@@ -1,16 +1,17 @@
 <template>
-  <module-frame :is-active="active" :is-incomplete="incomplete" container-class="setting-groupon">
+  <module-frame containerClass="setting-groupon" :isActive="active" :isIncomplete="incomplete">
     <div slot="preview" class="groupon-container">
       <activity
         :activity="copyModuleData.activity"
         :tag="copyModuleData.tag"
-        :show-title="radio"
+        :showTitle="radio"
         :type="moduleData.type"
-        :feedback="false"/>
+        :feedback="false">
+      </activity>
     </div>
     <div slot="setting" class="groupon-allocate">
       <header class="title">{{ activityTitle }}
-        <div v-if="portal === 'miniprogram'" class="text-12 color-gray mts">营销活动配置即将发布，敬请期待...</div>
+        <div class="text-12 color-gray mts" v-if="portal === 'miniprogram'">营销活动配置即将发布，敬请期待...</div>
       </header>
       <div class="groupon-item-setting clearfix">
         <div class="groupon-item-setting__section clearfix">
@@ -22,8 +23,8 @@
           <p class="pull-left section-left">活动：</p>
           <div class="section-right">
             <div class="required-option">
-              <el-button v-show="!activityName" type="info" size="mini" @click="openModal">选择活动</el-button>
-              <el-tag v-show="activityName" :disable-transitions="true" class="courseLink" closable @close="handleClose">
+              <el-button type="info" size="mini" @click="openModal" v-show="!activityName">选择活动</el-button>
+              <el-tag class="courseLink" closable :disable-transitions="true" @close="handleClose" v-show="activityName">
                 <el-tooltip class="text-content ellipsis" effect="dark" placement="top">
                   <span slot="content">{{ activityName }}</span>
                   <span>{{ activityName }}</span>
@@ -35,24 +36,25 @@
         <div class="groupon-item-setting__section clearfix">
           <p class="pull-left section-left">活动标签：</p>
           <div class="section-right pull-left">
-            <el-input v-model="copyModuleData.tag" size="mini" max-length="8" placeholder="请输入活动名称" clearable/>
+            <el-input size="mini" v-model="copyModuleData.tag" maxLength="8" placeholder="请输入活动名称" clearable></el-input>
           </div>
         </div>
       </div>
     </div>
-    <course-modal slot="modal" :visible="modalVisible" :course-list="courseSets" :type="moduleData.type" limit="1" @visibleChange="modalVisibleHandler" @updateCourses="getUpdatedCourses"/>
+    <course-modal slot="modal" :visible="modalVisible" limit=1 :courseList="courseSets" @visibleChange="modalVisibleHandler" @updateCourses="getUpdatedCourses" :type="moduleData.type">
+    </course-modal>
   </module-frame>
 </template>
 
 <script>
-import activity from '&/components/e-marketing/e-activity'
-import moduleFrame from '../module-frame'
-import courseModal from '../course/modal/course-modal'
-import settingCell from '../module-frame/setting-cell'
-import pathName2Portal from 'admin/config/api-portal-config'
+import activity from '&/components/e-marketing/e-activity';
+import moduleFrame from '../module-frame';
+import courseModal from '../course/modal/course-modal';
+import settingCell from '../module-frame/setting-cell';
+import pathName2Portal from 'admin/config/api-portal-config';
 
 export default {
-  name: 'MarketingGroupon',
+  name: 'marketing-groupon',
   components: {
     moduleFrame,
     courseModal,
@@ -62,19 +64,17 @@ export default {
   props: {
     active: {
       type: Boolean,
-      default: false
+      default: false,
     },
-    // eslint-disable-next-line vue/require-default-prop
     moduleData: {
-      type: Object,
-      dafault: () => {}
+      type: Object
     },
     incomplete: {
       type: Boolean,
-      default: false
+      default: false,
     }
   },
-  data() {
+  data () {
     return {
       modalVisible: false,
       courseSets: [],
@@ -84,51 +84,51 @@ export default {
   computed: {
     copyModuleData: {
       get() {
-        return this.moduleData.data
+        return this.moduleData.data;
       },
       set() {}
     },
     activityName() {
-      return this.moduleData.data.activity.name
+      return this.moduleData.data.activity.name;
     },
     activityTitle() {
-      const type = this.moduleData.type
-      if (type === 'seckill') return '秒杀设置'
-      if (type === 'cut') return '砍价设置'
-      return '拼团设置'
+      const type = this.moduleData.type;
+      if (type === 'seckill') return '秒杀设置';
+      if (type === 'cut') return '砍价设置';
+      return '拼团设置';
     },
     radio: {
       get() {
-        return this.copyModuleData.titleShow
+        return this.copyModuleData.titleShow;
       },
       set(value) {
-        this.copyModuleData.titleShow = value
+        this.copyModuleData.titleShow = value;
       }
     },
     portal() {
-      return pathName2Portal[this.pathName]
+      return pathName2Portal[this.pathName];
     }
   },
   methods: {
     modalVisibleHandler(visible) {
-      this.modalVisible = visible
+      this.modalVisible = visible;
     },
     openModal() {
-      this.modalVisible = true
+      this.modalVisible = true;
     },
     getUpdatedCourses(courses) {
-      this.courseSets = courses
-      if (!courses.length) return
+      this.courseSets = courses;
+      if (!courses.length) return;
 
-      this.copyModuleData.activity = courses[0]
+      this.copyModuleData.activity = courses[0];
     },
     removeActivity() {
-      this.courseSets = []
-      this.$set(this.copyModuleData, 'activity', {})
+      this.courseSets = [];
+      this.$set(this.copyModuleData, 'activity', {});
     },
     handleClose() {
-      this.removeActivity()
-    }
+      this.removeActivity();
+    },
   }
 }
 </script>

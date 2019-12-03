@@ -1,19 +1,22 @@
 <template>
   <module-frame :is-active="isActive" :is-incomplete="isIncomplete" container-class="setting-carousel">
-    <div slot="preview" class="carousel-image-container">
+    <div slot="preview" :class="{ 'carousel-image-container__app' :(pathName === 'appSetting')}" class="carousel-image-container">
       <img
         v-show="carouselImage"
         :src="carouselImage"
         class="carousel-image">
-      <div v-show="!carouselImage" class="image-mask">
+      <div v-show="!carouselImage" :class="{ 'image-mask__app' :(pathName === 'appSetting')}" class="image-mask">
         轮播图
       </div>
-      <div class="carousel-title ellipsis">{{ carouselTitle }}</div>
+      <div v-if="pathName !== 'appSetting'" class="carousel-title ellipsis">{{ carouselTitle }}</div>
     </div>
 
     <div slot="setting" class="carousel-allocate">
       <header class="title">
-        轮播图设置<div class="help-text">建议图片尺寸为750x400px，支持 jpg/png/gif 格式，大小不超过2MB</div></header>
+        轮播图设置
+        <div v-if="pathName !== 'appSetting'" class="help-text" >建议图片尺寸为750x400px，支持 jpg/png/gif 格式，大小不超过2MB</div>
+        <div v-else class="help-text" >建议图片尺寸为750x300px，支持 jpg/png/gif 格式，大小不超过2MB</div>
+      </header>
       <div v-for="(item, index) in copyModuleData.data" :key="index">
         <item
           :item="item"
@@ -24,7 +27,8 @@
           @selected="selected"
           @chooseCourse="openModal"
           @remove="itemRemove"
-          @removeCourseLink="removeCourseLink"/>
+          @removeCourseLink="removeCourseLink"
+          @setOutLink="setOutLink"/>
       </div>
       <el-button v-show="addBtnShow" class="btn-add-item" type="info" size="medium" @click="addItem">添加一个轮播图</el-button>
     </div>
@@ -71,7 +75,8 @@ export default {
       activeItemIndex: 0,
       modalVisible: false,
       courseSets: [],
-      type: 'course_list'
+      type: 'course_list',
+      pathName: this.$route.name
     }
   },
   computed: {
@@ -169,6 +174,10 @@ export default {
       this.copyModuleData.data[index].link.type = ''
       this.copyModuleData.data[index].link.target = null
       this.courseSets[this.activeItemIndex] = []
+    },
+    setOutLink(item = {}) {
+      const index = item.index
+      this.copyModuleData.data[index].link = { ...item }
     }
   }
 }

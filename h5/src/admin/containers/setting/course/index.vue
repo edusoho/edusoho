@@ -5,6 +5,7 @@
         :course-list="copyModuleData.data"
         :feedback="false"
         :type-list="type"
+        show-mode="admin"
         @fetchCourse="fetchCourse"/>
     </div>
     <div slot="setting">
@@ -18,6 +19,13 @@
           <el-input v-model="copyModuleData.data.title" size="mini" max-length="15" placeholder="请输入列表名称" clearable/>
         </setting-cell>
 
+        <!-- 排列方式： -->
+        <setting-cell v-if="portal==='apps'" title="排列方式：" >
+          <el-select v-model="displayStyle" placeholder="排列方式" size="mini">
+            <el-option v-for="item in layoutOptions" :key="item.value" :label="item.label" :value="item.value"/>
+          </el-select>
+        </setting-cell>
+
         <!-- 课程来源 -->
         <setting-cell :title="typeLabel + '来源：'">
           <el-radio v-model="sourceType" label="condition">{{ typeLabel }}分类</el-radio>
@@ -26,7 +34,7 @@
 
         <!-- 课程分类 -->
         <setting-cell :title="typeLabel + '分类：'">
-          <el-cascader v-show="sourceType === 'condition'" :options="this.type === 'course_list' ? courseCategories : classCategories" :props="cascaderProps" v-model="categoryTempId" size="mini" placeholder="请输入列表名称" filterable change-on-select/>
+          <el-cascader v-show="sourceType === 'condition'" :options="type === 'course_list' ? courseCategories : classCategories" :props="cascaderProps" v-model="categoryTempId" size="mini" placeholder="请输入列表名称" filterable change-on-select/>
           <div v-show="sourceType === 'custom'" class="required-option">
             <el-button size="mini" @click="openModal">选择{{ typeLabel }}</el-button>
           </div>
@@ -101,7 +109,7 @@ export default {
     },
     moduleData: {
       type: Object,
-      default: {}
+      default: () => {}
     },
     incomplete: {
       type: Boolean,
@@ -113,6 +121,13 @@ export default {
       modalVisible: false,
       limitOptions: [1, 2, 3, 4, 5, 6, 7, 8],
       type: this.moduleData.type,
+      layoutOptions: [{
+        value: 'row',
+        label: '一行一列'
+      }, {
+        value: 'distichous',
+        label: '一行两列'
+      }],
       sortOptions: [{
         value: '-studentNum',
         label: '加入最多'
@@ -197,6 +212,14 @@ export default {
       },
       set(value) {
         this.copyModuleData.data.sort = value
+      }
+    },
+    displayStyle: {
+      get() {
+        return this.copyModuleData.data.displayStyle
+      },
+      set(value) {
+        this.copyModuleData.data.displayStyle = value
       }
     },
     lastDays: {

@@ -39,11 +39,9 @@ export default {
   },
   props: {
     details: {
-      type: Object,
-      default: () => {}
+      default: {}
     },
     joinStatus: {
-      type: Boolean,
       default: false
     }
   },

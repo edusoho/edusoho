@@ -10,6 +10,7 @@
 <script>
 export default {
   name: 'SettingCell',
+  // eslint-disable-next-line vue/require-prop-types
   props: ['customClass', 'leftClass', 'rightClass', 'title']
 }
 </script>
