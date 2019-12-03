@@ -360,8 +360,8 @@ class H5SettingServiceTest extends BaseTestCase
                 2 => array('id' => 3),
             )),
             array('functionName' => 'findBatchsByIds', 'returnValue' => array(
-                1 => array('deadline' => time(), 'money' => 0, 'usedNum' => 1, 'unreceivedNum' => 1, 'targetType' => 'vip', 'targetId' => 1),
-                2 => array('deadline' => time() - 100000, 'money' => 0, 'usedNum' => 1, 'unreceivedNum' => 1,  'targetType' => 'vip', 'targetId' => 1),
+                1 => array('deadline' => time(), 'type' => 'discount', 'rate' => 9.00, 'money' => 0, 'usedNum' => 1, 'unreceivedNum' => 1, 'targetType' => 'vip', 'targetId' => 1),
+                2 => array('deadline' => time() - 100000, 'type' => 'discount', 'rate' => 9.00, 'money' => 0, 'usedNum' => 1, 'unreceivedNum' => 1,  'targetType' => 'vip', 'targetId' => 1),
             )),
         ));
         $this->mockBiz('VipPlugin:Vip:LevelService', array(
