@@ -1,6 +1,12 @@
 {% extends 'my/my-teaching.html.twig' %}
 
-{% block title %}{{ 'my.teaching.question_bank.testpaper.manage'|trans }} - {{ parent() }}{% endblock %}
+{% block title %}
+  {% if testpaper is defined %}
+    {{ 'my.teaching.question_bank.testpaper.edit'|trans }} - {{ parent() }}
+  {% else %}
+    {{ 'course.testpaper_manage.create_btn'|trans }} - {{ parent() }}
+  {% endif %}
+{% endblock %}
 {% set side_nav = 'my-question-bank' %}
 
 {% do script(['libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','app/js/question-bank/testpaper/create/index.js'])  %}

@@ -95,6 +95,7 @@ class TestpaperController extends BaseController
             'users' => $users,
             'paginator' => $paginator,
             'testpaperActivities' => $testpaperActivities,
+            'isSearch' => true,
         ));
     }
 
@@ -142,9 +143,9 @@ class TestpaperController extends BaseController
             $testpaper = $this->getTestpaperService()->buildTestpaper($baseInfo, 'testpaper');
             $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $questionInfo);
 
-            return $this->redirect(
-                $this->generateUrl('question_bank_manage_testpaper_list', array('id' => $id))
-            );
+            return $this->createJsonResponse(array(
+                'goto' => $this->generateUrl('question_bank_manage_testpaper_list', array('id' => $id))
+            ));
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
@@ -197,11 +198,14 @@ class TestpaperController extends BaseController
 
             $this->setFlashMessage('success', 'site.save.success');
 
-            return $this->redirect($this->generateUrl('question_bank_manage_testpaper_list', array('id' => $id)));
+            return $this->createJsonResponse(array(
+                'goto' => $this->generateUrl('question_bank_manage_testpaper_list', array('id' => $id))
+            ));
         }
 
         $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
-        $questionCategories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($questions, 'categoryId'));
+        $questionCategories = $this->getCategoryService()->findCategories($questionBank['id']);
+        $questionCategories = ArrayToolkit::index($questionCategories, 'id');
 
         return $this->render('question-bank/testpaper/manage/testpaper-form.html.twig', array(
             'questionBank' => $questionBank,
@@ -493,6 +497,7 @@ class TestpaperController extends BaseController
                 'questions' => $questions,
                 'questionBank' => $questionBank,
                 'questionCategories' => $questionCategories,
+                'type' => $type,
             ));
         }
 

@@ -863,7 +863,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         $index = 1;
-        $metas = $testpaper['metas'];
+        $items = array();
         foreach ($newItems as $questionId => $item) {
             $question = !empty($questions[$questionId]) ? $questions[$questionId] : array();
             if (!$question) {
@@ -880,7 +880,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $filter['questionType'] = $question['type'];
             $filter['testId'] = $testpaper['id'];
             $filter['score'] = empty($item['score']) ? 0 : floatval($item['score']);
-            $filter['missScore'] = empty($metas['missScores'][$question['type']]) ? 0 : floatval($metas['missScores'][$question['type']]);
+            $filter['missScore'] = empty($item['missScore']) ? 0 : floatval($item['missScore']);
             $filter['parentId'] = $question['parentId'];
             $items[] = $this->createItem($filter);
         }
