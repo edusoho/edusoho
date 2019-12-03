@@ -211,6 +211,7 @@ export default {
       this.fetchCourse()
     }
   },
+
   created() {
     console.log(this.pathName)
     console.log(this.pathName.includes('Setting'))

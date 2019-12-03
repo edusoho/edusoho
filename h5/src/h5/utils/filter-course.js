@@ -3,10 +3,10 @@ const getDisplayStyle = (data, listObj) => {
     ? `<span class="switch-box__state">
             <p style="color: #B0BDC9">${data.studentNum}人在学</p>
         </span>`
-    : ''
+    : '';
   const price = data.price === '0.00'
     ? '<p style="color: #408FFB">免费</p>'
-    : `<p style="color: #ff5353">¥ ${data.price}</p>`
+    : `<p style="color: #ff5353">¥ ${data.price}</p>`;
 
   if (listObj.typeList === 'classroom_list') {
     return {
@@ -28,7 +28,7 @@ const getDisplayStyle = (data, listObj) => {
                       <p style="color: #B0BDC9"> ${data.studentNum}人在学</p>
                    </span>`
       }
-    }
+    };
   }
   return {
     id: data.id,
@@ -47,17 +47,17 @@ const getDisplayStyle = (data, listObj) => {
       value: data.price || data.studentNum,
       html: `<span class="switch-box__price">${price}</span>${showStudentStr}`
     }
-  }
-}
+  };
+};
 const getAppDisplayStyle = (data, listObj) => {
-  const dataPrice = Number(data.price2.amount)
-  let price
+  const dataPrice = Number(data.price2.amount);
+  let price;
   if (dataPrice > 0 && data.price2.currency === 'coin') {
-    price = `<span style="color: #ff5353">${data.price2.coinAmount} ${data.price2.coinName}</span>`
+    price = `<span style="color: #ff5353">${data.price2.coinAmount} ${data.price2.coinName}</span>`;
   } else if (dataPrice > 0 && data.price2.currency === 'RMB') {
-    price = `<span style="color: #ff5353">¥ ${data.price2.amount}</span>`
+    price = `<span style="color: #ff5353">¥ ${data.price2.amount}</span>`;
   } else {
-    price = '<span style="color: #20B573">免费</span>'
+    price = '<span style="color: #20B573">免费</span>';
   }
 
   if (listObj.typeList === 'classroom_list') {
@@ -78,7 +78,7 @@ const getAppDisplayStyle = (data, listObj) => {
         value: data.price,
         html: `<span>${price}</span>`
       }
-    }
+    };
   }
   return {
     id: data.id,
@@ -96,15 +96,15 @@ const getAppDisplayStyle = (data, listObj) => {
       value: data.price,
       html: `<span>${price}</span>`
     }
-  }
-}
+  };
+};
 const courseListData = (data, listObj, setting = '') => {
   switch (listObj.type) {
     case 'price':
       if (setting === 'appSetting') {
-        return getAppDisplayStyle(data, listObj)
+        return getAppDisplayStyle(data, listObj);
       }
-      return getDisplayStyle(data, listObj)
+      return getDisplayStyle(data, listObj);
 
     case 'confirmOrder':
       return {
@@ -120,7 +120,7 @@ const courseListData = (data, listObj, setting = '') => {
                   <p style="color: #ff5353">¥ ${data.coinPayAmount}</p>
                 </span>`
         }
-      }
+      };
     case 'rank':
       if (listObj.typeList === 'classroom_list') {
         return {
@@ -136,7 +136,7 @@ const courseListData = (data, listObj, setting = '') => {
             value: data.courseNum,
             html: `<div class="e-course__count">共 ${data.courseNum} 门课程</div>`
           }
-        }
+        };
       }
       return {
         id: data.id,
@@ -162,9 +162,9 @@ const courseListData = (data, listObj, setting = '') => {
                   <span>${data.progress.percent}%</span>
                 </div>`
         }
-      }
+      };
     default:
-      return 'empty data'
+      return 'empty data';
   }
-}
-export default courseListData
+};
+export default courseListData;

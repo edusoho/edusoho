@@ -1,9 +1,9 @@
-import Vue from 'vue'
-import store from 'admin/store'
-import * as types from 'admin/store/mutation-types'
-import Router from 'vue-router'
+import Vue from 'vue';
+import store from 'admin/store';
+import * as types from 'admin/store/mutation-types';
+import Router from 'vue-router';
 
-Vue.use(Router)
+Vue.use(Router);
 // 路由懒加载 实现代码分离
 const routes = [
   {
@@ -38,23 +38,23 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "appSetting" */'admin/containers/setting/index.vue')
   }
-]
+];
 
-const env = process.env.NODE_ENV
-console.log('process.env', env)
+const env = process.env.NODE_ENV;
+console.log('process.env', env);
 // csrfToken 赋值
 if (!store.state.csrfToken && env === 'production') {
-  const csrfTag = window.parent.document.getElementsByTagName('meta')['csrf-token']
+  const csrfTag = window.parent.document.getElementsByTagName('meta')['csrf-token'];
   if (csrfTag && csrfTag.content) {
-    store.commit(types.GET_CSRF_TOKEN, csrfTag.content)
+    store.commit(types.GET_CSRF_TOKEN, csrfTag.content);
   } else {
-    throw new Error('csrfToken 不存在')
+    throw new Error('csrfToken 不存在');
   }
 }
 
 const router = new Router({
   routes
-})
+});
 
 router.beforeEach((to, from, next) => {
   // 获取会员后台配置
@@ -66,24 +66,24 @@ router.beforeEach((to, from, next) => {
       store.dispatch('getGlobalSettings', { type: 'site', key: 'settings' }),
       store.dispatch('getGlobalSettings', { type: 'classroom', key: 'classroomSettings' })
     ]).then(([vipPlugin, vipRes]) => {
-      console.log(vipPlugin, 8888)
-      return vipRes
+      console.log(vipPlugin, 8888);
+      return vipRes;
     }).then(vipRes => {
       if (vipRes && vipRes.h5Enabled && vipRes.enabled) {
-        store.dispatch('setVipLevels').then(() => next())
+        store.dispatch('setVipLevels').then(() => next());
       } else {
-        next()
+        next();
       }
     }).catch(err => {
       Vue.prototype.$message({
         message: err.message,
         type: 'error'
-      })
-      next()
-    })
+      });
+      next();
+    });
   } else {
-    next()
+    next();
   }
-})
+});
 
-export default router
+export default router;

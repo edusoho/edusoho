@@ -5,7 +5,7 @@
         <div class="item-container">
           <!-- course/classroom -->
           <div v-if="slide.link.type !== 'url'" @click="jumpTo(slide, index)">
-            <img v-bind:src="slide.image.uri">
+            <img :src="slide.image.uri">
           </div>
           <!-- url -->
           <a v-else :href="slide.link.url || 'javascript:;'">
@@ -19,21 +19,21 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      slides: {
-        type: Array,
-        default: []
-      },
-      feedback: {
-        type: Boolean,
-        default: true,
-      },
+export default {
+  props: {
+    slides: {
+      type: Array,
+      default: []
     },
-    methods: {
-      jumpTo(slide, index) {
-        if (!this.feedback) return;
-        if (!slide) return;
+    feedback: {
+      type: Boolean,
+      default: true
+    }
+  },
+  methods: {
+    jumpTo(slide, index) {
+      if (!this.feedback) return
+      if (!slide) return
 
         const itemLinkData = slide.link;
         if (itemLinkData.type === 'classroom' && itemLinkData.target) {
@@ -56,5 +56,5 @@
         }
       }
     }
-  }
+}
 </script>

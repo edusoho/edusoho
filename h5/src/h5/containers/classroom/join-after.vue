@@ -38,8 +38,9 @@
           :feedback="!errorMsg"
           :course-sets="details.courses"
           :disable-mask="true"
-          title="班级课程" 
-defaul-value="暂无课程" @click.native="showDialog"/>
+          title="班级课程"
+          defaul-value="暂无课程"
+          @click.native="showDialog"/>
       </div>
 
       <!-- 学员评价 -->

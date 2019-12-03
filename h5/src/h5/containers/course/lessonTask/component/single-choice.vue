@@ -2,23 +2,23 @@
   <div class="subject">
     <div class="subject-stem">
       <span class="serial-number">{{ itemdata.seq }}、</span>
-      <div v-html="stem" class="rich-text"></div>
+      <div class="rich-text" v-html="stem"/>
     </div>
 
-    <div class="material-title" v-if="itemdata.parentTitle">
-      <span class="serial-number">问题{{itemdata.materialIndex}}：</span>
-      <div v-html="itemdata.stem" class="rich-text"></div>
+    <div v-if="itemdata.parentTitle" class="material-title">
+      <span class="serial-number">问题{{ itemdata.materialIndex }}：</span>
+      <div class="rich-text" v-html="itemdata.stem"/>
     </div>
 
     <van-radio-group v-model="radio" class="answer-paper" @change="choose()">
       <van-radio
-        class="subject-option"
         v-for="(item, index) in itemdata.metas.choices"
         :key="index"
         :name="index"
         :disabled="!canDo"
+        class="subject-option"
       >
-        <div class="subject-option__content" v-html="item"></div>
+        <div class="subject-option__content" v-html="item"/>
         <span
           slot="icon"
           slot-scope="props"
@@ -30,15 +30,16 @@
 </template>
 
 <script>
-import  checkAnswer from '../../../../mixins/lessonTask/itemBank'
+import checkAnswer from '../../../../mixins/lessonTask/itemBank'
 export default {
-  name: "single-choice",
-  mixins:[checkAnswer],
-  data() {
-    return {
-      radio: this.answer[0]
-    };
+  name: 'SingleChoice',
+  filters: {
+    filterOrder(index) {
+      const arr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+      return arr[index]
+    }
   },
+  mixins: [checkAnswer],
   props: {
     itemdata: {
       type: Object,
@@ -57,28 +58,27 @@ export default {
       default: true
     }
   },
+  data() {
+    return {
+      radio: this.answer[0]
+    }
+  },
   computed: {
     stem: {
       get() {
         if (this.itemdata.parentTitle) {
-          return this.itemdata.parentTitle.stem;
+          return this.itemdata.parentTitle.stem
         } else {
-          return this.itemdata.stem;
+          return this.itemdata.stem
         }
       }
     }
   },
-  filters: {
-    filterOrder(index) {
-      const arr = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-      return arr[index];
-    }
-  },
   methods: {
-    //向父级提交数据
+    // 向父级提交数据
     choose() {
-      this.$emit("singleChoose", this.radio, this.itemdata.id);
+      this.$emit('singleChoose', this.radio, this.itemdata.id)
     }
   }
-};
+}
 </script>

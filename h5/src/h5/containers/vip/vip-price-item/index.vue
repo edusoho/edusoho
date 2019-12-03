@@ -2,24 +2,24 @@
   <div class="vip-price-item" @click="handleClick">
     <div class="vip-price-item__buy-type mb15 text-14">{{ item.time }}</div>
     <div class="red">¥ {{ item.price }}</div>
-    <i class="select-icon h5-icon h5-icon-zhengque"></i>
+    <i class="select-icon h5-icon h5-icon-zhengque"/>
   </div>
 </template>
 
 <script>
 export default {
 
-  name: 'vip-popup',
+  name: 'VipPopup',
   props: {
     item: {
       type: Object,
       default: () => {
-        return {};
-      },
+        return {}
+      }
     },
     index: {
       type: Number,
-      default: -1,
+      default: -1
     },
     vipBuyType: {
       type: String,
@@ -28,9 +28,9 @@ export default {
   },
   created() {
     // 默认选择一年或12个月
-    const year = this.vipBuyType === 'year';
+    const year = this.vipBuyType === 'year'
     if ((!year && this.index === 2) || (year && this.index === 0)) {
-      this.handleClick();
+      this.handleClick()
     }
   },
   methods: {

@@ -1,6 +1,6 @@
 <template>
   <div class="payPage">
-    <e-loading v-if="isLoading"></e-loading>
+    <e-loading v-if="isLoading"/>
     <div class="payPage__order">
       <div class="order__head order--line">
         支付方式
@@ -12,25 +12,27 @@
           <span class="sum__price">¥ <span class="num">{{ detail.pay_amount | toMoney }}</span></span>
         </div>
         <div class="payWay">
-          <div :class="['payWay__item', {'payWay__item--selected': payWay === 'Alipay_LegacyH5'}]"
+          <div
             v-show="paySettings.alipayEnabled && !inWechat"
+            :class="['payWay__item', {'payWay__item--selected': payWay === 'Alipay_LegacyH5'}]"
             @click="payWay = 'Alipay_LegacyH5';selected = true">
             <img class="correct" src="static/images/correct.png">
-            <div class="right"></div>
+            <div class="right"/>
             <img src="static/images/zfb.png">
           </div>
-          <div :class="['payWay__item', {'payWay__item--selected': payWay === 'WechatPay_H5'}]"
+          <div
             v-show="paySettings.wxpayEnabled"
+            :class="['payWay__item', {'payWay__item--selected': payWay === 'WechatPay_H5'}]"
             @click="payWay = 'WechatPay_H5'; selected = false">
             <img class="correct" src="static/images/correct.png">
-            <div class="right"></div>
+            <div class="right"/>
             <img src="static/images/wx.png">
           </div>
         </div>
       </div>
     </div>
     <div :class="['payPage__payBtn', {'disabled': !validPayWay}]" @click="handlePay">
-      {{ validPayWay ? '立即支付' : '无可用支付方式'}}
+      {{ validPayWay ? '立即支付' : '无可用支付方式' }}
     </div>
   </div>
 </template>
@@ -38,11 +40,11 @@
 <script>
 import Api from '@/api'
 import axios from 'axios'
-import { mapState } from 'vuex';
-import { Toast } from 'vant';
+import { mapState } from 'vuex'
+import { Toast } from 'vant'
 
 export default {
-  data () {
+  data() {
     return {
       detail: {},
       // WechatPay_JsH5--微信内支付 WechatPay_H5--微信wap支付
@@ -51,17 +53,17 @@ export default {
       paySettings: {},
       inWechat: this.isWeixinBrowser(),
       targetType: this.$route.query.targetType,
-      timeoutId: -1,
-    };
+      timeoutId: -1
+    }
   },
   computed: {
     ...mapState(['wechatSwitch', 'isLoading']),
     validPayWay() {
       return this.paySettings.wxpayEnabled ||
-        (this.paySettings.alipayEnabled && !this.inWechat);
+        (this.paySettings.alipayEnabled && !this.inWechat)
     }
   },
-  async created () {
+  async created() {
     this.paySettings = await Api.getSettings({
       query: {
         type: 'payment'
@@ -70,51 +72,51 @@ export default {
       Toast.fail(err.message)
     })
     if (this.paySettings.alipayEnabled && !this.inWechat) {
-      this.payWay = 'Alipay_LegacyH5';
+      this.payWay = 'Alipay_LegacyH5'
     } else if (this.paySettings.wxpayEnabled) {
-      this.payWay = 'WechatPay_H5';
+      this.payWay = 'WechatPay_H5'
     }
-    const { source, id, sn, targetId } = this.$route.query;
-      // 从我的订单入口进入
-      Api.getOrderDetail({
-        query: {
-          sn
-        }
-      }).then(res => {
-        if (res.status === 'success' && targetId) {
-          // 如果未关注公众号，挑战公众号页面
-          if (this.wechatSwitch) {
-            this.$router.replace({
-              path: '/pay_success',
-              query: {
-                targetType: this.targetType,
-                targetId: targetId
-              }
-            })
-            return;
-          }
-          this.$router.push({
-            path: `/${this.targetType}/${targetId}`,
+    const { source, id, sn, targetId } = this.$route.query
+    // 从我的订单入口进入
+    Api.getOrderDetail({
+      query: {
+        sn
+      }
+    }).then(res => {
+      if (res.status === 'success' && targetId) {
+        // 如果未关注公众号，挑战公众号页面
+        if (this.wechatSwitch) {
+          this.$router.replace({
+            path: '/pay_success',
+            query: {
+              targetType: this.targetType,
+              targetId: targetId
+            }
           })
+          return
         }
-        this.detail = Object.assign({}, res)
-      }).catch(err => {
-        Toast.fail(err.message)
-      })
+        this.$router.push({
+          path: `/${this.targetType}/${targetId}`
+        })
+      }
+      this.detail = Object.assign({}, res)
+    }).catch(err => {
+      Toast.fail(err.message)
+    })
   },
-  beforeRouteLeave (to, from, next) {
-    clearTimeout(this.timeoutId);
-    next();
+  beforeRouteLeave(to, from, next) {
+    clearTimeout(this.timeoutId)
+    next()
   },
   methods: {
-    handlePay () {
+    handlePay() {
       if (!this.validPayWay) return
 
       const isWxPay = this.payWay === 'WechatPay_H5' && this.inWechat
       if (isWxPay) {
         window.location.href = `${window.location.origin}/pay/center/wxpay_h5?pay_amount=` +
-          `${this.detail.pay_amount}&title=${this.detail.title}&sn=${this.detail.sn}`;
-        return;
+          `${this.detail.pay_amount}&title=${this.detail.title}&sn=${this.detail.sn}`
+        return
       }
 
       Api.createTrade({
@@ -128,22 +130,22 @@ export default {
         if (this.payWay === 'WechatPay_H5') {
           this.getTradeInfo(res.tradeSn).then(() => {
             window.location.href = res.mwebUrl
-          });
-          return;
+          })
+          return
         }
         window.location.href = res.payUrl
       }).catch(err => {
         Toast.fail(err.message)
       })
     },
-    isWeixinBrowser (){
+    isWeixinBrowser() {
       return /micromessenger/.test(navigator.userAgent.toLowerCase())
     },
     getTradeInfo(tradeSn) {
       // 轮询问检测微信外支付是否支付成功
       return Api.getTrade({
         query: {
-          tradesSn: tradeSn,
+          tradesSn: tradeSn
         }
       }).then((res) => {
         if (res.isPaid) {
@@ -154,14 +156,14 @@ export default {
                 paidUrl: window.location.origin + res.paidSuccessUrlH5
               }
             })
-            return;
+            return
           }
           window.location.href = window.location.origin + res.paidSuccessUrlH5
-          return;
+          return
         }
         this.timeoutId = setTimeout(() => {
-          this.getTradeInfo(tradeSn);
-        },2000)
+          this.getTradeInfo(tradeSn)
+        }, 2000)
       }).catch(err => {
         Toast.fail(err.message)
       })

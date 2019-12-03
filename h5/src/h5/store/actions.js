@@ -149,7 +149,6 @@ export const setWeChatSwitch = ({ commit }, isOn) =>
     });
   });
 
-
 // 全局优惠券显示开关
 export const setCouponSwitch = ({ commit }) => Api.getCouponSetting({})
   .then(res => {

@@ -1,50 +1,64 @@
 <template>
-  <div class="course-detail__head pos-rl" id="course-detail__head">
-    <div class="course-detail__nav--btn"
-          v-if="textContent"
-          @click="viewAudioDoc"
-          v-show="['audio'].includes(sourceType) && !isEncryptionPlus && !isCoverOpen">
+  <div id="course-detail__head" class="course-detail__head pos-rl">
+    <div
+      v-if="textContent"
+      v-show="['audio'].includes(sourceType) && !isEncryptionPlus && !isCoverOpen"
+      class="course-detail__nav--btn"
+      @click="viewAudioDoc">
       文稿
     </div>
-    <div class="course-detail__nav--cover web-view" :class="{ opened: isCoverOpen }" v-if="textContent" v-show="['audio'].includes(sourceType) && !isEncryptionPlus">
-      <div class="media-text" v-html="textContent"></div>
-      <div class="course-detail__nav--cover-control" v-show="isCoverOpen" @click="handlePlayer">
-        <i class="h5-icon" :class="!isPlaying ? 'h5-icon-bofang' : 'h5-icon-zanting'"></i>
+    <div v-if="textContent" v-show="['audio'].includes(sourceType) && !isEncryptionPlus" :class="{ opened: isCoverOpen }" class="course-detail__nav--cover web-view">
+      <div class="media-text" v-html="textContent"/>
+      <div v-show="isCoverOpen" class="course-detail__nav--cover-control" @click="handlePlayer">
+        <i :class="!isPlaying ? 'h5-icon-bofang' : 'h5-icon-zanting'" class="h5-icon"/>
       </div>
       <div class="course-detail__nav--cover-close-btn" @click="hideAudioDoc">
-        <i class="van-icon van-icon-arrow van-nav-bar__arrow"></i>
+        <i class="van-icon van-icon-arrow van-nav-bar__arrow"/>
       </div>
     </div>
-    <div class="course-detail__head--img" id="course-detail__head--img"
-      v-show="sourceType === 'img' || isEncryptionPlus">
+    <div
+      v-show="sourceType === 'img' || isEncryptionPlus"
+      id="course-detail__head--img"
+      class="course-detail__head--img">
       <img v-if="courseSet.cover" :src="courseSet.cover.large" alt="">
       <countDown
         v-if="seckillActivities && seckillActivities.status === 'ongoing' && counting && !isEmpty"
         :activity="seckillActivities"
         @timesUp="expire"
-        @sellOut="sellOut">
-      </countDown>
+        @sellOut="sellOut"/>
     </div>
-    <div id="course-detail__head--video"
-      ref="video"
-      v-show="['video', 'audio'].includes(sourceType) && !isEncryptionPlus">
-    </div>
-    <tagLink :tagData="tagData"></tagLink>
+    <div
+      v-show="['video', 'audio'].includes(sourceType) && !isEncryptionPlus"
+      id="course-detail__head--video"
+      ref="video"/>
+    <tagLink :tag-data="tagData"/>
   </div>
 </template>
 <script>
-import loadScript from 'load-script';
-import { mapState } from 'vuex';
+import loadScript from 'load-script'
+import { mapState } from 'vuex'
 import Api from '@/api'
-import { Toast,Dialog } from 'vant';
-import countDown from '&/components/e-marketing/e-count-down/index';
-import tagLink from '&/components/e-tag-link/e-tag-link';
-import qs from 'qs';
+import { Toast, Dialog } from 'vant'
+import countDown from '&/components/e-marketing/e-count-down/index'
+import tagLink from '&/components/e-tag-link/e-tag-link'
+import qs from 'qs'
 
 export default {
   components: {
     countDown,
-    tagLink,
+    tagLink
+  },
+  props: {
+    courseSet: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
+    seckillActivities: {
+      type: Object,
+      default: null
+    }
   },
   data() {
     return {
@@ -60,21 +74,9 @@ export default {
         isShow: false,
         link: '',
         className: 'course-tag',
-        minDirectRewardRatio: 0,
+        minDirectRewardRatio: 0
       },
-      bindAgencyRelation: {}, // 分销代理商绑定信息
-    };
-  },
-  props: {
-    courseSet: {
-      type: Object,
-      default: () => {
-        return {};
-      },
-    },
-    seckillActivities: {
-      type: Object,
-      default: null
+      bindAgencyRelation: {} // 分销代理商绑定信息
     }
   },
   computed: {
@@ -84,23 +86,23 @@ export default {
       taskId: state => state.taskId,
       details: state => state.details,
       joinStatus: state => state.joinStatus,
-      user: state => state.user,
+      user: state => state.user
     }),
     textContent() {
-      return this.mediaOpts.text;
+      return this.mediaOpts.text
     }
   },
   watch: {
-    taskId (value, oldValue) {
+    taskId(value, oldValue) {
       // 未登录情况下，详情页面不需要初始化播放器
-      if (this.$route.name === 'course' && !this.joinStatus) return;
-      if (value > 0) this.initHead();
-    },
+      if (this.$route.name === 'course' && !this.joinStatus) return
+      if (value > 0) this.initHead()
+    }
   },
   created() {
-    this.initHead();
-    this.showTagLink();
-    this.initTagData();
+    this.initHead()
+    this.showTagLink()
+    this.initTagData()
   },
   /*
   * 试看需要传preview=1
@@ -109,23 +111,23 @@ export default {
   methods: {
     initHead() {
       if (['video', 'audio'].includes(this.sourceType)) {
-        window.scrollTo(0, 0);
-        this.initPlayer();
+        window.scrollTo(0, 0)
+        this.initPlayer()
       }
     },
     viewAudioDoc() {
-       this.isCoverOpen = true;
+      this.isCoverOpen = true
     },
     hideAudioDoc() {
-      this.isCoverOpen = false;
+      this.isCoverOpen = false
     },
     handlePlayer() {
       if (this.isPlaying) {
-        return this.player && this.player.pause();
+        return this.player && this.player.pause()
       }
-      return this.player && this.player.play();
+      return this.player && this.player.play()
     },
-    getParams () {
+    getParams() {
       const canTryLookable = !this.joinStatus
       return canTryLookable ? {
         query: {
@@ -141,11 +143,11 @@ export default {
         }
       }
     },
-    async initPlayer (){
-      this.$refs.video && (this.$refs.video.innerHTML = '');
+    async initPlayer() {
+      this.$refs.video && (this.$refs.video.innerHTML = '')
 
-      const player = await Api.getMedia(this.getParams()).catch((err)=> {
-        const courseId = Number(this.details.id);
+      const player = await Api.getMedia(this.getParams()).catch((err) => {
+        const courseId = Number(this.details.id)
         // 后台课程设置里设置了不允许未登录用户观看免费试看的视频
         if (err.code == 4040101) {
           this.$router.push({
@@ -155,25 +157,24 @@ export default {
             }
           })
         }
-        Toast.fail(err.message);
+        Toast.fail(err.message)
       })
       console.log(player)
-      if (!player) return; //如果没有初始化成功
+      if (!player) return // 如果没有初始化成功
 
       if (player.mediaType === 'video' && !player.media.url) {
         Toast('课程内容准备中，请稍候查看')
-        return;
+        return
       }
 
-      const timelimit = player.media.timeLimit;
+      const timelimit = player.media.timeLimit
 
-
-      this.isEncryptionPlus = player.media.isEncryptionPlus;
+      this.isEncryptionPlus = player.media.isEncryptionPlus
       if (player.media.isEncryptionPlus) {
         Toast('该浏览器不支持云视频播放，请下载App')
-        return;
+        return
       }
-      const media = player.media;
+      const media = player.media
       const options = {
         id: 'course-detail__head--video',
         user: this.user,
@@ -181,62 +182,62 @@ export default {
         autoplay: true,
         disableFullscreen: this.sourceType === 'audio',
         isAudio: this.sourceType === 'audio',
-        strictMode:!media.supportMobile, //视频是否加密 1表示普通  0表示加密
+        strictMode: !media.supportMobile, // 视频是否加密 1表示普通  0表示加密
         pluck: {
-          timelimit: timelimit,
+          timelimit: timelimit
         },
         resId: media.resId,
-        disableDataUpload: true,
+        disableDataUpload: true
         // poster: "https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg"
-      };
+      }
       // 试看判断
       const canTryLookable = !this.joinStatus && Number(this.details.tryLookable)
-      if(!canTryLookable){
+      if (!canTryLookable) {
         delete options.pluck
       }
 
       this.mediaOpts = Object.assign({
         text: player.media.text
-      }, options) ;
+      }, options)
 
-      this.$store.commit('UPDATE_LOADING_STATUS', true);
+      this.$store.commit('UPDATE_LOADING_STATUS', true)
       this.loadPlayerSDK().then(SDK => {
-        this.$store.commit('UPDATE_LOADING_STATUS', false);
-        const player = new SDK(options);
+        this.$store.commit('UPDATE_LOADING_STATUS', false)
+        const player = new SDK(options)
         player.on('playing', () => {
-          this.isPlaying = true;
-        });
-        player.on('unablePlay', () => { //加密模式下在不支持的浏览器下提示
-        this.$refs.video.innerHTML = ''
+          this.isPlaying = true
+        })
+        player.on('unablePlay', () => { // 加密模式下在不支持的浏览器下提示
+          this.$refs.video.innerHTML = ''
           Dialog.alert({
             message: '当前内容不支持该手机浏览器观看，建议您使用Chrome、Safari浏览器观看。'
-          }).then(() => {});
-        });
+          }).then(() => {})
+        })
         player.on('paused', () => {
-          this.isPlaying = false;
-        });
-        this.player = player;
+          this.isPlaying = false
+        })
+        this.player = player
       })
     },
-    loadPlayerSDK () {
+    loadPlayerSDK() {
       if (!window.VideoPlayerSDK) {
-      const VEDIOURL='//service-cdn.qiqiuyun.net/js-sdk/video-player/sdk-v1.js?v='
-      const scrptSrc =  VEDIOURL+ (Date.now() / 1000 / 60);
-      // Cache SDK for 1 min.
+        const VEDIOURL = '//service-cdn.qiqiuyun.net/js-sdk/video-player/sdk-v1.js?v='
+        const scrptSrc = VEDIOURL + (Date.now() / 1000 / 60)
+        // Cache SDK for 1 min.
 
         return new Promise((resolve, reject) => {
           loadScript(scrptSrc, (err) => {
             if (err) {
-              reject(err);
+              reject(err)
             }
-            resolve(window.VideoPlayerSDK);
-          });
-        });
+            resolve(window.VideoPlayerSDK)
+          })
+        })
       }
-      return Promise.resolve(window.VideoPlayerSDK);
+      return Promise.resolve(window.VideoPlayerSDK)
     },
     expire() {
-      this.counting = false;
+      this.counting = false
     },
     sellOut() {
       this.isEmpty = true
@@ -245,36 +246,36 @@ export default {
     showTagLink() {
       Api.hasDrpPluginInstalled().then(res => {
         if (!res.Drp) {
-          this.tagData.isShow = false;
-          return;
+          this.tagData.isShow = false
+          return
         }
 
         Api.getAgencyBindRelation().then(data => {
           if (!data.agencyId) {
-            this.tagData.isShow = false;
-            return;
+            this.tagData.isShow = false
+            return
           }
-          this.bindAgencyRelation = data;
-          this.tagData.isShow = true;
+          this.bindAgencyRelation = data
+          this.tagData.isShow = true
         })
       })
     },
     initTagData() {
       Api.getDrpSetting().then(data => {
-        this.drpSetting = data;
-        this.tagData.minDirectRewardRatio = data.minDirectRewardRatio;
+        this.drpSetting = data
+        this.tagData.minDirectRewardRatio = data.minDirectRewardRatio
 
-        let params = {
+        const params = {
           type: 'course',
           id: this.details.id,
-          merchant_id: this.drpSetting.merchantId,
-        };
+          merchant_id: this.drpSetting.merchantId
+        }
 
-        this.tagData.link = this.drpSetting.distributor_template_url + '?' + qs.stringify(params);
-        const earnings = (this.drpSetting.minDirectRewardRatio / 100) * this.details.price;
-        this.tagData.earnings = (Math.floor(earnings * 100) / 100).toFixed(2);
-      });
-    },
+        this.tagData.link = this.drpSetting.distributor_template_url + '?' + qs.stringify(params)
+        const earnings = (this.drpSetting.minDirectRewardRatio / 100) * this.details.price
+        this.tagData.earnings = (Math.floor(earnings * 100) / 100).toFixed(2)
+      })
+    }
   }
 }
 </script>

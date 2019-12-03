@@ -1,7 +1,7 @@
 <!-- 职能：底部的 fixed 盒子 -->
 <template>
-  <footer class="footer-bar" :class="classList">
-    <slot></slot>
+  <footer :class="classList" class="footer-bar">
+    <slot/>
   </footer>
 </template>
 <script>
@@ -20,9 +20,9 @@ export default {
     classList() {
       return {
         disabled: this.disabled,
-        half: this.half,
-      };
-    },
-  },
+        half: this.half
+      }
+    }
+  }
 }
 </script>

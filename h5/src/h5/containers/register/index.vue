@@ -1,58 +1,59 @@
 <template>
   <div class="register">
-    <e-loading v-if="isLoading"></e-loading>
+    <e-loading v-if="isLoading"/>
     <span class="register-title">{{ registerType[pathName] }}</span>
 
-      <van-field
-        v-model="registerInfo.mobile"
-        placeholder="请输入手机号"
-        maxLength="11"
-        :border=false
-        :error-message="errorMessage.mobile"
-        @blur="validateMobileOrPsw('mobile')"
-        @keyup="validatedChecker()"
-      />
+    <van-field
+      v-model="registerInfo.mobile"
+      :border="false"
+      :error-message="errorMessage.mobile"
+      placeholder="请输入手机号"
+      max-length="11"
+      @blur="validateMobileOrPsw('mobile')"
+      @keyup="validatedChecker()"
+    />
 
-      <van-field
-        v-model="registerInfo.encrypt_password"
-        type="password"
-        maxLength="20"
-         :border=false
-        :error-message="errorMessage.encrypt_password"
-        @blur="validateMobileOrPsw('encrypt_password')"
-        :placeholder="placeHolder[pathName]"
-      />
+    <van-field
+      v-model="registerInfo.encrypt_password"
+      :border="false"
+      :error-message="errorMessage.encrypt_password"
+      :placeholder="placeHolder[pathName]"
+      type="password"
+      max-length="20"
+      @blur="validateMobileOrPsw('encrypt_password')"
+    />
 
-      <e-drag
-        ref="dragComponent"
-        v-if="dragEnable"
-        :key="dragKey"
-        @success="handleSmsSuccess"></e-drag>
+    <e-drag
+      v-if="dragEnable"
+      ref="dragComponent"
+      :key="dragKey"
+      @success="handleSmsSuccess"/>
 
-      <van-field
-        v-model="registerInfo.smsCode"
-        type="text"
-        :border=false
-        center
-        clearable
-        maxLength="6"
-        placeholder="请输入验证码"
-        >
-        <van-button
-          slot="button"
-          size="small"
-          type="primary"
-          :disabled="count.codeBtnDisable || !validated.mobile"
-          @click="clickSmsBtn">
-          发送验证码
-          <span v-show="count.showCount">({{ count.num }})</span>
-          </van-button>
-      </van-field>
+    <van-field
+      v-model="registerInfo.smsCode"
+      :border="false"
+      type="text"
+      center
+      clearable
+      max-length="6"
+      placeholder="请输入验证码"
+    >
+      <van-button
+        slot="button"
+        :disabled="count.codeBtnDisable || !validated.mobile"
+        size="small"
+        type="primary"
+        @click="clickSmsBtn">
+        发送验证码
+        <span v-show="count.showCount">({{ count.num }})</span>
+      </van-button>
+    </van-field>
 
-      <van-button type="default"
-        class="primary-btn mb20"
-        :disabled="btnDisable"
-        @click="handleSubmit">{{ btnType[pathName] }}</van-button>
+    <van-button
+      :disabled="btnDisable"
+      type="default"
+      class="primary-btn mb20"
+      @click="handleSubmit">{{ btnType[pathName] }}</van-button>
 
       <!-- <div class="login-bottom ">
         请详细阅读 <router-link to="/protocol">《用户服务协议》</router-link>
@@ -70,26 +71,26 @@
   </div>
 </template>
 <script>
-import activityMixin from '@/mixins/activity';
-import redirectMixin from '@/mixins/saveRedirect';
-import EDrag from '&/components/e-drag';
-import { mapActions, mapState } from 'vuex';
-import XXTEA from '@/utils/xxtea.js';
-import { Toast } from 'vant';
+import activityMixin from '@/mixins/activity'
+import redirectMixin from '@/mixins/saveRedirect'
+import EDrag from '&/components/e-drag'
+import { mapActions, mapState } from 'vuex'
+import XXTEA from '@/utils/xxtea.js'
+import { Toast } from 'vant'
 import rulesConfig from '@/utils/rule-config.js'
 
 const registerType = {
   binding: '绑定手机',
   register: '注册账号'
-};
+}
 const btnType = {
   binding: '绑定',
   register: '注册'
-};
+}
 const placeHolder = {
   binding: '请输入密码',
   register: '请设置密码（5-20位字符）'
-};
+}
 
 export default {
   components: {
@@ -132,10 +133,10 @@ export default {
       isLoading: state => state.isLoading
     }),
     btnDisable() {
-      return !(this.registerInfo.mobile
-        && this.registerInfo.encrypt_password
-        && this.registerInfo.smsCode);
-    },
+      return !(this.registerInfo.mobile &&
+        this.registerInfo.encrypt_password &&
+        this.registerInfo.smsCode)
+    }
   },
   methods: {
     ...mapActions([
@@ -145,40 +146,40 @@ export default {
       'userLogin'
     ]),
     validateMobileOrPsw(type = 'mobile') {
-      const ele = this.registerInfo[type];
-      const rule = rulesConfig[type];
+      const ele = this.registerInfo[type]
+      const rule = rulesConfig[type]
 
       if (ele.length == 0) {
-        this.errorMessage[type] = '';
-        return false;
+        this.errorMessage[type] = ''
+        return false
       }
 
       this.errorMessage[type] = !rule.validator(ele)
-        ? rule.message: '';
+        ? rule.message : ''
     },
     validatedChecker() {
-      const mobile = this.registerInfo.mobile;
-      const rule = rulesConfig['mobile'];
+      const mobile = this.registerInfo.mobile
+      const rule = rulesConfig['mobile']
 
-      this.validated.mobile = rule.validator(mobile);
+      this.validated.mobile = rule.validator(mobile)
     },
     handleSmsSuccess(token) {
-      this.registerInfo.dragCaptchaToken = token;
-      this.handleSendSms();
+      this.registerInfo.dragCaptchaToken = token
+      this.handleSendSms()
     },
     handleSubmit() {
-      const registerInfo = Object.assign({}, this.registerInfo);
-      const password = registerInfo.encrypt_password;
-      const mobile = registerInfo.mobile;
-      const encrypt = window.XXTEA.encryptToBase64(password, window.location.host);
+      const registerInfo = Object.assign({}, this.registerInfo)
+      const password = registerInfo.encrypt_password
+      const mobile = registerInfo.mobile
+      const encrypt = window.XXTEA.encryptToBase64(password, window.location.host)
 
-      registerInfo.encrypt_password = encrypt;
+      registerInfo.encrypt_password = encrypt
 
       // 手机绑定
       if (this.pathName === 'binding') {
         this.setMobile({
           query: {
-            mobile,
+            mobile
           },
           data: {
             password,
@@ -186,94 +187,94 @@ export default {
             smsToken: registerInfo.smsToken
           }
         })
-        .then(res => {
-          Toast.success({
-            duration: 2000,
-            message: '绑定成功'
-          });
-          this.afterLogin();
-        })
-        .catch(err => {
-          Toast.fail(err.message);
-        });
-        return;
+          .then(res => {
+            Toast.success({
+              duration: 2000,
+              message: '绑定成功'
+            })
+            this.afterLogin()
+          })
+          .catch(err => {
+            Toast.fail(err.message)
+          })
+        return
       }
 
       // 手机注册
       this.addUser(registerInfo)
-      .then(res => {
-        Toast.success({
-          duration: 2000,
-          message: '注册成功'
-        });
-        this.afterLogin();
-      })
-      .then(() => {
-        this.userLogin({
-          password,
-          username: mobile,
+        .then(res => {
+          Toast.success({
+            duration: 2000,
+            message: '注册成功'
+          })
+          this.afterLogin()
         })
-      })
-      .catch(err => {
-        Toast.fail(err.message);
-      });
+        .then(() => {
+          this.userLogin({
+            password,
+            username: mobile
+          })
+        })
+        .catch(err => {
+          Toast.fail(err.message)
+        })
     },
     clickSmsBtn() {
       if (!this.dragEnable) {
-        this.handleSendSms();
-        return;
+        this.handleSendSms()
+        return
       }
       // 验证码组件更新数据
       if (!this.$refs.dragComponent.dragToEnd) {
-        Toast('请先完成拼图验证');
-        return;
+        Toast('请先完成拼图验证')
+        return
       }
-      this.$refs.dragComponent.initDragCaptcha();
+      this.$refs.dragComponent.initDragCaptcha()
     },
     handleSendSms() {
       this.sendSmsCenter(this.registerInfo)
-      .then(res => {
-        this.registerInfo.smsToken = res.smsToken;
-        this.countDown();
-        this.dragEnable=false;
-      })
-      .catch(err => {
-        switch(err.code) {
-          case 4030301:
-          case 4030302:
-            this.dragKey ++;
-            this.registerInfo.dragCaptchaToken = '';
-            this.registerInfo.smsToken = '';
-            Toast.fail(err.message);
-            break;
-          case 4030303:
-            if (this.dragEnable) {
-              Toast.fail(err.message);
-            } else {
-              this.dragEnable = true;
-            }
-            break;
-          default:
-            Toast.fail(err.message);
-            break;
-        }
-      });
+        .then(res => {
+          this.registerInfo.smsToken = res.smsToken
+          this.countDown()
+          this.dragEnable = false
+        })
+        .catch(err => {
+          switch (err.code) {
+            case 4030301:
+            case 4030302:
+              this.dragKey++
+              this.registerInfo.dragCaptchaToken = ''
+              this.registerInfo.smsToken = ''
+              Toast.fail(err.message)
+              break
+            case 4030303:
+              if (this.dragEnable) {
+                Toast.fail(err.message)
+              } else {
+                this.dragEnable = true
+              }
+              break
+            default:
+              Toast.fail(err.message)
+              break
+          }
+        })
     },
     // 倒计时
     countDown() {
-      this.count.showCount = true;
-      this.count.codeBtnDisable = true;
-      this.count.num = 120;
+      this.count.showCount = true
+      this.count.codeBtnDisable = true
+      this.count.num = 120
 
       const timer = setInterval(() => {
-        if(this.count.num <= 0) {
-          this.count.codeBtnDisable = false;
+        if (this.count.num <= 0) {
+          this.count.codeBtnDisable = false
           this.count.showCount = false
-          clearInterval(timer);
-          return;
+          clearInterval(timer)
+          return
         }
-        this.count.num--;
-      }, 1000);
+        this.count.num--
+      }, 1000)
     }
   }
 }

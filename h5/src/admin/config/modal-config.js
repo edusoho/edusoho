@@ -160,6 +160,6 @@ const head = {
       label: 'delete'
     }
   ]
-}
+};
 
-export default head
+export default head;

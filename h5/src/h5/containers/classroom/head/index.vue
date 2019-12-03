@@ -70,13 +70,13 @@ export default {
       Api.hasDrpPluginInstalled().then(res => {
         if (!res.Drp) {
           this.tagData.isShow = false
-          return;
+          return
         }
 
         Api.getAgencyBindRelation().then(data => {
           if (!data.agencyId) {
             this.tagData.isShow = false
-            return;
+            return
           }
           this.bindAgencyRelation = data
           this.tagData.isShow = true
@@ -88,7 +88,7 @@ export default {
         this.drpSetting = data
         this.tagData.minDirectRewardRatio = data.minDirectRewardRatio
 
-        let params = {
+        const params = {
           type: 'classroom',
           id: this.classroomId,
           merchant_id: this.drpSetting.merchantId

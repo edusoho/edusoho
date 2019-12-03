@@ -1,9 +1,9 @@
 <template>
   <div class="more-mask">
-    <div class="more-mask__body" :style="heightStyle">
-      <slot></slot>
+    <div :style="heightStyle" class="more-mask__body">
+      <slot/>
     </div>
-    <div v-if="!disabled" class="more-mask__footer" v-show="exccedHeight" :style="textStyle" @touchstart.prevent="maskLoadMore">
+    <div v-if="!disabled" v-show="exccedHeight" :style="textStyle" class="more-mask__footer" @touchstart.prevent="maskLoadMore">
       {{ text.content || '点击查看更多' }}
     </div>
   </div>
@@ -11,17 +11,17 @@
 
 <script>
 export default {
-  name: 'more-mask',
+  name: 'MoreMask',
   props: {
     maxHeight: {
-      default: 288,
+      default: 288
     },
     disabled: {
-      default: false,
+      default: false
     },
     forceShow: {
       type: Boolean,
-      default: false,
+      default: false
     },
     text: {
       type: Object,
@@ -39,43 +39,43 @@ export default {
     return {
       realHeight: 0,
       intervalTime: 5 * 1000,
-      intervalId: undefined,
-    };
+      intervalId: undefined
+    }
   },
   computed: {
     exccedHeight() {
-      return this.realHeight > this.maxHeight || this.forceShow;
+      return this.realHeight > this.maxHeight || this.forceShow
     },
     heightStyle() {
-      const maxHeight = (!this.exccedHeight || this.disabled || this.forceShow) ?
-        'none' : `${this.maxHeight}px`;
-      const paddingBottom = this.forceShow || (this.exccedHeight && !this.disabled) ?
-        '25px' : '0';
-      return { maxHeight, paddingBottom };
+      const maxHeight = (!this.exccedHeight || this.disabled || this.forceShow)
+        ? 'none' : `${this.maxHeight}px`
+      const paddingBottom = this.forceShow || (this.exccedHeight && !this.disabled)
+        ? '25px' : '0'
+      return { maxHeight, paddingBottom }
     },
     textStyle() {
       return {
         paddingTop: `${this.text.paddingTop}px`,
         lineHeight: `${this.text.lineHeight}px`,
-        textAlign: `${this.text.align}`,
-      };
+        textAlign: `${this.text.align}`
+      }
     }
   },
   mounted() {
-    //dom异步更新，但不能保证异步dom 中图片等资源加载完成，这里取最长5秒内的结果
-    const segmentTime = 500;
+    // dom异步更新，但不能保证异步dom 中图片等资源加载完成，这里取最长5秒内的结果
+    const segmentTime = 500
     this.intervalId = setInterval(() => {
-      this.intervalTime -= segmentTime;
+      this.intervalTime -= segmentTime
       if (this.intervalTime < 0) {
-        clearInterval(this.intervalId);
-        return;
+        clearInterval(this.intervalId)
+        return
       }
-      this.realHeight = this.$el.getBoundingClientRect().height;
-    }, segmentTime);
+      this.realHeight = this.$el.getBoundingClientRect().height
+    }, segmentTime)
   },
   methods: {
     maskLoadMore() {
-      this.$emit('maskLoadMore');
+      this.$emit('maskLoadMore')
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="e-column-class pull-left">
     <div class="column-class-left">
-      <img :class="course.imgSrc.className" v-lazy="course.imgSrc.url" />
+      <img v-lazy="course.imgSrc.url" :class="course.imgSrc.className" >
       <div v-if="discountNum" class="column-class-left__discount">
         {{ discountNum }}
       </div>
@@ -11,7 +11,7 @@
           <span v-show="courseType === 'live'">直播</span>
         </div>
         <div v-if="course.studentNum">
-          <i class="iconfont icon-renqi"></i>
+          <i class="iconfont icon-renqi"/>
           {{ course.studentNum }}
         </div>
       </div>
@@ -21,19 +21,19 @@
         {{ course.header }}
       </div>
       <div class="column-class-right__center text-overflow">
-        <div v-if="course.middle.value" v-html="course.middle.html"></div>
+        <div v-if="course.middle.value" v-html="course.middle.html"/>
       </div>
       <div
         class="column-class-right__bottom text-overflow"
         v-html="course.bottom.html"
-      ></div>
+      />
     </div>
   </div>
 </template>
 
 <script>
-import eClassMixins from "@/mixins/eClass";
+import eClassMixins from '@/mixins/eClass'
 export default {
   mixins: [eClassMixins]
-};
+}
 </script>

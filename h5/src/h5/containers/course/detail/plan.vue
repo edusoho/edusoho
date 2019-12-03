@@ -39,7 +39,8 @@
 <script>
 import * as types from '@/store/mutation-types'
 import service from '@/containers/classroom/service'
-import { mapState, mapActions } from 'vuex'
+import { mapMutations, mapState, mapActions } from 'vuex'
+import { Toast } from 'vant'
 
 export default {
   components: {

@@ -67,6 +67,6 @@ const config = [
     name: 'vipPlugin',
     url: '/site_plugins/Vip'
   }
-]
+];
 
-export default config
+export default config;

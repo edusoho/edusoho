@@ -1,25 +1,24 @@
 <template>
   <!-- 文档播放器 -->
   <div class="web-view">
-    <e-loading v-if="isLoading"></e-loading>
+    <e-loading v-if="isLoading"/>
     <!-- web-view -->
-    <div id="player" v-show="media !== 'text'"></div>
-    <div class="media-text" ref="text" v-show="media === 'text'">
-    </div>
+    <div v-show="media !== 'text'" id="player"/>
+    <div v-show="media === 'text'" ref="text" class="media-text"/>
   </div>
 </template>
 <script>
-import loadScript from 'load-script';
-import Api from '@/api';
-import { mapState, mapMutations } from 'vuex';
-import * as types from '@/store/mutation-types';
-import { Toast } from 'vant';
+import loadScript from 'load-script'
+import Api from '@/api'
+import { mapState, mapMutations } from 'vuex'
+import * as types from '@/store/mutation-types'
+import { Toast } from 'vant'
 
 export default {
-  data () {
+  data() {
     return {
       media: '',
-      isPreview: this.$route.query.preview,
+      isPreview: this.$route.query.preview
     }
   },
   computed: {
@@ -31,16 +30,16 @@ export default {
       isLoading: state => state.isLoading
     })
   },
-  async mounted () {
+  async mounted() {
     const player = await Api.getMedia(this.getParams()).catch(err => {
-      Toast(err.message);
-      return Promise.reject(err);
-    });
+      Toast(err.message)
+      return Promise.reject(err)
+    })
     if (['ppt', 'doc'].includes(this.media)) {
       this.initPlayer(player)
     } else {
       // text类型不需要播放器
-      this.$refs.text.innerHTML = player.media.content;
+      this.$refs.text.innerHTML = player.media.content
       this.setNavbarTitle(player.media.title)
     }
   },
@@ -52,15 +51,15 @@ export default {
     * 试看需要传preview=1
     * eg: /api/courses/1/task_medias/1?preview=1
     */
-    getParams () {
-      const { courseId, taskId, type } = this.$route.query;
-      const canTryLookable = !this.joinStatus && this.isPreview;
-      this.media = type;
+    getParams() {
+      const { courseId, taskId, type } = this.$route.query
+      const canTryLookable = !this.joinStatus && this.isPreview
+      this.media = type
 
       return canTryLookable ? {
         query: {
           courseId,
-          taskId,
+          taskId
         }, params: {
           preview: 1
         }
@@ -72,25 +71,25 @@ export default {
       }
     },
     initPlayer(player) {
-      const media = player.media;
-      const playerSDKUri = '//service-cdn.qiqiuyun.net/js-sdk/sdk-v1.js?v='
+      const media = player.media
+      const playerSDKUri = '//service-cdn.qiqiuyun.net/js-sdk/sdk-v1.js?v=' +
       // const playerSDKUri = '//oilgb9e2p.qnssl.com/js-sdk/sdk-v1.js?v=' // 测试 sdk
-       + (Date.now()/1000/60);
+       (Date.now() / 1000 / 60)
 
       loadScript(playerSDKUri, (err) => {
-      if (err) throw err;
+        if (err) throw err
 
-      new window.QiQiuYun.Player({
-        id: 'player',  // 用于初始化的DOM节点id
-        // playServer: 'play.test.qiqiuyun.cn', // 测试 playServer
-        resNo: media.resId, // 想要播放的资源编号
-        token: media.token, // 请求播放的认证token
-        source: {
-          type: player.mediaType,
-          args: media
-        },
-      });
-    });
+        new window.QiQiuYun.Player({
+          id: 'player', // 用于初始化的DOM节点id
+          // playServer: 'play.test.qiqiuyun.cn', // 测试 playServer
+          resNo: media.resId, // 想要播放的资源编号
+          token: media.token, // 请求播放的认证token
+          source: {
+            type: player.mediaType,
+            args: media
+          }
+        })
+      })
     }
   }
 }

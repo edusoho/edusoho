@@ -20,15 +20,20 @@
     <van-cell v-if="unreceivedCoupons.length" class="course-detail__cell" is-link @click="couponListShow = true">
       <template slot="title">
         <span class="text-12">领券：</span>
-        <mini-coupon :item="item" v-for="(item, index) in miniCoupons" :key="index" />
+        <mini-coupon v-for="(item, index) in miniCoupons" :item="item" :key="index" />
       </template>
     </van-cell>
 
-    <e-popup class="coupon-popup white-background" :show.sync="couponListShow" title="优惠券">
-      <coupon v-for="(item, index) in unreceivedCoupons" :key="index" :index="index" :coupon="item" :showButton="true"
+    <e-popup :show.sync="couponListShow" class="coupon-popup white-background" title="优惠券">
+      <coupon
+        v-for="(item, index) in unreceivedCoupons"
+        :key="index"
+        :index="index"
+        :coupon="item"
+        :show-button="true"
         @couponHandle="couponHandle($event)" />
-      <div class="coupon-empty" v-show="!unreceivedCoupons.length">
-        <img class="empty-img" src='static/images/coupon_empty.png'>
+      <div v-show="!unreceivedCoupons.length" class="coupon-empty">
+        <img class="empty-img" src="static/images/coupon_empty.png">
         <div class="empty-text">暂无优惠券</div>
       </div>
     </e-popup>
@@ -36,24 +41,24 @@
 </template>
 
 <script>
-import EPopup from '@/components/popup';
-import coupon from '&/components/e-coupon/e-coupon';
-import miniCoupon from '&/components/e-mini-coupon/e-mini-coupon';
-import getCouponMixin from '@/mixins/coupon/getCouponHandler';
-import activityMixin from '@/mixins/activity/index';
+import EPopup from '@/components/popup'
+import coupon from '&/components/e-coupon/e-coupon'
+import miniCoupon from '&/components/e-mini-coupon/e-mini-coupon'
+import getCouponMixin from '@/mixins/coupon/getCouponHandler'
+import activityMixin from '@/mixins/activity/index'
 
 export default {
-  name: 'onsale',
-  mixins: [getCouponMixin, activityMixin],
+  name: 'Onsale',
   components: {
     coupon,
     miniCoupon,
-    EPopup,
+    EPopup
   },
+  mixins: [getCouponMixin, activityMixin],
   props: ['unreceivedCoupons', 'miniCoupons', 'activities'],
-  data () {
+  data() {
     return {
-      couponListShow: false,
+      couponListShow: false
     }
   }
 }

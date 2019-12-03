@@ -1,5 +1,5 @@
-import axios from 'axios'
-import store from 'admin/store'
+import axios from 'axios';
+import store from 'admin/store';
 
 // 状态码
 // const statusCode = {
@@ -7,36 +7,36 @@ import store from 'admin/store'
 // };
 
 axios.interceptors.request.use(config => {
-  config.headers.Accept = 'application/vnd.edusoho.v2+json'
+  config.headers.Accept = 'application/vnd.edusoho.v2+json';
 
-  const env = process.env.NODE_ENV
+  const env = process.env.NODE_ENV;
 
   if (env !== 'production') {
-    config.headers['X-Auth-Token'] = 'ewluz6saiu8k8w0wwo0cks4okcw8kws'
+    config.headers['X-Auth-Token'] = 'i0fs9kdiihc8w8o8w00ow4oc0osww0o';
   } else {
-    config.headers['X-Requested-With'] = 'XMLHttpRequest'
-    config.headers['X-CSRF-Token'] = store.state.csrfToken
+    config.headers['X-Requested-With'] = 'XMLHttpRequest';
+    config.headers['X-CSRF-Token'] = store.state.csrfToken;
   }
 
-  store.commit('UPDATE_LOADING_STATUS', true)
+  store.commit('UPDATE_LOADING_STATUS', true);
 
-  return config
-}, error => Promise.reject(error))
+  return config;
+}, error => Promise.reject(error));
 
 axios.interceptors.response.use(res => {
-  store.commit('UPDATE_LOADING_STATUS', false)
-  return res.data
+  store.commit('UPDATE_LOADING_STATUS', false);
+  return res.data;
 }, error => {
-  store.commit('UPDATE_LOADING_STATUS', false)
+  store.commit('UPDATE_LOADING_STATUS', false);
 
   switch (error.response.status) {
     case 401:
       // const code = error.response.data.error.code;
 
-      break
+      break;
     default:
-      break
+      break;
   }
 
-  return Promise.reject(error.response.data.error)
-})
+  return Promise.reject(error.response.data.error);
+});

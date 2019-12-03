@@ -1,17 +1,17 @@
-import Vue from 'vue'
-import { Toast } from 'vant'
-import store from '@/store'
-import * as types from '@/store/mutation-types'
-import Router from 'vue-router'
-import find from './find'
-import learning from './learning'
-import my from './my'
+import Vue from 'vue';
+import { Toast } from 'vant';
+import store from '@/store';
+import * as types from '@/store/mutation-types';
+import Router from 'vue-router';
+import find from './find';
+import learning from './learning';
+import my from './my';
 /* eslint-disable no-new */
 // const originalPush = Router.prototype.push
 // Router.prototype.push = function push(location) {
 //   return originalPush.call(this, location).catch(err => err)
 // }
-Vue.use(Router)
+Vue.use(Router);
 // 路由懒加载 实现代码分离
 const routes = [
   {
@@ -343,21 +343,21 @@ const routes = [
       component: () => import(/* webpackChunkName: "receive" */'@/containers/study-card/components/valid-card')
     }]
   }
-]
+];
 
 // 页面刷新，store数据会被清掉，需对token、user重新赋值
 if (localStorage.getItem('token')) {
   store.commit(types.USER_LOGIN, {
     token: localStorage.getItem('token'),
     user: JSON.parse(localStorage.getItem('user'))
-  })
+  });
 }
 
 const router = new Router({
   routes
-})
+});
 
-const isWeixinBrowser = /micromessenger/.test(navigator.userAgent.toLowerCase())
+const isWeixinBrowser = /micromessenger/.test(navigator.userAgent.toLowerCase());
 
 // 检查会员开关配置（会员页面需要有限判断，其他页面异步滞后判断减少页面等待时间）
 const setVipSwitch = () => new Promise((resolve, reject) => {
@@ -367,17 +367,17 @@ const setVipSwitch = () => new Promise((resolve, reject) => {
         // vip 前端元素判断（vip 插件已安装(升级) && vip 插件已开启 && vip 等级已设置）
         if (vipRes && vipRes.h5Enabled && vipRes.enabled) {
           return store.dispatch('setVipSwitch', true)
-            .then(() => resolve())
+            .then(() => resolve());
         }
-        return resolve(vipRes)
+        return resolve(vipRes);
       })
       .catch(err => {
-        Toast.fail(err.message)
-        return reject(err)
-      })
+        Toast.fail(err.message);
+        return reject(err);
+      });
   }
-  return resolve()
-})
+  return resolve();
+});
 
 // 检查微信公众号开关配置
 const setWeChatSwitch = () => new Promise((resolve, reject) => {
@@ -386,32 +386,32 @@ const setWeChatSwitch = () => new Promise((resolve, reject) => {
       .then(res => {
         if (res.enabled) {
           return store.dispatch('setWeChatSwitch', true)
-            .then(() => resolve())
+            .then(() => resolve());
         }
-        return resolve(res)
+        return resolve(res);
       })
       .catch(err => {
-        console.log(err.message)
-        return reject(err)
-      })
+        console.log(err.message);
+        return reject(err);
+      });
   }
-  return resolve()
-})
+  return resolve();
+});
 
 router.beforeEach((to, from, next) => {
-  const shouldUpdateMetaTitle = ['binding', 'password_reset', 'register', 'login', 'protocol', 'find'].includes(to.name)
+  const shouldUpdateMetaTitle = ['binding', 'password_reset', 'register', 'login', 'protocol', 'find'].includes(to.name);
 
   // 已登录用户不进入 prelogin/login/register 路由
   // 已登录用户进入 auth_social 路由，返回到首页，解决反复进入微信授权页面的问题
   if (['prelogin', 'register'].includes(to.name) && store.state.token) {
-    next(to.query.redirect || '/')
-    return
+    next(to.query.redirect || '/');
+    return;
   }
 
   // 未登录用户 信息设置页 跳转到首页
   if (['settings', 'couponCovert'].includes(to.name) && !store.state.token) {
-    next('/')
-    return
+    next('/');
+    return;
   }
 
   // 站点后台设置、会员后台配置
@@ -420,33 +420,33 @@ router.beforeEach((to, from, next) => {
       .then(siteRes => {
         // 动态更新 navbar title
         if (shouldUpdateMetaTitle) {
-          to.meta.title = siteRes.name
+          to.meta.title = siteRes.name;
         }
         if (to.name === 'vip') {
           setVipSwitch()
-            .then(() => next())
+            .then(() => next());
         } else {
-          next()
+          next();
         }
       })
       .catch(err => {
-        Toast.fail(err.message)
-      })
+        Toast.fail(err.message);
+      });
   } else if (shouldUpdateMetaTitle) {
-    to.meta.title = store.state.settings.name
-    next()
+    to.meta.title = store.state.settings.name;
+    next();
   } else {
-    next()
+    next();
   }
 
   if (store.state.token) {
-    setWeChatSwitch()
+    setWeChatSwitch();
   }
 
   store.dispatch('setCouponSwitch').then(res => {
-    console.log(res)
-  })
-})
+    console.log(res);
+  });
+});
 
 // 异步加载配置
 router.afterEach(to => {
@@ -457,11 +457,11 @@ router.afterEach(to => {
       key: 'courseSettings'
     })
       .catch(err => {
-        Toast.fail(err.message)
-      })
+        Toast.fail(err.message);
+      });
   }
   if (to.name !== 'vip') {
-    setVipSwitch()
+    setVipSwitch();
   }
-})
-export default router
+});
+export default router;

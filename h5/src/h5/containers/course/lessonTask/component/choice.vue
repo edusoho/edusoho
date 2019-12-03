@@ -2,23 +2,23 @@
   <div class="subject">
     <div class="subject-stem">
       <span class="serial-number">{{ itemdata.seq }}、</span>
-      <div class="subject-stem__content rich-text" v-html="stem"></div>
+      <div class="subject-stem__content rich-text" v-html="stem"/>
     </div>
 
-    <div class="material-title" v-if="itemdata.parentTitle">
-      <span class="serial-number">问题{{itemdata.materialIndex}}：</span>
-      <div v-html="itemdata.stem" class="rich-text"></div>
+    <div v-if="itemdata.parentTitle" class="material-title">
+      <span class="serial-number">问题{{ itemdata.materialIndex }}：</span>
+      <div class="rich-text" v-html="itemdata.stem"/>
     </div>
 
     <van-checkbox-group v-model="result" class="answer-paper" @change="choose()">
       <van-checkbox
-        class="subject-option"
         v-for="(item, index) in itemdata.metas.choices"
         :key="index"
         :name="index"
         :disabled="!canDo"
+        class="subject-option"
       >
-        <div class="subject-option__content" v-html="item"></div>
+        <div class="subject-option__content" v-html="item"/>
         <span
           slot="icon"
           slot-scope="props"
@@ -30,15 +30,16 @@
 </template>
 
 <script>
-import  checkAnswer from '../../../../mixins/lessonTask/itemBank'
+import checkAnswer from '../../../../mixins/lessonTask/itemBank'
 export default {
-  name: "choice-type",
-  mixins:[checkAnswer],
-  data() {
-    return {
-      result: this.answer
-    };
+  name: 'ChoiceType',
+  filters: {
+    filterOrder(index) {
+      const arr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+      return arr[index]
+    }
   },
+  mixins: [checkAnswer],
   props: {
     itemdata: {
       type: Object,
@@ -48,36 +49,35 @@ export default {
       type: Number,
       default: 1
     },
-    answer:{
+    answer: {
       type: Array,
       default: () => []
     },
-    canDo:{
-      type:Boolean,
-      default:true
+    canDo: {
+      type: Boolean,
+      default: true
+    }
+  },
+  data() {
+    return {
+      result: this.answer
     }
   },
   computed: {
     stem: {
       get() {
         if (this.itemdata.parentTitle) {
-          return this.itemdata.parentTitle.stem;
+          return this.itemdata.parentTitle.stem
         } else {
-          return this.itemdata.stem;
+          return this.itemdata.stem
         }
       }
     }
   },
-  filters: {
-    filterOrder(index) {
-      const arr = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-      return arr[index];
-    }
-  },
   methods: {
-    choose(name){
-        this.$emit('choiceChoose',this.result,this.itemdata.id)
+    choose(name) {
+      this.$emit('choiceChoose', this.result, this.itemdata.id)
     }
-  },
-};
+  }
+}
 </script>

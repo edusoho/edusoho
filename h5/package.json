@@ -9,7 +9,7 @@
     "build:h5": "vue-cli-service build --mode prod h5 --report",
     "build:admin": "vue-cli-service build --mode prod admin --report",
     "build": "vue-cli-service build --mode prod h5 && vue-cli-service build --mode prod admin",
-    "lint": "vue-cli-service lint",
+    "lint": "vue-cli-service lint --mode  h5",
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
@@ -60,29 +60,26 @@
     "vue-router": "^3.0.7",
     "vue-style-loader": "^3.0.1",
     "vuedraggable": "^2.16.0",
-    "vuex": "^3.0.1"
-  },
-  "devDependencies": {
-    "@babel/preset-env": "^7.6.3",
-    "@babel/preset-es2015": "^7.0.0-beta.53",
+    "vuex": "^3.0.1",
     "@vue/cli-plugin-babel": "^3.12.0",
     "@vue/cli-plugin-eslint": "^3.12.0",
     "@vue/cli-plugin-unit-jest": "^3.12.0",
+    "vue-template-compiler": "^2.6.10",
+    "script-ext-html-webpack-plugin": "^2.1.4",
+    "@babel/preset-env": "^7.6.3",
+    "@babel/preset-es2015": "^7.0.0-beta.53",
     "@vue/cli-service": "^3.12.0",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "^10.0.1"
+  },
+  "devDependencies": {
     "@vue/eslint-config-prettier": "^5.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
-    "babel-core": "7.0.0-bridge.0",
-    "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
-    "babel-plugin-component": "^1.1.1",
     "chromedriver": "^2.27.2",
     "eslint": "^5.16.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-vue": "^5.0.0",
-    "node-sass": "^4.12.0",
-    "prettier": "^1.18.2",
-    "sass-loader": "^8.0.0",
-    "script-ext-html-webpack-plugin": "^2.1.4",
-    "vue-template-compiler": "^2.6.10"
+    "prettier": "^1.18.2"
   }
 }
