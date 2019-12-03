@@ -6,6 +6,9 @@
 
 
 {% block main %}
+
+{% include 'admin/system/mobile-discovery-upgrade.modal.html.twig' %}
+
 {% if setting("mobile.enabled") == 1 %}
 <table class="table table-hover" id="category-table">
   <thead>
