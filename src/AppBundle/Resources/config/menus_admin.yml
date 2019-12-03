@@ -897,6 +897,10 @@ admin:
                 admin_setting_mobile:
                     name: admin.system.mobile_menu
                     children:
+                        admin_setting_mobile_discoveries_settings:
+                            name: admin.system.mobile.discoveries_setting
+                            disable: true
+                            router_name: admin_setting_mobile_discoveries
                         admin_setting_mobile_settings:
                             name: admin.system.mobile.basic_tab
                             disable: true
