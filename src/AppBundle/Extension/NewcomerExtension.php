@@ -61,17 +61,5 @@ class NewcomerExtension extends Extension
 
     public function register()
     {
-        $self = $this;
-
-        $newComerTasks = $this->getNewcomerTasks();
-
-        foreach ($newComerTasks as $key => $newComerTask) {
-            $biz[$key] = function ($biz) use ($self, $newComerTask) {
-                $newComerTask = call_user_func(array($self, $newComerTask));
-                $class = $newComerTask['class'];
-
-                return new $class($biz, $newComerTask);
-            };
-        }
     }
 }
