@@ -51,9 +51,8 @@ class UserSettingController extends BaseController
 
         $auth = array_merge($default, $auth);
 
-        $newcomerTask = $this->getSettingService()->get('newcomer_task', array());
-        $newcomerTask = array_merge($newcomerTask, array('auth_applied' => 1));
-        $this->getSettingService()->set('newcomer_task', $newcomerTask);
+        //完成新人助手
+        $this->doneNewcomerTask();
 
         if ('POST' == $request->getMethod()) {
             $defaultSetting = $request->request->all();
@@ -105,6 +104,17 @@ class UserSettingController extends BaseController
             'defaultSetting' => $defaultSetting,
             'hasOwnCopyright' => false,
         ));
+    }
+
+    protected function doneNewcomerTask()
+    {
+        $newComerTasks = $this->container->get('extension.manager')->getNewcomerTasks();
+        $authSettingTask = new $newComerTasks['auth_setting_task']['class']($this->getBiz(), $newComerTasks['auth_setting_task']['class']);
+        $isTaskDone = $authSettingTask->getStatus();
+
+        if (!$isTaskDone) {
+            $authSettingTask->doneTask('auth_setting_task');
+        }
     }
 
     public function userAvatarAction(Request $request)

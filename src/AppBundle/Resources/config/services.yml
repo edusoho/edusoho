@@ -75,6 +75,12 @@ services:
       tags:
         - { name: extension, priority: 10 }
 
+    newcomer_task.extension:
+      class: AppBundle\Extension\NewComerExtension
+      calls:
+        - [setBiz, ['@biz']]
+      tags:
+        - { name: extension, priority: 10  }
 
     biz.service_provider.collector:
         class: Biz\ServiceProviderCollector
