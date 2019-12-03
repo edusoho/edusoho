@@ -4,6 +4,7 @@ class QuestionSelect {
   constructor() {
     this.element = $('.js-select-container');
     this.table = $('.js-select-table');
+    this.$questionBankSelector = $('.js-question-bank');
     this.renderUrl = this.table.data('url');
     this.categoryContainer = $('.js-category-list');
     this.selectTypeQuestion = {};
@@ -12,6 +13,7 @@ class QuestionSelect {
   }
   init() {
     this.initEvent();
+    this.initQuestionBankSelector();
     this.initQuestionType();
     this.selector.setOpts({
       addCb: (item) => {
@@ -23,6 +25,10 @@ class QuestionSelect {
     });
   }
   initEvent() {
+    this.element.on('change', '.js-question-bank', (event) => {
+      this.onChangeQuestionBank(event);
+    });
+
     this.element.on('click', '.js-search-btn', (event) => {
       this.onClickSearchBtn(event);
     });
@@ -46,6 +52,17 @@ class QuestionSelect {
     $('.js-pick-btn').on('click', (event) => {
       this.onClickPick(event);
     });
+  }
+
+  initQuestionBankSelector() {
+    if (this.$questionBankSelector.length !== 0) {
+      this.$questionBankSelector.select2({
+        treeview: true,
+        dropdownAutoWidth: true,
+        treeviewInitState: 'collapsed',
+        placeholderOption: 'first',
+      });
+    }
   }
 
   initQuestionType() {
@@ -75,6 +92,20 @@ class QuestionSelect {
     }
   }
 
+  onChangeQuestionBank(event) {
+    let $selected = this.$questionBankSelector.select2('data');
+    let bankId = $selected.id;
+    if (parseInt(bankId)) {
+      let url = this.$questionBankSelector.data('url');
+      url = url.replace(/[0-9]/, bankId);
+      $.post(url, {isSelectBank:1}, function(html) {
+        $('#attachment-modal').html(html);
+      }).error(function(e) {
+        cd.message({type: 'danger', message: e.responseJson.error.message});
+      })
+    }
+  }
+
   onClickClearSelect(event) {
     this.element.find('.js-list-item').each((index, item) => {
       let type = $(item).data('type');
@@ -95,9 +126,11 @@ class QuestionSelect {
       cd.message({type: 'danger', message: Translator.trans('site.data.uncheck_name_hint', {'name': name})});
       return;
     }
+    this.cacheQuestion();
 
     $modal.trigger('selectQuestion', this.selectTypeQuestion);
     $modal.modal('hide');
+    $('.js-close-modal').trigger('click');
   }
 
   getTypeQuestionLength(type) {
@@ -135,6 +168,13 @@ class QuestionSelect {
     $target.addClass('active');
     $('.js-category-choose').val('');
     this.renderTable();
+  }
+
+  cacheQuestion() {
+    console.log(JSON.stringify(this.selectTypeQuestion));
+    console.log(window.frames['task-create-content-iframe']);
+    console.log($('.js-cached-question', window.frames[0].contentDocument));
+    $('.js-cached-question').text(JSON.stringify(this.selectTypeQuestion));
   }
 
   renderTable(isPaginator) {

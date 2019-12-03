@@ -9,7 +9,7 @@
   <td class="seq">{% if question.subCount > 0 %}<span class="color-gray">~</span>{% else %}{{ question.seq|default(' ') }}{% endif %}</td>
   <td>
     {% if question.includeImg|default('') %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
-    {{question['stem']|plain_text(40) }}
+    {{ question['stem']|plain_text(40) }}
 
     <div>
       {% include 'question-manage/part/belong.html.twig' with {question:question,courses:courses,courseTasks:courseTasks} %}
@@ -22,8 +22,8 @@
   <td>
     <div class="btn-group">
       {% if question.parentId == 0 %}
-        <a class="mrm" data-role="preview-btn" href="javascript:" data-url="{{ path('course_set_manage_question_preview', {courseSetId:courseSet.id, questionId:question.id, isNew:true }) }}" >{{'course.testpaper_manage.question.operation.preview_btn'|trans}}</a>
-        <a class="mrm" data-role="replace-item"  href="javascript:"  data-url="{{ path('course_set_manage_homework_question_picker', {id:courseSet.id, replace: question.id }) }}" >{{'course.testpaper_manage.question.operation.replace_btn'|trans}}</a>
+        <a class="mrm" data-role="preview-btn" href="javascript:" data-url="{{ path('question_bank_manage_question_preview', { courseSetId:courseSet.id, questionId:question.id, isNew:true }) }}" >{{'course.testpaper_manage.question.operation.preview_btn'|trans}}</a>
+        <a class="mrm" data-role="replace-item" href="javascript:" data-url="{{ path('course_set_manage_homework_question_picker', { id:courseSet.id, replace: question.id }) }}" >{{'course.testpaper_manage.question.operation.replace_btn'|trans}}</a>
         <a class="" data-role="item-delete-btn" href="javascript:" >{{'course.testpaper_manage.question.operation.delete_btn'|trans}}</a>
       {% endif %}
     </div>

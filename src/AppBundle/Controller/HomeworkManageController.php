@@ -4,6 +4,8 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Question\Service\QuestionService;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,18 +34,15 @@ class HomeworkManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $user = $this->getUser();
-        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSet['id']);
-
-        return $this->render('homework/manage/question-picker.html.twig', array(
-            'courseSet' => $courseSet,
-            'questions' => $questions,
-            'replace' => empty($conditions['replace']) ? '' : $conditions['replace'],
-            'paginator' => $paginator,
-            'courseTasks' => $this->getQuestionRanges($request->query->get('courseId', 0)),
-            'conditions' => $conditions,
-            'targetType' => $request->query->get('targetType', 'testpaper'),
-            'courses' => $manageCourses,
+        return $this->render('homework/manage/question-pick-modal.html.twig', array(
+            'isSelectBank' => 1,
+//            'courseSet' => $courseSet,
+//            'questions' => $questions,
+//            'replace' => empty($conditions['replace']) ? '' : $conditions['replace'],
+//            'paginator' => $paginator,
+//            'courseTasks' => $this->getQuestionRanges($request->query->get('courseId', 0)),
+//            'conditions' => $conditions,
+//            'targetType' => $request->query->get('targetType', 'testpaper'),
         ));
     }
 
@@ -171,7 +170,7 @@ class HomeworkManageController extends BaseController
         $activity = $this->getActivityService()->getActivity($activityId);
 
         if (!$activity || 'homework' != $activity['mediaType']) {
-            return $this->createMessageResponse('Argument Invalid');
+            return $this->createMessageResponse('error', 'Argument Invalid');
         }
 
         $testpaper = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
@@ -305,6 +304,17 @@ class HomeworkManageController extends BaseController
         return $this->createService('Testpaper:TestpaperService');
     }
 
+    /**
+     * @return QuestionBankService
+     */
+    protected function getQuestionBankService()
+    {
+        return $this->createService('QuestionBank:QuestionBankService');
+    }
+
+    /**
+     * @return QuestionService
+     */
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');

@@ -21,12 +21,14 @@ export default class Homework {
       this.$homeworkModal.hide();
     });
     this.$questionPickedModal.on('hidden.bs.modal', () => {
+      this.showPickedQuestion();
       this.$homeworkModal.show();
       this.$questionPickedModal.html('');
       if(this.validator2) {
         this.validator2.form();
       }
     });
+    this.$questionPickedModal.on('selectQuestion', (event, typeQuestions) => this.selectQuestion(event, typeQuestions));
     window.ltc.on('getActivity', (msg) => {
       window.ltc.emit('returnActivity', {valid:this.validator.form(), data:window.ltc.getFormSerializeObject($('#step2-form'))});
     });
@@ -65,6 +67,22 @@ export default class Homework {
     }, html => {
       this.$questionPickedModal.html(html);
     });
+  }
+
+  showPickedQuestion() {
+    let typeQuestions = JSON.parse($('.js-cached-question').text());
+    let questionIds = [];
+    $.each(Object.keys(typeQuestions), function(type) {
+      console.log(type);
+      questionIds += typeQuestions[type];
+    });
+    let url = $('.js-pick-modal').data('pickUrl');
+    let self = this;
+    $.post(url, {questionIds: typeQuestions}, typeHtml => {
+    });
+  }
+
+  selectQuestion(event, typeQuestions) {
   }
 
   inItStep2form() {
