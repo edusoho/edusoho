@@ -83,15 +83,11 @@ class MobileController extends BaseController
             if (0 == $appDiscoveryVersion) {
                 try {
                     $appSettings = array();
-
                     $bannersSetting = $this->getAppBannersSetting();
-
                     $channelSettings = $this->getAppChannelSettings();
-
                     $appSettings = array_merge($bannersSetting, $channelSettings);
 
                     $this->getSettingService()->set('app_discovery', array('version' => 1));
-
                     $this->getSettingService()->set('apps_published_discovery', $appSettings);
 
                     return $this->createJsonResponse(array('status' => 'successed'));

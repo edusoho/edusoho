@@ -12,7 +12,7 @@ define(function (require, exports, module) {
         $("#upgrade").click(function(){
             $(this).button('loading');
             var url = $(this).data('url');
-            var successUrl = $(this).data('success-url');
+            var successUrl = $(this).data('successUrl');
             $.post(url, function (res) {
                 if ('successed' == res.status) {
                     Notify.success(Translator.trans('admin.mobile_manage.discovery_upgrade_madal.notice_successed'));
