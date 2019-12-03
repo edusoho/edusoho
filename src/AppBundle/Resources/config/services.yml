@@ -76,7 +76,7 @@ services:
         - { name: extension, priority: 10 }
 
     newcomer_task.extension:
-      class: AppBundle\Extension\NewComerExtension
+      class: AppBundle\Extension\NewcomerExtension
       calls:
         - [setBiz, ['@biz']]
       tags:
