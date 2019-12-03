@@ -1562,7 +1562,7 @@ course.question_manage.question.delete_btn: 删除
 course.question_manage.question.include_sub: 含子题
 course.question_manage.question.unfinished: 未完成
 course.question_manage.question.sub_question: 子题
-course.question_manage.question.belong: 从属于
+course.question_manage.question.belong: 分类
 course.question_manage.question.course: 本课程
 course.question_manage.question.score: 得分：%testResult.score%分
 course.question_manage.question.true_answer: 正确答案是

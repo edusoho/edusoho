@@ -171,10 +171,7 @@ class QuestionSelect {
   }
 
   cacheQuestion() {
-    console.log(JSON.stringify(this.selectTypeQuestion));
-    console.log(window.frames['task-create-content-iframe']);
-    console.log($('.js-cached-question', window.frames[0].contentDocument));
-    $('.js-cached-question').text(JSON.stringify(this.selectTypeQuestion));
+    $('#task-create-content-iframe').contents().find('.js-cached-question').text(JSON.stringify(this.selectTypeQuestion));
   }
 
   renderTable(isPaginator) {

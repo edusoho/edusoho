@@ -813,6 +813,7 @@ json_response.join_group_failed.message: 加入小组失败!
 json_response.user_not_found.message: 该用户不存在
 json_response.homework_has_submitted_cannot_change.message: 作业已提交，不能再修改答案！
 json_response.must_choose_question.message: 请先选择题目
+json_response.no_multi_question_bank.message: 只能从一个题库中选题
 json_response.cannot_send_message_self.message: 不能给自己发私信哦！
 json_response.receiver_not_exist.message: 该收件人不存在
 json_response.receiver_not_allowed.message: 不支持向该用户发送私信

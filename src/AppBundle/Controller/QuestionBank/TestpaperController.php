@@ -430,46 +430,6 @@ class TestpaperController extends BaseController
         ));
     }
 
-    public function questionPickContentAction(Request $request, $id)
-    {
-        if (!$this->getQuestionBankService()->canManageBank($id)) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-
-        $conditions = $request->query->all();
-        $conditions['bankId'] = $id;
-        $conditions['parentId'] = empty($conditions['parentId']) ? 0 : $conditions['parentId'];
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getQuestionService()->searchCount($conditions),
-            10
-        );
-
-        $questions = $this->getQuestionService()->search(
-            $conditions,
-            array('createdTime' => 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $categories = $this->getCategoryService()->getCategoryStructureTree($questionBank['id']);
-//        $categoryTree = $this->getCategoryService()->getCategoryTree($questionBank['id']);
-//        $questionCategories = $this->getCategoryService()->findCategories($questionBank['id']);
-//        $questionCategories = ArrayToolkit::index($questionCategories, 'id');
-
-        return $this->render('question-bank/widgets/question-pick-content.html.twig', array(
-            'questions' => $questions,
-            'paginator' => $paginator,
-            'questionBank' => $questionBank,
-            'categories' => $categories,
-//            'categoryTree' => $categoryTree,
-//            'questionCategories' => $questionCategories,
-        ));
-    }
-
     public function questionSearchAction(Request $request, $id)
     {
         if (!$this->getQuestionBankService()->canManageBank($id)) {

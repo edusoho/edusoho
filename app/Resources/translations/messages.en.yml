@@ -1398,7 +1398,7 @@ course.question_manage.question.delete_btn: Delete
 course.question_manage.question.include_sub: 'Sub questions included'
 course.question_manage.question.unfinished: Unfinised
 course.question_manage.question.sub_question: 'Sub questions'
-course.question_manage.question.belong: 'If of'
+course.question_manage.question.belong: 'Category'
 course.question_manage.question.course: 'The course'
 course.question_manage.question.score: Score：%testResult.score%
 course.question_manage.question.true_answer: 'Correct answer is'
