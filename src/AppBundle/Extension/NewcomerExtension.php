@@ -69,8 +69,7 @@ class NewcomerExtension extends Extension implements ServiceProviderInterface
     {
         $newcomerTasks = $this->getNewcomerTasks();
         foreach ($newcomerTasks as $taskName => $newcomerTask) {
-            $container['newcomer.'.$taskName] = function ($biz)
-            use ($newcomerTask) {
+            $container['newcomer.'.$taskName] = function ($biz) use ($newcomerTask) {
                 return new $newcomerTask['class']($biz);
             };
         }
