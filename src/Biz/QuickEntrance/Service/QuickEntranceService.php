@@ -4,9 +4,13 @@ namespace Biz\QuickEntrance\Service;
 
 interface QuickEntranceService
 {
-    public function getEntrancesByUserId($userId);
+    const QUICK_ENTRANCE_MAX_NUM = 7;
 
-    public function getAllEntrances($userId);
+    public function findEntrancesByUserId($userId);
+
+    public function findAvailableEntrances();
+
+    public function findSelectedEntrancesCodeByUserId($userId);
 
     public function createUserEntrance($userId, $entrances = array());
 

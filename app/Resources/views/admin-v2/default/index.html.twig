@@ -53,7 +53,8 @@
           </div>
         </div>
 
-        {# 应用推荐 #}
+        {# 应用推荐（高级去版权不显示） #}
+        {% if not setting('copyright.thirdCopyright', false) == 1 %}
         <div class="admin-v2-section cd-pb24 application-intro js-application-intro"
              {% if not is_without_network() %}data-url="{{ path('admin_v2_homepage_application_intro') }}" {% endif %}>
           <div class="admin-v2-section__header cd-mb16">{{ 'admin_v2.homepage.application_intro'|trans }}
@@ -72,8 +73,10 @@
             </div>
           </div>
         </div>
+        {% endif %}
 
-        {# 经营建议#}
+        {# 经营建议（高级去版权不显示）#}
+        {% if not setting('copyright.thirdCopyright', false) == 1 %}
         <div class="admin-v2-section cd-pb16 cd-mb0">
           <div class="admin-v2-section__header cd-mb16">{{ 'admin_v2.business_advice.title'|trans }}<a {% if is_without_network() %}class="admin-v2-section__more js-no-network" href="javascript:;" {% else %}class="admin-v2-section__more" href="http://www.qiqiuyu.com" target="_blank"{% endif %}>{{ 'admin_v2.buiness_advice.goto_qiqiuyu'|trans }}</a></div>
           <div class="admin-v2-section__body admin-advice js-admin-advice" data-url="{{ path('admin_v2_homepage_business_advice') }}">
@@ -88,6 +91,7 @@
             </div>
           </div>
         </div>
+        {% endif %}
       </div>
 
       <div class="col-md-3">
@@ -98,7 +102,8 @@
           </div>
         </div>
 
-        {# 网校公告 #}
+        {# 网校公告（高级去版权不显示） #}
+        {% if not setting('copyright.thirdCopyright', false) == 1 %}
         <div class="admin-sidebar-section cd-pb16">
           <div class="admin-sidebar-section__header">{{ 'admin_v2.homepage.announcement_from_platform'|trans }}</div>
           <div class="announcement-from-platform js-announcement"{% if not is_without_network() %} data-url="{{ path('admin_v2_announcement_from_platform') }}"{% endif %}>
@@ -107,6 +112,7 @@
             </div>
           </div>
         </div>
+        {% endif %}
 
         {# changelog #}
         <div class="admin-sidebar-section js-admin-changelog" data-url="{{ path('admin_v2_homepage_changelog') }}">
@@ -118,7 +124,8 @@
           </div>
         </div>
 
-        {# 公众号 #}
+        {# 公众号（高级去版权不显示） #}
+        {% if not setting('copyright.thirdCopyright', false) == 1 %}
         <div class="admin-sidebar-section js-admin-qrcode" data-url="{{ path('admin_v2_homepage_qrcode') }}">
           <div class="admin-sidebar-section__header">{{ 'admin_v2.wechat_official_account.title'|trans }}</div>
           <div class="admin-sidebar-section__body">
@@ -127,6 +134,7 @@
             </div>
           </div>
         </div>
+        {% endif %}
       </div>
     </div>
 

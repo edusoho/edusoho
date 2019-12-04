@@ -1,7 +1,5 @@
 admin:
     - admin_v2
-admin_course:
-    - admin_v2_teach
 admin_course_show:
     - admin_v2_course_show
 admin_course_manage:
@@ -150,10 +148,6 @@ _admin_marketing_marketing_menu:
     - admin_v2_micromarketing
 _marketing_marketing_page:
     - admin_v2_micromarketing_page
-admin_operation:
-    - admin_v2_operating
-admin_mobile:
-    - admin_v2_h5_set
 admin_h5_set:
     - admin_v2_h5_set
 admin_wap_set:
@@ -231,7 +225,7 @@ admin_keyword_banlogs:
 admin_operation_group:
     - admin_v2_operation_group_manage
 admin_operation_group_manage:
-    - admin_v2_operation_group_manage
+    - admin_v2_operation_group
 admin_operation_group_create:
     - admin_v2_operation_group_create
 admin_operation_group_thread:
@@ -262,8 +256,6 @@ admin_operation_wechat_notification_record:
     - admin_v2_operation_wechat_notification_record
 admin_operation_wechat_notification_manage:
     - admin_v2_operation_wechat_notification_manage
-admin_user:
-    - admin_v2_user
 admin_user_show:
     - admin_v2_user_show
 admin_user_manage:
@@ -298,8 +290,6 @@ admin_user_learn_statistics:
     - admin_v2_learn_statistics
 admin_login_record:
     - admin_v2_login_record
-admin_finance:
-    - admin_v2_trade
 admin_orders:
     - admin_v2_goods_order
 admin_order_manage:
@@ -393,8 +383,6 @@ admin_setting_cloud:
     - admin_v2_setting_cloud
 admin_setting_my_cloud:
     - admin_v2_setting_my_cloud
-admin_system:
-    - admin_v2_system
 admin_setting_message:
     - admin_v2_school_information
     - admin_v2_school_information_setting

@@ -41,7 +41,7 @@ class DefaultController extends BaseController
     public function newcomerAction(Request $request)
     {
         return $this->render('admin-v2/default/newcomer-task.html.twig', array(
-            'newcomerTaskStatus' => $this->getNewcomerTaskStatus(),
+            'newcomerTasks' => $this->getNewcomerTasksWithStatus(),
         ));
     }
 
@@ -130,6 +130,7 @@ class DefaultController extends BaseController
             $setting['is_v2'] = 0;
             $this->getSettingService()->set('backstage', $setting);
             $this->pushEventTracking('switchToAdmin');
+
             return $this->createJsonResponse(array('status' => 'success', 'url' => $this->generateUrl('admin')));
         }
 
@@ -326,90 +327,53 @@ class DefaultController extends BaseController
         }
     }
 
-    protected function getNewcomerTaskStatus()
-    {
-        $newcomerTaskStatus = array(
-            'cloud_applied' => 0,
-            'auth_applied' => 0,
-            'payment_applied' => 0,
-            'plugin_applied' => 0,
-            'course_applied' => 0,
-            'decoration_applied' => 0,
-        );
-
-        $storage = $this->getSettingService()->get('storage', array());
-        if (!empty($storage['cloud_key_applied'])) {
-            $newcomerTaskStatus['cloud_applied'] = 1;
-        }
-        $payment = $this->getSettingService()->get('payment', array());
-        if (!empty($payment['alipay_enabled']) || !empty($payment['wxpay_enabled']) || !empty($payment['llpay_enabled'])) {
-            $newcomerTaskStatus['payment_applied'] = 1;
-        }
-        $apps = $this->getAppService()->findApps(0, $this->getAppService()->findAppCount());
-        $appTypes = ArrayToolkit::column($apps, 'type');
-        if (in_array(AppService::PLUGIN_TYPE, $appTypes)) {
-            $newcomerTaskStatus['plugin_applied'] = 1;
-        }
-        $publishCount = $this->getCourseSetService()->countCourseSets(array('status' => 'published'));
-        if (!empty($publishCount)) {
-            $newcomerTaskStatus['course_applied'] = 1;
-        }
-        $recommendCount = $this->getCourseSetService()->countCourseSets(array('recommended' => 1));
-        if (!empty($recommendCount)) {
-            $newcomerTaskStatus['recommend_course_applied'] = 1;
-        }
-        $latestBlockHistory = $this->getBlockService()->getLatestBlockHistory();
-        if (!empty($latestBlockHistory)) {
-            $newcomerTaskStatus['banner_applied'] = 1;
-        }
-
-        $newcomerTaskSetting = $this->getSettingService()->get('newcomer_task', $newcomerTaskStatus);
-        $newcomerTaskSetting = array_filter($newcomerTaskSetting);
-
-        $isRecommendCourseApplied = !empty($newcomerTaskStatus['recommend_course_applied']) || !empty($newcomerTaskSetting['recommend_course_applied']);
-        $isBannerApplied = !empty($newcomerTaskStatus['banner_applied']) || !empty($newcomerTaskSetting['banner_applied']);
-        if (!empty($newcomerTaskSetting['top_navigation_applied']) && $isBannerApplied && $isRecommendCourseApplied) {
-            $newcomerTaskStatus['decoration_applied'] = 1;
-        }
-
-        $newcomerTaskStatus = array_merge($newcomerTaskStatus, $newcomerTaskSetting);
-        $this->getSettingService()->set('newcomer_task', array_filter($newcomerTaskStatus));
-
-        return $newcomerTaskStatus;
-    }
-
     protected function isNewcomerTaskAllDone()
     {
-        $newcomerTask = $this->getSettingService()->get('newcomer_task', array());
-        $newcomerTask = array_filter($newcomerTask);
-        if (ArrayToolkit::requireds($newcomerTask, array(
-            'cloud_applied',
-            'auth_applied',
-            'payment_applied',
-            'plugin_applied',
-            'course_applied',
-            'decoration_applied',
-        ))) {
+        $newcomerTasksConfig = $this->getNewcomerTasksConfig();
+        $newcomerTasks = $this->getNewcomerTasksWithStatus();
+        $tasksStatus = ArrayToolkit::column($newcomerTasks, 'status');
+
+        //获取的完成数 与 配置的任务数量比较
+        if (array_sum($tasksStatus) == count($newcomerTasksConfig)) {
             return true;
         }
 
         return false;
     }
 
+    protected function getNewcomerTasksWithStatus()
+    {
+        $newcomerTasks = $this->getNewcomerTasksConfig();
+        foreach ($newcomerTasks as $key => $newComerTaskConfig) {
+            $biz = $this->getBiz();
+            $keyClass = $biz['newcomer.'.$key];
+            $newcomerTasks[$key]['status'] = $keyClass->getStatus();
+        }
+
+        return $newcomerTasks;
+    }
+
+    protected function getNewcomerTasksConfig()
+    {
+        return $this->container->get('extension.manager')->getNewcomerTasks();
+    }
+
     public function quickEntranceAction(Request $request)
     {
-        $userQuickEntrances = $this->getQuickEntranceService()->getEntrancesByUserId($this->getCurrentUser()->getId());
+        $userQuickEntrances = $this->getQuickEntranceService()->findEntrancesByUserId($this->getCurrentUser()->getId());
 
         if ($request->isMethod('POST')) {
             $entrances = $request->request->get('data', array());
             $userQuickEntrances = $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $entrances);
         }
 
-        $allQuickEntrances = $this->getQuickEntranceService()->getAllEntrances($this->getCurrentUser()->getId());
+        $allQuickEntrances = $this->getQuickEntranceService()->findAvailableEntrances();
+        $selectedEntranceCodes = $this->getQuickEntranceService()->findSelectedEntrancesCodeByUserId($this->getCurrentUser()->getId());
 
         return $this->render('admin-v2/default/quick-entrance/index.html.twig', array(
             'allQuickEntrances' => $allQuickEntrances,
             'userQuickEntrances' => $userQuickEntrances,
+            'selectedEntranceCodes' => $selectedEntranceCodes,
         ));
     }
 

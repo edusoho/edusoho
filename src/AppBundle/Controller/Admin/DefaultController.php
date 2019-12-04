@@ -157,7 +157,7 @@ class DefaultController extends BaseController
             if (empty($expect)) {
                 $disabledCloudServiceCount += empty($value) ? 1 : 0;
             } else {
-                $disabledCloudServiceCount += empty($value) || $value != $expect ? 2 : 0;
+                $disabledCloudServiceCount += empty($value) || $value != $expect ? 1 : 0;
             }
         }
 
