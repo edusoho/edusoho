@@ -2,7 +2,10 @@
 
 namespace AppBundle\Extension;
 
-class NewcomerExtension extends Extension
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
+
+class NewcomerExtension extends Extension implements ServiceProviderInterface
 {
     public function getNewcomerTasks()
     {
@@ -59,7 +62,17 @@ class NewcomerExtension extends Extension
         );
     }
 
-    public function register()
+    /**
+     * {@inheritdoc}
+     */
+    public function register(Container $container)
     {
+        $newcomerTasks = $this->getNewcomerTasks();
+        foreach ($newcomerTasks as $taskName => $newcomerTask) {
+            $container['newcomer.'.$taskName] = function ($biz)
+            use ($newcomerTask) {
+                return new $newcomerTask['class']($biz);
+            };
+        }
     }
 }

@@ -54,6 +54,13 @@ services:
         tags:
             - { name: extension, priority: 10  }
 
+    newcomer_task.extension:
+        class: AppBundle\Extension\NewcomerExtension
+        calls:
+            - [setBiz, ['@biz']]
+        tags:
+            - { name: extension, priority: 10  }
+
     payment.extension:
         class: AppBundle\Extension\PaymentExtension
         calls:
@@ -69,18 +76,11 @@ services:
             - { name: extension }
 
     wechat_template.extension:
-      class: AppBundle\Extension\WeChatTemplateExtension
-      calls:
-        - [setBiz, ['@biz']]
-      tags:
-        - { name: extension, priority: 10 }
-
-    newcomer_task.extension:
-      class: AppBundle\Extension\NewcomerExtension
-      calls:
-        - [setBiz, ['@biz']]
-      tags:
-        - { name: extension, priority: 10  }
+        class: AppBundle\Extension\WeChatTemplateExtension
+        calls:
+            - [setBiz, ['@biz']]
+        tags:
+            - { name: extension, priority: 10 }
 
     biz.service_provider.collector:
         class: Biz\ServiceProviderCollector

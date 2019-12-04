@@ -365,7 +365,7 @@ class DefaultController extends BaseController
     {
         $newcomerTasks = $this->getNewcomerTasksConfig();
         foreach ($newcomerTasks as $key => $newComerTaskConfig) {
-            $keyClass = new $newComerTaskConfig['class']($this->getBiz());
+            $keyClass = $this->getBiz()['newcomer.'.$key];
             $newcomerTasks[$key]['status'] = $keyClass->getStatus();
         }
 

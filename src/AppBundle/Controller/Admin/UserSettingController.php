@@ -107,8 +107,7 @@ class UserSettingController extends BaseController
 
     protected function doneNewcomerTask()
     {
-        $newComerTasks = $this->container->get('extension.manager')->getNewcomerTasks();
-        $authSettingTask = new $newComerTasks['auth_setting_task']['class']($this->getBiz());
+        $authSettingTask = $this->getBiz()['newcomer.auth_setting_task'];
         $isTaskDone = $authSettingTask->getStatus();
 
         if (!$isTaskDone) {
