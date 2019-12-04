@@ -22,7 +22,7 @@ class NavigationEventSubscriber extends EventSubscriber implements EventSubscrib
 
         if ('top' == $navigation['type']) {
             $newcomerTask = $this->getSettingService()->get('newcomer_task', array());
-            $newcomerTask = array_merge($newcomerTask, array('top_navigation_applied' => 1));
+            $newcomerTask = array_merge($newcomerTask, array('decoration_web_task' => array('child_task' => array('top_navigation_applied' => 1))));
             $this->getSettingService()->set('newcomer_task', $newcomerTask);
         }
     }
