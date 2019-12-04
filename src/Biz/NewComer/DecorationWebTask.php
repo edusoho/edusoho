@@ -9,17 +9,17 @@ class DecorationWebTask extends BaseNewcomer
 {
     public function getStatus()
     {
-        $this->isDecorationWebTaskDone();
+        $this->setDecorationWebTaskResult();
         $newcomerTask = $this->getSettingService()->get('newcomer_task', array());
 
         if (!empty($newcomerTask['decoration_web_task']['status'])) {
-            return false;
+            return true;
         }
 
         return false;
     }
 
-    public function isDecorationWebTaskDone()
+    public function setDecorationWebTaskResult()
     {
         $newcomerTask = $this->getSettingService()->get('newcomer_task', array());
         $decorationWebTask = isset($newcomerTask['decoration_web_task']) ? $newcomerTask['decoration_web_task'] : array();
