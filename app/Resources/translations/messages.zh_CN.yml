@@ -10513,3 +10513,6 @@ admin_v2.buiness_advice.goto_qiqiuyu: 前去EduSoho商学院
 
 admin_v2.notice.upgrade_notice: 新后台对插件进行了全新适配，为了便于您的后台管理，需要手动升级全部已安装插件
 admin_v2.notice.go_to_upgrade: 前往升级
+
+admin_v2.boot_page.notice: 为了更高效的操作，需要您前去新的页面
+admin_v2.boot_page.btn_text: 点击前去

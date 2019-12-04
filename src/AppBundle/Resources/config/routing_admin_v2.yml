@@ -566,16 +566,25 @@ admin_v2_coupon_setting:
     path: /setting/coupon
     defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:setting }
 
+# 营销-营销管理-微营销-入口页
+admin_v2_login_micromarketing_boot:
+  path: /login/marketing/boot
+  defaults: { _controller: AppBundle:AdminV2/Marketing/Micromarketing:boot }
+
 # 营销-营销管理-微营销
 admin_v2_login_micromarketing:
     path: /login/marketing
     defaults: { _controller: AppBundle:AdminV2/Marketing/Micromarketing:login }
 
 # 营销-渠道管理-分销
+admin_v2_login_distributor_boot:
+  path: /login/distributor/boot
+  defaults: { _controller: AppBundle:AdminV2/Marketing/Distributor:boot }
+
+# 营销-渠道管理-分销
 admin_v2_login_distributor:
     path: /login/distributor
     defaults: { _controller: AppBundle:AdminV2/Marketing/Distributor:login }
-
 
 # 运营-网校装修-微网校装修
 admin_v2_wap_set:

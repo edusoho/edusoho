@@ -22,6 +22,7 @@ class PermissionExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFilter('parent_permission', array($this, 'getParentPermission')),
+            new \Twig_SimpleFilter('visible_menus', array($this, 'getVisibleMenus')),
         );
     }
 
@@ -58,7 +59,13 @@ class PermissionExtension extends \Twig_Extension
         return $permissionMenus;
     }
 
-    public function getFirstChild($menu)
+    /**
+     * @param $menu
+     * @param bool $filterVisible 默认过滤visible != false 的第一个
+     *
+     * @return array|mixed
+     */
+    public function getFirstChild($menu, $filterVisible = true)
     {
         $menus = $this->getSubPermissions($menu['code']);
 
@@ -71,10 +78,14 @@ class PermissionExtension extends \Twig_Extension
             }
         }
 
+        if ($filterVisible) {
+            return $this->getFirstVisibleMenu($menus);
+        }
+
         return current($menus);
     }
 
-    public function getFirstChildByCode($code)
+    public function getFirstChildByCode($code, $filterVisible = true)
     {
         $menus = $this->getSubPermissions($code);
 
@@ -87,7 +98,23 @@ class PermissionExtension extends \Twig_Extension
             }
         }
 
+        if ($filterVisible) {
+            return $this->getFirstVisibleMenu($menus);
+        }
+
         return current($menus);
+    }
+
+    private function getFirstVisibleMenu($menus)
+    {
+        $twig = $this->container->get('twig');
+        foreach ($menus as $menu) {
+            if (!isset($menu['visible']) || isset($menu['visible']) && $this->evalExpression($twig, array(), $menu['visible'])) {
+                return $menu;
+            }
+        }
+
+        return array();
     }
 
     /**
@@ -181,6 +208,18 @@ class PermissionExtension extends \Twig_Extension
         }
 
         return $parent;
+    }
+
+    public function getVisibleMenus($menus)
+    {
+        $twig = $this->container->get('twig');
+        foreach ($menus as $key => $menu) {
+            if (isset($menu['visible']) && !$this->evalExpression($twig, array(), $menu['visible'])) {
+                unset($menus[$key]);
+            }
+        }
+
+        return $menus;
     }
 
     /**
