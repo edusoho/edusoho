@@ -17,7 +17,8 @@ class QuestionBankSelectLink
     let value = this.select1.val();
     let self = this;
 
-    self.select2.html('');
+    self.select2.empty();
+    self.select2.select2('val', '');
 
     if (value == 0) {
       this.select2.hide();
@@ -26,10 +27,9 @@ class QuestionBankSelectLink
 
     $.post(url,{bankId:value},function(result){
       if (result != '') {
-        let option = '<option value="0">'+Translator.trans('site.choose_hint')+'</option>';
-        option += '<option value="0">'+Translator.trans('question_bank.question_category.not_set')+'</option>';
+        let option = '';
         $.each(result,function(index,category){
-          option += '<option value="'+category.id+'">';
+          option += '<option value='+category.id+'>';
           for (var i=0;i < category.depth;i++) {
             option += ' ';
           }

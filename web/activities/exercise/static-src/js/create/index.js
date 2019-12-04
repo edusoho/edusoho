@@ -5,19 +5,19 @@ new Exercise($('#step2-form'));
 new QuestionBankSelectLink($('#questionBankSelect'), $('#questionCategorySelect'));
 
 checkQuestionNum();
-
-$('#questionBankSelect').change(function () {
-  checkQuestionNum();
-});
-
-$('#questionCategorySelect').change(function () {
-  checkQuestionNum();
-});
-
-$('[name="difficulty"]').change(function () {
-  checkQuestionNum();
-});
-
+//
+// $('#questionBankSelect').change(function () {
+//   checkQuestionNum();
+// });
+//
+// $('#questionCategorySelect').change(function () {
+//   checkQuestionNum();
+// });
+//
+// $('[name="difficulty"]').change(function () {
+//   checkQuestionNum();
+// });
+//
 function checkQuestionNum() {
   let url = $('#questionBankSelect').data('checkNumUrl');
   let bankId = $('#questionBankSelect').val();
@@ -44,5 +44,7 @@ $('#questionCategorySelect').select2({
   treeview: true,
   dropdownAutoWidth: true,
   treeviewInitState: 'collapsed',
-  placeholderOption: 'first'
+  placeholderOption: 'first',
+  allowClear: true,
+  placeholder: Translator.trans('question.marker_question.select_question_category')
 });

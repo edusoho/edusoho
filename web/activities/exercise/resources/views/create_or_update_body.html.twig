@@ -42,9 +42,8 @@
             <option value="0" {% if not range.bankId|default(0) %}selected{% endif %}>{{'question_bank.empty.no_auth'|trans}}</option>
           {% endif %}
         </select>
-        <select class="form-control width-150 {% if not questionCategories|default(null) %}hidden{% endif %}" id="questionCategorySelect" name="range[categoryId]">
+        <select class="form-control width-200 {% if not questionCategories|default(null) %}hidden{% endif %}" id="questionCategorySelect" name="range[categoryId]" multiple="multiple">
           <option value="0" {% if not range.categoryId|default(0) %}selected{% endif %}>{{'course.plan_task.exercise.question_sourse.choose'|trans}}</option>
-          <option value="0">{{'site.data.empty'|trans}}</option>
           {% if questionCategories|default(null) %}
             {% for category in questionCategories %}
               <option value={{ category.id }} {% if range.categoryId|default(0) == category.id %}selected{% endif %}>{% for i in 1..(category.depth-1) if category.depth > 1 %}　{% endfor %}{{ category.name }}</option>
