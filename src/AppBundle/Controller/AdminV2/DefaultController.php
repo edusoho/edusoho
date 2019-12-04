@@ -57,26 +57,6 @@ class DefaultController extends BaseController
         ));
     }
 
-    public function questionRemindTeachersAction(Request $request, $courseId, $questionId)
-    {
-        $course = $this->getCourseService()->getCourse($courseId);
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $question = $this->getThreadService()->getThread($courseId, $questionId);
-
-        $message = array(
-            'courseTitle' => $courseSet['title'],
-            'courseId' => $course['id'],
-            'threadId' => $question['id'],
-            'questionTitle' => strip_tags($question['title']),
-        );
-
-        foreach ($course['teacherIds'] as $receiverId) {
-            $result = $this->getNotificationService()->notify($receiverId, 'questionRemind', $message);
-        }
-
-        return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
-    }
-
     public function statisticsDailyAction(Request $request)
     {
         $todayTimeStart = strtotime(date('Y-m-d', time()));
@@ -452,6 +432,26 @@ class DefaultController extends BaseController
         return $this->render('admin-v2/default/qr-code.html.twig', array(
             'qrCode' => $qrCode,
         ));
+    }
+
+    public function questionRemindTeachersAction(Request $request, $courseId, $questionId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $question = $this->getThreadService()->getThread($courseId, $questionId);
+
+        $message = array(
+            'courseTitle' => $courseSet['title'],
+            'courseId' => $course['id'],
+            'threadId' => $question['id'],
+            'questionTitle' => strip_tags($question['title']),
+        );
+
+        foreach ($course['teacherIds'] as $receiverId) {
+            $this->getNotificationService()->notify($receiverId, 'questionRemind', $message);
+        }
+
+        return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
     }
 
     protected function getDisabledCloudServiceCount()
