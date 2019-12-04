@@ -119,12 +119,9 @@ const registerEvent = function($importBox) {
   }
 
   $oldTemplate.click(function() {
-    let url = $form.attr('action');
-    url = url.replace(/read/g, 'plumber');
-
     $.ajax({
       type: 'get',
-      url: url,
+      url: $form.data('plumberUrl'),
     }).done(function(resp) {
       let $modal = $('#modal');
       $modal.html(resp);
