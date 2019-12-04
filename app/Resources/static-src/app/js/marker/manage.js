@@ -247,7 +247,7 @@ class Manage {
   onCloseHelp(e) {
     let $this = $(e.currentTarget);
     $this.closest('.show-introhelp').removeClass('show-introhelp');
-    if ($('.show-introhelp').height() <= 0) {
+    if ($('.show-introhelp').length <= 0) {
       $('.js-introhelp-overlay').addClass('hidden');
       this.initDrag();
     }
