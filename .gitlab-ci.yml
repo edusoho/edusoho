@@ -131,6 +131,7 @@ check env:
   only:
     refs:
       - develop
+      - project/admin-v2
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"

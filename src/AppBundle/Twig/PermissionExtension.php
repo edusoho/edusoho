@@ -52,9 +52,9 @@ class PermissionExtension extends \Twig_Extension
     public function getSideBar($code)
     {
         $permission = $this->getNavPermission($code);
-        $group = $this->createPermissionBuilder()->groupedV2Permissions($permission['code']);
+        $groups = $this->createPermissionBuilder()->groupedV2Permissions($permission['code']);
 
-        $permissionMenus = $this->buildSidebarPermissionMenus($group);
+        $permissionMenus = $this->buildSidebarPermissionMenus($groups);
 
         return $permissionMenus;
     }
@@ -279,7 +279,7 @@ class PermissionExtension extends \Twig_Extension
             $group = $this->buildGroupPermissionMenus($group);
 
             //组下有菜单才显示，如果没有显示的菜单则组也不显示
-            if ($group['grade'] == 0 && isset($group['nodes'])) {
+            if (0 == $group['grade'] && isset($group['nodes'])) {
                 $permissions[] = $group;
             }
         }
@@ -333,18 +333,6 @@ class PermissionExtension extends \Twig_Extension
         }
 
         return false;
-    }
-
-    private function removeEmptyGroup($permissions)
-    {
-        $array = array();
-        foreach ($permissions as $key => $permission) {
-            if ($permission['grade'] == 0 && !isset($permission['nodes'])) {
-                unset($permissions[$key]);
-            }
-        }
-
-        return $array;
     }
 
     public function getName()
