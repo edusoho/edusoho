@@ -4,7 +4,6 @@ namespace Biz\Testpaper\Builder;
 
 use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Context\Biz;
-use AppBundle\Common\Exception\UnexpectedValueException;
 
 class TestpaperBuilder implements TestpaperBuilderInterface
 {
