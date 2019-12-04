@@ -45,7 +45,6 @@ check env:
       - develop
       - master
       - trigger
-      - project/admin-v2
     variables:
       - $REPOSITORY == "main"
 
@@ -132,6 +131,7 @@ check env:
   only:
     refs:
       - develop
+      - project/admin-v2
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
