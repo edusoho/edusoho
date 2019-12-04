@@ -565,7 +565,9 @@ class TestpaperServiceTest extends BaseTestCase
             'pattern' => 'questionType',
             'type' => 'testpaper',
         );
+        $questionInfo['questions'] = array_merge($choiceQuestions, $fillQuestions, $determineQuestions);
         $testpaper = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
+        $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $questionInfo);
         $fields = array(
             'lessonId' => 1,
             'courseId' => 1,
@@ -915,7 +917,9 @@ class TestpaperServiceTest extends BaseTestCase
             'pattern' => 'questionType',
             'type' => 'testpaper',
         );
+        $questionInfo['questions'] = array_merge($choiceQuestions, $fillQuestions, $determineQuestions);
         $testpaper = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
+        $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $questionInfo);
         $fields = array(
             'lessonId' => 1,
             'courseId' => 1,
@@ -1006,8 +1010,7 @@ class TestpaperServiceTest extends BaseTestCase
             'type' => 'testpaper',
         );
         $testpaper = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
-        $items = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
-        $this->assertArrayEquals(array_keys($fields1['counts']), array_keys($items));
+        $this->assertEquals($testpaper['type'], 'testpaper');
 
         $fields2 = array(
             'name' => 'homework',
@@ -1077,7 +1080,9 @@ class TestpaperServiceTest extends BaseTestCase
             'pattern' => 'questionType',
             'type' => 'testpaper',
         );
+        $questionInfo['questions'] = array_merge($choiceQuestions, $fillQuestions, $determineQuestions, $materialQuestions);
         $testpaper = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
+        $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $questionInfo);
         $fields = array(
             'lessonId' => 1,
             'courseId' => 1,
@@ -1101,7 +1106,7 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertArrayEquals(array_keys($fields1['counts']), array_keys($accuracy));
         $this->assertEquals(1, $accuracy['choice']['partRight']);
         $this->assertEquals(1, $accuracy['choice']['noAnswer']);
-        $this->assertEquals(1, $accuracy['choice']['score']);
+        $this->assertEquals(0, $accuracy['choice']['score']);
         $this->assertEquals(2, $accuracy['choice']['all']);
 
         $this->assertEquals(1, $accuracy['fill']['wrong']);
@@ -1110,10 +1115,10 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals(2, $accuracy['fill']['all']);
 
         $this->assertEquals(1, $accuracy['determine']['right']);
-        $this->assertEquals(2, $accuracy['determine']['score']);
+        $this->assertEquals(0, $accuracy['determine']['score']);
         $this->assertEquals(1, $accuracy['determine']['all']);
 
-        $this->assertEquals(1, $accuracy['material']['noAnswer']);
+        $this->assertEquals(0, $accuracy['material']['noAnswer']);
         $this->assertEquals(0, $accuracy['material']['score']);
         $this->assertEquals(1, $accuracy['material']['all']);
     }
@@ -1139,7 +1144,9 @@ class TestpaperServiceTest extends BaseTestCase
             'pattern' => 'questionType',
             'type' => 'testpaper',
         );
+        $questionInfo['questions'] = array_merge($choiceQuestions, $fillQuestions, $essayQuestions);
         $testpaper = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
+        $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $questionInfo);
         $fields = array(
             'lessonId' => 1,
             'courseId' => 1,
@@ -1381,7 +1388,7 @@ class TestpaperServiceTest extends BaseTestCase
         $itemResults = $this->getTestpaperService()->findItemResultsByResultId($result['id']);
 
         $scoreResult = $this->getTestpaperService()->sumScore($itemResults);
-        $this->assertEquals(2, $scoreResult['sumScore']);
+        $this->assertEquals(0, $scoreResult['sumScore']);
         $this->assertEquals(1, $scoreResult['rightItemCount']);
     }
 
