@@ -105,18 +105,6 @@ class PermissionExtension extends \Twig_Extension
         return current($menus);
     }
 
-    private function getFirstVisibleMenu($menus)
-    {
-        $twig = $this->container->get('twig');
-        foreach ($menus as $menu) {
-            if (!isset($menu['visible']) || isset($menu['visible']) && $this->evalExpression($twig, array(), $menu['visible'])) {
-                return $menu;
-            }
-        }
-
-        return array();
-    }
-
     /**
      * @param $menu
      *
@@ -333,6 +321,18 @@ class PermissionExtension extends \Twig_Extension
         }
 
         return false;
+    }
+
+    private function getFirstVisibleMenu($menus)
+    {
+        $twig = $this->container->get('twig');
+        foreach ($menus as $menu) {
+            if (!isset($menu['visible']) || isset($menu['visible']) && $this->evalExpression($twig, array(), $menu['visible'])) {
+                return $menu;
+            }
+        }
+
+        return array();
     }
 
     public function getName()
