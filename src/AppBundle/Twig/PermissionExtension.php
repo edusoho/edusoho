@@ -61,36 +61,37 @@ class PermissionExtension extends \Twig_Extension
 
     /**
      * @param $menu
-     * @param bool $filterVisible 默认过滤visible != false 的第一个
+     * @param bool $filterVisible         默认过滤visible != false 的第一个
+     * @param bool $allowOriginPermission 是否允许加载整个树，忽略权限 （默认true做兼容）
      *
      * @return array|mixed
      */
-    public function getFirstChild($menu, $filterVisible = true)
+    public function getFirstChild($menu, $filterVisible = true, $allowOriginPermission = true)
     {
-        $menus = $this->getSubPermissions($menu['code']);
-
-        if (empty($menus)) {
-            $permissions = $this->createPermissionBuilder()->getOriginSubPermissions($menu['code']);
-            if (empty($permissions)) {
-                return array();
-            } else {
-                $menus = $permissions;
-            }
+        if (!$menu) {
+            return array();
         }
 
-        if ($filterVisible) {
-            return $this->getFirstVisibleMenu($menus);
-        }
-
-        return current($menus);
+        return $this->getFirstChildByCode($menu['code'], $filterVisible, $allowOriginPermission);
     }
 
-    public function getFirstChildByCode($code, $filterVisible = true)
+    /**
+     * @param $code
+     * @param bool $filterVisible         默认过滤visible != false 的第一个
+     * @param bool $allowOriginPermission 是否允许加载整个树，忽略权限 （默认true做兼容）
+     *
+     * @return array|mixed
+     */
+    public function getFirstChildByCode($code, $filterVisible = true, $allowOriginPermission = true)
     {
         $menus = $this->getSubPermissions($code);
 
         if (empty($menus)) {
-            $permissions = $this->createPermissionBuilder()->getOriginSubPermissions($code);
+            if (!$allowOriginPermission) {
+                return array();
+            }
+
+            $permissions = $this->createPermissionBuilder()->getOriginSubPermissions($menu['code']);
             if (empty($permissions)) {
                 return array();
             } else {
