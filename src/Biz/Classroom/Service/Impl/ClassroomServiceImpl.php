@@ -702,6 +702,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     $this->getCourseSetService()->unlockCourseSet($course['courseSetId'], true);
                 }
 
+                $this->getCourseSetService()->resetParentIdByCourseId($course['id']);
+
                 $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $course['id']);
 
                 $infoData = array(
