@@ -6,7 +6,6 @@
     <th width="20%">{{ 'course.testpaper_manage.name'|trans }}</th>
     <th>{{ 'course.testpaper_manage.status'|trans }}</th>
     <th>{{ 'course.testpaper_manage.statistics'|trans }}</th>
-    <th>{{ 'course.testpaper_manage.time_limit'|trans }}</th>
     <th >{{ 'course.testpaper_manage.update'|trans }}</th>
     <th width="15%">{{ 'course.testpaper_manage.operation'|trans }}</th>
   </tr>
@@ -29,9 +28,6 @@
         {% if testpaper.passedCondition[0]|default(0) > 0 %}
           <div class="color-gray"><small>{{'course.testpaper_manage.passed_condition'|trans({'%passedCondition%': testpaper.passedCondition[0]|default(0) })}}</small></div>
         {% endif %}
-      </td>
-      <td>
-        {% if testpaper.limitedTime > 0 %}{{'course.testpaper_manage.limited_time'|trans({'%limitedTime%': testpaper.limitedTime})}}{% else %}{{'course.testpaper_manage.unlimited'|trans}}{% endif %}
       </td>
       <td>
         {{ web_macro.user_link(user) }}
@@ -76,7 +72,11 @@
   {% else %}
     <tr>
       <td colspan="20">
-        {{ 'course.testpaper_manage.empty'|trans()|raw }}
+        {% if isSearch is defined %}
+          <div class="empty">{{ 'my.teaching.question_bank.testpaper.empty'|trans }}</div>
+        {% else %}
+          {{ 'course.testpaper_manage.empty'|trans({'%createUrl%':path('question_bank_manage_testpaper_create', {id: questionBank.id})})|raw }}
+        {% endif %}
       </td>
     </tr>
   {% endfor %}

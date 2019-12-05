@@ -84,8 +84,9 @@ class TestpaperForm {
         stats[type]['score'] += score;
 
         let missScore = 0;
-        if ($(this).closest('js-miss-score').length > 0) {
-          missScore = parseFloat($(this).closest('js-miss-score').data('missScore'));
+
+        if ($(this).next('.js-miss-score').length > 0) {
+          missScore = parseFloat($(this).next('.js-miss-score').data('missScore'));
         }
 
         stats[type]['missScore'] = missScore;
@@ -122,9 +123,10 @@ class TestpaperForm {
     }
 
     this.$form.find('.js-question-score').each(function() {
+      let itemType = $(this).closest('tr').data('type');
       var score = $(this).data('score');
 
-      if (score == '0') {
+      if (score == '0' && itemType != 'material') {
         cd.message({type: 'danger', message: Translator.trans('activity.testpaper_manage.question_score_empty_hint') });
         isOk = false;
       }
@@ -203,15 +205,7 @@ class TestpaperForm {
         missScore: missScore,
       };
       this.$form.find('[data-role="batch-item"]:checked').each(function() {
-        let questionId = $(this).val();
-
-        if ($(this).closest('tr').data('type') == 'material') {
-          self.$form.find('[data-parent-id="'+questionId+'"]').each(function () {
-            self.setScore($(this), scoreObj);
-          });
-        } else {
-          self.setScore($(this).parents('tr'), scoreObj);
-        }
+        self.setScore($(this).parents('tr'), scoreObj);
       });
 
       cd.message({ type: 'success', message: Translator.trans('subject.score_update_success') });
@@ -389,16 +383,6 @@ class TestpaperForm {
     });
 
     $target.button('loading').addClass('disabled');
-    // $.post($target.data('checkUrl'),this.$form.serialize(),result => {
-    //   if (result.status == 'no') {
-    //     $('.js-build-check').html(Translator.trans('activity.testpaper_manage.question_num_error'));
-    //   } else {
-    //     $('.js-build-check').html('');
-    //
-    //     $target.button('loading').addClass('disabled');
-    //     this.$form.submit();
-    //   }
-    // });
 
     let baseInfo = {
       name: this.$form.find('#name-field').val(),
@@ -407,7 +391,7 @@ class TestpaperForm {
     let questionInfo = {
       questions: JSON.stringify(this.questions),
       questionTypeSeq: JSON.stringify(questionTypeSeq)
-    }
+    };
 
     $.post(this.$form.data('url'),{baseInfo: baseInfo, questionInfo: questionInfo},function(result) {
       if (result.goto) {

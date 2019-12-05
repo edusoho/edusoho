@@ -3617,6 +3617,7 @@ my.teaching.question_bank.question_category.manage: Question Category Manage
 my.teaching.question_bank.question.manage: Question Manage
 my.teaching.question_bank.testpaper.manage: Testpaper Manage
 my.teaching.question_bank.testpaper.edit: Edit Testpaper
+my.teaching.question_bank.testpaper.empty: No Testpaper
 my.teaching.question_bank.question_category.create: Create Topic Category
 my.teaching.question_bank.question_category.update: Edit Category
 my.teaching.question_bank.question_batch_category.title: Batch setting classification
