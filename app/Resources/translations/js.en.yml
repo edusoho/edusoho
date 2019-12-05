@@ -333,6 +333,7 @@ activity.testpaper_manage.input_description_hint: Please enter the testpaper des
 activity.testpaper_manage.generate_mode_hint: Please select the generation method
 activity.testpaper_manage.max_error_hint: The maximum value can not exceed 1000000000
 activity.testpaper_manage.pass_score_hint: 'Criteria Score: pass score: % passScore%'
+activity.testpaper_manage.qualified_score_hint: 'pass score: %passScore%'
 activity.testpaper_manage.setting_pass_score_error_hint: Pass score (% passedScore%) can not be higher than the total score (% totalScore%).
 activity.testpaper_manage.pass_score_error_hint: Pass score is greater than 0 and less than 1000, keep a decimal
 activity.testpaper_manage.question_required_error_hint: Please select the question

@@ -33,6 +33,7 @@ class TestpaperForm {
     this.$form.on('lengthChange','[data-role="question-body"]', event => this.changeQuestionCount(event));
     this.$scoreModal.on('click', '.js-batch-score-confirm', event => this.batchSetScore(event));
     $('.modal').on('selectQuestion', (event, typeQuestions) => this.selectQuestion(event, typeQuestions));
+    this.initSortList();
   }
 
   _confirmSave() {
@@ -432,6 +433,56 @@ class TestpaperForm {
           'width': width,
         });
       },
+    });
+  }
+
+  initSortList() {
+    let adjustment;
+    const $tbody = this.$form.find('tbody');
+    const td = $tbody.hasClass('js-homework-table') ? '': '<td></td>';
+    const tdHtml = `<tr class="question-placehoder js-placehoder"><td></td><td></td><td></td><td></td><td></td><td></td><td></td>${td}</tr>`;
+    $tbody.sortable({
+      containerPath: '> tr',
+      containerSelector:'tbody',
+      itemSelector: 'tr.is-question',
+      placeholder: tdHtml,
+      exclude: '.notMoveHandle',
+      onDragStart: function(item, container, _super) {
+        if (!item.hasClass('have-sub-questions')) {
+          $('.js-have-sub').removeClass('is-question');
+        }
+        let offset = item.offset(),
+          pointer = container.rootGroup.pointer;
+        adjustment = {
+          left: pointer.left - offset.left,
+          top: pointer.top - offset.top
+        };
+        _super(item, container);
+      },
+      onDrag: function(item, position) {
+        const height = item.height();
+        item.css({
+          left: position.left - adjustment.left,
+          top: position.top - adjustment.top
+        });
+
+        $('.js-placehoder').css({
+          'height': height,
+        });
+      },
+      onDrop: (item, container, _super) => {
+        _super(item, container);
+        if (item.hasClass('have-sub-questions')) {
+          let $tbody = item.parents('tbody');
+          $tbody.find('tr.is-question').each(function() {
+            let $tr = $(this);
+            $tbody.find('[data-parent-id=' + $tr.data('id') + ']').detach().insertAfter($tr);
+          });
+        } else {
+          $('.js-have-sub').addClass('is-question');
+        }
+        this.refreshSeqs();
+      }
     });
   }
 }

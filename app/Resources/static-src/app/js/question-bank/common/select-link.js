@@ -27,14 +27,15 @@ class QuestionBankSelectLink
 
     $.post(url,{bankId:value},function(result){
       if (result != '') {
-        let option = '';
+        let option = '<option value="0">'+Translator.trans('site.choose_hint')+'</option>';
         $.each(result,function(index,category){
-          option += '<option value='+category.id+'>';
-          for (var i=0;i < category.depth;i++) {
-            option += ' ';
+          option += '<option value="'+category.id+'">';
+          for (var i=1;i < category.depth;i++) {
+            option += '　';
           }
           option += category.name+'</option>';
         });
+
         self.select2.append(option);
         self.select2.removeClass('hidden');
       } else {

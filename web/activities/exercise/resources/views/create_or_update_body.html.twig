@@ -36,13 +36,13 @@
           {% if questionBankTree %}
             <option value="0" {% if not range.bankId|default(0) %}selected{% endif %}>{{'question.marker_question.select_question_bank'|trans}}</option>
             {% for tree in questionBankTree %}
-              <option value={{ tree.id }} {% if tree.categoryId is not defined %} disabled="disabled" {% endif %} {% if range.bankId|default(0) == tree.id %}selected{% endif %}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>
+              <option {% if tree.categoryId is not defined %}value={{ tree.id }}-category disabled="disabled" {% else %}value={{ tree.id }} {% endif %} {% if range.bankId|default(0) == tree.id %}selected{% endif %}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>
             {% endfor %}
           {% else %}
             <option value="0" {% if not range.bankId|default(0) %}selected{% endif %}>{{'question_bank.empty.no_auth'|trans}}</option>
           {% endif %}
         </select>
-        <select class="form-control width-200 {% if not questionCategories|default(null) %}hidden{% endif %}" id="questionCategorySelect" name="range[categoryId]" multiple="multiple">
+        <select class="form-control width-200 width-input-xlarge {% if not questionCategories|default(null) %}hidden{% endif %}" id="questionCategorySelect" name="range[categoryId]" multiple="multiple">
           <option value="0" {% if not range.categoryId|default(0) %}selected{% endif %}>{{'course.plan_task.exercise.question_sourse.choose'|trans}}</option>
           {% if questionCategories|default(null) %}
             {% for category in questionCategories %}

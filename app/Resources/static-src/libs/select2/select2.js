@@ -885,7 +885,7 @@ the specific language governing permissions and limitations under the Apache Lic
                             $('.select2-tree-icon').click(function() {
                                 var $that = $(this);
                                 var $node = $that.closest('li.select2-result');
-                                
+
                                 if ($node.hasClass('expanded')) {
                                     $node.removeClass('expanded').addClass('collapsed');
                                     $that.removeClass(opts.treeviewExpandedClass).addClass(opts.treeviewCollapsedClass);
@@ -897,8 +897,13 @@ the specific language governing permissions and limitations under the Apache Lic
                                     //expand
                                     self.expandNode($node, false);
                                 }
-                                
+
                             });
+
+                            var valueArray = self.opts.element.val() instanceof Array;
+                            if (valueArray) {
+                              return;
+                            }
 
                             //auto expand current selected node's all parent when dropdown
                             if (self.opts.element.val()) {
@@ -917,12 +922,12 @@ the specific language governing permissions and limitations under the Apache Lic
                                 //         $rootParent = $parent;
                                 //     }
                                 // }
-                                
+
                                 if (selectedNodeIndentCount > 0) {
                                     var $rootParent = $selectedNode.prevAll('[data-indent-count="0"]').filter('.select2-result-parent').first();
                                     self.expandNode($rootParent, true);
                                 }
-                                
+
                             }
                         }
                     }
