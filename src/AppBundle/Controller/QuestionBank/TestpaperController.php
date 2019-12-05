@@ -424,6 +424,7 @@ class TestpaperController extends BaseController
         $questionCategories = ArrayToolkit::index($questionCategories, 'id');
 
         return $this->render('question-bank/widgets/question-pick-modal.html.twig', array(
+            'isSelectBank' => $request->request->get('isSelectBank', 0),
             'questions' => $questions,
             'paginator' => $paginator,
             'questionBank' => $questionBank,

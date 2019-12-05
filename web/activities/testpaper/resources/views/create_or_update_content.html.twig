@@ -30,7 +30,7 @@
                 <option value="{{ bank.id }}" {% if bank.categoryId is not defined %} disabled="disabled" {% endif %}{% if testpaper.bankId|default(0) == bank.id %}selected{% endif %}>{% for i in 1..(bank.depth-1) if bank.depth > 1 %}　{% endfor %}{{ bank.name }}</option>
               {% endfor %}
             {% else %}
-              <option value="0"{% if not range.bankId|default(0) %} selected{% endif %}>{{'question_bank.empty.no_auth'|trans}}</option>
+              <option value="0">{{'question_bank.empty.no_auth'|trans}}</option>
             {% endif %}
           </select>
           <div class="help-block hidden js-help-block"></div>
