@@ -138,6 +138,8 @@ const registerEvent = function($importBox) {
     $step3Btns.addClass('hidden');
     $inputFile.val('');
   });
+
+  $('[data-toggle="popover"]').popover();
 };
 
 export {
