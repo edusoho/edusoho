@@ -24,12 +24,6 @@ class MobileSettingController extends BaseController
 {
     public function mobileAction(Request $request)
     {
-        $appDiscoveryVersion = $this->getH5SettingService()->getAppDiscoveryVersion();
-
-//        if (1 == $appDiscoveryVersion) {
-//            return $this->render('admin-v2/operating/mobile-setting/mobile-discovery-setting-upgraded.html.twig', array());
-//        }
-
         $operationMobile = $this->getSettingService()->get('operation_mobile', array());
         $courseGrids = $this->getSettingService()->get('operation_course_grids', array());
         $settingMobile = $this->getSettingService()->get('mobile', array());
@@ -83,7 +77,6 @@ class MobileSettingController extends BaseController
             'mobile' => $mobile,
             'mobileCode' => $mobileCode,
             'hasMobile' => $hasMobile,
-            'appDiscoveryVersion' => $appDiscoveryVersion,
         ));
     }
 
