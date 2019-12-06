@@ -517,7 +517,7 @@ class WeChatServiceTest extends BaseTestCase
                 'returnValue' => $wechatSetting,
             ),
             array(
-                'functionName' => 'get',
+                'functionName' => 'node',
                 'withParams' => array('site.url', array()),
                 'returnValue' => 'http://www.baidu.com',
             ),
