@@ -483,7 +483,7 @@ class Setting extends AbstractResource
 
     protected function getH5SettingService()
     {
-        return $this->createService('System:H5SettingService');
+        return $this->service('System:H5SettingService');
     }
 
     protected function getMpService()
