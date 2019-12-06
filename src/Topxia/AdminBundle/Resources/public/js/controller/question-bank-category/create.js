@@ -1,14 +1,14 @@
 define(function(require, exports, module) {
 
-  var Validator = require('bootstrap.validator');
-  var Notify = require('common/bootstrap-notify');
+  let Validator = require('bootstrap.validator');
+  let Notify = require('common/bootstrap-notify');
   require('common/validator-rules').inject(Validator);
-    
-  exports.run = function() {
-    var $form = $('#category-form');
-    var $modal = $form.parents('.modal');
 
-    var validator = new Validator({
+  exports.run = function() {
+    let $form = $('#category-form');
+    let $modal = $form.parents('.modal');
+
+    let validator = new Validator({
       element: $form,
       autoSubmit: false,
       onFormValidated: function(error, results, $form) {
@@ -25,7 +25,6 @@ define(function(require, exports, module) {
         }).fail(function() {
           Notify.danger(Translator.trans('admin.category.save_fail_hint'));
         });
-
       }
     });
 
@@ -34,7 +33,6 @@ define(function(require, exports, module) {
       required: true,
       rule: 'maxlength{max:30} visible_character'
     });
-
   };
 
 });

@@ -1,24 +1,24 @@
 define(function(require, exports, module) {
 
-  var Validator = require('bootstrap.validator');
-  var Notify = require('common/bootstrap-notify');
-  require('../widget/category-select').run('article');
+  let Validator = require('bootstrap.validator');
+  let Notify = require('common/bootstrap-notify');
+  let CategorySelector = require('../widget/category-select');
   require('common/validator-rules').inject(Validator);
   require('jquery.select2-css');
   require('jquery.select2');
 
   exports.run = function() {
-    var $form = $('#bank-form');
-    var $modal = $form.parents('.modal');
-    var validator = _initValidator($form, $modal);
+    let $form = $('#bank-form');
+    let $modal = $form.parents('.modal');
 
+    _initValidator($form, $modal);
     _initSelect($form);
-
   };
 
   function _initSelect($form) {
-    $('#bank-members').select2({
+    CategorySelector.run();
 
+    $('#bank-members').select2({
       ajax: {
         url: $('#bank-members').data('matchUrl'),
         dataType: 'json',
@@ -30,11 +30,9 @@ define(function(require, exports, module) {
           };
         },
         results: function(data) {
-
-          var results = [];
+          let results = [];
 
           $.each(data, function(index, item) {
-
             results.push({
               id: item.id,
               name: item.nickname
@@ -44,13 +42,12 @@ define(function(require, exports, module) {
           return {
             results: results
           };
-
         }
       },
       initSelection: function(element, callback) {
-        var data = [];
-        var members =  JSON.parse(element.val());
-        element.val('')
+        let data = [];
+        let members =  JSON.parse(element.val());
+        element.val('');
         $(members).each(function() {
           data.push({
             id: this.id,
@@ -73,8 +70,9 @@ define(function(require, exports, module) {
       }
     });
   }
+
   function _initValidator($form, $modal) {
-    var validator = new Validator({
+    let validator = new Validator({
       element: '#bank-form',
       failSilently: true,
       triggerType: 'change',
@@ -86,14 +84,13 @@ define(function(require, exports, module) {
 
         $('#create-btn').button('submiting').addClass('disabled');
 
-        $.post($form.attr('action'), $form.serialize()).done(function(html) {
+        $.post($form.attr('action'), $form.serialize()).done(function() {
           $modal.modal('hide');
           Notify.success(Translator.trans('admin.question_bank.save_success'));
           window.location.reload();
         }).fail(function() {
           Notify.danger(Translator.trans('admin.question_bank.save_fail'));
         });
-
       }
     });
 

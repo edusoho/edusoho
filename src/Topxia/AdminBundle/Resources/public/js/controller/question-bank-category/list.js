@@ -1,11 +1,11 @@
 define(function(require, exports, module) {
 
-  var Validator = require('bootstrap.validator');
-  var Notify = require('common/bootstrap-notify');
+  let Validator = require('bootstrap.validator');
+  let Notify = require('common/bootstrap-notify');
   require('common/validator-rules').inject(Validator);
-    
+
   exports.run = function() {
-    var $table = $('#category-table');
+    let $table = $('#category-table');
 
     $table.on('click', '.delete-btn', function() {
       if (!confirm(Translator.trans('admin.category.delete_hint'))) {

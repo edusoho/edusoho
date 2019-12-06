@@ -39,7 +39,7 @@ class DecorationWebTask extends BaseNewcomer
         }
 
         //完成推荐课程、设置轮播图、设置顶部导航三步骤 算该任务完成
-        if (3 === count($decorationWebTask['child_task'])) {
+        if (!empty($decorationWebTask['child_task']) && 3 === count($decorationWebTask['child_task'])) {
             $decorationWebTask['status'] = 1;
         }
 

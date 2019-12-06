@@ -344,7 +344,7 @@ admin:
                                     visible: ( classroom.status=='draft' )
                         admin_classroom_recommend:
                             name: admin.course.classroom.recommend_tab
-                            router_name: admin_classroom_recommend_list                        
+                            router_name: admin_classroom_recommend_list
                 admin_open_course_manage:
                     name: admin.course.open_course_menu
                     router_name: admin_open_course

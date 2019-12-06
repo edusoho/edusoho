@@ -529,13 +529,21 @@ admin_v2.course.review_menu: Reviews
 admin_v2.course.review.course_review_tab: Reviews
 admin_v2.course.review.classroom_review_tab: Rate
 
+# 教学模块-资源管理
+admin_v2.cloud_resource.basic_group: Resources
 
 # 教学模块-资源管理-云资源
-admin_v2.cloud_resource.basic_group: Cloud Resources
 admin_v2.cloud_resource.basic_tab: Cloud Resources
 admin_v2.cloud.file.basic_tab: Cloud Resources
 admin_v2.cloud.attachment.basic_tab: Cloud Attachement
 admin_v2.cloud.attachment_setting.basic_tab: Cloud Attachement Setting
+
+# 教学模块-资源管理-题库管理
+admin_v2.question_bank.menu: Question Bank
+admin_v2.question_bank.basic_tab: Question Bank
+admin_v2.question_bank.basic_tab.create_btn: Create
+admin_v2.question_bank.category_tab: Question Bank Category
+admin_v2.question_bank.category_tab.create_btn: Create
 
 # 通用按钮
 admin_v2.btn.sms_send_btn: Notify the publish

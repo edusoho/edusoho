@@ -115,6 +115,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('set_price', array($this, 'getSetPrice')),
             new \Twig_SimpleFunction('percent', array($this, 'calculatePercent')),
             new \Twig_SimpleFunction('category_choices', array($this, 'getCategoryChoices')),
+            new \Twig_SimpleFunction('build_category_choices', array($this, 'buildCategoryChoices')),
             new \Twig_SimpleFunction('question_category_choices', array($this, 'getQuestionCategoryChoices')),
             new \Twig_SimpleFunction('upload_max_filesize', array($this, 'getUploadMaxFilesize')),
             new \Twig_SimpleFunction('js_paths', array($this, 'getJsPaths')),
@@ -1613,6 +1614,15 @@ class WebExtension extends \Twig_Extension
     public function getSetPrice($price)
     {
         return NumberToolkit::roundUp($price);
+    }
+
+    public function buildCategoryChoices($categories, $indent = '　')
+    {
+        $builder = new CategoryBuilder();
+        $builder->build($categories);
+        $builder->setIndent($indent);
+
+        return $builder->convertToChoices();
     }
 
     public function getCategoryChoices($groupCode, $indent = '　')
