@@ -55,6 +55,19 @@ class AppServiceTest extends BaseTestCase
         $this->assertArrayEquals($app3, $apps[$app3['code']]);
     }
 
+    public function testFindAppsByTypes()
+    {
+        $app1 = $this->_createApp('code1', 'plugin');
+        $app2 = $this->_createApp('code2', 'plugin');
+        $app3 = $this->_createApp('code3', 'theme');
+
+        $types = array($app1['type'], $app3['type']);
+        $apps = $this->getAppService()->findAppsByTypes($types);
+
+        $this->assertArrayEquals($app1, $apps[0]);
+        $this->assertArrayEquals($app3, $apps[2]);
+    }
+
     public function testGetCenterApps()
     {
         $this->mockAppClient();
@@ -438,13 +451,14 @@ class AppServiceTest extends BaseTestCase
         return array('edusohoMaxVersion' => '8.3.3', 'edusohoMinVersion' => '7.0.0', 'fileName' => 'test', 'fromVersion' => '8.0.0', 'backupDB' => $backupDB, 'backupFile' => $backupFile, 'product' => array('code' => 'MAIN', 'name' => 'MAIN', 'description' => '', 'icon' => '', 'developerId' => '1', 'developerName' => ''), 'id' => 1, 'productId' => 1, 'type' => 'upgrade', 'toVersion' => '8.0.1');
     }
 
-    private function _createApp($code)
+    private function _createApp($code, $type = '')
     {
         $app = array(
             'code' => $code,
             'name' => 'phpunit app test',
             'version' => '1.0.0',
             'description' => 'app description',
+            'type' => $type,
         );
 
         return $this->getAppService()->registerApp($app);

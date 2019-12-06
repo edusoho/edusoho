@@ -35,7 +35,27 @@ class PermissionExtension extends \Twig_Extension
             new \Twig_SimpleFunction('has_permission', array($this, 'hasPermission')),
             new \Twig_SimpleFunction('eval_expression', array($this, 'evalExpression'), array('needs_context' => true, 'needs_environment' => true)),
             new \Twig_SimpleFunction('first_child_permission', array($this, 'getFirstChild')),
+            new \Twig_SimpleFunction('first_child_permission_by_code', array($this, 'getFirstChildByCode')),
+            new \Twig_SimpleFunction('side_bar_permission', array($this, 'getSideBar')),
+            new \Twig_SimpleFunction('root_permission', array($this, 'getRootPermission')),
+            new \Twig_SimpleFunction('nav_permission', array($this, 'getNavPermission')),
         );
+    }
+
+    /**
+     * @param $code
+     *
+     * @return array
+     *               获取admin_v2的sideBar
+     */
+    public function getSideBar($code)
+    {
+        $permission = $this->getNavPermission($code);
+        $group = $this->createPermissionBuilder()->groupedV2Permissions($permission['code']);
+
+        $permissionMenus = $this->buildSidebarPermissionMenus($group);
+
+        return $permissionMenus;
     }
 
     public function getFirstChild($menu)
@@ -54,13 +74,45 @@ class PermissionExtension extends \Twig_Extension
         return current($menus);
     }
 
+    public function getFirstChildByCode($code)
+    {
+        $menus = $this->getSubPermissions($code);
+
+        if (empty($menus)) {
+            $permissions = $this->createPermissionBuilder()->getOriginSubPermissions($code);
+            if (empty($permissions)) {
+                return array();
+            } else {
+                $menus = $permissions;
+            }
+        }
+
+        return current($menus);
+    }
+
+    /**
+     * @param $menu
+     *
+     * @return array|mixed
+     *                     递归获取叶子节点的permissions
+     */
+    public function getLeafFirstChild($menu)
+    {
+        $childMenu = $this->getFirstChild($menu);
+        if ($childMenu['children']) {
+            $childMenu = $this->getLeafFirstChild($childMenu);
+        }
+
+        return $childMenu;
+    }
+
     public function getPermissionPath($env, $context, $menu)
     {
         $route = empty($menu['router_name']) ? $menu['code'] : $menu['router_name'];
         $params = empty($menu['router_params']) ? array() : $menu['router_params'];
 
         foreach ($params as $key => $value) {
-            if (strpos($value, '(') === 0) {
+            if (0 === strpos($value, '(')) {
                 $value = $this->evalExpression($env, $context['_context'], $value);
                 $params[$key] = $value;
             } else {
@@ -74,7 +126,7 @@ class PermissionExtension extends \Twig_Extension
     public function evalExpression($twig, $context, $code)
     {
         $code = trim($code);
-        if (strpos($code, '(') === 0) {
+        if (0 === strpos($code, '(')) {
             $code = substr($code, 1, strlen($code) - 2);
         } else {
             $code = "'{$code}'";
@@ -131,9 +183,129 @@ class PermissionExtension extends \Twig_Extension
         return $parent;
     }
 
+    /**
+     * @param $code
+     * @param string $type admin|admin_v2
+     *
+     * @return array|mixed
+     *                     通过递归方式获取到root节点的permission
+     */
+    public function getRootPermission($code, $type = 'admin_v2')
+    {
+        $permission = $this->getParentPermission($code);
+        if ($permission['code'] != $type) {
+            $permission = $this->getRootPermission($permission['code']);
+        }
+
+        return $permission;
+    }
+
+    /**
+     * @param $code
+     * @param string $type admin|admin_v2
+     *
+     * @return array|mixed
+     *                     通过递归方式获取到nav栏的permission
+     */
+    public function getNavPermission($code, $type = 'admin_v2')
+    {
+        $permission = $this->getParentPermission($code);
+        if ($permission['parent'] != $type) {
+            $permission = $this->getNavPermission($permission['code']);
+        }
+
+        return $permission;
+    }
+
     private function createPermissionBuilder()
     {
         return PermissionBuilder::instance();
+    }
+
+    private function buildSidebarPermissionMenus($allGroup, $grade = 0)
+    {
+        $permissions = array();
+
+        foreach ($allGroup as $key => $group) {
+            //菜单组是否为可见状态
+            if (isset($group['visible']) && !$this->canVisibleMenus($group['visible'])) {
+                unset($allGroup[$key]);
+                continue;
+            }
+            //组下面没有菜单，则不显示该组
+            if (!isset($group['children'])) {
+                continue;
+            }
+
+            $group = $this->buildGroupPermissionMenus($group);
+
+            //组下有菜单才显示，如果没有显示的菜单则组也不显示
+            if ($group['grade'] == 0 && isset($group['nodes'])) {
+                $permissions[] = $group;
+            }
+        }
+
+        return $permissions;
+    }
+
+    private function buildGroupPermissionMenus($group, $grade = 0)
+    {
+        $groupInfo = array();
+        if (isset($group['is_group'])) {
+            $groupInfo['grade'] = $grade;
+        }
+        $groupInfo['id'] = "group_{$group['code']}";
+        $groupInfo['name'] = ServiceKernel::instance()->trans($group['name'], array(), 'menu');
+        $groupInfo['class'] = isset($group['class']) ? $group['class'] : '';
+        $groupInfo['code'] = $group['code'];
+
+        foreach ($group['children'] as $k => $child) {
+            //菜单是否可见状态
+            if (isset($child['visible']) && !$this->canVisibleMenus($child['visible'])) {
+                unset($group['children'][$k]);
+                continue;
+            }
+            // 获取菜单组下面的节点菜单数据
+            $groupInfo['nodes'][] = $this->buildNodesPermissionMenus($child);
+        }
+
+        return $groupInfo;
+    }
+
+    private function buildNodesPermissionMenus($child)
+    {
+        $nodes = array();
+        $nodes['id'] = "menu_{$child['code']}";
+        $nodes['class'] = isset($child['class']) ? $child['class'] : '';
+        $nodes['name'] = ServiceKernel::instance()->trans($child['name'], array(), 'menu');
+        $nodes['link'] = $this->getPermissionPath(array(), array(), $this->getFirstChild($this->getPermissionByCode($child['code'])));
+        $nodes['grade'] = 1;
+        $nodes['code'] = $child['code'];
+
+        return $nodes;
+    }
+
+    private function canVisibleMenus($visible)
+    {
+        $twigExpressionResult = $this->evalExpression($this->container->get('twig'), array(), $visible);
+
+        if ($twigExpressionResult) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function removeEmptyGroup($permissions)
+    {
+        $array = array();
+        foreach ($permissions as $key => $permission) {
+            if ($permission['grade'] == 0 && !isset($permission['nodes'])) {
+                unset($permissions[$key]);
+            }
+        }
+
+        return $array;
     }
 
     public function getName()

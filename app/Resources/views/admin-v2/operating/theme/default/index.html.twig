@@ -1,0 +1,10 @@
+
+{% extends 'default/index.html.twig' %}
+
+{% block stylesheets %}
+  {% include 'css_loader.html.twig' %}
+  {% include 'default/stylesheet-webpack.html.twig' with {
+      isEditColor: true, 
+    }
+  %}
+{% endblock %}

@@ -16,6 +16,8 @@ interface AppService
 
     public function findAppsByCodes(array $codes);
 
+    public function findAppsByTypes(array $types);
+
     public function getMainVersion();
 
     public function registerApp($app);

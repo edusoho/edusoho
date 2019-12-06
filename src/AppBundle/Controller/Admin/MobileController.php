@@ -4,9 +4,6 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Exception\FileToolkitException;
 use AppBundle\Common\FileToolkit;
-use AppBundle\Common\ArrayToolkit;
-use Biz\CloudPlatform\CloudAPIFactory;
-use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,45 +61,6 @@ class MobileController extends BaseController
         ));
     }
 
-    public function mobileSelectAction(Request $request)
-    {
-        $operationMobile = $this->getSettingService()->get('operation_mobile', array());
-        $courseGrids = $this->getSettingService()->get('operation_course_grids', array());
-        $settingMobile = $this->getSettingService()->get('mobile', array());
-
-        $default = array(
-            'courseIds' => '', //每周精品课
-        );
-
-        $mobile = array_merge($default, $courseGrids);
-
-        if ('POST' == $request->getMethod()) {
-            $courseGrids = $request->request->all();
-
-            $mobile = array_merge($operationMobile, $settingMobile, $courseGrids);
-
-            $this->getSettingService()->set('operation_mobile', $operationMobile);
-            $this->getSettingService()->set('operation_course_grids', $courseGrids);
-            $this->getSettingService()->set('mobile', $mobile);
-            $this->setFlashMessage('success', 'site.save.success');
-        }
-
-        $courseIds = explode(',', $mobile['courseIds']);
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-        $courses = ArrayToolkit::index($courses, 'id');
-        $sortedCourses = array();
-        foreach ($courseIds as $value) {
-            if (!empty($value) && !empty($courses[$value])) {
-                $sortedCourses[] = $courses[$value];
-            }
-        }
-
-        return $this->render('admin/system/course-select.html.twig', array(
-            'mobile' => $mobile,
-            'courses' => $sortedCourses,
-        ));
-    }
-
     public function mobilePictureUploadAction(Request $request, $type)
     {
         $fileId = $request->request->get('id');
@@ -137,25 +95,6 @@ class MobileController extends BaseController
         $this->getSettingService()->set('mobile', $setting);
 
         return $this->createJsonResponse(true);
-    }
-
-    public function customizationUpgradeAction(Request $request)
-    {
-        $currentVersion = $request->request->get('currentVersion');
-        $targetVersion = $request->request->get('targetVersion');
-
-        if (empty($currentVersion) || empty($targetVersion)) {
-            $this->createNewException(CommonException::ERROR_PARAMETER());
-        }
-
-        $api = CloudAPIFactory::create('root');
-
-        $resp = $api->post('/customization/mobile/apply', array(
-            'currentVersion' => $currentVersion,
-            'targetVersion' => $targetVersion,
-        ));
-
-        return $this->createJsonResponse($resp);
     }
 
     protected function getCourseService()

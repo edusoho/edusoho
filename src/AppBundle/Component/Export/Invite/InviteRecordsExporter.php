@@ -24,7 +24,7 @@ class InviteRecordsExporter extends Exporter
     {
         $user = $this->getUser();
 
-        if ($user->hasPermission('admin_operation_invite_record')) {
+        if ($user->hasPermission('admin_operation_invite_record') || $user->hasPermission('admin_v2_operation_invite_record')) {
             return true;
         }
 
@@ -58,7 +58,7 @@ class InviteRecordsExporter extends Exporter
             $limit
         );
 
-        if ($start == 0) {
+        if (0 == $start) {
             if (!empty($this->conditions['inviteUserId'])) {
                 $invitedRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($this->conditions['inviteUserId']);
                 if (!empty($invitedRecord)) {

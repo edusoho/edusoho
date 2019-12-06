@@ -1,1 +1,0 @@
-webpackJsonp(["app/css/main-purple"],{"1bac41a75aac415b842c":function(a,c){}},["1bac41a75aac415b842c"]);

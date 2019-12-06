@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use Biz\Common\CommonException;
 use Codeages\Biz\Order\Service\OrderService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use AppBundle\Common\CurlToolkit;
@@ -147,6 +148,7 @@ class DefaultController extends BaseController
             'cloud_sms.sms_enabled' => '',
             'cloud_search.search_enabled' => '',
             'cloud_consult.cloud_consult_setting_enabled' => 0,
+            'cloud_email_crm' => 'status',
             'storage.upload_mode' => 'cloud',
         );
 
@@ -155,7 +157,7 @@ class DefaultController extends BaseController
             if (empty($expect)) {
                 $disabledCloudServiceCount += empty($value) ? 1 : 0;
             } else {
-                $disabledCloudServiceCount += empty($value) || $value != $expect ? 2 : 0;
+                $disabledCloudServiceCount += empty($value) || $value != $expect ? 1 : 0;
             }
         }
 
@@ -409,6 +411,24 @@ class DefaultController extends BaseController
         }
 
         return false;
+    }
+
+    public function upgradeV2SettingAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get('backstage', array('is_v2' => 0));
+
+        if (!empty($setting) && $setting['is_v2']) {
+            $this->createNewException(CommonException::UPGRADE_V2_ERROR());
+        }
+        $user = $this->getCurrentUser();
+        if (0 == count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')))) {
+            return $this->createJsonResponse(array('status' => 'error', 'message' => $this->trans('admin_v2.upgrade_v2_setting_permission.error')));
+        }
+        $setting['is_v2'] = 1;
+        $this->getSettingService()->set('backstage', $setting);
+        $this->pushEventTracking('switchToAdminV2');
+
+        return $this->createJsonResponse(array('status' => 'success', 'url' => $this->generateUrl('admin_v2')));
     }
 
     private function getRegisterCount($timeRange)

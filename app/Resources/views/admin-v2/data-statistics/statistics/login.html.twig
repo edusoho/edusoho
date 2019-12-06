@@ -1,0 +1,13 @@
+{% extends 'admin-v2/data-statistics/statistics/analysis-base-layout.html.twig' %}
+{% set script_controller = 'analysis/login' %}
+{% block analysisBody %}
+  <div class="col-md-12">
+    {% if tab=="trend" %}
+      <div id="line-data"></div>
+      <input id="data" type="hidden" value='{% if data %}{{ data }}{% endif %}'>
+      <input id="loginStartDate" type="hidden" value='{% if loginStartDate %}{{ loginStartDate }}{% endif %}'>
+    {% elseif tab=="detail" %}
+      {% include 'admin-v2/data-statistics/statistics/login.table.html.twig' %}
+    {% endif %}
+  </div>
+{% endblock %}

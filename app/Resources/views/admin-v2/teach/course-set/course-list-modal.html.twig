@@ -1,0 +1,43 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}{{'admin.course_manage.manage.course_list.block_title'|trans}}{% endblock %}
+
+{% block body %}
+  <table class="table table-striped table-hover" id="course-table" style="word-break:break-all;">
+    <thead>
+    <tr>
+      <th>{{ 'admin.course_manage_modal.manage.number'|trans }}</th>
+      <th>{{ 'admin.course_manage.manage.name'|trans }}</th>
+      <th>{{ 'admin.course_manage.manage.price'|trans }}</th>
+      <th>{{ 'admin.course_manage.manage.course_list.status'|trans }}</th>
+      <th>{{ 'admin.course_manage.manage.student_number'|trans }}</th>
+      <th>{{ 'admin.course_manage.manage.course_list.creator'|trans }}</th>
+      <th>{{ 'admin.course_manage.manage.course_list.createdTime'|trans }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for course in courses if courses %}
+      {% set user = users[course.creator]|default(null) %}
+      <tr>
+        <td>{{ course.id }}</td>
+        <td><a href="{{ path('course_show',{id:course.id}) }}" target="_blank">{{ course.title }}</a></td>
+        <td>{{ course.price }}</td>
+        <td>{{ dict_macro.courseStatus(course.status) }}</td>
+        <td>{{ course.studentNum }}</td>
+        <td>{{ user.nickname|default('--') }}</td>
+        <td>{{ course.createdTime|date('Y-m-d H:i:s') }}</td>
+      </tr>
+    {% else %}
+      <tr>
+        <td colspan="20">
+          <div class="empty">{{'admin.course_manage.manage.empty'|trans}}</div>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {{ admin_macro.paginator(paginator) }}
+{% endblock %}

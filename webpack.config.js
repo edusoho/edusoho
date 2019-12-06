@@ -5,6 +5,7 @@ module.exports = {
   },
   libs: {
     'base': ['libs/base.js'], // 基础类库
+    'boot_base': ['libs/boot_base.js'],
     'html5shiv': ['html5shiv'],
     'fix-ie': ['console-polyfill', 'respond-js'], //也可以是一个npm依赖包
     'jquery-insertAtCaret': ['libs/jquery-insertAtCaret.js'],

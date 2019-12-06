@@ -1,0 +1,4 @@
+ <option value=''>{{'admin.system_log.all_operation_option'|trans}}</option>
+{% for action in actions %}
+      <option value="{{ action }}">{{ ('log.action.' ~ app.request.query.get('module') ~ '.' ~ action)|trans }}</option>
+{% endfor %}

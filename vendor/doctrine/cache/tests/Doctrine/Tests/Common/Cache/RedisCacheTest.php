@@ -36,12 +36,13 @@ class RedisCacheTest extends CacheTest
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function _getCacheDriver()
     {
         $driver = new RedisCache();
         $driver->setRedis($this->_redis);
+
         return $driver;
     }
 }

@@ -1,0 +1,61 @@
+{% extends 'admin-v2/layout.html.twig' %}
+{% set menu = 'admin_v2_cloud_email' %}
+
+{% block page_title %}
+  {% if setting('cloud_status.locked') == true %}
+    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.locked_tips'|trans}}：4008041114。</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% elseif account.status|default() == 'disable' %}
+    <div class="alert alert-warning" role="alert">{{'
+    admin.edu_cloud.edu_email.service_suspend_tips'|trans}}：4008041114。</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% block main %}
+  <div class="btn-group mbm">
+    <a href=" {{ path('admin_v2_edu_cloud_email_overview') }}" type="button" class="btn btn-default btn-sm">{{'admin.edu_cloud.side_bar.introduction'|trans}}</a>
+    <a href=" {{ path('admin_v2_edu_cloud_email_setting') }}" type="button" class="btn btn-default btn-sm btn-primary">{{'admin.edu_cloud.side_bar.setup'|trans}}</a>
+  </div>
+  <!-- 设置 -->
+  <div class="page-heading">
+    {{'admin.edu_cloud.edu_email.switch_title'|trans}}
+  </div>
+  <form class="form-horizontal" method="post" action="{{ path('admin_v2_edu_cloud_email_switch') }}">
+    <div class="form-group">
+      <label for="" class="col-sm-3 control-label">{{'admin.edu_cloud.edu_email.email_enable_btn'|trans}}：</label>
+      <div class="controls col-md-9 radios">
+        <div>
+          <span class="text-success">{{'admin.edu_cloud.edu_email.email_enabled'|trans}}</span>
+          <button class="btn btn-default btn-sm mlm" name="email-close">
+            <span class="text-muted">{{'admin.edu_cloud.edu_email.email_close'|trans}}</span>
+          </button>
+        </div>
+        <div class="help-block">
+          {{'admin.edu_cloud.edu_email.email_enable_tips'|trans({'%showUrl%': path('admin_v2_cloud_show',{'type': 'email'})})|raw}}
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-3 control-label">
+        <label for="" >{{'admin.edu_cloud.edu_email.addressee_name'|trans}}：</label>
+      </div>
+      <div class="controls col-md-8 mts">
+        <div>
+          {% if account.nickname != '' %}
+            {{ account.nickname }}
+          {% else %}
+            {{'admin.edu_cloud.edu_email.no_set_addressee'|trans}}
+          {% endif %}
+        </div>
+        <div class="help-block">
+          {{'admin.edu_cloud.edu_email.set_addressee'|trans({'%addresseeName%': 'http://open.edusoho.com/service/email/sender-name'})|raw}}
+        </div>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}

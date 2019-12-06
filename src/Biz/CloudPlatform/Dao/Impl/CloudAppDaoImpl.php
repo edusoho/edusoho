@@ -21,6 +21,11 @@ class CloudAppDaoImpl extends GeneralDaoImpl implements CloudAppDao
         return $this->findInField('code', $codes);
     }
 
+    public function findByTypes(array $types)
+    {
+        return $this->findInField('type', $types);
+    }
+
     public function find($start, $limit)
     {
         return $this->search(array(), array('installedTime' => 'DESC'), $start, $limit);

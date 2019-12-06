@@ -4716,7 +4716,6 @@ course.widgets.classroom_price.price: 价格：
 course.widgets.classroom_price.not_free: >
   价格 : %price%元
 course.widgets.classroom_price.free: 免费
-course.widgets.classroom_price.free: 免费
 course.widgets.course_order.not_free: 收费
 course.widgets.course_order.order_title: 订单名称：%title%
 course.widgets.course_order.order_sn: 订单号：%sn%
@@ -6765,7 +6764,6 @@ admin.edu_cloud.edu_sms.type_id: 类型编号
 admin.edu_cloud.edu_sms.application_scenarios: 短信应用场景
 admin.edu_cloud.edu_sms.sms_type_num: 类型编号
 admin.edu_cloud.edu_sms.sms_open_status: 启用状态
-admin.edu_cloud.edu_sms.sms_content: 短信内容
 admin.edu_cloud.edu_sms.sms_school_notify: 网校通知
 admin.edu_cloud.edu_sms.application_scenarios: 应用场景
 admin.edu_cloud.edu_sms.content: 内容示例
@@ -7293,11 +7291,6 @@ admin.user_center.message_student_to_teacher: 允许学员给教师发送私信
 admin.user_center.message_teacher_to_student: 允许教师给学员发送私信
 admin.user_center.message.setting_tip: 提示：支持取消上述角色间互发私信功能，其余角色不影响。设置后仅APP端不生效。
 
-admin.user_center.message_title_name: 私信发送设置
-admin.user_center.message_student_to_student: 允许学员给学员发送私信
-admin.user_center.message_student_to_teacher: 允许学员给教师发送私信
-admin.user_center.message_teacher_to_student: 允许教师给学员发送私信
-
 
 # 角色管理
 admin.role_manage.keyword_type: --关键词类型--
@@ -7307,7 +7300,6 @@ admin.role_manage.createdTime: 创建时间
 admin.role_manage.nickname: 创建者
 admin.role_manage.operation: 操作
 admin.role_manage.role.empty: 暂无角色
-admin.role_manage.keyword.placeholer: 关键词
 admin.role_manage.keyword.placeholer: 关键词
 admin.role_manage.help_block: >
   <p>1、初始化的4个角色，无法编辑和删除</p>
@@ -8830,6 +8822,7 @@ log.action.system.update_settings.xapi: 更新数据实验室设置
 log.action.system.update_settings.mobile: 更新移动客户端设置
 log.action.system.update_settings.wap: 更新WAP设置
 log.action.system.update_settings.developer: 更新开发者设置
+log.action.system.update_settings.backstage: 更新后台版本
 log.action.system.questions_settings: 题库设置
 log.action.system.customerServiceSetting: 客服管理
 log.action.system.setting_userCenter: 用户中心设置
@@ -10271,6 +10264,10 @@ wechat.notification.fans_list.no_wechat_bind: 暂未绑定微信服务号
 wechat.notification.fans_list.placeholder: 请输入关键词
 wechat.notification.send_days: 发送日
 wechat.notification.course_remind_conditions: 针对至少有一个未完成且未退出教学计划的学员，按固定频率和固定时间发送一条通知提醒。
+wechat.notification.tooltip_hint: 微信服务号通知不支持广告等营销类消息以及其它所有可能对用户造成骚扰的消息，如果通知发送失败，则可能是任务名称、课程名称等关键词中包含违规内容。
+wechat.notification.goto_authorization: 前往授权
+wechat.notification.template_opend: 已开启
+wechat.notification.template_closed: 未开启
 
 # 微信通知模板
 wechat.notification.template.live_start: '同学，您好，您报名的直播课即将开课。<br>课程名称：{《课程名》-《任务名》}<br>开课时间：{直播开始时间}（精确到分钟）<br>开课地点：在线直播<br>联系方式：无<br>不要迟到哦。'
@@ -10498,3 +10495,115 @@ question_reedit.select_question_category: --选择分类--
 question_reedit.category_text: 分类
 question_reedit.category_empty: 无
 question_plus_upgrade_tip: 当前插件版本过低，前往后台升级“题库增强版”插件后，才可继续使用旧模板导入。
+
+# 新版后台开始
+
+# 新后台首页
+admin_v2.homepage.more_btn: 更多
+admin_v2.homepage.loading_data_tips: 正在载入数据，请稍等。
+
+admin_v2.homepage.data_overview: 数据概览
+admin_v2.homepage.today_login_user: 今日登录用户
+admin_v2.homepage.today_register_user: 今日注册用户
+admin_v2.homepage.today_new_paid_order: 今日付费订单
+admin_v2.homepage.today_new_order: 今日新增订单
+
+# 新后台首页通知
+admin_v2.domain_error_hint: 当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【通用管理】-【网校信息】-【网站域名】
+admin_v2.homepage.setting_domain_btn: 立即设置
+admin_v2.homepage.renewal_btn: 立即续费
+admin_v2.homepage.cloud_notice.unknown_time: 未知时间
+admin_v2.homepage.cloud_notice.unknown_days: 未知
+
+admin_v2.homepage.cloud_notice: '欢迎使用,试用将于<strong> %endTime% </strong>到期,剩余<strong> %remainDays% </strong>天。您可以联系销售人员购买授权版本，或者延长试用期限。电话：4008041114 或 '
+
+# 常用入口
+admin_v2.homepage.quick_entrance: 常用入口
+admin_v2.edit_quick_entrance.btn: 编辑入口
+admin_v2.quick_entrance_setting: 设置常用入口
+admin_v2.quick_entrance_setting.tips: (最多设置7个快捷入口位）
+
+##分类标签
+admin_v2.course.tag: 标签管理
+admin_v2.course.tag.group: 标签组管理
+admin_v2.course.category.course_category_tab: 课程分类
+admin_v2.course.category.classroom_category_tab: 班级分类
+admin_v2.category_manage.add_title: 添加分类
+admin_v2.tag_manage.tag.create.modal_title: 新增标签
+admin_v2.tag_manage.tag.group.create.modal_title: 新增标签组
+
+admin_v2.homepage.school_info.cloud_service: 云服务
+admin_v2.homepage.school_info.app_center: 云市场
+admin_v2.homepage.school_info.system_upgrade: 系统更新
+admin_v2.homepage.school_info.cloud_service_status.open: 已开启
+admin_v2.homepage.school_info.cloud_service_status.not_open: 未开启
+admin_v2.homepage.school_info.app_status.upgraded: 已更新
+admin_v2.homepage.school_info.app_status.has_upgrade: 未更新
+admin_v2.homepage.school_info.system_status.has_upgrade: 有更新
+admin_v2.homepage.school_info.system_status.upgraded: 已更新
+admin_v2.homepage.school_info.system_version: 系统版本
+admin_v2.homepage.school_info.access_web: 访问Web
+admin_v2.homepage.school_info.access_mobile_app: 访问App
+admin_v2.homepage.school_info.access_wechat_app: 访问小程序
+admin_v2.homepage.school_info.level.none: 开源版
+admin_v2.homepage.school_info.level.saas: SaaS版
+admin_v2.homepage.school_info.level.license: 商业授权
+admin_v2.homepage.school_info.level.custom: 定制版
+
+# 新后台
+admin_v2.edu_cloud_not_access: 未接入教育云
+admin_v2.mobile_manage.open_tips: >
+  移动端未开启，请先在<a href="%openUrl%">APP设置</a>中设置开启
+admin_v2.live_course.create_btn: 创建直播
+admin_v2.system.security_setting: 白名单域名
+admin_v2.upgrade_v2_setting_permission.error: 请联系超级管理员或管理员操作
+admin_v2.upgrade_v2_setting.alert: '全新版后台已经更新，开启最新的体验，新后台需要手动升级插件，请勿忘记哦!'
+admin_v2.upgrade_v2_setting.setting_btn: 切换新版
+admin_v2.switch_old_version.setting_btn: 切换旧版
+admin_v2.switch_version.btn_loading: 正在切换....
+admin_v2.switch_old_version.title: 切换后台
+exception.common_upgrade_v2_error: 已经升级到新版
+exception.switch_old_version.permission_error: 请联系超级管理员或管理员操作
+exception.switch_old_version.error: 已经切回到旧版后台
+admin_v2.default.switch_old_version_btn: 回到旧版后台
+admin_v2.setting.navigation.foot.tips: >
+  清秋主题、默认主题A、默认主题B、雅致简洁之外的主题，请前往
+  <a class="text-info" style="font-weight:bold;" href="%url%">
+  Web端装修 </a>
+  中进行编辑。
+admin_v2.setting_course.course_list_page_seq.help_block: 地址：域名/course/explore,任何人都可在此页面查看网站所有已发布课程,如需设置网站首页课程排序，请到【运营】-【web装修】-【已购主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
+
+admin_v2.newcomer_task.helper: 任务助手
+admin_v2.newcomer_task.helper_tip: 六步完成网校基础建设
+admin_v2.newcomer_task.collapse: 收起
+admin_v2.newcomer_task.todo: 前去完成
+admin_v2.newcomer_task.done: 已完成
+admin_v2.newcomer_task.check_guide: 查看指南
+admin_v2.newcomer_task.cloud_applied.title: 接入教育云
+admin_v2.newcomer_task.cloud_applied.tip: 直播、点播等多种能力，低成本、并发高
+admin_v2.newcomer_task.payment_applied.title: 申请支付
+admin_v2.newcomer_task.payment_applied.tip: 开通微信、支付宝等支付，轻松在线收款
+admin_v2.newcomer_task.auth_applied.title: 设置注册
+admin_v2.newcomer_task.auth_applied.tip: 开启注册，建立网校专属用户流量池
+admin_v2.newcomer_task.plugin_applied.title: 安装常见插件
+admin_v2.newcomer_task.plugin_applied.tip: 为您推荐前10家优秀网校常用的插件
+admin_v2.newcomer_task.course_applied.title: 创建课程
+admin_v2.newcomer_task.course_applied.tip: 快速创建课程商品，获取网校收益
+admin_v2.newcomer_task.decoration_applied.title: 装修网校
+admin_v2.newcomer_task.decoration_applied.tip: 装修网校首页，获得更多用户好感
+
+admin_v2.homepage.overview: 概况
+admin_v2.developer_setting.platform_news_api_server: 获取平台信息API
+admin_v2.developer_setting.platform_news_api_server.info: '默认为 //platform-news-service.qiqiuyun.net'
+admin_v2.role_permission_manage.error: 错误
+admin_v2.default_page.changelog_title: EduSoho更新日志
+admin_v2.wechat_official_account.title: 公众号
+admin_v2.wechat_official_account.text: 关注EduSoho公众号 获取最新教育资讯
+admin_v2.homepage.announcement_from_platform: 站长公告
+admin_v2.homepage.application_intro: 应用推荐
+admin_v2.homepage.application_intro.more_btn: 逛逛营销应用
+admin_v2.business_advice.title: 经营建议
+admin_v2.buiness_advice.goto_qiqiuyu: 前去EduSoho商学院
+
+admin_v2.notice.upgrade_notice: 新后台对插件进行了全新适配，为了便于您的后台管理，需要手动升级全部已安装插件
+admin_v2.notice.go_to_upgrade: 前往升级

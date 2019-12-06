@@ -1626,6 +1626,10 @@ class UserServiceImpl extends BaseService implements UserService
             if (in_array('admin', $role['data'], true)) {
                 return true;
             }
+
+            if (in_array('admin_v2', $role['data_v2'], true)) {
+                return true;
+            }
         }
 
         return false;

@@ -21,20 +21,20 @@ do
     if [ ${line:0:2} != $ignoreStartLines ]; then
         i=1
         fixedClass=''
-        while((1==1))  
-        do  
+        while((1==1))
+        do
             split=`echo $line|cut -d " " -f$i`  ## 以空格分割
             if [ "$split" != "" ]; then
                 fixedClass="${split}"  # 取最后一个空格的后面的内容
-            else  
+            else
                 break
             fi
             ((i++))
         done
 
         if [[ $fixedClass = *\.php* ]]; then
-            echo 'php-cs-fixer fix '$fixedClass
-            php-cs-fixer fix $fixedClass
+            echo 'bin/php-cs-fixer fix '$fixedClass
+            bin/php-cs-fixer fix $fixedClass
         fi
     fi
 done < app/data/php-cs-fixer-problems

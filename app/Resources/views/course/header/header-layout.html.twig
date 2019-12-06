@@ -84,8 +84,8 @@
           </li>
 
           {{ slot('course.header-marketing-btn.extension', {'course': course}) }}
-
-          {% set canManage =  member.role|default('') == 'teacher' or has_permission('admin_course_content_manage') %}
+          {#添加admin_v2#}
+          {% set canManage =  member.role|default('') == 'teacher' or has_permission('admin_course_content_manage') or has_permission('admin_v2_course_content_manage') %}
           {% if canManage %}
             <li>
               {% if page_type|default('guest') == 'member' %}

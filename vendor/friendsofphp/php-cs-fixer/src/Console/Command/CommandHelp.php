@@ -1,0 +1,458 @@
+<?php
+
+/*
+ * This file is part of PHP CS Fixer.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
+namespace PhpCsFixer\Console\Command;
+
+use PhpCsFixer\Fixer\ConfigurableFixerInterface;
+use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
+use PhpCsFixer\Fixer\DefinedFixerInterface;
+use PhpCsFixer\Fixer\FixerInterface;
+use PhpCsFixer\FixerConfiguration\FixerOptionInterface;
+use PhpCsFixer\FixerFactory;
+use PhpCsFixer\RuleSet;
+
+/**
+ * @author Fabien Potencier <fabien@symfony.com>
+ * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ * @author SpacePossum
+ *
+ * @internal
+ */
+final class CommandHelp
+{
+    /**
+     * @return string
+     */
+    public static function getHelpCopy()
+    {
+        $template =
+            <<<EOF
+The <info>%command.name%</info> command tries to fix as much coding standards
+problems as possible on a given file or files in a given directory and its subdirectories:
+
+    <info>$ php %command.full_name% /path/to/dir</info>
+    <info>$ php %command.full_name% /path/to/file</info>
+
+By default <comment>--path-mode</comment> is set to ``override``, which means, that if you specify the path to a file or a directory via
+command arguments, then the paths provided to a ``Finder`` in config file will be ignored. You can use <comment>--path-mode=intersection</comment>
+to merge paths from the config file and from the argument:
+
+    <info>$ php %command.full_name% --path-mode=intersection /path/to/dir</info>
+
+The <comment>--format</comment> option for the output format. Supported formats are ``txt`` (default one), ``json``, ``xml`` and ``junit``.
+
+NOTE: When using ``junit`` format report generates in accordance with JUnit xml schema from Jenkins (see docs/junit-10.xsd).
+
+The <comment>--verbose</comment> option will show the applied rules. When using the ``txt`` format it will also displays progress notifications.
+
+The <comment>--rules</comment> option limits the rules to apply on the
+project:
+
+    <info>$ php %command.full_name% /path/to/project --rules=@PSR2</info>
+
+By default the PSR1 and PSR2 rules are used.
+
+The <comment>--rules</comment> option lets you choose the exact rules to
+apply (the rule names must be separated by a comma):
+
+    <info>$ php %command.full_name% /path/to/dir --rules=line_ending,full_opening_tag,indentation_type</info>
+
+You can also blacklist the rules you don't want by placing a dash in front of the rule name, if this is more convenient,
+using <comment>-name_of_fixer</comment>:
+
+    <info>$ php %command.full_name% /path/to/dir --rules=-full_opening_tag,-indentation_type</info>
+
+When using combinations of exact and blacklist rules, applying exact rules along with above blacklisted results:
+
+    <info>$ php %command.full_name% /path/to/project --rules=@Symfony,-@PSR1,-blank_line_before_return,strict_comparison</info>
+
+Complete configuration for rules can be supplied using a ``json`` formatted string.
+
+    <info>$ php %command.full_name% /path/to/project --rules='{"concat_space": {"spacing": "none"}}'</info>
+
+A combination of <comment>--dry-run</comment> and <comment>--diff</comment> will
+display a summary of proposed fixes, leaving your files unchanged.
+
+The <comment>--allow-risky</comment> option allows you to set whether risky rules may run. Default value is taken from config file.
+Risky rule is a rule, which could change code behaviour. By default no risky rules are run.
+
+The <comment>--stop-on-violation</comment> flag stops execution upon first file that needs to be fixed.
+
+The <comment>--show-progress</comment> option allows you to choose the way process progress is rendered:
+
+* <comment>none</comment>: disables progress output;
+* <comment>run-in</comment>: simple single-line progress output;
+* <comment>evaluating</comment>: multiline progress output with number of files and percentage on each line. Note that with this option, the files list is evaluated before processing to get the total number of files and then kept in memory to avoid using the file iterator twice. This has an impact on memory usage so using this option is not recommended on very large projects.
+
+If the option is not provided, it defaults to <comment>run-in</comment> unless a config file that disables output is used, in which case it defaults to <comment>none</comment>. This option has no effect if the verbosity of the command is less than <comment>verbose</comment>.
+
+    <info>$ php %command.full_name% --verbose --show-progress=evaluating</info>
+
+The command can also read from standard input, in which case it won't
+automatically fix anything:
+
+    <info>$ cat foo.php | php %command.full_name% --diff -</info>
+
+Choose from the list of available rules:
+
+%%%FIXERS_DETAILS%%%
+
+The <comment>--dry-run</comment> option displays the files that need to be
+fixed but without actually modifying them:
+
+    <info>$ php %command.full_name% /path/to/code --dry-run</info>
+
+Instead of using command line options to customize the rule, you can save the
+project configuration in a <comment>.php_cs.dist</comment> file in the root directory
+of your project. The file must return an instance of ``PhpCsFixer\ConfigInterface``,
+which lets you configure the rules, the files and directories that
+need to be analyzed. You may also create <comment>.php_cs</comment> file, which is
+the local configuration that will be used instead of the project configuration. It
+is a good practice to add that file into your <comment>.gitignore</comment> file.
+With the <comment>--config</comment> option you can specify the path to the
+<comment>.php_cs</comment> file.
+
+The example below will add two rules to the default list of PSR2 set rules:
+
+    <?php
+
+    \$finder = PhpCsFixer\Finder::create()
+        ->exclude('somedir')
+        ->notPath('src/Symfony/Component/Translation/Tests/fixtures/resources.php')
+        ->in(__DIR__)
+    ;
+
+    return PhpCsFixer\Config::create()
+        ->setRules(array(
+            '@PSR2' => true,
+            'strict_param' => true,
+            'array_syntax' => array('syntax' => 'short'),
+        ))
+        ->setFinder(\$finder)
+    ;
+
+    ?>
+
+**NOTE**: ``exclude`` will work only for directories, so if you need to exclude file, try ``notPath``.
+
+See `Symfony\\\\Finder <http://symfony.com/doc/current/components/finder.html>`_
+online documentation for other `Finder` methods.
+
+You may also use a blacklist for the rules instead of the above shown whitelist approach.
+The following example shows how to use all ``Symfony`` rules but the ``full_opening_tag`` rule.
+
+    <?php
+
+    \$finder = PhpCsFixer\Finder::create()
+        ->exclude('somedir')
+        ->in(__DIR__)
+    ;
+
+    return PhpCsFixer\Config::create()
+        ->setRules(array(
+            '@Symfony' => true,
+            'full_opening_tag' => false,
+        ))
+        ->setFinder(\$finder)
+    ;
+
+    ?>
+
+You may want to use non-linux whitespaces in your project. Then you need to
+configure them in your config file. Please be aware that this feature is
+experimental.
+
+    <?php
+
+    return PhpCsFixer\Config::create()
+        ->setIndent("\\t")
+        ->setLineEnding("\\r\\n")
+    ;
+
+    ?>
+
+By using ``--using-cache`` option with yes or no you can set if the caching
+mechanism should be used.
+
+Caching
+-------
+
+The caching mechanism is enabled by default. This will speed up further runs by
+fixing only files that were modified since the last run. The tool will fix all
+files if the tool version has changed or the list of rules has changed.
+Cache is supported only for tool downloaded as phar file or installed via
+composer.
+
+Cache can be disabled via ``--using-cache`` option or config file:
+
+    <?php
+
+    return PhpCsFixer\Config::create()
+        ->setUsingCache(false)
+    ;
+
+    ?>
+
+Cache file can be specified via ``--cache-file`` option or config file:
+
+    <?php
+
+    return PhpCsFixer\Config::create()
+        ->setCacheFile(__DIR__.'/.php_cs.cache')
+    ;
+
+    ?>
+
+Using PHP CS Fixer on CI
+------------------------
+
+Require ``friendsofphp/php-cs-fixer`` as a ``dev`` dependency:
+
+    $ ./composer.phar require --dev friendsofphp/php-cs-fixer
+
+Then, add the following command to your CI:
+
+    $ IFS=\$'\\n'; COMMIT_SCA_FILES=($(git diff --name-only --diff-filter=ACMRTUXB "\${COMMIT_RANGE}")); unset IFS
+    $ vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --stop-on-violation --using-cache=no --path-mode=intersection "\${COMMIT_SCA_FILES[@]}"
+
+Where ``\$COMMIT_RANGE`` is your range of commits, eg ``\$TRAVIS_COMMIT_RANGE`` or ``HEAD~..HEAD``.
+
+Exit codes
+----------
+
+Exit code is build using following bit flags:
+
+*  0 OK.
+*  1 General error (or PHP/HHVM minimal requirement not matched).
+*  4 Some files have invalid syntax (only in dry-run mode).
+*  8 Some files need fixing (only in dry-run mode).
+* 16 Configuration error of the application.
+* 32 Configuration error of a Fixer.
+* 64 Exception raised within the application.
+
+(applies to exit codes of the `fix` command only)
+EOF
+        ;
+
+        return str_replace(
+           '%%%FIXERS_DETAILS%%%',
+            self::getFixersHelp(),
+            $template
+        );
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return string
+     */
+    public static function toString($value)
+    {
+        if (is_array($value)) {
+            // Output modifications:
+            // - remove new-lines
+            // - combine multiple whitespaces
+            // - switch array-syntax to short array-syntax
+            // - remove whitespace at array opening
+            // - remove trailing array comma and whitespace at array closing
+            // - remove numeric array indexes
+            static $replaces = array(
+                array('#\r|\n#', '#\s{1,}#', '#array\s*\((.*)\)#s', '#\[\s+#', '#,\s*\]#', '#\d+\s*=>\s*#'),
+                array('', ' ', '[$1]', '[', ']', ''),
+            );
+
+            $str = preg_replace(
+                $replaces[0],
+                $replaces[1],
+                var_export($value, true)
+            );
+        } else {
+            $str = var_export($value, true);
+        }
+
+        return preg_replace('/\bNULL\b/', 'null', $str);
+    }
+
+    /**
+     * Returns the allowed values of the given option that can be converted to a string.
+     *
+     * @param FixerOptionInterface $option
+     *
+     * @return array|null
+     */
+    public static function getDisplayableAllowedValues(FixerOptionInterface $option)
+    {
+        $allowed = $option->getAllowedValues();
+
+        if (null !== $allowed) {
+            $allowed = array_filter($allowed, function ($value) {
+                return !is_callable($value);
+            });
+
+            usort($allowed, function ($valueA, $valueB) {
+                return strcasecmp(
+                    CommandHelp::toString($valueA),
+                    CommandHelp::toString($valueB)
+                );
+            });
+
+            if (0 === count($allowed)) {
+                $allowed = null;
+            }
+        }
+
+        return $allowed;
+    }
+
+    private static function getFixersHelp()
+    {
+        $help = '';
+        $fixerFactory = new FixerFactory();
+        $fixers = $fixerFactory->registerBuiltInFixers()->getFixers();
+
+        // sort fixers by name
+        usort(
+            $fixers,
+            function (FixerInterface $a, FixerInterface $b) {
+                return strcmp($a->getName(), $b->getName());
+            }
+        );
+
+        $ruleSets = array();
+        foreach (RuleSet::create()->getSetDefinitionNames() as $setName) {
+            $ruleSets[$setName] = new RuleSet(array($setName => true));
+        }
+
+        $getSetsWithRule = function ($rule) use ($ruleSets) {
+            $sets = array();
+
+            foreach ($ruleSets as $setName => $ruleSet) {
+                if ($ruleSet->hasRule($rule)) {
+                    $sets[] = $setName;
+                }
+            }
+
+            return $sets;
+        };
+
+        $count = count($fixers) - 1;
+        foreach ($fixers as $i => $fixer) {
+            $sets = $getSetsWithRule($fixer->getName());
+
+            if ($fixer instanceof DefinedFixerInterface) {
+                $description = $fixer->getDefinition()->getSummary();
+            } else {
+                $description = '[n/a]';
+            }
+
+            $description = wordwrap($description, 72, "\n   | ");
+            $description = str_replace('`', '``', $description);
+
+            if (!empty($sets)) {
+                $help .= sprintf(" * <comment>%s</comment> [%s]\n   | %s\n", $fixer->getName(), implode(', ', $sets), $description);
+            } else {
+                $help .= sprintf(" * <comment>%s</comment>\n   | %s\n", $fixer->getName(), $description);
+            }
+
+            if ($fixer->isRisky()) {
+                $help .= sprintf(
+                    "   | *Risky rule: %s.*\n",
+                    str_replace('`', '``', lcfirst(preg_replace('/\.$/', '', $fixer->getDefinition()->getRiskyDescription())))
+                );
+            }
+
+            if ($fixer instanceof ConfigurationDefinitionFixerInterface) {
+                $configurationDefinition = $fixer->getConfigurationDefinition();
+                $configurationDefinitionOptions = $configurationDefinition->getOptions();
+                if (count($configurationDefinitionOptions)) {
+                    $help .= "   |\n   | Configuration options:\n";
+
+                    usort(
+                        $configurationDefinitionOptions,
+                        function (FixerOptionInterface $optionA, FixerOptionInterface $optionB) {
+                            return strcmp($optionA->getName(), $optionB->getName());
+                        }
+                    );
+
+                    foreach ($configurationDefinitionOptions as $option) {
+                        $line = '<info>'.$option->getName().'</info>';
+
+                        $allowed = self::getDisplayableAllowedValues($option);
+                        if (null !== $allowed) {
+                            foreach ($allowed as &$value) {
+                                $value = self::toString($value);
+                            }
+                        } else {
+                            $allowed = $option->getAllowedTypes();
+                        }
+
+                        if (null !== $allowed) {
+                            $line .= ' (<comment>'.implode('</comment>, <comment>', $allowed).'</comment>)';
+                        }
+
+                        $line .= ': '.str_replace('`', '``', lcfirst(preg_replace('/\.$/', '', $option->getDescription()))).'; ';
+                        if ($option->hasDefault()) {
+                            $line .= 'defaults to <comment>'.self::toString($option->getDefault()).'</comment>';
+                        } else {
+                            $line .= 'required';
+                        }
+
+                        foreach (self::wordwrap($line, 72) as $index => $line) {
+                            $help .= (0 === $index ? '   | - ' : '   |   ').$line."\n";
+                        }
+                    }
+                }
+            } elseif ($fixer instanceof ConfigurableFixerInterface) {
+                $help .= "   | *Configurable rule.*\n";
+            }
+
+            if ($count !== $i) {
+                $help .= "\n";
+            }
+        }
+
+        return $help;
+    }
+
+    /**
+     * Wraps a string to the given number of characters, ignoring style tags.
+     *
+     * @param string $string
+     * @param int    $width
+     *
+     * @return string[]
+     */
+    private static function wordwrap($string, $width)
+    {
+        $result = array();
+        $currentLine = 0;
+        $lineLength = 0;
+        foreach (explode(' ', $string) as $word) {
+            $wordLength = strlen(preg_replace('~</?(\w+)>~', '', $word));
+            if (0 !== $lineLength) {
+                ++$wordLength; // space before word
+            }
+
+            if ($lineLength + $wordLength > $width) {
+                ++$currentLine;
+                $lineLength = 0;
+            }
+
+            $result[$currentLine][] = $word;
+            $lineLength += $wordLength;
+        }
+
+        return array_map(function ($line) {
+            return implode(' ', $line);
+        }, $result);
+    }
+}

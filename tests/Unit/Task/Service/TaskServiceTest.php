@@ -786,12 +786,6 @@ class TaskServiceTest extends BaseTestCase
         $this->assertEquals(1, $result['id']);
     }
 
-    public function testSumCourseSetLearnedTimeByCourseSetId()
-    {
-        $result = $this->getTaskService()->sumCourseSetLearnedTimeByCourseSetId(1);
-        $this->assertEmpty($result);
-    }
-
     public function testAnalysisTaskDataByTime()
     {
         $result = $this->getTaskService()->analysisTaskDataByTime(time(), time() + 86400);
