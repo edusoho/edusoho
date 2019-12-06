@@ -23,7 +23,7 @@
         <div class="form-group">
           <div class="col-sm-2 control-label"><label for="homework-about-field" class="control-label-required">{{'course.plan_task.activity_manage.homework.choose_question'|trans}}</label></div>
           <div class="col-sm-8">
-            <a id="picker_homework_items" data-url="{{ path('course_set_manage_homework_question_picker',{id:activity.fromCourseSetId,targetType:'homework'}) }}" class="btn btn-info btn-sm" data-role="pick-item"　><i class="es-icon es-icon-anonymous-iconfont"></i>
+            <a id="picker_homework_items" data-url="{{ path('course_set_manage_homework_question_picker',{id:activity.fromCourseSetId,targetType:'homework'}) }}" data-pick-url="{{ path('course_set_manage_homework_question_picked', {courseSetId:activity.fromCourseSetId}) }}" class="btn btn-info btn-sm js-pick-modal" data-role="pick-item"><i class="es-icon es-icon-anonymous-iconfont"></i>
               {{'course.plan_task.activity_manage.homework.choose_question'|trans}}
             </a>
             <input type="hidden" name="questionLength" value="{% if questions|default(null) %} questionItems.lenght {% endif %}">
@@ -54,9 +54,10 @@
               {% endif %}
               </tbody>
             </table>
+            <div class="js-cached-question hidden"></div>
             <div class="mbl">
               <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'course.testpaper_manage.question.select_all'|trans}}</label>
-              <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete-btn"  data-name="{{'course.testpaper_manage.question.content'|trans}}">{{'course.testpaper_manage.question.operation.delete_btn'|trans}}</button>
+              <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete-btn" data-name="{{'course.testpaper_manage.question.content'|trans}}">{{'course.testpaper_manage.question.operation.delete_btn'|trans}}</button>
             </div>
             <span class="color-danger js-help-redmine"></span>
             <p class="js-subjective-remask" data-type="homework">

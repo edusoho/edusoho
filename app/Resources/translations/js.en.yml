@@ -874,6 +874,7 @@ json_response.join_group_failed.message: Join the group failed!
 json_response.user_not_found.message: This user does not exist
 json_response.homework_has_submitted_cannot_change.message: The Homework has been submitted and can no longer be modified!
 json_response.must_choose_question.message: Please select the title first
+json_response.no_multi_question_bank.message: Please select question from single question bank
 json_response.cannot_send_message_self.message: Can not send yourself a private message!
 json_response.receiver_not_exist.message: The receiver does not exist
 json_response.receiver_not_allowed.message: The receiver is not allowed

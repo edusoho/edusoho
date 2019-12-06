@@ -1398,7 +1398,7 @@ course.question_manage.question.delete_btn: Delete
 course.question_manage.question.include_sub: 'Sub questions included'
 course.question_manage.question.unfinished: Unfinised
 course.question_manage.question.sub_question: 'Sub questions'
-course.question_manage.question.belong: 'If of'
+course.question_manage.question.belong: 'Category'
 course.question_manage.question.course: 'The course'
 course.question_manage.question.score: Score：%testResult.score%
 course.question_manage.question.true_answer: 'Correct answer is'
@@ -9185,3 +9185,4 @@ question.select_question_bank: --Select question bank--
 question_reedit.select_question_category: --Select category--
 question_reedit.category_text: Category
 question_reedit.category_empty: None
+question_plus_upgrade_tip: 'The current version of the plug-in is too low, you can continue to use the old template for importing after upgrading the "QuestionPlus" plug-in in the background.'
