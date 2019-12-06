@@ -1119,10 +1119,6 @@
   content: "\e6ec";
 }
 
-.es-icon-live:before {
-  content: "\e6f1";
-}
-
 .es-icon-video:before {
   content: "\e6f2";
 }
@@ -1285,10 +1281,6 @@
 
 .es-icon-entry-miniweb:before {
   content: "\e720";
-}
-
-.es-icon-miniprogram:before {
-  content: "\e721";
 }
 
 .es-icon-entry-app:before {
