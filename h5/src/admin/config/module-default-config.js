@@ -22,6 +22,7 @@ const MODULE_DEFAULT = {
       sort: 'recommendedSeq',
       lastDays: '0',
       limit: '4',
+      displayStyle: 'row',
       items: []
     }
   },
@@ -35,6 +36,7 @@ const MODULE_DEFAULT = {
       sort: 'recommendedSeq',
       lastDays: '0',
       limit: '4',
+      displayStyle: 'row',
       items: []
     }
   },

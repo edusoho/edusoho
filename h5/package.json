@@ -6,9 +6,11 @@
     "serve": "vue-cli-service serve",
     "dev:h5": "vue-cli-service serve --mode  h5",
     "dev:admin": "vue-cli-service serve --mode  admin",
-    "build:h5": "vue-cli-service build --mode prod h5 --report",
-    "build:admin": "vue-cli-service build --mode prod admin --report",
+    "build:h5": "vue-cli-service build --mode prod h5",
+    "build:admin": "vue-cli-service build --mode prod admin",
     "build": "vue-cli-service build --mode prod h5 && vue-cli-service build --mode prod admin",
+    "analyze:h5": "vue-cli-service build --mode prod h5 --report",
+    "analyze:admin": "vue-cli-service build --mode prod admin --report",
     "lint": "vue-cli-service lint --mode  h5",
     "test:unit": "vue-cli-service test:unit"
   },

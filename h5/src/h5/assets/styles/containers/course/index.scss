@@ -300,19 +300,15 @@
       }
     }
     .isFixed{
-      position: fixed;
+     //position: fixed;
+     position: sticky;
+     -webkit-overflow-scroll:touch;
       top:0;
       left: 0;
       right: 0;
     }
     &__content {
-      // position: absolute;
-      // left: 0;
-      // right: 0;
-      // bottom: 0;
-      // top: vw(300);
-      overflow: auto;
-      // margin-top: 44px;
+  //    overflow: auto;
       .e-panel-body {
         img {
           width: 100%;
@@ -361,9 +357,10 @@
     }
   }
   .progress-bar-fix{
-    position: fixed;
+    position: sticky;
     top: 44px;
     width: 100%;
+    -webkit-overflow-scroll:touch;
     box-sizing: border-box;
   }
   // 试看

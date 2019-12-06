@@ -35,26 +35,26 @@ export default {
       if (!this.feedback) return
       if (!slide) return
 
-      const itemLinkData = slide.link
-      if (itemLinkData.type === 'classroom' && itemLinkData.target) {
-        this.$router.push({
-          path: `/classroom/${itemLinkData.target.id}`
-        })
-        return
-      }
-      if (itemLinkData.type === 'vip') {
-        this.$router.push({
-          path: `/vip`
-        })
-        return
-      }
-      if (itemLinkData.type === 'course' && itemLinkData.target) {
-        this.$router.push({
-          path: `/course/${itemLinkData.target.id}`
-        })
-        return
+        const itemLinkData = slide.link;
+        if (itemLinkData.type === 'classroom' && itemLinkData.target) {
+          this.$router.push({
+            path: `/classroom/${itemLinkData.target.id}`
+          });
+          return;
+        }
+        if (itemLinkData.type === 'vip') {
+          this.$router.push({
+            path: `/vip`
+          });
+          return
+        }
+        if (itemLinkData.type === 'course' && itemLinkData.target) {
+          this.$router.push({
+            path: `/course/${itemLinkData.target.id}`
+          });
+          return
+        }
       }
     }
-  }
 }
 </script>

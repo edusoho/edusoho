@@ -23,8 +23,8 @@
     </div>
     <div class="receive-login-input">
       <van-field
-        ref="smsCode"
         v-model="userinfo.smsCode"
+        ref="smsCode"
         :border="false"
         type="number"
         placeholder="请输入验证码"

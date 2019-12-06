@@ -1,6 +1,7 @@
 <template>
-  <div v-if="courseList.items.length" class="e-course-list">
-    <div class="e-course-list__header">
+  <!-- 详见showMode注释 -->
+  <div v-if="(showMode==='h5' && courseList.items.length) || showMode==='admin'" class="e-course-list">
+    <div v-if="pathName!=='appSetting'" class="e-course-list__header" >
       <div class="clearfix">
         <span class="e-course-list__list-title text-overflow">{{ courseList.title }}</span>
         <span class="e-course-list__more">
@@ -8,32 +9,79 @@
         </span>
       </div>
     </div>
-    <div class="e-course-list__body">
-      <e-class
-        v-for="item in courseList.items"
-        :key="item.id"
-        :course="item | courseListData(listObj)"
-        :discount="typeList === 'course_list' ? item.courseSet.discount : ''"
-        :course-type="typeList === 'course_list' ? item.courseSet.type : ''"
-        :type-list="typeList"
-        :normal-tag-show="normalTagShow"
-        :vip-tag-show="vipTagShow"
-        :type="type"
-        :is-vip="item.vipLevelId"
-        :feedback="feedback"/>
+    <!-- 现在style中写样式，后续三端统一后再把上面那段div干掉，把style的样式写入到class中 -->
+    <div v-if="pathName==='appSetting'" class="e-course-list__header" style="padding:16px">
+      <div class="clearfix">
+        <span class="e-course-list__list-title text-overflow" style="font-size:16px">{{ courseList.title }}</span>
+        <span class="e-course-list__more">
+          <span class="more-text pull-left" style="font-size:12px" @click="jumpTo(courseList.source)">更多</span>
+        </span>
+      </div>
     </div>
-    <div v-show="courseItemData" class="e-course__empty">暂无{{ typeList === 'course_list' ? '课程' : '班级' }}</div>
+    <div v-if="courseList.items.length">
+      <div class="e-course-list__body">
+        <e-class
+          v-for="item in courseList.items"
+          v-if="pathName!=='appSetting'"
+          :key="item.id"
+          :course="item | courseListData(listObj)"
+          :discount="typeList === 'course_list' ? item.courseSet.discount : ''"
+          :course-type="typeList === 'course_list' ? item.courseSet.type : ''"
+          :type-list="typeList"
+          :normal-tag-show="normalTagShow"
+          :vip-tag-show="vipTagShow"
+          :type="type"
+          :is-vip="item.vipLevelId"
+          :feedback="feedback"/>
+        <!-- 一行一列  目前只正对app -->
+        <e-row-class
+          v-for="item in courseList.items"
+          v-if="pathName==='appSetting' && courseList.displayStyle==='row'"
+          :key="item.id"
+          :course="item | courseListData(listObj,pathName)"
+          :discount="typeList === 'course_list' ? item.courseSet.discount : ''"
+          :course-type="typeList === 'course_list' ? item.courseSet.type : ''"
+          :type-list="typeList"
+          :normal-tag-show="normalTagShow"
+          :vip-tag-show="vipTagShow"
+          :type="type"
+          :is-vip="item.vipLevelId"
+          :feedback="feedback"
+        />
+        <!-- 一行两列  目前只正对app -->
+        <div v-if="pathName==='appSetting' && courseList.displayStyle==='distichous'" class="clearfix">
+          <e-column-class
+            v-for="item in courseList.items"
+            :key="item.id"
+            :course="item | courseListData(listObj,pathName)"
+            :discount="typeList === 'course_list' ? item.courseSet.discount : ''"
+            :course-type="typeList === 'course_list' ? item.courseSet.type : ''"
+            :type-list="typeList"
+            :normal-tag-show="normalTagShow"
+            :vip-tag-show="vipTagShow"
+            :type="type"
+            :is-vip="item.vipLevelId"
+            :feedback="feedback"
+          />
+        </div>
+      </div>
+      <div v-show="courseItemData" class="e-course__empty">暂无{{ typeList === 'course_list' ? '课程' : '班级' }}</div>
+    </div>
   </div>
 </template>
 
 <script>
 import eClass from '../e-class/e-class'
+import eRowClass from '../e-row-class/e-row-class'
+import eColumnClass from '../e-column-class/e-column-class'
 import courseListData from '@/utils/filter-course.js'
 import { mapState } from 'vuex'
 
 export default {
   components: {
-    'e-class': eClass
+    'e-class': eClass,
+    'e-row-class': eRowClass,
+    'e-column-class': eColumnClass
   },
   filters: {
     courseListData
@@ -41,7 +89,7 @@ export default {
   props: {
     courseList: {
       type: Object,
-      default: {}
+      default: () => {}
     },
     feedback: {
       type: Boolean,
@@ -74,16 +122,19 @@ export default {
     levelId: {
       type: Number,
       default: 1
+    },
+    showMode: {// 展示模式  h5、admin 在admin模式下就算列表length为0，也要展示出列表标题。在h5模式下，length为0不展示任何列表标题
+      type: String,
+      default: 'h5'
     }
   },
   data() {
     return {
-      type: 'price',
-      pathName: this.$route.name
+      type: 'price'
     }
   },
   computed: {
-    ...mapState(['courseSettings']),
+    ...mapState(['courseSettings', 'classroomSettings']),
     sourceType: {
       get() {
         return this.courseList.sourceType
@@ -115,12 +166,23 @@ export default {
       },
       set() {}
     },
+    pathName: {
+      get() {
+        if (this.$route.name === 'appSetting' || this.$route.query.from === 'appSetting') {
+          return 'appSetting'
+        }
+        return this.$route.name
+      },
+      set() {}
+    },
     listObj() {
       return {
         type: 'price',
         typeList: this.typeList,
         showStudent: this.courseSettings
-          ? Number(this.courseSettings.show_student_num_enabled) : true
+          ? Number(this.courseSettings.show_student_num_enabled) : true,
+        classRoomShowStudent: this.classroomSettings
+          ? this.classroomSettings.show_student_num_enabled : true
       }
     }
   },
@@ -149,7 +211,10 @@ export default {
       this.fetchCourse()
     }
   },
+
   created() {
+    console.log(this.pathName)
+    console.log(this.pathName.includes('Setting'))
     if (!this.pathName.includes('Setting')) return
     this.fetchCourse()
   },
