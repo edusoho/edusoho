@@ -717,6 +717,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
      * @param $route
      * @param $parameters
      * @param $referenceType
+     *
      * @return mixed
      */
     private function generateUrl($route, $parameters, $referenceType)
@@ -724,7 +725,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         global $kernel;
 
         $router = $kernel->getContainer()->get('router');
-        if (!array_key_exists('HTTP_HOST', $_SERVER)){
+        if (!array_key_exists('HTTP_HOST', $_SERVER)) {
             $router = $this->decorateRouter($router);
         }
 
@@ -740,6 +741,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             empty($parsedUrl['host']) ?: $routerContext->setHost($parsedUrl['host']);
             empty($parsedUrl['scheme']) ?: $routerContext->setScheme($parsedUrl['scheme']);
         }
+
         return $router;
     }
 
