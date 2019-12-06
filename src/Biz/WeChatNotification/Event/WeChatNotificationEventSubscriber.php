@@ -23,6 +23,7 @@ use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Biz\AppLoggerConstant;
 use AppBundle\Common\ArrayToolkit;
+use Symfony\Component\Routing\Router;
 
 class WeChatNotificationEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
@@ -712,11 +713,34 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         }
     }
 
+    /**
+     * @param $route
+     * @param $parameters
+     * @param $referenceType
+     * @return mixed
+     */
     private function generateUrl($route, $parameters, $referenceType)
     {
         global $kernel;
 
-        return $kernel->getContainer()->get('router')->generate($route, $parameters, $referenceType);
+        $router = $kernel->getContainer()->get('router');
+        if (!array_key_exists('HTTP_HOST', $_SERVER)){
+            $router = $this->decorateRouter($router);
+        }
+
+        return $router->generate($route, $parameters, $referenceType);
+    }
+
+    private function decorateRouter(Router $router)
+    {
+        $url = $this->getSettingService()->node('site.url');
+        if (!empty($url)) {
+            $parsedUrl = parse_url($url);
+            $routerContext = $router->getContext();
+            empty($parsedUrl['host']) ?: $routerContext->setHost($parsedUrl['host']);
+            empty($parsedUrl['scheme']) ?: $routerContext->setScheme($parsedUrl['scheme']);
+        }
+        return $router;
     }
 
     private function getCloudNotificationClient()
