@@ -585,6 +585,11 @@ admin_operation_mobile:
     defaults: { _controller: AppBundle:Admin/Mobile:mobile }
     permissions: [admin_operation_mobile_banner_manage]
 
+admin_operation_mobile_upgrade:
+    path:  /operation/mobile_upgrade
+    defaults: { _controller: AppBundle:Admin/Mobile:mobileUpgrade }
+    permissions: [admin_operation_mobile_banner_manage]
+
 admin_operation_mobile_select:
     path:  /operation/mobile/select
     defaults: { _controller: AppBundle:Admin/Mobile:mobileSelect }
@@ -619,6 +624,11 @@ admin_discovery_column_index:
 admin_discovery_column_create:
     path:  /discovery_column/create
     defaults: { _controller: AppBundle:Admin/DiscoveryColumn:create }
+
+admin_setting_mobile_discoveries:
+    path:  /setting/mobile_discoveries
+    defaults: { _controller: AppBundle:Admin/Setting:mobileDiscoveries }
+    permissions: [admin_setting_mobile_settings]
 
 admin_setting_mobile:
     path:  /setting/mobile
