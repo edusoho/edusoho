@@ -124,10 +124,7 @@ class H5SettingServiceTest extends BaseTestCase
         $discoverySetting = $this->createCoupon();
         $discoverySetting = $this->getH5SettingService()->couponFilter($discoverySetting);
 
-        // $this->assertEquals(0, $discoverySetting['data']['items'][0]['money']);
-        // $this->assertEquals(1, $discoverySetting['data']['items'][0]['usedNum']);
-        // $this->assertEquals(1, $discoverySetting['data']['items'][0]['unreceivedNum']);
-        $this->assertEquals(array(), $discoverySetting['data']['items']);
+        $this->assertEquals(1, count($discoverySetting['data']['items']));
     }
 
     public function testVipFilter()
@@ -264,8 +261,8 @@ class H5SettingServiceTest extends BaseTestCase
             'data' => array(
                 'sort' => 'desc',
                 'items' => array(
-                    0 => array('id' => 1),
-                    1 => array('id' => 2),
+                    0 => array('id' => 1, 'type' => 'discount', 'rate' => 9.00),
+                    1 => array('id' => 2, 'type' => 'discount', 'rate' => 9.00),
                 ),
             ),
         );
@@ -353,15 +350,14 @@ class H5SettingServiceTest extends BaseTestCase
         $this->mockBiz('CloudPlatform:AppService', array(
             array('functionName' => 'getAppByCode', 'returnValue' => array('type' => 'plugin')),
         ));
-        $this->mockBiz('CouponPlugin:Coupon:CouponBatchService', array(
+        $this->mockBiz('Coupon:CouponBatchService', array(
             array('functionName' => 'fillUserCurrentCouponByBatches', 'returnValue' => array(
-                0 => array('id' => 1),
-                1 => array('id' => 2),
-                2 => array('id' => 3),
+                1 => array('id' => 1, 'type' => 'discount', 'rate' => 9.00),
+                2 => array('id' => 2, 'type' => 'discount', 'rate' => 9.00),
             )),
             array('functionName' => 'findBatchsByIds', 'returnValue' => array(
-                1 => array('deadline' => time(), 'money' => 0, 'usedNum' => 1, 'unreceivedNum' => 1, 'targetType' => 'vip', 'targetId' => 1),
-                2 => array('deadline' => time() - 100000, 'money' => 0, 'usedNum' => 1, 'unreceivedNum' => 1,  'targetType' => 'vip', 'targetId' => 1),
+                1 => array('deadline' => time(), 'type' => 'discount', 'rate' => 9.00, 'money' => 0, 'usedNum' => 1, 'unreceivedNum' => 1, 'targetType' => 'vip', 'targetId' => 1),
+                2 => array('deadline' => time() - 100000, 'type' => 'discount', 'rate' => 9.00, 'money' => 0, 'usedNum' => 1, 'unreceivedNum' => 1,  'targetType' => 'vip', 'targetId' => 1),
             )),
         ));
         $this->mockBiz('VipPlugin:Vip:LevelService', array(

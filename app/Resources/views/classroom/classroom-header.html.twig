@@ -1,4 +1,5 @@
 {% import 'macro.html.twig' as web_macro %}
+{% set isNewCoverSize = is_new_classroom_cover_size(classroom) %}
 
 <section class="class-header before">
   <div class="container">
@@ -18,22 +19,22 @@
       <li class="active">{{ classroom.title }}</li>
     </ol>
 
-    <div class="class-header-mian">
+    <div class="class-header-mian {% if isNewCoverSize %} class-header-main--new {% endif %}">
       <div class="class-bg-layer"></div>
       <div class="class-header-bg clearfix">
         <div class="class-img">
           {{ slot('drp.product_tags.extension', {'type':'classroom','targetId':classroom.id}) }}
           <a href="{{ path('classroom_show',{id:classroom.id}) }}">
-            <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}"
-              href="{{ path('classroom_show',{id:classroom.id}) }}">
+            <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
           </a>
           {% if classroom.status == 'closed' %}
-            <span class="label label-danger">{{ 'classroom.status.closed'|trans }}</span>
+            <span class="class-img__tag cd-tag cd-tag-red">{{ 'classroom.status.closed'|trans }}</span>
           {% endif %}
         </div>
         <div class="class-info">
-          <h2 class="title">
-            {{ classroom.title }}
+          <h2 class="title class-info__title">
+            <span class="hidden-xs">{{ classroom.title|sub_text(28) }}</span>
+            <span class="visible-xs">{{ classroom.title }}</span>
             <span class="es-qrcode top" data-url="{{ path('classroom_qrcode',{id: classroom.id}) }}">
               <i class="es-icon es-icon-qrcode"></i>
               <span class="qrcode-popover">
@@ -42,7 +43,7 @@
               </span>
             </span>
           </h2>
-          <div class="metas">
+          <div class="metas class-info__metas">
             {% if setting('classroom.show_review', '1') == 1 %}
               <div class="score">
                 {{ web_macro.star(classroom.rating) }}
@@ -69,15 +70,19 @@
             </div>
           </div>
 
-          <div class="fsxl hidden-sm mt5 mb10 ml20">
-            {% if classroom.expiryMode == 'date' %}
-              <span class="mrm">{{ 'classroom.expiry_date_tips'|trans }}</span><span>{{ classroom.expiryValue|date('Y-m-d') }}</span>
-            {% elseif classroom.expiryMode == 'days' %}
-              {{ 'classroom.expiry_day_tips'|trans({'%expiryValue%': classroom.expiryValue})|raw }}
-            {% endif %}
-          </div>
+         {# 有效期 #}
+          {% if classroom.expiryMode == 'date' %}
+            <div class="class-info__expiry hidden-sm">
+              <span class="color-gray cd-text-xs">{{ 'classroom.expiry_date_tips'|trans }}</span>
+              <span class="gray-darker">{{ classroom.expiryValue|date('Y-m-d') }}</span>
+            </div>
+          {% elseif classroom.expiryMode == 'days' %}
+            <div class="class-info__expiry hidden-sm">
+              <span class="color-gray cd-text-xs">{{ 'classroom.expiry_day_tips'|trans({'%expiryValue%': classroom.expiryValue})|raw }}</span>
+            </div>
+          {% endif %}
 
-          <ul class="class-data hidden-sm clearfix {% if classroomMemberLevel %}active{% endif %}">
+          <ul class="class-info__data class-data cd-mt8 hidden-sm clearfix {% if classroomMemberLevel %}active{% endif %}">
             {% if setting('classroom.show_student_num_enabled', '1') == 1 %}
               <li>
                 <p><i class="es-icon es-icon-person"></i></p>
@@ -90,7 +95,7 @@
             </li>
             <li>
               <span class="es-share top">
-                <a class="dropdown-toggle" href="" data-toggle="dropdown" aria-labelledby="dropdownMenu1">
+                <a class="dropdown-toggle" href="javascript:;" data-toggle="dropdown" aria-labelledby="dropdownMenu1">
                   <p><i class="es-icon es-icon-share"></i></p>
                   <p>{{ 'site.btn.share'|trans }}</p>
                 </a>
@@ -110,9 +115,9 @@
             {% endif %}
           </ul>
 
-          <div class="bottom-metas clearfix">
-            <div class="class-serve hidden-sm hidden-xs">
-              <div class="serve-frame">
+          <div class="bottom-metas class-info__bottom clearfix">
+            <div class="class-info__serve class-serve hidden-sm hidden-xs">
+              <div class="serve-label">
                 {{ 'classroom.showServices'|trans }}
               </div>
               {% include 'classroom/service-block.html.twig' with {'services':classroom.service } %}
@@ -121,7 +126,6 @@
             {% if  classroom.showable and classroom.status != 'closed' %}
               <div class="btn-buy">
                 {% include 'classroom/part/classroom-buy-btn.html.twig' %}
-
               </div>
             {% endif %}
 
@@ -129,7 +133,7 @@
         </div>
 
         {% if classroom_permit(classroom.id, 'Manage') and has_permission('admin_classroom_content_manage') %}
-          <a href="{{ path('classroom_manage',{id:classroom.id}) }}" class="btn btn-default setting hidden-xs hidden-sm"
+          <a class="class-setting hidden-xs hidden-sm" href="{{ path('classroom_manage',{id:classroom.id}) }}"
             title="{{ 'classroom.classroom_manage'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}">
             <i class="es-icon es-icon-setting"></i>
           </a>
@@ -139,8 +143,3 @@
     </div>
   </div>
 </section>
-
-{# {% if is_plugin_installed('ClassroomPlan') %}
-  {{ render(controller('ClassroomPlanBundle:ClassroomPlan:joinPlanBlock',{classroomId:classroom.id})) }}
-{% endif %}    
- #}
