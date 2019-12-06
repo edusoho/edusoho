@@ -25,7 +25,7 @@
           :fixed="option.fixed"
           :enlarge="option.enlarge"
           :auto-crop="option.autoCrop"
-          :fixed-number="option.fixedNumber"
+          :fixed-number="(pathName === 'appSetting') ? appFixedNumber : option.fixedNumber"
           :auto-crop-width="option.autoCropWidth"
           :auto-crop-height="option.autoCropHeight"
         />
@@ -37,9 +37,16 @@
     </el-dialog>
 
     <img v-show="active === index" class="icon-delete" src="static/images/delete.png" @click="handleRemove($event, index, itemNum)">
-    <div class="add-title pull-left">标题：<el-input v-model="item.title" size="mini" placeholder="请输入标题" max-length="15" clearable/>
+    <div v-if="pathName !== 'appSetting'" class="add-title">标题：<el-input v-model="item.title" size="mini" placeholder="请输入标题" max-length="15" clearable/>
     </div>
-    <div>链接：
+    <div v-if="pathName !== 'appSetting'" class="add-choose">
+      链接：<el-radio v-model="radio" label="insideLink">站内链接</el-radio>
+    </div>
+    <div v-else class="add-choose">
+      <el-radio v-model="radio" class="mt16" label="insideLink">站内链接</el-radio>
+      <el-radio v-model="radio" class="mt16" label="url">自定义链接</el-radio>
+    </div>
+    <div v-if="radio==='insideLink'" class="add-inner">
       <el-dropdown v-show="!linkTextShow">
         <el-button size="mini" class="el-dropdown-link">
           添加链接
@@ -60,17 +67,23 @@
         </el-tooltip>
       </el-tag>
     </div>
+    <div v-if="radio==='url'" class="add-outter">
+      <div class="pull-left add-outter-title" >输入网址：</div>
+      <el-input v-model="item.link.url" class="pull-right" size="mini" placeholder="例如 http://www.eduosho.com" clearable @change="changeLinkUrl"/>
+    </div>
   </div>
 </template>
 
 <script>
 import Api from 'admin/api'
 import { VueCropper } from 'vue-cropper'
-
+import settingCell from '../module-frame/setting-cell'
 export default {
   components: {
-    VueCropper
+    VueCropper,
+    settingCell
   },
+  // eslint-disable-next-line vue/require-prop-types
   props: ['item', 'index', 'active', 'itemNum', 'courseSets'],
   data() {
     return {
@@ -85,6 +98,7 @@ export default {
         high: false,
         enlarge: 2
       },
+      appFixedNumber: [375, 150],
       linkOptions: [{
         key: 0,
         type: 'course_list',
@@ -101,7 +115,9 @@ export default {
       imageCropped: false,
       dialogVisible: false,
       pathName: this.$route.name,
-      type: ''
+      type: '',
+      radio: 'insideLink', // 选择使用站内链接还是站外
+      linkUrl: '' // 站外链接的url
     }
   },
   computed: {
@@ -129,6 +145,9 @@ export default {
   },
   created() {
     this.type = this.item.link.type
+    if (this.item.link.type === 'url') {
+      this.radio = 'url'
+    }
   },
   methods: {
     beforeUpload(file) {
@@ -179,7 +198,7 @@ export default {
         data: formData
       })
         .then(data => {
-          if (this.pathName !== 'h5Setting') {
+          if (this.pathName === 'miniprogramSetting') {
             // 小程序后台替换图片协议
             data.uri = data.uri.replace(/^(\/\/)|(http:\/\/)/, 'https://')
           }
@@ -235,6 +254,13 @@ export default {
       this.type = value
       this.$emit('chooseCourse', {
         'value': value,
+        'index': this.index
+      })
+    },
+    changeLinkUrl(value) {
+      this.$emit('setOutLink', {
+        'type': 'url',
+        'url': value,
         'index': this.index
       })
     }

@@ -4,23 +4,48 @@
 .preview-container {
   padding: 0 50px;
   box-sizing: border-box;
+  .preview-title__app{
+    position: absolute;
+    top: 76px;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+  }
+  .preview-title__h5{
+    position: absolute;
+    top: 102px;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+  }
+  .preview-title__miniprogram{
+    position: absolute;
+    top: 58px;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+  }
   .image-container {
     .phone-img {
       position: relative;
       float: left;
       margin-right: 60px;
-      margin-top: -12px;
       &-mp {
         display: table;
         float: none;
         margin-left: auto;
         margin-right: auto;
-        >img {
-          width: 450px;
+        > img {
+          width: 375px;
         }
       }
-      >img {
-        width: 450px;
+      > img {
+        width: 375px;
+      }
+      &-app{
+        > img {
+          width: 438px;
+        }
       }
     }
     .code-container {
@@ -40,7 +65,7 @@
       padding: 10px 20px 50px;
       width: 240px;
       height: 240px;
-      border: 1px solid #E1E1E1;
+      border: 1px solid #e1e1e1;
       border-radius: 2px;
       margin-top: 100px;
       margin-bottom: 30px;
@@ -49,6 +74,19 @@
         .code-image {
           width: 100%;
         }
+      }
+    }
+    .code-item__img {
+      background-color: #fff;
+      padding: 10px 20px 20px;
+      width: 240px;
+      height: 240px;
+      border: 1px solid #e1e1e1;
+      border-radius: 2px;
+      margin-top: 100px;
+      margin-bottom: 30px;
+      .code-image {
+        width: 100%;
       }
     }
   }
@@ -70,14 +108,14 @@
     &__right {
       .e-course__header {
         font-family: PingFangSC-Medium;
-        color: #2B333B;
+        color: #2b333b;
       }
     }
   }
 
   .e-course-list {
     &__header {
-      padding: 10px;
+      padding: 10px 0px!important;
     }
     &__list-title {
       font-size: 15px;
@@ -86,6 +124,15 @@
       font-size: 14px;
     }
   }
+
+.e-course-list__body{
+  .e-column-class:nth-of-type(2n-1){
+    padding-left: 0px;
+  }
+  .e-row-class{
+    padding-left: 0px;
+  }
+}
 
   .coupon-preview__container {
     padding-left: 0;
@@ -168,17 +215,30 @@
   }
 }
 
+.find-page__part__padding{
+  padding: 0 10px!important;
+}
+
 .preview-iframe {
   position: absolute;
-  left: 50px;
-  top: 150px;
-  height: 560px;
-  width: 320px;
+  left: 25px;
+  top: 132px;
+  height: 483px;
+  width: 325px;
   overflow: auto;
+  &__miniprogram{
+    left: 25px;
+    top: 89px;
+    height: 573px;
+  }
+  &__app{
+    left: 31px;
+    top: 116px;
+    height: 647px;
+    width: 377px;
+  }
   .e-vip-list {
     padding-left: 0;
     padding-right: 0;
   }
 }
-
-

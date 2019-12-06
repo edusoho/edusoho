@@ -32,8 +32,8 @@ export default {
       default: ''
     },
     classroomId: {
-      type: String,
-      default: ''
+      type: Number,
+      default: 0
     },
     seckillActivities: {
       type: Object,

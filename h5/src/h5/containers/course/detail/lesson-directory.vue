@@ -77,7 +77,7 @@
         </div>
       </div>
     </div>
-    <div v-if="taskNumber==0 && unitNum==0" class="noneItem">
+    <div v-if="isNoData" class="noneItem">
       <img src="static/images/none.png" class="notask" >
       <p>暂时还没有课时哦...</p>
     </div>
@@ -132,11 +132,11 @@ export default {
       selectedPlanId: state => state.selectedPlanId
     }),
     hasLesson() {
-      if (this.lesson.length > 0) {
-        return true
-      } else {
-        return false
-      }
+      return this.lesson.length > 0
+    },
+    isNoData(){
+      //在当前章下无节且无课时才显示
+      return this.taskNumber===0 && this.unitNum===0
     }
   },
   methods: {

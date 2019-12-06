@@ -8,9 +8,7 @@ export const updateLoading = ({ commit }, { isLoading }) => {
 
 // 全局设置
 export const getGlobalSettings = ({ commit }, { type, key }) => Api.getSettings({
-  query: {
-    type
-  }
+ query: { type },
 }).then(res => {
   commit(types.GET_SETTINGS, {
     key,

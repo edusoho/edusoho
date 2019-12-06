@@ -16,8 +16,12 @@ const state = {
   vipLevels: [],
   vipSettings: {},
   vipSetupStatus: false,
-  vipPlugin: {}
+  vipPlugin: {},
+  courseSettings: {},
+  classroomSettings: {},
+  settings: {}
 };
+
 export default new Vuex.Store({
   state,
   actions,

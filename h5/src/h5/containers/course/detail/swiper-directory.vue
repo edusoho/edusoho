@@ -1,5 +1,5 @@
 <template>
-  <div id="swiper-directory" class="swiper-directory">
+  <div  class="swiper-directory">
     <van-swipe ref="chapterSwipe" :show-indicators="false" :loop="false" :touchable="true" :width="265" :initial-swipe="slideIndex" @change="changeChapter">
       <van-swipe-item v-for="(items, index) in item" :key="index" >
         <div v-if="items.isExist==0" :class="[current===index] ? 'swiper-directory-active':''" class="chapter nochapter" @click="handleChapter(index)">
