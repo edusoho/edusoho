@@ -29,12 +29,12 @@ class Money
             'amount' => $price,
         );
 
-        if ($setting['cash_model'] == 'currency') {
+        if ('currency' == $setting['cash_model']) {
             $money['currency'] = 'coin';
         }
 
-        if ($setting['cash_model'] != 'none') {
-            $money['coinAmount'] = strval(round(floatval($price) * floatval($setting['cash_rate']), 2));
+        if ('none' != $setting['cash_model']) {
+            $money['coinAmount'] = sprintf('%.2f', floatval($price) * floatval($setting['cash_rate']));
             $money['coinName'] = $setting['coin_name'];
         }
 

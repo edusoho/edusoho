@@ -501,23 +501,16 @@ admin_v2:
                         # App装修
                         admin_v2_setting_mobile:
                             quick_entrance_icon: 'app'
-                            router_name: admin_v2_setting_mobile
+                            router_name: admin_v2_setting_mobile_discoveries
                             name: admin_v2.operation.mobile_menu
                             children:
+                                admin_v2_mobile_discoveries_settings:
+                                    name: admin.system.mobile.discoveries_setting
+                                    visible: true
+                                    router_name: admin_v2_setting_mobile_discoveries
                                 admin_v2_mobile_settings:
                                     name: admin_v2.operation.mobile.basic_tab
-                                    disable: true
                                     router_name: admin_v2_setting_mobile
-                                admin_v2_mobile_banner_manage:
-                                    name: admin_v2.operation.mobile.banner_setting_tab
-                                    router_name: admin_v2_mobile_banner_manage
-                                admin_v2_discovery_column_index:
-                                    name: admin_v2.operation.mobile.discovery_column_tab
-                                    children:
-                                        admin_v2_discovery_column_create:
-                                            name: admin_v2.operation.mobile.discovery_column_tab.create_btn
-                                            group: topBtn
-                                            mode: modal
                         # web装修
                         admin_v2_block_manage:
                             quick_entrance_icon: 'webmix'

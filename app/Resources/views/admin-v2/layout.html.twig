@@ -22,7 +22,9 @@
   <title>
 
     {% block title %}
-      {{ currentMenu.name|trans({}, 'menu') }} - {{ menu|parent_permission.name|trans({}, 'menu') }} - {{ menu|parent_permission.code|parent_permission.name|trans({}, 'menu')  }}
+      {{ currentMenu.name|trans({}, 'menu') }}
+      - {{ menu|parent_permission.name|trans({}, 'menu') }} -
+        {{ menu|parent_permission.code|parent_permission.name|trans({}, 'menu')  }}
     {% endblock %}
     {% if not setting('copyright.owned') %} | EduSoho{% endif %}
   </title>

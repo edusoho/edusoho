@@ -24,7 +24,7 @@ class PageSettingPart extends PageSetting
             throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
         }
 
-        if (!in_array($portal, array('h5', 'miniprogram'))) {
+        if (!in_array($portal, array('h5', 'miniprogram', 'apps'))) {
             throw new BadRequestHttpException('Portal is error', null, ErrorCode::INVALID_ARGUMENT);
         }
         $content = $request->request->all();

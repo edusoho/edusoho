@@ -1,4 +1,4 @@
-<div class="my-course-item cd-mb40 clearfix">
+<div class="my-course-item cd-mb16 clearfix">
   <a class="my-course-item__link" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">
     {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'my-course-item__picture', courseSet.title) }}
     {% include 'my/learning/course/courses-block-label.html.twig' %}
@@ -15,7 +15,7 @@
   </div>
 
   <div class="my-course-item__btn">
-    <a class="btn cd-btn cd-btn-primary cd-btn-lg" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">{{ 'course.block_grid.view_course_btn'|trans }}</a>
+    <a class="btn cd-btn cd-btn-primary" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">{{ 'course.block_grid.view_course_btn'|trans }}</a>
   </div>
 
 </div>

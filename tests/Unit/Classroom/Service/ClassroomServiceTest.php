@@ -704,7 +704,7 @@ class ClassroomServiceTest extends BaseTestCase
                     'returnValue' => array('id' => 1, 'title' => 'title'),
                     'withParams' => array(
                         1,
-                        array('smallPicture' => 'uri1', 'middlePicture' => 'uri2', 'largePicture' => 'uri3'),
+                        array('smallPicture' => 'uri1?version=2', 'middlePicture' => 'uri2?version=2', 'largePicture' => 'uri3?version=2'),
                     ),
                 ),
             )

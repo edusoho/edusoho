@@ -1,5 +1,4 @@
-<div class="my-course-item cd-mb40 clearfix">
-
+<div class="my-course-item cd-mb16 clearfix">
 
   <a class="my-course-item__link" href="{{ path('course_set_show', {id:courseSet.id}) }}">
     {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'my-course-item__picture', courseSet.title) }}
@@ -11,13 +10,13 @@
     </div>
 
     {% if classroom|default(null) %}
-      <div class="my-course-item__classroom">
-        <span>{{ 'course.block_grid.from_classroom'|trans }}<a class="cd-link-minor" href="{{ path('classroom_show', {'id':classroom.id}) }}">{{ classroom.title }}</a></span>
+      <div class="my-course-item__classroom text-overflow">
+        <span>{{ 'course.block_grid.from_classroom'|trans }}<a class="cd-link-assist" href="{{ path('classroom_show', {'id':classroom.id}) }}">{{ classroom.title }}</a></span>
       </div>
     {% endif %}
 
     {% set percent = courseSet.percent ~ '%' %}
-    <div class="my-course-item__progress cd-mt24 cd-clearfix">
+    <div class="my-course-item__progress cd-mt32 cd-clearfix">
       <span class="my-course-item__progress__text">{{ 'course.members_manage.official_student.progress'|trans }}</span>
       <div class="cd-progress cd-progress-sm">
         <div class="progress-bar">
@@ -32,7 +31,7 @@
 
   {% if currentCourses|length > 1 %}
     <div class="my-course-item__btn my-course-item__dropdown cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
-      <a class="btn cd-btn cd-btn-primary cd-btn-lg dropdown-toggle" href="javascript:;">{% if type == 'learned' %}{{ 'course.block_grid.view_course_btn'|trans }}{% else %}{{ 'course.block_grid.countinue_learn_btn'|trans }}{% endif %}</a>
+      <a class="btn cd-btn cd-btn-primary dropdown-toggle" href="javascript:;">{% if type == 'learned' %}{{ 'course.block_grid.view_course_btn'|trans }}{% else %}{{ 'course.block_grid.countinue_learn_btn'|trans }}{% endif %}</a>
       <ul class="dropdown-menu" role="menu">
         {% for course in currentCourses %}
           {% set member = members[course.id]|default(null) %}
@@ -42,7 +41,7 @@
     </div>
   {% else %}
     <div class="my-course-item__btn">
-      <a class="btn cd-btn cd-btn-primary cd-btn-lg" href="{{ path('my_course_show', {id:currentCourses[0].id}) }}">{% if type == 'learned' %}{{ 'course.block_grid.view_course_btn'|trans }}{% else %}{{ 'course.block_grid.countinue_learn_btn'|trans }}{% endif %}</a>
+      <a class="btn cd-btn cd-btn-primary" href="{{ path('my_course_show', {id:currentCourses[0].id}) }}">{% if type == 'learned' %}{{ 'course.block_grid.view_course_btn'|trans }}{% else %}{{ 'course.block_grid.countinue_learn_btn'|trans }}{% endif %}</a>
     </div>
   {% endif %}
 </div>
