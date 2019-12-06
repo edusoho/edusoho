@@ -13,7 +13,7 @@ const courseListData = (data, listObj) => {
           targetId: data.targetId,
           imgSrc: {
             url: data.cover.middle || '',
-            className: 'e-class__img'
+            className: 'e-course__img'
           },
           header: data.title,
           middle: {
@@ -69,7 +69,7 @@ const courseListData = (data, listObj) => {
           targetId: data.targetId,
           imgSrc: {
             url: data.cover.middle || '',
-            className: 'e-class__img'
+            className: 'e-course__img'
           },
           header: data.title,
           middle: '',
@@ -83,7 +83,7 @@ const courseListData = (data, listObj) => {
         id: data.id,
         imgSrc: {
           url: data.courseSet.cover.middle || '',
-          className: (listObj.typeList === 'course_list') ? 'e-course__img' : 'e-class__img'
+          className: 'e-course__img'
         },
         header: data.courseSetTitle,
         middle: {
