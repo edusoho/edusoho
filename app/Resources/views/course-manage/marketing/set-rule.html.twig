@@ -72,12 +72,16 @@
     {% set wechatSetting = setting('wechat')|default([]) %}
     {% if wechatSetting.templates.courseRemind|default('') and  wechatSetting.templates.courseRemind.status|default(0) %}
       {% set days = get_days(wechatSetting.templates.courseRemind.sendDays) %}
-    <div class="help-block course-mange-space">{{ 'course.setting.course_remind_tip'|trans({'%D%': days, '%H%': wechatSetting.templates.courseRemind.sendTime }) }}
-      <a class="" data-container="body" data-toggle="popover" data-trigger="hover" href="{{ path('admin_wechat_notification_manage') }}" target="_blank">{{ 'course.setting.course_remind_change'|trans }}</a>
-    </div>
+      <div class="help-block course-mange-space">{{ 'course.setting.course_remind_tip'|trans({'%D%': days, '%H%': wechatSetting.templates.courseRemind.sendTime }) }}
+        {% if has_permission('admin_operation_wechat_notification_manage') %}
+          <a class="" data-container="body" data-toggle="popover" data-trigger="hover" href="{{ path('admin_wechat_notification_manage') }}" target="_blank">{{ 'course.setting.course_remind_change'|trans }}</a>
+        {% endif %}
+      </div>
     {% else %}
       <div class="help-block course-mange-space">{{ 'course.setting.course_remind_not_open'|trans }}
-        <a class="" data-container="body" data-toggle="popover" data-trigger="hover" href="{{ path('admin_wechat_notification_manage') }}" target="_blank">{{ 'course.setting.course_remind_go_to_open'|trans }}</a>
+        {% if has_permission('admin_operation_wechat_notification_manage') %}
+          <a class="" data-container="body" data-toggle="popover" data-trigger="hover" href="{{ path('admin_wechat_notification_manage') }}" target="_blank">{{ 'course.setting.course_remind_go_to_open'|trans }}</a>
+        {% endif %}
       </div>
     {% endif %}
   </div>
