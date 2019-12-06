@@ -1999,6 +1999,7 @@ course.plan_task.activity_manage.testpaper.choose: 请选择试卷
 course.plan_task.activity_manage.testpaper.create: >
   还没有试卷，请先去<a href="%testpaperUrl%" target="_parent">创建</a>
 course.plan_task.activity_manage.testpaper.empty_tips: 如果找不到试卷，请先确定该试卷已经发布
+course.plan_task.activity_manage.testpaper.qualified_score: 合格分数
 course.plan_task.activity_manage.testpaper.time_limit: 考试时长
 course.plan_task.activity_manage.testpaper.times: 考试次数
 course.plan_task.activity_manage.testpaper.start_time: 考试开始时间
@@ -2015,7 +2016,9 @@ course.plan_task.activity_manage.testpaper.mode.realTime: 指定
 course.plan_task.activity_manage.testpaper.mode.require_credit: 限制学分
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 参加此次考试所需的学分，０分则不限制。
 course.plan_task.activity_manage.testpaper.pass: 分数达标
+course.plan_task.activity_manage.testpaper.score_pass: 考试合格
 course.plan_task.activity_manage.testpaper.submit: 提交答卷
+course.plan_task.activity_manage.testpaper.finish_tip: 提示：若任务完成条件选择了“考试合格”，则学员的考试分数必须达到上一步中设置的“合格分数”，才能完成此任务。
 course.plan_task.activity_manage.testpaper.empty_tips: 试卷已被删除
 course.plan_task.activity_manage.testpaper.will_begin_tips: 考试未开始，请在%startTime%之后再来
 course.plan_task.activity_manage.testpaper.total_question: >

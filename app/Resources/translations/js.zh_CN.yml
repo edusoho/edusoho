@@ -277,6 +277,7 @@ activity.testpaper_manage.input_description_hint: 请输入试卷描述
 activity.testpaper_manage.generate_mode_hint: 请选择生成方式
 activity.testpaper_manage.max_error_hint: 最大值不能超过1000000000
 activity.testpaper_manage.pass_score_hint: 达标分数：%passScore%分
+activity.testpaper_manage.qualified_score_hint: %passScore%分
 activity.testpaper_manage.setting_pass_score_error_hint: 及格分数（%passedScore%）不能高于总分（%totalScore%）。
 activity.testpaper_manage.pass_score_error_hint: 及格分数必须大于0且小于1000，最多保留一位小数
 activity.testpaper_manage.question_required_error_hint: 请选择题目

@@ -1782,11 +1782,13 @@ course.plan_task.activity_manage.ppt.finished_condition_tips.end: '<p class="gra
 course.plan_task.activity_manage.testpaper.finished_condition_tips: '<p class="gray-darker mbs">Meet the following conditions:</p>'
 course.plan_task.activity_manage.testpaper.finish_score: 'Test score %finishScore% points'
 course.plan_task.activity_manage.testpaper.submit: Submit
+course.plan_task.activity_manage.testpaper.finish_tip: 'Tip: If "Exam Pass" is selected for the task completion condition, the test score must reach the "Pass Score" set in the previous step to complete this task.'
 course.plan_task.activity_manage.testpaper: 'Test paper'
 course.plan_task.activity_manage.testpaper.info: 'Test instruction'
 course.plan_task.activity_manage.testpaper.choose: 'Please choose test paper'
 course.plan_task.activity_manage.testpaper.create: "There is no testpaper, pleas e<a href=\"%testpaperUrl%\" target=\"_parent\">create</a>\n"
 course.plan_task.activity_manage.testpaper.empty_tips: 'If you can not find a testpaper, please make sure that the testpaper has been published'
+course.plan_task.activity_manage.testpaper.qualified_score: Qualified Score
 course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
 course.plan_task.activity_manage.testpaper.time_limit_tips: '0 Hour, No limitation.'
 course.plan_task.activity_manage.testpaper.time_length_tips: 0 Minute, No limitation.
@@ -1803,6 +1805,7 @@ course.plan_task.activity_manage.testpaper.mode.realTime: Specify
 course.plan_task.activity_manage.testpaper.mode.require_credit: 'Limit credits'
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 'The credits required to take the test, 0 is no limitation'
 course.plan_task.activity_manage.testpaper.pass: 'Pass mark'
+course.plan_task.activity_manage.testpaper.score_pass: 'Pass Score'
 course.plan_task.activity_manage.testpaper.will_begin_tips: 'The exam does not start, please come back at %startTime%.'
 course.plan_task.activity_manage.testpaper.total_question: 'A total of <span class = "color-primary">%itemCount% questions</ span>, total <span class = "color-primary">%score% points</span>.'
 course.plan_task.activity_manage.testpaper.pass_score: "pass score is <span class=\"color-primary\">%finishScore% points</span>.\n"
