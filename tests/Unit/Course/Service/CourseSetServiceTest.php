@@ -132,14 +132,8 @@ class CourseSetServiceTest extends BaseTestCase
 
         $recommendCourseSet = $this->getCourseSetService()->recommendCourse(1, $number);
 
-        $excepted = array(
-            'id' => 1,
-            'recommended' => 1,
-            'recommendedSeq' => (int) $number,
-            'recommendedTime' => time(),
-        );
-
-        $this->assertArraySternEquals($excepted, $recommendCourseSet);
+        $this->assertEquals(1, $recommendCourseSet['recommended']);
+        $this->assertEquals((int) $number, $recommendCourseSet['recommendedSeq']);
     }
 
     public function testCancelRecommendCourse()
