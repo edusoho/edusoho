@@ -723,23 +723,22 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     private function generateUrl($route, $parameters, $referenceType)
     {
         global $kernel;
-
-        $router = $kernel->getContainer()->get('router');
-        if (!array_key_exists('HTTP_HOST', $_SERVER)) {
-            $router = $this->decorateRouter($router);
-        }
+        $router = $this->decorateRouter($kernel->getContainer()->get('router'));
 
         return $router->generate($route, $parameters, $referenceType);
     }
 
     private function decorateRouter(Router $router)
     {
-        $url = $this->getSettingService()->node('site.url');
-        if (!empty($url)) {
-            $parsedUrl = parse_url($url);
-            $routerContext = $router->getContext();
-            empty($parsedUrl['host']) ?: $routerContext->setHost($parsedUrl['host']);
-            empty($parsedUrl['scheme']) ?: $routerContext->setScheme($parsedUrl['scheme']);
+        $routerContext = $router->getContext();
+        if ($routerContext->getHost() == 'localhost') {
+            $url = $this->getSettingService()->node('site.url');
+            if (!empty($url)) {
+                $parsedUrl = parse_url($url);
+
+                empty($parsedUrl['host']) ?: $routerContext->setHost($parsedUrl['host']);
+                empty($parsedUrl['scheme']) ?: $routerContext->setScheme($parsedUrl['scheme']);
+            }
         }
 
         return $router;
