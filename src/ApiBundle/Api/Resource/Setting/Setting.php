@@ -114,6 +114,7 @@ class Setting extends AbstractResource
             'enabled' => empty($mobileSetting['enabled']) ? true : (bool) $mobileSetting['enabled'],
             'logo' => empty($mobileSetting['logo']) ? '' : AssetHelper::uriForPath('/'.$mobileSetting['logo']),
             'splashs' => $splashs,
+            'appDiscoveryVersion' => $this->getH5SettingService()->getAppDiscoveryVersion(),
         );
     }
 
@@ -478,6 +479,11 @@ class Setting extends AbstractResource
     private function getSettingService()
     {
         return $this->service('System:SettingService');
+    }
+
+    protected function getH5SettingService()
+    {
+        return $this->createService('System:H5SettingService');
     }
 
     protected function getMpService()
