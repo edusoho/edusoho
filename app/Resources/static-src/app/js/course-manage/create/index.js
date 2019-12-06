@@ -26,9 +26,20 @@ class Creator {
           required: true,
           trim: true,
           course_title: true
+        },
+        expiryDays: {
+          required: () => {
+            return $('input[name="expiryMode"]:checked').val() != 'date';
+          },
+          digits: true,
+          max_year: true
         }
-      },
+      }
     });
+
+    $.validator.addMethod('max_year', function (value, element) {
+      return this.optional(element) || value <= 7300;
+    }, Translator.trans('course.manage.max_year_error_hint'));
 
     $('#course-submit').click((evt) => {
       this.expiry.commonExpiryMode();

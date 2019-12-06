@@ -635,11 +635,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $files = ArrayToolkit::index($files, 'id');
         $fileIds = ArrayToolkit::index($data, 'type');
-
+        $version = ClassroomService::COVER_SIZE_VERSION;
         $fields = array(
-            'smallPicture' => $files[$fileIds['small']['id']]['uri'],
-            'middlePicture' => $files[$fileIds['middle']['id']]['uri'],
-            'largePicture' => $files[$fileIds['large']['id']]['uri'],
+            'smallPicture' => $files[$fileIds['small']['id']]['uri']."?version={$version}",
+            'middlePicture' => $files[$fileIds['middle']['id']]['uri']."?version={$version}",
+            'largePicture' => $files[$fileIds['large']['id']]['uri']."?version={$version}",
         );
 
         $this->deleteNotUsedPictures($classroom);

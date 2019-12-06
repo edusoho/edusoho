@@ -6,6 +6,8 @@ use Biz\System\Annotation\Log;
 
 interface ClassroomService
 {
+    const COVER_SIZE_VERSION = '2'; //修改封面比例为16：9版本
+
     /**
      * @param $conditions
      * @param $orderBy
