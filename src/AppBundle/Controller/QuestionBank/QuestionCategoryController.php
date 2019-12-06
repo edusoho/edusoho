@@ -85,11 +85,16 @@ class QuestionCategoryController extends BaseController
     public function showCategoriesAction(Request $request)
     {
         $bankId = $request->request->get('bankId', 0);
+        $isTree = $request->request->get('isTree', false);
         if (!$this->getQuestionBankService()->canManageBank($bankId)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
-        $categories = $this->getQuestionCategoryService()->getCategoryTree($bankId);
+        if ($isTree) {
+            $categories = $this->getQuestionCategoryService()->getCategoryStructureTree($bankId);
+        } else {
+            $categories = $this->getQuestionCategoryService()->getCategoryTree($bankId);
+        }
 
         return $this->createJsonResponse($categories);
     }

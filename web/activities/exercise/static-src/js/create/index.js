@@ -2,7 +2,6 @@ import QuestionBankSelectLink from 'app/js/question-bank/common/select-link.js';
 import Exercise from './exercise';
 
 new Exercise($('#step2-form'));
-new QuestionBankSelectLink($('#questionBankSelect'), $('#questionCategorySelect'));
 
 checkQuestionNum();
 
@@ -10,7 +9,7 @@ $('#questionBankSelect').change(function () {
   checkQuestionNum();
 });
 
-$('#questionCategorySelect').change(function () {
+$('[name="range[categoryId]"]').change(function () {
   checkQuestionNum();
 });
 
@@ -21,7 +20,7 @@ $('[name="difficulty"]').change(function () {
 function checkQuestionNum() {
   let url = $('#questionBankSelect').data('checkNumUrl');
   let bankId = $('#questionBankSelect').val();
-  let categoryIds = $('#questionCategorySelect').val();
+  let categoryIds = $('[name="range[categoryId]"]').val();
   let difficulty = $('[name="difficulty"]').val();
 
   $.post(url, { bankId: bankId, categoryIds: categoryIds, difficulty: difficulty }, function (data) {
@@ -40,11 +39,11 @@ $('#questionBankSelect').select2({
   placeholderOption: 'first'
 });
 
-$('#questionCategorySelect').select2({
-  // treeview: true,
-  dropdownAutoWidth: true,
-  treeviewInitState: 'collapsed',
-  placeholderOption: 'first',
-  allowClear: true,
-  placeholder: Translator.trans('question.marker_question.select_question_category')
+let treeObject = new window.$.CheckTreeviewInput({
+  $elem: $('#questionCategorySelect'),
+  disableNodeCheck: true,
+  saveColumn: 'id',
+  transportChildren: true,
 });
+
+new QuestionBankSelectLink($('#questionBankSelect'), $('#questionCategorySelect'), treeObject);

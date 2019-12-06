@@ -21,12 +21,14 @@ export default class Homework {
       this.$homeworkModal.hide();
     });
     this.$questionPickedModal.on('hidden.bs.modal', () => {
+      this.showPickedQuestion();
       this.$homeworkModal.show();
       this.$questionPickedModal.html('');
       if(this.validator2) {
         this.validator2.form();
       }
     });
+    this.$questionPickedModal.on('selectQuestion', (event, typeQuestions) => this.selectQuestion(event, typeQuestions));
     window.ltc.on('getActivity', (msg) => {
       window.ltc.emit('returnActivity', {valid:this.validator.form(), data:window.ltc.getFormSerializeObject($('#step2-form'))});
     });
@@ -65,6 +67,45 @@ export default class Homework {
     }, html => {
       this.$questionPickedModal.html(html);
     });
+  }
+
+  showPickedQuestion() {
+    let $cachedQuestion = $('.js-cached-question');
+    if ($cachedQuestion.text() === '') {
+      return;
+    }
+    let typeQuestions = JSON.parse($cachedQuestion.text());
+    $cachedQuestion.text('');
+    let questionIds = [];
+    $.each(Object.keys(typeQuestions), function(index, type) {
+      questionIds.push.apply(questionIds, Object.keys(typeQuestions[type]));
+    });
+    let url = $('.js-pick-modal').data('pickUrl');
+    let self = this;
+    $.post(url, {questionIds: questionIds}, html => {
+      let $tbody = self.$step2_form.find('tbody:visible');
+      if ($tbody.length <= 0) {
+        $tbody = self.$step2_form.find('tbody');
+      }
+      $tbody.append(html).removeClass('hide');
+      $tbody.trigger('lengthChange');
+      self.refreshSeq();
+    });
+  }
+
+  refreshSeq() {
+    let seq = 1;
+    this.$step2_form.find('tbody tr').each(function(index, item) {
+      let $tr = $(item);
+      if (!$tr.hasClass('have-sub-questions')) {
+        $tr.find('td.seq').html(seq);
+        seq++;
+      }
+    });
+    this.$step2_form.find('[name="questionLength"]').val((seq - 1) > 0 ? (seq - 1) : null );
+  }
+
+  selectQuestion(event, typeQuestions) {
   }
 
   inItStep2form() {
