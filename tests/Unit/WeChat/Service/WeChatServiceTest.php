@@ -516,6 +516,11 @@ class WeChatServiceTest extends BaseTestCase
                 'functionName' => 'set',
                 'returnValue' => $wechatSetting,
             ),
+            array(
+                'functionName' => 'get',
+                'withParams' => array('site.url', array()),
+                'returnValue' => 'http://www.baidu.com',
+            ),
         ));
 
         $this->getSettingService()->set('wechat', $wechatSetting);
