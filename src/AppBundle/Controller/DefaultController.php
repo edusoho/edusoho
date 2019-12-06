@@ -21,14 +21,6 @@ class DefaultController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $url = $this->getSettingService()->node('site.url');
-        $router = $this->get('router');
-        if (!empty($url)) {
-            $parsedUrl = parse_url($url);
-            $routerContext = $router->getContext();
-            empty($parsedUrl['host']) ?: $routerContext->setHost($parsedUrl['host']);
-            empty($parsedUrl['scheme']) ?: $routerContext->setScheme($parsedUrl['scheme']);
-        }
         $user = $this->getCurrentUser();
 
         if (!empty($user['id'])) {
