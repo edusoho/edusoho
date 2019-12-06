@@ -1,4 +1,5 @@
 {% set file = video.ext.file|default(null) %}
+{% set questionBankTree = data('QuestionBankTree', {}) %}
 <div class="pane-question-content js-pane-question-content show-introhelp"
   data-marker-metas-url="{{ path('course_task_marker_metas', {'mediaId': file.id}) }}"
   data-queston-marker-add-url="{{path('course_task_question_marker_add',{'courseId':course.id,'taskId':task.id})}}"
@@ -12,7 +13,14 @@
       <div class="form-group cd-mb16">
         <div class="col-xs-6">
           <select class="form-control" name="bankId" id="mark-form-bankId" data-url="{{ path('question_bank_manage_question_category_show') }}">
-            {{ select_options(questionBankChoices, app.request.request.get('bankId'), 'question.marker_question.select_question_bank'|trans) }}
+            {% if questionBankTree %}
+							<option value="0">{{ 'question.select_question_bank'|trans }}</option>
+              {% for bank in questionBankTree %}
+								<option {% if bank.categoryId is not defined %} value disabled="disabled" {% else %} value="{{ bank.id }}" {% endif %}>{% for i in 1..(bank.depth-1) if bank.depth > 1 %}　{% endfor %}{{ bank.name }}</option>
+              {% endfor %}
+            {% else %}
+							<option value="0">{{'question_bank.empty.no_auth'|trans}}</option>
+            {% endif %}
           </select>
         </div>
         <div class="col-xs-6">
