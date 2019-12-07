@@ -1,6 +1,6 @@
 {% extends 'activity/activity-layout.html.twig' %}
 
-{% do script(['libs/ltc-sdk-client.js', 'libs/bootstrap-datetimepicker.js', 'libs/select2.js', 'testpaperactivity/js/manage/index.js'], 300) %}
+{% do script(['libs/ltc-sdk-client.js', 'libs/jquery-nouislider.js', 'libs/bootstrap-datetimepicker.js', 'libs/select2.js', 'testpaperactivity/js/manage/index.js'], 300) %}
 
 {% block activity_step %}
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
@@ -11,7 +11,7 @@
       {% set features = get_features() %}
       <div class="form-group">
         <div class="col-sm-2 control-label">
-          <label for="title" class="control-label-required">{{ 'course.plan_task.activity_manage.title_name'|trans }}</label>
+          <label for="title" class="control-testpaper-medialabel-required">{{ 'course.plan_task.activity_manage.title_name'|trans }}</label>
         </div>
         <div class="col-sm-10">
           <input id="title" class="form-control" type="text" name="title" value="{{ activity.title|default('') }}" >
@@ -27,7 +27,7 @@
             {% if questionBankTree %}
               <option value="0">{{ 'question.select_question_bank'|trans }}</option>
               {% for bank in questionBankTree %}
-                <option value="{{ bank.id }}" {% if bank.categoryId is not defined %} disabled="disabled" {% endif %}{% if testpaper.bankId|default(0) == bank.id %}selected{% endif %}>{% for i in 1..(bank.depth-1) if bank.depth > 1 %}　{% endfor %}{{ bank.name }}</option>
+                <option {% if bank.categoryId is not defined %}value="{{ bank.id }}-category" disabled="disabled" {% else %} value="{{ bank.id }}" {% endif %}{% if testpaper.bankId|default(0) == bank.id %}selected{% endif %}>{% for i in 1..(bank.depth-1) if bank.depth > 1 %}　{% endfor %}{{ bank.name }}</option>
               {% endfor %}
             {% else %}
               <option value="0">{{'question_bank.empty.no_auth'|trans}}</option>
@@ -46,6 +46,19 @@
       <div class="form-group" id="questionItemShowDiv" style="display:none;">
           <div class="col-sm-2 control-label"></div>
           <div class="col-sm-10 controls" id="questionItemShowTable"></div>
+      </div>
+
+      <div class="form-group js-score-form-group" id="score-condition" data-pass="{{ activity.finishData|default('0.6') }}" data-score="{{ testpaper.score|default(0) }}" {% if activity.finishData is not defined %}style="display:none" {% endif %} >
+        <div class="col-sm-2 control-label">
+          <label for="testpaper-media" class="control-label-required">{{'course.plan_task.activity_manage.testpaper.qualified_score'|trans}}</label>
+        </div>
+        <div class="col-sm-10 color-gray">
+          <span>0</span>
+          <div class="js-slider-content inline-block vertical-middle mlm mrl" id="score-slider">
+          </div>
+          <span class="js-score-total"></span>{{'site.question.attr.score.unit'|trans}}
+          <input type="hidden" id="finishData" name="finishData" value="{{ activity.finishData|default('0.6') }}">
+        </div>
       </div>
 
       <div class="form-group">
