@@ -27,7 +27,7 @@
             {% if questionBankTree %}
               <option value="0">{{ 'question.select_question_bank'|trans }}</option>
               {% for bank in questionBankTree %}
-                <option {% if bank.categoryId is not defined %}value="{{ bank.id }}-category" disabled="disabled" {% else %} value="{{ bank.id }}" {% endif %}{% if testpaper.bankId|default(0) == bank.id %}selected{% endif %}>{% for i in 1..(bank.depth-1) if bank.depth > 1 %}　{% endfor %}{{ bank.name }}</option>
+                <option {% if bank.categoryId is not defined %} value disabled="disabled" {% else %} value="{{ bank.id }}" {% if testpaper.bankId|default(0) == bank.id %}selected{% endif %}{% endif %}>{% for i in 1..(bank.depth-1) if bank.depth > 1 %}　{% endfor %}{{ bank.name }}</option>
               {% endfor %}
             {% else %}
               <option value="0">{{'question_bank.empty.no_auth'|trans}}</option>
