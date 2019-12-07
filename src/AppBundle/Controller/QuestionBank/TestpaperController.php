@@ -431,6 +431,7 @@ class TestpaperController extends BaseController
             'categories' => $categories,
             'categoryTree' => $categoryTree,
             'questionCategories' => $questionCategories,
+            'excludeIds' => empty($conditions['excludeIds']) ? '' : $conditions['excludeIds'],
         ));
     }
 
