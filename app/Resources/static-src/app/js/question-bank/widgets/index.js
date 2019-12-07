@@ -23,6 +23,7 @@ class QuestionSelect {
         this.removeQuestion(item);
       }
     });
+    $('a[data-toggle=tooltip]').tooltip({container: 'body'});
   }
   initEvent() {
     this.element.on('change', '.js-question-bank', (event) => {
