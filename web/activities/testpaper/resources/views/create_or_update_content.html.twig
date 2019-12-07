@@ -58,6 +58,9 @@
           </div>
           <span class="js-score-total"></span>{{'site.question.attr.score.unit'|trans}}
           <input type="hidden" id="finishData" name="finishData" value="{{ activity.finishData|default('0.6') }}">
+          {% if activity.finishType|default('') %}
+            <input type="hidden" name="finishType" value="{{ activity.finishType }}">
+          {% endif %}
         </div>
       </div>
 

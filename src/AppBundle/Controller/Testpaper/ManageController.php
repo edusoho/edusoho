@@ -133,6 +133,8 @@ class ManageController extends BaseController
         $student = $this->getUserService()->getUser($result['userId']);
         $accuracy = $this->getTestpaperService()->makeAccuracy($result['id']);
         $total = $this->getTestpaperService()->countQuestionTypes($testpaper, $questions);
+        $activity = $this->getActivityService()->getActivity($result['lessonId']);
+        $passScore = round($activity['finishData'] * $testpaper['score'], 1);
 
         return $this->render('testpaper/manage/teacher-check.html.twig', array(
             'paper' => $testpaper,
@@ -146,6 +148,7 @@ class ManageController extends BaseController
             'targetId' => $targetId,
             'isTeacher' => true,
             'action' => $request->query->get('action', ''),
+            'passScore' => $passScore,
         ));
     }
 
