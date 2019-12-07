@@ -70,7 +70,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $categories = ArrayToolkit::group($categories, 'parentId');
 
         $tree = array();
-        $this->makeCategoryTree($tree, $categories, 0);
+        $this->prepareCategoryTree($tree, $categories, 0);
 
         return $tree;
     }
@@ -169,7 +169,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         }
     }
 
-    protected function makeCategoryTree(&$tree, &$categories, $parentId)
+    protected function prepareCategoryTree(&$tree, &$categories, $parentId)
     {
         static $depth = 0;
 
@@ -177,8 +177,9 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             foreach ($categories[$parentId] as $category) {
                 ++$depth;
                 $category['depth'] = $depth;
+                $category['selectable'] = true;
                 $tree[] = $category;
-                $this->makeCategoryTree($tree, $categories, $category['id']);
+                $this->prepareCategoryTree($tree, $categories, $category['id']);
                 --$depth;
             }
         }

@@ -136,6 +136,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
     public function updateSubmitedResult($resultId, $usedTime, $options = array())
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
+        $activity = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
         $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperResult['testId'], $testpaperResult['type']);
         $items = $this->getTestpaperService()->findItemsByTestId($testpaperResult['testId'], $testpaperResult['type']);
         $itemResults = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id']);
@@ -158,7 +159,8 @@ class TestpaperBuilder implements TestpaperBuilderInterface
             $fields['checkedTime'] = time();
         }
 
-        $fields['passedStatus'] = $fields['score'] >= $testpaper['passedCondition'][0] ? 'passed' : 'unpassed';
+        $passScore = $testpaper['score'] * $activity['finishData'];
+        $fields['passedStatus'] = $fields['score'] >= $passScore ? 'passed' : 'unpassed';
 
         $fields['usedTime'] = $usedTime;
         $fields['endTime'] = time();
@@ -233,5 +235,10 @@ class TestpaperBuilder implements TestpaperBuilderInterface
     protected function getQuestionService()
     {
         return $this->biz->service('Question:QuestionService');
+    }
+
+    protected function getActivityService()
+    {
+        return $this->biz->service('Activity:ActivityService');
     }
 }

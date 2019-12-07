@@ -34,13 +34,13 @@
 
     levels: 2,
 
-    expandIcon: 'es-icon es-icon-tree_switcher_open',
-    collapseIcon: 'es-icon es-icon-tree_switcher_close',
+    expandIcon: 'es-icon es-icon-anonymous-iconfont',
+    collapseIcon: 'es-icon es-icon-remove',
     emptyIcon: 'glyphicon',
     nodeIcon: '',
     selectedIcon: '',
-    checkedIcon: 'es-icon es-icon-tree_check',
-    uncheckedIcon: 'es-icon es-icon-tree_checkbox',
+    checkedIcon: 'es-icon es-icon-studydone',
+    uncheckedIcon: 'es-icon es-icon-study',
 
     color: undefined, // '#000000',
     backColor: undefined, // '#FFFFFF',
@@ -160,10 +160,9 @@
       delete options.data;
     }
     this.options = $.extend({}, _default.settings, options);
-
     this.destroy();
     this.subscribeEvents();
-    this.setInitialStates({ nodes: this.tree }, 0);
+    this.setInitialStates({ children: this.tree }, 0);
     this.render();
 
 
@@ -259,13 +258,13 @@
     index nodes in a flattened structure
   */
   Tree.prototype.setInitialStates = function (node, level) {
-    
-    if (!node.nodes) return;
+
+    if (!node.children) return;
     level += 1;
 
     var parent = node;
     var _this = this;
-    $.each(node.nodes, function checkStates(index, node) {
+    $.each(node.children, function checkStates(index, node) {
 
       // nodeId : unique, incremental identifier
       node.nodeId = _this.nodes.length;
@@ -295,7 +294,7 @@
       if (!node.state.hasOwnProperty('expanded')) {
         if (
             (level < _this.options.levels) &&
-            (node.nodes && node.nodes.length > 0)) {
+            (node.children && node.children.length > 0)) {
           node.state.expanded = true;
         }
         else {
@@ -312,7 +311,7 @@
       _this.nodes.push(node);
 
       // recurse child nodes and transverse the tree
-      if (node.nodes) {
+      if (node.children) {
         _this.setInitialStates(node, level);
       }
     });
@@ -368,7 +367,7 @@
 
     if (state === node.state.expanded) return;
 
-    if (state && node.nodes) {
+    if (state && node.children) {
 
       // Expand a node
       node.state.expanded = true;
@@ -385,8 +384,8 @@
       }
 
       // Collapse child nodes
-      if (node.nodes && node.nodes.length && !options.ignoreChildren) {
-        $.each(node.nodes, $.proxy(function (index, node) {
+      if (node.children && node.children.length && !options.ignoreChildren) {
+        $.each(node.children, $.proxy(function (index, node) {
           this.setExpandedState(node, false, options);
         }, this));
       }
@@ -528,7 +527,7 @@
 
       // Add expand, collapse or empty spacer icons
       var classList = [];
-      if (node.nodes && node.nodes.length) {
+      if (node.children && node.children.length) {
         classList.push('expand-icon');
         if (node.state.expanded) {
           classList.push(_this.options.collapseIcon);
@@ -611,8 +610,8 @@
       _this.$wrapper.append(treeItem);
 
       // Recursively add child ndoes
-      if (node.nodes && node.nodes.length && node.state.expanded) {
-        return _this.buildTree(node.nodes, level);
+      if (node.children && node.children.length && node.state.expanded) {
+        return _this.buildTree(node.children, level);
       }
     });
   };
@@ -730,7 +729,7 @@
   Tree.prototype.getSiblings = function (identifier) {
     var node = this.identifyNode(identifier);
     var parent = this.getParent(node);
-    var nodes = parent ? parent.nodes : this.tree;
+    var nodes = parent ? parent.children : this.tree;
     return nodes.filter(function (obj) {
         return obj.nodeId !== node.nodeId;
       });
@@ -895,8 +894,8 @@
   Tree.prototype.expandNode = function (identifiers, options) {
     this.forEachIdentifier(identifiers, options, $.proxy(function (node, options) {
       this.setExpandedState(node, true, options);
-      if (node.nodes && node.nodes.length && (options && options.levels)) {
-        this.expandLevels(node.nodes, options.levels-1, options);
+      if (node.children && node.children.length && (options && options.levels)) {
+        this.expandLevels(node.children, options.levels-1, options);
       }
     }, this));
 
@@ -908,8 +907,8 @@
 
     $.each(nodes, $.proxy(function (index, node) {
       this.setExpandedState(node, (level > 0) ? true : false, options);
-      if (node.nodes && node.nodes.length) {
-        this.expandLevels(node.nodes, level-1, options);
+      if (node.children && node.children.length) {
+        this.expandLevels(node.children, level-1, options);
       }
     }, this));
   };
@@ -1289,7 +1288,7 @@
 
 /**
  * 2017-08-01
- * 加强expand判断，node.nodes.length
+ * 加强expand判断，node.children.length
  *   
  */
 

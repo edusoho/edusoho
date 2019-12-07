@@ -12,7 +12,7 @@ class QuestionCategoryTreeDataTag
     {
         $bankId = $arguments['bankId'];
 
-        return $this->getCategoryService()->getCategoryTree($bankId);
+        return json_encode($this->getCategoryService()->getCategoryStructureTree($bankId));
     }
 
     /**
