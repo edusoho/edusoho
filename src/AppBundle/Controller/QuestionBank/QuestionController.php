@@ -186,8 +186,10 @@ class QuestionController extends BaseController
         $conditions['parentId'] = empty($conditions['parentId']) ? 0 : $conditions['parentId'];
 
         $parentQuestion = array();
+        $orderBy = array('createdTime' => 'DESC');
         if (!empty($conditions['parentId'])) {
             $parentQuestion = $this->getQuestionService()->get($conditions['parentId']);
+            $orderBy = array('createdTime' => 'ASC');
         }
 
         if (!empty($conditions['categoryId'])) {
@@ -205,7 +207,7 @@ class QuestionController extends BaseController
 
         $questions = $this->getQuestionService()->search(
             $conditions,
-            array('createdTime' => 'DESC'),
+            $orderBy,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
