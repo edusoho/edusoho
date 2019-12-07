@@ -26,6 +26,11 @@ class CategoryBuilder
         $this->categories = $this->getQuestionCategoryService()->getCategoryTree($bankId);
     }
 
+    public function build($categories)
+    {
+        $this->categories = $categories;
+    }
+
     public function convertToChoices()
     {
         $choices = array();

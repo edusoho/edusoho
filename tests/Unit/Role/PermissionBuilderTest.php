@@ -15,6 +15,7 @@ class PermissionBuilderTest extends BaseTestCase
         $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
         $expected = array(
             $rootDir.'/../src/AppBundle/Resources/config/menus_admin.yml',
+            $rootDir.'/../src/AppBundle/Resources/config/menus_admin_v2.yml',
         );
 
         $this->assertEquals($expected, PermissionBuilder::instance()->getPermissionConfig());
@@ -120,6 +121,12 @@ class PermissionBuilderTest extends BaseTestCase
     {
         $this->assertNotEmpty(PermissionBuilder::instance()->getParentPermissionByCode('admin_user_show'));
         $this->assertEmpty(PermissionBuilder::instance()->getParentPermissionByCode('admin_test_permission'));
+    }
+
+    public function testGroupedV2Permissions()
+    {
+        $groupedPermissions = PermissionBuilder::instance()->getParentPermissionByCode('admin_v2_user_show');
+        $this->assertEquals('admin_v2.user.user_group', $groupedPermissions['name']);
     }
 
     protected function loadPermissions($user)

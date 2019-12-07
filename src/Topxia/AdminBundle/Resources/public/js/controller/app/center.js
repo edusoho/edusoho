@@ -15,7 +15,8 @@ define(function(require, exports, module) {
             }
         });
 
-        $.post('/admin/app/upgrades_count', function(count){
+        let $url = $('.js-upgrades-count').data('url');
+        $.post($url, function(count){
 
             if (count > 0) {
 

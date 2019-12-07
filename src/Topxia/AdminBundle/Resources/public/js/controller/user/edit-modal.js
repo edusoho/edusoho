@@ -28,8 +28,6 @@ define(function(require, exports, module) {
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
                     Notify.success(Translator.trans('admin.user.edit_user_profile_success_hint'));
-                    var $tr = $(html);
-                    $('#' + $tr.attr('id')).replaceWith($tr);
                 }).error(function(){
                     Notify.danger(Translator.trans('admin.user.edit_user_profile_error_hint'));
                 });

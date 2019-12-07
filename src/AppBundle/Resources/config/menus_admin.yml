@@ -344,7 +344,7 @@ admin:
                                     visible: ( classroom.status=='draft' )
                         admin_classroom_recommend:
                             name: admin.course.classroom.recommend_tab
-                            router_name: admin_classroom_recommend_list                        
+                            router_name: admin_classroom_recommend_list
                 admin_open_course_manage:
                     name: admin.course.open_course_menu
                     router_name: admin_open_course
@@ -612,11 +612,6 @@ admin:
                             name: admin.operation.mobile.banner_setting_tab
                             disable: true
                             router_name: admin_operation_mobile
-                        admin_operation_mobile_select_manage:
-                            name: admin.operation.mobile.selection_setting_tab
-                            disable: true
-                            router_name: admin_operation_mobile_select
-                            visible: false
                         admin_discovery_column_index:
                             name: admin.operation.mobile.discovery_column_tab
                             disable: true
@@ -631,15 +626,12 @@ admin:
                     children:
                         admin_operation_wechat_fans_list:
                             name: admin.operation.wechat.fans_list_tab
-                            disable: true
                             router_name: admin_wechat_fans_list
                         admin_operation_wechat_notification_record:
                             name: admin.operation.wechat.notification_record_tab
-                            disable: true
                             router_name: admin_wechat_notification_record
                         admin_operation_wechat_notification_manage:
                             name: admin.operation.wechat.notification_manage
-                            disable: true
                             router_name: admin_wechat_notification_manage
                 admin_operation_analysis_register:
                     name: admin.operation.analysis_menu
@@ -941,65 +933,49 @@ admin:
                         admin_setting_message:
                             name: admin.system.site.basic_tab
                             router_name: admin_setting_site
-                            disable: true
                         admin_setting_theme:
                             name: admin.system.site.theme_tab
-                            disable: true
                         admin_setting_mailer:
                             name: admin.system.site.mailer_setting_tab
-                            disable: true
                         admin_top_navigation:
                             name: admin.system.site.top_navigation_tab
                             router_name: admin_navigation
-                            disable: true
                             router_params:
                                 type: top
                         admin_foot_navigation:
                             name: admin.system.site.foot_navigation_tab
                             router_name: admin_navigation
-                            disable: true
                             router_params:
                                 type: foot
                         admin_friendlyLink_navigation:
                             name: admin.system.site.friendlyLink_navigation_tab
                             router_name: admin_navigation
-                            disable: true
                             router_params:
                                 type: friendlyLink
                         admin_setting_consult_setting:
                             name: admin.system.site.consult_setting_tab
-                            disable: true
                         admin_setting_es_bar:
                             name: admin.system.site.es_bar_tab
-                            disable: true
                         admin_setting_share:
                             name: admin.system.site.share_tab
-                            disable: true
                         admin_setting_security:
                             name: admin.system.site.security_tab
-                            disable: true
                 admin_setting_user:
                     name: admin.system.user_menu
                     children:
                         admin_user_auth:
                             name: admin.system.user.auth_tab
-                            disable: true
                             router_name: admin_setting_auth
                         admin_setting_login_bind:
                             name: admin.system.user.login_bind_tab
-                            disable: true
                         admin_setting_user_center:
                             name: admin.system.user.user_center_tab
-                            disable: true
                         admin_setting_user_fields:
                             name: admin.system.user.user_fields_tab
-                            disable: true
                         admin_setting_avatar:
                             name: admin.system.user.avatar_tab
-                            disable: true
                         admin_setting_user_message:
                             name: admin.system.user.message
-                            disable: true
                 admin_roles:
                     name: admin.system.roles_menu
                     children:
@@ -1032,10 +1008,10 @@ admin:
                             name: admin.system.course.basic_tab
                             disable: true
                             router_name: admin_setting_course_setting
-                        # admin_setting_live_course:
-                        #     name: 直播
-                        #     disable: true
-                        #     router_name: admin_setting_live_course_setting
+#                        admin_setting_live_course:
+#                            name: 直播
+#                            disable: true
+#                            router_name: admin_setting_live_course_setting
                         admin_setting_questions_setting:
                             name: admin.system.course.questions_tab
                             disable: true
@@ -1056,16 +1032,12 @@ admin:
                     children:
                         admin_article_setting:
                             name: admin.system.operation.article_tab
-                            disable: true
                         admin_group_set:
                             name: admin.system.operation.group_tab
-                            disable: true
                         admin_invite_set:
                             name: admin.system.operation.invite_tab
-                            disable: true
                         admin_message_setting:
                             name: admin.system.operation.message_tab
-                            disable: true
                             parent: admin_setting_operation
                 admin_setting_finance:
                     name: admin.system.finance_menu

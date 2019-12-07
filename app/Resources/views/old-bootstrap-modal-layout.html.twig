@@ -1,5 +1,10 @@
 {% import "macro.html.twig" as web_macro %}
-{% import "admin/macro.html.twig" as admin_macro %}
+
+{% if setting('backstage.is_v2',0)  == 0 %}
+  {% import "admin/macro.html.twig" as admin_macro %}
+{% else %}
+  {% import "admin-v2/macro.html.twig" as admin_macro %}
+{% endif %}
 
 <div class="modal-dialog {% if modal_class|default('') %} {{ modal_class }}{% endif %}">
   <div class="modal-content">

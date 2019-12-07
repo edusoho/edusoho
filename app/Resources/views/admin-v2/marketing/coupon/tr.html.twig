@@ -1,0 +1,65 @@
+{% import "admin-v2/macro.html.twig" as web_macro %}
+<tr>
+  <td>
+    {{ batch.name }}
+    <div class="short-long-text">
+      <div class="short-text text-sm text-muted">{{ batch.description|plain_text(8) }} <span class="trigger">({{ 'site.btn.expand'|trans }})</span></div>
+      <div class="long-text">{{ batch.description|raw }} <span class="trigger">({{ 'site.btn.collapse'|trans }})</span></div>
+    </div>
+  </td>
+  <td>
+    {{ batch.prefix }}
+  </td>
+  <td class="text-danger">
+  {% if batch.type=='discount' %}
+    <span>{{ 'coupon.type.discount_tip'|trans({'%rate%': batch.rate|number_format(2)}) }}</span>
+  {% elseif batch.type=='minus' %}
+    <span>{{ 'coupon.type.minus_tip'|trans({'%rate%': batch.rate}) }}</span>
+  {% endif %}   
+  <br>
+    {% if batch.couponContent == 'multi' %}
+      <span class="text-muted text-sm">{% if batch.targetType == 'course' %}{{ 'coupon.target_type.multi_course'|trans }}{% elseif batch.targetType == 'classroom' %}{{ 'coupon.target_type.multi_classroom'|trans }}{% endif %}</span>
+      <a class="text-sm" href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_coupon_show_target', {targetType:batch.targetType, batchId:batch.id}) }}">{{ 'coupon.target_type.detail'|trans }}</a>
+    {% else %}
+    <span class="text-muted text-sm">{{ batch.couponContent }}</span>
+    {% endif %}
+  </td>
+  <td>{{ batch.usedNum }}/{{ batch.generatedNum-batch.unreceivedNum }}/{{ batch.generatedNum }}</td>
+  <td>
+    {{ (batch.createdTime )|date('Y-n-d') }}
+    {% if batch.deadlineMode == 'time' %}
+      ~<br />{{ (batch.deadline )|date('Y-n-d') }}
+    {% else %}
+      {{ 'coupon.deadline_mode.day.help_block'|trans({'%day%': batch.fixedDay})|raw }}
+    {% endif %}
+  </td>
+  <td class="text-danger">{{ batch.money }}</td>
+  <td>
+    {% if batch.linkEnable|default(0) %}{{ 'coupon.channel_type.link'|trans }}<br />{% endif %}
+    {% if batch.codeEnable|default(0) %}{{ 'coupon.channel_type.code'|trans }}<br />{% endif %}
+    {% if batch.h5MpsEnable|default(0) %}{{ 'coupon.channel_type.page_detail'|trans }}:<br />{{ 'coupon.channel_type.h5_mps'|trans }}<br />{% endif %}
+  </td>
+  <td>
+    <div class="btn-group">
+      <a class="btn btn-default btn-sm" href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_coupon_show', {batchId:batch.id}) }}">{{ 'coupon.batch.detail'|trans }}</a>
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu" role="menu">
+        {% if batch.codeEnable %}
+          <li><a href="{{ path('admin_v2_coupon_batch_export', {batchId:batch.id}) }}" >{{ 'coupon.batch.export_csv'|trans }}</a></li>
+        {% endif %}
+        {% if setting('coupon.enabled', 0) %}
+          {% if batch.token and batch.linkEnable %}
+            <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_coupon_get_receive_url', {batchId:batch.id}) }}" >{{ 'coupon.batch.get_receive_url'|trans }}</a></li>
+          {% endif %}
+          {{ slot('admin_v2.batch.append.coupon', {'batch': batch}) }}
+          {% if batch.codeEnable or batch.linkEnable %}
+            <li class="divider"></li>
+          {% endif %}
+          <li> <a class="coupon-remove" href="javascript:;" data-url="{{ path('admin_v2_coupon_delete', {id:batch.id}) }}">{{ 'coupon.batch.delete'|trans }}</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </td>
+</tr>

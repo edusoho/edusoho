@@ -62,7 +62,7 @@ abstract class BaseInstallScript
         }
 
         if ($this->installMode == 'command') {
-            $filesystem->symlink($originDir, $targetDir, true);
+            $filesystem->symlink($this->filesystem->makePathRelative($originDir, realpath(dirname($targetDir))), $targetDir, true);
         } else {
             $filesystem->mirror($originDir, $targetDir, null, array('override' => true, 'delete' => true));
         }

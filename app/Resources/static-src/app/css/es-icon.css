@@ -1403,3 +1403,10 @@
   content: "\e73a";
 }
 
+.es-icon-entry-live:before {
+  content: "\e6f1";
+}  
+
+.es-icon-entry-miniprogram:before {
+  content: "\e721";
+}

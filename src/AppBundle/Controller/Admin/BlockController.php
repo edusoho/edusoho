@@ -54,10 +54,10 @@ class BlockController extends BaseController
     {
         $sort = array();
         $condation = array();
-        if ($category == 'lastest') {
+        if ('lastest' == $category) {
             $sort = array('updateTime' => 'DESC');
-        } elseif ($category != 'all') {
-            if ($category == 'theme') {
+        } elseif ('all' != $category) {
+            if ('theme' == $category) {
                 $theme = $this->getSettingService()->get('theme', array());
                 $category = $theme['uri'];
             }
@@ -71,6 +71,9 @@ class BlockController extends BaseController
     {
         $likeString = $request->query->get('q');
         $blocks = $this->getBlockService()->searchBlockTemplates(array('title' => $likeString), array('updateTime' => 'DESC'), 0, 10);
+        foreach ($blocks as &$block) {
+            $block['gotoUrl'] = $this->generateUrl('admin_block_visual_edit', array('blockTemplateId' => $block['id']));
+        }
 
         return $this->createJsonResponse($blocks);
     }
@@ -313,7 +316,7 @@ class BlockController extends BaseController
     public function uploadAction(Request $request, $blockId)
     {
         $response = array();
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $file = $request->files->get('file');
             if (!FileToolkit::isImageFile($file)) {
                 $this->createNewException(FileToolkitException::NOT_IMAGE());

@@ -1,0 +1,26 @@
+<div class="bottom cloud-search-section">
+  <div class="form-inline row">
+    <div class="form-group col-sm-4">
+      <label>{{ 'admin.cloud_file.transcode_status'|trans }}</label>
+      <select class="form-control js-process-status-select form-control-input-md" name="convertStatus">
+        <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
+        <option value="waiting">{{ 'material.common_table.transcode_waiting'|trans }}</option>
+        <option value="success">{{'material_lib.search.conditions.convert_status.success'|trans}}</option>
+        <option value="doing">{{'material_lib.search.conditions.convert_status.doing'|trans}}</option>
+        <option value="error">{{'material_lib.search.conditions.convert_status.error'|trans}}</option>
+        <option value="nonsupport">{{ 'material.common_table.transcode_file_not_support'|trans }}</option>
+        <option value="noneed">{{ 'material.common_table.no_need_transcode'|trans }}</option>
+      </select>
+    </div>
+
+    <div class="form-group es-materials-filter col-sm-6">
+      <label>{{ 'admin.cloud_file.upload_time'|trans }}</label>
+      <input class="form-control form-control-input-sm mrm" autocomplete="off" type="text" id="startDate" name="startDate" value="" placeholder="{{ 'form.placeholder.start_date'|trans }}">
+      -
+      <input class="form-control form-control-input-sm mlm" autocomplete="off" type="text" id="endDate" name="endDate" value="" placeholder="{{ 'form.placeholder.end_date'|trans }}">
+    </div>
+    <div class="form-group es-materials-filter col-sm-2">
+      <button class="form-space btn btn-primary cloud-search-btn">{{ 'form.btn.search'|trans }}</button>
+    </div>
+  </div>
+</div>

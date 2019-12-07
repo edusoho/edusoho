@@ -1,0 +1,23 @@
+{% extends 'admin-v2/operating/wechat-notification/setting-modal/layout.html.twig' %}
+
+{% block custom %}
+  <div class="form-group js-scenes">
+    <div class="col-sm-2 control-label"><label>{{'wechat.notification.setting_time_label'|trans}}</label></div>
+    <div class="col-sm-10 controls radios mts">
+      <label><input type="checkbox" name="scenes[]" value="beforeOneHour" {% if 'beforeOneHour' in template.scenes|default([]) %}checked{% endif %}> {{'wechat.notification.setting_live_time_before_one_hour'|trans}}</label>
+    </div>
+    <div class="col-sm-offset-2 col-sm-10 controls radios mts">
+      <label><input type="checkbox" name="scenes[]" value="beforeOneDay" {% if 'beforeOneDay' in template.scenes|default([]) %}checked{% endif %}> {{'wechat.notification.setting_live_time_before_one_day'|trans}}</label>
+      <div class="help-block"></div>
+    </div>
+
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <div class="pull-right">
+    <a href="{{ path('admin_v2_wechat_notification_manage') }}" class="btn btn-link">{{ 'form.btn.cancel'|trans }}</a>
+    <button type="button" class="js-notification-setting-btn btn btn-primary save-btn" data-url="{{ path('admin_v2_wechat_notification_setting_modal', {key:key}) }}" data-loading-text="{{ 'wechat.notification.saving'|trans }}">{{ 'wechat.notification.save'|trans }}</button>
+  </div>
+  <script>app.load('wechat-notification/live-open-setting');</script>
+{% endblock %}

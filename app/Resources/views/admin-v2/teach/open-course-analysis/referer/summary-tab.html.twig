@@ -1,0 +1,6 @@
+<div class="mbs">
+  <div class= "btn-group" >
+  	<a class="btn btn-default btn-sm {% if tab == 'list' %}btn-primary {% endif %}" href="{{path('admin_v2_open_course_analysis_referer_summary_list',{startTime:dateRange.startTime,endTime:dateRange.endTime})}}" role="button">{{ 'admin.open_manage.analysis.referer.summary_list_tab'|trans }}</a>
+  	<a class=" btn btn-default btn-sm {% if tab == 'summary' %}btn-primary {% endif %}" href="{{path('admin_v2_open_course_analysis_referer_summary',{startTime:dateRange.startTime,endTime:dateRange.endTime})}}" role="button">{{ 'admin.open_manage.analysis.referer.summary_tab'|trans }}</a>
+  </div>
+</div>

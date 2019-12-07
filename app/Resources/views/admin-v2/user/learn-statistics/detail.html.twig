@@ -1,0 +1,111 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_learn_statistics' %}
+
+{% set script_controller = 'user-data/index' %}
+{% set bodyClass = 'user-data' %}
+
+{% block page_title %}
+  <div class="mbm">
+    <img class="es-admin-avatar-sm" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
+    <span class="mlm">{{ user.nickname }}</span>
+  </div>
+{% endblock %}
+{% block page_buttons %}
+  <a class="btn btn-success btn-sm" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{ 'admin.user.fields.personal_menu_label'|trans }}</a>
+{% endblock %}
+
+{% block main %}
+  <div class="user-data-num-section">
+    <div class="row user-data-num-section__line">
+      <div class="col-xs-4 user-data-num-item">
+        <div class="user-data-num-item__count">{{ overview.learningCourseSetCount|default(0) }}</div>
+        <span class="user-data-num-item__text">{{ 'admin.user.statistics.data_detail.learning_course_sets'|trans }}</span>
+      </div>
+      <div class="col-xs-4 user-data-num-item user-data-num-item--middle">
+        <div class="user-data-num-item__count">{{ overview.learningCoursesCount|default(0) }}</div>
+        <span class="user-data-num-item__text">{{ 'admin.user.statistics.data_detail.learning_courses'|trans }}</span>
+      </div>
+      <div class="col-xs-4 user-data-num-item">
+        <div class="user-data-num-item__count">{{ overview.learningProcess.finishedCount|default(0) }}/{{ overview.learningProcess.total|default(0) }}</div>
+        <span class="user-data-num-item__text">{{ 'admin.user.statistics.data_detail.task_rate'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}</span>
+        <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm mls js-user-data-popover" data-original-title="" title=""></span>
+        <div class="popover-content hidden">
+          <div class="popover-item">
+            <div class="content">
+              {{ 'admin.user.statistics.data_detail.task_progress_tip'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-4 user-data-num-item">
+        <div class="user-data-num-item__count">{{ overview.learningCourseNotesCount|default(0) }}</div>
+        <span class="user-data-num-item__text">{{ 'admin.user.statistics.data_detail.note_number'|trans }}</span>
+      </div>
+      <div class="col-xs-4 user-data-num-item user-data-num-item--middle">
+        <div class="user-data-num-item__count">{{ overview.learningCourseThreadsCount|default(0) }}</div>
+        <span class="user-data-num-item__text">{{ 'admin.user.statistics.data_detail.thread_number'|trans }}</span>
+      </div>
+      <div class="col-xs-4 user-data-num-item">
+        <div class="user-data-num-item__count">{{ overview.learningReviewCount|default(0) }}</div>
+        <span class="user-data-num-item__text">{{ 'admin.user.statistics.data_detail.review_number'|trans }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="user-data-chart-section js-learn-data-tendency" data-url="{{ path('admin_v2_user_learn_chart', {userId: user.id}) }}">
+    <div class="user-data-title">{{ 'admin.user.statistics.data_detail.active_chart'|trans }}</div>
+    <div id="date-range-picker">
+      <span class="user-data-select">
+        <input class="user-data-select__range js-date-range-input" type="text" name="course-datetime" value="{{ '-29 days'|date('Y/m/d') }}-{{ 'now'|date('Y/m/d') }}">
+        <i class="es-icon es-icon-arrowdropdown"></i>
+      </span>
+      <a href="javascript:;" class="user-data-select__link js-quick-day-pick week" data-days="7">{{ 'course.dashboard.student_trend_seven_days'|trans }}</a>
+      <a href="javascript:;" class="user-data-select__link js-quick-day-pick month gray-darker" data-days="30">{{ 'course.dashboard.student_trend_thirty_days'|trans }}</a>
+      <a href="javascript:;" class="user-data-select__link js-quick-day-pick three-month" data-days="90">{{ 'admin.user.statistics.data_detail.student_trend_ninety_days'|trans }}</a>
+    </div>
+    <div id="learn-data-tendency-chart" style="height:360px;"></div>
+  </div>
+
+  <div class="user-data-detail-section">
+    <div class="user-data-title">{{ 'admin.user.statistics.data_detail.learn_detail'|trans }}</div>
+    {% for course in courses %}
+      {% set courseSet = courseSets[course.courseSetId] %}
+      {% set member = members[course.id] %}
+      <div class="user-data-course clearfix">
+        <a class="user-data-course__cover" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+          <img src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}">
+        </a>
+        <div class="user-data-course__info">
+          <a class="user-data-course__title text-overflow" href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ courseSet.title }}</a>
+          <div class="user-data-course__text text-overflow" title="{{ course.title }}">{{ course.title }}</div>
+          {% if member.joinedType == 'course' %}
+            <div class="user-data-course__money">
+              <span>{{ member.order.paid_cash_amount|default(0)|to_cash(1) }}</span>
+              {% if member.order.paid_coin_amount|default(0) != 0 %}<span>{{ '+ ' ~ member.order.paid_coin_amount|default(0)|to_coin(1) }}</span>{% endif %}
+            </div>
+          {% elseif member.joinedType == 'classroom' %}
+            <div class="user-data-course__text">{{ 'admin.user.statistics.data_detail.from_classroom'|trans }} {{ member.classroom.title|default('')  }}</div>
+          {% endif %}
+        </div>
+        <div class="user-data-course__status">
+          <div><span class="mrs">{{ 'join.time'|trans }}</span><span class="mlm">{{ member.createdTime|date('Y-m-d H:i:s') }}</span></div>
+          <div class="user-data-course__progress">
+            <span>{{ 'course.members_manage.official_student.progress'|trans }}</span>
+            <div class="es-admin-progress es-admin-progress-xs">
+              <div class="progress-bar progress-bar-success" style="width: {{ course.process.percent }}%;"></div>
+            </div>
+            <span>{{ course.process.percent }}%</span>
+          </div>
+        </div>
+
+      </div>
+    {% else %}
+      <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+    {% endfor %}
+  </div>
+
+  {{ admin_macro.paginator(paginator) }}
+{% endblock %}

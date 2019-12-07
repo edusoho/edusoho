@@ -1,0 +1,50 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_setting_cdn' %}
+
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" id="cdn-form" method="post">
+
+  <div class="form-group">
+    <label class="col-md-2 control-label">{{'admin.cdn.status'|trans}}</label>
+    <div class="col-md-8 controls radios">
+      {{ radios('enabled', {1:'admin.cdn.status.open'|trans, 0:'admin.cdn.status.close'|trans}, cdn.enabled) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-2 control-label">URL</label>
+    <div class="col-md-8 controls">
+      <input type="text" name="defaultUrl" class="form-control" value="{{ cdn.defaultUrl|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-2 control-label">USERURL</label>
+    <div class="col-md-8 controls">
+      <input type="text" name="userUrl" class="form-control" value="{{ cdn.userUrl|default('') }}" placeholder='{{'admin.cdn.input_placeholder'|trans}}'>
+
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-2 control-label">CONTENTURL</label>
+    <div class="col-md-8 controls">
+      <input type="text" name="contentUrl" class="form-control" value="{{ cdn.contentUrl|default('') }}" placeholder='{{'admin.cdn.input_placeholder'|trans}}'>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="controls col-md-offset-2 col-md-8">
+      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+{% endblock %}

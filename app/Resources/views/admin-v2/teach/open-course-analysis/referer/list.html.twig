@@ -1,0 +1,59 @@
+{% extends 'admin-v2/teach/open-course-analysis/layout.html.twig' %}
+{% set nav = 'referer' %}
+{% block analysis_content %}
+  {% set tab = 'list' %}
+  {% include 'admin-v2/teach/open-course-analysis/referer/summary-tab.html.twig' with { tab: tab } %}
+  <table class="table table-hover" style="word-break:break-all;">
+    <thead>
+      <tr>
+        <th width="60%">{{ 'admin.open_manage.analysis.referer.summary_list.name_th'|trans }}</th>
+        <th width="20%">{{ 'admin.open_manage.analysis.referer.summary_list.visit_number_th'|trans }}</th>
+        <th width="20%">{{ 'admin.open_manage.analysis.referer.summary_list.detail_th'|trans }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for refererLog in refererlogDatas %}
+        {% set orderCount = refererLog.orderCount|default(0) %}
+        {% set hitNum = refererLog.hitNum|default(0) %}
+        {% if refererLog.orderCount is null %}
+          {% set orderCount = 0 %}
+        {% endif %}
+        {% if refererLog.hitNum is null %}
+          {% set hitNum = 0 %}
+        {% endif %}
+
+        {% set openCourse = openCourses[refererLog.targetId]|default(null) %}
+        <tr {% if not openCourse %}style="text-decoration:line-through"{% endif %}>
+          <th scope="row">
+            {% if openCourse %}
+              <a href="{{ path('open_course_show', {courseId:openCourse.id}) }}" target="_blank"><strong>{{ openCourse.title }}</strong></a>
+              {% if openCourse.type == 'live' or openCourse.type == 'liveOpen' %}
+                <span class="label label-success live-label mls">{{ 'admin.open_manage.manage.live_course'|trans }}</span>
+              {% endif %}
+            {% else %}
+              {{ 'admin.open_manage.manage.live_course_empty'|trans }}
+            {% endif %}
+          </th>
+          <th>
+            {{ 'admin.open_manage.analysis.referer.summary_list.visit_number'|trans({'%visitNum%': hitNum})}}
+          </th>
+          <th>
+            {% if openCourse %}
+              <a href="javascript:;" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal"
+               data-url="{{ path('admin_v2_open_course_analysis_referer_detail',{id:refererLog.targetId, startTime:dateRange.startTime,endTime:dateRange.endTime}) }}">{{ 'admin.open_manage.analysis.referer.summary_list.detail_btn'|trans }}</a>
+            {% endif %}
+          </th>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="20">
+            <div class="empty">{{ 'admin.open_manage.analysis.referer.empty'|trans }}</div>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+    <span>{{ 'admin.open_manage.analysis.footer_tips'|trans }}</span>
+    {{ admin_macro.paginator(paginator) }}
+{% endblock %}

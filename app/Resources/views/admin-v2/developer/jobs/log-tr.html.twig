@@ -1,0 +1,20 @@
+{% import 'admin-v2/macro.html.twig' as admin_macro %}
+<tr id="job-log-table-tr-{{ log.id }}">
+    <td>
+        {{ log.created_time|date('Y-m-d H:i:s') }}
+    </td>
+
+    <td>
+        {{ log.name }}
+    </td>
+
+    <td>
+        {{ log.source }}
+    </td>
+
+
+    <td>
+        {{ log.status }}
+    </td>
+
+</tr>

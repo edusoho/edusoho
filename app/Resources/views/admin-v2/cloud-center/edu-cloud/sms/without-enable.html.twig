@@ -1,0 +1,23 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_cloud_sms' %}
+
+{% block main %}
+  <div class="panel panel-default notice-panel">
+    <div class="panel-body">
+      {{ web_macro.flash_messages() }}
+      <i class="es-icon es-icon-infooutline text-primary"></i>
+      <div class="text-md mbl">{{ 'admin.edu_cloud.edu_sms.no_enabled_sms'|trans }}</div>
+      {% if overview.isBuy == false %}
+        <div
+            class="color-gray notice-desc">{{ 'admin.edu_cloud.edu_sms.start_enabled_sms'|trans({'%smsBuyUrl%': path('admin_v2_cloud_buy', {type:'sms'}), '%smsShowUrl%': path('admin_v2_cloud_show', {type:'sms'})})|raw }}</div>
+      {% endif %}
+      <form class="form-horizontal" role="form" method="post" action="{{ path('admin_v2_edu_cloud_sms_status') }}">
+        <button type="submit" class="btn btn-primary btn-lg notice-btn"
+                {% if overview.isBuy == false %}disabled="disabled"{% endif %}
+                name="sms-open">{{ 'admin.edu_cloud.edu_sms.start_enabled_sms_btn'|trans }}</button>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_cloud_data_lab' %}
+{% set xapiSetting = setting('xapi') %}
+
+{% block main %}
+  <div class="mtl">
+    {% if not xapiSetting.enabled|default() %}
+      <p style="color: red">
+        {{ 'admin.datalab.warning_tip'|trans({'%url%': path('admin_v2_cloud_data_lab_setting')})|raw }}
+      </p>
+    {% endif %}
+    <iframe id="xapi-data" name="xapi-data" src="{{ url }}" style="width: 100%;height: 900px;border: none;">
+    </iframe>
+  </div>
+{% endblock %}

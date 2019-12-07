@@ -1,0 +1,46 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+  <div class="container mtl">
+<div class="cd-table-responsive">
+  <table class="cd-table table">
+    <thead>
+      <tr>
+        <th>{{ 'admin.user.statistics.sync_info.upgrade_time'|trans }}</th>
+        <th>{{ 'admin.user.statistics.sync_info.history_data_range'|trans }}</th>
+        <th>{{ 'admin.user.statistics.sync_info.table_total_history_data_sync_status'|trans }}</th>
+        <th>{{ 'admin.user.statistics.sync_info.table_daily_history_data_sync_status'|trans }}</th>
+        <th>{{ 'admin.user.statistics.sync_info.table_daily_create_status'|trans }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ data.setting.currentTime|date('Y-m-d H:i:s') }}</td>
+        <td>{{ 'admin.user.statistics.sync_info.history_data_range_days'|trans({'%days': (data.setting.timespan) / (60 * 24 * 60)}) }}</td>
+        <td>
+          {{ 'admin.user.statistics.sync_info.sync_user_id'|trans }}: {{ data.totalJob.args.lastUserId|default(0) }}<br/>
+          {{ 'admin.user.statistics.sync_info.sync_complete'|trans }}: {% if data.totalJob.enabled == 0 %}{{ 'admin.user.statistics.sync_info.true'|trans }}{% else %}{{ 'admin.user.statistics.sync_info.false'|trans }}{% endif %}
+        </td>
+        <td>
+          {{ 'admin.user.statistics.sync_info.sync_time'|trans }}: {{ data.pastDailyJob.args.cursor|default(0)|date('Y-m-d H:i:s') }}<br/>
+          {{ 'admin.user.statistics.sync_info.sync_complete'|trans }}: {% if data.pastDailyJob.enabled == 0 %}{{ 'admin.user.statistics.sync_info.true'|trans }}{% else %}{{ 'admin.user.statistics.sync_info.false'|trans }}{% endif %}
+        </td>
+        <td>
+          {{ 'admin.user.statistics.sync_info.sync_time'|trans }}: {{ data.dailyJob.args.cursor|default(0)|date('Y-m-d H:i:s') }}<br/>  
+          {{ 'admin.user.statistics.sync_info.sync_total'|trans }}:    {{ data.dailyDataNum }}<br/> 
+          {{ 'admin.user.statistics.sync_info.not_sync_total'|trans }}:    {{ data.dailyNotStorageDataNum }}<br/> 
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+  </div>
+{% endblock %}
+
+
+{% block header %}
+{% endblock %}
+{% block esBar %}
+{% endblock %}
+{% block footer %}
+{% endblock %}

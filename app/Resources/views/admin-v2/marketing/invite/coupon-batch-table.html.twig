@@ -1,0 +1,38 @@
+
+<table class="table mll" style="margin-bottom: 0px">
+  <thead>
+  <tr>
+    <th width="30%">{{ 'coupon.name'|trans }}</th>
+    <th width="30%">{{ 'coupon.content'|trans }}</th>
+    <th width="30%">{{ 'coupon.remaining_amount'|trans }}</th>
+    <th width="10%">{{ 'coupon.operation'|trans }}</th>
+  </tr>
+  </thead>
+  <tbody >
+  {% set batch = data('CouponBatch',{'batchId': batchId|default(0)}) %}
+  {% if batch|default()%}
+    <tr class="table-{{ type }}">
+      <td>{{ batch.name }}</td>
+      <td>
+        {% if batch.type=='discount' %}
+          {% set content =  'coupon.type.discount_tip'|trans({'%rate%': batch.rate|number_format(2)}) %}
+        {% elseif batch.type=='minus' %}
+          {% set content =  'coupon.type.minus_tip'|trans({'%rate%': batch.rate}) %}
+        {% endif %}
+        <span>{{ content }}</span>
+        <br>
+        {% if batch.couponContent == 'multi' %}
+          {% if batch.targetType == 'course' %}{{ 'coupon.target_type.multi_course'|trans }}{% elseif batch.targetType == 'classroom' %}{{ 'coupon.target_type.multi_classroom'|trans }}{% endif %}
+        {% else %}
+          <span class="text-muted text-sm">{{ batch.couponContent }}</span>
+        {% endif %}
+      </td>
+      <td>
+        {{batch.unreceivedNum }}
+      </td>
+      <td><a href="javascript:;" class="js-remove-item" >{{ 'site.btn.delete'|trans }}</a></td>
+    </tr>
+  {% endif %}
+  </tbody>
+</table>
+<span class="text-muted text-sm" style="margin-left: 20px">{{ 'admin.setting.invite.chooser_message'|trans }}</span>

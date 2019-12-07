@@ -22,8 +22,9 @@ namespace Doctrine\Common\Cache;
 /**
  * APC cache provider.
  *
- * @link   www.doctrine-project.org
+ * @see   www.doctrine-project.org
  * @since  2.0
+ *
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Jonathan Wage <jonwage@gmail.com>
@@ -62,7 +63,7 @@ class ApcCache extends CacheProvider
     protected function doDelete($id)
     {
         // apc_delete returns false if the id does not exist
-        return apc_delete($id) || ! apc_exists($id);
+        return apc_delete($id) || !apc_exists($id);
     }
 
     /**
@@ -87,20 +88,20 @@ class ApcCache extends CacheProvider
     protected function doGetStats()
     {
         $info = apc_cache_info('', true);
-        $sma  = apc_sma_info();
+        $sma = apc_sma_info();
 
         // @TODO - Temporary fix @see https://github.com/krakjoe/apcu/pull/42
         if (PHP_VERSION_ID >= 50500) {
-            $info['num_hits']   = isset($info['num_hits'])   ? $info['num_hits']   : $info['nhits'];
+            $info['num_hits'] = isset($info['num_hits']) ? $info['num_hits'] : $info['nhits'];
             $info['num_misses'] = isset($info['num_misses']) ? $info['num_misses'] : $info['nmisses'];
             $info['start_time'] = isset($info['start_time']) ? $info['start_time'] : $info['stime'];
         }
 
         return array(
-            Cache::STATS_HITS             => $info['num_hits'],
-            Cache::STATS_MISSES           => $info['num_misses'],
-            Cache::STATS_UPTIME           => $info['start_time'],
-            Cache::STATS_MEMORY_USAGE     => $info['mem_size'],
+            Cache::STATS_HITS => $info['num_hits'],
+            Cache::STATS_MISSES => $info['num_misses'],
+            Cache::STATS_UPTIME => $info['start_time'],
+            Cache::STATS_MEMORY_USAGE => $info['mem_size'],
             Cache::STATS_MEMORY_AVAILABLE => $sma['avail_mem'],
         );
     }
