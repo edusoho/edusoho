@@ -2,13 +2,18 @@
 
 namespace AppBundle\Controller\AdminV2\Operating;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\FileToolkitException;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Content\Service\FileService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Util\CourseTitleUtils;
+use Biz\DiscoveryColumn\Service\DiscoveryColumnService;
+use Biz\System\Service\H5SettingService;
 use Biz\System\Service\SettingService;
+use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\UserFieldService;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,6 +24,12 @@ class MobileSettingController extends BaseController
 {
     public function mobileAction(Request $request)
     {
+        $appDiscoveryVersion = $this->getH5SettingService()->getAppDiscoveryVersion();
+
+//        if (1 == $appDiscoveryVersion) {
+//            return $this->render('admin-v2/operating/mobile-setting/mobile-discovery-setting-upgraded.html.twig', array());
+//        }
+
         $operationMobile = $this->getSettingService()->get('operation_mobile', array());
         $courseGrids = $this->getSettingService()->get('operation_course_grids', array());
         $settingMobile = $this->getSettingService()->get('mobile', array());
@@ -72,7 +83,203 @@ class MobileSettingController extends BaseController
             'mobile' => $mobile,
             'mobileCode' => $mobileCode,
             'hasMobile' => $hasMobile,
+            'appDiscoveryVersion' => $appDiscoveryVersion,
         ));
+    }
+
+    public function mobileUpgradeAction(Request $request)
+    {
+        if ('POST' == $request->getMethod()) {
+            $appDiscoveryVersion = $this->getH5SettingService()->getAppDiscoveryVersion();
+
+            if (0 == $appDiscoveryVersion) {
+                try {
+                    $bannersSetting = $this->getAppBannersSetting();
+                    $channelSettings = $this->getAppChannelSettings();
+                    $appSettings = array_merge($bannersSetting, $channelSettings);
+
+                    $this->getSettingService()->set('app_discovery', array('version' => 1));
+                    $this->getSettingService()->set('apps_published_discovery', $appSettings);
+
+                    return $this->createJsonResponse(array('status' => 'successed'));
+                } catch (\Exception $e) {
+                    $this->getSettingService()->delete('app_discovery');
+
+                    return $this->createJsonResponse(array('status' => 'failed', 'msg' => $e->getMessage()));
+                }
+            }
+
+            return $this->createJsonResponse(array('status' => 'upgraded'));
+        }
+    }
+
+    protected function getAppChannelSettings()
+    {
+        $index = 1;
+
+        $settings = array();
+
+        $discoveryColumns = $this->getDiscoveryColumnService()->getDisplayData();
+
+        $sortTypes = array(
+            'hot' => '-studentNum',
+            'new' => '-createdTime',
+            'recommend' => 'recommendedSeq',
+        );
+
+        foreach ($discoveryColumns as $discoveryColumn) {
+            $setting = array(
+                'type' => '',
+                'moduleType' => '',
+                'data' => array(
+                    'title' => '',
+                    'sourceType' => 'condition',
+                    'categoryId' => '',
+                    'sort' => '',
+                    'lastDays' => 0,
+                    'limit' => '',
+                    'items' => array(),
+                ),
+            );
+
+            if (0 < intval($discoveryColumn['categoryId'])) {
+                $setting['data']['categoryIdArray'] = ArrayToolkit::column(
+                    $this->getCategoryService()->findCategoryBreadcrumbs($discoveryColumn['categoryId']),
+                    'id'
+                );
+            }
+
+            switch ($discoveryColumn['type']) {
+                case 'classroom':
+                    $setting['type'] = 'classroom_list';
+                    $setting['moduleType'] = 'classroom_list-'.$index;
+                    $setting['data']['categoryId'] = $discoveryColumn['categoryId'];
+                    $setting['data']['sort'] = empty($discoveryColumn['orderType']) ? '' : $sortTypes[$discoveryColumn['orderType']];
+                    $setting['data']['limit'] = $discoveryColumn['showCount'];
+                    $setting['data']['title'] = $discoveryColumn['title'];
+                    break;
+
+                case 'live':
+                    $setting['type'] = 'course_list';
+                    $setting['moduleType'] = 'course_list-'.$index;
+                    $setting['data']['sourceType'] = 'custom';
+                    $setting['data']['categoryId'] = $discoveryColumn['categoryId'];
+                    $setting['data']['sort'] = '-createdTime';
+                    $setting['data']['limit'] = $discoveryColumn['showCount'];
+                    $setting['data']['title'] = $discoveryColumn['title'];
+
+                    $conditions = array(
+                        'status' => 'published',
+                        'parentId' => 0,
+                        'type' => 'live',
+                        'excludeTypes' => array('reservation'),
+                        'courseSetStatus' => 'published',
+                    );
+                    if (isset($setting['data']['categoryIdArray'])) {
+                        $conditions['categoryIds'] = $setting['data']['categoryIdArray'];
+                    }
+                    $setting['data']['items'] = $this->getCourseService()->searchCourses($conditions, '', 0, $discoveryColumn['showCount']);
+
+                    break;
+
+                case 'course':
+                    $setting['type'] = 'course_list';
+                    $setting['moduleType'] = 'course_list-'.$index;
+                    $setting['data']['categoryId'] = $discoveryColumn['categoryId'];
+                    $setting['data']['sort'] = empty($discoveryColumn['orderType']) ? '' : $sortTypes[$discoveryColumn['orderType']];
+                    $setting['data']['limit'] = $discoveryColumn['showCount'];
+                    $setting['data']['title'] = $discoveryColumn['title'];
+                    $setting['data']['source'] = array(
+                        'courseType' => 'all',
+                        'category' => $discoveryColumn['categoryId'],
+                        'sort' => empty($discoveryColumn['orderType']) ? '' : $sortTypes[$discoveryColumn['orderType']],
+                    );
+                    break;
+
+                default:
+                    break;
+            }
+
+            $settings[$setting['moduleType']] = $setting;
+
+            ++$index;
+        }
+
+        return $settings;
+    }
+
+    protected function getAppBannersSetting()
+    {
+        $banners = json_decode(
+            file_get_contents($this->container->get('request')->getSchemeAndHttpHost().'/mapi_v2/School/getSchoolBanner'),
+            true
+        );
+
+        $setting = array();
+        if (!empty($banners)) {
+            $setting['slide-1'] = array(
+                'type' => 'slide_show',
+                'moduleType' => 'slide-1',
+                'data' => array(),
+            );
+
+            foreach ($banners as $banner) {
+                switch ($banner['action']) {
+                    case 'webview':
+                        $link = array(
+                            'type' => 'url',
+                            'target' => null,
+                            'url' => $banner['params'],
+                        );
+                        break;
+                    case 'none':
+                        $link = array(
+                            'type' => 'none',
+                            'target' => null,
+                            'url' => '',
+                        );
+                        break;
+                    case 'course':
+                        $course = $this->getCourseService()->getCourse($banner['params']);
+                        if (!empty($course)) {
+                            $target = array(
+                                'id' => $course['id'],
+                                'courseSetId' => $course['courseSetId'],
+                                'title' => $course['title'],
+                                'displayedTitle' => CourseTitleUtils::getDisplayedTitle($course),
+                            );
+                        } else {
+                            $target = null;
+                        }
+                        $link = array(
+                            'type' => 'course',
+                            'target' => $target,
+                            'url' => '',
+                        );
+                        break;
+                    default:
+                        $link = array(
+                            'type' => '',
+                            'target' => null,
+                            'url' => '',
+                        );
+                        break;
+                }
+
+                $setting['slide-1']['data'][] = array(
+                    'title' => '',
+                    'image' => array(
+                        'id' => 0,
+                        'size' => 0,
+                        'createdTime' => date('c'),
+                        'uri' => $banner['url'],
+                    ),
+                    'link' => $link,
+                );
+            }
+        }
+
+        return $setting;
     }
 
     public function bannerAction(Request $request)
@@ -163,6 +370,17 @@ class MobileSettingController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function mobileDiscoveriesAction(Request $request)
+    {
+        $appDiscoveryVersion = $this->getH5SettingService()->getAppDiscoveryVersion();
+
+        if (0 == $appDiscoveryVersion) {
+            return $this->redirect($this->generateUrl('admin_v2_setting_mobile'));
+        }
+
+        return $this->render('admin-v2/operating/mobile-setting/mobile.setting.discoveries.html.twig', array());
+    }
+
     /**
      * @return CourseService
      */
@@ -209,5 +427,29 @@ class MobileSettingController extends BaseController
     protected function getAuthService()
     {
         return $this->createService('User:AuthService');
+    }
+
+    /**
+     * @return DiscoveryColumnService
+     */
+    protected function getDiscoveryColumnService()
+    {
+        return $this->createService('DiscoveryColumn:DiscoveryColumnService');
+    }
+
+    /**
+     * @return CategoryService
+     */
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy:CategoryService');
+    }
+
+    /**
+     * @return H5SettingService
+     */
+    protected function getH5SettingService()
+    {
+        return $this->createService('System:H5SettingService');
     }
 }

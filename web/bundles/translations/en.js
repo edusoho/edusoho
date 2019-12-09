@@ -425,7 +425,7 @@ t.add("course.manage.expiry_start_date_error_hint", "Please enter the start date
 t.add("course.manage.expiry_days_error_hint", "Please enter the number of valid days", "js", "en");
 t.add("course.manage.deadline_end_date_error_hint", "Please enter the due date", "js", "en");
 t.add("course.manage.max_student_num_error_hint", "Please enter the number of courses", "js", "en");
-t.add("course.manage.max_year_error_hint", "The maximum value of the validity period can not exceed 99,999 days", "js", "en");
+t.add("course.manage.max_year_error_hint", "Please enter a value less than 7300 (20 years)", "js", "en");
 t.add("course.manage.max_capacity_hint", "The site can support up to %capacity% people to participate in the live at the same time, you can set a larger value, but then may lead to students can not enter the live.", "js", "en");
 t.add("course.manage.publish_hint", "Are you sure you want to publish the program?", "js", "en");
 t.add("course.manage.publish_title", "Publish teaching plan", "js", "en");
@@ -1306,6 +1306,9 @@ t.add("course.question_manage.manage.delete_tips", "Deleting the question may af
 t.add("admin.setting.invite.coupon.empty.tips", "Please set coupon batch", "js", "en");
 t.add("course.plan_task.activity_ppt_animation_img", "Switch img mode", "js", "en");
 t.add("course.plan_task.activity_ppt_animation_slide", "Switch animation mode", "js", "en");
+t.add("admin.mobile_manage.discovery_upgrade_madal.notice_successed", "Upgrade success", "js", "en");
+t.add("admin.mobile_manage.discovery_upgrade_madal.notice_failed", "Upgrade failed", "js", "en");
+t.add("admin.mobile_manage.discovery_upgrade_madal.notice_upgraded", "Cannot repeat upgrade", "js", "en");
 t.add("course.plan_task.lessons_publish_status", "Published Lesson Number:%publishedNum%<br\/>Unpublish Lesson Number:%unpublishedNum%", "js", "en");
 t.add("admin_v2.user.cloude_sms_enable_hint", "please go to\u3010Admin\u3011-\u3010App Cente\u3011-\u3010Cloud service\u3011-\u3010Cloud Sms\u3011open cloud sms first.", "js", "en");
 t.add("admin_v2.homepage.quick_entrance.hint", "Set up to 7 quick entries", "js", "en");

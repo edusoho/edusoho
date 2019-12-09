@@ -365,7 +365,7 @@ t.add("course.manage.expiry_start_date_error_hint", "\u8bf7\u8f93\u5165\u5f00\u5
 t.add("course.manage.expiry_days_error_hint", "\u8bf7\u8f93\u5165\u6709\u6548\u671f\u5929\u6570", "js", "zh_CN");
 t.add("course.manage.deadline_end_date_error_hint", "\u8bf7\u8f93\u5165\u622a\u81f3\u65e5\u671f", "js", "zh_CN");
 t.add("course.manage.max_student_num_error_hint", "\u8bf7\u8f93\u5165\u8bfe\u7a0b\u4eba\u6570", "js", "zh_CN");
-t.add("course.manage.max_year_error_hint", "\u6709\u6548\u671f\u6700\u5927\u503c\u4e0d\u80fd\u8d85\u8fc799,999\u5929", "js", "zh_CN");
+t.add("course.manage.max_year_error_hint", "\u8bf7\u8f93\u5165\u4e0d\u5927\u4e8e 7300\uff0820\u5e74\uff09\u7684\u6570\u503c", "js", "zh_CN");
 t.add("course.manage.max_capacity_hint", "\u7f51\u6821\u53ef\u652f\u6301\u6700\u591a%capacity%\u4eba\u540c\u65f6\u53c2\u52a0\u76f4\u64ad\uff0c\u60a8\u53ef\u4ee5\u8bbe\u7f6e\u4e00\u4e2a\u66f4\u5927\u7684\u6570\u503c\uff0c\u4f46\u5c4a\u65f6\u6709\u53ef\u80fd\u4f1a\u5bfc\u81f4\u6ee1\u989d\u540e\u5176\u4ed6\u5b66\u5458\u65e0\u6cd5\u8fdb\u5165\u76f4\u64ad\u3002", "js", "zh_CN");
 t.add("course.manage.publish_hint", "\u662f\u5426\u786e\u5b9a\u53d1\u5e03\u8be5\u6559\u5b66\u8ba1\u5212\uff1f", "js", "zh_CN");
 t.add("course.manage.publish_title", "\u53d1\u5e03\u6559\u5b66\u8ba1\u5212", "js", "zh_CN");
@@ -1251,6 +1251,9 @@ t.add("course.question_manage.manage.delete_tips", "\u5220\u9664\u9898\u76ee\uff
 t.add("admin.setting.invite.coupon.empty.tips", "\u8bf7\u8bbe\u7f6e\u4f18\u60e0\u5238\u6279\u6b21", "js", "zh_CN");
 t.add("course.plan_task.activity_ppt_animation_img", "\u5207\u6362\u56fe\u7247\u6a21\u5f0f", "js", "zh_CN");
 t.add("course.plan_task.activity_ppt_animation_slide", "\u5207\u6362\u52a8\u753b\u6a21\u5f0f", "js", "zh_CN");
+t.add("admin.mobile_manage.discovery_upgrade_madal.notice_successed", "\u5347\u7ea7\u6210\u529f", "js", "zh_CN");
+t.add("admin.mobile_manage.discovery_upgrade_madal.notice_failed", "\u5347\u7ea7\u5931\u8d25", "js", "zh_CN");
+t.add("admin.mobile_manage.discovery_upgrade_madal.notice_upgraded", "\u65e0\u6cd5\u91cd\u590d\u5347\u7ea7", "js", "zh_CN");
 t.add("course.plan_task.lessons_publish_status", "\u5df2\u53d1\u5e03\u8bfe\u65f6\u6570\uff1a%publishedNum%<br\/>\u672a\u53d1\u5e03\u8bfe\u65f6\u6570\uff1a%unpublishedNum%", "js", "zh_CN");
 t.add("admin_v2.user.cloude_sms_enable_hint", "\u8bf7\u5148\u5230\u3010\u7ba1\u7406\u540e\u53f0\u3011-\u3010\u5e94\u7528\u4e2d\u5fc3\u3011-\u3010\u4e91\u670d\u52a1\u3011-\u3010\u4e91\u77ed\u4fe1\u3011\u4e2d\u5f00\u542f\u4e91\u77ed\u4fe1\u54e6~", "js", "zh_CN");
 t.add("admin_v2.homepage.quick_entrance.hint", "\u6700\u591a\u8bbe\u7f6e7\u4e2a\u5feb\u6377\u5165\u53e3\u4f4d", "js", "zh_CN");

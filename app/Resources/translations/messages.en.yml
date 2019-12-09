@@ -2272,7 +2272,7 @@ classroom.category: Category
 classroom.price_label: Price(CNY)
 classroom.price_tips: "Total %courseNum% courses, original %price% CNY.\n"
 classroom.amount: "Equals to%price%\n"
-classroom.picture_tips: "File format could be jpg/gif/png. Suggested size is 525×350px. <br> The file limits to <strong>2MB</strong>.\n"
+classroom.picture_tips: "File format could be jpg/gif/png. Suggested size is 540×304px. <br> The file limits to <strong>2MB</strong>.\n"
 classroom.commitment_service_label: Commitment
 classroom.activiy: Activity
 classroom.activity_tips: "Arrange online and offline %name% activities, make the learning with more fun and keep closer relationships with your classmates.\n"
@@ -4040,7 +4040,7 @@ admin.course_manage.manage.live: Live
 admin.course_manage.manage.live_course: 'Live Course'
 admin.course_manage.manage.course_name_placeholder: 'Course name'
 admin.course_manage.manage.status_placeholder: Status
-admin.course_manage.manage.course_tips: "<div style='width:250px;'>\n  <span style='color:blue;'>Course Description</span><br>\n  1. The id and sorting are not available to edit;<br>\n  2. Rule of course url：domain name/course/course id;\n</div>\n"
+admin.course_manage.manage.course_tips: "<div style='width:250px;'>\n  <span style='color:blue;'>Course Description</span><br>\n  1. The id and sorting are not available to edit;<br>\n  2. Rule of course url：domain name/course_set/course id;\n</div>\n"
 admin.course_manage.manage.count: "Courses：<strong class=\"inflow-num\">%courseNum%</strong>\n"
 admin.course_manage.manage.published_count: "Published：<strong class=\"inflow-num\">%publishedNum%</strong>(s) \n"
 admin.course_manage.manage.closed_count: "Closed：<strong class=\"inflow-num\">%closedNum%</strong> \n"
@@ -4840,6 +4840,22 @@ admin.mobile_manage.discovery_column.new: Latest
 admin.mobile_manage.discovery_column.edit_btn: Edit
 admin.mobile_manage.discovery_column.delete_btn: Delete
 admin.mobile_manage.discovery_column.empty: 'No Category'
+admin.mobile_manage.discovery_upgrade_madal.stup1_title: 'App contents can be upgraded'
+admin.mobile_manage.discovery_upgrade_madal.stup1_content: 'Mobile content can be upgraded to APP home screen configuration. After the upgrading, you can set the App home screen content on the APP home screen configuration.'
+admin.mobile_manage.discovery_upgrade_madal.stup2_title: 'Tips'
+admin.mobile_manage.discovery_upgrade_madal.stup2_content: 'After the upgrading, mobile content will be migrated to the APP home screen configuration and the mobile content management will no longer available. The student app will prompt to upgrade the latest app, continue ？'
+admin.mobile_manage.discovery_upgrade_madal.btn_not_upgrade: 'Cancel'
+admin.mobile_manage.discovery_upgrade_madal.btn_next: 'Upgrade'
+admin.mobile_manage.discovery_upgrade_madal.btn_confirm: 'Upgrade'
+admin.mobile_manage.discovery_upgrade_madal.btn_loading: 'Upgrade in progress'
+admin.mobile_manage.discovery_upgrade.transfer_tips: > 
+  <p class="upgrade-color-info">Mobile content is upgraded to</p>
+  <p class="upgrade-color-primary">APP home screen configuration</p>
+admin.mobile_manage.discovery_upgrade.function: > 
+  <li><i class="es-icon es-icon-dot h5-color-primary"></i>Custom setting of each module</li>
+  <li><i class="es-icon es-icon-dot h5-color-primary"></i>Preview while setting to see the display effect in real time</li>
+  <li><i class="es-icon es-icon-dot h5-color-primary"></i>Create your personalized app at will</li>
+admin.mobile_manage.discovery_upgrade.transfer_btn: 'To use'
 admin.wechat_notification.switch: WeChat Notification Switch
 admin.wechat_notification.template: WeChat Notification Template
 admin.wechat_notification.template_name: Template Name
@@ -6498,6 +6514,7 @@ admin.finance_refund.failed_notification_hint: 'When administrator refused refun
 admin.finance_refund.notification_variable_description: 'Notice variable description'
 admin.finance_refund.refund_amount: 'Refund amount'
 admin.finance_refund.refund_course_or_classroom: 'Refund course or class'
+admin.mobile_setting.discovery_tips: Notice：Using the discovery page configuration function, the app version needs to be upgraded to 4.5.39 and above
 admin.mobile_setting.client_open_or_close: 'Enable mobile app'
 admin.mobile_setting.mobile_homepage_set_hint: '1. If turned on, you can add  <a target= "_blank" HREF = "%mobileHomepage%" > mobile page </a>(domain name /mobile ) address to the site navigation'
 admin.mobile_setting.mobile_operation_hint: '2. click <a target=, "_blank" HREF = "%operationUrl%" >here </a> to set the mobile banners and pages'

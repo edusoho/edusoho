@@ -46,7 +46,7 @@ class CourseInfo {
         $item.addClass('service-primary-item');
         values.push($item.data('code'));
       }
-      
+
       $('#course_services').val(JSON.stringify(values));
     });
   }
@@ -199,7 +199,7 @@ class CourseInfo {
     );
 
     $.validator.addMethod('max_year', function (value, element) {
-      return this.optional(element) || value < 100000;
+      return this.optional(element) || value <= 7300;
     }, Translator.trans('course.manage.max_year_error_hint'));
 
     $.validator.addMethod('live_capacity', function (value, element) {
