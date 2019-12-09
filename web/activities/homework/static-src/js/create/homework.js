@@ -74,6 +74,11 @@ export default class Homework {
     if ($cachedQuestion.text() === '') {
       return;
     }
+    let originBankId = $('.js-origin-bank').val(),
+      currentBankId = $('.js-current-bank').val();
+    if ($.trim(originBankId) !== $.trim(currentBankId)) {
+      $('.js-homework-table').html('');
+    }
     let typeQuestions = JSON.parse($cachedQuestion.text());
     $cachedQuestion.text('');
     let questionIds = [];
