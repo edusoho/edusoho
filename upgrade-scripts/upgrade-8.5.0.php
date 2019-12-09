@@ -54,6 +54,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'upgradeRoleDataV2',
             'updateAdminV2Setting',
             'addTableQuickEntrance',
+            'mobileUpgrade',
         );
 
         $funcNames = array();
@@ -187,6 +188,200 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         return 1;
+    }
+
+    public function mobileUpgrade()
+    {
+        $appDiscoveryVersion = $this->getH5SettingService()->getAppDiscoveryVersion();
+
+        if (0 == $appDiscoveryVersion) {
+            try {
+                $bannersSetting = $this->getAppBannersSetting();
+                $channelSettings = $this->getAppChannelSettings();
+                $appSettings = array_merge($bannersSetting, $channelSettings);
+
+                $this->getSettingService()->set('app_discovery', array('version' => 1));
+                $this->getSettingService()->set('apps_published_discovery', $appSettings);
+
+                return 1;
+            } catch (\Exception $e) {
+                $this->getConnection()->rollback();
+                $this->logger('error', $e->getTraceAsString());
+                throw $e;
+            }
+        }
+
+        return 1;
+    }
+
+    protected function getAppChannelSettings()
+    {
+        $index = 1;
+
+        $settings = array();
+
+        $discoveryColumns = $this->getDiscoveryColumnService()->getDisplayData();
+
+        $sortTypes = array(
+            'hot' => '-studentNum',
+            'new' => '-createdTime',
+            'recommend' => 'recommendedSeq',
+        );
+
+        foreach ($discoveryColumns as $discoveryColumn) {
+            $setting = array(
+                'type' => '',
+                'moduleType' => '',
+                'data' => array(
+                    'title' => '',
+                    'sourceType' => 'condition',
+                    'categoryId' => '',
+                    'sort' => '',
+                    'lastDays' => 0,
+                    'limit' => '',
+                    'items' => array(),
+                ),
+            );
+
+            if (0 < intval($discoveryColumn['categoryId'])) {
+                $setting['data']['categoryIdArray'] = \AppBundle\Common\ArrayToolkit::column(
+                    $this->getCategoryService()->findCategoryBreadcrumbs($discoveryColumn['categoryId']),
+                    'id'
+                );
+            }
+
+            switch ($discoveryColumn['type']) {
+                case 'classroom':
+                    $setting['type'] = 'classroom_list';
+                    $setting['moduleType'] = 'classroom_list-'.$index;
+                    $setting['data']['categoryId'] = $discoveryColumn['categoryId'];
+                    $setting['data']['sort'] = empty($discoveryColumn['orderType']) ? '' : $sortTypes[$discoveryColumn['orderType']];
+                    $setting['data']['limit'] = $discoveryColumn['showCount'];
+                    $setting['data']['title'] = $discoveryColumn['title'];
+                    break;
+
+                case 'live':
+                    $setting['type'] = 'course_list';
+                    $setting['moduleType'] = 'course_list-'.$index;
+                    $setting['data']['sourceType'] = 'custom';
+                    $setting['data']['categoryId'] = $discoveryColumn['categoryId'];
+                    $setting['data']['sort'] = '-createdTime';
+                    $setting['data']['limit'] = $discoveryColumn['showCount'];
+                    $setting['data']['title'] = $discoveryColumn['title'];
+
+                    $conditions = array(
+                        'status' => 'published',
+                        'parentId' => 0,
+                        'type' => 'live',
+                        'excludeTypes' => array('reservation'),
+                        'courseSetStatus' => 'published',
+                    );
+                    if (isset($setting['data']['categoryIdArray'])) {
+                        $conditions['categoryIds'] = $setting['data']['categoryIdArray'];
+                    }
+                    $setting['data']['items'] = $this->getCourseService()->searchCourses($conditions, '', 0, $discoveryColumn['showCount']);
+
+                    break;
+
+                case 'course':
+                    $setting['type'] = 'course_list';
+                    $setting['moduleType'] = 'course_list-'.$index;
+                    $setting['data']['categoryId'] = $discoveryColumn['categoryId'];
+                    $setting['data']['sort'] = empty($discoveryColumn['orderType']) ? '' : $sortTypes[$discoveryColumn['orderType']];
+                    $setting['data']['limit'] = $discoveryColumn['showCount'];
+                    $setting['data']['title'] = $discoveryColumn['title'];
+                    $setting['data']['source'] = array(
+                        'courseType' => 'all',
+                        'category' => $discoveryColumn['categoryId'],
+                        'sort' => empty($discoveryColumn['orderType']) ? '' : $sortTypes[$discoveryColumn['orderType']],
+                    );
+                    break;
+
+                default:
+                    break;
+            }
+
+            $settings[$setting['moduleType']] = $setting;
+
+            ++$index;
+        }
+
+        return $settings;
+    }
+
+    protected function getAppBannersSetting()
+    {
+        global $kernel;
+        $banners = json_decode(
+            file_get_contents($kernel->getContainer()->get('request')->getSchemeAndHttpHost().'/mapi_v2/School/getSchoolBanner'),
+            true
+        );
+
+        $setting = array();
+        if (!empty($banners)) {
+            $setting['slide-1'] = array(
+                'type' => 'slide_show',
+                'moduleType' => 'slide-1',
+                'data' => array(),
+            );
+
+            foreach ($banners as $banner) {
+                switch ($banner['action']) {
+                    case 'webview':
+                        $link = array(
+                            'type' => 'url',
+                            'target' => null,
+                            'url' => $banner['params'],
+                        );
+                        break;
+                    case 'none':
+                        $link = array(
+                            'type' => 'none',
+                            'target' => null,
+                            'url' => '',
+                        );
+                        break;
+                    case 'course':
+                        $course = $this->getCourseService()->getCourse($banner['params']);
+                        if (!empty($course)) {
+                            $target = array(
+                                'id' => $course['id'],
+                                'courseSetId' => $course['courseSetId'],
+                                'title' => $course['title'],
+                                'displayedTitle' => \Biz\Course\Util\CourseTitleUtils::getDisplayedTitle($course),
+                            );
+                        } else {
+                            $target = null;
+                        }
+                        $link = array(
+                            'type' => 'course',
+                            'target' => $target,
+                            'url' => '',
+                        );
+                        break;
+                    default:
+                        $link = array(
+                            'type' => '',
+                            'target' => null,
+                            'url' => '',
+                        );
+                        break;
+                }
+
+                $setting['slide-1']['data'][] = array(
+                    'title' => '',
+                    'image' => array(
+                        'id' => 0,
+                        'size' => 0,
+                        'createdTime' => date('c'),
+                        'uri' => $banner['url'],
+                    ),
+                    'link' => $link,
+                );
+            }
+        }
+
+        return $setting;
     }
 
     protected function generateIndex($step, $page)
@@ -341,5 +536,37 @@ abstract class AbstractUpdater
     private function getLoggerFile()
     {
         return $this->biz['kernel.root_dir'].'/../app/logs/upgrade.log';
+    }
+
+    /**
+     * @return \Biz\DiscoveryColumn\Service\DiscoveryColumnService
+     */
+    protected function getDiscoveryColumnService()
+    {
+        return $this->createService('DiscoveryColumn:DiscoveryColumnService');
+    }
+
+    /**
+     * @return \Biz\Taxonomy\Service\CategoryService
+     */
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy:CategoryService');
+    }
+
+    /**
+     * @return \Biz\System\Service\H5SettingService
+     */
+    protected function getH5SettingService()
+    {
+        return $this->createService('System:H5SettingService');
+    }
+
+    /**
+     * @return \Biz\Course\Service\CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 }
