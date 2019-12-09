@@ -78,7 +78,7 @@ export default {
       OptimizationCourseLessons: state => state.OptimizationCourseLessons
     }),
     hasChapter: function() {
-      return this.chapterNum === 0;
+      return this.chapterNum > 0;
     }
   },
   watch: {
