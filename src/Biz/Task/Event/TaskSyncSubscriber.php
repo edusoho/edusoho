@@ -131,21 +131,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         ));
     }
 
-    protected function syncTestpaper($activity, $copiedCourse)
-    {
-        if ('testpaper' != $activity['mediaType']) {
-            return array();
-        }
-
-        $testpaperCopy = new ActivityTestpaperCopy($this->getBiz());
-
-        return $testpaperCopy->copy($activity, array(
-            'newCourseSetId' => $copiedCourse['courseSetId'],
-            'newCourseId' => $copiedCourse['id'],
-            'isCopy' => 1,
-        ));
-    }
-
     /**
      * @return TaskService
      */
