@@ -5,7 +5,6 @@ namespace Biz\Course\Copy\Chain;
 use Biz\Task\Dao\TaskDao;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Copy\AbstractEntityCopy;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
@@ -145,7 +144,6 @@ class TaskCopy extends AbstractEntityCopy
      *
      * @param [type] $courseId   [description]
      * @param [type] $chapterIds 包含直播任务的课时ids
-     *
      */
     protected function updateChapter($courseId, $chapterIds)
     {
