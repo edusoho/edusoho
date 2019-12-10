@@ -1,5 +1,5 @@
 <div class="class-item">
-  {% if classroom.vipLevelId|default(0) %}
+  {% if classroom.vipLevelId|default(0) > 0 %}
     <span class="tag-vip-free"></span>
   {% endif %}
   <div class="class-img-wrap">

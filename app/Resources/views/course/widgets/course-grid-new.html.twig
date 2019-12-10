@@ -4,7 +4,7 @@
   {% else %}
     {% set course = data('PublishedCourseByCourseSet',{ courseSetId: courseSet.id } ) %}
   {% endif %}
-  {% if course.vipLevelId|default(0) %}
+  {% if course.vipLevelId|default(0) > 0 %}
     <span class="tag-vip-free"></span>
   {% endif %}
   <div class="course-img">
