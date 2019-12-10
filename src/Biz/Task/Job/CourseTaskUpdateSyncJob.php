@@ -5,7 +5,6 @@ namespace Biz\Task\Job;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\AppLoggerConstant;
-use Biz\Course\Copy\Chain\ActivityTestpaperCopy;
 use Biz\Course\Dao\CourseDao;
 use Biz\System\Service\LogService;
 use Biz\Task\Dao\TaskDao;
@@ -26,7 +25,7 @@ class CourseTaskUpdateSyncJob extends AbstractJob
 
             $helper = new BatchUpdateHelper($this->getTaskDao());
             foreach ($copiedTasks as $ct) {
-                $this->updateActivity($ct['activityId'], $ct['fromCourseSetId'], $ct['courseId']);
+                $this->updateActivity($ct['activityId']);
 
                 $ct = $this->copyFields($task, $ct, array(
                     'seq',
@@ -54,12 +53,10 @@ class CourseTaskUpdateSyncJob extends AbstractJob
         }
     }
 
-    private function updateActivity($activityId, $courseSetId, $courseId)
+    private function updateActivity($activityId)
     {
         $activity = $this->getActivityDao()->get($activityId);
         $sourceActivity = $this->getActivityDao()->get($activity['copyId']);
-
-        $testpaper = $this->syncTestpaper($sourceActivity, array('id' => $courseId, 'courseSetId' => $courseSetId));
 
         $activity = $this->copyFields($sourceActivity, $activity, array(
             'title',
@@ -72,10 +69,6 @@ class CourseTaskUpdateSyncJob extends AbstractJob
             'finishData',
         ));
 
-        if (!empty($testpaper)) {
-            $sourceActivity['testId'] = $testpaper['id'];
-        }
-
         $ext = $this->getActivityConfig($activity['mediaType'])->sync($sourceActivity, $activity);
 
         if (!empty($ext)) {
@@ -83,21 +76,6 @@ class CourseTaskUpdateSyncJob extends AbstractJob
         }
 
         $this->getActivityDao()->update($activity['id'], $activity);
-    }
-
-    private function syncTestpaper($activity, $copiedCourse)
-    {
-        if ('testpaper' != $activity['mediaType']) {
-            return array();
-        }
-
-        $testpaperCopy = new ActivityTestpaperCopy($this->biz);
-
-        return $testpaperCopy->copy($activity, array(
-            'newCourseSetId' => $copiedCourse['courseSetId'],
-            'newCourseId' => $copiedCourse['id'],
-            'isCopy' => 1,
-        ));
     }
 
     protected function copyFields($source, $target, $fields)

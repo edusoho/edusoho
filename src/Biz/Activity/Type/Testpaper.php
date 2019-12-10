@@ -50,7 +50,7 @@ class Testpaper extends Activity
         $testpaperActivity = $this->get($activity['mediaId']);
 
         $newExt = array(
-            'testpaperId' => empty($config['testId']) ? 0 : $config['testId'],
+            'testpaperId' => $testpaperActivity['mediaId'],
             'doTimes' => $testpaperActivity['doTimes'],
             'redoInterval' => $testpaperActivity['redoInterval'],
             'limitedTime' => $testpaperActivity['limitedTime'],
@@ -67,12 +67,8 @@ class Testpaper extends Activity
     {
         $sourceExt = $this->getTestpaperActivityService()->getActivity($sourceActivity['mediaId']);
         $ext = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-        $testPaper = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId(
-            $sourceExt['mediaId'],
-            $activity['fromCourseSetId']
-        );
 
-        $ext['testpaperId'] = $testPaper['id'];
+        $ext['testpaperId'] = $sourceExt['mediaId'];
         $ext['doTimes'] = $sourceExt['doTimes'];
         $ext['redoInterval'] = $sourceExt['redoInterval'];
         $ext['limitedTime'] = $sourceExt['limitedTime'];
