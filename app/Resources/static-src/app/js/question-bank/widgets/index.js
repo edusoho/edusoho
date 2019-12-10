@@ -1,4 +1,5 @@
 import Selector from '../common/selector';
+import { htmlEscape } from 'app/common/unit.js';
 
 class QuestionSelect {
   constructor() {
@@ -62,6 +63,16 @@ class QuestionSelect {
         dropdownAutoWidth: true,
         treeviewInitState: 'collapsed',
         placeholderOption: 'first',
+        formatResult: function(state) {
+          let text = htmlEscape(state.text);
+          if (!state.id) {
+            return text;
+          }
+          return `<div class="select2-result-text"><span class="select2-match"></span><span><i class="es-icon es-icon-tiku"></i>${text}</span></div>`;
+        },
+        dropdownCss: {
+          width: ''
+        },
       });
     }
   }
