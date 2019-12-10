@@ -118,7 +118,7 @@ class ManageController extends BaseController
             $this->getTestpaperService()->checkFinish($result['id'], $formData);
 
             $data = array('success' => true, 'goto' => '');
-            if ($isContinue) {
+            if ($isContinue == 'true') {
                 $route = $this->getRedirectRoute('nextCheck', $source);
                 $data['goto'] = $this->generateUrl($route, array('id' => $targetId, 'activityId' => $result['lessonId']));
             }
