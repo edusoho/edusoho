@@ -127,7 +127,7 @@ class QuestionSelect {
       cd.message({type: 'danger', message: Translator.trans('site.data.uncheck_name_hint', {'name': name})});
       return;
     }
-    this.cacheQuestion();
+    this.cacheQuestionAndBank();
 
     $modal.trigger('selectQuestion', this.selectTypeQuestion);
     $modal.modal('hide');
@@ -171,8 +171,18 @@ class QuestionSelect {
     this.renderTable();
   }
 
-  cacheQuestion() {
-    $('#task-create-content-iframe').contents().find('.js-cached-question').text(JSON.stringify(this.selectTypeQuestion));
+  cacheQuestionAndBank() {
+    let $content = $('#task-create-content-iframe').contents();
+    $content.find('.js-cached-question').text(JSON.stringify(this.selectTypeQuestion));
+    let bankId = this.$questionBankSelector.select2('data').id,
+      $originBank = $content.find('.js-origin-bank'),
+      $currentBank = $content.find('.js-current-bank');
+    if ($.trim($currentBank.val()) === '') {
+      $originBank.val(bankId);
+    } else {
+      $originBank.val($currentBank.val());
+    }
+    $currentBank.val(bankId);
   }
 
   renderTable(isPaginator) {
