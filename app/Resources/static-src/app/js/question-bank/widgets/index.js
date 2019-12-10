@@ -24,7 +24,7 @@ class QuestionSelect {
         this.removeQuestion(item);
       }
     });
-    $('a[data-toggle=tooltip]').tooltip({container: 'body'});
+    this.initToolTip();
   }
   initEvent() {
     this.element.on('change', '.js-question-bank', (event) => {
@@ -54,6 +54,10 @@ class QuestionSelect {
     $('.js-pick-btn').on('click', (event) => {
       this.onClickPick(event);
     });
+  }
+
+  initToolTip() {
+    $('a[data-toggle=tooltip]').tooltip({container: 'body'});
   }
 
   initQuestionBankSelector() {
@@ -209,6 +213,7 @@ class QuestionSelect {
     }).done(function(resp){
       self.table.html(resp);
       self.selector.updateTable();
+      self.initToolTip();
     }).fail(function(){
       self._loaded_error();
     });
