@@ -46,8 +46,8 @@
         {% include 'common/select.html.twig' with {
           placeholder: placeholder,
           id: 'questionCategorySelect',
-          data: questionCategories,
-          ids: range.categoryId|join(','),
+          data: questionCategories|default([]),
+          ids: range.categoryIds|default([])|join(','),
           treeName: 'range[categoryId]',
           classNames: 'width-400'
         } %}
