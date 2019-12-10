@@ -59,6 +59,7 @@ class HomeworkManageController extends BaseController
             $parameters['paginator'] = $paginator;
             $parameters['questionBank'] = $this->getQuestionBankService()->getQuestionBank($questionBankId);
             $parameters['categories'] = $this->getQuestionCategoryService()->getCategoryStructureTree($questionBankId);
+            $parameters['excludeIds'] = empty($conditions['excludeIds']) ? '' : $conditions['excludeIds'];
         }
 
         return $this->render('question-bank/widgets/question-pick-modal.html.twig', $parameters);
