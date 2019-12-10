@@ -1040,6 +1040,8 @@ course.testpaper_check.number: 'person-time'
 course.testpaper_check.get_score: 'Score %questonScore%'
 course.testpaper_check.get_score_range: 'Score 0 - %questonScore%'
 course.testpaper_check.testpaper_analysis: 'item analysis'
+course.testpaper_check.student_score: Student Grade
+course.testpaper_check.testpaper_total_score: Total Score
 
 course.homepage.re_try_btn: 'Try again'
 course.assignment_check: 'Review assignment'

@@ -30,6 +30,7 @@ class CheckTest
     this._initValidate();
     testpaperCardFixed();
     this.isContinue = false;
+    this.passStatus = 'passed';
   }
 
   _initEvent() {
@@ -145,10 +146,19 @@ class CheckTest
         scoreTotal = scoreTotal + Number($(this).val());
       });
 
-      let subjectiveScore = Number(this.$dialog.find('[name="objectiveScore"]').val());
-      let totalScore = Number(scoreTotal) + subjectiveScore;
+      let $scoreItem = this.$dialog.find('.js-student-score');
+      let passScore = this.$dialog.find('.js-pass-score').data('passScore');
+      let objectiveScore = Number($scoreItem.data('objectiveScore'));
+      let totalScore = Number(scoreTotal) + objectiveScore;
 
-      this.$dialog.find('#totalScore').html(totalScore);
+      $scoreItem.html(totalScore);
+      if (totalScore >= passScore) {
+        $scoreItem.removeClass('color-danger').addClass('color-success');
+        this.passStatus = 'passed';
+      } else {
+        $scoreItem.removeClass('color-success').addClass('color-danger');
+        this.passStatus = 'unpassed';
+      }
       this.$dialog.modal('show');
     }
 
@@ -164,7 +174,7 @@ class CheckTest
 
     let $target = $(event.currentTarget);
     let teacherSay = this.$dialog.find('textarea').val();
-    let passedStatus = this.$dialog.find('[name="passedStatus"]:checked').val();
+    let passedStatus = this.passStatus;
 
     $target.button('loading');
     $.post($target.data('postUrl'), {result:this.checkContent,teacherSay:teacherSay,passedStatus:passedStatus,isContinue:this.isContinue}, function(response) {
