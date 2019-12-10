@@ -136,8 +136,8 @@ class ExerciseBuilder implements TestpaperBuilderInterface
             $conditions['bankId'] = $testPaper['metas']['range']['bankId'];
         }
 
-        if (!empty($testPaper['metas']['range']['bankId']) && !empty($testPaper['metas']['range']['categoryId'])) {
-            $conditions['categoryId'] = $testPaper['metas']['range']['categoryId'];
+        if (!empty($testPaper['metas']['range']['bankId']) && !empty($testPaper['metas']['range']['categoryIds'])) {
+            $conditions['categoryIds'] = $testPaper['metas']['range']['categoryIds'];
         }
 
         return $conditions;
