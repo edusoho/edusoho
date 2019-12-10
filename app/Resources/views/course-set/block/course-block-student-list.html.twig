@@ -22,16 +22,6 @@
                           <span class="tag-discount"></span>
                         {% endif %}
                       {% endif %}
-                      {# {% if courseSet.serializeMode == 'serialized' %}
-                        <span class="tags"><span class="tag-serialing"></span></span>
-                      {% elseif courseSet.serializeMode == 'finished' %}
-                        <span class="tags"><span class="tag-finished"></span></span>
-                      {% endif %} #}
-                      {# {% if courseSet.type == 'live' %}
-                        <span class="tags">
-                          <span class="tag-live"></span>
-                        </span>
-                      {% endif %} #}
                       {% if courseSet.course.tryLookVideo|default(false) or courseSet.type|default() == 'reservation' or courseSet.type|default() == 'live' or courseSet.serializeMode != 'none'  %}
                         <div class="course-tag clearfix">
                           {% if courseSet.course.tryLookVideo|default(false) %}
@@ -39,7 +29,7 @@
                           {% endif %}
                           <span class="pull-right">
                             <span class="cd-mr8">{% if courseSet.type|default() == 'reservation' %}
-                              预约课程
+                              {{ 'my.teaching.course_set.reservation'|trans }}
                             {% elseif courseSet.type|default() == 'live' %}
                               {{ 'search.live_courses'|trans }}
                             {% else %}
