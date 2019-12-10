@@ -159,7 +159,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
             $fields['checkedTime'] = time();
         }
 
-        $passScore = $testpaper['score'] * $activity['finishData'];
+        $passScore = round($testpaper['score'] * $activity['finishData'], 1);
         $fields['passedStatus'] = $fields['score'] >= $passScore ? 'passed' : 'unpassed';
 
         $fields['usedTime'] = $usedTime;
