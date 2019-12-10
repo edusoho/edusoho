@@ -24,7 +24,7 @@
             {{ category.name }}
           </div>
           <div class="td col-md-4 code vertical-middle">
-            <div>{{ users[category.userId].nickname }}</div>
+            <div>{{ users[category.userId].nickname|default('--') }}</div>
             <span class="cd-text-sm cd-dark-minor">{{ category.updatedTime|date('Y-m-d H:i:s') }}</span>
           </div>
           <div class="td col-md-3 operation vertical-middle question-bank__right" style="overflow: unset;">
