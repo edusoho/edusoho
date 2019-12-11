@@ -93,7 +93,7 @@ const loadFirst = () => {
         template: '<div class="popover mini-program-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
         html: true,
         content: `<img src="${src}" width="200px">`
-      })
+      });
     });
   }
 
