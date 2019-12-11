@@ -289,9 +289,11 @@ export default {
         data: data
       }).then(res => {
         if (!this.couponSwitch) {
-          res.availableCoupons.length = 0
+          return;
         }
-        this.course = res
+        const coupons=res.availableCoupons;
+        this.course = res;
+        this.itemData= coupons.length>0 ? coupons[0]:null;
       }).catch(err => {
         // 购买后返回会造成重复下单报错
         this.$router.go(-1)
