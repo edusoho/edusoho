@@ -49,7 +49,7 @@
             {% if testpaper.status == 'open' %}
               <li><a class="close-testpaper" href="javascript:" title="
                 {% if testpaperActivities[testpaper.id]|default(null) %}
-                  {{'course.testpaper_manage.testpaper_quoted_close_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}\
+                  {{'course.testpaper_manage.testpaper_quoted_close_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}
                 {% else %}
                   {{'course.testpaper_manage.close_tips'|trans({'%name%': testpaper.name })}}
                 {% endif %}"
