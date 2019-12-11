@@ -102,15 +102,18 @@ class TestpaperShow {
     let $tr = $target.closest('tr');
     let self = this;
 
-    if (!confirm($target.attr('title'))) {
-      return;
-    }
-
-    $.post($target.data('url'), function(html){
-      cd.message({type: 'success', message: Translator.trans('testpaper_manage.save_success_hint')});
-      self.renderTable();
-    }).error(function(){
-      cd.message({type: 'danger', message: Translator.trans('testpaper_manage.save_error_hint')});
+    cd.confirm({
+      title: Translator.trans('confirm.oper.tip'),
+      content: $target.attr('title'),
+      okText: Translator.trans('site.confirm'),
+      cancelText: Translator.trans('site.close'),
+    }).on('ok', () => {
+      $.post($target.data('url'), function(html){
+        cd.message({type: 'success', message: Translator.trans('testpaper_manage.save_success_hint')});
+        self.renderTable();
+      }).error(function(){
+        cd.message({type: 'danger', message: Translator.trans('testpaper_manage.save_error_hint')});
+      });
     });
   }
 
