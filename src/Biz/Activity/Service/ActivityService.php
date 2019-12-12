@@ -42,7 +42,7 @@ interface ActivityService
 
     public function deleteActivity($id);
 
-    public function search($conditions, $orderBy, $start, $limit);
+    public function search($conditions, $orderBy, $start, $limit, $columns = array());
 
     public function count($conditions);
 

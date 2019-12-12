@@ -251,12 +251,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $user->hasPermission('admin_course_content_manage') || $user->hasPermission('admin_v2_course_content_manage');
     }
 
-    public function searchCourseSets(array $conditions, $orderBys, $start, $limit)
+    public function searchCourseSets(array $conditions, $orderBys, $start, $limit, $columns = array())
     {
         $orderBys = $this->getOrderBys($orderBys);
         $preparedCondtions = $this->prepareConditions($conditions);
 
-        return $this->getCourseSetDao()->search($preparedCondtions, $orderBys, $start, $limit);
+        return $this->getCourseSetDao()->search($preparedCondtions, $orderBys, $start, $limit, $columns);
     }
 
     public function countCourseSets(array $conditions)

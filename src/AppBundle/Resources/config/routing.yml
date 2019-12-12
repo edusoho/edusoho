@@ -2349,10 +2349,6 @@ course_set_manage_testpaper_preivew:
   path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/preview
   defaults: { _controller: AppBundle:Testpaper/Manage:preview }
 
-course_set_manage_testpaper_questions:
-  path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/questions
-  defaults: { _controller: AppBundle:Testpaper/Manage:questions }
-
 course_manage_testpaper_check:
   path: /course/{id}/manage/testpaper/{resultId}/check
   defaults: { _controller: AppBundle:Course/TestpaperManage:check }
