@@ -14,20 +14,18 @@ jQuery.validator.addMethod('name_max', function (value, element) {
   return this.optional(element) || maxLength;
 }, Translator.trans('question_bank.question_category.name_max_message'));
 
-jQuery.validator.addMethod('name_chinese_alphanumeric', function (value, element) {
-  let alphanumericValidator = true;
+jQuery.validator.addMethod('name_visible_character', function (value, element) {
   let visibleValidator = true;
   let values = value.split('\n');
   let self = this;
   $.each(values, function (key, string) {
-    alphanumericValidator = /^([\u4E00-\uFA29]|[a-zA-Z0-9_.·])*$/i.test(string);
     visibleValidator = ($.trim(string).length > 0);
-    if (alphanumericValidator == false || visibleValidator == false) {
-      return self.optional(element) || (alphanumericValidator && visibleValidator);
+    if (visibleValidator == false) {
+      return self.optional(element) || visibleValidator;
     }
   });
-  return self.optional(element) || (alphanumericValidator && visibleValidator);
-}, Translator.trans('question_bank.question_category.name_chinese_alphanumeric_message'));
+  return self.optional(element) || visibleValidator;
+}, Translator.trans('validate.visible_character.message'));
 
 class CategoryCreate {
   constructor(options) {
@@ -42,7 +40,7 @@ class CategoryCreate {
         'categoryNames': {
           required: true,
           name_max: true,
-          name_chinese_alphanumeric: true
+          name_visible_character: true
         },
       },
       ajax: true,
