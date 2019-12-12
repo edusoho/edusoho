@@ -2329,10 +2329,6 @@ course_set_manage_testpaper_info:
   defaults: { _controller: AppBundle:Testpaper/Manage:info }
   methods: [POST]
 
-course_set_manage_testpaper_preivew:
-  path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/preview
-  defaults: { _controller: AppBundle:Testpaper/Manage:preview }
-
 course_manage_testpaper_check:
   path: /course/{id}/manage/testpaper/{resultId}/check
   defaults: { _controller: AppBundle:Course/TestpaperManage:check }
@@ -2392,10 +2388,6 @@ testpaper_do_suspend:
   methods: [POST]
 
 #homework
-course_manage_homework:
-  path: /course/{courseId}/manage/homework
-  defaults: { _controller: AppBundle:HomeworkManage:index }
-
 course_set_manage_homework_question_picker:
   path: /course_set/{id}/manage/homework/question/picker
   defaults: { _controller: AppBundle:HomeworkManage:questionPicker }
