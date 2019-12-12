@@ -10500,6 +10500,7 @@ question_reedit.select_question_category: --选择分类--
 question_reedit.category_text: 分类
 question_reedit.category_empty: 无
 question_plus_upgrade_tip: 当前插件版本过低，前往后台升级“题库增强版”插件后，才可继续使用旧模板导入。
+question_bank.to_select.hint: 请先选择题库
 
 # 新版后台开始
 

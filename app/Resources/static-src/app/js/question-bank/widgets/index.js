@@ -1,4 +1,5 @@
 import Selector from '../common/selector';
+import { htmlEscape } from 'app/common/unit.js';
 
 class QuestionSelect {
   constructor() {
@@ -23,7 +24,7 @@ class QuestionSelect {
         this.removeQuestion(item);
       }
     });
-    $('a[data-toggle=tooltip]').tooltip({container: 'body'});
+    this.initToolTip();
   }
   initEvent() {
     this.element.on('change', '.js-question-bank', (event) => {
@@ -55,6 +56,10 @@ class QuestionSelect {
     });
   }
 
+  initToolTip() {
+    $('a[data-toggle=tooltip]').tooltip({container: 'body'});
+  }
+
   initQuestionBankSelector() {
     if (this.$questionBankSelector.length !== 0) {
       this.$questionBankSelector.select2({
@@ -62,6 +67,16 @@ class QuestionSelect {
         dropdownAutoWidth: true,
         treeviewInitState: 'collapsed',
         placeholderOption: 'first',
+        formatResult: function(state) {
+          let text = htmlEscape(state.text);
+          if (!state.id) {
+            return text;
+          }
+          return `<div class="select2-result-text"><span class="select2-match"></span><span><i class="es-icon es-icon-tiku"></i>${text}</span></div>`;
+        },
+        dropdownCss: {
+          width: ''
+        },
       });
     }
   }
@@ -198,6 +213,7 @@ class QuestionSelect {
     }).done(function(resp){
       self.table.html(resp);
       self.selector.updateTable();
+      self.initToolTip();
     }).fail(function(){
       self._loaded_error();
     });

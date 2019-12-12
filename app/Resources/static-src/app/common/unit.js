@@ -47,3 +47,12 @@ export const dateFormat = (fmt) => {
 export const numberConvertLetter = (number) =>  {
   return String.fromCharCode(number + 64);
 };
+
+export const htmlEscape = (s) => {
+  return (s + '').replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/'/g, '&#039;')
+      .replace(/"/g, '&quot;')
+      .replace(/\n/g, '<br />');
+};

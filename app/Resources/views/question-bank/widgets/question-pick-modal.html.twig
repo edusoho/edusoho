@@ -39,6 +39,12 @@
         </div>
       </div>
     </div>
+  {% else %}
+    <div class="question-add__content">
+      <div class="cd-feedback cd-mb0">
+        <div class="text-muted">{{ 'question_bank.to_select.hint'|trans }}</div>
+      </div>
+    </div>
   {% endif %}
 
   <div class="question-add__content question-add__footer">

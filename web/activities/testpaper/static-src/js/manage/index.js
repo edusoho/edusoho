@@ -1,4 +1,4 @@
-import { dateFormat } from 'app/common/unit.js';
+import { dateFormat, htmlEscape } from 'app/common/unit.js';
 
 class Testpaper {
   constructor($element) {
@@ -174,6 +174,16 @@ class Testpaper {
       dropdownAutoWidth: true,
       treeviewInitState: 'collapsed',
       placeholderOption: 'first',
+      formatResult: function(item) {
+        let text = htmlEscape(item.text);
+        if (!item.id) {
+          return text;
+        }
+        return `<div class="select2-result-text"><span class="select2-match"></span><span><i class="es-icon es-icon-tiku"></i>${text}</span></div>`;
+      },
+      dropdownCss: {
+        width: ''
+      },
     });
   }
 
