@@ -223,31 +223,6 @@ class ManageController extends BaseController
         return $this->createJsonResponse($result);
     }
 
-    public function updateAction(Request $request, $courseSetId, $testpaperId)
-    {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-
-        if (empty($testpaper) || $testpaper['courseSetId'] != $courseSetId) {
-            return $this->createMessageResponse('error', 'testpaper not found');
-        }
-
-        if ('POST' === $request->getMethod()) {
-            $data = $request->request->all();
-            $this->getTestpaperService()->updateTestpaper($testpaper['id'], $data);
-
-            $this->setFlashMessage('success', 'site.save.success');
-
-            return $this->redirect($this->generateUrl('course_set_manage_testpaper', array('id' => $courseSet['id'])));
-        }
-
-        return $this->render('testpaper/manage/update.html.twig', array(
-            'courseSet' => $courseSet,
-            'testpaper' => $testpaper,
-        ));
-    }
-
     public function infoAction(Request $request, $id)
     {
         $this->getCourseSetService()->tryManageCourseSet($id);

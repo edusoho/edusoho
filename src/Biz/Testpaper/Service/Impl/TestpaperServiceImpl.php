@@ -131,11 +131,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return ArrayToolkit::index($testpapers, 'id');
     }
 
-    public function searchTestpapers($conditions, $orderBy, $start, $limit)
+    public function searchTestpapers($conditions, $orderBy, $start, $limit, $columns = array())
     {
         $conditions = $this->filterConditions($conditions);
 
-        return $this->getTestpaperDao()->search($conditions, $orderBy, $start, $limit);
+        return $this->getTestpaperDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
     public function searchTestpaperCount($conditions)
