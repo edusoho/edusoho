@@ -113,8 +113,8 @@ export default {
       default: "demo-1"
     },
     saveFlag: {
-      type: Number,
-      default: 0
+      type: Boolean,
+      default: false
     }
   },
   computed: {
