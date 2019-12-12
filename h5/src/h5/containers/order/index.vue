@@ -24,10 +24,7 @@
             title="优惠券"
             class="nav-bar"
             @click-left="disuse"/>
-          <div :class="['btn-coupon-exit', {active: activeItemIndex < 0}]" @click="disuse">不使用优惠
-            <i class="h5-icon h5-icon-circle"/>
-            <i class="h5-icon h5-icon-check"/>
-          </div>
+          <div :class="['btn-coupon-exit', {active: activeItemIndex < 0}]" @click="disuse">不使用优惠 <i class="iconfont icon-About"/> </div>
           <div class="e-popup__content coupon-popup__content">
             <div class="coupon-number-change">
               <van-field
