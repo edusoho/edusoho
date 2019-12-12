@@ -258,6 +258,11 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function migrateTestpapers($page)
     {
+        if ($page == 1) {
+            $this->getConnection()->exec("
+                update `question_bank` set `testpaperNum` = 0;
+            ");
+        }
         $count = $this->getQuestionBankService()->countQuestionBanks(array());
         $start = $this->getStart($page);
 
@@ -274,7 +279,6 @@ class EduSohoUpgrade extends AbstractUpdater
                 $this->testpaperUpdateHelper->add('id', $testpaper['id'], array('bankId' => $questionBank['id']));
             }
             $this->testpaperUpdateHelper->flush();
-            $this->getQuestionBankDao()->update($questionBank['id'], array('testpaperNum' => 0));
             $this->getQuestionBankService()->waveTestpaperNum($questionBank['id'], count($testpapers));
         }
 
@@ -291,6 +295,9 @@ class EduSohoUpgrade extends AbstractUpdater
         if ($page == 1) {
             $this->getConnection()->exec("
                 delete from `question_category`;
+            ");
+            $this->getConnection()->exec("
+                update `question_bank` set `questionNum` = 0;
             ");
         }
 
@@ -346,7 +353,6 @@ class EduSohoUpgrade extends AbstractUpdater
                 $this->questionUpdateHelper->add('id', $belong['id'], array('bankId' => $questionBank['id'], 'categoryId' => $createdLessonCategory[$belong['lessonId']]));
             }
             $this->questionUpdateHelper->flush();
-            $this->getQuestionBankDao()->update($questionBank['id'], array('questionNum' => 0));
             $this->getQuestionBankService()->waveQuestionNum($questionBank['id'], count($questions));
 
             $exercises = $this->getTestpaperService()->searchTestpapers(
