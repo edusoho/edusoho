@@ -71,6 +71,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'createQuestionBankTables',
+            'createQuestionBankCategory',
             'migrateQuestionBanks',
             'migrateTestpapers',
             'migrateQuestionsAndExercises',
@@ -194,34 +195,58 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
+    protected function createQuestionBankCategory()
+    {
+        $this->getConnection()->exec("
+            delete from `question_bank_category`;
+        ");
+        $orgs = $this->getOrgService()->findOrgsByPrefixOrgCode('1.');
+        foreach ($orgs as $org) {
+            $this->getQuestionBankCategoryDao()->create(array(
+                'name' => '默认分类',
+                'parentId' => 0,
+                'orgId' => $org['id'],
+                'orgCode' => $org['orgCode']
+            ));
+        }
+
+        return 1;
+    }
+
     protected function migrateQuestionBanks($page)
     {
         if ($page == 1) {
             $this->getConnection()->exec("
                 delete from `question_bank`;
             ");
-                $this->getConnection()->exec("
-                delete from `question_bank_category`;
+            $this->getConnection()->exec("
+                update `question_bank_category` set `bankNum` = 0;
             ");
         }
 
-        $count = $this->getCourseSetService()->countCourseSets(array('locked' => 0), array('id' => 'desc'));
+        $defaultCategories = $this->getQuestionBankCategoryService()->findAllCategories();
+        $defaultCategories = ArrayToolkit::index($defaultCategories, 'orgId');
+        $count = $this->getCourseSetService()->countCourseSets(array('locked' => 0));
         $start = $this->getStart($page);
-        $bankNum = 0;
-        $defaultCategory = $this->getQuestionBankCategoryService()->createCategory(array('name' => '默认分类', 'parentId' => 0));
-        $courseSets = $this->getCourseSetService()->searchCourseSets(array('locked' => 0), array('id' => 'desc'), $start, $this->pageSize, array('id', 'title'));
+        $courseSets = $this->getCourseSetService()->searchCourseSets(array('locked' => 0), array('id' => 'desc'), $start, $this->pageSize, array('id', 'title', 'orgId', 'orgCode'));
         foreach ($courseSets as $courseSet) {
+            $category = empty($defaultCategories[$courseSet['orgId']]) ? reset($defaultCategories) : $defaultCategories[$courseSet['orgId']];
             $questions = $this->getQuestionService()->search(array('courseSetId' => $courseSet['id']), array(), 0, 1);
             if (empty($questions)) {
                 continue;
             }
 
-            $questionBank = $this->getQuestionBankDao()->create(array('name' => $courseSet['title'], 'categoryId' => $defaultCategory['id'], 'fromCourseSetId' => $courseSet['id']));
-            $bankNum++;
+            $questionBank = $this->getQuestionBankDao()->create(array(
+                'name' => $courseSet['title'],
+                'categoryId' => $category['id'],
+                'fromCourseSetId' => $courseSet['id'],
+                'orgId' => $courseSet['orgId'],
+                'orgCode' => $courseSet['orgCode']
+            ));
+            $this->getQuestionBankCategoryService()->waveCategoryBankNum($category['id'], 1);
             $teachers = $this->getCourseMemberService()->findCourseSetTeachers($courseSet['id']);
             $this->getQuestionBankMemberService()->batchCreateMembers($questionBank['id'], ArrayToolkit::column($teachers, 'userId'));
         }
-        $this->getQuestionBankCategoryService()->waveCategoryBankNum($defaultCategory['id'], $bankNum);
 
         $nextPage = $this->getNextPage($count, $page);
         if (empty($nextPage)) {
@@ -274,7 +299,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $questionBanks = $this->getQuestionBankService()->searchQuestionBanks(array(), array(), $start, $this->pageSize);
         $questionBanks = ArrayToolkit::index($questionBanks, 'fromCourseSetId');
         foreach ($questionBanks as $courseSetId => $questionBank) {
-            $questions = $this->getQuestionService()->search(
+            $questions = $this->getQuestionDao()->search(
                 array('courseSetId' => $courseSetId, 'parentId' => 0),
                 array(),
                 0,
@@ -285,7 +310,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $courses = ArrayToolkit::index($courses, 'id');
             $tasks = $this->getTaskService()->findTasksByCourseSetId($courseSetId);
             $tasks = ArrayToolkit::index($tasks, 'id');
-            
+
             $parentCategory = $this->getQuestionCategoryDao()->create(
                 array('bankId' => $questionBank['id'], 'parentId' => 0, 'name' => $questionBank['name'])
             );
@@ -536,6 +561,11 @@ class EduSohoUpgrade extends AbstractUpdater
         return $this->createDao('Question:CategoryDao');
     }
 
+    protected function getQuestionBankCategoryDao()
+    {
+        return $this->createDao('QuestionBank:CategoryDao');
+    }
+
     /**
      * @return \Biz\CloudPlatform\Service\AppService
      */
@@ -630,6 +660,14 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getTestpaperActivityService()
     {
         return $this->createService('Activity:TestpaperActivityService');
+    }
+
+    /**
+     * @return \Biz\Org\Service\OrgService
+     */
+    protected function getOrgService()
+    {
+        return $this->createService('Org:OrgService');
     }
 }
 
