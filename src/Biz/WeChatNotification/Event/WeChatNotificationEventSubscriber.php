@@ -42,6 +42,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             'exam.reviewed' => 'onTestpaperReviewd',
             'payment_trade.paid' => 'onPaid',
             'course.task.create.sync' => 'onTaskCreateSync',
+            'course.task.update.sync' => 'onTaskUpdateSync',
             'course.task.publish.sync' => 'onTaskPublishSync',
             'course.thread.create' => 'onCourseQuestionCreate',
             'thread.create' => 'onClassroomQuestionCreate',
@@ -232,6 +233,20 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             $tasks = $this->getCopiedTasks($task);
 
             $this->sendTasksPublishNotification($tasks);
+        }
+    }
+
+    public function onTaskUpdateSync(Event $event)
+    {
+        $task = $event->getSubject();
+        if ('live' == $task['type']) {
+            $copiedTasks = $this->getCopiedTasks($task);
+            foreach ($copiedTasks as $copiedTask) {
+                $this->deleteLiveNotificationJob($copiedTask);
+                if ('published' == $copiedTask['status']) {
+                    $this->registerLiveNotificationJob($copiedTask);
+                }
+            }
         }
     }
 
