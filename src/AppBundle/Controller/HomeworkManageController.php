@@ -233,31 +233,6 @@ class HomeworkManageController extends BaseController
         return $essayQuestions;
     }
 
-    protected function getQuestionRanges($courseId)
-    {
-        if (empty($courseId)) {
-            return array();
-        }
-
-        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseId);
-
-        return ArrayToolkit::index($courseTasks, 'id');
-    }
-
-    protected function sortType($types)
-    {
-        $newTypes = array('single_choice', 'choice', 'uncertain_choice', 'fill', 'determine', 'essay', 'material');
-
-        foreach ($types as $key => $value) {
-            if (!in_array($value, $newTypes)) {
-                $k = array_search($value, $newTypes);
-                unset($newTypes[$k]);
-            }
-        }
-
-        return $newTypes;
-    }
-
     protected function findRelatedData($activity, $paper)
     {
         $relatedData = array();
@@ -363,19 +338,9 @@ class HomeworkManageController extends BaseController
         return $this->createService('Course:CourseSetService');
     }
 
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
-    }
-
     protected function getCourseTaskService()
     {
         return $this->createService('Task:TaskService');
-    }
-
-    protected function getUserService()
-    {
-        return $this->createService('User:UserService');
     }
 
     protected function getActivityService()

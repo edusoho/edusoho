@@ -48,7 +48,6 @@
                 {% for key,questionItem in questionItems %}
                   {% set questionId = questionItem.questionId %}
                   {% set question = questions[questionId] %}
-                  {#{% include 'WebBundle:QuestionManage:question-tr.html.twig'%}#}
                   {% include 'question-manage/question-tr.html.twig'%}
                 {% endfor %}
               {% endif %}

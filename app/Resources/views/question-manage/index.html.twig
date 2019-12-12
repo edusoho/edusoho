@@ -4,7 +4,6 @@
 {% block title %}{{'course.question_manage'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'question' %}
-{% do script(['libs/jquery-intro.js', 'app/js/question-manage/index.js',]) %}
 
 {% block main %}
   {% include 'testpaper/manage/move-tip.html.twig' %}

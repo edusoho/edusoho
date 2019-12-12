@@ -256,36 +256,6 @@ class ManageController extends BaseController
         ));
     }
 
-    public function previewAction(Request $request, $courseSetId, $testpaperId)
-    {
-        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-        if (!$testpaper || $testpaper['courseSetId'] != $courseSetId) {
-            return $this->createMessageResponse('error', 'testpaper not found');
-        }
-
-        if ('closed' === $testpaper['status']) {
-            return $this->createMessageResponse('warning', 'testpaper already closed');
-        }
-
-        $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
-
-        $total = $this->getTestpaperService()->countQuestionTypes($testpaper, $questions);
-
-        $attachments = $this->getTestpaperService()->findAttachments($testpaper['id']);
-
-        return $this->render('testpaper/manage/preview.html.twig', array(
-            'questions' => $questions,
-            'limitedTime' => $testpaper['limitedTime'],
-            'paper' => $testpaper,
-            'paperResult' => array(),
-            'total' => $total,
-            'attachments' => $attachments,
-            'questionTypes' => $this->getTestpaperService()->getCheckedQuestionTypeBySeq($testpaper),
-        ));
-    }
-
     public function resultAnalysisAction(Request $request, $targetId, $targetType, $activityId, $studentNum)
     {
         $activity = $this->getActivityService()->getActivity($activityId);
@@ -614,36 +584,6 @@ class ManageController extends BaseController
         return $essayQuestions;
     }
 
-    protected function getQuestionTypes()
-    {
-        $typesConfig = $this->get('extension.manager')->getQuestionTypes();
-
-        $types = array();
-        foreach ($typesConfig as $type => $typeConfig) {
-            $types[$type] = array(
-                'name' => $typeConfig['name'],
-                'hasMissScore' => $typeConfig['hasMissScore'],
-                'seqNum' => $typeConfig['seqNum'],
-            );
-        }
-
-        return $types;
-    }
-
-    protected function getQuestionRanges($testpaperId)
-    {
-        $items = $this->getTestpaperService()->findItemsByTestId($testpaperId);
-        $questionIds = ArrayToolkit::column($items, 'questionId');
-
-        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
-        $taskIds = ArrayToolkit::column($questions, 'lessonId');
-
-        $courseTasks = $this->getTaskService()->findTasksByIds($taskIds);
-        $courseTasks = ArrayToolkit::index($courseTasks, 'id');
-
-        return $courseTasks;
-    }
-
     protected function findRelatedData($activity, $paper)
     {
         $relatedData = array();
@@ -808,11 +748,6 @@ class ManageController extends BaseController
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
-    }
-
-    protected function getFileService()
-    {
-        return $this->createService('Content:FileService');
     }
 
     protected function getTokenService()

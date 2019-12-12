@@ -10,7 +10,6 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Question\Service\QuestionService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -114,14 +113,6 @@ class ManageController extends BaseController
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
-    }
-
-    /**
-     * @return ServiceKernel
-     */
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
     }
 
     /**
