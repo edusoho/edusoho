@@ -2,6 +2,7 @@ import './video';
 import messenger from './messenger';
 import Drag from './drag';
 import Cookies from 'js-cookie';
+import { htmlEscape } from 'app/common/unit.js';
 
 let drag = (initMarkerArry, mediaLength, messenger) => {
   let drag = new Drag({
@@ -167,6 +168,16 @@ class Manage {
       dropdownAutoWidth: true,
       treeviewInitState: 'collapsed',
       placeholderOption: 'first',
+      formatResult: function(item) {
+        let text = htmlEscape(item.text);
+        if (!item.id) {
+          return text;
+        }
+        return `<div class="select2-result-text"><span class="select2-match"></span><span><i class="es-icon es-icon-tiku"></i>${text}</span></div>`;
+      },
+      dropdownCss: {
+        width: ''
+      },
     });
   }
 

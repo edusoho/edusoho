@@ -9193,6 +9193,7 @@ question_reedit.select_question_category: --Select category--
 question_reedit.category_text: Category
 question_reedit.category_empty: None
 question_plus_upgrade_tip: 'The current version of the plug-in is too low, you can continue to use the old template for importing after upgrading the "QuestionPlus" plug-in in the background.'
+question_bank.to_select.hint: Please select a question bank
 
 # 新版后台开始
 
