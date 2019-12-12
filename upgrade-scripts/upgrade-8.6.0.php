@@ -274,15 +274,18 @@ class EduSohoUpgrade extends AbstractUpdater
         $questionBanks = $this->getQuestionBankService()->searchQuestionBanks(array(), array(), $start, $this->pageSize);
         $questionBanks = ArrayToolkit::index($questionBanks, 'fromCourseSetId');
         foreach ($questionBanks as $courseSetId => $questionBank) {
-            $questions = $this->getQuestionService()->search(array('courseSetId' => $courseSetId, 'parentId' => 0), array(), 0, PHP_INT_MAX);
+            $questions = $this->getQuestionService()->search(
+                array('courseSetId' => $courseSetId, 'parentId' => 0),
+                array(),
+                0,
+                PHP_INT_MAX,
+                array('id', 'courseId', 'lessonId')
+            );
             $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
             $courses = ArrayToolkit::index($courses, 'id');
             $tasks = $this->getTaskService()->findTasksByCourseSetId($courseSetId);
             $tasks = ArrayToolkit::index($tasks, 'id');
-
-            array_walk($questions, function(&$item) {
-                $item = ArrayToolkit::parts($item, array('id', 'courseId', 'lessonId'));
-            });
+            
             $parentCategory = $this->getQuestionCategoryDao()->create(
                 array('bankId' => $questionBank['id'], 'parentId' => 0, 'name' => $questionBank['name'])
             );
