@@ -14,7 +14,7 @@ class AddQuestionBank extends Migration
         $connection->exec("
             CREATE TABLE IF NOT EXISTS `question_bank` (
               `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-              `name` varchar(64) NOT NULL COMMENT '题库名称',
+              `name` varchar(1024) NOT NULL COMMENT '题库名称',
               `testpaperNum` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '试卷数量',
               `questionNum` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '题目数量',
               `categoryId` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '分类id',
