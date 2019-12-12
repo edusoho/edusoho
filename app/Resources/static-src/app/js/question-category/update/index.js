@@ -11,7 +11,7 @@ class CategoryUpdate {
         'name': {
           required: true,
           maxlength: 30,
-          chinese_alphanumeric: true
+          visible_character: true
         },
       },
       ajax: true,
