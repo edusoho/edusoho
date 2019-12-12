@@ -1255,7 +1255,7 @@ t.add("admin.mobile_manage.discovery_upgrade_madal.notice_successed", "\u5347\u7
 t.add("admin.mobile_manage.discovery_upgrade_madal.notice_failed", "\u5347\u7ea7\u5931\u8d25", "js", "zh_CN");
 t.add("admin.mobile_manage.discovery_upgrade_madal.notice_upgraded", "\u65e0\u6cd5\u91cd\u590d\u5347\u7ea7", "js", "zh_CN");
 t.add("course.plan_task.lessons_publish_status", "\u5df2\u53d1\u5e03\u8bfe\u65f6\u6570\uff1a%publishedNum%<br\/>\u672a\u53d1\u5e03\u8bfe\u65f6\u6570\uff1a%unpublishedNum%", "js", "zh_CN");
-t.add("admin_v2.user.cloude_sms_enable_hint", "\u8bf7\u5148\u5230\u3010\u7ba1\u7406\u540e\u53f0\u3011-\u3010\u5e94\u7528\u4e2d\u5fc3\u3011-\u3010\u4e91\u670d\u52a1\u3011-\u3010\u4e91\u77ed\u4fe1\u3011\u4e2d\u5f00\u542f\u4e91\u77ed\u4fe1\u54e6~", "js", "zh_CN");
+t.add("admin_v2.user.cloude_sms_enable_hint", "\u8bf7\u5148\u5230\u3010\u7ba1\u7406\u540e\u53f0\u3011-\u3010\u4e91\u5e02\u573a\u3011-\u3010\u4e91\u670d\u52a1\u3011-\u3010\u4e91\u77ed\u4fe1\u3011\u4e2d\u5f00\u542f\u4e91\u77ed\u4fe1\u54e6~", "js", "zh_CN");
 t.add("admin_v2.homepage.quick_entrance.hint", "\u6700\u591a\u8bbe\u7f6e7\u4e2a\u5feb\u6377\u5165\u53e3\u4f4d", "js", "zh_CN");
 t.add("admin_v2.homepage.mini_program.title", "\u626b\u7801\u6253\u5f00\u5c0f\u7a0b\u5e8f", "js", "zh_CN");
 t.add("admin.switch_old_version.permission_error", "\u8bf7\u8054\u7cfb\u8d85\u7ea7\u7ba1\u7406\u5458\u6216\u7ba1\u7406\u5458\u64cd\u4f5c", "js", "zh_CN");
