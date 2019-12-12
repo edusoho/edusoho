@@ -107,7 +107,7 @@ export default {
     return {
       title: 'EduSoho 微网校',
       modules: [],
-      saveFlag: 0,
+      saveFlag: false,
       incomplete: true,
       validateResults: [],
       currentModuleIndex: '0',
@@ -358,7 +358,7 @@ export default {
       });
     },
     save(mode, needTrans = true) {
-      this.saveFlag ++;
+      this.saveFlag=true;
 
       // 验证提交配置
       const validateAndSubmit = () => {
@@ -370,17 +370,17 @@ export default {
         if (needTrans) {
           data = ObjectArray2ObjectByKey(this.modules, 'moduleType');
         }
-
         if (this.incomplete) {
           return;
         }
+
         this.saveDraft({
           data,
           mode,
           portal: this.portal,
           type: 'discovery',
         }).then(() => {
-
+          this.saveFlag=false;
           if (isPublish) {
             this.$message({
               message: '发布成功',
@@ -388,28 +388,30 @@ export default {
             });
             return;
           }
-          console.log('成功')
           this.$store.commit(types.UPDATE_DRAFT, data);
-          this.$router.push({
-            name: 'preview',
-            query: {
-              times: 10,
-              preview: isPublish ? 0 : 1,
-              duration: 60 * 5,
-              from: this.pathName,
-            }
-          });
+          this.toPreview(isPublish);
         }).catch(err => {
+          this.saveFlag=false;
           this.$message({
             message: err.message || '发布失败，请重新尝试',
             type: 'error'
           });
         })
       };
-
       setTimeout(() => {
         validateAndSubmit();
       }, 500); // 点击 预览／发布 时去验证所有组件，会有延迟，目前 low 的解决方法延迟 500ms 判断验证结果
+    },
+    toPreview(isPublish){
+          this.$router.push({
+           name: 'preview',
+          query: {
+              times: 10,
+              preview: isPublish ? 0 : 1,
+              duration: 60 * 5,
+              from: this.pathName,
+            }
+          });
     },
     validate() {
       for (var i = 0; i < this.modules.length; i++) {
