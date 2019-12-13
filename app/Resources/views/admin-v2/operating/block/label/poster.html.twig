@@ -1,0 +1,16 @@
+{% set first = 1 %}
+{% for dataId,data in  block.data[code]|default(null) %}
+  {% if first == 1 %}
+    <li class="poster-table active">
+      <a class="poster-btn" href="#poster-{{ dataId }}" data-toggle="tab"><span class="js-move-icon mrm"><i class="es-icon es-icon-yidong"></i></span><span class="mlm">{{ data.alt }}</span></a>
+      <input type="hidden" name="data[{{ code }}][{{ dataId }}][alt]" value="{{ data.alt }}">
+    </li>
+  {% else %}
+    <li class="poster-table">
+      <a class="poster-btn" href="#poster-{{ dataId }}" data-toggle="tab"><span class="js-move-icon mrm"><i class="es-icon es-icon-yidong"></i></span><span class="mlm">{{ data.alt }}</span></a>
+      <input type="hidden" name="data[{{ code }}][{{ dataId }}][alt]" value="{{ data.alt }}">
+    </li>
+  {% endif %}
+  {% set first = 0 %}
+
+{% endfor %}

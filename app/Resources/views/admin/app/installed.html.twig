@@ -15,7 +15,7 @@
       <a href=" {{ url('admin_app_installed', {postStatus: 'app'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'app'%}btn-primary{% endif %}">{{'admin.app_center.type.app'|trans}}</a>
   </div>
 
-  <table class="table table-striped table-hover">
+  <table class="table table-striped table-hover js-table" data-url="{{ path('admin_app_upgrades_count')}}" >
     <thead>
     </thead>
     <tbody>

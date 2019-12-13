@@ -1743,7 +1743,7 @@ class EduCloudController extends BaseController
     public function getAdAction()
     {
         $api = CloudAPIFactory::create('root');
-        $result = $api->get('/edusoho-ad');
+        $result = $api->get('/edusoho-ad', array('adType' => 'oldBackground'));
 
         return $this->createJsonResponse($result);
     }

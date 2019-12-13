@@ -1,0 +1,30 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_setting_avatar' %}
+{% set script_controller = 'setting/default-user-avatar' %}
+
+{% block main %}
+{{ web_macro.flash_messages() }}
+
+ <fieldset>
+    <div class="form-group">
+      <div class="col-md-3 control-label"></div>
+      <div class="controls col-md-8 radios" id="default-avatar" >
+        {{ radios('avatar', {1:'admin.user_avatar.customer_default_avatar'|trans, 0:'admin.user_avatar.system_default_avatar'|trans}, defaultSetting.defaultAvatar|default(0)) }}
+        <p>{{'admin.user_avatar.avatar.tips'|trans|raw}}</p>
+        {% include 'admin-v2/system/user-setting/default-avatar.html.twig' %}
+      </div>
+    </div>
+  </fieldset>
+  <form method="post" action="{{ path('admin_v2_setting_avatar') }}" >
+    <div class="form-group mll">
+        <div class="col-md-3 control-label"></div>
+        <div class="controls col-md-8">
+          <button type="submit" class="btn btn-primary mtl">{{'form.btn.submit'|trans}}</button>  
+        </div>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      <input type="hidden" name="defaultAvatar" value="{{ defaultSetting.defaultAvatar|default(0) }}">
+    </div>
+  </form>
+
+{% endblock %}

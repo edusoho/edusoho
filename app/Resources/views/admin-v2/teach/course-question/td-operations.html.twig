@@ -1,0 +1,24 @@
+{% if type == 'unPosted'%}
+
+      <div class="btn-group">
+        <a class="btn btn-default btn-sm remind-teachers" title="{{'admin.course_question.td_operations.remind_teachers_btn'|trans}}" 
+        data-url="{{ path('admin_v2_question_remind_teachers', {courseId:question.courseId, questionId:question.id}) }}">
+          <span class="glyphicon glyphicon-bell"></span>{{'admin.course_question.td_operations.remind_teachers_btn'|trans}}
+        </a>
+        <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu pull-right">
+          <li>
+            <a class="btn" data-role="item-delete" data-name="{{'admin.course_question.td_operations.dropdown.delete_question_btn'|trans}}" data-url="{{ path('admin_v2_course_thread_delete', {id:question.id}) }}">
+              <span class="glyphicon glyphicon-trash"></span> {{'admin.course_question.td_operations.dropdown.delete_question_btn'|trans}}</a>
+          </li>
+        </ul>
+
+      </div>
+
+{% elseif type == "all" %}
+
+      <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{'admin.course_question.td_operations.dropdown.delete_question_btn'|trans}}" data-url="{{ path('admin_v2_course_thread_delete', {id:question.id}) }}">{{'form.btn.delete'|trans}}</button>
+      
+{% endif %}

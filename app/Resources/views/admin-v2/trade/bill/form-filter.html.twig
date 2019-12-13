@@ -1,0 +1,34 @@
+<form id="bill-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+  <div class="form-group ">
+    <input class="form-control" type="text" id="startTime" name="startTime" value="{{ app.request.query.get('startTime') }}" placeholder="{{ 'form.placeholder.start_date'|trans }}" autocomplete="off">
+    -
+    <input class="form-control" type="text" id="endTime" name="endTime" value="{{ app.request.query.get('endTime') }}" placeholder="{{ 'form.placeholder.end_date'|trans }}" autocomplete="off">
+  </div>
+  {% if  menu == 'admin_v2_bill_cash' %}
+    <div class="form-group">
+      <select class="form-control" name="platform">
+        {% set newPayment = dict('paymentSelect') %}
+          {% set newPayment = newPayment|merge({'none':'cashflow.refund'|trans}) %}
+        {{ select_options(newPayment, app.request.get('platform'), 'order.payment_pattern'|trans) }}
+      </select>
+    </div>
+  {% endif %}
+  <div class="form-group">
+    <select class="form-control" name="keywordType">
+      {% set options = {'': 'admin.cashflow.keyword_default'|trans, 'buyerNickname': 'cashflow.user_name'|trans,'sn': 'cashflow.sn'|trans,'order_sn': 'cashflow.order_sn'|trans,'title_like': 'cashflow.title'|trans, 'trade_sn': 'cashflow.trade_sn'|trans} %}
+      {% if  menu == 'admin_v2_bill_cash' %}
+        {% set options = options|merge({ 'platform_sn': 'cashflow.platform_sn'|trans}) %}
+      {% endif %}
+      {{ select_options(options, app.request.query.get('keywordType')) }}
+    </select>
+  </div>
+<div class="form-group">
+    <input type="text" id="" name="keyword" style="width: 160px;" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{ 'admin.cashflow.keyword'|trans }}">
+</div>
+<button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
+
+{% include 'export/export-btn.html.twig' with
+  {'exportFileName': exportName,
+  'targetFormId': 'bill-search-form'}
+%}
+</form>

@@ -52,6 +52,11 @@ class AppServiceImpl extends BaseService implements AppService
         return ArrayToolkit::index($apps, 'code');
     }
 
+    public function findAppsByTypes(array $types)
+    {
+        return $this->getAppDao()->findByTypes($types);
+    }
+
     public function getCenterApps()
     {
         $apps = $this->createAppClient()->getApps();
