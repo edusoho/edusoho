@@ -22,6 +22,7 @@ class PermissionExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFilter('parent_permission', array($this, 'getParentPermission')),
+            new \Twig_SimpleFilter('visible_menus', array($this, 'getVisibleMenus')),
         );
     }
 
@@ -51,18 +52,45 @@ class PermissionExtension extends \Twig_Extension
     public function getSideBar($code)
     {
         $permission = $this->getNavPermission($code);
-        $group = $this->createPermissionBuilder()->groupedV2Permissions($permission['code']);
+        $groups = $this->createPermissionBuilder()->groupedV2Permissions($permission['code']);
 
-        $permissionMenus = $this->buildSidebarPermissionMenus($group);
+        $permissionMenus = $this->buildSidebarPermissionMenus($groups);
 
         return $permissionMenus;
     }
 
-    public function getFirstChild($menu)
+    /**
+     * @param $menu
+     * @param bool $filterVisible         默认过滤visible != false 的第一个
+     * @param bool $allowOriginPermission 是否允许加载整个树，忽略权限 （默认true做兼容）
+     *
+     * @return array|mixed
+     */
+    public function getFirstChild($menu, $filterVisible = true, $allowOriginPermission = true)
     {
-        $menus = $this->getSubPermissions($menu['code']);
+        if (!$menu) {
+            return array();
+        }
+
+        return $this->getFirstChildByCode($menu['code'], $filterVisible, $allowOriginPermission);
+    }
+
+    /**
+     * @param $code
+     * @param bool $filterVisible         默认过滤visible != false 的第一个
+     * @param bool $allowOriginPermission 是否允许加载整个树，忽略权限 （默认true做兼容）
+     *
+     * @return array|mixed
+     */
+    public function getFirstChildByCode($code, $filterVisible = true, $allowOriginPermission = true)
+    {
+        $menus = $this->getSubPermissions($code);
 
         if (empty($menus)) {
+            if (!$allowOriginPermission) {
+                return array();
+            }
+
             $permissions = $this->createPermissionBuilder()->getOriginSubPermissions($menu['code']);
             if (empty($permissions)) {
                 return array();
@@ -71,20 +99,8 @@ class PermissionExtension extends \Twig_Extension
             }
         }
 
-        return current($menus);
-    }
-
-    public function getFirstChildByCode($code)
-    {
-        $menus = $this->getSubPermissions($code);
-
-        if (empty($menus)) {
-            $permissions = $this->createPermissionBuilder()->getOriginSubPermissions($code);
-            if (empty($permissions)) {
-                return array();
-            } else {
-                $menus = $permissions;
-            }
+        if ($filterVisible) {
+            return $this->getFirstVisibleMenu($menus);
         }
 
         return current($menus);
@@ -183,6 +199,18 @@ class PermissionExtension extends \Twig_Extension
         return $parent;
     }
 
+    public function getVisibleMenus($menus)
+    {
+        $twig = $this->container->get('twig');
+        foreach ($menus as $key => $menu) {
+            if (isset($menu['visible']) && !$this->evalExpression($twig, array(), $menu['visible'])) {
+                unset($menus[$key]);
+            }
+        }
+
+        return $menus;
+    }
+
     /**
      * @param $code
      * @param string $type admin|admin_v2
@@ -240,7 +268,7 @@ class PermissionExtension extends \Twig_Extension
             $group = $this->buildGroupPermissionMenus($group);
 
             //组下有菜单才显示，如果没有显示的菜单则组也不显示
-            if ($group['grade'] == 0 && isset($group['nodes'])) {
+            if (0 == $group['grade'] && isset($group['nodes'])) {
                 $permissions[] = $group;
             }
         }
@@ -296,16 +324,16 @@ class PermissionExtension extends \Twig_Extension
         return false;
     }
 
-    private function removeEmptyGroup($permissions)
+    private function getFirstVisibleMenu($menus)
     {
-        $array = array();
-        foreach ($permissions as $key => $permission) {
-            if ($permission['grade'] == 0 && !isset($permission['nodes'])) {
-                unset($permissions[$key]);
+        $twig = $this->container->get('twig');
+        foreach ($menus as $menu) {
+            if (!isset($menu['visible']) || isset($menu['visible']) && $this->evalExpression($twig, array(), $menu['visible'])) {
+                return $menu;
             }
         }
 
-        return $array;
+        return array();
     }
 
     public function getName()

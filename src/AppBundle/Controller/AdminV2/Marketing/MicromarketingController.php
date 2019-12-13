@@ -10,6 +10,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class MicromarketingController extends BaseController
 {
+    public function bootAction(Request $request)
+    {
+        return $this->render('admin-v2/marketing/micro-marketing/boot.html.twig');
+    }
+
     public function loginAction(Request $request)
     {
         $storage = $this->getSettingService()->get('storage');

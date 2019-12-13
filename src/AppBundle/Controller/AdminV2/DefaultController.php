@@ -57,26 +57,6 @@ class DefaultController extends BaseController
         ));
     }
 
-    public function questionRemindTeachersAction(Request $request, $courseId, $questionId)
-    {
-        $course = $this->getCourseService()->getCourse($courseId);
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $question = $this->getThreadService()->getThread($courseId, $questionId);
-
-        $message = array(
-            'courseTitle' => $courseSet['title'],
-            'courseId' => $course['id'],
-            'threadId' => $question['id'],
-            'questionTitle' => strip_tags($question['title']),
-        );
-
-        foreach ($course['teacherIds'] as $receiverId) {
-            $result = $this->getNotificationService()->notify($receiverId, 'questionRemind', $message);
-        }
-
-        return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
-    }
-
     public function statisticsDailyAction(Request $request)
     {
         $todayTimeStart = strtotime(date('Y-m-d', time()));
@@ -415,16 +395,40 @@ class DefaultController extends BaseController
         ));
     }
 
+    public function questionRemindTeachersAction(Request $request, $courseId, $questionId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $question = $this->getThreadService()->getThread($courseId, $questionId);
+
+        $message = array(
+            'courseTitle' => $courseSet['title'],
+            'courseId' => $course['id'],
+            'threadId' => $question['id'],
+            'questionTitle' => strip_tags($question['title']),
+        );
+
+        foreach ($course['teacherIds'] as $receiverId) {
+            $this->getNotificationService()->notify($receiverId, 'questionRemind', $message);
+        }
+
+        return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
+    }
+
     protected function getDisabledCloudServiceCount()
     {
         $disabledCloudServiceCount = 0;
 
         $settingKeys = array(
+//            云直播
             'course.live_course_enabled' => '',
+//            云短信
             'cloud_sms.sms_enabled' => '',
+//            云搜索
             'cloud_search.search_enabled' => '',
+//            云问答
             'cloud_consult.cloud_consult_setting_enabled' => 0,
-            'cloud_email_crm.status' => 'enable',
+//            云视频、云文档
             'storage.upload_mode' => 'cloud',
         );
 
@@ -433,7 +437,7 @@ class DefaultController extends BaseController
             if (empty($expect)) {
                 $disabledCloudServiceCount += empty($value) ? 1 : 0;
             } else {
-                $disabledCloudServiceCount += empty($value) || $value != $expect ? 1 : 0;
+                $disabledCloudServiceCount += empty($value) || $value != $expect ? 2 : 0;
             }
         }
 

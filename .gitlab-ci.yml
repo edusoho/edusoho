@@ -45,7 +45,6 @@ check env:
       - develop
       - master
       - trigger
-      - project/admin-v2
     variables:
       - $REPOSITORY == "main"
 
@@ -93,7 +92,7 @@ check env:
 
 7.0 For Non-Develop:
   stage: test
-  image: codeages/ci-php:7.0-7
+  image: codeages/ci-php:7.1.33
   services:
     - mysql:5.5
     - redis:latest
@@ -110,12 +109,12 @@ check env:
 
 7.0 For Develop:
   stage: test
-  image: codeages/ci-php:7.0-7
+  image: codeages/ci-php:7.1.33
   services:
     - mysql:5.5
     - redis:latest
   script:
-    - sed -i 's/memory_limit.*/memory_limit = 3000M/g' /etc/php/7.0/phpdbg/php.ini
+    - sed -i 's/memory_limit.*/memory_limit = 3000M/g' /etc/php/7.1/phpdbg/php.ini
     - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitA2B --coverage-clover reports_tmp/phpunit.coverage.xml_1 --log-junit reports_tmp/phpunit.xml_1
     - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitC2C --coverage-clover reports_tmp/phpunit.coverage.xml_2 --log-junit reports_tmp/phpunit.xml_2
     - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitD2D --coverage-clover reports_tmp/phpunit.coverage.xml_3 --log-junit reports_tmp/phpunit.xml_3
@@ -132,6 +131,7 @@ check env:
   only:
     refs:
       - develop
+      - project/admin-v2
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"

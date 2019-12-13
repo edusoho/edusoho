@@ -39,16 +39,22 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySettings;
     }
 
+    public function getAppDiscoveryVersion()
+    {
+        $appDiscoverySetting = $this->getSettingService()->get('app_discovery', array());
+
+        return empty($appDiscoverySetting['version']) ? 0 : (int) $appDiscoverySetting['version'];
+    }
+
     public function courseListFilter($discoverySetting, $usage = 'show')
     {
         if ('condition' == $discoverySetting['data']['sourceType']) {
+            $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
             if (!empty($discoverySetting['data']['lastDays'])) {
                 $timeRange = TimeMachine::getTimeRangeByDays($discoverySetting['data']['lastDays']);
                 $conditions['outerStartTime'] = $timeRange['startTime'];
                 $conditions['outerEndTime'] = $timeRange['endTime'];
             }
-
-            $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
             $conditions['categoryId'] = $discoverySetting['data']['categoryId'];
             $sort = $this->getSortByStr($discoverySetting['data']['sort']);
             $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
@@ -84,13 +90,12 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     public function classroomListFilter($discoverySetting, $usage = 'show')
     {
         if ('condition' == $discoverySetting['data']['sourceType']) {
+            $conditions = array('status' => 'published', 'showable' => 1);
             if (!empty($discoverySetting['data']['lastDays'])) {
                 $timeRange = TimeMachine::getTimeRangeByDays($discoverySetting['data']['lastDays']);
                 $conditions['outerStartTime'] = $timeRange['startTime'];
                 $conditions['outerEndTime'] = $timeRange['endTime'];
             }
-
-            $conditions = array('status' => 'published', 'showable' => 1);
             $conditions['categoryId'] = $discoverySetting['data']['categoryId'];
             $sort = $this->getSortByStr($discoverySetting['data']['sort']);
             $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
@@ -128,7 +133,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 $target = empty($id) ? null : $this->getTarget($link['type'], $id);
                 if (empty($target)) {
                     $link['target'] = null;
-                    $link['url'] = '';
+                    $link['url'] = 'url' != $link['type'] ? '' : $link['url'];
                     $slideShow['link'] = $link;
                 }
             }
@@ -215,6 +220,10 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         $currentBatches = array();
         $currentBatches = $this->getCouponBatchService()->findBatchsByIds($batchIds);
         foreach ($batches as $key => &$batch) {
+            if ('discount' == $batch['type']) {
+                $batch['rate'] = strval(floatval($batch['rate']));
+            }
+
             $batchId = $batch['id'];
             if (empty($currentBatches[$batchId])) {
                 unset($batches[$key]);
@@ -368,7 +377,8 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     public function getDefaultDiscovery($portal)
     {
         $result = array();
-        if ('h5' == $portal) {
+
+        if (in_array($portal, array('h5', 'apps'))) {
             $posters = $this->getBlockService()->getPosters();
             $slides = array();
             foreach ($posters as $poster) {

@@ -10,7 +10,7 @@ admin_v2_homepage_daily_statistics:
     path: /homepage/data_statistics/daily
     defaults: { _controller: AppBundle:AdminV2/Default:statisticsDaily }
 
-admin_v2_homepage_newconer_task:
+admin_v2_homepage_newcomer_task:
     path: /homepage/newcomer_task
     defaults: { _controller: AppBundle:AdminV2/Default:newcomer }
 
@@ -620,16 +620,25 @@ admin_v2_coupon_setting:
     path: /setting/coupon
     defaults: { _controller: AppBundle:AdminV2/Marketing/Coupon:setting }
 
+# 营销-营销管理-微营销-入口页
+admin_v2_login_micromarketing_boot:
+  path: /login/marketing/boot
+  defaults: { _controller: AppBundle:AdminV2/Marketing/Micromarketing:boot }
+
 # 营销-营销管理-微营销
 admin_v2_login_micromarketing:
     path: /login/marketing
     defaults: { _controller: AppBundle:AdminV2/Marketing/Micromarketing:login }
 
 # 营销-渠道管理-分销
+admin_v2_login_distributor_boot:
+  path: /login/distributor/boot
+  defaults: { _controller: AppBundle:AdminV2/Marketing/Distributor:boot }
+
+# 营销-渠道管理-分销
 admin_v2_login_distributor:
     path: /login/distributor
     defaults: { _controller: AppBundle:AdminV2/Marketing/Distributor:login }
-
 
 # 运营-网校装修-微网校装修
 admin_v2_wap_set:
@@ -650,6 +659,26 @@ admin_v2_setting_mobile:
     path:  /setting/mobile
     defaults: { _controller: AppBundle:AdminV2/Operating/MobileSetting:mobile }
     permissions: [admin_v2_mobile_settings]
+
+admin_v2_operation_mobile_upgrade:
+    path:  /operation/mobile_upgrade
+    defaults: { _controller: AppBundle:AdminV2/Operating/MobileSetting:mobileUpgrade }
+    permissions: [admin_operation_mobile_banner_manage]
+
+admin_v2_operation_mobile_select:
+    path:  /operation/mobile/select
+    defaults: { _controller: AppBundle:AdminV2/Operating/MobileSetting:mobileSelect }
+    permissions: [admin_operation_mobile_select_manage]
+
+admin_v2_setting_mobile_discoveries:
+    path:  /setting/mobile_discoveries
+    defaults: { _controller: AppBundle:AdminV2/Operating/MobileSetting:mobileDiscoveries }
+    permissions: [admin_v2_setting_mobile]
+
+admin_v2_operation_mobile_customization_upgrade:
+    path:  /operation/mobile/customization_upgrade
+    defaults: { _controller: AppBundle:AdminV2/Operating/MobileSetting:customizationUpgrade }
+    methods: [POST]
 
 admin_v2_mobile_picture_upload:
     path:  /setting/mobile/picture/upload/{type}
@@ -1429,7 +1458,6 @@ admin_v2_generate_short_link:
     path:  /generate/short/link
     defaults: { _controller: AppBundle:AdminV2/Sms:changeLink }
 
-# 不知道该业务属于什么模块
 admin_v2_question_remind_teachers:
     path: /course/{courseId}/question/{questionId}/remindTeachers
     defaults: { _controller: AppBundle:AdminV2/Default:questionRemindTeachers }

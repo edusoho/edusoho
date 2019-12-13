@@ -148,7 +148,6 @@ class DefaultController extends BaseController
             'cloud_sms.sms_enabled' => '',
             'cloud_search.search_enabled' => '',
             'cloud_consult.cloud_consult_setting_enabled' => 0,
-            'cloud_email_crm' => 'status',
             'storage.upload_mode' => 'cloud',
         );
 
@@ -157,7 +156,7 @@ class DefaultController extends BaseController
             if (empty($expect)) {
                 $disabledCloudServiceCount += empty($value) ? 1 : 0;
             } else {
-                $disabledCloudServiceCount += empty($value) || $value != $expect ? 1 : 0;
+                $disabledCloudServiceCount += empty($value) || $value != $expect ? 2 : 0;
             }
         }
 

@@ -10,6 +10,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DistributorController extends BaseController
 {
+    public function bootAction(Request $request)
+    {
+        return $this->render('admin-v2/marketing/distributor/boot.html.twig');
+    }
+
     public function loginAction(Request $request)
     {
         $drpService = $this->getDistributorUserService()->getDrpService();
