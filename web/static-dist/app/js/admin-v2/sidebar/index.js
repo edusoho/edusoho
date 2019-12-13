@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/admin-v2/sidebar/index"],{d5ebfe795ab13e3a673e:function(a,e,d){"use strict";var t=$(".js-side-bar-data").data("value"),s=$(".js-sidebar-container").data("code"),b={data:t,code:s};cd.layout({data:b})}},["d5ebfe795ab13e3a673e"]);

@@ -1,0 +1,33 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_cloud_feature_lab_setting' %}
+
+{% set script_controller = 'feature_lab/setting' %}
+
+{% block main %}
+
+  {% if cloud_info()['ai.face'] %}
+    <div class="clearfix lab-setting-item">
+      <div class="pull-left">
+        <h4>{{ 'user.login.sts_discovery'|trans }}</h4>
+        <div class="text-sm text-muted">{{ 'admin.sts_discovery_function_tip'|trans }}</div>
+      </div>
+      <div class="text-right admin-common-switch mtm">
+        <label
+            class="switch switch-lg switch-green js-switch {% if setting('feature.face_enabled') == 1 %}checked{% endif %}">
+          <input type="checkbox" name="face_enabled" value="1"
+                 {% if setting('feature.face_enabled') == 1 %}checked{% endif %}>
+        </label>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="text-center">
+    <div class="error-content" style="padding: 50px 50px">
+      <h4>
+        {{ 'admin.sts_discovery_feature_tip'|trans }}
+      </h4>
+    </div>
+  </div>
+
+{% endblock %}

@@ -242,5 +242,11 @@ class DefaultServiceProvider implements ServiceProviderInterface
         $biz['queue.connection.database'] = function ($biz) {
             return new DatabaseQueue('database', $biz);
         };
+
+        $biz['role.get_permissions_yml'] = function ($biz) {
+            $role = $biz->service('Role:RoleService');
+
+            return $role->getPermissionsYmlContent();
+        };
     }
 }

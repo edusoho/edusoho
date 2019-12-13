@@ -1,0 +1,10 @@
+
+<div class="admin-sidebar-section__header">{{ 'admin_v2.wechat_official_account.title'|trans }}</div>
+<div class="admin-sidebar-section__body admin-wechat">
+  {% if qrCode.image is defined %}
+    <img src="{{ qrCode.image }}">
+    <div class="admin-wechat__text">{{ 'admin_v2.wechat_official_account.text'|trans }}</div>
+  {% else %}
+    <div class="admin-wechat__placeholder"></div>
+  {% endif %}
+</div>

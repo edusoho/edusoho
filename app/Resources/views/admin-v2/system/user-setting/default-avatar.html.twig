@@ -1,0 +1,41 @@
+<div class="form-group" id="avatar-class"
+{% if setting('default.defaultAvatar') == 0 %}
+style="display:none;"
+{% endif %}
+>
+  <div class="col-md-8 control-label"><b>{{'admin.user_avatar.customer_default_avatar'|trans}}</b></div>
+  <form id="avatar-form" method="post">
+    <div class="controls col-md-8 controls">
+      <img src="{{ filepath('','avatar.png' ) }}">
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label"></div>
+      <div class="controls col-md-8 controls">
+        <p class="help-block">{{'admin.user_avatar.customer_default_avatar.help_block'|trans}}。</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label"></div>
+      <div class="controls col-md-8 controls">
+        <a id="default-avatar-btn" 
+          class="btn btn-default btn-sm"
+          data-upload-token="{{ upload_token('system', 'image') }}"
+          data-goto-url="{{path('admin_v2_setting_default_avatar_crop')}}"
+        >{{'form.btn.upload'|trans}}</a>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="form-group" id="system-avatar-class" 
+{% if setting('default.defaultAvatar') == 1 %}
+style="display:none;"
+{% endif %}
+>
+  <div class="col-md-8 control-label"><b>{{'admin.user_avatar.system_default_avatar'|trans}}</b></div>
+    <div class="controls col-md-8 controls">
+      <img src="{{ asset('assets/img/default/avatar.png') }}">
+    </div>
+</div>

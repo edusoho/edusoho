@@ -1,3 +1,17 @@
+# 0.1.11 (2019-10-29)
+
+* layout组件支持新开页面和active配置，支持new标签样式配置，侧边栏多层级时默认展开
+
+# 0.1.10 (2019-10-22)
+
+* 恢复 解决regeneratorRuntime is not defined引起的bug
+
+# 0.1.9 (2019-10-10)
+
+* 新增后台 layout 组件
+
+* 修改直接引用dist/codeages-design.js 报错 regeneratorRuntime is not defined
+
 # 0.1.8 (2019-07-09)
 
 * upload组件  当选择文件为空时，使用上一次选择的文件而不是直接报错

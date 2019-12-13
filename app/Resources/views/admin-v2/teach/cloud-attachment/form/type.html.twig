@@ -1,0 +1,11 @@
+<ul class="materials-nav nav nav-tabs useType-tabs js-tags-container">
+  <li class="all"><span>{{ 'cloud_attachment.application'|trans }}：</span></li>
+  <li class="active js-useType-btn" data-value=""><a class="item" href="javascript:;">{{ 'cloud_attachment.type.all'|trans }}</a></li>
+  <li class="js-useType-btn " data-value="group"><a class="item" href="javascript:;">{{ 'cloud_attachment.type.group'|trans }}</a></li>
+  <li class="js-useType-btn " data-value="question"><a class="item" href="javascript:;">{{ 'cloud_attachment.type.test_question'|trans }}</a></li>
+  <li class="js-useType-btn " data-value="course"><a class="item" href="javascript:;">{{ 'cloud_attachment.type.course_discussion_area'|trans }}</a></li>
+  <li class="js-useType-btn " data-value="classroom"><a class="item" href="javascript:;">{{ 'cloud_attachment.type.classroom_thread'|trans }}</a></li>
+  <li class="js-useType-btn " data-value="article"><a class="item" href="javascript:;">{{ 'cloud_attachment.type.article'|trans }}</a></li>
+  <input type="hidden" name="useType" value="{{ useType|default('') }}">
+  <input type="hidden" name="resType" value="attachment">
+</ul>

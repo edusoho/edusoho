@@ -1,1 +1,0 @@
-webpackJsonp(["app/js/reward-point/mall/index"],[function(i,n){"use strict";echo.init()}]);

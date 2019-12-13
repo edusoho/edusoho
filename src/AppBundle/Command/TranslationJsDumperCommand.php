@@ -53,7 +53,7 @@ class TranslationJsDumperCommand extends BaseCommand
                 $filePaths = array('web/bundles/translations/');
             } else {
                 $filePaths = array(
-                    'plugins/'.ucfirst($code).'plugin/Resources/public/js/controller/translations/',
+                    'plugins/'.ucfirst($code).'Plugin/Resources/public/js/controller/translations/',
                     'plugins/'.ucfirst($code).'Plugin/Resources/static-src/js/translations/',
                 );
             }

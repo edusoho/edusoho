@@ -1,0 +1,12 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'small' %}
+
+{% block title %}{{ 'admin.edu_cloud.edu_video.delete_success'|trans }}{% endblock %}
+{% block body %}
+  {{ 'admin.edu_cloud.edu_video.delete_ok_confirm'|trans }}
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ 'admin.edu_cloud.edu_video.delete_ok_btn'|trans }}</button>
+{% endblock %}

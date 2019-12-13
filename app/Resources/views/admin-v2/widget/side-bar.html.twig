@@ -1,0 +1,6 @@
+{% do script(['app/js/admin-v2/sidebar/index.js']) %}
+{% set data = side_bar_permission(menu) %}
+<input id="js-side-bar-data" class="hidden js-side-bar-data" data-value="{{ data|json_encode }}">
+<div class="cd-layout-sidebar">
+  <ul class="cd-sidebar-container js-sidebar-container cd-mt24 pl0" data-code="{{ currentMenu.parent }}"></ul>
+</div>

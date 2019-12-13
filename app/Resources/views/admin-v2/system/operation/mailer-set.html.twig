@@ -1,0 +1,148 @@
+{% extends 'admin-v2/layout.html.twig' %}
+{% set script_controller = 'system/mailer' %}
+{% set script_arguments = { registerEmailVerified: setting('auth.email_enabled','closed') } %}
+{% set menu = 'admin_v2_setting_mailer' %}
+{% block main %}
+  {% if is_trial() %}
+    <div class="row form-group">
+      <div class="help-block">
+        </br></br>
+        <script>
+          var _hmt = _hmt || [];
+        </script>
+        <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        <p style="text-align:center;font-size:16px">{{ 'admin.setting.mailer.is_trial.tips'|trans|raw }}
+          <span id="BizQQWPA" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])">
+            <a id="BizQQWPA"
+               href="javascript:"
+               style='text-decoration:none;'>QQ：800023860 </a>。</span>
+        </p>
+        <script type="text/javascript">
+          BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 800023860, selector: 'BizQQWPA'});
+        </script>
+        </br>
+      </div>
+    </div>
+  {% else %}
+    {{ web_macro.flash_messages() }}
+    <form class="form-horizontal" method="post" id="mailer-form" novalidate
+          data-user-setting="{{ path('admin_v2_setting_auth') }}">
+      {% if status == 'cloud_email_crm' %}
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label>{{ 'admin.setting.mailer.cloud_email_crm'|trans }}</label>
+          </div>
+          <div class="controls col-md-8 mts">
+            <span class="text-success">{{ 'admin.setting.mailer.cloud_email_crm.status.open'|trans }}</span>
+            <p class="help-block">{{ 'admin.setting.mailer.cloud_email_crm.status.help_block'|trans({'%url%': path('admin_v2_edu_cloud_email_overview') })|raw }}</p>
+          </div>
+        </div>
+      {% else %}
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label>{{ 'admin.setting.mailer.cloud_email_crm'|trans }}</label>
+          </div>
+          <div class="controls col-md-8 mts">
+            <a href="{{ path('admin_v2_edu_cloud_email_overview') }}"
+               class="prl">{{ 'admin.setting.mailer.use_cloud_email_crm'|trans }}</a>
+            <a href="http://open.edusoho.com/show/cloud/email"
+               target="_blank">{{ 'admin.setting.mailer.understand_cloud_email_crm_advantage'|trans }}</a>
+            {{ 'admin.setting.mailer.cloud_email_crm.help_block'|trans|raw }}
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label>{{ 'admin.setting.mailer.send_email'|trans }}</label>
+          </div>
+          <div class="controls col-md-8 radios">
+            {{ radios('enabled', {1:'admin.setting.mailer.send_email.status.open'|trans, 0:'admin.setting.mailer.send_email.status.closed'|trans}, mailer.enabled) }}
+            <p class="help-block">{{ 'admin.setting.mailer.send_email.help_block'|trans }}</p>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="host">SMTP{{ 'admin.setting.mailer.server_address'|trans }}</label>
+          </div>
+          <div class="controls col-md-8">
+            <input type="text" id="host" name="host" class="form-control" value="{{ mailer.host }}">
+            <p class="help-block">
+              {{ 'admin.setting.mailer.server_address.help_block'|trans }}
+              {% if not setting('copyright.owned') or setting('copyright.thirdCopyright') == "2" %}
+                <a href="http://www.qiqiuyu.com/article/785"
+                   target="_blank">{{ 'admin.setting.mailer.commonly_document'|trans }}</a>
+              {% endif %}
+            </p>
+          </div>
+        </div>
+        <p></p>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="port">{{ 'admin.setting.mailer.SMTP_Port_number'|trans }}</label>
+          </div>
+          <div class="controls col-md-8">
+            <input type="text" id="port" name="port" class="form-control" value="{{ mailer.port }}">
+            <p class="help-block">{{ 'admin.setting.mailer.SMTP_Port_number.help_block'|trans }}25</p>
+          </div>
+        </div>
+        <p></p>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="username">{{ 'admin.setting.mailer.SMTP_user_name'|trans }}</label>
+          </div>
+          <div class="controls col-md-8">
+            <input type="text" id="username" name="username" class="form-control" value="{{ mailer.username }}">
+            <p class="help-block">{{ 'admin.setting.mailer.SMTP_user_name.help_block'|trans }}abc@mail.com</p>
+          </div>
+        </div>
+        <p></p>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="password">{{ 'admin.setting.mailer.SMTP_password'|trans }}</label>
+          </div>
+          <div class="controls col-md-8">
+            <input type="password" id="password" name="password" class="form-control" value="{{ mailer.password }}">
+            <p class="help-block">{{ 'admin.setting.mailer.SMTP_password.help_block'|trans }}</p>
+          </div>
+        </div>
+        <p></p>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="from">{{ 'admin.setting.mailer.senders_email_address'|trans }}</label>
+          </div>
+          <div class="controls col-md-8">
+            <input type="text" id="from" name="from" class="form-control" value="{{ mailer.from }}">
+            <p class="help-block">{{ 'admin.setting.mailer.senders_email_address.help_block'|trans }}abc@mail.com</p>
+          </div>
+        </div>
+        <p></p>
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="name">{{ 'admin.setting.mailer.senders_name'|trans }}</label>
+          </div>
+          <div class="controls col-md-8">
+            <input type="text" id="name" name="name" class="form-control" value="{{ mailer.name }}">
+          </div>
+        </div>
+        <p></p>
+        <div class="row form-group">
+          <div class="col-md-3 control-label"></div>
+          <div class="controls col-md-8">
+            <button type="submit" class="btn btn-primary">{{ 'form.btn.submit'|trans }}</button>
+            {% if mailer.enabled %}
+              <a class="btn btn-primary js-self-test" data-url="{{ path('admin_v2_setting_mailer_test') }}"
+                 href="javascript:;">{{ 'form.btn.verify'|trans }}</a>
+              <div class="mtl ptm">
+                <div class="alert alert-info" role="alert">
+                  {{ 'admin.setting.mailer.verifcation.tips'|trans }}
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+      <input type="hidden" name="email-setting-status" value="{{ status }}">
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  {% endif %}
+{% endblock %}

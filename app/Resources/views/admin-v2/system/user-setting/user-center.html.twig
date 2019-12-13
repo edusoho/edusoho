@@ -1,0 +1,175 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set script_controller = 'setting/user-center' %}
+
+{% set menu = 'admin_v2_setting_user_center' %}
+
+
+
+{% block main %}
+  {% if setting.mode !='default' %}
+    <div class="page-header clearfix"><a href="{{ path('admin_v2_setting_admin_sync') }}" class="pull-right btn btn-link">{{'admin.user_center.admin_sync_btn'|trans}}</a>
+    </div>
+  {% endif %}
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" novalidate>
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label >{{'admin.user_center.user_center.title'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios mode-radios">
+      {{ radios('mode', {'default':'site.default.none'|trans, 'discuz':'Discuz (Ucenter)'}, setting.mode) }}
+      {% if setting('magic.uc_phpwind','0') %}
+      <label><input type="radio" name="mode" value="phpwind" {% if setting.mode == 'phpwind' %}checked{% endif %}> Phpwind</label>
+      {% endif %}
+      <div class="help-block">
+        {{'admin.user_center.user_center.help_block'|trans}}
+      </div>
+    </div>
+  </div>
+  <div class="with-discuz" style="display:none;">
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>Ucenter{{'admin.user_center.Configration'|trans}}</label></div>
+      <div class="controls col-md-8">
+        <div class="help-block"><a href="http://www.qiqiuyu.com/course/125" target="_blank">{{'admin.user_center.Configration.help_block'|trans}}</a></div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_CONNECT</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_connect|default('') }}" placeholder="UC_CONNECT" name="discuzConfig[uc_connect]">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"></div>
+      <div class="controls col-md-8">
+        <div class="text-muted">
+          {{ 'admin.user_center.user_center.uc_connect.help_block' | trans }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBHOST</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_dbhost|default('') }}" placeholder="UC_DBHOST" name="discuzConfig[uc_dbhost]">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBUSER</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_dbuser|default('') }}" placeholder="UC_DBUSER" name="discuzConfig[uc_dbuser]">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBPW</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="password" value="{{ discuzConfig.uc_dbpw|default('') }}" placeholder="UC_DBPW" name="discuzConfig[uc_dbpw]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBNAME</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_dbname|default('') }}" placeholder="UC_DBNAME" name="discuzConfig[uc_dbname]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBCHARSET</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_dbcharset|default('') }}" placeholder="UC_DBCHARSET" name="discuzConfig[uc_dbcharset]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBTABLEPRE</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_dbtablepre|default('') }}" placeholder="UC_DBTABLEPRE" name="discuzConfig[uc_dbtablepre]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_DBCONNECT</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_dbconnect|default('') }}" placeholder="UC_DBCONNECT" name="discuzConfig[uc_dbconnect]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_KEY</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_key|default('') }}" placeholder="UC_KEY" name="discuzConfig[uc_key]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_API</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_api|default('') }}" placeholder="UC_API" name="discuzConfig[uc_api]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_CHARSET</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_charset|default('') }}" placeholder="UC_CHARSET" name="discuzConfig[uc_charset]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_IP</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_ip|default('') }}" placeholder="UC_IP" name="discuzConfig[uc_ip]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_APPID</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_appid|default('') }}" placeholder="UC_APPID" name="discuzConfig[uc_appid]">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>UC_PPP</label></div>
+      <div class="controls col-md-8">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_ppp|default('') }}" placeholder="UC_PPP" name="discuzConfig[uc_ppp]">
+      </div>
+    </div>
+  </div>
+  
+  {% if setting('magic.uc_phpwind','0') %}
+  <div class="row form-group with-phpwind" style="display:none;">
+    <div class="col-md-3 control-label"><label>{{'admin.user_center.WindId_Configration'|trans}}</label></div>
+    <div class="controls col-md-8">
+      <textarea class="form-control" name="phpwind_config" rows="10">{{ phpwindConfig }}</textarea>
+      <div class="help-block">{{'admin.user_center.WindId_Configration.help_block'|trans}}<a href="http://demo.edusoho.com/course/125" target="_blank">{{'admin.user_center.Configration.help_block'|trans}}</a></div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="form-group with-phpwind with-discuz">
+    <div class="col-md-3 control-label">
+      <label for="email_filter">{{'admin.user_center.filtr_email_list'|trans}}</label>
+    </div>
+    <div class="controls col-md-8">
+      <textarea id="email_filter" name="email_filter" class="form-control" rows="5">{{setting.email_filter}}</textarea>
+      <div class="help-block">
+        <div>{{'admin.user_center.filtr_email_list.help_block'|trans}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+    </div>
+  </div>
+
+  <div class="alert alert-info">
+    {{ 'admin.user_center.tips'|trans|raw }}
+  </div>
+
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% endblock %}
