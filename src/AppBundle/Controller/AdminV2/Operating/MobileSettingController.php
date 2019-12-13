@@ -163,6 +163,11 @@ class MobileSettingController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function mobileDiscoveriesAction(Request $request)
+    {
+        return $this->render('admin-v2/operating/mobile-setting/mobile.setting.discoveries.html.twig', array());
+    }
+
     /**
      * @return CourseService
      */

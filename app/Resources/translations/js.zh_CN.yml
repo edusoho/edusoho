@@ -464,7 +464,7 @@ course.manage.deadline_end_date_error_hint: 请输入学习有效期
 course.manage.expiry_days_error_hint: 开始日期应早于结束日期
 course.manage.expiry_start_date_error_hint: 结束日期应晚于开始日期
 course.manage.expiry_end_date_error_hint: 开始日期应早于结束日期
-course.manage.max_year_error_hint: 有效期最大值不能超过99,999天
+course.manage.max_year_error_hint: 请输入不大于 7300（20年）的数值
 course.manage.max_capacity_hint: 网校可支持最多%capacity%人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。
 course.manage.publish_hint: 是否确定发布该教学计划？
 course.manage.publish_title: 发布教学计划
@@ -1435,6 +1435,10 @@ admin.setting.invite.coupon.empty.tips: 请设置优惠券批次
 
 course.plan_task.activity_ppt_animation_img: 切换图片模式
 course.plan_task.activity_ppt_animation_slide: 切换动画模式
+
+admin.mobile_manage.discovery_upgrade_madal.notice_successed: '升级成功'
+admin.mobile_manage.discovery_upgrade_madal.notice_failed: '升级失败'
+admin.mobile_manage.discovery_upgrade_madal.notice_upgraded: '无法重复升级'
 course.plan_task.lessons_publish_status: 已发布课时数：%publishedNum%<br/>未发布课时数：%unpublishedNum%
 
 admin.question_bank.choose_category: 请选择所属分类
@@ -1456,7 +1460,7 @@ queston_bank.testpaper.no_open_tips: 如果找不到试卷，请先确定该试�
 queston_bank.testpaper.empty_tips: 此题库还没有试卷
 
 #新后台
-admin_v2.user.cloude_sms_enable_hint: 请先到【管理后台】-【应用中心】-【云服务】-【云短信】中开启云短信哦~
+admin_v2.user.cloude_sms_enable_hint: 请先到【管理后台】-【云市场】-【云服务】-【云短信】中开启云短信哦~
 admin_v2.homepage.quick_entrance.hint: 最多设置7个快捷入口位
 admin_v2.homepage.mini_program.title: 扫码打开小程序
 admin.switch_old_version.permission_error: 请联系超级管理员或管理员操作

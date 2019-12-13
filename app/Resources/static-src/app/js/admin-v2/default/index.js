@@ -55,16 +55,6 @@ const showCloudAd = () => {
   });
 };
 
-const src = $('.js-mini-program').data('src');
-$('.js-mini-program').popover({
-  trigger: 'hover',
-  placement: 'bottom',
-  title: Translator.trans('admin_v2.homepage.mini_program.title'),
-  template: '<div class="popover mini-program-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
-  html: true,
-  content: `<img src="${src}" width="200px">`
-});
-
 const loadFirst = () => {
   //六步任务助手
   const $stepsDom = $('.js-steps');
@@ -95,6 +85,15 @@ const loadFirst = () => {
   if ($infoDom.length && $infoDom.data('url')) {
     $.get($infoDom.data('url'), (html) => {
       $infoDom.html(html);
+      const src = $('.js-mini-program').data('src');
+      $('.js-mini-program').popover({
+        trigger: 'hover',
+        placement: 'bottom',
+        title: Translator.trans('admin_v2.homepage.mini_program.title'),
+        template: '<div class="popover mini-program-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+        html: true,
+        content: `<img src="${src}" width="200px">`
+      });
     });
   }
 

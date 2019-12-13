@@ -522,7 +522,7 @@ course.manage.deadline_end_date_error_hint: Please enter a study validity period
 course.manage.expiry_days_error_hint: The start date should be before the end date
 course.manage.expiry_start_date_error_hint: End date should be later than start date
 course.manage.expiry_end_date_error_hint: The start date should be earlier than the end date
-course.manage.max_year_error_hint: The maximum value of the validity period can not exceed 99,999 days
+course.manage.max_year_error_hint: Please enter a value less than 7300 (20 years)
 course.manage.max_capacity_hint: The site can support up to %capacity% people to participate in the live at the same time, you can set a larger value, but then may lead to students can not enter the live.
 course.manage.publish_hint: Are you sure you want to publish the program?
 course.manage.publish_title: Publish teaching plan
@@ -1493,6 +1493,10 @@ admin.setting.invite.coupon.empty.tips: Please set coupon batch
 
 course.plan_task.activity_ppt_animation_img: Switch img mode
 course.plan_task.activity_ppt_animation_slide: Switch animation mode
+
+admin.mobile_manage.discovery_upgrade_madal.notice_successed: 'Upgrade success'
+admin.mobile_manage.discovery_upgrade_madal.notice_failed: 'Upgrade failed'
+admin.mobile_manage.discovery_upgrade_madal.notice_upgraded: 'Cannot repeat upgrade'
 course.plan_task.lessons_publish_status: Published Lesson Number:%publishedNum%<br/>Unpublish Lesson Number:%unpublishedNum%
 
 admin.question_bank.choose_category: Please select the category

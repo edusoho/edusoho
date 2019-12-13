@@ -1,0 +1,66 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_operation_mobile_banner_manage' %}
+
+{% block main %}
+<style>
+.nav.nav-tabs.mbm{ display:none; }
+.upgrade-tips-container {
+    width:100%;
+    padding: 100px 90px;
+    height:500px;
+}
+.upgrade-tips-container-content {
+    float:left;
+    text-align:left
+} 
+.upgrade-tips-container-content .upgrade-color-info {
+    font-size: 24px;
+    color: #333333;
+    letter-spacing: 0;
+    line-height: 32px;
+    margin:0;
+}
+.upgrade-tips-container-content .upgrade-color-primary {
+    font-size: 24px;
+    color: #3182DF;
+    margin:0;
+}
+.upgrade-tips-container-content .btn-goto {
+    display: inline-block;
+    line-height: 36px;
+    margin-left: 2px;
+    padding: 0 30px;
+    background-image: linear-gradient(-90deg, #7FBBF4 0%, #5E90F0 100%);
+    border-radius: 2px;
+    text-align: center;
+    color: #fff;
+    width:180px;
+}
+.upgrade-tips-container-content .feature-info {
+    padding-left: 0;
+    margin-bottom: 25px;
+    margin-top: 15px;
+    color:#666666;
+}
+.upgrade-tips-container-content .feature-info li {
+    margin-bottom: 10px;
+    margin-left: -3px;
+    font-size: 16px;
+}
+.find-bg-plate {
+    float:right;
+    margin-top:-25px;
+    margin-right:35px;
+}
+</style>
+
+<div class="upgrade-tips-container">
+    <div class="upgrade-tips-container-content">
+        {{ 'admin.mobile_manage.discovery_upgrade.transfer_tips'|trans|raw }}
+        <ul class="feature-info">{{ 'admin.mobile_manage.discovery_upgrade.function'|trans|raw }}</ul>
+        <a type="buttom" href="{{ path('admin_setting_mobile_discoveries') }}" class="btn-goto">{{ 'admin.mobile_manage.discovery_upgrade.transfer_btn'|trans }}</a>
+    </div>
+    <img class="find-bg-plate" src="{{ asset('static-dist/app/img/admin/app_find_plate.png') }}" alt="">
+</div>
+{% endblock %}

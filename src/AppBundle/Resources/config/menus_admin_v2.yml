@@ -465,6 +465,11 @@ admin_v2:
                                     name: admin_v2.micromarketing.menu
                                     router_name: admin_v2_login_micromarketing
                                     disable: true
+                                    visible: false
+                                admin_v2_micromarketing_bootpage:
+                                    name: admin_v2.micromarketing.menu
+                                    router_name: admin_v2_login_micromarketing_boot
+                                    disable: true
                 # 渠道管理
                 admin_v2_channel_group:
                     name: admin_v2.channel.basic_group
@@ -474,13 +479,17 @@ admin_v2:
                         # 分销
                         admin_v2_distributor:
                             quick_entrance_icon: 'retail'
-                            router_name: admin_v2_login_distributor
                             name: admin_v2.distributor.menu
                             target: '_blank'
                             children:
                                 admin_v2_distributor_page:
                                     name: admin_v2.distributor.menu
                                     router_name: admin_v2_login_distributor
+                                    disable: true
+                                    visible: false
+                                admin_v2_distributor_bootpage:
+                                    name: admin_v2.distributor.menu
+                                    router_name: admin_v2_login_distributor_boot
                                     disable: true
         # 运营管理模块
         admin_v2_operating:
@@ -515,23 +524,16 @@ admin_v2:
                         # App装修
                         admin_v2_setting_mobile:
                             quick_entrance_icon: 'app'
-                            router_name: admin_v2_setting_mobile
+                            router_name: admin_v2_setting_mobile_discoveries
                             name: admin_v2.operation.mobile_menu
                             children:
+                                admin_v2_mobile_discoveries_settings:
+                                    name: admin.system.mobile.discoveries_setting
+                                    visible: true
+                                    router_name: admin_v2_setting_mobile_discoveries
                                 admin_v2_mobile_settings:
                                     name: admin_v2.operation.mobile.basic_tab
-                                    disable: true
                                     router_name: admin_v2_setting_mobile
-                                admin_v2_mobile_banner_manage:
-                                    name: admin_v2.operation.mobile.banner_setting_tab
-                                    router_name: admin_v2_mobile_banner_manage
-                                admin_v2_discovery_column_index:
-                                    name: admin_v2.operation.mobile.discovery_column_tab
-                                    children:
-                                        admin_v2_discovery_column_create:
-                                            name: admin_v2.operation.mobile.discovery_column_tab.create_btn
-                                            group: topBtn
-                                            mode: modal
                         # web装修
                         admin_v2_block_manage:
                             quick_entrance_icon: 'webmix'
