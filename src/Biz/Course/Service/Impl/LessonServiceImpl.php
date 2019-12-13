@@ -51,17 +51,17 @@ class LessonServiceImpl extends BaseService implements LessonService
             $taskFields = $this->parseTaskFields($fields);
             $taskFields['categoryId'] = $lesson['id'];
             $taskFields['isLesson'] = true;
+            $this->dispatchEvent('course.lesson.create', new Event($lesson));
+
             $task = $this->getTaskService()->createTask($taskFields);
 
             $this->commit();
-
-            $this->dispatchEvent('course.lesson.create', new Event($lesson));
-
-            return array($lesson, $task);
         } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;
         }
+
+        return array($lesson, $task);
     }
 
     public function updateLesson($lessonId, $fields)
