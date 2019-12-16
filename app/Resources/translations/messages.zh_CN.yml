@@ -650,7 +650,7 @@ pay_center.pay.weixin_pay: 微信支付
 pay_center.pay.weixin_pay.content_title: 支付信息
 pay_center.pay.weixin_pay.pay_btn: 立即支付
 pay_center.pay.weixin_pay.scan_qcode_pay_tips: >
-    请使用微信扫一扫<br>扫描二维码支付
+  请使用微信扫一扫<br>扫描二维码支付
 pay_center.pay.weixin_pay.press_qcode_pay_tips: 请长按二维码支付
 pay_center.pay.choose_other_way_btn: 选择其他支付方式
 pay_center.finish: 订单完成
@@ -2298,8 +2298,8 @@ classroom.course.content: >
   <a href="%menuPath%" target="_blank">&nbsp;&nbsp;《%courseTitle%》&nbsp;&nbsp;</a>
   实时同步中。如需更改内容可以选择对原课程进行更改。
 classroom.course.unlock_tips: >
-    如需解除同步单独编辑本课程，可点击下方按钮解除同步。
-    <font color="#e83d2c">注意：本操作不可逆！</font>
+  如需解除同步单独编辑本课程，可点击下方按钮解除同步。
+  <font color="#e83d2c">注意：本操作不可逆！</font>
 classroom.member_sign: 签到
 classroom.member_signed: 已签到
 classroom.sign_keep_days: 连续%keepDays%天
@@ -3890,7 +3890,8 @@ question_bank_category: 题库分类
 question_bank_category.all_category: 全部
 
 # 题库
-question_bank.empty: 暂无题库，请前往<a class="link-primary" href="%loginUrl%">后台-课程-题库管理</a>进行创建。
+question_bank.empty: 暂无题库，请前往<a class="link-primary" href="%url%">后台-课程-题库管理</a>进行创建。
+question_bank.admin_v2.empty: 暂无题库，请前往<a class="link-primary" href="%url%">后台-教学-题库管理</a>进行创建。
 question_bank.empty.no_auth: 暂无题库
 # 附件
 attachments: 附件
@@ -5954,10 +5955,10 @@ admin.mobile_manage.discovery_upgrade_madal.btn_not_upgrade: '暂不升级'
 admin.mobile_manage.discovery_upgrade_madal.btn_next: '继续'
 admin.mobile_manage.discovery_upgrade_madal.btn_confirm: '升级'
 admin.mobile_manage.discovery_upgrade_madal.btn_loading: '升级中'
-admin.mobile_manage.discovery_upgrade.transfer_tips: > 
+admin.mobile_manage.discovery_upgrade.transfer_tips: >
   <p class="upgrade-color-info">移动端内容管理已经升级至</p>
   <p class="upgrade-color-primary">移动端-App设置-发现页配置功能</p>
-admin.mobile_manage.discovery_upgrade.function: > 
+admin.mobile_manage.discovery_upgrade.function: >
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>自定义设置各模块</li>
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>边设置边预览，实时查看展示效果</li>
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>随心所欲打造您的个性APP</li>
@@ -7210,10 +7211,10 @@ admin.login_connect.User_login_protection.after: 经过
 admin.login_connect.User_login_protection.after.unblock: 分钟后，解锁用户/IP
 admin.login_connect.weixinmob.frist.help_block: 开通后，支持使用微信号在手机端微信APP内快捷注册或登录网站。
 admin.login_connect.weixinmob.help_block: >
-    如何开通：
-    1.一个已认证的<a target="_blank" href="https://mp.weixin.qq.com">微信服务号</a>；
-    2.一个已认证的<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>帐号；
-    3.服务号绑定到<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>。
+  如何开通：
+  1.一个已认证的<a target="_blank" href="https://mp.weixin.qq.com">微信服务号</a>；
+  2.一个已认证的<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>帐号；
+  3.服务号绑定到<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>。
 admin.login_connect.weixin.help_block: >
   请先到
   <a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>
@@ -7953,10 +7954,10 @@ admin.payment_setting.llpay_secret: 商户平台Key
 admin.payment_setting.llpay_public_key: 公钥
 admin.payment_setting.llpay_private_key: 密钥
 admin.payment_setting.llpay_application_tips: >
- 使用前提：
-  <p>1、在连连支付平台申请账户并开通，<a target="_blank" href="%qiqiuyuUrl%">点此查看申请说明</a>。</p>
-  <p>2、在账户开通后，前往连连支付商户站 - 安全中心 - 安全信息 - 商户秘钥维护，选择签名方式为rsa签名方式。</p>
-  <p>3、选择rsa签名方式后，请根据连连支付提示生成对应公钥和密钥文件，将文件内容复制后粘帖至对应处。</p>
+  使用前提：
+   <p>1、在连连支付平台申请账户并开通，<a target="_blank" href="%qiqiuyuUrl%">点此查看申请说明</a>。</p>
+   <p>2、在账户开通后，前往连连支付商户站 - 安全中心 - 安全信息 - 商户秘钥维护，选择签名方式为rsa签名方式。</p>
+   <p>3、选择rsa签名方式后，请根据连连支付提示生成对应公钥和密钥文件，将文件内容复制后粘帖至对应处。</p>
 
 admin.payment_setting.quickpay: 汇付宝－快捷支付
 admin.payment_setting.quickpay_api_application_word: 下载接口申请说明文档

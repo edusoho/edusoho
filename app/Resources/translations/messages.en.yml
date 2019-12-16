@@ -3274,6 +3274,11 @@ tag.popular_tag: 'Popular tag'
 tag.setting: 'Tag setting'
 category: Category
 category.all_category: All
+question_bank_category: Question Bank Category
+question_bank_category.all_category: All
+question_bank.empty: There is no question bank, please go to <a class="link-primary" href="%url%">Background-course-question bank management</a> to create it.
+question_bank.admin_v2.empty: There is no question bank, please go to <a class="link-primary" href="%url%">Background-teach-question bank management</a> to create it.
+question_bank.empty.no_auth: Empty
 attachments: Attachement
 attachments.preview: Preview
 attachments.preview.preview_btn: Preview
@@ -4432,7 +4437,7 @@ admin.question_bank.manage.add_title: Create Bank
 admin.question_bank.manage.edit_title: Edit Bank
 admin.question_bank.manage.name_label: Name
 admin.question_bank.manage.category_label: Category
-admin.question_bank.manage.manager_label: Authorized Teacher 
+admin.question_bank.manage.manager_label: Authorized Teacher
 admin.question_bank.manage.model: >
   <p class="question-bank-model-title"><i class="es-icon es-icon-Promote"></i>Structural modification</p>
   <p class="question-bank-model-text">In our new version, the questions and testpapers created in the question bank can be used in all courses.</p>
@@ -4918,10 +4923,10 @@ admin.mobile_manage.discovery_upgrade_madal.btn_not_upgrade: 'Cancel'
 admin.mobile_manage.discovery_upgrade_madal.btn_next: 'Upgrade'
 admin.mobile_manage.discovery_upgrade_madal.btn_confirm: 'Upgrade'
 admin.mobile_manage.discovery_upgrade_madal.btn_loading: 'Upgrade in progress'
-admin.mobile_manage.discovery_upgrade.transfer_tips: > 
+admin.mobile_manage.discovery_upgrade.transfer_tips: >
   <p class="upgrade-color-info">Mobile content is upgraded to</p>
   <p class="upgrade-color-primary">APP home screen configuration</p>
-admin.mobile_manage.discovery_upgrade.function: > 
+admin.mobile_manage.discovery_upgrade.function: >
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>Custom setting of each module</li>
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>Preview while setting to see the display effect in real time</li>
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>Create your personalized app at will</li>
