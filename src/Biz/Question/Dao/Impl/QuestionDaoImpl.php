@@ -94,7 +94,7 @@ class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
             'copyId = :copyId',
             'copyId IN (:copyIds)',
             'parentId > :parentIdGT',
-            'categoryId in (:categoryIds)',
+            'categoryId IN (:categoryIds)',
             'bankId = :bankId',
             'categoryId = :categoryId',
         );

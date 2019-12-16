@@ -364,6 +364,7 @@ class QuestionController extends BaseController
 
         $conditions = $request->request->all();
         $conditions['parentId'] = 0;
+        $conditions['categoryIds'] = explode(',', $conditions['categoryIds']);
 
         $typesNum = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
         $typesNum = ArrayToolkit::index($typesNum, 'type');
