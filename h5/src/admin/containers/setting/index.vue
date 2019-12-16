@@ -18,6 +18,7 @@
           <module-template v-for="(module, index) in modules"
             :key="index"
             :saveFlag="saveFlag"
+            :startValidate="startValidate"
             :index="index"
             :module="module"
             :active="isActive(index)"
@@ -107,7 +108,8 @@ export default {
     return {
       title: 'EduSoho 微网校',
       modules: [],
-      saveFlag: false,
+      saveFlag: 0,//保存标志，只有点击过保存或者预览按钮才开始实时校验，具体表现错误模块为有错误模块边框变红提示！。这里设置成为数字原因是：每次点击发布或者预览按钮时都需要去实时校验一次，
+      startValidate:false, //非空提示，在点击发布或者预览按钮时才需要提示，具体表现为弹窗提示
       incomplete: true,
       validateResults: [],
       currentModuleIndex: '0',
@@ -223,7 +225,6 @@ export default {
     updateModule(data, index) {
       // 更新模块
       this.validateResults[index] = data.incomplete;
-      console.log('updateModule', data);
     },
     removeModule(data, index) {
       // 删除一个模块
@@ -358,14 +359,17 @@ export default {
       });
     },
     save(mode, needTrans = true) {
-      this.saveFlag=true;
-
+      this.startValidate=true;
+      this.saveFlag ++;
       // 验证提交配置
       const validateAndSubmit = () => {
         let data = this.modules;
         const isPublish = mode === 'published';
 
+        this.startValidate=false;
+
         this.validate();
+
         // 如果已经是对象就不用转换
         if (needTrans) {
           data = ObjectArray2ObjectByKey(this.modules, 'moduleType');
@@ -373,14 +377,13 @@ export default {
         if (this.incomplete) {
           return;
         }
-
         this.saveDraft({
           data,
           mode,
           portal: this.portal,
           type: 'discovery',
         }).then(() => {
-          this.saveFlag=false;
+          this.saveFlag=0;
           if (isPublish) {
             this.$message({
               message: '发布成功',
@@ -391,7 +394,6 @@ export default {
           this.$store.commit(types.UPDATE_DRAFT, data);
           this.toPreview(isPublish);
         }).catch(err => {
-          this.saveFlag=false;
           this.$message({
             message: err.message || '发布失败，请重新尝试',
             type: 'error'
