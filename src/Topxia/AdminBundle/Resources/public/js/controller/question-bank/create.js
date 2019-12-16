@@ -2,7 +2,6 @@ define(function(require, exports, module) {
 
   let Validator = require('bootstrap.validator');
   let Notify = require('common/bootstrap-notify');
-  let CategorySelector = require('../widget/category-select');
   require('common/validator-rules').inject(Validator);
   require('jquery.select2-css');
   require('jquery.select2');
@@ -16,7 +15,15 @@ define(function(require, exports, module) {
   };
 
   function _initSelect($form) {
-    CategorySelector.run();
+    $('[name="categoryId"]').select2({
+      treeview: true,
+      dropdownAutoWidth: true,
+      treeviewInitState: 'collapsed',
+      placeholderOption: 'first',
+      formatNoMatches: function() {
+        return Translator.trans('admin.question_bank.no_category');
+      }
+    });
 
     $('#bank-members').select2({
       ajax: {
