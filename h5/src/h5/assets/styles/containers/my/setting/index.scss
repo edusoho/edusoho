@@ -29,6 +29,13 @@
     right: 0;
     bottom: 0;
   }
+  .van-uploader__wrapper{
+	  height: 100%;
+  }
+  .van-uploader__input-wrapper{
+	  height: 100%;
+	  width: 100%;
+  }
 
   // 修改昵称
   &-nickname {
