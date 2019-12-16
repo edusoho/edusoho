@@ -20,7 +20,7 @@ class QuestionBankController extends BaseController
         $paginator = new Paginator($this->get('request'), $count, 20);
         $questionBanks = $this->getQuestionBankService()->searchQuestionBanks(
             $conditions,
-            array(),
+            array('id' => 'desc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
