@@ -51,6 +51,11 @@ class Essay extends AbstractQuestion
 
     protected function matchAnswer(&$question, $line, &$preNode)
     {
+        if (!$this->hasSignal($line) && $preNode == QuestionElement::ANSWER) {
+            $question['answer'] .= '<br/>'.$line;
+            return true;
+        }
+        
         if (0 === strpos(trim($line), self::ANSWER_SIGNAL)) {
             $answer = str_replace(self::ANSWER_SIGNAL, '', $line);
             $question['answer'] = $answer;
