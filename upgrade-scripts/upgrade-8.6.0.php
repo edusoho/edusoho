@@ -321,10 +321,14 @@ class EduSohoUpgrade extends AbstractUpdater
             $parentCategory = $this->getQuestionCategoryDao()->create(
                 array('bankId' => $questionBank['id'], 'parentId' => 0, 'name' => $questionBank['name'])
             );
+
+            //根据课程、课时创建题目分类并且绑定题目上
             $createdLessonCategory = array();
             $createdCourseCategory = array();
             foreach ($questions as $belong) {
                 $courseId = $belong['courseId'];
+
+                //属于本课程的题目
                 if ($courseId == 0 || empty($courses[$courseId])) {
                     $this->questionUpdateHelper->add('id', $belong['id'], array('bankId' => $questionBank['id'], 'categoryId' => $parentCategory['id']));
                     continue;
@@ -337,11 +341,14 @@ class EduSohoUpgrade extends AbstractUpdater
                     );
                     $createdCourseCategory[$courseId] = $courseQuestionCategory['id'];
                 }
+
+                //属于计划的题目
                 if (empty($belong['lessonId']) || empty($tasks[$belong['lessonId']])) {
                     $this->questionUpdateHelper->add('id', $belong['id'], array('bankId' => $questionBank['id'], 'categoryId' => $createdCourseCategory[$courseId]));
                     continue;
                 }
 
+                //属于课时的题目
                 if (empty($createdLessonCategory[$belong['lessonId']])) {
                     $task = $tasks[$belong['lessonId']];
                     $lessonQuestionCategory = $this->getQuestionCategoryDao()->create(
@@ -369,6 +376,10 @@ class EduSohoUpgrade extends AbstractUpdater
                     continue;
                 }
 
+                if (!empty($metas['range']['bankId'])) {
+                    continue;
+                }
+
                 if (!empty($metas['range']['courseId']) && !empty($createdCourseCategory[$metas['range']['courseId']])) {
                     $categoryIds = array($createdCourseCategory[$metas['range']['courseId']]);
                 }
@@ -390,6 +401,7 @@ class EduSohoUpgrade extends AbstractUpdater
         return $nextPage;
     }
 
+    //依据不同的提交条件和试卷是否有主观题，给予课时不同的合格分数
     protected function updateTestpaperActivity($page)
     {
         $count = $this->getQuestionBankService()->countQuestionBanks(array());
@@ -416,10 +428,13 @@ class EduSohoUpgrade extends AbstractUpdater
                 $testpaper = $testpapers[$testpaperActivity['mediaId']];
                 $activity = $activities[$testpaperActivity['id']];
                 $itemCount = $this->getTestpaperService()->searchItemCount(array('questionTypes' => array('essay'), 'testId' => $testpaper['id']));
+
+                //有主观题、提交条件为'提交试卷'，合格分数为总分的60%
                 if ($itemCount > 0 && $activity['finishType'] == 'submit') {
                     $this->activityUpdateHelper->add('id', $activity['id'], array('finishData' => '0.60'));
                 }
 
+                //没有主观题，合格分数为'试卷合格分 / 总分'的百分比
                 if ($itemCount == 0 && is_array($testpaper['passedCondition']) && !empty($testpaper['passedCondition'][0])) {
                     $this->activityUpdateHelper->add('id', $activity['id'], array(
                         'finishData' => round($testpaper['passedCondition'][0] / $testpaper['score'], 2)
