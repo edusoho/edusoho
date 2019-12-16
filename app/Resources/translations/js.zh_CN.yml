@@ -1446,6 +1446,7 @@ admin.question_bank.save_success: 保存题库成功
 admin.question_bank.save_fail: 保存题库失败
 admin.question_bank.delete_hint: 确定要删除此题库吗
 admin.question_bank.fail_not_delete: 此题库内含有%testpaperNum%份试卷，%questionNum%道题目，无法删除
+admin.question_bank.no_category: 无题库分类
 
 question_bank.question_category.name_max_message: 名称的长度必须小于等于30
 question_bank.question_category.name_chinese_alphanumeric_message: 名称支持中文字、英文字母、数字及_ . ·
