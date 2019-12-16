@@ -38,6 +38,10 @@ interface WeChatService
 
     public function getTemplateId($key, $scene = '');
 
+    public function addTemplate($template, $key);
+
+    public function deleteTemplate($template, $key);
+
     public function createWeChatUser($fields);
 
     public function updateWeChatUser($id, $fields);
