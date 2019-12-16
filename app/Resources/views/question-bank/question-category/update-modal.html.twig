@@ -10,7 +10,7 @@
       <div class="form-group">
         <label class="col-md-2 control-label" for="category-name">{{'my.teaching.question_bank.question_category.name_label'|trans}}</label>
         <div class="col-md-8 controls">
-          <input id="category-name" name="name" class="form-control" rows="10" value="{{ category.name }}">
+          <input id="category-name" name="name" class="form-control" rows="10" value="{{ category.name }}" autocomplete="off">
         </div>
       </div>
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
