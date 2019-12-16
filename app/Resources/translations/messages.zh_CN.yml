@@ -5877,10 +5877,10 @@ admin.mobile_manage.discovery_upgrade_madal.btn_not_upgrade: '暂不升级'
 admin.mobile_manage.discovery_upgrade_madal.btn_next: '继续'
 admin.mobile_manage.discovery_upgrade_madal.btn_confirm: '升级'
 admin.mobile_manage.discovery_upgrade_madal.btn_loading: '升级中'
-admin.mobile_manage.discovery_upgrade.transfer_tips: > 
+admin.mobile_manage.discovery_upgrade.transfer_tips: >
   <p class="upgrade-color-info">移动端内容管理已经升级至</p>
   <p class="upgrade-color-primary">移动端-App设置-发现页配置功能</p>
-admin.mobile_manage.discovery_upgrade.function: > 
+admin.mobile_manage.discovery_upgrade.function: >
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>自定义设置各模块</li>
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>边设置边预览，实时查看展示效果</li>
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>随心所欲打造您的个性APP</li>
@@ -10104,6 +10104,8 @@ exception.task_result.not_found: 学习任务结果不存在
 exception.discovery_column.not_found: 发现栏目不存在
 
 exception.wechat.notify_setting_not_enabled: 微信通知未开启
+exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试
+exception.wechat.template_conflict_industry_hint: 服务号行业设置错误
 
 course.unname_title: 未命名计划
 
