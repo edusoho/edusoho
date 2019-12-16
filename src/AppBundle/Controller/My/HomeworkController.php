@@ -5,6 +5,7 @@ namespace AppBundle\Controller\My;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
+use Biz\Course\Service\CourseService;
 use Symfony\Component\HttpFoundation\Request;
 
 class HomeworkController extends BaseController
@@ -38,7 +39,7 @@ class HomeworkController extends BaseController
             $conditions['courseIds'] = array_intersect($conditions['courseIds'], $likeCourseIds);
         }
 
-        $courses = $this->getCourseService()->findCoursesByIds($conditions['courseIds']);
+        $courses = $this->getCourseService()->findCoursesByIds(array_values($conditions['courseIds']));
 
         if ('nickname' == $keywordType && $keyword) {
             $searchUser = $this->getUserService()->getUserByNickname($keyword);
@@ -159,6 +160,9 @@ class HomeworkController extends BaseController
         return $this->createService('Testpaper:TestpaperService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
