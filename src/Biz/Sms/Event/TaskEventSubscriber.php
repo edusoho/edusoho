@@ -78,9 +78,9 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
     public function onTaskUpdateSync(Event $event)
     {
         $task = $event->getSubject();
-        $copiedTasks = $this->getCopiedTasks($task);
 
         if ('live' == $task['type']) {
+            $copiedTasks = $this->getCopiedTasks($task);
             foreach ($copiedTasks as $copiedTask) {
                 $this->deleteJob($copiedTask);
                 if ('published' == $copiedTask['status']) {
