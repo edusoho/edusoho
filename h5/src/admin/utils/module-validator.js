@@ -1,16 +1,17 @@
 import Vue from 'vue';
 
-export default (module, startValidate) => {
+export default (module, startValidate=false) => {
   // 轮播图
   if (module.type === 'slide_show') {
     for (let i = 0; i < module.data.length; i += 1) {
       const imgUri = module.data[i].image.uri;
       if (!imgUri) {
-        if (!startValidate) return true;
-        Vue.prototype.$message({
-          message: '请完善轮播图模块信息！',
-          type: 'error'
-        });
+        if (startValidate) {
+          Vue.prototype.$message({
+            message: '请完善轮播图模块信息！',
+            type: 'error'
+          });
+        }
         return true;
       }
     }
@@ -20,11 +21,12 @@ export default (module, startValidate) => {
   if (module.type === 'course_list') {
     const courseExist = module.data.items.length;
     if (!module.data.title || (module.data.sourceType === 'custom' && !courseExist)) {
-      if (!startValidate) return true;
-      Vue.prototype.$message({
-        message: '请完善课程模块信息！',
-        type: 'error'
-      });
+      if (startValidate) {
+        Vue.prototype.$message({
+          message: '请完善课程模块信息！',
+          type: 'error'
+        });
+      }
       return true;
     }
   }
@@ -33,11 +35,12 @@ export default (module, startValidate) => {
   if (module.type === 'classroom_list') {
     const classExist = module.data.items.length;
     if (!module.data.title || (module.data.sourceType === 'custom' && !classExist)) {
-      if (!startValidate) return true;
-      Vue.prototype.$message({
-        message: '请完善班级模块信息！',
-        type: 'error'
-      });
+      if (startValidate) {
+        Vue.prototype.$message({
+          message: '请完善班级模块信息！',
+          type: 'error'
+        });
+      }
       return true;
     }
   }
@@ -46,11 +49,12 @@ export default (module, startValidate) => {
   if (module.type === 'poster') {
     const imgUri = module.data.image.uri;
     if (!imgUri) {
-      if (!startValidate) return true;
-      Vue.prototype.$message({
-        message: '请完善广告模块信息！',
-        type: 'error'
-      });
+      if (startValidate) {
+        Vue.prototype.$message({
+          message: '请完善广告模块信息！',
+          type: 'error'
+        });
+      }
       return true;
     }
   }
@@ -64,11 +68,12 @@ export default (module, startValidate) => {
     };
     const activityExist = module.data.activity.id;
     if (!activityExist) {
-      if (!startValidate) return true;
-      Vue.prototype.$message({
-        message: `请完善${typeText[module.type]}模块信息！`,
-        type: 'error'
-      });
+      if (startValidate) {
+        Vue.prototype.$message({
+          message: `请完善${typeText[module.type]}模块信息！`,
+          type: 'error'
+        });
+      }
       return true;
     }
   }
@@ -76,11 +81,12 @@ export default (module, startValidate) => {
   // 优惠券
   if (module.type === 'coupon') {
     if (!module.data.items.length) {
-      if (!startValidate) return true;
-      Vue.prototype.$message({
-        message: '请完善优惠券模块信息！',
-        type: 'error'
-      });
+      if (startValidate) {
+        Vue.prototype.$message({
+          message: '请完善优惠券模块信息！',
+          type: 'error'
+        });
+      }
       return true;
     }
   }
