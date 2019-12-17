@@ -7,6 +7,7 @@ use Biz\QuestionBank\Dao\MemberDao;
 use Biz\QuestionBank\Service\MemberService;
 use Biz\Common\CommonException;
 use AppBundle\Common\ArrayToolkit;
+use Biz\QuestionBank\Service\QuestionBankService;
 
 class MemberServiceImpl extends BaseService implements MemberService
 {
@@ -71,7 +72,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function isMemberInBank($bankId, $userId)
     {
-        $questionBank = $this->getQuestionBank($bankId);
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($bankId);
         if (empty($questionBank)) {
             return false;
         }
@@ -90,5 +91,13 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getMemberDao()
     {
         return $this->createDao('QuestionBank:MemberDao');
+    }
+
+    /**
+     * @return QuestionBankService
+     */
+    protected function getQuestionBankService()
+    {
+        return $this->createService('QuestionBank:QuestionBankService');
     }
 }
