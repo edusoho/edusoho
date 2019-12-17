@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4bb6f6dd33f022b9353e76ef2a61d620",
+    "content-hash": "59297c097ae6dfc4cf66aff0a7f0e576",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -6628,7 +6628,8 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.3.10"
+        "php": ">=5.3.10",
+        "ext-json": "*"
     },
     "platform-dev": []
 }
