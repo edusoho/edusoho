@@ -10,9 +10,7 @@ use http\Exception\InvalidArgumentException;
 use AppBundle\Common\Paginator;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\TestpaperException;
-use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
 use Biz\Question\Service\QuestionService;
@@ -103,7 +101,7 @@ class ManageController extends BaseController
             return $this->createMessageResponse('error', 'access denied');
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($result['testId'], $result['type']);
+        $testpaper = $this->getTestpaperService()->getTestpaper($result['testId']);
         if (!$testpaper) {
             $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
@@ -353,10 +351,6 @@ class ManageController extends BaseController
         $data = $request->request->all();
         $fromType = $data['fromType'];
         $toType = $data['toType'];
-        $isSub = $data['isSub'];
-        $isTestpaper = $data['isTestpaper'];
-        $method = $request->request->get('method', 'edit');
-        $courseSetId = $request->request->get('courseSetId', 0);
         if (empty($data['question'])) {
             throw new InvalidArgumentException('缺少必要参数');
         }
@@ -368,22 +362,15 @@ class ManageController extends BaseController
             $question = $this->convertEssay($toType, $data['question']);
         }
 
-        $user = $this->getCurrentUser();
-        $courses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSetId);
-        $courseTasks = empty($question['courseId']) ? array() : $this->getTaskService()->findTasksByCourseId($question['courseId']);
-        $courseTasks = ArrayToolkit::index($courseTasks, 'id');
-
         return $this->render("testpaper/subject/type/{$toType}.html.twig", array(
             'question' => $question,
             'seq' => $data['seq'],
             'token' => $data['token'],
             'type' => $toType,
-            'isSub' => $isSub,
-            'isTestpaper' => $isTestpaper,
-            'method' => $method,
-            'courses' => $courses,
-            'courseSetId' => $courseSetId,
-            'courseTasks' => $courseTasks,
+            'isSub' => $data['isSub'],
+            'isTestpaper' => $data['isTestpaper'],
+            'method' => empty($data['method']) ? 'edit' : $data['method'],
+            'questionBankId' => empty($data['questionBankId']) ? 0 : $data['questionBankId'],
         ));
     }
 
@@ -666,27 +653,11 @@ class ManageController extends BaseController
     }
 
     /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
-    }
-
-    /**
      * @return CourseSetService
      */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
-    }
-
-    /**
-     * @return UserService
-     */
-    protected function getUserService()
-    {
-        return $this->createService('User:UserService');
     }
 
     /**
