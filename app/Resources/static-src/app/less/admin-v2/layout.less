@@ -186,6 +186,9 @@ body {
         text-decoration: none;
       }
     }
+    @media (max-width: @screen-md-max) {
+      display: none;
+    }
   }
 
   .ct-layout-person_center {
@@ -356,7 +359,6 @@ body {
     li {
       padding: 4px 8px;
       &.active {
-        background-color:#080808;
         a {
           color: #fff;
         }
