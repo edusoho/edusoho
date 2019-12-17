@@ -84,7 +84,7 @@
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
               <i class="es-icon es-icon-menu"></i>
             </button>
-            <a class="navbar-title" href="{{ url('admin_v2') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}{{'admin.navbar.header.console_btn'|trans}}</a>
+            <a class="navbar-title" href="{{ url('admin_v2') }}">{{'admin.navbar.header.console_btn'|trans}}</a>
           </div>
           <div class="navbar-collapse navbar-collapse--mobile collapse">
             {% include 'admin-v2/widget/navigation-mobile.html.twig' %}
