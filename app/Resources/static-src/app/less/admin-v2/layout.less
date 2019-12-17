@@ -8,6 +8,9 @@ body {
     height: 60px !important;
     background-color: #333;
     box-shadow: 0px 2px 12px 0px rgba(0,0,0,0.05);
+    @media (max-width: @screen-xs-min) {
+      height: 54px !important;
+    }
   }
 
   .admin-navbar-brand {
@@ -35,6 +38,9 @@ body {
     height: 60px;
     > li + li {
       margin-left: 24px;
+      @media (max-width: @screen-md-max) {
+        margin-left: 8px !important;
+      }
     }
   }
 
@@ -51,6 +57,9 @@ body {
         margin-bottom: 20px;
         padding: 0 16px !important;
         font-weight: normal !important;
+        @media (max-width: @screen-md-max) {
+          padding: 0 6px !important;
+        }
         img {
           display: none;
         }
@@ -84,6 +93,9 @@ body {
           margin-top: 16px;
           margin-bottom: 16px;
           padding: 4px 16px !important;
+          @media (max-width: @screen-md-max) {
+            padding: 4px 8px !important;
+          }
           .cdv2-text-md;
           border-radius: 16px;
           background-color: rgba(255,255, 255, 0.2);
@@ -111,7 +123,6 @@ body {
           a {
             margin-top: 16px;
             margin-bottom: 16px !important;
-            padding: 4px 18px 4px 24px !important;
           }
         }
       }
@@ -121,6 +132,9 @@ body {
           margin-top: 16px;
           margin-bottom: 16px !important;
           padding: 4px 16px !important;
+          @media (max-width: @screen-md-max) {
+            padding: 4px 8px !important;
+          }
           background-color: #fff !important;
           border-radius: 16px !important;
           color: #333 !important;
@@ -138,6 +152,9 @@ body {
       @media(max-width: 1400px) {
         padding-left: 32px;
       }
+      @media (max-width: @screen-md-max) {
+        padding-left: 16px !important;
+      }
       .cdv2-text-lg;
     }
   }
@@ -148,6 +165,9 @@ body {
     transform: none;
     @media (max-width: 1366px) {
       left: 180px;
+    }
+    @media (max-width: @screen-md-max) {
+      left: 156px !important;
     }
   }
 
@@ -169,6 +189,9 @@ body {
   }
 
   .ct-layout-person_center {
+    @media (max-width: @screen-md-max) {
+      margin-right: 16px !important;
+    }
     .user-avatar-toggle {
       height: 60px !important;
       color: #fff !important;
@@ -255,6 +278,9 @@ body {
     padding: 6px 16px 16px;
     height: auto !important;
     min-height: 660px;
+    @media (max-width: @screen-xs-min) {
+      margin-right: 16px !important;
+    }
   }
 
   .cd-layout-main {
@@ -299,4 +325,45 @@ body {
   position: fixed;
   bottom: 80px;
   right: 10px;
+}
+
+.navbar-title {
+  margin-left: 108px;
+  color: #fff;
+  font-size: 20px;
+}
+
+.navbar-header--mobile {
+  .navbar-toggle {
+    position: relative;
+    float: none;
+    left: 0;
+    padding-top: 4px;
+    padding-bottom: 0;
+    padding-right: 0;
+    i {
+      color: #fff;
+      font-size: 24px;
+    }
+  }
+}
+
+.navbar-collapse--mobile {
+  background-color: #333;
+  padding: 8px;
+  ul {
+    padding-left: 0;
+    li {
+      padding: 4px 8px;
+      &.active {
+        background-color:#080808;
+        a {
+          color: #fff;
+        }
+      }
+      a {
+        color: #999;
+      }
+    }
+  }
 }

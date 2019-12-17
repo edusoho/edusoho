@@ -56,13 +56,13 @@
 
     <div class="ct-layout-container admin-layout-container">
       <div class="cd-fixed-top">
-        <div class="ct-top-logo">
+        <div class="ct-top-logo hidden-xs">
           <a class="admin-navbar-brand" href="{{ url('admin_v2') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}{{'admin.navbar.header.console_btn'|trans}}</a>
         </div>
-        <div class="ct-layout-navbar">
+        <div class="ct-layout-navbar hidden-xs">
           {% include 'admin-v2/widget/navigation.html.twig' %}
         </div>
-        <div class="ct-layout-person">
+        <div class="ct-layout-person hidden-xs">
           <ul class="cd-clearfix mb0">
             <li class="ct-layout-person_center cd-dropdown" data-toggle="cd-dropdown">
                 <a class="user-avatar-toggle" href="javascript:;">
@@ -77,6 +77,18 @@
                 </div>
             </li>
           </ul>
+        </div>
+        <div class="admin-navbar-mobile visible-xs clearfix">
+
+          <div class="navbar-header navbar-header--mobile">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <i class="es-icon es-icon-menu"></i>
+            </button>
+            <a class="navbar-title" href="{{ url('admin_v2') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}{{'admin.navbar.header.console_btn'|trans}}</a>
+          </div>
+          <div class="navbar-collapse navbar-collapse--mobile collapse">
+            {% include 'admin-v2/widget/navigation-mobile.html.twig' %}
+          </div>
         </div>
         <div class="pull-right change-version-btn">
           {# safari隐藏切换旧版按钮 #}
