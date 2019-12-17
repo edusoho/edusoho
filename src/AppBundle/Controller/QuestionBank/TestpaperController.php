@@ -453,6 +453,13 @@ class TestpaperController extends BaseController
             10
         );
 
+        if (!empty($conditions['categoryId'])) {
+            $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+            $childrenIds[] = $conditions['categoryId'];
+            $conditions['categoryIds'] = $childrenIds;
+            unset($conditions['categoryId']);
+        }
+
         $questions = $this->getQuestionService()->search(
             $conditions,
             $orderBy,
