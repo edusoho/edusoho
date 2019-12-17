@@ -676,8 +676,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $user = $this->getCurrentUser();
 
-        $checkData = $fields['result'];
-        unset($fields['result']);
+        $checkData = empty($fields['result']) ? array() : $fields['result'];
+        if (isset($fields['result'])) {
+            unset($fields['result']);
+        }
 
         $items = $this->findItemsByTestId($paperResult['testId']);
 

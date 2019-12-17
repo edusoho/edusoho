@@ -76,4 +76,8 @@ interface QuestionService
     public function batchDeletes($ids);
 
     public function importQuestions($questions, $token);
+
+    public function getQuestionConfig($type);
+
+    public function findAttachments($questionIds);
 }
