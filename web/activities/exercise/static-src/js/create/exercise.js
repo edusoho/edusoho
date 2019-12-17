@@ -62,8 +62,8 @@ export default class Exercise {
                 let bankId = $('[name="range[bankId]"]').val();
                 range.bankId = bankId;
                 if ($('[name="range[categoryId]"]').length > 0) {
-                  let categoryId = $('[name="range[categoryId]"]').val();
-                  range.categoryId = categoryId;
+                  let categoryIds = $('[name="range[categoryId]"]').val();
+                  range.categoryIds = categoryIds;
                 }
 
                 return JSON.stringify(range);

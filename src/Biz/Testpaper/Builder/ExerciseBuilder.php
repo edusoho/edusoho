@@ -262,8 +262,8 @@ class ExerciseBuilder implements TestpaperBuilderInterface
             $conditions['bankId'] = $options['range']['bankId'];
         }
 
-        if (!empty($options['range']['categoryId'])) {
-            $conditions['categoryId'] = $options['range']['categoryId'];
+        if (!empty($options['range']['categoryIds'])) {
+            $conditions['categoryIds'] = explode(',', $options['range']['categoryIds']);
         }
 
         if (!empty($options['questionTypes'])) {
@@ -276,6 +276,10 @@ class ExerciseBuilder implements TestpaperBuilderInterface
 
         if (!empty($options['difficulty'])) {
             $conditions['difficulty'] = $options['difficulty'];
+        }
+
+        if (!empty($options['categoryIds'])) {
+            $conditions['categoryIds'] = $options['categoryIds'];
         }
 
         $conditions['parentId'] = 0;
