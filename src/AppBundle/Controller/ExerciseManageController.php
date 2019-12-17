@@ -17,7 +17,7 @@ class ExerciseManageController extends BaseController
         $result = $this->getTestpaperService()->canBuildTestpaper('exercise', $fields);
 
         $status = false;
-        if ($result['status'] == 'yes') {
+        if ('yes' == $result['status']) {
             $status = true;
         }
 
