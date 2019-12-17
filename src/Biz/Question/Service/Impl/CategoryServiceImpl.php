@@ -133,6 +133,8 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         if (empty($fields)) {
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
+        $user = $this->getCurrentUser();
+        $fields['userId'] = $user['id'];
 
         return $this->getCategoryDao()->update($id, $fields);
     }
