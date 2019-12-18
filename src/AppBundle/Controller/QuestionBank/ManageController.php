@@ -22,6 +22,7 @@ class ManageController extends BaseController
         $conditions['categoryId'] = empty($conditions['subCategory']) ? $categoryId : $conditions['subCategory'];
         $conditions['ids'] = ArrayToolkit::column($this->getQuestionBankService()->findUserManageBanks(), 'id');
         $conditions['ids'] = empty($conditions['ids']) ? array(-1) : $conditions['ids'];
+        $conditions = $this->fillOrgCode($conditions);
 
         $pagination = new Paginator(
             $request,
