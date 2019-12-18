@@ -54,7 +54,6 @@
     <!--[if lt IE 9]>
       {% include 'default/ie8-alert.html.twig' %}
     <![endif]-->
-
     <div class="ct-layout-container admin-layout-container">
       <div class="cd-fixed-top">
         <div class="ct-top-logo hidden-xs">
@@ -101,6 +100,9 @@
         </div>
       </div>
       <div class="cd-layout-main">
+        {% if isSafari %}
+          {% include 'admin-v2/default/safari-notify-modal.html.twig' %}
+        {% endif %}
         {% block container %}
           {% block content %}
             {% include 'admin-v2/widget/side-bar.html.twig' %}
@@ -196,7 +198,3 @@
   {% endif %}
   >{{ menu.name|trans({}, 'menu') }}</a>
 {% endmacro %}
-
-{% if isSafari %}
-  {% include 'admin-v2/default/safari-notify-modal.html.twig' %}
-{% endif %}

@@ -1,1 +1,0 @@
-webpackJsonp(["app/js/admin-v2/default/safari-modal/index"],{"1613b003d6d4e94220f4":function(a,d,o){"use strict";$(".js-safari-modal-click").on("click",function(a){cd.modal({el:"#cd-modal",ajax:!1,url:"",maskClosable:!0}).on("ok",function(a,d){d.trigger("close")})})}},["1613b003d6d4e94220f4"]);
