@@ -8,7 +8,7 @@ body {
     height: 60px !important;
     background-color: #333;
     box-shadow: 0px 2px 12px 0px rgba(0,0,0,0.05);
-    @media (max-width: @screen-xs-min) {
+    @media (max-width: @screen-xs-max) {
       height: 54px !important;
     }
   }
@@ -75,7 +75,7 @@ body {
         &:before {
           content: 'New';
           position: absolute;
-          @media (min-width: @screen-xs-min) {
+          @media (min-width: @screen-xs-max) {
             right: -10px;
           }
           top: 10px;
@@ -85,7 +85,7 @@ body {
           background-color: #ed3e3e;
           border-radius: 20px;
           z-index: 10;
-          @media (max-width: @screen-xs-min) {
+          @media (max-width: @screen-xs-max) {
             top: 0;
             left: 48px;
           }
@@ -289,7 +289,7 @@ body {
     padding: 6px 16px 16px;
     height: auto !important;
     min-height: 660px;
-    @media (max-width: @screen-xs-min) {
+    @media (max-width: @screen-xs-max) {
       margin-right: 16px !important;
     }
   }
@@ -352,7 +352,7 @@ body {
 }
 
 .navbar-header--mobile {
-  @media (max-width: @screen-xs-min) {
+  @media (max-width: @screen-xs-max) {
     .navbar-toggle {
       position: relative;
       float: none;
@@ -371,7 +371,7 @@ body {
 
 .admin-layout-container .cd-fixed-top {
   .navbar-collapse--mobile {
-    @media (max-width: @screen-xs-min) {
+    @media (max-width: @screen-xs-max) {
       left: 0 !important;
       width: 100%;
       background-color: #333;
