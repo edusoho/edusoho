@@ -21,18 +21,18 @@ class QuestionTypePattern implements TestpaperPatternInterface
         $typedQuestions = ArrayToolkit::group($questions, 'type');
 
         $canBuildResult = $this->canBuildWithQuestions($options, $typedQuestions);
-        if ($canBuildResult['status'] == 'no') {
+        if ('no' == $canBuildResult['status']) {
             return array('status' => 'error', 'missing' => $canBuildResult['missing']);
         }
 
         $items = array();
         foreach ($options['counts'] as $type => $needCount) {
             $needCount = intval($needCount);
-            if ($needCount == 0) {
+            if (0 == $needCount) {
                 continue;
             }
 
-            if ($options['mode'] == 'difficulty') {
+            if ('difficulty' == $options['mode']) {
                 $difficultiedQuestions = ArrayToolkit::group($typedQuestions[$type], 'difficulty');
 
                 // 按难度百分比选取Question
@@ -85,7 +85,7 @@ class QuestionTypePattern implements TestpaperPatternInterface
         $selectedQuestions = array();
         foreach ($percentages as $difficulty => $percentage) {
             $subNeedCount = intval($needCount * $percentage / 100);
-            if ($subNeedCount == 0) {
+            if (0 == $subNeedCount) {
                 continue;
             }
 
@@ -104,7 +104,7 @@ class QuestionTypePattern implements TestpaperPatternInterface
 
         foreach ($options['counts'] as $type => $needCount) {
             $needCount = intval($needCount);
-            if ($needCount == 0) {
+            if (0 == $needCount) {
                 continue;
             }
 
@@ -112,11 +112,11 @@ class QuestionTypePattern implements TestpaperPatternInterface
                 $missing[$type] = $needCount;
                 continue;
             }
-            if ($type == 'material') {
+            if ('material' == $type) {
                 $validatedMaterialQuestionNum = 0;
                 foreach ($questions['material'] as $materialQuestion) {
                     if ($materialQuestion['subCount'] > 0) {
-                        $validatedMaterialQuestionNum += 1;
+                        ++$validatedMaterialQuestionNum;
                     }
                 }
                 if ($validatedMaterialQuestionNum < $needCount) {

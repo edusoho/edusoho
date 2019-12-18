@@ -12,7 +12,6 @@ use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\NormalStrategy;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Testpaper\Builder\RandomTestpaperBuilder;
-use Biz\Util\Phpsec\Crypt\Random;
 use Gregwar\Captcha\CaptchaBuilder;
 use Pimple\Container;
 use Biz\Common\HTMLHelper;
