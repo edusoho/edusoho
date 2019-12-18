@@ -228,7 +228,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $defaultCategories = ArrayToolkit::index($defaultCategories, 'orgId');
         $count = $this->getCourseSetService()->countCourseSets(array('locked' => 0));
         $start = $this->getStart($page);
-        $courseSets = $this->getCourseSetService()->searchCourseSets(array('locked' => 0), array('id' => 'desc'), $start, $this->pageSize, array('id', 'title', 'orgId', 'orgCode'));
+        $courseSets = $this->getCourseSetService()->searchCourseSets(array('locked' => 0), array('id' => 'ASC'), $start, $this->pageSize, array('id', 'title', 'orgId', 'orgCode'));
         foreach ($courseSets as $courseSet) {
             $category = empty($defaultCategories[$courseSet['orgId']]) ? reset($defaultCategories) : $defaultCategories[$courseSet['orgId']];
             $questions = $this->getQuestionService()->search(array('courseSetId' => $courseSet['id']), array(), 0, 1);
@@ -371,7 +371,7 @@ class EduSohoUpgrade extends AbstractUpdater
             );
             foreach ($exercises as $exercise) {
                 $metas = $exercise['metas'];
-                $categoryIds = array();
+                $categoryIds = '';
                 if (!isset($metas['range'])) {
                     continue;
                 }
@@ -381,11 +381,11 @@ class EduSohoUpgrade extends AbstractUpdater
                 }
 
                 if (!empty($metas['range']['courseId']) && !empty($createdCourseCategory[$metas['range']['courseId']])) {
-                    $categoryIds = array($createdCourseCategory[$metas['range']['courseId']]);
+                    $categoryIds = $createdCourseCategory[$metas['range']['courseId']];
                 }
 
                 if (!empty($metas['range']['lessonId']) && !empty($createdLessonCategory[$metas['range']['lessonId']])) {
-                    $categoryIds = array($createdLessonCategory[$metas['range']['lessonId']]);
+                    $categoryIds = $createdLessonCategory[$metas['range']['lessonId']];
                 }
                 $metas['range'] = array('bankId' => $questionBank['id'], 'categoryIds' => $categoryIds);
                 $this->testpaperUpdateHelper->add('id', $exercise['id'], array('metas' => $metas));
