@@ -66,7 +66,6 @@ class TestpaperForm {
   _calTestpaperStats() {
     let stats = {};
     let self = this;
-
     this.$typeNav.find('li').each(function() {
       let type = $(this).find('a').data('type'),
         name = $(this).find('a').data('name');
@@ -75,7 +74,7 @@ class TestpaperForm {
 
       self.$questionForm.find('#testpaper-table-' + type).find('.js-question-score').each(function() {
         let itemType = $(this).closest('tr').data('type');
-        let score = itemType === 'material' ? 0 : parseFloat($(this).data('score'));
+        let score = itemType === 'material' ? 0 : parseFloat($(this).attr('data-score'));
         let question = {};
 
         if (itemType !== 'material') {
@@ -109,7 +108,7 @@ class TestpaperForm {
 
     stats.total = total;
     self.questionsCount = total.count;
-
+    
     return stats;
   }
 
