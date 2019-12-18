@@ -60,7 +60,7 @@
           <a class="admin-navbar-brand" href="{{ url('admin_v2') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}{{'admin.navbar.header.console_btn'|trans}}</a>
         </div>
         <div class="ct-layout-navbar hidden-xs">
-          {% include 'admin-v2/widget/navigation.html.twig' %}
+          {% include 'admin-v2/widget/navigation.html.twig' with { isPC: true} %}
         </div>
         <div class="ct-layout-person hidden-xs">
           <ul class="cd-clearfix mb0">
@@ -87,7 +87,7 @@
             <a class="navbar-title" href="{{ url('admin_v2') }}">{{'admin.navbar.header.console_btn'|trans}}</a>
           </div>
           <div class="navbar-collapse navbar-collapse--mobile collapse">
-            {% include 'admin-v2/widget/navigation-mobile.html.twig' %}
+            {% include 'admin-v2/widget/navigation.html.twig' %}
           </div>
         </div>
         <div class="pull-right change-version-btn">
