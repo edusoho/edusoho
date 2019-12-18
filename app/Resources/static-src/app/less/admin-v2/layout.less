@@ -13,6 +13,9 @@ body {
     height: 60px !important;
     background-color: #333;
     box-shadow: 0px 2px 12px 0px rgba(0,0,0,0.05);
+    @media (max-width: @screen-xs-min) {
+      height: 54px !important;
+    }
   }
 
   .admin-navbar-brand {
@@ -40,6 +43,9 @@ body {
     height: 60px;
     > li + li {
       margin-left: 24px;
+      @media (max-width: @screen-md-max) {
+        margin-left: 8px !important;
+      }
     }
   }
 
@@ -56,6 +62,9 @@ body {
         margin-bottom: 20px;
         padding: 0 16px !important;
         font-weight: normal !important;
+        @media (max-width: @screen-md-max) {
+          padding: 0 6px !important;
+        }
         img {
           display: none;
         }
@@ -71,7 +80,9 @@ body {
         &:before {
           content: 'New';
           position: absolute;
-          right: -10px;
+          @media (min-width: @screen-xs-min) {
+            right: -10px;
+          }
           top: 10px;
           padding: 0px 3px;
           color: #fff;
@@ -79,6 +90,10 @@ body {
           background-color: #ed3e3e;
           border-radius: 20px;
           z-index: 10;
+          @media (max-width: @screen-xs-min) {
+            top: 0;
+            left: 48px;
+          }
         }
       }
       .es-transition;
@@ -89,6 +104,9 @@ body {
           margin-top: 16px;
           margin-bottom: 16px;
           padding: 4px 16px !important;
+          @media (max-width: @screen-md-max) {
+            padding: 4px 8px !important;
+          }
           .cdv2-text-md;
           border-radius: 16px;
           background-color: rgba(255,255, 255, 0.2);
@@ -116,7 +134,6 @@ body {
           a {
             margin-top: 16px;
             margin-bottom: 16px !important;
-            padding: 4px 18px 4px 24px !important;
           }
         }
       }
@@ -126,6 +143,9 @@ body {
           margin-top: 16px;
           margin-bottom: 16px !important;
           padding: 4px 16px !important;
+          @media (max-width: @screen-md-max) {
+            padding: 4px 8px !important;
+          }
           background-color: #fff !important;
           border-radius: 16px !important;
           color: #333 !important;
@@ -143,6 +163,9 @@ body {
       @media(max-width: 1400px) {
         padding-left: 32px;
       }
+      @media (max-width: @screen-md-max) {
+        padding-left: 16px !important;
+      }
       .cdv2-text-lg;
     }
   }
@@ -150,9 +173,14 @@ body {
   .cd-fixed-top .ct-layout-navbar {
     position: absolute;
     left: 205px;
+    padding-left: 0;
+    padding-right: 0;
     transform: none;
     @media (max-width: 1366px) {
       left: 180px;
+    }
+    @media (max-width: @screen-md-max) {
+      left: 156px !important;
     }
   }
 
@@ -171,9 +199,15 @@ body {
         text-decoration: none;
       }
     }
+    @media (max-width: @screen-md-max) {
+      display: none;
+    }
   }
 
   .ct-layout-person_center {
+    @media (max-width: @screen-md-max) {
+      margin-right: 16px !important;
+    }
     .user-avatar-toggle {
       height: 60px !important;
       color: #fff !important;
@@ -260,6 +294,9 @@ body {
     padding: 6px 16px 16px;
     height: auto !important;
     min-height: 660px;
+    @media (max-width: @screen-xs-min) {
+      margin-right: 16px !important;
+    }
   }
 
   .cd-layout-main {
@@ -304,4 +341,79 @@ body {
   position: fixed;
   bottom: 80px;
   right: 10px;
+  z-index: 1000;
+}
+
+.navbar-mobile-title {
+  margin-left: 108px;
+  color: #999;
+  font-size: 20px;
+  .es-transition;
+  &:hover,
+  &:focus {
+    .es-transition;
+    color: #fff;
+  }
+}
+
+.navbar-header--mobile {
+  @media (max-width: @screen-xs-min) {
+    .navbar-toggle {
+      position: relative;
+      float: none;
+      left: 0;
+      padding: 4px 0 0 14px;
+      padding-top: 4px;
+      padding-bottom: 0;
+      padding-right: 0;
+      i {
+        color: #fff;
+        font-size: 24px;
+      }
+    }
+  }
+}
+
+.admin-layout-container .cd-fixed-top {
+  .navbar-collapse--mobile {
+    @media (max-width: @screen-xs-min) {
+      left: 0 !important;
+      width: 100%;
+      background-color: #333;
+      padding: 8px;
+      ul {
+        padding-left: 0;
+        height: auto;
+        li {
+          padding: 4px 8px;
+          float: none !important;
+          & + li {
+            margin-left: 0 !important;
+          }
+          &.active {
+            a {
+              color: #fff !important;
+            }
+          }
+          &.application-icon {
+            a {
+              background-color: transparent !important;
+              margin-bottom: 0 !important;
+            }
+          }
+          a {
+            margin: 0 !important;
+            padding: 0 !important;
+            color: #999 !important;
+            background-color: #fff !important;
+            border-radius: 0 !important;
+            background-color: transparent !important;
+            img {
+              display: none !important;
+            }
+          }
+        }
+      }
+    }
+  }
 }
