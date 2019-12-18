@@ -79,12 +79,15 @@
           </ul>
         </div>
         <div class="pull-right change-version-btn">
-          {# safari隐藏切换旧版按钮 #}
-          {% set isNotSafari = (not (app.request.headers.get('User-Agent') matches '/Safari/') or (app.request.headers.get('User-Agent') matches '/Chrome/')) %}
-          {% if setting('backstage.allow_show_switch_btn')|default(0) and isNotSafari %}
+          {% if setting('backstage.allow_show_switch_btn')|default(0) %}
             {% set canAccess = 'ROLE_SUPER_ADMIN' in app.user.roles|default([]) or 'ROLE_ADMIN' in app.user.roles|default([]) %}
             {% if canAccess %}
-              <a href="#modal" data-toggle="modal" data-loading-text="{{ 'admin_v2.switch_version.btn_loading'|trans }}" data-url="{{ path('admin_v2_switch_old_version') }}">{{ 'admin_v2.switch_old_version.setting_btn'|trans }}</a>
+              {% set isSafari = (app.request.headers.get('User-Agent') matches '/Safari/') and (not (app.request.headers.get('User-Agent') matches '/Chrome/')) %}
+              {% if isSafari %}
+                {% include 'admin-v2/default/safari-notify-modal.html.twig' %}
+              {% else %}
+                <a href="#modal" data-toggle="modal" data-loading-text="{{ 'admin_v2.switch_version.btn_loading'|trans }}" data-url="{{ path('admin_v2_switch_old_version') }}">{{ 'admin_v2.switch_old_version.setting_btn'|trans }}</a>
+              {% endif %}
             {% else %}
               <a href="javascript:;" class="js-no-permission-btn">{{ 'admin_v2.switch_old_version.setting_btn'|trans }}</a>
             {% endif %}
