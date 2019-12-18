@@ -75,7 +75,9 @@ body {
         &:before {
           content: 'New';
           position: absolute;
-          right: -10px;
+          @media (min-width: @screen-xs-min) {
+            right: -10px;
+          }
           top: 10px;
           padding: 0px 3px;
           color: #fff;
@@ -83,6 +85,10 @@ body {
           background-color: #ed3e3e;
           border-radius: 20px;
           z-index: 10;
+          @media (max-width: @screen-xs-min) {
+            top: 0;
+            left: 48px;
+          }
         }
       }
       .es-transition;
@@ -162,6 +168,8 @@ body {
   .cd-fixed-top .ct-layout-navbar {
     position: absolute;
     left: 205px;
+    padding-left: 0;
+    padding-right: 0;
     transform: none;
     @media (max-width: 1366px) {
       left: 180px;
@@ -331,41 +339,75 @@ body {
   z-index: 1000;
 }
 
-.navbar-title {
+.navbar-mobile-title {
   margin-left: 108px;
-  color: #fff;
+  color: #999;
   font-size: 20px;
+  .es-transition;
+  &:hover,
+  &:focus {
+    .es-transition;
+    color: #fff;
+  }
 }
 
 .navbar-header--mobile {
-  .navbar-toggle {
-    position: relative;
-    float: none;
-    left: 0;
-    padding-top: 4px;
-    padding-bottom: 0;
-    padding-right: 0;
-    i {
-      color: #fff;
-      font-size: 24px;
+  @media (max-width: @screen-xs-min) {
+    .navbar-toggle {
+      position: relative;
+      float: none;
+      left: 0;
+      padding: 4px 0 0 14px;
+      padding-top: 4px;
+      padding-bottom: 0;
+      padding-right: 0;
+      i {
+        color: #fff;
+        font-size: 24px;
+      }
     }
   }
 }
 
-.navbar-collapse--mobile {
-  background-color: #333;
-  padding: 8px;
-  ul {
-    padding-left: 0;
-    li {
-      padding: 4px 8px;
-      &.active {
-        a {
-          color: #fff;
+.admin-layout-container .cd-fixed-top {
+  .navbar-collapse--mobile {
+    @media (max-width: @screen-xs-min) {
+      left: 0 !important;
+      width: 100%;
+      background-color: #333;
+      padding: 8px;
+      ul {
+        padding-left: 0;
+        height: auto;
+        li {
+          padding: 4px 8px;
+          float: none !important;
+          & + li {
+            margin-left: 0 !important;
+          }
+          &.active {
+            a {
+              color: #fff !important;
+            }
+          }
+          &.application-icon {
+            a {
+              background-color: transparent !important;
+              margin-bottom: 0 !important;
+            }
+          }
+          a {
+            margin: 0 !important;
+            padding: 0 !important;
+            color: #999 !important;
+            background-color: #fff !important;
+            border-radius: 0 !important;
+            background-color: transparent !important;
+            img {
+              display: none !important;
+            }
+          }
         }
-      }
-      a {
-        color: #999;
       }
     }
   }

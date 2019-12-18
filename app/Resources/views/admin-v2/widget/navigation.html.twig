@@ -7,7 +7,7 @@
     {% set rootMenu = permission('admin_v2') %}
   {% endif %}
 
-<ul {% if isPC|default(false) %} class="cd-tabs ct-layout-navbar_ul"{% endif %}>
+<ul class="cd-tabs ct-layout-navbar_ul">
   <li {% if adminV2Homepage|default(null) %}class="active"{% endif %} id="nav_admin_v2">
     <a title="{{ 'admin_v2.homepage.overview'|trans }}" href="{{ path('admin_v2') }}">{{ 'admin_v2.homepage.overview'|trans }}</a>
   </li>
@@ -22,7 +22,7 @@
             target="_blank"
           {% endif %}
         >
-        {% if isPC|default(false)  %}<img src="{{ asset('static-dist/app/img/admin-v2/app.png') }}" srcset="{{ asset('static-dist/app/img/admin-v2/app.png') }} 1x, {{ asset('static-dist/app/img/admin-v2/app@2x.png') }} 2x">{% endif %}<span>{{ m.name|trans({}, 'menu') }}</span>
+        <img src="{{ asset('static-dist/app/img/admin-v2/app.png') }}" srcset="{{ asset('static-dist/app/img/admin-v2/app.png') }} 1x, {{ asset('static-dist/app/img/admin-v2/app@2x.png') }} 2x"><span>{{ m.name|trans({}, 'menu') }}</span>
         </a>
       </li>
     {% endif %}
