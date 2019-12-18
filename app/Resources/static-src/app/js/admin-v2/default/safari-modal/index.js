@@ -1,4 +1,4 @@
-$('.js-click').on('click', function (e) {
+$('.js-safari-modal-click').on('click', function (e) {
   cd.modal({
     el: '#cd-modal',
     ajax: false,
