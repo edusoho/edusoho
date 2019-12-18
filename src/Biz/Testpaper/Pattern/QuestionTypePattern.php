@@ -140,25 +140,11 @@ class QuestionTypePattern implements TestpaperPatternInterface
     {
         $conditions = array(
             'parentId' => 0,
-            'courseSetId' => $options['courseSetId'],
+            'bankId' => $options['bankId'],
         );
 
-        //兼容course1.0 start
-        if (!empty($options['ranges']['start'])) {
-            $conditions['lessonIdGT'] = $options['ranges']['start'];
-        }
-
-        if (!empty($options['ranges']['end'])) {
-            $conditions['lessonIdLT'] = $options['ranges']['end'];
-        }
-        //兼容course1.0 end
-
-        if (!empty($options['ranges']['courseId'])) {
-            $conditions['courseId'] = $options['ranges']['courseId'];
-        }
-
-        if (!empty($options['ranges']['lessonId'])) {
-            $conditions['lessonId'] = $options['ranges']['lessonId'];
+        if (!empty($options['ranges']['categoryId'])) {
+            $conditions['categoryId'] = $options['ranges']['categoryId'];
         }
 
         $total = $this->getQuestionService()->searchCount($conditions);

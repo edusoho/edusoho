@@ -4346,6 +4346,8 @@ my.teaching.question_bank.question.manage: 题目管理
 my.teaching.question_bank.testpaper.manage: 试卷管理
 my.teaching.question_bank.testpaper.edit: 编辑试卷
 my.teaching.question_bank.testpaper.empty: 暂无试卷
+my.teaching.question_bank.testpaper.manual_create: 手动组卷
+my.teaching.question_bank.testpaper.automatic_create: 智能组卷
 my.teaching.question_bank.question_category.create: 添加题目分类
 my.teaching.question_bank.question_category.update: 编辑分类
 my.teaching.question_bank.question_batch_category.title: 批量设置分类

@@ -4,7 +4,7 @@
   {% if testpaper is defined %}
     {{ 'my.teaching.question_bank.testpaper.edit'|trans }} - {{ parent() }}
   {% else %}
-    {{ 'course.testpaper_manage.create_btn'|trans }} - {{ parent() }}
+    {{ 'my.teaching.question_bank.testpaper.manual_create'|trans }} - {{ parent() }}
   {% endif %}
 {% endblock %}
 {% set side_nav = 'my-question-bank' %}
@@ -35,7 +35,9 @@
                 {{ path('question_bank_manage_testpaper_create', {id: questionBank.id}) }}
               {% endif %}
             ">
-              {% include 'question-bank/testpaper/manage/base-info.html.twig' %}
+              {% if showBaseInfo == '1' %}
+                {% include 'question-bank/testpaper/manage/base-info.html.twig' %}
+              {% endif %}
               {% include 'question-bank/testpaper/manage/questions-info.html.twig' %}
             </form>
             {% include 'question-bank/testpaper/manage/set-score-modal.html.twig' %}

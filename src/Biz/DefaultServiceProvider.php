@@ -11,6 +11,8 @@ use Biz\Course\Util\CourseRenderViewResolver;
 use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\NormalStrategy;
 use Biz\Task\Strategy\StrategyContext;
+use Biz\Testpaper\Builder\RandomTestpaperBuilder;
+use Biz\Util\Phpsec\Crypt\Random;
 use Gregwar\Captcha\CaptchaBuilder;
 use Pimple\Container;
 use Biz\Common\HTMLHelper;
@@ -54,6 +56,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['testpaper_builder.testpaper'] = function ($biz) {
             return new TestpaperBuilder($biz);
+        };
+
+        $biz['testpaper_builder.random_testpaper'] = function ($biz) {
+            return new RandomTestpaperBuilder($biz);
         };
 
         $biz['file_fire_wall_factory'] = function ($biz) {

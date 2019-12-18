@@ -294,19 +294,21 @@ class TestpaperForm {
   }
 
   _initEditor(validator) {
-    let editor = CKEDITOR.replace(this.$description.attr('id'), {
-      toolbar: 'Simple',
-      fileSingleSizeLimit: app.fileSingleSizeLimit,
-      filebrowserImageUploadUrl: this.$description.data('imageUploadUrl'),
-      height: 100
-    });
-    editor.on('change', () => {
-      this.$description.val(delHtmlTag(editor.getData()));
-    });
-    editor.on('blur', () => {
-      this.$description.val(delHtmlTag(editor.getData()));
-      validator.form();
-    });
+    if (this.$description.length > 0) {
+      let editor = CKEDITOR.replace(this.$description.attr('id'), {
+        toolbar: 'Simple',
+        fileSingleSizeLimit: app.fileSingleSizeLimit,
+        filebrowserImageUploadUrl: this.$description.data('imageUploadUrl'),
+        height: 100
+      });
+      editor.on('change', () => {
+        this.$description.val(delHtmlTag(editor.getData()));
+      });
+      editor.on('blur', () => {
+        this.$description.val(delHtmlTag(editor.getData()));
+        validator.form();
+      });
+    }
   }
 
   _initValidate() {
@@ -374,7 +376,7 @@ class TestpaperForm {
     let $target = $(event.currentTarget);
 
     if(this.questionsCount > 2000){
-      notify('danger', Translator.trans('activity.testpaper_manage.questions_length_hint'));
+      cd.message({ type: 'danger', message: Translator.trans('activity.testpaper_manage.questions_length_hint') });
       return;
     }
 
