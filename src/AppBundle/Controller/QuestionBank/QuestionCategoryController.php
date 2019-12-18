@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\QuestionBank;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\TreeToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Question\Service\CategoryService;
 use Biz\QuestionBank\Service\QuestionBankService;
@@ -17,8 +18,9 @@ class QuestionCategoryController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        $categories = $this->getQuestionCategoryService()->getCategoryStructureTree($questionBank['id']);
+        $categories = $this->getQuestionCategoryService()->getCategoryTree($questionBank['id']);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($categories, 'userId'));
+        $categories = TreeToolkit::makeTree($categories, 'weight');
 
         return $this->render('question-bank/question-category/index.html.twig', array(
             'questionBank' => $questionBank,
