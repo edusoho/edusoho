@@ -10,7 +10,7 @@ $('#questionBankSelect').change(function () {
   checkQuestionNum();
 });
 
-$('[name="range[categoryId]"]').change(function () {
+$('[name="range[categoryIds]"]').change(function () {
   checkQuestionNum();
 });
 
@@ -21,7 +21,7 @@ $('[name="difficulty"]').change(function () {
 function checkQuestionNum() {
   let url = $('#questionBankSelect').data('checkNumUrl');
   let bankId = $('#questionBankSelect').val();
-  let categoryIds = $('[name="range[categoryId]"]').val();
+  let categoryIds = $('[name="range[categoryIds]"]').val();
   let difficulty = $('[name="difficulty"]').val();
 
   $.post(url, { bankId: bankId, categoryIds: categoryIds, difficulty: difficulty }, function (data) {
