@@ -3192,8 +3192,8 @@ question_bank_manage:
     defaults: { _controller: AppBundle:QuestionBank/Manage:manage }
 
 question_bank_list:
-    path: /my/question_banks/{category}
-    defaults: { _controller: AppBundle:QuestionBank/Manage:index, category:'' }
+    path: /my/question_banks/{categoryId}
+    defaults: { _controller: AppBundle:QuestionBank/Manage:index, categoryId:'' }
 
 question_bank_category_tree_nav:
     path: /question_banks/tree/{category}
