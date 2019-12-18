@@ -61,8 +61,8 @@ export default class Exercise {
                 let range = {};
                 let bankId = $('[name="range[bankId]"]').val();
                 range.bankId = bankId;
-                if ($('[name="range[categoryId]"]').length > 0) {
-                  let categoryIds = $('[name="range[categoryId]"]').val();
+                if ($('[name="range[categoryIds]"]').length > 0) {
+                  let categoryIds = $('[name="range[categoryIds]"]').val();
                   range.categoryIds = categoryIds;
                 }
 
