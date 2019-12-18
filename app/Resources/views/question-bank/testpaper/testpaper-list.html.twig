@@ -8,12 +8,15 @@
     </div>
 
     <div class="form-group pull-right">
-        <a data-url="{{ path('question_bank_manage_testpaper_import', {id: questionBank.id}) }}" class="cd-btn cd-btn-primary pull-right mls js-import-btn" data-toggle="modal" data-target="#modal">
-          {{ 'course.testpaper_manage.import_btn'|trans }}
-        </a>
-        <a class="cd-btn cd-btn-primary pull-right mls" href="{{ path('question_bank_manage_testpaper_create', {id: questionBank.id}) }}">
-          {{ 'course.testpaper_manage.create_btn'|trans }}
-        </a>
+      <a data-url="{{ path('question_bank_manage_testpaper_import', {id: questionBank.id}) }}" class="cd-btn cd-btn-primary pull-right mls js-import-btn" data-toggle="modal" data-target="#modal">
+        {{ 'course.testpaper_manage.import_btn'|trans }}
+      </a>
+      <a class="cd-btn cd-btn-primary pull-right mls" href="{{ path('question_bank_manage_random_testpaper_create', {id: questionBank.id}) }}">
+        {{ 'my.teaching.question_bank.testpaper.automatic_create'|trans }}
+      </a>
+      <a class="cd-btn cd-btn-primary pull-right mls" href="{{ path('question_bank_manage_testpaper_create', {id: questionBank.id}) }}">
+        {{ 'my.teaching.question_bank.testpaper.manual_create'|trans }}
+      </a>
       </div>
   </form>
 

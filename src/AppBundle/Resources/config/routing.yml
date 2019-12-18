@@ -3293,6 +3293,14 @@ question_bank_manage_testpaper_create:
     path: /question_bank/{id}/testpaper/create
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:create }
 
+question_bank_manage_random_testpaper_create:
+    path: /question_bank/{id}/random_testpaper/create
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:createRandomTestpaper }
+
+question_bank_manage_random_testpaper_build_check:
+    path: /question_bank/{id}/random_testpaper/{type}/check
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:buildCheck }
+
 question_bank_manage_testpaper_edit:
     path: /question_bank/{id}/testpaper/{testpaperId}/edit
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:edit }

@@ -155,6 +155,51 @@ class TestpaperController extends BaseController
         return $this->render('question-bank/testpaper/manage/testpaper-form.html.twig', array(
             'types' => $types,
             'questionBank' => $questionBank,
+            'showBaseInfo' => '1',
+        ));
+    }
+
+    public function createRandomTestpaperAction(Request $request, $id)
+    {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
+        }
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+
+        if ('POST' === $request->getMethod()) {
+            $fields = $request->request->all();
+
+            $fields['bankId'] = $id;
+            $fields['pattern'] = 'questionType';
+
+            $testpaper = $this->getTestpaperService()->buildTestpaper($fields, 'random_testpaper');
+
+            return $this->redirect(
+                $this->generateUrl(
+                    'question_bank_manage_testpaper_edit',
+                    array('id' => $id, 'testpaperId' => $testpaper['id'], 'showBaseInfo' => '0')
+                )
+            );
+        }
+
+        $types = $this->getQuestionTypes();
+
+        $conditions = array(
+            'types' => array_keys($types),
+            'bankId' => $id,
+            'parentId' => 0,
+        );
+
+        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
+        $questionNums = ArrayToolkit::index($questionNums, 'type');
+        $categoryTree = $this->getCategoryService()->getCategoryTree($questionBank['id']);
+
+        return $this->render('question-bank/testpaper/random/testpaper-form.html.twig', array(
+            'categoryTree' => $categoryTree,
+            'types' => $types,
+            'questionNums' => $questionNums,
+            'questionBank' => $questionBank,
         ));
     }
 
@@ -164,6 +209,7 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
+        $showBaseInfo = $request->query->get('showBaseInfo', '1');
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
@@ -213,6 +259,7 @@ class TestpaperController extends BaseController
             'questions' => $questions,
             'subCounts' => empty($questions['material']) ? 0 : array_sum(array_column($questions['material'], 'subCount')),
             'questionCategories' => $questionCategories,
+            'showBaseInfo' => $showBaseInfo,
         ));
     }
 
@@ -511,6 +558,20 @@ class TestpaperController extends BaseController
         }
 
         return $this->createJsonResponse($typeHtml);
+    }
+
+    public function buildCheckAction(Request $request, $id, $type)
+    {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $data = $request->request->all();
+        $data['bankId'] = $id;
+
+        $result = $this->getTestpaperService()->canBuildTestpaper($type, $data);
+
+        return $this->createJsonResponse($result);
     }
 
     protected function getQuestionTypes()
