@@ -15,7 +15,7 @@ class TestpaperForm {
     this.questions = [];
     this.questionsCount = 0;
     this.$typeNav = this.$form.find('#testpaper-question-nav');
-    new BatchSelect($('#testpaper-items-manager'));
+    new BatchSelect(this.$questionForm);
     this._initEvent();
     this._initValidate();
     this._initScoreValidator();
@@ -24,11 +24,11 @@ class TestpaperForm {
 
   _initEvent() {
     this.$form.on('click', '.js-request-save', event => this._confirmSave(event));
-    this.$modal.on('click','.js-confirm-submit',event => this._submitSave(event));
+    this.$modal.on('click','.js-confirm-submit', event => this._submitSave(event));
     this.$typeNav.on('click', 'li', event => this._changeNav(event));
-    this.$form.on('click', '[data-role="item-delete-btn"]', event=>this.deleteQuestion(event));
-    this.$form.on('click', '[data-role="batch-delete-btn"]', event=>this.batchDelete(event));
-    this.$form.on('click', '[data-role="set-score-btn"]', event=>this.showScoreModal(event));
+    this.$form.on('click', '[data-role="item-delete-btn"]', event => this.deleteQuestion(event));
+    this.$form.on('click', '[data-role="batch-delete-btn"]', event => this.batchDelete(event));
+    this.$form.on('click', '[data-role="set-score-btn"]', event => this.showScoreModal(event));
     this.$form.on('click', '.js-pick-modal', event => this.showPickModal(event));
     this.$form.on('lengthChange','[data-role="question-body"]', event => this.changeQuestionCount(event));
     this.$scoreModal.on('click', '.js-batch-score-confirm', event => this.batchSetScore(event));
@@ -48,12 +48,12 @@ class TestpaperForm {
     this.questions = [];
     let stats = this._calTestpaperStats();
 
-    let html='';
+    let html = '';
     $.each(stats, function(index, statsItem){
       let tr = '<tr>';
-      tr += '<td>' + statsItem.name + '</td>';
-      tr += '<td>' + statsItem.count + '</td>';
-      tr += '<td>' + statsItem.score.toFixed(1) + '</td>';
+      tr += `<td>${statsItem.name}</td>`;
+      tr += `<td>${statsItem.count}</td>`;
+      tr += `<td>${statsItem.score.toFixed(1)}</td>`;
       tr += '</tr>';
       html += tr;
     });
@@ -75,10 +75,10 @@ class TestpaperForm {
 
       self.$questionForm.find('#testpaper-table-' + type).find('.js-question-score').each(function() {
         let itemType = $(this).closest('tr').data('type');
-        let score = itemType == 'material' ? 0 : parseFloat($(this).data('score'));
+        let score = itemType === 'material' ? 0 : parseFloat($(this).data('score'));
         let question = {};
 
-        if (itemType != 'material') {
+        if (itemType !== 'material') {
           stats[type]['count'] ++;
         }
 
@@ -92,9 +92,7 @@ class TestpaperForm {
 
         stats[type]['missScore'] = missScore;
 
-        let questionId = $(this).closest('tr').data('id');
-
-        question['id'] = questionId;
+        question['id'] = $(this).closest('tr').data('id');
         question['score'] = score;
         question['missScore'] = missScore;
         question['type'] = type;
@@ -118,16 +116,16 @@ class TestpaperForm {
   _validateScore() {
     let isOk = true;
 
-    if (this.$form.find('.js-question-score').length == 0) {
+    if (this.$form.find('.js-question-score').length === 0) {
       cd.message({type: 'danger', message: Translator.trans('activity.testpaper_manage.question_required_error_hint') });
       isOk = false;
     }
 
     this.$form.find('.js-question-score').each(function() {
       let itemType = $(this).closest('tr').data('type');
-      var score = $(this).data('score');
+      let score = $(this).data('score');
 
-      if (score == '0' && itemType != 'material') {
+      if (score == '0' && itemType !== 'material') {
         cd.message({type: 'danger', message: Translator.trans('activity.testpaper_manage.question_score_empty_hint') });
         isOk = false;
       }
@@ -171,25 +169,28 @@ class TestpaperForm {
     let $tbody =  $target.parents('.js-question-table').find('tbody');
     let self = this;
 
-    this.$form.find('[data-role="batch-item"]:checked').each(function(index,item){
+    this.$form.find('[data-role="batch-item"]:checked').each(function() {
       let questionId = $(this).val();
-
-      if ($(this).closest('tr').data('type') == 'material') {
+      if ($(this).closest('tr').data('type') === 'material') {
         self.$form.find('[data-parent-id="'+questionId+'"]').remove();
       }
-      $(this).closest('tr').remove();
 
+      $(this).closest('tr').remove();
     });
     $tbody.trigger('lengthChange');
   }
 
   showScoreModal(event) {
-    if (this.$form.find('[data-role="batch-item"]:checked').length > 0) {
+    let $checked = this.$form.find('[data-role="batch-item"]:checked');
+    if ($checked.length > 0) {
       let self = this;
-      var types = ['choice', 'uncertain_choice'];
-      this.$form.find('[data-role="batch-item"]:checked').each(function(index,item){
-        if ($.inArray($(this).closest('tr').data('type'), types) != -1) {
-          self.$scoreModal.find('.js-miss-score-field').removeClass('hidden');
+      let types = ['choice', 'uncertain_choice'];
+      $checked.each(function() {
+        let $missScore = self.$scoreModal.find('.js-miss-score-field');
+        if ($.inArray($(this).closest('tr').data('type'), types) !== -1) {
+          $missScore.removeClass('hidden');
+        } else {
+          $missScore.addClass('hidden');
         }
       });
       this.$scoreModal.modal('show');
@@ -198,19 +199,21 @@ class TestpaperForm {
 
   batchSetScore(event) {
     if (this.scoreValidator.form()) {
-      let self = this;
-      let score = parseFloat(this.$scoreModal.find('input[name="score"]').val());
-      let missScore = parseFloat(this.$scoreModal.find('input[name="missScore"]').val());
+      let $score = this.$scoreModal.find('input[name="score"]');
+      let $missScore = this.$scoreModal.find('input[name="missScore"]');
       let scoreObj = {
-        score: score,
-        missScore: missScore,
+        score: parseFloat($score.val()),
+        missScore: parseFloat($missScore.val()),
       };
+      let self = this;
       this.$form.find('[data-role="batch-item"]:checked').each(function() {
         self.setScore($(this).parents('tr'), scoreObj);
       });
 
       cd.message({ type: 'success', message: Translator.trans('subject.score_update_success') });
       this.$scoreModal.modal('hide');
+      $score.val('');
+      $missScore.val('');
     }
   }
 
@@ -243,7 +246,7 @@ class TestpaperForm {
     let $target = $(event.currentTarget);
     let type = $target.data('type');
     let count = 0;
-    if (type == 'material') {
+    if (type === 'material') {
       count = $target.find('tr.is-sub-question').length;
     } else {
       count = $target.find('tr').length;
@@ -404,8 +407,7 @@ class TestpaperForm {
   }
 
   _initTypeSort() {
-    var $group = $('#testpaper-question-nav');
-    var adjustment;
+    let adjustment;
     $('#testpaper-question-nav').sortable({
       handle: '.js-move-icon',
       itemSelector : '.question-type-table',
@@ -415,7 +417,7 @@ class TestpaperForm {
         $('body').removeClass('dragging');
       },
       onDragStart: function(item, container, _super) {
-        var offset = item.offset(),
+        let offset = item.offset(),
           pointer = container.rootGroup.pointer;
         adjustment = {
           left: pointer.left - offset.left,
