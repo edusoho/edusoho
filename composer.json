@@ -19,6 +19,7 @@
   },
   "require": {
     "php": ">=5.3.10",
+    "ext-json": "*",
     "twig/twig": "1.33.0",
     "symfony/symfony": "2.8.18",
     "symfony/twig-bundle": "2.8.18",
