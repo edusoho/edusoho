@@ -229,8 +229,9 @@ class ManageController extends BaseController
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
-        if (!$this->getQuestionBankService()->canManageBank($testpaper['bankId'])) {
-            return $this->createMessageResponse('error', 'can not manage bank');
+        $bank = $this->getQuestionBankService()->getQuestionBank($testpaper['bankId']);
+        if (empty($bank)) {
+            return $this->createMessageResponse('error', 'bank is not exist');
         }
 
         if (empty($testpaper)) {

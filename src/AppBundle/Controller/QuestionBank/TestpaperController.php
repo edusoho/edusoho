@@ -562,7 +562,8 @@ class TestpaperController extends BaseController
 
     public function buildCheckAction(Request $request, $id, $type)
     {
-        if (!$this->getQuestionBankService()->canManageBank($id)) {
+        $bank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($bank)) {
             throw $this->createAccessDeniedException();
         }
 

@@ -4345,6 +4345,8 @@ my.teaching.question_bank.create: 创建题库
 my.teaching.question_bank.list: 题库列表
 my.teaching.question_bank.name_tip: 最多输入30个字符
 my.teaching.question_bank.info: 题库信息
+my.teaching.question_bank.name_label: 题库名称
+my.teaching.question_bank.category_label: 题库分类
 my.teaching.question_bank.question_category.manage: 题目分类管理
 my.teaching.question_bank.question.manage: 题目管理
 my.teaching.question_bank.testpaper.manage: 试卷管理

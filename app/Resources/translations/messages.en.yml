@@ -3627,6 +3627,8 @@ my.teaching.question_bank.create: Create
 my.teaching.question_bank.list: Question Bank List
 my.teaching.question_bank.name_tip: Enter up to 30 characters
 my.teaching.question_bank.info: Bank Info
+my.teaching.question_bank.name_label: Name
+my.teaching.question_bank.category_label: Category
 my.teaching.question_bank.question_category.manage: Question Category Manage
 my.teaching.question_bank.question.manage: Question Manage
 my.teaching.question_bank.testpaper.manage: Testpaper Manage
