@@ -28,10 +28,10 @@ class SignServiceTest extends BaseTestCase
         $this->assertTrue($signToday2);
     }
 
-    public function testIsYestodaySigned()
+    public function testIsYesterdaySigned()
     {
         $user = $this->createUser('user');
-        $signYestoday = $this->getSignService()->isYestodaySigned($user['id'], 'classroom_sign', 1);
+        $signYestoday = $this->getSignService()->isYesterdaySigned($user['id'], 'classroom_sign', 1);
         $this->assertFalse($signYestoday);
     }
 
