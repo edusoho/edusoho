@@ -108,7 +108,7 @@ class TestpaperForm {
 
     stats.total = total;
     self.questionsCount = total.count;
-    
+
     return stats;
   }
 

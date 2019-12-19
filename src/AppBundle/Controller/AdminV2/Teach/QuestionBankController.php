@@ -91,21 +91,6 @@ class QuestionBankController extends BaseController
         return $this->createJsonResponse($questionBank);
     }
 
-    public function memberMatchAction(Request $request)
-    {
-        $queryField = $request->query->get('q');
-
-        $users = $this->getUserService()->searchUsers(
-            array('nickname' => $queryField, 'roles' => 'ROLE_TEACHER'),
-            array('createdTime' => 'DESC'),
-            0,
-            10,
-            array('id', 'nickname')
-        );
-
-        return $this->createJsonResponse($users);
-    }
-
     /**
      * @return QuestionBankService
      */

@@ -2498,10 +2498,6 @@ admin_question_bank_manage_delete:
     defaults: { _controller: AppBundle:Admin/QuestionBank:delete }
     methods:  [POST]
 
-admin_question_bank_member_match:
-    path: /question_bank/member_match
-    defaults: { _controller: AppBundle:Admin/QuestionBank:memberMatch }
-
 admin_question_bank_category:
     path: /question_bank/category/index
     defaults: { _controller: AppBundle:Admin/QuestionBankCategory:index }

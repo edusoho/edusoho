@@ -3187,10 +3187,6 @@ oauth2_es_user_info:
   path:  /oauth/user_info/{userId}
   defaults: { _controller: AppBundle:OAuth2/Server/Authorization:getUserInfo }
 
-question_bank_manage:
-    path: /question_bank/{id}/manage
-    defaults: { _controller: AppBundle:QuestionBank/Manage:manage }
-
 question_bank_list:
     path: /my/question_banks/{categoryId}
     defaults: { _controller: AppBundle:QuestionBank/Manage:index, categoryId:'' }
@@ -3198,6 +3194,18 @@ question_bank_list:
 question_bank_category_tree_nav:
     path: /question_banks/tree/{category}
     defaults: { _controller: AppBundle:QuestionBank/Category:treeNav, category:'' }
+
+question_bank_create:
+    path: /question_bank/create
+    defaults: { _controller: AppBundle:QuestionBank/Manage:create }
+
+question_bank_manage:
+    path: /question_bank/{id}/manage
+    defaults: { _controller: AppBundle:QuestionBank/Manage:manage }
+
+question_bank_member_match:
+    path: /question_bank/member_match
+    defaults: { _controller: AppBundle:QuestionBank/Manage:memberMatch }
 
 question_bank_manage_question_category:
     path: /question_bank/{id}/question/category
