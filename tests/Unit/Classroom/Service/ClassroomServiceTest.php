@@ -824,14 +824,22 @@ class ClassroomServiceTest extends BaseTestCase
         $copyCourses = $this->getClassroomService()->addCoursesToClassroom($classroom['id'], array($course['id']));
         $copyCourse = current($copyCourses);
 
+        $courseSet = $this->getCourseSetService()->getCourseSet($copyCourse['courseSetId']);
         $enabled = $this->getClassroomService()->isCourseInClassroom($copyCourse['id'], $classroom['id']);
 
+        $this->assertEquals($course['id'], $copyCourse['parentId']);
+        $this->assertEquals($course['courseSetId'], $courseSet['parentId']);
         $this->assertEquals(true, $enabled);
 
         $this->getClassroomService()->deleteClassroomCourses($classroom['id'], array($copyCourse['id']));
 
+        $copyCourse = $this->getCourseService()->getCourse($copyCourse['id']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($copyCourse['courseSetId']);
+
         $enabled = $this->getClassroomService()->isCourseInClassroom($copyCourse['id'], $classroom['id']);
 
+        $this->assertEquals(0, $copyCourse['parentId']);
+        $this->assertEquals(0, $courseSet['parentId']);
         $this->assertEquals(false, $enabled);
     }
 
