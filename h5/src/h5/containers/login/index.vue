@@ -58,6 +58,12 @@ export default {
     },
     isWeixinBrowser() {
       return /micromessenger/.test(navigator.userAgent.toLowerCase())
+    },
+    canloginConfig(){
+      if(this.$route.query && this.$route.query.forbidWxLogin){
+          return false
+      }
+      return true
     }
   },
   async created() {
@@ -76,6 +82,15 @@ export default {
       Toast.fail(err.message)
     })
     this.getsettingsCloud()
+  },
+  mounted() {
+    this.bodyHeight = document.documentElement.clientHeight - 46
+    this.username = this.$route.params.username || this.$route.query.account || ''
+    Toast.loading({
+      message: '请稍后'
+    })
+   this.faceLogin();
+   this.thirdPartyLogin();
   },
   methods: {
     ...mapActions([
@@ -117,6 +132,34 @@ export default {
         }
       })
     },
+    faceLogin(){
+        // 人脸登录配置
+        Api.settingsFace({}).then(res => {
+          if (Number(res.login.enabled)) {
+            this.faceSetting = Number(res.login.h5_enabled)
+          } else {
+            this.faceSetting = 0
+          }
+        }).catch(err => {
+          Toast.fail(err.message)
+        })
+    },
+    thirdPartyLogin(){
+        if(!this.canloginConfig){
+            return
+        }
+        // 第三方登录配置
+        Api.loginConfig({}).then(res => {
+          Toast.clear()
+          this.loginConfig = res
+          if (Number(res.weixinmob_enabled) && this.isWeixinBrowser) {
+            this.wxLogin()
+          }
+        }).catch(err => {
+          Toast.fail(err.message)
+          Toast.clear()
+        })
+    },
     wxLogin() {
       this.$router.replace({
         path: '/auth/social',
@@ -144,36 +187,6 @@ export default {
         })
       }
     }
-  },
-
-  mounted() {
-    this.bodyHeight = document.documentElement.clientHeight - 46
-    this.username = this.$route.params.username || this.$route.query.account || ''
-    Toast.loading({
-      message: '请稍后'
-    })
-    // 人脸登录配置
-    Api.settingsFace({}).then(res => {
-      if (Number(res.login.enabled)) {
-        this.faceSetting = Number(res.login.h5_enabled)
-      } else {
-        this.faceSetting = 0
-      }
-    }).catch(err => {
-      Toast.fail(err.message)
-    })
-
-    // 第三方登录配置
-    Api.loginConfig({}).then(res => {
-      Toast.clear()
-      this.loginConfig = res
-      if (Number(res.weixinmob_enabled) && this.isWeixinBrowser) {
-        this.wxLogin()
-      }
-    }).catch(err => {
-      Toast.fail(err.message)
-      Toast.clear()
-    })
   }
 }
 </script>
