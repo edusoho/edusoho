@@ -25,7 +25,7 @@ class IapTransaction extends AbstractResource
         $trade = $this->getPayService()->rechargeByIap($data);
 
         return array(
-            'status' => $trade,
+            'trade' => $trade,
         );
     }
 

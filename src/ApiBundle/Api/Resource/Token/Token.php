@@ -6,17 +6,20 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Pay\Service\AccountService;
-use Topxia\MobileBundleV2\Controller\MobileBaseController;
 use Biz\System\Service\LogService;
 
 class Token extends AbstractResource
 {
+    const MOBILE_MODULE = 'mobile';
+
+    const TOKEN_TYPE = 'mobile_login';
+
     public function add(ApiRequest $request)
     {
         $type = $request->request->get('type');
         $user = $this->getCurrentUser()->toArray();
 
-        $token = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
+        $token = $this->getUserService()->makeToken(self::TOKEN_TYPE, $user['id'], time() + 3600 * 24 * 30);
 
         $this->appendUser($user);
         $this->getUserService()->markLoginInfo($type);
@@ -24,7 +27,7 @@ class Token extends AbstractResource
         if ('app' == $request->request->get('client')) {
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
 
-            $delTokens = $this->getTokenService()->findTokensByUserIdAndType($user['id'], MobileBaseController::TOKEN_TYPE);
+            $delTokens = $this->getTokenService()->findTokensByUserIdAndType($user['id'], self::TOKEN_TYPE);
 
             foreach ($delTokens as $delToken) {
                 if ($delToken['token'] != $token) {
@@ -41,19 +44,17 @@ class Token extends AbstractResource
 
     public function remove(ApiRequest $request, $token)
     {
-        $token = $request->headers->get('X-Auth-Token');
+        $user = $this->getCurrentUser()->toArray();
 
-        if (!empty($token)) {
-            $user = $this->getCurrentUser()->toArray();
-            $device = $this->getPushDeviceService()->getPushDeviceByUserId($user['id']);
-            if (!empty($device)) {
-                $device = $this->getPushDeviceService()->updatePushDevice($device['id'], array('userId' => 0));
-                $this->getPushDeviceService()->getPushSdk()->setDeviceActive($device['regId'], 0);
-            }
-            $this->getLogService()->info(MobileBaseController::MOBILE_MODULE, 'user_logout', '用户退出', array('userToken' => $user));
+        $device = $this->getPushDeviceService()->getPushDeviceByUserId($user['id']);
+        if (!empty($device)) {
+            $device = $this->getPushDeviceService()->updatePushDevice($device['id'], array('userId' => 0));
+            $this->getPushDeviceService()->getPushSdk()->setDeviceActive($device['regId'], 0);
         }
 
-        $this->getUserService()->deleteToken(MobileBaseController::TOKEN_TYPE, $token);
+        $this->getLogService()->info(self::MOBILE_MODULE, 'user_logout', '用户退出', array('userToken' => $user));
+
+        $this->getUserService()->deleteToken(self::TOKEN_TYPE, $user['loginToken']);
 
         return array('success' => true);
     }

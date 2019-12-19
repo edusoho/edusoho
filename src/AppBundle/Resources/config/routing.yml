@@ -912,8 +912,8 @@ mobile_userterms:
     path: /mobile/userterms
     defaults: { _controller: AppBundle:Mobile:userterms }
 
-mobile_privacyPolicy:
-    path: /mobile/privacyPolicy
+mobile_privacy_Policy:
+    path: /mobile/privacy_policy
     defaults: { _controller: AppBundle:Mobile:privacyPolicy }
 
 group:

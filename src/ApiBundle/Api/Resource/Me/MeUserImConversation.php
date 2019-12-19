@@ -43,42 +43,6 @@ class MeUserImConversation extends AbstractResource
         );
     }
 
-    public function post(Application $app, Request $request)
-    {
-        $requiredFields = array('memberIds');
-        $fields = $this->checkRequiredFields($requiredFields, $request->request->all());
-
-        $memberIds = explode(',', $fields['memberIds']);
-
-        if (2 != count($memberIds)) {
-            return $this->error(500, "Only support memberIds's count of 2");
-        }
-
-        $conversation = $this->getConversationService()->getConversationByMemberIds($memberIds);
-
-        if (empty($conversation)) {
-            $users = $this->getUserService()->findUsersByIds($memberIds);
-
-            foreach ($memberIds as $memberId) {
-                if (!in_array($memberId, ArrayToolkit::column($users, 'id'))) {
-                    return $this->error(500, "User #{$memberId} is not exsit");
-                }
-                $user['id'] = $users[$memberId]['id'];
-                $user['nickname'] = $users[$memberId]['nickname'];
-
-                $members[] = $user;
-            }
-
-            try {
-                $conversation = $this->getConversationService()->createConversation('', 'private', 0, $members);
-            } catch (\Exception $e) {
-                return $this->error($e->getCode(), $e->getMessage());
-            }
-        }
-
-        return $this->filter($conversation);
-    }
-
     protected function getConversationService()
     {
         return $this->service('IM:ConversationService');
