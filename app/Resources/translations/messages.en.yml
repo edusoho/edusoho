@@ -9272,7 +9272,7 @@ admin_v2.homepage.school_info.app_status.has_upgrade: New upgrade
 admin_v2.homepage.school_info.system_status.has_upgrade: New upgrade
 admin_v2.homepage.school_info.system_status.upgraded: Latest
 admin_v2.homepage.school_info.system_version: System version
-admin_v2.homepage.school_info.access_web: Access Web
+admin_v2.homepage.school_info.access_web: Access Homepage
 admin_v2.homepage.school_info.access_mobile_app: Access App
 admin_v2.homepage.school_info.access_wechat_app: Access wechat app
 admin_v2.homepage.school_info.level.none: Open source
@@ -9334,3 +9334,6 @@ admin_v2.notice.upgrade_notice: The new background for the plugin for a new adap
 admin_v2.notice.go_to_upgrade: Go to upgrade
 admin_v2.boot_page.notice: In order to operate more efficiently, you need to go to a new page
 admin_v2.boot_page.btn_text: Go
+admin_v2.homepage.switch_old_in_safari_notice: Due to Safari, toggle is not supported at present. It is recommended to use Google or 360 to toggle. Sorry for the inconvenience!
+admin_v2.homepage.switch_old_in_safari_notice.title: Determine the switch
+admin_v2.homepage.switch_old_in_safari_notice.got_it: Got it

@@ -10575,7 +10575,7 @@ admin_v2.homepage.school_info.app_status.has_upgrade: 未更新
 admin_v2.homepage.school_info.system_status.has_upgrade: 有更新
 admin_v2.homepage.school_info.system_status.upgraded: 已更新
 admin_v2.homepage.school_info.system_version: 系统版本
-admin_v2.homepage.school_info.access_web: 访问Web
+admin_v2.homepage.school_info.access_web: 访问首页
 admin_v2.homepage.school_info.access_mobile_app: 访问App
 admin_v2.homepage.school_info.access_wechat_app: 访问小程序
 admin_v2.homepage.school_info.level.none: 开源版
@@ -10642,3 +10642,6 @@ admin_v2.notice.upgrade_notice: 新后台对插件进行了全新适配，为了
 admin_v2.notice.go_to_upgrade: 前往升级
 admin_v2.boot_page.notice: 为了更高效的操作，需要您前去新的页面
 admin_v2.boot_page.btn_text: 点击前去
+admin_v2.homepage.switch_old_in_safari_notice: 由于Safari浏览器原因，暂时不支持切换， 建议使用谷歌或者360浏览器切换。 给您造成不便，抱歉！
+admin_v2.homepage.switch_old_in_safari_notice.title: 确定切换
+admin_v2.homepage.switch_old_in_safari_notice.got_it: 知道了
