@@ -53,7 +53,7 @@ class ManageController extends BaseController
             $questionBank = $this->getQuestionBankService()->createQuestionBank($data);
 
             return $this->createJsonResponse(array(
-                'goto' => $this->generateUrl('question_bank_manage_question_category', array('id' => $questionBank['id']))
+                'goto' => $this->generateUrl('question_bank_manage_question_category', array('id' => $questionBank['id'])),
             ));
         }
 
@@ -75,7 +75,7 @@ class ManageController extends BaseController
             $questionBank = $this->getQuestionBankService()->updateQuestionBankWithMembers($id, $request->request->all(), $members);
 
             return $this->createJsonResponse(array(
-                'goto' => $this->generateUrl('question_bank_manage_question_category', array('id' => $questionBank['id']))
+                'goto' => $this->generateUrl('question_bank_manage_question_category', array('id' => $questionBank['id'])),
             ));
         }
 
