@@ -29,8 +29,8 @@ class TaskLiveTicket extends AbstractResource
         $params['id'] = $user['id'];
         $params['nickname'] = $user['nickname'];
         $params['role'] = 'student';
-        // android, iphone
-        $params['device'] = $request->request->get('device', $this->getDevice($request->headers->get('user-agent')));
+        // android, iphone, mobile
+        $params['device'] = $request->request->get('device', DeviceToolkit::isMobileClient() ? 'mobile' : 'desktop');
 
         $liveTicket = CloudAPIFactory::create('leaf')->post("/liverooms/{$activity['ext']['liveId']}/tickets", $params);
 
@@ -42,13 +42,6 @@ class TaskLiveTicket extends AbstractResource
         $liveTicket = CloudAPIFactory::create('leaf')->get("/liverooms/{$taskId}/tickets/{$liveTicket}");
 
         return $liveTicket;
-    }
-
-    protected function getDevice($userAgent)
-    {
-        $deviceType = DeviceToolkit::getMobileDeviceType($userAgent);
-
-        return 'ios' == $deviceType ? 'iphone' : $deviceType;
     }
 
     /**
