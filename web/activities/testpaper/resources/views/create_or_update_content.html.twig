@@ -7,7 +7,7 @@
     <form class="form-horizontal" id="step2-form">
       {% set course = get_course(activity.fromCourseId) %}
       {% set testpaper = get_testpaper(activity.ext.mediaId|default(0))|default() %}
-      {% set questionBankTree = data('QuestionBankTree', {}) %}
+      {% set questionBankTree = data('QuestionBankTree', {selectId: testpaper.bankId|default(0)}) %}
       {% set features = get_features() %}
       <div class="form-group">
         <div class="col-sm-2 control-label">
@@ -27,7 +27,11 @@
             {% if questionBankTree %}
               <option value="0">{{ 'question.select_question_bank'|trans }}</option>
               {% for bank in questionBankTree %}
+                {% if bank.selected is defined %}
+                  <option class="hidden" value={{ bank.id }} {% if testpaper.bankId|default(0) == bank.id %}selected{% endif %}>{{ bank.name }}</option>
+                {% else %}
                 <option {% if bank.categoryId is not defined %} value disabled="disabled" {% else %} value="{{ bank.id }}" {% if testpaper.bankId|default(0) == bank.id %}selected{% endif %}{% endif %}>{% for i in 1..(bank.depth-1) if bank.depth > 1 %}　{% endfor %}{{ bank.name }}</option>
+                {% endif %}
               {% endfor %}
             {% else %}
               <option value="0">{{'question_bank.empty.no_auth'|trans}}</option>

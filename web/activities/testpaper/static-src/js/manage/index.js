@@ -7,6 +7,7 @@ class Testpaper {
     this.$questionBankSelector = this.$element.find('#question-bank');
     this.$testpaperSelector = this.$element.find('#testpaper-media');
     this.$questionItemShow = this.$element.find('#questionItemShowDiv');
+    this.$scoreItem = this.$element.find('.js-score-form-group');
     this._init();
   }
 
@@ -199,6 +200,7 @@ class Testpaper {
     let $helpBlock = $('.js-help-block');
     $helpBlock.addClass('hidden');
     this.$questionItemShow.hide();
+    this.$scoreItem.hide();
     this.$testpaperSelector.val('0');
 
     let selected = this.$questionBankSelector.select2('data');

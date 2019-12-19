@@ -358,7 +358,8 @@ class QuestionController extends BaseController
     public function showQuestionTypesNumAction(Request $request)
     {
         $bankId = $request->request->get('bankId', 0);
-        if (!empty($bankId) && !$this->getQuestionBankService()->canManageBank($bankId)) {
+        $bank = $this->getQuestionBankService()->getQuestionBank($bankId);
+        if (empty($bank)) {
             throw $this->createAccessDeniedException();
         }
 
