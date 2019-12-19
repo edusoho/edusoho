@@ -5,6 +5,16 @@
 {% set side_nav = 'my-question-bank' %}
 
 {% block main %}
+  <div class="cd-mb16">
+    <div class="pull-right hidden-xs">
+      <a class="cd-btn cd-btn-primary" data-url="{{ path('question_bank_create') }}" data-toggle="modal" data-target="#modal">
+        {{ 'my.teaching.question_bank.create'|trans }}
+      </a>
+    </div>
+    <div class="nav nav-pills mtm">
+      <h5 class="text-18">{{'my.teaching.question_bank.list'|trans}}</h5>
+    </div>
+  </div>
   {{ render(path('question_bank_category_tree_nav',{ category: category })) }}
 
   <div class="question-bank-list clearfix">

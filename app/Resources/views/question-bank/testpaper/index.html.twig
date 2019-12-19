@@ -2,6 +2,7 @@
 
 {% block title %}{{ 'my.teaching.question_bank.testpaper.manage'|trans }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'my-question-bank' %}
+{% set active_tab = 'testpaper-list' %}
 
 {% do script(['app/js/question-bank/testpaper/index.js'])  %}
 
@@ -11,13 +12,7 @@
   </div>
 
   <div>
-    <div class="courseset-header-section">
-      <ul class="nav nav-tabs nav-header-section clearfix">
-        <li class="nav-header-section__item cd-ml32"><a href="{{ path('question_bank_manage_question_list', {id: questionBank.id }) }}">{{ 'my.teaching.question_bank.question.manage'|trans }}</a></li>
-        <li class="nav-header-section__item cd-ml32 active"><a href="{{ path('question_bank_manage_testpaper_list', {id: questionBank.id }) }}">{{ 'my.teaching.question_bank.testpaper.manage'|trans }}</a></li>
-        <li class="nav-header-section__item cd-ml32"><a href="{{ path('question_bank_manage_question_category', {id: questionBank.id }) }}">{{ 'my.teaching.question_bank.question_category.manage'|trans }}</a></li>
-      </ul>
-    </div>
+    {% include 'question-bank/header-navbar.html.twig' %}
     <div class="panel panel-default panel-col">
       {% block panel_body %}
         <div class="panel-body question-list-container js-testpaper-container">

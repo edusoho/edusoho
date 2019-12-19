@@ -26,7 +26,7 @@
     <div class="form-group">
 			<label class="col-md-2 control-label" for="bank-members">{{'admin.question_bank.manage.manager_label'|trans}}</label>
 			<div class="col-md-8 controls">
-				<input id="bank-members" name="members" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{ bankMembers|default('') }}" data-match-url="{{ path('admin_v2_question_bank_member_match') }}">
+				<input id="bank-members" name="members" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{ bankMembers|default('') }}" data-match-url="{{ path('question_bank_member_match') }}">
         <div class="help-block" style="display:none;"></div>
 			</div>
 		</div>
