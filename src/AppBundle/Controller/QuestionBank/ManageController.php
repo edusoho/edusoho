@@ -16,7 +16,7 @@ class ManageController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        if (!$user->isTeacher() && !$user->hasPermission('admin_question_bank')) {
+        if (!$user->isTeacher() && !$user->hasPermission('admin_question_bank') && !$user->hasPermission('admin_v2_question_bank')) {
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
@@ -24,6 +24,7 @@ class ManageController extends BaseController
         $conditions['categoryId'] = empty($conditions['subCategory']) ? $categoryId : $conditions['subCategory'];
         $conditions['ids'] = ArrayToolkit::column($this->getQuestionBankService()->findUserManageBanks(), 'id');
         $conditions['ids'] = empty($conditions['ids']) ? array(-1) : $conditions['ids'];
+        $conditions = $this->fillOrgCode($conditions);
 
         $pagination = new Paginator(
             $request,

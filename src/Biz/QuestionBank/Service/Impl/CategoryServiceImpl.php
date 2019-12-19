@@ -9,6 +9,7 @@ use Biz\QuestionBank\QuestionBankException;
 use AppBundle\Common\TreeToolkit;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
+use Biz\System\Service\SettingService;
 use Biz\Taxonomy\CategoryException;
 use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
@@ -60,7 +61,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        $this->filterCategoryFields($fields, $category);
+        $this->filterCategoryFields($fields);
 
         return $this->getCategoryDao()->update($id, $fields);
     }
@@ -150,6 +151,10 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function findAllCategories()
     {
+        if ($this->getSettingService()->node('magic.enable_org')) {
+            return $this->getCategoryDao()->findByPrefixOrgCode($this->getCurrentUser()->getSelectOrgCode());
+        }
+
         return $this->getCategoryDao()->findAll();
     }
 
@@ -228,24 +233,22 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     protected function setCategoryOrg($category)
     {
         $magic = $this->getSettingService()->get('magic');
-
         if (empty($magic['enable_org'])) {
             return $category;
         }
 
-        $user = $this->getCurrentUser();
-        $currentOrg = $user['org'];
+        $currentOrg = $this->getCurrentUser()->getCurrentOrg();
 
         if (empty($category['parentId'])) {
-            if (empty($user['org'])) {
+            if (empty($currentOrg)) {
                 return $category;
             }
             $category['orgId'] = $currentOrg['id'];
             $category['orgCode'] = $currentOrg['orgCode'];
         } else {
-            $parentOrg = $this->getCategory($category['parentId']);
-            $category['orgId'] = $parentOrg['orgId'];
-            $category['orgCode'] = $parentOrg['orgCode'];
+            $parentCategory = $this->getCategory($category['parentId']);
+            $category['orgId'] = $parentCategory['orgId'];
+            $category['orgCode'] = $parentCategory['orgCode'];
         }
 
         return $category;
@@ -289,6 +292,9 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $this->createDao('QuestionBank:CategoryDao');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');

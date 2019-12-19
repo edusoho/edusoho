@@ -21,6 +21,17 @@ class CategoryDaoImpl extends AdvancedDaoImpl implements CategoryDao
         return $this->db()->fetchAll($sql, array($parentId)) ?: array();
     }
 
+    public function findByPrefixOrgCode($orgCode)
+    {
+        if (empty($orgCode)) {
+            return array();
+        }
+
+        $sql = "SELECT * FROM {$this->table()} WHERE `orgCode` LIKE ?";
+
+        return $this->db()->fetchAll($sql, array($orgCode.'%')) ?: array();
+    }
+
     public function findAll()
     {
         $sql = "SELECT * FROM {$this->table()} ORDER BY weight ASC";

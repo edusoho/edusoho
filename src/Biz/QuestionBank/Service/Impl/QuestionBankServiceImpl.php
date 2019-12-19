@@ -54,6 +54,7 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
             $questionBank = array(
                 'name' => $fields['name'],
                 'categoryId' => $fields['categoryId'],
+                'orgCode' => $this->getCurrentUser()->getSelectOrgCode(),
             );
             $questionBank = $this->fillOrgId($questionBank);
             $questionBank = $this->getQuestionBankDao()->create($questionBank);
