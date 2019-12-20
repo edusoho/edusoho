@@ -2,11 +2,8 @@
 
 namespace Biz\UpdateDatabaseStructure\Job;
 
+use Biz\System\Service\LogService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
-use Monolog\Handler\StreamHandler;
-use Biz\Common\JsonLogger;
-use Monolog\Logger;
-use Topxia\Service\Common\ServiceKernel;
 
 class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
 {
@@ -16,16 +13,6 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
      * 2.表量级很大，想要添加和业务代码没有强关联的添加字段或者修改字段属性的sql语句，字段的缺失会导致业务报错的语句，严禁在JOB执行
      *
      */
-    protected $logger = null;
-
-    public function __construct($params = array(), $biz = null)
-    {
-        parent::__construct($params, $biz);
-        $stream = new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/index-create.log', Logger::DEBUG);
-        $logger = new JsonLogger('CreateIndex', $stream);
-        $this->logger = $logger;
-    }
-
     public function execute()
     {
         $this->addTableIndex();
@@ -157,7 +144,7 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
                 $this->getConnection()->exec("ALTER TABLE {$table} ADD INDEX {$index} ({$column});");
             }
         } catch (\Exception $e) {
-            $this->logger->error('CREATE_INDEX', array('message' => $e->getMessage()));
+            $this->getLogService()->error('job', 'create_index', '索引创建失败:'.$e->getMessage());
         }
     }
 
@@ -168,7 +155,7 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
                 $this->getConnection()->exec("ALTER TABLE {$table} ADD UNIQUE INDEX {$index} ({$column});");
             }
         } catch (\Exception $e) {
-            $this->logger->error('CREATE_UNIQUE_INDEX', array('message' => $e->getMessage()));
+            $this->getLogService()->error('job', 'create_unique_index', '索引创建失败:'.$e->getMessage());
         }
     }
 
@@ -179,7 +166,7 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
                 $this->getConnection()->exec("ALTER TABLE {$table} MODIFY COLUMN {$fieldName} {$fieldType}{$length};");
             }
         } catch (\Exception $e) {
-            $this->logger->error('CHANGE_FIELD_TYPE', array('message' => $e->getMessage()));
+            $this->getLogService()->error('job', 'change_field_type', '类型修改失败:'.$e->getMessage());
         }
     }
 
@@ -202,5 +189,13 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
     protected function getBiz()
     {
         return $this->biz;
+    }
+
+    /**
+     * @return LogService
+     */
+    private function getLogService()
+    {
+        return $this->biz->service('System:LogService');
     }
 }
