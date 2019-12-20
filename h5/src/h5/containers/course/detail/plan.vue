@@ -154,13 +154,7 @@ export default {
       'getCourseLessons'
     ]),
     handleClick(item, index) {
-      this.items.map(item => item.active = false)
-      item.active = true
-      this.getCourseLessons({ courseId: item.id }).then(() => {
-        this.$emit('switchPlan')
-      }).catch(() => {
-        this.$emit('switchPlan')
-      })
+      this.$router.push({ path: `/course/${ item.id}`});
     },
     filterPrice() {
       const details = this.details
