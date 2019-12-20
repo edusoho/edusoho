@@ -3,6 +3,10 @@
 namespace Biz\UpdateDatabaseStructure\Job;
 
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
+use Monolog\Handler\StreamHandler;
+use Biz\Common\JsonLogger;
+use Monolog\Logger;
+use Topxia\Service\Common\ServiceKernel;
 
 class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
 {
@@ -12,6 +16,16 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
      * 2.表量级很大，想要添加和业务代码没有强关联的添加字段或者修改字段属性的sql语句，字段的缺失会导致业务报错的语句，严禁在JOB执行
      *
      */
+    protected $logger = null;
+
+    public function __construct($params = array(), $biz = null)
+    {
+        parent::__construct($params, $biz);
+        $stream = new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/index-create.log', Logger::DEBUG);
+        $logger = new JsonLogger('CreateIndex', $stream);
+        $this->logger = $logger;
+    }
+
     public function execute()
     {
         $this->addTableIndex();
@@ -102,6 +116,13 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
          *  Column courseTaskId
          */
         $this->createIndex('question', 'courseSetId', 'courseSetId');
+
+        /*
+         *  Table  question
+         *  Index  bankId_categoryId
+         *  Column bankId, categoryId
+         */
+        $this->createIndex('question', 'bankId_categoryId', 'bankId, categoryId');
     }
 
     protected function changeTableFiledType()
@@ -131,22 +152,34 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
 
     protected function createIndex($table, $index, $column)
     {
-        if (!$this->isIndexExist($table, $index)) {
-            $this->getConnection()->exec("ALTER TABLE {$table} ADD INDEX {$index} ({$column});");
+        try {
+            if (!$this->isIndexExist($table, $index)) {
+                $this->getConnection()->exec("ALTER TABLE {$table} ADD INDEX {$index} ({$column});");
+            }
+        } catch (\Exception $e) {
+            $this->logger->error('CREATE_INDEX', array('message' => $e->getMessage()));
         }
     }
 
     protected function createUniqueIndex($table, $index, $column)
     {
-        if (!$this->isIndexExist($table, $index)) {
-            $this->getConnection()->exec("ALTER TABLE {$table} ADD UNIQUE INDEX {$index} ({$column});");
+        try {
+            if (!$this->isIndexExist($table, $index)) {
+                $this->getConnection()->exec("ALTER TABLE {$table} ADD UNIQUE INDEX {$index} ({$column});");
+            }
+        } catch (\Exception $e) {
+            $this->logger->error('CREATE_UNIQUE_INDEX', array('message' => $e->getMessage()));
         }
     }
 
     protected function changeFiledType($table, $fieldName, $fieldType, $length = '')
     {
-        if ($this->shouldFiledTypeChanged($table, $fieldName, $fieldType)) {
-            $this->getConnection()->exec("ALTER TABLE {$table} MODIFY COLUMN {$fieldName} {$fieldType}{$length};");
+        try {
+            if ($this->shouldFiledTypeChanged($table, $fieldName, $fieldType)) {
+                $this->getConnection()->exec("ALTER TABLE {$table} MODIFY COLUMN {$fieldName} {$fieldType}{$length};");
+            }
+        } catch (\Exception $e) {
+            $this->logger->error('CHANGE_FIELD_TYPE', array('message' => $e->getMessage()));
         }
     }
 
