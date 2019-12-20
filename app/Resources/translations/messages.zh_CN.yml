@@ -8730,6 +8730,7 @@ log.module.thread: 话题
 log.module.mobile: 手机客户端
 log.module.wap: 微网校
 log.module.push: 推送
+log.module.question_bank: 题库
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -8976,6 +8977,9 @@ log.action.live.update_live_activity: 更新直播活动
 log.action.live.generate_live_replay: 生成录播回放
 log.action.live.delete_live_activity: 删除直播活动
 log.action.mobile.face_login: 人脸识别登录
+log.action.question_bank.create: 创建题库
+log.action.question_bank.delete: 删除题库
+log.action.question_bank.update_teacher: 修改授权教师
 
 log.action.template.course.create: 新建了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: 修改了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -9130,6 +9134,9 @@ log.action.template.live.update_live_activity: 更新了<strong class="color-suc
 log.action.template.live.generate_live_replay: 生成了<strong class="color-success">直播</strong>的录播回放 《%title%》
 log.action.template.live.delete_live_activity: 删除了<strong class="color-success">直播</strong>活动 《%title%》
 log.action.template.order.adjust_price: 修改了<strong class="color-success">订单</strong> 《%title%》的价格
+log.action.template.question_bank.create: 新建了<strong class="color-success">题库</strong> 《%title%》
+log.action.template.question_bank.delete: 删除了<strong class="color-success">题库</strong> 《%title%》
+log.action.template.question_bank.update_teacher: 更新了<strong class="color-success">题库</strong> 《%title%》的授权教师
 
 log.field.detail: 详情
 log.field.change.detail: 原设置为<strong class="color-danger">%old%</strong> 新设置为<strong class="color-danger">%new%</strong>

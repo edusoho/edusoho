@@ -242,8 +242,6 @@ class TestpaperController extends BaseController
             $this->getTestpaperService()->updateTestpaper($testpaper['id'], $baseInfo);
             $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $questionInfo);
 
-            $this->setFlashMessage('success', 'site.save.success');
-
             return $this->createJsonResponse(array(
                 'goto' => $this->generateUrl('question_bank_manage_testpaper_list', array('id' => $id)),
             ));
