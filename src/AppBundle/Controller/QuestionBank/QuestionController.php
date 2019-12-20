@@ -97,13 +97,10 @@ class QuestionController extends BaseController
                 $urlParams['id'] = $id;
                 $urlParams['type'] = $type;
                 $urlParams['goto'] = $goto;
-                $this->setFlashMessage('success', 'site.add.success');
 
                 return $this->redirect($this->generateUrl('question_bank_manage_question_create', $urlParams));
             }
             if ('continue_sub' === $fields['submission']) {
-                $this->setFlashMessage('success', 'site.add.success');
-
                 return $this->redirect(
                     $goto ?: $this->generateUrl(
                         'question_bank_manage_question_list',
@@ -111,8 +108,6 @@ class QuestionController extends BaseController
                     )
                 );
             }
-
-            $this->setFlashMessage('success', 'site.add.success');
 
             return $this->redirect(
                 $goto ?: $this->generateUrl(
@@ -148,8 +143,6 @@ class QuestionController extends BaseController
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
             $this->getQuestionService()->update($question['id'], $fields);
-
-            $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirect(
                 $request->query->get(
@@ -357,12 +350,6 @@ class QuestionController extends BaseController
 
     public function showQuestionTypesNumAction(Request $request)
     {
-        $bankId = $request->request->get('bankId', 0);
-        $bank = $this->getQuestionBankService()->getQuestionBank($bankId);
-        if (empty($bank)) {
-            throw $this->createAccessDeniedException();
-        }
-
         $conditions = $request->request->all();
         $conditions['parentId'] = 0;
         if (!empty($conditions['categoryIds'])) {

@@ -7485,6 +7485,7 @@ log.module.thread: 'Thread'
 log.module.mobile: 'Mobile'
 log.module.wap: 'Wap'
 log.module.push: 'Push'
+log.module.question_bank: 'Question Bank'
 
 log.action.course.create: 'Create course'
 log.action.course.update: 'Update course'
@@ -7731,6 +7732,9 @@ log.action.live.update_live_activity: 'Update activity'
 log.action.live.generate_live_replay: 'Generate playback'
 log.action.live.delete_live_activity: 'Delete activity'
 log.action.mobile.face_login: Face recognition login
+log.action.question_bank.create: Create Question Bank
+log.action.question_bank.delete: Delete Question Bank
+log.action.question_bank.update_teacher: Update Manager
 
 log.action.template.course.create: Created a new<strong class="color-success"> course </strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: Updated the<strong class="color-success"> course </strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -7887,6 +7891,9 @@ log.action.template.live.update_live_activity: Updated the<strong class="color-s
 log.action.template.live.generate_live_replay: Generated recording playback of<strong class="color-success"> live </strong> 《%title%》
 log.action.template.live.delete_live_activity: Deleted the<strong class="color-success"> live </strong>activity 《%title%》
 log.action.template.order.adjust_price: Adjusted the price of<strong class="color-success"> order </strong> 《%title%》
+log.action.template.question_bank.create: 新建了<strong class="color-success">题库</strong> 《%title%》
+log.action.template.question_bank.delete: 删除了<strong class="color-success">题库</strong> 《%title%》
+log.action.template.question_bank.update_teacher: 更新了<strong class="color-success">题库</strong>《%title%》的授权教师
 
 log.field.detail: Details
 log.field.change.detail: Original settings:<strong class="color-danger">%old%</strong> New settings:<strong class="color-danger">%new%</strong>
