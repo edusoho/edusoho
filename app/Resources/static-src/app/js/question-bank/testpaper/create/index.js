@@ -202,7 +202,7 @@ class TestpaperForm {
       let $missScore = this.$scoreModal.find('input[name="missScore"]');
       let scoreObj = {
         score: parseFloat($score.val()),
-        missScore: parseFloat($missScore.val()),
+        missScore: ($missScore.val() == '') ? 0 : parseFloat($missScore.val()),
       };
       let self = this;
       this.$form.find('[data-role="batch-item"]:checked').each(function() {
