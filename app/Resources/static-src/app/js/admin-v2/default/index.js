@@ -1,5 +1,11 @@
 import Cookies from 'js-cookie';
 
+let localUpgradeNotice = window.localStorage.getItem('upgradeNotice') ? window.localStorage.getItem('upgradeNotice') : '';
+if ($('.js-notice').val() == true && localUpgradeNotice != 1) {
+  window.localStorage.setItem('upgradeNotice', '1');
+  $('.js-upgrade-notice').removeClass('hidden');
+}
+
 $('.js-show-toggle').on('click', (event) => {
   const $target = $(event.currentTarget);
   $('.js-steps').slideToggle();

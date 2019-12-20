@@ -6,6 +6,7 @@
 {% set currentMenu = permission(menu) %}
 {% set cloudSmsInfo = isOldSmsUser()|default(false) %}
 {% set lang = app.request.getLocale() %}
+{% set isSafari = (app.request.headers.get('User-Agent') matches '/Safari/') and (not (app.request.headers.get('User-Agent') matches '/Chrome/')) %}
 
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -53,16 +54,21 @@
     <!--[if lt IE 9]>
       {% include 'default/ie8-alert.html.twig' %}
     <![endif]-->
-
     <div class="ct-layout-container admin-layout-container">
       <div class="cd-fixed-top">
-        <div class="ct-top-logo">
+        <div class="ct-top-logo hidden-xs">
           <a class="admin-navbar-brand" href="{{ url('admin_v2') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}{{'admin.navbar.header.console_btn'|trans}}</a>
         </div>
-        <div class="ct-layout-navbar">
+        <div class="navbar-header navbar-header--mobile visible-xs">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <i class="es-icon es-icon-menu"></i>
+          </button>
+          <a class="navbar-mobile-title" href="{{ url('admin_v2') }}">{{'admin.navbar.header.console_btn'|trans}}</a>
+        </div>
+        <div class="ct-layout-navbar navbar-collapse navbar-collapse--mobile collapse">
           {% include 'admin-v2/widget/navigation.html.twig' %}
         </div>
-        <div class="ct-layout-person">
+        <div class="ct-layout-person hidden-xs">
           <ul class="cd-clearfix mb0">
             <li class="ct-layout-person_center cd-dropdown" data-toggle="cd-dropdown">
                 <a class="user-avatar-toggle" href="javascript:;">
@@ -79,12 +85,14 @@
           </ul>
         </div>
         <div class="pull-right change-version-btn">
-          {# safari隐藏切换旧版按钮 #}
-          {% set isNotSafari = (not (app.request.headers.get('User-Agent') matches '/Safari/') or (app.request.headers.get('User-Agent') matches '/Chrome/')) %}
-          {% if setting('backstage.allow_show_switch_btn')|default(0) and isNotSafari %}
+          {% if setting('backstage.allow_show_switch_btn')|default(0) %}
             {% set canAccess = 'ROLE_SUPER_ADMIN' in app.user.roles|default([]) or 'ROLE_ADMIN' in app.user.roles|default([]) %}
             {% if canAccess %}
-              <a href="#modal" data-toggle="modal" data-loading-text="{{ 'admin_v2.switch_version.btn_loading'|trans }}" data-url="{{ path('admin_v2_switch_old_version') }}">{{ 'admin_v2.switch_old_version.setting_btn'|trans }}</a>
+              {% if isSafari %}
+                <a class="js-safari-modal-click">{{ 'admin_v2.switch_old_version.setting_btn'|trans }}</a>
+              {% else %}
+                <a href="#modal" data-toggle="modal" data-loading-text="{{ 'admin_v2.switch_version.btn_loading'|trans }}" data-url="{{ path('admin_v2_switch_old_version') }}">{{ 'admin_v2.switch_old_version.setting_btn'|trans }}</a>
+              {% endif %}
             {% else %}
               <a href="javascript:;" class="js-no-permission-btn">{{ 'admin_v2.switch_old_version.setting_btn'|trans }}</a>
             {% endif %}
@@ -92,6 +100,9 @@
         </div>
       </div>
       <div class="cd-layout-main">
+        {% if isSafari %}
+          {% include 'admin-v2/default/safari-notify-modal.html.twig' %}
+        {% endif %}
         {% block container %}
           {% block content %}
             {% include 'admin-v2/widget/side-bar.html.twig' %}
