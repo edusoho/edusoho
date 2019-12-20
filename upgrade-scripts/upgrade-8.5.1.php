@@ -87,7 +87,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function questionAddIndex()
     {
-        if ($this->isJobExist('F')) {
+        if ($this->isJobExist('HandlingTimeConsumingUpdateStructuresJob')) {
             return 1;
         }
 
