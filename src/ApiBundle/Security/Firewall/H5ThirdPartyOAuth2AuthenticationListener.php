@@ -26,6 +26,7 @@ class H5ThirdPartyOAuth2AuthenticationListener extends BaseAuthenticationListene
             $accessToken = $client->getAccessToken($code, '');
             $thirdPartyUser = $client->getUserInfo($accessToken);
             $this->getUserTokenFromAccessToken($request, $thirdPartyUser, $type);
+
             return;
         }
     }
@@ -34,6 +35,7 @@ class H5ThirdPartyOAuth2AuthenticationListener extends BaseAuthenticationListene
     {
         $user = $this->getUserService()->getUserBindByTypeAndFromId($type, $thirdPartyUser['id']);
         if ($user) {
+            $this->checkUserLocked($user['toId']);
             $token = $this->createTokenFromRequest($request, $user['toId']);
             $this->getTokenStorage()->setToken($token);
         }
@@ -43,6 +45,7 @@ class H5ThirdPartyOAuth2AuthenticationListener extends BaseAuthenticationListene
 
     /**
      * @param $type
+     *
      * @return \AppBundle\Component\OAuthClient\AbstractOauthClient
      */
     protected function createOAuthClient($type)
