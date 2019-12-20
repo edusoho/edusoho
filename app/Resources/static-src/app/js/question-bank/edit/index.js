@@ -11,7 +11,12 @@ class BankEdit {
       ajax: true,
       rules: {
         name: {
-          required: true,
+          required: {
+            depends () {
+              $(this).val($.trim($(this).val()));
+              return true;
+            }
+          },
           byte_maxlength: 30,
           trim: true
         },
