@@ -40,12 +40,12 @@
 
 {% block content %}
   <!-- 课程列表 -->
-  <div class="course-list cd-mt8">
+  <div class="course-list course-list-new cd-mt8">
     {% if courseSets %}
       <div class="row">
         {% for courseSet in courseSets %}
-          <div class="col-lg-3 col-md-4 col-xs-6">
-            {% include 'course/widgets/course-grid.html.twig' with { courseSet: courseSet} %}
+          <div class="col-lg-3 col-md-4 col-xs-6 course-item-wrap">
+            {% include 'course/widgets/course-grid-new.html.twig' with { courseSet: courseSet} %}
           </div>
         {% endfor %}
       </div>

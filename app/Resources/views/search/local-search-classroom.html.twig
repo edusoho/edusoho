@@ -36,8 +36,11 @@
       {% if classrooms %}
         {% for classroom in classrooms %}
           <div class="col-md-3 col-sm-6">
-            <div class="class-item local-search-class-item">
+            <div class="class-item local-search-class-item class-item--tag">
               <div class="class-img local-search-class-item__img">
+                {% if classroom.vipLevelId|default(0) > 0 %}
+                  <span class="tag-vip-free"></span>
+                {% endif %}
                 <a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
                   {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
                   <h3>{{ classroom.title }}</h3>
