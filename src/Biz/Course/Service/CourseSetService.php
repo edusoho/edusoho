@@ -326,6 +326,8 @@ interface CourseSetService
 
     public function searchCourseSetsByTeacherOrderByStickTime($conditions, $orderBy, $userId, $start, $limit);
 
+    public function findCourseSetsLikeTitle($title);
+
     /**
      * @param $courseId
      * 课程从班级移除后，重置课程及教学计划的parentId

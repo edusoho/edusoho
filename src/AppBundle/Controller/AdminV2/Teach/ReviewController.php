@@ -30,14 +30,13 @@ class ReviewController extends BaseController
             unset($conditions['courseTitle']);
             $conditions['courseSetIds'] = $conditions['courseSetIds'] ?: array(-1);
         }
+        $conditions['parentId'] = 0;
 
         $paginator = new Paginator(
             $request,
             $this->getCourseReviewService()->searchReviewsCount($conditions),
             20
         );
-
-        $conditions['parentId'] = 0;
 
         $reviews = $this->getCourseReviewService()->searchReviews(
             $conditions,
