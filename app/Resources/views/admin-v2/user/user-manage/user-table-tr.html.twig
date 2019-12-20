@@ -1,0 +1,77 @@
+{% import 'admin-v2/macro.html.twig' as admin_macro %}
+<tr id="user-table-tr-{{ user.id }}">
+  {% include 'org/parts/table-body-checkbox.html.twig' %}
+  <td>
+    <strong>{{ admin_macro.user_link(user) }}</strong>
+    {% if user.locked %}
+      <label class="label label-danger">{{'admin.user.manage.fields.forbid_label'|trans}}</label>
+    {% endif %}
+
+    <br>
+    <span class="text-muted text-sm">
+      {% for role in user.roles %}
+        {% set userRole = data('Role', {code: role}) %}
+        {% if userRole|default(false) %}
+          {{userRole.name|default('')}}
+        {% else %}
+          {{ dict_text('userRole', role) }}
+        {% endif %}
+        {% if not loop.last %} &nbsp {% endif %}
+      {% endfor %}
+    </span>
+  </td>
+ {% include 'org/parts/table-body-td.html.twig' with {orgCode: user.orgCode}%}
+  <td>
+    {% if user.verifiedMobile %}
+      {{ user.verifiedMobile }}<span class="text-success">({{'user.fields.mobile_label.bind'|trans}})</span>
+    {% elseif profile.mobile %}
+      {{ profile.mobile }}<span class="text-danger">({{'user.fields.mobile_label.no_bind'|trans}})</span>
+    {% else %}
+       --
+    {% endif %}
+  </td>
+
+  <td>
+    {% if not is_system_generated_email(user.email) %}
+      {{ user.email }}
+    {% else %}
+      --
+    {% endif %}
+
+    <br>
+    {% if user.emailVerified %}
+      <label class="label label-success" title="{{'admin.user.manage.label.email_verified_hint'|trans}}">{{'admin.user.manage.fields.verified_label'|trans}}</label>
+    {% endif %}
+  </td>
+
+  <td>
+    <span class="text-sm">{{ user.createdTime|date('Y-n-d H:i:s') }}</span>
+    <br>
+    <span class="text-muted text-sm">
+    <a class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ user.createdIp }}" target="_blank">{{ user.createdIp }}</a>
+    {{convert_ip(user.createdIp)}}
+  </span>
+    <span></span>
+  </td>
+  <td>
+    <span class="text-sm">
+      {% if user.loginTime == 0 %}
+       --
+      {% else %}
+        {{ user.loginTime|date('Y-n-d H:i:s') }}
+      {% endif %}
+    </span>
+    <br>
+    <span class="text-muted text-sm">
+    <a class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ user.loginIp }}" target="_blank">{{ user.loginIp }}</a>
+    {{convert_ip(user.loginIp)}}
+  </span>
+  </td>
+  <td>
+    <div class="btn-group">
+      <a href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_user_show', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">{{ 'admin.user.btn.show_btn'|trans }}</a>
+      {% include 'admin-v2/widget/group-button.html.twig' with {parentCode: 'admin_v2_user_manage', group:'groupButton', user: user} %}
+    </div>
+  </td>
+</tr>
+

@@ -1,7 +1,7 @@
 <div class="form-group mb0">
   <label class="col-sm-2 control-label">
     {{ 'course.marketing_setup.rule.expiry_date'|trans }}
-    <a class="es-icon es-icon-help course-mangae-info__help text-normal" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top" 
+    <a class="es-icon es-icon-help course-mangae-info__help text-normal" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top"
     data-content="<ul class='pl10 list-unstyled'>
       <li class='mb10'>{{ 'course.teaching_plan.expiry_date.anytime'|trans|raw }}</li>
       <li class='mb10'>{{ 'course.teaching_plan.expiry_date.real_time'|trans|raw }}</li>
@@ -17,7 +17,7 @@
     {{ cd_radios('expiryMode',
     { 'days': 'course.teaching_plan.expiry_date.anywhere_mode'|trans, 'date': 'course.teaching_plan.expiry_date.date_mode'|trans,'forever':'course.teaching_plan.expiry_date.forever_mode'|trans },
     course.expiryMode|default('days'), coursePublished or courseClosed ? 'disabled' : '') }}
-    
+
     {% if courseClosed or (courseSetClosed and course.expiryMode|default('days') == 'days') and course.status|default('draft') != 'draft' %}
       <input type="hidden" name="expiryMode" value="{{ course.expiryMode|default('days') }}">
     {% endif %}
@@ -65,6 +65,12 @@
 {% endif %}
 {% if is_granted('ROLE_ADMIN') %}
 <div class="form-group mtl">
+  {#添加admin_v2#}
+  {% if setting('backstage.is_v2',0)  == 0 %}
+    {% set dataWechatUrl = path('admin_wechat_notification_manage') %}
+  {% else %}
+    {% set dataWechatUrl=  path('admin_v2_wechat_notification_manage') %}
+  {% endif %}
   <label class="col-sm-2 control-label">
     {{ 'course.setting.course_remind'|trans }}
   </label>
@@ -74,13 +80,13 @@
       {% set days = get_days(wechatSetting.templates.courseRemind.sendDays) %}
       <div class="help-block course-mange-space">{{ 'course.setting.course_remind_tip'|trans({'%D%': days, '%H%': wechatSetting.templates.courseRemind.sendTime }) }}
         {% if has_permission('admin_operation_wechat_notification_manage') %}
-          <a class="" data-container="body" data-toggle="popover" data-trigger="hover" href="{{ path('admin_wechat_notification_manage') }}" target="_blank">{{ 'course.setting.course_remind_change'|trans }}</a>
+          <a class="" data-container="body" data-toggle="popover" data-trigger="hover" href="{{ dataWechatUrl }}" target="_blank">{{ 'course.setting.course_remind_change'|trans }}</a>
         {% endif %}
       </div>
     {% else %}
       <div class="help-block course-mange-space">{{ 'course.setting.course_remind_not_open'|trans }}
         {% if has_permission('admin_operation_wechat_notification_manage') %}
-          <a class="" data-container="body" data-toggle="popover" data-trigger="hover" href="{{ path('admin_wechat_notification_manage') }}" target="_blank">{{ 'course.setting.course_remind_go_to_open'|trans }}</a>
+          <a class="" data-container="body" data-toggle="popover" data-trigger="hover" href="{{ dataWechatUrl }}" target="_blank">{{ 'course.setting.course_remind_go_to_open'|trans }}</a>
         {% endif %}
       </div>
     {% endif %}

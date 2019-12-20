@@ -4,6 +4,7 @@ namespace Tests\Unit\Course\Service;
 
 use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
+use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseService;
@@ -132,14 +133,8 @@ class CourseSetServiceTest extends BaseTestCase
 
         $recommendCourseSet = $this->getCourseSetService()->recommendCourse(1, $number);
 
-        $excepted = array(
-            'id' => 1,
-            'recommended' => 1,
-            'recommendedSeq' => (int) $number,
-            'recommendedTime' => time(),
-        );
-
-        $this->assertArraySternEquals($excepted, $recommendCourseSet);
+        $this->assertEquals(1, $recommendCourseSet['recommended']);
+        $this->assertEquals((int) $number, $recommendCourseSet['recommendedSeq']);
     }
 
     public function testCancelRecommendCourse()
@@ -822,6 +817,48 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertEquals(0, $result);
     }
 
+    /**
+     * @expectedException \Biz\Course\CourseException
+     * @expectedExceptionMessage exception.course.not_found
+     */
+    public function testResetParentIdByCourseIdWithCourseNotFoundException()
+    {
+        $this->getCourseSetService()->resetParentIdByCourseId(0);
+    }
+
+    /**
+     * @expectedException \Biz\Course\CourseSetException
+     * @expectedExceptionMessage exception.courseset.not_found
+     */
+    public function testResetParentIdByCourseIdWithCourseSetNotFoundException()
+    {
+        $course = $this->mockNewCourseAndPublished();
+        $this->getCourseSetService()->resetParentIdByCourseId($course['id']);
+    }
+
+    public function testResetParentIdByCourseId()
+    {
+        $courseSet = $this->createAndPublishCourseSet('测试课程', 'normal');
+        $course = $this->mockNewCourseAndPublished();
+
+        $courseSet['parentId'] = 123;
+        $course['parentId'] = 12;
+
+        $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $courseSet);
+        $course = $this->getCourseDao()->update($course['id'], $course);
+
+        $this->assertEquals(123, $courseSet['parentId']);
+        $this->assertEquals(12, $course['parentId']);
+
+        $this->getCourseSetService()->resetParentIdByCourseId($course['id']);
+
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSet['id']);
+        $course = $this->getCourseService()->getCourse($course['id']);
+
+        $this->assertEquals(0, $courseSet['parentId']);
+        $this->assertEquals(0, $course['parentId']);
+    }
+
     protected function mockNewCourseAndPublished($fields = array())
     {
         $course = array(
@@ -905,5 +942,13 @@ class CourseSetServiceTest extends BaseTestCase
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return CourseDao
+     */
+    protected function getCourseDao()
+    {
+        return $this->createDao('Course:CourseDao');
     }
 }

@@ -20,6 +20,9 @@ admin.nav.cloud: 教育云
 admin.nav.system: 系统
 admin.nav.wechat_app: 移动端
 
+#新后台顶部导航
+admin.v2.nav.teach: 教学
+
 #用户模块
 admin.user.basic_menu: 用户管理
 admin.user.statistics_manage: 用户数据统计
@@ -35,7 +38,7 @@ admin.user.basic.login_record_tab: 登录日志
 admin.user.basic.basic_tab.create_btn: '添加新用户'
 admin.user.basic.basic_tab.edit_btn: '编辑用户信息'
 admin.user.basic.basic_tab.setting_roles_btn: '设置用户组'
-admin.user.basic.basic_tab.update_avatar_btn: '修改用户头像' 
+admin.user.basic.basic_tab.update_avatar_btn: '修改用户头像'
 admin.user.basic.basic_tab.change_password_btn: '修改密码'
 admin.user.basic.basic_tab.send_passwordreset_email_btn: '发送密码重置邮件'
 admin.user.basic.basic_tab.send_emailverify_email_btn: '发送Email验证邮件'
@@ -343,6 +346,7 @@ admin.system.wechat_auth_menu: 微信授权信息
 ##移动端设置模块
 admin.system.mobile.h5: 微网校设置
 admin.system.mobile.basic_tab: APP 设置
+admin.system.mobile.discoveries_setting: 发现页设置
 
 ##IOS内购商品设置模块
 admin.system.mobile_iap_product.basic_tab: IOS内购商品设置
@@ -433,3 +437,441 @@ admin.operation.coupon_menu: 优惠券管理
 admin.operation.coupon_menu.basic_tab: 优惠券管理
 admin.operation.coupon_menu.generate_btn: 生成优惠券
 admin.operation.query_menu.basic_tab: 使用查询
+
+# 新版后台开始
+
+#后台菜单
+admin_v2.basic_menu: 后台管理员
+
+# 新版后台顶部导航
+admin_v2.nav.teach: 教学
+admin_v2.nav.marketing: 营销
+admin_v2.nav.operating: 运营
+admin_v2.nav.user: 用户
+admin_v2.nav.trade: 交易
+admin_v2.nav.statistics: 数据
+admin_v2.nav.system: 系统
+
+# 教学-课程管理
+admin_v2.course.basic_group: 课程管理
+
+# 教学-课程管理-课程管理
+admin_v2.course.basic_menu: 课程管理
+
+admin_v2.course.basic.basic_tab: 课程管理
+admin_v2.course.basic.recommend_list_tab: 课程推荐
+admin_v2.course.basic.analysis_tab: 课程统计
+
+admin_v2.course.basic.basic_tab.manage_btn: 管理课程
+admin_v2.course.basic.basic_tab.create_btn: 创建课程
+admin_v2.course.basic.basic_tab.recommend_btn: 推荐课程
+admin_v2.course.basic.basic_tab.preview_btn: 预览
+admin_v2.course.basic.basic_tab.close_btn: 关闭课程
+admin_v2.course.basic.basic_tab.publish_submit_btn: 发布课程
+admin_v2.course.basic.basic_tab.clone_btn: 复制课程
+admin_v2.course.basic.basic_tab.delete_submit_btn: 删除课程
+
+# 教学-课程管理-班级管理
+admin_v2.course.classroom_menu: 班级管理
+
+admin_v2.course.classroom.basic_tab: 班级管理
+admin_v2.course.classroom.recommend_tab: 班级推荐
+admin_v2.course.classroom.basic_tab.manage_btn: 管理班级
+admin_v2.course.classroom.basic_tab.create_btn: 创建班级
+admin_v2.course.classroom.basic_tab.recommend_btn: 推荐班级
+admin_v2.course.classroom.basic_tab.close_btn: 关闭班级
+admin_v2.course.classroom.basic_tab.publish_submit_btn: 发布班级
+admin_v2.course.classroom.basic_tab.delete_submit_btn: 删除班级
+
+# 教学-课程管理-直播模块
+admin_v2.course.live_menu: 直播管理
+admin_v2.course.coming.live_tab: 即将开始
+admin_v2.course.underway.live_tab: 当前进行
+admin_v2.course.end.live_tab: 已结束的
+admin_v2.course.live.basic_tab.create_btn: 创建直播
+
+# 教学-课程管理-公开课模块
+admin_v2.course.open_course_menu: 公开课管理
+admin_v2.course.open_course.basic_tab: 公开课管理
+admin_v2.course.open_course.basic_tab.create_btn: 创建公开课
+admin_v2.course.open_course.recommend_list_tab: 公开课推荐
+admin_v2.course.open_course.analysis_tab: 公开课统计
+
+# 教学-助学管理
+admin_v2.tool.basic_group: 助学管理
+
+# 教学-助学管理-笔记管理
+admin_v2.course.note_menu: 笔记管理
+
+admin_v2.course.note.basic_tab: 笔记管理
+
+
+# 教学-助学管理-问答管理
+admin_v2.course.question_menu: 问答管理
+
+admin_v2.course.question.basic_tab: 问答管理
+
+# 教学-助学管理-话题管理
+admin_v2.course.thread_menu: 话题管理
+
+admin_v2.course.thread.course_thread_tab: 课程话题
+admin_v2.course.thread.classroom_thread_tab: 班级话题
+
+
+# 教学模块-助学管理-反馈管理
+admin_v2.course.review_menu: 反馈管理
+
+admin_v2.course.review.course_review_tab: 课程评价
+admin_v2.course.review.classroom_review_tab: 班级评价
+
+# 教学模块-资源管理-云资源
+admin_v2.cloud_resource.basic_group: 资源管理
+admin_v2.cloud_resource.basic_tab: 云资源
+admin_v2.cloud.file.basic_tab: 云资源
+admin_v2.cloud.attachment.basic_tab: 云附件
+admin_v2.cloud.attachment_setting.basic_tab: 云附件设置
+
+#通用按钮
+admin_v2.btn.recommend_cancel_btn: 取消推荐
+admin_v2.btn.sms_send_btn: 发送发布通知短信
+
+#教学模块-分类标签模块
+admin_v2.course.category_tag_menu: 分类标签
+
+##分类标签模块
+admin_v2.course.category_menu: 分类管理
+admin_v2.course.tag_menu: 标签管理
+admin_v2.course.tag.basic_tab: '标签管理'
+admin_v2.course.tag.tag_group_tab: '标签组管理'
+admin_v2.course.tag.basic_tab.create_btn: '新增标签'
+admin_v2.course.tag.tag_group_tab.create_tag_group_btn: '新建标签组'
+admin_v2.course.category.course_category_tab: 课程分类
+admin_v2.course.category.classroom_category_tab: 班级分类
+admin_v2.btn.create_category_btn: 添加分类
+
+
+# 运营-网校装修-微网校装修
+admin_v2.operation.mobile.h5: 微网校装修
+admin_v2.operation.wap_tab: 微网校装修
+
+# 运营-网校装修-APP装修
+admin_v2.operation.mobile_menu: App装修
+admin_v2.operation.mobile.basic_tab: App设置
+admin_v2.operation.mobile.banner_setting_tab: 轮播图
+admin_v2.operation.mobile.discovery_column_tab: '发现页栏目'
+admin_v2.operation.mobile.discovery_column_tab.create_btn: '添加栏目'
+
+
+# 运营-网校装修-小程序装修
+admin_v2.wechat_app.menu: 小程序装修
+
+# 运营-网校装修-web装修
+admin_v2.operation.block_menu: web装修
+admin_v2.operation.block.theme.basic_tab: 当前主题
+admin_v2.operation.block.all.basic_tab: 所有
+admin_v2.operation.block.system.basic_tab: 系统
+admin_v2.operation.site.theme_tab: 已购主题
+
+# 运营-网校装修-站点设置
+admin_v2.operation.site_decoration.basic_group: 网校装修
+
+admin_v2.operation.site_menu: 站点配置
+admin_v2.operation.site.top_navigation_tab: 顶部导航
+admin_v2.operation.site.foot_navigation_tab: 底部导航
+admin_v2.operation.site.consult_setting_tab: 客服
+admin_v2.operation.site.es_bar_tab: '侧边栏'
+admin_v2.operation.content.basic_tab: 自定义页面
+admin_v2.operation.site.share_tab: 分享
+admin_v2.operation.site.friendlyLink_navigation_tab: '友情链接'
+
+# 运营-内容运营-全站站内通知
+admin_v2.operation.notification_menu: 全站站内通知
+admin_v2.operation.notification.basic_tab: 全站站内通知
+admin_v2.operation.notification.basic_tab.create_btn: 创建站内通知
+
+#运营-内容运营-网站公告管理
+admin_v2.operation.announcement_menu: 网站公告管理
+admin_v2.operation.announcement.basic_tab: 网站公告管理
+admin_v2.operation.announcement.basic_tab.create_btn: 新增公告
+
+# 运营-内容运营-资讯
+admin_v2.operation.content_operation.basic_group: 内容运营
+admin_v2.operation.article_menu: 资讯管理
+admin_v2.operation.article.basic_tab: 资讯管理
+admin_v2.operation.article.basic_tab.create_btn: 添加资讯
+admin_v2.operation.article.category_tab: 栏目管理
+admin_v2.operation.article.category_tab.category_create_btn: 添加栏目
+
+# 运营-内容运营-微信通知
+admin_v2.operation.wechat_notification: 微信通知
+admin_v2.operation.wechat.notification_record_tab: 发送记录
+admin_v2.operation.wechat.notification_manage: 设置
+
+# 运营-内容运营-敏感词
+admin_v2.operation.sensitive_words_menu: 敏感词管理
+admin_v2.operation.sensitive_words.sensitive_words_list_tab: 敏感词列表
+admin_v2.operation.sensitive_words.sensitive_words_list_tab.create_btn: 添加敏感词
+admin_v2.operation.sensitive_words.banlogs_tab: 屏蔽记录
+
+
+
+#营销-营销管理
+admin_v2.marketing.basic_group: 营销管理
+
+#营销-营销管理-优惠券管理
+admin_v2.operation.coupon_menu: 优惠券
+admin_v2.marketing.coupon_menu.basic_tab: 优惠券管理
+admin_v2.marketing.coupon_menu.generate_btn: 生成优惠券
+admin_v2.marketing.query_menu.basic_tab: 使用查询
+admin_v2.system.marketing.coupon_setting_tab: 优惠券设置
+
+# 营销-渠道管理
+admin_v2.channel.basic_group: 渠道管理
+
+# 营销-渠道管理-分销
+admin_v2.distributor.menu: 分销
+
+#营销-营销管理-邀请管理
+admin_v2.operation.invite_menu: 邀请管理
+admin_v2.operation.invite.record_tab: 邀请记录
+admin_v2.operation.invite.user_tab: 用户查询
+admin_v2.operation.invite.coupon_tab: 奖励查询
+
+#营销-营销管理-微营销
+admin_v2.micromarketing.menu: 微营销
+
+#运营-内容运营-小组管理
+admin_v2.operation.group_menu: 小组管理
+admin_v2.operation.group.group_tab: 小组管理
+admin_v2.operation.group.group_tab.create_group_btn: 创建小组
+admin_v2.operation.group.group_thread_tab: 小组话题管理
+
+#运营-内容管理-私信管理
+admin_v2.operation.message_menu: 私信管理
+admin_v2.operation.message.basic_tab: 私信管理
+
+# 用户-用户管理-用户管理
+admin_v2.user.user_group: 用户管理
+admin_v2.user.basic_menu: 用户管理
+
+# 用户-用户管理-用户管理-tab
+admin_v2.user.basic.basic_tab: 用户管理
+admin_v2.user.basic.fans_tab: 服务号粉丝
+admin_v2.user.basic.online_tab: 在线用户
+admin_v2.user.basic.statistics_tab: 用户数据统计
+admin_v2.user.basic.login_record_tab: 登录日志
+
+admin_v2.user.basic.basic_tab.create_btn: '添加新用户'
+admin_v2.user.basic.basic_tab.edit_btn: '编辑用户信息'
+admin_v2.user.basic.basic_tab.setting_roles_btn: '设置用户组'
+admin_v2.user.basic.basic_tab.update_avatar_btn: '修改用户头像'
+admin_v2.user.basic.basic_tab.change_password_btn: '修改密码'
+admin_v2.user.basic.basic_tab.send_passwordreset_email_btn: '发送密码重置邮件'
+admin_v2.user.basic.basic_tab.send_emailverify_email_btn: '发送Email验证邮件'
+admin_v2.user.basic.basic_tab.lock_btn: '封禁用户'
+admin_v2.user.basic.basic_tab.unlock_btn: '解禁用户'
+admin_v2.user.basic.basic_tab.org_update_btn: '修改用户组织机构'
+
+#用户-用户管理-实名认证
+admin_v2.user.approval_menu: 实名认证
+admin_v2.user.approval.basic_tab.cancel_btn: 撤销
+admin_v2.user.approval.approving_menu: 审核中
+admin_v2.user.approval.approved_menu: 审核成功
+
+#用户管理-教师管理
+admin_v2.user.teacher_menu: 教师管理
+admin_v2.user.teacher.basic_tab: 教师管理
+admin_v2.user.teacher.basic_tab.promote_btn: 推荐老师
+admin_v2.user.teacher.promote_list_tab: 教师推荐
+
+#交易-商品订单
+admin_v2.trade.order_manage.basic_group: 订单管理
+admin_v2.trade.goods_order.menu: 商品订单
+admin_v2.trade.goods_order.basic_tab: 商品订单
+
+# 交易-退款订单
+admin_v2.trade.order_refunds_menu: 退款订单
+admin_v2.trade.order_refunds.basic_tab: 退款订单
+
+#交易-网校账单
+admin_v2.trade.asset_manage.basic_group: 资产管理
+admin_v2.trade.bills_menu: 网校账单
+admin_v2.trade.bills.cash_records_tab: 现金账单
+admin_v2.trade.bills.coin_records_tab: 虚拟币账单
+
+# 交易-虚拟币管理
+admin_v2.trade.coin_menu: 虚拟币管理
+admin_v2.trade.coin.basic_tab: 虚拟币管理
+
+# 交易-发票管理
+admin_v2.trade.invoice_manage.basic_group: 发票管理
+
+# 应用中心-营销云-营销应用
+admin_v2.basic_app_center_group: 营销云
+admin_v2.cloud.app_center_menu: 营销应用
+admin_v2.cloud.app_center.basic_tab: 应用中心
+admin_v2.cloud.app_center.installed_tab: 已购项目
+admin_v2.cloud.app_center.upgrades_tab: 更新
+admin_v2.cloud.app_center.logs_tab: 更新日志
+# 应用中心-基础云-概览
+admin_v2.cloud.overview_menu: 概览
+admin_v2.cloud.overview.basic_tab: 教育云概览
+
+# 应用中心-基础云-云服务
+admin_v2.nav.cloud_center: 云市场
+admin_v2.basic_cloud_group: 基础云
+admin_v2.cloud_service.basic_menu: 云服务
+admin_v2.cloud_service.sms_tab: 云短信
+
+admin_v2.tab.overview_tab: 概览
+admin_v2.tab.setting_tab: 设置
+
+admin_v2.cloud.video_menu: 云视频
+admin_v2.cloud.edulive_menu: 云直播
+admin_v2.cloud.sms_menu: 云短信
+admin_v2.cloud.email_menu: 云邮件
+admin_v2.cloud.search_menu: 云搜索
+admin_v2.cloud.consult_menu: 云问答
+
+admin_v2.cloud_service.sms_overview_tab: 概览
+
+# 应用中心-基础云-云服务-即时聊天设置
+admin_v2.cloud.im_setting_menu: 即时聊天设置
+admin_v2.cloud.im_setting.basic_tab: 即时聊天设置
+
+# 数据-数据统计
+admin_v2.data_statictics.analysis.basic_group: 数据分析
+admin_v2.data_statistics.statistics.menu: 数据统计
+admin_v2.data_statistics.statistics.basic_tab: 数据统计
+
+
+#数据实验室
+admin_v2.cloud.data_lab: 数据实验室
+admin_v2.cloud.data_lab_setting: 设置
+
+# 人脸识别
+admin_v2.cloud.face_identify: 人脸识别
+
+#功能实验室
+admin_v2.cloud.feature_lab: 功能实验室
+
+# 应用中心-基础云-授权信息
+admin_v2.cloud.cloud_setting_menu: 授权信息
+admin_v2.cloud.cloud_setting.basic_tab: 授权信息
+
+# 系统-通用管理
+admin_v2.general.basic_group: 通用管理
+
+# 系统-通用管理-网校信息
+admin_v2.system.site_menu: 网校信息
+admin_v2.system.site.basic_tab: 学校信息
+
+# 系统-通用管理-运营设置
+admin_v2.system.operation_menu: 运营设置
+admin_v2.system.mailer_setting_tab: 邮件服务器设置
+admin_v2.system.operation.article_tab: 资讯
+admin_v2.system.operation.group_tab: 小组
+admin_v2.system.operation.invite_tab: 邀请注册设置
+admin_v2.system.operation.message_open_tab: 私信开启
+admin_v2.system.operation.message_send_tab: 私信发送
+
+# 系统-交易设置
+admin_v2.transaction.basic_group: 交易设置
+
+# 系统-交易设置-资产设置
+admin_v2.system.asset_menu: 资产设置
+admin_v2.system.asset.payment_tab: 支付
+admin_v2.system.asset.coin_tab: 虚拟币
+admin_v2.system.asset.refund_tab: 退款
+
+#系统-通用管理-用户设置
+admin_v2.system.user_menu: 用户设置
+admin_v2.system.user.user_center_tab: 用户中心
+admin_v2.system.user.login_bind_tab: 登录
+admin_v2.system.user.user_fields_tab: 用户信息设置
+admin_v2.system.user.avatar_tab: 默认头像
+
+#系统-通用设置-微信授权信息
+admin_v2.system.wechat_auth_menu: 微信授权信息
+
+#系统-通用管理-课程设置
+admin_v2.system.course_menu: 课程设置
+admin_v2.system.course.basic_tab: 课程
+admin_v2.system.course.questions_tab: 题库
+admin_v2.system.course.avatar_tab: 默认图片
+admin_v2.system.course.classroom_tab: 班级
+admin_v2.system.course.open_course_tab: 公开课
+
+admin_v2.system.roles_menu: 角色权限
+admin_v2.system.roles.basic_tab: 角色权限
+admin_v2.system.roles.basic.create_btn: 新增角色
+admin_v2.system.roles.basic.edit_btn: 编辑角色
+admin_v2.system.roles.basic.delete_submit_btn: 删除角色
+
+# 系统-系统管理
+admin_v2.system.basic_group: 系统管理
+admin_v2.system.user.auth_tab: 注册
+
+# 系统-系统管理-系统优化
+admin_v2.system.optimize_menu: 系统优化
+admin_v2.system.optimize.basic_tab: 系统优化
+
+# 系统-系统管理-系统自检
+admin_v2.system.report_status_menu: 系统自检
+admin_v2.system.report_status.basic_tab: 系统自检
+
+# 系统-系统管理-系统日志
+admin_v2.system.logs_menu: 系统日志
+admin_v2.system.logs.logs_query_tab: 系统操作日志
+admin_v2.system.logs.logs_prod_tab: 程序运行日志
+
+# 系统-系统管理-安全设置
+admin_v2.system.security_menu: 安全设置
+admin_v2.system.blacklist_tab: IP黑名单
+admin_v2.system.security_tab: 白名单域名
+admin_v2.system.post_num_tab: 发帖限制
+
+# 数据-数据概览
+admin_v2.data_statistics.overview.menu: 数据概览
+admin_v2.data_statistics.overview.basic_tab: 数据概览
+
+# 系统-通用管理-组织机构管理
+admin_v2.system.org_menu: 组织机构管理
+admin_v2.system.org.basic_tab: 组织机构
+
+#队列
+admin_v2.system.queue_manage_menu: 队列
+admin_v2.system.queue_failed_tab: 队列错误日志
+
+# 隐藏模块
+admin_v2.nav.developer_module: 开发者
+admin_v2.nav.developer_module.basic_group: 开发者设置
+admin_v2.developer.xapi_manage: xAPI管理
+admin_v2.developer.xapi_setting: xAPI设置
+admin_v2.developer.xapi_statement: xAPI报表
+
+admin_v2.developer.cdn_manage: CDN管理
+admin_v2.developer.cdn_setting: CDN设置
+
+admin_v2.developer.debug_manage: 开发者调试
+admin_v2.developer.developer_manage: 开发者调试
+admin_v2.developer.magic_manage: Magic设置
+admin_v2.developer.version_manage: 应用版本修改
+admin_v2.developer.mocked_manage: Mock
+admin_v2.page_static_manage: 页面设置
+admin_v2.page_static_tab: 页面静态化设置
+
+# 组织机构管理(隐藏路由)
+admin_v2.developer.org_menu: 组织机构管理
+admin_v2.developer.org.basic_tab: 组织机构
+
+# 任务调度(隐藏路由)
+admin_v2.developer.jobs_manage_manu: 任务调度
+admin_v2.developer.jobs_manage: 任务调度
+admin_v2.developer.job_logs: 任务日志
+admin_v2.developer.crontab: crontab管理
+
+# IAP
+admin_v2.developer.mobile_iap_product_menu: iOS内购商品设置
+admin_v2.developer.mobile_iap_product.basic_tab: iOS内购商品设置iOS Purchase Setting
+# 新版后台结束

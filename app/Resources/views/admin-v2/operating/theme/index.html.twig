@@ -1,0 +1,54 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set script_controller = 'setting/theme' %}
+
+{% set menu = 'admin_v2_setting_theme' %}
+
+{% block main %}
+
+  <table class="table table-striped table-hover" id="theme-table">
+    <thead>
+    <tr>
+      <th>{{'admin.setting.theme.name'|trans}}</th>
+      <th width="10%">{{'admin.setting.theme.version'|trans}}</th>
+      <th>{{'admin.setting.theme.author'|trans}}</th>
+      <th>{{'admin.setting.theme.operation'|trans}}</th>
+    </tr>
+    </thead>
+    <tbody>
+      {% for theme in themes %}
+        <tr>
+          <td>
+
+            <div class="media">
+              <img class="media-object pull-left" src="{{ asset('themes/' ~ theme.uri ~ '/' ~ theme.thumb) }}" width="150">
+              <div class="media-body">
+                <h5 class="media-heading">{{ theme.name }}</h5>
+                {{ theme.description|default('')|raw }}
+                {% if theme.setting|default(null) %}
+                  <a href="../{{ theme.setting }}">{{'admin.setting.theme.setting_btn'|trans}}</a>
+                {% endif %}
+              </div>
+            </div>
+          </td>
+          <td>{{ theme.version }}</td>
+          <td>{{ theme.author }}</td>
+          <td>
+            {% if currentTheme.uri == theme.uri %}
+              <span class="text-success">{{'admin.setting.theme.current_theme'|trans}}</span>
+	            {% if theme.support_config|default(false) %}
+                <a href="{{ path('admin_v2_theme_manage', {uri:theme.uri}) }}"class="btn btn-primary" >{{'admin.setting.theme.manage_btn'|trans}}</a>
+	            {% endif %}
+            {% else %}
+              <button class="btn btn-default btn-sm use-theme-btn" data-url="{{ path('admin_v2_setting_theme_change', {uri:theme.uri}) }}">{{'admin.setting.theme.use_btn'|trans}}</button>
+            {% endif %}
+            
+           
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% import "macro.html.twig" as web_macro %}
+
+{% block title %}
+  {{ 'admin.crontab_job.set_next_fire_time'|trans }}
+{% endblock %}
+
+{% block body %}
+
+  <form class="form-horizontal" id="set-next-fire-time-form" action="{{ path('admin_v2_job_set_next_exec_time', {id:job.id}) }}" method="post">
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="next-time-field">{{ 'admin.crontab_job.next_fire_time'|trans }}</label>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="next-time-field" type="text" name="nextExecTime" data-now="{{ 'now'|date('Y-m-d H:i')  }}" value="{{ 'now + 10 minute'|date('Y-m-d H:i') }}" autocomplete="off">
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+
+{% endblock %}
+
+{% block footer %}
+  <button id="set-exec-time-btn" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}" type="button" class="btn btn-primary" data-toggle="form-submit" data-target="#set-next-fire-time-form">{{ 'form.btn.submit'|trans }}</button>
+  <script>app.load('topxiaadminbundle/controller/jobs/set-next-fired-time');</script>
+{% endblock %}

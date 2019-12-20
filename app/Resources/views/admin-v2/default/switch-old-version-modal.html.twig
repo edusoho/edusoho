@@ -1,0 +1,13 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg modal-switch-dialog' %}
+{% set hide_footer = true %}
+{% do script(['app/js/admin-v2/default/switch-old-version/index.js']) %}
+{% block title %}{{ 'admin_v2.switch_old_version.title'|trans }}{% endblock %}
+
+{% block body %}
+  {% set src = '//survey.qiqiuyun.net/index.php?r=survey/index&sid=354685&lang=zh-Hans&refurl=' ~ app.request.server.get('HTTP_REFERER')|default('') %}
+  <div class="js-question-section question-section" data-url="{{ path('admin_v2_switch_old_version') }}">
+    <iframe src="{{ src }}" id="iframe" width="100%" border="0" height="100%" frameborder="0"></iframe>
+  </div>
+{% endblock %}

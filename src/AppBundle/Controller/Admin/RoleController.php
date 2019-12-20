@@ -4,9 +4,11 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\CloudPlatform\Service\AppService;
+use Biz\Role\Service\RoleService;
 use Biz\Role\Util\PermissionBuilder;
+use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class RoleController extends BaseController
 {
@@ -51,6 +53,9 @@ class RoleController extends BaseController
         if ('POST' == $request->getMethod()) {
             $params = $request->request->all();
             $params['data'] = json_decode($params['data'], true);
+            $params['data_v2'] = json_decode($params['permissions'], true);
+            $params['data_v2'] = $this->getRoleService()->getAllParentPermissions($params['data_v2']);
+
             $this->getRoleService()->createRole($params);
 
             return $this->createJsonResponse(true);
@@ -58,7 +63,8 @@ class RoleController extends BaseController
 
         $tree = PermissionBuilder::instance()->getOriginPermissionTree();
         $res = $tree->toArray();
-        $children = $this->rolesTreeTrans($res['children']);
+        $children = $this->getRoleService()->rolesTreeTrans($res['children']);
+        $children = $this->getRoleService()->filterRoleTree($children);
 
         return $this->render('admin/role/role-modal.html.twig', array(
             'menus' => json_encode($children),
@@ -73,7 +79,9 @@ class RoleController extends BaseController
         if ('POST' == $request->getMethod()) {
             $params = $request->request->all();
             $params['data'] = json_decode($params['data'], true);
-            $role = $this->getRoleService()->updateRole($id, $params);
+            $params['data_v2'] = json_decode($params['permissions'], true);
+            $params['data_v2'] = $this->getRoleService()->getAllParentPermissions($params['data_v2']);
+            $this->getRoleService()->updateRole($id, $params);
 
             return $this->createJsonResponse(true);
         }
@@ -88,8 +96,9 @@ class RoleController extends BaseController
             });
         }
 
-        $originPermissions = $tree->toArray();
-        $children = $this->rolesTreeTrans($originPermissions['children']);
+        $res = $tree->toArray();
+        $children = $this->getRoleService()->rolesTreeTrans($res['children']);
+        $children = $this->getRoleService()->filterRoleTree($children);
 
         return $this->render('admin/role/role-modal.html.twig', array(
             'menus' => json_encode($children),
@@ -118,9 +127,10 @@ class RoleController extends BaseController
             $tree->data['chkDisabled'] = 'true';
         });
 
-        $treeArray = $tree->toArray();
+        $res = $tree->toArray();
 
-        $children = $this->rolesTreeTrans($treeArray['children']);
+        $children = $this->getRoleService()->rolesTreeTrans($res['children']);
+        $children = $this->getRoleService()->filterRoleTree($children);
 
         return $this->render('admin/role/role-modal.html.twig', array(
             'menus' => json_encode($children),
@@ -161,30 +171,27 @@ class RoleController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    private function rolesTreeTrans($tree)
-    {
-        foreach ($tree as &$child) {
-            $child['name'] = $this->trans($child['name'], array(), 'menu');
-            if (isset($child['children'])) {
-                $child['children'] = $this->rolesTreeTrans($child['children']);
-            }
-        }
-
-        return $tree;
-    }
-
+    /**
+     * @return RoleService
+     */
     protected function getRoleService()
     {
         return $this->createService('Role:RoleService');
     }
 
+    /**
+     * @return AppService
+     */
     protected function getAppService()
     {
         return $this->createService('CloudPlatform:AppService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 }

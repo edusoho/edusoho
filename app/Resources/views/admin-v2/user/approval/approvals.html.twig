@@ -1,0 +1,89 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set script_controller = 'user/approved' %}
+
+{% if approvalStatus == 'approving' %}
+  {% set menu = 'admin_v2_approval_approving' %}
+{% elseif approvalStatus == 'approved' %}
+  {% set menu = 'admin_v2_approval_approved' %}
+{% endif %}
+
+{% block main %}
+  <form id="user-search-form" class="form-inline well well-sm mtl" action="" method="get" novalidate>
+   {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+
+    <div class="form-group">
+      <select class="form-control" name="keywordType">
+        {{ select_options({'':'admin.user.approval.form.keyword_type_option.default'|trans,nickname:'user.fields.username_label'|trans,email:'admin.user.fields.email'|trans,truename:'user.fileds.realname'|trans,idcard:'admin.user.fields.idcard'|trans}, app.request.get('keywordType')) }}
+      </select>
+    </div>
+    <div class="form-group">
+      <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}"
+             placeholder="{{ 'admin.user.form.input_placeholder.keyword'|trans }}">
+    </div>
+    <div class="form-group">
+      {{ 'admin.user.approval.fields.application_date_label'|trans }}
+      <input class="form-control" type="text" id="startDate" name="startDateTime"
+             value="{{ app.request.query.get('startDateTime') }}" placeholder="{{ 'admin.user.form.input_placeholder.startDate'|trans }}" autocomplete="off">
+      -
+      <input class="form-control" type="text" id="endDate" name="endDateTime"
+             value="{{ app.request.query.get('endDateTime') }}" placeholder="{{ 'admin.user.form.input_placeholder.endDate'|trans }}" autocomplete="off">
+    </div>
+    <button class="btn btn-primary">{{ 'admin.user.form.btn.search_submit_btn'|trans }}</button>
+  </form>
+
+  {% if users %}
+    <table id="user-table" class="table table-striped">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>{{ 'user.fields.username_label'|trans }}</th>
+        {% include 'org/parts/table-thead-tr.html.twig' %}
+        <th>{{ 'user.fileds.realname'|trans }}</th>
+        <th>{{ 'admin.user.fields.idcard'|trans }}</th>
+        <th>{{ 'admin.user.approval.fields.email'|trans }}</th>
+        {% if approvalStatus == 'approving' %}
+          <th>{{ 'admin.user.approval.fields.application_date_label'|trans }}</th>
+        {% elseif approvalStatus == 'approved' %}
+          <th>{{ 'admin.user.approval.fields.approval_date_label'|trans }}</th>
+        {% endif %}
+        <th>{{ 'admin.user.fields.operation_label'|trans }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for user in users %}
+        <tr id="user-table-tr-{{ user.id }}">
+          <td>{{ user.id }}</td>
+          <td><strong>{{ admin_macro.user_link(user) }}</strong></td>
+          {% include 'org/parts/table-body-td.html.twig' with {orgCode: user.orgCode}%}
+          <td>{{ userProfiles[user.id].truename }}</td>
+          <td>{{ userProfiles[user.id].idcard }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.approvalTime | date('Y-m-d H:i') }}</td>
+          <td>
+            {% if approvalStatus == 'approved' %}
+              <div class="btn-group">
+                <a href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_approval_info_view', {id:user.id}) }}"
+                   class="btn btn-default btn-sm">{{ 'admin.user.btn.show_btn'|trans }}</a>
+                {% include 'admin-v2/widget/group-button.html.twig' with {parentCode: 'admin_v2_approval_approved', group:'groupButton', user: user} %}
+              </div>
+            {% elseif approvalStatus == 'approving' %}
+              <a href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_approval_approve', {id:user.id}) }}"
+                 class="btn btn-default btn-sm">{{ 'admin.user.approval.approve_submit_btn'|trans }}</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+    {{ admin_macro.paginator(paginator) }}
+  {% else %}
+    {% if approvalStatus == 'approved' %}
+      <div class="empty">{{ 'admin.user.approval.approved_empty_hint'|trans }}</div>
+    {% elseif approvalStatus == 'approving' %}
+      <div class="empty">{{ 'admin.user.approval.approving_empty_hint'|trans }}</div>
+    {% endif %}
+  {% endif %}
+
+{% endblock %}

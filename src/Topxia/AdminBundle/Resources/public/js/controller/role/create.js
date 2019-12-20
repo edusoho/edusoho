@@ -15,10 +15,13 @@ define(function(require, exports, module) {
     $('#role-submit').on('click', function(event) {
       var checkedNodes = tree.getCheckedNodes();
       var checkedNodesArray = [];
+      var permissionsArray = [];
       for (var i = 0; i < checkedNodes.length; i++) {
+        permissionsArray = permissionsArray.concat(checkedNodes[i].permissions);
         checkedNodesArray.push(checkedNodes[i].code);
       }
       $('#menus').val(JSON.stringify(checkedNodesArray));
+      $('#permissions').val(JSON.stringify(permissionsArray));
     });
 
     var validator = new Validator({
@@ -30,7 +33,7 @@ define(function(require, exports, module) {
         }
         $.post($form.attr('action'), $form.serialize(), function(html) {
           var string = $form.attr('action');
-                    
+
           if (string.indexOf('edit') >= 0) {
             Notify.success(Translator.trans('admin.role.update_success_hint'));
           } else{

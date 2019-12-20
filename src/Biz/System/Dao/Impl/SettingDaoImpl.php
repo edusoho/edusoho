@@ -9,6 +9,11 @@ class SettingDaoImpl extends GeneralDaoImpl implements SettingDao
 {
     protected $table = 'setting';
 
+    public function getByName($name)
+    {
+        return $this->getByFields(array('name' => $name));
+    }
+
     public function findAll()
     {
         $sql = "SELECT * FROM {$this->table}";

@@ -72,7 +72,7 @@
                             {% endif %}
                           </span>
                           <span class="class-student hidden-md"><i class="es-icon es-icon-people"></i>{{ classroom.studentNum + classroom.auditorNum }} 人</span>
-                          <span class="class-price">
+                          <span class="class-price mr0">
                             {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                               {% if classroom.price > 0 %}
                                 {{ classroom.price * setting('coin.cash_rate') }} {{ setting('coin.coin_name') }}

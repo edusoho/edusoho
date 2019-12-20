@@ -132,6 +132,18 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
             return $service;
         };
+
+        $biz['qiQiuYunSdk.platformNews'] = function ($biz) use ($that) {
+            $service = null;
+
+            $sdk = $that->generateSdk($biz, $that->getPlatformNewsConfig($biz));
+
+            if (!empty($sdk)) {
+                $service = $sdk->getPlatformNewsService();
+            }
+
+            return $service;
+        };
     }
 
     public function generateSdk($biz, $serviceConfig)
@@ -320,5 +332,23 @@ class DefaultSdkProvider implements ServiceProviderInterface
         }
 
         return array('wechat' => array('host' => $url['host']));
+    }
+
+    public function getPlatformNewsConfig($biz)
+    {
+        $setting = $biz->service('System:SettingService');
+        $developerSetting = $setting->get('developer', array());
+
+        if (empty($developerSetting['platform_news_api_server'])) {
+            return array();
+        }
+
+        $url = parse_url($developerSetting['platform_news_api_server']);
+
+        if (empty($url['host'])) {
+            return array();
+        }
+
+        return array('platformnews' => array('host' => $url['host']));
     }
 }

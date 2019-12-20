@@ -503,3 +503,7 @@ weekDays:
     Fri: 周五
     Sat: 周六
     Sun: 周日
+
+adminCourseTypes:
+    normal: 普通课程
+    classroom: 班级课程

@@ -22,6 +22,7 @@ use Biz\User\Service\AuthService;
 use Biz\User\Service\BatchNotificationService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
+use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Pay\Service\AccountService;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
@@ -81,6 +82,11 @@ class Login extends AbstractResource
             $user = $this->createUser($clientIp, $client, $mobile, $request);
             $this->sendRegisterSms($mobile, $user['id'], $user['nickname'], $user['realPassword']);
         }
+
+        if ($user['locked']) {
+            throw UserException::LOCKED_USER();
+        }
+
         $user['currentIp'] = $clientIp;
         $this->appendUser($user);
 

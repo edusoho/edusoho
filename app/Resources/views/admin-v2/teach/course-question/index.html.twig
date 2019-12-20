@@ -1,0 +1,128 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set script_controller = 'course/questions' %}
+
+{% set menu = 'admin_v2_course_question_manage' %}
+
+{% block main %}
+
+{% include 'admin-v2/teach/course-question/tab.html.twig' %}
+<br>
+
+  <div class="well well-sm mtl">
+    <form class="form-inline">
+
+      <div class="form-group">
+        <select class="form-control" name="keywordType">
+          {{ select_options({title:'admin.course_thread.form.keyword_type.title_option'|trans, content: 'admin.course_thread.form.keyword_type.content_option'|trans, courseId:'admin.course_thread.form.keyword_type.courseId_option'|trans, courseTitle:'admin.course_thread.form.keyword_type.courseTitle_option'|trans }, app.request.get('keywordType')) }}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <input class="form-control" type="text" placeholder="{{'admin.course_thread.form.input.keyword.placeholer'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
+      </div>
+
+      <span class="divider"></span>
+
+      <div class="form-group">
+        <input class="form-control" type="text" placeholder="{{'admin.course_thread.author_th'|trans}}" name="author" value="{{ app.request.get('author') }}">
+      </div>
+
+
+      <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
+    </form>
+  </div>
+
+  <div id="question-table-container">
+    <table id="question-table" class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th width="5%"><input type="checkbox" data-role="batch-select"></th>
+          <th width="50%">{{'admin.course_question.question_th'|trans}}</th>
+          {% if type == 'unPosted' %}
+            <th width="10%">{{'admin.course_question.view_th'|trans}}</th>
+          {% elseif type == 'all' %}
+            <th width="10%">{{'admin.course_question.replay_or_review_th'|trans}}</th>
+          {% endif %}
+          <th width="10%">{{'admin.course_thread.author_th'|trans}}</th>
+          <th width="10%">{{'admin.course_question.createdTime_th'|trans}}</th>
+          <th width="15%">{{'admin.course_thread.operation_th'|trans}}</th>
+        </tr>
+      </thead>
+      <tbody class="tbody">
+        {% for question in questions %}
+
+          {% set author = users[question.userId]|default(null) %}
+          {% set courseSet = courseSets[question.courseSetId]|default(null) %}
+          {% set course = courses[question.courseId]|default(null) %}
+          {% set task = tasks[question.taskId]|default(null) %}
+          {% if question.title == '' %}
+            {% if question.questionType == 'video' %}
+              {% set questionType = 'course.thread.question_type.video'|trans %}
+            {% elseif question.questionType == 'image' %}
+              {% set questionType = 'course.thread.question_type.image'|trans %}
+            {% elseif question.questionType == 'audio' %}
+              {% set questionType = 'course.thread.question_type.audio'|trans %}
+            {% elseif question.questionType == 'content' %}
+              {% set questionType = 'course.thread.question_type.content'|trans %}
+            {% endif %}
+          {% endif %}
+          <tr data-role="item">
+            <td><input value="{{question.id}}" type="checkbox" data-role="batch-item"> </td>
+            <td>
+              <a href="{{ path('course_thread_show', {courseId:question.courseId, threadId:question.id}) }}" target="_blank"><strong>{{ question.title|default('course.thread.question.title'|trans({'%questionType%':questionType|default('course.thread.question_type.content'|trans)})) }}</strong></a>
+
+              <div class="short-long-text">
+                <div class="short-text text-sm text-muted">{{ question.content|plain_text(60) }} <span class="trigger">({{'admin.course_thread.expand_td'|trans}})</span></div>
+                <div class="long-text">{{ question.content|raw }} <span class="trigger">({{'admin.course_thread.collapse_td'|trans}})</span></div>
+              </div>
+
+              <div class="text-sm mts">
+                {% if courseSet %}
+                  <a href="{{ path('course_show', {id:course.id}) }}" class="text-success" target="_blank">{{ courseSet.title }}</a>
+                {% endif %}
+
+                {% if course %}
+                  <span class="text-muted mhs">&raquo;</span>
+                  <a href="{{ path('course_show', {id:course.id}) }}" class="text-success" target="_blank">{{ course.title }}</a>
+                {% endif %}
+
+                {% if task %}
+                  <span class="text-muted mhs">&raquo;</span>
+                  <a class="text-success"  href="{{ path('course_task_show', {courseId:question.courseId, id:task.id}) }}" target="_blank">{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}{{task.number}}：{{ task.title }}</a>
+                {% endif %}
+              </div>
+            </td>
+            <td>
+            <span class="text-sm">
+              {% if type == 'unPosted' %}
+               {{ question.hitNum }}
+               {% elseif type == 'all' %}
+              {{ question.postNum }} / {{ question.hitNum }}
+                {% endif %}
+            </span>
+            </td>
+            <td>
+              {{ admin_macro.user_link(author) }} <br />
+            </td>
+            <td>
+              {{ question.createdTime|date('Y-n-d H:i:s') }}
+            </td>
+            <td>
+            {% include 'admin-v2/teach/course-question/td-operations.html.twig' %}
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="mbm">
+        <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'admin.course_thread.select_all_btn'|trans}}</label>
+        <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="{{'admin.course_question.question_th'|trans}}" data-url="{{ path('admin_v2_course_thread_batch_delete') }}">{{'form.btn.delete'|trans}}</button>
+    </div>
+  </div>
+
+  {{ admin_macro.paginator(paginator) }}
+{% endblock %}

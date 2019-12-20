@@ -1,0 +1,85 @@
+{% extends 'admin-v2/layout.html.twig' %}
+	 {% set menu = 'admin_v2_cloud_attachment_setting' %}
+	 {% set script_controller = 'educloud/attachment-setting' %} 
+	 {% block main %}
+     <div class="edu-service">
+       {% if info.accessCloud|default(0) == 0 or setting('storage.upload_mode') == 'local' or info.hasStorage == 0 %}
+         <div class="text-center">
+           <div class="error-content" style="padding: 100px 100px">
+             <h4>
+               {{ 'admin.edu_cloud.edu_attachment.attachment_tips'|trans({'%videoUrl%': path('admin_v2_edu_cloud_video_overview'), '%detailUrl%': 'http://open.edusoho.com/show/cloud/video'})|raw }}
+           </div>
+         </div>
+       {% else %}
+
+         <div class="edu-balance">
+           {{ web_macro.flash_messages() }}
+           <form id="cloud-attachment" class="form-horizontal" method="post" data-widget-cid="widget-0">
+             <div class="form-group">
+               <div class="col-md-3 control-label">
+                 <label>{{ 'admin.edu_cloud.edu_attachment.function'|trans }}</label>
+               </div>
+               <div class="controls col-md-8 radios">
+                 <label>
+                   <input type="radio" name="enable"
+                          value="1" {% if attachment.enable %} checked {% endif %}> {{ 'admin.edu_cloud.edu_attachment.open_radio'|trans }}
+                 </label>
+                 <label>
+                   <input type="radio" name="enable"
+                          value="0" {% if not attachment.enable %} checked {% endif %}>{{ 'admin.edu_cloud.edu_attachment.close_radio'|trans }}
+                 </label>
+               </div>
+             </div>
+             <div class="form-group attachement_detail {% if not attachment.enable %} hidden {% endif %}">
+               <div class="col-md-3 control-label">
+                 <label>{{ 'admin.edu_cloud.edu_attachment.service_setting'|trans }}</label>
+               </div>
+               <div class="controls col-md-8 radios">
+                 <label class="">
+                   <input type="checkbox" name="article"
+                          value="1" {% if attachment.article %} checked {% endif %}>
+                   {{ 'admin.edu_cloud.edu_attachment.article'|trans }}
+                 </label>
+                 <label>
+                   <input type="checkbox" name="course"
+                          value="1" {% if attachment.course %} checked {% endif %}>
+                   {{ 'admin.edu_cloud.edu_attachment.course'|trans }}
+                 </label>
+                 <label>
+                   <input type="checkbox" name="classroom"
+                          value="1" {% if attachment.classroom %} checked {% endif %}>
+                   {{ 'admin.edu_cloud.edu_attachment.clssroom'|trans }}
+                 </label>
+                 <label>
+                   <input type="checkbox" name="group"
+                          value="1" {% if attachment.group %} checked {% endif %}> {{ 'admin.edu_cloud.edu_attachment.group'|trans }}
+                 </label>
+                 <label>
+                   <input type="checkbox" name="question"
+                          value="1" {% if attachment.question %} checked {% endif %}> {{ 'admin.edu_cloud.edu_attachment.testpaper'|trans }}
+                 </label>
+               </div>
+             </div>
+             <div class="form-group attachement_detail {% if not attachment.enable %} hidden {% endif %}">
+               <div class="col-md-3 control-label">
+                 <label for="fileSize">{{ 'admin.edu_cloud.edu_attachment.size'|trans }}</label>
+               </div>
+               <div class="col-md-8 controls">
+                 <input type="text" id="fileSize" name="fileSize" class="form-control width-input-large mrm"
+                        style="display:inline-block"
+                        value="{{ attachment.fileSize }}">MB
+                 <p class="help-block">{{ 'admin.edu_cloud.edu_attachment.size_tips'|trans }}</p>
+               </div>
+             </div>
+             <div class="row form-group">
+               <div class="controls col-md-offset-3 col-md-8">
+                 <button type="submit" class="btn btn-primary">{{ 'form.btn.submit'|trans }}</button>
+               </div>
+             </div>
+             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+           </form>
+         </div>
+       {% endif %}
+
+     </div>
+   {% endblock %}

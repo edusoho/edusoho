@@ -174,10 +174,9 @@
             </div>
           {% endif %}
         </div>
-
-        {# 管理员 #}
-        {% if classroom_permit(classroom.id, 'Manage') and has_permission('admin_classroom_content_manage') %}
-          <a class="class-setting hidden-xs hidden-sm" href="{{ path('classroom_manage',{id:classroom.id}) }}"
+        {#添加admin_v2#}
+        {% if classroom_permit(classroom.id, 'Manage') and (has_permission('admin_classroom_content_manage') or has_permission('admin_v2_classroom_content_manage')) %}
+            <a class="class-setting hidden-xs hidden-sm" href="{{ path('classroom_manage',{id:classroom.id}) }}"
             title="{{ 'classroom.classroom_manage'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}">
             <i class="es-icon es-icon-setting"></i>
           </a>

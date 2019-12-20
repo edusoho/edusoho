@@ -1,0 +1,32 @@
+<table class="table table-striped table-hover" id="conversion-order-list-table" style="word-break:break-all;">
+  <thead>
+    <tr>
+      <th width="35%">{{ 'admin.open_manage.analysis.conversion.result.content_th'|trans }}</th>
+      <th>{{ 'admin.open_manage.analysis.conversion.result.type_th'|trans }}</th>
+      <th>{{ 'admin.open_manage.analysis.conversion.result.buy_num_th'|trans }}</th>
+      <th>{{ 'admin.open_manage.analysis.conversion.result.price_th'|trans }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for orderLog in orderLogs %}
+      {% set target = orderLog.target|default(null) %}
+      <tr>
+        <td>
+          {% if target %}
+            {{ target.title }}
+          {% else %}
+            -
+          {% endif %}
+        </td>
+        <td>{{ dict_text('targetName', orderLog.targetType) }}</td>
+        <td>{{ orderLog.orderCount }}</td>
+        <td>
+          {% if orderLog.targetType == 'vip'%} - {% else %}{{ target.price }}{% endif %}
+        </td>
+      </tr>
+      
+    {% else %}
+      <tr><td colspan="20"><div class="empty">{{ 'admin.open_manage.analysis.conversion.empty'|trans }}</div></td></tr>
+    {% endfor %}
+  </tbody>
+</table>

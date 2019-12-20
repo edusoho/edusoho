@@ -1,0 +1,15 @@
+{% extends 'admin-v2/operating/wechat-notification/setting-modal/layout.html.twig' %}
+
+{% block custom %}
+  <div class="form-group">
+    <div class="col-sm-2 control-label"><label for="send-time">{{ 'wechat.notification.send_time'|trans }}</label></div>
+    <div class="col-sm-4 controls mts"><input class="form-control" type="text" id="send-time" name="sendTime" {% if template.sendTime|default(0) %}data-date="{{ template.sendTime|default('00:00') }}" {% endif %} autocomplete="off"></div>
+  </div>
+{% endblock %}
+{% block footer %}
+  <div class="pull-right">
+    <a href="{{ path('admin_v2_wechat_notification_manage') }}" class="btn btn-link">{{ 'form.btn.cancel'|trans }}</a>
+    <button type="submit" class="btn btn-primary save-btn" data-toggle="form-submit" data-target="#notification-setting-form" data-submiting-text="{{ 'wechat.notification.saving'|trans }}">{{ 'wechat.notification.save'|trans }}</button>
+  </div>
+  <script>app.load('wechat-notification/homework-review-setting');</script>
+{% endblock %}

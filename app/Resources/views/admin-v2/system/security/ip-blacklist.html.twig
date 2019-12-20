@@ -1,0 +1,30 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_ip_blacklist_setting' %}
+
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+
+  <form class="form-horizontal" method="post">
+    <fieldset>
+      <div class="form-group">
+
+        <div class="col-md-2 control-label">
+          <label >{{'admin.ip_black_list.titile'|trans}}</label>
+        </div>
+        <div class="controls col-md-9">
+          <textarea id="blackListIps" name="blackListIps" rows="8" class="form-control">{% if blackListIps  %}{{blackListIps.ips}}{% endif %}</textarea>
+          <div class="help-block">{{'admin.ip_black_list.tips'|trans}}</div>
+        </div>
+
+        <div class="col-md-2 control-label"></div>
+        <div class="controls col-md-9">
+          <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+{% endblock %}

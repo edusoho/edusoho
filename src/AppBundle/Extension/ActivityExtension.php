@@ -81,7 +81,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             'live' => array(
                 'meta' => array(
                     'name' => 'course.activity.live',
-                    'icon' => 'es-icon es-icon-live',
+                    'icon' => 'es-icon es-icon-entry-live',
                 ),
                 'typeClass' => '\Biz\Activity\Type\Live',
                 'controller' => 'AppBundle:Activity/Live',

@@ -243,7 +243,7 @@ class SystemInitializer
         $settingService->get('developer', array());
         $developer['cloud_api_failover'] = 1;
         $settingService->set('developer', $developer);
-
+        $settingService->set('backstage', array('is_v2' => 1));
         $this->output->writeln(' ...<info>成功</info>');
     }
 

@@ -29,6 +29,7 @@ class ThirdPartyOAuth2AuthenticationListener extends BaseAuthenticationListener
     {
         $user = $this->getUserService()->getUserBindByTypeAndFromId($type, $thirdPartyUser['id']);
         if ($user) {
+            $this->checkUserLocked($user['toId']);
             $token = $this->createTokenFromRequest($request, $user['toId']);
             $this->getTokenStorage()->setToken($token);
         }

@@ -1,0 +1,23 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+{% set modal_class = 'modal-lg' %}
+{% block title %}
+  {{'admin.open_manage.analysis.referer.summary_list.modal_title'|trans({'%courseTItle%': course.title, '%startTime%': app.request.get('startTime'), '%endTime%': app.request.get('endTime')})}}
+{% endblock %}
+
+{% block body %}
+	{{ render(controller('AppBundle:AdminV2/Teach/OpenCourseAnalysis:detailGraph',{request:app.request, id:course.id})) }}
+	<div class="row form-group referer-log-list">
+		{% include 'admin-v2/teach/open-course-analysis/parts/referer-detail-list.html.twig' with {refererloglist:refererloglist, targetId:course.id} %}
+	</div>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
+{% endblock %}
+
+{% block script %}
+
+  <script>app.load('open-course-analysis/detail');</script>
+{% endblock %}

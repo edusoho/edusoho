@@ -106,4 +106,17 @@ class ParserTest extends BaseTestCase
         $this->assertEmpty($questions[0]['stem']);
         $this->assertEquals('choice', $questions[0]['type']);
     }
+
+    public function testParseEssayAnswerLines()
+    {
+        $filename = dirname(__DIR__).'/Fixtures/files/essay.docx';
+        $wordRead = new ReadDocx($filename);
+        $text = $wordRead->read();
+        $parser = new Parser($text);
+        $questions = $parser->parser();
+        $this->assertCount(1, $questions);
+        $this->assertEquals(0, stripos('问答题', $questions[0]['stem']));
+        $this->assertEquals('essay', $questions[0]['type']);
+        $this->assertEquals('是正确的，理由如下<br/>①这是第一个原因<br/>②这是第二个原因', trim($questions[0]['answer']));
+    }
 }
