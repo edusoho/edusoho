@@ -211,15 +211,21 @@ export default {
         this.slideIndex =
           this.level == 3 ? this.currentChapter : this.currentUnit;
       }
-      this.getMainTask(task, index);
+      this.getLessonIndex(task, index);
       // 把任务所属的章和节塞入到任务数组中,便于查找
       task.chapterIndex = this.currentChapter;
       task.unitIndex = this.currentUnit;
     },
-    // task下放入task中type=lesson的索引
+    getLessonIndex(task, index) {
+      // 非默认教学计划 是0  默认计划是lesson的index
+      if (!task.mode) {
+        this.getMainTask(task, 0);
+      } else if (task.mode === "lesson") {
+        this.getMainTask(task, index);
+      }
+    },
+    // 默认计划的task下放入task中type=lesson的索引，非默认计划的task下放入task中索引0
     getMainTask(task, index) {
-      // 非默认教学计划 是0  默认计划是index
-      index = task.mode ? index : 0;
       if (this.level === 3) {
         this.$set(
           this.item[this.currentChapter].children[this.currentUnit].children[
@@ -236,6 +242,7 @@ export default {
         );
       }
     },
+
     // 计算目录值
     computedNum(nums, types) {
       const current = this.level === 3 ? this.currentChapter : this.currentUnit;
