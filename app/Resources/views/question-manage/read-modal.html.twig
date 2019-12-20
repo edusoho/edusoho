@@ -43,7 +43,7 @@
 
 {% block footer %}
   {% if is_plugin_installed('QuestionPlus') %}
-    {% set disable = version_compare(plugin_version('QuestionPlus'),'2.0.9','<') %}
+    {% set disable = version_compare(plugin_version('QuestionPlus'), '2.1.0', '<=') %}
     <p class="cd-mt8 mb0 text-left">
       {% if not disable %}
         <a class="cd-link-primary" href="javascript:;" id="old-template-btn">{{ 'course.question_manage.import.use_old_template'|trans }}</a>
