@@ -35,15 +35,13 @@ export default {
   watch: {
     joinStatus: {
       handler: 'joinStatusChange'
+    },
+    '$route' (to, from) {
+      this.getData()
     }
   },
   created() {
-    // this.getBeCourse()
-    this.getCourseLessons({
-      courseId: this.$route.params.id
-    }).then(res => {
-      this.joinStatusChange(res.member)
-    })
+    this.getData();
   },
   methods: {
     ...mapActions('course', [
@@ -52,6 +50,13 @@ export default {
     ...mapMutations('course', {
       setSourceType: types.SET_SOURCETYPE
     }),
+    getData(){
+      this.getCourseLessons({
+        courseId: this.$route.params.id
+      }).then(res => {
+        this.joinStatusChange(res.member)
+      })
+    },
     joinStatusChange(status) {
       this.currentComp = ''
       if (status) {

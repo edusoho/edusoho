@@ -47,6 +47,7 @@ export default [
     // 获取优惠券功能开关
     name: 'getCouponSetting',
     url: '/setting/coupon',
-    method: 'GET'
+    method: 'GET',
+    disableLoading: true
   }
 ];
