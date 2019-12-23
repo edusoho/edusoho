@@ -137,6 +137,16 @@ class AppPackageUpdateController extends BaseController
                 'isUpgrade' => true,
                 'packageId' => $apps[$code]['package']['id'],
                 'toVersion' => $apps[$code]['package']['toVersion'],
+                'urls' => array(
+                    'checkDependsUrl' => $this->generateUrl('admin_v2_app_package_update_check_depends', array('id' => $apps[$code]['package']['id'])),
+                    'backupFileUrl' => $this->generateUrl('admin_v2_app_package_update_backup_file', array('id' => $apps[$code]['package']['id'])),
+                    'backupDbUrl' => $this->generateUrl('admin_v2_app_package_update_backup_db', array('id' => $apps[$code]['package']['id'])),
+                    'checkDownloadExtractUrl' => $this->generateUrl('admin_v2_app_package_update_check_download_and_extract', array('id' => $apps[$code]['package']['id'])),
+                    'downloadExtractUrl' => $this->generateUrl('admin_v2_app_package_update_download_and_extract', array('id' => $apps[$code]['package']['id'])),
+                    'beginUpgradeUrl' => $this->generateUrl('admin_v2_app_package_update_begin_upgrade', array('id' => $apps[$code]['package']['id'], 'type' => 'upgrade')),
+                    'checkNewestUrl' => $this->generateUrl('admin_v2_app_package_update_check_newest', array('code' => $code)),
+                    'checkEnvironmentUrl' => $this->generateUrl('admin_v2_app_package_update_check_environment', array('id' => $apps[$code]['package']['id'])),
+                ),
             );
         } catch (\Exception $e) {
             $result = array('isUpgrade' => false);
