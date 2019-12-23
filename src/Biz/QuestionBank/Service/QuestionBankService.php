@@ -34,7 +34,7 @@ interface QuestionBankService
      */
     public function deleteQuestionBank($id);
 
-    public function canManageBank($bankId, $permission = 'admin_question_bank');
+    public function canManageBank($bankId);
 
     public function waveTestpaperNum($id, $diff);
 
