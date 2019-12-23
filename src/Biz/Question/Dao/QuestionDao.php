@@ -2,15 +2,17 @@
 
 namespace Biz\Question\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface QuestionDao extends GeneralDaoInterface
+interface QuestionDao extends AdvancedDaoInterface
 {
     public function findQuestionsByIds(array $ids);
 
     public function findQuestionsByParentId($id);
 
     public function findQuestionsByCourseSetId($courseSetId);
+
+    public function findQuestionsByCopyId($copyId);
 
     public function findQuestionsByCategoryIds($categoryIds);
 
