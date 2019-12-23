@@ -108,7 +108,7 @@ check env:
 
 7.0 For Non-Develop:
   stage: test
-  image: codeages/ci-php:7.1.33
+  image: zhongyunchang/ci-php71:1
   services:
     - mysql:8.0
     - redis:latest
