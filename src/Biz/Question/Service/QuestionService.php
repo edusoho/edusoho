@@ -80,4 +80,6 @@ interface QuestionService
     public function getQuestionConfig($type);
 
     public function findAttachments($questionIds);
+
+    public function hasStemImg($question);
 }

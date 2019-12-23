@@ -26,10 +26,10 @@
   <div class="col-md-1 control-label"><label for="testpaper-range-field">{{'course.testpaper_manage.create.range'|trans}}</label></div>
   <div class="col-md-11 controls">
     <select class="form-control width-150" name="ranges[categoryId]" data-bank-id="{{ questionBank.id }}" data-check-num-url="{{ path('question_bank_manage_question_check_num') }}">
-      <option value="0" selected>{{'my.teaching.question_bank.question.all'|trans}}</option>
-      {% for tree in categoryTree %}
-        <option value={{ tree.id }}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>
-      {% endfor %}
+      <option value="" selected>{{ 'my.teaching.question_bank.question.all'|trans }}</option>
+      <option value="">{{ 'my.teaching.question_bank.question.all'|trans }}</option>
+      <option value="0">{{ 'my.teaching.question_bank.question.no_category'|trans }}</option>
+      {{ select_options(build_category_choices(categoryTree)) }}
     </select>
   </div>
 </div>

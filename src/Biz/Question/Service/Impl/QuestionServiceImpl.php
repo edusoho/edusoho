@@ -4,7 +4,10 @@ namespace Biz\Question\Service\Impl;
 
 use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Question\Dao\QuestionDao;
+use Biz\Question\Dao\QuestionFavoriteDao;
 use Biz\Question\QuestionException;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Question\Service\QuestionService;
 
@@ -479,11 +482,17 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $question;
     }
 
+    /**
+     * @return QuestionDao
+     */
     protected function getQuestionDao()
     {
         return $this->createDao('Question:QuestionDao');
     }
 
+    /**
+     * @return QuestionFavoriteDao
+     */
     protected function getQuestionFavoriteDao()
     {
         return $this->createDao('Question:QuestionFavoriteDao');
@@ -494,11 +503,9 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->createService('File:UploadFileService');
     }
 
-    protected function getLogService()
-    {
-        return $this->createService('System:LogService');
-    }
-
+    /**
+     * @return QuestionBankService
+     */
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
