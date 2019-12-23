@@ -81,7 +81,7 @@ check env:
   stage: test
   image: codeages/ci-php:5.5-5
   services:
-    - mysql:8.0
+    - mysql:5.5
     - redis:latest
   script:
     - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
@@ -89,8 +89,7 @@ check env:
   only:
     variables:
       - $REPOSITORY == "main"
-
-7.0 For Non-Develop:
+7.0 For main:
   stage: test
   image: codeages/ci-php:7.1.33
   services:
@@ -106,6 +105,18 @@ check env:
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
+
+7.0 For Non-Develop:
+  stage: test
+  image: codeages/ci-php:7.1.33
+  services:
+    - mysql:8.0
+    - redis:latest
+  script:
+    - bin/phpunit-diff
+  only:
+    variables:
+      - $REPOSITORY == "main"
 
 7.0 For Develop:
   stage: test
