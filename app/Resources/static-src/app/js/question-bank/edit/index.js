@@ -17,7 +17,7 @@ class BankEdit {
               return true;
             }
           },
-          byte_maxlength: 30,
+          maxlength: 30,
           trim: true
         },
         categoryId: {
