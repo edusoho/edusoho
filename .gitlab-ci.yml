@@ -113,8 +113,7 @@ check env:
     - zhongyunchang/mysql:8.0
     - redis:latest
   script:
-    - php -v
-    - php -m
+    - "sed -i 's/\\s*database_host.*/    database_host: zhongyunchang-mysql/g' app/config/parameters_test.yml"
     - bin/phpunit-diff
   only:
     variables:
