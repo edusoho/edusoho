@@ -1,0 +1,89 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_classroom_setting' %}
+
+{% set script_controller='topxiaadminbundle/controller/classroom/set' %}
+
+{% block main %}
+
+  {{ web_macro.flash_messages() }}
+
+  <form class="form-horizontal" method="post" id="member-zone-form" novalidate>
+    
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label >{{'admin.setting_course.classroom.setting_classroom_name'|trans}}</label>
+      </div>
+      <div class="controls col-md-4">
+        <input name="name" type="text" class="form-control" value="{{setting('classroom').name|default("")}}"/>
+        <div class="help-block">{{'admin.setting_course.classroom.setting_classroom_name.help_block'|trans}}</div>
+      </div>
+    </div>
+
+    <div class="alert alert-warning col-md-offset-2" role="alert">{{'admin.setting_course.classroom.setting_classroom_name.tips'|trans}}
+    </div>
+    
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label >{{'admin.setting_course.classroom.course_discount'|trans}}</label>
+      </div>
+      <div class="controls col-md-7 radios">
+        {{ radios('discount_buy', {1:'admin.setting_course.yes'|trans, 0:'admin.setting_course.no'|trans}, setting('classroom').discount_buy|default(1)) }}
+        <div class="help-block"><p>{{ 'admin.setting_course.classroom.course_discount.help_block'|trans }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label >{{'admin.setting_course.classroom.classroom_list_default_seq'|trans}}</label>
+      </div>
+      <div class="controls col-md-7 radios">
+        {{ radios('explore_default_orderBy', {createdTime:'site.datagrid.filter.latest'|trans, hotSeq:'site.datagrid.filter.hotest'|trans,recommendedSeq:'site.datagrid.filter.recommended'|trans}, classroomSetting.explore_default_orderBy) }}
+        <p class="help-block"><a target="_blank" href="{{ path('classroom_explore') }}">{{ 'admin.setting_course.classroom.classroom_list.help_block'|trans }}</a>{{ 'admin.setting_course.classroom.classroom_list_default_seq.help_block'|trans }}</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="row form-group">
+        <div class="col-md-2 control-label"><label >{{'admin.setting_course.classroom.classroom_comments_manage'|trans}}</label></div>
+        <div class="col-md-1 control-label control-label--short">{{ 'admin.setting_course.classroom.classroom_review'|trans }}：</div>
+        <div class="controls col-md-7 radios">
+          {{ radios('show_review', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, classroomSetting.show_review|default('1')) }}
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label"><label ></label></div>
+        <div class="col-md-1 control-label control-label--short">{{ 'admin.setting_course.classroom.classroom_thread'|trans }}：</div>
+        <div class="controls col-md-7 radios">
+            {{ radios('show_thread', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, classroomSetting.show_thread|default('1')) }}
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label"><label ></label></div>
+        <div class="col-md-1 control-label control-label--short">{{ 'admin.setting_course.classroom.classroom_note'|trans }}：</div>
+        <div class="controls col-md-7 radios">
+            {{ radios('show_note', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, classroomSetting.show_note|default('1')) }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <label class="col-md-2 control-label">{{ 'admin.setting_classroom.classroom_operation_mode.allow_show_user_count'|trans }}</label>
+      <div class="col-md-7 controls radios">
+        {{ radios('show_student_num_enabled', {'1':'admin.setting_course.open'|trans, '0':'admin.setting_course.closed'|trans}, setting('classroom').show_student_num_enabled|default('1') ) }}
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label"></div>
+      <div class="controls col-md-8">
+        <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>  
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}
+

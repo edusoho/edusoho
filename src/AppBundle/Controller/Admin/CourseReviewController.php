@@ -22,14 +22,13 @@ class CourseReviewController extends BaseController
             unset($conditions['courseTitle']);
             $conditions['courseSetIds'] = $conditions['courseSetIds'] ?: array(-1);
         }
+        $conditions['parentId'] = 0;
 
         $paginator = new Paginator(
             $request,
             $this->getReviewService()->searchReviewsCount($conditions),
             20
         );
-
-        $conditions['parentId'] = 0;
 
         $reviews = $this->getReviewService()->searchReviews(
             $conditions,
@@ -83,6 +82,9 @@ class CourseReviewController extends BaseController
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return \Biz\Course\Service\ReviewService
+     */
     protected function getReviewService()
     {
         return $this->createService('Course:ReviewService');

@@ -1,0 +1,5 @@
+<div class="btn-group">
+<a href="{{ path('admin_v2_question', {postStatus: 'unPosted'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'unPosted'%} btn-primary{% endif %}">{{'admin.course_thread.not_answer'|trans}}</a>
+
+<a href=" {{ path('admin_v2_question', {postStatus: 'all'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'all'%}btn-primary{% endif %}">{{'admin.course_thread.all_answer'|trans}}</a>
+</div>

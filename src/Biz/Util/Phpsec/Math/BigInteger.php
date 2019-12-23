@@ -1782,47 +1782,47 @@ class BigInteger
 
         // is the modulo odd?
 
-        if ($n->value[0] & 1) {
-            return $this->_normalize($this->_slidingWindow($e, $n, self::MONTGOMERY));
-        }
+//        if ($n->value[0] & 1) {
+//            return $this->_normalize($this->_slidingWindow($e, $n, self::MONTGOMERY));
+//        }
 
         // if it's not, it's even
 
         // find the lowest set bit (eg. the max pow of 2 that divides $n)
 
-        for ($i = 0; $i < count($n->value); ++$i) {
-            if ($n->value[$i]) {
-                $temp = decbin($n->value[$i]);
-                $j = strlen($temp) - strrpos($temp, '1') - 1;
-                $j += 26 * $i;
-                break;
-            }
-        }
+//        for ($i = 0; $i < count($n->value); ++$i) {
+//            if ($n->value[$i]) {
+//                $temp = decbin($n->value[$i]);
+//                $j = strlen($temp) - strrpos($temp, '1') - 1;
+//                $j += 26 * $i;
+//                break;
+//            }
+//        }
 
         // at this point, 2^$j * $n/(2^$j) == $n
 
-        $mod1 = $n->copy();
-        $mod1->_rshift($j);
-        $mod2 = new static();
-        $mod2->value = array(1);
-        $mod2->_lshift($j);
-
-        $part1 = ($mod1->value != array(1)) ? $this->_slidingWindow($e, $mod1, self::MONTGOMERY) : new static();
-        $part2 = $this->_slidingWindow($e, $mod2, self::POWEROF2);
-
-        $y1 = $mod2->modInverse($mod1);
-        $y2 = $mod1->modInverse($mod2);
-
-        $result = $part1->multiply($mod2);
-        $result = $result->multiply($y1);
-
-        $temp = $part2->multiply($mod1);
-        $temp = $temp->multiply($y2);
-
-        $result = $result->add($temp);
-        list(, $result) = $result->divide($n);
-
-        return $this->_normalize($result);
+//        $mod1 = $n->copy();
+//        $mod1->_rshift($j);
+//        $mod2 = new static();
+//        $mod2->value = array(1);
+//        $mod2->_lshift($j);
+//
+//        $part1 = ($mod1->value != array(1)) ? $this->_slidingWindow($e, $mod1, self::MONTGOMERY) : new static();
+//        $part2 = $this->_slidingWindow($e, $mod2, self::POWEROF2);
+//
+//        $y1 = $mod2->modInverse($mod1);
+//        $y2 = $mod1->modInverse($mod2);
+//
+//        $result = $part1->multiply($mod2);
+//        $result = $result->multiply($y1);
+//
+//        $temp = $part2->multiply($mod1);
+//        $temp = $temp->multiply($y2);
+//
+//        $result = $result->add($temp);
+//        list(, $result) = $result->divide($n);
+//
+//        return $this->_normalize($result);
     }
 
     /**
@@ -2392,38 +2392,38 @@ class BigInteger
         // perform better under different circumstances. in lieu of deleting it it's just been
         // made uncallable
 
-        static $cache = array(
-            self::VARIABLE => array(),
-            self::DATA => array(),
-        );
-
-        if (($key = array_search($m, $cache[self::VARIABLE])) === false) {
-            $key = count($cache[self::VARIABLE]);
-            $cache[self::VARIABLE][] = $m;
-            $cache[self::DATA][] = $this->_modInverse67108864($m);
-        }
-
-        $n = max(count($x), count($y), count($m));
-        $x = array_pad($x, $n, 0);
-        $y = array_pad($y, $n, 0);
-        $m = array_pad($m, $n, 0);
-        $a = array(self::VALUE => $this->_array_repeat(0, $n + 1));
-
-        for ($i = 0; $i < $n; ++$i) {
-            $temp = $a[self::VALUE][0] + $x[$i] * $y[0];
-            $temp = $temp - self::$baseFull * (self::$base === 26 ? intval($temp / 0x4000000) : ($temp >> 31));
-            $temp = $temp * $cache[self::DATA][$key];
-            $temp = $temp - self::$baseFull * (self::$base === 26 ? intval($temp / 0x4000000) : ($temp >> 31));
-            $temp = $this->_add($this->_regularMultiply(array($x[$i]), $y), false, $this->_regularMultiply(array($temp), $m), false);
-            $a = $this->_add($a[self::VALUE], false, $temp[self::VALUE], false);
-            $a[self::VALUE] = array_slice($a[self::VALUE], 1);
-        }
-
-        if ($this->_compare($a[self::VALUE], false, $m, false) >= 0) {
-            $a = $this->_subtract($a[self::VALUE], false, $m, false);
-        }
-
-        return $a[self::VALUE];
+//        static $cache = array(
+//            self::VARIABLE => array(),
+//            self::DATA => array(),
+//        );
+//
+//        if (($key = array_search($m, $cache[self::VARIABLE])) === false) {
+//            $key = count($cache[self::VARIABLE]);
+//            $cache[self::VARIABLE][] = $m;
+//            $cache[self::DATA][] = $this->_modInverse67108864($m);
+//        }
+//
+//        $n = max(count($x), count($y), count($m));
+//        $x = array_pad($x, $n, 0);
+//        $y = array_pad($y, $n, 0);
+//        $m = array_pad($m, $n, 0);
+//        $a = array(self::VALUE => $this->_array_repeat(0, $n + 1));
+//
+//        for ($i = 0; $i < $n; ++$i) {
+//            $temp = $a[self::VALUE][0] + $x[$i] * $y[0];
+//            $temp = $temp - self::$baseFull * (self::$base === 26 ? intval($temp / 0x4000000) : ($temp >> 31));
+//            $temp = $temp * $cache[self::DATA][$key];
+//            $temp = $temp - self::$baseFull * (self::$base === 26 ? intval($temp / 0x4000000) : ($temp >> 31));
+//            $temp = $this->_add($this->_regularMultiply(array($x[$i]), $y), false, $this->_regularMultiply(array($temp), $m), false);
+//            $a = $this->_add($a[self::VALUE], false, $temp[self::VALUE], false);
+//            $a[self::VALUE] = array_slice($a[self::VALUE], 1);
+//        }
+//
+//        if ($this->_compare($a[self::VALUE], false, $m, false) >= 0) {
+//            $a = $this->_subtract($a[self::VALUE], false, $m, false);
+//        }
+//
+//        return $a[self::VALUE];
     }
 
     /**

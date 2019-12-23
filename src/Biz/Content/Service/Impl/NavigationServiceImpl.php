@@ -196,6 +196,8 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
         $this->getLogService()->info('info', 'navigation_create', "创建导航{$fields['name']}");
 
+        $this->dispatchEvent('navigation.operate', $this->getNavigation($result['id']));
+
         return $result;
     }
 
@@ -235,6 +237,8 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
         $this->getLogService()->info('info', 'navigation_update', "编辑导航#{$id}", $fields);
 
+        $this->dispatchEvent('navigation.operate', $this->getNavigation($id));
+
         return $this->getNavigationDao()->update($id, $fields);
     }
 
@@ -249,7 +253,9 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
     public function deleteNavigation($id)
     {
-        return ($this->getNavigationDao()->delete($id)) + ($this->getNavigationDao()->delete($id));
+        $this->dispatchEvent('navigation.operate', $this->getNavigation($id));
+
+        return ($this->getNavigationDao()->delete($id)) + ($this->getNavigationDao()->deleteByParentId($id));
     }
 
     /**

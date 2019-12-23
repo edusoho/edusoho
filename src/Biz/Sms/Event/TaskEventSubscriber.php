@@ -28,6 +28,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
             'course.task.update' => 'onTaskUpdate',
             'course.task.delete' => 'onTaskDelete',
             'course.task.create.sync' => 'onTaskCreateSync',
+            'course.task.update.sync' => 'onTaskUpdateSync',
             'course.task.publish.sync' => 'onTaskPublishSync',
         );
     }
@@ -71,6 +72,21 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
             $tasks = $this->getCopiedTasks($task);
 
             $this->sendTasksPublishSms($tasks);
+        }
+    }
+
+    public function onTaskUpdateSync(Event $event)
+    {
+        $task = $event->getSubject();
+
+        if ('live' == $task['type']) {
+            $copiedTasks = $this->getCopiedTasks($task);
+            foreach ($copiedTasks as $copiedTask) {
+                $this->deleteJob($copiedTask);
+                if ('published' == $copiedTask['status']) {
+                    $this->registerJob($copiedTask);
+                }
+            }
         }
     }
 

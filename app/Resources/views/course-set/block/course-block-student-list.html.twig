@@ -1,8 +1,16 @@
-<div class="course-list">
-    <div class="row test-row">
+<div class="course-list course-list-new">
+    <div class="row">
         {% for courseSet in courseSets %}
-            <div class="col-lg-3 col-md-4 col-xs-6">
+            <div class="col-lg-3 col-md-4 col-xs-6 course-item-wrap">
                 <div class="course-item course-sticky-item">
+                  {% if courseSet.course is defined %}
+                    {% set course = courseSet.course %}
+                  {% else %}
+                    {% set course = data('PublishedCourseByCourseSet',{ courseSetId: courseSet.id } ) %}
+                  {% endif %}
+                  {% if course.vipLevelId|default(0) > 0 %}
+                    <span class="tag-vip-free"></span>
+                  {% endif %}
                   <div class="course-img">
                     <a {% if ref|default() %} href="{{ path('course_show', {id: courseSet.defaultCourseId,ref:ref}) }}" {% else %} href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" {% endif %} target="_blank">
                       {% if courseSet.discountId > 0 %}
@@ -14,15 +22,26 @@
                           <span class="tag-discount"></span>
                         {% endif %}
                       {% endif %}
-                      {% if courseSet.serializeMode == 'serialized' %}
-                        <span class="tags"><span class="tag-serialing"></span></span>
-                      {% elseif courseSet.serializeMode == 'finished' %}
-                        <span class="tags"><span class="tag-finished"></span></span>
-                      {% endif %}
-                      {% if courseSet.type == 'live' %}
-                        <span class="tags">
-                          <span class="tag-live"></span>
-                        </span>
+                      {% if courseSet.course.tryLookVideo|default(false) or courseSet.type|default() == 'reservation' or courseSet.type|default() == 'live' or courseSet.serializeMode != 'none'  %}
+                        <div class="course-tag clearfix">
+                          {% if courseSet.course.tryLookVideo|default(false) %}
+                            <span><i class="es-icon es-icon-video color-white"></i>{{'site.badge.try_watch'|trans}}</span>
+                          {% endif %}
+                          <span class="pull-right">
+                            <span class="cd-mr8">{% if courseSet.type|default() == 'reservation' %}
+                              {{ 'my.teaching.course_set.reservation'|trans }}
+                            {% elseif courseSet.type|default() == 'live' %}
+                              {{ 'search.live_courses'|trans }}
+                            {% else %}
+                              {% if courseSet.serializeMode == 'serialized' %}
+                                {{ 'course.status.serialized'|trans }}
+                              {% elseif courseSet.serializeMode == 'finished' %}
+                                {{ 'course.status.finished'|trans }}
+                              {% endif %}
+                            {% endif %}</span>
+                            <span class="course-tag__dot"></span>
+                          </span>
+                        </div>
                       {% endif %}
                       {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'img-responsive', courseSet.title) }}
                     </a>

@@ -1,0 +1,73 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set script_controller = 'topxiaadminbundle/controller/orgManage/list' %}
+
+{% set menu = 'admin_v2_org' %}
+
+{% block main %}
+
+
+  <ul class="list-table" id="org-table" style="margin-bottom: 0">
+    <li class="th">
+      <div class="row">
+        <div class="td col-md-3">{{ 'admin.org_manage.org_name'|trans }}</div>
+        <div class="td col-md-1">{{ 'admin.org_manage.org_code'|trans }}</div>
+        <div class="td col-md-2">{{ 'admin.org_manage.org_childrenNum'|trans }}</div>
+        <div class="td col-md-2">{{ 'admin.org_manage.org_nickname'|trans }}</div>
+        <div class="td col-md-2">{{ 'admin.org_manage.org_createdTime'|trans }}</div>
+        <div class="td col-md-2">{{ 'admin.org_manage.operation'|trans }}</div>
+      </div>
+    </li>
+    <li id="category-table-body" data-sort-url="{{ path('admin_v2_org_sort') }}">
+      {% if orgs is not empty %}
+        {{ _self.showorgTree(orgs, createdUsers,false) }}
+      {% else %}
+        <div class="row empty">{{ 'admin.org_manage.org_empty'|trans }}</div>
+      {% endif %}
+    </li>
+  </ul>
+
+  {% macro showorgTree(orgs, createdUsers,isCollapseChildren) %}
+    <ul class="list-table sortable-list" data-group-id="{{ orgs[0]['parentId'] }}">
+      {% for org in orgs %}
+        {% set user = createdUsers[org.createdUserId] %}
+        {% set isParent = org.children|default(null) is not empty %}
+        {% set isRoot = org.depth == 1 %}
+        <li id="{{ org.id }}" class="tr" data-name="{{ org.name }}" data-id="{{ org.id }}"
+            data-parent-id="{{ org.parentId }}"
+            style="display: {{ (not isRoot and isCollapseChildren) ? 'none' : 'block' }}">
+          <div class="row{{ (isParent and isCollapseChildren) ? ' row-collapse' : ' row-expand' }}">
+            <div class="td col-md-3 name sort-handle"
+                 style="padding-left: {{ 24 * (org.depth - 1 ) }}px;" title="{{ org.name }}">
+              {% if isParent %}
+                <i class="list-table-tree-icon glyphicon glyphicon-chevron-{{ isCollapseChildren ? 'right' : 'down' }}"></i>
+              {% else %}
+                <i class="list-table-tree-icon"></i>
+              {% endif %}
+              {{ org.name }}
+            </div>
+            <div class="td col-md-1 code" title="{{ org.code }}">{{ org.code }}</div>
+            <div class="td col-md-2 code">{{ org.childrenNum }}</div>
+            <div class="td col-md-2 code">{{ user.nickname }}</div>
+            <div class="td col-md-2 code"> {{ org.createdTime|date('Y-m-d') }}</div>
+            <div class="td col-md-2 operation">
+              <a href="javascript:;" class="btn btn-default btn-sm "
+                 data-url="{{ path('admin_v2_org_update', {id:org.id}) }}" data-toggle="modal" data-target="#modal">
+                <i class="glyphicon glyphicon-edit"></i> {{ 'admin.org_manage.edit_btn'|trans }}
+              </a>
+              {% if org.depth <= 5 %}
+                <a href="javascript:;" class="btn btn-default btn-sm"
+                   data-url="{{ path('admin_v2_org_create', {parentId:org.id}) }}" data-toggle="modal"
+                   data-target="#modal"><i class="glyphicon glyphicon-plus"></i> {{ 'admin.org_manage.add_btn'|trans }}</a>
+              {% endif %}
+            </div>
+          </div>
+          {% if isParent %}
+            {{ _self.showorgTree(org.children, createdUsers, isCollapseChildren) }}
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endmacro %}
+
+{% endblock %}

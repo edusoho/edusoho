@@ -1,0 +1,39 @@
+{% import "admin-v2/widget/macro.html.twig" as self_macro %}
+
+{% set permissions = sub_permissions(parentCode, group|default(null)) %}
+
+{% set dropdownMenusShow = false %}
+
+{# 兼容菜单配置中单词错误拼写：visable 正确为：visible  等插件全部更新完毕删除此代码 #}
+{% set permissions = arrays_key_convert(permissions, 'visable', 'visible') %}
+{# 兼容代码结束 #}
+
+{% for permission in permissions %}
+    {% if permission.visible is defined  %}
+      {% if eval_expression(permission.visible) %}
+        {% set dropdownMenusShow = true %}
+      {% endif %}
+    {% else %}
+      {% set dropdownMenusShow = true %}
+    {% endif %}
+{% endfor %}
+
+{% if dropdownMenusShow and permissions|default(null) %}
+<a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+  <span class="caret"></span>
+</a>
+<ul class="dropdown-menu">
+  {% for permission in permissions %}
+    <li>
+      {% if permission.visible is defined %}
+        {% if eval_expression(permission.visible) %}
+          {{ self_macro.menu_link_html(_context, permission, permission.class|default('')) }}
+        {% endif %}
+      {% else %}
+        {{ self_macro.menu_link_html(_context, permission, permission.class|default('')) }}
+      {% endif %}
+    </li>
+  {% endfor %}
+
+</ul>
+{% endif %}

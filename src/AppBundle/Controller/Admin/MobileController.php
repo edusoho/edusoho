@@ -2,11 +2,9 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\FileToolkitException;
 use AppBundle\Common\FileToolkit;
-use AppBundle\Common\ArrayToolkit;
-use Biz\CloudPlatform\CloudAPIFactory;
-use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -344,25 +342,6 @@ class MobileController extends BaseController
         $this->getSettingService()->set('mobile', $setting);
 
         return $this->createJsonResponse(true);
-    }
-
-    public function customizationUpgradeAction(Request $request)
-    {
-        $currentVersion = $request->request->get('currentVersion');
-        $targetVersion = $request->request->get('targetVersion');
-
-        if (empty($currentVersion) || empty($targetVersion)) {
-            $this->createNewException(CommonException::ERROR_PARAMETER());
-        }
-
-        $api = CloudAPIFactory::create('root');
-
-        $resp = $api->post('/customization/mobile/apply', array(
-            'currentVersion' => $currentVersion,
-            'targetVersion' => $targetVersion,
-        ));
-
-        return $this->createJsonResponse($resp);
     }
 
     protected function getCourseService()

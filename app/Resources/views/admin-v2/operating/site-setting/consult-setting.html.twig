@@ -1,0 +1,248 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_setting_consult_setting' %}
+
+{% set script_controller = 'setting/consult-setting' %}
+
+{% block main %}
+
+  {{ web_macro.flash_messages() }}
+
+  <form class="form-horizontal" method="post" id="consult-setting-form" novalidate>
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label>{{ 'admin.setting.consult.customer_service_function'|trans }}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('enabled', {1:'admin.setting.navigation.status.open'|trans, 0:'admin.setting.navigation.status.closed'|trans}, consult.enabled) }}
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label>{{ 'admin.setting.consult.floating_bar'|trans }}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('color',
+        {'default':'<span class="btn btn-lg" style="background:#37b97d"></span>',
+          'warning':'<span class="btn btn-lg" style="background:#e67e22"></span>',
+          'danger':'<span class="btn btn-lg" style="background:#e74c3c"></span>'},
+        consult.color) }}
+      </div>
+    </div>
+    <div data-role="template" style="display:none">
+      <div class="row form-group has-feedback">
+        <div class="controls col-md-2 col-md-offset-2">
+          <input type="text" name="" class="form-control" value="" placeholder="">
+        </div>
+        <div class="controls col-md-2">
+          <input type="text" name="" class="form-control" value="" placeholder="">
+        </div>
+        <div class="controls col-md-4">
+          <input type="text" name="" class="form-control" value="" placeholder="">
+          <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button"
+                  title="{{ 'admin.setting.consult.delete_btn'|trans }}">×
+          </button>
+          </input>
+        </div>
+      </div>
+    </div>
+
+    <div data-role="phone-template" style="display:none">
+      <div class="row form-group has-feedback">
+        <div class="controls col-md-4 col-md-offset-2">
+          <input type="text" name="" class="form-control" value="" placeholder="">
+        </div>
+        <div class="controls col-md-4">
+          <input type="text" name="" class="form-control" value="" placeholder="">
+          <button class="close delete-btn form-control-feedback" data-role="phone-item-delete" type="button"
+                  title="{{ 'admin.setting.consult.delete_btn'|trans }}">×
+          </button>
+          </input>
+        </div>
+      </div>
+    </div>
+
+    <div data-role="qqGroupTemplate" style="display:none">
+      <div class="row form-group has-feedback">
+        <div class="controls col-md-2 col-md-offset-2">
+          <input type="text" name="" class="form-control" value="" placeholder="">
+        </div>
+        <div class="controls col-md-2">
+          <input type="text" name="" class="form-control" value="" placeholder="">
+        </div>
+        <div class="controls col-md-4">
+          <input type="text" name="" class="form-control" value="" placeholder="">
+          <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button"
+                  title="{{ 'admin.setting.consult.delete_btn'|trans }}">×
+          </button>
+          </input>
+        </div>
+      </div>
+    </div>
+
+    <fieldset>
+      <legend>QQ{{ 'admin.setting.consult.customer_service_settings'|trans }}
+        <span class="glyphicon glyphicon-question-sign text-muted pull-right mll mts" id="qq-property-tips"
+              data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span>
+        <div id="qq-property-tips-html" style="display:none;">
+          <div style="width:250px;">
+            <span style="color:blue;">{{ 'admin.setting.consult.get_online_service_link.tips'|trans }}</span><br>
+            {{ 'admin.setting.consult.customer_service_settings.tips'|trans({'%http%':app.request.getScheme() })|raw }}
+            <br>
+          </div>
+        </div>
+      </legend>
+      <div id="consult-qq">
+        {% for qq in consult.qq %}
+          <div class="row form-group has-feedback">
+            <div class="controls col-md-2 col-md-offset-2">
+              <input type="text" name="qq[{{ loop.index0 }}][name]" class="form-control" value="{{ qq.name }}"
+                     placeholder="{{ 'admin.setting.consult.QQ_customer_service_name.placeholer'|trans }}">
+            </div>
+            <div class="controls col-md-2">
+              <input type="text" name="qq[{{ loop.index0 }}][number]" class="form-control" value="{{ qq.number }}"
+                     placeholder="{{ 'admin.setting.consult.QQ_number.placeholer'|trans }}">
+            </div>
+            <div class="controls col-md-4">
+              <input type="text" name="qq[{{ loop.index0 }}][url]" class="form-control" value="{{ qq.url|default('') }}"
+                     placeholder="{{ 'admin.setting.consult.enter_link_addr.placeholer'|trans }}">
+              {% if loop.index0 > 0 %}
+                <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button"
+                        title="{{ 'admin.setting.consult.delete_btn'|trans }}">×
+                </button>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="row form-group">
+        <div class="controls col-md-4 col-md-offset-2">
+          <span class="btn-link" data-role="item-add" data-parentId='consult-qq'
+                data-length='{{ consult.qq | length }}'>{{ 'admin.setting.consult.add_btn'|trans }}</span>
+        </div>
+      </div>
+    </fieldset>
+
+
+    <fieldset>
+      <legend>{{ 'admin.setting.consult.QQ_group_setting'|trans }}
+        <span class="glyphicon glyphicon-question-sign text-muted pull-right mll mts" id="qq-group-property-tips"
+              data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span>
+        <div id="qq-group-property-tips-html" style="display:none;">
+          <div style="width:250px;">
+            <span style="color:blue;">{{ 'admin.setting.consult.get_online_service_link.tips'|trans }}</span><br>
+            {{ 'admin.setting.consult.QQ_group_setting.tips'|trans|raw }}
+          </div>
+        </div>
+      </legend>
+      <div id="consult-qqgroup">
+        {% for qqgroup in consult.qqgroup %}
+          <div class="row form-group has-feedback">
+            <div class="controls col-md-2 col-md-offset-2">
+              <input type="text" name="qqgroup[{{ loop.index0 }}][name]" class="form-control" value="{{ qqgroup.name }}"
+                     placeholder="{{ 'admin.setting.consult.QQ_group_name.placeholer'|trans }}">
+            </div>
+            <div class="controls col-md-2">
+              <input type="text" name="qqgroup[{{ loop.index0 }}][number]" class="form-control"
+                     value="{{ qqgroup.number }}" placeholder="{{ 'admin.setting.consult.QQ_group_number.placeholer'|trans }}">
+            </div>
+            <div class="controls col-md-4">
+              <input type="text" name="qqgroup[{{ loop.index0 }}][url]" class="form-control"
+                     value="{{ qqgroup.url|default('') }}" placeholder="{{ 'admin.setting.consult.code_join_to_QQ_group.placeholer'|trans }}">
+              {% if loop.index0 > 0 %}
+                <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button"
+                        title="{{ 'admin.setting.consult.delete_btn'|trans }}">×
+                </button>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="row form-group">
+        <div class="controls col-md-4 col-md-offset-2">
+          <span class="btn-link" data-parentId='consult-qqgroup'
+                data-length='{{ consult.qqgroup | length }}'>{{ 'admin.setting.consult.add_btn'|trans }}</span>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>{{ 'admin.setting.consult.phone_setting'|trans }}</legend>
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="worktime">{{ 'admin.setting.consult.work_time'|trans }}</label>
+        </div>
+        <div class="controls col-md-8">
+          <input type="text" id="worktime" name="worktime" class="form-control" value="{{ consult.worktime }}">
+        </div>
+      </div>
+
+
+      <div id="consult-phone">
+        {% for phone in consult.phone %}
+          <div class="row form-group has-feedback">
+            <div class="controls col-md-4 col-md-offset-2">
+              <input type="text" name="phone[{{ loop.index0 }}][name]" class="form-control" value="{{ phone.name }}"
+                     placeholder="{{ 'admin.setting.consult.Contact'|trans }}">
+            </div>
+            <div class="controls col-md-4">
+              <input type="text" name="phone[{{ loop.index0 }}][number]" class="form-control" value="{{ phone.number }}"
+                     placeholder="{{ 'admin.setting.consult.phone'|trans }}">
+              {% if loop.index0 > 0 %}
+                <button class="close delete-btn form-control-feedback" data-role="phone-item-delete" type="button"
+                        title="{{ 'admin.setting.consult.delete_btn'|trans }}">×
+                </button>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="row form-group">
+        <div class="controls col-md-4 col-md-offset-2">
+          <span class="btn-link" data-role="phone-item-add" data-parentId='consult-phone'
+                data-length='{{ consult.phone | length }}'>{{ 'admin.setting.consult.add_btn'|trans }}</span>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>{{ 'admin.setting.consult.other_setting'|trans }}</legend>
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label>{{ 'admin.setting.consult.WeChat_QR_code'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          <div id="consult-container">{% if consult.webchatURI %}<img src="{{ asset(consult.webchatURI) }}">{% endif %}
+          </div>
+          <a href="javascript:;" class="btn btn-default btn-sm" id="consult-upload"
+             data-upload-token="{{ upload_token('system', 'image') }}" type="button"
+             data-goto-url="{{ path('admin_v2_setting_consult_upload') }}">{{ 'form.btn.upload'|trans }}</a>
+          <button class="btn btn-default btn-sm" id="consult-webchat-del" type="button"
+                  data-url="{{ path('admin_v2_setting_consult_webchat_delete') }}"
+                  {% if not consult.webchatURI %}style="display:none;"{% endif %}>{{ 'admin.setting.consult.delete_btn'|trans }}</button>
+          <p class="help-block">{{ 'admin.setting.consult.other_setting.help_block'|trans }}</p>
+          <input type="hidden" name="webchatURI" value="{{ consult.webchatURI }}">
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="email">{{ 'admin.setting.consult.work_email'|trans }}</label>
+        </div>
+        <div class="controls col-md-8">
+          <input type="text" id="email" name="email" class="form-control" value="{{ consult.email }}">
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"></div>
+      <div class="controls col-md-8">
+        <button type="submit" class="btn btn-primary">{{ 'form.btn.submit'|trans }}</button>
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+
+{% endblock %}

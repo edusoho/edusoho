@@ -1,0 +1,14 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+{{ 'admin.datalab.setting.modal_title'|trans }}
+{% endblock %}
+
+{% block body %}
+  {{ 'admin.datalab.setting.modal_disable_body'|trans }}
+{% endblock %}
+
+{% block footer %}
+    <button type="button" class="btn btn-primary pull-right" data-dismiss="modal">{{ 'admin.datalab.setting.btn_use'|trans }}</button>
+    <button id="xapi-setting-confirm" class="btn btn-link pull-right">{{ 'admin.datalab.setting.btn_close'|trans }}</button>
+{% endblock %}

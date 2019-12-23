@@ -38,13 +38,13 @@ class DiscoveryColumnController extends BaseController
     public function indexAction(Request $request)
     {
         $appDiscoveryVersion = $this->getH5SettingService()->getAppDiscoveryVersion();
-        
+
         if (1 == $appDiscoveryVersion) {
             return $this->render('admin/system/mobile-discovery-setting-upgraded.html.twig', array());
         }
 
         $discoveryColumns = $this->getDiscoveryColumnService()->getDisplayData();
-        
+
         return $this->render('admin/discovery-column/index.html.twig', array(
             'discoveryColumns' => $discoveryColumns,
             'appDiscoveryVersion' => $appDiscoveryVersion,
@@ -55,7 +55,7 @@ class DiscoveryColumnController extends BaseController
     {
         $categoryId = array();
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $conditions = $request->request->all();
             $conditions['createdTime'] = time();
 
@@ -63,7 +63,7 @@ class DiscoveryColumnController extends BaseController
                 $conditions['categoryId'] = 0;
             }
 
-            if ($conditions['type'] == 'live') {
+            if ('live' == $conditions['type']) {
                 $conditions['orderType'] = '';
             }
 
@@ -98,14 +98,14 @@ class DiscoveryColumnController extends BaseController
             $this->createNewException(DiscoveryColumnException::NOTFOUND_DISCOVERY_COLUMN());
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $conditions = $request->request->all();
 
             if (empty($conditions['categoryId'])) {
                 $conditions['categoryId'] = 0;
             }
 
-            if ($conditions['type'] == 'live') {
+            if ('live' == $conditions['type']) {
                 $conditions['orderType'] = '';
             }
 

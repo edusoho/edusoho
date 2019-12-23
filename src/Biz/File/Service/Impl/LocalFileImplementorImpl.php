@@ -149,7 +149,8 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         $targetPath = $this->getFilePath($targetType, $targetId);
 
         $filename = str_replace("{$targetType}/{$targetId}/", '', $data['hashId']);
-        $originalFile->move($targetPath, $filename);
+
+        return $originalFile->move($targetPath, $filename);
     }
 
     public function reconvertOldFile($file, $convertCallback, $pipeline = null)

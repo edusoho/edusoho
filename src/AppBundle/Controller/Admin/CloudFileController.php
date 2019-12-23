@@ -21,7 +21,7 @@ class CloudFileController extends BaseController
 
         $storageSetting = $this->getSettingService()->get('storage', array());
 
-        if (isset($result['hasStorage']) && $result['hasStorage'] == '1' && $storageSetting['upload_mode'] == 'cloud') {
+        if (isset($result['hasStorage']) && '1' == $result['hasStorage'] && 'cloud' == $storageSetting['upload_mode']) {
             return $this->redirect($this->generateUrl('admin_cloud_file_manage'));
         }
 
@@ -32,7 +32,7 @@ class CloudFileController extends BaseController
     {
         $storageSetting = $this->getSettingService()->get('storage', array());
 
-        if ($storageSetting['upload_mode'] != 'cloud') {
+        if ('cloud' != $storageSetting['upload_mode']) {
             return $this->redirect($this->generateUrl('admin_cloud_file'));
         }
 
@@ -57,7 +57,7 @@ class CloudFileController extends BaseController
             $results['count'],
             20
         );
-        $pageType = (isset($conditions['resType']) && $conditions['resType'] == 'attachment') ? 'attachment' : 'file';
+        $pageType = (isset($conditions['resType']) && 'attachment' == $conditions['resType']) ? 'attachment' : 'file';
 
         return $this->render('admin/cloud-file/tbody.html.twig', array(
             'pageType' => $pageType,
@@ -90,7 +90,7 @@ class CloudFileController extends BaseController
         }
 
         try {
-            if ($cloudFile['type'] == 'video') {
+            if ('video' == $cloudFile['type']) {
                 $thumbnails = $this->getCloudFileService()->getDefaultHumbnails($globalId);
             }
         } catch (\RuntimeException $e) {

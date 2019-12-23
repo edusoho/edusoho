@@ -1,0 +1,92 @@
+{% extends 'admin-v2/cloud-app-layout.html.twig' %}
+
+{% set script_controller = 'app/upgrades' %}
+
+{% set menu = 'admin_v2_app_upgrades' %}
+
+{% block main %}
+
+  <div class="alert alert-warning">
+    {{ 'admin.app_upgrades.tips'|trans }}
+  </div>
+
+  <div class="panel">
+    {% if apps %}
+      <div class="panel-heading"><h4>{{ 'admin.app_upgrades.count_tips'|trans({'%appUpgradesCount%': apps|length}) }}</h4></div>
+    {% endif %}
+    {% if status|default(null) %}
+      <div class="alert alert-danger">{{ 'admin.app_upgrades.accessKey_or_secretKey_error_tips'|trans({'%settingCloudUrl%': path('admin_v2_setting_cloud')})|raw }}</div>
+    {% else %}
+      {% if apps %}
+        <table class="table table-striped table-hover" id="app-table-container">
+          <thead>
+
+          </thead>
+          <tbody>
+          {% for app in apps %}
+            <tr>
+              <td>
+                <img src="http://open.edusoho.com/files/product/{{ app.icon }}" class="app-img pull-left mrl mtm"/>
+              </td>
+
+              <td width="26%">
+                <div class="mtm ">
+                  <a href="#" class=""><h4><strong class="text-primary">{{ app.name }}</strong></h4>
+                  </a> {% if version_compare(app.package.edusohoMinVersion, version, ">") %}
+                    <div
+                        class="text-danger">{{ 'admin.app_upgrades.low_version_tips'|trans({'%edusohoMinVersion%': app.package.edusohoMinVersion}) }}</div>{% endif %}
+                </div>
+
+                <!-- <div class="info mtm mbm clearfix"> -->
+                <div class="left-info pull-left">
+
+                  <div class="text-muted">
+                    <small>{{ 'admin.app_upgrades.developer'|trans }}：{{ app.developerName }}</small>
+                  </div>
+
+                  {% if app.code == 'MAIN' %}
+                    <div class="class-rating mtm">
+                      <span class="text-muted">{{ 'admin.app_upgrades.update_log'|trans }}<a href="{{ path('changelog_list') }}" class="default" target="_blank">{{ 'admin.app_upgrades.all_update_log'|trans }}</a></span>
+                    </div>
+                  {% endif %}
+
+                  <div class="class-rating mtm">
+                    <span class="text-muted">{{ 'admin.app_upgrades.version'|trans }}{{ app.package.toVersion }}</span>
+                  </div>
+
+                  <div class="middle-info">
+                    <div class="text-muted">{{ 'admin.app_upgrades.latest_update_time'|trans }}{{ app.package.createdTime|date('Y-m-d') }}</div>
+                  </div>
+
+                  <!-- </div> -->
+                </div>
+
+              </td>
+
+              <td>
+                <div class="info mtm mbm clearfix">
+                  <div class="pull-left short-long-text">
+                    <div class="short-text text-muted">{{ app.package.description|plain_text(80) }} <span
+                          class="trigger">({{ 'admin.app_upgrades.package_description_open'|trans }})</span></div>
+                    <div class="long-text text-muted">{{ app.package.description|raw }} <span
+                          class="trigger">({{ 'admin.app_upgrades.package_description_close'|trans }})</span></div>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <a href="#" data-toggle="modal" data-target="#modal"
+                   data-url="{{ path('admin_v2_app_package_update_modal', {id:app.package.id, type:'upgrade'}) }}"
+                   class="btn btn-primary {% if version_compare(app.package.edusohoMinVersion, version, ">") %}disabled{% endif %} mrl"
+                   data-keyboard="false" data-backdrop="static" style="margin-top:40px;">{{ 'admin.app_upgrades.update_btn'|trans }}</a>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        {{ 'admin.app_upgrades.latest_version_tips'|trans }}
+      {% endif %}
+    {% endif %}
+  </div>
+{% endblock %}

@@ -49,16 +49,16 @@ class CashBillExporter extends Exporter
         foreach ($cashes as $cash) {
             $content = array();
             $trade = empty($trades[$cash['trade_sn']]) ? array('platform_sn' => '--', 'trade_sn' => '--') : $trades[$cash['trade_sn']];
-            if ($cash['type'] == 'outflow' && $cash['amount_type'] == 'money') {
+            if ('outflow' == $cash['type'] && 'money' == $cash['amount_type']) {
                 //网校支出
                 $amountMark = '-';
                 $paymentText = $this->container->get('translator')->trans('order.payment_pattern.school');
-            } elseif ($cash['type'] == 'inflow' && $cash['amount_type'] == 'coin') {
+            } elseif ('inflow' == $cash['type'] && 'coin' == $cash['amount_type']) {
                 //用户余额支付
                 $amountMark = '+';
                 $paymentText = $this->container->get('translator')->trans('order.payment_pattern.balance');
             } else {
-                if ($cash['amount_type'] == 'coin') {
+                if ('coin' == $cash['amount_type']) {
                     $amountMark = '-';
                 } else {
                     $amountMark = '+';
@@ -71,7 +71,7 @@ class CashBillExporter extends Exporter
             $profile = empty($profiles[$cash['buyer_id']]) ? array('truename' => '--') : $profiles[$cash['buyer_id']];
 
             //系统生成的邮箱不显示
-            if (strpos($user['email'], '@edusoho.net') !== false) {
+            if (false !== strpos($user['email'], '@edusoho.net')) {
                 $user['email'] = '--';
             }
             $content[] = $cash['sn']."\t";
@@ -81,7 +81,7 @@ class CashBillExporter extends Exporter
             $content[] = $user['nickname'];
             $content[] = date('Y-n-d H:i:s', $cash['created_time']);
             $content[] = $amountMark.$cash['amount'] / 100;
-            if ($cash['amount_type'] == 'money') {
+            if ('money' == $cash['amount_type']) {
                 $content[] = $paymentText;
                 $content[] = $trade['platform_sn']."\t";
             }
@@ -98,7 +98,7 @@ class CashBillExporter extends Exporter
     {
         $user = $this->getUser();
 
-        if ($user->hasPermission('admin_bills')) {
+        if ($user->hasPermission('admin_bills') || $user->hasPermission('admin_v2_bills')) {
             return true;
         }
 

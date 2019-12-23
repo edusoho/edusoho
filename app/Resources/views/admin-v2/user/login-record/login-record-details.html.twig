@@ -1,0 +1,36 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+{% block title %}{{ user.nickname }}{{'admin.user.login_record.detail.heading_title'|trans}}{% endblock %}
+{% block body %}
+
+<div id="login-record-details">
+
+  <table class="table table-bordered" id="">
+    <thead>
+      <tr>
+        <th>{{'admin.user.login_record.detail.fields.login_time'|trans}}</th>
+        <th>{{'admin.user.login_record.detail.fields.login_ip'|trans}}</th>
+        <th>{{'admin.user.login_record.detail.fields.login_address'|trans}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for loginRecord in loginRecords %}
+        <tr>
+          <td>{{ loginRecord.createdTime|date('Y-n-d H:i:s') }}</td>
+          <td>{{ loginRecord.ip }}</td>
+          <td>{{ loginRecord.location }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {{ admin_macro.paginator(loginRecordPaginator) }}
+</div>
+
+{% endblock %}
+
+
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+{% endblock %}

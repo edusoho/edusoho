@@ -6,14 +6,10 @@ use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\AppLoggerConstant;
 use Biz\Course\Copy\Chain\ActivityTestpaperCopy;
-use Biz\Course\Dao\CourseDao;
-use Biz\System\Service\LogService;
-use Biz\Task\Dao\TaskDao;
-use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
-use Codeages\Biz\Framework\Scheduler\AbstractJob;
+use Codeages\Biz\Framework\Event\Event;
 
-class CourseTaskUpdateSyncJob extends AbstractJob
+class CourseTaskUpdateSyncJob extends AbstractSyncJob
 {
     public function execute()
     {
@@ -47,6 +43,8 @@ class CourseTaskUpdateSyncJob extends AbstractJob
             }
 
             $helper->flush();
+
+            $this->dispatchEvent('course.task.update.sync', new Event($task));
 
             $this->getLogService()->info(AppLoggerConstant::COURSE, 'sync_when_task_update', 'course.log.task.update.sync.success_tips', array('taskId' => $task['id']));
         } catch (\Exception $e) {
@@ -115,35 +113,11 @@ class CourseTaskUpdateSyncJob extends AbstractJob
     }
 
     /**
-     * @return TaskService
-     */
-    private function getTaskService()
-    {
-        return $this->biz->service('Task:TaskService');
-    }
-
-    /**
-     * @return CourseDao
-     */
-    private function getCourseDao()
-    {
-        return $this->biz->dao('Course:CourseDao');
-    }
-
-    /**
      * @return ActivityDao
      */
     private function getActivityDao()
     {
         return $this->biz->dao('Activity:ActivityDao');
-    }
-
-    /**
-     * @return TaskDao
-     */
-    private function getTaskDao()
-    {
-        return $this->biz->dao('Task:TaskDao');
     }
 
     /**
@@ -154,13 +128,5 @@ class CourseTaskUpdateSyncJob extends AbstractJob
     private function getActivityConfig($type)
     {
         return $this->biz["activity_type.{$type}"];
-    }
-
-    /**
-     * @return LogService
-     */
-    private function getLogService()
-    {
-        return $this->biz->service('System:LogService');
     }
 }

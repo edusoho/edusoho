@@ -1,0 +1,115 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+  {% if discoveryColumn|default(false) %}
+    {{ 'admin.mobile_manage.discovery_column.edit_column'|trans }}
+  {% else %}
+    {{ 'admin.mobile_manage.discovery_column.add_column'|trans }}
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+  <div id="category-creater-widget" data-upload-url="#">
+
+    <form id="category-form" class="form-horizontal"
+      {% if discoveryColumn %}action="{{ path('admin_v2_discovery_column_edit',{id:discoveryColumn.id}) }}"
+      {% else %}action="{{ path('admin_v2_discovery_column_create') }}"{% endif %} method="post"
+      data-mode='{% if discoveryColumn|default(false) %}edit{% else %}add{% endif %}'
+    >
+      <div class="form-group">
+        <label class="col-md-3 control-label" for="category-name-field">{{ 'admin.mobile_manage.discovery_column.column_name'|trans }}</label>
+        <div class="col-md-8 controls">
+          <input class="form-control" id="category-name-field" type="text"
+            data-url="{{ path('admin_v2_discovery_column_title_check',{id:discoveryColumn.id|default(0)}) }}" name="title"
+            value="{{ discoveryColumn.title|default() }}" tabindex="1">
+          <p class="help-block">{{ 'admin.mobile_manage.discovery_column.column_tips'|trans }}</p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="keyword-name-field">{{ 'admin.mobile_manage.discovery_column.type'|trans }}</label>
+        </div>
+        <div class="col-md-7 controls radios">
+          <input type="radio" id="course" name="type" checked="checked" value="course"
+            data-url="{{ path('admin_v2_discovery_column_category_tree', {id:discoveryColumn.id|default(), type:'course'}) }}">
+          <label for="course">{{ 'admin.mobile_manage.discovery_column.normal_course'|trans }}</label>
+          <input type="radio" id="live" name="type"{% if discoveryColumn and discoveryColumn.type == 'live' %} checked="checked"
+            {% endif %}value="live" data-url="{{ path('admin_v2_discovery_column_category_tree', {id:discoveryColumn.id|default(), type:'live'}) }}">
+          <label for="live">{{ 'admin.mobile_manage.discovery_column.live_course'|trans }}</label>
+          <input type="radio" id="classroom" name="type" {% if discoveryColumn and discoveryColumn.type == 'classroom' %} checked="checked"
+            {% endif %}value="classroom"
+            data-url="{{ path('admin_v2_discovery_column_category_tree', {id:discoveryColumn.id|default(), type:'classroom'}) }}">
+          <label for="classroom">{{ 'admin.mobile_manage.discovery_column.classroom'|trans }}</label>
+        </div>
+      </div>
+
+
+      <div class="form-group category-ajax">
+        <label class="col-md-3 control-label">{{ 'admin.mobile_manage.discovery_column.category'|trans }}</label>
+        {% if discoveryColumn %}
+          {% if discoveryColumn.type == 'course' or discoveryColumn.type == 'live' %}
+            <div class="col-md-8 controls course-category">
+              <select name="categoryId" required="required" class="form-control width-input width-input-large">
+                {{ select_options(category_choices('course'), categoryId, 'admin.mobile_manage.discovery_column.category'|trans) }}
+              </select>
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          {% else %}
+            <div class="col-md-8 controls classroom-category">
+              <select name="categoryId" required="required" class="form-control width-input width-input-large">
+                {{ select_options(category_choices('classroom'), categoryId, 'admin.mobile_manage.discovery_column.category'|trans) }}
+              </select>
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          {% endif %}
+        {% else %}
+          <div class="col-md-8 controls course-category">
+            <select name="categoryId" required="required" class="form-control width-input width-input-large">
+              {{ select_options(category_choices('course'), categoryId, 'admin.mobile_manage.discovery_column.category'|trans) }}
+            </select>
+            <div class="help-block" style="display:none;"></div>
+          </div>
+        {% endif %}
+      </div>
+
+      <div {% if discoveryColumn and discoveryColumn.type == 'live' %}class="form-group order-form hide"
+        {% else %}class="form-group order-form" {% endif %}>
+        <div class="col-md-3 control-label">
+          <label for="keyword-name-field">{{ 'admin.mobile_manage.discovery_column.sort_type'|trans }}</label>
+        </div>
+        <div class="col-md-7 controls radios">
+          <input type="radio" id="new" name="orderType" checked="checked" value="new">
+          <label for="new">{{ 'admin.mobile_manage.discovery_column.new'|trans }}</label>
+          <input type="radio" id="hot" name="orderType" {% if discoveryColumn.orderType|default(0) == 'hot' %}checked="checked"
+            {% endif %}value="hot">
+          <label for="hot">{{ 'admin.mobile_manage.discovery_column.hot'|trans }}</label>
+          <input type="radio" id="recommend" name="orderType" {% if discoveryColumn.orderType|default(0) == 'recommend' %}checked="checked"
+            {% endif %}value="recommend">
+          <label for="recommend">{{ 'admin.mobile_manage.discovery_column.recommend'|trans }}</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-3 control-label">{{ 'admin.mobile_manage.discovery_column.set_show_count'|trans }}</label>
+        <div class="col-sm-9">
+          <select class="form-control width-input-large" name="showCount">
+            <option value="2" {% if discoveryColumn.showCount|default(0) == 2 %} selected="selected" {% endif %}>2</option>
+            <option value="4" {% if discoveryColumn.showCount|default(0) == 4 %} selected="selected" {% endif %}>4</option>
+            <option value="6" {% if discoveryColumn.showCount|default(0) == 6 %} selected="selected" {% endif %}>6</option>
+          </select>
+          <p class="help-block">{{ 'admin.mobile_manage.discovery_column.set_show_tips'|trans }}</p>
+        </div>
+      </div>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+    </form>
+  </div>
+  <script type="text/javascript"> app.load('discovery-column/discovery-column-modal') </script>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">{{ 'form.btn.cancel'|trans }}</button>
+  <button id="category-create-btn" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}" type="submit" class="btn btn-primary" data-toggle="form-submit"
+    data-target="#category-form" tabindex="4">{{ 'form.btn.submit'|trans }}</button>
+{% endblock %}

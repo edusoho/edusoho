@@ -3349,6 +3349,7 @@ my.teaching.homework_check_menu: 'Assignments review'
 my.teaching.material_lib_menu: 'Library'
 my.teaching.course_set.normal: 'Normal'
 my.teaching.course_set.live: 'Live'
+my.teaching.course_set.reservation: 'Reservation'
 my.teaching.course_set.classroom: '%classroom% courses'
 my.teaching.open_course.normal: 'Recorded Open Course'
 my.teaching.open_course.live: 'Live Open Courses'
@@ -4848,10 +4849,10 @@ admin.mobile_manage.discovery_upgrade_madal.btn_not_upgrade: 'Cancel'
 admin.mobile_manage.discovery_upgrade_madal.btn_next: 'Upgrade'
 admin.mobile_manage.discovery_upgrade_madal.btn_confirm: 'Upgrade'
 admin.mobile_manage.discovery_upgrade_madal.btn_loading: 'Upgrade in progress'
-admin.mobile_manage.discovery_upgrade.transfer_tips: > 
+admin.mobile_manage.discovery_upgrade.transfer_tips: >
   <p class="upgrade-color-info">Mobile content is upgraded to</p>
   <p class="upgrade-color-primary">APP home screen configuration</p>
-admin.mobile_manage.discovery_upgrade.function: > 
+admin.mobile_manage.discovery_upgrade.function: >
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>Custom setting of each module</li>
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>Preview while setting to see the display effect in real time</li>
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>Create your personalized app at will</li>
@@ -7523,6 +7524,7 @@ log.action.system.update_settings.xapi: Update data lab settings
 log.action.system.update_settings.mobile: Update mobile client settings
 log.action.system.update_settings.wap: Update WAP settings
 log.action.system.update_settings.developer: Update developer settings
+log.action.system.update_settings.backstage: Update backstage settings
 log.action.system.questions_settings: 'Question Bank Settings'
 log.action.system.customerServiceSetting: 'Customer service'
 log.action.system.setting_userCenter: 'User center settings'
@@ -8814,6 +8816,8 @@ exception.coupon.target_type_error: The batch does not support viewing details
 exception.coupon.setting_close: Coupon global switch is closed
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
+exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.
+exception.wechat.template_conflict_industry_hint: Service number industry setting error.
 
 course.unname_title: unname course
 
@@ -8907,6 +8911,10 @@ wechat.notification.fans_list.no_wechat_bind: WeChat service number is not bound
 wechat.notification.fans_list.placeholder: Please enter keywords
 wechat.notification.send_days: Send Days
 wechat.notification.course_remind_conditions: 'For at least one student who has not completed and has not quit the teaching program, a notice is sent at a fixed frequency and at a fixed time.'
+wechat.notification.tooltip_hint: Wechat service number notice does not support marketing messages such as advertisements and all other messages that may cause harassment to users. If the notice fails to be sent, it may be that the keywords such as task name and course name contain illegal content.
+wechat.notification.goto_authorization: Goto Authoriation
+wechat.notification.template_opend: Opend
+wechat.notification.template_closed: Closed
 
 # 微信通知模板
 wechat.notification.template.live_start: Hello, classmates, the live lessons you are enrolling will start soon.<br>Course: {《course name》 - 《task name》}<br>Start time: {Live start time} (accurate to minute)<br>Course location: live online<br>Contact: None<br>Don't be late.
@@ -9119,3 +9127,116 @@ admin.setting.invite.chooser_coupon.refresh_btn: Refresh
 admin.setting.invite.chooser_coupon.unreceived_num: Please set a coupon lot with more than 1 available
 admin.operation.coupon_menu.generate_btn: Generate Coupon
 
+# 新版后台开始
+
+# 新后台首页
+admin_v2.homepage.more_btn: More
+admin_v2.homepage.loading_data_tips: 'Loding, please wait..'
+
+admin_v2.homepage.data_overview: Data Overview
+admin_v2.homepage.today_login_user: Number of users logged in today
+admin_v2.homepage.today_register_user: Number of users registered today
+admin_v2.homepage.today_new_paid_order: Orders paid today
+admin_v2.homepage.today_new_order: Number of orders added today
+
+# 新后台首页通知
+admin_v2.domain_error_hint: Current domain name does not match with the authorized domain name.to avoid affecting the normal use of cloud sms,please come【System】-【General Manage】-【Online School Information】-【Site Domain】
+admin_v2.homepage.setting_domain_btn: Set Up Now
+admin_v2.homepage.renewal_btn: Renewal Now
+admin_v2.homepage.cloud_notice.unknown_time: Unknow Time
+admin_v2.homepage.cloud_notice.unknown_days: Unknow
+
+admin_v2.homepage.cloud_notice: "Welcome, your trail will be expired on<strong> %endTime% </strong>,<strong> %remainDays% </strong> days left. </br> Contact our business managers to buy licence or extend your trail. Tel: 4008041114 or "
+
+# 常用入口
+admin_v2.homepage.quick_entrance: Quick Entrance
+admin_v2.edit_quick_entrance.btn: Edit Quick Entrance
+admin_v2.quick_entrance_setting: Set Quick Entrance
+admin_v2.quick_entrance_setting.tips: (Set up to 7 quick entries）
+
+##分类标签
+admin_v2.course.tag: Tag
+admin_v2.course.tag.group: Tag Groups
+admin_v2.course.category.course_category_tab: Course Categories
+admin_v2.course.category.classroom_category_tab: Class Categories
+admin_v2.category_manage.add_title: Add Category
+admin_v2.tag_manage.tag.create.modal_title: Add Tag
+admin_v2.tag_manage.tag.group.create.modal_title: Add Tag Group
+
+admin_v2.homepage.school_info.cloud_service: Cloud service
+admin_v2.homepage.school_info.app_center: Cloud market
+admin_v2.homepage.school_info.system_upgrade: System upgrade
+admin_v2.homepage.school_info.cloud_service_status.open: Opened
+admin_v2.homepage.school_info.cloud_service_status.not_open: Open All
+admin_v2.homepage.school_info.app_status.upgraded: Latest
+admin_v2.homepage.school_info.app_status.has_upgrade: New upgrade
+admin_v2.homepage.school_info.system_status.has_upgrade: New upgrade
+admin_v2.homepage.school_info.system_status.upgraded: Latest
+admin_v2.homepage.school_info.system_version: System version
+admin_v2.homepage.school_info.access_web: Access Homepage
+admin_v2.homepage.school_info.access_mobile_app: Access App
+admin_v2.homepage.school_info.access_wechat_app: Access wechat app
+admin_v2.homepage.school_info.level.none: Open source
+admin_v2.homepage.school_info.level.saas: SaaS
+admin_v2.homepage.school_info.level.license: License
+admin_v2.homepage.school_info.level.custom: Custom
+
+# 新后台
+admin_v2.edu_cloud_not_access: Edu cloud not accessable
+admin_v2.mobile_manage.open_tips: "Mobile not enabled，please enable in <a href=\"%openUrl%\">App Setting</a>\n"
+admin_v2.live_course.create_btn: Create
+admin_v2.system.security_setting: Whitelist Domain
+admin_v2.upgrade_v2_setting_permission.error: Please contact super administrator or administrator operation
+admin_v2.upgrade_v2_setting.alert: New background heavy hit, click "switch new version" to open a new experience!
+admin_v2.upgrade_v2_setting.setting_btn: Switch New Version
+admin_v2.switch_old_version.setting_btn: Switch Old Version
+admin_v2.switch_version.btn_loading: Switching....
+admin_v2.switch_old_version.title: Toggle backstage
+admin_v2.default.switch_old_version_btn: Back to old version
+exception.common_upgrade_v2_error: Has been upgraded to the new version
+exception.switch_old_version.permission_error: Please contact super administrator or administrator operation
+exception.switch_old_version.error: Has been upgraded to the old version
+admin_v2.setting.navigation.foot.tips: "Besides Qingqiu、Default A、Default B、Yazhi，please go to <a class=\"text-info\" style=\"font-weight:bold;\" href=\"%url%\"> web setting</a> and edit.\n"
+admin_v2.setting_course.course_list_page_seq.help_block: 'Address: Domain names /course/explore, anyone can view all published courses at this page. If you need to set courses order, please go to the "operating" - "web Setting" - "Purchased Theme" - "setting". Course order settings are only supported by ink-only theme and simplicity theme.'
+
+admin_v2.newcomer_task.helper: Task assistant
+admin_v2.newcomer_task.helper_tip: Six steps to complete the network school infrastructure
+admin_v2.newcomer_task.collapse: collapse
+admin_v2.newcomer_task.todo: Go ahead
+admin_v2.newcomer_task.done: Completed
+admin_v2.newcomer_task.check_guide: View guide
+admin_v2.newcomer_task.cloud_applied.title: Access education cloud
+admin_v2.newcomer_task.cloud_applied.tip: Live, on-demand and other capabilities, low cost, high concurrency
+admin_v2.newcomer_task.payment_applied.title: Apply for payment
+admin_v2.newcomer_task.payment_applied.tip: Open WeChat, Alipay and other payments, easy online payment
+admin_v2.newcomer_task.auth_applied.title: Setting up registration
+admin_v2.newcomer_task.auth_applied.tip: Open registration and establish a network user-specific user traffic pool
+admin_v2.newcomer_task.plugin_applied.title: Install common plugins
+admin_v2.newcomer_task.plugin_applied.tip: Recommend the plug-ins that are used by the top 10 excellent online schools for you
+admin_v2.newcomer_task.course_applied.title: Create Course
+admin_v2.newcomer_task.course_applied.tip: Quickly create course products and get online school earnings
+admin_v2.newcomer_task.decoration_applied.title: Decoration online school
+admin_v2.newcomer_task.decoration_applied.tip: Renovate the online school homepage, get more users
+
+admin_v2.homepage.overview: Overview
+admin_v2.developer_setting.platform_news_api_server: API to get information from platform
+admin_v2.developer_setting.platform_news_api_server.info: 'Default value is //platform-news-service.qiqiuyun.net'
+admin_v2.role_permission_manage.error: Error
+admin_v2.default_page.changelog_title: EduSoho Changelog
+admin_v2.wechat_official_account.title: Official Account
+admin_v2.wechat_official_account.text: Follow the EduSoho official account to get the latest education information
+admin_v2.homepage.announcement_from_platform: Announcement From Platform
+admin_v2.homepage.application_intro: Application Introduction
+admin_v2.homepage.application_intro.more_btn: View more marketing cloud application
+admin_v2.business_advice.title: Business advice
+admin_v2.buiness_advice.goto_qiqiuyu: EduSoho Business School
+
+admin_v2.notice.upgrade_notice: The new background for the plugin for a new adaptation, in order to facilitate your background management, need to manually upgrade all installed plugins
+admin_v2.notice.go_to_upgrade: Go to upgrade
+
+admin_v2.boot_page.notice: In order to operate more efficiently, you need to go to a new page
+admin_v2.boot_page.btn_text: Go
+
+admin_v2.homepage.switch_old_in_safari_notice: Due to Safari, toggle is not supported at present. It is recommended to use Google or 360 to toggle. Sorry for the inconvenience!
+admin_v2.homepage.switch_old_in_safari_notice.title: Determine the switch
+admin_v2.homepage.switch_old_in_safari_notice.got_it: Got it

@@ -1,0 +1,109 @@
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% set modal_class = 'modal-lg' %}
+{% block title %}{{'admin.course_manage.chooser.title'|trans}}{% endblock %}
+{% block body %}
+
+<form id="message-search-form" class="form-inline well well-sm" action="{{ path('admin_v2_course_chooser', {'withPlan': withCoursePlan }) }}" method="get" novalidate>
+	<div class="form-group">
+	  <select class="form-control" name="categoryId">
+	    {{ select_options(category_choices('course'), app.request.query.get('categoryId'), 'admin.course_manage.chooser.course_category'|trans) }}
+	  </select>
+	</div>
+  {% if not withCoursePlan %}
+    <div class="form-group">
+      <select class="form-control" name="status">
+        {{ select_options(dict('courseStatus'), app.request.query.get('status'), 'admin.course_manage.chooser.course_status'|trans) }}
+      </select>
+    </div>
+  {% endif %}
+	<div class="form-group">
+	  <input class="form-control" type="text" placeholder="{{'admin.course_manage.title_placeholder'|trans}}" name="title" value="{{ app.request.get('title') }}">
+	</div>
+	<div class="form-group">
+	  <input class="form-control" type="text" placeholder="{{'admin.course_manage.creator_placeholer'|trans}}" name="creatorName" value="{{ app.request.get('creatorName') }}">
+	</div>
+	<button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
+</form>
+
+<table class="table table-striped table-hover" id="course-table">
+	<thead>
+		<tr>
+		 <th>{{'admin.course_manage.chooser.num'|trans}}</th>
+	     <th width="30%">{{'admin.course_manage.chooser.name'|trans}}</th>
+       {% if withCoursePlan %}
+         <th width="20%">{{ 'admin.course_manage.chooser.plan_name'|trans }}</th>
+       {% else %}
+         <th>{{'admin.course_manage.chooser.student_num'|trans}}</th>
+         <th>{{'admin.course_manage.chooser.status'|trans}}</th>
+       {% endif %}
+	     <th>{{'admin.course_manage.chooser.creator'|trans}}</th>
+	     <th>{{'admin.course_manage.chooser.operation'|trans}}</th>
+		</tr>
+	</thead>
+	<tbody>
+	  {% for courseSet in courseSets %}
+	  	{% set user = users[courseSet.creator]|default(null) %}
+	  	{% import "admin/macro.html.twig" as admin_macro %}
+	    {% set category = categories[courseSet.categoryId]|default(null) %}
+		<tr id="course-tr-{{ courseSet.id }}">
+		  <td>{{ courseSet.id }}</td>
+		  <td>
+		    <a href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank"><strong>{{ courseSet.title }}</strong></a>
+		    <br>
+		  </td>
+      {% if withCoursePlan %}
+        <td>
+          {% if courseSet.courses|default(null)|length == 1 %}
+            {% for course in courseSet.courses %}
+              {{course.title}}
+            {% endfor %}
+            <select class="form-control js-course-select width-150 hidden" id="course-select-{{courseSet.id}}" style="width:80%;display: inline-block;">
+              {% if courseSet.courses %}
+                {% for course in courseSet.courses %}
+                  {{course.title}}
+                  <option value="{{course.id}}" data-display-title="{{ get_formated_course_title(course) }}">{{course.title}}</option>
+                {% endfor %}
+              {% endif %}
+            </select>
+          {% else %}
+            <select class="form-control js-course-select width-150" id="course-select-{{courseSet.id}}" style="width:80%;display: inline-block;">
+              {% if courseSet.courses|default(null) %}
+                {% for course in courseSet.courses %}
+                  {{course.title}}
+                  <option value="{{course.id}}" data-display-title="{{ get_formated_course_title(course) }}">
+                    {{course.title}}
+                  </option>
+                {% endfor %}
+              {% endif %}
+            </select>
+            <a class="color-gray" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'classroom.classroom_manage.course_select.tips'|trans}}"><i class="es-icon es-icon-help"></i></a>
+          {% endif %}
+        </td>
+      {% else %}
+        <td>{{ courseSet.studentNum }}</td>
+        <td>{{ dict_macro.courseStatus(courseSet.status) }}</td>
+      {% endif %}
+		  <td>
+		    {{ admin_macro.user_link(user) }}
+		    <br>
+		    <span class="text-muted text-sm">{{ courseSet.createdTime|date('Y-n-d H:i') }}</span>
+		  </td>
+		  <td>
+		 	<button type="button" class="btn btn-primary btn-sm choose-course" data-target="{{ courseSet.id }}" data-name="{{ courseSet.title}}">{{'admin.course_manage.chooser.select_btn'|trans}}</button>
+		  </td>
+		</tr>
+	  {% else %}
+	    <tr><td colspan="20"><div class="empty">{{'admin.course_manage.chooser.empty'|trans}}</div></td></tr>
+	  {% endfor %}
+	</tbody>
+</table>
+
+{{ admin_macro.paginator(paginator) }}
+
+{% endblock %}
+{% block footer %}
+  <button type="button" class="btn btn-default pull-right" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+  
+  <script>app.load('course/chooser');</script>
+{% endblock %}

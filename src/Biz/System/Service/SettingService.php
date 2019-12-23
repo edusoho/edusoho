@@ -17,7 +17,7 @@ interface SettingService
 
     public function setByNamespace($namespace, $name, $value);
 
-    public function get($name, $default = null);
+    public function get($name, $default = array());
 
     public function node($name, $default = null);
 

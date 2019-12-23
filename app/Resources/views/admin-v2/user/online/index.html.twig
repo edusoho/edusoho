@@ -1,0 +1,83 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_online' %}
+
+{% set script_controller = 'online/index' %}
+
+{% block main %}
+
+<form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+  <div class="form-group">
+    <input class="form-control" type="text" placeholder="{{'form.placeholder.nickname'|trans}}" name="name" value="{{ app.request.query.get('name') }}">
+    <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
+  </div>
+
+  <div id="radio-buttons" class="btn-group pull-right" data-toggle="buttons">
+    <label class="btn btn-default {% if app.request.query.get('type', 'online') == 'online' %}active{% endif %}">
+      <input type="radio" name="type" value="online" {% if app.request.query.get('type', 'online') == 'online' %}checked="checked"{% endif %}> {{ 'admin.user.online.all_visitors'|trans }}
+    </label>
+    <label class="btn btn-default {% if app.request.query.get('type', 'online') == 'logined' %}active{% endif %}">
+      <input type="radio" name="type" value="logined" {% if app.request.query.get('type', 'online') == 'logined' %}checked="checked"{% endif %}> {{ 'admin.user.online.registed_user'|trans }}
+    </label>
+    <label class="btn btn-default {% if app.request.query.get('type', 'online') == 'anonymous' %}active{% endif %}">
+      <input type="radio" name="type" value="anonymous" {% if app.request.query.get('type', 'online') == 'anonymous' %}checked="checked"{% endif %}> {{ 'admin.user.online.visitor'|trans }}
+    </label>
+  </div>
+</form>
+
+<p class="help-block">{{ 'admin.user.online.online_user_count'|trans({'%count%':  paginator.getItemCount() }) }}</p>
+
+{% if onlines %}
+    <table id="table" class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>{{'user.fields.username_label'|trans}}</th>
+          <th>{{'admin.user.online.device'|trans}}</th>
+          <th>{{'admin.user.online.client'|trans}}</th>
+          <th>{{'admin.user.online.operate_system'|trans}}</th>
+          <th>IP</th>
+          <th>{{'admin.user.online.last_access_time'|trans}}</th>
+        </tr>
+      </thead>
+    <tbody>
+    {% for online in onlines %}
+      <tr id="online-table-tr-{{ online.id }}">
+        <td>
+          {% if users[online.user_id]['nickname']|default(false) %}
+            {{ users[online.user_id]['nickname'] }}
+          {% else %}
+            <span class="text-muted">{{ 'admin.user.online.visitor'|trans }}</span>
+          {% endif %}
+        </td>
+        <td>
+          {{ parse_user_agent(online.user_agent).device }}
+        </td>
+        <td>
+          {% if online.source == 'App' %}
+            App
+          {% else %}
+            {{ parse_user_agent(online.user_agent).client.name }}: {{ parse_user_agent(online.user_agent).client.version }}
+          {% endif %}
+        </td>
+        <td>
+          {% if parse_user_agent(online.user_agent).os  %}
+            {{ parse_user_agent(online.user_agent).os.name }}: {{ parse_user_agent(online.user_agent).os.version }}
+          {% endif %}
+        </td>
+
+        <td>
+          {{ online.ip }}
+        </td>
+        <td>
+          {{ online.active_time|date('Y-n-d H:i:s') }}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+
+    </table>
+  {% else %}
+    <div class="empty">{{'admin.user.online.empty'|trans}}</div>
+  {% endif %}
+  {{ admin_macro.paginator(paginator) }}
+{% endblock %}

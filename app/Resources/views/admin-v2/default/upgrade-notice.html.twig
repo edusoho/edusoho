@@ -1,0 +1,7 @@
+{% if notice %}
+<div class="alert alert-warning js-upgrade-notice hidden" role="alert">
+  <span>{{ 'admin_v2.notice.upgrade_notice'|trans }}</span>
+  <a class="alert-link" href="{{ path('admin_v2_app_upgrades') }}" target="_blank">{{ 'admin_v2.notice.go_to_upgrade'|trans }}<i class="es-icon es-icon-guide"></i></a>
+</div>
+<input class="hidden js-notice" value="{{ notice }}">
+{% endif %}

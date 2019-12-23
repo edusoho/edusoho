@@ -1,0 +1,110 @@
+{% extends 'admin-v2/cloud-app-layout.html.twig' %}
+
+{% set script_controller = 'app/installed' %}
+
+{% set menu = 'admin_v2_app_installed' %}
+
+{% block main %}
+
+  <div class="mbl btn-group">
+
+      <a href="{{ path('admin_v2_app_installed', {postStatus: 'all'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'all'%} btn-primary{% endif %}">{{'admin.app_center.type.all'|trans}}</a>
+
+      <a href=" {{ path('admin_v2_app_installed', {postStatus: 'theme'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'theme'%}btn-primary{% endif %}">{{'admin.app_center.type.theme'|trans}}</a>
+
+      <a href=" {{ path('admin_v2_app_installed', {postStatus: 'app'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'app'%}btn-primary{% endif %}">{{'admin.app_center.type.app'|trans}}</a>
+  </div>
+
+  <table class="table table-striped table-hover js-table" data-url="{{ path('admin_v2_app_upgrades_count') }}">
+    <thead>
+    </thead>
+    <tbody>
+      {% if type == 'all' %}
+      {% set apps = apps %}
+      {% elseif type == 'theme'%}
+      {% set apps = theme %}
+      {% elseif type == 'app' %}
+      {% set apps = plugin %}
+      {% endif  %}
+
+      {% for app in apps %}
+  
+        {% if app.installed|default(0) or app.purchased or (app.userAccess|default(null) == "ok" ) and (app.price == 0 and not  app.licensed ) %}
+        <tr>
+          <td>
+              {% if app.code == "MAIN" %}
+                <img src="/assets/img/default/MAIN_icon.png" class="app-img pull-left mrl mtm"/>
+              {% else %}
+                <img src="http://open.edusoho.com/files/product/{{ app.icon }}" class="app-img pull-left mrl mtm"/>
+              {% endif %}
+              
+            <div class="mtm">
+              
+                <h4>
+                  <a target="_blank" href="http://open.edusoho.com/app/{{ app.code }}"><strong class="text-primary">{{ app.name }}</strong>
+                  </a>            
+                </h4>     
+    
+            </div>
+            
+            <div class="info mtm mbm clearfix">
+              <div class="left-info pull-left">
+
+                <div class="text-muted">{{'admin.app_center.author'|trans}}： {{ app.developerName }}</div>
+
+                {% if app.code == 'MAIN' %}
+                  <div class="class-rating mtm">
+                    <span class="text-muted">{{ 'admin.app_center.update_log'|trans }}<a href="{{ path('changelog_list') }}" class="default" target="_blank">{{ 'admin.app_center.all_update_log'|trans }}</a></span>
+                  </div>
+                {% endif %}
+
+                <div class="mts text-muted">{% if app.type == "theme" %}{{'admin.app_center.type.theme'|trans}}{% else %}{{'admin.app_center.type.app'|trans}}{% endif %}
+                </div>
+                <div class="class-rating mtm">
+                  {% if app.installed|default(0) %}
+                  <span class="text-muted">{{'admin.app_center.version'|trans}}{{ app.version }}</span>
+                  {% else %}
+                  <span class="text-muted">{{'admin.app_center.version'|trans}}{{ app.latestVersion }}</span>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="middle-info pull-left ">
+                {% if app.installed|default(0) %}
+                  <div class="text-muted">{{'admin.app_center.latest_update_time'|trans}} {{ app.updatedTime|date('Y-m-d') }}</div>
+                {% else %}
+                  <div class="text-muted">{{'admin.app_center.latest_update_time'|trans}} {{ app.latestTime|date('Y-m-d') }}</div>
+                {% endif %}
+              </div>
+              
+              {% if app.installed|default(0) %}
+              <div class="right-info pull-right">
+
+                  {% if setting('developer.debug') and app.code|lower != 'main' %}
+                    <br>
+                    <a href="javascript:;" data-url="{{ path('admin_v2_app_uninstall', {code:app.code}) }}" class="btn btn-danger uninstall-btn mtm">{{'admin.app_center.app_uninstall_btn'|trans}}</a>
+                  {% endif %}
+
+                  {% if route_exsit(app.code|lower ~ '_manage_index') %}
+                    <a href="{{ path(app.code|lower ~ '_manage_index') }}"  class="btn btn-primary mtm">{{'admin.app_center.app_manage_btn'|trans}}</a>
+                  {% endif %}
+
+              </div>
+              {% else %}
+              <div class="right-info pull-right">
+                  <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_app_package_update_modal', {id:app.latestPackageId, type:'install'}) }}" class="btn btn-primary" data-keyboard="false" data-backdrop="static">{{'admin.app_center.package_update_btn'|trans}}
+                  </a>
+
+              </div>
+              {% endif %}
+            </div>
+          </td>
+    
+        </tr>
+        {% endif %}
+
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

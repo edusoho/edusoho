@@ -1,0 +1,29 @@
+{% extends 'admin-v2/teach/cloud-file/layout.html.twig' %}
+
+{% set menu = 'admin_v2_cloud_attachment'%}
+{% do load_script('cloudfile/manage') %}
+
+{% block stylesheets %}
+  {{parent()}}
+  <style>
+  .batch-item {
+      position: absolute;
+      left: 6px;
+      top: 3px;
+      z-index: 101;
+  }
+</style>
+{% endblock %}
+
+{% block main %}
+<div class="eduyun-main">
+  <form class="form-inline es-materials-manage" id="materials-form">
+    {% include 'admin-v2/teach/cloud-attachment/form/type.html.twig' %}
+    {% include 'admin-v2/teach/cloud-attachment/form/nav.html.twig' %}
+    {% include 'admin-v2/teach/cloud-attachment/form/filter.html.twig' %}
+    {% include 'admin-v2/teach/cloud-attachment/form/batch.html.twig' %}
+    {% include 'admin-v2/teach/cloud-file/resource-table.html.twig' with {'pageType': 'attachment'} %}
+    <input type="hidden">
+  </form>
+</div>
+{% endblock %}

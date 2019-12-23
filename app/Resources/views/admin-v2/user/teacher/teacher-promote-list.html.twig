@@ -1,0 +1,46 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set script_controller = 'teacher/promote-list' %}
+
+{% set menu = 'admin_v2_teacher_promote_list' %}
+
+{% block main %}
+
+  <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+    {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+    
+    <div class="form-group">
+      <input type="text" name="nickname" class="form-control" value="{{ app.request.query.get('nickname') }}"
+             placeholder="{{'admin.user.teacher.fields.nickname.input_placeholder'|trans}}">
+    </div>
+
+    <button class="btn btn-primary">{{'admin.user.form.btn.search_submit_btn'|trans}}</button>
+
+  </form>
+
+  <table class="table table-striped table-hover mtl" id="teacher-promote-table">
+    <thead>
+    <tr>
+      <th>{{'admin.user.teacher.promote_tab.fields.serial_num_label'|trans}}</th>
+      <th width="35%">{{'user.fields.username_label'|trans}}</th>
+      {% include 'org/parts/table-thead-tr.html.twig' %}
+      <th>{{'admin.user.teacher.promote_tab.fields.promote_time_label'|trans}}</th>
+      <th>{{'admin.user.fields.operation_label'|trans}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+      {% include 'admin-v2/user/teacher/teacher-promote-tr.html.twig' %}
+    {% else %}
+      <tr>
+        <td colspan="20">
+          <div class="empty">{{'admin.user.teacher.promote_tab.teacher_empty_hint'|trans}}</div>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  {{ admin_macro.paginator(paginator) }}
+
+{% endblock %}

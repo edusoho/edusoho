@@ -5,7 +5,7 @@
 {% set script_controller = 'app/center' %}
 
 {% block main %}
-  <div class="mbl btn-group">
+  <div class="mbl btn-group js-upgrades-count" data-url="{{ path('admin_app_upgrades_count') }}" >
     <a href="{{ url('admin_app_center', {postStatus: 'all' }) }}" type="button"
        class="btn btn-default btn-sm {% if type == 'all' %} btn-primary{% endif %}">{{ 'admin.app_center.type.all'|trans }}</a>
     <a href=" {{ url('admin_app_center', {postStatus: 'theme' }) }}" type="button"

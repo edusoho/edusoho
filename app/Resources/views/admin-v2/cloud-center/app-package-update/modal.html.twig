@@ -1,0 +1,78 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set updateName = package.type == 'upgrade' ? 'admin.cloud.app.upgrades.upgrade'|trans : 'admin.cloud.app.upgrades.install'|trans %}
+
+
+
+{% block title %}{{ updateName }}{{ 'admin.cloud.app.upgrades.app'|trans }}{% endblock %}
+
+{% block body %}
+  <input type="hidden" name="package-type" value="{{ app.request.get('type')|default('') }}">
+
+  {% if setting('developer.debug')  %}
+    <div class="alert alert-danger">
+    {{'admin.cloud.app.upgrades_danger.tips'|trans}}
+    </div>
+  {% else %}
+     <div class="alert alert-warning">
+    {{ 'admin.cloud.app.upgrades.tips'|trans }}
+  </div>
+  {% endif %}
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th width="40%">{{ 'admin.cloud.app.upgrades.app_name'|trans }}</th>
+      <th width="25%">{{ 'admin.cloud.app.upgrades.app_version'|trans }}</th>
+      <th>{{ 'admin.cloud.app.upgrades.backupDB'|trans }}</th>
+      <th>{{ 'admin.cloud.app.upgrades.backupFile'|trans }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>{{ package.product.name }}</td>
+      <td>
+        {% if package.type == 'upgrade' %}
+          <strong class="text-muted">{{ package.fromVersion }}</strong> -&gt; <strong
+            class="text-success">{{ package.toVersion }}</strong>
+        {% else %}
+          <strong class="text-success">{{ package.toVersion }}</strong>
+        {% endif %}
+      </td>
+      <td>{% if package.backupDB == 1 %}{{ 'admin.cloud.app.upgrades.backupStatus.yes'|trans }}{% elseif package.backupDB == 0 %}{{ 'admin.cloud.app.upgrades.backupStatus.no'|trans }}{% endif %}</td>
+      <td>{% if package.backupFile == 1 %}{{ 'admin.cloud.app.upgrades.backupStatus.yes'|trans }}{% elseif package.backupFile == 0 %}{{ 'admin.cloud.app.upgrades.backupStatus.no'|trans }}{% endif %}</td>
+    </tr>
+
+    </tbody>
+  </table>
+
+  <div id="package-update-progress" class="package-update-progress" style="display:none;">
+    <div class="progress progress-striped active">
+      <div class="progress-bar progress-bar-success" style="width: 0%"></div>
+    </div>
+    <div class="text-success progress-text"></div>
+  </div>
+
+  <script type="text/javascript"> app.load('app/package-update-modal'); </script>
+{% endblock %}
+
+{% block footer %}
+  <button id="begin-update" type="button" class="btn btn-primary pull-right"
+          data-check-environment-url="{{ path('admin_v2_app_package_update_check_environment', {id:package.id}) }}"
+          data-check-depends-url="{{ path('admin_v2_app_package_update_check_depends', {id:package.id}) }}"
+          data-check-last-error-url="{{ path('admin_v2_app_package_update_check_last_error', {id:package.id}) }}"
+          data-backup-file-url="{{ path('admin_v2_app_package_update_backup_file', {id:package.id}) }}"
+          data-backup-db-url="{{ path('admin_v2_app_package_update_backup_db', {id:package.id}) }}"
+          data-check-download-extract-url="{{ path('admin_v2_app_package_update_check_download_and_extract', {id:package.id}) }}"
+          data-download-extract-url="{{ path('admin_v2_app_package_update_download_and_extract', {id:package.id}) }}"
+          data-begin-upgrade-url="{{ path('admin_v2_app_package_update_begin_upgrade', {id:package.id, type:app.request.get('type')}) }}"
+      {% if app.request.get('type') == 'upgrade' %}
+        data-check-newest-url="{{ path('admin_v2_app_package_update_check_newest',{code:package['product'].code|default('')}) }}"
+      {% endif %}
+  >{{ 'admin.cloud.app.upgrades.startUpdate_btn'|trans }}{{ updateName }}</button>
+
+  <strong class="text text-danger" id="updating-hint" style="display:none;">{{ 'admin.cloud.app.upgrades.updating.tips'|trans }}</strong>
+
+  <button id="finish-update-btn" data-loading-text="{{ 'admin.cloud.app.upgrades.finish_update.tips'|trans }}" class="btn btn-primary"
+          style="display:none">{{ 'admin.cloud.app.upgrades.finish_update_btn'|trans }}</button>
+{% endblock %}

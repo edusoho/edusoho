@@ -702,6 +702,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     $this->getCourseSetService()->unlockCourseSet($course['courseSetId'], true);
                 }
 
+                $this->getCourseSetService()->resetParentIdByCourseId($course['id']);
+
                 $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $course['id']);
 
                 $infoData = array(
@@ -1479,8 +1481,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return true;
         }
 
-        if ($user->hasPermission($permission)) {
-            return true;
+        $permissions = array_merge(array($permission), $this->getMarriedPermissions($permission));
+        foreach ($permissions as $permission) {
+            if ($user->hasPermission($permission)) {
+                return true;
+            }
         }
 
         $member = $this->getClassroomMember($id, $user['id']);
@@ -1776,7 +1781,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function recommendClassroom($id, $number)
     {
         $user = $this->getCurrentUser();
-        if (!$user->hasPermission('admin_classroom_set_recommend')) {
+        if (!$user->hasPermission('admin_classroom_set_recommend') && !$user->hasPermission('admin_v2_classroom_set_recommend')) {
             $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
@@ -1799,7 +1804,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function cancelRecommendClassroom($id)
     {
         $user = $this->getCurrentUser();
-        if (!$user->hasPermission('admin_classroom_cancel_recommend')) {
+        if (!$user->hasPermission('admin_classroom_cancel_recommend') && !$user->hasPermission('admin_v2_classroom_set_recommend')) {
             $this->createNewException(UserException::PERMISSION_DENIED());
         }
 

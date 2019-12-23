@@ -1,0 +1,38 @@
+<tr>
+    <th width="40%">{{'course'|trans}}</th>
+    <th>{{'finance.RMB_price'|trans}}</th>
+    <th>{{'finance.max_deduction_rate'|trans}}</th>
+    <th>{{'finance.max_deduction_money'|trans}}</th>
+    <th>{{ 'finance.max_can_use_coin'|trans({'%coinName%': setting('coin.coin_name')|default('finance.coin'|trans)}) }}</th>
+</tr>
+{% if items %}
+    {% for item in items %}
+        <tr>
+            <td>
+                <div class="clearfix">
+                    <img class="pull-left mrl" src="{{ filepath(item.conver.small|default(''),'course.png') }}" style="width:100px;"/>
+                    <a class="pull-left" href="{{ path('course_show',{id: item.defaultCourseId}) }}" target="_blank" >{{item.title}}
+                    </a>
+                </div>
+            </td>
+            <td>
+                <span id="rmb{{item.id}}" class="rmbPrice" data-val="{{ item.maxCoursePrice }}">
+                    {% if item.minCoursePrice == item.maxCoursePrice %}
+                        {{ item.minCoursePrice }}
+                    {% else %}
+                        {{ item.minCoursePrice }} ~ {{ item.maxCoursePrice }}
+                    {% endif %}
+                </span>
+            </td>
+            <td>
+                <input id="rate{{item.id}}" type="text" class="form-control rate" style="width:50px;display:inline-block" value="{{ item.maxRate }}" name="item-rate[{{item.id}}]" data-id="{{item.id}}"/> <label>%</label>
+            </td>
+            <td>
+                <span id="deRmb{{item.id}}"> {{ (item.maxRate * item.maxCoursePrice / 100)|number_format(2, '.') }}</span>
+            </td>
+            <td>
+                <span id="cash{{item.id}}">{{ (item.maxRate / 100 * item.maxCoursePrice * set.cash_rate)|number_format(2, '.', ',') }}</span>
+            </td>
+        </tr>
+    {% endfor %}
+{% endif %}
