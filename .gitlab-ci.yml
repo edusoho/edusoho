@@ -110,7 +110,7 @@ check env:
   stage: test
   image: zhongyunchang/ci-php71:1
   services:
-    - mysql:8.0
+    - zhongyunchang/mysql:8.0
     - redis:latest
   script:
     - php -v
