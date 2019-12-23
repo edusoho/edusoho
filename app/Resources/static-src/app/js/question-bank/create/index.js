@@ -6,7 +6,7 @@ $form.validate({
   rules: {
     name: {
       required: true,
-      byte_maxlength: 30,
+      maxlength: 30,
       trim: true
     },
     categoryId: {
