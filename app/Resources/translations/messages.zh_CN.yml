@@ -8981,6 +8981,9 @@ log.action.mobile.face_login: 人脸识别登录
 log.action.question_bank.create: 创建题库
 log.action.question_bank.delete: 删除题库
 log.action.question_bank.update_teacher: 修改授权教师
+log.action.question_bank.create_category: 创建题库分类
+log.action.question_bank.delete_category: 删除题库分类
+log.action.question_bank.update_category: 更新题库分类
 
 log.action.template.course.create: 新建了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: 修改了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -9137,7 +9140,9 @@ log.action.template.live.delete_live_activity: 删除了<strong class="color-suc
 log.action.template.order.adjust_price: 修改了<strong class="color-success">订单</strong> 《%title%》的价格
 log.action.template.question_bank.create: 新建了<strong class="color-success">题库</strong> 《%title%》
 log.action.template.question_bank.delete: 删除了<strong class="color-success">题库</strong> 《%title%》
-log.action.template.question_bank.update_teacher: 更新了<strong class="color-success">题库</strong> 《%title%》的授权教师
+log.action.template.question_bank.create_category: 创建了<strong class="color-success">题库分类</strong> 《%title%》
+log.action.template.question_bank.delete_category: 删除了<strong class="color-success">题库分类</strong> 《%title%》
+log.action.template.question_bank.update_category: 修改了<strong class="color-success">题库分类</strong> 《%title%》
 
 log.field.detail: 详情
 log.field.change.detail: 原设置为<strong class="color-danger">%old%</strong> 新设置为<strong class="color-danger">%new%</strong>

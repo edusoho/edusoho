@@ -490,6 +490,9 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'create',
                 'delete',
                 'update_teacher',
+                'create_category',
+                'delete_category',
+                'update_category',
             ),
         );
     }
