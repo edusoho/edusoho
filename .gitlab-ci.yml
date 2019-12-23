@@ -113,6 +113,8 @@ check env:
     - mysql:8.0
     - redis:latest
   script:
+    - php -v
+    - php -m
     - bin/phpunit-diff
   only:
     variables:
