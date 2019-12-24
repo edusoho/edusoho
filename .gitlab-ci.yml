@@ -106,16 +106,14 @@ check env:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
 
-7.0 For Non-Develop:
+7.0 For main with MySQL80:
   stage: test
-  image: zhongyunchang/ci-php71:1
+  image: codeages/ci-php71
   services:
     - name: mysql:8.0
       command: ["--default-authentication-plugin=mysql_native_password"]
     - redis:latest
   script:
-    - php -v
-    - php -m
     - bin/phpunit-diff
   only:
     variables:
