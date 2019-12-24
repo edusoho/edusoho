@@ -5389,9 +5389,6 @@ admin.question_bank.manage.model: >
   <p class="question-bank-model-title"><i class="es-icon es-icon-efficiency"></i>试卷创建优化，创建效率大提升</p>
   <p class="question-bank-model-text">用户可以一次性添加多个题型的题目，并且新增了跨页连选功能，大大提升了创建试卷的效率。</p>
 
-  <p class="question-bank-model-title"><i class="es-icon es-icon-Jurisdiction"></i>管理权限改造，权限结构更合理</p>
-  <p class="question-bank-model-text">新版本中，只能由管理员从“后台-课程-题库管理”中创建题库，教师角色的用户必须得到授权后才能在中台进行管理。</p>
-
   <p class="question-bank-model-title question-bank-model__special"><i class="es-icon es-icon-Explain"></i>特别说明</p>
   <p class="question-bank-model-text">老数据处理：原课程中的题目和试卷都搬迁到新版题库中了，原先教师有权限管理的题库，现在依然有权限管理</p>
 

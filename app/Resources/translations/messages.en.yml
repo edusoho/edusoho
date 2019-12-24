@@ -4457,9 +4457,6 @@ admin.question_bank.manage.model: >
   <p class="question-bank-model-title"><i class="es-icon es-icon-efficiency"></i>optimize the testpaper creation process</p>
   <p class="question-bank-model-text">You can add different types of question at one operation. And you can select questions through different pages.</p>
 
-  <p class="question-bank-model-title"><i class="es-icon es-icon-Jurisdiction"></i>Management authority modification</p>
-  <p class="question-bank-model-text">Only administrators can create question bank. The teachers can use questions and testpapers from the question bank which are authorized to them.</p>
-
   <p class="question-bank-model-title question-bank-model__special"><i class="es-icon es-icon-Explain"></i>PS</p>
   <p class="question-bank-model-text">The questions and testpapers in the courses are all moved to the question bank now.</p>
 
