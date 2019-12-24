@@ -390,6 +390,7 @@ admin_v2:
                                 admin_v2_question_bank_basic:
                                     name: admin_v2.question_bank.basic_tab
                                     router_name: admin_v2_question_bank
+                                    disable: true
                                     children:
                                         admin_v2_question_bank_add:
                                             name: admin_v2.question_bank.basic_tab.create_btn
@@ -399,6 +400,7 @@ admin_v2:
                                 admin_v2_question_bank_category:
                                     name: admin_v2.question_bank.category_tab
                                     router_name: admin_v2_question_bank_category
+                                    disable: true
                                     children:
                                         admin_v2_question_bank_category_add:
                                             name: admin_v2.question_bank.category_tab.create_btn

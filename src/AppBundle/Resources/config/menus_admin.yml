@@ -391,6 +391,7 @@ admin:
                         admin_question_bank_manage:
                             name: admin.course.question_bank.basic_tab
                             router_name: admin_question_bank
+                            disable: true
                             children:
                                 admin_question_bank_add:
                                     name: admin.course.question_bank.basic_tab.create_btn
@@ -400,6 +401,7 @@ admin:
                         admin_question_bank_category_manage:
                             name: admin.course.question_bank_category.basic_tab
                             router_name: admin_question_bank_category
+                            disable: true
                             children:
                                 admin_question_bank_category_add:
                                     name: admin.course.question_bank_category.basic_tab.create_btn
