@@ -151,15 +151,15 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         }
     }
 
-    public function canManageBank($bankId, $permission = 'admin_question_bank')
+    public function canManageBank($bankId)
     {
         $user = $this->getCurrentUser();
 
-        if ($user->isAdmin()) {
+        if ($user->isSuperAdmin()) {
             return true;
         }
 
-        if ($user->hasPermission($permission)) {
+        if ($user->hasPermission('admin_question_bank') || $user->hasPermission('admin_v2_question_bank')) {
             return true;
         }
 
@@ -188,7 +188,7 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
             return array();
         }
 
-        if ($user->isAdmin() || $user->hasPermission('admin_question_bank')) {
+        if ($user->isSuperAdmin() || $user->hasPermission('admin_question_bank') || $user->hasPermission('admin_v2_question_bank')) {
             $banks = $this->getQuestionBankDao()->findAll();
         } else {
             $members = $this->getMemberService()->findMembersByUserId($user['id']);

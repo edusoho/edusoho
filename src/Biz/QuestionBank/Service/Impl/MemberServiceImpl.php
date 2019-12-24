@@ -8,6 +8,8 @@ use Biz\QuestionBank\Service\MemberService;
 use Biz\Common\CommonException;
 use AppBundle\Common\ArrayToolkit;
 use Biz\QuestionBank\Service\QuestionBankService;
+use Biz\System\Service\LogService;
+use Biz\User\Service\UserService;
 
 class MemberServiceImpl extends BaseService implements MemberService
 {
@@ -67,6 +69,16 @@ class MemberServiceImpl extends BaseService implements MemberService
         if (!empty($members)) {
             $createMembers = explode(',', $members);
             $this->batchCreateMembers($bankId, $createMembers);
+
+            $users = $this->getUserService()->findUsersByIds($createMembers);
+            $bank = $this->getQuestionBankService()->getQuestionBank($bankId);
+            $nicknames = implode(',', ArrayToolkit::column($users, 'nickname'));
+            $this->getLogService()->info(
+                'question_bank',
+                'update_teacher',
+                "修改题库《{$bank['name']}》授权教师, ({$nicknames})",
+                array('nicknames' => $nicknames)
+            );
         }
     }
 
@@ -99,5 +111,21 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 }
