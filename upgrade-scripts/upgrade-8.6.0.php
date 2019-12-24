@@ -204,7 +204,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $orgs = $this->getOrgService()->findOrgsByPrefixOrgCode('1.');
         foreach ($orgs as $org) {
             $this->getQuestionBankCategoryDao()->create(array(
-                'name' => '默认分类',
+                'name' => '默认分类('.$org['name'].')',
                 'parentId' => 0,
                 'orgId' => $org['id'],
                 'orgCode' => $org['orgCode']
