@@ -26,7 +26,7 @@ class Importer {
 
     this.init();
   }
-  
+
   init() {
     this.events();
   }
@@ -56,7 +56,7 @@ class Importer {
         $btn.button('loading');
 
         self.formData = arrayToJson($form.serializeArray());
-        
+
         $.ajax({
           type: 'POST',
           url: $form.attr('action'),
@@ -68,7 +68,7 @@ class Importer {
           $btn.button('reset');
           const status = res.status;
           const eventType = 'on' + status.charAt(0).toUpperCase() + status.substr(1);
-  
+
           console.log(eventType);
           self[eventType](res);
         }).fail((res) => {
@@ -136,6 +136,7 @@ class Importer {
     `;
 
     this.importData = res.importData;
+    this.chunkNum = res.chunkNum;
     this.addTemplate(source, res);
   }
 
@@ -156,7 +157,8 @@ class Importer {
     new Progress({
       importData: this.importData,
       $container: this.$container,
-      formData: this.formData
+      formData: this.formData,
+      chunkSize: this.chunkNum
     });
   }
 }
