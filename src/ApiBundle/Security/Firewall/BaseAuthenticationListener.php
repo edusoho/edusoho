@@ -32,11 +32,12 @@ abstract class BaseAuthenticationListener implements ListenerInterface
         }
     }
 
-    protected function createTokenFromRequest(Request $request, $userId)
+    protected function createTokenFromRequest(Request $request, $userId, $loginToken = '')
     {
         $user = $this->getUserService()->getUser($userId);
         $currentUser = new CurrentUser();
         $user['currentIp'] = $request->getClientIp();
+        $user['loginToken'] = $loginToken;
         $currentUser->fromArray($user);
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
 

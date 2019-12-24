@@ -13,7 +13,7 @@ class File extends AbstractResource
     public function add(ApiRequest $request)
     {
         $group = $request->request->get('group', null);
-        if (!in_array($group, array('tmp', 'user', 'course', 'system'))) {
+        if (!in_array($group, array('default', 'tmp', 'user', 'course', 'system'))) {
             throw FileException::FILE_GROUP_INVALID();
         }
 

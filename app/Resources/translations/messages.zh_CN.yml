@@ -9731,6 +9731,7 @@ exception.rate_limit_email_max_attempt_reach: 已超过发送限制，1小时后
 exception.rate_limit_error_captcha: 图形验证码错误!
 exception.sms.setting_enable: 云短信相关设置未开启!
 exception.setting.attachment.setting_enable: 云附件未开启!
+exception.setting.app_client_closed: App客户端已关闭!
 exception.sms.code_invalid: 短信验证码错误
 exception.sms.type_error: sms类型错误
 exception.sms.send_failed: 发送失败！
@@ -9838,6 +9839,9 @@ exception.task.lessonid_invalid: 错误的课时id
 exception.task.access_denied: 没有权限
 exception.task.categoryid_invalid: 错误的章节id
 exception.task.forbidden_preview_task: 无权预览任务
+exception.task.type_invalid: 任务类型错误
+exception.task.live_replay_not_found: 课时回放不存在
+exception.task.live_replay_invalid: 课时回放获取失败
 exception.course.not_found: 教学计划不存在
 exception.course.forbidden_take_course: 不能访问教学计划
 exception.course.learnmode_invalid: 学习模式错误
