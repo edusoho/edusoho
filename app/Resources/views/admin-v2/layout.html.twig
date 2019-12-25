@@ -69,7 +69,7 @@
           {% include 'admin-v2/widget/navigation.html.twig' %}
         </div>
         <div class="ct-layout-person hidden-xs">
-          <ul class="cd-clearfix mb0 cd-pl24">
+          <ul class="cd-clearfix ct-layout-person__ul mb0">
             <li class="ct-layout-person_center cd-dropdown" data-toggle="cd-dropdown">
                 <a class="user-avatar-toggle" href="javascript:;">
                   <img class="cd-avatar cd-avatar-xs" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
@@ -108,8 +108,6 @@
           {% else %}
             <a href="{{ path('homepage') }}" target="_blank"><i class="es-icon es-icon-site icon-home"></i>{{ 'admin.homepage.back.home'|trans }}</a>
           {% endif %}
-          
-
         </div>
       </div>
       <div class="cd-layout-main">
