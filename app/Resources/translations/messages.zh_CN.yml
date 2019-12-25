@@ -5374,6 +5374,7 @@ admin.homepage.more_btn: 更多
 admin.homepage.loadig_data_tips: 正在载入数据，请稍等。
 admin.homepage.statistic.week: 最近7天
 admin.homepage.statistic.month: 最近30天
+admin.homepage.back.home: 回到首页
 
 # 后台首页
 admin.navbar.header.console_btn: 管理后台
