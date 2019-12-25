@@ -4429,6 +4429,7 @@ admin.homepage.more_btn: More
 admin.homepage.loadig_data_tips: 'Loding, please wait..'
 admin.homepage.statistic.week: 'Recent 7 days'
 admin.homepage.statistic.month: 'Recent 30 days'
+admin.homepage.back.home: 'Home'
 admin.navbar.header.console_btn: ''
 admin.navbar.header.often_used_btn: 'Bookmarked'
 admin.navbar.header.often_used.add_current_page: 'Bookmark current page'

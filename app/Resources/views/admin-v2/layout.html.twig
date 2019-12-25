@@ -69,7 +69,7 @@
           {% include 'admin-v2/widget/navigation.html.twig' %}
         </div>
         <div class="ct-layout-person hidden-xs">
-          <ul class="cd-clearfix mb0">
+          <ul class="cd-clearfix ct-layout-person__ul mb0">
             <li class="ct-layout-person_center cd-dropdown" data-toggle="cd-dropdown">
                 <a class="user-avatar-toggle" href="javascript:;">
                   <img class="cd-avatar cd-avatar-xs" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
@@ -78,24 +78,35 @@
                 <div class="dropdown-menu user-dropdown">
                   <div class="text-center ptl">
                     <div class="dropdown-arrow"></div>
-                    <a class="user-logout" href="{{ path('logout') }}"><i class="es-icon es-icon-logout cd-mr8"></i>{{ 'homepage.header.logout'|trans }}</a>
+                    <a class="user-operate-link" href="{{ path('logout') }}"><i class="es-icon es-icon-logout cd-mr8"></i>{{ 'homepage.header.logout'|trans }}</a>
                   </div>
                 </div>
             </li>
           </ul>
         </div>
         <div class="pull-right change-version-btn">
+          {% set canAccess = 'ROLE_SUPER_ADMIN' in app.user.roles|default([]) or 'ROLE_ADMIN' in app.user.roles|default([]) %}
           {% if setting('backstage.allow_show_switch_btn')|default(0) %}
-            {% set canAccess = 'ROLE_SUPER_ADMIN' in app.user.roles|default([]) or 'ROLE_ADMIN' in app.user.roles|default([]) %}
-            {% if canAccess %}
-              {% if isSafari %}
-                <a class="js-safari-modal-click">{{ 'admin_v2.switch_old_version.setting_btn'|trans }}</a>
-              {% else %}
-                <a href="#modal" data-toggle="modal" data-loading-text="{{ 'admin_v2.switch_version.btn_loading'|trans }}" data-url="{{ path('admin_v2_switch_old_version') }}">{{ 'admin_v2.switch_old_version.setting_btn'|trans }}</a>
-              {% endif %}
-            {% else %}
-              <a href="javascript:;" class="js-no-permission-btn">{{ 'admin_v2.switch_old_version.setting_btn'|trans }}</a>
-            {% endif %}
+            <li class="ct-layout-person_center cd-dropdown visible-lg cd-ml24"  data-toggle="cd-dropdown">
+              <a href="javascript:;"><i class="es-icon es-icon-site icon-home"></i>{{ 'admin.homepage.back.home'|trans }}<i class="cd-icon cd-icon-arrow-down"></i></a>
+              <ul class="dropdown-menu user-manage-dropdown" role="menu">
+                <div class="dropdown-arrow"></div>
+                <li><a class="user-operate-link" href="{{ path('homepage') }}" target="_blank"><i class="es-icon es-icon-site cd-mr8"></i>{{ 'admin.homepage.back.home'|trans }}</a></li>
+                <li>
+                  {% if canAccess %}
+                    {% if isSafari %}
+                      <a class="js-safari-modal-click user-operate-link"><i class="es-icon es-icon-switch cd-mr8"></i>{{ 'admin_v2.switch_old_version.setting_btn'|trans }}</a>
+                    {% else %}
+                      <a class="user-operate-link" href="#modal" data-toggle="modal" data-loading-text="{{ 'admin_v2.switch_version.btn_loading'|trans }}" data-url="{{ path('admin_v2_switch_old_version') }}"><i class="es-icon es-icon-switch cd-mr8"></i>{{ 'admin_v2.switch_old_version.setting_btn'|trans }}</a>
+                    {% endif %}
+                  {% else %}
+                    <a class="js-no-permission-btn user-operate-link" href="javascript:;"><i class="es-icon es-icon-switch cd-mr8"></i>{{ 'admin_v2.switch_old_version.setting_btn'|trans }}</a>
+                  {% endif %}
+                </li>
+              </ul>
+            </li>
+          {% else %}
+            <a href="{{ path('homepage') }}" target="_blank"><i class="es-icon es-icon-site icon-home"></i>{{ 'admin.homepage.back.home'|trans }}</a>
           {% endif %}
         </div>
       </div>
