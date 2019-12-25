@@ -58,3 +58,5 @@ let treeObject = new window.$.CheckTreeviewInput({
 });
 
 new QuestionBankSelectLink($('#questionBankSelect'), $('#questionCategorySelect'), treeObject);
+
+$('.task-iframe-body').find('.select2-results').css('max-height', '180px');
