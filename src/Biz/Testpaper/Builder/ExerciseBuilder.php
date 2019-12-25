@@ -260,6 +260,8 @@ class ExerciseBuilder implements TestpaperBuilderInterface
 
         if (!empty($options['range']['bankId'])) {
             $conditions['bankId'] = $options['range']['bankId'];
+        } else {
+            $conditions['bankId'] = '-1';
         }
 
         if (!empty($options['range']['categoryIds'])) {

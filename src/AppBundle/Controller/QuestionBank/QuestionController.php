@@ -356,6 +356,10 @@ class QuestionController extends BaseController
             $conditions['categoryIds'] = explode(',', $conditions['categoryIds']);
         }
 
+        if (empty($conditions['bankId'])) {
+            $conditions['bankId'] = '-1';
+        }
+
         $typesNum = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
         $typesNum = ArrayToolkit::index($typesNum, 'type');
 
