@@ -5379,9 +5379,10 @@ admin.question_bank.manage.edit_title: 编辑题库
 admin.question_bank.manage.name_label: 名称
 admin.question_bank.manage.category_label: 分类
 admin.question_bank.manage.manager_label: 授权教师
+admin.question_bank.manage.model-title: 题库更新说明
 admin.question_bank.manage.model: >
-  <p class="question-bank-model-title"><i class="es-icon es-icon-Promote"></i>题库结构改造，全面提升复用性</p>
-  <p class="question-bank-model-text">新版本中，实现了题库与课程的分离，在题库中创建的题目和试卷，可以在所有课程中使用，全面提升了题目和试卷的复用性。</p>
+  <p class="question-bank-model-title"><i class="es-icon es-icon-Promote"></i>新版题库功能，全面提升复用性</p>
+  <p class="question-bank-model-text">在新版题库中创建的题目和试卷可以在所有课程中引用，全面提升了题目和试卷的复用性。</p>
 
   <p class="question-bank-model-title"><i class="es-icon es-icon-manage"></i>新增题目分类，题目管理更方便</p>
   <p class="question-bank-model-text">每个题库中都可以创建一套题目分类，无需再从属于教学计划或者课时，方便网校管理题目。</p>
