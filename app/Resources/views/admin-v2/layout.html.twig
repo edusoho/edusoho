@@ -88,10 +88,10 @@
           {% set canAccess = 'ROLE_SUPER_ADMIN' in app.user.roles|default([]) or 'ROLE_ADMIN' in app.user.roles|default([]) %}
           {% if setting('backstage.allow_show_switch_btn')|default(0) %}
             <li class="ct-layout-person_center cd-dropdown visible-lg cd-ml24"  data-toggle="cd-dropdown">
-              <a href="javascript:;"><i class="es-icon es-icon-site icon-home"></i>{{ 'admin.homepage.back.home'|trans }}<i class="cd-icon cd-icon-arrow-down"></i></a>
+              <a href="javascript:;"><i class="es-icon es-icon-site icon-home"></i>{{ 'admin_v2.homepage.school_info.access_web'|trans }}<i class="cd-icon cd-icon-arrow-down"></i></a>
               <ul class="dropdown-menu user-manage-dropdown" role="menu">
                 <div class="dropdown-arrow"></div>
-                <li><a class="user-operate-link" href="{{ path('homepage') }}" target="_blank"><i class="es-icon es-icon-site cd-mr8"></i>{{ 'admin.homepage.back.home'|trans }}</a></li>
+                <li><a class="user-operate-link" href="{{ path('homepage') }}" target="_blank"><i class="es-icon es-icon-site cd-mr8"></i>{{ 'admin_v2.homepage.school_info.access_web'|trans }}</a></li>
                 <li>
                   {% if canAccess %}
                     {% if isSafari %}
@@ -106,7 +106,7 @@
               </ul>
             </li>
           {% else %}
-            <a href="{{ path('homepage') }}" target="_blank"><i class="es-icon es-icon-site icon-home"></i>{{ 'admin.homepage.back.home'|trans }}</a>
+            <a href="{{ path('homepage') }}" target="_blank"><i class="es-icon es-icon-site icon-home"></i>{{ 'admin_v2.homepage.school_info.access_web'|trans }}</a>
           {% endif %}
         </div>
       </div>
