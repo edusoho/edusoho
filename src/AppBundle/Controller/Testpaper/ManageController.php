@@ -133,7 +133,7 @@ class ManageController extends BaseController
         $accuracy = $this->getTestpaperService()->makeAccuracy($result['id']);
         $total = $this->getTestpaperService()->countQuestionTypes($testpaper, $questions);
         $activity = $this->getActivityService()->getActivity($result['lessonId']);
-        $passScore = round($activity['finishData'] * $testpaper['score'], 1);
+        $passScore = round($activity['finishData'] * $testpaper['score'], 0);
 
         return $this->render('testpaper/manage/teacher-check.html.twig', array(
             'paper' => $testpaper,
