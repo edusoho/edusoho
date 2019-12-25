@@ -377,8 +377,8 @@ class EduSohoUpgrade extends AbstractUpdater
                     continue;
                 }
 
-                if (!empty($metas['range']['bankId'])) {
-                    continue;
+                if (!empty($metas['old'])) {
+                    $metas['range'] = $metas['old'];
                 }
 
                 if (!empty($metas['range']['courseId']) && !empty($createdCourseCategory[$metas['range']['courseId']])) {
@@ -388,6 +388,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 if (!empty($metas['range']['lessonId']) && !empty($createdLessonCategory[$metas['range']['lessonId']])) {
                     $categoryIds = $createdLessonCategory[$metas['range']['lessonId']];
                 }
+                $metas['old'] = $metas['range'];
                 $metas['range'] = array('bankId' => $questionBank['id'], 'categoryIds' => $categoryIds);
                 $this->testpaperUpdateHelper->add('id', $exercise['id'], array('metas' => $metas));
             }
