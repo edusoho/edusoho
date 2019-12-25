@@ -449,7 +449,7 @@ class ClassroomController extends BaseController
                 $result['records'][] = array(
                     'day' => date('d', $userSign['createdTime']),
                     'time' => date('H-i', $userSign['createdTime']),
-                    'rank' => $userSign['rank'], );
+                    'rank' => $userSign['_rank'], );
             }
         }
 
