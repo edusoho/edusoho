@@ -308,7 +308,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $questionBanks = ArrayToolkit::index($questionBanks, 'fromCourseSetId');
         foreach ($questionBanks as $courseSetId => $questionBank) {
             $questions = $this->getQuestionDao()->search(
-                array('courseSetId' => $courseSetId, 'parentId' => 0),
+                array('courseSetId' => $courseSetId),
                 array(),
                 0,
                 PHP_INT_MAX,
