@@ -15,6 +15,7 @@ class QuestionBankCategoryController extends BaseController
 
         return $this->render('admin-v2/teach/question-bank-category/index.html.twig', array(
             'categories' => $categories,
+            'selectOrg' => $request->query->get('orgCode', ''),
         ));
     }
 
