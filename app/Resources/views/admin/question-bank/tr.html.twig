@@ -6,6 +6,7 @@
     <span class="mrl">{{ 'admin.question_bank.manage.testpaper'|trans }}：{{ questionBank.testpaperNum }}</span>
     <span>{{ 'admin.question_bank.manage.question'|trans }}：{{ questionBank.questionNum }}</span>
   </td>
+  {% include 'org/parts/table-body-td.html.twig' with {orgCode: questionBank.orgCode}%}
   <td>{{ category.name|default('') }}</td>
   <td>
     <div class="btn-group">
