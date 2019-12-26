@@ -9,9 +9,21 @@ class QuestionBankDaoImpl extends AdvancedDaoImpl implements QuestionBankDao
 {
     protected $table = 'question_bank';
 
+    public function getByCourseSetId($courseSetId)
+    {
+        return $this->getByFields(array('fromCourseSetId' => $courseSetId));
+    }
+
     public function findByIds($ids)
     {
-        return $this->findInField('id', $ids);
+        if (empty($ids)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE `isHidden` = 0 and `id` IN ({$marks});";
+
+        return $this->db()->fetchAll($sql, $ids);
     }
 
     public function declares()
@@ -32,6 +44,7 @@ class QuestionBankDaoImpl extends AdvancedDaoImpl implements QuestionBankDao
             'orgCode like :likeOrgCode',
             'categoryId IN (:categoryIds)',
             'id IN (:ids)',
+            'isHidden = :isHidden',
         );
 
         return $declares;
@@ -39,7 +52,7 @@ class QuestionBankDaoImpl extends AdvancedDaoImpl implements QuestionBankDao
 
     public function findAll()
     {
-        $sql = "SELECT * FROM {$this->table()} ORDER BY `id` ASC";
+        $sql = "SELECT * FROM {$this->table()} where `isHidden` = 0 ORDER BY `id` ASC";
 
         return $this->db()->fetchAll($sql) ?: array();
     }

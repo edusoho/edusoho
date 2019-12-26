@@ -8,6 +8,8 @@ interface QuestionBankService
 {
     public function getQuestionBank($id);
 
+    public function getQuestionBankByCourseSetId($courseSetId);
+
     public function findQuestionBanksByIds($ids);
 
     public function searchQuestionBanks($conditions, $orderBys, $start, $limit, $columns = array());
@@ -25,6 +27,8 @@ interface QuestionBankService
     public function updateQuestionBankWithMembers($id, $fields, $members);
 
     public function updateQuestionBank($id, $fields);
+
+    public function updateQuestionBankByCourseSetId($courseSetId, $fields);
 
     /**
      * @param $id

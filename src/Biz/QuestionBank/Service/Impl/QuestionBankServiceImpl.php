@@ -19,6 +19,11 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         return $this->getQuestionBankDao()->get($id);
     }
 
+    public function getQuestionBankByCourseSetId($courseSetId)
+    {
+        return $this->getQuestionBankDao()->getByCourseSetId($courseSetId);
+    }
+
     public function findQuestionBanksByIds($ids)
     {
         return $this->getQuestionBankDao()->findByIds($ids);
@@ -114,7 +119,7 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
     public function updateQuestionBank($id, $fields)
     {
-        $fields = ArrayToolkit::parts($fields, array('name', 'categoryId'));
+        $fields = ArrayToolkit::parts($fields, array('name', 'categoryId', 'isHidden'));
         if (empty($fields)) {
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
@@ -122,6 +127,23 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         $fields = $this->fillOrgId($fields);
 
         return $this->getQuestionBankDao()->update($id, $fields);
+    }
+
+    public function updateQuestionBankByCourseSetId($courseSetId, $fields)
+    {
+        $bank = $this->getQuestionBankByCourseSetId($courseSetId);
+        if (empty($bank)) {
+            return array();
+        }
+
+        $fields = ArrayToolkit::parts($fields, array('name', 'categoryId', 'isHidden'));
+        if (empty($fields)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER());
+        }
+
+        $fields = $this->fillOrgId($fields);
+
+        return $this->getQuestionBankDao()->update($bank['id'], $fields);
     }
 
     public function deleteQuestionBank($id)
@@ -216,6 +238,8 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
             }
             unset($conditions['categoryId']);
         }
+
+        $conditions['isHidden'] = 0;
 
         return $conditions;
     }
