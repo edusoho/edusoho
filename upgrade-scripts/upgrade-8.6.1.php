@@ -31,7 +31,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->testpaperActivityUpdateHelper = new BatchUpdateHelper($this->getTestpaperActivityDao());
 
-        $this->bankCategoryUpdateHelper = new BatchUpdateHelper($this->getQuestionCategoryDao());
+        $this->bankCategoryUpdateHelper = new BatchUpdateHelper($this->getQuestionBankCategoryDao());
     }
 
     public function update($index = 0)
@@ -137,7 +137,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         if (!$this->isFieldExist('question_category', 'upgradeFlag')) {
             $this->getConnection()->exec("
-                ALTER TABLE `question_category` ADD `upgradeFlag` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '标记' AFTER `fromCourseSetId`;
+                ALTER TABLE `question_category` ADD `upgradeFlag` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '标记';
             ");
         }
 
@@ -210,7 +210,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $defaultCategories = $this->getQuestionBankCategoryService()->findAllCategories();
         foreach ($defaultCategories as $category) {
-            $count = $this->getQuestionBankService()->countQuestionBanks(array('categoryId' => $category['id']));
+            $count = $this->getQuestionBankDao()->count(array('categoryId' => $category['id']));
             $this->bankCategoryUpdateHelper->add('id', $category['id'], array('bankNum' => $count));
         }
 
@@ -278,6 +278,8 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = "select * from `question_bank` where `upgradeFlag` = 0 LIMIT {$start}, {$this->pageSize}";
         $questionBanks = $this->getConnection()->fetchAll($sql, array());
         $questionBanks = ArrayToolkit::index($questionBanks, 'fromCourseSetId');
+        $updateCategoryLog = '更新的练习id：';
+        $ignoredCategoryLog = '忽略的练习id：';
         foreach ($questionBanks as $courseSetId => $questionBank) {
             $sql = "select * from testpaper_v8 where 
                         type = 'exercise' and 
@@ -288,20 +290,27 @@ class EduSohoUpgrade extends AbstractUpdater
             ";
             $exercises = $this->getConnection()->fetchAll($sql, array());
             foreach ($exercises as $exercise) {
-                $metas = $exercise['metas'];
+                $metas = json_decode($exercise['metas'], true);
                 $categoryIds = '';
                 if (!isset($metas['range'])) {
                     continue;
                 }
 
                 if (!empty($metas['range']['bankId']) && empty($metas['range']['categoryIds'])) {
+                    $updateCategoryLog .= $exercise['id'].',';
                     $metas['range'] = array('bankId' => $questionBank['id'], 'categoryIds' => $categoryIds);
                     $this->testpaperUpdateHelper->add('id', $exercise['id'], array('metas' => $metas));
+                } else {
+                    $ignoredCategoryLog .= $exercise['id'].',';
                 }
             }
             $this->testpaperUpdateHelper->flush();
         }
 
+        $updateCategoryLog .= PHP_EOL;
+        $ignoredCategoryLog .= PHP_EOL;
+        $this->logger('info', $updateCategoryLog);
+        $this->logger('info', $ignoredCategoryLog);
         $nextPage = $this->getNextPage($count, $page);
         if (empty($nextPage)) {
             return 1;
