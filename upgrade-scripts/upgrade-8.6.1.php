@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
-    private $pageSize = 100;
+    private $pageSize = 50;
 
     private $testpaperUpdateHelper = null;
 
