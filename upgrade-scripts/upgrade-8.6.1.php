@@ -17,6 +17,8 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private $testpaperActivityUpdateHelper = null;
 
+    private $bankCategoryUpdateHelper = null;
+
     public function __construct($biz)
     {
         parent::__construct($biz);
@@ -28,6 +30,8 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->activityUpdateHelper = new BatchUpdateHelper($this->getActivityDao());
 
         $this->testpaperActivityUpdateHelper = new BatchUpdateHelper($this->getTestpaperActivityDao());
+
+        $this->bankCategoryUpdateHelper = new BatchUpdateHelper($this->getQuestionCategoryDao());
     }
 
     public function update($index = 0)
@@ -70,14 +74,14 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            'createQuestionBankTables',
-            'createQuestionBankCategory',
+            'alterTableQuestionBank',
             'migrateQuestionBanks',
+            'countBankNums',
             'migrateTestpapers',
+            'migrateOldBankQuestionsAndExercises',
             'migrateQuestionsAndExercises',
             'updateTestpaperActivity',
             'addTableIndex',
-            'createSettingFlag',
         );
 
         $funcNames = array();
@@ -113,131 +117,59 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    protected function createQuestionBankTables()
+    protected function alterTableQuestionBank()
     {
-        if (!$this->isTableExist('question_bank_category')) {
+        $flag = $this->getSettingService()->get('bankFlag', '0');
+        if ($flag == '1') {
+            return 1;
+        }
+
+        if (!$this->isFieldExist('question_bank', 'upgradeFlag')) {
             $this->getConnection()->exec("
-                CREATE TABLE IF NOT EXISTS `question_bank_category` (
-                    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-                    `name` varchar(64) NOT NULL COMMENT '分类名称',
-                    `bankNum` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '题库数量',
-                    `weight` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '权重',
-                    `parentId` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父级分类id',
-                    `orgId` int(10) UNSIGNED NOT NULL DEFAULT '1' COMMENT '组织机构id',
-                    `orgCode` varchar(265) NOT NULL DEFAULT '1.' COMMENT '组织机构编码',
-                    `createdTime` int(10) UNSIGNED NOT NULL DEFAULT '0',
-                    `updatedTime` int(10) UNSIGNED NOT NULL DEFAULT '0',
-                    PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='题库分类表';
+                ALTER TABLE `question_bank` ADD `upgradeFlag` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '标记' AFTER `fromCourseSetId`;
             ");
         }
 
-        if (!$this->isTableExist('question_bank')) {
+        if (!$this->isFieldExist('question_bank', 'isHidden')) {
             $this->getConnection()->exec("
-                CREATE TABLE IF NOT EXISTS `question_bank` (
-                    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-                    `name` varchar(1024) NOT NULL COMMENT '题库名称',
-                    `testpaperNum` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '试卷数量',
-                    `questionNum` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '题目数量',
-                    `categoryId` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '分类id',
-                    `orgId` int(10) UNSIGNED NOT NULL DEFAULT '1' COMMENT '组织机构id',
-                    `orgCode` varchar(265) NOT NULL DEFAULT '1.' COMMENT '组织机构编码',
-                    `isHidden` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否隐藏',
-                    `createdTime` int(10) UNSIGNED NOT NULL DEFAULT '0',
-                    `updatedTime` int(10) UNSIGNED NOT NULL DEFAULT '0',
-                    `fromCourseSetId` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程id',
-                    PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='题库表';
+                ALTER TABLE `question_bank` ADD `isHidden` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否隐藏' AFTER `orgCode`;
             ");
         }
 
-        if (!$this->isTableExist('question_bank_member')) {
+        if (!$this->isFieldExist('question_category', 'upgradeFlag')) {
             $this->getConnection()->exec("
-                CREATE TABLE IF NOT EXISTS `question_bank_member` (
-                    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-                    `bankId` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '题库id',
-                    `userId` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户id',
-                    `createdTime` int(10) UNSIGNED NOT NULL DEFAULT '0',
-                    PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='题库教师表';
+                ALTER TABLE `question_category` ADD `upgradeFlag` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '标记' AFTER `fromCourseSetId`;
             ");
         }
 
-        $this->getConnection()->exec('
-            DROP TABLE IF EXISTS `question_category`;
-        ');
-
-        if (!$this->isTableExist('question_category')) {
-            $this->getConnection()->exec("
-                CREATE TABLE IF NOT EXISTS `question_category` (
-                    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-                    `name` varchar(1024) NOT NULL COMMENT '名称',
-                    `weight` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '权重',
-                    `parentId` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父级分类id',
-                    `bankId` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '所属题库id',
-                    `userId` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '更新用户id',
-                    `createdTime` int(10) UNSIGNED NOT NULL DEFAULT '0',
-                    `updatedTime` int(10) UNSIGNED NOT NULL DEFAULT '0',
-                    PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='题目分类表';
-            ");
-        }
-
-        if (!$this->isFieldExist('question', 'bankId')) {
-            $this->getConnection()->exec("
-                ALTER TABLE `question` ADD `bankId` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '所属题库id' AFTER `categoryId`;
-            ");
-        }
-
-        if (!$this->isFieldExist('testpaper_v8', 'bankId')) {
-            $this->getConnection()->exec("
-                ALTER TABLE `testpaper_v8` ADD `bankId` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '所属题库id' AFTER `description`;
-            ");
-        }
-
-        return 1;
-    }
-
-    protected function createQuestionBankCategory()
-    {
-        $this->getConnection()->exec("
-            delete from `question_bank_category`;
-        ");
-        $orgs = $this->getOrgService()->findOrgsByPrefixOrgCode('1.');
-        foreach ($orgs as $org) {
-            $this->getQuestionBankCategoryDao()->create(array(
-                'name' => '默认分类('.$org['name'].')',
-                'parentId' => 0,
-                'orgId' => $org['id'],
-                'orgCode' => $org['orgCode']
-            ));
-        }
 
         return 1;
     }
 
     protected function migrateQuestionBanks($page)
     {
+        $flag = $this->getSettingService()->get('bankFlag', '0');
+        if ($flag == '1') {
+            return 1;
+        }
+
         if ($page == 1) {
             $this->getConnection()->exec("
-                delete from `question_bank`;
-            ");
-            $this->getConnection()->exec("
-                update `question_bank_category` set `bankNum` = 0;
+                delete from `question_bank` where `upgradeFlag` = 1;
             ");
         }
 
         $defaultCategories = $this->getQuestionBankCategoryService()->findAllCategories();
         $defaultCategories = ArrayToolkit::index($defaultCategories, 'orgId');
-        $count = $this->getCourseSetService()->countCourseSets(array());
+        $count = $this->getCourseSetService()->countCourseSets(array('locked' => 1));
         $start = $this->getStart($page);
-        $courseSets = $this->getCourseSetService()->searchCourseSets(array(), array('id' => 'ASC'), $start, $this->pageSize, array('id', 'title', 'orgId', 'orgCode'));
+        $courseSets = $this->getCourseSetService()->searchCourseSets(array('locked' => 1), array('id' => 'ASC'), $start, $this->pageSize, array('id', 'title', 'orgId', 'orgCode'));
         $classroomCourses = $this->getClassroomService()->findClassroomsByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
         $classroomCourses = ArrayToolkit::index($classroomCourses, 'courseSetId');
         $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($classroomCourses, 'classroomId'));
         foreach ($courseSets as $courseSet) {
             $classroomId = empty($classroomCourses[$courseSet['id']]) ? 0 : $classroomCourses[$courseSet['id']]['classroomId'];
-            $classroomName = empty($classrooms[$classroomId]) ? '' : $classrooms[$classroomId]['title'];
+            $classroomName = empty($classrooms[$classroomId]) ? '' : $classrooms[$classroomId]['name'];
             $title = empty($classroomName) ? $courseSet['title'] : $courseSet['title'].'('.$classroomName.')';
             $category = empty($defaultCategories[$courseSet['orgId']]) ? reset($defaultCategories) : $defaultCategories[$courseSet['orgId']];
             $questions = $this->getQuestionService()->search(array('courseSetId' => $courseSet['id']), array(), 0, 1);
@@ -251,9 +183,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 'fromCourseSetId' => $courseSet['id'],
                 'orgId' => $courseSet['orgId'],
                 'orgCode' => $courseSet['orgCode'],
-                'isHidden' => empty($classrooms[$classroomId]) ? '1' : '0',
+                'upgradeFlag' => 1,
+                'isHidden' => 0,
             ));
-            $this->getQuestionBankCategoryService()->waveCategoryBankNum($category['id'], 1);
             $teachers = $this->getCourseMemberService()->findCourseSetTeachers($courseSet['id']);
             $this->getQuestionBankMemberService()->batchCreateMembers($questionBank['id'], ArrayToolkit::column($teachers, 'userId'));
         }
@@ -266,17 +198,47 @@ class EduSohoUpgrade extends AbstractUpdater
         return $nextPage;
     }
 
+    protected function countBankNums()
+    {
+        $flag = $this->getSettingService()->get('bankFlag', '0');
+        if ($flag == '1') {
+            return 1;
+        }
+
+        $this->getConnection()->exec("
+            update `question_bank_category` set `bankNum` = 0;
+        ");
+
+        $defaultCategories = $this->getQuestionBankCategoryService()->findAllCategories();
+        foreach ($defaultCategories as $category) {
+            $count = $this->getQuestionBankService()->countQuestionBanks(array('categoryId' => $category['id']));
+            $this->bankCategoryUpdateHelper->add('id', $category['id'], array('bankNum' => $count));
+        }
+
+        $this->bankCategoryUpdateHelper->flush();
+
+        return 1;
+    }
+
     protected function migrateTestpapers($page)
     {
+        $flag = $this->getSettingService()->get('bankFlag', '0');
+        if ($flag == '1') {
+            return 1;
+        }
+
         if ($page == 1) {
             $this->getConnection()->exec("
-                update `question_bank` set `testpaperNum` = 0;
+                update `question_bank` set `testpaperNum` = 0 where `upgradeFlag` = 1;
             ");
         }
-        $count = $this->getQuestionBankService()->countQuestionBanks(array());
+
+        $sql = "select count(*) from `question_bank` where `upgradeFlag` = 1";
+        $count = $this->getConnection()->fetchColumn($sql);
         $start = $this->getStart($page);
 
-        $questionBanks = $this->getQuestionBankService()->searchQuestionBanks(array(), array(), $start, $this->pageSize);
+        $sql = "select * from `question_bank` where `upgradeFlag` = 1 LIMIT {$start}, {$this->pageSize}";
+        $questionBanks = $this->getConnection()->fetchAll($sql, array());
         foreach ($questionBanks as $questionBank) {
             $testpapers = $this->getTestpaperService()->searchTestpapers(
                 array('courseSetId' => $questionBank['fromCourseSetId'], 'type' => 'testpaper'),
@@ -300,20 +262,71 @@ class EduSohoUpgrade extends AbstractUpdater
         return $nextPage;
     }
 
+    protected function migrateOldBankQuestionsAndExercises($page)
+    {
+        $sql = "select count(*) from `question_bank` where `upgradeFlag` = 0";
+        $count = $this->getConnection()->fetchColumn($sql);
+        $start = $this->getStart($page);
+
+        $sql = "select * from `question_bank` where `upgradeFlag` = 0 LIMIT {$start}, {$this->pageSize}";
+        $questionBanks = $this->getConnection()->fetchAll($sql, array());
+        $questionBanks = ArrayToolkit::index($questionBanks, 'fromCourseSetId');
+        foreach ($questionBanks as $courseSetId => $questionBank) {
+            $sql = "select * from testpaper_v8 where 
+                        type = 'exercise' and 
+                        courseSetId = {$courseSetId} and 
+                        updatedTime < (
+                            select updatedTime from cloud_app where code = 'MAIN'
+                        )
+            ";
+            $exercises = $this->getConnection()->fetchAll($sql, array());
+            $categorySelectSql = "select id from question_category where bankId = {$questionBank['id']} order by id asc limit 1";
+            $parentCategory = $this->getConnection()->fetchAssoc($categorySelectSql, array());
+            foreach ($exercises as $exercise) {
+                $metas = $exercise['metas'];
+                $categoryIds = $parentCategory['id'];
+                if (!isset($metas['range'])) {
+                    continue;
+                }
+
+                if (!empty($metas['range']['bankId']) && empty($metas['range']['categoryIds'])) {
+                    $metas['range'] = array('bankId' => $questionBank['id'], 'categoryIds' => $categoryIds);
+                    $this->testpaperUpdateHelper->add('id', $exercise['id'], array('metas' => $metas));
+                }
+            }
+            $this->testpaperUpdateHelper->flush();
+        }
+
+        $nextPage = $this->getNextPage($count, $page);
+        if (empty($nextPage)) {
+            return 1;
+        }
+
+        return $nextPage;
+    }
+
     protected function migrateQuestionsAndExercises($page)
     {
+        $flag = $this->getSettingService()->get('bankFlag', '0');
+        if ($flag == '1') {
+            return 1;
+        }
+
         if ($page == 1) {
             $this->getConnection()->exec("
-                delete from `question_category`;
+                delete from `question_category` where `upgradeFlag` = 1;
             ");
             $this->getConnection()->exec("
-                update `question_bank` set `questionNum` = 0;
+                update `question_bank` set `questionNum` = 0 where `upgradeFlag` = 1;
             ");
         }
 
-        $count = $this->getQuestionBankService()->countQuestionBanks(array());
+        $sql = "select count(*) from `question_bank` where `upgradeFlag` = 1";
+        $count = $this->getConnection()->fetchColumn($sql);
         $start = $this->getStart($page);
-        $questionBanks = $this->getQuestionBankService()->searchQuestionBanks(array(), array(), $start, $this->pageSize);
+
+        $sql = "select * from `question_bank` where `upgradeFlag` = 1 LIMIT {$start}, {$this->pageSize}";
+        $questionBanks = $this->getConnection()->fetchAll($sql, array());
         $questionBanks = ArrayToolkit::index($questionBanks, 'fromCourseSetId');
         $exerciseLog = '';
         $categoryLog = '';
@@ -330,9 +343,12 @@ class EduSohoUpgrade extends AbstractUpdater
             $tasks = $this->getTaskService()->findTasksByCourseSetId($courseSetId);
             $tasks = ArrayToolkit::index($tasks, 'id');
 
-            $parentCategory = $this->getQuestionCategoryDao()->create(
-                array('bankId' => $questionBank['id'], 'parentId' => 0, 'name' => $questionBank['name'])
-            );
+            $parentCategory = $this->getQuestionCategoryDao()->create(array(
+                'bankId' => $questionBank['id'],
+                'parentId' => 0,
+                'name' => $questionBank['name'],
+                'upgradeFlag' => 1,
+            ));
             $categoryLog .= '课程分类'.$parentCategory['id'].':'.'课程'.$courseSetId.PHP_EOL;
 
             //根据课程、课时创建题目分类并且绑定题目上
@@ -349,9 +365,12 @@ class EduSohoUpgrade extends AbstractUpdater
 
                 $courseTitle = empty($courses[$courseId]['title']) ? '默认计划' : $courses[$courseId]['title'];
                 if (empty($createdCourseCategory[$courseId])) {
-                    $courseQuestionCategory = $this->getQuestionCategoryDao()->create(
-                        array('bankId' => $questionBank['id'], 'parentId' => $parentCategory['id'], 'name' => $courseTitle)
-                    );
+                    $courseQuestionCategory = $this->getQuestionCategoryDao()->create(array(
+                        'bankId' => $questionBank['id'],
+                        'parentId' => $parentCategory['id'],
+                        'name' => $courseTitle,
+                        'upgradeFlag' => 1,
+                    ));
                     $categoryLog .= '计划分类'.$courseQuestionCategory['id'].':'.'计划'.$courseId.PHP_EOL;
                     $createdCourseCategory[$courseId] = $courseQuestionCategory['id'];
                 }
@@ -365,9 +384,12 @@ class EduSohoUpgrade extends AbstractUpdater
                 //属于课时的题目
                 if (empty($createdLessonCategory[$belong['lessonId']])) {
                     $task = $tasks[$belong['lessonId']];
-                    $lessonQuestionCategory = $this->getQuestionCategoryDao()->create(
-                        array('bankId' => $questionBank['id'], 'parentId' => $createdCourseCategory[$courseId], 'name' => $task['title'])
-                    );
+                    $lessonQuestionCategory = $this->getQuestionCategoryDao()->create(array(
+                        'bankId' => $questionBank['id'],
+                        'parentId' => $createdCourseCategory[$courseId],
+                        'name' => $task['title'],
+                        'upgradeFlag' => 1,
+                    ));
                     $categoryLog .= '课时分类'.$lessonQuestionCategory['id'].':'.'课时'.$belong['lessonId'].PHP_EOL;
                     $createdLessonCategory[$belong['lessonId']] = $lessonQuestionCategory['id'];
                 }
@@ -432,9 +454,17 @@ class EduSohoUpgrade extends AbstractUpdater
     //依据不同的提交条件和试卷是否有主观题，给予课时不同的合格分数
     protected function updateTestpaperActivity($page)
     {
-        $count = $this->getQuestionBankService()->countQuestionBanks(array());
+        $flag = $this->getSettingService()->get('bankFlag', '0');
+        if ($flag == '1') {
+            return 1;
+        }
+
+        $sql = "select count(*) from `question_bank` where `upgradeFlag` = 1";
+        $count = $this->getConnection()->fetchColumn($sql);
         $start = $this->getStart($page);
-        $questionBanks = $this->getQuestionBankService()->searchQuestionBanks(array(), array(), $start, $this->pageSize);
+
+        $sql = "select * from `question_bank` where `upgradeFlag` = 1 LIMIT {$start}, {$this->pageSize}";
+        $questionBanks = $this->getConnection()->fetchAll($sql, array());
         foreach ($questionBanks as $questionBank) {
             $activities = $this->getActivityService()->search(
                 array('fromCourseSetId' => $questionBank['fromCourseSetId'], 'mediaType' => 'testpaper'),
@@ -482,59 +512,6 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         return $nextPage;
-    }
-
-    protected function addTableIndex()
-    {
-        if ($this->isJobExist('HandlingTimeConsumingUpdateStructuresJob')) {
-            return 1;
-        }
-
-        $currentTime = time();
-        $today = strtotime(date('Y-m-d', $currentTime) . '02:00:00');
-
-        if ($currentTime > $today) {
-            $time = strtotime(date('Y-m-d', strtotime('+1 day')) . '02:00:00');
-        }
-
-        $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
-              `name`,
-              `expression`,
-              `class`,
-              `args`,
-              `priority`,
-              `pre_fire_time`,
-              `next_fire_time`,
-              `misfire_threshold`,
-              `misfire_policy`,
-              `enabled`,
-              `creator_id`,
-              `updated_time`,
-              `created_time`
-        ) VALUES (
-              'HandlingTimeConsumingUpdateStructuresJob',
-              '',
-              'Biz\\\\UpdateDatabaseStructure\\\\\Job\\\\HandlingTimeConsumingUpdateStructuresJob',
-              '',
-              '200',
-              '0',
-              '{$time}',
-              '300',
-              'executing',
-              '1',
-              '0',
-              '{$currentTime}',
-              '{$currentTime}'
-        )");
-        $this->logger('info', 'INSERT增加索引的定时任务HandlingTimeConsumingUpdateStructuresJob');
-        return 1;
-    }
-
-    protected function createSettingFlag()
-    {
-        $this->getSettingService()->set('bankFlag', '1');
-
-        return 1;
     }
 
     protected function generateIndex($step, $page)
