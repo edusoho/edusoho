@@ -289,7 +289,10 @@ class EduSohoUpgrade extends AbstractUpdater
                 $this->testpaperUpdateHelper->add('id', $testpaper['id'], array('bankId' => $questionBank['id']));
             }
             $this->testpaperUpdateHelper->flush();
-            $this->getQuestionBankService()->waveTestpaperNum($questionBank['id'], count($testpapers));
+            $testpaperNum = count($testpapers);
+            $this->getConnection()->exec("
+                update `question_bank` set `testpaperNum` = {$testpaperNum} where `id` = {$questionBank['id']};
+            ");
         }
 
         $nextPage = $this->getNextPage($count, $page);
@@ -375,7 +378,10 @@ class EduSohoUpgrade extends AbstractUpdater
                 $this->questionUpdateHelper->add('id', $belong['id'], array('bankId' => $questionBank['id'], 'categoryId' => $createdLessonCategory[$belong['lessonId']]));
             }
             $this->questionUpdateHelper->flush();
-            $this->getQuestionBankService()->waveQuestionNum($questionBank['id'], count($questions));
+            $questionNum = count($questions);
+            $this->getConnection()->exec("
+                update `question_bank` set `questionNum` = {$questionNum} where `id` = {$questionBank['id']};
+            ");
 
             $exercises = $this->getTestpaperService()->searchTestpapers(
                 array('courseSetId' => $courseSetId, 'type' => 'exercise'),

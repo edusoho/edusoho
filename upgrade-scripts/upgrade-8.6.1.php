@@ -81,7 +81,6 @@ class EduSohoUpgrade extends AbstractUpdater
             'migrateOldBankQuestionsAndExercises',
             'migrateQuestionsAndExercises',
             'updateTestpaperActivity',
-            'addTableIndex',
         );
 
         $funcNames = array();
@@ -169,7 +168,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($classroomCourses, 'classroomId'));
         foreach ($courseSets as $courseSet) {
             $classroomId = empty($classroomCourses[$courseSet['id']]) ? 0 : $classroomCourses[$courseSet['id']]['classroomId'];
-            $classroomName = empty($classrooms[$classroomId]) ? '' : $classrooms[$classroomId]['name'];
+            $classroomName = empty($classrooms[$classroomId]) ? '' : $classrooms[$classroomId]['title'];
             $title = empty($classroomName) ? $courseSet['title'] : $courseSet['title'].'('.$classroomName.')';
             $category = empty($defaultCategories[$courseSet['orgId']]) ? reset($defaultCategories) : $defaultCategories[$courseSet['orgId']];
             $questions = $this->getQuestionService()->search(array('courseSetId' => $courseSet['id']), array(), 0, 1);
@@ -251,7 +250,10 @@ class EduSohoUpgrade extends AbstractUpdater
                 $this->testpaperUpdateHelper->add('id', $testpaper['id'], array('bankId' => $questionBank['id']));
             }
             $this->testpaperUpdateHelper->flush();
-            $this->getQuestionBankService()->waveTestpaperNum($questionBank['id'], count($testpapers));
+            $testpaperNum = count($testpapers);
+            $this->getConnection()->exec("
+                update `question_bank` set `testpaperNum` = {$testpaperNum} where `id` = {$questionBank['id']};
+            ");
         }
 
         $nextPage = $this->getNextPage($count, $page);
@@ -264,6 +266,11 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function migrateOldBankQuestionsAndExercises($page)
     {
+        $flag = $this->getSettingService()->get('bankFlag', '0');
+        if ($flag == '1') {
+            return 1;
+        }
+        
         $sql = "select count(*) from `question_bank` where `upgradeFlag` = 0";
         $count = $this->getConnection()->fetchColumn($sql);
         $start = $this->getStart($page);
