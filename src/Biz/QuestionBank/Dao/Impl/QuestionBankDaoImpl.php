@@ -44,7 +44,7 @@ class QuestionBankDaoImpl extends AdvancedDaoImpl implements QuestionBankDao
             'orgCode like :likeOrgCode',
             'categoryId IN (:categoryIds)',
             'id IN (:ids)',
-            'isVisible = :isVisible',
+            'isHidden = :isHidden',
         );
 
         return $declares;
