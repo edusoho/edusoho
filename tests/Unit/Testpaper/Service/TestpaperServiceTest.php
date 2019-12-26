@@ -857,7 +857,7 @@ class TestpaperServiceTest extends BaseTestCase
             'counts' => array('choice' => 2, 'fill' => 2, 'determine' => 1),
             'scores' => array('choice' => 2, 'fill' => 2, 'determine' => 2),
             'missScores' => array('choice' => 1, 'uncertain_choice' => 1),
-            'courseSetId' => 1,
+            'courseSetId' => 0,
         );
         $result = $this->getTestpaperService()->canBuildTestpaper('testpaper', $options1);
 
@@ -867,7 +867,7 @@ class TestpaperServiceTest extends BaseTestCase
             'itemCount' => 3,
             'questionTypes' => array('choice', 'fill', 'determine', 'essay'),
             'difficulty' => 'normal',
-            'range' => 'course',
+            'range' => array('bankId' => 1),
             'courseSetId' => 1,
         );
         $result = $this->getTestpaperService()->canBuildTestpaper('exercise', $options2);
@@ -2218,7 +2218,7 @@ class TestpaperServiceTest extends BaseTestCase
         return $this->getTestpaperService()->addTestpaperResult($fields);
     }
 
-    protected function generateChoiceQuestions($courseId, $count, $difficulty = null, $parentId = 0)
+    protected function generateChoiceQuestions($bankId, $count, $difficulty = null, $parentId = 0)
     {
         $questions = array();
         for ($i = 0; $i < $count; ++$i) {
@@ -2232,8 +2232,7 @@ class TestpaperServiceTest extends BaseTestCase
                     'question -> choice 4',
                 ),
                 'answer' => array(1, 2),
-                'courseSetId' => $courseId,
-                'target' => 'course/'.$courseId,
+                'bankId' => $bankId,
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
                 'parentId' => $parentId,
             );
@@ -2244,15 +2243,14 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    protected function generateFillQuestions($courseId, $count, $difficulty = null, $parentId = 0)
+    protected function generateFillQuestions($bankId, $count, $difficulty = null, $parentId = 0)
     {
         $questions = array();
         for ($i = 0; $i < $count; ++$i) {
             $question = array(
                 'type' => 'fill',
                 'stem' => 'fill question [[aaa]].',
-                'target' => 'course/'.$courseId,
-                'courseSetId' => $courseId,
+                'bankId' => $bankId,
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
                 'parentId' => $parentId,
             );
@@ -2263,15 +2261,14 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    protected function generateDetermineQuestions($courseId, $count, $difficulty = null, $parentId = 0)
+    protected function generateDetermineQuestions($bankId, $count, $difficulty = null, $parentId = 0)
     {
         $questions = array();
         for ($i = 0; $i < $count; ++$i) {
             $question = array(
                 'type' => 'determine',
                 'stem' => 'determine question.',
-                'target' => 'course/'.$courseId,
-                'courseSetId' => $courseId,
+                'bankId' => $bankId,
                 'answer' => array(0),
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
                 'parentId' => $parentId,
@@ -2283,15 +2280,14 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    protected function generateEssayQuestions($courseId, $count, $difficulty = null, $parentId = 0)
+    protected function generateEssayQuestions($bankId, $count, $difficulty = null, $parentId = 0)
     {
         $questions = array();
         for ($i = 0; $i < $count; ++$i) {
             $question = array(
                 'type' => 'essay',
                 'stem' => 'essay question.',
-                'target' => 'course/'.$courseId,
-                'courseSetId' => $courseId,
+                'bankId' => $bankId,
                 'answer' => array('xxx'),
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
                 'parentId' => $parentId,
@@ -2303,15 +2299,14 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    protected function generateMaterialQuestions($courseId, $count, $difficulty = null)
+    protected function generateMaterialQuestions($bankId, $count, $difficulty = null)
     {
         $questions = array();
         for ($i = 0; $i < $count; ++$i) {
             $question = array(
                 'type' => 'material',
                 'stem' => 'material question.',
-                'target' => 'course/'.$courseId,
-                'courseSetId' => $courseId,
+                'bankId' => $bankId,
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
             );
 
