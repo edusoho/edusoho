@@ -237,7 +237,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($classroomCourses, 'classroomId'));
         foreach ($courseSets as $courseSet) {
             $classroomId = empty($classroomCourses[$courseSet['id']]) ? 0 : $classroomCourses[$courseSet['id']]['classroomId'];
-            $classroomName = empty($classrooms[$classroomId]) ? '' : $classrooms[$classroomId]['name'];
+            $classroomName = empty($classrooms[$classroomId]) ? '' : $classrooms[$classroomId]['title'];
             $title = empty($classroomName) ? $courseSet['title'] : $courseSet['title'].'('.$classroomName.')';
             $category = empty($defaultCategories[$courseSet['orgId']]) ? reset($defaultCategories) : $defaultCategories[$courseSet['orgId']];
             $questions = $this->getQuestionService()->search(array('courseSetId' => $courseSet['id']), array(), 0, 1);
