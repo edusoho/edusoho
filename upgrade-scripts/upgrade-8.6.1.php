@@ -287,11 +287,9 @@ class EduSohoUpgrade extends AbstractUpdater
                         )
             ";
             $exercises = $this->getConnection()->fetchAll($sql, array());
-            $categorySelectSql = "select id from question_category where bankId = {$questionBank['id']} order by id asc limit 1";
-            $parentCategory = $this->getConnection()->fetchAssoc($categorySelectSql, array());
             foreach ($exercises as $exercise) {
                 $metas = $exercise['metas'];
-                $categoryIds = $parentCategory['id'];
+                $categoryIds = '';
                 if (!isset($metas['range'])) {
                     continue;
                 }
@@ -415,7 +413,7 @@ class EduSohoUpgrade extends AbstractUpdater
             );
             foreach ($exercises as $exercise) {
                 $metas = $exercise['metas'];
-                $categoryIds = $parentCategory['id'];
+                $categoryIds = '';
                 if (!isset($metas['range'])) {
                     continue;
                 }
