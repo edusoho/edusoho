@@ -10652,6 +10652,8 @@ admin_v2.notice.upgrade_notice: 新后台对插件进行了全新适配，为了
 admin_v2.notice.go_to_upgrade: 前往升级
 admin_v2.boot_page.notice: 为了更高效的操作，需要您前去新的页面
 admin_v2.boot_page.btn_text: 点击前去
+
 admin_v2.homepage.switch_old_in_safari_notice: 由于Safari浏览器原因，暂时不支持切换， 建议使用谷歌或者360浏览器切换。 给您造成不便，抱歉！
 admin_v2.homepage.switch_old_in_safari_notice.title: 确定切换
 admin_v2.homepage.switch_old_in_safari_notice.got_it: 知道了
+
