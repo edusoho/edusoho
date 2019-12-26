@@ -158,7 +158,7 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
-        $defaultCategories = $this->getQuestionBankCategoryService()->findAllCategories();
+        $defaultCategories = $this->getQuestionBankCategoryDao()->findAll();
         $defaultCategories = ArrayToolkit::index($defaultCategories, 'orgId');
         $count = $this->getCourseSetService()->countCourseSets(array('locked' => 1));
         $start = $this->getStart($page);
@@ -208,7 +208,7 @@ class EduSohoUpgrade extends AbstractUpdater
             update `question_bank_category` set `bankNum` = 0;
         ");
 
-        $defaultCategories = $this->getQuestionBankCategoryService()->findAllCategories();
+        $defaultCategories = $this->getQuestionBankCategoryDao()->findAll();
         foreach ($defaultCategories as $category) {
             $count = $this->getQuestionBankDao()->count(array('categoryId' => $category['id']));
             $this->bankCategoryUpdateHelper->add('id', $category['id'], array('bankNum' => $count));
@@ -285,20 +285,19 @@ class EduSohoUpgrade extends AbstractUpdater
                         type = 'exercise' and 
                         courseSetId = {$courseSetId} and 
                         updatedTime < (
-                            select updatedTime from cloud_app where code = 'MAIN'
+                            select updatedTime from cloud_app where code = 'MAIN' limit 1
                         )
             ";
             $exercises = $this->getConnection()->fetchAll($sql, array());
             foreach ($exercises as $exercise) {
                 $metas = json_decode($exercise['metas'], true);
-                $categoryIds = '';
                 if (!isset($metas['range'])) {
                     continue;
                 }
 
                 if (!empty($metas['range']['bankId']) && empty($metas['range']['categoryIds'])) {
                     $updateCategoryLog .= $exercise['id'].',';
-                    $metas['range'] = array('bankId' => $questionBank['id'], 'categoryIds' => $categoryIds);
+                    $metas['range'] = array('bankId' => $questionBank['id'], 'categoryIds' => '');
                     $this->testpaperUpdateHelper->add('id', $exercise['id'], array('metas' => $metas));
                 } else {
                     $ignoredCategoryLog .= $exercise['id'].',';
