@@ -392,7 +392,7 @@ class EduSohoUpgrade extends AbstractUpdater
             );
             foreach ($exercises as $exercise) {
                 $metas = $exercise['metas'];
-                $categoryIds = $parentCategory['id'];
+                $categoryIds = '';
                 if (!isset($metas['range'])) {
                     continue;
                 }
