@@ -78,7 +78,7 @@ tagMatchUrl: path('tag_match')
     {% if course.type == 'liveOpen' %}
     <div class="course-manage-subltitle cd-mb40">{{ 'my.teaching.open_course.liveTimeSet.title'|trans }}</div>
 
-      <div class="form-group cd-mb8">
+      <div class="form-group start-form-group cd-mb8">
         <label class="col-md-2 control-label" for="live-startTime">{{'my.teaching.open_course.liveTimeSet.start_time'|trans}}</label>
         <div class="col-md-8 controls" style="z-index:2000;">
           <input type="text" id="live-startTime"  name="startTime" class="form-control width-input width-input-large" value="{% if openLiveLesson %}{{ openLiveLesson.startTime|date('Y-m-d H:i:s') }}{% endif %}" data-url="{{ path('client_time_check') }}">
