@@ -183,7 +183,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 'orgId' => $courseSet['orgId'],
                 'orgCode' => $courseSet['orgCode'],
                 'upgradeFlag' => 1,
-                'isHidden' => 0,
+                'isHidden' => empty($classrooms[$classroomId]) ? '0' : '1',
             ));
             $teachers = $this->getCourseMemberService()->findCourseSetTeachers($courseSet['id']);
             $this->getQuestionBankMemberService()->batchCreateMembers($questionBank['id'], ArrayToolkit::column($teachers, 'userId'));
@@ -270,7 +270,7 @@ class EduSohoUpgrade extends AbstractUpdater
         if ($flag == '1') {
             return 1;
         }
-        
+
         $sql = "select count(*) from `question_bank` where `upgradeFlag` = 0";
         $count = $this->getConnection()->fetchColumn($sql);
         $start = $this->getStart($page);

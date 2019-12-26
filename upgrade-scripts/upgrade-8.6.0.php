@@ -251,7 +251,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 'fromCourseSetId' => $courseSet['id'],
                 'orgId' => $courseSet['orgId'],
                 'orgCode' => $courseSet['orgCode'],
-                'isHidden' => empty($classrooms[$classroomId]) ? '1' : '0',
+                'isHidden' => empty($classrooms[$classroomId]) ? '0' : '1',
             ));
             $this->getQuestionBankCategoryService()->waveCategoryBankNum($category['id'], 1);
             $teachers = $this->getCourseMemberService()->findCourseSetTeachers($courseSet['id']);
@@ -273,10 +273,10 @@ class EduSohoUpgrade extends AbstractUpdater
                 update `question_bank` set `testpaperNum` = 0;
             ");
         }
-        $count = $this->getQuestionBankService()->countQuestionBanks(array());
+        $count = $this->getQuestionBankDao()->count(array());
         $start = $this->getStart($page);
 
-        $questionBanks = $this->getQuestionBankService()->searchQuestionBanks(array(), array(), $start, $this->pageSize);
+        $questionBanks = $this->getQuestionBankDao()->search(array(), array('id' => 'asc'), $start, $this->pageSize);
         foreach ($questionBanks as $questionBank) {
             $testpapers = $this->getTestpaperService()->searchTestpapers(
                 array('courseSetId' => $questionBank['fromCourseSetId'], 'type' => 'testpaper'),
@@ -314,9 +314,9 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
-        $count = $this->getQuestionBankService()->countQuestionBanks(array());
+        $count = $this->getQuestionBankDao()->count(array());
         $start = $this->getStart($page);
-        $questionBanks = $this->getQuestionBankService()->searchQuestionBanks(array(), array(), $start, $this->pageSize);
+        $questionBanks = $this->getQuestionBankDao()->search(array(), array(), $start, $this->pageSize);
         $questionBanks = ArrayToolkit::index($questionBanks, 'fromCourseSetId');
         $exerciseLog = '';
         $categoryLog = '';
@@ -438,9 +438,9 @@ class EduSohoUpgrade extends AbstractUpdater
     //依据不同的提交条件和试卷是否有主观题，给予课时不同的合格分数
     protected function updateTestpaperActivity($page)
     {
-        $count = $this->getQuestionBankService()->countQuestionBanks(array());
+        $count = $this->getQuestionBankDao()->count(array());
         $start = $this->getStart($page);
-        $questionBanks = $this->getQuestionBankService()->searchQuestionBanks(array(), array(), $start, $this->pageSize);
+        $questionBanks = $this->getQuestionBankDao()->search(array(), array(), $start, $this->pageSize);
         foreach ($questionBanks as $questionBank) {
             $activities = $this->getActivityService()->search(
                 array('fromCourseSetId' => $questionBank['fromCourseSetId'], 'mediaType' => 'testpaper'),
