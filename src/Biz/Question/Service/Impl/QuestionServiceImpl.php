@@ -299,14 +299,17 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->findQuestionsByCategoryIds($categoryIds);
     }
 
-    public function search($conditions, $sort, $start, $limit)
+    public function search($conditions, $sort, $start, $limit, $columns = array())
     {
         $conditions = $this->filterQuestionFields($conditions);
-        $questions = $this->getQuestionDao()->search($conditions, $sort, $start, $limit);
-        $that = $this;
-        array_walk($questions, function (&$question) use ($that) {
-            $question = $that->hasStemImg($question);
-        });
+        $questions = $this->getQuestionDao()->search($conditions, $sort, $start, $limit, $columns);
+
+        if (empty($columns) || in_array('stem', $columns)) {
+            $that = $this;
+            array_walk($questions, function (&$question) use ($that) {
+                $question = $that->hasStemImg($question);
+            });
+        }
 
         return $questions;
     }
