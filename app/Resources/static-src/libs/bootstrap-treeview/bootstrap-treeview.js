@@ -1218,7 +1218,7 @@
     var left = offset.left;
     var screenWidth = window.innerWidth || document.body.clientWidth;
     var blockWidth = Math.max((screenWidth / 80), 10);
-    var height = 43 * 8 + 1;
+    var height = 245;
     $element.css('max-width', (screenWidth - left - blockWidth) + 'px');
     $element.css({'max-height': height + 'px','overflow-y': 'auto'});
   };
