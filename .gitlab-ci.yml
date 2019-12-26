@@ -89,7 +89,8 @@ check env:
   only:
     variables:
       - $REPOSITORY == "main"
-7.0 For main:
+
+7.1 For main:
   stage: test
   image: codeages/ci-php:7.1.33
   services:
@@ -106,7 +107,7 @@ check env:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
 
-7.0 For main with MySQL80:
+7.1 For main with MySQL80:
   stage: test
   image: codeages/ci-php71
   services:
@@ -119,7 +120,7 @@ check env:
     variables:
       - $REPOSITORY == "main"
 
-7.0 For Develop:
+7.1 For Develop:
   stage: test
   image: codeages/ci-php:7.1.33
   services:
