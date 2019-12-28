@@ -22,6 +22,7 @@ class AddQuestionBank extends Migration
               `orgCode` varchar(265) NOT NULL DEFAULT '1.' COMMENT '组织机构编码',
               `createdTime` int(10) UNSIGNED NOT NULL DEFAULT '0',
               `updatedTime` int(10) UNSIGNED NOT NULL DEFAULT '0',
+              `fromCourseSetId` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程id',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='题库表';
         ");
