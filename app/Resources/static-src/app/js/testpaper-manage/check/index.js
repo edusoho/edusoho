@@ -174,7 +174,12 @@ class CheckTest
 
     let $target = $(event.currentTarget);
     let teacherSay = this.$dialog.find('textarea').val();
-    let passedStatus = this.passStatus;
+    let passedStatus = '';
+    if (this.$dialog.find('[name="passedStatus"]:checked').length > 0) {
+      passedStatus = this.$dialog.find('[name="passedStatus"]:checked').val();
+    } else {
+      passedStatus = this.passStatus;
+    }
 
     $target.button('loading');
     $.post($target.data('postUrl'), {result:this.checkContent,teacherSay:teacherSay,passedStatus:passedStatus,isContinue:this.isContinue}, function(response) {
