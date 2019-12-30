@@ -196,6 +196,18 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
+        if (!$this->isFieldExist('question_bank', 'upgradeFlag')) {
+            $this->getConnection()->exec("
+                ALTER TABLE `question_bank` ADD `upgradeFlag` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '标记' AFTER `fromCourseSetId`;
+            ");
+        }
+
+        if (!$this->isFieldExist('question_category', 'upgradeFlag')) {
+            $this->getConnection()->exec("
+                ALTER TABLE `question_category` ADD `upgradeFlag` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '标记';
+            ");
+        }
+
         return 1;
     }
 
@@ -222,7 +234,7 @@ class EduSohoUpgrade extends AbstractUpdater
         if ($page == 1) {
             $this->logger('debug',  '删除bank表全部数据');
             $this->getConnection()->exec("
-                delete from `question_bank`;
+                delete from `question_bank` where `upgradeFlag` = 1;
             ");
             $this->logger('debug', '更新bank_category表bankNum为0');
             $this->getConnection()->exec("
@@ -260,6 +272,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 'fromCourseSetId' => $courseSet['id'],
                 'orgId' => $courseSet['orgId'],
                 'orgCode' => $courseSet['orgCode'],
+                'upgradeFlag' => 1,
                 'isHidden' => empty($classrooms[$classroomId]) ? '0' : '1',
             ));
             $this->logger('debug', 'questionBank:'.json_encode($questionBank));
@@ -282,14 +295,16 @@ class EduSohoUpgrade extends AbstractUpdater
         if ($page == 1) {
             $this->logger('debug', '重置所有questionBank的questionNum为0');
             $this->getConnection()->exec("
-                update `question_bank` set `testpaperNum` = 0;
+                update `question_bank` set `testpaperNum` = 0 where `upgradeFlag` = 1;
             ");
         }
-        $count = $this->getQuestionBankDao()->count(array());
+        $sql = "select count(*) from `question_bank` where `upgradeFlag` = 1";
+        $count = $this->getConnection()->fetchColumn($sql);
         $start = $this->getStart($page);
         $this->logger('debug', "总数量：{$count},当前页面：{$page},开始行：{$start}");
 
-        $questionBanks = $this->getQuestionBankDao()->search(array(), array('id' => 'asc'), $start, $this->pageSize);
+        $sql = "select * from `question_bank` where `upgradeFlag` = 1 LIMIT {$start}, {$this->pageSize}";
+        $questionBanks = $this->getConnection()->fetchAll($sql, array());
         foreach ($questionBanks as $questionBank) {
             $this->logger('debug', "==========开始处理题库{$questionBank['id']}============");
             if (empty($questionBank['fromCourseSetId']))  {
@@ -325,17 +340,19 @@ class EduSohoUpgrade extends AbstractUpdater
         if ($page == 1) {
             $this->logger('debug', "清除question分类，更新题目数量");
             $this->getConnection()->exec("
-                delete from `question_category`;
+                delete from `question_category` where `upgradeFlag` = 1;
             ");
             $this->getConnection()->exec("
-                update `question_bank` set `questionNum` = 0;
+                update `question_bank` set `questionNum` = 0  where `upgradeFlag` = 1;
             ");
         }
 
-        $count = $this->getQuestionBankDao()->count(array());
+        $sql = "select count(*) from `question_bank` where `upgradeFlag` = 1";
+        $count = $this->getConnection()->fetchColumn($sql);
         $start = $this->getStart($page);
         $this->logger('debug', "总数量：{$count},当前页面：{$page},开始行：{$start}");
-        $questionBanks = $this->getQuestionBankDao()->search(array(), array(), $start, $this->pageSize);
+        $sql = "select * from `question_bank` where `upgradeFlag` = 1 LIMIT {$start}, {$this->pageSize}";
+        $questionBanks = $this->getConnection()->fetchAll($sql, array());
         $questionBanks = ArrayToolkit::index($questionBanks, 'fromCourseSetId');
         $exerciseLog = '';
         $categoryLog = '';
@@ -355,7 +372,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $tasks = ArrayToolkit::index($tasks, 'id');
 
             $parentCategory = $this->getQuestionCategoryDao()->create(
-                array('bankId' => $questionBank['id'], 'parentId' => 0, 'name' => $questionBank['name'])
+                array('bankId' => $questionBank['id'], 'parentId' => 0, 'name' => $questionBank['name'],'upgradeFlag' => 1)
             );
             $categoryLog .= '课程分类'.$parentCategory['id'].':'.'课程'.$courseSetId.PHP_EOL;
 
@@ -374,7 +391,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 $courseTitle = empty($courses[$courseId]['title']) ? '默认计划' : $courses[$courseId]['title'];
                 if (empty($createdCourseCategory[$courseId])) {
                     $courseQuestionCategory = $this->getQuestionCategoryDao()->create(
-                        array('bankId' => $questionBank['id'], 'parentId' => $parentCategory['id'], 'name' => $courseTitle)
+                        array('bankId' => $questionBank['id'], 'parentId' => $parentCategory['id'], 'name' => $courseTitle, 'upgradeFlag' => 1)
                     );
                     $categoryLog .= '计划分类'.$courseQuestionCategory['id'].':'.'计划'.$courseId.PHP_EOL;
                     $createdCourseCategory[$courseId] = $courseQuestionCategory['id'];
@@ -390,7 +407,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 if (empty($createdLessonCategory[$belong['lessonId']])) {
                     $task = $tasks[$belong['lessonId']];
                     $lessonQuestionCategory = $this->getQuestionCategoryDao()->create(
-                        array('bankId' => $questionBank['id'], 'parentId' => $createdCourseCategory[$courseId], 'name' => $task['title'])
+                        array('bankId' => $questionBank['id'], 'parentId' => $createdCourseCategory[$courseId], 'name' => $task['title'],'upgradeFlag' => 1,)
                     );
                     $categoryLog .= '课时分类'.$lessonQuestionCategory['id'].':'.'课时'.$belong['lessonId'].PHP_EOL;
                     $createdLessonCategory[$belong['lessonId']] = $lessonQuestionCategory['id'];
