@@ -99,6 +99,7 @@ class EduSohoUpgrade extends AbstractUpdater
         list($step, $page) = $this->getStepAndPage($index);
         $method = $funcNames[$step];
         $page = $this->$method($page);
+        $this->logger('debug', "{$step}:{$method}:{$page}:内存峰值： ".memory_get_peak_usage());
 
         if (1 == $page) {
             ++$step;
@@ -219,9 +220,11 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function migrateQuestionBanks($page)
     {
         if ($page == 1) {
+            $this->logger('debug',  '删除bank表全部数据');
             $this->getConnection()->exec("
                 delete from `question_bank`;
             ");
+            $this->logger('debug', '更新bank_category表bankNum为0');
             $this->getConnection()->exec("
                 update `question_bank_category` set `bankNum` = 0;
             ");
@@ -229,18 +232,24 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $defaultCategories = $this->getQuestionBankCategoryService()->findAllCategories();
         $defaultCategories = ArrayToolkit::index($defaultCategories, 'orgId');
-        $count = $this->getCourseSetService()->countCourseSets(array());
+        $this->logger('debug', '所有的题库分类'.json_encode($defaultCategories));
+        $count = $this->getCourseSetDao()->count(array());
         $start = $this->getStart($page);
-        $courseSets = $this->getCourseSetService()->searchCourseSets(array(), array('id' => 'ASC'), $start, $this->pageSize, array('id', 'title', 'orgId', 'orgCode'));
+        $this->logger('debug', "总数量：{$count},当前页面：{$page},开始行：{$start}");
+        $courseSets = $this->getCourseSetDao()->search(array(), array('id' => 'ASC'), $start, $this->pageSize, array('id', 'title', 'orgId', 'orgCode'));
+        $this->logger('debug', '所有的课程:'.json_encode(ArrayToolkit::columns($courseSets, array('id', 'title', 'orgId'))));
         $classroomCourses = $this->getClassroomService()->findClassroomsByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
         $classroomCourses = ArrayToolkit::index($classroomCourses, 'courseSetId');
         $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($classroomCourses, 'classroomId'));
         foreach ($courseSets as $courseSet) {
+            $this->logger('debug', "==========开始处理课程{$courseSet['id']}============");
             $classroomId = empty($classroomCourses[$courseSet['id']]) ? 0 : $classroomCourses[$courseSet['id']]['classroomId'];
             $classroomName = empty($classrooms[$classroomId]) ? '' : $classrooms[$classroomId]['title'];
             $title = empty($classroomName) ? $courseSet['title'] : $courseSet['title'].'('.$classroomName.')';
             $category = empty($defaultCategories[$courseSet['orgId']]) ? reset($defaultCategories) : $defaultCategories[$courseSet['orgId']];
+            $this->logger('debug', 'category:'.json_encode($category));
             $questions = $this->getQuestionService()->search(array('courseSetId' => $courseSet['id']), array(), 0, 1);
+            $this->logger('debug', 'questions:'.json_encode(ArrayToolkit::column($questions, 'id')));
             if (empty($questions)) {
                 continue;
             }
@@ -253,9 +262,11 @@ class EduSohoUpgrade extends AbstractUpdater
                 'orgCode' => $courseSet['orgCode'],
                 'isHidden' => empty($classrooms[$classroomId]) ? '0' : '1',
             ));
+            $this->logger('debug', 'questionBank:'.json_encode($questionBank));
             $this->getQuestionBankCategoryService()->waveCategoryBankNum($category['id'], 1);
             $teachers = $this->getCourseMemberService()->findCourseSetTeachers($courseSet['id']);
             $this->getQuestionBankMemberService()->batchCreateMembers($questionBank['id'], ArrayToolkit::column($teachers, 'userId'));
+            $this->logger('debug', "==========结束处理课程{$courseSet['id']}============");
         }
 
         $nextPage = $this->getNextPage($count, $page);
@@ -269,30 +280,36 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function migrateTestpapers($page)
     {
         if ($page == 1) {
+            $this->logger('debug', '重置所有questionBank的questionNum为0');
             $this->getConnection()->exec("
                 update `question_bank` set `testpaperNum` = 0;
             ");
         }
         $count = $this->getQuestionBankDao()->count(array());
         $start = $this->getStart($page);
+        $this->logger('debug', "总数量：{$count},当前页面：{$page},开始行：{$start}");
 
         $questionBanks = $this->getQuestionBankDao()->search(array(), array('id' => 'asc'), $start, $this->pageSize);
         foreach ($questionBanks as $questionBank) {
-            $testpapers = $this->getTestpaperService()->searchTestpapers(
-                array('courseSetId' => $questionBank['fromCourseSetId'], 'type' => 'testpaper'),
-                array(),
-                0,
-                PHP_INT_MAX,
-                array('id')
-            );
-            foreach ($testpapers as $testpaper) {
-                $this->testpaperUpdateHelper->add('id', $testpaper['id'], array('bankId' => $questionBank['id']));
+            $this->logger('debug', "==========开始处理题库{$questionBank['id']}============");
+            if (empty($questionBank['fromCourseSetId']))  {
+                $this->logger('error', 'bank不存在有效的courseSetId:'.$questionBank['fromCourseSetId']);
             }
-            $this->testpaperUpdateHelper->flush();
+            $testpapersSql = "SELECT id FROM `testpaper_v8` WHERE `courseSetId`={$questionBank['fromCourseSetId']} AND `type`='testpaper'";
+            $testpapers = $this->getConnection()->fetchAll($testpapersSql, array()) ?:array();
+            $this->logger('debug', "处理题库{$questionBank['id']}对应的试卷：".json_encode($testpapers));
+            if (!empty($testpapers)) {
+                foreach ($testpapers as $testpaper) {
+                    $this->testpaperUpdateHelper->add('id', $testpaper['id'], array('bankId' => $questionBank['id']));
+                }
+                $this->testpaperUpdateHelper->flush();
+            }
             $testpaperNum = count($testpapers);
+            $this->logger('debug', "更新对应试卷数量：{$testpaperNum}");
             $this->getConnection()->exec("
                 update `question_bank` set `testpaperNum` = {$testpaperNum} where `id` = {$questionBank['id']};
             ");
+            $this->logger('debug', "==========处理题库{$questionBank['id']}结束============");
         }
 
         $nextPage = $this->getNextPage($count, $page);
@@ -306,6 +323,7 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function migrateQuestionsAndExercises($page)
     {
         if ($page == 1) {
+            $this->logger('debug', "清除question分类，更新题目数量");
             $this->getConnection()->exec("
                 delete from `question_category`;
             ");
@@ -316,11 +334,13 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $count = $this->getQuestionBankDao()->count(array());
         $start = $this->getStart($page);
+        $this->logger('debug', "总数量：{$count},当前页面：{$page},开始行：{$start}");
         $questionBanks = $this->getQuestionBankDao()->search(array(), array(), $start, $this->pageSize);
         $questionBanks = ArrayToolkit::index($questionBanks, 'fromCourseSetId');
         $exerciseLog = '';
         $categoryLog = '';
         foreach ($questionBanks as $courseSetId => $questionBank) {
+            $this->logger('debug', "==========开始处理题库的题目 {$questionBank['id']}============");
             $questions = $this->getQuestionDao()->search(
                 array('courseSetId' => $courseSetId),
                 array(),
@@ -328,6 +348,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 PHP_INT_MAX,
                 array('id', 'courseId', 'lessonId')
             );
+            $this->logger('debug', "处理的questions:".json_encode($questions));
             $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
             $courses = ArrayToolkit::index($courses, 'id');
             $tasks = $this->getTaskService()->findTasksByCourseSetId($courseSetId);
@@ -629,7 +650,7 @@ class EduSohoUpgrade extends AbstractUpdater
         return sha1(uniqid(mt_rand(), true));
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->createService('System:SettingService');
     }
@@ -688,6 +709,14 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return \Biz\Course\Dao\CourseSetDao
+     */
+    protected function getCourseSetDao()
+    {
+        return $this->createDao('Course:CourseSetDao');
     }
 
     /**
