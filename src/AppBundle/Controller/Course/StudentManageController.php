@@ -30,17 +30,14 @@ class StudentManageController extends BaseController
 {
     public function studentsAction(Request $request, $courseSetId, $courseId)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        $followings = $this->findCurrentUserFollowings();
-
-        $keyword = $request->query->get('keyword', '');
 
         $conditions = array(
             'courseId' => $course['id'],
             'role' => 'student',
         );
 
+        $keyword = $request->query->get('keyword', '');
         if (!empty($keyword)) {
             $conditions['userIds'] = $this->getUserService()->getUserIdsByKeyword($keyword);
         }
@@ -59,14 +56,13 @@ class StudentManageController extends BaseController
         );
         $this->appendLearningProgress($members);
 
-        $userIds = ArrayToolkit::column($members, 'userId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
 
         return $this->render('course-manage/student/index.html.twig', array(
-            'courseSet' => $courseSet,
+            'courseSet' => $this->getCourseSetService()->getCourseSet($courseSetId),
             'course' => $course,
             'students' => $members,
-            'followings' => $followings,
+            'followings' => $this->findCurrentUserFollowings(),
             'users' => $users,
             'paginator' => $paginator,
         ));
@@ -156,7 +152,7 @@ class StudentManageController extends BaseController
 
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
-            $member = $this->getCourseMemberService()->remarkStudent($course['id'], $user['id'], $data['remark']);
+            $this->getCourseMemberService()->remarkStudent($course['id'], $user['id'], $data['remark']);
 
             return $this->createJsonResponse(array('success' => 1));
         }
@@ -274,7 +270,7 @@ class StudentManageController extends BaseController
             return $this->createMessageResponse('error', '您无权查看学员详细信息！');
         }
 
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $this->getCourseService()->tryManageCourse($courseId);
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
 
         if (empty($member)) {

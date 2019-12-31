@@ -1906,6 +1906,10 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function getUserIdsByKeyword($keyword)
     {
+        if (empty($keyword)) {
+            return array(-1);
+        }
+
         if (SimpleValidator::email($keyword)) {
             $user = $this->getUserByEmail($keyword);
 
@@ -1921,18 +1925,24 @@ class UserServiceImpl extends BaseService implements UserService
                 PHP_INT_MAX
             );
             $mobileNameUser = $this->getUserByNickname($keyword);
-            $userIds = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : null;
-
+            $userIds = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : array();
             $userIds[] = $mobileVerifiedUser ? $mobileVerifiedUser['id'] : null;
             $userIds[] = $mobileNameUser ? $mobileNameUser['id'] : null;
-
             $userIds = array_unique($userIds);
 
-            return $userIds ? $userIds : array(-1);
+            return $userIds ?: array(-1);
         }
-        $user = $this->getUserByNickname($keyword);
 
-        return $user ? array($user['id']) : array(-1);
+        $users = $this->searchUsers(
+            array('nickname' => $keyword),
+            array('id' => 'DESC'),
+            0,
+            $this->countUsers(array('nickname' => $keyword)),
+            array('id')
+        );
+        $userIds = ArrayToolkit::column($users, 'id');
+
+        return $userIds ?: array(-1);
     }
 
     public function updateUserNewMessageNum($id, $num)
