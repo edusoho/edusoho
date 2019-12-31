@@ -18,7 +18,7 @@ class CourseSetController extends CourseBaseController
         $user = $this->getCurrentUser();
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getCourseSetService()->countUserFavorites($user['id']),
             12
         );
@@ -58,7 +58,7 @@ class CourseSetController extends CourseBaseController
         }
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getCourseSetService()->countUserTeachingCourseSets($user['id'], $conditions),
             20
         );
@@ -158,7 +158,7 @@ class CourseSetController extends CourseBaseController
         );
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getTaskService()->countTasks($conditions),
             10
         );

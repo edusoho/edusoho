@@ -45,6 +45,7 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFunction('count', array($this, 'count')),
             new \Twig_SimpleFunction('course_count', array($this, 'courseCount')),
             new \Twig_SimpleFunction('course_cover', array($this, 'courseCover')),
+            new \Twig_SimpleFunction('open_course_cover', array($this, 'openCourseCover')),
             new \Twig_SimpleFunction('course_set_cover', array($this, 'courseSetCover')),
             //@deprecated 请勿使用，后续将删除  2017-03-30
             //@see WebExtension#avatarPath
@@ -185,6 +186,18 @@ class AppExtension extends \Twig_Extension
         }
 
         return $this->courseSetCover($courseSet, $type);
+    }
+
+    public function openCourseCover($openCourse, $type)
+    {
+        $cover = !empty($openCourse[$type.'Picture']) ? $openCourse[$type.'Picture'] : null;
+
+        if (empty($cover)) {
+            $settings = $this->getSettingService()->get('default');
+            $cover = !empty($settings['course.png']) ? $settings['course.png'] : null;
+        }
+
+        return $cover;
     }
 
     public function userAvatar($user, $type = 'middle')
