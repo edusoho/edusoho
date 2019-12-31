@@ -4997,6 +4997,7 @@ admin.course_manage.statistics.finished_number: 完成课程人数
 admin.course_manage.statistics.study_time_minute: 课程学习时长(分)
 admin.course_manage.statistics.income_RMB: 课程收入(元)
 admin.course_manage.statistics.no_introduce: 未引入
+admin.course_manage.statistics.classroom.remove: 已从%classroomName%中移除
 admin.course_manage.statistics.watch_task: 查看%taskName%
 admin.course_manage.statistics.watch_course_data: 查看课时数据
 
