@@ -616,7 +616,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                     'videoQuality' => 'normal',
                     'audioQuality' => 'normal',
                 );
-
                 $file['metas2'] = isset($file['metas']['levels']) ? $file['metas']['levels'] : array();
             }
         }
