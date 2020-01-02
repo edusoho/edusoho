@@ -119,53 +119,38 @@ class Testpaper {
 
   initAjaxTestPaperSelector() {
     let self = this;
-    this.$testpaperSelector.select2({
-      ajax: {
-        url: self.$testpaperSelector.data('url'),
-        dataType: 'json',
-        quietMillis: 250,
-        data: function(term, page) {
-          return {
-            keyword: term,
-            page: page,
+    $.post(self.$testpaperSelector.data('url'),{},function(data){
+      let results = [];
+      $.each(data.testPapers, function(index, testPaper) {
+        results.push({
+          id: testPaper.id,
+          text: testPaper.name,
+          score: testPaper.score,
+        });
+      });
+
+      self.$testpaperSelector.select2({
+        data: results,
+        initSelection: function(element, callback) {
+          let testPaperName = $('#testPaperName').val();
+          let testPaperId = element.val();
+          let testPaperScore = $('#score-condition').data('score');
+          if (!parseInt(testPaperId)) {
+            testPaperName = '';
+          }
+          let data = {
+            id: testPaperId,
+            text: testPaperName ? testPaperName : Translator.trans('activity.testpaper_manage.media_required'),
+            score: testPaperScore,
           };
+
+          callback(data);
         },
-        results: function(data, page) {
-          let results = [];
-
-          $.each(data.testPapers, function(index, testPaper) {
-            results.push({
-              id: testPaper.id,
-              text: testPaper.name,
-              score: testPaper.score,
-            });
-          });
-
-          return {
-            results: results,
-            more: page * 10 < data.openCount,
-          };
+        formatSelection: function(data) {
+          return data.text;
         },
-      },
-      initSelection: function(element, callback) {
-        let testPaperName = $('#testPaperName').val();
-        let testPaperId = element.val();
-        let testPaperScore = $('#score-condition').data('score');
-        if (!parseInt(testPaperId)) {
-          testPaperName = '';
-        }
-        let data = {
-          id: testPaperId,
-          text: testPaperName ? testPaperName : Translator.trans('activity.testpaper_manage.media_required'),
-          score: testPaperScore,
-        };
-
-        callback(data);
-      },
-      formatSelection: function(data) {
-        return data.text;
-      },
-      dropdownAutoWidth: true,
+        dropdownAutoWidth: true,
+      });
     });
   }
 
