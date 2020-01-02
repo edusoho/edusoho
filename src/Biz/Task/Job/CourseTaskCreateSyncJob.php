@@ -5,7 +5,6 @@ namespace Biz\Task\Job;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\AppLoggerConstant;
-use Biz\Course\Copy\Chain\ActivityTestpaperCopy;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMaterialDao;
@@ -77,11 +76,6 @@ class CourseTaskCreateSyncJob extends AbstractJob
 
     private function createActivity($activity, $copiedCourse)
     {
-        //create testpaper&questions if ref exists
-        $testpaper = $this->syncTestpaper($activity, $copiedCourse);
-
-        $testId = empty($testpaper) ? 0 : $testpaper['id'];
-
         $newActivity = array(
             'title' => $activity['title'],
             'remark' => $activity['remark'],
@@ -99,7 +93,7 @@ class CourseTaskCreateSyncJob extends AbstractJob
         );
 
         $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, array(
-            'testId' => $testId, 'refLiveroom' => 1, 'newActivity' => $newActivity, 'isCopy' => 1, 'isSync' => 1,
+            'refLiveroom' => 1, 'newActivity' => $newActivity, 'isCopy' => 1, 'isSync' => 1,
         ));
 
         if (!empty($ext)) {
@@ -143,21 +137,6 @@ class CourseTaskCreateSyncJob extends AbstractJob
             }
             $this->getMaterialDao()->create($newMaterial);
         }
-    }
-
-    private function syncTestpaper($activity, $copiedCourse)
-    {
-        if ('testpaper' != $activity['mediaType']) {
-            return array();
-        }
-
-        $testpaperCopy = new ActivityTestpaperCopy($this->biz);
-
-        return $testpaperCopy->copy($activity, array(
-            'newCourseSetId' => $copiedCourse['courseSetId'],
-            'newCourseId' => $copiedCourse['id'],
-            'isCopy' => 1,
-        ));
     }
 
     protected function copyFields($source, $target, $fields)

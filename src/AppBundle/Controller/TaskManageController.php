@@ -162,7 +162,6 @@ class TaskManageController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $task = $request->request->all();
-
             if (!isset($task['fromCourseSetId'])) {
                 $task['fromCourseSetId'] = $course['courseSetId'];
             }

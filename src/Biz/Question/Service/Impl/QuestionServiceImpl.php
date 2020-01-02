@@ -4,7 +4,10 @@ namespace Biz\Question\Service\Impl;
 
 use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Question\Dao\QuestionDao;
+use Biz\Question\Dao\QuestionFavoriteDao;
 use Biz\Question\QuestionException;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Question\Service\QuestionService;
 
@@ -43,11 +46,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
             if (!empty($fields['parentId'])) {
                 $parentQuestion = $this->get($fields['parentId']);
-                $fields['courseId'] = $parentQuestion['courseId'];
-                $fields['lessonId'] = $parentQuestion['lessonId'];
+                empty($parentQuestion) || $fields['categoryId'] = $parentQuestion['categoryId'];
             }
-
-            $fields['target'] = empty($fields['courseSetId']) ? '' : 'course-'.$fields['courseSetId'];
 
             $question = $this->getQuestionDao()->create($fields);
 
@@ -55,7 +55,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
                 $this->waveCount($question['parentId'], array('subCount' => '1'));
             }
 
-            //$this->getLogService()->info('course', 'add_question', "新增题目(#{$question['id']})", $question);
+            if (!empty($question['bankId']) && 0 == $question['parentId']) {
+                $this->getQuestionBankService()->waveQuestionNum($question['bankId'], 1);
+            }
+
             $this->dispatchEvent('question.create', new Event($question, array('argument' => $argument)));
 
             $this->commit();
@@ -72,25 +75,22 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $savedQuestions = array();
         //按照题型分组
         $groupQuestions = $this->groupQuestions($questions);
-        $courseSetId = $token['data']['courseSetId'];
+        $questionBankId = $token['data']['questionBankId'];
         try {
             $this->beginTransaction();
             foreach ($groupQuestions as $type => $questionsGroup) {
                 //分组循环处理题目
                 foreach ($questionsGroup as $key => $question) {
+                    $question['bankId'] = $questionBankId;
+                    $savedQuestions[] = $savedQuestion = $this->importQuestion($question);
                     if ('material' == $question['type']) {
                         $subQuestions = $question['subQuestions'];
-                        $question['courseSetId'] = $courseSetId;
-                        $savedQuestions[] = $savedQuestion = $this->importQuestion($question);
                         //材料题子题处理
                         foreach ($subQuestions as $subQuestion) {
                             $subQuestion['parentId'] = $savedQuestion['id'];
-                            $subQuestion['courseSetId'] = $courseSetId;
+                            $subQuestion['bankId'] = $questionBankId;
                             $savedQuestions[] = $this->importQuestion($subQuestion);
                         }
-                    } else {
-                        $question['courseSetId'] = $courseSetId;
-                        $savedQuestions[] = $this->importQuestion($question);
                     }
                 }
             }
@@ -155,6 +155,29 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->batchCreate($questions);
     }
 
+    public function batchUpdateCategoryId($ids, $categoryId)
+    {
+        if (empty($ids)) {
+            return array();
+        }
+
+        $updateFields = array();
+        foreach ($ids as $id) {
+            $updateFields[] = array('categoryId' => $categoryId);
+        }
+
+        return $this->batchUpdateQuestions($ids, $updateFields);
+    }
+
+    public function batchUpdateQuestions($ids, $fields)
+    {
+        if (empty($ids) || empty($fields)) {
+            return array();
+        }
+
+        return $this->getQuestionDao()->batchUpdate($ids, $fields, 'id');
+    }
+
     public function update($id, $fields)
     {
         $question = $this->get($id);
@@ -180,11 +203,15 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         if (!empty($question['parentId'])) {
             $parentQuestion = $this->get($question['parentId']);
-            $fields['courseId'] = $parentQuestion['courseId'];
-            $fields['lessonId'] = $parentQuestion['lessonId'];
+            empty($parentQuestion) || $fields['categoryId'] = $parentQuestion['categoryId'];
         }
 
         $question = $this->getQuestionDao()->update($id, $fields);
+
+        $this->getQuestionDao()->update(array('parentId' => $question['id']), array(
+            'categoryId' => $question['categoryId'],
+            'updatedUserId' => $question['updatedUserId'],
+        ));
 
         $this->dispatchEvent('question.update', new Event($question, array('argument' => $argument)));
 
@@ -216,6 +243,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         if ($question['subCount'] > 0) {
             $this->deleteSubQuestions($question['id']);
+        }
+
+        if (!empty($question['bankId']) && 0 == $question['parentId']) {
+            $this->getQuestionBankService()->waveQuestionNum($question['bankId'], -1);
         }
 
         $this->dispatchEvent('question.delete', new Event($question));
@@ -261,6 +292,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function findQuestionsByCopyId($copyId)
     {
         return $this->getQuestionDao()->findQuestionsByCopyId($copyId);
+    }
+
+    public function findQuestionsByCategoryIds($categoryIds)
+    {
+        return $this->getQuestionDao()->findQuestionsByCategoryIds($categoryIds);
     }
 
     public function search($conditions, $sort, $start, $limit)
@@ -446,11 +482,17 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $question;
     }
 
+    /**
+     * @return QuestionDao
+     */
     protected function getQuestionDao()
     {
         return $this->createDao('Question:QuestionDao');
     }
 
+    /**
+     * @return QuestionFavoriteDao
+     */
     protected function getQuestionFavoriteDao()
     {
         return $this->createDao('Question:QuestionFavoriteDao');
@@ -461,8 +503,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->createService('File:UploadFileService');
     }
 
-    protected function getLogService()
+    /**
+     * @return QuestionBankService
+     */
+    protected function getQuestionBankService()
     {
-        return $this->createService('System:LogService');
+        return $this->createService('QuestionBank:QuestionBankService');
     }
 }

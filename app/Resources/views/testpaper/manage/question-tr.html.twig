@@ -9,9 +9,9 @@
   <td class="seq">{% if question.subCount > 0 %}<span class="color-gray">~</span>{% else %}{{ item.seq|default(' ') }}{% endif %}</td>
   <td>
     {% if question.includeImg|default('') %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
-    {{question['stem']|plain_text(40) }}
+    {{ question['stem']|plain_text(40) }}
     <div class="color-gray text-sm">
-      {{'course.question_manage.manage.belong'|trans}}：
+      {{'course.question_manage.manage.category'|trans}}：
       {% if question.target == 'course-' ~ courseSet.id %}
         {{'course.question_manage.manage.default_belong'|trans}}
       {% else %}

@@ -1,0 +1,36 @@
+<div class="modal cd-modal in js-category-modal" aria-hidden="true">
+  <div class="modal-dialog cd-modal-dialog" data-clear="{{ closeClear|default(0) }}">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="cd-icon cd-icon-close"></i>
+        </button>
+        <h4 class="modal-title">{{ 'course.testpaper_manage.import.re_edit.batch_set_category'|trans }}</h4>
+      </div>
+
+      <div class="modal-body overflow-unset">
+        <div class="subject-state-content clearfix">
+          <span>{{'course.testpaper_manage.import.re_edit.selected'|trans}}</span><div class="subject-state-content__text js-select"></div>
+        </div>
+        <form class="form-horizontal subject-state-form mt20" id="batch-set-category-form">
+          <div class="form-group cd-mb24">
+            <div class="col-md-2 control-label subject-state-form__label"><label for="categoryId">{{'course.question_manage.manage.category'|trans}}</label></div>
+            <div class="col-md-9 controls">
+              <select id="categoryId" name="categoryId" required="required" class="form-control width-input width-input-large">
+                <option value="0">{{ 'site.data.empty'|trans }}</option>
+                <option value="0" selected>{{ 'site.data.empty'|trans }}</option>
+                {% set question_category_choices = question_category_choices(questionBankId) %}
+                {{ select_options(question_category_choices) }}
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="cd-btn cd-btn-link-default" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+        <button type="button" class="btn cd-btn cd-btn-primary js-batch-set-category">{{ 'form.btn.confirm'|trans }}</button>
+      </div>
+    </div>
+  </div>
+</div>

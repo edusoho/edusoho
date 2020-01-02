@@ -251,12 +251,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $user->hasPermission('admin_course_content_manage') || $user->hasPermission('admin_v2_course_content_manage');
     }
 
-    public function searchCourseSets(array $conditions, $orderBys, $start, $limit)
+    public function searchCourseSets(array $conditions, $orderBys, $start, $limit, $columns = array())
     {
         $orderBys = $this->getOrderBys($orderBys);
         $preparedCondtions = $this->prepareConditions($conditions);
 
-        return $this->getCourseSetDao()->search($preparedCondtions, $orderBys, $start, $limit);
+        return $this->getCourseSetDao()->search($preparedCondtions, $orderBys, $start, $limit, $columns);
     }
 
     public function countCourseSets(array $conditions)
@@ -798,6 +798,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
             $this->getCourseDao()->update($courses[0]['id'], $fields);
 
+            // todo 修改到bankSubscriber
+            $this->getQuestionBankService()->updateQuestionBankByCourseSetId(
+                $courseSet['id'],
+                array('isHidden' => 0)
+            );
+
             $this->dispatchEvent('course-set.unlock', new Event($courseSet));
 
             $this->commit();
@@ -1090,6 +1096,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return \Biz\QuestionBank\Service\QuestionBankService
+     */
+    protected function getQuestionBankService()
+    {
+        return $this->createService('QuestionBank:QuestionBankService');
     }
 
     protected function generateDefaultCourse($created)

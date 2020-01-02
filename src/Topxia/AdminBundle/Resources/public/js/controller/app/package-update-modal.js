@@ -87,10 +87,10 @@ define(function(require, exports, module) {
                 exec(title, url, progressBar, startProgress, endProgress);
             } else if(data.isUpgrade){
                $('.text-success').text(data.toVersion);
-                var urls = $("#begin-update").data();
+                var urls = data.urls;
                 steps = getQueue(urls);
                 $.each(steps, function(i, step) {
-                    var url = step.url.replace(/\d+/g,data.packageId);
+                    var url = step.url;
                     $(document).queue('update_step_queue', function() {
                         exec(step.title, url, progressBar, step.progressRange[0], step.progressRange[1]);
                     });

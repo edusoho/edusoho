@@ -187,6 +187,13 @@ class AppLoggerConstant implements LoggerConstantInterface
      */
     const PUSH = 'push';
 
+    /**
+     *  [$question_bank 题库]
+     *
+     * $var string
+     */
+    const QUESTION_BANK = 'question_bank';
+
     public function getActions()
     {
         return array(
@@ -479,6 +486,14 @@ class AppLoggerConstant implements LoggerConstantInterface
             self::MOBILE => array(
                 'face_login',
             ),
+            self::QUESTION_BANK => array(
+                'create',
+                'delete',
+                'update_teacher',
+                'create_category',
+                'delete_category',
+                'update_category',
+            ),
         );
     }
 
@@ -507,6 +522,7 @@ class AppLoggerConstant implements LoggerConstantInterface
             self::LIVE,
             self::MOBILE,
             self::PUSH,
+            self::QUESTION_BANK,
 //            self::COIN,
 //            self::COUPON,
 //            self::DISCOUNT,

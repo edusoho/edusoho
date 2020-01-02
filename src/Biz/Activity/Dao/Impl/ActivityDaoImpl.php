@@ -54,6 +54,7 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
             'fromCourseId IN (:courseIds)',
             'mediaType IN (:mediaTypes)',
             'mediaId = :mediaId',
+            'fromCourseSetId = :fromCourseSetId',
         );
 
         return $declares;

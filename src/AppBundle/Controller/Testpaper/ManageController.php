@@ -2,15 +2,15 @@
 
 namespace AppBundle\Controller\Testpaper;
 
-use ExamParser\Writer\WriteDocx;
+use Biz\Activity\Service\ActivityService;
+use Biz\Question\Service\CategoryService;
+use Biz\QuestionBank\QuestionBankException;
+use Biz\QuestionBank\Service\QuestionBankService;
 use http\Exception\InvalidArgumentException;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use AppBundle\Common\Paginator;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\TestpaperException;
-use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
 use Biz\Question\Service\QuestionService;
@@ -33,85 +33,8 @@ class ManageController extends BaseController
             ));
         }
 
-        $conditions = array(
-            'courseSetId' => $courseSet['id'],
-            'type' => 'testpaper',
-        );
-
-        if ($courseSet['parentId'] > 0 && $courseSet['locked']) {
-            $conditions['copyIdGT'] = 0;
-        }
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getTestpaperService()->searchTestpaperCount($conditions),
-            10
-        );
-
-        $testpapers = $this->getTestpaperService()->searchTestpapers(
-            $conditions,
-            array('createdTime' => 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $userIds = ArrayToolkit::column($testpapers, 'updatedUserId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByMediaIds(ArrayToolkit::column($testpapers, 'id'));
-
         return $this->render('testpaper/manage/index.html.twig', array(
             'courseSet' => $courseSet,
-            'testpapers' => $testpapers,
-            'users' => $users,
-            'paginator' => $paginator,
-            'testpaperActivities' => $testpaperActivities,
-        ));
-    }
-
-    public function createAction(Request $request, $id)
-    {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-
-        if ('POST' === $request->getMethod()) {
-            $fields = $request->request->all();
-
-            $fields['courseSetId'] = $courseSet['id'];
-            $fields['courseId'] = 0;
-            $fields['pattern'] = 'questionType';
-
-            $testpaper = $this->getTestpaperService()->buildTestpaper($fields, 'testpaper');
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'course_set_manage_testpaper_questions',
-                    array('courseSetId' => $courseSet['id'], 'testpaperId' => $testpaper['id'])
-                )
-            );
-        }
-
-        $types = $this->getQuestionTypes();
-
-        $conditions = array(
-            'types' => array_keys($types),
-            'courseSetId' => $courseSet['id'],
-            'parentId' => 0,
-        );
-
-        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
-        $questionNums = ArrayToolkit::index($questionNums, 'type');
-
-        $user = $this->getUser();
-        $ranges = $this->getTaskService()->findUserTeachCoursesTasksByCourseSetId($user['id'], $courseSet['id']);
-
-        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSet['id']);
-
-        return $this->render('testpaper/manage/create.html.twig', array(
-            'courseSet' => $courseSet,
-            'ranges' => $ranges,
-            'types' => $types,
-            'questionNums' => $questionNums,
-            'courses' => $manageCourses,
         ));
     }
 
@@ -124,33 +47,6 @@ class ManageController extends BaseController
             'type' => 'testpaper',
             'courseSet' => $courseSet,
         ));
-    }
-
-    public function exportAction(Request $request, $courseSetId, $testpaperId)
-    {
-        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-
-        if (empty($testpaper) || $testpaper['courseSetId'] != $courseSetId) {
-            return $this->createMessageResponse('error', 'testpaper not found');
-        }
-
-        $questions = $this->getTestpaperService()->buildExportTestpaperItems($testpaperId);
-
-        $fileName = $testpaper['name'].'.docx';
-        $baseDir = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory');
-        $path = $baseDir.DIRECTORY_SEPARATOR.$fileName;
-
-        $writer = new WriteDocx($path);
-        $writer->write($questions);
-
-        $headers = array(
-            'Content-Type' => 'application/msword',
-            'Content-Disposition' => 'attachment; filename='.$fileName,
-        );
-
-        return new BinaryFileResponse($path, 200, $headers);
     }
 
     public function checkListAction(Request $request, $targetId, $targetType, $type)
@@ -205,7 +101,7 @@ class ManageController extends BaseController
             return $this->createMessageResponse('error', 'access denied');
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($result['testId'], $result['type']);
+        $testpaper = $this->getTestpaperService()->getTestpaper($result['testId']);
         if (!$testpaper) {
             $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
@@ -221,7 +117,7 @@ class ManageController extends BaseController
             $this->getTestpaperService()->checkFinish($result['id'], $formData);
 
             $data = array('success' => true, 'goto' => '');
-            if ($isContinue) {
+            if ('true' == $isContinue) {
                 $route = $this->getRedirectRoute('nextCheck', $source);
                 $data['goto'] = $this->generateUrl($route, array('id' => $targetId, 'activityId' => $result['lessonId']));
             }
@@ -236,6 +132,8 @@ class ManageController extends BaseController
         $student = $this->getUserService()->getUser($result['userId']);
         $accuracy = $this->getTestpaperService()->makeAccuracy($result['id']);
         $total = $this->getTestpaperService()->countQuestionTypes($testpaper, $questions);
+        $activity = $this->getActivityService()->getActivity($result['lessonId']);
+        $passScore = round($activity['finishData'] * $testpaper['score'], 0);
 
         return $this->render('testpaper/manage/teacher-check.html.twig', array(
             'paper' => $testpaper,
@@ -249,6 +147,7 @@ class ManageController extends BaseController
             'targetId' => $targetId,
             'isTeacher' => true,
             'action' => $request->query->get('action', ''),
+            'passScore' => $passScore,
         ));
     }
 
@@ -322,179 +221,6 @@ class ManageController extends BaseController
         return $this->createJsonResponse($result);
     }
 
-    public function updateAction(Request $request, $courseSetId, $testpaperId)
-    {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-
-        if (empty($testpaper) || $testpaper['courseSetId'] != $courseSetId) {
-            return $this->createMessageResponse('error', 'testpaper not found');
-        }
-
-        if ('POST' === $request->getMethod()) {
-            $data = $request->request->all();
-            $this->getTestpaperService()->updateTestpaper($testpaper['id'], $data);
-
-            $this->setFlashMessage('success', 'site.save.success');
-
-            return $this->redirect($this->generateUrl('course_set_manage_testpaper', array('id' => $courseSet['id'])));
-        }
-
-        return $this->render('testpaper/manage/update.html.twig', array(
-            'courseSet' => $courseSet,
-            'testpaper' => $testpaper,
-        ));
-    }
-
-    public function deleteAction(Request $request, $courseSetId, $testpaperId)
-    {
-        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-
-        if (empty($testpaper) || $testpaper['courseSetId'] != $courseSetId) {
-            return $this->createMessageResponse('error', 'testpaper not found');
-        }
-
-        $this->getTestpaperService()->deleteTestpaper($testpaperId);
-
-        return $this->createJsonResponse(true);
-    }
-
-    public function deletesAction(Request $request, $courseSetId)
-    {
-        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $ids = $request->request->get('ids');
-
-        $testpapers = $this->getTestpaperService()->findTestpapersByIds($ids);
-        if (!empty($testpapers)) {
-            foreach ($testpapers as $testpaper) {
-                if ($testpaper['courseSetId'] != $courseSetId) {
-                    return $this->createMessageResponse('error', 'testpaper not found');
-                }
-            }
-            $this->getTestpaperService()->deleteTestpapers($ids);
-
-            return $this->createJsonResponse(true);
-        }
-
-        return $this->createMessageResponse('error', 'testpaper not found');
-    }
-
-    public function publishAction(Request $request, $courseSetId, $testpaperId)
-    {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-        if (empty($testpaper) || $testpaper['courseSetId'] != $courseSetId) {
-            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
-        }
-
-        $testpaper = $this->getTestpaperService()->publishTestpaper($testpaperId);
-
-        $user = $this->getUserService()->getUser($testpaper['updatedUserId']);
-
-        return $this->render('testpaper/manage/testpaper-list-tr.html.twig', array(
-            'testpaper' => $testpaper,
-            'user' => $user,
-            'courseSet' => $courseSet,
-        ));
-    }
-
-    public function closeAction(Request $request, $courseSetId, $testpaperId)
-    {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-        if (empty($testpaper) || $testpaper['courseSetId'] != $courseSetId) {
-            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
-        }
-
-        $testpaper = $this->getTestpaperService()->closeTestpaper($testpaperId);
-
-        $user = $this->getUserService()->getUser($testpaper['updatedUserId']);
-
-        return $this->render('testpaper/manage/testpaper-list-tr.html.twig', array(
-            'testpaper' => $testpaper,
-            'user' => $user,
-            'courseSet' => $courseSet,
-        ));
-    }
-
-    public function questionsAction(Request $request, $courseSetId, $testpaperId)
-    {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-
-        if (!$testpaper || $testpaper['courseSetId'] != $courseSetId) {
-            return $this->createMessageResponse('error', 'testpaper not found');
-        }
-
-        if ('draft' != $testpaper['status']) {
-            return $this->createMessageResponse('error', '已发布或已关闭的试卷不能再修改题目');
-        }
-
-        if ('POST' === $request->getMethod()) {
-            $fields = $request->request->all();
-
-            if (empty($fields['questions'])) {
-                return $this->createMessageResponse('error', '试卷题目不能为空！');
-            }
-            $fields['questions'] = json_decode($fields['questions'], true);
-
-            if (empty($fields['questionTypeSeq'])) {
-                return $this->createMessageResponse('error', '题型排序错误');
-            }
-            $fields['questionTypeSeq'] = json_decode($fields['questionTypeSeq'], true);
-
-            if (count($fields['questions']) > 2000) {
-                return $this->createMessageResponse('error', '试卷题目数量不能超过2000！');
-            }
-
-            if (!empty($fields['passedScore'])) {
-                $fields['passedCondition'] = array($fields['passedScore']);
-            }
-
-            $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $fields);
-
-            $this->setFlashMessage('success', 'site.save.success');
-
-            return $this->createJsonResponse(array(
-                'goto' => $this->generateUrl('course_set_manage_testpaper', array('id' => $courseSetId)),
-            ));
-        }
-
-        $items = $this->getTestpaperService()->findItemsByTestId($testpaper['id']);
-        $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
-
-        $hasEssay = $this->getQuestionService()->hasEssay(ArrayToolkit::column($items, 'questionId'));
-
-        if ($hasEssay) {
-            $passedScoreDefault = empty($testpaper['passedCondition']) ? ceil($testpaper['score'] * 0.6) : $testpaper['passedCondition'][0];
-        } else {
-            $passedScoreDefault = ceil($testpaper['score'] * 0.6);
-        }
-
-        $user = $this->getUser();
-        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSet['id']);
-
-        $courseTasks = $this->getQuestionRanges($testpaper['id']);
-
-        return $this->render('testpaper/manage/question.html.twig', array(
-            'courseSet' => $courseSet,
-            'testpaper' => $testpaper,
-            'questions' => $questions,
-            'hasEssay' => $hasEssay,
-            'passedScoreDefault' => $passedScoreDefault,
-            'courseTasks' => $courseTasks,
-            'courses' => $manageCourses,
-            'subCounts' => empty($questions['material']) ? 0 : array_sum(array_column($questions['material'], 'subCount')),
-        ));
-    }
-
     public function infoAction(Request $request, $id)
     {
         $this->getCourseSetService()->tryManageCourseSet($id);
@@ -503,13 +229,18 @@ class ManageController extends BaseController
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
-        if (empty($testpaper) || $testpaper['courseSetId'] != $id) {
+        $bank = $this->getQuestionBankService()->getQuestionBank($testpaper['bankId']);
+        if (empty($bank)) {
+            return $this->createMessageResponse('error', 'bank is not exist');
+        }
+
+        if (empty($testpaper)) {
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
         $items = $this->getTestpaperService()->getItemsCountByParams(
             array('testId' => $testpaperId, 'parentIdDefault' => 0),
-            $gourpBy = 'questionType'
+            'questionType'
         );
         $subItems = $this->getTestpaperService()->getItemsCountByParams(
             array('testId' => $testpaperId, 'parentId' => 0)
@@ -521,36 +252,6 @@ class ManageController extends BaseController
 
         return $this->render('testpaper/manage/item-get-table.html.twig', array(
             'items' => $items,
-        ));
-    }
-
-    public function previewAction(Request $request, $courseSetId, $testpaperId)
-    {
-        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-        if (!$testpaper || $testpaper['courseSetId'] != $courseSetId) {
-            return $this->createMessageResponse('error', 'testpaper not found');
-        }
-
-        if ('closed' === $testpaper['status']) {
-            return $this->createMessageResponse('warning', 'testpaper already closed');
-        }
-
-        $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
-
-        $total = $this->getTestpaperService()->countQuestionTypes($testpaper, $questions);
-
-        $attachments = $this->getTestpaperService()->findAttachments($testpaper['id']);
-
-        return $this->render('testpaper/manage/preview.html.twig', array(
-            'questions' => $questions,
-            'limitedTime' => $testpaper['limitedTime'],
-            'paper' => $testpaper,
-            'paperResult' => array(),
-            'total' => $total,
-            'attachments' => $attachments,
-            'questionTypes' => $this->getTestpaperService()->getCheckedQuestionTypeBySeq($testpaper),
         ));
     }
 
@@ -630,14 +331,9 @@ class ManageController extends BaseController
         $isSub = $request->request->get('isSub', '0');
         $isTestpaper = $request->request->get('isTestpaper', 1);
         $method = $request->request->get('method', 'edit');
-        $courseSetId = $request->request->get('courseSetId', 0);
+        $questionBankId = $request->request->get('questionBankId', 0);
 
         $question = $this->filterQuestion($question);
-
-        $user = $this->getCurrentUser();
-        $courses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSetId);
-        $courseTasks = empty($question['courseId']) ? array() : $this->getTaskService()->findTasksByCourseId($question['courseId']);
-        $courseTasks = ArrayToolkit::index($courseTasks, 'id');
 
         return $this->render("testpaper/subject/type/{$type}.html.twig", array(
             'question' => $question,
@@ -647,9 +343,7 @@ class ManageController extends BaseController
             'isSub' => $isSub,
             'isTestpaper' => $isTestpaper,
             'method' => $method,
-            'courses' => $courses,
-            'courseSetId' => $courseSetId,
-            'courseTasks' => $courseTasks,
+            'questionBankId' => $questionBankId,
         ));
     }
 
@@ -658,10 +352,6 @@ class ManageController extends BaseController
         $data = $request->request->all();
         $fromType = $data['fromType'];
         $toType = $data['toType'];
-        $isSub = $data['isSub'];
-        $isTestpaper = $data['isTestpaper'];
-        $method = $request->request->get('method', 'edit');
-        $courseSetId = $request->request->get('courseSetId', 0);
         if (empty($data['question'])) {
             throw new InvalidArgumentException('缺少必要参数');
         }
@@ -673,22 +363,15 @@ class ManageController extends BaseController
             $question = $this->convertEssay($toType, $data['question']);
         }
 
-        $user = $this->getCurrentUser();
-        $courses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSetId);
-        $courseTasks = empty($question['courseId']) ? array() : $this->getTaskService()->findTasksByCourseId($question['courseId']);
-        $courseTasks = ArrayToolkit::index($courseTasks, 'id');
-
         return $this->render("testpaper/subject/type/{$toType}.html.twig", array(
             'question' => $question,
             'seq' => $data['seq'],
             'token' => $data['token'],
             'type' => $toType,
-            'isSub' => $isSub,
-            'isTestpaper' => $isTestpaper,
-            'method' => $method,
-            'courses' => $courses,
-            'courseSetId' => $courseSetId,
-            'courseTasks' => $courseTasks,
+            'isSub' => $data['isSub'],
+            'isTestpaper' => $data['isTestpaper'],
+            'method' => empty($data['method']) ? 'edit' : $data['method'],
+            'questionBankId' => empty($data['questionBankId']) ? 0 : $data['questionBankId'],
         ));
     }
 
@@ -725,6 +408,7 @@ class ManageController extends BaseController
         $isSub = $request->request->get('isSub', '0');
 
         $question = $this->filterQuestion($question);
+        $question = $this->wrapQuestion($question);
 
         if ('fill' == $type) {
             $question['stemShow'] = preg_replace('/^((\d{0,5}(\.|、|。|\s))|((\(|（)\d{0,5}(\)|）)))/', '', $question['stem']);
@@ -754,7 +438,9 @@ class ManageController extends BaseController
         $testpaper = json_decode($content, true);
         $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
         $data = $token['data'];
-        $this->getCourseSetService()->tryManageCourseSet($data['courseSetId']);
+        if (!$this->getQuestionBankService()->canManageBank($data['questionBankId'])) {
+            $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
+        }
         $this->getTestpaperService()->importTestpaper($testpaper, $token);
 
         return $this->createJsonResponse(true);
@@ -768,6 +454,16 @@ class ManageController extends BaseController
             'type' => $type,
             'order' => $field['order'],
         ));
+    }
+
+    protected function wrapQuestion($question)
+    {
+        if (!empty($question['categoryId'])) {
+            $category = $this->getQuestionCategoryService()->getCategory($question['categoryId']);
+            $question['category'] = empty($category) ? array() : $category;
+        }
+
+        return $question;
     }
 
     protected function filterQuestion($question)
@@ -786,8 +482,7 @@ class ManageController extends BaseController
             'attachment',
             'subQuestions',
             'difficulty',
-            'courseId',
-            'lessonId',
+            'categoryId',
         ));
     }
 
@@ -877,36 +572,6 @@ class ManageController extends BaseController
         return $essayQuestions;
     }
 
-    protected function getQuestionTypes()
-    {
-        $typesConfig = $this->get('extension.manager')->getQuestionTypes();
-
-        $types = array();
-        foreach ($typesConfig as $type => $typeConfig) {
-            $types[$type] = array(
-                'name' => $typeConfig['name'],
-                'hasMissScore' => $typeConfig['hasMissScore'],
-                'seqNum' => $typeConfig['seqNum'],
-            );
-        }
-
-        return $types;
-    }
-
-    protected function getQuestionRanges($testpaperId)
-    {
-        $items = $this->getTestpaperService()->findItemsByTestId($testpaperId);
-        $questionIds = ArrayToolkit::column($items, 'questionId');
-
-        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
-        $taskIds = ArrayToolkit::column($questions, 'lessonId');
-
-        $courseTasks = $this->getTaskService()->findTasksByIds($taskIds);
-        $courseTasks = ArrayToolkit::index($courseTasks, 'id');
-
-        return $courseTasks;
-    }
-
     protected function findRelatedData($activity, $paper)
     {
         $relatedData = array();
@@ -989,27 +654,11 @@ class ManageController extends BaseController
     }
 
     /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
-    }
-
-    /**
      * @return CourseSetService
      */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
-    }
-
-    /**
-     * @return UserService
-     */
-    protected function getUserService()
-    {
-        return $this->createService('User:UserService');
     }
 
     /**
@@ -1026,6 +675,14 @@ class ManageController extends BaseController
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
+    }
+
+    /**
+     * @return CategoryService
+     */
+    protected function getQuestionCategoryService()
+    {
+        return $this->createService('Question:CategoryService');
     }
 
     protected function getQuestionAnalysisService()
@@ -1065,13 +722,16 @@ class ManageController extends BaseController
         return $this->createService('Classroom:ClassroomService');
     }
 
-    protected function getFileService()
-    {
-        return $this->createService('Content:FileService');
-    }
-
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
+    }
+
+    /**
+     * @return QuestionBankService
+     */
+    protected function getQuestionBankService()
+    {
+        return $this->createService('QuestionBank:QuestionBankService');
     }
 }

@@ -14,6 +14,7 @@ class QuestionFormBase {
   _init() {
     this._initEvent();
     this._initValidate();
+    this._initSelect();
   }
 
   _initEvent() {
@@ -35,9 +36,6 @@ class QuestionFormBase {
     let validator = this.$form.validate({
       onkeyup: false,
       rules: {
-        '[data-role="target"]': {
-          required: true,
-        },
         difficulty: {
           required: true,
         },
@@ -53,11 +51,19 @@ class QuestionFormBase {
         }
       },
       messages: {
-        '[data-role="target"]': Translator.trans('course.question.create.belong_required_error_hint'),
         difficulty: Translator.trans('course.question.create.difficulty_required_error_hint')
       }
     });
     this.validator = validator;
+  }
+
+  _initSelect() {
+    $('#categoryId').select2({
+      treeview: true,
+      dropdownAutoWidth: true,
+      treeviewInitState: 'collapsed',
+      placeholderOption: 'first'
+    });
   }
 
   initTitleEditor(validator) {
