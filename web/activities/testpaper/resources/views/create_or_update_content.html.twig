@@ -40,7 +40,7 @@
           <div class="help-block hidden js-help-block"></div>
         </div>
         <div class="col-sm-5 controls">
-          <input id="testpaper-media" class="form-control" name="testpaperId" value="{{ testpaper.id|default(0) }}" data-url="{% if testpaper %}{{ path('question_bank_manage_testpaper_json', {id:testpaper.bankId}) }}{% endif %}" data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:course.courseSetId}) }}">
+          <input id="testpaper-media" class="form-control hidden" name="testpaperId" value="{{ testpaper.id|default(0) }}" data-url="{% if testpaper %}{{ path('question_bank_manage_testpaper_json', {id:testpaper.bankId}) }}{% endif %}" data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:course.courseSetId}) }}">
           {% if testpaper|default() %}
             <input type="hidden" id="testPaperName" value="{{ testpaper.name }}">
           {% endif %}
