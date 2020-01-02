@@ -8,6 +8,7 @@ use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\SettingService;
 use Biz\Taxonomy\CategoryException;
 use Biz\Common\CommonException;
 use Biz\QuestionBank\QuestionBankException;
@@ -252,6 +253,9 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         return $this->createDao('QuestionBank:QuestionBankDao');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');

@@ -6,6 +6,11 @@ use Biz\System\Annotation\Log;
 
 interface QuestionBankService
 {
+    /**
+     * @param $id
+     *
+     * @return mixed
+     */
     public function getQuestionBank($id);
 
     public function getQuestionBankByCourseSetId($courseSetId);

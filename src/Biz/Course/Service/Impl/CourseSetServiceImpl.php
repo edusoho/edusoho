@@ -19,6 +19,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\System\Service\LogService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\User\Service\UserService;
@@ -775,6 +776,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
     }
 
+    /**
+     * @param $id
+     * @param bool $shouldClose
+     *
+     * @return mixed
+     *
+     * @throws \Exception
+     */
     public function unlockCourseSet($id, $shouldClose = false)
     {
         $courseSet = $this->tryManageCourseSet($id);
@@ -1099,7 +1108,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @return \Biz\QuestionBank\Service\QuestionBankService
+     * @return QuestionBankService
      */
     protected function getQuestionBankService()
     {

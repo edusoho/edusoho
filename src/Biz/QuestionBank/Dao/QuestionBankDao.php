@@ -6,6 +6,11 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface QuestionBankDao extends GeneralDaoInterface
 {
+    /**
+     * @param $courseSetId
+     *
+     * @return mixed
+     */
     public function getByCourseSetId($courseSetId);
 
     public function findByIds($ids);
