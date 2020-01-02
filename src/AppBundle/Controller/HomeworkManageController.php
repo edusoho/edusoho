@@ -220,7 +220,7 @@ class HomeworkManageController extends BaseController
         $essayQuestions = array();
 
         foreach ($questions as $question) {
-            if ('essay' == $question['type'] && !$question['parentId']) {
+            if ('essay' == $question['type'] && empty($question['parentId'])) {
                 $essayQuestions[$question['id']] = $question;
             } elseif ('material' == $question['type']) {
                 $types = ArrayToolkit::column($question['subs'], 'type');
