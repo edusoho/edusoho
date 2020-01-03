@@ -5379,6 +5379,7 @@ admin.question_bank.manage.edit_title: 编辑题库
 admin.question_bank.manage.name_label: 名称
 admin.question_bank.manage.category_label: 分类
 admin.question_bank.manage.manager_label: 授权教师
+admin.question_bank.manage.enter_bank_name.placeholer: 请输入名称
 admin.question_bank.manage.model-title: 题库更新说明
 admin.question_bank.manage.model: >
   <p class="question-bank-model-title"><i class="es-icon es-icon-Promote"></i>新版题库功能，全面提升复用性</p>

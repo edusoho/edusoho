@@ -44,7 +44,7 @@ interface QuestionService
 
     public function findQuestionsByCategoryIds($categoryIds);
 
-    public function search($conditions, $sort, $start, $limit);
+    public function search($conditions, $sort, $start, $limit, $columns = array());
 
     public function searchCount($conditions);
 

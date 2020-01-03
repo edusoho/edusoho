@@ -4448,6 +4448,7 @@ admin.question_bank.manage.name_label: Name
 admin.question_bank.manage.category_label: Category
 admin.question_bank.manage.manager_label: Authorized Teacher
 admin.question_bank.manage.model-title: question bank update
+admin.question_bank.manage.enter_bank_name.placeholer: Enter question bank name
 admin.question_bank.manage.model: >
   <p class="question-bank-model-title"><i class="es-icon es-icon-Promote"></i>Structural modification</p>
   <p class="question-bank-model-text">In our new version, the questions and testpapers created in the question bank can be used in all courses.</p>

@@ -23,7 +23,7 @@ class QuestionBankDaoImpl extends AdvancedDaoImpl implements QuestionBankDao
         $marks = str_repeat('?,', count($ids) - 1).'?';
         $sql = "SELECT * FROM {$this->table} WHERE `isHidden` = 0 and `id` IN ({$marks});";
 
-        return $this->db()->fetchAll($sql, $ids);
+        return $this->db()->fetchAll($sql, $ids) ?: array();
     }
 
     public function declares()
@@ -45,6 +45,7 @@ class QuestionBankDaoImpl extends AdvancedDaoImpl implements QuestionBankDao
             'categoryId IN (:categoryIds)',
             'id IN (:ids)',
             'isHidden = :isHidden',
+            'name like :nameLike',
         );
 
         return $declares;

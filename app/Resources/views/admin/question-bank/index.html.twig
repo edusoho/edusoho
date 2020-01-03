@@ -18,6 +18,9 @@
         {% endfor %}
       </select>
     </div>
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="{{'admin.question_bank.manage.enter_bank_name.placeholer'|trans}}" name="nameLike" value="{{app.request.get('nameLike')}}">
+    </div>
     <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
   </form>
 

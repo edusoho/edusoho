@@ -167,6 +167,7 @@ class Testpaper {
       },
       dropdownAutoWidth: true,
     });
+    this.$testpaperSelector.removeClass('hidden');
   }
 
   initQuestionBankSelector() {
@@ -199,6 +200,7 @@ class Testpaper {
   changeQuestionBank(event) {
     let $helpBlock = $('.js-help-block');
     $helpBlock.addClass('hidden');
+    this.$testpaperSelector.addClass('hidden');
     this.$questionItemShow.hide();
     this.$scoreItem.hide();
     this.$testpaperSelector.val('0');

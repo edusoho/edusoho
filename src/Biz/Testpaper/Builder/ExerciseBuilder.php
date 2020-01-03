@@ -4,6 +4,7 @@ namespace Biz\Testpaper\Builder;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\TimeMachine;
+use Biz\Question\Service\QuestionService;
 use Codeages\Biz\Framework\Context\Biz;
 
 class ExerciseBuilder implements TestpaperBuilderInterface
@@ -80,15 +81,22 @@ class ExerciseBuilder implements TestpaperBuilderInterface
                 $conditions,
                 array('id' => 'DESC'),
                 0,
-                $count
+                $count,
+                array('id')
             );
 
             $questionIds = array_rand($questions, $exercise['itemCount']);
             $questionIds = is_array($questionIds) ? $questionIds : array($questionIds);
-            $randomQuestions = array();
+            $randomQuestionIds = array();
             foreach ($questionIds as $id) {
-                $randomQuestions[$id] = $questions[$id];
+                $randomQuestionIds[$id] = $questions[$id];
             }
+            $randomQuestions = $this->getQuestionService()->search(
+                array('ids' => ArrayToolkit::column($randomQuestionIds, 'id')),
+                array('id' => 'DESC'),
+                0,
+                $exercise['itemCount']
+            );
         }
 
         return $this->formatQuestions($randomQuestions, $itemResults, $orders);
@@ -291,6 +299,9 @@ class ExerciseBuilder implements TestpaperBuilderInterface
         return $this->getQuestionService()->search($conditions, array('createdTime' => 'DESC'), 0, $total);
     }
 
+    /**
+     * @return QuestionService
+     */
     protected function getQuestionService()
     {
         return $this->biz->service('Question:QuestionService');
