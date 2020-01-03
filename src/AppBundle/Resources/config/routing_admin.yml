@@ -2481,3 +2481,41 @@ admin_upgrade_v2_setting:
     defaults: { _controller: AppBundle:Admin/Default:upgradeV2Setting }
     methods: [POST]
 
+admin_question_bank:
+    path: /question_bank/index
+    defaults: { _controller: AppBundle:Admin/QuestionBank:index }
+
+admin_question_bank_manage_create:
+    path: /question_bank/create
+    defaults: { _controller: AppBundle:Admin/QuestionBank:create }
+
+admin_question_bank_manage_edit:
+    path: /question_bank/{id}/edit
+    defaults: { _controller: AppBundle:Admin/QuestionBank:edit }
+
+admin_question_bank_manage_delete:
+    path: /question_bank/{id}/delete
+    defaults: { _controller: AppBundle:Admin/QuestionBank:delete }
+    methods:  [POST]
+
+admin_question_bank_category:
+    path: /question_bank/category/index
+    defaults: { _controller: AppBundle:Admin/QuestionBankCategory:index }
+
+admin_question_bank_category_manage_create:
+    path: /question_bank/category/create
+    defaults: { _controller: AppBundle:Admin/QuestionBankCategory:create }
+
+admin_question_bank_category_manage_edit:
+    path: /question_bank/category/{id}/edit
+    defaults: { _controller: AppBundle:Admin/QuestionBankCategory:edit }
+
+admin_question_bank_category_manage_delete:
+    path: /question_bank/category/{id}/delete
+    defaults: { _controller: AppBundle:Admin/QuestionBankCategory:delete }
+    methods:  [POST]
+
+admin_question_bank_category_sort:
+    path:  /question_bank/category/sort
+    defaults: { _controller: AppBundle:Admin/QuestionBankCategory:sort }
+    methods: [POST]

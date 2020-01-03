@@ -37,16 +37,8 @@ class Homework extends Activity
         $newActivity = $config['newActivity'];
         $homework = $this->get($activity['mediaId']);
 
-        if ($config['isCopy']) {
-            $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
-
-            $copyIds = ArrayToolkit::column($items, 'questionId');
-            $questions = $this->findQuestionsByCopydIdsAndCourseSetId($copyIds, $newActivity['fromCourseSetId']);
-            $questionIds = ArrayToolkit::column($questions, 'id');
-        } else {
-            $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
-            $questionIds = ArrayToolkit::column($items, 'questionId');
-        }
+        $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
+        $questionIds = ArrayToolkit::column($items, 'questionId');
 
         $newHomework = array(
             'title' => $homework['name'],
@@ -96,7 +88,6 @@ class Homework extends Activity
         $user = $this->getCurrentUser();
 
         $activity = $this->getActivityService()->getActivity($activityId);
-        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], 'homework');
 
         $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseId'], $activity['id'], 'homework');
         if (!$result) {

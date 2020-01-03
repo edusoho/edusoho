@@ -685,6 +685,8 @@ question.marker_question.select_tips: 'Only support gap filling, choice question
 question.marker_question.understand_btn: Ok
 question.marker_question.add_practice_tips: '<p class="title">only one step to create practice</p><p class="text-md">drag the questions to the <span class=''color-warning''>video edit area</p>'
 question.marker_question.video_edit_block: 'Video edit area'
+question.marker_question.select_question_bank: '--Select question bank--'
+question.marker_question.select_question_category: '--Select question category--'
 resource_lib: 'Resources'
 resource_lib.content_title: 'Resources'
 resource_lib.my: 'My resources'
@@ -1038,6 +1040,8 @@ course.testpaper_check.number: 'person-time'
 course.testpaper_check.get_score: 'Score %questonScore%'
 course.testpaper_check.get_score_range: 'Score 0 - %questonScore%'
 course.testpaper_check.testpaper_analysis: 'item analysis'
+course.testpaper_check.student_score: Student Grade
+course.testpaper_check.testpaper_total_score: Total Score
 
 course.homepage.re_try_btn: 'Try again'
 course.assignment_check: 'Review assignment'
@@ -1396,7 +1400,7 @@ course.question_manage.question.delete_btn: Delete
 course.question_manage.question.include_sub: 'Sub questions included'
 course.question_manage.question.unfinished: Unfinised
 course.question_manage.question.sub_question: 'Sub questions'
-course.question_manage.question.belong: 'If of'
+course.question_manage.question.belong: 'Category'
 course.question_manage.question.course: 'The course'
 course.question_manage.question.score: Score：%testResult.score%
 course.question_manage.question.true_answer: 'Correct answer is'
@@ -1420,7 +1424,7 @@ course.question_manage.manage.answer: Answer
 course.question_manage.manage.refer_answer: 'Reference answer'
 course.question_manage.manage.true: Correct
 course.question_manage.manage.fault: Wrong
-course.question_manage.manage.belong: Subordinate
+course.question_manage.manage.category: Category
 course.question_manage.manage.default_belong: 'This course'
 course.question_manage.manage.choose: 'Please select'
 course.question_manage.manage.belong_tips: 'Can be for this course, a program or a learning task'
@@ -1456,6 +1460,8 @@ course.question_manage.export_btn: export question
 course.testpaper_manage: Testpapers
 course.testpaper_manage.testpaper: Testpaper
 course.testpaper_manage.content_title: Testpaper
+course.testpaper_manage.transfer_text: The questions and test papers have moved. Click the portal below to check the new question bank
+course.testpaper_manage.transfer_btn: Go to see
 course.testpaper_manage.create_btn: Add
 course.testpaper_manage.import_btn: Import
 course.testpaper_manage.name: 'Paper Title'
@@ -1509,7 +1515,7 @@ course.testpaper_manage.import.re_edit.select_type: Select question type
 course.testpaper_manage.import.re_edit.uncertain_choice: Uncertain Choice
 course.testpaper_manage.import.re_edit.question_statistics: Question Statistics
 course.testpaper_manage.import.re_edit.batch_set_difficulty: Set difficulty
-course.testpaper_manage.import.re_edit.batch_set_belong: Set Belong
+course.testpaper_manage.import.re_edit.batch_set_category: Set category
 course.testpaper_manage.import.re_edit.question_list: Question list
 course.testpaper_manage.import.re_edit.batch_operate: Batch Operate
 course.testpaper_manage.import.re_edit.select_all: Select All
@@ -1778,11 +1784,13 @@ course.plan_task.activity_manage.ppt.finished_condition_tips.end: '<p class="gra
 course.plan_task.activity_manage.testpaper.finished_condition_tips: '<p class="gray-darker mbs">Meet the following conditions:</p>'
 course.plan_task.activity_manage.testpaper.finish_score: 'Test score %finishScore% points'
 course.plan_task.activity_manage.testpaper.submit: Submit
+course.plan_task.activity_manage.testpaper.finish_tip: 'Tip: If "Exam Pass" is selected for the task completion condition, the test score must reach the "Pass Score" set in the previous step to complete this task.'
 course.plan_task.activity_manage.testpaper: 'Test paper'
 course.plan_task.activity_manage.testpaper.info: 'Test instruction'
 course.plan_task.activity_manage.testpaper.choose: 'Please choose test paper'
 course.plan_task.activity_manage.testpaper.create: "There is no testpaper, pleas e<a href=\"%testpaperUrl%\" target=\"_parent\">create</a>\n"
 course.plan_task.activity_manage.testpaper.empty_tips: 'If you can not find a testpaper, please make sure that the testpaper has been published'
+course.plan_task.activity_manage.testpaper.qualified_score: Qualified Score
 course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
 course.plan_task.activity_manage.testpaper.time_limit_tips: '0 Hour, No limitation.'
 course.plan_task.activity_manage.testpaper.time_length_tips: 0 Minute, No limitation.
@@ -1799,6 +1807,7 @@ course.plan_task.activity_manage.testpaper.mode.realTime: Specify
 course.plan_task.activity_manage.testpaper.mode.require_credit: 'Limit credits'
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 'The credits required to take the test, 0 is no limitation'
 course.plan_task.activity_manage.testpaper.pass: 'Pass mark'
+course.plan_task.activity_manage.testpaper.score_pass: 'Pass Score'
 course.plan_task.activity_manage.testpaper.will_begin_tips: 'The exam does not start, please come back at %startTime%.'
 course.plan_task.activity_manage.testpaper.total_question: 'A total of <span class = "color-primary">%itemCount% questions</ span>, total <span class = "color-primary">%score% points</span>.'
 course.plan_task.activity_manage.testpaper.pass_score: "pass score is <span class=\"color-primary\">%finishScore% points</span>.\n"
@@ -3265,6 +3274,11 @@ tag.popular_tag: 'Popular tag'
 tag.setting: 'Tag setting'
 category: Category
 category.all_category: All
+question_bank_category: Question Bank Category
+question_bank_category.all_category: All
+question_bank.empty: There is no question bank, please go to <a class="link-primary" href="%url%">Background-course-question bank management</a> to create it.
+question_bank.admin_v2.empty: There is no question bank, please go to <a class="link-primary" href="%url%">Background-teach-question bank management</a> to create it.
+question_bank.empty.no_auth: Empty
 attachments: Attachement
 attachments.preview: Preview
 attachments.preview.preview_btn: Preview
@@ -3344,6 +3358,8 @@ my.teaching.today_courses: 'Number of courses today'
 my.teaching.classroom_menu: Class
 my.teaching.question_menu: 'Q&A'
 my.teaching.discussion_menu: Discussions
+my.teaching.online_review_menu: 'Online review'
+my.teaching.question_bank_menu: 'Question Bank'
 my.teaching.testpaper_check_menu: 'Tests review'
 my.teaching.homework_check_menu: 'Assignments review'
 my.teaching.material_lib_menu: 'Library'
@@ -3398,12 +3414,16 @@ my.teaching.testpaper.submit: Submit
 my.teaching.testpaper.check: Review
 my.teaching.testpaper.answer_detail: "Total <strong>%totalCount%</strong></div> <div class=\"color-gray\"><small>objective scroe %objectiveScore% points/ subjective score %subjectiveScore% points</small></div> <div class=\"color-success\"><small>%teacherName% at %checkTime%</small>\n"
 my.teaching.testpaper.default_teacher: System
+my.teaching.online.review.title: Online Review
 my.teaching.testpaper.check_title: 'Review test'
 my.teaching.testpaper.uncheck: Not reviewed
 my.teaching.testpaper.check_finished: Reviewed
 my.teaching.testpaper.reviewing_empty: 'No paper needs to review'
 my.teaching.testpaper.check_finished_empty: 'No paper has been reviewed'
 my.teaching.testpaper.test_record: 'My tests'
+my.teaching.testpaper.keyword.course_title: Course Title
+my.teaching.testpaper.keyword.nickname: Nickname
+my.teaching.testpaper.placeholder: Please input keyword
 my.teaching.open_course.hit_num: PV
 my.teaching.open_course.status: Status
 my.teaching.open_course.actions: Action
@@ -3603,6 +3623,36 @@ my.teaching.open_course.material.tips: 'Unable to download material because the 
 my.teaching.open_course.material.web_connect: 'External Online Material'
 my.teaching.open_course.material.lesson: Lesson
 my.teaching.open_course.material.upload_time: 'Uploaded At'
+
+my.teaching.question_bank.create: Create
+my.teaching.question_bank.list: Question Bank List
+my.teaching.question_bank.instructions: Instructions
+my.teaching.question_bank.name_tip: Enter up to 30 characters
+my.teaching.question_bank.info: Bank Info
+my.teaching.question_bank.name_label: Name
+my.teaching.question_bank.category_label: Category
+my.teaching.question_bank.question_category.manage: Question Category Manage
+my.teaching.question_bank.question.manage: Question Manage
+my.teaching.question_bank.testpaper.manage: Testpaper Manage
+my.teaching.question_bank.testpaper.edit: Edit Testpaper
+my.teaching.question_bank.testpaper.empty: No Testpaper
+my.teaching.question_bank.testpaper.manual_create: Manual Create
+my.teaching.question_bank.testpaper.automatic_create: Automatic Create
+my.teaching.question_bank.question_category.create: Create Topic Category
+my.teaching.question_bank.question_category.update: Edit Category
+my.teaching.question_bank.question_batch_category.title: Batch setting classification
+my.teaching.question_bank.question_category.title: Set Question Category
+my.teaching.question_bank.question_category.latest_update: Latest Update
+my.teaching.question_bank.question_category.operation: Operation
+my.teaching.question_bank.question_category.empty: No Question Category
+my.teaching.question_bank.question_category.create_hint: You can add categories in batches, one per line, and enter up to 30 characters for each category
+my.teaching.question_bank.question_category.name_label: Category Name
+my.teaching.question_bank.question.no_category: uncategorized
+my.teaching.question_bank.question.all: All Questions
+my.teaching.question_bank.question.set_category: Set Category
+my.teaching.question_bank.question.selected: selected Number
+my.teaching.question_bank.question.set_score: Set Score
+my.teaching.question_bank.question.add: Add title
 
 my.learning.menu_heading: 'My Learning'
 my.learning.course_set_menu: 'Courses'
@@ -4381,6 +4431,39 @@ admin.classroom_manage.chooser.recommend: Recommended
 admin.classroom_manage.chooser.free: Free
 admin.classroom_manage.chooser.select_btn: Choose
 admin.classroom_manage.chooser.empty: 'No %classroomName% Record'
+admin.question_bank.category_manage.name: Title
+admin.question_bank.category_manage.bank_number: Bank Number
+admin.question_bank.category_manage.operate: Action
+admin.question_bank.category_manage.bank: Question Bank
+admin.question_bank.manage.name: Title
+admin.question_bank.manage.bank_content: Content
+admin.question_bank.manage.all_category: All Category
+
+admin.question_bank.manage.category: Category
+admin.question_bank.manage.operate: Action
+admin.question_bank.manage.testpaper: Testpaper
+admin.question_bank.manage.question: Question
+admin.question_bank.manage.empty: Empty Question Bank
+admin.question_bank.manage.add_title: Create Bank
+admin.question_bank.manage.edit_title: Edit Bank
+admin.question_bank.manage.name_label: Name
+admin.question_bank.manage.category_label: Category
+admin.question_bank.manage.manager_label: Authorized Teacher
+admin.question_bank.manage.model-title: question bank update
+admin.question_bank.manage.enter_bank_name.placeholer: Enter question bank name
+admin.question_bank.manage.model: >
+  <p class="question-bank-model-title"><i class="es-icon es-icon-Promote"></i>Structural modification</p>
+  <p class="question-bank-model-text">In our new version, the questions and testpapers created in the question bank can be used in all courses.</p>
+
+  <p class="question-bank-model-title"><i class="es-icon es-icon-manage"></i>New feature : question category</p>
+  <p class="question-bank-model-text">You can ues question category to manage the question.</p>
+
+  <p class="question-bank-model-title"><i class="es-icon es-icon-efficiency"></i>optimize the testpaper creation process</p>
+  <p class="question-bank-model-text">You can add different types of question at one operation. And you can select questions through different pages.</p>
+
+  <p class="question-bank-model-title question-bank-model__special"><i class="es-icon es-icon-Explain"></i>PS</p>
+  <p class="question-bank-model-text">The questions and testpapers in the courses are all moved to the question bank now.</p>
+
 admin.category_manage.name_th: Title
 admin.category_manage.code_th: Code
 admin.category_manage.operate_th: Action
@@ -7403,6 +7486,7 @@ log.module.thread: 'Thread'
 log.module.mobile: 'Mobile'
 log.module.wap: 'Wap'
 log.module.push: 'Push'
+log.module.question_bank: 'Question Bank'
 
 log.action.course.create: 'Create course'
 log.action.course.update: 'Update course'
@@ -7649,6 +7733,12 @@ log.action.live.update_live_activity: 'Update activity'
 log.action.live.generate_live_replay: 'Generate playback'
 log.action.live.delete_live_activity: 'Delete activity'
 log.action.mobile.face_login: Face recognition login
+log.action.question_bank.create: Create Question Bank
+log.action.question_bank.delete: Delete Question Bank
+log.action.question_bank.update_teacher: Update Manager
+log.action.question_bank.create_category: Create Bank Category
+log.action.question_bank.delete_category: Delete Bank Category
+log.action.question_bank.update_category: Update Bank Category
 
 log.action.template.course.create: Created a new<strong class="color-success"> course </strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: Updated the<strong class="color-success"> course </strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -7805,6 +7895,11 @@ log.action.template.live.update_live_activity: Updated the<strong class="color-s
 log.action.template.live.generate_live_replay: Generated recording playback of<strong class="color-success"> live </strong> 《%title%》
 log.action.template.live.delete_live_activity: Deleted the<strong class="color-success"> live </strong>activity 《%title%》
 log.action.template.order.adjust_price: Adjusted the price of<strong class="color-success"> order </strong> 《%title%》
+log.action.template.question_bank.create: Created a new <strong class="color-success">question bank</strong> 《%title%》
+log.action.template.question_bank.delete: Deleted the <strong class="color-success">question bank</strong> 《%title%》
+log.action.template.question_bank.create_category: Created a new<strong class="color-success">bank category</strong> 《%title%》
+log.action.template.question_bank.delete_category: Deleted the<strong class="color-success">question bank</strong> 《%title%》
+log.action.template.question_bank.update_category: Updated the<strong class="color-success">question bank</strong> 《%title%》
 
 log.field.detail: Details
 log.field.change.detail: Original settings:<strong class="color-danger">%old%</strong> New settings:<strong class="color-danger">%new%</strong>
@@ -8808,6 +8903,9 @@ exception.filetoolkit.file_type_error: File type is incorrect
 exception.course.draft.not_found: Draft teaching plan does not exist
 exception.task_result.not_found: Learning task results do not exist
 exception.discovery_column.not_found: Discovery column does not exist
+exception.question_bank.forbidden_delete_category: There is a question bank under the classification or sub-category and cannot be deleted
+exception.question_bank.not_found_bank: Bank does not exist
+exception.question_bank.forbidden_access_bank: Forbidden access this bank
 exception.educloud.user_disabled_hint: The education cloud has been banned, and the payment system is automatically lifted. Tutorial <a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">See here</a>
 exception.coupon.target_type_error: The batch does not support viewing details
 exception.coupon.setting_close: Coupon global switch is closed
@@ -9124,6 +9222,25 @@ admin.setting.invite.chooser_coupon.refresh_btn: Refresh
 admin.setting.invite.chooser_coupon.unreceived_num: Please set a coupon lot with more than 1 available
 admin.operation.coupon_menu.generate_btn: Generate Coupon
 
+question_bank.question_manage.manage.category: Question category
+question_bank.question_manage.manage.stem: Statement
+question_bank.question_manage.manage.score: Score
+question_bank.question_manage.manage.difficulty: Difficulty
+question_bank.question_manage.manage.easy_difficulty: Simple
+question_bank.question_manage.manage.normal_difficulty: Normal
+question_bank.question_manage.manage.hard_difficulty: Difficult
+question_bank.question_manage.manage.analysis: Analysis
+question_bank.question_manage.manage.advanced_options: 'Show / Hide advanced options'
+question_bank.question_manage.manage.stem_tips: "Click the button <span style=\"color:red\">[ ]</span>  to insert a blank. You can also input manually, for example “This year is [[2014]]”, the answer is “2014”\n"
+question_bank.question_manage.manage.material: Material
+
+question.select_question_bank: --Select question bank--
+question_reedit.select_question_category: --Select category--
+question_reedit.category_text: Category
+question_reedit.category_empty: None
+question_plus_upgrade_tip: 'The current version of the plug-in is too low, you can continue to use the old template for importing after upgrading the "QuestionPlus" plug-in in the background.'
+question_bank.to_select.hint: Please select a question bank
+
 # 新版后台开始
 
 # 新后台首页
@@ -9230,10 +9347,10 @@ admin_v2.buiness_advice.goto_qiqiuyu: EduSoho Business School
 
 admin_v2.notice.upgrade_notice: The new background for the plugin for a new adaptation, in order to facilitate your background management, need to manually upgrade all installed plugins
 admin_v2.notice.go_to_upgrade: Go to upgrade
-
 admin_v2.boot_page.notice: In order to operate more efficiently, you need to go to a new page
 admin_v2.boot_page.btn_text: Go
 
 admin_v2.homepage.switch_old_in_safari_notice: Due to Safari, toggle is not supported at present. It is recommended to use Google or 360 to toggle. Sorry for the inconvenience!
 admin_v2.homepage.switch_old_in_safari_notice.title: Determine the switch
 admin_v2.homepage.switch_old_in_safari_notice.got_it: Got it
+

@@ -67,6 +67,7 @@ class HtmlExtension extends \Twig_Extension
         }
 
         foreach ($choices as $value => $name) {
+            $name = htmlspecialchars($name);
             if ($selected == $value) {
                 $html .= "<option value=\"{$value}\" selected=\"selected\">{$name}</option>";
             } else {

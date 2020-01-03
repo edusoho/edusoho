@@ -21,14 +21,14 @@
   },
   "finish_condition": [
     {
-      "type": "score",
-      "describe": "course.plan_task.activity_manage.testpaper.pass",
-      "html": "conditions.html.twig",
-      "value": "0.6"
-    },
-    {
       "type": "submit",
       "describe": "course.plan_task.activity_manage.testpaper.submit"
+    },
+    {
+      "type": "score",
+      "describe": "course.plan_task.activity_manage.testpaper.score_pass",
+      "html": "conditions.html.twig",
+      "value": "0.6"
     }
   ]
 }

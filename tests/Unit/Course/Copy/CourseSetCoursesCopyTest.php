@@ -37,49 +37,6 @@ class CourseSetCoursesCopeTest extends BaseTestCase
         $this->assertEquals(10, $courseSet['maxCoursePrice']);
     }
 
-    public function testUpdateQuestionsCourseId()
-    {
-        $courseSetId = 11;
-        $copy = new CourseSetCoursesCopy($this->biz, array(), false);
-        $course = $this->getCourseDao()->create(array('courseSetId' => $courseSetId, 'title' => '', 'type' => ''));
-        $course2 = $this->getCourseDao()->create(array('courseSetId' => $courseSetId, 'title' => '', 'type' => '', 'parentId' => $course['id']));
-        $question = $this->getQuestion()->create(array('copyId' => 1, 'courseSetId' => $courseSetId));
-        $question2 = $this->getQuestion()->create(array('copyId' => $question['id'], 'courseSetId' => $courseSetId, 'courseId' => $course['id']));
-        ReflectionUtils::invokeMethod($copy, 'updateQuestionsCourseId', array($courseSetId));
-        $question = $this->getQuestion()->get($question['id']);
-        $question2 = $this->getQuestion()->get($question2['id']);
-
-        $this->assertEquals(0, $question['courseId']);
-        $this->assertEquals($course2['id'], $question2['courseId']);
-    }
-
-    public function testUpdateQuestionsLessonId()
-    {
-        $courseSetId = 11;
-        $copy = new CourseSetCoursesCopy($this->biz, array(), false);
-        $task = $this->getTaskDao()->create(array('courseId' => 1, 'fromCourseSetId' => $courseSetId, 'title' => '', 'type' => '', 'createdUserId' => '1'));
-        $task2 = $this->getTaskDao()->create(array('courseId' => 1, 'fromCourseSetId' => $courseSetId, 'title' => '', 'type' => '', 'createdUserId' => '1', 'copyId' => $task['id']));
-        $question = $this->getQuestion()->create(array('copyId' => 1, 'courseSetId' => $courseSetId));
-        $question2 = $this->getQuestion()->create(array('copyId' => $question['id'], 'courseSetId' => $courseSetId, 'lessonId' => $task['id']));
-        ReflectionUtils::invokeMethod($copy, 'updateQuestionsLessonId', array($courseSetId));
-        $question = $this->getQuestion()->get($question['id']);
-        $question2 = $this->getQuestion()->get($question2['id']);
-        $this->assertEquals(0, $question['lessonId']);
-        $this->assertEquals($task2['id'], $question2['lessonId']);
-    }
-
-    public function testUpdateExerciseRange()
-    {
-        $courseSetId = 11;
-        $copy = new CourseSetCoursesCopy($this->biz, array(), false);
-        $task = $this->getTaskDao()->create(array('courseId' => 1, 'fromCourseSetId' => $courseSetId, 'title' => '', 'type' => '', 'createdUserId' => '1', 'copyId' => 10));
-        $testpaper = $this->getTestpaper()->create(array('lessonId' => 10, 'copyId' => 1, 'type' => 'exercise', 'courseSetId' => $courseSetId, 'metas' => array('range' => array('lessonId' => 10))));
-
-        ReflectionUtils::invokeMethod($copy, 'updateExerciseRange', array($courseSetId));
-        $testpaper = $this->getTestpaper()->get($testpaper['id']);
-        $this->assertEquals($task['id'], $testpaper['metas']['range']['lessonId']);
-    }
-
     public function testPreCopy()
     {
         $copy = new CourseSetCoursesCopy($this->biz, array(), false);

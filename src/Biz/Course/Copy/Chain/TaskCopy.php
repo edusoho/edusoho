@@ -5,7 +5,7 @@ namespace Biz\Course\Copy\Chain;
 use Biz\Task\Dao\TaskDao;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Copy\AbstractEntityCopy;
-use AppBundle\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 class TaskCopy extends AbstractEntityCopy
@@ -29,7 +29,7 @@ class TaskCopy extends AbstractEntityCopy
     protected function copyEntity($source, $config = array())
     {
         $user = $this->biz['user'];
-        $tasks = $this->getTaskDao()->findByCourseId($source['id']);
+        $tasks = $this->getTaskService()->findTasksByCourseId($source['id']);
 
         $chapterMap = $this->doCopyChapters($source, $config);
 
@@ -43,7 +43,7 @@ class TaskCopy extends AbstractEntityCopy
 
         $activityMap = $this->doCopyActivities($source, $config);
 
-        //task orderd by seq
+        //task order by seq
         usort($tasks, function ($t1, $t2) {
             return $t1['seq'] - $t2['seq'];
         });
@@ -86,10 +86,6 @@ class TaskCopy extends AbstractEntityCopy
 
         $this->getTaskService()->batchCreateTasks($newTasks);
 
-        if ($config['isCopy']) {
-            $this->updateQuestionsLessonId($newCourseSetId);
-            $this->updateExerciseRange($newCourseSetId);
-        }
         $this->updateChapter($newCourse['id'], $updateChapterIds);
 
         return $this->getTaskService()->findTasksByCourseId($newCourse['id']);
@@ -143,76 +139,11 @@ class TaskCopy extends AbstractEntityCopy
         return $new;
     }
 
-    protected function updateQuestionsLessonId($courseSetId)
-    {
-        $questions = $this->getQuestionService()->findQuestionsByCourseSetId($courseSetId);
-        $taskIds = ArrayToolkit::column($questions, 'lessonId');
-
-        $conditions = array(
-            'copyIds' => $taskIds,
-            'fromCourseSetId' => $courseSetId,
-        );
-        $parentTasks = $this->getTaskService()->searchTasks($conditions, array(), 0, PHP_INT_MAX);
-        $parentTasks = ArrayToolkit::index($parentTasks, 'copyId');
-
-        foreach ($questions as $question) {
-            if (empty($question['lessonId'])) {
-                continue;
-            }
-
-            $fields = array(
-                'lessonId' => empty($parentTasks[$question['lessonId']]) ? 0 : $parentTasks[$question['lessonId']]['id'],
-            );
-
-            $this->getQuestionDao()->update($question['id'], $fields);
-        }
-    }
-
-    protected function updateExerciseRange($courseSetId)
-    {
-        $conditions = array(
-            'courseSetId' => $courseSetId,
-            'type' => 'exercise',
-        );
-
-        $exercises = $this->getTestpaperService()->searchTestpapers($conditions, array(), 0, PHP_INT_MAX);
-
-        $taskIds = ArrayToolkit::column($exercises, 'lessonId');
-        $conditions = array(
-            'copyIds' => $taskIds,
-            'fromCourseSetId' => $courseSetId,
-        );
-        $copyTasks = $this->getTaskService()->searchTasks($conditions, array(), 0, PHP_INT_MAX);
-        $copyTasks = ArrayToolkit::index($copyTasks, 'copyId');
-
-        foreach ($exercises as $exercise) {
-            if (empty($exercise['lessonId'])) {
-                continue;
-            }
-
-            $metas = $exercise['metas'];
-            $range = $metas['range'];
-            $taskId = empty($range['lessonId']) ? 0 : $range['lessonId'];
-
-            $range['lessonId'] = empty($copyTasks[$taskId]['id']) ? 0 : $copyTasks[$taskId]['id'];
-            $metas['range'] = $range;
-
-            $fields = array(
-                'lessonId' => 0,
-                'metas' => $metas,
-            );
-
-            $this->getTestpaperService()->updateTestpaper($exercise['id'], $fields);
-        }
-    }
-
     /**
      * [当有直播任务时，修改该课时及所包含的所有任务状态为未发布]
      *
      * @param [type] $courseId   [description]
      * @param [type] $chapterIds 包含直播任务的课时ids
-     *
-     * @return [type] [description]
      */
     protected function updateChapter($courseId, $chapterIds)
     {
@@ -246,23 +177,11 @@ class TaskCopy extends AbstractEntityCopy
         return $this->biz->dao('Course:CourseChapterDao');
     }
 
-    protected function getQuestionDao()
-    {
-        return $this->biz->dao('Question:QuestionDao');
-    }
-
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->biz->service('Task:TaskService');
-    }
-
-    protected function getQuestionService()
-    {
-        return $this->biz->service('Question:QuestionService');
-    }
-
-    protected function getTestpaperService()
-    {
-        return $this->biz->service('Testpaper:TestpaperService');
     }
 }

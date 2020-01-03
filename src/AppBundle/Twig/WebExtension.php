@@ -19,8 +19,8 @@ use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
 use Biz\Player\Service\PlayerService;
-use Biz\System\Service\SettingService;
 use Biz\Testpaper\Service\TestpaperService;
+use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
@@ -115,6 +115,8 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('set_price', array($this, 'getSetPrice')),
             new \Twig_SimpleFunction('percent', array($this, 'calculatePercent')),
             new \Twig_SimpleFunction('category_choices', array($this, 'getCategoryChoices')),
+            new \Twig_SimpleFunction('build_category_choices', array($this, 'buildCategoryChoices')),
+            new \Twig_SimpleFunction('question_category_choices', array($this, 'getQuestionCategoryChoices')),
             new \Twig_SimpleFunction('upload_max_filesize', array($this, 'getUploadMaxFilesize')),
             new \Twig_SimpleFunction('js_paths', array($this, 'getJsPaths')),
             new \Twig_SimpleFunction('is_plugin_installed', array($this, 'isPluginInstalled')),
@@ -124,7 +126,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('context_value', array($this, 'getContextValue')),
             new \Twig_SimpleFunction('is_feature_enabled', array($this, 'isFeatureEnabled')),
             new \Twig_SimpleFunction('parameter', array($this, 'getParameter')),
-            new \Twig_SimpleFunction('upload_token', array($this, 'makeUpoadToken')),
+            new \Twig_SimpleFunction('upload_token', array($this, 'makeUploadToken')),
             new \Twig_SimpleFunction('countdown_time', array($this, 'getCountdownTime')),
             //todo covertIP 要删除
             new \Twig_SimpleFunction('convertIP', array($this, 'getConvertIP')),
@@ -538,7 +540,7 @@ class WebExtension extends \Twig_Extension
 
     public function getFingerprint()
     {
-        $user = $this->getUserService()->getCurrentUser();
+        $user = $this->biz['user'];
 
         if (!$user->isLogin()) {
             return '';
@@ -638,6 +640,9 @@ class WebExtension extends \Twig_Extension
         return $this->createService('Account:AccountProxyService');
     }
 
+    /**
+     * @return UserService
+     */
     private function getUserService()
     {
         return $this->createService('User:UserService');
@@ -793,7 +798,7 @@ class WebExtension extends \Twig_Extension
         return $this->container->getParameter($name);
     }
 
-    public function makeUpoadToken($group, $type = 'image', $duration = 18000)
+    public function makeUploadToken($group, $type = 'image', $duration = 18000)
     {
         $maker = new UploadToken();
 
@@ -1611,11 +1616,31 @@ class WebExtension extends \Twig_Extension
         return NumberToolkit::roundUp($price);
     }
 
-    public function getCategoryChoices($groupName, $indent = '　')
+    public function buildCategoryChoices($categories, $indent = '　')
     {
         $builder = new CategoryBuilder();
+        $builder->build($categories);
+        $builder->setIndent($indent);
 
-        return $builder->buildChoices($groupName, $indent);
+        return $builder->convertToChoices();
+    }
+
+    public function getCategoryChoices($groupCode, $indent = '　')
+    {
+        $builder = new CategoryBuilder();
+        $builder->buildForTaxonomy($groupCode);
+        $builder->setIndent($indent);
+
+        return $builder->convertToChoices();
+    }
+
+    public function getQuestionCategoryChoices($bankId, $indent = '　')
+    {
+        $builder = new CategoryBuilder();
+        $builder->buildForQuestion($bankId);
+        $builder->setIndent($indent);
+
+        return $builder->convertToChoices();
     }
 
     public function getNextExecutedTime()

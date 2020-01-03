@@ -1,93 +1,70 @@
-{% extends 'courseset-manage/courseset-layout.html.twig' %}
+{% extends 'question-bank/question/index.html.twig' %}
 
-{% block title %}
-  {% if question|default(null) %}{{'course.question_manage.edit'|trans}}{% else %}{{'course.question_manage.manage'|trans}}{% endif %} - {{ parent() }}
-{% endblock %}
+{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/select2.js', 'app/js/question-manage/form/index.js']) %}
 
-{% set side_nav = 'question' %}
-{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/question-manage/form/index.js']) %}
-
-{% block main %}
+{% block container %}
 
 {% set parentQuestion = parentQuestion|default(null) %}
 {% set questionTypesDict = getQuestionTypes() %}
 
-<div class="panel-col">
-  <div class="courseset-manage-body__title">{{'course.question_manage'|trans}}</div>
-
-    <ol class="breadcrumb">
-      <li><a href="{{ path('course_set_manage_question',{id:courseSet.id}) }}">{{'course.question_manage'|trans}}</a></li>
-      {% if parentQuestion %}
-        <li><a href="{{ path('course_set_manage_question',{id:courseSet.id, parentId: parentQuestion.id}) }}">{{ questionTypesDict[parentQuestion.type] }}</a></li>
-      {% endif %}
-      <li>{% if question|default(null) %}{{'course.question_manage.edit'|trans}}{% else %}{{'course.question_manage.manage'|trans}}{% endif %} </li>
-      <li class="active">{{ questionTypesDict[type] }}</li>
-    </ol>
-
+<div class="panel panel-default panel-col">
+  <div class="panel-body">
     <div id="question-creator-widget">
-      <form id="question-create-form" data-role="question-form" class="form-horizontal quiz-question" method="post" action="{% if question|default(null) %}{{ path('course_set_manage_question_update',{courseSetId:courseSet.id, questionId:question.id, goto:request.query.get('goto')}) }}{% else %}{{ path('course_set_manage_question_create',{id:courseSet.id, type:type, parentId:parentQuestion.id|default(0), goto:app.request.get('goto')}) }}{% endif %}">
+      <form id="question-create-form" data-role="question-form" class="form-horizontal quiz-question" method="post" action="{% if question|default(null) %}{{ path('question_bank_manage_question_update',{id:questionBank.id, questionId:question.id, goto:request.query.get('goto')}) }}{% else %}{{ path('question_bank_manage_question_create',{id:questionBank.id, type:type, parentId:parentQuestion.id|default(0), goto:app.request.get('goto')}) }}{% endif %}">
 
         {{ web_macro.flash_messages() }}
 
         {% if not parentQuestion %}
           <div class="form-group">
-            <div class="col-md-2 control-label"><label>{{'course.question_manage.manage.belong'|trans}}</label></div>
+            <div class="col-md-2 control-label"><label for="categoryId">{{'question_bank.question_manage.manage.category'|trans}}</label></div>
             <div class="col-md-8 controls">
-              <select class="form-control width-150" name="courseId" data-role="courseId" data-url="{{ path('course_set_manage_show_tasks',{courseSetId:courseSet.id})}}">
-                <option value="0" {% if not question.courseId|default(0) %}selected{% endif %}>{{'course.question_manage.manage.default_belong'|trans}}</option>
-                {% for course in courses if course %}
-                  <option value="{{ course.id }}" {% if question.courseId|default(0) == course.id %}selected{% endif %}>{{ get_course_title(course) }}</option>
-                {% endfor %}
+              <select class="form-control width-150" id="categoryId" name="categoryId" data-role="categoryId">
+                <option value="0">{{ 'admin.question_bank.manage.category'|trans }}</option>
+                <option value="0"{% if not question.categoryId|default(0) %} selected{% endif %}>{{ 'site.data.empty'|trans }}</option>
+                {% set question_category_choices = question_category_choices(questionBank.id) %}
+                {{ select_options(question_category_choices, question.categoryId|default(0)) }}
               </select>
-              <select class="form-control width-150" {% if not question.id|default(0) > 0 or not question.courseId|default(0) %}style="display:none;"{% endif %} name="lessonId" data-role="lessonId">
-                <option value="0" {% if not question.lessonId|default(0) %}selected{% endif %}>{{'course.question_manage.manage.choose'|trans}}</option>
-                {% for task in courseTasks|default([]) if task %}
-                  <option value="{{ task.id }}" {% if question.lessonId|default(0) == task.id %}selected{% endif %}>{{ task.title }}</option>
-                {% endfor %}
-              </select>
-              <div class="help-block">{{ 'course.question_manage.manage.belong_change_tips'|trans }}</div>
             </div>
           </div>
         {% endif %}
 
         <div class="form-group">
-          <div class="col-md-2 control-label"><label>{{'course.question_manage.manage.difficulty'|trans}}</label></div>
+          <div class="col-md-2 control-label"><label>{{'question_bank.question_manage.manage.difficulty'|trans}}</label></div>
           <div class="col-md-8 controls radios">
-            {{ radios('difficulty', {'simple':'course.question_manage.manage.easy_difficulty'|trans, 'normal':'course.question_manage.manage.normal_difficulty'|trans, 'difficulty':'course.question_manage.manage.hard_difficulty'|trans}, question.difficulty|default('normal')) }}
+            {{ radios('difficulty', {'simple':'question_bank.question_manage.manage.easy_difficulty'|trans, 'normal':'question_bank.question_manage.manage.normal_difficulty'|trans, 'difficulty':'question_bank.question_manage.manage.hard_difficulty'|trans}, question.difficulty|default('normal')) }}
           </div>
         </div>
 
         <div class="form-group">
-          <div class="col-md-2 control-label"><label for="question-stem-field" class="control-label-required">{{ question_stem_label|default('course.question_manage.manage.stem'|trans) }}</label></div>
+          <div class="col-md-2 control-label"><label for="question-stem-field" class="control-label-required">{{ question_stem_label|default('question_bank.question_manage.manage.stem'|trans) }}</label></div>
           <div class="col-md-8 controls">
-            <textarea class="form-control" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"  data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" name="stem" style="height:180px;">{{question.stem | default('')}}</textarea>
-            {% set question_stem_help = question_stem_help|default('') %}
-            {% if question_stem_help %}<div class="help-block">{{ question_stem_help|raw }}</div>{% endif %}
+            <textarea class="form-control" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" name="stem" style="height:180px;">{{question.stem | default('')}}</textarea>
+            {% if question_stem_help|default('') %}<div class="help-block">{{ question_stem_help|raw }}</div>{% endif %}
           </div>
         </div>
 
-        {{ render(controller('AppBundle:File/Attachment:formFields',{targetType: 'question.stem', useType: true, targetId: question.id|default(0)},{ useType:true,})) }}
-        
+        {{ render(controller('AppBundle:File/Attachment:formFields', {targetType: 'question.stem', useType: true, targetId: question.id|default(0)}, { useType:true,})) }}
+
         {% block question_extra_fields %}{% endblock %}
 
         <div class="form-group">
           <div class="col-md-8 col-md-offset-2 controls ">
-              <a href="javascript:;" data-toggle="collapse" data-role="advanced-collapse" data-target="#advanced-collapse" class="color-success collapsed">&raquo; {{'course.question_manage.manage.advanced_options'|trans}} ...</a>
+            <a href="javascript:;" data-toggle="collapse" data-role="advanced-collapse" data-target="#advanced-collapse" class="color-success collapsed">&raquo; {{'question_bank.question_manage.manage.advanced_options'|trans}} ...</a>
           </div>
         </div>
 
         <div id="advanced-collapse" class="advanced-collapse collapse">
           <div class="form-group">
-            <div class="col-md-2 control-label"><label for="question-analysis-field">{{'course.question_manage.manage.analysis'|trans}}</label></div>
+            <div class="col-md-2 control-label"><label for="question-analysis-field">{{'question_bank.question_manage.manage.analysis'|trans}}</label></div>
             <div class="col-md-8 controls">
-                <textarea class="form-control" id="question-analysis-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" name="analysis" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ question.analysis|default('') }}</textarea>
+              <textarea class="form-control" id="question-analysis-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" name="analysis" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ question.analysis|default('') }}</textarea>
             </div>
           </div>
-           {{ render(controller('AppBundle:File/Attachment:formFields',{targetType: 'question.analysis', targetId: question.id|default(0)},{ useType:true,})) }}
+          {{ render(controller('AppBundle:File/Attachment:formFields', {targetType: 'question.analysis', targetId: question.id|default(0)}, { useType:true,})) }}
           <div class="form-group">
-            <div class="col-md-2 control-label"><label for="question-score-field">{{'course.question_manage.manage.score'|trans}}</label></div>
+            <div class="col-md-2 control-label"><label for="question-score-field">{{'question_bank.question_manage.manage.score'|trans}}</label></div>
             <div class="col-md-8 controls">
-              <input class="form-control width-input" value="{{question.score|default(2)}}" type="text" id="question-score-field" name="score" />
+              <input class="form-control width-input" value="{{ question.score|default(2) }}" type="text" id="question-score-field" name="score"/>
             </div>
           </div>
         </div>
@@ -100,7 +77,7 @@
               {% endif %}
               <button type="button" data-role="submit" class="cd-btn cd-btn-primary submit-btn" data-submission="submit" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.save'|trans}}</button>
             {% endblock %}
-            <a href="{{ path('course_set_manage_question', {id:courseSet.id, parentId:parentQuestion.id|default(0)}) }}" class="btn btn-link">{{'form.btn.return'|trans}}</a>
+            <a href="{{ path('question_bank_manage_question_list', {id:questionBank.id, parentId:parentQuestion.id|default(0)}) }}" class="btn btn-link">{{'form.btn.return'|trans}}</a>
           </div>
         </div>
 
@@ -111,8 +88,7 @@
 
       </form>
     </div>
-
+  </div>
 </div>
-
 
 {% endblock %}
