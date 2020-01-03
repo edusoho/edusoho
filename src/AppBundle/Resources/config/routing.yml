@@ -587,8 +587,8 @@ my_live_courses_learning:
     defaults: { _controller: AppBundle:My/CourseSet:lives }
 
 my_testpaper_check_list:
-    path: /my/testpaper/check/{status}
-    defaults: { _controller: AppBundle:My/Testpaper:checkList, status: 'reviewing' }
+    path: /my/testpaper/check
+    defaults: { _controller: AppBundle:My/Testpaper:checkList }
 
 my_testpaper_list:
     path: /my/testpaper/list
@@ -2317,48 +2317,6 @@ course_set_manage_question:
   path: /course_set/{id}/manage/question
   defaults: { _controller: AppBundle:Question/Manage:index }
 
-course_set_manage_question_read:
-  path: /course_set/{id}/manage/question/read
-  defaults: { _controller: AppBundle:Question/Manage:read }
-
-course_set_manage_question_export:
-  path: /course_set/{id}/manage/question/export
-  defaults: { _controller: AppBundle:Question/Manage:export }
-
-course_set_manage_question_create:
-  path: /course_set/{id}/manage/question/{type}/create
-  defaults: { _controller: AppBundle:Question/Manage:create }
-
-course_set_manage_question_update:
-  path: /course_set/{courseSetId}/manage/question/{questionId}/update
-  defaults: { _controller: AppBundle:Question/Manage:update }
-
-course_set_manage_question_delete:
-  path: /course_set/{courseSetId}/manage/question/delete/{questionId}
-  defaults: { _controller: AppBundle:Question/Manage:delete }
-  methods: [POST]
-
-course_set_manage_question_deletes:
-  path: /course_set/{courseSetId}/manage/question/deletes
-  defaults: { _controller: AppBundle:Question/Manage:deletes }
-  methods: [POST]
-
-course_set_manage_question_preview:
-  path: /course_set/{courseSetId}/manage/question/{questionId}/preview
-  defaults: { _controller: AppBundle:Question/Manage:preview }
-
-course_set_manage_question_picker:
-  path: /course_set/{id}/manage/question/picker
-  defaults: { _controller: AppBundle:Question/Manage:questionPicker }
-
-course_set_manage_question_picked:
-  path:  /course_set/{courseSetId}/manage/question/picked
-  defaults: { _controller: AppBundle:Question/Manage:pickedQuestion }
-
-course_set_manage_question_check:
-  path: /course_set/{id}/manage/question/check
-  defaults: { _controller: AppBundle:Question/Manage:check }
-
 course_set_manage_show_tasks:
   path: /course_set/{courseSetId}/manage/show/tasks
   defaults: { _controller: AppBundle:Question/Manage:showTasks }
@@ -2374,54 +2332,10 @@ course_set_manage_testpaper:
   path: /course_set/{id}/manage/testpaper
   defaults: { _controller: AppBundle:Testpaper/Manage:index }
 
-course_set_manage_testpaper_create:
-  path: /course_set/{id}/manage/testpaper/create
-  defaults: { _controller: AppBundle:Testpaper/Manage:create }
-
-course_set_manage_testpaper_read:
-  path: /course_set/{id}/manage/testpaper/read
-  defaults: { _controller: AppBundle:Testpaper/Manage:read }
-
-course_set_manage_testpaper_export:
-  path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/export
-  defaults: { _controller: AppBundle:Testpaper/Manage:export }
-
-course_set_manage_testpaper_update:
-    path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/update
-    defaults: { _controller: AppBundle:Testpaper/Manage:update }
-
 course_set_manage_testpaper_info:
   path: /course_set/{id}/manage/testpaper/info
   defaults: { _controller: AppBundle:Testpaper/Manage:info }
   methods: [POST]
-
-course_set_manage_testpaper_publish:
-  path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/publish
-  defaults: { _controller: AppBundle:Testpaper/Manage:publish }
-  methods: [POST]
-
-course_set_manage_testpaper_close:
-  path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/close
-  defaults: { _controller: AppBundle:Testpaper/Manage:close }
-  methods: [POST]
-
-course_set_manage_testpaper_delete:
-  path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/delete
-  defaults: { _controller: AppBundle:Testpaper/Manage:delete }
-  methods: [POST]
-
-course_set_manage_testpaper_deletes:
-  path: /course_set/{courseSetId}/manage/testpaper/deletes
-  defaults: { _controller: AppBundle:Testpaper/Manage:deletes }
-  methods: [POST]
-
-course_set_manage_testpaper_preivew:
-  path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/preview
-  defaults: { _controller: AppBundle:Testpaper/Manage:preview }
-
-course_set_manage_testpaper_questions:
-  path: /course_set/{courseSetId}/manage/testpaper/{testpaperId}/questions
-  defaults: { _controller: AppBundle:Testpaper/Manage:questions }
 
 course_manage_testpaper_check:
   path: /course/{id}/manage/testpaper/{resultId}/check
@@ -2450,10 +2364,6 @@ course_manage_testpaper_result_list:
 course_manage_exam_result_anlysis:
   path: /course/{id}/manage/exam/activity/{activityId}/analysis
   defaults: { _controller: AppBundle:Course/TestpaperManage:resultAnalysis }
-
-course_manage_testpaper_questions:
-  path: /course/{courseId}/manage/testpaper/{testpaperId}/items
-  defaults: { _controller: AppBundle:Testpaper/Manage:questions }
 
 course_set_manage_testpaper_build_check:
   path: /course_set/{courseSetId}/manage/{type}/build/check
@@ -2486,10 +2396,6 @@ testpaper_do_suspend:
   methods: [POST]
 
 #homework
-course_manage_homework:
-  path: /course/{courseId}/manage/homework
-  defaults: { _controller: AppBundle:HomeworkManage:index }
-
 course_set_manage_homework_question_picker:
   path: /course_set/{id}/manage/homework/question/picker
   defaults: { _controller: AppBundle:HomeworkManage:questionPicker }
@@ -3288,3 +3194,168 @@ oauth2_es_token_verify:
 oauth2_es_user_info:
   path:  /oauth/user_info/{userId}
   defaults: { _controller: AppBundle:OAuth2/Server/Authorization:getUserInfo }
+
+question_bank_list:
+    path: /my/question_banks/{categoryId}
+    defaults: { _controller: AppBundle:QuestionBank/Manage:index, categoryId:'' }
+
+question_bank_category_tree_nav:
+    path: /question_banks/tree/{category}
+    defaults: { _controller: AppBundle:QuestionBank/Category:treeNav, category:'' }
+
+question_bank_create:
+    path: /question_bank/create
+    defaults: { _controller: AppBundle:QuestionBank/Manage:create }
+
+question_bank_manage:
+    path: /question_bank/{id}/manage
+    defaults: { _controller: AppBundle:QuestionBank/Manage:manage }
+
+question_bank_member_match:
+    path: /question_bank/member_match
+    defaults: { _controller: AppBundle:QuestionBank/Manage:memberMatch }
+
+question_bank_manage_question_category:
+    path: /question_bank/{id}/question/category
+    defaults: { _controller: AppBundle:QuestionBank/QuestionCategory:index }
+
+question_bank_manage_question_category_batch_create:
+    path: /question_bank/{id}/question/category/batch_create
+    defaults: { _controller: AppBundle:QuestionBank/QuestionCategory:batchCreate }
+
+question_bank_manage_question_category_edit:
+    path: /question_bank/question/category/{id}/edit
+    defaults: { _controller: AppBundle:QuestionBank/QuestionCategory:edit }
+
+question_bank_manage_question_category_delete:
+    path: /question_bank/question/category/{id}/delete
+    defaults: { _controller: AppBundle:QuestionBank/QuestionCategory:delete }
+    methods: [POST]
+
+question_bank_manage_question_category_question_count:
+    path: /question_bank/question/category/{id}/question_count
+    defaults: { _controller: AppBundle:QuestionBank/QuestionCategory:getQuestionCount }
+
+question_bank_manage_question_list:
+    path: /question_bank/{id}/questions
+    defaults: { _controller: AppBundle:QuestionBank/Question:index }
+
+question_bank_manage_question_show_ajax:
+    path: /question_bank/{id}/questions/show/ajax
+    defaults: { _controller: AppBundle:QuestionBank/Question:getQuestionsHtml }
+
+question_bank_manage_question_import:
+  path: /question_bank/{id}/question/import
+  defaults: { _controller: AppBundle:QuestionBank/Question:import }
+
+question_bank_manage_question_create:
+  path: /question_bank/{id}/question/{type}/create
+  defaults: { _controller: AppBundle:QuestionBank/Question:create }
+
+question_bank_manage_question_update:
+  path: /question_bank/{id}/question/{questionId}/update
+  defaults: { _controller: AppBundle:QuestionBank/Question:update }
+
+question_bank_manage_question_batch_delete:
+    path: /question_bank/{id}/questions/delete
+    defaults: { _controller: AppBundle:QuestionBank/Question:deleteQuestions }
+    methods: [POST]
+
+question_bank_manage_question_preview:
+    path: /question_bank/{id}/question/{questionId}/preview
+    defaults: { _controller: AppBundle:QuestionBank/Question:preview }
+
+question_bank_manage_question_delete:
+    path: /question_bank/{id}/question/{questionId}/delete
+    defaults: { _controller: AppBundle:QuestionBank/Question:delete }
+
+question_bank_manage_question_export:
+    path: /question_bank/{id}/questions/export
+    defaults: { _controller: AppBundle:QuestionBank/Question:export }
+
+question_bank_manage_question_category_show:
+    path: /question_bank/question/show/category
+    defaults: { _controller: AppBundle:QuestionBank/QuestionCategory:showCategories }
+    methods: [POST]
+
+question_bank_manage_question_set_category:
+    path: /question_bank/{id}/questions/set_category
+    defaults: { _controller: AppBundle:QuestionBank/Question:setCategory }
+    methods: [POST]
+
+question_bank_manage_question_check_num:
+    path: /question_bank/manage/question/check/num
+    defaults: { _controller: AppBundle:QuestionBank/Question:showQuestionTypesNum }
+    methods: [POST]
+
+question_bank_manage_testpaper_list:
+    path: /question_bank/{id}/testpapers
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:index }
+
+question_bank_manage_testpaper_import:
+    path: /question_bank/{id}/testpaper/import
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:import }
+
+question_bank_manage_testpaper_show_ajax:
+    path: /question_bank/{id}/testpaper/show/ajax
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:getTestpaperHtml }
+
+question_bank_manage_testpaper_batch_delete:
+    path: /question_bank/{id}/testpapers/delete
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:deleteTestpapers }
+    methods: [POST]
+
+question_bank_manage_testpaper_create:
+    path: /question_bank/{id}/testpaper/create
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:create }
+
+question_bank_manage_random_testpaper_create:
+    path: /question_bank/{id}/random_testpaper/create
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:createRandomTestpaper }
+
+question_bank_manage_random_testpaper_build_check:
+    path: /question_bank/{id}/random_testpaper/{type}/check
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:buildCheck }
+
+question_bank_manage_testpaper_edit:
+    path: /question_bank/{id}/testpaper/{testpaperId}/edit
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:edit }
+
+question_bank_manage_testpaper_publish:
+    path: /question_bank/{id}/testpaper/{testpaperId}/publish
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:publish }
+    methods: [POST]
+
+question_bank_manage_testpaper_close:
+    path: /question_bank/{id}/testpaper/{testpaperId}/close
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:close }
+    methods: [POST]
+
+question_bank_manage_testpaper_preview:
+    path: /question_bank/{id}/testpaper/{testpaperId}/preview
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:preview }
+
+question_bank_manage_testpaper_delete:
+    path: /question_bank/{id}/testpaper/{testpaperId}/delete
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:delete }
+
+question_bank_manage_testpaper_export:
+    path: /question_bank/{id}/testpaper/{testpaperId}/export
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:export }
+
+question_bank_manage_testpaper_json:
+    path: /question_bank/{id}/testpapers/json
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:json }
+
+question_bank_manage_question_pick:
+    path: /question_bank/{id}/question/pick
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:questionPick }
+
+question_bank_manage_question_search:
+    path: /question_bank/{id}/question/search
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:questionSearch }
+
+question_bank_manage_question_picked:
+    path: /question_bank/{id}/question/picked
+    defaults: { _controller: AppBundle:QuestionBank/Testpaper:pickedQuestion }
+

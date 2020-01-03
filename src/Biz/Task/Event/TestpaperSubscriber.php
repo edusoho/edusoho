@@ -28,7 +28,7 @@ class TestpaperSubscriber extends EventSubscriber implements EventSubscriberInte
         $activity = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
-        if ($testpaperResult['score'] >= $testpaperActivity['finishCondition']['finishScore']) {
+        if (!empty($testpaperActivity['finishCondition']) && $testpaperResult['score'] >= $testpaperActivity['finishCondition']['finishScore']) {
             $this->finishTaskResult($task['id'], $testpaperResult['userId']);
         }
     }

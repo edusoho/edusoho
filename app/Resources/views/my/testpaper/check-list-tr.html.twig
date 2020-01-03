@@ -1,5 +1,5 @@
 <tr>
-  <td width="55%" class="vertical-middle">
+  <td class="vertical-middle">
     {{ testpaper.name|plain_text(60) }}
     <div>
       <small class="color-gray">
@@ -9,21 +9,22 @@
       <small class="color-gray" title="{{'my.learning.homework.begin_time'|trans}}">{{'my.teaching.testpaper.detail'|trans({'%score%':testpaper.score,'%itemCount%':testpaper.itemCount})}}</small>
     </div>
   </td>
-  <td width="20%" class="vertical-middle">
+  <td class="vertical-middle">
     {{ web_macro.user_link(student) }} <br>
     <small class="color-gray">{{ paperResult.endTime|date("Y-n-d H:i") }} {{'my.teaching.testpaper.submit'|trans}}</small>
   </td>
-  <td width="30%" class="vertical-middle">
+  {% if status == 'finished'%}
+  <td class="vertical-middle">
+      <div class="text-warning">
+        {{'my.teaching.testpaper.answer_detail'|trans({'%totalCount%': paperResult.score, '%objectiveScore%': paperResult.objectiveScore, '%subjectiveScore%': paperResult.subjectiveScore, '%teacherName%': teacher.nickname|default('my.teaching.testpaper.default_teacher'|trans), '%checkTime%': paperResult.checkedTime|date('site.date_format_H_i'|trans)})|raw}}
+      </div>
+  </td>
+  {% endif %}
+  <td class="vertical-middle">
     {% if status == 'reviewing' and (not isTeacher is defined or isTeacher) %}
       <a class="link-primary" href="{{ path('course_manage_testpaper_check', {id:paperResult.courseId,resultId:paperResult.id,source:source|default('course'),targetId:targetId|default(0)}) }}" target="_blank">{{'my.teaching.testpaper.check'|trans}}</a>
-    {% endif %}
-
-    {% if status == 'finished' %}
-      <div>
-        <div class="text-warning">
-          {{'my.teaching.testpaper.answer_detail'|trans({'%totalCount%': paperResult.score, '%objectiveScore%': paperResult.objectiveScore, '%subjectiveScore%': paperResult.subjectiveScore, '%teacherName%': teacher.nickname|default('my.teaching.testpaper.default_teacher'|trans), '%checkTime%': paperResult.checkedTime|date('site.date_format_H_i'|trans)})|raw}}
-        </div>
-      </div>
+    {% else %}
+      <a class="link-primary" href="{{ path('testpaper_result_show', {id:paperResult.courseId,resultId:paperResult.id,source:source|default('course'),targetId:targetId|default(0)}) }}" target="_blank">{{'my.teaching.testpaper.watch_result'|trans}}</a>
     {% endif %}
   </td>
 </tr>

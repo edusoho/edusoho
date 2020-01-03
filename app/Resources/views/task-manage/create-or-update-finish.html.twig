@@ -19,13 +19,24 @@
               {{ defaultCondition['describe']|default(selectTips[defaultCondition['type']]|default(''))|trans }}
               <input type="hidden" id="finish-type" value="{{ defaultCondition['type'] }}" name="finishType">
             {% else %}
-              <select id="finish-type" name="finishType" class="form-control">
-                {% for condition in conditions %}
-                  <option data-value="{{ condition.value|default('') }}" value="{{ condition.type }}" {% if activity.finishType|default(defaultCondition.type) == condition.type|default() %} selected {% endif %}>
-                    {{ condition['describe']|default(selectTips[condition['type']]|default(''))|trans }}
-                  </option>
-                {% endfor %}
-              </select>
+              {% if activity.mediaType == 'testpaper' %}
+                <div class="cd-radio-group mts">
+                  {% for condition in conditions %}
+                    <label class="cd-radio {% if activity.finishType|default(defaultCondition.type) == condition.type|default() %}checked{% endif %}">
+                      <input type="radio" id="finish-type-select" name="finishType" value="{{ condition.type }}" data-toggle="cd-radio" {% if activity.finishType|default(defaultCondition.type) == condition.type|default() %}checked="checked"{% endif %}>
+                      {{ condition['describe']|default(selectTips[condition['type']]|default(''))|trans }}
+                    </label>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <select id="finish-type" name="finishType" class="form-control">
+                  {% for condition in conditions %}
+                    <option data-value="{{ condition.value|default('') }}" value="{{ condition.type }}" {% if activity.finishType|default(defaultCondition.type) == condition.type|default() %} selected {% endif %}>
+                      {{ condition['describe']|default(selectTips[condition['type']]|default(''))|trans }}
+                    </option>
+                  {% endfor %}
+                </select>
+              {% endif %}
             {% endif %}
             </div>
           </div>

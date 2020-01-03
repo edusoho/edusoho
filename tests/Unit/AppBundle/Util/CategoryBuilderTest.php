@@ -60,10 +60,12 @@ class CategoryBuilderTest extends BaseTestCase
             )
         );
         $builder = new CategoryBuilder();
-        $result = $builder->buildChoices('xxx');
+        $builder->buildForTaxonomy('xxx');
+        $result = $builder->convertToChoices();
         $this->assertEmpty($result);
 
-        $result = $builder->buildChoices('course');
+        $builder->buildForTaxonomy('course');
+        $result = $builder->convertToChoices();
         $this->assertEquals('默认分类', $result[1]);
         $this->assertEquals('　子分类', $result[3]);
     }
