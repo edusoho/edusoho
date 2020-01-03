@@ -1,3 +1,20 @@
 $primary-color: #408ffb;
 $bg-black:      #212121;
+$bg-white:   #FFFFFF;
 $border-grey:   #EEEEEE;
+$font-black:#333333;
+
+.webviews {
+  $active-bg:  #03C777;
+  $active-font:#03C777;
+  span{
+    background:  $active-bg;
+  }
+}
+.default{
+  $active-bg:  #408ffb;
+  $active-font:#408ffb;
+  span{
+    background:  $active-bg;
+  }
+}
