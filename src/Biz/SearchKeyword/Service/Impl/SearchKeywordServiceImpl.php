@@ -11,7 +11,7 @@ class SearchKeywordServiceImpl extends BaseService implements SearchKeywordServi
 {
     public function createSearchKeyword($keyword)
     {
-        if (!ArrayToolkit::requireds($keyword, array('name'))) {
+        if (!ArrayToolkit::requireds($keyword, array('name', 'type'))) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 

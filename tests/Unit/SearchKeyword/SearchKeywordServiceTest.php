@@ -8,15 +8,16 @@ class SearchKeywordServiceTest extends BaseTestCase
 {
     public function testCreateSearchKeyword()
     {
-        $keyword = array('name' => 'test');
+        $keyword = $this->getSearchKeyword();
         $searchKeyword = $this->getSearchKeywordService()->createSearchKeyword($keyword);
 
         $this->assertEquals('test', $searchKeyword['name']);
+        $this->assertEquals('question', $searchKeyword['type']);
     }
 
     public function testUpdateSearchKeyword()
     {
-        $keyword = array('name' => 'test');
+        $keyword = $this->getSearchKeyword();
         $searchKeyword = $this->getSearchKeywordService()->createSearchKeyword($keyword);
 
         $newKeyword = $this->getSearchKeywordService()->updateSearchKeyword($searchKeyword['id'], array('name' => 'newTest'));
@@ -26,7 +27,7 @@ class SearchKeywordServiceTest extends BaseTestCase
 
     public function testDeleteSearchKeyword()
     {
-        $keyword = array('name' => 'test');
+        $keyword = $this->getSearchKeyword();
         $searchKeyword = $this->getSearchKeywordService()->createSearchKeyword($keyword);
 
         $keyword = $this->getSearchKeywordService()->deleteSearchKeyword($searchKeyword['id']);
@@ -36,7 +37,7 @@ class SearchKeywordServiceTest extends BaseTestCase
 
     public function testSearchSearchKeywords()
     {
-        $keyword = array('name' => 'test');
+        $keyword = $this->getSearchKeyword();
         $this->getSearchKeywordService()->createSearchKeyword($keyword);
 
         $keywords = $this->getSearchKeywordService()->SearchSearchKeywords(array(), array(), 0, PHP_INT_MAX);
@@ -46,7 +47,7 @@ class SearchKeywordServiceTest extends BaseTestCase
 
     public function testCountSearchKeyword()
     {
-        $keyword = array('name' => 'test');
+        $keyword = $this->getSearchKeyword();
         $this->getSearchKeywordService()->createSearchKeyword($keyword);
 
         $num = $this->getSearchKeywordService()->countSearchKeywords(array());
@@ -56,7 +57,7 @@ class SearchKeywordServiceTest extends BaseTestCase
 
     public function testGetSearchKeyword()
     {
-        $keyword = array('name' => 'test');
+        $keyword = $this->getSearchKeyword();
         $keyword = $this->getSearchKeywordService()->createSearchKeyword($keyword);
 
         $keyword = $this->getSearchKeywordService()->getSearchKeyword($keyword['id']);
@@ -66,12 +67,17 @@ class SearchKeywordServiceTest extends BaseTestCase
 
     public function testAddSearchKeywordTimes()
     {
-        $keyword = array('name' => 'test');
+        $keyword = $this->getSearchKeyword();
         $keyword = $this->getSearchKeywordService()->createSearchKeyword($keyword);
         $this->getSearchKeywordService()->addSearchKeywordTimes($keyword['id']);
 
         $keyword = $this->getSearchKeywordService()->getSearchKeyword($keyword['id']);
         $this->assertEquals(2, $keyword['times']);
+    }
+
+    protected function getSearchKeyword($fields = array())
+    {
+        return array_merge(array('name' => 'test', 'type' => 'question'), $fields);
     }
 
     /**
