@@ -24,13 +24,13 @@ class ContentServiceImpl extends BaseService implements ContentService
         return $this->getContentDao()->getByAlias($alias);
     }
 
-    public function searchContents($conditions, $sort, $start, $limit)
+    public function searchContents($conditions, $orderBy, $start, $limit)
     {
-        switch ($sort) {
-            default:
-                $orderBy = array('createdTime' => 'DESC');
-                break;
+        if (!is_array($orderBy)) {
+            //老版本使用字符串表示顺序且只有一个latest,兼容orderBy为字符串时的写法
+            $orderBy = array('createdTime' => 'DESC');
         }
+
         $conditions = $this->prepareSearchConditions($conditions);
 
         return $this->getContentDao()->search($conditions, $orderBy, $start, $limit);

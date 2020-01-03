@@ -38,7 +38,8 @@ class ContentController extends BaseController
         );
 
         $contents = $this->getContentService()->searchContents(
-            $conditions, 'latest',
+            $conditions,
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

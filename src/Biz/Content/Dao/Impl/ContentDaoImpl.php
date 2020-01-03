@@ -19,6 +19,7 @@ class ContentDaoImpl extends GeneralDaoImpl implements ContentDao
                 'categoryId IN (:categoryIds)',
             ),
             'orderbys' => array(
+                'id',
                 'createdTime',
             ),
         );
