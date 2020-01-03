@@ -5,26 +5,50 @@ namespace AppBundle\Controller\My;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\MemberService;
+use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 
 class TestpaperController extends BaseController
 {
-    public function checkListAction(Request $request, $status)
+    public function checkListAction(Request $request)
     {
         $user = $this->getUser();
         if (!$user->isTeacher()) {
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
+        $status = $request->query->get('status', 'reviewing');
+        $keywordType = $request->query->get('keywordType', 'nickname');
+        $keyword = $request->query->get('keyword', '');
+
         $teacherCourses = $this->getCourseMemberService()->findTeacherMembersByUserId($user['id']);
         $courseIds = ArrayToolkit::column($teacherCourses, 'courseId');
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
+        if (!in_array($status, array('finished', 'reviewing'))) {
+            $status = 'reviewing';
+        }
 
         $conditions = array(
-            'status' => $status,
             'type' => 'testpaper',
             'courseIds' => $courseIds,
+            'status' => $status,
         );
+
+        if (!empty($courseIds) && 'courseTitle' == $keywordType) {
+            $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($keyword);
+            $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+            $courses = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
+            $courseIds = ArrayToolkit::column($courses, 'id');
+            $conditions['courseIds'] = array_intersect($conditions['courseIds'], $courseIds);
+        }
+
+        if ('nickname' == $keywordType && $keyword) {
+            $searchUser = $this->getUserService()->getUserByNickname($keyword);
+            $conditions['userId'] = $searchUser ? $searchUser['id'] : '-1';
+        }
 
         if ($status == 'finished') {
             $conditions['checkTeacherId'] = $user['id'];
@@ -37,7 +61,6 @@ class TestpaperController extends BaseController
         );
 
         $orderBy = $status == 'reviewing' ? array('endTime' => 'ASC') : array('checkedTime' => 'DESC');
-
         $paperResults = $this->getTestpaperService()->searchTestpaperResults(
             $conditions,
             $orderBy,
@@ -48,6 +71,7 @@ class TestpaperController extends BaseController
         $userIds = ArrayToolkit::column($paperResults, 'userId');
         $userIds = array_merge($userIds, ArrayToolkit::column($paperResults, 'checkTeacherId'));
         $users = $this->getUserService()->findUsersByIds($userIds);
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $courseSetIds = ArrayToolkit::column($paperResults, 'courseSetId');
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
@@ -63,6 +87,8 @@ class TestpaperController extends BaseController
             'users' => $users,
             'status' => $status,
             'testpapers' => $testpapers,
+            'keywordType' => $keywordType,
+            'keyword' => $keyword,
         ));
     }
 
@@ -114,21 +140,33 @@ class TestpaperController extends BaseController
         ));
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->getBiz()->service('Course:CourseSetService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');

@@ -1,10 +1,10 @@
 {% extends 'layout.html.twig' %}
 
-{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'app/js/subject/index.js']) %}
+{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/select2.js', 'app/js/subject/index.js']) %}
 
 {% block content %}
   <div class="hidden js-cached-data">{{ questions|json_encode }}</div>
-  <input type="hidden" name="courseSetId" value="{{ courseSetId }}" id="courseSetId">
+  <input type="hidden" name="questionBankId" value="{{ questionBankId }}" id="questionBankId">
   <div class="row">
     <div class="col-sm-3">
       <div class="subject-data subject-rect js-subject-data">
@@ -24,7 +24,6 @@
     </div>
   </div>
 
-
   {% block question_difficulty_modal %}
     {% include 'testpaper/subject/question-difficulty-modal.html.twig' %}
   {% endblock %}
@@ -34,10 +33,11 @@
   {% endblock %}
 
   {% block batch_set_belong_modal %}
-    {% include 'testpaper/subject/batch-set-belong-modal.html.twig' %}
+    {% include 'testpaper/subject/batch-set-category-modal.html.twig' %}
   {% endblock %}
 
   {% include 'testpaper/subject/create-subject-modal.html.twig' %}
+
   {% block analysis_edit_modal %}
     {% include 'testpaper/subject/analysis-edit-modal.html.twig' %}
   {% endblock %}

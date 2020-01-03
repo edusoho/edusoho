@@ -12,13 +12,12 @@ class ExerciseManageController extends BaseController
 
         $fields = $request->request->all();
 
-        $fields['courseSetId'] = $course['courseSetId'];
         $fields['excludeUnvalidatedMaterial'] = 1;
 
         $result = $this->getTestpaperService()->canBuildTestpaper('exercise', $fields);
 
         $status = false;
-        if ($result['status'] == 'yes') {
+        if ('yes' == $result['status']) {
             $status = true;
         }
 

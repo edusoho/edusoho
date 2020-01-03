@@ -9,15 +9,11 @@ export default class sbList {
     this.$itemList = $('.js-item-list');
     this.$subjectData = $('.js-subject-data');
     this.$batchBtn = $('.js-batch-btn');
-    this.$batchWrap = $('.js-subject-wrap');
-    this.$sbCheckbox = $('.js-show-checkbox');
-    this.$finishBtn = $('.js-finish-btn');
     this.$allBtn = $('.js-batch-select');
-    this.$anchor = $('.js-subject-anchor');
     this.flag = true;
     this.$diffiultyModal = $('.js-difficulty-modal');
     this.$scoreModal = $('.js-score-modal');
-    this.$belongModal = $('.js-belong-modal');
+    this.$categoryModal = $('.js-category-modal');
     this.scoreValidator = null;
     this.selectQuestion = [];
     this.questionOperate = null;
@@ -25,7 +21,7 @@ export default class sbList {
     this.redirect = false;
     this.questionOperate = null;
     this.timer = false;
-    this.courseSetId = $('#courseSetId').val();
+    this.questionBankId = $('#questionBankId').val();
     this.init();
   }
 
@@ -42,6 +38,7 @@ export default class sbList {
     this.statErrorQuestions();
     this.ieImg();
     this.initSelect();
+    this.initTooltip();
   }
 
   initQuestionOperate() {
@@ -73,47 +70,16 @@ export default class sbList {
   }
 
   initSelect() {
-    $('[data-toggle="tooltip"]').tooltip();
-    cd.select({
-      el: '#courseBelong',
-      type: 'single'
-    }).on('change', (value, text) => {
-      let url = $('#courseBelong').data('url');
-      let select2 = $('#lessonBelong');
-      $('.js-lesson-options').html('');
-      $('#lessonBelong').find('input[name="lessonId"]').val(0);
-      $('#lessonBelong').find('.select-value').text(Translator.trans('site.choose_hint'));
-      if (value == 0) {
-        select2.hide();
-        return;
-      }
-
-      $.post(url,{courseId:value},function(result){
-        if (result != '') {
-          let option = '<li class="checked" data-value="0">'+Translator.trans('site.choose_hint')+'</li>';
-          let $class = '';
-          $.each(result,function(index,task){
-            if(index == 0){
-              $class = 'tip-count-1';
-            }else{
-              $class = '';
-            }
-            option += `<li data-value="${task.id}" class="${$class}" title="${task.title}" data-toggle="tooltip" data-placement="top">${task.title}</li>`;
-          });
-          $('.js-lesson-options').append(option);
-          $('[data-toggle="tooltip"]').tooltip();
-          select2.show();
-        } else {
-          select2.hide();
-        }
-      });
-
+    $('[name=categoryId]').select2({
+      treeview: true,
+      dropdownAutoWidth: true,
+      treeviewInitState: 'collapsed',
+      placeholderOption: 'first',
     });
+  }
 
-    cd.select({
-      el: '#lessonBelong',
-      type: 'single'
-    });
+  initTooltip() {
+    $('[data-toggle=tooltip]').tooltip();
   }
 
   confirmFresh() {
@@ -132,10 +98,10 @@ export default class sbList {
     this.$element.on('click', '.js-finish-btn', event => this.finishBtnClick(event));
     this.$element.on('click', '*[data-anchor]', event => this.quickToQuestion(event, this.flag));
     this.$element.on('click', '.js-difficult-setting', event => this.showModal(event, this.$diffiultyModal));
-    this.$element.on('click', '.js-belong-setting', event => this.showModal(event, this.$belongModal));
+    this.$element.on('click', '.js-category-setting', event => this.showModal(event, this.$categoryModal));
     this.$element.on('click', '.js-score-setting', event => this.showScoreModal(event));
     this.$scoreModal.on('click', '.js-batch-score-confirm', event => this.batchSetScore(event));
-    this.$belongModal.on('click', '.js-batch-set-belong', event => this.batchSetBelong(event));
+    this.$categoryModal.on('click', '.js-batch-set-category', event => this.batchSetCategory(event));
     this.$itemList.on('click', '.js-item-edit', event => this.itemEdit(event));
     this.$itemList.on('click', '.js-item-delete', event => this.deleteSubjectItem(event));
     this.$itemList.on('change', '.js-testpaper-title', event => this.editTestpaperTitle(event));
@@ -232,10 +198,10 @@ export default class sbList {
   countNumber() {
     let itemLength = this.$element.find('.js-show-checkbox').length;
     const self = this;
-    setTimeout(function(){
+    setTimeout(function() {
       let $checkBox = $('.js-subject-list-body').find('.checked');
       let itemCheckedLength = $checkBox.length;
-      if (itemLength == itemCheckedLength) {
+      if (itemLength === itemCheckedLength) {
         self.$allBtn.addClass('checked');
       } else {
         self.$allBtn.removeClass('checked');
@@ -339,7 +305,7 @@ export default class sbList {
         name = $(this).parent().next('.js-type-name').text(),
         token = $(this).parents('.js-subject-anchor').data('anchor');
 
-      if (typeof stats[type] == 'undefined') {
+      if (typeof stats[type] === 'undefined') {
         stats[type] = {name:name, count:1};
       } else {
         stats[type]['count']++;
@@ -404,19 +370,19 @@ export default class sbList {
     }
   }
 
-  batchSetBelong() {
-    let courseId = this.$belongModal.find('input[name="courseId"]').val();
-    let lessonId = this.$belongModal.find('input[name="lessonId"]').val();
-    this.questionOperate.modifyBelong(this.selectQuestion, courseId, lessonId);
+  batchSetCategory() {
+    let categoryId = this.$categoryModal.find('#categoryId').val();
+    let categoryText = this.$categoryModal.find('#categoryId').find('option:selected').text();
+    this.questionOperate.modifyCategory(this.selectQuestion, categoryId, $.trim(categoryText));
     this.selectQuestion = [];
 
-    cd.message({ type: 'success', message: Translator.trans('subject.belong_update_success') });
-    this.$belongModal.modal('hide');
+    cd.message({ type: 'success', message: Translator.trans('subject.category_update_success') });
+    this.$categoryModal.modal('hide');
   }
 
   setDifficulty() {
     let self = this;
-    $('.js-difficulty-btn').click(function(){
+    $('.js-difficulty-btn').click(function() {
       let difficulty = $('input[name=\'difficultyRadios\']:checked').val();
       let text = $('input[name=\'difficultyRadios\']:checked').next().text();
       self.questionOperate.modifyDifficulty(self.selectQuestion, difficulty, text);
@@ -439,7 +405,7 @@ export default class sbList {
     let $target = $(event.currentTarget);
     let $item = $target.parents('.subject-item');
     let url = $target.parents('.subject-item__operation').data('url');
-    if (typeof $item.attr('data-material-token') != 'undefined') {
+    if (typeof $item.attr('data-material-token') !== 'undefined') {
       seq = $item.data('key');
       token = $item.attr('data-material-token');
       question = this.questionOperate.getSubQuestion(token, seq);
@@ -458,11 +424,12 @@ export default class sbList {
       'isSub' : isSub,
       'method' : 'edit',
       'isTestpaper': this.isTestpaper() ? 1 : 0,
-      'courseSetId': this.courseSetId,
+      'questionBankId': this.questionBankId,
     };
-    $.post(url, data, html=> {
+    $.post(url, data, html => {
       $item.replaceWith(html);
       showEditor.getEditor(question['type'], $('.js-edit-form'), self.questionOperate);
+      self.initSelect();
     });
   }
 
@@ -508,7 +475,7 @@ export default class sbList {
       'isSub' : isSub,
       'method' : method,
       'isTestpaper': this.isTestpaper() ? 1 : 0,
-      'courseSetId': this.courseSetId,
+      'questionBankId': this.questionBankId,
     };
     data.fromType = fromType;
     data.toType = toType;
@@ -549,7 +516,7 @@ export default class sbList {
       'token' : token,
       'method' : 'add',
       'isTestpaper' : isTestpaper,
-      'courseSetId': this.courseSetId,
+      'questionBankId': this.questionBankId,
     };
     $.post(url, data).then((res) => {
       $('#cd-modal').modal('hide');
@@ -579,12 +546,12 @@ export default class sbList {
       'method' : 'add',
       'isSub' : 1,
       'isTestpaper' : isTestpaper,
-      'courseSetId': this.courseSetId,
+      'questionBankId': this.questionBankId,
     };
     $.post(url, data).then((res) => {
       $('#cd-modal').modal('hide');
       $('.js-create-btn').attr('disabled', false);
-      var nextItem = $(`#${token}`).next('.subject-item');
+      let nextItem = $(`#${token}`).next('.subject-item');
       if (nextItem.hasClass('subject-sub-item')) {
         $(`[data-material-token="${token}"]`).last().after(res);
       } else {
@@ -657,7 +624,7 @@ export default class sbList {
       this.orderQuestionList(order, $listItem, $item);
       this.questionOperate.deleteQuestion(token);
       const self = this;
-      if (question.type == 'material') {
+      if (question.type === 'material') {
         $item.nextUntil('.js-subject-main-item').each(function() {
           $(this).remove();
           self.changeBottomFixed();
@@ -701,7 +668,7 @@ export default class sbList {
   editTestpaperTitle(event) {
     let val = $(event.target).val();
 
-    if ($.trim(val) == '') {
+    if ($.trim(val) === '') {
       cd.message({
         type: 'danger',
         message: Translator.trans('subject.testpaper_title_empty_hint'),
@@ -781,10 +748,7 @@ export default class sbList {
       return;
     }
 
-    let title = '';
-    if (this.isTestpaper()) {
-      title = this.testpaperTitle;
-    }
+    let title = this.isTestpaper() ? this.testpaperTitle : '';
     const $target = $(event.currentTarget);
     $target.button('loading');
     $.ajax({
@@ -810,10 +774,10 @@ export default class sbList {
   isMaterialHasSub() {
     let self = this;
     let tokenList = self.questionOperate.getTokenList();
-    for (var i = 0;i < tokenList.length;i++) {
+    for (let i = 0;i < tokenList.length;i++) {
       let token = tokenList[i];
       let question = self.questionOperate.getQuestion(token);
-      if (question['type'] == 'material' && question['subQuestions'].length == 0) {
+      if (question['type'] === 'material' && question['subQuestions'].length === 0) {
         let seq = self.questionOperate.getQuestionOrder(token);
         cd.message({
           type : 'danger',

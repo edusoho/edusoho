@@ -64,10 +64,10 @@ class TestpaperTest extends BaseTypeTestCase
             ),
         ));
         $fields1 = $this->mockField(1);
-        $activity1 = $type->create($fields1);
+        $type->create($fields1);
 
-        $copy = $type->copy(array('mediaType' => 'testpaper', 'mediaId' => 1), array('testId' => 2));
-        $this->assertEquals(2, $copy['mediaId']);
+        $copy = $type->copy(array('mediaType' => 'testpaper', 'mediaId' => 1), array());
+        $this->assertEquals(1, $copy['mediaId']);
     }
 
     public function testSync()

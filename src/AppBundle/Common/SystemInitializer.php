@@ -55,6 +55,7 @@ class SystemInitializer
         $this->_initSiteSetting();
         $this->_initStorageSetting();
         $this->_initCouponSetting();
+        $this->_initQuestionBankCategory();
         $this->_initSystemUsers();
         $this->_initCustom();
     }
@@ -689,6 +690,13 @@ EOD;
         $this->output->writeln(' ...<info>成功</info>');
     }
 
+    protected function _initQuestionBankCategory()
+    {
+        $this->output->write('  初始化题库默认分类');
+        $this->getQuestionBankCategoryService()->createCategory(array('name' => '默认分类', 'parentId' => 0));
+        $this->output->writeln(' ...<info>成功</info>');
+    }
+
     public function initLockFile()
     {
         $this->output->write('  初始化install.lock');
@@ -800,5 +808,13 @@ EOD;
     protected function getDictionaryService()
     {
         return ServiceKernel::instance()->getBiz()->service('Dictionary:DictionaryService');
+    }
+
+    /**
+     * @return \Biz\QuestionBank\Service\CategoryService
+     */
+    protected function getQuestionBankCategoryService()
+    {
+        return ServiceKernel::instance()->getBiz()->service('QuestionBank:CategoryService');
     }
 }

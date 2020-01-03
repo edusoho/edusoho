@@ -2,6 +2,7 @@
 
 namespace Biz\UpdateDatabaseStructure\Job;
 
+use Biz\System\Service\LogService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
 class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
@@ -102,6 +103,13 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
          *  Column courseTaskId
          */
         $this->createIndex('question', 'courseSetId', 'courseSetId');
+
+        /*
+         *  Table  question
+         *  Index  bankId_categoryId
+         *  Column bankId, categoryId
+         */
+        $this->createIndex('question', 'bankId_categoryId', 'bankId, categoryId');
     }
 
     protected function changeTableFiledType()
@@ -131,22 +139,34 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
 
     protected function createIndex($table, $index, $column)
     {
-        if (!$this->isIndexExist($table, $index)) {
-            $this->getConnection()->exec("ALTER TABLE {$table} ADD INDEX {$index} ({$column});");
+        try {
+            if (!$this->isIndexExist($table, $index)) {
+                $this->getConnection()->exec("ALTER TABLE {$table} ADD INDEX {$index} ({$column});");
+            }
+        } catch (\Exception $e) {
+            $this->getLogService()->error('job', 'create_index', '索引创建失败:'.$e->getMessage());
         }
     }
 
     protected function createUniqueIndex($table, $index, $column)
     {
-        if (!$this->isIndexExist($table, $index)) {
-            $this->getConnection()->exec("ALTER TABLE {$table} ADD UNIQUE INDEX {$index} ({$column});");
+        try {
+            if (!$this->isIndexExist($table, $index)) {
+                $this->getConnection()->exec("ALTER TABLE {$table} ADD UNIQUE INDEX {$index} ({$column});");
+            }
+        } catch (\Exception $e) {
+            $this->getLogService()->error('job', 'create_unique_index', '索引创建失败:'.$e->getMessage());
         }
     }
 
     protected function changeFiledType($table, $fieldName, $fieldType, $length = '')
     {
-        if ($this->shouldFiledTypeChanged($table, $fieldName, $fieldType)) {
-            $this->getConnection()->exec("ALTER TABLE {$table} MODIFY COLUMN {$fieldName} {$fieldType}{$length};");
+        try {
+            if ($this->shouldFiledTypeChanged($table, $fieldName, $fieldType)) {
+                $this->getConnection()->exec("ALTER TABLE {$table} MODIFY COLUMN {$fieldName} {$fieldType}{$length};");
+            }
+        } catch (\Exception $e) {
+            $this->getLogService()->error('job', 'change_field_type', '类型修改失败:'.$e->getMessage());
         }
     }
 
@@ -169,5 +189,13 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
     protected function getBiz()
     {
         return $this->biz;
+    }
+
+    /**
+     * @return LogService
+     */
+    private function getLogService()
+    {
+        return $this->biz->service('System:LogService');
     }
 }

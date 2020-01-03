@@ -91,7 +91,7 @@ class ExerciseTest extends BaseTypeTestCase
         $type = $this->getActivityConfig(self::TYPE);
 
         $fields = $this->mockField();
-        $metas = array('metas' => array('range' => array('courseId' => 1, 'lessonId' => 10)));
+        $metas = array('metas' => array('range' => array('bankId' => 1, 'categoryId' => 10)));
 
         $exercise = $type->create(array_merge($fields, $metas));
         $exercise2 = $type->create(array_merge($fields, array('copyId' => $exercise['id'], 'metas' => array(), 'fromCourseId' => 3)));
@@ -102,11 +102,11 @@ class ExerciseTest extends BaseTypeTestCase
                 'returnValue' => array(array('id' => 9)),
             ),
         ));
-        $syncedActivity = $type->sync(array('mediaId' => $exercise['id']), array('mediaId' => $exercise2['id']));
+        $type->sync(array('mediaId' => $exercise['id']), array('mediaId' => $exercise2['id']));
 
         $activity = $type->get($exercise2['id']);
 
-        $this->assertArrayEquals(array('range' => array('courseId' => 3, 'lessonId' => 9)), $activity['metas']);
+        $this->assertArrayEquals(array('range' => array('bankId' => 1, 'categoryId' => 10)), $activity['metas']);
     }
 
     /**

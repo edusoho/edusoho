@@ -1,0 +1,26 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'my.teaching.question_bank.question_category.update'|trans}}{% endblock %}
+
+{% do script(['libs/jquery-validation.js', 'app/js/question-category/update/index.js']) %}
+
+{% block body %}
+  <div id="post-widget">
+    <form class="form-horizontal" id="category-form" action="{{ path('question_bank_manage_question_category_edit',{id: category.id}) }}" method="post">
+      <div class="form-group">
+        <label class="col-md-2 control-label" for="category-name">{{'my.teaching.question_bank.question_category.name_label'|trans}}</label>
+        <div class="col-md-8 controls">
+          <input id="category-name" name="name" class="form-control" rows="10" value="{{ category.name }}" autocomplete="off">
+        </div>
+      </div>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">{{'form.btn.cancel'|trans}}</button>
+  <button id="category-create-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#category-form" tabindex="4">{{'form.btn.save'|trans}}</button>
+{% endblock %}
+
+

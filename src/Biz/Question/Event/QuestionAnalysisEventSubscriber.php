@@ -3,6 +3,9 @@
 namespace Biz\Question\Event;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Question\Service\QuestionAnalysisService;
+use Biz\Question\Service\QuestionService;
+use Biz\Testpaper\Service\TestpaperService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -52,7 +55,6 @@ class QuestionAnalysisEventSubscriber extends EventSubscriber implements EventSu
 
         $analysisItems = array();
 
-        $questionIds = ArrayToolkit::column($questions, 'id');
         $analysis = $this->findExistAnalysis($paperResult['testId'], $paperResult['type'], $paperResult['lessonId']);
 
         foreach ($questions as $question) {
@@ -110,8 +112,8 @@ class QuestionAnalysisEventSubscriber extends EventSubscriber implements EventSu
         $userAnswers = $this->getTestpaperService()->findItemResultsByResultId($paperResult['id']);
 
         foreach ($userAnswers as $userAnswer) {
-            $question = $questions[$userAnswer['questionId']];
-            if (!$userAnswer['answer'] || ('testpaper' != $paperResult['type'] && 'essay' == $question['type'])) {
+            $question = empty($questions[$userAnswer['questionId']]) ? array() : $questions[$userAnswer['questionId']];
+            if (!$userAnswer['answer'] || empty($question) || ('testpaper' != $paperResult['type'] && 'essay' == $question['type'])) {
                 continue;
             }
 
@@ -161,6 +163,9 @@ class QuestionAnalysisEventSubscriber extends EventSubscriber implements EventSu
         }
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->getBiz()->service('Testpaper:TestpaperService');
@@ -174,6 +179,9 @@ class QuestionAnalysisEventSubscriber extends EventSubscriber implements EventSu
         return $this->getBiz()->service('Question:QuestionService');
     }
 
+    /**
+     * @return QuestionAnalysisService
+     */
     protected function getQuestionAnalysisService()
     {
         return $this->getBiz()->service('Question:QuestionAnalysisService');

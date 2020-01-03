@@ -3,9 +3,9 @@
 namespace Biz\Testpaper\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Activity\Type\Testpaper;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Testpaper\Dao\TestpaperDao;
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
@@ -44,6 +44,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $fields['updatedUserId'] = $user['id'];
 
         $testpaper = $this->getTestpaperDao()->create($fields);
+
+        if (!empty($testpaper['bankId'])) {
+            $this->getQuestionBankService()->waveTestpaperNum($testpaper['bankId'], 1);
+        }
 
         return $testpaper;
     }
@@ -93,6 +97,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $result = $this->getTestpaperDao()->delete($testpaper['id']);
         $this->deleteItemsByTestId($testpaper['id']);
 
+        if (!empty($testpaper['bankId'])) {
+            $this->getQuestionBankService()->waveTestpaperNum($testpaper['bankId'], -1);
+        }
+
         $this->dispatchEvent('exam.delete', $testpaper);
 
         return $result;
@@ -123,13 +131,17 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return ArrayToolkit::index($testpapers, 'id');
     }
 
-    public function searchTestpapers($conditions, $orderBy, $start, $limit)
+    public function searchTestpapers($conditions, $orderBy, $start, $limit, $columns = array())
     {
-        return $this->getTestpaperDao()->search($conditions, $orderBy, $start, $limit);
+        $conditions = $this->filterConditions($conditions);
+
+        return $this->getTestpaperDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
     public function searchTestpaperCount($conditions)
     {
+        $conditions = $this->filterConditions($conditions);
+
         return $this->getTestpaperDao()->count($conditions);
     }
 
@@ -262,10 +274,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
             $testpaper = array(
                 'name' => $testpaperData['title'],
-                'courseSetId' => $data['courseSetId'],
+                'bankId' => $data['questionBankId'],
                 'metas' => $metas,
                 'pattern' => 'questionType',
-                'courseId' => 0,
                 'itemCount' => count($questions),
                 'type' => 'testpaper',
                 'score' => $metas['totalScore'],
@@ -665,8 +676,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $user = $this->getCurrentUser();
 
-        $checkData = $fields['result'];
-        unset($fields['result']);
+        $checkData = empty($fields['result']) ? array() : $fields['result'];
+        if (isset($fields['result'])) {
+            unset($fields['result']);
+        }
 
         $items = $this->findItemsByTestId($paperResult['testId']);
 
@@ -852,7 +865,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         $index = 1;
-        $metas = $testpaper['metas'];
+        $items = array();
         foreach ($newItems as $questionId => $item) {
             $question = !empty($questions[$questionId]) ? $questions[$questionId] : array();
             if (!$question) {
@@ -869,7 +882,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $filter['questionType'] = $question['type'];
             $filter['testId'] = $testpaper['id'];
             $filter['score'] = empty($item['score']) ? 0 : floatval($item['score']);
-            $filter['missScore'] = empty($metas['missScores'][$question['type']]) ? 0 : floatval($metas['missScores'][$question['type']]);
+            $filter['missScore'] = empty($item['missScore']) ? 0 : floatval($item['missScore']);
             $filter['parentId'] = $question['parentId'];
             $items[] = $this->createItem($filter);
         }
@@ -1276,6 +1289,16 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $passedStatus[0];
     }
 
+    protected function filterConditions($conditions)
+    {
+        if (!empty($conditions['keyword'])) {
+            $conditions['nameLike'] = '%'.trim($conditions['keyword']).'%';
+            unset($conditions['keyword']);
+        }
+
+        return $conditions;
+    }
+
     protected function getWrapper()
     {
         global $kernel;
@@ -1367,5 +1390,13 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    /**
+     * @return QuestionBankService
+     */
+    protected function getQuestionBankService()
+    {
+        return $this->createService('QuestionBank:QuestionBankService');
     }
 }

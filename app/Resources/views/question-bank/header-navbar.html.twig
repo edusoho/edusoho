@@ -1,0 +1,16 @@
+<div class="courseset-header-section">
+  <ul class="nav nav-tabs nav-header-section clearfix">
+    <li class="nav-header-section__item cd-ml32 {% if active_tab == 'question-list' %} active {% endif %}">
+      <a href="{{ path('question_bank_manage_question_list', {id: questionBank.id }) }}">{{ 'my.teaching.question_bank.question.manage'|trans }}</a>
+    </li>
+    <li class="nav-header-section__item cd-ml32 {% if active_tab == 'testpaper-list' %} active {% endif %}">
+      <a href="{{ path('question_bank_manage_testpaper_list', {id: questionBank.id }) }}">{{ 'my.teaching.question_bank.testpaper.manage'|trans }}</a>
+    </li>
+    <li class="nav-header-section__item cd-ml32 {% if active_tab == 'category-list' %} active {% endif %}">
+      <a href="{{ path('question_bank_manage_question_category', {id: questionBank.id }) }}">{{ 'my.teaching.question_bank.question_category.manage'|trans }}</a>
+    </li>
+    <li class="nav-header-section__item cd-ml32 {% if active_tab == 'bank-info' %} active {% endif %}">
+      <a href="{{ path('question_bank_manage', {id: questionBank.id }) }}">{{ 'my.teaching.question_bank.info'|trans }}</a>
+    </li>
+  </ul>
+</div>

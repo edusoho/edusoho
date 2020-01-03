@@ -384,6 +384,30 @@ admin:
                                         default: 'live'
                                     group: topBtn
                                     blank: 1
+                admin_question_bank:
+                    name: admin.course.question_bank
+                    after: admin_classroom
+                    children:
+                        admin_question_bank_manage:
+                            name: admin.course.question_bank.basic_tab
+                            router_name: admin_question_bank
+                            disable: true
+                            children:
+                                admin_question_bank_add:
+                                    name: admin.course.question_bank.basic_tab.create_btn
+                                    router_name: admin_question_bank_manage_create
+                                    group: topBtn
+                                    mode: modal
+                        admin_question_bank_category_manage:
+                            name: admin.course.question_bank_category.basic_tab
+                            router_name: admin_question_bank_category
+                            disable: true
+                            children:
+                                admin_question_bank_category_add:
+                                    name: admin.course.question_bank_category.basic_tab.create_btn
+                                    router_name: admin_question_bank_category_manage_create
+                                    group: topBtn
+                                    mode: modal
                 admin_course_thread:
                     name: admin.course.thread_menu
                     children:

@@ -40,7 +40,7 @@ interface TestpaperService
 
     public function getTestpaperByCopyIdAndCourseSetId($copyId, $courseSetId);
 
-    public function searchTestpapers($conditions, $sort, $start, $limit);
+    public function searchTestpapers($conditions, $sort, $start, $limit, $columns = array());
 
     public function searchTestpaperCount($conditions);
 

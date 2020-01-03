@@ -291,14 +291,6 @@ class CourseSetManageController extends BaseController
                     'id' => $courseSetId,
                 ),
             ),
-            'question_plus' => array(
-                'title' => '题目导入/导出',
-                'route' => 'course_question_plumber',
-                'params' => array(
-                    'courseSetId' => $courseSetId,
-                    'type' => 'import',
-                ),
-            ),
             'testpaper' => array(
                 'title' => '试卷管理',
                 'route' => 'course_set_manage_testpaper',

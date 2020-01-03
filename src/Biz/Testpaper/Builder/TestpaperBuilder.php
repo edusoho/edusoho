@@ -4,7 +4,6 @@ namespace Biz\Testpaper\Builder;
 
 use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Context\Biz;
-use AppBundle\Common\Exception\UnexpectedValueException;
 
 class TestpaperBuilder implements TestpaperBuilderInterface
 {
@@ -18,23 +17,9 @@ class TestpaperBuilder implements TestpaperBuilderInterface
     public function build($fields)
     {
         $fields = $this->filterFields($fields);
+        $fields['type'] = 'testpaper';
 
-        $testpaper = $this->getTestpaperService()->createTestpaper($fields);
-
-        $testpaperPattern = $this->getTestpaperService()->getTestpaperPattern($testpaper['pattern']);
-
-        $testpaper['metas']['courseSetId'] = $testpaper['courseSetId'];
-
-        $result = $testpaperPattern->getTestpaperQuestions($testpaper, $testpaper['metas']);
-
-        if ('ok' != $result['status']) {
-            throw new UnexpectedValueException("Build testpaper #{$result['id']} items error.");
-        }
-
-        $items = $this->createQuestionItems($result['items']);
-        $this->updateTestpaperByItems($testpaper['id'], $items);
-
-        return $testpaper;
+        return $this->getTestpaperService()->createTestpaper($fields);
     }
 
     public function canBuild($options)
@@ -142,6 +127,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
             'pattern',
             'metas',
             'questionTypeSeq',
+            'bankId',
         ));
 
         return $fields;
@@ -150,6 +136,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
     public function updateSubmitedResult($resultId, $usedTime, $options = array())
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
+        $activity = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
         $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperResult['testId'], $testpaperResult['type']);
         $items = $this->getTestpaperService()->findItemsByTestId($testpaperResult['testId'], $testpaperResult['type']);
         $itemResults = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id']);
@@ -172,7 +159,8 @@ class TestpaperBuilder implements TestpaperBuilderInterface
             $fields['checkedTime'] = time();
         }
 
-        $fields['passedStatus'] = $fields['score'] >= $testpaper['passedCondition'][0] ? 'passed' : 'unpassed';
+        $passScore = round($testpaper['score'] * $activity['finishData'], 1);
+        $fields['passedStatus'] = $fields['score'] >= $passScore ? 'passed' : 'unpassed';
 
         $fields['usedTime'] = $usedTime;
         $fields['endTime'] = time();
@@ -180,64 +168,6 @@ class TestpaperBuilder implements TestpaperBuilderInterface
         $fields['rightItemCount'] = $accuracy['rightItemCount'];
 
         return $this->getTestpaperService()->updateTestpaperResult($testpaperResult['id'], $fields);
-    }
-
-    protected function createQuestionItems($questions)
-    {
-        $testpaperItems = array();
-        $seq = 1;
-
-        foreach ($questions as $item) {
-            $item['seq'] = $seq;
-
-            if ('material' != $item['questionType']) {
-                ++$seq;
-            }
-            $item['type'] = 'testpaper';
-            $testpaperItems[] = $this->getTestpaperService()->createItem($item);
-        }
-
-        return $testpaperItems;
-    }
-
-    protected function updateTestpaperByItems($testpaperId, $items)
-    {
-        $count = 0;
-        $score = 0;
-        $totalScores = array(
-            'single_choice' => 0,
-            'choice' => 0,
-            'essay' => 0,
-            'uncertain_choice' => 0,
-            'determine' => 0,
-            'fill' => 0,
-            'material' => 0,
-        );
-        array_walk($items, function ($item) use (&$count, &$score, &$totalScores) {
-            if (!$item['parentId']) {
-                ++$count;
-            }
-
-            if ('material' != $item['questionType']) {
-                $score += $item['score'];
-                if ($item['parentId']) {
-                    $totalScores['material'] += $item['score'];
-                } else {
-                    $totalScores[$item['questionType']] += $item['score'];
-                }
-            }
-        });
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-        $testpaper['metas']['totalScores'] = $totalScores;
-
-        $fields = array(
-            'metas' => $testpaper['metas'],
-            'itemCount' => $count,
-            'score' => $score,
-        );
-
-        return $this->getTestpaperService()->updateTestpaper($testpaperId, $fields);
     }
 
     protected function getQuestions($options)
@@ -305,5 +235,10 @@ class TestpaperBuilder implements TestpaperBuilderInterface
     protected function getQuestionService()
     {
         return $this->biz->service('Question:QuestionService');
+    }
+
+    protected function getActivityService()
+    {
+        return $this->biz->service('Activity:ActivityService');
     }
 }
