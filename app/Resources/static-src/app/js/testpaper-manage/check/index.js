@@ -2,7 +2,7 @@ import {
   testpaperCardFixed,
 } from 'app/js/testpaper/widget/part';
 
-$.validator.addMethod('score',function(value,element){ 
+$.validator.addMethod('score',function(value,element){
   let isFloat = /^\d+(\.\d)?$/.test(value);
   if (!isFloat){
     return false;
@@ -13,7 +13,7 @@ $.validator.addMethod('score',function(value,element){
   } else {
     return false;
   }
-  
+
 }, $.validator.format(Translator.trans('activity.testpaper_manage.marking_validate_error_hint')));
 
 class CheckTest
@@ -50,7 +50,7 @@ class CheckTest
     let $shortTextarea = $(event.currentTarget);
 
     if ($shortTextarea.hasClass('essay-teacher-say-short')) {
-      
+
       event.preventDefault();
       event.stopPropagation();
       $(this).blur();
@@ -103,7 +103,7 @@ class CheckTest
         }, 1);
       });
     }
-    
+
   }
 
   _initValidate() {
@@ -115,9 +115,9 @@ class CheckTest
           required:true,
           score:true,
           min:0,
-          messages: {    
-            required: Translator.trans('activity.testpaper_manage.required_error_hint'),    
-          } 
+          messages: {
+            required: Translator.trans('activity.testpaper_manage.required_error_hint'),
+          }
         });
       });
     }
@@ -125,7 +125,7 @@ class CheckTest
   }
 
   _quick2Question(event) {
-    let $target = $(event.currentTarget); 
+    let $target = $(event.currentTarget);
     let position = $($target.data('anchor')).offset();
     $(document).scrollTop(position.top - 55);
   }
@@ -138,7 +138,7 @@ class CheckTest
       $('*[data-score]').each(function(){
         let content = {};
         let questionId = $(this).data('id');
-        
+
         content['score'] = Number($(this).val());
         content['teacherSay'] = $('[name="teacherSay_'+questionId+'"]').val();
 
@@ -182,7 +182,7 @@ class CheckTest
     }
 
     $target.button('loading');
-    $.post($target.data('postUrl'), {result:this.checkContent,teacherSay:teacherSay,passedStatus:passedStatus,isContinue:this.isContinue}, function(response) {
+    $.post($target.data('postUrl'), {result:JSON.stringify(this.checkContent),teacherSay:teacherSay,passedStatus:passedStatus,isContinue:this.isContinue}, function(response) {
       if (response.goto != '') {
         window.location.href = response.goto;
       } else {

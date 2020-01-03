@@ -4,13 +4,9 @@ namespace Biz\Task\Job;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\AppLoggerConstant;
-use Biz\Course\Dao\CourseDao;
-use Biz\System\Service\LogService;
-use Biz\Task\Dao\TaskDao;
 use Biz\Task\Strategy\CourseStrategy;
-use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
-class CourseTaskDeleteSyncJob extends AbstractJob
+class CourseTaskDeleteSyncJob extends AbstractSyncJob
 {
     public function execute()
     {
@@ -45,29 +41,5 @@ class CourseTaskDeleteSyncJob extends AbstractJob
     private function createCourseStrategy($course)
     {
         return $this->biz->offsetGet('course.strategy_context')->createStrategy($course['courseType']);
-    }
-
-    /**
-     * @return CourseDao
-     */
-    private function getCourseDao()
-    {
-        return $this->biz->dao('Course:CourseDao');
-    }
-
-    /**
-     * @return TaskDao
-     */
-    private function getTaskDao()
-    {
-        return $this->biz->dao('Task:TaskDao');
-    }
-
-    /**
-     * @return LogService
-     */
-    private function getLogService()
-    {
-        return $this->biz->service('System:LogService');
     }
 }

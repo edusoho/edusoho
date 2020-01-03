@@ -201,7 +201,7 @@ class LoginController extends BaseController
     protected function getTargetPath(Request $request)
     {
         if ($request->query->get('goto')) {
-            $targetPath = $request->query->get('goto');
+            $targetPath = $this->filterRedirectUrl($request->query->get('goto'));
         } elseif ($request->getSession()->has('_target_path')) {
             $targetPath = $request->getSession()->get('_target_path');
         } else {

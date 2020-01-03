@@ -1,0 +1,103 @@
+.course-list-new {
+  .course-item-wrap {
+    position: relative;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .course-item {
+    box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.08);
+    border: none;
+    .tag-vip-free {
+      position: absolute;
+      left: -4px;
+      top: 0;
+      width: 82px;
+      height: 32px;
+      z-index: 10;
+      background: url("@{img-src}vipfree@1x.png") no-repeat;
+      background-image: -webkit-image-set(url("@{img-src}vipfree@1x.png") 1x,url("@{img-src}vipfree@2x.png") 2x);
+    }
+    .tag-vip-free-en {
+      position: absolute;
+      left: -4px;
+      top: 0;
+      width: 82px;
+      height: 32px;
+      z-index: 10;
+      background: url("@{img-src}vipfreeEn@1x.png") no-repeat;
+      background-image: -webkit-image-set(url("@{img-src}vipfreeEn@1x.png") 1x,url("@{img-src}vipfreeEn@2x.png") 2x);
+    }
+    .course-tag {
+      position: absolute;
+      bottom: 0;
+      padding: 8px;
+      width: 100%;
+      font-size: 14px;
+      line-height: 20px;
+      color: #fff;
+      cursor: default;
+      background-color: rgba(0, 0, 0, 0.4);
+      @media (max-width: @screen-xs-min) {
+        padding: 4px;
+        font-size: 12px;
+        line-height: 16px;
+      }
+      i {
+        margin-right: 4px;
+        vertical-align: text-bottom;
+      }
+      .course-tag__dot {
+        position: absolute;
+        top: 15px;
+        right: 6px;
+        display: inline-block;
+        width: 5px;
+        height: 5px;
+        background-color: #20b573;
+        border-radius: 100%;
+        vertical-align: middle;
+        @media (max-width: @screen-xs-min) {
+          top: 10px;
+          width: 4px;
+          height: 4px;
+        }
+      }
+    }
+
+    // 用于近期直播
+    &.course-default {
+      padding: 64px 20px 58.88px;
+    }
+    .course-img {
+      .img-responsive {
+        padding: 0;
+      }
+    }
+    .course-info {
+      padding: 16px 8px;
+      .title {
+        margin-top: 0;
+        margin-bottom: 12px;
+        padding: 0;
+        line-height: 20px;
+      }
+      @media(max-width: @screen-xs-max) {
+        padding: 8px;
+        .title {
+          margin-top: 0;
+          margin-bottom: 8px;
+        }
+      }
+    }
+    .metas {
+      padding: 0;
+      line-height: 20px;
+      i {
+        margin-right: 4px;
+      }
+      .comment {
+        margin-left: 12px;
+      }
+    }
+  }
+}

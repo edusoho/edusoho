@@ -13,11 +13,11 @@
   </div>
   {% if tag %}
     {% if courseSets %}
-	    <div class="course-list">
+	    <div class="course-list course-list-new">
 		    <div class="row">
 				    {% for courseSet in courseSets %}
-					    <div class="col-lg-3 col-md-4 col-xs-6">
-						    {% include 'course/widgets/course-grid.html.twig' with {courseSet: courseSet} %}
+					    <div class="col-lg-3 col-md-4 col-xs-6 course-item-wrap">
+						    {% include 'course/widgets/course-grid-new.html.twig' with {courseSet: courseSet} %}
 					    </div>
 				    {% endfor %}
 		    </div>

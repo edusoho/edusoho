@@ -11,6 +11,7 @@ use Biz\User\UserException;
 use Biz\WeChat\Dao\UserWeChatDao;
 use Biz\WeChat\Service\WeChatService;
 use Biz\System\Service\SettingService;
+use Biz\WeChat\WeChatException;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
@@ -336,6 +337,89 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         return $template['templateId'];
     }
 
+    /**
+     * @param $template
+     * @param $key
+     *
+     * @return mixed
+     *
+     * @throws \Exception
+     */
+    public function addTemplate($template, $key)
+    {
+        $client = $this->getTemplateClient();
+        if (empty($client)) {
+            $this->createNewException(WeChatException::TOKEN_MAKE_ERROR());
+        }
+
+        $wechatSetting = $this->getSettingService()->get('wechat');
+        if (empty($wechatSetting['templates'][$key]['templateId'])) {
+            try {
+                if (!empty($wechatSetting['is_authorization'])) {
+                    $data = $this->getSDKWeChatService()->createNotificationTemplate($template['id']);
+                } else {
+                    $data = $client->addTemplate($template['id']);
+                }
+            } catch (\Exception $e) {
+                if ($e->getCode() == 40220005) {
+                    $this->createNewException(WeChatException::TEMPLATE_EXCEEDS_LIMIT());
+                }
+
+                if ($e->getCode() == 40220007) {
+                    $this->createNewException(WeChatException::TEMPLATE_CONFLICT_INDUSTRY());
+                }
+
+                throw $e;
+            }
+
+            if (empty($data)) {
+                $this->createNewException(WeChatException::TEMPLATE_OPEN_ERROR());
+            }
+
+            $wechatSetting['templates'][$key]['templateId'] = $data['template_id'];
+        }
+
+        $wechatSetting['templates'][$key]['status'] = 1;
+        $this->getSettingService()->set('wechat', $wechatSetting);
+
+        return $this->getSettingService()->get('wechat', $wechatSetting);
+    }
+
+    /**
+     * @param $template
+     * @param $key
+     *
+     * @return mixed
+     *
+     * @throws \Exception
+     */
+    public function deleteTemplate($template, $key)
+    {
+        $client = $this->getTemplateClient();
+        if (empty($client)) {
+            $this->createNewException(WeChatException::TOKEN_MAKE_ERROR());
+        }
+
+        $wechatSetting = $this->getSettingService()->get('wechat');
+
+        if (!empty($wechatSetting['templates'][$key]['templateId'])) {
+            if (!empty($wechatSetting['is_authorization'])) {
+                $data = $this->getSDKWeChatService()->deleteNotificationTemplate($wechatSetting['templates'][$key]['templateId']);
+            } else {
+                $data = $client->deleteTemplate($wechatSetting['templates'][$key]['templateId']);
+            }
+
+            if (empty($data)) {
+                $this->createNewException(WeChatException::TEMPLATE_OPEN_ERROR());
+            }
+        }
+
+        $wechatSetting['templates'][$key]['templateId'] = '';
+        $wechatSetting['templates'][$key]['status'] = 0;
+
+        return $this->getSettingService()->set('wechat', $wechatSetting);
+    }
+
     public function handleCloudNotification($oldSetting, $newSetting, $loginConnect)
     {
         if ($oldSetting['wechat_notification_enabled'] == $newSetting['wechat_notification_enabled']) {
@@ -436,6 +520,11 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         }
 
         return $userList;
+    }
+
+    private function getTemplateClient()
+    {
+        return $this->biz['wechat.template_message_client'];
     }
 
     private function weChatUserFilter($fields)

@@ -117,9 +117,9 @@ class WeChatNotificationController extends BaseController
             }
             $fields = $request->request->all();
             if (1 == $fields['status']) {
-                $this->addTemplate($templates[$key], $key);
+                $this->getWeChatService()->addTemplate($templates[$key], $key);
             } else {
-                $this->deleteTemplate($templates[$key], $key);
+                $this->getWeChatService()->deleteTemplate($templates[$key], $key);
             }
             $this->getWeChatService()->saveWeChatTemplateSetting($key, $fields);
 
@@ -164,61 +164,6 @@ class WeChatNotificationController extends BaseController
         unset($conditions['weChatFansKeywordType']);
 
         return $conditions;
-    }
-
-    protected function addTemplate($template, $key)
-    {
-        $client = $this->getTemplateClient();
-        if (empty($client)) {
-            throw new \RuntimeException($this->trans('wechat.notification.empty_token'));
-        }
-
-        $wechatSetting = $this->getSettingService()->get('wechat');
-        if (empty($wechatSetting['templates'][$key]['templateId'])) {
-            if (!empty($wechatSetting['is_authorization'])) {
-                $data = $this->getSDKWeChatService()->createNotificationTemplate($template['id']);
-            } else {
-                $data = $client->addTemplate($template['id']);
-            }
-
-            if (empty($data)) {
-                throw new \RuntimeException($this->trans('wechat.notification.template_open_error'));
-            }
-
-            $wechatSetting['templates'][$key]['templateId'] = $data['template_id'];
-        }
-
-        $wechatSetting['templates'][$key]['status'] = 1;
-        $this->getSettingService()->set('wechat', $wechatSetting);
-
-        return $this->getSettingService()->get('wechat', $wechatSetting);
-    }
-
-    protected function deleteTemplate($template, $key)
-    {
-        $client = $this->getTemplateClient();
-        if (empty($client)) {
-            throw new \RuntimeException($this->trans('wechat.notification.empty_token'));
-        }
-
-        $wechatSetting = $this->getSettingService()->get('wechat');
-
-        if (!empty($wechatSetting['templates'][$key]['templateId'])) {
-            if (!empty($wechatSetting['is_authorization'])) {
-                $data = $this->getSDKWeChatService()->deleteNotificationTemplate($wechatSetting['templates'][$key]['templateId']);
-            } else {
-                $data = $client->deleteTemplate($wechatSetting['templates'][$key]['templateId']);
-            }
-
-            if (empty($data)) {
-                throw new \RuntimeException($this->trans('wechat.notification.template_open_error'));
-            }
-        }
-
-        $wechatSetting['templates'][$key]['templateId'] = '';
-        $wechatSetting['templates'][$key]['status'] = 0;
-
-        return $this->getSettingService()->set('wechat', $wechatSetting);
     }
 
     protected function isCloudOpen()

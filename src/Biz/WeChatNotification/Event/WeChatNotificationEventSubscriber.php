@@ -23,6 +23,7 @@ use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Biz\AppLoggerConstant;
 use AppBundle\Common\ArrayToolkit;
+use Symfony\Component\Routing\Router;
 
 class WeChatNotificationEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
@@ -41,6 +42,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             'exam.reviewed' => 'onTestpaperReviewd',
             'payment_trade.paid' => 'onPaid',
             'course.task.create.sync' => 'onTaskCreateSync',
+            'course.task.update.sync' => 'onTaskUpdateSync',
             'course.task.publish.sync' => 'onTaskPublishSync',
             'course.thread.create' => 'onCourseQuestionCreate',
             'thread.create' => 'onClassroomQuestionCreate',
@@ -231,6 +233,20 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             $tasks = $this->getCopiedTasks($task);
 
             $this->sendTasksPublishNotification($tasks);
+        }
+    }
+
+    public function onTaskUpdateSync(Event $event)
+    {
+        $task = $event->getSubject();
+        if ('live' == $task['type']) {
+            $copiedTasks = $this->getCopiedTasks($task);
+            foreach ($copiedTasks as $copiedTask) {
+                $this->deleteLiveNotificationJob($copiedTask);
+                if ('published' == $copiedTask['status']) {
+                    $this->registerLiveNotificationJob($copiedTask);
+                }
+            }
         }
     }
 
@@ -712,11 +728,35 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         }
     }
 
+    /**
+     * @param $route
+     * @param $parameters
+     * @param $referenceType
+     *
+     * @return mixed
+     */
     private function generateUrl($route, $parameters, $referenceType)
     {
         global $kernel;
+        $router = $this->decorateRouter($kernel->getContainer()->get('router'));
 
-        return $kernel->getContainer()->get('router')->generate($route, $parameters, $referenceType);
+        return $router->generate($route, $parameters, $referenceType);
+    }
+
+    private function decorateRouter(Router $router)
+    {
+        $routerContext = $router->getContext();
+        if ($routerContext->getHost() == 'localhost') {
+            $url = $this->getSettingService()->node('site.url');
+            if (!empty($url)) {
+                $parsedUrl = parse_url($url);
+
+                empty($parsedUrl['host']) ?: $routerContext->setHost($parsedUrl['host']);
+                empty($parsedUrl['scheme']) ?: $routerContext->setScheme($parsedUrl['scheme']);
+            }
+        }
+
+        return $router;
     }
 
     private function getCloudNotificationClient()

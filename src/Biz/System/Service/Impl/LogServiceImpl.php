@@ -13,6 +13,8 @@ use AppBundle\Common\DeviceToolkit;
 
 class LogServiceImpl extends BaseService implements LogService
 {
+    const LOG_DATA_LENGTH_LIMIT = 4096;
+
     public function info($module, $action, $message, $data = null)
     {
         return $this->addLog('info', $module, $action, $message, $data);
@@ -109,6 +111,12 @@ class LogServiceImpl extends BaseService implements LogService
         if (is_array($data)) {
             if (isset($data['loginUser'])) {
                 unset($data['loginUser']);
+            }
+
+            foreach ($data as &$value) {
+                if (is_string($value) && mb_strlen($value, 'UTF-8') > self::LOG_DATA_LENGTH_LIMIT) {
+                    $value = mb_substr($value, 0, self::LOG_DATA_LENGTH_LIMIT, 'UTF-8');
+                }
             }
 
             $data = json_encode($data);
