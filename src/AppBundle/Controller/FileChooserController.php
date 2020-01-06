@@ -138,6 +138,10 @@ class FileChooserController extends BaseController
             unset($conditions['keyword']);
         }
 
+        if (isset($conditions['tagId']) && empty($conditions['tagId'])) {
+            unset($conditions['tagId']);
+        }
+
         if (!empty($conditions['batch'])) {
             $conditions['types'] = array('document', 'video', 'audio', 'ppt', 'flash');
         } else {
