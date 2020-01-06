@@ -46,7 +46,7 @@
                       {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'img-responsive', courseSet.title) }}
                     </a>
                     {% if courseSet.stickyTime|default('') %}
-                      <span class="course-sticky-tag">{{ 'group.thread.stick_label'|trans }}</span>
+                      <span class="course-sticky-tag course-sticky-tag--student">{{ 'group.thread.stick_label'|trans }}</span>
                     {% endif %}
 
                   </div>
