@@ -25,17 +25,16 @@
           {% endif %}
           <span class="pull-right">
             <span class="cd-mr8">{% if courseSet.type|default() == 'reservation' %}
-              {{ 'my.teaching.course_set.reservation'|trans }}
+              {{ 'my.teaching.course_set.reservation'|trans }}<span class="course-tag__dot"></span>
             {% elseif courseSet.type|default() == 'live' %}
-              {{ 'search.live_courses'|trans }}
+              {{ 'search.live_courses'|trans }}<span class="course-tag__dot"></span>
             {% else %}
               {% if courseSet.serializeMode == 'serialized' %}
-                {{ 'course.status.serialized'|trans }}
+                {{ 'course.status.serialized'|trans }}<span class="course-tag__dot"></span>
               {% elseif courseSet.serializeMode == 'finished' %}
-                {{ 'course.status.finished'|trans }}
+                {{ 'course.status.finished'|trans }}<span class="course-tag__dot"></span>
               {% endif %}
             {% endif %}</span>
-            <span class="course-tag__dot"></span>
           </span>
         </div>
       {% endif %}
