@@ -4,6 +4,7 @@ namespace Biz\Testpaper\Builder;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\TimeMachine;
+use Biz\Question\Service\QuestionService;
 use Codeages\Biz\Framework\Context\Biz;
 
 class ExerciseBuilder implements TestpaperBuilderInterface
@@ -80,15 +81,22 @@ class ExerciseBuilder implements TestpaperBuilderInterface
                 $conditions,
                 array('id' => 'DESC'),
                 0,
-                $count
+                $count,
+                array('id')
             );
 
             $questionIds = array_rand($questions, $exercise['itemCount']);
             $questionIds = is_array($questionIds) ? $questionIds : array($questionIds);
-            $randomQuestions = array();
+            $randomQuestionIds = array();
             foreach ($questionIds as $id) {
-                $randomQuestions[$id] = $questions[$id];
+                $randomQuestionIds[$id] = $questions[$id];
             }
+            $randomQuestions = $this->getQuestionService()->search(
+                array('ids' => ArrayToolkit::column($randomQuestionIds, 'id')),
+                array('id' => 'DESC'),
+                0,
+                $exercise['itemCount']
+            );
         }
 
         return $this->formatQuestions($randomQuestions, $itemResults, $orders);
@@ -105,7 +113,6 @@ class ExerciseBuilder implements TestpaperBuilderInterface
     {
         $conditions = array(
             'types' => $testPaper['metas']['questionTypes'],
-            'courseSetId' => $testPaper['courseSetId'],
             'parentId' => 0,
         );
         if (!empty($testPaper['metas']['difficulty'])) {
@@ -133,12 +140,12 @@ class ExerciseBuilder implements TestpaperBuilderInterface
         }
         //兼容course1.0 end
 
-        if (!empty($testPaper['metas']['range']['courseId'])) {
-            $conditions['courseId'] = $testPaper['metas']['range']['courseId'];
+        if (!empty($testPaper['metas']['range']['bankId'])) {
+            $conditions['bankId'] = $testPaper['metas']['range']['bankId'];
         }
 
-        if (!empty($testPaper['metas']['range']['courseId']) && !empty($testPaper['metas']['range']['lessonId'])) {
-            $conditions['lessonId'] = $testPaper['metas']['range']['lessonId'];
+        if (!empty($testPaper['metas']['range']['bankId']) && !empty($testPaper['metas']['range']['categoryIds'])) {
+            $conditions['categoryIds'] = $testPaper['metas']['range']['categoryIds'];
         }
 
         return $conditions;
@@ -259,12 +266,14 @@ class ExerciseBuilder implements TestpaperBuilderInterface
             $conditions['lessonId'] = $options['range'];
         }
 
-        if (!empty($options['range']['courseId'])) {
-            $conditions['courseId'] = $options['range']['courseId'];
+        if (!empty($options['range']['bankId'])) {
+            $conditions['bankId'] = $options['range']['bankId'];
+        } else {
+            $conditions['bankId'] = '-1';
         }
 
-        if (!empty($options['range']['lessonId'])) {
-            $conditions['lessonId'] = $options['range']['lessonId'];
+        if (!empty($options['range']['categoryIds'])) {
+            $conditions['categoryIds'] = explode(',', $options['range']['categoryIds']);
         }
 
         if (!empty($options['questionTypes'])) {
@@ -279,7 +288,10 @@ class ExerciseBuilder implements TestpaperBuilderInterface
             $conditions['difficulty'] = $options['difficulty'];
         }
 
-        $conditions['courseSetId'] = $options['courseSetId'];
+        if (!empty($options['categoryIds'])) {
+            $conditions['categoryIds'] = $options['categoryIds'];
+        }
+
         $conditions['parentId'] = 0;
 
         $total = $this->getQuestionService()->searchCount($conditions);
@@ -287,6 +299,9 @@ class ExerciseBuilder implements TestpaperBuilderInterface
         return $this->getQuestionService()->search($conditions, array('createdTime' => 'DESC'), 0, $total);
     }
 
+    /**
+     * @return QuestionService
+     */
     protected function getQuestionService()
     {
         return $this->biz->service('Question:QuestionService');

@@ -10,7 +10,6 @@ use Biz\Activity\Dao\ActivityDao;
 use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Event\CourseSyncSubscriber;
-use Biz\Course\Copy\Chain\ActivityTestpaperCopy;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 
 class TaskSyncSubscriber extends CourseSyncSubscriber
@@ -128,21 +127,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             'misfire_policy' => 'executing',
             'class' => 'Biz\Task\Job\CourseTaskDeleteSyncJob',
             'args' => array('taskId' => $task['id'], 'courseId' => $task['courseId']),
-        ));
-    }
-
-    protected function syncTestpaper($activity, $copiedCourse)
-    {
-        if ('testpaper' != $activity['mediaType']) {
-            return array();
-        }
-
-        $testpaperCopy = new ActivityTestpaperCopy($this->getBiz());
-
-        return $testpaperCopy->copy($activity, array(
-            'newCourseSetId' => $copiedCourse['courseSetId'],
-            'newCourseId' => $copiedCourse['id'],
-            'isCopy' => 1,
         ));
     }
 

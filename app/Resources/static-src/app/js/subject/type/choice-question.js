@@ -247,7 +247,7 @@ class Choice extends BaseQuestion {
     $.each(data, function(index, item) {
       let name = item['name'],
           value = item['value'];
-      if ($.inArray(name, ['stem', 'difficulty', 'score', 'missScore', 'type', 'analysis', 'courseId', 'lessonId']) !== -1) {
+      if ($.inArray(name, ['stem', 'difficulty', 'score', 'missScore', 'type', 'analysis', 'categoryId']) !== -1) {
         question[name] = value;
       } else if (name == 'options') {
         question['options'].push(value);
@@ -261,17 +261,18 @@ class Choice extends BaseQuestion {
     let key = $('.js-edit-form-seq').text() - 1;
     let seq = 0;
     if (isSub == '1') {
-      token = self.updataCachedSubQuestion(token, key, question, method);
+      token = self.updateCachedSubQuestion(token, key, question, method);
       question = self.operate.getSubQuestion(token, key);
       seq = key + 1;
     } else {
-      token = self.updataCachedQuestion(token, question, method);
+      token = self.updateCachedQuestion(token, question, method);
       question = self.operate.getQuestion(token);
       seq = self.operate.getQuestionOrder(token);
     }
     this.analysisEditor.destroy();
     $.post(self.$form.data('url'), {'seq': seq, 'question': question, 'token': token, 'isSub': isSub}, html => {
       self.$form.parent('.subject-item').replaceWith(html);
+      self._initTooltip();
     });
   }
 }

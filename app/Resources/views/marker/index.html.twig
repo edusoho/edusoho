@@ -5,7 +5,7 @@
 {% set file = activity.ext.file|default(null) %}
 {% set context = {hideBeginning:true ,hideQuestion:1, hideSubtitle:1} %}
 
-{% do script(['libs/jquery-sortable.js', 'libs/jquery-validation.js', 'app/js/marker/index.js']) %}
+{% do script(['libs/jquery-sortable.js', 'libs/jquery-validation.js', 'libs/select2.js', 'app/js/marker/index.js']) %}
 
 {% block body %}
   <div class="marker-manage-content js-marker-manage-content" id="task-dashboard"

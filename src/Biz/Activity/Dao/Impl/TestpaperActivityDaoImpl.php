@@ -3,9 +3,9 @@
 namespace Biz\Activity\Dao\Impl;
 
 use Biz\Activity\Dao\TestpaperActivityDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class TestpaperActivityDaoImpl extends GeneralDaoImpl implements TestpaperActivityDao
+class TestpaperActivityDaoImpl extends AdvancedDaoImpl implements TestpaperActivityDao
 {
     protected $table = 'activity_testpaper';
 

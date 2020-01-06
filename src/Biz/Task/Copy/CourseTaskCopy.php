@@ -104,8 +104,6 @@ class CourseTaskCopy extends AbstractCopy
      *
      * @param [type] $courseId   [description]
      * @param [type] $chapterIds 包含直播任务的课时ids
-     *
-     * @return [type] [description]
      */
     protected function updateChapter($courseId, $chapterIds)
     {

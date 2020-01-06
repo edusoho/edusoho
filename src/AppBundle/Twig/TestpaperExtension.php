@@ -4,10 +4,15 @@ namespace AppBundle\Twig;
 
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
+use Biz\Testpaper\Service\TestpaperService;
+use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class TestpaperExtension extends \Twig_Extension
 {
+    /**
+     * @var Biz
+     */
     protected $biz;
 
     /**
@@ -31,70 +36,29 @@ class TestpaperExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('find_course_set_testpapers', array($this, 'findTestpapersByCourseSetId')),
             new \Twig_SimpleFunction('get_features', array($this, 'getFeatures')),
             new \Twig_SimpleFunction('show_answers', array($this, 'canShowAnswers')),
+            new \Twig_SimpleFunction('get_testpaper', array($this, 'getTestPaper')),
         );
     }
 
     public function parseRange($range)
     {
-        $rangeDefault = array('courseId' => 0);
+        $rangeDefault = array('bankId' => 0);
         $range = empty($range) ? $rangeDefault : $range;
 
         if (is_array($range)) {
             return $range;
         } elseif ('course' == $range) {
             return $rangeDefault;
-        } elseif ('lesson' == $range) {
-            //兼容老数据
-            $conditions = array(
-                'activityId' => $activity['id'],
-                'type' => 'exercise',
-                'courseId' => $activity['fromCourseId'],
-            );
-            $task = $this->getCourseTaskService()->searchTasks($conditions, null, 0, 1);
-
-            if (!$task) {
-                return $rangeDefault;
-            }
-
-            $conditions = array(
-                'categoryId' => $task[0]['categoryId'],
-                'mode' => 'lesson',
-            );
-            $lessonTask = $this->getCourseTaskService()->searchTasks($conditions, null, 0, 1);
-            if ($lessonTask) {
-                return array('courseId' => $lessonTask[0]['courseId'], 'lessonId' => $lessonTask[0]['id']);
-            }
-
-            return $rangeDefault;
         }
 
         return $rangeDefault;
     }
 
-    public function findTestpapersByCourseSetId($id)
+    public function getTestPaper($id)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($id);
-        $conditions = array(
-            'courseSetId' => $id,
-            'status' => 'open',
-            'type' => 'testpaper',
-        );
-
-        if ($courseSet['parentId'] > 0 && $courseSet['locked']) {
-            $conditions['copyIdGT'] = 0;
-        }
-
-        $testpapers = $this->getTestpaperService()->searchTestpapers(
-            $conditions,
-            array('createdTime' => 'DESC'),
-            0,
-            PHP_INT_MAX
-        );
-
-        return $testpapers;
+        return $this->getTestpaperService()->getTestpaper($id);
     }
 
     public function getFeatures()
@@ -143,14 +107,12 @@ class TestpaperExtension extends \Twig_Extension
         return false;
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->biz->service('Testpaper:TestpaperService');
-    }
-
-    protected function getCourseSetService()
-    {
-        return $this->biz->service('Course:CourseSetService');
     }
 
     /**

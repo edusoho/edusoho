@@ -1,0 +1,28 @@
+<div>
+  <form class="form-inline js-search-form" novalidate>
+    <div class="form-group">
+      <input type="text" id="keyword" name="keyword" data-role="search-conditions" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'course.question_manage.filter.keywords'|trans}}">
+    </div>
+    <div class="form-group">
+      <button class="cd-btn cd-btn-primary js-search-btn">{{'form.btn.search'|trans}}</button>
+    </div>
+
+    <div class="form-group pull-right">
+      <a data-url="{{ path('question_bank_manage_testpaper_import', {id: questionBank.id}) }}" class="cd-btn cd-btn-primary pull-right mls js-import-btn" data-toggle="modal" data-target="#modal">
+        {{ 'course.testpaper_manage.import_btn'|trans }}
+      </a>
+      <a class="cd-btn cd-btn-primary pull-right mls" href="{{ path('question_bank_manage_random_testpaper_create', {id: questionBank.id}) }}">
+        {{ 'my.teaching.question_bank.testpaper.automatic_create'|trans }}
+      </a>
+      <a class="cd-btn cd-btn-primary pull-right mls" href="{{ path('question_bank_manage_testpaper_create', {id: questionBank.id}) }}">
+        {{ 'my.teaching.question_bank.testpaper.manual_create'|trans }}
+      </a>
+      </div>
+  </form>
+
+  <div role="courseset-manage-question">
+    <div id="quiz-table-container" class="js-testpaper-html" data-url="{{ path('question_bank_manage_testpaper_show_ajax', {id: questionBank.id}) }}">
+      {% include 'question-bank/testpaper/testpaper-list-tr.html.twig' %}
+    </div>
+  </div>
+</div>

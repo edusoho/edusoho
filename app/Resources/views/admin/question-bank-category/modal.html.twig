@@ -1,0 +1,28 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{% if category.id %}{{'admin.category_manage.edit_title'|trans}}{% else %}{{'admin.category_manage.add_title'|trans}}{% endif %}{% endblock %}
+
+
+{% block body %}
+<div id="category-creater-widget">
+
+	<form id="category-form" class="form-horizontal" action="{% if category.id %}{{ path('admin_question_bank_category_manage_edit', {id:category.id}) }}{% else %}{{ path('admin_question_bank_category_manage_create') }}{% endif %}" method="post">
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="category-name-field">{{'admin.category_manage.name_label'|trans}}</label>
+			<div class="col-md-8 controls">
+        <input class="form-control" id="category-name-field" type="text" name="name" value="{{ category.name|default('') }}" tabindex="1" autocomplete="off">
+			</div>
+		</div>
+
+		<input type="hidden" name="parentId" value="{{ category.parentId|default(0) }}">
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	</form>
+</div>
+
+<script type="text/javascript"> app.load('question-bank-category/create'); </script>
+{% endblock %}
+
+{% block footer %}
+  	<button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">{{'form.btn.cancel'|trans}}</button>
+	<button id="category-create-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#category-form" tabindex="4">{{'form.btn.save'|trans}}</button>
+{% endblock %}

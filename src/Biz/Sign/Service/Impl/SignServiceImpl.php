@@ -35,7 +35,7 @@ class SignServiceImpl extends BaseService implements SignService
 
         $sign = $this->getSignUserLogDao()->create($sign);
         $statistics = $this->targetSignedNumIncrease($targetType, $targetId, date('Ymd', time()));
-        $this->getSignUserLogDao()->update($sign['id'], array('rank' => $statistics['signedNum']));
+        $this->getSignUserLogDao()->update($sign['id'], array('_rank' => $statistics['signedNum']));
         $this->refreshKeepDays($userId, $targetType, $targetId);
 
         $this->dispatchEvent('class.signed', new Event($sign));
@@ -86,7 +86,7 @@ class SignServiceImpl extends BaseService implements SignService
     {
         $todaySign = $this->findSignRecordsByPeriod($userId, $targetType, $targetId, date('y-n-d'), date('y-n-d'));
 
-        return $todaySign ? $todaySign['0']['rank'] : -1;
+        return $todaySign ? $todaySign['0']['_rank'] : -1;
     }
 
     protected function refreshKeepDays($userId, $targetType, $targetId)

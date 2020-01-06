@@ -311,6 +311,11 @@ class NormalStrategyTest extends BaseTestCase
                 'functionName' => 'count',
                 'returnValue' => 0,
             ),
+            array(
+                'functionName' => 'findByCourseIdAndCategoryId',
+                'withParams' => array(1, 1),
+                'returnValue' => array(),
+            ),
         ));
         $this->mockBiz('Task:TaskResultService', array(
             array(

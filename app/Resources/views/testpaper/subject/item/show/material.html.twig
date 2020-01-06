@@ -16,7 +16,7 @@
       <span class="single-item__text--danger">{{ 'course.testpaper_manage.import.re_edit.error_no_stem'|trans }}</span>
     {% endif %}
   </div>
-  {% include 'testpaper/subject/common.html.twig' with { type: item.type, difficulty: item.difficulty, score: item.score|default('') } %}
+  {% include 'testpaper/subject/common.html.twig' with { type: item.type, difficulty: item.difficulty, score: item.score|default(''), category: item.category|default() } %}
 </div>
 
 {% if token is not defined %}

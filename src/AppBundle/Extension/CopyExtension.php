@@ -62,14 +62,6 @@ class CopyExtension extends Extension implements ServiceProviderInterface
                     'class' => 'Biz\Course\Copy\Chain\ClassroomTeacherCopy',
                     'priority' => 80,
                 ),
-                'courseset-question' => array(
-                    'class' => 'Biz\Course\Copy\Chain\CourseSetQuestionCopy',
-                    'priority' => 70,
-                ),
-                'courseset-testpaper' => array(
-                    'class' => 'Biz\Course\Copy\Chain\CourseSetTestpaperCopy',
-                    'priority' => 60,
-                ),
                 'task' => array(
                     'class' => 'Biz\Course\Copy\Chain\TaskCopy',
                     'priority' => 50,
@@ -85,12 +77,6 @@ class CopyExtension extends Extension implements ServiceProviderInterface
             'priority' => 100,
             'isCopy' => 0,
             'children' => array(
-                'question' => array(
-                    'class' => 'Biz\Question\Copy\QuestionCopy',
-                ),
-                'testpaper' => array(
-                    'class' => 'Biz\Testpaper\Copy\TestpapersCopy',
-                ),
                 'tag-owner' => array(
                     'class' => 'Biz\Taxonomy\Copy\TagOwnerCopy',
                     'priority' => 100,
