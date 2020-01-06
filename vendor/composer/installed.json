@@ -433,12 +433,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/exam-parser.git",
-            "reference": "dfedc7e47d9fe10f9758b4a0d3a345808f9c9065"
+            "reference": "f843689a4b6eaa4859031e4d8d8c1a14416d1d65"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/exam-parser/zipball/dfedc7e47d9fe10f9758b4a0d3a345808f9c9065",
-            "reference": "dfedc7e47d9fe10f9758b4a0d3a345808f9c9065",
+            "url": "https://api.github.com/repos/codeages/exam-parser/zipball/f843689a4b6eaa4859031e4d8d8c1a14416d1d65",
+            "reference": "f843689a4b6eaa4859031e4d8d8c1a14416d1d65",
             "shasum": "",
             "mirrors": [
                 {
@@ -459,7 +459,7 @@
             "monolog/monolog": "^1.18",
             "phpunit/phpunit": "^4 || ^5 || ^6"
         },
-        "time": "2019-12-16T06:25:25+00:00",
+        "time": "2020-01-06T00:57:14+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -6121,23 +6121,6 @@
         "name": "symfony/polyfill-xml",
         "version": "v1.12.0",
         "version_normalized": "1.12.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/polyfill-xml.git",
-            "reference": "e48d7bcd5b6d0aec5884ee351a3ea4d3abb58f13"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-xml/zipball/e48d7bcd5b6d0aec5884ee351a3ea4d3abb58f13",
-            "reference": "e48d7bcd5b6d0aec5884ee351a3ea4d3abb58f13",
-            "shasum": "",
-            "mirrors": [
-                {
-                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                    "preferred": true
-                }
-            ]
-        },
         "require": {
             "php": ">=5.3.3",
             "symfony/polyfill-php72": "~1.4"
@@ -6813,6 +6796,7 @@
             "ZendFramework",
             "escaper",
             "zf"
-        ]
+        ],
+        "abandoned": "laminas/laminas-escaper"
     }
 ]
