@@ -21,12 +21,11 @@
         <div class="testpaper-mark-info__title text-overflow" title="{{ taskTitle }}">{{ taskTitle }}</div>
         <div class="testpaper-mark-info__name">
           {% if testpaper %}{{'course.testpaper_manage.create.name'|trans}}： {{ testpaper.name }}{% else %}{{ 'course.testpaper_check.testpaper_delete'|trans }}{% endif %}
-          {% set courseSet = data('CourseSet', { id: task.fromCourseSetId }) %}
-          {% if courseSet and courseSet.parentId %}
+          {% if courseSets[task.fromCourseSetId] and courseSets[task.fromCourseSetId].parentId|default(0) %}
             <div class="mbm mtm color-gray">
               <span class="mrl">{{'user.orders.target_course'|trans}}：
                 {% set course=data('Course',{'courseId':task.courseId}) %}
-                {{ courseSet.title|default('')}}{% if course.title %}-{{ course.title|default('') }}{% endif %}
+                {{ courseSets[task.fromCourseSetId].title|default('')}}{% if courseSets[task.courseId]|default() %}-{{ courseSets[task.courseId].title|default('') }}{% endif %}
               </span>
             </div>
           {% endif %}
