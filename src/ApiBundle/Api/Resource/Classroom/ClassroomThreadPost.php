@@ -41,13 +41,14 @@ class ClassroomThreadPost extends AbstractResource
         if (!$this->getClassroomService()->canTakeClassroom($classroomId)) {
             throw ClassroomException::FORBIDDEN_TAKE_CLASSROOM();
         }
+        $content = $request->request->get('content', '');
 
-        if (empty($request->request->get('content', ''))) {
+        if (empty($content)) {
             throw CommonException::ERROR_PARAMETER();
         }
 
         $threadPost = array(
-            'content' => $request->request->get('content'),
+            'content' => $content,
             'parentId' => $request->request->get('parentId', 0),
             'threadId' => $threadId,
         );
