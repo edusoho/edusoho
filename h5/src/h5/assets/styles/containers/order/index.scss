@@ -1,5 +1,12 @@
 .order {
   height: 90vh;
+  .van-hairline--bottom{
+    background:#212121;
+    .van-nav-bar__title, .van-nav-bar__arrow{
+      color:#fff;
+      font-weight: bold;
+    }
+  }
   .goods-info {
     border-bottom: vw(14) solid #f7f7f7;
     > .e-course {
@@ -144,24 +151,12 @@
     display: flex;
     justify-content: space-between;
     padding: 0 vw(20);
-    line-height: vw(46);
+    height:50px;
+    line-height: 50px;
     background-color: #fff;
     font-size: vw(14);
-    .h5-icon {
-      font-size: vw(24);
-      color: #c1c1c1;
-    }
-    .h5-icon-check {
-      display: none;
-    }
-    &.active {
-      .h5-icon-circle {
-        display: none;
-      }
-      .h5-icon-check {
-        display: block;
-        color: #FF9800;
-      }
+    .icon-About{
+      font-size: vw(14);
     }
   }
 }
@@ -197,7 +192,7 @@
 }
 
 .order .coupon-popup__content {
-  top: vw(95);
+  top: 96px;
   background: #f5f5f5;
   .coupon-number-change{
     display: flex;

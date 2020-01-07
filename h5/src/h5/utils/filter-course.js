@@ -14,7 +14,7 @@ const getDisplayStyle = (data, listObj) => {
       targetId: data.targetId,
       imgSrc: {
         url: data.cover.middle || '',
-        className: 'e-class__img'
+        className: 'e-course__img'
       },
       header: data.title,
       middle: {
@@ -24,9 +24,9 @@ const getDisplayStyle = (data, listObj) => {
       bottom: {
         value: data.price || data.studentNum,
         html: `<span class="switch-box__price">${price}</span>
-                   <span class="switch-box__state">
-                      <p style="color: #B0BDC9"> ${data.studentNum}人在学</p>
-                   </span>`
+                  <span class="switch-box__state"><p style="color: #B0BDC9">
+                    ${data.studentNum}人在学</p>
+                  </span>`
       }
     };
   }
@@ -128,7 +128,7 @@ const courseListData = (data, listObj, setting = '') => {
           targetId: data.targetId,
           imgSrc: {
             url: data.cover.middle || '',
-            className: 'e-class__img'
+            className: 'e-course__img'
           },
           header: data.title,
           middle: '',
@@ -142,7 +142,7 @@ const courseListData = (data, listObj, setting = '') => {
         id: data.id,
         imgSrc: {
           url: data.courseSet.cover.middle || '',
-          className: (listObj.typeList === 'course_list') ? 'e-course__img' : 'e-class__img'
+          className: 'e-course__img'
         },
         header: data.courseSetTitle,
         middle: {

@@ -115,6 +115,10 @@ export default {
     saveFlag: {
       type: Number,
       default: 0
+    },
+    startValidate:{
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -168,7 +172,7 @@ export default {
           linkData.url = "";
         }
       }
-      const incomplete = validate(this.module, this.saveFlag);
+      const incomplete = validate(this.module, this.startValidate);
       this.$emit("updateModule", {
         incomplete,
         updateModule: this.module

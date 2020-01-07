@@ -89,7 +89,6 @@ export default {
       }
     },
     imgClass() {
-      if (this.typeList === 'classroom_list') return 'e-class__img'
       if (this.typeList === 'vip') return 'e-vip__img'
       return 'e-course__img'
     },

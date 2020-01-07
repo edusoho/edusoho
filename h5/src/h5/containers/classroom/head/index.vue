@@ -32,7 +32,7 @@ export default {
       default: ''
     },
     classroomId: {
-      type: Number,
+      type: String,
       default: 0
     },
     seckillActivities: {

@@ -24,10 +24,7 @@
             title="优惠券"
             class="nav-bar"
             @click-left="disuse"/>
-          <div :class="['btn-coupon-exit', {active: activeItemIndex < 0}]" @click="disuse">不使用优惠
-            <i class="h5-icon h5-icon-circle"/>
-            <i class="h5-icon h5-icon-check"/>
-          </div>
+          <div :class="['btn-coupon-exit', {active: activeItemIndex < 0}]" @click="disuse">不使用优惠 <i class="iconfont icon-About"/> </div>
           <div class="e-popup__content coupon-popup__content">
             <div class="coupon-number-change">
               <van-field
@@ -289,9 +286,11 @@ export default {
         data: data
       }).then(res => {
         if (!this.couponSwitch) {
-          res.availableCoupons.length = 0
+          return;
         }
-        this.course = res
+        const coupons=res.availableCoupons;
+        this.course = res;
+        this.itemData= coupons.length>0 ? coupons[0]:null;
       }).catch(err => {
         // 购买后返回会造成重复下单报错
         this.$router.go(-1)
