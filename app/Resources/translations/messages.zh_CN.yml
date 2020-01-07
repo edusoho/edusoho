@@ -8033,6 +8033,11 @@ admin.mobile_setting.app_custom_cover_hint: 请上传jpg, gif, png格式的图�
 admin.mobile_setting.splash_setting: 设置启动图
 admin.mobile_setting.splash_setting_hint: 请上传jpg, gif, png格式的图片。最多设置5张启动图，建议图片尺寸为 640×960px，建议图片大小不超过2MB。用户首次登录网校时会显示启动图。
 admin.mobile_setting.splash: 启动图%splashNum%
+admin.mobile_setting.study_center_entrance: 学习中心入口控制
+admin.mobile_setting.study_center_entrance.has_live: 含直播课表入口
+admin.mobile_setting.study_center_entrance.has_no_live: 不含直播课表入口
+admin.mobile_setting.study_center_entrance.has_live.notice: 含直播课表入口，进入页面后展示以月为维度的课表，方便学员查看直播安排
+admin.mobile_setting.study_center_entrance.has_no_live.notice: 不含直播课表，当机构不以直播为教学手段，建议可以不用展示入口
 admin.coin_model.currency_tips: >
   1、暂无手动修改用户虚拟币余额的功能
   <br>

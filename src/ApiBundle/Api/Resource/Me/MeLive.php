@@ -4,10 +4,6 @@ namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Resource\Activity\ActivityFilter;
-use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
-use ApiBundle\Api\Resource\Course\CourseFilter;
-use ApiBundle\Api\Resource\Filter;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Classroom\Service\ClassroomService;
@@ -44,12 +40,10 @@ class MeLive extends AbstractResource
 
         $lives = $this->getTaskService()->searchTasks($conditions, array('startTime' => 'DESC'), 0, $total);
 
-        $lives['dayLives'] = $this->filterDayLives($request->query->get('selectedDay', strtotime(date('00:00:00', time()))), $lives, $courseIds, $classroomIds);
-
-        return $lives;
+        return $this->sortAndFilterDayLives($lives, $courseIds, $classroomIds);
     }
 
-    protected function filterDayLives($selectedDay, $lives, $courseIds, $classroomIds)
+    protected function sortAndFilterDayLives($lives, $courseIds, $classroomIds)
     {
         $classroomCourses = array_combine($courseIds, $classroomIds);
 
@@ -60,39 +54,28 @@ class MeLive extends AbstractResource
         $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
 
         $dayLives = array();
-        $courseFilter = new CourseFilter();
-        $courseFilter->setMode(Filter::SIMPLE_MODE);
-
-        $activityFilter = new ActivityFilter();
-        $activityFilter->setMode(Filter::SIMPLE_MODE);
-
-        $classroomFilter = new ClassroomFilter();
-        $classroomFilter->setMode(Filter::SIMPLE_MODE);
-
-        $liveFilter = new MeLiveFilter();
-        $liveFilter->setMode(Filter::SIMPLE_MODE);
-
         foreach ($lives as $live) {
-            if ($live['startTime'] < $selectedDay || $live['startTime'] > strtotime(date('23:59:59', $selectedDay))) {
-                continue;
-            }
-
             $live['activity'] = empty($activities[$live['activityId']]) ? null : $activities[$live['activityId']];
-            $activityFilter->filter($live['activity']);
 
             $live['course'] = empty($courses[$live['courseId']]) ? null : $courses[$live['courseId']];
-            $courseFilter->filter($live['course']);
 
             $live['classroom'] = empty($classroomCourses[$live['courseId']]) || empty($classrooms[$classroomCourses[$live['courseId']]]) ? null : $classrooms[$classroomCourses[$live['courseId']]];
-            $classroomFilter->filter($live['classroom']);
 
             $status = $live['startTime'] > time() ? 'created' : ($live['endTime'] < time() ? 'finished' : 'doing');
-            $liveFilter->filter($live);
 
             $dayLives[$status][] = $live;
         }
 
-        return $dayLives;
+        $filteredLives = array();
+
+        array_filter(array('doing', 'created', 'finished'), function ($status) use ($dayLives, &$filteredLives) {
+            if (empty($dayLives[$status])) {
+                return false;
+            }
+            $filteredLives = array_merge($filteredLives, array_values($dayLives[$status]));
+        });
+
+        return array_values($filteredLives);
     }
 
     /**
