@@ -108,7 +108,7 @@ interface CourseSetService
      *
      * @return array[]
      */
-    public function searchCourseSets(array $conditions, $orderBys, $start, $limit);
+    public function searchCourseSets(array $conditions, $orderBys, $start, $limit, $columns = array());
 
     /**
      * @param array $conditions
@@ -325,4 +325,12 @@ interface CourseSetService
     public function refreshHotSeq();
 
     public function searchCourseSetsByTeacherOrderByStickTime($conditions, $orderBy, $userId, $start, $limit);
+
+    public function findCourseSetsLikeTitle($title);
+
+    /**
+     * @param $courseId
+     * 课程从班级移除后，重置课程及教学计划的parentId
+     */
+    public function resetParentIdByCourseId($courseId);
 }

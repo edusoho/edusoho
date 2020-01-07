@@ -53,9 +53,7 @@ abstract class CourseBaseController extends BaseController
 
         if (!$user->isLogin()) {
             $response = $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
-        }
-
-        if (!$this->getCourseService()->canTakeCourse($course)) {
+        } elseif (!$this->getCourseService()->canTakeCourse($course)) {
             $response = $this->createMessageResponse(
                 'info',
                 '您还不是课程《'.$courseSet['title'].'》的学员，请先购买或加入学习。',

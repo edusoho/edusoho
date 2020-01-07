@@ -6,11 +6,11 @@
         <h5><span>{{ config.title|default(config.defaultTitle) }}</span><div class="line"></div></h5>
         <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div>
       </div>
-      <div class="course-list">
+      <div class="course-list course-list-new">
         <div class="row">
           {% for courseSet in RecentLiveCourseSets %}
-            <div class="col-lg-3 col-md-4 col-xs-6">
-              {% include 'course/widgets/course-grid.html.twig' with {courseSet: courseSet} %}
+            <div class="col-lg-3 col-md-4 col-xs-6 course-item-wrap">
+              {% include 'course/widgets/course-grid-new.html.twig' with {courseSet: courseSet} %}
               {% set task = courseSet['task']|default(null) %}
               {% if task and "now"|date("U") >= task.startTime and "now"|date("U") <= task.endTime %}
                 <div class="course-date visible-lg">

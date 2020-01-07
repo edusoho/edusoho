@@ -63,6 +63,7 @@ admin.user.message.basic_tab: 'Messages'
 #课程模块
 admin.course.basic_menu: Courses
 admin.course.classroom_menu: Classes
+admin.course.question_bank: Question Bank
 admin.course.open_course_menu: Public Courses
 admin.course.live_menu: Lives
 admin.course.thread_menu: Discussions
@@ -96,6 +97,12 @@ admin.course.classroom.basic_tab.recommend_btn: Recommend
 admin.course.classroom.basic_tab.close_btn: Close
 admin.course.classroom.basic_tab.publish_submit_btn: Publish
 admin.course.classroom.basic_tab.delete_submit_btn: Delete
+
+##题库管理模块
+admin.course.question_bank.basic_tab: Question Bank
+admin.course.question_bank.basic_tab.create_btn: Create
+admin.course.question_bank_category.basic_tab: Question Bank Category
+admin.course.question_bank_category.basic_tab.create_btn: Create
 
 ##公开课管理模块
 admin.course.open_course.basic_tab: Open courses
@@ -523,13 +530,21 @@ admin_v2.course.review_menu: Reviews
 admin_v2.course.review.course_review_tab: Reviews
 admin_v2.course.review.classroom_review_tab: Rate
 
+# 教学模块-资源管理
+admin_v2.cloud_resource.basic_group: Resources
 
 # 教学模块-资源管理-云资源
-admin_v2.cloud_resource.basic_group: Cloud Resources
 admin_v2.cloud_resource.basic_tab: Cloud Resources
 admin_v2.cloud.file.basic_tab: Cloud Resources
 admin_v2.cloud.attachment.basic_tab: Cloud Attachement
 admin_v2.cloud.attachment_setting.basic_tab: Cloud Attachement Setting
+
+# 教学模块-资源管理-题库管理
+admin_v2.question_bank.menu: Question Bank
+admin_v2.question_bank.basic_tab: Question Bank
+admin_v2.question_bank.basic_tab.create_btn: Create
+admin_v2.question_bank.category_tab: Question Bank Category
+admin_v2.question_bank.category_tab.create_btn: Create
 
 # 通用按钮
 admin_v2.btn.sms_send_btn: Notify the publish

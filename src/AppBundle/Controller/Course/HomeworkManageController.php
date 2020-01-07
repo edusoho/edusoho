@@ -6,9 +6,7 @@ use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
-use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\Activity\Service\TestpaperActivityService;
 
 class HomeworkManageController extends BaseController
 {
@@ -62,22 +60,6 @@ class HomeworkManageController extends BaseController
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
-    }
-
-    /**
-     * @return TestpaperActivityService
-     */
-    protected function getTestpaperActivityService()
-    {
-        return $this->createService('Activity:TestpaperActivityService');
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
     }
 
     protected function getCourseMemberService()

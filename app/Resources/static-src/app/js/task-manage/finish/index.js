@@ -60,5 +60,9 @@ $('#watchTime').on('change', function() {
 });
 
 window.ltc.on('getCondition', function(msg){
-  window.ltc.emit('returnCondition', {valid: validate.form() ,data: {finishType: $('#finish-type').val(), finishData: $('#finish-data').val()} });
+  if ($('#finish-type-select').length > 0) {
+    window.ltc.emit('returnCondition', {valid: validate.form() ,data: {finishType: $('#finish-type-select:checked').val()} });
+  } else {
+    window.ltc.emit('returnCondition', {valid: validate.form() ,data: {finishType: $('#finish-type').val(), finishData: $('#finish-data').val()} });
+  }
 });

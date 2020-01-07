@@ -8,7 +8,7 @@ interface SignService
 
     public function isSignedToday($userId, $targetType, $targetId);
 
-    public function isYestodaySigned($userId, $targetType, $targetId);
+    public function isYesterdaySigned($userId, $targetType, $targetId);
 
     public function findSignRecordsByPeriod($userId, $targetType, $targetId, $startDay, $endDay);
 

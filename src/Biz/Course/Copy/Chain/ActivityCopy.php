@@ -34,25 +34,8 @@ class ActivityCopy extends AbstractEntityCopy
             $newActivity['fromCourseSetId'] = $courseSetId;
             $newActivity['copyId'] = $isCopy ? $activity['id'] : 0;
 
-            //create testpaper
-            $testId = 0;
-            if (in_array($activity['mediaType'], array('testpaper'))) {
-                $activityTestpaperCopy = new ActivityTestpaperCopy($this->biz);
-
-                $testpaper = $activityTestpaperCopy->copy($activity, array(
-                    'newCourseId' => $newCourseId,
-                    'newCourseSetId' => $courseSetId,
-                    'isCopy' => $isCopy,
-                ));
-                $testId = empty($testpaper['id']) ? 0 : $testpaper['id'];
-            }
-
-            //create activity config
-            $config = $this->getActivityConfig($activity['mediaType']);
-
-            $ext = $config->copy($activity, array(
+            $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, array(
                 'refLiveroom' => $activity['fromCourseSetId'] != $courseSetId,
-                'testId' => $testId,
                 'newActivity' => $newActivity,
                 'isCopy' => $isCopy,
             ));

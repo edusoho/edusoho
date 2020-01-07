@@ -5,18 +5,12 @@ namespace Biz\Task\Job;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\AppLoggerConstant;
-use Biz\Course\Copy\Chain\ActivityTestpaperCopy;
 use Biz\Course\Dao\CourseChapterDao;
-use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMaterialDao;
-use Biz\System\Service\LogService;
-use Biz\Task\Dao\TaskDao;
-use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
-class CourseTaskCreateSyncJob extends AbstractJob
+class CourseTaskCreateSyncJob extends AbstractSyncJob
 {
     public function execute()
     {
@@ -77,11 +71,6 @@ class CourseTaskCreateSyncJob extends AbstractJob
 
     private function createActivity($activity, $copiedCourse)
     {
-        //create testpaper&questions if ref exists
-        $testpaper = $this->syncTestpaper($activity, $copiedCourse);
-
-        $testId = empty($testpaper) ? 0 : $testpaper['id'];
-
         $newActivity = array(
             'title' => $activity['title'],
             'remark' => $activity['remark'],
@@ -99,7 +88,7 @@ class CourseTaskCreateSyncJob extends AbstractJob
         );
 
         $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, array(
-            'testId' => $testId, 'refLiveroom' => 1, 'newActivity' => $newActivity, 'isCopy' => 1, 'isSync' => 1,
+            'refLiveroom' => 1, 'newActivity' => $newActivity, 'isCopy' => 1, 'isSync' => 1,
         ));
 
         if (!empty($ext)) {
@@ -145,21 +134,6 @@ class CourseTaskCreateSyncJob extends AbstractJob
         }
     }
 
-    private function syncTestpaper($activity, $copiedCourse)
-    {
-        if ('testpaper' != $activity['mediaType']) {
-            return array();
-        }
-
-        $testpaperCopy = new ActivityTestpaperCopy($this->biz);
-
-        return $testpaperCopy->copy($activity, array(
-            'newCourseSetId' => $copiedCourse['courseSetId'],
-            'newCourseId' => $copiedCourse['id'],
-            'isCopy' => 1,
-        ));
-    }
-
     protected function copyFields($source, $target, $fields)
     {
         if (empty($fields)) {
@@ -172,22 +146,6 @@ class CourseTaskCreateSyncJob extends AbstractJob
         }
 
         return $target;
-    }
-
-    /**
-     * @return TaskService
-     */
-    private function getTaskService()
-    {
-        return $this->biz->service('Task:TaskService');
-    }
-
-    /**
-     * @return CourseDao
-     */
-    private function getCourseDao()
-    {
-        return $this->biz->dao('Course:CourseDao');
     }
 
     /**
@@ -207,14 +165,6 @@ class CourseTaskCreateSyncJob extends AbstractJob
     }
 
     /**
-     * @return TaskDao
-     */
-    private function getTaskDao()
-    {
-        return $this->biz->dao('Task:TaskDao');
-    }
-
-    /**
      * @param  $type
      *
      * @return Activity
@@ -225,29 +175,10 @@ class CourseTaskCreateSyncJob extends AbstractJob
     }
 
     /**
-     * @return LogService
-     */
-    private function getLogService()
-    {
-        return $this->biz->service('System:LogService');
-    }
-
-    /**
      * @return CourseMaterialDao
      */
     private function getMaterialDao()
     {
         return $this->biz->dao('Course:CourseMaterialDao');
-    }
-
-    protected function dispatchEvent($eventName, $subject, $arguments = array())
-    {
-        if ($subject instanceof Event) {
-            $event = $subject;
-        } else {
-            $event = new Event($subject, $arguments);
-        }
-
-        return $this->biz['dispatcher']->dispatch($eventName, $event);
     }
 }

@@ -22,17 +22,19 @@ use Biz\User\Service\AuthService;
 use Biz\User\Service\BatchNotificationService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
+use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Pay\Service\AccountService;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use Biz\Distributor\Util\DistributorCookieToolkit;
+use Biz\User\UserException;
 
 class Login extends AbstractResource
 {
     private $supportLoginTypes = array(
-        'sms',
+        'sms', 'token',
     );
 
     private $supportClients = array(
@@ -54,6 +56,43 @@ class Login extends AbstractResource
         $method = "loginBy${loginType}";
 
         return $this->$method($request);
+    }
+
+    public function loginByToken(ApiRequest $request)
+    {
+        $mobile = $this->getSettingService()->get('mobile', array());
+        if (empty($mobile['enabled'])) {
+            throw SettingException::APP_CLIENT_CLOSED();
+        }
+
+        $requestToken = $this->getTokenService()->verifyToken(MobileBaseController::TOKEN_TYPE, $request->request->get('token'));
+        if (empty($requestToken) || MobileBaseController::TOKEN_TYPE != $requestToken['type']) {
+            throw UserException::NOTFOUND_TOKEN();
+        }
+
+        $user = $this->getUserService()->getUser($requestToken['userId']);
+        if (empty($user)) {
+            throw UserException::NOTFOUND_USER();
+        }
+
+        if ($user['locked']) {
+            throw UserException::LOCKED_USER();
+        }
+
+        $client = $this->getClient($request->request->get('client', 'app'), $request->headers->get('User-Agent'));
+        $user['currentIp'] = $request->getHttpRequest()->getClientIp();
+        $this->appendUser($user);
+
+        $token = $this->getLoginToken($user['id']);
+
+        $this->afterLogin($user, $token, $client);
+
+        $this->getLogService()->info('mobile', 'user_login', "{$user['nickname']}使用二维码登录", array('requestToken' => $requestToken, 'token' => $token, 'user' => $user));
+
+        return array(
+            'token' => $token,
+            'user' => $user,
+        );
     }
 
     public function loginBySms(ApiRequest $request)
@@ -81,10 +120,21 @@ class Login extends AbstractResource
             $user = $this->createUser($clientIp, $client, $mobile, $request);
             $this->sendRegisterSms($mobile, $user['id'], $user['nickname'], $user['realPassword']);
         }
+
+        if ($user['locked']) {
+            throw UserException::LOCKED_USER();
+        }
+
         $user['currentIp'] = $clientIp;
         $this->appendUser($user);
 
-        $token = $this->getLoginToken($user['id'], $fields['smsCode'], $fields['smsToken'], $mobile, $client);
+        $token = $this->getLoginToken($user['id'], array(
+                'sms_code' => $fields['smsCode'],
+                'sms_token' => $fields['smsToken'],
+                'client' => $client,
+                'mobile' => $mobile,
+            )
+        );
 
         $this->afterLogin($user, $token, $client);
 
@@ -174,18 +224,13 @@ class Login extends AbstractResource
         $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
     }
 
-    private function getLoginToken($userId, $smsCode, $smsToken, $mobile, $client)
+    private function getLoginToken($userId, $data = array())
     {
         $token = $this->getTokenService()->makeToken(MobileBaseController::TOKEN_TYPE, array(
             'times' => 0,
             'duration' => TimeMachine::ONE_MONTH,
             'userId' => $userId,
-            'data' => array(
-                'sms_code' => $smsCode,
-                'sms_token' => $smsToken,
-                'client' => $client,
-                'mobile' => $mobile,
-            ),
+            'data' => $data,
         ));
 
         return $token['token'];

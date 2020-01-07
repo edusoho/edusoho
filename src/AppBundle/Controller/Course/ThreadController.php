@@ -79,6 +79,8 @@ class ThreadController extends CourseBaseController
         if ($course['parentId']) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $classroomSetting = $this->getSettingService()->get('classroom');
+            $classroomSetting['name'] = empty($classroomSetting['name']) ? $this->trans('site.default.classroom') : $classroomSetting['name'];
+
             if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
                 return $this->createMessageResponse('info', '非常抱歉，您无权限访问该'.$classroomSetting['name'].'，如有需要请联系客服', '', 3, $this->generateUrl('homepage'));
             }
@@ -432,6 +434,8 @@ class ThreadController extends CourseBaseController
         if ($course['parentId']) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $classroomSetting = $this->getSettingService()->get('classroom');
+            $classroomSetting['name'] = empty($classroomSetting['name']) ? $this->trans('site.default.classroom') : $classroomSetting['name'];
+
             if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
                 return $this->createMessageResponse('info', '非常抱歉，您无权限访问该'.$classroomSetting['name'].'，如有需要请联系客服', '', 3, $this->generateUrl('homepage'));
             }

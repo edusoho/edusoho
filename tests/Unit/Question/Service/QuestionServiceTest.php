@@ -108,9 +108,8 @@ class QuestionServiceTest extends BaseTestCase
             'type' => 'material',
             'stem' => 'test material question.',
             'content' => 'question material content',
-            'courseId' => 1,
-            'courseSetId' => 1,
-            'lessonId' => 2,
+            'bankId' => 1,
+            'categoryId' => 1,
             'answer' => array(),
             'target' => 'course-1',
         );
@@ -120,7 +119,8 @@ class QuestionServiceTest extends BaseTestCase
             'type' => 'single_choice',
             'stem' => 'test material-single choice question.',
             'content' => 'question material-single_choice content',
-            'courseSetId' => 1,
+            'bankId' => 1,
+            'categoryId' => 2,
             'choices' => array(
                 'question 1 -> choice 1',
                 'question 1 -> choice 2',
@@ -145,8 +145,8 @@ class QuestionServiceTest extends BaseTestCase
         $this->assertEquals($update['stem'], $questionUpdate['stem']);
         $this->assertEquals($update['score'], $questionUpdate['score']);
         $this->assertArrayEquals($update['answer'], $questionUpdate['answer']);
-        $this->assertEquals(1, $questionUpdate['courseId']);
-        $this->assertEquals(2, $questionUpdate['lessonId']);
+        $this->assertEquals(1, $questionUpdate['bankId']);
+        $this->assertEquals(1, $questionUpdate['categoryId']);
     }
 
     public function testUpdateCopyQuestionsSubCount()

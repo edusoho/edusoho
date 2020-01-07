@@ -8,6 +8,7 @@ use Biz\BaseService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
+use Biz\Course\CourseException;
 use Biz\Course\CourseSetException;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
@@ -19,6 +20,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\System\Service\LogService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\User\Service\UserService;
@@ -251,12 +253,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $user->hasPermission('admin_course_content_manage') || $user->hasPermission('admin_v2_course_content_manage');
     }
 
-    public function searchCourseSets(array $conditions, $orderBys, $start, $limit)
+    public function searchCourseSets(array $conditions, $orderBys, $start, $limit, $columns = array())
     {
         $orderBys = $this->getOrderBys($orderBys);
         $preparedCondtions = $this->prepareConditions($conditions);
 
-        return $this->getCourseSetDao()->search($preparedCondtions, $orderBys, $start, $limit);
+        return $this->getCourseSetDao()->search($preparedCondtions, $orderBys, $start, $limit, $columns);
     }
 
     public function countCourseSets(array $conditions)
@@ -775,6 +777,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
     }
 
+    /**
+     * @param $id
+     * @param bool $shouldClose
+     *
+     * @return mixed
+     *
+     * @throws \Exception
+     */
     public function unlockCourseSet($id, $shouldClose = false)
     {
         $courseSet = $this->tryManageCourseSet($id);
@@ -797,6 +807,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $courseSet = $this->getCourseSetDao()->update($id, $fields);
 
             $this->getCourseDao()->update($courses[0]['id'], $fields);
+
+            // todo 修改到bankSubscriber
+            $this->getQuestionBankService()->updateQuestionBankByCourseSetId(
+                $courseSet['id'],
+                array('isHidden' => 0)
+            );
 
             $this->dispatchEvent('course-set.unlock', new Event($courseSet));
 
@@ -959,6 +975,27 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->refreshHotSeq();
     }
 
+    public function resetParentIdByCourseId($courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        if (empty($course)) {
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
+        }
+
+        $courseSet = $this->getCourseSet($course['courseSetId']);
+
+        if (empty($courseSet)) {
+            $this->createNewException(CourseSetException::NOTFOUND_COURSESET());
+        }
+
+        $course['parentId'] = 0;
+        $courseSet['parentId'] = 0;
+
+        $this->getCourseDao()->update($course['id'], $course);
+        $this->getCourseSetDao()->update($courseSet['id'], $courseSet);
+    }
+
     protected function getRelatedCourseSetDao()
     {
         return $this->createDao('Course:RelatedCourseSetDao');
@@ -1090,6 +1127,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return QuestionBankService
+     */
+    protected function getQuestionBankService()
+    {
+        return $this->createService('QuestionBank:QuestionBankService');
     }
 
     protected function generateDefaultCourse($created)

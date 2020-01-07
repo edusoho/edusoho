@@ -5,7 +5,6 @@ namespace Biz\Activity\Copy;
 use Biz\AbstractCopy;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
-use Biz\Testpaper\Dao\TestpaperDao;
 
 class ActivityCopy extends AbstractCopy
 {
@@ -32,16 +31,8 @@ class ActivityCopy extends AbstractCopy
             $newActivity['fromCourseSetId'] = $newCourseSet['id'];
             $newActivity['copyId'] = $activity['id'];
 
-            $config = $this->getActivityConfig($activity['mediaType']);
-            $testId = 0;
-            if (in_array($activity['mediaType'], array('testpaper'))) {
-                $originalActivityTestpaper = $config->get($activity['mediaId']);
-                $activityTestpaper = $this->getTestpaperDao()->getTestpaperByCopyIdAndCourseSetId($originalActivityTestpaper['mediaId'], $newCourseSet['id']);
-                $testId = $activityTestpaper['id'];
-            }
-            $ext = $config->copy($activity, array(
+            $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, array(
                 'refLiveroom' => false,
-                'testId' => $testId,
                 'newActivity' => $newActivity,
                 'isCopy' => true,
             ));
@@ -86,14 +77,6 @@ class ActivityCopy extends AbstractCopy
             'finishType',
             'finishData',
         );
-    }
-
-    /**
-     * @return TestpaperDao
-     */
-    protected function getTestpaperDao()
-    {
-        return $this->biz->dao('Testpaper:TestpaperDao');
     }
 
     /**

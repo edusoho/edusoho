@@ -29,7 +29,6 @@ site.data.title: 标题
 site.data.score: 分
 site.data.count: 数
 site.data.num: 个
-site.data.empty: 暂无
 site.delete: 删除
 site.copy: 复制
 site.datagrid.empty: 暂无记录
@@ -651,7 +650,7 @@ pay_center.pay.weixin_pay: 微信支付
 pay_center.pay.weixin_pay.content_title: 支付信息
 pay_center.pay.weixin_pay.pay_btn: 立即支付
 pay_center.pay.weixin_pay.scan_qcode_pay_tips: >
-    请使用微信扫一扫<br>扫描二维码支付
+  请使用微信扫一扫<br>扫描二维码支付
 pay_center.pay.weixin_pay.press_qcode_pay_tips: 请长按二维码支付
 pay_center.pay.choose_other_way_btn: 选择其他支付方式
 pay_center.finish: 订单完成
@@ -785,6 +784,8 @@ question.marker_question.add_practice_tips: >
   <p class="title">添加随堂练习，只需一步操作</p>
   <p class="text-md">将题目拖拽到<span class='color-warning'>「视频编辑区域」</p>
 question.marker_question.video_edit_block: 视频编辑区域
+question.marker_question.select_question_bank: --选择题库--
+question.marker_question.select_question_category: --选择分类--
 
 # 教学资料库
 material_lib: 教学资料库
@@ -1160,6 +1161,8 @@ course.testpaper_check.number: 人次
 course.testpaper_check.get_score: 得 %questonScore% 分
 course.testpaper_check.get_score_range: 得 0 - %questonScore% 分
 course.testpaper_check.testpaper_analysis: 试题分析
+course.testpaper_check.student_score: 学员成绩
+course.testpaper_check.testpaper_total_score: 试卷总分
 
 course.homepage.re_try_btn: 再次尝试
 course.homework_check: 作业批阅
@@ -1561,7 +1564,7 @@ course.question_manage.question.delete_btn: 删除
 course.question_manage.question.include_sub: 含子题
 course.question_manage.question.unfinished: 未完成
 course.question_manage.question.sub_question: 子题
-course.question_manage.question.belong: 从属于
+course.question_manage.question.belong: 分类
 course.question_manage.question.course: 本课程
 course.question_manage.question.score: 得分：%testResult.score%分
 course.question_manage.question.true_answer: 正确答案是
@@ -1587,7 +1590,7 @@ course.question_manage.manage.answer: 答案
 course.question_manage.manage.refer_answer: 参考答案
 course.question_manage.manage.true: 正确
 course.question_manage.manage.fault: 错误
-course.question_manage.manage.belong: 从属
+course.question_manage.manage.category: 分类
 course.question_manage.manage.default_belong: 本课程
 course.question_manage.manage.choose: 请选择
 course.question_manage.manage.belong_tips: 可以针对本课程、某个教学计划或者某个学习活动出题
@@ -1622,6 +1625,8 @@ course.question_manage.import.rule: 导入规则说明
 course.question_manage.export_hint: (当前题目导出仅支持新模板)
 course.question_manage.export_btn: 导出题目
 
+course.testpaper_manage.transfer_text: 题目和试卷搬家啦，点击下方传送门前往查看全新题库。
+course.testpaper_manage.transfer_btn: 前往查看
 course.testpaper_manage: 课程试卷
 course.testpaper_manage.testpaper: 试卷
 course.testpaper_manage.content_title: 课程试卷
@@ -1685,7 +1690,7 @@ course.testpaper_manage.import.re_edit.select_type: 选择题型
 course.testpaper_manage.import.re_edit.uncertain_choice: 不定项
 course.testpaper_manage.import.re_edit.question_statistics: 题目统计
 course.testpaper_manage.import.re_edit.batch_set_difficulty: 设置难度
-course.testpaper_manage.import.re_edit.batch_set_belong: 设置从属
+course.testpaper_manage.import.re_edit.batch_set_category: 设置分类
 course.testpaper_manage.import.re_edit.question_list: 题目列表
 course.testpaper_manage.import.re_edit.batch_operate: 批量操作
 course.testpaper_manage.import.re_edit.select_all: 全选
@@ -1996,6 +2001,7 @@ course.plan_task.activity_manage.testpaper.choose: 请选择试卷
 course.plan_task.activity_manage.testpaper.create: >
   还没有试卷，请先去<a href="%testpaperUrl%" target="_parent">创建</a>
 course.plan_task.activity_manage.testpaper.empty_tips: 如果找不到试卷，请先确定该试卷已经发布
+course.plan_task.activity_manage.testpaper.qualified_score: 合格分数
 course.plan_task.activity_manage.testpaper.time_limit: 考试时长
 course.plan_task.activity_manage.testpaper.times: 考试次数
 course.plan_task.activity_manage.testpaper.start_time: 考试开始时间
@@ -2012,7 +2018,9 @@ course.plan_task.activity_manage.testpaper.mode.realTime: 指定
 course.plan_task.activity_manage.testpaper.mode.require_credit: 限制学分
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 参加此次考试所需的学分，０分则不限制。
 course.plan_task.activity_manage.testpaper.pass: 分数达标
+course.plan_task.activity_manage.testpaper.score_pass: 考试合格
 course.plan_task.activity_manage.testpaper.submit: 提交答卷
+course.plan_task.activity_manage.testpaper.finish_tip: 提示：若任务完成条件选择了“考试合格”，则学员的考试分数必须达到上一步中设置的“合格分数”，才能完成此任务。
 course.plan_task.activity_manage.testpaper.empty_tips: 试卷已被删除
 course.plan_task.activity_manage.testpaper.will_begin_tips: 考试未开始，请在%startTime%之后再来
 course.plan_task.activity_manage.testpaper.total_question: >
@@ -2290,8 +2298,8 @@ classroom.course.content: >
   <a href="%menuPath%" target="_blank">&nbsp;&nbsp;《%courseTitle%》&nbsp;&nbsp;</a>
   实时同步中。如需更改内容可以选择对原课程进行更改。
 classroom.course.unlock_tips: >
-    如需解除同步单独编辑本课程，可点击下方按钮解除同步。
-    <font color="#e83d2c">注意：本操作不可逆！</font>
+  如需解除同步单独编辑本课程，可点击下方按钮解除同步。
+  <font color="#e83d2c">注意：本操作不可逆！</font>
 classroom.member_sign: 签到
 classroom.member_signed: 已签到
 classroom.sign_keep_days: 连续%keepDays%天
@@ -3877,6 +3885,14 @@ tag.setting: 标签设置
 category: 分类
 category.all_category: 全部
 
+# 题库分类
+question_bank_category: 题库分类
+question_bank_category.all_category: 全部
+
+# 题库
+question_bank.empty: 暂无题库，请前往<a class="link-primary" href="%url%">后台-课程-题库管理</a>进行创建。
+question_bank.admin_v2.empty: 暂无题库，请前往<a class="link-primary" href="%url%">后台-教学-题库管理</a>进行创建。
+question_bank.empty.no_auth: 暂无题库
 # 附件
 attachments: 附件
 attachments.preview: 预览
@@ -3983,11 +3999,15 @@ my.teaching.today_courses: 今日课程数
 my.teaching.classroom_menu: 在教%classroom%
 my.teaching.question_menu: 学员问答
 my.teaching.discussion_menu: 学员话题
+my.teaching.online_review_menu: 在线批阅
+my.teaching.question_bank_menu: 题库
+my.teaching.question_bank_title: 题库
 my.teaching.testpaper_check_menu: 试卷批阅
 my.teaching.homework_check_menu: 作业批阅
 my.teaching.material_lib_menu: 教学资料库
 my.teaching.course_set.normal: 普通课程
 my.teaching.course_set.live: 直播课程
+my.teaching.course_set.reservation: 预约课程
 my.teaching.course_set.classroom: %classroom%课程
 my.teaching.open_course.normal: 录播公开课
 my.teaching.open_course.live: 直播公开课
@@ -4049,12 +4069,16 @@ my.teaching.testpaper.answer_detail: >
   <div class="color-gray"><small>客观题%objectiveScore%分 / 主观题%subjectiveScore%分</small></div>
   <div class="color-success"><small>%teacherName% 批于%checkTime%</small>
 my.teaching.testpaper.default_teacher: 系统
+my.teaching.online.review.title: 在线批阅
 my.teaching.testpaper.check_title: 试卷批阅
 my.teaching.testpaper.uncheck: 未批阅
 my.teaching.testpaper.check_finished: 已批阅
-my.teaching.testpaper.reviewing_empty: 还没有等待批阅的试卷
+my.teaching.testpaper.reviewing_empty: 没有需要批阅的试卷
 my.teaching.testpaper.check_finished_empty: 还没有已经批阅的试卷
 my.teaching.testpaper.test_record: 我的考试记录
+my.teaching.testpaper.keyword.course_title: 课程名称
+my.teaching.testpaper.keyword.nickname: 用户名
+my.teaching.testpaper.placeholder: 请输入关键词
 
 my.teaching.open_course.title: 名称
 my.teaching.open_course.hit_num: 浏览数
@@ -4317,7 +4341,36 @@ my.teaching.open_course.material.web_connect: 网络链接资料
 my.teaching.open_course.material.lesson: 课时
 my.teaching.open_course.material.upload_time: 上传于
 
-
+#题库
+my.teaching.question_bank.create: 创建题库
+my.teaching.question_bank.instructions: 使用说明
+my.teaching.question_bank.list: 题库列表
+my.teaching.question_bank.name_tip: 最多输入30个字符
+my.teaching.question_bank.info: 题库信息
+my.teaching.question_bank.name_label: 题库名称
+my.teaching.question_bank.category_label: 题库分类
+my.teaching.question_bank.question_category.manage: 题目分类管理
+my.teaching.question_bank.question.manage: 题目管理
+my.teaching.question_bank.testpaper.manage: 试卷管理
+my.teaching.question_bank.testpaper.edit: 编辑试卷
+my.teaching.question_bank.testpaper.empty: 暂无试卷
+my.teaching.question_bank.testpaper.manual_create: 手动组卷
+my.teaching.question_bank.testpaper.automatic_create: 智能组卷
+my.teaching.question_bank.question_category.create: 添加题目分类
+my.teaching.question_bank.question_category.update: 编辑分类
+my.teaching.question_bank.question_batch_category.title: 批量设置分类
+my.teaching.question_bank.question_category.title: 设置题目分类
+my.teaching.question_bank.question_category.latest_update: 最后更新
+my.teaching.question_bank.question_category.operation: 操作
+my.teaching.question_bank.question_category.empty: 无题目分类
+my.teaching.question_bank.question_category.create_hint: 可批量添加分类，一行一个，每个分类最多输入30个字符
+my.teaching.question_bank.question_category.name_label: 分类名称
+my.teaching.question_bank.question.no_category: 未分类
+my.teaching.question_bank.question.all: 全部题目
+my.teaching.question_bank.question.set_category: 设置分类
+my.teaching.question_bank.question.selected: 已选
+my.teaching.question_bank.question.set_score: 设置分值
+my.teaching.question_bank.question.add: 添加题目
 
 my.learning.menu_heading: 我的学习
 my.learning.course_set_menu: 我的课程
@@ -5309,6 +5362,40 @@ admin.classroom_manage.chooser.free: 免费
 admin.classroom_manage.chooser.select_btn: 选择
 admin.classroom_manage.chooser.empty: 暂无%classroomName%记录
 
+# 题库管理
+admin.question_bank.category_manage.name: 名称
+admin.question_bank.category_manage.bank_number: 包含内容
+admin.question_bank.category_manage.operate: 操作
+admin.question_bank.category_manage.bank: 题库
+admin.question_bank.manage.name: 名称
+admin.question_bank.manage.bank_content: 包含内容
+admin.question_bank.manage.all_category: 全部分类
+admin.question_bank.manage.category: 所属分类
+admin.question_bank.manage.operate: 操作
+admin.question_bank.manage.testpaper: 试卷
+admin.question_bank.manage.question: 题目
+admin.question_bank.manage.empty: 暂无题库
+admin.question_bank.manage.add_title: 创建题库
+admin.question_bank.manage.edit_title: 编辑题库
+admin.question_bank.manage.name_label: 名称
+admin.question_bank.manage.category_label: 分类
+admin.question_bank.manage.manager_label: 授权教师
+admin.question_bank.manage.enter_bank_name.placeholer: 请输入名称
+admin.question_bank.manage.model-title: 题库更新说明
+admin.question_bank.manage.model: >
+  <p class="question-bank-model-title"><i class="es-icon es-icon-Promote"></i>新版题库功能，全面提升复用性</p>
+  <p class="question-bank-model-text">在新版题库中创建的题目和试卷可以在所有课程中引用，全面提升了题目和试卷的复用性。</p>
+
+  <p class="question-bank-model-title"><i class="es-icon es-icon-manage"></i>新增题目分类，题目管理更方便</p>
+  <p class="question-bank-model-text">每个题库中都可以创建一套题目分类，无需再从属于教学计划或者课时，方便网校管理题目。</p>
+
+  <p class="question-bank-model-title"><i class="es-icon es-icon-efficiency"></i>试卷创建优化，创建效率大提升</p>
+  <p class="question-bank-model-text">用户可以一次性添加多个题型的题目，并且新增了跨页连选功能，大大提升了创建试卷的效率。</p>
+
+  <p class="question-bank-model-title question-bank-model__special"><i class="es-icon es-icon-Explain"></i>特别说明</p>
+  <p class="question-bank-model-text">老数据处理：原课程中的题目和试卷都搬迁到新版题库中了，原先教师有权限管理的题库，现在依然有权限管理</p>
+
+
 #　分类管理
 admin.category_manage.name_th: 名称
 admin.category_manage.code_th: 编码
@@ -5877,10 +5964,10 @@ admin.mobile_manage.discovery_upgrade_madal.btn_not_upgrade: '暂不升级'
 admin.mobile_manage.discovery_upgrade_madal.btn_next: '继续'
 admin.mobile_manage.discovery_upgrade_madal.btn_confirm: '升级'
 admin.mobile_manage.discovery_upgrade_madal.btn_loading: '升级中'
-admin.mobile_manage.discovery_upgrade.transfer_tips: > 
+admin.mobile_manage.discovery_upgrade.transfer_tips: >
   <p class="upgrade-color-info">移动端内容管理已经升级至</p>
   <p class="upgrade-color-primary">移动端-App设置-发现页配置功能</p>
-admin.mobile_manage.discovery_upgrade.function: > 
+admin.mobile_manage.discovery_upgrade.function: >
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>自定义设置各模块</li>
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>边设置边预览，实时查看展示效果</li>
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>随心所欲打造您的个性APP</li>
@@ -7133,10 +7220,10 @@ admin.login_connect.User_login_protection.after: 经过
 admin.login_connect.User_login_protection.after.unblock: 分钟后，解锁用户/IP
 admin.login_connect.weixinmob.frist.help_block: 开通后，支持使用微信号在手机端微信APP内快捷注册或登录网站。
 admin.login_connect.weixinmob.help_block: >
-    如何开通：
-    1.一个已认证的<a target="_blank" href="https://mp.weixin.qq.com">微信服务号</a>；
-    2.一个已认证的<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>帐号；
-    3.服务号绑定到<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>。
+  如何开通：
+  1.一个已认证的<a target="_blank" href="https://mp.weixin.qq.com">微信服务号</a>；
+  2.一个已认证的<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>帐号；
+  3.服务号绑定到<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>。
 admin.login_connect.weixin.help_block: >
   请先到
   <a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>
@@ -7876,10 +7963,10 @@ admin.payment_setting.llpay_secret: 商户平台Key
 admin.payment_setting.llpay_public_key: 公钥
 admin.payment_setting.llpay_private_key: 密钥
 admin.payment_setting.llpay_application_tips: >
- 使用前提：
-  <p>1、在连连支付平台申请账户并开通，<a target="_blank" href="%qiqiuyuUrl%">点此查看申请说明</a>。</p>
-  <p>2、在账户开通后，前往连连支付商户站 - 安全中心 - 安全信息 - 商户秘钥维护，选择签名方式为rsa签名方式。</p>
-  <p>3、选择rsa签名方式后，请根据连连支付提示生成对应公钥和密钥文件，将文件内容复制后粘帖至对应处。</p>
+  使用前提：
+   <p>1、在连连支付平台申请账户并开通，<a target="_blank" href="%qiqiuyuUrl%">点此查看申请说明</a>。</p>
+   <p>2、在账户开通后，前往连连支付商户站 - 安全中心 - 安全信息 - 商户秘钥维护，选择签名方式为rsa签名方式。</p>
+   <p>3、选择rsa签名方式后，请根据连连支付提示生成对应公钥和密钥文件，将文件内容复制后粘帖至对应处。</p>
 
 admin.payment_setting.quickpay: 汇付宝－快捷支付
 admin.payment_setting.quickpay_api_application_word: 下载接口申请说明文档
@@ -8644,6 +8731,7 @@ log.module.thread: 话题
 log.module.mobile: 手机客户端
 log.module.wap: 微网校
 log.module.push: 推送
+log.module.question_bank: 题库
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -8890,6 +8978,12 @@ log.action.live.update_live_activity: 更新直播活动
 log.action.live.generate_live_replay: 生成录播回放
 log.action.live.delete_live_activity: 删除直播活动
 log.action.mobile.face_login: 人脸识别登录
+log.action.question_bank.create: 创建题库
+log.action.question_bank.delete: 删除题库
+log.action.question_bank.update_teacher: 修改授权教师
+log.action.question_bank.create_category: 创建题库分类
+log.action.question_bank.delete_category: 删除题库分类
+log.action.question_bank.update_category: 更新题库分类
 
 log.action.template.course.create: 新建了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: 修改了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -9044,6 +9138,11 @@ log.action.template.live.update_live_activity: 更新了<strong class="color-suc
 log.action.template.live.generate_live_replay: 生成了<strong class="color-success">直播</strong>的录播回放 《%title%》
 log.action.template.live.delete_live_activity: 删除了<strong class="color-success">直播</strong>活动 《%title%》
 log.action.template.order.adjust_price: 修改了<strong class="color-success">订单</strong> 《%title%》的价格
+log.action.template.question_bank.create: 新建了<strong class="color-success">题库</strong> 《%title%》
+log.action.template.question_bank.delete: 删除了<strong class="color-success">题库</strong> 《%title%》
+log.action.template.question_bank.create_category: 创建了<strong class="color-success">题库分类</strong> 《%title%》
+log.action.template.question_bank.delete_category: 删除了<strong class="color-success">题库分类</strong> 《%title%》
+log.action.template.question_bank.update_category: 修改了<strong class="color-success">题库分类</strong> 《%title%》
 
 log.field.detail: 详情
 log.field.change.detail: 原设置为<strong class="color-danger">%old%</strong> 新设置为<strong class="color-danger">%new%</strong>
@@ -9730,6 +9829,7 @@ exception.rate_limit_email_max_attempt_reach: 已超过发送限制，1小时后
 exception.rate_limit_error_captcha: 图形验证码错误!
 exception.sms.setting_enable: 云短信相关设置未开启!
 exception.setting.attachment.setting_enable: 云附件未开启!
+exception.setting.app_client_closed: App客户端已关闭!
 exception.sms.code_invalid: 短信验证码错误
 exception.sms.type_error: sms类型错误
 exception.sms.send_failed: 发送失败！
@@ -9837,6 +9937,9 @@ exception.task.lessonid_invalid: 错误的课时id
 exception.task.access_denied: 没有权限
 exception.task.categoryid_invalid: 错误的章节id
 exception.task.forbidden_preview_task: 无权预览任务
+exception.task.type_invalid: 任务类型错误
+exception.task.live_replay_not_found: 课时回放不存在
+exception.task.live_replay_invalid: 课时回放获取失败
 exception.course.not_found: 教学计划不存在
 exception.course.forbidden_take_course: 不能访问教学计划
 exception.course.learnmode_invalid: 学习模式错误
@@ -10102,8 +10205,13 @@ exception.filetoolkit.file_type_error: 文件类型不正确
 exception.course.draft.not_found: 教学计划草稿不存在
 exception.task_result.not_found: 学习任务结果不存在
 exception.discovery_column.not_found: 发现栏目不存在
+exception.question_bank.forbidden_delete_category: 分类或子分类下有所属题库，无法删除
+exception.question_bank.not_found_bank: 题库不存在
+exception.question_bank.forbidden_access_bank: 没有访问该题库的权限
 
 exception.wechat.notify_setting_not_enabled: 微信通知未开启
+exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试
+exception.wechat.template_conflict_industry_hint: 服务号行业设置错误
 
 course.unname_title: 未命名计划
 
@@ -10419,6 +10527,26 @@ admin.setting.invite.chooser_coupon.refresh_btn: 刷新
 admin.setting.invite.chooser_coupon.unreceived_num: 请设置可用数量大于1的优惠券批次
 admin.operation.coupon_menu.generate_btn: 生成优惠券
 
+question_bank.question_manage.manage.category: 题目分类
+question_bank.question_manage.manage.stem: 题干
+question_bank.question_manage.manage.score: 分值
+question_bank.question_manage.manage.difficulty: 难度
+question_bank.question_manage.manage.easy_difficulty: 简单
+question_bank.question_manage.manage.normal_difficulty: 一般
+question_bank.question_manage.manage.hard_difficulty: 困难
+question_bank.question_manage.manage.analysis: 解析
+question_bank.question_manage.manage.advanced_options: 显示/隐藏 高级选项
+question_bank.question_manage.manage.stem_tips: >
+  点击编辑器按钮 <span style="color:red">[ ]</span>  可以插入填空项；也可手工输入，例如“今年是[[2014|马]]年”，回答“2014”或者“马”都算答对
+question_bank.question_manage.manage.material: 材料
+
+question.select_question_bank: --选择题库--
+question_reedit.select_question_category: --选择分类--
+question_reedit.category_text: 分类
+question_reedit.category_empty: 无
+question_plus_upgrade_tip: 当前插件版本过低，前往后台升级“题库增强版”插件后，才可继续使用旧模板导入。
+question_bank.to_select.hint: 请先选择题库
+
 # 新版后台开始
 
 # 新后台首页
@@ -10530,10 +10658,10 @@ admin_v2.buiness_advice.goto_qiqiuyu: 前去EduSoho商学院
 
 admin_v2.notice.upgrade_notice: 新后台对插件进行了全新适配，为了便于您的后台管理，需要手动升级全部已安装插件
 admin_v2.notice.go_to_upgrade: 前往升级
-
 admin_v2.boot_page.notice: 为了更高效的操作，需要您前去新的页面
 admin_v2.boot_page.btn_text: 点击前去
 
 admin_v2.homepage.switch_old_in_safari_notice: 由于Safari浏览器原因，暂时不支持切换， 建议使用谷歌或者360浏览器切换。 给您造成不便，抱歉！
 admin_v2.homepage.switch_old_in_safari_notice.title: 确定切换
 admin_v2.homepage.switch_old_in_safari_notice.got_it: 知道了
+

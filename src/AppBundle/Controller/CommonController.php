@@ -11,6 +11,7 @@ use Biz\User\Service\TokenService;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\System;
 
 class CommonController extends BaseController
 {
@@ -117,9 +118,9 @@ class CommonController extends BaseController
 
             $token = $this->getTokenService()->makeToken('mobile_login', $tokenFields);
 
-            $url = $request->getSchemeAndHttpHost().'/mapi_v2/User/loginWithToken?token='.$token['token'];
+            $url = $request->getSchemeAndHttpHost().'/mapi_v2/User/loginWithToken?token='.$token['token'].'&schoolVersion='.System::VERSION;
         } else {
-            $url = $request->getSchemeAndHttpHost().'/mapi_v2/School/loginSchoolWithSite?v=1';
+            $url = $request->getSchemeAndHttpHost().'/mapi_v2/School/loginSchoolWithSite?v=1&schoolVersion='.System::VERSION;
         }
 
         $qrCode = new QrCode();
