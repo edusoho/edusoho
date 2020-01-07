@@ -136,7 +136,7 @@ class Importer {
     `;
 
     this.importData = res.importData;
-    this.chunkNum = res.chunkNum;
+    this.chunkNum = res.chunkNum ? res.chunkNum : 8;
     this.addTemplate(source, res);
   }
 
