@@ -25,16 +25,16 @@
       </a>
     </li>
 
-    <li class="nav-header-section__item {% if side_nav == 'my-testpaper-check' %} active {% endif %}">
-      <a href="{{ path('my_testpaper_check_list',{status:'reviewing'}) }}">{{ 'my.teaching.testpaper_check_menu'|trans }}</a>
-    </li>
-
-    <li class="nav-header-section__item {% if side_nav == 'my-homework-check' %} active {% endif %}">
-      <a href="{{ path('my_homework_check_list',{status:'reviewing'}) }}">{{ 'my.teaching.homework_check_menu'|trans }}</a>
+    <li class="nav-header-section__item {% if side_nav == 'my-online-review' %} active {% endif %}">
+      <a href="{{ path('my_testpaper_check_list') }}">{{ 'my.teaching.online_review_menu'|trans }}</a>
     </li>
 
     <li class="nav-header-section__item {% if side_nav == 'material-lib' %} active {% endif %}">
       <a href="{{ path('material_lib_browsing') }}">{{ 'my.teaching.material_lib_menu'|trans }}</a>
+    </li>
+
+    <li class="nav-header-section__item {% if side_nav == 'my-question-bank' %} active {% endif %}">
+      <a href="{{ path('question_bank_list') }}">{{ 'my.teaching.question_bank_menu'|trans }}</a>
     </li>
   </ul>
 </div>

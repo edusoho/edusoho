@@ -107,6 +107,7 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
                 'orgCode PRE_LIKE :likeOrgCode',
                 'type NOT IN (:excludeTypes)',
                 'type IN (:types)',
+                'locked = :locked',
             ),
             'serializes' => array(
                 'goals' => 'delimiter',

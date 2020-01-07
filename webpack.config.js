@@ -32,7 +32,8 @@ module.exports = {
     'handlebars': ['handlebars'],
     'fullcalendar': ['libs/fullcalendar/index.js'],
     'ltc-sdk-client': ['libs/ltc-sdk-client/index.js'],
-    'ltc-sdk-server': ['libs/ltc-sdk-server/index.js']
+    'ltc-sdk-server': ['libs/ltc-sdk-server/index.js'],
+    'bootstrap-treeview': ['libs/bootstrap-treeview/index.js']
   },
   noParseDeps: { // 不解析依赖，加快编译速度
     'jquery': 'jquery/dist/jquery.js',

@@ -4,6 +4,10 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Question\Service\CategoryService;
+use Biz\Question\Service\QuestionService;
+use Biz\QuestionBank\QuestionBankException;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,44 +16,58 @@ class HomeworkManageController extends BaseController
 {
     public function questionPickerAction(Request $request, $id)
     {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+        $this->getCourseSetService()->tryManageCourseSet($id);
 
         $conditions = $request->query->all();
-
-        $conditions['courseSetId'] = $courseSet['id'];
         $conditions['parentId'] = 0;
+        if (!empty($conditions['excludeIds'])) {
+            $excludeQuestions = $this->getQuestionService()->findQuestionsByIds(explode(',', $conditions['excludeIds']));
+            $questionBankIds = ArrayToolkit::column($excludeQuestions, 'bankId');
+            $questionBankIds = array_unique($questionBankIds);
+            $questionBankId = array_shift($questionBankIds);
+            if (!empty($questionBankIds)) {
+                return $this->createJsonResponse(array('result' => 'error', 'message' => 'json_response.no_multi_question_bank.message'));
+            }
+            if (!$this->getQuestionBankService()->canManageBank($questionBankId)) {
+                $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
+            }
+        }
 
-        $paginator = new Paginator(
-            $request,
-            $this->getQuestionService()->searchCount($conditions),
-            7
+        $parameters = array(
+            'isSelectBank' => 1,
         );
 
-        $questions = $this->getQuestionService()->search(
-            $conditions,
-            array('createdTime' => 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        if (!empty($questionBankId)) {
+            $conditions['bankId'] = $questionBankId;
+            $paginator = new Paginator(
+                $request,
+                $this->getQuestionService()->searchCount($conditions),
+                10
+            );
 
-        $user = $this->getUser();
-        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSet['id']);
+            $questions = $this->getQuestionService()->search(
+                $conditions,
+                array('createdTime' => 'DESC'),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
 
-        return $this->render('homework/manage/question-picker.html.twig', array(
-            'courseSet' => $courseSet,
-            'questions' => $questions,
-            'replace' => empty($conditions['replace']) ? '' : $conditions['replace'],
-            'paginator' => $paginator,
-            'courseTasks' => $this->getQuestionRanges($request->query->get('courseId', 0)),
-            'conditions' => $conditions,
-            'targetType' => $request->query->get('targetType', 'testpaper'),
-            'courses' => $manageCourses,
-        ));
+            $questionCategories = $this->getQuestionCategoryService()->findCategories($questionBankId);
+            $questionCategories = ArrayToolkit::index($questionCategories, 'id');
+            $parameters['questionCategories'] = $questionCategories;
+            $parameters['questions'] = $questions;
+            $parameters['paginator'] = $paginator;
+            $parameters['questionBank'] = $this->getQuestionBankService()->getQuestionBank($questionBankId);
+            $parameters['categories'] = $this->getQuestionCategoryService()->getCategoryStructureTree($questionBankId);
+            $parameters['excludeIds'] = empty($conditions['excludeIds']) ? '' : $conditions['excludeIds'];
+        }
+
+        return $this->render('question-bank/widgets/question-pick-modal.html.twig', $parameters);
     }
 
     public function pickedQuestionAction(Request $request, $courseSetId)
     {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
         $questionIds = $request->request->get('questionIds', array(0));
 
@@ -59,24 +77,30 @@ class HomeworkManageController extends BaseController
 
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
+        $questionBankIds = ArrayToolkit::column($questions, 'bankId');
+        $questionBankIds = array_unique($questionBankIds);
+        $questionBankId = array_shift($questionBankIds);
+        if (!empty($questionBankIds)) {
+            return $this->createJsonResponse(array('result' => 'error', 'message' => 'json_response.no_multi_question_bank.message'));
+        }
+        if (!$this->getQuestionBankService()->canManageBank($questionBankId)) {
+            $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
+        }
+
         foreach ($questions as &$question) {
             if ($question['subCount'] > 0) {
                 $question['subs'] = $this->getQuestionService()->findQuestionsByParentId($question['id']);
             }
         }
 
-        $user = $this->getUser();
-        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $courseSet['id']);
-        $taskIds = ArrayToolkit::column($questions, 'lessonId');
-        $courseTasks = $this->getCourseTaskService()->findTasksByIds($taskIds);
-        $courseTasks = ArrayToolkit::index($courseTasks, 'id');
+        $categories = $this->getQuestionCategoryService()->findCategories($questionBankId);
+        $categories = ArrayToolkit::index($categories, 'id');
 
         return $this->render('homework/manage/question-picked.html.twig', array(
-            'courseSet' => $courseSet,
+            'questionBank' => $this->getQuestionBankService()->getQuestionBank($questionBankId),
+            'categories' => $categories,
             'questions' => $questions,
             'targetType' => $request->query->get('targetType', 'testpaper'),
-            'courseTasks' => $courseTasks,
-            'courses' => $manageCourses,
         ));
     }
 
@@ -172,7 +196,7 @@ class HomeworkManageController extends BaseController
         $activity = $this->getActivityService()->getActivity($activityId);
 
         if (!$activity || 'homework' != $activity['mediaType']) {
-            return $this->createMessageResponse('Argument Invalid');
+            return $this->createMessageResponse('error', 'Argument Invalid');
         }
 
         $testpaper = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
@@ -197,7 +221,7 @@ class HomeworkManageController extends BaseController
         $essayQuestions = array();
 
         foreach ($questions as $question) {
-            if ('essay' == $question['type'] && !$question['parentId']) {
+            if ('essay' == $question['type'] && empty($question['parentId'])) {
                 $essayQuestions[$question['id']] = $question;
             } elseif ('material' == $question['type']) {
                 $types = ArrayToolkit::column($question['subs'], 'type');
@@ -208,31 +232,6 @@ class HomeworkManageController extends BaseController
         }
 
         return $essayQuestions;
-    }
-
-    protected function getQuestionRanges($courseId)
-    {
-        if (empty($courseId)) {
-            return array();
-        }
-
-        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseId);
-
-        return ArrayToolkit::index($courseTasks, 'id');
-    }
-
-    protected function sortType($types)
-    {
-        $newTypes = array('single_choice', 'choice', 'uncertain_choice', 'fill', 'determine', 'essay', 'material');
-
-        foreach ($types as $key => $value) {
-            if (!in_array($value, $newTypes)) {
-                $k = array_search($value, $newTypes);
-                unset($newTypes[$k]);
-            }
-        }
-
-        return $newTypes;
     }
 
     protected function findRelatedData($activity, $paper)
@@ -306,6 +305,25 @@ class HomeworkManageController extends BaseController
         return $this->createService('Testpaper:TestpaperService');
     }
 
+    /**
+     * @return QuestionBankService
+     */
+    protected function getQuestionBankService()
+    {
+        return $this->createService('QuestionBank:QuestionBankService');
+    }
+
+    /**
+     * @return CategoryService
+     */
+    protected function getQuestionCategoryService()
+    {
+        return $this->createService('Question:CategoryService');
+    }
+
+    /**
+     * @return QuestionService
+     */
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
@@ -321,19 +339,9 @@ class HomeworkManageController extends BaseController
         return $this->createService('Course:CourseSetService');
     }
 
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
-    }
-
     protected function getCourseTaskService()
     {
         return $this->createService('Task:TaskService');
-    }
-
-    protected function getUserService()
-    {
-        return $this->createService('User:UserService');
     }
 
     protected function getActivityService()

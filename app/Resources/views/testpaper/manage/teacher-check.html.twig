@@ -54,6 +54,23 @@
 
           <div class="form-group">
             <div class="controls">
+              <div class="testpaper-check-score-content">
+                <div class="testpaper-check-score-content_well">
+                  <div class="testpaper-check-score-title mbm">{{ 'course.testpaper_check.student_score'|trans }}</div>
+                  <span class="testpaper-check-score js-student-score" data-objective-score="{{ paperResult.objectiveScore|default(0) }}"></span>
+                </div>
+              </div>
+              <div class="testpaper-check-detail-content">
+                <div class="testpaper-check-detail-content_well">
+                  <div class="testpaper-check-detail mbm">{{ 'course.testpaper_check.testpaper_total_score'|trans }}：{{ paper.score|default('0') }}</div>
+                  <div class="testpaper-check-detail js-pass-score" data-pass-score="{{ passScore|default('0') }}">{{ 'course.plan_task.activity_manage.testpaper.qualified_score'|trans }}：{{ passScore|default('0') }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="controls">
               <textarea class="form-control" rows='4' id="testpaper-teacherSay-input" placeholder="{{'course.homework_check.review.input_comment'|trans}}"></textarea>
             </div>
           </div>
@@ -62,17 +79,6 @@
               <select class="form-control" id="teacher-say-select" data-role="teacher-say">
                 {{'course.homework_check.review.common_comments'|trans|raw}}
               </select>
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="col-md-4 controls">
-              {% if paperResult|default(null) %}
-                <input type="hidden" value="{{ paperResult.objectiveScore }}" name="objectiveScore" />
-                {{'course.homework_check.review.score'|trans}}:<span id="totalScore">{{ paperResult.objectiveScore }}</span>
-              {% endif %}
-            </div>
-            <div class="col-md-8 controls radios">
-              {{ radios('passedStatus', dict('passedStatus'), 'passed' ) }}
             </div>
           </div>
         </div>

@@ -1,0 +1,20 @@
+<div id="colorpicker">
+  <div class="sliders" id="red"></div>
+  <div class="sliders" id="green"></div>
+  <div class="sliders" id="blue"></div>
+  <div class="result"></div>
+</div>
+
+<div class="form-group">
+  <div class="col-md-1 control-label"><label for="name-field">{{'course.testpaper_manage.create.name'|trans}}</label></div>
+  <div class="col-md-11 controls">
+    <input class="form-control" value="{% if testpaper.name | default(null)%}{{testpaper.name }}{% endif %}" data-info="base" name="name" id="name-field"/>
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="col-md-1 control-label"><label for="description-field">{{'course.testpaper_manage.create.description'|trans}}</label></div>
+  <div class="col-md-11 controls">
+    <textarea class="form-control" id="description-field" name="description" data-info="base" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{% if testpaper.description | default(null)%}{{testpaper.description }}{% endif %}</textarea>
+  </div>
+</div>

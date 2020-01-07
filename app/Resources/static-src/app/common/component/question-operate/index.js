@@ -116,6 +116,7 @@ export default class QuestionOperate {
       $(this).closest('tr').remove();
       
     });
+    this.refreshSeqs();
     questionSubjectiveRemask(this.$form);
   }
 

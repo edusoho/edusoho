@@ -49,7 +49,7 @@
     <div class="controls clearfix">
       {{ form_rest(form) }}
       <button type="button" class="btn btn-primary pull-right js-btn-thread-save" data-loading-text="{{'course.thread.post_form.create_tips'|trans}}">{{'course.thread.post_form.create_btn'|trans}}</button>
-      <a href="{{ path('my_course_show', {id: course.id, tab: 'threads'}) }}" class="btn btn-link pull-right">{{'form.btn.cancel'|trans}}</a>
+      <a href="{{ path('my_course_show', {id: course.id, tab: thread.type, type: thread.type}) }}" class="btn btn-link pull-right">{{'form.btn.cancel'|trans}}</a>
     </div>
   </div>
 

@@ -108,7 +108,7 @@ interface CourseSetService
      *
      * @return array[]
      */
-    public function searchCourseSets(array $conditions, $orderBys, $start, $limit);
+    public function searchCourseSets(array $conditions, $orderBys, $start, $limit, $columns = array());
 
     /**
      * @param array $conditions

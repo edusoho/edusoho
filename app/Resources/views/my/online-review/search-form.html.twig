@@ -1,0 +1,23 @@
+{% set resultStatus = resultStatus|default(null) %}
+{% set status = status|default('all') %}
+
+<form class="clearfix form-inline well well-sm testpaper-result-list-form" method="get">
+  <div class="form-group">
+    <select style="min-width:150px;" name="status" class="form-control" >
+      <option value="reviewing" {% if status == 'reviewing' %} selected='selected'{% endif %}>{{'site.default.unreviewing'|trans}}</option>
+      <option value="finished" {% if status == 'finished' %} selected='selected'{% endif %}>{{'site.default.reviewing'|trans}}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <select style="min-width:150px;" name="keywordType" class="form-control" >
+      <option {% if keywordType == 'nickname' %} selected='selected' {% endif %} value="nickname" >{{'my.teaching.testpaper.keyword.nickname'|trans}}</option>>
+      <option {% if keywordType == 'courseTitle' %} selected='selected' {% endif %} value="courseTitle" >{{'my.teaching.testpaper.keyword.course_title'|trans}}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <input class="form-control " type="text" placeholder="{{'my.teaching.testpaper.placeholder'|trans}}" name="keyword" value="{{ keyword }}">
+  </div>
+
+  <button class="cd-btn cd-btn-primary">{{'form.btn.search'|trans}}</button>
+
+</form>

@@ -1,0 +1,32 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set script_controller = 'question-bank-category/list' %}
+
+{% set menu = 'admin_v2_question_bank_category' %}
+
+{% block main %}
+  {% if setting('magic.enable_org', 0) %}
+    <form id="message-search-form" class="form-inline well well-sm" action="{{ path('admin_v2_question_bank_category') }}" method="get" novalidate>
+      <div class="form-group">
+        {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+      </div>
+      <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
+    </form>
+  {% endif %}
+
+  <ul class="list-table" id="category-table" style="margin-bottom: 0">
+    <li class="th">
+      <div class="row">
+        {% if setting('magic.enable_org', 0) %}
+          <div class="td col-md-4">{{'admin.question_bank.category_manage.name'|trans}}</div>
+          <div class="td col-md-3">{{'site.org.belongs_to_org_th'|trans}}</div>
+        {% else %}
+          <div class="td col-md-7">{{'admin.question_bank.category_manage.name'|trans}}</div>
+        {% endif %}
+        <div class="td col-md-2">{{'admin.question_bank.category_manage.bank_number'|trans}}</div>
+        <div class="td col-md-3">{{'admin.question_bank.category_manage.operate'|trans}}</div>
+      </div>
+    </li>
+    {% include 'admin-v2/teach/question-bank-category/tbody.html.twig' %}
+  </ul>
+{% endblock %}

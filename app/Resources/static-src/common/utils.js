@@ -119,6 +119,17 @@ const strToBase64 = (str) => {
   return (typeof btoa === 'undefined') ? $.base64.encode(str) : btoa(str);
 };
 
+const plainText = (text, length) => {
+  text = $.trim(text);
+  length = parseInt(length);
+
+  if ((length > 0) && (text.length > length)) {
+    text = text.slice(0, length);
+    text += '...';
+  }
+
+  return text;
+};
 
 export {
   Browser,
@@ -132,5 +143,6 @@ export {
   arrayToJson,
   isEmpty,
   strToBase64,
-  arrayIndex
+  arrayIndex,
+  plainText,
 };

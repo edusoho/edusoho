@@ -1,16 +1,17 @@
 {% extends 'activity/activity-layout.html.twig' %}
 
-{% do script(['libs/ltc-sdk-client.js', 'libs/bootstrap-datetimepicker.js','testpaperactivity/js/manage/index.js'], 300) %}
+{% do script(['libs/ltc-sdk-client.js', 'libs/jquery-nouislider.js', 'libs/bootstrap-datetimepicker.js', 'libs/select2.js', 'testpaperactivity/js/manage/index.js'], 300) %}
 
 {% block activity_step %}
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
     <form class="form-horizontal" id="step2-form">
       {% set course = get_course(activity.fromCourseId) %}
-      {% set testpapers = find_course_set_testpapers(course.courseSetId) %}
+      {% set testpaper = get_testpaper(activity.ext.mediaId|default(0))|default() %}
+      {% set questionBankTree = data('QuestionBankTree', {selectId: testpaper.bankId|default(0)}) %}
       {% set features = get_features() %}
       <div class="form-group">
         <div class="col-sm-2 control-label">
-          <label for="title" class="control-label-required">{{ 'course.plan_task.activity_manage.title_name'|trans }}</label>
+          <label for="title" class="control-testpaper-medialabel-required">{{ 'course.plan_task.activity_manage.title_name'|trans }}</label>
         </div>
         <div class="col-sm-10">
           <input id="title" class="form-control" type="text" name="title" value="{{ activity.title|default('') }}" >
@@ -18,29 +19,53 @@
         </div>
       </div>
       <div class="form-group">
-          <div class="col-sm-2 control-label">
-              <label for="testpaper-media" class="control-label-required">{{'course.plan_task.activity_manage.testpaper'|trans}}</label>
-          </div>
-          <div class="col-sm-10 controls">
-              <select id="testpaper-media" class="form-control" name="testpaperId"  data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:course.courseSetId}) }}">
-                  <option value="">{{ 'course.plan_task.activity_manage.testpaper.choose'|trans }}</option>
-                  {% for testpaper in testpapers if testpaper %}
-                      <option value="{{ testpaper.id }}" {% if testpaper.id == activity.ext.mediaId|default('') %}selected{% endif %} data-score="{{ testpaper.score }}">{{ testpaper.name }}</option>
-                  {% endfor %}
-              </select>
-              {% if testpapers is empty %}
-                  <div class="help-block color-danger">
-                      {{'course.plan_task.activity_manage.testpaper.create'|trans({'%testpaperUrl%':path('course_set_manage_testpaper',{id:course.courseSetId})})|raw}}
-                  </div>
-              {% else %}
-                  <div class="help-block">{{'course.plan_task.activity_manage.testpaper.empty_tips'|trans}}</div>
-              {% endif %}
-          </div>
+        <div class="col-sm-2 control-label">
+          <label for="testpaper-media" class="control-label-required">{{'course.plan_task.activity_manage.testpaper'|trans}}</label>
+        </div>
+        <div class="col-sm-5 controls">
+          <select id="question-bank" class="form-control" name="questionBankId" data-url="{{ path('question_bank_manage_testpaper_json', {id:0}) }}">
+            {% if questionBankTree %}
+              <option value="0">{{ 'question.select_question_bank'|trans }}</option>
+              {% for bank in questionBankTree %}
+                {% if bank.selected is defined %}
+                  <option class="hidden" value={{ bank.id }} {% if testpaper.bankId|default(0) == bank.id %}selected{% endif %}>{{ bank.name }}</option>
+                {% else %}
+                <option {% if bank.categoryId is not defined %} value disabled="disabled" {% else %} value="{{ bank.id }}" {% if testpaper.bankId|default(0) == bank.id %}selected{% endif %}{% endif %}>{% for i in 1..(bank.depth-1) if bank.depth > 1 %}　{% endfor %}{{ bank.name }}</option>
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              <option value="0">{{'question_bank.empty.no_auth'|trans}}</option>
+            {% endif %}
+          </select>
+          <div class="help-block hidden js-help-block"></div>
+        </div>
+        <div class="col-sm-5 controls">
+          <input id="testpaper-media" class="form-control hidden" name="testpaperId" value="{{ testpaper.id|default(0) }}" data-url="{% if testpaper %}{{ path('question_bank_manage_testpaper_json', {id:testpaper.bankId}) }}{% endif %}" data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:course.courseSetId}) }}">
+          {% if testpaper|default() %}
+            <input type="hidden" id="testPaperName" value="{{ testpaper.name }}">
+          {% endif %}
+        </div>
       </div>
 
       <div class="form-group" id="questionItemShowDiv" style="display:none;">
           <div class="col-sm-2 control-label"></div>
           <div class="col-sm-10 controls" id="questionItemShowTable"></div>
+      </div>
+
+      <div class="form-group js-score-form-group" id="score-condition" data-pass="{{ activity.finishData|default('0.6') }}" data-score="{{ testpaper.score|default(0) }}" {% if activity.finishData is not defined %}style="display:none" {% endif %} >
+        <div class="col-sm-2 control-label">
+          <label for="testpaper-media" class="control-label-required">{{'course.plan_task.activity_manage.testpaper.qualified_score'|trans}}</label>
+        </div>
+        <div class="col-sm-10 color-gray">
+          <span>0</span>
+          <div class="js-slider-content inline-block vertical-middle mlm mrl" id="score-slider">
+          </div>
+          <span class="js-score-total"></span>{{'site.question.attr.score.unit'|trans}}
+          <input type="hidden" id="finishData" name="finishData" value="{{ activity.finishData|default('0.6') }}">
+          {% if activity.finishType|default('') %}
+            <input type="hidden" name="finishType" value="{{ activity.finishType }}">
+          {% endif %}
+        </div>
       </div>
 
       <div class="form-group">

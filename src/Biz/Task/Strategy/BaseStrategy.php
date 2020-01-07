@@ -74,6 +74,10 @@ class BaseStrategy
             $this->biz['db']->beginTransaction();
 
             $this->getTaskDao()->delete($task['id']);
+            $tasks = $this->getTaskDao()->findByCourseIdAndCategoryId($task['courseId'], $task['categoryId']);
+            if (empty($tasks)) {
+                $this->getChapterDao()->delete($task['categoryId']);
+            }
             $this->getTaskResultService()->deleteUserTaskResultByTaskId($task['id']);
             $this->getActivityService()->deleteActivity($task['activityId']);
 
