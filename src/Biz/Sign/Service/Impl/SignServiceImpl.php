@@ -53,7 +53,7 @@ class SignServiceImpl extends BaseService implements SignService
         return empty($signs) ? false : true;
     }
 
-    public function isYestodaySigned($userId, $targetType, $targetId)
+    public function isYesterdaySigned($userId, $targetType, $targetId)
     {
         $startTimeToday = strtotime(date('y-n-d 0:0:0', strtotime('-1 days')));
         $endTimeToday = strtotime(date('y-n-d 23:59:59', strtotime('-1 days')));
@@ -94,8 +94,7 @@ class SignServiceImpl extends BaseService implements SignService
         $statistics = $this->getSignUserStatisticsDao()->getStatisticsByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId);
 
         if ($statistics) {
-            $statistics = $this->isYestodaySigned($userId, $targetType, $targetId);
-            if ($statistics) {
+            if ($this->isYesterdaySigned($userId, $targetType, $targetId)) {
                 $this->getSignUserStatisticsDao()->update($statistics['id'], array('keepDays' => $statistics['keepDays'] + 1));
             } else {
                 $this->getSignUserStatisticsDao()->update($statistics['id'], array('keepDays' => 1));

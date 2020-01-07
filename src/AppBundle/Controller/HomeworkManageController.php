@@ -134,6 +134,7 @@ class HomeworkManageController extends BaseController
             $formData = $request->request->all();
             $isContinue = $formData['isContinue'];
             unset($formData['isContinue']);
+            $formData['result'] = json_decode($formData['result'], true);
             $this->getTestpaperService()->checkFinish($result['id'], $formData);
 
             $data = array('success' => true, 'goto' => '');

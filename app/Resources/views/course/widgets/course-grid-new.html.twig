@@ -1,0 +1,70 @@
+<div class="course-item">
+  {% if courseSet.course is defined %}
+    {% set course = courseSet.course %}
+  {% else %}
+    {% set course = data('PublishedCourseByCourseSet',{ courseSetId: courseSet.id } ) %}
+  {% endif %}
+  {% if is_plugin_installed('Vip') and setting('vip.enabled') and course.vipLevelId|default(0) > 0 %}
+    <span class="tag-vip-free"></span>
+  {% endif %}
+  <div class="course-img">
+    <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">
+      {% if courseSet.discountId > 0 %}
+        {% if courseSet.discount == 0 %}
+          <!-- 限免 -->
+          <span class="tag-discount free"></span>
+        {% else %}
+          <!-- 折扣 -->
+          <span class="tag-discount"></span>
+        {% endif %}
+      {% endif %}
+      {% if courseSet.course.tryLookVideo|default(false) or courseSet.type|default() == 'reservation' or courseSet.type|default() == 'live' or courseSet.serializeMode != 'none'  %}
+        <div class="course-tag clearfix">
+          {% if courseSet.course.tryLookVideo|default(false) %}
+            <span><i class="es-icon es-icon-video color-white"></i>{{'site.badge.try_watch'|trans}}</span>
+          {% endif %}
+          <span class="pull-right">
+            <span class="cd-mr8">{% if courseSet.type|default() == 'reservation' %}
+              {{ 'my.teaching.course_set.reservation'|trans }}<span class="course-tag__dot"></span>
+            {% elseif courseSet.type|default() == 'live' %}
+              {{ 'search.live_courses'|trans }}<span class="course-tag__dot"></span>
+            {% else %}
+              {% if courseSet.serializeMode == 'serialized' %}
+                {{ 'course.status.serialized'|trans }}<span class="course-tag__dot"></span>
+              {% elseif courseSet.serializeMode == 'finished' %}
+                {{ 'course.status.finished'|trans }}<span class="course-tag__dot"></span>
+              {% endif %}
+            {% endif %}</span>
+          </span>
+        </div>
+      {% endif %}
+
+      {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'img-responsive', courseSet.title) }}
+    </a>
+  </div>
+  <div class="course-info">
+    <div class="title">
+      <a class="link-darker" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">
+        {{ courseSet.title }}
+      </a>
+    </div>
+    <div class="metas clearfix">
+      {% if setting('course.show_student_num_enabled', '1') == 1  %}
+          {% if setting('course.show_cover_num_mode') == 'studentNum' %}
+            <span class="num">
+              <i class="es-icon es-icon-people"></i>{{ courseSet.studentNum }}
+            </span>
+          {% elseif setting('course.show_cover_num_mode') == 'hitNum' %}
+            <span><i class="es-icon es-icon-view"></i>{{ course.hitNum }}</span>
+          {% endif %}
+        </span>
+      {% endif %}
+      {% if setting('course.show_review', '1') == 1 %}
+        <span {% if setting('course.show_student_num_enabled', '1') == 1 %} class="comment" {% endif %}><i class="es-icon es-icon-textsms"></i>{{ courseSet.ratingNum }}</span>
+      {% endif %}
+
+      {% include 'course/widgets/course-set-price.html.twig' with {shows: 'price'} %}
+
+    </div>
+  </div>
+</div>

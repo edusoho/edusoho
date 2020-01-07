@@ -6,16 +6,11 @@ use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\AppLoggerConstant;
 use Biz\Course\Dao\CourseChapterDao;
-use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMaterialDao;
-use Biz\System\Service\LogService;
-use Biz\Task\Dao\TaskDao;
-use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
-class CourseTaskCreateSyncJob extends AbstractJob
+class CourseTaskCreateSyncJob extends AbstractSyncJob
 {
     public function execute()
     {
@@ -154,22 +149,6 @@ class CourseTaskCreateSyncJob extends AbstractJob
     }
 
     /**
-     * @return TaskService
-     */
-    private function getTaskService()
-    {
-        return $this->biz->service('Task:TaskService');
-    }
-
-    /**
-     * @return CourseDao
-     */
-    private function getCourseDao()
-    {
-        return $this->biz->dao('Course:CourseDao');
-    }
-
-    /**
      * @return ActivityDao
      */
     private function getActivityDao()
@@ -186,14 +165,6 @@ class CourseTaskCreateSyncJob extends AbstractJob
     }
 
     /**
-     * @return TaskDao
-     */
-    private function getTaskDao()
-    {
-        return $this->biz->dao('Task:TaskDao');
-    }
-
-    /**
      * @param  $type
      *
      * @return Activity
@@ -204,29 +175,10 @@ class CourseTaskCreateSyncJob extends AbstractJob
     }
 
     /**
-     * @return LogService
-     */
-    private function getLogService()
-    {
-        return $this->biz->service('System:LogService');
-    }
-
-    /**
      * @return CourseMaterialDao
      */
     private function getMaterialDao()
     {
         return $this->biz->dao('Course:CourseMaterialDao');
-    }
-
-    protected function dispatchEvent($eventName, $subject, $arguments = array())
-    {
-        if ($subject instanceof Event) {
-            $event = $subject;
-        } else {
-            $event = new Event($subject, $arguments);
-        }
-
-        return $this->biz['dispatcher']->dispatch($eventName, $event);
     }
 }

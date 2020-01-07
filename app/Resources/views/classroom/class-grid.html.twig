@@ -1,4 +1,7 @@
-<div class="class-item">
+<div class="class-item class-item--tag">
+  {% if is_plugin_installed('Vip') and setting('vip.enabled') and classroom.vipLevelId|default(0) > 0 %}
+    <span class="tag-vip-free"></span>
+  {% endif %}
   <div class="class-img-wrap">
     <a class="class-img" href="{{ path('classroom_show', {id:classroom.id}) }}">
       {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}

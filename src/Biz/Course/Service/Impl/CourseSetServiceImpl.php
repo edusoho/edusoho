@@ -8,6 +8,7 @@ use Biz\BaseService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
+use Biz\Course\CourseException;
 use Biz\Course\CourseSetException;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
@@ -972,6 +973,27 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function refreshHotSeq()
     {
         return $this->getCourseSetDao()->refreshHotSeq();
+    }
+
+    public function resetParentIdByCourseId($courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        if (empty($course)) {
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
+        }
+
+        $courseSet = $this->getCourseSet($course['courseSetId']);
+
+        if (empty($courseSet)) {
+            $this->createNewException(CourseSetException::NOTFOUND_COURSESET());
+        }
+
+        $course['parentId'] = 0;
+        $courseSet['parentId'] = 0;
+
+        $this->getCourseDao()->update($course['id'], $course);
+        $this->getCourseSetDao()->update($courseSet['id'], $courseSet);
     }
 
     protected function getRelatedCourseSetDao()

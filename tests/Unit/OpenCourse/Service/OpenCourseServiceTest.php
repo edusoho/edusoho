@@ -122,13 +122,13 @@ class OpenCourseServiceTest extends BaseTestCase
             'recommended' => '0',
             'recommendedSeq' => '0',
             'recommendedTime' => '0',
-            'createdTime' => (string) $time,
-            'updatedTime' => (string) $time,
             'orgId' => '1',
             'orgCode' => '1.',
         );
 
         $created = $this->getOpenCourseService()->createCourse($course);
+        unset($created['createdTime']);
+        unset($created['updatedTime']);
         $this->assertEquals($excepted, $created);
     }
 

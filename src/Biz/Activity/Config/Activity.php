@@ -97,8 +97,6 @@ class Activity
 
             return !empty($log);
         }
-
-        return false;
     }
 
     public function get($targetId)
