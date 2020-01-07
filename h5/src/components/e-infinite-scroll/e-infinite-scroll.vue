@@ -13,7 +13,7 @@
       :is-vip="course.vipLevelId"
       :discount="typeList === 'course_list' ? course.courseSet.discount : ''"
       :course-type="typeList === 'course_list' ? course.courseSet.type : ''"
-      :course="course | courseListData(listObj)"
+      :course="course | courseListData(listObj,'appSetting')"
     />
   </van-list>
 </template>

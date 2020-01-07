@@ -99,6 +99,7 @@ const getAppDisplayStyle = (data, listObj) => {
   };
 };
 const courseListData = (data, listObj, setting = '') => {
+  // 当setting为appSetting: 1.后台admin为app设置。2.h5端被app的webview调用。  后续三端统一后可以去掉这个判断
   switch (listObj.type) {
     case 'price':
       if (setting === 'appSetting') {
