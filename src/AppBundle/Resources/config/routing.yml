@@ -903,10 +903,18 @@ mobile:
 mobile_download_qrcode:
     path: /mobile/downloadQrcode
     defaults: { _controller: AppBundle:Mobile:downloadQrcode }
-
+    
 mobile_download:
     path: /mobile/download
     defaults: { _controller: AppBundle:Mobile:download }
+
+mobile_userterms:
+    path: /mobile/userterms
+    defaults: { _controller: AppBundle:Mobile:userterms }
+
+mobile_privacy_Policy:
+    path: /mobile/privacy_policy
+    defaults: { _controller: AppBundle:Mobile:privacyPolicy }
 
 group:
     path:  /group
@@ -3054,7 +3062,7 @@ callback:
     defaults: { _controller: AppBundle:Callback/Endpoint:publish }
 
 mobile_qrcode:
-    path:  /mobil/qrcode
+    path:  /mobile/qrcode
     defaults: { _controller: AppBundle:Common:mobileQrcode }
 
 event_dispatch:

@@ -23,7 +23,7 @@ class XAuthTokenAuthenticationListener extends BaseAuthenticationListener
             throw UserException::NOTFOUND_TOKEN();
         }
 
-        $token = $this->createTokenFromRequest($request, $rawToken['userId']);
+        $token = $this->createTokenFromRequest($request, $rawToken['userId'], $rawToken['token']);
 
         $this->getTokenStorage()->setToken($token);
     }
