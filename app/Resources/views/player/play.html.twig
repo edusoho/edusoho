@@ -64,7 +64,7 @@
       {% if cloudSdk %}
         <script src="{{ cloud_sdk_url(cloudSdk) }}"></script>
       {% endif %}
-      {% do script(['libs/base.js','app/js/common.js','app/js/player/index.js'], 1000) %}
+      {% do script(['libs/base.js','app/js/player/index.js'], 1000) %}
     {% endif %}
     {% include 'script_boot.html.twig' %}
   {% else %}

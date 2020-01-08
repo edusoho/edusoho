@@ -9,13 +9,13 @@
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": ""
+  "url": ""
   },
   "devDependencies": {
     "babel-istanbul": "^0.12.2",
     "chai": "^4.1.2",
     "es-commit-msg-validator": "1.0.2",
-    "es-webpack-engine": "3.5.3-rc.1",
+    "es-webpack-engine": "git+https://github.com/cd-fez/es-webpack-engine.git#67d3848e9873111733da2db1779a65c829b115d8",
     "husky": "^0.14.3",
     "istanbul": "^0.4.5",
     "jsdom": "^11.6.2",
@@ -91,12 +91,10 @@
   },
   "babel": {
     "presets": [
-      "es2015",
-      "react",
-      "stage-0"
+      "@babel/preset-env",
+      "@babel/preset-react"
     ],
-    "plugins": [],
-    "compact": false
+    "compact": true
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.dev.js --parameters webpack.config.js",
