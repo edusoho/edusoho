@@ -14,6 +14,7 @@ abstract class Importer
     const DANGER_STATUS = 'danger';
     const ERROR_STATUS = 'error';
     const SUCCESS_STATUS = 'success';
+    const MAX_IMPORTER_COMPLEXITY = 50; //单请求最大导入复杂度（例如：人数*单次课程|班级数量<50）
 
     protected $biz;
     protected $necessaryFields = array('nickname' => '用户名', 'verifiedMobile' => '手机', 'email' => '邮箱');
@@ -374,8 +375,17 @@ abstract class Importer
         return $this->createSuccessResponse(
             $importData['allUserData'],
             $importData['checkInfo'],
-            $request->request->all()
+            array_merge($request->request->all(), array('chunkNum' => $this->calculateChunkNum()))
         );
+    }
+
+    protected function calculateChunkNum($singleComplexity = 1)
+    {
+        if (empty($singleComplexity)) {
+            return self::MAX_IMPORTER_COMPLEXITY;
+        }
+
+        return ceil(self::MAX_IMPORTER_COMPLEXITY / $singleComplexity);
     }
 
     /**
