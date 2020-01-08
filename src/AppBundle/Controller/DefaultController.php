@@ -3,7 +3,6 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Theme\Service\ThemeService;
 use Biz\Content\Service\BlockService;
 use Biz\Course\Service\CourseService;
