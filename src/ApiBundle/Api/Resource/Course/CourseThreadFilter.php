@@ -9,7 +9,7 @@ class CourseThreadFilter extends Filter
 {
     protected $publicFields = array(
         'id', 'courseId', 'taskId', 'type', 'isStick', 'isElite', 'isClosed', 'private', 'title', 'content', 'source', 'postNum', 'userId', 'attachments', 'attachments',
-        'hitNum', 'followNum', 'latestPostUserId', 'videoAskTime', 'videoId', 'latestPostTime', 'courseSetId', 'createdTime', 'updatedTime', 'user', 'askVideoUri', 'askVideoLength', 'askVideoThumbnail',
+        'hitNum', 'followNum', 'questionType', 'latestPostUserId', 'videoAskTime', 'videoId', 'latestPostTime', 'courseSetId', 'createdTime', 'updatedTime', 'user', 'course', 'askVideoUri', 'askVideoLength', 'askVideoThumbnail', 'notReadPostNum', 'lastPost',
     );
 
     protected function publicFields(&$data)
@@ -17,6 +17,18 @@ class CourseThreadFilter extends Filter
         if (isset($data['user'])) {
             $userFilter = new UserFilter();
             $userFilter->filter($data['user']);
+        }
+
+        if (isset($data['course'])) {
+            $courseFilter = new CourseFilter();
+            $courseFilter->setMode(Filter::SIMPLE_MODE);
+            $courseFilter->filter($data['course']);
+        }
+
+        if (isset($data['lastPost']) && !empty($data['lastPost'])) {
+            $courseThreadPostFilter = new CourseThreadPostFilter();
+            $courseThreadPostFilter->setMode(Filter::SIMPLE_MODE);
+            $courseThreadPostFilter->filter($data['lastPost']);
         }
 
         if (isset($data['latestPostTime'])) {

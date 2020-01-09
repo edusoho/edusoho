@@ -38,7 +38,7 @@
           <div class="col-md-3 col-sm-6">
             <div class="class-item local-search-class-item class-item--tag">
               <div class="class-img local-search-class-item__img">
-                {% if classroom.vipLevelId|default(0) > 0 %}
+                {% if is_plugin_installed('Vip') and setting('vip.enabled') and classroom.vipLevelId|default(0) > 0 %}
                   <span class="tag-vip-free"></span>
                 {% endif %}
                 <a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
