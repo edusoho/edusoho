@@ -214,8 +214,8 @@ Api Test With 5.5:
     # 执行newman的 API 单元测试
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
   only:
-    - /^release/.*$/
     refs:
+      - /^release/.*$/
       - develop
     variables:
       - $REPOSITORY == "main"
