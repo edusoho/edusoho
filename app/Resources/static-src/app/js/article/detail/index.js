@@ -5,6 +5,25 @@ let element = '#detail-content';
 let threadShowWidget = new ThreadShowWidget({
   element: element
 });
+let isCopy = $('.js-article-copy-body').data('copy');
+console.log(isCopy);
+if (isCopy) {
+    document.onselectstart = new Function('return false');
+    document.oncontextmenu = new Function('return false');
+    if (window.sidebar) {
+      document.onmousedown = new Function('return false');
+      document.onclick = new Function('return true');
+      document.oncut = new Function('return false');
+      document.oncopy = new Function('return false');
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.keyCode === 83 && (navigator.platform.match('Mac') ? e.metaKey : e.ctrlKey)) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, false);
+}
+
 
 $(element).on('click', '.js-article-like', function() {
   const $self = $(this);
