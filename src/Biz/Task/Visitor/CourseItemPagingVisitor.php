@@ -90,7 +90,9 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
             if ('task' == $item['itemType']) {
                 $lessonId = $item['categoryId'];
                 $lessonInfo = $lessonInfos[$lessonId];
-                if (!empty($lessonInfo['isSingleTaskLesson']) || $item['isLesson']) {
+                if (empty($lessonInfo['lesson'])) {
+                    unset($items[$key]);
+                } elseif (!empty($lessonInfo['isSingleTaskLesson']) || $item['isLesson']) {
                     $currentLesson = $lessonInfo['lesson'];
                     $item['isSingleTaskLesson'] = true;
                     $item['seq'] = $currentLesson['seq'];

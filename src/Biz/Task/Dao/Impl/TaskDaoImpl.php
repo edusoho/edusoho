@@ -130,25 +130,6 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
     }
 
     /**
-     * 统计当前时间以后每天的直播次数.
-     *
-     * @param  $limit
-     *
-     * @return array <string, int|string>
-     */
-    public function findFutureLiveDates($limit)
-    {
-        $time = time();
-        $sql = "SELECT count(ct.id) as count, ct.fromCourseSetId as courseSetId, from_unixtime(ct.startTime,'%Y-%m-%d') 
-                as date FROM `{$this->table()}` as ct LEFT JOIN `course_set_v8` as c 
-                on ct.fromCourseSetId = c.id 
-                WHERE ct.`type`= 'live' AND ct.status='published' and c.status='published' 
-                AND ct.startTime >= {$time} group by date order by date ASC limit 0, {$limit}";
-
-        return $this->db()->fetchAll($sql);
-    }
-
-    /**
      * 返回过去直播过的教学计划ID.
      *
      * @return array<int>

@@ -91,7 +91,7 @@ class ContentServiceTest extends BaseTestCase
                 ),
             )
         );
-        $result = $this->getContentService()->searchContents(array('categoryId' => 111), array(), 0, 5);
+        $result = $this->getContentService()->searchContents(array('categoryId' => 111), array('createdTime' => 'DESC'), 0, 5);
 
         $this->assertEquals(array(array('id' => 111, 'alias' => 'alias')), $result);
     }

@@ -2,21 +2,34 @@
 
 namespace Tests\Unit\Base;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
 
 abstract class BaseDaoTestCase extends BaseTestCase
 {
+    /**
+     * @param $dao
+     * @param $testConditions
+     * @param $testFields
+     * echo 不要删除，抽象函数，本地调试很方便
+     */
     public function searchTestUtil($dao, $testConditions, $testFields)
     {
         foreach ($testConditions as $testCondition) {
+            //            echo PHP_EOL.'开始比对search数据:'.PHP_EOL;
             $count = $dao->count($testCondition['condition']);
+//            echo 'conditions : '.json_encode($testCondition['condition']).' : '.(bool) ($testCondition['expectedCount'] == $count).PHP_EOL;
             $this->assertEquals($testCondition['expectedCount'], $count);
 
             $orderBy = empty($testCondition['orderBy']) ? array() : $testCondition['orderBy'];
             $results = $dao->search($testCondition['condition'], $orderBy, 0, 10);
-            foreach ($results as $key => $result) {
-                $this->assertArrayEquals($testCondition['expectedResults'][$key], $result, $testFields);
+            $testCondition['expectedResults'] = ArrayToolkit::index($testCondition['expectedResults'], 'id');
+            foreach ($results as $result) {
+                //                echo 'expectedResults : '.json_encode($testCondition['expectedResults'][$result['id']]).PHP_EOL;
+//                echo 'actuallyResults : '.json_encode($result).PHP_EOL;
+                $this->assertArrayEquals($testCondition['expectedResults'][$result['id']], $result, $testFields);
             }
+//            echo '=========================='.PHP_EOL;
         }
     }
 
