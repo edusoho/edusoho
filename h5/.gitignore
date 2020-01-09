@@ -20,3 +20,4 @@ composer.lock
 *.ntvs*
 *.njsproj
 *.sln
+deploy.yml

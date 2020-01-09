@@ -68,6 +68,8 @@ sudo chmod 600 ~/.ssh/deployerkey
 3、打包发布代码到 try 服务器（测试站地址: http://lvliujie.st.edusoho.cn, http://zhangfeng.st.edusoho.cn）
 
 ```
+cp deploy.yml.dist deploy.yml
+//配置参数
 php vendor/bin/dep deploy dev
 ```
 
