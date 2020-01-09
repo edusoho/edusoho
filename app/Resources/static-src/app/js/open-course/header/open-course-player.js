@@ -42,12 +42,13 @@ class OpenCoursePlayer {
 
       let mediaSourceActionsMap = {
         'iframe': this.onIframe,
-        'self': this.onVideo
+        'self': this.onVideo,
       };
-
       let caller = mediaSourceActionsMap[lesson.mediaSource] ? mediaSourceActionsMap[lesson.mediaSource].bind(this) : undefined;
 
-      if (caller === undefined && (lesson.type == 'video' || lesson.type == 'audio')) {
+      if(caller === undefined && lesson.mediaUri.indexOf('.mp4') != -1){
+         caller = mediaSourceActionsMap['iframe'].bind(this);
+      }else if(caller === undefined && (lesson.type == 'video' || lesson.type == 'audio')) {
         caller = this.onSWF.bind(this);
       }
 
