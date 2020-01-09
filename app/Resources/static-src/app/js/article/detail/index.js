@@ -6,7 +6,6 @@ let threadShowWidget = new ThreadShowWidget({
   element: element
 });
 let isCopy = $('.js-article-copy-body').data('copy');
-console.log(isCopy);
 if (isCopy) {
     document.onselectstart = new Function('return false');
     document.oncontextmenu = new Function('return false');
