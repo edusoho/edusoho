@@ -3,18 +3,44 @@ $bg-black:      #212121;
 $bg-white:   #FFFFFF;
 $border-grey:   #EEEEEE;
 $font-black:#333333;
+$active-bg:  #408ffb;
+$active-font:#408ffb;
 
-.webviews {
+.app {
   $active-bg:  #03C777;
-  $active-font:#03C777;
-  span{
-    background:  $active-bg;
+  $primary-color: #03C777;
+  .e-tree-selects{
+    .activeTag{
+            background: $active-bg ;
+    }
+    .e-menus{
+            .e-menu__line {
+                .selected {
+                  color: $primary-color !important;
+                }
+            }
+    }
+    .e-tree-select__list {
+          .active{
+                  color:$primary-color !important
+          }
+        .e-tree-select__item {
+          &.active {
+              &::after {
+                  color:$primary-color !important;
+                  border-top: 1px solid $primary-color !important;
+                  border-right: 1px solid $primary-color !important;
+                }
+              }
+          }
+    }
+  }
+  .treeSelected{
+    background:rgba(3,199,119,0.1) !important;
+    color: $primary-color !important;
   }
 }
-.default{
-  $active-bg:  #408ffb;
-  $active-font:#408ffb;
-  span{
-    background:  $active-bg;
-  }
+.activeTag{
+  background: $active-bg ;
 }
+

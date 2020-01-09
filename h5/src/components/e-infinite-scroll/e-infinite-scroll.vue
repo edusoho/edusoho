@@ -11,6 +11,7 @@
       :vip-tag-show="vipTagShow"
       :type-list="typeList"
       :is-vip="course.vipLevelId"
+      :is-app-use="isAppUse"
       :discount="typeList === 'course_list' ? course.courseSet.discount : ''"
       :course-type="typeList === 'course_list' ? course.courseSet.type : ''"
       :course="course | courseListData(listObj,'appSetting')"
@@ -36,6 +37,7 @@ export default {
     courseList: Array,
     isRequestCompile: Boolean,
     isAllData: Boolean,
+    isAppUse:Boolean,
     courseItemType: String,
     typeList: {
       type: String,

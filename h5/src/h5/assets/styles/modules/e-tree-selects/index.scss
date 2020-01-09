@@ -1,0 +1,89 @@
+@import './e-select-menu/index.scss';
+.e-tree-selects{
+  padding: vw(12) vw(16) vw(8) vw(12); 
+  box-shadow:0px 3px 4px 0px rgba(0,0,0,0.03);
+  .e-tree-scroll{
+    white-space: nowrap;
+    overflow-x: scroll;
+    padding-right: vw(23);
+    div{
+      display: inline-block;
+      margin-right: vw(16);
+      padding: 0 vw(8);
+      line-height: 24px;
+      font-size: vw(14);
+      color: #666666;
+      font-family:PingFangSC-Regular,PingFang SC;
+    }
+    .activeTag{
+      text-align: center;
+      color: #ffffff;
+      border-radius:vw(12);
+    }
+    .e-tree-more{
+      position: absolute;
+      top:vw(44);
+      padding: 0;
+      right:vw(-16);
+      height: vw(44);
+      width: vw(46);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #ffffff;
+    }
+  }
+  .e-tree-select__list {
+    position: relative;
+    .e-tree-select__items {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin:vw(18) 0 0;
+        padding-left:vw(8);
+        width: 100%;
+        .e-tree-select__item {
+          display: flex;
+          height: 100%;
+          align-items: center;
+          font-size: 14px;
+          color: #999999;
+          font-family:PingFangSC-Regular,PingFang SC;
+          &::after {
+            content: '';
+            display: inline-block;
+            margin-top:vw(-2);
+            margin-left: vw(8);
+            border-top: 1px solid #BEBEBE;
+            border-right: 1px solid #BEBEBE;
+            width: vw(6);
+            height: vw(6);
+            transform: rotate(135deg);
+            transition: all 200ms;
+          }
+          &.active {
+            &::after {
+              transform: rotate(-45deg);
+            }
+          }
+        }
+        .showfree{
+          display:flex;
+          align-items:center;
+          font-size:12px;
+          color:#999999;
+          font-family:PingFangSC-Regular,PingFang SC;
+          .van-switch{
+            margin-left:8px
+          }
+        }
+    }
+    .van-switch{
+      width: 3em;
+    }
+    .van-switch--on .van-switch__node {
+      -webkit-transform: translateX(1em);
+      transform: translateX(2em);
+  }
+  }
+}

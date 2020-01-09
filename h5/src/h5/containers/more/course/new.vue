@@ -1,9 +1,19 @@
 <template>
-  <div>
+  <div class="app">
     <div class="nav-bar">
-        <i class="iconfont icon-arrow-left"></i>
-        <div class="nav-bar-title">所有班级</div>
+      <i class="iconfont icon-arrow-left"></i>
+      <div class="nav-bar-title">所有课程</div>
     </div>
+
+    <treeSelects
+      :select-items="selectItems"
+      :categories="categories"
+      :treeMenuLevel="treeMenuLevel"
+      :selectedData="selectedData"
+      type="course"
+      @selectedChange="setQuery"
+      @selectToggled="toggleHandler"
+    />
 
     <infinite-scroll
       :course-list="courseList"
@@ -12,137 +22,158 @@
       :is-request-compile="isRequestCompile"
       :vip-tag-show="true"
       :type-list="'course_list'"
+      :is-app-use="isAppUse"
       @needRequest="sendRequest"
     />
+
+    <empty 
+     v-if="isEmptyCourse && isRequestCompile" 
+     text="暂无课程"
+     class="empty__couse"/>
   </div>
 </template>
 
 <script>
-import Api from '@/api'
-import infiniteScroll from '&/components/e-infinite-scroll/e-infinite-scroll.vue'
-import { mapMutations } from 'vuex'
-import * as types from '@/store/mutation-types'
-import CATEGORY_DEFAULT from '@/config/category-default-config.js'
+import Api from "@/api";
+import infiniteScroll from "&/components/e-infinite-scroll/e-infinite-scroll.vue";
+import treeSelects from "&/components/e-tree-selects/e-tree-selects.vue";
+import empty from '&/components/e-empty/e-empty.vue'
+import { mapMutations } from "vuex";
+import * as types from "@/store/mutation-types";
+import CATEGORY_DEFAULT from "@/config/category-default-config.js";
 export default {
-  name:'more_course_new',
+  name: "more_course_new",
   components: {
-    infiniteScroll
+    infiniteScroll,
+    treeSelects,
+    empty
   },
   data() {
     return {
-      selectItems: [],
+      isAppUse:true, //是否被app调用
       selectedData: {},
-      courseItemType: 'price',
+      courseItemType: "price",
       isRequestCompile: false,
       isAllCourse: false,
       isEmptyCourse: true,
       courseList: [],
       offset: 0,
       limit: 10,
-      type: 'all',
+      type: "all",
       categoryId: 0,
-      sort: 'recommendedSeq',
+      sort: "recommendedSeq",
       selecting: false,
       queryForm: {
-        courseType: 'type',
-        category: 'categoryId',
-        sort: 'sort'
+        courseType: "type",
+        category: "categoryId",
+        sort: "sort"
       },
-      dataDefault: CATEGORY_DEFAULT['course_list']
-    }
-  },
-  watch: {
-    selectedData() {
-      this.initCourseList()
-      this.getCourseList()
-    }
+      treeMenuLevel: 1,
+      selectItems: CATEGORY_DEFAULT["course_list"],
+      categories: []
+    };
   },
   created() {
-    this.selectedData = this.transform(this.$route.query)
-    this.getCourseCategories()
+    this.selectedData = this.transform(this.$route.query);
+    this.getCourseCategories();
+    this.setQuery();
   },
   methods: {
+    setQuery(value) {
+      if(value){
+          this.selectedData=value;
+      }
+       this.initCourseList();
+       this.getCourseList();
+    },
     // 获取课程分类数据
     getCourseCategories() {
-       Api.getCourseCategories()
-        .then((data) => {
-          data.unshift({
-            name: '全部',
-            id: '0'
-          })
-          this.dataDefault[0].data = data
-          this.selectItems = this.dataDefault
-        })
+      Api.getCourseCategories().then(data => {
+        this.formateCategories(data);
+      });
+    },
+    formateCategories(categories) {
+      categories.unshift({
+        name: "全部",
+        id: "0",
+        children: []
+      });
+      categories.forEach(item => {
+        if (item.children.length) {
+          this.treeMenuLevel = 2;
+        }
+      });
+      this.categories = categories;
     },
     initCourseList() {
-      this.isRequestCompile = false
-      this.isAllCourse = false
-      this.courseList = []
-      this.offset = 0
+      this.isRequestCompile = false;
+      this.isAllCourse = false;
+      this.courseList = [];
+      this.offset = 0;
     },
-    getCourseList(){
+    getCourseList() {
       const setting = {
         offset: this.offset,
         limit: this.limit
-      }
+      };
 
-      this.requestCourses(setting)
-        .then(() => {
-          this.isEmptyCourse= (this.courseList.length === 0)
-        })
+      this.requestCourses(setting).then(() => {
+        this.isEmptyCourse = this.courseList.length === 0;
+      });
     },
     judegIsAllCourse(courseInfomation) {
-      return this.courseList.length == courseInfomation.paging.total
+      return this.courseList.length == courseInfomation.paging.total;
     },
     requestCourses(setting) {
-      this.isRequestCompile = false
-      const config = Object.assign(this.selectedData, setting)
+      this.isRequestCompile = false;
+      const config = Object.assign(this.selectedData, setting);
       return Api.getCourseList({
         params: config
-      }).then((data) => {
-        this.formateData(data)
-        this.isRequestCompile = true
-      }).catch((err) => {
-        console.log(err, 'error')
       })
+        .then(data => {
+          this.formateData(data);
+          this.isRequestCompile = true;
+        })
+        .catch(err => {
+          console.log(err, "error");
+        });
     },
-    formateData(data){
-        this.courseList=this.courseList.concat( data.data)
-        this.isAllCourse = this.judegIsAllCourse(data)
-        if (!this.isAllCourse) {
-          this.offset = this.courseList.length
-        }
+    formateData(data) {
+      this.courseList = this.courseList.concat(data.data);
+      this.isAllCourse = this.judegIsAllCourse(data);
+      if (!this.isAllCourse) {
+        this.offset = this.courseList.length;
+      }
     },
     sendRequest() {
       const args = {
         offset: this.offset,
         limit: this.limit
-      }
+      };
 
-      if (!this.isAllCourse) this.requestCourses(args)
+      if (!this.isAllCourse) this.requestCourses(args);
     },
     transform(obj) {
-      const config = {}
-      const arr = Object.keys(obj)
+      const config = {};
+      const arr = Object.keys(obj);
       if (!arr.length) {
         return {
           categoryId: this.categoryId,
           type: this.type,
           sort: this.sort
-        }
+        };
       }
       arr.forEach((current, index) => {
-        config[this.queryForm[current]] = obj[current]
-      })
-      return config
+        config[this.queryForm[current]] = obj[current];
+      });
+      return config;
     },
     toggleHandler(value) {
-      this.selecting = value
+      this.selecting = value;
     }
   }
-}
+};
 </script>
 
 <style>
-
 </style>
