@@ -8536,6 +8536,7 @@ exception.rate_limit_email_max_attempt_reach: The delivery limit has been exceed
 exception.rate_limit_error_captcha: Graphic verification code error!
 exception.sms.setting_enable: Cloud SMS related settings are not enabled!
 exception.setting.attachment.setting_enable: Cloud Attachement settings are not enabled!
+exception.setting.app_client_closed: App client closed!
 exception.sms.code_invalid: SMS verification code error
 exception.sms.type_error: Sms type error
 exception.sms.send_failed: Failed to send!
@@ -8651,6 +8652,9 @@ exception.task.lessonid_invalid: Lesson id is invalid
 exception.task.access_denied: Task access denied
 exception.task.categoryid_invalid: Chapter id is invalid
 exception.task.forbidden_preview_task: You can not preview task
+exception.task.type_invalid: Task type invalid
+exception.task.live_replay_not_found: Task replay not found
+exception.task.live_replay_invalid: Task replay invalid
 exception.course.not_found: The course plan doesn't exist
 exception.course.forbidden_take_course: Can't access the teaching plan
 exception.course.learnmode_invalid: Learning mode error

@@ -58,6 +58,7 @@ class CourseTaskMedia extends AbstractResource
         return array(
             'mediaType' => $activity['mediaType'],
             'media' => $media,
+            'format' => $request->query->get('format', 'common'),
         );
     }
 
@@ -134,6 +135,11 @@ class CourseTaskMedia extends AbstractResource
         }
 
         return $medias;
+    }
+
+    protected function getTestpaper($course, $task, $activity, $request, $ssl = false)
+    {
+        return $activity['ext'];
     }
 
     protected function getVideo($course, $task, $activity, $request, $ssl = false)
