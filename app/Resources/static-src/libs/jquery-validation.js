@@ -1,6 +1,6 @@
 import 'jquery-validation';
 import { isEmpty } from 'common/utils';
-import axis from 'common/axis';
+import  { axis } from 'common/axis';
 
 $.validator.setDefaults({
   errorClass: 'form-error-message jq-validate-error',
