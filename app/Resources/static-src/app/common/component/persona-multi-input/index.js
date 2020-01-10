@@ -74,7 +74,7 @@ export default class PersonaMultiInput extends MultiInput {
     }
   }
 
-  onChecked(event) {
+  onChecked = (event)=> {
     let id = event.currentTarget.value;
     updateChecked(this.state.dataSourceUi,id);
     this.setState({
@@ -82,7 +82,7 @@ export default class PersonaMultiInput extends MultiInput {
     });
   }
 
-  addItem(value,data)  {
+  addItem = (value,data) =>{
     if(!data)  {
       return;
     }
