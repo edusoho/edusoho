@@ -176,23 +176,9 @@ a {
 .font-family-PFM {
   font-family: PingFangSC-Medium;
 }
-.van-button--disabled {
-  opacity: .6;
-  cursor: not-allowed;
-}
 
-// nav
-.nav-bar--default {
-  background-color: $bg-black;
-  color: #fff;
-  .van-icon {
-    color: #fff;
-    font-weight: bold;
-  }
-  .van-nav-bar__title{
-    color: #fff;
-  }
-}
+
+
 .blue-nav {
   background-color: $primary-color;
   color: white;

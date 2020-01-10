@@ -104,6 +104,23 @@ const routes = [
       title: '所有班级'
     },
     component: () => import(/* webpackChunkName: "more" */'@/containers/more/classroom/index.vue')
+  },
+  {
+    path: '/course/explore/new',
+    name: 'more_course_new',
+    meta: {
+      title: '所有课程',
+      hideTitle: true
+    },
+    component: () => import(/* webpackChunkName: "more" */'@/containers/more/course/new.vue')
+  }, {
+    path: '/classroom/explore/new',
+    name: 'more_class_new',
+    meta: {
+      title: '所有班级',
+      hideTitle: true
+    },
+    component: () => import(/* webpackChunkName: "more" */'@/containers/more/classroom/new.vue')
   }, {
     path: '/course/explore/vip',
     name: 'vip_course',
