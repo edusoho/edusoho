@@ -26,7 +26,7 @@ class MobileController extends BaseController
     {
         $referrer = $request->headers->get('Referer');
         $isBaiduMobile = 'm.baidu.com';
-        if (strpos($referrer, $isBaiduMobile) !== false) {
+        if (false !== strpos($referrer, $isBaiduMobile)) {
             return $this->redirectToRoute('homepage');
         }
 
