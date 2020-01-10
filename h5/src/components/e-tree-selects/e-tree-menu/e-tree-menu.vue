@@ -40,7 +40,7 @@ export default {
   props: {
     categories: Array,
     selectedData: Object,
-    categoriesId:Number
+    categoriesId: Number
   },
   data() {
     return {
@@ -49,11 +49,6 @@ export default {
       fristId: 0, //默认选中全部
       secondId: null,
       thirdId: null,
-      queryForm: {
-        courseType: "type",
-        category: "categoryId",
-        sort: "sort"
-      },
       isReadyEmit: false
     };
   },
@@ -66,64 +61,68 @@ export default {
     }
   },
   watch: {
-    categoriesId:function(value) {
-      this.fristId=value;
-      this.secondId=this.thirdId=null;
-      this.secondLevel = this.thirdLevel = [];
+    categoriesId: function(value) {
+      this.resetData();
+      this.fristId = value;
+      this.selectedActive();
     }
   },
   methods: {
     itemSelect(item, level) {
-      this.isReadyEmit = false;
       switch (level) {
         case "levelOne":
-          this.secondLevel = this.thirdLevel = [];
-          this.fristId = this.secondId = this.thirdId = null;
+          this.resetData();
           this.fristId = Number(item.id);
-
           if (item.children.length) {
             this.secondLevel = this.insertAll(item.children);
           } else {
-            this.queryData.categoryId = Number(item.id);
-            this.isReadyEmit = true;
+            this.sendData(item.id);
           }
           break;
         case "levelTwo":
           this.thirdId = null;
           this.thirdLevel = [];
           this.secondId = Number(item.id);
-
+          // 如果是全部，则筛选的分类id为父级的分类id
           if (item.name === "全部") {
-            this.queryData.categoryId = Number(this.fristId);
-            this.isReadyEmit = true;
+            this.sendData(this.fristId);
           } else if (item.children.length) {
             this.thirdLevel = this.insertAll(item.children);
           } else {
-            this.queryData.categoryId = Number(item.id);
-            this.isReadyEmit = true;
+            this.sendData(item.id);
           }
           break;
         case "levelThree":
           this.thirdId = Number(item.id);
-
           if (item.name === "全部") {
-            this.queryData.categoryId = Number(this.secondId);
-            this.isReadyEmit = true;
+            this.sendData(this.secondId);
           } else {
-            this.queryData.categoryId = Number(item.id);
-            this.isReadyEmit = true;
+            this.sendData(item.id);
           }
           break;
       }
-      // 更新数据
-      if (this.isReadyEmit)
-        this.$emit("selectedChange", this.queryData, this.fristId);
     },
     insertAll(children) {
       if (children[0].name !== "全部") {
         children.unshift({ name: "全部", id: "0", children: [] });
       }
       return children;
+    },
+    resetData() {
+      this.secondLevel = this.thirdLevel = [];
+      this.fristId = this.secondId = this.thirdId = null;
+    },
+    selectedActive() {
+      this.categories.forEach(item => {
+        if (item.id == this.fristId && item.children.length) {
+          this.secondLevel = this.insertAll(item.children);
+          this.secondId = 0;
+        }
+      });
+    },
+    sendData(id) {
+      this.queryData.categoryId = Number(id);
+      this.$emit("selectedChange", this.queryData, this.fristId);
     }
   }
 };

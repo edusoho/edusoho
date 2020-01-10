@@ -94,6 +94,14 @@ export default {
   watch: {
     isActive(value) {
       this.$emit("selectToggled", value);
+    },
+    showFree(value,oldValue){
+        if(value){
+          this.$set(this.selectedData,"minCoursePrice","0")
+        }else{
+          this.$delete(this.selectedData,"minCoursePrice")
+        }
+        this.$emit("selectedChange", this.selectedData);
     }
   },
   methods: {
