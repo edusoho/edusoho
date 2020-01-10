@@ -117,6 +117,10 @@ check env:
   script:
     - bin/phpunit-diff
   only:
+    refs:
+      - /^release/.*$/
+      - develop
+      - master
     variables:
       - $REPOSITORY == "main"
 
