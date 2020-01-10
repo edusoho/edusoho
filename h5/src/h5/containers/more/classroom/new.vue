@@ -1,9 +1,6 @@
 <template>
   <div class="app">
-    <div class="nav-bar">
-      <i class="iconfont icon-arrow-left"></i>
-      <div class="nav-bar-title">所有班级</div>
-    </div>
+    <e-navbar  title="所有班级"/>
 
     <treeSelects
       :select-items="selectItems"
@@ -37,6 +34,7 @@
 import Api from "@/api";
 import infiniteScroll from "&/components/e-infinite-scroll/e-infinite-scroll.vue";
 import treeSelects from "&/components/e-tree-selects/e-tree-selects.vue";
+import ENavbar from "&/components/e-navbar/e-navbar.vue";
 import empty from '&/components/e-empty/e-empty.vue'
 import { mapMutations } from "vuex";
 import * as types from "@/store/mutation-types";
@@ -46,7 +44,8 @@ export default {
   components: {
     infiniteScroll,
     treeSelects,
-    empty
+    empty,
+    ENavbar
   },
   data() {
     return {

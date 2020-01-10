@@ -177,20 +177,7 @@ a {
   font-family: PingFangSC-Medium;
 }
 
-//新版导航，暂时只有app的webview用到
-.nav-bar{
-  padding: vw(10) vw(16);
-  color: $font-black;
-  font-weight: bold;
-  text-align: center;
-  background: $bg-white;
-  .icon-arrow-left{
-    margin-top: vw(3);
-    @extend .pull-left;
-    color: $font-black;
-    @extend .text-16;
-  }
-}
+
 
 .blue-nav {
   background-color: $primary-color;
