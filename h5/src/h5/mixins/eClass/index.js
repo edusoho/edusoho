@@ -28,6 +28,10 @@ export default {
       type: String,
       default: 'course_list'
     },
+    isAppUse: {
+      type: Boolean,
+      default: false
+    },
     normalTagShow: {
       type: Boolean,
       default: true
@@ -80,6 +84,10 @@ export default {
   methods: {
     onClick(e) {
       if (!this.feedback) {
+        return;
+      }
+      if (this.isAppUse) {
+        // 调用app接口
         return;
       }
       const isOrder = this.type === 'order';
