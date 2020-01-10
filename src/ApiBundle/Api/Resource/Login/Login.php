@@ -29,7 +29,6 @@ use Topxia\MobileBundleV2\Controller\MobileBaseController;
 use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use Biz\Distributor\Util\DistributorCookieToolkit;
-use Biz\User\UserException;
 
 class Login extends AbstractResource
 {
