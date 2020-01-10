@@ -14,6 +14,8 @@ use Biz\Question\QuestionException;
 use Biz\Question\Service\QuestionService;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\QuestionBank\QuestionBankException;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -75,10 +77,12 @@ class QuestionMarkerController extends BaseController
      * 视频弹题预览.
      *
      * @param Request $request
-     * @param  $courseId
-     * @param  $id
+     * @param $courseId
+     * @param $id
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Exception
      */
     public function questionMakerPreviewAction(Request $request, $courseId, $id)
     {
@@ -88,6 +92,9 @@ class QuestionMarkerController extends BaseController
 
         if (empty($question)) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
+        }
+        if (!$this->getQuestionBankService()->canManageBank($question['bankId'])) {
+            $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
         }
 
         $item = array(
@@ -99,6 +106,7 @@ class QuestionMarkerController extends BaseController
         if ($question['subCount'] > 0) {
             $questions = $this->getQuestionService()->findQuestionsByParentId($id);
 
+            $items = array();
             foreach ($questions as $value) {
                 $items[] = array(
                     'questionId' => $value['id'],
@@ -121,19 +129,6 @@ class QuestionMarkerController extends BaseController
                 'questionPreview' => $questionPreview,
             )
         );
-    }
-
-    public function sortQuestionAction(Request $request, $markerId)
-    {
-        if (!$this->tryManageQuestionMarker()) {
-            return $this->createJsonResponse(false);
-        }
-
-        $data = $request->request->all();
-        $ids = $data['ids'];
-        $this->getQuestionMarkerService()->sortQuestionMarkers($ids);
-
-        return $this->createJsonResponse(true);
     }
 
     //删除弹题
@@ -185,6 +180,9 @@ class QuestionMarkerController extends BaseController
 
         if (empty($question)) {
             return $this->createMessageResponse('error', '该题目不存在!');
+        }
+        if (!$this->getQuestionBankService()->canManageBank($question['bankId'])) {
+            return $this->createMessageResponse('error', '没有管理该题目的权限');
         }
 
         if (empty($data['markerId'])) {
@@ -251,7 +249,7 @@ class QuestionMarkerController extends BaseController
                 'course' => $course,
                 'task' => $task,
                 'video' => $video,
-                'targetChoices' => $this->getQuestionTargetChoices($course),
+                'questionBankChoices' => $this->getQuestionBankChoices(),
             )
         );
     }
@@ -262,7 +260,7 @@ class QuestionMarkerController extends BaseController
 
         $task = $this->getTaskService()->getTask($taskId);
 
-        list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $course, $task);
+        list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $task);
 
         return $this->render(
             'marker/question-tr.html.twig',
@@ -271,35 +269,37 @@ class QuestionMarkerController extends BaseController
                 'task' => $task,
                 'paginator' => $paginator,
                 'questions' => $questions,
-                'targetChoices' => $this->getQuestionTargetChoices($course),
             )
         );
     }
 
-    protected function getQuestionTargetChoices($course)
+    protected function getQuestionBankChoices()
     {
-        $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
+        $questionBanks = $this->getQuestionBankService()->findUserManageBanks();
 
-        $choices = array("courseSet-{$course['courseSetId']}" => '本课程', "course-{$course['id']}" => '本计划');
-
-        foreach ($tasks as $task) {
-            $choices["{$course['id']}/{$task['id']}"] = "任务{$task['number']}：{$task['title']}";
+        $choices = array();
+        foreach ($questionBanks as &$questionBank) {
+            $choices[$questionBank['id']] = $questionBank['name'];
         }
 
         return $choices;
     }
 
-    protected function getPaginatorAndQuestion($request, $course, $task)
+    protected function getPaginatorAndQuestion(Request $request, $task)
     {
-        $conditions = $this->processTarget($request->request->all());
+        $conditions = $request->request->all();
 
+        if (empty($conditions['bankId'])) {
+            return array(new Paginator($request, 0), array());
+        }
+        if (!$this->getQuestionBankService()->canManageBank($conditions['bankId'])) {
+            $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
+        }
         if (!empty($conditions['keyword'])) {
             $conditions['stem'] = $conditions['keyword'];
         }
-
         $conditions['parentId'] = 0;
         $conditions['types'] = array('determine', 'single_choice', 'uncertain_choice', 'fill', 'choice');
-        $orderBy = array('createdTime' => 'DESC');
 
         $paginator = new Paginator(
             $request,
@@ -309,7 +309,7 @@ class QuestionMarkerController extends BaseController
 
         $questions = $this->getQuestionService()->search(
             $conditions,
-            $orderBy,
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -333,7 +333,7 @@ class QuestionMarkerController extends BaseController
 
     protected function tryManageQuestionMarker()
     {
-        $user = $this->getUserService()->getCurrentUser();
+        $user = $this->getCurrentUser();
 
         if ($this->getUserService()->hasAdminRoles($user['id'])) {
             return true;
@@ -424,33 +424,10 @@ class QuestionMarkerController extends BaseController
     }
 
     /**
-     * @param $conditions
-     *
-     * @return mixed
+     * @return QuestionBankService
      */
-    protected function processTarget($conditions)
+    protected function getQuestionBankService()
     {
-        $target = $conditions['target'];
-        if (false !== strpos($target, '-')) {
-            $targets = explode('-', $target);
-            //本课程
-
-            if ('courseSet' == $targets[0]) {
-                $conditions['courseSetId'] = $targets[1];
-                $conditions['courseId'] = 0;
-            }
-            //本计划
-            if ('course' == $targets[0]) {
-                $conditions['courseId'] = $targets[1];
-            }
-        } else {
-            //计划下的任务
-            $targets = explode('/', $target);
-            $conditions['courseId'] = $targets[0];
-            $conditions['lessonId'] = $targets[1];
-        }
-        unset($conditions['target']);
-
-        return $conditions;
+        return $this->createService('QuestionBank:QuestionBankService');
     }
 }

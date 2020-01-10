@@ -37,6 +37,10 @@ custom_admin:
     resource: "@CustomBundle/Resources/config/custom_admin_routing.yml"
     prefix:   /admin
 
+custom_admin_v2:
+    resource: "@CustomBundle/Resources/config/custom_admin_routing_v2.yml"
+    prefix:   /admin/v2
+
 # Internal routing configuration to handle ESI
 # _internal:
 #    resource: "@FrameworkBundle/Resources/config/routing/internal.xml"

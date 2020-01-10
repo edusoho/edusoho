@@ -266,6 +266,7 @@ activity.homework_manage.pass_objective_question_hint: >
 activity.ppt_manage.media_error_hint: 请上传或选择PPT
 activity.ppt_manage.finish_detail_required_error_hint: 请输入至少观看多少分钟
 
+activity.testpaper_manage.media_required: 请选择试卷
 activity.testpaper_manage.arithmetic_float_error_hint: 必须为正数，保留一位小数
 activity.testpaper_manage.positive_integer_error_hint: 必须为正整数
 activity.testpaper_manage.media_error_hint: 请选择试卷
@@ -276,6 +277,7 @@ activity.testpaper_manage.input_description_hint: 请输入试卷描述
 activity.testpaper_manage.generate_mode_hint: 请选择生成方式
 activity.testpaper_manage.max_error_hint: 最大值不能超过1000000000
 activity.testpaper_manage.pass_score_hint: 达标分数：%passScore%分
+activity.testpaper_manage.qualified_score_hint: %passScore%分
 activity.testpaper_manage.setting_pass_score_error_hint: 及格分数（%passedScore%）不能高于总分（%totalScore%）。
 activity.testpaper_manage.pass_score_error_hint: 及格分数必须大于0且小于1000，最多保留一位小数
 activity.testpaper_manage.question_required_error_hint: 请选择题目
@@ -429,7 +431,7 @@ course_set.manage.upgrade_hint:  >
 course_set.manage.img: >
   <div class="course-manage-spread"></div>
 course_set.manage.couseset_tab: >
-  <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">课程信息、课程文件、课程试卷、课程题库为共用功能，支持任意计划来进行引用。</div>
+  <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">课程信息、文件管理为共用功能，支持任意计划来进行引用。</div>
 course_set.manage.single_plan: >
   <p class="title cd-dark-major cd-mb32">使用指南</p><div class="cd-dark-minor cd-text-md">请进入默认计划设置，对首个计划的价格等内容进行设置。</div>
 course_set.manage.all_plan: >
@@ -812,6 +814,7 @@ json_response.join_group_failed.message: 加入小组失败!
 json_response.user_not_found.message: 该用户不存在
 json_response.homework_has_submitted_cannot_change.message: 作业已提交，不能再修改答案！
 json_response.must_choose_question.message: 请先选择题目
+json_response.no_multi_question_bank.message: 只能从一个题库中选题
 json_response.cannot_send_message_self.message: 不能给自己发私信哦！
 json_response.receiver_not_exist.message: 该收件人不存在
 json_response.receiver_not_allowed.message: 不支持向该用户发送私信
@@ -1018,6 +1021,7 @@ admin.category.icon_delete_fail_hint: 删除分类图标失败！
 admin.category.save_success_hint: 保存分类成功！
 admin.category.save_fail_hint: 添加分类失败，请重试！
 admin.category.delete_hint: 真的要删除该分类及其子分类吗？
+admin.category.delete_fail: 分类删除失败
 admin.classroom.choose_success_hint: 指定班级成功
 admin.classroom.operation_success_hint: 成功！
 admin.classroom.operation_fail_hint: 失败
@@ -1383,7 +1387,7 @@ subject.period: 。
 subject.miss_score_no_more_than_score: 漏选分值不得超过题目分值
 subject.score_update_success: 分数修改成功
 subject.difficulty_update_success: 难度修改成功
-subject.belong_update_success: 从属修改成功
+subject.category_update_success: 分类修改成功
 subject.question_count: 共%count%道题
 subject.total_score: 总分%totalScore%分
 subject.is_editing_warning: 请先完成第%seq%题的编辑
@@ -1436,6 +1440,25 @@ admin.mobile_manage.discovery_upgrade_madal.notice_successed: '升级成功'
 admin.mobile_manage.discovery_upgrade_madal.notice_failed: '升级失败'
 admin.mobile_manage.discovery_upgrade_madal.notice_upgraded: '无法重复升级'
 course.plan_task.lessons_publish_status: 已发布课时数：%publishedNum%<br/>未发布课时数：%unpublishedNum%
+
+admin.question_bank.choose_category: 请选择所属分类
+admin.question_bank.save_success: 保存题库成功
+admin.question_bank.save_fail: 保存题库失败
+admin.question_bank.delete_hint: 确定要删除此题库吗
+admin.question_bank.fail_not_delete: 此题库内含有%testpaperNum%份试卷，%questionNum%道题目，无法删除
+admin.question_bank.no_category: 无题库分类
+
+question_bank.question_category.name_max_message: 名称的长度必须小于等于30
+question_bank.question_category.name_chinese_alphanumeric_message: 名称支持中文字、英文字母、数字及_ . ·
+question_bank.question_category.create_success: 创建分类成功
+question_bank.question_category.update_success: 更新分类成功
+question_bank.question_category.delete_confirm_title: 删除确认
+question_bank.question_category.delete_confirm_hint: 此分类及其子分类下共包含%count%道题，删除后，这些题目都将变为未分类题目。您确定要删除此分类吗？
+question_bank.question_category.not_set: 无
+
+question.marker_question.select_question_category: --选择分类--
+queston_bank.testpaper.no_open_tips: 如果找不到试卷，请先确定该试卷已经发布
+queston_bank.testpaper.empty_tips: 此题库还没有试卷
 
 #新后台
 admin_v2.user.cloude_sms_enable_hint: 请先到【管理后台】-【云市场】-【云服务】-【云短信】中开启云短信哦~

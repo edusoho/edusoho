@@ -90,7 +90,7 @@ check env:
     variables:
       - $REPOSITORY == "main"
 
-7.0 For Non-Develop:
+7.1 For main:
   stage: test
   image: codeages/ci-php:7.1.33
   services:
@@ -107,7 +107,24 @@ check env:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
 
-7.0 For Develop:
+7.1 For main with MySQL80:
+  stage: test
+  image: codeages/ci-php71
+  services:
+    - name: mysql:8.0
+      command: ["--default-authentication-plugin=mysql_native_password"]
+    - redis:latest
+  script:
+    - bin/phpunit-diff
+  only:
+    refs:
+      - /^release/.*$/
+      - develop
+      - master
+    variables:
+      - $REPOSITORY == "main"
+
+7.1 For Develop:
   stage: test
   image: codeages/ci-php:7.1.33
   services:
@@ -131,7 +148,6 @@ check env:
   only:
     refs:
       - develop
-      - project/admin-v2
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
@@ -203,6 +219,7 @@ Api Test With 5.5:
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
   only:
     refs:
+      - /^release/.*$/
       - develop
     variables:
       - $REPOSITORY == "main"

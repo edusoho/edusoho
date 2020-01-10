@@ -598,26 +598,6 @@ class TaskServiceTest extends BaseTestCase
         $this->assertEquals(10, $result['maxOnlineNum']);
     }
 
-    public function testFindFutureLiveDates()
-    {
-        $courseSet = $this->createNewCourseSet();
-        $course = $this->createNewCourse($courseSet['id']);
-
-        $task = $this->mockSimpleTask($course['id'], $courseSet['id']);
-        $task = $this->getTaskService()->createTask($task);
-        $this->getTaskService()->publishTask($task['id']);
-
-        $this->mockBiz('Task:TaskDao', array(
-            array('functionName' => 'findFutureLiveDates', 'returnValue' => array(
-                array('count' => 2, 'courseSetId' => $courseSet['id'], 'date' => date('Y-m-d', time() + 86400)),
-            )),
-        ));
-
-        $results = $this->getTaskService()->findFutureLiveDates(10);
-
-        $this->assertEquals(1, count($results));
-    }
-
     public function testFindPublishedLivingTasksByCourseSetId()
     {
         $this->mockBiz('Task:TaskDao', array(

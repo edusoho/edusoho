@@ -18,6 +18,10 @@ interface QuestionService
 
     public function batchCreateQuestions($questions);
 
+    public function batchUpdateCategoryId($ids, $categoryId);
+
+    public function batchUpdateQuestions($ids, $fields);
+
     public function update($id, $fields);
 
     public function updateCopyQuestionsSubCount($parentId, $subCount);
@@ -38,7 +42,9 @@ interface QuestionService
 
     public function findQuestionsByCourseSetId($courseSetId);
 
-    public function search($conditions, $sort, $start, $limit);
+    public function findQuestionsByCategoryIds($categoryIds);
+
+    public function search($conditions, $sort, $start, $limit, $columns = array());
 
     public function searchCount($conditions);
 
@@ -70,4 +76,10 @@ interface QuestionService
     public function batchDeletes($ids);
 
     public function importQuestions($questions, $token);
+
+    public function getQuestionConfig($type);
+
+    public function findAttachments($questionIds);
+
+    public function hasStemImg($question);
 }

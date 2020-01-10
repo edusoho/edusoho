@@ -565,7 +565,9 @@ class TestpaperServiceTest extends BaseTestCase
             'pattern' => 'questionType',
             'type' => 'testpaper',
         );
+        $questionInfo['questions'] = array_merge($choiceQuestions, $fillQuestions, $determineQuestions);
         $testpaper = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
+        $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $questionInfo);
         $fields = array(
             'lessonId' => 1,
             'courseId' => 1,
@@ -855,7 +857,7 @@ class TestpaperServiceTest extends BaseTestCase
             'counts' => array('choice' => 2, 'fill' => 2, 'determine' => 1),
             'scores' => array('choice' => 2, 'fill' => 2, 'determine' => 2),
             'missScores' => array('choice' => 1, 'uncertain_choice' => 1),
-            'courseSetId' => 1,
+            'courseSetId' => 0,
         );
         $result = $this->getTestpaperService()->canBuildTestpaper('testpaper', $options1);
 
@@ -865,7 +867,7 @@ class TestpaperServiceTest extends BaseTestCase
             'itemCount' => 3,
             'questionTypes' => array('choice', 'fill', 'determine', 'essay'),
             'difficulty' => 'normal',
-            'range' => 'course',
+            'range' => array('bankId' => 1),
             'courseSetId' => 1,
         );
         $result = $this->getTestpaperService()->canBuildTestpaper('exercise', $options2);
@@ -915,7 +917,9 @@ class TestpaperServiceTest extends BaseTestCase
             'pattern' => 'questionType',
             'type' => 'testpaper',
         );
+        $questionInfo['questions'] = array_merge($choiceQuestions, $fillQuestions, $determineQuestions);
         $testpaper = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
+        $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $questionInfo);
         $fields = array(
             'lessonId' => 1,
             'courseId' => 1,
@@ -1006,8 +1010,7 @@ class TestpaperServiceTest extends BaseTestCase
             'type' => 'testpaper',
         );
         $testpaper = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
-        $items = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
-        $this->assertArrayEquals(array_keys($fields1['counts']), array_keys($items));
+        $this->assertEquals($testpaper['type'], 'testpaper');
 
         $fields2 = array(
             'name' => 'homework',
@@ -1077,7 +1080,9 @@ class TestpaperServiceTest extends BaseTestCase
             'pattern' => 'questionType',
             'type' => 'testpaper',
         );
+        $questionInfo['questions'] = array_merge($choiceQuestions, $fillQuestions, $determineQuestions, $materialQuestions);
         $testpaper = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
+        $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $questionInfo);
         $fields = array(
             'lessonId' => 1,
             'courseId' => 1,
@@ -1101,7 +1106,7 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertArrayEquals(array_keys($fields1['counts']), array_keys($accuracy));
         $this->assertEquals(1, $accuracy['choice']['partRight']);
         $this->assertEquals(1, $accuracy['choice']['noAnswer']);
-        $this->assertEquals(1, $accuracy['choice']['score']);
+        $this->assertEquals(0, $accuracy['choice']['score']);
         $this->assertEquals(2, $accuracy['choice']['all']);
 
         $this->assertEquals(1, $accuracy['fill']['wrong']);
@@ -1110,10 +1115,10 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals(2, $accuracy['fill']['all']);
 
         $this->assertEquals(1, $accuracy['determine']['right']);
-        $this->assertEquals(2, $accuracy['determine']['score']);
+        $this->assertEquals(0, $accuracy['determine']['score']);
         $this->assertEquals(1, $accuracy['determine']['all']);
 
-        $this->assertEquals(1, $accuracy['material']['noAnswer']);
+        $this->assertEquals(0, $accuracy['material']['noAnswer']);
         $this->assertEquals(0, $accuracy['material']['score']);
         $this->assertEquals(1, $accuracy['material']['all']);
     }
@@ -1139,7 +1144,9 @@ class TestpaperServiceTest extends BaseTestCase
             'pattern' => 'questionType',
             'type' => 'testpaper',
         );
+        $questionInfo['questions'] = array_merge($choiceQuestions, $fillQuestions, $essayQuestions);
         $testpaper = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
+        $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $questionInfo);
         $fields = array(
             'lessonId' => 1,
             'courseId' => 1,
@@ -1381,7 +1388,7 @@ class TestpaperServiceTest extends BaseTestCase
         $itemResults = $this->getTestpaperService()->findItemResultsByResultId($result['id']);
 
         $scoreResult = $this->getTestpaperService()->sumScore($itemResults);
-        $this->assertEquals(2, $scoreResult['sumScore']);
+        $this->assertEquals(0, $scoreResult['sumScore']);
         $this->assertEquals(1, $scoreResult['rightItemCount']);
     }
 
@@ -2033,13 +2040,13 @@ class TestpaperServiceTest extends BaseTestCase
         $token = array(
             'token' => 'testtoken',
             'data' => array(
-                'courseSetId' => 1,
+                'questionBankId' => 1,
             ),
         );
 
         $testpaper = $this->getTestpaperService()->importTestpaper($importData, $token);
         $this->assertEquals($importData['title'], $testpaper['name']);
-        $this->assertEquals($token['data']['courseSetId'], $testpaper['courseSetId']);
+        $this->assertEquals($token['data']['questionBankId'], $testpaper['bankId']);
     }
 
     protected function createHomework()
@@ -2211,7 +2218,7 @@ class TestpaperServiceTest extends BaseTestCase
         return $this->getTestpaperService()->addTestpaperResult($fields);
     }
 
-    protected function generateChoiceQuestions($courseId, $count, $difficulty = null, $parentId = 0)
+    protected function generateChoiceQuestions($bankId, $count, $difficulty = null, $parentId = 0)
     {
         $questions = array();
         for ($i = 0; $i < $count; ++$i) {
@@ -2225,8 +2232,7 @@ class TestpaperServiceTest extends BaseTestCase
                     'question -> choice 4',
                 ),
                 'answer' => array(1, 2),
-                'courseSetId' => $courseId,
-                'target' => 'course/'.$courseId,
+                'bankId' => $bankId,
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
                 'parentId' => $parentId,
             );
@@ -2237,15 +2243,14 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    protected function generateFillQuestions($courseId, $count, $difficulty = null, $parentId = 0)
+    protected function generateFillQuestions($bankId, $count, $difficulty = null, $parentId = 0)
     {
         $questions = array();
         for ($i = 0; $i < $count; ++$i) {
             $question = array(
                 'type' => 'fill',
                 'stem' => 'fill question [[aaa]].',
-                'target' => 'course/'.$courseId,
-                'courseSetId' => $courseId,
+                'bankId' => $bankId,
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
                 'parentId' => $parentId,
             );
@@ -2256,15 +2261,14 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    protected function generateDetermineQuestions($courseId, $count, $difficulty = null, $parentId = 0)
+    protected function generateDetermineQuestions($bankId, $count, $difficulty = null, $parentId = 0)
     {
         $questions = array();
         for ($i = 0; $i < $count; ++$i) {
             $question = array(
                 'type' => 'determine',
                 'stem' => 'determine question.',
-                'target' => 'course/'.$courseId,
-                'courseSetId' => $courseId,
+                'bankId' => $bankId,
                 'answer' => array(0),
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
                 'parentId' => $parentId,
@@ -2276,15 +2280,14 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    protected function generateEssayQuestions($courseId, $count, $difficulty = null, $parentId = 0)
+    protected function generateEssayQuestions($bankId, $count, $difficulty = null, $parentId = 0)
     {
         $questions = array();
         for ($i = 0; $i < $count; ++$i) {
             $question = array(
                 'type' => 'essay',
                 'stem' => 'essay question.',
-                'target' => 'course/'.$courseId,
-                'courseSetId' => $courseId,
+                'bankId' => $bankId,
                 'answer' => array('xxx'),
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
                 'parentId' => $parentId,
@@ -2296,15 +2299,14 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    protected function generateMaterialQuestions($courseId, $count, $difficulty = null)
+    protected function generateMaterialQuestions($bankId, $count, $difficulty = null)
     {
         $questions = array();
         for ($i = 0; $i < $count; ++$i) {
             $question = array(
                 'type' => 'material',
                 'stem' => 'material question.',
-                'target' => 'course/'.$courseId,
-                'courseSetId' => $courseId,
+                'bankId' => $bankId,
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
             );
 

@@ -40,6 +40,12 @@ class TaskException extends AbstractException
 
     const FORBIDDEN_PREVIEW_TASK = 4031216;
 
+    const TYPE_INVALID = 5001217;
+
+    const LIVE_REPLAY_NOT_FOUND = 4041218;
+
+    const LIVE_REPLAY_INVALID = 5001219;
+
     public $messages = array(
         4031201 => 'lesson_tasks_no_more_than_5',
         4041202 => 'exception.task.not_found',
@@ -57,5 +63,8 @@ class TaskException extends AbstractException
         4031214 => 'exception.task.access_denied',
         5001215 => 'exception.task.categoryid_invalid',
         4031216 => 'exception.task.forbidden_preview_task',
+        5001217 => 'exception.task.type_invalid',
+        4041218 => 'exception.task.live_replay_not_found',
+        5001219 => 'exception.task.live_replay_invalid',
     );
 }

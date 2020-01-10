@@ -2,6 +2,7 @@
 
 namespace Biz\Course\Copy;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\AbstractCopy;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
@@ -9,7 +10,6 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Question\Dao\QuestionDao;
 use Biz\Task\Dao\TaskDao;
 use Biz\Testpaper\Dao\TestpaperDao;
-use Codeages\Biz\Framework\Util\ArrayToolkit;
 
 class CourseSetCoursesCopy extends AbstractCopy
 {
@@ -55,98 +55,7 @@ class CourseSetCoursesCopy extends AbstractCopy
 
         $this->getCourseSetService()->updateCourseSetMinAndMaxPublishedCoursePrice($newCourseSet['id']);
 
-        $this->updateQuestionsCourseId($newCourseSet['id']);
-        $this->updateQuestionsLessonId($newCourseSet['id']);
-        $this->updateExerciseRange($newCourseSet['id']);
         $this->resetCopyId($newCourseSet['id']);
-    }
-
-    protected function updateQuestionsCourseId($courseSetId)
-    {
-        $questions = $this->getQuestionDao()->findQuestionsByCourseSetId($courseSetId);
-        $courseIds = ArrayToolkit::column($questions, 'courseId');
-
-        $conditions = array(
-            'parentIds' => $courseIds,
-            'fromCourseSetId' => $courseSetId,
-        );
-        $parentCourses = $this->getCourseDao()->search($conditions, array(), 0, PHP_INT_MAX);
-        $parentCourses = ArrayToolkit::index($parentCourses, 'parentId');
-
-        foreach ($questions as $question) {
-            if (empty($question['courseId'])) {
-                continue;
-            }
-
-            $fields = array(
-                'courseId' => empty($parentCourses[$question['courseId']]) ? 0 : $parentCourses[$question['courseId']]['id'],
-            );
-
-            $this->getQuestionDao()->update($question['id'], $fields);
-        }
-    }
-
-    protected function updateQuestionsLessonId($courseSetId)
-    {
-        $questions = $this->getQuestionDao()->findQuestionsByCourseSetId($courseSetId);
-        $taskIds = ArrayToolkit::column($questions, 'lessonId');
-
-        $conditions = array(
-            'copyIds' => $taskIds,
-            'fromCourseSetId' => $courseSetId,
-        );
-        $parentTasks = $this->getTaskDao()->search($conditions, array(), 0, PHP_INT_MAX);
-        $parentTasks = ArrayToolkit::index($parentTasks, 'copyId');
-
-        foreach ($questions as $question) {
-            if (empty($question['lessonId'])) {
-                continue;
-            }
-
-            $fields = array(
-                'lessonId' => empty($parentTasks[$question['lessonId']]) ? 0 : $parentTasks[$question['lessonId']]['id'],
-            );
-
-            $this->getQuestionDao()->update($question['id'], $fields);
-        }
-    }
-
-    protected function updateExerciseRange($courseSetId)
-    {
-        $conditions = array(
-            'courseSetId' => $courseSetId,
-            'type' => 'exercise',
-        );
-
-        $exercises = $this->getTestpaperDao()->search($conditions, array(), 0, PHP_INT_MAX);
-
-        $taskIds = ArrayToolkit::column($exercises, 'lessonId');
-        $conditions = array(
-            'copyIds' => $taskIds,
-            'fromCourseSetId' => $courseSetId,
-        );
-        $copyTasks = $this->getTaskDao()->search($conditions, array(), 0, PHP_INT_MAX);
-        $copyTasks = ArrayToolkit::index($copyTasks, 'copyId');
-
-        foreach ($exercises as $exercise) {
-            if (empty($exercise['lessonId'])) {
-                continue;
-            }
-
-            $metas = $exercise['metas'];
-            $range = $metas['range'];
-            $taskId = empty($range['lessonId']) ? 0 : $range['lessonId'];
-
-            $range['lessonId'] = empty($copyTasks[$taskId]['id']) ? 0 : $copyTasks[$taskId]['id'];
-            $metas['range'] = $range;
-
-            $fields = array(
-                'lessonId' => 0,
-                'metas' => $metas,
-            );
-
-            $this->getTestpaperDao()->update($exercise['id'], $fields);
-        }
     }
 
     /**

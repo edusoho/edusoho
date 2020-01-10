@@ -1,0 +1,32 @@
+{% do script(['app/js/question-category/widgets/index.js']) %}
+
+<div id="category-table-body question-category-panel__list">
+  <input class="js-category-choose" data-role="search-conditions" type="hidden" name="categoryId" value="">
+  <div class="js-sortable-item question-category-panel__item text-overflow">
+    <a href="javascript:;" class="gray-darker js-all-category-search js-active-set active">{{ 'my.teaching.question_bank.question.all'|trans }}</a>
+  </div>
+  <div class="js-sortable-item question-category-panel__item text-overflow">
+    <a href="javascript:;" class="gray-darker js-category-search js-active-set" data-id="0">{{ 'my.teaching.question_bank.question.no_category'|trans }}</a>
+  </div>
+  {% if categories is not empty %}
+    {{ _self.showCategoryTree(categories, false, 0) }}
+  {% endif %}
+</div>
+
+{% macro showCategoryTree(categories, isCollapseChildren, deep) %}
+  {% set deep = deep + 1 %}
+  <div class="js-sortable-list {% if deep > 1 %}question-category-panel__list{% endif %}" {% if deep > 1 %}style="display:none;"{% endif %}>
+    {% for category in categories %}
+      {% set isParent = category.children|default(null) is not empty %}
+        <div class="js-sortable-item question-category-panel__item text-overflow">
+          {% if isParent %}
+            <i class="cd-icon cd-icon-add gray-darker js-toggle-show js-remove-icon"></i>
+          {% endif %}
+          <a href="javascript:;" class="gray-darker question-category-item-name text-overflow js-category-search js-active-set" data-id="{{ category.id }}">{{ category.name }}</a>
+        </div>
+        {% if isParent %}
+          {{ _self.showCategoryTree(category.children, isCollapseChildren, deep) }}
+        {% endif %}
+    {% endfor %}
+  </div>
+{% endmacro %}

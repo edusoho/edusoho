@@ -1,0 +1,60 @@
+{% extends 'my/my-teaching.html.twig' %}
+{% do script(['app/js/question-bank/index.js']) %}
+
+{% block title %}{{ 'my.teaching.question_bank_title'|trans }} - {{ parent() }}{% endblock %}
+{% set side_nav = 'my-question-bank' %}
+
+{% block main %}
+  <div class="cd-mb16">
+   
+    <div class="pull-right hidden-xs">
+      <a class="link-primary question-bank-use" href="http://www.qiqiuyu.com/faq/1164/detail" target="view_window">
+        <i class="es-icon es-icon-tip"></i>
+        {{ 'my.teaching.question_bank.instructions'|trans }}
+      </a>
+      <a class="cd-btn cd-btn-primary" data-url="{{ path('question_bank_create') }}" data-toggle="modal" data-target="#modal">
+        {{ 'my.teaching.question_bank.create'|trans }}
+      </a>
+    </div>
+    <div class="nav nav-pills mtm">
+      <h5 class="text-18">{{'my.teaching.question_bank.list'|trans}}</h5>
+    </div>
+  </div>
+  {{ render(path('question_bank_category_tree_nav',{ category: category })) }}
+
+  <div class="question-bank-list clearfix">
+    {% if questionBanks %}
+      {% for questionBank in questionBanks %}
+        <a href="{{ path('question_bank_manage_question_list',{id:questionBank.id}) }}" class="question-bank-list-item link-dark">
+          <img src="{{ asset('static-dist/app/img/question-bank/question_bank_folder.png') }}"
+               srcset="{{ asset('static-dist/app/img/question-bank/question_bank_folder@2x.png') }} 2x" alt="folder"/>
+          <div class="question-bank-wrap">
+            <div class="question-bank-text">{{ questionBank.name }}</div>
+          </div>
+        </a>
+      {% endfor %}
+    {% elseif has_permission('admin_question_bank') and not category%}
+      {% if setting('backstage.is_v2',0)  == 0 %}
+        <div class="empty">{{ 'question_bank.empty'|trans({'%url%': path('admin_question_bank') })|raw }}</div>
+      {% else %}
+        <div class="empty">{{ 'question_bank.admin_v2.empty'|trans({'%url%': path('admin_v2_question_bank') })|raw }}</div>
+      {% endif %}
+    {% else %}
+      <div class="empty">{{ 'question_bank.empty.no_auth'|trans }}</div>
+    {% endif %}
+  </div>
+
+  {{ web_macro.paginator(paginator) }}
+  <div class="modal fade" id="questionBankModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content question-bank-model">
+        <i class="es-icon es-icon-close01 js-model-close"></i>
+        <img class="question-bank-model-img" src="{{ asset('static-dist/app/img/question-bank/questtion_bank_model.png') }}" alt="model"/>
+        <div class="question-bank-model-tops">{{'admin.question_bank.manage.model-title' | trans}}</div>
+        <div class="question-bank-model-wrap">
+          {{ 'admin.question_bank.manage.model'|trans|raw }}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

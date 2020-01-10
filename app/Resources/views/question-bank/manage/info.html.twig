@@ -1,0 +1,64 @@
+{% extends 'my/my-teaching.html.twig' %}
+
+{% block title %}{{ 'my.teaching.question_bank.info'|trans }} - {{ parent() }}{% endblock %}
+{% set side_nav = 'my-question-bank' %}
+{% set active_tab = 'bank-info' %}
+
+{% do script(['libs/jquery-validation.js', 'libs/select2.js', 'app/js/question-bank/edit/index.js'])  %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="question-bank-heading">{{ questionBank.name }}</div>
+  </div>
+
+  <div>
+    {% include 'question-bank/header-navbar.html.twig' %}
+    <div class="panel panel-default panel-col">
+      {% block panel_body %}
+        <div class="panel-body question-list-container js-testpaper-container">
+          <div class="mtl">
+            <div>
+
+              <form id="bank-form" class="form-horizontal">
+                <div class="form-group">
+                  <label class="col-md-2 control-label" for="bank-name">{{'my.teaching.question_bank.name_label'|trans}}</label>
+                  <div class="col-md-8 controls">
+                    <input class="form-control" id="bank-name" type="text" name="name" value="{{ questionBank.name|default('') }}" tabindex="1">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-md-2 control-label" for="bank-category">{{'my.teaching.question_bank.category_label'|trans}}</label>
+                  <div class="col-md-8 controls">
+                    <select style="width:150px;" class="form-control" name="categoryId" required="required" id="bank-category">
+                      <option value="">{{'admin.question_bank.manage.category'|trans}}</option>
+                      {% for tree in categoryTree %}
+                        <option value={{ tree.id }} {% if tree.id == questionBank.categoryId  %}selected{% endif%}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-md-2 control-label" for="bank-members">{{'admin.question_bank.manage.manager_label'|trans}}</label>
+                  <div class="col-md-8 controls">
+                    <input type="form-control" id="bank-members" name="members" class="width-full select2-offscreen hidden" tabindex="-1" value="{{ bankMembers|default('') }}" data-match-url="{{ path('question_bank_member_match') }}">
+                    <div class="help-block" style="display:none;"></div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-offset-2 col-md-8 controls">
+                    <button type="submit" id="save-btn" class="cd-btn cd-btn-primary">{{'form.btn.save'|trans}}</button>
+                  </div>
+                </div>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+              </form>
+
+            </div>
+          </div>
+        </div>
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}

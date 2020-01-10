@@ -649,18 +649,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->update($taskId, array('maxOnlineNum' => $maxNum));
     }
 
-    /**
-     * 统计当前时间以后每天的直播次数.
-     *
-     * @param  $limit
-     *
-     * @return array <string, int|string>
-     */
-    public function findFutureLiveDates($limit = 4)
-    {
-        return $this->getTaskDao()->findFutureLiveDates($limit);
-    }
-
     public function findPublishedLivingTasksByCourseSetId($courseSetId)
     {
         $conditions = array(

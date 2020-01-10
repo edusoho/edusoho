@@ -5,6 +5,7 @@ namespace AppBundle\Twig;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Question\Service\QuestionService;
 use Codeages\Biz\Framework\Context\Biz;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class QuestionExtension extends \Twig_Extension
