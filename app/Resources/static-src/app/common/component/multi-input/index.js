@@ -65,7 +65,7 @@ export default class MultiInput extends Component {
     }
   }
 
-  removeItem(event) {
+  removeItem = (event) => {
     let id = event.currentTarget.attributes["data-item-id"].value;
     removeItem(this.state.dataSourceUi, id);
     this.setState({
@@ -73,14 +73,14 @@ export default class MultiInput extends Component {
     });
   }
 
-  sortItem(datas) {
+  sortItem = (datas) => {
     this.state.dataSourceUi = updateItemSeq(datas, this.state.dataSourceUi);
     this.setState({
       dataSourceUi: this.state.dataSourceUi,
     });
   }
 
-  addItem(value, data) {
+  addItem = (value, data) => {
     initItem(this.state.dataSourceUi, value);
     this.setState({
       dataSourceUi: this.state.dataSourceUi,
