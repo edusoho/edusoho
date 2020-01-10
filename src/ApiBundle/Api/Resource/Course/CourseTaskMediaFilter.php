@@ -9,7 +9,7 @@ use ApiBundle\Api\Resource\Exercise\ExerciseFilter;
 class CourseTaskMediaFilter extends Filter
 {
     protected $publicFields = array(
-        'mediaType', 'media',
+        'mediaType', 'media', 'format',
     );
 
     protected function publicFields(&$data)
@@ -52,5 +52,12 @@ class CourseTaskMediaFilter extends Filter
             default:
                 break;
         }
+        
+        if ('object' == $data['format'] && 'download' != $data['mediaType']) {
+            $data[$data['mediaType'].'Media'] = $data['media'];
+            unset($data['media']);
+        }
+
+        unset($data['format']);
     }
 }

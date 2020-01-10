@@ -34,6 +34,8 @@ class SettingException extends AbstractException
 
     const FORBIDDEN_CLOUD_ATTACHMENT = 4030813;
 
+    const APP_CLIENT_CLOSED = 4030814;
+
     public $messages = array(
         4030801 => 'exception.setting.forbidden_mobile_register',
         4030802 => 'exception.sms.setting_enable',
@@ -48,5 +50,6 @@ class SettingException extends AbstractException
         5000811 => 'exception.setting.no_copyright',
         5000812 => 'exception.setting.ai_face_disable',
         4030813 => 'exception.setting.attachment.setting_enable',
+        4030814 => 'exception.setting.app_client_closed',
     );
 }
