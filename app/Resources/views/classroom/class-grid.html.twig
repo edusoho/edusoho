@@ -1,5 +1,5 @@
 <div class="class-item class-item--tag">
-  {% if classroom.vipLevelId|default(0) > 0 %}
+  {% if is_plugin_installed('Vip') and setting('vip.enabled') and classroom.vipLevelId|default(0) > 0 %}
     <span class="tag-vip-free"></span>
   {% endif %}
   <div class="class-img-wrap">

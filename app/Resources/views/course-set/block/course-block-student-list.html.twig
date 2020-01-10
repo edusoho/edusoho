@@ -8,7 +8,7 @@
                   {% else %}
                     {% set course = data('PublishedCourseByCourseSet',{ courseSetId: courseSet.id } ) %}
                   {% endif %}
-                  {% if course.vipLevelId|default(0) > 0 %}
+                  {% if is_plugin_installed('Vip') and setting('vip.enabled') and course.vipLevelId|default(0) > 0 %}
                     <span class="tag-vip-free"></span>
                   {% endif %}
                   <div class="course-img">
@@ -46,7 +46,7 @@
                       {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'img-responsive', courseSet.title) }}
                     </a>
                     {% if courseSet.stickyTime|default('') %}
-                      <span class="course-sticky-tag">{{ 'group.thread.stick_label'|trans }}</span>
+                      <span class="course-sticky-tag course-sticky-tag--student">{{ 'group.thread.stick_label'|trans }}</span>
                     {% endif %}
 
                   </div>

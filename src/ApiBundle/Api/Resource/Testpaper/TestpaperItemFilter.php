@@ -33,6 +33,8 @@ class TestpaperItemFilter extends Filter
                     $answer = $this->convertAbsoluteUrl($answer);
                 }
             }
+        } else {
+            $data['testResult'] = (object) array();
         }
 
         if (!empty($data['type'])) {

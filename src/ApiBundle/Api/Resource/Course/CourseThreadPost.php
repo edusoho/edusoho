@@ -40,7 +40,7 @@ class CourseThreadPost extends AbstractResource
         $total = $this->getCourseThreadService()->getThreadPostCountByThreadId($threadId);
         $posts = $this->getCourseThreadService()->searchThreadPosts(
             $conditions,
-            array(),
+            $request->query->get('sort', array()),
             $offset,
             $limit
         );

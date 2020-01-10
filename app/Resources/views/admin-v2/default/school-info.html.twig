@@ -51,7 +51,7 @@
 </div>
 {% endif %}
 <div class="admin-link">
-  <a class="admin-link__btn" href="{{ path('homepage') }}" target="_blank"><i class="es-icon es-icon-website"></i>{{ 'admin_v2.homepage.school_info.access_web'|trans }}</a>
+  <a class="admin-link__btn" href="{{ path('homepage') }}" target="_blank"><i class="es-icon es-icon-site"></i>{{ 'admin_v2.homepage.school_info.access_web'|trans }}</a>
   <a {% if mobileEnabled %}class="admin-link__btn" href="{{ path('mobile') }}" target="_blank" {% else %}class="admin-link__btn admin-link__btn--disabled" href="{{ path('admin_v2_setting_mobile') }}"{% endif %}>{% if not mobileEnabled %}<span class="closed-tag"></span>{% endif %}<i class="es-icon es-icon-app"></i>{{ 'admin_v2.homepage.school_info.access_mobile_app'|trans }}</a>
   <a {% if wechatAppStatus.installed|default(false) %}class="admin-link__btn js-mini-program mb0" href="javascript:;" data-src="{{ miniProgramCodeImg.img_url|default() }}" {% else %}class="admin-link__btn admin-link__btn--disabled" href="{{ path('admin_v2_wechat_app') }}"{% endif %}>{% if not wechatAppStatus.installed %}<span class="closed-tag"></span>{% endif %}<i class="es-icon es-icon-entry-miniprogram"></i>{{ 'admin_v2.homepage.school_info.access_wechat_app'|trans }}</a>
 </div>
