@@ -83,22 +83,22 @@
 
       <div class="controls col-md-8 radios">
         <label>
-          <input type="radio" name="register_protective" id="none" value="none" {% if auth.register_protective|default(none) == "none" %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.none'|trans}}
+          <input type="radio" name="register_protective" id="none" value="none" {% if auth.register_protective|default(null) == "none" %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.none'|trans}}
         </label>
         <label>
           <input type="radio" name="register_protective" id="low" value="low" {% if  auth.register_protective|default(null) == "low" %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.low'|trans}}
         </label>
         <label>
-          <input type="radio" name="register_protective" id="middle" value="middle" {% if  auth.register_protective|default(null) == "middle" %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.middle'|trans}}
+          <input type="radio" name="register_protective" id="middle" value="middle" {% if  auth.register_protective|default("middle") == "middle" %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.middle'|trans}}
         </label>
         <label>
           <input type="radio" name="register_protective" id="high" value="high"{% if auth.register_protective|default(null) == "high" %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.high'|trans}}
         </label>
+        <div class="help-block js-mobile-tip {% if auth.register_mode == 'email' or auth.register_mode == 'closed' %}hidden{% endif %}">为了避免云短信被盗刷，建议开启注册防护机制</div>
       </div>
-
       <button type="button" class="hiddenJsAction" style="display: none"></button>
 
-      <div class="controls col-md-8 mtl col-md-offset-3 dync_visible not_closed_mode low_protective" {% if  auth.register_protective|default(null) == "low" %}{% else %}style="display:none;"{% endif %}>
+      <div class="controls col-md-8 col-md-offset-3 dync_visible not_closed_mode low_protective" {% if  auth.register_protective|default(null) == "low" %}{% else %}style="display:none;"{% endif %}>
         <div class="well">
           {{'admin.user_auth.Protection.Explaination'|trans}}
           <p class="mll mtm dync_visible low_protective_email low_protective_email_or_mobile">{{'admin.user_auth.Protection.low.Verification_code.email'|trans}}</p>
@@ -107,7 +107,7 @@
         </div>
       </div>
 
-      <div class="controls col-md-8 mtl col-md-offset-3 dync_visible not_closed_mode middle_protective" {% if  auth.register_protective|default(null) == "middle" %}{% else %}style="display:none;"{% endif %}>
+      <div class="controls col-md-8 col-md-offset-3 dync_visible not_closed_mode middle_protective" {% if  auth.register_protective|default(null) == "middle" %}{% else %}style="display:none;"{% endif %}>
         <div class="well">
           {{'admin.user_auth.Protection.Explaination'|trans}}
           <p class="mll mtm dync_visible middle_protective_email middle_protective_email_or_mobile">{{'admin.user_auth.Protection.low.Verification_code.email'|trans}}</p>
@@ -117,7 +117,7 @@
         </div>
       </div>
 
-      <div class="controls col-md-8 mtl col-md-offset-3 dync_visible not_closed_mode high_protective" {% if  auth.register_protective|default(null) == "high" %}{% else %}style="display:none;"{% endif %}>
+      <div class="controls col-md-8 col-md-offset-3 dync_visible not_closed_mode high_protective" {% if  auth.register_protective|default(null) == "high" %}{% else %}style="display:none;"{% endif %}>
         <div class="well">
           {{'admin.user_auth.Protection.Explaination'|trans}}
           <p class="mll mtm dync_visible high_protective_email high_protective_email_or_mobile">{{'admin.user_auth.Protection.low.Verification_code.email'|trans}}</p>
