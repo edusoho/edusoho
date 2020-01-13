@@ -21,7 +21,7 @@
         <div class="testpaper-mark-info__title text-overflow" title="{{ taskTitle }}">{{ taskTitle }}</div>
         <div class="testpaper-mark-info__name">
           {% if testpaper %}{{'course.testpaper_manage.create.name'|trans}}： {{ testpaper.name }}{% else %}{{ 'course.testpaper_check.testpaper_delete'|trans }}{% endif %}
-          {% if courseSets[task.fromCourseSetId] and courseSets[task.fromCourseSetId].parentId|default(0) %}
+          {% if courseSets[task.fromCourseSetId] is defined and courseSets[task.fromCourseSetId].parentId|default(0) %}
             <div class="mbm mtm color-gray">
               <span class="mrl">{{'user.orders.target_course'|trans}}：
                 {% set course=data('Course',{'courseId':task.courseId}) %}
