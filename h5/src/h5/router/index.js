@@ -158,6 +158,15 @@ const routes = [
     path: '/live',
     name: 'live',
     component: () => import(/* webpackChunkName: "live" */'@/containers/course/detail/live-view.vue')
+  },
+  {
+    path: '/live-timetable',
+    name: 'live-timetable',
+    meta: {
+      title: '直播课表',
+      hideTitle: true
+    },
+    component: () => import(/* webpackChunkName: "live" */'@/containers/live-timetable/index.vue')
   }, {
     path: '/testpaper',
     name: 'testpaperIntro',

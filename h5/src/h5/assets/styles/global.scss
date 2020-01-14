@@ -176,8 +176,17 @@ a {
 .font-family-PFM {
   font-family: PingFangSC-Medium;
 }
+.font-family-PM {
+  font-family:PingFangSC-Medium,PingFang SC;
+}
+.font-family-PR {
+  font-family:PingFangSC-Regular,PingFang SC;
+}
 
-
+//box-shadow
+.box-shadow{
+  box-shadow:0px 1px 4px 0px rgba(0,0,0,0.05)
+}
 
 .blue-nav {
   background-color: $primary-color;

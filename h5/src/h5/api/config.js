@@ -9,8 +9,9 @@ import vip from './vip/index';
 import marketing from './marketing/index';
 import studyCard from './study-card/index';
 import distribution from './distribution/index';
+import liveTimetable from './liveTimetable/index';
 
 const config = [...classroom, ...course, ...lesson, ...me, ...order,
-  ...setting, ...coupon, ...vip, ...marketing, ...distribution, ...studyCard];
+  ...setting, ...coupon, ...vip, ...marketing, ...distribution, ...studyCard, ...liveTimetable];
 
 export default config;
