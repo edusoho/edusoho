@@ -21,7 +21,8 @@ class CreateUserFootprint extends Migration
                 `updatedTime` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
                 PRIMARY KEY(`id`),
                 KEY `index_user_date`(`userId`, `date`),
-                KEY `index_target_type_id`(`targetType`, `targetId`)
+                KEY `index_target_type_id`(`targetType`, `targetId`),
+                KEY `index_date`(`date`)
             )ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT '用户足迹';
         ");
     }

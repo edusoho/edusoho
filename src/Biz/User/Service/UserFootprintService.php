@@ -13,4 +13,6 @@ interface UserFootprintService
     public function countUserFootprints($conditions);
 
     public function prepareUserFootprintsByType($footprints, $type);
+
+    public function deleteUserFootprintsBeforeDate($date);
 }

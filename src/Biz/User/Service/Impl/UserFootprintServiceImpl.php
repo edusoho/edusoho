@@ -64,6 +64,11 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
         return $footprints;
     }
 
+    public function deleteUserFootprintsBeforeDate($date)
+    {
+        return $this->getUserFootprintDao()->deleteBeforeDate($date);
+    }
+
     protected function prepareTaskFootprints($footprints)
     {
         $taskIds = ArrayToolkit::column($footprints, 'targetId');

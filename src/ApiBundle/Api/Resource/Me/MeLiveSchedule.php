@@ -24,7 +24,7 @@ class MeLiveSchedule extends AbstractResource
             'type' => 'live',
             'courseIds' => $courseIds,
             'status' => 'published',
-            'startTime_GT' => $request->query->get('startTime', strtotime(date('00:00:00', time()))),
+            'startTime_GE' => $request->query->get('startTime', strtotime(date('00:00:00', time()))),
             'startTime_LE' => $request->query->get('endTime', strtotime(date('23:59:59', time()))),
         );
 

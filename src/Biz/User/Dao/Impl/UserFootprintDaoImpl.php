@@ -8,6 +8,13 @@ class UserFootprintDaoImpl extends GeneralDaoImpl
 {
     protected $table = 'user_footprint';
 
+    public function deleteBeforeDate($date)
+    {
+        $sql = "DELETE FROM {$this->table()} WHERE `date` <= ?";
+
+        return $this->db()->executeUpdate($sql, array($date));
+    }
+
     public function declares()
     {
         return array(
@@ -26,7 +33,8 @@ class UserFootprintDaoImpl extends GeneralDaoImpl
                 'userId = :userId',
                 'targetId = :targetId',
                 'targetType = :targetType',
-                'date >= :date',
+                'date >= :date_GT',
+                'date <= :date_LE',
             ),
         );
     }

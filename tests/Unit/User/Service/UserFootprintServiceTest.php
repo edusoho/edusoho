@@ -3,6 +3,7 @@
 namespace Tests\Unit\User\Service;
 
 use Biz\BaseTestCase;
+use Biz\User\Dao\UserFootprintDao;
 use Biz\User\Service\UserFootprintService;
 
 class UserFootprintServiceTest extends BaseTestCase
@@ -92,7 +93,7 @@ class UserFootprintServiceTest extends BaseTestCase
         $result = $this->getFootprintService()->searchUserFootprints(array('userId' => 100), array('updatedTime' => 'DESC'), 0, 10);
         $this->assertEquals(array($userFootprint1, $userFootprint2), $result);
 
-        $result = $this->getFootprintService()->searchUserFootprints(array('userId' => 100, 'date' => time() + 24 * 24), array('updatedTime' => 'DESC'), 0, 10);
+        $result = $this->getFootprintService()->searchUserFootprints(array('userId' => 100, 'date_GT' => time() + 24 * 24), array('updatedTime' => 'DESC'), 0, 10);
         $this->assertEquals(array($userFootprint2), $result);
     }
 
@@ -267,6 +268,56 @@ class UserFootprintServiceTest extends BaseTestCase
         $this->assertEquals('test lesson task title', $result[1]['target']['title']);
     }
 
+    public function testDeleteUserFootprintsByCreatedTime()
+    {
+        $footprint = array(
+            'userId' => $this->getCurrentUser()->getId(),
+            'targetType' => 'test type1',
+            'targetId' => 1,
+            'event' => 'test event',
+            'date' => time(),
+        );
+
+        $this->getFootprintDao()->create($footprint);
+
+        $footprint = array(
+            'userId' => $this->getCurrentUser()->getId(),
+            'targetType' => 'test type2',
+            'targetId' => 1,
+            'event' => 'test event',
+            'date' => strtotime('-1 year', time()),
+        );
+
+        $this->getFootprintDao()->create($footprint);
+        $footprint = array(
+            'userId' => $this->getCurrentUser()->getId(),
+            'targetType' => 'test type3',
+            'targetId' => 1,
+            'event' => 'test event',
+            'date' => strtotime('-2 year', time()) - 60 * 60,
+        );
+
+        $this->getFootprintDao()->create($footprint);
+        $footprint = array(
+            'userId' => $this->getCurrentUser()->getId(),
+            'targetType' => 'test type4',
+            'targetId' => 1,
+            'event' => 'test event',
+            'date' => strtotime('-2 year', time()),
+        );
+
+        $this->getFootprintDao()->create($footprint);
+
+        $count = $this->getFootprintService()->countUserFootprints(array());
+        $this->assertEquals(4, $count);
+
+        $this->getFootprintService()->deleteUserFootprintsBeforeDate(strtotime('-2 year', time()));
+
+        $count = $this->getFootprintService()->countUserFootprints(array());
+
+        $this->assertEquals(2, $count);
+    }
+
     protected function createFootprint($userId = null, $targetType = 'task', $targetId = 1, $event = 'learn', $date = 0)
     {
         $footprint = array(
@@ -286,5 +337,13 @@ class UserFootprintServiceTest extends BaseTestCase
     protected function getFootprintService()
     {
         return $this->createService('User:UserFootprintService');
+    }
+
+    /**
+     * @return UserFootprintDao
+     */
+    protected function getFootprintDao()
+    {
+        return $this->createDao('User:UserFootprintDao');
     }
 }
