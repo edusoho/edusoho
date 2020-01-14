@@ -1,6 +1,7 @@
 import EsMessenger from 'app/common/messenger';
 import swfobject from 'es-swfobject';
 import { getSupportedPlayer } from 'common/video-player-judge';
+import LocalVideoPlayer from 'app/js/player/local-video-player';
 import CourseAd from './course-ad';
 
 class OpenCoursePlayer {
@@ -29,6 +30,7 @@ class OpenCoursePlayer {
   }
 
   showPlayer() {
+    let self =this;
     $.get(this.url, (lesson) => {
       console.log(this.url, lesson);
       if (lesson.mediaError) {
@@ -46,8 +48,8 @@ class OpenCoursePlayer {
       };
       let caller = mediaSourceActionsMap[lesson.mediaSource] ? mediaSourceActionsMap[lesson.mediaSource].bind(this) : undefined;
 
-      if(caller === undefined && lesson.mediaUri.indexOf('.mp4') != -1){
-         caller = mediaSourceActionsMap['iframe'].bind(this);
+      if(lesson.mediaSource === 'NeteaseOpenCourse' && lesson.mediaUri.indexOf('.mp4') != -1){
+        self._playerLocalVideo(lesson.mediaUri);
       }else if(caller === undefined && (lesson.type == 'video' || lesson.type == 'audio')) {
         caller = this.onSWF.bind(this);
       }
@@ -155,6 +157,14 @@ class OpenCoursePlayer {
   getPlayer() {
     return window.frames['viewerIframe'].window.BalloonVideoPlayer ||
            window.frames['viewerIframe'].window.player;
+  }
+
+  _playerLocalVideo(playerUrl) {
+    $('#lesson-video-content').html('<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>');
+    new LocalVideoPlayer({
+      'element' : 'lesson-player',
+      'url' : playerUrl,
+    });
   }
 
   videoPlay(playerUrl) {
