@@ -119,6 +119,9 @@ class ExportQuestionWrapper extends Wrapper
         $result = preg_split('/(<img [^>]*?>)/', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
         foreach ($result as $item) {
             if (preg_match('/<img .*src=[\'\"](.*?)[\'\"].*>/', $item, $matches)) {
+                if (strrpos($webDir.$matches[1], '.emf') !== false) {
+                    continue;
+                }
                 $items[] = array(
                     'element' => 'img',
                     'content' => $webDir.$matches[1],
