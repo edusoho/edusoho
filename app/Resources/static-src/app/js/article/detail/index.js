@@ -5,8 +5,8 @@ let element = '#detail-content';
 let threadShowWidget = new ThreadShowWidget({
   element: element
 });
-let isCopy = $('.js-article-copy-body').data('copy');
-if (isCopy) {
+let copyEnabled = $('.js-article-copy-body').data('copy');
+if (copyEnabled) {
     document.onselectstart = new Function('return false');
     document.oncontextmenu = new Function('return false');
     if (window.sidebar) {
