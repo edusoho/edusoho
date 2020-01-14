@@ -215,7 +215,7 @@ class Setting extends AbstractResource
 
         return array(
             'name' => $siteSetting['name'],
-            'url' => $siteSetting['url'],
+            'url' => $request->getHttpRequest()->getSchemeAndHttpHost(),
             'logo' => empty($siteSetting['logo']) ? '' : $siteSetting['url'].'/'.$siteSetting['logo'],
         );
     }
