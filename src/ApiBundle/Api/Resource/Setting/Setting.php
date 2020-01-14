@@ -61,6 +61,10 @@ class Setting extends AbstractResource
             'video_watermark' => '0',
         );
 
+        empty($storageSetting['video_watermark']) || $storageSetting['video_watermark'] = strval($storageSetting['video_watermark']);
+        empty($storageSetting['video_fingerprint']) || $storageSetting['video_fingerprint'] = strval($storageSetting['video_fingerprint']);
+        empty($storageSetting['video_fingerprint_time']) || $storageSetting['video_fingerprint_time'] = strval($storageSetting['video_fingerprint_time']);
+
         if (!empty($storageSetting)) {
             $fingerPrintSetting = ArrayToolkit::parts($storageSetting, array(
                 'video_fingerprint',
