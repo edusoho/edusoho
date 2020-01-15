@@ -88,6 +88,11 @@ export default [
     method: 'GET'
   }, {
     // 我的学习
+    name: 'myhistoryLearn',
+    url: '/me/footprint',
+    method: 'GET'
+  }, {
+    // 我的学习
     name: 'myStudyClasses',
     url: '/me/classrooms',
     method: 'GET'

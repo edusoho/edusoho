@@ -27,7 +27,7 @@
       .live-content__title{
         font-size: 14px;
         color: #333333;
-        .icon-zhibo{
+        .iconfont{
           margin-right: vw(8);
           color: #BEBEBE;
         }
@@ -39,17 +39,6 @@
         font-size: 12px;
         .live-content__time{
           position: relative;
-          padding-right: vw(8);
-          margin-right: vw(8);
-          &::after{
-            position: absolute;
-            content: "";
-            top:0;
-            bottom: 0;
-            right: 0;
-            width: 1px;
-            background: #E1E1E1;
-          }
         }
         .live-status--default{
           color: $primary-color;

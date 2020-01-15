@@ -258,8 +258,34 @@ const filters = [
   },
   {
     name: 'formateTime',
-    handler(value) {
-      return formatSimpleHour(new Date(value));
+    handler(task) {
+      switch (task.type) {
+        case 'video':
+        case 'audio':
+          if (task.mediaSource !== 'self' && task.type !== 'audio') {
+            return '';
+          }
+          return `时长: ${formatTimeByNumber(task.length)}`;
+        case 'live':
+          return `${formatSimpleHour(new Date(task.startTime * 1000))} | `;
+        case 'text':
+        case 'doc':
+        case 'ppt':
+        case 'testpaper':
+        case 'homework':
+        case 'exercise':
+        case 'download':
+        case 'discuss':
+          return '';
+        default:
+          return '暂不支持';
+      }
+    }
+  },
+  {
+    name: 'formateLiveTime',
+    handler(time) {
+      return `${formatSimpleHour(new Date(time))} | `;
     }
   }
 ];
