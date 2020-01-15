@@ -13,7 +13,7 @@
       line-height: 24px;
       font-size: vw(14);
       color: #666666;
-      font-family:PingFangSC-Regular,PingFang SC;
+      @extend .font-family-PR;
     }
     .activeTag{
       text-align: center;
@@ -48,7 +48,7 @@
           align-items: center;
           font-size: 14px;
           color: #999999;
-          font-family:PingFangSC-Regular,PingFang SC;
+          @extend .font-family-PR;
           &::after {
             content: '';
             display: inline-block;
@@ -72,7 +72,7 @@
           align-items:center;
           font-size:12px;
           color:#999999;
-          font-family:PingFangSC-Regular,PingFang SC;
+          @extend .font-family-PR;
           .van-switch{
             margin-left:8px
           }

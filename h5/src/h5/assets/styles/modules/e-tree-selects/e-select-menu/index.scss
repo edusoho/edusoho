@@ -13,7 +13,7 @@
       margin-top:vw(24);
       color: #999999;
       font-size: 14px;
-      font-family: PingFangSC-Regular,PingFang SC;
+      @extend .font-family-PR;
       padding-left:vw(20);
     }
     .selected {
@@ -61,7 +61,7 @@
       text-align: center;
       height: vw(54);
       line-height: vw(54);
-      font-family:PingFangSC-Regular,PingFang SC;
+      @extend .font-family-PR;
       font-size: 14px;
       color: #2B333B;
     }

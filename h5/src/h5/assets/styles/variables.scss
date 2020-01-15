@@ -39,8 +39,38 @@ $active-font:#408ffb;
     background:rgba(3,199,119,0.1) !important;
     color: $primary-color !important;
   }
+  .live-list{
+      .live-list__title {
+        .live-title__left {
+          color: $primary-color!important;
+        }
+        .live-title__right {
+          &::after {
+            background: $primary-color!important;
+          }
+        }
+      }
+  }
+  .e-course-card{
+    .live-list__item{
+      .live-item__content{
+        .live-content__dec{
+          .live-status--default{
+              color: $primary-color!important;
+          }
+        }
+        .live-btn--start{
+          background-color:$primary-color !important;
+       }
+       .live-btn--default{
+        color: $primary-color!important;
+        border: 1px solid $primary-color!important;
+       }
+      }
+    }
+  }
+  
 }
 .activeTag{
   background: $active-bg ;
 }
-
