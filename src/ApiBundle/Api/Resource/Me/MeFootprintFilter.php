@@ -28,6 +28,8 @@ class MeFootprintFilter extends Filter
             return array();
         }
 
+        $footprint['date'] = date('c', $footprint['date']);
+
         $courseItemFilter = new CourseItemFilter();
         $courseItemFilter->setMode(Filter::SIMPLE_MODE);
 
@@ -37,16 +39,21 @@ class MeFootprintFilter extends Filter
         $classroomFilter = new ClassroomFilter();
         $classroomFilter->setMode(Filter::SIMPLE_MODE);
 
-        $course = $footprint['target']['course'];
-        $classroom = $footprint['target']['classroom'];
+        if (empty($footprint['target'])) {
+            return $footprint;
+        }
+
+        $course = empty($footprint['target']['course']) ? array() : $footprint['target']['course'];
+        $classroom = empty($footprint['target']['classroom']) ? array() : $footprint['target']['classroom'];
 
         $courseFilter->filter($course);
         $classroomFilter->filter($classroom);
+
         $courseItemFilter->filter($footprint['target']);
 
         $footprint['target']['course'] = $course;
         $footprint['target']['classroom'] = $classroom;
 
-        return $footprint['target'];
+        return $footprint;
     }
 }

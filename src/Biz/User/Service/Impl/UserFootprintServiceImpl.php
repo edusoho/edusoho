@@ -17,8 +17,9 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
     {
         $footprint = $this->checkAndFilterFootprint($footprint);
 
+        $footprint['date'] = empty($footprint['date']) ? strtotime(date('00:00:00', time())) : strtotime(date('00:00:00', $footprint['date']));
+
         $conditions = $footprint;
-        $conditions['date'] = strtotime(date('00:00:00', $footprint['date']));
         $existedFootprint = $this->searchUserFootprints($conditions, array(), 0, 1);
 
         if (empty($existedFootprint)) {
@@ -75,7 +76,7 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
 
         $tasks = $this->getTaskService()->findTasksByIds($taskIds);
         if (empty($tasks)) {
-            return array();
+            return $footprints;
         }
 
         $tasks = ArrayToolkit::index($tasks, 'id');

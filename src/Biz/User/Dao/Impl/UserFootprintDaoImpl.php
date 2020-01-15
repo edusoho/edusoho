@@ -33,8 +33,7 @@ class UserFootprintDaoImpl extends GeneralDaoImpl
                 'userId = :userId',
                 'targetId = :targetId',
                 'targetType = :targetType',
-                'date >= :date_GT',
-                'date <= :date_LE',
+                'date = :date',
             ),
         );
     }
