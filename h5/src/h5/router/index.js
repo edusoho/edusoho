@@ -167,6 +167,15 @@ const routes = [
       hideTitle: true
     },
     component: () => import(/* webpackChunkName: "live" */'@/containers/live-timetable/index.vue')
+  },
+  {
+    path: '/more/live',
+    name: 'moreLive',
+    meta: {
+      title: '今日直播',
+      hideTitle: true
+    },
+    component: () => import(/* webpackChunkName: "live" */'@/containers/live-timetable/more/index.vue')
   }, {
     path: '/testpaper',
     name: 'testpaperIntro',
