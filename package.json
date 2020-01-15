@@ -93,10 +93,10 @@
     "weixin-js-sdk": "1.2.0"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon  --trace-deprecation=true --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.dev.js --parameters webpack.config.js",
+    "dev": "cross-env NODE_ENV=development nodemon  --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.dev.js --parameters webpack.config.js",
     "dev:debug": "npm run dev sourcemap:true",
     "dev:custom": "npm run dev watch:CustomBundle",
-    "compile": "cross-env NODE_ENV=production node --trace-deprecation=true --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.prod.js --parameters webpack.config.js",
+    "compile": "cross-env NODE_ENV=production node --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.prod.js --parameters webpack.config.js",
     "compile:debug": "npm run compile sourcemap:true",
     "compile:custom": "npm run compile module:CustomBundle",
     "clean": "rm -rf node_modules",

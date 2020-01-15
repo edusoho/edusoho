@@ -3,7 +3,8 @@
 {% set title = title|default(typeTitles[type]) %}
 {% block title %}{{ title|trans }} - {{ parent() }}{% endblock %}
 {% block head_scripts %}{{ script|default('')|raw }}{% endblock %}
-{% do script(['app/js/default/message/index.js']) %}
+
+{% do script(['app/js/vue/index.js']) %}
 
 {% block content %}
 <div id="page-message-container" class="page-message-container" data-goto="{{ goto }}" data-duration={{ duration }}>
@@ -14,4 +15,6 @@
     <div class="page-message-body">{{ message|default('')|trans }}</div>
   </div>
 </div>
+
+<div id="app"></div>
 {% endblock %}
