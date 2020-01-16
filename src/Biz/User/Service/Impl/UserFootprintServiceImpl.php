@@ -3,6 +3,7 @@
 namespace Biz\User\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
@@ -82,10 +83,12 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
         $tasks = ArrayToolkit::index($tasks, 'id');
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($tasks, 'courseId'));
-        $courses = ArrayToolkit::index($courses, 'id');
 
         $classroomCourses = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses, 'id'));
         $classroomCourses = ArrayToolkit::index($classroomCourses, 'courseId');
+
+        $activities = $this->getActivityService()->findActivities(ArrayToolkit::column($tasks, 'activityId'), true);
+        $activities = ArrayToolkit::index($activities, 'id');
 
         $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($classroomCourses, 'classroomId'));
 
@@ -97,9 +100,11 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
 
             $course = empty($courses[$task['courseId']]) ? null : $courses[$task['courseId']];
             $classroom = empty($classroomCourses[$task['courseId']]['classroomId']) || empty($classrooms[$classroomCourses[$task['courseId']]['classroomId']]) ? null : $classrooms[$classroomCourses[$task['courseId']]['classroomId']];
+            $activity = empty($activities[$task['activityId']]) ? null : $activities[$task['activityId']];
 
             if ($task['isLesson']) {
                 $task['task'] = $task;
+                $task['activity'] = $activity;
                 $task['course'] = $course;
                 $task['classroom'] = $classroom;
                 $footprint['target'] = $task;
@@ -109,6 +114,7 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
                 $lesson['task'] = $task;
                 $lesson['course'] = $course;
                 $lesson['classroom'] = $classroom;
+                $lesson['activity'] = $activity;
 
                 $footprint['target'] = $lesson;
             }
@@ -162,5 +168,13 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
     }
 }

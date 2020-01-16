@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Me;
 
+use ApiBundle\Api\Resource\Activity\ActivityFilter;
 use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
 use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Resource\Course\CourseItemFilter;
@@ -39,20 +40,26 @@ class MeFootprintFilter extends Filter
         $classroomFilter = new ClassroomFilter();
         $classroomFilter->setMode(Filter::SIMPLE_MODE);
 
+        $activityFilter = new ActivityFilter();
+        $activityFilter->setMode(Filter::SIMPLE_MODE);
+
         if (empty($footprint['target'])) {
             return $footprint;
         }
 
         $course = empty($footprint['target']['course']) ? array() : $footprint['target']['course'];
         $classroom = empty($footprint['target']['classroom']) ? array() : $footprint['target']['classroom'];
+        $activity = empty($footprint['target']['activity']) ? array() : $footprint['target']['activity'];
 
         $courseFilter->filter($course);
         $classroomFilter->filter($classroom);
+        $activityFilter->filter($activity);
 
         $courseItemFilter->filter($footprint['target']);
 
         $footprint['target']['course'] = $course;
         $footprint['target']['classroom'] = $classroom;
+        $footprint['target']['activity'] = $activity;
 
         return $footprint;
     }
