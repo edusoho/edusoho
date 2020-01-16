@@ -1,4 +1,4 @@
-{% do script(['app/js/default/header/index.js']) %}
+{% do script(['app/js/vue/index.js']) %}
 {% set navigations = data('NavigationsTree', {}) %}
 
 <header class="es-header navbar">
@@ -10,3 +10,5 @@
     {% include 'default/header/user-operation.html.twig' %}
   </nav>
 </header>
+
+<div id="app"></div>

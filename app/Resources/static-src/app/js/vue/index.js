@@ -1,6 +1,5 @@
 import Vue from 'vue/dist/vue.esm.js';
-const App = require('./App.vue');
-import app from './test.vue';
+import App from './App.vue';
 Vue.config.productionTip = false;
 
 new Vue({
