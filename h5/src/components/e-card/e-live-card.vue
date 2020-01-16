@@ -75,7 +75,7 @@ export default {
         return type === "btn" ? "立即回放" : "观看回放";
       }
       if (value === "default") {
-        return type === "btn" ? "进入教室" : "正在播放";
+        return type === "btn" ? "进入教室" : "正在直播";
       }
       if (value === "nostart") {
         return "即将开始";

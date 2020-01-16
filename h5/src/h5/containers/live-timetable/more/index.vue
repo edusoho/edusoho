@@ -19,7 +19,7 @@
 
 <script>
 import ENavbar from "&/components/e-navbar/e-navbar.vue";
-import ECard from "&/components/e-course-card/e-course-card";
+import ECard from "&/components/e-card/e-live-card";
 import empty from "&/components/e-empty/e-empty.vue";
 import { formatFullTime } from "@/utils/date-toolkit";
 import Api from "@/api";

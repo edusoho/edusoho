@@ -16,7 +16,7 @@
 
 <script>
 import ENavbar from "&/components/e-navbar/e-navbar.vue";
-import ECard from "&/components/e-course-card/e-course-task";
+import ECard from "&/components/e-card/e-course-card";
 import empty from "&/components/e-empty/e-empty.vue";
 import Api from "@/api";
 export default {
@@ -53,8 +53,6 @@ export default {
       this.course = this.course.concat(res.data);
       this.$set(this.query, "offset", this.course.length);
       this.loading = false;
-      console.log(this.course.length)
-      console.log(res.paging.total)
       if (this.course.length >= res.paging.total) {
         this.finished = true;
       }

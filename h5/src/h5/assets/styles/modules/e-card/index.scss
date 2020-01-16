@@ -16,6 +16,9 @@
       font-size: 14px;
       color: #999999;
       background:rgba(245,245,245,1);
+      span{
+        @extend .text-overflow ;
+      }
     }
     .live-item__content{
       display: flex;
@@ -24,9 +27,20 @@
       margin: 0 vw(8);
       padding: vw(16) 0;
       box-sizing: border-box;
+      @extend .font-family-PR ;
+      .live-content__left{
+          width:vw(188)
+      }
+      .live-content__subtitle{
+        margin-bottom: vw(8);
+        font-size:12px;
+        color: #999999;
+        @extend .text-overflow ;
+      }
       .live-content__title{
         font-size: 14px;
         color: #333333;
+          @extend .text-overflow ;
         .iconfont{
           margin-right: vw(8);
           color: #BEBEBE;
@@ -54,6 +68,9 @@
         padding: vw(2) vw(12);
         font-size: 14px;
         border-radius:28px;
+      }
+      .live-btn--none{
+        color: #999999;
       }
       .live-btn--default{
         color: $primary-color;
