@@ -23,7 +23,7 @@
 
 <script>
 import ENavbar from "&/components/e-navbar/e-navbar.vue";
-import ECard from "&/components/e-course-card/e-course-card";
+import ECard from "&/components/e-card/e-live-card";
 import Calendar from "vue-calendar-component";
 import empty from "&/components/e-empty/e-empty.vue";
 import { formatFullTime, compareDate } from "@/utils/date-toolkit";

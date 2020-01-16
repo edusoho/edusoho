@@ -42,7 +42,7 @@
 
 <script>
 export default {
-  name: "e-course-card",
+  name: "e-live-card",
   props: {
     course: {
       type: Object,
