@@ -376,6 +376,14 @@ const routes = [
         color: 'white'
       },
       component: () => import(/* webpackChunkName: "receive" */'@/containers/study-card/components/valid-card')
+    }, {
+      path: '/my/history/learning',
+      name: 'history-learn',
+      meta: {
+        title: '历史学习',
+        hideTitle: true
+      },
+      component: () => import(/* webpackChunkName: "history-learning" */'@/containers/learning/historyLearn/index.vue')
     }]
   }
 ];

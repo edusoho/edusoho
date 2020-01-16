@@ -258,8 +258,46 @@ const filters = [
   },
   {
     name: 'formateTime',
-    handler(value) {
-      return formatSimpleHour(new Date(value));
+    handler(target) {
+      switch (target.task.type) {
+        case 'video':
+        case 'audio':
+          return `时长: ${formatTimeByNumber(target.task.length)}`;
+        case 'live':
+          const now = new Date().getTime();
+          const startTimeStamp = new Date(target.task.startTime * 1000);
+          const endTimeStamp = new Date(target.task.endTime * 1000);
+          let status = '';
+          // 直播未开始
+          if (now <= startTimeStamp) {
+            status = '未开始';
+          }
+          if (now > endTimeStamp) {
+            if (target.activity.replayStatus === 'ungenerated') {
+              status = '已结束';
+            }
+            status = '观看回放';
+          }
+          status = '正在直播';
+          return `${formatSimpleHour(new Date(target.task.startTime * 1000))} | ${status}`;
+        case 'text':
+        case 'doc':
+        case 'ppt':
+        case 'testpaper':
+        case 'homework':
+        case 'exercise':
+        case 'download':
+        case 'discuss':
+          return '';
+        default:
+          return '暂不支持';
+      }
+    }
+  },
+  {
+    name: 'formateLiveTime',
+    handler(time) {
+      return `${formatSimpleHour(new Date(time))} | `;
     }
   }
 ];
@@ -268,7 +306,6 @@ export default {
   install(Vue) {
     filters.map(item => {
       Vue.filter(item.name, item.handler);
-
       return item;
     });
   }

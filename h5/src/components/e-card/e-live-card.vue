@@ -12,7 +12,7 @@
             {{course.activity.title}}
           </div>
           <div class="live-content__dec">
-            <span class="live-content__time">{{course.startTime | formateTime}}</span>
+            <span class="live-content__time">{{course.startTime | formateLiveTime}}</span>
             <template v-if=" course.type==='live' ">
               <span :class="getStatusClass(status)">
                 {{status | liveStatusText('status')}}
@@ -27,7 +27,6 @@
         <div class="live-content__right">
           <template v-if=" course.type==='live' && status!=='end'">
             <div
-              class="live-btn live-btn--default"
               :class="['live-btn', status==='default' ? 'live-btn--start' : 'live-btn--default']"
             >{{status | liveStatusText('btn')}}</div>
           </template>
@@ -76,7 +75,7 @@ export default {
         return type === "btn" ? "立即回放" : "观看回放";
       }
       if (value === "default") {
-        return type === "btn" ? "进入教室" : "正在播放";
+        return type === "btn" ? "进入教室" : "正在直播";
       }
       if (value === "nostart") {
         return "即将开始";
