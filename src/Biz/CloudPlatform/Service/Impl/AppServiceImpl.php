@@ -10,6 +10,7 @@ use Biz\CloudPlatform\Dao\CloudAppLogDao;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\CloudPlatform\UpgradeLock;
 use Biz\Common\CommonException;
+use Biz\QiQiuYun\Service\QiQiuYunSdkProxyService;
 use Biz\Role\Service\RoleService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
@@ -569,6 +570,7 @@ class AppServiceImpl extends BaseService implements AppService
             }
 
             $info = $this->_execScriptForPackageUpdate($package, $packageDir, $type, $index);
+            $this->_submitSystemInfo($package);
 
             if (isset($info['index'])) {
                 goto last;
@@ -604,8 +606,7 @@ class AppServiceImpl extends BaseService implements AppService
         }
 
         last :
-            $this->_submitRunLogForPackageUpdate('执行升级', $package, $errors);
-
+        $this->_submitRunLogForPackageUpdate('执行升级', $package, $errors);
         $this->trySystemCrontabInitializer($package);
 
         if (empty($info)) {
@@ -816,6 +817,21 @@ class AppServiceImpl extends BaseService implements AppService
         ));
     }
 
+    protected function _submitSystemInfo($package)
+    {
+        return $this->getQiQiuYunSdkProxyService()->pushEventTracking('applicationUpgrade', array(
+            'productId' => $package['productId'],
+            'productName' => $package['product']['name'],
+            'packageId' => $package['id'],
+            'fromVersion' => empty($package['fromVersion']) ? '' : $package['fromVersion'],
+            'toVersion' => empty($package['toVersion']) ? '' : $package['toVersion'],
+            'sysInfo' => array(
+                'OS' => PHP_OS,
+                'PHPVERSION' => PHP_VERSION,
+            ),
+        ));
+    }
+
     protected function unzipPackageFile($filepath, $unzipDir)
     {
         $filesystem = new Filesystem();
@@ -1002,5 +1018,13 @@ class AppServiceImpl extends BaseService implements AppService
     protected function getRoleService()
     {
         return $this->createService('Role:RoleService');
+    }
+
+    /**
+     * @return QiQiuYunSdkProxyService
+     */
+    protected function getQiQiuYunSdkProxyService()
+    {
+        return $this->createService('QiQiuYun:QiQiuYunSdkProxyService');
     }
 }

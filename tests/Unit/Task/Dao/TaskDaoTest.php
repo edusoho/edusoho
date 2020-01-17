@@ -181,25 +181,6 @@ class TaskDaoTest extends BaseDaoTestCase
         $this->assertArrayEquals($expected[1], $result, $this->getCompareKeys());
     }
 
-    public function testFindFutureLiveDates()
-    {
-        $field = array(
-            'type' => 'course',
-            'title' => 'hmm',
-            'subtitle' => 'oh',
-            'status' => 'published',
-            'serializeMode' => 'none',
-            'ratingNum' => 1,
-            'rating' => 1,
-            'noteNum' => 1,
-            'studentNum' => 1,
-        );
-        $course = $this->getCourseSetDao()->create($field);
-        $expected = $this->mockDataObject(array('fromCourseSetId' => 1, 'type' => 'live', 'status' => 'published', 'startTime' => time() + 5000));
-        $result = $this->getDao()->findFutureLiveDates(5);
-        $this->assertEquals(1, $result[0]['count']);
-    }
-
     public function testFindPastLivedCourseSetIds()
     {
         $expected = $this->mockDataObject(array('type' => 'live', 'status' => 'published', 'endTime' => time() - 5000));

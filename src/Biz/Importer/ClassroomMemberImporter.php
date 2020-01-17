@@ -2,6 +2,7 @@
 
 namespace Biz\Importer;
 
+use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ClassroomMemberImporter extends Importer
@@ -90,6 +91,10 @@ class ClassroomMemberImporter extends Importer
             return $danger;
         }
 
+        $classroomId = $request->request->get('classroomId');
+        $classroomCoursesCount = $this->getClassroomService()->countCoursesByClassroomId($classroomId);
+        $chunkNum = $this->calculateChunkNum($classroomCoursesCount);
+
         $importData = $this->getUserData();
 
         if (!empty($importData['errorInfo'])) {
@@ -99,12 +104,12 @@ class ClassroomMemberImporter extends Importer
         return $this->createSuccessResponse(
             $importData['allUserData'],
             $importData['checkInfo'],
-            $request->request->all()
+            array_merge($request->request->all(), array('chunkNum' => $chunkNum))
         );
     }
 
     /**
-     * @return \Biz\Classroom\Service\ClassroomService
+     * @return ClassroomService
      */
     protected function getClassroomService()
     {

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Biz\Common\CommonException;
+use Biz\QiQiuYun\Service\QiQiuYunSdkProxyService;
 use Biz\User\CurrentUser;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
@@ -420,17 +421,17 @@ class BaseController extends Controller
         return $this->getBiz()->service('System:LogService');
     }
 
+    /**
+     * @return QiQiuYunSdkProxyService
+     */
+    protected function getQiQiuYunSdkProxyService()
+    {
+        return $this->createService('QiQiuYun:QiQiuYunSdkProxyService');
+    }
+
     protected function pushEventTracking($action, $data = null)
     {
-        $biz = $this->getBiz();
-        try {
-            $biz['qiQiuYunSdk.esOp']->submitEventTracking(array(
-                'action' => $action,
-                'data' => $data,
-            ));
-        } catch (\Exception $e) {
-            $biz['logger']->error('pushEventTrackingError: '.$e->getMessage(), $e->getTrace());
-        }
+        return $this->getQiQiuYunSdkProxyService()->pushEventTracking($action, $data);
     }
 
     protected function getJWTAuth()

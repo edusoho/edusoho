@@ -53,9 +53,11 @@ class ManageController extends BaseController
     {
         $courseIds = array($targetId);
         $courses = array();
+        $courseSets = array();
         if ('classroom' === $targetType) {
             $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
             $courseIds = ArrayToolkit::column($courses, 'id');
+            $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
         }
 
         $conditions = array(
@@ -86,6 +88,7 @@ class ManageController extends BaseController
             'tasks' => $tasks,
             'resultStatusNum' => $resultStatusNum,
             'courses' => ArrayToolkit::index($courses, 'id'),
+            'courseSets' => ArrayToolkit::index($courseSets, 'id'),
         ));
     }
 

@@ -53,7 +53,7 @@
                 {% if classroom %}
                   <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
                 {% elseif not classroom %}
-                  <span class="label label-danger live-label mls">{{'admin.course_manage.statistics.no_introduce'|trans}}</span> 
+                  <span class="label label-danger live-label mls">{{'admin.course_manage.statistics.classroom.remove'|trans({'%classroomName%':setting("classroom.name")|default('site.default.classroom'|trans)})}}</span>
                 {% endif %}
               </td>
               {% endif %}

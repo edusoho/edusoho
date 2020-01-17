@@ -20,16 +20,26 @@
       <div class="col-md-8">
         <div class="testpaper-mark-info__title text-overflow" title="{{ taskTitle }}">{{ taskTitle }}</div>
         <div class="testpaper-mark-info__name">
-          {% if testpaper %}{{ testpaper.name }}{% else %}{{ 'course.testpaper_check.testpaper_delete'|trans }}{% endif %}
-        </div>
-        <div class="mbm color-gray">
-          <span class="mrl">{{'course.testpaper_check.start_date'|trans}}
-            {% if task.startTime %}
-              {{ task.startTime|date('Y-m-d H:i') }}
-            {% else %}
-              {{ task.createdTime|date('Y-m-d H:i') }}
-            {% endif %}
+          <span class="text-overflow">
+            {% if testpaper %}{{'course.testpaper_manage.create.name'|trans}}： {{ testpaper.name }}{% else %}{{ 'course.testpaper_check.testpaper_delete'|trans }}{% endif %}
           </span>
+          {% if courseSets[task.fromCourseSetId] is defined and courseSets[task.fromCourseSetId].parentId|default(0) %}
+            <div class="mbm mtm color-gray">
+              <span class="mrl text-overflow">{{'user.orders.target_course'|trans}}：
+                {% set course=data('Course',{'courseId':task.courseId}) %}
+                {{ courseSets[task.fromCourseSetId].title|default('')}}{% if courseSets[task.courseId]|default() %}-{{ courseSets[task.courseId].title|default('')|plain_text(8) }}{% endif %}
+              </span>
+            </div>
+          {% endif %}
+          <div class="mbm color-gray">
+            <span class="mrl">{{'course.testpaper_check.start_date'|trans}}
+              {% if task.startTime %}
+                {{ task.startTime|date('Y-m-d H:i') }}
+              {% else %}
+                {{ task.createdTime|date('Y-m-d H:i') }}
+              {% endif %}
+            </span>
+          </div>
         </div>
       </div>
       {% if testpaper %}

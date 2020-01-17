@@ -263,6 +263,8 @@ class DefaultStrategyTest extends BaseTestCase
     {
         $task = array(
             'id' => 1,
+            'courseId' => 1,
+            'categoryId' => 1,
             'activityId' => 1,
             'mode' => 'exercise',
         );
@@ -272,6 +274,11 @@ class DefaultStrategyTest extends BaseTestCase
                 'functionName' => 'delete',
                 'withParams' => array(1),
                 'runTimes' => 1,
+            ),
+            array(
+                'functionName' => 'findByCourseIdAndCategoryId',
+                'withParams' => array(1, 1),
+                'returnValue' => array(),
             ),
         ));
         $this->mockBiz('Task:TaskResultService', array(
@@ -307,6 +314,11 @@ class DefaultStrategyTest extends BaseTestCase
                     'functionName' => 'delete',
                     'withParams' => array(1),
                     'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'findByCourseIdAndCategoryId',
+                    'withParams' => array(1, 1),
+                    'returnValue' => array(),
                 ),
             )
         );
