@@ -1032,7 +1032,7 @@ class TestpaperServiceTest extends BaseTestCase
             'itemCount' => 3,
             'questionTypes' => array('choice', 'fill', 'determine', 'essay'),
             'difficulty' => 'normal',
-            'range' => 'course',
+            'range' => array('bankId' => 1),
             'courseSetId' => 1,
             'courseId' => 0,
             'pattern' => 'questionType',
