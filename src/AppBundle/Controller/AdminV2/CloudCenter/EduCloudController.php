@@ -781,6 +781,18 @@ class EduCloudController extends BaseController
         ));
     }
 
+    public function searchClauseAction(Request $request)
+    {
+        if ('POST' == $request->getMethod()) {
+            $callbackRouteUrl = $this->generateUrl('edu_cloud_search_callback');
+            $this->getSearchService()->applySearchAccount($callbackRouteUrl);
+
+            return $this->redirect($this->generateUrl('admin_v2_edu_cloud_search_overview'));
+        }
+
+        return $this->render('admin-v2/cloud-center/edu-cloud/cloud-search-clause-modal.html.twig');
+    }
+
     public function searchOpenAction()
     {
         $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());

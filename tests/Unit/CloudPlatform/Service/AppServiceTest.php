@@ -272,6 +272,13 @@ class AppServiceTest extends BaseTestCase
     public function testBeginPackageUpdate()
     {
         $this->mockAppClient();
+        $this->mockBiz('QiQiuYun:QiQiuYunSdkProxyService', array(
+            array(
+                'functionName' => 'pushEventTracking',
+                'returnValue' => true,
+                'runTimes' => 1,
+            ),
+        ));
         $errors = $this->getAppService()->beginPackageUpdate(1, 'upgrade');
 
         $this->assertArrayEquals(array(), $errors);
@@ -280,6 +287,13 @@ class AppServiceTest extends BaseTestCase
     public function testBeginPackageUpdateWithIndexNotZero()
     {
         $this->mockAppClient();
+        $this->mockBiz('QiQiuYun:QiQiuYunSdkProxyService', array(
+            array(
+                'functionName' => 'pushEventTracking',
+                'returnValue' => true,
+                'runTimes' => 1,
+            ),
+        ));
         $errors = $this->getAppService()->beginPackageUpdate(1, 'upgrade', 1);
 
         $this->assertArrayEquals(array(), $errors);
@@ -288,6 +302,13 @@ class AppServiceTest extends BaseTestCase
     public function testBeginPackageUpdateWithHasDeleteDir()
     {
         $this->mockAppClient();
+        $this->mockBiz('QiQiuYun:QiQiuYunSdkProxyService', array(
+            array(
+                'functionName' => 'pushEventTracking',
+                'returnValue' => true,
+                'runTimes' => 1,
+            ),
+        ));
         $package = $this->getDefaultPackage();
         $result = ReflectionUtils::invokeMethod($this->getAppService(), 'makePackageFileUnzipDir', array($package));
         $filesystem = new Filesystem();
