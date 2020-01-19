@@ -128,6 +128,8 @@ class QuestionParserController extends BaseController
             },
             $text
         );
+        $text = htmlspecialchars($text);
+
         $parser = new Parser($text);
 
         return $parser->parser();

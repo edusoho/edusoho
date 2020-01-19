@@ -28,10 +28,10 @@
           {% endif %}
         </span>
         <span class="course-detail-heading">
-          {% if marketingPage %}
-            {{ courseSet.title }}
-            {% else %}
+          {% if not marketingPage and course.title %}
             {{ course.title }}
+          {% else %}
+            {{ courseSet.title }}
           {% endif %}
           {# 二维码标志 #}
           {% block course_header_qrcode %}

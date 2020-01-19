@@ -20,12 +20,14 @@
       <div class="col-md-8">
         <div class="testpaper-mark-info__title text-overflow" title="{{ taskTitle }}">{{ taskTitle }}</div>
         <div class="testpaper-mark-info__name">
-          {% if testpaper %}{{'course.testpaper_manage.create.name'|trans}}： {{ testpaper.name }}{% else %}{{ 'course.testpaper_check.testpaper_delete'|trans }}{% endif %}
-          {% if courseSets[task.fromCourseSetId] and courseSets[task.fromCourseSetId].parentId|default(0) %}
+          <span class="text-overflow">
+            {% if testpaper %}{{'course.testpaper_manage.create.name'|trans}}： {{ testpaper.name }}{% else %}{{ 'course.testpaper_check.testpaper_delete'|trans }}{% endif %}
+          </span>
+          {% if courseSets[task.fromCourseSetId] is defined and courseSets[task.fromCourseSetId].parentId|default(0) %}
             <div class="mbm mtm color-gray">
-              <span class="mrl">{{'user.orders.target_course'|trans}}：
+              <span class="mrl text-overflow">{{'user.orders.target_course'|trans}}：
                 {% set course=data('Course',{'courseId':task.courseId}) %}
-                {{ courseSets[task.fromCourseSetId].title|default('')}}{% if courseSets[task.courseId]|default() %}-{{ courseSets[task.courseId].title|default('') }}{% endif %}
+                {{ courseSets[task.fromCourseSetId].title|default('')}}{% if courseSets[task.courseId]|default() %}-{{ courseSets[task.courseId].title|default('')|plain_text(8) }}{% endif %}
               </span>
             </div>
           {% endif %}
