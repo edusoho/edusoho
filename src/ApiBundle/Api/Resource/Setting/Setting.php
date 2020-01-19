@@ -61,6 +61,18 @@ class Setting extends AbstractResource
             'video_watermark' => '0',
         );
 
+        if (isset($storageSetting['video_watermark'])) {
+            $storageSetting['video_watermark'] = strval($storageSetting['video_watermark']);
+        }
+
+        if (isset($storageSetting['video_fingerprint'])) {
+            $storageSetting['video_fingerprint'] = strval($storageSetting['video_fingerprint']);
+        }
+
+        if (isset($storageSetting['video_fingerprint_time'])) {
+            $storageSetting['video_fingerprint_time'] = strval($storageSetting['video_fingerprint_time']);
+        }
+
         if (!empty($storageSetting)) {
             $fingerPrintSetting = ArrayToolkit::parts($storageSetting, array(
                 'video_fingerprint',
@@ -203,7 +215,7 @@ class Setting extends AbstractResource
 
         return array(
             'name' => $siteSetting['name'],
-            'url' => $siteSetting['url'],
+            'url' => $request->getHttpRequest()->getSchemeAndHttpHost(),
             'logo' => empty($siteSetting['logo']) ? '' : $siteSetting['url'].'/'.$siteSetting['logo'],
         );
     }

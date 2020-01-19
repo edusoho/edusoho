@@ -133,6 +133,12 @@ define(function(require, exports, module) {
         $('.email-content').addClass('hidden');
       }
 
+      if (modle == 'mobile' || modle == 'email_or_mobile') {
+        $('.js-mobile-tip').removeClass('hidden');
+      } else {
+        $('.js-mobile-tip').addClass('hidden');
+      }
+
       $('.hiddenJsAction').click();
     });
   };
