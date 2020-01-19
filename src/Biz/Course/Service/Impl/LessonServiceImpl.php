@@ -4,8 +4,11 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\LessonException;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LessonService;
+use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 use AppBundle\Common\ArrayToolkit;
@@ -322,16 +325,25 @@ class LessonServiceImpl extends BaseService implements LessonService
         return $fields;
     }
 
+    /**
+     * @return CourseChapterDao
+     */
     protected function getCourseChapterDao()
     {
         return $this->createDao('Course:CourseChapterDao');
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');

@@ -14,6 +14,7 @@ abstract class Importer
     const DANGER_STATUS = 'danger';
     const ERROR_STATUS = 'error';
     const SUCCESS_STATUS = 'success';
+    const MAX_IMPORTER_COMPLEXITY = 8; //单请求最大导入复杂度（例如：人数*单次课程|班级数量<8）
 
     protected $biz;
     protected $necessaryFields = array('nickname' => '用户名', 'verifiedMobile' => '手机', 'email' => '邮箱');
@@ -201,6 +202,10 @@ abstract class Importer
                     $user = $this->getUserService()->getUserByVerifiedMobile($userData['verifiedMobile']);
                 }
 
+                if (!empty($user)) {
+                    $this->filterUser($user);
+                }
+
                 $validate[] = array_merge($user, array('row' => $row));
             }
 
@@ -236,6 +241,17 @@ abstract class Importer
         if (!$this->checkNecessaryFields($this->excelFields)) {
             return $this->createDangerResponse('缺少必要的字段');
         }
+    }
+
+    protected function filterUser(&$user)
+    {
+        unset($user['password']);
+        unset($user['salt']);
+        unset($user['payPassword']);
+        unset($user['payPasswordSalt']);
+        unset($user['createdTime']);
+        unset($user['updatedTime']);
+        unset($user['distributorToken']);
     }
 
     protected function excelAnalyse($file)
@@ -374,8 +390,17 @@ abstract class Importer
         return $this->createSuccessResponse(
             $importData['allUserData'],
             $importData['checkInfo'],
-            $request->request->all()
+            array_merge($request->request->all(), array('chunkNum' => $this->calculateChunkNum()))
         );
+    }
+
+    protected function calculateChunkNum($singleComplexity = 1)
+    {
+        if (empty($singleComplexity)) {
+            return self::MAX_IMPORTER_COMPLEXITY;
+        }
+
+        return ceil(self::MAX_IMPORTER_COMPLEXITY / $singleComplexity);
     }
 
     /**

@@ -13,7 +13,6 @@ class MemberOperationRecordDaoTest extends BaseDaoTestCase
         $expected[] = $this->mockDataObject();
         $expected[] = $this->mockDataObject(array('member_id' => 2, 'operate_time' => 800000));
         $expected[] = $this->mockDataObject(array('user_id' => 2, 'operate_type' => 'exit', 'reason_type' => 'buy_join'));
-
         $testConditions = array(
             array(
                 'condition' => array(),
@@ -21,7 +20,7 @@ class MemberOperationRecordDaoTest extends BaseDaoTestCase
                 'expectedCount' => 3,
             ),
             array(
-                'condition' => array('id' => 1),
+                'condition' => array('id' => $expected[0]['id']),
                 'expectedResults' => array($expected[0]),
                 'expectedCount' => 1,
             ),

@@ -206,6 +206,13 @@ class ClassroomMemberImporterTest extends BaseTestCase
         $this->assertNotNull($result[0]);
     }
 
+    public function testCalculateChunkNum()
+    {
+        $importer = new ClassroomMemberImporter($this->getBiz());
+        $result = ReflectionUtils::invokeMethod($importer, 'calculateChunkNum');
+        $this->assertEquals(8, $result);
+    }
+
     public function testGetUserData()
     {
         $importer = new ClassroomMemberImporter($this->getBiz());

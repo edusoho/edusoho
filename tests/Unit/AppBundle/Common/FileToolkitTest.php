@@ -22,7 +22,7 @@ class FileTookitTest extends BaseTestCase
         $this->assertEmpty($result);
 
         $result = FileToolkit::validateFileExtension($file);
-        $this->assertEquals(array('只允许上传以下扩展名的文件：jpg jpeg gif png txt doc docx xls xlsx pdf ppt pptx pps ods odp mp4 mp3 avi flv wmv wma mov zip rar gz tar 7z swf ico'), $result);
+        $this->assertEquals(array('只允许上传以下扩展名的文件：jpg jpeg gif png txt doc docx xls xlsx pdf ppt pptx pps ods odp mp4 mp3 avi flv wmv wma mov zip rar gz tar 7z swf ico emf'), $result);
 
         $result = FileToolkit::validateFileExtension($file, 'jpg jpeg');
         $this->assertEquals(array('只允许上传以下扩展名的文件：jpg jpeg'), $result);

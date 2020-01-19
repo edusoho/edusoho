@@ -61,6 +61,18 @@ class Setting extends AbstractResource
             'video_watermark' => '0',
         );
 
+        if (isset($storageSetting['video_watermark'])) {
+            $storageSetting['video_watermark'] = strval($storageSetting['video_watermark']);
+        }
+
+        if (isset($storageSetting['video_fingerprint'])) {
+            $storageSetting['video_fingerprint'] = strval($storageSetting['video_fingerprint']);
+        }
+
+        if (isset($storageSetting['video_fingerprint_time'])) {
+            $storageSetting['video_fingerprint_time'] = strval($storageSetting['video_fingerprint_time']);
+        }
+
         if (!empty($storageSetting)) {
             $fingerPrintSetting = ArrayToolkit::parts($storageSetting, array(
                 'video_fingerprint',
@@ -211,7 +223,7 @@ class Setting extends AbstractResource
 
         return array(
             'name' => $siteSetting['name'],
-            'url' => $siteSetting['url'],
+            'url' => $request->getHttpRequest()->getSchemeAndHttpHost(),
             'logo' => empty($siteSetting['logo']) ? '' : $siteSetting['url'].'/'.$siteSetting['logo'],
         );
     }
@@ -332,10 +344,10 @@ class Setting extends AbstractResource
     {
         $courseSetting = $this->getSettingService()->get('course', array());
 
-        if (0 == $courseSetting['show_student_num_enabled']) {
+        if (isset($courseSetting['show_student_num_enabled']) && 0 == $courseSetting['show_student_num_enabled']) {
             $showStudentNumEnabled = 0;
             $showHitNumEnabled = 0;
-        } elseif ((1 == $courseSetting['show_student_num_enabled']) && (isset($courseSetting['show_cover_num_mode'])) && ('hitNum' == $courseSetting['show_cover_num_mode'])) {
+        } elseif (!empty($courseSetting['show_student_num_enabled']) && (isset($courseSetting['show_cover_num_mode'])) && ('hitNum' == $courseSetting['show_cover_num_mode'])) {
             $showStudentNumEnabled = 0;
             $showHitNumEnabled = 1;
         } else {

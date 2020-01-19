@@ -22,7 +22,7 @@ class SystemInitializerTest extends BaseTestCase
         $output = new ConsoleOutput();
         $initializer = new \AppBundle\Common\SystemInitializer($output);
         ReflectionUtils::invokeMethod($initializer, '_initPages', array());
-        $result = $this->getContentService()->searchContents(array(), array('id' => 'DESC'), 0, \PHP_INT_MAX);
+        $result = $this->getContentService()->searchContents(array(), array('id' => 'ASC'), 0, \PHP_INT_MAX);
 
         $this->assertArrayEquals(array(
             'title' => '关于我们',

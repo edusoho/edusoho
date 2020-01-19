@@ -88,7 +88,6 @@ class ThreadController extends CourseBaseController
 
         $user = $this->getCurrentUser();
 
-        $isMemberNonExpired = true;
         if ($member && !$this->getMemberService()->isMemberNonExpired($course, $member)) {
             $isMemberNonExpired = false;
         } else {
@@ -215,7 +214,6 @@ class ThreadController extends CourseBaseController
 
         if ('POST' == $request->getMethod()) {
             $form->submit($request);
-            $formData = $request->request->all();
             if ($form->isValid()) {
                 try {
                     $thread = $this->getThreadService()->createThread($form->getData());
@@ -273,7 +271,6 @@ class ThreadController extends CourseBaseController
         if ('POST' == $request->getMethod()) {
             try {
                 $form->submit($request);
-                $formData = $request->request->all();
 
                 if ($form->isValid()) {
                     $thread = $this->getThreadService()->updateThread($thread['courseId'], $thread['id'], $form->getData());
@@ -453,7 +450,6 @@ class ThreadController extends CourseBaseController
             $userId = $currentUser->id;
 
             if ($form->isValid()) {
-                $formData = $request->request->all();
                 $postData = $form->getData();
 
                 list($postData, $users) = $this->replaceMention($postData);
@@ -521,7 +517,6 @@ class ThreadController extends CourseBaseController
 
     protected function replaceMention($postData)
     {
-        $currentUser = $this->getCurrentUser();
         $content = $postData['content'];
         $users = array();
         preg_match_all('/@([\x{4e00}-\x{9fa5}\w]{2,16})/u', $content, $matches);
@@ -573,7 +568,6 @@ class ThreadController extends CourseBaseController
         $form = $this->createPostForm($post);
 
         if ('POST' == $request->getMethod()) {
-            $formData = $request->request->all();
             $form->submit($request);
 
             if ($form->isValid()) {

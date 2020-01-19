@@ -11,10 +11,53 @@ class MaterialLibChoose extends Chooser {
   }
 
   _init() {
+    this._initTagSelect();
     this._loadList();
   }
 
+  _initTagSelect(){
+    let $tags = $(this.container).find('#materialTags');
+    $tags.select2({
+      ajax: {
+        url: $tags.data('url') + '#',
+        dataType: 'json',
+        quietMillis: 100,
+        data: function(term, page) {
+          return {
+            q: term,
+            page_limit: 100
+          };
+        },
+        results: function(data) {
+          var results = [{id: "0", name: "--选择标签--"}];
+          $.each(data, function(index, item) {
+            results.push({
+              id: item.id,
+              name: item.name
+            });
+          });
+          return {
+            results: results
+          };
+        }
+      },
+      formatSelection: function(item) {
+        return item.name;
+      },
+      formatResult: function(item) {
+        return item.name;
+      },
+      width: 'off',
+      multiple: false,
+      locked: true,
+      placeholder: Translator.trans('--选择标签--'),
+      maximumSelectionSize: 100,
+    });
+  }
+
   _initEvent() {
+    $(this.container).on('change', '#materialType',this._switchFileSourceSelect.bind(this));
+    $(this.container).on('click', '#materialTags',this._switchTags.bind(this));
     $(this.container).on('click', '.js-material-type', this._switchFileSource.bind(this));
     $(this.container).on('click', '.js-browser-search', this._filterByFileName.bind(this));
     $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
@@ -44,6 +87,34 @@ class MaterialLibChoose extends Chooser {
     this._loadList();
   }
 
+  _switchTags(event) {
+    let that = event.currentTarget;
+    $('input[name=tagId]').val($(that).val());
+    this._loadList();
+  }
+
+  _switchFileSourceSelect(event) {
+    let that = event.currentTarget;
+    $('input[name=sourceFrom]').val($(that).val());
+    $('input[name=page]').val(1);
+    switch ($(that).val()) {
+      case 'upload':
+        $('.js-file-name-group').removeClass('hidden');
+        $('.js-file-owner-group').addClass('hidden');
+        break;
+      case 'shared':
+        this._loadSharingContacts.call(this, $(that).data('sharingContactsUrl'));
+        $('.js-file-name-group').removeClass('hidden');
+        $('.js-file-owner-group').addClass('hidden');
+        break;
+      default:
+        $('.js-file-name-group').removeClass('hidden');
+        $('.js-file-owner-group').addClass('hidden');
+        break;
+    }
+    this._loadList();
+  }
+
   _switchFileSource(event) {
     let that = event.currentTarget;
     var type = $(that).data('type');
@@ -51,19 +122,19 @@ class MaterialLibChoose extends Chooser {
     $('input[name=sourceFrom]').val(type);
     $('input[name=page]').val(1);
     switch (type) {
-    case 'my':
-      $('.js-file-name-group').removeClass('hidden');
-      $('.js-file-owner-group').addClass('hidden');
-      break;
-    case 'sharing':
-      this._loadSharingContacts.call(this, $(that).data('sharingContactsUrl'));
-      $('.js-file-name-group').removeClass('hidden');
-      $('.js-file-owner-group').addClass('hidden');
-      break;
-    default:
-      $('.js-file-name-group').removeClass('hidden');
-      $('.js-file-owner-group').addClass('hidden');
-      break;
+      case 'my':
+        $('.js-file-name-group').removeClass('hidden');
+        $('.js-file-owner-group').addClass('hidden');
+        break;
+      case 'sharing':
+        this._loadSharingContacts.call(this, $(that).data('sharingContactsUrl'));
+        $('.js-file-name-group').removeClass('hidden');
+        $('.js-file-owner-group').addClass('hidden');
+        break;
+      default:
+        $('.js-file-name-group').removeClass('hidden');
+        $('.js-file-owner-group').addClass('hidden');
+        break;
     }
     this._loadList();
   }

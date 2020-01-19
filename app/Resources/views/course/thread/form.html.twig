@@ -56,7 +56,7 @@
           <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" class="btn btn-link">{{'form.btn.cancel'|trans}}</a>
           <button type="button" class="btn btn-primary js-btn-thread-save">{{'form.btn.save'|trans}}</button>
         {% else %}
-           <a href="{{ path('my_course_show', {id: course.id, tab: 'threads'}) }}" class="btn btn-link">{{'form.btn.cancel'|trans}}</a>
+          <a href="{{ path('my_course_show', {id: course.id, tab: type, type: type}) }}" class="btn btn-link">{{'form.btn.cancel'|trans}}</a>
           <button type="button" class="btn btn-primary js-btn-thread-save">{{'form.btn.reply'|trans}}</button>
         {% endif  %}
       </div>

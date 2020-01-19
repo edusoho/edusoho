@@ -1,5 +1,5 @@
 {% extends 'layout.html.twig' %}
-{% do script(['libs/jquery-validation.js','libs/iframe-resizer-contentWindow.js'], 500) %}
+{% do script(['libs/jquery-validation.js','libs/select2.js', 'libs/iframe-resizer-contentWindow.js'], 500) %}
 
 {% block bodyClass %}{{ 'es-main-' ~ maincolor }} {{ 'es-nav-' ~ navigationcolor }} {% if bodyClass|default('') %}{{ bodyClass }}{% endif %} {{ 'task-iframe-body' }}{% endblock %}
 {% block body %}
