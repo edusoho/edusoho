@@ -1,3 +1,4 @@
+chunk-manifest.json
 /app/cache
 /app/logs
 /app/data
@@ -44,6 +45,7 @@ project.sublime-workspace
 *.css.map
 *.codekit
 web/php-performance.php
+chunk-manifest.json
 .npminstall.done
 /web/static-dist/*
 !/web/static-dist/libs

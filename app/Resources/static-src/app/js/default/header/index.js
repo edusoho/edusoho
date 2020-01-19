@@ -1,3 +1,3 @@
 import HeaderNav from './header.js';
 
-// new HeaderNav();
+new HeaderNav();
