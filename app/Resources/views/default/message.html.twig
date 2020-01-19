@@ -3,7 +3,6 @@
 {% set title = title|default(typeTitles[type]) %}
 {% block title %}{{ title|trans }} - {{ parent() }}{% endblock %}
 {% block head_scripts %}{{ script|default('')|raw }}{% endblock %}
-
 {% do script(['app/js/default/message/index.js']) %}
 
 {% block content %}
