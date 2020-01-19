@@ -4,7 +4,7 @@
 {% block title %}{{ title|trans }} - {{ parent() }}{% endblock %}
 {% block head_scripts %}{{ script|default('')|raw }}{% endblock %}
 
-{% do script(['app/js/vue/index.js']) %}
+{% do script(['app/js/default/message/index.js']) %}
 
 {% block content %}
 <div id="page-message-container" class="page-message-container" data-goto="{{ goto }}" data-duration={{ duration }}>
