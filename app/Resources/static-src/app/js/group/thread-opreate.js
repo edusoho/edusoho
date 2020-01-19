@@ -21,6 +21,7 @@ export const initThread = () => {
       'content': {
         required: true,
         minlength: 2,
+        maxlength: 3000,
         trim: true
       }
     },
@@ -50,6 +51,7 @@ export const initThreadReplay = () => {
         [`${content}`]: {
           required: true,
           minlength: 2,
+          maxlength: 3000,
           trim: true
         }
       },
