@@ -27,7 +27,7 @@ class MeThread extends AbstractResource
         $courseThreads = $this->getCourseThreadService()->searchThreads($conditions, 'postedNotStick', $offset, $limit);
 
         if (empty($courseThreads)) {
-            return array();
+            return (object)array();
         }
 
         $posts = $this->getCourseThreadService()->searchThreadPosts(array('threadIds' => ArrayToolkit::column($courseThreads, 'id'), 'isRead' => 0, 'exceptedUserId' => $currentUser['id']), array(), 0, PHP_INT_MAX);

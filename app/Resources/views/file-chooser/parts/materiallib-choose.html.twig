@@ -1,8 +1,8 @@
 <div class="chooser-content">
 	<div class="row ">
-		<select class="form-control col-sm-2 inline-block" id="materialType" >
-			<option data-type="my" value="upload" data-url="{{ path('media_materiallib_contacts') }}">{{'file_chooser.materiallib_choose.from_upload'|trans}}</option>
-			<option data-type="sharing" value="shared" data-url="{{ path('media_materiallib_contacts') }}">{{'file_chooser.materiallib_choose.from_share'|trans}}</option>
+		<select class="form-control col-sm-2 inline-block" id="materialType" data-sharing-contacts-url="{{ path('media_materiallib_contacts') }}">
+			<option data-type="my" value="my" data-url="{{ path('media_materiallib_contacts') }}">{{'file_chooser.materiallib_choose.from_upload'|trans}}</option>
+			<option data-type="sharing" value="shared"  data-url="{{ path('media_materiallib_contacts') }}">{{'file_chooser.materiallib_choose.from_share'|trans}}</option>
 			<option data-type="public" value="public" data-url="{{ path('media_materiallib_contacts') }}">{{'file_chooser.materiallib_choose.from_public'|trans}}</option>
 		</select>
 		<div class="col-sm-4 controls material-tags">
