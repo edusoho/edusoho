@@ -25,6 +25,11 @@ export const initThread = () => {
         trim: true
       }
     },
+    messages: {
+      'content': {
+        maxlength: Translator.trans('group.thread.reply.max_length.notice')
+      }
+    },
     submitSuccess: function (data) {
       console.log(data);
       if (data == '/login') {
@@ -53,6 +58,11 @@ export const initThreadReplay = () => {
           minlength: 2,
           maxlength: 3000,
           trim: true
+        }
+      },
+      messages: {
+        [`${content}`]: {
+          maxlength: Translator.trans('group.thread.reply.max_length.notice'),
         }
       },
       submitHandler: function (form) {
