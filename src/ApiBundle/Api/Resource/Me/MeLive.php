@@ -18,7 +18,7 @@ class MeLive extends AbstractResource
         $courseMembers = $this->getCourseMemberService()->findStudentMemberByUserId($this->getCurrentUser()->getId());
 
         if (empty($courseMembers)) {
-            return $this->makePagingObject(array(), 0, 0, 0);
+            return array();
         }
 
         $conditions = array(
@@ -29,18 +29,15 @@ class MeLive extends AbstractResource
             'startTime_LE' => $request->query->get('endTime'),
         );
 
-        list($offset, $limit) = $this->getOffsetAndLimit($request);
         $total = $this->getTaskService()->countTasks($conditions);
 
         if (empty($total)) {
-            return $this->makePagingObject(array(), 0, 0, 0);
+            return array();
         }
 
         $liveTasks = $this->getTaskService()->searchTasks($conditions, array('startTime' => 'DESC'), 0, $total);
 
-        $liveTasks = $this->sortAndFilterLiveTasks($liveTasks, $courseMembers);
-
-        return $this->makePagingObject($liveTasks, $total, $offset, $limit);
+        return $this->sortAndFilterLiveTasks($liveTasks, $courseMembers);
     }
 
     protected function sortAndFilterLiveTasks($liveTasks, $courseMembers)
