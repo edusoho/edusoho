@@ -10,22 +10,18 @@ use Biz\User\Service\UserFootprintService;
 
 class MeFootprint extends AbstractResource
 {
-    private $supportTypes = array('task');
-
     public function search(ApiRequest $request)
     {
         $conditions = array(
             'userId' => $this->getCurrentUser()->getId(),
-            'targetType' => $request->query->get('type', 'task'),
+            'targetType' => $request->query->get('type'),
         );
         list($offset, $limit) = $this->getOffsetAndLimit($request);
 
         $total = $this->getUserFootprintService()->countUserFootprints($conditions);
         $footprints = $this->getUserFootprintService()->searchUserFootprints($conditions, array('updatedTime' => 'DESC'), $offset, $limit);
 
-        $type = $this->filterType($request->query->get('type', 'task'));
-
-        $footprints = $this->getUserFootprintService()->prepareUserFootprintsByType($footprints, $type);
+        $footprints = $this->getUserFootprintService()->prepareUserFootprintsByType($footprints, $request->query->get('type'));
 
         return $this->makePagingObject($footprints, $total, $offset, $limit);
     }
@@ -38,18 +34,11 @@ class MeFootprint extends AbstractResource
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
+        $footprint['userId'] = $this->getCurrentUser()->getId();
+
         $footprint = $this->getUserFootprintService()->createUserFootprint($footprint);
 
-        return array('result' => !empty($footprint));
-    }
-
-    private function filterType($type)
-    {
-        if (!in_array($type, $this->supportTypes)) {
-            throw CommonException::ERROR_PARAMETER();
-        }
-
-        return ucfirst($type);
+        return $footprint;
     }
 
     /**

@@ -3,7 +3,6 @@
 namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\Resource\Activity\ActivityFilter;
-use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
 use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Resource\Filter;
 
@@ -27,10 +26,6 @@ class MeLiveFilter extends Filter
         $courseFilter = new CourseFilter();
         $courseFilter->setMode(Filter::SIMPLE_MODE);
         $courseFilter->filter($data['course']);
-
-        $classroomFilter = new ClassroomFilter();
-        $classroomFilter->setMode(Filter::SIMPLE_MODE);
-        $classroomFilter->filter($data['classroom']);
 
         $activityFilter = new ActivityFilter();
         $activityFilter->setMode(Filter::SIMPLE_MODE);

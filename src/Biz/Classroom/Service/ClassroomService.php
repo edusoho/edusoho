@@ -87,7 +87,7 @@ interface ClassroomService
      */
     public function deleteClassroom($id);
 
-    public function searchClassrooms($conditions, $orderBy, $start, $limit);
+    public function searchClassrooms($conditions, $orderBy, $start, $limit, $columns = array());
 
     public function countClassrooms($condtions);
 

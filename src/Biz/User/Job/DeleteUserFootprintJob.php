@@ -9,7 +9,7 @@ class DeleteUserFootprintJob extends AbstractJob
 {
     public function execute()
     {
-        $this->getUserFootprintService()->deleteUserFootprintsBeforeDate(strtotime('-2 year', time()));
+        $this->getUserFootprintService()->deleteUserFootprintsBeforeDate(date('Y-m-d', strtotime('-2 year', time())));
     }
 
     /**

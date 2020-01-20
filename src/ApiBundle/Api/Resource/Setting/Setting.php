@@ -123,10 +123,10 @@ class Setting extends AbstractResource
         }
 
         $defaultStudyCenter = array(
-            'liveScheduleEnabled' => 0,
-            'historyLearningEnabled' => 1,
-            'myCacheEnabled' => 1,
-            'myQAEnabled' => 1,
+            'liveScheduleEnabled' => '0',
+            'historyLearningEnabled' => '1',
+            'myCacheEnabled' => '1',
+            'myQAEnabled' => '1',
         );
 
         return array(
@@ -134,7 +134,7 @@ class Setting extends AbstractResource
             'logo' => empty($mobileSetting['logo']) ? '' : AssetHelper::uriForPath('/'.$mobileSetting['logo']),
             'splashs' => $splashs,
             'appDiscoveryVersion' => $this->getH5SettingService()->getAppDiscoveryVersion(),
-            'studyCenter' => empty($mobileSetting['studyCenter']) ? $defaultStudyCenter : $mobileSetting['studyCenter'],
+            'studyCenter' => empty($mobileSetting['studyCenter']) ? $defaultStudyCenter : array_merge($defaultStudyCenter, $mobileSetting['studyCenter']),
         );
     }
 

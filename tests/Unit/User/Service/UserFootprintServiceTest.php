@@ -25,28 +25,20 @@ class UserFootprintServiceTest extends BaseTestCase
     public function testCreateUserFootprint()
     {
         $footprint = array(
-            'id' => 1,
+            'id' => '1',
             'userId' => $this->getCurrentUser()->getId(),
             'targetType' => 'task',
-            'targetId' => 1,
+            'targetId' => '1',
             'event' => 'learn',
-            'date' => strtotime(date('00:00:00', 1579017600)),
+            'date' => date('Y-m-d', 1579017600),
         );
 
         $result = $this->getFootprintService()->createUserFootprint($footprint);
-
-        $existedFootprint = $result;
 
         unset($result['createdTime']);
         unset($result['updatedTime']);
 
         $this->assertEquals($footprint, $result);
-
-        sleep(1);
-        $updatedFootprint = $this->getFootprintService()->createUserFootprint($footprint);
-
-        $this->assertEquals($existedFootprint['date'], $updatedFootprint['date']);
-        $this->assertNotEquals((int) $existedFootprint['updatedTime'], (int) $updatedFootprint['updatedTime']);
     }
 
     /**
@@ -65,10 +57,7 @@ class UserFootprintServiceTest extends BaseTestCase
     {
         $footprint = $this->createFootprint();
 
-        sleep(1);
         $result = $this->getFootprintService()->updateFootprint($footprint['id'], $footprint);
-
-        $this->assertNotEquals($footprint['updatedTime'], $result['updatedTime']);
 
         unset($footprint['updatedTime']);
         unset($result['updatedTime']);
@@ -79,23 +68,15 @@ class UserFootprintServiceTest extends BaseTestCase
     public function testSearchUserFootprint()
     {
         $currentUserFootprint1 = $this->createFootprint();
-        sleep(1);
         $currentUserFootprint2 = $this->createFootprint($this->getCurrentUser()->getId(), 'task', 2);
         $userFootprint1 = $this->createFootprint(100);
-        sleep(1);
-        $userFootprint2 = $this->createFootprint(100, 'task', 2, 'learn', strtotime('-1 day'));
+        $userFootprint2 = $this->createFootprint(100, 'task', 2, 'learn', date('Y-m-d', strtotime('-1 day')));
 
-        $result = $this->getFootprintService()->searchUserFootprints(array(), array(), 0, 10);
-        $this->assertEmpty($result);
+        $result = $this->getFootprintService()->searchUserFootprints(array('userId' => $this->getCurrentUser()->getId()), array(), 0, 10);
 
-        $result = $this->getFootprintService()->searchUserFootprints(array('userId' => $this->getCurrentUser()->getId()), array('updatedTime' => 'DESC'), 0, 10);
+        $this->assertEquals(array($currentUserFootprint1, $currentUserFootprint2), $result);
 
-        $this->assertEquals(array($currentUserFootprint2, $currentUserFootprint1), $result);
-
-        $result = $this->getFootprintService()->searchUserFootprints(array('userId' => 100), array('updatedTime' => 'DESC'), 0, 10);
-        $this->assertEquals(array($userFootprint2, $userFootprint1), $result);
-
-        $result = $this->getFootprintService()->searchUserFootprints(array('userId' => 100, 'date' => strtotime('-1 day')), array('updatedTime' => 'DESC'), 0, 10);
+        $result = $this->getFootprintService()->searchUserFootprints(array('userId' => 100, 'date' => date('Y-m-d', strtotime('-1 day'))), array(), 0, 10);
         $this->assertEquals(array($userFootprint2), $result);
     }
 
@@ -185,6 +166,7 @@ class UserFootprintServiceTest extends BaseTestCase
                             'id' => 1,
                             'courseId' => 1,
                             'seq' => 1,
+                            'activityId' => 1,
                             'title' => 'test lesson title',
                             'isOptional' => '0',
                             'mode' => 'lesson',
@@ -197,6 +179,7 @@ class UserFootprintServiceTest extends BaseTestCase
                             'courseId' => 1,
                             'categoryId' => 2,
                             'seq' => 5,
+                            'activityId' => 2,
                             'title' => 'test task title',
                             'isOptional' => '0',
                             'mode' => 'exercise',
@@ -212,6 +195,7 @@ class UserFootprintServiceTest extends BaseTestCase
                         array(
                             'id' => 2,
                             'courseId' => 1,
+                            'activityId' => 1,
                             'seq' => 4,
                             'categoryId' => 2,
                             'title' => 'test lesson task title',
@@ -228,7 +212,7 @@ class UserFootprintServiceTest extends BaseTestCase
 
         $this->mockBiz('Course:CourseService', array(
                 array(
-                    'functionName' => 'findCoursesByIds',
+                    'functionName' => 'searchCourses',
                     'returnValue' => array(
                         array(
                             'id' => 1,
@@ -251,7 +235,7 @@ class UserFootprintServiceTest extends BaseTestCase
                 ),
             ),
             array(
-                'functionName' => 'findClassroomsByIds',
+                'functionName' => 'searchClassrooms',
                 'returnValue' => array(
                     array(
                         'id' => 1,
@@ -259,6 +243,16 @@ class UserFootprintServiceTest extends BaseTestCase
                 ),
             ),
         ));
+
+        $this->mockBiz('Activity:ActivityService', array(
+            array(
+                'functionName' => 'findActivities',
+                'returnValue' => array(
+                    'id' => 1,
+                ),
+            ),
+        ));
+
         $result = $this->getFootprintService()->prepareUserFootprintsByType($footprints, 'task');
 
         $this->assertEquals(2, count($result));
@@ -277,7 +271,7 @@ class UserFootprintServiceTest extends BaseTestCase
             'targetType' => 'test type1',
             'targetId' => 1,
             'event' => 'test event',
-            'date' => time(),
+            'date' => date('Y-m-d', time()),
         );
 
         $this->getFootprintDao()->create($footprint);
@@ -287,7 +281,7 @@ class UserFootprintServiceTest extends BaseTestCase
             'targetType' => 'test type2',
             'targetId' => 1,
             'event' => 'test event',
-            'date' => strtotime('-1 year', time()),
+            'date' => date('Y-m-d', strtotime('-1 year', time())),
         );
 
         $this->getFootprintDao()->create($footprint);
@@ -296,7 +290,7 @@ class UserFootprintServiceTest extends BaseTestCase
             'targetType' => 'test type3',
             'targetId' => 1,
             'event' => 'test event',
-            'date' => strtotime('-2 year', time()) - 60 * 60,
+            'date' => date('Y-m-d', strtotime('-2 year', time()) - 60 * 60),
         );
 
         $this->getFootprintDao()->create($footprint);
@@ -305,7 +299,7 @@ class UserFootprintServiceTest extends BaseTestCase
             'targetType' => 'test type4',
             'targetId' => 1,
             'event' => 'test event',
-            'date' => strtotime('-2 year', time()),
+            'date' => date('Y-m-d', strtotime('-2 year', time())),
         );
 
         $this->getFootprintDao()->create($footprint);
@@ -313,7 +307,7 @@ class UserFootprintServiceTest extends BaseTestCase
         $count = $this->getFootprintService()->countUserFootprints(array());
         $this->assertEquals(4, $count);
 
-        $this->getFootprintService()->deleteUserFootprintsBeforeDate(strtotime('-2 year', time()));
+        $this->getFootprintService()->deleteUserFootprintsBeforeDate(date('Y-m-d', strtotime('-2 year', time())));
 
         $count = $this->getFootprintService()->countUserFootprints(array());
 
@@ -327,7 +321,7 @@ class UserFootprintServiceTest extends BaseTestCase
             'targetType' => $targetType,
             'targetId' => $targetId,
             'event' => $event,
-            'date' => empty($date) ? strtotime(date('00:00:00', time())) : $date,
+            'date' => empty($date) ? date('Y-m-d', time()) : $date,
         );
 
         return $this->getFootprintDao()->create($footprint);

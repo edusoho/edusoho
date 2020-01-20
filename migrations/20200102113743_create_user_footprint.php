@@ -16,7 +16,7 @@ class CreateUserFootprint extends Migration
                 `targetType` VARCHAR(32) NOT NULL COMMENT '目标类型(task)',
                 `targetId` INT(10) UNSIGNED NOT NULL COMMENT '目标id(taskId)',
                 `event` VARCHAR(32) NOT NULL COMMENT '事件类型(learn)',
-                `date` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '记录时间',
+                `date` DATE NOT NULL COMMENT '记录时间(精确到天)',
                 `createdTime` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
                 `updatedTime` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
                 PRIMARY KEY(`id`),

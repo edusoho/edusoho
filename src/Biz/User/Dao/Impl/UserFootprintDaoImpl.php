@@ -27,13 +27,13 @@ class UserFootprintDaoImpl extends GeneralDaoImpl
             'timestamps' => array(
                 'createdTime',
                 'updatedTime',
-                'date',
             ),
             'conditions' => array(
                 'userId = :userId',
                 'targetId = :targetId',
                 'targetType = :targetType',
                 'date = :date',
+                'date <= :date_LE',
             ),
         );
     }

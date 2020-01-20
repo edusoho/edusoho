@@ -15,67 +15,64 @@ class MeLive extends AbstractResource
 {
     public function search(ApiRequest $request)
     {
-        $memberCourses = $this->getCourseMemberService()->findStudentMemberByUserId($this->getCurrentUser()->getId());
+        $courseMembers = $this->getCourseMemberService()->findStudentMemberByUserId($this->getCurrentUser()->getId());
 
-        if (empty($memberCourses)) {
-            return array();
+        if (empty($courseMembers)) {
+            return $this->makePagingObject(array(), 0, 0, 0);
         }
-
-        $courseIds = ArrayToolkit::column($memberCourses, 'courseId');
-        $classroomIds = ArrayToolkit::column($memberCourses, 'classroomId');
 
         $conditions = array(
             'type' => 'live',
-            'courseIds' => $courseIds,
+            'courseIds' => ArrayToolkit::column($courseMembers, 'courseId'),
             'status' => 'published',
-            'startTime_GE' => $request->query->get('startTime', strtotime(date('00:00:00', time()))),
-            'startTime_LE' => $request->query->get('endTime', strtotime(date('23:59:59', time()))),
+            'startTime_GE' => $request->query->get('startTime'),
+            'startTime_LE' => $request->query->get('endTime'),
         );
 
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
         $total = $this->getTaskService()->countTasks($conditions);
 
         if (empty($total)) {
-            return array();
+            return $this->makePagingObject(array(), 0, 0, 0);
         }
 
-        $lives = $this->getTaskService()->searchTasks($conditions, array('startTime' => 'DESC'), 0, $total);
+        $liveTasks = $this->getTaskService()->searchTasks($conditions, array('startTime' => 'DESC'), 0, $total);
 
-        return $this->sortAndFilterDayLives($lives, $courseIds, $classroomIds);
+        $liveTasks = $this->sortAndFilterLiveTasks($liveTasks, $courseMembers);
+
+        return $this->makePagingObject($liveTasks, $total, $offset, $limit);
     }
 
-    protected function sortAndFilterDayLives($lives, $courseIds, $classroomIds)
+    protected function sortAndFilterLiveTasks($liveTasks, $courseMembers)
     {
-        $classroomCourses = array_combine($courseIds, $classroomIds);
+        $courseMembers = ArrayToolkit::index($courseMembers, 'courseId');
 
-        $activities = $this->getActivityService()->findActivities(ArrayToolkit::column($lives, 'activityId'), true, 0);
+        $activities = $this->getActivityService()->findActivities(ArrayToolkit::column($liveTasks, 'activityId'), true, 0);
         $activities = ArrayToolkit::index($activities, 'id');
 
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-        $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
+        $courseIds = ArrayToolkit::column($courseMembers, 'courseId');
+        $classroomIds = ArrayToolkit::column($courseMembers, 'classroomId');
 
-        $dayLives = array();
-        foreach ($lives as $live) {
+        $courses = $this->getCourseService()->searchCourses(array('ids' => $courseIds), array(), 0, count($courseIds), array('id', 'title', 'courseSetTitle'));
+        $courses = ArrayToolkit::index($courses, 'id');
+
+        $classrooms = $this->getClassroomService()->searchClassrooms(array('classroomIds' => $classroomIds), array(), 0, count($classroomIds), array('id', 'title'));
+        $classrooms = ArrayToolkit::index($classrooms, 'id');
+
+        $doingLives = array();
+        $finishedLives = array();
+        $notStartLives = array();
+        foreach ($liveTasks as $live) {
             $live['activity'] = empty($activities[$live['activityId']]) ? null : $activities[$live['activityId']];
 
             $live['course'] = empty($courses[$live['courseId']]) ? null : $courses[$live['courseId']];
 
-            $live['classroom'] = empty($classroomCourses[$live['courseId']]) || empty($classrooms[$classroomCourses[$live['courseId']]]) ? null : $classrooms[$classroomCourses[$live['courseId']]];
+            $live['classroom'] = empty($courseMembers[$live['courseId']]['classroomId']) || empty($classrooms[$courseMembers[$live['courseId']]['classroomId']]) ? null : $classrooms[$courseMembers[$live['courseId']]['classroomId']];
 
-            $status = $live['startTime'] > time() ? 'created' : ($live['endTime'] < time() ? 'finished' : 'doing');
-
-            $dayLives[$status][] = $live;
+            $live['startTime'] > time() ? $notStartLives[] = $live : ($live['endTime'] < time() ? $finishedLives[] = $live : $doingLives[] = $live);
         }
 
-        $filteredLives = array();
-
-        array_filter(array('doing', 'created', 'finished'), function ($status) use ($dayLives, &$filteredLives) {
-            if (empty($dayLives[$status])) {
-                return false;
-            }
-            $filteredLives = array_merge($filteredLives, array_values($dayLives[$status]));
-        });
-
-        return array_values($filteredLives);
+        return array_merge($doingLives, $notStartLives, $finishedLives);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Biz\User\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\SimpleValidator;
 use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\Classroom\Service\ClassroomService;
@@ -17,8 +18,6 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
     public function createUserFootprint($footprint)
     {
         $footprint = $this->checkAndFilterFootprint($footprint);
-
-        $footprint['date'] = empty($footprint['date']) ? strtotime(date('00:00:00', time())) : strtotime(date('00:00:00', $footprint['date']));
 
         $conditions = $footprint;
         $existedFootprint = $this->searchUserFootprints($conditions, array(), 0, 1);
@@ -39,10 +38,6 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
 
     public function searchUserFootprints(array $conditions, array $order, $start, $limit, $columns = array())
     {
-        if (empty($conditions)) {
-            return array();
-        }
-
         return $this->getUserFootprintDao()->search($conditions, $order, $start, $limit, $columns);
     }
 
@@ -81,16 +76,20 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
         }
 
         $tasks = ArrayToolkit::index($tasks, 'id');
+        $courseIds = ArrayToolkit::column($tasks, 'courseId');
 
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($tasks, 'courseId'));
+        $courses = $this->getCourseService()->searchCourses(array('ids' => $courseIds), array(), 0, count($courseIds), array('id', 'title', 'courseSetTitle'));
+        $courses = ArrayToolkit::index($courses, 'id');
 
         $classroomCourses = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses, 'id'));
         $classroomCourses = ArrayToolkit::index($classroomCourses, 'courseId');
+        $classroomIds = ArrayToolkit::column($classroomCourses, 'classroomId');
 
         $activities = $this->getActivityService()->findActivities(ArrayToolkit::column($tasks, 'activityId'), true);
         $activities = ArrayToolkit::index($activities, 'id');
 
-        $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($classroomCourses, 'classroomId'));
+        $classrooms = $this->getClassroomService()->searchClassrooms(array('classroomIds' => $classroomIds), array(), 0, count($classroomIds), array('id', 'title'));
+        $classrooms = ArrayToolkit::index($classrooms, 'id');
 
         foreach ($footprints as &$footprint) {
             $task = empty($tasks[$footprint['targetId']]) ? null : $tasks[$footprint['targetId']];
@@ -125,16 +124,20 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
 
     protected function checkAndFilterFootprint($footprint)
     {
-        if (!ArrayToolkit::requireds($footprint, array('targetType', 'targetId', 'event'))) {
+        if (!ArrayToolkit::requireds($footprint, array('userId', 'targetType', 'targetId', 'event'))) {
             throw $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
+        if (!empty($footprint['date']) && !SimpleValidator::date($footprint['date'])) {
+            throw $this->createNewException(CommonException::ERROR_PARAMETER());
+        }
+
         return array(
-            'userId' => empty($footprint['userId']) ? $this->getCurrentUser()->getId() : $footprint['userId'],
+            'userId' => $footprint['userId'],
             'targetType' => $footprint['targetType'],
             'targetId' => $footprint['targetId'],
             'event' => $footprint['event'],
-            'date' => empty($footprint['date']) ? time() : $footprint['date'],
+            'date' => empty($footprint['date']) ? date('Y-m-d', time()) : $footprint['date'],
         );
     }
 

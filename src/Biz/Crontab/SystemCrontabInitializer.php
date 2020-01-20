@@ -196,7 +196,6 @@ class SystemCrontabInitializer
                 'expression' => '0 1 * * *',
                 'class' => 'Biz\User\Job\DeleteUserFootprintJob',
                 'misfire_policy' => 'executing',
-                'misfire_threshold' => 300,
             ),
         );
         $defaultJob = array(
