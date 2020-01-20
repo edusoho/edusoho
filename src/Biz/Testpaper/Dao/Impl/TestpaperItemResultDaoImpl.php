@@ -3,9 +3,9 @@
 namespace Biz\Testpaper\Dao\Impl;
 
 use Biz\Testpaper\Dao\TestpaperItemResultDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class TestpaperItemResultDaoImpl extends GeneralDaoImpl implements TestpaperItemResultDao
+class TestpaperItemResultDaoImpl extends AdvancedDaoImpl implements TestpaperItemResultDao
 {
     protected $table = 'testpaper_item_result_v8';
 
