@@ -2,9 +2,9 @@
 
 namespace Biz\Testpaper\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface TestpaperDao extends GeneralDaoInterface
+interface TestpaperDao extends AdvancedDaoInterface
 {
     public function getByIdAndType($id, $type);
 
