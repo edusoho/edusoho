@@ -41,4 +41,9 @@ class BaseQuestion extends BizAware
 
         return $fields;
     }
+
+    public function filterAnswer($answer)
+    {
+        return $answer;
+    }
 }

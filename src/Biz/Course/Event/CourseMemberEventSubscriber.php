@@ -154,6 +154,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $course = $event->getSubject();
         $member = $event->getArgument('member');
+        $this->countIncome($event);
 
         if ('student' == $member['role']) {
             $this->getCourseService()->updateCourseStatistics($course['id'], array('studentNum'));

@@ -14,6 +14,8 @@ interface TypeInterface
 
     public function judge($question, $answer);
 
+    public function filterAnswer($answer);
+
     public function filter(array $fields);
 
     /**

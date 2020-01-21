@@ -1282,7 +1282,6 @@ class TestpaperServiceTest extends BaseTestCase
         $answers = array(
             $choiceQuestions[0]['id'] => array(2, 3),
             $fillQuestions[0]['id'] => array('fill answer'),
-            123 => array(1),
         );
 
         $answers = json_encode($answers);
@@ -1295,7 +1294,7 @@ class TestpaperServiceTest extends BaseTestCase
         ));
         $itemResults = $this->getTestpaperService()->submitAnswers($testpaperResult['id'], $answers, array($choiceQuestions[0]['id'] => array(1, 2)));
 
-        $this->assertEquals(3, count($itemResults));
+        $this->assertEquals(2, count($itemResults));
     }
 
     /**
@@ -1331,7 +1330,6 @@ class TestpaperServiceTest extends BaseTestCase
         $answers = array(
             $choiceQuestions[0]['id'] => array(2, 3),
             $fillQuestions[0]['id'] => array('fill answer'),
-            123 => array(1),
         );
 
         $answers = json_encode($answers);

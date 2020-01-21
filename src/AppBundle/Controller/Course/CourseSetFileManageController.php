@@ -224,7 +224,7 @@ class CourseSetFileManageController extends BaseController
             'courseSet' => $courseSet,
             'materials' => $materials,
             'files' => $files,
-            'ids' => json_encode($fileIds),
+            'ids' => $fileIds,
         ));
     }
 
@@ -239,7 +239,6 @@ class CourseSetFileManageController extends BaseController
                 $this->createNewException(CommonException::ERROR_PARAMETER());
             }
 
-            $formData['ids'] = json_decode($formData['ids'], true);
             $deletedMaterials = $this->getMaterialService()->deleteMaterials($id, $formData['ids']);
 
             if (empty($deletedMaterials)) {
