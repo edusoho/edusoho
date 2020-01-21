@@ -33,6 +33,17 @@ class Essay extends BaseQuestion implements TypeInterface
         return $fields;
     }
 
+    public function filterAnswer($answer)
+    {
+        if (!empty($answer) && is_array($answer)) {
+            foreach ($answer as &$value) {
+                $value = $this->biz['html_helper']->purify($value);
+            }
+        }
+
+        return $answer;
+    }
+
     public function judge($question, $answer)
     {
         return array('status' => 'none', 'score' => 0);
