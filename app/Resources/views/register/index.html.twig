@@ -70,7 +70,7 @@
 							<label class="control-label required" for="sms_code">{{'user.settings.security.sms_code'|trans}}</label>
 							<div class="controls cd-row">
 								<div class="col-xs-6">
-									<input type="text" maxlength="6" class="form-control input-lg" id="sms_code" name="sms_code" placeholder="{{'user.settings.security.input_sms_code'|trans}}" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
+									<input type="text" maxlength="6" class="form-control input-lg" id="sms_code" name="sms_code" placeholder="{{'user.settings.security.input_sms_code'|trans}}" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}" onkeydown="if(event.keyCode==13) return false;">
 									<p class="help-block"> </p>
 								</div>
 								<div class="col-xs-6">
@@ -87,7 +87,7 @@
 						<div class="form-group mbl">
 							<label class="control-label required" for="invitedCode">{{'user.register.invite_code_label'|trans}}<span class="color-success">（{{'form.field.optional'|trans}}）</span></label>
 							<div class="controls">
-								<input type="text" name="invitedCode" class="form-control input-lg invitecode" data-url="{{path('invitecode_check')}}" placeholder="{{'user.register.invite_code_placeholder'|trans}}">
+								<input type="text" name="invitedCode" class="form-control input-lg invitecode" data-url="{{path('invitecode_check')}}" placeholder="{{'user.register.invite_code_placeholder'|trans}}" onkeydown="if(event.keyCode==13) return false;">
 							</div>
 						</div>
 					{% endif %}
