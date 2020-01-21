@@ -47,7 +47,7 @@ module.exports = {
 	productionSourceMap: false, // 生产环境 sourceMap
 	devServer: {
 		open: true, // 项目构建成功之后，自动弹出页面
-		host: "localhost", // 主机名，也可以127.0.0.0 || 做真机测试时候0.0.0.0
+		host: "0.0.0.0", // 主机名，也可以127.0.0.0 || 做真机测试时候0.0.0.0
 		port: 8081, // 端口号，默认8080
 		https: false, // 协议
 		hotOnly: false, // 没啥效果，热模块，webpack已经做好了

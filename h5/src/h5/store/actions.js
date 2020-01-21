@@ -156,3 +156,4 @@ export const setCouponSwitch = ({ commit }) => Api.getCouponSetting({})
     commit(types.COUPON_SWITCH, couponSwitch);
     return couponSwitch;
   });
+

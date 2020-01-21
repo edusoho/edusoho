@@ -1,32 +1,27 @@
 <template>
   <div class="app">
-    <e-navbar  title="所有班级"/>
-
     <treeSelects
       :select-items="selectItems"
       :categories="categories"
       :treeMenuLevel="treeMenuLevel"
       :selectedData="selectedData"
-      type="classroom"
+      type="course"
       @selectedChange="setQuery"
       @selectToggled="toggleHandler"
     />
 
     <infinite-scroll
       :course-list="courseList"
-      :is-all-data="true"
-      :normal-tag-show="false"
-      :vip-tag-show="true"
+      :is-all-data="isAllCourse"
       :course-item-type="courseItemType"
       :is-request-compile="isRequestCompile"
-      :type-list="'classroom_list'"
+      :vip-tag-show="true"
+      :type-list="'course_list'"
       :is-app-use="isAppUse"
       @needRequest="sendRequest"
     />
-    <empty 
-     v-if="isEmptyCourse && isRequestCompile" 
-     text="暂无班级"
-     class="empty__couse"/>
+
+    <empty v-if="isEmptyCourse && isRequestCompile" text="暂无课程" class="empty__couse" />
   </div>
 </template>
 
@@ -34,22 +29,20 @@
 import Api from "@/api";
 import infiniteScroll from "&/components/e-infinite-scroll/e-infinite-scroll.vue";
 import treeSelects from "&/components/e-tree-selects/e-tree-selects.vue";
-import ENavbar from "&/components/e-navbar/e-navbar.vue";
-import empty from '&/components/e-empty/e-empty.vue'
+import empty from "&/components/e-empty/e-empty.vue";
 import { mapMutations } from "vuex";
-import * as types from "@/store/mutation-types";
 import CATEGORY_DEFAULT from "@/config/category-default-config.js";
 export default {
-  name: "more_class_new",
+  name: "more_course_new",
   components: {
     infiniteScroll,
     treeSelects,
-    empty,
-    ENavbar
+    empty
   },
   data() {
     return {
-      isAppUse:true, //是否被app调用
+      showShadow: false,
+      isAppUse: true, //是否被app调用
       selectedData: {},
       courseItemType: "price",
       isRequestCompile: false,
@@ -68,28 +61,39 @@ export default {
         sort: "sort"
       },
       treeMenuLevel: 1,
-      selectItems: CATEGORY_DEFAULT["classroom_list"],
+      selectItems: CATEGORY_DEFAULT["course_list"],
       categories: []
     };
   },
   created() {
+    this.setTitle();
     this.selectedData = this.transform(this.$route.query);
-    this.getClassCategories();
+    this.getCourseCategories();
     this.setQuery();
   },
   methods: {
-    setQuery(value) {
-      if(value){
-          this.selectedData=value;
-      }
-       this.initCourseList();
-       this.getClassList();
-    },
-    // 获取班级分类数据
-    getClassCategories() {
-      Api.getClassCategories().then(data => {
-        this.formateCategories(data);
+    setTitle() {
+      window.postNativeMessage({
+        action: "kuozhi_native_header",
+        data: { title: "所有课程" }
       });
+    },
+    setQuery(value) {
+      if (value) {
+        this.selectedData = value;
+      }
+      this.initCourseList();
+      this.getCourseList();
+    },
+    // 获取课程分类数据
+    getCourseCategories() {
+      Api.getCourseCategories()
+        .then(data => {
+          this.formateCategories(data);
+        })
+        .catch(error => {
+          this.sendError(error);
+        });
     },
     formateCategories(categories) {
       categories.unshift({
@@ -110,32 +114,31 @@ export default {
       this.courseList = [];
       this.offset = 0;
     },
-    getClassList() {
+    getCourseList() {
       const setting = {
         offset: this.offset,
         limit: this.limit
       };
 
-      this.requestClass(setting).then(() => {
+      this.requestCourses(setting).then(() => {
         this.isEmptyCourse = this.courseList.length === 0;
       });
     },
     judegIsAllCourse(courseInfomation) {
       return this.courseList.length == courseInfomation.paging.total;
     },
-    requestClass(setting) {
+    requestCourses(setting) {
       this.isRequestCompile = false;
       const config = Object.assign(this.selectedData, setting);
-
-      return Api.getClassList({
+      return Api.getCourseList({
         params: config
       })
         .then(data => {
           this.formateData(data);
           this.isRequestCompile = true;
         })
-        .catch(err => {
-          console.log(err, "error");
+        .catch(error => {
+          this.sendError(error);
         });
     },
     formateData(data) {
@@ -151,7 +154,7 @@ export default {
         limit: this.limit
       };
 
-      if (!this.isAllCourse) this.requestClass(args);
+      if (!this.isAllCourse) this.requestCourses(args);
     },
     transform(obj) {
       const config = {};
@@ -170,6 +173,15 @@ export default {
     },
     toggleHandler(value) {
       this.selecting = value;
+    },
+    sendError(error) {
+      window.postNativeMessage({
+        action: "kuozhi_h5_error",
+        data: {
+          code: error.code,
+          message: error.message
+        }
+      });
     }
   }
 };

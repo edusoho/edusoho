@@ -1,7 +1,7 @@
 <template>
   <div class="e-course-card">
     <div class="live-list__item">
-      <div class="live-item__top">
+      <div class="live-item__top" @click="toCourse()">
         <span>{{course.course.displayedTitle}}</span>
         <i class="iconfont icon-arrow-right"></i>
       </div>
@@ -13,26 +13,23 @@
           </div>
           <div class="live-content__dec">
             <span class="live-content__time">{{course.startTime | formateLiveTime}}</span>
-            <template v-if=" course.type==='live' ">
-              <span :class="getStatusClass(status)">
-                {{status | liveStatusText('status')}}
-                <i
-                  v-show=" status==='default' "
-                  class="iconfont icon-zhibo1"
-                ></i>
-              </span>
-            </template>
+            <span :class="getStatusClass(status)">
+              {{status | liveStatusText }}
+              <i
+                v-show=" status==='default' "
+                class="iconfont icon-zhibo1"
+              ></i>
+            </span>
           </div>
         </div>
-        <div class="live-content__right">
-          <template v-if=" course.type==='live' && status!=='end'">
-            <div
-              :class="['live-btn', status==='default' ? 'live-btn--start' : 'live-btn--default']"
-            >{{status | liveStatusText('btn')}}</div>
-          </template>
+        <div class="live-content__right" v-if="status!=='end'">
+          <div
+            :class="['live-btn', status==='default' ? 'live-btn--start' : 'live-btn--default']"
+            @click="toTask()"
+          >{{status | liveBtnText }}</div>
         </div>
       </div>
-      <div class="live-item__bottom" v-if="course.classroom">
+      <div class="live-item__bottom" v-if="course.classroom" @click="toClassroom()">
         <span>{{course.classroom.title}}</span>
         <i class="iconfont icon-arrow-right"></i>
       </div>
@@ -70,32 +67,63 @@ export default {
     }
   },
   filters: {
-    liveStatusText: function(value, type) {
-      if (value === "replay") {
-        return type === "btn" ? "立即回放" : "观看回放";
+    liveStatusText: function(value) {
+      switch (value) {
+        case "replay":
+          return "观看回放";
+        case "default":
+          return "正在直播";
+        case "nostart":
+          return "即将开始";
+        case "end":
+          return "已结束";
+        default:
+          return "";
       }
-      if (value === "default") {
-        return type === "btn" ? "进入教室" : "正在直播";
-      }
-      if (value === "nostart") {
-        return "即将开始";
-      }
-      if (value === "end") {
-        return "已结束";
+    },
+    liveBtnText: function(value) {
+      switch (value) {
+        case "replay":
+          return "立即回放";
+        case "default":
+          return "进入教室";
+        case "nostart":
+          return "即将开始";
+        case "end":
+          return "已结束";
+        default:
+          return "";
       }
     }
   },
   methods: {
     getStatusClass(value) {
-      if (value === "replay") {
-        return "live-status--end";
+      switch (value) {
+        case "replay":
+          return "live-status--end";
+        case "default":
+          return "live-status--start";
+        case "nostart":
+          return "live-status--default";
+        case "end":
+          return "";
+        default:
+          return "";
       }
-      if (value === "default") {
-        return "live-status--start";
+    },
+    toClassroom() {
+      this.$emit("toClassroom",this.course.classroom.id)
+    },
+    toTask(){
+      const task={
+        id:this.course.id,
+        type:this.course.type,
+        courseId:this.course.course.id
       }
-      if (value === "nostart") {
-        return "live-status--default";
-      }
+      this.$emit("toTask",task)
+    },
+    toCourse(){
+       this.$emit("toCourse",this.course.course.id)
     }
   }
 };

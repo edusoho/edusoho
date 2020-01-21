@@ -4,6 +4,7 @@
     background: #F5F5F5;
   }
   .live-list{
+    position: relative;
     padding: vw(16);
     overflow: scroll;
     box-sizing: border-box;
@@ -34,8 +35,18 @@
         }
       }
     }
+    .live-timetable-loading{
+      position: absolute;
+      top:20%;
+      left: 50%;
+      margin-left: -30px;
+    }
   }
   .empty__live{
     margin-top: 16%;
   }
+  .empty__more-live{
+    margin-top: 46%;
+  }
+
 }

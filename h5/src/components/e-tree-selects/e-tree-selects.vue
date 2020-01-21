@@ -2,18 +2,21 @@
   <div class="e-tree-selects">
     <!-- 分类选择 -->
     <div>
-      <div class="e-tree-scroll" ref="e-tree-scroll">
-        <div
-          v-for="(item,index) in categories"
-          :key="index"
-          :ref="`treemenu${item.id}`"
-          :class="{ activeTag: (item.id==categoriesId) }"
-          @click="selectTag(item.id)"
-        >{{item.name}}</div>
-        <div v-if="treeMenuLevel>1" class="e-tree-more" @click="openMore()">
-          <i class="iconfont icon-Questioncard"></i>
+      <div class="e-tree-warp">
+        <div class="e-tree-scroll" ref="e-tree-scroll">
+          <div
+            v-for="(item,index) in categories"
+            :key="index"
+            :ref="`treemenu${item.id}`"
+            :class="{ activeTag: (item.id==categoriesId) }"
+            @click="selectTag(item.id)"
+          >{{item.name}}</div>
+          <div v-if="treeMenuLevel>1" class="e-tree-more" @click="openMore()">
+            <i class="iconfont icon-more"></i>
+          </div>
         </div>
       </div>
+
       <tree-menu
         v-show="openMenu"
         v-model="proxyData"
@@ -71,7 +74,7 @@ export default {
     selectedData: Object,
     categories: Array,
     treeMenuLevel: Number,
-    type:String
+    type: String
   },
   data() {
     return {
@@ -95,20 +98,20 @@ export default {
     isActive(value) {
       this.$emit("selectToggled", value);
     },
-    showFree(value,oldValue){
-        if(value){
-          this.$set(this.selectedData,"minCoursePrice","0")
-        }else{
-          this.$delete(this.selectedData,"minCoursePrice")
-        }
-        this.$emit("selectedChange", this.selectedData);
+    showFree(value, oldValue) {
+      if (value) {
+        this.$set(this.selectedData, "price", "0");
+      } else {
+        this.$delete(this.selectedData, "price");
+      }
+      this.$emit("selectedChange", this.selectedData);
     }
   },
   methods: {
     // 滑动部分选择
     selectTag(id) {
       if (this.categoriesId === Number(id)) {
-        return
+        return;
       }
       this.categoriesId = Number(id);
       this.selectedData.categoryId = Number(id);

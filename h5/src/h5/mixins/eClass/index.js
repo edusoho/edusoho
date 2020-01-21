@@ -83,15 +83,15 @@ export default {
   },
   methods: {
     onClick(e) {
+      const isOrder = this.type === 'order';
+      const id = this.course.id || this.course.targetId;
       if (!this.feedback) {
         return;
       }
       if (this.isAppUse) {
-        // 调用app接口
+        this.postMessage(this.typeList, id);
         return;
       }
-      const isOrder = this.type === 'order';
-      const id = this.course.id || this.course.targetId;
       if (e.target.tagName === 'SPAN') {
         return;
       }
@@ -103,6 +103,20 @@ export default {
         path:
           this.typeList === 'course_list' ? `/course/${id}` : `/classroom/${id}`
       });
+    },
+    // 调用app接口
+    postMessage(type, id) {
+      let action;
+      let data = {};
+      if (type === 'course_list') {
+        action = 'kuozhi_course';
+        data = { courseId: id };
+      } else {
+        action = 'kuozhi_classroom';
+        data = { classroomId: id };
+      }
+      // 调用app接口
+      window.postNativeMessage({ action, data });
     }
   }
 };

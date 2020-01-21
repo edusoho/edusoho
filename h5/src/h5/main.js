@@ -36,7 +36,8 @@ import {
   RadioGroup,
   Panel,
   ActionSheet,
-  Switch
+  Switch,
+  Loading
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -78,7 +79,8 @@ Vue.use(Panel);
 Vue.use(Tab)
   .use(Tabs)
   .use(Dialog)
-  .use(Switch);
+  .use(Switch)
+  .use(Loading);
 Vue.config.productionTip = false;
 Api.getSettings({
   query: {
