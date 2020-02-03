@@ -15,7 +15,7 @@
         <div class="live-title__right">{{today}}</div>
       </div>
       <div class="live-timetable-loading" v-show="!isRequestComplete">
-            <van-loading vertical>加载中...</van-loading>
+        <van-loading vertical>加载中...</van-loading>
       </div>
       <e-card
         v-if="isRequestComplete"
@@ -38,6 +38,7 @@ import empty from "&/components/e-empty/e-empty.vue";
 import { formatFullTime, compareDate } from "@/utils/date-toolkit";
 import * as types from "@/store/mutation-types";
 import Api from "@/api";
+import axios from "axios";
 import { parse } from "querystring";
 export default {
   name: "live-timetable",
@@ -53,7 +54,10 @@ export default {
       liveHeight: null,
       today: "",
       liveCourse: [],
-      isRequestComplete: false
+      isRequestComplete: false,
+      isScheduleTime: false,
+      isLiveCourse: false,
+      token: ""
     };
   },
   created() {
@@ -82,8 +86,15 @@ export default {
     //获取时间课表，按照一个月的时间段获取
     getliveSchedule(time) {
       const params = this.getMonthTime(time);
-      Api.liveSchedule({ params })
+      Api.liveSchedule({
+        params,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-Auth-Token": this.token
+        }
+      })
         .then(res => {
+          this.isScheduleTime = true;
           this.setScheduleTime(res);
         })
         .catch(error => {
@@ -107,8 +118,15 @@ export default {
     getmyLiveCourse(time) {
       const params = this.getDayTime(time);
       this.isRequestComplete = false;
-      Api.myliveCourse({ params })
+      Api.myliveCourse({
+        params,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-Auth-Token": this.token
+        }
+      })
         .then(res => {
+          this.isLiveCourse = true;
           this.liveCourse = res;
           this.isRequestComplete = true;
         })
@@ -118,14 +136,18 @@ export default {
     },
     clickDay(data) {
       this.today = formatFullTime(new Date(data));
-      this.getmyLiveCourse(new Date(data));
+      if (this.isLiveCourse) {
+        this.getmyLiveCourse(new Date(data));
+      }
     },
     clickToday(data) {
       console.log("跳到了本月今天", data); //跳到了本月
     },
     //左右点击切换月份
     changeDate(data) {
-      this.getliveSchedule(data);
+      if (this.isScheduleTime) {
+        this.getliveSchedule(data);
+      }
     },
     showToday() {
       this.today = formatFullTime(new Date());
@@ -163,10 +185,13 @@ export default {
     getUserInfo() {
       const self = this;
       window.nativeCallback = function(res) {
-        self.$store.commit(types.USER_LOGIN, {
-          token: res.token,
-          user: res
-        });
+        // self.$store.commit(types.USER_LOGIN, {
+        //   token: res.token,
+        //   user: res
+        // });
+        self.token = res.token;
+        self.getliveSchedule(new Date());
+        self.getmyLiveCourse(new Date());
       };
       window.postNativeMessage({
         action: "kuozhi_login_user",
