@@ -2,6 +2,9 @@
 .e-tree-selects{
   padding: vw(12) vw(16) vw(8) vw(12); 
   box-shadow:0px 3px 4px 0px rgba(0,0,0,0.03);
+  .e-tree-warp{
+    position: relative;
+  }
   .e-tree-scroll{
     white-space: nowrap;
     overflow-x: scroll;
@@ -10,7 +13,7 @@
       display: inline-block;
       margin-right: vw(16);
       padding: 0 vw(8);
-      line-height: 24px;
+      line-height: vw(24);
       font-size: vw(14);
       color: #666666;
       @extend .font-family-PR;
@@ -22,14 +25,13 @@
     }
     .e-tree-more{
       position: absolute;
-      top:vw(44);
+      top:vw(0);
       padding: 0;
-      right:vw(-16);
-      height: vw(44);
+     right: vw(-32);
+      height: vw(24);
       width: vw(46);
       display: flex;
       justify-content: center;
-      align-items: center;
       background: #ffffff;
     }
   }

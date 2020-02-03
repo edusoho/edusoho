@@ -1,7 +1,7 @@
 <template>
   <div class="e-course-card" v-if="course.target">
     <div class="live-list__item">
-      <div class="live-item__top">
+      <div class="live-item__top" @click="toCourse()">
         <span>{{course.target.course.displayedTitle}}</span>
         <i class="iconfont icon-arrow-right"></i>
       </div>
@@ -20,11 +20,11 @@
           </div>
         </div>
         <div class="live-content__right">
-          <div class="live-btn live-btn--start" v-if="course.target.task.type !=='flash' ">继续学习</div>
+          <div class="live-btn live-btn--start" v-if="course.target.task.type !=='flash' " @click="toTask()">继续学习</div>
           <div class="live-btn live-btn--none" v-else>暂不支持</div>
         </div>
       </div>
-      <div class="live-item__bottom" v-if="course.classroom">
+      <div class="live-item__bottom" v-if="course.target.classroom.length" @click="toClassroom()">
         <span>{{course.target.classroom.title}}</span>
         <i class="iconfont icon-arrow-right"></i>
       </div>
@@ -94,6 +94,20 @@ export default {
     },
     canShowSubtitle(target) {
       return target.task.seq !== target.seq;
+    },
+    toClassroom() {
+      this.$emit("toClassroom",this.course.target.classroom.id)
+    },
+    toTask(){
+      const task={
+        id:this.course.target.task.id,
+        type:this.course.target.task.type,
+        courseId:this.course.target.course.id,
+      }
+      this.$emit("toTask",task)
+    },
+    toCourse(){
+      this.$emit("toCourse",this.course.target.course.id)
     }
   }
 };

@@ -28,3 +28,4 @@ export const SET_SOCIAL_STATUS = 'SET_SOCIAL_STATUS';
 
 // 优惠券总开关
 export const COUPON_SWITCH = 'COUPON_SWITCH';
+

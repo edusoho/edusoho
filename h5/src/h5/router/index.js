@@ -7,10 +7,6 @@ import find from './find';
 import learning from './learning';
 import my from './my';
 /* eslint-disable no-new */
-// const originalPush = Router.prototype.push
-// Router.prototype.push = function push(location) {
-//   return originalPush.call(this, location).catch(err => err)
-// }
 Vue.use(Router);
 // 路由懒加载 实现代码分离
 const routes = [
@@ -104,23 +100,6 @@ const routes = [
       title: '所有班级'
     },
     component: () => import(/* webpackChunkName: "more" */'@/containers/more/classroom/index.vue')
-  },
-  {
-    path: '/course/explore/new',
-    name: 'more_course_new',
-    meta: {
-      title: '所有课程',
-      hideTitle: true
-    },
-    component: () => import(/* webpackChunkName: "more" */'@/containers/more/course/new.vue')
-  }, {
-    path: '/classroom/explore/new',
-    name: 'more_class_new',
-    meta: {
-      title: '所有班级',
-      hideTitle: true
-    },
-    component: () => import(/* webpackChunkName: "more" */'@/containers/more/classroom/new.vue')
   }, {
     path: '/course/explore/vip',
     name: 'vip_course',
@@ -158,24 +137,6 @@ const routes = [
     path: '/live',
     name: 'live',
     component: () => import(/* webpackChunkName: "live" */'@/containers/course/detail/live-view.vue')
-  },
-  {
-    path: '/live-timetable',
-    name: 'live-timetable',
-    meta: {
-      title: '直播课表',
-      hideTitle: true
-    },
-    component: () => import(/* webpackChunkName: "live" */'@/containers/live-timetable/index.vue')
-  },
-  {
-    path: '/more/live',
-    name: 'moreLive',
-    meta: {
-      title: '今日直播',
-      hideTitle: true
-    },
-    component: () => import(/* webpackChunkName: "live" */'@/containers/live-timetable/more/index.vue')
   }, {
     path: '/testpaper',
     name: 'testpaperIntro',
@@ -376,15 +337,48 @@ const routes = [
         color: 'white'
       },
       component: () => import(/* webpackChunkName: "receive" */'@/containers/study-card/components/valid-card')
-    }, {
-      path: '/my/history/learning',
-      name: 'history-learn',
-      meta: {
-        title: '历史学习',
-        hideTitle: true
-      },
-      component: () => import(/* webpackChunkName: "history-learning" */'@/containers/learning/historyLearn/index.vue')
     }]
+  }, {
+    path: '/my/history/learning',
+    name: 'history-learn',
+    meta: {
+      title: '历史学习',
+      hideTitle: true
+    },
+    component: () => import(/* webpackChunkName: "history-learning" */'@/containers/webview/learning/historyLearn/index.vue')
+  }, {
+    path: '/live-timetable',
+    name: 'live-timetable',
+    meta: {
+      title: '直播课表',
+      hideTitle: true
+    },
+    component: () => import(/* webpackChunkName: "live" */'@/containers/webview/live-timetable/index.vue')
+  },
+  {
+    path: '/more/live',
+    name: 'moreLive',
+    meta: {
+      title: '今日直播',
+      hideTitle: true
+    },
+    component: () => import(/* webpackChunkName: "live" */'@/containers/webview/live-timetable/more/index.vue')
+  }, {
+    path: '/course/explore/new',
+    name: 'more_course_new',
+    meta: {
+      title: '所有课程',
+      hideTitle: true
+    },
+    component: () => import(/* webpackChunkName: "more" */'@/containers/webview/course/new.vue')
+  }, {
+    path: '/classroom/explore/new',
+    name: 'more_class_new',
+    meta: {
+      title: '所有班级',
+      hideTitle: true
+    },
+    component: () => import(/* webpackChunkName: "more" */'@/containers/webview/classroom/new.vue')
   }
 ];
 
@@ -441,6 +435,7 @@ const setWeChatSwitch = () => new Promise((resolve, reject) => {
   return resolve();
 });
 
+
 router.beforeEach((to, from, next) => {
   const shouldUpdateMetaTitle = ['binding', 'password_reset', 'register', 'login', 'protocol', 'find'].includes(to.name);
 
@@ -456,6 +451,7 @@ router.beforeEach((to, from, next) => {
     next('/');
     return;
   }
+
 
   // 站点后台设置、会员后台配置
   if (!Object.keys(store.state.settings).length) {

@@ -23,7 +23,7 @@ export default {
     return {
       showLeftArrow: false,
       isQrcode: false,
-      hideNavbar: false,
+      hideNavbar: true,
       isShare: false,
       color: ''
     }
