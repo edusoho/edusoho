@@ -35,7 +35,7 @@ class MeLive extends AbstractResource
             return array();
         }
 
-        $liveTasks = $this->getTaskService()->searchTasks($conditions, array('startTime' => 'DESC'), 0, $total);
+        $liveTasks = $this->getTaskService()->searchTasks($conditions, array('startTime' => 'ASC'), 0, $total);
 
         return $this->sortAndFilterLiveTasks($liveTasks, $courseMembers);
     }
