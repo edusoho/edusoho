@@ -185,10 +185,6 @@ export default {
     getUserInfo() {
       const self = this;
       window.nativeCallback = function(res) {
-        // self.$store.commit(types.USER_LOGIN, {
-        //   token: res.token,
-        //   user: res
-        // });
         self.token = res.token;
         self.getliveSchedule(new Date());
         self.getmyLiveCourse(new Date());

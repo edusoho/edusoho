@@ -5,6 +5,9 @@
         <div class="live-title__left">直播课表</div>
         <div class="live-title__right">{{today}}</div>
       </div>
+      <div class="text-center mt20">
+          <van-loading size="24px" v-show="isLoad">加载中...</van-loading>
+      </div>
       <e-card
         v-if="isRequestComplete"
         v-for="(item,index) in liveCourse"
@@ -37,7 +40,8 @@ export default {
       today: "",
       liveCourse: [],
       isRequestComplete: false,
-      token: ""
+      token: "",
+      isLoad:true
     };
   },
   computed: {
@@ -72,6 +76,7 @@ export default {
         .then(res => {
           this.liveCourse = res;
           this.isRequestComplete = true;
+          this.isLoad=false;
         })
         .catch(error => {
           this.sendError(error);

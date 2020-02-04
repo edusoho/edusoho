@@ -88,7 +88,7 @@ export default {
         });
     },
     formateData(res) {
-      let sort = [];
+      let sort = this.sort;
       res.data.forEach(item => {
         let date = formatchinaTime(new Date(item.date));
         sort.push(date);

@@ -71,17 +71,17 @@ module.exports = {
 	configureWebpack: config => {
 		if (process.env.NODE_ENV === 'production') {
 			config.plugins.push(
-				new UglifyJsPlugin({
-					uglifyOptions: {
-						compress: {
-							drop_console: true,
-							drop_debugger: true
-						}
-					},
-					cache: true, // 启用文件缓存
-					parallel: true // 使用多进程并行运行来提高构建速度
-					// sourceMap: false // 映射错误信息到模块
-				})
+				// new UglifyJsPlugin({
+				// 	uglifyOptions: {
+				// 		compress: {
+				// 			drop_console: true,
+				// 			drop_debugger: true
+				// 		}
+				// 	},
+				// 	cache: true, // 启用文件缓存
+				// 	parallel: true // 使用多进程并行运行来提高构建速度
+				// 	// sourceMap: false // 映射错误信息到模块
+				// })
 			);
 		}
 		else {
