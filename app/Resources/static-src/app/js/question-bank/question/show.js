@@ -83,8 +83,6 @@ class QuestionsShow {
     let conditions = this.element.find('[data-role="search-conditions"]').serialize();
     let url = $target.data('url');
     $target.attr('href', url + '?' + conditions);
-    $target.trigger('click');
-    $target.attr('href', 'javascript:');
   }
 
   setCategory(event) {
