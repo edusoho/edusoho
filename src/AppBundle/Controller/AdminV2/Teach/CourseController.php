@@ -28,7 +28,7 @@ class CourseController extends BaseController
         $courses = array($defaultCourse);
         $courses = array_merge($courses, $publishedCourses);
         $courseId = $request->query->get('courseId');
-        
+
         if (empty($courseId)) {
             $course = reset($courses);
             $courseId = $course['id'];
