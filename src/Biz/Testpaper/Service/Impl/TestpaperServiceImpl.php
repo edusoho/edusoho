@@ -676,6 +676,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $user = $this->getCurrentUser();
 
+        if (!empty($fields['teacherSay'])) {
+            $fields['teacherSay'] = $this->purifyHtml($fields['teacherSay']);
+        }
+
         $checkData = empty($fields['result']) ? array() : $fields['result'];
         if (isset($fields['result'])) {
             unset($fields['result']);
@@ -690,6 +694,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $checkedFields = empty($checkData[$questionId]) ? array() : $checkData[$questionId];
             if (!$checkedFields) {
                 continue;
+            }
+
+            if (!empty($checkedFields['teacherSay'])) {
+                $checkedFields['teacherSay'] = $this->purifyHtml($checkedFields['teacherSay']);
             }
 
             $userAnswer = empty($userAnswers[$questionId]) ? array() : $userAnswers[$questionId];
@@ -1292,7 +1300,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     protected function filterConditions($conditions)
     {
         if (!empty($conditions['keyword'])) {
-            $conditions['nameLike'] = '%'.trim($conditions['keyword']).'%';
+            $conditions['nameLike'] = '%' . trim($conditions['keyword']) . '%';
             unset($conditions['keyword']);
         }
 
