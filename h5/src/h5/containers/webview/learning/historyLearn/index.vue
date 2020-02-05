@@ -63,7 +63,6 @@ export default {
   created() {
     this.setTitle();
     this.getUserInfo();
-    this.getHistoryLearn();
   },
   methods: {
     setTitle() {
@@ -75,10 +74,10 @@ export default {
     getHistoryLearn() {
       Api.myhistoryLearn({
         params: this.query,
-        // headers: {
-        //   "Content-Type": "application/x-www-form-urlencoded",
-        //   "X-Auth-Token": this.token
-        // }
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-Auth-Token": this.token
+        }
       })
         .then(res => {
           this.formateData(res);
