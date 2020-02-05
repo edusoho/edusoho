@@ -156,3 +156,9 @@ export const setCouponSwitch = ({ commit }) => Api.getCouponSetting({})
     commit(types.COUPON_SWITCH, couponSwitch);
     return couponSwitch;
   });
+
+// 全局分校插件开关
+export const setDrpSwitch = ({ commit }) => Api.getDrpSetting({})
+  .then(res => {
+    const drpSetting = res;
+  });
