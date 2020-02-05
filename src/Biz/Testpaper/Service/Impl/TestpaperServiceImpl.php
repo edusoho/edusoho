@@ -1300,7 +1300,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     protected function filterConditions($conditions)
     {
         if (!empty($conditions['keyword'])) {
-            $conditions['nameLike'] = '%' . trim($conditions['keyword']) . '%';
+            $conditions['nameLike'] = '%'.trim($conditions['keyword']).'%';
             unset($conditions['keyword']);
         }
 
