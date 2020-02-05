@@ -28,7 +28,6 @@ import empty from "&/components/e-empty/e-empty.vue";
 import { formatFullTime } from "@/utils/date-toolkit";
 import * as types from "@/store/mutation-types";
 import Api from "@/api";
-import axios from "axios";
 export default {
   name: "more-live",
   components: {
@@ -46,7 +45,7 @@ export default {
   },
   computed: {
     noData: function() {
-      return this.isRequestComplete && this.liveCourse.length === 0;
+      return this.isRequestComplete && !this.liveCourse.length;
     }
   },
   created() {

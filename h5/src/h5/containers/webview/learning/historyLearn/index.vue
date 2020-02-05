@@ -52,17 +52,18 @@ export default {
         offset: 0,
         type: "task"
       },
-      token:''
+      token: ""
     };
   },
   computed: {
     noData: function() {
-      return this.isRequestComplete && this.sort.length === 0;
+      return this.isRequestComplete && !this.sort.length;
     }
   },
   created() {
     this.setTitle();
     this.getUserInfo();
+    this.getHistoryLearn();
   },
   methods: {
     setTitle() {
@@ -74,10 +75,10 @@ export default {
     getHistoryLearn() {
       Api.myhistoryLearn({
         params: this.query,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "X-Auth-Token": this.token
-        }
+        // headers: {
+        //   "Content-Type": "application/x-www-form-urlencoded",
+        //   "X-Auth-Token": this.token
+        // }
       })
         .then(res => {
           this.formateData(res);
@@ -114,7 +115,7 @@ export default {
     getUserInfo() {
       const self = this;
       window.nativeCallback = function(res) {
-        self.token=res.token;
+        self.token = res.token;
         self.getHistoryLearn();
       };
       window.postNativeMessage({

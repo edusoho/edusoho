@@ -38,7 +38,6 @@ import empty from "&/components/e-empty/e-empty.vue";
 import { formatFullTime, compareDate } from "@/utils/date-toolkit";
 import * as types from "@/store/mutation-types";
 import Api from "@/api";
-import axios from "axios";
 import { parse } from "querystring";
 export default {
   name: "live-timetable",
@@ -66,7 +65,7 @@ export default {
   },
   computed: {
     noData: function() {
-      return this.isRequestComplete && this.liveCourse.length === 0;
+      return this.isRequestComplete && !this.liveCourse.length;
     }
   },
   mounted() {
