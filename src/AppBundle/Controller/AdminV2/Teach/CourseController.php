@@ -23,9 +23,12 @@ class CourseController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($courseSetId);
+        $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
+        $courses = array($defaultCourse);
+        $courses = array_merge($courses, $publishedCourses);
         $courseId = $request->query->get('courseId');
-
+        
         if (empty($courseId)) {
             $course = reset($courses);
             $courseId = $course['id'];
