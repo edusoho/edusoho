@@ -60,9 +60,10 @@ module.exports = {
 				// target: 'https://www.easy-mock.com/mock/5b1742522de86c43cc2dc73a/edusoho',
 				// target: 'http://zyc.st.edusoho.cn',
         //target: 'http://wr.st.edusoho.cn',
-        target:'http://gdy.st.edusoho.cn',
+        //target:'http://gdy.st.edusoho.cn',
         //target:'https://www.iyamusic.com',
-				//target: 'http://devtest.edusoho.cn',
+        //target: 'http://devtest.edusoho.cn',
+        target:"http://try6.edusoho.cn",
 				changeOrigin: true,
 				secure: false,
 			}

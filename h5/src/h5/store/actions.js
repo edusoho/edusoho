@@ -157,8 +157,8 @@ export const setCouponSwitch = ({ commit }) => Api.getCouponSetting({})
     return couponSwitch;
   });
 
-// 全局分校插件开关
+// 全局分销插件开关
 export const setDrpSwitch = ({ commit }) => Api.getDrpSetting({})
   .then(res => {
-    const drpSetting = res;
+    commit(types.GET_SETTINGS, { key: 'DrpSettings', setting: res });
   });

@@ -22,7 +22,8 @@ const state = {
   couponSwitch: 0,
   socialBinded: {
     wx: true
-  }
+  },
+  DrpSettings: {}
 };
 
 export default new Vuex.Store({

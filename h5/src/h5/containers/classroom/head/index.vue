@@ -16,7 +16,7 @@ import countDown from '&/components/e-marketing/e-count-down/index'
 import tagLink from '&/components/e-tag-link/e-tag-link'
 import Api from '@/api'
 import qs from 'qs'
-
+import { mapState } from 'vuex'
 export default {
   components: {
     countDown,
@@ -54,8 +54,10 @@ export default {
       bindAgencyRelation: {} // 分销代理商绑定信息
     }
   },
+  computed: {
+    ...mapState(['DrpSettings']),
+  },
   created() {
-    this.showTagLink()
     this.initTagData()
   },
   methods: {
@@ -84,20 +86,21 @@ export default {
       })
     },
     initTagData() {
-      Api.getDrpSetting().then(data => {
-        this.drpSetting = data
-        this.tagData.minDirectRewardRatio = data.minDirectRewardRatio
+      if(Object.keys(this.DrpSettings).length){
+        this.tagData.minDirectRewardRatio = this.DrpSettings.minDirectRewardRatio
 
         const params = {
           type: 'classroom',
           id: this.classroomId,
-          merchant_id: this.drpSetting.merchantId
+          merchant_id: this.DrpSettings.merchantId
         }
 
-        this.tagData.link = this.drpSetting.distributor_template_url + '?' + qs.stringify(params)
-        const earnings = (this.drpSetting.minDirectRewardRatio / 100) * this.details.price
+        this.tagData.link = this.DrpSettings.distributor_template_url + '?' + qs.stringify(params)
+        const earnings = (this.DrpSettings.minDirectRewardRatio / 100) * this.price
         this.tagData.earnings = (Math.floor(earnings * 100) / 100).toFixed(2)
-      })
+
+        this.showTagLink()
+      }
     }
   }
 }

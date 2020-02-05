@@ -162,13 +162,15 @@ export default {
         num: 0
       },
       isShowInviteUrl: false, // 是否显示邀请链接
-      drpSetting: {}, // Drp设置信息
       bindAgencyRelation: {} // 分销代理商绑定信息
     };
   },
   computed: {
     ...mapState(["vipSettings", "isLoading", "vipSwitch"]),
-    ...mapState({ userInfo: state => state.user }),
+    ...mapState({
+      userInfo: state => state.user,
+      drpSetting:state => state.DrpSettings
+    }),
     vipDated() {
       if (!this.vipInfo) return false;
       const deadlineStamp = new Date(this.vipInfo.deadline).getTime();
@@ -235,9 +237,7 @@ export default {
       return;
     }
     this.getVipLevels();
-    this.showInviteUrl();
     this.getDrpSetting();
-
     setTimeout(() => {
       window.scrollTo(0, 0);
     }, 100);
@@ -411,9 +411,9 @@ export default {
       });
     },
     getDrpSetting() {
-      Api.getDrpSetting().then(data => {
-        this.drpSetting = data;
-      });
+      if(Object.keys(this.drpSetting).length){
+        this.showInviteUrl();
+      }
     }
   }
 };
