@@ -9,6 +9,10 @@
     white-space: nowrap;
     overflow-x: scroll;
     padding-right: vw(23);
+    &::-webkit-scrollbar {
+      background-color:transparent;
+      display:none;
+    }
     div{
       display: inline-block;
       margin-right: vw(16);

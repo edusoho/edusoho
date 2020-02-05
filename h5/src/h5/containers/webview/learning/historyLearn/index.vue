@@ -51,18 +51,18 @@ export default {
         limit: 10,
         offset: 0,
         type: "task"
-      }
+      },
+      token: ""
     };
   },
   computed: {
     noData: function() {
-      return this.isRequestComplete && this.sort.length === 0;
+      return this.isRequestComplete && !this.sort.length;
     }
   },
   created() {
-    this.setTitle()
+    this.setTitle();
     this.getUserInfo();
-    this.getHistoryLearn();
   },
   methods: {
     setTitle() {
@@ -72,7 +72,13 @@ export default {
       });
     },
     getHistoryLearn() {
-      Api.myhistoryLearn({ params: this.query })
+      Api.myhistoryLearn({
+        params: this.query,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-Auth-Token": this.token
+        }
+      })
         .then(res => {
           this.formateData(res);
           this.isRequestComplete = true;
@@ -82,7 +88,7 @@ export default {
         });
     },
     formateData(res) {
-      let sort = [];
+      let sort = this.sort;
       res.data.forEach(item => {
         let date = formatchinaTime(new Date(item.date));
         sort.push(date);
@@ -108,10 +114,8 @@ export default {
     getUserInfo() {
       const self = this;
       window.nativeCallback = function(res) {
-        self.$store.commit(types.USER_LOGIN, {
-          token: res.token,
-          user: res
-        });
+        self.token = res.token;
+        self.getHistoryLearn();
       };
       window.postNativeMessage({
         action: "kuozhi_login_user",

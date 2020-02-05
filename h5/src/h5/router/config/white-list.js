@@ -1,13 +1,13 @@
 const whiteList = [
-  '/login/qrcode',
-  '/login',
-  '/sts',
-  '/face_verification',
   '/live-timetable',
   '/more/live',
   '/my/history/learning',
   '/classroom/explore/new',
-  '/course/explore/new'
+  '/course/explore/new',
+  '/login/qrcode',
+  '/login',
+  '/sts',
+  '/face_verification'
 ];
 
 export default whiteList;

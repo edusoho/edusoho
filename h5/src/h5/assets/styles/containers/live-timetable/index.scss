@@ -11,6 +11,7 @@
     .live-list__title {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       .live-title__left {
         @extend .font-family-PM ;
         font-weight: 500;

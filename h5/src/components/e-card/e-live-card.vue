@@ -84,7 +84,7 @@ export default {
     liveBtnText: function(value) {
       switch (value) {
         case "replay":
-          return "立即回放";
+          return "观看回放";
         case "default":
           return "进入教室";
         case "nostart":

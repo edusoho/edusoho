@@ -5,6 +5,9 @@
         <div class="live-title__left">直播课表</div>
         <div class="live-title__right">{{today}}</div>
       </div>
+      <div class="text-center mt20">
+          <van-loading size="24px" v-show="isLoad">加载中...</van-loading>
+      </div>
       <e-card
         v-if="isRequestComplete"
         v-for="(item,index) in liveCourse"
@@ -35,19 +38,23 @@ export default {
     return {
       today: "",
       liveCourse: [],
-      isRequestComplete: false
+      isRequestComplete: false,
+      token: "",
+      isLoad:true
     };
   },
   computed: {
     noData: function() {
-      return this.isRequestComplete && this.liveCourse.length === 0;
+      return this.isRequestComplete && !this.liveCourse.length;
     }
   },
   created() {
     this.setTitle();
     this.getUserInfo();
     this.today = formatFullTime(new Date());
-    this.getmyLiveCourse(new Date());
+  },
+  beforeRouteLeave() {
+    this.$store.commit(types.USER_LOGOUT);
   },
   methods: {
     setTitle() {
@@ -58,10 +65,17 @@ export default {
     },
     getmyLiveCourse(time) {
       const params = this.getDayTime(time);
-      Api.myliveCourse({ params })
+      Api.myliveCourse({
+        params,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-Auth-Token": this.token
+        }
+      })
         .then(res => {
           this.liveCourse = res;
           this.isRequestComplete = true;
+          this.isLoad=false;
         })
         .catch(error => {
           this.sendError(error);
@@ -77,10 +91,8 @@ export default {
     getUserInfo() {
       const self = this;
       window.nativeCallback = function(res) {
-        self.$store.commit(types.USER_LOGIN, {
-          token: res.token,
-          user: res
-        });
+        self.token = res.token;
+        self.getmyLiveCourse(new Date());
       };
       window.postNativeMessage({
         action: "kuozhi_login_user",
