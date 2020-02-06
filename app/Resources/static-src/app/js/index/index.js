@@ -1,6 +1,7 @@
 import Swiper from 'swiper';
 import '../teacher/follow-btn';
-
+import Notification from 'app/js/notice-comp/notice';
+import { isMobileUpdateDevice } from 'common/utils';
 
 if ($('.es-poster .swiper-slide').length > 1) {
   var swiper = new Swiper('.es-poster.swiper-container', {
@@ -29,5 +30,18 @@ $('body').on('click', '.js-course-filter', function () {
     }
     $('.course-filter .visible-xs .btn').html(text + ' ' + '<span class="caret"></span>');
     echo.init();
+  });
+});
+
+
+
+$(document).ready(function() {
+  if (isMobileUpdateDevice()) return;
+  if (!$('.js-current-live-course').length) return;
+  const $currentLiveCourse = $('.js-current-live-course');
+  new Notification({
+    positionClass: $currentLiveCourse.data('position'),
+    title: $('.js-current-live-course .js-live-notify-title').html(),
+    template: $('.js-current-live-course .js-live-notify-body').html(),
   });
 });

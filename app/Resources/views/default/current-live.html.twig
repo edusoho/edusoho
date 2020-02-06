@@ -1,7 +1,24 @@
-<div>
-  <p>直播名称{{ task.title }}</p>
-  <p>直播开始时间{{ task.startTime|date('Y-m-d H:i') }}</p>
-  <p>直播结束时间{{ task.endTime|date('Y-m-d H:i') }}</p>
-  <p>直播课程图片<img src="{{ filepath(course_set_cover(task.courseSet, 'small'), 'course.png') }}" alt=""></p>
-  <p>直播入口 <a href="{{ path('task_live_entry',{courseId:task.courseId, activityId:task.activityId}) }}">{{ path('task_live_entry',{courseId:task.courseId, activityId:task.activityId}) }}</a> </p>
+<div class="js-current-live-course hidden" data-position="{{ setting('homepage_live_notify.position') }}">
+  {% set liveEntryUrl = path('task_live_entry',{courseId:task.courseId, activityId:task.activityId}) %}
+  <div class="js-live-notify-title">
+    <div><i class="es-icon es-icon-entry-live cd-mr8"></i>{{ 'homepage.live_notify.header'|trans }}</div>
+  </div>
+  <div class="js-live-notify-body">
+    <div class="clearfix notification-live-item">
+      <div class="notification-item-dom"><a href="{{ liveEntryUrl }}" target="_blank"><img src="{{ filepath(course_set_cover(task.courseSet, 'small'), 'course.png') }}" alt="course-cover" class="img-responsive"></a></div>
+      <div class="notification-live-info notification-item-dom">
+        <a class="notification-live-info__title text-overflow" href="{{ liveEntryUrl }}" target="_blank" data-toggle="tooltip" data-placement="top" title="{{ task.title }}">{{ task.title }}</a>
+        {% if task.startTime > timestamp() %}
+          <div class="notification-live-info__ing start">
+            <span class="live-time">{{ task.startTime|date('H:i') }}</span>
+            <span class="live-divider">|</span>
+            <span class="color-success">{{'homepage.live_notify.start_while'|trans}}</span>
+          </div>
+        {% else %}
+          <div class="notification-live-info__ing">{{'homepage.live_notify.living'|trans}}<i class="es-icon es-icon-entry-live cd-ml8"></i></div>
+        {% endif %}
+        <div class="notification-live-info__link bg-primary"><a href="{{ liveEntryUrl}}" target="_blank">{{ 'homepage.live_notify.entry_live_room'|trans }}</a></div>
+      </div>
+    </div>
+  </div>
 </div>

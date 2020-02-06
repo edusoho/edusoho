@@ -10,31 +10,31 @@
   <form class="form-horizontal" method="post" id="live-notify-setting-form" novalidate>
     <div class="row form-group">
       <div class="col-md-3 control-label">
-        <label for="enabled">{{'首页直播提醒'|trans}}</label>
+        <label for="enabled">{{'admin_v2.operation.homepage_live_notify.enable'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('enabled', {1:'开启'|trans, 0:'关闭'|trans}, liveNotifySetting.enabled) }}
-        <p class="help-block">{{'开启后，当有即将开始的直播时，对于已购买直播的学员，进入首页时会弹出浮动提示框，提示学员进入直播教室。'|trans}}</p>
+        {{ radios('enabled', {1:'admin_v2.operation.homepage_live_notify.enable.open'|trans, 0:'admin_v2.operation.homepage_live_notify.enable.close'|trans}, liveNotifySetting.enabled) }}
+        <p class="help-block">{{'admin_v2.operation.homepage_live_notify.enable.hint'|trans}}</p>
       </div>
     </div>
 
     <div class="row form-group">
       <div class="col-md-3 control-label">
-        <label for="preTime">{{ '提前提醒时间'|trans }}</label>
+        <label for="preTime">{{ 'admin_v2.operation.homepage_live_notify.pre_time'|trans }}</label>
       </div>
       <div class="controls col-md-8">
         <input class="form-control width-input" required id="preTime" type="text" name="preTime" value="{{ liveNotifySetting.preTime }}">{{ '分钟'|trans }}
-        <p class="help-block">{{'设置在直播开课前第几分钟，弹出提醒。'|trans}}</p>
+        <p class="help-block">{{'admin_v2.operation.homepage_live_notify.pre_time_hint'|trans}}</p>
       </div>
     </div>
 
     <div class="row form-group">
       <div class="col-md-3 control-label">
-        <label for="enabled">{{'提醒显示位置'|trans}}</label>
+        <label for="enabled">{{'admin_v2.operation.homepage_live_notify.position'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('position', {'leftBottom' :'页面左下角'|trans, 'rightBottom' :'页面右下角'|trans, 'rightTop' :'页面右上角'|trans}, liveNotifySetting.position) }}
-        <p class="help-block">{{'设置直播提醒的浮层显示位置，需避免跟已有的浮层重叠。'|trans}}</p>
+        {{ radios('position', {'leftBottom' :'admin_v2.operation.homepage_live_notify.position.left_bottom'|trans, 'rightBottom' :'admin_v2.operation.homepage_live_notify.position.right_bottom'|trans, 'rightTop' :'admin_v2.operation.homepage_live_notify.position.right_top'|trans}, liveNotifySetting.position) }}
+        <p class="help-block">{{'admin_v2.operation.homepage_live_notify.position_hint'|trans}}</p>
       </div>
     </div>
 
