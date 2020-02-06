@@ -321,7 +321,7 @@ class CourseController extends BaseController
     protected function removeUnpublishAndNonDefaultCourses($courses)
     {
         foreach ($courses as $key => $course) {
-            if ($course['status'] != 'published' && $course['isDefault'] != 1) {
+            if ('published' != $course['status'] && 1 != $course['isDefault']) {
                 unset($courses[$key]);
             }
         }
