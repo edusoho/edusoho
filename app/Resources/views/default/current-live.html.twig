@@ -1,11 +1,4 @@
-<div class="js-current-live-course hidden"
-    data-title="{{ task.title }}"
-    data-src="{{ filepath(course_set_cover(task.courseSet, 'small'), 'course.png') }}"
-    data-url="{{ path('task_live_entry',{courseId:task.courseId, activityId:task.activityId}) }}"
-    data-time="{{ task.startTime|date('H:i') }}"
-    data-position="{{ setting('homepage_live_notify.position') }}"
-    data-status="{% if task.startTime > timestamp() %}waiting{% else %}living{% endif %}"
-  >
+<div class="js-current-live-course hidden" data-position="{{ setting('homepage_live_notify.position') }}">
   {% set liveEntryUrl = path('task_live_entry',{courseId:task.courseId, activityId:task.activityId}) %}
   <div class="js-live-notify-title">
     <div><i class="es-icon es-icon-entry-live cd-mr8"></i>{{ 'homepage.live_notify.header'|trans }}</div>
