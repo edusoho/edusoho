@@ -23,10 +23,8 @@ class CourseController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
-        $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($courseSetId);
-        $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
-        $courses = array($defaultCourse);
-        $courses = array_merge($courses, $publishedCourses);
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        $courses = $this->removeUnpublishAndNonDefaultCourses($courses);
         $courseId = $request->query->get('courseId');
 
         if (empty($courseId)) {
@@ -318,6 +316,17 @@ class CourseController extends BaseController
         }
 
         return $tasks;
+    }
+
+    protected function removeUnpublishAndNonDefaultCourses($courses)
+    {
+        foreach ($courses as $key => $course) {
+            if ($course['status'] != 'published' && $course['isDefault'] != 1) {
+                unset($courses[$key]);
+            }
+        }
+
+        return $courses;
     }
 
     protected function getPasswordEncoder()
