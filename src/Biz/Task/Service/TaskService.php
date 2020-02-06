@@ -235,4 +235,6 @@ interface TaskService
     public function updateTasksOptionalByLessonId($lessonId, $isOptional = 0);
 
     public function countLessonsWithMultipleTasks($courseId);
+
+    public function getUserCurrentPublishedLiveTask();
 }

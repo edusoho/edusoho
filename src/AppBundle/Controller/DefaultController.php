@@ -33,6 +33,10 @@ class DefaultController extends BaseController
         return $this->render('default/index.html.twig', array('friendlyLinks' => $friendlyLinks, 'custom' => $custom));
     }
 
+    public function liveAction(Request $request)
+    {
+    }
+
     public function appDownloadAction()
     {
         $meCount = $this->getMeCount();

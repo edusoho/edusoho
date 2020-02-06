@@ -673,6 +673,22 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->searchTasks($conditions, array('startTime' => 'ASC'), 0, $this->countTasks($conditions));
     }
 
+    public function getUserCurrentPublishedLiveTask()
+    {
+        $liveNotifySetting = $this->getSettingService()->get('homepage_live_notify', array());
+        if (!empty($liveNotifySetting['enabled'])) {
+            $conditions = array(
+                'type' => 'live',
+                'status' => 'published',
+                'startTime_LT' => time() - 60 * $liveNotifySetting['preTime'],
+            );
+
+            return $this->searchTasks($conditions, array('startTime' => 'ASC'), 0, 1);
+        }
+
+        return array();
+    }
+
     /**
      * 返回当前正在直播的直播任务
      *
