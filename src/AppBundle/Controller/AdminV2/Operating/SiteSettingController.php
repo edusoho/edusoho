@@ -85,6 +85,26 @@ class SiteSettingController extends BaseController
         ));
     }
 
+    public function homepageLiveNotifySettingAction(Request $request)
+    {
+        $liveNotifySetting = $this->getSettingService()->get('homepage_live_notify', array());
+        $default = array(
+            'enabled' => 0,
+            'preTime' => 15, //minutes
+            'position' => 'leftBottom', //leftBottom|rightBottom|rightTop
+        );
+        $liveNotifySetting = array_merge($default, $liveNotifySetting);
+        if ('POST' == $request->getMethod()) {
+            $liveNotifySetting = $request->request->all();
+            $this->getSettingService()->set('homepage_live_notify', $liveNotifySetting);
+            $this->setFlashMessage('success', 'site.save.success');
+        }
+
+        return $this->render('admin-v2/operating/site-setting/homepage-live-notify.html.twig', array(
+            'liveNotifySetting' => $liveNotifySetting,
+        ));
+    }
+
     public function shareAction(Request $request)
     {
         $defaultSetting = $this->getSettingService()->get('default', array());
