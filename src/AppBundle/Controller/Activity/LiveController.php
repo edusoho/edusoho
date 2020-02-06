@@ -47,6 +47,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
 
         $summary = $activity['remark'];
         unset($activity['remark']);
+
         return $this->render('activity/live/show.html.twig', array(
             'activity' => $activity,
             'summary' => $summary,
@@ -128,6 +129,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
          */
         $provider = empty($activity['ext']['liveProvider']) ? 0 : $activity['ext']['liveProvider'];
         $this->freshTaskLearnStat($request, $activity['id']);
+
         return $this->forward('AppBundle:Liveroom:_entry', array(
             'roomId' => $activity['ext']['liveId'],
             'params' => array(
