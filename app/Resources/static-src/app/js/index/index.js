@@ -1,6 +1,6 @@
 import Swiper from 'swiper';
 import '../teacher/follow-btn';
-
+import Notification from'app/js/notice-comp/notice';
 
 if ($('.es-poster .swiper-slide').length > 1) {
   var swiper = new Swiper('.es-poster.swiper-container', {
@@ -30,4 +30,32 @@ $('body').on('click', '.js-course-filter', function () {
     $('.course-filter .visible-xs .btn').html(text + ' ' + '<span class="caret"></span>');
     echo.init();
   });
+});
+
+
+// 变量
+const courseInfo = {
+  title: '小学三年级上数学开学典课程常识练习满分',
+  link: '#',
+  liveStatus: 'ing',
+  url: '/assets/img/default/courseSet.png'
+};
+
+const time = '18:00';
+const flag = (courseInfo.liveStatus === 'ing');
+const courseStatus = flag ?
+  '<div class="notification-live-info__ing">正在直播中<i class="es-icon es-icon-entry-live cd-ml8"></i></div>':
+  `<div class="notification-live-info__ing start"><span class="live-time">${time}</span><span class="live-divider">|</span></span><span class="color-success">即将开始</span></div>`;
+new Notification({
+  positionClass: 'topRight',
+  title: '<div><i class="es-icon es-icon-entry-live cd-mr8"></i>直播课程提醒</div>',
+  template: `
+    <div class="clearfix notification-live-item">
+      <div class="item-one"><a href="${courseInfo.link}" target="_blank"><img src="${courseInfo.url}" alt="course-cover" class="img-responsive"></a></div>
+      <div class="notification-live-info item-one">
+        <a class="notification-live-info__title text-overflow" href="${courseInfo.link}" target="_blank" data-toggle="tooltip" data-placement="top" title="${courseInfo.title}">${courseInfo.title}</a>
+        ${courseStatus}
+        <div class="notification-live-info__link bg-primary"><a href="${courseInfo.link}" target="_blank">进入教室</a></div>
+      </div>
+    </div>`,
 });
