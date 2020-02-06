@@ -39,29 +39,9 @@ $(document).ready(function() {
   if (isMobileUpdateDevice()) return;
   if (!$('.js-current-live-course').length) return;
   const $currentLiveCourse = $('.js-current-live-course');
-  const courseInfo = {
-    title: $currentLiveCourse.data('title'),
-    link: $currentLiveCourse.data('url'),
-    liveStatus: 'wait',
-    url: $currentLiveCourse.data('src'),
-    time: $currentLiveCourse.data('time')
-  };
-  
-  const flag = (courseInfo.liveStatus === 'ing');
-  const courseStatus = flag ?
-    '<div class="notification-live-info__ing">正在直播中<i class="es-icon es-icon-entry-live cd-ml8"></i></div>':
-    `<div class="notification-live-info__ing start"><span class="live-time">${courseInfo.time}</span><span class="live-divider">|</span></span><span class="color-success">即将开始</span></div>`;
   new Notification({
     positionClass: $currentLiveCourse.data('position'),
-    title: '<div><i class="es-icon es-icon-entry-live cd-mr8"></i>直播课程提醒</div>',
-    template: `
-      <div class="clearfix notification-live-item">
-        <div class="notification-item-dom"><a href="${courseInfo.link}" target="_blank"><img src="${courseInfo.url}" alt="course-cover" class="img-responsive"></a></div>
-        <div class="notification-live-info notification-item-dom">
-          <a class="notification-live-info__title text-overflow" href="${courseInfo.link}" target="_blank" data-toggle="tooltip" data-placement="top" title="${courseInfo.title}">${courseInfo.title}</a>
-          ${courseStatus}
-          <div class="notification-live-info__link bg-primary"><a href="${courseInfo.link}" target="_blank">进入教室</a></div>
-        </div>
-      </div>`,
+    title: $('.js-current-live-course .js-live-notify-title').html(),
+    template: $('.js-current-live-course .js-live-notify-body').html(),
   });
 });

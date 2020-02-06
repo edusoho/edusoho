@@ -47,9 +47,6 @@ class LiveController extends BaseActivityController implements ActivityActionInt
 
         $summary = $activity['remark'];
         unset($activity['remark']);
-
-        $this->freshTaskLearnStat($request, $activity['id']);
-
         return $this->render('activity/live/show.html.twig', array(
             'activity' => $activity,
             'summary' => $summary,
@@ -79,7 +76,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         ));
     }
 
-    public function liveEntryAction($courseId, $activityId)
+    public function liveEntryAction(Request $request, $courseId, $activityId)
     {
         $user = $this->getUser();
         if (!$user->isLogin()) {
@@ -130,7 +127,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
          *          '8'=>'athena', //ES直播
          */
         $provider = empty($activity['ext']['liveProvider']) ? 0 : $activity['ext']['liveProvider'];
-
+        $this->freshTaskLearnStat($request, $activity['id']);
         return $this->forward('AppBundle:Liveroom:_entry', array(
             'roomId' => $activity['ext']['liveId'],
             'params' => array(
@@ -179,8 +176,11 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             if (!empty($eventName)) {
                 $this->getTaskService()->trigger($task['id'], $eventName, $data);
             }
-            if ('start' == $taskResult['status']) {
-                $this->getActivityService()->trigger($activityId, 'doing', array('task' => $task, 'lastTime' => $data['lastTime']));
+
+            if (in_array($taskResult['status'], array('start', 'doing'))) {
+                if ('doing' == $taskResult['status']) {
+                    $this->getActivityService()->trigger($activityId, 'doing', array('task' => $task, 'lastTime' => $data['lastTime']));
+                }
                 $this->getActivityService()->trigger($activityId, 'finish', array('taskId' => $task['id']));
                 $this->getTaskService()->finishTaskResult($task['id']);
             }
@@ -258,7 +258,6 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         $key = 'activity.'.$activityId;
         $session = $request->getSession($key);
         $taskStore = $session->get($key);
-
         if (!empty($taskStore)) {
             $now = time();
             //任务连续学习超过5小时则不再统计时长

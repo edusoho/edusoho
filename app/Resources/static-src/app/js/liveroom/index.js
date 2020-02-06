@@ -40,9 +40,8 @@ class Live {
           }
         });
       }, 3000);
-
-      this.triggerLiveEvent();
     }
+    this.triggerLiveEvent();
   }
 
   entryRoom(roomUrl) {
@@ -65,7 +64,7 @@ class Live {
 
   triggerLiveEvent() {
     let self = this;
-    
+
     let eventName = null;
     let timestamp = Date.parse( new Date() ).toString();
     timestamp = timestamp.substr(0,10);
