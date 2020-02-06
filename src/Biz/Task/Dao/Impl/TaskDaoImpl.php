@@ -22,7 +22,7 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
     public function getUserCurrentPublishedLiveTaskByTimeRange($userId, $startTime, $endBeforeTimeRange)
     {
         $currentTime = time();
-        $sql = "SELECT * FROM {$this->table} WHERE type='live' and status='published' and courseId IN (SELECT courseId FROM `course_member` WHERE role = 'teacher' AND userId = ?) 
+        $sql = "SELECT * FROM {$this->table} WHERE type='live' and status='published' and courseId IN (SELECT courseId FROM `course_member` WHERE role = 'student' AND userId = ?) 
                 and (startTime > {$currentTime} and startTime < ? 
                 or  
                 startTime < {$currentTime} and endTime - ? > {$currentTime}) 
