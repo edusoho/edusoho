@@ -74,16 +74,16 @@ class Notification extends Component {
 
     let test = {};
     switch (this.options.positionClass) {
-    case 'topRight':
+    case 'rightTop':
       test = Object.assign({}, topRightData);
       break;
-    case 'topLeft':
+    case 'leftTop':
       test = Object.assign({}, topLeftData);
       break;
-    case 'bottomLeft':
+    case 'leftBottom':
       test = Object.assign({}, bottomLeftData);
       break;
-    case 'bottomRight':
+    case 'rightBottom':
       test = Object.assign({}, bottomRightData);
       break;
     default:

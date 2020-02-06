@@ -1,6 +1,6 @@
 import Swiper from 'swiper';
 import '../teacher/follow-btn';
-import Notification from'app/js/notice-comp/notice';
+import Notification from 'app/js/notice-comp/notice';
 import { isMobileUpdateDevice } from 'common/utils';
 
 if ($('.es-poster .swiper-slide').length > 1) {
@@ -35,22 +35,24 @@ $('body').on('click', '.js-course-filter', function () {
 
 
 
-// 变量
-if (!isMobileUpdateDevice()) {
+$(document).ready(function() {
+  if (isMobileUpdateDevice()) return;
+  if (!$('.js-current-live-course').length) return;
+  const $currentLiveCourse = $('.js-current-live-course');
   const courseInfo = {
-    title: '小学三年级上数学开学典课程常识练习满分',
-    link: '#',
+    title: $currentLiveCourse.data('title'),
+    link: $currentLiveCourse.data('url'),
     liveStatus: 'wait',
-    url: '/assets/img/default/courseSet.png'
+    url: $currentLiveCourse.data('src'),
+    time: $currentLiveCourse.data('time')
   };
   
-  const time = '18:00';
   const flag = (courseInfo.liveStatus === 'ing');
   const courseStatus = flag ?
     '<div class="notification-live-info__ing">正在直播中<i class="es-icon es-icon-entry-live cd-ml8"></i></div>':
-    `<div class="notification-live-info__ing start"><span class="live-time">${time}</span><span class="live-divider">|</span></span><span class="color-success">即将开始</span></div>`;
+    `<div class="notification-live-info__ing start"><span class="live-time">${courseInfo.time}</span><span class="live-divider">|</span></span><span class="color-success">即将开始</span></div>`;
   new Notification({
-    positionClass: 'topRight',
+    positionClass: $currentLiveCourse.data('position'),
     title: '<div><i class="es-icon es-icon-entry-live cd-mr8"></i>直播课程提醒</div>',
     template: `
       <div class="clearfix notification-live-item">
@@ -62,4 +64,4 @@ if (!isMobileUpdateDevice()) {
         </div>
       </div>`,
   });
-}
+});

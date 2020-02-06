@@ -1,4 +1,10 @@
-<div>
+<div class="js-current-live-course hidden" 
+    data-title="{{ task.title }}"
+    data-src="{{ filepath(course_set_cover(task.courseSet, 'small'), 'course.png') }}"
+    data-url="{{ path('task_live_entry',{courseId:task.courseId, activityId:task.activityId}) }}"
+    data-time="{{ task.startTime|date('H:i') }}"
+    data-position="rightTop"
+  >
   <p>直播名称{{ task.title }}</p>
   <p>直播开始时间{{ task.startTime|date('Y-m-d H:i') }}</p>
   <p>直播结束时间{{ task.endTime|date('Y-m-d H:i') }}</p>
