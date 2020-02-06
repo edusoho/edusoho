@@ -45,9 +45,10 @@ export default {
     };
   },
   computed: {
+    ...mapState(["DrpSwitch"]),
     ...mapState({
       isLoading: state => state.isLoading,
-      drpSetting: state => state.DrpSettings
+      DrpSwitch: state => state.DrpSwitch
     })
   },
   created() {
@@ -55,20 +56,19 @@ export default {
       window.scrollTo(0, 0);
     }, 100);
     Api.hasPluginInstalled().then(res => {
-      this.hasBusinessDrainage = res.BusinessDrainage;
-    });
-
-    this.getDrpSetting();
+      this.hasBusinessDrainage = res.BusinessDrainage
+    })
+    this.showDistributorEntrance();
   },
   methods: {
     showDistributorEntrance() {
-      Api.hasDrpPluginInstalled().then(res => {
-        if (!res.Drp) {
+        if (!this.DrpSwitch) {
           this.isShowDistributorEntrance = false;
           return;
         }
+        this.getDrpSetting()
         this.getAgencyBindRelation();
-      });
+
     },
     getAgencyBindRelation() {
       Api.getAgencyBindRelation().then(data => {
@@ -80,9 +80,9 @@ export default {
       });
     },
     getDrpSetting() {
-      if (Object.keys(this.drpSetting).length) {
-        this.showDistributorEntrance();
-      }
+      Api.getDrpSetting().then(data => {
+        this.drpSetting = data
+      })
     }
   }
 };
