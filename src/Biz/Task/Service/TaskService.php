@@ -236,5 +236,5 @@ interface TaskService
 
     public function countLessonsWithMultipleTasks($courseId);
 
-    public function getUserCurrentPublishedLiveTask();
+    public function getUserCurrentPublishedLiveTask($userId, $startTime, $endBeforeRange);
 }

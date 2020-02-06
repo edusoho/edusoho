@@ -673,20 +673,9 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->searchTasks($conditions, array('startTime' => 'ASC'), 0, $this->countTasks($conditions));
     }
 
-    public function getUserCurrentPublishedLiveTask()
+    public function getUserCurrentPublishedLiveTask($userId, $startTime, $endBeforeRange)
     {
-        $liveNotifySetting = $this->getSettingService()->get('homepage_live_notify', array());
-        if (!empty($liveNotifySetting['enabled'])) {
-            $conditions = array(
-                'type' => 'live',
-                'status' => 'published',
-                'startTime_LT' => time() - 60 * $liveNotifySetting['preTime'],
-            );
-
-            return $this->searchTasks($conditions, array('startTime' => 'ASC'), 0, 1);
-        }
-
-        return array();
+        return $this->getTaskDao()->getUserCurrentPublishedLiveTaskByTimeRange($userId, $startTime, $endBeforeRange);
     }
 
     /**
@@ -1191,6 +1180,9 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->biz->service('Task:TaskResultService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
         return $this->biz->service('Course:MemberService');
