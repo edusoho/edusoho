@@ -24,13 +24,13 @@
   -moz-box-shadow:  0 2px 20px 0 rgba(0,0,0,0.15);
   box-shadow:  0 2px 20px 0 rgba(0,0,0,0.15);
   overflow: hidden;
-  &.topLeft,
-  &.bottomLeft {
+  &.leftTop,
+  &.leftBottom {
     .animation(fadeInLeft .3s .2s ease both);
     left: 16px;
   }
-  &.topRight,
-  &.bottomRight {
+  &.rightTop,
+  &.rightBottom {
     .animation(fadeInRight .3s .2s ease both);
     right: 16px;
   }
@@ -47,7 +47,7 @@
   }
 }
 
-.item-one {
+.notification-item-dom {
   display: table-cell;
   vertical-align: top;
 }
