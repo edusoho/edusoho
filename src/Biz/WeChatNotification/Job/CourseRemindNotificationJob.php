@@ -18,8 +18,8 @@ class CourseRemindNotificationJob extends AbstractNotificationJob
             return;
         }
 
-//        $allBindUserIds = $this->getWeChatService()->findAllBindUserIds();
-        $userIds = array(22434);
+        $allBindUserIds = $this->getWeChatService()->findAllBindUserIds();
+        $userIds = ArrayToolkit::column($allBindUserIds, 'userId');
         if (empty($userIds)) {
             return;
         }
