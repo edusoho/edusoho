@@ -19,6 +19,18 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
         return $this->db()->delete($this->table(), array('courseId' => $courseId));
     }
 
+    public function getUserCurrentPublishedLiveTaskByTimeRange($userId, $startTime, $endBeforeTimeRange)
+    {
+        $currentTime = time();
+        $sql = "SELECT * FROM {$this->table} WHERE type='live' and status='published' and courseId IN (SELECT courseId FROM `course_member` WHERE role = 'teacher' AND userId = ?) 
+                and (startTime > {$currentTime} and startTime < ? 
+                or  
+                startTime < {$currentTime} and endTime - ? > {$currentTime}) 
+                ORDER BY startTime ASC LIMIT 1";
+
+        return $this->db()->fetchAssoc($sql, array($userId, $startTime, $endBeforeTimeRange)) ?: array();
+    }
+
     public function findByCourseId($courseId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? ORDER  BY seq";
