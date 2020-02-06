@@ -23,7 +23,7 @@ const state = {
   socialBinded: {
     wx: true
   },
-  DrpSettings: {}
+  DrpSwitch: false // 分销插件
 };
 
 export default new Vuex.Store({

@@ -158,7 +158,7 @@ export const setCouponSwitch = ({ commit }) => Api.getCouponSetting({})
   });
 
 // 全局分销插件开关
-export const setDrpSwitch = ({ commit }) => Api.getDrpSetting({})
+export const setDrpSwitch = ({ commit }) => Api.hasDrpPluginInstalled({})
   .then(res => {
-    commit(types.GET_SETTINGS, { key: 'DrpSettings', setting: res });
+    commit(types.GET_SETTINGS, { key: 'DrpSwitch', setting: res.Drp });
   });

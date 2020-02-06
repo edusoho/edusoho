@@ -88,14 +88,14 @@ export default {
     };
   },
   computed: {
+    ...mapState(["DrpSwitch"]),
     ...mapState("course", {
       sourceType: state => state.sourceType,
       selectedPlanId: state => state.selectedPlanId,
       taskId: state => state.taskId,
       details: state => state.details,
       joinStatus: state => state.joinStatus,
-      user: state => state.user,
-      DrpSettings: state => DrpSettings
+      user: state => state.user
     }),
     textContent() {
       return this.mediaOpts.text;
@@ -110,7 +110,7 @@ export default {
   },
   created() {
     this.initHead();
-    this.initTagData();
+    this.showTagLink();
   },
   /*
    * 试看需要传preview=1
@@ -262,42 +262,40 @@ export default {
       this.$emit("goodsEmpty");
     },
     showTagLink() {
-      Api.hasDrpPluginInstalled().then(res => {
-        if (!res.Drp) {
+      if (!this.DrpSwitch) {
+        this.tagData.isShow = false;
+        return;
+      }
+      this.initTagData();
+      this.getAgencyBindRelation();
+    },
+    getAgencyBindRelation() {
+      Api.getAgencyBindRelation().then(data => {
+        if (!data.agencyId) {
           this.tagData.isShow = false;
           return;
         }
-
-        Api.getAgencyBindRelation().then(data => {
-          if (!data.agencyId) {
-            this.tagData.isShow = false;
-            return;
-          }
-          this.bindAgencyRelation = data;
-          this.tagData.isShow = true;
-        });
+        this.bindAgencyRelation = data;
+        this.tagData.isShow = true;
       });
     },
     initTagData() {
-      if (Object.keys(this.DrpSettings).length) {
-        this.tagData.minDirectRewardRatio = this.DrpSettings.minDirectRewardRatio;
+      Api.getDrpSetting().then(data => {
+        this.drpSetting = data;
+        this.tagData.minDirectRewardRatio = data.minDirectRewardRatio;
 
         const params = {
           type: "course",
           id: this.details.id,
-          merchant_id: this.DrpSettings.merchantId
+          merchant_id: this.drpSetting.merchantId
         };
 
         this.tagData.link =
-          this.DrpSettings.distributor_template_url +
-          "?" +
-          qs.stringify(params);
+          this.drpSetting.distributor_template_url + "?" + qs.stringify(params);
         const earnings =
-          (this.DrpSettings.minDirectRewardRatio / 100) * this.details.price;
+          (this.drpSetting.minDirectRewardRatio / 100) * this.details.price;
         this.tagData.earnings = (Math.floor(earnings * 100) / 100).toFixed(2);
-
-        this.showTagLink();
-      }
+      });
     }
   }
 };
