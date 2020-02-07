@@ -104,11 +104,11 @@
             <td><span class="text-sm">{{ thread.postNum }} / {{ thread.hitNum }}</span></td>
             <td>
               {% if course %}
-                <a href="javascript:;" data-set-url="{{ path('course_thread_elite', {courseId:course.id, threadId:thread.id}) }}" data-cancel-url="{{ path('course_thread_unelite', {courseId:course.id, threadId:thread.id}) }}" class="promoted-label">
+                <a href="javascript:;" data-set-url="{{ path('course_thread_elite', {courseId:course.id, threadId:thread.id}) }}" data-cancel-url="{{ path('course_thread_unelite', {courseId:course.id, threadId:thread.id}) }}" class="promoted-label text-decoration-none">
                   <span class="label {% if thread.isElite %}label-success{% else %}label-default{% endif %}">{{'admin.course_thread.course_thread_manage_tab.isElite_btn'|trans}}</span>
                 </a>
               
-                <a href="javascript:;" data-set-url="{{ path('course_thread_stick', {courseId:course.id, threadId:thread.id}) }}" data-cancel-url="{{ path('course_thread_unstick', {courseId:course.id, threadId:thread.id}) }}" class="promoted-label">
+                <a href="javascript:;" data-set-url="{{ path('course_thread_stick', {courseId:course.id, threadId:thread.id}) }}" data-cancel-url="{{ path('course_thread_unstick', {courseId:course.id, threadId:thread.id}) }}" class="promoted-label text-decoration-none">
                   <span class="label {% if thread.isStick %}label-success{% else %}label-default{% endif %}">{{'admin.course_thread.course_thread_manage_tab.isStick_btn'|trans}}</span>
                 </a>
               {% endif %}
