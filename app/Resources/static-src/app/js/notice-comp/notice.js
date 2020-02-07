@@ -9,39 +9,42 @@ class Notification extends Component {
       template: '',
       title: '',
       zIndex: 9999,
+      acitonClassName: ''
     };
     
     Object.assign(this.options, props);
 
     this.$notification = null;
     this.$body = $(document.body);
-
     this.init();
   }
 
   init() {
     this.template();
     this.events();
+    this.actionEvent();
   }
 
   events() {
     $(document).on('click', '.cd-notification-close', (event) => this.closeEvent(event));
   }
 
-  closeEvent(event) {
-    let $this = $(event.currentTarget);
-    let $parent = $this.parent();
-    $parent.addClass('cd-hide');
-    
-    setTimeout(() => {
-      $parent.remove();
-    }, 300);
+  actionEvent() {
+    if ($(this.options.acitonClassName).length) {
+      $(document).on('click', this.options.acitonClassName, (event) => this.closeEvent(event));
+    }
+  }
 
+  closeEvent() {
+    const $parent = $('.cd-notification-wrap');
+    setTimeout(() => {
+      $('.cd-notification-wrap').remove();
+    }, 300);
     this.emit('close', $parent);
   }
 
   template() {
-    this.$notification = $(document.createElement('div')).addClass('cd-notification-warp');
+    this.$notification = $(document.createElement('div')).addClass('cd-notification-wrap');
 
     const html = `
       <div class="cd-notification ${this.options.positionClass}">

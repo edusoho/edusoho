@@ -43,5 +43,6 @@ $(document).ready(function() {
     positionClass: $currentLiveCourse.data('position'),
     title: $('.js-current-live-course .js-live-notify-title').html(),
     template: $('.js-current-live-course .js-live-notify-body').html(),
+    acitonClassName: '.js-live-notify-link'
   });
 });
