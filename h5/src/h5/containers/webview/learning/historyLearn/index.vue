@@ -2,10 +2,8 @@
   <div class="app history-learn">
     <div class="history-learn-list" style>
       <van-list
-        v-if="sort.length>0"
         v-model="loading"
         :finished="finished"
-        finished-text="没有更多了"
         @load="onLoad"
       >
         <div v-for="(date,index) in sort" :key="index">
