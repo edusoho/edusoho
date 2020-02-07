@@ -1,6 +1,5 @@
 import Swiper from 'swiper';
 import '../teacher/follow-btn';
-import Notification from 'app/js/notice-comp/notice';
 import { isMobileUpdateDevice } from 'common/utils';
 
 if ($('.es-poster .swiper-slide').length > 1) {
@@ -37,9 +36,11 @@ $('body').on('click', '.js-course-filter', function () {
 
 $(document).ready(function() {
   if (isMobileUpdateDevice()) return;
+  console.log($('.js-current-live-course').length);
   if (!$('.js-current-live-course').length) return;
   const $currentLiveCourse = $('.js-current-live-course');
-  new Notification({
+  alert(33);
+  cd.notification({
     positionClass: $currentLiveCourse.data('position'),
     title: $('.js-current-live-course .js-live-notify-title').html(),
     template: $('.js-current-live-course .js-live-notify-body').html(),
