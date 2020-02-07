@@ -265,21 +265,21 @@ const filters = [
           return `时长: ${formatTimeByNumber(target.task.length)}`;
         case 'live':
           const now = new Date().getTime();
+          const time = formatSimpleHour(new Date(target.task.startTime * 1000));
           const startTimeStamp = new Date(target.task.startTime * 1000);
           const endTimeStamp = new Date(target.task.endTime * 1000);
-          let status = '';
           // 直播未开始
           if (now <= startTimeStamp) {
-            status = '未开始';
+            return `${time} | 未开始`;
           }
           if (now > endTimeStamp) {
             if (target.activity.replayStatus === 'ungenerated') {
-              status = '已结束';
+              return `${time} | 已结束`;
             }
-            status = '观看回放';
+            return `${time} | 观看回放`;
           }
           status = '正在直播';
-          return `${formatSimpleHour(new Date(target.task.startTime * 1000))} | ${status}`;
+          return `${time} | 正在直播`;
         case 'text':
         case 'doc':
         case 'ppt':
