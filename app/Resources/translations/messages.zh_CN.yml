@@ -10678,7 +10678,7 @@ admin_v2.operation.homepage_live_notify.position.left_bottom: 页面左下角
 admin_v2.operation.homepage_live_notify.position.right_bottom: 页面右下角
 admin_v2.operation.homepage_live_notify.position.right_top: 页面右上角
 
-homepage.live_notify.header: 直播课程提醒
+homepage.live_notify.header: 直播开课提醒
 homepage.live_notify.start_while: 即将开始
 homepage.live_notify.living: 正在直播中
 homepage.live_notify.entry_live_room: 进入教室
