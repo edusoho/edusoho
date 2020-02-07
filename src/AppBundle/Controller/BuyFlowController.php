@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\Exception\AccessDeniedException;
 use AppBundle\Common\UserToolkit;
 use AppBundle\Util\AvatarAlert;
 use Biz\System\Service\SettingService;
@@ -111,7 +112,7 @@ abstract class BuyFlowController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            $this->createNewException(UserException::UN_LOGIN());
+            throw new AccessDeniedException(UserException::UN_LOGIN());
         }
     }
 
