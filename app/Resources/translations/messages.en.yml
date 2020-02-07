@@ -9370,7 +9370,7 @@ admin_v2.operation.homepage_live_notify.position.left_bottom: Bottom left corner
 admin_v2.operation.homepage_live_notify.position.right_bottom: Bottom right corner of page
 admin_v2.operation.homepage_live_notify.position.right_top: Top right corner of page
 
-homepage.live_notify.header: Live course reminder
+homepage.live_notify.header: Live start reminder
 homepage.live_notify.start_while: Begin in a minute
 homepage.live_notify.living: Living
 homepage.live_notify.entry_live_room: Go to liveroom
