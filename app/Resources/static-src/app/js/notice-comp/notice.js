@@ -98,7 +98,6 @@ class Notification extends Component {
     this.$notification.css(finalData);
 
     this.$notification.html(html).appendTo(this.$body);
-    $('[data-toggle="tooltip"]').tooltip();
     clearInterval(this.timeout);
   }
 }
