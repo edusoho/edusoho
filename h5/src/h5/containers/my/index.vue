@@ -41,14 +41,14 @@ export default {
       activeIndex: 0,
       tabs: ["我的订单", "我的活动"],
       hasBusinessDrainage: false,
-      isShowDistributorEntrance: false // 是否展示分销中心入口
+      isShowDistributorEntrance: false, // 是否展示分销中心入口
+      drpSetting:{}
     };
   },
   computed: {
     ...mapState(["DrpSwitch"]),
     ...mapState({
       isLoading: state => state.isLoading,
-      DrpSwitch: state => state.DrpSwitch
     })
   },
   created() {
