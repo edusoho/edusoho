@@ -49,6 +49,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
+            'createUserFootprint',
             'registerJob',
         );
 
@@ -123,6 +124,30 @@ class EduSohoUpgrade extends AbstractUpdater
               '{$currentTime}'
         )");
         $this->logger('info', '新增定时删除用户足迹的定时任务');
+        return 1;
+    }
+
+    public function createUserFootprint()
+    {
+        if (!$this->isTableExist('user_footprint')) {
+            $this->getConnection()->exec("
+                CREATE TABLE IF NOT EXISTS `user_footprint`(
+                `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `userId` INT(10) UNSIGNED NOT NULL COMMENT '用户id',
+                `targetType` VARCHAR(32) NOT NULL COMMENT '目标类型(task)',
+                `targetId` INT(10) UNSIGNED NOT NULL COMMENT '目标id(taskId)',
+                `event` VARCHAR(32) NOT NULL COMMENT '事件类型(learn)',
+                `date` DATE NOT NULL COMMENT '记录时间(精确到天)',
+                `createdTime` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+                `updatedTime` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+                PRIMARY KEY(`id`),
+                KEY `index_user_date`(`userId`, `date`),
+                KEY `index_target_type_id`(`targetType`, `targetId`),
+                KEY `index_date`(`date`)
+            )ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT '用户足迹';
+            ");
+        }
+
         return 1;
     }
 
