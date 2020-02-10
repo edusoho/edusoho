@@ -861,6 +861,18 @@ admin_v2:
                                 admin_v2_teacher_promote_list:
                                     name: admin_v2.user.teacher.promote_list_tab
                                     disable: true
+                        admin_v2_destroy_account:
+                            router_name: admin_v2_destroy_account_record
+                            name: admin_v2.user.destroy_account_manage_menu
+                            children:
+                                admin_v2_destroy_account_record_manage:
+                                    name: admin_v2.user.destroy_account.basic_tab
+                                    router_name: admin_v2_destroy_account_record
+                                    disable: true
+                                admin_v2_destroyed_account_manage:
+                                    name: admin_v2.user.destroy_account.destroyed_tab
+                                    router_name: admin_v2_destroyed_account
+                                    disable: true
         # 交易模块
         admin_v2_trade:
             quick_entrance_icon_class: 'icon-color-yellow'
