@@ -49,8 +49,12 @@ admin.user.basic.basic_tab.org_update_btn: 'Change Organization'
 ##教师管理模块
 admin.user.teacher.basic_tab: All
 admin.user.teacher.promote_list_tab: Recommended
-
 admin.user.teacher.basic_tab.promote_btn: Recommended
+
+#用户管理-注销管理
+admin_v2.user.destroy_account_manage_menu: Destroy
+admin_v2.user.destroy_account.basic_tab: Destroy Record
+admin_v2.user.destroy_account.destroyed_tab: Destroyed
 
 ##实名认证管理模块
 admin.user.approval.basic_tab: Authentication'
