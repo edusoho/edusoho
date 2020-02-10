@@ -671,6 +671,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 'duration' => 3600 * 24 * 30,
             ));
 
+            $this->controller->setCurrentUser($user['id'], $this->request);
+            $this->controller->getUserService()->markLoginInfo('app');
+
             $biz = ServiceKernel::instance()->getBiz();
             $biz['dispatcher']->dispatch('user.login', new Event($user));
         }
