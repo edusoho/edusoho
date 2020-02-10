@@ -1,22 +1,24 @@
 <template>
-  <van-list
-    v-model="loading"
-    :finished="finished"
-    @load="onLoad">
-    <courseItem
-      v-for="(course, index) in courseList"
-      :key="index"
-      :type="courseItemType"
-      :normal-tag-show="normalTagShow"
-      :vip-tag-show="vipTagShow"
-      :type-list="typeList"
-      :is-vip="course.vipLevelId"
-      :is-app-use="isAppUse"
-      :discount="typeList === 'course_list' ? course.courseSet.discount : ''"
-      :course-type="typeList === 'course_list' ? course.courseSet.type : ''"
-      :course="course | courseListData(listObj,'appSetting')"
-    />
-  </van-list>
+  <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      @load="onLoad">
+      <courseItem
+        v-for="(course, index) in courseList"
+        :key="index"
+        :type="courseItemType"
+        :normal-tag-show="normalTagShow"
+        :vip-tag-show="vipTagShow"
+        :type-list="typeList"
+        :is-vip="course.vipLevelId"
+        :is-app-use="isAppUse"
+        :discount="typeList === 'course_list' ? course.courseSet.discount : ''"
+        :course-type="typeList === 'course_list' ? course.courseSet.type : ''"
+        :course="course | courseListData(listObj,'appSetting')"
+      />
+    </van-list>
+  </van-pull-refresh>
 </template>
 
 <script>
@@ -56,7 +58,8 @@ export default {
   data() {
     return {
       list: [],
-      finished: false
+      finished: false,
+      refreshing:false
     }
   },
 
@@ -89,8 +92,20 @@ export default {
 
   methods: {
     onLoad() {
+      if (this.refreshing) {
+          this.$emit('resetData')
+          this.refreshing = false;
+        }
       // 通知父组件请求数据并更新courseList
       if (this.isRequestCompile) this.$emit('needRequest')
+    },
+    onRefresh() {
+      // 清空列表数据
+      this.finished = false;
+      // 重新加载数据
+      // 将 loading 设置为 true，表示处于加载状态
+      this.loading = true;
+      this.onLoad();
     }
   }
 }
