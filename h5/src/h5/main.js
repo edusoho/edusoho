@@ -37,7 +37,8 @@ import {
   Panel,
   ActionSheet,
   Switch,
-  Loading
+  Loading,
+  PullRefresh
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -59,6 +60,7 @@ Vue.component('van-checkbox-group', CheckboxGroup);
 Vue.component('van-radio', Radio);
 Vue.component('van-radio-group', RadioGroup);
 Vue.component('van-panel', Panel);
+Vue.component('van-pull-refresh', PullRefresh);
 
 Vue.use(ActionSheet);
 Vue.use(filters);
@@ -80,6 +82,7 @@ Vue.use(Tab)
   .use(Tabs)
   .use(Dialog)
   .use(Switch)
+  .use(PullRefresh)
   .use(Loading);
 Vue.config.productionTip = false;
 Api.getSettings({

@@ -19,6 +19,7 @@
       :is-request-compile="isRequestCompile"
       :type-list="'classroom_list'"
       :is-app-use="isAppUse"
+      @resetData="initCourseList"
       @needRequest="sendRequest"
     />
     <empty v-if="isEmptyCourse && isRequestCompile" text="暂无班级" class="empty__couse" />

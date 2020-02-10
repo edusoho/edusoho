@@ -19,6 +19,7 @@
       :type-list="'course_list'"
       :is-app-use="isAppUse"
       @needRequest="sendRequest"
+      @resetData="initCourseList"
     />
 
     <empty v-if="isEmptyCourse && isRequestCompile" text="暂无课程" class="empty__couse" />
