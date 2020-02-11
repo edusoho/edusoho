@@ -31,10 +31,22 @@ class YoukuVideoItemParser extends AbstractItemParser
         }
 
         $response['content'] = htmlspecialchars_decode(urldecode($response['content']));
-        $matched = preg_match('/id=[\\\\]{0,1}"s_baidu1[\\\\]{0,1}"\s+href=[\\\\]{0,1}"(.*?)[\\\\]{0,1}"/s', $response['content'], $matches);
+        // $matched = preg_match('/id=[\\\\]{0,1}"s_baidu1[\\\\]{0,1}"\s+href=[\\\\]{0,1}"(.*?)[\\\\]{0,1}"/s', $response['content'], $matches);
+        
+        // feat #20200211 兼容优酷新版页面
+        $matched = preg_match('/window\.\_\_INITIAL\_DATA\_\_\ \=(.+)\;\<\/script\>/s', $response['content'], $matches);
         if (empty($matched)) {
             throw ParserException::PARSED_FAILED_YOUKU();
         }
+        
+        $youkuJson = json_decode($matches[1], true);
+        $youkuData = $youkuJson['data']['data'];
+        $query['title'] = $youkuData['data']['extra']['videoTitle'];
+        $query['pic'] = $youkuData['data']['extra']['videoImg'];
+        $query['duration'] = $youkuData['data']['extra']['duration'];
+        $query['desc'] = $youkuData['nodes'][0]['nodes'][0]['nodes'][0]['data']['desc'];
+
+        /*
         $queryString = substr($matches[1], strpos($matches[1], '?') + 1);
         $queryString = substr($queryString, 0, strpos($queryString, '#') ?: strlen($queryString));
         parse_str($queryString, $query);
@@ -42,6 +54,7 @@ class YoukuVideoItemParser extends AbstractItemParser
         if (empty($query) || empty($query['title'])) {
             throw ParserException::PARSED_FAILED_YOUKU();
         }
+        */
 
         $item['uuid'] = 'youku:'.$videoId;
         $item['name'] = $query['title'];
