@@ -13,21 +13,21 @@
 
   <td nowrap="nowrap">
     {% if thread.isElite %}
-      <a href="javascript:;" data-url="{{ path('admin_v2_group_thread_cancel_elite',{threadId:thread.id}) }}" class="promoted-label">
+      <a href="javascript:;" data-url="{{ path('admin_v2_group_thread_cancel_elite',{threadId:thread.id}) }}" class="promoted-label text-decoration-none">
         <span class="label label-success">{{'admin.operation_group.thread.isElite'|trans}}</span>
       </a>
     {% else %}
-      <a href="javascript:;" data-url="{{ path('admin_v2_group_thread_set_elite',{threadId:thread.id}) }}" class="promoted-label">
+      <a href="javascript:;" data-url="{{ path('admin_v2_group_thread_set_elite',{threadId:thread.id}) }}" class="promoted-label text-decoration-none">
         <span class="label label-default">{{'admin.operation_group.thread.isElite'|trans}}</span>
       </a>
     {% endif %}
   
     {% if thread.isStick %}
-      <a href="javascript:;" data-url="{{ path('admin_v2_group_thread_cancel_stick',{threadId:thread.id}) }}" class="promoted-label">
+      <a href="javascript:;" data-url="{{ path('admin_v2_group_thread_cancel_stick',{threadId:thread.id}) }}" class="promoted-label text-decoration-none">
         <span class="label label-success">{{'admin.operation_group.thread.isStick'|trans}}</span>
       </a>
     {% else %}
-      <a href="javascript:;" data-url="{{ path('admin_v2_group_thread_set_stick',{threadId:thread.id}) }}" class="promoted-label">
+      <a href="javascript:;" data-url="{{ path('admin_v2_group_thread_set_stick',{threadId:thread.id}) }}" class="promoted-label text-decoration-none">
         <span class="label label-default">{{'admin.operation_group.thread.isStick'|trans}}</span>
     </a>
     {% endif %}
