@@ -1366,6 +1366,10 @@ admin_v2_destroyed_account:
     path: /destroyed_account
     defaults: { _controller: AppBundle:AdminV2/User/DestroyAccount:index}
 
+admin_v2_destroyed_account_detail:
+  path: /destroyed_account/{id}/detail
+  defaults: { _controller: AppBundle:AdminV2/User/DestroyAccount:detail}
+
 # 交易-订单管理-商品订单
 admin_v2_order_manage:
     path: /order/manage
