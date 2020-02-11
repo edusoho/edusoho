@@ -64,6 +64,14 @@ class DestroyAccountServiceTest extends BaseTestCase
         $this->assertEquals(2, $result['userId']);
     }
 
+    public function testCountDestroyAccountRecords()
+    {
+        $this->createDestroyAccountRecord();
+
+        $result = $this->getDestroyAccountRecordService()->countDestroyAccountRecords(array());
+        $this->assertEquals(1, $result);
+    }
+
     private function createDestroyAccountRecord()
     {
         $fields = array(

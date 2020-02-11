@@ -43,6 +43,11 @@ class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAcco
         return $records;
     }
 
+    public function countDestroyAccountRecords($conditions)
+    {
+        return $this->getDestroyAccountRecordDao()->count($conditions);
+    }
+
     /**
      * @return DestroyAccountRecordDao
      */

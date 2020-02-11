@@ -19,6 +19,7 @@ class DestroyAccountRecord extends Migration
               `reason` VARCHAR (256)  NOT NULL DEFAULT '0' COMMENT '注销理由',
               `rejectedReson` VARCHAR (128) NOT NULL DEFAULT '0' COMMENT '拒绝申请理由',
               `status` VARCHAR (128) NOT NULL DEFAULT 'audit' COMMENT '注销状态（audit、cancel、passed、rejected）',
+              `auditUserId` INT (10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '处理申请的用户id',
               `passedTime` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '通过时间',
               `createdTime` int(10) UNSIGNED NOT NULL DEFAULT '0',
               `updatedTime` int(10) UNSIGNED NOT NULL DEFAULT '0',

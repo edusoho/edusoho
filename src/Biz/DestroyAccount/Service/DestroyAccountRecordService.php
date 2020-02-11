@@ -15,4 +15,6 @@ interface DestroyAccountRecordService
     public function getLastDestroyAccountRecordByUserId($userId);
 
     public function searchDestroyAccountRecords($conditions, $orderBy, $start, $limit);
+
+    public function countDestroyAccountRecords($conditions);
 }
