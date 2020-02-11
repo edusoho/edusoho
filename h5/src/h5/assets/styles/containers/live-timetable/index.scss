@@ -15,7 +15,7 @@
       .live-title__left {
         @extend .font-family-PM ;
         font-weight: 500;
-        color: $primary-color;
+        color: #03C777;
       }
       .live-title__right {
         padding-left: vw(16);
@@ -31,7 +31,7 @@
           content: "";
           width: vw(8);
           height: vw(8);
-          background: $primary-color;
+          background: #03C777;
           border-radius: 50%;
         }
       }

@@ -26,6 +26,7 @@
       text-align: center;
       color: #ffffff;
       border-radius:vw(12);
+      background:#03C777
     }
     .e-tree-more{
       position: absolute;
@@ -45,7 +46,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin:vw(18) 0 0;
+        margin:vw(10) 0 0;
         padding-left:vw(8);
         width: 100%;
         .e-tree-select__item {
@@ -68,8 +69,12 @@
             transition: all 200ms;
           }
           &.active {
+            color:#03C777;
             &::after {
               transform: rotate(-45deg);
+              color:#03C777;
+              border-top: 1px solid #03C777;
+              border-right: 1px solid #03C777;
             }
           }
         }

@@ -55,7 +55,7 @@
           position: relative;
         }
         .live-status--default{
-          color: $primary-color;
+          color: #03C777;
         }
         .live-status--start,.icon-zhibo1{
           color: #FF9B56!important;
@@ -73,11 +73,11 @@
         color: #999999;
       }
       .live-btn--default{
-        color: $primary-color;
-        border: 1px solid $primary-color;
+        color: #03C777;
+        border: 1px solid #03C777;
       }
       .live-btn--start{
-         background-color:$primary-color ;
+         background-color:#03C777;
          color: #ffffff!important;
       }
     }
