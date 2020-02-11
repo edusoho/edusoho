@@ -72,6 +72,9 @@ class CourseExtension extends \Twig_Extension
     public function getLatestLiveTask()
     {
         $user = $this->biz['user'];
+        if (!$user->isLogin()) {
+            return null;
+        }
         $liveNotifySetting = $this->getSettingService()->get('homepage_live_notify', array());
         if (empty($liveNotifySetting['enabled'])) {
             return null;
