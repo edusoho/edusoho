@@ -10666,7 +10666,7 @@ admin_v2.homepage.switch_old_in_safari_notice: 由于Safari浏览器原因，暂
 admin_v2.homepage.switch_old_in_safari_notice.title: 确定切换
 admin_v2.homepage.switch_old_in_safari_notice.got_it: 知道了
 
-admin_v2.operation.homepage_live_notify.enable: 首页直播提醒
+admin_v2.operation.homepage_live_notify.enable: 直播开课提醒
 admin_v2.operation.homepage_live_notify.enable.open: 开启
 admin_v2.operation.homepage_live_notify.enable.close: 关闭
 admin_v2.operation.homepage_live_notify.enable.hint: 开启后，当有即将开始的直播时，对于已购买直播的学员，进入首页时会弹出浮动提示框，提示学员进入直播教室。
