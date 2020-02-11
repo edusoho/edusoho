@@ -9374,5 +9374,11 @@ admin_v2.user.destroy_account_record.show: Show
 admin_v2.user.destroy_account_record.empty: Empty
 admin_v2.user.destroy_account_record.detail: Detail
 admin_v2.user.destroy_account_record.rejectedReson: RejectedReson
-
-
+admin_v2.destroy_account.destroyed_account.number: Cancellation ID
+admin_v2.destroy_account.destroyed_account.nickname: Nickname
+admin_v2.destroy_account.destroyed_account.destroy_time: Destroy Time
+admin_v2.destroy_account.destroyed_account.operation: operation
+admin_v2.destroy_account.destroyed_account.empty: empty
+admin_v2.destroy_account.destroyed_account.detail: Detail
+admin_v2.destroy_account.destroyed_account.reason: Reason
+admin_v2.destroy_account.destroyed_account.audit_user: Audit User

@@ -10682,3 +10682,11 @@ admin_v2.user.destroy_account_record.show: 查看
 admin_v2.user.destroy_account_record.empty: 暂无注销申请
 admin_v2.user.destroy_account_record.detail: 详情
 admin_v2.user.destroy_account_record.rejectedReson: 拒绝理由
+admin_v2.destroy_account.destroyed_account.number: 注销ID
+admin_v2.destroy_account.destroyed_account.nickname: 注销前用户名
+admin_v2.destroy_account.destroyed_account.destroy_time: 注销时间
+admin_v2.destroy_account.destroyed_account.operation: 操作
+admin_v2.destroy_account.destroyed_account.empty: 暂无记录
+admin_v2.destroy_account.destroyed_account.detail: 详情
+admin_v2.destroy_account.destroyed_account.reason: 注销理由
+admin_v2.destroy_account.destroyed_account.audit_user: 处理人

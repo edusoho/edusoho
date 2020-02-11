@@ -1,0 +1,25 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'admin_v2.destroy_account.destroyed_account.detail'|trans}}{% endblock %}
+
+{% block body %}
+  <div class="form-horizontal">
+    <div class="form-group">
+      <label class="col-md-2 control-label">{{'admin_v2.destroy_account.destroyed_account.reason'|trans}}</label>
+      <div class="col-md-8 controls mts">
+        <span style="word-wrap:break-word">{{ record.reason }}</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">{{'admin_v2.destroy_account.destroyed_account.audit_user'|trans}}</label>
+      <div class="col-md-8 controls mts">
+        {{ auditUser.nickname }}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">{{'form.btn.confirm'|trans}}</button>
+{% endblock %}
