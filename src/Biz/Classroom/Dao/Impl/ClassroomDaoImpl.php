@@ -31,27 +31,11 @@ class ClassroomDaoImpl extends AdvancedDaoImpl implements ClassroomDao
             return $this->searchByRatingAndTimeRange($conditions, $timeRange, $orderBy['rating'], $start, $limit);
         }
 
-        return parent::search($conditions, $orderBy, $start, $limit, $columns = array());
+        return parent::search($conditions, $orderBy, $start, $limit, $columns);
     }
 
     /**
      *  根据一段时间内的加入人数排序
-     *
-        SELECT classroom_member.studentNumCount, classroom.*
-        FROM (classroom classroom)
-            LEFT JOIN (
-                SELECT COUNT(id) AS studentNumCount, classroomId
-                FROM `classroom_member`
-                WHERE `role` LIKE '%|student|%'
-                    AND createdTime >= 1533312000
-                    AND createdTime <= 1542211200
-                GROUP BY classroomId
-            ) classroom_member
-            ON classroom.id = classroom_member.classroomId
-        WHERE classroom.status = :status
-            AND classroom.showable = :showable
-        ORDER BY classroom_member.studentNumCount DESC
-        LIMIT 0, 15
      */
     protected function searchByStudentNumAndTimeRange($conditions, $timeRange, $orderBy = 'DESC', $start, $limit)
     {
@@ -86,22 +70,6 @@ class ClassroomDaoImpl extends AdvancedDaoImpl implements ClassroomDao
 
     /**
      * 根据一段时间内的评价平均分排序
-     *
-        SELECT classroom_review.rating_avg, classroom.*
-        FROM (classroom classroom)
-            LEFT JOIN (
-                SELECT AVG(`rating`) AS rating_avg, classroomId
-                FROM `classroom_review`
-                WHERE parentId = 0
-                    AND createdTime >= 1533312000
-                    AND createdTime <= 1542211200
-                GROUP BY classroomId
-            ) classroom_review
-            ON classroom.id = classroom_review.classroomId
-        WHERE classroom.status = :status
-            AND classroom.showable = :showable
-        ORDER BY classroom_review.rating_avg DESC
-        LIMIT 0, 15
      */
     protected function searchByRatingAndTimeRange($conditions, $timeRange, $orderBy = 'DESC', $start, $limit)
     {
