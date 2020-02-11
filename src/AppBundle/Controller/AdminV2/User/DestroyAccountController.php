@@ -49,11 +49,11 @@ class DestroyAccountController extends BaseController
 
     protected function filterConditions($conditions)
     {
-        if (!empty($conditions['keyword']) && $conditions['keywordType'] == 'id') {
+        if (!empty($conditions['keyword']) && 'id' == $conditions['keywordType']) {
             $conditions['id'] = $conditions['keyword'];
         }
 
-        if (!empty($conditions['keyword']) && $conditions['keywordType'] == 'nickname') {
+        if (!empty($conditions['keyword']) && 'nickname' == $conditions['keywordType']) {
             $conditions['nicknameLike'] = $conditions['keyword'];
         }
 
