@@ -45,7 +45,8 @@ const CATEGORY_DEFAULT = {
       text: '课程类型',
       type: 'sort'
     }
-  ]
+  ],
+  openCourse_list: []
 };
 
 export default CATEGORY_DEFAULT;

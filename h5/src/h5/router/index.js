@@ -370,7 +370,7 @@ const routes = [
       title: '所有课程',
       hideTitle: true
     },
-    component: () => import(/* webpackChunkName: "more" */'@/containers/webview/course/new.vue')
+    component: () => import(/* webpackChunkName: "more" */'@/containers/webview/course/more.vue')
   }, {
     path: '/classroom/explore/new',
     name: 'more_class_new',
@@ -378,7 +378,15 @@ const routes = [
       title: '所有班级',
       hideTitle: true
     },
-    component: () => import(/* webpackChunkName: "more" */'@/containers/webview/classroom/new.vue')
+    component: () => import(/* webpackChunkName: "more" */'@/containers/webview/classroom/more.vue')
+  }, {
+    path: '/openCourse/explore/new',
+    name: 'more_openCourse',
+    meta: {
+      title: '免费直播课',
+      hideTitle: true
+    },
+    component: () => import(/* webpackChunkName: "more" */'@/containers/webview/openCourse/more.vue')
   }
 ];
 
