@@ -4,6 +4,7 @@ namespace AppBundle\Controller\AdminV2\User;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
+use Biz\DestroyAccount\Service\DestroyAccountRecordService;
 use Biz\DestroyAccount\Service\DestroyedAccountService;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,9 +42,13 @@ class DestroyAccountController extends BaseController
     public function detailAction(Request $request, $id)
     {
         $destroyAccount = $this->getDestroyedAccountService()->getDestroyedAccount($id);
+        $record = $this->getDestroyAccountRecordService()->getDestroyAccountRecord($destroyAccount['recordId']);
+        $auditUser = $this->getUserService()->getUser($record['auditUserId']);
 
         return $this->render('admin-v2/user/destroy-account/destroyed-list-detail.html.twig', array(
             'destroyAccount' => $destroyAccount,
+            'record' => $record,
+            'auditUser' => $auditUser,
         ));
     }
 
@@ -77,5 +82,13 @@ class DestroyAccountController extends BaseController
     protected function getDestroyedAccountService()
     {
         return $this->createService('DestroyAccount:DestroyedAccountService');
+    }
+
+    /**
+     * @return DestroyAccountRecordService
+     */
+    protected function getDestroyAccountRecordService()
+    {
+        return $this->createService('DestroyAccount:DestroyAccountRecordService');
     }
 }
