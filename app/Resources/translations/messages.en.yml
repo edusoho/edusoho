@@ -9358,3 +9358,11 @@ admin_v2.homepage.switch_old_in_safari_notice: Due to Safari, toggle is not supp
 admin_v2.homepage.switch_old_in_safari_notice.title: Determine the switch
 admin_v2.homepage.switch_old_in_safari_notice.got_it: Got it
 
+admin_v2.destroy_account.destroyed_account.number: Cancellation ID
+admin_v2.destroy_account.destroyed_account.nickname: Nickname
+admin_v2.destroy_account.destroyed_account.destroy_time: Destroy Time
+admin_v2.destroy_account.destroyed_account.operation: operation
+admin_v2.destroy_account.destroyed_account.empty: empty
+admin_v2.destroy_account.destroyed_account.detail: Detail
+admin_v2.destroy_account.destroyed_account.reason: Reason
+admin_v2.destroy_account.destroyed_account.audit_user: Audit User
