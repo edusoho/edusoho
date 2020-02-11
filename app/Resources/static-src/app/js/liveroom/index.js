@@ -58,7 +58,7 @@ class Live {
     }
 
     self.isLiveRoomOpened = true;
-    let html = '<iframe name="classroom" src="' + roomUrl + '" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no"></iframe>';
+    let html = '<iframe name="classroom" src="' + roomUrl + '" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no" allowfullscreen="true" allow="microphone; camera"></iframe>';
     $('body').html(html);
   }
 

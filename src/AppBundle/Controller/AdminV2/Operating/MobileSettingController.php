@@ -39,6 +39,12 @@ class MobileSettingController extends BaseController
             'splash3' => '', // 启动图3
             'splash4' => '', // 启动图4
             'splash5' => '', // 启动图5
+            'studyCenter' => array(
+                'liveScheduleEnabled' => 0,
+                'historyLearningEnabled' => 1,
+                'myCacheEnabled' => 1,
+                'myQAEnabled' => 1,
+            ),
         );
 
         $mobile = array_merge($default, $settingMobile);
@@ -53,6 +59,17 @@ class MobileSettingController extends BaseController
             if (!empty($mobile['bundleId'])) {
                 $mobile['bundleId'] = trim($mobile['bundleId']);
             }
+
+            if (isset($mobile['liveScheduleEnabled'])) {
+                $mobile['studyCenter'] = array(
+                    'liveScheduleEnabled' => $mobile['liveScheduleEnabled'],
+                    'historyLearningEnabled' => 1,
+                    'myCacheEnabled' => 1,
+                    'myQAEnabled' => 1,
+                );
+                unset($mobile['liveScheduleEnabled']);
+            }
+
             $this->getSettingService()->set('mobile', $mobile);
 
             $this->setFlashMessage('success', 'site.save.success');
