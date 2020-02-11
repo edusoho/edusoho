@@ -3,7 +3,7 @@
 namespace Tests\Unit\DiscovieryColumn\Service;
 
 use Biz\BaseTestCase;
-use Biz\DiscoveryColumn\Service\DiscoveryColumnService;
+use Biz\DestroyAccount\Service\DestroyAccountRecordService;
 
 class DiscoveryColumnServiceTest extends BaseTestCase
 {
@@ -148,7 +148,7 @@ class DiscoveryColumnServiceTest extends BaseTestCase
     }
 
     /**
-     * @return DiscoveryColumnService
+     * @return DestroyAccountRecordService
      */
     protected function getDiscoveryColumnService()
     {
