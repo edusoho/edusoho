@@ -64,6 +64,34 @@
   }
 }
 
+.e-course-list {
+  &__header {
+    padding: 20px;
+  }
+  &__headers {
+    padding: 16px!important;
+  }
+  &__list-title {
+    font-size: 18px;
+  }
+  &__more {
+    font-size: 14px;
+    .more-text {
+      margin-right: 3px;
+      line-height: 25px;
+    }
+    &:after {
+      margin-top: 7.5px;
+      margin-right: 2px;
+      width: 7px;
+      height: 7px;
+    }
+  }
+  .e-column-class:nth-of-type(2n){
+    padding:  0 0 16px 12px;
+  }
+}
+
 .e-row-class{
   padding: 0 16px 16px;
   display:flex;
@@ -244,35 +272,83 @@
   }
 }
 
-.e-course-list {
-  &__header {
-    padding: 20px;
-  }
-  &__headers {
-    padding: 16px!important;
-  }
-  &__list-title {
-    font-size: 18px;
-  }
-  &__more {
-    font-size: 14px;
-    .more-text {
-      margin-right: 3px;
-      line-height: 25px;
+.e-openCourse-class{
+  padding: 0 0 16px 16px;
+  display:inline-block;
+  .column-class-left{
+    position:relative;
+    width:188px;
+    border-radius:4px 4px 0px 0px;
+    overflow:hidden;
+    font-size:0px;
+    img{
+      width: 188px;
+      height: 105.8px;
+      border-radius:4px 4px 0px 0px;
     }
-    &:after {
-      margin-top: 7.5px;
-      margin-right: 2px;
-      width: 7px;
-      height: 7px;
+    &__member{
+      position: absolute;
+      top:4px;
+      padding:2px 4px;
+      height:16px;
+      font-size:10px;
+      background:rgba(246,201,63,1);
+      text-align:center;
+      color:#fff;
+      border-radius:0px 100px 100px 0px;
+    }
+    &__live{
+      position: absolute;
+      bottom:0px;
+      display:flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      box-sizing: border-box;
+      padding:4px 4px 4px 8px;
+      width:100%;
+      height:32px;
+      color:#fff;
+      font-size:12px;
+      background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.6) 100%);
+      .icon-renqi{
+        margin-right:2px;
+        font-size:12px;
+      }
     }
   }
-  .e-column-class:nth-of-type(2n){
-    padding:  0 0 16px 12px;
+  .column-class-right{
+    display:flex;
+    padding:8px;
+    width:188px;
+    flex-direction:column;
+    box-shadow:0px 2px 8px 0px rgba(0,0,0,0.05);
+    border-radius:4px;
+    box-sizing:border-box;
+    &__top{
+      height:20px;
+      font-size:14px;
+      color:#333333;
+      font-weight:500;
+    }
+    &__center{
+      height:14px;
+      font-size:12px;
+      color:#999999
+    }
+    &__bottom{
+      margin-top:4px;
+      height:20px;
+      font-size:14px;
+      color:#FE3B13;
+      font-weight:500;
+    }
+    &__live{
+      line-height:20px;
+      color:#999999;
+      font-size:12px;
+    }
   }
 }
-
-
 
 .rank-box {
   .progress {

@@ -56,6 +56,19 @@
       @updateModule="updateHandler(module, index)"
     ></vip>
 
+  <!-- 仅app有的基础组件 -->
+  <!-- 图文导航 -->
+    
+  <!-- 公开课 -->
+    <open-course
+      v-if="module.type === moduleDefault.openCourseList.type"
+      :key="3"
+      :active="isActive"
+      :moduleData="module"
+      :incomplete="validateFuc"
+      @updateModule="updateHandler(module, index)"
+    ></open-course>
+
     <!-- 营销组件——拼团，砍价，秒杀 -->
     <marketing-activity
       v-if="[moduleDefault.groupon.type, moduleDefault.cut.type, moduleDefault.seckill.type].includes(module.type)"
@@ -77,6 +90,7 @@
 <script>
 import Carousel from "../carousel";
 import Course from "../course";
+import OpenCourse from "../open-course";
 import Poster from "../poster";
 import Coupon from "../coupon";
 import Vip from "../vip";
@@ -91,7 +105,8 @@ export default {
     poster: Poster,
     "marketing-activity": MarketingActivity,
     coupon: Coupon,
-    vip: Vip
+    vip: Vip,
+    openCourse:OpenCourse
   },
   props: {
     module: {
