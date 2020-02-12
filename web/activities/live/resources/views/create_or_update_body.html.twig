@@ -24,7 +24,7 @@
       </div>
 
       {% set roomTypes = get_live_room_type() %}
-      {% if roomTypes %}
+      {% if roomTypes and not activity.id|default(false) %}
         <div class="form-group">
           <div class="col-sm-2 control-label">
             <label for="roomType">{{ 'course.live_activity.room_type'|trans }}</label>
