@@ -34,8 +34,8 @@ class DestroyAccountServiceTest extends BaseTestCase
     public function testDeleteDestroyAccountRecord()
     {
         $this->createDestroyAccountRecord();
-        $this->getDestroyAccountRecordService()->deleteDiscoveryColumn(1);
-        $result = $this->getDestroyAccountRecordService()->getDiscoveryColumn(1);
+        $this->getDestroyAccountRecordService()->deleteDestroyAccountRecord(1);
+        $result = $this->getDestroyAccountRecordService()->getDestroyAccountRecord(1);
         $this->assertEquals($result, null);
     }
 
