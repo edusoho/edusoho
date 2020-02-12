@@ -4,7 +4,9 @@ namespace Biz\DestroyAccount\Service\Impl;
 
 use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Common\CommonException;
 use Biz\DestroyAccount\Dao\DestroyAccountRecordDao;
+use Biz\DestroyAccount\DestroyAccountException;
 use Biz\DestroyAccount\Service\DestroyAccountRecordService;
 
 class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAccountRecordService
@@ -23,6 +25,16 @@ class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAcco
 
     public function createDestroyAccountRecord($fields)
     {
+        if (!ArrayToolkit::requireds($fields, array('userId', 'nickname', 'reason'))) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        if (mb_strlen($fields['reason'], 'UTF-8') > 200) {
+            $this->createNewException(DestroyAccountException::REASON_TOO_LONG());
+        }
+
+        $fields = ArrayToolkit::parts($fields, array('userId', 'nickname', 'reason'));
+
         return $this->getDestroyAccountRecordDao()->create($fields);
     }
 

@@ -10214,6 +10214,8 @@ exception.wechat.notify_setting_not_enabled: 微信通知未开启
 exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试
 exception.wechat.template_conflict_industry_hint: 服务号行业设置错误
 
+exception.destroy_account.reason_too_long: 注销原因限制200字数
+
 course.unname_title: 未命名计划
 
 admin.index.course_order: 课程订单
