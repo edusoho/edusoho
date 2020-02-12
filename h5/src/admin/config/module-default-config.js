@@ -40,6 +40,20 @@ const MODULE_DEFAULT = {
       items: []
     }
   },
+  openCourseList: {
+    type: 'open_course_list',
+    moduleType: '',
+    data: {
+      title: '',
+      sourceType: 'condition',
+      categoryId: '0',
+      sort: 'recommendedSeq',
+      lastDays: '0',
+      limit: '4',
+      displayStyle: 'distichous',
+      items: []
+    }
+  },
   poster: {
     type: 'poster',
     moduleType: '',
@@ -135,6 +149,34 @@ const MARKETING_MODULE = [
   }
 ];
 
+const APP_BASE_MODULE = [
+  {
+    name: '轮播图',
+    default: MODULE_DEFAULT.slideShow
+  }, {
+    name: '课程列表',
+    default: MODULE_DEFAULT.courseList
+  }, {
+    name: '班级列表',
+    default: MODULE_DEFAULT.classList
+  }, {
+    name: '图片广告',
+    default: MODULE_DEFAULT.poster
+  }, {
+    name: '优惠券',
+    default: MODULE_DEFAULT.coupon
+  }, {
+    name: '会员专区',
+    default: MODULE_DEFAULT.vip
+  }, {
+    name: '图文导航',
+    default: MODULE_DEFAULT.icon
+  }, {
+    name: '公开课列表',
+    default: MODULE_DEFAULT.openCourseList
+  }
+];
+
 const VALUE_DEFAULT = {
   classroom_list: {
     key: 'title'
@@ -178,5 +220,10 @@ const TYPE_TEXT_DEFAULT = {
 };
 
 export {
-  MODULE_DEFAULT, BASE_MODULE, MARKETING_MODULE, VALUE_DEFAULT, TYPE_TEXT_DEFAULT
+  MODULE_DEFAULT,
+  BASE_MODULE,
+  MARKETING_MODULE,
+  APP_BASE_MODULE,
+  VALUE_DEFAULT,
+  TYPE_TEXT_DEFAULT
 };

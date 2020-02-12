@@ -36,6 +36,7 @@
 .prs {padding-right: 5px;}
 .prm {padding-right: 10px;}
 .prl {padding-right: 20px;}
+.prl16{padding-right: 16px;}
 
 .pbs {padding-bottom: 5px;}
 .pbm {padding-bottom: 10px;}
@@ -83,6 +84,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.nowarp{
+  white-space: nowrap;
+  overflow-x:scroll;
+  &::-webkit-scrollbar {
+    background-color:transparent;
+    display:none;
+  }
 }
 
 .btn-gray {
