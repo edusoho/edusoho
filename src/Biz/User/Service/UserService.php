@@ -40,6 +40,8 @@ interface UserService
 
     public function findUsersByIds(array $id);
 
+    public function findUnDestroyedUsersByIds($ids);
+
     public function findUserProfilesByIds(array $ids);
 
     public function searchUsers(array $conditions, array $orderBy, $start, $limit, $columns = array());

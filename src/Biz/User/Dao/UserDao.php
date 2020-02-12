@@ -22,6 +22,8 @@ interface UserDao extends GeneralDaoInterface
 
     public function countByLessThanCreatedTime($time);
 
+    public function findUnDestroyedUsersByIds($ids);
+
     public function findByNicknames(array $nicknames);
 
     public function findByIds(array $ids);
