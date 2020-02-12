@@ -11,6 +11,6 @@ class DestroyAccountException extends AbstractException
     const REASON_TOO_LONG = 5006701;
 
     public $messages = array(
-        40455006701301 => 'exception.destroy_account.reason_too_long',
+        5006701 => 'exception.destroy_account.reason_too_long',
     );
 }
