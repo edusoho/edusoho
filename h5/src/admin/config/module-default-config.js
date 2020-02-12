@@ -54,6 +54,41 @@ const MODULE_DEFAULT = {
       items: []
     }
   },
+  graphicNavigation: {
+    type: 'graphic_navigation',
+    moduleType: 'navigation-1',
+    data: [{
+      title: '公开课',
+      image: {
+        url: ''
+      },
+      link: {
+        type: 'openCourse',
+        target: null,
+        url: '跳转公开课“全部”列表'
+      }
+    }, {
+      title: '热门课',
+      image: {
+        url: ''
+      },
+      link: {
+        type: 'course',
+        target: null,
+        url: '跳转课程“全部”列表'
+      }
+    }, {
+      title: '热销班',
+      image: {
+        url: ''
+      },
+      link: {
+        type: 'class',
+        target: null,
+        url: '跳转班级“全部”列表'
+      }
+    }]
+  },
   poster: {
     type: 'poster',
     moduleType: '',
@@ -170,7 +205,7 @@ const APP_BASE_MODULE = [
     default: MODULE_DEFAULT.vip
   }, {
     name: '图文导航',
-    default: MODULE_DEFAULT.icon
+    default: MODULE_DEFAULT.graphicNavigation
   }, {
     name: '公开课列表',
     default: MODULE_DEFAULT.openCourseList
