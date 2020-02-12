@@ -104,6 +104,18 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
         return $this->db()->fetchColumn($sql, array($time));
     }
 
+    public function findUnDestroyedUsersByIds($ids)
+    {
+        if (empty($ids)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE destroyed = 0 AND id IN ({$marks});";
+
+        return $this->db()->fetchAll($sql, $ids);
+    }
+
     protected function createQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
@@ -222,6 +234,7 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
                 'orgCode PRE_LIKE :likeOrgCode',
                 'orgCode = :orgCode',
                 'distributorToken = :distributorToken',
+                'destroyed = :destroyed',
             ),
         );
     }
