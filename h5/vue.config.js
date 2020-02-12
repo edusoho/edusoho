@@ -19,7 +19,7 @@ const chunks = {
 }
 page[projectname]={
 		entry: `src/${projectname}/main.js`, // page 的入口
-		template: "src/public/index.html", // 模板来源
+		template: `src/public/${projectname==='h5'?'index.html':'admin.html'}`, // 模板来源
 		filename: "index.html", // 在 dist/index.html 的输出r
 		// 当使用 title 选项时，template 中的 title 标签需要是 <title><%= htmlWebpackPlugin.options.title %></title>
 		title: "Index Page",
@@ -47,7 +47,7 @@ module.exports = {
 	productionSourceMap: false, // 生产环境 sourceMap
 	devServer: {
 		open: true, // 项目构建成功之后，自动弹出页面
-		host: "localhost", // 主机名，也可以127.0.0.0 || 做真机测试时候0.0.0.0
+		host: "0.0.0.0", // 主机名，也可以127.0.0.0 || 做真机测试时候0.0.0.0
 		port: 8081, // 端口号，默认8080
 		https: false, // 协议
 		hotOnly: false, // 没啥效果，热模块，webpack已经做好了
@@ -60,9 +60,9 @@ module.exports = {
 				// target: 'https://www.easy-mock.com/mock/5b1742522de86c43cc2dc73a/edusoho',
 				// target: 'http://zyc.st.edusoho.cn',
         //target: 'http://wr.st.edusoho.cn',
-        target:'http://gdy.st.edusoho.cn',
+        //target:'http://gdy.st.edusoho.cn',
         //target:'https://www.iyamusic.com',
-				//target: 'http://devtest.edusoho.cn',
+				target: 'http://devtest.edusoho.cn',
 				changeOrigin: true,
 				secure: false,
 			}
@@ -86,7 +86,7 @@ module.exports = {
 		}
 		else {
 			// 为开发环境修改配置...
-		}
+    }
 		config.resolve.extensions = ['.js', '.vue', '.json']
 	},
 	chainWebpack: config => {

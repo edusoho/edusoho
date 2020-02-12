@@ -33,6 +33,17 @@ const formatSimpleTime = date => {
   }).join('-');
 };
 
+// 12:04
+const formatSimpleHour = date => {
+  const hour = date.getHours();
+  const minute = date.getMinutes();
+
+  return [hour, minute].map(n => {
+    n = n.toString();
+    return n[1] ? n : `0${n}`;
+  }).join(':');
+};
+
 // 2018-12-06
 const formatFullTime = date => {
   const year = date.getFullYear();
@@ -141,6 +152,27 @@ const getdateTimeDown = (date, i) => {
   return time;
 };
 
+/**
+ * 判断日期1是否大于日期2，只到年月日
+ * @param {Object} date1
+ * @param {Object} date2
+ */
+const compareDate = (date1, date2) => {
+  let result = false;
+  if (date1.getFullYear() > date2.getFullYear()) {
+    result = true;
+  } else if (date1.getFullYear() === date2.getFullYear()) {
+    if (date1.getMonth() > date2.getMonth()) {
+      result = true;
+    } else if (date1.getMonth() === date2.getMonth()) {
+      if (date1.getDate() > date2.getDate()) {
+        result = true;
+      }
+    }
+  }
+  return result;
+};
+
 export {
   formatTime,
   formatFullTime,
@@ -148,8 +180,10 @@ export {
   formatSimpleTime,
   formatTimeByNumber,
   formatCompleteTime,
+  formatSimpleHour,
   dateTimeDown,
   getOffsetDays,
   getCountDown,
-  getdateTimeDown
+  getdateTimeDown,
+  compareDate
 };

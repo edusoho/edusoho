@@ -1,6 +1,8 @@
 <?php
 namespace Deployer;
 
+use Symfony\Component\Yaml\Yaml;
+
 require 'recipe/common.php';
 
 // Configuration
@@ -8,15 +10,25 @@ require 'recipe/common.php';
 set('repository', 'git@coding.codeages.work:edusoho/edusoho-h5.git');
 set('git_tty', false); // [Optional] Allocate tty for git on first deployment
 set('writable_mode', 'acl');
+$yaml = Yaml::parse(file_get_contents(__DIR__.'/deploy.yml'));
 
+$host = host($yaml['hosts'][0])
+    ->stage($yaml['stage'])
+    ->user($yaml['ssh']['user'])
+    ->identityFile($yaml['ssh']['identity_file'])
+    ->set('deploy_path', $yaml['path']);
 
-host('124.160.104.77')
-    ->stage('dev')
-    ->user('root')
-    ->identityFile('~/.ssh/deployerkey')
-    ->addSshOption('UserKnownHostsFile', '/dev/null')
-    ->addSshOption('StrictHostKeyChecking', 'no')
-    ->set('deploy_path', '/var/www/h5.st.edusoho.cn');
+foreach ($yaml['ssh']['options'] as $key => $option){
+    $host->addSshOption($key, $option);
+}
+
+//host('124.160.104.77')
+//    ->stage('dev')
+//    ->user('root')
+//    ->identityFile('~/.ssh/deployerkey')
+//    ->addSshOption('UserKnownHostsFile', '/dev/null')
+//    ->addSshOption('StrictHostKeyChecking', 'no')
+//    ->set('deploy_path', '/var/www/h5.st.edusoho.cn');
 
 // Tasks
 

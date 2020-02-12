@@ -70,3 +70,33 @@
   background-color: #1989fa;
   border: 1px solid #1989fa;
 }
+
+.van-button--disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+// nav
+.nav-bar--default {
+  background-color: $bg-black;
+  color: #fff;
+  .van-icon {
+    color: #fff;
+    font-weight: bold;
+  }
+  .van-nav-bar__title{
+    color: #fff;
+  }
+}
+
+.nav-bar--white {
+  background-color: $bg-white;
+  color: #fff;
+  .van-icon {
+    color: #333333;
+    font-weight: bold;
+  }
+  .van-nav-bar__title{
+    color: #333333;
+  }
+}

@@ -2,7 +2,7 @@
   <div id="app">
     <van-nav-bar
       :class="[
-        { hide: isQrcode },
+        { hide: (isQrcode || hideNavbar) },
         color === 'white' ? 'nav-bar--white' : 'nav-bar--default'
       ]"
       :title="title"
@@ -23,6 +23,7 @@ export default {
     return {
       showLeftArrow: false,
       isQrcode: false,
+      hideNavbar: true,
       isShare: false,
       color: ''
     }
@@ -63,15 +64,10 @@ export default {
         const redirect = to.query.redirect || ''
 
         this.isQrcode = !!to.query.loginToken
-        if (to.meta.hideTitle) {
-          this.isQrcode = true
-        }
 
-        if (to.meta.color === 'white') {
-          this.color = 'white'
-        } else {
-          this.color = ''
-        }
+        this.hideNavbar=to.meta.hideTitle ? to.meta.hideTitle : false
+
+        this.color=to.meta.color === 'white'?'white':''
 
         this.showLeftArrow = ![
           'my',
