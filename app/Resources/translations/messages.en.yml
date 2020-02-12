@@ -8918,6 +8918,8 @@ exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned O
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.
 exception.wechat.template_conflict_industry_hint: Service number industry setting error.
 
+exception.destroy_account.reason_too_long: Write off reason limit 200 words
+
 course.unname_title: unname course
 
 admin.index.course_order: "course order"
