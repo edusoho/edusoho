@@ -10666,7 +10666,22 @@ admin_v2.homepage.switch_old_in_safari_notice: 由于Safari浏览器原因，暂
 admin_v2.homepage.switch_old_in_safari_notice.title: 确定切换
 admin_v2.homepage.switch_old_in_safari_notice.got_it: 知道了
 
-
+admin_v2.user.destroy_account_record.nickname: 用户名
+admin_v2.user.destroy_account_record.createdTime: 申请时间
+admin_v2.user.destroy_account_record.reason: 注销理由
+admin_v2.user.destroy_account_record.auditTime: 处理时间
+admin_v2.user.destroy_account_record.status: 状态
+admin_v2.user.destroy_account_record.status_audit: 待审核
+admin_v2.user.destroy_account_record.status_rejected: 已拒绝
+admin_v2.user.destroy_account_record.status_passed: 已同意
+admin_v2.user.destroy_account_record.status_cancel: 已撤销
+admin_v2.user.destroy_account_record.manage: 操作
+admin_v2.user.destroy_account_record.auditUser: 处理人：
+admin_v2.user.destroy_account_record.audit: 审核
+admin_v2.user.destroy_account_record.show: 查看
+admin_v2.user.destroy_account_record.empty: 暂无注销申请
+admin_v2.user.destroy_account_record.detail: 详情
+admin_v2.user.destroy_account_record.rejectedReson: 拒绝理由
 admin_v2.destroy_account.destroyed_account.number: 注销ID
 admin_v2.destroy_account.destroyed_account.nickname: 注销前用户名
 admin_v2.destroy_account.destroyed_account.destroy_time: 注销时间

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\DiscovieryColumn\Service;
+namespace Tests\Unit\DestroyAccount\Service;
 
 use Biz\BaseTestCase;
 use Biz\DestroyAccount\Service\DestroyAccountRecordService;

@@ -14,13 +14,14 @@ class DestroyAccountRecord extends Migration
         $connection->exec("
             CREATE TABLE IF NOT EXISTS `destroy_account_record` (
               `id` INT (10) UNSIGNED NOT NULL AUTO_INCREMENT,
-              `nickname` VARCHAR (10) NOT NULL DEFAULT '0' COMMENT '用户名',
+              `nickname` VARCHAR (10) NOT NULL DEFAULT '' COMMENT '用户名',
               `userId` INT (10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户id',
-              `reason` VARCHAR (256)  NOT NULL DEFAULT '0' COMMENT '注销理由',
-              `rejectedReson` VARCHAR (128) NOT NULL DEFAULT '0' COMMENT '拒绝申请理由',
+              `reason` VARCHAR (256)  NOT NULL DEFAULT '' COMMENT '注销理由',
+              `rejectedReson` VARCHAR (128) NOT NULL DEFAULT '' COMMENT '拒绝申请理由',
               `status` VARCHAR (128) NOT NULL DEFAULT 'audit' COMMENT '注销状态（audit、cancel、passed、rejected）',
+              `ip` varchar(64) NOT NULL DEFAULT '' COMMENT '申请ip',
               `auditUserId` INT (10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '处理申请的用户id',
-              `passedTime` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '通过时间',
+              `auditTime` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '通过时间',
               `createdTime` int(10) UNSIGNED NOT NULL DEFAULT '0',
               `updatedTime` int(10) UNSIGNED NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`)

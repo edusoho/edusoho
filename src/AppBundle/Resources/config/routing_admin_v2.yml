@@ -1362,6 +1362,14 @@ admin_v2_destroy_account_record:
     path: /destroy_account/record
     defaults: { _controller: AppBundle:AdminV2/User/DestroyAccount:recordIndex}
 
+admin_v2_destroy_account_record_detail:
+    path: /destroy_account/record/{id}/detail
+    defaults: { _controller: AppBundle:AdminV2/User/DestroyAccount:recordDetail}
+
+admin_v2_destroy_account_record_audit:
+    path: /destroy_account/record/{id}/audit
+    defaults: { _controller: AppBundle:AdminV2/User/DestroyAccount:audit}
+
 admin_v2_destroyed_account:
     path: /destroyed_account
     defaults: { _controller: AppBundle:AdminV2/User/DestroyAccount:index}
