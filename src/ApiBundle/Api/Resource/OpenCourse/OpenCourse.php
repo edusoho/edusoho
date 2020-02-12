@@ -13,34 +13,40 @@ class OpenCourse extends AbstractResource
     /**
      * @ApiConf(isRequiredAuth=false)
      */
-    public function get(ApiRequest $request, $courseId)
-    {
-        $course = $this->getOpenCourseService()->getCourse($courseId);
-
-        $course['lesson'] = $this->getOpenCourseService()->findLessonsByCourseId($courseId);
-        return $course;
-    }
-
-    /**
-     * @ApiConf(isRequiredAuth=false)
-     */
     public function search(ApiRequest $request)
     {
-        $conditions = array('type' => 'liveOpen', 'status' => 'published');
-        list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $courses = $this->getOpenCourseService()->searchCourses($conditions, array(), $offset, $limit);
-        $courses = ArrayToolkit::index($courses, 'id');
-        $total = $this->getOpenCourseService()->countCourses($conditions);
+        $conditions = array('type' => 'liveOpen', 'status' => 'published', 'endTimeGreaterThan' => time());
+        $orderBy = array('startTime' => 'ASC');
 
-        $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
+        if ($request->query->get('categoryId')) {
+            $conditions['categoryId'] = $request->query->get('categoryId');
+        }
 
         if ($request->query->get('isReplay')) {
             $conditions['endTimeLessThan'] = time();
-            $lessons = $this->getOpenCourseService()->searchLessons($conditions, array('startTime' => 'DESC'), 0, count($courses));
-        } else {
-            $conditions['endTimeGreaterThan'] = time();
-            $lessons = $this->getOpenCourseService()->searchLessons($conditions, array('startTime' => 'ASC'), 0, count($courses));
+            $orderBy = array('startTime' => 'DESC');
+            unset($conditions['endTimeGreaterThan']);
         }
+
+        if ($request->query->get('limitDays')) {
+            $conditions['endTimeLessThan'] = strtotime('+' . $request->query->get('limitDays') . ' day', strtotime('23:59:59', time()));
+        }
+
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
+        $total = $this->getOpenCourseService()->countLessons($conditions);
+        $lessons = $this->getOpenCourseService()->searchLessons($conditions, $orderBy, $offset, $total);
+
+        $conditions = array(
+            'type' => 'liveOpen',
+            'status' => 'published',
+            'ids' => ArrayToolkit::column($lessons, 'courseId'),
+        );
+        $courses = $this->getOpenCourseService()->searchCourses($conditions, array(), 0, $total);
+        $courses = ArrayToolkit::index($courses, 'id');
+
+        $total = $this->getOpenCourseService()->countLessons($conditions);
+        $lessons = $this->getOpenCourseService()->searchLessons($conditions, $orderBy, $offset, $total);
+
 
         $result = array();
         foreach ($lessons as $lesson) {
