@@ -20,7 +20,7 @@
       <div class="column-class-right__top text-overflow">
         {{ course.header }}
       </div>
-      <div class="column-class-right__center text-overflow">
+      <div class="column-class-right__center  text-overflow">
         <div v-if="course.middle.value" v-html="course.middle.html"/>
       </div>
       <div
