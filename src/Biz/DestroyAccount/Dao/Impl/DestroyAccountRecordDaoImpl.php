@@ -13,7 +13,7 @@ class DestroyAccountRecordDaoImpl extends GeneralDaoImpl implements DestroyAccou
     {
         $sql = "SELECT * FROM {$this->table} where $userId = ? ORDER BY createdTime DESC LIMIT 1";
 
-        return $this->db()->fetchColumn($sql, array($userId));
+        return $this->db()->fetchAssoc($sql, array($userId));
     }
 
     public function declares()
