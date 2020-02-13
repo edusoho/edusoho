@@ -47,8 +47,8 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
     {
         $marks = str_repeat('?,', count($userIds) - 1).'?';
 
-        $childSql = "SELECT userId, max(lastLearnTime) as maxLastLearnTime FROM course_member WHERE role = ? AND userId IN ($marks) AND finishedTime = 0 group by userId";
-        $sql = 'select cm.* from `course_member` as cm right join ('.$childSql.') as m on cm.userId = m.userId and cm.lastLearnTime = m.maxLastLearnTime order by cm.userId DESC';
+        $childSql = "SELECT userId, max(lastLearnTime) as maxLastLearnTime FROM course_member  WHERE role = ? AND userId IN ($marks) AND finishedTime = 0 group by userId";
+        $sql = 'select cm.*,c.compulsoryTaskNum as compulsoryTaskNum from `course_member` as cm right join ('.$childSql.') as m on cm.userId = m.userId and cm.lastLearnTime = m.maxLastLearnTime JOIN course_v8 AS c ON cm.courseId = c.id where cm.learnedCompulsoryTaskNum < compulsoryTaskNum order by cm.userId DESC';
 
         return $this->db()->fetchAll($sql, array_merge(array('student'), $userIds));
     }
