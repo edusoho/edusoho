@@ -43,9 +43,25 @@ class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAcco
         return $this->getDestroyAccountRecordDao()->delete($id);
     }
 
+    public function cancelDestroyAccountRecord()
+    {
+        $user = $this->getCurrentUser();
+        $lastAuditRecord = $this->getLastAuditDestroyAccountRecordByUserId($user['id']);
+        if (empty($lastAuditRecord)) {
+            $this->createNewException(DestroyAccountException::NOT_FOUND_RECORD());
+        }
+
+        return $this->updateDestroyAccountRecord($lastAuditRecord['id'], array('status' => 'cancel'));
+    }
+
     public function getLastDestroyAccountRecordByUserId($userId)
     {
         return $this->getDestroyAccountRecordDao()->getLastDestroyAccountRecordByUserId($userId);
+    }
+
+    public function getLastAuditDestroyAccountRecordByUserId($userId)
+    {
+        return $this->getDestroyAccountRecordDao()->getLastAuditDestroyAccountRecordByUserId($userId);
     }
 
     public function searchDestroyAccountRecords($conditions, $orderBy, $start, $limit)

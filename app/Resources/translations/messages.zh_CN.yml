@@ -10215,6 +10215,7 @@ exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开�
 exception.wechat.template_conflict_industry_hint: 服务号行业设置错误
 
 exception.destroy_account.reason_too_long: 注销原因限制200字数
+exception.destroy_account.not_found_record: 未找到注销记录
 
 course.unname_title: 未命名计划
 

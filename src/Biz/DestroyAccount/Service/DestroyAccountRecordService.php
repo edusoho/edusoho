@@ -12,7 +12,11 @@ interface DestroyAccountRecordService
 
     public function deleteDestroyAccountRecord($id);
 
+    public function cancelDestroyAccountRecord();
+
     public function getLastDestroyAccountRecordByUserId($userId);
+
+    public function getLastAuditDestroyAccountRecordByUserId($userId);
 
     public function searchDestroyAccountRecords($conditions, $orderBy, $start, $limit);
 

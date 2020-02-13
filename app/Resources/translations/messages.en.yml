@@ -8919,6 +8919,7 @@ exception.wechat.template_exceeds_limit_hint: A WeChat service number allows onl
 exception.wechat.template_conflict_industry_hint: Service number industry setting error.
 
 exception.destroy_account.reason_too_long: Write off reason limit 200 words
+exception.destroy_account.not_found_record: Record Not Found
 
 course.unname_title: unname course
 

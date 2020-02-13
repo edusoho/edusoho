@@ -7,24 +7,17 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
 use Biz\DestroyAccount\Service\DestroyAccountRecordService;
 
-class AccountApplyDestroy extends AbstractResource
+class AccountCancelApply extends AbstractResource
 {
     public function add(ApiRequest $request)
     {
-        $reason = $request->request->get('reason', '');
+        $lastAuditRecord = $this->getDestroyAccountRecordService()->cancelDestroyAccountRecord();
 
-        if (empty($reason)) {
-            throw CommonException::ERROR_PARAMETER();
+        if ($lastAuditRecord['status'] == 'cancel') {
+            return true;
         }
 
-        $user = $this->getCurrentUser();
-        $fiedlds = array(
-            'userId' => $user['id'],
-            'nickname' => $user['nickname'],
-            'reason' => $reason,
-        );
-
-        return $this->getDestroyAccountRecordService()->createDestroyAccountRecord($fiedlds);
+        return false;
     }
 
     /**

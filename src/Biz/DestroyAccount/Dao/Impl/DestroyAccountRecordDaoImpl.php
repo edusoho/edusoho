@@ -16,6 +16,13 @@ class DestroyAccountRecordDaoImpl extends GeneralDaoImpl implements DestroyAccou
         return $this->db()->fetchAssoc($sql, array($userId));
     }
 
+    public function getLastAuditDestroyAccountRecordByUserId($userId)
+    {
+        $sql = "SELECT * FROM {$this->table} where $userId = ? and status = 'audit' ORDER BY createdTime DESC LIMIT 1";
+
+        return $this->db()->fetchAssoc($sql, array($userId));
+    }
+
     public function declares()
     {
         return array(
