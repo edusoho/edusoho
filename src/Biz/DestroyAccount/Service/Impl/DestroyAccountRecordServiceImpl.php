@@ -8,6 +8,12 @@ use Biz\Common\CommonException;
 use Biz\DestroyAccount\Dao\DestroyAccountRecordDao;
 use Biz\DestroyAccount\DestroyAccountException;
 use Biz\DestroyAccount\Service\DestroyAccountRecordService;
+use Biz\DestroyAccount\Service\DestroyedAccountService;
+use Biz\User\Service\Impl\UserServiceImpl;
+use Biz\User\Service\TokenService;
+use Biz\User\Service\UserService;
+use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAccountRecordService
 {
@@ -18,7 +24,11 @@ class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAcco
 
     public function updateDestroyAccountRecord($id, $fields)
     {
-        $fields = ArrayToolkit::parts($fields, array('status'));
+        if (!ArrayToolkit::requireds($fields, array('status'))) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        $fields = ArrayToolkit::parts($fields, array('status', 'rejectedReason', 'auditUserId'));
 
         return $this->getDestroyAccountRecordDao()->update($id, $fields);
     }
@@ -58,6 +68,86 @@ class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAcco
     public function countDestroyAccountRecords($conditions)
     {
         return $this->getDestroyAccountRecordDao()->count($conditions);
+    }
+
+    public function passDestroyAccountRecord($id)
+    {
+        $record = $this->getDestroyAccountRecord($id);
+        $user = $this->getUserService()->getUser($record['userId']);
+        $auditUser = $this->getCurrentUser();
+        $fields = array(
+            'auditUserId' => $auditUser['id'],
+            'status' => 'passed',
+        );
+
+        try {
+            $this->updateDestroyAccountRecord($id, $fields);
+            $destroyedAccount = $this->getDestroyedAccountService()->createDestroyedAccount(array('recordId' => $record['id'], 'userId' => $record['userId'], 'nickname' => $record['nickname']));
+
+            //更新用户相关信息
+            $this->updateUserInfoForDestroyAccount($record['userId'], $destroyedAccount);
+        } catch (\Exception $e) {
+            $this->getLogger()->error($e->getMessage());
+        }
+
+        $this->dispatchEvent('user.destroyed', new Event($user));
+
+        return true;
+    }
+
+    public function rejectDestroyAccountRecord($id, $reason)
+    {
+        $record = $this->getDestroyAccountRecord($id);
+        $auditUser = $this->getCurrentUser();
+        $fields = array(
+            'auditUserId' => $auditUser['id'],
+            'status' => 'rejected',
+            'rejectedReason' => $reason,
+        );
+        $user = $this->getUserService()->getUser($record['userId']);
+        $this->updateDestroyAccountRecord($id, $fields);
+
+        $this->dispatchEvent('user.reject.destroy', new Event($user, array('reason' => $reason)));
+
+        return true;
+    }
+
+    private function updateUserInfoForDestroyAccount($userId, $destroyedAccount)
+    {
+        //更新用户信息
+        $this->getUserService()->updateUserForDestroyedAccount($userId, $destroyedAccount['id']);
+
+        //清除用户绑定信息
+        $this->getUserService()->deleteUserBindByUserId($userId);
+
+        //清除用户登录token
+        $this->getTokenService()->destroyTokensByUserId($userId);
+
+        return true;
+    }
+
+    /**
+     * @return TokenService
+     */
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return DestroyedAccountService
+     */
+    protected function getDestroyedAccountService()
+    {
+        return $this->createService('DestroyAccount:DestroyedAccountService');
     }
 
     /**

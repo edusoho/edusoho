@@ -394,4 +394,14 @@ interface UserService
      * 人脸识别采集状态修改
      */
     public function setFaceRegistered($id);
+
+    /**
+     * 注销用户信息修改
+     * @param $userId
+     * @param $destroyedId (destroyed_account表对应id)
+     * @return array()
+     */
+    public function updateUserForDestroyedAccount($userId, $destroyedId);
+
+    public function deleteUserBindByUserId($userId);
 }

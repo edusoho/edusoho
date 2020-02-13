@@ -8428,6 +8428,8 @@ notification.discount.reject: 您的打折活动%discount%，未通过管理员�
 notification.discount.pass: 您的打折活动%discount%，已通过管理员审核。
 notification.question.post_create: %who% 在 %thread% 回答了你
 notification.question.post_ask: %who% 在 %thread% 追问了你
+notification.destroy-account.reject: %who%，您的帐号注销申请审核未通过，理由：%reason%。
+
 
 notification.group-profile.chownout: 您的小组 %group% 被管理员转移给了用户 %who%。
 notification.group-profile.chownin: 您获得了小组 %group% 的管理权限。
@@ -10692,3 +10694,7 @@ admin_v2.destroy_account.destroyed_account.empty: 暂无记录
 admin_v2.destroy_account.destroyed_account.detail: 详情
 admin_v2.destroy_account.destroyed_account.reason: 注销理由
 admin_v2.destroy_account.destroyed_account.audit_user: 处理人
+admin_v2.destroy_account.destroyed_account.audit_reason: 处理意见
+admin_v2.destroy_account.destroyed_account.audit_agree: 同意
+admin_v2.destroy_account.destroyed_account.audit_reject: 拒绝
+admin_v2.destroy_account.destroyed_account.reason_tip: 最多输入30个字

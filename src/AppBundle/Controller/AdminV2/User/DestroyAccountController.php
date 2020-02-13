@@ -7,6 +7,8 @@ use AppBundle\Controller\AdminV2\BaseController;
 use Biz\DestroyAccount\Service\DestroyAccountRecordService;
 use Biz\DestroyAccount\Service\DestroyedAccountService;
 use Biz\User\Service\UserService;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Mockery\Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 class DestroyAccountController extends BaseController
@@ -23,7 +25,7 @@ class DestroyAccountController extends BaseController
 
         $records = $this->getDestroyAccountRecordService()->searchDestroyAccountRecords(
             $conditions,
-            array(),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -39,6 +41,29 @@ class DestroyAccountController extends BaseController
         $record = $this->getDestroyAccountRecordService()->getDestroyAccountRecord($id);
 
         return $this->render('admin-v2/user/destroy-account/record-detail.html.twig', array(
+            'record' => $record,
+        ));
+    }
+
+    public function auditAction(Request $request, $id)
+    {
+        $record = $this->getDestroyAccountRecordService()->getDestroyAccountRecord($id);
+
+        if ($request->getMethod() == 'POST') {
+            $field = $request->request->all();
+
+            if ($field['status'] == 'pass') {
+                $this->getDestroyAccountRecordService()->passDestroyAccountRecord($id);
+            }
+
+            if ($field['status'] == 'reject') {
+                $this->getDestroyAccountRecordService()->rejectDestroyAccountRecord($id, $field['reject_reason']);
+            }
+
+            return $this->createJsonResponse(array('success' => true));
+        }
+
+        return $this->render('admin-v2/user/destroy-account/audit-modal.html.twig', array(
             'record' => $record,
         ));
     }
