@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ active: active === index }" class="carousel-item clearfix" @click="selected(index)">
+  <div :class="{ active: active === index }" class="graphic-navigation-item clearfix" @click="selected(index)">
     <el-upload
       :http-request="uploadImg"
       :before-upload="beforeUpload"
@@ -8,9 +8,9 @@
       action="string"
       accept=".jpg,.jpeg,.png,.gif,.bmp,.JPG,.JPEG,.PBG,.GIF,.BMP"
     >
-      <img v-if="!item.image.url"  :src="getDefaultImg(item.link.type)" class="carousel-img">
-      <img v-else :src="item.image.url" class="carousel-img">
-      <div  class="carousel-img-mask">更换图片</div>
+      <img v-if="!item.image.url"  :src="getDefaultImg(item.link.type)" class="graphic-navigation-img">
+      <img v-else :src="item.image.url" class="graphic-navigation-img">
+      <div  class="graphic-navigation-img-mask">更换图片</div>
     </el-upload>
 
     <el-dialog

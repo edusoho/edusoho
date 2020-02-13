@@ -41,7 +41,7 @@
       }
     }
   }
-  .carousel-item {
+  .graphic-navigation-item {
     position: relative;
     border: 1px solid $grey-light;
     background-color: #fff;
@@ -62,14 +62,15 @@
       .el-upload {
         height: 100%;
       }
-      .carousel-img {
+      .graphic-navigation-img {
         margin-top: 10px;
         width: 60px;
         border-radius: 50%;
       }
-      .carousel-img-mask {
+      .graphic-navigation-img-mask {
         position: absolute;
         top: 0;
+        bottom: 0;
         width: 100%;
         color: transparent;
         @include transition();
