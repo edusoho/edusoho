@@ -8,9 +8,12 @@ class DestroyAccountException extends AbstractException
 {
     const EXCEPTION_MODUAL = 67;
 
+    const NOT_FOUND_RECORD = 4046701;
+
     const REASON_TOO_LONG = 5006701;
 
     public $messages = array(
+        4046701 => 'exception.destroy_account.not_found_record',
         5006701 => 'exception.destroy_account.reason_too_long',
     );
 }
