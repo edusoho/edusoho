@@ -7,8 +7,6 @@ use AppBundle\Controller\AdminV2\BaseController;
 use Biz\DestroyAccount\Service\DestroyAccountRecordService;
 use Biz\DestroyAccount\Service\DestroyedAccountService;
 use Biz\User\Service\UserService;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
-use Mockery\Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 class DestroyAccountController extends BaseController

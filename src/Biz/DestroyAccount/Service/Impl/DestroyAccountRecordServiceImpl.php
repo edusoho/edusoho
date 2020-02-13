@@ -9,11 +9,9 @@ use Biz\DestroyAccount\Dao\DestroyAccountRecordDao;
 use Biz\DestroyAccount\DestroyAccountException;
 use Biz\DestroyAccount\Service\DestroyAccountRecordService;
 use Biz\DestroyAccount\Service\DestroyedAccountService;
-use Biz\User\Service\Impl\UserServiceImpl;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAccountRecordService
 {
