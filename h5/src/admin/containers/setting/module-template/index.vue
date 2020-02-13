@@ -58,7 +58,14 @@
 
   <!-- 仅app有的基础组件 -->
   <!-- 图文导航 -->
-    
+     <graphic-navigation
+      v-if="module.type === moduleDefault.graphicNavigation.type"
+      :active="isActive"
+      :moduleData="module"
+      :incomplete="validateFuc"
+      @updateModule="updateHandler(module, index)"
+    ></graphic-navigation>
+
   <!-- 公开课 -->
     <open-course
       v-if="module.type === moduleDefault.openCourseList.type"
@@ -91,6 +98,7 @@
 import Carousel from "../carousel";
 import Course from "../course";
 import OpenCourse from "../open-course";
+import GraphicNavigation from "../graphic-navigation";
 import Poster from "../poster";
 import Coupon from "../coupon";
 import Vip from "../vip";
@@ -106,7 +114,8 @@ export default {
     "marketing-activity": MarketingActivity,
     coupon: Coupon,
     vip: Vip,
-    openCourse:OpenCourse
+    openCourse:OpenCourse,
+    graphicNavigation:GraphicNavigation
   },
   props: {
     module: {
