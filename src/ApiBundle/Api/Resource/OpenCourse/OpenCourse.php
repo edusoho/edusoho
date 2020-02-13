@@ -15,50 +15,74 @@ class OpenCourse extends AbstractResource
      */
     public function search(ApiRequest $request)
     {
-        $conditions = array('type' => 'liveOpen', 'status' => 'published', 'endTimeGreaterThan' => time());
-        $orderBy = array('startTime' => 'ASC');
-
-        if ($request->query->get('categoryId')) {
-            $conditions['categoryId'] = $request->query->get('categoryId');
-        }
-
-        if ($request->query->get('isReplay')) {
-            $conditions['endTimeLessThan'] = time();
-            $orderBy = array('startTime' => 'DESC');
-            unset($conditions['endTimeGreaterThan']);
-        }
-
-        if ($request->query->get('limitDays')) {
-            $conditions['endTimeLessThan'] = strtotime('+' . $request->query->get('limitDays') . ' day', strtotime('23:59:59', time()));
-        }
+        $conditions = $this->_prepareConditions($request->query->all());
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $total = $this->getOpenCourseService()->countLessons($conditions);
-        $lessons = $this->getOpenCourseService()->searchLessons($conditions, $orderBy, $offset, $total);
 
-        $conditions = array(
+        $total = $this->getOpenCourseService()->countLessons($conditions);
+        if (!$total) {
+            return $this->makePagingObject(array(), $total, $offset, $limit);
+        }
+
+        $lessons = $this->getOpenCourseService()->searchLessons($conditions, array('startTime' => 'ASC'), 0, $total);
+        $lessons = ArrayToolkit::index($lessons, 'courseId');
+
+        $courseConditions = array(
             'type' => 'liveOpen',
             'status' => 'published',
             'ids' => ArrayToolkit::column($lessons, 'courseId'),
         );
-        $courses = $this->getOpenCourseService()->searchCourses($conditions, array(), 0, $total);
-        $courses = ArrayToolkit::index($courses, 'id');
 
-        $total = $this->getOpenCourseService()->countLessons($conditions);
-        $lessons = $this->getOpenCourseService()->searchLessons($conditions, $orderBy, $offset, $total);
+        $total = $this->getOpenCourseService()->countCourses($courseConditions);
+        $courses = $this->getOpenCourseService()->searchCourses($courseConditions, array(), $offset, $limit);
 
-
-        $result = array();
-        foreach ($lessons as $lesson) {
-            if (empty($courses[$lesson['courseId']])) {
+        $doingCourses = array();
+        $finishedCourses = array();
+        $notStartCourses = array();
+        foreach ($courses as $course) {
+            if (empty($lessons[$course['id']])) {
                 continue;
             }
 
-            $courses[$lesson['courseId']]['lesson'] = $lesson;
-            $result[] = $courses[$lesson['courseId']];
+            $course['startTime'] = $lessons[$course['id']]['startTime'];
+            $course['lesson'] = $lessons[$course['id']];
+
+            if ($course['lesson']['startTime'] > time()) {
+                $notStartCourses[] = $course;
+            } elseif ($course['lesson']['startTime'] <= time() && $course['lesson']['endTime'] < time()) {
+                $finishedCourses[] = $course;
+            } else {
+                $doingCourses[] = $course;
+            }
+        }
+        
+        $doingCourses = ArrayToolkit::sortPerArrayValue($doingCourses, 'startTime');
+        $notStartCourses = ArrayToolkit::sortPerArrayValue($notStartCourses, 'startTime');
+        $finishedCourses = ArrayToolkit::sortPerArrayValue($finishedCourses, 'startTime', false);
+
+        return $this->makePagingObject(array_merge($doingCourses, $notStartCourses, $finishedCourses), $total, $offset, $limit);
+    }
+
+    protected function _prepareConditions($conditions)
+    {
+        $preparedConditions = array('type' => 'liveOpen', 'status' => 'published');
+
+        if (!empty($conditions['categoryId'])) {
+            $preparedConditions['categoryId'] = $conditions['categoryId'];
         }
 
-        return $this->makePagingObject($result, $total, $offset, $limit);
+        if (!empty($conditions['isReplay'])) {
+            $preparedConditions['endTimeLessThan'] = time();
+        } elseif (isset($conditions['isReplay'])) {
+            $preparedConditions['endTimeGreaterThan'] = time();
+        }
+
+        if (!empty($conditions['limitDays']) && is_numeric($conditions['limitDays'])) {
+            $preparedConditions['startTimeGreaterThan'] = strtotime(date('Y-m-d', time()));
+            $preparedConditions['startTimeLessThan'] = strtotime(date('Y-m-d', time() + $conditions['limitDays'] * 24 * 60 * 60));
+        }
+
+        return $preparedConditions;
     }
 
     /**
