@@ -73,10 +73,7 @@ export default {
       pathName: this.$route.name,
     }
   },
-
-  created() {
-
-  },
+  created() {},
   methods: {
     getDefaultImg(type){
       switch(type){
@@ -107,7 +104,9 @@ export default {
         })
         return
       }
-
+      this.readFail(file)
+    },
+    readFail(file){
       this.dialogVisible = true
       const reader = new FileReader()
       reader.onload = () => {
@@ -131,12 +130,13 @@ export default {
       const formData = new FormData()
       formData.append('file', file)
       formData.append('group', 'system')
-
-      Api.uploadFile({
+      this.sendUploadFile(formData)
+    },
+    sendUploadFile(formData){
+       Api.uploadFile({
         data: formData
       })
         .then(data => {
-          console.log(data)
           if (this.pathName === 'miniprogramSetting') {
             // 小程序后台替换图片协议
             data.uri = data.uri.replace(/^(\/\/)|(http:\/\/)/, 'https://')

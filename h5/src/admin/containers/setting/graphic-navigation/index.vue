@@ -33,13 +33,11 @@
 import { MODULE_DEFAULT } from 'admin/config/module-default-config'
 import item from './item'
 import moduleFrame from '../module-frame'
-import courseModal from '../course/modal/course-modal'
 
 export default {
   components: {
     item,
     moduleFrame,
-    courseModal
   },
   props: {
     active: {
@@ -58,9 +56,6 @@ export default {
   data() {
     return {
       activeItemIndex: 0,
-      modalVisible: false,
-      courseSets: [],
-      type: 'course_list',
       pathName: this.$route.name
     }
   },
@@ -85,14 +80,6 @@ export default {
         console.log('changed copyModuleData')
       }
     },
-    carouselImage() {
-      return this.copyModuleData.data[this.activeItemIndex] &&
-        this.copyModuleData.data[this.activeItemIndex].image.uri
-    },
-    carouselTitle() {
-      return this.copyModuleData.data[this.activeItemIndex] &&
-        this.copyModuleData.data[this.activeItemIndex].title
-    }
   },
   watch: {
     copyModuleData: {
@@ -115,6 +102,7 @@ export default {
     },
     selected(selected) {
       this.activeItemIndex = selected.selectIndex
+     // this.copyModuleData.data[this.activeItemIndex].image.url=selected.imageUrl
     }
   }
 }
