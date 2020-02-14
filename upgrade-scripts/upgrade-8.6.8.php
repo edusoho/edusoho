@@ -89,13 +89,39 @@ class EduSohoUpgrade extends AbstractUpdater
     public function addPasswordConfigIfRedisEnable()
     {
         $configFile = $this->biz['kernel.root_dir'].'/../app/config/parameters.yml';
+        $filesystem = new Filesystem();
         $parameters = Yaml::parse(file_get_contents($configFile));
         if (!empty($parameters['parameters']['redis_host']) && empty($parameters['parameters']['redis_password'])) {
-            $parameters['parameters']['redis_password'] = '';
+            $filesystem->copy($configFile, dirname($configFile).'/parameters.yml.bak');
+            $parameters = $this->fillConfig($parameters);
             file_put_contents($configFile, Yaml::dump($parameters));
         }
 
         return 1;
+    }
+
+    private function fillConfig($config)
+    {
+        $dbConfig = $this->biz['db.options'];
+        $parameters = empty($config['parameters']) ? array() : $config['parameters'];
+        $parameters['database_driver'] = empty($parameters['database_driver']) ? $dbConfig['driver'] : $parameters['database_driver'];
+        $parameters['database_host'] = empty($parameters['database_host']) ? $dbConfig['host'] : $parameters['database_host'];
+        $parameters['database_port'] = empty($parameters['database_port']) ? $dbConfig['port'] : $parameters['database_port'];
+        $parameters['database_name'] = empty($parameters['database_name']) ? $dbConfig['dbname'] : $parameters['database_name'];
+        $parameters['database_user'] = empty($parameters['database_user']) ? $dbConfig['user'] : $parameters['database_user'];
+        $parameters['database_password'] = empty($parameters['database_password']) ? $dbConfig['password'] : $parameters['database_password'];
+        $parameters['locale'] = empty($parameters['locale']) ? 'zh_CN' : $parameters['locale'];
+        $parameters['secret'] = empty($parameters['secret']) ? 'ThisTokenIsNotSoSecretChangeIt' : $parameters['secret'];
+
+        $parameters['redis_host'] = empty($parameters['redis_host']) ? '127.0.0.1:6379' : $parameters['redis_host'];
+        $parameters['redis_timeout'] = empty($parameters['redis_timeout']) ? 1 : $parameters['redis_timeout'];
+        $parameters['redis_reserved'] = empty($parameters['redis_reserved']) ? null : $parameters['redis_reserved'];
+        $parameters['redis_retry_interval'] = empty($parameters['redis_retry_interval']) ? 100 : $parameters['redis_retry_interval'];
+        $parameters['redis_password'] = empty($parameters['redis_password']) ? '' : $parameters['redis_password'];
+
+        $config['parameters'] = $parameters;
+
+        return $config;
     }
 
     protected function generateIndex($step, $page)
