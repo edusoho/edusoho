@@ -8,6 +8,7 @@ use AppBundle\Common\TimeMachine;
 use Doctrine\Common\Inflector\Inflector;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
+use Biz\OpenCourse\Service\OpenCourseService;
 
 class H5SettingServiceImpl extends BaseService implements H5SettingService
 {
@@ -85,6 +86,102 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         $discoverySetting['data']['items'] = array_values($discoverySetting['data']['items']);
 
         return $discoverySetting;
+    }
+
+    public function openCourseListFilter($discoverySetting, $usage = 'show')
+    {
+        if ('condition' == $discoverySetting['data']['sourceType']) {
+            $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
+            $discoverySetting['data']['items'] = $this->getOpenCourseService()->searchAndSortLiveCourses(
+                $discoverySetting['data'],
+                array(),
+                0,
+                $limit
+            );
+        }
+
+        if ('custom' == $discoverySetting['data']['sourceType']) {
+            $courses = $discoverySetting['data']['items'];
+            foreach ($courses as $key => $course) {
+                $existCourse = $this->getOpenCourseService()->getCourse($course['id']);
+                $discoverySetting['data']['items'][$key] = $existCourse;
+                if (empty($existCourse)) {
+                    unset($discoverySetting['data']['items'][$key]);
+                    continue;
+                }
+                if ('show' == $usage && 'published' != $existCourse['status']) {
+                    unset($discoverySetting['data']['items'][$key]);
+                    continue;
+                }
+
+                $existLesson = $this->getOpenCourseService()->getCourseLesson($course['id'], $course['lesson']['id']);
+                $discoverySetting['data']['items'][$key]['lesson'] = $existLesson;
+
+                if (empty($existLesson) || ('show' == $usage && 'published' != $existLesson['status'])) {
+                    unset($discoverySetting['data']['items'][$key]);
+                }
+            }
+        }
+        $discoverySetting['data']['items'] = array_values($discoverySetting['data']['items']);
+
+        return $discoverySetting;
+    }
+
+    protected function searchOpenCourse($conditions, $limit)
+    {
+        $conditions = $this->_prepareOpenCourseConditions($conditions);
+
+        $lessons = $this->getOpenCourseService()->searchLessons($conditions, array('startTime' => 'ASC'), 0, $limit);
+        $lessons = ArrayToolkit::index($lessons, 'courseId');
+
+        $courseConditions = array(
+            'type' => 'liveOpen',
+            'status' => 'published',
+            'parentId' => 0,
+            'ids' => ArrayToolkit::column($lessons, 'courseId'),
+        );
+
+        $courses = $this->getOpenCourseService()->searchCourses($courseConditions, array(), 0, $limit);
+        foreach ($courses as $course) {
+            if (empty($lessons[$course['id']])) {
+                continue;
+            }
+
+            $course['startTime'] = $lessons[$course['id']]['startTime'];
+            $course['lesson'] = $lessons[$course['id']];
+
+            if ($course['lesson']['startTime'] > time()) {
+                $notStartCourses[] = $course;
+            } elseif ($course['lesson']['startTime'] <= time() && $course['lesson']['endTime'] < time()) {
+                $finishedCourses[] = $course;
+            } else {
+                $doingCourses[] = $course;
+            }
+        }
+
+    }
+
+    protected function _prepareOpenCourseConditions($conditions)
+    {
+        $defaultConditions = array('categoryId' => '', 'isReplay' => 0, 'limitDays' => 0, 'titleLike' => '');
+        $conditions = ArrayToolkit::filter($conditions, $defaultConditions);
+        $conditions = array_merge(array('type' => 'liveOpen', 'status' => 'published', 'parentId' => 0), $conditions);
+
+        if (!empty($conditions['isReplay'])) {
+            $conditions['endTimeLessThan'] = time();
+        } elseif (isset($conditions['isReplay'])) {
+            $conditions['endTimeGreaterThan'] = time();
+        }
+
+        if (!empty($conditions['limitDays']) && is_numeric($conditions['limitDays'])) {
+            $conditions['startTimeGreaterThan'] = strtotime(date('Y-m-d', time()));
+            $conditions['startTimeLessThan'] = strtotime(date('Y-m-d', time() + $conditions['limitDays'] * 24 * 60 * 60));
+        }
+
+        unset($conditions['isReplay']);
+        unset($conditions['limitDays']);
+
+        return $conditions;
     }
 
     public function classroomListFilter($discoverySetting, $usage = 'show')
@@ -491,5 +588,13 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     protected function getAppService()
     {
         return $this->biz->service('CloudPlatform:AppService');
+    }
+
+    /**
+     * @return OpenCourseService
+     */
+    protected function getOpenCourseService()
+    {
+        return $this->biz->service('OpenCourse:OpenCourseService');
     }
 }
