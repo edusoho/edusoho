@@ -33,7 +33,7 @@ class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAcco
 
     public function createDestroyAccountRecord($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('userId', 'nickname', 'reason'))) {
+        if (!ArrayToolkit::requireds($fields, array('userId', 'nickname', 'reason', 'ip'))) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
@@ -41,7 +41,7 @@ class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAcco
             $this->createNewException(DestroyAccountException::REASON_TOO_LONG());
         }
 
-        $fields = ArrayToolkit::parts($fields, array('userId', 'nickname', 'reason'));
+        $fields = ArrayToolkit::parts($fields, array('userId', 'nickname', 'reason', 'ip'));
 
         return $this->getDestroyAccountRecordDao()->create($fields);
     }
