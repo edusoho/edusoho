@@ -32,6 +32,7 @@ class UserManageController extends BaseController
             'keywordType' => '',
             'keyword' => '',
             'keywordUserType' => '',
+            'destroyed' => 0,
         );
 
         $conditions = array_merge($conditions, $fields);

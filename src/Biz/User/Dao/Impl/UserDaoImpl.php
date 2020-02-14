@@ -24,6 +24,11 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
         return $this->getByFields(array('nickname' => $nickname));
     }
 
+    public function getUnDestroyedUserByNickname($nickname)
+    {
+        return $this->getByFields(array('nickname' => $nickname, 'destroyed' => 0));
+    }
+
     public function getByUUID($uuid)
     {
         return $this->getByFields(array('uuid' => $uuid));

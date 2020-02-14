@@ -17,6 +17,8 @@ interface UserService
 
     public function getUserByNickname($nickname);
 
+    public function getUnDstroyedUserByNickname($nickname);
+
     public function getUserByType($type);
 
     public function getUserByUUID($uuid);
@@ -24,7 +26,7 @@ interface UserService
     public function updateUserUpdatedTime($id);
 
     //根据用户名/邮箱/手机号精确查找用户
-    public function getUserByLoginField($keyword);
+    public function getUserByLoginField($keyword, $isFilterDestroyed = false);
 
     public function getUserByVerifiedMobile($mobile);
 
