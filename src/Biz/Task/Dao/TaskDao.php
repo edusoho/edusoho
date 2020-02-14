@@ -62,4 +62,13 @@ interface TaskDao extends AdvancedDaoInterface
     public function analysisTaskDataByTime($startTime, $endTime);
 
     public function countByChpaterId($chapterId);
+
+    /**
+     * @param $userId
+     * @param $startTime 'timestamp ，秒'
+     * @param $endBeforeTimeRange 'time_range 秒'
+     *
+     * @return mixed
+     */
+    public function getUserCurrentPublishedLiveTaskByTimeRange($userId, $startTime, $endBeforeTimeRange);
 }

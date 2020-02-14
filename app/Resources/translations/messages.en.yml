@@ -6619,6 +6619,11 @@ admin.mobile_setting.app_custom_cover_hint: 'Please upload pictures in png, gif 
 admin.mobile_setting.splash_setting: 'Setup launch pictures'
 admin.mobile_setting.splash_setting_hint: 'Please upload images with format of PNG,GIF,JPG. Maximum 5 launch pictures, recommend size: 640×960px. Image size should not exceed 2MB.Users will see the launch pictures when enter the site in App for first time.admin.mobile_setting.splash1: Launch picture 1admin.mobile_setting.splash2: Launch picture 2admin.mobile_setting.splash3: Launch picture 3admin.mobile_setting.splash4: Launch picture 4admin.mobile_setting.splash5: Launch picture 5'
 admin.mobile_setting.splash: 'Launch image %splashNum%'
+admin.mobile_setting.study_center_entrance: 'Study Center Entrance Setting'
+admin.mobile_setting.study_center_entrance.has_live: 'Entrance with live calendar'
+admin.mobile_setting.study_center_entrance.has_no_live: 'Entrane without live calendar'
+admin.mobile_setting.study_center_entrance.has_live.notice: 'Contains live schedule entry. After entering the page, the monthly schedule will be displayed to facilitate students to check the live schedule.'
+admin.mobile_setting.study_center_entrance.has_no_live.notice: 'Does not include live schedules. Institutions do not use live course as a teaching method, it is recommended that the entrance be not required'
 admin.coin_model.currency_tips: "1, Could not manually update the user's virtual coin  balance.<br> 2, To recharge, please install plugin <a href=\"%appCenterUrl%\">study card </a>or<a href=\"%appCenterUrl%\">account recharge</a><br> 3、Once you use the method (use and exchange rate), please do not change <br> 4、The use of the switch will make the course price will change according to the exchange rate<br> 5、If you participate in the promotional activities of the course, update the price will have a corresponding discount<br> 6、The virtual coin is used for the price: the online school uses the virtual coin as the payment currency, and the course and membership are priced and settled in the virtual coin.\n"
 admin.coin_course_set.tips: '1 CNY CNY exchanged to <strong class="text-info">%cashRate%</strong>%coinName%'
 admin.coin_setting.price_set_tips: 'Please set a valid price'
@@ -9359,3 +9364,19 @@ admin_v2.homepage.switch_old_in_safari_notice.title: Determine the switch
 admin_v2.homepage.switch_old_in_safari_notice.got_it: Got it
 
 admin.article_setting.article_copy_manage: Information copy protection
+admin_v2.operation.homepage_live_notify.enable: Live Notify
+admin_v2.operation.homepage_live_notify.enable.open: Open
+admin_v2.operation.homepage_live_notify.enable.close: Close
+admin_v2.operation.homepage_live_notify.enable.hint: After opening, when there is a live broadcast about to start, for the students who have purchased the live broadcast, a floating prompt box will pop up when entering the home page to prompt the students to enter the live classroom.
+admin_v2.operation.homepage_live_notify.pre_time: Reminder time in advance
+admin_v2.operation.homepage_live_notify.pre_time_hint: Set in the first few minutes before the live class, pop up the reminder.
+admin_v2.operation.homepage_live_notify.position: Reminder display location
+admin_v2.operation.homepage_live_notify.position_hint: Set the floating layer display position of the live broadcast reminder to avoid overlapping with the existing floating layer.
+admin_v2.operation.homepage_live_notify.position.left_bottom: Bottom left corner of page
+admin_v2.operation.homepage_live_notify.position.right_bottom: Bottom right corner of page
+admin_v2.operation.homepage_live_notify.position.right_top: Top right corner of page
+
+homepage.live_notify.header: Live start reminder
+homepage.live_notify.start_while: Begin in a minute
+homepage.live_notify.living: Living
+homepage.live_notify.entry_live_room: Go to liveroom

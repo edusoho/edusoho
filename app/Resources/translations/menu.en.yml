@@ -308,6 +308,7 @@ admin.system.site.top_navigation_tab: Top Navigation
 admin.system.site.foot_navigation_tab: Bottom Navigation
 admin.system.site.friendlyLink_navigation_tab: 'Recommended Links'
 admin.system.site.consult_setting_tab: Custom Service
+admin_v2.operation.site.homepage_live_notify_tab: Live Notify
 admin.system.site.es_bar_tab: 'Sidebar'
 admin.system.site.share_tab: Share
 admin.system.site.security_tab: Security
