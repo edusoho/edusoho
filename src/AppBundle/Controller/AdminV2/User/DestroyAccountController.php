@@ -23,7 +23,7 @@ class DestroyAccountController extends BaseController
 
         $records = $this->getDestroyAccountRecordService()->searchDestroyAccountRecords(
             $conditions,
-            array(),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -39,6 +39,34 @@ class DestroyAccountController extends BaseController
         $record = $this->getDestroyAccountRecordService()->getDestroyAccountRecord($id);
 
         return $this->render('admin-v2/user/destroy-account/record-detail.html.twig', array(
+            'record' => $record,
+        ));
+    }
+
+    public function auditAction(Request $request, $id)
+    {
+        $record = $this->getDestroyAccountRecordService()->getDestroyAccountRecord($id);
+        $user = $this->getCurrentUser();
+
+        if ($request->getMethod() == 'POST') {
+            if ($record['userId'] == $user['id']) {
+                return $this->createJsonResponse(array('success' => false, 'message' => $this->trans('admin_v2.destroy_account.destroyed_account.can_not_manage')));
+            }
+
+            $field = $request->request->all();
+
+            if ($field['status'] == 'pass') {
+                $this->getDestroyAccountRecordService()->passDestroyAccountRecord($id);
+            }
+
+            if ($field['status'] == 'reject') {
+                $this->getDestroyAccountRecordService()->rejectDestroyAccountRecord($id, $field['reject_reason']);
+            }
+
+            return $this->createJsonResponse(array('success' => true));
+        }
+
+        return $this->render('admin-v2/user/destroy-account/audit-modal.html.twig', array(
             'record' => $record,
         ));
     }

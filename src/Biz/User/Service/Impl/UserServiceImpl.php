@@ -102,6 +102,35 @@ class UserServiceImpl extends BaseService implements UserService
         return true;
     }
 
+    public function updateUserForDestroyedAccount($userId, $destroyedId)
+    {
+        $user = $this->getUser($userId);
+        $userFields = array(
+            'nickname' => '注销ID_'.$destroyedId,
+            'email' => $this->generateEmail($user),
+            'emailVerified' => 0,
+            'verifiedMobile' => '',
+            'smallAvatar' => '',
+            'mediumAvatar' => '',
+            'largeAvatar' => '',
+            'destroyed' => 1,
+        );
+
+        $userProfile = array(
+            'idcard' => '',
+            'mobile' => '',
+        );
+        $this->getProfileDao()->update($userId, $userProfile);
+        $this->changeUserRoles($userId, array('ROLE_USER'));
+
+        return $this->getUserDao()->update($userId, $userFields);
+    }
+
+    public function deleteUserBindByUserId($userId)
+    {
+        return $this->getUserBindDao()->deleteByToId($userId);
+    }
+
     public function searchUserProfileCount(array $conditions)
     {
         return $this->getProfileDao()->count($conditions);

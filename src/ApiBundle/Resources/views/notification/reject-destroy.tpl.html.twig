@@ -1,0 +1,4 @@
+{% set data = notification.content %}
+
+{{ 'notification.destroy-account.reject'|trans({'%who%':data.userName|default(''), '%reason%':data.reason|default('')}) }}
+
