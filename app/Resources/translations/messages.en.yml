@@ -7179,6 +7179,7 @@ notification.vip.add_by_admin: You have been added as a %vipName% member by the 
 notification.vip.remove_by_admin: You have been cancelled %vipName%, please contact the administrator if in doubt.
 notification.materialLib.share: %who% has shared the data to you, %do%.
 notification.materialLib.click_to_view: click to view
+notification.destroy-account.reject: %who%，Your account cancellation application has not been approved. Reasons: %reason%。
 #TODO trans
 notification.delete-cloud-mp4: 'Your normal video has been deleted successfully, and all existing cloud videos are in encrypted format.'
 notification.distributor-reward: 'Congratulations on your successful registration reward: a %money% CNY coupon, which can be used for all-site consumption and has been sent to %where%.'
@@ -8918,6 +8919,9 @@ exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned O
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.
 exception.wechat.template_conflict_industry_hint: Service number industry setting error.
 
+exception.destroy_account.reason_too_long: Write off reason limit 200 words
+exception.destroy_account.not_found_record: Record Not Found
+
 course.unname_title: unname course
 
 admin.index.course_order: "course order"
@@ -9382,4 +9386,9 @@ admin_v2.destroy_account.destroyed_account.empty: empty
 admin_v2.destroy_account.destroyed_account.detail: Detail
 admin_v2.destroy_account.destroyed_account.reason: Reason
 admin_v2.destroy_account.destroyed_account.audit_user: Audit User
+admin_v2.destroy_account.destroyed_account.audit_reason: Audit Reason
+admin_v2.destroy_account.destroyed_account.audit_agree: Agree
+admin_v2.destroy_account.destroyed_account.audit_reject: Reject
+admin_v2.destroy_account.destroyed_account.reason_tip: Enter a maximum of 30 words
+admin_v2.destroy_account.destroyed_account.can_not_manage: Can not manage your self
 user.user_had_destroyed: Account had destroyed

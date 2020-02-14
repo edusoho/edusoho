@@ -8428,6 +8428,8 @@ notification.discount.reject: 您的打折活动%discount%，未通过管理员�
 notification.discount.pass: 您的打折活动%discount%，已通过管理员审核。
 notification.question.post_create: %who% 在 %thread% 回答了你
 notification.question.post_ask: %who% 在 %thread% 追问了你
+notification.destroy-account.reject: %who%，您的帐号注销申请审核未通过，理由：%reason%。
+
 
 notification.group-profile.chownout: 您的小组 %group% 被管理员转移给了用户 %who%。
 notification.group-profile.chownin: 您获得了小组 %group% 的管理权限。
@@ -10214,6 +10216,9 @@ exception.wechat.notify_setting_not_enabled: 微信通知未开启
 exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试
 exception.wechat.template_conflict_industry_hint: 服务号行业设置错误
 
+exception.destroy_account.reason_too_long: 注销原因限制200字数
+exception.destroy_account.not_found_record: 未找到注销记录
+
 course.unname_title: 未命名计划
 
 admin.index.course_order: 课程订单
@@ -10690,4 +10695,9 @@ admin_v2.destroy_account.destroyed_account.empty: 暂无记录
 admin_v2.destroy_account.destroyed_account.detail: 详情
 admin_v2.destroy_account.destroyed_account.reason: 注销理由
 admin_v2.destroy_account.destroyed_account.audit_user: 处理人
+admin_v2.destroy_account.destroyed_account.audit_reason: 处理意见
+admin_v2.destroy_account.destroyed_account.audit_agree: 同意
+admin_v2.destroy_account.destroyed_account.audit_reject: 拒绝
+admin_v2.destroy_account.destroyed_account.reason_tip: 最多输入30个字
+admin_v2.destroy_account.destroyed_account.can_not_manage: 不能操作您自己的申请
 user.user_had_destroyed: 帐号已注销

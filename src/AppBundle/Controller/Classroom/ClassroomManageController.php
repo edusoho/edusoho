@@ -341,7 +341,7 @@ class ClassroomManageController extends BaseController
                 return $this->createJsonResponse(array('success' => 0, 'message' => $this->trans('classroom.joining_date.expired_tips')));
             }
 
-            $user = $this->getUserService()->getUserByLoginField($data['queryfield']);
+            $user = $this->getUserService()->getUserByLoginField($data['queryfield'], true);
 
             if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
@@ -367,7 +367,7 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
 
         $keyWord = $request->query->get('value');
-        $user = $this->getUserService()->getUserByLoginField($keyWord);
+        $user = $this->getUserService()->getUserByLoginField($keyWord, true);
         $response = true;
         if (!$user) {
             $response = $this->container->get('translator')->trans('user.not_exist');

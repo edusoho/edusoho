@@ -102,6 +102,35 @@ class UserServiceImpl extends BaseService implements UserService
         return true;
     }
 
+    public function updateUserForDestroyedAccount($userId, $destroyedId)
+    {
+        $user = $this->getUser($userId);
+        $userFields = array(
+            'nickname' => '注销ID_'.$destroyedId,
+            'email' => $this->generateEmail($user),
+            'emailVerified' => 0,
+            'verifiedMobile' => '',
+            'smallAvatar' => '',
+            'mediumAvatar' => '',
+            'largeAvatar' => '',
+            'destroyed' => 1,
+        );
+
+        $userProfile = array(
+            'idcard' => '',
+            'mobile' => '',
+        );
+        $this->getProfileDao()->update($userId, $userProfile);
+        $this->changeUserRoles($userId, array('ROLE_USER'));
+
+        return $this->getUserDao()->update($userId, $userFields);
+    }
+
+    public function deleteUserBindByUserId($userId)
+    {
+        return $this->getUserBindDao()->deleteByToId($userId);
+    }
+
     public function searchUserProfileCount(array $conditions)
     {
         return $this->getProfileDao()->count($conditions);
@@ -163,7 +192,15 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function findFriendCount($userId)
     {
-        return $this->getFriendDao()->count(array('fromId' => $userId, 'pair' => 1));
+        $friends = $this->getFriendDao()->search(
+            array('fromId' => $userId, 'pair' => 1),
+            null,
+            0,
+            PHP_INT_MAX
+        );
+        $ids = ArrayToolkit::column($friends, 'toId');
+
+        return $this->getUserDao()->count(array('userIds' => $ids, 'destroyed' => 0));
     }
 
     public function getSimpleUser($id)
@@ -197,7 +234,14 @@ class UserServiceImpl extends BaseService implements UserService
         return !$user ? null : UserSerialize::unserialize($user);
     }
 
-    public function getUserByLoginField($keyword)
+    public function getUnDstroyedUserByNickname($nickname)
+    {
+        $user = $this->getUserDao()->getUnDestroyedUserByNickname($nickname);
+
+        return !$user ? null : UserSerialize::unserialize($user);
+    }
+
+    public function getUserByLoginField($keyword, $isFilterDestroyed = false)
     {
         if (SimpleValidator::email($keyword)) {
             $user = $this->getUserDao()->getByEmail($keyword);
@@ -208,6 +252,10 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (isset($user['type']) && 'system' == $user['type']) {
+            return null;
+        }
+
+        if ($isFilterDestroyed && 1 == $user['destroyed']) {
             return null;
         }
 
@@ -271,6 +319,15 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $users = UserSerialize::unserializes(
             $this->getUserDao()->findByIds($ids)
+        );
+
+        return ArrayToolkit::index($users, 'id');
+    }
+
+    public function findUnDestroyedUsersByIds($ids)
+    {
+        $users = UserSerialize::unserializes(
+            $this->getUserDao()->findUnDestroyedUsersByIds($ids)
         );
 
         return ArrayToolkit::index($users, 'id');
@@ -1529,7 +1586,7 @@ class UserServiceImpl extends BaseService implements UserService
         );
         $ids = ArrayToolkit::column($friends, 'toId');
 
-        return $this->findUsersByIds($ids);
+        return $this->findUnDestroyedUsersByIds($ids);
     }
 
     public function countFriends($userId)

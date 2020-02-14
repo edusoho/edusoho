@@ -17,6 +17,8 @@ interface UserService
 
     public function getUserByNickname($nickname);
 
+    public function getUnDstroyedUserByNickname($nickname);
+
     public function getUserByType($type);
 
     public function getUserByUUID($uuid);
@@ -24,7 +26,7 @@ interface UserService
     public function updateUserUpdatedTime($id);
 
     //根据用户名/邮箱/手机号精确查找用户
-    public function getUserByLoginField($keyword);
+    public function getUserByLoginField($keyword, $isFilterDestroyed = false);
 
     public function getUserByVerifiedMobile($mobile);
 
@@ -39,6 +41,8 @@ interface UserService
     public function getUserByEmail($email);
 
     public function findUsersByIds(array $id);
+
+    public function findUnDestroyedUsersByIds($ids);
 
     public function findUserProfilesByIds(array $ids);
 
@@ -392,4 +396,14 @@ interface UserService
      * 人脸识别采集状态修改
      */
     public function setFaceRegistered($id);
+
+    /**
+     * 注销用户信息修改
+     * @param $userId
+     * @param $destroyedId (destroyed_account表对应id)
+     * @return array()
+     */
+    public function updateUserForDestroyedAccount($userId, $destroyedId);
+
+    public function deleteUserBindByUserId($userId);
 }
