@@ -205,7 +205,14 @@ class UserServiceImpl extends BaseService implements UserService
         return !$user ? null : UserSerialize::unserialize($user);
     }
 
-    public function getUserByLoginField($keyword)
+    public function getUnDstroyedUserByNickname($nickname)
+    {
+        $user = $this->getUserDao()->getUnDestroyedUserByNickname($nickname);
+
+        return !$user ? null : UserSerialize::unserialize($user);
+    }
+
+    public function getUserByLoginField($keyword, $isFilterDestroyed = false)
     {
         if (SimpleValidator::email($keyword)) {
             $user = $this->getUserDao()->getByEmail($keyword);
@@ -216,6 +223,10 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (isset($user['type']) && 'system' == $user['type']) {
+            return null;
+        }
+
+        if ($isFilterDestroyed && $user['destroyed'] == 1) {
             return null;
         }
 
