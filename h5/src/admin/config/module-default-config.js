@@ -47,7 +47,6 @@ const MODULE_DEFAULT = {
       title: '',
       sourceType: 'condition',
       categoryId: '0',
-      sort: 'recommendedSeq',
       limitDays: '0',
       limit: '4',
       displayStyle: 'distichous',
