@@ -9382,3 +9382,4 @@ admin_v2.destroy_account.destroyed_account.empty: empty
 admin_v2.destroy_account.destroyed_account.detail: Detail
 admin_v2.destroy_account.destroyed_account.reason: Reason
 admin_v2.destroy_account.destroyed_account.audit_user: Audit User
+user.user_had_destroyed: Account had destroyed
