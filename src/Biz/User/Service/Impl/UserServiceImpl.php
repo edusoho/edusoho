@@ -216,6 +216,9 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function getUserByVerifiedMobile($mobile)
     {
+        if (empty($mobile)) {
+            return null;
+        }
         $user = $this->getUserDao()->getByVerifiedMobile($mobile);
 
         return !$user ? null : UserSerialize::unserialize($user);

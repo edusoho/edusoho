@@ -24,6 +24,7 @@ class CourseController extends BaseController
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        $courses = $this->removeUnpublishAndNonDefaultCourses($courses);
         $courseId = $request->query->get('courseId');
 
         if (empty($courseId)) {
@@ -315,6 +316,17 @@ class CourseController extends BaseController
         }
 
         return $tasks;
+    }
+
+    protected function removeUnpublishAndNonDefaultCourses($courses)
+    {
+        foreach ($courses as $key => $course) {
+            if ('published' != $course['status'] && 1 != $course['isDefault']) {
+                unset($courses[$key]);
+            }
+        }
+
+        return $courses;
     }
 
     protected function getPasswordEncoder()

@@ -10327,9 +10327,9 @@ wechat.notification.template_closed: 未开启
 
 # 微信通知模板
 wechat.notification.template.live_start: '同学，您好，您报名的直播课即将开课。<br>课程名称：{《课程名》-《任务名》}<br>开课时间：{直播开始时间}（精确到分钟）<br>开课地点：在线直播<br>联系方式：无<br>不要迟到哦。'
-wechat.notification.template.homework_result: '同学，你好，你的作业已批阅完成<br>作业名称：[任务名]<br>所属课程：[课程名]<br>辅导老师：[教师用户名]<br>作业结果：[作业结果]'
-wechat.notification.template.exam_result: '同学，你好，你的试卷已批阅完成<br>考试科目：[任务名]<br>考试成绩：[考试的分数]<br>再接再厉哦'
-wechat.notification.template.lesson_add: '同学，你好，课程有新任务发布<br>课程名称：[课程名称]<br>课程类别：[课程类别]<br>课程老师：[教师用户名]<br>课程时间：[任务发布时间]或[直播开始时间]<br>请及时前往学习'
+wechat.notification.template.homework_result: '同学，您好，你的作业已批阅完成<br>作业名称：[任务名]<br>所属课程：[课程名]<br>辅导老师：[教师用户名]<br>作业结果：[作业结果]'
+wechat.notification.template.exam_result: '同学，您好，你的试卷已批阅完成<br>考试科目：[任务名]<br>考试成绩：[考试的分数]<br>再接再厉哦'
+wechat.notification.template.lesson_add: '同学，您好，课程有新任务发布<br>课程名称：[课程名称]<br>课程类别：[课程类别]<br>课程老师：[教师用户名]<br>课程时间：[任务发布时间]或[直播开始时间]<br>请及时前往学习'
 wechat.notification.template.charge_success: '尊敬的客户，您已充值成功<br>充值类型：现金充值<br>充值订单号：[订单号]<br>充值金额：[实际支付价格]<br>充值时间：[支付时间]<br>快去看看课程吧~'
 wechat.notification.template.buy_success: '尊敬的客户，您已支付成功<br>订单详情：[商品名称]<br>订单价格：[订单价格]<br>订单时间：[支付时间]<br>会员到期日：无<br>请前往查看'
 wechat.notification.template.ask_question: '尊敬的老师，您的在教课程《课程名称》或在教班级《班级名称》中有学员发布了提问<br>申请人：[提问者]<br>问题内容：[问题标题]<br>时间：[问题提交时间]'
@@ -10628,7 +10628,7 @@ admin_v2.setting.navigation.foot.tips: >
   <a class="text-info" style="font-weight:bold;" href="%url%">
   Web端装修 </a>
   中进行编辑。
-admin_v2.setting_course.course_list_page_seq.help_block: 地址：域名/course/explore,任何人都可在此页面查看网站所有已发布课程,如需设置网站首页课程排序，请到【运营】-【web装修】-【已购主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
+admin_v2.setting_course.course_list_page_seq.help_block: 地址：域名/course/explore,任何人都可在此页面查看网站所有已发布课程,如需设置网站首页课程排序，请到【运营】-【Web装修】-【已购主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
 
 admin_v2.newcomer_task.helper: 任务助手
 admin_v2.newcomer_task.helper_tip: 六步完成网校基础建设
@@ -10687,3 +10687,4 @@ homepage.live_notify.header: 直播开课提醒
 homepage.live_notify.start_while: 即将开始
 homepage.live_notify.living: 正在直播中
 homepage.live_notify.entry_live_room: 进入教室
+admin.article_setting.article_copy_manage: 资讯防复制

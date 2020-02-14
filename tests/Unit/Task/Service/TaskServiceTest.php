@@ -1030,6 +1030,10 @@ class TaskServiceTest extends BaseTestCase
                 'functionName' => 'tryManageCourse',
                 'returnValue' => true,
             ),
+            array(
+                'functionName' => 'updateCourseStatistics',
+                'returnValue' => array('id' => 1, 'taskNum' => 0),
+            ),
         ));
 
         $this->mockBiz('Task:TaskDao', array(

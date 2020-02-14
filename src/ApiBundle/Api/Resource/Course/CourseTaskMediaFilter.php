@@ -52,7 +52,6 @@ class CourseTaskMediaFilter extends Filter
             default:
                 break;
         }
-        
         if ('object' == $data['format'] && 'download' != $data['mediaType']) {
             $data[$data['mediaType'].'Media'] = $data['media'];
             unset($data['media']);
