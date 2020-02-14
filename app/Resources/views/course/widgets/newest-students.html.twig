@@ -7,7 +7,7 @@
     <ul class="user-avatar-list clearfix">
       {% for student in students %}
         <li>
-          <a class="user-dropdown-info__avatar js-user-card" href="{{ path('user_show', {'id': student.id}) }}" data-card-url="{{ path('user_card_show', {userId: student.id}) }}"
+          <a class="user-dropdown-info__avatar {% if student.destroyed|default(0) == 0 %}js-user-card{% endif %}" href="{{ path('user_show', {'id': student.id}) }}" data-card-url="{{ path('user_card_show', {userId: student.id}) }}"
             data-user-id="{{ student.id }}" data-original-title="" title="">
             <img class="avatar-sm" src="{{ filepath(student.smallAvatar, 'avatar.png') }}">
             {{ slot('header.user.logo', {user: student}) }}

@@ -32,8 +32,12 @@
         <span class="color-warning">{{order.amount}}</span>
       </td>
       <td>
+        {% if users[order.userId].destroyed|default(0) == 0 %}
         <a target="_blank" href="{{ path('user_show', {id:order.userId}) }}">
         {{users[order.userId].nickname}}</a>
+        {% else %}
+          {{ 'user.user_had_destroyed'|trans }}
+        {% endif %}
       </td>
       <td>
         {{dict_text('payment',order.payment)}}
