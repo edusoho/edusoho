@@ -16,7 +16,11 @@ define(function(require, exports, module) {
         $('#audit-submit-btn').button('submiting').addClass('disabled');
         $.post($form.attr('action'), $form.serialize(), function (result) {
           $modal.modal('hide');
-          Notify.success(Translator.trans('处理成功'));
+          if (result.success === true) {
+            Notify.success(Translator.trans('处理成功'));
+          } else {
+            Notify.danger(Translator.trans(result.message));
+          }
 
           window.location.reload();
         }).error(function () {

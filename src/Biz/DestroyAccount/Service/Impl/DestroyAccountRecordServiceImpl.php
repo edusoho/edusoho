@@ -79,13 +79,16 @@ class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAcco
         );
 
         try {
+            $this->beginTransaction();
             $this->updateDestroyAccountRecord($id, $fields);
             $destroyedAccount = $this->getDestroyedAccountService()->createDestroyedAccount(array('recordId' => $record['id'], 'userId' => $record['userId'], 'nickname' => $record['nickname']));
 
             //更新用户相关信息
             $this->updateUserInfoForDestroyAccount($record['userId'], $destroyedAccount);
+            $this->commit();
         } catch (\Exception $e) {
             $this->getLogger()->error($e->getMessage());
+            $this->rollback();
         }
 
         $this->dispatchEvent('user.destroyed', new Event($user));
