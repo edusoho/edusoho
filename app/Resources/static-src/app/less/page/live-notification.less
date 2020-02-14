@@ -1,0 +1,63 @@
+.notification-item-dom {
+  display: table-cell;
+  vertical-align: top;
+}
+
+.notification-live-item {
+  position: relative;
+  margin-top: 16px;
+  width: 448px;
+  img {
+    width: 142.2px;
+  }
+  .notification-live-info {
+    width: 218px;
+    padding-left: 12px;
+    padding-right: 24px;
+  }
+  .notification-live-info__title {
+    width: 182px;
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333333;
+    line-height: 20px;
+  }
+  .notification-live-info__ing {
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #ffa55a;
+    &.start {
+      .live-time {
+        color: #999;
+      }
+      .live-divider {
+        margin-left: 8px;
+        margin-right: 8px;
+        color: #e1e1e1;
+      }
+    }
+  }
+  .notification-live-info__link {
+    position: absolute;
+    top: 26px;
+    right: 0;
+    padding: 4px 16px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #fff;
+    border-radius: 34.5px;
+    a {
+      color: #fff;
+    }
+    .es-transition;
+    &:hover,
+    &:focus,
+    &.active {
+      .es-transition;
+      .opacity(0.8);
+    }
+  }
+}
+
