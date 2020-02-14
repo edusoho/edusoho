@@ -45,6 +45,20 @@ export default (module, startValidate = false) => {
     }
   }
 
+  // 公开课
+  if (module.type === 'open_course_list') {
+    const openCourseExist = module.data.items.length;
+    if (!module.data.title || (module.data.sourceType === 'custom' && !openCourseExist)) {
+      if (startValidate) {
+        Vue.prototype.$message({
+          message: '请完善公开课模块信息！',
+          type: 'error'
+        });
+      }
+      return true;
+    }
+  }
+
   // 广告
   if (module.type === 'poster') {
     const imgUri = module.data.image.uri;

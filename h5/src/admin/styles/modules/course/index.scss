@@ -343,9 +343,24 @@
       font-weight:500;
     }
     &__live{
+      margin-top: 2px;
       line-height:20px;
       color:#999999;
       font-size:12px;
+    }
+    .live-status--default{
+      color: #03C777;
+    }
+    .live-status--start,.icon-zhibo1{
+      color: #FF9B56!important;
+    }
+    .live-status--end{
+      color: #999999!important
+    }
+    .live-time{
+      margin-right: 8px;
+      padding-right: 8px;
+      border-right: 1px solid #E1E1E1;
     }
   }
 }

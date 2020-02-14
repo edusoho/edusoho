@@ -43,6 +43,10 @@ const config = [
     name: 'getClassList',
     url: '/classrooms'
   }, {
+    // 获取公开课列表数据
+    name: 'getOpenCourseList',
+    url: '/open_course'
+  }, {
     // 获取优惠券功能开关
     name: 'getCouponSetting',
     url: '/setting/coupon',

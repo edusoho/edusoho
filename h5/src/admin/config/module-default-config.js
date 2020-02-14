@@ -48,7 +48,7 @@ const MODULE_DEFAULT = {
       sourceType: 'condition',
       categoryId: '0',
       sort: 'recommendedSeq',
-      lastDays: '0',
+      limitDays: '0',
       limit: '4',
       displayStyle: 'distichous',
       items: []
@@ -219,6 +219,9 @@ const VALUE_DEFAULT = {
   course_list: {
     key: 'displayedTitle'
   },
+  open_course_list: {
+    key: 'title'
+  },
   groupon: {
     key: 'name'
   },
@@ -239,6 +242,9 @@ const TYPE_TEXT_DEFAULT = {
   },
   classroom_list: {
     text: '班级'
+  },
+  open_course_list: {
+    text: '公开课'
   },
   groupon: {
     text: '活动'
