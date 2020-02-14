@@ -226,7 +226,7 @@ class UserServiceImpl extends BaseService implements UserService
             return null;
         }
 
-        if ($isFilterDestroyed && $user['destroyed'] == 1) {
+        if ($isFilterDestroyed && 1 == $user['destroyed']) {
             return null;
         }
 
