@@ -3,8 +3,10 @@
 namespace AppBundle\Twig;
 
 use AppBundle\Util\AvatarAlert;
+use Biz\Activity\Service\ActivityService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Util\CourseTitleUtils;
 use Biz\System\Service\SettingService;
@@ -63,7 +65,28 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('get_course_tasks', array($this, 'getCourseTasks')),
             new \Twig_SimpleFunction('is_teacher', array($this, 'isTeacher')),
             new \Twig_SimpleFunction('next_task', array($this, 'getNextTask')),
+            new \Twig_SimpleFunction('latest_live_task', array($this, 'getLatestLiveTask')),
         );
+    }
+
+    public function getLatestLiveTask()
+    {
+        $user = $this->biz['user'];
+        if (!$user->isLogin()) {
+            return null;
+        }
+        $liveNotifySetting = $this->getSettingService()->get('homepage_live_notify', array());
+        if (empty($liveNotifySetting['enabled'])) {
+            return null;
+        }
+        $startTime = time() + $liveNotifySetting['preTime'] * 60;
+        $endTimeRange = 15 * 60; //结束前固定15分钟
+        $task = $this->getTaskService()->getUserCurrentPublishedLiveTask($user['id'], $startTime, $endTimeRange);
+        if ($task) {
+            $task['courseSet'] = $this->getCourseSetService()->getCourseSet($task['fromCourseSetId']);
+        }
+
+        return $task;
     }
 
     public function getNextTask($taskId)
@@ -385,6 +408,9 @@ class CourseExtension extends \Twig_Extension
         return $this->biz->service('Course:CourseService');
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->biz->service('Course:CourseSetService');

@@ -1,0 +1,49 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_homepage_live_notify' %}
+{% do script(['libs/jquery-validation.js','app/js/admin-v2/operating/site/live-notify/index.js']) %}
+
+{% block main %}
+
+  {{ web_macro.flash_messages() }}
+
+  <form class="form-horizontal" method="post" id="live-notify-setting-form" novalidate>
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="enabled">{{'admin_v2.operation.homepage_live_notify.enable'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('enabled', {1:'admin_v2.operation.homepage_live_notify.enable.open'|trans, 0:'admin_v2.operation.homepage_live_notify.enable.close'|trans}, liveNotifySetting.enabled) }}
+        <p class="help-block">{{'admin_v2.operation.homepage_live_notify.enable.hint'|trans}}</p>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="preTime">{{ 'admin_v2.operation.homepage_live_notify.pre_time'|trans }}</label>
+      </div>
+      <div class="controls col-md-8">
+        <input class="form-control width-input" required id="preTime" type="text" name="preTime" value="{{ liveNotifySetting.preTime }}">{{ '分钟'|trans }}
+        <p class="help-block">{{'admin_v2.operation.homepage_live_notify.pre_time_hint'|trans}}</p>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="enabled">{{'admin_v2.operation.homepage_live_notify.position'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('position', {'leftBottom' :'admin_v2.operation.homepage_live_notify.position.left_bottom'|trans, 'rightBottom' :'admin_v2.operation.homepage_live_notify.position.right_bottom'|trans, 'rightTop' :'admin_v2.operation.homepage_live_notify.position.right_top'|trans}, liveNotifySetting.position) }}
+        <p class="help-block">{{'admin_v2.operation.homepage_live_notify.position_hint'|trans}}</p>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"></div>
+      <div class="controls col-md-8">
+        <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}

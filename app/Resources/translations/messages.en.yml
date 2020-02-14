@@ -9363,4 +9363,20 @@ admin_v2.homepage.switch_old_in_safari_notice: Due to Safari, toggle is not supp
 admin_v2.homepage.switch_old_in_safari_notice.title: Determine the switch
 admin_v2.homepage.switch_old_in_safari_notice.got_it: Got it
 
+admin_v2.operation.homepage_live_notify.enable: Live Notify
+admin_v2.operation.homepage_live_notify.enable.open: Open
+admin_v2.operation.homepage_live_notify.enable.close: Close
+admin_v2.operation.homepage_live_notify.enable.hint: After opening, when there is a live broadcast about to start, for the students who have purchased the live broadcast, a floating prompt box will pop up when entering the home page to prompt the students to enter the live classroom.
+admin_v2.operation.homepage_live_notify.pre_time: Reminder time in advance
+admin_v2.operation.homepage_live_notify.pre_time_hint: Set in the first few minutes before the live class, pop up the reminder.
+admin_v2.operation.homepage_live_notify.position: Reminder display location
+admin_v2.operation.homepage_live_notify.position_hint: Set the floating layer display position of the live broadcast reminder to avoid overlapping with the existing floating layer.
+admin_v2.operation.homepage_live_notify.position.left_bottom: Bottom left corner of page
+admin_v2.operation.homepage_live_notify.position.right_bottom: Bottom right corner of page
+admin_v2.operation.homepage_live_notify.position.right_top: Top right corner of page
+
+homepage.live_notify.header: Live start reminder
+homepage.live_notify.start_while: Begin in a minute
+homepage.live_notify.living: Living
+homepage.live_notify.entry_live_room: Go to liveroom
 admin.article_setting.article_copy_manage: Information copy protection
