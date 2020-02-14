@@ -37,7 +37,11 @@
     </div>
 
     <div class="metas text-sm">
-      <a href="{{ path('user_show', {id:author.id}) }}" class="color-gray">{{ author.nickname }}</a>
+      {% if author.destroyed|default(0) == 0 %}
+        <a href="{{ path('user_show', {id:author.id}) }}" class="color-gray">{{ author.nickname }}</a>
+      {% else %}
+        <a class="color-gray">{{ 'user.user_had_destroyed'|trans }}</a>
+      {% endif %}
       <span>{{'thread.create_thread'|trans({'%dict_text%':dict_text('threadType', thread.type)})}}</span>
       {% if thread.postNum > 0 and users[thread.lastPostUserId] is defined %}
         {% set poster = users[thread.lastPostUserId] %}
