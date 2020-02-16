@@ -885,6 +885,10 @@ admin_v2_setting_es_bar:
     path:  /setting/es-bar
     defaults: { _controller: AppBundle:AdminV2/Operating/SiteSetting:esBarSetting }
 
+admin_v2_homepage_live_notify:
+    path:  /setting/homepage-live-notify
+    defaults: { _controller: AppBundle:AdminV2/Operating/SiteSetting:homepageLiveNotifySetting }
+
 admin_v2_content:
     path:  /setting/content
     defaults: { _controller: AppBundle:AdminV2/Operating/Content:index }

@@ -33,7 +33,7 @@ class MeThreadPost extends AbstractResource
         $threadIds = isset($questionIds) ? array_merge($questionIds, $threadIds) : $threadIds;
 
         if (empty($threadIds)) {
-            return (object)array();
+            return (object) array();
         }
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
@@ -43,7 +43,7 @@ class MeThreadPost extends AbstractResource
         $courseThreads = $this->getCourseThreadService()->searchThreads(array('ids' => $threadIds), 'postedNotStick', $offset, $limit);
 
         if (empty($courseThreads)) {
-            return (object)array();
+            return (object) array();
         }
 
         $posts = $this->getCourseThreadService()->searchThreadPosts(array('threadIds' => ArrayToolkit::column($courseThreads, 'id'), 'isRead' => 0, 'exceptedUserId' => $currentUser['id']), array(), 0, PHP_INT_MAX);
