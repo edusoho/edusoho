@@ -89,6 +89,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             $fields = $this->createActivity($fields);
             $strategy = $this->createCourseStrategy($fields['courseId']);
             $task = $strategy->createTask($fields);
+            $task = array_merge($fields, $task);
             $this->dispatchEvent('course.task.create', new Event($task));
             $this->commit();
 
@@ -147,7 +148,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             $this->createNewException(TaskException::FORBIDDEN_UPDATE_TASK());
         }
-
         $this->beginTransaction();
         try {
             $this->preUpdateTaskCheck($id, $fields);
@@ -166,6 +166,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             $fields['endTime'] = $activity['endTime'];
             $strategy = $this->createCourseStrategy($task['courseId']);
             $task = $strategy->updateTask($id, $fields);
+            $task = array_merge($fields, $task);
             $this->dispatchEvent('course.task.update', new Event($task, $oldTask));
 
             if ('download' == $task['type']) {
