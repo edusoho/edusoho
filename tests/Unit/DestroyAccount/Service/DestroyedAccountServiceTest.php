@@ -3,7 +3,6 @@
 namespace Tests\Unit\DestroyAccount\Service;
 
 use Biz\BaseTestCase;
-use Biz\DestroyAccount\Service\DestroyAccountRecordService;
 use Biz\DestroyAccount\Service\DestroyedAccountService;
 
 class DestroyedAccountServiceTest extends BaseTestCase
