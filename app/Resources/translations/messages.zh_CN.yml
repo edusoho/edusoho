@@ -10218,6 +10218,7 @@ exception.wechat.template_conflict_industry_hint: 服务号行业设置错误
 
 exception.destroy_account.reason_too_long: 注销原因限制200字数
 exception.destroy_account.not_found_record: 未找到注销记录
+exception.destroy_account.audit_record_exist: 已存在审核中的申请
 
 course.unname_title: 未命名计划
 
