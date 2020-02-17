@@ -52,18 +52,9 @@ class DestroyAccountServiceTest extends BaseTestCase
     public function testGetLastDestroyAccountRecordByUserId()
     {
         $this->createDestroyAccountRecord();
-        sleep(1);
-        $fields = array(
-            'userId' => 2,
-            'nickname' => 'test',
-            'reason' => '释放手机号',
-            'status' => 'audit',
-            'ip' => '127.0.0.1',
-        );
-        $this->getDestroyAccountRecordDao()->create($fields);
 
         $result = $this->getDestroyAccountRecordService()->getLastDestroyAccountRecordByUserId(1);
-        $this->assertEquals(2, $result['userId']);
+        $this->assertEquals(1, $result['userId']);
     }
 
     public function testCountDestroyAccountRecords()
