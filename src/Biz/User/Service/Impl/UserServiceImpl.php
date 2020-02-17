@@ -199,6 +199,9 @@ class UserServiceImpl extends BaseService implements UserService
             PHP_INT_MAX
         );
         $ids = ArrayToolkit::column($friends, 'toId');
+        if (empty($ids)) {
+            return 0;
+        }
 
         return $this->getUserDao()->count(array('userIds' => $ids, 'destroyed' => 0));
     }
