@@ -13,7 +13,7 @@
             </div>
             <div class="content">{{post.content|raw}}</div>
             <div class="color-gray text-normal pull-right">
-              <a href="javascript:" class="li-reply" postId="{{postMain.id}}" postName="{{postReplyMembers[post.userId].nickname}}"> {{'group.thread.reply_btn'|trans}}</a>
+              <a href="javascript:" class="li-reply" postId="{{postMain.id}}" postName="{% if postReplyMembers[post.userId].destroyed|default(0) == 0 %}{{postReplyMembers[post.userId].nickname}}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %}"> {{'group.thread.reply_btn'|trans}}</a>
             </div>
           </div>
         </li>

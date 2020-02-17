@@ -141,10 +141,10 @@
                 {% endif %}
 
                 {% if not subPosts %}
-                  <a href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="{{postMember[post.userId].id}}">{{'group.thread.reply_btn'|trans}}</a>
+                  <a href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{% if postMember[post.userId].destroyed|default(0) == 0 %}{{postMember[post.userId].nickname}}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %}" data-from-user-id-nosub="{{postMember[post.userId].id}}">{{'group.thread.reply_btn'|trans}}</a>
                   <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" style="display:none;">{{'group.thread.collapse_btn'|trans}}</a>
                 {% else %}
-                  <a style="display:none;" href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="">{{'group.thread.reply_btn'|trans}}({{postReplyCount[post.id]}})</a>
+                  <a style="display:none;" href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{% if postMember[post.userId].destroyed|default(0) == 0 %}{{postMember[post.userId].nickname}}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %}" data-from-user-id-nosub="">{{'group.thread.reply_btn'|trans}}({{postReplyCount[post.id]}})</a>
                   <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" >{{'group.thread.collapse_btn'|trans}}</a>
                 {% endif %}
               </div>

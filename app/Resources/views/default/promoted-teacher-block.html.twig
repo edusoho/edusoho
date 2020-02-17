@@ -4,7 +4,11 @@
   <div class="es-box-body">
     <div class="promoted-teacher">
       <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ filepath(teacher.mediumAvatar, 'avatar.png') }}" class="avatar"></a>
+      {% if teacher.destroyed|default(0) == 0 %}
       <a class="nickname" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+      {% else %}
+        {{ 'user.user_had_destroyed'|trans }}
+      {% endif %}
       <div class="title">{{ teacher.title }}</div>
       <div class="about">{{ teacher.about|plain_text(100) }}</div>
       <div class="more"><a href="{{ path('user_show', {id:teacher.id}) }}">{{'teacher.promoted_teacher.see_ben'|trans}} &raquo;</a></div>

@@ -27,6 +27,9 @@ class UserController extends BaseController
 {
     public function headerBlockAction($user)
     {
+        if (1 == $user['destroyed']) {
+            return $this->render('user/header-destroyed-block.html.twig', array('user' => $user));
+        }
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $user = array_merge($user, $userProfile);
 

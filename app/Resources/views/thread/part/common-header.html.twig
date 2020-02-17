@@ -13,7 +13,12 @@
       {{ thread.title }}
     </div>
     <div class="metas">
-      <a href="{{ path('user_show', {id:author.id}) }}">{{ author.nickname }}</a>{{'thread.create_thread'|trans({'%dict_text%': dict_text('threadType', thread.type)})}}<span>{{ thread.createdTime|smart_time }}</span>
+        {% if author.destroyed|default(0) == 0 %}
+          <a href="{{ path('user_show', {id:author.id}) }}">{{ author.nickname }}</a>
+        {% else %}
+          <a>{{ 'user.user_had_destroyed'|trans }}</a>
+        {% endif %}
+      {{'thread.create_thread'|trans({'%dict_text%': dict_text('threadType', thread.type)})}}<span>{{ thread.createdTime|smart_time }}</span>
     </div>
   </div>
   <div class="media-data">

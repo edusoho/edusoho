@@ -13,7 +13,11 @@
 				</div>
 				<div class="media-body media-middle">
 					<div class="title">
-						<a class="link-dark link-dark" href="{{path('user_show',{id:teacher.id})}}">{{ teacher.nickname }}</a>
+					{% if teacher.destroyed|default(0) == 0 %}
+					  <a class="link-dark link-dark" href="{{path('user_show',{id:teacher.id})}}">{{ teacher.nickname }}</a>
+				    {% else %}
+					  <a class="link-dark link-dark">{{ 'user.user_had_destroyed'|trans }}</a>
+                    {% endif %}
 					</div>
 					<div class="content">{{ teacher.title}}
 					</div>
