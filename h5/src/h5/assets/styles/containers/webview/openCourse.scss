@@ -1,5 +1,15 @@
 .openCourse{
   .openCourse__tabs{
     margin-top: vw(-18);
+    .van-tabs__wrap{
+      box-shadow:0px 3px 4px 0px rgba(0,0,0,0.03);
+    }
+    .open_course_date{
+     margin:0 vw(16) vw(24);
+     padding-bottom: vw(4);
+     font-size: 14px;
+     color: #313131;
+     border-bottom: vw(1) solid #E1E1E1;
+    }
   }
 }

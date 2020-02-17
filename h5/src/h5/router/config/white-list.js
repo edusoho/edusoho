@@ -4,6 +4,7 @@ const whiteList = [
   '/my/history/learning',
   '/classroom/explore/new',
   '/course/explore/new',
+  '/openCourse/explore/new',
   '/login/qrcode',
   '/login',
   '/sts',
