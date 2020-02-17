@@ -43,7 +43,7 @@
         ></div>
       </div>
 
-      {% do script(['libs/base.js','app/js/main.js'], 1000) %}
+      {% do script(['libs/base.js','app/js/commons.js','app/js/main.js'], 1000) %}
       {% if cloudSdk %}
         <script src="{{ cloud_sdk_url(cloudSdk) }}"></script>
       {% endif %}

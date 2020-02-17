@@ -16,6 +16,6 @@
       {% endif %}>
     </div>
     <input type="hidden" class="js-cloud-url" data-url="{{ cloud_sdk_url('player') }}">
-    {% do script(['libs/base.js','app/js/main.js','app/js/activity/new-doc/index.js'], 1000) %}
+    {% do script(['libs/base.js','app/js/commons.js','app/js/main.js','app/js/activity/new-doc/index.js'], 1000) %}
   {% endif %}
 {% endblock %}
