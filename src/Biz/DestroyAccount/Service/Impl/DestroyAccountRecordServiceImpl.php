@@ -48,6 +48,7 @@ class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAcco
         }
 
         $fields = ArrayToolkit::parts($fields, array('userId', 'nickname', 'reason', 'ip'));
+        $fields['status'] = 'audit';
 
         return $this->getDestroyAccountRecordDao()->create($fields);
     }

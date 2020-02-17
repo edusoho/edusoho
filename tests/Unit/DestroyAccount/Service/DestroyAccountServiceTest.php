@@ -3,6 +3,7 @@
 namespace Tests\Unit\DestroyAccount\Service;
 
 use Biz\BaseTestCase;
+use Biz\DestroyAccount\Dao\DestroyAccountRecordDao;
 use Biz\DestroyAccount\Service\DestroyAccountRecordService;
 
 class DestroyAccountServiceTest extends BaseTestCase
@@ -57,8 +58,9 @@ class DestroyAccountServiceTest extends BaseTestCase
             'nickname' => 'test',
             'reason' => '释放手机号',
             'status' => 'audit',
+            'ip' => '127.0.0.1',
         );
-        $this->getDestroyAccountRecordService()->createDestroyAccountRecord($fields);
+        $this->getDestroyAccountRecordDao()->create($fields);
 
         $result = $this->getDestroyAccountRecordService()->getLastDestroyAccountRecordByUserId(1);
         $this->assertEquals(2, $result['userId']);
@@ -79,6 +81,7 @@ class DestroyAccountServiceTest extends BaseTestCase
             'nickname' => 'test',
             'reason' => '释放手机号',
             'status' => 'audit',
+            'ip' => '127.0.0.1',
         );
 
         return $this->getDestroyAccountRecordService()->createDestroyAccountRecord($fields);
@@ -90,5 +93,13 @@ class DestroyAccountServiceTest extends BaseTestCase
     protected function getDestroyAccountRecordService()
     {
         return $this->createService('DestroyAccount:DestroyAccountRecordService');
+    }
+
+    /**
+     * @return DestroyAccountRecordDao
+     */
+    protected function getDestroyAccountRecordDao()
+    {
+        return $this->createDao('DestroyAccount:DestroyAccountRecordDao');
     }
 }
