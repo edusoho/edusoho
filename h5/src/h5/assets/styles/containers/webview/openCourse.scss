@@ -1,5 +1,8 @@
 .openCourse{
   .openCourse__tabs{
     margin-top: vw(-18);
+    .van-tabs__wrap{
+      @extend .box-shadow;
+    }
   }
 }

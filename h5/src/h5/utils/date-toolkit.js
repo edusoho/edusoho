@@ -33,6 +33,13 @@ const formatSimpleTime = date => {
   }).join('-');
 };
 
+// 11月16日
+const formatChinaDay = date => {
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  return `${month}月${day}日`;
+};
+
 // 12:04
 const formatSimpleHour = date => {
   const hour = date.getHours();
@@ -177,6 +184,7 @@ export {
   formatTime,
   formatFullTime,
   formatchinaTime,
+  formatChinaDay,
   formatSimpleTime,
   formatTimeByNumber,
   formatCompleteTime,

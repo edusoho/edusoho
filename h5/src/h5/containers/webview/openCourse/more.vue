@@ -11,29 +11,36 @@
     />
     <van-tabs 
     class="openCourse__tabs"
-    v-model="activeTab" 
+    v-model="isReplay" 
     color="#03C777"
     title-active-color="#03C777"
     line-width="16px"
     :border="false"
     animated 
     @click="">
-      <van-tab title="直播">内容 1</van-tab>
-      <van-tab title="回放">内容 2</van-tab>
+      <van-tab title="直播">
+        <infinite-scroll
+          :course-list="courseList"
+          :is-all-data="isAllCourse"
+          :is-request-compile="isRequestCompile"
+          :type-list="'open_course_list'"
+          :is-app-use="isAppUse"
+          @needRequest="sendRequest"
+          @resetData="initCourseList"
+        />
+      </van-tab>
+      <van-tab title="回放">
+        <infinite-scroll
+          :course-list="courseList"
+          :is-all-data="isAllCourse"
+          :is-request-compile="isRequestCompile"
+          :type-list="'open_course_list'"
+          :is-app-use="isAppUse"
+          @needRequest="sendRequest"
+          @resetData="initCourseList"
+        />
+      </van-tab>
     </van-tabs>
-
-    <!-- <infinite-scroll
-      :course-list="courseList"
-      :is-all-data="isAllCourse"
-      :course-item-type="courseItemType"
-      :is-request-compile="isRequestCompile"
-      :vip-tag-show="true"
-      :type-list="'course_list'"
-      :is-app-use="isAppUse"
-      @needRequest="sendRequest"
-      @resetData="initCourseList"
-    /> -->
-
     <empty v-if="isEmptyCourse && isRequestCompile" text="暂无课程" class="empty__couse" />
   </div>
 </template>
@@ -54,11 +61,8 @@ export default {
   },
   data() {
     return {
-      activeTab: 0,
-      showShadow: false,
       isAppUse: true, //是否被app调用
       selectedData: {},
-      courseItemType: "price",
       isRequestCompile: false,
       isAllCourse: false,
       isEmptyCourse: true,
@@ -67,7 +71,7 @@ export default {
       limit: 10,
       type: "all",
       categoryId: 0,
-      sort: "recommendedSeq",
+      isReplay:1,
       selecting: false,
       queryForm: {
         courseType: "type"
@@ -76,6 +80,14 @@ export default {
       selectItems: CATEGORY_DEFAULT["openCourse_list"],
       categories: []
     };
+  },
+  watch: {
+    isReplay: function (newVal, oldVal) {
+      if(newVal===oldVal){
+        return;
+      }
+      this.setQuery();
+    }
   },
   created() {
     this.setTitle();
@@ -129,7 +141,8 @@ export default {
     getCourseList() {
       const setting = {
         offset: this.offset,
-        limit: this.limit
+        limit: this.limit,
+        isReplay:this.isReplay
       };
 
       this.requestCourses(setting).then(() => {
@@ -142,7 +155,7 @@ export default {
     requestCourses(setting) {
       this.isRequestCompile = false;
       const config = Object.assign(this.selectedData, setting);
-      return Api.getCourseList({
+      return Api.getOpenCourseList({
         params: config
       })
         .then(data => {
