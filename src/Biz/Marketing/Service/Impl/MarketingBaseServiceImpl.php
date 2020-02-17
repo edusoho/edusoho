@@ -3,6 +3,7 @@
 namespace Biz\Marketing\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Classroom\ClassroomException;
 use Biz\User\CurrentUser;
 use Biz\Role\Util\PermissionBuilder;
 use Biz\Marketing\Service\MarketingService;
@@ -65,8 +66,22 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
             'type' => $postData['target_type'],
             'id' => $postData['target_id'],
         );
-        list($classroom, $member, $order) = $this->makeUserJoin($user['id'], $target['id'], $orderInfo);
-        $logMsg = $this->getFinishedInfo($user, $classroom, $member, $order);
+
+        $isClassroomMember = false;
+        try {
+            list($classroom, $member, $order) = $this->makeUserJoin($user['id'], $target['id'], $orderInfo);
+        } catch (\Exception $e) {
+            if (ClassroomException::DUPLICATE_JOIN != $e->getCode()) {
+                $this->createNewException($e);
+            }
+            $isClassroomMember = true;
+        }
+
+        if ($isClassroomMember) {
+            $logMsg = "用户,{$user['id']}已经是班级成员,班级ID：{$target['id']}";
+        } else {
+            $logMsg = $this->getFinishedInfo($user, $classroom, $member, $order);
+        }
         $logger->info($logMsg);
 
         $response = array();
