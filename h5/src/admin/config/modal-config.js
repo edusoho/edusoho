@@ -1,4 +1,19 @@
 const head = {
+  open_course_list: [
+    {
+      col: 5,
+      title: '课程名称',
+      label: 'title'
+    }, {
+      col: 5,
+      title: '创建时间',
+      label: 'createdTime'
+    }, {
+      col: 0,
+      title: '操作',
+      label: 'delete'
+    }
+  ],
   course_list: [
     {
       col: 5,

@@ -12,6 +12,12 @@
         :feedback="feedback"
         :type-list="part.type"
         class="gray-border-bottom"/>
+        <e-openCourse-list
+        v-if="['open_course_list'].includes(part.type)"
+        :course-list="part.data"
+        :feedback="feedback"
+        :type-list="part.type"
+        class="gray-border-bottom"/>
       <e-poster
         v-if="part.type == 'poster'"
         :class="imageMode[part.data.responsive]"
@@ -51,6 +57,7 @@ import swipe from '&/components/e-swipe/e-swipe.vue'
 import marketPart from '&/components/e-marketing/e-activity'
 import coupon from '&/components/e-coupon-list/e-coupon-list'
 import vipList from '&/components/e-vip-list/e-vip-list'
+import openCourseList from '&/components/e-openCourse-list/e-openCourse-list'
 import { mapActions } from 'vuex'
 
 export default {
@@ -60,7 +67,8 @@ export default {
     'e-poster': poster,
     'e-market-part': marketPart,
     'e-coupon-list': coupon,
-    'e-vip-list': vipList
+    'e-vip-list': vipList,
+    'e-openCourse-list':openCourseList
   },
   props: {
     feedback: {
