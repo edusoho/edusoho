@@ -27,7 +27,7 @@
 
         <!-- 课程分类 -->
         <setting-cell :title="typeLabel + '分类：'">
-          <el-cascader v-show="sourceType === 'condition'" :options="type === 'course_list' ? courseCategories : classCategories" :props="cascaderProps" v-model="categoryTempId" size="mini" placeholder="请输入列表名称" filterable change-on-select/>
+          <el-cascader v-show="sourceType === 'condition'" :options="courseCategories" :props="cascaderProps" v-model="categoryTempId" size="mini" placeholder="请输入列表名称" filterable change-on-select/>
           <div v-show="sourceType === 'custom'" class="required-option">
             <el-button size="mini" @click="openModal">选择{{ typeLabel }}</el-button>
           </div>
@@ -42,13 +42,13 @@
 
         <!-- 排列顺序 -->
         <setting-cell v-show="sourceType === 'condition'" title="排列顺序：">
-          <div class="section-right__item pull-left">
+          <!-- <div class="section-right__item pull-left">
             <el-select v-model="sort" placeholder="顺序" size="mini">
               <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value"/>
             </el-select>
-          </div>
-          <div v-show="showDateOptions" class="section-right__item pull-right">
-            <el-select v-model="lastDays" placeholder="时间区间" size="mini">
+          </div> -->
+          <div  class="section-right__item">
+            <el-select v-model="limitDays" placeholder="时间区间" size="mini">
               <el-option v-for="item in dateOptions" :key="item.value" :label="item.label" :value="item.value"/>
             </el-select>
           </div>
@@ -75,7 +75,7 @@
 <script>
 import draggable from 'vuedraggable'
 import eOpenCourseList from '&/components/e-openCourse-list/e-openCourse-list'
-import courseModal from './modal/course-modal'
+import courseModal from '../course/modal/course-modal'
 import moduleFrame from '../module-frame'
 import settingCell from '../module-frame/setting-cell'
 import { mapMutations, mapState, mapActions } from 'vuex'
@@ -113,19 +113,6 @@ export default {
       modalVisible: false,
       limitOptions: [1, 2, 3, 4, 5, 6, 7, 8],
       type: this.moduleData.type,
-      sortOptions: [{
-        value: '-studentNum',
-        label: '加入最多'
-      }, {
-        value: '-createdTime',
-        label: '最近创建'
-      }, {
-        value: '-rating',
-        label: '评分最高'
-      }, {
-        value: 'recommendedSeq',
-        label: `推荐${optionLabel[this.moduleData.type]}`
-      }],
       cascaderProps: {
         label: 'name',
         value: 'id'
@@ -149,7 +136,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['courseCategories', 'classCategories']),
+    ...mapState(['courseCategories']),
     typeLabel() {
       return optionLabel[this.type]
     },
@@ -173,30 +160,12 @@ export default {
         console.log('changed copyModuleData')
       }
     },
-    showDateOptions() {
-      const isNewCreated = this.moduleData.data.sort === this.sortOptions[1].value
-      const isRecommend = this.moduleData.data.sort === this.sortOptions[3].value
-
-      if (isNewCreated || isRecommend) {
-        // 如果是 最新创建 或 推荐课程 时间区间为所有
-        this.moduleData.data.lastDays = '0'
-      }
-      return !isNewCreated && !isRecommend
-    },
     sourceType: {
       get() {
         return this.copyModuleData.data.sourceType
       },
       set(value) {
         this.copyModuleData.data.sourceType = value
-      }
-    },
-    sort: {
-      get() {
-        return this.copyModuleData.data.sort
-      },
-      set(value) {
-        this.copyModuleData.data.sort = value
       }
     },
     displayStyle: {
@@ -207,12 +176,12 @@ export default {
         this.copyModuleData.data.displayStyle = value
       }
     },
-    lastDays: {
+    limitDays: {
       get() {
-        return this.copyModuleData.data.lastDays.toString()
+        return this.copyModuleData.data.limitDays.toString()
       },
       set(value) {
-        this.copyModuleData.data.lastDays = value
+        this.copyModuleData.data.limitDays = value
       }
     },
     limit: {
@@ -271,30 +240,12 @@ export default {
       },
       immediate: true
     },
-    classCategories: {
-      handler(tree) {
-        if (!tree || this.categoryDiggered) return
-
-        const categoryExist = false
-        treeDigger(tree, (children, id) => {
-          if (id) {
-            const categoryExist = (id == this.categoryTempId)
-          }
-          return children
-        })
-        this.categoryDiggered = true
-
-        if (categoryExist) return
-        this.categoryTempId = ['0']
-      },
-      immediate: true
-    },
     sourceType(value) {
       this.limit = value === 'condition' ? 4 : 8
     }
   },
   methods: {
-    ...mapActions(['getCourseList', 'getClassList']),
+    ...mapActions(['getOpenCourseList']),
     getUpdatedCourses(courses) {
       this.copyModuleData.data.items = courses
     },
@@ -310,8 +261,7 @@ export default {
     },
     fetchCourse({ params, index }) {
       if (this.sourceType === 'custom') return
-      if (this.type === 'open_course_list') {
-        this.getCourseList(params).then(res => {
+      this.getOpenCourseList(params).then(res => {
           this.moduleData.data.items = res.data
         }).catch((err) => {
           this.$message({
@@ -319,16 +269,7 @@ export default {
             type: 'error'
           })
         })
-        return
-      }
-      this.getClassList(params).then(res => {
-        this.moduleData.data.items = res.data
-      }).catch((err) => {
-        this.$message({
-          message: err.message,
-          type: 'error'
-        })
-      })
+
     }
   }
 }

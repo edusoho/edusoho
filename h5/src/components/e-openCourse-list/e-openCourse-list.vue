@@ -81,14 +81,9 @@ export default {
         return this.courseList.sourceType
       }
     },
-    sort: {
+    limitDays: {
       get() {
-        return this.courseList.sort
-      }
-    },
-    lastDays: {
-      get() {
-        return this.courseList.lastDays
+        return this.courseList.limitDays
       }
     },
     limit: {
@@ -128,9 +123,6 @@ export default {
     }
   },
   watch: {
-    sort(value) {
-      this.fetchCourse()
-    },
     limit(value, oldValue) {
       if (oldValue > value) {
         const newItems = this.courseList.items.slice(0, value)
@@ -139,7 +131,7 @@ export default {
       }
       this.fetchCourse()
     },
-    lastDays(value) {
+    limitDays(value) {
       this.fetchCourse()
     },
     categoryId(value) {
@@ -162,9 +154,8 @@ export default {
       if (this.sourceType === 'custom') return
 
       const params = {
-        sort: this.sort,
         limit: this.limit,
-        lastDays: this.lastDays,
+        limitDays: this.limitDays,
         categoryId: this.categoryId
       }
 

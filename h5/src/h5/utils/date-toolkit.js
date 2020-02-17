@@ -33,6 +33,16 @@ const formatSimpleTime = date => {
   }).join('-');
 };
 
+const formatDotTime = date => {
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
+  return [month, day].map(n => {
+    n = n.toString();
+    return n[1] ? n : `0${n}`;
+  }).join('.');
+};
+
 // 12:04
 const formatSimpleHour = date => {
   const hour = date.getHours();
@@ -178,6 +188,7 @@ export {
   formatFullTime,
   formatchinaTime,
   formatSimpleTime,
+  formatDotTime,
   formatTimeByNumber,
   formatCompleteTime,
   formatSimpleHour,
