@@ -399,8 +399,10 @@ interface UserService
 
     /**
      * 注销用户信息修改
+     *
      * @param $userId
      * @param $destroyedId (destroyed_account表对应id)
+     *
      * @return array()
      */
     public function updateUserForDestroyedAccount($userId, $destroyedId);

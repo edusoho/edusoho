@@ -60,7 +60,7 @@ class DestroyAccountEventSubscriber extends EventSubscriber implements EventSubs
 
         $message = array(
             'userName' => $user['nickname'],
-            'reason' => $reason
+            'reason' => $reason,
         );
         $this->getNotificationService()->notify($user['id'], 'reject-destroy', $message);
     }
