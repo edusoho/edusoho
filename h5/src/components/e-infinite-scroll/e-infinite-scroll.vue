@@ -6,14 +6,17 @@
       @load="onLoad">
       <!-- 公开课 -->
       <template  v-if="typeList=='open_course_list'">
-        <opencourseItem 
-          v-for="(course, index) in courseList"
-          :key="'opencourse'+index"
-          :type="courseItemType"
-          :type-list="typeList"
-          :is-app-use="isAppUse"
-          :course="course"
-        />
+        <div v-for="(date,index) in courseDate" :key="'date'+index">
+          <div class="open_course_date">{{date}}</div>
+          <opencourseItem 
+            v-for="(course, index) in courseList[date]"
+            :key="'opencourse'+index"
+            :type="courseItemType"
+            :type-list="typeList"
+            :is-app-use="isAppUse"
+            :course="course"
+          />
+        </div>
       </template>
       <!-- 班级和课程 -->
       <template  v-else>
@@ -63,6 +66,10 @@ export default {
     typeList: {
       type: String,
       default: 'course_list'
+    },
+    courseDate:{
+      type: Array,
+      default: ()=>[]
     },
     normalTagShow: {
       type: Boolean,

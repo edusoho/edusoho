@@ -63,6 +63,12 @@ const formatFullTime = date => {
   }).join('-');
 };
 
+// 2018年
+const formatChinaYear = date => {
+  const year = date.getFullYear();
+  return `${year}年`;
+};
+
 // 2018年12月6日
 const formatchinaTime = date => {
   const year = date.getFullYear();
@@ -183,6 +189,7 @@ const compareDate = (date1, date2) => {
 export {
   formatTime,
   formatFullTime,
+  formatChinaYear,
   formatchinaTime,
   formatChinaDay,
   formatSimpleTime,

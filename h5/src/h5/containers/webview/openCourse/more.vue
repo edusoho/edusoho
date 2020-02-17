@@ -31,6 +31,7 @@
       </van-tab>
       <van-tab title="回放">
         <infinite-scroll
+          :course-date="courseDate"
           :course-list="courseList"
           :is-all-data="isAllCourse"
           :is-request-compile="isRequestCompile"
@@ -52,6 +53,7 @@ import treeSelects from "&/components/e-tree-selects/e-tree-selects.vue";
 import empty from "&/components/e-empty/e-empty.vue";
 import { mapMutations } from "vuex";
 import CATEGORY_DEFAULT from "@/config/category-default-config.js";
+import { formatChinaYear } from "@/utils/date-toolkit";
 export default {
   name: "more_openCourse",
   components: {
@@ -66,12 +68,14 @@ export default {
       isRequestCompile: false,
       isAllCourse: false,
       isEmptyCourse: true,
-      courseList: [],
+      course:[],
+      courseList: {},
+      courseDate:[],
       offset: 0,
       limit: 10,
       type: "all",
       categoryId: 0,
-      isReplay:1,
+      isReplay:0,
       selecting: false,
       queryForm: {
         courseType: "type"
@@ -146,11 +150,11 @@ export default {
       };
 
       this.requestCourses(setting).then(() => {
-        this.isEmptyCourse = this.courseList.length === 0;
+        this.isEmptyCourse = this.course.length === 0;
       });
     },
     judegIsAllCourse(courseInfomation) {
-      return this.courseList.length == courseInfomation.paging.total;
+      return this.course.length == courseInfomation.paging.total;
     },
     requestCourses(setting) {
       this.isRequestCompile = false;
@@ -167,7 +171,18 @@ export default {
         });
     },
     formateData(data) {
-      this.courseList = this.courseList.concat(data.data);
+      let courseDate = this.courseDate;
+      data.data.forEach(item => {
+        let date = formatChinaYear(new Date(item.createdTime));
+        courseDate.push(date);
+        if (!this.courseList[date]) {
+          this.$set(this.courseList, date, []);
+        }
+        this.courseList[date].push(item);
+      });
+      this.courseDate = Array.from(new Set(courseDate));
+
+    this.course = this.course.concat(data.data);
       this.isAllCourse = this.judegIsAllCourse(data);
       if (!this.isAllCourse) {
         this.offset = this.courseList.length;
