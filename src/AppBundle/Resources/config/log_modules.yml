@@ -400,3 +400,12 @@ push:
         modalField: all
 
 
+destroy_account_record:
+    create:
+        modalField:
+          0: nickname
+          1: reason
+    pass:
+        modalField: all
+    reject:
+        modalField: all

@@ -2,12 +2,20 @@
 
 namespace Biz\DestroyAccount\Service;
 
+use Biz\System\Annotation\Log;
+
 interface DestroyAccountRecordService
 {
     public function getDestroyAccountRecord($id);
 
     public function updateDestroyAccountRecord($id, $fields);
 
+    /**
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="destroy_account_record", action="create")
+     */
     public function createDestroyAccountRecord($fields);
 
     public function deleteDestroyAccountRecord($id);
@@ -19,6 +27,23 @@ interface DestroyAccountRecordService
     public function getLastAuditDestroyAccountRecordByUserId($userId);
 
     public function searchDestroyAccountRecords($conditions, $orderBy, $start, $limit);
+
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="destroy_account_record", action="pass")
+     */
+    public function passDestroyAccountRecord($id);
+
+    /**
+     * @param $id
+     * @param $reason
+     *
+     * @return mixed
+     * @Log(module="destroy_account_record",action="reject")
+     */
+    public function rejectDestroyAccountRecord($id, $reason);
 
     public function countDestroyAccountRecords($conditions);
 }

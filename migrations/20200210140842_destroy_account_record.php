@@ -14,7 +14,7 @@ class DestroyAccountRecord extends Migration
         $connection->exec("
             CREATE TABLE IF NOT EXISTS `destroy_account_record` (
               `id` INT (10) UNSIGNED NOT NULL AUTO_INCREMENT,
-              `nickname` VARCHAR (10) NOT NULL DEFAULT '' COMMENT '用户名',
+              `nickname` VARCHAR (128) NOT NULL DEFAULT '' COMMENT '用户名',
               `userId` INT (10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户id',
               `reason` VARCHAR (256)  NOT NULL DEFAULT '' COMMENT '注销理由',
               `rejectedReason` VARCHAR (128) NOT NULL DEFAULT '' COMMENT '拒绝申请理由',
