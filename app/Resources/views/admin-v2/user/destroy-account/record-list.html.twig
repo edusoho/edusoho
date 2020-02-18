@@ -34,12 +34,12 @@
               <td width="30%" title="{{ record.reason|default('') }}">{{ record.reason|default('')|sub_text(20) }}</td>
               <td width="15%">
                 {% if record.auditTime|default(0) %}
-                    --
-                {% else %}
-                {{ record.auditTime|date('Y-n-d H:i:s') }}
-                <br>
-                {% set user = data('User', {userId:record.auditUserId }) %}
+                  {{ record.auditTime|date('Y-n-d H:i:s') }}
+                  <br>
+                    {% set user = data('User', {userId:record.auditUserId }) %}
                   <span class="text-muted text-sm">{{ 'admin_v2.user.destroy_account_record.auditUser'|trans }}{{ user.nickname }}</span>
+                {% else %}
+                  --
                 {% endif %}
               </td>
               <td width="15%">

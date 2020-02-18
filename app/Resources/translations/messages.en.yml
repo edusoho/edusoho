@@ -7901,6 +7901,12 @@ log.action.template.question_bank.delete: Deleted the <strong class="color-succe
 log.action.template.question_bank.create_category: Created a new<strong class="color-success">bank category</strong> 《%title%》
 log.action.template.question_bank.delete_category: Deleted the<strong class="color-success">question bank</strong> 《%title%》
 log.action.template.question_bank.update_category: Updated the<strong class="color-success">question bank</strong> 《%title%》
+log.action.template.destroy_account_record.create: Apply destroy account
+log.action.template.destroy_account_record.pass: User %nickname% account cancellation application has been approved
+log.action.template.destroy_account_record.reject: The account cancellation request for user "%nickname%" was rejected
+log.action.destroy_account.create: Apply destroy account
+log.action.destroy_account.pass: Pass destroy account
+log.action.destroy_account.reject: Reject destroy account
 
 log.field.detail: Details
 log.field.change.detail: Original settings:<strong class="color-danger">%old%</strong> New settings:<strong class="color-danger">%new%</strong>
@@ -8921,6 +8927,7 @@ exception.wechat.template_conflict_industry_hint: Service number industry settin
 
 exception.destroy_account.reason_too_long: Write off reason limit 200 words
 exception.destroy_account.not_found_record: Record Not Found
+exception.destroy_account.audit_record_exist: Audit Record Is Exist
 
 course.unname_title: unname course
 

@@ -2,12 +2,20 @@
 
 namespace Biz\DestroyAccount\Service;
 
+use Biz\System\Annotation\Log;
+
 interface DestroyAccountRecordService
 {
     public function getDestroyAccountRecord($id);
 
     public function updateDestroyAccountRecord($id, $fields);
 
+    /**
+     * @param $fields
+     *
+     * @return mixed
+     * @Log(module="destroy_account_record", action="create", funcName="getDestroyAccountRecord")
+     */
     public function createDestroyAccountRecord($fields);
 
     public function deleteDestroyAccountRecord($id);
