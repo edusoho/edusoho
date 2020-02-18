@@ -14,7 +14,9 @@ interface DestroyAccountRecordService
 
     public function cancelDestroyAccountRecord();
 
-    public function getLastDestroyAccountRecordByUserId($userId);
+    public function passDestroyAccountRecord($id);
+
+    public function rejectDestroyAccountRecord($id, $reason);
 
     public function getLastAuditDestroyAccountRecordByUserId($userId);
 

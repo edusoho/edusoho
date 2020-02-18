@@ -48,20 +48,36 @@ class DestroyAccountServiceTest extends BaseTestCase
         $this->assertEquals(1, count($result));
     }
 
-    public function testGetLastDestroyAccountRecordByUserId()
+    public function testGetLastAuditDestroyAccountRecordByUserId()
     {
         $this->createDestroyAccountRecord();
-        sleep(1);
-        $fields = array(
-            'userId' => 2,
-            'nickname' => 'test',
-            'reason' => '释放手机号',
-            'status' => 'audit',
-        );
-        $this->getDestroyAccountRecordService()->createDestroyAccountRecord($fields);
 
-        $result = $this->getDestroyAccountRecordService()->getLastDestroyAccountRecordByUserId(1);
-        $this->assertEquals(2, $result['userId']);
+        $result = $this->getDestroyAccountRecordService()->getLastAuditDestroyAccountRecordByUserId(1);
+        $this->assertEquals(1, $result['userId']);
+    }
+
+    public function testCancelDestroyAccountRecord()
+    {
+        $this->createDestroyAccountRecord();
+        $result = $this->getDestroyAccountRecordService()->cancelDestroyAccountRecord();
+
+        $this->assertEquals('cancel', $result['status']);
+    }
+
+    public function testPassDestroyAccountRecord()
+    {
+        $this->createDestroyAccountRecord();
+        $result = $this->getDestroyAccountRecordService()->passDestroyAccountRecord(1);
+
+        $this->assertEquals('passed', $result);
+    }
+
+    public function testRejectDestroyAccountRecord()
+    {
+        $this->createDestroyAccountRecord();
+        $result = $this->getDestroyAccountRecordService()->rejectDestroyAccountRecord(1, '不允许注销');
+
+        $this->assertEquals('rejected', $result['status']);
     }
 
     public function testCountDestroyAccountRecords()
