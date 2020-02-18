@@ -1,46 +1,4 @@
 .setting-graphicNavigation{
-  .graphicNavigation__warp{
-    display:flex;
-    align-items: center;
-    padding: 16px 0;
-    .graphicNavigation__item{
-      position: relative;
-      display:flex;
-      flex:1;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      color: #999999;
-      .graphicNavigation__img{
-        width:40px;
-        border-radius: 50%;
-      }
-      span{
-        margin-top: 2px;
-      }
-    }
-    .graphicNavigation__border{
-      &::before{
-        content: "";
-        position: absolute;
-        right:0;
-        top:10px;
-        bottom: 20px;
-        width: 1px;
-        background: #EBEBEB;
-      }
-      &::after{
-        content: "";
-        position: absolute;
-        left:0;
-        top:10px;
-        bottom: 20px;
-        width: 1px;
-        background: #EBEBEB;
-      }
-    }
-  }
   .graphic-navigation-item {
     position: relative;
     border: 1px solid $grey-light;
@@ -85,7 +43,7 @@
       margin-top: 3px;
       margin-bottom: 14px;
       .el-input {
-        width: 144px;
+        width: 200px;
       }
       .el-input__inner {
         border-radius: 2px;
@@ -97,6 +55,14 @@
       display: flex;
       align-items: center;
       flex-wrap: wrap;
+      .el-input {
+        width: 200px;
+      }
+      .el-input__inner {
+        border-radius: 2px;
+        padding-left: 4px;
+        margin-left: 4px;
+      }
     }
     .add-inner{
       margin-top:16px;
@@ -126,6 +92,50 @@
     height: 250px;
     .cropper-view-box{
       border-radius: 50%;
+    }
+  }
+}
+.e-graphic-navigation{
+  .graphicNavigation__warp{
+    display:flex;
+    align-items: center;
+    padding: 16px 0;
+    .graphicNavigation__item{
+      position: relative;
+      display:flex;
+      flex:1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #999999;
+      .graphicNavigation__img{
+        width:40px;
+        border-radius: 50%;
+      }
+      span{
+        margin-top: 2px;
+      }
+    }
+    .graphicNavigation__border{
+      &::before{
+        content: "";
+        position: absolute;
+        right:0;
+        top:10px;
+        bottom: 20px;
+        width: 1px;
+        background: #EBEBEB;
+      }
+      &::after{
+        content: "";
+        position: absolute;
+        left:0;
+        top:10px;
+        bottom: 20px;
+        width: 1px;
+        background: #EBEBEB;
+      }
     }
   }
 }

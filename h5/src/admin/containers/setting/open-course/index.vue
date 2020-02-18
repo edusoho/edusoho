@@ -154,7 +154,7 @@ export default {
     },
     copyModuleData: {
       get() {
-        return this.moduleData
+        return  this.moduleData
       },
       set() {
         console.log('changed copyModuleData')
@@ -207,6 +207,7 @@ export default {
   watch: {
     copyModuleData: {
       handler(data) {
+              console.log(data)
         this.$emit('updateModule', data)
       },
       deep: true
@@ -260,7 +261,8 @@ export default {
       this.copyModuleData.data.items.splice(index, 1)
     },
     fetchCourse({ params, index }) {
-      if (this.sourceType === 'custom') return
+      console.log(this.sourceType);
+      if (this.sourceType === 'custom') {return}
       this.getOpenCourseList(params).then(res => {
           this.moduleData.data.items = res.data
         }).catch((err) => {

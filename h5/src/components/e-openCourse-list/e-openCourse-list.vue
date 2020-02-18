@@ -5,7 +5,7 @@
       <div class="clearfix">
         <span class="e-course-list__list-title text-overflow" style="font-size:16px">{{ courseList.title }}</span>
         <span class="e-course-list__more">
-          <span class="more-text pull-left" style="font-size:12px" @click="jumpTo(courseList.source)">更多</span>
+          <span class="more-text pull-left" style="font-size:12px" >更多</span>
         </span>
       </div>
     </div>
