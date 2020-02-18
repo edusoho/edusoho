@@ -44,18 +44,18 @@ class DestroyAccountEventSubscriber extends EventSubscriber implements EventSubs
         $user = $event->getSubject();
         $reason = $event->getArgument('reason');
 
+        $message = array(
+            'userName' => $user['nickname'],
+            'reason' => $reason,
+        );
+        $this->getNotificationService()->notify($user['id'], 'reject-destroy', $message);
+
         if (!empty($user['verifiedMobile'])) {
             $smsParams = array(
                 'mobiles' => $user['verifiedMobile'],
                 'templateId' => 2032,
                 'templateParams' => array('reason' => $reason),
             );
-
-            $message = array(
-                'userName' => $user['nickname'],
-                'reason' => $reason,
-            );
-            $this->getNotificationService()->notify($user['id'], 'reject-destroy', $message);
 
             try {
                 $this->getSDKSmsService()->sendToOne($smsParams);
