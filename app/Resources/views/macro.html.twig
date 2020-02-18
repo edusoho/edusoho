@@ -24,7 +24,7 @@
   {% set size = size|default('small') %}
   {% if user %}
     <a
-      class="avatar-link-{{ size }} {% if 'card' in options %}js-user-card{% endif %}"
+      class="avatar-link-{{ size }} {% if 'card' in options and user.destroyed|default(0) %}js-user-card{% endif %}"
       {% if '_blank' in options %}
         target="_blank"
       {% endif %}
