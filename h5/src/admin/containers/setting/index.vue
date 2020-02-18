@@ -243,7 +243,6 @@ export default {
     removeModule(data, index) {
       // 删除一个模块
       this.typeCount.removeByType(data.type);
-
       this.currentModuleIndex = Math.max(this.currentModuleIndex - 1, 0);
       this.modules.splice(index, 1);
     },

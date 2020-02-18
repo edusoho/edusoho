@@ -69,7 +69,6 @@
   <!-- 公开课 -->
     <open-course
       v-if="module.type === moduleDefault.openCourseList.type"
-      :key="3"
       :active="isActive"
       :moduleData="module"
       :incomplete="validateFuc"

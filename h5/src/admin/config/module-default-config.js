@@ -63,8 +63,8 @@ const MODULE_DEFAULT = {
       },
       link: {
         type: 'openCourse',
-        target: null,
-        url: '跳转公开课“全部”列表'
+        target: '跳转公开课“全部”列表',
+        url: ''
       }
     }, {
       title: '热门课',
@@ -73,8 +73,8 @@ const MODULE_DEFAULT = {
       },
       link: {
         type: 'course',
-        target: null,
-        url: '跳转课程“全部”列表'
+        target: '跳转课程“全部”列表',
+        url: ''
       }
     }, {
       title: '热销班',
@@ -83,8 +83,8 @@ const MODULE_DEFAULT = {
       },
       link: {
         type: 'class',
-        target: null,
-        url: '跳转班级“全部”列表'
+        target: '跳转班级“全部”列表',
+        url: ''
       }
     }]
   },

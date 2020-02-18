@@ -1,16 +1,9 @@
 <template>
   <module-frame :is-active="isActive" :is-incomplete="isIncomplete" container-class="setting-graphicNavigation">
     <div slot="preview" >
-        <div class="graphicNavigation__warp">
-          <div 
-          :class="[index===1? 'graphicNavigation__border':'','graphicNavigation__item']" 
-          v-for="(item, index) in copyModuleData.data"
-          :key="index">
-            <img v-if="!item.image.url" class="graphicNavigation__img" :src="getDefaultImg(item.link.type)" />
-            <img v-else class="graphicNavigation__img" :src="item.image.url" />
-            <span v-if="item.title">{{item.title}}</span>
-          </div>
-        </div>
+        <e-graphic-navigation
+          :graphicNavigation="copyModuleData.data"
+        />
     </div>
 
     <div slot="setting" class="carousel-allocate">
@@ -33,11 +26,14 @@
 import { MODULE_DEFAULT } from 'admin/config/module-default-config'
 import item from './item'
 import moduleFrame from '../module-frame'
+import eGraphicNavigation from '&/components/e-graphic-navigation/e-graphic-navigation.vue'
+
 
 export default {
   components: {
     item,
     moduleFrame,
+    'e-graphic-navigation':eGraphicNavigation
   },
   props: {
     active: {
