@@ -5,9 +5,7 @@ namespace Biz\System\Interceptor;
 use Biz\System\Service\LogService;
 use Codeages\Biz\Framework\Context\AbstractInterceptor;
 use Codeages\Biz\Framework\Context\Biz;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Targetlog\Annotation\Log;
-use Mockery\Exception;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\System\Util\LogDataUtils;
 

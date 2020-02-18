@@ -4,7 +4,6 @@ namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\UserBindDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class UserBindDaoImpl extends GeneralDaoImpl implements UserBindDao
 {
