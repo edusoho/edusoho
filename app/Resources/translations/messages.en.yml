@@ -8921,6 +8921,7 @@ exception.wechat.template_conflict_industry_hint: Service number industry settin
 
 exception.destroy_account.reason_too_long: Write off reason limit 200 words
 exception.destroy_account.not_found_record: Record Not Found
+exception.destroy_account.audit_record_exist: Audit Record Is Exist
 
 course.unname_title: unname course
 

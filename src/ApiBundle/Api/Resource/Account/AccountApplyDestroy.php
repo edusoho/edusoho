@@ -22,6 +22,7 @@ class AccountApplyDestroy extends AbstractResource
             'userId' => $user['id'],
             'nickname' => $user['nickname'],
             'reason' => $reason,
+            'ip' => $request->getHttpRequest()->getClientIp(),
         );
 
         return $this->getDestroyAccountRecordService()->createDestroyAccountRecord($fiedlds);

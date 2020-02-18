@@ -33,15 +33,22 @@ class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAcco
 
     public function createDestroyAccountRecord($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('userId', 'nickname', 'reason'))) {
+        if (!ArrayToolkit::requireds($fields, array('userId', 'nickname', 'reason', 'ip'))) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        $user = $this->getCurrentUser();
+        $lastAuditRecord = $this->getLastAuditDestroyAccountRecordByUserId($user['id']);
+        if (!empty($lastAuditRecord)) {
+            $this->createNewException(DestroyAccountException::AUDIT_RECORD_EXIST());
         }
 
         if (mb_strlen($fields['reason'], 'UTF-8') > 200) {
             $this->createNewException(DestroyAccountException::REASON_TOO_LONG());
         }
 
-        $fields = ArrayToolkit::parts($fields, array('userId', 'nickname', 'reason'));
+        $fields = ArrayToolkit::parts($fields, array('userId', 'nickname', 'reason', 'ip'));
+        $fields['status'] = 'audit';
 
         return $this->getDestroyAccountRecordDao()->create($fields);
     }
