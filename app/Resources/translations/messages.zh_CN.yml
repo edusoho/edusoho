@@ -9691,6 +9691,11 @@ log.attr.system.update_settings.wap.version.0: 关闭
 log.attr.system.update_settings.wap.about: 网校简介
 log.attr.system.update_settings.wap.logo: 网校LOGO
 log.attr.order.pay_amount: 价格（分）
+log.attr.destroy_account_record.reason: 注销理由
+log.attr.destroy_account_record.rejectedReason: 拒绝理由
+log.attr.destroy_account_record.nickname: 用户名
+log.attr.destroy_account_record.auditUserNickname: 处理人
+log.attr.destroy_account_record.destroyedAccountId: 注销ID
 
 cashflow.title: 名称
 cashflow.sn: 流水号

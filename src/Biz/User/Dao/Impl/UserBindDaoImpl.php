@@ -4,6 +4,7 @@ namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\UserBindDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class UserBindDaoImpl extends GeneralDaoImpl implements UserBindDao
 {
@@ -72,9 +73,7 @@ class UserBindDaoImpl extends GeneralDaoImpl implements UserBindDao
 
     public function deleteByToId($toId)
     {
-        $sql = "DELETE FROM {$this->table} WHERE toId = ?";
-
-        return $this->db()->executeQuery($sql, array('toId' => $toId));
+        return $this->db()->delete($this->table, array('toId' => $toId));
     }
 
     public function declares()

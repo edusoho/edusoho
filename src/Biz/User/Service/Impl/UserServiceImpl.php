@@ -37,6 +37,7 @@ use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;

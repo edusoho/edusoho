@@ -26,7 +26,7 @@ class DestroyAccountRecordDaoImpl extends GeneralDaoImpl implements DestroyAccou
     public function declares()
     {
         return array(
-            'timestamps' => array('createdTime', 'updatedTime'),
+            'timestamps' => array('createdTime', 'updatedTime', 'auditTime'),
             'orderbys' => array('createdTime'),
             'conditions' => array(
                 'userId = :userId',
