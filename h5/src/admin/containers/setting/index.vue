@@ -133,6 +133,7 @@ export default {
       pathName: this.$route.name,
       currentMPVersion: '0.0.0',
       couponSwitch: 0,
+      moduleLength:0
     }
   },
   computed: {
@@ -309,13 +310,16 @@ export default {
         })
         return;
       }
+      this.moduleLength=this.moduleLength+1
       this.typeCount.addByType(data.default.type);
 
       const defaultString = JSON.stringify(data.default); // 需要一个深拷贝对象
       let defaultCopied = JSON.parse(defaultString);
 
       //app默认两行展示，这里要手动修改
-       defaultCopied=this.formateAppDisplay(data.default.type,defaultCopied);
+      defaultCopied=this.formateAppDisplay(data.default.type,defaultCopied);
+      //oldIndex用于组件的key,减少组件重新创建
+      defaultCopied.oldIndex=this.moduleLength;
 
       this.modules.push(defaultCopied);
       this.currentModuleIndex = Math.max(this.modules.length - 1, 0);
@@ -330,13 +334,13 @@ export default {
         mode,
       }).then(res => {
         //app默认两行展示，这里要手动修改
-        Object.keys(res).forEach(element => {
+        Object.keys(res).forEach((element ,index)=> {
           res[element]=this.formateAppDisplay(res[element].type,res[element]);
-          this.modules.push(res[element])
+          res[element].oldIndex=index;        //oldIndex用于组件的key,减少组件重新创建
         });
-
-      // this.modules = Object.values(res);
-        this.moduleCountInit();
+       this.moduleLength=Object.keys(res).length-1;
+       this.modules = Object.values(res);
+       this.moduleCountInit();
       }).catch((err) => {
         this.moduleCountInit();
         this.$message({
