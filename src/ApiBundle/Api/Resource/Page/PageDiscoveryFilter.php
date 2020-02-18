@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Page;
 use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
 use ApiBundle\Api\Resource\Coupon\CouponFilter;
+use ApiBundle\Api\Resource\OpenCourse\OpenCourseFilter;
 use VipPlugin\Api\Resource\VipLevel\VipLevelFilter;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\MarketingActivity\MarketingActivityFilter;
@@ -77,6 +78,14 @@ class PageDiscoveryFilter extends Filter
             $marketingActivityFilter = new MarketingActivityFilter();
             $marketingActivityFilter->setMode(Filter::SIMPLE_MODE);
             $marketingActivityFilter->filter($data['data']['activity']);
+        }
+
+        if ('open_course_list' == $data['type']) {
+            $courseFilter = new OpenCourseFilter();
+            $courseFilter->setMode(Filter::PUBLIC_MODE);
+            foreach ($data['data']['items'] as &$course) {
+                $courseFilter->filter($course);
+            }
         }
     }
 }

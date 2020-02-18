@@ -158,7 +158,6 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 $doingCourses[] = $course;
             }
         }
-
     }
 
     protected function _prepareOpenCourseConditions($conditions)
@@ -236,6 +235,11 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             }
         }
 
+        return $discoverySetting;
+    }
+
+    public function graphicNavigationFilter($discoverySetting, $usage = 'show')
+    {
         return $discoverySetting;
     }
 
