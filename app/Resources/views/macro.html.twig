@@ -22,7 +22,7 @@
 {# options 可以传card(显示卡片), _blank(新开窗口), null_link(空链接) #}
 {%- macro user_avatar_link(user, size, options = []) -%}
   {% set size = size|default('small') %}
-  {% if user and user.destroyed|default(0) %}
+  {% if user and user.destroyed|default(0) == 0 %}
     <a
       class="avatar-link-{{ size }} {% if 'card' in options %}js-user-card{% endif %}"
       {% if '_blank' in options %}
