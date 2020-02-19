@@ -10691,7 +10691,7 @@ admin_v2.destroy_account.destroyed_account.number: 注销ID
 admin_v2.destroy_account.destroyed_account.nickname: 注销前用户名
 admin_v2.destroy_account.destroyed_account.destroy_time: 注销时间
 admin_v2.destroy_account.destroyed_account.operation: 操作
-admin_v2.destroy_account.destroyed_account.empty: 暂无记录
+admin_v2.destroy_account.destroyed_account.empty: 暂无注销记录
 admin_v2.destroy_account.destroyed_account.detail: 详情
 admin_v2.destroy_account.destroyed_account.reason: 注销理由
 admin_v2.destroy_account.destroyed_account.audit_user: 处理人
