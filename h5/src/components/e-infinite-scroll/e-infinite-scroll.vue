@@ -6,10 +6,10 @@
       @load="onLoad">
       <!-- 公开课 -->
       <template  v-if="typeList=='open_course_list'">
-        <div v-for="(date,index) in courseDate" :key="'date'+index">
+        <div v-for="(date,index) in openCourseDate" :key="'date'+index">
           <div class="open_course_date">{{date}}</div>
           <opencourseItem 
-            v-for="(course, index) in courseList[date]"
+            v-for="(course, index) in openCourseList[date]"
             :key="'opencourse'+index"
             :type="courseItemType"
             :type-list="typeList"
@@ -67,9 +67,13 @@ export default {
       type: String,
       default: 'course_list'
     },
-    courseDate:{
+    openCourseDate:{
       type: Array,
       default: ()=>[]
+    },
+    openCourseList:{
+      type: Object,
+      default: ()=>{}
     },
     normalTagShow: {
       type: Boolean,

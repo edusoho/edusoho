@@ -20,7 +20,8 @@
     @click="">
       <van-tab title="直播">
         <infinite-scroll
-          :course-list="courseList"
+          :openCourseDate="courseDate"
+          :openCourseList="courseList"
           :is-all-data="isAllCourse"
           :is-request-compile="isRequestCompile"
           :type-list="'open_course_list'"
@@ -31,8 +32,8 @@
       </van-tab>
       <van-tab title="回放">
         <infinite-scroll
-          :course-date="courseDate"
-          :course-list="courseList"
+          :openCourseDate="courseDate"
+          :openCourseList="courseList"
           :is-all-data="isAllCourse"
           :is-request-compile="isRequestCompile"
           :type-list="'open_course_list'"
@@ -139,7 +140,9 @@ export default {
     initCourseList() {
       this.isRequestCompile = false;
       this.isAllCourse = false;
-      this.courseList = [];
+      this.course = [];
+      this.courseList={};
+      this.courseDate=[];
       this.offset = 0;
     },
     getCourseList() {
