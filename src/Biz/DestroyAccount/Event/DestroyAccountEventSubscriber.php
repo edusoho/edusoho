@@ -3,6 +3,7 @@
 namespace Biz\DestroyAccount\Event;
 
 use Biz\System\Service\SettingService;
+use Biz\User\Service\NotificationService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -73,6 +74,9 @@ class DestroyAccountEventSubscriber extends EventSubscriber implements EventSubs
         return $this->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return NotificationService
+     */
     protected function getNotificationService()
     {
         return $this->getBiz()->service('User:NotificationService');
