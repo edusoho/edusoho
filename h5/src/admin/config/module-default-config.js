@@ -82,7 +82,7 @@ const MODULE_DEFAULT = {
         url: ''
       },
       link: {
-        type: 'class',
+        type: 'classroom',
         target: '跳转班级“全部”列表',
         url: ''
       }
