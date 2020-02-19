@@ -14,7 +14,7 @@ interface DestroyAccountRecordService
      * @param $fields
      *
      * @return mixed
-     * @Log(module="destroy_account_record", action="create", funcName="getDestroyAccountRecord")
+     * @Log(module="destroy_account_record", action="create")
      */
     public function createDestroyAccountRecord($fields);
 

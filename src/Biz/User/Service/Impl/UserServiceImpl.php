@@ -1588,6 +1588,8 @@ class UserServiceImpl extends BaseService implements UserService
             $limit
         );
         $ids = ArrayToolkit::column($friends, 'toId');
+        $users = $this->findUnDestroyedUsersByIds($ids);
+        $ids = ArrayToolkit::column($users, 'id');
 
         return $this->findUnDestroyedUsersByIds($ids);
     }
