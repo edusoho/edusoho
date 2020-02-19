@@ -70,11 +70,6 @@ class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAcco
         return $this->updateDestroyAccountRecord($lastAuditRecord['id'], array('status' => 'cancel'));
     }
 
-    public function getLastDestroyAccountRecordByUserId($userId)
-    {
-        return $this->getDestroyAccountRecordDao()->getLastDestroyAccountRecordByUserId($userId);
-    }
-
     public function getLastAuditDestroyAccountRecordByUserId($userId)
     {
         return $this->getDestroyAccountRecordDao()->getLastAuditDestroyAccountRecordByUserId($userId);
@@ -119,7 +114,7 @@ class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAcco
 
         $this->dispatchEvent('user.destroyed', new Event($user));
 
-        return true;
+        return $record;
     }
 
     public function rejectDestroyAccountRecord($id, $reason)

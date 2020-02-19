@@ -4,6 +4,7 @@ namespace Tests\Unit\User\Service;
 
 use Biz\BaseTestCase;
 use AppBundle\Common\ReflectionUtils;
+use Biz\User\Service\TokenService;
 
 class TokenServiceTest extends BaseTestCase
 {
@@ -218,6 +219,21 @@ class TokenServiceTest extends BaseTestCase
         $this->assertGreaterThan(time(), $token['expiredTime']);
     }
 
+    public function testDestroyTokensByUserId()
+    {
+        $token = $this->getTokenService()->makeToken('test_token', array(
+            'userId' => 1,
+            'times' => 2,
+            'duration' => 3600,
+        ));
+        $result = $this->getTokenService()->destroyTokensByUserId($token['userId']);
+
+        $this->assertEquals(true, $result);
+    }
+
+    /**
+     * @return TokenService
+     */
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');

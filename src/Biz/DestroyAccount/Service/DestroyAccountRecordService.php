@@ -22,15 +22,13 @@ interface DestroyAccountRecordService
 
     public function cancelDestroyAccountRecord();
 
-    public function getLastDestroyAccountRecordByUserId($userId);
+    public function passDestroyAccountRecord($id);
+
+    public function rejectDestroyAccountRecord($id, $reason);
 
     public function getLastAuditDestroyAccountRecordByUserId($userId);
 
     public function searchDestroyAccountRecords($conditions, $orderBy, $start, $limit);
-
-    public function passDestroyAccountRecord($id);
-
-    public function rejectDestroyAccountRecord($id, $reason);
 
     public function countDestroyAccountRecords($conditions);
 }

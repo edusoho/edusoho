@@ -31,9 +31,7 @@ class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
 
     public function destroyTokensByUserId($userId)
     {
-        $sql = "DELETE FROM {$this->table} WHERE userId = ?";
-
-        return $this->db()->executeQuery($sql, array($userId));
+        return $this->db()->delete($this->table, array('userId' => $userId));
     }
 
     public function getByType($type)
