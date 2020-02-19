@@ -3,6 +3,7 @@
 namespace Biz\DestroyAccount\Event;
 
 use Biz\System\Service\SettingService;
+use Biz\User\Service\NotificationService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -44,6 +45,12 @@ class DestroyAccountEventSubscriber extends EventSubscriber implements EventSubs
         $user = $event->getSubject();
         $reason = $event->getArgument('reason');
 
+        $message = array(
+            'userName' => $user['nickname'],
+            'reason' => $reason,
+        );
+        $this->getNotificationService()->notify($user['id'], 'reject-destroy', $message);
+
         if (!empty($user['verifiedMobile'])) {
             $smsParams = array(
                 'mobiles' => $user['verifiedMobile'],
@@ -57,12 +64,6 @@ class DestroyAccountEventSubscriber extends EventSubscriber implements EventSubs
                 throw $e;
             }
         }
-
-        $message = array(
-            'userName' => $user['nickname'],
-            'reason' => $reason,
-        );
-        $this->getNotificationService()->notify($user['id'], 'reject-destroy', $message);
     }
 
     /**
@@ -73,6 +74,9 @@ class DestroyAccountEventSubscriber extends EventSubscriber implements EventSubs
         return $this->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return NotificationService
+     */
     protected function getNotificationService()
     {
         return $this->getBiz()->service('User:NotificationService');

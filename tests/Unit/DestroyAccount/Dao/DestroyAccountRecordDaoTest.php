@@ -8,8 +8,8 @@ class DestroyAccountRecordDaoTest extends BaseDaoTestCase
 {
     public function testSearch()
     {
-        $record1 = $this->mockDataObject(array('nickname' => 'test1'));
-        $record2 = $this->mockDataObject(array('nickname' => 'test2'));
+        $this->mockDataObject(array('nickname' => 'test1'));
+        $this->mockDataObject(array('nickname' => 'test2'));
         $result = $this->getDao()->search(array('id' => 1), array(), 0, 10);
         $this->assertEquals('test1', $result[0]['nickname']);
 
