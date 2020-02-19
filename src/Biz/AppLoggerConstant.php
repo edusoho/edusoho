@@ -505,7 +505,7 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'create',
                 'pass',
                 'reject',
-            )
+            ),
         );
     }
 
