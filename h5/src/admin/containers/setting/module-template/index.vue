@@ -3,6 +3,7 @@
     <!-- 基础组件——轮播 -->
     <carousel
       v-if="module.type === moduleDefault.slideShow.type"
+      :key="'carousel'+module.oldIndex"
       :active="isActive"
       :moduleData="module"
       :incomplete="validateFuc"
@@ -12,7 +13,7 @@
     <!-- 基础组件——课程列表 -->
     <course
       v-if="module.type === moduleDefault.courseList.type"
-      :key="1"
+      :key="'course'+module.oldIndex"
       :active="isActive"
       :moduleData="module"
       :incomplete="validateFuc"
@@ -22,7 +23,7 @@
     <!-- 班级列表 -->
     <course
       v-if="module.type === moduleDefault.classList.type"
-      :key="2"
+      :key="'classroom'+module.oldIndex"
       :active="isActive"
       :moduleData="module"
       :incomplete="validateFuc"
@@ -32,6 +33,7 @@
     <!-- 广告海报 -->
     <poster
       v-if="module.type === moduleDefault.poster.type"
+      :key="'poster'+module.oldIndex"
       :active="isActive"
       :moduleData="module"
       :incomplete="validateFuc"
@@ -41,6 +43,7 @@
     <!-- 优惠券 -->
     <coupon
       v-if="module.type === moduleDefault.coupon.type"
+      :key="'coupon'+module.oldIndex"
       :active="isActive"
       :moduleData="module"
       :incomplete="validateFuc"
@@ -50,6 +53,7 @@
     <!-- 会员 -->
     <vip
       v-if="module.type === moduleDefault.vip.type"
+      :key="'vip'+module.oldIndex"
       :active="isActive"
       :moduleData="module"
       :incomplete="validateFuc"
@@ -60,6 +64,7 @@
   <!-- 图文导航 -->
      <graphic-navigation
       v-if="module.type === moduleDefault.graphicNavigation.type"
+      :key="'navigation'+module.oldIndex"
       :active="isActive"
       :moduleData="module"
       :incomplete="validateFuc"
@@ -69,6 +74,7 @@
   <!-- 公开课 -->
     <open-course
       v-if="module.type === moduleDefault.openCourseList.type"
+      :key="'openCourse'+module.oldIndex"
       :active="isActive"
       :moduleData="module"
       :incomplete="validateFuc"
@@ -78,10 +84,10 @@
     <!-- 营销组件——拼团，砍价，秒杀 -->
     <marketing-activity
       v-if="[moduleDefault.groupon.type, moduleDefault.cut.type, moduleDefault.seckill.type].includes(module.type)"
+      :key="'marketing'+module.oldIndex"
       :active="isActive"
       :moduleData="module"
       :incomplete="validateFuc"
-      :key="index"
       @updateModule="updateHandler(module, index)"
     ></marketing-activity>
     <img

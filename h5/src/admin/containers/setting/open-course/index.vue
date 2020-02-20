@@ -207,7 +207,6 @@ export default {
   watch: {
     copyModuleData: {
       handler(data) {
-              console.log(data)
         this.$emit('updateModule', data)
       },
       deep: true
