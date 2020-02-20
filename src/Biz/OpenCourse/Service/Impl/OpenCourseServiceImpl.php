@@ -1048,10 +1048,11 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function searchAndSortLiveCourses($conditions = array(), $orderBy = array(), $start, $limit)
     {
-        $lessonConditions = $this->_prepareLiveCourseLessonConditions($conditions);
-        if (empty($lessonConditions)) {
+        if (empty($conditions)) {
             return array();
         }
+
+        $lessonConditions = $this->_prepareLiveCourseLessonConditions($conditions);
 
         $total = $this->countLessons($lessonConditions);
         if (!$total) {
