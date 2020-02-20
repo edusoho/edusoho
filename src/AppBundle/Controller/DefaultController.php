@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
 use Biz\Theme\Service\ThemeService;
 use Biz\Content\Service\BlockService;
 use Biz\Course\Service\CourseService;
@@ -313,6 +314,9 @@ class DefaultController extends BaseController
         return $this->getBiz()->service('Course:MemberService');
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->getBiz()->service('Task:TaskService');
