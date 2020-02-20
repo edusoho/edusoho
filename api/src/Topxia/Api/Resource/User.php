@@ -98,6 +98,7 @@ class User extends BaseResource
         }
 
         $res['updatedTime'] = date('c', $res['updatedTime']);
+        $res = $this->destroyedNicknameFilter($res);
 
         return $res;
     }
