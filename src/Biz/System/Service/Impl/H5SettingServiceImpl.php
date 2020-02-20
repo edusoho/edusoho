@@ -184,9 +184,11 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
 
     public function graphicNavigationFilter($discoverySetting, $usage = 'show')
     {
+        $schema = (!empty($_SERVER['HTTPS']) && 'off' !== strtolower($_SERVER['HTTPS'])) ? 'https' : 'http';
+
         foreach ($discoverySetting['data'] as &$navigation) {
             if (!empty($navigation['link'])) {
-                $navigation['link']['url'] = $_SERVER['HTTP_HOST'].'/h5/index.html#/'.$navigation['link']['type'].'/explore/new';
+                $navigation['link']['url'] = $schema.'://'.$_SERVER['HTTP_HOST'].'/h5/index.html#/'.$navigation['link']['type'].'/explore/new';
             }
         }
 
