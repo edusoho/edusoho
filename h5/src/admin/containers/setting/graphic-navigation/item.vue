@@ -39,7 +39,7 @@
     <div class="add-title">标题：<el-input v-model="item.title" size="mini" placeholder="请输入标题" max-length="15" clearable/>
     </div>
     <div  class="add-choose">
-      链接：<el-input  v-model="item.link.url" size="mini" :placeholder="item.link.target"  :disabled="true" clearable/>
+      链接：<el-input  v-model="item.link.target" size="mini" :placeholder="item.link.target"  :disabled="true" clearable/>
     </div>
   </div>
 </template>
