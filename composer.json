@@ -58,7 +58,8 @@
     "codeages/biz-order-pay": "0.1.31",
     "ramsey/uuid": "^2.9",
     "codeages/exam-parser": "dev-master",
-    "doctrine/cache": "1.5.x-dev"
+    "doctrine/cache": "1.5.x-dev",
+    "codeages/escloud-php-sdk": "^1.1"
   },
   "require-dev": {
     "sensio/generator-bundle": "3.0.11",
