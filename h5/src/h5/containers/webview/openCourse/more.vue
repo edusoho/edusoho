@@ -185,10 +185,10 @@ export default {
       });
       this.courseDate = Array.from(new Set(courseDate));
 
-    this.course = this.course.concat(data.data);
+      this.course = this.course.concat(data.data);
       this.isAllCourse = this.judegIsAllCourse(data);
       if (!this.isAllCourse) {
-        this.offset = this.courseList.length;
+        this.offset = this.course.length;
       }
     },
     sendRequest() {
