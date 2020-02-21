@@ -40,6 +40,7 @@ class OpenCourse extends AbstractResource
             $lesson = $this->getVideoLesson($request, $lesson);
         }
 
+        $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
         $course['lesson'] = $lesson;
 
         return $course;
