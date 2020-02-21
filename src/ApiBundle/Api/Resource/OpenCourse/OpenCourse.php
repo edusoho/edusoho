@@ -54,7 +54,10 @@ class OpenCourse extends AbstractResource
         list($offset, $limit) = $this->getOffsetAndLimit($request);
 
         $total = $this->getOpenCourseService()->countLiveCourses($request->query->all());
-        $courses = $this->getOpenCourseService()->searchAndSortLiveCourses($request->query->all(), array(), $offset, $limit);
+
+        $orderBy = $request->query->get('isReplay') ? array('startTime' => 'DESC') : array());
+
+        $courses = $this->getOpenCourseService()->searchAndSortLiveCourses($request->query->all(), $orderBy, $offset, $limit);
 
         $this->getOCUtil()->multiple($courses, array('userId', 'teacherIds'));
 
@@ -88,7 +91,7 @@ class OpenCourse extends AbstractResource
                                 ));
 
                                 $headUrl = array(
-                                    'url' => $this->getHttpHost($request)."/hls/{$headLeaderInfo['id']}/playlist/{$token['token']}.m3u8?format=json&line=".$line,
+                                    'url' => $this->getHttpHost($request) . "/hls/{$headLeaderInfo['id']}/playlist/{$token['token']}.m3u8?format=json&line=" . $line,
                                 );
 
                                 $lesson['headUrl'] = $headUrl['url'];
@@ -104,7 +107,7 @@ class OpenCourse extends AbstractResource
                             ));
 
                             $url = array(
-                                'url' => $this->getHttpHost($request)."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format=json&line=".$line,
+                                'url' => $this->getHttpHost($request) . "/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format=json&line=" . $line,
                             );
                         } else {
                             return $this->error('404', '当前视频格式不能被播放！');
@@ -136,7 +139,7 @@ class OpenCourse extends AbstractResource
                         'duration' => 3600,
                         'userId' => 0,
                     ));
-                    $lesson['mediaUri'] = $this->getHttpHost($request)."/player/{$file['id']}/file/{$token['token']}";
+                    $lesson['mediaUri'] = $this->getHttpHost($request) . "/player/{$file['id']}/file/{$token['token']}";
                 }
             } else {
                 $lesson['mediaUri'] = '';
@@ -164,7 +167,7 @@ class OpenCourse extends AbstractResource
 
     protected function getHttpHost(ApiRequest $request)
     {
-        return $request->getHttpRequest()->getScheme()."://{$_SERVER['HTTP_HOST']}";
+        return $request->getHttpRequest()->getScheme() . "://{$_SERVER['HTTP_HOST']}";
     }
 
     /**
