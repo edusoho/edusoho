@@ -139,7 +139,7 @@ abstract class BaseResource
         $simple = array();
 
         $simple['id'] = $user['id'];
-        $simple['nickname'] = ($user['destroyed'] == 1) ? "号已注销" : $user['nickname'];
+        $simple['nickname'] = ($user['destroyed'] == 1) ? "帐号已注销" : $user['nickname'];
         $simple['title'] = $user['title'];
         $simple['roles'] = $user['roles'];
         $simple['avatar'] = $this->getFileUrl($user['smallAvatar']);
