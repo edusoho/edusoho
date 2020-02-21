@@ -23,12 +23,11 @@ class OpenCourseLiveTicket extends AbstractResource
             throw OpenCourseException::NOTFOUND_LESSON();
         }
 
-        $course = $this->getOpenCourseService()->getCourse($lesson['courseId']);
-        $result = $this->getLiveCourseService()->checkLessonStatus($lesson);
-
-        if (!$result['result']) {
-            throw OpenCourseException::STATUS_INVALID();
+        if ('liveOpen' != $lesson['type']) {
+            throw OpenCourseException::LESSON_TYPE_INVALID();
         }
+
+        $course = $this->getOpenCourseService()->getCourse($lesson['courseId']);
 
         $params = array();
 
