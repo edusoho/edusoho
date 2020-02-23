@@ -83,7 +83,7 @@ export default {
         const discount = Number(this.discount)
         //减价
         if(this.discountType==="reduce"){
-         return `减价${discount}`
+         return `减${discount}`
         }
         //打折
         if(this.discountType==="discount"){
