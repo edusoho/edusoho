@@ -139,13 +139,20 @@ abstract class BaseResource
         $simple = array();
 
         $simple['id'] = $user['id'];
-        $simple['nickname'] = $user['nickname'];
+        $simple['nickname'] = ($user['destroyed'] == 1) ? "帐号已注销" : $user['nickname'];
         $simple['title'] = $user['title'];
         $simple['roles'] = $user['roles'];
         $simple['avatar'] = $this->getFileUrl($user['smallAvatar']);
         $simple['uuid'] = $user['uuid'];
 
         return $simple;
+    }
+
+    protected function destroyedNicknameFilter($user)
+    {
+        $user['nickname'] = ($user['destroyed'] == 1) ? "帐号已注销" : $user['nickname'];
+
+        return $user ;
     }
 
     protected function nextCursorPaging($currentCursor, $currentStart, $currentLimit, $currentRows)
