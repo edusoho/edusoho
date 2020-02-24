@@ -37,7 +37,6 @@ class ResourceManager
     private function getClassName(PathMeta $meta)
     {
         $overrideFindInCustom = $meta->fallbackToCustomApi($this->customApiNamespaces);
-
         if ($overrideFindInCustom['isFind']) {
             return $overrideFindInCustom['className'];
         } else {
