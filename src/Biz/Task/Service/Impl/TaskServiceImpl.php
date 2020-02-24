@@ -673,6 +673,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->searchTasks($conditions, array('startTime' => 'ASC'), 0, $this->countTasks($conditions));
     }
 
+    public function getUserCurrentPublishedLiveTask($userId, $startTime, $endBeforeRange)
+    {
+        return $this->getTaskDao()->getUserCurrentPublishedLiveTaskByTimeRange($userId, $startTime, $endBeforeRange);
+    }
+
     /**
      * 返回当前正在直播的直播任务
      *
@@ -1175,6 +1180,9 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->biz->service('Task:TaskResultService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
         return $this->biz->service('Course:MemberService');

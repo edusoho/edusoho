@@ -10719,3 +10719,19 @@ admin_v2.destroy_account.destroyed_account.audit_reject: 拒绝
 admin_v2.destroy_account.destroyed_account.reason_tip: 最多输入30个字
 admin_v2.destroy_account.destroyed_account.can_not_manage: 不能操作您自己的申请
 user.user_had_destroyed: 帐号已注销
+admin_v2.operation.homepage_live_notify.enable: 直播开课提醒
+admin_v2.operation.homepage_live_notify.enable.open: 开启
+admin_v2.operation.homepage_live_notify.enable.close: 关闭
+admin_v2.operation.homepage_live_notify.enable.hint: 开启后，当有即将开始的直播时，对于已购买直播的学员，进入首页时会弹出浮动提示框，提示学员进入直播教室。
+admin_v2.operation.homepage_live_notify.pre_time: 提前提醒时间
+admin_v2.operation.homepage_live_notify.pre_time_hint: 设置在直播开课前第几分钟，弹出提醒。
+admin_v2.operation.homepage_live_notify.position: 提醒显示位置
+admin_v2.operation.homepage_live_notify.position_hint: 设置直播提醒的浮层显示位置，需避免跟已有的浮层重叠。
+admin_v2.operation.homepage_live_notify.position.left_bottom: 页面左下角
+admin_v2.operation.homepage_live_notify.position.right_bottom: 页面右下角
+admin_v2.operation.homepage_live_notify.position.right_top: 页面右上角
+
+homepage.live_notify.header: 直播开课提醒
+homepage.live_notify.start_while: 即将开始
+homepage.live_notify.living: 正在直播中
+homepage.live_notify.entry_live_room: 进入教室
