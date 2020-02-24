@@ -122,16 +122,16 @@ export default {
       categoryDiggered: false,
       dateOptions: [{
         value: '7',
-        label: '最近7天'
+        label: '前后7天'
       }, {
         value: '30',
-        label: '最近30天'
+        label: '前后30天'
       }, {
         value: '90',
-        label: '最近90天'
+        label: '前后90天'
       }, {
         value: '0',
-        label: '历史所有'
+        label: '所有'
       }]
     }
   },
