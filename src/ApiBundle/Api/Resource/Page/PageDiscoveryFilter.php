@@ -87,5 +87,20 @@ class PageDiscoveryFilter extends Filter
                 $courseFilter->filter($course);
             }
         }
+
+        if ('graphic_navigation' == $data['type']) {
+            foreach ($data['data'] as &$navigation) {
+                if (empty($navigation['image']) || empty($navigation['link'])) {
+                    continue;
+                }
+
+                if (!empty($navigation['image']['url'])) {
+                    continue;
+                }
+
+                $default = $navigation['link']['type'] == 'course' ? 'hot_course.png' : ($navigation['link']['type'] == 'openCourse' ? 'open_course.png' : 'hot_classroom.png');
+                $navigation['image']['url'] = AssetHelper::getFurl('', $default);
+            }
+        }
     }
 }
