@@ -142,9 +142,8 @@ class QuestionsShow {
       $.post($target.data('url'), {ids: ids}, function(response) {
         if (response) {
           cd.message({ type: 'success', message: Translator.trans('site.delete_success_hint') });
-          self._resetPage();
           self.selector.resetItems();
-          self.renderTable();
+          self.renderTable(true);
         } else {
           cd.message({ type: 'danger', message: Translator.trans('site.delete_fail_hint') });
         }
