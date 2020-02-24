@@ -19,6 +19,10 @@ const isMobileDevice = () => {
   return navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i);
 };
 
+const isMobileUpdateDevice = () => {
+  return !!navigator.userAgent.match(/(Android|Linux|webOS|iPhone|iPod|BlackBerry|Windows Phone|miui|1plus)/i);
+};
+
 const delHtmlTag = (str) => {
   return str.replace(/<[^>]+>/g, '').replace(/&nbsp;/ig, '');
 };
@@ -145,4 +149,5 @@ export {
   strToBase64,
   arrayIndex,
   plainText,
+  isMobileUpdateDevice
 };

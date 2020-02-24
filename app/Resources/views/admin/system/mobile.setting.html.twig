@@ -66,6 +66,48 @@
     </div>
   </div>
 
+  <fieldset>
+    <legend>{{ 'admin.mobile_setting.study_center_entrance'|trans }}</legend>
+    <div class="col-md-1"></div>
+    <div class="col-md-6 ptl radios">
+      <div class="form-group">
+        <label for="studyCenter_1">
+          <input type="radio" id="studyCenter_1" name="liveScheduleEnabled"
+                 value="1" {% if mobile.studyCenter.liveScheduleEnabled|default(0) == 1 %} checked{% endif %}>
+          {{ 'admin.mobile_setting.study_center_entrance.has_live'|trans }}
+          <div class="help-block">
+            <img style="width: 70%;"
+                 src="{{ asset('static-dist/app/img/admin-v2/study_center_entrance_has_live.png') }}">
+            <div>{{ 'admin.mobile_setting.study_center_entrance.has_live.notice'|trans }}</div>
+          </div>
+        </label>
+      </div>
+      <div class="form-group">
+        <label for="studyCenter_0">
+          <input type="radio" id="studyCenter_0" name="liveScheduleEnabled"
+                 value="0" {% if mobile.studyCenter.liveScheduleEnabled|default(0) == 0 %} checked{% endif %}>
+          {{ 'admin.mobile_setting.study_center_entrance.has_no_live'|trans }}
+          <div class="help-block">
+            <img style="width: 70%;"
+                 src="{{ asset('static-dist/app/img/admin-v2/study_center_entrance_has_no_live.png') }}">
+            <div class="help-block">{{ 'admin.mobile_setting.study_center_entrance.has_no_live.notice'|trans }}</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="col-md-4 text-center study-center-entrance-preview">
+      <img style="width: 50%;"
+           class="img-has-no-live {% if mobile.studyCenter.liveScheduleEnabled|default(0) == 1 %} hidden {% endif %}"
+           src="{{ asset('static-dist/app/img/admin-v2/app_study_center_entrance_has_no_live.png') }}">
+      <img style="width: 50%;"
+           class="img-has-live {% if mobile.studyCenter.liveScheduleEnabled|default(0) == 0 %} hidden {% endif %}"
+           src="{{ asset('static-dist/app/img/admin-v2/app_study_center_entrance_has_live.png') }}">
+      <div>学习中心</div>
+    </div>
+
+  </fieldset>
+
 {% if mobileCode != 'edusoho' and mobileCode != 'edusohov3' %}
   <fieldset>
     <legend>{{'admin.mobile_setting.app_custom_setting_option'|trans}}</legend>

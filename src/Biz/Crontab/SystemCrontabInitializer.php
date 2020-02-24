@@ -192,6 +192,11 @@ class SystemCrontabInitializer
                 'class' => 'Biz\CloudPlatform\Job\CloudConsultFreshJob',
                 'misfire_policy' => 'executing',
             ),
+            'DeleteUserFootprintJob' => array(
+                'expression' => '0 1 * * *',
+                'class' => 'Biz\User\Job\DeleteUserFootprintJob',
+                'misfire_policy' => 'executing',
+            ),
         );
         $defaultJob = array(
             'pool' => 'default',
