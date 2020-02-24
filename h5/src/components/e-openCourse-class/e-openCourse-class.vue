@@ -6,9 +6,9 @@
         <div>
           <span v-show="course.type === 'liveOpen'">直播</span>
         </div>
-        <div v-if="course.studentNum">
+        <div v-if="course.hitNum">
           <i class="iconfont icon-renqi"/>
-          {{ course.studentNum }}
+          {{ course.hitNum }}
         </div>
       </div>
     </div>

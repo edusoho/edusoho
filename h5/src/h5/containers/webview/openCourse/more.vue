@@ -17,7 +17,7 @@
     line-width="16px"
     :border="false"
     animated 
-    @click="">
+    >
       <van-tab title="直播">
         <infinite-scroll
           :openCourseDate="courseDate"
@@ -104,7 +104,7 @@ export default {
     setTitle() {
       window.postNativeMessage({
         action: "kuozhi_native_header",
-        data: { title: "免费直播课" }
+        data: { title: "所有公开课" }
       });
     },
     setQuery(value) {

@@ -6,9 +6,9 @@
         <div>
           <span >直播</span>
         </div>
-        <div v-if="course.studentNum">
+        <div v-if="course.hitNum">
           <i class="iconfont icon-renqi" />
-          {{ course.studentNum }}
+          {{ course.hitNum }}
         </div>
       </div>
     </div>
@@ -24,13 +24,15 @@
           <span :class="getStatusClass(status)" v-else>
             {{ course.lesson.startTime | filterOpenCourse }}
           </span>
-          <div class="live-content__right" v-if="status !== 'end'">
+          <div class="live-content__right" >
             <div
+              v-if="status !== 'end'"
               :class="[ 'live-btn', status === 'default' ? 'live-btn--start' : 'live-btn--default']"
               @click="toTask()"
             >
               {{ status | liveBtnText }}
             </div>
+            <div v-else>暂无回放</div>
           </div>
         </div>
       </div>
