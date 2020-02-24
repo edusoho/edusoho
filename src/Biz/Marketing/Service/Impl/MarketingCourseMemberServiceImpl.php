@@ -27,4 +27,9 @@ class MarketingCourseMemberServiceImpl extends MemberServiceImpl
 
         return $this->getOrderFacadeService()->createSpecialOrder($courseProduct, $userId, $params, 'Marketing');
     }
+
+    public function createMarketingOrder($courseId, $userId, $data)
+    {
+        return $this->createOrder($courseId, $userId, $data);
+    }
 }
