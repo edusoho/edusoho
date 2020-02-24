@@ -116,7 +116,6 @@ class Users extends BaseResource
         $profiles = $this->getUserService()->findUserProfilesByIds($ids);
 
         foreach ($res as $key => $one) {
-            $res = $this->destroyedNicknameFilter($res);
             $res[$key]['profile'] = $profiles[$one['id']];
             $res[$key] = $this->callFilter($name, $one);
         }

@@ -12,7 +12,7 @@ class User extends BaseResource
     );
 
     private $_publicFields = array(
-        'id', 'nickname', 'title', 'point', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'createdTime', 'updatedTime', 'roles'
+        'id', 'nickname', 'title', 'point', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'createdTime', 'updatedTime', 'roles', 'destroyed'
     );
 
     private $_publicProfileFields = array(
@@ -24,7 +24,7 @@ class User extends BaseResource
         'point', 'coin', 'smallAvatar', 'mediumAvatar', 'largeAvatar',
         'email', 'emailVerified', 'promoted', 'promotedTime', 'locked', 'lockDeadline',
         'loginTime', 'loginIp', 'approvalTime', 'approvalStatus', 'newMessageNum', 'newNotificationNum',
-        'createdIp', 'createdTime', 'updatedTime'
+        'createdIp', 'createdTime', 'updatedTime', 'destroyed'
     );
 
     private $_privateProfileFields = array(
@@ -108,7 +108,7 @@ class User extends BaseResource
         $simple = array();
 
         $simple['id']       = $res['id'];
-        $simple['nickname'] = $res['nickname'];
+        $simple['nickname'] = ($res['destroyed'] == 1) ? "帐号已注销" : $res['nickname'];
         $simple['title']    = $res['title'];
         $simple['avatar']   = $this->getFileUrl($res['smallAvatar']);
         $simple['uuid'] = $res['uuid'];
