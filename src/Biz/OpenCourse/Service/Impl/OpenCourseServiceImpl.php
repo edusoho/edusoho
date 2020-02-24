@@ -1112,7 +1112,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         }
 
         if (!empty($conditions['limitDays']) && is_numeric($conditions['limitDays'])) {
-            $conditions['startTimeGreaterThan'] = strtotime(date('Y-m-d', time()));
+            $conditions['startTimeGreaterThan'] = strtotime(date('Y-m-d', time() - $conditions['limitDays'] * 24 * 60 * 60));
             $conditions['startTimeLessThan'] = strtotime(date('Y-m-d', time() + $conditions['limitDays'] * 24 * 60 * 60));
         }
 
