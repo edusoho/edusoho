@@ -1024,25 +1024,26 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function countLiveCourses($conditions = array())
     {
-        if (!empty($conditions['title'])) {
-            $courseConditions = array(
-                'type' => 'liveOpen',
-                'status' => 'published',
-                'parentId' => 0,
-                'categoryId' => empty($conditions['categoryId']) ? '' : $conditions['categoryId'],
-                'titleLike' => $conditions['title'],
-            );
-            $courses = $this->searchCourses($courseConditions, array(), 0, PHP_INT_MAX);
-            $courses = ArrayToolkit::index($courses, 'id');
-
-            $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
-        }
-
         $lessonConditions = $this->_prepareLiveCourseLessonConditions($conditions);
 
         $total = $this->countLessons($lessonConditions);
 
-        return $total;
+        if (!$total) {
+            return $total;
+        }
+
+        $lessons = $this->searchLessons($lessonConditions, array(), 0, $total);
+
+        $courseConditions = array(
+            'type' => 'liveOpen',
+            'status' => 'published',
+            'parentId' => 0,
+            'ids' => ArrayToolkit::column($lessons, 'courseId'),
+            'categoryId' => empty($conditions['categoryId']) ? '' : $conditions['categoryId'],
+            'titleLike' => empty($conditions['title']) ? '' : $conditions['title'],
+        );
+
+        return $this->countCourses($courseConditions);
     }
 
     public function searchAndSortLiveCourses($conditions = array(), $orderBy = array(), $start, $limit)
@@ -1059,7 +1060,10 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
                 'categoryId' => empty($conditions['categoryId']) ? '' : $conditions['categoryId'],
                 'titleLike' => $conditions['title'],
             );
-            $courses = $this->searchCourses($courseConditions, array(), 0, PHP_INT_MAX);
+
+            $total = $this->countCourses($courseConditions);
+
+            $courses = $this->searchCourses($courseConditions, array(), 0, $total);
             $courses = ArrayToolkit::index($courses, 'id');
 
             $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
@@ -1069,9 +1073,8 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $lessons = $this->searchLessons($lessonConditions, $orderBy, $start, $limit);
 
-        $doingCourses = array();
         $finishedCourses = array();
-        $notStartCourses = array();
+        $notFinishedCourses = array();
         foreach ($lessons as $lesson) {
             if (!empty($courses) && empty($courses[$lesson['courseId']])) {
                 continue;
@@ -1079,23 +1082,24 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
             $course = !empty($courses[$lesson['courseId']]) ? $courses[$lesson['courseId']] : $this->getCourse($lesson['id']);
 
+            if ($course['status'] != 'published') {
+                continue;
+            }
+
             $course['startTime'] = $lesson['startTime'];
             $course['lesson'] = $lesson;
 
-            if ($lesson['startTime'] > time()) {
-                $notStartCourses[] = $course;
-            } elseif ($lesson['startTime'] <= time() && $lesson['endTime'] < time()) {
+            if ($lesson['endTime'] < time()) {
                 $finishedCourses[] = $course;
             } else {
-                $doingCourses[] = $course;
+                $notFinishedCourses[] = $course;
             }
         }
 
-        $doingCourses = ArrayToolkit::sortPerArrayValue($doingCourses, 'startTime');
-        $notStartCourses = ArrayToolkit::sortPerArrayValue($notStartCourses, 'startTime');
+        $notFinishedCourses = ArrayToolkit::sortPerArrayValue($notFinishedCourses, 'startTime');
         $finishedCourses = ArrayToolkit::sortPerArrayValue($finishedCourses, 'startTime', false);
 
-        return array_merge($doingCourses, $notStartCourses, $finishedCourses);
+        return array_merge($notFinishedCourses, $finishedCourses);
     }
 
     protected function _prepareLiveCourseLessonConditions($conditions)
