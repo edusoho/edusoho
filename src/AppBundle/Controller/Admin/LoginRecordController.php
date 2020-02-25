@@ -39,7 +39,7 @@ class LoginRecordController extends BaseController
             ));
         }
 
-        $conditions['action'] = 'login_success';
+        $conditions['actions'] = array('login_success', 'user_login');
 
         $paginator = new Paginator(
             $this->get('request'),
