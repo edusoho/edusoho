@@ -13,7 +13,7 @@
       {{ thread.title }}
     </div>
     <div class="metas">
-        {% if author.destroyed|default(0) == 0 %}
+        {% if not author.destroyed|default(0) %}
           <a href="{{ path('user_show', {id:author.id}) }}">{{ author.nickname }}</a>
         {% else %}
           <a>{{ 'user.user_had_destroyed'|trans }}</a>

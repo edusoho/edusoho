@@ -22,7 +22,7 @@
             <img class="avatar-lg" src="{{ filepath(friend.largeAvatar, 'avatar.png') }}" alt="">
           </a>
           <h3 class="title">
-            {% if friend.destroyed|default(0) == 0 %}
+            {% if not friend.destroyed|default(0) %}
               <a class="link-dark" href="{{ path('user_show', {id:friend.id}) }}">{{ friend.nickname }}</a>
             {% else %}
               <a class="link-dark">{{ 'user.user_had_destroyed'|trans }}</a>

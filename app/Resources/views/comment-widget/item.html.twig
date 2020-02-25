@@ -5,7 +5,7 @@
   <div class="media-body">
     <div class="media-heading">
       <a href="javascript:" class="pull-right comment-delete-btn" data-url="{{ path('comment_widget_delete', {id:comment.id}) }}">x</a>
-      <a href="javascript:">{% if user.destroyed|default(0) == 0 %}{{ user.nickname }}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %}</a>
+      <a href="javascript:">{% if not user.destroyed|default(0) %}{{ user.nickname }}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %}</a>
       <span class="bullet">•</span>
       <span>{{ comment.createdTime|smart_time }}</span>
     </div>
