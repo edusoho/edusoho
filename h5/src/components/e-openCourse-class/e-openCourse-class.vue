@@ -66,7 +66,7 @@ export default {
         case "nostart":
           return "即将开始";
         case "end":
-          return "已结束";
+          return "暂无回放";
         default:
           return "";
       }
