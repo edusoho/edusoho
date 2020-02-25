@@ -1027,81 +1027,81 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $lessonConditions = $this->_prepareLiveCourseLessonConditions($conditions);
 
         $total = $this->countLessons($lessonConditions);
+
         if (!$total) {
             return $total;
         }
 
         $lessons = $this->searchLessons($lessonConditions, array(), 0, $total);
-        $lessons = ArrayToolkit::index($lessons, 'courseId');
 
         $courseConditions = array(
             'type' => 'liveOpen',
             'status' => 'published',
             'parentId' => 0,
-            'categoryId' => empty($lessonConditions['categoryId']) ? '' : $lessonConditions['categoryId'],
             'ids' => ArrayToolkit::column($lessons, 'courseId'),
+            'categoryId' => empty($conditions['categoryId']) ? '' : $conditions['categoryId'],
             'titleLike' => empty($conditions['title']) ? '' : $conditions['title'],
         );
 
         return $this->countCourses($courseConditions);
     }
 
-    public function searchAndSortLiveCourses($conditions = array(), $orderBy = array(), $start, $limit)
+    public function searchAndSortLiveCourses($conditions = array(), $start, $limit)
     {
         if (empty($conditions)) {
             return array();
         }
 
-        $lessonConditions = $this->_prepareLiveCourseLessonConditions($conditions);
+        if (!empty($conditions['title'])) {
+            $courseConditions = array(
+                'type' => 'liveOpen',
+                'status' => 'published',
+                'parentId' => 0,
+                'categoryId' => empty($conditions['categoryId']) ? '' : $conditions['categoryId'],
+                'titleLike' => $conditions['title'],
+            );
 
-        $total = $this->countLessons($lessonConditions);
-        if (!$total) {
-            return array();
+            $total = $this->countCourses($courseConditions);
+
+            $courses = $this->searchCourses($courseConditions, array(), 0, $total);
+            $courses = ArrayToolkit::index($courses, 'id');
+
+            $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
         }
 
-        $lessons = $this->searchLessons($lessonConditions, $orderBy, 0, $total);
-        $lessons = ArrayToolkit::index($lessons, 'courseId');
-        $courseConditions = array(
-            'type' => 'liveOpen',
-            'status' => 'published',
-            'parentId' => 0,
-            'categoryId' => empty($lessonConditions['categoryId']) ? '' : $lessonConditions['categoryId'],
-            'ids' => ArrayToolkit::column($lessons, 'courseId'),
-            'titleLike' => empty($conditions['title']) ? '' : $conditions['title'],
-        );
-
-        $courses = $this->searchCourses($courseConditions, array(), $start, $limit);
-
-        $doingCourses = array();
+        $lessons = $this->getOpenCourseLessonDao()->searchLessonsWithOrderBy($this->_prepareLiveCourseLessonConditions($conditions), $start, $limit);
         $finishedCourses = array();
-        $notStartCourses = array();
-        foreach ($courses as $course) {
-            if (empty($lessons[$course['id']])) {
+        $notFinishedCourses = array();
+        foreach ($lessons as $lesson) {
+            if (!empty($courses) && empty($courses[$lesson['courseId']])) {
                 continue;
             }
 
-            $course['startTime'] = $lessons[$course['id']]['startTime'];
-            $course['lesson'] = $lessons[$course['id']];
+            $course = !empty($courses[$lesson['courseId']]) ? $courses[$lesson['courseId']] : $this->getCourse($lesson['id']);
 
-            if ($course['lesson']['startTime'] > time()) {
-                $notStartCourses[] = $course;
-            } elseif ($course['lesson']['startTime'] <= time() && $course['lesson']['endTime'] < time()) {
+            if ($course['status'] != 'published') {
+                continue;
+            }
+
+            $course['startTime'] = $lesson['startTime'];
+            $course['lesson'] = $lesson;
+
+            if ($lesson['endTime'] < time()) {
                 $finishedCourses[] = $course;
             } else {
-                $doingCourses[] = $course;
+                $notFinishedCourses[] = $course;
             }
         }
 
-        $doingCourses = ArrayToolkit::sortPerArrayValue($doingCourses, 'startTime');
-        $notStartCourses = ArrayToolkit::sortPerArrayValue($notStartCourses, 'startTime');
+        $notFinishedCourses = ArrayToolkit::sortPerArrayValue($notFinishedCourses, 'startTime');
         $finishedCourses = ArrayToolkit::sortPerArrayValue($finishedCourses, 'startTime', false);
 
-        return array_merge($doingCourses, $notStartCourses, $finishedCourses);
+        return array_merge($notFinishedCourses, $finishedCourses);
     }
 
     protected function _prepareLiveCourseLessonConditions($conditions)
     {
-        $defaultConditions = array('categoryId' => '', 'isReplay' => 0, 'limitDays' => 0);
+        $defaultConditions = array('categoryId' => '', 'isReplay' => 0, 'limitDays' => 0, 'courseIds' => array());
         $conditions = ArrayToolkit::filter($conditions, $defaultConditions);
         $conditions = array_merge(array('type' => 'liveOpen', 'status' => 'published', 'parentId' => 0), $conditions);
 

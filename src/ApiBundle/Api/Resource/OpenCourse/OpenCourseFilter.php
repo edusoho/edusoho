@@ -9,10 +9,10 @@ use ApiBundle\Api\Util\AssetHelper;
 class OpenCourseFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'title', 'subtitle', 'status','type', 'lessonNum','categoryId','tags',
-        'smallPicture','middlePicture','largePicture','about','teachers', 'studentNum',
+        'id', 'title', 'subtitle', 'status', 'type', 'lessonNum', 'categoryId', 'tags',
+        'smallPicture', 'middlePicture', 'largePicture', 'about', 'teachers', 'studentNum',
         'hitNum', 'likeNum', 'postNum', 'user', 'parentId', 'locked', 'recommended',
-        'recommendedSeq', 'recommendedTime', 'createdTime','updatedTime', 'orgId', 'orgCode', 'lesson',
+        'recommendedSeq', 'recommendedTime', 'createdTime', 'updatedTime', 'orgId', 'orgCode', 'lesson',
     );
 
     protected function publicFields(&$data)
@@ -25,5 +25,13 @@ class OpenCourseFilter extends Filter
         $userFilter->setMode(Filter::SIMPLE_MODE);
         $userFilter->filter($data['user']);
         $userFilter->filters($data['teachers']);
+
+        if (!empty($data['lesson']['startTime'])) {
+            $data['lesson']['startTime'] = date('c', $data['lesson']['startTime']);
+        }
+
+        if (!empty($data['lesson']['endTime'])) {
+            $data['lesson']['endTime'] = date('c', $data['lesson']['endTime']);
+        }
     }
 }

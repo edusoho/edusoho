@@ -201,5 +201,5 @@ interface OpenCourseService
 
     public function countLiveCourses($conditions = array());
 
-    public function searchAndSortLiveCourses($conditions = array(), $orderBy = array(), $start, $limit);
+    public function searchAndSortLiveCourses($conditions = array(), $start, $limit);
 }
