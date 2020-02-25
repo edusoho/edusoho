@@ -96,7 +96,7 @@ if (!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
 }
 
 function bindCardEvent() {
-  $('body').on('click', '.js-card-content .follow-btn', function () {
+  $('html').on('click', '.js-card-content .follow-btn', function () {
     var $btn = $(this);
     var loggedin = $btn.data('loggedin');
     if (loggedin == '1') {
