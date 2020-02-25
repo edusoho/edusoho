@@ -105,7 +105,7 @@ class DestroyAccountRecordServiceImpl extends BaseService implements DestroyAcco
 
             //更新用户相关信息
             $this->updateUserInfoForDestroyAccount($record['userId'], $destroyedAccount);
-            $this->getLogService()->info('destroy_account_record', 'pass', '通过注销帐号申请', array('destroyedAccountId' => $destroyedAccount['id'], 'nickname' => $record['nickname'], 'reason' => $record['reason'], 'auditUserNickname' => $auditUser['nickname']));
+            $this->getLogService()->info('destroy_account_record', 'pass', '通过注销帐号申请', array('destroyedAccountId' => $destroyedAccount['id'], 'nickname' => $record['nickname'], 'reason' => $record['reason'], 'auditUserNickname' => $auditUser['nickname'], 'mobile' => $user['verifiedMobile'], 'email' => $user['email']));
             $this->commit();
         } catch (\Exception $e) {
             $this->getLogger()->error($e->getMessage());
