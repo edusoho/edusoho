@@ -86,16 +86,6 @@ export default {
     }
   },
   methods: {
-    getDefaultImg(type){
-      switch(type){
-        case "openCourse":
-          return "static/images/openCourse.png"
-        case "course":
-          return "static/images/hotcourse.png"
-        case "classroom":
-          return "static/images/hotclass.png"
-      }
-    },
     selected(selected) {
       this.activeItemIndex = selected.selectIndex
      // this.copyModuleData.data[this.activeItemIndex].image.url=selected.imageUrl

@@ -81,7 +81,7 @@ export default {
           return "static/images/openCourse.png"
         case "course":
           return "static/images/hotcourse.png"
-        case "class":
+        case "classroom":
           return "static/images/hotclass.png"
       }
     },
