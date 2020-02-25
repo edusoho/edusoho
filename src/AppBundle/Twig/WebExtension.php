@@ -1853,7 +1853,7 @@ class WebExtension extends \Twig_Extension
         }
 
         $toUser = $this->getUserService()->getUser($userId);
-        if ($toUser['destroyed'] == 1 || $user['destroyed'] == 1) {
+        if (1 == $toUser['destroyed'] || 1 == $user['destroyed']) {
             return false;
         }
 
