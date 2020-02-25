@@ -155,9 +155,9 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             'monolog.permission' => 0666,
             'monolog.formatter' => new \Codeages\Biz\Framework\Util\ReadableJsonFormatter(),
         ));
-        $biz->extend('monolog', function($monolog) {
+        $biz->extend('monolog', function ($monolog) {
             $monolog->pushProcessor(new \AppBundle\Processor\TraceProcessor());
-        
+
             return $monolog;
         });
         $biz->register(new \Codeages\Biz\Framework\Provider\SchedulerServiceProvider());

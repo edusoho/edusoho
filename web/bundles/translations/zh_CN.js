@@ -1283,4 +1283,5 @@ t.add("admin.switch_old_version.title", "\u5207\u6362\u540e\u53f0", "js", "zh_CN
 t.add("admin.switch_old_version.confirm_message", "\u5207\u6362\u5230\u8001\u540e\u53f0\u540e\uff0c\u6240\u6709\u7ba1\u7406\u5458\u5c06\u5207\u6362\u81f3\u8001\u540e\u53f0\uff0c\u786e\u8ba4\u5207\u6362\uff1f", "js", "zh_CN");
 t.add("admin.switch_new_version.confirm_message", "\u5347\u7ea7\u5230\u65b0\u540e\u53f0\u540e\uff0c\u6240\u6709\u7ba1\u7406\u5458\u5c06\u5207\u6362\u81f3\u65b0\u540e\u53f0\uff0c\u4f46\u6743\u9650\u529f\u80fd\u4e0d\u4f1a\u6539\u53d8\uff0c \u786e\u8ba4\u5207\u6362\uff1f", "js", "zh_CN");
 t.add("admin.can_not_link_data", "\u65e0\u6cd5\u8fde\u63a5\u5230\u6570\u636e", "js", "zh_CN");
+t.add("group.thread.reply.max_length.notice", "\u56de\u590d\u5185\u5bb9\u4e0d\u5f97\u8d85\u8fc73000\u5b57", "js", "zh_CN");
 })(Translator);

@@ -753,10 +753,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         try {
             foreach ($answers as $questionId => $answer) {
-                $fields = array('answer' => $answer);
-
                 $question = empty($questions[$questionId]) ? array() : $questions[$questionId];
                 $paperItem = empty($paperItems[$questionId]) ? array() : $paperItems[$questionId];
+
+                $answer = $this->getQuestionService()->filterAnswer($question, $answer);
+                $fields = array('answer' => $answer);
 
                 if (!$question) {
                     $fields['status'] = 'none';
