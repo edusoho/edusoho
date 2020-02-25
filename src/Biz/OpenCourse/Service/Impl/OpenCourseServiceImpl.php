@@ -1078,7 +1078,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
                 continue;
             }
 
-            $course = !empty($courses[$lesson['courseId']]) ? $courses[$lesson['courseId']] : $this->getCourse($lesson['id']);
+            $course = !empty($courses[$lesson['courseId']]) ? $courses[$lesson['courseId']] : $this->getCourse($lesson['courseId']);
 
             if ($course['status'] != 'published') {
                 continue;
