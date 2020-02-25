@@ -9363,6 +9363,7 @@ admin_v2.homepage.switch_old_in_safari_notice: Due to Safari, toggle is not supp
 admin_v2.homepage.switch_old_in_safari_notice.title: Determine the switch
 admin_v2.homepage.switch_old_in_safari_notice.got_it: Got it
 
+admin.article_setting.article_copy_manage: Information copy protection
 admin_v2.operation.homepage_live_notify.enable: Live Notify
 admin_v2.operation.homepage_live_notify.enable.open: Open
 admin_v2.operation.homepage_live_notify.enable.close: Close
