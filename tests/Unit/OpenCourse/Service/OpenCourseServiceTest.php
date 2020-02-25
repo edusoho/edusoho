@@ -1602,14 +1602,14 @@ class OpenCourseServiceTest extends BaseTestCase
             'title' => $course1['title'],
         );
 
-        $result = $this->getOpenCourseService()->searchAndSortLiveCourses($conditions, array(), 0, 2);
+        $result = $this->getOpenCourseService()->searchAndSortLiveCourses($conditions, 0, 2);
 
         $this->assertEmpty($result);
 
         $this->getOpenCourseService()->publishCourse($course1['id']);
         $this->getOpenCourseService()->publishCourse($course2['id']);
 
-        $result = $this->getOpenCourseService()->searchAndSortLiveCourses($conditions, array(), 0, 2);
+        $result = $this->getOpenCourseService()->searchAndSortLiveCourses($conditions, 0, 2);
 
         $this->assertCount(1, $result);
         $this->assertEquals($course1['title'], $result[0]['title']);

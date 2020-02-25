@@ -55,7 +55,7 @@ class OpenCourse extends AbstractResource
 
         $total = $this->getOpenCourseService()->countLiveCourses($request->query->all());
 
-        $courses = $this->getOpenCourseService()->searchAndSortLiveCourses($request->query->all(), array('startTime' => 'DESC'), $offset, $limit);
+        $courses = $this->getOpenCourseService()->searchAndSortLiveCourses($request->query->all(), $offset, $limit);
 
         $this->getOCUtil()->multiple($courses, array('userId', 'teacherIds'));
 

@@ -1046,7 +1046,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $this->countCourses($courseConditions);
     }
 
-    public function searchAndSortLiveCourses($conditions = array(), $orderBy = array(), $start, $limit)
+    public function searchAndSortLiveCourses($conditions = array(), $start, $limit)
     {
         if (empty($conditions)) {
             return array();
@@ -1069,10 +1069,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
         }
 
-        $lessonConditions = $this->_prepareLiveCourseLessonConditions($conditions);
-
-        $lessons = $this->searchLessons($lessonConditions, $orderBy, $start, $limit);
-
+        $lessons = $this->getOpenCourseLessonDao()->searchLessonsWithOrderBy($this->_prepareLiveCourseLessonConditions($conditions), $start, $limit);
         $finishedCourses = array();
         $notFinishedCourses = array();
         foreach ($lessons as $lesson) {
