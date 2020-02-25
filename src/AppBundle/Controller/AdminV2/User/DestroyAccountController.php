@@ -46,10 +46,9 @@ class DestroyAccountController extends BaseController
     public function auditAction(Request $request, $id)
     {
         $record = $this->getDestroyAccountRecordService()->getDestroyAccountRecord($id);
-        $user = $this->getCurrentUser();
 
         if ($request->getMethod() == 'POST') {
-            if ($record['userId'] == $user['id']) {
+            if ($record['userId'] == $this->getCurrentUser()->getId()) {
                 return $this->createJsonResponse(array('success' => false, 'message' => $this->trans('admin_v2.destroy_account.destroyed_account.can_not_manage')));
             }
 
