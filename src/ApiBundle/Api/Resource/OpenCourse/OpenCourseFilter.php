@@ -25,13 +25,5 @@ class OpenCourseFilter extends Filter
         $userFilter->setMode(Filter::SIMPLE_MODE);
         $userFilter->filter($data['user']);
         $userFilter->filters($data['teachers']);
-
-        if (!empty($data['lesson']['startTime'])) {
-            $data['lesson']['startTime'] = date('c', $data['lesson']['startTime']);
-        }
-
-        if (!empty($data['lesson']['endTime'])) {
-            $data['lesson']['endTime'] = date('c', $data['lesson']['endTime']);
-        }
     }
 }

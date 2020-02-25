@@ -1032,7 +1032,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             return $total;
         }
 
-        $lessons = $this->searchLessons($lessonConditions, array(), 0, $total);
+        $lessons = $this->getOpenCourseLessonDao()->searchLessonsWithOrderBy($lessonConditions, 0, $total);
 
         $courseConditions = array(
             'type' => 'liveOpen',
