@@ -1852,13 +1852,17 @@ class WebExtension extends \Twig_Extension
             return false;
         }
 
-        if ($user->isAdmin() || $user->isSuperAdmin()) {
-            return true;
+        $toUser = $this->getUserService()->getUser($userId);
+        if ($toUser['destroyed'] == 1 || $user['destroyed'] == 1) {
+            return false;
         }
 
-        $toUser = $this->getUserService()->getUser($userId);
         if ($user['id'] == $toUser['id']) {
             return false;
+        }
+
+        if ($user->isAdmin() || $user->isSuperAdmin()) {
+            return true;
         }
 
         if (in_array('ROLE_ADMIN', $toUser['roles']) || in_array('ROLE_SUPER_ADMIN', $toUser['roles'])) {
