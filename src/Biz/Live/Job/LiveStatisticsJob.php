@@ -18,6 +18,6 @@ class LiveStatisticsJob extends AbstractJob
 
     private function getLiveStatisticsService()
     {
-        return $this->biz->service('User:NotificationService');
+        return $this->biz->service('Live:LiveStatisticsService');
     }
 }
