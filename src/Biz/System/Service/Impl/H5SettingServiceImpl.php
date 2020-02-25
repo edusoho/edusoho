@@ -91,10 +91,14 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     public function openCourseListFilter($discoverySetting, $usage = 'show')
     {
         if ('condition' == $discoverySetting['data']['sourceType']) {
+            $conditions = array(
+                'categoryId' => isset($discoverySetting['data']['categoryId']) ? $discoverySetting['data']['categoryId'] : 0,
+                'limitDays' => isset($discoverySetting['data']['limitDays']) ? $discoverySetting['data']['limitDays'] : 0,
+            );
+
             $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
             $discoverySetting['data']['items'] = $this->getOpenCourseService()->searchAndSortLiveCourses(
-                $discoverySetting['data'],
-                array(),
+                $conditions,
                 0,
                 $limit
             );

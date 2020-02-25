@@ -1573,7 +1573,7 @@ class OpenCourseServiceTest extends BaseTestCase
 
     public function testSearchAndSortLiveCourses_ConditionsEmpty()
     {
-        $result = $this->getOpenCourseService()->searchAndSortLiveCourses(array(), array(), 0, 1);
+        $result = $this->getOpenCourseService()->searchAndSortLiveCourses(array(), 0, 1);
         $this->assertEmpty($result);
     }
 
@@ -1585,7 +1585,7 @@ class OpenCourseServiceTest extends BaseTestCase
         $conditions = array(
             'title' => $course['title'],
         );
-        $result = $this->getOpenCourseService()->searchAndSortLiveCourses($conditions, array(), 0, 1);
+        $result = $this->getOpenCourseService()->searchAndSortLiveCourses($conditions, 0, 1);
 
         $this->assertEmpty($result);
     }
