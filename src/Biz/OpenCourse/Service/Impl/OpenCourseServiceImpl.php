@@ -1064,16 +1064,17 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $total = $this->countCourses($courseConditions);
 
             $courses = $this->searchCourses($courseConditions, array(), 0, $total);
+
             $courses = ArrayToolkit::index($courses, 'id');
 
             $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
         }
 
         $lessons = $this->getOpenCourseLessonDao()->searchLessonsWithOrderBy($this->_prepareLiveCourseLessonConditions($conditions), $start, $limit);
-        $finishedCourses = array();
-        $notFinishedCourses = array();
+
+        $results = array();
         foreach ($lessons as $lesson) {
-            if (!empty($courses) && empty($courses[$lesson['courseId']])) {
+            if (isset($conditions['courseIds']) && empty($courses[$lesson['courseId']])) {
                 continue;
             }
 
@@ -1083,20 +1084,11 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
                 continue;
             }
 
-            $course['startTime'] = $lesson['startTime'];
             $course['lesson'] = $lesson;
-
-            if ($lesson['endTime'] < time()) {
-                $finishedCourses[] = $course;
-            } else {
-                $notFinishedCourses[] = $course;
-            }
+            $results[] = $course;
         }
 
-        $notFinishedCourses = ArrayToolkit::sortPerArrayValue($notFinishedCourses, 'startTime');
-        $finishedCourses = ArrayToolkit::sortPerArrayValue($finishedCourses, 'startTime', false);
-
-        return array_merge($notFinishedCourses, $finishedCourses);
+        return $results;
     }
 
     protected function _prepareLiveCourseLessonConditions($conditions)
