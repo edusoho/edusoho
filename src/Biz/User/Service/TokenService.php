@@ -41,6 +41,8 @@ interface TokenService
 
     public function findTokensByUserIdAndType($userId, $type);
 
+    public function destroyTokensByUserId($userId);
+
     public function getTokenByType($type);
 
     public function deleteTokenByTypeAndUserId($type, $userId);

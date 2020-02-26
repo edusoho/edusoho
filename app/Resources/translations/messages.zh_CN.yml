@@ -8433,6 +8433,8 @@ notification.discount.reject: 您的打折活动%discount%，未通过管理员�
 notification.discount.pass: 您的打折活动%discount%，已通过管理员审核。
 notification.question.post_create: %who% 在 %thread% 回答了你
 notification.question.post_ask: %who% 在 %thread% 追问了你
+notification.destroy-account.reject: %who%，您的帐号注销申请审核未通过，理由：%reason%。
+
 
 notification.group-profile.chownout: 您的小组 %group% 被管理员转移给了用户 %who%。
 notification.group-profile.chownin: 您获得了小组 %group% 的管理权限。
@@ -8738,6 +8740,7 @@ log.module.mobile: 手机客户端
 log.module.wap: 微网校
 log.module.push: 推送
 log.module.question_bank: 题库
+log.module.destroy_account_record: 帐号注销
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -8990,6 +8993,9 @@ log.action.question_bank.update_teacher: 修改授权教师
 log.action.question_bank.create_category: 创建题库分类
 log.action.question_bank.delete_category: 删除题库分类
 log.action.question_bank.update_category: 更新题库分类
+log.action.destroy_account_record.create: 申请注销帐号
+log.action.destroy_account_record.pass: 通过注销帐号申请
+log.action.destroy_account_record.reject: 拒绝注销帐号申请
 
 log.action.template.course.create: 新建了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: 修改了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -9149,6 +9155,9 @@ log.action.template.question_bank.delete: 删除了<strong class="color-success"
 log.action.template.question_bank.create_category: 创建了<strong class="color-success">题库分类</strong> 《%title%》
 log.action.template.question_bank.delete_category: 删除了<strong class="color-success">题库分类</strong> 《%title%》
 log.action.template.question_bank.update_category: 修改了<strong class="color-success">题库分类</strong> 《%title%》
+log.action.template.destroy_account_record.create: 申请注销帐号
+log.action.template.destroy_account_record.pass: 同意了用户“%nickname%”的帐号注销申请
+log.action.template.destroy_account_record.reject: 拒绝了用户“%nickname%”的帐号注销申请
 
 log.field.detail: 详情
 log.field.change.detail: 原设置为<strong class="color-danger">%old%</strong> 新设置为<strong class="color-danger">%new%</strong>
@@ -9687,6 +9696,11 @@ log.attr.system.update_settings.wap.version.0: 关闭
 log.attr.system.update_settings.wap.about: 网校简介
 log.attr.system.update_settings.wap.logo: 网校LOGO
 log.attr.order.pay_amount: 价格（分）
+log.attr.destroy_account_record.reason: 注销理由
+log.attr.destroy_account_record.rejectedReason: 拒绝理由
+log.attr.destroy_account_record.nickname: 用户名
+log.attr.destroy_account_record.auditUserNickname: 处理人
+log.attr.destroy_account_record.destroyedAccountId: 注销ID
 
 cashflow.title: 名称
 cashflow.sn: 流水号
@@ -10219,6 +10233,10 @@ exception.wechat.notify_setting_not_enabled: 微信通知未开启
 exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试
 exception.wechat.template_conflict_industry_hint: 服务号行业设置错误
 
+exception.destroy_account.reason_too_long: 注销原因限制200字数
+exception.destroy_account.not_found_record: 未找到注销记录
+exception.destroy_account.audit_record_exist: 已存在审核中的申请
+
 course.unname_title: 未命名计划
 
 admin.index.course_order: 课程订单
@@ -10671,6 +10689,36 @@ admin_v2.homepage.switch_old_in_safari_notice: 由于Safari浏览器原因，暂
 admin_v2.homepage.switch_old_in_safari_notice.title: 确定切换
 admin_v2.homepage.switch_old_in_safari_notice.got_it: 知道了
 
+admin_v2.user.destroy_account_record.nickname: 用户名
+admin_v2.user.destroy_account_record.createdTime: 申请时间
+admin_v2.user.destroy_account_record.reason: 注销理由
+admin_v2.user.destroy_account_record.auditTime: 处理时间
+admin_v2.user.destroy_account_record.status: 状态
+admin_v2.user.destroy_account_record.status_audit: 待审核
+admin_v2.user.destroy_account_record.status_rejected: 已拒绝
+admin_v2.user.destroy_account_record.status_passed: 已同意
+admin_v2.user.destroy_account_record.status_cancel: 已撤销
+admin_v2.user.destroy_account_record.manage: 操作
+admin_v2.user.destroy_account_record.auditUser: 处理人：
+admin_v2.user.destroy_account_record.audit: 审核
+admin_v2.user.destroy_account_record.show: 查看
+admin_v2.user.destroy_account_record.empty: 暂无注销申请
+admin_v2.user.destroy_account_record.detail: 详情
+admin_v2.user.destroy_account_record.rejectedReson: 拒绝理由
+admin_v2.destroy_account.destroyed_account.number: 注销ID
+admin_v2.destroy_account.destroyed_account.nickname: 注销前用户名
+admin_v2.destroy_account.destroyed_account.destroy_time: 注销时间
+admin_v2.destroy_account.destroyed_account.operation: 操作
+admin_v2.destroy_account.destroyed_account.empty: 暂无注销记录
+admin_v2.destroy_account.destroyed_account.detail: 详情
+admin_v2.destroy_account.destroyed_account.reason: 注销理由
+admin_v2.destroy_account.destroyed_account.audit_user: 处理人
+admin_v2.destroy_account.destroyed_account.audit_reason: 处理意见
+admin_v2.destroy_account.destroyed_account.audit_agree: 同意
+admin_v2.destroy_account.destroyed_account.audit_reject: 拒绝
+admin_v2.destroy_account.destroyed_account.reason_tip: 最多输入30个字
+admin_v2.destroy_account.destroyed_account.can_not_manage: 不能操作您自己的申请
+user.user_had_destroyed: 帐号已注销
 admin.article_setting.article_copy_manage: 资讯防复制
 admin_v2.operation.homepage_live_notify.enable: 直播开课提醒
 admin_v2.operation.homepage_live_notify.enable.open: 开启

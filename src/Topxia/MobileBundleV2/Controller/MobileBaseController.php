@@ -179,7 +179,7 @@ class MobileBaseController extends BaseController
         foreach ($users as $key => $user) {
             $simplifyUsers[$key] = array(
                 'id' => $user['id'],
-                'nickname' => $user['nickname'],
+                'nickname' => ($user['destroyed'] == 1) ? '帐号已注销' : $user['nickname'],
                 'title' => $user['title'],
                 'following' => (string) $controller->getUserService()->findUserFollowingCount($user['id']),
                 'follower' => (string) $controller->getUserService()->findUserFollowerCount($user['id']),
@@ -517,6 +517,8 @@ class MobileBaseController extends BaseController
                 $user['follower'] = (string) $controller->getUserService()->findUserFollowerCount($user['id']);
 
                 $user['email'] = '****';
+                $user['nickname'] = ($user['destroyed'] == 1) ? "帐号已注销" : $user['nickname'];
+
                 unset($user['password']);
                 unset($user['payPasswordSalt']);
                 unset($user['payPassword']);
