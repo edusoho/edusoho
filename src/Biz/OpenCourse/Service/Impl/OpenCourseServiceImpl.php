@@ -1052,13 +1052,13 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             return array();
         }
 
-        if (!empty($conditions['title'])) {
+        if (!empty($conditions['title']) || !empty($conditions['categoryId'])) {
             $courseConditions = array(
                 'type' => 'liveOpen',
                 'status' => 'published',
                 'parentId' => 0,
                 'categoryId' => empty($conditions['categoryId']) ? '' : $conditions['categoryId'],
-                'titleLike' => $conditions['title'],
+                'titleLike' => empty($conditions['title']) ? '' : $conditions['title'],
             );
 
             $total = $this->countCourses($courseConditions);
