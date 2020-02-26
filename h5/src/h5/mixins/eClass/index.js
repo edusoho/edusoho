@@ -68,7 +68,7 @@ export default {
         if (this.discountType === 'discount') {
           if (discount === 10) return false;
           if (discount == 0) return '限免';
-          return `折${discount}`;
+          return `${discount}折`;
         }
       }
     }
