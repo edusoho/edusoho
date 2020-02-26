@@ -9,6 +9,11 @@ class LiveStatisticsDaoImpl extends AdvancedDaoImpl implements LiveStatisticsDao
 {
     protected $table = 'live_statistics';
 
+    public function getByLiveIdAndType($liveId, $type)
+    {
+        return $this->getByFields(array('liveId' => $liveId, 'type' => $type));
+    }
+
     public function findByLiveIdsAndType(array $liveIds, $type)
     {
         $builder = $this->createQueryBuilder(array('liveIds' => $liveIds, 'type' => $type))

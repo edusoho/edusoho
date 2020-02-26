@@ -74,7 +74,7 @@
               <i class="es-icon es-icon-dot color-success"></i>{{ 'course.live_statistics.live_playing'|trans }}
             {% endif %}
           </td>
-          <td><a href="{{ path('homepage') }}">{{ 'site.btn.detail'|trans }}</a></td>
+          <td><a href="{{ path('course_set_manage_live_statistics_detail', {courseId: course.id, taskId: liveTask.id}) }}">{{ 'site.btn.detail'|trans }}</a></td>
         </tr>
       {% else %}
         <tr>

@@ -44,6 +44,7 @@ class VisitorProcessor extends AbstractLiveStatisticsProcessor
         return array(
             'totalLearnTime' => $totalLearnTime,
             'detail' => $result,
+            'success' => 1,
         );
     }
 

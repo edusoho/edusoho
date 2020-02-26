@@ -4,6 +4,7 @@ namespace Biz\Live\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\Live\Dao\LiveStatisticsDao;
 use Biz\Live\LiveStatisticsProcessor\LiveStatsisticsProcessorFactory;
 use Biz\Live\Service\LiveStatisticsService;
@@ -16,10 +17,52 @@ class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsSer
 
     public function createLiveCheckinStatistics($liveId)
     {
-        $result = $this->getLiveClient()->getLiveRoomCheckinList($liveId);
-        $processor = LiveStatsisticsProcessorFactory::create(self::STATISTICS_TYPE_CHECKIN);
-        $data = $processor->handlerResult($result);
-        $this->insertLiveStatistics($liveId, $data, self::STATISTICS_TYPE_CHECKIN);
+        $statistics = $this->generateStatisticsByLiveIdAndType($liveId, self::STATISTICS_TYPE_CHECKIN);
+
+        return $this->getLiveStatisticsDao()->create($statistics);
+    }
+
+    public function createLiveVisitorStatistics($liveId)
+    {
+        $statistics = $this->generateStatisticsByLiveIdAndType($liveId, self::STATISTICS_TYPE_VISITOR);
+
+        return $this->getLiveStatisticsDao()->create($statistics);
+    }
+
+    public function updateCheckinStatistics($liveId)
+    {
+        $exist = $this->getCheckinStatisticsByLiveId($liveId);
+
+        if (empty($exist)) {
+            return $this->createLiveCheckinStatistics($liveId);
+        }
+
+        $statistics = $this->generateStatisticsByLiveIdAndType($liveId, self::STATISTICS_TYPE_CHECKIN);
+
+        return $this->getLiveStatisticsDao()->update($exist['id'], $statistics);
+    }
+
+    public function updateVisitorStatistics($liveId)
+    {
+        $exist = $this->getCheckinStatisticsByLiveId($liveId);
+
+        if (empty($exist)) {
+            return $this->createLiveCheckinStatistics($liveId);
+        }
+
+        $statistics = $this->generateStatisticsByLiveIdAndType($liveId, self::STATISTICS_TYPE_VISITOR);
+
+        return $this->getLiveStatisticsDao()->update($exist['id'], $statistics);
+    }
+
+    public function getCheckinStatisticsByLiveId($liveId)
+    {
+        return $this->getLiveStatisticsDao()->getByLiveIdAndType($liveId, self::STATISTICS_TYPE_CHECKIN);
+    }
+
+    public function getVisitorStatisticsByLiveId($liveId)
+    {
+        return $this->getLiveStatisticsDao()->getByLiveIdAndType($liveId, self::STATISTICS_TYPE_VISITOR);
     }
 
     public function findCheckinStatisticsByLiveIds($liveIds)
@@ -36,21 +79,26 @@ class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsSer
         return ArrayToolkit::index($liveStatistics, 'liveId');
     }
 
-    public function createLiveVisitorStatistics($liveId)
+    protected function generateStatisticsByLiveIdAndType($liveId, $type)
     {
-        $result = $this->getLiveClient()->getLiveRoomHistory($liveId);
-        $processor = LiveStatsisticsProcessorFactory::create(self::STATISTICS_TYPE_VISITOR);
-        $data = $processor->handlerResult($result);
-        $this->insertLiveStatistics($liveId, $data, self::STATISTICS_TYPE_VISITOR);
-    }
+        if (!in_array($type, array(self::STATISTICS_TYPE_CHECKIN, self::STATISTICS_TYPE_VISITOR))) {
+            throw $this->createService(CommonException::ERROR_PARAMETER());
+        }
 
-    private function insertLiveStatistics($liveId, $data, $type)
-    {
-        return $this->getLiveStatisticsDao()->create(array(
+        if ($type == self::STATISTICS_TYPE_CHECKIN) {
+            $result = $this->getLiveClient()->getLiveRoomCheckinList($liveId);
+        } else {
+            $result = $this->getLiveClient()->getLiveRoomHistory($liveId);
+        }
+
+        $processor = LiveStatsisticsProcessorFactory::create($type);
+        $data = $processor->handlerResult($result);
+
+        return array(
             'liveId' => $liveId,
             'type' => $type,
             'data' => $data,
-        ));
+        );
     }
 
     /**

@@ -32,7 +32,8 @@ class CheckinProcessor extends AbstractLiveStatisticsProcessor
         }
 
         return array(
-            'time' => $data[0]['time'],
+            'success' => 1,
+            'time' => $data[0]['time'] / 1000,
             'detail' => $users,
         );
     }

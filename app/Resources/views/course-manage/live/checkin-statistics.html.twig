@@ -1,0 +1,7 @@
+{% if statistics.data.success %}
+  <div class="row">
+    <h4 class="col-md-4"><strong>最近点名：</strong>{{ statistics.data.time|date('Y-m-d H:i:s')|default('0') }}</h4>
+    <h4 class="col-md-4"><strong>点名数/学员总数：</strong>{{ statistics.data.detail|length|default('0') }}/{{ course.studentNum }}</h4>
+    <a class="pull-right" href="#">点名明细</a>
+  </div>
+{% endif %}

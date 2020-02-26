@@ -1911,7 +1911,19 @@ course_set_manage_course_overview:
 
 course_set_manage_live_statistics:
  path: /course_set/{courseSetId}/manage/course/{courseId}/live_statistics
- defaults: {_controller: AppBundle:Course/CourseManage:liveStatistics}
+ defaults: {_controller: AppBundle:LiveStatistics/CourseLiveStatistics:index}
+
+course_set_manage_live_statistics_detail:
+ path: /course/{courseId}/task/{taskId}/live_statistics_detail
+ defaults: {_controller: AppBundle:LiveStatistics/CourseLiveStatistics:detail}
+
+course_set_manage_live_statistics_checkin:
+ path: /course/{courseId}/live_statistics/{liveId}/checkin_statistics
+ defaults: {_controller: AppBundle:LiveStatistics/CourseLiveStatistics:checkinStatistics}
+
+course_set_manage_live_statistics_visitor:
+ path: /course/{courseId}/live_statistics/{liveId}/visitor_statistics
+ defaults: {_controller: AppBundle:LiveStatistics/CourseLiveStatistics:visitorStatistics}
 
 course_set_manage_task_detail:
     path: /course/{courseId}/task/detail

@@ -1,0 +1,6 @@
+{% if statistics.data.success %}
+  <div>
+    <h4 class="col-md-4"><strong>平均学习时长（分）：</strong>{{ statistics.data.averageLearnTime|default('0') }}</h4>
+    <a class="pull-right" href="#">学习时长明细</a>
+  </div>
+{% endif %}

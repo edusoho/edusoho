@@ -1,0 +1,33 @@
+{% extends 'course-manage/layout.html.twig' %}
+
+{% block title %}{{ 'course.live_statistics'|trans }} - {{ course.title }} - {{ parent() }}{% endblock %}
+{% set course_side_nav = 'live-statistics' %}
+{% do script(['app/js/course-manage/live/index.js']) %}
+
+{% block page_title %}{% if not course.title %}{{ course.courseSetTitle }}{% else %}{{ course.title }}{% endif %} / {{ task.title }}{% endblock %}
+{% block main_body %}
+
+  <div class="help-block mbl">{{ '数据来源于直播间，自动在直播结束一天同步' }}</div>
+  <div class="cd-panel mb0 border-radius-none">
+    <div class="cd-panel-heading">
+      <div class="cd-panel-title">
+        <h3>点名统计</h3>
+      </div>
+    </div>
+    <div class="cd-panel-body">
+      <div id="checkin-data" data-url="{{ path('course_set_manage_live_statistics_checkin', {courseId: course.id,liveId:activity.ext.liveId}) }}">
+      </div>
+    </div>
+  </div>
+  <div class="cd-panel mb0  border-radius-none">
+    <div class="cd-panel-heading">
+      <div class="cd-panel-title">
+        <h3>学习时长统计</h3>
+      </div>
+    </div>
+    <div class="cd-panel-body">
+      <div id="learn-time-data" data-url="{{ path('course_set_manage_live_statistics_visitor', {courseId:course.id,liveId:activity.ext.liveId}) }}">
+      </div>
+    </div>
+  </div>
+{% endblock %}
