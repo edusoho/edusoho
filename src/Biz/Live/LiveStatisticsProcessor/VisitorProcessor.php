@@ -23,28 +23,49 @@ class VisitorProcessor extends AbstractLiveStatisticsProcessor
     {
         $result = array();
         $totalLearnTime = 0;
-        foreach ($data as $user) {
-            $userId = $this->getUserIdByNickName($user['nickName']);
-            if (empty($result[$userId])) {
-                $result[$userId] = array(
-                    'firstJoin' => $user['joinTime'],
-                    'lastLeave' => $user['leaveTime'],
-                    'learnTime' => $user['leaveTime'] - $user['joinTime'],
-                );
-            } else {
-                $result[$userId] = array(
-                    'firstJoin' => $result[$userId]['firstJoin'] > $user['joinTime'] ? $user['joinTime'] : $result[$userId]['firstJoin'],
-                    'lastLeave' => $result[$userId]['lastLeave'] > $user['leaveTime'] ? $result[$userId]['lastLeave'] : $user['leaveTime'],
-                    'learnTime' => $result[$userId]['learnTime'] + ($user['leaveTime'] - $user['joinTime']),
-                );
+        try {
+            foreach ($data as $user) {
+                $result = $this->handleUser($result, $user);
+                $totalLearnTime += ($user['leaveTime'] - $user['joinTime']);
             }
-            $totalLearnTime += ($user['leaveTime'] - $user['joinTime']);
+        } catch (ServiceException $e) {
+            $this->getLogService()->info('course', 'live', 'handle data error: '.json_encode($data));
+
+            return array(
+                'totalLearnTime' => 0,
+                'success' => 0,
+                'detail' => array(),
+            );
         }
 
         return array(
             'totalLearnTime' => $totalLearnTime,
+            'success' => 1,
             'detail' => $result,
         );
+    }
+
+    private function handleUser($result, $user)
+    {
+        $userId = $this->getUserIdByNickName($user['nickName']);
+        if (empty($userId)) {
+            throw new ServiceException('user not found');
+        }
+        if (empty($result[$userId])) {
+            $result[$userId] = array(
+                'firstJoin' => $user['joinTime'],
+                'lastLeave' => $user['leaveTime'],
+                'learnTime' => $user['leaveTime'] - $user['joinTime'],
+            );
+        } else {
+            $result[$userId] = array(
+                'firstJoin' => $result[$userId]['firstJoin'] > $user['joinTime'] ? $user['joinTime'] : $result[$userId]['firstJoin'],
+                'lastLeave' => $result[$userId]['lastLeave'] > $user['leaveTime'] ? $result[$userId]['lastLeave'] : $user['leaveTime'],
+                'learnTime' => $result[$userId]['learnTime'] + ($user['leaveTime'] - $user['joinTime']),
+            );
+        }
+
+        return $result;
     }
 
     private function checkResult($result)
