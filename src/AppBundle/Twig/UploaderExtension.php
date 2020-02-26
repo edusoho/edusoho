@@ -65,7 +65,7 @@ class UploaderExtension extends \Twig_Extension
         $availableAccepts = array(
             'video' => array(
                 'extensions' => array('mp4', 'avi', 'flv', 'f4v', 'mpg', 'wmv', 'mov', 'vob', 'rmvb', 'mkv', 'm4v'),
-                'mimeTypes' => array('video/mp4', 'video/mpeg', 'video/x-msvideo', 'video/quicktime', 'video/3gpp', 'video/x-m4v', 'video/x-flv','video/x-ms-wmv'),
+                'mimeTypes' => array('video/mp4', 'video/mpeg', 'video/x-msvideo', 'video/quicktime', 'video/3gpp', 'video/x-m4v', 'video/x-flv', 'video/x-ms-wmv'),
             ),
             'local_video' => array(
                 'extensions' => array('mp4'),
