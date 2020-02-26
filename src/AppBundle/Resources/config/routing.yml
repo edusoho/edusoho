@@ -1909,6 +1909,10 @@ course_set_manage_course_overview:
   path: /course_set/{courseSetId}/manage/course/{courseId}/overview
   defaults: {_controller: AppBundle:Course/CourseManage:overview}
 
+course_set_manage_live_statistics:
+ path: /course_set/{courseSetId}/manage/course/{courseId}/live_statistics
+ defaults: {_controller: AppBundle:Course/CourseManage:liveStatistics}
+
 course_set_manage_task_detail:
     path: /course/{courseId}/task/detail
     defaults: {_controller: AppBundle:TaskLearnData:taskDetailList}

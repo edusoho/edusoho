@@ -346,6 +346,43 @@ class CourseManageController extends BaseController
         return $this->createJsonpResponse($data);
     }
 
+    public function liveStatisticsAction(Request $request, $courseSetId, $courseId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+
+        $taskConditions = array(
+            'courseId' => $courseId,
+            'fromCourseSetId' => $courseSetId,
+            'type' => 'live',
+            'titleLike' => $request->query->get('title'),
+            'status' => 'published',
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getTaskService()->countTasks($taskConditions),
+            10
+        );
+
+        $liveTasks = $this->getTaskService()->searchTasks(
+            $taskConditions,
+            array('seq' => 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render(
+            'course-manage/live/live-statistics.html.twig',
+            array(
+                'course' => $course,
+                'courseSet' => $courseSet,
+                'liveTasks' => $liveTasks,
+                'paginator' => $paginator,
+            )
+        );
+    }
+
     protected function fillAnalysisData($condition, $currentData)
     {
         $timeRange = $this->getTimeRange($condition);

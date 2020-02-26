@@ -9379,3 +9379,17 @@ homepage.live_notify.header: Live start reminder
 homepage.live_notify.start_while: Begin in a minute
 homepage.live_notify.living: Living
 homepage.live_notify.entry_live_room: Go to liveroom
+
+course.live_statistics: Live statistics
+course.live_statistics.live_start_time: Start time
+course.live_statistics.live_time_long: Duration(min)
+course.live_statistics.max_participate_count: Max oarticipate count
+course.live_statistics.live_status: Status
+course.live_statistics.operation: Operation
+
+course.live_statistics.check_in_status: Check in/Total
+course.live_statistics.average_learn_time: Average learn time（min）
+
+course.live_statistics.live_coming: Comming soon
+course.live_statistics.live_playing: Playing
+course.live_statistics.live_finished: Finished

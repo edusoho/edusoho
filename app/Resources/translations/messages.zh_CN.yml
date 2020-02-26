@@ -10687,3 +10687,16 @@ homepage.live_notify.header: 直播开课提醒
 homepage.live_notify.start_while: 即将开始
 homepage.live_notify.living: 正在直播中
 homepage.live_notify.entry_live_room: 进入教室
+
+course.live_statistics: 直播统计
+course.live_statistics.live_start_time: 直播开始时间
+course.live_statistics.live_time_long: 直播时长（分）
+course.live_statistics.max_participate_count: 最大参与人数
+course.live_statistics.live_status: 进行状态
+course.live_statistics.operation: 操作
+course.live_statistics.check_in_status: 点名数/学员总数
+course.live_statistics.average_learn_time: 平均学习时长（分）
+
+course.live_statistics.live_coming: 即将开始
+course.live_statistics.live_playing: 正在进行
+course.live_statistics.live_finished: 已结束
