@@ -16,6 +16,11 @@ export default class UploaderChooser extends Chooser {
     }
 
     let $uploader = this.element.find('#uploader-container');
+    const uploaderAccpet = $uploader.data('accept');
+    const currentType = $uploader.data('uploadType');
+    if (currentType == 'video') {
+      uploaderAccpet.mimeTypes.push('.flv');
+    }
 
     this._sdk = new UploaderSDK({
       id: $uploader.attr('id'),
@@ -24,7 +29,7 @@ export default class UploaderChooser extends Chooser {
       disableSentry: app.cloudDisableLogReport,
       initUrl: $uploader.data('initUrl'),
       finishUrl: $uploader.data('finishUrl'),
-      accept: $uploader.data('accept'),
+      accept: uploaderAccpet,
       process: this._getUploadProcess(),
       ui: 'single',
       locale: document.documentElement.lang
