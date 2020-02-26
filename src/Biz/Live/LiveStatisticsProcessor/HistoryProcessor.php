@@ -4,7 +4,7 @@ namespace Biz\Live\LiveStatisticsProcessor;
 
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
-class CheckinProcessor extends AbstractLiveStatisticsProcessor
+class HistoryProcessor extends AbstractLiveStatisticsProcessor
 {
     public function handlerResult($result)
     {
@@ -21,18 +21,13 @@ class CheckinProcessor extends AbstractLiveStatisticsProcessor
 
     private function handleData($data)
     {
-        if (empty($data)) {
-            return array();
-        }
         $result = array();
-        $users = $data[0]['users'];
-        foreach ($users as $user) {
+        foreach ($data as $user) {
             $user['userId'] = $this->getUserIdByNickName($user['nickName']);
             $result[] = $user;
         }
 
         return array(
-            'time' => $data[0]['time'],
             'data' => $result,
             'detail' => $data,
         );
