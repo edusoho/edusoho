@@ -143,7 +143,7 @@ class EdusohoLiveClient
 
     public function getLiveRoomCheckinList($liveId)
     {
-        return $this->createCloudApi('leaf')->get("/lives/{$liveId}/checkinList");
+        return $this->createCloudApi('leaf')->get("/lives/{$liveId}/checkin_list");
     }
 
     public function getLiveRoomHistory($liveId)
