@@ -7,7 +7,7 @@
       {% for teacher in teachers %}
         <div class="media media-default">
           <div class="media-left">
-            <a class="{% if teacher.destroyed|default(0) == 0 %}js-user-card{% endif %}" href="{{ path('user_show', {'id': teacher.id}) }}"
+            <a class="{% if not teacher.destroyed|default(0) %}js-user-card{% endif %}" href="{{ path('user_show', {'id': teacher.id}) }}"
                data-card-url="{{ path('user_card_show', {'userId': teacher.id}) }}"
                data-user-id="{{ teacher.id }}"
                data-original-title="" title="">
@@ -15,7 +15,7 @@
           </div>
           <div class="media-body">
             <div class="title">
-              {% if teacher.destroyed|default(0) == 0 %}
+              {% if not teacher.destroyed|default(0) %}
               <a class="link-dark link-dark" href="{{ path('user_show', {'id': teacher.id}) }}">{{ teacher.nickname }}</a>
               {% else %}
                 <a class="link-dark link-dark">{{ 'user.user_had_destroyed'|trans }}</a>

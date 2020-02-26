@@ -49,7 +49,7 @@
             </td>
           {% else %}
             <td>
-              {% if buyer.destroyed|default(0) == 0 %}
+              {% if not buyer.destroyed|default(0) %}
                 <span><a target="_blank" href="{{ path('user_show', {id: buyer.id}) }}">{{ buyer.nickname|default('--') }}</a></span>
               {% else %}
                 <span>{{ 'user.user_had_destroyed'|trans }}</span>

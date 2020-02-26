@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block content %}
-  {% if user.destroyed|default(0) == 0 %}
+  {% if not user.destroyed|default(0) %}
   <ul class="nav nav-tabs clearfix">
     <li {% if pageNav == 'about' %}class="active"{% endif %}><a href="{{ path('user_about', {id: user.id}) }}">{{'user.homepage.introductions'|trans}}</a></li>
   	{% if 'ROLE_TEACHER' in user.roles %}

@@ -5,7 +5,7 @@
       <img src="{{ filepath(fromUser.smallAvatar, 'avatar.png') }}">
     </div>
     <div class="inform-message-item__info">
-      <div class="cd-mb8 cd-dark-minor">{% if fromUser.destroyed == 0 %}{{ fromUser.nickname }}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %}</div>
+      <div class="cd-mb8 cd-dark-minor">{% if not fromUser.destroyed %}{{ fromUser.nickname }}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %}</div>
       <div class="cd-dark-major">{{ conversation.latestMessageContent|sub_text(13) }}</div>
     </div>
   </a>

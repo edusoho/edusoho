@@ -6,7 +6,7 @@
   <div class="media-body">
     <div class="metas">
       {% include 'thread/post-manage-menu.html.twig' %}
-      {% if author.destroyed|default(0) == 0 %}
+      {% if not author.destroyed|default(0) %}
         <a href="{{ path('user_show', {id:author.id}) }}" class="nickname">{{ author.nickname }}</a>
       {% eles %}
         {{ 'user.user_had_destroyed'|trans }}

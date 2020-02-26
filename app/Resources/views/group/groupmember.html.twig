@@ -28,7 +28,7 @@
       <div class="piece-header">{{'group.detail.group_members.leader'|trans}}</div>
       <div class="piece-body clearfix">
         <div class="grouplist">
-          {% if owner_info.destroyed|default(0) == 0 %}
+          {% if not owner_info.destroyed|default(0) %}
           <a href="{{path('user_show',{id:owner_info.id})}}" title="{{owner_info.nickname}}"  >
             <img src="{{ filepath(owner_info.largeAvatar, 'avatar.png') }}" alt="{{owner_info.nickname}}" class="avatar-md">
           </a>
@@ -161,7 +161,7 @@
           {{ web_macro.user_avatar(groupOwner, '') }}
         </div>
         <div class="media-body">
-          {% if groupOwner.destroyed|default(0) == 0 %}
+          {% if not groupOwner.destroyed|default(0) %}
             <div><a class="gray-darker" href="{{path('user_show',{id:groupOwner.id})}}" title="{{groupOwner.nickname}}">{{groupOwner.nickname}}</a></div>
           {% else %}
             <div><a class="gray-darker">{{ 'user.user_had_destroyed'|trans }}</a></div>

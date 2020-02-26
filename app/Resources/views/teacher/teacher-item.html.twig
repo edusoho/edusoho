@@ -4,7 +4,7 @@
       <img class="avatar-lg" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt="">
     </a>
     <h3 class="title">
-      {% if teacher.destroyed|default(0) == 0 %}
+      {% if not teacher.destroyed|default(0) %}
       <a class="link-dark" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
       {% else %}
         <a class="link-dark">{{ 'user.user_had_destroyed'|trans }}</a>

@@ -137,9 +137,10 @@ abstract class BaseResource
     protected function simpleUser($user)
     {
         $simple = array();
+        $user = $this->destroyedNicknameFilter($user);
 
         $simple['id'] = $user['id'];
-        $simple['nickname'] = ($user['destroyed'] == 1) ? "帐号已注销" : $user['nickname'];
+        $simple['nickname'] = $user['nickname'];
         $simple['title'] = $user['title'];
         $simple['roles'] = $user['roles'];
         $simple['avatar'] = $this->getFileUrl($user['smallAvatar']);

@@ -7,7 +7,7 @@
   <div class="media-body">
     <div class="metas title">
       {% include 'thread/post-manage-menu.html.twig' %}
-        {% if author.destroyed|default(0) == 0 %}
+        {% if not author.destroyed|default(0) %}
           <a href="{{ path('user_show', {id:author.id}) }}" class="nickname">{{ author.nickname }}</a>
         {% else %}
           <a class="color-gray">{{ 'user.user_had_destroyed'|trans }}</a>
