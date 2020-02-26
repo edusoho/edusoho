@@ -76,6 +76,9 @@
             {{ 'course.plan_overview'|trans }}
           </a>
         </li>
+        <li class="cd-sidebar__item {% if course_side_nav == 'live-statistics' %}active{% endif %}">
+          <a href="{{ path('course_set_manage_live_statistics', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">{{ 'course.live_statistics'|trans }}</a>
+        </li>
         {% if setting('storage.upload_mode', 'local') == 'cloud' %}
           <li class="cd-sidebar__item {% if course_side_nav == 'question_marker' %}active{% endif %}">
             <a href="{{ path('course_manage_question_marker',{courseSetId: courseSet.id, courseId: curCourse.id}) }}">

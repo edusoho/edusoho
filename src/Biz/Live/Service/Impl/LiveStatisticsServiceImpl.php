@@ -2,6 +2,7 @@
 
 namespace Biz\Live\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Live\Dao\LiveStatisticsDao;
 use Biz\Live\LiveStatisticsProcessor\LiveStatsisticsProcessorFactory;
@@ -21,6 +22,20 @@ class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsSer
         $this->insertLiveStatistics($liveId, $data, self::STATISTICS_TYPE_CHECKIN);
     }
 
+    public function findCheckinStatisticsByLiveIds($liveIds)
+    {
+        $liveStatistics = $this->getLiveStatisticsDao()->findByLiveIdsAndType($liveIds, self::STATISTICS_TYPE_CHECKIN);
+
+        return ArrayToolkit::index($liveStatistics, 'liveId');
+    }
+
+    public function findVisitorStatisticsByLiveIds($liveIds)
+    {
+        $liveStatistics = $this->getLiveStatisticsDao()->findByLiveIdsAndType($liveIds, self::STATISTICS_TYPE_VISITOR);
+
+        return ArrayToolkit::index($liveStatistics, 'liveId');
+    }
+
     public function createLiveVisitorStatistics($liveId)
     {
         $result = $this->getLiveClient()->getLiveRoomHistory($liveId);
@@ -33,10 +48,8 @@ class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsSer
     {
         return $this->getLiveStatisticsDao()->create(array(
             'liveId' => $liveId,
-            'data' => json_encode($data),
             'type' => $type,
-            'createdTime' => time(),
-            'updatedTime' => time(),
+            'data' => $data,
         ));
     }
 

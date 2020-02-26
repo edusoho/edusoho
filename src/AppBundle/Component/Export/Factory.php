@@ -42,6 +42,7 @@ class Factory
             'user-learn-statistics' => 'AppBundle\Component\Export\UserLearnStatistics\UserLearnStatisticsExporter',
             'course-students' => 'AppBundle\Component\Export\Course\StudentExporter',
             'invoice-records' => 'InvoicePlugin\Component\Export\Invoice\InvoiceRecordsExporter',
+            'course-live-statistics-list' => 'AppBundle\Component\Export\Course\CourseLiveStatisticsExporter',
         );
 
         $names = explode(':', $name);
