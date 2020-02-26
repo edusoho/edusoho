@@ -75,15 +75,16 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             );
         } else {
             $live = $this->createLiveroom($activity);
-        }
 
-        if (empty($live)) {
-            $this->createNewException(LiveActivityException::CREATE_LIVEROOM_FAILED());
-        }
+            if (empty($live)) {
+                $this->createNewException(LiveActivityException::CREATE_LIVEROOM_FAILED());
+            }
 
-        if (isset($live['error'])) {
-            $error = '帐号已过期' == $live['error'] ? '直播服务已过期' : $live['error'];
-            throw $this->createServiceException($error);
+            if (isset($live['error'])) {
+                $error = '帐号已过期' == $live['error'] ? '直播服务已过期' : $live['error'];
+                throw $this->createServiceException($error);
+            }
+            $this->registerLiveStatisticsJob($live['id'],$activity);
         }
 
         if (!empty($activity['roomType']) && !$this->isRoomType($activity['roomType'])) {
@@ -137,6 +138,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
             $this->getEdusohoLiveClient()->updateLive($liveParams);
         }
+        $this->registerLiveStatisticsJob($liveActivity['liveId'],$fields);
 
         $live = ArrayToolkit::parts($fields, array('replayStatus', 'fileId', 'roomType'));
 
@@ -184,6 +186,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $this->getLiveActivityDao()->delete($id);
         if (!empty($liveActivity['liveId'])) {
             $this->getEdusohoLiveClient()->deleteLive($liveActivity['liveId']);
+            $this->deleteLiveStatisticsJob($liveActivity['liveId']);
         }
     }
 
@@ -293,6 +296,32 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $live;
     }
 
+    private function registerLiveStatisticsJob($liveId,$activity)
+    {
+        //SchedulerService not support change expression
+        $this->deleteLiveStatisticsJob($liveId);
+
+        $job = array(
+            'name' => 'LiveStatisticsNextDay_'.$liveId,
+            'expression' => intval($activity['startTime'] + $activity['length'] * 60 + 86400),
+            'class' => 'Biz\Live\Job\LiveStatisticsJob',
+            'misfire_threshold' => 60 * 60,
+            'misfire_policy' => 'executing',
+            'args' => array(
+                'liveId' => $liveId,
+            ),
+        );
+        $this->getSchedulerService()->register($job);
+    }
+
+    private function deleteLiveStatisticsJob($liveId)
+    {
+        $job = $this->getSchedulerService()->getJobByName('LiveStatisticsNextDay_'.$liveId);
+        if(!empty($job)) {
+            $this->getSchedulerService()->deleteJob($job['id']);
+        }
+    }
+
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
@@ -312,5 +341,10 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     protected function getActivityDao()
     {
         return $this->createDao('Activity:ActivityDao');
+    }
+
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
     }
 }

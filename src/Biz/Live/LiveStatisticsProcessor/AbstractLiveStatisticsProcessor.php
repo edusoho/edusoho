@@ -22,4 +22,15 @@ abstract class AbstractLiveStatisticsProcessor
     {
         return ServiceKernel::instance()->createService('System:LogService');
     }
+
+    protected function getUserIdByNickName($nickname)
+    {
+        $userId = trim(strrchr($nickname, '_'), '_');
+        //考虑老数据的情况，不建议在循环中getUserByNickname
+        if (!is_numeric($userId) || empty($userId)) {
+            return 0;
+        }
+
+        return $userId;
+    }
 }

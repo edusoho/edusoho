@@ -22,40 +22,32 @@ class CheckinProcessor extends AbstractLiveStatisticsProcessor
 
     private function handleData($data)
     {
+        if(empty($data)) {
+            return array();
+        }
         $result = array();
-        $users = $data['users'];
+        $users = $data[0]['users'];
         foreach ($users as $user) {
-            $userId = $this->getUserIdByNickName($user['nickName']);
-            $user['userId'] = $userId;
-            $result[] = $user;
+            $user['userId'] = $this->getUserIdByNickName($user['nickName']);
+            $result[$user['userId']] = $user;
         }
 
         return array(
-            'time' => $data['time'],
+            'time' => $data[0]['time'],
             'data' => $result,
             'detail' => $data
         );
     }
 
-    private function getUserIdByNickName($nickname)
-    {
-        $list = explode('_', $nickname);
-        if (count($list) == 2) {
-            return $list[1];
-        }
-
-        return 0;
-    }
-
     private function checkResult($result)
     {
         if (!isset($result['code']) || self::RESPONSE_CODE_SUCCESS != $result['code']) {
-            $this->getLogService()->info('live', 'check code error: ' . json_encode($result));
+            $this->getLogService()->info('course','live', 'check code error: ' . json_encode($result));
             throw new ServiceException('code is not success or not found');
         }
 
         if (!isset($result['data'])) {
-            $this->getLogService()->info('live', 'check data error: ' . json_encode($result));
+            $this->getLogService()->info('course','live', 'check data error: ' . json_encode($result));
             throw new ServiceException('data is not found');
         }
 
