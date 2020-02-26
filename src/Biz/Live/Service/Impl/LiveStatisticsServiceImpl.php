@@ -11,7 +11,7 @@ use Biz\Util\EdusohoLiveClient;
 class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsService
 {
     const STATISTICS_TYPE_CHECKIN = 'checkin';
-    const STATISTICS_TYPE_VISITOR = 'visitor:';
+    const STATISTICS_TYPE_VISITOR = 'visitor';
 
     public function createLiveCheckinStatistics($liveId)
     {

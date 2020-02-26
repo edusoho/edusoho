@@ -9,7 +9,7 @@ class LiveStatisticsJob extends AbstractJob
     public function execute()
     {
         $this->getLiveStatisticsService()->createLiveCheckinStatistics($this->args['liveId']);
-        $this->getLiveStatisticsService()->createLiveHistoryStatistics($this->args['liveId']);
+        $this->getLiveStatisticsService()->createLiveVisitorStatistics($this->args['liveId']);
     }
 
     private function getLiveStatisticsService()

@@ -22,14 +22,28 @@ class VisitorProcessor extends AbstractLiveStatisticsProcessor
     private function handleData($data)
     {
         $result = array();
+        $totalLearnTime = 0;
         foreach ($data as $user) {
-            $user['userId'] = $this->getUserIdByNickName($user['nickName']);
-            $result[$user['userId']] = $user;
+            $userId = $this->getUserIdByNickName($user['nickName']);
+            if (empty($result[$userId])) {
+                $result[$userId] = array(
+                    'firstJoin' => $user['joinTime'],
+                    'lastLeave' => $user['leaveTime'],
+                    'learnTime' => $user['leaveTime'] - $user['joinTime'],
+                );
+            } else {
+                $result[$userId] = array(
+                    'firstJoin' => $result[$userId]['firstJoin'] > $user['joinTime'] ? $user['joinTime'] : $result[$userId]['firstJoin'],
+                    'lastLeave' => $result[$userId]['lastLeave'] > $user['leaveTime'] ? $result[$userId]['lastLeave'] : $user['leaveTime'],
+                    'learnTime' => $result[$userId]['learnTime'] + ($user['leaveTime'] - $user['joinTime']),
+                );
+            }
+            $totalLearnTime += ($user['leaveTime'] - $user['joinTime']);
         }
 
         return array(
-            'data' => $result,
-            'detail' => $data,
+            'totalLearnTime' => $totalLearnTime,
+            'detail' => $result,
         );
     }
 
