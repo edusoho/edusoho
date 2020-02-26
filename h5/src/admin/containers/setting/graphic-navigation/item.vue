@@ -28,6 +28,7 @@
           :fixed-number="option.fixedNumber"
           :auto-crop-width="option.autoCropWidth"
           :auto-crop-height="option.autoCropHeight"
+          :outputType="option.outputType"
         />
       </div>
       <span slot="footer" class="dialog-footer">
@@ -60,6 +61,7 @@ export default {
       activeIndex: this.active,
       option: {
         img: '',
+        outputType: 'png', // 裁剪生成图片的格式
         autoCrop: true,
         autoCropWidth: 80,
         autoCropHeight: 80,
