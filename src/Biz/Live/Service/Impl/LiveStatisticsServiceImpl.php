@@ -12,14 +12,14 @@ use Biz\Util\EdusohoLiveClient;
 class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsService
 {
     const STATISTICS_TYPE_CHECKIN = 'checkin';
-    const STATISTICS_TYPE_HISTORY = 'history';
+    const STATISTICS_TYPE_VISITOR = 'visitor';
 
     public function createLiveCheckinStatistics($liveId)
     {
         $result = $this->getLiveClient()->getLiveRoomCheckinList($liveId);
         $processor = LiveStatsisticsProcessorFactory::create(self::STATISTICS_TYPE_CHECKIN);
         $data = $processor->handlerResult($result);
-        $this->insertLiveStatistics($data, self::STATISTICS_TYPE_CHECKIN, 'checkin');
+        $this->insertLiveStatistics($liveId, $data, self::STATISTICS_TYPE_CHECKIN);
     }
 
     public function findCheckinStatisticsByLiveIds($liveIds)
@@ -41,6 +41,14 @@ class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsSer
         $liveStatistics = $this->getLiveStatisticsDao()->findByLiveIdsAndType($liveIds, $type);
 
         return ArrayToolkit::index($liveStatistics, 'liveId');
+    }
+
+    public function createLiveVisitorStatistics($liveId)
+    {
+        $result = $this->getLiveClient()->getLiveRoomHistory($liveId);
+        $processor = LiveStatsisticsProcessorFactory::create(self::STATISTICS_TYPE_VISITOR);
+        $data = $processor->handlerResult($result);
+        $this->insertLiveStatistics($liveId, $data, self::STATISTICS_TYPE_VISITOR);
     }
 
     private function insertLiveStatistics($liveId, $data, $type)

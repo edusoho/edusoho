@@ -4,7 +4,7 @@ namespace Biz\Live\LiveStatisticsProcessor;
 
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
-class CheckinProcessor extends AbstractLiveStatisticsProcessor
+class VisitorProcessor extends AbstractLiveStatisticsProcessor
 {
     public function handlerResult($result)
     {
@@ -21,19 +21,29 @@ class CheckinProcessor extends AbstractLiveStatisticsProcessor
 
     private function handleData($data)
     {
-        if (empty($data)) {
-            return array();
-        }
-
-        $users = $data[0]['users'];
-        foreach ($users as &$user) {
+        $result = array();
+        $totalLearnTime = 0;
+        foreach ($data as $user) {
             $userId = $this->getUserIdByNickName($user['nickName']);
-            $user['userId'] = $userId;
+            if (empty($result[$userId])) {
+                $result[$userId] = array(
+                    'firstJoin' => $user['joinTime'],
+                    'lastLeave' => $user['leaveTime'],
+                    'learnTime' => $user['leaveTime'] - $user['joinTime'],
+                );
+            } else {
+                $result[$userId] = array(
+                    'firstJoin' => $result[$userId]['firstJoin'] > $user['joinTime'] ? $user['joinTime'] : $result[$userId]['firstJoin'],
+                    'lastLeave' => $result[$userId]['lastLeave'] > $user['leaveTime'] ? $result[$userId]['lastLeave'] : $user['leaveTime'],
+                    'learnTime' => $result[$userId]['learnTime'] + ($user['leaveTime'] - $user['joinTime']),
+                );
+            }
+            $totalLearnTime += ($user['leaveTime'] - $user['joinTime']);
         }
 
         return array(
-            'time' => $data[0]['time'],
-            'detail' => $users,
+            'totalLearnTime' => $totalLearnTime,
+            'detail' => $result,
         );
     }
 
