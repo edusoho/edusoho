@@ -29,7 +29,7 @@ class VisitorProcessor extends AbstractLiveStatisticsProcessor
                 $totalLearnTime += ($user['leaveTime'] - $user['joinTime']);
             }
         } catch (ServiceException $e) {
-            $this->getLogService()->info('course', 'live', 'handle data error: '.json_encode($data));
+            $this->getLogService()->info('course', 'live', 'handle visitor data error: ',json_encode($data));
 
             return array(
                 'totalLearnTime' => 0,
