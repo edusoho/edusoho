@@ -8,5 +8,5 @@ interface LiveStatisticsService
 
     public function findCheckinStatisticsByLiveIds($liveIds);
 
-    public function findByLiveIdsAndType(array $liveIds, $type);
+    public function findVisitorStatisticsByLiveIds($liveIds);
 }

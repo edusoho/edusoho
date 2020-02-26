@@ -298,14 +298,12 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
     private function registerLiveStatisticsJob($liveId,$activity)
     {
-        //SchedulerService not support change expression
         $this->deleteLiveStatisticsJob($liveId);
 
         $job = array(
             'name' => 'LiveStatisticsNextDay_'.$liveId,
             'expression' => intval($activity['startTime'] + $activity['length'] * 60 + 86400),
             'class' => 'Biz\Live\Job\LiveStatisticsJob',
-            'misfire_threshold' => 60 * 60,
             'misfire_policy' => 'executing',
             'args' => array(
                 'liveId' => $liveId,

@@ -24,21 +24,14 @@ class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsSer
 
     public function findCheckinStatisticsByLiveIds($liveIds)
     {
-        $liveStatistics = $this->getLiveStatisticsDao()->findByLiveIdsAndType($liveIds, 'checkin');
+        $liveStatistics = $this->getLiveStatisticsDao()->findByLiveIdsAndType($liveIds, self::STATISTICS_TYPE_CHECKIN);
 
         return ArrayToolkit::index($liveStatistics, 'liveId');
     }
 
-    public function findHistoryStatisticsByLiveIds($liveIds)
+    public function findVisitorStatisticsByLiveIds($liveIds)
     {
-        $liveStatistics = $this->getLiveStatisticsDao()->findByLiveIdsAndType($liveIds, 'history');
-
-        return ArrayToolkit::index($liveStatistics, 'liveId');
-    }
-
-    public function findByLiveIdsAndType(array $liveIds, $type)
-    {
-        $liveStatistics = $this->getLiveStatisticsDao()->findByLiveIdsAndType($liveIds, $type);
+        $liveStatistics = $this->getLiveStatisticsDao()->findByLiveIdsAndType($liveIds, self::STATISTICS_TYPE_VISITOR);
 
         return ArrayToolkit::index($liveStatistics, 'liveId');
     }
