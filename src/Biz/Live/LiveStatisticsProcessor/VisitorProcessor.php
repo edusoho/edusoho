@@ -4,7 +4,7 @@ namespace Biz\Live\LiveStatisticsProcessor;
 
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
-class HistoryProcessor extends AbstractLiveStatisticsProcessor
+class VisitorProcessor extends AbstractLiveStatisticsProcessor
 {
     public function handlerResult($result)
     {
@@ -17,7 +17,6 @@ class HistoryProcessor extends AbstractLiveStatisticsProcessor
         } catch (ServiceException $e) {
             throw $e;
         }
-
     }
 
     private function handleData($data)
@@ -30,19 +29,19 @@ class HistoryProcessor extends AbstractLiveStatisticsProcessor
 
         return array(
             'data' => $result,
-            'detail' => $data
+            'detail' => $data,
         );
     }
 
     private function checkResult($result)
     {
         if (!isset($result['code']) || self::RESPONSE_CODE_SUCCESS != $result['code']) {
-            $this->getLogService()->info('course','live', 'check code error: ' . json_encode($result));
+            $this->getLogService()->info('course', 'live', 'check code error: '.json_encode($result));
             throw new ServiceException('code is not success or not found');
         }
 
         if (!isset($result['data'])) {
-            $this->getLogService()->info('course','live', 'check data error: ' . json_encode($result));
+            $this->getLogService()->info('course', 'live', 'check data error: '.json_encode($result));
             throw new ServiceException('data is not found');
         }
 
