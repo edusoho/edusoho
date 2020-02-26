@@ -17,6 +17,7 @@ class HistoryProcessor extends AbstractLiveStatisticsProcessor
         } catch (ServiceException $e) {
             throw $e;
         }
+
     }
 
     private function handleData($data)
@@ -24,24 +25,24 @@ class HistoryProcessor extends AbstractLiveStatisticsProcessor
         $result = array();
         foreach ($data as $user) {
             $user['userId'] = $this->getUserIdByNickName($user['nickName']);
-            $result[] = $user;
+            $result[$user['userId']] = $user;
         }
 
         return array(
             'data' => $result,
-            'detail' => $data,
+            'detail' => $data
         );
     }
 
     private function checkResult($result)
     {
         if (!isset($result['code']) || self::RESPONSE_CODE_SUCCESS != $result['code']) {
-            $this->getLogService()->info('course', 'live', 'check code error: '.json_encode($result));
+            $this->getLogService()->info('course','live', 'check code error: ' . json_encode($result));
             throw new ServiceException('code is not success or not found');
         }
 
         if (!isset($result['data'])) {
-            $this->getLogService()->info('course', 'live', 'check data error: '.json_encode($result));
+            $this->getLogService()->info('course','live', 'check data error: ' . json_encode($result));
             throw new ServiceException('data is not found');
         }
 

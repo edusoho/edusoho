@@ -1,5 +1,4 @@
 <?php
-
 namespace Biz\Live\Service\Impl;
 
 use Biz\BaseService;
@@ -7,6 +6,7 @@ use Biz\Live\Dao\LiveStatisticsDao;
 use Biz\Live\LiveStatisticsProcessor\LiveStatsisticsProcessorFactory;
 use Biz\Live\Service\LiveStatisticsService;
 use Biz\Util\EdusohoLiveClient;
+use Topxia\Service\Common\ServiceKernel;
 
 class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsService
 {
@@ -18,7 +18,7 @@ class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsSer
         $result = $this->getLiveClient()->getLiveRoomCheckinList($liveId);
         $processor = LiveStatsisticsProcessorFactory::create(self::STATISTICS_TYPE_CHECKIN);
         $data = $processor->handlerResult($result);
-        $this->insertLiveStatistics($liveId, $data, self::STATISTICS_TYPE_CHECKIN);
+        $this->insertLiveStatistics($liveId,$data, self::STATISTICS_TYPE_CHECKIN);
     }
 
     public function createLiveHistoryStatistics($liveId)
@@ -26,17 +26,17 @@ class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsSer
         $result = $this->getLiveClient()->getLiveRoomCheckinList($liveId);
         $processor = LiveStatsisticsProcessorFactory::create(self::STATISTICS_TYPE_HISTORY);
         $data = $processor->handlerResult($result);
-        $this->insertLiveStatistics($liveId, $data, self::STATISTICS_TYPE_HISTORY);
+        $this->insertLiveStatistics($liveId,$data, self::STATISTICS_TYPE_HISTORY);
     }
 
     private function insertLiveStatistics($liveId, $data, $type)
     {
         return $this->getLiveStatisticsDao()->create(array(
             'liveId' => $liveId,
-            'data' => $data,
+            'data' => json_encode($data),
             'type' => $type,
             'createdTime' => time(),
-            'updatedTime' => time(),
+            'updatedTime' => time()
         ));
     }
 
