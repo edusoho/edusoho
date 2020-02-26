@@ -297,6 +297,9 @@ class UserServiceTest extends BaseTestCase
         $keyword = '13777868634';
         $result = $this->getUserService()->getUserByLoginField($keyword);
         $this->assertEquals($result['id'], $registeredUser['id']);
+
+        $result = $this->getUserService()->getUserByVerifiedMobile('');
+        $this->assertNull($result);
     }
 
     public function testGetUserByEmail()

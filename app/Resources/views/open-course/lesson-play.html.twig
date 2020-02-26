@@ -9,7 +9,12 @@
     {% if setting('storage.video_fingerprint') and app.user %}
       data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
     {% endif %}
-  ></div>
+  >
+  </div>
+  {% if lesson.mediaSource == 'NeteaseOpenCourse'%}
+    <div id="lesson-video-content" class="local-video-player " style="height: 100%"></div>
+  {% endif %}
+
   <div id="lesson-preview-swf-player" class="lesson-content embed-responsive embed-responsive-16by9" style="display:none;height:100%;"></div>
 
   <input type="hidden" id="firstLesson" data-url="{{ path('open_course_lesson_show',{courseId:lesson.courseId,lessonId:lesson.id}) }}">

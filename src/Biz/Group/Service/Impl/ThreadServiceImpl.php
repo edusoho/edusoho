@@ -3,6 +3,7 @@
 namespace Biz\Group\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\Thread\Dao\ThreadDao;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Group\Dao\ThreadCollectDao;
@@ -373,6 +374,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         if ($event->isPropagationStopped()) {
             $this->createNewException(ThreadException::FORBIDDEN_TIME_LIMIT());
+        }
+
+        if (mb_strlen($threadContent['content'], 'UTF-8') > 3000) {
+            throw $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $threadContent['content'] = $this->sensitiveFilter($threadContent['content'], 'group-thread-post-create');

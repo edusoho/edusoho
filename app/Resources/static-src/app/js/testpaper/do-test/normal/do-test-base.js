@@ -13,9 +13,7 @@ class DoTestpaper extends DoTestBase {
         super($container);
         this.$timePauseDialog = this.$container.find('#time-pause-dialog');
         this.$timer = $container.find('.js-testpaper-timer');
-        if($('#facein-init-modal').length < 1){
-            this._init();
-        }
+        this._init();
     }
 
     _init() {

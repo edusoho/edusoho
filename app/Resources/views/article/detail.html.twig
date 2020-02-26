@@ -19,10 +19,11 @@
     <div class="col-md-8 article-detail-main">
       <section class="es-section article-content">
         {% include 'article/part/detail-breadcrumb.html.twig' %}
-        
-        {% include 'article/part/detail-metas.html.twig' %}
-        
-        {% include 'article/part/detail-body.html.twig' %}
+        <div class="js-article-copy-body" data-copy="{{setting('article.copy_enabled',1)}}">
+          {% include 'article/part/detail-metas.html.twig' %}
+
+          {% include 'article/part/detail-body.html.twig' %}
+        </div>
 
         {% include 'attachment/widget/list.html.twig' with {targetType:'article', targetId:article.id} %}
 
