@@ -25,17 +25,37 @@ class CheckinProcessor extends AbstractLiveStatisticsProcessor
             return array();
         }
 
-        $users = $data[0]['users'];
-        foreach ($users as &$user) {
-            $userId = $this->getUserIdByNickName($user['nickName']);
-            $user['userId'] = $userId;
+        try {
+            $users = $data[0]['users'];
+            foreach ($users as &$user) {
+                $user = $this->handleUser($user);
+            }
+        } catch (ServiceException $e) {
+            $this->getLogService()->info('course', 'live', 'handle checkin data error: ', json_encode($data));
+
+            return array(
+                'time' => 0,
+                'success' => 0,
+                'detail' => array(),
+            );
         }
 
         return array(
+            'time' => $data[0]['time'],
             'success' => 1,
-            'time' => $data[0]['time'] / 1000,
             'detail' => $users,
         );
+    }
+
+    private function handleUser($user)
+    {
+        $userId = $this->getUserIdByNickName($user['nickName']);
+        if (empty($userId)) {
+            throw new ServiceException('user not found');
+        }
+        $user['userId'] = $userId;
+
+        return $user;
     }
 
     private function checkResult($result)
