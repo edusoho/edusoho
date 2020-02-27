@@ -23,6 +23,7 @@
       @needRequest="sendRequest"
     />
     <empty v-if="isEmptyCourse && isRequestCompile" text="暂无班级" class="empty__couse" />
+    <back-top  icon="icon-top" color="#20B573"/>  
   </div>
 </template>
 
@@ -31,6 +32,7 @@ import Api from "@/api";
 import infiniteScroll from "&/components/e-infinite-scroll/e-infinite-scroll.vue";
 import treeSelects from "&/components/e-tree-selects/e-tree-selects.vue";
 import empty from "&/components/e-empty/e-empty.vue";
+import backTop from "&/components/e-back-top/e-back-top.vue";
 import { mapMutations } from "vuex";
 import CATEGORY_DEFAULT from "@/config/category-default-config.js";
 export default {
@@ -38,7 +40,8 @@ export default {
   components: {
     infiniteScroll,
     treeSelects,
-    empty
+    empty,
+    backTop
   },
   data() {
     return {
