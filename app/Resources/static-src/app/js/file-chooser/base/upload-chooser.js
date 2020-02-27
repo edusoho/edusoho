@@ -1,5 +1,6 @@
 import Chooser from './chooser';
 import notify from 'common/notify';
+import { Browser } from 'common/utils';
 
 export default class UploaderChooser extends Chooser {
   constructor(element) {
@@ -19,7 +20,9 @@ export default class UploaderChooser extends Chooser {
     const uploaderAccpet = $uploader.data('accept');
     const currentType = $uploader.data('uploadType');
     if (currentType == 'video') {
-      uploaderAccpet.mimeTypes.push('.flv');
+      const isIE = (Browser.ie9 || Browser.ie10 || Browser.ie11 || Browser.edge);
+      const extraMime = isIE ? '.flv, .m4v': '.flv';
+      uploaderAccpet.mimeTypes.push(extraMime);
     }
 
     this._sdk = new UploaderSDK({
