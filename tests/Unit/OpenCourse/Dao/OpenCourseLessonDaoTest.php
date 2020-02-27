@@ -186,7 +186,7 @@ class OpenCourseLessonDaoTest extends BaseDaoTestCase
             'mediaId' => 1,
             'number' => 1,
             'startTime' => time(),
-            'endTime' => time() * 60 * 60,
+            'endTime' => time() + 60 * 60,
             'title' => 'a',
             'createdTime' => time(),
             'copyId' => 1,
