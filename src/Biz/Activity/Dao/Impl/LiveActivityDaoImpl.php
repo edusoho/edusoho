@@ -14,6 +14,7 @@ class LiveActivityDaoImpl extends GeneralDaoImpl implements LiveActivityDao
         return array(
             'conditions' => array(
                 'id IN (:ids)',
+                'liveId = :liveId',
                 'liveProvider = :liveProvider',
                 'replayStatus = :replayStatus',
                 'progressStatus != :progressStatusNotEqual',

@@ -53,6 +53,10 @@ class CheckinProcessor extends AbstractLiveStatisticsProcessor
         if (empty($userId)) {
             throw new ServiceException('user not found');
         }
+
+        $existUser = $this->getUserService()->getUser($userId);
+        $user['nickname'] = empty($existUser['nickname']) ? $user['nickName'] : $existUser['nickname'];
+
         $user['userId'] = $userId;
 
         return $user;

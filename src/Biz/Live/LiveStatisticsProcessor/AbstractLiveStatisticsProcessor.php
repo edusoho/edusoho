@@ -2,6 +2,7 @@
 
 namespace Biz\Live\LiveStatisticsProcessor;
 
+use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -32,5 +33,13 @@ abstract class AbstractLiveStatisticsProcessor
         }
 
         return $userId;
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 }

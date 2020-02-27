@@ -1527,3 +1527,5 @@ admin.switch_old_version.title: Toggle backstage
 admin.switch_old_version.confirm_message: 'After switching to the old background, all administrators will switch to the old background to confirm the switch?'
 admin.switch_new_version.confirm_message: 'After upgrading to the new background, all administrators will switch to the new background, but the permissions will not change, confirm the switch?'
 admin.can_not_link_data: Unable to link to data
+
+course_manage.live_statistics.empty_tips: Data syncing, please try again later

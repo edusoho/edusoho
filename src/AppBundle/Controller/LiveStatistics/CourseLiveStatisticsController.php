@@ -69,30 +69,36 @@ class CourseLiveStatisticsController extends BaseController
         );
     }
 
-    public function checkinStatisticsAction(Request $request, $courseId, $liveId)
+    public function jsonDataAction(Request $request, $liveId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
-        $statistics = $this->getLiveStatisticsService()->updateCheckinStatistics($liveId);
+        $checkin = $this->getLiveStatisticsService()->updateCheckinStatistics($liveId);
+        $visitor = $this->getLiveStatisticsService()->updateVisitorStatistics($liveId);
 
-        return $this->render('course-manage/live/checkin-statistics.html.twig', array(
-            'statistics' => $statistics,
-            'course' => $course,
+        if (!empty($checkin['data']['time'])) {
+            $checkin['data']['time'] = date('Y-m-d H:i:s', $checkin['data']['time'] / 1000);
+        }
+
+        $visitor['data'] = $this->dealWithVisitorData($visitor['data']);
+
+        return $this->createJsonResponse(array(
+            'checkin' => $checkin,
+            'visitor' => $visitor,
         ));
     }
 
-    public function visitorStatisticsAction(Request $request, $courseId, $liveId)
+    private function dealWithVisitorData($visitorData)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
-        $statistics = $this->getLiveStatisticsService()->updateVisitorStatistics($liveId);
-
-        if ($statistics['data']['totalLearnTime']) {
-            $statistics['data']['averageLearnTime'] = ceil($statistics['data']['totalLearnTime'] / 1000 / 60 / $course['studentNum']);
+        if (!empty($visitorData['totalLearnTime'])) {
+            $visitorData['totalLearnTime'] = ceil($visitorData['totalLearnTime'] / 1000 / 60);
         }
 
-        return $this->render('course-manage/live/visitor-statistics.html.twig', array(
-            'statistics' => $statistics,
-            'course' => $course,
-        ));
+        foreach ($visitorData['detail'] as &$user) {
+            $user['firstJoin'] = empty($user['firstJoin']) ? '0' : date('Y-m-d H:i:s', $user['firstJoin'] / 1000);
+            $user['lastLeave'] = empty($user['lastLeave']) ? '0' : date('Y-m-d H:i:s', $user['lastLeave'] / 1000);
+            $user['learnTime'] = empty($user['learnTime']) ? '0' : $user['learnTime'] / 1000 / 60;
+        }
+
+        return $visitorData;
     }
 
     /**

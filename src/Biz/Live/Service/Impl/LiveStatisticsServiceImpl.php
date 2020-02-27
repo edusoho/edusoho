@@ -44,10 +44,10 @@ class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsSer
 
     public function updateVisitorStatistics($liveId)
     {
-        $exist = $this->getCheckinStatisticsByLiveId($liveId);
+        $exist = $this->getVisitorStatisticsByLiveId($liveId);
 
         if (empty($exist)) {
-            return $this->createLiveCheckinStatistics($liveId);
+            return $this->createLiveVisitorStatistics($liveId);
         }
 
         $statistics = $this->generateStatisticsByLiveIdAndType($liveId, self::STATISTICS_TYPE_VISITOR);
@@ -90,6 +90,8 @@ class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsSer
         } else {
             $result = $this->getLiveClient()->getLiveRoomHistory($liveId);
         }
+
+        $result['liveId'] = $liveId;
 
         $processor = LiveStatsisticsProcessorFactory::create($type);
         $data = $processor->handlerResult($result);

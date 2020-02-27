@@ -6,27 +6,35 @@
 
 {% block page_title %}{% if not course.title %}{{ course.courseSetTitle }}{% else %}{{ course.title }}{% endif %} / {{ task.title }}{% endblock %}
 {% block main_body %}
-
   <div class="help-block mbl">{{ '数据来源于直播间，自动在直播结束一天同步' }}</div>
-  <div class="cd-panel mb0 border-radius-none">
-    <div class="cd-panel-heading">
-      <div class="cd-panel-title">
-        <h3>点名统计</h3>
+  <div id="detail-data" data-url="{{ path('live_statistics_json_data', {liveId:activity.ext.liveId}) }}">
+    <div class="cd-panel mb0 border-radius-none">
+      <div class="cd-panel-heading">
+        <div class="cd-panel-title">
+          <h3>点名统计</h3>
+        </div>
+      </div>
+      <div class="cd-panel-body">
+        <div class="row">
+          <h4 class="col-md-4"><strong>最近点名：</strong><span id="checkin-time">{{ '0' }}</span></h4>
+          <h4 class="col-md-4">
+            <strong>点名数/学员总数：</strong><span id="checkin-data">{{ '0' }}</span>/<span id="course-student-number">{{ course.studentNum }}</span>
+          </h4>
+          <a class="pull-right" href="#">点名明细</a>
+        </div>
       </div>
     </div>
-    <div class="cd-panel-body">
-      <div id="checkin-data" data-url="{{ path('course_set_manage_live_statistics_checkin', {courseId: course.id,liveId:activity.ext.liveId}) }}">
+    <div class="cd-panel mb0  border-radius-none">
+      <div class="cd-panel-heading">
+        <div class="cd-panel-title">
+          <h3>学习时长统计</h3>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="cd-panel mb0  border-radius-none">
-    <div class="cd-panel-heading">
-      <div class="cd-panel-title">
-        <h3>学习时长统计</h3>
-      </div>
-    </div>
-    <div class="cd-panel-body">
-      <div id="learn-time-data" data-url="{{ path('course_set_manage_live_statistics_visitor', {courseId:course.id,liveId:activity.ext.liveId}) }}">
+      <div class="cd-panel-body">
+        <div class="row">
+          <h4 class="col-md-4"><strong>平均学习时长（分）：</strong><span id="visitor-learn-time">{{ '0' }}</span></h4>
+          <a class="pull-right" href="#">学习时长明细</a>
+        </div>
       </div>
     </div>
   </div>

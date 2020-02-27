@@ -1917,13 +1917,9 @@ course_set_manage_live_statistics_detail:
  path: /course/{courseId}/task/{taskId}/live_statistics_detail
  defaults: {_controller: AppBundle:LiveStatistics/CourseLiveStatistics:detail}
 
-course_set_manage_live_statistics_checkin:
- path: /course/{courseId}/live_statistics/{liveId}/checkin_statistics
- defaults: {_controller: AppBundle:LiveStatistics/CourseLiveStatistics:checkinStatistics}
-
-course_set_manage_live_statistics_visitor:
- path: /course/{courseId}/live_statistics/{liveId}/visitor_statistics
- defaults: {_controller: AppBundle:LiveStatistics/CourseLiveStatistics:visitorStatistics}
+live_statistics_json_data:
+ path: /live_statistics/{liveId}/json_data
+ defaults: {_controller: AppBundle:LiveStatistics/CourseLiveStatistics:jsonData}
 
 course_set_manage_task_detail:
     path: /course/{courseId}/task/detail

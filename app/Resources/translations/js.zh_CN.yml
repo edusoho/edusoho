@@ -1469,3 +1469,5 @@ admin.switch_old_version.title: 切换后台
 admin.switch_old_version.confirm_message: '切换到老后台后，所有管理员将切换至老后台，确认切换？'
 admin.switch_new_version.confirm_message: '升级到新后台后，所有管理员将切换至新后台，但权限功能不会改变， 确认切换？'
 admin.can_not_link_data: 无法连接到数据
+
+course_manage.live_statistics.empty_tips: 数据同步中，请稍后重试
