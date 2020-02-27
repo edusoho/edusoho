@@ -63,6 +63,7 @@ class VisitorProcessor extends AbstractLiveStatisticsProcessor
                 if (empty($user)) {
                     continue;
                 }
+
                 $result = $this->handleUserResult($result, $user);
                 $totalLearnTime += ($user['leaveTime'] - $user['joinTime']);
             }
@@ -99,6 +100,8 @@ class VisitorProcessor extends AbstractLiveStatisticsProcessor
 
         $user['userId'] = $userId;
         $user['nickname'] = $nickname;
+        $user['joinTime'] /= 1000;
+        $user['leaveTime'] /= 1000;
 
         return $user;
     }
@@ -125,21 +128,6 @@ class VisitorProcessor extends AbstractLiveStatisticsProcessor
         }
 
         return $result;
-    }
-
-    private function checkResult($result)
-    {
-        if (!isset($result['code']) || self::RESPONSE_CODE_SUCCESS != $result['code']) {
-            $this->getLogService()->info('course', 'live', 'check code error: '.json_encode($result));
-            throw new ServiceException('code is not success or not found');
-        }
-
-        if (!isset($result['data'])) {
-            $this->getLogService()->info('course', 'live', 'check data error: '.json_encode($result));
-            throw new ServiceException('data is not found');
-        }
-
-        return true;
     }
 
     /**

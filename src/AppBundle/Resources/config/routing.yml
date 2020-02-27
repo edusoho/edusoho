@@ -1921,6 +1921,10 @@ live_statistics_json_data:
  path: /live_statistics/{liveId}/json_data
  defaults: {_controller: AppBundle:LiveStatistics/CourseLiveStatistics:jsonData}
 
+live_statistics_modal:
+ path: /task/{taskId}/live_statistics/{liveId}/modal/{type}
+ defaults: {_controller: AppBundle:LiveStatistics/CourseLiveStatistics:modal}
+
 course_set_manage_task_detail:
     path: /course/{courseId}/task/detail
     defaults: {_controller: AppBundle:TaskLearnData:taskDetailList}

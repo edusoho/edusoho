@@ -69,36 +69,52 @@ class CourseLiveStatisticsController extends BaseController
         );
     }
 
+    public function modalAction(Request $request, $taskId, $liveId, $type)
+    {
+        $task = $this->getTaskService()->getTask($taskId);
+
+        if (LiveStatisticsService::STATISTICS_TYPE_CHECKIN == $type) {
+            $statistics = $this->getLiveStatisticsService()->getCheckinStatisticsByLiveId($liveId);
+        } else {
+            $statistics = $this->getLiveStatisticsService()->getVisitorStatisticsByLiveId($liveId);
+        }
+
+        $statistics = empty($statistics['data']['detail']) ? array() : $statistics['data']['detail'];
+
+        $paginator = new Paginator(
+            $request,
+            count($statistics),
+            1
+        );
+
+        $statistics = array_slice($statistics, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+
+        return $this->render('course-manage/live/live-statistics-modal.html.twig', array(
+            'liveId' => $liveId,
+            'task' => $task,
+            'statistics' => $statistics,
+            'type' => $type,
+            'paginator' => $paginator,
+        ));
+    }
+
     public function jsonDataAction(Request $request, $liveId)
     {
         $checkin = $this->getLiveStatisticsService()->updateCheckinStatistics($liveId);
         $visitor = $this->getLiveStatisticsService()->updateVisitorStatistics($liveId);
 
         if (!empty($checkin['data']['time'])) {
-            $checkin['data']['time'] = date('Y-m-d H:i:s', $checkin['data']['time'] / 1000);
+            $checkin['data']['time'] = date('Y-m-d H:i:s', $checkin['data']['time']);
         }
 
-        $visitor['data'] = $this->dealWithVisitorData($visitor['data']);
+        if (!empty($visitor['data']['totalLearnTime'])) {
+            $visitor['data']['totalLearnTime'] = ceil($visitor['data']['totalLearnTime'] / 60);
+        }
 
         return $this->createJsonResponse(array(
             'checkin' => $checkin,
             'visitor' => $visitor,
         ));
-    }
-
-    private function dealWithVisitorData($visitorData)
-    {
-        if (!empty($visitorData['totalLearnTime'])) {
-            $visitorData['totalLearnTime'] = ceil($visitorData['totalLearnTime'] / 1000 / 60);
-        }
-
-        foreach ($visitorData['detail'] as &$user) {
-            $user['firstJoin'] = empty($user['firstJoin']) ? '0' : date('Y-m-d H:i:s', $user['firstJoin'] / 1000);
-            $user['lastLeave'] = empty($user['lastLeave']) ? '0' : date('Y-m-d H:i:s', $user['lastLeave'] / 1000);
-            $user['learnTime'] = empty($user['learnTime']) ? '0' : $user['learnTime'] / 1000 / 60;
-        }
-
-        return $visitorData;
     }
 
     /**

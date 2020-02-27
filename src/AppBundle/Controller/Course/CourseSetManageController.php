@@ -332,6 +332,11 @@ class CourseSetManageController extends BaseController
                 'route' => 'course_set_manage_course_teachers',
                 'params' => array('courseSetId' => $courseSetId, 'courseId' => $courseId),
             ),
+            'live-statistics' => array(
+                'title' => '直播统计',
+                'route' => 'course_set_manage_live_statistics',
+                'params' => array('courseSetId' => $courseSetId, 'courseId' => $courseId),
+            ),
         );
 
         if (!empty($lockedCourseSetMenus[$sideNav])) {

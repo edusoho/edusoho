@@ -4,6 +4,9 @@ namespace Biz\Live\Service;
 
 interface LiveStatisticsService
 {
+    const STATISTICS_TYPE_CHECKIN = 'checkin';
+    const STATISTICS_TYPE_VISITOR = 'visitor';
+
     public function createLiveCheckinStatistics($liveId);
 
     public function createLiveVisitorStatistics($liveId);

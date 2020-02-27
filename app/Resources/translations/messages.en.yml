@@ -9393,3 +9393,15 @@ course.live_statistics.average_learn_time: Average learn time（min）
 course.live_statistics.live_coming: Comming soon
 course.live_statistics.live_playing: Playing
 course.live_statistics.live_finished: Finished
+
+course.live_statistics.first_join: Earliest joined time
+course.live_statistics.last_leave: Latest leave time
+course.live_statistics.learn_time: Effective learning time(min)
+
+course.live_statistics.empty_data: Empty data
+course.live_statistics.visitor_list: List of Duration
+course.live_statistics.check_list: Checkin list
+
+course.live_statistics.checkin_status: Checkin status
+course.live_statistics.checkin_status.checked: Checked
+course.live_statistics.checkin_status.not_checked: Not checked

@@ -10700,3 +10700,16 @@ course.live_statistics.average_learn_time: 平均学习时长（分）
 course.live_statistics.live_coming: 即将开始
 course.live_statistics.live_playing: 正在进行
 course.live_statistics.live_finished: 已结束
+
+course.live_statistics.first_join: 最早加入直播时间
+course.live_statistics.last_leave: 最晚离开直播时间
+course.live_statistics.learn_time: 有效学习时长
+
+course.live_statistics.empty_data: 暂无数据
+course.live_statistics.visitor_list: 学习时长名单
+course.live_statistics.check_list: 点名名单
+
+course.live_statistics.checkin_status: 是否点名
+course.live_statistics.checkin_status.checked: 已点名
+course.live_statistics.checkin_status.not_checked: 未点名
+
