@@ -20,8 +20,8 @@ export default class UploaderChooser extends Chooser {
     const uploaderAccpet = $uploader.data('accept');
     const currentType = $uploader.data('uploadType');
     if (currentType == 'video') {
-      const isIE = (Browser.ie10 || Browser.ie11 || Browser.edge);
-      const extraMime = isIE ? '.flv, .m4v': '.flv';
+      const isSupportM4V = (Browser.ie10 || Browser.ie11 || Browser.edge || Browser.firefox);
+      const extraMime = isSupportM4V ? '.flv, .m4v': '.flv';
       uploaderAccpet.mimeTypes.push(extraMime);
     }
 
