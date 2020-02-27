@@ -72,7 +72,7 @@
       {% set task = tasks[note.taskId]|default(null) %}
       <div class="media note-item">
         <div class="media-left">
-          <a class="{% if not user.destroyed|default(0) %}js-user-card{% endif %}" href="{{ path('user_show', {'id': author.id }) }}"
+          <a class="{% if not author.destroyed|default(0) %}js-user-card{% endif %}" href="{{ path('user_show', {'id': author.id }) }}"
             data-card-url="{{ path('user_card_show', {'userId': author.id}) }}" data-user-id="{{ author.id }}">
             <img class="avatar-sm" src="{{ filepath(author.smallAvatar, 'avatar.png') }}">
           </a>
@@ -88,7 +88,7 @@
             <span class="js-change-btn" style="display: none;">{{ 'course.note.collapse_btn'|trans|raw }}</span>
           </a>
           <div class="metas clearfix">
-            {% if not user.destroyed|default(0) %}
+            {% if not author.destroyed|default(0) %}
               <a class="link-dark name" href="{{ path('user_show', {'id': author.id }) }}">{{ author.nickname }}</a>
             {% else %}
               <a class="link-dark name">{{ 'user.user_had_destroyed'|trans }}</a>
