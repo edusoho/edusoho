@@ -84,7 +84,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
                 $error = '帐号已过期' == $live['error'] ? '直播服务已过期' : $live['error'];
                 throw $this->createServiceException($error);
             }
-            $this->registerLiveStatisticsJob($live['id'],$activity);
+            $this->registerLiveStatisticsJob($live['id'], $activity);
         }
 
         if (!empty($activity['roomType']) && !$this->isRoomType($activity['roomType'])) {
@@ -138,7 +138,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
             $this->getEdusohoLiveClient()->updateLive($liveParams);
         }
-        $this->registerLiveStatisticsJob($liveActivity['liveId'],$fields);
+        $this->registerLiveStatisticsJob($liveActivity['liveId'], $fields);
 
         $live = ArrayToolkit::parts($fields, array('replayStatus', 'fileId', 'roomType'));
 
@@ -296,7 +296,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $live;
     }
 
-    private function registerLiveStatisticsJob($liveId,$activity)
+    private function registerLiveStatisticsJob($liveId, $activity)
     {
         $this->deleteLiveStatisticsJob($liveId);
 
@@ -315,7 +315,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     private function deleteLiveStatisticsJob($liveId)
     {
         $job = $this->getSchedulerService()->getJobByName('LiveStatisticsNextDay_'.$liveId);
-        if(!empty($job)) {
+        if (!empty($job)) {
             $this->getSchedulerService()->deleteJob($job['id']);
         }
     }
