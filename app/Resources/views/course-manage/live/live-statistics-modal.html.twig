@@ -64,7 +64,7 @@
             <td>{{ user.nickname|default('') }}</td>
             <td>{{ user.firstJoin|date('Y-m-d H:i:s')|default('') }}</td>
             <td>{{ user.lastLeave|date('Y-m-d H:i:s')|default('') }}</td>
-            <td>{{ user.learnTime|default('') }}</td>
+            <td>{{ (user.learnTime/60)|round(0, 'ceil')|default(0) }}</td>
           </tr>
         {% else %}
           <tr>

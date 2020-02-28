@@ -1,15 +1,16 @@
 <?php
+
 namespace Biz\Live\LiveStatisticsProcessor;
 
 use Topxia\Service\Common\ServiceKernel;
 
-class LiveStatsisticsProcessorFactory
+class LiveStatisticsProcessorFactory
 {
     private static $mockedProcessor;
 
     public static function create($type)
     {
-        if (!empty($mockedProcessor)) {
+        if (!empty(self::$mockedProcessor)) {
             return self::$mockedProcessor;
         }
 
@@ -18,6 +19,7 @@ class LiveStatsisticsProcessorFactory
         }
 
         $class = __NAMESPACE__.'\\'.ucfirst($type).'Processor';
+
         return new $class(ServiceKernel::instance()->getBiz());
     }
 }

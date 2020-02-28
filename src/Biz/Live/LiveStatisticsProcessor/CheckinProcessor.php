@@ -26,15 +26,14 @@ class CheckinProcessor extends AbstractLiveStatisticsProcessor
         }
 
         try {
-            $users = $data[0]['users'];
-            foreach ($users as &$user) {
+            foreach ($data[0]['users'] as &$user) {
                 $user = $this->handleUser($user);
             }
         } catch (ServiceException $e) {
             $this->getLogService()->info('course', 'live', 'handle checkin data error: ', json_encode($data));
 
             return array(
-                'time' => 0,
+                'time' => $data[0]['time'] / 1000,
                 'success' => 0,
                 'detail' => array(),
             );
@@ -43,7 +42,7 @@ class CheckinProcessor extends AbstractLiveStatisticsProcessor
         return array(
             'time' => $data[0]['time'] / 1000,
             'success' => 1,
-            'detail' => $users,
+            'detail' => $data[0]['users'],
         );
     }
 

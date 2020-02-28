@@ -6,7 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Live\Dao\LiveStatisticsDao;
-use Biz\Live\LiveStatisticsProcessor\LiveStatsisticsProcessorFactory;
+use Biz\Live\LiveStatisticsProcessor\LiveStatisticsProcessorFactory;
 use Biz\Live\Service\LiveStatisticsService;
 use Biz\Util\EdusohoLiveClient;
 
@@ -87,10 +87,9 @@ class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsSer
         } else {
             $result = $this->getLiveClient()->getLiveRoomHistory($liveId);
         }
-
         $result['liveId'] = $liveId;
 
-        $processor = LiveStatsisticsProcessorFactory::create($type);
+        $processor = LiveStatisticsProcessorFactory::create($type);
         $data = $processor->handlerResult($result);
 
         return array(

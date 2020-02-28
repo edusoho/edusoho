@@ -7,7 +7,6 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\Course\Service\MemberService;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
-use Topxia\Service\Common\ServiceKernel;
 
 class VisitorProcessor extends AbstractLiveStatisticsProcessor
 {
@@ -55,6 +54,10 @@ class VisitorProcessor extends AbstractLiveStatisticsProcessor
 
     private function handleData($data)
     {
+        if (empty($data)) {
+            return array();
+        }
+
         $result = array();
         $totalLearnTime = 0;
         try {
@@ -135,7 +138,7 @@ class VisitorProcessor extends AbstractLiveStatisticsProcessor
      */
     private function getActivityService()
     {
-        return ServiceKernel::instance()->createService('Activity:ActivityService');
+        return $this->biz->service('Activity:ActivityService');
     }
 
     /**
@@ -143,7 +146,7 @@ class VisitorProcessor extends AbstractLiveStatisticsProcessor
      */
     private function getLiveActivityService()
     {
-        return ServiceKernel::instance()->createService('Activity:LiveActivityService');
+        return $this->biz->service('Activity:LiveActivityService');
     }
 
     /**
@@ -151,6 +154,6 @@ class VisitorProcessor extends AbstractLiveStatisticsProcessor
      */
     private function getCourseMemberService()
     {
-        return ServiceKernel::instance()->createService('Course:MemberService');
+        return $this->biz->service('Course:MemberService');
     }
 }

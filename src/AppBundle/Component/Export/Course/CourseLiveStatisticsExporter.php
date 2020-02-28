@@ -79,8 +79,8 @@ class CourseLiveStatisticsExporter extends Exporter
         $data = array();
         foreach ($tasks as $task) {
             $liveId = empty($activityLives[$task['activityId']]) ? 0 : $activityLives[$task['activityId']];
-            $checkinCount = empty($checkinStatistics[$liveId]) ? 0 : count($checkinStatistics[$liveId]['detail']);
-            $totalLearnTime = empty($visitorStatistics[$liveId]) ? 0 : $visitorStatistics[$liveId['totalLearnTime']];
+            $checkinCount = empty($checkinStatistics[$liveId]['data']['detail']) ? 0 : count($checkinStatistics[$liveId]['data']['detail']);
+            $totalLearnTime = empty($visitorStatistics[$liveId]['data']['totalLearnTime']) ? 0 : $visitorStatistics[$liveId]['data']['totalLearnTime'];
             $status = $task['endTime'] < time() ? $translator->trans('course.live_statistics.live_finished') : ($task['startTime'] > time() ? $translator->trans('course.live_statistics.live_coming') : $translator->trans('course.live_statistics.live_playing'));
 
             $data[] = array(
@@ -89,8 +89,8 @@ class CourseLiveStatisticsExporter extends Exporter
                 $task['length'],
                 $this->parameter['course']['maxStudentNum'],
                 $status,
-                $checkinCount . '/' . $this->parameter['course']['studentNum'],
-                ceil($totalLearnTime / $this->parameter['course']['studentNum']),
+                $checkinCount.'/'.$this->parameter['course']['studentNum'],
+                ceil($totalLearnTime / 60 / $this->parameter['course']['studentNum']),
             );
         }
 

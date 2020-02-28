@@ -5,11 +5,10 @@ namespace Biz\Live\LiveStatisticsProcessor;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
-use Topxia\Service\Common\ServiceKernel;
 
 abstract class AbstractLiveStatisticsProcessor
 {
-    private $biz;
+    protected $biz;
 
     const RESPONSE_CODE_SUCCESS = 0;
 
@@ -26,7 +25,7 @@ abstract class AbstractLiveStatisticsProcessor
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->createService('System:LogService');
+        return $this->biz->service('System:LogService');
     }
 
     protected function getUserIdByNickName($nickname)
@@ -43,7 +42,7 @@ abstract class AbstractLiveStatisticsProcessor
     {
         if (!isset($result['code'])) {
             $this->getLogService()->info('course', 'live', 'check code error: '.json_encode($result));
-            throw new ServiceException('code is not not found');
+            throw new ServiceException('code is not found');
         }
 
         if (!in_array($result['code'], array(self::RESPONSE_CODE_NOT_SUPPORT, self::RESPONSE_CODE_SUCCESS, self::RESPONSE_CODE_NOT_FOUND))) {
@@ -64,6 +63,6 @@ abstract class AbstractLiveStatisticsProcessor
      */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->biz->service('User:UserService');
     }
 }
