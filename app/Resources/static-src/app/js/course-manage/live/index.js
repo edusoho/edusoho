@@ -22,7 +22,5 @@ if ($('#detail-data').length) {
       var studentNum = $('#course-student-number').html();
       $('#visitor-learn-time').html(Math.ceil(visitor.totalLearnTime/studentNum));
     }
-
-
   });
 }

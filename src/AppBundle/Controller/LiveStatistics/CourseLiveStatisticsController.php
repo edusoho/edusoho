@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\LiveStatistics;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
@@ -84,7 +85,7 @@ class CourseLiveStatisticsController extends BaseController
         $paginator = new Paginator(
             $request,
             count($statistics),
-            1
+            10
         );
 
         $statistics = array_slice($statistics, $paginator->getOffsetCount(), $paginator->getPerPageCount());
@@ -94,6 +95,38 @@ class CourseLiveStatisticsController extends BaseController
             'task' => $task,
             'statistics' => $statistics,
             'type' => $type,
+            'paginator' => $paginator,
+        ));
+    }
+
+    public function checkinDataAction(Request $request, $liveId)
+    {
+        $status = $request->query->get('status');
+
+        $statistics = $this->getLiveStatisticsService()->getCheckinStatisticsByLiveId($liveId);
+
+        $statistics = empty($statistics['data']['detail']) ? array() : $statistics['data']['detail'];
+
+        if ($status) {
+            $groupedStatistics = ArrayToolkit::group($statistics, 'checkin');
+            $groupedStatistics = array(
+                empty($groupedStatistics[0]) ? array() : $groupedStatistics[0],
+                empty($groupedStatistics[1]) ? array() : $groupedStatistics[1],
+            );
+
+            $statistics = $status == 'checked' ? $groupedStatistics[1] : $groupedStatistics[0];
+        }
+
+        $paginator = new Paginator(
+            $request,
+            count($statistics),
+            10
+        );
+
+        $statistics = array_slice($statistics, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+
+        return $this->render('course-manage/live/checkin-data.html.twig', array(
+            'statistics' => $statistics,
             'paginator' => $paginator,
         ));
     }

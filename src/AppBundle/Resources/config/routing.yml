@@ -1925,6 +1925,10 @@ live_statistics_modal:
  path: /task/{taskId}/live_statistics/{liveId}/modal/{type}
  defaults: {_controller: AppBundle:LiveStatistics/CourseLiveStatistics:modal}
 
+live_statistics_checkin:
+ path: /live_statistics/{liveId}/checkin
+ defaults: {_controller: AppBundle:LiveStatistics/CourseLiveStatistics:checkinData}
+
 course_set_manage_task_detail:
     path: /course/{courseId}/task/detail
     defaults: {_controller: AppBundle:TaskLearnData:taskDetailList}

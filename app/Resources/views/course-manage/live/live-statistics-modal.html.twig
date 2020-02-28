@@ -8,7 +8,7 @@
     {{ 'course.live_statistics.visitor_list'|trans }}
   {% else %}
     {% set exportFileName = 'course-live-statistics-checkin-list' %}
-    {{ 'course.live_statistics.check_list'|trans }}
+    {{ 'course.live_statistics.checkin_list'|trans }}
   {% endif %}
   {% include 'export/export-btn.html.twig' with
     {
@@ -17,8 +17,7 @@
       'exportClass': 'cd-icon-download',
       'exportWebpack': 'ture',
       'showDownLoadText': 0,
-    }
-  %}
+    } %}
 {% endblock %}
 
 {% block body %}
@@ -27,9 +26,30 @@
     <input type="hidden" name="taskId" value="{{ task.id }}">
     <input type="hidden" name="courseId" value="{{ task.courseId }}">
   </form>
-  <div class="table-responsive cd-table-responsive">
-    <table class="table cd-table">
-      {% if type == 'visitor' %}
+  {% if type =='checkin' %}
+    <ul class="cd-tabs" id="cd-tabs">
+      <li class="{% if status|default('all') == 'all' %}active{% endif %}">
+        <a href="javascript:;"
+           data-url="{{ path('live_statistics_checkin',{liveId:liveId}) }}"
+           data-toggle="cd-tabs">{{ 'course.live_statistics.checkin_status.all'|trans }}</a>
+      </li>
+      <li class="{% if status|default('all') == 'unchecked' %}active{% endif %}">
+        <a href="javascript:;"
+           data-url="{{ path('live_statistics_checkin',{liveId:liveId,status:'unchecked'}) }}"
+           data-toggle="cd-tabs"> {{ 'course.live_statistics.checkin_status.not_checked'|trans }}</a>
+      </li>
+      <li class="{% if status|default('all') == 'checked' %}active{% endif %}">
+        <a href="javascript:;"
+           data-url="{{ path('live_statistics_checkin', {liveId:liveId,status:'checked'}) }}"
+           data-toggle="cd-tabs">{{ 'course.live_statistics.checkin_status.checked'|trans }}</a>
+      </li>
+    </ul>
+    <div id="checkin-tabs-panel" class="table-responsive cd-table-responsive">
+      {% include 'course-manage/live/checkin-data.html.twig' with {statistics:statistics,paginator:paginator} %}
+    </div>
+  {% else %}
+    <div class="table-responsive cd-table-responsive">
+      <table class="table cd-table">
         <thead>
         <tr>
           <th>{{ 'user.fields.username_label'|trans }}</th>
@@ -54,40 +74,14 @@
           </tr>
         {% endfor %}
         </tbody>
-      {% else %}
-        <thead>
-        <tr>
-          <th>{{ 'user.fields.username_label'|trans }}</th>
-          <th>{{ 'course.live_statistics.checkin_status'|trans }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for user in statistics %}
-          <tr>
-            <td>{{ user.nickname|default('') }}</td>
-            <td>
-              {% if user.checkin|default(0) %}
-                {{ 'course.live_statistics.checkin_status.checked'|trans }}
-              {% else %}
-                {{ 'course.live_statistics.checkin_status.not_checked'|trans }}
-              {% endif %}
-            </td>
-          </tr>
-        {% else %}
-          <tr>
-            <td colspan="20">
-              <div class="empty">{{ 'course.live_statistics.empty_data'|trans }}</div>
-            </td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      {% endif %}
-    </table>
-    {{ web_macro.paginator(paginator) }}
-  </div>
+      </table>
+      {{ web_macro.paginator(paginator) }}
+    </div>
+  {% endif %}
 {% endblock %}
 
 {% block footer %}
+  {% do script(['app/js/course-manage/live/modal/index.js']) %}
   <button id="course-title-cancel" type="button" class="cd-btn cd-btn-link-default"
           data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
 {% endblock %}

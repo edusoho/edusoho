@@ -10707,9 +10707,10 @@ course.live_statistics.learn_time: 有效学习时长
 
 course.live_statistics.empty_data: 暂无数据
 course.live_statistics.visitor_list: 学习时长名单
-course.live_statistics.check_list: 点名名单
+course.live_statistics.checkin_list: 点名名单
 
 course.live_statistics.checkin_status: 是否点名
 course.live_statistics.checkin_status.checked: 已点名
 course.live_statistics.checkin_status.not_checked: 未点名
+course.live_statistics.checkin_status.all: 全部
 
