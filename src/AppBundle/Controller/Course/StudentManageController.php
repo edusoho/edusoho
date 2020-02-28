@@ -104,7 +104,7 @@ class StudentManageController extends BaseController
 
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
-            $user = $this->getUserService()->getUserByLoginField($data['queryfield']);
+            $user = $this->getUserService()->getUserByLoginField($data['queryfield'], true);
 
             $data['source'] = 'outside';
             $data['remark'] = empty($data['remark']) ? $operateUser['nickname'].'添加' : $data['remark'];
@@ -230,7 +230,7 @@ class StudentManageController extends BaseController
     public function checkStudentAction(Request $request, $courseSetId, $courseId)
     {
         $keyword = $request->query->get('value');
-        $user = $this->getUserService()->getUserByLoginField($keyword);
+        $user = $this->getUserService()->getUserByLoginField($keyword, true);
 
         $response = true;
         if (!$user) {

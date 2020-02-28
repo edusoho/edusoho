@@ -879,7 +879,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $result = $this->getMessageService()->getConversationByFromIdAndToId($fromId, $toId);
         if (!empty($result)) {
             $fromUser = $this->controller->getUserService()->getUser($fromId);
-            $result['fromUserName'] = $fromUser['nickname'];
+            $result['fromUserName'] = ($fromUser['destroyed'] == 1) ? '帐号已注销' : $fromUser['nickname'];
         }
 
         return $result;

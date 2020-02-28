@@ -7184,6 +7184,7 @@ notification.vip.add_by_admin: You have been added as a %vipName% member by the 
 notification.vip.remove_by_admin: You have been cancelled %vipName%, please contact the administrator if in doubt.
 notification.materialLib.share: %who% has shared the data to you, %do%.
 notification.materialLib.click_to_view: click to view
+notification.destroy-account.reject: %who%，Your account cancellation application has not been approved. Reasons: %reason%。
 #TODO trans
 notification.delete-cloud-mp4: 'Your normal video has been deleted successfully, and all existing cloud videos are in encrypted format.'
 notification.distributor-reward: 'Congratulations on your successful registration reward: a %money% CNY coupon, which can be used for all-site consumption and has been sent to %where%.'
@@ -7905,6 +7906,12 @@ log.action.template.question_bank.delete: Deleted the <strong class="color-succe
 log.action.template.question_bank.create_category: Created a new<strong class="color-success">bank category</strong> 《%title%》
 log.action.template.question_bank.delete_category: Deleted the<strong class="color-success">question bank</strong> 《%title%》
 log.action.template.question_bank.update_category: Updated the<strong class="color-success">question bank</strong> 《%title%》
+log.action.template.destroy_account_record.create: Apply destroy account
+log.action.template.destroy_account_record.pass: User %nickname% account cancellation application has been approved
+log.action.template.destroy_account_record.reject: The account cancellation request for user "%nickname%" was rejected
+log.action.destroy_account.create: Apply destroy account
+log.action.destroy_account.pass: Pass destroy account
+log.action.destroy_account.reject: Reject destroy account
 
 log.field.detail: Details
 log.field.change.detail: Original settings:<strong class="color-danger">%old%</strong> New settings:<strong class="color-danger">%new%</strong>
@@ -8923,6 +8930,10 @@ exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned O
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.
 exception.wechat.template_conflict_industry_hint: Service number industry setting error.
 
+exception.destroy_account.reason_too_long: Write off reason limit 200 words
+exception.destroy_account.not_found_record: Record Not Found
+exception.destroy_account.audit_record_exist: Audit Record Is Exist
+
 course.unname_title: unname course
 
 admin.index.course_order: "course order"
@@ -9362,7 +9373,37 @@ admin_v2.boot_page.btn_text: Go
 admin_v2.homepage.switch_old_in_safari_notice: Due to Safari, toggle is not supported at present. It is recommended to use Google or 360 to toggle. Sorry for the inconvenience!
 admin_v2.homepage.switch_old_in_safari_notice.title: Determine the switch
 admin_v2.homepage.switch_old_in_safari_notice.got_it: Got it
-
+admin_v2.user.destroy_account_record.nickname: Nickname
+admin_v2.user.destroy_account_record.createdTime: CreatedTime
+admin_v2.user.destroy_account_record.reason: Reason
+admin_v2.user.destroy_account_record.auditTime: AuditTime
+admin_v2.user.destroy_account_record.status: Status
+admin_v2.user.destroy_account_record.status_audit: Audit
+admin_v2.user.destroy_account_record.status_rejected: Rejected
+admin_v2.user.destroy_account_record.status_passed: Passed
+admin_v2.user.destroy_account_record.status_cancel: Cancel
+admin_v2.user.destroy_account_record.manage: Manage
+admin_v2.user.destroy_account_record.auditUser: AuditUser
+admin_v2.user.destroy_account_record.audit: Audit
+admin_v2.user.destroy_account_record.show: Show
+admin_v2.user.destroy_account_record.empty: Empty
+admin_v2.user.destroy_account_record.detail: Detail
+admin_v2.user.destroy_account_record.rejectedReson: RejectedReson
+admin_v2.destroy_account.destroyed_account.number: Cancellation ID
+admin_v2.destroy_account.destroyed_account.nickname: Nickname
+admin_v2.destroy_account.destroyed_account.destroy_time: Destroy Time
+admin_v2.destroy_account.destroyed_account.operation: operation
+admin_v2.destroy_account.destroyed_account.empty: empty
+admin_v2.destroy_account.destroyed_account.detail: Detail
+admin_v2.destroy_account.destroyed_account.reason: Reason
+admin_v2.destroy_account.destroyed_account.audit_user: Audit User
+admin_v2.destroy_account.destroyed_account.audit_reason: Audit Reason
+admin_v2.destroy_account.destroyed_account.audit_agree: Agree
+admin_v2.destroy_account.destroyed_account.audit_reject: Reject
+admin_v2.destroy_account.destroyed_account.reason_tip: Enter a maximum of 30 words
+admin_v2.destroy_account.destroyed_account.can_not_manage: Can not manage your self
+user.user_had_destroyed: Account had destroyed
+admin.article_setting.article_copy_manage: Information copy protection
 admin_v2.operation.homepage_live_notify.enable: Live Notify
 admin_v2.operation.homepage_live_notify.enable.open: Open
 admin_v2.operation.homepage_live_notify.enable.close: Close

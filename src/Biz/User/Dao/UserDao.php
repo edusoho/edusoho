@@ -12,6 +12,8 @@ interface UserDao extends GeneralDaoInterface
 
     public function getByNickname($nickname);
 
+    public function getUnDestroyedUserByNickname($nickname);
+
     public function getByUUID($uuid);
 
     public function countByMobileNotEmpty();
@@ -21,6 +23,8 @@ interface UserDao extends GeneralDaoInterface
     public function getByVerifiedMobile($mobile);
 
     public function countByLessThanCreatedTime($time);
+
+    public function findUnDestroyedUsersByIds($ids);
 
     public function findByNicknames(array $nicknames);
 
