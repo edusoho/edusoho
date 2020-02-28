@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}{% if pageNav == 'teach' %}{{'user.homepage.teaching_courses'|trans}} - {% elseif pageNav == 'learn' %}{{'user.homepage.learning_courses'|trans}} - {% elseif pageNav == 'favorited' %}{{'user.homepage.favorite_courses'|trans}} - {% elseif pageNav == 'group' %}{{'user.homepage.joined_group'|trans}} - {% elseif pageNav == 'friend' %}{{'user.homepage.following_fan'|trans}} - {% else %}{{''}}{% endif %}{{'user.homepage'|trans({'%nickname%':user.nickname})}} - {{ parent() }}{% endblock %}
+{% block title %}{% if pageNav == 'teach' %}{{'user.homepage.teaching_courses'|trans}} - {% elseif pageNav == 'learn' %}{{'user.homepage.learning_courses'|trans}} - {% elseif pageNav == 'favorited' %}{{'user.homepage.favorite_courses'|trans}} - {% elseif pageNav == 'group' %}{{'user.homepage.joined_group'|trans}} - {% elseif pageNav == 'friend' %}{{'user.homepage.following_fan'|trans}} - {% else %}{{''}}{% endif %}{% if user.destroyed|default(0) == 0 %}{{'user.homepage'|trans({'%nickname%':user.nickname})}}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %} - {{ parent() }}{% endblock %}
 {% block keywords %}{{ user.title }}{% endblock %}
 {% block description %}{{ user.about|default('')|plain_text(100) }}{% endblock %}
 {% set bodyClass = 'userpage bg-blank' %}
@@ -13,6 +13,7 @@
 {% endblock %}
 
 {% block content %}
+  {% if not user.destroyed|default(0) %}
   <ul class="nav nav-tabs clearfix">
     <li {% if pageNav == 'about' %}class="active"{% endif %}><a href="{{ path('user_about', {id: user.id}) }}">{{'user.homepage.introductions'|trans}}</a></li>
   	{% if 'ROLE_TEACHER' in user.roles %}
@@ -31,4 +32,5 @@
     <li {% if pageNav == 'friend' %}class="active"{% endif %}><a href="{{ path('user_following', {id:user.id}) }}">{{'user.homepage.following_fan'|trans}}</a></li>
   </ul>
   {% block main %}{% endblock %}
+  {% endif %}
 {% endblock %}

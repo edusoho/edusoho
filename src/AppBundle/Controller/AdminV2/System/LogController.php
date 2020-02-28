@@ -122,9 +122,13 @@ class LogController extends BaseController
         }
 
         foreach ($data as $message => $fieldChange) {
+            $key = LogDataUtils::trans($message, $log['module'], $log['action']);
             if (is_array($fieldChange) && in_array($message, $modalShowFields)) {
-                $key = LogDataUtils::trans($message, $log['module'], $log['action']);
                 $fieldChange = self::getStrChangeFiled($log['module'], $log['action'], $fieldChange, $message);
+                $showData[$key] = $fieldChange;
+            }
+
+            if (!is_array($fieldChange) && in_array($message, $modalShowFields)) {
                 $showData[$key] = $fieldChange;
             }
         }

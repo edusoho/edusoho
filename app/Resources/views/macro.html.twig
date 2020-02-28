@@ -1,7 +1,7 @@
 {# user_avater 已废弃，请勿使用 #}
 {%- macro user_avatar(user, class, imgClass, card = true) -%}
   {% if user %}
-    <a class="{{ class }} {% if card %}js-user-card{% endif %}" href="{{ path('user_show', {id:user.id}) }}" data-card-url="{{ path('user_card_show', {userId:user.id}) }}" data-user-id="{{ user.id }}">
+    <a class="{{ class }} {% if card and not user.destroyed|default(0) %}js-user-card{% endif %}" href="{{ path('user_show', {id:user.id}) }}" data-card-url="{{ path('user_card_show', {userId:user.id}) }}" data-user-id="{{ user.id }}">
       {% if imgClass == 'avatar-md' %}
         {% set avatarType = 'medium' %}
       {% elseif imgClass == 'avatar-lg' %}
@@ -22,7 +22,7 @@
 {# options 可以传card(显示卡片), _blank(新开窗口), null_link(空链接) #}
 {%- macro user_avatar_link(user, size, options = []) -%}
   {% set size = size|default('small') %}
-  {% if user %}
+  {% if user and not user.destroyed|default(0) %}
     <a
       class="avatar-link-{{ size }} {% if 'card' in options %}js-user-card{% endif %}"
       {% if '_blank' in options %}
@@ -57,7 +57,11 @@
 
 {%- macro user_link(user, class, card = true) -%}
   {% if user %}
-    <a class="link-dark {{ class }}" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{ user.nickname }}</a>
+    {% if not user.destroyed|default(0) %}
+      <a class="link-dark {{ class }}" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{ user.nickname }}</a>
+    {% else %}
+      {{ 'user.user_had_destroyed'|trans }}
+    {% endif %}
   {% else %}
     <a class="link-dark {{ class }}" href="javascript:;"><del>{{'user.not_exist'|trans}}</del></a>
   {% endif %}

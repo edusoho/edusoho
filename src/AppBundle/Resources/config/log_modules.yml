@@ -400,3 +400,17 @@ push:
         modalField: all
 
 
+destroy_account_record:
+    create:
+        modalField:
+          ["nickname", "reason"]
+    pass:
+        templateParam:
+          %nickname%: nickname
+        modalField:
+          ["destroyedAccountId", "nickname", "reason", "auditUserNickname"]
+    reject:
+        templateParam:
+          %nickname%: nickname
+        modalField:
+          ["nickname", "reason", "auditUserNickname", "rejectedReason"]
