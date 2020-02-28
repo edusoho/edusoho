@@ -1470,4 +1470,6 @@ admin.switch_old_version.confirm_message: '切换到老后台后，所有管理�
 admin.switch_new_version.confirm_message: '升级到新后台后，所有管理员将切换至新后台，但权限功能不会改变， 确认切换？'
 admin.can_not_link_data: 无法连接到数据
 
+group.thread.reply.max_length.notice: 回复内容不得超过3000字
+
 course_manage.live_statistics.empty_tips: 数据同步中，请稍后重试

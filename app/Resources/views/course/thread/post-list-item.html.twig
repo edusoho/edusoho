@@ -16,14 +16,18 @@
 
   <div class="thread-post-body media-body" style="word-break:break-all;">
     <div class="media-heading">
-      <a href="javascript:">{{ author.nickname }}</a>
+      {% if not author.destroyed|default(0) %}
+        <a href="javascript:">{{ author.nickname }}</a>
+      {% else %}
+        {{ 'user.user_had_destroyed'|trans }}
+      {% endif %}
       <span class="bullet">•</span>
       <span class="color-gray">{{ post.createdTime|smart_time }}</span>
     </div>
     <div class="editor-text">{{ post.content|cdn|raw }}</div>
     {% include 'attachment/widget/list.html.twig' with {targetType:'course.thread.post', targetId:post.id|default(0)} %}
     {% if app.user.id != author.id and thread.type != 'question' %}
-    <div class="thread-post-action" data-user="{{ author.nickname }}"><a class="js-call-username" href="#thread-post-form" >{{'thread.reply'|trans}}</a></div>
+    <div class="thread-post-action" data-user="{% if not author.destroyed|default(0) %}{{ author.nickname }}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %}"><a class="js-call-username" href="#thread-post-form" >{{'thread.reply'|trans}}</a></div>
     {% endif %}
   </div>
 </li>

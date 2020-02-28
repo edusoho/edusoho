@@ -52,6 +52,8 @@ interface QuestionService
 
     public function judgeQuestion($question, $answer);
 
+    public function filterAnswer($question, $answer);
+
     public function hasEssay($questionIds);
 
     public function getQuestionCountGroupByTypes($conditions);

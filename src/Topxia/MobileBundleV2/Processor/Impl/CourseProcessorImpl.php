@@ -1213,6 +1213,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('userId', 'userId参数错误');
         }
 
+        $user = $this->getUserService()->getUser($userId);
         $start = (int) $this->getParam('start', 0);
         $limit = (int) $this->getParam('limit', 10);
         $total = $this->getCourseSetService()->countUserLearnCourseSets($userId);
@@ -1250,7 +1251,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'start' => $start,
             'limit' => $limit,
             'total' => $total,
-            'data' => $this->controller->filterCourses(array_values($tempCourse)),
+            'data' => (1 == $user['destroyed']) ? array() : $this->controller->filterCourses(array_values($tempCourse)),
         );
 
         return $result;

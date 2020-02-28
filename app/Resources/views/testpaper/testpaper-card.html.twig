@@ -43,6 +43,7 @@
 	<div class="panel-footer text-right">
 		{% if paperResult.id|default(0) > 0 %}
 			<input type="hidden" data-url="{{ path('testpaper_do_suspend', {resultId:paperResult.id}) }}" data-role="test-suspend">
+			{{ slot('course.task.facein.testpaper_card_add_button') }}
 
 			<button class="btn btn-primary do-test" id="finishPaper" data-ajax="{{ path('testpaper_result_submit', { resultId: paperResult.id|default(0) }) }}"  data-toggle="modal" data-target="#testpaper-finished-dialog">{{'testpaper.answer.answer_card.submit_btn'|trans}}</button>
 		{% else %}
@@ -50,3 +51,4 @@
 		{% endif %}
 	</div>
 </div>
+{{ slot('course.task.facein.inspection',{activity:activity|default([]),paperResult:paperResult|default([])}) }}

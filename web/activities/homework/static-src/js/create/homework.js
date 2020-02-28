@@ -108,6 +108,7 @@ export default class Homework {
       }
     });
     this.$step2_form.find('[name="questionLength"]').val((seq - 1) > 0 ? (seq - 1) : null );
+    this.validator.form();
   }
 
   selectQuestion(event, typeQuestions) {

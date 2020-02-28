@@ -36,6 +36,11 @@ class PathParser
                 continue;
             }
 
+            if ($part == 'account') {
+                $pathMeta->addResName($part);
+                continue;
+            }
+
             if ($nextIsResName) {
                 $pathMeta->addResName($part);
                 $nextIsResName = 0;
