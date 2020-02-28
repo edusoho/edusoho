@@ -33,14 +33,14 @@ class CheckinProcessor extends AbstractLiveStatisticsProcessor
             $this->getLogService()->info('course', 'live', 'handle checkin data error: ', json_encode($data));
 
             return array(
-                'time' => $data[0]['time'] / 1000,
+                'time' => intval($data[0]['time'] / 1000),
                 'success' => 0,
                 'detail' => array(),
             );
         }
 
         return array(
-            'time' => $data[0]['time'] / 1000,
+            'time' => intval($data[0]['time'] / 1000),
             'success' => 1,
             'detail' => $data[0]['users'],
         );
@@ -48,7 +48,7 @@ class CheckinProcessor extends AbstractLiveStatisticsProcessor
 
     private function handleUser($user)
     {
-        $userId = $this->getUserIdByNickName($user['nickName']);
+        $userId = $this->splitUserIdFromNickName($user['nickName']);
         if (empty($userId)) {
             throw new ServiceException('user not found');
         }

@@ -8,6 +8,11 @@ class LiveStatisticsProcessorFactory
 {
     private static $mockedProcessor;
 
+    private static $map = array(
+        'checkin',
+        'visitor',
+    );
+
     public static function create($type)
     {
         if (!empty(self::$mockedProcessor)) {
@@ -18,8 +23,10 @@ class LiveStatisticsProcessorFactory
             throw new \Exception('type cannot be null');
         }
 
-        $class = __NAMESPACE__.'\\'.ucfirst($type).'Processor';
+        if (in_array($type, self::$map)) {
+            $class = __NAMESPACE__.'\\'.ucfirst($type).'Processor';
 
-        return new $class(ServiceKernel::instance()->getBiz());
+            return new $class(ServiceKernel::instance()->getBiz());
+        }
     }
 }

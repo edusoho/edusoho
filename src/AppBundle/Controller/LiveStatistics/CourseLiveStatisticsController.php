@@ -72,7 +72,7 @@ class CourseLiveStatisticsController extends BaseController
 
     public function modalAction(Request $request, $taskId, $liveId, $type)
     {
-        $task = $this->getTaskService()->getTask($taskId);
+        $task = $this->getTaskService()->tryTakeTask($taskId);
 
         if (LiveStatisticsService::STATISTICS_TYPE_CHECKIN == $type) {
             $statistics = $this->getLiveStatisticsService()->getCheckinStatisticsByLiveId($liveId);
@@ -99,8 +99,9 @@ class CourseLiveStatisticsController extends BaseController
         ));
     }
 
-    public function checkinDataAction(Request $request, $liveId)
+    public function checkinDataAction(Request $request, $taskId, $liveId)
     {
+        $this->getTaskService()->tryTakeTask($taskId);
         $status = $request->query->get('status');
 
         $statistics = $this->getLiveStatisticsService()->getCheckinStatisticsByLiveId($liveId);
@@ -131,8 +132,9 @@ class CourseLiveStatisticsController extends BaseController
         ));
     }
 
-    public function jsonDataAction(Request $request, $liveId)
+    public function jsonDataAction(Request $request, $taskId, $liveId)
     {
+        $this->getTaskService()->tryTakeTask($taskId);
         $checkin = $this->getLiveStatisticsService()->updateCheckinStatistics($liveId);
         $visitor = $this->getLiveStatisticsService()->updateVisitorStatistics($liveId);
 

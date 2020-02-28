@@ -10745,6 +10745,7 @@ course.live_statistics.live_status: 进行状态
 course.live_statistics.operation: 操作
 course.live_statistics.check_in_status: 点名数/学员总数
 course.live_statistics.average_learn_time: 平均学习时长（分）
+course.live_statistics.task_name_placeholder: 任务名
 
 course.live_statistics.detail_notice: 数据来源于直播间，自动在直播结束一天同步
 course.live_statistics.detail.checkin: 点名统计

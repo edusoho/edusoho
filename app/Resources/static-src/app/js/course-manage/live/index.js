@@ -6,8 +6,8 @@ if ($('#detail-data').length) {
       notify('warning', Translator.trans('course_manage.live_statistics.empty_tips'));
     }
 
-    var checkin = response.checkin.data;
-    var visitor = response.visitor.data;
+    let checkin = response.checkin.data;
+    let visitor = response.visitor.data;
 
     if ($('#checkin-time').length && checkin.time) {
       $('#checkin-time').html(checkin.time);
@@ -18,8 +18,8 @@ if ($('#detail-data').length) {
     }
 
     if ($('#visitor-learn-time').length && visitor.totalLearnTime) {
-      var studentNum = $('#course-student-number').html();
-      $('#visitor-learn-time').html(Math.ceil(visitor.totalLearnTime/studentNum));
+      let studentNum = $('#course-student-number').html();
+      $('#visitor-learn-time').html(studentNum > 0 ? Math.ceil(visitor.totalLearnTime/studentNum) : 0);
     }
   });
 }

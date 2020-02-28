@@ -30,17 +30,17 @@
     <ul class="cd-tabs" id="cd-tabs">
       <li class="{% if status|default('all') == 'all' %}active{% endif %}">
         <a href="javascript:;"
-           data-url="{{ path('live_statistics_checkin',{liveId:liveId}) }}"
+           data-url="{{ path('live_statistics_checkin',{taskId:task.id,liveId:liveId}) }}"
            data-toggle="cd-tabs">{{ 'course.live_statistics.checkin_status.all'|trans }}</a>
       </li>
       <li class="{% if status|default('all') == 'unchecked' %}active{% endif %}">
         <a href="javascript:;"
-           data-url="{{ path('live_statistics_checkin',{liveId:liveId,status:'unchecked'}) }}"
+           data-url="{{ path('live_statistics_checkin',{taskId:task.id,liveId:liveId,status:'unchecked'}) }}"
            data-toggle="cd-tabs"> {{ 'course.live_statistics.checkin_status.not_checked'|trans }}</a>
       </li>
       <li class="{% if status|default('all') == 'checked' %}active{% endif %}">
         <a href="javascript:;"
-           data-url="{{ path('live_statistics_checkin', {liveId:liveId,status:'checked'}) }}"
+           data-url="{{ path('live_statistics_checkin', {taskId:task.id,liveId:liveId,status:'checked'}) }}"
            data-toggle="cd-tabs">{{ 'course.live_statistics.checkin_status.checked'|trans }}</a>
       </li>
     </ul>

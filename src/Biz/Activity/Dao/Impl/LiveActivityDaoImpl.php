@@ -31,4 +31,9 @@ class LiveActivityDaoImpl extends GeneralDaoImpl implements LiveActivityDao
     {
         return $this->findByFields(array('liveId' => $liveId, 'replayStatus' => 'ungenerated'));
     }
+
+    public function getByLiveId($liveId)
+    {
+        return $this->getByFields(array('liveId' => $liveId));
+    }
 }

@@ -90,7 +90,7 @@ class CourseLiveStatisticsExporter extends Exporter
                 $this->parameter['course']['maxStudentNum'],
                 $status,
                 $checkinCount.'/'.$this->parameter['course']['studentNum'],
-                ceil($totalLearnTime / 60 / $this->parameter['course']['studentNum']),
+                empty($this->parameter['course']['studentNum']) ? 0 : ceil($totalLearnTime / 60 / $this->parameter['course']['studentNum']),
             );
         }
 

@@ -28,7 +28,7 @@ abstract class AbstractLiveStatisticsProcessor
         return $this->biz->service('System:LogService');
     }
 
-    protected function getUserIdByNickName($nickname)
+    protected function splitUserIdFromNickName($nickname)
     {
         $userId = trim(strrchr($nickname, '_'), '_');
         if (!is_numeric($userId) || empty($userId)) {

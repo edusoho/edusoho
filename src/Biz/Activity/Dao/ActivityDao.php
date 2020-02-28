@@ -17,4 +17,6 @@ interface ActivityDao extends GeneralDaoInterface
     public function findOverlapTimeActivitiesByCourseId($courseId, $newStartTime, $newEndTime, $excludeId = null);
 
     public function findFinishedLivesWithinTwoHours();
+
+    public function getByMediaIdAndMediaTypeAndCopyId($mediaId, $mediaType, $copyId);
 }

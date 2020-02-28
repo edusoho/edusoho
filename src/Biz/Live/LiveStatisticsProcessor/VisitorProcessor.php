@@ -31,23 +31,18 @@ class VisitorProcessor extends AbstractLiveStatisticsProcessor
 
     private function getTeacherIdsByLiveId($liveId)
     {
-        $liveActivity = $this->getLiveActivityService()->search(array('liveId' => $liveId), array(), 0, 1);
+        $liveActivity = $this->getLiveActivityService()->getByLiveId($liveId);
         if (empty($liveActivity)) {
             return array();
         }
 
-        $conditions = array(
-            'mediaId' => $liveActivity[0]['id'],
-            'mediaType' => 'live',
-            'copyId' => 0,
-        );
-        $activity = $this->getActivityService()->search($conditions, array(), 0, 1);
+        $activity = $this->getActivityService()->getByMediaIdAndMediaTypeAndCopyId($liveActivity['id'], 'live', 0);
 
         if (empty($activity)) {
             return array();
         }
 
-        $teachers = $this->getCourseMemberService()->findCourseTeachers($activity[0]['fromCourseId']);
+        $teachers = $this->getCourseMemberService()->findCourseTeachers($activity['fromCourseId']);
 
         return ArrayToolkit::column($teachers, 'userId');
     }
@@ -89,7 +84,7 @@ class VisitorProcessor extends AbstractLiveStatisticsProcessor
 
     private function handleUser($user)
     {
-        $userId = $this->getUserIdByNickName($user['nickName']);
+        $userId = $this->splitUserIdFromNickName($user['nickName']);
         if (empty($userId)) {
             throw new ServiceException('user not found');
         }

@@ -8,7 +8,7 @@
   <form class="form-inline cd-form-inline" id="live-statistics" action="" method="get">
     <div class="form-group cd-form-group cd-form-group-button">
       <input class="form-control form-control-md" value="{{ app.request.get('title') }}" type="text" name="title"
-             placeholder="任务名">
+             placeholder="{{ 'course.live_statistics.task_name_placeholder'|trans }}">
       <input name="courseId" type="hidden" value="{{ course.id }}">
       <input name="courseSetId" type="hidden" value="{{ courseSet.id }}">
       <button type="submit">
@@ -29,7 +29,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h4 class="modal-title" data-success="文件下载完成">{{ 'file.download.start'|trans }}</h4>
+            <h4 class="modal-title" data-success="{{ 'file.download.finish'|trans }}">{{ 'file.download.start'|trans }}</h4>
           </div>
           <div class="modal-body">
             <div class="progress progress-striped active">
