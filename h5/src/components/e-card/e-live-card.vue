@@ -29,7 +29,7 @@
           >{{status | liveBtnText }}</div>
         </div>
       </div>
-      <div class="live-item__bottom" v-if="course.classroom" @click="toClassroom()">
+      <div class="live-item__bottom van-hairline--top" v-if="course.classroom" @click="toClassroom()">
         <span>{{course.classroom.title}}</span>
         <i class="iconfont icon-arrow-right"></i>
       </div>

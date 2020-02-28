@@ -9,7 +9,11 @@
      padding-bottom: vw(4);
      font-size: 14px;
      color: #313131;
-     border-bottom: 1px solid #E1E1E1;
+    // border-bottom: 1px solid #E1E1E1;
+    }
+    .van-hairline--bottom::after {
+       border-bottom-width: 1px!important; 
+       border-color:#E1E1E1;
     }
   }
 }

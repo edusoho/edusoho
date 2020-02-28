@@ -92,7 +92,9 @@
       text-align: right;
       color: #999999;
       font-size: 12px;
-      border-top: 1px solid #EBEBEB;
+    }
+    .van-hairline--top::after {
+      border-color: #EBEBEB;
     }
   }
 }

@@ -8,7 +8,7 @@
         @load="onLoad"
       >
         <div v-for="(date,index) in sort" :key="index">
-          <div class="history-learn-date">{{date}}</div>
+          <div class="history-learn-date van-hairline--bottom">{{date}}</div>
           <template v-if="isRequestComplete">
             <e-card
               v-for="(item,index) in lesson[date]"

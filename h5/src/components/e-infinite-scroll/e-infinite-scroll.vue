@@ -7,7 +7,7 @@
       <!-- 公开课 -->
       <template  v-if="typeList=='open_course_list'">
         <div v-for="(date,index) in openCourseDate" :key="'date'+index">
-          <div class="open_course_date">{{date}}</div>
+          <div class="open_course_date van-hairline--bottom">{{date}}</div>
           <opencourseItem 
             v-for="(course, index) in openCourseList[date]"
             :key="'opencourse'+index"
