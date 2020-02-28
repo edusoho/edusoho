@@ -48,7 +48,7 @@ class MessageController extends BaseController
             return $this->createJsonResponse($response);
         }
 
-        $user = $this->getUserService()->getUserByNickname($nickname);
+        $user = $this->getUserService()->getUnDstroyedUserByNickname($nickname);
         if (empty($user)) {
             $response = array('success' => false, 'message' => 'json_response.receiver_not_exist.message');
 
@@ -134,7 +134,7 @@ class MessageController extends BaseController
         if ('POST' == $request->getMethod()) {
             $message = $request->request->get('message');
             $nickname = $message['receiver'];
-            $receiver = $this->getUserService()->getUserByNickname($nickname);
+            $receiver = $this->getUserService()->getUnDstroyedUserByNickname($nickname);
             if (empty($receiver)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
@@ -208,7 +208,7 @@ class MessageController extends BaseController
         $data = array();
         $queryString = $request->query->get('q');
         $findedUsersByNickname = $this->getUserService()->searchUsers(
-            array('nickname' => $queryString),
+            array('nickname' => $queryString, 'destroyed' => 0),
             array('createdTime' => 'DESC'),
             0,
             10);

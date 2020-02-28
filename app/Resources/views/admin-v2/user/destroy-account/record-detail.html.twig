@@ -1,0 +1,42 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'admin_v2.user.destroy_account_record.detail'|trans}}{% endblock %}
+
+{% block body %}
+<form class="form-horizontal">
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label for="status">{{'admin_v2.user.destroy_account_record.reason'|trans}}</label>
+    </div>
+    <div class="col-md-8 controls pts">{{ record.reason|default('') }}</div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label for="status">{{'admin_v2.user.destroy_account_record.status'|trans}}</label>
+    </div>
+    <div class="col-md-8 controls pts">
+      {% if record.status == 'audit' %}
+        {{ 'admin_v2.user.destroy_account_record.status_audit'|trans }}
+      {% elseif record.status == 'rejected' %}
+        {{ 'admin_v2.user.destroy_account_record.status_rejected'|trans }}
+      {% elseif record.status == 'cancel' %}
+        {{ 'admin_v2.user.destroy_account_record.status_cancel'|trans }}
+      {% elseif record.status == 'passed' %}
+        {{ 'admin_v2.user.destroy_account_record.status_passed'|trans }}
+      {% endif %}
+    </div>
+  </div>
+  {% if record.rejectedReason|default('') %}
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label for="status">{{'admin_v2.user.destroy_account_record.rejectedReson'|trans}}</label>
+    </div>
+    <div class="col-md-8 controls pts">{{ record.rejectedReason|default('') }}</div>
+  </div>
+  {% endif %}
+</form>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">{{'form.btn.confirm'|trans}}</button>
+{% endblock %}
