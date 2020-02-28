@@ -24,6 +24,11 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
         return $this->getByFields(array('nickname' => $nickname));
     }
 
+    public function getUnDestroyedUserByNickname($nickname)
+    {
+        return $this->getByFields(array('nickname' => $nickname, 'destroyed' => 0));
+    }
+
     public function getByUUID($uuid)
     {
         return $this->getByFields(array('uuid' => $uuid));
@@ -102,6 +107,18 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
         $sql = "SELECT count(id) as count FROM `{$this->table()}` WHERE  `createdTime` <= ? and type <> 'system' ";
 
         return $this->db()->fetchColumn($sql, array($time));
+    }
+
+    public function findUnDestroyedUsersByIds($ids)
+    {
+        if (empty($ids)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE destroyed = 0 AND id IN ({$marks});";
+
+        return $this->db()->fetchAll($sql, $ids);
     }
 
     protected function createQueryBuilder($conditions)
@@ -222,6 +239,7 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
                 'orgCode PRE_LIKE :likeOrgCode',
                 'orgCode = :orgCode',
                 'distributorToken = :distributorToken',
+                'destroyed = :destroyed',
             ),
         );
     }
