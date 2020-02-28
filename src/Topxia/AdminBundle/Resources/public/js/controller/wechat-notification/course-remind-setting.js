@@ -15,6 +15,7 @@ exports.run = function () {
     autoSubmit: false,
     onFormValidated: function(error, results, $form) {
       if (error) {
+        $('.submit-btn').button('reset').removeClass('disabled');
         return false;
       }
 
@@ -38,16 +39,31 @@ exports.run = function () {
     }
   });
 
+  $('input[type=radio][name=status]').change(function() {
+    let value = $('input[type=radio][name=status]:checked').val();
+    if (value == 0) {
+      validator.removeItem('[name="sendDays[]"]');
+    } else {
+      validator.addItem({
+        element: '[name="sendDays[]"]',
+        required: true,
+        errormessageRequired: Translator.trans('site.choose_hint')+Translator.trans('admin.wechat_notification.send_days'),
+      });
+    }
+  });
+
   validator.addItem({
     element: '[name="sendTime"]',
     required: true,
   });
 
-  validator.addItem({
-    element: '[name="sendDays[]"]',
-    required: true,
-    errormessageRequired: Translator.trans('site.choose_hint')+Translator.trans('admin.wechat_notification.send_days'),
-  });
+  if ($('input[type=radio][name=status]:checked').val() == 1) {
+    validator.addItem({
+      element: '[name="sendDays[]"]',
+      required: true,
+      errormessageRequired: Translator.trans('site.choose_hint')+Translator.trans('admin.wechat_notification.send_days'),
+    });
+  }
 
   $("#send-time").datetimepicker({
     language: 'zh-CN',

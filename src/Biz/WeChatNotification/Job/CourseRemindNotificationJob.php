@@ -49,7 +49,7 @@ class CourseRemindNotificationJob extends AbstractNotificationJob
                 continue;
             }
             $courseTitle = (isset($courses[$courseMember['courseId']]) && !empty($courses[$courseMember['courseId']]['title'])) ? $courses[$courseMember['courseId']]['title'] : $courses[$courseMember['courseId']]['courseSetTitle'];
-            $courseCompulsoryTaskNum = isset($courses[$courseMember['courseId']]['compulsoryTaskNum']) ? $courses[$courseMember['courseId']]['compulsoryTaskNum'] : '0';
+            $courseCompulsoryTaskNum = isset($courseMember['compulsoryTaskNum']) ? $courseMember['compulsoryTaskNum'] : '0';
             $process = (0 == $courseCompulsoryTaskNum) ? 0 : $courseMember['learnedCompulsoryTaskNum'] ? round($courseMember['learnedCompulsoryTaskNum'] / $courseCompulsoryTaskNum, 2) * 100 : 0;
             $keyword2 = date('Y-m-d', time()).PHP_EOL.'学习进度：'.$process.'%';
             $data['keyword1'] = array('value' => empty($courseTitle) ? '' : '《'.$courseTitle.'》');
