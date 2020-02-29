@@ -122,22 +122,18 @@ class VisitorProcessorTest extends BaseTestCase
     {
         $this->mockBiz('Activity:LiveActivityService', array(
             array(
-                'functionName' => 'search',
+                'functionName' => 'getByLiveId',
                 'returnValue' => array(
-                    array(
                         'id' => 1,
-                    ),
                 ),
             ),
         ));
 
         $this->mockBiz('Activity:ActivityService', array(
             array(
-                'functionName' => 'search',
+                'functionName' => 'getByMediaIdAndMediaTypeAndCopyId',
                 'returnValue' => array(
-                    array(
                         'fromCourseId' => 1,
-                    ),
                 ),
             ),
         ));
