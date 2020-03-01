@@ -3113,9 +3113,9 @@ es-to-primitive@^1.2.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.2"
 
-"es-webpack-engine@git+https://github.com/cd-fez/es-webpack-engine.git#15f4bda42e5626b3583d6002bd1ed894c3b1ba55":
+"es-webpack-engine@git+https://github.com/cd-fez/es-webpack-engine.git#1f895800685a60588044c50b7589b939bbc7ec78":
   version "0.0.4-beta10"
-  resolved "git+https://github.com/cd-fez/es-webpack-engine.git#15f4bda42e5626b3583d6002bd1ed894c3b1ba55"
+  resolved "git+https://github.com/cd-fez/es-webpack-engine.git#1f895800685a60588044c50b7589b939bbc7ec78"
   dependencies:
     "@babel/cli" "^7.0.0"
     "@babel/core" "^7.0.0"
