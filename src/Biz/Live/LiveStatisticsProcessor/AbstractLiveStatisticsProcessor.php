@@ -14,7 +14,7 @@ abstract class AbstractLiveStatisticsProcessor
 
     const RESPONSE_CODE_NOT_FOUND = 4001;
 
-    const RESPONSE_CODE_NOT_SUPPORT = 4003;
+    const RESPONSE_CODE_NOT_SUPPORT = 4002;
 
     public function __construct(Biz $biz)
     {
