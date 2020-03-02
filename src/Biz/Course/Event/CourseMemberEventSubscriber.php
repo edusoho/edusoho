@@ -106,7 +106,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $conditions = array(
             'target_id' => $course['id'],
             'target_type' => 'course',
-            'statuses' => array('success', 'finished'),
+            'statuses' => array('paid', 'success', 'finished'),
         );
 
         $income = $this->getOrderFacadeService()->sumOrderItemPayAmount($conditions);
@@ -154,6 +154,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $course = $event->getSubject();
         $member = $event->getArgument('member');
+        $this->countIncome($event);
 
         if ('student' == $member['role']) {
             $this->getCourseService()->updateCourseStatistics($course['id'], array('studentNum'));

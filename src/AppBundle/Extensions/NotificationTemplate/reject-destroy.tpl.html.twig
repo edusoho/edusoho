@@ -1,0 +1,14 @@
+{% import 'macro.html.twig' as macro %}
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+        {% set data = notification.content %}
+        {{ 'notification.destroy-account.reject'|trans({'%who%':data.userName|default(''), '%reason%':data.reason|default('')}) }}
+    </div>
+    <div class="notification-footer">
+    </div>
+  </div>
+</li>

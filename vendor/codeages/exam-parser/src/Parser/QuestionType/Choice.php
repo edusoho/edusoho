@@ -139,7 +139,7 @@ class Choice extends AbstractQuestion
 
         //判断选项是否有错
         foreach ($question[QuestionElement::OPTIONS] as $index => $option) {
-            if (empty($option)) {
+            if (trim($option) == '') {
                 $question['errors'][QuestionElement::OPTIONS.'_'.$index] = $this->getError(QuestionElement::OPTIONS, QuestionErrors::NO_OPTION, $index);
             }
         }

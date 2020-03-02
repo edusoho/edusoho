@@ -21,7 +21,13 @@ export const initThread = () => {
       'content': {
         required: true,
         minlength: 2,
+        maxlength: 3000,
         trim: true
+      }
+    },
+    messages: {
+      'content': {
+        maxlength: Translator.trans('group.thread.reply.max_length.notice')
       }
     },
     submitSuccess: function (data) {
@@ -50,7 +56,13 @@ export const initThreadReplay = () => {
         [`${content}`]: {
           required: true,
           minlength: 2,
+          maxlength: 3000,
           trim: true
+        }
+      },
+      messages: {
+        [`${content}`]: {
+          maxlength: Translator.trans('group.thread.reply.max_length.notice'),
         }
       },
       submitHandler: function (form) {

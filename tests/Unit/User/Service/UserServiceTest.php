@@ -7,6 +7,7 @@ use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
 use Biz\User\CurrentUser;
+use Biz\User\Dao\UserDao;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
@@ -246,6 +247,22 @@ class UserServiceTest extends BaseTestCase
         $this->assertNull($foundUser);
     }
 
+    public function testGetUnDstroyedUserByNickname()
+    {
+        $userInfo = array(
+            'nickname' => 'test_nickname',
+            'password' => 'test_password',
+            'email' => 'test_email@email.com',
+        );
+        $registeredUser = $this->getUserService()->register($userInfo);
+        $user = $this->getUserService()->getUnDstroyedUserByNickname($registeredUser['nickname']);
+        $this->assertEquals($registeredUser, $user);
+
+        $this->getUserDao()->update($registeredUser['id'], array('destroyed' => 1));
+        $user = $this->getUserService()->getUnDstroyedUserByNickname($registeredUser['nickname']);
+        $this->assertNull($user);
+    }
+
     public function testGetUserByUUID()
     {
         $registeredUser = $this->createFromUser();
@@ -274,14 +291,13 @@ class UserServiceTest extends BaseTestCase
         $result = $this->getUserService()->getUserByLoginField($keyword);
         $this->assertEquals($result['id'], $registeredUser['id']);
 
-        $keyword = 'admin@admin.com';
-        $this->mockBiz('User:UserDao', array(
-            array(
-                'functionName' => 'getByEmail',
-                'returnValue' => array('type' => 'system'),
-            ),
-        ));
+        $keyword = 'test_email@email.com';
+        $this->getUserDao()->update($registeredUser['id'], array('type' => 'system'));
         $result = $this->getUserService()->getUserByLoginField($keyword);
+        $this->assertNull($result);
+
+        $this->getUserDao()->update($registeredUser['id'], array('type' => 'import', 'destroyed' => 1));
+        $result = $this->getUserService()->getUserByLoginField($keyword, true);
         $this->assertNull($result);
     }
 
@@ -297,6 +313,9 @@ class UserServiceTest extends BaseTestCase
         $keyword = '13777868634';
         $result = $this->getUserService()->getUserByLoginField($keyword);
         $this->assertEquals($result['id'], $registeredUser['id']);
+
+        $result = $this->getUserService()->getUserByVerifiedMobile('');
+        $this->assertNull($result);
     }
 
     public function testGetUserByEmail()
@@ -3397,6 +3416,14 @@ class UserServiceTest extends BaseTestCase
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return UserDao
+     */
+    protected function getUserDao()
+    {
+        return $this->createDao('User:UserDao');
     }
 
     protected function getSettingService()
