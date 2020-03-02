@@ -103,7 +103,7 @@ class HTMLHelper
     protected function handleOuterLink($html, $safeDomains)
     {
         $siteSettings = $this->getSettingService()->get('site', array());
-        $url = $this->getTrimUrl($siteSettings['url']);
+        $url = isset($siteSettings['url']) ? $this->getTrimUrl($siteSettings['url']) : '';
 
         preg_match_all('/\<img[^\>]*?src\s*=\s*[\'\"](?:http:\/\/|https:\/\/)(.*?)[\'\"].*?\>/i', $html, $matches);
         foreach ($matches[1] as $key => $matche) {
