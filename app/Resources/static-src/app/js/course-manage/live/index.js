@@ -14,7 +14,7 @@ function initData() {
   $.get($('#detail-data').data('url'), function (response) {
     if (response.checkin.errorCode || response.visitor.errorCode) {
       if (response.checkin.errorCode == 4002) {
-        $('#checkin-detail').html(Translator.trans('course_manage.live_statistics.checkin_not_support'));
+        $('#checkin-detail').html('<h4 class="col-md-12">'+Translator.trans('course_manage.live_statistics.checkin_not_support')+'</h4>');
       }else {
         notify('warning', Translator.trans('course_manage.live_statistics.empty_tips'));
       }
