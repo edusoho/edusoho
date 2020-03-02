@@ -109,10 +109,15 @@ class HTMLHelper
         foreach ($matches[1] as $key => $matche) {
             $needReplaceFlag = true;
             foreach ($safeDomains as $safeDomain) {
-                if (false !== strpos($matche, $safeDomain) || false !== strpos($matche, $url)) {
+                if (false !== strpos($matche, $safeDomain)) {
                     $needReplaceFlag = false;
                 }
             }
+
+            if (empty($url) || false !== strpos($matche, $url)) {
+                $needReplaceFlag = false;
+            }
+
             //存在于白名单内就不进行替换移除
             if ($needReplaceFlag) {
                 $html = str_replace($matches[0][$key], '', $html);
