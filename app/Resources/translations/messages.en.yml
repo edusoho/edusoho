@@ -9456,3 +9456,6 @@ course.live_statistics.checkin_status: Checkin status
 course.live_statistics.checkin_status.checked: Checked
 course.live_statistics.checkin_status.not_checked: Not checked
 course.live_statistics.checkin_status.all: All
+
+exception.live_statistic.not_found: Live statistics not found
+exception.live_statistic.not_support: Live statistics not supported function

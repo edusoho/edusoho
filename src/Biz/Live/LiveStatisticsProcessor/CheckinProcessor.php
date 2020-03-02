@@ -14,7 +14,7 @@ class CheckinProcessor extends AbstractLiveStatisticsProcessor
             $data = $this->handleData($result['data']);
 
             return $data;
-        } catch (ServiceException $e) {
+        } catch (\Exception $e) {
             throw $e;
         }
     }
@@ -22,7 +22,7 @@ class CheckinProcessor extends AbstractLiveStatisticsProcessor
     private function handleData($data)
     {
         if (empty($data)) {
-            return array();
+            return array('success' => 1);
         }
 
         try {

@@ -8,6 +8,7 @@ use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Live\LiveStatisticsException;
 use Biz\Live\Service\LiveStatisticsService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
@@ -135,8 +136,18 @@ class CourseLiveStatisticsController extends BaseController
     public function jsonDataAction(Request $request, $taskId, $liveId)
     {
         $this->getTaskService()->tryTakeTask($taskId);
-        $checkin = $this->getLiveStatisticsService()->updateCheckinStatistics($liveId);
-        $visitor = $this->getLiveStatisticsService()->updateVisitorStatistics($liveId);
+
+        try {
+            $checkin = $this->getLiveStatisticsService()->updateCheckinStatistics($liveId);
+        } catch (LiveStatisticsException $e) {
+            $checkin['errorCode'] = $e->getCode();
+        }
+
+        try {
+            $visitor = $this->getLiveStatisticsService()->updateVisitorStatistics($liveId);
+        } catch (LiveStatisticsException $e) {
+            $visitor['errorCode'] = $e->getCode();
+        }
 
         if (!empty($checkin['data']['time'])) {
             $checkin['data']['time'] = date('Y-m-d H:i:s', $checkin['data']['time']);
