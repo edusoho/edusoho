@@ -19,14 +19,15 @@ class HTMLHelperTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'get',
-                    'returnValue' => array('safe_iframe_domains' => array(
-                        'www.baidu.com',
-                    )),
+                    'withParams' => array('security'),
+                    'returnValue' => array(
+                        'safe_iframe_domains' => array('www.baidu.com'),
+                    ),
                 ),
                 array(
                     'functionName' => 'get',
                     'withParams' => array('site', array()),
-                    'returnValue' => array(),
+                    'returnValue' => array('url' => 'http://www.test.edu.cn'),
                 ),
             )
         );
