@@ -20,7 +20,7 @@ function initData() {
       }
     }
 
-    if (!response.checkin.data.success || !response.visitor.data.success) {
+    if (!response.checkin.errorCode && !response.visitor.errorCode && (!response.checkin.data.success || !response.visitor.data.success)) {
       notify('warning', Translator.trans('course_manage.live_statistics.data_not_valid'));
     }
 
