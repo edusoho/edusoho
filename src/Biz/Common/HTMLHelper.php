@@ -102,11 +102,14 @@ class HTMLHelper
 
     protected function handleOuterLink($html, $safeDomains)
     {
+        $siteSettings = $this->getSettingService()->get('site', array());
+        $url = $this->getTrimUrl($siteSettings['url']);
+
         preg_match_all('/\<img[^\>]*?src\s*=\s*[\'\"](?:http:\/\/|https:\/\/)(.*?)[\'\"].*?\>/i', $html, $matches);
         foreach ($matches[1] as $key => $matche) {
             $needReplaceFlag = true;
             foreach ($safeDomains as $safeDomain) {
-                if (false !== strpos($matche, $safeDomain)) {
+                if (false !== strpos($matche, $safeDomain) || false !== strpos($matche, $url)) {
                     $needReplaceFlag = false;
                 }
             }
@@ -117,6 +120,15 @@ class HTMLHelper
         }
 
         return $html;
+    }
+
+    protected function getTrimUrl($url)
+    {
+        $url = !empty($url) ? $url : '';
+        $url = rtrim($url, '/');
+        $url = ltrim($url, 'http://');
+
+        return ltrim($url, 'https://');
     }
 
     /**
