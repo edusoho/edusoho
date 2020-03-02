@@ -8,6 +8,7 @@
 {% block main_body %}
   <div class="help-block mbl">{{ 'course.live_statistics.detail_notice'|trans }}</div>
   <div id="detail-data" data-showable="{% if "now"|date('U') >= task.endTime %}1{% else %}0{% endif %}" data-url="{{ path('live_statistics_json_data', {taskId:task.id,liveId:activity.ext.liveId}) }}">
+    <span class="hidden" id="course-student-number">{{ course.studentNum }}</span>
     <div class="cd-panel mb0 border-radius-none">
       <div class="cd-panel-heading">
         <div class="cd-panel-title">
@@ -18,7 +19,7 @@
         <div class="row" id="checkin-detail">
           <h4 class="col-md-4"><strong>{{ 'course.live_statistics.detail.checkin_time'|trans }}：</strong><span id="checkin-time">{{ '-' }}</span></h4>
           <h4 class="col-md-4">
-            <strong>{{ 'course.live_statistics.check_in_status'|trans }}：</strong><span id="checkin-data">{{ '-' }}</span>/<span id="course-student-number">{{ course.studentNum }}</span>
+            <strong>{{ 'course.live_statistics.check_in_status'|trans }}：</strong><span id="checkin-data">{{ '-' }}</span>/{{ course.studentNum }}
           </h4>
           <a class="pull-right"  href="#modal" data-toggle="modal" data-url="{{ path('live_statistics_modal', {taskId: task.id, liveId: activity.ext.liveId, type:'checkin'}) }}">{{ 'course.live_statistics.detail.checkin_detail'|trans }}</a>
         </div>
