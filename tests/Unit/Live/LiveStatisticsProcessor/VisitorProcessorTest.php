@@ -30,6 +30,17 @@ class VisitorProcessorTest extends BaseTestCase
     }
 
     /**
+     * @expectedException \Biz\Live\LiveStatisticsException
+     * @expectedExceptionMessage exception.live_statistic.not_found
+     */
+    public function testHandlerResult_LiveStatisticsException()
+    {
+        $processor = new VisitorProcessor($this->getBiz());
+
+        $processor->handlerResult(array('code' => VisitorProcessor::RESPONSE_CODE_NOT_FOUND));
+    }
+
+    /**
      * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      * @expectedExceptionMessage data is not found
      */
@@ -37,10 +48,10 @@ class VisitorProcessorTest extends BaseTestCase
     {
         $processor = new VisitorProcessor($this->getBiz());
 
-        $processor->handlerResult(array('code' => VisitorProcessor::RESPONSE_CODE_NOT_FOUND));
+        $processor->handlerResult(array('code' => VisitorProcessor::RESPONSE_CODE_SUCCESS));
     }
 
-    public function testHandleResult_Empty()
+    public function testHandleResult_SuccessWithoutDetail()
     {
         $result = array(
             'code' => VisitorProcessor::RESPONSE_CODE_SUCCESS,
@@ -48,7 +59,8 @@ class VisitorProcessorTest extends BaseTestCase
         );
         $processor = new VisitorProcessor($this->getBiz());
         $result = $processor->handlerResult($result);
-        $this->assertEmpty($result);
+        $this->assertEquals(1, $result['success']);
+        $this->assertArrayNotHasKey('detail', $result);
     }
 
     public function testHandleResult_NotSuccess()
@@ -124,7 +136,7 @@ class VisitorProcessorTest extends BaseTestCase
             array(
                 'functionName' => 'getByLiveId',
                 'returnValue' => array(
-                        'id' => 1,
+                    'id' => 1,
                 ),
             ),
         ));
@@ -133,7 +145,7 @@ class VisitorProcessorTest extends BaseTestCase
             array(
                 'functionName' => 'getByMediaIdAndMediaTypeAndCopyId',
                 'returnValue' => array(
-                        'fromCourseId' => 1,
+                    'fromCourseId' => 1,
                 ),
             ),
         ));

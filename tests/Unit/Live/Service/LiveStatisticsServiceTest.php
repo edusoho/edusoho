@@ -25,7 +25,10 @@ class LiveStatisticsServiceTest extends BaseTestCase
 
         $this->assertEquals($liveId, $result['liveId']);
         $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_CHECKIN, $result['type']);
-        $this->assertEquals(array('data' => 'test data'), $result['data']);
+        $this->assertEquals(array('data' => array(
+            'success' => 1,
+            'detail' => 'test detail',
+        )), $result['data']);
     }
 
     public function testCreateLiveVisitorStatistics()
@@ -42,7 +45,8 @@ class LiveStatisticsServiceTest extends BaseTestCase
 
         $this->assertEquals($liveId, $result['liveId']);
         $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_VISITOR, $result['type']);
-        $this->assertEquals(array('data' => 'test data'), $result['data']);
+        $this->assertEquals(array('data' => array('success' => 1,
+            'detail' => 'test detail', )), $result['data']);
     }
 
     public function testGetCheckinStatisticsByLiveId()
@@ -87,7 +91,8 @@ class LiveStatisticsServiceTest extends BaseTestCase
 
         $this->assertEquals($liveId, $result['liveId']);
         $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_CHECKIN, $result['type']);
-        $this->assertEquals(array('data' => 'test data'), $result['data']);
+        $this->assertEquals(array('data' => array('success' => 1,
+            'detail' => 'test detail', )), $result['data']);
     }
 
     public function testUpdateCheckinStatistics_WithExistedStatistics()
@@ -110,7 +115,7 @@ class LiveStatisticsServiceTest extends BaseTestCase
 
         $this->assertEquals($liveId, $result['liveId']);
         $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_CHECKIN, $result['type']);
-        $this->assertEquals(array('data' => 'test data'), $result['data']);
+        $this->assertEmpty($result['data']);
     }
 
     public function testUpdateVisitorStatistics_WithoutExistedStatistics()
@@ -127,7 +132,8 @@ class LiveStatisticsServiceTest extends BaseTestCase
 
         $this->assertEquals($liveId, $result['liveId']);
         $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_VISITOR, $result['type']);
-        $this->assertEquals(array('data' => 'test data'), $result['data']);
+        $this->assertEquals(array('data' => array('success' => 1,
+            'detail' => 'test detail', )), $result['data']);
     }
 
     public function testUpdateVisitorStatistics_WithExistedStatistics()
@@ -150,7 +156,7 @@ class LiveStatisticsServiceTest extends BaseTestCase
 
         $this->assertEquals($liveId, $result['liveId']);
         $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_VISITOR, $result['type']);
-        $this->assertEquals(array('data' => 'test data'), $result['data']);
+        $this->assertEmpty($result['data']);
     }
 
     public function testFindCheckinStatisticsByLiveIds()
@@ -207,7 +213,10 @@ class LiveStatisticsServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'handlerResult',
                     'returnValue' => array(
-                        'data' => 'test data',
+                        'data' => array(
+                            'success' => 1,
+                            'detail' => 'test detail',
+                        ),
                     ),
                 ),
             )

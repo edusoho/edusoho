@@ -2,6 +2,7 @@
 
 namespace Biz\Live\LiveStatisticsProcessor;
 
+use Biz\Live\LiveStatisticsException;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
@@ -45,8 +46,9 @@ abstract class AbstractLiveStatisticsProcessor
             throw new ServiceException('code is not found');
         }
 
-        if (!in_array($result['code'], array(self::RESPONSE_CODE_NOT_SUPPORT, self::RESPONSE_CODE_SUCCESS, self::RESPONSE_CODE_NOT_FOUND))) {
-            $this->getLogService()->info('course', 'live', 'check code error: '.json_encode($result));
+        if (in_array($result['code'], array(self::RESPONSE_CODE_NOT_FOUND, self::RESPONSE_CODE_NOT_SUPPORT))) {
+            throw new LiveStatisticsException($result['code']);
+        } elseif ($result['code'] != self::RESPONSE_CODE_SUCCESS) {
             throw new ServiceException('code is not valid');
         }
 

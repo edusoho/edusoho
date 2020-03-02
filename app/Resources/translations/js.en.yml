@@ -1531,3 +1531,6 @@ admin.can_not_link_data: Unable to link to data
 group.thread.reply.max_length.notice: Reply content must not exceed 3000 words
 
 course_manage.live_statistics.empty_tips: Data syncing, please try again later
+course_manage.live_statistics.live_not_end: Live data is not generated
+course_manage.live_statistics.checkin_not_support: Check in is currently not supported
+course_manage.live_statistics.data_not_valid: The data is abnormal

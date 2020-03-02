@@ -1473,3 +1473,6 @@ admin.can_not_link_data: 无法连接到数据
 group.thread.reply.max_length.notice: 回复内容不得超过3000字
 
 course_manage.live_statistics.empty_tips: 数据同步中，请稍后重试
+course_manage.live_statistics.live_not_end: 直播数据未生成
+course_manage.live_statistics.checkin_not_support: 当前直播课暂不支持点名功能
+course_manage.live_statistics.data_not_valid: 数据异常，直播间数据返回错误

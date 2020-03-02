@@ -7,7 +7,7 @@
 {% block page_title %}{% if not course.title %}{{ course.courseSetTitle }}{% else %}{{ course.title }}{% endif %} / {{ task.title }}{% endblock %}
 {% block main_body %}
   <div class="help-block mbl">{{ 'course.live_statistics.detail_notice'|trans }}</div>
-  <div id="detail-data" data-url="{{ path('live_statistics_json_data', {taskId:task.id,liveId:activity.ext.liveId}) }}">
+  <div id="detail-data" data-showable="{% if "now"|date('U') >= task.endTime %}1{% else %}0{% endif %}" data-url="{{ path('live_statistics_json_data', {taskId:task.id,liveId:activity.ext.liveId}) }}">
     <div class="cd-panel mb0 border-radius-none">
       <div class="cd-panel-heading">
         <div class="cd-panel-title">
@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="cd-panel-body">
-        <div class="row">
+        <div class="row" id="checkin-detail">
           <h4 class="col-md-4"><strong>{{ 'course.live_statistics.detail.checkin_time'|trans }}：</strong><span id="checkin-time">{{ '-' }}</span></h4>
           <h4 class="col-md-4">
             <strong>{{ 'course.live_statistics.check_in_status'|trans }}：</strong><span id="checkin-data">{{ '-' }}</span>/<span id="course-student-number">{{ course.studentNum }}</span>

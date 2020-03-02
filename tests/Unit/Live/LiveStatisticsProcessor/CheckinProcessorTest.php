@@ -30,6 +30,17 @@ class CheckinProcessorTest extends BaseTestCase
     }
 
     /**
+     * @expectedException \Biz\Live\LiveStatisticsException
+     * @expectedExceptionMessage exception.live_statistic.not_found
+     */
+    public function testHandlerResult_LiveStatisticsException()
+    {
+        $processor = new CheckinProcessor($this->getBiz());
+
+        $processor->handlerResult(array('code' => CheckinProcessor::RESPONSE_CODE_NOT_FOUND));
+    }
+
+    /**
      * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      * @expectedExceptionMessage data is not found
      */
@@ -37,10 +48,10 @@ class CheckinProcessorTest extends BaseTestCase
     {
         $processor = new CheckinProcessor($this->getBiz());
 
-        $processor->handlerResult(array('code' => CheckinProcessor::RESPONSE_CODE_NOT_FOUND));
+        $processor->handlerResult(array('code' => CheckinProcessor::RESPONSE_CODE_SUCCESS));
     }
 
-    public function testHandleResult_Empty()
+    public function testHandleResult_SuccessWithoutDetail()
     {
         $result = array(
             'code' => CheckinProcessor::RESPONSE_CODE_SUCCESS,
@@ -48,7 +59,8 @@ class CheckinProcessorTest extends BaseTestCase
         );
         $processor = new CheckinProcessor($this->getBiz());
         $result = $processor->handlerResult($result);
-        $this->assertEmpty($result);
+        $this->assertEquals(1, $result['success']);
+        $this->assertArrayNotHasKey('detail', $result);
     }
 
     public function testHandleResult_NotSuccess()

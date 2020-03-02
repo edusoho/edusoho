@@ -36,7 +36,7 @@ class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsSer
 
         $statistics = $this->generateStatisticsByLiveIdAndType($liveId, self::STATISTICS_TYPE_CHECKIN);
 
-        return empty($statistics['data']) ? $exist : $this->getLiveStatisticsDao()->update($exist['id'], $statistics);
+        return empty($statistics['data']['detail']) ? $exist : $this->getLiveStatisticsDao()->update($exist['id'], $statistics);
     }
 
     public function updateVisitorStatistics($liveId)
@@ -49,7 +49,7 @@ class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsSer
 
         $statistics = $this->generateStatisticsByLiveIdAndType($liveId, self::STATISTICS_TYPE_VISITOR);
 
-        return empty($statistics['data']) ? $exist : $this->getLiveStatisticsDao()->update($exist['id'], $statistics);
+        return empty($statistics['data']['detail']) ? $exist : $this->getLiveStatisticsDao()->update($exist['id'], $statistics);
     }
 
     public function getCheckinStatisticsByLiveId($liveId)
