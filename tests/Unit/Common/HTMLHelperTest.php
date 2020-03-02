@@ -23,6 +23,11 @@ class HTMLHelperTest extends BaseTestCase
                         'www.baidu.com',
                     )),
                 ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('site', array()),
+                    'returnValue' => array(),
+                ),
             )
         );
         //2.传入不带任何需要过滤的字符串
