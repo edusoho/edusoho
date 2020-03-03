@@ -95,7 +95,7 @@ class EduSohoUpgrade extends AbstractUpdater
                   `data` MEDIUMTEXT,
                   `type` enum('checkin','visitor') NOT NULL DEFAULT 'checkin' COMMENT 'checkin:点名记录, visitor:访问记录',
                   `createdTime` int(10) unsigned NOT NULL,
-                  `updatedTime` bigint(15) unsigned NOT NULL DEFAULT '0',
+                  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
                    PRIMARY KEY (`id`),
                    KEY `liveId` (liveId)
                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='直播数据统计';
