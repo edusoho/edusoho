@@ -102,6 +102,9 @@ class HTMLHelper
 
     protected function handleOuterLink($html, $safeDomains)
     {
+        $siteSettings = $this->getSettingService()->get('site', array());
+        $url = isset($siteSettings['url']) ? $this->getTrimUrl($siteSettings['url']) : '';
+
         preg_match_all('/\<img[^\>]*?src\s*=\s*[\'\"](?:http:\/\/|https:\/\/)(.*?)[\'\"].*?\>/i', $html, $matches);
         foreach ($matches[1] as $key => $matche) {
             $needReplaceFlag = true;
@@ -110,6 +113,11 @@ class HTMLHelper
                     $needReplaceFlag = false;
                 }
             }
+
+            if (empty($url) || false !== strpos($matche, $url)) {
+                $needReplaceFlag = false;
+            }
+
             //存在于白名单内就不进行替换移除
             if ($needReplaceFlag) {
                 $html = str_replace($matches[0][$key], '', $html);
@@ -117,6 +125,15 @@ class HTMLHelper
         }
 
         return $html;
+    }
+
+    protected function getTrimUrl($url)
+    {
+        $url = !empty($url) ? $url : '';
+        $url = rtrim($url, '/');
+        $url = ltrim($url, 'http://');
+
+        return ltrim($url, 'https://');
     }
 
     /**
