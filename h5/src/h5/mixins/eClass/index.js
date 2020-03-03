@@ -16,6 +16,10 @@ export default {
       type: String,
       default: 'normal'
     },
+    discountType: {
+      type: String,
+      default: 'discount'
+    },
     discount: {
       type: String,
       default: '10'
@@ -27,6 +31,10 @@ export default {
     typeList: {
       type: String,
       default: 'course_list'
+    },
+    isAppUse: {
+      type: Boolean,
+      default: false
     },
     normalTagShow: {
       type: Boolean,
@@ -52,11 +60,17 @@ export default {
       if (this.typeList === 'class_list') return false;
       if (this.discount !== '') {
         const discount = Number(this.discount);
-        if (discount === 10) return false;
-        if (discount === 0) return '限免';
-        return `${discount}折`;
+        // 减价
+        if (this.discountType === 'reduce') {
+          return `减${discount}`;
+        }
+        // 打折
+        if (this.discountType === 'discount') {
+          if (discount === 10) return false;
+          if (discount == 0) return '限免';
+          return `${discount}折`;
+        }
       }
-      return false;
     }
   },
   watch: {
@@ -79,11 +93,15 @@ export default {
   },
   methods: {
     onClick(e) {
+      const isOrder = this.type === 'order';
+      const id = this.course.id || this.course.targetId;
       if (!this.feedback) {
         return;
       }
-      const isOrder = this.type === 'order';
-      const id = this.course.id || this.course.targetId;
+      if (this.isAppUse) {
+        this.postMessage(this.typeList, id);
+        return;
+      }
       if (e.target.tagName === 'SPAN') {
         return;
       }
@@ -95,6 +113,20 @@ export default {
         path:
           this.typeList === 'course_list' ? `/course/${id}` : `/classroom/${id}`
       });
+    },
+    // 调用app接口
+    postMessage(type, id) {
+      let action;
+      let data = {};
+      if (type === 'course_list') {
+        action = 'kuozhi_course';
+        data = { courseId: id };
+      } else {
+        action = 'kuozhi_classroom';
+        data = { classroomId: id };
+      }
+      // 调用app接口
+      window.postNativeMessage({ action, data });
     }
   }
 };

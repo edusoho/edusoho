@@ -1,0 +1,53 @@
+.live-timetable {
+  .bg-gary{
+    height: 12px;
+    background: #F5F5F5;
+  }
+  .live-list{
+    position: relative;
+    padding: vw(16);
+    overflow: scroll;
+    box-sizing: border-box;
+    .live-list__title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .live-title__left {
+        @extend .font-family-PM ;
+        font-weight: 500;
+        color: $primary-color;
+      }
+      .live-title__right {
+        padding-left: vw(16);
+        position: relative;
+        color: #666666;
+        font-size: 14px;
+        @extend .font-family-PM ;
+        &::after {
+          position: absolute;
+          left: 0;
+          top: 50%;
+          margin-top: vw(-4);
+          content: "";
+          width: vw(8);
+          height: vw(8);
+          background: $primary-color;
+          border-radius: 50%;
+        }
+      }
+    }
+    .live-timetable-loading{
+      position: absolute;
+      top:20%;
+      left: 50%;
+      margin-left: -30px;
+    }
+  }
+  .empty__live{
+    margin-top: 16%;
+  }
+  .empty__more-live{
+    margin-top: 46%;
+  }
+
+}

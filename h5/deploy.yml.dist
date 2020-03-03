@@ -1,0 +1,11 @@
+repository:
+stage: dev
+hosts:
+  - 124.160.104.77
+path: /var/www/h5.st.edusoho.cn
+ssh:
+  user: root
+  identity_file: ~/.ssh/deployerkey
+  options:
+    UserKnownHostsFile: /dev/null
+    StrictHostKeyChecking: no
