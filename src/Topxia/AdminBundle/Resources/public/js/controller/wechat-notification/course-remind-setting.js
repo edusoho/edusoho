@@ -43,18 +43,18 @@ exports.run = function () {
     let value = $('input[type=radio][name=status]:checked').val();
     if (value == 0) {
       validator.removeItem('[name="sendDays[]"]');
+      validator.removeItem('[name="sendTime"]');
     } else {
       validator.addItem({
         element: '[name="sendDays[]"]',
         required: true,
         errormessageRequired: Translator.trans('site.choose_hint')+Translator.trans('admin.wechat_notification.send_days'),
       });
+      validator.addItem({
+        element: '[name="sendTime"]',
+        required: true,
+      });
     }
-  });
-
-  validator.addItem({
-    element: '[name="sendTime"]',
-    required: true,
   });
 
   if ($('input[type=radio][name=status]:checked').val() == 1) {
@@ -62,6 +62,11 @@ exports.run = function () {
       element: '[name="sendDays[]"]',
       required: true,
       errormessageRequired: Translator.trans('site.choose_hint')+Translator.trans('admin.wechat_notification.send_days'),
+    });
+
+    validator.addItem({
+      element: '[name="sendTime"]',
+      required: true,
     });
   }
 
