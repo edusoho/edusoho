@@ -392,7 +392,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
         if ('courseRemind' == $key) {
             $templates['courseRemind']['sendTime'] = $fields['sendTime'];
-            $templates['courseRemind']['sendDays'] = $fields['sendDays'];
+            $templates['courseRemind']['sendDays'] = empty($fields['sendDays']) ? array() : $fields['sendDays'];
             $notificationJob = $this->getSchedulerService()->getJobByName('WeChatNotificationJob_CourseRemind');
             if ($notificationJob) {
                 $this->getSchedulerService()->deleteJob($notificationJob['id']);
