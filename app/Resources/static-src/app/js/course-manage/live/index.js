@@ -27,15 +27,15 @@ function initData() {
     let checkin = response.checkin.data;
     let visitor = response.visitor.data;
 
-    if ($('#checkin-time').length && checkin.time) {
+    if ($('#checkin-time').length && checkin && checkin.time) {
       $('#checkin-time').html(checkin.time);
     }
 
-    if ($('#checkin-data').length && checkin.detail) {
+    if ($('#checkin-data').length && checkin && checkin.detail) {
       $('#checkin-data').html(checkin.detail.length);
     }
 
-    if ($('#visitor-learn-time').length && visitor.totalLearnTime) {
+    if ($('#visitor-learn-time').length && visitor && visitor.totalLearnTime) {
       let studentNum = $('#course-student-number').html();
       $('#visitor-learn-time').html(studentNum > 0 ? Math.ceil(visitor.totalLearnTime / studentNum) : 0);
     }
