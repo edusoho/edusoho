@@ -12,6 +12,8 @@ interface OpenCourseLessonDao extends GeneralDaoInterface
 
     public function deleteByCourseId($id);
 
+    public function searchLessonsWithOrderBy($conditions, $start, $limit);
+
     public function getLessonMaxSeqByCourseId($courseId);
 
     public function findTimeSlotOccupiedLessonsByCourseId($courseId, $startTime, $endTime, $excludeLessonId);

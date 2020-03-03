@@ -41,9 +41,9 @@ class MeFootprintFilter extends Filter
         $activityFilter = new ActivityFilter();
         $activityFilter->setMode(Filter::SIMPLE_MODE);
 
-        $course = empty($footprint['target']['course']) ? array() : $footprint['target']['course'];
-        $classroom = empty($footprint['target']['classroom']) ? array() : $footprint['target']['classroom'];
-        $activity = empty($footprint['target']['activity']) ? array() : $footprint['target']['activity'];
+        $course = empty($footprint['target']['course']) ? null : $footprint['target']['course'];
+        $classroom = empty($footprint['target']['classroom']) ? null : $footprint['target']['classroom'];
+        $activity = empty($footprint['target']['activity']) ? null : $footprint['target']['activity'];
 
         $courseFilter->filter($course);
         $activityFilter->filter($activity);
