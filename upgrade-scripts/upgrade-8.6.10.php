@@ -87,7 +87,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function createLiveStatisticsTable()
     {
-        if (!$this->isTableExist('destroy_account_record')) {
+        if (!$this->isTableExist('live_statistics')) {
             $this->getConnection()->exec("
                 CREATE TABLE IF NOT EXISTS`live_statistics` (
                   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
