@@ -32,6 +32,6 @@ class LiveStatistics extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("DROP TABLE IF EXISTS `live_statistics`");
+        $connection->exec('DROP TABLE IF EXISTS `live_statistics`');
     }
 }
