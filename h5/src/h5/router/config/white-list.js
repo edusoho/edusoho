@@ -1,4 +1,9 @@
 const whiteList = [
+  '/live-timetable',
+  '/more/live',
+  '/my/history/learning',
+  '/classroom/explore/new',
+  '/course/explore/new',
   '/login/qrcode',
   '/login',
   '/sts',

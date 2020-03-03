@@ -41,6 +41,10 @@ export default {
       type: String,
       default: 'normal'
     },
+    discountType: {
+      type: String,
+      default: 'discount'
+    },
     discount: {
       type: String,
       default: '10'
@@ -77,9 +81,16 @@ export default {
       if (this.typeList === 'class_list') return false
       if (this.discount !== '') {
         const discount = Number(this.discount)
-        if (discount === 10) return false
-        if (discount == 0) return '限免'
-        return discount + '折'
+        //减价
+        if(this.discountType==="reduce"){
+         return `减${discount}`
+        }
+        //打折
+        if(this.discountType==="discount"){
+          if (discount === 10) return false
+          if (discount == 0) return '限免'
+          return `${discount}折`
+        }
       }
     }
   },
