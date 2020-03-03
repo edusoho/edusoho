@@ -101,7 +101,7 @@ interface TestpaperService
 
     public function searchTestpaperResultsCountJoinCourseMemberGroupByUserId($conditions);
 
-    public function searchTestpaperResults($conditions, $sort, $start, $limit);
+    public function searchTestpaperResults($conditions, $sort, $start, $limit, $columns = array());
 
     public function searchTestpapersScore($conditions);
 

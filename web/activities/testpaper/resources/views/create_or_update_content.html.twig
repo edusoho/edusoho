@@ -103,6 +103,8 @@
               <input class="form-control width-input width-input-large mr0" id="startTime" type="text" name="startTime" autocomplete="off" value="{% if activity|default(null) and activity.startTime|default(0) != 0 %}{{ activity.startTime|date('Y-m-d H:i') }}{% else %}0{% endif %}" >
           </div>
       </div>
+      {{ slot('course.task.facein.settings', {'activity': activity|default([])}) }}
+
     </form>
   </div>
   {% if 'lesson_credit' in features %}
