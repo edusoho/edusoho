@@ -32,6 +32,13 @@ class BaseQuestionController extends BaseController
         if ($question['parentId'] > 0) {
             $parentQuestion = $this->getQuestionService()->get($question['parentId']);
         }
+        $goto = $request->query->get(
+            'goto',
+            $this->generateUrl(
+                'question_bank_manage_question_list',
+                array('id' => $questionBankId, 'parentId' => $questionId)
+            )
+        );
 
         return $this->render($view, array(
             'questionBank' => $questionBank,
@@ -40,6 +47,7 @@ class BaseQuestionController extends BaseController
             'type' => $question['type'],
             'request' => $request,
             'categoryTree' => $this->getQuestionCategoryService()->getCategoryTree($questionBankId),
+            'goto' => $goto,
         ));
     }
 
