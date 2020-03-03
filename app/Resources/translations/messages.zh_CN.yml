@@ -10760,7 +10760,7 @@ course.live_statistics.live_finished: 已结束
 
 course.live_statistics.first_join: 最早加入直播时间
 course.live_statistics.last_leave: 最晚离开直播时间
-course.live_statistics.learn_time: 有效学习时长
+course.live_statistics.learn_time: 有效学习时长（分）
 
 course.live_statistics.empty_data: 暂无数据
 course.live_statistics.visitor_list: 学习时长名单
