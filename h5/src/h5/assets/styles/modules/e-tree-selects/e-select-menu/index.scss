@@ -17,7 +17,7 @@
       padding-left:vw(20);
     }
     .selected {
-      color: $primary-color;
+      color: #03C777;
     }
   }
   .more {
@@ -58,13 +58,17 @@
     flex-direction: column;
     overflow: scroll;
     -webkit-overflow-scrolling: touch;
+    .treeSelected{
+      background:rgba(3,199,119,0.1);
+      color:  #03C777!important;
+    }
     .e-menu__item {
       text-align: center;
       height: vw(54);
       line-height: vw(54);
+      color:#666666;
       @extend .font-family-PR;
       font-size: 14px;
-      color: #2B333B;
     }
   }
   .level-one{

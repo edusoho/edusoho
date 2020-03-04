@@ -1,3 +1,4 @@
+import openCourse from './openCourse/index';
 import classroom from './classroom/index';
 import setting from './setting/index';
 import course from './course/index';
@@ -11,7 +12,7 @@ import studyCard from './study-card/index';
 import distribution from './distribution/index';
 import liveTimetable from './liveTimetable/index';
 
-const config = [...classroom, ...course, ...lesson, ...me, ...order,
+const config = [...openCourse, ...classroom, ...course, ...lesson, ...me, ...order,
   ...setting, ...coupon, ...vip, ...marketing, ...distribution, ...studyCard, ...liveTimetable];
 
 export default config;

@@ -1,4 +1,5 @@
 <template>
+<van-pull-refresh v-model="pullLoading" @refresh="onRefresh">
   <div class="app live-timetable">
     <div ref="liveList" class="live-list">
       <div class="live-list__title">
@@ -20,6 +21,7 @@
       <empty v-if="noData" text="空空如也，暂无内容" class="empty__more-live" />
     </div>
   </div>
+</van-pull-refresh>
 </template>
 
 <script>
@@ -40,7 +42,8 @@ export default {
       liveCourse: [],
       isRequestComplete: false,
       token: "",
-      isLoad:true
+      isLoad:true,
+      pullLoading: false
     };
   },
   computed: {
@@ -76,6 +79,7 @@ export default {
           this.liveCourse = res;
           this.isRequestComplete = true;
           this.isLoad=false;
+          this.pullLoading = false;
         })
         .catch(error => {
           this.sendError(error);
@@ -130,6 +134,14 @@ export default {
           message: error.message
         }
       });
+    },
+    initData(){
+      this.liveCourse = [];
+      this.isRequestComplete = false;
+    },
+    onRefresh() {
+      this.initData()
+      this.getmyLiveCourse(new Date());
     }
   }
 };

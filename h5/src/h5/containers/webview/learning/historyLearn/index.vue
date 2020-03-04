@@ -1,4 +1,5 @@
 <template>
+<van-pull-refresh v-model="refreshing" @refresh="onRefresh">
   <div class="app history-learn">
     <div class="history-learn-list" style>
       <van-list
@@ -7,7 +8,7 @@
         @load="onLoad"
       >
         <div v-for="(date,index) in sort" :key="index">
-          <div class="history-learn-date">{{date}}</div>
+          <div class="history-learn-date van-hairline--bottom">{{date}}</div>
           <template v-if="isRequestComplete">
             <e-card
               v-for="(item,index) in lesson[date]"
@@ -23,6 +24,7 @@
     </div>
     <empty v-if="noData" text="空空如也，暂无内容" class="empty__history_learn" />
   </div>
+</van-pull-refresh>
 </template>
 
 <script>
@@ -45,6 +47,7 @@ export default {
       isRequestComplete: false,
       loading: false,
       finished: false,
+      refreshing:false,
       query: {
         limit: 10,
         offset: 0,
@@ -103,11 +106,33 @@ export default {
         this.finished = true;
       }
     },
+    initData(){
+      this.sort=[];
+      this.course=[];
+      this.lesson={};
+      this.query={  limit: 10,  offset: 0,  type: "task"  };
+      this.refreshing = false;
+      this.finished=false;
+      this.isRequestComplete=false
+    },
     onLoad() {
+      if (this.refreshing) {
+         this.initData();
+         this.getHistoryLearn();
+         return;
+      }
       if (this.finished || !this.isRequestComplete) {
         return;
       }
       this.getHistoryLearn();
+    },
+    onRefresh() {
+      // 清空列表数据
+      this.finished = false;
+      // 重新加载数据
+      // 将 loading 设置为 true，表示处于加载状态
+      this.loading = true;
+      this.onLoad();
     },
     getUserInfo() {
       const self = this;

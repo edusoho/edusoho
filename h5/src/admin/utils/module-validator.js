@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-export default (module, startValidate=false) => {
+export default (module, startValidate = false) => {
   // 轮播图
   if (module.type === 'slide_show') {
     for (let i = 0; i < module.data.length; i += 1) {
@@ -38,6 +38,20 @@ export default (module, startValidate=false) => {
       if (startValidate) {
         Vue.prototype.$message({
           message: '请完善班级模块信息！',
+          type: 'error'
+        });
+      }
+      return true;
+    }
+  }
+
+  // 公开课
+  if (module.type === 'open_course_list') {
+    const openCourseExist = module.data.items.length;
+    if (!module.data.title || (module.data.sourceType === 'custom' && !openCourseExist)) {
+      if (startValidate) {
+        Vue.prototype.$message({
+          message: '请完善公开课模块信息！',
           type: 'error'
         });
       }

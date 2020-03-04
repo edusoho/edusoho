@@ -12,11 +12,21 @@
         :feedback="feedback"
         :type-list="part.type"
         class="gray-border-bottom"/>
+        <e-openCourse-list
+        v-if="['open_course_list'].includes(part.type)"
+        :course-list="part.data"
+        :feedback="feedback"
+        :type-list="part.type"
+        class="gray-border-bottom"/>
       <e-poster
         v-if="part.type == 'poster'"
         :class="imageMode[part.data.responsive]"
         :poster="part.data"
         :feedback="feedback"/>
+      <e-graphic-navigation
+        v-if="part.type == 'graphic_navigation'"
+          :graphicNavigation="part.data"
+      />
       <e-market-part
         v-if="['groupon', 'cut', 'seckill'].includes(part.type)"
         :tag="part.data.tag"
@@ -51,6 +61,8 @@ import swipe from '&/components/e-swipe/e-swipe.vue'
 import marketPart from '&/components/e-marketing/e-activity'
 import coupon from '&/components/e-coupon-list/e-coupon-list'
 import vipList from '&/components/e-vip-list/e-vip-list'
+import openCourseList from '&/components/e-openCourse-list/e-openCourse-list'
+import eGraphicNavigation from '&/components/e-graphic-navigation/e-graphic-navigation.vue'
 import { mapActions } from 'vuex'
 
 export default {
@@ -60,7 +72,9 @@ export default {
     'e-poster': poster,
     'e-market-part': marketPart,
     'e-coupon-list': coupon,
-    'e-vip-list': vipList
+    'e-vip-list': vipList,
+    'e-openCourse-list':openCourseList,
+    'e-graphic-navigation':eGraphicNavigation
   },
   props: {
     feedback: {

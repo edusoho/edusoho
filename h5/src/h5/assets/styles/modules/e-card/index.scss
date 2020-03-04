@@ -55,7 +55,7 @@
           position: relative;
         }
         .live-status--default{
-          color: $primary-color;
+          color: #03C777;
         }
         .live-status--start,.icon-zhibo1{
           color: #FF9B56!important;
@@ -66,18 +66,22 @@
       }
       .live-btn {
         padding: vw(2) vw(12);
-        font-size: 14px;
+        font-size: 12px;
         border-radius:28px;
+      }
+      .live-btn--end{
+        color: #999999;
+        border: 1px solid #BEBEBE;
       }
       .live-btn--none{
         color: #999999;
       }
       .live-btn--default{
-        color: $primary-color;
-        border: 1px solid $primary-color;
+        color: #03C777;
+        border: 1px solid #03C777;
       }
       .live-btn--start{
-         background-color:$primary-color ;
+         background-color:#03C777;
          color: #ffffff!important;
       }
     }
@@ -88,7 +92,9 @@
       text-align: right;
       color: #999999;
       font-size: 12px;
-      border-top: 1px solid #EBEBEB;
+    }
+    .van-hairline--top::after {
+      border-color: #EBEBEB;
     }
   }
 }

@@ -1,4 +1,5 @@
 <template>
+<van-pull-refresh v-model="pullLoading" @refresh="onRefresh">
   <div class="live-timetable app">
     <Calendar
       ref="Calendar"
@@ -29,6 +30,7 @@
       <empty v-if="noData" text="空空如也，暂无内容" class="empty__live" />
     </div>
   </div>
+</van-pull-refresh>
 </template>
 
 <script>
@@ -56,7 +58,8 @@ export default {
       isRequestComplete: false,
       isScheduleTime: false,
       isLiveCourse: false,
-      token: ""
+      token: "",
+      pullLoading: false
     };
   },
   created() {
@@ -128,6 +131,7 @@ export default {
           this.isLiveCourse = true;
           this.liveCourse = res;
           this.isRequestComplete = true;
+          this.pullLoading = false;
         })
         .catch(error => {
           this.sendError(error);
@@ -219,6 +223,14 @@ export default {
           message: error.message
         }
       });
+    },
+    initData(){
+      this.liveCourse=[];
+      this.isRequestComplete=false;
+    },
+    onRefresh() {
+      this.initData();
+      this.getmyLiveCourse(new Date(this.today))
     }
   }
 };

@@ -33,6 +33,23 @@ const formatSimpleTime = date => {
   }).join('-');
 };
 
+const formatDotTime = date => {
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
+  return [month, day].map(n => {
+    n = n.toString();
+    return n[1] ? n : `0${n}`;
+  }).join('.');
+};
+
+// 11月16日
+const formatChinaDay = date => {
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  return `${month}月${day}日`;
+};
+
 // 12:04
 const formatSimpleHour = date => {
   const hour = date.getHours();
@@ -54,6 +71,12 @@ const formatFullTime = date => {
     n = n.toString();
     return n[1] ? n : `0${n}`;
   }).join('-');
+};
+
+// 2018年
+const formatChinaYear = date => {
+  const year = date.getFullYear();
+  return `${year}年`;
 };
 
 // 2018年12月6日
@@ -176,8 +199,11 @@ const compareDate = (date1, date2) => {
 export {
   formatTime,
   formatFullTime,
+  formatChinaYear,
   formatchinaTime,
+  formatChinaDay,
   formatSimpleTime,
+  formatDotTime,
   formatTimeByNumber,
   formatCompleteTime,
   formatSimpleHour,

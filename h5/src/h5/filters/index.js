@@ -278,7 +278,6 @@ const filters = [
             }
             return `${time} | 观看回放`;
           }
-          status = '正在直播';
           return `${time} | 正在直播`;
         case 'text':
         case 'doc':
