@@ -33,7 +33,7 @@
             class="help-block">{{ 'admin.mobile_setting.mobile_homepage_set_hint'|trans({'%mobileHomepage%': path('mobile')})|raw }}</div>
         {% if 0 == appDiscoveryVersion|default(0) %}
           <div
-              class="help-block">{{ 'admin.mobile_setting.mobile_operation_hint'|trans({'%operationUrl%': path('admin_v2_mobile_banner_manage')})|raw }}</div>
+              class="help-block">{{ 'admin.mobile_setting.mobile_operation_hint'|trans({'%operationUrl%': path('admin_v2_setting_mobile_discoveries')})|raw }}</div>
         {% endif %}
       </div>
     </div>

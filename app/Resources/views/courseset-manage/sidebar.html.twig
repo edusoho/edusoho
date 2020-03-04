@@ -76,6 +76,15 @@
             {{ 'course.plan_overview'|trans }}
           </a>
         </li>
+        <li class="cd-sidebar__item {% if course_side_nav == 'live-statistics' %}active{% endif %}">
+          {% if courseSet.locked %}
+            <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'live-statistics'}) }}">
+              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.live_statistics'|trans }}
+            </a>
+          {% else %}
+            <a href="{{ path('course_set_manage_live_statistics', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">{{ 'course.live_statistics'|trans }}</a>
+          {% endif %}
+        </li>
         {% if setting('storage.upload_mode', 'local') == 'cloud' %}
           <li class="cd-sidebar__item {% if course_side_nav == 'question_marker' %}active{% endif %}">
             <a href="{{ path('course_manage_question_marker',{courseSetId: courseSet.id, courseId: curCourse.id}) }}">

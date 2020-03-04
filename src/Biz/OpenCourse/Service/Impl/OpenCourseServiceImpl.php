@@ -1022,6 +1022,98 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $openLiveCourses;
     }
 
+    public function countLiveCourses($conditions = array())
+    {
+        $lessonConditions = $this->_prepareLiveCourseLessonConditions($conditions);
+
+        $total = $this->countLessons($lessonConditions);
+
+        if (!$total) {
+            return $total;
+        }
+
+        $lessons = $this->getOpenCourseLessonDao()->searchLessonsWithOrderBy($lessonConditions, 0, $total);
+
+        $courseConditions = array(
+            'type' => 'liveOpen',
+            'status' => 'published',
+            'parentId' => 0,
+            'ids' => ArrayToolkit::column($lessons, 'courseId'),
+            'categoryId' => empty($conditions['categoryId']) ? '' : $conditions['categoryId'],
+            'titleLike' => empty($conditions['title']) ? '' : $conditions['title'],
+        );
+
+        return $this->countCourses($courseConditions);
+    }
+
+    public function searchAndSortLiveCourses($conditions = array(), $start, $limit)
+    {
+        if (empty($conditions)) {
+            return array();
+        }
+
+        if (!empty($conditions['title']) || !empty($conditions['categoryId'])) {
+            $courseConditions = array(
+                'type' => 'liveOpen',
+                'status' => 'published',
+                'parentId' => 0,
+                'categoryId' => empty($conditions['categoryId']) ? '' : $conditions['categoryId'],
+                'titleLike' => empty($conditions['title']) ? '' : $conditions['title'],
+            );
+
+            $total = $this->countCourses($courseConditions);
+
+            $courses = $this->searchCourses($courseConditions, array(), 0, $total);
+
+            $courses = ArrayToolkit::index($courses, 'id');
+
+            $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
+        }
+
+        $lessons = $this->getOpenCourseLessonDao()->searchLessonsWithOrderBy($this->_prepareLiveCourseLessonConditions($conditions), $start, $limit);
+
+        $results = array();
+        foreach ($lessons as $lesson) {
+            if (isset($conditions['courseIds']) && empty($courses[$lesson['courseId']])) {
+                continue;
+            }
+
+            $course = !empty($courses[$lesson['courseId']]) ? $courses[$lesson['courseId']] : $this->getCourse($lesson['courseId']);
+
+            if ($course['status'] != 'published') {
+                continue;
+            }
+
+            $course['lesson'] = $lesson;
+            $results[] = $course;
+        }
+
+        return $results;
+    }
+
+    protected function _prepareLiveCourseLessonConditions($conditions)
+    {
+        $defaultConditions = array('categoryId' => '', 'isReplay' => 0, 'limitDays' => 0, 'courseIds' => array());
+        $conditions = ArrayToolkit::filter($conditions, $defaultConditions);
+        $conditions = array_merge(array('type' => 'liveOpen', 'status' => 'published', 'parentId' => 0), $conditions);
+
+        if (!empty($conditions['isReplay'])) {
+            $conditions['endTimeLessThan'] = time();
+        } elseif (isset($conditions['isReplay'])) {
+            $conditions['endTimeGreaterThan'] = time();
+        }
+
+        if (!empty($conditions['limitDays']) && is_numeric($conditions['limitDays'])) {
+            $conditions['startTimeGreaterThan'] = strtotime(date('Y-m-d', time() - $conditions['limitDays'] * 24 * 60 * 60));
+            $conditions['startTimeLessThan'] = strtotime(date('Y-m-d', time() + $conditions['limitDays'] * 24 * 60 * 60));
+        }
+
+        unset($conditions['isReplay']);
+        unset($conditions['limitDays']);
+
+        return $conditions;
+    }
+
     protected function deleteLessonsByCourseId($courseId)
     {
         $lessons = $this->findLessonsByCourseId($courseId);

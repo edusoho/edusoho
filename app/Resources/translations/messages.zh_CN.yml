@@ -10736,3 +10736,40 @@ homepage.live_notify.start_while: 即将开始
 homepage.live_notify.living: 正在直播中
 homepage.live_notify.entry_live_room: 进入教室
 admin.article_setting.article_copy_manage: 资讯防复制
+
+course.live_statistics: 直播统计
+course.live_statistics.live_start_time: 直播开始时间
+course.live_statistics.live_time_long: 直播时长（分）
+course.live_statistics.max_participate_count: 最大参与人数
+course.live_statistics.live_status: 进行状态
+course.live_statistics.operation: 操作
+course.live_statistics.check_in_status: 点名数/学员总数
+course.live_statistics.average_learn_time: 平均学习时长（分）
+course.live_statistics.task_name_placeholder: 任务名
+
+course.live_statistics.detail_notice: 数据来源于直播间，自动在直播结束一天同步
+course.live_statistics.detail.checkin: 点名统计
+course.live_statistics.detail.checkin_time: 最近点名
+course.live_statistics.detail.checkin_detail: 点名明细
+course.live_statistics.detail.total_learn_time: 学习时长统计
+course.live_statistics.detail.learn_time_detail: 学习时长明细
+
+course.live_statistics.live_coming: 即将开始
+course.live_statistics.live_playing: 正在进行
+course.live_statistics.live_finished: 已结束
+
+course.live_statistics.first_join: 最早加入直播时间
+course.live_statistics.last_leave: 最晚离开直播时间
+course.live_statistics.learn_time: 有效学习时长（分）
+
+course.live_statistics.empty_data: 暂无数据
+course.live_statistics.visitor_list: 学习时长名单
+course.live_statistics.checkin_list: 点名名单
+
+course.live_statistics.checkin_status: 是否点名
+course.live_statistics.checkin_status.checked: 已点名
+course.live_statistics.checkin_status.not_checked: 未点名
+course.live_statistics.checkin_status.all: 全部
+
+exception.live_statistic.not_found: 直播数据未获取到
+exception.live_statistic.not_support: 当前直播供应商暂不支持该功能

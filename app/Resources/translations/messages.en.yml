@@ -9420,4 +9420,45 @@ homepage.live_notify.header: Live start reminder
 homepage.live_notify.start_while: Begin in a minute
 homepage.live_notify.living: Living
 homepage.live_notify.entry_live_room: Go to liveroom
+<<<<<<< HEAD
 admin.article_setting.article_copy_manage: Information copy protection
+=======
+
+course.live_statistics: Live statistics
+course.live_statistics.live_start_time: Start time
+course.live_statistics.live_time_long: Duration(min)
+course.live_statistics.max_participate_count: Max oarticipate count
+course.live_statistics.live_status: Status
+course.live_statistics.operation: Operation
+
+course.live_statistics.check_in_status: Check in/Total
+course.live_statistics.average_learn_time: Average learn time（min）
+course.live_statistics.task_name_placeholder: Task name
+
+course.live_statistics.detail_notice: The data comes from the live room, which is automatically synchronized one day after the live
+course.live_statistics.detail.checkin: Checkin Statistics
+course.live_statistics.detail.checkin_time: Latest checkin
+course.live_statistics.detail.checkin_detail: Details
+course.live_statistics.detail.total_learn_time: Learning Duration Statistics
+course.live_statistics.detail.learn_time_detail: Details
+
+course.live_statistics.live_coming: Comming soon
+course.live_statistics.live_playing: Playing
+course.live_statistics.live_finished: Finished
+
+course.live_statistics.first_join: Earliest joined time
+course.live_statistics.last_leave: Latest leave time
+course.live_statistics.learn_time: Effective learning time(min)
+
+course.live_statistics.empty_data: Empty data
+course.live_statistics.visitor_list: List of Duration
+course.live_statistics.checkin_list: Checkin list
+
+course.live_statistics.checkin_status: Checkin status
+course.live_statistics.checkin_status.checked: Checked
+course.live_statistics.checkin_status.not_checked: Not checked
+course.live_statistics.checkin_status.all: All
+
+exception.live_statistic.not_found: Live statistics not found
+exception.live_statistic.not_support: Live statistics not supported function
+>>>>>>> master
