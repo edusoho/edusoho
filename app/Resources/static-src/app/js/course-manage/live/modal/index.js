@@ -1,10 +1,6 @@
-$('body').on('click', '#cd-tabs a', function () {
-  cd.tabs({
-    el: '#cd-tabs a',
-    target: '#tabs-panel',
-    url: $(this).data('url'),
-  }).on('success', (response) => {
-    $('#checkin-tabs-panel').html(response);
-  })
+$('#cd-tabs a').click(function () {
+  $.get($(this).data('url'), function (response) {
+    $('#modal').html(response);
+  });
 });
 

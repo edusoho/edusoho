@@ -74,9 +74,20 @@ class CourseLiveStatisticsController extends BaseController
     public function modalAction(Request $request, $taskId, $liveId, $type)
     {
         $task = $this->getTaskService()->tryTakeTask($taskId);
+        $status = $request->query->get('status');
 
         if (LiveStatisticsService::STATISTICS_TYPE_CHECKIN == $type) {
             $statistics = $this->getLiveStatisticsService()->getCheckinStatisticsByLiveId($liveId);
+
+            if ($status && !empty($statistics['data']['detail'])) {
+                $groupedStatistics = ArrayToolkit::group($statistics['data']['detail'], 'checkin');
+                $groupedStatistics = array(
+                    empty($groupedStatistics[0]) ? array() : $groupedStatistics[0],
+                    empty($groupedStatistics[1]) ? array() : $groupedStatistics[1],
+                );
+
+                $statistics['data']['detail'] = $status == 'checked' ? $groupedStatistics[1] : $groupedStatistics[0];
+            }
         } else {
             $statistics = $this->getLiveStatisticsService()->getVisitorStatisticsByLiveId($liveId);
         }
@@ -97,39 +108,7 @@ class CourseLiveStatisticsController extends BaseController
             'statistics' => $statistics,
             'type' => $type,
             'paginator' => $paginator,
-        ));
-    }
-
-    public function checkinDataAction(Request $request, $taskId, $liveId)
-    {
-        $this->getTaskService()->tryTakeTask($taskId);
-        $status = $request->query->get('status');
-
-        $statistics = $this->getLiveStatisticsService()->getCheckinStatisticsByLiveId($liveId);
-
-        $statistics = empty($statistics['data']['detail']) ? array() : $statistics['data']['detail'];
-
-        if ($status) {
-            $groupedStatistics = ArrayToolkit::group($statistics, 'checkin');
-            $groupedStatistics = array(
-                empty($groupedStatistics[0]) ? array() : $groupedStatistics[0],
-                empty($groupedStatistics[1]) ? array() : $groupedStatistics[1],
-            );
-
-            $statistics = $status == 'checked' ? $groupedStatistics[1] : $groupedStatistics[0];
-        }
-
-        $paginator = new Paginator(
-            $request,
-            count($statistics),
-            10
-        );
-
-        $statistics = array_slice($statistics, $paginator->getOffsetCount(), $paginator->getPerPageCount());
-
-        return $this->render('course-manage/live/checkin-data.html.twig', array(
-            'statistics' => $statistics,
-            'paginator' => $paginator,
+            'status' => $status,
         ));
     }
 
