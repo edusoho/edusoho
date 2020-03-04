@@ -1284,4 +1284,8 @@ t.add("admin.switch_old_version.confirm_message", "\u5207\u6362\u5230\u8001\u540
 t.add("admin.switch_new_version.confirm_message", "\u5347\u7ea7\u5230\u65b0\u540e\u53f0\u540e\uff0c\u6240\u6709\u7ba1\u7406\u5458\u5c06\u5207\u6362\u81f3\u65b0\u540e\u53f0\uff0c\u4f46\u6743\u9650\u529f\u80fd\u4e0d\u4f1a\u6539\u53d8\uff0c \u786e\u8ba4\u5207\u6362\uff1f", "js", "zh_CN");
 t.add("admin.can_not_link_data", "\u65e0\u6cd5\u8fde\u63a5\u5230\u6570\u636e", "js", "zh_CN");
 t.add("group.thread.reply.max_length.notice", "\u56de\u590d\u5185\u5bb9\u4e0d\u5f97\u8d85\u8fc73000\u5b57", "js", "zh_CN");
+t.add("course_manage.live_statistics.empty_tips", "\u6570\u636e\u540c\u6b65\u4e2d\uff0c\u8bf7\u7a0d\u540e\u91cd\u8bd5", "js", "zh_CN");
+t.add("course_manage.live_statistics.live_not_end", "\u76f4\u64ad\u6570\u636e\u672a\u751f\u6210", "js", "zh_CN");
+t.add("course_manage.live_statistics.checkin_not_support", "\u5f53\u524d\u76f4\u64ad\u8bfe\u6682\u4e0d\u652f\u6301\u70b9\u540d\u529f\u80fd", "js", "zh_CN");
+t.add("course_manage.live_statistics.data_not_valid", "\u6570\u636e\u5f02\u5e38\uff0c\u76f4\u64ad\u95f4\u6570\u636e\u8fd4\u56de\u9519\u8bef", "js", "zh_CN");
 })(Translator);

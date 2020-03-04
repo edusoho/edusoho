@@ -8,6 +8,7 @@ use AppBundle\Common\TimeMachine;
 use Doctrine\Common\Inflector\Inflector;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
+use Biz\OpenCourse\Service\OpenCourseService;
 
 class H5SettingServiceImpl extends BaseService implements H5SettingService
 {
@@ -87,6 +88,49 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
+    public function openCourseListFilter($discoverySetting, $usage = 'show')
+    {
+        if ('condition' == $discoverySetting['data']['sourceType']) {
+            $conditions = array(
+                'categoryId' => isset($discoverySetting['data']['categoryId']) ? $discoverySetting['data']['categoryId'] : 0,
+                'limitDays' => isset($discoverySetting['data']['limitDays']) ? $discoverySetting['data']['limitDays'] : 0,
+            );
+
+            $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
+            $discoverySetting['data']['items'] = $this->getOpenCourseService()->searchAndSortLiveCourses(
+                $conditions,
+                0,
+                $limit
+            );
+        }
+
+        if ('custom' == $discoverySetting['data']['sourceType']) {
+            $courses = $discoverySetting['data']['items'];
+            foreach ($courses as $key => $course) {
+                $existCourse = $this->getOpenCourseService()->getCourse($course['id']);
+                $discoverySetting['data']['items'][$key] = $existCourse;
+                if (empty($existCourse)) {
+                    unset($discoverySetting['data']['items'][$key]);
+                    continue;
+                }
+                if ('show' == $usage && 'published' != $existCourse['status']) {
+                    unset($discoverySetting['data']['items'][$key]);
+                    continue;
+                }
+
+                $existLesson = $this->getOpenCourseService()->getCourseLesson($course['id'], $course['lesson']['id']);
+                $discoverySetting['data']['items'][$key]['lesson'] = $existLesson;
+
+                if (empty($existLesson) || ('show' == $usage && 'published' != $existLesson['status'])) {
+                    unset($discoverySetting['data']['items'][$key]);
+                }
+            }
+        }
+        $discoverySetting['data']['items'] = array_values($discoverySetting['data']['items']);
+
+        return $discoverySetting;
+    }
+
     public function classroomListFilter($discoverySetting, $usage = 'show')
     {
         if ('condition' == $discoverySetting['data']['sourceType']) {
@@ -136,6 +180,19 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                     $link['url'] = 'url' != $link['type'] ? '' : $link['url'];
                     $slideShow['link'] = $link;
                 }
+            }
+        }
+
+        return $discoverySetting;
+    }
+
+    public function graphicNavigationFilter($discoverySetting, $usage = 'show')
+    {
+        $schema = (!empty($_SERVER['HTTPS']) && 'off' !== strtolower($_SERVER['HTTPS'])) ? 'https' : 'http';
+
+        foreach ($discoverySetting['data'] as &$navigation) {
+            if (!empty($navigation['link'])) {
+                $navigation['link']['url'] = $schema.'://'.$_SERVER['HTTP_HOST'].'/h5/index.html#/'.$navigation['link']['type'].'/explore/new';
             }
         }
 
@@ -491,5 +548,13 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     protected function getAppService()
     {
         return $this->biz->service('CloudPlatform:AppService');
+    }
+
+    /**
+     * @return OpenCourseService
+     */
+    protected function getOpenCourseService()
+    {
+        return $this->biz->service('OpenCourse:OpenCourseService');
     }
 }

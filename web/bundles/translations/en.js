@@ -1339,4 +1339,8 @@ t.add("admin.switch_old_version.confirm_message", "After switching to the old ba
 t.add("admin.switch_new_version.confirm_message", "After upgrading to the new background, all administrators will switch to the new background, but the permissions will not change, confirm the switch?", "js", "en");
 t.add("admin.can_not_link_data", "Unable to link to data", "js", "en");
 t.add("group.thread.reply.max_length.notice", "Reply content must not exceed 3000 words", "js", "en");
+t.add("course_manage.live_statistics.empty_tips", "Data syncing, please try again later", "js", "en");
+t.add("course_manage.live_statistics.live_not_end", "Live data is not generated", "js", "en");
+t.add("course_manage.live_statistics.checkin_not_support", "Check in is currently not supported", "js", "en");
+t.add("course_manage.live_statistics.data_not_valid", "The data is abnormal", "js", "en");
 })(Translator);

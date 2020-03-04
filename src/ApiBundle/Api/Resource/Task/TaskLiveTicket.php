@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Task;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\CloudPlatform\CloudAPIFactory;
@@ -37,6 +38,9 @@ class TaskLiveTicket extends AbstractResource
         return $liveTicket;
     }
 
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function get(ApiRequest $request, $taskId, $liveTicket)
     {
         $liveTicket = CloudAPIFactory::create('leaf')->get("/liverooms/{$taskId}/tickets/{$liveTicket}");
