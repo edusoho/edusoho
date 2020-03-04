@@ -17,10 +17,5 @@
   window.postNativeMessage = postNativeMessage;
   window.nativeCallback = function (data) {
     console.log(data.nickname);
-<<<<<<< HEAD
-  }
-})()
-=======
   };
 }());
->>>>>>> master
