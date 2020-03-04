@@ -9330,8 +9330,8 @@ admin_v2.default.switch_old_version_btn: Back to old version
 exception.common_upgrade_v2_error: Has been upgraded to the new version
 exception.switch_old_version.permission_error: Please contact super administrator or administrator operation
 exception.switch_old_version.error: Has been upgraded to the old version
-admin_v2.setting.navigation.foot.tips: "Besides Qingqiu、Default A、Default B、Yazhi，please go to <a class=\"text-info\" style=\"font-weight:bold;\" href=\"%url%\"> web setting</a> and edit.\n"
-admin_v2.setting_course.course_list_page_seq.help_block: 'Address: Domain names /course/explore, anyone can view all published courses at this page. If you need to set courses order, please go to the "operating" - "web Setting" - "Purchased Theme" - "setting". Course order settings are only supported by ink-only theme and simplicity theme.'
+admin_v2.setting.navigation.foot.tips: "Besides Qingqiu、Default A、Default B、Yazhi，please go to <a class=\"text-info\" style=\"font-weight:bold;\" href=\"%url%\"> Web setting</a> and edit.\n"
+admin_v2.setting_course.course_list_page_seq.help_block: 'Address: Domain names /course/explore, anyone can view all published courses at this page. If you need to set courses order, please go to the "operating" - "Web Setting" - "Purchased Theme" - "setting". Course order settings are only supported by ink-only theme and simplicity theme.'
 
 admin_v2.newcomer_task.helper: Task assistant
 admin_v2.newcomer_task.helper_tip: Six steps to complete the network school infrastructure
@@ -9373,7 +9373,6 @@ admin_v2.boot_page.btn_text: Go
 admin_v2.homepage.switch_old_in_safari_notice: Due to Safari, toggle is not supported at present. It is recommended to use Google or 360 to toggle. Sorry for the inconvenience!
 admin_v2.homepage.switch_old_in_safari_notice.title: Determine the switch
 admin_v2.homepage.switch_old_in_safari_notice.got_it: Got it
-
 admin_v2.user.destroy_account_record.nickname: Nickname
 admin_v2.user.destroy_account_record.createdTime: CreatedTime
 admin_v2.user.destroy_account_record.reason: Reason
@@ -9459,3 +9458,4 @@ course.live_statistics.checkin_status.all: All
 
 exception.live_statistic.not_found: Live statistics not found
 exception.live_statistic.not_support: Live statistics not supported function
+admin.article_setting.article_copy_manage: Information copy protection
