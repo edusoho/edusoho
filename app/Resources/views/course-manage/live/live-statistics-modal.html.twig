@@ -30,17 +30,17 @@
     <ul class="cd-tabs" id="cd-tabs">
       <li class="{% if status|default('all') == 'all' %}active{% endif %}">
         <a href="javascript:;"
-           data-url="{{ path('live_statistics_checkin',{taskId:task.id,liveId:liveId}) }}"
+           data-url="{{ path('live_statistics_modal',{taskId:task.id,liveId:liveId,type:type}) }}"
            data-toggle="cd-tabs">{{ 'course.live_statistics.checkin_status.all'|trans }}</a>
       </li>
       <li class="{% if status|default('all') == 'unchecked' %}active{% endif %}">
         <a href="javascript:;"
-           data-url="{{ path('live_statistics_checkin',{taskId:task.id,liveId:liveId,status:'unchecked'}) }}"
+           data-url="{{ path('live_statistics_modal',{taskId:task.id,liveId:liveId,type:type,status:'unchecked'}) }}"
            data-toggle="cd-tabs"> {{ 'course.live_statistics.checkin_status.not_checked'|trans }}</a>
       </li>
       <li class="{% if status|default('all') == 'checked' %}active{% endif %}">
         <a href="javascript:;"
-           data-url="{{ path('live_statistics_checkin', {taskId:task.id,liveId:liveId,status:'checked'}) }}"
+           data-url="{{ path('live_statistics_modal', {taskId:task.id,liveId:liveId,type:type,status:'checked'}) }}"
            data-toggle="cd-tabs">{{ 'course.live_statistics.checkin_status.checked'|trans }}</a>
       </li>
     </ul>
@@ -75,13 +75,12 @@
         {% endfor %}
         </tbody>
       </table>
-      {{ web_macro.paginator(paginator) }}
     </div>
   {% endif %}
+  {{ web_macro.paginator(paginator) }}
 {% endblock %}
 
 {% block footer %}
   {% do script(['app/js/course-manage/live/modal/index.js']) %}
-  <button id="course-title-cancel" type="button" class="cd-btn cd-btn-link-default"
-          data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+  <button id="course-title-cancel" type="button" class="cd-btn cd-btn-link-default" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
 {% endblock %}
