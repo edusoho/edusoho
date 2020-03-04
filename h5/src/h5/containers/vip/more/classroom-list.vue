@@ -17,6 +17,7 @@
 
 <script>
 import Api from '@/api'
+import { Toast } from 'vant'
 import eClass from '&/components/e-class/e-class'
 import courseListData from '@/utils/filter-course.js'
 
@@ -39,7 +40,7 @@ export default {
   },
   data() {
     return {
-      classroomList: {},
+      classroomList: [],
       loading: false,
       finished: false,
       type: 'price',
