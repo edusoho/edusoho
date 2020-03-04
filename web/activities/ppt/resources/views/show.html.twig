@@ -31,7 +31,7 @@
       <button class="cd-btn cd-btn-primary ppt-player-change-btn js-change-ppt-btn" type="button">{{ 'course.plan_task.activity_ppt_animation_btn'|trans }}</button>
     {% endif %}
     <input type="hidden" class="js-cloud-url" data-url="{{ cloud_sdk_url('newPlayer') }}">
-    {% do script(['libs/base.js','app/js/commons.js','app/js/main.js','pptactivity/js/show/index.js'], 1000) %}
+    {% do script(['libs/base.js','app/js/common.js','app/js/main.js','pptactivity/js/show/index.js'], 1000) %}
   {% endif %}
 
   {#<div class="iframe-parent-content" id="activity-ppt-content"#}
