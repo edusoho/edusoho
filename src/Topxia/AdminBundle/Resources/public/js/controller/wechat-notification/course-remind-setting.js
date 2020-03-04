@@ -78,7 +78,9 @@ exports.run = function () {
     formatViewType: 'time',
     startView: 1,
   }).on('hide', function(){
-    validator.query('#send-time').execute();
+    if ($('input[type=radio][name=status]:checked').val() == 1) {
+      validator.query('#send-time').execute();
+    }
   });
 
     $("#send-time").datetimepicker('setValue', $("#send-time").val().substring(0, 5));
