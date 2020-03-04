@@ -105,7 +105,13 @@ export const getCourseList = ({ commit }, params) => Api.getCourseList({
   params
 });
 
+// 班级搜索列表数据
 export const getClassList = ({ commit }, params) => Api.getClassList({
+  params
+});
+
+//公开课
+export const getOpenCourseList = ({ commit }, params) => Api.getOpenCourseList({
   params
 });
 

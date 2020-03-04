@@ -44,8 +44,8 @@
         </div>
       </div> -->
 
-      <!-- 底部添加组件按钮 -->
-      <div class="multi-find-section find-section clearfix">
+      <!--h5和小程序 底部添加组件按钮 -->
+      <div class="multi-find-section find-section clearfix" v-if="portal!=='apps'">
         <div class="section-title">基础组件</div>
         <div class="section-button-group clearfix">
           <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
@@ -53,7 +53,7 @@
             {{ item.name }}
           </el-button>
         </div>
-        <template v-if="portal!=='apps'">
+        <template >
           <div class="section-title">营销组件
             <a class="color-primary pull-right text-12" :href="createMarketingUrl" target="_blank">创建活动&gt;&gt;</a>
           </div>
@@ -64,6 +64,17 @@
             </el-button>
           </div>
         </template>
+      </div>
+
+      <!-- App  底部添加组件按钮-->
+      <div class="multi-find-section find-section clearfix" v-if="portal==='apps'">
+        <div class="section-title">基础组件</div>
+        <div class="section-button-group clearfix">
+          <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
+            v-for="(item, index) in appBaseModules" :key="`app-base-${index}`">
+            {{ item.name }}
+          </el-button>
+        </div>
       </div>
 
       <find-footer :portal="portal"></find-footer>
@@ -86,7 +97,7 @@
 <script>
 import Api from 'admin/api';
 import * as types from 'admin/store/mutation-types';
-import { BASE_MODULE, MARKETING_MODULE } from 'admin/config/module-default-config';
+import { BASE_MODULE, MARKETING_MODULE, APP_BASE_MODULE } from 'admin/config/module-default-config';
 import ModuleCounter from 'admin/utils/module-counter';
 import needUpgrade from 'admin/utils/version-compare';
 import pathName2Portal from 'admin/config/api-portal-config';
@@ -108,17 +119,21 @@ export default {
     return {
       title: 'EduSoho 微网校',
       modules: [],
-      saveFlag: 0,//保存标志，只有点击过保存或者预览按钮才开始实时校验，具体表现错误模块为有错误模块边框变红提示！。这里设置成为数字原因是：每次点击发布或者预览按钮时都需要去实时校验一次，
-      startValidate:false, //非空提示，在点击发布或者预览按钮时才需要提示，具体表现为弹窗提示
+      //保存标志，只有点击过保存或者预览按钮才开始实时校验，具体表现错误模块为有错误模块边框变红提示！。这里设置成为数字原因是：每次点击发布或者预览按钮时都需要去实时校验一次，
+      saveFlag: 0,
+      //非空提示，在点击发布或者预览按钮时才需要提示，具体表现为弹窗提示
+      startValidate:false,
       incomplete: true,
       validateResults: [],
       currentModuleIndex: '0',
       baseModules: BASE_MODULE,
       marketingModules: MARKETING_MODULE,
+      appBaseModules:APP_BASE_MODULE,
       typeCount: {},
       pathName: this.$route.name,
       currentMPVersion: '0.0.0',
       couponSwitch: 0,
+      moduleLength:0
     }
   },
   computed: {
@@ -229,7 +244,6 @@ export default {
     removeModule(data, index) {
       // 删除一个模块
       this.typeCount.removeByType(data.type);
-
       this.currentModuleIndex = Math.max(this.currentModuleIndex - 1, 0);
       this.modules.splice(index, 1);
     },
@@ -296,13 +310,16 @@ export default {
         })
         return;
       }
+      this.moduleLength=this.moduleLength+1
       this.typeCount.addByType(data.default.type);
 
       const defaultString = JSON.stringify(data.default); // 需要一个深拷贝对象
       let defaultCopied = JSON.parse(defaultString);
 
       //app默认两行展示，这里要手动修改
-       defaultCopied=this.formateAppDisplay(data.default.type,defaultCopied);
+      defaultCopied=this.formateAppDisplay(data.default.type,defaultCopied);
+      //oldIndex用于组件的key,减少组件重新创建
+      defaultCopied.oldIndex=this.moduleLength;
 
       this.modules.push(defaultCopied);
       this.currentModuleIndex = Math.max(this.modules.length - 1, 0);
@@ -317,13 +334,13 @@ export default {
         mode,
       }).then(res => {
         //app默认两行展示，这里要手动修改
-        Object.keys(res).forEach(element => {
+        Object.keys(res).forEach((element ,index)=> {
           res[element]=this.formateAppDisplay(res[element].type,res[element]);
-          this.modules.push(res[element])
+          res[element].oldIndex=index;        //oldIndex用于组件的key,减少组件重新创建
         });
-
-      // this.modules = Object.values(res);
-        this.moduleCountInit();
+       this.moduleLength=Object.keys(res).length-1;
+       this.modules = Object.values(res);
+       this.moduleCountInit();
       }).catch((err) => {
         this.moduleCountInit();
         this.$message({

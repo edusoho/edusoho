@@ -22,14 +22,14 @@
             </span>
           </div>
         </div>
-        <div class="live-content__right" v-if="status!=='end'">
+        <div class="live-content__right">
           <div
-            :class="['live-btn', status==='default' ? 'live-btn--start' : 'live-btn--default']"
+            :class="['live-btn', getBtnClass(status)]"
             @click="toTask()"
           >{{status | liveBtnText }}</div>
         </div>
       </div>
-      <div class="live-item__bottom" v-if="course.classroom" @click="toClassroom()">
+      <div class="live-item__bottom van-hairline--top" v-if="course.classroom" @click="toClassroom()">
         <span>{{course.classroom.title}}</span>
         <i class="iconfont icon-arrow-right"></i>
       </div>
@@ -90,7 +90,7 @@ export default {
         case "nostart":
           return "即将开始";
         case "end":
-          return "已结束";
+          return "暂无回放";
         default:
           return "";
       }
@@ -111,10 +111,27 @@ export default {
           return "";
       }
     },
+    getBtnClass(value){
+       switch (value) {
+        case "replay":
+          return "live-btn--default";
+        case "default":
+          return "live-btn--start";
+        case "nostart":
+          return "live-btn--default";
+        case "end":
+          return "live-btn--end";
+        default:
+          return "";
+      }
+    },
     toClassroom() {
       this.$emit("toClassroom",this.course.classroom.id)
     },
     toTask(){
+      if(this.status==="end"){
+        return
+      }
       const task={
         id:this.course.id,
         type:this.course.type,

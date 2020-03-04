@@ -216,8 +216,6 @@ export default {
   },
 
   created() {
-    console.log(this.pathName)
-    console.log(this.pathName.includes('Setting'))
     if (!this.pathName.includes('Setting')) return
     this.fetchCourse()
   },

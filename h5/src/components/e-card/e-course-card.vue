@@ -24,7 +24,7 @@
           <div class="live-btn live-btn--none" v-else>暂不支持</div>
         </div>
       </div>
-      <div class="live-item__bottom" v-if="course.target.classroom.length" @click="toClassroom()">
+      <div class="live-item__bottom van-hairline--top" v-if="course.target.classroom" @click="toClassroom()">
         <span>{{course.target.classroom.title}}</span>
         <i class="iconfont icon-arrow-right"></i>
       </div>

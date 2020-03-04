@@ -46,6 +46,12 @@ import { VALUE_DEFAULT, TYPE_TEXT_DEFAULT } from 'admin/config/module-default-co
 
 function apiConfig(type, queryString) {
   return {
+    'open_course_list': {
+      apiName: 'getOpenCourseList',
+      params: {
+        title: queryString
+      }
+    },
     'classroom_list': {
       apiName: 'getClassList',
       params: {
@@ -166,7 +172,8 @@ export default {
       'getCourseList',
       'getClassList',
       'getMarketingList',
-      'getCouponList'
+      'getCouponList',
+      'getOpenCourseList'
     ]),
     restoreListIds() {
       this.courseListIds = [];

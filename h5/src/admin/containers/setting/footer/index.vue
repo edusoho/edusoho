@@ -7,10 +7,10 @@
       :key="item.type"
       class="find-footer-item"
     >
-      <div class="find-footer-item__icon " >
-        <i :class="item.icon"/>
+      <div class="find-footer-item__icon" >
+        <i v-if="item.icon" :class="item.icon"/>
+        <img v-else class="find-footer-item__icon"  :src="item.iconUrl"/>
       </div>
-      <!-- <img class="find-footer-item__icon" :src="item.name === 'find' ? item.active : item.normal" /> -->
       <span class="find-footer-item__text">{{ item.type }}</span>
     </div>
   </div>
@@ -18,20 +18,25 @@
 
 <script>
 const appItems = [
-  {
-    name: 'dynamic',
-    type: '动态',
-    icon: 'iconfont icon-dongtai'
-  },
-  {
+   {
     name: 'find',
     type: '发现',
-    icon: 'iconfont icon-faxian11'
+    iconUrl: 'static/images/apptab1.png'
+  },
+  {
+    name: 'dynamic',
+    type: '学习',
+    iconUrl: 'static/images/apptab2.png'
+  },
+  {
+    name: 'learn',
+    type: '动态',
+    iconUrl: 'static/images/apptab3.png'
   },
   {
     name: 'my',
-    type: '我',
-    icon: 'iconfont icon-wo'
+    type: '我的',
+    iconUrl: 'static/images/apptab4.png'
   }
 ]
 const h5Items = [ // footer
