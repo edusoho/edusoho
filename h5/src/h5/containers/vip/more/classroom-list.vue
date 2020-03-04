@@ -39,7 +39,7 @@ export default {
   },
   data() {
     return {
-      classroomList: {},
+      classroomList: [],
       loading: false,
       finished: false,
       type: 'price',
