@@ -5,6 +5,7 @@
         v-for="item in courseList"
         :key="item.id"
         :course="item | courseListData(listObj)"
+        :discountType="typeList === 'course_list' ? item.courseSet.discountType : ''"
         :discount="typeList === 'course_list' ? item.courseSet.discount : ''"
         :course-type="typeList === 'course_list' ? item.courseSet.type : ''"
         :type-list="typeList"

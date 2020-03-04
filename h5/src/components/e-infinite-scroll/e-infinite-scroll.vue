@@ -29,6 +29,7 @@
           :type-list="typeList"
           :is-vip="course.vipLevelId"
           :is-app-use="isAppUse"
+          :discountType="typeList === 'course_list' ? course.courseSet.discountType : ''"
           :discount="typeList === 'course_list' ? course.courseSet.discount : ''"
           :course-type="typeList === 'course_list' ? course.courseSet.type : ''"
           :course="course | courseListData(listObj,'appSetting')"
