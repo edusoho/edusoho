@@ -9,4 +9,6 @@ interface LiveActivityDao extends GeneralDaoInterface
     public function findByIds($Ids);
 
     public function findByLiveIdAndReplayStatus($liveId);
+
+    public function getByLiveId($liveId);
 }

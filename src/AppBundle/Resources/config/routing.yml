@@ -1909,6 +1909,26 @@ course_set_manage_course_overview:
   path: /course_set/{courseSetId}/manage/course/{courseId}/overview
   defaults: {_controller: AppBundle:Course/CourseManage:overview}
 
+course_set_manage_live_statistics:
+ path: /course_set/{courseSetId}/manage/course/{courseId}/live_statistics
+ defaults: {_controller: AppBundle:LiveStatistics/CourseLiveStatistics:index}
+
+course_set_manage_live_statistics_detail:
+ path: /course/{courseId}/task/{taskId}/live_statistics_detail
+ defaults: {_controller: AppBundle:LiveStatistics/CourseLiveStatistics:detail}
+
+live_statistics_json_data:
+ path: /task/{taskId}/live_statistics/{liveId}/json_data
+ defaults: {_controller: AppBundle:LiveStatistics/CourseLiveStatistics:jsonData}
+
+live_statistics_modal:
+ path: /task/{taskId}/live_statistics/{liveId}/modal/{type}
+ defaults: {_controller: AppBundle:LiveStatistics/CourseLiveStatistics:modal}
+
+live_statistics_checkin:
+ path: /task/{taskId}/live_statistics/{liveId}/checkin
+ defaults: {_controller: AppBundle:LiveStatistics/CourseLiveStatistics:checkinData}
+
 course_set_manage_task_detail:
     path: /course/{courseId}/task/detail
     defaults: {_controller: AppBundle:TaskLearnData:taskDetailList}

@@ -14,9 +14,11 @@ class LiveActivityDaoImpl extends GeneralDaoImpl implements LiveActivityDao
         return array(
             'conditions' => array(
                 'id IN (:ids)',
+                'liveId = :liveId',
                 'liveProvider = :liveProvider',
                 'replayStatus = :replayStatus',
                 'progressStatus != :progressStatusNotEqual',
+                'progressStatus = :progressStatus',
             ),
         );
     }
@@ -29,5 +31,10 @@ class LiveActivityDaoImpl extends GeneralDaoImpl implements LiveActivityDao
     public function findByLiveIdAndReplayStatus($liveId)
     {
         return $this->findByFields(array('liveId' => $liveId, 'replayStatus' => 'ungenerated'));
+    }
+
+    public function getByLiveId($liveId)
+    {
+        return $this->getByFields(array('liveId' => $liveId));
     }
 }
