@@ -70,12 +70,11 @@ export default {
   methods: {
     onLoad() {
       const params = { levelId: this.levelId, offset: this.offset }
-      Api.getVipCourses({ params }).then(res => {
-        console.log(res)
-        this.courseList = [...this.courseList, ...res.data]
+       Api.getVipClasses({ params }).then(({ data, paging }) => {
+        this.courseList = [...this.courseList, ...data]
        this.offset = this.courseList.length
 
-        if (this.courseList.length == res.paging.total) {
+        if (this.courseList.length == paging.total) {
           this.finished = true
         }
        this.loading = false
