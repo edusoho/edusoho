@@ -70,7 +70,7 @@ export default {
   methods: {
     onLoad() {
       const params = { levelId: this.levelId, offset: this.offset }
-       Api.getVipClasses({ params }).then(({ data, paging }) => {
+       Api.getVipCourses({ params }).then(({ data, paging }) => {
         this.courseList = [...this.courseList, ...data]
        this.offset = this.courseList.length
 
