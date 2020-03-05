@@ -609,7 +609,8 @@ upload.video_quality_switcher.setup: Setup
 upload.video_quality_switcher.video_quality: 'Quality:'
 upload.video_quality_switcher.video_quality.low: 'Low <span class="color-gray">(suitable for ppt video)</span>'
 upload.video_quality_switcher.video_quality.normal: 'Normal <span class="color-gray">(suitable for screen record or video record with bulit-in camera)</span>'
-upload.video_quality_switcher.video_quality.high: 'High <span class="color-gray">(suitable for high videos)</span>'
+upload.video_quality_switcher.video_quality.high: 'High <span class="color-gray">(suitable for high quality movies)</span>'
+upload.video_quality_switcher.video_quality.super: 'Super <span class="color-gray">(suitable for high quality art movies)</span>'
 upload.video_quality_switcher.audio_quality: 'Audio:'
 upload.video_quality_switcher.audio_quality.low: Low
 upload.video_quality_switcher.audio_quality.normal: Normal
@@ -1899,6 +1900,7 @@ file_chooser.upload_file.video_quality: 'Video'
 file_chooser.upload_file.video_quality.low: Smooth
 file_chooser.upload_file.video_quality.normal: Standard
 file_chooser.upload_file.video_quality.high: 'High Definition'
+file_chooser.upload_file.video_quality.super: 'Super High Definition'
 file_chooser.upload_file.audio_quality: 'Audio'
 file_chooser.upload_file.audio_quality.low: Smooth
 file_chooser.upload_file.audio_quality.normal: Standard

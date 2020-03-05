@@ -19,7 +19,7 @@
         <div class="col-xs-8">
           {{'file_chooser.upload_file.video_quality'|trans}}
           <select class="form-control border-gray mrl js-upload-params" name="videoQuality">
-            {{ select_options({'low':'file_chooser.upload_file.video_quality.low'|trans, 'normal':'file_chooser.upload_file.video_quality.normal'|trans, 'high':'file_chooser.upload_file.video_quality.high'|trans}, setting('storage.video_quality')) }}
+            {{ select_options({'low':'file_chooser.upload_file.video_quality.low'|trans, 'normal':'file_chooser.upload_file.video_quality.normal'|trans, 'high':'file_chooser.upload_file.video_quality.high'|trans,'super':'file_chooser.upload_file.video_quality.super'|trans}, setting('storage.video_quality')) }}
           </select>
           {{'file_chooser.upload_file.audio_quality'|trans}}
           <select class="form-control border-gray js-upload-params" name="audioQuality">
