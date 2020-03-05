@@ -1,1 +1,1 @@
-webpackJsonp(["app/js/course-manage/live/modal/index"],{bf1076b5c51049b3ef8e:function(a,c,e){"use strict";$("body").on("click","#cd-tabs a",function(){cd.tabs({el:"#cd-tabs a",target:"#tabs-panel",url:$(this).data("url")}).on("success",function(a){$("#checkin-tabs-panel").html(a)})})}},["bf1076b5c51049b3ef8e"]);
+webpackJsonp(["app/js/course-manage/live/modal/index"],{bf1076b5c51049b3ef8e:function(c,e,a){"use strict";$("#cd-tabs a").click(function(){$.get($(this).data("url"),function(c){$("#modal").html(c)})})}},["bf1076b5c51049b3ef8e"]);
