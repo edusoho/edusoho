@@ -28,7 +28,7 @@ class TaskLiveTicket extends AbstractResource
         $user = $this->getCurrentUser();
         $params = array();
         $params['id'] = $user['id'];
-        $params['nickname'] = $user['nickname'];
+        $params['nickname'] = $user['nickname'].'_'.$user['id'];
         $params['role'] = 'student';
         // android, iphone, mobile
         $params['device'] = $request->request->get('device', DeviceToolkit::isMobileClient() ? 'mobile' : 'desktop');
