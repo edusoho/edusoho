@@ -5506,6 +5506,8 @@ admin.edu_cloud.edu_video.video_embed_watermark_picture_tips: 'When turned on, t
 admin.edu_cloud.edu_video.finger_print_time_label: 'Cloud video fingerprint display duration'
 admin.edu_cloud.edu_video.finger_print_time_tips: 'The recommended duration is between 0.5 and 1.5 seconds'
 admin.edu_cloud.edu_video.finger_print_time: Second
+admin.edu_cloud.edu_video.finger_print_opacity_label: 'Cloud video fingerprint opacity'
+admin.edu_cloud.edu_video.finger_print_opacity_tips: 'The recommended opacity is between 0 and 1 seconds,The smaller the number, the more transparent'
 admin.edu_cloud.edu_video.enable_hls_encryption_plus: 'Cloud video security enhancements'
 admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 'After turned on, cloud video anti-theft effect to further enhance, but the video will not be able to play in the H5 browser, the system will guide the user to use App view.'
 admin.edu_cloud.edu_video.buy_flow_tips: 'Open traffic annual package, video traffic more cost-effective. <a class="" href="%bugUrl%" target="_blank"> What is a traffic package? </a>'
@@ -9403,7 +9405,6 @@ admin_v2.destroy_account.destroyed_account.audit_reject: Reject
 admin_v2.destroy_account.destroyed_account.reason_tip: Enter a maximum of 30 words
 admin_v2.destroy_account.destroyed_account.can_not_manage: Can not manage your self
 user.user_had_destroyed: Account had destroyed
-admin.article_setting.article_copy_manage: Information copy protection
 admin_v2.operation.homepage_live_notify.enable: Live Notify
 admin_v2.operation.homepage_live_notify.enable.open: Open
 admin_v2.operation.homepage_live_notify.enable.close: Close
@@ -9458,3 +9459,4 @@ course.live_statistics.checkin_status.all: All
 
 exception.live_statistic.not_found: Live statistics not found
 exception.live_statistic.not_support: Live statistics not supported function
+admin.article_setting.article_copy_manage: Information copy protection
