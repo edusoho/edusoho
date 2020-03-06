@@ -1186,6 +1186,7 @@ admin.setting.cloud.delete_cloud_video_embed_watermark_hint: 确认要删除云�
 admin.setting.cloud.delete_cloud_video_embed_watermark_success_hint: 删除云视频内嵌水印成功！
 admin.setting.cloud.delete_cloud_video_embed_watermark_fail_hint: 删除云视频内嵌水印失败！
 admin.setting.cloud.validate_old.video_fingerprint_time.display: 云视频指纹显示时间
+admin.setting.cloud.validate_old.video_fingerprint_opacity.display: 云视频指纹不透明度
 admin.setting.consult_setting.upload_qrcode_success_hint: 上传微信二维码成功！
 admin.setting.consult_setting.setting_max_num_hint: 最多设置10个..
 admin.setting.consult_setting.delete_hint: 确认要删除吗？
