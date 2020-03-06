@@ -10646,7 +10646,7 @@ admin_v2.setting.navigation.foot.tips: >
   <a class="text-info" style="font-weight:bold;" href="%url%">
   Web端装修 </a>
   中进行编辑。
-admin_v2.setting_course.course_list_page_seq.help_block: 地址：域名/course/explore,任何人都可在此页面查看网站所有已发布课程,如需设置网站首页课程排序，请到【运营】-【web装修】-【已购主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
+admin_v2.setting_course.course_list_page_seq.help_block: 地址：域名/course/explore,任何人都可在此页面查看网站所有已发布课程,如需设置网站首页课程排序，请到【运营】-【Web装修】-【已购主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
 
 admin_v2.newcomer_task.helper: 任务助手
 admin_v2.newcomer_task.helper_tip: 六步完成网校基础建设
@@ -10688,7 +10688,6 @@ admin_v2.boot_page.btn_text: 点击前去
 admin_v2.homepage.switch_old_in_safari_notice: 由于Safari浏览器原因，暂时不支持切换， 建议使用谷歌或者360浏览器切换。 给您造成不便，抱歉！
 admin_v2.homepage.switch_old_in_safari_notice.title: 确定切换
 admin_v2.homepage.switch_old_in_safari_notice.got_it: 知道了
-
 admin_v2.user.destroy_account_record.nickname: 用户名
 admin_v2.user.destroy_account_record.createdTime: 申请时间
 admin_v2.user.destroy_account_record.reason: 注销理由
@@ -10736,6 +10735,7 @@ homepage.live_notify.header: 直播开课提醒
 homepage.live_notify.start_while: 即将开始
 homepage.live_notify.living: 正在直播中
 homepage.live_notify.entry_live_room: 进入教室
+admin.article_setting.article_copy_manage: 资讯防复制
 
 course.live_statistics: 直播统计
 course.live_statistics.live_start_time: 直播开始时间

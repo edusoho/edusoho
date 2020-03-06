@@ -536,7 +536,7 @@ admin_v2:
                                 admin_v2_mobile_settings:
                                     name: admin_v2.operation.mobile.basic_tab
                                     router_name: admin_v2_setting_mobile
-                        # web装修
+                        # Web装修
                         admin_v2_block_manage:
                             quick_entrance_icon: 'webmix'
                             name: admin_v2.operation.block_menu
