@@ -6623,6 +6623,8 @@ admin.edu_cloud.edu_video.finger_print_embed_tips: >
 admin.edu_cloud.edu_video.finger_print_time_label: 云视频指纹显示时长：
 admin.edu_cloud.edu_video.finger_print_time_tips: 建议时长在0.5 - 1.5秒之间
 admin.edu_cloud.edu_video.finger_print_time: 秒
+admin.edu_cloud.edu_video.finger_print_opacity_label: 指纹不透明度：
+admin.edu_cloud.edu_video.finger_print_opacity_tips: 请输入0～1之间的一位小数,数字越小越透明
 admin.edu_cloud.edu_video.enable_hls_encryption_plus: 云视频防盗增强
 admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在手机浏览器中播放，系统会引导用户使用App观看。
 admin.edu_cloud.edu_video.buy_flow_tips: >
