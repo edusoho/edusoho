@@ -16,11 +16,11 @@
             timeout="1000"
             source-ip="127.0.0.1"
             local-domain="local.example.com"
-            logging="true"
-            delivery-address="single@host.com">
+            logging="true">
         <swiftmailer:antiflood/>
         <swiftmailer:spool type="memory"/>
         <swiftmailer:delivery-whitelist-pattern>/foo@.*/</swiftmailer:delivery-whitelist-pattern>
         <swiftmailer:delivery-whitelist-pattern>/.*@bar.com$/</swiftmailer:delivery-whitelist-pattern>
+        <swiftmailer:delivery-address>single@host.com</swiftmailer:delivery-address>
     </swiftmailer:config>
 </container>

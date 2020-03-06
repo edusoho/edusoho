@@ -1,5 +1,5 @@
 {
-    "Version": "2.1.28.80",
+    "Version": "36",
     "Names": {
         "ADP": [
             "ADP",
@@ -75,7 +75,7 @@
         ],
         "AZN": [
             "AZN",
-            "manat azerí"
+            "manat azerbaiyano"
         ],
         "BAD": [
             "BAD",
@@ -83,7 +83,7 @@
         ],
         "BAM": [
             "BAM",
-            "marco convertible de Bosnia-Herzegovina"
+            "marco convertible de Bosnia y Herzegovina"
         ],
         "BBD": [
             "BBD",
@@ -225,6 +225,10 @@
             "CLP",
             "peso chileno"
         ],
+        "CNH": [
+            "CNH",
+            "yuan chino (extracontinental)"
+        ],
         "CNY": [
             "CNY",
             "yuan"
@@ -351,7 +355,7 @@
         ],
         "GBP": [
             "GBP",
-            "libra británica"
+            "libra esterlina"
         ],
         "GEK": [
             "GEK",
@@ -611,6 +615,10 @@
         ],
         "MRO": [
             "MRO",
+            "uguiya (1973–2017)"
+        ],
+        "MRU": [
+            "MRU",
             "uguiya"
         ],
         "MTL": [
@@ -631,7 +639,7 @@
         ],
         "MWK": [
             "MWK",
-            "kwacha malauí"
+            "kuacha malauí"
         ],
         "MXN": [
             "MXN",
@@ -707,7 +715,7 @@
         ],
         "PEN": [
             "PEN",
-            "nuevo sol peruano"
+            "sol peruano"
         ],
         "PES": [
             "PES",
@@ -839,6 +847,10 @@
         ],
         "STD": [
             "STD",
+            "dobra (1977–2017)"
+        ],
+        "STN": [
+            "STN",
             "dobra"
         ],
         "SUR": [
@@ -926,7 +938,7 @@
             "chelín ugandés"
         ],
         "USD": [
-            "$",
+            "US$",
             "dólar estadounidense"
         ],
         "USN": [
@@ -949,6 +961,10 @@
             "UYU",
             "peso uruguayo"
         ],
+        "UYW": [
+            "UYW",
+            "unidad previsional uruguayo"
+        ],
         "UZS": [
             "UZS",
             "sum"
@@ -959,6 +975,10 @@
         ],
         "VEF": [
             "VEF",
+            "bolívar venezolano (2008–2018)"
+        ],
+        "VES": [
+            "VES",
             "bolívar venezolano"
         ],
         "VND": [
@@ -975,7 +995,7 @@
         ],
         "XAF": [
             "XAF",
-            "franco CFA BEAC"
+            "franco CFA de África Central"
         ],
         "XCD": [
             "XCD",
@@ -995,7 +1015,7 @@
         ],
         "XOF": [
             "XOF",
-            "franco CFA BCEAO"
+            "franco CFA de África Occidental"
         ],
         "XPF": [
             "CFPF",

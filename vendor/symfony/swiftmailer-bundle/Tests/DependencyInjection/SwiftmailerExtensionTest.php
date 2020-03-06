@@ -95,20 +95,6 @@ class SwiftmailerExtensionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getConfigTypes
-     *
-     * @group legacy
-     */
-    public function testMailConfig($type)
-    {
-        $container = $this->loadContainerFromFile('mail', $type);
-
-        $this->assertEquals('swiftmailer.mailer.default.transport', (string) $container->getAlias('swiftmailer.transport'));
-        $this->assertEquals('swiftmailer.mailer.default.transport.spool', (string) $container->getAlias('swiftmailer.mailer.default.transport'));
-        $this->assertEquals('swiftmailer.mailer.default.transport.mail', (string) $container->getAlias('swiftmailer.mailer.default.transport.real'));
-    }
-
-    /**
-     * @dataProvider getConfigTypes
      */
     public function testNullTransport($type)
     {

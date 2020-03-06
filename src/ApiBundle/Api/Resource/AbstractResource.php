@@ -155,7 +155,7 @@ abstract class AbstractResource
 
     public function getClientIp()
     {
-        return $this->container->get('request')->getClientIp();
+        return $this->container->get('request_stack')->getMasterRequest()->getClientIp();
     }
 
     public function invokeResource(ApiRequest $apiRequest)

@@ -15,6 +15,7 @@ namespace PhpCsFixer\Fixer\StringNotation;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Preg;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
@@ -62,7 +63,8 @@ EOF
             }
 
             if ($tokens[$index + 1]->isGivenKind(T_END_HEREDOC)) {
-                $this->convertToNowdoc($token);
+                $tokens[$index] = $this->convertToNowdoc($token);
+
                 continue;
             }
 
@@ -75,13 +77,16 @@ EOF
 
             $content = $tokens[$index + 1]->getContent();
             // regex: odd number of backslashes, not followed by dollar
-            if (preg_match('/(?<!\\\\)(?:\\\\{2})*\\\\(?![$\\\\])/', $content)) {
+            if (Preg::match('/(?<!\\\\)(?:\\\\{2})*\\\\(?![$\\\\])/', $content)) {
                 continue;
             }
 
-            $this->convertToNowdoc($token);
+            $tokens[$index] = $this->convertToNowdoc($token);
             $content = str_replace(array('\\\\', '\\$'), array('\\', '$'), $content);
-            $tokens[$index + 1]->setContent($content);
+            $tokens[$index + 1] = new Token(array(
+                $tokens[$index + 1]->getId(),
+                $content,
+            ));
         }
     }
 
@@ -89,9 +94,14 @@ EOF
      * Transforms the heredoc start token to nowdoc notation.
      *
      * @param Token $token
+     *
+     * @return Token
      */
     private function convertToNowdoc(Token $token)
     {
-        $token->setContent(preg_replace('/(?<=^<<<)(\s*)"?(.*?)"?$/', '$1\'$2\'', $token->getContent()));
+        return new Token(array(
+            $token->getId(),
+            Preg::replace('/^([Bb]?<<<)([ \t]*)"?([^\s"]+)"?/', '$1$2\'$3\'', $token->getContent()),
+        ));
     }
 }

@@ -11,66 +11,17 @@
 
 namespace Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
+@trigger_error(sprintf('The %s class is deprecated since Symfony 3.3 and will be removed in 4.0. Use Symfony\Component\PropertyInfo\DependencyInjection\PropertyInfoPass instead.', PropertyInfoPass::class), E_USER_DEPRECATED);
+
+use Symfony\Component\PropertyInfo\DependencyInjection\PropertyInfoPass as BasePropertyInfoPass;
 
 /**
  * Adds extractors to the property_info service.
  *
  * @author Kévin Dunglas <dunglas@gmail.com>
+ *
+ * @deprecated since version 3.3, to be removed in 4.0. Use {@link BasePropertyInfoPass instead}.
  */
-class PropertyInfoPass implements CompilerPassInterface
+class PropertyInfoPass extends BasePropertyInfoPass
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function process(ContainerBuilder $container)
-    {
-        if (!$container->hasDefinition('property_info')) {
-            return;
-        }
-
-        $listExtractors = $this->findAndSortTaggedServices('property_info.list_extractor', $container);
-        $container->getDefinition('property_info')->replaceArgument(0, $listExtractors);
-
-        $typeExtractors = $this->findAndSortTaggedServices('property_info.type_extractor', $container);
-        $container->getDefinition('property_info')->replaceArgument(1, $typeExtractors);
-
-        $descriptionExtractors = $this->findAndSortTaggedServices('property_info.description_extractor', $container);
-        $container->getDefinition('property_info')->replaceArgument(2, $descriptionExtractors);
-
-        $accessExtractors = $this->findAndSortTaggedServices('property_info.access_extractor', $container);
-        $container->getDefinition('property_info')->replaceArgument(3, $accessExtractors);
-    }
-
-    /**
-     * Finds all services with the given tag name and order them by their priority.
-     *
-     * @param string           $tagName
-     * @param ContainerBuilder $container
-     *
-     * @return array
-     */
-    private function findAndSortTaggedServices($tagName, ContainerBuilder $container)
-    {
-        $services = $container->findTaggedServiceIds($tagName);
-
-        $sortedServices = array();
-        foreach ($services as $serviceId => $tags) {
-            foreach ($tags as $attributes) {
-                $priority = isset($attributes['priority']) ? $attributes['priority'] : 0;
-                $sortedServices[$priority][] = new Reference($serviceId);
-            }
-        }
-
-        if (empty($sortedServices)) {
-            return array();
-        }
-
-        krsort($sortedServices);
-
-        // Flatten the array
-        return call_user_func_array('array_merge', $sortedServices);
-    }
 }

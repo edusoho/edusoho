@@ -84,6 +84,9 @@ class SwiftmailerExtension extends Extension
                 $options[$key] = $mailer[$key];
             }
         }
+        if (!$usedEnvs) {
+            SwiftmailerTransportFactory::validateConfig($mailer);
+        }
         if ($usedEnvs && !$disableDelivery) {
             $transportId = sprintf('swiftmailer.mailer.%s.transport.dynamic', $name);
             $definitionDecorator = new Definition('\Swift_Transport');
@@ -109,7 +112,7 @@ class SwiftmailerExtension extends Extension
 
             $container->setParameter(sprintf('swiftmailer.mailer.%s.transport.name', $name), $transport);
 
-            $transportId = in_array($transport, array('smtp', 'sendmail', 'null', 'mail'))
+            $transportId = in_array($transport, array('smtp', 'sendmail', 'null'))
                 ? sprintf('swiftmailer.mailer.%s.transport.%s', $name, $transport)
                 : $transport;
 
@@ -208,14 +211,6 @@ class SwiftmailerExtension extends Extension
                 ->setConfigurator(array(new Reference(sprintf('swiftmailer.transport.configurator.%s', $name)), 'configure'))
             ;
 
-            $container->setAlias(sprintf('swiftmailer.mailer.%s.transport', $name), sprintf('swiftmailer.mailer.%s.transport.%s', $name, $transport));
-        } elseif ('mail' === $transport) {
-            // deprecated
-            $definitionDecorator = $this->createChildDefinition(sprintf('swiftmailer.transport.%s.abstract', $transport));
-            $container
-                ->setDefinition(sprintf('swiftmailer.mailer.%s.transport.%s', $name, $transport), $definitionDecorator)
-                ->addArgument(new Reference(sprintf('swiftmailer.mailer.%s.transport.eventdispatcher', $name)))
-            ;
             $container->setAlias(sprintf('swiftmailer.mailer.%s.transport', $name), sprintf('swiftmailer.mailer.%s.transport.%s', $name, $transport));
         } elseif ('null' === $transport) {
             $definitionDecorator = $this->createChildDefinition('swiftmailer.transport.null.abstract');

@@ -19,7 +19,7 @@ class StreamedResponseTest extends TestCase
 {
     public function testConstructor()
     {
-        $response = new StreamedResponse(function () { echo 'foo'; }, 404, array('Content-Type' => 'text/plain'));
+        $response = new StreamedResponse(function () { echo 'foo'; }, 404, ['Content-Type' => 'text/plain']);
 
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals('text/plain', $response->headers->get('Content-Type'));
@@ -51,15 +51,17 @@ class StreamedResponseTest extends TestCase
 
     public function testPrepareWithHeadRequest()
     {
-        $response = new StreamedResponse(function () { echo 'foo'; });
+        $response = new StreamedResponse(function () { echo 'foo'; }, 200, ['Content-Length' => '123']);
         $request = Request::create('/', 'HEAD');
 
         $response->prepare($request);
+
+        $this->assertSame('123', $response->headers->get('Content-Length'));
     }
 
     public function testPrepareWithCacheHeaders()
     {
-        $response = new StreamedResponse(function () { echo 'foo'; }, 200, array('Cache-Control' => 'max-age=600, public'));
+        $response = new StreamedResponse(function () { echo 'foo'; }, 200, ['Cache-Control' => 'max-age=600, public']);
         $request = Request::create('/', 'GET');
 
         $response->prepare($request);
@@ -79,29 +81,16 @@ class StreamedResponseTest extends TestCase
         $this->assertEquals(1, $called);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testSendContentWithNonCallable()
     {
+        $this->expectException('LogicException');
         $response = new StreamedResponse(null);
         $response->sendContent();
     }
 
-    /**
-     * @expectedException \LogicException
-     */
-    public function testSetCallbackNonCallable()
-    {
-        $response = new StreamedResponse(null);
-        $response->setCallback(null);
-    }
-
-    /**
-     * @expectedException \LogicException
-     */
     public function testSetContent()
     {
+        $this->expectException('LogicException');
         $response = new StreamedResponse(function () { echo 'foo'; });
         $response->setContent('foo');
     }
@@ -118,5 +107,34 @@ class StreamedResponseTest extends TestCase
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\StreamedResponse', $response);
         $this->assertEquals(204, $response->getStatusCode());
+    }
+
+    public function testReturnThis()
+    {
+        $response = new StreamedResponse(function () {});
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\StreamedResponse', $response->sendContent());
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\StreamedResponse', $response->sendContent());
+
+        $response = new StreamedResponse(function () {});
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\StreamedResponse', $response->sendHeaders());
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\StreamedResponse', $response->sendHeaders());
+    }
+
+    public function testSetNotModified()
+    {
+        $response = new StreamedResponse(function () { echo 'foo'; });
+        $modified = $response->setNotModified();
+        $this->assertObjectHasAttribute('headers', $modified);
+        $this->assertObjectHasAttribute('content', $modified);
+        $this->assertObjectHasAttribute('version', $modified);
+        $this->assertObjectHasAttribute('statusCode', $modified);
+        $this->assertObjectHasAttribute('statusText', $modified);
+        $this->assertObjectHasAttribute('charset', $modified);
+        $this->assertEquals(304, $modified->getStatusCode());
+
+        ob_start();
+        $modified->sendContent();
+        $string = ob_get_clean();
+        $this->assertEmpty($string);
     }
 }

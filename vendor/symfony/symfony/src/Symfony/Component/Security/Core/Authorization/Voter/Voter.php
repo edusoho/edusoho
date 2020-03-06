@@ -24,36 +24,20 @@ abstract class Voter implements VoterInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsAttribute($attribute)
-    {
-        throw new \BadMethodCallException('supportsAttribute method is deprecated since version 2.8, to be removed in 3.0');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function supportsClass($class)
-    {
-        throw new \BadMethodCallException('supportsClass method is deprecated since version 2.8, to be removed in 3.0');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function vote(TokenInterface $token, $object, array $attributes)
+    public function vote(TokenInterface $token, $subject, array $attributes)
     {
         // abstain vote by default in case none of the attributes are supported
         $vote = self::ACCESS_ABSTAIN;
 
         foreach ($attributes as $attribute) {
-            if (!$this->supports($attribute, $object)) {
+            if (!$this->supports($attribute, $subject)) {
                 continue;
             }
 
             // as soon as at least one attribute is supported, default is to deny access
             $vote = self::ACCESS_DENIED;
 
-            if ($this->voteOnAttribute($attribute, $object, $token)) {
+            if ($this->voteOnAttribute($attribute, $subject, $token)) {
                 // grant access as soon as at least one attribute returns a positive response
                 return self::ACCESS_GRANTED;
             }
@@ -76,9 +60,8 @@ abstract class Voter implements VoterInterface
      * Perform a single access check operation on a given attribute, subject and token.
      * It is safe to assume that $attribute and $subject already passed the "supports()" method check.
      *
-     * @param string         $attribute
-     * @param mixed          $subject
-     * @param TokenInterface $token
+     * @param string $attribute
+     * @param mixed  $subject
      *
      * @return bool
      */

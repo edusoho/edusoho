@@ -79,6 +79,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new AppBundle\AppBundle(),
             new CustomBundle\CustomBundle(),
             new ApiBundle\ApiBundle(),
+            new Symfony\Bundle\AsseticBundle\AsseticBundle(),
         );
 
         if (is_file($this->getRootDir().'/config/sentry.yml')) {
@@ -157,7 +158,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         ));
         $biz->extend('monolog', function($monolog) {
             $monolog->pushProcessor(new \AppBundle\Processor\TraceProcessor());
-        
+
             return $monolog;
         });
         $biz->register(new \Codeages\Biz\Framework\Provider\SchedulerServiceProvider());

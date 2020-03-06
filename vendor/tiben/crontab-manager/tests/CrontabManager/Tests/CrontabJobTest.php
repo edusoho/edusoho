@@ -26,7 +26,7 @@ use TiBeN\CrontabManager\CrontabJob;
  * @author TiBeN
  */
     
-class CrontabJobTest extends \PHPUnit_Framework_TestCase
+class CrontabJobTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test parsing crontab and creation of cronjob 
@@ -43,96 +43,105 @@ class CrontabJobTest extends \PHPUnit_Framework_TestCase
         $crontabLines = array();
         
         $crontabJob = new CrontabJob();
-        $crontabJob->enabled = true;
-        $crontabJob->minutes = '30';
-        $crontabJob->hours = '23';
-        $crontabJob->dayOfMonth = '*';
-        $crontabJob->months = '*';
-        $crontabJob->dayOfWeek = '*';
-        $crontabJob->taskCommandLine = 'df >> /tmp/df.log';
+        $crontabJob
+            ->setEnabled(true)
+            ->setMinutes(30)
+            ->setHours(23)
+            ->setDayOfMonth('*')
+            ->setMonths('*')
+            ->setDayOfWeek('*')
+            ->setTaskCommandLine('df >> /tmp/df.log');
         $crontabLines[] = array('30 23 * * * df >> /tmp/df.log', $crontabJob);
         
         $crontabJob = new CrontabJob();
-        $crontabJob->enabled = true;
-        $crontabJob->minutes = '12';
-        $crontabJob->hours = '10';
-        $crontabJob->dayOfMonth = '2-5';
-        $crontabJob->months = '*';
-        $crontabJob->dayOfWeek = '*';
-        $crontabJob->taskCommandLine = 'df >> /tmp/df.log';
+        $crontabJob
+            ->setEnabled(true)
+            ->setMinutes(12)
+            ->setHours(10)
+            ->setDayOfMonth('2-5')
+            ->setMonths('*')
+            ->setDayOfWeek('*')
+            ->setTaskCommandLine('df >> /tmp/df.log');
         $crontabLines[] = array('12 10 2-5 * * df >> /tmp/df.log', $crontabJob);
         
         $crontabJob = new CrontabJob();
-        $crontabJob->enabled = true;
-        $crontabJob->minutes = '59';
-        $crontabJob->hours = '23';
-        $crontabJob->dayOfMonth = '*/2';
-        $crontabJob->months = '*';
-        $crontabJob->dayOfWeek = '*';
-        $crontabJob->taskCommandLine = 'df >> /tmp/df.log';
+        $crontabJob
+            ->setEnabled(true)
+            ->setMinutes(59)
+            ->setHours(23)
+            ->setDayOfMonth('*/2')
+            ->setMonths('*')
+            ->setDayOfWeek('*')
+            ->setTaskCommandLine('df >> /tmp/df.log');
         $crontabLines[] = array('59 23 */2 * * df >> /tmp/df.log', $crontabJob);
         
         $crontabJob = new CrontabJob();
-        $crontabJob->enabled = true;
-        $crontabJob->minutes = '0';
-        $crontabJob->hours = '0';
-        $crontabJob->dayOfMonth = '25-31';
-        $crontabJob->months = '1,3,5,7,8,10,12';
-        $crontabJob->dayOfWeek = '0';
-        $crontabJob->taskCommandLine = 'my-script.sh';
+        $crontabJob
+            ->setEnabled(true)
+            ->setMinutes(0)
+            ->setHours(0)
+            ->setDayOfMonth('25-31')
+            ->setMonths('1,3,5,7,8,10,12')
+            ->setDayOfWeek(0)
+            ->setTaskCommandLine('my-script.sh');
         $crontabLines[] = array('0 0 25-31 1,3,5,7,8,10,12 0 my-script.sh', $crontabJob);
         
         /* space at start test case */
         $crontabJob = new CrontabJob();
-        $crontabJob->enabled = true;
-        $crontabJob->minutes = '0';
-        $crontabJob->hours = '*';
-        $crontabJob->dayOfMonth = '*/2';
-        $crontabJob->months = '*';
-        $crontabJob->dayOfWeek = '*';
-        $crontabJob->taskCommandLine = 'my-script.sh';
-        $crontabJob->comments = 'commentaire blablabla';
+        $crontabJob
+            ->setEnabled(true)
+            ->setMinutes(0)
+            ->setHours('*')
+            ->setDayOfMonth('*/2')
+            ->setMonths('*')
+            ->setDayOfWeek('*')
+            ->setTaskCommandLine('my-script.sh')
+            ->setComments('commentaire blablabla');
         $crontabLines[] = array(' 0 * */2 * * my-script.sh #commentaire blablabla', $crontabJob);
 
         /* Tab or spaces test case */
         $crontabJob = new CrontabJob();
-        $crontabJob->enabled = true;
-        $crontabJob->minutes = '0';
-        $crontabJob->hours = '*';
-        $crontabJob->dayOfMonth = '*/2';
-        $crontabJob->months = '*';
-        $crontabJob->dayOfWeek = '*';
-        $crontabJob->taskCommandLine = 'my-script.sh';
-        $crontabJob->comments = 'commentaire blablabla';
+        $crontabJob
+            ->setEnabled(true)
+            ->setMinutes(0)
+            ->setHours('*')
+            ->setDayOfMonth('*/2')
+            ->setMonths('*')
+            ->setDayOfWeek('*')
+            ->setTaskCommandLine('my-script.sh')
+            ->setComments('commentaire blablabla');
         $crontabLines[] = array('0  *    */2      *       *      my-script.sh #commentaire blablabla', $crontabJob);
         
         /* Cron shortcut test case */
         $crontabJob = new CrontabJob();
-        $crontabJob->enabled = true;
-        $crontabJob->shortCut = 'daily';
-        $crontabJob->taskCommandLine = 'my-script.sh';
+        $crontabJob
+            ->setEnabled(true)
+            ->setShortCut('daily')
+            ->setTaskCommandLine('my-script.sh');
         $crontabLines[] = array('@daily my-script.sh', $crontabJob);
         
         /* Disabled cron test case - without spaces */
         $crontabJob = new CrontabJob();
-        $crontabJob->enabled = false;
-        $crontabJob->minutes = '30';
-        $crontabJob->hours = '23';
-        $crontabJob->dayOfMonth = '*';
-        $crontabJob->months = '*';
-        $crontabJob->dayOfWeek = '*';
-        $crontabJob->taskCommandLine = 'df >> /tmp/df.log';
+        $crontabJob
+            ->setEnabled(false)
+            ->setMinutes(30)
+            ->setHours(23)
+            ->setDayOfMonth('*')
+            ->setMonths('*')
+            ->setDayOfWeek('*')
+            ->setTaskCommandLine('df >> /tmp/df.log');
         $crontabLines[] = array('#30 23 * * * df >> /tmp/df.log', $crontabJob);
 
         /* Disabled cron test case - with spaces */
         $crontabJob = new CrontabJob();
-        $crontabJob->enabled = false;
-        $crontabJob->minutes = '30';
-        $crontabJob->hours = '23';
-        $crontabJob->dayOfMonth = '*';
-        $crontabJob->months = '*';
-        $crontabJob->dayOfWeek = '*';
-        $crontabJob->taskCommandLine = 'df >> /tmp/df.log';
+        $crontabJob
+            ->setEnabled(false)
+            ->setMinutes(30)
+            ->setHours(23)
+            ->setDayOfMonth('*')
+            ->setMonths('*')
+            ->setDayOfWeek('*')
+            ->setTaskCommandLine('df >> /tmp/df.log');
         $crontabLines[] = array('#   30 23 * * * df >> /tmp/df.log', $crontabJob);
 
         return $crontabLines;
@@ -140,26 +149,29 @@ class CrontabJobTest extends \PHPUnit_Framework_TestCase
     
     public function testFormatCrontabLine()
     {
-        /* Normal formated crontab line */
+        /* Well formatted crontab line */
         $crontabJob = new CrontabJob();
-        $crontabJob->minutes = '30';
-        $crontabJob->hours = '23';
-        $crontabJob->taskCommandLine = 'df >> /tmp/df.log';
+        $crontabJob
+            ->setMinutes(30)
+            ->setHours(23)
+            ->setTaskCommandLine('df >> /tmp/df.log');
         $this->assertEquals('30 23 * * * df >> /tmp/df.log', $crontabJob->formatCrontabLine());
         $crontabJob = new CrontabJob();
         
-        /* Shortcut formated crontab line */
+        /* Crontab line formatted with a shortcut */
         $crontab = new CrontabJob();
-        $crontabJob->shortCut = 'reboot';
-        $crontabJob->taskCommandLine = 'echo "youpi"';
+        $crontabJob
+            ->setShortCut('reboot')
+            ->setTaskCommandLine('echo "youpi"');
         $this->assertEquals('@reboot echo "youpi"', $crontabJob->formatCrontabLine());
         
         /* crontab line with comments */
         $crontabJob = new CrontabJob();
-        $crontabJob->minutes = '30';
-        $crontabJob->hours = '23';
-        $crontabJob->taskCommandLine = 'df >> /tmp/df.log';
-        $crontabJob->comments = 'This job is commented';
+        $crontabJob
+            ->setMinutes(30)
+            ->setHours(23)
+            ->setTaskCommandLine('df >> /tmp/df.log')
+            ->setComments('This job is commented');
         $this->assertEquals(
             '30 23 * * * df >> /tmp/df.log #This job is commented', 
             $crontabJob->formatCrontabLine()
@@ -167,11 +179,12 @@ class CrontabJobTest extends \PHPUnit_Framework_TestCase
 
         /* disabled crontab line */
         $crontabJob = new CrontabJob();
-        $crontabJob->enabled = false;
-        $crontabJob->minutes = '30';
-        $crontabJob->hours = '23';
-        $crontabJob->taskCommandLine = 'df >> /tmp/df.log';
-        $crontabJob->comments = 'This job is commented';
+        $crontabJob
+            ->setEnabled(false)
+            ->setMinutes(30)
+            ->setHours(23)
+            ->setTaskCommandLine('df >> /tmp/df.log')
+            ->setComments('This job is commented');
         $this->assertEquals(
             '#30 23 * * * df >> /tmp/df.log #This job is commented', 
             $crontabJob->formatCrontabLine()
@@ -181,40 +194,113 @@ class CrontabJobTest extends \PHPUnit_Framework_TestCase
     
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Crontab line not well formated then can't be parsed
+     * @expectedExceptionMessage Crontab line not well formatted, so it can't be parsed
      */
-    public function testCrontabLineNotWellFormatedNotEnoughStars()
+    public function testCrontabLineNotWellFormattedNotEnoughStars()
     {
         CrontabJob::createFromCrontabLine('* * 15 * youpi');
     }
 
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Crontab line not well formated then can't be parsed
+     * @expectedExceptionMessage Crontab line not well formatted, so it can't be parsed
      */
-    public function testCrontabLineNotWellFormatedShortcutWithoutArobase()
+    public function testCrontabLineNotWellFormattedShortcutWithoutAtSign()
     {
         CrontabJob::createFromCrontabLine('daily youpi');
     }
 
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Crontab line not well formated then can't be parsed
+     * @expectedExceptionMessage Crontab line not well formatted, so it can't be parsed
      */
-    public function testCrontabLineNotWellFormatedUnknownShortcut()
+    public function testCrontabLineNotWellFormattedUnknownShortcut()
     {
         CrontabJob::createFromCrontabLine('@maintenant youpi');
     }
     
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage CrontabJob contain's no task command line
+     * @expectedExceptionMessage CrontabJob contains no task command line
      */
     public function testNoTaskSetException()
     {
         $crontabJob = new CrontabJob();
-        $crontabJob->minutes = '30';
-        $crontabJob->hours = '23';
-        $crontabJob->formatCrontabLine();
+        $crontabJob
+            ->setMinutes(30)
+            ->setHours(23)
+            ->formatCrontabLine();
+    }
+    
+    public function testSettersWithValidValues()
+    {
+        $crontabJob = new CrontabJob();
+        $crontabJob
+            ->setEnabled(true)
+            ->setMinutes(50)
+            ->setHours(20)
+            ->setDayOfMonth(3)
+            ->setMonths(4)
+            ->setDayOfWeek('*')
+            ->setTaskCommandLine('myScript.sh')
+            ->setComments('My recurring task');
+        $this->assertTrue($crontabJob->isEnabled());
+        $this->assertEquals($crontabJob->getMinutes(), 50);
+        $this->assertEquals($crontabJob->getHours(), 20);
+        $this->assertEquals($crontabJob->getDayOfMonth(), 3);
+        $this->assertEquals($crontabJob->getMonths(), 4);
+        $this->assertEquals($crontabJob->getDayOfWeek(), '*');
+        $this->assertEquals($crontabJob->getTaskCommandLine(), 'myScript.sh');
+        $this->assertEquals($crontabJob->getComments(), 'My recurring task');
+    }
+    
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage The minutes value is not valid
+     */
+    public function testInvalidMinutes()
+    {
+        $crontabJob = new CrontabJob();
+        $crontabJob->setMinutes(65);
+    }
+    
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage The hours value is not valid
+     */
+    public function testInvalidHours()
+    {
+        $crontabJob = new CrontabJob();
+        $crontabJob->setHours(27);
+    }
+    
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage The day of month is not valid
+     */
+    public function testInvalidDayOfMonth()
+    {
+        $crontabJob = new CrontabJob();
+        $crontabJob->setDayOfMonth(34);
+    }
+    
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage The month value is not valid
+     */
+    public function testInvalidMonth()
+    {
+        $crontabJob = new CrontabJob();
+        $crontabJob->setMonths(14);
+    }
+    
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage The day of week is not valid
+     */
+    public function testInvalidDayOfWeek()
+    {
+        $crontabJob = new CrontabJob();
+        $crontabJob->setDayOfWeek(9);
     }
 }

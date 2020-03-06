@@ -20,16 +20,14 @@ class Swift_Mailer_ArrayRecipientIterator implements Swift_Mailer_RecipientItera
      *
      * @var array
      */
-    private $_recipients = array();
+    private $recipients = [];
 
     /**
      * Create a new ArrayRecipientIterator from $recipients.
-     *
-     * @param array $recipients
      */
     public function __construct(array $recipients)
     {
-        $this->_recipients = $recipients;
+        $this->recipients = $recipients;
     }
 
     /**
@@ -39,7 +37,7 @@ class Swift_Mailer_ArrayRecipientIterator implements Swift_Mailer_RecipientItera
      */
     public function hasNext()
     {
-        return !empty($this->_recipients);
+        return !empty($this->recipients);
     }
 
     /**
@@ -50,6 +48,6 @@ class Swift_Mailer_ArrayRecipientIterator implements Swift_Mailer_RecipientItera
      */
     public function nextRecipient()
     {
-        return array_splice($this->_recipients, 0, 1);
+        return array_splice($this->recipients, 0, 1);
     }
 }

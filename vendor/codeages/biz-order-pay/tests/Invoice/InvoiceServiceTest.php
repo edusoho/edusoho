@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Pay\Service\Impl\PayServiceImpl;
 
 class InvoiceServiceTest extends IntegrationTestCase
@@ -129,7 +128,7 @@ class InvoiceServiceTest extends IntegrationTestCase
             'phone' => '15700081111',
             'receiver' => 'tinyyywood',
             'ids' => $trades['id'],
-            'money' => 1,
+            'money' => 100,
         );
     }
 

@@ -17,14 +17,14 @@
 class Swift_FileSpool extends Swift_ConfigurableSpool
 {
     /** The spool directory */
-    private $_path;
+    private $path;
 
     /**
      * File WriteRetry Limit.
      *
      * @var int
      */
-    private $_retryLimit = 10;
+    private $retryLimit = 10;
 
     /**
      * Create a new FileSpool.
@@ -35,11 +35,11 @@ class Swift_FileSpool extends Swift_ConfigurableSpool
      */
     public function __construct($path)
     {
-        $this->_path = $path;
+        $this->path = $path;
 
-        if (!file_exists($this->_path)) {
-            if (!mkdir($this->_path, 0777, true)) {
-                throw new Swift_IoException(sprintf('Unable to create path "%s".', $this->_path));
+        if (!file_exists($this->path)) {
+            if (!mkdir($this->path, 0777, true)) {
+                throw new Swift_IoException(sprintf('Unable to create path "%s".', $this->path));
             }
         }
     }
@@ -77,25 +77,25 @@ class Swift_FileSpool extends Swift_ConfigurableSpool
      */
     public function setRetryLimit($limit)
     {
-        $this->_retryLimit = $limit;
+        $this->retryLimit = $limit;
     }
 
     /**
      * Queues a message.
      *
-     * @param Swift_Mime_Message $message The message to store
+     * @param Swift_Mime_SimpleMessage $message The message to store
      *
      * @throws Swift_IoException
      *
      * @return bool
      */
-    public function queueMessage(Swift_Mime_Message $message)
+    public function queueMessage(Swift_Mime_SimpleMessage $message)
     {
         $ser = serialize($message);
-        $fileName = $this->_path.'/'.$this->getRandomString(10);
-        for ($i = 0; $i < $this->_retryLimit; ++$i) {
+        $fileName = $this->path.'/'.$this->getRandomString(10);
+        for ($i = 0; $i < $this->retryLimit; ++$i) {
             /* We try an exclusive creation of the file. This is an atomic operation, it avoid locking mechanism */
-            $fp = @fopen($fileName.'.message', 'x');
+            $fp = @fopen($fileName.'.message', 'xb');
             if (false !== $fp) {
                 if (false === fwrite($fp, $ser)) {
                     return false;
@@ -108,7 +108,7 @@ class Swift_FileSpool extends Swift_ConfigurableSpool
             }
         }
 
-        throw new Swift_IoException(sprintf('Unable to create a file for enqueuing Message in "%s".', $this->_path));
+        throw new Swift_IoException(sprintf('Unable to create a file for enqueuing Message in "%s".', $this->path));
     }
 
     /**
@@ -118,10 +118,10 @@ class Swift_FileSpool extends Swift_ConfigurableSpool
      */
     public function recover($timeout = 900)
     {
-        foreach (new DirectoryIterator($this->_path) as $file) {
+        foreach (new DirectoryIterator($this->path) as $file) {
             $file = $file->getRealPath();
 
-            if (substr($file, -16) == '.message.sending') {
+            if ('.message.sending' == substr($file, -16)) {
                 $lockedtime = filectime($file);
                 if ((time() - $lockedtime) > $timeout) {
                     rename($file, substr($file, 0, -8));
@@ -140,12 +140,12 @@ class Swift_FileSpool extends Swift_ConfigurableSpool
      */
     public function flushQueue(Swift_Transport $transport, &$failedRecipients = null)
     {
-        $directoryIterator = new DirectoryIterator($this->_path);
+        $directoryIterator = new DirectoryIterator($this->path);
 
         /* Start the transport only if there are queued files to send */
         if (!$transport->isStarted()) {
             foreach ($directoryIterator as $file) {
-                if (substr($file->getRealPath(), -8) == '.message') {
+                if ('.message' == substr($file->getRealPath(), -8)) {
                     $transport->start();
                     break;
                 }
@@ -158,7 +158,7 @@ class Swift_FileSpool extends Swift_ConfigurableSpool
         foreach ($directoryIterator as $file) {
             $file = $file->getRealPath();
 
-            if (substr($file, -8) != '.message') {
+            if ('.message' != substr($file, -8)) {
                 continue;
             }
 
@@ -200,7 +200,7 @@ class Swift_FileSpool extends Swift_ConfigurableSpool
         $ret = '';
         $strlen = strlen($base);
         for ($i = 0; $i < $count; ++$i) {
-            $ret .= $base[((int) rand(0, $strlen - 1))];
+            $ret .= $base[random_int(0, $strlen - 1)];
         }
 
         return $ret;

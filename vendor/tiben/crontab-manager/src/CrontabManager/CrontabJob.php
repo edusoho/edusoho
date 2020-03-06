@@ -20,14 +20,14 @@ namespace TiBeN\CrontabManager;
 
 /**
  * CrontabJob
- * Represent a Job of the crontab.
+ * Represents a Job of the crontab.
  * 
  * @author TiBeN
  */
 class CrontabJob
 {
     /**
-     * Tell whether the cron job is enabled or not
+     * Tells whether the cron job is enabled or not
      * This will add or not a # at the beginning of the cron line
      *
      * @var boolean
@@ -87,14 +87,248 @@ class CrontabJob
     
     /**
      * Predefined scheduling definition
-     * Shorcut définition that replace standard définition (preceded by @)
-     * possibles values : yearly, monthly, weekly, daily, hourly, reboot
-     * When a shortcut is defined, it overwrite stantard définition
+     * Shorcut definition that replaces the standard definition (preceded by @)
+     * possible values : yearly, monthly, weekly, daily, hourly, reboot
+     * When a shortcut is defined, it overwrites the stantard definition
      *
      * @var String
      */
     public $shortCut;
     
+    /* Getters and Setters */
+    
+    /**
+     * Gets the enabled status of the cron job
+     * @return Boolean
+     */
+    public function isEnabled()
+    {
+        return $this->enabled;
+    }
+    
+    /**
+     * Sets the enabled status of the cron job
+     * @param Boolean $enabled
+     * @return $this
+     */
+    public function setEnabled($enabled = true) 
+    {
+        $this->enabled = $enabled;
+        return $this;
+    }
+    
+    /**
+     * Gets the number of minutes.
+     * @return Int
+     */
+    public function getMinutes()
+    {
+        return $this->minutes;
+    }
+    
+    /**
+     * Sets the number of minutes.
+     * @param Int/String $minutes
+     * @throws \InvalidArgumentException
+     * @return $this
+     */
+    public function setMinutes($minutes)
+    {
+        if (is_numeric($minutes) && ((int)$minutes < 0 || (int)$minutes > 59))
+        {
+            throw new \InvalidArgumentException(
+                'The minutes value is not valid'
+            );
+        }
+        
+        $this->minutes = $minutes;
+        return $this;
+    }
+    
+    /**
+     * Gets the number of hours.
+     * @return Int
+     */
+    public function getHours()
+    {
+        return $this->hours;
+    }
+    
+    /**
+     * Sets the number of hours.
+     * @param Int/String $hours
+     * @throws \InvalidArgumentException
+     * @return $this
+     */
+    public function setHours($hours)
+    {
+        if (is_numeric($hours) && ((int)$hours < 0 || (int)$hours > 23))
+        {
+            throw new \InvalidArgumentException(
+                'The hours value is not valid'
+            );
+        }
+        
+        $this->hours = $hours;
+        return $this;
+    }
+    
+    /**
+     * Gets the day of month.
+     * @return Int
+     */
+    public function getDayOfMonth()
+    {
+        return $this->dayOfMonth;
+    }
+    
+    /**
+     * Sets the day of month.
+     * @param Int/String $dayOfMonth
+     * @throws \InvalidArgumentException
+     * @return $this
+     */
+    public function setDayOfMonth($dayOfMonth)
+    {
+        if (is_numeric($dayOfMonth) && ((int)$dayOfMonth < 1 || (int)$dayOfMonth > 31))
+        {
+            throw new \InvalidArgumentException(
+                'The day of month is not valid'
+            );
+        }
+        
+        $this->dayOfMonth = $dayOfMonth;
+        return $this;
+    }
+    
+        /**
+     * Gets the month number.
+     * @return Int
+     */
+    public function getMonths()
+    {
+        return $this->months;
+    }
+    
+    /**
+     * Sets the month number.
+     * @param Int/String $months
+     * @throws \InvalidArgumentException
+     * @return $this
+     */
+    public function setMonths($months)
+    {
+        if (is_numeric($months) && ((int)$months < 1 || (int)$months > 12))
+        {
+            throw new \InvalidArgumentException(
+                'The month value is not valid'
+            );
+        }
+        
+        $this->months = $months;
+        return $this;
+    }
+    
+        /**
+     * Gets the day of week.
+     * @return Int
+     */
+    public function getDayOfWeek()
+    {
+        return $this->dayOfWeek;
+    }
+    
+    /**
+     * Sets the day of week.
+     * @param Int/String $dayOfWeek
+     * @throws \InvalidArgumentException
+     * @return $this
+     */
+    public function setDayOfWeek($dayOfWeek)
+    {
+        // 0 and 7 are both valid for Sunday
+        if (is_numeric($dayOfWeek) && ((int)$dayOfWeek < 0 || (int)$dayOfWeek > 7))
+        {
+            throw new \InvalidArgumentException(
+                'The day of week is not valid'
+            );
+        }
+        
+        $this->dayOfWeek = $dayOfWeek;
+        return $this;
+    }
+    
+    /**
+     * Gets the task command line.
+     * @return String
+     */
+    public function getTaskCommandLine()
+    {
+        return $this->taskCommandLine;
+    }
+    
+    /**
+     * Sets the task command line.
+     * @param String $taskCommandLine
+     * @return $this
+     */
+    public function setTaskCommandLine($taskCommandLine)
+    {
+        $this->taskCommandLine = $taskCommandLine;
+        return $this;
+    }
+    
+    /**
+     * Gets the job comments.
+     * @return String
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+    
+    /**
+     * Sets the optional job comments.
+     * @param String $comments
+     * @return $this
+     */
+    public function setComments($comments)
+    {
+        $this->comments = $comments;
+        return $this;
+    }
+    
+    /**
+     * Gets the time shortcut.
+     * @return String
+     */
+    public function getShortCut()
+    {
+        return $this->shortCut;
+    }
+    
+    /**
+     * Sets the time shortcut.
+     * @param String $shortCut
+     * @throws \InvalidArgumentException
+     * @return $this
+     */
+    public function setShortCut($shortCut)
+    {
+        // @annually is the same as @yearly, and @midnight is the same as @daily
+        $possibleValues = array(
+            'yearly', 'annually', 'monthly', 'weekly', 'daily', 'midnight', 'hourly', 'reboot'
+        );
+        if (!in_array($shortCut, $possibleValues)) {
+            throw new \InvalidArgumentException(
+                'The shortcut is not valid.'
+            );
+        }
+        
+        $this->shortCut = $shortCut;
+        return $this;
+    }
+
     /**
      * Factory method to create a CrontabJob from a crontab line.
      *
@@ -113,7 +347,7 @@ class CrontabJob
 
         if (!preg_match($crontabLineRegex, $crontabLine, $matches)) {
             throw new \InvalidArgumentException(
-                'Crontab line not well formated then can\'t be parsed'
+                'Crontab line not well formatted, so it can\'t be parsed'
             );
         }
 
@@ -121,24 +355,25 @@ class CrontabJob
         $crontabJob = new self();
       
         if (!empty($matches[1])) {
-            $crontabJob->enabled = false;
+            $crontabJob->setEnabled(false);
         }
 
         if (!empty($matches)) {
-            $crontabJob->minutes = $matches[3];
-            $crontabJob->hours = $matches[4];
-            $crontabJob->dayOfMonth = $matches[5];
-            $crontabJob->months = $matches[6];
-            $crontabJob->dayOfWeek = $matches[7];
+            $crontabJob
+                ->setMinutes($matches[3])
+                ->setHours($matches[4])
+                ->setDayOfMonth($matches[5])
+                ->setMonths($matches[6])
+                ->setDayOfWeek($matches[7]);
         }
         
         if (!empty($matches[8])) {
-            $crontabJob->shortCut = $matches[9];
+            $crontabJob->setShortCut($matches[9]);
         }
         
-        $crontabJob->taskCommandLine = $matches[10];
+        $crontabJob->setTaskCommandLine($matches[10]);
         if (!empty($matches[12])) {
-            $crontabJob->comments = $matches[12];
+            $crontabJob->setComments($matches[12]);
         }
         
         return $crontabJob;
@@ -156,7 +391,7 @@ class CrontabJob
         // Check if job has a task command line
         if (!isset($this->taskCommandLine) || empty($this->taskCommandLine)) {
             throw new \InvalidArgumentException(
-                'CrontabJob contain\'s no task command line'
+                'CrontabJob contains no task command line'
             );
         }
         

@@ -59,8 +59,12 @@
         <xsd:attribute name="service" type="xsd:string" />
         <xsd:attribute name="servicename" type="xsd:string" />
         <xsd:attribute name="session-mode" type="xsd:string" />
+        <xsd:attribute name="default_dbname" type="xsd:string" />
         <xsd:attribute name="sslmode" type="xsd:string" />
         <xsd:attribute name="sslrootcert" type="xsd:string" />
+        <xsd:attribute name="sslcert" type="xsd:string" />
+        <xsd:attribute name="sslkey" type="xsd:string" />
+        <xsd:attribute name="sslcrl" type="xsd:string" />
         <xsd:attribute name="pooled" type="xsd:string" />
         <xsd:attribute name="multiple-active-result-sets" type="xsd:string" />
         <xsd:attribute name="connectstring" type="xsd:string" />
@@ -154,6 +158,7 @@
             <xsd:element name="class" type="xsd:string" minOccurs="0" maxOccurs="1" />
             <xsd:element name="host" type="xsd:string" minOccurs="0" maxOccurs="1" />
             <xsd:element name="port" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="database" type="xsd:integer" minOccurs="0" maxOccurs="1" />
             <xsd:element name="instance-class" type="xsd:string" minOccurs="0" maxOccurs="1" />
         </xsd:all>
 

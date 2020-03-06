@@ -14,7 +14,7 @@ services:
 
     user.online_track:
         class: AppBundle\Component\Track\UserOnlineTrack
-        arguments: ['@service_container', '@Biz']
+        arguments: ['@service_container', '@biz']
 
     extension.manager:
         class: AppBundle\Extension\ExtensionManager
@@ -143,7 +143,7 @@ services:
 
     web.twig.extension:
         class: AppBundle\Twig\WebExtension
-        arguments:    ['@service_container', '@biz']
+        arguments:    ['@service_container', '@biz', '@request_stack']
         tags:
             - { name: twig.extension }
 

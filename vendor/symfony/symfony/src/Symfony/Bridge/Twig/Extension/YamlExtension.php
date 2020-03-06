@@ -13,26 +13,28 @@ namespace Symfony\Bridge\Twig\Extension;
 
 use Symfony\Component\Yaml\Dumper as YamlDumper;
 use Symfony\Component\Yaml\Yaml;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
 /**
  * Provides integration of the Yaml component with Twig.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class YamlExtension extends \Twig_Extension
+class YamlExtension extends AbstractExtension
 {
     /**
      * {@inheritdoc}
      */
     public function getFilters()
     {
-        return array(
-            new \Twig_SimpleFilter('yaml_encode', array($this, 'encode')),
-            new \Twig_SimpleFilter('yaml_dump', array($this, 'dump')),
-        );
+        return [
+            new TwigFilter('yaml_encode', [$this, 'encode']),
+            new TwigFilter('yaml_dump', [$this, 'dump']),
+        ];
     }
 
-    public function encode($input, $inline = 0, $dumpObjects = false)
+    public function encode($input, $inline = 0, $dumpObjects = 0)
     {
         static $dumper;
 
@@ -40,8 +42,16 @@ class YamlExtension extends \Twig_Extension
             $dumper = new YamlDumper();
         }
 
-        if (defined('Symfony\Component\Yaml\Yaml::DUMP_OBJECT')) {
-            return $dumper->dump($input, $inline, 0, is_bool($dumpObjects) ? Yaml::DUMP_OBJECT : 0);
+        if (\defined('Symfony\Component\Yaml\Yaml::DUMP_OBJECT')) {
+            if (\is_bool($dumpObjects)) {
+                @trigger_error('Passing a boolean flag to toggle object support is deprecated since Symfony 3.1 and will be removed in 4.0. Use the Yaml::DUMP_OBJECT flag instead.', E_USER_DEPRECATED);
+
+                $flags = $dumpObjects ? Yaml::DUMP_OBJECT : 0;
+            } else {
+                $flags = $dumpObjects;
+            }
+
+            return $dumper->dump($input, $inline, 0, $flags);
         }
 
         return $dumper->dump($input, $inline, 0, false, $dumpObjects);
@@ -49,12 +59,12 @@ class YamlExtension extends \Twig_Extension
 
     public function dump($value, $inline = 0, $dumpObjects = false)
     {
-        if (is_resource($value)) {
+        if (\is_resource($value)) {
             return '%Resource%';
         }
 
-        if (is_array($value) || is_object($value)) {
-            return '%'.gettype($value).'% '.$this->encode($value, $inline, $dumpObjects);
+        if (\is_array($value) || \is_object($value)) {
+            return '%'.\gettype($value).'% '.$this->encode($value, $inline, $dumpObjects);
         }
 
         return $this->encode($value, $inline, $dumpObjects);

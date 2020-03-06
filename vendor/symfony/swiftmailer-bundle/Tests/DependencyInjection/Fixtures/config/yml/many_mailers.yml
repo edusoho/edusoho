@@ -14,7 +14,7 @@ swiftmailer:
             local_domain:     first.example.org
             logging:          true
             sender_address:   first-sender@example.org
-            delivery_address: first@example.org
+            delivery_addresses: [first@example.org]
             delivery_whitelist:
                 - /firstfoo@.*/
                 - /.*@firstbar.com$/
@@ -32,7 +32,7 @@ swiftmailer:
             logging:          true
             spool:
                 type: memory
-            delivery_address: secondary@example.org
+            delivery_addresses: [secondary@example.org]
             delivery_whitelist:
                 - /secondaryfoo@.*/
                 - /.*@secondarybar.com$/
@@ -51,7 +51,7 @@ swiftmailer:
             spool:
                 type: file
             sender_address:   third-sender@example.org
-            delivery_address: third@example.org
+            delivery_addresses: [third@example.org]
             delivery_whitelist:
                 - /thirdfoo@.*/
                 - /.*@thirdbar.com$/

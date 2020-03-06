@@ -11,10 +11,10 @@
 
 namespace Symfony\Component\Translation\Loader;
 
-use Symfony\Component\Translation\MessageCatalogue;
+use Symfony\Component\Config\Resource\DirectoryResource;
 use Symfony\Component\Translation\Exception\InvalidResourceException;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
-use Symfony\Component\Config\Resource\DirectoryResource;
+use Symfony\Component\Translation\MessageCatalogue;
 
 /**
  * IcuResFileLoader loads translations from a resource bundle.
@@ -70,13 +70,13 @@ class IcuResFileLoader implements LoaderInterface
      *
      * This function takes an array by reference and will modify it
      *
-     * @param \ResourceBundle $rb       the ResourceBundle that will be flattened
-     * @param array           $messages used internally for recursive calls
-     * @param string          $path     current path being parsed, used internally for recursive calls
+     * @param \ResourceBundle $rb       The ResourceBundle that will be flattened
+     * @param array           $messages Used internally for recursive calls
+     * @param string          $path     Current path being parsed, used internally for recursive calls
      *
      * @return array the flattened ResourceBundle
      */
-    protected function flatten(\ResourceBundle $rb, array &$messages = array(), $path = null)
+    protected function flatten(\ResourceBundle $rb, array &$messages = [], $path = null)
     {
         foreach ($rb as $key => $value) {
             $nodePath = $path ? $path.'.'.$key : $key;

@@ -181,7 +181,7 @@ class CouponBatchController extends BaseController
 
         $batch = $this->getCouponBatchService()->getBatch($batchId);
 
-        $paginator = new Paginator($this->get('request'), $count, 20);
+        $paginator = new Paginator($request, $count, 20);
 
         $coupons = $this->getCouponService()->searchCoupons(
             array('batchId' => $batchId),
@@ -205,7 +205,7 @@ class CouponBatchController extends BaseController
     public function targetDetailAction(Request $request, $targetType, $batchId)
     {
         $batch = $this->getCouponBatchService()->getBatch($batchId);
-        $paginator = new Paginator($this->get('request'), count($batch['targetIds']), 10);
+        $paginator = new Paginator($request, count($batch['targetIds']), 10);
         $targetIds = empty($batch['targetIds']) ? array(-1) : $batch['targetIds'];
 
         $targets = array();

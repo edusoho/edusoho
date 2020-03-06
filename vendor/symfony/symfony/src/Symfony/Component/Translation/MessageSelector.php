@@ -11,6 +11,8 @@
 
 namespace Symfony\Component\Translation;
 
+use Symfony\Component\Translation\Exception\InvalidArgumentException;
+
 /**
  * MessageSelector.
  *
@@ -43,15 +45,21 @@ class MessageSelector
      *
      * @return string
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function choose($message, $number, $locale)
     {
-        $parts = explode('|', $message);
-        $explicitRules = array();
-        $standardRules = array();
+        $parts = [];
+        if (preg_match('/^\|++$/', $message)) {
+            $parts = explode('|', $message);
+        } elseif (preg_match_all('/(?:\|\||[^\|])++/', $message, $matches)) {
+            $parts = $matches[0];
+        }
+
+        $explicitRules = [];
+        $standardRules = [];
         foreach ($parts as $part) {
-            $part = trim($part);
+            $part = trim(str_replace('||', '|', $part));
 
             if (preg_match('/^(?P<interval>'.Interval::getIntervalRegexp().')\s*(?P<message>.*?)$/xs', $part, $matches)) {
                 $explicitRules[$matches['interval']] = $matches['message'];
@@ -74,11 +82,11 @@ class MessageSelector
         if (!isset($standardRules[$position])) {
             // when there's exactly one rule given, and that rule is a standard
             // rule, use this rule
-            if (1 === count($parts) && isset($standardRules[0])) {
+            if (1 === \count($parts) && isset($standardRules[0])) {
                 return $standardRules[0];
             }
 
-            throw new \InvalidArgumentException(sprintf('Unable to choose a translation for "%s" with locale "%s" for value "%d". Double check that this translation has the correct plural options (e.g. "There is one apple|There are %%count%% apples").', $message, $locale, $number));
+            throw new InvalidArgumentException(sprintf('Unable to choose a translation for "%s" with locale "%s" for value "%d". Double check that this translation has the correct plural options (e.g. "There is one apple|There are %%count%% apples").', $message, $locale, $number));
         }
 
         return $standardRules[$position];

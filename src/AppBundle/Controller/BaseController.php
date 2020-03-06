@@ -361,7 +361,7 @@ class BaseController extends Controller
      */
     public function filterRedirectUrl($url)
     {
-        $host = $this->get('request')->getHost();
+        $host = $this->get('request_stack')->getCurrentRequest()->getHost();
         $safeHosts = array($host);
 
         $parsedUrl = parse_url($url);

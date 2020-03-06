@@ -1,0 +1,5 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+<?xml version="1.0" encoding="UTF-8"?>
+<alipay><is_success>F</is_success><error>ILLEGAL_PARTNER</error></alipay>

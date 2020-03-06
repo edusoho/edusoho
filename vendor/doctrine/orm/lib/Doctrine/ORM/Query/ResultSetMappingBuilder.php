@@ -19,7 +19,7 @@
 
 namespace Doctrine\ORM\Query;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 /**
@@ -64,7 +64,7 @@ class ResultSetMappingBuilder extends ResultSetMapping
     private $sqlCounter = 0;
 
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     private $em;
 
@@ -76,10 +76,10 @@ class ResultSetMappingBuilder extends ResultSetMapping
     private $defaultRenameMode;
 
     /**
-     * @param EntityManager $em
-     * @param integer       $defaultRenameMode
+     * @param EntityManagerInterface $em
+     * @param integer                $defaultRenameMode
      */
-    public function __construct(EntityManager $em, $defaultRenameMode = self::COLUMN_RENAMING_NONE)
+    public function __construct(EntityManagerInterface $em, $defaultRenameMode = self::COLUMN_RENAMING_NONE)
     {
         $this->em                = $em;
         $this->defaultRenameMode = $defaultRenameMode;
@@ -110,7 +110,7 @@ class ResultSetMappingBuilder extends ResultSetMapping
      * @param string   $class          The class name of the joined entity.
      * @param string   $alias          The unique alias to use for the joined entity.
      * @param string   $parentAlias    The alias of the entity result that is the parent of this joined result.
-     * @param object   $relation       The association field that connects the parent entity result
+     * @param string   $relation       The association field that connects the parent entity result
      *                                 with the joined entity result.
      * @param array    $renamedColumns Columns that have been renamed (tableColumnName => queryColumnName).
      * @param int|null $renameMode     One of the COLUMN_RENAMING_* constants or array for BC reasons (CUSTOM).
@@ -142,8 +142,8 @@ class ResultSetMappingBuilder extends ResultSetMapping
         $classMetadata = $this->em->getClassMetadata($class);
         $platform      = $this->em->getConnection()->getDatabasePlatform();
 
-        if ($classMetadata->isInheritanceTypeSingleTable() || $classMetadata->isInheritanceTypeJoined()) {
-            throw new \InvalidArgumentException('ResultSetMapping builder does not currently support inheritance.');
+        if ( ! $this->isInheritanceSupported($classMetadata)) {
+            throw new \InvalidArgumentException('ResultSetMapping builder does not currently support your inheritance scheme.');
         }
 
 
@@ -177,6 +177,16 @@ class ResultSetMappingBuilder extends ResultSetMapping
                 }
             }
         }
+    }
+
+    private function isInheritanceSupported(ClassMetadataInfo $classMetadata)
+    {
+        if ($classMetadata->isInheritanceTypeSingleTable()
+            && in_array($classMetadata->name, $classMetadata->discriminatorMap, true)) {
+            return true;
+        }
+
+        return ! ($classMetadata->isInheritanceTypeSingleTable() || $classMetadata->isInheritanceTypeJoined());
     }
 
     /**
@@ -428,8 +438,8 @@ class ResultSetMappingBuilder extends ResultSetMapping
                 $sql  .= $class->fieldMappings[$this->fieldMappings[$columnName]]['columnName'];
             } else if (isset($this->metaMappings[$columnName])) {
                 $sql .= $this->metaMappings[$columnName];
-            } else if (isset($this->discriminatorColumn[$columnName])) {
-                $sql .= $this->discriminatorColumn[$columnName];
+            } else if (isset($this->discriminatorColumns[$dqlAlias])) {
+                $sql .= $this->discriminatorColumns[$dqlAlias];
             }
 
             $sql .= " AS " . $columnName;

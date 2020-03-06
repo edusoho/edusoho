@@ -17,6 +17,8 @@ use PhpCsFixer\DocBlock\Annotation;
 use PhpCsFixer\DocBlock\DocBlock;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Preg;
+use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
@@ -38,7 +40,7 @@ final class PhpdocNoEmptyReturnFixer extends AbstractFixer
     public function getDefinition()
     {
         return new FixerDefinition(
-            '@return void and @return null annotations should be omitted from phpdocs.',
+            '`@return` void and `@return null` annotations should be omitted from PHPDoc.',
             array(
                 new CodeSample(
                     '<?php
@@ -65,7 +67,8 @@ function foo() {}
      */
     public function getPriority()
     {
-        // must be run before the PhpdocSeparationFixer and PhpdocOrderFixer
+        // must be run before the PhpdocSeparationFixer, PhpdocOrderFixer
+        // must be run after the PhpdocAddMissingParamAnnotationFixer
         return 10;
     }
 
@@ -74,7 +77,7 @@ function foo() {}
      */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
-        foreach ($tokens as $token) {
+        foreach ($tokens as $index => $token) {
             if (!$token->isGivenKind(T_DOC_COMMENT)) {
                 continue;
             }
@@ -90,7 +93,7 @@ function foo() {}
                 $this->fixAnnotation($doc, $annotation);
             }
 
-            $token->setContent($doc->getContent());
+            $tokens[$index] = new Token(array(T_DOC_COMMENT, $doc->getContent()));
         }
     }
 
@@ -102,7 +105,7 @@ function foo() {}
      */
     private function fixAnnotation(DocBlock $doc, Annotation $annotation)
     {
-        if (1 === preg_match('/@return\s+(void|null)(?!\|)/', $doc->getLine($annotation->getStart())->getContent())) {
+        if (1 === Preg::match('/@return\s+(void|null)(?!\|)/', $doc->getLine($annotation->getStart())->getContent())) {
             $annotation->remove();
         }
     }

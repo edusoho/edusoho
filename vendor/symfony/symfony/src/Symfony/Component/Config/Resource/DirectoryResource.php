@@ -22,15 +22,19 @@ class DirectoryResource implements SelfCheckingResourceInterface, \Serializable
     private $pattern;
 
     /**
-     * Constructor.
-     *
      * @param string      $resource The file path to the resource
      * @param string|null $pattern  A pattern to restrict monitored files
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct($resource, $pattern = null)
     {
-        $this->resource = $resource;
+        $this->resource = realpath($resource) ?: (file_exists($resource) ? $resource : false);
         $this->pattern = $pattern;
+
+        if (false === $this->resource || !is_dir($this->resource)) {
+            throw new \InvalidArgumentException(sprintf('The directory "%s" does not exist.', $resource));
+        }
     }
 
     /**
@@ -38,11 +42,11 @@ class DirectoryResource implements SelfCheckingResourceInterface, \Serializable
      */
     public function __toString()
     {
-        return md5(serialize(array($this->resource, $this->pattern)));
+        return md5(serialize([$this->resource, $this->pattern]));
     }
 
     /**
-     * {@inheritdoc}
+     * @return string The file path to the resource
      */
     public function getResource()
     {
@@ -100,11 +104,17 @@ class DirectoryResource implements SelfCheckingResourceInterface, \Serializable
         return true;
     }
 
+    /**
+     * @internal
+     */
     public function serialize()
     {
-        return serialize(array($this->resource, $this->pattern));
+        return serialize([$this->resource, $this->pattern]);
     }
 
+    /**
+     * @internal
+     */
     public function unserialize($serialized)
     {
         list($this->resource, $this->pattern) = unserialize($serialized);

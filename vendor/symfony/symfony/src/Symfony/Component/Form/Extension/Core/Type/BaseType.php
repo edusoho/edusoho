@@ -15,7 +15,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\Util\StringUtil;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -72,27 +71,17 @@ abstract class BaseType extends AbstractType
 
             // Strip leading underscores and digits. These are allowed in
             // form names, but not in HTML4 ID attributes.
-            // http://www.w3.org/TR/html401/struct/global.html#adef-id
+            // https://www.w3.org/TR/html401/struct/global#adef-id
             $id = ltrim($id, '_0123456789');
         }
 
-        $blockPrefixes = array();
+        $blockPrefixes = [];
         for ($type = $form->getConfig()->getType(); null !== $type; $type = $type->getParent()) {
-            if (method_exists($type, 'getBlockPrefix')) {
-                array_unshift($blockPrefixes, $type->getBlockPrefix());
-            } else {
-                @trigger_error(get_class($type).': The ResolvedFormTypeInterface::getBlockPrefix() method will be added in version 3.0. You should add it to your implementation.', E_USER_DEPRECATED);
-
-                $fqcn = get_class($type->getInnerType());
-                $name = $type->getName();
-                $hasCustomName = $name !== $fqcn;
-
-                array_unshift($blockPrefixes, $hasCustomName ? $name : StringUtil::fqcnToBlockPrefix($fqcn));
-            }
+            array_unshift($blockPrefixes, $type->getBlockPrefix());
         }
         $blockPrefixes[] = $uniqueBlockPrefix;
 
-        $view->vars = array_replace($view->vars, array(
+        $view->vars = array_replace($view->vars, [
             'form' => $view,
             'id' => $id,
             'name' => $name,
@@ -111,8 +100,8 @@ abstract class BaseType extends AbstractType
             // collection form have different types (dynamically), they should
             // be rendered differently.
             // https://github.com/symfony/symfony/issues/5038
-            'cache_key' => $uniqueBlockPrefix.'_'.$form->getConfig()->getType()->getName(),
-        ));
+            'cache_key' => $uniqueBlockPrefix.'_'.$form->getConfig()->getType()->getBlockPrefix(),
+        ]);
     }
 
     /**
@@ -120,15 +109,15 @@ abstract class BaseType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'block_name' => null,
             'disabled' => false,
             'label' => null,
             'label_format' => null,
-            'attr' => array(),
+            'attr' => [],
             'translation_domain' => null,
             'auto_initialize' => true,
-        ));
+        ]);
 
         $resolver->setAllowedTypes('attr', 'array');
     }

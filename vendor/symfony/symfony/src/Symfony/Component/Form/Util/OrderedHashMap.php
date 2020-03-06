@@ -71,28 +71,28 @@ class OrderedHashMap implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @var array
      */
-    private $elements = array();
+    private $elements = [];
 
     /**
      * The keys of the map in the order in which they were inserted or changed.
      *
      * @var array
      */
-    private $orderedKeys = array();
+    private $orderedKeys = [];
 
     /**
      * References to the cursors of all open iterators.
      *
      * @var array
      */
-    private $managedCursors = array();
+    private $managedCursors = [];
 
     /**
      * Creates a new map.
      *
      * @param array $elements The elements to insert initially
      */
-    public function __construct(array $elements = array())
+    public function __construct(array $elements = [])
     {
         $this->elements = $elements;
         $this->orderedKeys = array_keys($elements);
@@ -125,15 +125,15 @@ class OrderedHashMap implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         if (null === $key || !isset($this->elements[$key])) {
             if (null === $key) {
-                $key = array() === $this->orderedKeys
+                $key = [] === $this->orderedKeys
                     // If the array is empty, use 0 as key
                     ? 0
-                    // Imitate PHP's behavior of generating a key that equals
+                    // Imitate PHP behavior of generating a key that equals
                     // the highest existing integer key + 1
                     : 1 + (int) max($this->orderedKeys);
             }
 
-            $this->orderedKeys[] = $key;
+            $this->orderedKeys[] = (string) $key;
         }
 
         $this->elements[$key] = $value;
@@ -144,7 +144,7 @@ class OrderedHashMap implements \ArrayAccess, \IteratorAggregate, \Countable
      */
     public function offsetUnset($key)
     {
-        if (false !== ($position = array_search($key, $this->orderedKeys))) {
+        if (false !== ($position = array_search((string) $key, $this->orderedKeys))) {
             array_splice($this->orderedKeys, $position, 1);
             unset($this->elements[$key]);
 
@@ -169,6 +169,6 @@ class OrderedHashMap implements \ArrayAccess, \IteratorAggregate, \Countable
      */
     public function count()
     {
-        return count($this->elements);
+        return \count($this->elements);
     }
 }

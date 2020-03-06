@@ -97,6 +97,8 @@ class HipChatHandler extends SocketHandler
      */
     public function __construct($token, $room, $name = 'Monolog', $notify = false, $level = Logger::CRITICAL, $bubble = true, $useSSL = true, $format = 'text', $host = 'api.hipchat.com', $version = self::API_V1)
     {
+        @trigger_error('The Monolog\Handler\HipChatHandler class is deprecated. You should migrate to Slack and the SlackWebhookHandler / SlackbotHandler, see https://www.atlassian.com/partnerships/slack', E_USER_DEPRECATED);
+
         if ($version == self::API_V1 && !$this->validateStringLength($name, static::MAXIMUM_NAME_LENGTH)) {
             throw new \InvalidArgumentException('The supplied name is too long. HipChat\'s v1 API supports names up to 15 UTF-8 characters.');
         }
@@ -219,6 +221,21 @@ class HipChatHandler extends SocketHandler
     protected function write(array $record)
     {
         parent::write($record);
+        $this->finalizeWrite();
+    }
+
+    /**
+     * Finalizes the request by reading some bytes and then closing the socket
+     *
+     * If we do not read some but close the socket too early, hipchat sometimes
+     * drops the request entirely.
+     */
+    protected function finalizeWrite()
+    {
+        $res = $this->getResource();
+        if (is_resource($res)) {
+            @fread($res, 2048);
+        }
         $this->closeSocket();
     }
 

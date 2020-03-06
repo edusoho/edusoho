@@ -29,33 +29,19 @@ class Isbn extends Constraint
     const CHECKSUM_FAILED_ERROR = '2881c032-660f-46b6-8153-d352d9706640';
     const TYPE_NOT_RECOGNIZED_ERROR = 'fa54a457-f042-441f-89c4-066ee5bdd3e1';
 
-    protected static $errorNames = array(
+    protected static $errorNames = [
         self::TOO_SHORT_ERROR => 'TOO_SHORT_ERROR',
         self::TOO_LONG_ERROR => 'TOO_LONG_ERROR',
         self::INVALID_CHARACTERS_ERROR => 'INVALID_CHARACTERS_ERROR',
         self::CHECKSUM_FAILED_ERROR => 'CHECKSUM_FAILED_ERROR',
         self::TYPE_NOT_RECOGNIZED_ERROR => 'TYPE_NOT_RECOGNIZED_ERROR',
-    );
+    ];
 
     public $isbn10Message = 'This value is not a valid ISBN-10.';
     public $isbn13Message = 'This value is not a valid ISBN-13.';
     public $bothIsbnMessage = 'This value is neither a valid ISBN-10 nor a valid ISBN-13.';
     public $type;
     public $message;
-
-    /**
-     * @deprecated since version 2.5, to be removed in 3.0. Use option "type" instead.
-     *
-     * @var bool
-     */
-    public $isbn10 = false;
-
-    /**
-     * @deprecated since version 2.5, to be removed in 3.0. Use option "type" instead.
-     *
-     * @var bool
-     */
-    public $isbn13 = false;
 
     /**
      * {@inheritdoc}

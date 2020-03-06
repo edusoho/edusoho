@@ -55,7 +55,7 @@ services:
             - { name: twig.loader, priority: 255 }
 
     codeages_plugin.theme.templating.locator:
-        class:          "%templating.locator.class%"
+        class:          Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator
         arguments:      ['@codeages_plugin.theme.file_locator', '%kernel.cache_dir%']
 
     codeags_plugin.event.lazy_subscribers:

@@ -39,15 +39,11 @@ final class FixerFactory
     private $nameValidator;
 
     /**
-     * Fixers.
-     *
      * @var FixerInterface[]
      */
     private $fixers = array();
 
     /**
-     * Fixers by name.
-     *
      * @var FixerInterface[] Associative array of fixers with names as keys
      */
     private $fixersByName = array();
@@ -79,8 +75,6 @@ final class FixerFactory
     }
 
     /**
-     * Get fixers.
-     *
      * @return FixerInterface[]
      */
     public function getFixers()
@@ -91,8 +85,6 @@ final class FixerFactory
     }
 
     /**
-     * Register all built in fixers.
-     *
      * @return $this
      */
     public function registerBuiltInFixers()
@@ -119,8 +111,6 @@ final class FixerFactory
     }
 
     /**
-     * Register fixers.
-     *
      * @param FixerInterface[] $fixers
      *
      * @return $this
@@ -135,8 +125,6 @@ final class FixerFactory
     }
 
     /**
-     * Register fixer.
-     *
      * @param FixerInterface $fixer
      * @param bool           $isCustom
      *
@@ -227,8 +215,6 @@ final class FixerFactory
 
     /**
      * Sort fixers by their priorities.
-     *
-     * @return $this
      */
     private function sortFixers()
     {
@@ -246,14 +232,12 @@ final class FixerFactory
         $this->fixers = array_map(function (array $item) {
             return $item[0];
         }, $data);
-
-        return $this;
     }
 
     /**
      * @param FixerInterface $fixer
      *
-     * @return string[]|null
+     * @return null|string[]
      */
     private function getFixersConflicts(FixerInterface $fixer)
     {

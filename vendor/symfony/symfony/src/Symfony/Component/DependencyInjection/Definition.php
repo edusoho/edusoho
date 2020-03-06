@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\DependencyInjection;
 
+use Symfony\Component\DependencyInjection\Argument\BoundArgument;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Exception\OutOfBoundsException;
 
@@ -24,36 +25,65 @@ class Definition
     private $class;
     private $file;
     private $factory;
-    private $factoryClass;
-    private $factoryMethod;
-    private $factoryService;
     private $shared = true;
     private $deprecated = false;
-    private $deprecationTemplate = 'The "%service_id%" service is deprecated. You should stop using it, as it will soon be removed.';
-    private $scope = ContainerInterface::SCOPE_CONTAINER;
-    private $properties = array();
-    private $calls = array();
+    private $deprecationTemplate;
+    private $properties = [];
+    private $calls = [];
+    private $instanceof = [];
+    private $autoconfigured = false;
     private $configurator;
-    private $tags = array();
+    private $tags = [];
     private $public = true;
+    private $private = true;
     private $synthetic = false;
     private $abstract = false;
-    private $synchronized = false;
     private $lazy = false;
     private $decoratedService;
     private $autowired = false;
-    private $autowiringTypes = array();
+    private $autowiringTypes = [];
+    private $changes = [];
+    private $bindings = [];
+    private $errors = [];
 
-    protected $arguments;
+    protected $arguments = [];
+
+    private static $defaultDeprecationTemplate = 'The "%service_id%" service is deprecated. You should stop using it, as it will soon be removed.';
 
     /**
      * @param string|null $class     The service class
      * @param array       $arguments An array of arguments to pass to the service constructor
      */
-    public function __construct($class = null, array $arguments = array())
+    public function __construct($class = null, array $arguments = [])
     {
-        $this->class = $class;
+        if (null !== $class) {
+            $this->setClass($class);
+        }
         $this->arguments = $arguments;
+    }
+
+    /**
+     * Returns all changes tracked for the Definition object.
+     *
+     * @return array An array of changes for this Definition
+     */
+    public function getChanges()
+    {
+        return $this->changes;
+    }
+
+    /**
+     * Sets the tracked changes for the Definition object.
+     *
+     * @param array $changes An array of changes for this Definition
+     *
+     * @return $this
+     */
+    public function setChanges(array $changes)
+    {
+        $this->changes = $changes;
+
+        return $this;
     }
 
     /**
@@ -65,7 +95,9 @@ class Definition
      */
     public function setFactory($factory)
     {
-        if (is_string($factory) && strpos($factory, '::') !== false) {
+        $this->changes['factory'] = true;
+
+        if (\is_string($factory) && false !== strpos($factory, '::')) {
             $factory = explode('::', $factory, 2);
         }
 
@@ -77,7 +109,7 @@ class Definition
     /**
      * Gets the factory.
      *
-     * @return string|array The PHP function or an array containing a class/Reference and a method to call
+     * @return string|array|null The PHP function or an array containing a class/Reference and a method to call
      */
     public function getFactory()
     {
@@ -85,79 +117,28 @@ class Definition
     }
 
     /**
-     * Sets the name of the class that acts as a factory using the factory method,
-     * which will be invoked statically.
-     *
-     * @param string $factoryClass The factory class name
-     *
-     * @return $this
-     *
-     * @deprecated since version 2.6, to be removed in 3.0.
-     */
-    public function setFactoryClass($factoryClass)
-    {
-        @trigger_error(sprintf('%s(%s) is deprecated since version 2.6 and will be removed in 3.0. Use Definition::setFactory() instead.', __METHOD__, $factoryClass), E_USER_DEPRECATED);
-
-        $this->factoryClass = $factoryClass;
-
-        return $this;
-    }
-
-    /**
-     * Gets the factory class.
-     *
-     * @return string|null The factory class name
-     *
-     * @deprecated since version 2.6, to be removed in 3.0.
-     */
-    public function getFactoryClass($triggerDeprecationError = true)
-    {
-        if ($triggerDeprecationError) {
-            @trigger_error('The '.__METHOD__.' method is deprecated since version 2.6 and will be removed in 3.0.', E_USER_DEPRECATED);
-        }
-
-        return $this->factoryClass;
-    }
-
-    /**
-     * Sets the factory method able to create an instance of this class.
-     *
-     * @param string $factoryMethod The factory method name
-     *
-     * @return $this
-     *
-     * @deprecated since version 2.6, to be removed in 3.0.
-     */
-    public function setFactoryMethod($factoryMethod)
-    {
-        @trigger_error(sprintf('%s(%s) is deprecated since version 2.6 and will be removed in 3.0. Use Definition::setFactory() instead.', __METHOD__, $factoryMethod), E_USER_DEPRECATED);
-
-        $this->factoryMethod = $factoryMethod;
-
-        return $this;
-    }
-
-    /**
      * Sets the service that this service is decorating.
      *
-     * @param null|string $id        The decorated service id, use null to remove decoration
-     * @param null|string $renamedId The new decorated service id
+     * @param string|null $id        The decorated service id, use null to remove decoration
+     * @param string|null $renamedId The new decorated service id
      * @param int         $priority  The priority of decoration
      *
      * @return $this
      *
-     * @throws InvalidArgumentException In case the decorated service id and the new decorated service id are equals.
+     * @throws InvalidArgumentException in case the decorated service id and the new decorated service id are equals
      */
     public function setDecoratedService($id, $renamedId = null, $priority = 0)
     {
-        if ($renamedId && $id == $renamedId) {
-            throw new \InvalidArgumentException(sprintf('The decorated service inner name for "%s" must be different than the service name itself.', $id));
+        if ($renamedId && $id === $renamedId) {
+            throw new InvalidArgumentException(sprintf('The decorated service inner name for "%s" must be different than the service name itself.', $id));
         }
+
+        $this->changes['decorated_service'] = true;
 
         if (null === $id) {
             $this->decoratedService = null;
         } else {
-            $this->decoratedService = array($id, $renamedId, (int) $priority);
+            $this->decoratedService = [$id, $renamedId, (int) $priority];
         }
 
         return $this;
@@ -166,63 +147,11 @@ class Definition
     /**
      * Gets the service that this service is decorating.
      *
-     * @return null|array An array composed of the decorated service id, the new id for it and the priority of decoration, null if no service is decorated
+     * @return array|null An array composed of the decorated service id, the new id for it and the priority of decoration, null if no service is decorated
      */
     public function getDecoratedService()
     {
         return $this->decoratedService;
-    }
-
-    /**
-     * Gets the factory method.
-     *
-     * @return string|null The factory method name
-     *
-     * @deprecated since version 2.6, to be removed in 3.0.
-     */
-    public function getFactoryMethod($triggerDeprecationError = true)
-    {
-        if ($triggerDeprecationError) {
-            @trigger_error('The '.__METHOD__.' method is deprecated since version 2.6 and will be removed in 3.0.', E_USER_DEPRECATED);
-        }
-
-        return $this->factoryMethod;
-    }
-
-    /**
-     * Sets the name of the service that acts as a factory using the factory method.
-     *
-     * @param string $factoryService The factory service id
-     *
-     * @return $this
-     *
-     * @deprecated since version 2.6, to be removed in 3.0.
-     */
-    public function setFactoryService($factoryService, $triggerDeprecationError = true)
-    {
-        if ($triggerDeprecationError) {
-            @trigger_error(sprintf('%s(%s) is deprecated since version 2.6 and will be removed in 3.0. Use Definition::setFactory() instead.', __METHOD__, $factoryService), E_USER_DEPRECATED);
-        }
-
-        $this->factoryService = $factoryService;
-
-        return $this;
-    }
-
-    /**
-     * Gets the factory service id.
-     *
-     * @return string|null The factory service id
-     *
-     * @deprecated since version 2.6, to be removed in 3.0.
-     */
-    public function getFactoryService($triggerDeprecationError = true)
-    {
-        if ($triggerDeprecationError) {
-            @trigger_error('The '.__METHOD__.' method is deprecated since version 2.6 and will be removed in 3.0.', E_USER_DEPRECATED);
-        }
-
-        return $this->factoryService;
     }
 
     /**
@@ -234,6 +163,8 @@ class Definition
      */
     public function setClass($class)
     {
+        $this->changes['class'] = true;
+
         $this->class = $class;
 
         return $this;
@@ -252,8 +183,6 @@ class Definition
     /**
      * Sets the arguments to pass to the service constructor/factory method.
      *
-     * @param array $arguments An array of arguments
-     *
      * @return $this
      */
     public function setArguments(array $arguments)
@@ -263,6 +192,11 @@ class Definition
         return $this;
     }
 
+    /**
+     * Sets the properties to define when creating the service.
+     *
+     * @return $this
+     */
     public function setProperties(array $properties)
     {
         $this->properties = $properties;
@@ -270,11 +204,24 @@ class Definition
         return $this;
     }
 
+    /**
+     * Gets the properties to define when creating the service.
+     *
+     * @return array
+     */
     public function getProperties()
     {
         return $this->properties;
     }
 
+    /**
+     * Sets a specific property.
+     *
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return $this
+     */
     public function setProperty($name, $value)
     {
         $this->properties[$name] = $value;
@@ -297,10 +244,10 @@ class Definition
     }
 
     /**
-     * Sets a specific argument.
+     * Replaces a specific argument.
      *
-     * @param int   $index
-     * @param mixed $argument
+     * @param int|string $index
+     * @param mixed      $argument
      *
      * @return $this
      *
@@ -308,15 +255,34 @@ class Definition
      */
     public function replaceArgument($index, $argument)
     {
-        if (0 === count($this->arguments)) {
+        if (0 === \count($this->arguments)) {
             throw new OutOfBoundsException('Cannot replace arguments if none have been configured yet.');
         }
 
-        if ($index < 0 || $index > count($this->arguments) - 1) {
-            throw new OutOfBoundsException(sprintf('The index "%d" is not in the range [0, %d].', $index, count($this->arguments) - 1));
+        if (\is_int($index) && ($index < 0 || $index > \count($this->arguments) - 1)) {
+            throw new OutOfBoundsException(sprintf('The index "%d" is not in the range [0, %d].', $index, \count($this->arguments) - 1));
+        }
+
+        if (!\array_key_exists($index, $this->arguments)) {
+            throw new OutOfBoundsException(sprintf('The argument "%s" doesn\'t exist.', $index));
         }
 
         $this->arguments[$index] = $argument;
+
+        return $this;
+    }
+
+    /**
+     * Sets a specific argument.
+     *
+     * @param int|string $key
+     * @param mixed      $value
+     *
+     * @return $this
+     */
+    public function setArgument($key, $value)
+    {
+        $this->arguments[$key] = $value;
 
         return $this;
     }
@@ -334,7 +300,7 @@ class Definition
     /**
      * Gets an argument to pass to the service constructor/factory method.
      *
-     * @param int $index
+     * @param int|string $index
      *
      * @return mixed The argument value
      *
@@ -342,8 +308,8 @@ class Definition
      */
     public function getArgument($index)
     {
-        if ($index < 0 || $index > count($this->arguments) - 1) {
-            throw new OutOfBoundsException(sprintf('The index "%d" is not in the range [0, %d].', $index, count($this->arguments) - 1));
+        if (!\array_key_exists($index, $this->arguments)) {
+            throw new OutOfBoundsException(sprintf('The argument "%s" doesn\'t exist.', $index));
         }
 
         return $this->arguments[$index];
@@ -352,13 +318,11 @@ class Definition
     /**
      * Sets the methods to call after service initialization.
      *
-     * @param array $calls An array of method calls
-     *
      * @return $this
      */
-    public function setMethodCalls(array $calls = array())
+    public function setMethodCalls(array $calls = [])
     {
-        $this->calls = array();
+        $this->calls = [];
         foreach ($calls as $call) {
             $this->addMethodCall($call[0], $call[1]);
         }
@@ -376,12 +340,12 @@ class Definition
      *
      * @throws InvalidArgumentException on empty $method param
      */
-    public function addMethodCall($method, array $arguments = array())
+    public function addMethodCall($method, array $arguments = [])
     {
         if (empty($method)) {
-            throw new InvalidArgumentException(sprintf('Method name cannot be empty.'));
+            throw new InvalidArgumentException('Method name cannot be empty.');
         }
-        $this->calls[] = array($method, $arguments);
+        $this->calls[] = [$method, $arguments];
 
         return $this;
     }
@@ -434,9 +398,55 @@ class Definition
     }
 
     /**
-     * Sets tags for this definition.
+     * Sets the definition templates to conditionally apply on the current definition, keyed by parent interface/class.
      *
-     * @param array $tags
+     * @param ChildDefinition[] $instanceof
+     *
+     * @return $this
+     */
+    public function setInstanceofConditionals(array $instanceof)
+    {
+        $this->instanceof = $instanceof;
+
+        return $this;
+    }
+
+    /**
+     * Gets the definition templates to conditionally apply on the current definition, keyed by parent interface/class.
+     *
+     * @return ChildDefinition[]
+     */
+    public function getInstanceofConditionals()
+    {
+        return $this->instanceof;
+    }
+
+    /**
+     * Sets whether or not instanceof conditionals should be prepended with a global set.
+     *
+     * @param bool $autoconfigured
+     *
+     * @return $this
+     */
+    public function setAutoconfigured($autoconfigured)
+    {
+        $this->changes['autoconfigured'] = true;
+
+        $this->autoconfigured = $autoconfigured;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAutoconfigured()
+    {
+        return $this->autoconfigured;
+    }
+
+    /**
+     * Sets tags for this definition.
      *
      * @return $this
      */
@@ -466,7 +476,7 @@ class Definition
      */
     public function getTag($name)
     {
-        return isset($this->tags[$name]) ? $this->tags[$name] : array();
+        return isset($this->tags[$name]) ? $this->tags[$name] : [];
     }
 
     /**
@@ -477,7 +487,7 @@ class Definition
      *
      * @return $this
      */
-    public function addTag($name, array $attributes = array())
+    public function addTag($name, array $attributes = [])
     {
         $this->tags[$name][] = $attributes;
 
@@ -517,7 +527,7 @@ class Definition
      */
     public function clearTags()
     {
-        $this->tags = array();
+        $this->tags = [];
 
         return $this;
     }
@@ -531,6 +541,8 @@ class Definition
      */
     public function setFile($file)
     {
+        $this->changes['file'] = true;
+
         $this->file = $file;
 
         return $this;
@@ -555,6 +567,8 @@ class Definition
      */
     public function setShared($shared)
     {
+        $this->changes['shared'] = true;
+
         $this->shared = (bool) $shared;
 
         return $this;
@@ -571,46 +585,6 @@ class Definition
     }
 
     /**
-     * Sets the scope of the service.
-     *
-     * @param string $scope Whether the service must be shared or not
-     *
-     * @return $this
-     *
-     * @deprecated since version 2.8, to be removed in 3.0.
-     */
-    public function setScope($scope, $triggerDeprecationError = true)
-    {
-        if ($triggerDeprecationError) {
-            @trigger_error('The '.__METHOD__.' method is deprecated since version 2.8 and will be removed in 3.0.', E_USER_DEPRECATED);
-        }
-
-        if (ContainerInterface::SCOPE_PROTOTYPE === $scope) {
-            $this->setShared(false);
-        }
-
-        $this->scope = $scope;
-
-        return $this;
-    }
-
-    /**
-     * Returns the scope of the service.
-     *
-     * @return string
-     *
-     * @deprecated since version 2.8, to be removed in 3.0.
-     */
-    public function getScope($triggerDeprecationError = true)
-    {
-        if ($triggerDeprecationError) {
-            @trigger_error('The '.__METHOD__.' method is deprecated since version 2.8 and will be removed in 3.0.', E_USER_DEPRECATED);
-        }
-
-        return $this->scope;
-    }
-
-    /**
      * Sets the visibility of this service.
      *
      * @param bool $boolean
@@ -619,7 +593,10 @@ class Definition
      */
     public function setPublic($boolean)
     {
+        $this->changes['public'] = true;
+
         $this->public = (bool) $boolean;
+        $this->private = false;
 
         return $this;
     }
@@ -635,39 +612,32 @@ class Definition
     }
 
     /**
-     * Sets the synchronized flag of this service.
+     * Sets if this service is private.
+     *
+     * When set, the "private" state has a higher precedence than "public".
+     * In version 3.4, a "private" service always remains publicly accessible,
+     * but triggers a deprecation notice when accessed from the container,
+     * so that the service can be made really private in 4.0.
      *
      * @param bool $boolean
      *
      * @return $this
-     *
-     * @deprecated since version 2.7, will be removed in 3.0.
      */
-    public function setSynchronized($boolean, $triggerDeprecationError = true)
+    public function setPrivate($boolean)
     {
-        if ($triggerDeprecationError) {
-            @trigger_error('The '.__METHOD__.' method is deprecated since version 2.7 and will be removed in 3.0.', E_USER_DEPRECATED);
-        }
-
-        $this->synchronized = (bool) $boolean;
+        $this->private = (bool) $boolean;
 
         return $this;
     }
 
     /**
-     * Whether this service is synchronized.
+     * Whether this service is private.
      *
      * @return bool
-     *
-     * @deprecated since version 2.7, will be removed in 3.0.
      */
-    public function isSynchronized($triggerDeprecationError = true)
+    public function isPrivate()
     {
-        if ($triggerDeprecationError) {
-            @trigger_error('The '.__METHOD__.' method is deprecated since version 2.7 and will be removed in 3.0.', E_USER_DEPRECATED);
-        }
-
-        return $this->synchronized;
+        return $this->private;
     }
 
     /**
@@ -679,6 +649,8 @@ class Definition
      */
     public function setLazy($lazy)
     {
+        $this->changes['lazy'] = true;
+
         $this->lazy = (bool) $lazy;
 
         return $this;
@@ -755,7 +727,7 @@ class Definition
      *
      * @return $this
      *
-     * @throws InvalidArgumentException When the message template is invalid.
+     * @throws InvalidArgumentException when the message template is invalid
      */
     public function setDeprecated($status = true, $template = null)
     {
@@ -770,6 +742,8 @@ class Definition
 
             $this->deprecationTemplate = $template;
         }
+
+        $this->changes['deprecated'] = true;
 
         $this->deprecated = (bool) $status;
 
@@ -796,19 +770,25 @@ class Definition
      */
     public function getDeprecationMessage($id)
     {
-        return str_replace('%service_id%', $id, $this->deprecationTemplate);
+        return str_replace('%service_id%', $id, $this->deprecationTemplate ?: self::$defaultDeprecationTemplate);
     }
 
     /**
      * Sets a configurator to call after the service is fully initialized.
      *
-     * @param callable $callable A PHP callable
+     * @param string|array $configurator A PHP callable
      *
      * @return $this
      */
-    public function setConfigurator($callable)
+    public function setConfigurator($configurator)
     {
-        $this->configurator = $callable;
+        $this->changes['configurator'] = true;
+
+        if (\is_string($configurator) && false !== strpos($configurator, '::')) {
+            $configurator = explode('::', $configurator, 2);
+        }
+
+        $this->configurator = $configurator;
 
         return $this;
     }
@@ -816,7 +796,7 @@ class Definition
     /**
      * Gets the configurator to call after the service is fully initialized.
      *
-     * @return callable|null The PHP callable to call
+     * @return callable|array|null
      */
     public function getConfigurator()
     {
@@ -829,10 +809,14 @@ class Definition
      * @param string[] $types
      *
      * @return $this
+     *
+     * @deprecated since version 3.3, to be removed in 4.0.
      */
     public function setAutowiringTypes(array $types)
     {
-        $this->autowiringTypes = array();
+        @trigger_error('Autowiring-types are deprecated since Symfony 3.3 and will be removed in 4.0. Use aliases instead.', E_USER_DEPRECATED);
+
+        $this->autowiringTypes = [];
 
         foreach ($types as $type) {
             $this->autowiringTypes[$type] = true;
@@ -852,7 +836,7 @@ class Definition
     }
 
     /**
-     * Sets autowired.
+     * Enables/disables autowiring.
      *
      * @param bool $autowired
      *
@@ -860,7 +844,9 @@ class Definition
      */
     public function setAutowired($autowired)
     {
-        $this->autowired = $autowired;
+        $this->changes['autowired'] = true;
+
+        $this->autowired = (bool) $autowired;
 
         return $this;
     }
@@ -869,9 +855,15 @@ class Definition
      * Gets autowiring types that will default to this definition.
      *
      * @return string[]
+     *
+     * @deprecated since version 3.3, to be removed in 4.0.
      */
-    public function getAutowiringTypes()
+    public function getAutowiringTypes(/*$triggerDeprecation = true*/)
     {
+        if (1 > \func_num_args() || func_get_arg(0)) {
+            @trigger_error('Autowiring-types are deprecated since Symfony 3.3 and will be removed in 4.0. Use aliases instead.', E_USER_DEPRECATED);
+        }
+
         return array_keys($this->autowiringTypes);
     }
 
@@ -881,9 +873,13 @@ class Definition
      * @param string $type
      *
      * @return $this
+     *
+     * @deprecated since version 3.3, to be removed in 4.0.
      */
     public function addAutowiringType($type)
     {
+        @trigger_error(sprintf('Autowiring-types are deprecated since Symfony 3.3 and will be removed in 4.0. Use aliases instead for "%s".', $type), E_USER_DEPRECATED);
+
         $this->autowiringTypes[$type] = true;
 
         return $this;
@@ -895,9 +891,13 @@ class Definition
      * @param string $type
      *
      * @return $this
+     *
+     * @deprecated since version 3.3, to be removed in 4.0.
      */
     public function removeAutowiringType($type)
     {
+        @trigger_error(sprintf('Autowiring-types are deprecated since Symfony 3.3 and will be removed in 4.0. Use aliases instead for "%s".', $type), E_USER_DEPRECATED);
+
         unset($this->autowiringTypes[$type]);
 
         return $this;
@@ -909,9 +909,65 @@ class Definition
      * @param string $type
      *
      * @return bool
+     *
+     * @deprecated since version 3.3, to be removed in 4.0.
      */
     public function hasAutowiringType($type)
     {
+        @trigger_error(sprintf('Autowiring-types are deprecated since Symfony 3.3 and will be removed in 4.0. Use aliases instead for "%s".', $type), E_USER_DEPRECATED);
+
         return isset($this->autowiringTypes[$type]);
+    }
+
+    /**
+     * Gets bindings.
+     *
+     * @return array
+     */
+    public function getBindings()
+    {
+        return $this->bindings;
+    }
+
+    /**
+     * Sets bindings.
+     *
+     * Bindings map $named or FQCN arguments to values that should be
+     * injected in the matching parameters (of the constructor, of methods
+     * called and of controller actions).
+     *
+     * @return $this
+     */
+    public function setBindings(array $bindings)
+    {
+        foreach ($bindings as $key => $binding) {
+            if (!$binding instanceof BoundArgument) {
+                $bindings[$key] = new BoundArgument($binding);
+            }
+        }
+
+        $this->bindings = $bindings;
+
+        return $this;
+    }
+
+    /**
+     * Add an error that occurred when building this Definition.
+     *
+     * @param string $error
+     */
+    public function addError($error)
+    {
+        $this->errors[] = $error;
+    }
+
+    /**
+     * Returns any errors that occurred while building this Definition.
+     *
+     * @return array
+     */
+    public function getErrors()
+    {
+        return $this->errors;
     }
 }

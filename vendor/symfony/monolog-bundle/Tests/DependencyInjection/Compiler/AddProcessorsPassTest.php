@@ -11,6 +11,7 @@
 
 namespace Symfony\Bundle\MonologBundle\Tests\DependencyInjection\Compiler;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\MonologBundle\DependencyInjection\Compiler\AddProcessorsPass;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Definition;
@@ -18,7 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
-class AddProcessorsPassTest extends \PHPUnit_Framework_TestCase
+class AddProcessorsPassTest extends TestCase
 {
     public function testHandlerProcessors()
     {
@@ -42,18 +43,18 @@ class AddProcessorsPassTest extends \PHPUnit_Framework_TestCase
         $loader->load('monolog.xml');
 
         $definition = $container->getDefinition('monolog.logger_prototype');
-        $container->setDefinition('monolog.handler.test', new Definition('%monolog.handler.null.class%', array (100, false)));
-        $container->setDefinition('handler_test', new Definition('%monolog.handler.null.class%', array (100, false)));
+        $container->setDefinition('monolog.handler.test', new Definition('%monolog.handler.null.class%', array(100, false)));
+        $container->setDefinition('handler_test', new Definition('%monolog.handler.null.class%', array(100, false)));
         $container->setAlias('monolog.handler.test2', 'handler_test');
         $definition->addMethodCall('pushHandler', array(new Reference('monolog.handler.test')));
         $definition->addMethodCall('pushHandler', array(new Reference('monolog.handler.test2')));
 
         $service = new Definition('TestClass', array('false', new Reference('logger')));
-        $service->addTag('monolog.processor', array ('handler' => 'test'));
+        $service->addTag('monolog.processor', array('handler' => 'test'));
         $container->setDefinition('test', $service);
 
         $service = new Definition('TestClass', array('false', new Reference('logger')));
-        $service->addTag('monolog.processor', array ('handler' => 'test2'));
+        $service->addTag('monolog.processor', array('handler' => 'test2'));
         $container->setDefinition('test2', $service);
 
         $container->getCompilerPassConfig()->setOptimizationPasses(array());

@@ -1,21 +1,31 @@
 Plugins
 =======
 
-Plugins are provided with Swift Mailer and can be used to extend the behavior
-of the library in situations where using simple class inheritance would be more complex.
+Plugins exist to extend, or modify the behaviour of Swift Mailer. They respond
+to Events that are fired within the Transports during sending.
+
+There are a number of Plugins provided as part of the base Swift Mailer package
+and they all follow a common interface to respond to Events fired within the
+library. Interfaces are provided to "listen" to each type of Event fired and to
+act as desired when a listened-to Event occurs.
+
+Although several plugins are provided with Swift Mailer out-of-the-box, the
+Events system has been specifically designed to make it easy for experienced
+object-oriented developers to write their own plugins in order to achieve
+goals that may not be possible with the base library.
 
 AntiFlood Plugin
 ----------------
 
-Many SMTP servers have limits on the number of messages that may be sent
-during any single SMTP connection. The AntiFlood plugin provides a way to stay
-within this limit while still managing a large number of emails.
+Many SMTP servers have limits on the number of messages that may be sent during
+any single SMTP connection. The AntiFlood plugin provides a way to stay within
+this limit while still managing a large number of emails.
 
 A typical limit for a single connection is 100 emails. If the server you
-connect to imposes such a limit, it expects you to disconnect after that
-number of emails has been sent. You could manage this manually within a loop,
-but the AntiFlood plugin provides the necessary wrapper code so that you don't
-need to worry about this logic.
+connect to imposes such a limit, it expects you to disconnect after that number
+of emails has been sent. You could manage this manually within a loop, but the
+AntiFlood plugin provides the necessary wrapper code so that you don't need to
+worry about this logic.
 
 Regardless of limits imposed by the server, it's usually a good idea to be
 conservative with the resources of the SMTP server. Sending will become
@@ -38,29 +48,14 @@ The AntiFlood Plugin -- like all plugins -- is added with the Mailer class's
 ``registerPlugin()`` method. It takes two constructor parameters: the number of
 emails to pause after, and optionally the number of seconds to pause for.
 
-To use the AntiFlood plugin:
-
-* Create an instance of the Mailer using any Transport you choose.
-
-* Create an instance of the ``Swift_Plugins_AntiFloodPlugin`` class, passing
-  in one or two constructor parameters.
-
-* Register the plugin using the Mailer's ``registerPlugin()`` method.
-
-* Continue using Swift Mailer to send messages as normal.
-
-When Swift Mailer sends messages it will count the number of messages that
-have been sent since the last re-connect. Once the number hits your specified
-threshold it will disconnect and re-connect, optionally pausing for a
-specified amount of time.
-
-.. code-block:: php
-
-    require_once 'lib/swift_required.php';
+When Swift Mailer sends messages it will count the number of messages that have
+been sent since the last re-connect. Once the number hits your specified
+threshold it will disconnect and re-connect, optionally pausing for a specified
+amount of time::
 
     // Create the Mailer using any Transport
-    $mailer = Swift_Mailer::newInstance(
-      Swift_SmtpTransport::newInstance('smtp.example.org', 25)
+    $mailer = new Swift_Mailer(
+      new Swift_SmtpTransport('smtp.example.org', 25)
     );
 
     // Use AntiFlood to re-connect after 100 emails
@@ -83,9 +78,9 @@ If your SMTP server has restrictions in place to limit the rate at which you
 send emails, then your code will need to be aware of this rate-limiting. The
 Throttler plugin makes Swift Mailer run at a rate-limited speed.
 
-Many shared hosts don't open their SMTP servers as a free-for-all. Usually
-they have policies in place (probably to discourage spammers) that only allow
-you to send a fixed number of emails per-hour/day.
+Many shared hosts don't open their SMTP servers as a free-for-all. Usually they
+have policies in place (probably to discourage spammers) that only allow you to
+send a fixed number of emails per-hour/day.
 
 The Throttler plugin supports two modes of rate-limiting and with each, you
 will need to do that math to figure out the values you want. The plugin can
@@ -99,29 +94,14 @@ The Throttler Plugin -- like all plugins -- is added with the Mailer class'
 ``registerPlugin()`` method. It has two required constructor parameters that
 tell it how to do its rate-limiting.
 
-To use the Throttler plugin:
-
-* Create an instance of the Mailer using any Transport you choose.
-
-* Create an instance of the ``Swift_Plugins_ThrottlerPlugin`` class, passing
-  the number of emails, or bytes you wish to limit by, along with the mode
-  you're using.
-
-* Register the plugin using the Mailer's ``registerPlugin()`` method.
-
-* Continue using Swift Mailer to send messages as normal.
-
-When Swift Mailer sends messages it will keep track of the rate at which sending
-messages is occurring. If it realises that sending is happening too fast, it
-will cause your program to ``sleep()`` for enough time to average out the rate.
-
-.. code-block:: php
-
-    require_once 'lib/swift_required.php';
+When Swift Mailer sends messages it will keep track of the rate at which
+sending messages is occurring. If it realises that sending is happening too
+fast, it will cause your program to ``sleep()`` for enough time to average out
+the rate::
 
     // Create the Mailer using any Transport
-    $mailer = Swift_Mailer::newInstance(
-      Swift_SmtpTransport::newInstance('smtp.example.org', 25)
+    $mailer = new Swift_Mailer(
+      new Swift_SmtpTransport('smtp.example.org', 25)
     );
 
     // Rate limit to 100 emails per-minute
@@ -148,10 +128,10 @@ The Logger plugins helps with debugging during the process of sending. It can
 help to identify why an SMTP server is rejecting addresses, or any other
 hard-to-find problems that may arise.
 
-The Logger plugin comes in two parts. There's the plugin itself, along with
-one of a number of possible Loggers that you may choose to use. For example,
-the logger may output messages directly in realtime, or it may capture
-messages in an array.
+The Logger plugin comes in two parts. There's the plugin itself, along with one
+of a number of possible Loggers that you may choose to use. For example, the
+logger may output messages directly in realtime, or it may capture messages in
+an array.
 
 One other notable feature is the way in which the Logger plugin changes
 Exception messages. If Exceptions are being thrown but the error message does
@@ -164,8 +144,7 @@ own implementation is incredibly simple and is achieved by creating a short
 class that implements the ``Swift_Plugins_Logger`` interface.
 
 * ``Swift_Plugins_Loggers_ArrayLogger``: Keeps a collection of log messages
-  inside an array. The array content can be cleared or dumped out to the
-  screen.
+  inside an array. The array content can be cleared or dumped out to the screen.
 
 * ``Swift_Plugins_Loggers_EchoLogger``: Prints output to the screen in
   realtime. Handy for very rudimentary debug output.
@@ -177,34 +156,14 @@ The Logger Plugin -- like all plugins -- is added with the Mailer class'
 ``registerPlugin()`` method. It accepts an instance of ``Swift_Plugins_Logger``
 in its constructor.
 
-To use the Logger plugin:
-
-* Create an instance of the Mailer using any Transport you choose.
-
-* Create an instance of the a Logger implementation of
-  ``Swift_Plugins_Logger``.
-
-* Create an instance of the ``Swift_Plugins_LoggerPlugin`` class, passing the
-  created Logger instance to its constructor.
-
-* Register the plugin using the Mailer's ``registerPlugin()`` method.
-
-* Continue using Swift Mailer to send messages as normal.
-
-* Dump the contents of the log with the logger's ``dump()`` method.
-
 When Swift Mailer sends messages it will keep a log of all the interactions
 with the underlying Transport being used. Depending upon the Logger that has
-been used the behaviour will differ, but all implementations offer a way to
-get the contents of the log.
-
-.. code-block:: php
-
-    require_once 'lib/swift_required.php';
+been used the behaviour will differ, but all implementations offer a way to get
+the contents of the log::
 
     // Create the Mailer using any Transport
-    $mailer = Swift_Mailer::newInstance(
-     Swift_SmtpTransport::newInstance('smtp.example.org', 25)
+    $mailer = new Swift_Mailer(
+     new Swift_SmtpTransport('smtp.example.org', 25)
     );
 
     // To use the ArrayLogger
@@ -234,18 +193,18 @@ tiny variations such as the recipient's name being used inside the message
 body. The Decorator plugin aims to provide a solution for allowing these small
 differences.
 
-The decorator plugin works by intercepting the sending process of Swift
-Mailer, reading the email address in the To: field and then looking up a set
-of replacements for a template.
+The decorator plugin works by intercepting the sending process of Swift Mailer,
+reading the email address in the To: field and then looking up a set of
+replacements for a template.
 
 While the use of this plugin is simple, it is probably the most commonly
 misunderstood plugin due to the way in which it works. The typical mistake
 users make is to try registering the plugin multiple times (once for each
 recipient) -- inside a loop for example. This is incorrect.
 
-The Decorator plugin should be registered just once, but containing the list
-of all recipients prior to sending. It will use this list of recipients to
-find the required replacements during sending.
+The Decorator plugin should be registered just once, but containing the list of
+all recipients prior to sending. It will use this list of recipients to find
+the required replacements during sending.
 
 Using the Decorator Plugin
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -263,37 +222,33 @@ you'll be sending the message to.
     email addresses and whose values are an associative array of replacements
     for that email address. The curly braces used in this example can be any
     type of syntax you choose, provided they match the placeholders in your
-    email template.
+    email template::
 
-    .. code-block:: php
-
-        $replacements = array();
+        $replacements = [];
         foreach ($users as $user) {
-          $replacements[$user['email']] = array(
+          $replacements[$user['email']] = [
             '{username}'=>$user['username'],
-            '{password}'=>$user['password']
-          );
+            '{resetcode}'=>$user['resetcode']
+          ];
         }
 
 Now create an instance of the Decorator plugin using this array of replacements
 and then register it with the Mailer. Do this only once!
 
-.. code-block:: php
+::
 
     $decorator = new Swift_Plugins_DecoratorPlugin($replacements);
 
     $mailer->registerPlugin($decorator);
 
 When you create your message, replace elements in the body (and/or the subject
-line) with your placeholders.
+line) with your placeholders::
 
-.. code-block:: php
-
-    $message = Swift_Message::newInstance()
+    $message = (new Swift_Message())
       ->setSubject('Important notice for {username}')
       ->setBody(
-        "Hello {username}, we have reset your password to {password}\n" .
-        "Please log in and change it at your earliest convenience."
+        "Hello {username}, you requested to reset your password.\n" .
+        "Please visit https://example.com/pwreset and use the reset code {resetcode} to set a new password."
       )
       ;
 
@@ -310,8 +265,8 @@ this to one user:
 
     Subject: Important notice for smilingsunshine2009
 
-    Hello smilingsunshine2009, we have reset your password to rainyDays
-    Please log in and change it at your earliest convenience.
+    Hello smilingsunshine2009, you requested to reset your password.
+    Please visit https://example.com/pwreset and use the reset code 183457 to set a new password.
 
 While another use may receive the message as:
 
@@ -319,12 +274,12 @@ While another use may receive the message as:
 
     Subject: Important notice for billy-bo-bob
 
-    Hello billy-bo-bob, we have reset your password to dancingOctopus
-    Please log in and change it at your earliest convenience.
+    Hello billy-bo-bob, you requested to reset your password.
+    Please visit https://example.com/pwreset and use the reset code 539127 to set a new password.
 
 While the decorator plugin provides a means to solve this problem, there are
-various ways you could tackle this problem without the need for a plugin.
-We're trying to come up with a better way ourselves and while we have several
+various ways you could tackle this problem without the need for a plugin. We're
+trying to come up with a better way ourselves and while we have several
 (obvious) ideas we don't quite have the perfect solution to go ahead and
 implement it. Watch this space.
 
@@ -337,49 +292,46 @@ that performs replacement lookups on-the-fly you may provide your own
 implementation.
 
 Providing your own replacements lookup implementation for the Decorator is
-simply a matter of passing an instance of ``Swift_Plugins_Decorator_Replacements`` to the decorator plugin's constructor,
+simply a matter of passing an instance of
+``Swift_Plugins_Decorator_Replacements`` to the decorator plugin's constructor,
 rather than passing in an array.
 
 The Replacements interface is very simple to implement since it has just one
 method: ``getReplacementsFor($address)``.
 
 Imagine you want to look up replacements from a database on-the-fly, you might
-provide an implementation that does this. You need to create a small class.
-
-.. code-block:: php
+provide an implementation that does this. You need to create a small class::
 
     class DbReplacements implements Swift_Plugins_Decorator_Replacements {
       public function getReplacementsFor($address) {
-        $sql = sprintf(
-          "SELECT * FROM user WHERE email = '%s'",
-          mysql_real_escape_string($address)
+        global $db; // Your PDO instance with a connection to your database
+        $query = $db->prepare(
+          "SELECT * FROM `users` WHERE `email` = ?"
         );
 
-        $result = mysql_query($sql);
+        $query->execute([$address]);
 
-        if ($row = mysql_fetch_assoc($result)) {
-          return array(
+        if ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+          return [
             '{username}'=>$row['username'],
-            '{password}'=>$row['password']
-          );
+            '{resetcode}'=>$row['resetcode']
+          ];
         }
       }
     }
 
 Now all you need to do is pass an instance of your class into the Decorator
-plugin's constructor instead of passing an array.
-
-.. code-block:: php
+plugin's constructor instead of passing an array::
 
     $decorator = new Swift_Plugins_DecoratorPlugin(new DbReplacements());
 
     $mailer->registerPlugin($decorator);
 
-For each message sent, the plugin will call your class' ``getReplacementsFor()``
-method to find the array of replacements it needs.
+For each message sent, the plugin will call your class'
+``getReplacementsFor()`` method to find the array of replacements it needs.
 
 .. note::
 
     If your lookup algorithm is case sensitive, you should transform the
-    ``$address`` argument as appropriate -- for example by passing it
-    through ``strtolower()``.
+    ``$address`` argument as appropriate -- for example by passing it through
+    ``strtolower()``.

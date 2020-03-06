@@ -15,11 +15,12 @@ namespace PhpCsFixer\Fixer\ClassNotation;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
 use PhpCsFixer\Fixer\WhitespacesAwareFixerInterface;
+use PhpCsFixer\FixerConfiguration\AllowedValueSubset;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverRootless;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
-use PhpCsFixer\FixerConfiguration\FixerOptionValidatorGenerator;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Preg;
 use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
@@ -95,17 +96,13 @@ final class Example
      */
     protected function createConfigurationDefinition()
     {
-        $generator = new FixerOptionValidatorGenerator();
-
         $values = array('const', 'property');
 
         $elements = new FixerOptionBuilder('elements', 'List of strings which element should be modified.');
         $elements = $elements
             ->setDefault($values)
             ->setAllowedTypes(array('array'))
-            ->setAllowedValues(array(
-                $generator->allowedValueIsSubsetOf($values),
-            ))
+            ->setAllowedValues(array(new AllowedValueSubset($values)))
             ->getOption()
         ;
 
@@ -163,7 +160,7 @@ final class Example
         $divisionContent = null;
         if ($tokens[$startIndex - 1]->isWhitespace()) {
             $divisionContent = $tokens[$startIndex - 1]->getContent();
-            if (preg_match('#(\n|\r\n)#', $divisionContent, $matches)) {
+            if (Preg::match('#(\n|\r\n)#', $divisionContent, $matches)) {
                 $divisionContent = $matches[0].trim($divisionContent, "\r\n");
             }
         }
@@ -173,12 +170,14 @@ final class Example
             $token = $tokens[$i];
 
             if ($token->equals(')')) {
-                $i = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $i, false);
+                $i = $tokens->findBlockStart(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $i);
+
                 continue;
             }
 
             if ($token->isGivenKind(CT::T_ARRAY_SQUARE_BRACE_CLOSE)) {
-                $i = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_ARRAY_SQUARE_BRACE, $i, false);
+                $i = $tokens->findBlockStart(Tokens::BLOCK_TYPE_ARRAY_SQUARE_BRACE, $i);
+
                 continue;
             }
 
@@ -186,12 +185,12 @@ final class Example
                 continue;
             }
 
-            $token->setContent(';');
+            $tokens[$i] = new Token(';');
             if ($tokens[$i + 1]->isWhitespace()) {
-                $tokens[$i + 1]->clear();
+                $tokens->clearAt($i + 1);
             }
 
-            if ($divisionContent) {
+            if (null !== $divisionContent && '' !== $divisionContent) {
                 $tokens->insertAt($i + 1, new Token(array(T_WHITESPACE, $divisionContent)));
             }
 

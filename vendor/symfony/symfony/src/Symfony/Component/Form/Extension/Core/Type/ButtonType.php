@@ -26,14 +26,7 @@ class ButtonType extends BaseType implements ButtonTypeInterface
      */
     public function getParent()
     {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return $this->getBlockPrefix();
+        return null;
     }
 
     /**
@@ -51,8 +44,6 @@ class ButtonType extends BaseType implements ButtonTypeInterface
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
-            'auto_initialize' => false,
-        ));
+        $resolver->setDefault('auto_initialize', false);
     }
 }

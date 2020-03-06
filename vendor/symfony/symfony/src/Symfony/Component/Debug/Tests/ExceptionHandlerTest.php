@@ -12,10 +12,10 @@
 namespace Symfony\Component\Debug\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\Debug\Exception\OutOfMemoryException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 require_once __DIR__.'/HeaderMock.php';
 
@@ -39,8 +39,8 @@ class ExceptionHandlerTest extends TestCase
         $handler->sendPhpResponse(new \RuntimeException('Foo'));
         $response = ob_get_clean();
 
-        $this->assertContains('<h1>Whoops, looks like something went wrong.</h1>', $response);
-        $this->assertNotContains('<h2 class="block_exception clear_fix">', $response);
+        $this->assertStringContainsString('Whoops, looks like something went wrong.', $response);
+        $this->assertStringNotContainsString('<div class="trace trace-as-html">', $response);
 
         $handler = new ExceptionHandler(true);
 
@@ -48,8 +48,8 @@ class ExceptionHandlerTest extends TestCase
         $handler->sendPhpResponse(new \RuntimeException('Foo'));
         $response = ob_get_clean();
 
-        $this->assertContains('<h1>Whoops, looks like something went wrong.</h1>', $response);
-        $this->assertContains('<h2 class="block_exception clear_fix">', $response);
+        $this->assertStringContainsString('Whoops, looks like something went wrong.', $response);
+        $this->assertStringContainsString('<div class="trace trace-as-html">', $response);
     }
 
     public function testStatusCode()
@@ -60,12 +60,12 @@ class ExceptionHandlerTest extends TestCase
         $handler->sendPhpResponse(new NotFoundHttpException('Foo'));
         $response = ob_get_clean();
 
-        $this->assertContains('Sorry, the page you are looking for could not be found.', $response);
+        $this->assertStringContainsString('Sorry, the page you are looking for could not be found.', $response);
 
-        $expectedHeaders = array(
-            array('HTTP/1.0 404', true, null),
-            array('Content-Type: text/html; charset=iso8859-1', true, null),
-        );
+        $expectedHeaders = [
+            ['HTTP/1.0 404', true, null],
+            ['Content-Type: text/html; charset=iso8859-1', true, null],
+        ];
 
         $this->assertSame($expectedHeaders, testHeader());
     }
@@ -75,14 +75,14 @@ class ExceptionHandlerTest extends TestCase
         $handler = new ExceptionHandler(false, 'iso8859-1');
 
         ob_start();
-        $handler->sendPhpResponse(new MethodNotAllowedHttpException(array('POST')));
-        $response = ob_get_clean();
+        $handler->sendPhpResponse(new MethodNotAllowedHttpException(['POST']));
+        ob_get_clean();
 
-        $expectedHeaders = array(
-            array('HTTP/1.0 405', true, null),
-            array('Allow: POST', false, null),
-            array('Content-Type: text/html; charset=iso8859-1', true, null),
-        );
+        $expectedHeaders = [
+            ['HTTP/1.0 405', true, null],
+            ['Allow: POST', false, null],
+            ['Content-Type: text/html; charset=iso8859-1', true, null],
+        ];
 
         $this->assertSame($expectedHeaders, testHeader());
     }
@@ -94,42 +94,70 @@ class ExceptionHandlerTest extends TestCase
         $handler->sendPhpResponse(new \RuntimeException('Foo', 0, new \RuntimeException('Bar')));
         $response = ob_get_clean();
 
-        $this->assertStringMatchesFormat('%A<span class="exception_message">Foo</span>%A<span class="exception_message">Bar</span>%A', $response);
+        $this->assertStringMatchesFormat('%A<p class="break-long-words trace-message">Foo</p>%A<p class="break-long-words trace-message">Bar</p>%A', $response);
     }
 
     public function testHandle()
     {
-        $exception = new \Exception('foo');
+        $handler = new ExceptionHandler(true);
+        ob_start();
 
-        $handler = $this->getMockBuilder('Symfony\Component\Debug\ExceptionHandler')->setMethods(array('sendPhpResponse'))->getMock();
-        $handler
-            ->expects($this->exactly(2))
-            ->method('sendPhpResponse');
+        $handler->handle(new \Exception('foo'));
 
-        $handler->handle($exception);
+        $this->assertThatTheExceptionWasOutput(ob_get_clean(), \Exception::class, 'Exception', 'foo');
+    }
 
-        $that = $this;
-        $handler->setHandler(function ($e) use ($exception, $that) {
-            $that->assertSame($exception, $e);
+    public function testHandleWithACustomHandlerThatOutputsSomething()
+    {
+        $handler = new ExceptionHandler(true);
+        ob_start();
+        $handler->setHandler(function () {
+            echo 'ccc';
         });
 
-        $handler->handle($exception);
+        $handler->handle(new \Exception());
+        ob_end_flush(); // Necessary because of this PHP bug : https://bugs.php.net/76563
+        $this->assertSame('ccc', ob_get_clean());
+    }
+
+    public function testHandleWithACustomHandlerThatOutputsNothing()
+    {
+        $handler = new ExceptionHandler(true);
+        $handler->setHandler(function () {});
+
+        $handler->handle(new \Exception('ccc'));
+
+        $this->assertThatTheExceptionWasOutput(ob_get_clean(), \Exception::class, 'Exception', 'ccc');
+    }
+
+    public function testHandleWithACustomHandlerThatFails()
+    {
+        $handler = new ExceptionHandler(true);
+        $handler->setHandler(function () {
+            throw new \RuntimeException();
+        });
+
+        $handler->handle(new \Exception('ccc'));
+
+        $this->assertThatTheExceptionWasOutput(ob_get_clean(), \Exception::class, 'Exception', 'ccc');
     }
 
     public function testHandleOutOfMemoryException()
     {
-        $exception = new OutOfMemoryException('foo', 0, E_ERROR, __FILE__, __LINE__);
-
-        $handler = $this->getMockBuilder('Symfony\Component\Debug\ExceptionHandler')->setMethods(array('sendPhpResponse'))->getMock();
-        $handler
-            ->expects($this->once())
-            ->method('sendPhpResponse');
-
-        $that = $this;
-        $handler->setHandler(function ($e) use ($that) {
-            $that->fail('OutOfMemoryException should bypass the handler');
+        $handler = new ExceptionHandler(true);
+        ob_start();
+        $handler->setHandler(function () {
+            $this->fail('OutOfMemoryException should bypass the handler');
         });
 
-        $handler->handle($exception);
+        $handler->handle(new OutOfMemoryException('foo', 0, E_ERROR, __FILE__, __LINE__));
+
+        $this->assertThatTheExceptionWasOutput(ob_get_clean(), OutOfMemoryException::class, 'OutOfMemoryException', 'foo');
+    }
+
+    private function assertThatTheExceptionWasOutput($content, $expectedClass, $expectedTitle, $expectedMessage)
+    {
+        $this->assertStringContainsString(sprintf('<span class="exception_title"><abbr title="%s">%s</abbr></span>', $expectedClass, $expectedTitle), $content);
+        $this->assertStringContainsString(sprintf('<p class="break-long-words trace-message">%s</p>', $expectedMessage), $content);
     }
 }

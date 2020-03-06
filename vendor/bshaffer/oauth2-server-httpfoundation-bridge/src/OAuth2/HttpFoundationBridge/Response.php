@@ -8,7 +8,7 @@ use OAuth2\ResponseInterface;
 /**
  *
  */
- class Response extends JsonResponse implements ResponseInterface
+class Response extends JsonResponse implements ResponseInterface
  {
     public function addParameters(array $parameters)
     {
@@ -59,10 +59,18 @@ use OAuth2\ResponseInterface;
         if ($params) {
             // add the params to the URL
             $parts = parse_url($url);
-            $sep = isset($parts['query']) && count($parts['query']) > 0 ? '&' : '?';
+            $sep = isset($parts['query']) && !empty($parts['query']) ? '&' : '?';
             $url .= $sep . http_build_query($params);
         }
 
         $this->headers->set('Location', $url);
     }
- }
+
+    /**
+     * @param int $statusCode
+     */
+    public function setStatusCode($statusCode, $text = null)
+    {
+        return parent::setStatusCode($statusCode);
+    }
+}

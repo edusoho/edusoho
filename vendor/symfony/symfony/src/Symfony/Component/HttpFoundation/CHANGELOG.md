@@ -1,6 +1,43 @@
 CHANGELOG
 =========
 
+3.4.14
+------
+
+ * [BC BREAK] Support for the IIS-only `X_ORIGINAL_URL` and `X_REWRITE_URL`
+   HTTP headers has been dropped for security reasons.
+
+3.4.0
+-----
+
+ * implemented PHP 7.0's `SessionUpdateTimestampHandlerInterface` with a new
+   `AbstractSessionHandler` base class and a new `StrictSessionHandler` wrapper
+ * deprecated the `WriteCheckSessionHandler`, `NativeSessionHandler` and `NativeProxy` classes
+ * deprecated setting session save handlers that do not implement `\SessionHandlerInterface` in `NativeSessionStorage::setSaveHandler()`
+ * deprecated using `MongoDbSessionHandler` with the legacy mongo extension; use it with the mongodb/mongodb package and ext-mongodb instead
+ * deprecated `MemcacheSessionHandler`; use `MemcachedSessionHandler` instead
+
+3.3.0
+-----
+
+ * the `Request::setTrustedProxies()` method takes a new `$trustedHeaderSet` argument,
+   see https://symfony.com/doc/current/deployment/proxies.html for more info,
+ * deprecated the `Request::setTrustedHeaderName()` and `Request::getTrustedHeaderName()` methods,
+ * added `File\Stream`, to be passed to `BinaryFileResponse` when the size of the served file is unknown,
+   disabling `Range` and `Content-Length` handling, switching to chunked encoding instead
+ * added the `Cookie::fromString()` method that allows to create a cookie from a
+   raw header string
+
+3.1.0
+-----
+
+ * Added support for creating `JsonResponse` with a string of JSON data
+
+3.0.0
+-----
+
+ * The precedence of parameters returned from `Request::get()` changed from "GET, PATH, BODY" to "PATH, GET, BODY"
+
 2.8.0
 -----
 
@@ -107,10 +144,10 @@ CHANGELOG
  * Added `FlashBag`. Flashes expire when retrieved by `get()` or `all()`. This
    implementation is ESI compatible.
  * Added `AutoExpireFlashBag` (default) to replicate Symfony 2.0.x auto expire
-   behaviour of messages auto expiring after one page page load.  Messages must
+   behavior of messages auto expiring after one page page load.  Messages must
    be retrieved by `get()` or `all()`.
  * Added `Symfony\Component\HttpFoundation\Attribute\AttributeBag` to replicate
-   attributes storage behaviour from 2.0.x (default).
+   attributes storage behavior from 2.0.x (default).
  * Added `Symfony\Component\HttpFoundation\Attribute\NamespacedAttributeBag` for
    namespace session attributes.
  * Flash API can stores messages in an array so there may be multiple messages

@@ -11,56 +11,27 @@
 
 namespace Symfony\Bundle\FrameworkBundle\Translation;
 
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Translation\MessageCatalogue;
-use Symfony\Component\Translation\Loader\LoaderInterface;
+use Symfony\Component\Translation\Reader\TranslationReader;
 
 /**
- * TranslationLoader loads translation messages from translation files.
- *
- * @author Michel Salib <michelsalib@hotmail.com>
+ * @deprecated since version 3.4 and will be removed in 4.0. Use Symfony\Component\Translation\Reader\TranslationReader instead
  */
-class TranslationLoader
+class TranslationLoader extends TranslationReader
 {
-    /**
-     * Loaders used for import.
-     *
-     * @var array
-     */
-    private $loaders = array();
-
-    /**
-     * Adds a loader to the translation extractor.
-     *
-     * @param string          $format The format of the loader
-     * @param LoaderInterface $loader
-     */
-    public function addLoader($format, LoaderInterface $loader)
+    public function __construct()
     {
-        $this->loaders[$format] = $loader;
+        @trigger_error(sprintf('The class "%s" is deprecated since Symfony 3.4 and will be removed in 4.0. Use "%s" instead. ', self::class, TranslationReader::class), E_USER_DEPRECATED);
     }
 
     /**
      * Loads translation messages from a directory to the catalogue.
      *
-     * @param string           $directory the directory to look into
-     * @param MessageCatalogue $catalogue the catalogue
+     * @param string           $directory The directory to look into
+     * @param MessageCatalogue $catalogue The catalogue
      */
     public function loadMessages($directory, MessageCatalogue $catalogue)
     {
-        if (!is_dir($directory)) {
-            return;
-        }
-
-        foreach ($this->loaders as $format => $loader) {
-            // load any existing translation files
-            $finder = new Finder();
-            $extension = $catalogue->getLocale().'.'.$format;
-            $files = $finder->files()->name('*.'.$extension)->in($directory);
-            foreach ($files as $file) {
-                $domain = substr($file->getFilename(), 0, -1 * strlen($extension) - 1);
-                $catalogue->addCatalogue($loader->load($file->getPathname(), $catalogue->getLocale(), $domain));
-            }
-        }
+        $this->read($directory, $catalogue);
     }
 }

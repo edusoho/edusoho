@@ -319,12 +319,12 @@ class CaptchaBuilder implements CaptchaBuilderInterface
     {
         $length = strlen($phrase);
         if ($length === 0) {
-            return imagecolorallocate($image, 0, 0, 0);
+            return \imagecolorallocate($image, 0, 0, 0);
         }
 
         // Gets the text size and start position
         $size = $width / $length - $this->rand(0, 3) - 1;
-        $box = imagettfbbox($size, 0, $font, $phrase);
+        $box = \imagettfbbox($size, 0, $font, $phrase);
         $textWidth = $box[2] - $box[0];
         $textHeight = $box[1] - $box[7];
         $x = ($width - $textWidth) / 2;
@@ -335,15 +335,15 @@ class CaptchaBuilder implements CaptchaBuilderInterface
         } else {
             $textColor = $this->textColor;
         }
-        $col = imagecolorallocate($image, $textColor[0], $textColor[1], $textColor[2]);
+        $col = \imagecolorallocate($image, $textColor[0], $textColor[1], $textColor[2]);
 
         // Write the letters one by one, with random angle
         for ($i=0; $i<$length; $i++) {
-            $box = imagettfbbox($size, 0, $font, $phrase[$i]);
+            $box = \imagettfbbox($size, 0, $font, $phrase[$i]);
             $w = $box[2] - $box[0];
             $angle = $this->rand(-$this->maxAngle, $this->maxAngle);
             $offset = $this->rand(-$this->maxOffset, $this->maxOffset);
-            imagettftext($image, $size, $angle, $x, $y + $offset, $col, $font, $phrase[$i]);
+            \imagettftext($image, $size, $angle, $x, $y + $offset, $col, $font, $phrase[$i]);
             $x += $w;
         }
 

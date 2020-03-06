@@ -16,11 +16,11 @@ class Swift_Transport_StreamBuffer_ProcessAcceptanceTest extends Swift_Transport
         parent::setUp();
     }
 
-    protected function _initializeBuffer()
+    protected function initializeBuffer()
     {
-        $this->_buffer->initialize(array(
+        $this->buffer->initialize([
             'type' => Swift_Transport_IoBuffer::TYPE_PROCESS,
             'command' => SWIFT_SENDMAIL_PATH.' -bs',
-        ));
+        ]);
     }
 }

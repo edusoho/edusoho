@@ -1,30 +1,42 @@
 language: php
+sudo: false
 
 php:
-  - 5.3
   - 5.4
   - 5.5
   - 5.6
   - 7.0
+  - 7.1
   - hhvm
 
 matrix:
+  include:
+    - php: 5.3
+      dist: precise
+    - php: 5.3
+      env: COMPOSER_OPTIONS="--prefer-lowest"
+      dist: precise
+    - php: 7.0
+      env: COMPOSER_OPTIONS="--prefer-lowest"
+    - php: 7.1
+      env: TEST_COVERAGE=true
   allow_failures:
     - php: hhvm
-    - php: 7.0
   fast_finish: true
-
-sudo: false
 
 cache:
   directories:
-    - $HOME/.composer/cache
+    - $HOME/.composer/cache/files
 
 before_install:
   - composer self-update
+  - if [[ $TEST_COVERAGE ]]; then PHPUNIT_FLAGS="--coverage-clover clover.xml"; fi
 
-install: travis_retry composer install --no-interaction --prefer-source
+install: travis_retry composer update --no-interaction --prefer-dist --prefer-stable $COMPOSER_OPTIONS
 
 script:
+  - vendor/bin/phpunit -v $PHPUNIT_FLAGS
   - vendor/bin/php-cs-fixer fix --config-file=.php_cs --verbose --diff --dry-run
-  - vendor/bin/phpunit
+
+after_success:
+  - if [[ $TEST_COVERAGE ]]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover clover.xml; fi

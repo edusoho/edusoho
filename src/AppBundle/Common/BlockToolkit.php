@@ -63,10 +63,13 @@ class BlockToolkit
 
     public static function render($block, $container)
     {
-        if (!$container->isScopeActive('request')) {
-            $container->enterScope('request');
-            $container->set('request', new Request(), 'request');
-        }
+        /**
+         * @deprecated isScopeActive deprecated
+         */
+//        if (!$container->isScopeActive('request')) {
+//            $container->enterScope('request');
+//            $container->set('request', new Request(), 'request');
+//        }
 
         if (empty($block['templateName']) || empty($block['data'])) {
             return '';

@@ -21,7 +21,7 @@ class HTMLPurifier_Config
      * HTML Purifier's version
      * @type string
      */
-    public $version = '4.9.2';
+    public $version = '4.12.0';
 
     /**
      * Whether or not to automatically finalize
@@ -333,7 +333,7 @@ class HTMLPurifier_Config
         }
 
         // Raw type might be negative when using the fully optimized form
-        // of stdclass, which indicates allow_null == true
+        // of stdClass, which indicates allow_null == true
         $rtype = is_int($def) ? $def : $def->type;
         if ($rtype < 0) {
             $type = -$rtype;
@@ -890,7 +890,7 @@ class HTMLPurifier_Config
             // zip(tail(trace), trace) -- but PHP is not Haskell har har
             for ($i = 0, $c = count($trace); $i < $c - 1; $i++) {
                 // XXX this is not correct on some versions of HTML Purifier
-                if ($trace[$i + 1]['class'] === 'HTMLPurifier_Config') {
+                if (isset($trace[$i + 1]['class']) && $trace[$i + 1]['class'] === 'HTMLPurifier_Config') {
                     continue;
                 }
                 $frame = $trace[$i];

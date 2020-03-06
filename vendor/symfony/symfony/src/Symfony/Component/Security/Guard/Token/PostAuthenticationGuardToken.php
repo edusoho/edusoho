@@ -12,7 +12,7 @@
 namespace Symfony\Component\Security\Guard\Token;
 
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
-use Symfony\Component\Security\Core\Role\RoleInterface;
+use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -28,9 +28,9 @@ class PostAuthenticationGuardToken extends AbstractToken implements GuardTokenIn
     private $providerKey;
 
     /**
-     * @param UserInterface            $user        The user!
-     * @param string                   $providerKey The provider (firewall) key
-     * @param RoleInterface[]|string[] $roles       An array of roles
+     * @param UserInterface   $user        The user!
+     * @param string          $providerKey The provider (firewall) key
+     * @param (Role|string)[] $roles       An array of roles
      *
      * @throws \InvalidArgumentException
      */
@@ -47,7 +47,7 @@ class PostAuthenticationGuardToken extends AbstractToken implements GuardTokenIn
 
         // this token is meant to be used after authentication success, so it is always authenticated
         // you could set it as non authenticated later if you need to
-        parent::setAuthenticated(true);
+        $this->setAuthenticated(true);
     }
 
     /**
@@ -58,7 +58,7 @@ class PostAuthenticationGuardToken extends AbstractToken implements GuardTokenIn
      */
     public function getCredentials()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -76,7 +76,9 @@ class PostAuthenticationGuardToken extends AbstractToken implements GuardTokenIn
      */
     public function serialize()
     {
-        return serialize(array($this->providerKey, parent::serialize()));
+        $serialized = [$this->providerKey, parent::serialize(true)];
+
+        return $this->doSerialize($serialized, \func_num_args() ? func_get_arg(0) : null);
     }
 
     /**
@@ -84,7 +86,7 @@ class PostAuthenticationGuardToken extends AbstractToken implements GuardTokenIn
      */
     public function unserialize($serialized)
     {
-        list($this->providerKey, $parentStr) = unserialize($serialized);
+        list($this->providerKey, $parentStr) = \is_array($serialized) ? $serialized : unserialize($serialized);
         parent::unserialize($parentStr);
     }
 }

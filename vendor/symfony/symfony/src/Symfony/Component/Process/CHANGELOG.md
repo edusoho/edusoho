@@ -1,6 +1,23 @@
 CHANGELOG
 =========
 
+3.4.0
+-----
+
+ * deprecated the ProcessBuilder class
+ * deprecated calling `Process::start()` without setting a valid working directory beforehand (via `setWorkingDirectory()` or constructor)
+
+3.3.0
+-----
+
+ * added command line arrays in the `Process` class
+ * added `$env` argument to `Process::start()`, `run()`, `mustRun()` and `restart()` methods
+ * deprecated the `ProcessUtils::escapeArgument()` method
+ * deprecated not inheriting environment variables
+ * deprecated configuring `proc_open()` options
+ * deprecated configuring enhanced Windows compatibility
+ * deprecated configuring enhanced sigchild compatibility
+
 2.5.0
 -----
 

@@ -11,64 +11,56 @@
 
 namespace Symfony\Bridge\Twig\Tests\Extension;
 
-use Symfony\Component\Form\FormView;
-use Symfony\Bridge\Twig\Form\TwigRenderer;
-use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
-use Symfony\Component\Form\Tests\AbstractTableLayoutTest;
-use Symfony\Bridge\Twig\Tests\Extension\Fixtures\StubTranslator;
+use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Bridge\Twig\Tests\Extension\Fixtures\StubFilesystemLoader;
+use Symfony\Bridge\Twig\Tests\Extension\Fixtures\StubTranslator;
+use Symfony\Component\Form\FormRenderer;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\Tests\AbstractTableLayoutTest;
+use Twig\Environment;
 
 class FormExtensionTableLayoutTest extends AbstractTableLayoutTest
 {
+    use RuntimeLoaderProvider;
+
     /**
-     * @var FormExtension
+     * @var FormRenderer
      */
-    protected $extension;
+    private $renderer;
 
-    protected $testableFeatures = array(
-        'choice_attr',
-    );
+    protected static $supportedFeatureSetVersion = 304;
 
-    protected function setUp()
+    /**
+     * @before
+     */
+    public function doSetUp()
     {
-        parent::setUp();
-
-        $rendererEngine = new TwigRendererEngine(array(
-            'form_table_layout.html.twig',
-            'custom_widgets.html.twig',
-        ));
-        $renderer = new TwigRenderer($rendererEngine, $this->getMockBuilder('Symfony\Component\Security\Csrf\CsrfTokenManagerInterface')->getMock());
-
-        $this->extension = new FormExtension($renderer);
-
-        $loader = new StubFilesystemLoader(array(
+        $loader = new StubFilesystemLoader([
             __DIR__.'/../../Resources/views/Form',
             __DIR__.'/Fixtures/templates/form',
-        ));
+        ]);
 
-        $environment = new \Twig_Environment($loader, array('strict_variables' => true));
+        $environment = new Environment($loader, ['strict_variables' => true]);
         $environment->addExtension(new TranslationExtension(new StubTranslator()));
         $environment->addGlobal('global', '');
-        $environment->addExtension($this->extension);
+        $environment->addExtension(new FormExtension());
 
-        $this->extension->initRuntime($environment);
-    }
-
-    protected function tearDown()
-    {
-        parent::tearDown();
-
-        $this->extension = null;
+        $rendererEngine = new TwigRendererEngine([
+            'form_table_layout.html.twig',
+            'custom_widgets.html.twig',
+        ], $environment);
+        $this->renderer = new FormRenderer($rendererEngine, $this->getMockBuilder('Symfony\Component\Security\Csrf\CsrfTokenManagerInterface')->getMock());
+        $this->registerTwigRuntimeLoader($environment, $this->renderer);
     }
 
     public function testStartTagHasNoActionAttributeWhenActionIsEmpty()
     {
-        $form = $this->factory->create('Symfony\Component\Form\Extension\Core\Type\FormType', null, array(
+        $form = $this->factory->create('Symfony\Component\Form\Extension\Core\Type\FormType', null, [
             'method' => 'get',
             'action' => '',
-        ));
+        ]);
 
         $html = $this->renderStart($form->createView());
 
@@ -77,67 +69,62 @@ class FormExtensionTableLayoutTest extends AbstractTableLayoutTest
 
     public function testStartTagHasActionAttributeWhenActionIsZero()
     {
-        $form = $this->factory->create('Symfony\Component\Form\Extension\Core\Type\FormType', null, array(
+        $form = $this->factory->create('Symfony\Component\Form\Extension\Core\Type\FormType', null, [
             'method' => 'get',
             'action' => '0',
-        ));
+        ]);
 
         $html = $this->renderStart($form->createView());
 
         $this->assertSame('<form name="form" method="get" action="0">', $html);
     }
 
-    protected function renderForm(FormView $view, array $vars = array())
+    protected function renderForm(FormView $view, array $vars = [])
     {
-        return (string) $this->extension->renderer->renderBlock($view, 'form', $vars);
+        return (string) $this->renderer->renderBlock($view, 'form', $vars);
     }
 
-    protected function renderEnctype(FormView $view)
+    protected function renderLabel(FormView $view, $label = null, array $vars = [])
     {
-        return (string) $this->extension->renderer->searchAndRenderBlock($view, 'enctype');
-    }
-
-    protected function renderLabel(FormView $view, $label = null, array $vars = array())
-    {
-        if ($label !== null) {
-            $vars += array('label' => $label);
+        if (null !== $label) {
+            $vars += ['label' => $label];
         }
 
-        return (string) $this->extension->renderer->searchAndRenderBlock($view, 'label', $vars);
+        return (string) $this->renderer->searchAndRenderBlock($view, 'label', $vars);
     }
 
     protected function renderErrors(FormView $view)
     {
-        return (string) $this->extension->renderer->searchAndRenderBlock($view, 'errors');
+        return (string) $this->renderer->searchAndRenderBlock($view, 'errors');
     }
 
-    protected function renderWidget(FormView $view, array $vars = array())
+    protected function renderWidget(FormView $view, array $vars = [])
     {
-        return (string) $this->extension->renderer->searchAndRenderBlock($view, 'widget', $vars);
+        return (string) $this->renderer->searchAndRenderBlock($view, 'widget', $vars);
     }
 
-    protected function renderRow(FormView $view, array $vars = array())
+    protected function renderRow(FormView $view, array $vars = [])
     {
-        return (string) $this->extension->renderer->searchAndRenderBlock($view, 'row', $vars);
+        return (string) $this->renderer->searchAndRenderBlock($view, 'row', $vars);
     }
 
-    protected function renderRest(FormView $view, array $vars = array())
+    protected function renderRest(FormView $view, array $vars = [])
     {
-        return (string) $this->extension->renderer->searchAndRenderBlock($view, 'rest', $vars);
+        return (string) $this->renderer->searchAndRenderBlock($view, 'rest', $vars);
     }
 
-    protected function renderStart(FormView $view, array $vars = array())
+    protected function renderStart(FormView $view, array $vars = [])
     {
-        return (string) $this->extension->renderer->renderBlock($view, 'form_start', $vars);
+        return (string) $this->renderer->renderBlock($view, 'form_start', $vars);
     }
 
-    protected function renderEnd(FormView $view, array $vars = array())
+    protected function renderEnd(FormView $view, array $vars = [])
     {
-        return (string) $this->extension->renderer->renderBlock($view, 'form_end', $vars);
+        return (string) $this->renderer->renderBlock($view, 'form_end', $vars);
     }
 
-    protected function setTheme(FormView $view, array $themes)
+    protected function setTheme(FormView $view, array $themes, $useDefaultThemes = true)
     {
-        $this->extension->renderer->setTheme($view, $themes);
+        $this->renderer->setTheme($view, $themes, $useDefaultThemes);
     }
 }

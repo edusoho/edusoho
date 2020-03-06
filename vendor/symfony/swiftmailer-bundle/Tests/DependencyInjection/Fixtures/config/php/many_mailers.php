@@ -16,7 +16,7 @@ $container->loadFromExtension('swiftmailer', array(
             'local_domain' => 'first.example.org',
             'logging' => true,
             'sender_address' => 'first-sender@example.org',
-            'delivery_address' => 'first@example.org',
+            'delivery_addresses' => ['first@example.org'],
             'delivery_whitelist' => array(
                 '/firstfoo@.*/',
                 '/.*@firstbar.com$/',
@@ -37,7 +37,7 @@ $container->loadFromExtension('swiftmailer', array(
             'spool' => array(
                 'type' => 'memory',
                 ),
-            'delivery_address' => 'secondary@example.org',
+            'delivery_addresses' => ['secondary@example.org'],
             'delivery_whitelist' => array(
                 '/secondaryfoo@.*/',
                 '/.*@secondarybar.com$/',
@@ -59,7 +59,7 @@ $container->loadFromExtension('swiftmailer', array(
                 'type' => 'file',
                 ),
             'sender_address' => 'third-sender@example.org',
-            'delivery_address' => 'third@example.org',
+            'delivery_addresses' => ['third@example.org'],
             'delivery_whitelist' => array(
                 '/thirdfoo@.*/',
                 '/.*@thirdbar.com$/',

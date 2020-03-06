@@ -11,7 +11,7 @@ Spyc supports YAML 1.0 specification.
 
 Using Spyc is trivial:
 
-```
+```php
 <?php
 require_once "spyc.php";
 $Data = Spyc::YAMLLoad('spyc.yaml');
@@ -19,7 +19,7 @@ $Data = Spyc::YAMLLoad('spyc.yaml');
 
 or (if you prefer functional syntax)
 
-```
+```php
 <?php
 require_once "spyc.php";
 $Data = spyc_load_file('spyc.yaml');

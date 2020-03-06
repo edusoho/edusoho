@@ -50,8 +50,6 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
 
         $apply['ids'] = explode(',', $apply['ids']);
 
-        $apply['money'] *= 100;
-
         $apply['sn'] = $this->generateSn();
 
         return $apply;
@@ -133,7 +131,7 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
             'company_address' => '',
             'company_mobile' => '',
             'bank' => '',
-            'account' => ',',
+            'account' => ','
         ));
 
         $invoice = $this->getInvoiceDao()->update($id, $fields);

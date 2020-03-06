@@ -12,62 +12,23 @@
 namespace Sensio\Bundle\FrameworkExtraBundle\Tests\DependencyInjection;
 
 use Sensio\Bundle\FrameworkExtraBundle\DependencyInjection\SensioFrameworkExtraExtension;
-use Sensio\Bundle\FrameworkExtraBundle\DependencyInjection\Compiler\LegacyPass;
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
-class SensioFrameworkExtraExtensionTest extends \PHPUnit_Framework_TestCase
+class SensioFrameworkExtraExtensionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @group legacy
-     */
-    public function testLegacySecurityListener()
-    {
-        if (interface_exists('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')) {
-            $this->markTestSkipped();
-        }
-
-        $this->iniSet('error_reporting', -1 & ~E_USER_DEPRECATED);
-
-        $container = new ContainerBuilder();
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../Resources/config'));
-        $loader->load('security.xml');
-        $r = new \ReflectionClass('Symfony\Bundle\SecurityBundle\SecurityBundle');
-        $loader = new XmlFileLoader($container, new FileLocator(dirname($r->getFileName()).'/Resources/config'));
-        $loader->load('security.xml');
-        $this->registerLegacyPass($container);
-        $container->compile();
-
-        $securityContext = $container->getDefinition('sensio_framework_extra.security.listener')->getArgument(0);
-        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $securityContext);
-    }
-
-    public function testSecurityListener()
-    {
-        if (!interface_exists('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')) {
-            $this->markTestSkipped();
-        }
-
-        $container = new ContainerBuilder();
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../Resources/config'));
-        $loader->load('security.xml');
-        $r = new \ReflectionClass('Symfony\Bundle\SecurityBundle\SecurityBundle');
-        $loader = new XmlFileLoader($container, new FileLocator(dirname($r->getFileName()).'/Resources/config'));
-        $loader->load('security.xml');
-        $this->registerLegacyPass($container);
-        $container->compile();
-
-        $this->assertNull($container->getDefinition('sensio_framework_extra.security.listener')->getArgument(0));
-    }
-
     public function testDefaultExpressionLanguageConfig()
     {
         $container = new ContainerBuilder();
 
         $extension = new SensioFrameworkExtraExtension();
-        $extension->load(array(), $container);
+        $config = [
+            'router' => [
+                'annotations' => false,
+            ],
+        ];
+
+        $extension->load([$config], $container);
 
         $this->assertAlias($container, 'sensio_framework_extra.security.expression_language.default', 'sensio_framework_extra.security.expression_language');
     }
@@ -77,15 +38,18 @@ class SensioFrameworkExtraExtensionTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder();
 
         $extension = new SensioFrameworkExtraExtension();
-        $config = array(
-            'security' => array(
+        $config = [
+            'router' => [
+                'annotations' => false,
+            ],
+            'security' => [
                 'expression_language' => 'acme.security.expression_language',
-            ),
-        );
+            ],
+        ];
 
         $container->setDefinition('acme.security.expression_language', new Definition());
 
-        $extension->load(array($config), $container);
+        $extension->load([$config], $container);
 
         $this->assertAlias($container, 'acme.security.expression_language', 'sensio_framework_extra.security.expression_language');
     }
@@ -95,13 +59,16 @@ class SensioFrameworkExtraExtensionTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder();
 
         $extension = new SensioFrameworkExtraExtension();
-        $config = array(
-            'templating' => array(
-                'controller_patterns' => $patterns = array('/foo/', '/bar/', '/foobar/'),
-            ),
-        );
+        $config = [
+            'router' => [
+                'annotations' => false,
+            ],
+            'templating' => [
+                'controller_patterns' => $patterns = ['/foo/', '/bar/', '/foobar/'],
+            ],
+        ];
 
-        $extension->load(array($config), $container);
+        $extension->load([$config], $container);
 
         $this->assertEquals($patterns, $container->getDefinition('sensio_framework_extra.view.guesser')->getArgument(1));
     }
@@ -109,16 +76,5 @@ class SensioFrameworkExtraExtensionTest extends \PHPUnit_Framework_TestCase
     private function assertAlias(ContainerBuilder $container, $value, $key)
     {
         $this->assertEquals($value, (string) $container->getAlias($key), sprintf('%s alias is correct', $key));
-    }
-
-    private function registerLegacyPass(ContainerBuilder $container)
-    {
-        $passConfig = $container->getCompiler()->getPassConfig();
-        $passConfig->setAfterRemovingPasses(array());
-        $passConfig->setBeforeOptimizationPasses(array());
-        $passConfig->setBeforeRemovingPasses(array());
-        $passConfig->setOptimizationPasses(array());
-        $passConfig->setRemovingPasses(array());
-        $container->addCompilerPass(new LegacyPass());
     }
 }

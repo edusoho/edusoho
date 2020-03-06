@@ -4,6 +4,7 @@ namespace AppBundle\Twig;
 
 use Codeages\Biz\Framework\Context\Biz;
 use AppBundle\Common\BlockToolkit;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class BlockExtension extends \Twig_Extension
 {

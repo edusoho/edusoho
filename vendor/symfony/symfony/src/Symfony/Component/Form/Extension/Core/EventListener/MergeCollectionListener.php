@@ -12,36 +12,21 @@
 namespace Symfony\Component\Form\Extension\Core\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
 class MergeCollectionListener implements EventSubscriberInterface
 {
-    /**
-     * Whether elements may be added to the collection.
-     *
-     * @var bool
-     */
     private $allowAdd;
-
-    /**
-     * Whether elements may be removed from the collection.
-     *
-     * @var bool
-     */
     private $allowDelete;
 
     /**
-     * Creates a new listener.
-     *
-     * @param bool $allowAdd    Whether values might be added to the
-     *                          collection.
-     * @param bool $allowDelete Whether values might be removed from the
-     *                          collection.
+     * @param bool $allowAdd    Whether values might be added to the collection
+     * @param bool $allowDelete Whether values might be removed from the collection
      */
     public function __construct($allowAdd = false, $allowDelete = false)
     {
@@ -51,9 +36,9 @@ class MergeCollectionListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             FormEvents::SUBMIT => 'onSubmit',
-        );
+        ];
     }
 
     public function onSubmit(FormEvent $event)
@@ -62,14 +47,14 @@ class MergeCollectionListener implements EventSubscriberInterface
         $data = $event->getData();
 
         if (null === $data) {
-            $data = array();
+            $data = [];
         }
 
-        if (!is_array($data) && !($data instanceof \Traversable && $data instanceof \ArrayAccess)) {
+        if (!\is_array($data) && !($data instanceof \Traversable && $data instanceof \ArrayAccess)) {
             throw new UnexpectedTypeException($data, 'array or (\Traversable and \ArrayAccess)');
         }
 
-        if (null !== $dataToMergeInto && !is_array($dataToMergeInto) && !($dataToMergeInto instanceof \Traversable && $dataToMergeInto instanceof \ArrayAccess)) {
+        if (null !== $dataToMergeInto && !\is_array($dataToMergeInto) && !($dataToMergeInto instanceof \Traversable && $dataToMergeInto instanceof \ArrayAccess)) {
             throw new UnexpectedTypeException($dataToMergeInto, 'array or (\Traversable and \ArrayAccess)');
         }
 
@@ -80,15 +65,15 @@ class MergeCollectionListener implements EventSubscriberInterface
             return;
         }
 
-        if (!$dataToMergeInto) {
+        if (null === $dataToMergeInto) {
             // No original data was set. Set it if allowed
             if ($this->allowAdd) {
                 $dataToMergeInto = $data;
             }
         } else {
             // Calculate delta
-            $itemsToAdd = is_object($data) ? clone $data : $data;
-            $itemsToDelete = array();
+            $itemsToAdd = \is_object($data) ? clone $data : $data;
+            $itemsToDelete = [];
 
             foreach ($dataToMergeInto as $beforeKey => $beforeItem) {
                 foreach ($data as $afterKey => $afterItem) {
@@ -124,18 +109,5 @@ class MergeCollectionListener implements EventSubscriberInterface
         }
 
         $event->setData($dataToMergeInto);
-    }
-
-    /**
-     * Alias of {@link onSubmit()}.
-     *
-     * @deprecated since version 2.3, to be removed in 3.0.
-     *             Use {@link onSubmit()} instead.
-     */
-    public function onBind(FormEvent $event)
-    {
-        @trigger_error('The '.__METHOD__.' method is deprecated since version 2.3 and will be removed in 3.0. Use the onSubmit() method instead.', E_USER_DEPRECATED);
-
-        $this->onSubmit($event);
     }
 }

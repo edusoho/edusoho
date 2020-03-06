@@ -38,19 +38,17 @@ class ArrayNode extends Node
 
     /**
      * Compiles the node to PHP.
-     *
-     * @param Compiler $compiler A Compiler instance
      */
     public function compile(Compiler $compiler)
     {
-        $compiler->raw('array(');
+        $compiler->raw('[');
         $this->compileArguments($compiler);
-        $compiler->raw(')');
+        $compiler->raw(']');
     }
 
     public function evaluate($functions, $values)
     {
-        $result = array();
+        $result = [];
         foreach ($this->getKeyValuePairs() as $pair) {
             $result[$pair['key']->evaluate($functions, $values)] = $pair['value']->evaluate($functions, $values);
         }
@@ -58,11 +56,41 @@ class ArrayNode extends Node
         return $result;
     }
 
+    public function toArray()
+    {
+        $value = [];
+        foreach ($this->getKeyValuePairs() as $pair) {
+            $value[$pair['key']->attributes['value']] = $pair['value'];
+        }
+
+        $array = [];
+
+        if ($this->isHash($value)) {
+            foreach ($value as $k => $v) {
+                $array[] = ', ';
+                $array[] = new ConstantNode($k);
+                $array[] = ': ';
+                $array[] = $v;
+            }
+            $array[0] = '{';
+            $array[] = '}';
+        } else {
+            foreach ($value as $v) {
+                $array[] = ', ';
+                $array[] = $v;
+            }
+            $array[0] = '[';
+            $array[] = ']';
+        }
+
+        return $array;
+    }
+
     protected function getKeyValuePairs()
     {
-        $pairs = array();
+        $pairs = [];
         foreach (array_chunk($this->nodes, 2) as $pair) {
-            $pairs[] = array('key' => $pair[0], 'value' => $pair[1]);
+            $pairs[] = ['key' => $pair[0], 'value' => $pair[1]];
         }
 
         return $pairs;

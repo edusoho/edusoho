@@ -23,6 +23,7 @@ use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Common\SimpleValidator;
 use ApiBundle\Api\Util\AssetHelper;
@@ -45,10 +46,11 @@ class WebExtension extends \Twig_Extension
 
     protected $defaultCloudSdkHost;
 
-    public function __construct($container, Biz $biz)
+    public function __construct($container, Biz $biz, RequestStack $requestStack)
     {
         $this->container = $container;
         $this->biz = $biz;
+        $this->requestStack = $requestStack;
     }
 
     public function getFilters()
@@ -281,7 +283,7 @@ class WebExtension extends \Twig_Extension
             return false;
         }
 
-        $pcVersion = $this->container->get('request')->cookies->get('PCVersion', 0);
+        $pcVersion = $this->requestStack->getMasterRequest()->cookies->get('PCVersion', 0);
         if ($pcVersion) {
             return false;
         }
@@ -302,7 +304,8 @@ class WebExtension extends \Twig_Extension
     public function isESCopyright()
     {
         $copyright = $this->getSetting('copyright');
-        $request = $this->container->get('request');
+        $request = $this->requestStack->getMasterRequest();
+
         $host = $request->getHttpHost();
         if ($copyright) {
             $result = !(
@@ -457,7 +460,7 @@ class WebExtension extends \Twig_Extension
         );
 
         $jsapi_ticket = $jsApiTicket['data']['ticket'];
-        $url = empty($url) ? $this->container->get('request')->getUri() : $url;
+        $url = empty($url) ? $this->requestStack->getMasterRequest()->getUri() : $url;
         $string = 'jsapi_ticket='.$jsapi_ticket.'&noncestr='.$config['nonceStr'].'&timestamp='.$config['timestamp'].'&url='.$url;
         $config['string'] = $string;
         $config['signature'] = sha1($string);
@@ -527,7 +530,7 @@ class WebExtension extends \Twig_Extension
 
     public function isMicroMessenger()
     {
-        return false !== strpos($this->container->get('request')->headers->get('User-Agent'), 'MicroMessenger');
+        return false !== strpos($this->requestStack->getMasterRequest()->headers->get('User-Agent'), 'MicroMessenger');
     }
 
     public function renameLocale($locale)
@@ -554,7 +557,7 @@ class WebExtension extends \Twig_Extension
         if ($pattern) {
             $fingerprint = $this->parsePattern($pattern, $user);
         } else {
-            $request = $this->container->get('request');
+            $request = $this->requestStack->getMasterRequest();
             $host = $request->getHttpHost();
             $fingerprint = "{$host} {$user['nickname']}";
         }
@@ -702,7 +705,7 @@ class WebExtension extends \Twig_Extension
         $basePath = $cdnUrl->get();
 
         if (empty($basePath)) {
-            $basePath = $this->container->get('request')->getBasePath();
+            $basePath = $this->requestStack->getMasterRequest()->getBasePath();
         }
 
         $theme = $this->getSetting('theme.uri', 'default');
@@ -986,7 +989,7 @@ class WebExtension extends \Twig_Extension
             return $url;
         }
 
-        return $this->container->get('request')->getBaseUrl().'/'.$url;
+        return $this->requestStack->getMasterRequest()->getBaseUrl().'/'.$url;
     }
 
     /**
@@ -1060,8 +1063,8 @@ class WebExtension extends \Twig_Extension
 
     public function getFilePath($uri, $default = '', $absolute = false)
     {
-        $assets = $this->container->get('templating.helper.assets');
-        $request = $this->container->get('request');
+        $assets = $this->container->get('assets.packages');
+        $request = $this->requestStack->getMasterRequest();
 
         if (empty($uri)) {
             $url = $assets->getUrl('assets/img/default/'.$default);
@@ -1096,8 +1099,8 @@ class WebExtension extends \Twig_Extension
 
     public function getDefaultPath($category, $uri = '', $size = '', $absolute = false)
     {
-        $assets = $this->container->get('templating.helper.assets');
-        $request = $this->container->get('request');
+        $assets = $this->container->get('assets.packages');
+        $request = $this->requestStack->getMasterRequest();
 
         if (empty($uri)) {
             $publicUrlpath = 'assets/img/default/';
@@ -1145,8 +1148,8 @@ class WebExtension extends \Twig_Extension
             return $uri;
         }
 
-        $assets = $this->container->get('templating.helper.assets');
-        $request = $this->container->get('request');
+        $assets = $this->container->get('assets.packages');
+        $request = $this->requestStack->getMasterRequest();
 
         if (strpos($uri, '://')) {
             $uri = $this->parseFileUri($uri);
@@ -1165,7 +1168,7 @@ class WebExtension extends \Twig_Extension
 
     public function getSystemDefaultPath($defaultKey, $absolute = false)
     {
-        $assets = $this->container->get('templating.helper.assets');
+        $assets = $this->container->get('assets.packages');
         $defaultSetting = $this->getSetting('default', array());
 
         if (array_key_exists($defaultKey, $defaultSetting)
@@ -1183,7 +1186,7 @@ class WebExtension extends \Twig_Extension
 
     public function makeLazyImg($src, $class = '', $alt = '', $img = 'lazyload_course.png')
     {
-        $imgpath = $path = $this->container->get('templating.helper.assets')->getUrl('assets/img/default/'.$img);
+        $imgpath = $path = $this->container->get('assets.packages')->getUrl('assets/img/default/'.$img);
 
         return sprintf('<img src="%s" alt="%s" class="%s" data-echo="%s" />', $imgpath, $alt, $class, $src);
     }
@@ -1210,8 +1213,8 @@ class WebExtension extends \Twig_Extension
 
     public function getFileUrl($uri, $default = '', $absolute = false)
     {
-        $assets = $this->container->get('templating.helper.assets');
-        $request = $this->container->get('request');
+        $assets = $this->container->get('assets.packages');
+        $request = $this->requestStack->getMasterRequest();
 
         if (empty($uri)) {
             $url = $assets->getUrl('assets/img/default/'.$default);
@@ -1246,7 +1249,7 @@ class WebExtension extends \Twig_Extension
 
     private function getPublicFilePath($path, $defaultKey = false, $absolute = false, $package = 'content')
     {
-        $assets = $this->container->get('templating.helper.assets');
+        $assets = $this->container->get('assets.packages');
 
         if (empty($path)) {
             $defaultSetting = $this->getSetting('default', array());
@@ -1279,11 +1282,11 @@ class WebExtension extends \Twig_Extension
         $cdnUrl = $cdn->get($package);
 
         if ($cdnUrl) {
-            $isSecure = $this->container->get('request')->isSecure();
+            $isSecure = $this->requestStack->getMasterRequest()->isSecure();
             $protocal = $isSecure ? 'https:' : 'http:';
             $path = $protocal.$cdnUrl.$path;
         } elseif ($absolute) {
-            $request = $this->container->get('request');
+            $request = $this->requestStack->getMasterRequest();
             $path = $request->getSchemeAndHttpHost().$path;
         }
 
@@ -1296,11 +1299,11 @@ class WebExtension extends \Twig_Extension
         $cdnUrl = $cdn->get($package);
 
         if ($cdnUrl) {
-            $isSecure = $this->container->get('request')->isSecure();
+            $isSecure = $this->requestStack->getMasterRequest()->isSecure();
             $protocal = $isSecure ? 'https:' : 'http:';
             $path = $protocal.$cdnUrl;
         } else {
-            $request = $this->container->get('request');
+            $request = $this->requestStack->getMasterRequest();
             $path = $request->getSchemeAndHttpHost();
         }
 

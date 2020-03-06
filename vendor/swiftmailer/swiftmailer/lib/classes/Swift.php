@@ -11,16 +11,14 @@
 /**
  * General utility class in Swift Mailer, not to be instantiated.
  *
- *
  * @author Chris Corbyn
  */
 abstract class Swift
 {
-    /** Swift Mailer Version number generated during dist release process */
-    const VERSION = '@SWIFT_VERSION_NUMBER@';
+    const VERSION = '6.2.3';
 
     public static $initialized = false;
-    public static $inits = array();
+    public static $inits = [];
 
     /**
      * Registers an initializer callable that will be called the first time
@@ -75,6 +73,6 @@ abstract class Swift
         if (null !== $callable) {
             self::$inits[] = $callable;
         }
-        spl_autoload_register(array('Swift', 'autoload'));
+        spl_autoload_register(['Swift', 'autoload']);
     }
 }

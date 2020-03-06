@@ -26,7 +26,7 @@ class Hour1200Transformer extends HourTransformer
     public function format(\DateTime $dateTime, $length)
     {
         $hourOfDay = $dateTime->format('g');
-        $hourOfDay = '12' == $hourOfDay ? '0' : $hourOfDay;
+        $hourOfDay = '12' === $hourOfDay ? '0' : $hourOfDay;
 
         return $this->padLeft($hourOfDay, $length);
     }
@@ -56,9 +56,9 @@ class Hour1200Transformer extends HourTransformer
      */
     public function extractDateOptions($matched, $length)
     {
-        return array(
+        return [
             'hour' => (int) $matched,
             'hourInstance' => $this,
-        );
+        ];
     }
 }

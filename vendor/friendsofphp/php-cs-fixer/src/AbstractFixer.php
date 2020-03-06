@@ -13,6 +13,7 @@
 namespace PhpCsFixer;
 
 use PhpCsFixer\ConfigurationException\InvalidFixerConfigurationException;
+use PhpCsFixer\ConfigurationException\InvalidForEnvFixerConfigurationException;
 use PhpCsFixer\ConfigurationException\RequiredFixerConfigurationException;
 use PhpCsFixer\Fixer\ConfigurableFixerInterface;
 use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
@@ -20,6 +21,7 @@ use PhpCsFixer\Fixer\DefinedFixerInterface;
 use PhpCsFixer\Fixer\FixerInterface;
 use PhpCsFixer\Fixer\WhitespacesAwareFixerInterface;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverInterface;
+use PhpCsFixer\FixerConfiguration\InvalidOptionsForEnvException;
 use PhpCsFixer\Tokenizer\Tokens;
 use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
@@ -32,7 +34,7 @@ use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 abstract class AbstractFixer implements FixerInterface, DefinedFixerInterface
 {
     /**
-     * @var array<string, mixed>|null
+     * @var null|array<string, mixed>
      */
     protected $configuration;
 
@@ -42,7 +44,7 @@ abstract class AbstractFixer implements FixerInterface, DefinedFixerInterface
     protected $whitespacesConfig;
 
     /**
-     * @var FixerConfigurationResolverInterface|null
+     * @var null|FixerConfigurationResolverInterface
      */
     private $configurationDefinition;
 
@@ -61,8 +63,12 @@ abstract class AbstractFixer implements FixerInterface, DefinedFixerInterface
         }
     }
 
-    public function fix(\SplFileInfo $file, Tokens $tokens)
+    final public function fix(\SplFileInfo $file, Tokens $tokens)
     {
+        if ($this instanceof ConfigurableFixerInterface && null === $this->configuration) {
+            throw new RequiredFixerConfigurationException($this->getName(), 'Configuration is required.');
+        }
+
         if (0 < $tokens->count() && $this->isCandidate($tokens) && $this->supports($file)) {
             $this->applyFix($file, $tokens);
         }
@@ -106,7 +112,7 @@ abstract class AbstractFixer implements FixerInterface, DefinedFixerInterface
     public function configure(array $configuration = null)
     {
         if (!$this instanceof ConfigurationDefinitionFixerInterface) {
-            throw new \LogicException('Cannot configure using Abstact parent, child not implementing "PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface".');
+            throw new \LogicException('Cannot configure using Abstract parent, child not implementing "PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface".');
         }
 
         if (null === $configuration) {
@@ -124,14 +130,18 @@ abstract class AbstractFixer implements FixerInterface, DefinedFixerInterface
             throw new RequiredFixerConfigurationException(
                 $this->getName(),
                 sprintf('Missing required configuration: %s', $exception->getMessage()),
-                null,
+                $exception
+            );
+        } catch (InvalidOptionsForEnvException $exception) {
+            throw new InvalidForEnvFixerConfigurationException(
+                $this->getName(),
+                sprintf('Invalid configuration for env: %s', $exception->getMessage()),
                 $exception
             );
         } catch (ExceptionInterface $exception) {
             throw new InvalidFixerConfigurationException(
                 $this->getName(),
                 sprintf('Invalid configuration: %s', $exception->getMessage()),
-                null,
                 $exception
             );
         }
@@ -143,7 +153,7 @@ abstract class AbstractFixer implements FixerInterface, DefinedFixerInterface
     public function getConfigurationDefinition()
     {
         if (!$this instanceof ConfigurationDefinitionFixerInterface) {
-            throw new \LogicException('Cannot get configuration definition using Abstact parent, child not implementing "PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface".');
+            throw new \LogicException('Cannot get configuration definition using Abstract parent, child not implementing "PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface".');
         }
 
         if (null === $this->configurationDefinition) {
@@ -156,7 +166,7 @@ abstract class AbstractFixer implements FixerInterface, DefinedFixerInterface
     public function setWhitespacesConfig(WhitespacesFixerConfig $config)
     {
         if (!$this instanceof WhitespacesAwareFixerInterface) {
-            throw new \LogicException('Cannot run method for class not implementing `WhitespacesAwareFixerInterface`.');
+            throw new \LogicException('Cannot run method for class not implementing "PhpCsFixer\Fixer\WhitespacesAwareFixerInterface".');
         }
 
         $this->whitespacesConfig = $config;
@@ -170,7 +180,7 @@ abstract class AbstractFixer implements FixerInterface, DefinedFixerInterface
     protected function createConfigurationDefinition()
     {
         if (!$this instanceof ConfigurationDefinitionFixerInterface) {
-            throw new \LogicException('Cannot create configuration definition using Abstact parent, child not implementing "PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface".');
+            throw new \LogicException('Cannot create configuration definition using Abstract parent, child not implementing "PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface".');
         }
 
         throw new \LogicException('Not implemented.');

@@ -38,7 +38,7 @@ class DoctrineFooType extends Type
      */
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return $platform->getClobTypeDeclarationSQL(array());
+        return $platform->getClobTypeDeclarationSQL([]);
     }
 
     /**
@@ -47,10 +47,10 @@ class DoctrineFooType extends Type
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         if (null === $value) {
-            return;
+            return null;
         }
         if (!$value instanceof Foo) {
-            throw new ConversionException(sprintf('Expected %s, got %s', 'Symfony\Bridge\Doctrine\Tests\PropertyInfo\Fixtures\Foo', gettype($value)));
+            throw new ConversionException(sprintf('Expected %s, got %s', 'Symfony\Bridge\Doctrine\Tests\PropertyInfo\Fixtures\Foo', \gettype($value)));
         }
 
         return $foo->bar;
@@ -62,9 +62,9 @@ class DoctrineFooType extends Type
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         if (null === $value) {
-            return;
+            return null;
         }
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             throw ConversionException::conversionFailed($value, self::NAME);
         }
 
