@@ -10720,7 +10720,6 @@ admin_v2.destroy_account.destroyed_account.audit_reject: 拒绝
 admin_v2.destroy_account.destroyed_account.reason_tip: 最多输入30个字
 admin_v2.destroy_account.destroyed_account.can_not_manage: 不能操作您自己的申请
 user.user_had_destroyed: 帐号已注销
-admin.article_setting.article_copy_manage: 资讯防复制
 admin_v2.operation.homepage_live_notify.enable: 直播开课提醒
 admin_v2.operation.homepage_live_notify.enable.open: 开启
 admin_v2.operation.homepage_live_notify.enable.close: 关闭
