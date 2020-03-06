@@ -3347,7 +3347,7 @@ customer_service.feedback_email: 'Feedback mail'
 customer_service.qq_customer_service: 'Qq customer servcie'
 customer_service.qq_group: 'QQ group'
 customer_service.mobile_group: 'Telephone customer service'
-customer_service.weixin-content: 'Public wechat number'
+customer_service.weixin-content: 'Wechat QR code'
 customer_service.time: 'Service time'
 customer_service.send_message: 'Click here to send me message'
 my.teaching.menu_heading: 'My teaching'
@@ -9356,7 +9356,7 @@ admin_v2.homepage.overview: Overview
 admin_v2.developer_setting.platform_news_api_server: API to get information from platform
 admin_v2.developer_setting.platform_news_api_server.info: 'Default value is //platform-news-service.qiqiuyun.net'
 admin_v2.role_permission_manage.error: Error
-admin_v2.default_page.changelog_title: EduSoho Changelog
+admin_v2.default_page.changelog_title: Changelog
 admin_v2.wechat_official_account.title: Official Account
 admin_v2.wechat_official_account.text: Follow the EduSoho official account to get the latest education information
 admin_v2.homepage.announcement_from_platform: Announcement From Platform
