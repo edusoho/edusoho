@@ -263,3 +263,11 @@
   content: "\e6f4";
 }
 
+.icon-zhibo1:before {
+  content: "\e68c";
+}
+
+.icon-more:before {
+  content: "\e68d";
+}
+

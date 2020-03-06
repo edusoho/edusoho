@@ -5,6 +5,7 @@
         v-for="item in courseList"
         :key="item.id"
         :course="item | courseListData(listObj)"
+        :discountType="typeList === 'course_list' ? item.courseSet.discountType : ''"
         :discount="typeList === 'course_list' ? item.courseSet.discount : ''"
         :course-type="typeList === 'course_list' ? item.courseSet.type : ''"
         :type-list="typeList"
@@ -17,6 +18,7 @@
 
 <script>
 import Api from '@/api'
+import { Toast } from 'vant'
 import eClass from '&/components/e-class/e-class'
 import courseListData from '@/utils/filter-course.js'
 import { mapState } from 'vuex'
@@ -37,7 +39,7 @@ export default {
   },
   data() {
     return {
-      courseList: {},
+      courseList: [],
       loading: false,
       finished: false,
       type: 'price',
@@ -68,14 +70,14 @@ export default {
   methods: {
     onLoad() {
       const params = { levelId: this.levelId, offset: this.offset }
-      Api.getVipCourses({ params }).then(({ data, paging }) => {
+       Api.getVipCourses({ params }).then(({ data, paging }) => {
         this.courseList = [...this.courseList, ...data]
-        this.offset = this.courseList.length
+       this.offset = this.courseList.length
 
         if (this.courseList.length == paging.total) {
           this.finished = true
         }
-        this.loading = false
+       this.loading = false
       }).catch(err => {
         Toast.fail(err.message)
         this.loading = false

@@ -22,7 +22,8 @@ const state = {
   couponSwitch: 0,
   socialBinded: {
     wx: true
-  }
+  },
+  DrpSwitch: false // 分销插件
 };
 
 export default new Vuex.Store({

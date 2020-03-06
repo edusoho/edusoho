@@ -15,15 +15,14 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@babel/core": "7.0.0",
     "@babel/preset-env": "^7.6.3",
-    "@babel/preset-es2015": "^7.0.0-beta.53",
     "@vue/cli-plugin-babel": "^3.12.0",
     "@vue/cli-plugin-eslint": "^3.12.0",
-    "@vue/cli-plugin-unit-jest": "^3.12.0",
+    "@vue/cli-plugin-unit-jest": "^3.12.0",                                  
     "@vue/cli-service": "^3.12.0",
     "autoprefixer": "^7.1.2",
     "axios": "^0.16.2",
-    "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^7.1.1",
     "babel-plugin-component": "^1.1.1",
@@ -44,11 +43,9 @@
     "eslint-loader": "^1.7.1",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsfix": "^1.0.3",
-    "eslint-plugin-vue": "^4.0.0",
     "eslint-plugin-vuefix": "^0.2.0",
-    "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^1.1.4",
-    "html-webpack-plugin": "^2.30.1",
+    "html-webpack-plugin": "3.2.0",
     "load-script": "^1.0.0",
     "node-sass": "^4.12.0",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
@@ -76,6 +73,7 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@babel/plugin-transform-arrow-functions": "^7.7.4",
     "@vue/eslint-config-prettier": "^5.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-jest": "^23.6.0",

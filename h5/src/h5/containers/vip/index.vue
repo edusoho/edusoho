@@ -6,7 +6,7 @@
         <img v-if="user.avatar" :src="user.avatar.large" class="user-img" />
         <div class="user-middle">
           <div class="user-name">{{ user.nickname }}</div>
-          <span v-if="vipInfo" class="user-vip vip-level text-overflow ">
+          <span v-if="vipInfo" class="user-vip vip-level text-overflow">
             <img
               v-if="vipInfo.icon"
               :class="['vip-img', vipDated ? 'vip-expired' : '']"
@@ -162,13 +162,15 @@ export default {
         num: 0
       },
       isShowInviteUrl: false, // 是否显示邀请链接
-      drpSetting: {}, // Drp设置信息
-      bindAgencyRelation: {} // 分销代理商绑定信息
+      bindAgencyRelation: {}, // 分销代理商绑定信息
+      drpSetting:{}
     };
   },
   computed: {
-    ...mapState(["vipSettings", "isLoading", "vipSwitch"]),
-    ...mapState({ userInfo: state => state.user }),
+    ...mapState(["vipSettings", "isLoading", "vipSwitch", "DrpSwitch"]),
+    ...mapState({
+      userInfo: state => state.user
+    }),
     vipDated() {
       if (!this.vipInfo) return false;
       const deadlineStamp = new Date(this.vipInfo.deadline).getTime();
@@ -236,8 +238,6 @@ export default {
     }
     this.getVipLevels();
     this.showInviteUrl();
-    this.getDrpSetting();
-
     setTimeout(() => {
       window.scrollTo(0, 0);
     }, 100);
@@ -285,35 +285,35 @@ export default {
           : res.levels[0].id;
         levelId = isNaN(queryId) ? levelId : queryId;
 
-        this.getPriceItems( res.levels);
-        this.getVipIndex(levelId,res.levels);
+        this.getPriceItems(res.levels);
+        this.getVipIndex(levelId, res.levels);
 
         this.loaded = true;
       });
     },
-    getPriceItems(levels){
+    getPriceItems(levels) {
       for (var i = 0; i < this.levels.length; i++) {
-          const item = levels[i];
-          this.priceItems = [
-            ...this.priceItems,
-            getPriceItems(
-              this.vipSettings.buyType,
-              item.monthPrice,
-              item.yearPrice
-            )
-          ];
-        }
+        const item = levels[i];
+        this.priceItems = [
+          ...this.priceItems,
+          getPriceItems(
+            this.vipSettings.buyType,
+            item.monthPrice,
+            item.yearPrice
+          )
+        ];
+      }
     },
-    getVipIndex(levelId,levels){
-       // currentLevelIndex要放在levels数据之后
-        let vipIndex = 0;
-        const vipLevel =levels.find((level, index) => {
-          if (level.id === levelId) {
-            vipIndex = index;
-            return level;
-          }
-        });
-        this.currentLevelIndex = vipIndex;
+    getVipIndex(levelId, levels) {
+      // currentLevelIndex要放在levels数据之后
+      let vipIndex = 0;
+      const vipLevel = levels.find((level, index) => {
+        if (level.id === levelId) {
+          vipIndex = index;
+          return level;
+        }
+      });
+      this.currentLevelIndex = vipIndex;
     },
     selectPriceItem(event, index) {
       this.activePriceIndex = index;
@@ -389,25 +389,26 @@ export default {
 
       // 会员续费
       if (this.vipDated && this.vipInfo) {
-        this.getVipIndex(this.vipInfo.levelId,this.levels)
+        this.getVipIndex(this.vipInfo.levelId, this.levels);
       }
       this.vipPopShow = true;
     },
     showInviteUrl() {
-      Api.hasDrpPluginInstalled().then(res => {
-        if (!res.Drp) {
+      if (!this.DrpSwitch) {
+        this.isShowInviteUrl = false;
+        return;
+      }
+      this.getDrpSetting();
+      this.getAgencyBindRelation();
+    },
+    getAgencyBindRelation() {
+      Api.getAgencyBindRelation().then(data => {
+        if (!data.agencyId) {
           this.isShowInviteUrl = false;
           return;
         }
-
-        Api.getAgencyBindRelation().then(data => {
-          if (!data.agencyId) {
-            this.isShowInviteUrl = false;
-            return;
-          }
-          this.bindAgencyRelation = data;
-          this.isShowInviteUrl = true;
-        });
+        this.bindAgencyRelation = data;
+        this.isShowInviteUrl = true;
       });
     },
     getDrpSetting() {

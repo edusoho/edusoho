@@ -469,6 +469,7 @@ router.beforeEach((to, from, next) => {
         if (shouldUpdateMetaTitle) {
           to.meta.title = siteRes.name;
         }
+        store.dispatch('setDrpSwitch');
         if (to.name === 'vip') {
           setVipSwitch()
             .then(() => next());
