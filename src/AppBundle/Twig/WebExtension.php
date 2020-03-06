@@ -550,7 +550,7 @@ class WebExtension extends \Twig_Extension
 
         // @todo 如果配置用户的关键信息，这个方法存在信息泄漏风险，更换新播放器后解决这个问题。
         $pattern = $this->getSetting('magic.video_fingerprint');
-        $opacity = $this->getSetting('storage.video_fingerprint_opacity',1);
+        $opacity = $this->getSetting('storage.video_fingerprint_opacity', 1);
 
         if ($pattern) {
             $fingerprint = $this->parsePattern($pattern, $user);
