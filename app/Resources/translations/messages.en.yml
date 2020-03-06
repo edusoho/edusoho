@@ -9420,9 +9420,6 @@ homepage.live_notify.header: Live start reminder
 homepage.live_notify.start_while: Begin in a minute
 homepage.live_notify.living: Living
 homepage.live_notify.entry_live_room: Go to liveroom
-<<<<<<< HEAD
-admin.article_setting.article_copy_manage: Information copy protection
-=======
 
 course.live_statistics: Live statistics
 course.live_statistics.live_start_time: Start time
@@ -9461,4 +9458,3 @@ course.live_statistics.checkin_status.all: All
 
 exception.live_statistic.not_found: Live statistics not found
 exception.live_statistic.not_support: Live statistics not supported function
->>>>>>> master
