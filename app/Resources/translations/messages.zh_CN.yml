@@ -703,7 +703,7 @@ upload.video_quality_switcher.video_quality.normal: >
 upload.video_quality_switcher.video_quality.high: >
   精细 <span class="color-gray">(适合动态电影)</span>
 upload.video_quality_switcher.video_quality.super: >
-  超精细 <span class="color-gray">(适用于超高画质的专业视频)</span>
+  超精细 <span class="color-gray">(适合超高画质的专业视频)</span>
 upload.video_quality_switcher.audio_quality: 音质：
 upload.video_quality_switcher.audio_quality.low: 流畅
 upload.video_quality_switcher.audio_quality.normal: 标准
@@ -6591,7 +6591,7 @@ admin.edu_cloud.edu_video.transcode_quality_normal: >
 admin.edu_cloud.edu_video.transcode_quality_high: >
   精细 %<span class="text-muted">%(适合动态电影)%</span>%
 admin.edu_cloud.edu_video.transcode_quality_super: >
-  超精细 %<span class="text-muted">%(适合高要求艺术视频)%</span>%
+  超精细 %<span class="text-muted">%(适合超高画质的专业视频)%</span>%
 admin.edu_cloud.edu_video.audio_transcode_quality: 视频转码音质：
 admin.edu_cloud.edu_video.low: 流畅
 admin.edu_cloud.edu_video.normal: 标准
