@@ -3984,7 +3984,7 @@ customer_service.feedback_email: 反馈邮件
 customer_service.qq_customer_service: QQ客服
 customer_service.qq_group: QQ群
 customer_service.mobile_group: 电话客服
-customer_service.weixin-content: 微信公众号
+customer_service.weixin-content: 微信二维码
 customer_service.email: 电子邮箱
 customer_service.time: 服务时间：
 customer_service.send_message: 点击这里给我发消息
@@ -10673,7 +10673,7 @@ admin_v2.homepage.overview: 概况
 admin_v2.developer_setting.platform_news_api_server: 获取平台信息API
 admin_v2.developer_setting.platform_news_api_server.info: '默认为 //platform-news-service.qiqiuyun.net'
 admin_v2.role_permission_manage.error: 错误
-admin_v2.default_page.changelog_title: EduSoho更新日志
+admin_v2.default_page.changelog_title: 更新日志
 admin_v2.wechat_official_account.title: 公众号
 admin_v2.wechat_official_account.text: 关注EduSoho公众号 获取最新教育资讯
 admin_v2.homepage.announcement_from_platform: 站长公告
