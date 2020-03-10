@@ -1,0 +1,11 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'admin.user.manage.user_show.fields.heading_title'|trans}}{% endblock %}
+
+{% block body %}
+  <h3 style="margin-left:200px;">{{ 'user.user_had_destroyed'|trans }}</h3>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+{% endblock %}

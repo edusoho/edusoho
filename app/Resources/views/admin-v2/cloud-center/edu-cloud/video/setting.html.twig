@@ -405,6 +405,15 @@
     </div>
     <div class="row form-group">
       <div class="col-md-3 control-label">
+        <label>{{'admin.edu_cloud.edu_video.finger_print_opacity_label'|trans}}</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="video_fingerprint_opacity" class="form-control width-input width-input-small" name="video_fingerprint_opacity" value="{{ storageSetting.video_fingerprint_opacity }}">
+        <div class="text-muted mts">{{'admin.edu_cloud.edu_video.finger_print_opacity_tips'|trans}}</div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
         <label>{{ 'admin.edu_cloud.edu_video.enable_hls_encryption_plus'|trans }}：</label>
       </div>
       <div class="controls col-md-8 radios">

@@ -37,4 +37,6 @@ interface LiveActivityService
     public function search($conditions, $orderbys, $start, $limit);
 
     public function canUpdateRoomType($liveStartTime);
+
+    public function getByLiveId($liveId);
 }

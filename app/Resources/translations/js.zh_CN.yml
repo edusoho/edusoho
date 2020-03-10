@@ -1186,6 +1186,7 @@ admin.setting.cloud.delete_cloud_video_embed_watermark_hint: 确认要删除云�
 admin.setting.cloud.delete_cloud_video_embed_watermark_success_hint: 删除云视频内嵌水印成功！
 admin.setting.cloud.delete_cloud_video_embed_watermark_fail_hint: 删除云视频内嵌水印失败！
 admin.setting.cloud.validate_old.video_fingerprint_time.display: 云视频指纹显示时间
+admin.setting.cloud.validate_old.video_fingerprint_opacity.display: 云视频指纹不透明度
 admin.setting.consult_setting.upload_qrcode_success_hint: 上传微信二维码成功！
 admin.setting.consult_setting.setting_max_num_hint: 最多设置10个..
 admin.setting.consult_setting.delete_hint: 确认要删除吗？
@@ -1469,3 +1470,10 @@ admin.switch_old_version.title: 切换后台
 admin.switch_old_version.confirm_message: '切换到老后台后，所有管理员将切换至老后台，确认切换？'
 admin.switch_new_version.confirm_message: '升级到新后台后，所有管理员将切换至新后台，但权限功能不会改变， 确认切换？'
 admin.can_not_link_data: 无法连接到数据
+
+group.thread.reply.max_length.notice: 回复内容不得超过3000字
+
+course_manage.live_statistics.empty_tips: 数据同步中，请稍后重试
+course_manage.live_statistics.live_not_end: 直播数据未生成
+course_manage.live_statistics.checkin_not_support: 当前直播课暂不支持点名功能
+course_manage.live_statistics.data_not_valid: 数据异常，直播间数据返回错误

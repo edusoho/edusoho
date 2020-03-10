@@ -23,7 +23,7 @@
 						<div class="form-group mbl">
 							<label class="control-label required" for="register_email">{{'user.settings.security.password_reset.email'|trans}}</label>
 							<div class="controls">
-								<input type="email" id="register_email" name="email"  class="form-control input-lg" data-url="{{path('register_email_check')}}" placeholder="{{'user.register.account_with_email_placeholder'|trans}}">
+								<input type="email" id="register_email" name="email"  class="form-control input-lg" data-url="{{path('register_email_check')}}" placeholder="{{'user.register.account_with_email_placeholder'|trans}}" onkeydown="if(event.keyCode==13) return false;">
 								<p class="help-block"></p>
 							</div>
 						</div>
@@ -31,7 +31,7 @@
 						<div class="form-group mbl">
 							<label class="control-label required" for="register_mobile">{{'user.settings.security.password_reset.mobile'|trans}}</label>
 							<div class="controls">
-								<input type="number" id="register_mobile" name="verifiedMobile"  class="form-control input-lg" data-url="{{path('register_mobile_check')}}" placeholder="{{'user.register.account_with_mobile_placeholder'|trans}}">
+								<input type="number" id="register_mobile" name="verifiedMobile"  class="form-control input-lg" data-url="{{path('register_mobile_check')}}" placeholder="{{'user.register.account_with_mobile_placeholder'|trans}}" onkeydown="if(event.keyCode==13) return false;">
 								<p class="help-block"></p>
 							</div>
 						</div>
@@ -39,7 +39,7 @@
 						<div class="form-group mbl">
 							<label class="control-label required" for="register_emailOrmobile">{{'user.register.account_with_mobile_or_email_label'|trans}}</label>
 							<div class="controls">
-								<input type="text" id="register_emailOrMobile" name="emailOrMobile"  class="form-control input-lg" data-url="{{path('register_email_or_mobile_check')}}" placeholder="{{'user.register.account_with_mobile_or_email_placeholder'|trans}}">
+								<input type="text" id="register_emailOrMobile" name="emailOrMobile"  class="form-control input-lg" data-url="{{path('register_email_or_mobile_check')}}" placeholder="{{'user.register.account_with_mobile_or_email_placeholder'|trans}}" onkeydown="if(event.keyCode==13) return false;">
 								<p class="help-block"></p>
 							</div>
 						</div>
@@ -48,7 +48,7 @@
 					<div class="form-group mbl">
 						<label class="control-label required" for="register_nickname">{{'user.register.username_label'|trans}}</label>
 						<div class="controls">
-							<input type="text" id="register_nickname" name="nickname" required="required" class="form-control input-lg" data-url="{{path('register_nickname_check')}}" placeholder="{{'user.register.username_label_placeholder'|trans}}">
+							<input type="text" id="register_nickname" name="nickname" required="required" class="form-control input-lg" data-url="{{path('register_nickname_check')}}" placeholder="{{'user.register.username_label_placeholder'|trans}}" onkeydown="if(event.keyCode==13) return false;">
 							<p class="help-block"></p>
 						</div>
 					</div>
@@ -56,7 +56,7 @@
 					<div class="form-group mbl">
 						<label class="control-label required" for="register_password">{{'user.register.password_label'|trans}}</label>
 						<div class="controls">
-							<input type="password" id="register_password" name="password" required="required" class="form-control input-lg" placeholder="{{'user.register.password_label_placeholder'|trans}}">
+							<input type="password" id="register_password" name="password" required="required" class="form-control input-lg" placeholder="{{'user.register.password_label_placeholder'|trans}}" onkeydown="if(event.keyCode==13) return false;">
 							<p class="help-block"></p>
 						</div>
 					</div>
@@ -70,7 +70,7 @@
 							<label class="control-label required" for="sms_code">{{'user.settings.security.sms_code'|trans}}</label>
 							<div class="controls cd-row">
 								<div class="col-xs-6">
-									<input type="text" maxlength="6" class="form-control input-lg" id="sms_code" name="sms_code" placeholder="{{'user.settings.security.input_sms_code'|trans}}" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
+									<input type="text" maxlength="6" class="form-control input-lg" id="sms_code" name="sms_code" placeholder="{{'user.settings.security.input_sms_code'|trans}}" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}" onkeydown="if(event.keyCode==13) return false;">
 									<p class="help-block"> </p>
 								</div>
 								<div class="col-xs-6">
@@ -87,7 +87,7 @@
 						<div class="form-group mbl">
 							<label class="control-label required" for="invitedCode">{{'user.register.invite_code_label'|trans}}<span class="color-success">（{{'form.field.optional'|trans}}）</span></label>
 							<div class="controls">
-								<input type="text" name="invitedCode" class="form-control input-lg invitecode" data-url="{{path('invitecode_check')}}" placeholder="{{'user.register.invite_code_placeholder'|trans}}">
+								<input type="text" name="invitedCode" class="form-control input-lg invitecode" data-url="{{path('invitecode_check')}}" placeholder="{{'user.register.invite_code_placeholder'|trans}}" onkeydown="if(event.keyCode==13) return false;">
 							</div>
 						</div>
 					{% endif %}

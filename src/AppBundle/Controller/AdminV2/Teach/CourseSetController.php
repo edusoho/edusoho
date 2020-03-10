@@ -303,6 +303,7 @@ class CourseSetController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
+        $courses = $this->removeUnpublishAndNonDefaultCourses($courses);
         $courseId = $request->query->get('courseId');
 
         if (empty($courseId)) {
@@ -803,6 +804,17 @@ class CourseSetController extends BaseController
         }
 
         return trim($tagsNames, $delimiter);
+    }
+
+    protected function removeUnpublishAndNonDefaultCourses($courses)
+    {
+        foreach ($courses as $key => $course) {
+            if ('published' != $course['status'] && 1 != $course['isDefault']) {
+                unset($courses[$key]);
+            }
+        }
+
+        return $courses;
     }
 
     /**

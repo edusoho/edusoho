@@ -5,6 +5,7 @@
     <label class="col-md-2 controls-label text-right">{{ 'wechat.notification.send_days'|trans }}</label>
     <div class="col-md-10 controls">
       <input class="hidden" name="key" value="{{ key }}" />
+      <input class="hidden" name="sendDays" value="" />
       {% for key, day in dict('weekDays') %}
         <div class="btn btn-small js-days-item {% if key in template.sendDays|default([]) %}btn-primary{% else %}btn-default{% endif %}">{{ day|trans }}
           <input class="hidden" type="checkbox" name="sendDays[]" value="{{ key }}" {% if key in template.sendDays|default([]) %} checked='checked'{% endif %}>

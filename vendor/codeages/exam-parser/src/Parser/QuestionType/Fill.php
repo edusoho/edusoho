@@ -77,7 +77,7 @@ class Fill extends AbstractQuestion
 
         //判断答案是否有错
         foreach ($question[QuestionElement::ANSWERS] as $key => $answer) {
-            if (empty($answer)) {
+            if (trim($answer) == '') {
                 $question['errors'][QuestionElement::ANSWERS.'_'.$key] = $this->getError(QuestionElement::ANSWERS, QuestionErrors::NO_ANSWER, $key);
             }
         }

@@ -75,15 +75,16 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             );
         } else {
             $live = $this->createLiveroom($activity);
-        }
 
-        if (empty($live)) {
-            $this->createNewException(LiveActivityException::CREATE_LIVEROOM_FAILED());
-        }
+            if (empty($live)) {
+                $this->createNewException(LiveActivityException::CREATE_LIVEROOM_FAILED());
+            }
 
-        if (isset($live['error'])) {
-            $error = '帐号已过期' == $live['error'] ? '直播服务已过期' : $live['error'];
-            throw $this->createServiceException($error);
+            if (isset($live['error'])) {
+                $error = '帐号已过期' == $live['error'] ? '直播服务已过期' : $live['error'];
+                throw $this->createServiceException($error);
+            }
+            $this->dispatchEvent('live.activity.create', new Event($live['id'], array('activity' => $activity)));
         }
 
         if (!empty($activity['roomType']) && !$this->isRoomType($activity['roomType'])) {
@@ -137,7 +138,6 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
             $this->getEdusohoLiveClient()->updateLive($liveParams);
         }
-
         $live = ArrayToolkit::parts($fields, array('replayStatus', 'fileId', 'roomType'));
 
         if (!empty($live['fileId'])) {
@@ -151,7 +151,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $liveActivity = $this->getLiveActivityDao()->update($id, $live);
         }
 
-        $this->dispatchEvent('live.activity.update', new Event($liveActivity, array('fields' => $live)));
+        $this->dispatchEvent('live.activity.update', new Event($liveActivity, array('fields' => $live, 'liveId' => $liveActivity['liveId'], 'activity' => $activity)));
 
         return array($liveActivity, $fields);
     }
@@ -184,12 +184,18 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $this->getLiveActivityDao()->delete($id);
         if (!empty($liveActivity['liveId'])) {
             $this->getEdusohoLiveClient()->deleteLive($liveActivity['liveId']);
+            $this->dispatchEvent('live.activity.delete', new Event($liveActivity['liveId']));
         }
     }
 
     public function search($conditions, $orderbys, $start, $limit)
     {
         return $this->getLiveActivityDao()->search($conditions, $orderbys, $start, $limit);
+    }
+
+    public function getByLiveId($liveId)
+    {
+        return $this->getLiveActivityDao()->getByLiveId($liveId);
     }
 
     /**
@@ -312,5 +318,10 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     protected function getActivityDao()
     {
         return $this->createDao('Activity:ActivityDao');
+    }
+
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
     }
 }

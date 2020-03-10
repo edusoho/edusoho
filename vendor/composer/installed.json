@@ -427,6 +427,60 @@
         "description": "Rate limiter with Biz Framework."
     },
     {
+        "name": "codeages/escloud-php-sdk",
+        "version": "v1.1.2",
+        "version_normalized": "1.1.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/escloud-php-sdk.git",
+            "reference": "fcd9309b21519bb0eec42643f6d725f7f2258ea9"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/codeages/escloud-php-sdk/zipball/fcd9309b21519bb0eec42643f6d725f7f2258ea9",
+            "reference": "fcd9309b21519bb0eec42643f6d725f7f2258ea9",
+            "shasum": "",
+            "mirrors": [
+                {
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                    "preferred": true
+                }
+            ]
+        },
+        "require": {
+            "ext-curl": "*",
+            "ext-json": "*",
+            "firebase/php-jwt": "^5.0",
+            "paragonie/random_compat": ">=2",
+            "php": ">=5.3.3",
+            "psr/log": "^1.0"
+        },
+        "require-dev": {
+            "monolog/monolog": "^1.18",
+            "phpunit/phpunit": "^4 || ^5 || ^6"
+        },
+        "time": "2020-02-20T03:32:03+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "src/functions.php"
+            ],
+            "psr-4": {
+                "ESCloud\\SDK\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "authors": [
+            {
+                "name": "Codeages Team",
+                "email": "team@codeages.com",
+                "homepage": "http://www.codeages.com"
+            }
+        ],
+        "description": "ESCloud PHP SDK"
+    },
+    {
         "name": "codeages/exam-parser",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
@@ -2099,6 +2153,60 @@
         ]
     },
     {
+        "name": "firebase/php-jwt",
+        "version": "v5.0.0",
+        "version_normalized": "5.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/firebase/php-jwt.git",
+            "reference": "9984a4d3a32ae7673d6971ea00bae9d0a1abba0e"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/firebase/php-jwt/zipball/9984a4d3a32ae7673d6971ea00bae9d0a1abba0e",
+            "reference": "9984a4d3a32ae7673d6971ea00bae9d0a1abba0e",
+            "shasum": "",
+            "mirrors": [
+                {
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                    "preferred": true
+                }
+            ]
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": " 4.8.35"
+        },
+        "time": "2017-06-27T22:17:23+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Firebase\\JWT\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Neuman Vong",
+                "email": "neuman+pear@twilio.com",
+                "role": "Developer"
+            },
+            {
+                "name": "Anant Narayanan",
+                "email": "anant@php.net",
+                "role": "Developer"
+            }
+        ],
+        "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
+        "homepage": "https://github.com/firebase/php-jwt"
+    },
+    {
         "name": "friendsofphp/php-cs-fixer",
         "version": "v2.2.0",
         "version_normalized": "2.2.0.0",
@@ -2922,7 +3030,8 @@
         "keywords": [
             "cron",
             "schedule"
-        ]
+        ],
+        "abandoned": "dragonmantank/cron-expression"
     },
     {
         "name": "mustangostang/spyc",
@@ -4969,7 +5078,8 @@
                 "email": "fabien@symfony.com"
             }
         ],
-        "description": "This bundle generates code for you"
+        "description": "This bundle generates code for you",
+        "abandoned": "symfony/maker-bundle"
     },
     {
         "name": "sensiolabs/security-checker",
@@ -6121,6 +6231,11 @@
         "name": "symfony/polyfill-xml",
         "version": "v1.12.0",
         "version_normalized": "1.12.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/polyfill-xml.git",
+            "reference": "e48d7bcd5b6d0aec5884ee351a3ea4d3abb58f13"
+        },
         "require": {
             "php": ">=5.3.3",
             "symfony/polyfill-php72": "~1.4"
@@ -6153,7 +6268,8 @@
             "polyfill",
             "portable",
             "shim"
-        ]
+        ],
+        "abandoned": "symfony/polyfill-php72"
     },
     {
         "name": "symfony/security-acl",

@@ -33,6 +33,11 @@ class ImUser extends AbstractResource
         );
 
         $users = ArrayToolkit::mergeArraysValue(array($mobileAndQQUsers, $nicknameUsers));
+        foreach ($users as $key => $user) {
+            if ($user['destroyed'] == 1) {
+                unset($users[$key]);
+            }
+        }
 
         return $users;
     }
