@@ -37,6 +37,8 @@
               <div class="class-course-score">
                 {{ web_macro.star(course.rating) }}
               </div>
+            {% else %}
+              <div class="pbm"></div>
             {% endif %}
             <span class="course-show">
               <i class="es-icon es-icon-keyboardarrowdown" data-lesson-url="{{ path('classrom_course_tasks_list', {courseId:course.id, classroomId:classroom.id}) }}"></i>
