@@ -61,7 +61,7 @@ abstract class Filter
 
     public function filters(&$dataSet)
     {
-        if (!$dataSet) {
+        if (!$dataSet || !is_array($dataSet)) {
             return;
         }
 
