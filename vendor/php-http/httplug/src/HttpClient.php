@@ -2,14 +2,27 @@
 
 namespace Http\Client;
 
-use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
- * {@inheritdoc}
+ * Sends a PSR-7 Request and returns a PSR-7 response.
  *
- * Provide the Httplug HttpClient interface for BC.
- * You should typehint Psr\Http\Client\ClientInterface in new code
+ * @author GeLo <geloen.eric@gmail.com>
+ * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
+ * @author David Buchmann <mail@davidbu.ch>
  */
-interface HttpClient extends ClientInterface
+interface HttpClient
 {
+    /**
+     * Sends a PSR-7 request.
+     *
+     * @param RequestInterface $request
+     *
+     * @return ResponseInterface
+     *
+     * @throws \Http\Client\Exception If an error happens during processing the request.
+     * @throws \Exception             If processing the request is impossible (eg. bad configuration).
+     */
+    public function sendRequest(RequestInterface $request);
 }

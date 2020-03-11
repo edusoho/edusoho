@@ -22,13 +22,17 @@
     "source":     "https://github.com/paragonie/random_compat"
   },
   "require": {
-    "php": "^7"
+    "php": ">=5.2.0"
   },
   "require-dev": {
-    "vimeo/psalm": "^1",
     "phpunit/phpunit": "4.*|5.*"
   },
   "suggest": {
     "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes."
+  },
+  "autoload": {
+    "files": [
+      "lib/random.php"
+    ]
   }
 }

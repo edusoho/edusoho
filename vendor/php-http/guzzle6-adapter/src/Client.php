@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Http\Adapter\Guzzle6;
 
 use GuzzleHttp\Client as GuzzleClient;
@@ -11,41 +9,47 @@ use GuzzleHttp\Middleware;
 use Http\Client\HttpAsyncClient;
 use Http\Client\HttpClient;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 
 /**
  * HTTP Adapter for Guzzle 6.
  *
  * @author David de Boer <david@ddeboer.nl>
  */
-final class Client implements HttpClient, HttpAsyncClient
+class Client implements HttpClient, HttpAsyncClient
 {
     /**
      * @var ClientInterface
      */
     private $client;
 
-    public function __construct(?ClientInterface $client = null)
+    /**
+     * @param ClientInterface|null $client
+     */
+    public function __construct(ClientInterface $client = null)
     {
         if (!$client) {
-            $client = self::buildClient();
+            $client = static::buildClient();
         }
 
         $this->client = $client;
     }
 
     /**
-     * Factory method to create the Guzzle 6 adapter with custom Guzzle configuration.
+     * Factory method to create the guzzle 6 adapter with custom configuration for guzzle.
+     *
+     * @param array $config Configuration to create guzzle with.
+     *
+     * @return Client
      */
-    public static function createWithConfig(array $config): Client
+    public static function createWithConfig(array $config)
     {
-        return new self(self::buildClient($config));
+        return new self(static::buildClient($config));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function sendRequest(RequestInterface $request): ResponseInterface
+    public function sendRequest(RequestInterface $request)
     {
         $promise = $this->sendAsyncRequest($request);
 
@@ -63,9 +67,13 @@ final class Client implements HttpClient, HttpAsyncClient
     }
 
     /**
-     * Build the Guzzle client instance.
+     * Build the guzzle client instance.
+     *
+     * @param array $config Additional configuration
+     *
+     * @return GuzzleClient
      */
-    private static function buildClient(array $config = []): GuzzleClient
+    private static function buildClient(array $config = [])
     {
         $handlerStack = new HandlerStack(\GuzzleHttp\choose_handler());
         $handlerStack->push(Middleware::prepareBody(), 'prepare_body');

@@ -15,14 +15,13 @@
         }
     ],
     "require": {
-        "php": "^7.0",
+        "php": ">=5.4",
         "psr/http-message": "^1.0",
-        "psr/http-client": "^1.0",
         "php-http/promise": "^1.0"
     },
     "require-dev": {
-        "phpspec/phpspec": "^4.3.4|^5.0|^6.0",
-        "friends-of-phpspec/phpspec-code-coverage" : "^4.1"
+        "phpspec/phpspec": "^2.4",
+        "henrikbjorn/phpspec-code-coverage" : "^1.0"
     },
     "autoload": {
         "psr-4": {
@@ -35,7 +34,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.x-dev"
+            "dev-master": "1.1-dev"
         }
     }
 }

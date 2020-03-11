@@ -228,7 +228,7 @@ abstract class ClassDiscovery
     public static function safeClassExists($class)
     {
         try {
-            return class_exists($class) || interface_exists($class);
+            return class_exists($class);
         } catch (\Exception $e) {
             return false;
         }

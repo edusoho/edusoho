@@ -18,10 +18,12 @@ final class MockClientStrategy implements DiscoveryStrategy
      */
     public static function getCandidates($type)
     {
-        if (is_a(HttpClient::class, $type, true) || is_a(HttpAsyncClient::class, $type, true)) {
-            return [['class' => Mock::class, 'condition' => Mock::class]];
-        }
-
-        return [];
+        switch ($type) {
+            case HttpClient::class:
+            case HttpAsyncClient::class:
+                return [['class' => Mock::class, 'condition' => Mock::class]];
+            default:
+                return [];
+       }
     }
 }

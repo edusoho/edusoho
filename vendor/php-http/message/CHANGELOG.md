@@ -9,17 +9,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
-## [1.8.0] - 2019-08-05
-
-### Changed
-
-- Raised minimum PHP version to 7.1
-
-### Fixed
-
-- Fatal error on `CurlCommandFormatter` when body is larger than `escapeshellarg` allowed length.
-- Do not read stream in message formatter if stream is not seekable.
-
 ## [1.7.2] - 2018-10-30
 
 ### Fixed
@@ -188,8 +177,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Message factory (Guzzle, Diactoros)
 
 
-[Unreleased]: https://github.com/php-http/message/compare/1.7.2...HEAD
-[1.7.2]: https://github.com/php-http/message/compare/v1.7.1...1.7.2
+[Unreleased]: https://github.com/php-http/message/compare/v1.7.1...HEAD
 [1.7.1]: https://github.com/php-http/message/compare/1.7.0...v1.7.1
 [1.7.0]: https://github.com/php-http/message/compare/1.6.0...1.7.0
 [1.6.0]: https://github.com/php-http/message/compare/1.5.0...1.6.0

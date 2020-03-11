@@ -36,10 +36,7 @@ class CurlCommandFormatter implements Formatter
 
         $body = $request->getBody();
         if ($body->getSize() > 0) {
-            // escapeshellarg argument max length on Windows, but longer body in curl command would be impractical anyways
-            if ($body->getSize() > 8192) {
-                $data = '[too long stream omitted]';
-            } elseif ($body->isSeekable()) {
+            if ($body->isSeekable()) {
                 $data = $body->__toString();
                 $body->rewind();
                 if (preg_match('/[\x00-\x1F\x7F]/', $data)) {

@@ -11,14 +11,13 @@
         }
     ],
     "require": {
-        "php": "^7.1"
+        "php": "^5.5 || ^7.0"
     },
     "require-dev": {
         "php-http/httplug": "^1.0 || ^2.0",
         "php-http/message-factory": "^1.0",
         "puli/composer-plugin": "1.0.0-beta10",
-        "phpspec/phpspec": "^5.1",
-        "akeneo/phpspec-skip-example-extension": "^4.0"
+        "phpspec/phpspec": "^2.4"
     },
     "suggest": {
         "puli/composer-plugin": "Sets up Puli which is recommended for Discovery to work. Check http://docs.php-http.org/en/latest/discovery.html for more details.",
@@ -40,7 +39,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.7-dev"
+            "dev-master": "1.5-dev"
         }
     },
     "conflict": {

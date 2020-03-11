@@ -110,7 +110,6 @@ class Configuration implements ConfigurationInterface
         };
 
         $node
-            ->setDeprecated('DoctrineCacheBundle is deprecated and will not be available for Symfony 5. Please migrate your caches to symfony/cache and remove the doctrine_cache key from your configuration.')
             ->children()
                 ->arrayNode('acl_cache')
                     ->beforeNormalization()

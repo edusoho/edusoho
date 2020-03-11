@@ -1,21 +1,31 @@
 <?php
-
-declare(strict_types=1);
+/*
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * This software consists of voluntary contributions made by many individuals
+ * and is licensed under the MIT license. For more information, see
+ * <http://www.doctrine-project.org>.
+ */
 
 namespace Doctrine\Common\Lexer;
 
-use ReflectionClass;
-use const PREG_SPLIT_DELIM_CAPTURE;
-use const PREG_SPLIT_NO_EMPTY;
-use const PREG_SPLIT_OFFSET_CAPTURE;
-use function implode;
-use function in_array;
-use function preg_split;
-use function sprintf;
-use function substr;
-
 /**
  * Base class for writing simple lexers, i.e. for creating small DSLs.
+ *
+ * @since  2.0
+ * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
+ * @author Jonathan Wage <jonwage@gmail.com>
+ * @author Roman Borschel <roman@code-factory.org>
  */
 abstract class AbstractLexer
 {
@@ -37,42 +47,35 @@ abstract class AbstractLexer
      *
      * @var array
      */
-    private $tokens = [];
+    private $tokens = array();
 
     /**
      * Current lexer position in input string.
      *
-     * @var int
+     * @var integer
      */
     private $position = 0;
 
     /**
      * Current peek of current lexer position.
      *
-     * @var int
+     * @var integer
      */
     private $peek = 0;
 
     /**
      * The next token in the input.
      *
-     * @var array|null
+     * @var array
      */
     public $lookahead;
 
     /**
      * The last matched/seen token.
      *
-     * @var array|null
+     * @var array
      */
     public $token;
-
-    /**
-     * Composed regex for input parsing.
-     *
-     * @var string
-     */
-    private $regex;
 
     /**
      * Sets the input data to be tokenized.
@@ -87,7 +90,7 @@ abstract class AbstractLexer
     public function setInput($input)
     {
         $this->input  = $input;
-        $this->tokens = [];
+        $this->tokens = array();
 
         $this->reset();
         $this->scan($input);
@@ -101,9 +104,9 @@ abstract class AbstractLexer
     public function reset()
     {
         $this->lookahead = null;
-        $this->token     = null;
-        $this->peek      = 0;
-        $this->position  = 0;
+        $this->token = null;
+        $this->peek = 0;
+        $this->position = 0;
     }
 
     /**
@@ -119,7 +122,7 @@ abstract class AbstractLexer
     /**
      * Resets the lexer position on the input to the given position.
      *
-     * @param int $position Position to place the lexical scanner.
+     * @param integer $position Position to place the lexical scanner.
      *
      * @return void
      */
@@ -131,7 +134,7 @@ abstract class AbstractLexer
     /**
      * Retrieve the original lexer's input until a given position.
      *
-     * @param int $position
+     * @param integer $position
      *
      * @return string
      */
@@ -143,13 +146,13 @@ abstract class AbstractLexer
     /**
      * Checks whether a given token matches the current lookahead.
      *
-     * @param int|string $token
+     * @param integer|string $token
      *
-     * @return bool
+     * @return boolean
      */
     public function isNextToken($token)
     {
-        return $this->lookahead !== null && $this->lookahead['type'] === $token;
+        return null !== $this->lookahead && $this->lookahead['type'] === $token;
     }
 
     /**
@@ -157,23 +160,23 @@ abstract class AbstractLexer
      *
      * @param array $tokens
      *
-     * @return bool
+     * @return boolean
      */
     public function isNextTokenAny(array $tokens)
     {
-        return $this->lookahead !== null && in_array($this->lookahead['type'], $tokens, true);
+        return null !== $this->lookahead && in_array($this->lookahead['type'], $tokens, true);
     }
 
     /**
      * Moves to the next token in the input string.
      *
-     * @return bool
+     * @return boolean
      */
     public function moveNext()
     {
-        $this->peek      = 0;
-        $this->token     = $this->lookahead;
-        $this->lookahead = isset($this->tokens[$this->position])
+        $this->peek = 0;
+        $this->token = $this->lookahead;
+        $this->lookahead = (isset($this->tokens[$this->position]))
             ? $this->tokens[$this->position++] : null;
 
         return $this->lookahead !== null;
@@ -196,10 +199,10 @@ abstract class AbstractLexer
     /**
      * Checks if given value is identical to the given token.
      *
-     * @param mixed      $value
-     * @param int|string $token
+     * @param mixed   $value
+     * @param integer $token
      *
-     * @return bool
+     * @return boolean
      */
     public function isA($value, $token)
     {
@@ -215,9 +218,9 @@ abstract class AbstractLexer
     {
         if (isset($this->tokens[$this->position + $this->peek])) {
             return $this->tokens[$this->position + $this->peek++];
+        } else {
+            return null;
         }
-
-        return null;
     }
 
     /**
@@ -227,9 +230,8 @@ abstract class AbstractLexer
      */
     public function glimpse()
     {
-        $peek       = $this->peek();
+        $peek = $this->peek();
         $this->peek = 0;
-
         return $peek;
     }
 
@@ -242,8 +244,10 @@ abstract class AbstractLexer
      */
     protected function scan($input)
     {
-        if (! isset($this->regex)) {
-            $this->regex = sprintf(
+        static $regex;
+
+        if ( ! isset($regex)) {
+            $regex = sprintf(
                 '/(%s)|%s/%s',
                 implode(')|(', $this->getCatchablePatterns()),
                 implode('|', $this->getNonCatchablePatterns()),
@@ -251,37 +255,37 @@ abstract class AbstractLexer
             );
         }
 
-        $flags   = PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_OFFSET_CAPTURE;
-        $matches = preg_split($this->regex, $input, -1, $flags);
+        $flags = PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_OFFSET_CAPTURE;
+        $matches = preg_split($regex, $input, -1, $flags);
 
-        if ($matches === false) {
+        if (false === $matches) {
             // Work around https://bugs.php.net/78122
-            $matches = [[$input, 0]];
+            $matches = array(array($input, 0));
         }
 
         foreach ($matches as $match) {
             // Must remain before 'value' assignment since it can change content
             $type = $this->getType($match[0]);
 
-            $this->tokens[] = [
+            $this->tokens[] = array(
                 'value' => $match[0],
                 'type'  => $type,
                 'position' => $match[1],
-            ];
+            );
         }
     }
 
     /**
      * Gets the literal for a given token.
      *
-     * @param int|string $token
+     * @param integer $token
      *
-     * @return int|string
+     * @return string
      */
     public function getLiteral($token)
     {
-        $className = static::class;
-        $reflClass = new ReflectionClass($className);
+        $className = get_class($this);
+        $reflClass = new \ReflectionClass($className);
         $constants = $reflClass->getConstants();
 
         foreach ($constants as $name => $value) {
@@ -300,7 +304,7 @@ abstract class AbstractLexer
      */
     protected function getModifiers()
     {
-        return 'iu';
+        return 'i';
     }
 
     /**
@@ -322,7 +326,7 @@ abstract class AbstractLexer
      *
      * @param string $value
      *
-     * @return int|string|null
+     * @return integer
      */
     abstract protected function getType(&$value);
 }
