@@ -155,6 +155,13 @@ define(function(require, exports, module) {
             display:Translator.trans('admin.setting.cloud.validate_old.video_fingerprint_time.display')
         });
 
+      validator.addItem({
+        element: '[name="video_fingerprint_opacity"]',
+        required: true,
+        rule: 'decimal min{min:0} max{max:1}',
+        display:Translator.trans('admin.setting.cloud.validate_old.video_fingerprint_opacity.display')
+      });
+
         $('input[name="video_fingerprint"]').change(function(){
             if($(this).val() == 1) {
                 validator.addItem({

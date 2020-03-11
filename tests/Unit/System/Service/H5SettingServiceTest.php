@@ -149,6 +149,34 @@ class H5SettingServiceTest extends BaseTestCase
         $this->assertEquals('所有课程', $conditions['title']);
     }
 
+    public function testGraphicNavigationFilter()
+    {
+        $setting = $this->createNavigation();
+        $result = $this->getH5SettingService()->graphicNavigationFilter($setting);
+
+        $schema = (!empty($_SERVER['HTTPS']) && 'off' !== strtolower($_SERVER['HTTPS'])) ? 'https' : 'http';
+
+        $expected = $schema.'://'.$_SERVER['HTTP_HOST'].'/h5/index.html#/openCourse/explore/new';
+        $this->assertEquals($expected, $result['data'][0]['link']['url']);
+    }
+
+    public function testOpenCourseListFilter()
+    {
+        $this->mockOpenCourse();
+
+        $discoverySetting = $this->createTypeListByCondition('open_course_list');
+        $discoverySetting = $this->getH5SettingService()->openCourseListFilter($discoverySetting);
+
+        $this->assertEquals('open_course_list', $discoverySetting['type']);
+        $this->assertEquals('condition', $discoverySetting['data']['sourceType']);
+        $this->assertCount(2, $discoverySetting['data']['items']);
+
+        $discoverySetting = $this->createTypeListByCustom('course_list');
+        $discoverySetting = $this->getH5SettingService()->openCourseListFilter($discoverySetting);
+        $this->assertEmpty($discoverySetting['data']['items']);
+        $this->assertEquals('custom', $discoverySetting['data']['sourceType']);
+    }
+
     protected function createFilter()
     {
         return array(
@@ -357,7 +385,7 @@ class H5SettingServiceTest extends BaseTestCase
             )),
             array('functionName' => 'findBatchsByIds', 'returnValue' => array(
                 1 => array('deadline' => time(), 'type' => 'discount', 'rate' => 9.00, 'money' => 0, 'usedNum' => 1, 'unreceivedNum' => 1, 'targetType' => 'vip', 'targetId' => 1),
-                2 => array('deadline' => time() - 100000, 'type' => 'discount', 'rate' => 9.00, 'money' => 0, 'usedNum' => 1, 'unreceivedNum' => 1,  'targetType' => 'vip', 'targetId' => 1),
+                2 => array('deadline' => time() - 100000, 'type' => 'discount', 'rate' => 9.00, 'money' => 0, 'usedNum' => 1, 'unreceivedNum' => 1, 'targetType' => 'vip', 'targetId' => 1),
             )),
         ));
         $this->mockBiz('VipPlugin:Vip:LevelService', array(
@@ -374,6 +402,62 @@ class H5SettingServiceTest extends BaseTestCase
             array('functionName' => 'findEnabledLevels', 'returnValue' => array(0 => array('id' => 1))),
             array('functionName' => 'getFreeCourseNumByLevelId', 'returnValue' => 1),
             array('functionName' => 'getFreeClassroomNumByLevelId', 'returnValue' => 1),
+        ));
+    }
+
+    protected function createNavigation()
+    {
+        return array(
+            'type' => 'graphic_navigation',
+            'moduleType' => 'navigation-1',
+            'data' => array(
+                array(
+                    'title' => '公开课',
+                    'image' => array(
+                        'url' => '',
+                    ),
+                    'link' => array(
+                        'type' => 'openCourse',
+                        'target' => '跳转公开课“全部”列表',
+                        'url' => '',
+                    ),
+                ),
+            ),
+        );
+    }
+
+    protected function mockOpenCourse()
+    {
+        $this->mockBiz('OpenCourse:OpenCourseService', array(
+            array(
+                'functionName' => 'searchAndSortLiveCourses',
+                'returnValue' => array(
+                    array(
+                        'id' => 3,
+                        'title' => 'openCourse-3',
+                        'lesson' => array(
+                            'id' => 3,
+                            'title' => 'openCourse-Lesson-3',
+                        ),
+                    ),
+                    array(
+                        'id' => 2,
+                        'title' => 'openCourse-2',
+                        'lesson' => array(
+                            'id' => 2,
+                            'title' => 'openCourse-Lesson-2',
+                        ),
+                    ),
+                ),
+            ),
+            array(
+                'functionName' => 'getCourse',
+                'returnValue' => array(),
+            ),
+            array(
+                'functionName' => 'getCourseLesson',
+                'returnValue' => array(),
+            ),
         ));
     }
 

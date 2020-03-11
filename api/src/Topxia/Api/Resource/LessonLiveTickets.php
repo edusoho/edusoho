@@ -26,7 +26,7 @@ class LessonLiveTickets extends BaseResource
 
         $params = array();
         $params['id'] = $user['id'];
-        $params['nickname'] = $user['nickname'];
+        $params['nickname'] = $user['nickname'].'_'.$user['id'];
         $params['role'] = 'student';
 
         // android, iphone

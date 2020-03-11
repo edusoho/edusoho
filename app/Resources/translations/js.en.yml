@@ -1245,6 +1245,7 @@ admin.setting.cloud.delete_cloud_video_embed_watermark_hint: Are you sure you wa
 admin.setting.cloud.delete_cloud_video_embed_watermark_success_hint: Delete cloud video embed watermark successfully!
 admin.setting.cloud.delete_cloud_video_embed_watermark_fail_hint: Delete cloud video embed watermark failed!
 admin.setting.cloud.validate_old.video_fingerprint_time.display: Cloud video fingerprint display time
+admin.setting.cloud.validate_old.video_fingerprint_opacity.display: Cloud video fingerprint display opacity
 admin.setting.consult_setting.upload_qrcode_success_hint: Upload WeChat QR code successfully!
 admin.setting.consult_setting.setting_max_num_hint: Set up to 10..
 admin.setting.consult_setting.delete_hint: Are you sure you want to delete?
@@ -1527,3 +1528,10 @@ admin.switch_old_version.title: Toggle backstage
 admin.switch_old_version.confirm_message: 'After switching to the old background, all administrators will switch to the old background to confirm the switch?'
 admin.switch_new_version.confirm_message: 'After upgrading to the new background, all administrators will switch to the new background, but the permissions will not change, confirm the switch?'
 admin.can_not_link_data: Unable to link to data
+
+group.thread.reply.max_length.notice: Reply content must not exceed 3000 words
+
+course_manage.live_statistics.empty_tips: Data syncing, please try again later
+course_manage.live_statistics.live_not_end: Live data is not generated
+course_manage.live_statistics.checkin_not_support: Check in is currently not supported
+course_manage.live_statistics.data_not_valid: The data is abnormal

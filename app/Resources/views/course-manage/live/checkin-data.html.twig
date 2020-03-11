@@ -1,0 +1,30 @@
+{% import "macro.html.twig" as web_macro %}
+
+<table class="table cd-table">
+  <thead>
+  <tr>
+    <th>{{ 'user.fields.username_label'|trans }}</th>
+    <th>{{ 'course.live_statistics.checkin_status'|trans }}</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for user in statistics %}
+    <tr>
+      <td>{{ user.nickname|default('') }}</td>
+      <td>
+        {% if user.checkin|default(0) %}
+          {{ 'course.live_statistics.checkin_status.checked'|trans }}
+        {% else %}
+          {{ 'course.live_statistics.checkin_status.not_checked'|trans }}
+        {% endif %}
+      </td>
+    </tr>
+  {% else %}
+    <tr>
+      <td colspan="20">
+        <div class="empty">{{ 'course.live_statistics.empty_data'|trans }}</div>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>

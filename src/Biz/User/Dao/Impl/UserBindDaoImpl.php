@@ -70,6 +70,11 @@ class UserBindDaoImpl extends GeneralDaoImpl implements UserBindDao
         return $this->db()->delete($this->table, array('type' => $type, 'toId' => $toId));
     }
 
+    public function deleteByToId($toId)
+    {
+        return $this->db()->delete($this->table, array('toId' => $toId));
+    }
+
     public function declares()
     {
         return array(

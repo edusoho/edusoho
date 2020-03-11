@@ -48,15 +48,17 @@
     </div>
 
     {% include 'org/org-tree-select.html.twig' with {colmd:7,modal: 'modal'} %}
-    
-    <div class="row form-group">
-      <div class="col-md-2 control-label">
-        <label for="roles">{{'admin.user.fields.role_label'|trans}}</label>
+
+    {% if 'ROLE_TEACHER' in app.user.roles|default(null) %}
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="roles">{{'admin.user.fields.role_label'|trans}}</label>
+        </div>
+        <div class="col-md-7 controls">
+          <input type="checkbox" value="ROLE_TEACHER" name="roles[]"> {{'role.teacher'|trans}}
+        </div>
       </div>
-      <div class="col-md-7 controls">
-        <input type="checkbox" value="ROLE_TEACHER" name="roles[]"> {{'role.teacher'|trans}}
-      </div>
-    </div>
+    {% endif %}
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 

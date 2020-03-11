@@ -1551,6 +1551,71 @@ class OpenCourseServiceTest extends BaseTestCase
         $this->assertEquals(1, $result['userId']);
     }
 
+    public function testCountLiveCourses()
+    {
+        $course1 = $this->_createLiveOpenCourse('1');
+        $lesson1 = $this->_createOpenLiveCourseLesson($course1);
+
+        $course2 = $this->_createLiveOpenCourse('2');
+        $lesson2 = $this->_createOpenLiveCourseLesson($course2);
+
+        $this->getOpenCourseService()->publishCourse($course1['id']);
+        $this->getOpenCourseService()->publishCourse($course2['id']);
+
+        $result = $this->getOpenCourseService()->countLiveCourses(array());
+
+        $this->assertEquals(2, $result);
+
+        $result = $this->getOpenCourseService()->countLiveCourses(array('title' => $course1['title']));
+
+        $this->assertEquals(1, $result);
+    }
+
+    public function testSearchAndSortLiveCourses_ConditionsEmpty()
+    {
+        $result = $this->getOpenCourseService()->searchAndSortLiveCourses(array(), 0, 1);
+        $this->assertEmpty($result);
+    }
+
+    public function testSearchAndSortLiveCourses_CoursesEmpty()
+    {
+        $course = $this->_createLiveOpenCourse();
+        $lesson = $this->_createOpenLiveCourseLesson($course);
+
+        $conditions = array(
+            'title' => $course['title'],
+        );
+        $result = $this->getOpenCourseService()->searchAndSortLiveCourses($conditions, 0, 1);
+
+        $this->assertEmpty($result);
+    }
+
+    public function testSearchAndSortLiveCourses()
+    {
+        $course1 = $this->_createLiveOpenCourse('1');
+        $lesson1 = $this->_createOpenLiveCourseLesson($course1);
+
+        $course2 = $this->_createLiveOpenCourse('2');
+        $lesson2 = $this->_createOpenLiveCourseLesson($course2);
+
+        $conditions = array(
+            'title' => $course1['title'],
+        );
+
+        $result = $this->getOpenCourseService()->searchAndSortLiveCourses($conditions, 0, 2);
+
+        $this->assertEmpty($result);
+
+        $this->getOpenCourseService()->publishCourse($course1['id']);
+        $this->getOpenCourseService()->publishCourse($course2['id']);
+
+        $result = $this->getOpenCourseService()->searchAndSortLiveCourses($conditions, 0, 2);
+
+        $this->assertCount(1, $result);
+        $this->assertEquals($course1['title'], $result[0]['title']);
+        $this->assertEquals($lesson1['id'], $result[0]['lesson']['id']);
+    }
+
     private function mookOrg($name)
     {
         $org = array();
@@ -1560,10 +1625,10 @@ class OpenCourseServiceTest extends BaseTestCase
         return $org;
     }
 
-    private function _createLiveOpenCourse()
+    private function _createLiveOpenCourse($seq = '')
     {
         $course = array(
-            'title' => 'liveOpenCourse',
+            'title' => 'liveOpenCourse'.$seq,
             'type' => 'liveOpen',
             'userId' => 1,
             'createdTime' => time(),

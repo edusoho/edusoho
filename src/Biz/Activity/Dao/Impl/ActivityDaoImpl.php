@@ -55,6 +55,8 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
             'mediaType IN (:mediaTypes)',
             'mediaId = :mediaId',
             'fromCourseSetId = :fromCourseSetId',
+            'startTime >= :startTime_GT',
+            'endTime <= :endTime_LT',
         );
 
         return $declares;
@@ -70,5 +72,10 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
         }
 
         return $this->db()->fetchAll($sql, array($courseId, $newStartTime, $newEndTime, $newStartTime, $newEndTime, $newStartTime, $newEndTime));
+    }
+
+    public function getByMediaIdAndMediaTypeAndCopyId($mediaId, $mediaType, $copyId)
+    {
+        return $this->getByFields(array('mediaId' => $mediaId, 'mediaType' => $mediaType, 'copyId' => $copyId));
     }
 }

@@ -321,3 +321,15 @@ services:
         arguments: ['@biz']
         tags:
             - { name: codeages_plugin.event.subscriber }
+
+    destroy_account_event_subscriber:
+        class: Biz\DestroyAccount\Event\DestroyAccountEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    live_statistics_event_subscriber:
+        class: Biz\Live\Event\LiveStatisticsSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
