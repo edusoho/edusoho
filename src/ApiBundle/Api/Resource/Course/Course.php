@@ -13,6 +13,8 @@ use AppBundle\Common\TimeMachine;
 
 class Course extends AbstractResource
 {
+    const DEFAULT_PAGING_LIMIT = 20;
+
     /**
      * @ApiConf(isRequiredAuth=false)
      */
