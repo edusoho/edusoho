@@ -27,88 +27,88 @@ class OpenCourseLessonDaoTest extends BaseDaoTestCase
                 'condition' => array(),
                 'expectedResults' => $expected,
                 'expectedCount' => 13,
-                ),
+            ),
             array(
                 'condition' => array('courseId' => 2),
                 'expectedResults' => array($expected[0]),
                 'expectedCount' => 1,
-                ),
+            ),
             array(
                 'condition' => array('updatedTime_GE' => 2),
                 'expectedResults' => array($expected[1]),
                 'expectedCount' => 1,
-                ),
+            ),
             array(
                 'condition' => array('status' => 'unpublished'),
                 'expectedResults' => array($expected[2]),
                 'expectedCount' => 1,
-                ),
+            ),
             array(
                 'condition' => array('type' => 'b'),
                 'expectedResults' => array($expected[3]),
                 'expectedCount' => 1,
-                ),
+            ),
             array(
                 'condition' => array('free' => 2),
                 'expectedResults' => array($expected[4]),
                 'expectedCount' => 1,
-                ),
+            ),
             array(
                 'condition' => array('userId' => 2),
                 'expectedResults' => array($expected[5]),
                 'expectedCount' => 1,
-                ),
+            ),
             array(
                 'condition' => array('mediaId' => 2),
                 'expectedResults' => array($expected[6]),
                 'expectedCount' => 1,
-                ),
+            ),
             array(
                 'condition' => array('number' => 2),
                 'expectedResults' => array($expected[7]),
                 'expectedCount' => 1,
-                ),
+            ),
             array(
                 'condition' => array('startTimeGreaterThan' => 2),
                 'expectedResults' => array($expected[8]),
                 'expectedCount' => 1,
-                ),
+            ),
             array(
                 'condition' => array('endTimeLessThan' => 2),
                 'expectedResults' => $expected,
                 'expectedCount' => 13,
-                ),
+            ),
             array(
                 'condition' => array('startTimeLessThan' => 2),
                 'expectedResults' => $expected,
                 'expectedCount' => 13,
-                ),
+            ),
             array(
                 'condition' => array('endTimeGreaterThan' => 0),
                 'expectedResults' => $expected,
                 'expectedCount' => 13,
-                ),
+            ),
             array(
                 'condition' => array('titleLike' => 'b'),
                 'expectedResults' => array($expected[10]),
                 'expectedCount' => 1,
-                ),
+            ),
             array(
                 'condition' => array('startTime' => '2', 'endTime' => '3'),
                 'expectedResults' => array($expected[11]),
                 'expectedCount' => 1,
-                ),
+            ),
             array(
                 'condition' => array('copyId' => 2),
                 'expectedResults' => array($expected[12]),
                 'expectedCount' => 1,
-                ),
+            ),
             array(
                 'condition' => array('courseIds' => array(2)),
                 'expectedResults' => array($expected[0]),
                 'expectedCount' => 1,
-                ),
-            );
+            ),
+        );
         $this->searchTestUtil($this->getDao(), $testCondition, $this->getCompareKeys());
     }
 
@@ -172,6 +172,68 @@ class OpenCourseLessonDaoTest extends BaseDaoTestCase
         $expected[] = $this->mockDataObject(array('seq' => 1));
         $res = $this->getDao()->getLessonMaxSeqByCourseId(1);
         $this->assertEquals(1, $res);
+    }
+
+    public function testSearchLessonsWithOrder()
+    {
+        $lesson1 = $this->mockDataObject(array(
+            'courseId' => 1,
+            'updatedTime' => time(),
+            'status' => 'published',
+            'type' => 'liveOpen',
+            'free' => 1,
+            'userId' => 1,
+            'mediaId' => 1,
+            'number' => 1,
+            'startTime' => time(),
+            'endTime' => time() + 60 * 60,
+            'title' => 'a',
+            'createdTime' => time(),
+            'copyId' => 1,
+            'replayStatus' => 'ungenerated',
+            'progressStatus' => 'created',
+        ));
+
+        $lesson2 = $this->mockDataObject(array(
+            'courseId' => 2,
+            'updatedTime' => time() + 60 * 60 * 2,
+            'status' => 'published',
+            'type' => 'liveOpen',
+            'free' => 1,
+            'userId' => 1,
+            'mediaId' => 1,
+            'number' => 1,
+            'startTime' => time() + 60 * 60 * 2,
+            'endTime' => time() + 60 * 60 * 3,
+            'title' => 'a',
+            'createdTime' => time() + 60 * 60 * 2,
+            'copyId' => 1,
+            'replayStatus' => 'ungenerated',
+            'progressStatus' => 'created',
+        ));
+
+        $lesson3 = $this->mockDataObject(array(
+            'courseId' => 3,
+            'updatedTime' => time() - 60 * 60 * 2,
+            'status' => 'published',
+            'type' => 'liveOpen',
+            'free' => 1,
+            'userId' => 1,
+            'mediaId' => 1,
+            'number' => 1,
+            'startTime' => time() - 60 * 60 * 2,
+            'endTime' => time() - 60 * 60,
+            'title' => 'a',
+            'createdTime' => time() - 60 * 60 * 2,
+            'copyId' => 1,
+            'replayStatus' => 'ungenerated',
+            'progressStatus' => 'created',
+        ));
+
+        $result = $this->getDao()->searchLessonsWithOrderBy(array('courseIds' => array($lesson1['courseId'])), 0, 2);
+
+        $this->assertCount(1, $result);
+        $this->assertEquals($lesson1['id'], $result[0]['id']);
     }
 
     protected function getDefaultMockFields()

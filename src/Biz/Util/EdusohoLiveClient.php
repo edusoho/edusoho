@@ -141,6 +141,16 @@ class EdusohoLiveClient
         return in_array($liveProvider, array(self::OLD_ES_LIVE_PROVIDER, self::NEW_ES_LIVE_PROVIDER));
     }
 
+    public function getLiveRoomCheckinList($liveId)
+    {
+        return $this->createCloudApi('leaf')->get("/lives/{$liveId}/checkin_list");
+    }
+
+    public function getLiveRoomHistory($liveId)
+    {
+        return $this->createCloudApi('leaf')->get("/lives/{$liveId}/history");
+    }
+
     protected function createCloudApi($server)
     {
         if (empty($this->cloudApi[$server])) {

@@ -24,6 +24,7 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         '299dfe369c68155fbe2a6dcdb576d58e' => __DIR__.'/..'.'/codeages/omnipay-alipay/src/Common/helpers.php',
         'ce89ac35a6c330c55f4710717db9ff78' => __DIR__.'/..'.'/kriswallsmith/assetic/src/functions.php',
         '04c6c5c2f7095ccf6c481d3e53e1776f' => __DIR__.'/..'.'/mustangostang/spyc/Spyc.php',
+        'aef137864a7aaf34614936d4960886a7' => __DIR__.'/..'.'/codeages/escloud-php-sdk/src/functions.php',
         '0b994ed09d88003af15ffbb9ef2e73ce' => __DIR__.'/..'.'/codeages/qiqiuyun-php-sdk/src/functions.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__.'/..'.'/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         'c65d09b6820da036953a371c8c73a9b1' => __DIR__.'/..'.'/facebook/graph-sdk/src/Facebook/polyfills.php',
@@ -96,11 +97,13 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
             'Gregwar\\Captcha\\' => 16,
         ),
         'F' => array(
+            'Firebase\\JWT\\' => 13,
             'Facebook\\' => 9,
         ),
         'E' => array(
             'ExamParser\\' => 11,
             'Endroid\\QrCode\\' => 15,
+            'ESCloud\\SDK\\' => 12,
         ),
         'D' => array(
             'Doctrine\\Instantiator\\' => 22,
@@ -259,6 +262,9 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         'Gregwar\\Captcha\\' => array(
             0 => __DIR__.'/..'.'/gregwar/captcha',
         ),
+        'Firebase\\JWT\\' => array(
+            0 => __DIR__.'/..'.'/firebase/php-jwt/src',
+        ),
         'Facebook\\' => array(
             0 => __DIR__.'/..'.'/facebook/graph-sdk/src/Facebook',
         ),
@@ -267,6 +273,9 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         ),
         'Endroid\\QrCode\\' => array(
             0 => __DIR__.'/..'.'/endroid/qrcode/src',
+        ),
+        'ESCloud\\SDK\\' => array(
+            0 => __DIR__.'/..'.'/codeages/escloud-php-sdk/src',
         ),
         'Doctrine\\Instantiator\\' => array(
             0 => __DIR__.'/..'.'/doctrine/instantiator/src/Doctrine/Instantiator',

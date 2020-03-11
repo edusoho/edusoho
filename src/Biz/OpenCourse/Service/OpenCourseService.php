@@ -198,4 +198,8 @@ interface OpenCourseService
     public function getTodayOpenLiveCourseNumber();
 
     public function findOpenLiveCourse($conditions, $userId);
+
+    public function countLiveCourses($conditions = array());
+
+    public function searchAndSortLiveCourses($conditions = array(), $start, $limit);
 }

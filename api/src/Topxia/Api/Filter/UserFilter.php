@@ -51,6 +51,7 @@ class UserFilter implements Filter
         $data['mediumAvatar'] = empty($mediumAvatar) ? $host.'/assets/img/default/avatar.png' : $host.'/files/'.$mediumAvatar['path'];
         $largeAvatar = empty($data['largeAvatar']) ? '' : $fileService->parseFileUri($data['largeAvatar']);
         $data['largeAvatar'] = empty($largeAvatar) ? $host.'/assets/img/default/avatar.png' : $host.'/files/'.$largeAvatar['path'];
+        $data['nickname'] = ($data['destroyed'] == 1) ? '帐号已注销' : $data['nickname'];
 
         $user = getCurrentUser();
         $profile = $userService->getUserProfile($data['id']);

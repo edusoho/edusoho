@@ -107,7 +107,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             $key = 'examResult';
             $logName = 'wechat_notify_exam_result';
             $data = array(
-                'first' => array('value' => '同学，您好，你的试卷已批阅完成'),
+                'first' => array('value' => '同学，您好，您的试卷已批阅完成'),
                 'keyword1' => array('value' => $task['title']),
                 'keyword2' => array('value' => $paperResult['score']),
                 'remark' => array('value' => '再接再厉哦'),
@@ -130,7 +130,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             }
 
             $data = array(
-                'first' => array('value' => '同学，您好，你的作业已批阅完成'),
+                'first' => array('value' => '同学，您好，您的作业已批阅完成'),
                 'keyword1' => array('value' => $task['title']),
                 'keyword2' => array('value' => $course['courseSetTitle']),
                 'keyword3' => array('value' => $nickname),
@@ -392,7 +392,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
         if ('courseRemind' == $key) {
             $templates['courseRemind']['sendTime'] = $fields['sendTime'];
-            $templates['courseRemind']['sendDays'] = $fields['sendDays'];
+            $templates['courseRemind']['sendDays'] = empty($fields['sendDays']) ? array() : $fields['sendDays'];
             $notificationJob = $this->getSchedulerService()->getJobByName('WeChatNotificationJob_CourseRemind');
             if ($notificationJob) {
                 $this->getSchedulerService()->deleteJob($notificationJob['id']);
@@ -746,7 +746,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     private function decorateRouter(Router $router)
     {
         $routerContext = $router->getContext();
-        if ($routerContext->getHost() == 'localhost') {
+        if ('localhost' == $routerContext->getHost()) {
             $url = $this->getSettingService()->node('site.url');
             if (!empty($url)) {
                 $parsedUrl = parse_url($url);

@@ -113,7 +113,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         }
 
         $params['id'] = $user['id'];
-        $params['nickname'] = $user['nickname'];
+        $params['nickname'] = $user['nickname'].'_'.$user['id'];
 
         /**
          * @var int

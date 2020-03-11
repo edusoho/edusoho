@@ -29,6 +29,11 @@ class LearnCourseTaskAccessorTest extends BaseTestCase
                     'withParams' => array('security'),
                     'runTimes' => 1,
                 ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('site', array()),
+                    'returnValue' => array(),
+                ),
             )
         );
         $this->createDemoCourse();

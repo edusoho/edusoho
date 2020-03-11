@@ -47,6 +47,10 @@ class PageDiscovery extends AbstractResource
                     $couponBatch['targetDetail'] = $this->getCouponBatchService()->getCouponBatchTargetDetail($couponBatch['id']);
                 }
             }
+
+            if ('open_course_list' == $discoverySetting['type']) {
+                $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('userId', 'teacherIds'));
+            }
         }
 
         return !empty($params['format']) && 'list' == $params['format'] ? array_values($discoverySettings) : $discoverySettings;

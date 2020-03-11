@@ -20,4 +20,5 @@
       <span class="text-muted">{{'admin.live_manage.deleted'|trans}}</span>
     {% endif %}
   </td>
+  <td><a href="{{ path('course_set_manage_live_statistics_detail', {courseId: liveTask.courseId, taskId: liveTask.id}) }}">{{ 'site.btn.detail'|trans }}</a></td>
 </tr>

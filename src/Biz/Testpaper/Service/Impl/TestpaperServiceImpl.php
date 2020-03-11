@@ -494,13 +494,13 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->searchTestpaperResultsCountJoinCourseMemberGroupByUserId($conditions);
     }
 
-    public function searchTestpaperResults($conditions, $sort, $start, $limit)
+    public function searchTestpaperResults($conditions, $sort, $start, $limit, $columns = array())
     {
         if (isset($conditions['courseIds']) && empty($conditions['courseIds'])) {
             return array();
         }
 
-        return $this->getTestpaperResultDao()->search($conditions, $sort, $start, $limit);
+        return $this->getTestpaperResultDao()->search($conditions, $sort, $start, $limit, $columns);
     }
 
     public function searchTestpapersScore($conditions)
@@ -753,10 +753,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         try {
             foreach ($answers as $questionId => $answer) {
-                $fields = array('answer' => $answer);
-
                 $question = empty($questions[$questionId]) ? array() : $questions[$questionId];
                 $paperItem = empty($paperItems[$questionId]) ? array() : $paperItems[$questionId];
+
+                $answer = $this->getQuestionService()->filterAnswer($question, $answer);
+                $fields = array('answer' => $answer);
 
                 if (!$question) {
                     $fields['status'] = 'none';
