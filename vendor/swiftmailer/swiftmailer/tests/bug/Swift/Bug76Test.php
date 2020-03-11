@@ -1,38 +1,38 @@
 <?php
 
-class Swift_Bug76Test extends \PHPUnit\Framework\TestCase
+class Swift_Bug76Test extends \PHPUnit_Framework_TestCase
 {
-    private $inputFile;
-    private $outputFile;
-    private $encoder;
+    private $_inputFile;
+    private $_outputFile;
+    private $_encoder;
 
     protected function setUp()
     {
-        $this->inputFile = sys_get_temp_dir().'/in.bin';
-        file_put_contents($this->inputFile, '');
+        $this->_inputFile = sys_get_temp_dir().'/in.bin';
+        file_put_contents($this->_inputFile, '');
 
-        $this->outputFile = sys_get_temp_dir().'/out.bin';
-        file_put_contents($this->outputFile, '');
+        $this->_outputFile = sys_get_temp_dir().'/out.bin';
+        file_put_contents($this->_outputFile, '');
 
-        $this->encoder = $this->createEncoder();
+        $this->_encoder = $this->_createEncoder();
     }
 
     protected function tearDown()
     {
-        unlink($this->inputFile);
-        unlink($this->outputFile);
+        unlink($this->_inputFile);
+        unlink($this->_outputFile);
     }
 
     public function testBase64EncodedLineLengthNeverExceeds76CharactersEvenIfArgsDo()
     {
-        $this->fillFileWithRandomBytes(1000, $this->inputFile);
+        $this->_fillFileWithRandomBytes(1000, $this->_inputFile);
 
-        $os = $this->createStream($this->inputFile);
-        $is = $this->createStream($this->outputFile);
+        $os = $this->_createStream($this->_inputFile);
+        $is = $this->_createStream($this->_outputFile);
 
-        $this->encoder->encodeByteStream($os, $is, 0, 80); //Exceeds 76
+        $this->_encoder->encodeByteStream($os, $is, 0, 80); //Exceeds 76
 
-        $this->assertMaxLineLength(76, $this->outputFile,
+        $this->assertMaxLineLength(76, $this->_outputFile,
             '%s: Line length should not exceed 76 characters'
         );
     }
@@ -45,7 +45,7 @@ class Swift_Bug76Test extends \PHPUnit\Framework\TestCase
         }
     }
 
-    private function fillFileWithRandomBytes($byteCount, $file)
+    private function _fillFileWithRandomBytes($byteCount, $file)
     {
         // I was going to use dd with if=/dev/random but this way seems more
         // cross platform even if a hella expensive!!
@@ -53,18 +53,18 @@ class Swift_Bug76Test extends \PHPUnit\Framework\TestCase
         file_put_contents($file, '');
         $fp = fopen($file, 'wb');
         for ($i = 0; $i < $byteCount; ++$i) {
-            $byteVal = random_int(0, 255);
+            $byteVal = rand(0, 255);
             fwrite($fp, pack('i', $byteVal));
         }
         fclose($fp);
     }
 
-    private function createEncoder()
+    private function _createEncoder()
     {
         return new Swift_Mime_ContentEncoder_Base64ContentEncoder();
     }
 
-    private function createStream($file)
+    private function _createStream($file)
     {
         return new Swift_ByteStream_FileByteStream($file, true);
     }

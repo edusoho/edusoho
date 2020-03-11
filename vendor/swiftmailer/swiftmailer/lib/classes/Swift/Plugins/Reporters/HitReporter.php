@@ -20,21 +20,22 @@ class Swift_Plugins_Reporters_HitReporter implements Swift_Plugins_Reporter
      *
      * @var array
      */
-    private $failures = [];
+    private $_failures = array();
 
-    private $failures_cache = [];
+    private $_failures_cache = array();
 
     /**
      * Notifies this ReportNotifier that $address failed or succeeded.
      *
-     * @param string $address
-     * @param int    $result  from {@link RESULT_PASS, RESULT_FAIL}
+     * @param Swift_Mime_Message $message
+     * @param string             $address
+     * @param int                $result  from {@link RESULT_PASS, RESULT_FAIL}
      */
-    public function notify(Swift_Mime_SimpleMessage $message, $address, $result)
+    public function notify(Swift_Mime_Message $message, $address, $result)
     {
-        if (self::RESULT_FAIL == $result && !isset($this->failures_cache[$address])) {
-            $this->failures[] = $address;
-            $this->failures_cache[$address] = true;
+        if (self::RESULT_FAIL == $result && !isset($this->_failures_cache[$address])) {
+            $this->_failures[] = $address;
+            $this->_failures_cache[$address] = true;
         }
     }
 
@@ -45,7 +46,7 @@ class Swift_Plugins_Reporters_HitReporter implements Swift_Plugins_Reporter
      */
     public function getFailedRecipients()
     {
-        return $this->failures;
+        return $this->_failures;
     }
 
     /**
@@ -53,6 +54,6 @@ class Swift_Plugins_Reporters_HitReporter implements Swift_Plugins_Reporter
      */
     public function clear()
     {
-        $this->failures = $this->failures_cache = [];
+        $this->_failures = $this->_failures_cache = array();
     }
 }

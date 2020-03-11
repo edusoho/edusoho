@@ -122,11 +122,23 @@ You can also pass directly the wanted phrase to the builder:
 $captcha = new CaptchaBuilder('hello');
 ```
 
+Complete example
+================
+
+If you want to see an example you can have a look at he ``demo/form.php``, which uses ``demo/session.php`` to
+render a captcha and check it after the submission
+
 Symfony Bundle
 ================
 
 You can have a look at the following repository to enjoy the Symfony 2 bundle packaging this captcha generator :
 https://github.com/Gregwar/CaptchaBundle
+
+Yii2 Extension
+===============
+
+You can use the following extension for integrating with Yii2 Framework :
+https://github.com/juliardi/yii2-captcha
 
 License
 =======

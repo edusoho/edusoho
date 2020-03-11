@@ -16,10 +16,10 @@
 abstract class Swift_ConfigurableSpool implements Swift_Spool
 {
     /** The maximum number of messages to send per flush */
-    private $message_limit;
+    private $_message_limit;
 
     /** The time limit per flush */
-    private $time_limit;
+    private $_time_limit;
 
     /**
      * Sets the maximum number of messages to send per flush.
@@ -28,7 +28,7 @@ abstract class Swift_ConfigurableSpool implements Swift_Spool
      */
     public function setMessageLimit($limit)
     {
-        $this->message_limit = (int) $limit;
+        $this->_message_limit = (int) $limit;
     }
 
     /**
@@ -38,7 +38,7 @@ abstract class Swift_ConfigurableSpool implements Swift_Spool
      */
     public function getMessageLimit()
     {
-        return $this->message_limit;
+        return $this->_message_limit;
     }
 
     /**
@@ -48,7 +48,7 @@ abstract class Swift_ConfigurableSpool implements Swift_Spool
      */
     public function setTimeLimit($limit)
     {
-        $this->time_limit = (int) $limit;
+        $this->_time_limit = (int) $limit;
     }
 
     /**
@@ -58,6 +58,6 @@ abstract class Swift_ConfigurableSpool implements Swift_Spool
      */
     public function getTimeLimit()
     {
-        return $this->time_limit;
+        return $this->_time_limit;
     }
 }

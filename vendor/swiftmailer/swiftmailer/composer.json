@@ -15,29 +15,23 @@
         }
     ],
     "require": {
-        "php": ">=7.0.0",
-        "egulias/email-validator": "~2.0",
-        "symfony/polyfill-iconv": "^1.0",
-        "symfony/polyfill-mbstring": "^1.0",
-        "symfony/polyfill-intl-idn": "^1.10"
+        "php": ">=5.3.3"
     },
     "require-dev": {
         "mockery/mockery": "~0.9.1",
-        "symfony/phpunit-bridge": "^3.4.19|^4.1.8"
-    },
-    "suggest": {
-        "ext-intl": "Needed to support internationalized email addresses",
-        "true/punycode": "Needed to support internationalized email addresses, if ext-intl is not installed"
+        "symfony/phpunit-bridge": "~3.2"
     },
     "autoload": {
         "files": ["lib/swift_required.php"]
     },
     "autoload-dev": {
-        "psr-0": { "Swift_": "tests/unit" }
+        "psr-0": {
+            "Swift_": "tests/unit"
+        }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "6.2-dev"
+            "dev-master": "5.4-dev"
         }
     }
 }

@@ -2,11 +2,11 @@
 
 use Mockery as m;
 
-class Swift_Bug534Test extends \SwiftMailerTestCase
+class Swift_Bug534Test extends \PHPUnit_Framework_TestCase
 {
     public function testEmbeddedImagesAreEmbedded()
     {
-        $message = (new Swift_Message())
+        $message = Swift_Message::newInstance()
             ->setFrom('from@example.com')
             ->setTo('to@example.com')
             ->setSubject('test')
@@ -15,7 +15,7 @@ class Swift_Bug534Test extends \SwiftMailerTestCase
         $message->setBody('<img src="'.$cid.'" />', 'text/html');
 
         $that = $this;
-        $messageValidation = function (Swift_Mime_SimpleMessage $message) use ($that) {
+        $messageValidation = function (Swift_Mime_Message $message) use ($that) {
             preg_match('/cid:(.*)"/', $message->toString(), $matches);
             $cid = $matches[1];
             preg_match('/Content-ID: <(.*)>/', $message->toString(), $matches);
@@ -25,7 +25,7 @@ class Swift_Bug534Test extends \SwiftMailerTestCase
             return true;
         };
 
-        $failedRecipients = [];
+        $failedRecipients = array();
 
         $transport = m::mock('Swift_Transport');
         $transport->shouldReceive('isStarted')->andReturn(true);

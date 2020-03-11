@@ -49,6 +49,7 @@
       <xsd:attribute name="local-domain" type="xsd:string"/>
       <xsd:attribute name="transport" type="xsd:string" />
       <xsd:attribute name="logging" type="xsd:string" />
+      <xsd:attribute name="delivery-address" type="xsd:string" />
       <xsd:attribute name="disable-delivery" type="xsd:boolean" />
       <xsd:attribute name="sender-address" type="xsd:boolean" />
       <xsd:attribute name="url" type="xsd:string" />
@@ -60,7 +61,6 @@
       <xsd:element name="antiflood" type="antiflood" minOccurs="0" maxOccurs="1" />
       <xsd:element name="spool" type="spool" minOccurs="0" maxOccurs="1" />
       <xsd:element name="delivery-whitelist-pattern" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
-      <xsd:element name="delivery-address" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
     </xsd:sequence>
 
     <xsd:attribute name="name" type="xsd:string" />

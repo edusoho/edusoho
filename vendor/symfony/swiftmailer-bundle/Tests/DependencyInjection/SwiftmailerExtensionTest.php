@@ -13,7 +13,8 @@ namespace Symfony\Bundle\SwiftmailerBundle\Tests\DependencyInjection;
 
 use Symfony\Bundle\SwiftmailerBundle\DependencyInjection\SwiftmailerExtension;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\Compiler\ResolveDefinitionTemplatesPass;
+use Symfony\Component\DependencyInjection\Compiler\ResolveDefinitionTemplatesPass; // BC with 2.7
+use Symfony\Component\DependencyInjection\Compiler\ResolveChildDefinitionsPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -91,6 +92,20 @@ class SwiftmailerExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('swiftmailer.mailer.default.transport.sendmail', (string) $container->getAlias('swiftmailer.mailer.default.transport'));
 
         $this->assertEquals('local.example.org', $container->get('swiftmailer.mailer.default.transport')->getLocalDomain());
+    }
+
+    /**
+     * @dataProvider getConfigTypes
+     *
+     * @group legacy
+     */
+    public function testMailConfig($type)
+    {
+        $container = $this->loadContainerFromFile('mail', $type);
+
+        $this->assertEquals('swiftmailer.mailer.default.transport', (string) $container->getAlias('swiftmailer.transport'));
+        $this->assertEquals('swiftmailer.mailer.default.transport.spool', (string) $container->getAlias('swiftmailer.mailer.default.transport'));
+        $this->assertEquals('swiftmailer.mailer.default.transport.mail', (string) $container->getAlias('swiftmailer.mailer.default.transport.real'));
     }
 
     /**
@@ -423,7 +438,7 @@ class SwiftmailerExtensionTest extends \PHPUnit_Framework_TestCase
         $loader->load($file.'.'.$type);
 
         $container->getCompilerPassConfig()->setOptimizationPasses(array(
-            new ResolveDefinitionTemplatesPass(),
+            class_exists('Symfony\Component\DependencyInjection\Compiler\ResolveChildDefinitionsPass') ? new ResolveChildDefinitionsPass() : new ResolveDefinitionTemplatesPass(),
         ));
         $container->getCompilerPassConfig()->setRemovingPasses(array());
         $container->compile();

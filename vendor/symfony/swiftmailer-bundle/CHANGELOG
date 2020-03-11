@@ -1,21 +1,12 @@
-* 3.0.2 (2017-06-05)
+* 2.6.3 (2017-07-22)
 
- * removed empty delivery_addresses
- * removed usage of deprecated ConsoleExceptionEvent for 3.3+
- * fixed encryption option when using env variable
+ * fixed compat with Symfony 3.3+
 
-* 3.0.1 (2017-05-19)
+* 2.6.2 (2017-05-22)
 
- * removed deprecated delivery_address configuration setting
- * removed class parameters in the container configuration
- * removed obsolete support for the mail transport
+ * fixed Swiftmailer dependency
 
-* 3.0.0 (2017-05-19)
-
- * removed the swiftmailer:debug command alias
- * added compatibility with Swiftmailer 6.0
-
-* 2.6.1 (2017-05-19)
+* 2.6.1 (2017-05-20)
 
  * reverted support for Swiftmailer 6.0
 

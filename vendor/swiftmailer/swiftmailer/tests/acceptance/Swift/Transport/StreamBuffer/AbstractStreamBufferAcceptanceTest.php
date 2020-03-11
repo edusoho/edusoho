@@ -1,10 +1,10 @@
 <?php
 
-abstract class Swift_Transport_StreamBuffer_AbstractStreamBufferAcceptanceTest extends \PHPUnit\Framework\TestCase
+abstract class Swift_Transport_StreamBuffer_AbstractStreamBufferAcceptanceTest extends \PHPUnit_Framework_TestCase
 {
-    protected $buffer;
+    protected $_buffer;
 
-    abstract protected function initializeBuffer();
+    abstract protected function _initializeBuffer();
 
     protected function setUp()
     {
@@ -15,49 +15,49 @@ abstract class Swift_Transport_StreamBuffer_AbstractStreamBufferAcceptanceTest e
              );
         }
 
-        $this->buffer = new Swift_Transport_StreamBuffer(
+        $this->_buffer = new Swift_Transport_StreamBuffer(
             $this->getMockBuilder('Swift_ReplacementFilterFactory')->getMock()
         );
     }
 
     public function testReadLine()
     {
-        $this->initializeBuffer();
+        $this->_initializeBuffer();
 
-        $line = $this->buffer->readLine(0);
+        $line = $this->_buffer->readLine(0);
         $this->assertRegExp('/^[0-9]{3}.*?\r\n$/D', $line);
-        $seq = $this->buffer->write("QUIT\r\n");
+        $seq = $this->_buffer->write("QUIT\r\n");
         $this->assertTrue((bool) $seq);
-        $line = $this->buffer->readLine($seq);
+        $line = $this->_buffer->readLine($seq);
         $this->assertRegExp('/^[0-9]{3}.*?\r\n$/D', $line);
-        $this->buffer->terminate();
+        $this->_buffer->terminate();
     }
 
     public function testWrite()
     {
-        $this->initializeBuffer();
+        $this->_initializeBuffer();
 
-        $line = $this->buffer->readLine(0);
+        $line = $this->_buffer->readLine(0);
         $this->assertRegExp('/^[0-9]{3}.*?\r\n$/D', $line);
 
-        $seq = $this->buffer->write("HELO foo\r\n");
+        $seq = $this->_buffer->write("HELO foo\r\n");
         $this->assertTrue((bool) $seq);
-        $line = $this->buffer->readLine($seq);
+        $line = $this->_buffer->readLine($seq);
         $this->assertRegExp('/^[0-9]{3}.*?\r\n$/D', $line);
 
-        $seq = $this->buffer->write("QUIT\r\n");
+        $seq = $this->_buffer->write("QUIT\r\n");
         $this->assertTrue((bool) $seq);
-        $line = $this->buffer->readLine($seq);
+        $line = $this->_buffer->readLine($seq);
         $this->assertRegExp('/^[0-9]{3}.*?\r\n$/D', $line);
-        $this->buffer->terminate();
+        $this->_buffer->terminate();
     }
 
     public function testBindingOtherStreamsMirrorsWriteOperations()
     {
-        $this->initializeBuffer();
+        $this->_initializeBuffer();
 
-        $is1 = $this->createMockInputStream();
-        $is2 = $this->createMockInputStream();
+        $is1 = $this->_createMockInputStream();
+        $is2 = $this->_createMockInputStream();
 
         $is1->expects($this->at(0))
             ->method('write')
@@ -72,37 +72,37 @@ abstract class Swift_Transport_StreamBuffer_AbstractStreamBufferAcceptanceTest e
             ->method('write')
             ->with('y');
 
-        $this->buffer->bind($is1);
-        $this->buffer->bind($is2);
+        $this->_buffer->bind($is1);
+        $this->_buffer->bind($is2);
 
-        $this->buffer->write('x');
-        $this->buffer->write('y');
+        $this->_buffer->write('x');
+        $this->_buffer->write('y');
     }
 
     public function testBindingOtherStreamsMirrorsFlushOperations()
     {
-        $this->initializeBuffer();
+        $this->_initializeBuffer();
 
-        $is1 = $this->createMockInputStream();
-        $is2 = $this->createMockInputStream();
+        $is1 = $this->_createMockInputStream();
+        $is2 = $this->_createMockInputStream();
 
         $is1->expects($this->once())
             ->method('flushBuffers');
         $is2->expects($this->once())
             ->method('flushBuffers');
 
-        $this->buffer->bind($is1);
-        $this->buffer->bind($is2);
+        $this->_buffer->bind($is1);
+        $this->_buffer->bind($is2);
 
-        $this->buffer->flushBuffers();
+        $this->_buffer->flushBuffers();
     }
 
     public function testUnbindingStreamPreventsFurtherWrites()
     {
-        $this->initializeBuffer();
+        $this->_initializeBuffer();
 
-        $is1 = $this->createMockInputStream();
-        $is2 = $this->createMockInputStream();
+        $is1 = $this->_createMockInputStream();
+        $is2 = $this->_createMockInputStream();
 
         $is1->expects($this->at(0))
             ->method('write')
@@ -114,17 +114,17 @@ abstract class Swift_Transport_StreamBuffer_AbstractStreamBufferAcceptanceTest e
             ->method('write')
             ->with('x');
 
-        $this->buffer->bind($is1);
-        $this->buffer->bind($is2);
+        $this->_buffer->bind($is1);
+        $this->_buffer->bind($is2);
 
-        $this->buffer->write('x');
+        $this->_buffer->write('x');
 
-        $this->buffer->unbind($is2);
+        $this->_buffer->unbind($is2);
 
-        $this->buffer->write('y');
+        $this->_buffer->write('y');
     }
 
-    private function createMockInputStream()
+    private function _createMockInputStream()
     {
         return $this->getMockBuilder('Swift_InputByteStream')->getMock();
     }

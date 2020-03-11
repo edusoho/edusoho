@@ -1,80 +1,80 @@
 <?php
 
-class Swift_Plugins_PopBeforeSmtpPluginTest extends \PHPUnit\Framework\TestCase
+class Swift_Plugins_PopBeforeSmtpPluginTest extends \PHPUnit_Framework_TestCase
 {
     public function testPluginConnectsToPop3HostBeforeTransportStarts()
     {
-        $connection = $this->createConnection();
+        $connection = $this->_createConnection();
         $connection->expects($this->once())
                    ->method('connect');
 
-        $plugin = $this->createPlugin('pop.host.tld', 110);
+        $plugin = $this->_createPlugin('pop.host.tld', 110);
         $plugin->setConnection($connection);
 
-        $transport = $this->createTransport();
-        $evt = $this->createTransportChangeEvent($transport);
+        $transport = $this->_createTransport();
+        $evt = $this->_createTransportChangeEvent($transport);
 
         $plugin->beforeTransportStarted($evt);
     }
 
     public function testPluginDisconnectsFromPop3HostBeforeTransportStarts()
     {
-        $connection = $this->createConnection();
+        $connection = $this->_createConnection();
         $connection->expects($this->once())
                    ->method('disconnect');
 
-        $plugin = $this->createPlugin('pop.host.tld', 110);
+        $plugin = $this->_createPlugin('pop.host.tld', 110);
         $plugin->setConnection($connection);
 
-        $transport = $this->createTransport();
-        $evt = $this->createTransportChangeEvent($transport);
+        $transport = $this->_createTransport();
+        $evt = $this->_createTransportChangeEvent($transport);
 
         $plugin->beforeTransportStarted($evt);
     }
 
     public function testPluginDoesNotConnectToSmtpIfBoundToDifferentTransport()
     {
-        $connection = $this->createConnection();
+        $connection = $this->_createConnection();
         $connection->expects($this->never())
                    ->method('disconnect');
         $connection->expects($this->never())
                    ->method('connect');
 
-        $smtp = $this->createTransport();
+        $smtp = $this->_createTransport();
 
-        $plugin = $this->createPlugin('pop.host.tld', 110);
+        $plugin = $this->_createPlugin('pop.host.tld', 110);
         $plugin->setConnection($connection);
         $plugin->bindSmtp($smtp);
 
-        $transport = $this->createTransport();
-        $evt = $this->createTransportChangeEvent($transport);
+        $transport = $this->_createTransport();
+        $evt = $this->_createTransportChangeEvent($transport);
 
         $plugin->beforeTransportStarted($evt);
     }
 
     public function testPluginCanBindToSpecificTransport()
     {
-        $connection = $this->createConnection();
+        $connection = $this->_createConnection();
         $connection->expects($this->once())
                    ->method('connect');
 
-        $smtp = $this->createTransport();
+        $smtp = $this->_createTransport();
 
-        $plugin = $this->createPlugin('pop.host.tld', 110);
+        $plugin = $this->_createPlugin('pop.host.tld', 110);
         $plugin->setConnection($connection);
         $plugin->bindSmtp($smtp);
 
-        $evt = $this->createTransportChangeEvent($smtp);
+        $evt = $this->_createTransportChangeEvent($smtp);
 
         $plugin->beforeTransportStarted($evt);
     }
 
-    private function createTransport()
+    private function _createTransport()
     {
         return $this->getMockBuilder('Swift_Transport')->getMock();
     }
 
-    private function createTransportChangeEvent($transport)
+    private function _createTransportChangeEvent($transport)
     {
         $evt = $this->getMockBuilder('Swift_Events_TransportChangeEvent')
                     ->disableOriginalConstructor()
@@ -89,12 +89,12 @@ class Swift_Plugins_PopBeforeSmtpPluginTest extends \PHPUnit\Framework\TestCase
         return $evt;
     }
 
-    public function createConnection()
+    public function _createConnection()
     {
         return $this->getMockBuilder('Swift_Plugins_Pop_Pop3Connection')->getMock();
     }
 
-    public function createPlugin($host, $port, $crypto = null)
+    public function _createPlugin($host, $port, $crypto = null)
     {
         return new Swift_Plugins_PopBeforeSmtpPlugin($host, $port, $crypto);
     }

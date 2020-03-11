@@ -20,7 +20,7 @@ class Swift_Plugins_ImpersonatePlugin implements Swift_Events_SendListener
      *
      * @var string
      */
-    private $sender;
+    private $_sender;
 
     /**
      * Create a new ImpersonatePlugin to impersonate $sender.
@@ -29,11 +29,13 @@ class Swift_Plugins_ImpersonatePlugin implements Swift_Events_SendListener
      */
     public function __construct($sender)
     {
-        $this->sender = $sender;
+        $this->_sender = $sender;
     }
 
     /**
      * Invoked immediately before the Message is sent.
+     *
+     * @param Swift_Events_SendEvent $evt
      */
     public function beforeSendPerformed(Swift_Events_SendEvent $evt)
     {
@@ -44,11 +46,13 @@ class Swift_Plugins_ImpersonatePlugin implements Swift_Events_SendListener
         $headers->addPathHeader('X-Swift-Return-Path', $message->getReturnPath());
 
         // replace them with the one to send to
-        $message->setReturnPath($this->sender);
+        $message->setReturnPath($this->_sender);
     }
 
     /**
      * Invoked immediately after the Message is sent.
+     *
+     * @param Swift_Events_SendEvent $evt
      */
     public function sendPerformed(Swift_Events_SendEvent $evt)
     {

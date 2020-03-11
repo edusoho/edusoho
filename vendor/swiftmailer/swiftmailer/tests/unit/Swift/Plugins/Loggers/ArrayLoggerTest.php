@@ -1,6 +1,6 @@
 <?php
 
-class Swift_Plugins_Loggers_ArrayLoggerTest extends \PHPUnit\Framework\TestCase
+class Swift_Plugins_Loggers_ArrayLoggerTest extends \PHPUnit_Framework_TestCase
 {
     public function testAddingSingleEntryDumpsSingleLine()
     {

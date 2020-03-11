@@ -1,30 +1,30 @@
 <?php
 
-class Swift_Mime_ContentEncoder_Base64ContentEncoderAcceptanceTest extends \PHPUnit\Framework\TestCase
+class Swift_Mime_ContentEncoder_Base64ContentEncoderAcceptanceTest extends \PHPUnit_Framework_TestCase
 {
-    private $samplesDir;
-    private $encoder;
+    private $_samplesDir;
+    private $_encoder;
 
     protected function setUp()
     {
-        $this->samplesDir = realpath(__DIR__.'/../../../../_samples/charsets');
-        $this->encoder = new Swift_Mime_ContentEncoder_Base64ContentEncoder();
+        $this->_samplesDir = realpath(__DIR__.'/../../../../_samples/charsets');
+        $this->_encoder = new Swift_Mime_ContentEncoder_Base64ContentEncoder();
     }
 
     public function testEncodingAndDecodingSamples()
     {
-        $sampleFp = opendir($this->samplesDir);
+        $sampleFp = opendir($this->_samplesDir);
         while (false !== $encodingDir = readdir($sampleFp)) {
-            if ('.' == substr($encodingDir, 0, 1)) {
+            if (substr($encodingDir, 0, 1) == '.') {
                 continue;
             }
 
-            $sampleDir = $this->samplesDir.'/'.$encodingDir;
+            $sampleDir = $this->_samplesDir.'/'.$encodingDir;
 
             if (is_dir($sampleDir)) {
                 $fileFp = opendir($sampleDir);
                 while (false !== $sampleFile = readdir($fileFp)) {
-                    if ('.' == substr($sampleFile, 0, 1)) {
+                    if (substr($sampleFile, 0, 1) == '.') {
                         continue;
                     }
 
@@ -35,7 +35,7 @@ class Swift_Mime_ContentEncoder_Base64ContentEncoderAcceptanceTest extends \PHPU
 
                     $is = new Swift_ByteStream_ArrayByteStream();
 
-                    $this->encoder->encodeByteStream($os, $is);
+                    $this->_encoder->encodeByteStream($os, $is);
 
                     $encoded = '';
                     while (false !== $bytes = $is->read(8192)) {

@@ -15,19 +15,19 @@ class Swift_Transport_StreamBuffer_BasicSocketAcceptanceTest extends Swift_Trans
         parent::setUp();
     }
 
-    protected function initializeBuffer()
+    protected function _initializeBuffer()
     {
         $parts = explode(':', SWIFT_SMTP_HOST);
         $host = $parts[0];
-        $port = $parts[1] ?? 25;
+        $port = isset($parts[1]) ? $parts[1] : 25;
 
-        $this->buffer->initialize([
+        $this->_buffer->initialize(array(
             'type' => Swift_Transport_IoBuffer::TYPE_SOCKET,
             'host' => $host,
             'port' => $port,
             'protocol' => 'tcp',
             'blocking' => 1,
             'timeout' => 15,
-        ]);
+        ));
     }
 }

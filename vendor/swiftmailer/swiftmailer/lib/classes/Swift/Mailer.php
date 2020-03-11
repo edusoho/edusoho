@@ -16,14 +16,28 @@
 class Swift_Mailer
 {
     /** The Transport used to send messages */
-    private $transport;
+    private $_transport;
 
     /**
      * Create a new Mailer using $transport for delivery.
+     *
+     * @param Swift_Transport $transport
      */
     public function __construct(Swift_Transport $transport)
     {
-        $this->transport = $transport;
+        $this->_transport = $transport;
+    }
+
+    /**
+     * Create a new Mailer instance.
+     *
+     * @param Swift_Transport $transport
+     *
+     * @return self
+     */
+    public static function newInstance(Swift_Transport $transport)
+    {
+        return new self($transport);
     }
 
     /**
@@ -52,23 +66,23 @@ class Swift_Mailer
      * The return value is the number of recipients who were accepted for
      * delivery.
      *
-     * @param array $failedRecipients An array of failures by-reference
+     * @param Swift_Mime_Message $message
+     * @param array              $failedRecipients An array of failures by-reference
      *
      * @return int The number of successful recipients. Can be 0 which indicates failure
      */
-    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null)
+    public function send(Swift_Mime_Message $message, &$failedRecipients = null)
     {
         $failedRecipients = (array) $failedRecipients;
 
-        // FIXME: to be removed in 7.0 (as transport must now start itself on send)
-        if (!$this->transport->isStarted()) {
-            $this->transport->start();
+        if (!$this->_transport->isStarted()) {
+            $this->_transport->start();
         }
 
         $sent = 0;
 
         try {
-            $sent = $this->transport->send($message, $failedRecipients);
+            $sent = $this->_transport->send($message, $failedRecipients);
         } catch (Swift_RfcComplianceException $e) {
             foreach ($message->getTo() as $address => $name) {
                 $failedRecipients[] = $address;
@@ -80,10 +94,12 @@ class Swift_Mailer
 
     /**
      * Register a plugin using a known unique key (e.g. myPlugin).
+     *
+     * @param Swift_Events_EventListener $plugin
      */
     public function registerPlugin(Swift_Events_EventListener $plugin)
     {
-        $this->transport->registerPlugin($plugin);
+        $this->_transport->registerPlugin($plugin);
     }
 
     /**
@@ -93,6 +109,6 @@ class Swift_Mailer
      */
     public function getTransport()
     {
-        return $this->transport;
+        return $this->_transport;
     }
 }

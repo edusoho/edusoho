@@ -1,25 +1,23 @@
 <?php
 
-use Egulias\EmailValidator\EmailValidator;
-
-class Swift_Mime_MimePartAcceptanceTest extends \PHPUnit\Framework\TestCase
+class Swift_Mime_MimePartAcceptanceTest extends \PHPUnit_Framework_TestCase
 {
-    private $contentEncoder;
-    private $cache;
-    private $headers;
-    private $emailValidator;
+    private $_contentEncoder;
+    private $_cache;
+    private $_grammar;
+    private $_headers;
 
     protected function setUp()
     {
-        $this->cache = new Swift_KeyCache_ArrayKeyCache(
+        $this->_cache = new Swift_KeyCache_ArrayKeyCache(
             new Swift_KeyCache_SimpleKeyCacheInputStream()
             );
         $factory = new Swift_CharacterReaderFactory_SimpleCharacterReaderFactory();
-        $this->contentEncoder = new Swift_Mime_ContentEncoder_QpContentEncoder(
+        $this->_contentEncoder = new Swift_Mime_ContentEncoder_QpContentEncoder(
             new Swift_CharacterStream_ArrayCharacterStream($factory, 'utf-8'),
             new Swift_StreamFilters_ByteArrayReplacementFilter(
-                [[0x0D, 0x0A], [0x0D], [0x0A]],
-                [[0x0A], [0x0A], [0x0D, 0x0A]]
+                array(array(0x0D, 0x0A), array(0x0D), array(0x0A)),
+                array(array(0x0A), array(0x0A), array(0x0D, 0x0A))
                 )
             );
 
@@ -29,16 +27,15 @@ class Swift_Mime_MimePartAcceptanceTest extends \PHPUnit\Framework\TestCase
         $paramEncoder = new Swift_Encoder_Rfc2231Encoder(
             new Swift_CharacterStream_ArrayCharacterStream($factory, 'utf-8')
             );
-        $this->emailValidator = new EmailValidator();
-        $this->idGenerator = new Swift_Mime_IdGenerator('example.com');
-        $this->headers = new Swift_Mime_SimpleHeaderSet(
-            new Swift_Mime_SimpleHeaderFactory($headerEncoder, $paramEncoder, $this->emailValidator)
+        $this->_grammar = new Swift_Mime_Grammar();
+        $this->_headers = new Swift_Mime_SimpleHeaderSet(
+            new Swift_Mime_SimpleHeaderFactory($headerEncoder, $paramEncoder, $this->_grammar)
             );
     }
 
     public function testCharsetIsSetInHeader()
     {
-        $part = $this->createMimePart();
+        $part = $this->_createMimePart();
         $part->setContentType('text/plain');
         $part->setCharset('utf-8');
         $part->setBody('foobar');
@@ -53,7 +50,7 @@ class Swift_Mime_MimePartAcceptanceTest extends \PHPUnit\Framework\TestCase
 
     public function testFormatIsSetInHeaders()
     {
-        $part = $this->createMimePart();
+        $part = $this->_createMimePart();
         $part->setContentType('text/plain');
         $part->setFormat('flowed');
         $part->setBody('> foobar');
@@ -68,7 +65,7 @@ class Swift_Mime_MimePartAcceptanceTest extends \PHPUnit\Framework\TestCase
 
     public function testDelSpIsSetInHeaders()
     {
-        $part = $this->createMimePart();
+        $part = $this->_createMimePart();
         $part->setContentType('text/plain');
         $part->setDelSp(true);
         $part->setBody('foobar');
@@ -83,7 +80,7 @@ class Swift_Mime_MimePartAcceptanceTest extends \PHPUnit\Framework\TestCase
 
     public function testAll3ParamsInHeaders()
     {
-        $part = $this->createMimePart();
+        $part = $this->_createMimePart();
         $part->setContentType('text/plain');
         $part->setCharset('utf-8');
         $part->setFormat('fixed');
@@ -100,7 +97,7 @@ class Swift_Mime_MimePartAcceptanceTest extends \PHPUnit\Framework\TestCase
 
     public function testBodyIsCanonicalized()
     {
-        $part = $this->createMimePart();
+        $part = $this->_createMimePart();
         $part->setContentType('text/plain');
         $part->setCharset('utf-8');
         $part->setBody("foobar\r\rtest\ning\r");
@@ -116,14 +113,14 @@ class Swift_Mime_MimePartAcceptanceTest extends \PHPUnit\Framework\TestCase
             );
     }
 
-    protected function createMimePart()
+    protected function _createMimePart()
     {
         $entity = new Swift_Mime_MimePart(
-            $this->headers,
-            $this->contentEncoder,
-            $this->cache,
-            $this->idGenerator
-        );
+            $this->_headers,
+            $this->_contentEncoder,
+            $this->_cache,
+            $this->_grammar
+            );
 
         return $entity;
     }

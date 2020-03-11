@@ -83,6 +83,22 @@ class Configuration implements ConfigurationInterface
             ->requiresAtLeastOneElement()
             ->useAttributeAsKey('name')
                 ->prototype('array')
+            // BC layer for "delivery_address: null" (the case of a string goes through the XML normalization too)
+            ->beforeNormalization()
+                ->ifTrue(function ($v) {
+                    return is_array($v) && array_key_exists('delivery_address', $v) && null === $v['delivery_address'];
+                })
+                ->then(function ($v) {
+                    @trigger_error('The swiftmailer.delivery_address configuration key is deprecated since version 2.3.10 and will be removed in 3.0. Use the swiftmailer.delivery_addresses configuration key instead (or remove the empty setting)', E_USER_DEPRECATED);
+                    unset($v['delivery_address']);
+
+                    if (!isset($v['delivery_addresses'])) {
+                        $v['delivery_addresses'] = array();
+                    }
+
+                    return $v;
+                })
+            ->end()
             ->children()
                 ->scalarNode('url')->defaultNull()->end()
                 ->scalarNode('transport')->defaultValue('smtp')->end()
@@ -124,16 +140,24 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('encryption')
                     ->defaultNull()
+                    ->validate()
+                        ->ifNotInArray(array('tls', 'ssl', null))
+                        ->thenInvalid('The %s encryption is not supported')
+                    ->end()
                 ->end()
                 ->scalarNode('auth_mode')
                     ->defaultNull()
+                    ->validate()
+                        ->ifNotInArray(array('plain', 'login', 'cram-md5', null))
+                        ->thenInvalid('The %s authentication mode is not supported')
+                    ->end()
                 ->end()
                 ->scalarNode('sender_address')->end()
                 ->arrayNode('delivery_addresses')
                     ->performNoDeepMerging()
                     ->beforeNormalization()
                         ->ifArray()
-                        ->then(function ($v) { return array_filter(array_values($v)); })
+                        ->then(function ($v) { return array_values($v); })
                     ->end()
                     ->prototype('scalar')
                     ->end()
@@ -157,8 +181,8 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end()
-            ->fixXmlConfig('delivery_address', 'delivery_addresses')
             ->fixXmlConfig('delivery_whitelist_pattern', 'delivery_whitelist')
+            ->fixXmlConfig('delivery_address', 'delivery_addresses')
             ->children()
                 ->arrayNode('delivery_whitelist')
                     ->prototype('scalar')

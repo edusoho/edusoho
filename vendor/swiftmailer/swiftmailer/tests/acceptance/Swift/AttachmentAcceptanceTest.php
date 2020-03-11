@@ -5,8 +5,8 @@ require_once __DIR__.'/Mime/AttachmentAcceptanceTest.php';
 
 class Swift_AttachmentAcceptanceTest extends Swift_Mime_AttachmentAcceptanceTest
 {
-    protected function createAttachment()
+    protected function _createAttachment()
     {
-        return new Swift_Attachment();
+        return Swift_Attachment::newInstance();
     }
 }

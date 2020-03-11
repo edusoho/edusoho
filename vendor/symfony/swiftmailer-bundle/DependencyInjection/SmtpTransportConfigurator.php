@@ -16,6 +16,7 @@ use Symfony\Component\Routing\RequestContext;
 class SmtpTransportConfigurator
 {
     private $localDomain;
+
     private $requestContext;
 
     public function __construct($localDomain, RequestContext $requestContext = null)

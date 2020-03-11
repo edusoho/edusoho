@@ -16,7 +16,7 @@
 class Swift_Preferences
 {
     /** Singleton instance */
-    private static $instance = null;
+    private static $_instance = null;
 
     /** Constructor not to be used */
     private function __construct()
@@ -30,11 +30,11 @@ class Swift_Preferences
      */
     public static function getInstance()
     {
-        if (!isset(self::$instance)) {
-            self::$instance = new self();
+        if (!isset(self::$_instance)) {
+            self::$_instance = new self();
         }
 
-        return self::$instance;
+        return self::$_instance;
     }
 
     /**
@@ -92,7 +92,7 @@ class Swift_Preferences
         Swift_DependencyContainer::getInstance()
             ->register('mime.qpcontentencoder')
             ->asNewInstanceOf('Swift_Mime_ContentEncoder_QpContentEncoder')
-            ->withDependencies(['mime.charstream', 'mime.bytecanonicalizer'])
+            ->withDependencies(array('mime.charstream', 'mime.bytecanonicalizer'))
             ->addConstructorValue($dotEscape);
 
         return $this;

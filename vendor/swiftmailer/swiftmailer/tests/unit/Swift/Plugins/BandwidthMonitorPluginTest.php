@@ -1,6 +1,6 @@
 <?php
 
-class Swift_Plugins_BandwidthMonitorPluginTest extends \PHPUnit\Framework\TestCase
+class Swift_Plugins_BandwidthMonitorPluginTest extends \PHPUnit_Framework_TestCase
 {
     private $_monitor;
 
@@ -8,68 +8,68 @@ class Swift_Plugins_BandwidthMonitorPluginTest extends \PHPUnit\Framework\TestCa
 
     protected function setUp()
     {
-        $this->monitor = new Swift_Plugins_BandwidthMonitorPlugin();
+        $this->_monitor = new Swift_Plugins_BandwidthMonitorPlugin();
     }
 
     public function testBytesOutIncreasesWhenCommandsSent()
     {
-        $evt = $this->createCommandEvent("RCPT TO:<foo@bar.com>\r\n");
+        $evt = $this->_createCommandEvent("RCPT TO:<foo@bar.com>\r\n");
 
-        $this->assertEquals(0, $this->monitor->getBytesOut());
-        $this->monitor->commandSent($evt);
-        $this->assertEquals(23, $this->monitor->getBytesOut());
-        $this->monitor->commandSent($evt);
-        $this->assertEquals(46, $this->monitor->getBytesOut());
+        $this->assertEquals(0, $this->_monitor->getBytesOut());
+        $this->_monitor->commandSent($evt);
+        $this->assertEquals(23, $this->_monitor->getBytesOut());
+        $this->_monitor->commandSent($evt);
+        $this->assertEquals(46, $this->_monitor->getBytesOut());
     }
 
     public function testBytesInIncreasesWhenResponsesReceived()
     {
-        $evt = $this->createResponseEvent("250 Ok\r\n");
+        $evt = $this->_createResponseEvent("250 Ok\r\n");
 
-        $this->assertEquals(0, $this->monitor->getBytesIn());
-        $this->monitor->responseReceived($evt);
-        $this->assertEquals(8, $this->monitor->getBytesIn());
-        $this->monitor->responseReceived($evt);
-        $this->assertEquals(16, $this->monitor->getBytesIn());
+        $this->assertEquals(0, $this->_monitor->getBytesIn());
+        $this->_monitor->responseReceived($evt);
+        $this->assertEquals(8, $this->_monitor->getBytesIn());
+        $this->_monitor->responseReceived($evt);
+        $this->assertEquals(16, $this->_monitor->getBytesIn());
     }
 
     public function testCountersCanBeReset()
     {
-        $evt = $this->createResponseEvent("250 Ok\r\n");
+        $evt = $this->_createResponseEvent("250 Ok\r\n");
 
-        $this->assertEquals(0, $this->monitor->getBytesIn());
-        $this->monitor->responseReceived($evt);
-        $this->assertEquals(8, $this->monitor->getBytesIn());
-        $this->monitor->responseReceived($evt);
-        $this->assertEquals(16, $this->monitor->getBytesIn());
+        $this->assertEquals(0, $this->_monitor->getBytesIn());
+        $this->_monitor->responseReceived($evt);
+        $this->assertEquals(8, $this->_monitor->getBytesIn());
+        $this->_monitor->responseReceived($evt);
+        $this->assertEquals(16, $this->_monitor->getBytesIn());
 
-        $evt = $this->createCommandEvent("RCPT TO:<foo@bar.com>\r\n");
+        $evt = $this->_createCommandEvent("RCPT TO:<foo@bar.com>\r\n");
 
-        $this->assertEquals(0, $this->monitor->getBytesOut());
-        $this->monitor->commandSent($evt);
-        $this->assertEquals(23, $this->monitor->getBytesOut());
-        $this->monitor->commandSent($evt);
-        $this->assertEquals(46, $this->monitor->getBytesOut());
+        $this->assertEquals(0, $this->_monitor->getBytesOut());
+        $this->_monitor->commandSent($evt);
+        $this->assertEquals(23, $this->_monitor->getBytesOut());
+        $this->_monitor->commandSent($evt);
+        $this->assertEquals(46, $this->_monitor->getBytesOut());
 
-        $this->monitor->reset();
+        $this->_monitor->reset();
 
-        $this->assertEquals(0, $this->monitor->getBytesOut());
-        $this->assertEquals(0, $this->monitor->getBytesIn());
+        $this->assertEquals(0, $this->_monitor->getBytesOut());
+        $this->assertEquals(0, $this->_monitor->getBytesIn());
     }
 
     public function testBytesOutIncreasesAccordingToMessageLength()
     {
-        $message = $this->createMessageWithByteCount(6);
-        $evt = $this->createSendEvent($message);
+        $message = $this->_createMessageWithByteCount(6);
+        $evt = $this->_createSendEvent($message);
 
-        $this->assertEquals(0, $this->monitor->getBytesOut());
-        $this->monitor->sendPerformed($evt);
-        $this->assertEquals(6, $this->monitor->getBytesOut());
-        $this->monitor->sendPerformed($evt);
-        $this->assertEquals(12, $this->monitor->getBytesOut());
+        $this->assertEquals(0, $this->_monitor->getBytesOut());
+        $this->_monitor->sendPerformed($evt);
+        $this->assertEquals(6, $this->_monitor->getBytesOut());
+        $this->_monitor->sendPerformed($evt);
+        $this->assertEquals(12, $this->_monitor->getBytesOut());
     }
 
-    private function createSendEvent($message)
+    private function _createSendEvent($message)
     {
         $evt = $this->getMockBuilder('Swift_Events_SendEvent')
                     ->disableOriginalConstructor()
@@ -81,7 +81,7 @@ class Swift_Plugins_BandwidthMonitorPluginTest extends \PHPUnit\Framework\TestCa
         return $evt;
     }
 
-    private function createCommandEvent($command)
+    private function _createCommandEvent($command)
     {
         $evt = $this->getMockBuilder('Swift_Events_CommandEvent')
                     ->disableOriginalConstructor()
@@ -93,7 +93,7 @@ class Swift_Plugins_BandwidthMonitorPluginTest extends \PHPUnit\Framework\TestCa
         return $evt;
     }
 
-    private function createResponseEvent($response)
+    private function _createResponseEvent($response)
     {
         $evt = $this->getMockBuilder('Swift_Events_ResponseEvent')
                     ->disableOriginalConstructor()
@@ -105,23 +105,23 @@ class Swift_Plugins_BandwidthMonitorPluginTest extends \PHPUnit\Framework\TestCa
         return $evt;
     }
 
-    private function createMessageWithByteCount($bytes)
+    private function _createMessageWithByteCount($bytes)
     {
-        $this->bytes = $bytes;
-        $msg = $this->getMockBuilder('Swift_Mime_SimpleMessage')->disableOriginalConstructor()->getMock();
+        $this->_bytes = $bytes;
+        $msg = $this->getMockBuilder('Swift_Mime_Message')->getMock();
         $msg->expects($this->any())
             ->method('toByteStream')
-            ->will($this->returnCallback([$this, 'write']));
-        /*  $this->checking(Expectations::create()
-              -> ignoring($msg)->toByteStream(any()) -> calls(array($this, 'write'))
-          ); */
+            ->will($this->returnCallback(array($this, '_write')));
+      /*  $this->_checking(Expectations::create()
+            -> ignoring($msg)->toByteStream(any()) -> calls(array($this, '_write'))
+        ); */
 
         return $msg;
     }
 
-    public function write($is)
+    public function _write($is)
     {
-        for ($i = 0; $i < $this->bytes; ++$i) {
+        for ($i = 0; $i < $this->_bytes; ++$i) {
             $is->write('x');
         }
     }

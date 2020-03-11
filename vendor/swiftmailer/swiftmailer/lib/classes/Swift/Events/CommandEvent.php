@@ -20,26 +20,27 @@ class Swift_Events_CommandEvent extends Swift_Events_EventObject
      *
      * @var string
      */
-    private $command;
+    private $_command;
 
     /**
      * An array of codes which a successful response will contain.
      *
      * @var int[]
      */
-    private $successCodes = [];
+    private $_successCodes = array();
 
     /**
      * Create a new CommandEvent for $source with $command.
      *
-     * @param string $command
-     * @param array  $successCodes
+     * @param Swift_Transport $source
+     * @param string          $command
+     * @param array           $successCodes
      */
-    public function __construct(Swift_Transport $source, $command, $successCodes = [])
+    public function __construct(Swift_Transport $source, $command, $successCodes = array())
     {
         parent::__construct($source);
-        $this->command = $command;
-        $this->successCodes = $successCodes;
+        $this->_command = $command;
+        $this->_successCodes = $successCodes;
     }
 
     /**
@@ -49,7 +50,7 @@ class Swift_Events_CommandEvent extends Swift_Events_EventObject
      */
     public function getCommand()
     {
-        return $this->command;
+        return $this->_command;
     }
 
     /**
@@ -59,6 +60,6 @@ class Swift_Events_CommandEvent extends Swift_Events_EventObject
      */
     public function getSuccessCodes()
     {
-        return $this->successCodes;
+        return $this->_successCodes;
     }
 }

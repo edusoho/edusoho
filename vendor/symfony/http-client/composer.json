@@ -21,7 +21,7 @@
         "symfony/http-client-implementation": "1.1"
     },
     "require": {
-        "php": "^7.1.3",
+        "php": "^7.2.5",
         "psr/log": "^1.0",
         "symfony/http-client-contracts": "^1.1.8|^2",
         "symfony/polyfill-php73": "^1.11",
@@ -32,9 +32,9 @@
         "nyholm/psr7": "^1.0",
         "php-http/httplug": "^1.0|^2.0",
         "psr/http-client": "^1.0",
-        "symfony/dependency-injection": "^4.3|^5.0",
-        "symfony/http-kernel": "^4.4",
-        "symfony/process": "^4.2|^5.0"
+        "symfony/dependency-injection": "^4.4|^5.0",
+        "symfony/http-kernel": "^4.4|^5.0",
+        "symfony/process": "^4.4|^5.0"
     },
     "autoload": {
         "psr-4": { "Symfony\\Component\\HttpClient\\": "" },
@@ -45,7 +45,7 @@
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-master": "4.4-dev"
+            "dev-master": "5.0-dev"
         }
     }
 }

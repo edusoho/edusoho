@@ -1,42 +1,42 @@
 <?php
 
-class Swift_Transport_StreamBufferTest extends \PHPUnit\Framework\TestCase
+class Swift_Transport_StreamBufferTest extends \PHPUnit_Framework_TestCase
 {
     public function testSettingWriteTranslationsCreatesFilters()
     {
-        $factory = $this->createFactory();
+        $factory = $this->_createFactory();
         $factory->expects($this->once())
                 ->method('createFilter')
                 ->with('a', 'b')
-                ->will($this->returnCallback([$this, 'createFilter']));
+                ->will($this->returnCallback(array($this, '_createFilter')));
 
-        $buffer = $this->createBuffer($factory);
-        $buffer->setWriteTranslations(['a' => 'b']);
+        $buffer = $this->_createBuffer($factory);
+        $buffer->setWriteTranslations(array('a' => 'b'));
     }
 
     public function testOverridingTranslationsOnlyAddsNeededFilters()
     {
-        $factory = $this->createFactory();
+        $factory = $this->_createFactory();
         $factory->expects($this->exactly(2))
                 ->method('createFilter')
-                ->will($this->returnCallback([$this, 'createFilter']));
+                ->will($this->returnCallback(array($this, '_createFilter')));
 
-        $buffer = $this->createBuffer($factory);
-        $buffer->setWriteTranslations(['a' => 'b']);
-        $buffer->setWriteTranslations(['x' => 'y', 'a' => 'b']);
+        $buffer = $this->_createBuffer($factory);
+        $buffer->setWriteTranslations(array('a' => 'b'));
+        $buffer->setWriteTranslations(array('x' => 'y', 'a' => 'b'));
     }
 
-    private function createBuffer($replacementFactory)
+    private function _createBuffer($replacementFactory)
     {
         return new Swift_Transport_StreamBuffer($replacementFactory);
     }
 
-    private function createFactory()
+    private function _createFactory()
     {
         return $this->getMockBuilder('Swift_ReplacementFilterFactory')->getMock();
     }
 
-    public function createFilter()
+    public function _createFilter()
     {
         return $this->getMockBuilder('Swift_StreamFilter')->getMock();
     }

@@ -1,6 +1,6 @@
 <?php
 
-class Swift_Plugins_Loggers_EchoLoggerTest extends \PHPUnit\Framework\TestCase
+class Swift_Plugins_Loggers_EchoLoggerTest extends \PHPUnit_Framework_TestCase
 {
     public function testAddingEntryDumpsSingleLineWithoutHtml()
     {

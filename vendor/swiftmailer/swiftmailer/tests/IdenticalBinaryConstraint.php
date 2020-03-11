@@ -5,7 +5,7 @@
  *
  * @author Chris Corbyn
  */
-class IdenticalBinaryConstraint extends \PHPUnit\Framework\Constraint\Constraint
+class IdenticalBinaryConstraint extends \PHPUnit_Framework_Constraint
 {
     protected $value;
 
@@ -37,7 +37,7 @@ class IdenticalBinaryConstraint extends \PHPUnit\Framework\Constraint\Constraint
      */
     public function toString()
     {
-        return 'identical binary';
+        return 'indentical binary';
     }
 
     /**

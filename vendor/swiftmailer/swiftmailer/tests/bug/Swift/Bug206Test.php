@@ -1,10 +1,8 @@
 <?php
 
-use Egulias\EmailValidator\EmailValidator;
-
-class Swift_Bug206Test extends \PHPUnit\Framework\TestCase
+class Swift_Bug206Test extends \PHPUnit_Framework_TestCase
 {
-    private $factory;
+    private $_factory;
 
     protected function setUp()
     {
@@ -15,23 +13,23 @@ class Swift_Bug206Test extends \PHPUnit\Framework\TestCase
         $paramEncoder = new Swift_Encoder_Rfc2231Encoder(
             new Swift_CharacterStream_ArrayCharacterStream($factory, 'utf-8')
         );
-        $emailValidator = new EmailValidator();
-        $this->factory = new Swift_Mime_SimpleHeaderFactory($headerEncoder, $paramEncoder, $emailValidator);
+        $grammar = new Swift_Mime_Grammar();
+        $this->_factory = new Swift_Mime_SimpleHeaderFactory($headerEncoder, $paramEncoder, $grammar);
     }
 
     public function testMailboxHeaderEncoding()
     {
-        $this->doTestHeaderIsFullyEncoded('email@example.org', 'Family Name, Name', ' "Family Name, Name" <email@example.org>');
-        $this->doTestHeaderIsFullyEncoded('email@example.org', 'Family Namé, Name', ' Family =?utf-8?Q?Nam=C3=A9=2C?= Name');
-        $this->doTestHeaderIsFullyEncoded('email@example.org', 'Family Namé , Name', ' Family =?utf-8?Q?Nam=C3=A9_=2C?= Name');
-        $this->doTestHeaderIsFullyEncoded('email@example.org', 'Family Namé ;Name', ' Family =?utf-8?Q?Nam=C3=A9_=3BName?= ');
+        $this->_testHeaderIsFullyEncoded('email@example.org', 'Family Name, Name', ' "Family Name, Name" <email@example.org>');
+        $this->_testHeaderIsFullyEncoded('email@example.org', 'Family Namé, Name', ' Family =?utf-8?Q?Nam=C3=A9=2C?= Name');
+        $this->_testHeaderIsFullyEncoded('email@example.org', 'Family Namé , Name', ' Family =?utf-8?Q?Nam=C3=A9_=2C?= Name');
+        $this->_testHeaderIsFullyEncoded('email@example.org', 'Family Namé ;Name', ' Family =?utf-8?Q?Nam=C3=A9_=3BName?= ');
     }
 
-    private function doTestHeaderIsFullyEncoded($email, $name, $expected)
+    private function _testHeaderIsFullyEncoded($email, $name, $expected)
     {
-        $mailboxHeader = $this->factory->createMailboxHeader('To', [
+        $mailboxHeader = $this->_factory->createMailboxHeader('To', array(
             $email => $name,
-        ]);
+        ));
 
         $headerBody = substr($mailboxHeader->toString(), 3, strlen($expected));
 

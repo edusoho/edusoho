@@ -1,19 +1,19 @@
 <?php
 
-class Swift_Bug118Test extends \PHPUnit\Framework\TestCase
+class Swift_Bug118Test extends \PHPUnit_Framework_TestCase
 {
-    private $message;
+    private $_message;
 
     protected function setUp()
     {
-        $this->message = new Swift_Message();
+        $this->_message = new Swift_Message();
     }
 
     public function testCallingGenerateIdChangesTheMessageId()
     {
-        $currentId = $this->message->getId();
-        $this->message->generateId();
-        $newId = $this->message->getId();
+        $currentId = $this->_message->getId();
+        $this->_message->generateId();
+        $newId = $this->_message->getId();
 
         $this->assertNotEquals($currentId, $newId);
     }

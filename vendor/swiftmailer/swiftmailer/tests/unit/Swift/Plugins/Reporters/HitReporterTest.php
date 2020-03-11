@@ -1,64 +1,64 @@
 <?php
 
-class Swift_Plugins_Reporters_HitReporterTest extends \PHPUnit\Framework\TestCase
+class Swift_Plugins_Reporters_HitReporterTest extends \PHPUnit_Framework_TestCase
 {
-    private $hitReporter;
-    private $message;
+    private $_hitReporter;
+    private $_message;
 
     protected function setUp()
     {
-        $this->hitReporter = new Swift_Plugins_Reporters_HitReporter();
-        $this->message = $this->getMockBuilder('Swift_Mime_SimpleMessage')->disableOriginalConstructor()->getMock();
+        $this->_hitReporter = new Swift_Plugins_Reporters_HitReporter();
+        $this->_message = $this->getMockBuilder('Swift_Mime_Message')->getMock();
     }
 
     public function testReportingFail()
     {
-        $this->hitReporter->notify($this->message, 'foo@bar.tld',
+        $this->_hitReporter->notify($this->_message, 'foo@bar.tld',
             Swift_Plugins_Reporter::RESULT_FAIL
             );
-        $this->assertEquals(['foo@bar.tld'],
-            $this->hitReporter->getFailedRecipients()
+        $this->assertEquals(array('foo@bar.tld'),
+            $this->_hitReporter->getFailedRecipients()
             );
     }
 
     public function testMultipleReports()
     {
-        $this->hitReporter->notify($this->message, 'foo@bar.tld',
+        $this->_hitReporter->notify($this->_message, 'foo@bar.tld',
             Swift_Plugins_Reporter::RESULT_FAIL
             );
-        $this->hitReporter->notify($this->message, 'zip@button',
+        $this->_hitReporter->notify($this->_message, 'zip@button',
             Swift_Plugins_Reporter::RESULT_FAIL
             );
-        $this->assertEquals(['foo@bar.tld', 'zip@button'],
-            $this->hitReporter->getFailedRecipients()
+        $this->assertEquals(array('foo@bar.tld', 'zip@button'),
+            $this->_hitReporter->getFailedRecipients()
             );
     }
 
     public function testReportingPassIsIgnored()
     {
-        $this->hitReporter->notify($this->message, 'foo@bar.tld',
+        $this->_hitReporter->notify($this->_message, 'foo@bar.tld',
             Swift_Plugins_Reporter::RESULT_FAIL
             );
-        $this->hitReporter->notify($this->message, 'zip@button',
+        $this->_hitReporter->notify($this->_message, 'zip@button',
             Swift_Plugins_Reporter::RESULT_PASS
             );
-        $this->assertEquals(['foo@bar.tld'],
-            $this->hitReporter->getFailedRecipients()
+        $this->assertEquals(array('foo@bar.tld'),
+            $this->_hitReporter->getFailedRecipients()
             );
     }
 
     public function testBufferCanBeCleared()
     {
-        $this->hitReporter->notify($this->message, 'foo@bar.tld',
+        $this->_hitReporter->notify($this->_message, 'foo@bar.tld',
             Swift_Plugins_Reporter::RESULT_FAIL
             );
-        $this->hitReporter->notify($this->message, 'zip@button',
+        $this->_hitReporter->notify($this->_message, 'zip@button',
             Swift_Plugins_Reporter::RESULT_FAIL
             );
-        $this->assertEquals(['foo@bar.tld', 'zip@button'],
-            $this->hitReporter->getFailedRecipients()
+        $this->assertEquals(array('foo@bar.tld', 'zip@button'),
+            $this->_hitReporter->getFailedRecipients()
             );
-        $this->hitReporter->clear();
-        $this->assertEquals([], $this->hitReporter->getFailedRecipients());
+        $this->_hitReporter->clear();
+        $this->assertEquals(array(), $this->_hitReporter->getFailedRecipients());
     }
 }

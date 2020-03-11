@@ -13,6 +13,6 @@ $container->loadFromExtension('swiftmailer', array(
     'local_domain' => 'local.example.com',
     'logging' => true,
     'spool' => array('type' => 'memory'),
-    'delivery_addresses' => ['single@host.com'],
+    'delivery_address' => 'single@host.com',
     'delivery_whitelist' => array('/foo@.*/', '/.*@bar.com$/'),
 ));
