@@ -193,6 +193,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         foreach ($discoverySetting['data'] as &$navigation) {
             if (!empty($navigation['link'])) {
                 $navigation['link']['url'] = $schema.'://'.$_SERVER['HTTP_HOST'].'/h5/index.html#/'.$navigation['link']['type'].'/explore/new';
+                $navigation['link']['uri'] = $schema.'://'.$_SERVER['HTTP_HOST'].'/h5/index.html#/'.$navigation['link']['type'].'/explore/new';
             }
         }
 
