@@ -9,6 +9,10 @@ const config = [
     name: 'getDraft',
     url: '/pages/{portal}/settings/{type}'
   }, {
+    // 获取班级课程分类
+    name: 'getCategoryType',
+    url: '/category/{type}'
+  }, {
     // 后台配置保存
     name: 'saveDraft',
     headers: {

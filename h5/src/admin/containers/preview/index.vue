@@ -3,8 +3,9 @@
     <div class="image-container clearfix">
       <div :class="{'phone-img-app': from === 'appSetting'}" class="phone-img">
         <img :src="bgImg">
-        <div :class="getTitleClass()">{{ settings.name }}</div>
+        <div :class="getTitleClass()"><i class="iconfont icon-search"></i>{{ settings.name }}</div>
         <mobile-preview :class="getClass()" :feedback="false"/>
+        <find-footer :portal="portal" class="preview-app-footer" v-if="from === 'appSetting'"></find-footer>
       </div>
       <div class="code-container" >
         <div v-if="isH5" class="code-item">
@@ -23,12 +24,14 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import findFooter from '../setting/footer';
 import mobilePreview from './mobile'
 import pathName2Portal from 'admin/config/api-portal-config'
 
 export default {
   components: {
-    mobilePreview
+    mobilePreview,
+    findFooter
   },
   data() {
     return {
@@ -43,6 +46,9 @@ export default {
     },
     isH5() {
       return this.from === 'h5Setting'
+    },
+    portal() {
+      return pathName2Portal[this.from];
     },
     bgImg() {
       if (this.from === 'miniprogramSetting') {

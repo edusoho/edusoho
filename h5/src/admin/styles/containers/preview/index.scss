@@ -4,12 +4,31 @@
 .preview-container {
   padding: 0 50px;
   box-sizing: border-box;
-  .preview-title__app{
+  // .preview-title__app{
+  //   position: absolute;
+  //   top: 76px;
+  //   width: 100%;
+  //   text-align: center;
+  //   color: #fff;
+  // }
+  .preview-title__app {
     position: absolute;
     top: 76px;
-    width: 100%;
-    text-align: center;
-    color: #fff;
+    left: 46px;
+    right: 46px;
+    height: 28px;
+    text-align: left;
+    background:rgba(245, 245, 245, 1);
+    border-radius:14px;
+    line-height: 28px;
+    font-size:12px;
+    color:rgba(190, 190, 190, 1);
+    padding-left: 34px;
+    i {
+      position: absolute;
+      top: 0px;
+      left: 16px;
+    }
   }
   .preview-title__h5{
     position: absolute;
@@ -208,6 +227,9 @@
 
 .find-page__part {
   position: relative;
+  > .e-swipe {
+    padding: 12px 16px 0;
+  }
   &:nth-last-child(2) {
     .gray-border-bottom {
       border-bottom: 0;

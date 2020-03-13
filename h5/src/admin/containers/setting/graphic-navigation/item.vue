@@ -1,17 +1,65 @@
 <template>
   <div :class="{ active: active === index }" class="graphic-navigation-item clearfix" @click="selected(index)">
-    <el-upload
-      :http-request="uploadImg"
-      :before-upload="beforeUpload"
-      :show-file-list="false"
-      class="add-img"
-      action="string"
-      accept=".jpg,.jpeg,.png,.gif,.bmp,.JPG,.JPEG,.PBG,.GIF,.BMP"
-    >
-      <img v-if="!item.image.url"  :src="getDefaultImg(item.link.type)" class="graphic-navigation-img">
-      <img v-else :src="item.image.url" class="graphic-navigation-img">
-      <div  class="graphic-navigation-img-mask">更换图片</div>
-    </el-upload>
+    <div class="graphic-navigation-item-left clearfix">
+      <div class="add-img" @click="chooseImg">
+        <img v-if="!item.image.uri"  :src="getDefaultImg(item.link.type)" class="graphic-navigation-img">
+        <img v-else :src="item.image.uri" class="graphic-navigation-img">
+        <div  class="graphic-navigation-img-mask">更换图片</div>
+      </div>
+    </div>
+    <div class="graphic-navigation-item-right clearfix">
+      <div class="add-title">
+        标题：<el-input v-model="item.title" size="mini" placeholder="请输入标题" max-length="15" clearable/>
+      </div>
+      <div class="add-title">
+        链接来源：
+        <el-select v-model="item.link.type" placeholder="请选择" size="mini" width="150px">
+          <el-option v-for="typeItem in typeOptions" :key="typeItem.value" :label="typeItem.label" :value="typeItem.value"/>
+        </el-select>
+      </div>
+      <div  class="add-choose" v-show="groupList.length">
+        {{ getTypeText(item.link.type) }}分类：
+        <el-select v-model="item.link.categoryId" placeholder="请选择" size="mini" width="150px">
+          <el-option v-for="groupItem in groupList" :key="groupItem.id" :label="groupItem.name" :value="groupItem.id"/>
+        </el-select>
+      </div>
+    </div>
+    <img
+      class="icon-delete"
+      src="static/images/delete.png"
+      @click="handleRemove(index)"
+      v-show="active === index"
+    />
+
+    <el-dialog
+      :visible.sync="chooseVisible"
+      title="选择图片"
+      width="60%">
+      <div class="choose-container">
+        <div class="choose-container-group"  v-for="(group, groupIndex) in imgChooseList" :key="groupIndex">
+          <div class="choose-container-group-item" v-for="(item, index) in group" :key="index">
+            <img :src="item" class="graphic-navigation-img" @click="setCurrentImg(item)">
+          </div>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="chooseVisible = false">取 消</el-button>
+        <el-upload
+        :http-request="uploadImg"
+        :before-upload="beforeUpload"
+        :show-file-list="false"
+        class="upload-img"
+        action="string"
+        accept=".jpg,.jpeg,.png,.gif,.bmp,.JPG,.JPEG,.PBG,.GIF,.BMP"
+      >
+        <el-button type="primary">上传图片</el-button>
+        <!-- <img v-if="!item.image.url"  :src="getDefaultImg(item.link.type)" class="graphic-navigation-img">
+        <img v-else :src="item.image.url" class="graphic-navigation-img"> -->
+        <!-- <div  class="graphic-navigation-img-mask"></div> -->
+      </el-upload>
+      </span>
+    </el-dialog>
+    
 
     <el-dialog
       :visible.sync="dialogVisible"
@@ -36,12 +84,6 @@
         <el-button type="primary" @click="stopCrop">确 定</el-button>
       </span>
     </el-dialog>
-
-    <div class="add-title">标题：<el-input v-model="item.title" size="mini" placeholder="请输入标题" max-length="15" clearable/>
-    </div>
-    <div  class="add-choose">
-      链接：<el-input  v-model="item.link.target" size="mini" :placeholder="item.link.target"  :disabled="true" clearable/>
-    </div>
   </div>
 </template>
 
@@ -49,6 +91,9 @@
 import Api from 'admin/api'
 import { VueCropper } from 'vue-cropper'
 import settingCell from '../module-frame/setting-cell'
+import { mapActions, mapState } from 'vuex';
+
+console.log(ICON_LIST);
 export default {
   components: {
     VueCropper,
@@ -58,6 +103,26 @@ export default {
   props: ['item', 'index', 'active'],
   data() {
     return {
+      chooseVisible: false,
+      chooseType: '',
+      imgChooseList: ICON_LIST,
+      typeBaseList: [{
+        value: 'openCourse',
+        label: '公开课分类'
+      }, {
+        value: 'classroom',
+        label: '班级分类'
+      }, {
+        value: 'course',
+        label: '课程分类'
+      }],
+      typeText: {
+        openCourse: '公开课',
+        classroom: '班级',
+        course: '课程',
+        vip: '会员'
+      },
+      groupList: [],
       activeIndex: this.active,
       option: {
         img: '',
@@ -75,8 +140,54 @@ export default {
       pathName: this.$route.name,
     }
   },
-  created() {},
+  computed: {
+    ...mapState(['isLoading', 'vipLevels', 'vipSettings',
+                'vipSetupStatus', 'vipPlugin','settings']),
+    vipDisabled() {
+      return !this.vipSetupStatus || (!this.vipSettings
+            || !this.vipSettings.enabled
+            || !this.vipSettings.h5Enabled);
+    },
+    typeOptions() {
+      console.log('vipDisabled', this.vipDisabled);
+      const vipItem = !this.vipDisabled ? [{
+        value: 'vip',
+        label: '会员专区'
+      }] : []
+      return [ ...vipItem, ...this.typeBaseList ];
+    },
+  },
+  created() {
+    this.getCurrentType();
+  },
   methods: {
+    ...mapActions([
+      'getCategoryType',
+    ]),
+    getCurrentType() {
+      this.groupList.length = 0;
+      if (this.item.link.type === 'vip') {
+        return;
+      }
+      this.getCategoryType({
+        type: this.item.link.type
+      }).then(res => {
+        console.log(res);
+        res.forEach(item => {
+          this.groupList.push(item);
+        })
+      })
+    },
+    getTypeText(type) {
+      return this.typeText[type];
+    },
+    setCurrentImg(uri) {
+      this.item.image.uri = uri;
+      this.chooseVisible = false;
+    },
+    handleRemove(data, index) {
+      this.$emit("removeItem", data);
+    },
     getDefaultImg(type){
       switch(type){
         case "openCourse":
@@ -85,9 +196,12 @@ export default {
           return "static/images/hotcourse.png"
         case "classroom":
           return "static/images/hotclass.png"
+        default:
+          return "static/images/graphic/default/icon@2x.png"
       }
     },
     beforeUpload(file) {
+      this.chooseVisible = false;
       const type = file.type
       const size = file.size / 1024 / 1024
 
@@ -107,6 +221,9 @@ export default {
         return
       }
       this.readFail(file)
+    },
+    chooseImg() {
+      this.chooseVisible = true;
     },
     readFail(file){
       this.dialogVisible = true
@@ -143,13 +260,11 @@ export default {
             // 小程序后台替换图片协议
             data.uri = data.uri.replace(/^(\/\/)|(http:\/\/)/, 'https://')
           }
-          data.url=data.uri;
-          delete data.uri;
           this.item.image = data
           this.$emit('selected',
             {
               selectIndex: this.activeIndex,
-              imageUrl: data.url
+              imageUrl: data.uri
             })
 
           this.$message({
@@ -165,16 +280,23 @@ export default {
         })
     },
     selected(index) {
-      this.imgAdress = this.item.image.url
+      this.imgAdress = this.item.image.uri
       this.activeIndex = index
       this.$emit('selected',
         {
           selectIndex: index,
-          imageUrl: this.item.image.url
+          imageUrl: this.item.image.uri
         }
       )
     }
-  }
+  },
+  watch: {
+    'item.link.type': {
+      handler(data) {
+        this.getCurrentType();
+      }
+    }
+  },
 }
 
 </script>

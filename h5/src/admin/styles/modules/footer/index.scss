@@ -5,6 +5,12 @@
   width: 100%;
   background-color: #fff;
   border-top: 1px solid #e1e1e1;
+  &.preview-app-footer {
+    bottom: 63px;
+    width: inherit;
+    left: 30px;
+    right: 29px;
+  }
   .iconfont{
     font-size:20px;
   }

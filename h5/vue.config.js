@@ -1,6 +1,7 @@
 const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const merge = require('webpack-merge');
+const scannerData = require('./build/scanner.js');
 
 function resolve(dir) {
 	return path.join(__dirname, dir);
@@ -62,8 +63,8 @@ module.exports = {
         //target: 'http://wr.st.edusoho.cn',
         //target:'http://gdy.st.edusoho.cn',
         //target:'https://www.iyamusic.com',
-        //target: 'http://devtest.edusoho.cn',
-        target:"http://try6.edusoho.cn",
+        target: 'http://devtest.edusoho.cn',
+        // target:"http://try6.edusoho.cn",
 				changeOrigin: true,
 				secure: false,
 			}
@@ -97,6 +98,24 @@ module.exports = {
 			.delete('preload-h5')
 			.delete('prefetch-admin')
 			.delete('preload-admin');
+
+		// 设置eslint在dev模式下自动格式化代码
+		config.module
+			.rule('eslint')
+			.use('eslint-loader')
+			.loader('eslint-loader')
+			.tap(options => {
+				options.fix = true
+				return options
+			})
+		config
+			.plugin('define')
+			.tap(args => {
+				Object.entries(scannerData).forEach(([key, value]) => {
+					args[0][key] = JSON.stringify(value);
+				});
+				return args
+			})
 		//set第一个参数：设置的别名，第二个参数：设置的路径
 		config.resolve.alias
 			.set("@", resolve("./src/h5"))

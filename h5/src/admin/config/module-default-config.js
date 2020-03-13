@@ -59,7 +59,8 @@ const MODULE_DEFAULT = {
     data: [{
       title: '公开课',
       image: {
-        url: ''
+        url: '',
+        uri: ''
       },
       link: {
         type: 'openCourse',
@@ -69,7 +70,8 @@ const MODULE_DEFAULT = {
     }, {
       title: '热门课',
       image: {
-        url: ''
+        url: '',
+        uri: ''
       },
       link: {
         type: 'course',
@@ -79,7 +81,8 @@ const MODULE_DEFAULT = {
     }, {
       title: '热销班',
       image: {
-        url: ''
+        url: '',
+        uri: ''
       },
       link: {
         type: 'classroom',

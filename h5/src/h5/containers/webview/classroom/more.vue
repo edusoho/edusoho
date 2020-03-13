@@ -162,19 +162,24 @@ export default {
       if (!this.isAllCourse) this.requestClass(args);
     },
     transform(obj) {
-      const config = {};
+      const config = {}
       const arr = Object.keys(obj);
+      const defaultData = {
+        categoryId: this.categoryId,
+        type: this.type,
+        sort: this.sort
+      };
       if (!arr.length) {
-        return {
-          categoryId: this.categoryId,
-          type: this.type,
-          sort: this.sort
-        };
+        return defaultData;
       }
       arr.forEach((current, index) => {
-        config[this.queryForm[current]] = obj[current];
-      });
-      return config;
+        if (current === 'category') {
+          config[this.queryForm[current]] = Number(obj[current])
+          return;
+        }
+        config[this.queryForm[current]] = obj[current]
+      })
+      return Object.assign(defaultData, config);
     },
     toggleHandler(value) {
       this.selecting = value;
