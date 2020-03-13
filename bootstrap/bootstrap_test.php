@@ -22,8 +22,8 @@ $kernel->boot();
  */
 //$container->enterScope('request');
 //$container->set('request', $request, 'request');
-$kernel->getContainer()->set('request', $request);
 
+$kernel->getContainer()->get('request_stack')->push($request);
 // boot test
 $biz = $kernel->getContainer()->get('biz');
 $bootstrap = new UnitTestsBootstrap($biz);

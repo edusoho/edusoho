@@ -14,7 +14,8 @@ $kernel->setRequest($request);
 $kernel->boot();
 
 $container = $kernel->getContainer();
-$container->set('request', $request);
+$container->get('request_stack')->push($request);
+
 
 $biz = $container->get('biz');
 
