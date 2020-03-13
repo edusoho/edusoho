@@ -27,11 +27,11 @@ class QuestionParserController extends BaseController
             if ('docx' == $ext) {
                 $result = $this->getFileService()->uploadFile('course_private', $file);
                 $uploadFile = $this->getFileService()->parseFileUri($result['uri']);
-//                try {
+                try {
                     $questions = $this->parseQuestions($uploadFile['fullpath']);
-//                } catch (\Exception $e) {
-//                    return $this->render($templateInfo['readErrorModalTemplate']);
-//                }
+                } catch (\Exception $e) {
+                    return $this->render($templateInfo['readErrorModalTemplate']);
+                }
 
                 $cacheFilePath = $this->cacheQuestions($questions, $uploadFile);
                 $token = $this->getTokenService()->makeToken('upload.course_private_file', array(
