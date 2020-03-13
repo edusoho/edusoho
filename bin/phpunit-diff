@@ -114,7 +114,8 @@ else
                 "bin/phpunit -c app/ --testsuite UnitD2D"
                 "bin/phpunit -c app/ --testsuite UnitE2P"
                 "bin/phpunit -c app/ --testsuite UnitQ2T"
-                "bin/phpunit -c app/ --testsuite UnitU2Z")
+                "bin/phpunit -c app/ --testsuite UnitU2Z"
+                "bin/phpunit -c app/ --testsuite SpecialTest")
 
     for ((i = 0; i < ${#phpunitAll[@]}; i++))
     do

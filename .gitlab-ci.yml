@@ -138,6 +138,8 @@ check env:
     - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitE2P --coverage-clover reports_tmp/phpunit.coverage.xml_4 --log-junit reports_tmp/phpunit.xml_4
     - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitQ2T --coverage-clover reports_tmp/phpunit.coverage.xml_5 --log-junit reports_tmp/phpunit.xml_5
     - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitU2Z --coverage-clover reports_tmp/phpunit.coverage.xml_6 --log-junit reports_tmp/phpunit.xml_6
+    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite SpecialTest --coverage-clover reports_tmp/phpunit.coverage.xml_7 --log-junit reports_tmp/phpunit.xml_7
+
     - mkdir reports
     - bin/caculate
     - echo "sonar.links.ci=$SONAR_LINKS_CI" >> sonar-project.properties

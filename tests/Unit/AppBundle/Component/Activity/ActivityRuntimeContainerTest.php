@@ -154,7 +154,7 @@ class ActivityRuntimeContainerTest extends BaseTestCase
         $container->set('biz', $this->biz);
         $container->setParameter('edusoho.activities_dir', $this->getContainer()->getParameter('edusoho.activities_dir'));
         $container->set('activity_config_manager', $this->getContainer()->get('activity_config_manager'));
-        $container->set('request', $this->getContainer()->get('request'));
+        $container->register('request_stack', $this->getContainer()->get('request_stack'))->setShared(true);
         $activityContainer = new ActivityRuntimeContainer($container);
         $activityContainer->render('test.html', array());
     }
