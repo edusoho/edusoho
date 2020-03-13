@@ -17,13 +17,12 @@ $filesystem->remove($kernel->getCacheDir());
 $kernel->boot();
 
 
-
-$container = $kernel->getContainer();
 /**
  * expired in symfony 3.0
  */
 //$container->enterScope('request');
 //$container->set('request', $request, 'request');
+$kernel->getContainer()->set('request', $request);
 
 // boot test
 $biz = $kernel->getContainer()->get('biz');

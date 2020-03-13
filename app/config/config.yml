@@ -150,3 +150,4 @@ services:
         factory:
             - '@request_stack'
             - 'getMasterRequest'
+        shared: true
