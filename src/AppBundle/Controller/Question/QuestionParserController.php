@@ -27,11 +27,11 @@ class QuestionParserController extends BaseController
             if ('docx' == $ext) {
                 $result = $this->getFileService()->uploadFile('course_private', $file);
                 $uploadFile = $this->getFileService()->parseFileUri($result['uri']);
-                try {
+//                try {
                     $questions = $this->parseQuestions($uploadFile['fullpath']);
-                } catch (\Exception $e) {
-                    return $this->render($templateInfo['readErrorModalTemplate']);
-                }
+//                } catch (\Exception $e) {
+//                    return $this->render($templateInfo['readErrorModalTemplate']);
+//                }
 
                 $cacheFilePath = $this->cacheQuestions($questions, $uploadFile);
                 $token = $this->getTokenService()->makeToken('upload.course_private_file', array(
@@ -118,13 +118,13 @@ class QuestionParserController extends BaseController
         $self = $this;
         $fileService = $this->getFileService();
         $text = preg_replace_callback(
-            '/src=[\'\"](.*?)[\'\"]/',
+            '/<img src=[\'\"](.*?)[\'\"]/',
             function ($matches) use ($self, $fileService) {
                 $file = new FileObject($matches[1]);
                 $result = $fileService->uploadFile('course', $file);
                 $url = $self->get('web.twig.extension')->getFpath($result['uri']);
 
-                return "src=\"{$url}\"";
+                return "<img src=\"{$url}\"";
             },
             $text
         );
