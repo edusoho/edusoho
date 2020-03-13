@@ -26,6 +26,10 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
     protected $pluginConfigurationManager;
 
+    private $requestStackSize = 0;
+
+    private $resetServices = false;
+
     public function __construct($environment, $debug)
     {
         parent::__construct($environment, $debug);
@@ -37,7 +41,25 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
     public function boot()
     {
         if (true === $this->booted) {
+            if (!$this->requestStackSize && $this->resetServices) {
+                if ($this->container->has('services_resetter')) {
+                    $this->container->get('services_resetter')->reset();
+                }
+                $this->resetServices = false;
+                if ($this->debug) {
+                    $this->startTime = microtime(true);
+                }
+            }
+
             return;
+        }
+        if ($this->debug) {
+            $this->startTime = microtime(true);
+        }
+        if ($this->debug && !isset($_ENV['SHELL_VERBOSITY']) && !isset($_SERVER['SHELL_VERBOSITY'])) {
+            putenv('SHELL_VERBOSITY=3');
+            $_ENV['SHELL_VERBOSITY'] = 3;
+            $_SERVER['SHELL_VERBOSITY'] = 3;
         }
 
         if ($this->loadClassCache) {

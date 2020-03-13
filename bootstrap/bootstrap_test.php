@@ -10,16 +10,20 @@ $loader = require __DIR__.'/../app/autoload.php';
 $request = Request::createFromGlobals();
 $kernel = new AppKernel('test', true);
 $kernel->setRequest($request);
-$kernel->boot();
-
 //clear cache
 $filesystem = new \Symfony\Component\Filesystem\Filesystem();
 $filesystem->remove($kernel->getCacheDir());
 
-// inject request service
+$kernel->boot();
+
+
+
 $container = $kernel->getContainer();
-$container->enterScope('request');
-$container->set('request', $request, 'request');
+/**
+ * expired in symfony 3.0
+ */
+//$container->enterScope('request');
+//$container->set('request', $request, 'request');
 
 // boot test
 $biz = $kernel->getContainer()->get('biz');
