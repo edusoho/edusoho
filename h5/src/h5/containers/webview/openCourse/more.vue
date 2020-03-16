@@ -84,6 +84,7 @@ export default {
       queryForm: {
         courseType: "type",
         category: 'categoryId',
+        categoryId: "categoryId",
       },
       treeMenuLevel: 1,
       selectItems: CATEGORY_DEFAULT["openCourse_list"],

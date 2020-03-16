@@ -62,6 +62,7 @@ export default {
       queryForm: {
         courseType: "type",
         category: "categoryId",
+        categoryId: "categoryId",
         sort: "sort"
       },
       treeMenuLevel: 1,
