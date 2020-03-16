@@ -6,6 +6,7 @@ use Biz\AbstractCopy;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Task\Dao\TaskDao;
+use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
@@ -65,6 +66,7 @@ class CourseTaskCopy extends AbstractCopy
         if (!empty($newTasks)) {
             $this->getTaskDao()->batchCreate($newTasks);
             $this->updateChapter($newCourse['id'], $updateChapterIds);
+            $this->dispatchEvent('course.task_copy', new Event($newCourse));
         }
     }
 
