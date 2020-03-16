@@ -9,7 +9,7 @@
     </div>
     <div class="graphic-navigation-item-right clearfix">
       <div class="add-title">
-        标题：<el-input v-model="item.title" size="mini" placeholder="请输入标题" max-length="15" clearable/>
+        标题：<el-input v-model="item.title" size="mini" placeholder="请输入标题" maxlength="5" clearable/>
       </div>
       <div class="add-title">
         链接来源：
