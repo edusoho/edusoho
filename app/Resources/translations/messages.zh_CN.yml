@@ -4681,6 +4681,8 @@ common.video_quality.normal: 标准
 common.video_quality.normal.tips: 适合屏幕录制、摄像头拍摄
 common.video_quality.high: 精细
 common.video_quality.high.tips: 适合动态电影
+common.video_quality.super: 超精细
+common.video_quality.super.tips: 适合超高画质的专业视频
 
 # content
 contetn.active_list.create_template: 请创建模版文件
@@ -9592,6 +9594,7 @@ log.attr.system.update_settings.storage.video_quality: 视频转码画质
 log.attr.system.update_settings.storage.video_quality.low: 流畅
 log.attr.system.update_settings.storage.video_quality.normal: 标准
 log.attr.system.update_settings.storage.video_quality.high: 精细
+log.attr.system.update_settings.storage.video_quality.super: 超精细
 log.attr.system.update_settings.storage.video_audio_quality: 视频转码音质
 log.attr.system.update_settings.storage.video_audio_quality.low: 流畅
 log.attr.system.update_settings.storage.video_audio_quality.normal: 标准
