@@ -150,7 +150,6 @@ check env:
   only:
     refs:
       - develop
-      - bugfix/develop-unit-test-coverage
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
