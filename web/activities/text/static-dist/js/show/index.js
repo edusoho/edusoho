@@ -1,4 +1,7 @@
 var load = window.ltc.load('es-ckeditor-highlight', 'es-ckeditor-highlight-zenburn.css', 'jquery', 'scrollbar');
+var isMac = function() {
+    return /macintosh|mac os x/i.test(navigator.userAgent);
+}();
 load.then(function(){
   var context = window.ltc.getContext();
   window.ltc.api({
@@ -16,7 +19,11 @@ load.then(function(){
       $('.js-text-activity-content').addClass(classStr);
       $iframe.attr('scrolling', 'no');
     } else {
-      $('#text-activity').perfectScrollbar({wheelSpeed:1});
+      if (isMac) {
+        $('#text-activity').perfectScrollbar({wheelSpeed:1});
+      } else {
+        $('#text-activity').perfectScrollbar();
+      }
       $('#text-activity').perfectScrollbar('update');
     }
     document.querySelectorAll('pre code').forEach((block) => {
