@@ -140,11 +140,7 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
         $currentUser->fromArray($systemUser);
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
         $this->biz['user'] = $currentUser;
-        $data['price'] = $data['marketingOrderPayAmount'];
-        $data['originPrice'] = $data['marketingOrderPriceAmount'];
-        $data['source'] = 'marketing';
-        $data['remark'] = '来自微营销';
-        $data['orderTitleRemark'] = '(来自微营销)';
+        $data = $this->prepareOrderFields($data);
 
         // 如 list($classroom, $member, $order) = $this->getClassroomMemberService()->becomeStudentWithOrder($classroomId, $userId, $data);
         return $this->joinTarget($targetId, $userId, $data);
@@ -252,10 +248,22 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
         $member = $this->getMember($targetId, $userId);
         $order = $this->getMarketingOrderDao()->getOrderByMarketingOrderId($data['marketingOrderId']);
         if (empty($order)) {
+            $data = $this->prepareOrderFields($data);
             $order = $this->createMarketingOrder($targetId, $userId, $data);
         }
 
         return array($product, $member, $order);
+    }
+
+    private function prepareOrderFields($data)
+    {
+        $data['price'] = $data['marketingOrderPayAmount'];
+        $data['originPrice'] = $data['marketingOrderPriceAmount'];
+        $data['source'] = 'marketing';
+        $data['remark'] = '来自微营销';
+        $data['orderTitleRemark'] = '(来自微营销)';
+
+        return $data;
     }
 
     /**
