@@ -118,6 +118,9 @@ class ReadDocx
         foreach ($paragraphList as $paragraph) {
             $text .= trim($paragraph->textContent).PHP_EOL;
         }
+        $text = str_replace('<w:docimg', '&docimg;', $text);
+        $text = str_replace('<', '&lt;', $text);
+        $text = str_replace('&docimg;', '<img', $text);
 
         $this->documentText = $text;
     }
@@ -152,7 +155,7 @@ class ReadDocx
                     $ext = pathinfo($rels[$imageId], PATHINFO_EXTENSION);
                     $path = $this->resourceTmpPath.'/'.Uuid::uuid4().'.'.$ext;
                     file_put_contents($path, $file);
-                    $imageXml->nodeValue = sprintf('<img src="%s" %s %s>', $path, $htmlCx, $htmlCy);
+                    $imageXml->nodeValue = sprintf('<w:docimg src="%s" %s %s>', $path, $htmlCx, $htmlCy);
                 }
             }
         }
@@ -190,7 +193,7 @@ class ReadDocx
                     $ext = pathinfo($rels[$imageId], PATHINFO_EXTENSION);
                     $path = $this->resourceTmpPath . '/' . Uuid::uuid4() . '.' . $ext;
                     file_put_contents($path, $file);
-                    $imageXml->nodeValue = sprintf('<img src="%s" width="%s" height="%s">', $path, $widthMatches[1], $heightMatches[1]);
+                    $imageXml->nodeValue = sprintf('<w:docimg src="%s" width="%s" height="%s">', $path, $widthMatches[1], $heightMatches[1]);
                 }
             }
         }

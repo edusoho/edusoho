@@ -475,12 +475,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/exam-parser.git",
-                "reference": "f843689a4b6eaa4859031e4d8d8c1a14416d1d65"
+                "reference": "452401330c398adcee7b78e8e43d2e6d900880e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/exam-parser/zipball/f843689a4b6eaa4859031e4d8d8c1a14416d1d65",
-                "reference": "f843689a4b6eaa4859031e4d8d8c1a14416d1d65",
+                "url": "https://api.github.com/repos/codeages/exam-parser/zipball/452401330c398adcee7b78e8e43d2e6d900880e4",
+                "reference": "452401330c398adcee7b78e8e43d2e6d900880e4",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -495,7 +495,7 @@
                 "ext-zip": "*",
                 "php": ">=5.3.3",
                 "phpoffice/phpword": "^0.16.0",
-                "ramsey/uuid": "2.9"
+                "ramsey/uuid": "^2.9|^3.9"
             },
             "require-dev": {
                 "monolog/monolog": "^1.18",
@@ -521,7 +521,7 @@
                 }
             ],
             "description": "Exam Parser",
-            "time": "2020-01-06T00:57:14+00:00"
+            "time": "2020-03-16T02:33:45+00:00"
         },
         {
             "name": "codeages/omnipay-alipay",
