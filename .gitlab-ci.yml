@@ -121,6 +121,7 @@ check env:
       - /^release/.*$/
       - develop
       - master
+      - feature/edusoho-symfony34
     variables:
       - $REPOSITORY == "main"
 
