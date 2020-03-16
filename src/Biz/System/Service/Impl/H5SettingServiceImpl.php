@@ -191,8 +191,12 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         $schema = (!empty($_SERVER['HTTPS']) && 'off' !== strtolower($_SERVER['HTTPS'])) ? 'https' : 'http';
 
         foreach ($discoverySetting['data'] as &$navigation) {
+            if (!empty($navigation['image']['url'])) {
+                $navigation['image']['uri'] = $navigation['image']['url'];
+            }
             if (!empty($navigation['link'])) {
                 $navigation['link']['url'] = $schema.'://'.$_SERVER['HTTP_HOST'].'/h5/index.html#/'.$navigation['link']['type'].'/explore/new';
+                $navigation['link']['conditions'] = array('categoryId' => !empty($navigation['link']['categoryId']) ? $navigation['link']['categoryId'] : 0);
             }
         }
 
