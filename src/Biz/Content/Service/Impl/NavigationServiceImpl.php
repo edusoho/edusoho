@@ -237,8 +237,6 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
         $this->getLogService()->info('info', 'navigation_update', "编辑导航#{$id}", $fields);
 
-        $this->dispatchEvent('navigation.operate', $this->getNavigation($id));
-
         return $this->getNavigationDao()->update($id, $fields);
     }
 

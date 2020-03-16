@@ -16,7 +16,7 @@ load.then(function(){
       $('.js-text-activity-content').addClass(classStr);
       $iframe.attr('scrolling', 'no');
     } else {
-      $('#text-activity').perfectScrollbar();
+      $('#text-activity').perfectScrollbar({wheelSpeed:1});
       $('#text-activity').perfectScrollbar('update');
     }
     document.querySelectorAll('pre code').forEach((block) => {

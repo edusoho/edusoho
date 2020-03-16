@@ -7618,6 +7618,7 @@ log.action.system.update_settings.mobile: Update mobile client settings
 log.action.system.update_settings.wap: Update WAP settings
 log.action.system.update_settings.developer: Update developer settings
 log.action.system.update_settings.backstage: Update backstage settings
+log.action.system.update_settings.newcomer_task: Update newcomer task settings
 log.action.system.questions_settings: 'Question Bank Settings'
 log.action.system.customerServiceSetting: 'Customer service'
 log.action.system.setting_userCenter: 'User center settings'
