@@ -279,9 +279,7 @@ export default {
           title: "",
           message:
             "本场考试已开启云监考，暂不支持在移动端答题，请前往PC端进行答题。"
-        }).then(() => {
-          this.goDoTestpaper();
-        });
+        }).then(() => {});
       } else {
         this.goDoTestpaper();
       }
