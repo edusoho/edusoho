@@ -5,6 +5,8 @@ namespace Tests\Unit\AppBundle\Util;
 use Biz\BaseTestCase;
 use AppBundle\Util\UploaderToken;
 use AppBundle\Common\TimeMachine;
+use Biz\System\Service\SettingService;
+use Firebase\JWT\JWT;
 
 class UploaderTokenTest extends BaseTestCase
 {
@@ -14,15 +16,15 @@ class UploaderTokenTest extends BaseTestCase
         TimeMachine::setMockedTime(time());
         $uploaderToken = new UploaderToken();
         $token = $uploaderToken->make('courselesson', 3, 'private');
-
-        $result = base64_decode($token);
-        $contents = explode('|', $result);
-        $this->assertEquals($user['id'], $contents[0]);
+        $this->getSettingService()->get('storage', array());
+        $accessKey = empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'];
+        $secretKey = empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'];
+        $result = JWT::decode($token, md5($accessKey.$secretKey), array('HS256'));
+        $contents = explode('|', $result->metas);
+        $this->assertEquals($user['uuid'], $contents[0]);
         $this->assertEquals('courselesson', $contents[1]);
         $this->assertEquals(3, $contents[2]);
         $this->assertEquals('private', $contents[3]);
-        $this->assertEquals(TimeMachine::time() + 86400, $contents[4]);
-        $this->assertEquals(md5("{$user['id']}|courselesson|3|private|".(TimeMachine::time() + 86400)."|{$user['salt']}"), $contents[5]);
     }
 
     public function testParse()
@@ -30,17 +32,6 @@ class UploaderTokenTest extends BaseTestCase
         $uploaderToken = new UploaderToken();
         //传入空
         $result = $uploaderToken->parse(null);
-        $this->assertNull($result);
-
-        //传入过时的token
-        $result = $uploaderToken->parse('MXxjb3Vyc2VsZXNzb258M3xwcml2YXRlfDg2NDAwfDkwMGFkZWQzNWUxNzIwZjYyY2QyYzUwNWJlMGJlNzU2');
-        $this->assertNull($result);
-
-        //传入不符合sign的token
-        $token = $uploaderToken->make('courselesson', 3, 'private');
-        $result = base64_decode($token);
-        $contents = explode('|', $result);
-        $result = $uploaderToken->parse(base64_encode($contents[0].'|'.$contents[1].'|'.$contents[2].'|'.$contents[3].'|'.$contents[4].'|'.$contents[5].'extractstr'));
         $this->assertNull($result);
 
         //正常传入的token
@@ -51,5 +42,13 @@ class UploaderTokenTest extends BaseTestCase
         $this->assertEquals('courselesson', $result['targetType']);
         $this->assertEquals(3, $result['targetId']);
         $this->assertEquals('private', $result['bucket']);
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }
