@@ -2,6 +2,7 @@ const path = require("path");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const merge = require("webpack-merge");
 const scannerData = require("./build/scanner.js");
+const proxyMap = require("./build/env.js");
 
 function resolve(dir) {
   return path.join(__dirname, dir);
@@ -25,6 +26,8 @@ const chunks = {
     projectname
   ]
 };
+
+const proxyData = proxyMap[process.env.VUE_APP_PROXY_TYPE || 'devtest'];
 page[projectname] = {
   entry: `src/${projectname}/main.js`, // page 的入口
   template: `src/public/${projectname === "h5" ? "index.html" : "admin.html"}`, // 模板来源
@@ -66,13 +69,7 @@ module.exports = {
     },
     proxy: {
       "/api": {
-        // target: 'https://www.easy-mock.com/mock/5b1742522de86c43cc2dc73a/edusoho',
-        // target: 'http://zyc.st.edusoho.cn',
-        //target: 'http://wr.st.edusoho.cn',
-        //target:'http://gdy.st.edusoho.cn',
-        //target:'https://www.iyamusic.com',
-        target: "http://devtest.edusoho.cn",
-        // target:"http://try6.edusoho.cn",
+				target: proxyData.url,
         changeOrigin: true,
         secure: false
       }
@@ -118,6 +115,7 @@ module.exports = {
       .delete("preload-admin");
 
     config.plugin("define").tap(args => {
+			args[0].AUTH_TOKEN = proxyData.token;
       Object.entries(scannerData).forEach(([key, value]) => {
         args[0][key] = JSON.stringify(value);
       });

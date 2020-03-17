@@ -1,5 +1,6 @@
 import axios from 'axios';
 import store from 'admin/store';
+import proxyMap from '../../../build/env';
 
 // 状态码
 // const statusCode = {
@@ -12,8 +13,7 @@ axios.interceptors.request.use(config => {
   const env = process.env.NODE_ENV;
 
   if (env !== 'production') {
-    // config.headers['X-Auth-Token'] = '2ggsc28azq3ookoswkw8sg4ggosocw0'; // try 6
-    config.headers['X-Auth-Token'] = 'in1vy3uwgxkwc8okocw08k8ckscw0so'; // devtest
+    config.headers['X-Auth-Token'] = proxyMap[process.env.VUE_APP_PROXY_TYPE || 'devtest'].token;
   } else {
     config.headers['X-Requested-With'] = 'XMLHttpRequest';
     config.headers['X-CSRF-Token'] = store.state.csrfToken;

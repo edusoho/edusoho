@@ -93,7 +93,7 @@ import { VueCropper } from 'vue-cropper'
 import settingCell from '../module-frame/setting-cell'
 import { mapActions, mapState } from 'vuex';
 
-console.log(ICON_LIST);
+const { protocol, pathname, host } = window.location;
 export default {
   components: {
     VueCropper,
@@ -103,6 +103,7 @@ export default {
   props: ['item', 'index', 'active'],
   data() {
     return {
+      baseUri: `${protocol}//${host}${pathname.split('/').slice(0, -1).join('/')}/`,
       chooseVisible: false,
       chooseType: '',
       imgChooseList: ICON_LIST,
@@ -182,7 +183,7 @@ export default {
       return this.typeText[type];
     },
     setCurrentImg(uri) {
-      this.item.image.uri = uri;
+      this.item.image.uri = this.baseUri + uri;
       this.chooseVisible = false;
     },
     handleRemove(data, index) {
@@ -197,7 +198,7 @@ export default {
         case "classroom":
           return "static/images/hotclass.png"
         default:
-          return "static/images/graphic/default/icon@2x.png"
+          return `${this.baseUri}static/images/graphic/default/icon@2x.png`
       }
     },
     beforeUpload(file) {
