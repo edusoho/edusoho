@@ -26,6 +26,8 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 
     public function countAnnouncements($conditions)
     {
+        $conditions = $this->_prepareSearchConditions($conditions);
+
         return $this->getAnnouncementDao()->count($conditions);
     }
 
