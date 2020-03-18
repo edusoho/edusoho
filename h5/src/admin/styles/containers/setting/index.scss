@@ -26,6 +26,26 @@
       line-height: 40px;
       background: transparent;
     }
+    &-apps {
+      position: absolute;
+      top: 27px;
+      left: 16px;
+      right: 16px;
+      height: 28px;
+      text-align: left;
+      background: rgba(245, 245, 245, 1);
+      border-radius: 14px;
+      line-height: 28px;
+      font-size: 12px;
+      color: rgba(190, 190, 190, 1);
+      padding-left: 34px;
+
+      i {
+        position: absolute;
+        top: 0px;
+        left: 16px;
+      }
+    }
   }
   .find-head-img {
     width: 373px;

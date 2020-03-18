@@ -3,7 +3,8 @@
     <div class="help-block" v-if="portal === 'miniprogram'"></div>
     <div class="setting-page" :class="{'setting-page-miniprogram': portal === 'miniprogram' && supportActivityVersion}">
       <img class="find-head-img" :src="headImg" alt="">
-      <div class="find-navbar" :class="{'find-navbar-miniprogram': (portal === 'miniprogram' || portal === 'apps')}">
+      <div class="find-navbar" :class="`find-navbar-${portal}`">
+        <i v-if="portal === 'apps'" class="iconfont icon-search"></i>
         <i class="h5-icon h5-icon-houtui"></i>{{ headTitle }}
       </div>
 

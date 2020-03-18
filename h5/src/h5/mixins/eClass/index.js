@@ -57,20 +57,19 @@ export default {
   computed: {
     ...mapState(['vipSwitch', 'isLoading']),
     discountNum() {
-      if (this.typeList === 'class_list') return false;
-      if (this.discount !== '') {
-        const discount = Number(this.discount);
-        // 减价
-        if (this.discountType === 'reduce') {
-          return `减${discount}`;
-        }
-        // 打折
-        if (this.discountType === 'discount') {
-          if (discount === 10) return false;
-          if (discount == 0) return '限免';
-          return `${discount}折`;
-        }
+      const discount = Number(this.discount);
+      if (this.typeList === 'class_list' || isNaN(discount)) return false;
+      // 减价
+      if (this.discountType === 'reduce') {
+        return `减${discount}`;
       }
+      // 打折
+      if (this.discountType === 'discount') {
+        if (discount === 10) return false;
+        if (discount === 0) return '限免';
+        return `${discount}折`;
+      }
+      return false;
     }
   },
   watch: {

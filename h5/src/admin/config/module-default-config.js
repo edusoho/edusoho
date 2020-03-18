@@ -1,3 +1,5 @@
+const { protocol, pathname, host } = window.location;
+const baseUri = `${protocol}//${host}${pathname.split('/').slice(0, -1).join('/')}/`;
 const MODULE_DEFAULT = {
   slideShow: {
     type: 'slide_show',
@@ -59,7 +61,8 @@ const MODULE_DEFAULT = {
     data: [{
       title: '公开课',
       image: {
-        url: ''
+        url: '',
+        uri: `${baseUri}static/images/openCourse.png`
       },
       link: {
         type: 'openCourse',
@@ -69,7 +72,8 @@ const MODULE_DEFAULT = {
     }, {
       title: '热门课',
       image: {
-        url: ''
+        url: '',
+        uri: `${baseUri}static/images/hotcourse.png`
       },
       link: {
         type: 'course',
@@ -79,7 +83,8 @@ const MODULE_DEFAULT = {
     }, {
       title: '热销班',
       image: {
-        url: ''
+        url: '',
+        uri: `${baseUri}static/images/hotclass.png`
       },
       link: {
         type: 'classroom',

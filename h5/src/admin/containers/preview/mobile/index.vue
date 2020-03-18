@@ -24,6 +24,7 @@
         :poster="part.data"
         :feedback="feedback"/>
       <e-graphic-navigation
+        class="gray-border-bottom"
         v-if="part.type == 'graphic_navigation'"
           :graphicNavigation="part.data"
       />
