@@ -12,6 +12,7 @@ selenium-debug.log
 /vendor/
 composer.json
 composer.lock
+/build/env.js
 
 # Editor directories and files
 .idea
