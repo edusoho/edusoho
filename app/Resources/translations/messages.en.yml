@@ -9466,3 +9466,5 @@ course.live_statistics.checkin_status.all: All
 exception.live_statistic.not_found: Live statistics not found
 exception.live_statistic.not_support: Live statistics not supported function
 admin.article_setting.article_copy_manage: Information copy protection
+
+admin_v2.user.manage.change_nickname_password.heading_title: 'Change nickname and password'
