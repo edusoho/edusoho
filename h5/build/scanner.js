@@ -1,15 +1,15 @@
-const fs = require('fs')
-var join = require('path').join;
+const fs = require("fs");
+var join = require("path").join;
 
-const basePath = './public/static/images/graphic/list'
+const basePath = "./public/static/images/graphic/list";
 
 function getIconList(path) {
-  let fileList = []
+  let fileList = [];
   function getJsonFiles(jsonPath) {
     let files = [];
     function findJsonFile(path, jsonFiles) {
       let files = fs.readdirSync(path);
-      files.forEach(function (item, index) {
+      files.forEach(function(item, index) {
         let fPath = join(path, item);
         let stat = fs.statSync(fPath);
         if (stat.isDirectory() === true) {
@@ -18,23 +18,19 @@ function getIconList(path) {
           jsonFiles.push(list);
         }
         if (stat.isFile() === true) {
-          if (item.indexOf('.DS_Store') < 0) {
-            jsonFiles.push(path.replace('public/', '') + '/' + item);
+          if (item.indexOf(".DS_Store") < 0) {
+            jsonFiles.push(path.replace("public/", "") + "/" + item);
           }
         }
       });
     }
     findJsonFile(jsonPath, files);
-    fileList = files
+    fileList = files;
   }
-  getJsonFiles(path)
+  getJsonFiles(path);
   return fileList;
 }
 
-const iconList = getIconList(basePath);
-
-console.log(iconList);
-
 module.exports = {
-  ICON_LIST: getIconList(basePath),
+  ICON_LIST: getIconList(basePath)
 };

@@ -26,10 +26,8 @@ const chunks = {
     projectname
   ]
 };
-
-const proxyData = proxyMap[process.env.VUE_APP_PROXY_TYPE || 'devtest'];
 page[projectname] = {
-  entry: `src/${projectname}/main.js`, // page 的入口
+  entry: `src/${projectname}/main.js`, // page 的入口PROXY_TYPE
   template: `src/public/${projectname === "h5" ? "index.html" : "admin.html"}`, // 模板来源
   filename: "index.html", // 在 dist/index.html 的输出r
   // 当使用 title 选项时，template 中的 title 标签需要是 <title><%= htmlWebpackPlugin.options.title %></title>
@@ -39,7 +37,6 @@ page[projectname] = {
   chunks:
     process.env.NODE_ENV !== "development" ? chunks.prodChunks : chunks.dafault
 };
-
 module.exports = {
   publicPath: publicPath, // 官方要求修改路径在这里做更改，默认是根目录下，可以自行配置
   outputDir: `dist${projectname === "h5" ? "" : "/" + projectname}`, //标识是打包哪个文件
@@ -69,7 +66,7 @@ module.exports = {
     },
     proxy: {
       "/api": {
-				target: proxyData.url,
+        target: proxyMap.url,
         changeOrigin: true,
         secure: false
       }
@@ -115,7 +112,7 @@ module.exports = {
       .delete("preload-admin");
 
     config.plugin("define").tap(args => {
-			args[0].AUTH_TOKEN = proxyData.token;
+      args[0].AUTH_TOKEN = proxyMap.token;
       Object.entries(scannerData).forEach(([key, value]) => {
         args[0][key] = JSON.stringify(value);
       });

@@ -277,6 +277,7 @@ export default {
       if (this.enable_facein === 1) {
         Dialog.alert({
           title: "",
+          confirmButtonText: "知道了",
           message:
             "本场考试已开启云监考，暂不支持在移动端答题，请前往PC端进行答题。"
         }).then(() => {});
