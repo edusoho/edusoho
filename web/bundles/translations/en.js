@@ -1084,6 +1084,7 @@ t.add("admin.setting.cloud.delete_cloud_video_embed_watermark_hint", "Are you su
 t.add("admin.setting.cloud.delete_cloud_video_embed_watermark_success_hint", "Delete cloud video embed watermark successfully!", "js", "en");
 t.add("admin.setting.cloud.delete_cloud_video_embed_watermark_fail_hint", "Delete cloud video embed watermark failed!", "js", "en");
 t.add("admin.setting.cloud.validate_old.video_fingerprint_time.display", "Cloud video fingerprint display time", "js", "en");
+t.add("admin.setting.cloud.validate_old.video_fingerprint_opacity.display", "Cloud video fingerprint display opacity", "js", "en");
 t.add("admin.setting.consult_setting.upload_qrcode_success_hint", "Upload WeChat QR code successfully!", "js", "en");
 t.add("admin.setting.consult_setting.setting_max_num_hint", "Set up to 10..", "js", "en");
 t.add("admin.setting.consult_setting.delete_hint", "Are you sure you want to delete?", "js", "en");
