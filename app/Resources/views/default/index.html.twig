@@ -1,7 +1,11 @@
 {% extends 'default/base-index.html.twig' %}
-{% do script(['app/js/index/index.js']) %}
+{% do script(['app/js/vue-test/index.js']) %}
 
 {% block content %}
+    {% verbatim %}
+      <div id="app">
+      </div>
+    {% endverbatim %}
     {% cache 'jianmo/home/top/banner' 600 %}
     {{ block_show('jianmo:home_top_banner') }}
     {% endcache %}

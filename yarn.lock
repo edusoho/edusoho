@@ -6015,10 +6015,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank-test@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/item-bank-test/-/item-bank-test-0.1.2.tgz#d39c4dff1f6daa02750c7df78050f445ce0c672b"
-  integrity sha512-Mr5QNPuQbI7K6FqZDNkCv3qv98WKWfmhGPVuA8ecN8Fk2Lt4aV5pVvsHEfcLd5mYzZl+mOU5OHbqZhCn0ne2vw==
+item-bank-test@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/item-bank-test/-/item-bank-test-0.1.3.tgz#a0f06342c26a465b97e6a3403c4246b0bf6697d6"
+  integrity sha512-o/X1rJ6CVOIMv0BOkacRgwVmoq1+jUkEvPhoUZt+K3of/YNIMgg5vr0N/v+cC6oT+4tVJqq7Rl9GZRW+epaJaw==
   dependencies:
     ant-design-vue "^1.4.12"
     axios "^0.19.2"
