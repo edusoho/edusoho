@@ -37,6 +37,7 @@ module.exports = {
   },
   noParseDeps: { // 不解析依赖，加快编译速度
     'jquery': 'jquery/dist/jquery.js',
+    'vue-js': 'vue/dist/vue.min.js',
     'bootstrap': 'bootstrap/dist/js/bootstrap.js',
     'jquery-validation': 'jquery-validation/dist/jquery.validate.js',
     'perfect-scrollbar': 'perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js',
