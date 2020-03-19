@@ -1,6 +1,6 @@
-import axios from "axios";
-import store from "admin/store";
-import proxyMap from "../../../build/env";
+import axios from 'axios';
+import store from 'admin/store';
+import proxyMap from '../../../build/env';
 
 // 状态码
 // const statusCode = {
@@ -9,18 +9,18 @@ import proxyMap from "../../../build/env";
 
 axios.interceptors.request.use(
   config => {
-    config.headers.Accept = "application/vnd.edusoho.v2+json";
+    config.headers.Accept = 'application/vnd.edusoho.v2+json';
 
     const env = process.env.NODE_ENV;
 
-    if (env !== "production") {
-      config.headers["X-Auth-Token"] = proxyMap.token;
+    if (env !== 'production') {
+      config.headers['X-Auth-Token'] = proxyMap.token;
     } else {
-      config.headers["X-Requested-With"] = "XMLHttpRequest";
-      config.headers["X-CSRF-Token"] = store.state.csrfToken;
+      config.headers['X-Requested-With'] = 'XMLHttpRequest';
+      config.headers['X-CSRF-Token'] = store.state.csrfToken;
     }
 
-    store.commit("UPDATE_LOADING_STATUS", true);
+    store.commit('UPDATE_LOADING_STATUS', true);
 
     return config;
   },
@@ -29,11 +29,11 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   res => {
-    store.commit("UPDATE_LOADING_STATUS", false);
+    store.commit('UPDATE_LOADING_STATUS', false);
     return res.data;
   },
   error => {
-    store.commit("UPDATE_LOADING_STATUS", false);
+    store.commit('UPDATE_LOADING_STATUS', false);
 
     switch (error.response.status) {
       case 401:
