@@ -98,7 +98,7 @@ class SimpleValidator
 
     public static function weixin($value)
     {
-        return (bool) preg_match('/[-_a-zA-Z0-9]{6,20}$/', $value);
+        return (bool) preg_match('/^[-_a-zA-Z0-9]{6,20}$/', $value);
     }
 
     public static function integer($value)
