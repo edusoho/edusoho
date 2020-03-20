@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div>{{ message }}</div>
-    <item-manage :showCKEditorData="showCKEditorData" ></item-manage>
+    <item-manage :showCKEditorData="showCKEditorData"></item-manage>
   </div>
 </template>
 

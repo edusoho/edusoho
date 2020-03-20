@@ -1,51 +1,62 @@
 import QuestionFormBase from '../type/form-base';
-import Choice from '../type/question-choice';
-import SingleChoice from '../type/question-single-choice';
-import UncertainChoice from '../type/question-uncertain-choice';
-import Determine from '../type/question-determine';
-import Fill from '../type/question-fill';
-import Essay from '../type/question-essay';
-import Material from '../type/question-material';
+import Choice from '../type/choice';
+import SingleChoice from '../type/single-choice';
+import UncertainChoice from '../type/uncertain-choice';
+import Determine from '../type/determine';
+import Fill from '../type/fill';
+import Essay from '../type/essay';
+import Material from '../type/material';
+import Vue from 'vue';
+import itemBank from 'item-bank-test';
+
+Vue.use(itemBank);
+
+Vue.config.productionTip = false;
 
 let questionCreator;
+
 class QuestionCreator {
   constructor() {
   }
 
   static getCreator(type, $form) {
     switch (type) {
-    case 'single_choice':
-      questionCreator = new SingleChoice($form);
-      break;
-    case 'uncertain_choice':
-      questionCreator = new UncertainChoice($form);
-      break;
-    case 'choice':
-      questionCreator = new Choice($form);
-      break;
-    case 'determine':
-      questionCreator = new Determine($form);
-      break;
-    case 'essay':
-      questionCreator = new Essay($form);
-      break;
-    case 'fill':
-      questionCreator = new Fill($form);
-      break;
-    case 'material':
-      questionCreator = new Material($form);
-      break;
-    default:
-      questionCreator = new QuestionFormBase($form);
-      questionCreator.initTitleEditor();
-      questionCreator.initAnalysisEditor();
+      case 'single_choice':
+        questionCreator = SingleChoice;
+        break;
+      case 'uncertain_choice':
+        questionCreator = UncertainChoice;
+        break;
+      case 'choice':
+        questionCreator = Choice;
+        break;
+      case 'determine':
+        questionCreator = Determine;
+        break;
+      case 'essay':
+        questionCreator = Essay;
+        break;
+      case 'fill':
+        questionCreator = Fill;
+        break;
+      case 'material':
+        questionCreator = Material;
+        break;
+      default:
+        questionCreator = new QuestionFormBase($form);
+        questionCreator.initTitleEditor();
+        questionCreator.initAnalysisEditor();
     }
 
     return questionCreator;
   }
 }
+let type = $('[name="type"]').val();
 
-let $form = $('[data-role="question-form"]');
-let type = $form.find('[name="type"]').val();
+new Vue({
+  render: createElement => createElement(QuestionCreator.getCreator(type))
+}).$mount('#app');
 
-QuestionCreator.getCreator(type, $form);
+// let $form = $('[data-role="question-form"]');
+
+// QuestionCreator.getCreator(type);

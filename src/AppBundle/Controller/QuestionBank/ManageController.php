@@ -8,6 +8,7 @@ use AppBundle\Controller\BaseController;
 use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
+use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ManageController extends BaseController
@@ -117,6 +118,14 @@ class ManageController extends BaseController
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
+    }
+
+    /**
+     * @return ItemBankService
+     */
+    protected function getItemBankService()
+    {
+        return $this->createService('ItemBank:ItemBank:ItemBankService');
     }
 
     /**

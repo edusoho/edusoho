@@ -8,6 +8,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
+use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
 use Symfony\Component\HttpFoundation\Request;
 
 class QuestionBankController extends BaseController
@@ -86,9 +87,9 @@ class QuestionBankController extends BaseController
 
     public function deleteAction(Request $request, $id)
     {
-        $questionBank = $this->getQuestionBankService()->deleteQuestionBank($id);
+        $this->getQuestionBankService()->deleteQuestionBank($id);
 
-        return $this->createJsonResponse($questionBank);
+        return $this->createJsonResponse(true);
     }
 
     /**
@@ -97,6 +98,14 @@ class QuestionBankController extends BaseController
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
+    }
+
+    /**
+     * @return ItemBankService
+     */
+    protected function getItemBankService()
+    {
+        return $this->createService('ItemBank:ItemBank:ItemBankService');
     }
 
     /**

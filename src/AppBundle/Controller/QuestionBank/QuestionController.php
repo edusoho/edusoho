@@ -8,6 +8,8 @@ use Biz\Question\QuestionException;
 use Biz\Question\Service\CategoryService;
 use Biz\Question\Service\QuestionService;
 use Biz\QuestionBank\Service\QuestionBankService;
+use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Paginator;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -24,41 +26,39 @@ class QuestionController extends BaseController
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
         $conditions = $request->query->all();
 
-        $conditions['bankId'] = $id;
-        $conditions['parentId'] = empty($conditions['parentId']) ? 0 : $conditions['parentId'];
+        $conditions['bank_id'] = $id;
+//        $conditions['parentId'] = empty($conditions['parentId']) ? 0 : $conditions['parentId'];
 
         $parentQuestion = array();
-        $orderBy = array('createdTime' => 'DESC');
-        if ($conditions['parentId'] > 0) {
-            $parentQuestion = $this->getQuestionService()->get($conditions['parentId']);
-            $orderBy = array('createdTime' => 'ASC');
-        }
+        $orderBy = array('created_time' => 'DESC');
+//        if ($conditions['parentId'] > 0) {
+//            $parentQuestion = $this->getQuestionService()->get($conditions['parentId']);
+//            $orderBy = array('createdTime' => 'ASC');
+//        }
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getQuestionService()->searchCount($conditions),
+            $this->getItemService()->countItems($conditions),
             10
         );
 
-        $questions = $this->getQuestionService()->search(
+        $questions = $this->getItemService()->searchItems(
             $conditions,
             $orderBy,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'updatedUserId'));
-        $categories = $this->getQuestionCategoryService()->getCategoryStructureTree($questionBank['id']);
         $categoryTree = $this->getQuestionCategoryService()->getCategoryTree($questionBank['id']);
-        $questionCategories = $this->getQuestionCategoryService()->findCategories($questionBank['id']);
+        $questionCategories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['id']);
         $questionCategories = ArrayToolkit::index($questionCategories, 'id');
 
         return $this->render('question-bank/question/index.html.twig', array(
             'questions' => $questions,
             'paginator' => $paginator,
-            'users' => $users,
+            'users' => $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'updated_user_id')),
             'questionBank' => $questionBank,
-            'categories' => $categories,
+            'categories' => $this->getItemCategoryService()->getItemCategoryTree($questionBank['id']),
             'categoryTree' => $categoryTree,
             'parentQuestion' => $parentQuestion,
             'questionCategories' => $questionCategories,
@@ -88,31 +88,24 @@ class QuestionController extends BaseController
 
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
-            $fields['bankId'] = $id;
-            $question = $this->getQuestionService()->create($fields);
+            $fields['bank_id'] = $id;
+            $item = $this->getItemService()->createItem($fields);
+//            $question = $this->getQuestionService()->create($fields);
 
             $goto = $request->query->get('goto', null);
             if ('continue' === $fields['submission']) {
-                $urlParams = ArrayToolkit::parts($question, array('target', 'difficulty', 'parentId'));
+                $urlParams = ArrayToolkit::parts($item, array('difficulty'));
                 $urlParams['id'] = $id;
                 $urlParams['type'] = $type;
                 $urlParams['goto'] = $goto;
 
                 return $this->redirect($this->generateUrl('question_bank_manage_question_create', $urlParams));
             }
-            if ('continue_sub' === $fields['submission']) {
-                return $this->redirect(
-                    $goto ?: $this->generateUrl(
-                        'question_bank_manage_question_list',
-                        array('id' => $id, 'parentId' => $question['id'])
-                    )
-                );
-            }
 
             return $this->redirect(
                 $goto ?: $this->generateUrl(
                     'question_bank_manage_question_list',
-                    array('id' => $id, 'parentId' => $question['parentId'])
+                    array('id' => $id)
                 )
             );
         }
@@ -438,5 +431,21 @@ class QuestionController extends BaseController
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->createService('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return ItemCategoryService
+     */
+    protected function getItemCategoryService()
+    {
+        return $this->createService('ItemBank:Item:ItemCategoryService');
     }
 }
