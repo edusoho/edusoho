@@ -18,10 +18,10 @@ class UploaderToken
         $user = $this->getCurrentUser();
         $metas = "{$user['uuid']}|{$targetType}|{$targetId}|{$bucket}";
         $payload = array(
-            "iss" => "EduSoho",
-            "aud" => "EduSoho",
-            "exp" => TimeMachine::time() + $ttl,
-            "metas" => $metas,
+            'iss' => 'EduSoho',
+            'aud' => 'EduSoho',
+            'exp' => TimeMachine::time() + $ttl,
+            'metas' => $metas,
         );
 
         return JWT::encode($payload, $this->getKey(), 'HS256');
@@ -40,6 +40,7 @@ class UploaderToken
         if (empty($user)) {
             return null;
         }
+
         return array(
             'userId' => $user['id'],
             'targetType' => $targetType,
@@ -66,8 +67,9 @@ class UploaderToken
     private function getKey()
     {
         $this->getSettingService()->get('storage', array());
-        $accessKey =  empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'];
+        $accessKey = empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'];
         $secretKey = empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'];
+
         return md5($accessKey.$secretKey);
     }
 
@@ -76,7 +78,7 @@ class UploaderToken
      */
     private function getSettingService()
     {
-        return $this->getServiceKernel()->getBiz()->service("System:SettingService");
+        return $this->getServiceKernel()->getBiz()->service('System:SettingService');
     }
 
     /**
@@ -84,7 +86,7 @@ class UploaderToken
      */
     private function getUserService()
     {
-        return $this->getServiceKernel()->getBiz()->service("User:UserService");
+        return $this->getServiceKernel()->getBiz()->service('User:UserService');
     }
 
     private function getServiceKernel()
