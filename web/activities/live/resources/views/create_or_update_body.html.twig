@@ -30,7 +30,7 @@
             <label for="roomType">{{ 'course.live_activity.room_type'|trans }}</label>
           </div>
           <div class="col-sm-10">
-            <select class="form-control width-input" name="roomType" {% if not canUpdateRoomType|default(1) %}disabled{% endif %}>
+            <select class="form-control width-input" name="roomType" {% if not canUpdateRoomType|default(1) or activity.ext.roomCreated|default(false) %}disabled{% endif %}>
               {% for key, roomType in roomTypes if roomTypes %}
                 <option value="{{ key }}" {% if activity.ext.roomType|default('large') == key %}selected{% endif %}>{{ roomType|trans }}</option>
               {% endfor %}

@@ -702,6 +702,8 @@ upload.video_quality_switcher.video_quality.normal: >
   标准 <span class="color-gray">(适合屏幕录制、摄像头拍摄)</span>
 upload.video_quality_switcher.video_quality.high: >
   精细 <span class="color-gray">(适合动态电影)</span>
+upload.video_quality_switcher.video_quality.super: >
+  超精细 <span class="color-gray">(适合超高画质的专业视频)</span>
 upload.video_quality_switcher.audio_quality: 音质：
 upload.video_quality_switcher.audio_quality.low: 流畅
 upload.video_quality_switcher.audio_quality.normal: 标准
@@ -2154,6 +2156,7 @@ file_chooser.upload_file.video_quality: 转码画质
 file_chooser.upload_file.video_quality.low: 流畅
 file_chooser.upload_file.video_quality.normal: 标准
 file_chooser.upload_file.video_quality.high: 精细
+file_chooser.upload_file.video_quality.super: 超精细
 file_chooser.upload_file.audio_quality: 转码音质
 file_chooser.upload_file.audio_quality.low: 流畅
 file_chooser.upload_file.audio_quality.normal: 标准
@@ -3984,7 +3987,7 @@ customer_service.feedback_email: 反馈邮件
 customer_service.qq_customer_service: QQ客服
 customer_service.qq_group: QQ群
 customer_service.mobile_group: 电话客服
-customer_service.weixin-content: 微信公众号
+customer_service.weixin-content: 微信二维码
 customer_service.email: 电子邮箱
 customer_service.time: 服务时间：
 customer_service.send_message: 点击这里给我发消息
@@ -4678,6 +4681,8 @@ common.video_quality.normal: 标准
 common.video_quality.normal.tips: 适合屏幕录制、摄像头拍摄
 common.video_quality.high: 精细
 common.video_quality.high.tips: 适合动态电影
+common.video_quality.super: 超精细
+common.video_quality.super.tips: 适合超高画质的专业视频
 
 # content
 contetn.active_list.create_template: 请创建模版文件
@@ -6587,6 +6592,8 @@ admin.edu_cloud.edu_video.transcode_quality_normal: >
   标准 %<span class="text-muted">%(适合屏幕录制、摄像头拍摄)%</span>%
 admin.edu_cloud.edu_video.transcode_quality_high: >
   精细 %<span class="text-muted">%(适合动态电影)%</span>%
+admin.edu_cloud.edu_video.transcode_quality_super: >
+  超精细 %<span class="text-muted">%(适合超高画质的专业视频)%</span>%
 admin.edu_cloud.edu_video.audio_transcode_quality: 视频转码音质：
 admin.edu_cloud.edu_video.low: 流畅
 admin.edu_cloud.edu_video.normal: 标准
@@ -6623,6 +6630,8 @@ admin.edu_cloud.edu_video.finger_print_embed_tips: >
 admin.edu_cloud.edu_video.finger_print_time_label: 云视频指纹显示时长：
 admin.edu_cloud.edu_video.finger_print_time_tips: 建议时长在0.5 - 1.5秒之间
 admin.edu_cloud.edu_video.finger_print_time: 秒
+admin.edu_cloud.edu_video.finger_print_opacity_label: 指纹不透明度：
+admin.edu_cloud.edu_video.finger_print_opacity_tips: 请输入0～1之间的一位小数,数字越小越透明
 admin.edu_cloud.edu_video.enable_hls_encryption_plus: 云视频防盗增强
 admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在手机浏览器中播放，系统会引导用户使用App观看。
 admin.edu_cloud.edu_video.buy_flow_tips: >
@@ -8865,6 +8874,7 @@ log.action.system.update_settings.mobile: 更新移动客户端设置
 log.action.system.update_settings.wap: 更新WAP设置
 log.action.system.update_settings.developer: 更新开发者设置
 log.action.system.update_settings.backstage: 更新后台版本
+log.action.system.update_settings.newcomer_task: 更新任务助手
 log.action.system.questions_settings: 题库设置
 log.action.system.customerServiceSetting: 客服管理
 log.action.system.setting_userCenter: 用户中心设置
@@ -9587,6 +9597,7 @@ log.attr.system.update_settings.storage.video_quality: 视频转码画质
 log.attr.system.update_settings.storage.video_quality.low: 流畅
 log.attr.system.update_settings.storage.video_quality.normal: 标准
 log.attr.system.update_settings.storage.video_quality.high: 精细
+log.attr.system.update_settings.storage.video_quality.super: 超精细
 log.attr.system.update_settings.storage.video_audio_quality: 视频转码音质
 log.attr.system.update_settings.storage.video_audio_quality.low: 流畅
 log.attr.system.update_settings.storage.video_audio_quality.normal: 标准
@@ -10671,7 +10682,7 @@ admin_v2.homepage.overview: 概况
 admin_v2.developer_setting.platform_news_api_server: 获取平台信息API
 admin_v2.developer_setting.platform_news_api_server.info: '默认为 //platform-news-service.qiqiuyun.net'
 admin_v2.role_permission_manage.error: 错误
-admin_v2.default_page.changelog_title: EduSoho更新日志
+admin_v2.default_page.changelog_title: 更新日志
 admin_v2.wechat_official_account.title: 公众号
 admin_v2.wechat_official_account.text: 关注EduSoho公众号 获取最新教育资讯
 admin_v2.homepage.announcement_from_platform: 站长公告
@@ -10734,7 +10745,6 @@ homepage.live_notify.header: 直播开课提醒
 homepage.live_notify.start_while: 即将开始
 homepage.live_notify.living: 正在直播中
 homepage.live_notify.entry_live_room: 进入教室
-admin.article_setting.article_copy_manage: 资讯防复制
 
 course.live_statistics: 直播统计
 course.live_statistics.live_start_time: 直播开始时间
@@ -10772,3 +10782,4 @@ course.live_statistics.checkin_status.all: 全部
 
 exception.live_statistic.not_found: 直播数据未获取到
 exception.live_statistic.not_support: 当前直播供应商暂不支持该功能
+admin.article_setting.article_copy_manage: 资讯防复制

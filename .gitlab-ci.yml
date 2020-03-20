@@ -87,6 +87,8 @@ check env:
     - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
     - bin/phpunit-diff
   only:
+    refs:
+      - merge_requests
     variables:
       - $REPOSITORY == "main"
 
@@ -126,7 +128,7 @@ check env:
 
 7.1 For Develop:
   stage: test
-  image: codeages/ci-php:7.1.33
+  image: codeages/ci-php71
   services:
     - mysql:5.5
     - redis:latest

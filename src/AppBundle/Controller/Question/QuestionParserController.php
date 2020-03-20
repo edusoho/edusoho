@@ -118,13 +118,13 @@ class QuestionParserController extends BaseController
         $self = $this;
         $fileService = $this->getFileService();
         $text = preg_replace_callback(
-            '/src=[\'\"](.*?)[\'\"]/',
+            '/<img src=[\'\"](.*?)[\'\"]/',
             function ($matches) use ($self, $fileService) {
                 $file = new FileObject($matches[1]);
                 $result = $fileService->uploadFile('course', $file);
                 $url = $self->get('web.twig.extension')->getFpath($result['uri']);
 
-                return "src=\"{$url}\"";
+                return "<img src=\"{$url}\"";
             },
             $text
         );

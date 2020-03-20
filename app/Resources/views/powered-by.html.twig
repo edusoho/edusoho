@@ -4,5 +4,5 @@
   {% endif %}
 {% else %}
   Powered by <a href="http://www.edusoho.com/" target="_blank">EduSoho v{{ constant('\\AppBundle\\System::VERSION') }}</a>
-  ©2014-{{ null|date('Y') }} {% if not setting('copyright.thirdCopyright')|default(0) == 2 %}<a class="mlm" href="http://www.howzhi.com/" target="_blank">{{'site.power_by'|trans}}</a>{% endif %}
+  ©2014-{{ null|date('Y') }}
 {% endif %}

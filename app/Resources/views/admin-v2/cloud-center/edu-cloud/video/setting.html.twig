@@ -245,8 +245,8 @@
 
     <div class="row form-group">
       <label for="" class="col-sm-3 control-label">{{'admin.edu_cloud.edu_video.transcode_quality'|trans}}：</label>
-      <div class="controls col-sm-9 radios">
-        {{ radios('video_quality', {'low':'admin.edu_cloud.edu_video.transcode_quality_low'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'})|raw, 'normal':'admin.edu_cloud.edu_video.transcode_quality_normal'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'})|raw, 'high': 'admin.edu_cloud.edu_video.transcode_quality_high'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'})|raw}, storageSetting.video_quality) }}
+      <div class="controls col-sm-6 radios">
+        {{ radios('video_quality', {'low':'admin.edu_cloud.edu_video.transcode_quality_low'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'})|raw, 'normal':'admin.edu_cloud.edu_video.transcode_quality_normal'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'})|raw, 'high': 'admin.edu_cloud.edu_video.transcode_quality_high'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'})|raw,'super': 'admin.edu_cloud.edu_video.transcode_quality_super'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'})|raw}, storageSetting.video_quality) }}
       </div>
     </div>
 
@@ -401,6 +401,15 @@
       <div class="controls col-md-8">
         <input type="text" id="video_fingerprint_time" class="form-control width-input width-input-small" name="video_fingerprint_time" value="{{ storageSetting.video_fingerprint_time }}"> {{'admin.edu_cloud.edu_video.finger_print_time'|trans}}
         <div class="text-muted mts">{{'admin.edu_cloud.edu_video.finger_print_time_tips'|trans}}</div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label>{{'admin.edu_cloud.edu_video.finger_print_opacity_label'|trans}}</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="video_fingerprint_opacity" class="form-control width-input width-input-small" name="video_fingerprint_opacity" value="{{ storageSetting.video_fingerprint_opacity }}">
+        <div class="text-muted mts">{{'admin.edu_cloud.edu_video.finger_print_opacity_tips'|trans}}</div>
       </div>
     </div>
     <div class="row form-group">
