@@ -3,7 +3,6 @@
 namespace AppBundle\Twig;
 
 use AppBundle\Util\UploaderToken;
-use Firebase\JWT\JWT;
 
 class UploaderExtension extends \Twig_Extension
 {
@@ -33,6 +32,7 @@ class UploaderExtension extends \Twig_Extension
     public function makeUpoaderToken($targetType, $targetId, $bucket, $ttl = 86400)
     {
         $maker = new UploaderToken();
+
         return $maker->make($targetType, $targetId, $bucket, $ttl);
     }
 
