@@ -1029,6 +1029,7 @@ t.add("admin.setting.cloud.delete_cloud_video_embed_watermark_hint", "\u786e\u8b
 t.add("admin.setting.cloud.delete_cloud_video_embed_watermark_success_hint", "\u5220\u9664\u4e91\u89c6\u9891\u5185\u5d4c\u6c34\u5370\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.setting.cloud.delete_cloud_video_embed_watermark_fail_hint", "\u5220\u9664\u4e91\u89c6\u9891\u5185\u5d4c\u6c34\u5370\u5931\u8d25\uff01", "js", "zh_CN");
 t.add("admin.setting.cloud.validate_old.video_fingerprint_time.display", "\u4e91\u89c6\u9891\u6307\u7eb9\u663e\u793a\u65f6\u95f4", "js", "zh_CN");
+t.add("admin.setting.cloud.validate_old.video_fingerprint_opacity.display", "\u4e91\u89c6\u9891\u6307\u7eb9\u4e0d\u900f\u660e\u5ea6", "js", "zh_CN");
 t.add("admin.setting.consult_setting.upload_qrcode_success_hint", "\u4e0a\u4f20\u5fae\u4fe1\u4e8c\u7ef4\u7801\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.setting.consult_setting.setting_max_num_hint", "\u6700\u591a\u8bbe\u7f6e10\u4e2a..", "js", "zh_CN");
 t.add("admin.setting.consult_setting.delete_hint", "\u786e\u8ba4\u8981\u5220\u9664\u5417\uff1f", "js", "zh_CN");

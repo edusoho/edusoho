@@ -41,7 +41,11 @@
             {% elseif "now"|date("U") < courseSet.liveStartTime|default(0) and courseSet.liveStartTime|default(0)|date('Y-m-d') != "now"|date('Y-m-d') %}
               <span class="re-report">{{'course_set.live.live_preview'|trans}} {{ courseSet.liveStartTime|default(0)|date('m-d H:i')}}</span>
             {% elseif courseSet.advanceTime|default(0) %}
-              <span class="re-report">{{'course_set.live.live_preview'|trans}} {{ courseSet.advanceTime|default(0)|date('m-d H:i')}}</span>
+              {% if "now"|date("U") < courseSet.advanceTime|default(0) and courseSet.advanceTime|default(0)|date('Y-m-d') == "now"|date('Y-m-d') %}
+                <span class="re-report">{{'course_set.live.on_live_soon'|trans}} {{ courseSet.advanceTime|date('m-d H:i')}}</span>
+              {% elseif "now"|date("U") < courseSet.advanceTime|default(0) and courseSet.advanceTime|default(0)|date('Y-m-d') != "now"|date('Y-m-d') %}
+                <span class="re-report">{{'course_set.live.live_preview'|trans}} {{ courseSet.advanceTime|default(0)|date('m-d H:i')}}</span>
+              {% endif %}
             {% endif %}
           </a>
         </div>

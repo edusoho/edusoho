@@ -6,6 +6,7 @@ use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Event\Event;
 
 abstract class AbstractCopy
 {
@@ -104,6 +105,22 @@ abstract class AbstractCopy
             $class = new $currentNode['class']($this->biz, $currentNode);
             $class->copy($source, $options);
         }
+    }
+
+    protected function dispatchEvent($eventName, $subject, $arguments = array())
+    {
+        if ($subject instanceof Event) {
+            $event = $subject;
+        } else {
+            $event = new Event($subject, $arguments);
+        }
+
+        return $this->getDispatcher()->dispatch($eventName, $event);
+    }
+
+    private function getDispatcher()
+    {
+        return $this->biz['dispatcher'];
     }
 
     protected function getCopyChain()

@@ -4,6 +4,7 @@ namespace AppBundle\Controller\AdminV2\Operating;
 
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Content\Service\NavigationService;
+use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
 
@@ -80,6 +81,14 @@ class NavigationController extends BaseController
         $ids = ArrayToolkit::column($data, 'id');
         $this->getNavigationService()->updateNavigationsSequenceByIds($ids);
 
+        $nav = current($data);
+        $nav = $this->getNavigationService()->getNavigation($nav['id']);
+        if ($nav['type'] == 'top') {
+            $newcomerTask = $this->getSettingService()->get('newcomer_task', array());
+            $newcomerTask = array_merge($newcomerTask, array('decoration_web_task' => array('child_task' => array('top_navigation_applied' => 1))));
+            $this->getSettingService()->set('newcomer_task', $newcomerTask);
+        }
+
         return $this->createJsonResponse(true);
     }
 
@@ -98,5 +107,13 @@ class NavigationController extends BaseController
     protected function getNavigationService()
     {
         return $this->createService('Content:NavigationService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }

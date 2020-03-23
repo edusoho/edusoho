@@ -309,17 +309,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function initUpload($params)
     {
-        $user = $this->getCurrentUser();
-
-        if (empty($user)) {
-            $this->createNewException(UserException::UN_LOGIN());
-        }
-
         if (!ArrayToolkit::requireds($params, array('targetId', 'targetType', 'hash'))) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $params['userId'] = $user['id'];
         $params = ArrayToolkit::parts($params, array(
             'id',
             'directives',
