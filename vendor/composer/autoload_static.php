@@ -37,6 +37,10 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         array (
             'Zend\\Escaper\\' => 13,
         ),
+        'V' => 
+        array (
+            'Valitron\\' => 9,
+        ),
         'T' => 
         array (
             'Topxia\\Api\\' => 11,
@@ -152,6 +156,10 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         'Zend\\Escaper\\' => 
         array (
             0 => __DIR__ . '/..' . '/zendframework/zend-escaper/src',
+        ),
+        'Valitron\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/vlucas/valitron/src/Valitron',
         ),
         'Topxia\\Api\\' => 
         array (

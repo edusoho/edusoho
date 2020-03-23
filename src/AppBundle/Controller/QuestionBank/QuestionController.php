@@ -23,14 +23,12 @@ class QuestionController extends BaseController
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+//        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
         $conditions = $request->query->all();
-
         $conditions['bank_id'] = $id;
 //        $conditions['parentId'] = empty($conditions['parentId']) ? 0 : $conditions['parentId'];
 
-        $parentQuestion = array();
-        $orderBy = array('created_time' => 'DESC');
+//        $orderBy = array('created_time' => 'DESC');
 //        if ($conditions['parentId'] > 0) {
 //            $parentQuestion = $this->getQuestionService()->get($conditions['parentId']);
 //            $orderBy = array('createdTime' => 'ASC');
@@ -42,26 +40,24 @@ class QuestionController extends BaseController
             10
         );
 
-        $questions = $this->getItemService()->searchItems(
+        $items = $this->getItemService()->searchItems(
             $conditions,
-            $orderBy,
+            array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $categoryTree = $this->getQuestionCategoryService()->getCategoryTree($questionBank['id']);
-        $questionCategories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['id']);
-        $questionCategories = ArrayToolkit::index($questionCategories, 'id');
+        $categoryTree = $this->getQuestionCategoryService()->getCategoryTree($id);
+        $questionCategories = $this->getItemCategoryService()->findItemCategoriesByBankId($id);
 
         return $this->render('question-bank/question/index.html.twig', array(
-            'questions' => $questions,
+            'questions' => $items,
             'paginator' => $paginator,
-            'users' => $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'updated_user_id')),
-            'questionBank' => $questionBank,
-            'categories' => $this->getItemCategoryService()->getItemCategoryTree($questionBank['id']),
+            'users' => $this->getUserService()->findUsersByIds(ArrayToolkit::column($items, 'updated_user_id')),
+            'questionBank' => $this->getQuestionBankService()->getQuestionBank($id),
+            'categories' => $this->getItemCategoryService()->getItemCategoryTree($id),
             'categoryTree' => $categoryTree,
-            'parentQuestion' => $parentQuestion,
-            'questionCategories' => $questionCategories,
+            'questionCategories' => ArrayToolkit::index($questionCategories, 'id'),
         ));
     }
 
@@ -102,10 +98,9 @@ class QuestionController extends BaseController
                 return $this->redirect($this->generateUrl('question_bank_manage_question_create', $urlParams));
             }
 
-            return $this->redirect(
-                $goto ?: $this->generateUrl(
-                    'question_bank_manage_question_list',
-                    array('id' => $id)
+            return $this->createJsonResponse(
+                array(
+                    'goto' => $goto ?: $this->generateUrl('question_bank_manage_question_list', array('id' => $id))
                 )
             );
         }
@@ -128,21 +123,21 @@ class QuestionController extends BaseController
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
 
-        $question = $this->getQuestionService()->get($questionId);
-        if (empty($question) || $question['bankId'] != $questionBank['id']) {
+        $question = $this->getItemService()->getItem($questionId);
+        if (empty($question) || $question['bank_id'] != $questionBank['id']) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
 
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
-            $this->getQuestionService()->update($question['id'], $fields);
+            $this->getItemService()->updateItem($question['id'], $fields);
 
             return $this->redirect(
                 $request->query->get(
                     'goto',
                     $this->generateUrl(
                         'question_bank_manage_question_list',
-                        array('id' => $id, 'parentId' => $question['parentId'])
+                        array('id' => $id)
                     )
                 )
             );
@@ -164,22 +159,11 @@ class QuestionController extends BaseController
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-
         $conditions = $request->query->all();
-
-        $conditions['bankId'] = $id;
-        $conditions['parentId'] = empty($conditions['parentId']) ? 0 : $conditions['parentId'];
-
-        $parentQuestion = array();
-        $orderBy = array('createdTime' => 'DESC');
-        if (!empty($conditions['parentId'])) {
-            $parentQuestion = $this->getQuestionService()->get($conditions['parentId']);
-            $orderBy = array('createdTime' => 'ASC');
-        }
+        $conditions['bank_id'] = $id;
 
         if (!empty($conditions['categoryId'])) {
-            $childrenIds = $this->getQuestionCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+            $childrenIds = $this->getItemCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
             $childrenIds[] = $conditions['categoryId'];
             $conditions['categoryIds'] = $childrenIds;
             unset($conditions['categoryId']);
@@ -187,28 +171,26 @@ class QuestionController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getQuestionService()->searchCount($conditions),
+            $this->getItemService()->countItems($conditions),
             10
         );
 
-        $questions = $this->getQuestionService()->search(
+        $questions = $this->getItemService()->searchItems(
             $conditions,
-            $orderBy,
+            array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'updatedUserId'));
-        $questionCategories = $this->getQuestionCategoryService()->findCategories($questionBank['id']);
-        $questionCategories = ArrayToolkit::index($questionCategories, 'id');
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        $questionCategories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['id']);
 
         return $this->render('question-bank/question/question-list-table.html.twig', array(
             'questions' => $questions,
             'paginator' => $paginator,
-            'users' => $users,
+            'users' => $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'updated_user_id')),
             'questionBank' => $questionBank,
-            'questionCategories' => $questionCategories,
-            'parentQuestion' => $parentQuestion,
+            'questionCategories' => ArrayToolkit::index($questionCategories, 'id'),
         ));
     }
 
@@ -218,11 +200,11 @@ class QuestionController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        $question = $this->getQuestionService()->get($questionId);
-        if (!$question || $question['bankId'] != $id) {
+        $question = $this->getItemService()->getItem($questionId);
+        if (!$question || $question['bank_id'] != $id) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
-        $this->getQuestionService()->delete($questionId);
+        $this->getItemService()->deleteItem($questionId);
 
         return $this->createJsonResponse(true);
     }

@@ -1,13 +1,13 @@
 {% set questionTypes = getQuestionTypes() %}
-{% set parentId = parentQuestion.id|default(0) %}
+{#{% set parentId = parentQuestion.id|default(0) %}#}
 
 <div>
   <form class="form-inline js-search-form" novalidate>
     <div class="form-group">
       <select class="form-control" name="difficulty" data-role="search-conditions">
         <option value="" {% if not app.request.get('difficulty', '') %}selected{% endif %}>{{'course.question_manage.manage.difficulty'|trans}}</option>
-        <option value="simple" {% if app.request.get('difficulty','') == 'simple' %}selected{% endif %}>{{ 'course.question_manage.manage.easy_difficulty'|trans }}</option>
-        <option value="normal" {% if app.request.get('difficulty','') == 'normal' %}selected{% endif %}>{{ 'course.question_manage.manage.normal_difficulty'|trans }}</option>
+        <option value="simple" {% if app.request.get('difficulty', '') == 'simple' %}selected{% endif %}>{{ 'course.question_manage.manage.easy_difficulty'|trans }}</option>
+        <option value="normal" {% if app.request.get('difficulty', '') == 'normal' %}selected{% endif %}>{{ 'course.question_manage.manage.normal_difficulty'|trans }}</option>
         <option value="difficulty" {% if app.request.get('difficulty','') == 'difficulty' %}selected{% endif %}>{{ 'course.question_manage.manage.hard_difficulty'|trans }}</option>
       </select>
     </div>

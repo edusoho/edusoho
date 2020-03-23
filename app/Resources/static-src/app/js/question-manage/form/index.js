@@ -31,7 +31,7 @@ class QuestionCreator {
         questionCreator = Choice;
         break;
       case 'determine':
-        questionCreator = Determine;
+        questionCreator = Choice;
         break;
       case 'essay':
         questionCreator = Essay;
@@ -40,7 +40,7 @@ class QuestionCreator {
         questionCreator = Fill;
         break;
       case 'material':
-        questionCreator = Material;
+        questionCreator = Choice;
         break;
       default:
         questionCreator = new QuestionFormBase($form);

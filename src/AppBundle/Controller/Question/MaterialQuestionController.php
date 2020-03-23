@@ -30,7 +30,6 @@ class MaterialQuestionController extends BaseQuestionController
 
         return $this->render('question-manage/material-form.html.twig', array(
             'questionBank' => $questionBank,
-            'parentQuestion' => array(),
             'type' => $type,
             'categoryTree' => $this->getQuestionCategoryService()->getCategoryTree($questionBankId),
         ));

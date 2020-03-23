@@ -4,7 +4,7 @@
 
 {% block container %}
 
-{% set parentQuestion = parentQuestion|default(null) %}
+{#{% set parentQuestion = parentQuestion|default(null) %}#}
 {% set questionTypesDict = getQuestionTypes() %}
 
 <div class="panel panel-default panel-col">
@@ -88,11 +88,12 @@
         {#<input type="hidden" name="submission">#}
         {#<input type="hidden" name="type" value="{{ type }}">#}
         {#<input type="hidden" name="parentId" value="{{ parentQuestion.id|default(0) }}">#}
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        {#<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">#}
 
       {#</form>#}
       <input type="hidden" name="type" value="{{ type }}">
       <input type="hidden" name="submitUrl" value="{{ path('question_bank_manage_question_create', {id: questionBank.id, type: type}) }}">
+      <input type="hidden" name="category" value="{{ categoryTree|json_encode }}">
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </div>
   </div>

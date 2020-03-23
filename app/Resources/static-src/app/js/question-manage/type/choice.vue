@@ -9,18 +9,18 @@
   export default {
     data() {
       return {
-        type: 'choice',
+        type: $('[name=type]').val(),
         showCKEditorData: {
           publicPath: "http://t5.edusoho.cn/static-dist/libs/es-ckeditor/ckeditor.js",
         },
+        // category: $('[name=category]').val()
       };
     },
     methods: {
       getData(data) {
-        data['submission'] = '';
-        data['type'] = 'choice';
-        // data['_csrf_token'] = $('[name=_csrf_token]').val();
         console.log(data);
+        data['submission'] = '';
+        data['type'] = $('[name=type]').val();
         $.ajax({
           url: $('[name=submitUrl]').val(),
           type: 'post',
@@ -29,7 +29,9 @@
             request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
           }
         }).done(function (resp) {
-          //
+          if (resp.goto) {
+            window.location.href = resp.goto;
+          }
         })
       }
     }

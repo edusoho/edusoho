@@ -7,6 +7,7 @@ use AppBundle\Common\TreeToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Question\Service\CategoryService;
 use Biz\QuestionBank\Service\QuestionBankService;
+use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Symfony\Component\HttpFoundation\Request;
 
 class QuestionCategoryController extends BaseController
@@ -18,27 +19,25 @@ class QuestionCategoryController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        $categories = $this->getQuestionCategoryService()->getCategoryTree($questionBank['id']);
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($categories, 'userId'));
-        $categories = TreeToolkit::makeTree($categories, 'weight');
+        $categories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['id']);
 
         return $this->render('question-bank/question-category/index.html.twig', array(
             'questionBank' => $questionBank,
-            'categories' => $categories,
-            'users' => $users,
+            'categories' => $this->getItemCategoryService()->getItemCategoryTree($questionBank['id']),
+            'users' => $this->getUserService()->findUsersByIds(ArrayToolkit::column($categories, 'updated_user_id')),
         ));
     }
 
     public function batchCreateAction(Request $request, $id)
     {
-        if ('POST' == $request->getMethod()) {
+        if ($request->isMethod('POST')) {
             $categoryNames = $request->request->get('categoryNames');
             $parentId = $request->request->get('parentId');
             $categoryNames = trim($categoryNames);
             $categoryNames = explode("\r\n", $categoryNames);
             $categoryNames = array_filter($categoryNames);
 
-            $this->getQuestionCategoryService()->batchCreateCategory($id, $parentId, $categoryNames);
+            $this->getItemCategoryService()->createItemCategories($id, $parentId, $categoryNames);
 
             return $this->createJsonResponse(array('success' => true, 'parentId' => $parentId));
         }
@@ -115,6 +114,14 @@ class QuestionCategoryController extends BaseController
     protected function getQuestionCategoryService()
     {
         return $this->createService('Question:CategoryService');
+    }
+
+    /**
+     * @return ItemCategoryService
+     */
+    protected function getItemCategoryService()
+    {
+        return $this->createService('ItemBank:Item:ItemCategoryService');
     }
 
     protected function getQuestionService()
