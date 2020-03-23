@@ -31,6 +31,25 @@ export default (module, startValidate = false) => {
     }
   }
 
+  // 图文导航
+  if (module.type === 'graphic_navigation') {
+    for (let i = 0; i < module.data.length; i += 1) {
+      const currentItem = module.data[i];
+      const imgUri = currentItem.image.uri;
+      const title = currentItem.title;
+      const type = currentItem.link.type;
+      if (!imgUri || !title || !type) {
+        if (startValidate) {
+          Vue.prototype.$message({
+            message: '请完善图文导航模块信息！',
+            type: 'error'
+          });
+        }
+        return true;
+      }
+    }
+  }
+
   // 班级
   if (module.type === 'classroom_list') {
     const classExist = module.data.items.length;

@@ -46,7 +46,9 @@ export default {
     },
     // 为了计算距离顶部的高度，当高度大于60显示回顶部图标，小于60则隐藏
     scrollToTop () {
-      let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+      let scrollTop = window.pageYOffset ||
+      document.documentElement.scrollTop ||
+      document.body.scrollTop
       this.scrollTop = scrollTop
       if (this.scrollTop > 60) {
         this.btnFlag = true

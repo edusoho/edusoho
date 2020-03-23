@@ -81,7 +81,7 @@ export default {
       showFree: false,
       isActive: false,
       openMenu: false,
-      categoriesId: 0, //最父级的分类id，默认是name="全部"的id
+      categoriesId: this.selectedData.categoryId || 0, //最父级的分类id，默认是name="全部"的id
       menuContent: {},
       selectedIndex: null
     };

@@ -16,8 +16,10 @@
           :item="item"
           :index="index"
           :active="activeItemIndex"
-          @selected="selected"/>
+          @selected="selected"
+          @removeItem="removeHanlder"/>
       </div>
+      <el-button type="primary" class="setting-graphicNavigation-add" @click="addHandler">添加图文导航</el-button>
     </div>
   </module-frame>
 </template>
@@ -70,6 +72,7 @@ export default {
     },
     copyModuleData: {
       get() {
+        console.log(this.moduleData);
         return this.moduleData
       },
       set() {
@@ -80,6 +83,7 @@ export default {
   watch: {
     copyModuleData: {
       handler(data) {
+        console.log('update', data)
         this.$emit('updateModule', data)
       },
       deep: true
@@ -89,6 +93,33 @@ export default {
     selected(selected) {
       this.activeItemIndex = selected.selectIndex
      // this.copyModuleData.data[this.activeItemIndex].image.url=selected.imageUrl
+    },
+    removeHanlder(index) {
+      if (this.copyModuleData.data.length <= 1) {
+        this.$message({
+          message: '不得少于1个',
+          type: 'info'
+        })
+        return;
+      }
+      this.copyModuleData.data.splice(index, 1);
+    },
+    addHandler() {
+      if (this.copyModuleData.data.length >= 10) {
+        this.$message({
+          message: '最多上传10个',
+          type: 'info'
+        })
+        return;
+      }
+      this.copyModuleData.data.push({
+        title: '',
+        image: {
+          url: '',
+          uri: ''
+        },
+        link: {}
+      })
     }
   }
 }
