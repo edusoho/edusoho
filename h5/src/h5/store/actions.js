@@ -79,7 +79,7 @@ export const setNickname = ({ commit }, { nickname }) =>
         nickname
       }
     }).then(res => {
-      commit(types.SET_NICKNAME, res);
+      commit(types.SET_AVATAR, res);
       resolve(res);
       return res;
     }).catch(err => reject(err));
