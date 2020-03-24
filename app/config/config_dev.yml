@@ -28,3 +28,9 @@ monolog:
             type:  firephp
             level: info
 
+services:
+    app.cloud_api_collector:
+        class: AppBundle\DataCollector\CloudApiDataCollector
+        arguments: ['@Biz']
+        tags:
+            - { name: data_collector, template: 'webprofiler/cloud-api.html.twig', id: 'app.cloud_api_collector'}
