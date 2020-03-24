@@ -14,50 +14,16 @@
   <div>
     {% include 'question-bank/header-navbar.html.twig' %}
     {% block container %}
-      {#{% if parentQuestion %}#}
-        {#<div class="cd-content courseset-manage-body courseset-manage-padding">#}
-          {#<div role="courseset-manage-question" class="js-question-container">#}
-            {#<div class="courseset-manage-body__title">#}
-              {#<div class="courseset-manage-body__btn">#}
-                {#{% include 'question-bank/question/create-question-btn-group.html.twig' %}#}
-              {#</div>#}
-            {#</div>#}
-
-            {#<div id="quiz-table-container">#}
-              {#<ol class="breadcrumb">#}
-                {#<li><a href="{{ path('question_bank_manage_question_list', {id:questionBank.id}) }}">{{ 'my.teaching.question_bank.question.manage'|trans }}</a></li>#}
-                {#<li class="active">{{ dict_text('questionType', 'material') }}</li>#}
-              {#</ol>#}
-
-              {#{{ web_macro.flash_messages() }}#}
-
-              {#<div class="row">#}
-                {#<div class="col-sm-12">#}
-                  {#<div class="well well-sm short-long-text">#}
-                    {#<div class="short-text">{{ parentQuestion.stem|plain_text(100) }} <span class="trigger">({{'site.btn.expand'|trans}})</span></div>#}
-                    {#<div class="long-text">{{ parentQuestion.stem|raw }} <span class="trigger">({{'site.btn.collapse'|trans}})</span></div>#}
-                  {#</div>#}
-                {#</div>#}
-              {#</div>#}
-              {#<input type="hidden" name="parentId" value="{{ parentQuestion.id }}" data-role="search-conditions">#}
-              {#<div class="js-question-html" data-url="{{ path('question_bank_manage_question_show_ajax', {id: questionBank.id}) }}">#}
-                {#{% include 'question-bank/question/question-list-table.html.twig' %}#}
-              {#</div>#}
-            {#</div>#}
-          {#</div>#}
-        {#</div>#}
-      {#{% else %}#}
-        <div class="panel panel-default panel-col">
-          <div class="panel-body question-list-container js-question-container">
-            <div class="mtl category-list-content js-category-content">
-              {% include 'question-bank/question/category-list.html.twig' %}
-            </div>
-            <div class="mtl question-list-content">
-              {% include 'question-bank/question/question-list.html.twig' %}
-            </div>
+      <div class="panel panel-default panel-col">
+        <div class="panel-body question-list-container js-question-container">
+          <div class="mtl category-list-content js-category-content">
+            {% include 'question-bank/question/category-list.html.twig' %}
+          </div>
+          <div class="mtl question-list-content">
+            {% include 'question-bank/question/question-list.html.twig' %}
           </div>
         </div>
-      {#{% endif %}#}
+      </div>
     {% endblock %}
   </div>
 

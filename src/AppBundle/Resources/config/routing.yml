@@ -3282,7 +3282,7 @@ question_bank_manage_question_preview:
     defaults: { _controller: AppBundle:QuestionBank/Question:preview }
 
 question_bank_manage_question_delete:
-    path: /question_bank/{id}/question/{questionId}/delete
+    path: /question_bank/{id}/question/{$itemId}/delete
     defaults: { _controller: AppBundle:QuestionBank/Question:delete }
 
 question_bank_manage_question_export:
