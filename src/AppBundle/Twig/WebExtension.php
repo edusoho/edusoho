@@ -553,13 +553,14 @@ class WebExtension extends \Twig_Extension
 
         // @todo 如果配置用户的关键信息，这个方法存在信息泄漏风险，更换新播放器后解决这个问题。
         $pattern = $this->getSetting('magic.video_fingerprint');
+        $opacity = $this->getSetting('storage.video_fingerprint_opacity', 1);
 
         if ($pattern) {
             $fingerprint = $this->parsePattern($pattern, $user);
         } else {
             $request = $this->requestStack->getMasterRequest();
             $host = $request->getHttpHost();
-            $fingerprint = "{$host} {$user['nickname']}";
+            $fingerprint = "<span style=\"opacity:{$opacity};\"> {$host} {$user['nickname']} </span>";
         }
 
         return $fingerprint;
@@ -1855,13 +1856,17 @@ class WebExtension extends \Twig_Extension
             return false;
         }
 
-        if ($user->isAdmin() || $user->isSuperAdmin()) {
-            return true;
+        $toUser = $this->getUserService()->getUser($userId);
+        if (1 == $toUser['destroyed'] || 1 == $user['destroyed']) {
+            return false;
         }
 
-        $toUser = $this->getUserService()->getUser($userId);
         if ($user['id'] == $toUser['id']) {
             return false;
+        }
+
+        if ($user->isAdmin() || $user->isSuperAdmin()) {
+            return true;
         }
 
         if (in_array('ROLE_ADMIN', $toUser['roles']) || in_array('ROLE_SUPER_ADMIN', $toUser['roles'])) {

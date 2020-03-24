@@ -702,6 +702,8 @@ upload.video_quality_switcher.video_quality.normal: >
   标准 <span class="color-gray">(适合屏幕录制、摄像头拍摄)</span>
 upload.video_quality_switcher.video_quality.high: >
   精细 <span class="color-gray">(适合动态电影)</span>
+upload.video_quality_switcher.video_quality.super: >
+  超精细 <span class="color-gray">(适合超高画质的专业视频)</span>
 upload.video_quality_switcher.audio_quality: 音质：
 upload.video_quality_switcher.audio_quality.low: 流畅
 upload.video_quality_switcher.audio_quality.normal: 标准
@@ -2154,6 +2156,7 @@ file_chooser.upload_file.video_quality: 转码画质
 file_chooser.upload_file.video_quality.low: 流畅
 file_chooser.upload_file.video_quality.normal: 标准
 file_chooser.upload_file.video_quality.high: 精细
+file_chooser.upload_file.video_quality.super: 超精细
 file_chooser.upload_file.audio_quality: 转码音质
 file_chooser.upload_file.audio_quality.low: 流畅
 file_chooser.upload_file.audio_quality.normal: 标准
@@ -3984,7 +3987,7 @@ customer_service.feedback_email: 反馈邮件
 customer_service.qq_customer_service: QQ客服
 customer_service.qq_group: QQ群
 customer_service.mobile_group: 电话客服
-customer_service.weixin-content: 微信公众号
+customer_service.weixin-content: 微信二维码
 customer_service.email: 电子邮箱
 customer_service.time: 服务时间：
 customer_service.send_message: 点击这里给我发消息
@@ -4678,6 +4681,8 @@ common.video_quality.normal: 标准
 common.video_quality.normal.tips: 适合屏幕录制、摄像头拍摄
 common.video_quality.high: 精细
 common.video_quality.high.tips: 适合动态电影
+common.video_quality.super: 超精细
+common.video_quality.super.tips: 适合超高画质的专业视频
 
 # content
 contetn.active_list.create_template: 请创建模版文件
@@ -6587,6 +6592,8 @@ admin.edu_cloud.edu_video.transcode_quality_normal: >
   标准 %<span class="text-muted">%(适合屏幕录制、摄像头拍摄)%</span>%
 admin.edu_cloud.edu_video.transcode_quality_high: >
   精细 %<span class="text-muted">%(适合动态电影)%</span>%
+admin.edu_cloud.edu_video.transcode_quality_super: >
+  超精细 %<span class="text-muted">%(适合超高画质的专业视频)%</span>%
 admin.edu_cloud.edu_video.audio_transcode_quality: 视频转码音质：
 admin.edu_cloud.edu_video.low: 流畅
 admin.edu_cloud.edu_video.normal: 标准
@@ -6623,6 +6630,8 @@ admin.edu_cloud.edu_video.finger_print_embed_tips: >
 admin.edu_cloud.edu_video.finger_print_time_label: 云视频指纹显示时长：
 admin.edu_cloud.edu_video.finger_print_time_tips: 建议时长在0.5 - 1.5秒之间
 admin.edu_cloud.edu_video.finger_print_time: 秒
+admin.edu_cloud.edu_video.finger_print_opacity_label: 指纹不透明度：
+admin.edu_cloud.edu_video.finger_print_opacity_tips: 请输入0～1之间的一位小数,数字越小越透明
 admin.edu_cloud.edu_video.enable_hls_encryption_plus: 云视频防盗增强
 admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips: 开启后，云视频防盗效果进一步提升，但视频将无法在手机浏览器中播放，系统会引导用户使用App观看。
 admin.edu_cloud.edu_video.buy_flow_tips: >
@@ -8433,6 +8442,8 @@ notification.discount.reject: 您的打折活动%discount%，未通过管理员�
 notification.discount.pass: 您的打折活动%discount%，已通过管理员审核。
 notification.question.post_create: %who% 在 %thread% 回答了你
 notification.question.post_ask: %who% 在 %thread% 追问了你
+notification.destroy-account.reject: %who%，您的帐号注销申请审核未通过，理由：%reason%。
+
 
 notification.group-profile.chownout: 您的小组 %group% 被管理员转移给了用户 %who%。
 notification.group-profile.chownin: 您获得了小组 %group% 的管理权限。
@@ -8738,6 +8749,7 @@ log.module.mobile: 手机客户端
 log.module.wap: 微网校
 log.module.push: 推送
 log.module.question_bank: 题库
+log.module.destroy_account_record: 帐号注销
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -8862,6 +8874,7 @@ log.action.system.update_settings.mobile: 更新移动客户端设置
 log.action.system.update_settings.wap: 更新WAP设置
 log.action.system.update_settings.developer: 更新开发者设置
 log.action.system.update_settings.backstage: 更新后台版本
+log.action.system.update_settings.newcomer_task: 更新任务助手
 log.action.system.questions_settings: 题库设置
 log.action.system.customerServiceSetting: 客服管理
 log.action.system.setting_userCenter: 用户中心设置
@@ -8990,6 +9003,9 @@ log.action.question_bank.update_teacher: 修改授权教师
 log.action.question_bank.create_category: 创建题库分类
 log.action.question_bank.delete_category: 删除题库分类
 log.action.question_bank.update_category: 更新题库分类
+log.action.destroy_account_record.create: 申请注销帐号
+log.action.destroy_account_record.pass: 通过注销帐号申请
+log.action.destroy_account_record.reject: 拒绝注销帐号申请
 
 log.action.template.course.create: 新建了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: 修改了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -9149,6 +9165,9 @@ log.action.template.question_bank.delete: 删除了<strong class="color-success"
 log.action.template.question_bank.create_category: 创建了<strong class="color-success">题库分类</strong> 《%title%》
 log.action.template.question_bank.delete_category: 删除了<strong class="color-success">题库分类</strong> 《%title%》
 log.action.template.question_bank.update_category: 修改了<strong class="color-success">题库分类</strong> 《%title%》
+log.action.template.destroy_account_record.create: 申请注销帐号
+log.action.template.destroy_account_record.pass: 同意了用户“%nickname%”的帐号注销申请
+log.action.template.destroy_account_record.reject: 拒绝了用户“%nickname%”的帐号注销申请
 
 log.field.detail: 详情
 log.field.change.detail: 原设置为<strong class="color-danger">%old%</strong> 新设置为<strong class="color-danger">%new%</strong>
@@ -9578,6 +9597,7 @@ log.attr.system.update_settings.storage.video_quality: 视频转码画质
 log.attr.system.update_settings.storage.video_quality.low: 流畅
 log.attr.system.update_settings.storage.video_quality.normal: 标准
 log.attr.system.update_settings.storage.video_quality.high: 精细
+log.attr.system.update_settings.storage.video_quality.super: 超精细
 log.attr.system.update_settings.storage.video_audio_quality: 视频转码音质
 log.attr.system.update_settings.storage.video_audio_quality.low: 流畅
 log.attr.system.update_settings.storage.video_audio_quality.normal: 标准
@@ -9687,6 +9707,11 @@ log.attr.system.update_settings.wap.version.0: 关闭
 log.attr.system.update_settings.wap.about: 网校简介
 log.attr.system.update_settings.wap.logo: 网校LOGO
 log.attr.order.pay_amount: 价格（分）
+log.attr.destroy_account_record.reason: 注销理由
+log.attr.destroy_account_record.rejectedReason: 拒绝理由
+log.attr.destroy_account_record.nickname: 用户名
+log.attr.destroy_account_record.auditUserNickname: 处理人
+log.attr.destroy_account_record.destroyedAccountId: 注销ID
 
 cashflow.title: 名称
 cashflow.sn: 流水号
@@ -10219,6 +10244,10 @@ exception.wechat.notify_setting_not_enabled: 微信通知未开启
 exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试
 exception.wechat.template_conflict_industry_hint: 服务号行业设置错误
 
+exception.destroy_account.reason_too_long: 注销原因限制200字数
+exception.destroy_account.not_found_record: 未找到注销记录
+exception.destroy_account.audit_record_exist: 已存在审核中的申请
+
 course.unname_title: 未命名计划
 
 admin.index.course_order: 课程订单
@@ -10327,8 +10356,8 @@ wechat.notification.template_closed: 未开启
 
 # 微信通知模板
 wechat.notification.template.live_start: '同学，您好，您报名的直播课即将开课。<br>课程名称：{《课程名》-《任务名》}<br>开课时间：{直播开始时间}（精确到分钟）<br>开课地点：在线直播<br>联系方式：无<br>不要迟到哦。'
-wechat.notification.template.homework_result: '同学，您好，你的作业已批阅完成<br>作业名称：[任务名]<br>所属课程：[课程名]<br>辅导老师：[教师用户名]<br>作业结果：[作业结果]'
-wechat.notification.template.exam_result: '同学，您好，你的试卷已批阅完成<br>考试科目：[任务名]<br>考试成绩：[考试的分数]<br>再接再厉哦'
+wechat.notification.template.homework_result: '同学，您好，您的作业已批阅完成<br>作业名称：[任务名]<br>所属课程：[课程名]<br>辅导老师：[教师用户名]<br>作业结果：[作业结果]'
+wechat.notification.template.exam_result: '同学，您好，您的试卷已批阅完成<br>考试科目：[任务名]<br>考试成绩：[考试的分数]<br>再接再厉哦'
 wechat.notification.template.lesson_add: '同学，您好，课程有新任务发布<br>课程名称：[课程名称]<br>课程类别：[课程类别]<br>课程老师：[教师用户名]<br>课程时间：[任务发布时间]或[直播开始时间]<br>请及时前往学习'
 wechat.notification.template.charge_success: '尊敬的客户，您已充值成功<br>充值类型：现金充值<br>充值订单号：[订单号]<br>充值金额：[实际支付价格]<br>充值时间：[支付时间]<br>快去看看课程吧~'
 wechat.notification.template.buy_success: '尊敬的客户，您已支付成功<br>订单详情：[商品名称]<br>订单价格：[订单价格]<br>订单时间：[支付时间]<br>会员到期日：无<br>请前往查看'
@@ -10653,7 +10682,7 @@ admin_v2.homepage.overview: 概况
 admin_v2.developer_setting.platform_news_api_server: 获取平台信息API
 admin_v2.developer_setting.platform_news_api_server.info: '默认为 //platform-news-service.qiqiuyun.net'
 admin_v2.role_permission_manage.error: 错误
-admin_v2.default_page.changelog_title: EduSoho更新日志
+admin_v2.default_page.changelog_title: 更新日志
 admin_v2.wechat_official_account.title: 公众号
 admin_v2.wechat_official_account.text: 关注EduSoho公众号 获取最新教育资讯
 admin_v2.homepage.announcement_from_platform: 站长公告
@@ -10670,7 +10699,36 @@ admin_v2.boot_page.btn_text: 点击前去
 admin_v2.homepage.switch_old_in_safari_notice: 由于Safari浏览器原因，暂时不支持切换， 建议使用谷歌或者360浏览器切换。 给您造成不便，抱歉！
 admin_v2.homepage.switch_old_in_safari_notice.title: 确定切换
 admin_v2.homepage.switch_old_in_safari_notice.got_it: 知道了
-
+admin_v2.user.destroy_account_record.nickname: 用户名
+admin_v2.user.destroy_account_record.createdTime: 申请时间
+admin_v2.user.destroy_account_record.reason: 注销理由
+admin_v2.user.destroy_account_record.auditTime: 处理时间
+admin_v2.user.destroy_account_record.status: 状态
+admin_v2.user.destroy_account_record.status_audit: 待审核
+admin_v2.user.destroy_account_record.status_rejected: 已拒绝
+admin_v2.user.destroy_account_record.status_passed: 已同意
+admin_v2.user.destroy_account_record.status_cancel: 已撤销
+admin_v2.user.destroy_account_record.manage: 操作
+admin_v2.user.destroy_account_record.auditUser: 处理人：
+admin_v2.user.destroy_account_record.audit: 审核
+admin_v2.user.destroy_account_record.show: 查看
+admin_v2.user.destroy_account_record.empty: 暂无注销申请
+admin_v2.user.destroy_account_record.detail: 详情
+admin_v2.user.destroy_account_record.rejectedReson: 拒绝理由
+admin_v2.destroy_account.destroyed_account.number: 注销ID
+admin_v2.destroy_account.destroyed_account.nickname: 注销前用户名
+admin_v2.destroy_account.destroyed_account.destroy_time: 注销时间
+admin_v2.destroy_account.destroyed_account.operation: 操作
+admin_v2.destroy_account.destroyed_account.empty: 暂无注销记录
+admin_v2.destroy_account.destroyed_account.detail: 详情
+admin_v2.destroy_account.destroyed_account.reason: 注销理由
+admin_v2.destroy_account.destroyed_account.audit_user: 处理人
+admin_v2.destroy_account.destroyed_account.audit_reason: 处理意见
+admin_v2.destroy_account.destroyed_account.audit_agree: 同意
+admin_v2.destroy_account.destroyed_account.audit_reject: 拒绝
+admin_v2.destroy_account.destroyed_account.reason_tip: 最多输入30个字
+admin_v2.destroy_account.destroyed_account.can_not_manage: 不能操作您自己的申请
+user.user_had_destroyed: 帐号已注销
 admin_v2.operation.homepage_live_notify.enable: 直播开课提醒
 admin_v2.operation.homepage_live_notify.enable.open: 开启
 admin_v2.operation.homepage_live_notify.enable.close: 关闭
@@ -10687,4 +10745,41 @@ homepage.live_notify.header: 直播开课提醒
 homepage.live_notify.start_while: 即将开始
 homepage.live_notify.living: 正在直播中
 homepage.live_notify.entry_live_room: 进入教室
+
+course.live_statistics: 直播统计
+course.live_statistics.live_start_time: 直播开始时间
+course.live_statistics.live_time_long: 直播时长（分）
+course.live_statistics.max_participate_count: 最大参与人数
+course.live_statistics.live_status: 进行状态
+course.live_statistics.operation: 操作
+course.live_statistics.check_in_status: 点名数/学员总数
+course.live_statistics.average_learn_time: 平均学习时长（分）
+course.live_statistics.task_name_placeholder: 任务名
+
+course.live_statistics.detail_notice: 数据来源于直播间，自动在直播结束一天同步
+course.live_statistics.detail.checkin: 点名统计
+course.live_statistics.detail.checkin_time: 最近点名
+course.live_statistics.detail.checkin_detail: 点名明细
+course.live_statistics.detail.total_learn_time: 学习时长统计
+course.live_statistics.detail.learn_time_detail: 学习时长明细
+
+course.live_statistics.live_coming: 即将开始
+course.live_statistics.live_playing: 正在进行
+course.live_statistics.live_finished: 已结束
+
+course.live_statistics.first_join: 最早加入直播时间
+course.live_statistics.last_leave: 最晚离开直播时间
+course.live_statistics.learn_time: 有效学习时长（分）
+
+course.live_statistics.empty_data: 暂无数据
+course.live_statistics.visitor_list: 学习时长名单
+course.live_statistics.checkin_list: 点名名单
+
+course.live_statistics.checkin_status: 是否点名
+course.live_statistics.checkin_status.checked: 已点名
+course.live_statistics.checkin_status.not_checked: 未点名
+course.live_statistics.checkin_status.all: 全部
+
+exception.live_statistic.not_found: 直播数据未获取到
+exception.live_statistic.not_support: 当前直播供应商暂不支持该功能
 admin.article_setting.article_copy_manage: 资讯防复制

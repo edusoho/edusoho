@@ -6,7 +6,11 @@
         {{ slot('header.user.logo', {user: user}) }}
       </div>
       <div class="name">
-        {{user.nickname}}
+        {% if not user.destroyed|default(0) %}
+          {{user.nickname}}
+        {% else %}
+          {{ 'user.user_had_destroyed'|trans }}
+        {% endif %}
       </div>
       <div class="position">
         {% if 'ROLE_TEACHER' in user.roles %}

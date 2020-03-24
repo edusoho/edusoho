@@ -228,12 +228,34 @@ class LiveCourseSetController extends CourseBaseController
         foreach ($liveCourseSetIds as $key => $courseSetId) {
             $ret[$courseSetId] = $liveCourseSets[$courseSetId];
             $ret[$courseSetId]['course'] = $courses[$courseSetId];
+            $now = time();
+
+            //正在直播的课时
             $tasks = $this->getTaskService()->searchTasks(
-                array('fromCourseSetId' => $courseSetId),
+                array('fromCourseSetId' => $courseSetId, 'type' => 'live', 'startTime_LE' => $now, 'endTime_GT' => $now),
                 array('startTime' => 'ASC'),
                 0,
                 1
             );
+            if (empty($tasks)) {
+                //第一个已经结束的课时课程
+                $tasks = $this->getTaskService()->searchTasks(
+                    array('fromCourseSetId' => $courseSetId, 'type' => 'live', 'endTime_LT' => $now),
+                    array('startTime' => 'ASC'),
+                    0,
+                    1
+                );
+                //第一个未开始过的课时
+                $advanceTasks = $this->getTaskService()->searchTasks(
+                    array('fromCourseSetId' => $courseSetId, 'type' => 'live', 'endTime_GT' => $now),
+                    array('startTime' => 'ASC'),
+                    0,
+                    1
+                );
+                if (!empty($advanceTasks)) {
+                    $ret[$courseSetId]['advanceTime'] = $advanceTasks[0]['startTime'];
+                }
+            }
 
             if (empty($tasks)) {
                 continue;

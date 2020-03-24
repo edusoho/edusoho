@@ -361,6 +361,17 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $questionConfig->judge($question, $answer);
     }
 
+    public function filterAnswer($question, $answer)
+    {
+        if (empty($answer)) {
+            return $answer;
+        }
+
+        $questionConfig = $this->getQuestionConfig($question['type']);
+
+        return $questionConfig->filterAnswer($answer);
+    }
+
     public function hasEssay($questionIds)
     {
         $count = $this->searchCount(array('ids' => $questionIds, 'type' => 'essay'));

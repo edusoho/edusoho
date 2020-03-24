@@ -1,0 +1,40 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'admin_v2.user.destroy_account_record.audit'|trans}}{% endblock %}
+{% block body %}
+<form class="form-horizontal" id="audit-modal" method="post" action="{{ path('admin_v2_destroy_account_record_audit', {id: record.id}) }}">
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label for="status">{{ 'admin_v2.destroy_account.destroyed_account.audit_reason'|trans }}</label>
+    </div>
+    <div class="col-md-8 controls radios">
+      <label>
+        <input type="radio" id="status" name="status" value="pass" checked>{{ 'admin_v2.destroy_account.destroyed_account.audit_agree'|trans }}
+      </label>
+      <label>
+        <input type="radio" id="status" name="status" value="reject">{{ 'admin_v2.destroy_account.destroyed_account.audit_reject'|trans }}
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group js-reject hidden">
+    <div class="col-md-3 control-label">
+      <label for="reject_reason">{{ 'admin_v2.user.destroy_account_record.rejectedReson'|trans }}</label>
+    </div>
+    <div class="col-md-8 controls">
+      <textarea maxlength="30" id="reject_reason" name="reject_reason" class="form-control" placeholder="{{ 'admin_v2.destroy_account.destroyed_account.reason_tip'|trans }}"></textarea>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+{% endblock %}
+
+
+{% block footer %}
+  <div>
+    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+    <button class="btn btn-primary pull-right" id="audit-submit-btn" data-submiting-text="{{ 'form.btn.confirm'|trans }}" data-toggle="form-submit" data-target="#audit-modal" data-url="{{ path('admin_v2_destroy_account_record_audit', {id: record.id}) }}">{{ 'form.btn.confirm'|trans }}</button>
+  </div>
+  <script>app.load('destroy-account/audit-modal');</script>
+{% endblock %}

@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/course-manage/live/modal/index"],{bf1076b5c51049b3ef8e:function(c,e,a){"use strict";$("#cd-tabs a").click(function(){$.get($(this).data("url"),function(c){$("#modal").html(c)})})}},["bf1076b5c51049b3ef8e"]);

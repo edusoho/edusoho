@@ -21,6 +21,42 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Security
 
 
+## [3.9.3] - 2020-02-20
+
+### Fixed
+
+* For v1 UUIDs, round down for timestamps so that microseconds do not bump the
+  timestamp to the next second.
+
+  As an example, consider the case of timestamp `1` with  `600000` microseconds
+  (`1.600000`). This is the first second after midnight on January 1, 1970, UTC.
+  Previous versions of this library had a bug that would round this to `2`, so
+  the rendered time was `1970-01-01 00:00:02`. This was incorrect. Despite
+  having `600000` microseconds, the time should not round up to the next second.
+  Rather, the time should be `1970-01-01 00:00:01.600000`. Since this version of
+  ramsey/uuid does not support microseconds, the microseconds are dropped, and
+  the time is `1970-01-01 00:00:01`. No rounding should occur.
+
+
+## [3.9.2] - 2019-12-17
+
+### Fixed
+
+* Check whether files returned by `/sys/class/net/*/address` are readable
+  before attempting to read them. This avoids a PHP warning that was being
+  emitted on hosts that do not grant permission to read these files.
+
+
+## [3.9.1] - 2019-12-01
+
+### Fixed
+
+* Fix `RandomNodeProvider` behavior on 32-bit systems. The `RandomNodeProvider`
+  was converting a 6-byte string to a decimal number, which is a 48-bit,
+  unsigned integer. This caused problems on 32-bit systems and has now been
+  resolved.
+
+
 ## [3.9.0] - 2019-11-30
 
 ### Added
@@ -41,7 +77,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Deprecated
 
-These will be removed in version ramsey/uuid version 4.0.0:
+These will be removed in ramsey/uuid version 4.0.0:
 
 * `MtRandGenerator`, `OpenSslGenerator`, and `SodiumRandomGenerator` are
   deprecated in favor of using the default `RandomBytesGenerator`.
@@ -572,7 +608,10 @@ versions leading up to this release.*
 [ramsey/uuid-doctrine]: https://github.com/ramsey/uuid-doctrine
 [ramsey/uuid-console]: https://github.com/ramsey/uuid-console
 
-[unreleased]: https://github.com/ramsey/uuid/compare/3.9.0...HEAD
+[unreleased]: https://github.com/ramsey/uuid/compare/3.9.3...HEAD
+[3.9.3]: https://github.com/ramsey/uuid/compare/3.9.2...3.9.3
+[3.9.2]: https://github.com/ramsey/uuid/compare/3.9.1...3.9.2
+[3.9.1]: https://github.com/ramsey/uuid/compare/3.9.0...3.9.1
 [3.9.0]: https://github.com/ramsey/uuid/compare/3.8.0...3.9.0
 [3.8.0]: https://github.com/ramsey/uuid/compare/3.7.3...3.8.0
 [3.7.3]: https://github.com/ramsey/uuid/compare/3.7.2...3.7.3

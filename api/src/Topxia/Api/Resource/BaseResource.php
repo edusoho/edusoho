@@ -137,6 +137,7 @@ abstract class BaseResource
     protected function simpleUser($user)
     {
         $simple = array();
+        $user = $this->destroyedNicknameFilter($user);
 
         $simple['id'] = $user['id'];
         $simple['nickname'] = $user['nickname'];
@@ -146,6 +147,13 @@ abstract class BaseResource
         $simple['uuid'] = $user['uuid'];
 
         return $simple;
+    }
+
+    protected function destroyedNicknameFilter($user)
+    {
+        $user['nickname'] = ($user['destroyed'] == 1) ? "帐号已注销" : $user['nickname'];
+
+        return $user ;
     }
 
     protected function nextCursorPaging($currentCursor, $currentStart, $currentLimit, $currentRows)

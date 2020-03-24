@@ -3,6 +3,8 @@
 namespace Biz\Marketing\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
+use Biz\Marketing\Dao\MarketingOrderDao;
 use Biz\User\CurrentUser;
 use Biz\Role\Util\PermissionBuilder;
 use Biz\Marketing\Service\MarketingService;
@@ -48,6 +50,9 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
     {
         $logger = $this->biz['logger'];
         $logger->info(json_encode($postData));
+        if (empty($postData['order_id'])) {
+            $this->createNewException(CommonException::ERROR_PARAMETER());
+        }
 
         list($isNew, $user, $password) = $this->createUserIfNeed($postData, $logger);
 
@@ -65,8 +70,19 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
             'type' => $postData['target_type'],
             'id' => $postData['target_id'],
         );
-        list($classroom, $member, $order) = $this->makeUserJoin($user['id'], $target['id'], $orderInfo);
-        $logMsg = $this->getFinishedInfo($user, $classroom, $member, $order);
+
+        $hasJoined = false;
+        try {
+            list($product, $member, $order) = $this->makeUserJoin($user['id'], $target['id'], $orderInfo);
+        } catch (\Exception $e) {
+            if ($this->getDuplicateJoinCode() != $e->getCode()) {
+                $this->createNewException($e);
+            }
+            $hasJoined = true;
+            list($product, $member, $order) = $this->tryCreateMarketingOrder($user['id'], $target['id'], $orderInfo);
+        }
+
+        $logMsg = $this->getFinishedInfo($user, $product, $member, $order, $hasJoined);
         $logger->info($logMsg);
 
         $response = array();
@@ -85,6 +101,26 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
     abstract protected function joinTarget($targetId, $userId, $data);
 
     /**
+     * @return "获取目标产品信息";
+     */
+    abstract protected function getProduct($targetId);
+
+    /**
+     * @return "获取目标成员信息";
+     */
+    abstract protected function getMember($targetId, $userId);
+
+    /**
+     * @return "发现学员已加入后补建的微营销订单信息";
+     */
+    abstract protected function createMarketingOrder($targetId, $userId, $data);
+
+    /**
+     * @return "获取产品重复加入code值";
+     */
+    abstract protected function getDuplicateJoinCode();
+
+    /**
      * @return 如 "准备把用户,{$user['id']}添加到班级"，用于记录info日志，如下
      *             $logger->info("准备把用户,{$user['id']}添加到班级");
      */
@@ -94,7 +130,7 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
      * @return 如 "把用户,{$user['id']}添加到课程成功,课程ID：{$target['id']},memberId:{$member['id']},订单Id:{$order['id']}"，
      *             用于返回信息及记录info日志
      */
-    abstract protected function getFinishedInfo($user, $target, $member, $order);
+    abstract protected function getFinishedInfo($user, $target, $member, $order, $hasJoined);
 
     protected function makeUserJoin($userId, $targetId, $data)
     {
@@ -104,11 +140,7 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
         $currentUser->fromArray($systemUser);
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
         $this->biz['user'] = $currentUser;
-        $data['price'] = $data['marketingOrderPayAmount'];
-        $data['originPrice'] = $data['marketingOrderPriceAmount'];
-        $data['source'] = 'marketing';
-        $data['remark'] = '来自微营销';
-        $data['orderTitleRemark'] = '(来自微营销)';
+        $data = $this->prepareOrderFields($data);
 
         // 如 list($classroom, $member, $order) = $this->getClassroomMemberService()->becomeStudentWithOrder($classroomId, $userId, $data);
         return $this->joinTarget($targetId, $userId, $data);
@@ -208,5 +240,37 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
         $user = $this->getAuthService()->register($registration, 'marketing');
 
         return $user;
+    }
+
+    private function tryCreateMarketingOrder($userId, $targetId, $data)
+    {
+        $product = $this->getProduct($targetId);
+        $member = $this->getMember($targetId, $userId);
+        $order = $this->getMarketingOrderDao()->getOrderByMarketingOrderId($data['marketingOrderId']);
+        if (empty($order)) {
+            $data = $this->prepareOrderFields($data);
+            $order = $this->createMarketingOrder($targetId, $userId, $data);
+        }
+
+        return array($product, $member, $order);
+    }
+
+    private function prepareOrderFields($data)
+    {
+        $data['price'] = $data['marketingOrderPayAmount'];
+        $data['originPrice'] = $data['marketingOrderPriceAmount'];
+        $data['source'] = 'marketing';
+        $data['remark'] = '来自微营销';
+        $data['orderTitleRemark'] = '(来自微营销)';
+
+        return $data;
+    }
+
+    /**
+     * @return MarketingOrderDao
+     */
+    protected function getMarketingOrderDao()
+    {
+        return $this->createDao('Marketing:MarketingOrderDao');
     }
 }

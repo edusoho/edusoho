@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\FileToolkit;
 use Biz\Content\FileException;
 use Symfony\Component\HttpFoundation\File\File as FileObject;
+use Symfony\Component\Filesystem\Filesystem;
 
 class File extends AbstractResource
 {
@@ -38,7 +39,8 @@ class File extends AbstractResource
         // data:{mimeType};base64,{code}
         $user = $this->getCurrentUser();
         if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $str, $result)) {
-            $filePath = $this->biz['topxia.upload.public_directory'].'/tmp/'.$user['id'].'_'.time().'.'.$result[2];
+            $directory = $this->checkDirectory($this->biz['topxia.upload.private_directory'].'/tmp');
+            $filePath = $directory . '/' . $user['id'].'_'.time().'.'.$result[2];
             file_put_contents($filePath, base64_decode(str_replace($result[1], '', $str)));
 
             $file = new FileObject($filePath);
@@ -53,6 +55,16 @@ class File extends AbstractResource
         }
 
         return null;
+    }
+
+    protected function checkDirectory($directory)
+    {
+        $filesystem = new Filesystem();
+        if (!$filesystem->exists($directory)) {
+            $filesystem->mkdir($directory);
+        }
+
+        return $directory;
     }
 
     protected function getFileService()

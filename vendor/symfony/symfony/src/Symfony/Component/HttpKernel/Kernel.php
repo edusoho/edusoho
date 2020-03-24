@@ -581,9 +581,7 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
         $cacheDir = $this->warmupDir ?: $this->getCacheDir();
         $cache = new ConfigCache($cacheDir.'/'.$class.'.php', $this->debug);
         $oldContainer = null;
-
         if ($fresh = $cache->isFresh()) {
-
             // Silence E_WARNING to ignore "include" failures - don't use "@" to prevent silencing fatal errors
             $errorLevel = error_reporting(E_ALL ^ E_WARNING);
             $fresh = $oldContainer = false;
@@ -653,7 +651,6 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
         }
 
         if (null === $oldContainer && file_exists($cache->getPath())) {
-
             $errorLevel = error_reporting(E_ALL ^ E_WARNING);
             try {
                 $oldContainer = include $cache->getPath();
@@ -875,6 +872,7 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
         if (file_exists($legacyFile)) {
             @unlink($legacyFile);
         }
+
         $cache->write($rootCode, $container->getResources());
     }
 

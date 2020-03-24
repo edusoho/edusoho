@@ -178,7 +178,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             'monolog.permission' => 0666,
             'monolog.formatter' => new \Codeages\Biz\Framework\Util\ReadableJsonFormatter(),
         ));
-        $biz->extend('monolog', function($monolog) {
+        $biz->extend('monolog', function ($monolog) {
             $monolog->pushProcessor(new \AppBundle\Processor\TraceProcessor());
 
             return $monolog;
@@ -242,7 +242,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
                         'timeout' => $this->getContainer()->getParameter('redis_timeout'),
                         'reserved' => $this->getContainer()->getParameter('redis_reserved'),
                         'redis_interval' => $this->getContainer()->getParameter('redis_retry_interval'),
-                        'password' => $this->getContainer()->getParameter('redis_password'),
+                        'password' => $this->getContainer()->hasParameter('redis_password') ? $this->getContainer()->getParameter('redis_password') : '',
                     ),
                     'dao.cache.enabled' => true,
                 )

@@ -75,7 +75,7 @@ class Essay extends AbstractQuestion
         }
 
         //判断答案是否有错
-        if (empty($question[QuestionElement::ANSWER])) {
+        if (trim($question[QuestionElement::ANSWER]) == '') {
             $question['errors'][QuestionElement::ANSWER] = $this->getError(QuestionElement::ANSWER, QuestionErrors::NO_ANSWER);
         }
     }

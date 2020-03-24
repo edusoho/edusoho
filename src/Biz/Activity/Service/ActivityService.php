@@ -66,4 +66,6 @@ interface ActivityService
     public function findFinishedLivesWithinTwoHours();
 
     public function getActivityFinishCondition($activity);
+
+    public function getByMediaIdAndMediaTypeAndCopyId($mediaId, $mediaType, $copyId);
 }

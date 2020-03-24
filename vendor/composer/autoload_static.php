@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit136032c0fc433a93b914ba62db42d7b5
+class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
 {
     public static $files = array (
         '92c8763cd6170fce6fcfe7e26b4e8c10' => __DIR__ . '/..' . '/symfony/phpunit-bridge/bootstrap.php',
@@ -32,6 +32,7 @@ class ComposerStaticInit136032c0fc433a93b914ba62db42d7b5
         'ce89ac35a6c330c55f4710717db9ff78' => __DIR__ . '/..' . '/kriswallsmith/assetic/src/functions.php',
         '04c6c5c2f7095ccf6c481d3e53e1776f' => __DIR__ . '/..' . '/mustangostang/spyc/Spyc.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
+        'aef137864a7aaf34614936d4960886a7' => __DIR__ . '/..' . '/codeages/escloud-php-sdk/src/functions.php',
         '0b994ed09d88003af15ffbb9ef2e73ce' => __DIR__ . '/..' . '/codeages/qiqiuyun-php-sdk/src/functions.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         '2a404a48a0596622a2af787408f2be5e' => __DIR__ . '/..' . '/xxtea/xxtea/xxtea.php',
@@ -143,12 +144,14 @@ class ComposerStaticInit136032c0fc433a93b914ba62db42d7b5
         ),
         'F' => 
         array (
+            'Firebase\\JWT\\' => 13,
             'Fig\\Link\\' => 9,
         ),
         'E' => 
         array (
             'ExamParser\\' => 11,
             'Endroid\\QrCode\\' => 15,
+            'ESCloud\\SDK\\' => 12,
         ),
         'D' => 
         array (
@@ -440,6 +443,10 @@ class ComposerStaticInit136032c0fc433a93b914ba62db42d7b5
         array (
             0 => __DIR__ . '/..' . '/gregwar/captcha/src/Gregwar',
         ),
+        'Firebase\\JWT\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
+        ),
         'Fig\\Link\\' => 
         array (
             0 => __DIR__ . '/..' . '/fig/link-util/src',
@@ -451,6 +458,10 @@ class ComposerStaticInit136032c0fc433a93b914ba62db42d7b5
         'Endroid\\QrCode\\' => 
         array (
             0 => __DIR__ . '/..' . '/endroid/qrcode/src',
+        ),
+        'ESCloud\\SDK\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/escloud-php-sdk/src',
         ),
         'Doctrine\\Instantiator\\' => 
         array (
@@ -1200,12 +1211,12 @@ class ComposerStaticInit136032c0fc433a93b914ba62db42d7b5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit136032c0fc433a93b914ba62db42d7b5::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit136032c0fc433a93b914ba62db42d7b5::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr4 = ComposerStaticInit136032c0fc433a93b914ba62db42d7b5::$fallbackDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit136032c0fc433a93b914ba62db42d7b5::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit136032c0fc433a93b914ba62db42d7b5::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInit136032c0fc433a93b914ba62db42d7b5::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8::$fallbackDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8::$classMap;
 
         }, null, ClassLoader::class);
     }

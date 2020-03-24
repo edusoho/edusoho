@@ -41,6 +41,11 @@ class SystemUtil
         return $realPath;
     }
 
+    public static function getPrivateTmpPath()
+    {
+        return ServiceKernel::instance()->getParameter('topxia.upload.private_directory').DIRECTORY_SEPARATOR.'tmp';
+    }
+
     public static function backupdb()
     {
         $backUpdir = self::getUploadTmpPath();

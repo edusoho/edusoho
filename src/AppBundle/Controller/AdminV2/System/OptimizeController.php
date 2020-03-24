@@ -27,6 +27,7 @@ class OptimizeController extends BaseController
             FileUtil::emptyDir(SystemUtil::getDownloadPath());
         }
         FileUtil::emptyDir(SystemUtil::getUploadTmpPath());
+        FileUtil::emptyDir(SystemUtil::getPrivateTmpPath());
 
         return $this->createJsonResponse(true);
     }
