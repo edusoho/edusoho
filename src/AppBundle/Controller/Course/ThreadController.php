@@ -13,6 +13,7 @@ use Biz\File\Service\UploadFileService;
 use Biz\User\Service\NotificationService;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use VipPlugin\Biz\Vip\Service\VipService;
 
 class ThreadController extends CourseBaseController
@@ -278,7 +279,7 @@ class ThreadController extends CourseBaseController
                     $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $thread['id'], $attachment['targetType'], $attachment['type']);
 
                     if ($user->isAdmin()) {
-                        $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $thread['id']), true);
+                        $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $thread['id']), UrlGeneratorInterface::ABSOLUTE_URL);
                         $message = array(
                             'courseId' => $courseId,
                             'id' => $thread['id'],
@@ -326,7 +327,7 @@ class ThreadController extends CourseBaseController
         $user = $this->getCurrentUser();
 
         if ($user->isAdmin()) {
-            $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $threadId), true);
+            $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $threadId), UrlGeneratorInterface::ABSOLUTE_URL);
             $message = array(
                 'courseId' => $courseId,
                 'id' => $threadId,
@@ -396,7 +397,7 @@ class ThreadController extends CourseBaseController
                 'threadType' => $thread['type'],
                 'type' => 'elite',
             );
-            $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $threadId), true);
+            $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $threadId), UrlGeneratorInterface::ABSOLUTE_URL);
             $this->getNotificationService()->notify($thread['userId'], 'course-thread', $message);
         }
 
@@ -417,7 +418,7 @@ class ThreadController extends CourseBaseController
                 'threadType' => $thread['type'],
                 'type' => 'unelite',
             );
-            $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $threadId), true);
+            $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $threadId), UrlGeneratorInterface::ABSOLUTE_URL);
             $this->getNotificationService()->notify($thread['userId'], 'course-thread', $message);
         }
 
@@ -591,7 +592,7 @@ class ThreadController extends CourseBaseController
                     $this->getNotificationService()->notify($post['userId'], 'course-thread', $message);
                 }
 
-                $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $post['courseId'], 'threadId' => $post['threadId']), true);
+                $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $post['courseId'], 'threadId' => $post['threadId']), UrlGeneratorInterface::ABSOLUTE_URL);
                 $threadUrl .= '?#post-'.$post['id']; // add ? to fix chrome bug
 
                 return $this->redirect($threadUrl);
@@ -615,7 +616,7 @@ class ThreadController extends CourseBaseController
         $thread = $this->getThreadService()->getThread($courseId, $threadId);
 
         if ($user->isAdmin()) {
-            $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $threadId), true);
+            $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $threadId), UrlGeneratorInterface::ABSOLUTE_URL);
 
             $message = array(
                 'userId' => $user['id'],

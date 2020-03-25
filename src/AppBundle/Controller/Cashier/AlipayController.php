@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Cashier;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AlipayController extends PaymentController
 {
@@ -22,7 +23,7 @@ class AlipayController extends PaymentController
         $data['platform_type'] = 'Web';
         $this->getPayService()->notifyPaid($payment, $data);
 
-        return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $data['out_trade_no']), true));
+        return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $data['out_trade_no']), UrlGeneratorInterface::ABSOLUTE_URL));
     }
 
     public function returnForH5Action(Request $request, $payment)
@@ -31,7 +32,7 @@ class AlipayController extends PaymentController
         $data['platform_type'] = 'Wap';
         $this->getPayService()->notifyPaid($payment, $data);
 
-        return $this->redirect($this->generateUrl('cashier_pay_success_for_h5', array('trade_sn' => $data['out_trade_no']), true));
+        return $this->redirect($this->generateUrl('cashier_pay_success_for_h5', array('trade_sn' => $data['out_trade_no']), UrlGeneratorInterface::ABSOLUTE_URL));
     }
 
     public function returnForAppAction(Request $request)

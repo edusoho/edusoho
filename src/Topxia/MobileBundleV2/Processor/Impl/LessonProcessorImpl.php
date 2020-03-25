@@ -6,6 +6,7 @@ use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\MediaParser\ParserProxy;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\LessonProcessor;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -529,7 +530,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                                         'token' => $token['token'],
                                         'line' => $this->request->get('line'),
                                         'hideBeginning' => 1,
-                                    ), true),
+                                    ), UrlGeneratorInterface::ABSOLUTE_URL),
                                 );
 
                                 $lesson['headUrl'] = $headUrl['url'];
@@ -552,7 +553,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                                     'token' => $token['token'],
                                     'line' => $this->request->get('line'),
                                     'hideBeginning' => 1,
-                                ), true),
+                                ), UrlGeneratorInterface::ABSOLUTE_URL),
                             );
                         } else {
                             throw new \RuntimeException('当前视频不支持播放！');
