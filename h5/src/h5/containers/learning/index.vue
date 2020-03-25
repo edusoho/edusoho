@@ -32,7 +32,6 @@
         @needRequest="classSendRequest"
       />
     </div>
-    <div class="mt50"/>
   </div>
 </template>
 <script>
@@ -169,3 +168,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  .e-learn {
+    padding-bottom: 60px;
+  }
+</style>
