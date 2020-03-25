@@ -64,7 +64,7 @@
   },
   "require-dev": {
     "sensio/generator-bundle": "3.0.11",
-    "symfony/phpunit-bridge": "3.2.6",
+    "symfony/phpunit-bridge": "3.4.26",
     "mockery/mockery": "0.9.9",
     "phpunit/phpunit": "4.8.36",
     "friendsofphp/php-cs-fixer": "2.2.0"
