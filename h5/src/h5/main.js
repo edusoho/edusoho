@@ -9,6 +9,7 @@ import whiteList from '@/router/config/white-list';
 import '@/assets/styles/main.scss';
 import App from '@/App';
 import Api from '@/api';
+import VueClipboard from 'vue-clipboard2';
 import {
   Row,
   Col,
@@ -84,6 +85,7 @@ Vue.use(Tab)
   .use(Switch)
   .use(PullRefresh)
   .use(Loading);
+Vue.use(VueClipboard);
 Vue.config.productionTip = false;
 Api.getSettings({
   query: {
@@ -134,12 +136,11 @@ Api.getSettings({
 
     const hasToken = window.localStorage.getItem('token');
     if (!hasToken && Number(GetUrlParam('needLogin'))) {
-      window.location.href =
-        `${
-          location.origin
-        }/h5/index.html#/login?redirect=/course/${courseId}&skipUrl=%2F&account=${GetUrlParam(
-          'account'
-        )}`;
+      window.location.href = `${
+        location.origin
+      }/h5/index.html#/login?redirect=/course/${courseId}&skipUrl=%2F&account=${GetUrlParam(
+        'account'
+      )}`;
     }
 
     // 已登录状态直接跳转详情页
