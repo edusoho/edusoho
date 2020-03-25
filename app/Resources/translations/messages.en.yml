@@ -1442,11 +1442,12 @@ course.question_manage.manage.belong_change_tips: If this question is cited, cha
 course.question_manage.edit: Edit
 course.question_manage.import.btn: Import question
 course.question_manage.import.modal_title: Import question
-course.question_manage.import.new_hint: New workflow, More efficient
+course.question_manage.import.new_hint: Read before upload
 course.question_manage.import.drag_document_hint: Drag document to here
 course.question_manage.import.docx_support_hint: Only support docx,
 course.question_manage.import.download_template: Download template
 course.question_manage.import.doc_to_docx_hint: How doc convert to docx?
+question_manage.import.doc_to_docx_hint.tutorial: Tutorial
 course.question_manage.import.upload_document: Upload
 course.question_manage.import.reupload_document: Re-Upload
 course.question_manage.import.uploading: Uploading...

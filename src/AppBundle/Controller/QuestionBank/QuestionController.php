@@ -57,12 +57,10 @@ class QuestionController extends BaseController
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-
         return $this->forward('AppBundle:Question/QuestionParser:read', array(
             'request' => $request,
             'type' => 'question',
-            'questionBank' => $questionBank,
+            'questionBank' => $this->getQuestionBankService()->getQuestionBank($id),
         ));
     }
 
@@ -131,7 +129,7 @@ class QuestionController extends BaseController
             )
         );
         if ($request->isMethod('POST')) {
-            $this->getItemService()->updateItem($item['id'], $request->request->all());
+            $this->getItemService()->updateItem($item['id'], json_decode($request->getContent(), true));
 
             return $this->createJsonResponse(array('goto' => $goto));
         }

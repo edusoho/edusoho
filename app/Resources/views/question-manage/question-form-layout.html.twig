@@ -14,9 +14,10 @@
       <input type="hidden" name="mode" value="{{ mode }}">
       <input type="hidden" name="bank_id" value="{{ questionBank.id }}">
       <input type="hidden" name="type" value="{{ type }}">
-      <input type="hidden" name="submitUrl" value="{{ path('question_bank_manage_question_create', {id: questionBank.id, type: type}) }}">
+      <input type="hidden" name="create_url" value="{{ path('question_bank_manage_question_create', {id: questionBank.id, type: type}) }}">
       <input type="hidden" name="category" value="{{ categoryTree|json_encode }}">
       {% if mode == 'edit' %}
+        <input type="hidden" name="update_url" value="{{ path('question_bank_manage_question_update', {id: questionBank.id, questionId: item.id}) }}">
         <input type="hidden" name="item" value="{{ item|json_encode }}">
       {% endif %}
     </div>

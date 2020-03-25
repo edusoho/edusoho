@@ -1489,7 +1489,7 @@ class WebExtension extends \Twig_Extension
 
     public function fillQuestionStemTextFilter($stem)
     {
-        return preg_replace('/\[\[.+?\]\]/', '____', $stem);
+        return preg_replace('/\[\[\]\]/', '____', $stem);
     }
 
     public function fillQuestionStemHtmlFilter($stem)

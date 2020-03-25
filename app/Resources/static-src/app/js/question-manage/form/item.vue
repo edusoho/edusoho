@@ -47,9 +47,9 @@
       getData(data) {
         data['submission'] = '';
         data['type'] = $('[name=type]').val();
-        console.log(data.questions);
+        let mode = $('[name=mode]').val();
         $.ajax({
-          url: $('[name=submitUrl]').val(),
+          url: mode === 'create' ? $('[name=create_url]').val() : $('[name=update_url]').val(),
           contentType: 'application/json;charset=utf-8',
           type: 'post',
           data: JSON.stringify(data),
