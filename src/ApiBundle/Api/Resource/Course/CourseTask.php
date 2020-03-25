@@ -10,6 +10,7 @@ use Biz\Course\CourseException;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class CourseTask extends AbstractResource
 {
@@ -38,6 +39,7 @@ class CourseTask extends AbstractResource
         $task['activity'] = $this->getActivityService()->getActivity($task['activityId'], true);
         $task['activity']['finishCondition'] = $this->getActivityService()->getActivityFinishCondition($task['activity']);
         $task['result'] = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
+        $task['courseUrl'] = $this->generateUrl('my_course_show', array('id' => $courseId), UrlGeneratorInterface::ABSOLUTE_URL);
 
         return $task;
     }
