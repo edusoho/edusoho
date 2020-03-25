@@ -1,4 +1,4 @@
-repository:
+repository: git@coding.codeages.work:edusoho/edusoho-h5.git
 stage: dev
 hosts:
   - 124.160.104.77

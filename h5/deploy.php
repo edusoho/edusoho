@@ -6,11 +6,11 @@ use Symfony\Component\Yaml\Yaml;
 require 'recipe/common.php';
 
 // Configuration
+$yaml = Yaml::parse(file_get_contents(__DIR__.'/deploy.yml'));
 
-set('repository', 'git@coding.codeages.work:edusoho/edusoho-h5.git');
+set('repository', $yaml['repository']);
 set('git_tty', false); // [Optional] Allocate tty for git on first deployment
 set('writable_mode', 'acl');
-$yaml = Yaml::parse(file_get_contents(__DIR__.'/deploy.yml'));
 
 $host = host($yaml['hosts'][0])
     ->stage($yaml['stage'])
