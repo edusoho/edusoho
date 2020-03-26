@@ -12,11 +12,16 @@ import loadScript from 'load-script'
 import { mapState } from 'vuex'
 import Api from '@/api'
 import { Toast } from 'vant'
+import TaskPipe from '@/utils/task-pipe/index';
 
 export default {
   data() {
     return {
-      isEncryptionPlus: false
+      isEncryptionPlus: false,
+      currentTime: 0,
+      startTime: 0,
+      timeChangingList: [],
+      taskPipe: undefined,
     }
   },
   computed: {
@@ -30,6 +35,7 @@ export default {
     })
   },
   created() {
+    this.initTaskPipe();
     this.initPlayer()
   },
   /*
@@ -37,6 +43,31 @@ export default {
   * eg: /api/courses/1/task_medias/1?preview=1
   */
   methods: {
+    watchTime() {
+      if (this.isAndroid() && this.taskPipe) {
+        return Math.floor(this.taskPipe.getDuration() / 60000);
+      }
+      let timeCount = this.currentTime - this.startTime;
+      this.timeChangingList.forEach(item => {
+        timeCount += (item.end - item.start);
+      });
+      return Math.floor(timeCount / 60);
+    },
+    isAndroid() {
+      return !!navigator.userAgent.match(new RegExp("android", "i"));
+    },
+    initTaskPipe() {
+      this.taskPipe = new TaskPipe({
+        reportData: {
+          courseId: this.selectedPlanId,
+          taskId: this.taskId
+        },
+        formatReportData: (data) => {
+          data.watchTime = this.watchTime()
+          return data;
+        }
+      });
+    },
     getParams() {
       const canTryLookable = !this.joinStatus
       return canTryLookable ? {
@@ -80,6 +111,24 @@ export default {
       this.loadPlayerSDK().then(SDK => {
         this.$store.commit('UPDATE_LOADING_STATUS', false)
         const player = new SDK(options)
+        player
+        .on('ready', () => {
+          this.taskPipe.initInterval();
+        })
+        .on('datapicker.start', (e) => {
+          this.timeChangingList.push({
+            start: this.startTime,
+            end: e.end,
+          });
+          this.startTime = e.start;
+        })
+        .on('ended', () => {
+          this.taskPipe.trigger('end');
+        })
+        .on('timeupdate', (e) => {
+          this.currentTime = e.currentTime;
+          this.taskPipe.trigger('time', this.watchTime());
+        })
       })
     },
     loadPlayerSDK() {

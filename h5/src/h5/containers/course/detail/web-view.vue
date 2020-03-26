@@ -13,12 +13,15 @@ import Api from '@/api'
 import { mapState, mapMutations } from 'vuex'
 import * as types from '@/store/mutation-types'
 import { Toast } from 'vant'
+import TaskPipe from '@/utils/task-pipe/index'
 
 export default {
   data() {
     return {
       media: '',
-      isPreview: this.$route.query.preview
+      isPreview: this.$route.query.preview,
+      taskPipe: undefined,
+      pageLength: 0,
     }
   },
   computed: {
@@ -31,6 +34,7 @@ export default {
     })
   },
   async mounted() {
+    this.initTaskPipe();
     const player = await Api.getMedia(this.getParams()).catch(err => {
       Toast(err.message)
       return Promise.reject(err)
@@ -47,6 +51,22 @@ export default {
     ...mapMutations({
       setNavbarTitle: types.SET_NAVBAR_TITLE
     }),
+    initTaskPipe() {
+      const { courseId, taskId, type } = this.$route.query
+      this.taskPipe = new TaskPipe({
+        reportData: {
+          courseId: this.selectedPlanId,
+          taskId: this.taskId
+        },
+      });
+      this.taskPipe.on('courseData', (res) => {
+        this.pageLength = res.length;
+      });
+      setInterval(() => {
+        const duration = Math.floor(this.taskPipe.getDuration() / 60000);
+        this.taskPipe.trigger('time', duration);
+      }, 1000);
+    },
     /*
     * 试看需要传preview=1
     * eg: /api/courses/1/task_medias/1?preview=1
@@ -79,7 +99,7 @@ export default {
       loadScript(playerSDKUri, (err) => {
         if (err) throw err
 
-        new window.QiQiuYun.Player({
+        const player = new window.QiQiuYun.Player({
           id: 'player', // 用于初始化的DOM节点id
           // playServer: 'play.test.qiqiuyun.cn', // 测试 playServer
           resNo: media.resId, // 想要播放的资源编号
@@ -87,6 +107,14 @@ export default {
           source: {
             type: player.mediaType,
             args: media
+          }
+        })
+        player.on('ready', () => {
+          this.taskPipe.initInterval();
+        })
+        .on('pagechanged', (e) => {
+          if (e.page = this.pageLength) {
+            this.taskPipe.trigger('end');
           }
         })
       })

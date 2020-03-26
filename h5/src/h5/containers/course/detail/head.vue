@@ -49,6 +49,7 @@ import { Toast, Dialog } from "vant";
 import countDown from "&/components/e-marketing/e-count-down/index";
 import tagLink from "&/components/e-tag-link/e-tag-link";
 import qs from "qs";
+import TaskPipe from '@/utils/task-pipe/index';
 
 export default {
   components: {
@@ -84,6 +85,10 @@ export default {
         className: "course-tag",
         minDirectRewardRatio: 0
       },
+      currentTime: 0,
+      startTime: 0,
+      timeChangingList: [],
+      taskPipe: undefined,
       bindAgencyRelation: {} // 分销代理商绑定信息
     };
   },
@@ -110,6 +115,7 @@ export default {
   },
   created() {
     this.initHead();
+    this.initTaskPipe();
     this.showTagLink();
   },
   /*
@@ -117,6 +123,31 @@ export default {
    * eg: /api/courses/1/task_medias/1?preview=1
    */
   methods: {
+    watchTime() {
+      if (this.isAndroid() && this.taskPipe) {
+        return Math.floor(this.taskPipe.getDuration() / 60000);
+      }
+      let timeCount = this.currentTime - this.startTime;
+      this.timeChangingList.forEach(item => {
+        timeCount += (item.end - item.start);
+      });
+      return Math.floor(timeCount / 60);
+    },
+    isAndroid() {
+      return !!navigator.userAgent.match(new RegExp("android", "i"));
+    },
+    initTaskPipe() {
+      this.taskPipe = new TaskPipe({
+        reportData: {
+          courseId: this.selectedPlanId,
+          taskId: this.taskId
+        },
+        formatReportData: (data) => {
+          data.watchTime = this.watchTime()
+          return data;
+        }
+      });
+    },
     initHead() {
       if (["video", "audio"].includes(this.sourceType)) {
         window.scrollTo(0, 0);
@@ -234,6 +265,24 @@ export default {
           this.isPlaying = false;
         });
         this.player = player;
+        player
+        .on('ready', () => {
+          this.taskPipe.initInterval();
+        })
+        .on('datapicker.start', (e) => {
+          this.timeChangingList.push({
+            start: this.startTime,
+            end: e.end,
+          });
+          this.startTime = e.start;
+        })
+        .on('ended', () => {
+          this.taskPipe.trigger('end');
+        })
+        .on('timeupdate', (e) => {
+          this.currentTime = e.currentTime;
+          this.taskPipe.trigger('time', this.watchTime());
+        })
       });
     },
     loadPlayerSDK() {
