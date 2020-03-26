@@ -147,7 +147,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         }
 
         if (isset($replayList['error']) && !empty($replayList['error'])) {
-            throw $this->createServiceException($replayList['error']);
+            throw $this->createServiceException($replayList['error'], 500);
         }
 
         $this->deleteReplayByLessonId($lessonId, $type);
