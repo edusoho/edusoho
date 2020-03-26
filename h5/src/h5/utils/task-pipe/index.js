@@ -85,7 +85,6 @@ class TaskPipe extends Event {
       this.clearInterval();
     }
     this.getReportData(state, { lastTime: this.lastTime, ...data }).then(res => {
-      this.trigger(state, res);
       if (res.lastTime) {
         this.lastTime = res.lastTime;
       }
@@ -96,7 +95,6 @@ class TaskPipe extends Event {
         if (res.result.status === 'finish') {
           this.clearInterval();
         }
-        this.trigger(res.result.status, res);
       }
     }).catch(error => {
       if (error.status === 403) {
