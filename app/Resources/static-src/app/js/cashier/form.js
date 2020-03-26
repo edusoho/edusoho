@@ -66,6 +66,16 @@ class CashierForm {
       coinAmount
     }).done((res) => {
       this.$form.find('.js-pay-price').text(res.data);
+
+      if (!$('.js-no-payment').length) {
+        return null;
+      }
+
+      if (res.data == '￥0.00') {
+        $('.js-no-payment').removeAttr('disabled');
+        $('.js-no-payment').removeClass('cd-btn-default');
+        $('.js-no-payment').addClass('cd-btn-primary');
+      }
     });
   }
 
