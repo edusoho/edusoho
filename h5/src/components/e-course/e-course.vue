@@ -71,7 +71,8 @@ export default {
         return this.course.cover.middle
       }
       const courseSet = this.course.courseSet
-      return courseSet ? courseSet.cover.middle : this.order.cover.middle
+      let imageSrc = courseSet ? courseSet.cover.middle : this.order.cover.middle
+      return imageSrc ? imageSrc : ''
     },
     title() {
       if (this.typeList === 'classroom_list') {
@@ -133,7 +134,7 @@ export default {
         return
       }
       this.$router.push({
-        path: (this.typeList === 'course_list') ? `/course/${id}` : `/classroom/${id}`
+        path: (this.typeList === 'classroom_list') ? `/classroom/${id}` : `/course/${id}`
       })
     }
   }
