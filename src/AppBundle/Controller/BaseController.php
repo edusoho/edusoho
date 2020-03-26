@@ -6,6 +6,7 @@ use Biz\Common\CommonException;
 use Biz\QiQiuYun\Service\QiQiuYunSdkProxyService;
 use Biz\User\CurrentUser;
 use AppBundle\Common\ArrayToolkit;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -233,7 +234,7 @@ class BaseController extends Controller
 
     protected function createNamedFormBuilder($name, $data = null, array $options = array())
     {
-        return $this->container->get('form.factory')->createNamedBuilder($name, 'form', $data, $options);
+        return $this->container->get('form.factory')->createNamedBuilder($name, FormType::class, $data, $options);
     }
 
     protected function createJsonResponse($data = null, $status = 200, $headers = array())
