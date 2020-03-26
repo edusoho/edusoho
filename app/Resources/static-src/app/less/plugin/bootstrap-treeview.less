@@ -63,3 +63,42 @@
 }
 
 
+
+// 插件中插入的代码
+.treeview .list-group-item {
+	cursor: pointer;
+}
+
+.treeview span.indent {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.treeview span.icon {
+	width: 12px;
+	margin-right: 5px;
+}
+
+.treeview .node-disabled {
+  cursor: pointer;
+
+  .check-icon {
+    color: silver !important;
+    cursor: not-allowed;
+
+  }
+}
+
+.treeview-backdrop {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1024;
+}
+
+.treeview .list-group {
+  margin: 0;
+  padding: 0;
+}

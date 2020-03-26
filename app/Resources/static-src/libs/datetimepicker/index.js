@@ -1,6 +1,4 @@
 import  'bootstrap-datetime-picker';
-import '!style-loader?insertAt=top!css-loader!node_modules/bootstrap-datetime-picker/css/bootstrap-datetimepicker.css';
-import '!style-loader?insertAt=top!css-loader!less-loader!./index.less';
 
 $.fn.datetimepicker.dates['zh_CN'] = {
   days: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],

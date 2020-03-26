@@ -1,4 +1,4 @@
-import WebUploader from './fex-webuploader/webuploader.js';
+require('./fex-webuploader/webuploader.js');
 import SWF_PATH from './fex-webuploader/Uploader.swf';
 
 class EsWebUploader {
