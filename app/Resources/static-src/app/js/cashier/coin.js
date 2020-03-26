@@ -33,6 +33,13 @@ export default class Coin {
       this.removePasswordValidate();
 
       this.$form.trigger('removePriceItem', ['coin-price']);
+
+      if ($('.js-no-payment').length) {
+        $('.js-no-payment').attr('disabled', 'disabled');
+        $('.js-no-payment').addClass('cd-btn-default');
+        $('.js-no-payment').removeClass('cd-btn-primary');
+      }
+
       this.cashierForm.calcPayPrice(inputCoinNum);
       return;
     }
@@ -52,6 +59,13 @@ export default class Coin {
       price = '￥' + parseFloat(inputCoinNum / this.coinRate).toFixed(2);
     }
     this.$form.trigger('addPriceItem', ['coin-price', coinName + Translator.trans('order.create.minus'), price]);
+
+    if ($('.js-no-payment').length) {
+      $('.js-no-payment').attr('disabled', 'disabled');
+      $('.js-no-payment').addClass('cd-btn-default');
+      $('.js-no-payment').removeClass('cd-btn-primary');
+    }
+
     this.cashierForm.calcPayPrice(inputCoinNum);
   }
 

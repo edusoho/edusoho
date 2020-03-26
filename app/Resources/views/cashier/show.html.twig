@@ -68,7 +68,7 @@
         {{ 'pay_center.pay.mode'|trans }}
       </span>
       <span class="order-center-deduction__content">
-        {% if payments %}
+        {% if payments or setting('coin.coin_enabled')|default(0) %}
           {{ 'pay_center.pay.mode.tips'|trans }}
         {% else %}
           {{ 'payment.useless_tips'|trans }}
@@ -94,6 +94,8 @@
             </span>
         {% endfor %}
       </div>
+    {% elseif setting('coin.coin_enabled')|default(0) %}
+      <input type="hidden" name="payment" value="coin">
     {% endif %}
 
     <div class="order-center-line"></div>
@@ -141,6 +143,12 @@
     {% if payments %}
       <div class="text-right">
         <button class="btn cd-btn cd-btn-primary cd-btn-lg js-pay-btn" type="button" data-loading-text="{{ 'pay_center.pay.confirm_pay_btn_loading'|trans }}">
+          {{ 'pay_center.pay.confirm_pay_btn'|trans }}
+        </button>
+      </div>
+    {% elseif setting('coin.coin_enabled')|default(0) %}
+      <div class="text-right">
+        <button class="btn cd-btn cd-btn-default cd-btn-lg js-pay-btn js-no-payment" disabled type="button" data-loading-text="{{ 'pay_center.pay.confirm_pay_btn_loading'|trans }}">
           {{ 'pay_center.pay.confirm_pay_btn'|trans }}
         </button>
       </div>
