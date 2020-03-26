@@ -209,6 +209,26 @@
     #course-detail__head--video {
       height: vw(210);
     }
+    &--btn{
+      position: absolute;
+      top:vw(8);
+      right: vw(8);
+      padding: vw(6) vw(16);
+      font-size: vw(14);
+      display: flex;
+      align-items: center;
+      color:$primary-color;
+      border-radius: vw(30);
+      border:1px solid  $primary-color;
+      background: #fff;
+    }
+    .icon-markdone{
+      margin-right: vw(4);
+    }
+    &--activebtn{
+      color: #fff;
+      background: $primary-color;
+    }
   }
   // plan component
   &__plan {
