@@ -8,7 +8,7 @@ use ApiBundle\Api\Util\AssetHelper;
 class UserFilter extends Filter
 {
     protected $simpleFields = array(
-        'id', 'nickname', 'title', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'uuid', 'destroyed'
+        'id', 'nickname', 'title', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'uuid', 'destroyed',
     );
 
     protected $publicFields = array(
@@ -69,6 +69,6 @@ class UserFilter extends Filter
 
     protected function destroyedNicknameFilter(&$data)
     {
-        $data['nickname'] = ($data['destroyed'] == 1) ? "帐号已注销" : $data['nickname'];
+        $data['nickname'] = ($data['destroyed'] == 1) ? '帐号已注销' : $data['nickname'];
     }
 }

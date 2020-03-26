@@ -1,4 +1,4 @@
-exports.validate = function() {
+let validate = function() {
   $.extend($.validator.messages, {
     required: '请输入%display%',
     remote: '请修正此字段',
@@ -109,7 +109,7 @@ exports.validate = function() {
 }
 
 
-exports.jquery = () => {
+let jquery = () => {
   $.fn.serializeObject = function()
   {
     let o = {};
@@ -134,7 +134,7 @@ exports.jquery = () => {
   });
 };
 
-exports.editor = () => {
+let editor = () => {
   window.ltc.editor = (value) => {
     $(`#${value}`).data('imageDownloadUrl', window.ltc.getEditorConfig()['imageDownloadUrl'])
     
@@ -146,3 +146,6 @@ exports.editor = () => {
     }, window.ltc.getEditorConfig()));
   }
 }
+
+
+export {validate,  jquery, editor}

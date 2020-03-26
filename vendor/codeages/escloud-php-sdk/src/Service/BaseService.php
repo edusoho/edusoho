@@ -88,10 +88,12 @@ abstract class BaseService
      *
      * @param $method
      * @param $uri
-     * @param array $data
-     * @param array $headers
+     * @param array  $data
+     * @param array  $headers
      * @param string $node
+     *
      * @return mixed
+     *
      * @throws ResponseException
      * @throws SDKException
      * @throws SDK\HttpClient\ClientException
@@ -132,7 +134,9 @@ abstract class BaseService
      * 从Response中抽取API返回结果
      *
      * @param Response $response
+     *
      * @return mixed
+     *
      * @throws ResponseException
      * @throws SDKException
      */
@@ -160,7 +164,9 @@ abstract class BaseService
      * @param $uri
      * @param string $protocol
      * @param string $node
+     *
      * @return string
+     *
      * @throws SDKException
      */
     protected function getRequestUri($uri, $protocol = 'http', $node = 'root')

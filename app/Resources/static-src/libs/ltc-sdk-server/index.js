@@ -101,5 +101,4 @@ class LtcSDKServer {
     return Api(options);
   }
 }
-
-module.exports = window.ltc = new LtcSDKServer();
+window.ltc = new LtcSDKServer();

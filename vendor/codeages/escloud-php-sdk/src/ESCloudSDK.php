@@ -22,9 +22,10 @@ class ESCloudSDK
     /**
      * ESCloudSDK constructor.
      *
-     * @param array $options
+     * @param array                $options
      * @param LoggerInterface|null $logger
      * @param ClientInterface|null $httpClient
+     *
      * @throws SDKException
      */
     public function __construct(array $options, LoggerInterface $logger = null, ClientInterface $httpClient = null)
@@ -164,7 +165,7 @@ class ESCloudSDK
         $options = empty($this->options['service'][$lowerName]) ? array() : $this->options['service'][$lowerName];
 
         $class = __NAMESPACE__.'\\Service\\'.$name.'Service';
-        $auth = new Auth($this->options['access_key'], $this->options['secret_key'],  $useJwt);
+        $auth = new Auth($this->options['access_key'], $this->options['secret_key'], $useJwt);
         $this->services[$name] = new $class($auth, $options, $this->logger, $this->httpClient);
 
         return $this->services[$name];
