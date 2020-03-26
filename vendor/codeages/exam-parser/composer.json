@@ -15,7 +15,7 @@
         "ext-zip" : "*",
         "ext-dom" : "*",
         "ext-mbstring" : "*",
-        "ramsey/uuid": "2.9"
+        "ramsey/uuid": "^2.9|^3.9"
     },
     "require-dev": {
         "phpunit/phpunit": "^4 || ^5 || ^6",

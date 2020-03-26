@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a79648ca5620408749e54e3bb7d7d5b0",
+    "content-hash": "24228d2b4b3ba458b05543bafb9af599",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -475,12 +475,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/exam-parser.git",
-                "reference": "f843689a4b6eaa4859031e4d8d8c1a14416d1d65"
+                "reference": "452401330c398adcee7b78e8e43d2e6d900880e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/exam-parser/zipball/f843689a4b6eaa4859031e4d8d8c1a14416d1d65",
-                "reference": "f843689a4b6eaa4859031e4d8d8c1a14416d1d65",
+                "url": "https://api.github.com/repos/codeages/exam-parser/zipball/452401330c398adcee7b78e8e43d2e6d900880e4",
+                "reference": "452401330c398adcee7b78e8e43d2e6d900880e4",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -495,7 +495,7 @@
                 "ext-zip": "*",
                 "php": ">=5.3.3",
                 "phpoffice/phpword": "^0.16.0",
-                "ramsey/uuid": "2.9"
+                "ramsey/uuid": "^2.9|^3.9"
             },
             "require-dev": {
                 "monolog/monolog": "^1.18",
@@ -521,7 +521,7 @@
                 }
             ],
             "description": "Exam Parser",
-            "time": "2020-01-06T00:57:14+00:00"
+            "time": "2020-03-16T02:33:45+00:00"
         },
         {
             "name": "codeages/omnipay-alipay",
@@ -1969,16 +1969,16 @@
         },
         {
             "name": "firebase/php-jwt",
-            "version": "v5.0.0",
+            "version": "v5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "9984a4d3a32ae7673d6971ea00bae9d0a1abba0e"
+                "reference": "4566062c68f76f43d44f1643f4970fe89757d4c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/9984a4d3a32ae7673d6971ea00bae9d0a1abba0e",
-                "reference": "9984a4d3a32ae7673d6971ea00bae9d0a1abba0e",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/4566062c68f76f43d44f1643f4970fe89757d4c6",
+                "reference": "4566062c68f76f43d44f1643f4970fe89757d4c6",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1991,7 +1991,7 @@
                 "php": ">=5.3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": " 4.8.35"
+                "phpunit/phpunit": "^4.8|^5"
             },
             "type": "library",
             "autoload": {
@@ -2017,7 +2017,7 @@
             ],
             "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
             "homepage": "https://github.com/firebase/php-jwt",
-            "time": "2017-06-27T22:17:23+00:00"
+            "time": "2020-02-24T23:15:03+00:00"
         },
         {
             "name": "gregwar/captcha",
@@ -6732,6 +6732,18 @@
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-xml.git",
                 "reference": "e48d7bcd5b6d0aec5884ee351a3ea4d3abb58f13"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-xml/zipball/e48d7bcd5b6d0aec5884ee351a3ea4d3abb58f13",
+                "reference": "e48d7bcd5b6d0aec5884ee351a3ea4d3abb58f13",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "php": ">=5.3.3",
