@@ -69,7 +69,7 @@ class TaskPipe extends Event {
     }
   }
 
-  getReportData(state, data) {
+  getReportData(state, data = {}) {
     this.setReportParams(data);
     return Api[this.options.reportMap[state]]({
       query: this.reportData,
