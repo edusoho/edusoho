@@ -466,7 +466,7 @@ class TestpaperController extends BaseController
             'items' => $items,
             'paginator' => $paginator,
             'questionBank' => $itemBank,
-            'categories' => $categories,
+            'categoryTree' => $categories,
             'itemCategories' => $itemCategories,
             'excludeIds' => empty($conditions['excludeIds']) ? '' : $conditions['excludeIds'],
         ));
@@ -536,7 +536,7 @@ class TestpaperController extends BaseController
 
             $typeHtml[$type] = $this->renderView('question-bank/widgets/picked-question.html.twig', array(
                 'items' => $items,
-                'itemBank' => $itemBank,
+                'questionBank' => $itemBank,
                 'itemCategories' => $itemCategories,
                 'type' => $type,
             ));
