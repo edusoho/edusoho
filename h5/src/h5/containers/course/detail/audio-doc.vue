@@ -115,17 +115,17 @@ export default {
         .on('ready', () => {
           this.taskPipe.initInterval();
         })
-        .on('datapicker.start', (e) => {
+        player.on('datapicker.start', (e) => {
           this.timeChangingList.push({
             start: this.startTime,
             end: e.end,
           });
           this.startTime = e.start;
         })
-        .on('ended', () => {
+        player.on('ended', () => {
           this.taskPipe.trigger('end');
         })
-        .on('timeupdate', (e) => {
+        player.on('timeupdate', (e) => {
           this.currentTime = e.currentTime;
           this.taskPipe.trigger('time', this.watchTime());
         })

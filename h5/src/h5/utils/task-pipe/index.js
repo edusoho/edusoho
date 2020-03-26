@@ -95,6 +95,7 @@ class TaskPipe extends Event {
         if (res.result.status === 'finish') {
           this.clearInterval();
         }
+        this.trigger(`report.${res.result.status}`, res);
       }
     }).catch(error => {
       if (error.status === 403) {

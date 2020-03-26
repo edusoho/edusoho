@@ -113,7 +113,7 @@ export default {
         player.on('ready', () => {
           this.taskPipe.initInterval();
         })
-        .on('pagechanged', (e) => {
+        player.on('pagechanged', (e) => {
           if (e.page === this.pageLength) {
             this.taskPipe.trigger('end');
           }

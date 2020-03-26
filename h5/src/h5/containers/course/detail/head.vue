@@ -115,7 +115,6 @@ export default {
   },
   created() {
     this.initHead();
-    this.initTaskPipe();
     this.showTagLink();
   },
   /*
@@ -147,10 +146,12 @@ export default {
           return data;
         }
       });
+      console.log(this.taskPipe);
     },
     initHead() {
       if (["video", "audio"].includes(this.sourceType)) {
         window.scrollTo(0, 0);
+        this.initTaskPipe();
         this.initPlayer();
       }
     },
@@ -269,17 +270,17 @@ export default {
         .on('ready', () => {
           this.taskPipe.initInterval();
         })
-        .on('datapicker.start', (e) => {
+        player.on('datapicker.start', (e) => {
           this.timeChangingList.push({
             start: this.startTime,
             end: e.end,
           });
           this.startTime = e.start;
         })
-        .on('ended', () => {
+        player.on('ended', () => {
           this.taskPipe.trigger('end');
         })
-        .on('timeupdate', (e) => {
+        player.on('timeupdate', (e) => {
           this.currentTime = e.currentTime;
           this.taskPipe.trigger('time', this.watchTime());
         })
