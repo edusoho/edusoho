@@ -478,40 +478,39 @@ class TestpaperController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        $questionBank = $this->getItemBankService()->getItemBank($id);
         $conditions = $request->query->all();
 
-        $conditions['bankId'] = $id;
-        $conditions['parentId'] = empty($conditions['parentId']) ? 0 : $conditions['parentId'];
-        $orderBy = array('createdTime' => 'DESC');
+        $conditions['bank_id'] = $id;
+        $orderBy = array('created_time' => 'DESC');
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getQuestionService()->searchCount($conditions),
+            $this->getItemService()->countItems($conditions),
             10
         );
 
         if (!empty($conditions['categoryId'])) {
-            $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+            $childrenIds = $this->getItemCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
             $childrenIds[] = $conditions['categoryId'];
-            $conditions['categoryIds'] = $childrenIds;
+            $conditions['category_ids'] = $childrenIds;
             unset($conditions['categoryId']);
         }
 
-        $questions = $this->getQuestionService()->search(
+        $items = $this->getItemService()->searchItems(
             $conditions,
             $orderBy,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $questionCategories = $this->getCategoryService()->findCategories($questionBank['id']);
-        $questionCategories = ArrayToolkit::index($questionCategories, 'id');
+        $itemCategories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['id']);
+        $itemCategories = ArrayToolkit::index($itemCategories, 'id');
 
         return $this->render('question-bank/widgets/question-pick-body.html.twig', array(
-            'questions' => $questions,
+            'items' => $items,
             'paginator' => $paginator,
             'questionBank' => $questionBank,
-            'questionCategories' => $questionCategories,
+            'itemCategories' => $itemCategories,
         ));
     }
 
