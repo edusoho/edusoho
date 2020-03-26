@@ -21,19 +21,24 @@
             action="{{ path('question_bank_manage_question_import', {id: questionBank.id}) }}" enctype="multipart/form-data">
         <div class="cd-form-group mb0 clearfix">
           <div class="cd-pl32 cd-pr32 cd-pv32 bg-color" id="upload-file-box">
-            <p class="cd-mb24 cd-dark-major text-16 text-center">{{ 'course.question_manage.import.new_hint'|trans }}</p>
             <div class="upload-area js-upload-area text-center">
               <label id="upload-btn" for="form_file" class="btn cd-btn cd-btn-lg cd-btn-primary"
                      data-loading-text="{{ 'course.question_manage.import.uploading'|trans }}">{{ 'course.question_manage.import.upload_document'|trans }}</label>
               <input type="file" id="form_file" name="importFile" class="hidden" value="" required="required" accept=".docx">
               <p class="cd-mt16 text-14">{{ 'course.question_manage.import.drag_document_hint'|trans }}</p>
               <div class="upload-file__tip cd-mt16">
+                <p class="cd-mb24 cd-dark-major text-16 text-center">
+                  {{ 'course.question_manage.import.new_hint'|trans }}
+                  <a class="cd-link-primary" href="http://www.qiqiuyu.com/faq/881/detail" target="_blank">{{ 'course.question_manage.import.rule'|trans }}</a>
+                </p>
                 <p class="cd-dark-major text-14">
-                  <span>{{ 'course.question_manage.import.docx_support_hint'|trans }}</span>
+                  Tips:<span>{{ 'course.question_manage.import.docx_support_hint'|trans }}</span>
                   <a class="cd-link-primary" href="{{ asset('/assets/files/questions_import_example.docx') }}">{{ 'course.question_manage.import.download_template'|trans }}</a>
                 </p>
-                <p class="text-14"><a class="cd-link-primary" href="http://www.qiqiuyu.com/faq/880/detail" target="_blank">{{ 'course.question_manage.import.doc_to_docx_hint'|trans }}</a></p>
-                <p><a class="cd-link-primary" href="http://www.qiqiuyu.com/faq/881/detail" target="_blank">{{ 'course.question_manage.import.rule'|trans }}</a></p>
+                <p class="cd-dark-major text-14">
+                  {{ 'course.question_manage.import.doc_to_docx_hint'|trans }}
+                  <a class="cd-link-primary" href="http://www.qiqiuyu.com/faq/880/detail" target="_blank">{{ 'question_manage.import.doc_to_docx_hint.tutorial'|trans }}</a>
+                </p>
               </div>
             </div>
           </div>

@@ -19,19 +19,6 @@ class MaterialQuestionController extends BaseQuestionController
 
     public function createAction(Request $request, $questionBankId, $type)
     {
-        if (!$this->getQuestionBankService()->canManageBank($questionBankId)) {
-            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
-        }
-
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($questionBankId);
-        if (empty($questionBank)) {
-            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
-        }
-
-        return $this->render('question-manage/material-form.html.twig', array(
-            'questionBank' => $questionBank,
-            'type' => $type,
-            'categoryTree' => $this->getQuestionCategoryService()->getCategoryTree($questionBankId),
-        ));
+        return $this->baseCreateAction($request, $questionBankId, $type, 'question-manage/material-form.html.twig');
     }
 }

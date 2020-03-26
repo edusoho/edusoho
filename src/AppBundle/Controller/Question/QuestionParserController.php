@@ -2,13 +2,13 @@
 
 namespace AppBundle\Controller\Question;
 
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use ExamParser\Parser\Parser;
 use ExamParser\Reader\ReadDocx;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Content\Service\FileService;
 use Biz\User\Service\TokenService;
-use Biz\Course\Service\CourseService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File as FileObject;
@@ -21,10 +21,8 @@ class QuestionParserController extends BaseController
         $templateInfo = $this->getTemplateInfo($type);
         if ($request->isMethod('POST')) {
             $file = $request->files->get('importFile');
-            $ext = FileToolkit::getFileExtension($file);
-            $user = $this->getCurrentUser();
 
-            if ('docx' == $ext) {
+            if ('docx' == FileToolkit::getFileExtension($file)) {
                 $result = $this->getFileService()->uploadFile('course_private', $file);
                 $uploadFile = $this->getFileService()->parseFileUri($result['uri']);
                 try {
@@ -33,7 +31,6 @@ class QuestionParserController extends BaseController
                     return $this->render($templateInfo['readErrorModalTemplate']);
                 }
 
-                $cacheFilePath = $this->cacheQuestions($questions, $uploadFile);
                 $token = $this->getTokenService()->makeToken('upload.course_private_file', array(
                     'data' => array(
                         'id' => $result['id'],
@@ -41,10 +38,10 @@ class QuestionParserController extends BaseController
                         'fileuri' => $result['uri'],
                         'filepath' => $uploadFile['fullpath'],
                         'questionBankId' => $questionBank['id'],
-                        'cacheFilePath' => $cacheFilePath,
+                        'cacheFilePath' => $this->cacheQuestions($questions, $uploadFile),
                     ),
                     'duration' => 86400,
-                    'userId' => $user['id'],
+                    'userId' => $this->getCurrentUser()->getId(),
                 ));
 
                 return $this->createJsonResponse(array(
@@ -136,10 +133,9 @@ class QuestionParserController extends BaseController
 
     protected function cacheQuestions($questions, $uploadFile)
     {
-        $questionsJson = json_encode($questions);
         $fileSystem = new Filesystem();
         $filePath = $uploadFile['fullpath'].'json';
-        $fileSystem->dumpFile($filePath, $questionsJson);
+        $fileSystem->dumpFile($filePath, json_encode($questions));
 
         return $filePath;
     }
@@ -190,18 +186,18 @@ class QuestionParserController extends BaseController
     }
 
     /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->createService('ItemBank:Item:ItemService');
+    }
+
+    /**
      * @return FileService
      */
     protected function getFileService()
     {
         return $this->createService('Content:FileService');
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
     }
 }

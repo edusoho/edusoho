@@ -8,6 +8,7 @@ use AppBundle\Controller\BaseController;
 use Biz\Question\Service\CategoryService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
 
 class QuestionCategoryController extends BaseController
@@ -52,15 +53,15 @@ class QuestionCategoryController extends BaseController
 
     public function editAction(Request $request, $id)
     {
-        if ('POST' == $request->getMethod()) {
+        if ($request->isMethod('POST')) {
             $name = $request->request->get('name', '');
 
-            $this->getQuestionCategoryService()->updateCategory($id, array('name' => $name));
+            $this->getItemCategoryService()->updateItemCategory($id, array('name' => $name));
 
             return $this->createJsonResponse(array('success' => true));
         }
 
-        $category = $this->getQuestionCategoryService()->getCategory($id);
+        $category = $this->getItemCategoryService()->getItemCategory($id);
 
         return $this->render('question-bank/question-category/update-modal.html.twig', array(
             'category' => $category,
@@ -69,16 +70,16 @@ class QuestionCategoryController extends BaseController
 
     public function getQuestionCountAction(Request $request, $id)
     {
-        $children = $this->getQuestionCategoryService()->findCategoryChildrenIds($id);
+        $children = $this->getItemCategoryService()->findCategoryChildrenIds($id);
         $children[] = $id;
-        $questionCount = $this->getQuestionService()->searchCount(array('categoryIds' => $children));
+        $questionCount = $this->getItemService()->countItems(array('category_ids' => $children));
 
         return $this->createJsonResponse(array('questionCount' => $questionCount));
     }
 
     public function deleteAction(Request $request, $id)
     {
-        $this->getQuestionCategoryService()->deleteCategory($id);
+        $this->getItemCategoryService()->deleteItemCategory($id);
 
         return $this->createJsonResponse(array('success' => true));
     }
@@ -124,8 +125,11 @@ class QuestionCategoryController extends BaseController
         return $this->createService('ItemBank:Item:ItemCategoryService');
     }
 
-    protected function getQuestionService()
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
     {
-        return $this->createService('Question:QuestionService');
+        return $this->createService('ItemBank:Item:ItemService');
     }
 }

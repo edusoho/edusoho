@@ -76,8 +76,7 @@ class ManageController extends BaseController
         if (!$this->getQuestionBankService()->canManageBank($data['questionBankId'])) {
             $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
         }
-        $content = $request->getContent();
-        $postData = json_decode($content, true);
+        $postData = json_decode($request->getContent(), true);
         $this->getQuestionService()->importQuestions($postData['questions'], $token);
 
         return $this->createJsonResponse(true);
