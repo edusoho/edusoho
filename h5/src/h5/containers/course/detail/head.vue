@@ -33,11 +33,17 @@
         @sellOut="sellOut"
       />
     </div>
+
     <div
       v-show="['video', 'audio'].includes(sourceType) && !isEncryptionPlus"
       id="course-detail__head--video"
       ref="video"
     />
+    <div class="course-detail__head--btn course-detail__head--activebtn" >
+      <i class="iconfont icon-markdone"></i>
+      学过了
+    </div>
+    <div class="course-detail__head--btn" v-if="false">完成条件</div>
     <tagLink :tag-data="tagData" />
   </div>
 </template>
