@@ -41,7 +41,9 @@
         subject: item,
         type: $('[name=type]').val(),
         showCKEditorData: {
-          publicPath: "http://t5.edusoho.cn/static-dist/libs/es-ckeditor/ckeditor.js",
+          publicPath: '/static-dist/libs/es-ckeditor/ckeditor.js',
+          filebrowserImageUploadUrl: $('[name=image_upload_url]').val(),
+          filebrowserImageDownloadUrl: $('[name=image_download_url]').val(),
         },
       };
     },
