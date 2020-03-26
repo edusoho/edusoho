@@ -548,12 +548,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/exam-parser.git",
-                "reference": "452401330c398adcee7b78e8e43d2e6d900880e4"
+                "reference": "92411b92486e02853dc0738c2df284adf7b24b15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/exam-parser/zipball/452401330c398adcee7b78e8e43d2e6d900880e4",
-                "reference": "452401330c398adcee7b78e8e43d2e6d900880e4",
+                "url": "https://api.github.com/repos/codeages/exam-parser/zipball/92411b92486e02853dc0738c2df284adf7b24b15",
+                "reference": "92411b92486e02853dc0738c2df284adf7b24b15",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -568,7 +568,7 @@
                 "ext-zip": "*",
                 "php": ">=5.3.3",
                 "phpoffice/phpword": "^0.16.0",
-                "ramsey/uuid": "^2.9|^3.9"
+                "ramsey/uuid": "^3.9"
             },
             "require-dev": {
                 "monolog/monolog": "^1.18",
@@ -594,7 +594,7 @@
                 }
             ],
             "description": "Exam Parser",
-            "time": "2020-03-16T02:33:45+00:00"
+            "time": "2020-03-26T01:40:58+00:00"
         },
         {
             "name": "codeages/omnipay-alipay",
@@ -6080,20 +6080,6 @@
             "keywords": [
                 "framework"
             ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-02-29T10:21:57+00:00"
         },
         {
@@ -6622,12 +6608,6 @@
             "keywords": [
                 "Xdebug",
                 "performance"
-            ],
-            "funding": [
-                {
-                    "url": "https://packagist.com",
-                    "type": "custom"
-                }
             ],
             "time": "2020-03-01T12:26:26+00:00"
         },
@@ -8020,6 +8000,5 @@
         "php": ">=5.5.9",
         "ext-json": "*"
     },
-    "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "platform-dev": []
 }

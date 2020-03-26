@@ -562,12 +562,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/exam-parser.git",
-            "reference": "452401330c398adcee7b78e8e43d2e6d900880e4"
+            "reference": "92411b92486e02853dc0738c2df284adf7b24b15"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/exam-parser/zipball/452401330c398adcee7b78e8e43d2e6d900880e4",
-            "reference": "452401330c398adcee7b78e8e43d2e6d900880e4",
+            "url": "https://api.github.com/repos/codeages/exam-parser/zipball/92411b92486e02853dc0738c2df284adf7b24b15",
+            "reference": "92411b92486e02853dc0738c2df284adf7b24b15",
             "shasum": "",
             "mirrors": [
                 {
@@ -582,20 +582,20 @@
             "ext-zip": "*",
             "php": ">=5.3.3",
             "phpoffice/phpword": "^0.16.0",
-            "ramsey/uuid": "^2.9|^3.9"
+            "ramsey/uuid": "^3.9"
         },
         "require-dev": {
             "monolog/monolog": "^1.18",
             "phpunit/phpunit": "^4 || ^5 || ^6"
         },
-        "time": "2020-03-16T02:33:45+00:00",
+        "time": "2020-03-26T01:40:58+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
                 "dev-master": "1.0.x-dev"
             }
         },
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-4": {
                 "ExamParser\\": "src"
@@ -1182,12 +1182,6 @@
         "keywords": [
             "Xdebug",
             "performance"
-        ],
-        "funding": [
-            {
-                "url": "https://packagist.com",
-                "type": "custom"
-            }
         ]
     },
     {
@@ -7807,20 +7801,6 @@
         "homepage": "https://symfony.com",
         "keywords": [
             "framework"
-        ],
-        "funding": [
-            {
-                "url": "https://symfony.com/sponsor",
-                "type": "custom"
-            },
-            {
-                "url": "https://github.com/fabpot",
-                "type": "github"
-            },
-            {
-                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                "type": "tidelift"
-            }
         ]
     },
     {
