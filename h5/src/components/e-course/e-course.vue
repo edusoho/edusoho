@@ -72,7 +72,6 @@ export default {
       }
       const courseSet = this.course.courseSet
       let imageSrc = courseSet ? courseSet.cover.middle : this.order.cover.middle
-      console.log(imageSrc ? imageSrc : '');
       return imageSrc ? imageSrc : ''
     },
     title() {
