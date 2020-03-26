@@ -1,0 +1,4 @@
+{% set questionTypesDict = getQuestionTypes() %}
+{% set question = item.questions[0] %}
+
+{% include 'question-bank/widgets/picked-item/base-item-question.html.twig' %}

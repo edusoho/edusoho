@@ -1,6 +1,6 @@
 {% set questionTypesDict = getQuestionTypes() %}
 {% set questionTypesSeq = getQuestionTypeSeq() %}
-{% set questionTypesDict = sortQuestionTypes(questionTypesDict, testpaper.questionTypeSeq|default([])) %}
+{% set questionTypesDict = sortQuestionTypes(questionTypesDict, sections|default([])) %}
 <div class="panel-col" id="testpaper-items-manager">
   <div class="clearfix">
     <div class="clearfix mbm">
@@ -10,20 +10,16 @@
           <li class="question-type-table{% if loop.index == 1 %} active{% endif %}">
             <a href="javascript:" data-type="{{ type }}" data-name="{{ questionTypesDict[type] }}" class="testpaper-nav-link"><span class="js-move-icon mrm"><i class="es-icon es-icon-yidong"></i></span><span class="mlm">{{ questionTypesDict[type] }}</span>
               <span class="js-count-{{ type }}">
-              {% if type == 'material' %}
-                ({{ subCounts|default(0) }})
-              {% else %}
-                ({{ count(questions[type]|default([])) }})
+                ({{ sections[type]['question_count']|default(0) }})
               </span>
-              {% endif %}
             </a>
-            <input type="hidden" name="questionTypeSeq" value="{{ questionTypesSeq[type] }}">
+{#            <input type="hidden" name="questionTypeSeq" value="{{ questionTypesSeq[type] }}">#}
           </li>
         {% endfor %}
       </ul>
     </div>
     <div id="testpaper-stats" class="color-success"></div>
-    {% for type, typeDict in questionTypesDict if typeDict %}
+    {% for type, name in questionTypesDict if questionTypesDict %}
       <div class="js-question-table {% if loop.index != 1 %}hide{% endif %}" id="testpaper-table-{{ type }}">
         <table class="table table-striped table-hover tab-content">
           <thead>
@@ -32,11 +28,7 @@
             <th><input type="checkbox" data-role="batch-select"></th>
             <th width="8%">{{'course.testpaper_manage.question.seq'|trans}}</th>
             <th width="35%">{{'course.testpaper_manage.question.stem'|trans}}</th>
-            {% if type in ['choice', 'uncertain_choice'] %}
-              <th width="10%">{{'course.testpaper_manage.question.score'|trans}}</th>
-              <th width="10%">{{'course.testpaper_manage.create.questions_setup.missing_score'|trans}}</th>
-            {% elseif type == 'material' %}
-              <th width="10%">{{'course.testpaper_manage.question.type'|trans}}</th>
+            {% if type in ['choice', 'uncertain_choice', 'material'] %}
               <th width="10%">{{'course.testpaper_manage.question.score'|trans}}</th>
               <th width="10%">{{'course.testpaper_manage.create.questions_setup.missing_score'|trans}}</th>
             {% else %}
@@ -47,14 +39,11 @@
           </tr>
           </thead>
           <tbody data-type="{{ type }}" class="testpaper-table-tbody" data-role="question-body">
-          {% for question in questions[type]|default(null) if question %}
-            {% if not question.isDeleted|default(null) %}
-              {% include 'question-bank/testpaper/manage/question-picked.html.twig' %}
-              {% if question.subs|default(null) %}
-                {% for question in question.subs %}
-                  {% include 'question-bank/testpaper/manage/question-picked.html.twig' %}
-                {% endfor %}
-              {% endif %}
+          {% for item in sections[type].items|default([]) if sections %}
+            {% if item.type == 'material' %}
+              {% include 'question-bank/widgets/picked-item/material-question-item.html.twig' %}
+            {% else %}
+              {% include 'question-bank/widgets/picked-item/question-item.html.twig' %}
             {% endif %}
           {% endfor %}
           </tbody>

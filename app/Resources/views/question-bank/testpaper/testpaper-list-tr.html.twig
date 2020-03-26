@@ -12,7 +12,7 @@
   </thead>
   <tbody>
   {% for testpaper in testpapers %}
-    {% set user = users[testpaper.updatedUserId] %}
+    {% set user = users[testpaper.updated_user_id] %}
     <tr data-role='item'>
       <td><input value="{{ testpaper.id }}" type="checkbox" class="js-checkbox" data-id="{{ testpaper.id }}"></td>
       <td>
@@ -24,15 +24,12 @@
         {% if testpaper.status == 'closed' %}{{'course.testpaper_manage.testpaper_status.closed'|trans}}{% endif %}
       </td>
       <td>
-        {{'course.testpaper_manage.count'|trans({'%itemCount%': testpaper.itemCount})}} <span class="color-gray">/</span> {{'course.testpaper_manage.score'|trans({'%score%': testpaper.score})}}
-        {% if testpaper.passedCondition[0]|default(0) > 0 %}
-          <div class="color-gray"><small>{{'course.testpaper_manage.passed_condition'|trans({'%passedCondition%': testpaper.passedCondition[0]|default(0) })}}</small></div>
-        {% endif %}
+        {{'course.testpaper_manage.count'|trans({'%itemCount%': testpaper.item_count})}} <span class="color-gray">/</span> {{'course.testpaper_manage.score'|trans({'%score%': testpaper.total_score})}}
       </td>
       <td>
         {{ web_macro.user_link(user) }}
         <br />
-        <span class="color-gray text-sm">{{testpaper.updatedTime | date('Y-n-d H:i:s')}}</span>
+        <span class="color-gray text-sm">{{testpaper.updated_time | date('Y-n-d H:i:s')}}</span>
       </td>
       <td>
         <div class="btn-group">

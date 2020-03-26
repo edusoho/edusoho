@@ -12,7 +12,7 @@ class TestpaperForm {
     this.scoreSlider = null;
     this.$scoreModal = $('.js-score-modal');
     this.$modal = $('#testpaper-confirm-modal');
-    this.questions = [];
+    this.sections = [];
     this.questionsCount = 0;
     this.$typeNav = this.$form.find('#testpaper-question-nav');
     new BatchSelect(this.$questionForm);
@@ -66,38 +66,54 @@ class TestpaperForm {
   _calTestpaperStats() {
     let stats = {};
     let self = this;
+    let seq = 1;
     this.$typeNav.find('li').each(function() {
       let type = $(this).find('a').data('type'),
         name = $(this).find('a').data('name');
 
       stats[type] = {name:name, count:0, score:0, missScore:0};
+      let section = {name:name, seq:seq++, items:[]};
 
-      self.$questionForm.find('#testpaper-table-' + type).find('.js-question-score').each(function() {
-        let itemType = $(this).closest('tr').data('type');
-        let score = itemType === 'material' ? 0 : parseFloat($(this).attr('data-score'));
-        let question = {};
+      self.$questionForm.find('#testpaper-table-' + type).find('.js-item').each(function() {
+        let itemType = $(this).data('type');
+        let item = {
+          id: $(this).data('id'),
+          seq: $(this).find('.seq').text(),
+        };
 
-        if (itemType !== 'material') {
+        let questions = [];
+        if (itemType == 'material') {
+          $(this).nextUntil('.js-item').each(function () {
+            let questionScore = parseFloat($(this).find('.js-question-score').attr('data-score'));
+            let question = {
+              id: $(this).data('questionId'),
+              score: questionScore
+            };
+            if ($(this).find('.js-miss-score').length > 0) {
+              question['missScore'] = parseFloat($(this).find('.js-miss-score').data('missScore'));
+            }
+            questions.push(question);
+            stats[type]['count'] ++;
+            stats[type]['score'] += questionScore;
+          });
+        } else {
+          let score = parseFloat($(this).find('.js-question-score').attr('data-score'));
+          let question = {
+            id: $(this).data('questionId'),
+            score: score
+          };
+          if ($(this).find('.js-miss-score').length > 0) {
+            question['missScore'] = parseFloat($(this).find('.js-miss-score').data('missScore'));
+          }
+          questions.push(question);
+          stats[type]['score'] += score;
           stats[type]['count'] ++;
         }
 
-        stats[type]['score'] += score;
-
-        let missScore = 0;
-
-        if ($(this).next('.js-miss-score').length > 0) {
-          missScore = parseFloat($(this).next('.js-miss-score').data('missScore'));
-        }
-
-        stats[type]['missScore'] = missScore;
-
-        question['id'] = $(this).closest('tr').data('id');
-        question['score'] = score;
-        question['missScore'] = missScore;
-        question['type'] = type;
-
-        self.questions.push(question);
+        item['questions'] = questions;
+        section['items'].push(item);
       });
+      self.sections.push(section);
     });
 
     let total = {name:Translator.trans('activity.testpaper_manage.question_total_score'), count:0, score:0};
@@ -129,7 +145,7 @@ class TestpaperForm {
         isOk = false;
       }
 
-      if (!/^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(score)) {
+      if (!/^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(score) && itemType !== 'material') {
         cd.message({type: 'danger', message: Translator.trans('activity.testpaper_manage.question_score_error_hint') });
         isOk = false;
       }
@@ -157,7 +173,7 @@ class TestpaperForm {
     let $target = $(event.currentTarget);
     let id = $target.closest('tr').data('id');
     let $tbody =  $target.closest('tbody');
-    $tbody.find('[data-parent-id="'+id+'"]').remove();
+    $tbody.find('[data-id="'+id+'"]').remove();
     $target.closest('tr').remove();
     $tbody.trigger('lengthChange');
     this.refreshSeqs();
@@ -256,12 +272,12 @@ class TestpaperForm {
   showPickModal (event) {
     let excludeIds = [];
     let $target = $(event.currentTarget);
-    this.$form.find('[name="questionIds[]"]').each(function(){
+    this.$form.find('[name="itemIds[]"]').each(function(){
       excludeIds.push($(this).val());
     });
 
     let $modal = $('#modal').modal();
-    $.get($target.data('url'), {excludeIds: excludeIds.join(',')}, function(html) {
+    $.get($target.data('url'), {exclude_ids: excludeIds.join(',')}, function(html) {
       $modal.html(html);
     });
   }
@@ -382,23 +398,15 @@ class TestpaperForm {
       return;
     }
 
-    let questionTypeSeq = [];
-    $("input[name='questionTypeSeq']").each(function(){
-      questionTypeSeq.push($(this).val());
-    });
-
     $target.button('loading').addClass('disabled');
 
     let baseInfo = {
       name: this.$form.find('#name-field').val(),
-      description: this.$form.find('#description-field').val()
+      description: this.$form.find('#description-field').val(),
     };
-    let questionInfo = {
-      questions: JSON.stringify(this.questions),
-      questionTypeSeq: JSON.stringify(questionTypeSeq)
-    };
+    let sections = JSON.stringify(this.sections);
 
-    $.post(this.$form.data('url'),{baseInfo: baseInfo, questionInfo: questionInfo},function(result) {
+    $.post(this.$form.data('url'),{baseInfo: baseInfo, sections: sections},function(result) {
       if (result.goto) {
         window.location.href = result.goto;
       }
