@@ -2240,9 +2240,9 @@ es-abstract@^1.7.0:
     is-callable "^1.1.3"
     is-regex "^1.0.4"
 
-es-ckeditor@4.7.2-patch11:
+"es-ckeditor@git+https://github.com/cd-fez/es-ckeditor.git#master":
   version "4.7.2-patch11"
-  resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch11.tgz#bfc750884c2a0c334a4ff1822c603c4cc732a7e2"
+  resolved "git+https://github.com/cd-fez/es-ckeditor.git#dd6e44e5ef41839d85b0620347bbcdbac955d9a1"
 
 es-commit-msg-validator@1.0.2:
   version "1.0.2"
