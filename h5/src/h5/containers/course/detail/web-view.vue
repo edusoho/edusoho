@@ -41,6 +41,7 @@ export default {
     })
     if (['ppt', 'doc'].includes(this.media)) {
       this.initPlayer(player)
+      this.pageLength = (player.media && player.media.images && player.media.images.length) || 0;
     } else {
       // text类型不需要播放器
       this.$refs.text.innerHTML = player.media.content
@@ -113,7 +114,7 @@ export default {
           this.taskPipe.initInterval();
         })
         .on('pagechanged', (e) => {
-          if (e.page = this.pageLength) {
+          if (e.page === this.pageLength) {
             this.taskPipe.trigger('end');
           }
         })

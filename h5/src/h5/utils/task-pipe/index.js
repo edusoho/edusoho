@@ -74,6 +74,9 @@ class TaskPipe extends Event {
     return Api[this.options.reportMap[state]]({
       query: this.reportData,
       data: this.options.formatReportData(data)
+    }).then(res => {
+      this.trigger(state, res);
+      return res;
     });
   }
 
