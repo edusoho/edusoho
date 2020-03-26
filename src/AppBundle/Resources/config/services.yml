@@ -84,6 +84,7 @@ services:
 
     biz.service_provider.collector:
         class: Biz\ServiceProviderCollector
+        public: true
 
     coupon_service_provider:
         class: Biz\Coupon\CouponServiceProvider

@@ -12,6 +12,9 @@ use Biz\System\Service\SettingService;
 use Biz\File\Service\UploadFileService;
 use Biz\User\Service\NotificationService;
 use Biz\Classroom\Service\ClassroomService;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use VipPlugin\Biz\Vip\Service\VipService;
@@ -313,10 +316,10 @@ class ThreadController extends CourseBaseController
     protected function createThreadForm($data = array())
     {
         return $this->createNamedFormBuilder('thread', $data)
-            ->add('title', 'text')
-            ->add('content', 'textarea')
-            ->add('type', 'hidden')
-            ->add('courseId', 'hidden')
+            ->add('title', TextType::class)
+            ->add('content', TextareaType::class)
+            ->add('type', HiddenType::class)
+            ->add('courseId', HiddenType::class)
             ->getForm();
     }
 
@@ -737,9 +740,9 @@ class ThreadController extends CourseBaseController
     protected function createPostForm($data = array())
     {
         return $this->createNamedFormBuilder('post', $data)
-            ->add('content', 'textarea')
-            ->add('courseId', 'hidden')
-            ->add('threadId', 'hidden')
+            ->add('content', TextareaType::class)
+            ->add('courseId', HiddenType::class)
+            ->add('threadId', HiddenType::class)
             ->getForm();
     }
 }
