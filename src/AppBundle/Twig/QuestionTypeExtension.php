@@ -70,23 +70,26 @@ class QuestionTypeExtension extends \Twig_Extension
         return $typeSeq;
     }
 
-    public function sortQuestionTypes($types, $questionTypeSeq = array())
+    public function sortQuestionTypes($types, $sections = array())
     {
-        if (empty($questionTypeSeq)) {
+        if (empty($sections)) {
             return $types;
         }
 
         $newTypes = array();
         $questionExtension = $this->container->get('extension.manager')->getQuestionTypes();
 
-        $typeSeq = array();
-        array_walk($questionExtension, function ($value, $type) use (&$typeSeq) {
-            $typeSeq[$type] = $value['seqNum'];
-        });
-        $typeSeq = array_flip($typeSeq);
-        foreach ($questionTypeSeq as $seq) {
-            $newTypes[$typeSeq[$seq]] = $types[$typeSeq[$seq]];
+        foreach ($sections as $section) {
+            $newTypes[$section['type']] = $section['name'];
         }
+
+        $existTypes = array_keys($newTypes);
+        $container = $this->container;
+        array_walk($questionExtension, function ($value, $type) use (&$newTypes, $container, $existTypes) {
+            if (!in_array($type, $existTypes)) {
+                $newTypes[$type] = $container->get('translator')->trans($value['name']);
+            }
+        });
 
         return $newTypes;
     }
