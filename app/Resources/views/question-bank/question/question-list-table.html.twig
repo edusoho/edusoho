@@ -56,9 +56,6 @@
         </td>
         <td>
           <div class="btn-group">
-            {% if question.type == 'material'%}
-              <a href="{{ path('question_bank_manage_question_list', {id:questionBank.id, parentId:question.id}) }}" class="color-info">{{'course.question_manage.question.manage_sub_btn'|trans}}</a>
-            {% endif %}
             <a  href="javascript:" class="color-info js-update-btn" data-url="{{ path('question_bank_manage_question_update', {id:questionBank.id, questionId:question.id, goto: paginator.getPageUrl(paginator.currentPage)}) }}"  class="color-info"> {{'course.question_manage.question.edit_btn'|trans}}</a>
             <a href="javascript:" class="color-info js-delete-btn" data-name='{{'course.question_manage.question'|trans}}{% if question.type == 'material'%}({{'course.question_manage.question.include_sub'|trans}}){% endif %}'
             data-url="{{ path('question_bank_manage_question_delete', {id: questionBank.id, questionId: question.id}) }}">
