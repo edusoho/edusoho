@@ -86,12 +86,13 @@
 </template>
 <script>
 import redirectMixin from '@/mixins/saveRedirect'
+import copyUrl from '@/mixins/copyUrl'
 import { mapState, mapMutations } from 'vuex'
 import * as types from '@/store/mutation-types'
 import { Dialog, Toast } from 'vant'
 export default {
   name: 'LessonDirectory',
-  mixins: [redirectMixin],
+  mixins: [redirectMixin,copyUrl],
   props: {
     lesson: {
       type: Array,
@@ -176,12 +177,17 @@ export default {
     lessonCellClick(task) {
       // 课程错误和未发布状态，不允许学习任务
       if (this.errorMsg) {
-        this.$emit('showDialog')
-        return
+        this.$emit("showDialog");
+        return;
       }
-      if (task.status === 'create') {
-        Toast('敬请期待')
-        return
+      if (task.lock) {
+        Toast("需要解锁上一个任务");
+        return;
+      }
+      //课程再创建阶段或者和未发布状态
+      if (task.status === "create" || task.status !== "published") {
+        Toast("敬请期待");
+        return;
       }
       const nextTask = {
         id: task.id
@@ -298,7 +304,7 @@ export default {
           })
           break
         default:
-          Toast('暂不支持此类型')
+          this.copyPcUrl(task.courseUrl);
       }
     },
     // 任务图标(缺少下载)
