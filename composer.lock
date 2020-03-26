@@ -7945,6 +7945,18 @@
                     }
                 ]
             },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-xml/zipball/e48d7bcd5b6d0aec5884ee351a3ea4d3abb58f13",
+                "reference": "e48d7bcd5b6d0aec5884ee351a3ea4d3abb58f13",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
             "require": {
                 "php": ">=5.3.3"
             },

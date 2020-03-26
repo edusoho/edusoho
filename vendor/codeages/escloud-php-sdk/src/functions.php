@@ -61,6 +61,7 @@ namespace ESCloud\SDK {
         for ($i = 0; $i < $length; ++$i) {
             $str .= $keyspace[random_int(0, $max)];
         }
+
         return $str;
     }
 }

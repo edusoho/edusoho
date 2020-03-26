@@ -18,7 +18,7 @@ class AccountDestroyInfo extends AbstractResource
 
         return array(
             'applied' => empty($record) ? false : true,
-            'agreement' => $this->getAgreement($siteName)
+            'agreement' => $this->getAgreement($siteName),
         );
     }
 
