@@ -123,10 +123,7 @@ class QuestionController extends BaseController
 
         $goto = $request->query->get(
             'goto',
-            $this->generateUrl(
-                'question_bank_manage_question_list',
-                array('id' => $id)
-            )
+            $this->generateUrl('question_bank_manage_question_list', array('id' => $id))
         );
         if ($request->isMethod('POST')) {
             $this->getItemService()->updateItem($item['id'], json_decode($request->getContent(), true));

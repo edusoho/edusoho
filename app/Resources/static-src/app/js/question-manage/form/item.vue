@@ -8,6 +8,7 @@
       :type="type"
       :showCKEditorData="showCKEditorData"
       @getData="getData"
+      @goBack="goBack"
     ></item-manage>
     <item-manage
       v-if="mode === 'edit'"
@@ -18,6 +19,7 @@
       :type="type"
       :showCKEditorData="showCKEditorData"
       @getData="getData"
+      @goBack="goBack"
     ></item-manage>
   </div>
 </template>
@@ -45,7 +47,9 @@
     },
     methods: {
       getData(data) {
-        data['submission'] = '';
+        let submission = data.isAgain ? 'continue' : '';
+        data = data.data;
+        data['submission'] = submission;
         data['type'] = $('[name=type]').val();
         let mode = $('[name=mode]').val();
         $.ajax({
@@ -61,6 +65,9 @@
             window.location.href = resp.goto;
           }
         })
+      },
+      goBack() {
+        window.location.href = $('[name=back_url]').val();
       }
     }
   }
