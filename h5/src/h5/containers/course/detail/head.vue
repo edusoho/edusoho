@@ -304,6 +304,10 @@ export default {
         });
         player.on("paused", () => {
           this.isPlaying = false;
+           if (player.taskId !== this.taskId) {
+            return;
+          }
+          this.taskPipe.flush();
         });
         this.player = player;
         player
