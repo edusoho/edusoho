@@ -57,6 +57,7 @@ import { Toast, Dialog } from "vant";
 import countDown from "&/components/e-marketing/e-count-down/index";
 import tagLink from "&/components/e-tag-link/e-tag-link";
 import qs from "qs";
+import report from "@/mixins/course/report"
 import TaskPipe from '@/utils/task-pipe/index';
 
 export default {
@@ -64,6 +65,7 @@ export default {
     countDown,
     tagLink
   },
+  mixins:[report],
   props: {
     courseSet: {
       type: Object,
@@ -144,47 +146,54 @@ export default {
         });
       }
     },
-    watchTime() {
-      if (this.isAndroid() && this.taskPipe) {
-        return Math.floor(this.taskPipe.getDuration() / 60000);
-      }
-      let timeCount = this.currentTime - this.startTime;
-      this.timeChangingList.forEach(item => {
-        timeCount += (item.end - item.start);
-      });
-      return Math.floor(timeCount / 60);
-    },
+    // watchTime() {
+    //   if (this.isAndroid() && this.taskPipe) {
+    //     return Math.floor(this.taskPipe.getDuration() / 60000);
+    //   }
+    //   let timeCount = this.currentTime - this.startTime;
+    //   this.timeChangingList.forEach(item => {
+    //     timeCount += (item.end - item.start);
+    //   });
+    //   return Math.floor(timeCount / 60);
+    // },
     isAndroid() {
       return !!navigator.userAgent.match(new RegExp("android", "i"));
     },
-    initTaskPipe() {
-      if (this.taskPipe) {
-        return;
-      }
-      this.taskPipe = new TaskPipe({
-        reportData: {
-          courseId: this.selectedPlanId,
-          taskId: this.taskId
-        },
-        formatReportData: (data) => {
-          data.watchTime = this.watchTime()
-          return data;
-        }
-      });
-      console.log(this.taskPipe);
-      this.taskPipe.on('courseData', (res) => {
-        this.finishCondition = res.activity && res.activity.finishCondition;
-      });
-      this.taskPipe.on('report.finish', () => {
-        this.enableFinish = true;
-      })
-    },
+    // initTaskPipe() {
+    //   if (this.taskPipe) {
+    //     return;
+    //   }
+    //   this.taskPipe = new TaskPipe({
+    //     reportData: {
+    //       courseId: this.selectedPlanId,
+    //       taskId: this.taskId
+    //     },
+    //     formatReportData: (data) => {
+    //       data.watchTime = this.watchTime()
+    //       return data;
+    //     }
+    //   });
+    //   console.log(this.taskPipe);
+    //   this.taskPipe.on('courseData', (res) => {
+    //     this.finishCondition = res.activity && res.activity.finishCondition;
+    //   });
+    //   this.taskPipe.on('report.finish', () => {
+    //     this.enableFinish = true;
+    //   })
+    // },
     initHead() {
       if (["video", "audio"].includes(this.sourceType)) {
         window.scrollTo(0, 0);
-        this.initTaskPipe();
+        this.initReportData(this.selectedPlanId,this.taskId,this.sourceType);
+      //  this.initTaskPipe();
+        this.getFinishCondition();
         this.initPlayer();
       }
+    },
+    getFinishCondition(){
+      this.getCourseData(this.selectedPlanId,this.taskId).then((res)=>{
+        this.finishCondition = res.activity && res.activity.finishCondition;
+      })
     },
     viewAudioDoc() {
       this.isCoverOpen = true;
@@ -303,38 +312,47 @@ export default {
           if (player.taskId !== this.taskId) {
             return;
           }
-          this.taskPipe.flush();
+           this.reprtData();
+         // this.taskPipe.flush();
         });
         player
         .on('ready', () => {
           if (player.taskId !== this.taskId) {
             return;
           }
-          console.log("开始")
-          this.taskPipe.initInterval();
+          this.intervalReportData();
+         // this.taskPipe.initInterval();
         })
         player.on('datapicker.start', (e) => {
           if (player.taskId !== this.taskId) {
             return;
           }
-          this.timeChangingList.push({
-            start: this.startTime,
-            end: e.end,
-          });
-          this.startTime = e.start;
+          // this.timeChangingList.push({
+          //   start: this.startTime,
+          //   end: e.end,
+          // });
+          // this.startTime = e.start;
         })
         player.on('ended', () => {
           if (player.taskId !== this.taskId) {
             return;
           }
-          this.taskPipe.trigger('end');
+          if(this.finishCondition.type==="end"){
+            this.reprtData("finish");
+          }
+         // this.taskPipe.trigger('end');
         })
         player.on('timeupdate', (e) => {
           if (player.taskId !== this.taskId) {
             return;
           }
-          this.currentTime = e.currentTime;
-          this.taskPipe.trigger('time', this.watchTime());
+          if(this.finishCondition.type==="time"){
+            if((e.currentTime/60) >= parseInt(this.finishCondition.time)){
+               this.reprtData("finish");
+            }
+          }
+         // this.currentTime = e.currentTime;
+         // this.taskPipe.trigger('time', this.watchTime());
         })
       });
     },

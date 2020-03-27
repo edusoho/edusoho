@@ -45,7 +45,7 @@ export default [
   {
     // 课时上报事件
     name: 'reportTask',
-    url: '/courses/{courseId}/task/{taskId}/events/${events}',
+    url: '/courses/{courseId}/task/{taskId}/events/{events}',
     method: 'PUT',
     disableLoading: true
   },
