@@ -64,11 +64,11 @@ export default {
   },
   watch: {
     selectedData() {
-      const { courseList, selectedData } = this.searchCourseList;
+      const { courseList, selectedData, paging } = this.searchCourseList;
 
       if (this.isSelectedDataSame(selectedData)) {
         this.courseList = courseList;
-        this.isRequestCompile = true;
+        this.requestCoursesSuccess(paging);
 
         return;
       }
@@ -78,15 +78,7 @@ export default {
         offset: this.offset,
         limit: this.limit
       }
-
       this.requestCourses(setting)
-        .then(() => {
-          if (this.courseList.length !== 0) {
-            this.isEmptyCourse = false
-          } else {
-            this.isEmptyCourse = true
-          }
-        })
     }
   },
   created() {
@@ -126,11 +118,8 @@ export default {
       this.offset = 0
     },
 
-    judegIsAllCourse(courseInfomation) {
-      if (this.courseList.length == courseInfomation.paging.total) {
-        return true
-      }
-      return false
+    judegIsAllCourse(paging) {
+      return this.courseList.length == paging.total;
     },
 
     requestCourses(setting) {
@@ -138,23 +127,28 @@ export default {
       const config = Object.assign({}, this.selectedData, setting)
       return Api.getCourseList({
         params: config
-      }).then((data) => {
-        data.data.forEach(element => {
-          this.courseList.push(element)
-        })
+      }).then(({ data, paging }) => {
+        data.forEach(element => {
+          this.courseList.push(element);
+        });
         this.setCourseList({
           selectedData: this.selectedData,
-          courseList: this.courseList
+          courseList: this.courseList,
+          paging,
         });
-        const isAllCourse = this.judegIsAllCourse(data)
-        if (!isAllCourse) {
-          this.offset = this.courseList.length
-        }
-        this.isAllCourse = isAllCourse
-        this.isRequestCompile = true
+        this.requestCoursesSuccess(paging);
       }).catch((err) => {
         console.log(err, 'error')
       })
+    },
+
+    requestCoursesSuccess(paging = {}) {
+      this.isAllCourse = this.judegIsAllCourse(paging)
+      if (!this.isAllCourse) {
+        this.offset = this.courseList.length
+      }
+      this.isRequestCompile = true
+      this.isEmptyCourse = this.courseList.length === 0
     },
 
     sendRequest() {

@@ -12,7 +12,8 @@ const state = {
   OptimizationCourseLessons: [], // 优化后的课程中所有任务
   searchCourseList: {
     selectedData: {},
-    courseList: []
+    courseList: [],
+    paging: {}
   }
 };
 
