@@ -24,6 +24,7 @@ class TaskPipe extends Event {
   constructor(options) {
     super(options);
     this.delta = 0;
+    this.num = Math.random();
     this.options = Object.assign(DEFAULT_OPTIONS, options);
     this.reportData = this.options.reportData;
     this.startDate = Date.now();
@@ -54,6 +55,7 @@ class TaskPipe extends Event {
   }
 
   initInterval() {
+    console.error(this.num);
     window.onbeforeunload = () => {
       this.clearInterval();
       this.flush();

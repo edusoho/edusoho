@@ -121,12 +121,18 @@ export default {
     taskId(value, oldValue) {
       // 未登录情况下，详情页面不需要初始化播放器
       if (this.$route.name === "course" && !this.joinStatus) return;
-      if (value > 0) this.initHead();
+      if (value > 0) {
+        this.taskPipe && this.taskPipe.clearInterval();
+        this.initHead();
+      }
     }
   },
   created() {
     this.initHead();
     this.showTagLink();
+  },
+  beforeDestroy() {
+    this.taskPipe.clearInterval();
   },
   /*
    * 试看需要传preview=1
@@ -155,6 +161,9 @@ export default {
       return !!navigator.userAgent.match(new RegExp("android", "i"));
     },
     initTaskPipe() {
+      if (this.taskPipe) {
+        return;
+      }
       this.taskPipe = new TaskPipe({
         reportData: {
           courseId: this.selectedPlanId,
@@ -277,7 +286,11 @@ export default {
       this.$store.commit("UPDATE_LOADING_STATUS", true);
       this.loadPlayerSDK().then(SDK => {
         this.$store.commit("UPDATE_LOADING_STATUS", false);
+        if (this.player) {
+          this.player.taskId = -1;
+        }
         const player = new SDK(options);
+        player.taskId = this.taskId;
         player.on("playing", () => {
           this.isPlaying = true;
         });
@@ -295,9 +308,15 @@ export default {
         this.player = player;
         player
         .on('ready', () => {
+          if (player.taskId !== this.taskId) {
+            return;
+          }
           this.taskPipe.initInterval();
         })
         player.on('datapicker.start', (e) => {
+          if (player.taskId !== this.taskId) {
+            return;
+          }
           this.timeChangingList.push({
             start: this.startTime,
             end: e.end,
@@ -305,9 +324,15 @@ export default {
           this.startTime = e.start;
         })
         player.on('ended', () => {
+          if (player.taskId !== this.taskId) {
+            return;
+          }
           this.taskPipe.trigger('end');
         })
         player.on('timeupdate', (e) => {
+          if (player.taskId !== this.taskId) {
+            return;
+          }
           this.currentTime = e.currentTime;
           this.taskPipe.trigger('time', this.watchTime());
         })

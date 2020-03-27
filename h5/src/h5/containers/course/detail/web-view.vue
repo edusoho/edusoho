@@ -73,6 +73,9 @@ export default {
       }
     },
     initTaskPipe() {
+      if (this.taskPipe) {
+        return;
+      }
       const { courseId, taskId, type } = this.$route.query
       this.taskPipe = new TaskPipe({
         reportData: {
@@ -137,6 +140,7 @@ export default {
           }
         })
         player.on('ready', () => {
+          this.taskPipe.clearInterval();
           this.taskPipe.initInterval();
         })
         player.on('pagechanged', (e) => {

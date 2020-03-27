@@ -48,6 +48,9 @@ export default {
     this.initTaskPipe();
     this.initPlayer()
   },
+  beforeDestroy() {
+    this.taskPipe.clearInterval();
+  },
   /*
   * 试看需要传preview=1
   * eg: /api/courses/1/task_medias/1?preview=1
@@ -139,6 +142,7 @@ export default {
         const player = new SDK(options)
         player
         .on('ready', () => {
+          this.taskPipe.clearInterval();
           this.taskPipe.initInterval();
         })
         player.on('datapicker.start', (e) => {
