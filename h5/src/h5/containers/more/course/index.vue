@@ -24,7 +24,7 @@ import Api from '@/api'
 import treeSelect from '&/components/e-tree-select/e-tree-select.vue'
 import lazyLoading from '&/components/e-lazy-loading/e-lazy-loading.vue'
 import emptyCourse from '../../learning/emptyCourse/emptyCourse.vue'
-import { mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import * as types from '@/store/mutation-types'
 import CATEGORY_DEFAULT from '@/config/category-default-config.js'
 
@@ -57,8 +57,21 @@ export default {
       dataDefault: CATEGORY_DEFAULT['course_list']
     }
   },
+  computed: {
+    ...mapState({
+      searchCourseList: state => state.course.searchCourseList
+    }),
+  },
   watch: {
     selectedData() {
+      const { courseList, selectedData } = this.searchCourseList;
+
+      if (this.isSelectedDataSame(selectedData)) {
+        this.courseList = courseList;
+
+        return;
+      }
+
       this.initCourseList()
       const setting = {
         offset: this.offset,
@@ -83,22 +96,6 @@ export default {
       limit: this.limit
     })
 
-    // 老接口数据，会被替换暂不处理
-    // Api.getSelectItems()
-    //   .then((data) => {
-    //     data[0].data.unshift({
-    //       name: '全部',
-    //       id: '0'
-    //     });
-    //     data[1].data.unshift({
-    //       text: '全部',
-    //       type: 'all'
-    //     });
-    //     const items = Object.values(data)
-    //     items.pop();
-    //     this.selectItems = items;
-    //   });
-
     // 获取班级分类数据
     Api.getCourseCategories()
       .then((data) => {
@@ -111,8 +108,14 @@ export default {
       })
   },
   methods: {
+    ...mapActions('course', [
+      'setCourseList',
+    ]),
     setQuery(value) {
-      this.selectedData = value
+      this.$router.replace({
+        name: 'more_course',
+        query: value,
+      })
     },
 
     initCourseList() {
@@ -138,6 +141,10 @@ export default {
         data.data.forEach(element => {
           this.courseList.push(element)
         })
+        this.setCourseList({
+          selectedData: this.selectedData,
+          courseList: this.courseList
+        });
         const isAllCourse = this.judegIsAllCourse(data)
         if (!isAllCourse) {
           this.offset = this.courseList.length
@@ -158,24 +165,24 @@ export default {
       if (!this.isAllCourse) this.requestCourses(args)
     },
 
-    transform(obj) {
-      const config = {}
-      const arr = Object.keys(obj)
-      if (!arr.length) {
-        return {
-          categoryId: this.categoryId,
-          type: this.type,
-          sort: this.sort
-        }
-      }
-      arr.forEach((current, index) => {
-        config[this.queryForm[current]] = obj[current]
-      })
-      console.log(config, 'arr config')
-      return config
+    transform(obj = {}) {
+      return Object.assign({
+        categoryId: this.categoryId,
+        type: this.type,
+        sort: this.sort
+      }, obj);
     },
     toggleHandler(value) {
       this.selecting = value
+    },
+    isSelectedDataSame(selectedData) {
+      for (const key in this.selectedData) {
+        if (this.selectedData[key] !== selectedData[key]) {
+          return false;
+        }
+      }
+
+      return true;
     }
   }
 }

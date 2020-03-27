@@ -9,7 +9,11 @@ const state = {
   taskId: 0, // 任务id
   courseLessons: [], // 课程中所有任务
   nextStudy: {}, // 下一次学习
-  OptimizationCourseLessons: [] // 优化后的课程中所有任务
+  OptimizationCourseLessons: [], // 优化后的课程中所有任务
+  searchCourseList: {
+    selectedData: {},
+    courseList: []
+  }
 };
 
 const hasJoinedCourse = course => course.member;
@@ -36,6 +40,9 @@ const mutations = {
   [types.SET_SOURCETYPE](currentState, payload) {
     currentState.sourceType = payload.sourceType;
     currentState.taskId = payload.taskId;
+  },
+  [types.SET_COURSELIST](currentState, data) {
+    currentState.searchCourseList = data || {};
   }
 };
 
@@ -205,6 +212,9 @@ const actions = {
           reject(err);
         });
     });
+  },
+  setCourseList({ commit }, data) {
+    commit(types.SET_COURSELIST, data);
   }
 };
 
