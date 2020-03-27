@@ -11,13 +11,14 @@ import { mapState, mapMutations } from 'vuex'
 import * as types from '@/store/mutation-types'
 import { Toast } from 'vant'
 import redirectMixin from '@/mixins/saveRedirect'
-
+import TaskPipe from '@/utils/task-pipe/index'
 export default {
   mixins: [redirectMixin],
   data() {
     return {
       playUrl: '',
-      requestCount: 0
+      requestCount: 0,
+      taskPipe:undefined
     }
   },
   computed: {
@@ -97,7 +98,17 @@ export default {
         Toast.fail(err.message)
       })
     },
-
+    //上报完成课时
+    finishTask() {
+      const { courseId, taskId } = this.$route.query
+      this.taskPipe = new TaskPipe({
+        reportData: {
+          courseId: courseId,
+          taskId: taskId
+        },
+      });
+      this.taskPipe.flush('finish');
+    },
     getLiveUrl(taskId, no) {
       this.requestCount++
       Api.getLiveUrl({
@@ -109,7 +120,8 @@ export default {
         if (res.roomUrl) {
           const index = res.roomUrl.indexOf('/')
           // 由于在safari中从https转到http的地址会出错
-          this.playUrl = index == 0 ? res.roomUrl : res.roomUrl.substring(index)
+          this.playUrl = index == 0 ? res.roomUrl : res.roomUrl.substring(index);
+          this.finishTask();
         } else {
           if (this.requestCount < 30) {
             this.getLiveUrl(taskId, no)
