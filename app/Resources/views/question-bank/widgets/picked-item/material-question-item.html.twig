@@ -30,6 +30,8 @@
     <td class="js-miss-score" data-miss-score="{{ question.missScore|default(0)|score_text }}">
       {{ question.missScore|default(0)|score_text }}
     </td>
+  {% else %}
+    <td></td>
   {% endif %}
   <td>{{ dict_text('difficulty', item.difficulty)}}</td>
   <td>

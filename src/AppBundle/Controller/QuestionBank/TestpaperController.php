@@ -66,28 +66,27 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        $questionBank = $this->getItemBankService()->getItemBank($id);
 
         $conditions = array(
-            'bankId' => $questionBank['id'],
-            'type' => 'testpaper',
-            'keyword' => $request->query->get('keyword', ''),
+            'bank_id' => $questionBank['id'],
+            'nameLike' => $request->query->get('keyword', ''),
         );
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getTestpaperService()->searchTestpaperCount($conditions),
+            $this->getAssessmentService()->countAssessments($conditions),
             10
         );
 
-        $testpapers = $this->getTestpaperService()->searchTestpapers(
+        $testpapers = $this->getAssessmentService()->searchAssessments(
             $conditions,
-            array('createdTime' => 'DESC'),
+            array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $userIds = ArrayToolkit::column($testpapers, 'updatedUserId');
+        $userIds = ArrayToolkit::column($testpapers, 'updated_user_id');
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByMediaIds(ArrayToolkit::column($testpapers, 'id'));
@@ -275,13 +274,13 @@ class TestpaperController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        $assessment = $this->getAssessmentService()->getAssessment($testpaperId);
 
-        if (empty($testpaper) || $testpaper['bankId'] != $id) {
+        if (empty($assessment) || $assessment['bank_id'] != $id) {
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
-        $this->getTestpaperService()->deleteTestpaper($testpaperId);
+        $this->getAssessmentService()->deleteAssessment($testpaperId);
 
         return $this->createJsonResponse(true);
     }
@@ -292,14 +291,12 @@ class TestpaperController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-        if (empty($testpaper) || $testpaper['bankId'] != $id) {
+        $assessment = $this->getAssessmentService()->getAssessment($testpaperId);
+        if (empty($assessment) || $assessment['bank_id'] != $id) {
             $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
-        $testpaper = $this->getTestpaperService()->publishTestpaper($testpaperId);
-
-        $user = $this->getUserService()->getUser($testpaper['updatedUserId']);
+        $this->getAssessmentService()->openAssessment($testpaperId);
 
         return $this->createJsonResponse(true);
     }
@@ -310,14 +307,12 @@ class TestpaperController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-        if (empty($testpaper) || $testpaper['bankId'] != $id) {
+        $assessment = $this->getAssessmentService()->getAssessment($testpaperId);
+        if (empty($assessment) || $assessment['bank_id'] != $id) {
             $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
-        $testpaper = $this->getTestpaperService()->closeTestpaper($testpaperId);
-
-        $user = $this->getUserService()->getUser($testpaper['updatedUserId']);
+        $this->getAssessmentService()->closeAssessment($testpaperId);
 
         return $this->createJsonResponse(true);
     }
