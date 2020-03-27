@@ -10,7 +10,7 @@ const DEFAULT_OPTIONS = {
     courseList: 'getCourseLessons',
     learningProcess: 'getNextStudy'
   },
-  learnTimeSec: 60,
+  learnTimeSec: 1,
   reportData: {},
   formatReportData: data => data
 };
@@ -108,6 +108,8 @@ class TaskPipe extends Event {
   }
 
   waittingExecute(cb, time) {
+    console.log('10s');
+    console.log(cb);
     this.triggerDate = Date.now();
     cb();
     this.timer = setTimeout(() => {

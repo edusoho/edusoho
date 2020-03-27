@@ -39,12 +39,12 @@
       id="course-detail__head--video"
       ref="video"
     />
-    <div v-if="learnMode">
+    <div>
       <div class="course-detail__head--btn course-detail__head--activebtn" v-if="enableFinish">
         <i class="iconfont icon-markdone"></i>
         学过了
       </div>
-      <div class="course-detail__head--btn" v-if="enableFinish" @click="toToast">完成条件</div>
+      <div class="course-detail__head--btn" v-if="!enableFinish" @click="toToast">完成条件</div>
     </div>
     <tagLink :tag-data="tagData" />
   </div>
@@ -130,9 +130,6 @@ export default {
   created() {
     this.initHead();
     this.showTagLink();
-  },
-  beforeDestroy() {
-    this.taskPipe.clearInterval();
   },
   /*
    * 试看需要传preview=1
@@ -224,7 +221,6 @@ export default {
       this.$refs.video && (this.$refs.video.innerHTML = "");
 
       const player = await Api.getMedia(this.getParams()).catch(err => {
-        this.learnMode = this.details.learnMode !== 'freeMode';
         this.enableFinish = !!this.details.enableFinish;
         const courseId = Number(this.details.id);
         // 后台课程设置里设置了不允许未登录用户观看免费试看的视频
@@ -238,7 +234,6 @@ export default {
         }
         Toast.fail(err.message);
       });
-      console.log(player);
       if (!player) return; // 如果没有初始化成功
 
       if (player.mediaType === "video" && !player.media.url) {
@@ -291,6 +286,7 @@ export default {
         }
         const player = new SDK(options);
         player.taskId = this.taskId;
+        this.player = player;
         player.on("playing", () => {
           this.isPlaying = true;
         });
@@ -304,13 +300,17 @@ export default {
         });
         player.on("paused", () => {
           this.isPlaying = false;
+          if (player.taskId !== this.taskId) {
+            return;
+          }
+          this.taskPipe.flush();
         });
-        this.player = player;
         player
         .on('ready', () => {
           if (player.taskId !== this.taskId) {
             return;
           }
+          console.log("开始")
           this.taskPipe.initInterval();
         })
         player.on('datapicker.start', (e) => {

@@ -43,6 +43,13 @@ export default [
     disableLoading: true
   },
   {
+    // 课时上报事件
+    name: 'reportTask',
+    url: '/courses/{courseId}/task/{taskId}/events/${events}',
+    method: 'PUT',
+    disableLoading: true
+  },
+  {
     // 课时finish
     name: 'reportTaskFinish',
     url: '/courses/{courseId}/task/{taskId}/events/finish',
