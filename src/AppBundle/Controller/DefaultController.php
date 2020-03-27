@@ -17,6 +17,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\User\Service\BatchNotificationService;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class DefaultController extends BaseController
 {
@@ -42,7 +43,7 @@ class DefaultController extends BaseController
         if ($this->getWebExtension()->isMicroMessenger() && 'edusohov3' == $mobileCode) {
             $url = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.kuozhi';
         } else {
-            $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $mobileCode), true);
+            $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $mobileCode), UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         return $this->render('mobile/app-download.html.twig', array(

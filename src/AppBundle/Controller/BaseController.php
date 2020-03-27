@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\SecurityEvents;
 use AppBundle\Common\Exception\ResourceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -186,33 +187,33 @@ class BaseController extends Controller
             return $this->generateUrl('homepage');
         }
 
-        if ($targetPath == $this->generateUrl('login', array(), true)) {
+        if ($targetPath == $this->generateUrl('login', array(), UrlGeneratorInterface::ABSOLUTE_URL)) {
             return $this->generateUrl('homepage');
         }
 
         $url = explode('?', $targetPath);
 
-        if ($url[0] == $this->generateUrl('partner_logout', array(), true)) {
+        if ($url[0] == $this->generateUrl('partner_logout', array(), UrlGeneratorInterface::ABSOLUTE_URL)) {
             return $this->generateUrl('homepage');
         }
 
-        if ($url[0] == $this->generateUrl('password_reset_update', array(), true)) {
-            $targetPath = $this->generateUrl('homepage', array(), true);
+        if ($url[0] == $this->generateUrl('password_reset_update', array(), UrlGeneratorInterface::ABSOLUTE_URL)) {
+            $targetPath = $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         if (strpos($url[0], $request->getPathInfo()) > -1) {
-            $targetPath = $this->generateUrl('homepage', array(), true);
+            $targetPath = $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         if (false !== strpos($url[0], 'callback')
             || false !== strpos($url[0], '/login/bind')
             || false !== strpos($url[0], 'crontab')
         ) {
-            $targetPath = $this->generateUrl('homepage', array(), true);
+            $targetPath = $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         if (empty($targetPath)) {
-            $targetPath = $this->generateUrl('homepage', array(), true);
+            $targetPath = $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         return $this->filterRedirectUrl($targetPath);
@@ -369,7 +370,7 @@ class BaseController extends Controller
         $isUnsafeHost = isset($parsedUrl['host']) && !in_array($parsedUrl['host'], $safeHosts);
 
         if (empty($url) || $isUnsafeHost) {
-            $url = $this->generateUrl('homepage', array(), true);
+            $url = $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         return strip_tags($url);

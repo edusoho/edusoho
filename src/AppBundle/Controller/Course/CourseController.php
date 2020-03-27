@@ -19,6 +19,7 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\UserException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use VipPlugin\Biz\Vip\Service\VipService;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
@@ -645,11 +646,11 @@ class CourseController extends CourseBaseController
             $params['classroomId'] = $classroom['id'];
         }
 
-        $url = $this->generateUrl('course_show', $params, true);
+        $url = $this->generateUrl('course_show', $params, UrlGeneratorInterface::ABSOLUTE_URL);
         if ($user->isLogin()) {
             $courseMember = $this->getMemberService()->getCourseMember($id, $user['id']);
             if ($courseMember) {
-                $url = $this->generateUrl('my_course_show', $params, true);
+                $url = $this->generateUrl('my_course_show', $params, UrlGeneratorInterface::ABSOLUTE_URL);
             }
         }
 
@@ -664,10 +665,10 @@ class CourseController extends CourseBaseController
                 'duration' => 3600,
             )
         );
-        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), UrlGeneratorInterface::ABSOLUTE_URL);
 
         $response = array(
-            'img' => $this->generateUrl('common_qrcode', array('text' => $url), true),
+            'img' => $this->generateUrl('common_qrcode', array('text' => $url), UrlGeneratorInterface::ABSOLUTE_URL),
         );
 
         return $this->createJsonResponse($response);

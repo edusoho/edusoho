@@ -17,6 +17,7 @@ use Biz\User\UserException;
 use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class RegisterController extends BaseController
 {
@@ -557,7 +558,7 @@ class RegisterController extends BaseController
     {
         try {
             $site = $this->getSettingService()->get('site', array());
-            $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), true);
+            $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
             $mailOptions = array(
                 'to' => $user['email'],
                 'template' => 'email_registration',
