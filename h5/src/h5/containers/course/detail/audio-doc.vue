@@ -5,6 +5,13 @@
       id="course-detail__audio--content"
       ref="audio"
       class="course-detail__audio--content"/>
+    <div v-if="learnMode">
+      <div class="course-detail__head--btn course-detail__head--activebtn" v-if="enableFinish">
+        <i class="iconfont icon-markdone"></i>
+        学过了
+      </div>
+      <div class="course-detail__head--btn" v-if="enableFinish" @click="toToast">完成条件</div>
+    </div>
   </div>
 </template>
 <script>
@@ -17,6 +24,9 @@ import TaskPipe from '@/utils/task-pipe/index';
 export default {
   data() {
     return {
+      finishCondition: undefined,
+      learnMode: false,
+      enableFinish: false,
       isEncryptionPlus: false,
       currentTime: 0,
       startTime: 0,
@@ -43,6 +53,14 @@ export default {
   * eg: /api/courses/1/task_medias/1?preview=1
   */
   methods: {
+    toToast() {
+      if (this.finishCondition) {
+        this.$toast({
+          message: this.finishCondition.text,
+          position: 'bottom'
+        });
+      }
+    },
     watchTime() {
       if (this.isAndroid() && this.taskPipe) {
         return Math.floor(this.taskPipe.getDuration() / 60000);
@@ -67,6 +85,12 @@ export default {
           return data;
         }
       });
+      this.taskPipe.on('courseData', (res) => {
+        this.finishCondition = res.activity && res.activity.finishCondition;
+      });
+      this.taskPipe.on('report.finish', () => {
+        this.enableFinish = true;
+      })
     },
     getParams() {
       const canTryLookable = !this.joinStatus
@@ -109,6 +133,8 @@ export default {
 
       this.$store.commit('UPDATE_LOADING_STATUS', true)
       this.loadPlayerSDK().then(SDK => {
+        this.learnMode = this.details.learnMode !== 'freeMode';
+        this.enableFinish = !!this.details.enableFinish;
         this.$store.commit('UPDATE_LOADING_STATUS', false)
         const player = new SDK(options)
         player

@@ -5,6 +5,13 @@
     <!-- web-view -->
     <div v-show="media !== 'text'" id="player"/>
     <div v-show="media === 'text'" ref="text" class="media-text"/>
+    <div v-if="learnMode">
+      <div class="course-detail__head--btn course-detail__head--activebtn" v-if="enableFinish">
+        <i class="iconfont icon-markdone"></i>
+        学过了
+      </div>
+      <div class="course-detail__head--btn" v-if="enableFinish" @click="toToast">完成条件</div>
+    </div>
   </div>
 </template>
 <script>
@@ -18,6 +25,9 @@ import TaskPipe from '@/utils/task-pipe/index'
 export default {
   data() {
     return {
+      finishCondition: undefined,
+      learnMode: false,
+      enableFinish: false,
       media: '',
       isPreview: this.$route.query.preview,
       taskPipe: undefined,
@@ -39,6 +49,8 @@ export default {
       Toast(err.message)
       return Promise.reject(err)
     })
+    this.learnMode = this.details.learnMode !== 'freeMode';
+    this.enableFinish = !!this.details.enableFinish;
     if (['ppt', 'doc'].includes(this.media)) {
       this.initPlayer(player)
       this.pageLength = (player.media && player.media.images && player.media.images.length) || 0;
@@ -52,6 +64,14 @@ export default {
     ...mapMutations({
       setNavbarTitle: types.SET_NAVBAR_TITLE
     }),
+    toToast() {
+      if (this.finishCondition) {
+        this.$toast({
+          message: this.finishCondition.text,
+          position: 'bottom'
+        });
+      }
+    },
     initTaskPipe() {
       const { courseId, taskId, type } = this.$route.query
       this.taskPipe = new TaskPipe({
@@ -63,6 +83,12 @@ export default {
       this.taskPipe.on('courseData', (res) => {
         this.pageLength = res.length;
       });
+      this.taskPipe.on('courseData', (res) => {
+        this.finishCondition = res.activity && res.activity.finishCondition;
+      });
+      this.taskPipe.on('report.finish', () => {
+        this.enableFinish = true;
+      })
       setInterval(() => {
         const duration = Math.floor(this.taskPipe.getDuration() / 60000);
         this.taskPipe.trigger('time', duration);

@@ -39,11 +39,13 @@
       id="course-detail__head--video"
       ref="video"
     />
-    <div class="course-detail__head--btn course-detail__head--activebtn" >
-      <i class="iconfont icon-markdone"></i>
-      学过了
+    <div v-if="learnMode">
+      <div class="course-detail__head--btn course-detail__head--activebtn" v-if="enableFinish">
+        <i class="iconfont icon-markdone"></i>
+        学过了
+      </div>
+      <div class="course-detail__head--btn" v-if="enableFinish" @click="toToast">完成条件</div>
     </div>
-    <div class="course-detail__head--btn" v-if="false">完成条件</div>
     <tagLink :tag-data="tagData" />
   </div>
 </template>
@@ -76,6 +78,9 @@ export default {
   },
   data() {
     return {
+      finishCondition: undefined,
+      learnMode: false,
+      enableFinish: false,
       isEncryptionPlus: false,
       mediaOpts: {},
       isCoverOpen: false,
@@ -128,6 +133,14 @@ export default {
    * eg: /api/courses/1/task_medias/1?preview=1
    */
   methods: {
+    toToast() {
+      if (this.finishCondition) {
+        this.$toast({
+          message: this.finishCondition.text,
+          position: 'bottom'
+        });
+      }
+    },
     watchTime() {
       if (this.isAndroid() && this.taskPipe) {
         return Math.floor(this.taskPipe.getDuration() / 60000);
@@ -153,6 +166,12 @@ export default {
         }
       });
       console.log(this.taskPipe);
+      this.taskPipe.on('courseData', (res) => {
+        this.finishCondition = res.activity && res.activity.finishCondition;
+      });
+      this.taskPipe.on('report.finish', () => {
+        this.enableFinish = true;
+      })
     },
     initHead() {
       if (["video", "audio"].includes(this.sourceType)) {
@@ -196,6 +215,8 @@ export default {
       this.$refs.video && (this.$refs.video.innerHTML = "");
 
       const player = await Api.getMedia(this.getParams()).catch(err => {
+        this.learnMode = this.details.learnMode !== 'freeMode';
+        this.enableFinish = !!this.details.enableFinish;
         const courseId = Number(this.details.id);
         // 后台课程设置里设置了不允许未登录用户观看免费试看的视频
         if (err.code == 4040101) {
