@@ -39,13 +39,15 @@ export default [
     // 课时doing
     name: 'reportTaskDoing',
     url: '/courses/{courseId}/task/{taskId}/events/doing',
-    method: 'PUT'
+    method: 'PUT',
+    disableLoading: true
   },
   {
     // 课时finish
     name: 'reportTaskFinish',
     url: '/courses/{courseId}/task/{taskId}/events/finish',
-    method: 'PUT'
+    method: 'PUT',
+    disableLoading: true
   },
   {
     // 下次学习课时

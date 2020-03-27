@@ -81,6 +81,9 @@
       <img src="static/images/none.png" class="notask" >
       <p>暂时还没有课时哦...</p>
     </div>
+      <finish-dialog>
+
+      </finish-dialog>
   </div>
 
 </template>
@@ -90,9 +93,14 @@ import copyUrl from '@/mixins/copyUrl'
 import { mapState, mapMutations } from 'vuex'
 import * as types from '@/store/mutation-types'
 import { Dialog, Toast } from 'vant'
+import finishDialog from '../components/finish-dialog'
+import TaskPipe from '@/utils/task-pipe/index'
 export default {
   name: 'LessonDirectory',
   mixins: [redirectMixin,copyUrl],
+  components:{
+    finishDialog
+  },
   props: {
     lesson: {
       type: Array,
@@ -263,7 +271,6 @@ export default {
               replay = true
             }
           }
-
           this.$router.push({
             name: 'live',
             query: {
@@ -276,7 +283,7 @@ export default {
           })
           break
         case 'testpaper':
-          const testId = task.activity.testpaperInfo.testpaperId
+          const testId = task.activity.testpaperInfo.testpaperId;
           this.$router.push({
             name: 'testpaperIntro',
             query: {
@@ -386,7 +393,19 @@ export default {
         return 'back'
       }
       return 'play'
-    }
+    },
+     //上报完成课时
+    finishTask(task) {
+      const reportData={
+        courseId:this.selectedPlanId,
+        taskId:task.id
+      }
+      const { courseId, taskId } = this.$route.query
+      this.taskPipe = new TaskPipe({
+        reportData
+      });
+      this.taskPipe.flush();
+    },
   }
 }
 </script>
