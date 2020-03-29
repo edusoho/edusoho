@@ -9,7 +9,9 @@ const state = {
   taskId: 0, // 任务id
   courseLessons: [], // 课程中所有任务
   nextStudy: {}, // 下一次学习
-  OptimizationCourseLessons: [] // 优化后的课程中所有任务
+  OptimizationCourseLessons: [], // 优化后的课程中所有任务
+  allTask: {},
+  taskStatus: '' // 当前task任务完成情况
 };
 
 const hasJoinedCourse = course => course.member;

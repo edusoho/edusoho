@@ -1,3 +1,12 @@
+.finish-dialog-mask{
+  position: fixed;
+  top:0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: rgba($color: #000000, $alpha: 0.5);
+  z-index: 9999;
+}
 .finish-dialog {
   &-content {
     width: 80%;
@@ -42,18 +51,18 @@
       align-items: center;
     }
     &__rate {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 10px;
+      box-sizing: border-box;
       width: 0;
       height: 100%;
       border-radius: 46px;
       background: $primary-color;
       transition: all 0.5s;
-    }
-    &__text {
-      position: absolute;
-      font-size: vw(14);
-      margin-left: vw(10);
       color: #fff;
-      @extend .font-family-PFM;
+      font-size: vw(14);
     }
   }
 }

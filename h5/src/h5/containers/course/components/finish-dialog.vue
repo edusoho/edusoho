@@ -6,21 +6,19 @@
         <div class="progress-bar">
           <div class="progress-bar__content">
             <div
-              :style="{ width: `${completionRate}%'` }"
+              :style="{ width: rate }"
               class="progress-bar__rate"
-            />
+            >
+               {{ rate }}
+            </div>
           </div>
-          <div class="progress-bar__text">{{ completionRate }}%</div>
         </div>
-        <template>
-          <p class="finish-dialog-text">恭喜完成</p>
+        <p class="finish-dialog-text">恭喜完成</p>
+        <template v-if="showNextTask">
           <p>课时：{{ nextTask.number }}{{ nextTask.title }}</p>
           <div class="finish-dialog-btn" @click="goNextTask">下一课</div>
         </template>
       </div>
-    </div>
-    <div class="wrapper" @click.stop>
-      <div class="block" />
     </div>
   </van-overlay>
 </template>
@@ -28,12 +26,14 @@
 <script>
 import Api from "@/api"
 import copyUrl from '@/mixins/copyUrl'
+import { mapMutations } from 'vuex'
+import * as types from '@/store/mutation-types'
 export default {
   name: "finish-dialog",
   mixins: [copyUrl],
   data() {
     return {
-      show: false
+      show: true
     };
   },
   props: {
@@ -45,19 +45,28 @@ export default {
     },
     completionRate: {
       type: Number,
-      default: 0
+      default: 100
     },
     courseId:{
-      type: Number,
-      default: 0
+      type: String,
+      default: ''
     }
   },
   computed: {
     showNextTask() {
+      if(this.nextTask===null){
+        return false;
+      }
       return Object.keys(this.nextTask).length;
+    },
+    rate(){
+      return `${this.completionRate}%`
     }
   },
   methods: {
+     ...mapMutations('course', {
+      setSourceType: types.SET_SOURCETYPE
+    }),
     goNextTask() {
       const params={
         courseId:this.courseId,
@@ -80,6 +89,7 @@ export default {
       // 更改store中的当前学习
       this.$store.commit(`course/${types.GET_NEXT_STUDY}`, { nextTask });
       this.showTypeDetail(task) ;
+      this.show=false;
     },
     showTypeDetail(task) {
       if (task.status !== "published") {
@@ -89,21 +99,19 @@ export default {
       switch (task.type) {
         case "video":
           if (task.mediaSource === "self") {
-            //todo 跳转到目录页
-            // this.setSourceType({
-            //   sourceType: "video",
-            //   taskId: task.id
-            // });
+            this.setSourceType({
+              sourceType: "video",
+              taskId: task.id
+            });
           } else {
              this.copyPcUrl(task.courseUrl);
           }
           break;
         case "audio":
-          //todo 跳转到目录页
-          // this.setSourceType({
-          //   sourceType: "audio",
-          //   taskId: task.id
-          // });
+          this.setSourceType({
+            sourceType: "audio",
+            taskId: task.id
+          });
           break;
         case "text":
         case "ppt":

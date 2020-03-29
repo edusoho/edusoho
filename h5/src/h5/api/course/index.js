@@ -33,7 +33,8 @@ export default [
     // 课时信息
     name: 'getCourseData',
     url: '/courses/{courseId}/task/{taskId}',
-    method: 'GET'
+    method: 'GET',
+    disableLoading: true
   },
   {
     // 课时doing

@@ -1,4 +1,5 @@
 import Api from '@/api/index';
+import * as types from '@/store/mutation-types';
 // import fastLogin from "../fastLogin/index"
 export default {
   // mixins: [fastLogin],
@@ -11,6 +12,7 @@ export default {
         courseId: null,
         taskId: null
       },
+      isFinish: false,
       reportType: null
     };
   },
@@ -18,6 +20,10 @@ export default {
     initReportData(courseId, taskId, sourceType) {
       this.reportData = { courseId, taskId };
       this.reportType = sourceType;
+      this.isFinish = false;
+      this.reportIntervalTime = null;
+      this.reportFinishCondition = null;
+      this.reprtData();
     },
     // 获取任务信息
     getCourseData(courseId, taskId) {
@@ -29,7 +35,7 @@ export default {
           return res;
         })
         .catch(err => {
-          comsole.log(err);
+          console.log(err);
         });
     },
     /**
@@ -39,40 +45,48 @@ export default {
      * @param {*} events  //doing finish
      */
     reprtData(events = 'doing') {
+      if (this.isFinish) {
+        return;
+      }
       const params = {
         courseId: this.reportData.courseId,
         taskId: this.reportData.taskId,
         events
       };
-      /* eslint-disable no-new */
-      Api.reportTask({ query: params })
-        .then(res => {
-          this.handleReprtResult(res);
-          return res;
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      return new Promise((resolve, reject) => {
+        Api.reportTask({ query: params })
+          .then(res => {
+            this.handleReprtResult(res);
+            resolve(res);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
     },
     handleReprtResult(res) {
       if (res.result.status === 'finish') {
         this.clearReportIntervalTime();
+        this.isFinish = true;
+        this.$store.commit(types.SET_TASK_SATUS, 'finish');
+      } else {
+        this.$store.commit(types.SET_TASK_SATUS, 'start');
       }
     },
     /**
      * 1分钟上报一次
      */
-    intervalReportData(min = 0.1) {
+    intervalReportData(min = 1) {
       const intervalTime = min * 60 * 1000;
-      this.reportIntervalTime = setInterval(() => { this.reprtData('doing'); console.log(1); }, 1000);
-      this.checkoutTime();
+      this.reportIntervalTime = setInterval(() => { this.reprtData('doing'); }, intervalTime);
+      // this.checkoutTime();
     },
     /**
      * 到达时间
      */
     checkoutTime() {
       if (this.reportFinishCondition.type === 'time') {
-        if (reportNowTime > this.reportFinishCondition.time) {
+        if (reportNowTime >= this.reportFinishCondition.time) {
           this.reprtData('finish');
         }
       }
