@@ -17,7 +17,7 @@ class SyncTotalJob extends AbstractJob
             $users = $this->getUserService()->searchUsers(array('id_GT' => $lastUserId), array('id' => 'asc'), 0, $limit);
             $learnSetting = $this->getLearnStatisticsService()->getStatisticsSetting();
 
-            if (empty($users)) {
+            if (empty($users) || !empty($learnSetting['syncTotalDataStatus'])) {
                 $this->setTotalDataStatus($learnSetting);
                 $this->getSchedulerService()->disabledJob($this->id);
 
