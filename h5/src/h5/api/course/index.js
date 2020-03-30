@@ -33,12 +33,20 @@ export default [
     // 课时信息
     name: 'getCourseData',
     url: '/courses/{courseId}/task/{taskId}',
-    method: 'GET'
+    method: 'GET',
+    disableLoading: true
   },
   {
     // 课时doing
     name: 'reportTaskDoing',
     url: '/courses/{courseId}/task/{taskId}/events/doing',
+    method: 'PUT',
+    disableLoading: true
+  },
+  {
+    // 课时上报事件
+    name: 'reportTask',
+    url: '/courses/{courseId}/task/{taskId}/events/{events}',
     method: 'PUT',
     disableLoading: true
   },

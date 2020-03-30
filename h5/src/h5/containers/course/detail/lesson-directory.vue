@@ -6,7 +6,7 @@
         :id="lessonItem.tasks[lessonItem.index].id"
         :class="{'zb-ks' : doubleLine(lessonItem.tasks[lessonItem.index])}"
         class="lesson-title"
-        @click="lessonCellClick(lessonItem.tasks[lessonItem.index])"
+        @click="lessonCellClick(lessonItem.tasks[lessonItem.index],lessonIndex,lessonItem.index)"
       >
         <div class="lesson-title-r">
           <div class="lesson-title-des">
@@ -60,7 +60,7 @@
           :id="taskItem.id"
           :key="taskIndex"
           class="litem"
-          @click="lessonCellClick(taskItem)"
+          @click="lessonCellClick(taskItem,lessonIndex,taskIndex)"
         >
           <div
             :class="{ 'lessonactive': (currentTask==Number(taskItem.id)) }"
@@ -81,9 +81,6 @@
       <img src="static/images/none.png" class="notask" >
       <p>暂时还没有课时哦...</p>
     </div>
-      <finish-dialog>
-
-      </finish-dialog>
   </div>
 
 </template>
@@ -182,7 +179,8 @@ export default {
       }
       return result
     },
-    lessonCellClick(task) {
+    lessonCellClick(task,lessonIndex,taskIndex) {
+      this.$store.commit(types.SET_TASK_SATUS, '');
       // 课程错误和未发布状态，不允许学习任务
       if (this.errorMsg) {
         this.$emit("showDialog");
@@ -393,19 +391,7 @@ export default {
         return 'back'
       }
       return 'play'
-    },
-     //上报完成课时
-    finishTask(task) {
-      const reportData={
-        courseId:this.selectedPlanId,
-        taskId:task.id
-      }
-      const { courseId, taskId } = this.$route.query
-      this.taskPipe = new TaskPipe({
-        reportData
-      });
-      this.taskPipe.flush();
-    },
+    }
   }
 }
 </script>
