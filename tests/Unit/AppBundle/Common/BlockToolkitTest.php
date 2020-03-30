@@ -133,7 +133,7 @@ class BlockToolkitTest extends BaseTestCase
         $this->getBlockService()->shouldNotHaveReceived('createBlockTemplate');
 
         BlockToolkit::init($jsonFile, $container, __DIR__.'/File/testNotExist');
-        $this->getBlockService()->shouldHaveReceived('updateTemplateContent')->times(4);
+        $this->getBlockService()->shouldHaveReceived('updateTemplateContent')->times(2);
         $this->getBlockService()->shouldHaveReceived('updateBlockTemplate')->times(2);
         $this->getBlockService()->shouldNotHaveReceived('createBlockTemplate');
     }
