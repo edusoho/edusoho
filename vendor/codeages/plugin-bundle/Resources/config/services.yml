@@ -25,7 +25,7 @@ services:
         public: false
         tags:
             - { name: twig.extension }
-  
+
     codeages_plugin.slot_twig_extension:
         class: Codeages\PluginBundle\Twig\SlotExtension
         public: false
@@ -61,6 +61,7 @@ services:
     codeags_plugin.event.lazy_subscribers:
         class: Codeages\PluginBundle\Event\LazySubscribers
         arguments: ['@service_container']
+        public: true
 
     templating.locator:
         alias:          codeages_plugin.theme.templating.locator
