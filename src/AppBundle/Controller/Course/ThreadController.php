@@ -217,7 +217,7 @@ class ThreadController extends CourseBaseController
         ));
 
         if ('POST' == $request->getMethod()) {
-            $form->submit($request);
+            $form->handleRequest($request);
             if ($form->isValid()) {
                 try {
                     $thread = $this->getThreadService()->createThread($form->getData());

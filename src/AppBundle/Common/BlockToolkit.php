@@ -53,7 +53,7 @@ class BlockToolkit
                     $blockTemplate = $blockService->updateTemplateContent($blockTemplate['id'], $content);
                 }
 
-                if (empty($blockTemplate['content']) && $container) {
+                if (!empty($blockTemplate['id']) && empty($blockTemplate['content']) && $container) {
                     $content = self::render($blockTemplate, $container);
                     $blockService->updateTemplateContent($blockTemplate['id'], $content);
                 }
@@ -63,7 +63,7 @@ class BlockToolkit
 
     public static function render($block, $container)
     {
-        /**
+        /*
          * @deprecated isScopeActive deprecated
          */
 //        if (!$container->isScopeActive('request')) {

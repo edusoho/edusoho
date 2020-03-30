@@ -185,7 +185,7 @@ class AudioTest extends BaseTypeTestCase
         $type->delete($audioActivity['id']);
         $result = $type->get($audioActivity['id']);
 
-        $this->assertEmpty($result['file']);
+        $this->assertEmpty($result);
         $this->assertTrue(empty($result['id']));
     }
 
