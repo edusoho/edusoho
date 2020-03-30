@@ -71,49 +71,39 @@ class TestpaperForm {
       let type = $(this).find('a').data('type'),
         name = $(this).find('a').data('name');
 
+      let itemSeq = 1;
+      let items = [];
       stats[type] = {name:name, count:0, score:0, missScore:0};
-      let section = {name:name, seq:seq++, items:[]};
 
       self.$questionForm.find('#testpaper-table-' + type).find('.js-item').each(function() {
         let itemType = $(this).data('type');
         let item = {
           id: $(this).data('id'),
-          seq: $(this).find('.seq').text(),
+          seq: itemSeq++,
         };
 
         let questions = [];
         if (itemType == 'material') {
           $(this).nextUntil('.js-item').each(function () {
-            let questionScore = parseFloat($(this).find('.js-question-score').attr('data-score'));
-            let question = {
-              id: $(this).data('questionId'),
-              score: questionScore
-            };
-            if ($(this).find('.js-miss-score').length > 0) {
-              question['missScore'] = parseFloat($(this).find('.js-miss-score').data('missScore'));
-            }
+            let question = self.getItemQuestion(this);
             questions.push(question);
             stats[type]['count'] ++;
-            stats[type]['score'] += questionScore;
+            stats[type]['score'] += question.score;
           });
         } else {
-          let score = parseFloat($(this).find('.js-question-score').attr('data-score'));
-          let question = {
-            id: $(this).data('questionId'),
-            score: score
-          };
-          if ($(this).find('.js-miss-score').length > 0) {
-            question['missScore'] = parseFloat($(this).find('.js-miss-score').data('missScore'));
-          }
+          let question = self.getItemQuestion(this);
           questions.push(question);
-          stats[type]['score'] += score;
+          stats[type]['score'] += question.score;
           stats[type]['count'] ++;
         }
 
         item['questions'] = questions;
-        section['items'].push(item);
+        items.push(item);
       });
-      self.sections.push(section);
+
+      if (items.length > 0) {
+        self.sections.push({name: name, seq:seq++, items:items});
+      }
     });
 
     let total = {name:Translator.trans('activity.testpaper_manage.question_total_score'), count:0, score:0};
@@ -126,6 +116,19 @@ class TestpaperForm {
     self.questionsCount = total.count;
 
     return stats;
+  }
+
+  getItemQuestion(that) {
+    let questionScore = parseFloat($(that).find('.js-question-score').attr('data-score'));
+    let question = {
+      id: $(that).data('questionId'),
+      score: questionScore
+    };
+    if ($(that).find('.js-miss-score').length > 0) {
+      question['missScore'] = parseFloat($(that).find('.js-miss-score').data('missScore'));
+    }
+
+    return question;
   }
 
   _validateScore() {
@@ -176,7 +179,7 @@ class TestpaperForm {
     $tbody.find('[data-id="'+id+'"]').remove();
     $target.closest('tr').remove();
     $tbody.trigger('lengthChange');
-    this.refreshSeqs();
+    this.refreshSeqs($tbody.data('type'));
   }
 
   batchDelete(event) {
@@ -199,7 +202,7 @@ class TestpaperForm {
     let $checked = this.$form.find('[data-role="batch-item"]:checked');
     if ($checked.length > 0) {
       let self = this;
-      let types = ['choice', 'uncertain_choice'];
+      let types = ['choice', 'uncertain_choice', 'material'];
       $checked.each(function() {
         let $missScore = self.$scoreModal.find('.js-miss-score-field');
         if ($.inArray($(this).closest('tr').data('type'), types) !== -1) {
@@ -243,18 +246,18 @@ class TestpaperForm {
     }
   }
 
-  refreshSeqs() {
+  refreshSeqs(type) {
     let seq = 1;
-    this.$form.find('tbody tr').each(function(){
-      let $tr = $(this);
+    let $table = this.$form.find('#testpaper-table-' + type);
+    $table.find('tbody tr').each(function(index,item) {
+      let $tr = $(item);
 
-      if (!$tr.hasClass('have-sub-questions')) {
+      if (!$tr.hasClass('is-sub-question')) {
         $tr.find('td.seq').html(seq);
         seq ++;
       }
     });
-
-    this.$form.find('[name="questionLength"]').val((seq - 1) > 0 ? (seq - 1 ) : null );
+    $table.find('[name="questionLength"]').val((seq - 1) > 0 ? (seq - 1) : null );
   }
 
   changeQuestionCount(event) {
@@ -291,24 +294,10 @@ class TestpaperForm {
           let $tbody = self.$questionForm.find('#testpaper-table-' + type).find('.testpaper-table-tbody');
           $tbody.append(html);
           $tbody.trigger('lengthChange');
-          self._refreshSeqs(type);
+          self.refreshSeqs(type);
         });
       }
     });
-  }
-
-  _refreshSeqs(type) {
-    let seq = 1;
-    let $table = this.$form.find('#testpaper-table-' + type);
-    $table.find('tbody tr').each(function(index,item) {
-      let $tr = $(item);
-
-      if (!$tr.hasClass('have-sub-questions')) {
-        $tr.find('td.seq').html(seq);
-        seq ++;
-      }
-    });
-    $table.find('[name="questionLength"]').val((seq - 1) > 0 ? (seq - 1) : null );
   }
 
   _initEditor(validator) {
@@ -487,12 +476,12 @@ class TestpaperForm {
           let $tbody = item.parents('tbody');
           $tbody.find('tr.is-question').each(function() {
             let $tr = $(this);
-            $tbody.find('[data-parent-id=' + $tr.data('id') + ']').detach().insertAfter($tr);
+            $tbody.find('[data-id=' + $tr.data('id') + '].is-sub-question').detach().insertAfter($tr);
           });
         } else {
           $('.js-have-sub').addClass('is-question');
         }
-        this.refreshSeqs();
+        this.refreshSeqs(item.data('type'));
       }
     });
   }
