@@ -151,7 +151,8 @@ export default {
       bindAgencyRelation: {}, // 分销代理商绑定信息
       nextTask: null, //下一课时信息
       completionRate: 0, //任务完成率
-      finishDialog: false //下一课时弹出模态框
+      finishDialog: false, //下一课时弹出模态框
+      watchTime:0
     };
   },
   computed: {
@@ -354,6 +355,7 @@ export default {
             return;
           }
           this.intervalReportData();
+          this.intervalReportLearnTime();
         });
         player.on("datapicker.start", e => {
           if (player.taskId !== this.taskId) {
@@ -373,11 +375,12 @@ export default {
           if (player.taskId !== this.taskId) {
             return;
           }
-          if (this.finishCondition.type === "time") {
-            if (e.currentTime / 60 >= parseInt(this.finishCondition.data)) {
-              this.reprtData("finish");
-            }
-          }
+          this.watchTime=e.currentTime;
+          // if (this.finishCondition.type === "time") {
+          //   if (e.currentTime / 60 >= parseInt(this.finishCondition.data)) {
+          //     this.reprtData("finish");
+          //   }
+          // }
           // this.currentTime = e.currentTime;
           // this.taskPipe.trigger('time', this.watchTime());
         });
