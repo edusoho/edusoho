@@ -18,12 +18,10 @@ require_once dirname(__DIR__) . '/Framework/Error/Deprecated.php';
 
 /**
  * Error handler that converts PHP errors and warnings to exceptions.
- *
- * @since Class available since Release 3.3.0
  */
 class PHPUnit_Util_ErrorHandler
 {
-    protected static $errorStack = array();
+    protected static $errorStack = [];
 
     /**
      * Returns the error stack.
@@ -49,7 +47,7 @@ class PHPUnit_Util_ErrorHandler
             return false;
         }
 
-        self::$errorStack[] = array($errno, $errstr, $errfile, $errline);
+        self::$errorStack[] = [$errno, $errstr, $errfile, $errline];
 
         $trace = debug_backtrace(false);
         array_shift($trace);
