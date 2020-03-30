@@ -5,7 +5,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Biz\UnitTests\UnitTestsBootstrap;
 
 $loader = require __DIR__.'/../app/autoload.php';
-
+if (PHP_VERSION_ID >= 70400) {
+    error_reporting('E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED');
+}
 // boot kernel
 $request = Request::createFromGlobals();
 $kernel = new AppKernel('test', true);

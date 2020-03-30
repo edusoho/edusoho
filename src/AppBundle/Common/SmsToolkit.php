@@ -26,7 +26,7 @@ class SmsToolkit
 
     public static function smsCheckRatelimiter(Request $request, $type, $smsCode)
     {
-        $smsSession = $request->getSession()->get($type) ?: [];
+        $smsSession = $request->getSession()->get($type);
         $smsSessionCode = $smsSession['sms_code'];
 
         if (!isset($smsSession['sms_remain'])) {
