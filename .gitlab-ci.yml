@@ -127,6 +127,24 @@ check env:
     variables:
       - $REPOSITORY == "main"
 
+7.4 For main with MySQL80:
+  stage: test
+  image: codeages/ci-php74
+  services:
+    - name: mysql:8.0
+      command: ["--default-authentication-plugin=mysql_native_password"]
+    - redis:latest
+  script:
+    - bin/phpunit-diff
+  only:
+    refs:
+      - /^release/.*$/
+      - develop
+      - master
+      - feature/edusoho-symfony34
+    variables:
+      - $REPOSITORY == "main"
+
 7.1 For Develop:
   stage: test
   image: codeages/ci-php71
