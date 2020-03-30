@@ -117,8 +117,7 @@ check env:
       command: ["--default-authentication-plugin=mysql_native_password"]
     - redis:latest
   script:
-    - bin/phpunit -c app/ --testsuite SpecialTest
-#    - bin/phpunit-diff
+    - bin/phpunit-diff
   only:
     refs:
       - /^release/.*$/
@@ -136,8 +135,7 @@ check env:
       command: ["--default-authentication-plugin=mysql_native_password"]
     - redis:latest
   script:
-    - bin/phpunit -c app/ --testsuite SpecialTest
-#    - bin/phpunit-diff
+    - bin/phpunit-diff
   only:
     refs:
       - /^release/.*$/
