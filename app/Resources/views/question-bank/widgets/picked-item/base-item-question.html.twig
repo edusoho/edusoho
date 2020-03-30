@@ -1,7 +1,8 @@
 {% set questionTypesDict = getQuestionTypes() %}
 {% set question = item.questions[0] %}
 
-<tr id="testpaper-item-{{ item.id }}" data-id="{{ item.id }}" data-question-id="{{ question.id|default(0) }}" data-type="{{ item.type }}" class="js-item">
+<tr id="testpaper-item-{{ item.id }}" data-id="{{ item.id }}" data-question-id="{{ question.id|default(0) }}" data-type="{{ item.type }}"
+    class="js-item is-question {% if item.type == 'material' %}have-sub-questions js-have-sub{% endif %}">
   <td><span class="glyphicon glyphicon-resize-vertical sort-handle"/></td>
   <td>
     {% if item.type != 'material' %}
@@ -13,7 +14,7 @@
   <td>
     <a class="color-info" href="#modal" data-toggle="modal" data-url="{{ path('question_bank_manage_question_preview', {id: questionBank.id, questionId: item.id}) }}">
       {% if item.includeImg|default('') %}<span class="glyphicon glyphicon-picture"/>{% endif %}
-      {{question.stem|plain_text(40) }}
+      {{item.material|plain_text(40) }}
     </a>
     <br/>
     <span class="color-gray text-sm">{{ 'category'|trans }}：

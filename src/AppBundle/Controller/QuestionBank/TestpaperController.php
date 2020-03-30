@@ -434,6 +434,7 @@ class TestpaperController extends BaseController
 
         $conditions['bank_id'] = $id;
         if (!empty($conditions['exclude_ids'])) {
+            $excludeIds = $conditions['exclude_ids'];
             $conditions['exclude_ids'] = explode(',', $conditions['exclude_ids']);
         }
 
@@ -463,7 +464,7 @@ class TestpaperController extends BaseController
             'questionBank' => $itemBank,
             'categoryTree' => $categories,
             'itemCategories' => $itemCategories,
-            'excludeIds' => empty($conditions['excludeIds']) ? '' : $conditions['excludeIds'],
+            'excludeIds' => empty($excludeIds) ? '' : $excludeIds,
         ));
     }
 
@@ -569,7 +570,7 @@ class TestpaperController extends BaseController
     protected function setSectionsType($sections)
     {
         foreach ($sections as &$section) {
-            $section['type'] = reset($section['items'])['type'];
+            $section['type'] = $section['items'][0]['type'];
         }
 
         return ArrayToolkit::index($sections, 'type');

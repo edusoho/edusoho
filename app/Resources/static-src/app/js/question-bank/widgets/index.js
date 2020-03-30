@@ -204,7 +204,7 @@ class QuestionSelect {
     isPaginator || this._resetPage();
     let self = this;
     let conditions = this.element.find('[data-role="search-conditions"]').serialize() + '&page=' + this.element.find('.js-page').val();
-    conditions += '&excludeIds=' + $('.js-excludeIds').val();
+    conditions += '&exclude_ids=' + $('.js-excludeIds').val();
     this._loading();
     $.ajax({
       type: 'GET',
