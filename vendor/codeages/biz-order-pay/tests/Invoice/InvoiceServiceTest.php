@@ -128,7 +128,7 @@ class InvoiceServiceTest extends IntegrationTestCase
             'phone' => '15700081111',
             'receiver' => 'tinyyywood',
             'ids' => $trades['id'],
-            'money' => 100,
+            'money' => 1,
         );
     }
 

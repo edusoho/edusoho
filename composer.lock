@@ -415,12 +415,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "0ff9c577c48bf9ad2d5ffea6d489cad98dcdd054"
+                "reference": "392d64f44fae96201753d44e1bafee08fae7f732"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/0ff9c577c48bf9ad2d5ffea6d489cad98dcdd054",
-                "reference": "0ff9c577c48bf9ad2d5ffea6d489cad98dcdd054",
+                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/392d64f44fae96201753d44e1bafee08fae7f732",
+                "reference": "392d64f44fae96201753d44e1bafee08fae7f732",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -451,7 +451,7 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2020-03-06T05:16:47+00:00"
+            "time": "2020-03-30T11:29:57+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
