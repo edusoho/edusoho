@@ -2,6 +2,7 @@
 
 namespace Omnipay\Alipay;
 
+use Omnipay\Alipay\Requests\LegacyCloseRequest;
 use Omnipay\Alipay\Requests\LegacyCompletePurchaseRequest;
 use Omnipay\Alipay\Requests\LegacyCompleteRefundRequest;
 use Omnipay\Alipay\Requests\LegacyQueryRequest;
@@ -342,5 +343,13 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     public function query(array $parameters = [])
     {
         return $this->createRequest(LegacyQueryRequest::class, $parameters);
+    }
+
+    public function close(array $parameters = [])
+    {
+        $request = new LegacyCloseRequest(array('key' => $this->getPartner(), 'secret' => $this->getKey()));
+        $request->setParams($parameters);
+
+        return $request;
     }
 }
