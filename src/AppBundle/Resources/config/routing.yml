@@ -3212,12 +3212,8 @@ oauth2_es_user_info:
   defaults: { _controller: AppBundle:OAuth2/Server/Authorization:getUserInfo }
 
 question_bank_list:
-    path: /my/question_banks/{categoryId}
-    defaults: { _controller: AppBundle:QuestionBank/Manage:index, categoryId:'' }
-
-question_bank_category_tree_nav:
-    path: /question_banks/tree/{category}
-    defaults: { _controller: AppBundle:QuestionBank/Category:treeNav, category:'' }
+    path: /my/question_banks
+    defaults: { _controller: AppBundle:QuestionBank/Manage:index }
 
 question_bank_create:
     path: /question_bank/create
@@ -3282,7 +3278,7 @@ question_bank_manage_question_preview:
     defaults: { _controller: AppBundle:QuestionBank/Question:preview }
 
 question_bank_manage_question_delete:
-    path: /question_bank/{id}/question/{$itemId}/delete
+    path: /question_bank/{id}/question/{itemId}/delete
     defaults: { _controller: AppBundle:QuestionBank/Question:delete }
 
 question_bank_manage_question_export:

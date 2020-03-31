@@ -8,10 +8,10 @@ use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\System\Service\SettingService;
 use Biz\Taxonomy\CategoryException;
 use Biz\Common\CommonException;
 use Biz\QuestionBank\QuestionBankException;
+use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
 
 class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 {
@@ -63,6 +63,8 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
                 'orgCode' => $this->getCurrentUser()->getSelectOrgCode(),
             );
             $questionBank = $this->fillOrgId($questionBank);
+            $itemBank = $this->getItemBankService()->createItemBank(array('name' => $questionBank['name']));
+            $questionBank['itemBankId'] = $itemBank['id'];
             $questionBank = $this->getQuestionBankDao()->create($questionBank);
             $this->getCategoryService()->waveCategoryBankNum($fields['categoryId'], 1);
 
@@ -137,14 +139,7 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
             return array();
         }
 
-        $fields = ArrayToolkit::parts($fields, array('name', 'categoryId', 'isHidden'));
-        if (empty($fields)) {
-            $this->createNewException(CommonException::ERROR_PARAMETER());
-        }
-
-        $fields = $this->fillOrgId($fields);
-
-        return $this->getQuestionBankDao()->update($bank['id'], $fields);
+        return $this->updateQuestionBank($bank['id'], $fields);
     }
 
     public function deleteQuestionBank($id)
@@ -162,6 +157,7 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
             $this->beginTransaction();
 
             $this->getQuestionBankDao()->delete($id);
+            $this->getItemBankService()->deleteItemBank($questionBank['itemBankId']);
 
             $this->getCategoryService()->waveCategoryBankNum($questionBank['categoryId'], -1);
 
@@ -195,11 +191,17 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
     public function waveTestpaperNum($id, $diff)
     {
+        $questionBank = $this->getQuestionBank($id);
+        $this->getItemBankService()->updateAssessmentNum($questionBank['itemBankId'], $diff);
+
         return $this->getQuestionBankDao()->wave(array($id), array('testpaperNum' => $diff));
     }
 
     public function waveQuestionNum($id, $diff)
     {
+        $questionBank = $this->getQuestionBank($id);
+        $this->getItemBankService()->updateItemNum($questionBank['itemBankId'], $diff);
+
         return $this->getQuestionBankDao()->wave(array($id), array('questionNum' => $diff));
     }
 
@@ -254,14 +256,6 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
     }
 
     /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->createService('System:SettingService');
-    }
-
-    /**
      * @return CategoryService
      */
     protected function getCategoryService()
@@ -275,5 +269,13 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
     protected function getMemberService()
     {
         return $this->createService('QuestionBank:MemberService');
+    }
+
+    /**
+     * @return ItemBankService
+     */
+    protected function getItemBankService()
+    {
+        return $this->createService('ItemBank:ItemBank:ItemBankService');
     }
 }

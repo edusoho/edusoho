@@ -8,12 +8,11 @@ use AppBundle\Controller\BaseController;
 use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
-use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ManageController extends BaseController
 {
-    public function indexAction(Request $request, $categoryId)
+    public function indexAction(Request $request)
     {
         $user = $this->getCurrentUser();
 
@@ -22,7 +21,6 @@ class ManageController extends BaseController
         }
 
         $conditions = $request->query->all();
-        $conditions['categoryId'] = empty($conditions['subCategory']) ? $categoryId : $conditions['subCategory'];
         $conditions['ids'] = ArrayToolkit::column($this->getQuestionBankService()->findUserManageBanks(), 'id');
         $conditions['ids'] = empty($conditions['ids']) ? array(-1) : $conditions['ids'];
         $conditions = $this->fillOrgCode($conditions);
@@ -41,15 +39,16 @@ class ManageController extends BaseController
         );
 
         return $this->render('question-bank/list.html.twig', array(
-            'category' => $categoryId,
             'paginator' => $pagination,
             'questionBanks' => $questionBanks,
+            'categoryTree' => $this->getCategoryService()->getCategoryTree(),
+            'categoryId' => empty($conditions['categoryId']) ? 0 : $conditions['categoryId'],
         ));
     }
 
     public function createAction(Request $request)
     {
-        if ('POST' == $request->getMethod()) {
+        if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $data['members'] = $this->getCurrentUser()->getId();
             $questionBank = $this->getQuestionBankService()->createQuestionBank($data);
@@ -59,10 +58,8 @@ class ManageController extends BaseController
             ));
         }
 
-        $categoryTree = $this->getCategoryService()->getCategoryTree();
-
         return $this->render('question-bank/manage/create-modal.html.twig', array(
-            'categoryTree' => $categoryTree,
+            'categoryTree' => $this->getCategoryService()->getCategoryTree(),
         ));
     }
 
@@ -72,27 +69,29 @@ class ManageController extends BaseController
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
-        if ('POST' == $request->getMethod()) {
-            $members = $request->request->get('members', '');
-            $questionBank = $this->getQuestionBankService()->updateQuestionBankWithMembers($id, $request->request->all(), $members);
+        if ($request->isMethod('POST')) {
+            $questionBank = $this->getQuestionBankService()->updateQuestionBankWithMembers(
+                $id,
+                $request->request->all(),
+                $request->request->get('members', '')
+            );
 
             return $this->createJsonResponse(array(
                 'goto' => $this->generateUrl('question_bank_manage_question_category', array('id' => $questionBank['id'])),
             ));
         }
 
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        $members = $this->getMemberService()->findMembersByBankId($id);
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
+        $users = $this->getUserService()->findUsersByIds(
+            ArrayToolkit::column($this->getMemberService()->findMembersByBankId($id), 'userId')
+        );
         $bankMembers = array();
         foreach ($users as $user) {
             $bankMembers[] = array('id' => $user['id'], 'name' => $user['nickname']);
         }
-        $categoryTree = $this->getCategoryService()->getCategoryTree();
 
         return $this->render('question-bank/manage/info.html.twig', array(
-            'questionBank' => $questionBank,
-            'categoryTree' => $categoryTree,
+            'questionBank' => $this->getQuestionBankService()->getQuestionBank($id),
+            'categoryTree' => $this->getCategoryService()->getCategoryTree(),
             'bankMembers' => json_encode($bankMembers),
         ));
     }
@@ -118,14 +117,6 @@ class ManageController extends BaseController
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
-    }
-
-    /**
-     * @return ItemBankService
-     */
-    protected function getItemBankService()
-    {
-        return $this->createService('ItemBank:ItemBank:ItemBankService');
     }
 
     /**

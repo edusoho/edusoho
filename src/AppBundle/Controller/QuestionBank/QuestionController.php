@@ -20,12 +20,16 @@ class QuestionController extends BaseController
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank)) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
 
         $conditions = $request->query->all();
-        $conditions['bank_id'] = $id;
+        $conditions['bank_id'] = $questionBank['itemBankId'];
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getItemService()->countItems($conditions),
             10
         );
@@ -37,14 +41,14 @@ class QuestionController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $questionCategories = $this->getItemCategoryService()->findItemCategoriesByBankId($id);
-        $categoryTree = $this->getItemCategoryService()->getItemCategoryTree($id);
+        $questionCategories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
+        $categoryTree = $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']);
 
         return $this->render('question-bank/question/index.html.twig', array(
             'questions' => $items,
             'paginator' => $paginator,
             'users' => $this->getUserService()->findUsersByIds(ArrayToolkit::column($items, 'updated_user_id')),
-            'questionBank' => $this->getQuestionBankService()->getQuestionBank($id),
+            'questionBank' => $questionBank,
             'categoryTree' => $categoryTree,
             'categoryTreeArray' => $this->convertCategoryTreeToArray($categoryTree),
             'questionCategories' => ArrayToolkit::index($questionCategories, 'id'),
@@ -76,7 +80,7 @@ class QuestionController extends BaseController
 
         if ($request->isMethod('POST')) {
             $fields = json_decode($request->getContent(), true);
-            $fields['bank_id'] = $id;
+            $fields['bank_id'] = $questionBank['itemBankId'];
 
             $item = $this->getItemService()->createItem($fields);
 
@@ -117,7 +121,7 @@ class QuestionController extends BaseController
         }
 
         $item = $this->getItemService()->getItemWithQuestions($questionId, true);
-        if (empty($item) || $item['bank_id'] != $questionBank['id']) {
+        if (empty($item) || $item['bank_id'] != $questionBank['itemBankId']) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
 
@@ -136,7 +140,7 @@ class QuestionController extends BaseController
             'questionBank' => $questionBank,
             'item' => $item,
             'type' => $item['type'],
-            'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($id),
+            'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($item['bank_id']),
             'goto' => $goto,
         ));
     }
@@ -146,9 +150,13 @@ class QuestionController extends BaseController
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank)) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
 
         $conditions = $request->query->all();
-        $conditions['bank_id'] = $id;
+        $conditions['bank_id'] = $questionBank['itemBankId'];
 
         if (!empty($conditions['category_id'])) {
             $childrenIds = $this->getItemCategoryService()->findCategoryChildrenIds($conditions['category_id']);
@@ -158,7 +166,7 @@ class QuestionController extends BaseController
         }
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getItemService()->countItems($conditions),
             10
         );
@@ -170,8 +178,7 @@ class QuestionController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        $questionCategories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['id']);
+        $questionCategories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
 
         return $this->render('question-bank/question/question-list-table.html.twig', array(
             'questions' => $questions,
@@ -187,9 +194,13 @@ class QuestionController extends BaseController
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank)) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
 
         $item = $this->getItemService()->getItem($itemId);
-        if (!$item || $item['bank_id'] != $id) {
+        if (!$item || $item['bank_id'] != $questionBank['itemBankId']) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
         $this->getItemService()->deleteItem($itemId);
@@ -220,7 +231,7 @@ class QuestionController extends BaseController
         }
 
         $ids = $request->request->get('ids', array());
-        $categoryId = $request->request->get('category_id', array());
+        $categoryId = $request->request->get('categoryId', array());
         $items = $this->getItemService()->findItemsByIds($ids);
         if (empty($items)) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
@@ -236,15 +247,18 @@ class QuestionController extends BaseController
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank)) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
 
         $question = $this->getItemService()->getItem($questionId);
 
-        if (!$question || $question['bank_id'] != $id) {
+        if (!$question || $question['bank_id'] != $questionBank['itemBankId']) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
 
-        $isNewWindow = $request->query->get('isNew');
-        $template = $isNewWindow ? 'question-manage/preview.html.twig' : 'question-manage/preview-modal.html.twig';
+        $template = $request->query->get('isNew') ? 'question-manage/preview.html.twig' : 'question-manage/preview-modal.html.twig';
 
         return $this->render($template, array(
             'question' => $question,
@@ -258,14 +272,16 @@ class QuestionController extends BaseController
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
 
-        $imgRootDir = $this->get('kernel')->getContainer()->getParameter('kernel.root_dir').'/../web';
-        $baseDir = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory');
-        $fileName = str_replace(',', '', $questionBank['name']).'-题目.docx';
-        $path = $baseDir.DIRECTORY_SEPARATOR.$fileName;
+        $fileName = $this->getExportFileName($id);
+        $path = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory').DIRECTORY_SEPARATOR.$fileName;
 
-        $result = $this->getItemService()->exportItems($id, $request->query->all(), $path, $imgRootDir);
+        $result = $this->getItemService()->exportItems(
+            $id,
+            $request->query->all(),
+            $path,
+            $this->get('kernel')->getContainer()->getParameter('kernel.root_dir').'/../web'
+        );
 
         if (empty($result)) {
             return $this->createMessageResponse('info', '导出题目为空', null, 3000, $this->generateUrl('question_bank_manage_question_list', array('id' => $id)));
@@ -296,6 +312,16 @@ class QuestionController extends BaseController
         return $this->createJsonResponse($typesNum);
     }
 
+    protected function getExportFileName($id)
+    {
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank)) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
+
+        return str_replace(',', '', $questionBank['name']).'-题目.docx';
+    }
+
     protected function convertCategoryTreeToArray($categoryTree)
     {
         $categoryTreeArray = array();
@@ -312,11 +338,6 @@ class QuestionController extends BaseController
         $push(array('children' => $categoryTree));
 
         return $categoryTreeArray;
-    }
-
-    protected function getQuestionConfig()
-    {
-        return $this->get('extension.manager')->getQuestionTypes();
     }
 
     /**

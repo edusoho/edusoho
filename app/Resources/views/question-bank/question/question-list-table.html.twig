@@ -58,7 +58,7 @@
           <div class="btn-group">
             <a  href="javascript:" class="color-info js-update-btn" data-url="{{ path('question_bank_manage_question_update', {id:questionBank.id, questionId:question.id, goto: paginator.getPageUrl(paginator.currentPage)}) }}"  class="color-info"> {{'course.question_manage.question.edit_btn'|trans}}</a>
             <a href="javascript:" class="color-info js-delete-btn" data-name='{{'course.question_manage.question'|trans}}'
-            data-url="{{ path('question_bank_manage_question_delete', {id: questionBank.id, questionId: question.id}) }}">
+            data-url="{{ path('question_bank_manage_question_delete', {id: questionBank.id, itemId: question.id}) }}">
               {{'course.question_manage.question.delete_btn'|trans}}
             </a>
           </div>

@@ -1548,7 +1548,7 @@ course.question_manage.more_btn: 更多
 course.question_manage.content_title: 课程题库
 course.question_manage.filter.question_type: --按题型--
 course.question_manage.filter.course: 按课程
-course.question_manage.filter.keywords: 关键字
+course.question_manage.filter.keywords: 关键词
 course.question_manage.filter.select: 请选择
 course.question_manage.stem: 题干
 course.question_manage.score: 得分
@@ -10582,6 +10582,7 @@ question_reedit.category_text: 分类
 question_reedit.category_empty: 无
 question_plus_upgrade_tip: 当前插件版本过低，前往后台升级“题库增强版”插件后，才可继续使用旧模板导入。
 question_bank.to_select.hint: 请先选择题库
+question_bank.select_bank_category_hint: --选择题库分类--
 
 # 新版后台开始
 
