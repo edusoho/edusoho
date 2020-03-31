@@ -136,4 +136,4 @@ class LtcSDKClient {
   }
 }
 
-module.exports = window.ltc = new LtcSDKClient();
+window.ltc = new LtcSDKClient();

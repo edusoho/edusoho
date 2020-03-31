@@ -1,5 +1,5 @@
 {% extends 'activity/content-layout.html.twig' %}
-{% do script(['libs/jquery-countdown.js','app/js/activity/live/index.js']) %}
+{#{% do script(['libs/jquery-countdown.js','app/js/activity/live/index.js']) %} #}
 {% set endLeftSeconds = activity.endTime - activity.nowDate %}
 {% set startLeftSeconds = activity.startTime - activity.nowDate %}
 {% set replayGuid = activity.ext.liveProvider == 1 ? 'activity.live.replay_guid_1'|trans : 'activity.live.replay_guid'|trans %}

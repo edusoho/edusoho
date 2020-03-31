@@ -11,12 +11,16 @@
   <tbody>
   {% if paidCourseDetail %}
     {% for data in paidCourseDetail %}
-      {% if courses[data.course_id].title|default(null) %}
+      {% if courses[data.course_id].id|default(null) %}
         <tr>
           <td>
             <a href="{{ path('course_show', {id:data.course_id}) }}" target="_blank">
               <strong>
-                {{ courseSets[courses[data.course_id].courseSetId].title ~ '-' ~ courses[data.course_id].title }}
+                {% if courses[data.course_id].title|default(null) %}
+                  {{ courseSets[courses[data.course_id].courseSetId].title ~ '-' ~ courses[data.course_id].title }}
+                {% else %}
+                  {{ courseSets[courses[data.course_id].courseSetId].title }}
+                {% endif %}
               </strong><br>
               <span class="text-muted text-sm">{{ 'admin.operation_analysis.paid_course.order'|trans }}：{{ data.sn }}</span>
             </a>

@@ -19,6 +19,43 @@
     <script src="dev-lib/dev-start.js"></script>
     <!--<script src="dist/kityformula-editor.all.min.js"></script>-->
     <script>
+        window.addEventListener("message", function (e) {
+            var eventName = e.data.eventName;
+            if (eventName === 'kityformula.show') {
+                window.kfe.execCommand( "render", '\\placeholder');
+            }
+
+            if (eventName === 'kityformula.ok') {
+                var kfe = window.kfe;
+                var source = kfe.execCommand( "get.source" );
+                var replaceSpecialCharacter = function(source) {
+                    var $source = source.replace(/\\cong/g,'=^\\sim')
+                        .replace(/\\varnothing/g,'\\oslash')
+                        .replace(/\\gets/g,'\\leftarrow')
+                        .replace(/\\because/g,'\\cdot_\\cdot\\cdot')
+                        .replace(/\\blacksquare/g,'\\rule{20}{20}');
+                        return $source;
+                };
+                source = replaceSpecialCharacter(source);
+                if ($.trim(source) == "\\placeholder"){
+                    return;
+                }
+                if(/.*[\u4e00-\u9fa5]+.*$/.test(source)) {
+                    alert("不能含有汉字！");
+                    return false;
+                }
+                for(var i=0;i<source.length;i++)
+                {
+                    var strCode=source.charCodeAt(i);
+                    if((strCode>65248)||(strCode==12288)){
+                        alert("不能含有中文全角字符");
+                        return false;
+                    }
+                }
+                var $imgUrl = 'http://formula.edusoho.net/cgi-bin/mimetex.cgi?'+source;
+                window.parent.postMessage({eventName:'es-ckeditor.post', imageUrl:$imgUrl, source:source }, '*');
+            }
+        }, false);
         jQuery( function ($) {
 
             var factory = kf.EditorFactory.create( $( "#kfEditorContainer" )[ 0 ], {

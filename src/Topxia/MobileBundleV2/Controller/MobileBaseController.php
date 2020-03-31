@@ -517,7 +517,7 @@ class MobileBaseController extends BaseController
                 $user['follower'] = (string) $controller->getUserService()->findUserFollowerCount($user['id']);
 
                 $user['email'] = '****';
-                $user['nickname'] = ($user['destroyed'] == 1) ? "帐号已注销" : $user['nickname'];
+                $user['nickname'] = ($user['destroyed'] == 1) ? '帐号已注销' : $user['nickname'];
 
                 unset($user['password']);
                 unset($user['payPasswordSalt']);

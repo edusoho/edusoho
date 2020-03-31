@@ -80,7 +80,7 @@ class BaseProcessor
         return array_map(function ($user) use ($container) {
             foreach ($user as $key => $value) {
                 if (!in_array($key, array(
-                    'id', 'email', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'nickname', 'roles', 'locked', 'about', 'title', 'destroyed'))
+                    'id', 'email', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'nickname', 'roles', 'locked', 'about', 'title', 'destroyed', ))
                 ) {
                     unset($user[$key]);
                 }
@@ -89,7 +89,7 @@ class BaseProcessor
             $user['smallAvatar'] = $container->get('web.twig.extension')->getFurl($user['smallAvatar'], 'avatar.png');
             $user['mediumAvatar'] = $container->get('web.twig.extension')->getFurl($user['mediumAvatar'], 'avatar.png');
             $user['largeAvatar'] = $container->get('web.twig.extension')->getFurl($user['largeAvatar'], 'avatar-large.png');
-            $user['nickname'] = ($user['destroyed'] == 1) ? "帐号已注销" : $user['nickname'];
+            $user['nickname'] = ($user['destroyed'] == 1) ? '帐号已注销' : $user['nickname'];
 
             return $user;
         }, $users);
@@ -366,7 +366,7 @@ class BaseProcessor
     {
         return $this->controller->getService('System:H5SettingService');
     }
-    
+
     public function createErrorResponse($name, $message)
     {
         $error = array(
