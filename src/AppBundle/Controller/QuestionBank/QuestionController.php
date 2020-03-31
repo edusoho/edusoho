@@ -89,7 +89,7 @@ class QuestionController extends BaseController
 
                 return $this->createJsonResponse(
                     array(
-                        'goto' => $this->generateUrl('question_bank_manage_question_create', $urlParams)
+                        'goto' => $this->generateUrl('question_bank_manage_question_create', $urlParams),
                     )
                 );
             }
@@ -286,7 +286,7 @@ class QuestionController extends BaseController
             $conditions['category_ids'] = explode(',', $conditions['categoryIds']);
         }
 
-        if (isset($conditions['categoryId']) && $conditions['categoryId'] != '') {
+        if (isset($conditions['categoryId']) && '' != $conditions['categoryId']) {
             $conditions['category_ids'] = array($conditions['categoryId']);
         }
 
