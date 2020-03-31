@@ -211,7 +211,7 @@
     }
     &--btn{
       position: absolute;
-      top:vw(8);
+      top:-38px;
       right: vw(8);
       padding: vw(6) vw(16);
       font-size: vw(14);
@@ -221,6 +221,7 @@
       border-radius: vw(30);
       border:1px solid  $primary-color;
       background: #fff;
+      z-index: 9999;
     }
     .icon-markdone{
       margin-right: vw(4);

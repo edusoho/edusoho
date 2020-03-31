@@ -145,6 +145,15 @@ export default {
       return this.taskNumber===0 && this.unitNum===0
     }
   },
+  mounted(){
+    if(Object.keys(this.$route.query).length){
+      const { sourceType,taskId }=this.$route.query;
+      this.setSourceType({
+          sourceType: sourceType,
+          taskId: taskId
+        });
+    }
+  },
   methods: {
     ...mapMutations('course', {
       setSourceType: types.SET_SOURCETYPE

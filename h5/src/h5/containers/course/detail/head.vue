@@ -103,7 +103,7 @@ import tagLink from "&/components/e-tag-link/e-tag-link";
 import finishDialog from "../components/finish-dialog";
 import qs from "qs";
 import report from "@/mixins/course/report";
-import TaskPipe from "@/utils/task-pipe/index";
+//import TaskPipe from "@/utils/task-pipe/index";
 
 export default {
   components: {
@@ -144,15 +144,15 @@ export default {
         className: "course-tag",
         minDirectRewardRatio: 0
       },
-      currentTime: 0,
-      startTime: 0,
+      // currentTime: 0,
+      // startTime: 0,
       timeChangingList: [],
-      taskPipe: undefined,
+      // taskPipe: undefined,
       bindAgencyRelation: {}, // 分销代理商绑定信息
       nextTask: null, //下一课时信息
       completionRate: 0, //任务完成率
       finishDialog: false, //下一课时弹出模态框
-      watchTime:0
+      watchTime: 0
     };
   },
   computed: {
@@ -168,8 +168,8 @@ export default {
     textContent() {
       return this.mediaOpts.text;
     },
-    showLearnBtn(){
-      return ["video", "audio"].includes(this.sourceType)
+    showLearnBtn() {
+      return ["video", "audio"].includes(this.sourceType);
     }
   },
   watch: {
@@ -221,11 +221,14 @@ export default {
     initHead() {
       if (["video", "audio"].includes(this.sourceType)) {
         window.scrollTo(0, 0);
-        this.initReportData(this.selectedPlanId, this.taskId, this.sourceType);
-        this.finishDialog = false;
-        this.getFinishCondition();
+        this.initReport();
         this.initPlayer();
       }
+    },
+    initReport() {
+      this.initReportData(this.selectedPlanId, this.taskId, this.sourceType);
+      this.finishDialog = false;
+      this.getFinishCondition();
     },
     getFinishCondition() {
       this.getCourseData(this.selectedPlanId, this.taskId).then(res => {
@@ -265,7 +268,7 @@ export default {
     },
     async initPlayer() {
       this.$refs.video && (this.$refs.video.innerHTML = "");
-      this.enableFinish = !!this.details.enableFinish;
+      this.enableFinish = !!parseInt(this.details.enableFinish);
       const player = await Api.getMedia(this.getParams()).catch(err => {
         const courseId = Number(this.details.id);
         // 后台课程设置里设置了不允许未登录用户观看免费试看的视频
@@ -354,14 +357,14 @@ export default {
           if (player.taskId !== this.taskId) {
             return;
           }
-          this.intervalReportData();
-          this.intervalReportLearnTime();
+          // this.intervalReportData();
+          // this.intervalReportLearnTime();
         });
         player.on("datapicker.start", e => {
           if (player.taskId !== this.taskId) {
             return;
           }
-          console.log(11)
+          console.log(11);
         });
         player.on("ended", () => {
           if (player.taskId !== this.taskId) {
@@ -375,7 +378,7 @@ export default {
           if (player.taskId !== this.taskId) {
             return;
           }
-          this.watchTime=e.currentTime;
+          this.watchTime = e.currentTime;
           // if (this.finishCondition.type === "time") {
           //   if (e.currentTime / 60 >= parseInt(this.finishCondition.data)) {
           //     this.reprtData("finish");

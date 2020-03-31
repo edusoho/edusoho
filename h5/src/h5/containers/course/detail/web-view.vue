@@ -1,41 +1,80 @@
 <template>
   <!-- 文档播放器 -->
   <div class="web-view">
-    <e-loading v-if="isLoading"/>
+    <e-loading v-if="isLoading" />
     <!-- web-view -->
-    <div v-show="media !== 'text'" id="player"/>
-    <div v-show="media === 'text'" ref="text" class="media-text"/>
-    <div v-if="learnMode">
-      <div class="course-detail__head--btn course-detail__head--activebtn" v-if="enableFinish">
+    <div v-show="media !== 'text'" id="player" />
+    <div v-show="media === 'text'" ref="text" class="media-text" />
+
+    <!-- 学习上报按钮 -->
+    <template>
+      <div
+        v-if="isFinish"
+        class="web-view--btn web-view--activebtn"
+      >
         <i class="iconfont icon-markdone"></i>
         学过了
       </div>
-      <div class="course-detail__head--btn" v-if="enableFinish" @click="toToast">完成条件</div>
-    </div>
+
+      <div v-if="!isFinish">
+        <div
+          class="web-view--btn"
+          v-if="enableFinish"
+          @click="toLearned"
+        >
+          学过了
+        </div>
+        <div
+          class="web-view--btn"
+          v-if="!enableFinish"
+          @click="toToast"
+        >
+          完成条件
+        </div>
+      </div>
+    </template>
+    <!-- 学习上报按钮 -->
+    <finishDialog
+      v-if="finishDialog"
+      :nextTask="nextTask"
+      :completionRate="completionRate"
+      :courseId="courseId"
+      @reloadPage="reloadPage"
+    ></finishDialog>
   </div>
 </template>
 <script>
-import loadScript from 'load-script'
-import Api from '@/api'
-import { mapState, mapMutations } from 'vuex'
-import * as types from '@/store/mutation-types'
-import { Toast } from 'vant'
-import TaskPipe from '@/utils/task-pipe/index'
-
+import loadScript from "load-script";
+import Api from "@/api";
+import { mapState, mapMutations } from "vuex";
+import * as types from "@/store/mutation-types";
+import { Toast } from "vant";
+import TaskPipe from "@/utils/task-pipe/index";
+import report from "@/mixins/course/report";
+import finishDialog from "../components/finish-dialog";
 export default {
+  components: {
+    finishDialog
+  },
+  mixins: [report],
   data() {
     return {
       finishCondition: undefined,
-      learnMode: false,
       enableFinish: false,
-      media: '',
+      media: "",
       isPreview: this.$route.query.preview,
-      taskPipe: undefined,
-      pageLength: 0,
-    }
+      //taskPipe: undefined,
+      nextTask: null, //下一课时信息
+      completionRate: 0, //任务完成率
+      finishDialog: false, //下一课时弹出模态框
+      courseId: null,
+      taskId: null,
+      type: null,
+      player: null
+    };
   },
   computed: {
-    ...mapState('course', {
+    ...mapState("course", {
       details: state => state.details,
       joinStatus: state => state.joinStatus
     }),
@@ -43,113 +82,150 @@ export default {
       isLoading: state => state.isLoading
     })
   },
+  created() {
+    this.courseId = this.$route.query.courseId;
+    this.taskId = this.$route.query.taskId;
+    this.type = this.$route.query.type;
+  },
   async mounted() {
-    this.initTaskPipe();
-    const player = await Api.getMedia(this.getParams()).catch(err => {
-      Toast(err.message)
-      return Promise.reject(err)
-    })
-    this.learnMode = this.details.learnMode !== 'freeMode';
-    this.enableFinish = !!this.details.enableFinish;
-    if (['ppt', 'doc'].includes(this.media)) {
-      this.initPlayer(player)
-      this.pageLength = (player.media && player.media.images && player.media.images.length) || 0;
-    } else {
-      // text类型不需要播放器
-      this.$refs.text.innerHTML = player.media.content
-      this.setNavbarTitle(player.media.title)
-    }
+    this.initData();
   },
   methods: {
     ...mapMutations({
       setNavbarTitle: types.SET_NAVBAR_TITLE
     }),
+    async initData() {
+      this.initReport();
+      this.enableFinish = !!parseInt(this.details.enableFinish);
+      const player = await Api.getMedia(this.getParams()).catch(err => {
+        Toast(err.message);
+        return Promise.reject(err);
+      });
+      if (["ppt", "doc"].includes(this.media)) {
+        this.initPlayer(player);
+      } else {
+        // text类型不需要播放器
+        this.$refs.text.innerHTML = player.media.content;
+      }
+    },
+    initReport() {
+      this.initReportData(this.courseId, this.taskId, this.type);
+      this.finishDialog = false;
+      this.getFinishCondition();
+    },
+    getFinishCondition() {
+      this.getCourseData(this.courseId, this.taskId).then(res => {
+        this.setNavbarTitle(res.title);
+        this.finishCondition = res.activity && res.activity.finishCondition;
+      });
+    },
     toToast() {
       if (this.finishCondition) {
         this.$toast({
           message: this.finishCondition.text,
-          position: 'bottom'
+          position: "bottom"
         });
       }
     },
-    initTaskPipe() {
-      if (this.taskPipe) {
-        return;
-      }
-      const { courseId, taskId, type } = this.$route.query
-      this.taskPipe = new TaskPipe({
-        reportData: {
-          courseId: this.selectedPlanId,
-          taskId: this.taskId
-        },
-      });
-      this.taskPipe.on('courseData', (res) => {
-        this.pageLength = res.length;
-      });
-      this.taskPipe.on('courseData', (res) => {
-        this.finishCondition = res.activity && res.activity.finishCondition;
-      });
-      this.taskPipe.on('report.finish', () => {
-        this.enableFinish = true;
-      })
-      setInterval(() => {
-        const duration = Math.floor(this.taskPipe.getDuration() / 60000);
-        this.taskPipe.trigger('time', duration);
-      }, 1000);
-    },
+    // initTaskPipe() {
+    //   if (this.taskPipe) {
+    //     return;
+    //   }
+    //   const { courseId, taskId, type } = this.$route.query
+    //   this.taskPipe = new TaskPipe({
+    //     reportData: {
+    //       courseId: this.selectedPlanId,
+    //       taskId: this.taskId
+    //     },
+    //   });
+    //   this.taskPipe.on('courseData', (res) => {
+    //     this.pageLength = res.length;
+    //   });
+    //   this.taskPipe.on('courseData', (res) => {
+    //     this.finishCondition = res.activity && res.activity.finishCondition;
+    //   });
+    //   this.taskPipe.on('report.finish', () => {
+    //     this.enableFinish = true;
+    //   })
+    //   setInterval(() => {
+    //     const duration = Math.floor(this.taskPipe.getDuration() / 60000);
+    //     this.taskPipe.trigger('time', duration);
+    //   }, 1000);
+    // },
+
     /*
-    * 试看需要传preview=1
-    * eg: /api/courses/1/task_medias/1?preview=1
-    */
+     * 试看需要传preview=1
+     * eg: /api/courses/1/task_medias/1?preview=1
+     */
     getParams() {
-      const { courseId, taskId, type } = this.$route.query
-      const canTryLookable = !this.joinStatus && this.isPreview
-      this.media = type
+      const { courseId, taskId, type } = this.$route.query;
+      const canTryLookable = !this.joinStatus && this.isPreview;
+      this.media = type;
 
-      return canTryLookable ? {
-        query: {
-          courseId,
-          taskId
-        }, params: {
-          preview: 1
-        }
-      } : {
-        query: {
-          courseId,
-          taskId
-        }
-      }
+      return canTryLookable
+        ? {
+            query: {
+              courseId,
+              taskId
+            },
+            params: {
+              preview: 1
+            }
+          }
+        : {
+            query: {
+              courseId,
+              taskId
+            }
+          };
     },
-    initPlayer(player) {
-      const media = player.media
-      const playerSDKUri = '//service-cdn.qiqiuyun.net/js-sdk/sdk-v1.js?v=' +
-      // const playerSDKUri = '//oilgb9e2p.qnssl.com/js-sdk/sdk-v1.js?v=' // 测试 sdk
-       (Date.now() / 1000 / 60)
+    initPlayer(playerParams) {
+      const media = playerParams.media;
+      const playerSDKUri =
+        "//service-cdn.qiqiuyun.net/js-sdk/sdk-v1.js?v=" +
+        // const playerSDKUri = '//oilgb9e2p.qnssl.com/js-sdk/sdk-v1.js?v=' // 测试 sdk
+        Date.now() / 1000 / 60;
 
-      loadScript(playerSDKUri, (err) => {
-        if (err) throw err
+      loadScript(playerSDKUri, err => {
+        if (err) throw err;
 
         const player = new window.QiQiuYun.Player({
-          id: 'player', // 用于初始化的DOM节点id
+          id: "player", // 用于初始化的DOM节点id
           // playServer: 'play.test.qiqiuyun.cn', // 测试 playServer
           resNo: media.resId, // 想要播放的资源编号
           token: media.token, // 请求播放的认证token
           source: {
-            type: player.mediaType,
+            type: playerParams.mediaType,
             args: media
           }
-        })
-        player.on('ready', () => {
-          this.taskPipe.clearInterval();
-          this.taskPipe.initInterval();
-        })
-        player.on('pagechanged', (e) => {
-          if (e.page === this.pageLength) {
-            this.taskPipe.trigger('end');
+        });
+        this.player = player;
+        player.on("ready", () => {
+          // this.intervalReportData();
+          // this.intervalReportLearnTime();
+        });
+        player.on("pagechanged", e => {
+          if (e.pageNum === e.total) {
+            if (this.finishCondition.type === "end") {
+              this.reprtData("finish");
+            }
           }
-        })
-      })
+        });
+      });
+    },
+    toLearned() {
+      this.reprtData("finish").then(res => {
+        this.nextTask = res.nextTask;
+        this.completionRate = res.completionRate;
+        this.finishDialog = true;
+      });
+    },
+    reloadPage(data) {
+      this.courseId = data.courseId;
+      this.taskId = data.taskId;
+      this.type = data.type;
+      this.initData();
     }
   }
-}
+};
 </script>

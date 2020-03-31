@@ -5,11 +5,8 @@
         <img class="finish-dialog-img" src="static/images/reportDialog.png" />
         <div class="progress-bar">
           <div class="progress-bar__content">
-            <div
-              :style="{ width: rate }"
-              class="progress-bar__rate"
-            >
-               {{ rate }}
+            <div :style="{ width: rate }" class="progress-bar__rate">
+              {{ rate }}
             </div>
           </div>
         </div>
@@ -24,16 +21,18 @@
 </template>
 
 <script>
-import Api from "@/api"
-import copyUrl from '@/mixins/copyUrl'
-import { mapMutations } from 'vuex'
-import * as types from '@/store/mutation-types'
+import Api from "@/api";
+import copyUrl from "@/mixins/copyUrl";
+import { mapMutations } from "vuex";
+import * as types from "@/store/mutation-types";
 export default {
   name: "finish-dialog",
   mixins: [copyUrl],
+  inject: ["reload"],
   data() {
     return {
-      show: true
+      show: true,
+      path: ""
     };
   },
   props: {
@@ -47,34 +46,37 @@ export default {
       type: Number,
       default: 100
     },
-    courseId:{
+    courseId: {
       type: String,
-      default: ''
+      default: ""
     }
   },
   computed: {
     showNextTask() {
-      if(this.nextTask===null){
+      if (this.nextTask === null) {
         return false;
       }
       return Object.keys(this.nextTask).length;
     },
-    rate(){
-      return `${this.completionRate}%`
+    rate() {
+      return `${this.completionRate}%`;
     }
   },
+  created() {
+    this.path = this.$route.path;
+  },
   methods: {
-     ...mapMutations('course', {
+    ...mapMutations("course", {
       setSourceType: types.SET_SOURCETYPE
     }),
     goNextTask() {
-      const params={
-        courseId:this.courseId,
-        taskId:this.nextTask.id
-      }
-      Api.getCourseData({query: params }).then(res=>{
-        this.toLearnTask(res)
-      })
+      const params = {
+        courseId: this.courseId,
+        taskId: this.nextTask.id
+      };
+      Api.getCourseData({ query: params }).then(res => {
+        this.toLearnTask(res);
+      });
     },
     //跳转到task
     toLearnTask(task) {
@@ -88,8 +90,8 @@ export default {
       };
       // 更改store中的当前学习
       this.$store.commit(`course/${types.GET_NEXT_STUDY}`, { nextTask });
-      this.showTypeDetail(task) ;
-      this.show=false;
+      this.showTypeDetail(task);
+      this.show = false;
     },
     showTypeDetail(task) {
       if (task.status !== "published") {
@@ -98,20 +100,10 @@ export default {
       }
       switch (task.type) {
         case "video":
-          if (task.mediaSource === "self") {
-            this.setSourceType({
-              sourceType: "video",
-              taskId: task.id
-            });
-          } else {
-             this.copyPcUrl(task.courseUrl);
-          }
+          this.playVedio(task);
           break;
         case "audio":
-          this.setSourceType({
-            sourceType: "audio",
-            taskId: task.id
-          });
+          this.playAudio(task);
           break;
         case "text":
         case "ppt":
@@ -121,9 +113,11 @@ export default {
             query: {
               courseId: this.courseId,
               taskId: task.id,
-              type: task.type
+              type: task.type,
+              backUrl: `/course/${this.courseId}`
             }
           });
+          this.reload();
           break;
         case "live":
           const nowDate = new Date();
@@ -131,7 +125,10 @@ export default {
           const startDate = new Date(task.startTime * 1000);
           let replay = false;
           if (nowDate > endDate) {
-            if (task.activity && task.activity.replayStatus == "videoGenerated") {
+            if (
+              task.activity &&
+              task.activity.replayStatus == "videoGenerated"
+            ) {
               // 本站文件
               if (task.mediaSource === "self") {
                 this.setSourceType({
@@ -142,7 +139,10 @@ export default {
                 this.copyPcUrl(task.courseUrl);
               }
               return;
-            } else if (task.activity && task.activity.replayStatus == "ungenerated") {
+            } else if (
+              task.activity &&
+              task.activity.replayStatus == "ungenerated"
+            ) {
               Toast("暂无回放");
               return;
             } else {
@@ -191,6 +191,44 @@ export default {
           break;
         default:
           this.copyPcUrl(task.courseUrl);
+      }
+    },
+    playVedio(task) {
+      if (task.mediaSource === "self") {
+        const path = `/course/${this.courseId}`;
+        if (this.$route.path === path) {
+          this.setSourceType({
+            sourceType: "video",
+            taskId: task.id
+          });
+        } else {
+          this.$router.push({
+            path: path,
+            query: {
+              sourceType: "video",
+              taskId: task.id
+            }
+          });
+        }
+      } else {
+        this.copyPcUrl(task.courseUrl);
+      }
+    },
+    playAudio(task) {
+      const path = `/course/${this.courseId}`;
+      if (this.$route.path === path) {
+        this.setSourceType({
+          sourceType: "audio",
+          taskId: task.id
+        });
+      } else {
+        this.$router.push({
+          path: path,
+          query: {
+            sourceType: "audio",
+            taskId: task.id
+          }
+        });
       }
     }
   }
