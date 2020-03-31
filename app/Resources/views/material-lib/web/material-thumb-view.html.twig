@@ -3,19 +3,20 @@
 {% do script(['libs/bootstrap-datetimepicker.js','libs/jquery-validation.js', 'libs/select2.js' ,'app/js/material-lib/index/index.js']) %}
 
 {% block page_body %}
+  {% set sourceFrom = app.request.query.get('sourceFrom')|default('my') %}
 <form id="material-search-form" action="{{ path('material_lib_browsing') }}" method="get" novalidate>
   <input type="hidden" class="js-page" name="page" value="1">
   <div class="source-btn row" role="group" aria-label="...">
     <ul class="nav nav-tabs col-sm-6 mb0">
-      <li class="active" data-value="my"><a href="javascript:;" class="js-source-btn">{{'material_lib.my'|trans}}</a></li>
-      <li class="" data-value="public"><a href="javascript:;" class="js-source-btn">{{'material_lib.public'|trans}}</a></li>
-      <li class="" data-value="favorite"><a href="javascript:;" class="js-source-btn">{{'material_lib.favorite'|trans}}</a></li>
-      <li class="" data-value="sharing"><a href="javascript:;" class="js-source-btn">{{'material_lib.sharing'|trans}}</a></li>
+      <li class="{% if sourceFrom == 'my' %}active{% endif %}" data-value="my"><a href="javascript:;" class="js-source-btn">{{'material_lib.my'|trans}}</a></li>
+      <li class="{% if sourceFrom == 'public' %}active{% endif %}" data-value="public"><a href="javascript:;" class="js-source-btn">{{'material_lib.public'|trans}}</a></li>
+      <li class="{% if sourceFrom == 'favorite' %}active{% endif %}" data-value="favorite"><a href="javascript:;" class="js-source-btn">{{'material_lib.favorite'|trans}}</a></li>
+      <li class="{% if sourceFrom == 'sharing' %}active{% endif %}" data-value="sharing"><a href="javascript:;" class="js-source-btn">{{'material_lib.sharing'|trans}}</a></li>
     </ul>
      <div class="btn-group col-sm-6 hidden-xs">
       {% include 'material-lib/web/form/head.html.twig' %}
     </div>
-    <input type="hidden" name="sourceFrom" value="my">
+    <input type="hidden" name="sourceFrom" value="{{ sourceFrom }}">
   </div>
   {% include 'material-lib/web/form/nav.html.twig' %}
   <div class="material-search-list material-tag js-material-tag">

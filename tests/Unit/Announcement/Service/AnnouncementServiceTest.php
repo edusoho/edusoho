@@ -162,7 +162,7 @@ class AnnouncementServiceTest extends BaseTestCase
                     'functionName' => 'count',
                     'returnValue' => 1,
                     'withParams' => array(
-                        array('targetType' => 'course'),
+                        array('targetType' => 'course', 'orgCode' => '1.'),
                     ),
                 ),
             )

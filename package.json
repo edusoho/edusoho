@@ -12,10 +12,11 @@
     "url": ""
   },
   "devDependencies": {
+    "@babel/node": "^7.0.0",
     "babel-istanbul": "^0.12.2",
     "chai": "^4.1.2",
     "es-commit-msg-validator": "1.0.2",
-    "es-webpack-engine": "3.5.3-rc.1",
+    "es-webpack-engine": "git+https://github.com/cd-fez/es-webpack-engine.git#f67610b3e086f970a49360aaee31489806779bfb",
     "husky": "^0.14.3",
     "istanbul": "^0.4.5",
     "jsdom": "^11.6.2",
@@ -25,10 +26,11 @@
     "sinon": "^4.4.6"
   },
   "dependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/runtime-corejs2": "^7.7.7",
     "axios": "^0.18.0",
     "babel-plugin-module-resolver": "^3.1.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-polyfill": "6.5.0",
     "bootstrap": "3.3.7",
     "bootstrap-daterangepicker": "2.1.24",
     "bootstrap-datetime-picker": "2.3.10",
@@ -42,7 +44,7 @@
     "easy-pie-chart": "2.1.7",
     "echarts": "3.1.10",
     "echo-js": "1.7.3",
-    "es-ckeditor": "4.7.2-patch11",
+    "es-ckeditor": "git+https://github.com/cd-fez/es-ckeditor.git#master",
     "es-fullcalendar": "3.7.0-patch5",
     "es-jcrop": "latest",
     "es-jquery-sortable": "0.9.13-patch2",
@@ -86,21 +88,13 @@
     "typeahead.js": "0.11.1",
     "ua-parser-js": "^0.7.17",
     "video.js": "4.10.2",
+    "vue": "^2.6.11",
     "waypoints": "4.0.1",
     "websocket": "^1.0.25",
     "weixin-js-sdk": "1.2.0"
   },
-  "babel": {
-    "presets": [
-      "es2015",
-      "react",
-      "stage-0"
-    ],
-    "plugins": [],
-    "compact": false
-  },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.dev.js --parameters webpack.config.js",
+    "dev": "cross-env NODE_ENV=development nodemon --trace-deprecation --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.dev.js --parameters webpack.config.js",
     "dev:debug": "npm run dev sourcemap:true",
     "dev:custom": "npm run dev watch:CustomBundle",
     "compile": "cross-env NODE_ENV=production node --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.prod.js --parameters webpack.config.js",

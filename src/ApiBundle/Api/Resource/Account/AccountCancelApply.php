@@ -4,7 +4,6 @@ namespace ApiBundle\Api\Resource\Account;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Common\CommonException;
 use Biz\DestroyAccount\Service\DestroyAccountRecordService;
 
 class AccountCancelApply extends AbstractResource

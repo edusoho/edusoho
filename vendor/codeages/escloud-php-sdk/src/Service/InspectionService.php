@@ -1,4 +1,5 @@
 <?php
+
 namespace ESCloud\SDK\Service;
 
 use ESCloud\SDK\Exception\ResponseException;
@@ -13,6 +14,7 @@ class InspectionService extends BaseService
      * 获得帐户信息
      *
      * @return array
+     *
      * @throws ResponseException
      * @throws SDKException
      * @throws ClientException
