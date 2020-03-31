@@ -85,13 +85,9 @@ check env:
     - redis:latest
   script:
     #    - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
-    - phpunit -c app/ --testsuite SpecialTest
-    - phpunit -c app/ --testsuite UnitA2B
-    - phpunit -c app/ --testsuite UnitC2C
-    - phpunit -c app/ --testsuite UnitD2D
-    - phpunit -c app/ --testsuite UnitE2P
-    - phpunit -c app/ --testsuite UnitQ2T
-    - phpunit -c app/ --testsuite UnitU2Z
+    - composer remove phpunit/phpunit
+    - composer require bin/phpunit
+    - bin/phpunit-diff
   only:
     refs:
       - merge_requests
