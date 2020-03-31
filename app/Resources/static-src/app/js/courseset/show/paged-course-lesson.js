@@ -22,6 +22,7 @@ class PagedCourseLesson {
     let finalOptions = $.extend(this._getDefaultOptions(options), options);
     finalOptions.wrapDom = options.wrapTarget;
     finalOptions.pageSize = this._getPageSizeByMaxLessonsNumOfChapter(finalOptions)
+
     new ESInfiniteCachedScroll(finalOptions);
 
     if (this._displayAllImmediately) {
@@ -129,7 +130,7 @@ class PagedCourseLesson {
 
         'getTaskName': function(data, context) {
           if (data.isSingleTaskLesson) {
-            return Translator.trans('course.lesson', { part_name: context.i18n.i18nLessonName, number: context.getLessonNum(data, context), title: data.title });
+            return ('1' == data['isOptional']) ? data.title : Translator.trans('course.lesson', { part_name: context.i18n.i18nLessonName, number: context.getLessonNum(data, context), title: data.title });
           } else {
             return Translator.trans('course.catalogue.task_status.task', { taskName: context.i18n.i18nTaskName, taskNumber: data.number, taskTitle: data.title });
           }

@@ -10785,4 +10785,5 @@ exception.live_statistic.not_found: 直播数据未获取到
 exception.live_statistic.not_support: 当前直播供应商暂不支持该功能
 admin.article_setting.article_copy_manage: 资讯防复制
 
+task.show_optional_tips: 显示选修课时
 admin_v2.user.manage.change_nickname_password.heading_title: 修改用户名和密码

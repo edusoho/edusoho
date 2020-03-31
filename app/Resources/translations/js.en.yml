@@ -1026,6 +1026,7 @@ admin.analysis.register_num: number of registered
 admin.analysis.user_total_num: total number of users
 admin.analysis.view_num: number of views
 admin.analysis.vip_income: vip income
+admin.analysis.app/Resources/translations/messages.zh_CN.yml: number of paid user
 admin.announcement.save_error_hint: Operation failed
 admin.announcement.delete_hint: Are you sure you want to delete this announcement?
 admin.app.uninstall_hint: Really want to uninstall this app?

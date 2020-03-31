@@ -1,6 +1,6 @@
 <div class="course-detail-content js-course-detail-content">
   
-  {% include 'course/task-list/parts/task-list-template.html.twig' %}
+  {% include 'course/task-list/parts/task-list-template.html.twig' with {showOptional:showOptional|default(false)} %}
 
   <ul class="task-list task-list-md task-list-hover infinite-container"></ul>
 
