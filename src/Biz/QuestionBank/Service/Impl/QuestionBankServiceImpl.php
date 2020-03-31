@@ -2,15 +2,15 @@
 
 namespace Biz\QuestionBank\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\QuestionBank\Dao\QuestionBankDao;
+use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Taxonomy\CategoryException;
-use Biz\Common\CommonException;
-use Biz\QuestionBank\QuestionBankException;
 use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
 
 class QuestionBankServiceImpl extends BaseService implements QuestionBankService

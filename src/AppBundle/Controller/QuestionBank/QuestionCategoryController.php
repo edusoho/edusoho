@@ -70,7 +70,7 @@ class QuestionCategoryController extends BaseController
         $children[] = $id;
 
         return $this->createJsonResponse(array(
-            'questionCount' => $this->getItemService()->countItems(array('category_ids' => $children))
+            'questionCount' => $this->getItemService()->countItems(array('category_ids' => $children)),
         ));
     }
 

@@ -9,7 +9,7 @@ class QuestionBankAddItemBankId extends Migration
      */
     public function up()
     {
-        $this->getContainer()->offsetGet('db')->exec("alter table `question_bank` add column `itemBankId` int(10) not null comment '标准题库id'");
+        $this->getContainer()->offsetGet('db')->exec("ALTER TABLE `question_bank` ADD COLUMN `itemBankId` INT(10) NOT NULL comment '标准题库id'");
     }
 
     /**
@@ -17,6 +17,6 @@ class QuestionBankAddItemBankId extends Migration
      */
     public function down()
     {
-        $this->getContainer()->offsetGet('db')->exec("alter table `question_bank` drop column `itemBankId`;");
+        $this->getContainer()->offsetGet('db')->exec('ALTER TABLE `question_bank` DROP COLUMN `itemBankId`;');
     }
 }

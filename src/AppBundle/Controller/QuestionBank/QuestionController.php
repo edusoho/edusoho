@@ -10,8 +10,8 @@ use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class QuestionController extends BaseController
 {
@@ -93,7 +93,7 @@ class QuestionController extends BaseController
 
                 return $this->createJsonResponse(
                     array(
-                        'goto' => $this->generateUrl('question_bank_manage_question_create', $urlParams)
+                        'goto' => $this->generateUrl('question_bank_manage_question_create', $urlParams),
                     )
                 );
             }
@@ -231,7 +231,7 @@ class QuestionController extends BaseController
         }
 
         $ids = $request->request->get('ids', array());
-        $categoryId = $request->request->get('categoryId', array());
+        $categoryId = $request->request->get('categoryId', 0);
         $items = $this->getItemService()->findItemsByIds($ids);
         if (empty($items)) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());

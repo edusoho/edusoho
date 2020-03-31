@@ -2,9 +2,9 @@
 
 namespace AppBundle\Controller\AdminV2\Teach;
 
-use AppBundle\Controller\AdminV2\BaseController;
-use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Controller\AdminV2\BaseController;
 use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
