@@ -27,8 +27,8 @@
     {{ question.score|default(0)|score_text }}
   </td>
   {% if question.answer_mode in ['uncertain_choice', 'choice'] %}
-    <td class="js-miss-score" data-miss-score="{{ question.missScore|default(0)|score_text }}">
-      {{ question.missScore|default(0)|score_text }}
+    <td class="js-miss-score" data-miss-score="{{ question.miss_score|default(0)|score_text }}">
+      {{ question.miss_score|default(0)|score_text }}
     </td>
   {% else %}
     <td></td>

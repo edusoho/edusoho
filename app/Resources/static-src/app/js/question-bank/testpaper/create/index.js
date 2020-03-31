@@ -125,7 +125,7 @@ class TestpaperForm {
       score: questionScore
     };
     if ($(that).find('.js-miss-score').length > 0) {
-      question['missScore'] = parseFloat($(that).find('.js-miss-score').data('missScore'));
+      question['miss_score'] = parseFloat($(that).find('.js-miss-score').data('missScore'));
     }
 
     return question;
