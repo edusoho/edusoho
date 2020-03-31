@@ -52,7 +52,7 @@ class BizSessionHandler implements \SessionHandlerInterface
 
         $session = $this->getSessionService()->getSessionBySessId($session_id);
 
-        return $session['sess_data'];
+        return empty($session['sess_data']) ? null : $session['sess_data'];
     }
 
     public function write($session_id, $session_data)
