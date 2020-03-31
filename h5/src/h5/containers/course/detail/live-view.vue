@@ -46,7 +46,8 @@ export default {
     this.initReportData(
       this.courseId,
       this.taskId,
-      "live"
+      "live",
+      false
     );
   },
   methods: {

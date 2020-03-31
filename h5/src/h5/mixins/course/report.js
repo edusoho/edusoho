@@ -24,7 +24,7 @@ export default {
      * @param {*} taskId 
      * @param {*} sourceType  上报课程类型
      */
-    initReportData(courseId, taskId, sourceType) {
+    initReportData(courseId, taskId, sourceType,reportNow=true) {
       this.clearReportIntervalTime();
       this.reportData = { courseId, taskId };
       this.reportType = sourceType;
@@ -32,14 +32,14 @@ export default {
       this.reportIntervalTime = null;
       this.reportLearnTime = null;
       this.reportFinishCondition = null;
-      if (sourceType !== "live") {
-        initEvent;
+      if (reportNow) {
+        this.initReportEvent();
       }
     },
     /**
      * 初始化上报所需方法
      */
-    initEvent() {
+    initReportEvent() {
       this.reprtData();
       this.intervalReportData();
       this.intervalReportLearnTime();
