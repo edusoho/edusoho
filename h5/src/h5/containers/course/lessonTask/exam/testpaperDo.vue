@@ -313,67 +313,6 @@ export default {
           }
         })
     },
-    // //处理六大题型数据
-    // sixType(type, item) {
-    //   if (type == 'single_choice') {
-    //     let length = item.metas.choices.length;
-    //     //刷新页面或意外中断回来数据会丢失，因此要判断本地是否有缓存数据，如果有要把数据塞回
-    //     if (this.lastAnswer) {
-    //       this.$set(this.answer, item.id, this.lastAnswer[item.id]);
-    //     } else {
-    //       this.$set(this.answer, item.id, []);
-    //     }
-    //     this.info.push(item);
-    //   }
-    //   if (type == 'choice' || type == 'uncertain_choice') {
-    //     if (this.lastAnswer) {
-    //       this.$set(this.answer, item.id, this.lastAnswer[item.id]);
-    //     } else {
-    //       this.$set(this.answer, item.id, []);
-    //     }
-    //     this.info.push(item);
-    //   }
-    //   if (type == 'essay') {
-    //     if (this.lastAnswer) {
-    //       this.$set(this.answer, item.id, this.lastAnswer[item.id]);
-    //     } else {
-    //       this.$set(this.answer, item.id, ['']);
-    //     }
-    //     this.info.push(item);
-    //   }
-
-    //   if (type == 'fill') {
-    //     let fillstem = item.stem;
-    //     let { stem, index } = this.fillReplce(fillstem, 0);
-    //     item.stem = stem;
-    //     item.fillnum = index;
-    //     if (this.lastAnswer) {
-    //       this.$set(this.answer, item.id, this.lastAnswer[item.id]);
-    //     } else {
-    //       this.$set(this.answer, item.id, new Array(index).fill(''));
-    //     }
-    //     this.info.push(item);
-    //   }
-
-    //   if (type == 'determine') {
-    //     if (this.lastAnswer) {
-    //       this.$set(this.answer, item.id, this.lastAnswer[item.id]);
-    //     } else {
-    //       this.$set(this.answer, item.id, []);
-    //     }
-    //     this.info.push(item);
-    //   }
-    // },
-    // //处理富文本，并统计填空题的空格个数
-    // fillReplce(stem, index) {
-    //   const reg = /\[\[.+?\]\]/;
-    //   while (reg.exec(stem)) {
-    //     stem = stem.replace(reg, () => {
-    //       return `<span class="fill-bank">（${++index}）</span>`;
-    //     });
-    //   }
-    //   return { stem, index };
-    // },
     // 答题卡状态判断,finish 0是未完成  1是已完成
     formatStatus(type, id) {
       let finish = 0

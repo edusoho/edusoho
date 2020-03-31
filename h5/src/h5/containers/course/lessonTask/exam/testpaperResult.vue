@@ -87,12 +87,13 @@ import Api from "@/api";
 import { mapState, mapMutations, mapActions } from "vuex";
 import * as types from "@/store/mutation-types";
 import examMixin from "@/mixins/lessonTask/exam.js";
+import report from "@/mixins/course/report";
 import { getdateTimeDown } from "@/utils/date-toolkit.js";
 import { Dialog, Toast } from "vant";
 
 export default {
   name: "TestpaperResult",
-  mixins: [examMixin],
+  mixins: [examMixin, report],
   data() {
     return {
       enable_facein: "", //是否开启云监考
@@ -132,7 +133,8 @@ export default {
   computed: {
     ...mapState({
       isLoading: state => state.isLoading,
-      user: state => state.user
+      user: state => state.user,
+      selectedPlanId: state => state.selectedPlanId,
     }),
     usedTime: function() {
       const timeInterval = parseInt(this.result.usedTime) || 0;
@@ -145,6 +147,7 @@ export default {
     }
   },
   created() {
+    this.initReport();
     this.getTestpaperResult();
   },
   beforeRouteEnter(to, from, next) {
@@ -175,7 +178,8 @@ export default {
         this.isReadOver = this.result.status === "finished";
         this.getSubjectList(res.items);
         this.calSubjectHeight();
-
+        //上报学习进度
+        this.reprtData("doing");
         this.canDoing(this.result, this.user.id)
           .then(() => {
             this.startTestpaper("KeepDoing");
@@ -185,6 +189,10 @@ export default {
           });
       });
       this.getInfo();
+    },
+    //初始化上报数据
+    initReport() {
+      this.initReportData(this.selectedPlanId,this.$route.query.targetId, "testpaper",false);
     },
     judgeTime() {
       const interval = this.redoInterval;

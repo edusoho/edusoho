@@ -17,6 +17,9 @@ export default {
       learnTime: 0 // 学习时长
     };
   },
+  beforeDestroy(){
+    this.clearReportIntervalTime();
+  },
   methods: {
     /**
      * 初始化上报数据
@@ -31,6 +34,7 @@ export default {
       this.isFinish = false;
       this.reportIntervalTime = null;
       this.reportLearnTime = null;
+      this.learnTime=0;
       this.reportFinishCondition = null;
       if (reportNow) {
         this.initReportEvent();
@@ -67,9 +71,10 @@ export default {
      * @param {*} courseId
      * @param {*} taskId
      * @param {*} events  //doing finish
+     *  @param {*} ContinuousReport //是否每间隔一分钟上报
      */
-    reprtData(events = "doing") {
-      if (this.isFinish) {
+    reprtData(events = "doing",ContinuousReport=false) {
+      if (this.isFinish&&!ContinuousReport) {
         return;
       }
       let params = {};
@@ -103,7 +108,6 @@ export default {
      */
     handleReprtResult(res) {
       if (res.result.status === "finish") {
-        this.clearReportIntervalTime();
         this.isFinish = true;
         this.$store.commit(types.SET_TASK_SATUS, "finish");
       } else {
@@ -113,7 +117,6 @@ export default {
     intervalReportLearnTime() {
       this.reportLearnTime = setInterval(() => {
         this.checkoutTime();
-        // eslint-disable-next-line
         this.learnTime++;
       }, 1000);
     },
@@ -123,7 +126,7 @@ export default {
     intervalReportData(min = 1) {
       const intervalTime = min * 60 * 1000;
       this.reportIntervalTime = setInterval(() => {
-        this.reprtData("doing");
+        this.reprtData("doing",true);
       }, intervalTime);
     },
     /**
