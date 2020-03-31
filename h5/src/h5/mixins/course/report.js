@@ -27,18 +27,22 @@ export default {
       this.reportLearnTime = null;
       this.reportFinishCondition = null;
       this.reprtData();
+      this.intervalReportData();
+      this.intervalReportLearnTime();
     },
     // 获取任务信息
     getCourseData(courseId, taskId) {
       const param = { courseId, taskId };
-      return Api.getCourseData({ query: param })
+      return new Promise((resolve, reject) => {
+        Api.getCourseData({ query: param })
         .then(res => {
           this.reportFinishCondition = res.activity.finishCondition;
-          return res;
+          resolve(res);
         })
         .catch(err => {
-          console.log(err);
+          reject(err);
         });
+      })
     },
     /**
      * 上报课时学习情况
@@ -50,18 +54,20 @@ export default {
       if (this.isFinish) {
         return;
       }
-      let watchTime = this.learnTime;
-      if (['video', 'audio'].includes(this.reportType)) {
-        watchTime = this.watchTime;
+      let params={}
+      if(events==="doing"){
+        let watchTime = this.learnTime;
+        if (['video', 'audio'].includes(this.reportType)) {
+          watchTime = this.watchTime;
+        }
+        params = { watchTime };
       }
-      const params = { watchTime };
 
       const query = {
         courseId: this.reportData.courseId,
         taskId: this.reportData.taskId,
         events
       };
-
       return new Promise((resolve, reject) => {
         Api.reportTask({ query, params })
           .then(res => {
@@ -102,6 +108,9 @@ export default {
      * 检验是否到达完成条件时间
      */
     checkoutTime() {
+      if(!this.reportFinishCondition){
+        return;
+      }
       if (this.reportFinishCondition.type === 'time') {
         if (
           parseInt(this.learnTime / 60, 10) >=
