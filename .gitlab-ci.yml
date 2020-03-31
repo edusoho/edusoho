@@ -85,8 +85,8 @@ check env:
     - redis:latest
   script:
     #    - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
-    - composer remove phpunit/phpunit
-    - composer require bin/phpunit
+    - composer remove phpunit/phpunit --ignore-platform-reqs
+    - composer require-dev bin/phpunit --ignore-platform-reqs
     - bin/phpunit-diff
   only:
     refs:
