@@ -53,6 +53,10 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         array (
             'Webmozart\\Assert\\' => 17,
         ),
+        'V' => 
+        array (
+            'Valitron\\' => 9,
+        ),
         'T' => 
         array (
             'Twig\\' => 5,
@@ -203,6 +207,10 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         'Webmozart\\Assert\\' => 
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
+        ),
+        'Valitron\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/vlucas/valitron/src/Valitron',
         ),
         'Twig\\' => 
         array (

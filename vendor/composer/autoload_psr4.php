@@ -9,6 +9,7 @@ return array(
     'phpDocumentor\\Reflection\\' => array($vendorDir . '/phpdocumentor/reflection-common/src', $vendorDir . '/phpdocumentor/reflection-docblock/src', $vendorDir . '/phpdocumentor/type-resolver/src'),
     'Zend\\Escaper\\' => array($vendorDir . '/zendframework/zend-escaper/src'),
     'Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
+    'Valitron\\' => array($vendorDir . '/vlucas/valitron/src/Valitron'),
     'Twig\\' => array($vendorDir . '/twig/twig/src'),
     'Topxia\\Api\\' => array($baseDir . '/api/src/Topxia/Api'),
     'TiBeN\\' => array($vendorDir . '/tiben/crontab-manager/src'),
