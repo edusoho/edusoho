@@ -512,6 +512,15 @@ course_set_detail_data:
    path:  /course_set/detail/data/{id}
    defaults: { _controller: AppBundle:Admin/CourseSet:detailData }
 
+admin_course_set_detail_data_export_prepare:
+  path: /course_set/detail/data/{courseId}/export/prepare
+  defaults: { _controller: AppBundle:Admin/CourseSet:prepareForExportCourseDetailData }
+  permissions: [admin_course_set_data]
+
+admin_course_set_detail_data_export:
+  path: /course_set/detail/data/{courseId}/export
+  defaults: { _controller: AppBundle:Admin/CourseSet:exportCourseDetailData}
+
 admin_courses_data:
     path:  /courses/data/{courseSetId}
     defaults: { _controller: AppBundle:Admin/Course:coursesData }
