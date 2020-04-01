@@ -130,6 +130,9 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             if (class_exists('Symfony\Bundle\WebProfilerBundle\WebProfilerBundle')) {
                 $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             }
+            if (class_exists('Symfony\Bundle\WebServerBundle\WebServerBundle')) {
+                $bundles[] = new Symfony\Bundle\WebServerBundle\WebServerBundle();
+            }
             if (class_exists('Sensio\Bundle\DistributionBundle\SensioDistributionBundle')) {
                 $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             }
