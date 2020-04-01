@@ -45,9 +45,5 @@ interface QuestionBankService
 
     public function canManageBank($bankId);
 
-    public function waveTestpaperNum($id, $diff);
-
-    public function waveQuestionNum($id, $diff);
-
     public function findUserManageBanks();
 }

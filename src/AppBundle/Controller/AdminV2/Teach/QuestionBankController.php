@@ -2,46 +2,39 @@
 
 namespace AppBundle\Controller\AdminV2\Teach;
 
-use AppBundle\Controller\AdminV2\BaseController;
-use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Controller\AdminV2\BaseController;
 use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
-use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
 use Symfony\Component\HttpFoundation\Request;
 
 class QuestionBankController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $conditions = $request->query->all();
-        $conditions = $this->fillOrgCode($conditions);
-        $count = $this->getQuestionBankService()->countQuestionBanks($conditions);
-        $paginator = new Paginator($this->get('request'), $count, 20);
+        $conditions = $this->fillOrgCode($request->query->all());
+        $paginator = new Paginator($request, $this->getQuestionBankService()->countQuestionBanks($conditions), 20);
         $questionBanks = $this->getQuestionBankService()->searchQuestionBanks(
             $conditions,
             array('id' => 'desc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $categories = $this->getCategoryService()->findCategoriesByIds(
-            ArrayToolkit::column($questionBanks, 'categoryId')
-        );
-        $categoryTree = $this->getCategoryService()->getCategoryTree();
 
         return $this->render('admin-v2/teach/question-bank/index.html.twig', array(
             'questionBanks' => $questionBanks,
-            'categories' => $categories,
+            'categories' => $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($questionBanks, 'categoryId')),
             'paginator' => $paginator,
-            'categoryTree' => $categoryTree,
+            'categoryTree' => $this->getCategoryService()->getCategoryTree(),
             'categoryId' => empty($conditions['categoryId']) ? 0 : $conditions['categoryId'],
         ));
     }
 
     public function createAction(Request $request)
     {
-        if ('POST' == $request->getMethod()) {
+        if ($request->isMethod('POST')) {
             $questionBank = $this->getQuestionBankService()->createQuestionBank($request->request->all());
 
             return $this->createJsonResponse($questionBank);
@@ -52,35 +45,36 @@ class QuestionBankController extends BaseController
             'name' => '',
             'categoryId' => 0,
         );
-        $categoryTree = $this->getCategoryService()->getCategoryTree();
 
         return $this->render('admin-v2/teach/question-bank/modal.html.twig', array(
             'questionBank' => $questionBank,
-            'categoryTree' => $categoryTree,
+            'categoryTree' => $this->getCategoryService()->getCategoryTree(),
         ));
     }
 
     public function editAction(Request $request, $id)
     {
-        if ('POST' == $request->getMethod()) {
-            $members = $request->request->get('members', '');
-            $questionBank = $this->getQuestionBankService()->updateQuestionBankWithMembers($id, $request->request->all(), $members);
+        if ($request->isMethod('POST')) {
+            $questionBank = $this->getQuestionBankService()->updateQuestionBankWithMembers(
+                $id,
+                $request->request->all(),
+                $request->request->get('members', '')
+            );
 
             return $this->createJsonResponse($questionBank);
         }
 
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        $members = $this->getMemberService()->findMembersByBankId($id);
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
+        $users = $this->getUserService()->findUsersByIds(
+            ArrayToolkit::column($this->getMemberService()->findMembersByBankId($id), 'userId')
+        );
         $bankMembers = array();
         foreach ($users as $user) {
             $bankMembers[] = array('id' => $user['id'], 'name' => $user['nickname']);
         }
-        $categoryTree = $this->getCategoryService()->getCategoryTree();
 
         return $this->render('admin-v2/teach/question-bank/modal.html.twig', array(
-            'questionBank' => $questionBank,
-            'categoryTree' => $categoryTree,
+            'questionBank' => $this->getQuestionBankService()->getQuestionBank($id),
+            'categoryTree' => $this->getCategoryService()->getCategoryTree(),
             'bankMembers' => json_encode($bankMembers),
         ));
     }
@@ -98,14 +92,6 @@ class QuestionBankController extends BaseController
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
-    }
-
-    /**
-     * @return ItemBankService
-     */
-    protected function getItemBankService()
-    {
-        return $this->createService('ItemBank:ItemBank:ItemBankService');
     }
 
     /**
