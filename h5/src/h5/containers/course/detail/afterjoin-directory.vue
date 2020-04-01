@@ -73,7 +73,8 @@ export default {
       slideIndex: 0, // 顶部滑动的索引
       taskId: null,
       nodata: false,
-      allTask: {}
+      allTask: {},
+      allTaskId: [] //所有task的id
     };
   },
   computed: {
@@ -81,6 +82,7 @@ export default {
       nextStudy: state => state.nextStudy,
       selectedPlanId: state => state.selectedPlanId,
       OptimizationCourseLessons: state => state.OptimizationCourseLessons,
+      details: state => state.details,
       // allTask: state => state.allTask,
       taskStatus: state => state.taskStatus
     }),
@@ -99,7 +101,8 @@ export default {
       deep: true
     },
     taskStatus: {
-      handler: "changeTaskStatus"
+      handler: "changeTaskStatus",
+      immediate: false
     }
   },
   methods: {
@@ -128,7 +131,6 @@ export default {
       this.nodata = false;
       this.setItems(res);
       this.mapChild(this.item);
-      // this.$store.commit(types.SET_ALL_TASK,this.allTask)
       this.startScroll();
     },
     resetData() {
@@ -240,6 +242,7 @@ export default {
       task.level = this.level;
       task.taskIndex = index;
       this.allTask[task.id] = { ...task };
+      this.allTaskId.push(task.id);
     },
     getLessonIndex(task, index) {
       // 非默认教学计划 是0  默认计划是lesson的index
@@ -283,12 +286,14 @@ export default {
       if (!val) {
         return;
       }
+      if (val === "finish") {
+        this.changeLockStatus();
+      }
       const task = this.allTask[this.taskId];
       let result = {};
       if (task.level === 2) {
-        const nowTask = this.item[task.unitIndex].children[task.LessonIndex].tasks[
-          task.taskIndex
-        ];
+        const nowTask = this.item[task.unitIndex].children[task.LessonIndex]
+          .tasks[task.taskIndex];
         if (nowTask.result) {
           nowTask.result.status = val;
         } else {
@@ -303,6 +308,27 @@ export default {
         } else {
           result.status = val;
           nowTask.result = result;
+        }
+      }
+    },
+    changeLockStatus() {
+      if (this.details.learnMode !== "lockMode") {
+        return;
+      }
+      const taskIndex = this.allTaskId.indexOf(this.taskId.toString());
+      if (taskIndex < this.allTaskId.length - 1) {
+        const nextTaskId = this.allTaskId[taskIndex + 1];
+        const nextTask = this.allTask[nextTaskId];
+        if (nextTask.level === 2) {
+          const nowTask = this.item[nextTask.unitIndex].children[
+            nextTask.LessonIndex
+          ].tasks[nextTask.taskIndex];
+          nowTask.lock = false;
+        } else {
+          const nowTask = this.item[nextTask.chapterIndex].children[
+            nextTask.unitIndex
+          ].children[nextTask.LessonIndex].tasks[nextTask.taskIndex];
+          nowTask.lock = false;
         }
       }
     }
