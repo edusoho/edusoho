@@ -215,8 +215,7 @@ export default {
     },
     toLearned() {
       this.reprtData("finish").then(res => {
-        this.nextTask = res.nextTask;
-        this.completionRate = res.completionRate;
+        this.finishResult=res;
         this.finishDialog = true;
       });
     },

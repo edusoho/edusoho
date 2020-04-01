@@ -41,6 +41,9 @@ const mutations = {
   },
   [types.UPDATE_PROGRESS](currentState, payload) {
     currentState.details.progress.percent = payload;
+  },
+  [types.SET_ALL_TASK](currentState, payload) {
+    currentState.allTask = payload;
   }
 };
 
