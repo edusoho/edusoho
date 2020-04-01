@@ -18,6 +18,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\TestpaperActivityService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class ManageController extends BaseController
 {
@@ -229,33 +230,23 @@ class ManageController extends BaseController
     {
         $this->getCourseSetService()->tryManageCourseSet($id);
 
-        $testpaperId = $request->request->get('testpaperId');
+        $assessmentId = $request->request->get('testpaperId');
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-
-        $bank = $this->getQuestionBankService()->getQuestionBank($testpaper['bankId']);
+        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
+        
+        $bank = $this->getQuestionBankService()->getQuestionBank($assessment['bank_id']);
         if (empty($bank)) {
-            return $this->createMessageResponse('error', 'bank is not exist');
+            return $this->createMessageResponse('error', 'bank is not ex33ist');
         }
 
-        if (empty($testpaper)) {
-            return $this->createMessageResponse('error', 'testpaper not found');
+        if (empty($assessment)) {
+            return $this->createMessageResponse('error', 'assessment not found');
         }
 
-        $items = $this->getTestpaperService()->getItemsCountByParams(
-            array('testId' => $testpaperId, 'parentIdDefault' => 0),
-            'questionType'
-        );
-        $subItems = $this->getTestpaperService()->getItemsCountByParams(
-            array('testId' => $testpaperId, 'parentId' => 0)
-        );
-
-        $items = ArrayToolkit::index($items, 'questionType');
-
-        $items['material'] = $subItems[0];
+        $assessment = $this->getAssessmentService()->showAssessment($assessmentId);
 
         return $this->render('testpaper/manage/item-get-table.html.twig', array(
-            'items' => $items,
+            'assessment' => $assessment,
         ));
     }
 
@@ -737,5 +728,13 @@ class ManageController extends BaseController
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 }

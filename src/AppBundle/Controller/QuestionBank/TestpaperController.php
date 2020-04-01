@@ -385,13 +385,13 @@ class TestpaperController extends BaseController
         }
 
         $conditions = array(
-            'bankId' => $id,
+            'bank_id' => $id,
             'type' => 'testpaper',
             'keyword' => $request->query->get('keyword', ''),
         );
-        $totalCount = $this->getTestpaperService()->searchTestpaperCount($conditions);
+        $totalCount = $this->getAssessmentService()->countAssessments($conditions);
         $conditions['status'] = 'open';
-        $openCount = $this->getTestpaperService()->searchTestpaperCount($conditions);
+        $openCount = $this->getAssessmentService()->countAssessments($conditions);
 
         $pagination = new Paginator(
             $request,
@@ -399,19 +399,19 @@ class TestpaperController extends BaseController
             10
         );
 
-        $testPapers = $this->getTestpaperService()->searchTestpapers(
+        $testPapers = $this->getAssessmentService()->searchAssessments(
             $conditions,
-            array('createdTime' => 'DESC'),
+            array('created_time' => 'DESC'),
             $pagination->getOffsetCount(),
             $pagination->getPerPageCount()
         );
 
         foreach ($testPapers as &$testPaper) {
-            $testPaper = ArrayToolkit::parts($testPaper, array(
-                'id',
-                'name',
-                'score',
-            ));
+            $testPaper = array(
+                'id' => $testPaper['id'],
+                'name' => $testPaper['name'],
+                'score' => $testPaper['total_score'],
+            );
         }
 
         $data = array(
