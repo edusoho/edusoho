@@ -351,7 +351,7 @@ export default {
           if (player.taskId !== this.taskId) {
             return;
           }
-          this.reprtData();
+          this.reprtData("doing",true);
         });
         player.on("ready", () => {
           if (player.taskId !== this.taskId) {
