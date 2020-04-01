@@ -17,6 +17,7 @@ export const GET_NEXT_STUDY = 'GET_NEXT_STUDY';
 export const HAND_EXAM = 'HAND_EXAM';
 export const SET_ALL_TASK = 'SET_ALL_TASK';
 export const SET_TASK_SATUS = 'SET_TASK_SATUS';
+export const UPDATE_PROGRESS = 'UPDATE_PROGRESS ';
 // register
 export const ADD_USER = 'ADD_USER';
 export const SMS_CENTER = 'SMS_CENTER';
