@@ -38,6 +38,9 @@ const mutations = {
   [types.SET_SOURCETYPE](currentState, payload) {
     currentState.sourceType = payload.sourceType;
     currentState.taskId = payload.taskId;
+  },
+  [types.UPDATE_PROGRESS](currentState, payload) {
+    currentState.details.progress.percent = payload;
   }
 };
 

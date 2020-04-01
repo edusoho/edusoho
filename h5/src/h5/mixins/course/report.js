@@ -110,6 +110,7 @@ export default {
       if (res.result.status === "finish") {
         this.isFinish = true;
         this.$store.commit(types.SET_TASK_SATUS, "finish");
+        this.$store.commit(`course/${types.UPDATE_PROGRESS}`, res.completionRate);
       } else {
         this.$store.commit(types.SET_TASK_SATUS, "start");
       }
