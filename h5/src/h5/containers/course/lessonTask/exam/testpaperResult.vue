@@ -134,7 +134,7 @@ export default {
     ...mapState({
       isLoading: state => state.isLoading,
       user: state => state.user,
-      selectedPlanId: state => state.selectedPlanId,
+      selectedPlanId: state => state.course.selectedPlanId,
     }),
     usedTime: function() {
       const timeInterval = parseInt(this.result.usedTime) || 0;
