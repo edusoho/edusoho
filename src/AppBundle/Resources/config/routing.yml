@@ -3375,3 +3375,6 @@ question_bank_manage_question_picked:
     path: /question_bank/{id}/question/picked
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:pickedQuestion }
 
+course_task_list_render:
+    path: /course/{courseId}/task/list/render/{type}/{paged}
+    defaults: { _controller: AppBundle:Course/Course:renderTaskList, paged:false }

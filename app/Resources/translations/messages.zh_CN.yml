@@ -7524,6 +7524,7 @@ admin.magic_setting.disable_web_crontab: 是否开启web定时任务
 admin.magic_setting.cloud_search: 是否开启云搜索业务
 admin.magic_setting.ios_buy_disable: 是否关闭iOS购买功能
 admin.magic_setting.ios_vip_close: 是否关闭iOS会员模块
+admin.magic_setting.ios_exchange_coupon_close: 是否关闭IOS兑换卡券功能
 admin.magic_setting.export_limit: 订单单次导出数量
 admin.magic_setting.export_allow_count: 订单导出允许的最大数量
 admin.magic_setting.enable_org: 是否开启组织机构
@@ -10783,3 +10784,6 @@ course.live_statistics.checkin_status.all: 全部
 exception.live_statistic.not_found: 直播数据未获取到
 exception.live_statistic.not_support: 当前直播供应商暂不支持该功能
 admin.article_setting.article_copy_manage: 资讯防复制
+
+task.show_optional_tips: 显示选修课时
+admin_v2.user.manage.change_nickname_password.heading_title: 修改用户名和密码

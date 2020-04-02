@@ -8,7 +8,7 @@
       {% set data = notification.content %}
 
       {% set who = macro.link(data.nickname, path('user_show', {'id':data.userId})) %}
-      {% set do = macro.link('notification.materialLib.click_to_view'|trans, path('material_lib_browsing', {'type':'all', 'viewMode':'thumb', 'source':'shared'})) %}
+      {% set do = macro.link('notification.materialLib.click_to_view'|trans, path('material_lib_browsing', {'type':'all', 'viewMode':'thumb', 'source':'shared', 'sourceFrom':'sharing'})) %}
       {{ 'notification.materialLib.share'|trans({'%who%':who, '%do%':do})|raw }}
 
     </div>
