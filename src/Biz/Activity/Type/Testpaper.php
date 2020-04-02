@@ -85,7 +85,7 @@ class Testpaper extends Activity
             'startTime' => $activity['startTime'],
             'testpaperId' => $testpaperActivity['mediaId'],
             'doTimes' => $testpaperActivity['answerScene']['do_times'],
-            'redoInterval' => $testpaperActivity['answerScene']['redo_tnterval'],
+            'redoInterval' => $testpaperActivity['answerScene']['redo_interval'],
             'limitedTime' => $testpaperActivity['answerScene']['limited_time'],
             'checkType' => $testpaperActivity['checkType'],
             'requireCredit' => $testpaperActivity['requireCredit'],

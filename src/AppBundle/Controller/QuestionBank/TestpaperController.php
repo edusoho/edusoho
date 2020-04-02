@@ -390,7 +390,7 @@ class TestpaperController extends BaseController
 
         $conditions = array(
             'bank_id' => $id,
-            'type' => 'testpaper',
+            'displayable' => 1,
             'keyword' => $request->query->get('keyword', ''),
         );
         $totalCount = $this->getAssessmentService()->countAssessments($conditions);
