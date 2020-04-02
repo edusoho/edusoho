@@ -58,9 +58,6 @@ export default {
   [types.COUPON_SWITCH](state, payload) {
     state.couponSwitch = payload;
   },
-  [types.SET_ALL_TASK](state, payload) {
-    state.course.allTask = payload;
-  },
   [types.SET_TASK_SATUS](state, payload) {
     state.course.taskStatus = payload;
   }

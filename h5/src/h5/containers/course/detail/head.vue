@@ -87,8 +87,7 @@
     <tagLink :tag-data="tagData" />
     <finishDialog
       v-if="finishDialog"
-      :nextTask="nextTask"
-      :completionRate="completionRate"
+      :finishResult="finishResult"
       :courseId="selectedPlanId"
     ></finishDialog>
   </div>
@@ -149,8 +148,7 @@ export default {
       timeChangingList: [],
       // taskPipe: undefined,
       bindAgencyRelation: {}, // 分销代理商绑定信息
-      nextTask: null, //下一课时信息
-      completionRate: 0, //任务完成率
+      finishResult:null,
       finishDialog: false, //下一课时弹出模态框
       watchTime: 0
     };
@@ -452,8 +450,7 @@ export default {
     },
     toLearned() {
       this.reprtData("finish").then(res => {
-        this.nextTask = res.nextTask;
-        this.completionRate = res.completionRate;
+        this.finishResult=res;
         this.finishDialog = true;
       });
     }

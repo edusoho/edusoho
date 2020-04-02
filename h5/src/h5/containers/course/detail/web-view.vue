@@ -36,8 +36,7 @@
     <!-- 学习上报按钮 -->
     <finishDialog
       v-if="finishDialog"
-      :nextTask="nextTask"
-      :completionRate="completionRate"
+      :finishResult="finishResult"
       :courseId="courseId"
       @reloadPage="reloadPage"
     ></finishDialog>
@@ -63,9 +62,7 @@ export default {
       enableFinish: false,
       media: "",
       isPreview: this.$route.query.preview,
-      //taskPipe: undefined,
-      nextTask: null, //下一课时信息
-      completionRate: 0, //任务完成率
+      finishResult:null,
       finishDialog: false, //下一课时弹出模态框
       courseId: null,
       taskId: null,
@@ -215,8 +212,7 @@ export default {
     },
     toLearned() {
       this.reprtData("finish").then(res => {
-        this.nextTask = res.nextTask;
-        this.completionRate = res.completionRate;
+        this.finishResult=res;
         this.finishDialog = true;
       });
     },

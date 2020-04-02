@@ -1,8 +1,14 @@
 <template>
-  <van-overlay :show="show" @click="show = false" :z-index="9999">
+  <van-overlay :show="show" :z-index="9999">
     <div class="finish-dialog ">
       <div class="finish-dialog-content clearfix">
-        <img class="finish-dialog-img" src="static/images/reportDialog.png" />
+        <div class="finish-dialog-top">
+          <img class="finish-dialog-img" src="static/images/reportDialog.png" />
+          <div class="finish-dialog-top--text">学习完成</div>
+        </div>
+        <div class="finish-dialog-close" @click="show = false">
+          <i class="iconfont icon-guanbi"></i>
+        </div>
         <div class="progress-bar">
           <div class="progress-bar__content">
             <div :style="{ width: rate }" class="progress-bar__rate">
@@ -11,8 +17,8 @@
           </div>
         </div>
         <p class="finish-dialog-text">恭喜完成</p>
-        <template v-if="showNextTask">
-          <p>课时：{{ nextTask.number }}{{ nextTask.title }}</p>
+        <template>
+          <p class="text-overflow">{{ title }}</p>
           <div class="finish-dialog-btn" @click="goNextTask">下一课</div>
         </template>
       </div>
@@ -23,7 +29,7 @@
 <script>
 import Api from "@/api";
 import copyUrl from "@/mixins/copyUrl";
-import { mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 import * as types from "@/store/mutation-types";
 export default {
   name: "finish-dialog",
@@ -36,15 +42,11 @@ export default {
     };
   },
   props: {
-    nextTask: {
+    finishResult: {
       type: Object,
       default() {
         return {};
       }
-    },
-    completionRate: {
-      type: Number,
-      default: 100
     },
     courseId: {
       type: String,
@@ -52,14 +54,20 @@ export default {
     }
   },
   computed: {
-    showNextTask() {
-      if (this.nextTask === null) {
-        return false;
-      }
-      return Object.keys(this.nextTask).length;
-    },
+    ...mapState("course", {
+      allTask: state => state.allTask,
+    }),
     rate() {
-      return `${this.completionRate}%`;
+      if (!this.finishResult) {
+        return "0%";
+      }
+      return `${this.finishResult.completionRate}%`;
+    },
+    title() {
+      if (!this.finishResult) {
+        return "";
+      }
+      return this.allTask[this.finishResult.result.courseTaskId].title;
     }
   },
   created() {

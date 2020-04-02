@@ -52,6 +52,7 @@ import utilDirectory from "./util-directory.vue";
 import lessonDirectory from "./lesson-directory.vue";
 import Api from "@/api";
 import { mapState, mapMutations } from "vuex";
+import * as types from '@/store/mutation-types'
 export default {
   name: "AfterjoinDirectory",
   components: {
@@ -132,6 +133,7 @@ export default {
       this.setItems(res);
       this.mapChild(this.item);
       this.startScroll();
+      this.$store.commit(`course/${types.SET_ALL_TASK}`,this.allTask)
     },
     resetData() {
       this.chapterNum = 0; // 章节数

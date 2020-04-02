@@ -1,24 +1,43 @@
-.finish-dialog-mask{
-  position: fixed;
-  top:0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  background: rgba($color: #000000, $alpha: 0.5);
-  z-index: 9999;
-}
 .finish-dialog {
   &-content {
+    position: relative;
     width: 80%;
     margin: 40% auto;
     padding: vw(24) vw(16);
+    padding-top: vw(84);
     text-align: center;
     background: #fff;
     border-radius: 8px;
   }
+  &-close{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    right: vw(-15);
+    top: vw(-15);
+    width: vw(30);
+    height: vw(30);
+    background: #fff;
+    border-radius: 100%;
+  }
+  .icon-guanbi{
+    font-size: 12px;
+    color: #71777D;
+  }
+  .finish-dialog-top{
+    position: absolute;
+    top:-30%;
+    width: 100%;
+    text-align: center;
+  }
   &-img {
+    width: 50%;
     margin: auto;
-    margin-top: -27%;
+  }
+  &-top--text{
+    margin-top: -25%;
+    color: #fff;
   }
   &-btn {
     display: flex;
