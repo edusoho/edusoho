@@ -37,19 +37,16 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="newPassword"]',
-            required: true,
             rule: 'minlength{min:5} maxlength{max:20} spaceNoSupport'
         });
 
         validator.addItem({
             element: '[name="confirmPassword"]',
-            required: true,
             rule: 'confirmation{target:#newPassword}'
         });
 
       validator.addItem({
         element: '[name="nickname"]',
-        required: true,
         rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:18} remote'
       });
 
