@@ -16,6 +16,7 @@ use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
+use PhpCsFixer\FixerConfiguration\InvalidOptionsForEnvException;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\VersionSpecification;
@@ -23,7 +24,6 @@ use PhpCsFixer\FixerDefinition\VersionSpecificCodeSample;
 use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
-use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Options;
 
 /**
@@ -57,8 +57,7 @@ final class ArraySyntaxFixer extends AbstractFixer implements ConfigurationDefin
             'PHP arrays should be declared using the configured syntax (requires PHP >= 5.4 for short syntax).',
             array(
                 new CodeSample(
-                    "<?php\n[1,2];",
-                    array('syntax' => 'long')
+                    "<?php\n[1,2];"
                 ),
                 new VersionSpecificCodeSample(
                     "<?php\narray(1,2);",
@@ -94,7 +93,7 @@ final class ArraySyntaxFixer extends AbstractFixer implements ConfigurationDefin
         $callback = $this->fixCallback;
         for ($index = $tokens->count() - 1; 0 <= $index; --$index) {
             if ($tokens[$index]->isGivenKind($this->candidateTokenKind)) {
-                $this->$callback($tokens, $index);
+                $this->{$callback}($tokens, $index);
             }
         }
     }
@@ -109,7 +108,7 @@ final class ArraySyntaxFixer extends AbstractFixer implements ConfigurationDefin
             ->setAllowedValues(array('long', 'short'))
             ->setNormalizer(function (Options $options, $value) {
                 if (PHP_VERSION_ID < 50400 && 'short' === $value) {
-                    throw new InvalidOptionsException(sprintf(
+                    throw new InvalidOptionsForEnvException(sprintf(
                         'Short array syntax is supported from PHP5.4 (your PHP version is %d).',
                         PHP_VERSION_ID
                     ));
@@ -132,8 +131,8 @@ final class ArraySyntaxFixer extends AbstractFixer implements ConfigurationDefin
     {
         $closeIndex = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_ARRAY_SQUARE_BRACE, $index);
 
-        $tokens->overrideAt($index, '(');
-        $tokens->overrideAt($closeIndex, ')');
+        $tokens[$index] = new Token('(');
+        $tokens[$closeIndex] = new Token(')');
 
         $tokens->insertAt($index, new Token(array(T_ARRAY, 'array')));
     }
@@ -147,8 +146,8 @@ final class ArraySyntaxFixer extends AbstractFixer implements ConfigurationDefin
         $openIndex = $tokens->getNextTokenOfKind($index, array('('));
         $closeIndex = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $openIndex);
 
-        $tokens->overrideAt($openIndex, array(CT::T_ARRAY_SQUARE_BRACE_OPEN, '['));
-        $tokens->overrideAt($closeIndex, array(CT::T_ARRAY_SQUARE_BRACE_CLOSE, ']'));
+        $tokens[$openIndex] = new Token(array(CT::T_ARRAY_SQUARE_BRACE_OPEN, '['));
+        $tokens[$closeIndex] = new Token(array(CT::T_ARRAY_SQUARE_BRACE_CLOSE, ']'));
 
         $tokens->clearTokenAndMergeSurroundingWhitespace($index);
     }

@@ -26,7 +26,7 @@
 
     <tr>
       <td>{{ 'admin.reports_status.php_version'|trans }} （<a href="{{ path('admin_report_status_php') }}">{{ 'admin.reports_status.more_info'|trans }}</a>）</td>
-      <td>5.5.x</td>
+      <td>7.1.x</td>
       <td>
         {% if env.phpVersionOk %}
           <span class="text-success">√ {{ env.phpVersion }}</span>
@@ -34,7 +34,7 @@
           <span class="text-danger">X {{ env.phpVersion }}</span>
         {% endif %}
       </td>
-      <td>5.3.3</td>
+      <td>5.5.9</td>
     </tr>
 
     <tr>

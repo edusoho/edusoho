@@ -2,8 +2,9 @@
 
 namespace Omnipay\Alipay\Responses;
 
-class AopTradeAppPayResponse extends \Omnipay\Alipay\Responses\AbstractResponse
+class AopTradeAppPayResponse extends AbstractResponse
 {
+
     /**
      * Is the response successful?
      *
@@ -13,6 +14,8 @@ class AopTradeAppPayResponse extends \Omnipay\Alipay\Responses\AbstractResponse
     {
         return true;
     }
+
+
     /**
      * Gets the redirect form data array, if the redirect method is POST.
      */

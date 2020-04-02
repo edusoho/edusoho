@@ -10,6 +10,22 @@ of this bundle. For version `1.x`, please read:
 Also, you might be interested in this [UPGRADE
 guide](https://github.com/willdurand/BazingaJsTranslationBundle/blob/master/UPGRADE.md).
 
+- [Installation](#installation)
+- [Usage](#usage)
+    - [Load Translations](#load-translations)
+        - [Domains](#domains)
+        - [Locales](#locales)
+        - [Loading via JSON](#loading-via-json)
+    - [The dump Command](#the-dump-command)
+        - [Assetic](#assetic)
+    - [The JS Translator](#the-js-translator)
+        - [Message Placeholders / Parameters](#message-placeholders--parameters)
+        - [Pluralization](#pluralization)
+        - [Get The Locale](#get-the-locale)
+- [Examples](#examples)
+- [More configuration](#more-configuration)
+- [Reference Configuration](#reference-configuration)
+- [Testing](#testing)
 
 Installation
 ------------
@@ -44,7 +60,7 @@ _bazinga_jstranslation:
 
 Publish assets:
 
-    php app/console assets:install --symlink web
+    php bin/console assets:install --symlink web
 
 ### Require via NPM (optional)
 
@@ -89,7 +105,7 @@ attribute to the `html` tag:
 ```
 
 Now, you are done with the basic setup, and you can specify the [translation
-files](http://symfony.com/doc/current/book/translation.html#translation-locations-and-naming-conventions)
+files](https://symfony.com/doc/current/translation.html#translation-resource-file-names-and-locations)
 you want to load.
 
 ### Load Translations
@@ -150,14 +166,14 @@ You can use the `locales` **query parameter** to get translations in a specific
 language, or to load translation messages in several languages at once:
 
 ``` html
-<script src="{{ url('bazinga_jstranslation_js', { 'domain': 'DOMAIN_NAME' }) }}?locales=MY_LOCALE"></script>
+<script src="{{ url('bazinga_jstranslation_js', { 'domain': 'DOMAIN_NAME', 'locales': 'MY_LOCALE' }) }}"></script>
 ```
 
 This will return the translated messages found in each `DOMAIN_NAME.MY_LOCALE.*`
 files of your project.
 
 ``` html
-<script src="{{ url('bazinga_jstranslation_js', { 'domain': 'DOMAIN_NAME' }) }}?locales=fr,en"></script>
+<script src="{{ url('bazinga_jstranslation_js', { 'domain': 'DOMAIN_NAME', 'locales': 'fr,en' }) }}"></script>
 ```
 
 This will return the translated messages found in each `DOMAIN_NAME.(fr|en).*`
@@ -179,7 +195,7 @@ Then, feed the translator via `Translator.fromJSON(myRetrievedJSONString)`.
 
 This bundle provides a command to dump the translation files:
 
-    php app/console bazinga:js-translation:dump [target] [--format=js|json] [--pattern=/translations/{domain}.{_format}] [--merge-domains]
+    php bin/console bazinga:js-translation:dump [target] [--format=js|json] [--pattern=/translations/{domain}.{_format}] [--merge-domains]
 
 The optional `target` argument allows you to override the target directory to
 dump JS translation files in. By default, it generates files in the `web/js/`
@@ -255,7 +271,7 @@ Translator.transChoice('key', 123, { "foo" : "bar" }, 'DOMAIN_NAME');
 ```
 
 > Read the official documentation about Symfony2 [message
-placeholders](http://symfony.com/doc/current/book/translation.html#message-placeholders).
+placeholders](https://symfony.com/doc/current/translation.html#message-placeholders).
 
 #### Pluralization
 
@@ -294,7 +310,7 @@ Translator.transChoice('apples', 100, {"count" : 100});
 ```
 
 For more information, read the official documentation  about
-[pluralization](http://symfony.com/doc/current/book/translation.html#pluralization).
+[pluralization](https://symfony.com/doc/current/translation.html#pluralization).
 
 #### Get The Locale
 
@@ -424,7 +440,7 @@ Testing
 
 ### PHP
 
-Setup the test suite using [Composer](http://getcomposer.org/):
+Setup the test suite using [Composer](https://getcomposer.org/):
 
     $ composer install --dev
 

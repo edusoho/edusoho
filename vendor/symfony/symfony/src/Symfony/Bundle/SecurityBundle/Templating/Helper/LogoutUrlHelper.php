@@ -11,10 +11,7 @@
 
 namespace Symfony\Bundle\SecurityBundle\Templating\Helper;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Templating\Helper\Helper;
 
 /**
@@ -26,29 +23,9 @@ class LogoutUrlHelper extends Helper
 {
     private $generator;
 
-    /**
-     * Constructor.
-     *
-     * @param ContainerInterface|LogoutUrlGenerator $generator    A ContainerInterface or LogoutUrlGenerator instance
-     * @param UrlGeneratorInterface|null            $router       The router service
-     * @param TokenStorageInterface|null            $tokenStorage The token storage service
-     *
-     * @deprecated Passing a ContainerInterface as a first argument is deprecated since 2.7 and will be removed in 3.0.
-     * @deprecated Passing a second and third argument is deprecated since 2.7 and will be removed in 3.0.
-     */
-    public function __construct($generator, UrlGeneratorInterface $router = null, TokenStorageInterface $tokenStorage = null)
+    public function __construct(LogoutUrlGenerator $generator)
     {
-        if ($generator instanceof ContainerInterface) {
-            @trigger_error('The '.__CLASS__.' constructor will require a LogoutUrlGenerator instead of a ContainerInterface instance in 3.0.', E_USER_DEPRECATED);
-
-            if ($generator->has('security.logout_url_generator')) {
-                $this->generator = $generator->get('security.logout_url_generator');
-            } else {
-                $this->generator = new LogoutUrlGenerator($generator->get('request_stack'), $router, $tokenStorage);
-            }
-        } else {
-            $this->generator = $generator;
-        }
+        $this->generator = $generator;
     }
 
     /**
@@ -60,7 +37,7 @@ class LogoutUrlHelper extends Helper
      */
     public function getLogoutPath($key)
     {
-        return $this->generator->getLogoutPath($key, UrlGeneratorInterface::ABSOLUTE_PATH);
+        return $this->generator->getLogoutPath($key);
     }
 
     /**
@@ -72,7 +49,7 @@ class LogoutUrlHelper extends Helper
      */
     public function getLogoutUrl($key)
     {
-        return $this->generator->getLogoutUrl($key, UrlGeneratorInterface::ABSOLUTE_URL);
+        return $this->generator->getLogoutUrl($key);
     }
 
     /**

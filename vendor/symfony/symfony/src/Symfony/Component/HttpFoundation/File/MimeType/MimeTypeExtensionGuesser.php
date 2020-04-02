@@ -20,13 +20,11 @@ class MimeTypeExtensionGuesser implements ExtensionGuesserInterface
      * A map of mime types and their default extensions.
      *
      * This list has been placed under the public domain by the Apache HTTPD project.
-     * This list has been updated from upstream on 2013-04-23.
+     * This list has been updated from upstream on 2019-01-14.
      *
-     * @see http://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types
-     *
-     * @var array
+     * @see https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types
      */
-    protected $defaultExtensions = array(
+    protected $defaultExtensions = [
         'application/andrew-inset' => 'ez',
         'application/applixware' => 'aw',
         'application/atom+xml' => 'atom',
@@ -601,6 +599,7 @@ class MimeTypeExtensionGuesser implements ExtensionGuesserInterface
         'application/x-xliff+xml' => 'xlf',
         'application/x-xpinstall' => 'xpi',
         'application/x-xz' => 'xz',
+        'application/x-zip-compressed' => 'zip',
         'application/x-zmachine' => 'z1',
         'application/xaml+xml' => 'xaml',
         'application/xcap-diff+xml' => 'xdf',
@@ -619,7 +618,7 @@ class MimeTypeExtensionGuesser implements ExtensionGuesserInterface
         'audio/adpcm' => 'adp',
         'audio/basic' => 'au',
         'audio/midi' => 'mid',
-        'audio/mp4' => 'mp4a',
+        'audio/mp4' => 'm4a',
         'audio/mpeg' => 'mpga',
         'audio/ogg' => 'oga',
         'audio/s3m' => 's3m',
@@ -654,6 +653,11 @@ class MimeTypeExtensionGuesser implements ExtensionGuesserInterface
         'chemical/x-cml' => 'cml',
         'chemical/x-csml' => 'csml',
         'chemical/x-xyz' => 'xyz',
+        'font/collection' => 'ttc',
+        'font/otf' => 'otf',
+        'font/ttf' => 'ttf',
+        'font/woff' => 'woff',
+        'font/woff2' => 'woff2',
         'image/bmp' => 'bmp',
         'image/x-ms-bmp' => 'bmp',
         'image/cgm' => 'cgm',
@@ -670,8 +674,8 @@ class MimeTypeExtensionGuesser implements ExtensionGuesserInterface
         'image/tiff' => 'tiff',
         'image/vnd.adobe.photoshop' => 'psd',
         'image/vnd.dece.graphic' => 'uvi',
-        'image/vnd.dvb.subtitle' => 'sub',
         'image/vnd.djvu' => 'djvu',
+        'image/vnd.dvb.subtitle' => 'sub',
         'image/vnd.dwg' => 'dwg',
         'image/vnd.dxf' => 'dxf',
         'image/vnd.fastbidsheet' => 'fbs',
@@ -733,8 +737,8 @@ class MimeTypeExtensionGuesser implements ExtensionGuesserInterface
         'text/vcard' => 'vcard',
         'text/vnd.curl' => 'curl',
         'text/vnd.curl.dcurl' => 'dcurl',
-        'text/vnd.curl.scurl' => 'scurl',
         'text/vnd.curl.mcurl' => 'mcurl',
+        'text/vnd.curl.scurl' => 'scurl',
         'text/vnd.dvb.subtitle' => 'sub',
         'text/vnd.fly' => 'fly',
         'text/vnd.fmi.flexstor' => 'flx',
@@ -744,13 +748,14 @@ class MimeTypeExtensionGuesser implements ExtensionGuesserInterface
         'text/vnd.sun.j2me.app-descriptor' => 'jad',
         'text/vnd.wap.wml' => 'wml',
         'text/vnd.wap.wmlscript' => 'wmls',
+        'text/vtt' => 'vtt',
         'text/x-asm' => 's',
         'text/x-c' => 'c',
         'text/x-fortran' => 'f',
-        'text/x-pascal' => 'p',
         'text/x-java-source' => 'java',
-        'text/x-opml' => 'opml',
         'text/x-nfo' => 'nfo',
+        'text/x-opml' => 'opml',
+        'text/x-pascal' => 'p',
         'text/x-setext' => 'etx',
         'text/x-sfv' => 'sfv',
         'text/x-uuencode' => 'uu',
@@ -796,13 +801,19 @@ class MimeTypeExtensionGuesser implements ExtensionGuesserInterface
         'video/x-sgi-movie' => 'movie',
         'video/x-smv' => 'smv',
         'x-conference/x-cooltalk' => 'ice',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
     public function guess($mimeType)
     {
-        return isset($this->defaultExtensions[$mimeType]) ? $this->defaultExtensions[$mimeType] : null;
+        if (isset($this->defaultExtensions[$mimeType])) {
+            return $this->defaultExtensions[$mimeType];
+        }
+
+        $lcMimeType = strtolower($mimeType);
+
+        return isset($this->defaultExtensions[$lcMimeType]) ? $this->defaultExtensions[$lcMimeType] : null;
     }
 }

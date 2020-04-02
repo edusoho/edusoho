@@ -18,6 +18,8 @@ use Symfony\Bridge\Doctrine\HttpFoundation\DbalSessionHandler;
  * Test class for DbalSessionHandler.
  *
  * @author Drak <drak@zikula.org>
+ *
+ * @group legacy
  */
 class DbalSessionHandlerTest extends TestCase
 {
@@ -25,5 +27,7 @@ class DbalSessionHandlerTest extends TestCase
     {
         $connection = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock();
         $handler = new DbalSessionHandler($connection);
+
+        $this->assertInstanceOf('Symfony\Bridge\Doctrine\HttpFoundation\DbalSessionHandler', $handler);
     }
 }

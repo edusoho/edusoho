@@ -11,9 +11,9 @@
 
 namespace Symfony\Bundle\FrameworkBundle\Templating\Helper;
 
-use Symfony\Component\Templating\Helper\Helper;
 use Symfony\Component\Form\FormRendererInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\Templating\Helper\Helper;
 
 /**
  * FormHelper provides helpers to help display forms.
@@ -23,14 +23,8 @@ use Symfony\Component\Form\FormView;
  */
 class FormHelper extends Helper
 {
-    /**
-     * @var FormRendererInterface
-     */
     private $renderer;
 
-    /**
-     * @param FormRendererInterface $renderer
-     */
     public function __construct(FormRendererInterface $renderer)
     {
         $this->renderer = $renderer;
@@ -49,12 +43,13 @@ class FormHelper extends Helper
      *
      * The theme format is "<Bundle>:<Controller>".
      *
-     * @param FormView     $view   A FormView instance
-     * @param string|array $themes A theme or an array of theme
+     * @param FormView     $view             A FormView instance
+     * @param string|array $themes           A theme or an array of theme
+     * @param bool         $useDefaultThemes If true, will use default themes defined in the renderer
      */
-    public function setTheme(FormView $view, $themes)
+    public function setTheme(FormView $view, $themes, $useDefaultThemes = true)
     {
-        $this->renderer->setTheme($view, $themes);
+        $this->renderer->setTheme($view, $themes, $useDefaultThemes);
     }
 
     /**
@@ -66,9 +61,9 @@ class FormHelper extends Helper
      *
      * You can pass options during the call:
      *
-     *     <?php echo view['form']->form($form, array('attr' => array('class' => 'foo'))) ?>
+     *     <?php echo view['form']->form($form, ['attr' => ['class' => 'foo']]) ?>
      *
-     *     <?php echo view['form']->form($form, array('separator' => '+++++')) ?>
+     *     <?php echo view['form']->form($form, ['separator' => '+++++']) ?>
      *
      * This method is mainly intended for prototyping purposes. If you want to
      * control the layout of a form in a more fine-grained manner, you are
@@ -81,7 +76,7 @@ class FormHelper extends Helper
      *
      * @return string The HTML markup
      */
-    public function form(FormView $view, array $variables = array())
+    public function form(FormView $view, array $variables = [])
     {
         return $this->renderer->renderBlock($view, 'form', $variables);
     }
@@ -98,7 +93,7 @@ class FormHelper extends Helper
      *
      * @return string The HTML markup
      */
-    public function start(FormView $view, array $variables = array())
+    public function start(FormView $view, array $variables = [])
     {
         return $this->renderer->renderBlock($view, 'form_start', $variables);
     }
@@ -115,30 +110,9 @@ class FormHelper extends Helper
      *
      * @return string The HTML markup
      */
-    public function end(FormView $view, array $variables = array())
+    public function end(FormView $view, array $variables = [])
     {
         return $this->renderer->renderBlock($view, 'form_end', $variables);
-    }
-
-    /**
-     * Renders the HTML enctype in the form tag, if necessary.
-     *
-     * Example usage templates:
-     *
-     *     <form action="..." method="post" <?php echo $view['form']->enctype($form) ?>>
-     *
-     * @param FormView $view The view for which to render the encoding type
-     *
-     * @return string The HTML markup
-     *
-     * @deprecated since version 2.3, to be removed in 3.0.
-     *             Use {@link start} instead.
-     */
-    public function enctype(FormView $view)
-    {
-        @trigger_error('The form helper $view[\'form\']->enctype() is deprecated since version 2.3 and will be removed in 3.0. Use $view[\'form\']->start() instead.', E_USER_DEPRECATED);
-
-        return $this->renderer->searchAndRenderBlock($view, 'enctype');
     }
 
     /**
@@ -150,16 +124,16 @@ class FormHelper extends Helper
      *
      * You can pass options during the call:
      *
-     *     <?php echo $view['form']->widget($form, array('attr' => array('class' => 'foo'))) ?>
+     *     <?php echo $view['form']->widget($form, ['attr' => ['class' => 'foo']]) ?>
      *
-     *     <?php echo $view['form']->widget($form, array('separator' => '+++++')) ?>
+     *     <?php echo $view['form']->widget($form, ['separator' => '+++++']) ?>
      *
      * @param FormView $view      The view for which to render the widget
      * @param array    $variables Additional variables passed to the template
      *
      * @return string The HTML markup
      */
-    public function widget(FormView $view, array $variables = array())
+    public function widget(FormView $view, array $variables = [])
     {
         return $this->renderer->searchAndRenderBlock($view, 'widget', $variables);
     }
@@ -172,7 +146,7 @@ class FormHelper extends Helper
      *
      * @return string The HTML markup
      */
-    public function row(FormView $view, array $variables = array())
+    public function row(FormView $view, array $variables = [])
     {
         return $this->renderer->searchAndRenderBlock($view, 'row', $variables);
     }
@@ -186,10 +160,10 @@ class FormHelper extends Helper
      *
      * @return string The HTML markup
      */
-    public function label(FormView $view, $label = null, array $variables = array())
+    public function label(FormView $view, $label = null, array $variables = [])
     {
         if (null !== $label) {
-            $variables += array('label' => $label);
+            $variables += ['label' => $label];
         }
 
         return $this->renderer->searchAndRenderBlock($view, 'label', $variables);
@@ -197,8 +171,6 @@ class FormHelper extends Helper
 
     /**
      * Renders the errors of the given view.
-     *
-     * @param FormView $view The view to render the errors for
      *
      * @return string The HTML markup
      */
@@ -215,7 +187,7 @@ class FormHelper extends Helper
      *
      * @return string The HTML markup
      */
-    public function rest(FormView $view, array $variables = array())
+    public function rest(FormView $view, array $variables = [])
     {
         return $this->renderer->searchAndRenderBlock($view, 'rest', $variables);
     }
@@ -229,7 +201,7 @@ class FormHelper extends Helper
      *
      * @return string The HTML markup
      */
-    public function block(FormView $view, $blockName, array $variables = array())
+    public function block(FormView $view, $blockName, array $variables = [])
     {
         return $this->renderer->renderBlock($view, $blockName, $variables);
     }
@@ -240,32 +212,44 @@ class FormHelper extends Helper
      * Use this helper for CSRF protection without the overhead of creating a
      * form.
      *
-     * <code>
-     * echo $view['form']->csrfToken('rm_user_'.$user->getId());
-     * </code>
+     *     echo $view['form']->csrfToken('rm_user_'.$user->getId());
      *
-     * Check the token in your action using the same intention.
+     * Check the token in your action using the same CSRF token id.
      *
-     * <code>
-     * $csrfProvider = $this->get('security.csrf.token_generator');
-     * if (!$csrfProvider->isCsrfTokenValid('rm_user_'.$user->getId(), $token)) {
-     *     throw new \RuntimeException('CSRF attack detected.');
-     * }
-     * </code>
+     *     // $csrfProvider being an instance of Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface
+     *     if (!$csrfProvider->isCsrfTokenValid('rm_user_'.$user->getId(), $token)) {
+     *         throw new \RuntimeException('CSRF attack detected.');
+     *     }
      *
-     * @param string $intention The intention of the protected action
+     * @param string $tokenId The CSRF token id of the protected action
      *
      * @return string A CSRF token
      *
-     * @throws \BadMethodCallException When no CSRF provider was injected in the constructor.
+     * @throws \BadMethodCallException when no CSRF provider was injected in the constructor
      */
-    public function csrfToken($intention)
+    public function csrfToken($tokenId)
     {
-        return $this->renderer->renderCsrfToken($intention);
+        return $this->renderer->renderCsrfToken($tokenId);
     }
 
     public function humanize($text)
     {
         return $this->renderer->humanize($text);
+    }
+
+    /**
+     * @internal
+     */
+    public function formEncodeCurrency($text, $widget = '')
+    {
+        if ('UTF-8' === $charset = $this->getCharset()) {
+            $text = htmlspecialchars($text, ENT_QUOTES | (\defined('ENT_SUBSTITUTE') ? ENT_SUBSTITUTE : 0), 'UTF-8');
+        } else {
+            $text = htmlentities($text, ENT_QUOTES | (\defined('ENT_SUBSTITUTE') ? ENT_SUBSTITUTE : 0), 'UTF-8');
+            $text = iconv('UTF-8', $charset, $text);
+            $widget = iconv('UTF-8', $charset, $widget);
+        }
+
+        return str_replace('{{ widget }}', $widget, $text);
     }
 }

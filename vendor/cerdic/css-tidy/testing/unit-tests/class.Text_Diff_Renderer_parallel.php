@@ -12,7 +12,7 @@ class Text_Diff_Renderer_parallel extends Text_Diff_Renderer
 	var $final    = 'Final';
 	var $_leading_context_lines = 10000; // these are big to ensure entire string is output
 	var $_trailing_context_lines = 10000;
-	function _blockHeader() {}
+	function _blockHeader($xbeg, $xlen, $ybeg, $ylen) {}
 	function _startDiff() {
 		return '<table class="diff"><thead><tr><th>'. $this->original .'</th><th>'. $this->final .'</th></tr></thead><tbody>';
 	}

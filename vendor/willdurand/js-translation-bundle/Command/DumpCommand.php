@@ -3,7 +3,7 @@
 namespace Bazinga\Bundle\JsTranslationBundle\Command;
 
 use Bazinga\Bundle\JsTranslationBundle\Dumper\TranslationDumper;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -13,9 +13,34 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @author Adrien Russo <adrien.russo.qc@gmail.com>
  * @author Hugo Monteiro <hugo.monteiro@gmail.com>
  */
-class DumpCommand extends ContainerAwareCommand
+class DumpCommand extends Command
 {
+    /**
+     * @var TranslationDumper
+     */
+    private $dumper;
+
+    /**
+     * @var string
+     */
+    private $kernelRootDir;
+
+    /**
+     * @var string
+     */
     private $targetPath;
+
+    /**
+     * @param TranslationDumper $dumper
+     * @param $kernelRootDir
+     */
+    public function __construct(TranslationDumper $dumper, $kernelRootDir)
+    {
+        $this->dumper = $dumper;
+        $this->kernelRootDir = $kernelRootDir;
+
+        parent::__construct();
+    }
 
     /**
      * {@inheritDoc}
@@ -61,8 +86,7 @@ class DumpCommand extends ContainerAwareCommand
     {
         parent::initialize($input, $output);
 
-        $this->targetPath = $input->getArgument('target') ?:
-            sprintf('%s/../web/js', $this->getContainer()->getParameter('kernel.root_dir'));
+        $this->targetPath = $input->getArgument('target') ?: sprintf('%s/../web/js', $this->kernelRootDir);
     }
 
     /**
@@ -87,9 +111,6 @@ class DumpCommand extends ContainerAwareCommand
             $this->targetPath
         ));
 
-        $this
-            ->getContainer()
-            ->get('bazinga.jstranslation.translation_dumper')
-            ->dump($this->targetPath, $input->getOption('pattern'), $formats, $merge);
+        $this->dumper->dump($this->targetPath, $input->getOption('pattern'), $formats, $merge);
     }
 }

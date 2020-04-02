@@ -65,18 +65,6 @@ Where the ``attribute_name`` column contains the key and
 The feature request for persistence of primitive value arrays
 `is described in the DDC-298 ticket <http://www.doctrine-project.org/jira/browse/DDC-298>`_.
 
-Value Objects
-~~~~~~~~~~~~~
-
-There is currently no native support value objects in Doctrine
-other than for ``DateTime`` instances or if you serialize the
-objects using ``serialize()/deserialize()`` which the DBAL Type
-"object" supports.
-
-The feature request for full value-object support
-`is described in the DDC-93 ticket <http://www.doctrine-project.org/jira/browse/DDC-93>`_.
-
-
 Cascade Merge with Bi-directional Associations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -187,3 +175,10 @@ Microsoft SQL Server and Doctrine "datetime"
 
 Doctrine assumes that you use ``DateTime2`` data-types. If your legacy database contains DateTime
 datatypes then you have to add your own data-type (see Basic Mapping for an example).
+
+MySQL with MyISAM tables
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Doctrine cannot provide atomic operations when calling ``EntityManager#flush()`` if one
+of the tables involved uses the storage engine MyISAM. You must use InnoDB or
+other storage engines that support transactions if you need integrity.

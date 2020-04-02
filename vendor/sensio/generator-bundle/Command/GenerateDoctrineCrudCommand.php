@@ -43,24 +43,22 @@ class GenerateDoctrineCrudCommand extends GenerateDoctrineCommand
             ->setName('doctrine:generate:crud')
             ->setAliases(array('generate:doctrine:crud'))
             ->setDescription('Generates a CRUD based on a Doctrine entity')
-            ->setDefinition(array(
-                new InputArgument('entity', InputArgument::OPTIONAL, 'The entity class name to initialize (shortcut notation)'),
-                new InputOption('entity', '', InputOption::VALUE_REQUIRED, 'The entity class name to initialize (shortcut notation)'),
-                new InputOption('route-prefix', '', InputOption::VALUE_REQUIRED, 'The route prefix'),
-                new InputOption('with-write', '', InputOption::VALUE_NONE, 'Whether or not to generate create, new and delete actions'),
-                new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The format used for configuration files (php, xml, yml, or annotation)', 'annotation'),
-                new InputOption('overwrite', '', InputOption::VALUE_NONE, 'Overwrite any existing controller or form class when generating the CRUD contents'),
-            ))
+            ->addArgument('entity', InputArgument::OPTIONAL, 'The entity class name to initialize (shortcut notation)')
+            ->addOption('entity', null, InputOption::VALUE_OPTIONAL, 'The entity class name to initialize (shortcut notation)')
+            ->addOption('route-prefix', null, InputOption::VALUE_REQUIRED, 'The route prefix')
+            ->addOption('with-write', null, InputOption::VALUE_NONE, 'Whether or not to generate create, new and delete actions')
+            ->addOption('format', null, InputOption::VALUE_REQUIRED, 'The format used for configuration files (php, xml, yml, or annotation)', 'annotation')
+            ->addOption('overwrite', null, InputOption::VALUE_NONE, 'Overwrite any existing controller or form class when generating the CRUD contents')
             ->setHelp(<<<EOT
 The <info>%command.name%</info> command generates a CRUD based on a Doctrine entity.
 
 The default command only generates the list and show actions.
 
-<info>php %command.full_name% --entity=AcmeBlogBundle:Post --route-prefix=post_admin</info>
+<info>php %command.full_name% AcmeBlogBundle:Post --route-prefix=post_admin</info>
 
 Using the --with-write option allows to generate the new, edit and delete actions.
 
-<info>php %command.full_name% --entity=AcmeBlogBundle:Post --route-prefix=post_admin --with-write</info>
+<info>php %command.full_name% AcmeBlogBundle:Post --route-prefix=post_admin --with-write</info>
 
 Every generated file is based on a template. There are default templates but they can be overridden by placing custom templates in one of the following locations, by order of priority:
 
@@ -93,9 +91,16 @@ EOT
 
                 return 1;
             }
+        } else {
+            // BC to be removed in 4.0
+            if ($input->hasOption('entity') && $entityOption = $input->getOption('entity')) {
+                @trigger_error('Using the "--entity" option has been deprecated since version 3.0 and will be removed in 4.0. Pass it as argument instead.', E_USER_DEPRECATED);
+
+                $input->setArgument('entity', $entityOption);
+            }
         }
 
-        $entity = Validators::validateEntityName($input->getOption('entity'));
+        $entity = Validators::validateEntityName($input->getArgument('entity'));
         list($bundle, $entity) = $this->parseShortcutNotation($entity);
 
         $format = Validators::validateFormat($input->getOption('format'));
@@ -154,11 +159,13 @@ EOT
             '',
         ));
 
-        if ($input->hasArgument('entity') && $input->getArgument('entity') != '') {
-            $input->setOption('entity', $input->getArgument('entity'));
+        if ($input->hasOption('entity') && $entityOption = $input->getOption('entity')) {
+            @trigger_error('Using the "--entity" option has been deprecated since version 3.0 and will be removed in 4.0. Pass it as argument instead.', E_USER_DEPRECATED);
+
+            $input->setArgument('entity', $entityOption);
         }
 
-        $question = new Question($questionHelper->getQuestion('The Entity shortcut name', $input->getOption('entity')), $input->getOption('entity'));
+        $question = new Question($questionHelper->getQuestion('The Entity shortcut name', $input->getArgument('entity')), $input->getArgument('entity'));
         $question->setValidator(array('Sensio\Bundle\GeneratorBundle\Command\Validators', 'validateEntityName'));
 
         $autocompleter = new EntitiesAutoCompleter($this->getContainer()->get('doctrine')->getManager());
@@ -166,7 +173,7 @@ EOT
         $question->setAutocompleterValues($autocompleteEntities);
         $entity = $questionHelper->ask($input, $output, $question);
 
-        $input->setOption('entity', $entity);
+        $input->setArgument('entity', $entity);
         list($bundle, $entity) = $this->parseShortcutNotation($entity);
 
         try {
@@ -213,10 +220,8 @@ EOT
         $input->setOption('route-prefix', $prefix);
 
         // summary
+        $questionHelper->writeSection($output, 'Summary before generation');
         $output->writeln(array(
-            '',
-            $this->getHelper('formatter')->formatBlock('Summary before generation', 'bg=blue;fg=white', true),
-            '',
             sprintf('You are going to generate a CRUD controller for "<info>%s:%s</info>"', $bundle, $entity),
             sprintf('using the "<info>%s</info>" format.', $format),
             '',

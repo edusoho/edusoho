@@ -1,6 +1,37 @@
 CHANGELOG
 =========
 
+3.4.0
+-----
+
+ * Added `TranslationDumperPass`
+ * Added `TranslationExtractorPass`
+ * Added `TranslatorPass`
+ * Added `TranslationReader` and `TranslationReaderInterface`
+ * Added `<notes>` section to the Xliff 2.0 dumper.
+ * Improved Xliff 2.0 loader to load `<notes>` section.
+ * Added `TranslationWriterInterface`
+ * Deprecated `TranslationWriter::writeTranslations` in favor of `TranslationWriter::write`
+ * added support for adding custom message formatter and decoupling the default one.
+ * Added `PhpExtractor`
+ * Added `PhpStringTokenParser`
+
+3.2.0
+-----
+
+ * Added support for escaping `|` in plural translations with double pipe.
+
+3.1.0
+-----
+
+ * Deprecated the backup feature of the file dumper classes.
+
+3.0.0
+-----
+
+ * removed `FileDumper::format()` method.
+ * Changed the visibility of the locale property in `Translator` from protected to private.
+
 2.8.0
 -----
 

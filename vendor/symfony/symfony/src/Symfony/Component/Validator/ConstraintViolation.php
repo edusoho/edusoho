@@ -18,54 +18,15 @@ namespace Symfony\Component\Validator;
  */
 class ConstraintViolation implements ConstraintViolationInterface
 {
-    /**
-     * @var string
-     */
     private $message;
-
-    /**
-     * @var string
-     */
     private $messageTemplate;
-
-    /**
-     * @var array
-     */
     private $parameters;
-
-    /**
-     * @var int|null
-     */
     private $plural;
-
-    /**
-     * @var mixed
-     */
     private $root;
-
-    /**
-     * @var string
-     */
     private $propertyPath;
-
-    /**
-     * @var mixed
-     */
     private $invalidValue;
-
-    /**
-     * @var Constraint|null
-     */
     private $constraint;
-
-    /**
-     * @var mixed
-     */
     private $code;
-
-    /**
-     * @var mixed
-     */
     private $cause;
 
     /**
@@ -109,22 +70,22 @@ class ConstraintViolation implements ConstraintViolationInterface
      */
     public function __toString()
     {
-        if (is_object($this->root)) {
-            $class = 'Object('.get_class($this->root).')';
-        } elseif (is_array($this->root)) {
+        if (\is_object($this->root)) {
+            $class = 'Object('.\get_class($this->root).')';
+        } elseif (\is_array($this->root)) {
             $class = 'Array';
         } else {
             $class = (string) $this->root;
         }
 
         $propertyPath = (string) $this->propertyPath;
-        $code = $this->code;
+        $code = (string) $this->code;
 
         if ('' !== $propertyPath && '[' !== $propertyPath[0] && '' !== $class) {
             $class .= '.';
         }
 
-        if (!empty($code)) {
+        if ('' !== $code) {
             $code = ' (code '.$code.')';
         }
 
@@ -141,19 +102,6 @@ class ConstraintViolation implements ConstraintViolationInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @deprecated since version 2.7, to be removed in 3.0.
-     *             Use getParameters() instead
-     */
-    public function getMessageParameters()
-    {
-        @trigger_error('The '.__METHOD__.' method is deprecated since version 2.7, to be removed in 3.0. Use the ConstraintViolation::getParameters() method instead.', E_USER_DEPRECATED);
-
-        return $this->parameters;
-    }
-
-    /**
-     * Alias of {@link getMessageParameters()}.
      */
     public function getParameters()
     {
@@ -162,19 +110,6 @@ class ConstraintViolation implements ConstraintViolationInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @deprecated since version 2.7, to be removed in 3.0.
-     *             Use getPlural() instead
-     */
-    public function getMessagePluralization()
-    {
-        @trigger_error('The '.__METHOD__.' method is deprecated since version 2.7, to be removed in 3.0. Use the ConstraintViolation::getPlural() method instead.', E_USER_DEPRECATED);
-
-        return $this->plural;
-    }
-
-    /**
-     * Alias of {@link getMessagePluralization()}.
      */
     public function getPlural()
     {

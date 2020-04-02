@@ -41,8 +41,8 @@ class ActivityRuntimeContainerPass implements CompilerPassInterface
         }
         $translator = $container->findDefinition('translator.default');
 
-        $options = $translator->getArgument(3);
+        $options = $translator->getArgument(4);
         $options['resource_files'] = array_merge_recursive($options['resource_files'], $translationFiles);
-        $translator->replaceArgument(3, $options);
+        $translator->replaceArgument(4, $options);
     }
 }

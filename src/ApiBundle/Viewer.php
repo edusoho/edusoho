@@ -17,7 +17,7 @@ class Viewer
 
     public function view($result, $status = Response::HTTP_OK)
     {
-        $request = $this->container->get('request');
+        $request = $this->container->get('request_stack')->getMasterRequest();
         $isEnvelop = $request->query->get('envelope', false);
 
         if ($isEnvelop) {

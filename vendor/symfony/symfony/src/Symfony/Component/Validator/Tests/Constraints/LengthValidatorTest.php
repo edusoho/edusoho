@@ -13,15 +13,10 @@ namespace Symfony\Component\Validator\Tests\Constraints;
 
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\LengthValidator;
-use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class LengthValidatorTest extends AbstractConstraintValidatorTest
+class LengthValidatorTest extends ConstraintValidatorTestCase
 {
-    protected function getApiVersion()
-    {
-        return Validation::API_VERSION_2_5;
-    }
-
     protected function createValidator()
     {
         return new LengthValidator();
@@ -41,60 +36,58 @@ class LengthValidatorTest extends AbstractConstraintValidatorTest
         $this->assertNoViolation();
     }
 
-    /**
-     * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
-     */
     public function testExpectsStringCompatibleType()
     {
+        $this->expectException('Symfony\Component\Validator\Exception\UnexpectedTypeException');
         $this->validator->validate(new \stdClass(), new Length(5));
     }
 
     public function getThreeOrLessCharacters()
     {
-        return array(
-            array(12),
-            array('12'),
-            array('üü'),
-            array('éé'),
-            array(123),
-            array('123'),
-            array('üüü'),
-            array('ééé'),
-        );
+        return [
+            [12],
+            ['12'],
+            ['üü'],
+            ['éé'],
+            [123],
+            ['123'],
+            ['üüü'],
+            ['ééé'],
+        ];
     }
 
     public function getFourCharacters()
     {
-        return array(
-            array(1234),
-            array('1234'),
-            array('üüüü'),
-            array('éééé'),
-        );
+        return [
+            [1234],
+            ['1234'],
+            ['üüüü'],
+            ['éééé'],
+        ];
     }
 
     public function getFiveOrMoreCharacters()
     {
-        return array(
-            array(12345),
-            array('12345'),
-            array('üüüüü'),
-            array('ééééé'),
-            array(123456),
-            array('123456'),
-            array('üüüüüü'),
-            array('éééééé'),
-        );
+        return [
+            [12345],
+            ['12345'],
+            ['üüüüü'],
+            ['ééééé'],
+            [123456],
+            ['123456'],
+            ['üüüüüü'],
+            ['éééééé'],
+        ];
     }
 
     public function getOneCharset()
     {
-        return array(
-            array('é', 'utf8', true),
-            array("\xE9", 'CP1252', true),
-            array("\xE9", 'XXX', false),
-            array("\xE9", 'utf8', false),
-        );
+        return [
+            ['é', 'utf8', true],
+            ["\xE9", 'CP1252', true],
+            ["\xE9", 'XXX', false],
+            ["\xE9", 'utf8', false],
+        ];
     }
 
     /**
@@ -102,7 +95,7 @@ class LengthValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testValidValuesMin($value)
     {
-        $constraint = new Length(array('min' => 5));
+        $constraint = new Length(['min' => 5]);
         $this->validator->validate($value, $constraint);
 
         $this->assertNoViolation();
@@ -113,7 +106,7 @@ class LengthValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testValidValuesMax($value)
     {
-        $constraint = new Length(array('max' => 3));
+        $constraint = new Length(['max' => 3]);
         $this->validator->validate($value, $constraint);
 
         $this->assertNoViolation();
@@ -135,10 +128,10 @@ class LengthValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testInvalidValuesMin($value)
     {
-        $constraint = new Length(array(
+        $constraint = new Length([
             'min' => 4,
             'minMessage' => 'myMessage',
-        ));
+        ]);
 
         $this->validator->validate($value, $constraint);
 
@@ -156,10 +149,10 @@ class LengthValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testInvalidValuesMax($value)
     {
-        $constraint = new Length(array(
+        $constraint = new Length([
             'max' => 4,
             'maxMessage' => 'myMessage',
-        ));
+        ]);
 
         $this->validator->validate($value, $constraint);
 
@@ -177,11 +170,11 @@ class LengthValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testInvalidValuesExactLessThanFour($value)
     {
-        $constraint = new Length(array(
+        $constraint = new Length([
             'min' => 4,
             'max' => 4,
             'exactMessage' => 'myMessage',
-        ));
+        ]);
 
         $this->validator->validate($value, $constraint);
 
@@ -199,11 +192,11 @@ class LengthValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testInvalidValuesExactMoreThanFour($value)
     {
-        $constraint = new Length(array(
+        $constraint = new Length([
             'min' => 4,
             'max' => 4,
             'exactMessage' => 'myMessage',
-        ));
+        ]);
 
         $this->validator->validate($value, $constraint);
 
@@ -221,12 +214,12 @@ class LengthValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testOneCharset($value, $charset, $isValid)
     {
-        $constraint = new Length(array(
+        $constraint = new Length([
             'min' => 1,
             'max' => 1,
             'charset' => $charset,
             'charsetMessage' => 'myMessage',
-        ));
+        ]);
 
         $this->validator->validate($value, $constraint);
 
@@ -242,11 +235,20 @@ class LengthValidatorTest extends AbstractConstraintValidatorTest
         }
     }
 
-    public function testConstraintGetDefaultOption()
+    public function testConstraintDefaultOption()
     {
         $constraint = new Length(5);
 
         $this->assertEquals(5, $constraint->min);
         $this->assertEquals(5, $constraint->max);
+    }
+
+    public function testConstraintAnnotationDefaultOption()
+    {
+        $constraint = new Length(['value' => 5, 'exactMessage' => 'message']);
+
+        $this->assertEquals(5, $constraint->min);
+        $this->assertEquals(5, $constraint->max);
+        $this->assertEquals('message', $constraint->exactMessage);
     }
 }

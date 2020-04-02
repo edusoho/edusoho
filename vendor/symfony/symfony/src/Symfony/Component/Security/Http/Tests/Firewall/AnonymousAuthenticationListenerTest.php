@@ -23,7 +23,7 @@ class AnonymousAuthenticationListenerTest extends TestCase
         $tokenStorage
             ->expects($this->any())
             ->method('getToken')
-            ->will($this->returnValue($this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')->getMock()))
+            ->willReturn($this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')->getMock())
         ;
         $tokenStorage
             ->expects($this->never())
@@ -46,10 +46,10 @@ class AnonymousAuthenticationListenerTest extends TestCase
         $tokenStorage
             ->expects($this->any())
             ->method('getToken')
-            ->will($this->returnValue(null))
+            ->willReturn(null)
         ;
 
-        $anonymousToken = new AnonymousToken('TheSecret', 'anon.', array());
+        $anonymousToken = new AnonymousToken('TheSecret', 'anon.', []);
 
         $authenticationManager = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface')->getMock();
         $authenticationManager
@@ -58,7 +58,7 @@ class AnonymousAuthenticationListenerTest extends TestCase
             ->with($this->callback(function ($token) {
                 return 'TheSecret' === $token->getSecret();
             }))
-            ->will($this->returnValue($anonymousToken))
+            ->willReturn($anonymousToken)
         ;
 
         $tokenStorage

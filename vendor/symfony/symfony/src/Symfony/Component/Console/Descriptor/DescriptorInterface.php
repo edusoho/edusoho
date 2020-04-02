@@ -21,11 +21,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 interface DescriptorInterface
 {
     /**
-     * Describes an InputArgument instance.
+     * Describes an object if supported.
      *
-     * @param OutputInterface $output
-     * @param object          $object
-     * @param array           $options
+     * @param object $object
      */
-    public function describe(OutputInterface $output, $object, array $options = array());
+    public function describe(OutputInterface $output, $object, array $options = []);
 }

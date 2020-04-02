@@ -12,28 +12,48 @@
 namespace Symfony\Component\Form\Test;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Form\Forms;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\Forms;
 
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
 abstract class FormIntegrationTestCase extends TestCase
 {
+    use ForwardCompatTestTrait;
+
     /**
      * @var FormFactoryInterface
      */
     protected $factory;
 
-    protected function setUp()
+    private function doSetUp()
     {
         $this->factory = Forms::createFormFactoryBuilder()
             ->addExtensions($this->getExtensions())
+            ->addTypeExtensions($this->getTypeExtensions())
+            ->addTypes($this->getTypes())
+            ->addTypeGuessers($this->getTypeGuessers())
             ->getFormFactory();
     }
 
     protected function getExtensions()
     {
-        return array();
+        return [];
+    }
+
+    protected function getTypeExtensions()
+    {
+        return [];
+    }
+
+    protected function getTypes()
+    {
+        return [];
+    }
+
+    protected function getTypeGuessers()
+    {
+        return [];
     }
 }

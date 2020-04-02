@@ -177,7 +177,7 @@ use Monolog\Logger;
  *   - [release]: release number of the application that will be attached to logs, defaults to null
  *   - [level]: level name or int value, defaults to DEBUG
  *   - [bubble]: bool, defaults to true
- *   - [auto_stack_logs]: bool, defaults to false
+ *   - [auto_log_stacks]: bool, defaults to false
  *
  * - newrelic:
  *   - [level]: level name or int value, defaults to DEBUG
@@ -406,7 +406,7 @@ class Configuration implements ConfigurationInterface
                                 ->canBeUnset()
                                 ->beforeNormalization()
                                     ->ifString()
-                                    ->then(function ($v) { return array('id'=> $v); })
+                                    ->then(function ($v) { return array('id' => $v); })
                                 ->end()
                                 ->children()
                                     ->scalarNode('id')->end()
@@ -425,7 +425,7 @@ class Configuration implements ConfigurationInterface
                                 ->canBeUnset()
                                 ->beforeNormalization()
                                     ->ifString()
-                                    ->then(function ($v) { return array('id'=> $v); })
+                                    ->then(function ($v) { return array('id' => $v); })
                                 ->end()
                                 ->children()
                                     ->scalarNode('id')->end()
@@ -453,7 +453,7 @@ class Configuration implements ConfigurationInterface
                                 ->canBeUnset()
                                 ->beforeNormalization()
                                     ->ifString()
-                                    ->then(function ($v) { return array('id'=> $v); })
+                                    ->then(function ($v) { return array('id' => $v); })
                                 ->end()
                                 ->children()
                                     ->scalarNode('id')->end()
@@ -651,7 +651,7 @@ class Configuration implements ConfigurationInterface
                             ->thenInvalid('Service handlers can not have a formatter configured in the bundle, you must reconfigure the service itself instead')
                         ->end()
                         ->validate()
-                            ->ifTrue(function ($v) { return ('fingers_crossed' === $v['type'] || 'buffer' === $v['type'] || 'filter' === $v['type']) && 1 !== count($v['handler']); })
+                            ->ifTrue(function ($v) { return ('fingers_crossed' === $v['type'] || 'buffer' === $v['type'] || 'filter' === $v['type']) && empty($v['handler']); })
                             ->thenInvalid('The handler has to be specified to use a FingersCrossedHandler or BufferHandler or FilterHandler')
                         ->end()
                         ->validate()

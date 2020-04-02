@@ -5,7 +5,7 @@ namespace ExamParser\Reader;
 use ExamParser\Exception\ExamException;
 use ZipArchive;
 use DOMDocument;
-use Rhumsaa\Uuid\Uuid;
+use Ramsey\Uuid\Uuid;
 
 class ReadDocx
 {

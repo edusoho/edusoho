@@ -13,7 +13,6 @@ namespace Symfony\Component\DependencyInjection\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DefinitionTest extends TestCase
 {
@@ -21,20 +20,22 @@ class DefinitionTest extends TestCase
     {
         $def = new Definition('stdClass');
         $this->assertEquals('stdClass', $def->getClass(), '__construct() takes the class name as its first argument');
+        $this->assertSame(['class' => true], $def->getChanges());
 
-        $def = new Definition('stdClass', array('foo'));
-        $this->assertEquals(array('foo'), $def->getArguments(), '__construct() takes an optional array of arguments as its second argument');
+        $def = new Definition('stdClass', ['foo']);
+        $this->assertEquals(['foo'], $def->getArguments(), '__construct() takes an optional array of arguments as its second argument');
     }
 
     public function testSetGetFactory()
     {
-        $def = new Definition('stdClass');
+        $def = new Definition();
 
         $this->assertSame($def, $def->setFactory('foo'), '->setFactory() implements a fluent interface');
         $this->assertEquals('foo', $def->getFactory(), '->getFactory() returns the factory');
 
         $def->setFactory('Foo::bar');
-        $this->assertEquals(array('Foo', 'bar'), $def->getFactory(), '->setFactory() converts string static method call to the array');
+        $this->assertEquals(['Foo', 'bar'], $def->getFactory(), '->setFactory() converts string static method call to the array');
+        $this->assertSame(['factory' => true], $def->getChanges());
     }
 
     public function testSetGetClass()
@@ -49,31 +50,27 @@ class DefinitionTest extends TestCase
         $def = new Definition('stdClass');
         $this->assertNull($def->getDecoratedService());
         $def->setDecoratedService('foo', 'foo.renamed', 5);
-        $this->assertEquals(array('foo', 'foo.renamed', 5), $def->getDecoratedService());
+        $this->assertEquals(['foo', 'foo.renamed', 5], $def->getDecoratedService());
         $def->setDecoratedService(null);
         $this->assertNull($def->getDecoratedService());
 
         $def = new Definition('stdClass');
         $this->assertNull($def->getDecoratedService());
         $def->setDecoratedService('foo', 'foo.renamed');
-        $this->assertEquals(array('foo', 'foo.renamed', 0), $def->getDecoratedService());
+        $this->assertEquals(['foo', 'foo.renamed', 0], $def->getDecoratedService());
         $def->setDecoratedService(null);
         $this->assertNull($def->getDecoratedService());
 
         $def = new Definition('stdClass');
         $def->setDecoratedService('foo');
-        $this->assertEquals(array('foo', null, 0), $def->getDecoratedService());
+        $this->assertEquals(['foo', null, 0], $def->getDecoratedService());
         $def->setDecoratedService(null);
         $this->assertNull($def->getDecoratedService());
 
         $def = new Definition('stdClass');
 
-        if (method_exists($this, 'expectException')) {
-            $this->expectException('InvalidArgumentException');
-            $this->expectExceptionMessage('The decorated service inner name for "foo" must be different than the service name itself.');
-        } else {
-            $this->setExpectedException('InvalidArgumentException', 'The decorated service inner name for "foo" must be different than the service name itself.');
-        }
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('The decorated service inner name for "foo" must be different than the service name itself.');
 
         $def->setDecoratedService('foo', 'foo');
     }
@@ -81,31 +78,29 @@ class DefinitionTest extends TestCase
     public function testArguments()
     {
         $def = new Definition('stdClass');
-        $this->assertSame($def, $def->setArguments(array('foo')), '->setArguments() implements a fluent interface');
-        $this->assertEquals(array('foo'), $def->getArguments(), '->getArguments() returns the arguments');
+        $this->assertSame($def, $def->setArguments(['foo']), '->setArguments() implements a fluent interface');
+        $this->assertEquals(['foo'], $def->getArguments(), '->getArguments() returns the arguments');
         $this->assertSame($def, $def->addArgument('bar'), '->addArgument() implements a fluent interface');
-        $this->assertEquals(array('foo', 'bar'), $def->getArguments(), '->addArgument() adds an argument');
+        $this->assertEquals(['foo', 'bar'], $def->getArguments(), '->addArgument() adds an argument');
     }
 
     public function testMethodCalls()
     {
         $def = new Definition('stdClass');
-        $this->assertSame($def, $def->setMethodCalls(array(array('foo', array('foo')))), '->setMethodCalls() implements a fluent interface');
-        $this->assertEquals(array(array('foo', array('foo'))), $def->getMethodCalls(), '->getMethodCalls() returns the methods to call');
-        $this->assertSame($def, $def->addMethodCall('bar', array('bar')), '->addMethodCall() implements a fluent interface');
-        $this->assertEquals(array(array('foo', array('foo')), array('bar', array('bar'))), $def->getMethodCalls(), '->addMethodCall() adds a method to call');
+        $this->assertSame($def, $def->setMethodCalls([['foo', ['foo']]]), '->setMethodCalls() implements a fluent interface');
+        $this->assertEquals([['foo', ['foo']]], $def->getMethodCalls(), '->getMethodCalls() returns the methods to call');
+        $this->assertSame($def, $def->addMethodCall('bar', ['bar']), '->addMethodCall() implements a fluent interface');
+        $this->assertEquals([['foo', ['foo']], ['bar', ['bar']]], $def->getMethodCalls(), '->addMethodCall() adds a method to call');
         $this->assertTrue($def->hasMethodCall('bar'), '->hasMethodCall() returns true if first argument is a method to call registered');
         $this->assertFalse($def->hasMethodCall('no_registered'), '->hasMethodCall() returns false if first argument is not a method to call registered');
         $this->assertSame($def, $def->removeMethodCall('bar'), '->removeMethodCall() implements a fluent interface');
-        $this->assertEquals(array(array('foo', array('foo'))), $def->getMethodCalls(), '->removeMethodCall() removes a method to call');
+        $this->assertEquals([['foo', ['foo']]], $def->getMethodCalls(), '->removeMethodCall() removes a method to call');
     }
 
-    /**
-     * @expectedException \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Method name cannot be empty.
-     */
     public function testExceptionOnEmptyMethodCall()
     {
+        $this->expectException('Symfony\Component\DependencyInjection\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('Method name cannot be empty.');
         $def = new Definition('stdClass');
         $def->addMethodCall('');
     }
@@ -125,29 +120,6 @@ class DefinitionTest extends TestCase
         $this->assertFalse($def->isShared(), '->isShared() returns false if the instance must not be shared');
     }
 
-    /**
-     * @group legacy
-     */
-    public function testPrototypeScopedDefinitionAreNotShared()
-    {
-        $def = new Definition('stdClass');
-        $def->setScope(ContainerInterface::SCOPE_PROTOTYPE);
-
-        $this->assertFalse($def->isShared());
-        $this->assertEquals(ContainerInterface::SCOPE_PROTOTYPE, $def->getScope());
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testSetGetScope()
-    {
-        $def = new Definition('stdClass');
-        $this->assertEquals('container', $def->getScope());
-        $this->assertSame($def, $def->setScope('foo'));
-        $this->assertEquals('foo', $def->getScope());
-    }
-
     public function testSetIsPublic()
     {
         $def = new Definition('stdClass');
@@ -162,17 +134,6 @@ class DefinitionTest extends TestCase
         $this->assertFalse($def->isSynthetic(), '->isSynthetic() returns false by default');
         $this->assertSame($def, $def->setSynthetic(true), '->setSynthetic() implements a fluent interface');
         $this->assertTrue($def->isSynthetic(), '->isSynthetic() returns true if the service is synthetic.');
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testLegacySetIsSynchronized()
-    {
-        $def = new Definition('stdClass');
-        $this->assertFalse($def->isSynchronized(), '->isSynchronized() returns false by default');
-        $this->assertSame($def, $def->setSynchronized(true), '->setSynchronized() implements a fluent interface');
-        $this->assertTrue($def->isSynchronized(), '->isSynchronized() returns true if the service is synchronized.');
     }
 
     public function testSetIsLazy()
@@ -202,22 +163,22 @@ class DefinitionTest extends TestCase
 
     /**
      * @dataProvider invalidDeprecationMessageProvider
-     * @expectedException \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      */
     public function testSetDeprecatedWithInvalidDeprecationTemplate($message)
     {
+        $this->expectException('Symfony\Component\DependencyInjection\Exception\InvalidArgumentException');
         $def = new Definition('stdClass');
         $def->setDeprecated(false, $message);
     }
 
     public function invalidDeprecationMessageProvider()
     {
-        return array(
-            "With \rs" => array("invalid \r message %service_id%"),
-            "With \ns" => array("invalid \n message %service_id%"),
-            'With */s' => array('invalid */ message %service_id%'),
-            'message not containing require %service_id% variable' => array('this is deprecated'),
-        );
+        return [
+            "With \rs" => ["invalid \r message %service_id%"],
+            "With \ns" => ["invalid \n message %service_id%"],
+            'With */s' => ['invalid */ message %service_id%'],
+            'message not containing require %service_id% variable' => ['this is deprecated'],
+        ];
     }
 
     public function testSetGetConfigurator()
@@ -231,18 +192,18 @@ class DefinitionTest extends TestCase
     {
         $def = new Definition('stdClass');
         $this->assertSame($def, $def->clearTags(), '->clearTags() implements a fluent interface');
-        $def->addTag('foo', array('foo' => 'bar'));
+        $def->addTag('foo', ['foo' => 'bar']);
         $def->clearTags();
-        $this->assertEquals(array(), $def->getTags(), '->clearTags() removes all current tags');
+        $this->assertEquals([], $def->getTags(), '->clearTags() removes all current tags');
     }
 
     public function testClearTag()
     {
         $def = new Definition('stdClass');
         $this->assertSame($def, $def->clearTags(), '->clearTags() implements a fluent interface');
-        $def->addTag('1foo1', array('foo1' => 'bar1'));
-        $def->addTag('2foo2', array('foo2' => 'bar2'));
-        $def->addTag('3foo3', array('foo3' => 'bar3'));
+        $def->addTag('1foo1', ['foo1' => 'bar1']);
+        $def->addTag('2foo2', ['foo2' => 'bar2']);
+        $def->addTag('3foo3', ['foo3' => 'bar3']);
         $def->clearTag('2foo2');
         $this->assertTrue($def->hasTag('1foo1'));
         $this->assertFalse($def->hasTag('2foo2'));
@@ -255,18 +216,18 @@ class DefinitionTest extends TestCase
     public function testTags()
     {
         $def = new Definition('stdClass');
-        $this->assertEquals(array(), $def->getTag('foo'), '->getTag() returns an empty array if the tag is not defined');
+        $this->assertEquals([], $def->getTag('foo'), '->getTag() returns an empty array if the tag is not defined');
         $this->assertFalse($def->hasTag('foo'));
         $this->assertSame($def, $def->addTag('foo'), '->addTag() implements a fluent interface');
         $this->assertTrue($def->hasTag('foo'));
-        $this->assertEquals(array(array()), $def->getTag('foo'), '->getTag() returns attributes for a tag name');
-        $def->addTag('foo', array('foo' => 'bar'));
-        $this->assertEquals(array(array(), array('foo' => 'bar')), $def->getTag('foo'), '->addTag() can adds the same tag several times');
-        $def->addTag('bar', array('bar' => 'bar'));
-        $this->assertEquals($def->getTags(), array(
-            'foo' => array(array(), array('foo' => 'bar')),
-            'bar' => array(array('bar' => 'bar')),
-        ), '->getTags() returns all tags');
+        $this->assertEquals([[]], $def->getTag('foo'), '->getTag() returns attributes for a tag name');
+        $def->addTag('foo', ['foo' => 'bar']);
+        $this->assertEquals([[], ['foo' => 'bar']], $def->getTag('foo'), '->addTag() can adds the same tag several times');
+        $def->addTag('bar', ['bar' => 'bar']);
+        $this->assertEquals($def->getTags(), [
+            'foo' => [[], ['foo' => 'bar']],
+            'bar' => [['bar' => 'bar']],
+        ], '->getTags() returns all tags');
     }
 
     public function testSetArgument()
@@ -274,48 +235,42 @@ class DefinitionTest extends TestCase
         $def = new Definition('stdClass');
 
         $def->addArgument('foo');
-        $this->assertSame(array('foo'), $def->getArguments());
+        $this->assertSame(['foo'], $def->getArguments());
 
         $this->assertSame($def, $def->replaceArgument(0, 'moo'));
-        $this->assertSame(array('moo'), $def->getArguments());
+        $this->assertSame(['moo'], $def->getArguments());
 
         $def->addArgument('moo');
         $def
             ->replaceArgument(0, 'foo')
             ->replaceArgument(1, 'bar')
         ;
-        $this->assertSame(array('foo', 'bar'), $def->getArguments());
+        $this->assertSame(['foo', 'bar'], $def->getArguments());
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function testGetArgumentShouldCheckBounds()
     {
+        $this->expectException('OutOfBoundsException');
         $def = new Definition('stdClass');
 
         $def->addArgument('foo');
         $def->getArgument(1);
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     * @expectedExceptionMessage The index "1" is not in the range [0, 0].
-     */
     public function testReplaceArgumentShouldCheckBounds()
     {
+        $this->expectException('OutOfBoundsException');
+        $this->expectExceptionMessage('The index "1" is not in the range [0, 0].');
         $def = new Definition('stdClass');
 
         $def->addArgument('foo');
         $def->replaceArgument(1, 'bar');
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     * @expectedExceptionMessage Cannot replace arguments if none have been configured yet.
-     */
     public function testReplaceArgumentWithoutExistingArgumentsShouldCheckBounds()
     {
+        $this->expectException('OutOfBoundsException');
+        $this->expectExceptionMessage('Cannot replace arguments if none have been configured yet.');
         $def = new Definition('stdClass');
         $def->replaceArgument(0, 'bar');
     }
@@ -324,38 +279,109 @@ class DefinitionTest extends TestCase
     {
         $def = new Definition('stdClass');
 
-        $this->assertEquals(array(), $def->getProperties());
-        $this->assertSame($def, $def->setProperties(array('foo' => 'bar')));
-        $this->assertEquals(array('foo' => 'bar'), $def->getProperties());
+        $this->assertEquals([], $def->getProperties());
+        $this->assertSame($def, $def->setProperties(['foo' => 'bar']));
+        $this->assertEquals(['foo' => 'bar'], $def->getProperties());
     }
 
     public function testSetProperty()
     {
         $def = new Definition('stdClass');
 
-        $this->assertEquals(array(), $def->getProperties());
+        $this->assertEquals([], $def->getProperties());
         $this->assertSame($def, $def->setProperty('foo', 'bar'));
-        $this->assertEquals(array('foo' => 'bar'), $def->getProperties());
+        $this->assertEquals(['foo' => 'bar'], $def->getProperties());
     }
 
     public function testAutowired()
     {
         $def = new Definition('stdClass');
         $this->assertFalse($def->isAutowired());
+
         $def->setAutowired(true);
         $this->assertTrue($def->isAutowired());
+
+        $def->setAutowired(false);
+        $this->assertFalse($def->isAutowired());
     }
 
+    public function testChangesNoChanges()
+    {
+        $def = new Definition();
+
+        $this->assertSame([], $def->getChanges());
+    }
+
+    public function testGetChangesWithChanges()
+    {
+        $def = new Definition('stdClass', ['fooarg']);
+
+        $def->setAbstract(true);
+        $def->setAutowired(true);
+        $def->setConfigurator('configuration_func');
+        $def->setDecoratedService(null);
+        $def->setDeprecated(true);
+        $def->setFactory('factory_func');
+        $def->setFile('foo.php');
+        $def->setLazy(true);
+        $def->setPublic(true);
+        $def->setShared(true);
+        $def->setSynthetic(true);
+        // changes aren't tracked for these, class or arguments
+        $def->setInstanceofConditionals([]);
+        $def->addTag('foo_tag');
+        $def->addMethodCall('methodCall');
+        $def->setProperty('fooprop', true);
+        $def->setAutoconfigured(true);
+
+        $this->assertSame([
+            'class' => true,
+            'autowired' => true,
+            'configurator' => true,
+            'decorated_service' => true,
+            'deprecated' => true,
+            'factory' => true,
+            'file' => true,
+            'lazy' => true,
+            'public' => true,
+            'shared' => true,
+            'autoconfigured' => true,
+        ], $def->getChanges());
+
+        $def->setChanges([]);
+        $this->assertSame([], $def->getChanges());
+    }
+
+    /**
+     * @group legacy
+     */
     public function testTypes()
     {
         $def = new Definition('stdClass');
 
-        $this->assertEquals(array(), $def->getAutowiringTypes());
-        $this->assertSame($def, $def->setAutowiringTypes(array('Foo')));
-        $this->assertEquals(array('Foo'), $def->getAutowiringTypes());
+        $this->assertEquals([], $def->getAutowiringTypes());
+        $this->assertSame($def, $def->setAutowiringTypes(['Foo']));
+        $this->assertEquals(['Foo'], $def->getAutowiringTypes());
         $this->assertSame($def, $def->addAutowiringType('Bar'));
         $this->assertTrue($def->hasAutowiringType('Bar'));
         $this->assertSame($def, $def->removeAutowiringType('Foo'));
-        $this->assertEquals(array('Bar'), $def->getAutowiringTypes());
+        $this->assertEquals(['Bar'], $def->getAutowiringTypes());
+    }
+
+    public function testShouldAutoconfigure()
+    {
+        $def = new Definition('stdClass');
+        $this->assertFalse($def->isAutoconfigured());
+        $def->setAutoconfigured(true);
+        $this->assertTrue($def->isAutoconfigured());
+    }
+
+    public function testAddError()
+    {
+        $def = new Definition('stdClass');
+        $this->assertEmpty($def->getErrors());
+        $def->addError('First error');
+        $def->addError('Second error');
+        $this->assertSame(['First error', 'Second error'], $def->getErrors());
     }
 }

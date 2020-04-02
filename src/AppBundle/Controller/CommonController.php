@@ -12,6 +12,7 @@ use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\System;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class CommonController extends BaseController
 {
@@ -23,7 +24,7 @@ class CommonController extends BaseController
         $inWhitelist = $qrCodeFilter->isInWhiteList($text);
 
         if (!$inWhitelist && 0 !== strpos($text, $request->getUriForPath(''))) {
-            $text = $this->generateUrl('homepage', array(), true);
+            $text = $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         $qrCode = new QrCode();
@@ -66,7 +67,7 @@ class CommonController extends BaseController
         if (empty($token) || !isset($token['data']['url'])) {
             $content = $this->renderView('default/message.html.twig', array(
                 'type' => 'error',
-                'goto' => $this->generateUrl('homepage', array(), true),
+                'goto' => $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL),
                 'duration' => 1,
                 'message' => '二维码已失效，正跳转到首页',
             ));

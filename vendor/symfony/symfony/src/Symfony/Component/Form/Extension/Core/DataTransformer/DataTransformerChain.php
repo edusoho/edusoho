@@ -21,17 +21,12 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
  */
 class DataTransformerChain implements DataTransformerInterface
 {
-    /**
-     * The value transformers.
-     *
-     * @var DataTransformerInterface[]
-     */
     protected $transformers;
 
     /**
      * Uses the given value transformers to transform values.
      *
-     * @param array $transformers
+     * @param DataTransformerInterface[] $transformers
      */
     public function __construct(array $transformers)
     {
@@ -78,7 +73,7 @@ class DataTransformerChain implements DataTransformerInterface
      */
     public function reverseTransform($value)
     {
-        for ($i = count($this->transformers) - 1; $i >= 0; --$i) {
+        for ($i = \count($this->transformers) - 1; $i >= 0; --$i) {
             $value = $this->transformers[$i]->reverseTransform($value);
         }
 

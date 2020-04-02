@@ -22,10 +22,7 @@ use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
  */
 class ChromePhpHandler extends BaseChromePhpHandler
 {
-    /**
-     * @var array
-     */
-    private $headers = array();
+    private $headers = [];
 
     /**
      * @var Response
@@ -41,9 +38,9 @@ class ChromePhpHandler extends BaseChromePhpHandler
             return;
         }
 
-        if (!preg_match('{\b(?:Chrome/\d+(?:\.\d+)*|Firefox/(?:4[3-9]|[5-9]\d|\d{3,})(?:\.\d)*)\b}', $event->getRequest()->headers->get('User-Agent'))) {
-            $this->sendHeaders = false;
-            $this->headers = array();
+        if (!preg_match(static::USER_AGENT_REGEX, $event->getRequest()->headers->get('User-Agent'))) {
+            self::$sendHeaders = false;
+            $this->headers = [];
 
             return;
         }
@@ -52,7 +49,7 @@ class ChromePhpHandler extends BaseChromePhpHandler
         foreach ($this->headers as $header => $content) {
             $this->response->headers->set($header, $content);
         }
-        $this->headers = array();
+        $this->headers = [];
     }
 
     /**
@@ -60,7 +57,7 @@ class ChromePhpHandler extends BaseChromePhpHandler
      */
     protected function sendHeader($header, $content)
     {
-        if (!$this->sendHeaders) {
+        if (!self::$sendHeaders) {
             return;
         }
 

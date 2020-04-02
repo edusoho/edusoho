@@ -3,13 +3,15 @@
 namespace Omnipay\Alipay;
 
 use Omnipay\Alipay\Requests\AopTradeAppPayRequest;
+
 /**
  * Class AopAppGateway
  * @package Omnipay\Alipay
  * @link    https://doc.open.alipay.com/docs/doc.htm?treeId=204&articleId=105051&docType=1
  */
-class AopAppGateway extends \Omnipay\Alipay\AbstractAopGateway
+class AopAppGateway extends AbstractAopGateway
 {
+
     /**
      * Get gateway display name
      *
@@ -19,13 +21,15 @@ class AopAppGateway extends \Omnipay\Alipay\AbstractAopGateway
     {
         return 'Alipay APP Gateway';
     }
+
+
     /**
      * @param array $parameters
      *
-     * @return AopTradeAppPayRequest
+     * @return \Omnipay\Alipay\Requests\AopTradeAppPayRequest
      */
-    public function purchase(array $parameters = array())
+    public function purchase(array $parameters = [])
     {
-        return $this->createRequest('Omnipay\\Alipay\\Requests\\AopTradeAppPayRequest', $parameters);
+        return $this->createRequest(AopTradeAppPayRequest::class, $parameters);
     }
 }

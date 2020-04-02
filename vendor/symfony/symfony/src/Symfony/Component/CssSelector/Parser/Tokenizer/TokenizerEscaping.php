@@ -23,14 +23,8 @@ namespace Symfony\Component\CssSelector\Parser\Tokenizer;
  */
 class TokenizerEscaping
 {
-    /**
-     * @var TokenizerPatterns
-     */
     private $patterns;
 
-    /**
-     * @param TokenizerPatterns $patterns
-     */
     public function __construct(TokenizerPatterns $patterns)
     {
         $this->patterns = $patterns;
@@ -71,14 +65,16 @@ class TokenizerEscaping
             $c = hexdec($match[1]);
 
             if (0x80 > $c %= 0x200000) {
-                return chr($c);
+                return \chr($c);
             }
             if (0x800 > $c) {
-                return chr(0xC0 | $c >> 6).chr(0x80 | $c & 0x3F);
+                return \chr(0xC0 | $c >> 6).\chr(0x80 | $c & 0x3F);
             }
             if (0x10000 > $c) {
-                return chr(0xE0 | $c >> 12).chr(0x80 | $c >> 6 & 0x3F).chr(0x80 | $c & 0x3F);
+                return \chr(0xE0 | $c >> 12).\chr(0x80 | $c >> 6 & 0x3F).\chr(0x80 | $c & 0x3F);
             }
+
+            return '';
         }, $value);
     }
 }

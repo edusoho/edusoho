@@ -18,8 +18,6 @@ use Sensio\Bundle\GeneratorBundle\Command\GenerateCommandCommand;
 class GenerateCommandCommandTest extends GenerateCommandTest
 {
     protected $generator;
-    protected $bundle;
-    protected $tmpDir;
 
     /**
      * @dataProvider getInteractiveCommandData
@@ -35,7 +33,8 @@ class GenerateCommandCommandTest extends GenerateCommandTest
             ->with($this->getBundle(), $name)
         ;
 
-        $tester = $this->getCommandTester($generator, $input);
+        $tester = new CommandTester($command = $this->getCommand($generator));
+        $this->setInputs($tester, $command, $input);
         $tester->execute($options);
     }
 
@@ -82,14 +81,12 @@ class GenerateCommandCommandTest extends GenerateCommandTest
             ->with($this->getBundle(), $name)
         ;
 
-        $tester = $this->getCommandTester($generator);
+        $tester = new CommandTester($command = $this->getCommand($generator));
         $tester->execute($options, array('interactive' => false));
     }
 
     public function getNonInteractiveCommandData()
     {
-        $tmp = sys_get_temp_dir();
-
         return array(
             array(
                 array('bundle' => 'FooBarBundle', 'name' => 'app:my-command'),
@@ -98,20 +95,15 @@ class GenerateCommandCommandTest extends GenerateCommandTest
         );
     }
 
-    protected function getCommand($generator, $input)
+    protected function getCommand($generator)
     {
         $command = new GenerateCommandCommand();
 
         $command->setContainer($this->getContainer());
-        $command->setHelperSet($this->getHelperSet($input));
+        $command->setHelperSet($this->getHelperSet());
         $command->setGenerator($generator);
 
         return $command;
-    }
-
-    protected function getCommandTester($generator, $input = '')
-    {
-        return new CommandTester($this->getCommand($generator, $input));
     }
 
     protected function getApplication($input = '')
@@ -160,7 +152,7 @@ class GenerateCommandCommandTest extends GenerateCommandTest
     protected function setBundle()
     {
         $bundle = $this->getMockBuilder('Symfony\Component\HttpKernel\Bundle\BundleInterface')->getMock();
-        $bundle->expects($this->any())->method('getPath')->will($this->returnValue($this->tmpDir));
+        $bundle->expects($this->any())->method('getPath')->will($this->returnValue(''));
         $bundle->expects($this->any())->method('getName')->will($this->returnValue('FooBarBundle'));
         $bundle->expects($this->any())->method('getNamespace')->will($this->returnValue('Foo\BarBundle'));
 

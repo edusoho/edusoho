@@ -12,9 +12,9 @@
 namespace Symfony\Component\HttpKernel\Tests\HttpCache;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpKernel\HttpCache\Esi;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\HttpCache\Esi;
 
 class EsiTest extends TestCase
 {
@@ -40,10 +40,10 @@ class EsiTest extends TestCase
 
         $request = Request::create('/');
         $esi->addSurrogateCapability($request);
-        $this->assertEquals('symfony2="ESI/1.0"', $request->headers->get('Surrogate-Capability'));
+        $this->assertEquals('symfony="ESI/1.0"', $request->headers->get('Surrogate-Capability'));
 
         $esi->addSurrogateCapability($request);
-        $this->assertEquals('symfony2="ESI/1.0", symfony2="ESI/1.0"', $request->headers->get('Surrogate-Capability'));
+        $this->assertEquals('symfony="ESI/1.0", symfony="ESI/1.0"', $request->headers->get('Surrogate-Capability'));
     }
 
     public function testAddSurrogateControl()
@@ -88,7 +88,7 @@ class EsiTest extends TestCase
         $request = Request::create('/');
         $response = new Response();
         $response->headers->set('Content-Type', 'text/plain');
-        $esi->process($request, $response);
+        $this->assertSame($response, $esi->process($request, $response));
 
         $this->assertFalse($response->headers->has('x-body-eval'));
     }
@@ -99,7 +99,7 @@ class EsiTest extends TestCase
 
         $request = Request::create('/');
         $response = new Response('<esi:remove> <a href="http://www.example.com">www.example.com</a> </esi:remove> Keep this'."<esi:remove>\n <a>www.example.com</a> </esi:remove> And this");
-        $esi->process($request, $response);
+        $this->assertSame($response, $esi->process($request, $response));
 
         $this->assertEquals(' Keep this And this', $response->getContent());
     }
@@ -110,7 +110,7 @@ class EsiTest extends TestCase
 
         $request = Request::create('/');
         $response = new Response('<esi:comment text="some comment &gt;" /> Keep this');
-        $esi->process($request, $response);
+        $this->assertSame($response, $esi->process($request, $response));
 
         $this->assertEquals(' Keep this', $response->getContent());
     }
@@ -121,23 +121,23 @@ class EsiTest extends TestCase
 
         $request = Request::create('/');
         $response = new Response('foo <esi:comment text="some comment" /><esi:include src="..." alt="alt" onerror="continue" />');
-        $esi->process($request, $response);
+        $this->assertSame($response, $esi->process($request, $response));
 
         $this->assertEquals('foo <?php echo $this->surrogate->handle($this, \'...\', \'alt\', true) ?>'."\n", $response->getContent());
         $this->assertEquals('ESI', $response->headers->get('x-body-eval'));
 
         $response = new Response('foo <esi:comment text="some comment" /><esi:include src="foo\'" alt="bar\'" onerror="continue" />');
-        $esi->process($request, $response);
+        $this->assertSame($response, $esi->process($request, $response));
 
         $this->assertEquals('foo <?php echo $this->surrogate->handle($this, \'foo\\\'\', \'bar\\\'\', true) ?>'."\n", $response->getContent());
 
         $response = new Response('foo <esi:include src="..." />');
-        $esi->process($request, $response);
+        $this->assertSame($response, $esi->process($request, $response));
 
         $this->assertEquals('foo <?php echo $this->surrogate->handle($this, \'...\', \'\', false) ?>'."\n", $response->getContent());
 
         $response = new Response('foo <esi:include src="..."></esi:include>');
-        $esi->process($request, $response);
+        $this->assertSame($response, $esi->process($request, $response));
 
         $this->assertEquals('foo <?php echo $this->surrogate->handle($this, \'...\', \'\', false) ?>'."\n", $response->getContent());
     }
@@ -148,21 +148,19 @@ class EsiTest extends TestCase
 
         $request = Request::create('/');
         $response = new Response('<?php <? <% <script language=php>');
-        $esi->process($request, $response);
+        $this->assertSame($response, $esi->process($request, $response));
 
         $this->assertEquals('<?php echo "<?"; ?>php <?php echo "<?"; ?> <?php echo "<%"; ?> <?php echo "<s"; ?>cript language=php>', $response->getContent());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testProcessWhenNoSrcInAnEsi()
     {
+        $this->expectException('RuntimeException');
         $esi = new Esi();
 
         $request = Request::create('/');
         $response = new Response('foo <esi:include />');
-        $esi->process($request, $response);
+        $this->assertSame($response, $esi->process($request, $response));
     }
 
     public function testProcessRemoveSurrogateControlHeader()
@@ -172,16 +170,16 @@ class EsiTest extends TestCase
         $request = Request::create('/');
         $response = new Response('foo <esi:include src="..." />');
         $response->headers->set('Surrogate-Control', 'content="ESI/1.0"');
-        $esi->process($request, $response);
+        $this->assertSame($response, $esi->process($request, $response));
         $this->assertEquals('ESI', $response->headers->get('x-body-eval'));
 
         $response->headers->set('Surrogate-Control', 'no-store, content="ESI/1.0"');
-        $esi->process($request, $response);
+        $this->assertSame($response, $esi->process($request, $response));
         $this->assertEquals('ESI', $response->headers->get('x-body-eval'));
         $this->assertEquals('no-store', $response->headers->get('surrogate-control'));
 
         $response->headers->set('Surrogate-Control', 'content="ESI/1.0", no-store');
-        $esi->process($request, $response);
+        $this->assertSame($response, $esi->process($request, $response));
         $this->assertEquals('ESI', $response->headers->get('x-body-eval'));
         $this->assertEquals('no-store', $response->headers->get('surrogate-control'));
     }
@@ -193,11 +191,9 @@ class EsiTest extends TestCase
         $this->assertEquals('foo', $esi->handle($cache, '/', '/alt', true));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testHandleWhenResponseIsNot200()
     {
+        $this->expectException('RuntimeException');
         $esi = new Esi();
         $response = new Response('foo');
         $response->setStatusCode(404);
@@ -220,26 +216,26 @@ class EsiTest extends TestCase
         $response1 = new Response('foo');
         $response1->setStatusCode(404);
         $response2 = new Response('bar');
-        $cache = $this->getCache(Request::create('/'), array($response1, $response2));
+        $cache = $this->getCache(Request::create('/'), [$response1, $response2]);
         $this->assertEquals('bar', $esi->handle($cache, '/', '/alt', false));
     }
 
     protected function getCache($request, $response)
     {
-        $cache = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpCache\HttpCache')->setMethods(array('getRequest', 'handle'))->disableOriginalConstructor()->getMock();
+        $cache = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpCache\HttpCache')->setMethods(['getRequest', 'handle'])->disableOriginalConstructor()->getMock();
         $cache->expects($this->any())
               ->method('getRequest')
-              ->will($this->returnValue($request))
+              ->willReturn($request)
         ;
-        if (is_array($response)) {
+        if (\is_array($response)) {
             $cache->expects($this->any())
                   ->method('handle')
-                  ->will(call_user_func_array(array($this, 'onConsecutiveCalls'), $response))
+                  ->will(\call_user_func_array([$this, 'onConsecutiveCalls'], $response))
             ;
         } else {
             $cache->expects($this->any())
                   ->method('handle')
-                  ->will($this->returnValue($response))
+                  ->willReturn($response)
             ;
         }
 

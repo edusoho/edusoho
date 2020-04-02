@@ -88,6 +88,12 @@ class Spyc {
    */
   public $setting_use_syck_is_possible = false;
 
+  /**
+   * Setting this to true will forse YAMLLoad to use syck_load function when
+   * possible. False by default.
+   * @var bool
+   */
+  public $setting_empty_hash_as_object = false;
 
 
   /**#@+
@@ -147,9 +153,15 @@ class Spyc {
      * @access public
      * @return array
      * @param string $input Path of YAML file or string containing YAML
+     * @param array set options
      */
-  public static function YAMLLoad($input) {
+  public static function YAMLLoad($input, $options = []) {
     $Spyc = new Spyc;
+    foreach ($options as $key => $value) {
+        if (property_exists($Spyc, $key)) {
+            $Spyc->$key = $value;
+        }
+    }
     return $Spyc->_load($input);
   }
 
@@ -171,9 +183,15 @@ class Spyc {
      * @access public
      * @return array
      * @param string $input String containing YAML
+     * @param array set options
      */
-  public static function YAMLLoadString($input) {
+  public static function YAMLLoadString($input, $options = []) {
     $Spyc = new Spyc;
+    foreach ($options as $key => $value) {
+        if (property_exists($Spyc, $key)) {
+            $Spyc->$key = $value;
+        }
+    }
     return $Spyc->_loadString($input);
   }
 
@@ -574,18 +592,19 @@ class Spyc {
       $line = $this->stripGroup ($line, $group);
     }
 
-    if ($this->startsMappedSequence($line))
+    if ($this->startsMappedSequence($line)) {
       return $this->returnMappedSequence($line);
+    }
 
-    if ($this->startsMappedValue($line))
+    if ($this->startsMappedValue($line)) {
       return $this->returnMappedValue($line);
+    }
 
     if ($this->isArrayElement($line))
-     return $this->returnArrayElement($line);
+      return $this->returnArrayElement($line);
 
     if ($this->isPlainArray($line))
      return $this->returnPlainArray($line);
-
 
     return $this->returnKeyValuePair($line);
 
@@ -599,6 +618,11 @@ class Spyc {
      */
   private function _toType($value) {
     if ($value === '') return "";
+
+    if ($this->setting_empty_hash_as_object && $value === '{}') {
+      return new stdClass();
+    }
+
     $first_character = $value[0];
     $last_character = substr($value, -1, 1);
 
@@ -1101,6 +1125,7 @@ class Spyc {
       }
       // Set the type of the value.  Int, string, etc
       $value = $this->_toType($value);
+
       if ($key === '0') $key = '__!YAMLZero';
       $array[$key] = $value;
     } else {

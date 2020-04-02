@@ -1,13 +1,11 @@
 <?php
 
-require_once ("../Spyc.php");
-
 class IndentTest extends PHPUnit_Framework_TestCase {
 
     protected $Y;
 
     protected function setUp() {
-        $this->Y = Spyc::YAMLLoad("indent_1.yaml");
+        $this->Y = Spyc::YAMLLoad(__DIR__."/indent_1.yaml");
     }
 
     public function testIndent_1() {

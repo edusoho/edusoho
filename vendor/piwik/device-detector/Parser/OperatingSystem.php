@@ -46,6 +46,7 @@ class OperatingSystem extends ParserAbstract
         'DFB' => 'DragonFly',
         'FED' => 'Fedora',
         'FOS' => 'Firefox OS',
+        'FIR' => 'Fire OS',
         'BSD' => 'FreeBSD',
         'GNT' => 'Gentoo',
         'GTV' => 'Google TV',
@@ -53,6 +54,7 @@ class OperatingSystem extends ParserAbstract
         'HAI' => 'Haiku OS',
         'IRI' => 'IRIX',
         'INF' => 'Inferno',
+        'KOS' => 'KaiOS',
         'KNO' => 'Knoppix',
         'KBT' => 'Kubuntu',
         'LIN' => 'GNU/Linux',
@@ -73,6 +75,7 @@ class OperatingSystem extends ParserAbstract
         'OS2' => 'OS/2',
         'T64' => 'OSF1',
         'OBS' => 'OpenBSD',
+        'ORD' => 'Ordissimo',
         'PSP' => 'PlayStation Portable',
         'PS3' => 'PlayStation',
         'RHT' => 'Red Hat',
@@ -96,6 +99,7 @@ class OperatingSystem extends ParserAbstract
         'WTV' => 'WebTV',
         'WIN' => 'Windows',
         'WCE' => 'Windows CE',
+        'WIO' => 'Windows IoT',
         'WMO' => 'Windows Mobile',
         'WPH' => 'Windows Phone',
         'WRT' => 'Windows RT',
@@ -113,20 +117,20 @@ class OperatingSystem extends ParserAbstract
      * @var array
      */
     protected static $osFamilies = array(
-        'Android'               => array('AND', 'CYN', 'REM', 'RZD', 'MLD', 'MCD', 'YNS'),
+        'Android'               => array('AND', 'CYN', 'FIR', 'REM', 'RZD', 'MLD', 'MCD', 'YNS'),
         'AmigaOS'               => array('AMG', 'MOR'),
         'Apple TV'              => array('ATV'),
         'BlackBerry'            => array('BLB', 'QNX'),
         'Brew'                  => array('BMP'),
         'BeOS'                  => array('BEO', 'HAI'),
         'Chrome OS'             => array('COS'),
-        'Firefox OS'            => array('FOS'),
+        'Firefox OS'            => array('FOS', 'KOS'),
         'Gaming Console'        => array('WII', 'PS3'),
         'Google TV'             => array('GTV'),
         'IBM'                   => array('OS2'),
         'iOS'                   => array('IOS'),
         'RISC OS'               => array('ROS'),
-        'GNU/Linux'             => array('LIN', 'ARL', 'DEB', 'KNO', 'MIN', 'UBT', 'KBT', 'XBT', 'LBT', 'FED', 'RHT', 'VLN', 'MDR', 'GNT', 'SAB', 'SLW', 'SSE', 'CES', 'BTR', 'SAF'),
+        'GNU/Linux'             => array('LIN', 'ARL', 'DEB', 'KNO', 'MIN', 'UBT', 'KBT', 'XBT', 'LBT', 'FED', 'RHT', 'VLN', 'MDR', 'GNT', 'SAB', 'SLW', 'SSE', 'CES', 'BTR', 'SAF', 'ORD'),
         'Mac'                   => array('MAC'),
         'Mobile Gaming Console' => array('PSP', 'NDS', 'XBX'),
         'Real-time OS'          => array('MTK', 'TDX'),
@@ -135,7 +139,7 @@ class OperatingSystem extends ParserAbstract
         'Unix'                  => array('SOS', 'AIX', 'HPX', 'BSD', 'NBS', 'OBS', 'DFB', 'SYL', 'IRI', 'T64', 'INF'),
         'WebTV'                 => array('WTV'),
         'Windows'               => array('WIN'),
-        'Windows Mobile'        => array('WPH', 'WMO', 'WCE', 'WRT')
+        'Windows Mobile'        => array('WPH', 'WMO', 'WCE', 'WRT', 'WIO')
     );
 
     /**

@@ -18,6 +18,8 @@ use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
  * @Annotation
  * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
  *
+ * @property int $maxSize
+ *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
 class File extends Constraint
@@ -30,16 +32,16 @@ class File extends Constraint
     const TOO_LARGE_ERROR = 'df8637af-d466-48c6-a59d-e7126250a654';
     const INVALID_MIME_TYPE_ERROR = '744f00bc-4389-4c74-92de-9a43cde55534';
 
-    protected static $errorNames = array(
+    protected static $errorNames = [
         self::NOT_FOUND_ERROR => 'NOT_FOUND_ERROR',
         self::NOT_READABLE_ERROR => 'NOT_READABLE_ERROR',
         self::EMPTY_ERROR => 'EMPTY_ERROR',
         self::TOO_LARGE_ERROR => 'TOO_LARGE_ERROR',
         self::INVALID_MIME_TYPE_ERROR => 'INVALID_MIME_TYPE_ERROR',
-    );
+    ];
 
     public $binaryFormat;
-    public $mimeTypes = array();
+    public $mimeTypes = [];
     public $notFoundMessage = 'The file could not be found.';
     public $notReadableMessage = 'The file is not readable.';
     public $maxSizeMessage = 'The file is too large ({{ size }} {{ suffix }}). Allowed maximum size is {{ limit }} {{ suffix }}.';
@@ -86,25 +88,31 @@ class File extends Constraint
         return parent::__get($option);
     }
 
+    public function __isset($option)
+    {
+        if ('maxSize' === $option) {
+            return true;
+        }
+
+        return parent::__isset($option);
+    }
+
     private function normalizeBinaryFormat($maxSize)
     {
-        $sizeInt = (int) $maxSize;
-
+        $factors = [
+            'k' => 1000,
+            'ki' => 1 << 10,
+            'm' => 1000 * 1000,
+            'mi' => 1 << 20,
+            'g' => 1000 * 1000 * 1000,
+            'gi' => 1 << 30,
+        ];
         if (ctype_digit((string) $maxSize)) {
-            $this->maxSize = $sizeInt;
+            $this->maxSize = (int) $maxSize;
             $this->binaryFormat = null === $this->binaryFormat ? false : $this->binaryFormat;
-        } elseif (preg_match('/^\d++k$/i', $maxSize)) {
-            $this->maxSize = $sizeInt * 1000;
-            $this->binaryFormat = null === $this->binaryFormat ? false : $this->binaryFormat;
-        } elseif (preg_match('/^\d++M$/i', $maxSize)) {
-            $this->maxSize = $sizeInt * 1000000;
-            $this->binaryFormat = null === $this->binaryFormat ? false : $this->binaryFormat;
-        } elseif (preg_match('/^\d++Ki$/i', $maxSize)) {
-            $this->maxSize = $sizeInt << 10;
-            $this->binaryFormat = null === $this->binaryFormat ? true : $this->binaryFormat;
-        } elseif (preg_match('/^\d++Mi$/i', $maxSize)) {
-            $this->maxSize = $sizeInt << 20;
-            $this->binaryFormat = null === $this->binaryFormat ? true : $this->binaryFormat;
+        } elseif (preg_match('/^(\d++)('.implode('|', array_keys($factors)).')$/i', $maxSize, $matches)) {
+            $this->maxSize = $matches[1] * $factors[$unit = strtolower($matches[2])];
+            $this->binaryFormat = null === $this->binaryFormat ? 2 === \strlen($unit) : $this->binaryFormat;
         } else {
             throw new ConstraintDefinitionException(sprintf('"%s" is not a valid maximum size', $this->maxSize));
         }

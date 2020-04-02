@@ -8,9 +8,9 @@
     </parameters>
 
     <services>
-        <service id="bazinga.jstranslation.controller" class="%bazinga.jstranslation.controller.class%">
+        <service id="bazinga.jstranslation.controller" class="%bazinga.jstranslation.controller.class%" public="true">
             <argument type="service" id="translator" />
-            <argument type="service" id="templating" />
+            <argument type="service" id="twig" />
             <argument type="service" id="bazinga.jstranslation.translation_finder" />
             <argument>%kernel.cache_dir%/bazinga-js-translation</argument>
             <argument>%kernel.debug%</argument>

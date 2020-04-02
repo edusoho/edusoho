@@ -15,16 +15,6 @@ class PasswordTypeTest extends BaseTypeTest
 {
     const TESTED_TYPE = 'Symfony\Component\Form\Extension\Core\Type\PasswordType';
 
-    /**
-     * @group legacy
-     */
-    public function testLegacyName()
-    {
-        $form = $this->factory->create('password');
-
-        $this->assertSame('password', $form->getConfig()->getType()->getName());
-    }
-
     public function testEmptyIfNotSubmitted()
     {
         $form = $this->factory->create(static::TESTED_TYPE);
@@ -43,7 +33,7 @@ class PasswordTypeTest extends BaseTypeTest
 
     public function testNotEmptyIfSubmittedAndNotAlwaysEmpty()
     {
-        $form = $this->factory->create(static::TESTED_TYPE, null, array('always_empty' => false));
+        $form = $this->factory->create(static::TESTED_TYPE, null, ['always_empty' => false]);
         $form->submit('pAs5w0rd');
 
         $this->assertSame('pAs5w0rd', $form->createView()->vars['value']);

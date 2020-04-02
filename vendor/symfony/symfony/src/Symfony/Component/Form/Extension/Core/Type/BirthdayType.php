@@ -21,7 +21,7 @@ class BirthdayType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('years', range(date('Y') - 120, date('Y')));
+        $resolver->setDefault('years', range((int) date('Y') - 120, date('Y')));
 
         $resolver->setAllowedTypes('years', 'array');
     }
@@ -31,15 +31,7 @@ class BirthdayType extends AbstractType
      */
     public function getParent()
     {
-        return __NAMESPACE__.'\DateType';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return $this->getBlockPrefix();
+        return DateType::class;
     }
 
     /**

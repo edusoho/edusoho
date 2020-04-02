@@ -18,11 +18,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ExpressionRequestMatcherTest extends TestCase
 {
-    /**
-     * @expectedException \LogicException
-     */
     public function testWhenNoExpressionIsSet()
     {
+        $this->expectException('LogicException');
         $expressionRequestMatcher = new ExpressionRequestMatcher();
         $expressionRequestMatcher->matches(new Request());
     }
@@ -55,15 +53,15 @@ class ExpressionRequestMatcherTest extends TestCase
 
     public function provideExpressions()
     {
-        return array(
-            array('request.getMethod() == method', true),
-            array('request.getPathInfo() == path', true),
-            array('request.getHost() == host', true),
-            array('request.getClientIp() == ip', true),
-            array('request.attributes.all() == attributes', true),
-            array('request.getMethod() == method && request.getPathInfo() == path && request.getHost() == host && request.getClientIp() == ip &&  request.attributes.all() == attributes', true),
-            array('request.getMethod() != method', false),
-            array('request.getMethod() != method && request.getPathInfo() == path && request.getHost() == host && request.getClientIp() == ip &&  request.attributes.all() == attributes', false),
-        );
+        return [
+            ['request.getMethod() == method', true],
+            ['request.getPathInfo() == path', true],
+            ['request.getHost() == host', true],
+            ['request.getClientIp() == ip', true],
+            ['request.attributes.all() == attributes', true],
+            ['request.getMethod() == method && request.getPathInfo() == path && request.getHost() == host && request.getClientIp() == ip &&  request.attributes.all() == attributes', true],
+            ['request.getMethod() != method', false],
+            ['request.getMethod() != method && request.getPathInfo() == path && request.getHost() == host && request.getClientIp() == ip &&  request.attributes.all() == attributes', false],
+        ];
     }
 }

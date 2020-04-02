@@ -19,6 +19,7 @@ use Biz\User\Service\TokenService;
 use Biz\User\TokenException;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use AppBundle\Common\ArrayToolkit;
 
@@ -275,16 +276,16 @@ class TaskController extends BaseController
             array(
                 'userId' => $user['id'],
                 'data' => array(
-                    'url' => $this->generateUrl('course_task_show', $params, true),
+                    'url' => $this->generateUrl('course_task_show', $params, UrlGeneratorInterface::ABSOLUTE_URL),
                 ),
                 'times' => 1,
                 'duration' => 3600,
             )
         );
-        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), UrlGeneratorInterface::ABSOLUTE_URL);
 
         $response = array(
-            'img' => $this->generateUrl('common_qrcode', array('text' => $url), true),
+            'img' => $this->generateUrl('common_qrcode', array('text' => $url), UrlGeneratorInterface::ABSOLUTE_URL),
         );
 
         return $this->createJsonResponse($response);

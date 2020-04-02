@@ -4,9 +4,8 @@ namespace Bazinga\Bundle\JsTranslationBundle\Dumper;
 
 use Bazinga\Bundle\JsTranslationBundle\Finder\TranslationFinder;
 use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\Templating\EngineInterface;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Twig_Environment;
 
 /**
  * @author Adrien Russo <adrien.russo.qc@gmail.com>
@@ -17,9 +16,9 @@ class TranslationDumper
     const DEFAULT_TRANSLATION_PATTERN = '/translations/{domain}.{_format}';
 
     /**
-     * @var EngineInterface
+     * @var \Twig_Environment
      */
-    private $engine;
+    private $twig;
 
     /**
      * @var TranslationFinder
@@ -57,14 +56,14 @@ class TranslationDumper
     private $defaultDomain;
 
     /**
-     * @param EngineInterface   $engine         The engine.
+     * @param Twig_Environment  $twig           The twig environment.
      * @param TranslationFinder $finder         The translation finder.
      * @param FileSystem        $filesystem     The file system.
      * @param string            $localeFallback
      * @param string            $defaultDomain
      */
     public function __construct(
-        EngineInterface $engine,
+        Twig_Environment $twig,
         TranslationFinder $finder,
         Filesystem $filesystem,
         $localeFallback = '',
@@ -72,7 +71,7 @@ class TranslationDumper
         array $activeLocales = array(),
         array $activeDomains = array()
     ) {
-        $this->engine         = $engine;
+        $this->twig           = $twig;
         $this->finder         = $finder;
         $this->filesystem     = $filesystem;
         $this->localeFallback = $localeFallback;
@@ -167,7 +166,7 @@ class TranslationDumper
 
             file_put_contents(
                 $file,
-                $this->engine->render('BazingaJsTranslationBundle::config.' . $format . '.twig', array(
+                $this->twig->render('@BazingaJsTranslation/config.' . $format . '.twig', array(
                     'fallback'      => $this->localeFallback,
                     'defaultDomain' => $this->defaultDomain,
                 ))
@@ -180,7 +179,7 @@ class TranslationDumper
         foreach ($this->getTranslations() as $locale => $domains) {
             foreach ($domains as $domain => $translations) {
                 foreach ($formats as $format) {
-                    $content = $this->engine->render('BazingaJsTranslationBundle::getTranslations.' . $format . '.twig', array(
+                    $content = $this->twig->render('@BazingaJsTranslation/getTranslations.' . $format . '.twig', array(
                         'translations'   => array($locale => array(
                             $domain => $translations,
                         )),
@@ -211,8 +210,8 @@ class TranslationDumper
     {
         foreach ($this->getTranslations() as $locale => $domains) {
             foreach ($formats as $format) {
-                $content = $this->engine->render(
-                    'BazingaJsTranslationBundle::getTranslations.' . $format . '.twig',
+                $content = $this->twig->render(
+                    '@BazingaJsTranslation/getTranslations.' . $format . '.twig',
                     array(
                         'translations' => array($locale => $domains),
                         'include_config' => false,

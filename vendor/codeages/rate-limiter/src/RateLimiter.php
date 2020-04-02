@@ -54,7 +54,7 @@ class RateLimiter
         }
     }
 
-    public function getAllow($id)
+    public function getAllowance($id)
     {
         $this->check($id, 0);
         $value = $this->storage->get($this->getKey($id));
@@ -65,6 +65,32 @@ class RateLimiter
         }
 
         return $this->maxAllowance;
+    }
+
+    public function updateAllowance($id, $threshold)
+    {
+        $key = $this->getKey($id);
+        $value = $this->storage->get($key);
+        if ($value !== false) {
+            list($allowance, $lastCheckTime) = $this->unpackValue($value);
+            $updatedAllowance = ($allowance + $threshold) > 0 ? ($allowance + $threshold) : 0;
+        } else {
+            $updatedAllowance = $threshold > 0 ? $threshold : 0;
+        }
+
+        $this->storage->set($this->getKey($id), $this->packValue($updatedAllowance, time()), $this->period);
+
+        return $updatedAllowance;
+    }
+
+    public function getMaxAllowance()
+    {
+        return $this->maxAllowance;
+    }
+
+    public function getAllow($id)
+    {
+        return $this->getAllowance($id);
     }
 
     public function purge($id)

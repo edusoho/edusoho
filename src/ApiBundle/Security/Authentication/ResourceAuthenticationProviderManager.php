@@ -38,6 +38,6 @@ class ResourceAuthenticationProviderManager implements ResourceAuthenticationInt
             $provider->authenticate($resourceProxy, $method);
         }
 
-        $this->container->get('event_dispatcher')->dispatch(AuthenticationEvents::AFTER_AUTHENTICATE, new ResourceEvent($this->container->get('request'), $resourceProxy));
+        $this->container->get('event_dispatcher')->dispatch(AuthenticationEvents::AFTER_AUTHENTICATE, new ResourceEvent($this->container->get('request_stack')->getMasterRequest(), $resourceProxy));
     }
 }

@@ -11,14 +11,14 @@
 
 namespace Symfony\Bundle\FrameworkBundle\Tests\Functional;
 
-class FragmentTest extends WebTestCase
+class FragmentTest extends AbstractWebTestCase
 {
     /**
      * @dataProvider getConfigs
      */
     public function testFragment($insulate)
     {
-        $client = $this->createClient(array('test_case' => 'Fragment', 'root_config' => 'config.yml'));
+        $client = $this->createClient(['test_case' => 'Fragment', 'root_config' => 'config.yml']);
         if ($insulate) {
             $client->insulate();
         }
@@ -30,9 +30,9 @@ class FragmentTest extends WebTestCase
 
     public function getConfigs()
     {
-        return array(
-            array(false),
-            array(true),
-        );
+        return [
+            [false],
+            [true],
+        ];
     }
 }

@@ -7190,7 +7190,7 @@ notification.vip.add_by_admin: You have been added as a %vipName% member by the 
 notification.vip.remove_by_admin: You have been cancelled %vipName%, please contact the administrator if in doubt.
 notification.materialLib.share: %who% has shared the data to you, %do%.
 notification.materialLib.click_to_view: click to view
-notification.destroy-account.reject: %who%，Your account cancellation application has not been approved. Reasons: %reason%。
+notification.destroy-account.reject: "%who%,Your account cancellation application has not been approved. Reasons: %reason%。"
 #TODO trans
 notification.delete-cloud-mp4: 'Your normal video has been deleted successfully, and all existing cloud videos are in encrypted format.'
 notification.distributor-reward: 'Congratulations on your successful registration reward: a %money% CNY coupon, which can be used for all-site consumption and has been sent to %where%.'
@@ -9040,7 +9040,7 @@ wechat.notification.template_opend: Opend
 wechat.notification.template_closed: Closed
 
 # 微信通知模板
-wechat.notification.template.live_start: Hello, classmates, the live lessons you are enrolling will start soon.<br>Course: {《course name》 - 《task name》}<br>Start time: {Live start time} (accurate to minute)<br>Course location: live online<br>Contact: None<br>Don't be late.
+wechat.notification.template.live_start: "Hello, classmates, the live lessons you are enrolling will start soon.<br>Course: {《course name》 - 《task name》}<br>Start time: {Live start time} (accurate to minute)<br>Course location: live online<br>Contact: None<br>Don't be late."
 wechat.notification.template.homework_result: 'Classmate, hello, your homework has been reviewed.<br>Job Name: [Task Name]]<br>Course: [course name]<br>Tutor: [Teacher User Name]<br>Homework result: [homework result]'
 wechat.notification.template.exam_result: 'Hello, your class has been reviewed.<br>Examination subject: [task name]<br>Test score: [test score]<br>Keep up the good work'
 wechat.notification.template.lesson_add: 'Classmate, hello, the course has a new task to post<br>Course Name: [Course Name]<br>Course category: [Course category]<br>Course Teacher: [Teacher User Name]<br>Course time: [Task release time]<br>Please go to study in time.'
