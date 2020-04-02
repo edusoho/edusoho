@@ -531,20 +531,36 @@ class UserManageController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function changeNicknamePasswordAction(Request $request, $userId)
+    public function changeNicknameAction(Request $request, $userId)
     {
         $user = $this->getUserService()->getUser($userId);
 
         if ('POST' === $request->getMethod()) {
             $formData = $request->request->all();
-            !empty($formData['nickname']) ? $this->getAuthService()->changeNickname($user['id'], $formData['nickname']) : '';
-            !empty($formData['newPassword']) ? $this->getAuthService()->changePassword($user['id'], null, $formData['newPassword']) : '';
+            $this->getAuthService()->changeNickname($user['id'], $formData['nickname']);
             $this->kickUserLogout($user['id']);
 
             return $this->createJsonResponse(true);
         }
 
-        return $this->render('admin-v2/user/user-manage/change-nickname-password-modal.html.twig', array(
+        return $this->render('admin-v2/user/user-manage/change-nickname-modal.html.twig', array(
+            'user' => $user,
+        ));
+    }
+
+    public function changePasswordAction(Request $request, $userId)
+    {
+        $user = $this->getUserService()->getUser($userId);
+
+        if ('POST' === $request->getMethod()) {
+            $formData = $request->request->all();
+            $this->getAuthService()->changePassword($user['id'], null, $formData['newPassword']);
+            $this->kickUserLogout($user['id']);
+
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->render('admin-v2/user/user-manage/change-password-modal.html.twig', array(
             'user' => $user,
         ));
     }
