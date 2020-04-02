@@ -28,6 +28,8 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
  * one location.
  *
  * @author Ryan Weaver <ryan@knpuniversity.com>
+ *
+ * @deprecated since version 3.4, to be removed in 4.0. Use AuthenticatorInterface instead
  */
 interface GuardAuthenticatorInterface extends AuthenticationEntryPointInterface
 {
@@ -40,20 +42,18 @@ interface GuardAuthenticatorInterface extends AuthenticationEntryPointInterface
      *
      * For example, for a form login, you might:
      *
-     *      if ($request->request->has('_username')) {
-     *          return array(
-     *              'username' => $request->request->get('_username'),
-     *              'password' => $request->request->get('_password'),
-     *          );
-     *      } else {
-     *          return;
-     *      }
+     *     if ($request->request->has('_username')) {
+     *         return [
+     *             'username' => $request->request->get('_username'),
+     *             'password' => $request->request->get('_password'),
+     *         ];
+     *     } else {
+     *         return;
+     *     }
      *
      * Or for an API token that's on a header, you might use:
      *
-     *      return array('api_key' => $request->headers->get('X-API-TOKEN'));
-     *
-     * @param Request $request
+     *     return ['api_key' => $request->headers->get('X-API-TOKEN')];
      *
      * @return mixed|null
      */
@@ -66,9 +66,6 @@ interface GuardAuthenticatorInterface extends AuthenticationEntryPointInterface
      *
      * You may throw an AuthenticationException if you wish. If you return
      * null, then a UsernameNotFoundException is thrown for you.
-     *
-     * @param mixed                 $credentials
-     * @param UserProviderInterface $userProvider
      *
      * @throws AuthenticationException
      *
@@ -85,9 +82,6 @@ interface GuardAuthenticatorInterface extends AuthenticationEntryPointInterface
      *
      * The *credentials* are the return value from getCredentials()
      *
-     * @param mixed         $credentials
-     * @param UserInterface $user
-     *
      * @return bool
      *
      * @throws AuthenticationException
@@ -103,8 +97,7 @@ interface GuardAuthenticatorInterface extends AuthenticationEntryPointInterface
      *
      * @see AbstractGuardAuthenticator
      *
-     * @param UserInterface $user
-     * @param string        $providerKey The provider (i.e. firewall) key
+     * @param string $providerKey The provider (i.e. firewall) key
      *
      * @return GuardTokenInterface
      */
@@ -114,13 +107,10 @@ interface GuardAuthenticatorInterface extends AuthenticationEntryPointInterface
      * Called when authentication executed, but failed (e.g. wrong username password).
      *
      * This should return the Response sent back to the user, like a
-     * RedirectResponse to the login page or a 403 response.
+     * RedirectResponse to the login page or a 401 response.
      *
      * If you return null, the request will continue, but the user will
      * not be authenticated. This is probably not what you want to do.
-     *
-     * @param Request                 $request
-     * @param AuthenticationException $exception
      *
      * @return Response|null
      */
@@ -135,9 +125,7 @@ interface GuardAuthenticatorInterface extends AuthenticationEntryPointInterface
      * If you return null, the current request will continue, and the user
      * will be authenticated. This makes sense, for example, with an API.
      *
-     * @param Request        $request
-     * @param TokenInterface $token
-     * @param string         $providerKey The provider (i.e. firewall) key
+     * @param string $providerKey The provider (i.e. firewall) key
      *
      * @return Response|null
      */
@@ -153,6 +141,7 @@ interface GuardAuthenticatorInterface extends AuthenticationEntryPointInterface
      *      done by having a _remember_me checkbox in your form, but
      *      can be configured by the "always_remember_me" and "remember_me_parameter"
      *      parameters under the "remember_me" firewall key
+     *  D) The onAuthenticationSuccess method returns a Response object
      *
      * @return bool
      */

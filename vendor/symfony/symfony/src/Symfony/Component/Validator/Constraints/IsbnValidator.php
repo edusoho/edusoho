@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\Validator\Constraints;
 
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -33,44 +32,27 @@ class IsbnValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         if (!$constraint instanceof Isbn) {
-            throw new UnexpectedTypeException($constraint, __NAMESPACE__.'\Isbn');
+            throw new UnexpectedTypeException($constraint, Isbn::class);
         }
 
         if (null === $value || '' === $value) {
             return;
         }
 
-        if (!is_scalar($value) && !(is_object($value) && method_exists($value, '__toString'))) {
+        if (!is_scalar($value) && !(\is_object($value) && method_exists($value, '__toString'))) {
             throw new UnexpectedTypeException($value, 'string');
         }
 
         $value = (string) $value;
         $canonical = str_replace('-', '', $value);
 
-        if (null === $constraint->type) {
-            if ($constraint->isbn10 && !$constraint->isbn13) {
-                @trigger_error('The "isbn10" option of the Isbn constraint is deprecated since version 2.5 and will be removed in 3.0. Use the "type" option instead.', E_USER_DEPRECATED);
-                $constraint->type = 'isbn10';
-            } elseif ($constraint->isbn13 && !$constraint->isbn10) {
-                @trigger_error('The "isbn13" option of the Isbn constraint is deprecated since version 2.5 and will be removed in 3.0. Use the "type" option instead.', E_USER_DEPRECATED);
-                $constraint->type = 'isbn13';
-            }
-        }
-
         // Explicitly validate against ISBN-10
         if ('isbn10' === $constraint->type) {
             if (true !== ($code = $this->validateIsbn10($canonical))) {
-                if ($this->context instanceof ExecutionContextInterface) {
-                    $this->context->buildViolation($this->getMessage($constraint, $constraint->type))
-                        ->setParameter('{{ value }}', $this->formatValue($value))
-                        ->setCode($code)
-                        ->addViolation();
-                } else {
-                    $this->buildViolation($this->getMessage($constraint, $constraint->type))
-                        ->setParameter('{{ value }}', $this->formatValue($value))
-                        ->setCode($code)
-                        ->addViolation();
-                }
+                $this->context->buildViolation($this->getMessage($constraint, $constraint->type))
+                    ->setParameter('{{ value }}', $this->formatValue($value))
+                    ->setCode($code)
+                    ->addViolation();
             }
 
             return;
@@ -79,17 +61,10 @@ class IsbnValidator extends ConstraintValidator
         // Explicitly validate against ISBN-13
         if ('isbn13' === $constraint->type) {
             if (true !== ($code = $this->validateIsbn13($canonical))) {
-                if ($this->context instanceof ExecutionContextInterface) {
-                    $this->context->buildViolation($this->getMessage($constraint, $constraint->type))
-                        ->setParameter('{{ value }}', $this->formatValue($value))
-                        ->setCode($code)
-                        ->addViolation();
-                } else {
-                    $this->buildViolation($this->getMessage($constraint, $constraint->type))
-                        ->setParameter('{{ value }}', $this->formatValue($value))
-                        ->setCode($code)
-                        ->addViolation();
-                }
+                $this->context->buildViolation($this->getMessage($constraint, $constraint->type))
+                    ->setParameter('{{ value }}', $this->formatValue($value))
+                    ->setCode($code)
+                    ->addViolation();
             }
 
             return;
@@ -112,17 +87,10 @@ class IsbnValidator extends ConstraintValidator
         }
 
         if (true !== $code) {
-            if ($this->context instanceof ExecutionContextInterface) {
-                $this->context->buildViolation($this->getMessage($constraint))
-                    ->setParameter('{{ value }}', $this->formatValue($value))
-                    ->setCode($code)
-                    ->addViolation();
-            } else {
-                $this->buildViolation($this->getMessage($constraint))
-                    ->setParameter('{{ value }}', $this->formatValue($value))
-                    ->setCode($code)
-                    ->addViolation();
-            }
+            $this->context->buildViolation($this->getMessage($constraint))
+                ->setParameter('{{ value }}', $this->formatValue($value))
+                ->setCode($code)
+                ->addViolation();
         }
     }
 
@@ -177,7 +145,7 @@ class IsbnValidator extends ConstraintValidator
             return Isbn::INVALID_CHARACTERS_ERROR;
         }
 
-        $length = strlen($isbn);
+        $length = \strlen($isbn);
 
         if ($length < 13) {
             return Isbn::TOO_SHORT_ERROR;

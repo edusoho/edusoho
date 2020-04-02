@@ -17,7 +17,6 @@ use Symfony\Component\Intl\Data\Bundle\Writer\JsonBundleWriter;
 
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
- * @requires PHP 5.4
  */
 class JsonBundleWriterTest extends TestCase
 {
@@ -44,27 +43,23 @@ class JsonBundleWriterTest extends TestCase
 
     protected function tearDown()
     {
-        if (PHP_VERSION_ID < 50400) {
-            return;
-        }
-
         $this->filesystem->remove($this->directory);
     }
 
     public function testWrite()
     {
-        $this->writer->write($this->directory, 'en', array(
-            'Entry1' => array(
-                'Array' => array('foo', 'bar'),
+        $this->writer->write($this->directory, 'en', [
+            'Entry1' => [
+                'Array' => ['foo', 'bar'],
                 'Integer' => 5,
                 'Boolean' => false,
                 'Float' => 1.23,
-            ),
+            ],
             'Entry2' => 'String',
-            'Traversable' => new \ArrayIterator(array(
+            'Traversable' => new \ArrayIterator([
                 'Foo' => 'Bar',
-            )),
-        ));
+            ]),
+        ]);
 
         $this->assertFileEquals(__DIR__.'/Fixtures/en.json', $this->directory.'/en.json');
     }

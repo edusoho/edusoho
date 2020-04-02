@@ -27,7 +27,7 @@ use TiBeN\CrontabManager\CrontabAdapter;
  *
  * @author TiBeN
  */
-class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
+class CrontabRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     protected $fixturesPath;
 
@@ -42,7 +42,7 @@ class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testParseCrontab()
     {
         /* Create fake crontabAdapter */
-        $fakeCrontabAdapter = $this->getMock('TiBeN\CrontabManager\CrontabAdapter');
+        $fakeCrontabAdapter = $this->createMock('TiBeN\CrontabManager\CrontabAdapter');
         $fakeCrontabAdapter
             ->expects($this->any())
             ->method('readCrontab')
@@ -97,7 +97,7 @@ class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testReadHeaderComments()
     {
         /* Create fake crontabAdapter */
-        $fakeCrontabAdapter = $this->getMock('TiBeN\CrontabManager\CrontabAdapter');
+        $fakeCrontabAdapter = $this->createMock('TiBeN\CrontabManager\CrontabAdapter');
         $fakeCrontabAdapter
             ->expects($this->any())
             ->method('readCrontab')
@@ -122,7 +122,7 @@ class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testFindJobByRegex()
     {
         /* Create fake crontabAdapter */
-        $fakeCrontabAdapter = $this->getMock('TiBeN\CrontabManager\CrontabAdapter');
+        $fakeCrontabAdapter = $this->createMock('TiBeN\CrontabManager\CrontabAdapter');
         $fakeCrontabAdapter
             ->expects($this->any())
             ->method('readCrontab')
@@ -157,7 +157,7 @@ class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testFindJobByRegexUsingComments()
     {
         /* Create fake crontabAdapter */
-        $fakeCrontabAdapter = $this->getMock('TiBeN\CrontabManager\CrontabAdapter');
+        $fakeCrontabAdapter = $this->createMock('TiBeN\CrontabManager\CrontabAdapter');
         $fakeCrontabAdapter
             ->expects($this->any())
             ->method('readCrontab')
@@ -191,7 +191,7 @@ class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testPersist()
     {
         /* Create fake crontabAdapter */
-        $fakeCrontabAdapter = $this->getMock('TiBeN\CrontabManager\CrontabAdapter');
+        $fakeCrontabAdapter = $this->createMock('TiBeN\CrontabManager\CrontabAdapter');
 
         $fakeCrontabAdapter
             ->expects($this->any())
@@ -240,7 +240,7 @@ class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testRemove()
     {
         /* Create fake crontabAdapter */
-        $fakeCrontabAdapter = $this->getMock('TiBeN\CrontabManager\CrontabAdapter');
+        $fakeCrontabAdapter = $this->createMock('TiBeN\CrontabManager\CrontabAdapter');
 
         $fakeCrontabAdapter
             ->expects($this->any())
@@ -287,7 +287,7 @@ class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionInvalidRegexOnFindJobByRegex()
     {
-        $fakeCrontabAdapter = $this->getMock('TiBeN\CrontabManager\CrontabAdapter');
+        $fakeCrontabAdapter = $this->createMock('TiBeN\CrontabManager\CrontabAdapter');
 
         $fakeCrontabAdapter
             ->expects($this->any())
@@ -310,7 +310,7 @@ class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testRemoveAnUnknownJob()
     {
-        $fakeCrontabAdapter = $this->getMock('TiBeN\CrontabManager\CrontabAdapter');
+        $fakeCrontabAdapter = $this->createMock('TiBeN\CrontabManager\CrontabAdapter');
 
         $fakeCrontabAdapter
             ->expects($this->any())
@@ -334,7 +334,7 @@ class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddAnAlreadyInTheRepositoryJob()
     {
-        $fakeCrontabAdapter = $this->getMock('TiBeN\CrontabManager\CrontabAdapter');
+        $fakeCrontabAdapter = $this->createMock('TiBeN\CrontabManager\CrontabAdapter');
 
         $fakeCrontabAdapter
             ->expects($this->any())

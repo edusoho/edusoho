@@ -6,7 +6,7 @@
 
 The ``slice`` filter extracts a slice of a sequence, a mapping, or a string:
 
-.. code-block:: jinja
+.. code-block:: twig
 
     {% for i in [1, 2, 3, 4, 5]|slice(1, 2) %}
         {# will iterate over 2 and 3 #}
@@ -18,7 +18,7 @@ The ``slice`` filter extracts a slice of a sequence, a mapping, or a string:
 
 You can use any valid expression for both the start and the length:
 
-.. code-block:: jinja
+.. code-block:: twig
 
     {% for i in [1, 2, 3, 4, 5]|slice(start, length) %}
         {# ... #}
@@ -26,7 +26,7 @@ You can use any valid expression for both the start and the length:
 
 As syntactic sugar, you can also use the ``[]`` notation:
 
-.. code-block:: jinja
+.. code-block:: twig
 
     {% for i in [1, 2, 3, 4, 5][start:length] %}
         {# ... #}
@@ -65,7 +65,7 @@ Arguments
 * ``length``:        The size of the slice
 * ``preserve_keys``: Whether to preserve key or not (when the input is an array)
 
-.. _`Traversable`: http://php.net/manual/en/class.traversable.php
-.. _`array_slice`: http://php.net/array_slice
-.. _`mb_substr` :  http://php.net/mb-substr
-.. _`substr`:      http://php.net/substr
+.. _`Traversable`: https://secure.php.net/manual/en/class.traversable.php
+.. _`array_slice`: https://secure.php.net/array_slice
+.. _`mb_substr` :  https://secure.php.net/mb-substr
+.. _`substr`:      https://secure.php.net/substr

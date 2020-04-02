@@ -18,6 +18,7 @@
  */
 
 namespace Doctrine\ORM;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 /**
  * Contains exception messages for all invalid lifecycle state exceptions inside UnitOfWork
@@ -65,7 +66,7 @@ class ORMInvalidArgumentException extends \InvalidArgumentException
     static public function entityWithoutIdentity($className, $entity)
     {
         return new self(
-            "The given entity of type '" . $className . "' (".self::objToStr($entity).") has no identity/no " . 
+            "The given entity of type '" . $className . "' (".self::objToStr($entity).") has no identity/no " .
             "id values set. It cannot be added to the identity map."
         );
     }
@@ -154,7 +155,7 @@ class ORMInvalidArgumentException extends \InvalidArgumentException
      */
     static public function detachedEntityCannot($entity, $operation)
     {
-        return new self("A detached entity was found during " . $operation . " " . self::objToStr($entity));
+        return new self("Detached entity " . self::objToStr($entity) . " cannot be " . $operation);
     }
 
     /**
@@ -185,6 +186,30 @@ class ORMInvalidArgumentException extends \InvalidArgumentException
     public static function invalidIdentifierBindingEntity()
     {
         return new self("Binding entities to query parameters only allowed for entities that have an identifier.");
+    }
+
+    /**
+     * @param ClassMetadata $targetClass
+     * @param array         $assoc
+     * @param mixed         $actualValue
+     *
+     * @return self
+     */
+    public static function invalidAssociation(ClassMetadata $targetClass, $assoc, $actualValue)
+    {
+        $expectedType = 'Doctrine\Common\Collections\Collection|array';
+
+        if (($assoc['type'] & ClassMetadata::TO_ONE) > 0) {
+            $expectedType = $targetClass->getName();
+        }
+
+        return new self(sprintf(
+            'Expected value of type "%s" for association field "%s#$%s", got "%s" instead.',
+            $expectedType,
+            $assoc['sourceEntity'],
+            $assoc['fieldName'],
+            is_object($actualValue) ? get_class($actualValue) : gettype($actualValue)
+        ));
     }
 
     /**

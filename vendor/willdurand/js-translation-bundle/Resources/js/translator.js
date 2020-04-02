@@ -232,7 +232,8 @@
             var _r = new RegExp(_prefix + _i + _suffix, 'g');
 
             if (_r.test(message)) {
-                message = message.replace(_r, placeholders[_i]);
+                var _v = String(placeholders[_i]).replace(new RegExp('\\$', 'g'), '$$$$');
+                message = message.replace(_r, _v);
             }
         }
 

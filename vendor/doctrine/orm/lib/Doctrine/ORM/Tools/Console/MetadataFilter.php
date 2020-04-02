@@ -22,7 +22,7 @@ namespace Doctrine\ORM\Tools\Console;
 /**
  * Used by CLI Tools to restrict entity-based commands to given patterns.
  *
- * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
+ * @license     http://www.opensource.org/licenses/mit-license.php MIT
  * @link        www.doctrine-project.com
  * @since       1.0
  * @author      Benjamin Eberlei <kontakt@beberlei.de>
@@ -76,7 +76,15 @@ class MetadataFilter extends \FilterIterator implements \Countable
         $metadata = $it->current();
 
         foreach ($this->filter as $filter) {
-            if (strpos($metadata->name, $filter) !== false) {
+            $pregResult = preg_match("/$filter/", $metadata->name);
+
+            if ($pregResult === false) {
+                throw new \RuntimeException(
+                    sprintf("Error while evaluating regex '/%s/'.", $filter)
+                );
+            }
+
+            if ($pregResult) {
                 return true;
             }
         }

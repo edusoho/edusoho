@@ -14,9 +14,10 @@ namespace PhpCsFixer\Fixer\ClassNotation;
 
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
+use PhpCsFixer\FixerConfiguration\AllowedValueSubset;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverRootless;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
-use PhpCsFixer\FixerConfiguration\FixerOptionValidatorGenerator;
+use PhpCsFixer\FixerConfiguration\InvalidOptionsForEnvException;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\VersionSpecification;
@@ -24,7 +25,6 @@ use PhpCsFixer\FixerDefinition\VersionSpecificCodeSample;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\Tokenizer\TokensAnalyzer;
-use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Options;
 
 /**
@@ -41,7 +41,7 @@ final class VisibilityRequiredFixer extends AbstractFixer implements Configurati
     public function getDefinition()
     {
         return new FixerDefinition(
-            'Visibility MUST be declared on all properties and methods; abstract and final MUST be declared before the visibility; static MUST be declared after the visibility.',
+            'Visibility MUST be declared on all properties and methods; `abstract` and `final` MUST be declared before the visibility; `static` MUST be declared after the visibility.',
             array(
                 new CodeSample(
 '<?php
@@ -91,19 +91,12 @@ class Sample
                 continue;
             }
 
-            switch ($element['type']) {
-                case 'method':
-                    $this->fixMethodVisibility($tokens, $index);
-
-                    break;
-                case 'property':
-                    $this->fixPropertyVisibility($tokens, $index);
-
-                    break;
-                case 'const':
-                    $this->fixConstVisibility($tokens, $index);
-
-                    break;
+            if ('method' === $element['type']) {
+                $this->fixMethodVisibility($tokens, $index);
+            } elseif ('property' === $element['type']) {
+                $this->fixPropertyVisibility($tokens, $index);
+            } elseif ('const' === $element['type']) {
+                $this->fixConstVisibility($tokens, $index);
             }
         }
     }
@@ -113,17 +106,13 @@ class Sample
      */
     protected function createConfigurationDefinition()
     {
-        $generator = new FixerOptionValidatorGenerator();
-
         $elements = new FixerOptionBuilder('elements', 'The structural elements to fix (PHP >= 7.1 required for `const`).');
         $elements = $elements
             ->setAllowedTypes(array('array'))
-            ->setAllowedValues(array(
-                $generator->allowedValueIsSubsetOf(array('property', 'method', 'const')),
-            ))
+            ->setAllowedValues(array(new AllowedValueSubset(array('property', 'method', 'const'))))
             ->setNormalizer(function (Options $options, $value) {
                 if (PHP_VERSION_ID < 70100 && in_array('const', $value, true)) {
-                    throw new InvalidOptionsException('"const" option can only be enabled with PHP 7.1+.');
+                    throw new InvalidOptionsForEnvException('"const" option can only be enabled with PHP 7.1+.');
                 }
 
                 return $value;
@@ -144,9 +133,8 @@ class Sample
         $this->overrideAttribs($tokens, $index, $this->grabAttribsBeforeMethodToken($tokens, $index));
 
         // force whitespace between function keyword and function name to be single space char
-        $afterToken = $tokens[++$index];
-        if ($afterToken->isWhitespace()) {
-            $afterToken->setContent(' ');
+        if ($tokens[$index + 1]->isWhitespace()) {
+            $tokens[$index + 1] = new Token(array(T_WHITESPACE, ' '));
         }
     }
 
@@ -186,7 +174,7 @@ class Sample
      * @param Tokens $tokens Tokens collection
      * @param int    $index  token index
      *
-     * @return array map of grabbed attributes, key is attribute name and value is array of index and clone of Token
+     * @return array<string, null|Token> map of grabbed attributes, key is attribute name and value is array of index and clone of Token
      */
     private function grabAttribsBeforeMethodToken(Tokens $tokens, $index)
     {
@@ -217,9 +205,9 @@ class Sample
      *
      * Token at given index is prepended by attributes.
      *
-     * @param Tokens $tokens      Tokens collection
-     * @param int    $memberIndex token index
-     * @param array  $attribs     map of grabbed attributes, key is attribute name and value is array of index and clone of Token
+     * @param Tokens                    $tokens      Tokens collection
+     * @param int                       $memberIndex token index
+     * @param array<string, null|Token> $attribs     map of grabbed attributes, key is attribute name and value is array of index and clone of Token
      */
     private function overrideAttribs(Tokens $tokens, $memberIndex, array $attribs)
     {
@@ -254,7 +242,7 @@ class Sample
      * @param Tokens $tokens Tokens collection
      * @param int    $index  token index
      *
-     * @return array map of grabbed attributes, key is attribute name and value is array of index and clone of Token
+     * @return array<string, null|Token> map of grabbed attributes, key is attribute name and value is array of index and clone of Token
      */
     private function grabAttribsBeforePropertyToken(Tokens $tokens, $index)
     {
@@ -280,12 +268,12 @@ class Sample
     /**
      * Grab info about attributes before token at given index.
      *
-     * @param Tokens $tokens          Tokens collection
-     * @param int    $index           token index
-     * @param array  $tokenAttribsMap token to attribute name map
-     * @param array  $attribs         array of token attributes
+     * @param Tokens                    $tokens          Tokens collection
+     * @param int                       $index           token index
+     * @param array<int, null|string>   $tokenAttribsMap token to attribute name map
+     * @param array<string, null|Token> $attribs         array of token attributes
      *
-     * @return array map of grabbed attributes, key is attribute name and value is array of index and clone of Token
+     * @return array<string, null|Token> map of grabbed attributes, key is attribute name and value is array of index and clone of Token
      */
     private function grabAttribsBeforeToken(Tokens $tokens, $index, array $tokenAttribsMap, array $attribs)
     {

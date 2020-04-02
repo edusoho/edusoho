@@ -1,5 +1,5 @@
 {
-    "Version": "2.1.28.79",
+    "Version": "36",
     "Names": {
         "ADP": [
             "ADP",
@@ -260,6 +260,10 @@
         "CLP": [
             "CLP",
             "Čilės pesas"
+        ],
+        "CNH": [
+            "CNH",
+            "Kinijos Užsienio juanis"
         ],
         "CNX": [
             "CNX",
@@ -679,6 +683,10 @@
         ],
         "MRO": [
             "MRO",
+            "Mauritanijos ugija (1973–2017)"
+        ],
+        "MRU": [
+            "MRU",
             "Mauritanijos ugija"
         ],
         "MTL": [
@@ -779,7 +787,7 @@
         ],
         "PEN": [
             "PEN",
-            "Peru naujasis solis"
+            "Peru solis"
         ],
         "PES": [
             "PES",
@@ -911,6 +919,10 @@
         ],
         "STD": [
             "STD",
+            "San Tomės ir Principės dobra (1977–2017)"
+        ],
+        "STN": [
+            "STN",
             "San Tomės ir Principės dobra"
         ],
         "SUR": [
@@ -1031,6 +1043,10 @@
         ],
         "VEF": [
             "VEF",
+            "Venesuelos bolivaras (2008–2018)"
+        ],
+        "VES": [
+            "VES",
             "Venesuelos bolivaras"
         ],
         "VND": [

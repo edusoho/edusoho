@@ -36,41 +36,17 @@ class MemberMetadataTest extends TestCase
         $this->metadata = null;
     }
 
-    /**
-     * @group legacy
-     */
-    public function testLegacyAddValidSetsMemberToCascaded()
-    {
-        $result = $this->metadata->addConstraint(new Valid());
-
-        $this->assertEquals(array(), $this->metadata->getConstraints());
-        $this->assertEquals($result, $this->metadata);
-        $this->assertTrue($this->metadata->isCascaded());
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testLegacyAddOtherConstraintDoesNotSetMemberToCascaded()
-    {
-        $result = $this->metadata->addConstraint($constraint = new ConstraintA());
-
-        $this->assertEquals(array($constraint), $this->metadata->getConstraints());
-        $this->assertEquals($result, $this->metadata);
-        $this->assertFalse($this->metadata->isCascaded());
-    }
-
     public function testAddConstraintRequiresClassConstraints()
     {
-        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('Symfony\Component\Validator\Exception\ConstraintDefinitionException');
+        $this->expectException('Symfony\Component\Validator\Exception\ConstraintDefinitionException');
 
         $this->metadata->addConstraint(new ClassConstraint());
     }
 
     public function testSerialize()
     {
-        $this->metadata->addConstraint(new ConstraintA(array('property1' => 'A')));
-        $this->metadata->addConstraint(new ConstraintB(array('groups' => 'TestGroup')));
+        $this->metadata->addConstraint(new ConstraintA(['property1' => 'A']));
+        $this->metadata->addConstraint(new ConstraintB(['groups' => 'TestGroup']));
 
         $metadata = unserialize(serialize($this->metadata));
 
@@ -79,19 +55,7 @@ class MemberMetadataTest extends TestCase
 
     public function testSerializeCollectionCascaded()
     {
-        $this->metadata->addConstraint(new Valid(array('traverse' => true)));
-
-        $metadata = unserialize(serialize($this->metadata));
-
-        $this->assertEquals($this->metadata, $metadata);
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testLegacySerializeCollectionCascadedDeeply()
-    {
-        $this->metadata->addConstraint(new Valid(array('traverse' => true)));
+        $this->metadata->addConstraint(new Valid(['traverse' => true]));
 
         $metadata = unserialize(serialize($this->metadata));
 
@@ -100,7 +64,7 @@ class MemberMetadataTest extends TestCase
 
     public function testSerializeCollectionNotCascaded()
     {
-        $this->metadata->addConstraint(new Valid(array('traverse' => false)));
+        $this->metadata->addConstraint(new Valid(['traverse' => false]));
 
         $metadata = unserialize(serialize($this->metadata));
 

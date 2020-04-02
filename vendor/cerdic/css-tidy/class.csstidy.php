@@ -33,47 +33,23 @@
  */
 
 /**
- * Defines ctype functions if required.
- *
- * @TODO: Make these methods of CSSTidy.
- * @since 1.0.0
- */
-if (!function_exists('ctype_space')){
-	/* ctype_space Check for whitespace character(s) */
-	function ctype_space($text){
-		return (1===preg_match("/^[ \r\n\t\f]+$/", $text));
-	}
-}
-if (!function_exists('ctype_alpha')){
-	/* ctype_alpha Check for alphabetic character(s) */
-	function ctype_alpha($text){
-		return (1===preg_match('/^[a-zA-Z]+$/', $text));
-	}
-}
-if (!function_exists('ctype_xdigit')){
-	/* ctype_xdigit Check for HEX character(s) */
-	function ctype_xdigit($text){
-		return (1===preg_match('/^[a-fA-F0-9]+$/', $text));
-	}
-}
-
-/**
  * Defines constants
  * @todo //TODO: make them class constants of csstidy
  */
-define('AT_START',    1);
-define('AT_END',      2);
-define('SEL_START',   3);
-define('SEL_END',     4);
-define('PROPERTY',    5);
-define('VALUE',       6);
-define('COMMENT',     7);
-define('DEFAULT_AT', 41);
+define('AT_START',         1);
+define('AT_END',           2);
+define('SEL_START',        3);
+define('SEL_END',          4);
+define('PROPERTY',         5);
+define('VALUE',            6);
+define('COMMENT',          7);
+define('IMPORTANT_COMMENT',8);
+define('DEFAULT_AT',      41);
 
 /**
  * Contains a class for printing CSS code
  *
- * @version 1.0
+ * @version 1.1.0
  */
 require('class.csstidy_print.php');
 
@@ -94,7 +70,7 @@ require('class.csstidy_optimise.php');
  * An online version should be available here: http://cdburnerxp.se/cssparse/css_optimiser.php
  * @package csstidy
  * @author Florian Schmitz (floele at gmail dot com) 2005-2006
- * @version 1.5.5
+ * @version 1.7.0
  */
 class csstidy {
 
@@ -147,7 +123,7 @@ class csstidy {
 	 * @var string
 	 * @access private
 	 */
-	public $version = '1.5.2';
+	public $version = '1.7.1';
 	/**
 	 * Stores the settings
 	 * @var array
@@ -318,6 +294,10 @@ class csstidy {
 		/* is dangeroues to be used: CSS is broken sometimes */
 		$this->settings['merge_selectors'] = 0;
 		/* preserve or not browser hacks */
+
+		/* Useful to produce a rtl css from a ltr one (or the opposite) */
+		$this->settings['reverse_left_and_right'] = 0;
+
 		$this->settings['discard_invalid_selectors'] = false;
 		$this->settings['discard_invalid_properties'] = false;
 		$this->settings['css_level'] = 'CSS3.0';
@@ -411,7 +391,17 @@ class csstidy {
 	 */
 	public function _add_token($type, $data, $do = false) {
 		if ($this->get_cfg('preserve_css') || $do) {
-			$this->tokens[] = array($type, ($type == COMMENT) ? $data : trim($data));
+			// nested @... : if opening a new part we just closed, remove the previous closing instead of adding opening
+			if ($type === AT_START
+				and count($this->tokens)
+				and $last = end($this->tokens)
+				and $last[0] === AT_END
+				and $last[1] === trim($data)) {
+				array_pop($this->tokens);
+			}
+			else {
+				$this->tokens[] = array($type, ($type == COMMENT or $type == IMPORTANT_COMMENT) ? $data : trim($data));
+			}
 		}
 	}
 
@@ -447,10 +437,10 @@ class csstidy {
 		$add = '';
 		$replaced = false;
 
-		while ($i < strlen($string) && (ctype_xdigit($string{$i}) || ctype_space($string{$i})) && strlen($add) < 6) {
-			$add .= $string{$i};
+		while ($i < strlen($string) && (ctype_xdigit($string[$i]) || ctype_space($string[$i])) && strlen($add) < 6) {
+			$add .= $string[$i];
 
-			if (ctype_space($string{$i})) {
+			if (ctype_space($string[$i])) {
 				break;
 			}
 			$i++;
@@ -464,12 +454,12 @@ class csstidy {
 			$add = trim('\\' . $add);
 		}
 
-		if (@ctype_xdigit($string{$i + 1}) && ctype_space($string{$i})
-						&& !$replaced || !ctype_space($string{$i})) {
+		if (@ctype_xdigit($string[$i + 1]) && ctype_space($string[$i])
+						&& !$replaced || !ctype_space($string[$i])) {
 			$i--;
 		}
 
-		if ($add !== '\\' || !$this->get_cfg('remove_bslash') || strpos($this->tokens_list, $string{$i + 1}) !== false) {
+		if ($add !== '\\' || !$this->get_cfg('remove_bslash') || strpos($this->tokens_list, $string[$i + 1]) !== false) {
 			return $add;
 		}
 
@@ -571,7 +561,7 @@ class csstidy {
 	 * @version 1.11
 	 */
 	public function is_token(&$string, $i) {
-		return (strpos($this->tokens_list, $string{$i}) !== false && !$this->escaped($string, $i));
+		return (strpos($this->tokens_list, $string[$i]) !== false && !$this->escaped($string, $i));
 	}
 
 	/**
@@ -598,9 +588,10 @@ class csstidy {
 		$this->print->input_css = $string;
 		$string = str_replace("\r\n", "\n", $string) . ' ';
 		$cur_comment = '';
+		$cur_at = '';
 
 		for ($i = 0, $size = strlen($string); $i < $size; $i++) {
-			if ($string{$i} === "\n" || $string{$i} === "\r") {
+			if ($string[$i] === "\n" || $string[$i] === "\r") {
 				++$this->line;
 			}
 
@@ -608,27 +599,27 @@ class csstidy {
 				/* Case in at-block */
 				case 'at':
 					if ($this->is_token($string, $i)) {
-						if ($string{$i} === '/' && @$string{$i + 1} === '*') {
+						if ($string[$i] === '/' && @$string[$i + 1] === '*') {
 							$this->status = 'ic';
 							++$i;
 							$this->from[] = 'at';
-						} elseif ($string{$i} === '{') {
+						} elseif ($string[$i] === '{') {
 							$this->status = 'is';
-							$this->at = $this->css_new_media_section($this->at);
+							$this->at = $this->css_new_media_section($this->at, $cur_at);
 							$this->_add_token(AT_START, $this->at);
-						} elseif ($string{$i} === ',') {
-							$this->at = trim($this->at) . ',';
-						} elseif ($string{$i} === '\\') {
-							$this->at .= $this->_unicode($string, $i);
+						} elseif ($string[$i] === ',') {
+							$cur_at = trim($cur_at) . ',';
+						} elseif ($string[$i] === '\\') {
+							$cur_at .= $this->_unicode($string, $i);
 						}
 						// fix for complicated media, i.e @media screen and (-webkit-min-device-pixel-ratio:1.5)
-						elseif (in_array($string{$i}, array('(', ')', ':', '.', '/'))) {
-							$this->at .= $string{$i};
+						elseif (in_array($string[$i], array('(', ')', ':', '.', '/'))) {
+							$cur_at .= $string[$i];
 						}
 					} else {
-						$lastpos = strlen($this->at) - 1;
-						if (!( (ctype_space($this->at{$lastpos}) || $this->is_token($this->at, $lastpos) && $this->at{$lastpos} === ',') && ctype_space($string{$i}))) {
-							$this->at .= $string{$i};
+						$lastpos = strlen($cur_at) - 1;
+						if (!( (ctype_space($cur_at[$lastpos]) || $this->is_token($cur_at, $lastpos) && $cur_at[$lastpos] === ',') && ctype_space($string[$i]))) {
+							$cur_at .= $string[$i];
 						}
 					}
 					break;
@@ -636,24 +627,25 @@ class csstidy {
 				/* Case in-selector */
 				case 'is':
 					if ($this->is_token($string, $i)) {
-						if ($string{$i} === '/' && @$string{$i + 1} === '*' && trim($this->selector) == '') {
+						if ($string[$i] === '/' && @$string[$i + 1] === '*' && trim($this->selector) == '') {
 							$this->status = 'ic';
 							++$i;
 							$this->from[] = 'is';
-						} elseif ($string{$i} === '@' && trim($this->selector) == '') {
+						} elseif ($string[$i] === '@' && trim($this->selector) == '') {
 							// Check for at-rule
 							$this->invalid_at = true;
 							foreach ($at_rules as $name => $type) {
 								if (!strcasecmp(substr($string, $i + 1, strlen($name)), $name)) {
-									($type === 'at') ? $this->at = '@' . $name : $this->selector = '@' . $name;
+									($type === 'at') ? $cur_at = '@' . $name : $this->selector = '@' . $name;
 									if ($type === 'atis') {
 										$this->next_selector_at = ($this->next_selector_at?$this->next_selector_at:($this->at?$this->at:DEFAULT_AT));
-										$this->at = $this->css_new_media_section(' ');
+										$this->at = $this->css_new_media_section($this->at, ' ', true);
 										$type = 'is';
 									}
 									$this->status = $type;
 									$i += strlen($name);
 									$this->invalid_at = false;
+									break;
 								}
 							}
 
@@ -661,54 +653,55 @@ class csstidy {
 								$this->selector = '@';
 								$invalid_at_name = '';
 								for ($j = $i + 1; $j < $size; ++$j) {
-									if (!ctype_alpha($string{$j})) {
+									if (!ctype_alpha($string[$j])) {
 										break;
 									}
-									$invalid_at_name .= $string{$j};
+									$invalid_at_name .= $string[$j];
 								}
 								$this->log('Invalid @-rule: ' . $invalid_at_name . ' (removed)', 'Warning');
 							}
-						} elseif (($string{$i} === '"' || $string{$i} === "'")) {
-							$this->cur_string[] = $string{$i};
+						} elseif (($string[$i] === '"' || $string[$i] === "'")) {
+							$this->cur_string[] = $string[$i];
 							$this->status = 'instr';
-							$this->str_char[] = $string{$i};
+							$this->str_char[] = $string[$i];
 							$this->from[] = 'is';
 							/* fixing CSS3 attribute selectors, i.e. a[href$=".mp3" */
-							$this->quoted_string[] = ($string{$i - 1} === '=' );
-						} elseif ($this->invalid_at && $string{$i} === ';') {
+							$this->quoted_string[] = ($string[$i - 1] === '=' );
+						} elseif ($this->invalid_at && $string[$i] === ';') {
 							$this->invalid_at = false;
 							$this->status = 'is';
 							if ($this->next_selector_at) {
-								$this->at = $this->css_new_media_section($this->next_selector_at);
+								$this->at = $this->css_close_media_section($this->at);
+								$this->at = $this->css_new_media_section($this->at, $this->next_selector_at);
 								$this->next_selector_at = '';
 							}
-						} elseif ($string{$i} === '{') {
+						} elseif ($string[$i] === '{') {
 							$this->status = 'ip';
 							if ($this->at == '') {
-								$this->at = $this->css_new_media_section(DEFAULT_AT);
+								$this->at = $this->css_new_media_section($this->at, DEFAULT_AT);
 							}
 							$this->selector = $this->css_new_selector($this->at,$this->selector);
 							$this->_add_token(SEL_START, $this->selector);
 							$this->added = false;
-						} elseif ($string{$i} === '}') {
+						} elseif ($string[$i] === '}') {
 							$this->_add_token(AT_END, $this->at);
-							$this->at = '';
+							$this->at = $this->css_close_media_section($this->at);
 							$this->selector = '';
 							$this->sel_separate = array();
-						} elseif ($string{$i} === ',') {
+						} elseif ($string[$i] === ',') {
 							$this->selector = trim($this->selector) . ',';
 							$this->sel_separate[] = strlen($this->selector);
-						} elseif ($string{$i} === '\\') {
+						} elseif ($string[$i] === '\\') {
 							$this->selector .= $this->_unicode($string, $i);
-						} elseif ($string{$i} === '*' && @in_array($string{$i + 1}, array('.', '#', '[', ':')) && ($i==0 OR $string{$i - 1}!=='/')) {
+						} elseif ($string[$i] === '*' && @in_array($string[$i + 1], array('.', '#', '[', ':')) && ($i==0 OR $string[$i - 1]!=='/')) {
 							// remove unnecessary universal selector, FS#147, but not comment in selector
 						} else {
-							$this->selector .= $string{$i};
+							$this->selector .= $string[$i];
 						}
 					} else {
 						$lastpos = strlen($this->selector) - 1;
-						if ($lastpos == -1 || !( (ctype_space($this->selector{$lastpos}) || $this->is_token($this->selector, $lastpos) && $this->selector{$lastpos} === ',') && ctype_space($string{$i}))) {
-							$this->selector .= $string{$i};
+						if ($lastpos == -1 || !( (ctype_space($this->selector[$lastpos]) || $this->is_token($this->selector, $lastpos) && $this->selector[$lastpos] === ',') && ctype_space($string[$i]))) {
+							$this->selector .= $string[$i];
 						}
 					}
 					break;
@@ -716,17 +709,17 @@ class csstidy {
 				/* Case in-property */
 				case 'ip':
 					if ($this->is_token($string, $i)) {
-						if (($string{$i} === ':' || $string{$i} === '=') && $this->property != '') {
+						if (($string[$i] === ':' || $string[$i] === '=') && $this->property != '') {
 							$this->status = 'iv';
 							if (!$this->get_cfg('discard_invalid_properties') || $this->property_is_valid($this->property)) {
 								$this->property = $this->css_new_property($this->at,$this->selector,$this->property);
 								$this->_add_token(PROPERTY, $this->property);
 							}
-						} elseif ($string{$i} === '/' && @$string{$i + 1} === '*' && $this->property == '') {
+						} elseif ($string[$i] === '/' && @$string[$i + 1] === '*' && $this->property == '') {
 							$this->status = 'ic';
 							++$i;
 							$this->from[] = 'ip';
-						} elseif ($string{$i} === '}') {
+						} elseif ($string[$i] === '}') {
 							$this->explode_selectors();
 							$this->status = 'is';
 							$this->invalid_at = false;
@@ -734,45 +727,46 @@ class csstidy {
 							$this->selector = '';
 							$this->property = '';
 							if ($this->next_selector_at) {
-								$this->at = $this->css_new_media_section($this->next_selector_at);
+								$this->at = $this->css_close_media_section($this->at);
+								$this->at = $this->css_new_media_section($this->at, $this->next_selector_at);
 								$this->next_selector_at = '';
 							}
-						} elseif ($string{$i} === ';') {
+						} elseif ($string[$i] === ';') {
 							$this->property = '';
-						} elseif ($string{$i} === '\\') {
+						} elseif ($string[$i] === '\\') {
 							$this->property .= $this->_unicode($string, $i);
 						}
 						// else this is dumb IE a hack, keep it
 						// including //
-						elseif (($this->property === '' && !ctype_space($string{$i}))
-							|| ($this->property === '/' || $string{$i} === '/')) {
-							$this->property .= $string{$i};
+						elseif (($this->property === '' && !ctype_space($string[$i]))
+							|| ($this->property === '/' || $string[$i] === '/')) {
+							$this->property .= $string[$i];
 						}
-					} elseif (!ctype_space($string{$i})) {
-						$this->property .= $string{$i};
+					} elseif (!ctype_space($string[$i])) {
+						$this->property .= $string[$i];
 					}
 					break;
 
 				/* Case in-value */
 				case 'iv':
-					$pn = (($string{$i} === "\n" || $string{$i} === "\r") && $this->property_is_next($string, $i + 1) || $i == strlen($string) - 1);
+					$pn = (($string[$i] === "\n" || $string[$i] === "\r") && $this->property_is_next($string, $i + 1) || $i == strlen($string) - 1);
 					if ($this->is_token($string, $i) || $pn) {
-						if ($string{$i} === '/' && @$string{$i + 1} === '*') {
+						if ($string[$i] === '/' && @$string[$i + 1] === '*') {
 							$this->status = 'ic';
 							++$i;
 							$this->from[] = 'iv';
-						} elseif (($string{$i} === '"' || $string{$i} === "'" || $string{$i} === '(')) {
-							$this->cur_string[] = $string{$i};
-							$this->str_char[] = ($string{$i} === '(') ? ')' : $string{$i};
+						} elseif (($string[$i] === '"' || $string[$i] === "'" || $string[$i] === '(')) {
+							$this->cur_string[] = $string[$i];
+							$this->str_char[] = ($string[$i] === '(') ? ')' : $string[$i];
 							$this->status = 'instr';
 							$this->from[] = 'iv';
 							$this->quoted_string[] = in_array(strtolower($this->property), $quoted_string_properties);
-						} elseif ($string{$i} === ',') {
+						} elseif ($string[$i] === ',') {
 							$this->sub_value = trim($this->sub_value) . ',';
-						} elseif ($string{$i} === '\\') {
+						} elseif ($string[$i] === '\\') {
 							$this->sub_value .= $this->_unicode($string, $i);
-						} elseif ($string{$i} === ';' || $pn) {
-							if ($this->selector{0} === '@' && isset($at_rules[substr($this->selector, 1)]) && $at_rules[substr($this->selector, 1)] === 'iv') {
+						} elseif ($string[$i] === ';' || $pn) {
+							if ($this->selector[0] === '@' && isset($at_rules[substr($this->selector, 1)]) && $at_rules[substr($this->selector, 1)] === 'iv') {
 								/* Add quotes to charset, import, namespace */
 								$this->sub_value_arr[] = trim($this->sub_value);
 
@@ -794,12 +788,12 @@ class csstidy {
 							} else {
 								$this->status = 'ip';
 							}
-						} elseif ($string{$i} !== '}') {
-							$this->sub_value .= $string{$i};
+						} elseif ($string[$i] !== '}') {
+							$this->sub_value .= $string[$i];
 						}
-						if (($string{$i} === '}' || $string{$i} === ';' || $pn) && !empty($this->selector)) {
+						if (($string[$i] === '}' || $string[$i] === ';' || $pn) && !empty($this->selector)) {
 							if ($this->at == '') {
-								$this->at = $this->css_new_media_section(DEFAULT_AT);
+								$this->at = $this->css_new_media_section($this->at,DEFAULT_AT);
 							}
 
 							// case settings
@@ -845,21 +839,22 @@ class csstidy {
 							$this->sub_value_arr = array();
 							$this->value = '';
 						}
-						if ($string{$i} === '}') {
+						if ($string[$i] === '}') {
 							$this->explode_selectors();
 							$this->_add_token(SEL_END, $this->selector);
 							$this->status = 'is';
 							$this->invalid_at = false;
 							$this->selector = '';
 							if ($this->next_selector_at) {
-								$this->at = $this->css_new_media_section($this->next_selector_at);
+								$this->at = $this->css_close_media_section($this->at);
+								$this->at = $this->css_new_media_section($this->at, $this->next_selector_at);
 								$this->next_selector_at = '';
 							}
 						}
 					} elseif (!$pn) {
-						$this->sub_value .= $string{$i};
+						$this->sub_value .= $string[$i];
 
-						if (ctype_space($string{$i})) {
+						if (ctype_space($string[$i])) {
 							$this->optimise->subvalue();
 							if ($this->sub_value != '') {
 								$this->sub_value_arr[] = $this->sub_value;
@@ -874,26 +869,26 @@ class csstidy {
 					$_str_char = $this->str_char[count($this->str_char)-1];
 					$_cur_string = $this->cur_string[count($this->cur_string)-1];
 					$_quoted_string = $this->quoted_string[count($this->quoted_string)-1];
-					$temp_add = $string{$i};
+					$temp_add = $string[$i];
 
 					// Add another string to the stack. Strings can't be nested inside of quotes, only parentheses, but
 					// parentheticals can be nested more than once.
-					if ($_str_char === ")" && ($string{$i} === "(" || $string{$i} === '"' || $string{$i} === '\'') && !$this->escaped($string, $i)) {
-						$this->cur_string[] = $string{$i};
-						$this->str_char[] = $string{$i} === '(' ? ')' : $string{$i};
+					if ($_str_char === ")" && ($string[$i] === "(" || $string[$i] === '"' || $string[$i] === '\'') && !$this->escaped($string, $i)) {
+						$this->cur_string[] = $string[$i];
+						$this->str_char[] = $string[$i] === '(' ? ')' : $string[$i];
 						$this->from[] = 'instr';
-						$this->quoted_string[] = ($_str_char === ')' && $string{$i} !== '(' && trim($_cur_string)==='(')?$_quoted_string:!($string{$i} === '(');
-						continue;
+						$this->quoted_string[] = ($_str_char === ')' && $string[$i] !== '(' && trim($_cur_string)==='(')?$_quoted_string:!($string[$i] === '(');
+						continue 2;
 					}
 
-					if ($_str_char !== ")" && ($string{$i} === "\n" || $string{$i} === "\r") && !($string{$i - 1} === '\\' && !$this->escaped($string, $i - 1))) {
+					if ($_str_char !== ")" && ($string[$i] === "\n" || $string[$i] === "\r") && !($string[$i - 1] === '\\' && !$this->escaped($string, $i - 1))) {
 						$temp_add = "\\A";
 						$this->log('Fixed incorrect newline in string', 'Warning');
 					}
 
 					$_cur_string .= $temp_add;
 
-					if ($string{$i} === $_str_char && !$this->escaped($string, $i)) {
+					if ($string[$i] === $_str_char && !$this->escaped($string, $i)) {
 						$this->status = array_pop($this->from);
 
 						if (!preg_match('|[' . implode('', $this->data['csstidy']['whitespace']) . ']|uis', $_cur_string) && $this->property !== 'content') {
@@ -944,13 +939,19 @@ class csstidy {
 
 				/* Case in-comment */
 				case 'ic':
-					if ($string{$i} === '*' && $string{$i + 1} === '/') {
+					if ($string[$i] === '*' && $string[$i + 1] === '/') {
 						$this->status = array_pop($this->from);
 						$i++;
-						$this->_add_token(COMMENT, $cur_comment);
+						if (strlen($cur_comment) > 1 and strncmp($cur_comment, '!', 1) === 0) {
+							$this->_add_token(IMPORTANT_COMMENT, $cur_comment);
+							$this->css_add_important_comment($cur_comment);
+						}
+						else {
+							$this->_add_token(COMMENT, $cur_comment);
+						}
 						$cur_comment = '';
 					} else {
-						$cur_comment .= $string{$i};
+						$cur_comment .= $string[$i];
 					}
 					break;
 			}
@@ -1033,7 +1034,26 @@ class csstidy {
 	 * @version 1.02
 	 */
 	static function escaped(&$string, $pos) {
-		return!(@($string{$pos - 1} !== '\\') || csstidy::escaped($string, $pos - 1));
+		return!(@($string[$pos - 1] !== '\\') || csstidy::escaped($string, $pos - 1));
+	}
+
+
+	/**
+	 * Add an important comment to the css code
+	 * (one we want to keep)
+	 * @param $comment
+	 */
+	public function css_add_important_comment($comment) {
+		if ($this->get_cfg('preserve_css') || trim($comment) == '') {
+			return;
+		}
+		if (!isset($this->css['!'])) {
+			$this->css['!'] = '';
+		}
+		else {
+			$this->css['!'] .= "\n";
+		}
+		$this->css['!'] .= $comment;
 	}
 
 	/**
@@ -1061,35 +1081,83 @@ class csstidy {
 	}
 
 	/**
-	 * Start a new media section.
-	 * Check if the media is not already known,
-	 * else rename it with extra spaces
-	 * to avoid merging
+	 * Check if a current media section is the continuation of the last one
+	 * if not inc the name of the media section to avoid a merging
 	 *
-	 * @param string $media
-	 * @return string
+	 * @param int|string $media
+	 * @return int|string
 	 */
-	public function css_new_media_section($media) {
-		if ($this->get_cfg('preserve_css')) {
+	public function css_check_last_media_section_or_inc($media) {
+		// are we starting?
+		if (!$this->css || !is_array($this->css) || empty($this->css)) {
 			return $media;
 		}
 
 		// if the last @media is the same as this
 		// keep it
-		if (!$this->css || !is_array($this->css) || empty($this->css)) {
-			return $media;
-		}
 		end($this->css);
-		list($at,) = each($this->css);
+		$at = key($this->css);
 		if ($at == $media) {
 			return $media;
 		}
+
+		// else inc the section in the array
 		while (isset($this->css[$media]))
 			if (is_numeric($media))
 				$media++;
 			else
 				$media .= ' ';
 		return $media;
+	}
+
+	/**
+	 * Start a new media section.
+	 * Check if the media is not already known,
+	 * else rename it with extra spaces
+	 * to avoid merging
+	 *
+	 * @param string $current_media
+	 * @param string $media
+	 * @param bool $at_root
+	 * @return string
+	 */
+	public function css_new_media_section($current_media, $new_media, $at_root = false) {
+		if ($this->get_cfg('preserve_css')) {
+			return $new_media;
+		}
+
+		// if we already are in a media and CSS level is 3, manage nested medias
+		if ($current_media
+			&& !$at_root
+			// numeric $current_media means DEFAULT_AT or inc
+			&& !is_numeric($current_media)
+			&& strncmp($this->get_cfg('css_level'), 'CSS3', 4) == 0) {
+
+			$new_media = rtrim($current_media) . "{" . rtrim($new_media);
+		}
+
+		return $this->css_check_last_media_section_or_inc($new_media);
+	}
+
+	/**
+	 * Close a media section
+	 * Find the parent media we were in before or the root
+	 * @param $current_media
+	 * @return string
+	 */
+	public function css_close_media_section($current_media) {
+		if ($this->get_cfg('preserve_css')) {
+			return '';
+		}
+
+		if (strpos($current_media, '{') !== false) {
+			$current_media = explode('{', $current_media);
+			array_pop($current_media);
+			$current_media = implode('{', $current_media);
+			return $current_media;
+		}
+
+		return '';
 	}
 
 	/**
@@ -1119,7 +1187,7 @@ class csstidy {
 
 			// if last is the same, keep it
 			end($this->css[$media]);
-			list($sel,) = each($this->css[$media]);
+			$sel = key($this->css[$media]);
 			if ($sel == $selector) {
 				return $selector;
 			}
@@ -1262,26 +1330,26 @@ class csstidy {
 		$current_string = '';
 
 		for ($i = 0, $_len = strlen($value); $i < $_len; $i++) {
-			if (($value{$i} === ',' || $value{$i} === ' ') && $in_str === true) {
+			if (($value[$i] === ',' || $value[$i] === ' ') && $in_str === true) {
 				$in_str = false;
 				$strings[] = $current_string;
 				$current_string = '';
-			} elseif ($value{$i} === '"' || $value{$i} === "'") {
-				if ($in_str === $value{$i}) {
+			} elseif ($value[$i] === '"' || $value[$i] === "'") {
+				if ($in_str === $value[$i]) {
 					$strings[] = $current_string;
 					$in_str = false;
 					$current_string = '';
 					continue;
 				} elseif (!$in_str) {
-					$in_str = $value{$i};
+					$in_str = $value[$i];
 				}
 			} else {
 				if ($in_str) {
-					$current_string .= $value{$i};
+					$current_string .= $value[$i];
 				} else {
-					if (!preg_match("/[\s,]/", $value{$i})) {
+					if (!preg_match("/[\s,]/", $value[$i])) {
 						$in_str = true;
-						$current_string = $value{$i};
+						$current_string = $value[$i];
 					}
 				}
 			}

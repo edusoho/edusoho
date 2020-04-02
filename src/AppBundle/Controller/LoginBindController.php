@@ -14,6 +14,7 @@ use Biz\User\TokenException;
 use Biz\WeChat\Service\WeChatService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class LoginBindController extends BaseController
 {
@@ -47,7 +48,7 @@ class LoginBindController extends BaseController
             $params['os'] = $request->query->get('os');
         }
 
-        $callbackUrl = $this->generateUrl('login_bind_callback', $params, true);
+        $callbackUrl = $this->generateUrl('login_bind_callback', $params, UrlGeneratorInterface::ABSOLUTE_URL);
 
         $url = $client->getAuthorizeUrl($callbackUrl);
 
@@ -86,7 +87,7 @@ class LoginBindController extends BaseController
             $callbackParams['os'] = $os;
         }
 
-        $callbackUrl = $this->generateUrl('login_bind_callback', $callbackParams, true);
+        $callbackUrl = $this->generateUrl('login_bind_callback', $callbackParams, UrlGeneratorInterface::ABSOLUTE_URL);
         $oauthClient = $this->createOAuthClient($type);
         $token = $oauthClient->getAccessToken($code, $callbackUrl);
 

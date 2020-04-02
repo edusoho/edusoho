@@ -1,5 +1,5 @@
 imports:
-    - { resource: older_versions_config.yml }
+    - { resource: base_config.yml }
 
 framework:
     translator:

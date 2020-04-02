@@ -85,21 +85,31 @@ class AnnotationDriver extends AbstractAnnotationDriver
             $mappedSuperclassAnnot = $classAnnotations['Doctrine\ORM\Mapping\MappedSuperclass'];
             $metadata->setCustomRepositoryClass($mappedSuperclassAnnot->repositoryClass);
             $metadata->isMappedSuperclass = true;
+        } else if (isset($classAnnotations['Doctrine\ORM\Mapping\Embeddable'])) {
+            $metadata->isEmbeddedClass = true;
         } else {
             throw MappingException::classIsNotAValidEntityOrMappedSuperClass($className);
         }
 
         // Evaluate Table annotation
         if (isset($classAnnotations['Doctrine\ORM\Mapping\Table'])) {
-            $tableAnnot = $classAnnotations['Doctrine\ORM\Mapping\Table'];
+            $tableAnnot   = $classAnnotations['Doctrine\ORM\Mapping\Table'];
             $primaryTable = array(
-                'name' => $tableAnnot->name,
+                'name'   => $tableAnnot->name,
                 'schema' => $tableAnnot->schema
             );
 
             if ($tableAnnot->indexes !== null) {
                 foreach ($tableAnnot->indexes as $indexAnnot) {
                     $index = array('columns' => $indexAnnot->columns);
+
+                    if ( ! empty($indexAnnot->flags)) {
+                        $index['flags'] = $indexAnnot->flags;
+                    }
+
+                    if ( ! empty($indexAnnot->options)) {
+                        $index['options'] = $indexAnnot->options;
+                    }
 
                     if ( ! empty($indexAnnot->name)) {
                         $primaryTable['indexes'][$indexAnnot->name] = $index;
@@ -113,6 +123,10 @@ class AnnotationDriver extends AbstractAnnotationDriver
                 foreach ($tableAnnot->uniqueConstraints as $uniqueConstraintAnnot) {
                     $uniqueConstraint = array('columns' => $uniqueConstraintAnnot->columns);
 
+                    if ( ! empty($uniqueConstraintAnnot->options)) {
+                        $uniqueConstraint['options'] = $uniqueConstraintAnnot->options;
+                    }
+
                     if ( ! empty($uniqueConstraintAnnot->name)) {
                         $primaryTable['uniqueConstraints'][$uniqueConstraintAnnot->name] = $uniqueConstraint;
                     } else {
@@ -121,11 +135,22 @@ class AnnotationDriver extends AbstractAnnotationDriver
                 }
             }
 
-            if ($tableAnnot->options !== null) {
+            if ($tableAnnot->options) {
                 $primaryTable['options'] = $tableAnnot->options;
             }
 
             $metadata->setPrimaryTable($primaryTable);
+        }
+
+        // Evaluate @Cache annotation
+        if (isset($classAnnotations['Doctrine\ORM\Mapping\Cache'])) {
+            $cacheAnnot = $classAnnotations['Doctrine\ORM\Mapping\Cache'];
+            $cacheMap   = array(
+                'region' => $cacheAnnot->region,
+                'usage'  => constant('Doctrine\ORM\Mapping\ClassMetadata::CACHE_USAGE_' . $cacheAnnot->usage),
+            );
+
+            $metadata->enableCache($cacheMap);
         }
 
         // Evaluate NamedNativeQueries annotation
@@ -240,7 +265,9 @@ class AnnotationDriver extends AbstractAnnotationDriver
                 ||
                 $metadata->isInheritedField($property->name)
                 ||
-                $metadata->isInheritedAssociation($property->name)) {
+                $metadata->isInheritedAssociation($property->name)
+                ||
+                $metadata->isInheritedEmbeddedClass($property->name)) {
                 continue;
             }
 
@@ -364,6 +391,18 @@ class AnnotationDriver extends AbstractAnnotationDriver
                 }
 
                 $metadata->mapManyToMany($mapping);
+            } else if ($embeddedAnnot = $this->reader->getPropertyAnnotation($property, 'Doctrine\ORM\Mapping\Embedded')) {
+                $mapping['class'] = $embeddedAnnot->class;
+                $mapping['columnPrefix'] = $embeddedAnnot->columnPrefix;
+                $metadata->mapEmbedded($mapping);
+            }
+
+            // Evaluate @Cache annotation
+            if (($cacheAnnot = $this->reader->getPropertyAnnotation($property, 'Doctrine\ORM\Mapping\Cache')) !== null) {
+                $metadata->enableAssociationCache($mapping['fieldName'], array(
+                    'usage'         => constant('Doctrine\ORM\Mapping\ClassMetadata::CACHE_USAGE_' . $cacheAnnot->usage),
+                    'region'        => $cacheAnnot->region,
+                ));
             }
         }
 

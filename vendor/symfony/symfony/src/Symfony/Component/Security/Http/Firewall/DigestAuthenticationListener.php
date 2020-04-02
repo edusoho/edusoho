@@ -11,23 +11,27 @@
 
 namespace Symfony\Component\Security\Http\Firewall;
 
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Symfony\Component\Security\Core\Exception\NonceExpiredException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\EntryPoint\DigestAuthenticationEntryPoint;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Exception\BadCredentialsException;
-use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Core\Exception\NonceExpiredException;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Http\Session\SessionAuthenticationStrategyInterface;
 
 /**
  * DigestAuthenticationListener implements Digest HTTP authentication.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ *
+ * @deprecated since 3.4, to be removed in 4.0
  */
 class DigestAuthenticationListener implements ListenerInterface
 {
@@ -36,9 +40,12 @@ class DigestAuthenticationListener implements ListenerInterface
     private $providerKey;
     private $authenticationEntryPoint;
     private $logger;
+    private $sessionStrategy;
 
     public function __construct(TokenStorageInterface $tokenStorage, UserProviderInterface $provider, $providerKey, DigestAuthenticationEntryPoint $authenticationEntryPoint, LoggerInterface $logger = null)
     {
+        @trigger_error(sprintf('The %s class and the whole HTTP digest authentication system is deprecated since Symfony 3.4 and will be removed in 4.0.', __CLASS__), E_USER_DEPRECATED);
+
         if (empty($providerKey)) {
             throw new \InvalidArgumentException('$providerKey must not be empty.');
         }
@@ -52,8 +59,6 @@ class DigestAuthenticationListener implements ListenerInterface
 
     /**
      * Handles digest authentication.
-     *
-     * @param GetResponseEvent $event A GetResponseEvent instance
      *
      * @throws AuthenticationServiceException
      */
@@ -74,7 +79,7 @@ class DigestAuthenticationListener implements ListenerInterface
         }
 
         if (null !== $this->logger) {
-            $this->logger->debug('Digest Authorization header received from user agent.', array('header' => $header));
+            $this->logger->debug('Digest Authorization header received from user agent.', ['header' => $header]);
         }
 
         try {
@@ -101,7 +106,7 @@ class DigestAuthenticationListener implements ListenerInterface
 
         if (!hash_equals($serverDigestMd5, $digestAuth->getResponse())) {
             if (null !== $this->logger) {
-                $this->logger->debug('Unexpected response from the DigestAuth received; is the header returning a clear text passwords?', array('expected' => $serverDigestMd5, 'received' => $digestAuth->getResponse()));
+                $this->logger->debug('Unexpected response from the DigestAuth received; is the header returning a clear text passwords?', ['expected' => $serverDigestMd5, 'received' => $digestAuth->getResponse()]);
             }
 
             $this->fail($event, $request, new BadCredentialsException('Incorrect response'));
@@ -116,10 +121,23 @@ class DigestAuthenticationListener implements ListenerInterface
         }
 
         if (null !== $this->logger) {
-            $this->logger->info('Digest authentication successful.', array('username' => $digestAuth->getUsername(), 'received' => $digestAuth->getResponse()));
+            $this->logger->info('Digest authentication successful.', ['username' => $digestAuth->getUsername(), 'received' => $digestAuth->getResponse()]);
         }
 
-        $this->tokenStorage->setToken(new UsernamePasswordToken($user, $user->getPassword(), $this->providerKey));
+        $token = new UsernamePasswordToken($user, $user->getPassword(), $this->providerKey);
+        $this->migrateSession($request, $token);
+
+        $this->tokenStorage->setToken($token);
+    }
+
+    /**
+     * Call this method if your authentication token is stored to a session.
+     *
+     * @final
+     */
+    public function setSessionAuthenticationStrategy(SessionAuthenticationStrategyInterface $sessionStrategy)
+    {
+        $this->sessionStrategy = $sessionStrategy;
     }
 
     private function fail(GetResponseEvent $event, Request $request, AuthenticationException $authException)
@@ -130,21 +148,35 @@ class DigestAuthenticationListener implements ListenerInterface
         }
 
         if (null !== $this->logger) {
-            $this->logger->info('Digest authentication failed.', array('exception' => $authException));
+            $this->logger->info('Digest authentication failed.', ['exception' => $authException]);
         }
 
         $event->setResponse($this->authenticationEntryPoint->start($request, $authException));
     }
+
+    private function migrateSession(Request $request, TokenInterface $token)
+    {
+        if (!$this->sessionStrategy || !$request->hasSession() || !$request->hasPreviousSession()) {
+            return;
+        }
+
+        $this->sessionStrategy->onAuthentication($request, $token);
+    }
 }
 
+/**
+ * @deprecated since 3.4, to be removed in 4.0.
+ */
 class DigestData
 {
-    private $elements = array();
+    private $elements = [];
     private $header;
     private $nonceExpiryTime;
 
     public function __construct($header)
     {
+        @trigger_error(sprintf('The %s class and the whole HTTP digest authentication system is deprecated since Symfony 3.4 and will be removed in 4.0.', __CLASS__), E_USER_DEPRECATED);
+
         $this->header = $header;
         preg_match_all('/(\w+)=("((?:[^"\\\\]|\\\\.)+)"|([^\s,$]+))/', $header, $matches, PREG_SET_ORDER);
         foreach ($matches as $match) {
@@ -161,12 +193,12 @@ class DigestData
 
     public function getUsername()
     {
-        return strtr($this->elements['username'], array('\\"' => '"', '\\\\' => '\\'));
+        return strtr($this->elements['username'], ['\\"' => '"', '\\\\' => '\\']);
     }
 
     public function validateAndDecode($entryPointKey, $expectedRealm)
     {
-        if ($keys = array_diff(array('username', 'realm', 'nonce', 'uri', 'response'), array_keys($this->elements))) {
+        if ($keys = array_diff(['username', 'realm', 'nonce', 'uri', 'response'], array_keys($this->elements))) {
             throw new BadCredentialsException(sprintf('Missing mandatory digest value; received header "%s" (%s)', $this->header, implode(', ', $keys)));
         }
 
@@ -184,7 +216,7 @@ class DigestData
 
         $nonceTokens = explode(':', $nonceAsPlainText);
 
-        if (2 !== count($nonceTokens)) {
+        if (2 !== \count($nonceTokens)) {
             throw new BadCredentialsException(sprintf('Nonce should have yielded two tokens but was "%s".', $nonceAsPlainText));
         }
 

@@ -2,10 +2,6 @@
 
 namespace Codeages\RateLimiter\Storage;
 
-/**
- * @author Peter Chung <touhonoob@gmail.com>
- * @date May 16, 2015
- */
 class RedisStorage implements Storage
 {
     /**
@@ -13,11 +9,15 @@ class RedisStorage implements Storage
      */
     protected $redis;
 
-    public function __construct($host = '127.0.0.1', $port = 6379)
+    public function __construct($host = '127.0.0.1', $port = 6379, $password = null)
     {
         $this->redis = new \Redis();
         if ($this->redis->connect($host, $port) === false) {
             throw new \RuntimeException("Cannot connect to redis server $host:$port");
+        }
+
+        if ($password) {
+            $this->redis->auth($password);
         }
     }
 

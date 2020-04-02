@@ -16,6 +16,7 @@ use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\WhitespacesAwareFixerInterface;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Preg;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\Tokenizer\TokensAnalyzer;
@@ -118,7 +119,7 @@ final class Sample
                 $methodEnd = $tokens->getNextTokenOfKind($index, array(';'));
             } else {
                 $methodStart = $tokens->getNextTokenOfKind($index, array('{'));
-                $methodEnd = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_CURLY_BRACE, $methodStart, true);
+                $methodEnd = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_CURLY_BRACE, $methodStart);
             }
 
             $this->fixSpaceBelowMethod($tokens, $classEnd, $methodEnd);
@@ -255,14 +256,20 @@ final class Sample
         }
 
         if ($lineBreakCount < $reqLineCount) {
-            $tokens[$startIndex]->setContent(str_repeat($lineEnding, $reqLineCount - $lineBreakCount).$tokens[$startIndex]->getContent());
+            $tokens[$startIndex] = new Token(array(
+                T_WHITESPACE,
+                str_repeat($lineEnding, $reqLineCount - $lineBreakCount).$tokens[$startIndex]->getContent(),
+            ));
 
             return;
         }
 
         // $lineCount = > $reqLineCount : check the one Token case first since this one will be true most of the time
         if (1 === $numbOfWhiteTokens) {
-            $tokens[$startIndex]->setContent(preg_replace('/\r\n|\n/', '', $tokens[$startIndex]->getContent(), $lineBreakCount - $reqLineCount));
+            $tokens[$startIndex] = new Token(array(
+                T_WHITESPACE,
+                Preg::replace('/\r\n|\n/', '', $tokens[$startIndex]->getContent(), $lineBreakCount - $reqLineCount),
+            ));
 
             return;
         }
@@ -272,7 +279,10 @@ final class Sample
         for ($i = $startIndex; $i < $endIndex && $toReplaceCount > 0; ++$i) {
             $tokenLineCount = substr_count($tokens[$i]->getContent(), "\n");
             if ($tokenLineCount > 0) {
-                $tokens[$i]->setContent(preg_replace('/\r\n|\n/', '', $tokens[$i]->getContent(), min($toReplaceCount, $tokenLineCount)));
+                $tokens[$i] = new Token(array(
+                    T_WHITESPACE,
+                    Preg::replace('/\r\n|\n/', '', $tokens[$i]->getContent(), min($toReplaceCount, $tokenLineCount)),
+                ));
                 $toReplaceCount -= $tokenLineCount;
             }
         }
@@ -307,6 +317,7 @@ final class Sample
         for ($i = $commentIndex - 1; $i > 0; --$i) {
             if ($tokens[$i]->isComment()) {
                 $start = $i;
+
                 continue;
             }
 

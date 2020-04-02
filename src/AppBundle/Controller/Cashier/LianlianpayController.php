@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Common\DeviceToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class LianlianpayController extends PaymentController
 {
@@ -21,7 +22,7 @@ class LianlianpayController extends PaymentController
         $data = json_decode($data['res_data'], true);
         $this->getPayService()->notifyPaid('lianlianpay', $data);
 
-        return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $data['no_order']), true));
+        return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $data['no_order']), UrlGeneratorInterface::ABSOLUTE_URL));
     }
 
     public function returnAction(Request $request, $payment)
@@ -34,6 +35,6 @@ class LianlianpayController extends PaymentController
 
         $this->getPayService()->notifyPaid($payment, $data);
 
-        return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $data['no_order']), true));
+        return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $data['no_order']), UrlGeneratorInterface::ABSOLUTE_URL));
     }
 }

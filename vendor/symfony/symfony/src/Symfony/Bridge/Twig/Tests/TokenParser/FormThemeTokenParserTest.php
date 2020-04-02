@@ -12,8 +12,14 @@
 namespace Symfony\Bridge\Twig\Tests\TokenParser;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Bridge\Twig\TokenParser\FormThemeTokenParser;
 use Symfony\Bridge\Twig\Node\FormThemeNode;
+use Symfony\Bridge\Twig\TokenParser\FormThemeTokenParser;
+use Twig\Environment;
+use Twig\Node\Expression\ArrayExpression;
+use Twig\Node\Expression\ConstantExpression;
+use Twig\Node\Expression\NameExpression;
+use Twig\Parser;
+use Twig\Source;
 
 class FormThemeTokenParserTest extends TestCase
 {
@@ -22,78 +28,96 @@ class FormThemeTokenParserTest extends TestCase
      */
     public function testCompile($source, $expected)
     {
-        $env = new \Twig_Environment($this->getMockBuilder('Twig_LoaderInterface')->getMock(), array('cache' => false, 'autoescape' => false, 'optimizations' => 0));
+        $env = new Environment($this->getMockBuilder('Twig\Loader\LoaderInterface')->getMock(), ['cache' => false, 'autoescape' => false, 'optimizations' => 0]);
         $env->addTokenParser(new FormThemeTokenParser());
-        $stream = $env->tokenize(new \Twig_Source($source, ''));
-        $parser = new \Twig_Parser($env);
+        $source = new Source($source, '');
+        $stream = $env->tokenize($source);
+        $parser = new Parser($env);
+
+        $expected->setSourceContext($source);
 
         $this->assertEquals($expected, $parser->parse($stream)->getNode('body')->getNode(0));
     }
 
     public function getTestsForFormTheme()
     {
-        return array(
-            array(
+        return [
+            [
                 '{% form_theme form "tpl1" %}',
                 new FormThemeNode(
-                    new \Twig_Node_Expression_Name('form', 1),
-                    new \Twig_Node_Expression_Array(array(
-                        new \Twig_Node_Expression_Constant(0, 1),
-                        new \Twig_Node_Expression_Constant('tpl1', 1),
-                    ), 1),
+                    new NameExpression('form', 1),
+                    new ArrayExpression([
+                        new ConstantExpression(0, 1),
+                        new ConstantExpression('tpl1', 1),
+                    ], 1),
                     1,
                     'form_theme'
                 ),
-            ),
-            array(
+            ],
+            [
                 '{% form_theme form "tpl1" "tpl2" %}',
                 new FormThemeNode(
-                    new \Twig_Node_Expression_Name('form', 1),
-                    new \Twig_Node_Expression_Array(array(
-                        new \Twig_Node_Expression_Constant(0, 1),
-                        new \Twig_Node_Expression_Constant('tpl1', 1),
-                        new \Twig_Node_Expression_Constant(1, 1),
-                        new \Twig_Node_Expression_Constant('tpl2', 1),
-                    ), 1),
+                    new NameExpression('form', 1),
+                    new ArrayExpression([
+                        new ConstantExpression(0, 1),
+                        new ConstantExpression('tpl1', 1),
+                        new ConstantExpression(1, 1),
+                        new ConstantExpression('tpl2', 1),
+                    ], 1),
                     1,
                     'form_theme'
                 ),
-            ),
-            array(
+            ],
+            [
                 '{% form_theme form with "tpl1" %}',
                 new FormThemeNode(
-                    new \Twig_Node_Expression_Name('form', 1),
-                    new \Twig_Node_Expression_Constant('tpl1', 1),
+                    new NameExpression('form', 1),
+                    new ConstantExpression('tpl1', 1),
                     1,
                     'form_theme'
                 ),
-            ),
-            array(
+            ],
+            [
                 '{% form_theme form with ["tpl1"] %}',
                 new FormThemeNode(
-                    new \Twig_Node_Expression_Name('form', 1),
-                    new \Twig_Node_Expression_Array(array(
-                        new \Twig_Node_Expression_Constant(0, 1),
-                        new \Twig_Node_Expression_Constant('tpl1', 1),
-                    ), 1),
+                    new NameExpression('form', 1),
+                    new ArrayExpression([
+                        new ConstantExpression(0, 1),
+                        new ConstantExpression('tpl1', 1),
+                    ], 1),
                     1,
                     'form_theme'
                 ),
-            ),
-            array(
+            ],
+            [
                 '{% form_theme form with ["tpl1", "tpl2"] %}',
                 new FormThemeNode(
-                    new \Twig_Node_Expression_Name('form', 1),
-                    new \Twig_Node_Expression_Array(array(
-                        new \Twig_Node_Expression_Constant(0, 1),
-                        new \Twig_Node_Expression_Constant('tpl1', 1),
-                        new \Twig_Node_Expression_Constant(1, 1),
-                        new \Twig_Node_Expression_Constant('tpl2', 1),
-                    ), 1),
+                    new NameExpression('form', 1),
+                    new ArrayExpression([
+                        new ConstantExpression(0, 1),
+                        new ConstantExpression('tpl1', 1),
+                        new ConstantExpression(1, 1),
+                        new ConstantExpression('tpl2', 1),
+                    ], 1),
                     1,
                     'form_theme'
                 ),
-            ),
-        );
+            ],
+            [
+                '{% form_theme form with ["tpl1", "tpl2"] only %}',
+                new FormThemeNode(
+                    new NameExpression('form', 1),
+                    new ArrayExpression([
+                        new ConstantExpression(0, 1),
+                        new ConstantExpression('tpl1', 1),
+                        new ConstantExpression(1, 1),
+                        new ConstantExpression('tpl2', 1),
+                    ], 1),
+                    1,
+                    'form_theme',
+                    true
+                ),
+            ],
+        ];
     }
 }

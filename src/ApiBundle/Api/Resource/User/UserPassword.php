@@ -13,6 +13,7 @@ use AppBundle\Common\EncryptionToolkit;
 use Biz\Common\CommonException;
 use AppBundle\Common\SimpleValidator;
 use Biz\Sms\SmsException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class UserPassword extends AbstractResource
 {
@@ -84,7 +85,7 @@ class UserPassword extends AbstractResource
                 'format' => 'html',
                 'params' => array(
                     'nickname' => $user['nickname'],
-                    'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), true),
+                    'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL),
                     'sitename' => $site['name'],
                     'siteurl' => $site['url'],
                 ),

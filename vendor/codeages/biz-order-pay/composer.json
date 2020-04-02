@@ -3,9 +3,9 @@
     "description": "order, pay module",
     "type": "library",
     "require": {
-        "codeages/biz-framework": "^0.9",
-        "codeages/omnipay-alipay": "^2.3",
-        "codeages/omnipay-wechatpay": "^1.1"
+        "codeages/biz-framework": "^0.9|^0.10",
+        "codeages/omnipay-alipay": "dev-master",
+        "lokielse/omnipay-wechatpay": "^3.0"
     },
     "license": "MIT",
     "autoload": {

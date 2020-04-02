@@ -42,7 +42,7 @@ class Extension extends \Twig_Extension
     public function getName()
     {
         if (version_compare(\Twig_Environment::VERSION, '1.26.0', '>=')) {
-            return get_class($this);
+            return __CLASS__;
         }
         return 'asm89_cache';
     }

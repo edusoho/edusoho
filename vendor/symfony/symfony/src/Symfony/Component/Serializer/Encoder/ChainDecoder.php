@@ -19,13 +19,15 @@ use Symfony\Component\Serializer\Exception\RuntimeException;
  * @author Jordi Boggiano <j.boggiano@seld.be>
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  * @author Lukas Kahwe Smith <smith@pooteeweet.org>
+ *
+ * @final since version 3.3.
  */
-class ChainDecoder implements DecoderInterface
+class ChainDecoder implements DecoderInterface /*, ContextAwareDecoderInterface*/
 {
-    protected $decoders = array();
-    protected $decoderByFormat = array();
+    protected $decoders = [];
+    protected $decoderByFormat = [];
 
-    public function __construct(array $decoders = array())
+    public function __construct(array $decoders = [])
     {
         $this->decoders = $decoders;
     }
@@ -33,18 +35,20 @@ class ChainDecoder implements DecoderInterface
     /**
      * {@inheritdoc}
      */
-    final public function decode($data, $format, array $context = array())
+    final public function decode($data, $format, array $context = [])
     {
-        return $this->getDecoder($format)->decode($data, $format, $context);
+        return $this->getDecoder($format, $context)->decode($data, $format, $context);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supportsDecoding($format)
+    public function supportsDecoding($format/*, array $context = []*/)
     {
+        $context = \func_num_args() > 1 ? func_get_arg(1) : [];
+
         try {
-            $this->getDecoder($format);
+            $this->getDecoder($format, $context);
         } catch (RuntimeException $e) {
             return false;
         }
@@ -59,9 +63,9 @@ class ChainDecoder implements DecoderInterface
      *
      * @return DecoderInterface
      *
-     * @throws RuntimeException If no decoder is found.
+     * @throws RuntimeException if no decoder is found
      */
-    private function getDecoder($format)
+    private function getDecoder($format, array $context)
     {
         if (isset($this->decoderByFormat[$format])
             && isset($this->decoders[$this->decoderByFormat[$format]])
@@ -70,7 +74,7 @@ class ChainDecoder implements DecoderInterface
         }
 
         foreach ($this->decoders as $i => $decoder) {
-            if ($decoder->supportsDecoding($format)) {
+            if ($decoder->supportsDecoding($format, $context)) {
                 $this->decoderByFormat[$format] = $i;
 
                 return $decoder;

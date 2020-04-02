@@ -73,6 +73,8 @@ class LegacyExpressGatewayTest extends AbstractGatewayTestCase
 
     public function testQuery()
     {
+        $this->setMockHttpResponse('LegacyExpress_Query_Failure.txt');
+
         /**
          * @var LegacyQueryResponse $response
          */

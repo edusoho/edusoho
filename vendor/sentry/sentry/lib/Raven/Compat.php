@@ -81,9 +81,9 @@ class Raven_Compat
     public static function json_encode($value, $options = 0, $depth = 512)
     {
         if (function_exists('json_encode')) {
-            if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+            if (PHP_VERSION_ID < 50300) {
                 return json_encode($value);
-            } elseif (version_compare(PHP_VERSION, '5.5.0', '<')) {
+            } elseif (PHP_VERSION_ID < 50500) {
                 return json_encode($value, $options);
             } else {
                 return json_encode($value, $options, $depth);
@@ -102,7 +102,7 @@ class Raven_Compat
      */
     public static function _json_encode($value, $depth = 513)
     {
-        if (ini_get('xdebug.extended_info') !== false) {
+        if (extension_loaded('xdebug')) {
             ini_set('xdebug.max_nesting_level', 2048);
         }
         return self::_json_encode_lowlevel($value, $depth);
@@ -176,5 +176,23 @@ class Raven_Compat
 
             return '{' . join(',', $result) . '}';
         }
+    }
+
+    public static function strlen($string)
+    {
+        if (extension_loaded('mbstring')) {
+            return mb_strlen($string, 'UTF-8');
+        }
+
+        return strlen($string);
+    }
+
+    public static function substr($string, $start, $length)
+    {
+        if (extension_loaded('mbstring')) {
+            return mb_substr($string, $start, $length, 'UTF-8');
+        }
+
+        return substr($string, $start, $length);
     }
 }

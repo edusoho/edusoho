@@ -11,13 +11,11 @@
 
 namespace Symfony\Bridge\Doctrine\Logger;
 
+use Doctrine\DBAL\Logging\SQLLogger;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
-use Doctrine\DBAL\Logging\SQLLogger;
 
 /**
- * DbalLogger.
- *
  * @author Fabien Potencier <fabien@symfony.com>
  */
 class DbalLogger implements SQLLogger
@@ -28,12 +26,6 @@ class DbalLogger implements SQLLogger
     protected $logger;
     protected $stopwatch;
 
-    /**
-     * Constructor.
-     *
-     * @param LoggerInterface $logger    A LoggerInterface instance
-     * @param Stopwatch       $stopwatch A Stopwatch instance
-     */
     public function __construct(LoggerInterface $logger = null, Stopwatch $stopwatch = null)
     {
         $this->logger = $logger;
@@ -50,7 +42,7 @@ class DbalLogger implements SQLLogger
         }
 
         if (null !== $this->logger) {
-            $this->log($sql, null === $params ? array() : $this->normalizeParams($params));
+            $this->log($sql, null === $params ? [] : $this->normalizeParams($params));
         }
     }
 
@@ -79,12 +71,12 @@ class DbalLogger implements SQLLogger
     {
         foreach ($params as $index => $param) {
             // normalize recursively
-            if (is_array($param)) {
+            if (\is_array($param)) {
                 $params[$index] = $this->normalizeParams($param);
                 continue;
             }
 
-            if (!is_string($params[$index])) {
+            if (!\is_string($params[$index])) {
                 continue;
             }
 

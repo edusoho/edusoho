@@ -11,6 +11,7 @@
 
 namespace Silex\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @author Igor Wiedler <igor@wiedler.ch>
  */
-class MiddlewareTest extends \PHPUnit_Framework_TestCase
+class MiddlewareTest extends TestCase
 {
     public function testBeforeAndAfterFilter()
     {
@@ -254,7 +255,7 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
 
         $test = $this;
 
-        $middlewareTarget = array();
+        $middlewareTarget = [];
         $applicationBeforeMiddleware = function ($request, $app) use (&$middlewareTarget, $test) {
             $test->assertInstanceOf('\Symfony\Component\HttpFoundation\Request', $request);
             $test->assertInstanceOf('\Silex\Application', $app);
@@ -302,6 +303,6 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
         $response = $app->handle($request);
         $app->terminate($request, $response);
 
-        $this->assertSame(array('application_before_middleware_triggered', 'route_before_middleware_triggered', 'route_after_middleware_triggered', 'application_after_middleware_triggered', 'application_finish_middleware_triggered'), $middlewareTarget);
+        $this->assertSame(['application_before_middleware_triggered', 'route_before_middleware_triggered', 'route_after_middleware_triggered', 'application_after_middleware_triggered', 'application_finish_middleware_triggered'], $middlewareTarget);
     }
 }

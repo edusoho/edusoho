@@ -13,15 +13,10 @@ namespace Symfony\Component\Validator\Tests\Constraints;
 
 use Symfony\Component\Validator\Constraints\Time;
 use Symfony\Component\Validator\Constraints\TimeValidator;
-use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class TimeValidatorTest extends AbstractConstraintValidatorTest
+class TimeValidatorTest extends ConstraintValidatorTestCase
 {
-    protected function getApiVersion()
-    {
-        return Validation::API_VERSION_2_5;
-    }
-
     protected function createValidator()
     {
         return new TimeValidator();
@@ -48,11 +43,9 @@ class TimeValidatorTest extends AbstractConstraintValidatorTest
         $this->assertNoViolation();
     }
 
-    /**
-     * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
-     */
     public function testExpectsStringCompatibleType()
     {
+        $this->expectException('Symfony\Component\Validator\Exception\UnexpectedTypeException');
         $this->validator->validate(new \stdClass(), new Time());
     }
 
@@ -68,11 +61,11 @@ class TimeValidatorTest extends AbstractConstraintValidatorTest
 
     public function getValidTimes()
     {
-        return array(
-            array('01:02:03'),
-            array('00:00:00'),
-            array('23:59:59'),
-        );
+        return [
+            ['01:02:03'],
+            ['00:00:00'],
+            ['23:59:59'],
+        ];
     }
 
     /**
@@ -80,9 +73,9 @@ class TimeValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testInvalidTimes($time, $code)
     {
-        $constraint = new Time(array(
+        $constraint = new Time([
             'message' => 'myMessage',
-        ));
+        ]);
 
         $this->validator->validate($time, $constraint);
 
@@ -94,14 +87,21 @@ class TimeValidatorTest extends AbstractConstraintValidatorTest
 
     public function getInvalidTimes()
     {
-        return array(
-            array('foobar', Time::INVALID_FORMAT_ERROR),
-            array('foobar 12:34:56', Time::INVALID_FORMAT_ERROR),
-            array('12:34:56 foobar', Time::INVALID_FORMAT_ERROR),
-            array('00:00', Time::INVALID_FORMAT_ERROR),
-            array('24:00:00', Time::INVALID_TIME_ERROR),
-            array('00:60:00', Time::INVALID_TIME_ERROR),
-            array('00:00:60', Time::INVALID_TIME_ERROR),
-        );
+        return [
+            ['foobar', Time::INVALID_FORMAT_ERROR],
+            ['foobar 12:34:56', Time::INVALID_FORMAT_ERROR],
+            ['12:34:56 foobar', Time::INVALID_FORMAT_ERROR],
+            ['00:00', Time::INVALID_FORMAT_ERROR],
+            ['24:00:00', Time::INVALID_TIME_ERROR],
+            ['00:60:00', Time::INVALID_TIME_ERROR],
+            ['00:00:60', Time::INVALID_TIME_ERROR],
+        ];
+    }
+
+    public function testDateTimeImmutableIsValid()
+    {
+        $this->validator->validate(new \DateTimeImmutable(), new Time());
+
+        $this->assertNoViolation();
     }
 }

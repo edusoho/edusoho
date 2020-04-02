@@ -1,6 +1,26 @@
 Changelog
 =========
 
+5.4.12 (2018-07-31)
+-------------------
+
+ * fixed typo
+
+5.4.11 (2018-07-31)
+-------------------
+
+ * fixed startTLS support for PHP 5.6-
+
+5.4.10 (2018-07-27)
+-------------------
+
+ * fixed startTLS only allowed tls1.0, now allowed: tls1.0, tls1.1, tls1.2
+
+5.4.9 (2018-01-23)
+------------------
+
+ * no changes, last version of the 5.x series
+
 5.4.8 (2017-05-01)
 ------------------
 

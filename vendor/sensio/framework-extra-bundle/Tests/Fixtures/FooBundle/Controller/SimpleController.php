@@ -1,23 +1,20 @@
 <?php
 
 /*
- * This file is part of the Symfony framework.
+ * This file is part of the Symfony package.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Tests\Fixtures\FooBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(service="test.simple.multiple")
- */
 class SimpleController
 {
     /**
@@ -30,7 +27,7 @@ class SimpleController
 
     /**
      * @Route("/simple/multiple/{a}/{b}/")
-     * @Template("FooBundle:Simple:some.html.twig")
+     * @Template("@Foo/simple/some.html.twig")
      */
     public function someMoreAction($a, $b, $c = 'c')
     {
@@ -58,9 +55,9 @@ class SimpleController
      */
     public function streamedAction()
     {
-        return array(
+        return [
             'foo' => 'foo',
             'bar' => 'bar',
-        );
+        ];
     }
 }

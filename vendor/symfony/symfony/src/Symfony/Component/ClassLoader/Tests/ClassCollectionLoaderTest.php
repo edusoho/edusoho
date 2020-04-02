@@ -13,17 +13,19 @@ namespace Symfony\Component\ClassLoader\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\ClassLoader\ClassCollectionLoader;
+use Symfony\Component\ClassLoader\Tests\Fixtures\DeclaredClass;
+use Symfony\Component\ClassLoader\Tests\Fixtures\WarmedClass;
 
 require_once __DIR__.'/Fixtures/ClassesWithParents/GInterface.php';
 require_once __DIR__.'/Fixtures/ClassesWithParents/CInterface.php';
 require_once __DIR__.'/Fixtures/ClassesWithParents/B.php';
 require_once __DIR__.'/Fixtures/ClassesWithParents/A.php';
 
+/**
+ * @group legacy
+ */
 class ClassCollectionLoaderTest extends TestCase
 {
-    /**
-     * @requires PHP 5.4
-     */
     public function testTraitDependencies()
     {
         require_once __DIR__.'/Fixtures/deps/traits.php';
@@ -32,17 +34,17 @@ class ClassCollectionLoaderTest extends TestCase
         $m = $r->getMethod('getOrderedClasses');
         $m->setAccessible(true);
 
-        $ordered = $m->invoke(null, array('CTFoo'));
+        $ordered = $m->invoke(null, ['CTFoo']);
 
         $this->assertEquals(
-            array('TD', 'TC', 'TB', 'TA', 'TZ', 'CTFoo'),
+            ['TD', 'TC', 'TB', 'TA', 'TZ', 'CTFoo'],
             array_map(function ($class) { return $class->getName(); }, $ordered)
         );
 
-        $ordered = $m->invoke(null, array('CTBar'));
+        $ordered = $m->invoke(null, ['CTBar']);
 
         $this->assertEquals(
-            array('TD', 'TZ', 'TC', 'TB', 'TA', 'CTBar'),
+            ['TD', 'TZ', 'TC', 'TB', 'TA', 'CTBar'],
             array_map(function ($class) { return $class->getName(); }, $ordered)
         );
     }
@@ -52,12 +54,12 @@ class ClassCollectionLoaderTest extends TestCase
      */
     public function testClassReordering(array $classes)
     {
-        $expected = array(
+        $expected = [
             'ClassesWithParents\\GInterface',
             'ClassesWithParents\\CInterface',
             'ClassesWithParents\\B',
             'ClassesWithParents\\A',
-        );
+        ];
 
         $r = new \ReflectionClass('Symfony\Component\ClassLoader\ClassCollectionLoader');
         $m = $r->getMethod('getOrderedClasses');
@@ -70,32 +72,31 @@ class ClassCollectionLoaderTest extends TestCase
 
     public function getDifferentOrders()
     {
-        return array(
-            array(array(
+        return [
+            [[
                 'ClassesWithParents\\A',
                 'ClassesWithParents\\CInterface',
                 'ClassesWithParents\\GInterface',
                 'ClassesWithParents\\B',
-            )),
-            array(array(
+            ]],
+            [[
                 'ClassesWithParents\\B',
                 'ClassesWithParents\\A',
                 'ClassesWithParents\\CInterface',
-            )),
-            array(array(
+            ]],
+            [[
                 'ClassesWithParents\\CInterface',
                 'ClassesWithParents\\B',
                 'ClassesWithParents\\A',
-            )),
-            array(array(
+            ]],
+            [[
                 'ClassesWithParents\\A',
-            )),
-        );
+            ]],
+        ];
     }
 
     /**
      * @dataProvider getDifferentOrdersForTraits
-     * @requires PHP 5.4
      */
     public function testClassWithTraitsReordering(array $classes)
     {
@@ -105,7 +106,7 @@ class ClassCollectionLoaderTest extends TestCase
         require_once __DIR__.'/Fixtures/ClassesWithParents/D.php';
         require_once __DIR__.'/Fixtures/ClassesWithParents/E.php';
 
-        $expected = array(
+        $expected = [
             'ClassesWithParents\\GInterface',
             'ClassesWithParents\\CInterface',
             'ClassesWithParents\\ATrait',
@@ -115,7 +116,7 @@ class ClassCollectionLoaderTest extends TestCase
             'ClassesWithParents\\A',
             'ClassesWithParents\\D',
             'ClassesWithParents\\E',
-        );
+        ];
 
         $r = new \ReflectionClass('Symfony\Component\ClassLoader\ClassCollectionLoader');
         $m = $r->getMethod('getOrderedClasses');
@@ -128,36 +129,33 @@ class ClassCollectionLoaderTest extends TestCase
 
     public function getDifferentOrdersForTraits()
     {
-        return array(
-            array(array(
+        return [
+            [[
                 'ClassesWithParents\\E',
                 'ClassesWithParents\\ATrait',
-            )),
-            array(array(
+            ]],
+            [[
                 'ClassesWithParents\\E',
-            )),
-        );
+            ]],
+        ];
     }
 
-    /**
-     * @requires PHP 5.4
-     */
     public function testFixClassWithTraitsOrdering()
     {
         require_once __DIR__.'/Fixtures/ClassesWithParents/CTrait.php';
         require_once __DIR__.'/Fixtures/ClassesWithParents/F.php';
         require_once __DIR__.'/Fixtures/ClassesWithParents/G.php';
 
-        $classes = array(
+        $classes = [
             'ClassesWithParents\\F',
             'ClassesWithParents\\G',
-        );
+        ];
 
-        $expected = array(
+        $expected = [
             'ClassesWithParents\\CTrait',
             'ClassesWithParents\\F',
             'ClassesWithParents\\G',
-        );
+        ];
 
         $r = new \ReflectionClass('Symfony\Component\ClassLoader\ClassCollectionLoader');
         $m = $r->getMethod('getOrderedClasses');
@@ -178,14 +176,14 @@ class ClassCollectionLoaderTest extends TestCase
 
     public function getFixNamespaceDeclarationsData()
     {
-        return array(
-            array("namespace;\nclass Foo {}\n", "namespace\n{\nclass Foo {}\n}"),
-            array("namespace Foo;\nclass Foo {}\n", "namespace Foo\n{\nclass Foo {}\n}"),
-            array("namespace   Bar ;\nclass Foo {}\n", "namespace Bar\n{\nclass Foo {}\n}"),
-            array("namespace Foo\Bar;\nclass Foo {}\n", "namespace Foo\Bar\n{\nclass Foo {}\n}"),
-            array("namespace Foo\Bar\Bar\n{\nclass Foo {}\n}\n", "namespace Foo\Bar\Bar\n{\nclass Foo {}\n}"),
-            array("namespace\n{\nclass Foo {}\n}\n", "namespace\n{\nclass Foo {}\n}"),
-        );
+        return [
+            ["namespace;\nclass Foo {}\n", "namespace\n{\nclass Foo {}\n}"],
+            ["namespace Foo;\nclass Foo {}\n", "namespace Foo\n{\nclass Foo {}\n}"],
+            ["namespace   Bar ;\nclass Foo {}\n", "namespace Bar\n{\nclass Foo {}\n}"],
+            ["namespace Foo\Bar;\nclass Foo {}\n", "namespace Foo\Bar\n{\nclass Foo {}\n}"],
+            ["namespace Foo\Bar\Bar\n{\nclass Foo {}\n}\n", "namespace Foo\Bar\Bar\n{\nclass Foo {}\n}"],
+            ["namespace\n{\nclass Foo {}\n}\n", "namespace\n{\nclass Foo {}\n}"],
+        ];
     }
 
     /**
@@ -200,26 +198,24 @@ class ClassCollectionLoaderTest extends TestCase
 
     public function getFixNamespaceDeclarationsDataWithoutTokenizer()
     {
-        return array(
-            array("namespace;\nclass Foo {}\n", "namespace\n{\nclass Foo {}\n}\n"),
-            array("namespace Foo;\nclass Foo {}\n", "namespace Foo\n{\nclass Foo {}\n}\n"),
-            array("namespace   Bar ;\nclass Foo {}\n", "namespace   Bar\n{\nclass Foo {}\n}\n"),
-            array("namespace Foo\Bar;\nclass Foo {}\n", "namespace Foo\Bar\n{\nclass Foo {}\n}\n"),
-            array("namespace Foo\Bar\Bar\n{\nclass Foo {}\n}\n", "namespace Foo\Bar\Bar\n{\nclass Foo {}\n}\n"),
-            array("\nnamespace\n{\nclass Foo {}\n\$namespace=123;}\n", "\nnamespace\n{\nclass Foo {}\n\$namespace=123;}\n"),
-        );
+        return [
+            ["namespace;\nclass Foo {}\n", "namespace\n{\nclass Foo {}\n}\n"],
+            ["namespace Foo;\nclass Foo {}\n", "namespace Foo\n{\nclass Foo {}\n}\n"],
+            ["namespace   Bar ;\nclass Foo {}\n", "namespace   Bar\n{\nclass Foo {}\n}\n"],
+            ["namespace Foo\Bar;\nclass Foo {}\n", "namespace Foo\Bar\n{\nclass Foo {}\n}\n"],
+            ["namespace Foo\Bar\Bar\n{\nclass Foo {}\n}\n", "namespace Foo\Bar\Bar\n{\nclass Foo {}\n}\n"],
+            ["\nnamespace\n{\nclass Foo {}\n\$namespace=123;}\n", "\nnamespace\n{\nclass Foo {}\n\$namespace=123;}\n"],
+        ];
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testUnableToLoadClassException()
     {
+        $this->expectException('InvalidArgumentException');
         if (is_file($file = sys_get_temp_dir().'/foo.php')) {
             unlink($file);
         }
 
-        ClassCollectionLoader::load(array('SomeNotExistingClass'), sys_get_temp_dir(), 'foo', false);
+        ClassCollectionLoader::load(['SomeNotExistingClass'], sys_get_temp_dir(), 'foo', false);
     }
 
     public function testCommentStripping()
@@ -229,14 +225,14 @@ class ClassCollectionLoaderTest extends TestCase
         }
         spl_autoload_register($r = function ($class) {
             if (0 === strpos($class, 'Namespaced') || 0 === strpos($class, 'Pearlike_')) {
-                @require_once __DIR__.'/Fixtures/'.str_replace(array('\\', '_'), '/', $class).'.php';
+                @require_once __DIR__.'/Fixtures/'.str_replace(['\\', '_'], '/', $class).'.php';
             }
         });
 
-        $strictTypes = defined('HHVM_VERSION') ? '' : "\nnamespace {require __DIR__.'/Fixtures/Namespaced/WithStrictTypes.php';}";
+        $strictTypes = \defined('HHVM_VERSION') ? '' : "\nnamespace {require __DIR__.'/Fixtures/Namespaced/WithStrictTypes.php';}";
 
         ClassCollectionLoader::load(
-            array('Namespaced\\WithComments', 'Pearlike_WithComments', 'Namespaced\\WithDirMagic', 'Namespaced\\WithFileMagic', 'Namespaced\\WithHaltCompiler', $strictTypes ? 'Namespaced\\WithStrictTypes' : 'Namespaced\\WithComments'),
+            ['Namespaced\\WithComments', 'Pearlike_WithComments', 'Namespaced\\WithDirMagic', 'Namespaced\\WithFileMagic', 'Namespaced\\WithHaltCompiler', $strictTypes ? 'Namespaced\\WithStrictTypes' : 'Namespaced\\WithComments'],
             __DIR__,
             'bar',
             false
@@ -281,9 +277,41 @@ namespace {require __DIR__.'/Fixtures/Namespaced/WithFileMagic.php';}
 namespace {require __DIR__.'/Fixtures/Namespaced/WithHaltCompiler.php';}
 EOF
             .$strictTypes,
-            str_replace(array("<?php \n", '\\\\'), array('', '/'), file_get_contents($file))
+            str_replace(["<?php \n", '\\\\'], ['', '/'], file_get_contents($file))
         );
 
         unlink($file);
+    }
+
+    public function testInline()
+    {
+        $this->assertTrue(class_exists(WarmedClass::class, true));
+
+        @unlink($cache = sys_get_temp_dir().'/inline.php');
+
+        $classes = [WarmedClass::class];
+        $excluded = [DeclaredClass::class];
+
+        ClassCollectionLoader::inline($classes, $cache, $excluded);
+
+        $this->assertSame(<<<'EOTXT'
+<?php 
+namespace Symfony\Component\ClassLoader\Tests\Fixtures
+{
+interface WarmedInterface
+{
+}
+}
+namespace Symfony\Component\ClassLoader\Tests\Fixtures
+{
+class WarmedClass extends DeclaredClass implements WarmedInterface
+{
+}
+}
+EOTXT
+            , file_get_contents($cache)
+        );
+
+        unlink($cache);
     }
 }

@@ -8,14 +8,8 @@
  * file that was distributed with this source code.
  */
 
-/**
- * @since      File available since Release 3.7.20
- */
 class Framework_TestFailureTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @covers PHPUnit_Framework_TestFailure::toString
-     */
     public function testToString()
     {
         $test      = new self(__FUNCTION__);

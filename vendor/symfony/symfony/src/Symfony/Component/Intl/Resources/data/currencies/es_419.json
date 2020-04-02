@@ -1,29 +1,29 @@
 {
-    "Version": "2.1.27.99",
+    "Version": "36",
     "Names": {
-        "AMD": [
-            "AMD",
-            "dram armenio"
-        ],
         "CAD": [
             "CAD",
             "dólar canadiense"
-        ],
-        "ERN": [
-            "ERN",
-            "nafka"
         ],
         "EUR": [
             "EUR",
             "euro"
         ],
+        "MWK": [
+            "MWK",
+            "kwacha malauí"
+        ],
         "THB": [
             "THB",
-            "bat"
+            "baht tailandes"
         ],
         "USD": [
             "USD",
             "dólar estadounidense"
+        ],
+        "UZS": [
+            "UZS",
+            "som uzbeko"
         ],
         "VND": [
             "VND",

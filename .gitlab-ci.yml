@@ -33,36 +33,36 @@ check env:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
 
-5.3 with nothing:
-  stage: test
-  image: codeages/ci-php:5.3-2
-  services:
-    - mysql:5.5
-  script:
-    - bin/phpunit-diff
-  only:
-    refs:
-      - develop
-      - master
-      - trigger
-    variables:
-      - $REPOSITORY == "main"
-
-5.3 with Redis:
-  stage: test
-  image: codeages/ci-php:5.3-2
-  services:
-    - mysql:5.5
-    - redis:latest
-  script:
-    - bin/phpunit-diff
-  only:
-    refs:
-      - develop
-      - master
-      - trigger
-    variables:
-      - $REPOSITORY == "main"
+#5.3 with nothing:
+#  stage: test
+#  image: codeages/ci-php:5.3-2
+#  services:
+#    - mysql:5.5
+#  script:
+#    - bin/phpunit-diff
+#  only:
+#    refs:
+#      - develop
+#      - master
+#      - trigger
+#    variables:
+#      - $REPOSITORY == "main"
+#
+#5.3 with Redis:
+#  stage: test
+#  image: codeages/ci-php:5.3-2
+#  services:
+#    - mysql:5.5
+#    - redis:latest
+#  script:
+#    - bin/phpunit-diff
+#  only:
+#    refs:
+#      - develop
+#      - master
+#      - trigger
+#    variables:
+#      - $REPOSITORY == "main"
 
 7.1 with php-cs-fixer only for custom:
   stage: test
@@ -84,7 +84,9 @@ check env:
     - mysql:5.5
     - redis:latest
   script:
-    - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
+    #    - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
+    - composer remove phpunit/phpunit --ignore-platform-reqs
+    - composer require-dev bin/phpunit --ignore-platform-reqs
     - bin/phpunit-diff
   only:
     refs:
@@ -123,6 +125,25 @@ check env:
       - /^release/.*$/
       - develop
       - master
+      - feature/edusoho-symfony34
+    variables:
+      - $REPOSITORY == "main"
+
+7.4 For main with MySQL80:
+  stage: test
+  image: codeages/ci-php74
+  services:
+    - name: mysql:8.0
+      command: ["--default-authentication-plugin=mysql_native_password"]
+    - redis:latest
+  script:
+    - bin/phpunit-diff
+  only:
+    refs:
+      - /^release/.*$/
+      - develop
+      - master
+      - feature/edusoho-symfony34
     variables:
       - $REPOSITORY == "main"
 
@@ -140,6 +161,8 @@ check env:
     - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitE2P --coverage-clover reports_tmp/phpunit.coverage.xml_4 --log-junit reports_tmp/phpunit.xml_4
     - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitQ2T --coverage-clover reports_tmp/phpunit.coverage.xml_5 --log-junit reports_tmp/phpunit.xml_5
     - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitU2Z --coverage-clover reports_tmp/phpunit.coverage.xml_6 --log-junit reports_tmp/phpunit.xml_6
+    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite SpecialTest --coverage-clover reports_tmp/phpunit.coverage.xml_7 --log-junit reports_tmp/phpunit.xml_7
+
     - mkdir reports
     - bin/caculate
     - echo "sonar.links.ci=$SONAR_LINKS_CI" >> sonar-project.properties

@@ -11,8 +11,8 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 
 /**
  * Managers converters.
@@ -25,24 +25,23 @@ class ParamConverterManager
     /**
      * @var array
      */
-    protected $converters = array();
+    private $converters = [];
 
     /**
      * @var array
      */
-    protected $namedConverters = array();
+    private $namedConverters = [];
 
     /**
      * Applies all converters to the passed configurations and stops when a
      * converter is applied it will move on to the next configuration and so on.
      *
-     * @param Request      $request
      * @param array|object $configurations
      */
     public function apply(Request $request, $configurations)
     {
-        if (is_object($configurations)) {
-            $configurations = array($configurations);
+        if (\is_object($configurations)) {
+            $configurations = [$configurations];
         }
 
         foreach ($configurations as $configuration) {
@@ -51,19 +50,16 @@ class ParamConverterManager
     }
 
     /**
-     * Apply converter on request based on the given configuration.
-     *
-     * @param Request                $request
-     * @param ConfigurationInterface $configuration
+     * Applies converter on request based on the given configuration.
      */
-    protected function applyConverter(Request $request, ConfigurationInterface $configuration)
+    private function applyConverter(Request $request, ParamConverter $configuration)
     {
         $value = $request->attributes->get($configuration->getName());
         $className = $configuration->getClass();
 
         // If the value is already an instance of the class we are trying to convert it into
         // we should continue as no conversion is required
-        if (is_object($value) && $value instanceof $className) {
+        if (\is_object($value) && $value instanceof $className) {
             return;
         }
 
@@ -71,7 +67,8 @@ class ParamConverterManager
             if (!isset($this->namedConverters[$converterName])) {
                 throw new \RuntimeException(sprintf(
                     "No converter named '%s' found for conversion of parameter '%s'.",
-                    $converterName, $configuration->getName()
+                    $converterName,
+                    $configuration->getName()
                 ));
             }
 
@@ -80,7 +77,8 @@ class ParamConverterManager
             if (!$converter->supports($configuration)) {
                 throw new \RuntimeException(sprintf(
                     "Converter '%s' does not support conversion of parameter '%s'.",
-                    $converterName, $configuration->getName()
+                    $converterName,
+                    $configuration->getName()
                 ));
             }
 
@@ -106,15 +104,14 @@ class ParamConverterManager
      * added converter will not be part of the iteration chain and can only
      * be invoked explicitly.
      *
-     * @param ParamConverterInterface $converter A ParamConverterInterface instance
-     * @param int                     $priority  The priority (between -10 and 10).
-     * @param string                  $name      Name of the converter.
+     * @param int    $priority the priority (between -10 and 10)
+     * @param string $name     name of the converter
      */
     public function add(ParamConverterInterface $converter, $priority = 0, $name = null)
     {
-        if ($priority !== null) {
+        if (null !== $priority) {
             if (!isset($this->converters[$priority])) {
-                $this->converters[$priority] = array();
+                $this->converters[$priority] = [];
             }
 
             $this->converters[$priority][] = $converter;
@@ -125,20 +122,20 @@ class ParamConverterManager
         }
     }
 
-   /**
-    * Returns all registered param converters.
-    *
-    * @return array An array of param converters
-    */
-   public function all()
-   {
-       krsort($this->converters);
+    /**
+     * Returns all registered param converters.
+     *
+     * @return array An array of param converters
+     */
+    public function all()
+    {
+        krsort($this->converters);
 
-       $converters = array();
-       foreach ($this->converters as $all) {
-           $converters = array_merge($converters, $all);
-       }
+        $converters = [];
+        foreach ($this->converters as $all) {
+            $converters = array_merge($converters, $all);
+        }
 
-       return $converters;
-   }
+        return $converters;
+    }
 }

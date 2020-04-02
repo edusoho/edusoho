@@ -127,7 +127,13 @@ UPGRADE FROM 2.x to 3.0
    $table->render();
    ```
 
+* Parameters of `renderException()` method of the
+  `Symfony\Component\Console\Application` are type hinted.
+  You must add the type hint to your implementations.
+
 ### DependencyInjection
+
+ * The method `remove` was added to `Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface`.
 
  * The concept of scopes was removed, the removed methods are:
 
@@ -211,6 +217,22 @@ UPGRADE FROM 2.x to 3.0
    removed: `ContainerBuilder::synchronize()`, `Definition::isSynchronized()`,
    and `Definition::setSynchronized()`.
 
+### DomCrawler
+
+ * The interface of the `Symfony\Component\DomCrawler\Crawler` changed. It does no longer implement `\Iterator` but `\IteratorAggregate`. If you rely on methods of the `\Iterator` interface, call the `getIterator` method of the `\IteratorAggregate` interface before. No changes are required in a `\Traversable`-aware control structure, such as `foreach`.
+
+   Before:
+
+   ```php
+   $crawler->current();
+   ```
+
+   After:
+
+   ```php
+   $crawler->getIterator()->current();
+   ```
+
 ### DoctrineBridge
 
  * The `property` option of `DoctrineType` was removed in favor of the `choice_label` option.
@@ -236,10 +258,21 @@ UPGRADE FROM 2.x to 3.0
 
 ### EventDispatcher
 
+ * The method `getListenerPriority($eventName, $listener)` has been added to the
+   `EventDispatcherInterface`.
  * The interface `Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcherInterface`
    extends `Symfony\Component\EventDispatcher\EventDispatcherInterface`.
 
 ### Form
+
+ * The `getBlockPrefix()` method was added to the `FormTypeInterface` in replacement of
+   the `getName()` method which has been removed.
+
+ * The `configureOptions()` method was added to the `FormTypeInterface` in replacement
+   of the `setDefaultOptions()` method which has been removed.
+
+ * The `getBlockPrefix()` method was added to the `ResolvedFormTypeInterface` in
+   replacement of the `getName()` method which has been removed.
 
  * The option `options` of the `CollectionType` has been removed in favor
    of the `entry_options` option.
@@ -380,8 +413,8 @@ UPGRADE FROM 2.x to 3.0
    $form = $this->createForm(MyType::class);
    ```
 
- * Passing custom data to forms now needs to be done 
-   through the options resolver. 
+ * Passing custom data to forms now needs to be done
+   through the options resolver.
 
     In the controller:
 
@@ -392,7 +425,7 @@ UPGRADE FROM 2.x to 3.0
         'method' => 'PUT',
     ));
     ```
-    After: 
+    After:
     ```php
     $form = $this->createForm(MyType::class, $entity, array(
         'action' => $this->generateUrl('action_route'),
@@ -401,13 +434,13 @@ UPGRADE FROM 2.x to 3.0
     ));
     ```
     In the form type:
-    
+
     Before:
     ```php
     class MyType extends AbstractType
     {
         private $value;
-    
+
         public function __construct($variableValue)
         {
             $this->value = $value;
@@ -415,7 +448,7 @@ UPGRADE FROM 2.x to 3.0
         // ...
     }
     ```
-    
+
     After:
     ```php
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -423,7 +456,7 @@ UPGRADE FROM 2.x to 3.0
         $value = $options['custom_value'];
         // ...
     }
-    
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
@@ -431,7 +464,7 @@ UPGRADE FROM 2.x to 3.0
         ));
     }
     ```
- 
+
  * The alias option of the `form.type_extension` tag was removed in favor of
    the `extended_type`/`extended-type` option.
 
@@ -563,6 +596,24 @@ UPGRADE FROM 2.x to 3.0
    }
    ```
 
+   If the form is submitted with a different request method than `POST`, you need to configure this in the form:
+
+   Before:
+
+   ```php
+   $form = $this->createForm(FormType::class, $entity);
+   $form->submit($request);
+   ```
+
+   After:
+
+   ```php
+   $form = $this->createForm(FormType::class, $entity, [
+       'method' => 'PUT',
+   ]);
+   $form->handleRequest($request);
+   ```
+
  * The events `PRE_BIND`, `BIND` and `POST_BIND` were renamed to `PRE_SUBMIT`, `SUBMIT`
    and `POST_SUBMIT`.
 
@@ -630,7 +681,7 @@ UPGRADE FROM 2.x to 3.0
    As a value for the option you must provide the fully-qualified class name (FQCN)
    now as well.
 
- * The `FormIntegrationTestCase` and `FormPerformanceTestCase` classes were moved form the `Symfony\Component\Form\Tests` namespace to the `Symfony\Component\Form\Test` namespace.
+ * The `FormIntegrationTestCase` and `FormPerformanceTestCase` classes were moved from the `Symfony\Component\Form\Tests` namespace to the `Symfony\Component\Form\Test` namespace.
 
  * The constants `ROUND_HALFEVEN`, `ROUND_HALFUP` and `ROUND_HALFDOWN` in class
    `NumberToLocalizedStringTransformer` were renamed to `ROUND_HALF_EVEN`,
@@ -689,6 +740,11 @@ UPGRADE FROM 2.x to 3.0
    and `yaml:lint` commands have been deprecated since Symfony 2.7 and will
    be removed in Symfony 3.0. Use the `debug:config`, `debug:container`,
    `debug:router`, `debug:translation` and `lint:yaml` commands instead.
+
+ * The base `Controller`class is now abstract.
+
+ * The visibility of all methods of the base `Controller` class has been changed from
+   `public` to `protected`.
 
  * The `getRequest` method of the base `Controller` class has been deprecated
    since Symfony 2.4 and must be therefore removed in 3.0. The only reliable
@@ -816,6 +872,8 @@ UPGRADE FROM 2.x to 3.0
 
  * The `RouterApacheDumperCommand` was removed.
 
+ * The `createEsi` method of `Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache` was removed. Use `createSurrogate` instead.
+
  * The `templating.helper.router` service was moved to `templating_php.xml`. You
    have to ensure that the PHP templating engine is enabled to be able to use it:
 
@@ -823,6 +881,34 @@ UPGRADE FROM 2.x to 3.0
    framework:
        templating:
            engines: ['php']
+   ```
+
+ * The assets settings under `framework.templating` were moved to `framework.assets`.
+
+   Before:
+
+   ```yml
+   framework:
+       templating:
+           assets_version: 'v123'
+           assets_version_format: '%%s?version=%%s'
+           assets_base_urls:
+               http: ['http://cdn.example.com']
+               ssl:  ['https://secure.example.com']
+           packages:
+               # ...
+   ```
+
+   After:
+
+   ```yml
+   framework:
+       assets:
+           version: 'v123'
+           version_format: '%%s?version=%%s'
+           base_urls: ['http://cdn.example.com', 'https://secure.example.com']
+           packages:
+               # ...
    ```
 
  * The `form.csrf_provider` service is removed as it implements an adapter for
@@ -977,7 +1063,7 @@ UPGRADE FROM 2.x to 3.0
    ```
 
  * The `ApacheMatcherDumper` and `ApacheUrlMatcher` were removed since
-   the performance gains were minimal and it's hard to replicate the behaviour
+   the performance gains were minimal and it's hard to replicate the behavior
    of PHP implementation.
 
  * The `getMatcherDumperInstance()` and `getGeneratorDumperInstance()` methods in the
@@ -1008,6 +1094,12 @@ UPGRADE FROM 2.x to 3.0
    ```
 
 ### Security
+
+ * The `vote()` method from the `VoterInterface` was changed to now accept arbitrary
+   types and not only objects. You can rely on the new abstract `Voter` class introduced
+   in 2.8 to ease integrating your own voters.
+
+ * The `AbstractVoter` class was removed in favor of the new `Voter` class.
 
  * The `Resources/` directory was moved to `Core/Resources/`
 
@@ -1098,7 +1190,7 @@ UPGRADE FROM 2.x to 3.0
            'http_digest' => array('secret' => '%secret%'),
        ),
    ));
-  ```
+   ```
 
  * The `AbstractVoter` class was removed. Instead, extend the new `Voter` class,
    introduced in 2.8, and move your voting logic to the to the `supports($attribute, $subject)`
@@ -1205,6 +1297,68 @@ UPGRADE FROM 2.x to 3.0
 
  * The `Translator::setFallbackLocale()` method has been removed in favor of
    `Translator::setFallbackLocales()`.
+
+ * The visibility of the `locale` property has been changed from protected to private. Rely on `getLocale` and `setLocale`
+   instead.
+
+   Before:
+
+   ```php
+    class CustomTranslator extends Translator
+    {
+        public function fooMethod()
+        {
+           // get locale
+           $locale = $this->locale;
+
+           // update locale
+           $this->locale = $locale;
+        }
+    }
+   ```
+
+   After:
+
+   ```php
+    class CustomTranslator extends Translator
+    {
+        public function fooMethod()
+        {
+           // get locale
+           $locale = $this->getLocale();
+
+           // update locale
+           $this->setLocale($locale);
+       }
+    }
+   ```
+
+ * The method `FileDumper::format()` was removed. You should use
+   `FileDumper::formatCatalogue()` instead.
+
+   Before:
+
+   ```php
+    class CustomDumper extends FileDumper
+    {
+        protected function format(MessageCatalogue $messages, $domain)
+        {
+            ...
+        }
+    }
+   ```
+
+   After:
+
+   ```php
+    class CustomDumper extends FileDumper
+    {
+        public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = array())
+        {
+            ...
+        }
+    }
+   ```
 
  * The `getMessages()` method of the `Symfony\Component\Translation\Translator`
    class was removed. You should use the `getCatalogue()` method of the
@@ -1768,7 +1922,22 @@ UPGRADE FROM 2.x to 3.0
    `Process::setInput()` and `Process::getInput()` that works the same way.
  * `Process::setInput()` and `ProcessBuilder::setInput()` do not accept non-scalar types.
 
+### Monolog Bridge
+
+ * `Symfony\Bridge\Monolog\Logger::emerg()` was removed. Use `emergency()` which is PSR-3 compatible.
+ * `Symfony\Bridge\Monolog\Logger::crit()` was removed. Use `critical()` which is PSR-3 compatible.
+ * `Symfony\Bridge\Monolog\Logger::err()` was removed. Use `error()` which is PSR-3 compatible.
+ * `Symfony\Bridge\Monolog\Logger::warn()` was removed. Use `warning()` which is PSR-3 compatible.
+
+### Swiftmailer Bridge
+
+ * `Symfony\Bridge\Swiftmailer\DataCollector\MessageDataCollector` was removed. Use the `Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector` class instead.
+
 ### HttpFoundation
+
+ * The precedence of parameters returned from `Request::get()` changed from "GET, PATH, BODY" to "PATH, GET, BODY"
+
+ * `Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface` no longer implements the `IteratorAggregate` interface. Use the `all()` method instead of iterating over the flash bag.
 
  * Removed the feature that allowed finding deep items in `ParameterBag::get()`.
    This may affect you when getting parameters from the `Request` class:

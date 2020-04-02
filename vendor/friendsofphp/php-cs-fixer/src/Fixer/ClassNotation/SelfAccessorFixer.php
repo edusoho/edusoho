@@ -30,7 +30,7 @@ final class SelfAccessorFixer extends AbstractFixer
     public function getDefinition()
     {
         return new FixerDefinition(
-            'Inside a classy element "self" should be preferred to the class name itself.',
+            'Inside class or interface element `self` should be preferred to the class name itself.',
             array(
                 new CodeSample(
                     '<?php
@@ -45,7 +45,9 @@ class Sample
     }
 }'
                 ),
-            )
+            ),
+            null,
+            'Risky when using dynamic calls like get_called_class() or late static binding.'
         );
     }
 
@@ -54,7 +56,15 @@ class Sample
      */
     public function isCandidate(Tokens $tokens)
     {
-        return $tokens->isAnyTokenKindsFound(Token::getClassyTokenKinds());
+        return $tokens->isAnyTokenKindsFound(array(T_CLASS, T_INTERFACE));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isRisky()
+    {
+        return true;
     }
 
     /**
@@ -65,7 +75,7 @@ class Sample
         $tokensAnalyzer = new TokensAnalyzer($tokens);
 
         for ($i = 0, $c = $tokens->count(); $i < $c; ++$i) {
-            if (!$tokens[$i]->isClassy() || $tokensAnalyzer->isAnonymousClass($i)) {
+            if (!$tokens[$i]->isGivenKind(array(T_CLASS, T_INTERFACE)) || $tokensAnalyzer->isAnonymousClass($i)) {
                 continue;
             }
 
@@ -105,6 +115,7 @@ class Sample
             ) {
                 $i = $tokens->getNextTokenOfKind($i, array('{'));
                 $i = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_CURLY_BRACE, $i);
+
                 continue;
             }
 
@@ -115,8 +126,8 @@ class Sample
             $prevToken = $tokens[$tokens->getPrevMeaningfulToken($i)];
             $nextToken = $tokens[$tokens->getNextMeaningfulToken($i)];
 
-            // skip tokens that are part of a fully qualified name
-            if ($prevToken->isGivenKind(T_NS_SEPARATOR) || $nextToken->isGivenKind(T_NS_SEPARATOR)) {
+            // skip tokens that are part of a fully qualified name or used in class property access
+            if ($prevToken->isGivenKind(array(T_NS_SEPARATOR, T_OBJECT_OPERATOR)) || $nextToken->isGivenKind(T_NS_SEPARATOR)) {
                 continue;
             }
 
@@ -124,7 +135,7 @@ class Sample
                 $prevToken->isGivenKind(array(T_INSTANCEOF, T_NEW)) ||
                 $nextToken->isGivenKind(T_PAAMAYIM_NEKUDOTAYIM)
             ) {
-                $token->setContent('self');
+                $tokens[$i] = new Token(array(T_STRING, 'self'));
             }
         }
     }

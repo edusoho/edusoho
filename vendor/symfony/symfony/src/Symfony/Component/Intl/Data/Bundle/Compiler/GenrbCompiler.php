@@ -22,29 +22,22 @@ use Symfony\Component\Intl\Exception\RuntimeException;
  */
 class GenrbCompiler implements BundleCompilerInterface
 {
-    /**
-     * @var string The path to the "genrb" executable
-     */
     private $genrb;
 
     /**
      * Creates a new compiler based on the "genrb" executable.
      *
      * @param string $genrb   Optional. The path to the "genrb" executable
-     * @param string $envVars Optional. Environment variables to be loaded when
-     *                        running "genrb".
+     * @param string $envVars Optional. Environment variables to be loaded when running "genrb".
      *
-     * @throws RuntimeException If the "genrb" cannot be found.
+     * @throws RuntimeException if the "genrb" cannot be found
      */
     public function __construct($genrb = 'genrb', $envVars = '')
     {
         exec('which '.$genrb, $output, $status);
 
         if (0 !== $status) {
-            throw new RuntimeException(sprintf(
-                'The command "%s" is not installed',
-                $genrb
-            ));
+            throw new RuntimeException(sprintf('The command "%s" is not installed', $genrb));
         }
 
         $this->genrb = ($envVars ? $envVars.' ' : '').$genrb;
@@ -61,13 +54,8 @@ class GenrbCompiler implements BundleCompilerInterface
 
         exec($this->genrb.' --quiet -e UTF-8 -d '.$targetDir.' '.$sourcePath, $output, $status);
 
-        if ($status !== 0) {
-            throw new RuntimeException(sprintf(
-                'genrb failed with status %d while compiling %s to %s.',
-                $status,
-                $sourcePath,
-                $targetDir
-            ));
+        if (0 !== $status) {
+            throw new RuntimeException(sprintf('genrb failed with status %d while compiling %s to %s.', $status, $sourcePath, $targetDir));
         }
     }
 }

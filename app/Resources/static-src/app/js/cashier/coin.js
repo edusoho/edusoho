@@ -7,7 +7,7 @@ export default class Coin {
     this.coinRate = this.$container.data('coinRate');
     this.maxCoinInput = this.$container.data('maxAllowCoin') > this.$container.data('coinBalance') ?
       this.$container.data('coinBalance') : this.$container.data('maxAllowCoin');
-    
+
     this.init();
   }
 

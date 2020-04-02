@@ -38,59 +38,12 @@ class Configuration implements ConfigurationInterface
             ->end()
         ;
 
-        $this->addFormSection($rootNode);
         $this->addFormThemesSection($rootNode);
         $this->addGlobalsSection($rootNode);
         $this->addTwigOptions($rootNode);
         $this->addTwigFormatOptions($rootNode);
 
         return $treeBuilder;
-    }
-
-    private function addFormSection(ArrayNodeDefinition $rootNode)
-    {
-        $rootNode
-            // Check deprecation before the config is processed to ensure
-            // the setting has been explicitly defined in a configuration file.
-            ->beforeNormalization()
-                ->ifTrue(function ($v) { return isset($v['form']['resources']); })
-                ->then(function ($v) {
-                    @trigger_error('The twig.form.resources configuration key is deprecated since version 2.6 and will be removed in 3.0. Use the twig.form_themes configuration key instead.', E_USER_DEPRECATED);
-
-                    return $v;
-                })
-            ->end()
-            ->validate()
-                ->ifTrue(function ($v) {
-                    return count($v['form']['resources']) > 0;
-                })
-                ->then(function ($v) {
-                    $v['form_themes'] = array_values(array_unique(array_merge($v['form']['resources'], $v['form_themes'])));
-
-                    return $v;
-                })
-            ->end()
-            ->children()
-                ->arrayNode('form')
-                    ->info('Deprecated since version 2.6, to be removed in 3.0. Use twig.form_themes instead')
-                    ->addDefaultsIfNotSet()
-                    ->fixXmlConfig('resource')
-                    ->children()
-                        ->arrayNode('resources')
-                            ->addDefaultChildrenIfNoneSet()
-                            ->prototype('scalar')->defaultValue('form_div_layout.html.twig')->end()
-                            ->example(array('MyBundle::form.html.twig'))
-                            ->validate()
-                                ->ifTrue(function ($v) {return !in_array('form_div_layout.html.twig', $v); })
-                                ->then(function ($v) {
-                                    return array_merge(array('form_div_layout.html.twig'), $v);
-                                })
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end()
-            ->end()
-        ;
     }
 
     private function addFormThemesSection(ArrayNodeDefinition $rootNode)
@@ -101,11 +54,11 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('form_themes')
                     ->addDefaultChildrenIfNoneSet()
                     ->prototype('scalar')->defaultValue('form_div_layout.html.twig')->end()
-                    ->example(array('MyBundle::form.html.twig'))
+                    ->example(['MyBundle::form.html.twig'])
                     ->validate()
-                        ->ifTrue(function ($v) { return !in_array('form_div_layout.html.twig', $v); })
+                        ->ifTrue(function ($v) { return !\in_array('form_div_layout.html.twig', $v); })
                         ->then(function ($v) {
-                            return array_merge(array('form_div_layout.html.twig'), $v);
+                            return array_merge(['form_div_layout.html.twig'], $v);
                         })
                     ->end()
                 ->end()
@@ -121,36 +74,36 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('globals')
                     ->normalizeKeys(false)
                     ->useAttributeAsKey('key')
-                    ->example(array('foo' => '"@bar"', 'pi' => 3.14))
+                    ->example(['foo' => '"@bar"', 'pi' => 3.14])
                     ->prototype('array')
                         ->beforeNormalization()
-                            ->ifTrue(function ($v) { return is_string($v) && 0 === strpos($v, '@'); })
+                            ->ifTrue(function ($v) { return \is_string($v) && 0 === strpos($v, '@'); })
                             ->then(function ($v) {
                                 if (0 === strpos($v, '@@')) {
                                     return substr($v, 1);
                                 }
 
-                                return array('id' => substr($v, 1), 'type' => 'service');
+                                return ['id' => substr($v, 1), 'type' => 'service'];
                             })
                         ->end()
                         ->beforeNormalization()
                             ->ifTrue(function ($v) {
-                                if (is_array($v)) {
+                                if (\is_array($v)) {
                                     $keys = array_keys($v);
                                     sort($keys);
 
-                                    return $keys !== array('id', 'type') && $keys !== array('value');
+                                    return $keys !== ['id', 'type'] && $keys !== ['value'];
                                 }
 
                                 return true;
                             })
-                            ->then(function ($v) { return array('value' => $v); })
+                            ->then(function ($v) { return ['value' => $v]; })
                         ->end()
                         ->children()
                             ->scalarNode('id')->end()
                             ->scalarNode('type')
                                 ->validate()
-                                    ->ifNotInArray(array('service'))
+                                    ->ifNotInArray(['service'])
                                     ->thenInvalid('The %s type is not supported')
                                 ->end()
                             ->end()
@@ -170,22 +123,26 @@ class Configuration implements ConfigurationInterface
                 ->variableNode('autoescape')->defaultValue('name')->end()
                 ->scalarNode('autoescape_service')->defaultNull()->end()
                 ->scalarNode('autoescape_service_method')->defaultNull()->end()
-                ->scalarNode('base_template_class')->example('Twig_Template')->cannotBeEmpty()->end()
+                ->scalarNode('base_template_class')->example('Twig\Template')->cannotBeEmpty()->end()
                 ->scalarNode('cache')->defaultValue('%kernel.cache_dir%/twig')->end()
                 ->scalarNode('charset')->defaultValue('%kernel.charset%')->end()
                 ->booleanNode('debug')->defaultValue('%kernel.debug%')->end()
                 ->booleanNode('strict_variables')->end()
                 ->scalarNode('auto_reload')->end()
                 ->integerNode('optimizations')->min(-1)->end()
+                ->scalarNode('default_path')
+                    ->info('The default path used to load templates')
+                    ->defaultValue('%kernel.project_dir%/templates')
+                ->end()
                 ->arrayNode('paths')
                     ->normalizeKeys(false)
                     ->useAttributeAsKey('paths')
                     ->beforeNormalization()
                         ->always()
                         ->then(function ($paths) {
-                            $normalized = array();
+                            $normalized = [];
                             foreach ($paths as $path => $namespace) {
-                                if (is_array($namespace)) {
+                                if (\is_array($namespace)) {
                                     // xml
                                     $path = $namespace['value'];
                                     $namespace = $namespace['namespace'];

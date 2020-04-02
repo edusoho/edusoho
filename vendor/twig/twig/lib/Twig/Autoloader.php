@@ -29,11 +29,7 @@ class Twig_Autoloader
     {
         @trigger_error('Using Twig_Autoloader is deprecated since version 1.21. Use Composer instead.', E_USER_DEPRECATED);
 
-        if (PHP_VERSION_ID < 50300) {
-            spl_autoload_register(array(__CLASS__, 'autoload'));
-        } else {
-            spl_autoload_register(array(__CLASS__, 'autoload'), true, $prepend);
-        }
+        spl_autoload_register([__CLASS__, 'autoload'], true, $prepend);
     }
 
     /**
@@ -47,7 +43,9 @@ class Twig_Autoloader
             return;
         }
 
-        if (is_file($file = dirname(__FILE__).'/../'.str_replace(array('_', "\0"), array('/', ''), $class).'.php')) {
+        if (is_file($file = __DIR__.'/../'.str_replace(['_', "\0"], ['/', ''], $class).'.php')) {
+            require $file;
+        } elseif (is_file($file = __DIR__.'/../../src/'.str_replace(['Twig\\', '\\', "\0"], ['', '/', ''], $class).'.php')) {
             require $file;
         }
     }

@@ -126,7 +126,7 @@ class SystemController extends BaseController
         $env = array();
         $env['os'] = PHP_OS;
         $env['phpVersion'] = PHP_VERSION;
-        $env['phpVersionOk'] = version_compare(PHP_VERSION, '5.3.0') >= 0;
+        $env['phpVersionOk'] = version_compare(PHP_VERSION, '5.5.9') >= 0;
         $env['user'] = getenv('USER');
         $env['pdoMysqlOk'] = extension_loaded('pdo_mysql');
         $env['uploadMaxFilesize'] = ini_get('upload_max_filesize');

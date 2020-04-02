@@ -12,10 +12,12 @@
 namespace Symfony\Bundle\FrameworkBundle\Tests\Translation;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
-use Symfony\Component\Translation\MessageCatalogue;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Translation\MessageSelector;
+use Symfony\Component\Translation\Formatter\MessageFormatter;
+use Symfony\Component\Translation\Loader\YamlFileLoader;
+use Symfony\Component\Translation\MessageCatalogue;
 
 class TranslatorTest extends TestCase
 {
@@ -42,11 +44,15 @@ class TranslatorTest extends TestCase
         $fs->remove($dir);
     }
 
-    public function testTransWithoutCaching()
+    /**
+     * @group legacy
+     * @expectedDeprecation The "Symfony\Bundle\FrameworkBundle\Translation\Translator::__construct()" method takes the default locale as the 3rd argument since Symfony 3.3. Not passing it is deprecated and will trigger an error in 4.0.
+     */
+    public function testTransWithoutCachingOmittingLocale()
     {
-        $translator = $this->getTranslator($this->getLoader());
+        $translator = $this->getTranslator($this->getLoader(), [], 'loader', '\Symfony\Bundle\FrameworkBundle\Translation\Translator', null);
         $translator->setLocale('fr');
-        $translator->setFallbackLocales(array('en', 'es', 'pt-PT', 'pt_BR', 'fr.UTF-8', 'sr@latin'));
+        $translator->setFallbackLocales(['en', 'es', 'pt-PT', 'pt_BR', 'fr.UTF-8', 'sr@latin']);
 
         $this->assertEquals('foo (FR)', $translator->trans('foo'));
         $this->assertEquals('bar (EN)', $translator->trans('bar'));
@@ -59,12 +65,16 @@ class TranslatorTest extends TestCase
         $this->assertEquals('foobarbax (sr@latin)', $translator->trans('foobarbax'));
     }
 
-    public function testTransWithCaching()
+    /**
+     * @group legacy
+     * @expectedDeprecation The "Symfony\Bundle\FrameworkBundle\Translation\Translator::__construct()" method takes the default locale as the 3rd argument since Symfony 3.3. Not passing it is deprecated and will trigger an error in 4.0.
+     */
+    public function testTransWithCachingOmittingLocale()
     {
         // prime the cache
-        $translator = $this->getTranslator($this->getLoader(), array('cache_dir' => $this->tmpDir));
+        $translator = $this->getTranslator($this->getLoader(), ['cache_dir' => $this->tmpDir], 'loader', '\Symfony\Bundle\FrameworkBundle\Translation\Translator', null);
         $translator->setLocale('fr');
-        $translator->setFallbackLocales(array('en', 'es', 'pt-PT', 'pt_BR', 'fr.UTF-8', 'sr@latin'));
+        $translator->setFallbackLocales(['en', 'es', 'pt-PT', 'pt_BR', 'fr.UTF-8', 'sr@latin']);
 
         $this->assertEquals('foo (FR)', $translator->trans('foo'));
         $this->assertEquals('bar (EN)', $translator->trans('bar'));
@@ -80,9 +90,152 @@ class TranslatorTest extends TestCase
         $loader = $this->getMockBuilder('Symfony\Component\Translation\Loader\LoaderInterface')->getMock();
         $loader->expects($this->never())->method('load');
 
-        $translator = $this->getTranslator($loader, array('cache_dir' => $this->tmpDir));
+        $translator = $this->getTranslator($loader, ['cache_dir' => $this->tmpDir], 'loader', '\Symfony\Bundle\FrameworkBundle\Translation\Translator', null);
         $translator->setLocale('fr');
-        $translator->setFallbackLocales(array('en', 'es', 'pt-PT', 'pt_BR', 'fr.UTF-8', 'sr@latin'));
+        $translator->setFallbackLocales(['en', 'es', 'pt-PT', 'pt_BR', 'fr.UTF-8', 'sr@latin']);
+
+        $this->assertEquals('foo (FR)', $translator->trans('foo'));
+        $this->assertEquals('bar (EN)', $translator->trans('bar'));
+        $this->assertEquals('foobar (ES)', $translator->trans('foobar'));
+        $this->assertEquals('choice 0 (EN)', $translator->transChoice('choice', 0));
+        $this->assertEquals('no translation', $translator->trans('no translation'));
+        $this->assertEquals('foobarfoo (PT-PT)', $translator->trans('foobarfoo'));
+        $this->assertEquals('other choice 1 (PT-BR)', $translator->transChoice('other choice', 1));
+        $this->assertEquals('foobarbaz (fr.UTF-8)', $translator->trans('foobarbaz'));
+        $this->assertEquals('foobarbax (sr@latin)', $translator->trans('foobarbax'));
+    }
+
+    /**
+     * @group legacy
+     * @expectedDeprecation The "Symfony\Bundle\FrameworkBundle\Translation\Translator::__construct()" method takes the default locale as the 3rd argument since Symfony 3.3. Not passing it is deprecated and will trigger an error in 4.0.
+     */
+    public function testTransWithCachingWithInvalidLocaleOmittingLocale()
+    {
+        $this->expectException('InvalidArgumentException');
+        $loader = $this->getMockBuilder('Symfony\Component\Translation\Loader\LoaderInterface')->getMock();
+        $translator = $this->getTranslator($loader, ['cache_dir' => $this->tmpDir], 'loader', '\Symfony\Bundle\FrameworkBundle\Tests\Translation\TranslatorWithInvalidLocale', null);
+
+        $translator->trans('foo');
+    }
+
+    /**
+     * @group legacy
+     * @expectedDeprecation The "Symfony\Bundle\FrameworkBundle\Translation\Translator::__construct()" method takes the default locale as the 3rd argument since Symfony 3.3. Not passing it is deprecated and will trigger an error in 4.0.
+     */
+    public function testLoadResourcesWithoutCachingOmittingLocale()
+    {
+        $loader = new YamlFileLoader();
+        $resourceFiles = [
+            'fr' => [
+                __DIR__.'/../Fixtures/Resources/translations/messages.fr.yml',
+            ],
+        ];
+
+        $translator = $this->getTranslator($loader, ['resource_files' => $resourceFiles], 'yml', '\Symfony\Bundle\FrameworkBundle\Translation\Translator', null);
+        $translator->setLocale('fr');
+
+        $this->assertEquals('répertoire', $translator->trans('folder'));
+    }
+
+    /**
+     * @group legacy
+     * @expectedDeprecation The "Symfony\Bundle\FrameworkBundle\Translation\Translator::__construct()" method takes the default locale as the 3rd argument since Symfony 3.3. Not passing it is deprecated and will trigger an error in 4.0.
+     */
+    public function testGetDefaultLocaleOmittingLocale()
+    {
+        $container = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerInterface')->getMock();
+        $container
+            ->expects($this->once())
+            ->method('getParameter')
+            ->with('kernel.default_locale')
+            ->willReturn('en')
+        ;
+        $translator = new Translator($container, new MessageFormatter());
+
+        $this->assertSame('en', $translator->getLocale());
+    }
+
+    /**
+     * @group legacy
+     */
+    public function testGetDefaultLocaleOmittingLocaleWithPsrContainer()
+    {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Missing third $defaultLocale argument.');
+        $container = $this->getMockBuilder(ContainerInterface::class)->getMock();
+        new Translator($container, new MessageFormatter());
+    }
+
+    /**
+     * @group legacy
+     * @expectedDeprecation The "Symfony\Bundle\FrameworkBundle\Translation\Translator::__construct()" method takes the default locale as the 3rd argument since Symfony 3.3. Not passing it is deprecated and will trigger an error in 4.0.
+     */
+    public function testWarmupOmittingLocale()
+    {
+        $loader = new YamlFileLoader();
+        $resourceFiles = [
+            'fr' => [
+                __DIR__.'/../Fixtures/Resources/translations/messages.fr.yml',
+            ],
+        ];
+
+        // prime the cache
+        $translator = $this->getTranslator($loader, ['cache_dir' => $this->tmpDir, 'resource_files' => $resourceFiles], 'yml', '\Symfony\Bundle\FrameworkBundle\Translation\Translator', null);
+        $translator->setFallbackLocales(['fr']);
+        $translator->warmup($this->tmpDir);
+
+        $loader = $this->getMockBuilder('Symfony\Component\Translation\Loader\LoaderInterface')->getMock();
+        $loader
+            ->expects($this->never())
+            ->method('load');
+
+        $translator = $this->getTranslator($loader, ['cache_dir' => $this->tmpDir, 'resource_files' => $resourceFiles], 'yml', '\Symfony\Bundle\FrameworkBundle\Translation\Translator', null);
+        $translator->setLocale('fr');
+        $translator->setFallbackLocales(['fr']);
+        $this->assertEquals('répertoire', $translator->trans('folder'));
+    }
+
+    public function testTransWithoutCaching()
+    {
+        $translator = $this->getTranslator($this->getLoader());
+        $translator->setLocale('fr');
+        $translator->setFallbackLocales(['en', 'es', 'pt-PT', 'pt_BR', 'fr.UTF-8', 'sr@latin']);
+
+        $this->assertEquals('foo (FR)', $translator->trans('foo'));
+        $this->assertEquals('bar (EN)', $translator->trans('bar'));
+        $this->assertEquals('foobar (ES)', $translator->trans('foobar'));
+        $this->assertEquals('choice 0 (EN)', $translator->transChoice('choice', 0));
+        $this->assertEquals('no translation', $translator->trans('no translation'));
+        $this->assertEquals('foobarfoo (PT-PT)', $translator->trans('foobarfoo'));
+        $this->assertEquals('other choice 1 (PT-BR)', $translator->transChoice('other choice', 1));
+        $this->assertEquals('foobarbaz (fr.UTF-8)', $translator->trans('foobarbaz'));
+        $this->assertEquals('foobarbax (sr@latin)', $translator->trans('foobarbax'));
+    }
+
+    public function testTransWithCaching()
+    {
+        // prime the cache
+        $translator = $this->getTranslator($this->getLoader(), ['cache_dir' => $this->tmpDir]);
+        $translator->setLocale('fr');
+        $translator->setFallbackLocales(['en', 'es', 'pt-PT', 'pt_BR', 'fr.UTF-8', 'sr@latin']);
+
+        $this->assertEquals('foo (FR)', $translator->trans('foo'));
+        $this->assertEquals('bar (EN)', $translator->trans('bar'));
+        $this->assertEquals('foobar (ES)', $translator->trans('foobar'));
+        $this->assertEquals('choice 0 (EN)', $translator->transChoice('choice', 0));
+        $this->assertEquals('no translation', $translator->trans('no translation'));
+        $this->assertEquals('foobarfoo (PT-PT)', $translator->trans('foobarfoo'));
+        $this->assertEquals('other choice 1 (PT-BR)', $translator->transChoice('other choice', 1));
+        $this->assertEquals('foobarbaz (fr.UTF-8)', $translator->trans('foobarbaz'));
+        $this->assertEquals('foobarbax (sr@latin)', $translator->trans('foobarbax'));
+
+        // do it another time as the cache is primed now
+        $loader = $this->getMockBuilder('Symfony\Component\Translation\Loader\LoaderInterface')->getMock();
+        $loader->expects($this->never())->method('load');
+
+        $translator = $this->getTranslator($loader, ['cache_dir' => $this->tmpDir]);
+        $translator->setLocale('fr');
+        $translator->setFallbackLocales(['en', 'es', 'pt-PT', 'pt_BR', 'fr.UTF-8', 'sr@latin']);
 
         $this->assertEquals('foo (FR)', $translator->trans('foo'));
         $this->assertEquals('bar (EN)', $translator->trans('bar'));
@@ -97,24 +250,24 @@ class TranslatorTest extends TestCase
 
     public function testTransWithCachingWithInvalidLocale()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Invalid "invalid locale" locale.');
         $loader = $this->getMockBuilder('Symfony\Component\Translation\Loader\LoaderInterface')->getMock();
-        $translator = $this->getTranslator($loader, array('cache_dir' => $this->tmpDir), 'loader', '\Symfony\Bundle\FrameworkBundle\Tests\Translation\TranslatorWithInvalidLocale');
-        $translator->setLocale('invalid locale');
+        $translator = $this->getTranslator($loader, ['cache_dir' => $this->tmpDir], 'loader', '\Symfony\Bundle\FrameworkBundle\Tests\Translation\TranslatorWithInvalidLocale');
 
-        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('\InvalidArgumentException');
         $translator->trans('foo');
     }
 
     public function testLoadResourcesWithoutCaching()
     {
-        $loader = new \Symfony\Component\Translation\Loader\YamlFileLoader();
-        $resourceFiles = array(
-            'fr' => array(
+        $loader = new YamlFileLoader();
+        $resourceFiles = [
+            'fr' => [
                 __DIR__.'/../Fixtures/Resources/translations/messages.fr.yml',
-            ),
-        );
+            ],
+        ];
 
-        $translator = $this->getTranslator($loader, array('resource_files' => $resourceFiles), 'yml');
+        $translator = $this->getTranslator($loader, ['resource_files' => $resourceFiles], 'yml');
         $translator->setLocale('fr');
 
         $this->assertEquals('répertoire', $translator->trans('folder'));
@@ -122,20 +275,67 @@ class TranslatorTest extends TestCase
 
     public function testGetDefaultLocale()
     {
-        $container = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerInterface')->getMock();
-        $container
-            ->expects($this->once())
-            ->method('getParameter')
-            ->with('kernel.default_locale')
-            ->will($this->returnValue('en'))
-        ;
-
-        $translator = new Translator($container, new MessageSelector());
+        $container = $this->getMockBuilder(ContainerInterface::class)->getMock();
+        $translator = new Translator($container, new MessageFormatter(), 'en');
 
         $this->assertSame('en', $translator->getLocale());
     }
 
-    protected function getCatalogue($locale, $messages, $resources = array())
+    public function testInvalidOptions()
+    {
+        $this->expectException('Symfony\Component\Translation\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('The Translator does not support the following options: \'foo\'');
+        $container = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerInterface')->getMock();
+
+        (new Translator($container, new MessageFormatter(), 'en', [], ['foo' => 'bar']));
+    }
+
+    /** @dataProvider getDebugModeAndCacheDirCombinations */
+    public function testResourceFilesOptionLoadsBeforeOtherAddedResources($debug, $enableCache)
+    {
+        $someCatalogue = $this->getCatalogue('some_locale', []);
+
+        $loader = $this->getMockBuilder('Symfony\Component\Translation\Loader\LoaderInterface')->getMock();
+
+        $loader->expects($this->at(0))
+            ->method('load')
+            /* The "messages.some_locale.loader" is passed via the resource_file option and shall be loaded first */
+            ->with('messages.some_locale.loader', 'some_locale', 'messages')
+            ->willReturn($someCatalogue);
+
+        $loader->expects($this->at(1))
+            ->method('load')
+            /* This resource is added by an addResource() call and shall be loaded after the resource_files */
+            ->with('second_resource.some_locale.loader', 'some_locale', 'messages')
+            ->willReturn($someCatalogue);
+
+        $options = [
+            'resource_files' => ['some_locale' => ['messages.some_locale.loader']],
+            'debug' => $debug,
+        ];
+
+        if ($enableCache) {
+            $options['cache_dir'] = $this->tmpDir;
+        }
+
+        /** @var Translator $translator */
+        $translator = $this->createTranslator($loader, $options);
+        $translator->addResource('loader', 'second_resource.some_locale.loader', 'some_locale', 'messages');
+
+        $translator->trans('some_message', [], null, 'some_locale');
+    }
+
+    public function getDebugModeAndCacheDirCombinations()
+    {
+        return [
+            [false, false],
+            [true, false],
+            [false, true],
+            [true, true],
+        ];
+    }
+
+    protected function getCatalogue($locale, $messages, $resources = [])
     {
         $catalogue = new MessageCatalogue($locale);
         foreach ($messages as $key => $translation) {
@@ -154,53 +354,53 @@ class TranslatorTest extends TestCase
         $loader
             ->expects($this->at(0))
             ->method('load')
-            ->will($this->returnValue($this->getCatalogue('fr', array(
+            ->willReturn($this->getCatalogue('fr', [
                 'foo' => 'foo (FR)',
-            ))))
+            ]))
         ;
         $loader
             ->expects($this->at(1))
             ->method('load')
-            ->will($this->returnValue($this->getCatalogue('en', array(
+            ->willReturn($this->getCatalogue('en', [
                 'foo' => 'foo (EN)',
                 'bar' => 'bar (EN)',
                 'choice' => '{0} choice 0 (EN)|{1} choice 1 (EN)|]1,Inf] choice inf (EN)',
-            ))))
+            ]))
         ;
         $loader
             ->expects($this->at(2))
             ->method('load')
-            ->will($this->returnValue($this->getCatalogue('es', array(
+            ->willReturn($this->getCatalogue('es', [
                 'foobar' => 'foobar (ES)',
-            ))))
+            ]))
         ;
         $loader
             ->expects($this->at(3))
             ->method('load')
-            ->will($this->returnValue($this->getCatalogue('pt-PT', array(
+            ->willReturn($this->getCatalogue('pt-PT', [
                 'foobarfoo' => 'foobarfoo (PT-PT)',
-            ))))
+            ]))
         ;
         $loader
             ->expects($this->at(4))
             ->method('load')
-            ->will($this->returnValue($this->getCatalogue('pt_BR', array(
+            ->willReturn($this->getCatalogue('pt_BR', [
                 'other choice' => '{0} other choice 0 (PT-BR)|{1} other choice 1 (PT-BR)|]1,Inf] other choice inf (PT-BR)',
-            ))))
+            ]))
         ;
         $loader
             ->expects($this->at(5))
             ->method('load')
-            ->will($this->returnValue($this->getCatalogue('fr.UTF-8', array(
+            ->willReturn($this->getCatalogue('fr.UTF-8', [
                 'foobarbaz' => 'foobarbaz (fr.UTF-8)',
-            ))))
+            ]))
         ;
         $loader
             ->expects($this->at(6))
             ->method('load')
-            ->will($this->returnValue($this->getCatalogue('sr@latin', array(
+            ->willReturn($this->getCatalogue('sr@latin', [
                 'foobarbax' => 'foobarbax (sr@latin)',
-            ))))
+            ]))
         ;
 
         return $loader;
@@ -212,15 +412,15 @@ class TranslatorTest extends TestCase
         $container
             ->expects($this->any())
             ->method('get')
-            ->will($this->returnValue($loader))
+            ->willReturn($loader)
         ;
 
         return $container;
     }
 
-    public function getTranslator($loader, $options = array(), $loaderFomat = 'loader', $translatorClass = '\Symfony\Bundle\FrameworkBundle\Translation\Translator')
+    public function getTranslator($loader, $options = [], $loaderFomat = 'loader', $translatorClass = '\Symfony\Bundle\FrameworkBundle\Translation\Translator', $defaultLocale = 'en')
     {
-        $translator = $this->createTranslator($loader, $options, $translatorClass, $loaderFomat);
+        $translator = $this->createTranslator($loader, $options, $translatorClass, $loaderFomat, $defaultLocale);
 
         if ('loader' === $loaderFomat) {
             $translator->addResource('loader', 'foo', 'fr');
@@ -237,16 +437,16 @@ class TranslatorTest extends TestCase
 
     public function testWarmup()
     {
-        $loader = new \Symfony\Component\Translation\Loader\YamlFileLoader();
-        $resourceFiles = array(
-            'fr' => array(
+        $loader = new YamlFileLoader();
+        $resourceFiles = [
+            'fr' => [
                 __DIR__.'/../Fixtures/Resources/translations/messages.fr.yml',
-            ),
-        );
+            ],
+        ];
 
         // prime the cache
-        $translator = $this->getTranslator($loader, array('cache_dir' => $this->tmpDir, 'resource_files' => $resourceFiles), 'yml');
-        $translator->setFallbackLocales(array('fr'));
+        $translator = $this->getTranslator($loader, ['cache_dir' => $this->tmpDir, 'resource_files' => $resourceFiles], 'yml');
+        $translator->setFallbackLocales(['fr']);
         $translator->warmup($this->tmpDir);
 
         $loader = $this->getMockBuilder('Symfony\Component\Translation\Loader\LoaderInterface')->getMock();
@@ -254,18 +454,28 @@ class TranslatorTest extends TestCase
             ->expects($this->never())
             ->method('load');
 
-        $translator = $this->getTranslator($loader, array('cache_dir' => $this->tmpDir, 'resource_files' => $resourceFiles), 'yml');
+        $translator = $this->getTranslator($loader, ['cache_dir' => $this->tmpDir, 'resource_files' => $resourceFiles], 'yml');
         $translator->setLocale('fr');
-        $translator->setFallbackLocales(array('fr'));
+        $translator->setFallbackLocales(['fr']);
         $this->assertEquals('répertoire', $translator->trans('folder'));
     }
 
-    private function createTranslator($loader, $options, $translatorClass = '\Symfony\Bundle\FrameworkBundle\Translation\Translator', $loaderFomat = 'loader')
+    private function createTranslator($loader, $options, $translatorClass = '\Symfony\Bundle\FrameworkBundle\Translation\Translator', $loaderFomat = 'loader', $defaultLocale = 'en')
     {
+        if (null === $defaultLocale) {
+            return new $translatorClass(
+                $this->getContainer($loader),
+                new MessageFormatter(),
+                [$loaderFomat => [$loaderFomat]],
+                $options
+            );
+        }
+
         return new $translatorClass(
             $this->getContainer($loader),
-            new MessageSelector(),
-            array($loaderFomat => array($loaderFomat)),
+            new MessageFormatter(),
+            $defaultLocale,
+            [$loaderFomat => [$loaderFomat]],
             $options
         );
     }
@@ -276,8 +486,8 @@ class TranslatorWithInvalidLocale extends Translator
     /**
      * {@inheritdoc}
      */
-    public function setLocale($locale)
+    public function getLocale()
     {
-        $this->locale = $locale;
+        return 'invalid locale';
     }
 }

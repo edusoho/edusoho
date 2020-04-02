@@ -16,7 +16,7 @@ class BatchNotificationController extends BaseController
         $user = $this->getUser();
         $conditions = array();
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getBatchNotificationService()->countBatchNotifications($conditions),
             10
         );

@@ -7,7 +7,7 @@
 
 {% if 'show' in actions %}
 {{ route_name_prefix }}_show:
-    path:     /{id}/show
+    path:     /{{ '{' ~ identifier ~ '}' }}/show
     defaults: { _controller: "{{ bundle }}:{{ entity }}:show" }
     methods:  GET
 {% endif %}
@@ -21,14 +21,14 @@
 
 {% if 'edit' in actions %}
 {{ route_name_prefix }}_edit:
-    path:     /{id}/edit
+    path:     /{{ '{' ~ identifier ~ '}' }}/edit
     defaults: { _controller: "{{ bundle }}:{{ entity }}:edit" }
     methods:  [GET, POST]
 {% endif %}
 
 {% if 'delete' in actions %}
 {{ route_name_prefix }}_delete:
-    path:     /{id}/delete
+    path:     /{{ '{' ~ identifier ~ '}' }}/delete
     defaults: { _controller: "{{ bundle }}:{{ entity }}:delete" }
     methods:  DELETE
 {% endif %}

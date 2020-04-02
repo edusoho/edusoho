@@ -18,39 +18,23 @@ class YamlTest extends TestCase
 {
     public function testParseAndDump()
     {
-        $data = array('lorem' => 'ipsum', 'dolor' => 'sit');
+        $data = ['lorem' => 'ipsum', 'dolor' => 'sit'];
         $yml = Yaml::dump($data);
         $parsed = Yaml::parse($yml);
         $this->assertEquals($data, $parsed);
     }
 
-    /**
-     * @group legacy
-     */
-    public function testLegacyParseFromFile()
-    {
-        $filename = __DIR__.'/Fixtures/index.yml';
-        $contents = file_get_contents($filename);
-        $parsedByFilename = Yaml::parse($filename);
-        $parsedByContents = Yaml::parse($contents);
-        $this->assertEquals($parsedByFilename, $parsedByContents);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The indentation must be greater than zero
-     */
     public function testZeroIndentationThrowsException()
     {
-        Yaml::dump(array('lorem' => 'ipsum', 'dolor' => 'sit'), 2, 0);
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('The indentation must be greater than zero');
+        Yaml::dump(['lorem' => 'ipsum', 'dolor' => 'sit'], 2, 0);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The indentation must be greater than zero
-     */
     public function testNegativeIndentationThrowsException()
     {
-        Yaml::dump(array('lorem' => 'ipsum', 'dolor' => 'sit'), 2, -4);
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('The indentation must be greater than zero');
+        Yaml::dump(['lorem' => 'ipsum', 'dolor' => 'sit'], 2, -4);
     }
 }

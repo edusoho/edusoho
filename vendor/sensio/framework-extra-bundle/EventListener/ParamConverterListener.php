@@ -1,12 +1,12 @@
 <?php
 
 /*
- * This file is part of the Symfony framework.
+ * This file is part of the Symfony package.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
@@ -28,9 +28,9 @@ class ParamConverterListener implements EventSubscriberInterface
     /**
      * @var ParamConverterManager
      */
-    protected $manager;
+    private $manager;
 
-    protected $autoConvert;
+    private $autoConvert;
 
     /**
      * @var bool
@@ -38,10 +38,7 @@ class ParamConverterListener implements EventSubscriberInterface
     private $isParameterTypeSupported;
 
     /**
-     * Constructor.
-     *
-     * @param ParamConverterManager $manager     A ParamConverterManager instance
-     * @param bool                  $autoConvert Auto convert non-configured objects
+     * @param bool $autoConvert Auto convert non-configured objects
      */
     public function __construct(ParamConverterManager $manager, $autoConvert = true)
     {
@@ -52,24 +49,22 @@ class ParamConverterListener implements EventSubscriberInterface
 
     /**
      * Modifies the ParamConverterManager instance.
-     *
-     * @param FilterControllerEvent $event A FilterControllerEvent instance
      */
     public function onKernelController(FilterControllerEvent $event)
     {
         $controller = $event->getController();
         $request = $event->getRequest();
-        $configurations = array();
+        $configurations = [];
 
         if ($configuration = $request->attributes->get('_converters')) {
-            foreach (is_array($configuration) ? $configuration : array($configuration) as $configuration) {
+            foreach (\is_array($configuration) ? $configuration : [$configuration] as $configuration) {
                 $configurations[$configuration->getName()] = $configuration;
             }
         }
 
-        if (is_array($controller)) {
+        if (\is_array($controller)) {
             $r = new \ReflectionMethod($controller[0], $controller[1]);
-        } elseif (is_object($controller) && is_callable($controller, '__invoke')) {
+        } elseif (\is_object($controller) && \is_callable([$controller, '__invoke'])) {
             $r = new \ReflectionMethod($controller, '__invoke');
         } else {
             $r = new \ReflectionFunction($controller);
@@ -96,7 +91,7 @@ class ParamConverterListener implements EventSubscriberInterface
 
             if ($class || $hasType) {
                 if (!isset($configurations[$name])) {
-                    $configuration = new ParamConverter(array());
+                    $configuration = new ParamConverter([]);
                     $configuration->setName($name);
 
                     $configurations[$name] = $configuration;
@@ -116,14 +111,12 @@ class ParamConverterListener implements EventSubscriberInterface
     }
 
     /**
-     * Get subscribed events.
-     *
-     * @return array Subscribed events
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             KernelEvents::CONTROLLER => 'onKernelController',
-        );
+        ];
     }
 }

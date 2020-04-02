@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="./test/bootstrap.php">
+<phpunit bootstrap="./test/bootstrap.php"
+  convertWarningsToExceptions="false">
   <testsuites>
     <testsuite name="OAuth2 Server HttpFoundation Bridge Test Suite">
       <directory suffix="Test.php">./test</directory>

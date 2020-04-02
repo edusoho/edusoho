@@ -1,12 +1,12 @@
 <?php
 
 /*
- * This file is part of the Symfony framework.
+ * This file is part of the Symfony package.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
@@ -56,9 +56,9 @@ class HttpCacheListener implements EventSubscriberInterface
         }
 
         $etag = '';
-        if ($configuration->getETag()) {
-            $etag = hash('sha256', $this->getExpressionLanguage()->evaluate($configuration->getETag(), $request->attributes->all()));
-            $response->setETag($etag);
+        if ($configuration->getEtag()) {
+            $etag = hash('sha256', $this->getExpressionLanguage()->evaluate($configuration->getEtag(), $request->attributes->all()));
+            $response->setEtag($etag);
         }
 
         if ($response->isNotModified($request)) {
@@ -90,36 +90,38 @@ class HttpCacheListener implements EventSubscriberInterface
         $response = $event->getResponse();
 
         // http://tools.ietf.org/html/draft-ietf-httpbis-p4-conditional-12#section-3.1
-        if (!in_array($response->getStatusCode(), array(200, 203, 300, 301, 302, 304, 404, 410))) {
+        if (!\in_array($response->getStatusCode(), [200, 203, 300, 301, 302, 304, 404, 410])) {
             return;
         }
 
-        if (null !== $age = $configuration->getSMaxAge()) {
-            if (!is_numeric($age)) {
-                $now = microtime(true);
-
-                $age = ceil(strtotime($configuration->getSMaxAge(), $now) - $now);
-            }
+        if (!$response->headers->hasCacheControlDirective('s-maxage') && null !== $age = $configuration->getSMaxAge()) {
+            $age = $this->convertToSecondsIfNeeded($age);
 
             $response->setSharedMaxAge($age);
         }
 
-        if (null !== $age = $configuration->getMaxAge()) {
-            if (!is_numeric($age)) {
-                $now = microtime(true);
+        if ($configuration->mustRevalidate()) {
+            $response->headers->addCacheControlDirective('must-revalidate');
+        }
 
-                $age = ceil(strtotime($configuration->getMaxAge(), $now) - $now);
-            }
+        if (!$response->headers->hasCacheControlDirective('max-age') && null !== $age = $configuration->getMaxAge()) {
+            $age = $this->convertToSecondsIfNeeded($age);
 
             $response->setMaxAge($age);
         }
 
-        if (null !== $configuration->getExpires()) {
+        if (!$response->headers->hasCacheControlDirective('max-stale') && null !== $stale = $configuration->getMaxStale()) {
+            $stale = $this->convertToSecondsIfNeeded($stale);
+
+            $response->headers->addCacheControlDirective('max-stale', $stale);
+        }
+
+        if (!$response->headers->has('Expires') && null !== $configuration->getExpires()) {
             $date = \DateTime::createFromFormat('U', strtotime($configuration->getExpires()), new \DateTimeZone('UTC'));
             $response->setExpires($date);
         }
 
-        if (null !== $configuration->getVary()) {
+        if (!$response->headers->has('Vary') && null !== $configuration->getVary()) {
             $response->setVary($configuration->getVary());
         }
 
@@ -131,27 +133,25 @@ class HttpCacheListener implements EventSubscriberInterface
             $response->setPrivate();
         }
 
-        if (isset($this->lastModifiedDates[$request])) {
+        if (!$response->headers->has('Last-Modified') && isset($this->lastModifiedDates[$request])) {
             $response->setLastModified($this->lastModifiedDates[$request]);
 
             unset($this->lastModifiedDates[$request]);
         }
 
-        if (isset($this->etags[$request])) {
-            $response->setETag($this->etags[$request]);
+        if (!$response->headers->has('Etag') && isset($this->etags[$request])) {
+            $response->setEtag($this->etags[$request]);
 
             unset($this->etags[$request]);
         }
-
-        $event->setResponse($response);
     }
 
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             KernelEvents::CONTROLLER => 'onKernelController',
             KernelEvents::RESPONSE => 'onKernelResponse',
-        );
+        ];
     }
 
     private function getExpressionLanguage()
@@ -164,5 +164,21 @@ class HttpCacheListener implements EventSubscriberInterface
         }
 
         return $this->expressionLanguage;
+    }
+
+    /**
+     * @param int|string $time Time that can be either expressed in seconds or with relative time format (1 day, 2 weeks, ...)
+     *
+     * @return int
+     */
+    private function convertToSecondsIfNeeded($time)
+    {
+        if (!is_numeric($time)) {
+            $now = microtime(true);
+
+            $time = ceil(strtotime($time, $now) - $now);
+        }
+
+        return $time;
     }
 }

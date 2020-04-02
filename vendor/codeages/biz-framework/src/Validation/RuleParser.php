@@ -2,6 +2,9 @@
 
 namespace Codeages\Biz\Framework\Validation;
 
+/**
+ * @deprecated
+ */
 class RuleParser
 {
     public static function parse($rules)
