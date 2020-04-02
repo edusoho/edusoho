@@ -102,11 +102,11 @@ class EduSohoUpgrade extends AbstractUpdater
             return 1;
         }
 
-        $sql    = "SELECT * FROM role WHERE code='ROLE_SUPER_ADMIN';";
-        $result = $this->getConnection()->fetchAssoc($sql);
-        if ($result) {
-            $dataV2 = array_merge(json_decode($result['data_v2']), array('admin_v2_user_change_nickname'));
-            $this->getConnection()->exec("UPDATE role SET data_v2='".json_encode($dataV2)."' WHERE code='ROLE_SUPER_ADMIN';");
+        $role = $this->getRoleService()->getRoleByCode('ROLE_SUPER_ADMIN');
+
+        if ($role && isset($role['data_v2']) && !in_array('admin_v2_user_change_nickname', $role['data_v2'])) {
+            $role['data_v2'][] = 'admin_v2_user_change_nickname';
+            $this->getRoleDao()->update($role['id'], $role);
         }
 
         return 1;
@@ -165,6 +165,22 @@ class EduSohoUpgrade extends AbstractUpdater
     private function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return \Biz\Role\Service\RoleService
+     */
+    private function getRoleService()
+    {
+        return $this->createService('Role:RoleService');
+    }
+
+    /**
+     * @return \Biz\Role\Dao\RoleDao
+     */
+    private function getRoleDao()
+    {
+        return $this->createDao('Role:RoleDao');
     }
 }
 
