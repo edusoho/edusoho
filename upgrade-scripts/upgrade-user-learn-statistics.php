@@ -49,7 +49,8 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            'updateStorageDailyLearnStatisticsJob'
+            'updateStorageDailyLearnStatisticsJob',
+            'updateRoleSuperAdmin',
         );
 
         $funcNames = array();
@@ -90,6 +91,22 @@ class EduSohoUpgrade extends AbstractUpdater
         if ($this->isJobExist('StorageDailyLearnStatisticsJob')) {
             $sql = "UPDATE `biz_scheduler_job` SET `expression` = '*/3 3-6 * * *' WHERE `biz_scheduler_job`.`name` = 'StorageDailyLearnStatisticsJob'";
             $this->getConnection()->exec($sql);
+        }
+
+        return 1;
+    }
+
+    public function updateRoleSuperAdmin()
+    {
+        if (!$this->isTableExist('role')) {
+            return 1;
+        }
+
+        $sql    = "SELECT * FROM role WHERE code='ROLE_SUPER_ADMIN';";
+        $result = $this->getConnection()->fetchAssoc($sql);
+        if ($result) {
+            $dataV2 = array_merge(json_decode($result['data_v2']), array('admin_v2_user_change_nickname'));
+            $this->getConnection()->exec("UPDATE role SET data_v2='".json_encode($dataV2)."' WHERE code='ROLE_SUPER_ADMIN';");
         }
 
         return 1;
