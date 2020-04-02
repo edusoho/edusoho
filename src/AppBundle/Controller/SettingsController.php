@@ -321,7 +321,7 @@ class SettingsController extends BaseController
             ->getForm();
 
         if ('POST' === $request->getMethod()) {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $passwords = $form->getData();
@@ -401,7 +401,7 @@ class SettingsController extends BaseController
             ->getForm();
 
         if ('POST' === $request->getMethod()) {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $data = $form->getData();
@@ -934,7 +934,7 @@ class SettingsController extends BaseController
                     'message' => 'user.settings.login_password_fail',
                 ), 500);
             }
-            $form->bind($request);
+            $form->handleRequest($request);
             if ($form->isValid()) {
                 $passwords = $form->getData();
                 $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);

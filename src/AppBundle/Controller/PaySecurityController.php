@@ -33,7 +33,7 @@ class PaySecurityController extends BaseController
         }
 
         if ($request->getMethod() === 'POST') {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $passwords = $form->getData();
@@ -79,7 +79,7 @@ class PaySecurityController extends BaseController
             ->getForm();
 
         if ($request->getMethod() === 'POST') {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $passwords = $form->getData();
@@ -116,7 +116,7 @@ class PaySecurityController extends BaseController
         }
 
         if ($request->getMethod() === 'POST') {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $passwords = $form->getData();
@@ -152,7 +152,7 @@ class PaySecurityController extends BaseController
             ->getForm();
 
         if ($request->getMethod() === 'POST') {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $data = $form->getData();

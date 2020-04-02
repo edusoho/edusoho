@@ -49,7 +49,7 @@ class PasswordResetController extends BaseController
             ->getForm();
 
         if ('POST' === $request->getMethod()) {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $data = $form->getData();
