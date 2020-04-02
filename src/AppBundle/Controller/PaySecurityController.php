@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\SmsToolkit;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Request;
 
 class PaySecurityController extends BaseController
@@ -20,9 +21,9 @@ class PaySecurityController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-            ->add('currentUserLoginPassword', 'password')
-            ->add('newPayPassword', 'password')
-            ->add('confirmPayPassword', 'password')
+            ->add('currentUserLoginPassword', PasswordType::class)
+            ->add('newPayPassword', PasswordType::class)
+            ->add('confirmPayPassword', PasswordType::class)
             ->getForm();
 
         if ($user->isLogin() && empty($user['password'])) {
@@ -72,9 +73,9 @@ class PaySecurityController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-            ->add('currentUserLoginPassword', 'password')
-            ->add('newPayPassword', 'password')
-            ->add('confirmPayPassword', 'password')
+            ->add('currentUserLoginPassword', PasswordType::class)
+            ->add('newPayPassword', PasswordType::class)
+            ->add('confirmPayPassword', PasswordType::class)
             ->getForm();
 
         if ($request->getMethod() === 'POST') {
@@ -103,9 +104,9 @@ class PaySecurityController extends BaseController
         $user = $this->getCurrentUser();
 
         $form = $this->createFormBuilder()
-            ->add('oldPayPassword', 'password')
-            ->add('newPayPassword', 'password')
-            ->add('confirmPayPassword', 'password')
+            ->add('oldPayPassword', PasswordType::class)
+            ->add('newPayPassword', PasswordType::class)
+            ->add('confirmPayPassword', PasswordType::class)
             ->getForm();
 
         if ($user->isLogin() && empty($user['password'])) {
@@ -145,9 +146,9 @@ class PaySecurityController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-            ->add('payPassword', 'password')
-            ->add('confirmPayPassword', 'password')
-            ->add('currentUserLoginPassword', 'password')
+            ->add('payPassword', PasswordType::class)
+            ->add('confirmPayPassword', PasswordType::class)
+            ->add('currentUserLoginPassword', PasswordType::class)
             ->getForm();
 
         if ($request->getMethod() === 'POST') {

@@ -14,6 +14,7 @@ use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\CurlToolkit;
 use AppBundle\Common\FileToolkit;
 use Codeages\Biz\Pay\Service\AccountService;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
@@ -315,8 +316,8 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
 
         $form = $this->createFormBuilder()
-            ->add('newPassword', 'password')
-            ->add('confirmPassword', 'password')
+            ->add('newPassword', PasswordType::class)
+            ->add('confirmPassword', PasswordType::class)
             ->getForm();
 
         if ('POST' === $request->getMethod()) {
@@ -326,9 +327,9 @@ class SettingsController extends BaseController
                 $passwords = $form->getData();
                 $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
                 $form = $this->createFormBuilder()
-                    ->add('currentUserLoginPassword', 'password')
-                    ->add('newPayPassword', 'password')
-                    ->add('confirmPayPassword', 'password')
+                    ->add('currentUserLoginPassword', PasswordType::class)
+                    ->add('newPayPassword', PasswordType::class)
+                    ->add('confirmPayPassword', PasswordType::class)
                     ->getForm();
 
                 return $this->render('settings/pay-password-modal.html.twig', array(
@@ -394,9 +395,9 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-            ->add('payPassword', 'password')
-            ->add('confirmPayPassword', 'password')
-            ->add('currentUserLoginPassword', 'password')
+            ->add('payPassword', PasswordType::class)
+            ->add('confirmPayPassword', PasswordType::class)
+            ->add('currentUserLoginPassword', PasswordType::class)
             ->getForm();
 
         if ('POST' === $request->getMethod()) {
@@ -923,8 +924,8 @@ class SettingsController extends BaseController
         $targetPath = $request->query->get('targetPath');
         $showType = $request->query->get('showType', 'modal');
         $form = $this->createFormBuilder()
-            ->add('newPassword', 'password')
-            ->add('confirmPassword', 'password')
+            ->add('newPassword', PasswordType::class)
+            ->add('confirmPassword', PasswordType::class)
             ->getForm();
 
         if ('POST' === $request->getMethod()) {
