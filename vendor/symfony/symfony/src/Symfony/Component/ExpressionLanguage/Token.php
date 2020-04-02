@@ -30,11 +30,9 @@ class Token
     const PUNCTUATION_TYPE = 'punctuation';
 
     /**
-     * Constructor.
-     *
-     * @param int    $type   The type of the token
-     * @param string $value  The token value
-     * @param int    $cursor The cursor position in the source
+     * @param string                $type   The type of the token (self::*_TYPE)
+     * @param string|int|float|null $value  The token value
+     * @param int                   $cursor The cursor position in the source
      */
     public function __construct($type, $value, $cursor)
     {

@@ -26,18 +26,15 @@ class PercentToLocalizedStringTransformer implements DataTransformerInterface
     const FRACTIONAL = 'fractional';
     const INTEGER = 'integer';
 
-    protected static $types = array(
+    protected static $types = [
         self::FRACTIONAL,
         self::INTEGER,
-    );
+    ];
 
     private $type;
-
     private $scale;
 
     /**
-     * Constructor.
-     *
      * @see self::$types for a list of supported types
      *
      * @param int    $scale The scale
@@ -55,7 +52,7 @@ class PercentToLocalizedStringTransformer implements DataTransformerInterface
             $type = self::FRACTIONAL;
         }
 
-        if (!in_array($type, self::$types, true)) {
+        if (!\in_array($type, self::$types, true)) {
             throw new UnexpectedTypeException($type, implode('", "', self::$types));
         }
 
@@ -70,8 +67,8 @@ class PercentToLocalizedStringTransformer implements DataTransformerInterface
      *
      * @return string Percentage value
      *
-     * @throws TransformationFailedException If the given value is not numeric or
-     *                                       if the value could not be transformed.
+     * @throws TransformationFailedException if the given value is not numeric or
+     *                                       if the value could not be transformed
      */
     public function transform($value)
     {
@@ -105,32 +102,71 @@ class PercentToLocalizedStringTransformer implements DataTransformerInterface
      *
      * @return int|float Normalized value
      *
-     * @throws TransformationFailedException If the given value is not a string or
-     *                                       if the value could not be transformed.
+     * @throws TransformationFailedException if the given value is not a string or
+     *                                       if the value could not be transformed
      */
     public function reverseTransform($value)
     {
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             throw new TransformationFailedException('Expected a string.');
         }
 
         if ('' === $value) {
-            return;
+            return null;
         }
 
+        $position = 0;
         $formatter = $this->getNumberFormatter();
+        $groupSep = $formatter->getSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
+        $decSep = $formatter->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
+        $grouping = $formatter->getAttribute(\NumberFormatter::GROUPING_USED);
+
+        if ('.' !== $decSep && (!$grouping || '.' !== $groupSep)) {
+            $value = str_replace('.', $decSep, $value);
+        }
+
+        if (',' !== $decSep && (!$grouping || ',' !== $groupSep)) {
+            $value = str_replace(',', $decSep, $value);
+        }
+
+        if (false !== strpos($value, $decSep)) {
+            $type = \NumberFormatter::TYPE_DOUBLE;
+        } else {
+            $type = \PHP_INT_SIZE === 8 ? \NumberFormatter::TYPE_INT64 : \NumberFormatter::TYPE_INT32;
+        }
+
         // replace normal spaces so that the formatter can read them
-        $value = $formatter->parse(str_replace(' ', ' ', $value));
+        $result = $formatter->parse(str_replace(' ', "\xc2\xa0", $value), $type, $position);
 
         if (intl_is_failure($formatter->getErrorCode())) {
             throw new TransformationFailedException($formatter->getErrorMessage());
         }
 
         if (self::FRACTIONAL == $this->type) {
-            $value /= 100;
+            $result /= 100;
         }
 
-        return $value;
+        if (\function_exists('mb_detect_encoding') && false !== $encoding = mb_detect_encoding($value, null, true)) {
+            $length = mb_strlen($value, $encoding);
+            $remainder = mb_substr($value, $position, $length, $encoding);
+        } else {
+            $length = \strlen($value);
+            $remainder = substr($value, $position, $length);
+        }
+
+        // After parsing, position holds the index of the character where the
+        // parsing stopped
+        if ($position < $length) {
+            // Check if there are unrecognized characters at the end of the
+            // number (excluding whitespace characters)
+            $remainder = trim($remainder, " \t\n\r\0\x0b\xc2\xa0");
+
+            if ('' !== $remainder) {
+                throw new TransformationFailedException(sprintf('The number contains unrecognized characters: "%s"', $remainder));
+            }
+        }
+
+        return $result;
     }
 
     /**

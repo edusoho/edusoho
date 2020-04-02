@@ -11,14 +11,14 @@
 
 namespace Symfony\Bundle\FrameworkBundle\Tests\Templating\Helper;
 
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\Extension\Templating\TemplatingExtension;
-use Symfony\Component\Form\Tests\AbstractTableLayoutTest;
+use Symfony\Bundle\FrameworkBundle\Templating\Helper\TranslatorHelper;
 use Symfony\Bundle\FrameworkBundle\Tests\Templating\Helper\Fixtures\StubTemplateNameParser;
 use Symfony\Bundle\FrameworkBundle\Tests\Templating\Helper\Fixtures\StubTranslator;
-use Symfony\Component\Templating\PhpEngine;
+use Symfony\Component\Form\Extension\Templating\TemplatingExtension;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\Tests\AbstractTableLayoutTest;
 use Symfony\Component\Templating\Loader\FilesystemLoader;
-use Symfony\Bundle\FrameworkBundle\Templating\Helper\TranslatorHelper;
+use Symfony\Component\Templating\PhpEngine;
 
 class FormHelperTableLayoutTest extends AbstractTableLayoutTest
 {
@@ -27,16 +27,14 @@ class FormHelperTableLayoutTest extends AbstractTableLayoutTest
      */
     protected $engine;
 
-    protected $testableFeatures = array(
-        'choice_attr',
-    );
+    protected static $supportedFeatureSetVersion = 304;
 
     public function testStartTagHasNoActionAttributeWhenActionIsEmpty()
     {
-        $form = $this->factory->create('Symfony\Component\Form\Extension\Core\Type\FormType', null, array(
+        $form = $this->factory->create('Symfony\Component\Form\Extension\Core\Type\FormType', null, [
             'method' => 'get',
             'action' => '',
-        ));
+        ]);
 
         $html = $this->renderStart($form->createView());
 
@@ -45,10 +43,10 @@ class FormHelperTableLayoutTest extends AbstractTableLayoutTest
 
     public function testStartTagHasActionAttributeWhenActionIsZero()
     {
-        $form = $this->factory->create('Symfony\Component\Form\Extension\Core\Type\FormType', null, array(
+        $form = $this->factory->create('Symfony\Component\Form\Extension\Core\Type\FormType', null, [
             'method' => 'get',
             'action' => '0',
-        ));
+        ]);
 
         $html = $this->renderStart($form->createView());
 
@@ -60,47 +58,39 @@ class FormHelperTableLayoutTest extends AbstractTableLayoutTest
         // should be moved to the Form component once absolute file paths are supported
         // by the default name parser in the Templating component
         $reflClass = new \ReflectionClass('Symfony\Bundle\FrameworkBundle\FrameworkBundle');
-        $root = realpath(dirname($reflClass->getFileName()).'/Resources/views');
+        $root = realpath(\dirname($reflClass->getFileName()).'/Resources/views');
         $rootTheme = realpath(__DIR__.'/Resources');
         $templateNameParser = new StubTemplateNameParser($root, $rootTheme);
-        $loader = new FilesystemLoader(array());
+        $loader = new FilesystemLoader([]);
 
         $this->engine = new PhpEngine($templateNameParser, $loader);
         $this->engine->addGlobal('global', '');
-        $this->engine->setHelpers(array(
+        $this->engine->setHelpers([
             new TranslatorHelper(new StubTranslator()),
-        ));
+        ]);
 
-        return array_merge(parent::getExtensions(), array(
-            new TemplatingExtension($this->engine, $this->csrfTokenManager, array(
+        return array_merge(parent::getExtensions(), [
+            new TemplatingExtension($this->engine, $this->csrfTokenManager, [
                 'FrameworkBundle:Form',
                 'FrameworkBundle:FormTable',
-            )),
-        ));
+            ]),
+        ]);
     }
 
-    protected function tearDown()
+    /**
+     * @after
+     */
+    public function doTearDown()
     {
         $this->engine = null;
-
-        parent::tearDown();
     }
 
-    protected function renderForm(FormView $view, array $vars = array())
+    protected function renderForm(FormView $view, array $vars = [])
     {
         return (string) $this->engine->get('form')->form($view, $vars);
     }
 
-    protected function renderEnctype(FormView $view)
-    {
-        if (!method_exists($form = $this->engine->get('form'), 'enctype')) {
-            $this->markTestSkipped(sprintf('Deprecated method %s->enctype() is not implemented.', get_class($form)));
-        }
-
-        return (string) $form->enctype($view);
-    }
-
-    protected function renderLabel(FormView $view, $label = null, array $vars = array())
+    protected function renderLabel(FormView $view, $label = null, array $vars = [])
     {
         return (string) $this->engine->get('form')->label($view, $label, $vars);
     }
@@ -110,33 +100,33 @@ class FormHelperTableLayoutTest extends AbstractTableLayoutTest
         return (string) $this->engine->get('form')->errors($view);
     }
 
-    protected function renderWidget(FormView $view, array $vars = array())
+    protected function renderWidget(FormView $view, array $vars = [])
     {
         return (string) $this->engine->get('form')->widget($view, $vars);
     }
 
-    protected function renderRow(FormView $view, array $vars = array())
+    protected function renderRow(FormView $view, array $vars = [])
     {
         return (string) $this->engine->get('form')->row($view, $vars);
     }
 
-    protected function renderRest(FormView $view, array $vars = array())
+    protected function renderRest(FormView $view, array $vars = [])
     {
         return (string) $this->engine->get('form')->rest($view, $vars);
     }
 
-    protected function renderStart(FormView $view, array $vars = array())
+    protected function renderStart(FormView $view, array $vars = [])
     {
         return (string) $this->engine->get('form')->start($view, $vars);
     }
 
-    protected function renderEnd(FormView $view, array $vars = array())
+    protected function renderEnd(FormView $view, array $vars = [])
     {
         return (string) $this->engine->get('form')->end($view, $vars);
     }
 
-    protected function setTheme(FormView $view, array $themes)
+    protected function setTheme(FormView $view, array $themes, $useDefaultThemes = true)
     {
-        $this->engine->get('form')->setTheme($view, $themes);
+        $this->engine->get('form')->setTheme($view, $themes, $useDefaultThemes);
     }
 }

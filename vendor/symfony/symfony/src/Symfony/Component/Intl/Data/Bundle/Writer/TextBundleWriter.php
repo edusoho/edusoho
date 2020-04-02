@@ -47,7 +47,7 @@ class TextBundleWriter implements BundleWriterInterface
      * @param string   $bundleName The name of the bundle
      * @param mixed    $value      The value of the node
      * @param bool     $fallback   Whether the resource bundle should be merged
-     *                             with the fallback locale.
+     *                             with the fallback locale
      *
      * @see http://source.icu-project.org/repos/icu/icuhtml/trunk/design/bnf_rb.txt
      */
@@ -66,14 +66,13 @@ class TextBundleWriter implements BundleWriterInterface
      * @param resource $file          The file handle to write to
      * @param mixed    $value         The value of the node
      * @param int      $indentation   The number of levels to indent
-     * @param bool     $requireBraces Whether to require braces to be printed
-     *                                around the value.
+     * @param bool     $requireBraces Whether to require braces to be printedaround the value
      *
      * @see http://source.icu-project.org/repos/icu/icuhtml/trunk/design/bnf_rb.txt
      */
     private function writeResource($file, $value, $indentation, $requireBraces = true)
     {
-        if (is_int($value)) {
+        if (\is_int($value)) {
             $this->writeInteger($file, $value);
 
             return;
@@ -83,13 +82,13 @@ class TextBundleWriter implements BundleWriterInterface
             $value = iterator_to_array($value);
         }
 
-        if (is_array($value)) {
-            $intValues = count($value) === count(array_filter($value, 'is_int'));
+        if (\is_array($value)) {
+            $intValues = \count($value) === \count(array_filter($value, 'is_int'));
 
             $keys = array_keys($value);
 
             // check that the keys are 0-indexed and ascending
-            $intKeys = $keys === range(0, count($keys) - 1);
+            $intKeys = $keys === range(0, \count($keys) - 1);
 
             if ($intValues && $intKeys) {
                 $this->writeIntVector($file, $value, $indentation);
@@ -108,7 +107,7 @@ class TextBundleWriter implements BundleWriterInterface
             return;
         }
 
-        if (is_bool($value)) {
+        if (\is_bool($value)) {
             $value = $value ? 'true' : 'false';
         }
 
@@ -154,7 +153,7 @@ class TextBundleWriter implements BundleWriterInterface
      * @param resource $file          The file handle to write to
      * @param string   $value         The value of the node
      * @param bool     $requireBraces Whether to require braces to be printed
-     *                                around the value.
+     *                                around the value
      *
      * @see http://source.icu-project.org/repos/icu/icuhtml/trunk/design/bnf_rb.txt
      */
@@ -196,18 +195,18 @@ class TextBundleWriter implements BundleWriterInterface
     /**
      * Writes a "table" node.
      *
-     * @param resource           $file        The file handle to write to
-     * @param array|\Traversable $value       The value of the node
-     * @param int                $indentation The number of levels to indent
-     * @param bool               $fallback    Whether the table should be merged
-     *                                        with the fallback locale.
+     * @param resource $file        The file handle to write to
+     * @param iterable $value       The value of the node
+     * @param int      $indentation The number of levels to indent
+     * @param bool     $fallback    Whether the table should be merged
+     *                              with the fallback locale
      *
-     * @throws UnexpectedTypeException When $value is not an array and not a
-     *                                 \Traversable instance.
+     * @throws UnexpectedTypeException when $value is not an array and not a
+     *                                 \Traversable instance
      */
     private function writeTable($file, $value, $indentation, $fallback = true)
     {
-        if (!is_array($value) && !$value instanceof \Traversable) {
+        if (!\is_array($value) && !$value instanceof \Traversable) {
             throw new UnexpectedTypeException($value, 'array or \Traversable');
         }
 

@@ -11,8 +11,8 @@
 
 namespace Symfony\Component\Routing\Tests\Loader;
 
-use Symfony\Component\Routing\Loader\AnnotationDirectoryLoader;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Routing\Loader\AnnotationDirectoryLoader;
 
 class AnnotationDirectoryLoaderTest extends AbstractAnnotationLoaderTest
 {
@@ -29,12 +29,18 @@ class AnnotationDirectoryLoaderTest extends AbstractAnnotationLoaderTest
 
     public function testLoad()
     {
-        $this->reader->expects($this->exactly(2))->method('getClassAnnotation');
+        $this->reader->expects($this->exactly(4))->method('getClassAnnotation');
 
         $this->reader
             ->expects($this->any())
             ->method('getMethodAnnotations')
-            ->will($this->returnValue(array()))
+            ->willReturn([])
+        ;
+
+        $this->reader
+            ->expects($this->any())
+            ->method('getClassAnnotations')
+            ->willReturn([])
         ;
 
         $this->loader->load(__DIR__.'/../Fixtures/AnnotatedClasses');
@@ -42,15 +48,23 @@ class AnnotationDirectoryLoaderTest extends AbstractAnnotationLoaderTest
 
     public function testLoadIgnoresHiddenDirectories()
     {
-        $this->expectAnnotationsToBeReadFrom(array(
+        $this->expectAnnotationsToBeReadFrom([
             'Symfony\Component\Routing\Tests\Fixtures\AnnotatedClasses\BarClass',
+            'Symfony\Component\Routing\Tests\Fixtures\AnnotatedClasses\BazClass',
             'Symfony\Component\Routing\Tests\Fixtures\AnnotatedClasses\FooClass',
-        ));
+            'Symfony\Component\Routing\Tests\Fixtures\AnnotatedClasses\EncodingClass',
+        ]);
 
         $this->reader
             ->expects($this->any())
             ->method('getMethodAnnotations')
-            ->will($this->returnValue(array()))
+            ->willReturn([])
+        ;
+
+        $this->reader
+            ->expects($this->any())
+            ->method('getClassAnnotations')
+            ->willReturn([])
         ;
 
         $this->loader->load(__DIR__.'/../Fixtures/AnnotatedClasses');
@@ -67,12 +81,30 @@ class AnnotationDirectoryLoaderTest extends AbstractAnnotationLoaderTest
         $this->assertFalse($this->loader->supports($fixturesDir, 'foo'), '->supports() checks the resource type if specified');
     }
 
+    public function testItSupportsAnyAnnotation()
+    {
+        $this->assertTrue($this->loader->supports(__DIR__.'/../Fixtures/even-with-not-existing-folder', 'annotation'));
+    }
+
+    public function testLoadFileIfLocatedResourceIsFile()
+    {
+        $this->reader->expects($this->exactly(1))->method('getClassAnnotation');
+
+        $this->reader
+            ->expects($this->any())
+            ->method('getMethodAnnotations')
+            ->willReturn([])
+        ;
+
+        $this->loader->load(__DIR__.'/../Fixtures/AnnotatedClasses/FooClass.php');
+    }
+
     private function expectAnnotationsToBeReadFrom(array $classes)
     {
-        $this->reader->expects($this->exactly(count($classes)))
+        $this->reader->expects($this->exactly(\count($classes)))
             ->method('getClassAnnotation')
             ->with($this->callback(function (\ReflectionClass $class) use ($classes) {
-                return in_array($class->getName(), $classes);
+                return \in_array($class->getName(), $classes);
             }));
     }
 }

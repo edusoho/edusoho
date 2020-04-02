@@ -11,17 +11,17 @@
 
 namespace Symfony\Component\Form;
 
+use Symfony\Component\Form\Exception\BadMethodCallException;
 use Symfony\Component\Form\Exception\InvalidArgumentException;
 use Symfony\Component\Form\Exception\OutOfBoundsException;
-use Symfony\Component\Form\Exception\BadMethodCallException;
+use Symfony\Component\Validator\ConstraintViolation;
 
 /**
  * Iterates over the errors of a form.
  *
- * Optionally, this class supports recursive iteration. In order to iterate
- * recursively, set the constructor argument $deep to true. Now each element
- * returned by the iterator is either an instance of {@link FormError} or of
- * {@link FormErrorIterator}, in case the errors belong to a sub-form.
+ * This class supports recursive iteration. In order to iterate recursively,
+ * pass a structure of {@link FormError} and {@link FormErrorIterator} objects
+ * to the $errors constructor argument.
  *
  * You can also wrap the iterator into a {@link \RecursiveIteratorIterator} to
  * flatten the recursive structure into a flat list of errors.
@@ -32,26 +32,16 @@ class FormErrorIterator implements \RecursiveIterator, \SeekableIterator, \Array
 {
     /**
      * The prefix used for indenting nested error messages.
-     *
-     * @var string
      */
     const INDENTATION = '    ';
 
-    /**
-     * @var FormInterface
-     */
     private $form;
-
-    /**
-     * @var FormError[]|FormErrorIterator[]
-     */
     private $errors;
 
     /**
-     * Creates a new iterator.
-     *
-     * @param FormInterface $form   The erroneous form
-     * @param array         $errors The form errors
+     * @param FormInterface      $form   The erroneous form
+     * @param FormError[]|self[] $errors An array of form errors and instances
+     *                                   of FormErrorIterator
      *
      * @throws InvalidArgumentException If the errors are invalid
      */
@@ -59,12 +49,7 @@ class FormErrorIterator implements \RecursiveIterator, \SeekableIterator, \Array
     {
         foreach ($errors as $error) {
             if (!($error instanceof FormError || $error instanceof self)) {
-                throw new InvalidArgumentException(sprintf(
-                    'The errors must be instances of '.
-                    '"\Symfony\Component\Form\FormError" or "%s". Got: "%s".',
-                    __CLASS__,
-                    is_object($error) ? get_class($error) : gettype($error)
-                ));
+                throw new InvalidArgumentException(sprintf('The errors must be instances of "Symfony\Component\Form\FormError" or "%s". Got: "%s".', __CLASS__, \is_object($error) ? \get_class($error) : \gettype($error)));
             }
         }
 
@@ -85,7 +70,7 @@ class FormErrorIterator implements \RecursiveIterator, \SeekableIterator, \Array
             if ($error instanceof FormError) {
                 $string .= 'ERROR: '.$error->getMessage()."\n";
             } else {
-                /* @var $error FormErrorIterator */
+                /* @var self $error */
                 $string .= $error->form->getName().":\n";
                 $string .= self::indent((string) $error);
             }
@@ -107,8 +92,7 @@ class FormErrorIterator implements \RecursiveIterator, \SeekableIterator, \Array
     /**
      * Returns the current element of the iterator.
      *
-     * @return FormError|FormErrorIterator An error or an iterator containing
-     *                                     nested errors.
+     * @return FormError|self An error or an iterator containing nested errors
      */
     public function current()
     {
@@ -242,7 +226,7 @@ class FormErrorIterator implements \RecursiveIterator, \SeekableIterator, \Array
      */
     public function count()
     {
-        return count($this->errors);
+        return \count($this->errors);
     }
 
     /**
@@ -263,6 +247,27 @@ class FormErrorIterator implements \RecursiveIterator, \SeekableIterator, \Array
         while ($position !== key($this->errors)) {
             next($this->errors);
         }
+    }
+
+    /**
+     * Creates iterator for errors with specific codes.
+     *
+     * @param string|string[] $codes The codes to find
+     *
+     * @return static new instance which contains only specific errors
+     */
+    public function findByCodes($codes)
+    {
+        $codes = (array) $codes;
+        $errors = [];
+        foreach ($this as $error) {
+            $cause = $error->getCause();
+            if ($cause instanceof ConstraintViolation && \in_array($cause->getCode(), $codes, true)) {
+                $errors[] = $error;
+            }
+        }
+
+        return new static($this->form, $errors);
     }
 
     /**

@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Endroid\QrCode\QrCode;
 use Biz\CloudPlatform\Client\CloudAPI;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MobileController extends BaseController
 {
@@ -50,7 +51,7 @@ class MobileController extends BaseController
     public function downloadQrcodeAction(Request $request)
     {
         $code = $request->get('code');
-        $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $code), true);
+        $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $code), UrlGeneratorInterface::ABSOLUTE_URL);
         $qrCode = new QrCode();
         $qrCode->setText($url);
         $qrCode->setSize(150);

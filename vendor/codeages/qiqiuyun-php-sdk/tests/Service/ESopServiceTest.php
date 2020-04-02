@@ -11,7 +11,7 @@ class ESopServiceTest extends BaseTestCase
     {
         $httpClient = $this->mockHttpClient(array(
             'id' => 123,
-            'script' => 'script...',
+            'script' => "script...",
             'enable' => 1,
         ));
 

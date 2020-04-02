@@ -18,6 +18,8 @@ use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverRootless;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Tokenizer\Analyzer\ArgumentsAnalyzer;
+use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
@@ -83,6 +85,8 @@ final class RandomApiMigrationFixer extends AbstractFunctionReferenceFixer imple
      */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
+        $argumentsAnalyzer = new ArgumentsAnalyzer();
+
         foreach ($this->configuration['replacements'] as $functionIdentity => $functionReplacement) {
             if ($functionIdentity === $functionReplacement['alternativeName']) {
                 continue;
@@ -98,7 +102,7 @@ final class RandomApiMigrationFixer extends AbstractFunctionReferenceFixer imple
                 }
 
                 list($functionName, $openParenthesis, $closeParenthesis) = $boundaries;
-                $count = $this->countArguments($tokens, $openParenthesis, $closeParenthesis);
+                $count = $argumentsAnalyzer->countArguments($tokens, $openParenthesis, $closeParenthesis);
                 if (!in_array($count, $functionReplacement['argumentCount'], true)) {
                     continue 2;
                 }
@@ -106,7 +110,20 @@ final class RandomApiMigrationFixer extends AbstractFunctionReferenceFixer imple
                 // analysing cursor shift, so nested calls could be processed
                 $currIndex = $openParenthesis;
 
-                $tokens[$functionName]->setContent($functionReplacement['alternativeName']);
+                $tokens[$functionName] = new Token(array(T_STRING, $functionReplacement['alternativeName']));
+
+                if (0 === $count && 'random_int' === $functionReplacement['alternativeName']) {
+                    $tokens->insertAt($currIndex + 1, array(
+                        new Token(array(T_LNUMBER, '0')),
+                        new Token(','),
+                        new Token(array(T_WHITESPACE, ' ')),
+                        new Token(array(T_STRING, 'getrandmax')),
+                        new Token('('),
+                        new Token(')'),
+                    ));
+
+                    $currIndex += 6;
+                }
             }
         }
     }

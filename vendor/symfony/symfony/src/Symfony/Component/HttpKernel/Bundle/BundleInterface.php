@@ -36,8 +36,6 @@ interface BundleInterface extends ContainerAwareInterface
      * Builds the bundle.
      *
      * It is only ever called once when the cache is empty.
-     *
-     * @param ContainerBuilder $container A ContainerBuilder instance
      */
     public function build(ContainerBuilder $container);
 
@@ -56,6 +54,8 @@ interface BundleInterface extends ContainerAwareInterface
      * bundle.
      *
      * @return string The Bundle name it overrides or null if no parent
+     *
+     * @deprecated This method is deprecated as of 3.4 and will be removed in 4.0.
      */
     public function getParent();
 

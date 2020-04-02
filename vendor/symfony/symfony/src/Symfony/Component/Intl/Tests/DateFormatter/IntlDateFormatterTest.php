@@ -34,11 +34,9 @@ class IntlDateFormatterTest extends AbstractIntlDateFormatterTest
         $this->assertEquals('y-M-d', $formatter->getPattern());
     }
 
-    /**
-     * @expectedException \Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException
-     */
     public function testConstructorWithUnsupportedLocale()
     {
+        $this->expectException('Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException');
         new IntlDateFormatter('pt_BR', IntlDateFormatter::MEDIUM, IntlDateFormatter::SHORT);
     }
 
@@ -52,7 +50,7 @@ class IntlDateFormatterTest extends AbstractIntlDateFormatterTest
     {
         $formatter = $this->getDefaultDateFormatter();
 
-        $localtime = array(
+        $localtime = [
             'tm_sec' => 59,
             'tm_min' => 3,
             'tm_hour' => 15,
@@ -62,7 +60,7 @@ class IntlDateFormatterTest extends AbstractIntlDateFormatterTest
             'tm_wday' => 0,
             'tm_yday' => 105,
             'tm_isdst' => 0,
-        );
+        ];
 
         try {
             $formatter->format($localtime);
@@ -73,23 +71,19 @@ class IntlDateFormatterTest extends AbstractIntlDateFormatterTest
         }
     }
 
-    /**
-     * @expectedException \Symfony\Component\Intl\Exception\NotImplementedException
-     */
     public function testFormatWithUnimplementedChars()
     {
+        $this->expectException('Symfony\Component\Intl\Exception\NotImplementedException');
         $pattern = 'Y';
         $formatter = new IntlDateFormatter('en', IntlDateFormatter::MEDIUM, IntlDateFormatter::SHORT, 'UTC', IntlDateFormatter::GREGORIAN, $pattern);
         $formatter->format(0);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Intl\Exception\NotImplementedException
-     */
     public function testFormatWithNonIntegerTimestamp()
     {
+        $this->expectException('Symfony\Component\Intl\Exception\NotImplementedException');
         $formatter = $this->getDefaultDateFormatter();
-        $formatter->format(array());
+        $formatter->format([]);
     }
 
     public function testGetErrorCode()
@@ -110,56 +104,44 @@ class IntlDateFormatterTest extends AbstractIntlDateFormatterTest
         $this->assertFalse($formatter->isLenient());
     }
 
-    /**
-     * @expectedException \Symfony\Component\Intl\Exception\MethodNotImplementedException
-     */
     public function testLocaltime()
     {
+        $this->expectException('Symfony\Component\Intl\Exception\MethodNotImplementedException');
         $formatter = $this->getDefaultDateFormatter();
         $formatter->localtime('Wednesday, December 31, 1969 4:00:00 PM PT');
     }
 
-    /**
-     * @expectedException \Symfony\Component\Intl\Exception\MethodArgumentNotImplementedException
-     */
     public function testParseWithNotNullPositionValue()
     {
+        $this->expectException('Symfony\Component\Intl\Exception\MethodArgumentNotImplementedException');
         $position = 0;
         $formatter = $this->getDefaultDateFormatter('y');
         $this->assertSame(0, $formatter->parse('1970', $position));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Intl\Exception\MethodNotImplementedException
-     */
     public function testSetCalendar()
     {
+        $this->expectException('Symfony\Component\Intl\Exception\MethodNotImplementedException');
         $formatter = $this->getDefaultDateFormatter();
         $formatter->setCalendar(IntlDateFormatter::GREGORIAN);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException
-     */
     public function testSetLenient()
     {
+        $this->expectException('Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException');
         $formatter = $this->getDefaultDateFormatter();
         $formatter->setLenient(true);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Intl\Exception\NotImplementedException
-     */
     public function testFormatWithGmtTimeZoneAndMinutesOffset()
     {
+        $this->expectException('Symfony\Component\Intl\Exception\NotImplementedException');
         parent::testFormatWithGmtTimeZoneAndMinutesOffset();
     }
 
-    /**
-     * @expectedException \Symfony\Component\Intl\Exception\NotImplementedException
-     */
     public function testFormatWithNonStandardTimezone()
     {
+        $this->expectException('Symfony\Component\Intl\Exception\NotImplementedException');
         parent::testFormatWithNonStandardTimezone();
     }
 
@@ -181,6 +163,17 @@ class IntlDateFormatterTest extends AbstractIntlDateFormatterTest
     public function parseQuarterProvider()
     {
         return $this->notImplemented(parent::parseQuarterProvider());
+    }
+
+    public function testParseThreeDigitsYears()
+    {
+        if (PHP_INT_SIZE < 8) {
+            $this->markTestSkipped('Parsing three digits years requires a 64bit PHP.');
+        }
+
+        $formatter = $this->getDefaultDateFormatter('yyyy-M-d');
+        $this->assertSame(-32157648000, $formatter->parse('950-12-19'));
+        $this->assertIsIntlSuccess($formatter, 'U_ZERO_ERROR', IntlGlobals::U_ZERO_ERROR);
     }
 
     protected function getDateFormatter($locale, $datetype, $timetype, $timezone = null, $calendar = IntlDateFormatter::GREGORIAN, $pattern = null)
@@ -215,14 +208,12 @@ class IntlDateFormatterTest extends AbstractIntlDateFormatterTest
      * + 10 seconds) are added, then we have 86,400 seconds (24h * 60min * 60s)
      * + 10 seconds
      *
-     * @param array $dataSets
-     *
      * @return array
      */
     private function notImplemented(array $dataSets)
     {
         return array_map(function ($row) {
-            return array($row[0], $row[1], 0);
+            return [$row[0], $row[1], 0];
         }, $dataSets);
     }
 }

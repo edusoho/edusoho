@@ -11,7 +11,7 @@
 
 namespace Symfony\Bridge\Doctrine;
 
-use Doctrine\Common\Persistence\ManagerRegistry as ManagerRegistryInterface;
+use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -19,7 +19,7 @@ use Doctrine\ORM\EntityManager;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-interface RegistryInterface extends ManagerRegistryInterface
+interface RegistryInterface extends LegacyManagerRegistry
 {
     /**
      * Gets the default entity manager name.
@@ -52,7 +52,7 @@ interface RegistryInterface extends ManagerRegistryInterface
      * it makes sense to get a new one to replace the closed one.
      *
      * Be warned that you will get a brand new entity manager as
-     * the existing one is not useable anymore. This means that any
+     * the existing one is not usable anymore. This means that any
      * other object with a dependency on this entity manager will
      * hold an obsolete reference. You can inject the registry instead
      * to avoid this problem.

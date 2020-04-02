@@ -12,9 +12,9 @@
 namespace Symfony\Component\Asset;
 
 use Symfony\Component\Asset\Context\ContextInterface;
-use Symfony\Component\Asset\VersionStrategy\VersionStrategyInterface;
 use Symfony\Component\Asset\Exception\InvalidArgumentException;
 use Symfony\Component\Asset\Exception\LogicException;
+use Symfony\Component\Asset\VersionStrategy\VersionStrategyInterface;
 
 /**
  * Package that adds a base URL to asset URLs in addition to a version.
@@ -35,7 +35,7 @@ use Symfony\Component\Asset\Exception\LogicException;
  */
 class UrlPackage extends Package
 {
-    private $baseUrls = array();
+    private $baseUrls = [];
     private $sslPackage;
 
     /**
@@ -47,7 +47,7 @@ class UrlPackage extends Package
     {
         parent::__construct($versionStrategy, $context);
 
-        if (!is_array($baseUrls)) {
+        if (!\is_array($baseUrls)) {
             $baseUrls = (array) $baseUrls;
         }
 
@@ -81,6 +81,10 @@ class UrlPackage extends Package
 
         $url = $this->getVersionStrategy()->applyVersion($path);
 
+        if ($this->isAbsoluteUrl($url)) {
+            return $url;
+        }
+
         if ($url && '/' != $url[0]) {
             $url = '/'.$url;
         }
@@ -97,7 +101,7 @@ class UrlPackage extends Package
      */
     public function getBaseUrl($path)
     {
-        if (1 === count($this->baseUrls)) {
+        if (1 === \count($this->baseUrls)) {
             return $this->baseUrls[0];
         }
 
@@ -116,12 +120,12 @@ class UrlPackage extends Package
      */
     protected function chooseBaseUrl($path)
     {
-        return (int) fmod(hexdec(substr(hash('sha256', $path), 0, 10)), count($this->baseUrls));
+        return (int) fmod(hexdec(substr(hash('sha256', $path), 0, 10)), \count($this->baseUrls));
     }
 
     private function getSslUrls($urls)
     {
-        $sslUrls = array();
+        $sslUrls = [];
         foreach ($urls as $url) {
             if ('https://' === substr($url, 0, 8) || '//' === substr($url, 0, 2)) {
                 $sslUrls[] = $url;

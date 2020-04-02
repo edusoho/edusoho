@@ -11,9 +11,9 @@
 
 namespace Symfony\Bundle\FrameworkBundle\Templating;
 
-use Symfony\Component\Templating\DelegatingEngine as BaseDelegatingEngine;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Templating\DelegatingEngine as BaseDelegatingEngine;
 
 /**
  * DelegatingEngine selects an engine for a given template.
@@ -24,12 +24,6 @@ class DelegatingEngine extends BaseDelegatingEngine implements EngineInterface
 {
     protected $container;
 
-    /**
-     * Constructor.
-     *
-     * @param ContainerInterface $container The DI container
-     * @param array              $engineIds An array of engine Ids
-     */
     public function __construct(ContainerInterface $container, array $engineIds)
     {
         $this->container = $container;
@@ -49,7 +43,7 @@ class DelegatingEngine extends BaseDelegatingEngine implements EngineInterface
     /**
      * {@inheritdoc}
      */
-    public function renderResponse($view, array $parameters = array(), Response $response = null)
+    public function renderResponse($view, array $parameters = [], Response $response = null)
     {
         $engine = $this->getEngine($view);
 
@@ -72,7 +66,7 @@ class DelegatingEngine extends BaseDelegatingEngine implements EngineInterface
     private function resolveEngines()
     {
         foreach ($this->engines as $i => $engine) {
-            if (is_string($engine)) {
+            if (\is_string($engine)) {
                 $this->engines[$i] = $this->container->get($engine);
             }
         }

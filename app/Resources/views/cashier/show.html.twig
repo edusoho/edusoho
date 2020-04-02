@@ -81,15 +81,15 @@
         {% for type, payment in payments if not ((type == 'alipay' and is_micro_messenger()) or type == 'wechat_app') %}
           <div class="order-pay-type js-pay-type {% if loop.index == 1 %}active{% endif %}" id="{{ type }}">
             <img src="{{ asset('assets/img/order/' ~ type ~ '.png') }}"
-              srcset="{{ asset('assets/img/order/' ~ type ~ '.png') }} 1x, {{ asset('assets/img/order/' ~ type ~ '@2x.png') }} 2x"/>
+                 srcset="{{ asset('assets/img/order/' ~ type ~ '.png') }} 1x, {{ asset('assets/img/order/' ~ type ~ '@2x.png') }} 2x"/>
           </div>
 
           {% if loop.index == 1 %}
             <input type="hidden" name="payment" value="{{ type }}">
           {% endif %}
-          {% else %}
-            {% set payments = false %}
-            <span class="order-center-deduction__content">
+        {% else %}
+          {% set payments = false %}
+          <span class="order-center-deduction__content">
                 {{ 'payment.unusable_tips'|trans }}
             </span>
         {% endfor %}
@@ -129,7 +129,7 @@
         <div class="order-center-price__title">
           {% if currency == 'coin' %}
             <i class="cd-icon cd-icon-help cd-text-sm cd-dark-assist" data-toggle="tooltip" data-placement="top"
-              title="{{ 'order.confirm.rate_change'|trans({ '%coin_name%': setting('coin.coin_name'), '%rmb_unit%': (1 / setting('coin.cash_rate')) }) }}">
+               title="{{ 'order.confirm.rate_change'|trans({ '%coin_name%': setting('coin.coin_name'), '%rmb_unit%': (1 / setting('coin.cash_rate')) }) }}">
             </i>
           {% endif %}
           {{'order.confirm.pay_rmb'|trans}}

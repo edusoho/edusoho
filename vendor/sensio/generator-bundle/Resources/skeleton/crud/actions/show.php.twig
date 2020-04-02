@@ -6,7 +6,7 @@
      *
 {% block phpdoc_method_annotations %}
 {% if 'annotation' == format %}
-     * @Route("/{id}", name="{{ route_name_prefix }}_show")
+     * @Route("/{{ '{' ~ identifier ~ '}' }}", name="{{ route_name_prefix }}_show")
      * @Method("GET")
 {% endif %}
 {% endblock phpdoc_method_annotations %}

@@ -12,6 +12,8 @@
 
 namespace PhpCsFixer\DocBlock;
 
+use PhpCsFixer\Preg;
+
 /**
  * This represents a tag, as defined by the proposed PSR PHPDoc standard.
  *
@@ -41,7 +43,7 @@ class Tag
     /**
      * The cached tag name.
      *
-     * @var string|null
+     * @var null|string
      */
     private $name;
 
@@ -65,7 +67,7 @@ class Tag
     public function getName()
     {
         if (null === $this->name) {
-            preg_match_all('/@[a-zA-Z0-9_-]+(?=\s|$)/', $this->line->getContent(), $matches);
+            Preg::matchAll('/@[a-zA-Z0-9_-]+(?=\s|$)/', $this->line->getContent(), $matches);
 
             if (isset($matches[0][0])) {
                 $this->name = ltrim($matches[0][0], '@');
@@ -92,7 +94,7 @@ class Tag
             throw new \RuntimeException('Cannot set name on unknown tag.');
         }
 
-        $this->line->setContent(preg_replace("/@$current/", "@$name", $this->line->getContent(), 1));
+        $this->line->setContent(Preg::replace("/@${current}/", "@${name}", $this->line->getContent(), 1));
 
         $this->name = $name;
     }

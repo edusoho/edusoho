@@ -32,7 +32,7 @@ class Token
     /**
      * ID of token prototype, if available.
      *
-     * @var int|null
+     * @var null|int
      */
     private $id;
 
@@ -51,25 +51,44 @@ class Token
     private $changed = false;
 
     /**
-     * Constructor.
-     *
-     * @param string|array $token token prototype
+     * @param array|string $token token prototype
      */
     public function __construct($token)
     {
         if (is_array($token)) {
+            if (!is_int($token[0])) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Id must be an int, got "%s".',
+                    is_object($token[0]) ? get_class($token[0]) : gettype($token[0])
+                ));
+            }
+
+            if (!is_string($token[1])) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Content must be a string, got "%s".',
+                    is_object($token[1]) ? get_class($token[1]) : gettype($token[1])
+                ));
+            }
+
+            if ('' === $token[1]) {
+                throw new \InvalidArgumentException('Cannot set empty content for id-based Token.');
+            }
+
             $this->isArray = true;
             $this->id = $token[0];
             $this->content = $token[1];
-        } else {
+        } elseif (is_string($token)) {
             $this->isArray = false;
             $this->content = $token;
+        } else {
+            throw new \InvalidArgumentException(sprintf(
+                'Cannot recognize input value as valid Token prototype, got "%s".',
+                is_object($token) ? get_class($token) : gettype($token)
+            ));
         }
     }
 
     /**
-     * Get cast token kinds.
-     *
      * @return int[]
      */
     public static function getCastTokenKinds()
@@ -106,7 +125,9 @@ class Token
      */
     public function clear()
     {
-        $this->override('');
+        $this->content = '';
+        $this->id = null;
+        $this->isArray = false;
     }
 
     /**
@@ -122,7 +143,7 @@ class Token
      *
      * If tokens are arrays, then only keys defined in parameter token are checked.
      *
-     * @param Token|array|string $other         token or it's prototype
+     * @param array|string|Token $other         token or it's prototype
      * @param bool               $caseSensitive perform a case sensitive comparison
      *
      * @return bool
@@ -181,10 +202,10 @@ class Token
     /**
      * A helper method used to find out whether or not a certain input token has to be case-sensitively matched.
      *
-     * @param bool|bool[] $caseSensitive global case sensitiveness or an array of booleans, whose keys should match
-     *                                   the ones used in $others. If any is missing, the default case-sensitive
-     *                                   comparison is used
-     * @param int         $key           the key of the token that has to be looked up
+     * @param array<int, bool>|bool $caseSensitive global case sensitiveness or an array of booleans, whose keys should match
+     *                                             the ones used in $others. If any is missing, the default case-sensitive
+     *                                             comparison is used
+     * @param int                   $key           the key of the token that has to be looked up
      *
      * @return bool
      */
@@ -198,9 +219,7 @@ class Token
     }
 
     /**
-     * Get token prototype.
-     *
-     * @return string|array token prototype
+     * @return array|string token prototype
      */
     public function getPrototype()
     {
@@ -217,6 +236,8 @@ class Token
     /**
      * Get token's content.
      *
+     * It shall be used only for getting the content of token, not for checking it against excepted value.
+     *
      * @return string
      */
     public function getContent()
@@ -227,7 +248,9 @@ class Token
     /**
      * Get token's id.
      *
-     * @return int|null
+     * It shall be used only for getting the internal id of token, not for checking it against excepted value.
+     *
+     * @return null|int
      */
     public function getId()
     {
@@ -237,11 +260,13 @@ class Token
     /**
      * Get token name.
      *
+     * It shall be used only for getting the name of token, not for checking it against excepted value.
+     *
      * @return null|string token name
      */
     public function getName()
     {
-        if (!isset($this->id)) {
+        if (null === $this->id) {
             return null;
         }
 
@@ -289,7 +314,7 @@ class Token
     /**
      * Generate array containing all predefined constants that exists in PHP version in use.
      *
-     * @see http://php.net/manual/en/language.constants.predefined.php
+     * @see https://php.net/manual/en/language.constants.predefined.php
      *
      * @return array<int, int>
      */
@@ -405,7 +430,7 @@ class Token
     /**
      * Returns if the token is of a Magic constants type.
      *
-     * @see http://php.net/manual/en/language.constants.predefined.php
+     * @see https://php.net/manual/en/language.constants.predefined.php
      *
      * @return bool
      */
@@ -417,9 +442,9 @@ class Token
     }
 
     /**
-     * Check if token is a whitespace.
+     * Check if token is whitespace.
      *
-     * @param null|string $whitespaces whitespaces characters, default is " \t\n\r\0\x0B"
+     * @param null|string $whitespaces whitespace characters, default is " \t\n\r\0\x0B"
      *
      * @return bool
      */
@@ -441,7 +466,7 @@ class Token
      *
      * If called on Token inside Tokens collection please use `Tokens::overrideAt` instead.
      *
-     * @param Token|array|string $other token prototype
+     * @param array|string|Token $other token prototype
      */
     public function override($other)
     {
@@ -467,25 +492,22 @@ class Token
     }
 
     /**
-     * Set token's content.
-     *
      * @param string $content
      */
     public function setContent($content)
     {
-        // setting empty content is clearing the token
-        if ('' === $content) {
-            $this->clear();
-
-            return;
-        }
-
         if ($this->content === $content) {
             return;
         }
 
         $this->changed = true;
         $this->content = $content;
+
+        // setting empty content is clearing the token
+        if ('' === $content) {
+            $this->id = null;
+            $this->isArray = false;
+        }
     }
 
     public function toArray()
@@ -500,7 +522,7 @@ class Token
     }
 
     /**
-     * @param string[]|null $options JSON encode option
+     * @param null|string[] $options JSON encode option
      *
      * @return string
      */

@@ -21,6 +21,7 @@ use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Preg;
 
 /**
  * Fixes spaces around commas and assignment operators in Doctrine annotations.
@@ -35,9 +36,9 @@ final class DoctrineAnnotationSpacesFixer extends AbstractDoctrineAnnotationFixe
         return new FixerDefinition(
             'Fixes spaces in Doctrine annotations.',
             array(
-                new CodeSample("<?php\n/**\n * @Foo ( )\n */\nclass Bar {}"),
-                new CodeSample("<?php\n/**\n * @Foo(\"bar\" ,\"baz\")\n */\nclass Bar {}"),
-                new CodeSample("<?php\n/**\n * @Foo(foo = \"foo\", bar = {\"foo\":\"foo\", \"bar\"=\"bar\"})\n */\nclass Bar {}"),
+                new CodeSample(
+                    "<?php\n/**\n * @Foo ( )\n */\nclass Bar {}\n\n/**\n * @Foo(\"bar\" ,\"baz\")\n */\nclass Bar2 {}\n\n/**\n * @Foo(foo = \"foo\", bar = {\"foo\":\"foo\", \"bar\"=\"bar\"})\n */\nclass Bar3 {}"
+                ),
             ),
             'There must not be any space around parentheses; commas must be preceded by no space and followed by one space; there must be no space around named arguments assignment operator; there must be one space around array assignment operator.'
         );
@@ -204,7 +205,7 @@ final class DoctrineAnnotationSpacesFixer extends AbstractDoctrineAnnotationFixe
                 $token->clear();
             }
 
-            if ($index < count($tokens) - 1 && !preg_match('/^\s/', $tokens[$index + 1]->getContent())) {
+            if ($index < count($tokens) - 1 && !Preg::match('/^\s/', $tokens[$index + 1]->getContent())) {
                 $tokens->insertAt($index + 1, new Token(DocLexer::T_NONE, ' '));
             }
         }
@@ -223,16 +224,19 @@ final class DoctrineAnnotationSpacesFixer extends AbstractDoctrineAnnotationFixe
             $endScopeType = end($scopes);
             if (false !== $endScopeType && $token->isType($endScopeType)) {
                 array_pop($scopes);
+
                 continue;
             }
 
             if ($tokens[$index]->isType(DocLexer::T_AT)) {
                 $scopes[] = DocLexer::T_CLOSE_PARENTHESIS;
+
                 continue;
             }
 
             if ($tokens[$index]->isType(DocLexer::T_OPEN_CURLY_BRACES)) {
                 $scopes[] = DocLexer::T_CLOSE_CURLY_BRACES;
+
                 continue;
             }
 

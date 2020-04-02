@@ -107,7 +107,7 @@ class csstidy_csst extends SimpleExpectation
 	/**
 	 * Implements SimpleExpectation::testMessage().
 	 */
-	function testMessage() {
+	function testMessage($compare) {
 		$message = $this->test . ' test at '. htmlspecialchars($this->filename);
 		return $message;
 	}

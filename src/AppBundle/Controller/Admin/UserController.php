@@ -17,6 +17,7 @@ use Biz\User\Service\TokenService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class UserController extends BaseController
 {
@@ -458,7 +459,7 @@ class UserController extends BaseController
                 'template' => 'email_reset_password',
                 'params' => array(
                     'nickname' => $user['nickname'],
-                    'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), true),
+                    'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL),
                     'sitename' => $site['name'],
                     'siteurl' => $site['url'],
                 ),
@@ -486,7 +487,7 @@ class UserController extends BaseController
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
 
         $site = $this->getSettingService()->get('site', array());
-        $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), true);
+        $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
 
         try {
             $mailOptions = array(

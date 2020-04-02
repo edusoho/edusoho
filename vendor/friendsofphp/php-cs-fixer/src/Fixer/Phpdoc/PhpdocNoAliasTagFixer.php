@@ -19,6 +19,8 @@ use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverRootless;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Preg;
+use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Options;
@@ -82,11 +84,20 @@ final class Example
     /**
      * {@inheritdoc}
      */
+    public function getPriority()
+    {
+        // must be run before PhpdocAddMissingParamAnnotationFixer
+        return 11;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
         $searchFor = array_keys($this->configuration['replacements']);
 
-        foreach ($tokens as $token) {
+        foreach ($tokens as $index => $token) {
             if (!$token->isGivenKind(T_DOC_COMMENT)) {
                 continue;
             }
@@ -102,7 +113,7 @@ final class Example
                 $annotation->getTag()->setName($this->configuration['replacements'][$annotation->getTag()->getName()]);
             }
 
-            $token->setContent($doc->getContent());
+            $tokens[$index] = new Token(array(T_DOC_COMMENT, $doc->getContent()));
         }
     }
 
@@ -129,7 +140,7 @@ final class Example
                         ));
                     }
 
-                    if (1 !== preg_match('#^\S+$#', $to) || false !== strpos($to, '*/')) {
+                    if (1 !== Preg::match('#^\S+$#', $to) || false !== strpos($to, '*/')) {
                         throw new InvalidOptionsException(sprintf(
                             'Tag "%s" cannot be replaced by invalid tag "%s".',
                             $from,

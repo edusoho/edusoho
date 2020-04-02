@@ -1,5 +1,5 @@
 {
-    "Version": "2.1.28.79",
+    "Version": "36",
     "Names": {
         "ADP": [
             "ADP",
@@ -240,6 +240,10 @@
         "CLP": [
             "CLP",
             "Čileanski pezos"
+        ],
+        "CNH": [
+            "CNH",
+            "Kineski juan (izvanteritorijalni)"
         ],
         "CNY": [
             "CNY",
@@ -643,6 +647,10 @@
         ],
         "MRO": [
             "MRO",
+            "Mauritanijska ugvija (1973–2017)"
+        ],
+        "MRU": [
+            "MRU",
             "Mauritanijska ugvija"
         ],
         "MTL": [
@@ -739,7 +747,7 @@
         ],
         "PEN": [
             "PEN",
-            "Peruanski novi sol"
+            "Peruanski sol"
         ],
         "PES": [
             "PES",
@@ -871,6 +879,10 @@
         ],
         "STD": [
             "STD",
+            "Dobra Sao Toma i Principa (1977–2017)"
+        ],
+        "STN": [
+            "STN",
             "Dobra Sao Toma i Principa"
         ],
         "SUR": [
@@ -991,6 +1003,10 @@
         ],
         "VEF": [
             "VEF",
+            "venecuelanski bolivar (2008–2018)"
+        ],
+        "VES": [
+            "VES",
             "Venecuelanski bolivar"
         ],
         "VND": [

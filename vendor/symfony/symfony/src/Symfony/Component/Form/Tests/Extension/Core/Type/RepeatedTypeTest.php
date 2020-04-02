@@ -26,21 +26,9 @@ class RepeatedTypeTest extends BaseTypeTest
     {
         parent::setUp();
 
-        $this->form = $this->factory->create(static::TESTED_TYPE, null, array(
+        $this->form = $this->factory->create(static::TESTED_TYPE, null, [
             'type' => TextTypeTest::TESTED_TYPE,
-        ));
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testLegacyName()
-    {
-        $form = $this->factory->create('repeated', array(
-            'type' => 'text',
-        ));
-
-        $this->assertSame('repeated', $form->getConfig()->getType()->getName());
+        ]);
     }
 
     public function testSetData()
@@ -53,10 +41,10 @@ class RepeatedTypeTest extends BaseTypeTest
 
     public function testSetOptions()
     {
-        $form = $this->factory->create(static::TESTED_TYPE, null, array(
+        $form = $this->factory->create(static::TESTED_TYPE, null, [
             'type' => TextTypeTest::TESTED_TYPE,
-            'options' => array('label' => 'Global'),
-        ));
+            'options' => ['label' => 'Global'],
+        ]);
 
         $this->assertSame('Global', $form['first']->getConfig()->getOption('label'));
         $this->assertSame('Global', $form['second']->getConfig()->getOption('label'));
@@ -66,12 +54,12 @@ class RepeatedTypeTest extends BaseTypeTest
 
     public function testSetOptionsPerChild()
     {
-        $form = $this->factory->create(static::TESTED_TYPE, null, array(
+        $form = $this->factory->create(static::TESTED_TYPE, null, [
             // the global required value cannot be overridden
             'type' => TextTypeTest::TESTED_TYPE,
-            'first_options' => array('label' => 'Test', 'required' => false),
-            'second_options' => array('label' => 'Test2'),
-        ));
+            'first_options' => ['label' => 'Test', 'required' => false],
+            'second_options' => ['label' => 'Test2'],
+        ]);
 
         $this->assertSame('Test', $form['first']->getConfig()->getOption('label'));
         $this->assertSame('Test2', $form['second']->getConfig()->getOption('label'));
@@ -81,53 +69,47 @@ class RepeatedTypeTest extends BaseTypeTest
 
     public function testSetRequired()
     {
-        $form = $this->factory->create(static::TESTED_TYPE, null, array(
+        $form = $this->factory->create(static::TESTED_TYPE, null, [
             'required' => false,
             'type' => TextTypeTest::TESTED_TYPE,
-        ));
+        ]);
 
         $this->assertFalse($form['first']->isRequired());
         $this->assertFalse($form['second']->isRequired());
     }
 
-    /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
-     */
     public function testSetInvalidOptions()
     {
-        $this->factory->create(static::TESTED_TYPE, null, array(
+        $this->expectException('Symfony\Component\OptionsResolver\Exception\InvalidOptionsException');
+        $this->factory->create(static::TESTED_TYPE, null, [
             'type' => TextTypeTest::TESTED_TYPE,
             'options' => 'bad value',
-        ));
+        ]);
     }
 
-    /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
-     */
     public function testSetInvalidFirstOptions()
     {
-        $this->factory->create(static::TESTED_TYPE, null, array(
+        $this->expectException('Symfony\Component\OptionsResolver\Exception\InvalidOptionsException');
+        $this->factory->create(static::TESTED_TYPE, null, [
             'type' => TextTypeTest::TESTED_TYPE,
             'first_options' => 'bad value',
-        ));
+        ]);
     }
 
-    /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
-     */
     public function testSetInvalidSecondOptions()
     {
-        $this->factory->create(static::TESTED_TYPE, null, array(
+        $this->expectException('Symfony\Component\OptionsResolver\Exception\InvalidOptionsException');
+        $this->factory->create(static::TESTED_TYPE, null, [
             'type' => TextTypeTest::TESTED_TYPE,
             'second_options' => 'bad value',
-        ));
+        ]);
     }
 
     public function testSetErrorBubblingToTrue()
     {
-        $form = $this->factory->create(static::TESTED_TYPE, null, array(
+        $form = $this->factory->create(static::TESTED_TYPE, null, [
             'error_bubbling' => true,
-        ));
+        ]);
 
         $this->assertTrue($form->getConfig()->getOption('error_bubbling'));
         $this->assertTrue($form['first']->getConfig()->getOption('error_bubbling'));
@@ -136,9 +118,9 @@ class RepeatedTypeTest extends BaseTypeTest
 
     public function testSetErrorBubblingToFalse()
     {
-        $form = $this->factory->create(static::TESTED_TYPE, null, array(
+        $form = $this->factory->create(static::TESTED_TYPE, null, [
             'error_bubbling' => false,
-        ));
+        ]);
 
         $this->assertFalse($form->getConfig()->getOption('error_bubbling'));
         $this->assertFalse($form['first']->getConfig()->getOption('error_bubbling'));
@@ -147,11 +129,11 @@ class RepeatedTypeTest extends BaseTypeTest
 
     public function testSetErrorBubblingIndividually()
     {
-        $form = $this->factory->create(static::TESTED_TYPE, null, array(
+        $form = $this->factory->create(static::TESTED_TYPE, null, [
             'error_bubbling' => true,
-            'options' => array('error_bubbling' => false),
-            'second_options' => array('error_bubbling' => true),
-        ));
+            'options' => ['error_bubbling' => false],
+            'second_options' => ['error_bubbling' => true],
+        ]);
 
         $this->assertTrue($form->getConfig()->getOption('error_bubbling'));
         $this->assertFalse($form['first']->getConfig()->getOption('error_bubbling'));
@@ -160,11 +142,11 @@ class RepeatedTypeTest extends BaseTypeTest
 
     public function testSetOptionsPerChildAndOverwrite()
     {
-        $form = $this->factory->create(static::TESTED_TYPE, null, array(
+        $form = $this->factory->create(static::TESTED_TYPE, null, [
             'type' => TextTypeTest::TESTED_TYPE,
-            'options' => array('label' => 'Label'),
-            'second_options' => array('label' => 'Second label'),
-        ));
+            'options' => ['label' => 'Label'],
+            'second_options' => ['label' => 'Second label'],
+        ]);
 
         $this->assertSame('Label', $form['first']->getConfig()->getOption('label'));
         $this->assertSame('Second label', $form['second']->getConfig()->getOption('label'));
@@ -174,7 +156,7 @@ class RepeatedTypeTest extends BaseTypeTest
 
     public function testSubmitUnequal()
     {
-        $input = array('first' => 'foo', 'second' => 'bar');
+        $input = ['first' => 'foo', 'second' => 'bar'];
 
         $this->form->submit($input);
 
@@ -187,7 +169,7 @@ class RepeatedTypeTest extends BaseTypeTest
 
     public function testSubmitEqual()
     {
-        $input = array('first' => 'foo', 'second' => 'foo');
+        $input = ['first' => 'foo', 'second' => 'foo'];
 
         $this->form->submit($input);
 
@@ -200,6 +182,6 @@ class RepeatedTypeTest extends BaseTypeTest
 
     public function testSubmitNull($expected = null, $norm = null, $view = null)
     {
-        parent::testSubmitNull($expected, $norm, array('first' => null, 'second' => null));
+        parent::testSubmitNull($expected, $norm, ['first' => null, 'second' => null]);
     }
 }

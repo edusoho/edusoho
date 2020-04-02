@@ -13,24 +13,18 @@ namespace Symfony\Component\Validator\Tests\Constraints;
 
 use Symfony\Component\Validator\Constraints\LessThan;
 use Symfony\Component\Validator\Constraints\LessThanValidator;
-use Symfony\Component\Validator\Validation;
 
 /**
  * @author Daniel Holmes <daniel@danielholmes.org>
  */
 class LessThanValidatorTest extends AbstractComparisonValidatorTestCase
 {
-    protected function getApiVersion()
-    {
-        return Validation::API_VERSION_2_5;
-    }
-
     protected function createValidator()
     {
         return new LessThanValidator();
     }
 
-    protected function createConstraint(array $options)
+    protected function createConstraint(array $options = null)
     {
         return new LessThan($options);
     }
@@ -45,15 +39,25 @@ class LessThanValidatorTest extends AbstractComparisonValidatorTestCase
      */
     public function provideValidComparisons()
     {
-        return array(
-            array(1, 2),
-            array(new \DateTime('2000-01-01'), new \DateTime('2010-01-01')),
-            array(new \DateTime('2000-01-01'), '2010-01-01'),
-            array(new \DateTime('2000-01-01 UTC'), '2010-01-01 UTC'),
-            array(new ComparisonTest_Class(4), new ComparisonTest_Class(5)),
-            array('22', '333'),
-            array(null, 1),
-        );
+        return [
+            [1, 2],
+            [new \DateTime('2000-01-01'), new \DateTime('2010-01-01')],
+            [new \DateTime('2000-01-01'), '2010-01-01'],
+            [new \DateTime('2000-01-01 UTC'), '2010-01-01 UTC'],
+            [new ComparisonTest_Class(4), new ComparisonTest_Class(5)],
+            ['22', '333'],
+            [null, 1],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function provideValidComparisonsToPropertyPath()
+    {
+        return [
+            [4],
+        ];
     }
 
     /**
@@ -61,18 +65,25 @@ class LessThanValidatorTest extends AbstractComparisonValidatorTestCase
      */
     public function provideInvalidComparisons()
     {
-        return array(
-            array(3, '3', 2, '2', 'integer'),
-            array(2, '2', 2, '2', 'integer'),
-            array(new \DateTime('2010-01-01'), 'Jan 1, 2010, 12:00 AM', new \DateTime('2000-01-01'), 'Jan 1, 2000, 12:00 AM', 'DateTime'),
-            array(new \DateTime('2000-01-01'), 'Jan 1, 2000, 12:00 AM', new \DateTime('2000-01-01'), 'Jan 1, 2000, 12:00 AM', 'DateTime'),
-            array(new \DateTime('2010-01-01'), 'Jan 1, 2010, 12:00 AM', '2000-01-01', 'Jan 1, 2000, 12:00 AM', 'DateTime'),
-            array(new \DateTime('2000-01-01'), 'Jan 1, 2000, 12:00 AM', '2000-01-01', 'Jan 1, 2000, 12:00 AM', 'DateTime'),
-            array(new \DateTime('2010-01-01 UTC'), 'Jan 1, 2010, 12:00 AM', '2000-01-01 UTC', 'Jan 1, 2000, 12:00 AM', 'DateTime'),
-            array(new \DateTime('2000-01-01 UTC'), 'Jan 1, 2000, 12:00 AM', '2000-01-01 UTC', 'Jan 1, 2000, 12:00 AM', 'DateTime'),
-            array(new ComparisonTest_Class(5), '5', new ComparisonTest_Class(5), '5', __NAMESPACE__.'\ComparisonTest_Class'),
-            array(new ComparisonTest_Class(6), '6', new ComparisonTest_Class(5), '5', __NAMESPACE__.'\ComparisonTest_Class'),
-            array('333', '"333"', '22', '"22"', 'string'),
-        );
+        return [
+            [3, '3', 2, '2', 'integer'],
+            [2, '2', 2, '2', 'integer'],
+            [new \DateTime('2010-01-01'), 'Jan 1, 2010, 12:00 AM', new \DateTime('2000-01-01'), 'Jan 1, 2000, 12:00 AM', 'DateTime'],
+            [new \DateTime('2000-01-01'), 'Jan 1, 2000, 12:00 AM', new \DateTime('2000-01-01'), 'Jan 1, 2000, 12:00 AM', 'DateTime'],
+            [new \DateTime('2010-01-01'), 'Jan 1, 2010, 12:00 AM', '2000-01-01', 'Jan 1, 2000, 12:00 AM', 'DateTime'],
+            [new \DateTime('2000-01-01'), 'Jan 1, 2000, 12:00 AM', '2000-01-01', 'Jan 1, 2000, 12:00 AM', 'DateTime'],
+            [new \DateTime('2010-01-01 UTC'), 'Jan 1, 2010, 12:00 AM', '2000-01-01 UTC', 'Jan 1, 2000, 12:00 AM', 'DateTime'],
+            [new \DateTime('2000-01-01 UTC'), 'Jan 1, 2000, 12:00 AM', '2000-01-01 UTC', 'Jan 1, 2000, 12:00 AM', 'DateTime'],
+            [new ComparisonTest_Class(5), '5', new ComparisonTest_Class(5), '5', __NAMESPACE__.'\ComparisonTest_Class'],
+            [new ComparisonTest_Class(6), '6', new ComparisonTest_Class(5), '5', __NAMESPACE__.'\ComparisonTest_Class'],
+            ['333', '"333"', '22', '"22"', 'string'],
+        ];
+    }
+
+    public function provideComparisonsToNullValueAtPropertyPath()
+    {
+        return [
+            [5, '5', true],
+        ];
     }
 }

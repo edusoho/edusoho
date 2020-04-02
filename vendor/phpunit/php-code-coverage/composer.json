@@ -21,21 +21,22 @@
         "irc": "irc://irc.freenode.net/phpunit"
     },
     "require": {
-        "php": ">=5.3.3",
-        "phpunit/php-file-iterator": "~1.3",
-        "phpunit/php-token-stream": "~1.3",
-        "phpunit/php-text-template": "~1.2",
-        "sebastian/environment": "^1.3.2",
-        "sebastian/version": "~1.0"
+        "php": "^5.6 || ^7.0",
+        "ext-dom": "*",
+        "ext-xmlwriter": "*",
+        "phpunit/php-file-iterator": "^1.3",
+        "phpunit/php-token-stream": "^1.4.2 || ^2.0",
+        "phpunit/php-text-template": "^1.2",
+        "sebastian/code-unit-reverse-lookup": "^1.0",
+        "sebastian/environment": "^1.3.2 || ^2.0",
+        "sebastian/version": "^1.0 || ^2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4",
-        "ext-xdebug": ">=2.1.4"
+        "phpunit/phpunit": "^5.7",
+        "ext-xdebug": "^2.1.4"
     },
     "suggest": {
-        "ext-dom": "*",
-        "ext-xdebug": ">=2.2.1",
-        "ext-xmlwriter": "*"
+        "ext-xdebug": "^2.5.1"
     },
     "autoload": {
         "classmap": [
@@ -44,7 +45,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.2.x-dev"
+            "dev-master": "4.0.x-dev"
         }
     }
 }

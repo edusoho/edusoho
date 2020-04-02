@@ -1,43 +1,34 @@
 <?php
 
-/*
- * This file is part of the Doctrine Bundle
- *
- * The code was originally distributed inside the Symfony framework.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- * (c) Doctrine Project, Benjamin Eberlei <kontakt@beberlei.de>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Doctrine\Bundle\DoctrineBundle\DependencyInjection;
 
+use Doctrine\ORM\EntityManager;
+use ReflectionClass;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\DependencyInjection\Exception\LogicException;
 
 /**
  * This class contains the configuration information for the bundle
  *
  * This information is solely responsible for how the different configuration
  * sections are normalized, and merged.
- *
- * @author Christophe Coevoet <stof@notk.org>
  */
 class Configuration implements ConfigurationInterface
 {
+    /** @var bool */
     private $debug;
 
     /**
      * Constructor
      *
-     * @param Boolean $debug Whether to use the debug mode
+     * @param bool $debug Whether to use the debug mode
      */
     public function __construct($debug)
     {
-        $this->debug = (Boolean) $debug;
+        $this->debug = (bool) $debug;
     }
 
     /**
@@ -45,8 +36,14 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('doctrine');
+        $treeBuilder = new TreeBuilder('doctrine');
+
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            // BC layer for symfony/config 4.1 and older
+            $rootNode = $treeBuilder->root('doctrine');
+        }
 
         $this->addDbalSection($rootNode);
         $this->addOrmSection($rootNode);
@@ -56,8 +53,6 @@ class Configuration implements ConfigurationInterface
 
     /**
      * Add DBAL section to configuration tree
-     *
-     * @param ArrayNodeDefinition $node
      */
     private function addDbalSection(ArrayNodeDefinition $node)
     {
@@ -65,11 +60,13 @@ class Configuration implements ConfigurationInterface
             ->children()
             ->arrayNode('dbal')
                 ->beforeNormalization()
-                    ->ifTrue(function ($v) { return is_array($v) && !array_key_exists('connections', $v) && !array_key_exists('connection', $v); })
-                    ->then(function ($v) {
+                    ->ifTrue(static function ($v) {
+                        return is_array($v) && ! array_key_exists('connections', $v) && ! array_key_exists('connection', $v);
+                    })
+                    ->then(static function ($v) {
                         // Key that should not be rewritten to the connection config
-                        $excludedKeys = array('default_connection' => true, 'types' => true, 'type' => true);
-                        $connection = array();
+                        $excludedKeys = ['default_connection' => true, 'types' => true, 'type' => true];
+                        $connection   = [];
                         foreach ($v as $key => $value) {
                             if (isset($excludedKeys[$key])) {
                                 continue;
@@ -78,7 +75,7 @@ class Configuration implements ConfigurationInterface
                             unset($v[$key]);
                         }
                         $v['default_connection'] = isset($v['default_connection']) ? (string) $v['default_connection'] : 'default';
-                        $v['connections'] = array($v['default_connection'] => $connection);
+                        $v['connections']        = [$v['default_connection'] => $connection];
 
                         return $v;
                     })
@@ -93,7 +90,9 @@ class Configuration implements ConfigurationInterface
                         ->prototype('array')
                             ->beforeNormalization()
                                 ->ifString()
-                                ->then(function ($v) { return array('class' => $v); })
+                                ->then(static function ($v) {
+                                    return ['class' => $v];
+                                })
                             ->end()
                             ->children()
                                 ->scalarNode('class')->isRequired()->end()
@@ -104,8 +103,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->fixXmlConfig('connection')
                 ->append($this->getDbalConnectionsNode())
-            ->end()
-        ;
+            ->end();
     }
 
     /**
@@ -115,15 +113,20 @@ class Configuration implements ConfigurationInterface
      */
     private function getDbalConnectionsNode()
     {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('connections');
+        $treeBuilder = new TreeBuilder('connections');
 
-        /** @var $connectionNode ArrayNodeDefinition */
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            $node = $treeBuilder->getRootNode();
+        } else {
+            // BC layer for symfony/config 4.1 and older
+            $node = $treeBuilder->root('connections');
+        }
+
+        /** @var ArrayNodeDefinition $connectionNode */
         $connectionNode = $node
             ->requiresAtLeastOneElement()
             ->useAttributeAsKey('name')
-            ->prototype('array')
-        ;
+            ->prototype('array');
 
         $this->configureDbalDriverNode($connectionNode);
 
@@ -160,15 +163,13 @@ class Configuration implements ConfigurationInterface
                     ->useAttributeAsKey('name')
                     ->prototype('scalar')->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
 
         $slaveNode = $connectionNode
             ->children()
                 ->arrayNode('slaves')
                     ->useAttributeAsKey('name')
-                    ->prototype('array')
-        ;
+                    ->prototype('array');
         $this->configureDbalDriverNode($slaveNode);
 
         $shardNode = $connectionNode
@@ -180,8 +181,7 @@ class Configuration implements ConfigurationInterface
                             ->min(1)
                             ->isRequired()
                         ->end()
-                    ->end()
-        ;
+                    ->end();
         $this->configureDbalDriverNode($shardNode);
 
         return $node;
@@ -191,8 +191,6 @@ class Configuration implements ConfigurationInterface
      * Adds config keys related to params processed by the DBAL drivers
      *
      * These keys are available for slave configurations too.
-     *
-     * @param ArrayNodeDefinition $node
      */
     private function configureDbalDriverNode(ArrayNodeDefinition $node)
     {
@@ -216,7 +214,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('servicename')
                     ->info(
-                        'Overrules dbname parameter if given and used as SERVICE_NAME or SID connection parameter '.
+                        'Overrules dbname parameter if given and used as SERVICE_NAME or SID connection parameter ' .
                         'for Oracle depending on the service parameter.'
                     )
                 ->end()
@@ -226,16 +224,36 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('server')
                     ->info('The name of a running database server to connect to for SQL Anywhere.')
                 ->end()
+                ->scalarNode('default_dbname')
+                    ->info(
+                        'Override the default database (postgres) to connect to for PostgreSQL connexion.'
+                    )
+                ->end()
                 ->scalarNode('sslmode')
                     ->info(
-                        'Determines whether or with what priority a SSL TCP/IP connection will be negotiated with '.
+                        'Determines whether or with what priority a SSL TCP/IP connection will be negotiated with ' .
                         'the server for PostgreSQL.'
                     )
                 ->end()
                 ->scalarNode('sslrootcert')
                     ->info(
-                        'The name of a file containing SSL certificate authority (CA) certificate(s). '.
+                        'The name of a file containing SSL certificate authority (CA) certificate(s). ' .
                         'If the file exists, the server\'s certificate will be verified to be signed by one of these authorities.'
+                    )
+                ->end()
+                ->scalarNode('sslcert')
+                    ->info(
+                        'The path to the SSL client certificate file for PostgreSQL.'
+                    )
+                ->end()
+                ->scalarNode('sslkey')
+                    ->info(
+                        'The path to the SSL client key file for PostgreSQL.'
+                    )
+                ->end()
+                ->scalarNode('sslcrl')
+                    ->info(
+                        'The file name of the SSL certificate revocation list for PostgreSQL.'
                     )
                 ->end()
                 ->booleanNode('pooled')->info('True to use a pooled server with the oci8/pdo_oracle driver')->end()
@@ -243,23 +261,25 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('use_savepoints')->info('Use savepoints for nested transactions')->end()
                 ->scalarNode('instancename')
                 ->info(
-                    'Optional parameter, complete whether to add the INSTANCE_NAME parameter in the connection.'.
-                    ' It is generally used to connect to an Oracle RAC server to select the name'.
+                    'Optional parameter, complete whether to add the INSTANCE_NAME parameter in the connection.' .
+                    ' It is generally used to connect to an Oracle RAC server to select the name' .
                     ' of a particular instance.'
                 )
                 ->end()
                 ->scalarNode('connectstring')
                 ->info(
-                    'Complete Easy Connect connection descriptor, see https://docs.oracle.com/database/121/NETAG/naming.htm.'.
-                    'When using this option, you will still need to provide the user and password parameters, but the other '.
-                    'parameters will no longer be used. Note that when using this parameter, the getHost and getPort methods'.
+                    'Complete Easy Connect connection descriptor, see https://docs.oracle.com/database/121/NETAG/naming.htm.' .
+                    'When using this option, you will still need to provide the user and password parameters, but the other ' .
+                    'parameters will no longer be used. Note that when using this parameter, the getHost and getPort methods' .
                     ' from Doctrine\DBAL\Connection will no longer function as expected.'
                 )
                 ->end()
             ->end()
             ->beforeNormalization()
-                ->ifTrue(function ($v) {return !isset($v['sessionMode']) && isset($v['session_mode']);})
-                ->then(function ($v) {
+                ->ifTrue(static function ($v) {
+                    return ! isset($v['sessionMode']) && isset($v['session_mode']);
+                })
+                ->then(static function ($v) {
                     $v['sessionMode'] = $v['session_mode'];
                     unset($v['session_mode']);
 
@@ -267,40 +287,46 @@ class Configuration implements ConfigurationInterface
                 })
             ->end()
             ->beforeNormalization()
-                ->ifTrue(function ($v) {return !isset($v['MultipleActiveResultSets']) && isset($v['multiple_active_result_sets']);})
-                ->then(function ($v) {
+                ->ifTrue(static function ($v) {
+                    return ! isset($v['MultipleActiveResultSets']) && isset($v['multiple_active_result_sets']);
+                })
+                ->then(static function ($v) {
                     $v['MultipleActiveResultSets'] = $v['multiple_active_result_sets'];
                     unset($v['multiple_active_result_sets']);
 
                     return $v;
                 })
-            ->end()
-        ;
+            ->end();
     }
 
     /**
      * Add the ORM section to configuration tree
-     *
-     * @param ArrayNodeDefinition $node
      */
     private function addOrmSection(ArrayNodeDefinition $node)
     {
-        $generationModes = $this->getAutoGenerateModes();
-
         $node
             ->children()
                 ->arrayNode('orm')
                     ->beforeNormalization()
-                        ->ifTrue(function ($v) { return null === $v || (is_array($v) && !array_key_exists('entity_managers', $v) && !array_key_exists('entity_manager', $v)); })
-                        ->then(function ($v) {
+                        ->ifTrue(static function ($v) {
+                            if (! empty($v) && ! class_exists(EntityManager::class)) {
+                                throw new LogicException('The doctrine/orm package is required when the doctrine.orm config is set.');
+                            }
+
+                            return $v === null || (is_array($v) && ! array_key_exists('entity_managers', $v) && ! array_key_exists('entity_manager', $v));
+                        })
+                        ->then(static function ($v) {
                             $v = (array) $v;
                             // Key that should not be rewritten to the connection config
-                            $excludedKeys = array(
-                                'default_entity_manager' => true, 'auto_generate_proxy_classes' => true,
-                                'proxy_dir' => true, 'proxy_namespace' => true, 'resolve_target_entities' => true,
+                            $excludedKeys  = [
+                                'default_entity_manager' => true,
+                                'auto_generate_proxy_classes' => true,
+                                'proxy_dir' => true,
+                                'proxy_namespace' => true,
+                                'resolve_target_entities' => true,
                                 'resolve_target_entity' => true,
-                            );
-                            $entityManager = array();
+                            ];
+                            $entityManager = [];
                             foreach ($v as $key => $value) {
                                 if (isset($excludedKeys[$key])) {
                                     continue;
@@ -309,7 +335,7 @@ class Configuration implements ConfigurationInterface
                                 unset($v[$key]);
                             }
                             $v['default_entity_manager'] = isset($v['default_entity_manager']) ? (string) $v['default_entity_manager'] : 'default';
-                            $v['entity_managers'] = array($v['default_entity_manager'] => $entityManager);
+                            $v['entity_managers']        = [$v['default_entity_manager'] => $entityManager];
 
                             return $v;
                         })
@@ -319,7 +345,9 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('auto_generate_proxy_classes')->defaultValue(false)
                             ->info('Auto generate mode possible values are: "NEVER", "ALWAYS", "FILE_NOT_EXISTS", "EVAL"')
                             ->validate()
-                                ->ifTrue(function ($v) use ($generationModes) {
+                                ->ifTrue(function ($v) {
+                                    $generationModes = $this->getAutoGenerateModes();
+
                                     if (is_int($v) && in_array($v, $generationModes['values']/*array(0, 1, 2, 3)*/)) {
                                         return false;
                                     }
@@ -338,8 +366,8 @@ class Configuration implements ConfigurationInterface
                             ->end()
                             ->validate()
                                 ->ifString()
-                                ->then(function ($v) {
-                                    return constant('Doctrine\Common\Proxy\AbstractProxyFactory::AUTOGENERATE_'.strtoupper($v));
+                                ->then(static function ($v) {
+                                    return constant('Doctrine\Common\Proxy\AbstractProxyFactory::AUTOGENERATE_' . strtoupper($v));
                                 })
                             ->end()
                         ->end()
@@ -351,26 +379,30 @@ class Configuration implements ConfigurationInterface
                     ->fixXmlConfig('resolve_target_entity', 'resolve_target_entities')
                     ->append($this->getOrmTargetEntityResolverNode())
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 
     /**
      * Return ORM target entity resolver node
      *
-     * @return \Symfony\Component\Config\Definition\Builder\NodeDefinition
+     * @return NodeDefinition
      */
     private function getOrmTargetEntityResolverNode()
     {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('resolve_target_entities');
+        $treeBuilder = new TreeBuilder('resolve_target_entities');
+
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            $node = $treeBuilder->getRootNode();
+        } else {
+            // BC layer for symfony/config 4.1 and older
+            $node = $treeBuilder->root('resolve_target_entities');
+        }
 
         $node
             ->useAttributeAsKey('interface')
             ->prototype('scalar')
                 ->cannotBeEmpty()
-            ->end()
-        ;
+            ->end();
 
         return $node;
     }
@@ -378,53 +410,62 @@ class Configuration implements ConfigurationInterface
     /**
      * Return ORM entity listener node
      *
-     * @return \Symfony\Component\Config\Definition\Builder\NodeDefinition
+     * @return NodeDefinition
      */
     private function getOrmEntityListenersNode()
     {
-        $builder = new TreeBuilder();
-        $node = $builder->root('entity_listeners');
-        $normalizer = function ($mappings) {
-            $entities = array();
+        $treeBuilder = new TreeBuilder('entity_listeners');
+
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            $node = $treeBuilder->getRootNode();
+        } else {
+            // BC layer for symfony/config 4.1 and older
+            $node = $treeBuilder->root('entity_listeners');
+        }
+
+        $normalizer = static function ($mappings) {
+            $entities = [];
 
             foreach ($mappings as $entityClass => $mapping) {
-                $listeners = array();
+                $listeners = [];
 
                 foreach ($mapping as $listenerClass => $listenerEvent) {
-                    $events = array();
+                    $events = [];
 
                     foreach ($listenerEvent as $eventType => $eventMapping) {
                         if ($eventMapping === null) {
-                            $eventMapping = array(null);
+                            $eventMapping = [null];
                         }
 
                         foreach ($eventMapping as $method) {
-                            $events[] = array(
-                               'type' => $eventType,
-                               'method' => $method,
-                            );
+                            $events[] = [
+                                'type' => $eventType,
+                                'method' => $method,
+                            ];
                         }
                     }
 
-                    $listeners[] = array(
+                    $listeners[] = [
                         'class' => $listenerClass,
                         'event' => $events,
-                    );
+                    ];
                 }
 
-                $entities[] = array(
+                $entities[] = [
                     'class' => $entityClass,
                     'listener' => $listeners,
-                );
+                ];
             }
 
-            return array('entities' => $entities);
+            return ['entities' => $entities];
         };
 
         $node
             ->beforeNormalization()
                 // Yaml normalization
-                ->ifTrue(function ($v) { return is_array(reset($v)) && is_string(key(reset($v))); })
+                ->ifTrue(static function ($v) {
+                    return is_array(reset($v)) && is_string(key(reset($v)));
+                })
                 ->then($normalizer)
             ->end()
             ->fixXmlConfig('entity', 'entities')
@@ -453,8 +494,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
 
         return $node;
     }
@@ -466,8 +506,14 @@ class Configuration implements ConfigurationInterface
      */
     private function getOrmEntityManagersNode()
     {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('entity_managers');
+        $treeBuilder = new TreeBuilder('entity_managers');
+
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            $node = $treeBuilder->getRootNode();
+        } else {
+            // BC layer for symfony/config 4.1 and older
+            $node = $treeBuilder->root('entity_managers');
+        }
 
         $node
             ->requiresAtLeastOneElement()
@@ -486,7 +532,7 @@ class Configuration implements ConfigurationInterface
                     ->scalarNode('naming_strategy')->defaultValue('doctrine.orm.naming_strategy.default')->end()
                     ->scalarNode('quote_strategy')->defaultValue('doctrine.orm.quote_strategy.default')->end()
                     ->scalarNode('entity_listener_resolver')->defaultNull()->end()
-                    ->scalarNode('repository_factory')->defaultNull()->end()
+                    ->scalarNode('repository_factory')->defaultValue('doctrine.orm.container_repository_factory')->end()
                 ->end()
                 ->children()
                     ->arrayNode('second_level_cache')
@@ -543,10 +589,12 @@ class Configuration implements ConfigurationInterface
                         ->prototype('array')
                             ->beforeNormalization()
                                 ->ifString()
-                                ->then(function ($v) { return array('type' => $v); })
+                                ->then(static function ($v) {
+                                    return ['type' => $v];
+                                })
                             ->end()
-                            ->treatNullLike(array())
-                            ->treatFalseLike(array('mapping' => false))
+                            ->treatNullLike([])
+                            ->treatFalseLike(['mapping' => false])
                             ->performNoDeepMerging()
                             ->children()
                                 ->scalarNode('mapping')->defaultValue(true)->end()
@@ -586,14 +634,16 @@ class Configuration implements ConfigurationInterface
                         ->prototype('array')
                             ->beforeNormalization()
                                 ->ifString()
-                                ->then(function ($v) { return array('class' => $v); })
+                                ->then(static function ($v) {
+                                    return ['class' => $v];
+                                })
                             ->end()
                             ->beforeNormalization()
                                 // The content of the XML node is returned as the "value" key so we need to rename it
-                                ->ifTrue(function ($v) {
+                                ->ifTrue(static function ($v) {
                                     return is_array($v) && isset($v['value']);
                                 })
-                                ->then(function ($v) {
+                                ->then(static function ($v) {
                                     $v['class'] = $v['value'];
                                     unset($v['value']);
 
@@ -612,8 +662,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
 
         return $node;
     }
@@ -627,26 +676,34 @@ class Configuration implements ConfigurationInterface
      */
     private function getOrmCacheDriverNode($name)
     {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root($name);
+        $treeBuilder = new TreeBuilder($name);
+
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            $node = $treeBuilder->getRootNode();
+        } else {
+            // BC layer for symfony/config 4.1 and older
+            $node = $treeBuilder->root($name);
+        }
 
         $node
             ->addDefaultsIfNotSet()
             ->beforeNormalization()
                 ->ifString()
-                ->then(function ($v) { return array('type' => $v); })
+                ->then(static function ($v) {
+                    return ['type' => $v];
+                })
             ->end()
             ->children()
                 ->scalarNode('type')->defaultValue('array')->end()
                 ->scalarNode('host')->end()
                 ->scalarNode('port')->end()
+                ->scalarNode('database')->end()
                 ->scalarNode('instance_class')->end()
                 ->scalarNode('class')->end()
                 ->scalarNode('id')->end()
                 ->scalarNode('namespace')->defaultNull()->end()
                 ->scalarNode('cache_provider')->defaultNull()->end()
-            ->end()
-        ;
+            ->end();
 
         return $node;
     }
@@ -659,22 +716,24 @@ class Configuration implements ConfigurationInterface
     private function getAutoGenerateModes()
     {
         $constPrefix = 'AUTOGENERATE_';
-        $prefixLen = strlen($constPrefix);
-        $refClass = new \ReflectionClass('Doctrine\Common\Proxy\AbstractProxyFactory');
+        $prefixLen   = strlen($constPrefix);
+        $refClass    = new ReflectionClass('Doctrine\Common\Proxy\AbstractProxyFactory');
         $constsArray = $refClass->getConstants();
-        $namesArray = array();
-        $valuesArray = array();
+        $namesArray  = [];
+        $valuesArray = [];
 
         foreach ($constsArray as $key => $value) {
-            if (strpos($key, $constPrefix) === 0) {
-                $namesArray[] = substr($key, $prefixLen);
-                $valuesArray[] = (int) $value;
+            if (strpos($key, $constPrefix) !== 0) {
+                continue;
             }
+
+            $namesArray[]  = substr($key, $prefixLen);
+            $valuesArray[] = (int) $value;
         }
 
-        return array(
+        return [
             'names' => $namesArray,
             'values' => $valuesArray,
-        );
+        ];
     }
 }

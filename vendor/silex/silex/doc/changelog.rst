@@ -1,6 +1,51 @@
 Changelog
 =========
 
+2.2.3 (2018-02-25)
+------------------
+
+ * fixed validator integration into the security provider (order of registration of the validator and security providers does not matter anymore)
+ * fixed compatibility issues with Symfony 3.4
+
+2.2.2 (2018-01-12)
+------------------
+
+* [SECURITY] fixed before handlers not executed under mounts
+
+2.2.1 (2017-12-14)
+------------------
+
+* added support for Swiftmailer SSL stream_context_options option
+* fixed usage of namespaces for Twig paths
+
+2.2.0 (2017-07-23)
+------------------
+
+* added json manifest version strategy support
+* fixed EsiFragment constructor
+* fixed RedirectableUrlMatcher compatibility with Symfony
+* fixed compatibility with Pimple 3.2
+* fixed WebTestCase compatibility with PHPUnit 6+
+
+2.1.0 (2017-05-03)
+------------------
+
+* added more options to security.firewalls
+* added WebLink component integration
+* added parameters to configure the Twig core extension behavior
+* fixed deprecation notices with symfony/twig-bridge 3.2+ in TwigServiceProvider
+* added FormRegistry as a service to enable the extension point
+* removed the build scripts
+* fixed some deprecation warnings
+* added support for registering Swiftmailer plugins
+
+2.0.4 (2016-11-06)
+------------------
+
+* fixed twig.app_variable definition
+* added support for latest versions of Twig 1.x and 2.0 (Twig runtime loaders)
+* added support for Symfony 2.3
+
 2.0.3 (2016-08-22)
 ------------------
 

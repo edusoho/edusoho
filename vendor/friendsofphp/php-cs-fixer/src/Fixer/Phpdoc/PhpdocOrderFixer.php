@@ -16,6 +16,7 @@ use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\DocBlock\DocBlock;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
@@ -37,7 +38,7 @@ final class PhpdocOrderFixer extends AbstractFixer
     public function getDefinition()
     {
         return new FixerDefinition(
-            'Annotations in phpdocs should be ordered so that param annotations come first, then throws annotations, then return annotations.',
+            'Annotations in PHPDoc should be ordered so that `@param` annotations come first, then `@throws` annotations, then `@return` annotations.',
             array(
                 new CodeSample(
                     '<?php
@@ -76,7 +77,7 @@ final class PhpdocOrderFixer extends AbstractFixer
      */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
-        foreach ($tokens as $token) {
+        foreach ($tokens as $index => $token) {
             if (!$token->isGivenKind(T_DOC_COMMENT)) {
                 continue;
             }
@@ -88,7 +89,7 @@ final class PhpdocOrderFixer extends AbstractFixer
             // state of the dockblock is correct after the modifications
             $content = $this->moveReturnAnnotations($content);
             // persist the content at the end
-            $token->setContent($content);
+            $tokens[$index] = new Token(array(T_DOC_COMMENT, $content));
         }
     }
 

@@ -19,7 +19,7 @@ class MongoDBCacheTest extends CacheTest
 
     protected function setUp()
     {
-        if (!version_compare(phpversion('mongo'), '1.3.0', '>=')) {
+        if ( ! version_compare(phpversion('mongo'), '1.3.0', '>=')) {
             $this->markTestSkipped('Mongo >= 1.3.0 is required.');
         }
 
@@ -52,7 +52,7 @@ class MongoDBCacheTest extends CacheTest
     public function testMongoCursorExceptionsDoNotBubbleUp()
     {
         /* @var $collection \MongoCollection|\PHPUnit_Framework_MockObject_MockObject */
-        $collection = $this->getMock('MongoCollection');
+        $collection = $this->getMock('MongoCollection', array(), array(), '', false);
 
         $collection->expects(self::once())->method('update')->willThrowException(new \MongoCursorException());
 

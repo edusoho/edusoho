@@ -4,6 +4,7 @@ namespace Tests\Unit\Course\Service;
 
 use Biz\BaseTestCase;
 use AppBundle\Common\ReflectionUtils;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PlayerServiceTest extends BaseTestCase
 {
@@ -68,7 +69,7 @@ class PlayerServiceTest extends BaseTestCase
             array('storage' => 'cloud', 'metas2' => true, 'convertParams' => array('convertor' => 'HLSEncryptedVideo'), 'id' => 1), array('hideBeginning' => true), true
         );
         $this->assertEquals('hls_playlist', $result['route']);
-        $this->assertTrue($result['referenceType']);
+        $this->assertEquals(UrlGeneratorInterface::ABSOLUTE_URL, $result['referenceType']);
 
         $this->mockBiz('MaterialLib:MaterialLibService', array(
             array('functionName' => 'player', 'returnValue' => array('url' => 'www.baidu.com')),
@@ -82,7 +83,7 @@ class PlayerServiceTest extends BaseTestCase
             array('id' => 1, 'storage' => 'es'), array(), true
         );
         $this->assertEquals('player_local_media', $result['route']);
-        $this->assertTrue($result['referenceType']);
+        $this->assertEquals(UrlGeneratorInterface::ABSOLUTE_URL, $result['referenceType']);
     }
 
     public function testGetDocFilePlayer()

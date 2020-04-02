@@ -108,7 +108,7 @@ class CrontabRepository
     }
     
     /**
-     * Add an new CrontabJob in the connected crontab
+     * Add a new CrontabJob in the connected crontab
      *
      * @param CrontabJob $crontabJob
      */
@@ -124,7 +124,7 @@ class CrontabRepository
     }
 
     /**
-     * Remove a CrontabJob in the connected crontab
+     * Remove a CrontabJob from the connected crontab
      *
      * @param CrontabJob $crontabJob
      */

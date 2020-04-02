@@ -11,10 +11,14 @@
 
 namespace Symfony\Bundle\TwigBundle\Controller;
 
-use Symfony\Component\HttpKernel\Exception\FlattenException;
-use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
+use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Loader\ExistsLoaderInterface;
+use Twig\Loader\SourceContextLoaderInterface;
 
 /**
  * ExceptionController renders error or exception pages for a given
@@ -26,13 +30,12 @@ use Symfony\Component\HttpFoundation\Response;
 class ExceptionController
 {
     protected $twig;
-
-    /**
-     * @var bool Show error (false) or exception (true) pages by default
-     */
     protected $debug;
 
-    public function __construct(\Twig_Environment $twig, $debug)
+    /**
+     * @param bool $debug Show error (false) or exception (true) pages by default
+     */
+    public function __construct(Environment $twig, $debug)
     {
         $this->twig = $twig;
         $this->debug = $debug;
@@ -44,10 +47,6 @@ class ExceptionController
      * A "showException" request parameter can be used to force display of an error page (when set to false) or
      * the exception page (when true). If it is not present, the "debug" value passed into the constructor will
      * be used.
-     *
-     * @param Request              $request   The request
-     * @param FlattenException     $exception A FlattenException instance
-     * @param DebugLoggerInterface $logger    A DebugLoggerInterface instance
      *
      * @return Response
      *
@@ -62,14 +61,14 @@ class ExceptionController
 
         return new Response($this->twig->render(
             (string) $this->findTemplate($request, $request->getRequestFormat(), $code, $showException),
-            array(
+            [
                 'status_code' => $code,
                 'status_text' => isset(Response::$statusTexts[$code]) ? Response::$statusTexts[$code] : '',
                 'exception' => $exception,
                 'logger' => $logger,
                 'currentContent' => $currentContent,
-            )
-        ));
+            ]
+        ), 200, ['Content-Type' => $request->getMimeType($request->getRequestFormat()) ?: 'text/html']);
     }
 
     /**
@@ -89,10 +88,9 @@ class ExceptionController
     }
 
     /**
-     * @param Request $request
-     * @param string  $format
-     * @param int     $code          An HTTP response status code
-     * @param bool    $showException
+     * @param string $format
+     * @param int    $code          An HTTP response status code
+     * @param bool   $showException
      *
      * @return string
      */
@@ -123,23 +121,28 @@ class ExceptionController
         return sprintf('@Twig/Exception/%s.html.twig', $showException ? 'exception_full' : $name);
     }
 
-    // to be removed when the minimum required version of Twig is >= 3.0
+    // to be removed when the minimum required version of Twig is >= 2.0
     protected function templateExists($template)
     {
         $template = (string) $template;
 
         $loader = $this->twig->getLoader();
-        if ($loader instanceof \Twig_ExistsLoaderInterface || method_exists($loader, 'exists')) {
-            return $loader->exists($template);
+
+        if (1 === Environment::MAJOR_VERSION && !$loader instanceof ExistsLoaderInterface) {
+            try {
+                if ($loader instanceof SourceContextLoaderInterface) {
+                    $loader->getSourceContext($template);
+                } else {
+                    $loader->getSource($template);
+                }
+
+                return true;
+            } catch (LoaderError $e) {
+            }
+
+            return false;
         }
 
-        try {
-            $loader->getSourceContext($template)->getCode();
-
-            return true;
-        } catch (\Twig_Error_Loader $e) {
-        }
-
-        return false;
+        return $loader->exists($template);
     }
 }

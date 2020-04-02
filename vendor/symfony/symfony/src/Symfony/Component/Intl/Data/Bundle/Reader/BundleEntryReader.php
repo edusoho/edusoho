@@ -11,11 +11,11 @@
 
 namespace Symfony\Component\Intl\Data\Bundle\Reader;
 
+use Symfony\Component\Intl\Data\Util\RecursiveArrayAccess;
 use Symfony\Component\Intl\Exception\MissingResourceException;
 use Symfony\Component\Intl\Exception\OutOfBoundsException;
 use Symfony\Component\Intl\Exception\ResourceBundleNotFoundException;
 use Symfony\Component\Intl\Locale;
-use Symfony\Component\Intl\Data\Util\RecursiveArrayAccess;
 
 /**
  * Default implementation of {@link BundleEntryReaderInterface}.
@@ -28,22 +28,15 @@ use Symfony\Component\Intl\Data\Util\RecursiveArrayAccess;
  */
 class BundleEntryReader implements BundleEntryReaderInterface
 {
-    /**
-     * @var BundleReaderInterface
-     */
     private $reader;
 
     /**
      * A mapping of locale aliases to locales.
-     *
-     * @var array
      */
-    private $localeAliases = array();
+    private $localeAliases = [];
 
     /**
      * Creates an entry reader based on the given resource bundle reader.
-     *
-     * @param BundleReaderInterface $reader A resource bundle reader to use
      */
     public function __construct(BundleReaderInterface $reader)
     {
@@ -83,7 +76,7 @@ class BundleEntryReader implements BundleEntryReaderInterface
         $readSucceeded = false;
         $exception = null;
         $currentLocale = $locale;
-        $testedLocales = array();
+        $testedLocales = [];
 
         while (null !== $currentLocale) {
             // Resolve any aliases to their target locales
@@ -97,7 +90,7 @@ class BundleEntryReader implements BundleEntryReaderInterface
                 $readSucceeded = true;
 
                 $isCurrentTraversable = $currentEntry instanceof \Traversable;
-                $isCurrentMultiValued = $isCurrentTraversable || is_array($currentEntry);
+                $isCurrentMultiValued = $isCurrentTraversable || \is_array($currentEntry);
 
                 // Return immediately if fallback is disabled or we are dealing
                 // with a scalar non-null entry
@@ -169,7 +162,7 @@ class BundleEntryReader implements BundleEntryReaderInterface
         );
 
         // Append fallback locales, if any
-        if (count($testedLocales) > 1) {
+        if (\count($testedLocales) > 1) {
             // Remove original locale
             array_shift($testedLocales);
 

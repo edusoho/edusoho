@@ -12,6 +12,13 @@
 namespace Symfony\Component\Security\Http\Tests\Firewall;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Role\SwitchUserRole;
+use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Http\Event\SwitchUserEvent;
 use Symfony\Component\Security\Http\Firewall\SwitchUserListener;
 use Symfony\Component\Security\Http\SecurityEvents;
@@ -32,45 +39,46 @@ class SwitchUserListenerTest extends TestCase
 
     protected function setUp()
     {
-        $this->tokenStorage = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')->getMock();
+        $this->tokenStorage = new TokenStorage();
         $this->userProvider = $this->getMockBuilder('Symfony\Component\Security\Core\User\UserProviderInterface')->getMock();
         $this->userChecker = $this->getMockBuilder('Symfony\Component\Security\Core\User\UserCheckerInterface')->getMock();
         $this->accessDecisionManager = $this->getMockBuilder('Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface')->getMock();
-        $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')->getMock();
-        $this->request->query = $this->getMockBuilder('Symfony\Component\HttpFoundation\ParameterBag')->getMock();
-        $this->request->server = $this->getMockBuilder('Symfony\Component\HttpFoundation\ServerBag')->getMock();
-        $this->event = $this->getEvent($this->request);
+        $this->request = new Request();
+        $this->event = new GetResponseEvent($this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock(), $this->request, HttpKernelInterface::MASTER_REQUEST);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $providerKey must not be empty
-     */
     public function testProviderKeyIsRequired()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('$providerKey must not be empty');
         new SwitchUserListener($this->tokenStorage, $this->userProvider, $this->userChecker, '', $this->accessDecisionManager);
     }
 
     public function testEventIsIgnoredIfUsernameIsNotPassedWithTheRequest()
     {
-        $this->request->expects($this->any())->method('get')->with('_switch_user')->will($this->returnValue(null));
+        $listener = new SwitchUserListener($this->tokenStorage, $this->userProvider, $this->userChecker, 'provider123', $this->accessDecisionManager);
+        $listener->handle($this->event);
 
-        $this->event->expects($this->never())->method('setResponse');
-        $this->tokenStorage->expects($this->never())->method('setToken');
+        $this->assertNull($this->event->getResponse());
+        $this->assertNull($this->tokenStorage->getToken());
+    }
 
+    public function testExitUserThrowsAuthenticationExceptionIfNoCurrentToken()
+    {
+        $this->expectException('Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException');
+        $this->tokenStorage->setToken(null);
+        $this->request->query->set('_switch_user', '_exit');
         $listener = new SwitchUserListener($this->tokenStorage, $this->userProvider, $this->userChecker, 'provider123', $this->accessDecisionManager);
         $listener->handle($this->event);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException
-     */
     public function testExitUserThrowsAuthenticationExceptionIfOriginalTokenCannotBeFound()
     {
-        $token = $this->getToken(array($this->getMockBuilder('Symfony\Component\Security\Core\Role\RoleInterface')->getMock()));
+        $this->expectException('Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException');
+        $token = new UsernamePasswordToken('username', '', 'key', ['ROLE_FOO']);
 
-        $this->tokenStorage->expects($this->any())->method('getToken')->will($this->returnValue($token));
-        $this->request->expects($this->any())->method('get')->with('_switch_user')->will($this->returnValue('_exit'));
+        $this->tokenStorage->setToken($token);
+        $this->request->query->set('_switch_user', SwitchUserListener::EXIT_VALUE);
 
         $listener = new SwitchUserListener($this->tokenStorage, $this->userProvider, $this->userChecker, 'provider123', $this->accessDecisionManager);
         $listener->handle($this->event);
@@ -78,29 +86,19 @@ class SwitchUserListenerTest extends TestCase
 
     public function testExitUserUpdatesToken()
     {
-        $originalToken = $this->getToken();
-        $role = $this->getMockBuilder('Symfony\Component\Security\Core\Role\SwitchUserRole')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $role->expects($this->any())->method('getSource')->will($this->returnValue($originalToken));
+        $originalToken = new UsernamePasswordToken('username', '', 'key', []);
+        $this->tokenStorage->setToken(new UsernamePasswordToken('username', '', 'key', [new SwitchUserRole('ROLE_PREVIOUS', $originalToken)]));
 
-        $this->tokenStorage->expects($this->any())
-            ->method('getToken')
-            ->will($this->returnValue($this->getToken(array($role))));
-
-        $this->request->expects($this->any())->method('get')->with('_switch_user')->will($this->returnValue('_exit'));
-        $this->request->expects($this->any())->method('getUri')->will($this->returnValue('/'));
-        $this->request->query->expects($this->once())->method('remove', '_switch_user');
-        $this->request->query->expects($this->any())->method('all')->will($this->returnValue(array()));
-        $this->request->server->expects($this->once())->method('set')->with('QUERY_STRING', '');
-
-        $this->tokenStorage->expects($this->once())
-            ->method('setToken')->with($originalToken);
-        $this->event->expects($this->once())
-            ->method('setResponse')->with($this->isInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse'));
+        $this->request->query->set('_switch_user', SwitchUserListener::EXIT_VALUE);
 
         $listener = new SwitchUserListener($this->tokenStorage, $this->userProvider, $this->userChecker, 'provider123', $this->accessDecisionManager);
         $listener->handle($this->event);
+
+        $this->assertSame([], $this->request->query->all());
+        $this->assertSame('', $this->request->server->get('QUERY_STRING'));
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $this->event->getResponse());
+        $this->assertSame($this->request->getUri(), $this->event->getResponse()->getTargetUrl());
+        $this->assertSame($originalToken, $this->tokenStorage->getToken());
     }
 
     public function testExitUserDispatchesEventWithRefreshedUser()
@@ -113,38 +111,9 @@ class SwitchUserListenerTest extends TestCase
             ->method('refreshUser')
             ->with($originalUser)
             ->willReturn($refreshedUser);
-        $originalToken = $this->getToken();
-        $originalToken
-            ->expects($this->any())
-            ->method('getUser')
-            ->willReturn($originalUser);
-        $role = $this
-            ->getMockBuilder('Symfony\Component\Security\Core\Role\SwitchUserRole')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $role->expects($this->any())->method('getSource')->willReturn($originalToken);
-        $this
-            ->tokenStorage
-            ->expects($this->any())
-            ->method('getToken')
-            ->willReturn($this->getToken(array($role)));
-        $this
-            ->request
-            ->expects($this->any())
-            ->method('get')
-            ->with('_switch_user')
-            ->willReturn('_exit');
-        $this
-            ->request
-            ->expects($this->any())
-            ->method('getUri')
-            ->willReturn('/');
-        $this
-            ->request
-            ->query
-            ->expects($this->any())
-            ->method('all')
-            ->will($this->returnValue(array()));
+        $originalToken = new UsernamePasswordToken($originalUser, '', 'key');
+        $this->tokenStorage->setToken(new UsernamePasswordToken('username', '', 'key', [new SwitchUserRole('ROLE_PREVIOUS', $originalToken)]));
+        $this->request->query->set('_switch_user', SwitchUserListener::EXIT_VALUE);
 
         $dispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $dispatcher
@@ -166,41 +135,9 @@ class SwitchUserListenerTest extends TestCase
             ->userProvider
             ->expects($this->never())
             ->method('refreshUser');
-        $originalToken = $this->getToken();
-        $originalToken
-            ->expects($this->any())
-            ->method('getUser')
-            ->willReturn($originalUser);
-        $role = $this
-            ->getMockBuilder('Symfony\Component\Security\Core\Role\SwitchUserRole')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $role
-            ->expects($this->any())
-            ->method('getSource')
-            ->willReturn($originalToken);
-        $this
-            ->tokenStorage
-            ->expects($this->any())
-            ->method('getToken')
-            ->willReturn($this->getToken(array($role)));
-        $this
-            ->request
-            ->expects($this->any())
-            ->method('get')
-            ->with('_switch_user')
-            ->willReturn('_exit');
-        $this
-            ->request
-            ->query
-            ->expects($this->any())
-            ->method('all')
-            ->will($this->returnValue(array()));
-        $this
-            ->request
-            ->expects($this->any())
-            ->method('getUri')
-            ->willReturn('/');
+        $originalToken = new UsernamePasswordToken($originalUser, '', 'key');
+        $this->tokenStorage->setToken(new UsernamePasswordToken('username', '', 'key', [new SwitchUserRole('ROLE_PREVIOUS', $originalToken)]));
+        $this->request->query->set('_switch_user', SwitchUserListener::EXIT_VALUE);
 
         $dispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $dispatcher
@@ -212,19 +149,17 @@ class SwitchUserListenerTest extends TestCase
         $listener->handle($this->event);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     */
     public function testSwitchUserIsDisallowed()
     {
-        $token = $this->getToken(array($this->getMockBuilder('Symfony\Component\Security\Core\Role\RoleInterface')->getMock()));
+        $this->expectException('Symfony\Component\Security\Core\Exception\AccessDeniedException');
+        $token = new UsernamePasswordToken('username', '', 'key', ['ROLE_FOO']);
 
-        $this->tokenStorage->expects($this->any())->method('getToken')->will($this->returnValue($token));
-        $this->request->expects($this->any())->method('get')->with('_switch_user')->will($this->returnValue('kuba'));
+        $this->tokenStorage->setToken($token);
+        $this->request->query->set('_switch_user', 'kuba');
 
         $this->accessDecisionManager->expects($this->once())
-            ->method('decide')->with($token, array('ROLE_ALLOWED_TO_SWITCH'))
-            ->will($this->returnValue(false));
+            ->method('decide')->with($token, ['ROLE_ALLOWED_TO_SWITCH'])
+            ->willReturn(false);
 
         $listener = new SwitchUserListener($this->tokenStorage, $this->userProvider, $this->userChecker, 'provider123', $this->accessDecisionManager);
         $listener->handle($this->event);
@@ -232,83 +167,185 @@ class SwitchUserListenerTest extends TestCase
 
     public function testSwitchUser()
     {
-        $token = $this->getToken(array($this->getMockBuilder('Symfony\Component\Security\Core\Role\RoleInterface')->getMock()));
-        $user = $this->getMockBuilder('Symfony\Component\Security\Core\User\UserInterface')->getMock();
-        $user->expects($this->any())->method('getRoles')->will($this->returnValue(array()));
+        $token = new UsernamePasswordToken('username', '', 'key', ['ROLE_FOO']);
+        $user = new User('username', 'password', []);
 
-        $this->tokenStorage->expects($this->any())->method('getToken')->will($this->returnValue($token));
-        $this->request->expects($this->any())->method('get')->with('_switch_user')->will($this->returnValue('kuba'));
-        $this->request->query->expects($this->once())->method('remove', '_switch_user');
-        $this->request->query->expects($this->any())->method('all')->will($this->returnValue(array()));
-
-        $this->request->expects($this->any())->method('getUri')->will($this->returnValue('/'));
-        $this->request->server->expects($this->once())->method('set')->with('QUERY_STRING', '');
+        $this->tokenStorage->setToken($token);
+        $this->request->query->set('_switch_user', 'kuba');
 
         $this->accessDecisionManager->expects($this->once())
-            ->method('decide')->with($token, array('ROLE_ALLOWED_TO_SWITCH'))
-            ->will($this->returnValue(true));
+            ->method('decide')->with($token, ['ROLE_ALLOWED_TO_SWITCH'])
+            ->willReturn(true);
 
         $this->userProvider->expects($this->once())
             ->method('loadUserByUsername')->with('kuba')
-            ->will($this->returnValue($user));
+            ->willReturn($user);
         $this->userChecker->expects($this->once())
             ->method('checkPostAuth')->with($user);
-        $this->tokenStorage->expects($this->once())
-            ->method('setToken')->with($this->isInstanceOf('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken'));
 
         $listener = new SwitchUserListener($this->tokenStorage, $this->userProvider, $this->userChecker, 'provider123', $this->accessDecisionManager);
         $listener->handle($this->event);
+
+        $this->assertSame([], $this->request->query->all());
+        $this->assertSame('', $this->request->server->get('QUERY_STRING'));
+        $this->assertInstanceOf('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken', $this->tokenStorage->getToken());
+    }
+
+    public function testSwitchUserAlreadySwitched()
+    {
+        $originalToken = new UsernamePasswordToken('original', null, 'key', ['ROLE_FOO']);
+        $alreadySwitchedToken = new UsernamePasswordToken('switched_1', null, 'key', [new SwitchUserRole('ROLE_PREVIOUS_ADMIN', $originalToken)]);
+
+        $tokenStorage = new TokenStorage();
+        $tokenStorage->setToken($alreadySwitchedToken);
+
+        $targetUser = new User('kuba', 'password', ['ROLE_FOO', 'ROLE_BAR']);
+        $this->request->query->set('_switch_user', 'kuba');
+
+        $this->accessDecisionManager->expects($this->once())
+            ->method('decide')->with($originalToken, ['ROLE_ALLOWED_TO_SWITCH'])
+            ->willReturn(true);
+        $this->userProvider->expects($this->once())
+            ->method('loadUserByUsername')
+            ->with('kuba')
+            ->willReturn($targetUser);
+        $this->userChecker->expects($this->once())
+            ->method('checkPostAuth')->with($targetUser);
+
+        $listener = new SwitchUserListener($tokenStorage, $this->userProvider, $this->userChecker, 'provider123', $this->accessDecisionManager, null, '_switch_user', 'ROLE_ALLOWED_TO_SWITCH', null, false);
+        $listener->handle($this->event);
+
+        $this->assertSame([], $this->request->query->all());
+        $this->assertSame('', $this->request->server->get('QUERY_STRING'));
+        $this->assertSame('kuba', $tokenStorage->getToken()->getUsername());
+        $this->assertSame($originalToken, $tokenStorage->getToken()->getRoles()[2]->getSource());
+    }
+
+    public function testSwitchUserWorksWithFalsyUsernames()
+    {
+        $token = new UsernamePasswordToken('username', '', 'key', ['ROLE_FOO']);
+        $user = new User('username', 'password', []);
+
+        $this->tokenStorage->setToken($token);
+        $this->request->query->set('_switch_user', '0');
+
+        $this->accessDecisionManager->expects($this->once())
+            ->method('decide')->with($token, ['ROLE_ALLOWED_TO_SWITCH'])
+            ->willReturn(true);
+
+        $this->userProvider->expects($this->once())
+            ->method('loadUserByUsername')->with('0')
+            ->willReturn($user);
+        $this->userChecker->expects($this->once())
+            ->method('checkPostAuth')->with($user);
+
+        $listener = new SwitchUserListener($this->tokenStorage, $this->userProvider, $this->userChecker, 'provider123', $this->accessDecisionManager);
+        $listener->handle($this->event);
+
+        $this->assertSame([], $this->request->query->all());
+        $this->assertSame('', $this->request->server->get('QUERY_STRING'));
+        $this->assertInstanceOf('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken', $this->tokenStorage->getToken());
     }
 
     public function testSwitchUserKeepsOtherQueryStringParameters()
     {
-        $token = $this->getToken(array($this->getMockBuilder('Symfony\Component\Security\Core\Role\RoleInterface')->getMock()));
-        $user = $this->getMockBuilder('Symfony\Component\Security\Core\User\UserInterface')->getMock();
-        $user->expects($this->any())->method('getRoles')->will($this->returnValue(array()));
+        $token = new UsernamePasswordToken('username', '', 'key', ['ROLE_FOO']);
+        $user = new User('username', 'password', []);
 
-        $this->tokenStorage->expects($this->any())->method('getToken')->will($this->returnValue($token));
-        $this->request->expects($this->any())->method('get')->with('_switch_user')->will($this->returnValue('kuba'));
-        $this->request->query->expects($this->once())->method('remove', '_switch_user');
-        $this->request->query->expects($this->any())->method('all')->will($this->returnValue(array('page' => 3, 'section' => 2)));
-        $this->request->expects($this->any())->method('getUri')->will($this->returnValue('/'));
-        $this->request->server->expects($this->once())->method('set')->with('QUERY_STRING', 'page=3&section=2');
+        $this->tokenStorage->setToken($token);
+        $this->request->query->replace([
+            '_switch_user' => 'kuba',
+            'page' => 3,
+            'section' => 2,
+        ]);
 
         $this->accessDecisionManager->expects($this->once())
-            ->method('decide')->with($token, array('ROLE_ALLOWED_TO_SWITCH'))
-            ->will($this->returnValue(true));
+            ->method('decide')->with($token, ['ROLE_ALLOWED_TO_SWITCH'])
+            ->willReturn(true);
 
         $this->userProvider->expects($this->once())
             ->method('loadUserByUsername')->with('kuba')
-            ->will($this->returnValue($user));
+            ->willReturn($user);
         $this->userChecker->expects($this->once())
             ->method('checkPostAuth')->with($user);
-        $this->tokenStorage->expects($this->once())
-            ->method('setToken')->with($this->isInstanceOf('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken'));
 
+        $listener = new SwitchUserListener($this->tokenStorage, $this->userProvider, $this->userChecker, 'provider123', $this->accessDecisionManager);
+        $listener->handle($this->event);
+
+        $this->assertSame('page=3&section=2', $this->request->server->get('QUERY_STRING'));
+        $this->assertInstanceOf('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken', $this->tokenStorage->getToken());
+    }
+
+    public function testSwitchUserWithReplacedToken()
+    {
+        $user = new User('username', 'password', []);
+        $token = new UsernamePasswordToken($user, '', 'provider123', ['ROLE_FOO']);
+
+        $user = new User('replaced', 'password', []);
+        $replacedToken = new UsernamePasswordToken($user, '', 'provider123', ['ROLE_BAR']);
+
+        $this->tokenStorage->setToken($token);
+        $this->request->query->set('_switch_user', 'kuba');
+
+        $this->accessDecisionManager->expects($this->any())
+            ->method('decide')->with($token, ['ROLE_ALLOWED_TO_SWITCH'])
+            ->willReturn(true);
+
+        $this->userProvider->expects($this->any())
+            ->method('loadUserByUsername')->with('kuba')
+            ->willReturn($user);
+
+        $dispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $dispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with(SecurityEvents::SWITCH_USER,
+                $this->callback(function (SwitchUserEvent $event) use ($replacedToken, $user) {
+                    if ($user !== $event->getTargetUser()) {
+                        return false;
+                    }
+                    $event->setToken($replacedToken);
+
+                    return true;
+                }));
+
+        $listener = new SwitchUserListener($this->tokenStorage, $this->userProvider, $this->userChecker, 'provider123', $this->accessDecisionManager, null, '_switch_user', 'ROLE_ALLOWED_TO_SWITCH', $dispatcher);
+        $listener->handle($this->event);
+
+        $this->assertSame($replacedToken, $this->tokenStorage->getToken());
+    }
+
+    public function testSwitchtUserThrowsAuthenticationExceptionIfNoCurrentToken()
+    {
+        $this->expectException('Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException');
+        $this->tokenStorage->setToken(null);
+        $this->request->query->set('_switch_user', 'username');
         $listener = new SwitchUserListener($this->tokenStorage, $this->userProvider, $this->userChecker, 'provider123', $this->accessDecisionManager);
         $listener->handle($this->event);
     }
 
-    private function getEvent($request)
+    public function testSwitchUserStateless()
     {
-        $event = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseEvent')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $token = new UsernamePasswordToken('username', '', 'key', ['ROLE_FOO']);
+        $user = new User('username', 'password', []);
 
-        $event->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($request));
+        $this->tokenStorage->setToken($token);
+        $this->request->query->set('_switch_user', 'kuba');
 
-        return $event;
-    }
+        $this->accessDecisionManager->expects($this->once())
+            ->method('decide')->with($token, ['ROLE_ALLOWED_TO_SWITCH'])
+            ->willReturn(true);
 
-    private function getToken(array $roles = array())
-    {
-        $token = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')->getMock();
-        $token->expects($this->any())
-            ->method('getRoles')
-            ->will($this->returnValue($roles));
+        $this->userProvider->expects($this->once())
+            ->method('loadUserByUsername')->with('kuba')
+            ->willReturn($user);
+        $this->userChecker->expects($this->once())
+            ->method('checkPostAuth')->with($user);
 
-        return $token;
+        $listener = new SwitchUserListener($this->tokenStorage, $this->userProvider, $this->userChecker, 'provider123', $this->accessDecisionManager, null, '_switch_user', 'ROLE_ALLOWED_TO_SWITCH', null, true);
+        $listener->handle($this->event);
+
+        $this->assertInstanceOf('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken', $this->tokenStorage->getToken());
+        $this->assertFalse($this->event->hasResponse());
     }
 }

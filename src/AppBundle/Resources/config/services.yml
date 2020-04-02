@@ -7,20 +7,25 @@ services:
     activity_runtime_container:
         class: AppBundle\Component\Activity\ActivityRuntimeContainer
         arguments: ['@service_container']
+        public: true
 
     activity_config_manager:
         class: AppBundle\Component\Activity\ActivityConfigManager
         arguments: ['%kernel.cache_dir%', '%edusoho.activities_dir%', '%kernel.debug%']
+        public: true
 
     user.online_track:
         class: AppBundle\Component\Track\UserOnlineTrack
-        arguments: ['@service_container', '@Biz']
+        arguments: ['@service_container', '@biz']
+        public: true
 
     extension.manager:
         class: AppBundle\Extension\ExtensionManager
+        public: true
 
     activity.extension:
         class: AppBundle\Extension\ActivityExtension
+        public: true
         calls:
             - [setBiz, ['@biz']]
         tags:
@@ -28,6 +33,7 @@ services:
 
     course.extension:
         class: AppBundle\Extension\CourseExtension
+        public: true
         calls:
             - [setBiz, ['@biz']]
         tags:
@@ -35,6 +41,7 @@ services:
 
     copy.extension:
         class: AppBundle\Extension\CopyExtension
+        public: true
         calls:
             - [setBiz, ['@biz']]
         tags:
@@ -42,6 +49,7 @@ services:
 
     task_toolbar.extension:
         class: AppBundle\Extension\TaskToolbarExtension
+        public: true
         calls:
             - [setBiz, ['@biz']]
         tags:
@@ -49,6 +57,7 @@ services:
 
     question.extension:
         class: AppBundle\Extension\QuestionExtension
+        public: true
         calls:
             - [setBiz, ['@biz']]
         tags:
@@ -56,6 +65,7 @@ services:
 
     newcomer_task.extension:
         class: AppBundle\Extension\NewcomerExtension
+        public: true
         calls:
             - [setBiz, ['@biz']]
         tags:
@@ -63,6 +73,7 @@ services:
 
     payment.extension:
         class: AppBundle\Extension\PaymentExtension
+        public: true
         calls:
             - [setBiz, ['@biz']]
         tags:
@@ -70,6 +81,7 @@ services:
 
     callback.extension:
         class: AppBundle\Extension\CallbackExtension
+        public: true
         calls:
             - [setBiz, ['@biz']]
         tags:
@@ -77,6 +89,7 @@ services:
 
     wechat_template.extension:
         class: AppBundle\Extension\WeChatTemplateExtension
+        public: true
         calls:
             - [setBiz, ['@biz']]
         tags:
@@ -84,9 +97,11 @@ services:
 
     biz.service_provider.collector:
         class: Biz\ServiceProviderCollector
+        public: true
 
     coupon_service_provider:
         class: Biz\Coupon\CouponServiceProvider
+        public: true
         calls:
             - [setBiz, ['@biz']]
         tags:
@@ -94,6 +109,7 @@ services:
 
     mail_service_provider:
         class: Biz\Mail\MailServiceProvider
+        public: true
         calls:
             - [setBiz, ['@biz']]
         tags:
@@ -102,117 +118,138 @@ services:
     web.twig.question_type_extension:
         class: AppBundle\Twig\QuestionTypeExtension
         arguments:    ['@service_container', '@biz']
+        public: true
         tags:
             - { name: twig.extension }
 
     web.twig.question_extension:
       class: AppBundle\Twig\QuestionExtension
       arguments:    ['@service_container', '@biz']
+      public: true
       tags:
             - { name: twig.extension }
 
     web.twig.testpaper_extension:
         class: AppBundle\Twig\TestpaperExtension
         arguments:    ['@service_container', '@biz']
+        public: true
         tags:
             - { name: twig.extension }
 
     web.twig.material_extension:
         class: AppBundle\Twig\MaterialExtension
         arguments:    ['@service_container', '@biz']
+        public: true
         tags:
             - { name: twig.extension }
 
     web.twig.app_extension:
         class: AppBundle\Twig\AppExtension
         arguments: ['@service_container']
+        public: true
         tags:
             - { name: twig.extension }
 
     web.twig.activity_extension:
         class: AppBundle\Twig\ActivityExtension
         arguments:    ['@service_container', '@biz']
+        public: true
         tags:
             - { name: twig.extension }
 
     web.twig.live_extension:
         class: AppBundle\Twig\LiveExtension
         arguments:    ['@service_container', '@biz']
+        public: true
         tags:
             - { name: twig.extension }
 
     web.twig.extension:
         class: AppBundle\Twig\WebExtension
-        arguments:    ['@service_container', '@biz']
+        arguments:    ['@service_container', '@biz', '@request_stack']
+        public: true
         tags:
             - { name: twig.extension }
 
     web.twig.html_extension:
         class: AppBundle\Twig\HtmlExtension
         arguments:    ['@service_container', '@biz']
+        public: true
         tags:
             - { name: twig.extension }
 
     web.twig.dictionary_extension:
         class: AppBundle\Twig\DictionaryExtension
         arguments:    ['@service_container', '@biz']
+        public: true
         tags:
             - { name: twig.extension }
 
     web.twig.data_extension:
         class: AppBundle\Twig\DataExtension
         arguments:    ['@service_container', '@biz']
+        public: true
         tags:
             - { name: twig.extension }
 
     web.twig.block_extension:
         class: AppBundle\Twig\BlockExtension
         arguments:    ['@service_container', '@biz']
+        public: true
         tags:
             - { name: twig.extension }
 
     web.twig.uploader_extension:
         class: AppBundle\Twig\UploaderExtension
         arguments:    ['@service_container']
+        public: true
         tags:
             - { name: twig.extension }
 
     web.twig.theme_extension:
         class: AppBundle\Twig\ThemeExtension
         arguments:    ['@service_container', '@biz']
+        public: true
         tags:
             - { name: twig.extension }
 
     web.twig.order_extension:
         class: AppBundle\Twig\OrderExtension
         arguments:    ['@service_container', '@biz']
+        public: true
         tags:
             - { name: twig.extension }
 
     web.twig.course_extension:
         class: AppBundle\Twig\CourseExtension
         arguments:    ['@service_container', '@biz']
+        public: true
         tags:
             - { name: twig.extension }
 
     web.twig.search_extension:
         class: AppBundle\Twig\SearchExtension
         arguments:    ['@service_container', '@biz']
+        public: true
         tags:
             - { name: twig.extension }
 
     topxia.timemachine:
         class: AppBundle\Common\TimeMachine
         arguments:    ['Asia/Shanghai']
+        public: true
 
     web.wrapper:
         class: AppBundle\Component\Wrapper\WrapperManage
         arguments: ['@service_container']
+        public: true
 
     export_factory:
         class: AppBundle\Component\Export\Factory
         arguments: ['@service_container']
+        public: true
 
     qrcode_whitelist_filter:
         class: AppBundle\Component\QrCode\QrCodeWhiteListFilter
         arguments: ['@service_container']
+        public: true

@@ -24,6 +24,7 @@ class ClassMetadataTest extends TestCase
     const CLASSNAME = 'Symfony\Component\Validator\Tests\Fixtures\Entity';
     const PARENTCLASS = 'Symfony\Component\Validator\Tests\Fixtures\EntityParent';
     const PROVIDERCLASS = 'Symfony\Component\Validator\Tests\Fixtures\GroupSequenceProviderEntity';
+    const PROVIDERCHILDCLASS = 'Symfony\Component\Validator\Tests\Fixtures\GroupSequenceProviderChildEntity';
 
     protected $metadata;
 
@@ -39,14 +40,14 @@ class ClassMetadataTest extends TestCase
 
     public function testAddConstraintDoesNotAcceptValid()
     {
-        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('Symfony\Component\Validator\Exception\ConstraintDefinitionException');
+        $this->expectException('Symfony\Component\Validator\Exception\ConstraintDefinitionException');
 
         $this->metadata->addConstraint(new Valid());
     }
 
     public function testAddConstraintRequiresClassConstraints()
     {
-        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('Symfony\Component\Validator\Exception\ConstraintDefinitionException');
+        $this->expectException('Symfony\Component\Validator\Exception\ConstraintDefinitionException');
 
         $this->metadata->addConstraint(new PropertyConstraint());
     }
@@ -56,17 +57,17 @@ class ClassMetadataTest extends TestCase
         $this->metadata->addPropertyConstraint('firstName', new ConstraintA());
         $this->metadata->addPropertyConstraint('lastName', new ConstraintB());
 
-        $this->assertEquals(array('firstName', 'lastName'), $this->metadata->getConstrainedProperties());
+        $this->assertEquals(['firstName', 'lastName'], $this->metadata->getConstrainedProperties());
     }
 
     public function testAddMultiplePropertyConstraints()
     {
-        $this->metadata->addPropertyConstraints('lastName', array(new ConstraintA(), new ConstraintB()));
+        $this->metadata->addPropertyConstraints('lastName', [new ConstraintA(), new ConstraintB()]);
 
-        $constraints = array(
-            new ConstraintA(array('groups' => array('Default', 'Entity'))),
-            new ConstraintB(array('groups' => array('Default', 'Entity'))),
-        );
+        $constraints = [
+            new ConstraintA(['groups' => ['Default', 'Entity']]),
+            new ConstraintB(['groups' => ['Default', 'Entity']]),
+        ];
 
         $properties = $this->metadata->getPropertyMetadata('lastName');
 
@@ -80,10 +81,10 @@ class ClassMetadataTest extends TestCase
         $this->metadata->addGetterConstraint('lastName', new ConstraintA());
         $this->metadata->addGetterConstraint('lastName', new ConstraintB());
 
-        $constraints = array(
-            new ConstraintA(array('groups' => array('Default', 'Entity'))),
-            new ConstraintB(array('groups' => array('Default', 'Entity'))),
-        );
+        $constraints = [
+            new ConstraintA(['groups' => ['Default', 'Entity']]),
+            new ConstraintB(['groups' => ['Default', 'Entity']]),
+        ];
 
         $properties = $this->metadata->getPropertyMetadata('lastName');
 
@@ -94,12 +95,12 @@ class ClassMetadataTest extends TestCase
 
     public function testAddMultipleGetterConstraints()
     {
-        $this->metadata->addGetterConstraints('lastName', array(new ConstraintA(), new ConstraintB()));
+        $this->metadata->addGetterConstraints('lastName', [new ConstraintA(), new ConstraintB()]);
 
-        $constraints = array(
-            new ConstraintA(array('groups' => array('Default', 'Entity'))),
-            new ConstraintB(array('groups' => array('Default', 'Entity'))),
-        );
+        $constraints = [
+            new ConstraintA(['groups' => ['Default', 'Entity']]),
+            new ConstraintB(['groups' => ['Default', 'Entity']]),
+        ];
 
         $properties = $this->metadata->getPropertyMetadata('lastName');
 
@@ -116,17 +117,17 @@ class ClassMetadataTest extends TestCase
         $this->metadata->mergeConstraints($parent);
         $this->metadata->addConstraint(new ConstraintA());
 
-        $constraints = array(
-            new ConstraintA(array('groups' => array(
+        $constraints = [
+            new ConstraintA(['groups' => [
                 'Default',
                 'EntityParent',
                 'Entity',
-            ))),
-            new ConstraintA(array('groups' => array(
+            ]]),
+            new ConstraintA(['groups' => [
                 'Default',
                 'Entity',
-            ))),
-        );
+            ]]),
+        ];
 
         $this->assertEquals($constraints, $this->metadata->getConstraints());
     }
@@ -135,46 +136,46 @@ class ClassMetadataTest extends TestCase
     {
         $parent = new ClassMetadata(self::PARENTCLASS);
         $parent->addPropertyConstraint('firstName', new ConstraintA());
-        $parent->addPropertyConstraint('firstName', new ConstraintB(array('groups' => 'foo')));
+        $parent->addPropertyConstraint('firstName', new ConstraintB(['groups' => 'foo']));
 
         $this->metadata->mergeConstraints($parent);
         $this->metadata->addPropertyConstraint('firstName', new ConstraintA());
 
-        $constraintA1 = new ConstraintA(array('groups' => array(
+        $constraintA1 = new ConstraintA(['groups' => [
             'Default',
             'EntityParent',
             'Entity',
-        )));
-        $constraintA2 = new ConstraintA(array('groups' => array(
+        ]]);
+        $constraintA2 = new ConstraintA(['groups' => [
             'Default',
             'Entity',
-        )));
-        $constraintB = new ConstraintB(array(
-            'groups' => array('foo'),
-        ));
+        ]]);
+        $constraintB = new ConstraintB([
+            'groups' => ['foo'],
+        ]);
 
-        $constraints = array(
+        $constraints = [
             $constraintA1,
             $constraintB,
             $constraintA2,
-        );
+        ];
 
-        $constraintsByGroup = array(
-            'Default' => array(
+        $constraintsByGroup = [
+            'Default' => [
                 $constraintA1,
                 $constraintA2,
-            ),
-            'EntityParent' => array(
+            ],
+            'EntityParent' => [
                 $constraintA1,
-            ),
-            'Entity' => array(
+            ],
+            'Entity' => [
                 $constraintA1,
                 $constraintA2,
-            ),
-            'foo' => array(
+            ],
+            'foo' => [
                 $constraintB,
-            ),
-        );
+            ],
+        ];
 
         $members = $this->metadata->getPropertyMetadata('firstName');
 
@@ -200,19 +201,19 @@ class ClassMetadataTest extends TestCase
         $this->metadata->mergeConstraints($parent);
         $this->metadata->addPropertyConstraint('internal', new ConstraintA());
 
-        $parentConstraints = array(
-            new ConstraintA(array('groups' => array(
+        $parentConstraints = [
+            new ConstraintA(['groups' => [
                 'Default',
                 'EntityParent',
                 'Entity',
-            ))),
-        );
-        $constraints = array(
-            new ConstraintA(array('groups' => array(
+            ]]),
+        ];
+        $constraints = [
+            new ConstraintA(['groups' => [
                 'Default',
                 'Entity',
-            ))),
-        );
+            ]]),
+        ];
 
         $members = $this->metadata->getPropertyMetadata('internal');
 
@@ -232,8 +233,8 @@ class ClassMetadataTest extends TestCase
 
     public function testSerialize()
     {
-        $this->metadata->addConstraint(new ConstraintA(array('property1' => 'A')));
-        $this->metadata->addConstraint(new ConstraintB(array('groups' => 'TestGroup')));
+        $this->metadata->addConstraint(new ConstraintA(['property1' => 'A']));
+        $this->metadata->addConstraint(new ConstraintB(['groups' => 'TestGroup']));
         $this->metadata->addPropertyConstraint('firstName', new ConstraintA());
         $this->metadata->addGetterConstraint('lastName', new ConstraintB());
 
@@ -244,48 +245,42 @@ class ClassMetadataTest extends TestCase
 
     public function testGroupSequencesWorkIfContainingDefaultGroup()
     {
-        $this->metadata->setGroupSequence(array('Foo', $this->metadata->getDefaultGroup()));
+        $this->metadata->setGroupSequence(['Foo', $this->metadata->getDefaultGroup()]);
+
+        $this->assertInstanceOf('Symfony\Component\Validator\Constraints\GroupSequence', $this->metadata->getGroupSequence());
     }
 
     public function testGroupSequencesFailIfNotContainingDefaultGroup()
     {
-        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('Symfony\Component\Validator\Exception\GroupDefinitionException');
-
-        $this->metadata->setGroupSequence(array('Foo', 'Bar'));
+        $this->expectException('Symfony\Component\Validator\Exception\GroupDefinitionException');
+        $this->metadata->setGroupSequence(['Foo', 'Bar']);
     }
 
     public function testGroupSequencesFailIfContainingDefault()
     {
-        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('Symfony\Component\Validator\Exception\GroupDefinitionException');
-
-        $this->metadata->setGroupSequence(array('Foo', $this->metadata->getDefaultGroup(), Constraint::DEFAULT_GROUP));
+        $this->expectException('Symfony\Component\Validator\Exception\GroupDefinitionException');
+        $this->metadata->setGroupSequence(['Foo', $this->metadata->getDefaultGroup(), Constraint::DEFAULT_GROUP]);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Validator\Exception\GroupDefinitionException
-     */
     public function testGroupSequenceFailsIfGroupSequenceProviderIsSet()
     {
+        $this->expectException('Symfony\Component\Validator\Exception\GroupDefinitionException');
         $metadata = new ClassMetadata(self::PROVIDERCLASS);
         $metadata->setGroupSequenceProvider(true);
-        $metadata->setGroupSequence(array('GroupSequenceProviderEntity', 'Foo'));
+        $metadata->setGroupSequence(['GroupSequenceProviderEntity', 'Foo']);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Validator\Exception\GroupDefinitionException
-     */
     public function testGroupSequenceProviderFailsIfGroupSequenceIsSet()
     {
+        $this->expectException('Symfony\Component\Validator\Exception\GroupDefinitionException');
         $metadata = new ClassMetadata(self::PROVIDERCLASS);
-        $metadata->setGroupSequence(array('GroupSequenceProviderEntity', 'Foo'));
+        $metadata->setGroupSequence(['GroupSequenceProviderEntity', 'Foo']);
         $metadata->setGroupSequenceProvider(true);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Validator\Exception\GroupDefinitionException
-     */
     public function testGroupSequenceProviderFailsIfDomainClassIsInvalid()
     {
+        $this->expectException('Symfony\Component\Validator\Exception\GroupDefinitionException');
         $metadata = new ClassMetadata('stdClass');
         $metadata->setGroupSequenceProvider(true);
     }
@@ -297,6 +292,17 @@ class ClassMetadataTest extends TestCase
         $this->assertTrue($metadata->isGroupSequenceProvider());
     }
 
+    public function testMergeConstraintsMergesGroupSequenceProvider()
+    {
+        $parent = new ClassMetadata(self::PROVIDERCLASS);
+        $parent->setGroupSequenceProvider(true);
+
+        $metadata = new ClassMetadata(self::PROVIDERCHILDCLASS);
+        $metadata->mergeConstraints($parent);
+
+        $this->assertTrue($metadata->isGroupSequenceProvider());
+    }
+
     /**
      * https://github.com/symfony/symfony/issues/11604.
      */
@@ -304,14 +310,4 @@ class ClassMetadataTest extends TestCase
     {
         $this->assertCount(0, $this->metadata->getPropertyMetadata('foo'), '->getPropertyMetadata() returns an empty collection if no metadata is configured for the given property');
     }
-}
-
-class ParentClass
-{
-    public $example = 0;
-}
-
-class ChildClass extends ParentClass
-{
-    public $example = 1;    // overrides parent property of same name
 }

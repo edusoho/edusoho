@@ -48,18 +48,18 @@ class PhpBundleWriterTest extends TestCase
 
     public function testWrite()
     {
-        $this->writer->write($this->directory, 'en', array(
-            'Entry1' => array(
-                'Array' => array('foo', 'bar'),
+        $this->writer->write($this->directory, 'en', [
+            'Entry1' => [
+                'Array' => ['foo', 'bar'],
                 'Integer' => 5,
                 'Boolean' => false,
                 'Float' => 1.23,
-            ),
+            ],
             'Entry2' => 'String',
-            'Traversable' => new \ArrayIterator(array(
+            'Traversable' => new \ArrayIterator([
                 'Foo' => 'Bar',
-            )),
-        ));
+            ]),
+        ]);
 
         $this->assertFileEquals(__DIR__.'/Fixtures/en.php', $this->directory.'/en.php');
     }
@@ -69,10 +69,6 @@ class PhpBundleWriterTest extends TestCase
      */
     public function testWriteResourceBundle()
     {
-        if (PHP_VERSION_ID < 50315 || (PHP_VERSION_ID >= 50400 && PHP_VERSION_ID < 50404)) {
-            $this->markTestSkipped('ResourceBundle implements Traversable only as of PHP 5.3.15 and 5.4.4');
-        }
-
         $bundle = new \ResourceBundle('rb', __DIR__.'/Fixtures', false);
 
         $this->writer->write($this->directory, 'en', $bundle);

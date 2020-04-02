@@ -23,14 +23,8 @@ use Symfony\Component\Security\Core\Security;
  */
 class AuthenticationUtils
 {
-    /**
-     * @var RequestStack
-     */
     private $requestStack;
 
-    /**
-     * @param RequestStack $requestStack
-     */
     public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
@@ -49,7 +43,7 @@ class AuthenticationUtils
 
         if ($request->attributes->has(Security::AUTHENTICATION_ERROR)) {
             $authenticationException = $request->attributes->get(Security::AUTHENTICATION_ERROR);
-        } elseif ($session !== null && $session->has(Security::AUTHENTICATION_ERROR)) {
+        } elseif (null !== $session && $session->has(Security::AUTHENTICATION_ERROR)) {
             $authenticationException = $session->get(Security::AUTHENTICATION_ERROR);
 
             if ($clearSession) {

@@ -15,6 +15,7 @@ namespace PhpCsFixer\Fixer\ClassNotation;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
 use PhpCsFixer\Fixer\WhitespacesAwareFixerInterface;
+use PhpCsFixer\FixerConfiguration\AliasedFixerOptionBuilder;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\CodeSample;
@@ -78,7 +79,7 @@ extends Bar
 implements Baz, BarBaz
 {}
 ',
-                    array('singleLine' => true)
+                    array('single_line' => true)
                 ),
                 new CodeSample(
 '<?php
@@ -88,7 +89,7 @@ extends Bar
 implements Baz
 {}
 ',
-                    array('singleItemSingleLine' => true)
+                    array('single_item_single_line' => true)
                 ),
                 new CodeSample(
 '<?php
@@ -97,7 +98,7 @@ interface Bar extends
     Bar, BarBaz, FooBarBaz
 {}
 ',
-                    array('multiLineExtendsEachSingleLine' => true)
+                    array('multi_line_extends_each_single_line' => true)
                 ),
             )
         );
@@ -129,19 +130,28 @@ interface Bar extends
      */
     protected function createConfigurationDefinition()
     {
-        $multiLineExtendsEachSingleLine = new FixerOptionBuilder('multiLineExtendsEachSingleLine', 'Whether definitions should be multiline.');
+        $multiLineExtendsEachSingleLine = new AliasedFixerOptionBuilder(
+            new FixerOptionBuilder('multi_line_extends_each_single_line', 'Whether definitions should be multiline.'),
+            'multiLineExtendsEachSingleLine'
+        );
         $multiLineExtendsEachSingleLine
             ->setAllowedTypes(array('bool'))
             ->setDefault(false)
         ;
 
-        $singleItemSingleLine = new FixerOptionBuilder('singleItemSingleLine', 'Whether definitions should be single line when including a single item.');
+        $singleItemSingleLine = new AliasedFixerOptionBuilder(
+            new FixerOptionBuilder('single_item_single_line', 'Whether definitions should be single line when including a single item.'),
+            'singleItemSingleLine'
+        );
         $singleItemSingleLine
             ->setAllowedTypes(array('bool'))
             ->setDefault(false)
         ;
 
-        $singleLine = new FixerOptionBuilder('singleLine', 'Whether definitions should be single line.');
+        $singleLine = new AliasedFixerOptionBuilder(
+            new FixerOptionBuilder('single_line', 'Whether definitions should be single line.'),
+            'singleLine'
+        );
         $singleLine
             ->setAllowedTypes(array('bool'))
             ->setDefault(false)
@@ -208,17 +218,17 @@ interface Bar extends
      *
      * @return array
      */
-    private function fixClassyDefinitionExtends(Tokens $tokens, $classOpenIndex, $classExtendsInfo)
+    private function fixClassyDefinitionExtends(Tokens $tokens, $classOpenIndex, array $classExtendsInfo)
     {
         $endIndex = $tokens->getPrevNonWhitespace($classOpenIndex);
 
-        if ($this->configuration['singleLine'] || false === $classExtendsInfo['multiLine']) {
+        if ($this->configuration['single_line'] || false === $classExtendsInfo['multiLine']) {
             $this->makeClassyDefinitionSingleLine($tokens, $classExtendsInfo['start'], $endIndex);
             $classExtendsInfo['multiLine'] = false;
-        } elseif ($this->configuration['singleItemSingleLine'] && 1 === $classExtendsInfo['numberOfExtends']) {
+        } elseif ($this->configuration['single_item_single_line'] && 1 === $classExtendsInfo['numberOfExtends']) {
             $this->makeClassyDefinitionSingleLine($tokens, $classExtendsInfo['start'], $endIndex);
             $classExtendsInfo['multiLine'] = false;
-        } elseif ($this->configuration['multiLineExtendsEachSingleLine'] && $classExtendsInfo['multiLine']) {
+        } elseif ($this->configuration['multi_line_extends_each_single_line'] && $classExtendsInfo['multiLine']) {
             $this->makeClassyInheritancePartMultiLine($tokens, $classExtendsInfo['start'], $endIndex);
             $classExtendsInfo['multiLine'] = true;
         }
@@ -237,10 +247,10 @@ interface Bar extends
     {
         $endIndex = $tokens->getPrevNonWhitespace($classOpenIndex);
 
-        if ($this->configuration['singleLine'] || false === $classImplementsInfo['multiLine']) {
+        if ($this->configuration['single_line'] || false === $classImplementsInfo['multiLine']) {
             $this->makeClassyDefinitionSingleLine($tokens, $classImplementsInfo['start'], $endIndex);
             $classImplementsInfo['multiLine'] = false;
-        } elseif ($this->configuration['singleItemSingleLine'] && 1 === $classImplementsInfo['numberOfImplements']) {
+        } elseif ($this->configuration['single_item_single_line'] && 1 === $classImplementsInfo['numberOfImplements']) {
             $this->makeClassyDefinitionSingleLine($tokens, $classImplementsInfo['start'], $endIndex);
             $classImplementsInfo['multiLine'] = false;
         } else {
@@ -257,7 +267,7 @@ interface Bar extends
      *
      * @return int
      */
-    private function fixClassyDefinitionOpenSpacing(Tokens $tokens, $classDefInfo)
+    private function fixClassyDefinitionOpenSpacing(Tokens $tokens, array $classDefInfo)
     {
         if ($classDefInfo['anonymousClass']) {
             if (false !== $classDefInfo['implements']) {
@@ -278,7 +288,7 @@ interface Bar extends
 
         if ($tokens[$openIndex - 1]->isWhitespace()) {
             if (' ' !== $spacing || !$tokens[$tokens->getPrevNonWhitespace($openIndex - 1)]->isComment()) {
-                $tokens[$openIndex - 1]->setContent($spacing);
+                $tokens[$openIndex - 1] = new Token(array(T_WHITESPACE, $spacing));
             }
 
             return $openIndex;
@@ -372,7 +382,7 @@ interface Bar extends
                     if (!('#' === $content || '//' === substr($content, 0, 2))) {
                         $content = $tokens[$nextNonWhite]->getContent();
                         if (!('#' === $content || '//' === substr($content, 0, 2))) {
-                            $tokens[$i]->setContent(' ');
+                            $tokens[$i] = new Token(array(T_WHITESPACE, ' '));
                         }
                     }
 
@@ -380,12 +390,12 @@ interface Bar extends
                 }
 
                 if ($tokens[$i + 1]->equalsAny(array(',', '(', ')')) || $tokens[$i - 1]->equals('(')) {
-                    $tokens[$i]->clear();
+                    $tokens->clearAt($i);
 
                     continue;
                 }
 
-                $tokens[$i]->setContent(' ');
+                $tokens[$i] = new Token(array(T_WHITESPACE, ' '));
 
                 continue;
             }
@@ -439,7 +449,10 @@ interface Bar extends
 
             if (!$isOnOwnLine) {
                 if ($tokens[$breakAtIndex - 1]->isWhitespace()) {
-                    $tokens[$breakAtIndex - 1]->setContent($this->whitespacesConfig->getLineEnding().$this->whitespacesConfig->getIndent());
+                    $tokens[$breakAtIndex - 1] = new Token(array(
+                        T_WHITESPACE,
+                        $this->whitespacesConfig->getLineEnding().$this->whitespacesConfig->getIndent(),
+                    ));
                 } else {
                     $tokens->insertAt($breakAtIndex, new Token(array(T_WHITESPACE, $this->whitespacesConfig->getLineEnding().$this->whitespacesConfig->getIndent())));
                 }

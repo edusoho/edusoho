@@ -376,8 +376,8 @@ class TestCaseLazyDispatcher extends LazyDispatcher
             $event = new Event();
         }
 
-        $event->setDispatcher($this);
-        $event->setName($eventName);
+//        $event->setDispatcher($this);
+//        $event->setName($eventName);
 
         $subscribers = $this->container->get('codeags_plugin.event.lazy_subscribers');
 

@@ -8,15 +8,12 @@
  * file that was distributed with this source code.
  */
 
-/**
- * @since Class available since Release 4.0.0
- */
 abstract class PHPUnit_Runner_Filter_GroupFilterIterator extends RecursiveFilterIterator
 {
     /**
      * @var array
      */
-    protected $groupTests = array();
+    protected $groupTests = [];
 
     /**
      * @param RecursiveIterator           $iterator

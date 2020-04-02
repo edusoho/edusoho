@@ -11,11 +11,11 @@
 
 namespace Symfony\Component\Intl\Data\Generator;
 
-use Symfony\Component\Intl\Data\Bundle\Reader\BundleReaderInterface;
+use Symfony\Component\Intl\Data\Bundle\Compiler\BundleCompilerInterface;
+use Symfony\Component\Intl\Data\Bundle\Reader\BundleEntryReaderInterface;
 use Symfony\Component\Intl\Data\Util\ArrayAccessibleResourceBundle;
 use Symfony\Component\Intl\Data\Util\LocaleScanner;
 use Symfony\Component\Intl\Exception\RuntimeException;
-use Symfony\Component\Intl\Data\Bundle\Compiler\GenrbCompiler;
 
 /**
  * The rule for compiling the language bundle.
@@ -27,11 +27,9 @@ use Symfony\Component\Intl\Data\Bundle\Compiler\GenrbCompiler;
 class LanguageDataGenerator extends AbstractDataGenerator
 {
     /**
-     * Source: http://www-01.sil.org/iso639-3/codes.asp.
-     *
-     * @var array
+     * Source: https://iso639-3.sil.org/code_tables/639/data.
      */
-    private static $preferredAlpha2ToAlpha3Mapping = array(
+    private static $preferredAlpha2ToAlpha3Mapping = [
         'ak' => 'aka',
         'ar' => 'ara',
         'ay' => 'aym',
@@ -41,6 +39,7 @@ class LanguageDataGenerator extends AbstractDataGenerator
         'cs' => 'ces',
         'cy' => 'cym',
         'de' => 'deu',
+        'dz' => 'dzo',
         'el' => 'ell',
         'et' => 'est',
         'eu' => 'eus',
@@ -83,14 +82,14 @@ class LanguageDataGenerator extends AbstractDataGenerator
         'yi' => 'yid',
         'za' => 'zha',
         'zh' => 'zho',
-    );
+    ];
 
     /**
      * Collects all available language codes.
      *
      * @var string[]
      */
-    private $languageCodes = array();
+    private $languageCodes = [];
 
     /**
      * {@inheritdoc}
@@ -103,7 +102,7 @@ class LanguageDataGenerator extends AbstractDataGenerator
     /**
      * {@inheritdoc}
      */
-    protected function compileTemporaryBundles(GenrbCompiler $compiler, $sourceDir, $tempDir)
+    protected function compileTemporaryBundles(BundleCompilerInterface $compiler, $sourceDir, $tempDir)
     {
         $compiler->compile($sourceDir.'/lang', $tempDir);
         $compiler->compile($sourceDir.'/misc/metadata.txt', $tempDir);
@@ -114,40 +113,42 @@ class LanguageDataGenerator extends AbstractDataGenerator
      */
     protected function preGenerate()
     {
-        $this->languageCodes = array();
+        $this->languageCodes = [];
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function generateDataForLocale(BundleReaderInterface $reader, $tempDir, $displayLocale)
+    protected function generateDataForLocale(BundleEntryReaderInterface $reader, $tempDir, $displayLocale)
     {
         $localeBundle = $reader->read($tempDir, $displayLocale);
 
         // isset() on \ResourceBundle returns true even if the value is null
         if (isset($localeBundle['Languages']) && null !== $localeBundle['Languages']) {
-            $data = array(
+            $data = [
                 'Version' => $localeBundle['Version'],
                 'Names' => iterator_to_array($localeBundle['Languages']),
-            );
+            ];
 
             $this->languageCodes = array_merge($this->languageCodes, array_keys($data['Names']));
 
             return $data;
         }
+
+        return null;
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function generateDataForRoot(BundleReaderInterface $reader, $tempDir)
+    protected function generateDataForRoot(BundleEntryReaderInterface $reader, $tempDir)
     {
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function generateDataForMeta(BundleReaderInterface $reader, $tempDir)
+    protected function generateDataForMeta(BundleEntryReaderInterface $reader, $tempDir)
     {
         $rootBundle = $reader->read($tempDir, 'root');
         $metadataBundle = $reader->read($tempDir, 'metadata');
@@ -156,58 +157,44 @@ class LanguageDataGenerator extends AbstractDataGenerator
 
         sort($this->languageCodes);
 
-        return array(
+        return [
             'Version' => $rootBundle['Version'],
             'Languages' => $this->languageCodes,
-            'Aliases' => $metadataBundle['languageAlias'],
             'Alpha2ToAlpha3' => $this->generateAlpha2ToAlpha3Mapping($metadataBundle),
-        );
+        ];
     }
 
     private function generateAlpha2ToAlpha3Mapping(ArrayAccessibleResourceBundle $metadataBundle)
     {
-        // Data structure has changed in ICU 5.5 from "languageAlias" to "alias->language"
-        $aliases = $metadataBundle['languageAlias'] ?: $metadataBundle['alias']['language'];
-        $alpha2ToAlpha3 = array();
+        $aliases = iterator_to_array($metadataBundle['alias']['language']);
+        $alpha2ToAlpha3 = [];
 
-        foreach ($aliases as $alias => $language) {
-            // $language is a string before ICU 5.5
-            $language = is_string($language) ? $language : $language['replacement'];
-            if (2 === strlen($language) && 3 === strlen($alias)) {
+        foreach ($aliases as $alias => $data) {
+            $language = $data['replacement'];
+            if (2 === \strlen($language) && 3 === \strlen($alias) && 'overlong' === $data['reason']) {
                 if (isset(self::$preferredAlpha2ToAlpha3Mapping[$language])) {
                     // Validate to prevent typos
                     if (!isset($aliases[self::$preferredAlpha2ToAlpha3Mapping[$language]])) {
-                        throw new RuntimeException(
-                            'The statically set three-letter mapping '.
-                            self::$preferredAlpha2ToAlpha3Mapping[$language].' '.
-                            'for the language code '.$language.' seems to be '.
-                            'invalid. Typo?'
-                        );
+                        throw new RuntimeException('The statically set three-letter mapping '.self::$preferredAlpha2ToAlpha3Mapping[$language].' for the language code '.$language.' seems to be invalid. Typo?');
                     }
 
                     $alpha3 = self::$preferredAlpha2ToAlpha3Mapping[$language];
-                    $alpha2 = is_string($aliases[$alpha3]) ? $aliases[$alpha3] : $aliases[$alpha3]['replacement'];
+                    $alpha2 = $aliases[$alpha3]['replacement'];
 
                     if ($language !== $alpha2) {
-                        throw new RuntimeException(
-                            'The statically set three-letter mapping '.$alpha3.' '.
-                            'for the language code '.$language.' seems to be '.
-                            'an alias for '.$alpha2.'. Wrong mapping?'
-                        );
+                        throw new RuntimeException('The statically set three-letter mapping '.$alpha3.' for the language code '.$language.' seems to be an alias for '.$alpha2.'. Wrong mapping?');
                     }
 
                     $alpha2ToAlpha3[$language] = $alpha3;
                 } elseif (isset($alpha2ToAlpha3[$language])) {
-                    throw new RuntimeException(
-                        'Multiple three-letter mappings exist for the language '.
-                        'code '.$language.'. Please add one of them to the '.
-                        'property $preferredAlpha2ToAlpha3Mapping.'
-                    );
+                    throw new RuntimeException('Multiple three-letter mappings exist for the language code '.$language.'. Please add one of them to the property $preferredAlpha2ToAlpha3Mapping.');
                 } else {
                     $alpha2ToAlpha3[$language] = $alias;
                 }
             }
         }
+
+        asort($alpha2ToAlpha3);
 
         return $alpha2ToAlpha3;
     }

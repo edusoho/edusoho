@@ -20,15 +20,7 @@ class RangeType extends AbstractType
      */
     public function getParent()
     {
-        return __NAMESPACE__.'\TextType';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return $this->getBlockPrefix();
+        return TextType::class;
     }
 
     /**

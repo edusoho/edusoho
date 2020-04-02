@@ -3,7 +3,6 @@
   "type": "library",
   "description": "Alipay gateway for Omnipay payment processing library",
   "keywords": [
-    "php53",
     "alipay",
     "gateway",
     "merchant",
@@ -12,8 +11,14 @@
     "payment",
     "purchase"
   ],
-  "homepage": "https://github.com/codeages/omnipay-alipay",
+  "homepage": "https://github.com/lokielse/omnipay-alipay",
   "license": "MIT",
+  "authors": [
+    {
+      "name": "Loki Else",
+      "email": "lokielse@gmail.com"
+    }
+  ],
   "autoload": {
     "psr-4": {
       "Omnipay\\Alipay\\": "src/",
@@ -24,9 +29,15 @@
     ]
   },
   "require": {
-    "omnipay/common": "~2.0"
+    "ext-json": "*",
+    "ext-openssl": "*",
+    "omnipay/common": "^3.0",
+    "php-http/guzzle6-adapter": "*"
   },
   "require-dev": {
-    "omnipay/tests": "~2.0"
-  }
+    "omnipay/tests": "^3.0",
+    "squizlabs/php_codesniffer": "^3.4"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }

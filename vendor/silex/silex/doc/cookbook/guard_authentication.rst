@@ -14,7 +14,7 @@ Step 1) Create the Authenticator Class
 Suppose you have an API where your clients will send an X-AUTH-TOKEN
 header on each request. This token is composed of the username followed
 by a password, separated by a colon (e.g. ``X-AUTH-TOKEN: coolguy:awesomepassword``).
-Your job is to read this, find theassociated user (if any) and check
+Your job is to read this, find the associated user (if any) and check
 the password.
 
 To create a custom authentication system, just create a class and make
@@ -34,6 +34,7 @@ AbstractGuardAuthenticator. This requires you to implement six methods:
     use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
     use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
     use Symfony\Component\Security\Core\Exception\AuthenticationException;
+    use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
     class TokenAuthenticator extends AbstractGuardAuthenticator
     {
@@ -136,7 +137,7 @@ Finally, configure your `security.firewalls` key to use this authenticator:
 
 .. code-block:: php
 
-    $app['security.firewalls'] => array(
+    $app['security.firewalls'] = array(
         'main' => array(
             'guard' => array(
                 'authenticators' => array(
@@ -150,7 +151,8 @@ Finally, configure your `security.firewalls` key to use this authenticator:
             // configure where your users come from. Hardcode them, or load them from somewhere
             // http://silex.sensiolabs.org/doc/providers/security.html#defining-a-custom-user-provider
             'users' => array(
-                'victoria' => array('ROLE_USER', 'randomsecret'),
+            //raw password = foo
+                'victoria' => array('ROLE_USER', '$2y$10$3i9/lVd8UOFIJ6PAMFt8gu3/r5g0qeCJvoSlLCsvMTythye19F77a'),
             ),
             // 'anonymous' => true
         ),
@@ -175,7 +177,7 @@ under different conditions:
     # {"message":"Username could not be found."}
 
     # test with a working token
-    curl -H "X-AUTH-TOKEN: victoria:randomsecret" http://localhost:8000/
+    curl -H "X-AUTH-TOKEN: victoria:foo" http://localhost:8000/
     # the homepage controller is executed: the page loads normally
 
 For more details read the Symfony cookbook entry on

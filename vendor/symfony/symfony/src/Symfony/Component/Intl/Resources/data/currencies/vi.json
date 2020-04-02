@@ -1,5 +1,5 @@
 {
-    "Version": "2.1.28.79",
+    "Version": "36",
     "Names": {
         "ADP": [
             "ADP",
@@ -27,7 +27,7 @@
         ],
         "ANG": [
             "ANG",
-            "Guilder Tây Ấn Hà Lan"
+            "Guilder Antille Hà Lan"
         ],
         "AOA": [
             "AOA",
@@ -257,6 +257,10 @@
             "CLP",
             "Peso Chile"
         ],
+        "CNH": [
+            "CNH",
+            "Nhân dân tệ (hải ngoại)"
+        ],
         "CNY": [
             "CN¥",
             "Nhân dân tệ"
@@ -391,7 +395,7 @@
         ],
         "GEL": [
             "GEL",
-            "Lari Gruzia"
+            "Lari Georgia"
         ],
         "GHC": [
             "GHC",
@@ -487,7 +491,7 @@
         ],
         "IQD": [
             "IQD",
-            "Dinar I-rắc"
+            "Dinar Iraq"
         ],
         "IRR": [
             "IRR",
@@ -663,6 +667,10 @@
         ],
         "MRO": [
             "MRO",
+            "Ouguiya Mauritania (1973–2017)"
+        ],
+        "MRU": [
+            "MRU",
             "Ouguiya Mauritania"
         ],
         "MTL": [
@@ -759,7 +767,7 @@
         ],
         "PEN": [
             "PEN",
-            "Nuevo Sol Peru"
+            "Sol Peru"
         ],
         "PES": [
             "PES",
@@ -767,7 +775,7 @@
         ],
         "PGK": [
             "PGK",
-            "Kina Papua New Guinean"
+            "Kina Papua New Guinea"
         ],
         "PHP": [
             "PHP",
@@ -891,6 +899,10 @@
         ],
         "STD": [
             "STD",
+            "Dobra São Tomé và Príncipe (1977–2017)"
+        ],
+        "STN": [
+            "STN",
             "Dobra São Tomé và Príncipe"
         ],
         "SUR": [
@@ -963,7 +975,7 @@
         ],
         "UAH": [
             "UAH",
-            "Hryvnia Ucraina"
+            "Hryvnia Ukraina"
         ],
         "UAK": [
             "UAK",
@@ -1011,6 +1023,10 @@
         ],
         "VEF": [
             "VEF",
+            "Bolívar Venezuela (2008–2018)"
+        ],
+        "VES": [
+            "VES",
             "Bolívar Venezuela"
         ],
         "VND": [

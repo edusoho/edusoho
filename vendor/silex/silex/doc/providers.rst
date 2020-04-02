@@ -51,9 +51,13 @@ Included providers
 There are a few providers that you get out of the box. All of these are within
 the ``Silex\Provider`` namespace:
 
+* :doc:`AssetServiceProvider <providers/asset>`
+* :doc:`CsrfServiceProvider <providers/csrf>`
 * :doc:`DoctrineServiceProvider <providers/doctrine>`
 * :doc:`FormServiceProvider <providers/form>`
 * :doc:`HttpCacheServiceProvider <providers/http_cache>`
+* :doc:`HttpFragmentServiceProvider <providers/http_fragment>`
+* :doc:`LocaleServiceProvider <providers/locale>`
 * :doc:`MonologServiceProvider <providers/monolog>`
 * :doc:`RememberMeServiceProvider <providers/remember_me>`
 * :doc:`SecurityServiceProvider <providers/security>`
@@ -64,6 +68,7 @@ the ``Silex\Provider`` namespace:
 * :doc:`TranslationServiceProvider <providers/translation>`
 * :doc:`TwigServiceProvider <providers/twig>`
 * :doc:`ValidatorServiceProvider <providers/validator>`
+* :doc:`VarDumperServiceProvider <providers/var_dumper>`
 
 .. note::
 
@@ -77,7 +82,7 @@ Third party providers
 
 Some service providers are developed by the community. Those third-party
 providers are listed on `Silex' repository wiki
-<https://github.com/silexphp/Silex/wiki/Third-Party-ServiceProviders>`_.
+<https://github.com/silexphp/Silex/wiki/Third-Party-ServiceProviders-for-Silex-2.x>`_.
 
 You are encouraged to share yours.
 
@@ -93,7 +98,7 @@ Providers must implement the ``Pimple\ServiceProviderInterface``::
 
 This is very straight forward, just create a new class that implements the
 register method. In the ``register()`` method, you can define services on the
-application which then may make use of other services and parameters. 
+application which then may make use of other services and parameters.
 
 .. tip::
 
@@ -131,6 +136,7 @@ Here is an example of such a provider::
     use Silex\Application;
     use Silex\Api\BootableProviderInterface;
     use Silex\Api\EventListenerProviderInterface;
+    use Symfony\Component\EventDispatcher\EventDispatcherInterface;
     use Symfony\Component\HttpKernel\KernelEvents;
     use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
@@ -148,13 +154,13 @@ Here is an example of such a provider::
 
         public function boot(Application $app)
         {
-            // do something 
+            // do something
         }
 
         public function subscribe(Container $app, EventDispatcherInterface $dispatcher)
         {
             $dispatcher->addListener(KernelEvents::REQUEST, function(FilterResponseEvent $event) use ($app) {
-                // do something 
+                // do something
             });
         }
     }

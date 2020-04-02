@@ -12,7 +12,7 @@
  * Records invocations and provides convenience methods for checking them later
  * on.
  * This abstract class can be implemented by matchers which needs to check the
- * number of times an invocation has occured.
+ * number of times an invocation has occurred.
  *
  * @since Class available since Release 1.0.0
  * @abstract
@@ -22,7 +22,7 @@ abstract class PHPUnit_Framework_MockObject_Matcher_InvokedRecorder implements P
     /**
      * @var PHPUnit_Framework_MockObject_Invocation[]
      */
-    protected $invocations = array();
+    protected $invocations = [];
 
     /**
      * @return int
@@ -57,7 +57,8 @@ abstract class PHPUnit_Framework_MockObject_Matcher_InvokedRecorder implements P
     }
 
     /**
-     * @param  PHPUnit_Framework_MockObject_Invocation $invocation
+     * @param PHPUnit_Framework_MockObject_Invocation $invocation
+     *
      * @return bool
      */
     public function matches(PHPUnit_Framework_MockObject_Invocation $invocation)

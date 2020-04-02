@@ -1,22 +1,22 @@
 <?php
 
 /*
- * This file is part of the Symfony framework.
+ * This file is part of the Symfony package.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Tests\Fixtures\FooBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Template("FooBundle:Invokable:predefined.html.twig")
+ * @Template("@Foo/invokable/predefined.html.twig")
  */
 class MultipleActionsClassLevelTemplateController extends Controller
 {
@@ -25,9 +25,9 @@ class MultipleActionsClassLevelTemplateController extends Controller
      */
     public function firstAction()
     {
-        return array(
+        return [
             'foo' => 'bar',
-        );
+        ];
     }
 
     /**
@@ -36,19 +36,19 @@ class MultipleActionsClassLevelTemplateController extends Controller
      */
     public function secondAction()
     {
-        return array(
+        return [
             'foo' => 'bar',
-        );
+        ];
     }
 
     /**
      * @Route("/multi/one-template/4/")
-     * @Template("FooBundle::overwritten.html.twig")
+     * @Template("@Foo/overwritten.html.twig")
      */
     public function overwriteAction()
     {
-        return array(
+        return [
             'foo' => 'foo bar baz',
-        );
+        ];
     }
 }

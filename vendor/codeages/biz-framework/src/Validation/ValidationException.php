@@ -4,11 +4,14 @@ namespace Codeages\Biz\Framework\Validation;
 
 use Exception;
 
+/**
+ * @deprecated
+ */
 class ValidationException extends Exception
 {
     public function __construct(array $errors)
     {
-        $message = [];
+        $message = array();
         foreach ($errors as $field => $error) {
             $message[] = implode(' / ', $error);
         }

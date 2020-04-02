@@ -11,7 +11,6 @@
 /**
  * Tests for the BankAccount class.
  *
- * @since      Class available since Release 2.3.0
  */
 class BankAccountTest extends PHPUnit_Framework_TestCase
 {
@@ -29,7 +28,14 @@ class BankAccountTest extends PHPUnit_Framework_TestCase
      */
     public function testBalanceIsInitiallyZero()
     {
-        $this->assertEquals(0, $this->ba->getBalance());
+        /* @Given a fresh bank account */
+        $ba = new BankAccount;
+
+        /* @When I ask it for its balance */
+        $balance = $ba->getBalance();
+
+        /* @Then I should get 0 */
+        $this->assertEquals(0, $balance);
     }
 
     /**

@@ -1,5 +1,5 @@
 {
-    "Version": "2.1.29.54",
+    "Version": "36",
     "Names": {
         "AED": [
             "AED",
@@ -20,6 +20,10 @@
         "BIF": [
             "BIF",
             "Faransi ti Orílɛ́ède Bùùrúndì"
+        ],
+        "BRL": [
+            "R$",
+            "Owó ti Orílɛ̀-èdè Brazil"
         ],
         "BWP": [
             "BWP",
@@ -67,7 +71,7 @@
         ],
         "GBP": [
             "£",
-            "Pɔɔn ti Orílɛ́ède Bírítísì"
+            "Pɔ́n-ùn ti Orilɛ̀-èdè Gɛ̀ɛ́sì"
         ],
         "GHC": [
             "GHC",
@@ -119,6 +123,10 @@
         ],
         "MRO": [
             "MRO",
+            "Ouguiya ti Orílɛ́ède Maritania (1973–2017)"
+        ],
+        "MRU": [
+            "MRU",
             "Ouguiya ti Orílɛ́ède Maritania"
         ],
         "MUR": [
@@ -139,7 +147,11 @@
         ],
         "NGN": [
             "₦",
-            "Naira ti Orílɛ́ède Nàìjíríà"
+            "Náìrà ti Orílɛ̀-èdè Nàìjíríà"
+        ],
+        "RUB": [
+            "₽",
+            "Owó ruble ti ilɛ̀ Rɔ́shíà"
         ],
         "RWF": [
             "RWF",
@@ -171,6 +183,10 @@
         ],
         "STD": [
             "STD",
+            "Dobira ti Orílɛ́ède Sao tome Ati Pirisipe (1977–2017)"
+        ],
+        "STN": [
+            "STN",
             "Dobira ti Orílɛ́ède Sao tome Ati Pirisipe"
         ],
         "TND": [
@@ -186,8 +202,8 @@
             "Siile ti Orílɛ́ède Uganda"
         ],
         "USD": [
-            "US$",
-            "Dɔla ti Orílɛ́ède Amerika"
+            "$",
+            "Dɔ́là"
         ],
         "XAF": [
             "FCFA",

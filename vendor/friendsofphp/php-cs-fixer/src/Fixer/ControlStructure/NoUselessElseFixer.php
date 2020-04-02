@@ -69,7 +69,7 @@ final class NoUselessElseFixer extends AbstractFixer
 
             // clean up `else` if it is an empty statement
             $this->fixEmptyElse($tokens, $index);
-            if ($token->isEmpty()) {
+            if ($tokens->isEmptyAt($index)) {
                 continue;
             }
 
@@ -107,21 +107,22 @@ final class NoUselessElseFixer extends AbstractFixer
                 $previous,
                 array(
                     ';',
-                    array(T_CLOSE_TAG),
-                    array(T_IF),
                     array(T_BREAK),
+                    array(T_CLOSE_TAG),
                     array(T_CONTINUE),
                     array(T_EXIT),
                     array(T_GOTO),
+                    array(T_IF),
                     array(T_RETURN),
                     array(T_THROW),
                 )
             );
 
             if (
-                null === $candidateIndex ||
-                $tokens[$candidateIndex]->equalsAny(array(';', array(T_CLOSE_TAG), array(T_IF))) ||
-                $this->isInConditional($tokens, $candidateIndex, $previousBlockStart)
+                null === $candidateIndex
+                || $tokens[$candidateIndex]->equalsAny(array(';', array(T_CLOSE_TAG), array(T_IF)))
+                || $this->isInConditional($tokens, $candidateIndex, $previousBlockStart)
+                || $this->isInConditionWithoutBraces($tokens, $candidateIndex, $previousBlockStart)
             ) {
                 return;
             }
@@ -149,7 +150,7 @@ final class NoUselessElseFixer extends AbstractFixer
         $close = $previous = $tokens->getPrevMeaningfulToken($index);
         // short 'if' detection
         if ($tokens[$close]->equals('}')) {
-            $previous = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_CURLY_BRACE, $close, false);
+            $previous = $tokens->findBlockStart(Tokens::BLOCK_TYPE_CURLY_BRACE, $close);
         }
 
         $open = $tokens->getPrevTokenOfKind($previous, array(array(T_IF), array(T_ELSE), array(T_ELSEIF)));
@@ -229,8 +230,76 @@ final class NoUselessElseFixer extends AbstractFixer
         // token is always ')' here.
         // If it is part of the condition the token is always in, return false.
         // If it is not it is a nested condition so return true
-        $open = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $candidateIndex, false);
+        $open = $tokens->findBlockStart(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $candidateIndex);
 
         return $tokens->getPrevMeaningfulToken($open) > $lowerLimitIndex;
+    }
+
+    /**
+     * For internal use only, as it is not perfect.
+     *
+     * Returns if the token at given index is part of a if/elseif/else statement
+     * without {}. Assumes not passing the last `;`/close tag of the statement, not
+     * out of range index, etc.
+     *
+     * @param Tokens $tokens
+     * @param int    $index           Index of the token to check
+     * @param int    $lowerLimitIndex
+     *
+     * @return bool
+     */
+    private function isInConditionWithoutBraces(Tokens $tokens, $index, $lowerLimitIndex)
+    {
+        do {
+            if ($tokens[$index]->isComment() || $tokens[$index]->isWhitespace()) {
+                $index = $tokens->getPrevMeaningfulToken($index);
+            }
+
+            $token = $tokens[$index];
+            if ($token->isGivenKind(array(T_IF, T_ELSEIF, T_ELSE))) {
+                return true;
+            }
+
+            if ($token->equals(';', '}')) {
+                return false;
+            }
+            if ($token->equals('{')) {
+                $index = $tokens->getPrevMeaningfulToken($index);
+
+                // OK if belongs to: for, do, while, foreach
+                // Not OK if belongs to: if, else, elseif
+                if ($tokens[$index]->isGivenKind(T_DO)) {
+                    --$index;
+
+                    continue;
+                }
+
+                if (!$tokens[$index]->equals(')')) {
+                    return false; // like `else {`
+                }
+
+                $index = $tokens->findBlockStart(
+                    Tokens::BLOCK_TYPE_PARENTHESIS_BRACE,
+                    $index
+                );
+
+                $index = $tokens->getPrevMeaningfulToken($index);
+                if ($tokens[$index]->isGivenKind(array(T_IF, T_ELSEIF))) {
+                    return false;
+                }
+            } elseif ($token->equals(')')) {
+                $type = Tokens::detectBlockType($token);
+                $index = $tokens->findBlockStart(
+                    $type['type'],
+                    $index
+                );
+
+                $index = $tokens->getPrevMeaningfulToken($index);
+            } else {
+                --$index;
+            }
+        } while ($index > $lowerLimitIndex);
+
+        return false;
     }
 }

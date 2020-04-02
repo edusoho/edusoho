@@ -11,6 +11,7 @@
 
 namespace Silex\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Silex\Application;
 use Silex\Controller;
 use Silex\ControllerCollection;
@@ -23,13 +24,13 @@ use Symfony\Component\Routing\RouteCollection;
  *
  * @author Igor Wiedler <igor@wiedler.ch>
  */
-class ControllerCollectionTest extends \PHPUnit_Framework_TestCase
+class ControllerCollectionTest extends TestCase
 {
     public function testGetRouteCollectionWithNoRoutes()
     {
         $controllers = new ControllerCollection(new Route());
         $routes = $controllers->flush();
-        $this->assertEquals(0, count($routes->all()));
+        $this->assertCount(0, $routes->all());
     }
 
     public function testGetRouteCollectionWithRoutes()
@@ -39,7 +40,7 @@ class ControllerCollectionTest extends \PHPUnit_Framework_TestCase
         $controllers->match('/bar', function () {});
 
         $routes = $controllers->flush();
-        $this->assertEquals(2, count($routes->all()));
+        $this->assertCount(2, $routes->all());
     }
 
     public function testControllerFreezing()
@@ -57,11 +58,15 @@ class ControllerCollectionTest extends \PHPUnit_Framework_TestCase
         } catch (ControllerFrozenException $e) {
         }
 
+        $this->addToAssertionCount(1);
+
         try {
             $barController->bind('bar2');
             $this->fail();
         } catch (ControllerFrozenException $e) {
         }
+
+        $this->addToAssertionCount(1);
     }
 
     public function testConflictingRouteNames()
@@ -89,7 +94,7 @@ class ControllerCollectionTest extends \PHPUnit_Framework_TestCase
         $routes = $controllers->flush();
 
         $this->assertCount(3, $routes->all());
-        $this->assertEquals(array('_a_a', '_a_a_1', '_a_a_2'), array_keys($routes->all()));
+        $this->assertEquals(['_a_a', '_a_a_1', '_a_a_2'], array_keys($routes->all()));
     }
 
     public function testUniqueGeneratedRouteNamesAmongMounts()
@@ -105,7 +110,7 @@ class ControllerCollectionTest extends \PHPUnit_Framework_TestCase
         $routes = $controllers->flush();
 
         $this->assertCount(2, $routes->all());
-        $this->assertEquals(array('_root_a_leaf', '_root_a_leaf_1'), array_keys($routes->all()));
+        $this->assertEquals(['_root_a_leaf', '_root_a_leaf_1'], array_keys($routes->all()));
     }
 
     public function testUniqueGeneratedRouteNamesAmongNestedMounts()
@@ -124,7 +129,7 @@ class ControllerCollectionTest extends \PHPUnit_Framework_TestCase
         $routes = $controllers->flush();
 
         $this->assertCount(2, $routes->all());
-        $this->assertEquals(array('_root_a_tree_leaf', '_root_a_tree_leaf_1'), array_keys($routes->all()));
+        $this->assertEquals(['_root_a_tree_leaf', '_root_a_tree_leaf_1'], array_keys($routes->all()));
     }
 
     public function testMountCallable()
@@ -153,7 +158,7 @@ class ControllerCollectionTest extends \PHPUnit_Framework_TestCase
 
         $routes = $controllers->flush();
         $subRoutes = $subControllers->flush();
-        $this->assertTrue($routes->count() == 2 && $subRoutes->count() == 0);
+        $this->assertTrue(2 == $routes->count() && 0 == $subRoutes->count());
     }
 
     public function testMountControllersFactory()
@@ -190,6 +195,23 @@ class ControllerCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('\w+', $controller->getRoute()->getRequirement('extra'));
     }
 
+    public function testAssertWithMountCallable()
+    {
+        $controllers = new ControllerCollection(new Route());
+        $controller = null;
+        $controllers->mount('/{name}', function ($mounted) use (&$controller) {
+            $mounted->assert('name', '\w+');
+            $mounted->mount('/{id}', function ($mounted2) use (&$controller) {
+                $mounted2->assert('id', '\d+');
+                $controller = $mounted2->match('/{extra}', function () {})->assert('extra', '\w+');
+            });
+        });
+
+        $this->assertEquals('\d+', $controller->getRoute()->getRequirement('id'));
+        $this->assertEquals('\w+', $controller->getRoute()->getRequirement('name'));
+        $this->assertEquals('\w+', $controller->getRoute()->getRequirement('extra'));
+    }
+
     public function testValue()
     {
         $controllers = new ControllerCollection(new Route());
@@ -209,7 +231,7 @@ class ControllerCollectionTest extends \PHPUnit_Framework_TestCase
         $controller = $controllers->match('/{id}/{name}/{extra}', function () {})->convert('name', 'Fabien')->convert('extra', 'Symfony');
         $controllers->convert('extra', 'Twig');
 
-        $this->assertEquals(array('id' => '1', 'name' => 'Fabien', 'extra' => 'Twig'), $controller->getRoute()->getOption('_converters'));
+        $this->assertEquals(['id' => '1', 'name' => 'Fabien', 'extra' => 'Twig'], $controller->getRoute()->getOption('_converters'));
     }
 
     public function testRequireHttp()
@@ -218,11 +240,11 @@ class ControllerCollectionTest extends \PHPUnit_Framework_TestCase
         $controllers->requireHttp();
         $controller = $controllers->match('/{id}/{name}/{extra}', function () {})->requireHttps();
 
-        $this->assertEquals(array('https'), $controller->getRoute()->getSchemes());
+        $this->assertEquals(['https'], $controller->getRoute()->getSchemes());
 
         $controllers->requireHttp();
 
-        $this->assertEquals(array('http'), $controller->getRoute()->getSchemes());
+        $this->assertEquals(['http'], $controller->getRoute()->getSchemes());
     }
 
     public function testBefore()
@@ -232,7 +254,7 @@ class ControllerCollectionTest extends \PHPUnit_Framework_TestCase
         $controller = $controllers->match('/{id}/{name}/{extra}', function () {})->before('mid2');
         $controllers->before('mid3');
 
-        $this->assertEquals(array('mid1', 'mid2', 'mid3'), $controller->getRoute()->getOption('_before_middlewares'));
+        $this->assertEquals(['mid1', 'mid2', 'mid3'], $controller->getRoute()->getOption('_before_middlewares'));
     }
 
     public function testAfter()
@@ -242,7 +264,7 @@ class ControllerCollectionTest extends \PHPUnit_Framework_TestCase
         $controller = $controllers->match('/{id}/{name}/{extra}', function () {})->after('mid2');
         $controllers->after('mid3');
 
-        $this->assertEquals(array('mid1', 'mid2', 'mid3'), $controller->getRoute()->getOption('_after_middlewares'));
+        $this->assertEquals(['mid1', 'mid2', 'mid3'], $controller->getRoute()->getOption('_after_middlewares'));
     }
 
     public function testWhen()
@@ -287,9 +309,9 @@ class ControllerCollectionTest extends \PHPUnit_Framework_TestCase
 
         $cl1->flush();
 
-        $this->assertEquals(array('before'), $c1->getRoute()->getOption('_before_middlewares'));
-        $this->assertEquals(array('before'), $c2->getRoute()->getOption('_before_middlewares'));
-        $this->assertEquals(array('before'), $c3->getRoute()->getOption('_before_middlewares'));
+        $this->assertEquals(['before'], $c1->getRoute()->getOption('_before_middlewares'));
+        $this->assertEquals(['before'], $c2->getRoute()->getOption('_before_middlewares'));
+        $this->assertEquals(['before'], $c3->getRoute()->getOption('_before_middlewares'));
     }
 
     public function testRoutesFactoryOmitted()

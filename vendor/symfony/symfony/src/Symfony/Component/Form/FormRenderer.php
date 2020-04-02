@@ -11,12 +11,10 @@
 
 namespace Symfony\Component\Form;
 
-use Symfony\Component\Form\Exception\LogicException;
 use Symfony\Component\Form\Exception\BadMethodCallException;
-use Symfony\Component\Form\Exception\UnexpectedTypeException;
-use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderAdapter;
-use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
+use Symfony\Component\Form\Exception\LogicException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Twig\Environment;
 
 /**
  * Renders a form into HTML using a rendering engine.
@@ -27,47 +25,14 @@ class FormRenderer implements FormRendererInterface
 {
     const CACHE_KEY_VAR = 'unique_block_prefix';
 
-    /**
-     * @var FormRendererEngineInterface
-     */
     private $engine;
-
-    /**
-     * @var CsrfTokenManagerInterface
-     */
     private $csrfTokenManager;
+    private $blockNameHierarchyMap = [];
+    private $hierarchyLevelMap = [];
+    private $variableStack = [];
 
-    /**
-     * @var array
-     */
-    private $blockNameHierarchyMap = array();
-
-    /**
-     * @var array
-     */
-    private $hierarchyLevelMap = array();
-
-    /**
-     * @var array
-     */
-    private $variableStack = array();
-
-    /**
-     * Constructor.
-     *
-     * @param FormRendererEngineInterface    $engine
-     * @param CsrfTokenManagerInterface|null $csrfTokenManager
-     *
-     * @throws UnexpectedTypeException
-     */
-    public function __construct(FormRendererEngineInterface $engine, $csrfTokenManager = null)
+    public function __construct(FormRendererEngineInterface $engine, CsrfTokenManagerInterface $csrfTokenManager = null)
     {
-        if ($csrfTokenManager instanceof CsrfProviderInterface) {
-            $csrfTokenManager = new CsrfProviderAdapter($csrfTokenManager);
-        } elseif (null !== $csrfTokenManager && !$csrfTokenManager instanceof CsrfTokenManagerInterface) {
-            throw new UnexpectedTypeException($csrfTokenManager, 'CsrfProviderInterface or CsrfTokenManagerInterface or null');
-        }
-
         $this->engine = $engine;
         $this->csrfTokenManager = $csrfTokenManager;
     }
@@ -83,9 +48,10 @@ class FormRenderer implements FormRendererInterface
     /**
      * {@inheritdoc}
      */
-    public function setTheme(FormView $view, $themes)
+    public function setTheme(FormView $view, $themes /*, $useDefaultThemes = true */)
     {
-        $this->engine->setTheme($view, $themes);
+        $args = \func_get_args();
+        $this->engine->setTheme($view, $themes, isset($args[2]) ? (bool) $args[2] : true);
     }
 
     /**
@@ -103,7 +69,7 @@ class FormRenderer implements FormRendererInterface
     /**
      * {@inheritdoc}
      */
-    public function renderBlock(FormView $view, $blockName, array $variables = array())
+    public function renderBlock(FormView $view, $blockName, array $variables = [])
     {
         $resource = $this->engine->getResourceForBlockName($view, $blockName);
 
@@ -116,7 +82,7 @@ class FormRenderer implements FormRendererInterface
         // The variables are cached globally for a view (instead of for the
         // current suffix)
         if (!isset($this->variableStack[$viewCacheKey])) {
-            $this->variableStack[$viewCacheKey] = array();
+            $this->variableStack[$viewCacheKey] = [];
 
             // The default variable scope contains all view variables, merged with
             // the variables passed explicitly to the helper
@@ -162,7 +128,7 @@ class FormRenderer implements FormRendererInterface
     /**
      * {@inheritdoc}
      */
-    public function searchAndRenderBlock(FormView $view, $blockNameSuffix, array $variables = array())
+    public function searchAndRenderBlock(FormView $view, $blockNameSuffix, array $variables = [])
     {
         $renderOnlyOnce = 'row' === $blockNameSuffix || 'widget' === $blockNameSuffix;
 
@@ -195,9 +161,9 @@ class FormRenderer implements FormRendererInterface
         // to implement a custom "choice_widget" block (no matter in which theme),
         // or to fallback to the block of the parent type, which would be
         // "form_widget" in this example (again, no matter in which theme).
-        // If the designer wants to explicitly fallback to "form_widget" in his
-        // custom "choice_widget", for example because he only wants to wrap
-        // a <div> around the original implementation, he can simply call the
+        // If the designer wants to explicitly fallback to "form_widget" in their
+        // custom "choice_widget", for example because they only want to wrap
+        // a <div> around the original implementation, they can call the
         // widget() function again to render the block for the parent type.
         //
         // The second kind is implemented in the following blocks.
@@ -205,11 +171,11 @@ class FormRenderer implements FormRendererInterface
             // INITIAL CALL
             // Calculate the hierarchy of template blocks and start on
             // the bottom level of the hierarchy (= "_<id>_<section>" block)
-            $blockNameHierarchy = array();
+            $blockNameHierarchy = [];
             foreach ($view->vars['block_prefixes'] as $blockNamePrefix) {
                 $blockNameHierarchy[] = $blockNamePrefix.'_'.$blockNameSuffix;
             }
-            $hierarchyLevel = count($blockNameHierarchy) - 1;
+            $hierarchyLevel = \count($blockNameHierarchy) - 1;
 
             $hierarchyInit = true;
         } else {
@@ -225,7 +191,7 @@ class FormRenderer implements FormRendererInterface
         // The variables are cached globally for a view (instead of for the
         // current suffix)
         if (!isset($this->variableStack[$viewCacheKey])) {
-            $this->variableStack[$viewCacheKey] = array();
+            $this->variableStack[$viewCacheKey] = [];
 
             // The default variable scope contains all view variables, merged with
             // the variables passed explicitly to the helper
@@ -253,7 +219,7 @@ class FormRenderer implements FormRendererInterface
 
         // Escape if no resource exists for this block
         if (!$resource) {
-            if (count($blockNameHierarchy) !== count(array_unique($blockNameHierarchy))) {
+            if (\count($blockNameHierarchy) !== \count(array_unique($blockNameHierarchy))) {
                 throw new LogicException(sprintf('Unable to render the form because the block names array contains duplicates: "%s".', implode('", "', array_reverse($blockNameHierarchy))));
             }
 
@@ -316,6 +282,22 @@ class FormRenderer implements FormRendererInterface
      */
     public function humanize($text)
     {
-        return ucfirst(trim(strtolower(preg_replace(array('/([A-Z])/', '/[_\s]+/'), array('_$1', ' '), $text))));
+        return ucfirst(strtolower(trim(preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $text))));
+    }
+
+    /**
+     * @internal
+     */
+    public function encodeCurrency(Environment $environment, $text, $widget = '')
+    {
+        if ('UTF-8' === $charset = $environment->getCharset()) {
+            $text = htmlspecialchars($text, ENT_QUOTES | (\defined('ENT_SUBSTITUTE') ? ENT_SUBSTITUTE : 0), 'UTF-8');
+        } else {
+            $text = htmlentities($text, ENT_QUOTES | (\defined('ENT_SUBSTITUTE') ? ENT_SUBSTITUTE : 0), 'UTF-8');
+            $text = iconv('UTF-8', $charset, $text);
+            $widget = iconv('UTF-8', $charset, $widget);
+        }
+
+        return str_replace('{{ widget }}', $widget, $text);
     }
 }

@@ -28,7 +28,7 @@ use Doctrine\ORM\Mapping\MappingException;
 /**
  * XmlDriver is a metadata driver that enables mapping through XML files.
  *
- * @license 	http://www.opensource.org/licenses/lgpl-license.php LGPL
+ * @license 	http://www.opensource.org/licenses/mit-license.php MIT
  * @link    	www.doctrine-project.org
  * @since   	2.0
  * @author		Benjamin Eberlei <kontakt@beberlei.de>
@@ -69,17 +69,29 @@ class XmlDriver extends FileDriver
                 isset($xmlRoot['repository-class']) ? (string)$xmlRoot['repository-class'] : null
             );
             $metadata->isMappedSuperclass = true;
+        } else if ($xmlRoot->getName() == 'embeddable') {
+            $metadata->isEmbeddedClass = true;
         } else {
             throw MappingException::classIsNotAValidEntityOrMappedSuperClass($className);
         }
 
         // Evaluate <entity...> attributes
-        $table = array();
+        $primaryTable = array();
+
         if (isset($xmlRoot['table'])) {
-            $table['name'] = (string)$xmlRoot['table'];
+            $primaryTable['name'] = (string) $xmlRoot['table'];
         }
 
-        $metadata->setPrimaryTable($table);
+        if (isset($xmlRoot['schema'])) {
+            $primaryTable['schema'] = (string) $xmlRoot['schema'];
+        }
+
+        $metadata->setPrimaryTable($primaryTable);
+
+        // Evaluate second level cache
+        if (isset($xmlRoot->cache)) {
+            $metadata->enableCache($this->cacheToArray($xmlRoot->cache));
+        }
 
         // Evaluate named queries
         if (isset($xmlRoot->{'named-queries'})) {
@@ -143,11 +155,6 @@ class XmlDriver extends FileDriver
             }
         }
 
-        /* not implemented specially anyway. use table = schema.table
-        if (isset($xmlRoot['schema'])) {
-            $metadata->table['schema'] = (string)$xmlRoot['schema'];
-        }*/
-
         if (isset($xmlRoot['inheritance-type'])) {
             $inheritanceType = (string)$xmlRoot['inheritance-type'];
             $metadata->setInheritanceType(constant('Doctrine\ORM\Mapping\ClassMetadata::INHERITANCE_TYPE_' . $inheritanceType));
@@ -187,17 +194,21 @@ class XmlDriver extends FileDriver
         // Evaluate <indexes...>
         if (isset($xmlRoot->indexes)) {
             $metadata->table['indexes'] = array();
-            foreach ($xmlRoot->indexes->index as $index) {
-                $columns = explode(',', (string)$index['columns']);
+            foreach ($xmlRoot->indexes->index as $indexXml) {
+                $index = array('columns' => explode(',', (string) $indexXml['columns']));
 
-                if (isset($index['name'])) {
-                    $metadata->table['indexes'][(string)$index['name']] = array(
-                        'columns' => $columns
-                    );
+                if (isset($indexXml['flags'])) {
+                    $index['flags'] = explode(',', (string) $indexXml['flags']);
+                }
+
+                if (isset($indexXml->options)) {
+                    $index['options'] = $this->_parseOptions($indexXml->options->children());
+                }
+
+                if (isset($indexXml['name'])) {
+                    $metadata->table['indexes'][(string) $indexXml['name']] = $index;
                 } else {
-                    $metadata->table['indexes'][] = array(
-                        'columns' => $columns
-                    );
+                    $metadata->table['indexes'][] = $index;
                 }
             }
         }
@@ -205,17 +216,18 @@ class XmlDriver extends FileDriver
         // Evaluate <unique-constraints..>
         if (isset($xmlRoot->{'unique-constraints'})) {
             $metadata->table['uniqueConstraints'] = array();
-            foreach ($xmlRoot->{'unique-constraints'}->{'unique-constraint'} as $unique) {
-                $columns = explode(',', (string)$unique['columns']);
+            foreach ($xmlRoot->{'unique-constraints'}->{'unique-constraint'} as $uniqueXml) {
+                $unique = array('columns' => explode(',', (string) $uniqueXml['columns']));
 
-                if (isset($unique['name'])) {
-                    $metadata->table['uniqueConstraints'][(string)$unique['name']] = array(
-                        'columns' => $columns
-                    );
+
+                if (isset($uniqueXml->options)) {
+                    $unique['options'] = $this->_parseOptions($uniqueXml->options->children());
+                }
+
+                if (isset($uniqueXml['name'])) {
+                    $metadata->table['uniqueConstraints'][(string)$uniqueXml['name']] = $unique;
                 } else {
-                    $metadata->table['uniqueConstraints'][] = array(
-                        'columns' => $columns
-                    );
+                    $metadata->table['uniqueConstraints'][] = $unique;
                 }
             }
         }
@@ -238,6 +250,26 @@ class XmlDriver extends FileDriver
                 }
 
                 $metadata->mapField($mapping);
+            }
+        }
+
+        if (isset($xmlRoot->embedded)) {
+            foreach ($xmlRoot->embedded as $embeddedMapping) {
+                $columnPrefix = isset($embeddedMapping['column-prefix'])
+                    ? (string) $embeddedMapping['column-prefix']
+                    : null;
+
+                $useColumnPrefix = isset($embeddedMapping['use-column-prefix'])
+                    ? $this->evaluateBoolean($embeddedMapping['use-column-prefix'])
+                    : true;
+
+                $mapping = array(
+                    'fieldName' => (string) $embeddedMapping['name'],
+                    'class' => (string) $embeddedMapping['class'],
+                    'columnPrefix' => $useColumnPrefix ? $columnPrefix : false
+                );
+
+                $metadata->mapEmbedded($mapping);
             }
         }
 
@@ -353,6 +385,11 @@ class XmlDriver extends FileDriver
                 }
 
                 $metadata->mapOneToOne($mapping);
+
+                // Evaluate second level cache
+                if (isset($oneToOneElement->cache)) {
+                    $metadata->enableAssociationCache($mapping['fieldName'], $this->cacheToArray($oneToOneElement->cache));
+                }
             }
         }
 
@@ -392,6 +429,11 @@ class XmlDriver extends FileDriver
                 }
 
                 $metadata->mapOneToMany($mapping);
+
+                // Evaluate second level cache
+                if (isset($oneToManyElement->cache)) {
+                    $metadata->enableAssociationCache($mapping['fieldName'], $this->cacheToArray($oneToManyElement->cache));
+                }
             }
         }
 
@@ -432,6 +474,11 @@ class XmlDriver extends FileDriver
                 }
 
                 $metadata->mapManyToOne($mapping);
+
+                // Evaluate second level cache
+                if (isset($manyToOneElement->cache)) {
+                    $metadata->enableAssociationCache($mapping['fieldName'], $this->cacheToArray($manyToOneElement->cache));
+                }
             }
         }
 
@@ -497,6 +544,11 @@ class XmlDriver extends FileDriver
                 }
 
                 $metadata->mapManyToMany($mapping);
+
+                // Evaluate second level cache
+                if (isset($manyToManyElement->cache)) {
+                    $metadata->enableAssociationCache($mapping['fieldName'], $this->cacheToArray($manyToManyElement->cache));
+                }
             }
         }
 
@@ -706,13 +758,39 @@ class XmlDriver extends FileDriver
     }
 
     /**
+     * Parse / Normalize the cache configuration
+     *
+     * @param SimpleXMLElement $cacheMapping
+     *
+     * @return array
+     */
+    private function cacheToArray(SimpleXMLElement $cacheMapping)
+    {
+        $region = isset($cacheMapping['region']) ? (string) $cacheMapping['region'] : null;
+        $usage  = isset($cacheMapping['usage']) ? strtoupper($cacheMapping['usage']) : null;
+
+        if ($usage && ! defined('Doctrine\ORM\Mapping\ClassMetadata::CACHE_USAGE_' . $usage)) {
+            throw new \InvalidArgumentException(sprintf('Invalid cache usage "%s"', $usage));
+        }
+
+        if ($usage) {
+            $usage = constant('Doctrine\ORM\Mapping\ClassMetadata::CACHE_USAGE_' . $usage);
+        }
+
+        return array(
+            'usage'  => $usage,
+            'region' => $region,
+        );
+    }
+
+    /**
      * Gathers a list of cascade options found in the given cascade element.
      *
      * @param SimpleXMLElement $cascadeElement The cascade element.
      *
      * @return array The list of cascade options.
      */
-    private function _getCascadeMappings($cascadeElement)
+    private function _getCascadeMappings(SimpleXMLElement $cascadeElement)
     {
         $cascades = array();
         /* @var $action SimpleXmlElement */
@@ -733,7 +811,8 @@ class XmlDriver extends FileDriver
     protected function loadMappingFile($file)
     {
         $result = array();
-        $xmlElement = simplexml_load_file($file);
+        // Note: we do not use `simplexml_load_file()` because of https://bugs.php.net/bug.php?id=62577
+        $xmlElement = simplexml_load_string(file_get_contents($file));
 
         if (isset($xmlElement->entity)) {
             foreach ($xmlElement->entity as $entityElement) {
@@ -744,6 +823,11 @@ class XmlDriver extends FileDriver
             foreach ($xmlElement->{'mapped-superclass'} as $mappedSuperClass) {
                 $className = (string)$mappedSuperClass['name'];
                 $result[$className] = $mappedSuperClass;
+            }
+        } else if (isset($xmlElement->embeddable)) {
+            foreach ($xmlElement->embeddable as $embeddableElement) {
+                $embeddableName = (string) $embeddableElement['name'];
+                $result[$embeddableName] = $embeddableElement;
             }
         }
 
@@ -759,6 +843,6 @@ class XmlDriver extends FileDriver
     {
         $flag = (string)$element;
 
-        return ($flag === true || $flag == "true" || $flag == "1");
+        return ($flag == "true" || $flag == "1");
     }
 }

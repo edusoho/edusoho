@@ -11,6 +11,7 @@
 
 namespace Sensio\Bundle\GeneratorBundle\Tests\Manipulator;
 
+use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessBuilder;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Sensio\Bundle\GeneratorBundle\Tests\Generator\GeneratorTest;
@@ -45,14 +46,33 @@ class KernelManipulatorTest extends GeneratorTest
         $phpFinder = new PhpExecutableFinder();
         $phpExecutable = $phpFinder->find();
 
-        $this->assertNotSame(false, $phpExecutable, 'Php executable binary found');
+        $this->assertNotFalse($phpExecutable, 'Php executable binary found');
 
-        $pb = new ProcessBuilder();
-        $process = $pb->add($phpExecutable)->add('-l')->add($fullpath)->getProcess();
+        $arguments = array($phpExecutable, '-l', $fullpath);
+
+        // ProcessBuilder is deprecated in symfony/process version 3.4,
+        // but Process doesn't accept an array of arguments in versions <3.3,
+        // in which ProcessUtils::escapeArgument() is not marked as deprecated
+        $useProcess = true;
+        if (method_exists('Symfony\Component\Process\ProcessUtils', 'escapeArgument')) {
+            $r = new \ReflectionMethod('Symfony\Component\Process\ProcessUtils', 'escapeArgument');
+            if ($r->isPublic() && false === strpos($r->getDocComment(), '@deprecated')) {
+                $useProcess = false;
+            }
+        }
+        if ($useProcess) {
+            $process = new Process($arguments);
+            // preserve the BC with symfony <3.3
+            $process->setCommandLine($process->getCommandLine());
+        } else {
+            $pb = new ProcessBuilder($arguments);
+            $process = $pb->getProcess();
+        }
+
         $process->run();
 
         $result = strpos($process->getOutput(), 'No syntax errors detected');
-        $this->assertNotSame(false, $result, 'Manipulator should not provoke syntax errors');
+        $this->assertNotFalse($result, 'Manipulator should not provoke syntax errors');
     }
 
     /**
@@ -66,10 +86,9 @@ class KernelManipulatorTest extends GeneratorTest
             'With bundles array contains comma' => array(__DIR__.'/Stubs/ContainsCommaKernelStub.php'),
             'With bundles added w/o trailing comma' => array(__DIR__.'/Stubs/ContainsBundlesKernelStub.php'),
             'With some extra code and bad formatted' => array(__DIR__.'/Stubs/ContainsExtraCodeKernelStub.php'),
-
         );
 
-        if(PHP_VERSION_ID >= 50400){
+        if (PHP_VERSION_ID >= 50400) {
             $stubs = array_merge($stubs, array(
                 'With empty bundles array, short array syntax' => array(__DIR__.'/Stubs/EmptyBundlesShortArraySyntaxKernelStub.php'),
                 'With empty multiline bundles array, short array syntax' => array(__DIR__.'/Stubs/EmptyBundlesMultilineShortArraySyntaxKernelStub.php'),

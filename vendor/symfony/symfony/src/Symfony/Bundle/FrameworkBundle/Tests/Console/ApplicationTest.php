@@ -15,8 +15,13 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\ApplicationTester;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class ApplicationTest extends TestCase
 {
@@ -24,30 +29,30 @@ class ApplicationTest extends TestCase
     {
         $bundle = $this->getMockBuilder('Symfony\Component\HttpKernel\Bundle\BundleInterface')->getMock();
 
-        $kernel = $this->getKernel(array($bundle), true);
+        $kernel = $this->getKernel([$bundle], true);
 
         $application = new Application($kernel);
-        $application->doRun(new ArrayInput(array('list')), new NullOutput());
+        $application->doRun(new ArrayInput(['list']), new NullOutput());
     }
 
     public function testBundleCommandsAreRegistered()
     {
-        $bundle = $this->createBundleMock(array());
+        $bundle = $this->createBundleMock([]);
 
-        $kernel = $this->getKernel(array($bundle), true);
+        $kernel = $this->getKernel([$bundle], true);
 
         $application = new Application($kernel);
-        $application->doRun(new ArrayInput(array('list')), new NullOutput());
+        $application->doRun(new ArrayInput(['list']), new NullOutput());
 
         // Calling twice: registration should only be done once.
-        $application->doRun(new ArrayInput(array('list')), new NullOutput());
+        $application->doRun(new ArrayInput(['list']), new NullOutput());
     }
 
     public function testBundleCommandsAreRetrievable()
     {
-        $bundle = $this->createBundleMock(array());
+        $bundle = $this->createBundleMock([]);
 
-        $kernel = $this->getKernel(array($bundle));
+        $kernel = $this->getKernel([$bundle]);
 
         $application = new Application($kernel);
         $application->all();
@@ -60,9 +65,9 @@ class ApplicationTest extends TestCase
     {
         $command = new Command('example');
 
-        $bundle = $this->createBundleMock(array($command));
+        $bundle = $this->createBundleMock([$command]);
 
-        $kernel = $this->getKernel(array($bundle));
+        $kernel = $this->getKernel([$bundle]);
 
         $application = new Application($kernel);
 
@@ -73,9 +78,9 @@ class ApplicationTest extends TestCase
     {
         $command = new Command('example');
 
-        $bundle = $this->createBundleMock(array($command));
+        $bundle = $this->createBundleMock([$command]);
 
-        $kernel = $this->getKernel(array($bundle));
+        $kernel = $this->getKernel([$bundle]);
 
         $application = new Application($kernel);
 
@@ -85,11 +90,11 @@ class ApplicationTest extends TestCase
     public function testBundleCommandCanBeFoundByAlias()
     {
         $command = new Command('example');
-        $command->setAliases(array('alias'));
+        $command->setAliases(['alias']);
 
-        $bundle = $this->createBundleMock(array($command));
+        $bundle = $this->createBundleMock([$command]);
 
-        $kernel = $this->getKernel(array($bundle));
+        $kernel = $this->getKernel([$bundle]);
 
         $application = new Application($kernel);
 
@@ -98,21 +103,93 @@ class ApplicationTest extends TestCase
 
     public function testBundleCommandsHaveRightContainer()
     {
-        $command = $this->getMockForAbstractClass('Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand', array('foo'), '', true, true, true, array('setContainer'));
+        $command = $this->getMockForAbstractClass('Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand', ['foo'], '', true, true, true, ['setContainer']);
         $command->setCode(function () {});
         $command->expects($this->exactly(2))->method('setContainer');
 
-        $application = new Application($this->getKernel(array(), true));
+        $application = new Application($this->getKernel([], true));
         $application->setAutoExit(false);
         $application->setCatchExceptions(false);
         $application->add($command);
         $tester = new ApplicationTester($application);
 
         // set container is called here
-        $tester->run(array('command' => 'foo'));
+        $tester->run(['command' => 'foo']);
 
         // as the container might have change between two runs, setContainer must called again
-        $tester->run(array('command' => 'foo'));
+        $tester->run(['command' => 'foo']);
+    }
+
+    public function testBundleCommandCanOverriddeAPreExistingCommandWithTheSameName()
+    {
+        $command = new Command('example');
+
+        $bundle = $this->createBundleMock([$command]);
+
+        $kernel = $this->getKernel([$bundle]);
+
+        $application = new Application($kernel);
+        $newCommand = new Command('example');
+        $application->add($newCommand);
+
+        $this->assertSame($newCommand, $application->get('example'));
+    }
+
+    public function testRunOnlyWarnsOnUnregistrableCommand()
+    {
+        $container = new ContainerBuilder();
+        $container->register('event_dispatcher', EventDispatcher::class);
+        $container->register(ThrowingCommand::class, ThrowingCommand::class);
+        $container->setParameter('console.command.ids', [ThrowingCommand::class => ThrowingCommand::class]);
+
+        $kernel = $this->getMockBuilder(KernelInterface::class)->getMock();
+        $kernel
+            ->method('getBundles')
+            ->willReturn([$this->createBundleMock(
+                [(new Command('fine'))->setCode(function (InputInterface $input, OutputInterface $output) { $output->write('fine'); })]
+            )]);
+        $kernel
+            ->method('getContainer')
+            ->willReturn($container);
+
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+
+        $tester = new ApplicationTester($application);
+        $tester->run(['command' => 'fine']);
+        $output = $tester->getDisplay();
+
+        $this->assertSame(0, $tester->getStatusCode());
+        $this->assertStringContainsString('Some commands could not be registered:', $output);
+        $this->assertStringContainsString('throwing', $output);
+        $this->assertStringContainsString('fine', $output);
+    }
+
+    public function testRegistrationErrorsAreDisplayedOnCommandNotFound()
+    {
+        $container = new ContainerBuilder();
+        $container->register('event_dispatcher', EventDispatcher::class);
+
+        $kernel = $this->getMockBuilder(KernelInterface::class)->getMock();
+        $kernel
+            ->method('getBundles')
+            ->willReturn([$this->createBundleMock(
+                [(new Command(null))->setCode(function (InputInterface $input, OutputInterface $output) { $output->write('fine'); })]
+            )]);
+        $kernel
+            ->method('getContainer')
+            ->willReturn($container);
+
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+
+        $tester = new ApplicationTester($application);
+        $tester->run(['command' => 'fine']);
+        $output = $tester->getDisplay();
+
+        $this->assertSame(1, $tester->getStatusCode());
+        $this->assertStringContainsString('Some commands could not be registered:', $output);
+        $this->assertStringContainsString('Command "fine" is not defined.', $output);
     }
 
     private function getKernel(array $bundles, $useDispatcher = false)
@@ -129,32 +206,32 @@ class ApplicationTest extends TestCase
                 ->expects($this->atLeastOnce())
                 ->method('get')
                 ->with($this->equalTo('event_dispatcher'))
-                ->will($this->returnValue($dispatcher));
+                ->willReturn($dispatcher);
         }
 
         $container
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('hasParameter')
-            ->with($this->equalTo('console.command.ids'))
-            ->will($this->returnValue(true))
+            ->withConsecutive(['console.command.ids'], ['console.lazy_command.ids'])
+            ->willReturnOnConsecutiveCalls(true, true)
         ;
         $container
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getParameter')
-            ->with($this->equalTo('console.command.ids'))
-            ->will($this->returnValue(array()))
+            ->withConsecutive(['console.lazy_command.ids'], ['console.command.ids'])
+            ->willReturnOnConsecutiveCalls([], [])
         ;
 
         $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\KernelInterface')->getMock();
         $kernel
             ->expects($this->any())
             ->method('getBundles')
-            ->will($this->returnValue($bundles))
+            ->willReturn($bundles)
         ;
         $kernel
             ->expects($this->any())
             ->method('getContainer')
-            ->will($this->returnValue($container))
+            ->willReturn($container)
         ;
 
         return $kernel;
@@ -166,11 +243,19 @@ class ApplicationTest extends TestCase
         $bundle
             ->expects($this->once())
             ->method('registerCommands')
-            ->will($this->returnCallback(function (Application $application) use ($commands) {
+            ->willReturnCallback(function (Application $application) use ($commands) {
                 $application->addCommands($commands);
-            }))
+            })
         ;
 
         return $bundle;
+    }
+}
+
+class ThrowingCommand extends Command
+{
+    public function __construct()
+    {
+        throw new \Exception('throwing');
     }
 }

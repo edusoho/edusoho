@@ -1,6 +1,8 @@
 SensioDistributionBundle
 ========================
 
+**WARNING**: This bundle does not support Symfony 4. Symfony Flex is a total replacement for this bundle.
+
 SensioDistributionBundle provides useful developer features that can be re-used
 amongst several Symfony Distributions.
 

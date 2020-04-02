@@ -18,6 +18,7 @@ use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Preg;
 use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
@@ -37,7 +38,7 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurat
      */
     public function fixSpace(Tokens $tokens, $index)
     {
-        @trigger_error(__METHOD__.' is deprecated and will be removed in 3.0', E_USER_DEPRECATED);
+        @trigger_error(__METHOD__.' is deprecated and will be removed in 3.0.', E_USER_DEPRECATED);
         $this->fixSpace2($tokens, $index);
     }
 
@@ -116,13 +117,13 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurat
             $token = $tokens[$index];
 
             if ($token->equals(')')) {
-                $index = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $index, false);
+                $index = $tokens->findBlockStart(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $index);
 
                 continue;
             }
 
             if ($token->isGivenKind(CT::T_ARRAY_SQUARE_BRACE_CLOSE)) {
-                $index = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_ARRAY_SQUARE_BRACE, $index, false);
+                $index = $tokens->findBlockStart(Tokens::BLOCK_TYPE_ARRAY_SQUARE_BRACE, $index);
 
                 continue;
             }
@@ -146,22 +147,26 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurat
             $prevIndex = $tokens->getPrevNonWhitespace($index - 1);
 
             if (!$tokens[$prevIndex]->equalsAny(array(',', array(T_END_HEREDOC))) && !$tokens[$prevIndex]->isComment()) {
-                $tokens[$index - 1]->clear();
+                $tokens->clearAt($index - 1);
             }
         }
 
-        $nextToken = $tokens[$index + 1];
+        $nextIndex = $index + 1;
+        $nextToken = $tokens[$nextIndex];
 
         // Two cases for fix space after comma (exclude multiline comments)
         //  1) multiple spaces after comma
         //  2) no space after comma
         if ($nextToken->isWhitespace()) {
-            if ($this->configuration['keep_multiple_spaces_after_comma'] || $this->isCommentLastLineToken($tokens, $index + 2)) {
+            if (
+                ($this->configuration['keep_multiple_spaces_after_comma'] && !Preg::match('/\R/', $nextToken->getContent()))
+                || $this->isCommentLastLineToken($tokens, $index + 2)
+            ) {
                 return;
             }
 
             $newContent = ltrim($nextToken->getContent(), " \t");
-            $nextToken->setContent('' === $newContent ? ' ' : $newContent);
+            $tokens[$nextIndex] = new Token(array(T_WHITESPACE, '' === $newContent ? ' ' : $newContent));
 
             return;
         }

@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
 use Codeages\Biz\Pay\Service\PayService;
 use Biz\OrderFacade\Service\OrderFacadeService;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PayCenter extends AbstractResource
 {
@@ -38,7 +39,7 @@ class PayCenter extends AbstractResource
             if ($trade['platform'] == 'wechat' && $trade['platform_type'] == 'Mweb') {
                 $trade['paymentForm'] = array();
                 $trade['paymentHtml'] = '';
-                $trade['paymentUrl'] = $this->generateUrl('cashier_wechat_mweb_app_trade', array('tradeSn' => $params['orderId']), true);
+                $trade['paymentUrl'] = $this->generateUrl('cashier_wechat_mweb_app_trade', array('tradeSn' => $params['orderId']), UrlGeneratorInterface::ABSOLUTE_URL);
             } else {
                 $platformCreatedResult = $this->getPayService()->getCreateTradeResultByTradeSnFromPlatform($params['orderId']);
                 $form = $this->makePayForm($platformCreatedResult);

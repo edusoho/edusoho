@@ -131,7 +131,3 @@ class CashierForm {
 
 
 export default CashierForm;
-
-
-
-

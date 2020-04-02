@@ -12,7 +12,6 @@
 namespace Symfony\Component\Intl\Data\Provider;
 
 use Symfony\Component\Intl\Data\Bundle\Reader\BundleEntryReaderInterface;
-use Symfony\Component\Intl\Locale;
 
 /**
  * Data provider for region-related ICU data.
@@ -23,23 +22,14 @@ use Symfony\Component\Intl\Locale;
  */
 class RegionDataProvider
 {
-    /**
-     * @var string
-     */
     private $path;
-
-    /**
-     * @var BundleEntryReaderInterface
-     */
     private $reader;
 
     /**
      * Creates a data provider that reads locale-related data from .res files.
      *
-     * @param string                     $path   The path to the directory
-     *                                           containing the .res files.
-     * @param BundleEntryReaderInterface $reader The reader for reading the .res
-     *                                           files.
+     * @param string                     $path   The path to the directory containing the .res files
+     * @param BundleEntryReaderInterface $reader The reader for reading the .res files
      */
     public function __construct($path, BundleEntryReaderInterface $reader)
     {
@@ -49,25 +39,25 @@ class RegionDataProvider
 
     public function getRegions()
     {
-        return $this->reader->readEntry($this->path, 'meta', array('Regions'));
+        return $this->reader->readEntry($this->path, 'meta', ['Regions']);
     }
 
     public function getName($region, $displayLocale = null)
     {
         if (null === $displayLocale) {
-            $displayLocale = Locale::getDefault();
+            $displayLocale = \Locale::getDefault();
         }
 
-        return $this->reader->readEntry($this->path, $displayLocale, array('Names', $region));
+        return $this->reader->readEntry($this->path, $displayLocale, ['Names', $region]);
     }
 
     public function getNames($displayLocale = null)
     {
         if (null === $displayLocale) {
-            $displayLocale = Locale::getDefault();
+            $displayLocale = \Locale::getDefault();
         }
 
-        $names = $this->reader->readEntry($this->path, $displayLocale, array('Names'));
+        $names = $this->reader->readEntry($this->path, $displayLocale, ['Names']);
 
         if ($names instanceof \Traversable) {
             $names = iterator_to_array($names);
