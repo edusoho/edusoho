@@ -16,7 +16,6 @@ use AppBundle\Common\Paginator;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
-use ExamParser\Writer\WriteDocx;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class TestpaperController extends BaseController
@@ -379,7 +378,6 @@ class TestpaperController extends BaseController
         if (empty($result)) {
             return $this->createMessageResponse('info', '导出试卷为空', null, 3000, $this->generateUrl('question_bank_manage_testpaper_list', array('id' => $id)));
         }
-
 
         $headers = array(
             'Content-Type' => 'application/msword',
