@@ -274,7 +274,7 @@ class ThreadController extends CourseBaseController
 
         if ('POST' == $request->getMethod()) {
             try {
-                $form->submit($request);
+                $form->handleRequest($request);
 
                 if ($form->isValid()) {
                     $thread = $this->getThreadService()->updateThread($thread['courseId'], $thread['id'], $form->getData());
@@ -450,7 +450,7 @@ class ThreadController extends CourseBaseController
         $currentUser = $this->getCurrentUser();
 
         if ('POST' == $request->getMethod()) {
-            $form->submit($request);
+            $form->handleRequest($request);
             $userId = $currentUser->id;
 
             if ($form->isValid()) {
@@ -572,7 +572,7 @@ class ThreadController extends CourseBaseController
         $form = $this->createPostForm($post);
 
         if ('POST' == $request->getMethod()) {
-            $form->submit($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $post = $this->getThreadService()->updatePost($post['courseId'], $post['id'], $form->getData());
