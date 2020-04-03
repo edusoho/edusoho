@@ -172,7 +172,7 @@ export default {
     },
     isSelectedDataSame(selectedData) {
       for (const key in this.selectedData) {
-        if (this.selectedData[key] !== selectedData[key]) {
+        if (this.selectedData[key] != selectedData[key]) {
           return false;
         }
       }
