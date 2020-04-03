@@ -43,7 +43,7 @@ class Exercise extends Activity
         ));
 
         return $this->getExerciseActivityService()->createActivity(array(
-            'sceneId' => $answerScene['id'],
+            'answerSceneId' => $answerScene['id'],
             'drawCondition' => $this->getCondition($fields),
         ));
     }
@@ -58,7 +58,7 @@ class Exercise extends Activity
         ));
 
         return $this->getExerciseActivityService()->createActivity(array(
-            'sceneId' => $answerScene['id'],
+            'answerSceneId' => $answerScene['id'],
             'drawCondition' => $exercise['drawCondition'],
         ));
     }
