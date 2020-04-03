@@ -11,9 +11,9 @@
 
 namespace Symfony\Component\HttpKernel\Event;
 
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * Allows to filter a Response object.
@@ -26,11 +26,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class FilterResponseEvent extends KernelEvent
 {
-    /**
-     * The current response object.
-     *
-     * @var Response
-     */
     private $response;
 
     public function __construct(HttpKernelInterface $kernel, Request $request, $requestType, Response $response)
@@ -52,8 +47,6 @@ class FilterResponseEvent extends KernelEvent
 
     /**
      * Sets a new response object.
-     *
-     * @param Response $response
      */
     public function setResponse(Response $response)
     {

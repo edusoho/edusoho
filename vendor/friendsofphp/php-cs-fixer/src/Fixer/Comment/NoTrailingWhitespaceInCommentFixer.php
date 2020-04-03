@@ -15,6 +15,8 @@ namespace PhpCsFixer\Fixer\Comment;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Preg;
+use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
@@ -28,7 +30,7 @@ final class NoTrailingWhitespaceInCommentFixer extends AbstractFixer
     public function getDefinition()
     {
         return new FixerDefinition(
-            'There MUST be no trailing spaces inside comments and phpdocs.',
+            'There MUST be no trailing spaces inside comment or PHPDoc.',
             array(new CodeSample('<?php
 // This is '.'
 // a comment. '.'
@@ -51,23 +53,21 @@ final class NoTrailingWhitespaceInCommentFixer extends AbstractFixer
     {
         foreach ($tokens as $index => $token) {
             if ($token->isGivenKind(T_DOC_COMMENT)) {
-                $token->setContent(
-                    preg_replace('/[ \t]+$/m', '', $token->getContent())
-                );
+                $tokens[$index] = new Token(array(T_DOC_COMMENT, Preg::replace('/[ \t]+$/m', '', $token->getContent())));
 
                 continue;
             }
 
             if ($token->isGivenKind(T_COMMENT)) {
                 if ('/*' === substr($token->getContent(), 0, 2)) {
-                    $token->setContent(
-                        preg_replace('/[ \t]+$/m', '', $token->getContent())
-                    );
+                    $tokens[$index] = new Token(array(T_COMMENT, Preg::replace('/[ \t]+$/m', '', $token->getContent())));
                 } elseif (isset($tokens[$index + 1]) && $tokens[$index + 1]->isWhitespace()) {
-                    $nextToken = $tokens[$index + 1];
-                    $nextToken->setContent(
-                        ltrim($nextToken->getContent(), " \t")
-                    );
+                    $trimmedContent = ltrim($tokens[$index + 1]->getContent(), " \t");
+                    if ('' !== $trimmedContent) {
+                        $tokens[$index + 1] = new Token(array(T_WHITESPACE, $trimmedContent));
+                    } else {
+                        $tokens->clearAt($index + 1);
+                    }
                 }
             }
         }

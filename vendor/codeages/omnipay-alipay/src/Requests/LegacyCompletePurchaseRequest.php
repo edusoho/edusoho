@@ -4,9 +4,12 @@ namespace Omnipay\Alipay\Requests;
 
 use Omnipay\Alipay\Responses\LegacyCompletePurchaseResponse;
 use Omnipay\Common\Message\ResponseInterface;
-class LegacyCompletePurchaseRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
+
+class LegacyCompletePurchaseRequest extends AbstractLegacyRequest
 {
     protected $verifyNotifyId = true;
+
+
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
      * gateway, but will usually be either an associative array, or a SimpleXMLElement.
@@ -17,6 +20,8 @@ class LegacyCompletePurchaseRequest extends \Omnipay\Alipay\Requests\AbstractLeg
     {
         return $this->getParams();
     }
+
+
     /**
      * @return mixed
      */
@@ -24,6 +29,8 @@ class LegacyCompletePurchaseRequest extends \Omnipay\Alipay\Requests\AbstractLeg
     {
         return $this->getParameter('params');
     }
+
+
     /**
      * Send the request with specified data
      *
@@ -34,30 +41,39 @@ class LegacyCompletePurchaseRequest extends \Omnipay\Alipay\Requests\AbstractLeg
     public function sendData($data)
     {
         if (array_get($data, 'result')) {
-            $request = new \Omnipay\Alipay\Requests\LegacyVerifyAppPayReturnRequest($this->httpClient, $this->httpRequest);
+            $request = new LegacyVerifyAppPayReturnRequest($this->httpClient, $this->httpRequest);
             $request->initialize($this->parameters->all());
             $request->setResult($data['result']);
             $request->setAlipayPublicKey($this->getAlipayPublicKey());
             $data = $request->send()->getData();
-            $data = array_map(function ($v) {
-                return substr($v, 1, mb_strlen($v) - 2) . '';
-            }, $data);
+
+            $data = array_map(
+                function ($v) {
+                    return substr($v, 1, mb_strlen($v) - 2) . '';
+                },
+                $data
+            );
+
             if (array_get($data, 'success') == 'true') {
                 $data['trade_status'] = 'TRADE_SUCCESS';
             } else {
                 $data['trade_status'] = 'WAIT_BUYER_PAY';
             }
         } else {
-            $request = new \Omnipay\Alipay\Requests\LegacyNotifyRequest($this->httpClient, $this->httpRequest);
+            $request = new LegacyNotifyRequest($this->httpClient, $this->httpRequest);
             $request->initialize($this->parameters->all());
             $request->setAlipayPublicKey($this->getAlipayPublicKey());
             $request->setVerifyNotifyId($this->verifyNotifyId);
             $request->setKey($this->getKey());
             $response = $request->send();
+
             $data = $response->getData();
         }
-        return $this->response = new \Omnipay\Alipay\Responses\LegacyCompletePurchaseResponse($this, $data);
+
+        return $this->response = new LegacyCompletePurchaseResponse($this, $data);
     }
+
+
     /**
      * @param $value
      *
@@ -67,14 +83,17 @@ class LegacyCompletePurchaseRequest extends \Omnipay\Alipay\Requests\AbstractLeg
     {
         return $this->setParameter('params', $value);
     }
+
+
     /**
      * @param boolean $verifyNotifyId
      *
-     * @return LegacyCompletePurchaseRequest
+     * @return \Omnipay\Alipay\Requests\LegacyCompletePurchaseRequest
      */
     public function setVerifyNotifyId($verifyNotifyId)
     {
         $this->verifyNotifyId = $verifyNotifyId;
+
         return $this;
     }
 }

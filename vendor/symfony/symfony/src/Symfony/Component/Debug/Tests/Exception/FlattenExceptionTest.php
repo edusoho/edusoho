@@ -13,19 +13,20 @@ namespace Symfony\Component\Debug\Tests\Exception;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Debug\Exception\FlattenException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+use Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\GoneHttpException;
 use Symfony\Component\HttpKernel\Exception\LengthRequiredHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\PreconditionFailedHttpException;
 use Symfony\Component\HttpKernel\Exception\PreconditionRequiredHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
 class FlattenExceptionTest extends TestCase
@@ -53,7 +54,7 @@ class FlattenExceptionTest extends TestCase
         $flattened = FlattenException::create(new ConflictHttpException());
         $this->assertEquals('409', $flattened->getStatusCode());
 
-        $flattened = FlattenException::create(new MethodNotAllowedHttpException(array('POST')));
+        $flattened = FlattenException::create(new MethodNotAllowedHttpException(['POST']));
         $this->assertEquals('405', $flattened->getStatusCode());
 
         $flattened = FlattenException::create(new AccessDeniedHttpException());
@@ -79,33 +80,38 @@ class FlattenExceptionTest extends TestCase
 
         $flattened = FlattenException::create(new UnsupportedMediaTypeHttpException());
         $this->assertEquals('415', $flattened->getStatusCode());
+
+        if (class_exists(SuspiciousOperationException::class)) {
+            $flattened = FlattenException::create(new SuspiciousOperationException());
+            $this->assertEquals('400', $flattened->getStatusCode());
+        }
     }
 
     public function testHeadersForHttpException()
     {
-        $flattened = FlattenException::create(new MethodNotAllowedHttpException(array('POST')));
-        $this->assertEquals(array('Allow' => 'POST'), $flattened->getHeaders());
+        $flattened = FlattenException::create(new MethodNotAllowedHttpException(['POST']));
+        $this->assertEquals(['Allow' => 'POST'], $flattened->getHeaders());
 
         $flattened = FlattenException::create(new UnauthorizedHttpException('Basic realm="My Realm"'));
-        $this->assertEquals(array('WWW-Authenticate' => 'Basic realm="My Realm"'), $flattened->getHeaders());
+        $this->assertEquals(['WWW-Authenticate' => 'Basic realm="My Realm"'], $flattened->getHeaders());
 
         $flattened = FlattenException::create(new ServiceUnavailableHttpException('Fri, 31 Dec 1999 23:59:59 GMT'));
-        $this->assertEquals(array('Retry-After' => 'Fri, 31 Dec 1999 23:59:59 GMT'), $flattened->getHeaders());
+        $this->assertEquals(['Retry-After' => 'Fri, 31 Dec 1999 23:59:59 GMT'], $flattened->getHeaders());
 
         $flattened = FlattenException::create(new ServiceUnavailableHttpException(120));
-        $this->assertEquals(array('Retry-After' => 120), $flattened->getHeaders());
+        $this->assertEquals(['Retry-After' => 120], $flattened->getHeaders());
 
         $flattened = FlattenException::create(new TooManyRequestsHttpException('Fri, 31 Dec 1999 23:59:59 GMT'));
-        $this->assertEquals(array('Retry-After' => 'Fri, 31 Dec 1999 23:59:59 GMT'), $flattened->getHeaders());
+        $this->assertEquals(['Retry-After' => 'Fri, 31 Dec 1999 23:59:59 GMT'], $flattened->getHeaders());
 
         $flattened = FlattenException::create(new TooManyRequestsHttpException(120));
-        $this->assertEquals(array('Retry-After' => 120), $flattened->getHeaders());
+        $this->assertEquals(['Retry-After' => 120], $flattened->getHeaders());
     }
 
     /**
      * @dataProvider flattenDataProvider
      */
-    public function testFlattenHttpException(\Exception $exception, $statusCode)
+    public function testFlattenHttpException(\Exception $exception)
     {
         $flattened = FlattenException::create($exception);
         $flattened2 = FlattenException::create($exception);
@@ -120,7 +126,7 @@ class FlattenExceptionTest extends TestCase
     /**
      * @dataProvider flattenDataProvider
      */
-    public function testPrevious(\Exception $exception, $statusCode)
+    public function testPrevious(\Exception $exception)
     {
         $flattened = FlattenException::create($exception);
         $flattened2 = FlattenException::create($exception);
@@ -129,7 +135,7 @@ class FlattenExceptionTest extends TestCase
 
         $this->assertSame($flattened2, $flattened->getPrevious());
 
-        $this->assertSame(array($flattened2), $flattened->getAllPrevious());
+        $this->assertSame([$flattened2], $flattened->getAllPrevious());
     }
 
     /**
@@ -167,43 +173,118 @@ class FlattenExceptionTest extends TestCase
     /**
      * @dataProvider flattenDataProvider
      */
-    public function testToArray(\Exception $exception, $statusCode)
+    public function testToArray(\Exception $exception)
     {
         $flattened = FlattenException::create($exception);
-        $flattened->setTrace(array(), 'foo.php', 123);
+        $flattened->setTrace([], 'foo.php', 123);
 
-        $this->assertEquals(array(
-            array(
+        $this->assertEquals([
+            [
                 'message' => 'test',
                 'class' => 'Exception',
-                'trace' => array(array(
+                'trace' => [[
                     'namespace' => '', 'short_class' => '', 'class' => '', 'type' => '', 'function' => '', 'file' => 'foo.php', 'line' => 123,
-                    'args' => array(),
-                )),
-            ),
-        ), $flattened->toArray());
+                    'args' => [],
+                ]],
+            ],
+        ], $flattened->toArray());
     }
 
     public function flattenDataProvider()
     {
-        return array(
-            array(new \Exception('test', 123), 500),
-        );
+        return [
+            [new \Exception('test', 123)],
+        ];
+    }
+
+    public function testArguments()
+    {
+        if (\PHP_VERSION_ID >= 70400) {
+            $this->markTestSkipped('PHP 7.4 removes arguments from exception traces.');
+        }
+
+        $dh = opendir(__DIR__);
+        $fh = tmpfile();
+
+        $incomplete = unserialize('O:14:"BogusTestClass":0:{}');
+
+        $exception = $this->createException([
+            (object) ['foo' => 1],
+            new NotFoundHttpException(),
+            $incomplete,
+            $dh,
+            $fh,
+            function () {},
+            [1, 2],
+            ['foo' => 123],
+            null,
+            true,
+            false,
+            0,
+            0.0,
+            '0',
+            '',
+            INF,
+            NAN,
+        ]);
+
+        $flattened = FlattenException::create($exception);
+        $trace = $flattened->getTrace();
+        $args = $trace[1]['args'];
+        $array = $args[0][1];
+
+        closedir($dh);
+        fclose($fh);
+
+        $i = 0;
+        $this->assertSame(['object', 'stdClass'], $array[$i++]);
+        $this->assertSame(['object', 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException'], $array[$i++]);
+        $this->assertSame(['incomplete-object', 'BogusTestClass'], $array[$i++]);
+        $this->assertSame(['resource', \defined('HHVM_VERSION') ? 'Directory' : 'stream'], $array[$i++]);
+        $this->assertSame(['resource', 'stream'], $array[$i++]);
+
+        $args = $array[$i++];
+        $this->assertSame($args[0], 'object');
+        $this->assertTrue('Closure' === $args[1] || is_subclass_of($args[1], '\Closure'), 'Expect object class name to be Closure or a subclass of Closure.');
+
+        $this->assertSame(['array', [['integer', 1], ['integer', 2]]], $array[$i++]);
+        $this->assertSame(['array', ['foo' => ['integer', 123]]], $array[$i++]);
+        $this->assertSame(['null', null], $array[$i++]);
+        $this->assertSame(['boolean', true], $array[$i++]);
+        $this->assertSame(['boolean', false], $array[$i++]);
+        $this->assertSame(['integer', 0], $array[$i++]);
+        $this->assertSame(['float', 0.0], $array[$i++]);
+        $this->assertSame(['string', '0'], $array[$i++]);
+        $this->assertSame(['string', ''], $array[$i++]);
+        $this->assertSame(['float', INF], $array[$i++]);
+
+        // assertEquals() does not like NAN values.
+        $this->assertEquals($array[$i][0], 'float');
+        $this->assertNan($array[$i][1]);
     }
 
     public function testRecursionInArguments()
     {
-        $a = array('foo', array(2, &$a));
+        if (\PHP_VERSION_ID >= 70400) {
+            $this->markTestSkipped('PHP 7.4 removes arguments from exception traces.');
+        }
+
+        $a = null;
+        $a = ['foo', [2, &$a]];
         $exception = $this->createException($a);
 
         $flattened = FlattenException::create($exception);
         $trace = $flattened->getTrace();
-        $this->assertContains('*DEEP NESTED ARRAY*', serialize($trace));
+        $this->assertStringContainsString('*DEEP NESTED ARRAY*', serialize($trace));
     }
 
     public function testTooBigArray()
     {
-        $a = array();
+        if (\PHP_VERSION_ID >= 70400) {
+            $this->markTestSkipped('PHP 7.4 removes arguments from exception traces.');
+        }
+
+        $a = [];
         for ($i = 0; $i < 20; ++$i) {
             for ($j = 0; $j < 50; ++$j) {
                 for ($k = 0; $k < 10; ++$k) {
@@ -217,55 +298,17 @@ class FlattenExceptionTest extends TestCase
 
         $flattened = FlattenException::create($exception);
         $trace = $flattened->getTrace();
+
+        $this->assertSame($trace[1]['args'][0], ['array', ['array', '*SKIPPED over 10000 entries*']]);
+
         $serializeTrace = serialize($trace);
 
-        $this->assertContains('*SKIPPED over 10000 entries*', $serializeTrace);
-        $this->assertNotContains('*value1*', $serializeTrace);
+        $this->assertStringContainsString('*SKIPPED over 10000 entries*', $serializeTrace);
+        $this->assertStringNotContainsString('*value1*', $serializeTrace);
     }
 
     private function createException($foo)
     {
         return new \Exception();
-    }
-
-    public function testSetTraceIncompleteClass()
-    {
-        $flattened = FlattenException::create(new \Exception('test', 123));
-        $flattened->setTrace(
-            array(
-                array(
-                    'file' => __FILE__,
-                    'line' => 123,
-                    'function' => 'test',
-                    'args' => array(
-                        unserialize('O:14:"BogusTestClass":0:{}'),
-                    ),
-                ),
-            ),
-            'foo.php', 123
-        );
-
-        $this->assertEquals(array(
-            array(
-                'message' => 'test',
-                'class' => 'Exception',
-                'trace' => array(
-                    array(
-                        'namespace' => '', 'short_class' => '', 'class' => '', 'type' => '', 'function' => '',
-                        'file' => 'foo.php', 'line' => 123,
-                        'args' => array(),
-                    ),
-                    array(
-                        'namespace' => '', 'short_class' => '', 'class' => '', 'type' => '', 'function' => 'test',
-                        'file' => __FILE__, 'line' => 123,
-                        'args' => array(
-                            array(
-                                'incomplete-object', 'BogusTestClass',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ), $flattened->toArray());
     }
 }

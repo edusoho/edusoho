@@ -3,13 +3,15 @@
 namespace Omnipay\Alipay;
 
 use Omnipay\Alipay\Requests\AopTradeWapPayRequest;
+
 /**
  * Class AopWapGateway
  * @package Omnipay\Alipay
  * @link    https://doc.open.alipay.com/docs/doc.htm?treeId=203&articleId=105288&docType=1
  */
-class AopWapGateway extends \Omnipay\Alipay\AbstractAopGateway
+class AopWapGateway extends AbstractAopGateway
 {
+
     /**
      * Get gateway display name
      *
@@ -19,6 +21,8 @@ class AopWapGateway extends \Omnipay\Alipay\AbstractAopGateway
     {
         return 'Alipay WAP Gateway';
     }
+
+
     /**
      * @return mixed
      */
@@ -26,6 +30,8 @@ class AopWapGateway extends \Omnipay\Alipay\AbstractAopGateway
     {
         return $this->getParameter('return_url');
     }
+
+
     /**
      * @param $value
      *
@@ -35,13 +41,15 @@ class AopWapGateway extends \Omnipay\Alipay\AbstractAopGateway
     {
         return $this->setParameter('return_url', $value);
     }
+
+
     /**
      * @param array $parameters
      *
      * @return \Omnipay\Common\Message\AbstractRequest
      */
-    public function purchase(array $parameters = array())
+    public function purchase(array $parameters = [])
     {
-        return $this->createRequest('Omnipay\\Alipay\\Requests\\AopTradeWapPayRequest', $parameters);
+        return $this->createRequest(AopTradeWapPayRequest::class, $parameters);
     }
 }

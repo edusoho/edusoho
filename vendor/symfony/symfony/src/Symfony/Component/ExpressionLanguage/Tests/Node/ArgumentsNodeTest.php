@@ -17,9 +17,16 @@ class ArgumentsNodeTest extends ArrayNodeTest
 {
     public function getCompileData()
     {
-        return array(
-            array('"a", "b"', $this->getArrayNode()),
-        );
+        return [
+            ['"a", "b"', $this->getArrayNode()],
+        ];
+    }
+
+    public function getDumpData()
+    {
+        return [
+            ['"a", "b"', $this->getArrayNode()],
+        ];
     }
 
     protected function createArrayNode()

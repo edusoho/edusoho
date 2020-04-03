@@ -13,6 +13,7 @@ namespace Silex\Tests\Provider\SecurityServiceProviderTest;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
@@ -27,15 +28,20 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     public function getCredentials(Request $request)
     {
         if (!$token = $request->headers->get('X-AUTH-TOKEN')) {
-            return;
+            return Kernel::VERSION_ID < 30400 ? null : false;
         }
 
         list($username, $secret) = explode(':', $token);
 
-        return array(
+        return [
             'username' => $username,
             'secret' => $secret,
-        );
+        ];
+    }
+
+    public function supports(Request $request)
+    {
+        return !empty($request->headers->get('X-AUTH-TOKEN'));
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider)
@@ -56,18 +62,18 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        $data = array(
+        $data = [
             'message' => strtr($exception->getMessageKey(), $exception->getMessageData()),
-        );
+        ];
 
         return new JsonResponse($data, 403);
     }
 
     public function start(Request $request, AuthenticationException $authException = null)
     {
-        $data = array(
+        $data = [
             'message' => 'Authentication Required',
-        );
+        ];
 
         return new JsonResponse($data, 401);
     }

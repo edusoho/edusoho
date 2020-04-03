@@ -1,0 +1,19 @@
+language: php
+
+php:
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2
+  - nightly
+
+install: composer install
+
+script:
+  - cd testing
+  - php unit-tests.php
+  - cd ..
+
+matrix:
+  allow_failures:
+    - php: nightly

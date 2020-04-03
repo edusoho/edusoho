@@ -12,12 +12,10 @@
 namespace Symfony\Component\Ldap\Exception;
 
 /**
- * LdapException is throw if php ldap module is not loaded.
+ * LdapException is thrown if php ldap module is not loaded.
  *
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
- *
- * @internal
  */
-class LdapException extends \RuntimeException
+class LdapException extends \RuntimeException implements ExceptionInterface
 {
 }

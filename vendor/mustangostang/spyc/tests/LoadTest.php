@@ -1,7 +1,5 @@
 <?php
 
-require_once ("../Spyc.php");
-
 class LoadTest extends PHPUnit_Framework_TestCase {
     public function testQuotes() {
         $test_values = array(

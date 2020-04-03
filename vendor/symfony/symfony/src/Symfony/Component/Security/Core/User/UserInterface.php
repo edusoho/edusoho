@@ -21,10 +21,10 @@ use Symfony\Component\Security\Core\Role\Role;
  * password (for checking against a submitted password), assigning roles
  * and so on.
  *
- * Regardless of how your user are loaded or where they come from (a database,
- * configuration, web service, etc), you will have a class that implements
- * this interface. Objects that implement this interface are created and
- * loaded by different objects that implement UserProviderInterface
+ * Regardless of how your users are loaded or where they come from (a database,
+ * configuration, web service, etc.), you will have a class that implements
+ * this interface. Objects that implement this interface are created and 
+ * loaded by different objects that implement UserProviderInterface.
  *
  * @see UserProviderInterface
  * @see AdvancedUserInterface
@@ -36,12 +36,10 @@ interface UserInterface
     /**
      * Returns the roles granted to the user.
      *
-     * <code>
-     * public function getRoles()
-     * {
-     *     return array('ROLE_USER');
-     * }
-     * </code>
+     *     public function getRoles()
+     *     {
+     *         return ['ROLE_USER'];
+     *     }
      *
      * Alternatively, the roles might be stored on a ``roles`` property,
      * and populated in any number of different ways when the user object
@@ -57,7 +55,7 @@ interface UserInterface
      * This should be the encoded password. On authentication, a plain-text
      * password will be salted, encoded, and then compared to this value.
      *
-     * @return string The password
+     * @return string|null The encoded password if any
      */
     public function getPassword();
 

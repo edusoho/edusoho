@@ -23,8 +23,6 @@ interface DumperInterface
     /**
      * Inspects whether the given definitions should produce proxy instantiation logic in the dumped container.
      *
-     * @param Definition $definition
-     *
      * @return bool
      */
     public function isProxyCandidate(Definition $definition);
@@ -32,17 +30,14 @@ interface DumperInterface
     /**
      * Generates the code to be used to instantiate a proxy in the dumped factory code.
      *
-     * @param Definition $definition
-     * @param string     $id         service identifier
+     * @param string $id Service identifier
      *
      * @return string
      */
-    public function getProxyFactoryCode(Definition $definition, $id);
+    public function getProxyFactoryCode(Definition $definition, $id/**, $factoryCode = null */);
 
     /**
      * Generates the code for the lazy proxy.
-     *
-     * @param Definition $definition
      *
      * @return string
      */

@@ -11,14 +11,14 @@
 
 namespace Symfony\Component\Security\Core\Authentication\Provider;
 
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Core\User\UserCheckerInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\User\UserCheckerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
  * DaoAuthenticationProvider uses a UserProviderInterface to retrieve the user
@@ -32,8 +32,6 @@ class DaoAuthenticationProvider extends UserAuthenticationProvider
     private $userProvider;
 
     /**
-     * Constructor.
-     *
      * @param UserProviderInterface   $userProvider               An UserProviderInterface instance
      * @param UserCheckerInterface    $userChecker                An UserCheckerInterface instance
      * @param string                  $providerKey                The provider key
@@ -63,7 +61,7 @@ class DaoAuthenticationProvider extends UserAuthenticationProvider
                 throw new BadCredentialsException('The presented password cannot be empty.');
             }
 
-            if (!$this->encoderFactory->getEncoder($user)->isPasswordValid($user->getPassword(), $presentedPassword, $user->getSalt())) {
+            if (null === $user->getPassword() || !$this->encoderFactory->getEncoder($user)->isPasswordValid($user->getPassword(), $presentedPassword, $user->getSalt())) {
                 throw new BadCredentialsException('The presented password is invalid.');
             }
         }

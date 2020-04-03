@@ -1,0 +1,19 @@
+imports:
+    - { resource: ./../config/default.yml }
+
+services:
+    # alias the service so we can access it in the tests
+    functional_test.security.helper:
+        alias: security.helper
+        public: true
+
+security:
+    providers:
+        in_memory:
+            memory:
+                users: []
+
+    firewalls:
+        default:
+            logout_on_user_change: true
+            anonymous: ~

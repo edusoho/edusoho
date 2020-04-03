@@ -15,7 +15,10 @@ class PhpFileCacheTest extends BaseFileCacheTest
         $data = parent::provideDataToCache();
 
         unset($data['object'], $data['object_recursive']); // PhpFileCache only allows objects that implement __set_state() and fully support var_export()
-        unset($data['float_zero']); // var_export exports float(0) as int(0)
+
+        if (PHP_VERSION_ID < 70002) {
+            unset($data['float_zero']); // var_export exports float(0) as int(0): https://bugs.php.net/bug.php?id=66179
+        }
 
         return $data;
     }
@@ -25,7 +28,7 @@ class PhpFileCacheTest extends BaseFileCacheTest
         $cache = $this->_getCacheDriver();
 
         // Test save
-        $cache->save('test_set_state', new SetStateClass(array(1, 2, 3)));
+        $cache->save('test_set_state', new SetStateClass(array(1,2,3)));
 
         //Test __set_state call
         $this->assertCount(0, SetStateClass::$values);
@@ -33,7 +36,7 @@ class PhpFileCacheTest extends BaseFileCacheTest
         // Test fetch
         $value = $cache->fetch('test_set_state');
         $this->assertInstanceOf('Doctrine\Tests\Common\Cache\SetStateClass', $value);
-        $this->assertEquals(array(1, 2, 3), $value->getValue());
+        $this->assertEquals(array(1,2,3), $value->getValue());
 
         //Test __set_state call
         $this->assertCount(1, SetStateClass::$values);
@@ -47,7 +50,7 @@ class PhpFileCacheTest extends BaseFileCacheTest
         $cache = $this->_getCacheDriver();
 
         $this->setExpectedException('InvalidArgumentException');
-        $cache->save('test_not_set_state', new NotSetStateClass(array(1, 2, 3)));
+        $cache->save('test_not_set_state', new NotSetStateClass(array(1,2,3)));
     }
 
     public function testGetStats()
@@ -90,7 +93,6 @@ class SetStateClass extends NotSetStateClass
     public static function __set_state($data)
     {
         self::$values = $data;
-
         return new self($data['value']);
     }
 }

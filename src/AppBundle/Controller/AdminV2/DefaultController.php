@@ -25,6 +25,7 @@ use QiQiuYun\SDK\Service\WeChatService;
 use QiQiuYun\SDK\Service\PlatformNewsService;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Topxia\Service\Common\ServiceKernel;
 
 class DefaultController extends BaseController
@@ -199,7 +200,7 @@ class DefaultController extends BaseController
     public function getCloudNoticesAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            $domain = $this->generateUrl('homepage', array(), true);
+            $domain = $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
             $api = CloudAPIFactory::create('root');
             $result = $api->get('/trial/remainDays', array('domain' => $domain));
         }

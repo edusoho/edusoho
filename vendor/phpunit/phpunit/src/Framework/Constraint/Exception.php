@@ -8,9 +8,6 @@
  * file that was distributed with this source code.
  */
 
-/**
- * @since Class available since Release 3.6.6
- */
 class PHPUnit_Framework_Constraint_Exception extends PHPUnit_Framework_Constraint
 {
     /**
@@ -54,9 +51,9 @@ class PHPUnit_Framework_Constraint_Exception extends PHPUnit_Framework_Constrain
     {
         if ($other !== null) {
             $message = '';
-            if ($other instanceof Exception) {
+            if ($other instanceof Exception || $other instanceof Throwable) {
                 $message = '. Message was: "' . $other->getMessage() . '" at'
-                        . "\n" . $other->getTraceAsString();
+                        . "\n" . PHPUnit_Util_Filter::getFilteredStacktrace($other);
             }
 
             return sprintf(

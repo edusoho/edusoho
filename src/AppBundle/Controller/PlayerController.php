@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\MaterialLib\Service\MaterialLibService;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PlayerController extends BaseController
 {
@@ -151,7 +152,7 @@ class PlayerController extends BaseController
         $params['keyUrl'] = $this->generateUrl('global_file_hls_clef', array(
             'globalId' => $file['no'],
             'token' => $token['token'],
-        ), true);
+        ), UrlGeneratorInterface::ABSOLUTE_URL);
         $params['key'] = $file['metas']['levels'][$level]['key'];
         $params['fileId'] = $file['id'];
 
@@ -216,7 +217,7 @@ class PlayerController extends BaseController
                 'token' => $token['token'],
             );
 
-            $streams[$level] = $this->generateUrl('global_file_hls_stream', $params, true);
+            $streams[$level] = $this->generateUrl('global_file_hls_stream', $params, UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         $api = CloudAPIFactory::create('leaf');

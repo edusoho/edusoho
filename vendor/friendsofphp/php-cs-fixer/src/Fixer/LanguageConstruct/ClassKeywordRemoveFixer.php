@@ -130,11 +130,15 @@ $className = Baz::class;
             if ($tokens[$index]->isGivenKind(CT::T_GROUP_IMPORT_BRACE_OPEN)) {
                 $groupEndIndex = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_GROUP_IMPORT_BRACE, $index);
                 $groupImports = array_map(
-                    'trim',
+                    function ($import) {
+                        return trim($import);
+                    },
                     explode(',', $tokens->generatePartialCode($index + 1, $groupEndIndex - 1))
                 );
                 foreach ($groupImports as $groupImport) {
-                    $groupImportParts = array_map('trim', explode(' as ', $groupImport));
+                    $groupImportParts = array_map(function ($import) {
+                        return trim($import);
+                    }, explode(' as ', $groupImport));
                     if (2 === count($groupImportParts)) {
                         $this->imports[$groupImportParts[1]] = $import.$groupImportParts[0];
                     } else {
@@ -158,9 +162,9 @@ $className = Baz::class;
      */
     private function replaceClassKeywordsSection(Tokens $tokens, $startIndex, $endIndex)
     {
-        $CTClassTokens = $tokens->findGivenKind(CT::T_CLASS_CONSTANT, $startIndex, $endIndex);
-        if (!empty($CTClassTokens)) {
-            $this->replaceClassKeyword($tokens, current(array_keys($CTClassTokens)));
+        $ctClassTokens = $tokens->findGivenKind(CT::T_CLASS_CONSTANT, $startIndex, $endIndex);
+        if (!empty($ctClassTokens)) {
+            $this->replaceClassKeyword($tokens, current(array_keys($ctClassTokens)));
             $this->replaceClassKeywordsSection($tokens, $startIndex, $endIndex);
         }
     }
@@ -195,6 +199,7 @@ $className = Baz::class;
         foreach ($this->imports as $alias => $import) {
             if ($classString === $alias) {
                 $classImport = $import;
+
                 break;
             }
 
@@ -203,13 +208,14 @@ $className = Baz::class;
 
             if (0 === strcmp($namespaceToTest, substr($import, -strlen($namespaceToTest)))) {
                 $classImport = $import;
+
                 break;
             }
         }
 
         for ($i = $classBeginIndex; $i <= $classIndex; ++$i) {
             if (!$tokens[$i]->isComment() && !($tokens[$i]->isWhitespace() && false !== strpos($tokens[$i]->getContent(), "\n"))) {
-                $tokens[$i]->clear();
+                $tokens->clearAt($i);
             }
         }
 
@@ -220,7 +226,7 @@ $className = Baz::class;
     }
 
     /**
-     * @param string|false $classImport
+     * @param false|string $classImport
      * @param string       $classString
      *
      * @return string

@@ -42,7 +42,7 @@ class LocaleScanner
      */
     public function scanLocales($sourceDir)
     {
-        $locales = glob($sourceDir.'/*.txt');
+        $locales = glob($sourceDir.'/*.txt', GLOB_NOSORT);
 
         // Remove file extension and sort
         array_walk($locales, function (&$locale) { $locale = basename($locale, '.txt'); });
@@ -68,7 +68,7 @@ class LocaleScanner
     public function scanAliases($sourceDir)
     {
         $locales = $this->scanLocales($sourceDir);
-        $aliases = array();
+        $aliases = [];
 
         // Delete locales that are no aliases
         foreach ($locales as $locale) {

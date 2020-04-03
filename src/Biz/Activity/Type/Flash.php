@@ -100,7 +100,10 @@ class Flash extends Activity
     public function get($targetId)
     {
         $flashActivity = $this->getFlashActivityDao()->get($targetId);
-        $flashActivity['file'] = $this->getUploadFileService()->getFullFile($flashActivity['mediaId']);
+
+        if ($flashActivity) {
+            $flashActivity['file'] = $this->getUploadFileService()->getFullFile($flashActivity['mediaId']);
+        }
 
         return $flashActivity;
     }

@@ -11,10 +11,6 @@
 
 namespace Symfony\Component\Serializer\Normalizer;
 
-use Symfony\Component\Serializer\Exception\CircularReferenceException;
-use Symfony\Component\Serializer\Exception\LogicException;
-use Symfony\Component\Serializer\Exception\RuntimeException;
-
 /**
  * Converts between objects and arrays by mapping properties.
  *
@@ -32,106 +28,16 @@ use Symfony\Component\Serializer\Exception\RuntimeException;
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
-class PropertyNormalizer extends AbstractNormalizer
+class PropertyNormalizer extends AbstractObjectNormalizer
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @throws CircularReferenceException
-     */
-    public function normalize($object, $format = null, array $context = array())
-    {
-        if ($this->isCircularReference($object, $context)) {
-            return $this->handleCircularReference($object);
-        }
-
-        $reflectionObject = new \ReflectionObject($object);
-        $attributes = array();
-        $allowedAttributes = $this->getAllowedAttributes($object, $context, true);
-
-        foreach ($reflectionObject->getProperties() as $property) {
-            if (in_array($property->name, $this->ignoredAttributes) || $property->isStatic()) {
-                continue;
-            }
-
-            if (false !== $allowedAttributes && !in_array($property->name, $allowedAttributes)) {
-                continue;
-            }
-
-            // Override visibility
-            if (!$property->isPublic()) {
-                $property->setAccessible(true);
-            }
-
-            $attributeValue = $property->getValue($object);
-
-            if (isset($this->callbacks[$property->name])) {
-                $attributeValue = call_user_func($this->callbacks[$property->name], $attributeValue);
-            }
-            if (null !== $attributeValue && !is_scalar($attributeValue)) {
-                if (!$this->serializer instanceof NormalizerInterface) {
-                    throw new LogicException(sprintf('Cannot normalize attribute "%s" because injected serializer is not a normalizer', $property->name));
-                }
-
-                $attributeValue = $this->serializer->normalize($attributeValue, $format, $context);
-            }
-
-            $propertyName = $property->name;
-            if ($this->nameConverter) {
-                $propertyName = $this->nameConverter->normalize($propertyName);
-            }
-
-            $attributes[$propertyName] = $attributeValue;
-        }
-
-        return $attributes;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @throws RuntimeException
-     */
-    public function denormalize($data, $class, $format = null, array $context = array())
-    {
-        $allowedAttributes = $this->getAllowedAttributes($class, $context, true);
-        $data = $this->prepareForDenormalization($data);
-
-        $reflectionClass = new \ReflectionClass($class);
-        $object = $this->instantiateObject($data, $class, $context, $reflectionClass, $allowedAttributes);
-
-        foreach ($data as $propertyName => $value) {
-            if ($this->nameConverter) {
-                $propertyName = $this->nameConverter->denormalize($propertyName);
-            }
-
-            $allowed = $allowedAttributes === false || in_array($propertyName, $allowedAttributes);
-            $ignored = in_array($propertyName, $this->ignoredAttributes);
-            if ($allowed && !$ignored && $reflectionClass->hasProperty($propertyName)) {
-                $property = $reflectionClass->getProperty($propertyName);
-
-                if ($property->isStatic()) {
-                    continue;
-                }
-
-                // Override visibility
-                if (!$property->isPublic()) {
-                    $property->setAccessible(true);
-                }
-
-                $property->setValue($object, $value);
-            }
-        }
-
-        return $object;
-    }
+    private $cache = [];
 
     /**
      * {@inheritdoc}
      */
     public function supportsNormalization($data, $format = null)
     {
-        return is_object($data) && !$data instanceof \Traversable && $this->supports(get_class($data));
+        return parent::supportsNormalization($data, $format) && (isset($this->cache[$type = \get_class($data)]) ? $this->cache[$type] : $this->cache[$type] = $this->supports($type));
     }
 
     /**
@@ -139,7 +45,7 @@ class PropertyNormalizer extends AbstractNormalizer
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return class_exists($type) && $this->supports($type);
+        return parent::supportsDenormalization($data, $type, $format) && (isset($this->cache[$type]) ? $this->cache[$type] : $this->cache[$type] = $this->supports($type));
     }
 
     /**
@@ -154,12 +60,131 @@ class PropertyNormalizer extends AbstractNormalizer
         $class = new \ReflectionClass($class);
 
         // We look for at least one non-static property
-        foreach ($class->getProperties() as $property) {
-            if (!$property->isStatic()) {
-                return true;
+        do {
+            foreach ($class->getProperties() as $property) {
+                if (!$property->isStatic()) {
+                    return true;
+                }
             }
-        }
+        } while ($class = $class->getParentClass());
 
         return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function isAllowedAttribute($classOrObject, $attribute, $format = null, array $context = [])
+    {
+        if (!parent::isAllowedAttribute($classOrObject, $attribute, $format, $context)) {
+            return false;
+        }
+
+        try {
+            $reflectionProperty = $this->getReflectionProperty($classOrObject, $attribute);
+            if ($reflectionProperty->isStatic()) {
+                return false;
+            }
+        } catch (\ReflectionException $reflectionException) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function extractAttributes($object, $format = null, array $context = [])
+    {
+        $reflectionObject = new \ReflectionObject($object);
+        $attributes = [];
+        $checkPropertyInitialization = \PHP_VERSION_ID >= 70400;
+
+        do {
+            foreach ($reflectionObject->getProperties() as $property) {
+                if ($checkPropertyInitialization) {
+                    if (!$property->isPublic()) {
+                        $property->setAccessible(true);
+                    }
+
+                    if (!$property->isInitialized($object)) {
+                        continue;
+                    }
+                }
+
+                if (!$this->isAllowedAttribute($reflectionObject->getName(), $property->name, $format, $context)) {
+                    continue;
+                }
+
+                $attributes[] = $property->name;
+            }
+        } while ($reflectionObject = $reflectionObject->getParentClass());
+
+        return $attributes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getAttributeValue($object, $attribute, $format = null, array $context = [])
+    {
+        try {
+            $reflectionProperty = $this->getReflectionProperty($object, $attribute);
+        } catch (\ReflectionException $reflectionException) {
+            return null;
+        }
+
+        // Override visibility
+        if (!$reflectionProperty->isPublic()) {
+            $reflectionProperty->setAccessible(true);
+        }
+
+        return $reflectionProperty->getValue($object);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setAttributeValue($object, $attribute, $value, $format = null, array $context = [])
+    {
+        try {
+            $reflectionProperty = $this->getReflectionProperty($object, $attribute);
+        } catch (\ReflectionException $reflectionException) {
+            return;
+        }
+
+        if ($reflectionProperty->isStatic()) {
+            return;
+        }
+
+        // Override visibility
+        if (!$reflectionProperty->isPublic()) {
+            $reflectionProperty->setAccessible(true);
+        }
+
+        $reflectionProperty->setValue($object, $value);
+    }
+
+    /**
+     * @param string|object $classOrObject
+     * @param string        $attribute
+     *
+     * @return \ReflectionProperty
+     *
+     * @throws \ReflectionException
+     */
+    private function getReflectionProperty($classOrObject, $attribute)
+    {
+        $reflectionClass = new \ReflectionClass($classOrObject);
+        while (true) {
+            try {
+                return $reflectionClass->getProperty($attribute);
+            } catch (\ReflectionException $e) {
+                if (!$reflectionClass = $reflectionClass->getParentClass()) {
+                    throw $e;
+                }
+            }
+        }
     }
 }

@@ -12,9 +12,8 @@
 namespace Symfony\Component\Form\Extension\Core\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer;
-use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class NumberType extends AbstractType
@@ -36,25 +35,15 @@ class NumberType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $scale = function (Options $options) {
-            if (null !== $options['precision']) {
-                @trigger_error('The form option "precision" is deprecated since version 2.7 and will be removed in 3.0. Use "scale" instead.', E_USER_DEPRECATED);
-            }
-
-            return $options['precision'];
-        };
-
-        $resolver->setDefaults(array(
-            // deprecated as of Symfony 2.7, to be removed in Symfony 3.0
-            'precision' => null,
+        $resolver->setDefaults([
             // default scale is locale specific (usually around 3)
-            'scale' => $scale,
+            'scale' => null,
             'grouping' => false,
             'rounding_mode' => NumberToLocalizedStringTransformer::ROUND_HALF_UP,
             'compound' => false,
-        ));
+        ]);
 
-        $resolver->setAllowedValues('rounding_mode', array(
+        $resolver->setAllowedValues('rounding_mode', [
             NumberToLocalizedStringTransformer::ROUND_FLOOR,
             NumberToLocalizedStringTransformer::ROUND_DOWN,
             NumberToLocalizedStringTransformer::ROUND_HALF_DOWN,
@@ -62,17 +51,9 @@ class NumberType extends AbstractType
             NumberToLocalizedStringTransformer::ROUND_HALF_UP,
             NumberToLocalizedStringTransformer::ROUND_UP,
             NumberToLocalizedStringTransformer::ROUND_CEILING,
-        ));
+        ]);
 
-        $resolver->setAllowedTypes('scale', array('null', 'int'));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return $this->getBlockPrefix();
+        $resolver->setAllowedTypes('scale', ['null', 'int']);
     }
 
     /**

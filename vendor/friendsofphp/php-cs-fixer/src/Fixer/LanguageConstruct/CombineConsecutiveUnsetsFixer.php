@@ -39,7 +39,7 @@ final class CombineConsecutiveUnsetsFixer extends AbstractFixer
      */
     public function getPriority()
     {
-        // should ran before SpaceAfterSemicolonFixer, NoWhitespaceInBlankLineFixer, NoTrailingWhitespaceFixer and NoExtraConsecutiveBlankLinesFixer and after NoEmptyStatementFixer.
+        // should be run before SpaceAfterSemicolonFixer, NoWhitespaceInBlankLineFixer, NoTrailingWhitespaceFixer and NoExtraConsecutiveBlankLinesFixer and after NoEmptyStatementFixer.
         return 24;
     }
 
@@ -64,6 +64,7 @@ final class CombineConsecutiveUnsetsFixer extends AbstractFixer
             $previousUnsetCall = $this->getPreviousUnsetCall($tokens, $index);
             if (is_int($previousUnsetCall)) {
                 $index = $previousUnsetCall;
+
                 continue;
             }
 
@@ -123,7 +124,7 @@ final class CombineConsecutiveUnsetsFixer extends AbstractFixer
      * @param Tokens $tokens
      * @param int    $index
      *
-     * @return int[]|int
+     * @return int|int[]
      */
     private function getPreviousUnsetCall(Tokens $tokens, $index)
     {
@@ -145,7 +146,7 @@ final class CombineConsecutiveUnsetsFixer extends AbstractFixer
             return $previousUnsetBraceEnd;
         }
 
-        $previousUnsetBraceStart = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $previousUnsetBraceEnd, false);
+        $previousUnsetBraceStart = $tokens->findBlockStart(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $previousUnsetBraceEnd);
         $previousUnset = $tokens->getPrevMeaningfulToken($previousUnsetBraceStart);
         if (null === $previousUnset) {
             return $index;
@@ -176,14 +177,14 @@ final class CombineConsecutiveUnsetsFixer extends AbstractFixer
         $added = 0;
         for ($i = $start + 1; $i < $end; $i += 2) {
             if ($tokens[$i]->isWhitespace() && $tokens[$to + 1]->isWhitespace()) {
-                $tokens[$to + 1]->setContent($tokens[$to + 1]->getContent().$tokens[$i]->getContent());
+                $tokens[$to + 1] = new Token(array(T_WHITESPACE, $tokens[$to + 1]->getContent().$tokens[$i]->getContent()));
             } else {
                 $tokens->insertAt(++$to, clone $tokens[$i]);
                 ++$end;
                 ++$added;
             }
 
-            $tokens[$i + 1]->clear();
+            $tokens->clearAt($i + 1);
         }
 
         return $added;

@@ -11,6 +11,7 @@
 
 namespace Silex\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +22,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  *
  * @author Igor Wiedler <igor@wiedler.ch>
  */
-class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
+class ExceptionHandlerTest extends TestCase
 {
     public function testExceptionHandlerExceptionNoDebug()
     {
@@ -34,7 +35,7 @@ class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
 
         $request = Request::create('/foo');
         $response = $app->handle($request);
-        $this->assertContains('<h1>Whoops, looks like something went wrong.</h1>', $response->getContent());
+        $this->assertContains('Whoops, looks like something went wrong.', $response->getContent());
         $this->assertEquals(500, $response->getStatusCode());
     }
 
@@ -61,7 +62,7 @@ class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
 
         $request = Request::create('/foo');
         $response = $app->handle($request);
-        $this->assertContains('<h1>Sorry, the page you are looking for could not be found.</h1>', $response->getContent());
+        $this->assertContains('Sorry, the page you are looking for could not be found.', $response->getContent());
         $this->assertEquals(404, $response->getStatusCode());
     }
 
@@ -85,7 +86,7 @@ class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
 
         $request = Request::create('/foo', 'POST');
         $response = $app->handle($request);
-        $this->assertContains('<h1>Whoops, looks like something went wrong.</h1>', $response->getContent());
+        $this->assertContains('Whoops, looks like something went wrong.', $response->getContent());
         $this->assertEquals(405, $response->getStatusCode());
         $this->assertEquals('GET', $response->headers->get('Allow'));
     }
@@ -307,7 +308,6 @@ class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
         // Since we throw a standard Exception above only
         // the second error handler should fire
         $app->error(function (\LogicException $e) { // Extends \Exception
-
             return 'Caught LogicException';
         });
         $app->error(function (\Exception $e) {
@@ -333,7 +333,6 @@ class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
         // Since we throw a LogicException above
         // the first error handler should fire
         $app->error(function (\LogicException $e) { // Extends \Exception
-
             return 'Caught LogicException';
         });
         $app->error(function (\Exception $e) {
@@ -364,7 +363,6 @@ class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
             return 'Caught Exception';
         });
         $app->error(function (\LogicException $e) { // Extends \Exception
-
             return 'Caught LogicException';
         });
 
@@ -383,7 +381,7 @@ class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
         });
 
         // Array style callback for error handler
-        $app->error(array($this, 'exceptionHandler'));
+        $app->error([$this, 'exceptionHandler']);
 
         $request = Request::create('/foo');
         $response = $app->handle($request);

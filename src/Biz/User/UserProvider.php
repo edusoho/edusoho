@@ -30,7 +30,7 @@ class UserProvider implements UserProviderInterface
             throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
         }
 
-        $request = $this->container->get('request');
+        $request = $this->container->get('request_stack')->getMasterRequest();
 
         $forbidden = AuthenticationHelper::checkLoginForbidden($request);
         if ('error' == $forbidden['status']) {

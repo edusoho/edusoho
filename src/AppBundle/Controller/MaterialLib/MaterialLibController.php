@@ -11,6 +11,7 @@ use Biz\Taxonomy\Service\TagService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\File\UploadFileException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MaterialLibController extends BaseController
 {
@@ -455,7 +456,7 @@ class MaterialLibController extends BaseController
             $this->getUploadFileShareHistoryService()->addShareHistory($currentUserId, $targetUserId, 0);
 
             $targetUser = $this->getUserService()->getUser($targetUserId);
-            $userUrl = $this->generateUrl('user_show', array('id' => $currentUser['id']), true);
+            $userUrl = $this->generateUrl('user_show', array('id' => $currentUser['id']), UrlGeneratorInterface::ABSOLUTE_URL);
             $toMyShareUrl = $this->generateUrl('material_lib_browsing', array('type' => 'all', 'viewMode' => 'thumb', 'source' => 'shared'));
             $this->getNotificationService()->notify($targetUser['id'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>".$this->trans('已取消分享资料给你，')."<a href='{$toMyShareUrl}'>".$this->trans('点击查看').'</a>');
         }

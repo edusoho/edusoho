@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\Validator\Constraints;
 
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -30,31 +29,24 @@ class RegexValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         if (!$constraint instanceof Regex) {
-            throw new UnexpectedTypeException($constraint, __NAMESPACE__.'\Regex');
+            throw new UnexpectedTypeException($constraint, Regex::class);
         }
 
         if (null === $value || '' === $value) {
             return;
         }
 
-        if (!is_scalar($value) && !(is_object($value) && method_exists($value, '__toString'))) {
+        if (!is_scalar($value) && !(\is_object($value) && method_exists($value, '__toString'))) {
             throw new UnexpectedTypeException($value, 'string');
         }
 
         $value = (string) $value;
 
         if ($constraint->match xor preg_match($constraint->pattern, $value)) {
-            if ($this->context instanceof ExecutionContextInterface) {
-                $this->context->buildViolation($constraint->message)
-                    ->setParameter('{{ value }}', $this->formatValue($value))
-                    ->setCode(Regex::REGEX_FAILED_ERROR)
-                    ->addViolation();
-            } else {
-                $this->buildViolation($constraint->message)
-                    ->setParameter('{{ value }}', $this->formatValue($value))
-                    ->setCode(Regex::REGEX_FAILED_ERROR)
-                    ->addViolation();
-            }
+            $this->context->buildViolation($constraint->message)
+                ->setParameter('{{ value }}', $this->formatValue($value))
+                ->setCode(Regex::REGEX_FAILED_ERROR)
+                ->addViolation();
         }
     }
 }

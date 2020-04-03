@@ -12,8 +12,6 @@
 namespace Symfony\Component\BrowserKit;
 
 /**
- * Request object.
- *
  * @author Fabien Potencier <fabien@symfony.com>
  */
 class Request
@@ -27,8 +25,6 @@ class Request
     protected $content;
 
     /**
-     * Constructor.
-     *
      * @param string $uri        The request URI
      * @param string $method     The HTTP method request
      * @param array  $parameters The request parameters
@@ -37,7 +33,7 @@ class Request
      * @param array  $server     An array of server parameters
      * @param string $content    The raw body data
      */
-    public function __construct($uri, $method, array $parameters = array(), array $files = array(), array $cookies = array(), array $server = array(), $content = null)
+    public function __construct($uri, $method, array $parameters = [], array $files = [], array $cookies = [], array $server = [], $content = null)
     {
         $this->uri = $uri;
         $this->method = $method;
@@ -111,7 +107,7 @@ class Request
     /**
      * Gets the request raw body data.
      *
-     * @return string The request raw body data
+     * @return string|null The request raw body data
      */
     public function getContent()
     {

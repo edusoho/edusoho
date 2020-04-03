@@ -18,6 +18,8 @@ class PredisCache extends CacheProvider
 
     /**
      * @param ClientInterface $client
+     *
+     * @return void
      */
     public function __construct(ClientInterface $client)
     {
@@ -50,9 +52,37 @@ class PredisCache extends CacheProvider
     /**
      * {@inheritdoc}
      */
+    protected function doSaveMultiple(array $keysAndValues, $lifetime = 0)
+    {
+        if ($lifetime) {
+            $success = true;
+
+            // Keys have lifetime, use SETEX for each of them
+            foreach ($keysAndValues as $key => $value) {
+                $response = $this->client->setex($key, $lifetime, serialize($value));
+
+                if ((string) $response != 'OK') {
+                    $success = false;
+                }
+            }
+
+            return $success;
+        }
+
+        // No lifetime, use MSET
+        $response = $this->client->mset(array_map(function ($value) {
+            return serialize($value);
+        }, $keysAndValues));
+
+        return (string) $response == 'OK';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function doContains($id)
     {
-        return $this->client->exists($id);
+        return (bool) $this->client->exists($id);
     }
 
     /**
@@ -67,7 +97,7 @@ class PredisCache extends CacheProvider
             $response = $this->client->set($id, $data);
         }
 
-        return true === $response || 'OK' == $response;
+        return $response === true || $response == 'OK';
     }
 
     /**
@@ -85,7 +115,7 @@ class PredisCache extends CacheProvider
     {
         $response = $this->client->flushdb();
 
-        return true === $response || 'OK' == $response;
+        return $response === true || $response == 'OK';
     }
 
     /**
@@ -96,11 +126,11 @@ class PredisCache extends CacheProvider
         $info = $this->client->info();
 
         return array(
-            Cache::STATS_HITS => $info['Stats']['keyspace_hits'],
-            Cache::STATS_MISSES => $info['Stats']['keyspace_misses'],
-            Cache::STATS_UPTIME => $info['Server']['uptime_in_seconds'],
-            Cache::STATS_MEMORY_USAGE => $info['Memory']['used_memory'],
-            Cache::STATS_MEMORY_AVAILABLE => false,
+            Cache::STATS_HITS              => $info['Stats']['keyspace_hits'],
+            Cache::STATS_MISSES            => $info['Stats']['keyspace_misses'],
+            Cache::STATS_UPTIME            => $info['Server']['uptime_in_seconds'],
+            Cache::STATS_MEMORY_USAGE      => $info['Memory']['used_memory'],
+            Cache::STATS_MEMORY_AVAILABLE  => false
         );
     }
 }

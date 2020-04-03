@@ -14,18 +14,13 @@ namespace Symfony\Component\Validator\Tests\Constraints;
 use Symfony\Bridge\PhpUnit\DnsMock;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\EmailValidator;
-use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 /**
  * @group dns-sensitive
  */
-class EmailValidatorTest extends AbstractConstraintValidatorTest
+class EmailValidatorTest extends ConstraintValidatorTestCase
 {
-    protected function getApiVersion()
-    {
-        return Validation::API_VERSION_2_5;
-    }
-
     protected function createValidator()
     {
         return new EmailValidator(false);
@@ -45,11 +40,9 @@ class EmailValidatorTest extends AbstractConstraintValidatorTest
         $this->assertNoViolation();
     }
 
-    /**
-     * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
-     */
     public function testExpectsStringCompatibleType()
     {
+        $this->expectException('Symfony\Component\Validator\Exception\UnexpectedTypeException');
         $this->validator->validate(new \stdClass(), new Email());
     }
 
@@ -65,11 +58,11 @@ class EmailValidatorTest extends AbstractConstraintValidatorTest
 
     public function getValidEmails()
     {
-        return array(
-            array('fabien@symfony.com'),
-            array('example@example.co.uk'),
-            array('fabien_potencier@example.fr'),
-        );
+        return [
+            ['fabien@symfony.com'],
+            ['example@example.co.uk'],
+            ['fabien_potencier@example.fr'],
+        ];
     }
 
     /**
@@ -77,9 +70,9 @@ class EmailValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testInvalidEmails($email)
     {
-        $constraint = new Email(array(
+        $constraint = new Email([
             'message' => 'myMessage',
-        ));
+        ]);
 
         $this->validator->validate($email, $constraint);
 
@@ -91,21 +84,96 @@ class EmailValidatorTest extends AbstractConstraintValidatorTest
 
     public function getInvalidEmails()
     {
-        return array(
-            array('example'),
-            array('example@'),
-            array('example@localhost'),
-            array('foo@example.com bar'),
-        );
+        return [
+            ['example'],
+            ['example@'],
+            ['example@localhost'],
+            ['foo@example.com bar'],
+        ];
     }
 
     public function testStrict()
     {
-        $constraint = new Email(array('strict' => true));
+        $constraint = new Email(['strict' => true]);
 
         $this->validator->validate('example@localhost', $constraint);
 
         $this->assertNoViolation();
+    }
+
+    /**
+     * @dataProvider getInvalidEmailsForStrictChecks
+     */
+    public function testStrictWithInvalidEmails($email)
+    {
+        $constraint = new Email([
+            'message' => 'myMessage',
+            'strict' => true,
+        ]);
+
+        $this->validator->validate($email, $constraint);
+
+        $this
+            ->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$email.'"')
+            ->setCode(Email::INVALID_FORMAT_ERROR)
+            ->assertRaised();
+    }
+
+    /**
+     * @see https://github.com/egulias/EmailValidator/blob/1.2.8/tests/egulias/Tests/EmailValidator/EmailValidatorTest.php
+     */
+    public function getInvalidEmailsForStrictChecks()
+    {
+        return [
+            ['test@example.com test'],
+            ['user  name@example.com'],
+            ['user   name@example.com'],
+            ['example.@example.co.uk'],
+            ['example@example@example.co.uk'],
+            ['(test_exampel@example.fr)'],
+            ['example(example)example@example.co.uk'],
+            ['.example@localhost'],
+            ['ex\ample@localhost'],
+            ['example@local\host'],
+            ['example@localhost.'],
+            ['user name@example.com'],
+            ['username@ example . com'],
+            ['example@(fake).com'],
+            ['example@(fake.com'],
+            ['username@example,com'],
+            ['usern,ame@example.com'],
+            ['user[na]me@example.com'],
+            ['"""@iana.org'],
+            ['"\"@iana.org'],
+            ['"test"test@iana.org'],
+            ['"test""test"@iana.org'],
+            ['"test"."test"@iana.org'],
+            ['"test".test@iana.org'],
+            ['"test"'.\chr(0).'@iana.org'],
+            ['"test\"@iana.org'],
+            [\chr(226).'@iana.org'],
+            ['test@'.\chr(226).'.org'],
+            ['\r\ntest@iana.org'],
+            ['\r\n test@iana.org'],
+            ['\r\n \r\ntest@iana.org'],
+            ['\r\n \r\ntest@iana.org'],
+            ['\r\n \r\n test@iana.org'],
+            ['test@iana.org \r\n'],
+            ['test@iana.org \r\n '],
+            ['test@iana.org \r\n \r\n'],
+            ['test@iana.org \r\n\r\n'],
+            ['test@iana.org  \r\n\r\n '],
+            ['test@iana/icann.org'],
+            ['test@foo;bar.com'],
+            ['test;123@foobar.com'],
+            ['test@example..com'],
+            ['email.email@email."'],
+            ['test@email>'],
+            ['test@email<'],
+            ['test@email{'],
+            [str_repeat('x', 254).'@example.com'], //email with warnings
+        ];
     }
 
     /**
@@ -114,12 +182,12 @@ class EmailValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testDnsChecks($type, $violation)
     {
-        DnsMock::withMockedHosts(array('example.com' => array(array('type' => $violation ? false : $type))));
+        DnsMock::withMockedHosts(['example.com' => [['type' => $violation ? false : $type]]]);
 
-        $constraint = new Email(array(
+        $constraint = new Email([
             'message' => 'myMessage',
             'MX' === $type ? 'checkMX' : 'checkHost' => true,
-        ));
+        ]);
 
         $this->validator->validate('foo@example.com', $constraint);
 
@@ -135,14 +203,14 @@ class EmailValidatorTest extends AbstractConstraintValidatorTest
 
     public function getDnsChecks()
     {
-        return array(
-            array('MX', false),
-            array('MX', Email::MX_CHECK_FAILED_ERROR),
-            array('A', false),
-            array('A', Email::HOST_CHECK_FAILED_ERROR),
-            array('AAAA', false),
-            array('AAAA', Email::HOST_CHECK_FAILED_ERROR),
-        );
+        return [
+            ['MX', false],
+            ['MX', Email::MX_CHECK_FAILED_ERROR],
+            ['A', false],
+            ['A', Email::HOST_CHECK_FAILED_ERROR],
+            ['AAAA', false],
+            ['AAAA', Email::HOST_CHECK_FAILED_ERROR],
+        ];
     }
 
     /**
@@ -150,13 +218,41 @@ class EmailValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testHostnameIsProperlyParsed()
     {
-        DnsMock::withMockedHosts(array('baz.com' => array(array('type' => 'MX'))));
+        DnsMock::withMockedHosts(['baz.com' => [['type' => 'MX']]]);
 
         $this->validator->validate(
             '"foo@bar"@baz.com',
-            new Email(array('checkMX' => true))
+            new Email(['checkMX' => true])
         );
 
         $this->assertNoViolation();
+    }
+
+    /**
+     * @dataProvider provideCheckTypes
+     */
+    public function testEmptyHostIsNotValid($checkType, $violation)
+    {
+        $this->validator->validate(
+            'foo@bar.fr@',
+            new Email([
+                'message' => 'myMessage',
+                $checkType => true,
+            ])
+        );
+
+        $this
+            ->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"foo@bar.fr@"')
+            ->setCode($violation)
+            ->assertRaised();
+    }
+
+    public function provideCheckTypes()
+    {
+        return [
+            ['checkMX', Email::MX_CHECK_FAILED_ERROR],
+            ['checkHost', Email::HOST_CHECK_FAILED_ERROR],
+        ];
     }
 }

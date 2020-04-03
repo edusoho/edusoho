@@ -15,6 +15,7 @@ use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
 use Biz\User\Service\UserService;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class TaskSmsProcessor extends BaseSmsProcessor
@@ -101,7 +102,7 @@ class TaskSmsProcessor extends BaseSmsProcessor
 
         if (empty($url)) {
             $originUrl = $kernel->getContainer()->get('router')->generate('course_task_show',
-                array('courseId' => $task['courseId'], 'id' => $task['id']), true);
+                array('courseId' => $task['courseId'], 'id' => $task['id']), UrlGeneratorInterface::ABSOLUTE_URL);
         } else {
             $originUrl = $url.$kernel->getContainer()->get('router')->generate('course_task_show',
                     array('courseId' => $task['courseId'], 'id' => $task['id']));

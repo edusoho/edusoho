@@ -24,15 +24,9 @@ class ApplicationDescription
 {
     const GLOBAL_NAMESPACE = '_global';
 
-    /**
-     * @var Application
-     */
     private $application;
-
-    /**
-     * @var null|string
-     */
     private $namespace;
+    private $showHidden;
 
     /**
      * @var array
@@ -50,15 +44,14 @@ class ApplicationDescription
     private $aliases;
 
     /**
-     * Constructor.
-     *
-     * @param Application $application
      * @param string|null $namespace
+     * @param bool        $showHidden
      */
-    public function __construct(Application $application, $namespace = null)
+    public function __construct(Application $application, $namespace = null, $showHidden = false)
     {
         $this->application = $application;
         $this->namespace = $namespace;
+        $this->showHidden = $showHidden;
     }
 
     /**
@@ -103,16 +96,16 @@ class ApplicationDescription
 
     private function inspectApplication()
     {
-        $this->commands = array();
-        $this->namespaces = array();
+        $this->commands = [];
+        $this->namespaces = [];
 
         $all = $this->application->all($this->namespace ? $this->application->findNamespace($this->namespace) : null);
         foreach ($this->sortCommands($all) as $namespace => $commands) {
-            $names = array();
+            $names = [];
 
             /** @var Command $command */
             foreach ($commands as $name => $command) {
-                if (!$command->getName()) {
+                if (!$command->getName() || (!$this->showHidden && $command->isHidden())) {
                     continue;
                 }
 
@@ -125,36 +118,40 @@ class ApplicationDescription
                 $names[] = $name;
             }
 
-            $this->namespaces[$namespace] = array('id' => $namespace, 'commands' => $names);
+            $this->namespaces[$namespace] = ['id' => $namespace, 'commands' => $names];
         }
     }
 
     /**
-     * @param array $commands
-     *
      * @return array
      */
     private function sortCommands(array $commands)
     {
-        $namespacedCommands = array();
-        $globalCommands = array();
+        $namespacedCommands = [];
+        $globalCommands = [];
+        $sortedCommands = [];
         foreach ($commands as $name => $command) {
             $key = $this->application->extractNamespace($name, 1);
-            if (!$key) {
-                $globalCommands['_global'][$name] = $command;
+            if (\in_array($key, ['', self::GLOBAL_NAMESPACE], true)) {
+                $globalCommands[$name] = $command;
             } else {
                 $namespacedCommands[$key][$name] = $command;
             }
         }
-        ksort($namespacedCommands);
-        $namespacedCommands = array_merge($globalCommands, $namespacedCommands);
 
-        foreach ($namespacedCommands as &$commandsSet) {
-            ksort($commandsSet);
+        if ($globalCommands) {
+            ksort($globalCommands);
+            $sortedCommands[self::GLOBAL_NAMESPACE] = $globalCommands;
         }
-        // unset reference to keep scope clear
-        unset($commandsSet);
 
-        return $namespacedCommands;
+        if ($namespacedCommands) {
+            ksort($namespacedCommands);
+            foreach ($namespacedCommands as $key => $commandsSet) {
+                ksort($commandsSet);
+                $sortedCommands[$key] = $commandsSet;
+            }
+        }
+
+        return $sortedCommands;
     }
 }

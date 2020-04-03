@@ -14,9 +14,9 @@ namespace PhpCsFixer\Fixer\PhpUnit;
 
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
+use PhpCsFixer\FixerConfiguration\AllowedValueSubset;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverRootless;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
-use PhpCsFixer\FixerConfiguration\FixerOptionValidatorGenerator;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\Tokenizer\Token;
@@ -36,7 +36,6 @@ final class PhpUnitDedicateAssertFixer extends AbstractFixer implements Configur
         'is_null' => array('assertNotNull', 'assertNull'),
         'is_array' => true,
         'is_bool' => true,
-        'is_boolean' => true,
         'is_callable' => true,
         'is_double' => true,
         'is_float' => true,
@@ -73,7 +72,7 @@ final class PhpUnitDedicateAssertFixer extends AbstractFixer implements Configur
     public function getDefinition()
     {
         return new FixerDefinition(
-            'PHPUnit assertions like "assertInternalType", "assertFileExists", should be used over "assertTrue".',
+            'PHPUnit assertions like `assertInternalType`, `assertFileExists`, should be used over `assertTrue`.',
             array(
                 new CodeSample(
                     '<?php
@@ -142,7 +141,6 @@ $this->assertTrue(is_nan($a));
             'is_null',
             'is_array',
             'is_bool',
-            'is_boolean',
             'is_callable',
             'is_double',
             'is_float',
@@ -156,14 +154,11 @@ $this->assertTrue(is_nan($a));
             'is_scalar',
             'is_string',
         );
-        $generator = new FixerOptionValidatorGenerator();
 
         $functions = new FixerOptionBuilder('functions', 'List of assertions to fix.');
         $functions = $functions
             ->setAllowedTypes(array('array'))
-            ->setAllowedValues(array(
-                $generator->allowedValueIsSubsetOf($values),
-            ))
+            ->setAllowedValues(array(new AllowedValueSubset($values)))
             ->setDefault($values)
             ->getOption()
         ;
@@ -256,7 +251,7 @@ $this->assertTrue(is_nan($a));
 
         if (is_array(self::$fixMap[$content])) {
             if (false !== self::$fixMap[$content][$isPositive]) {
-                $tokens[$assertCallIndex]->setContent(self::$fixMap[$content][$isPositive]);
+                $tokens[$assertCallIndex] = new Token(array(T_STRING, self::$fixMap[$content][$isPositive]));
                 $this->removeFunctionCall($tokens, $testDefaultNamespaceTokenIndex, $testIndex, $testOpenIndex, $testCloseIndex);
             }
 
@@ -264,9 +259,9 @@ $this->assertTrue(is_nan($a));
         }
 
         $type = substr($content, 3);
-        $tokens[$assertCallIndex]->setContent($isPositive ? 'assertInternalType' : 'assertNotInternalType');
-        $tokens->overrideAt($testIndex, array(T_CONSTANT_ENCAPSED_STRING, "'".$type."'"));
-        $tokens->overrideAt($testOpenIndex, ',');
+        $tokens[$assertCallIndex] = new Token(array(T_STRING, $isPositive ? 'assertInternalType' : 'assertNotInternalType'));
+        $tokens[$testIndex] = new Token(array(T_CONSTANT_ENCAPSED_STRING, "'".$type."'"));
+        $tokens[$testOpenIndex] = new Token(',');
         $tokens->clearTokenAndMergeSurroundingWhitespace($testCloseIndex);
 
         if (!$tokens[$testOpenIndex + 1]->isWhitespace()) {
@@ -282,7 +277,7 @@ $this->assertTrue(is_nan($a));
 
     /**
      * @param Tokens    $tokens
-     * @param int|false $callNSIndex
+     * @param false|int $callNSIndex
      * @param int       $callIndex
      * @param int       $openIndex
      * @param int       $closeIndex

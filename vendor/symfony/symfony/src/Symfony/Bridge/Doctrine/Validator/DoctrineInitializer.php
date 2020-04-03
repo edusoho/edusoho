@@ -11,7 +11,8 @@
 
 namespace Symfony\Bridge\Doctrine\Validator;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\ObjectInitializerInterface;
 
 /**
@@ -23,14 +24,17 @@ class DoctrineInitializer implements ObjectInitializerInterface
 {
     protected $registry;
 
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @param ManagerRegistry|LegacyManagerRegistry $registry
+     */
+    public function __construct($registry)
     {
         $this->registry = $registry;
     }
 
     public function initialize($object)
     {
-        $manager = $this->registry->getManagerForClass(get_class($object));
+        $manager = $this->registry->getManagerForClass(\get_class($object));
         if (null !== $manager) {
             $manager->initializeObject($object);
         }

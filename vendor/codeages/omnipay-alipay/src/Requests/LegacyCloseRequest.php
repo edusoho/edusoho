@@ -103,12 +103,12 @@ class LegacyCloseRequest
 class AlipayResponse
 {
     protected $success;
-    protected $message;
+    protected $failData;
 
-    public function __construct($success, $message = '')
+    public function __construct($success, $failData = '')
     {
         $this->success = $success;
-        $this->message = $message;
+        $this->failData = $failData;
     }
 
     public function isSuccessful()
@@ -116,8 +116,8 @@ class AlipayResponse
         return $this->success;
     }
 
-    public function getMessage()
+    public function getFailData()
     {
-        return $this->message;
+        return $this->failData;
     }
 }

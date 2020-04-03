@@ -24,7 +24,7 @@ class BlockController extends BaseController
         list($condation, $sort) = $this->dealQueryFields($category);
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getBlockService()->searchBlockTemplateCount($condation),
             20
         );
@@ -212,7 +212,7 @@ class BlockController extends BaseController
 
         $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             null,
             5
         );
@@ -221,7 +221,7 @@ class BlockController extends BaseController
 
         if (!empty($block)) {
             $paginator = new Paginator(
-                $this->get('request'),
+                $request,
                 $this->getBlockService()->findBlockHistoryCountByBlockId($block['blockId']),
                 20
             );

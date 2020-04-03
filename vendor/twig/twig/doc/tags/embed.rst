@@ -12,7 +12,7 @@ included template, like when extending a template.
 
 Think of an embedded template as a "micro layout skeleton".
 
-.. code-block:: jinja
+.. code-block:: twig
 
     {% embed "teasers_skeleton.twig" %}
         {# These blocks are defined in "teasers_skeleton.twig" #}
@@ -88,26 +88,26 @@ two boxes side by side:
 
 Without the ``embed`` tag, you have two ways to design your templates:
 
- * Create two "intermediate" base templates that extend the master layout
-   template: one with vertically stacked boxes to be used by the "foo" and
-   "bar" pages and another one with side-by-side boxes for the "boom" and
-   "baz" pages.
+* Create two "intermediate" base templates that extend the master layout
+  template: one with vertically stacked boxes to be used by the "foo" and
+  "bar" pages and another one with side-by-side boxes for the "boom" and
+  "baz" pages.
 
- * Embed the markup for the top/bottom and left/right boxes into each page 
-   template directly.
+* Embed the markup for the top/bottom and left/right boxes into each page
+  template directly.
 
 These two solutions do not scale well because they each have a major drawback:
 
- * The first solution may indeed work for this simplified example. But imagine
-   we add a sidebar, which may again contain different, recurring structures
-   of content. Now we would need to create intermediate base templates for
-   all occurring combinations of content structure and sidebar structure...
-   and so on.
+* The first solution may indeed work for this simplified example. But imagine
+  we add a sidebar, which may again contain different, recurring structures
+  of content. Now we would need to create intermediate base templates for
+  all occurring combinations of content structure and sidebar structure...
+  and so on.
 
- * The second solution involves duplication of common code with all its negative
-   consequences: any change involves finding and editing all affected copies
-   of the structure, correctness has to be verified for each copy, copies may
-   go out of sync by careless modifications etc.
+* The second solution involves duplication of common code with all its negative
+  consequences: any change involves finding and editing all affected copies
+  of the structure, correctness has to be verified for each copy, copies may
+  go out of sync by careless modifications etc.
 
 In such a situation, the ``embed`` tag comes in handy. The common layout
 code can live in a single base template, and the two different content structures,
@@ -116,7 +116,7 @@ as necessary:
 
 Page template ``foo.twig``:
 
-.. code-block:: jinja
+.. code-block:: twig
 
     {% extends "layout_skeleton.twig" %}
 
@@ -134,7 +134,7 @@ Page template ``foo.twig``:
 
 And here is the code for ``vertical_boxes_skeleton.twig``:
 
-.. code-block:: html+jinja
+.. code-block:: html+twig
 
     <div class="top_box">
         {% block top %}
@@ -153,7 +153,7 @@ out the HTML markup for the boxes.
 
 The ``embed`` tag takes the exact same arguments as the ``include`` tag:
 
-.. code-block:: jinja
+.. code-block:: twig
 
     {% embed "base" with {'foo': 'bar'} %}
         ...

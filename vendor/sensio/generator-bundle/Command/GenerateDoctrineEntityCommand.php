@@ -13,6 +13,7 @@ namespace Sensio\Bundle\GeneratorBundle\Command;
 
 use Sensio\Bundle\GeneratorBundle\Generator\DoctrineEntityGenerator;
 use Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -33,14 +34,15 @@ class GenerateDoctrineEntityCommand extends GenerateDoctrineCommand
             ->setName('doctrine:generate:entity')
             ->setAliases(array('generate:doctrine:entity'))
             ->setDescription('Generates a new Doctrine entity inside a bundle')
-            ->addOption('entity', null, InputOption::VALUE_REQUIRED, 'The entity class name to initialize (shortcut notation)')
+            ->addArgument('entity', InputArgument::OPTIONAL, 'The entity class name to initialize (shortcut notation)')
+            ->addOption('entity', null, InputOption::VALUE_OPTIONAL, 'The entity class name to initialize (shortcut notation)')
             ->addOption('fields', null, InputOption::VALUE_REQUIRED, 'The fields to create with the new entity')
             ->addOption('format', null, InputOption::VALUE_REQUIRED, 'Use the format for configuration files (php, xml, yml, or annotation)', 'annotation')
             ->setHelp(<<<EOT
 The <info>%command.name%</info> task generates a new Doctrine
 entity inside a bundle:
 
-<info>php %command.full_name% --entity=AcmeBlogBundle:Blog/Post</info>
+<info>php %command.full_name% AcmeBlogBundle:Blog/Post</info>
 
 The above command would initialize a new entity in the following entity
 namespace <info>Acme\BlogBundle\Entity\Blog\Post</info>.
@@ -48,21 +50,21 @@ namespace <info>Acme\BlogBundle\Entity\Blog\Post</info>.
 You can also optionally specify the fields you want to generate in the new
 entity:
 
-<info>php %command.full_name% --entity=AcmeBlogBundle:Blog/Post --fields="title:string(255) body:text"</info>
+<info>php %command.full_name% AcmeBlogBundle:Blog/Post --fields="title:string(255) body:text"</info>
 
 By default, the command uses annotations for the mapping information; change it
 with <comment>--format</comment>:
 
-<info>php %command.full_name% --entity=AcmeBlogBundle:Blog/Post --format=yml</info>
+<info>php %command.full_name% AcmeBlogBundle:Blog/Post --format=yml</info>
 
-To deactivate the interaction mode, simply use the <comment>--no-interaction</comment> option
-without forgetting to pass all needed options:
+To deactivate the interaction mode, simply use the <comment>--no-interaction</comment> option or its
+alias <comment>-n</comment>, without forgetting to pass all needed options:
 
-<info>php %command.full_name% --entity=AcmeBlogBundle:Blog/Post --format=annotation --fields="title:string(255) body:text" --no-interaction</info>
+<info>php %command.full_name% AcmeBlogBundle:Blog/Post -n --format=annotation --fields="title:string(255) body:text"</info>
 
 This also has support for passing field specific attributes:
 
-<info>php %command.full_name% --entity=AcmeBlogBundle:Blog/Post --format=annotation --fields="title:string(length=255 nullable=true unique=true) body:text ranking:decimal(precision:10 scale:0)" --no-interaction</info>
+<info>php %command.full_name% AcmeBlogBundle:Blog/Post -n --format=annotation --fields="title:string(length=255 nullable=true unique=true) body:text ranking:decimal(precision=10 scale=0)"</info>
 EOT
         );
     }
@@ -74,7 +76,14 @@ EOT
     {
         $questionHelper = $this->getQuestionHelper();
 
-        $entity = Validators::validateEntityName($input->getOption('entity'));
+        // BC to be removed in 4.0
+        if (!$input->isInteractive() && $input->hasOption('entity') && $entityOption = $input->getOption('entity')) {
+            @trigger_error('Using the "--entity" option has been deprecated since version 3.0 and will be removed in 4.0. Pass it as argument instead.', E_USER_DEPRECATED);
+
+            $input->setArgument('entity', $entityOption);
+        }
+
+        $entity = Validators::validateEntityName($input->getArgument('entity'));
         list($bundle, $entity) = $this->parseShortcutNotation($entity);
         $format = Validators::validateFormat($input->getOption('format'));
         $fields = $this->parseFields($input->getOption('fields'));
@@ -120,10 +129,16 @@ EOT
             '',
         ));
 
+        if ($input->hasOption('entity') && $entityOption = $input->getOption('entity')) {
+            @trigger_error('Using the "--entity" option has been deprecated since version 3.0 and will be removed in 4.0. Pass it as argument instead.', E_USER_DEPRECATED);
+
+            $input->setArgument('entity', $entityOption);
+        }
+
         $bundleNames = array_keys($this->getContainer()->get('kernel')->getBundles());
 
         while (true) {
-            $question = new Question($questionHelper->getQuestion('The Entity shortcut name', $input->getOption('entity')), $input->getOption('entity'));
+            $question = new Question($questionHelper->getQuestion('The Entity shortcut name', $input->getArgument('entity')), $input->getArgument('entity'));
             $question->setValidator(array('Sensio\Bundle\GeneratorBundle\Command\Validators', 'validateEntityName'));
             $question->setAutocompleterValues($bundleNames);
             $entity = $questionHelper->ask($input, $output, $question);
@@ -148,7 +163,7 @@ EOT
                 $output->writeln(sprintf('<bg=red>Bundle "%s" does not exist.</>', $bundle));
             }
         }
-        $input->setOption('entity', $bundle.':'.$entity);
+        $input->setArgument('entity', $bundle.':'.$entity);
 
         // format
         $output->writeln(array(

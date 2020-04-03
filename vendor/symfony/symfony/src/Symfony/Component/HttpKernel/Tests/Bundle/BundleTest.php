@@ -13,10 +13,11 @@ namespace Symfony\Component\HttpKernel\Tests\Bundle;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpKernel\Tests\Fixtures\ExtensionNotValidBundle\ExtensionNotValidBundle;
-use Symfony\Component\HttpKernel\Tests\Fixtures\ExtensionPresentBundle\ExtensionPresentBundle;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\Tests\Fixtures\ExtensionAbsentBundle\ExtensionAbsentBundle;
+use Symfony\Component\HttpKernel\Tests\Fixtures\ExtensionNotValidBundle\ExtensionNotValidBundle;
 use Symfony\Component\HttpKernel\Tests\Fixtures\ExtensionPresentBundle\Command\FooCommand;
+use Symfony\Component\HttpKernel\Tests\Fixtures\ExtensionPresentBundle\ExtensionPresentBundle;
 
 class BundleTest extends TestCase
 {
@@ -30,6 +31,10 @@ class BundleTest extends TestCase
         );
     }
 
+    /**
+     * @group legacy
+     * @expectedDeprecation Auto-registration of the command "Symfony\Component\HttpKernel\Tests\Fixtures\ExtensionPresentBundle\Command\FooCommand" is deprecated since Symfony 3.4 and won't be supported in 4.0. Use PSR-4 based service discovery instead.
+     */
     public function testRegisterCommands()
     {
         $cmd = new FooCommand();
@@ -45,11 +50,12 @@ class BundleTest extends TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage must implement Symfony\Component\DependencyInjection\Extension\ExtensionInterface
+     * @group legacy
      */
     public function testGetContainerExtensionWithInvalidClass()
     {
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage('must implement Symfony\Component\DependencyInjection\Extension\ExtensionInterface');
         $bundle = new ExtensionNotValidBundle();
         $bundle->getContainerExtension();
     }
@@ -67,4 +73,33 @@ class BundleTest extends TestCase
         $bundle->setContainer($container);
         $bundle->registerCommands($application);
     }
+
+    public function testBundleNameIsGuessedFromClass()
+    {
+        $bundle = new GuessedNameBundle();
+
+        $this->assertSame('Symfony\Component\HttpKernel\Tests\Bundle', $bundle->getNamespace());
+        $this->assertSame('GuessedNameBundle', $bundle->getName());
+    }
+
+    public function testBundleNameCanBeExplicitlyProvided()
+    {
+        $bundle = new NamedBundle();
+
+        $this->assertSame('ExplicitlyNamedBundle', $bundle->getName());
+        $this->assertSame('Symfony\Component\HttpKernel\Tests\Bundle', $bundle->getNamespace());
+        $this->assertSame('ExplicitlyNamedBundle', $bundle->getName());
+    }
+}
+
+class NamedBundle extends Bundle
+{
+    public function __construct()
+    {
+        $this->name = 'ExplicitlyNamedBundle';
+    }
+}
+
+class GuessedNameBundle extends Bundle
+{
 }

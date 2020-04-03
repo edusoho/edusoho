@@ -14,11 +14,12 @@ namespace PhpCsFixer\Fixer\PhpUnit;
 
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
+use PhpCsFixer\FixerConfiguration\AllowedValueSubset;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverRootless;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
-use PhpCsFixer\FixerConfiguration\FixerOptionValidatorGenerator;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
@@ -55,7 +56,7 @@ final class PhpUnitConstructFixer extends AbstractFixer implements Configuration
     public function getDefinition()
     {
         return new FixerDefinition(
-            'PHPUnit assertion method calls like "->assertSame(true, $foo)" should be written with dedicated method like "->assertTrue($foo)".',
+            'PHPUnit assertion method calls like `->assertSame(true, $foo)` should be written with dedicated method like `->assertTrue($foo)`.',
             array(
                 new CodeSample(
                     '<?php
@@ -103,7 +104,7 @@ $this->assertNotSame(null, $d);
             $assertionFixer = self::$assertionFixers[$assertionMethod];
 
             for ($index = 0, $limit = $tokens->count(); $index < $limit; ++$index) {
-                $index = $this->$assertionFixer($tokens, $index, $assertionMethod);
+                $index = $this->{$assertionFixer}($tokens, $index, $assertionMethod);
 
                 if (null === $index) {
                     break;
@@ -117,14 +118,10 @@ $this->assertNotSame(null, $d);
      */
     protected function createConfigurationDefinition()
     {
-        $generator = new FixerOptionValidatorGenerator();
-
         $assertions = new FixerOptionBuilder('assertions', 'List of assertion methods to fix.');
         $assertions = $assertions
             ->setAllowedTypes(array('array'))
-            ->setAllowedValues(array(
-                $generator->allowedValueIsSubsetOf(array_keys(self::$assertionFixers)),
-            ))
+            ->setAllowedValues(array(new AllowedValueSubset(array_keys(self::$assertionFixers))))
             ->setDefault(array(
                 'assertEquals',
                 'assertSame',
@@ -142,7 +139,7 @@ $this->assertNotSame(null, $d);
      * @param int    $index
      * @param string $method
      *
-     * @return int|null
+     * @return null|int
      */
     private function fixAssertNegative(Tokens $tokens, $index, $method)
     {
@@ -160,7 +157,7 @@ $this->assertNotSame(null, $d);
      * @param int    $index
      * @param string $method
      *
-     * @return int|null
+     * @return null|int
      */
     private function fixAssertPositive(Tokens $tokens, $index, $method)
     {
@@ -179,7 +176,7 @@ $this->assertNotSame(null, $d);
      * @param int                   $index
      * @param string                $method
      *
-     * @return int|null
+     * @return null|int
      */
     private function fixAssert(array $map, Tokens $tokens, $index, $method)
     {
@@ -202,17 +199,17 @@ $this->assertNotSame(null, $d);
         $firstParameterToken = $tokens[$sequenceIndexes[4]];
 
         if (!$firstParameterToken->isNativeConstant()) {
-            return null;
+            return $sequenceIndexes[4];
         }
 
         $sequenceIndexes[5] = $tokens->getNextMeaningfulToken($sequenceIndexes[4]);
 
         // return if first method argument is an expression, not value
         if (!$tokens[$sequenceIndexes[5]]->equals(',')) {
-            return null;
+            return $sequenceIndexes[5];
         }
 
-        $tokens[$sequenceIndexes[2]]->setContent($map[$firstParameterToken->getContent()]);
+        $tokens[$sequenceIndexes[2]] = new Token(array(T_STRING, $map[$firstParameterToken->getContent()]));
         $tokens->clearRange($sequenceIndexes[4], $tokens->getNextNonWhitespace($sequenceIndexes[5]) - 1);
 
         return $sequenceIndexes[5];

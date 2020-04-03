@@ -12,14 +12,14 @@
 
 namespace PhpCsFixer\Linter;
 
+use PhpCsFixer\FileReader;
 use PhpCsFixer\FileRemoval;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Process\ProcessUtils;
 
 /**
- * Handle PHP code linting process.
+ * Handle PHP code linting using separated process of `php -l _file_`.
  *
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
  *
@@ -28,28 +28,24 @@ use Symfony\Component\Process\ProcessUtils;
 final class ProcessLinter implements LinterInterface
 {
     /**
-     * Temporary file for code linting.
-     *
-     * @var string|null
-     */
-    private $temporaryFile;
-
-    /**
-     * PHP executable.
-     *
-     * @var string
-     */
-    private $executable;
-
-    /**
-     * Files removal handler.
-     *
      * @var FileRemoval
      */
     private $fileRemoval;
 
     /**
-     * @param string|null $executable PHP executable, null for autodetection
+     * Temporary file for code linting.
+     *
+     * @var null|string
+     */
+    private $temporaryFile;
+
+    /**
+     * @var ProcessLinterProcessBuilder
+     */
+    private $processBuilder;
+
+    /**
+     * @param null|string $executable PHP executable, null for autodetection
      */
     public function __construct($executable = null)
     {
@@ -75,7 +71,7 @@ final class ProcessLinter implements LinterInterface
             }
         }
 
-        $this->executable = $executable;
+        $this->processBuilder = new ProcessLinterProcessBuilder($executable);
 
         $this->fileRemoval = new FileRemoval();
     }
@@ -112,8 +108,6 @@ final class ProcessLinter implements LinterInterface
     }
 
     /**
-     * Create process that lint PHP file.
-     *
      * @param string $path path to file
      *
      * @return Process
@@ -122,11 +116,11 @@ final class ProcessLinter implements LinterInterface
     {
         // in case php://stdin
         if (!is_file($path)) {
-            return $this->createProcessForSource(file_get_contents($path));
+            return $this->createProcessForSource(FileReader::createSingleton()->read($path));
         }
 
-        $process = new Process($this->prepareCommand($path));
-        $process->setTimeout(null);
+        $process = $this->processBuilder->build($path);
+        $process->setTimeout(10);
         $process->start();
 
         return $process;
@@ -151,25 +145,5 @@ final class ProcessLinter implements LinterInterface
         }
 
         return $this->createProcessForFile($this->temporaryFile);
-    }
-
-    /**
-     * Prepare command that will lint a file.
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    private function prepareCommand($path)
-    {
-        $executable = ProcessUtils::escapeArgument($this->executable);
-
-        if (defined('HHVM_VERSION')) {
-            $executable .= ' --php';
-        }
-
-        $path = ProcessUtils::escapeArgument($path);
-
-        return sprintf('%s -l %s', $executable, $path);
     }
 }

@@ -38,7 +38,8 @@ class GenerateBundleCommandTest extends GenerateCommandTest
             ->with($bundle)
         ;
 
-        $tester = new CommandTester($this->getCommand($generator, $input, $container));
+        $tester = new CommandTester($command = $this->getCommand($generator, $container));
+        $this->setInputs($tester, $command, $input);
         $tester->execute($options);
     }
 
@@ -96,7 +97,7 @@ class GenerateBundleCommandTest extends GenerateCommandTest
             ->with($bundle)
         ;
 
-        $tester = new CommandTester($this->getCommand($generator, '', $container));
+        $tester = new CommandTester($this->getCommand($generator, $container));
         $tester->execute($options, array('interactive' => false));
     }
 
@@ -120,7 +121,7 @@ class GenerateBundleCommandTest extends GenerateCommandTest
         );
     }
 
-    protected function getCommand($generator, $input, $container)
+    protected function getCommand($generator, $container)
     {
         $command = $this
             ->getMockBuilder('Sensio\Bundle\GeneratorBundle\Command\GenerateBundleCommand')
@@ -129,7 +130,7 @@ class GenerateBundleCommandTest extends GenerateCommandTest
         ;
 
         $command->setContainer($container);
-        $command->setHelperSet($this->getHelperSet($input));
+        $command->setHelperSet($this->getHelperSet());
         $command->setGenerator($generator);
 
         return $command;

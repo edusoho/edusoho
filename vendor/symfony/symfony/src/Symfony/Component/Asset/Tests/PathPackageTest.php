@@ -23,29 +23,29 @@ class PathPackageTest extends TestCase
     public function testGetUrl($basePath, $format, $path, $expected)
     {
         $package = new PathPackage($basePath, new StaticVersionStrategy('v1', $format));
-        $this->assertEquals($expected, $package->getUrl($path));
+        $this->assertSame($expected, $package->getUrl($path));
     }
 
     public function getConfigs()
     {
-        return array(
-            array('/foo', '', 'http://example.com/foo', 'http://example.com/foo'),
-            array('/foo', '', 'https://example.com/foo', 'https://example.com/foo'),
-            array('/foo', '', '//example.com/foo', '//example.com/foo'),
+        return [
+            ['/foo', '', 'http://example.com/foo', 'http://example.com/foo'],
+            ['/foo', '', 'https://example.com/foo', 'https://example.com/foo'],
+            ['/foo', '', '//example.com/foo', '//example.com/foo'],
 
-            array('', '', '/foo', '/foo?v1'),
+            ['', '', '/foo', '/foo?v1'],
 
-            array('/foo', '', '/foo', '/foo/foo?v1'),
-            array('/foo', '', 'foo', '/foo/foo?v1'),
-            array('foo', '', 'foo', '/foo/foo?v1'),
-            array('foo/', '', 'foo', '/foo/foo?v1'),
-            array('/foo/', '', 'foo', '/foo/foo?v1'),
+            ['/foo', '', '/bar', '/bar?v1'],
+            ['/foo', '', 'bar', '/foo/bar?v1'],
+            ['foo', '', 'bar', '/foo/bar?v1'],
+            ['foo/', '', 'bar', '/foo/bar?v1'],
+            ['/foo/', '', 'bar', '/foo/bar?v1'],
 
-            array('/foo', 'version-%2$s/%1$s', '/foo', '/foo/version-v1/foo'),
-            array('/foo', 'version-%2$s/%1$s', 'foo', '/foo/version-v1/foo'),
-            array('/foo', 'version-%2$s/%1$s', 'foo/', '/foo/version-v1/foo/'),
-            array('/foo', 'version-%2$s/%1$s', '/foo/', '/foo/version-v1/foo/'),
-        );
+            ['/foo', 'version-%2$s/%1$s', '/bar', '/version-v1/bar'],
+            ['/foo', 'version-%2$s/%1$s', 'bar', '/foo/version-v1/bar'],
+            ['/foo', 'version-%2$s/%1$s', 'bar/', '/foo/version-v1/bar/'],
+            ['/foo', 'version-%2$s/%1$s', '/bar/', '/version-v1/bar/'],
+        ];
     }
 
     /**
@@ -55,30 +55,41 @@ class PathPackageTest extends TestCase
     {
         $package = new PathPackage($basePath, new StaticVersionStrategy('v1', $format), $this->getContext($basePathRequest));
 
-        $this->assertEquals($expected, $package->getUrl($path));
+        $this->assertSame($expected, $package->getUrl($path));
     }
 
     public function getContextConfigs()
     {
-        return array(
-            array('', '/foo', '', '/foo', '/foo/foo?v1'),
-            array('', '/foo', '', 'foo', '/foo/foo?v1'),
-            array('', 'foo', '', 'foo', '/foo/foo?v1'),
-            array('', 'foo/', '', 'foo', '/foo/foo?v1'),
-            array('', '/foo/', '', 'foo', '/foo/foo?v1'),
+        return [
+            ['', '/foo', '', '/baz', '/baz?v1'],
+            ['', '/foo', '', 'baz', '/foo/baz?v1'],
+            ['', 'foo', '', 'baz', '/foo/baz?v1'],
+            ['', 'foo/', '', 'baz', '/foo/baz?v1'],
+            ['', '/foo/', '', 'baz', '/foo/baz?v1'],
 
-            array('/bar', '/foo', '', '/foo', '/bar/foo/foo?v1'),
-            array('/bar', '/foo', '', 'foo', '/bar/foo/foo?v1'),
-            array('/bar', 'foo', '', 'foo', '/bar/foo/foo?v1'),
-            array('/bar', 'foo/', '', 'foo', '/bar/foo/foo?v1'),
-            array('/bar', '/foo/', '', 'foo', '/bar/foo/foo?v1'),
-        );
+            ['/bar', '/foo', '', '/baz', '/baz?v1'],
+            ['/bar', '/foo', '', 'baz', '/bar/foo/baz?v1'],
+            ['/bar', 'foo', '', 'baz', '/bar/foo/baz?v1'],
+            ['/bar', 'foo/', '', 'baz', '/bar/foo/baz?v1'],
+            ['/bar', '/foo/', '', 'baz', '/bar/foo/baz?v1'],
+        ];
+    }
+
+    public function testVersionStrategyGivesAbsoluteURL()
+    {
+        $versionStrategy = $this->getMockBuilder('Symfony\Component\Asset\VersionStrategy\VersionStrategyInterface')->getMock();
+        $versionStrategy->expects($this->any())
+            ->method('applyVersion')
+            ->willReturn('https://cdn.com/bar/main.css');
+        $package = new PathPackage('/subdirectory', $versionStrategy, $this->getContext('/bar'));
+
+        $this->assertSame('https://cdn.com/bar/main.css', $package->getUrl('main.css'));
     }
 
     private function getContext($basePath)
     {
         $context = $this->getMockBuilder('Symfony\Component\Asset\Context\ContextInterface')->getMock();
-        $context->expects($this->any())->method('getBasePath')->will($this->returnValue($basePath));
+        $context->expects($this->any())->method('getBasePath')->willReturn($basePath);
 
         return $context;
     }

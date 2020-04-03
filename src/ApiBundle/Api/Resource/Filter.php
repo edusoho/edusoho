@@ -32,7 +32,7 @@ abstract class Filter
 
     public function filter(&$data)
     {
-        if (!$data) {
+        if (!$data || !is_array($data)) {
             return null;
         }
 

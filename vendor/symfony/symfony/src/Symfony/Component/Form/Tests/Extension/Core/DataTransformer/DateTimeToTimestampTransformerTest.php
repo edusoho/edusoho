@@ -11,9 +11,10 @@
 
 namespace Symfony\Component\Form\Tests\Extension\Core\DataTransformer;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToTimestampTransformer;
 
-class DateTimeToTimestampTransformerTest extends DateTimeTestCase
+class DateTimeToTimestampTransformerTest extends TestCase
 {
     public function testTransform()
     {
@@ -56,9 +57,6 @@ class DateTimeToTimestampTransformerTest extends DateTimeTestCase
         $this->assertEquals($output, $transformer->transform($input));
     }
 
-    /**
-     * @requires PHP 5.5
-     */
     public function testTransformDateTimeImmutable()
     {
         $transformer = new DateTimeToTimestampTransformer('Asia/Hong_Kong', 'America/New_York');
@@ -74,7 +72,7 @@ class DateTimeToTimestampTransformerTest extends DateTimeTestCase
     {
         $transformer = new DateTimeToTimestampTransformer();
 
-        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('Symfony\Component\Form\Exception\TransformationFailedException');
+        $this->expectException('Symfony\Component\Form\Exception\TransformationFailedException');
 
         $transformer->transform('1234');
     }
@@ -86,7 +84,7 @@ class DateTimeToTimestampTransformerTest extends DateTimeTestCase
         $output = new \DateTime('2010-02-03 04:05:06 UTC');
         $input = $output->format('U');
 
-        $this->assertDateTimeEquals($output, $reverseTransformer->reverseTransform($input));
+        $this->assertEquals($output, $reverseTransformer->reverseTransform($input));
     }
 
     public function testReverseTransformEmpty()
@@ -104,14 +102,14 @@ class DateTimeToTimestampTransformerTest extends DateTimeTestCase
         $input = $output->format('U');
         $output->setTimezone(new \DateTimeZone('Asia/Hong_Kong'));
 
-        $this->assertDateTimeEquals($output, $reverseTransformer->reverseTransform($input));
+        $this->assertEquals($output, $reverseTransformer->reverseTransform($input));
     }
 
     public function testReverseTransformExpectsValidTimestamp()
     {
         $reverseTransformer = new DateTimeToTimestampTransformer();
 
-        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('Symfony\Component\Form\Exception\TransformationFailedException');
+        $this->expectException('Symfony\Component\Form\Exception\TransformationFailedException');
 
         $reverseTransformer->reverseTransform('2010-2010-2010');
     }

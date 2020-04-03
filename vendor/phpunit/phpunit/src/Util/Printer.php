@@ -10,8 +10,6 @@
 
 /**
  * Utility class that can print to STDOUT or write to a file.
- *
- * @since Class available since Release 2.0.0
  */
 class PHPUnit_Util_Printer
 {
@@ -33,11 +31,6 @@ class PHPUnit_Util_Printer
     protected $outTarget;
 
     /**
-     * @var bool
-     */
-    protected $printsHTML = false;
-
-    /**
      * Constructor.
      *
      * @param mixed $out
@@ -51,7 +44,7 @@ class PHPUnit_Util_Printer
                 if (strpos($out, 'socket://') === 0) {
                     $out = explode(':', str_replace('socket://', '', $out));
 
-                    if (sizeof($out) != 2) {
+                    if (count($out) != 2) {
                         throw new PHPUnit_Framework_Exception;
                     }
 
@@ -73,27 +66,12 @@ class PHPUnit_Util_Printer
     }
 
     /**
-     * Flush buffer, optionally tidy up HTML, and close output if it's not to a php stream
+     * Flush buffer and close output if it's not to a PHP stream
      */
     public function flush()
     {
         if ($this->out && strncmp($this->outTarget, 'php://', 6) !== 0) {
             fclose($this->out);
-        }
-
-        if ($this->printsHTML === true &&
-            $this->outTarget !== null &&
-            strpos($this->outTarget, 'php://') !== 0 &&
-            strpos($this->outTarget, 'socket://') !== 0 &&
-            extension_loaded('tidy')) {
-            file_put_contents(
-                $this->outTarget,
-                tidy_repair_file(
-                    $this->outTarget,
-                    array('indent' => true, 'wrap' => 0),
-                    'utf8'
-                )
-            );
         }
     }
 
@@ -103,8 +81,6 @@ class PHPUnit_Util_Printer
      * Do not confuse this function with the flush() function of this class,
      * since the flush() function may close the file being written to, rendering
      * the current object no longer usable.
-     *
-     * @since  Method available since Release 3.3.0
      */
     public function incrementalFlush()
     {
@@ -143,8 +119,6 @@ class PHPUnit_Util_Printer
      * Check auto-flush mode.
      *
      * @return bool
-     *
-     * @since  Method available since Release 3.3.0
      */
     public function getAutoFlush()
     {
@@ -158,8 +132,6 @@ class PHPUnit_Util_Printer
      * not be confused with the different effects of this class' flush() method.
      *
      * @param bool $autoFlush
-     *
-     * @since  Method available since Release 3.3.0
      */
     public function setAutoFlush($autoFlush)
     {

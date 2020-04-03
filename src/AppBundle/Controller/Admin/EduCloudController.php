@@ -1781,7 +1781,7 @@ class EduCloudController extends BaseController
     {
         $user = $this->getUser();
 
-        $callback = $this->get('request')->getSchemeAndHttpHost().$this->generateUrl('callback', array('type' => 'cloudFile', 'ac' => 'files.notify'));
+        $callback = $this->get('request_stack')->getMasterRequest()->getSchemeAndHttpHost().$this->generateUrl('callback', array('type' => 'cloudFile', 'ac' => 'files.notify'));
 
         $this->getCloudFileService()->deleteCloudMP4Files($user['id'], $callback);
 

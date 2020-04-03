@@ -11,38 +11,26 @@
 
 namespace Symfony\Bundle\FrameworkBundle\Tests\Templating;
 
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
+use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 
 class TemplateTest extends TestCase
 {
     /**
      * @dataProvider getTemplateToPathProvider
      */
-    public function testGetPathForTemplatesInABundle($template, $path)
+    public function testGetPathForTemplate($template, $path)
     {
-        if ($template->get('bundle')) {
-            $this->assertEquals($template->getPath(), $path);
-        }
-    }
-
-    /**
-     * @dataProvider getTemplateToPathProvider
-     */
-    public function testGetPathForTemplatesOutOfABundle($template, $path)
-    {
-        if (!$template->get('bundle')) {
-            $this->assertEquals($template->getPath(), $path);
-        }
+        $this->assertSame($template->getPath(), $path);
     }
 
     public function getTemplateToPathProvider()
     {
-        return array(
-            array(new TemplateReference('FooBundle', 'Post', 'index', 'html', 'php'), '@FooBundle/Resources/views/Post/index.html.php'),
-            array(new TemplateReference('FooBundle', '', 'index', 'html', 'twig'), '@FooBundle/Resources/views/index.html.twig'),
-            array(new TemplateReference('', 'Post', 'index', 'html', 'php'), 'views/Post/index.html.php'),
-            array(new TemplateReference('', '', 'index', 'html', 'php'), 'views/index.html.php'),
-        );
+        return [
+            [new TemplateReference('FooBundle', 'Post', 'index', 'html', 'php'), '@FooBundle/Resources/views/Post/index.html.php'],
+            [new TemplateReference('FooBundle', '', 'index', 'html', 'twig'), '@FooBundle/Resources/views/index.html.twig'],
+            [new TemplateReference('', 'Post', 'index', 'html', 'php'), 'views/Post/index.html.php'],
+            [new TemplateReference('', '', 'index', 'html', 'php'), 'views/index.html.php'],
+        ];
     }
 }

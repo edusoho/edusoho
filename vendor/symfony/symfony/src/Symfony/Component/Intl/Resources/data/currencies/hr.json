@@ -1,5 +1,5 @@
 {
-    "Version": "2.1.28.79",
+    "Version": "36",
     "Names": {
         "ADP": [
             "ADP",
@@ -219,7 +219,7 @@
         ],
         "BYN": [
             "BYN",
-            "bjeloruska rublja"
+            "bjeloruski rubalj"
         ],
         "BYR": [
             "BYR",
@@ -260,6 +260,10 @@
         "CLP": [
             "CLP",
             "čileanski pezo"
+        ],
+        "CNH": [
+            "CNH",
+            "kineski juan (offshore)"
         ],
         "CNX": [
             "CNX",
@@ -539,7 +543,7 @@
         ],
         "KHR": [
             "KHR",
-            "kambođanski rijal"
+            "kambodžanski rijal"
         ],
         "KMF": [
             "KMF",
@@ -647,7 +651,7 @@
         ],
         "MGA": [
             "MGA",
-            "madagaskarski ariary"
+            "malgaški arijari"
         ],
         "MGF": [
             "MGF",
@@ -679,6 +683,10 @@
         ],
         "MRO": [
             "MRO",
+            "mauritanijska ouguja (1973. – 2017.)"
+        ],
+        "MRU": [
+            "MRU",
             "mauritanijska ouguja"
         ],
         "MTL": [
@@ -779,11 +787,11 @@
         ],
         "PEN": [
             "PEN",
-            "peruanski novi sol"
+            "peruanski sol"
         ],
         "PES": [
             "PES",
-            "peruanski sol"
+            "peruanski sol (1863–1965)"
         ],
         "PGK": [
             "PGK",
@@ -835,7 +843,7 @@
         ],
         "RUB": [
             "RUB",
-            "ruska rublja"
+            "ruski rubalj"
         ],
         "RUR": [
             "RUR",
@@ -847,7 +855,7 @@
         ],
         "SAR": [
             "SAR",
-            "saudijski rial"
+            "saudijski rijal"
         ],
         "SBD": [
             "SBD",
@@ -911,6 +919,10 @@
         ],
         "STD": [
             "STD",
+            "dobra Svetog Tome i Principa (1977–2017)"
+        ],
+        "STN": [
+            "STN",
             "dobra Svetog Tome i Principa"
         ],
         "SUR": [
@@ -1031,6 +1043,10 @@
         ],
         "VEF": [
             "VEF",
+            "venezuelanski bolivar (2008. – 2018.)"
+        ],
+        "VES": [
+            "VES",
             "venezuelanski bolivar"
         ],
         "VND": [
@@ -1087,7 +1103,7 @@
         ],
         "YER": [
             "YER",
-            "jemenski rial"
+            "jemenski rijal"
         ],
         "YUD": [
             "YUD",

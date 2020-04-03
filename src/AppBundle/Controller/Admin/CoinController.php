@@ -310,7 +310,7 @@ class CoinController extends BaseController
         $systemUser = $this->getUserService()->getUserByType('system');
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getAccountProxyService()->countBalances(
                 array(
                     'except_user_ids' => array(0, $systemUser['id']),
@@ -347,7 +347,7 @@ class CoinController extends BaseController
         $conditions['user_id'] = $userId;
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getAccountProxyService()->countCashflows($conditions),
             20
         );

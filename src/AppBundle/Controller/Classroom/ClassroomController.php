@@ -26,6 +26,7 @@ use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\Classroom\Service\ClassroomReviewService;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ClassroomController extends BaseController
 {
@@ -575,15 +576,15 @@ class ClassroomController extends BaseController
         $token = $this->getTokenService()->makeToken('qrcode', array(
             'userId' => $user['id'],
             'data' => array(
-                'url' => $this->generateUrl('classroom_show', array('id' => $id), true),
+                'url' => $this->generateUrl('classroom_show', array('id' => $id), UrlGeneratorInterface::ABSOLUTE_URL),
             ),
             'times' => 1,
             'duration' => 3600,
         ));
-        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), UrlGeneratorInterface::ABSOLUTE_URL);
 
         $response = array(
-            'img' => $this->generateUrl('common_qrcode', array('text' => $url), true),
+            'img' => $this->generateUrl('common_qrcode', array('text' => $url), UrlGeneratorInterface::ABSOLUTE_URL),
         );
 
         return $this->createJsonResponse($response);

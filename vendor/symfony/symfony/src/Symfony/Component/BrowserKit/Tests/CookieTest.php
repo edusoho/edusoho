@@ -16,6 +16,21 @@ use Symfony\Component\BrowserKit\Cookie;
 
 class CookieTest extends TestCase
 {
+    public function testToString()
+    {
+        $cookie = new Cookie('foo', 'bar', strtotime('Fri, 20-May-2011 15:25:52 GMT'), '/', '.myfoodomain.com', true);
+        $this->assertEquals('foo=bar; expires=Fri, 20 May 2011 15:25:52 GMT; domain=.myfoodomain.com; path=/; secure; httponly', (string) $cookie, '->__toString() returns string representation of the cookie');
+
+        $cookie = new Cookie('foo', 'bar with white spaces', strtotime('Fri, 20-May-2011 15:25:52 GMT'), '/', '.myfoodomain.com', true);
+        $this->assertEquals('foo=bar%20with%20white%20spaces; expires=Fri, 20 May 2011 15:25:52 GMT; domain=.myfoodomain.com; path=/; secure; httponly', (string) $cookie, '->__toString() encodes the value of the cookie according to RFC 3986 (white space = %20)');
+
+        $cookie = new Cookie('foo', null, 1, '/admin/', '.myfoodomain.com');
+        $this->assertEquals('foo=; expires=Thu, 01 Jan 1970 00:00:01 GMT; domain=.myfoodomain.com; path=/admin/; httponly', (string) $cookie, '->__toString() returns string representation of a cleared cookie if value is NULL');
+
+        $cookie = new Cookie('foo', 'bar', 0, '/', '');
+        $this->assertEquals('foo=bar; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; httponly', (string) $cookie);
+    }
+
     /**
      * @dataProvider getTestsForToFromString
      */
@@ -26,16 +41,16 @@ class CookieTest extends TestCase
 
     public function getTestsForToFromString()
     {
-        return array(
-            array('foo=bar; path=/'),
-            array('foo=bar; path=/foo'),
-            array('foo=bar; domain=google.com; path=/'),
-            array('foo=bar; domain=example.com; path=/; secure', 'https://example.com/'),
-            array('foo=bar; path=/; httponly'),
-            array('foo=bar; domain=google.com; path=/foo; secure; httponly', 'https://google.com/'),
-            array('foo=bar=baz; path=/'),
-            array('foo=bar%3Dbaz; path=/'),
-        );
+        return [
+            ['foo=bar; path=/'],
+            ['foo=bar; path=/foo'],
+            ['foo=bar; domain=example.com; path=/'],
+            ['foo=bar; domain=example.com; path=/; secure', 'https://example.com/'],
+            ['foo=bar; path=/; httponly'],
+            ['foo=bar; domain=example.com; path=/foo; secure; httponly', 'https://example.com/'],
+            ['foo=bar=baz; path=/'],
+            ['foo=bar%3Dbaz; path=/'],
+        ];
     }
 
     public function testFromStringIgnoreSecureFlag()
@@ -54,16 +69,16 @@ class CookieTest extends TestCase
 
     public function getExpireCookieStrings()
     {
-        return array(
-            array('foo=bar; expires=Fri, 31-Jul-2020 08:49:37 GMT'),
-            array('foo=bar; expires=Fri, 31 Jul 2020 08:49:37 GMT'),
-            array('foo=bar; expires=Fri, 31-07-2020 08:49:37 GMT'),
-            array('foo=bar; expires=Fri, 31-07-20 08:49:37 GMT'),
-            array('foo=bar; expires=Friday, 31-Jul-20 08:49:37 GMT'),
-            array('foo=bar; expires=Fri Jul 31 08:49:37 2020'),
-            array('foo=bar; expires=\'Fri Jul 31 08:49:37 2020\''),
-            array('foo=bar; expires=Friday July 31st 2020, 08:49:37 GMT'),
-        );
+        return [
+            ['foo=bar; expires=Fri, 31-Jul-2020 08:49:37 GMT'],
+            ['foo=bar; expires=Fri, 31 Jul 2020 08:49:37 GMT'],
+            ['foo=bar; expires=Fri, 31-07-2020 08:49:37 GMT'],
+            ['foo=bar; expires=Fri, 31-07-20 08:49:37 GMT'],
+            ['foo=bar; expires=Friday, 31-Jul-20 08:49:37 GMT'],
+            ['foo=bar; expires=Fri Jul 31 08:49:37 2020'],
+            ['foo=bar; expires=\'Fri Jul 31 08:49:37 2020\''],
+            ['foo=bar; expires=Friday July 31st 2020, 08:49:37 GMT'],
+        ];
     }
 
     public function testFromStringWithCapitalization()
@@ -85,7 +100,7 @@ class CookieTest extends TestCase
 
     public function testFromStringThrowsAnExceptionIfCookieIsNotValid()
     {
-        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         Cookie::fromString('foo');
     }
 
@@ -98,7 +113,7 @@ class CookieTest extends TestCase
 
     public function testFromStringThrowsAnExceptionIfUrlIsNotValid()
     {
-        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         Cookie::fromString('foo=bar', 'foobar');
     }
 
@@ -179,12 +194,10 @@ class CookieTest extends TestCase
         $this->assertFalse($cookie->isExpired());
     }
 
-    /**
-     * @expectedException        \UnexpectedValueException
-     * @expectedExceptionMessage The cookie expiration time "string" is not valid.
-     */
     public function testConstructException()
     {
-        $cookie = new Cookie('foo', 'bar', 'string');
+        $this->expectException('UnexpectedValueException');
+        $this->expectExceptionMessage('The cookie expiration time "string" is not valid.');
+        new Cookie('foo', 'bar', 'string');
     }
 }

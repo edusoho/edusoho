@@ -15,7 +15,6 @@ namespace PhpCsFixer\Fixer\Whitespace;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
-use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
@@ -35,7 +34,8 @@ final class NoSpacesInsideParenthesisFixer extends AbstractFixer
             'There MUST NOT be a space after the opening parenthesis. There MUST NOT be a space before the closing parenthesis.',
             array(
                 new CodeSample("<?php\nif ( \$a ) {\n    foo( );\n}"),
-                new CodeSample('<?php
+                new CodeSample(
+                    '<?php
 function foo( $bar, $baz )
 {
 }'
@@ -81,11 +81,13 @@ function foo( $bar, $baz )
             $endIndex = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $index);
 
             // remove space after opening `(`
-            $this->removeSpaceAroundToken($tokens[$index + 1]);
+            if (!$tokens[$tokens->getNextNonWhitespace($index)]->isComment()) {
+                $this->removeSpaceAroundToken($tokens, $index + 1);
+            }
 
             // remove space before closing `)` if it is not `list($a, $b, )` case
             if (!$tokens[$tokens->getPrevMeaningfulToken($endIndex)]->equals(',')) {
-                $this->removeSpaceAroundToken($tokens[$endIndex - 1]);
+                $this->removeSpaceAroundToken($tokens, $endIndex - 1);
             }
         }
     }
@@ -93,12 +95,15 @@ function foo( $bar, $baz )
     /**
      * Remove spaces from token at a given index.
      *
-     * @param Token $token
+     * @param Tokens $tokens
+     * @param int    $index
      */
-    private function removeSpaceAroundToken(Token $token)
+    private function removeSpaceAroundToken(Tokens $tokens, $index)
     {
+        $token = $tokens[$index];
+
         if ($token->isWhitespace() && false === strpos($token->getContent(), "\n")) {
-            $token->clear();
+            $tokens->clearAt($index);
         }
     }
 }

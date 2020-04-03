@@ -2,10 +2,10 @@
 
 namespace Firebase\JWT;
 
-use \DomainException;
-use \InvalidArgumentException;
-use \UnexpectedValueException;
-use \DateTime;
+use DomainException;
+use InvalidArgumentException;
+use UnexpectedValueException;
+use DateTime;
 
 /**
  * JSON Web Token implementation, based on this spec:
@@ -55,11 +55,11 @@ class JWT
     /**
      * Decodes a JWT string into a PHP object.
      *
-     * @param string                    $jwt            The JWT
-     * @param string|array|resource     $key            The key, or map of keys.
-     *                                                  If the algorithm used is asymmetric, this is the public key
-     * @param array                     $allowed_algs   List of supported verification algorithms
-     *                                                  Supported algorithms are 'ES256', 'HS256', 'HS384', 'HS512', 'RS256', 'RS384', and 'RS512'
+     * @param string                $jwt          The JWT
+     * @param string|array|resource $key          The key, or map of keys.
+     *                                            If the algorithm used is asymmetric, this is the public key
+     * @param array                 $allowed_algs List of supported verification algorithms
+     *                                            Supported algorithms are 'ES256', 'HS256', 'HS384', 'HS512', 'RS256', 'RS384', and 'RS512'
      *
      * @return object The JWT's payload as a PHP object
      *
@@ -151,13 +151,13 @@ class JWT
     /**
      * Converts and signs a PHP object or array into a JWT string.
      *
-     * @param object|array  $payload    PHP object or array
-     * @param string        $key        The secret key.
-     *                                  If the algorithm used is asymmetric, this is the private key
-     * @param string        $alg        The signing algorithm.
-     *                                  Supported algorithms are 'ES256', 'HS256', 'HS384', 'HS512', 'RS256', 'RS384', and 'RS512'
-     * @param mixed         $keyId
-     * @param array         $head       An array with header elements to attach
+     * @param object|array $payload PHP object or array
+     * @param string       $key     The secret key.
+     *                              If the algorithm used is asymmetric, this is the private key
+     * @param string       $alg     The signing algorithm.
+     *                              Supported algorithms are 'ES256', 'HS256', 'HS384', 'HS512', 'RS256', 'RS384', and 'RS512'
+     * @param mixed        $keyId
+     * @param array        $head    An array with header elements to attach
      *
      * @return string A signed JWT
      *
@@ -187,10 +187,10 @@ class JWT
     /**
      * Sign a string with a given key and algorithm.
      *
-     * @param string            $msg    The message to sign
-     * @param string|resource   $key    The secret key
-     * @param string            $alg    The signing algorithm.
-     *                                  Supported algorithms are 'ES256', 'HS256', 'HS384', 'HS512', 'RS256', 'RS384', and 'RS512'
+     * @param string          $msg The message to sign
+     * @param string|resource $key The secret key
+     * @param string          $alg The signing algorithm.
+     *                             Supported algorithms are 'ES256', 'HS256', 'HS384', 'HS512', 'RS256', 'RS384', and 'RS512'
      *
      * @return string An encrypted message
      *
@@ -214,6 +214,7 @@ class JWT
                     if ($alg === 'ES256') {
                         $signature = self::signatureFromDER($signature, 256);
                     }
+
                     return $signature;
                 }
         }
@@ -396,8 +397,9 @@ class JWT
     /**
      * Convert an ECDSA signature to an ASN.1 DER sequence
      *
-     * @param   string $sig The ECDSA signature to convert
-     * @return  string The encoded DER object
+     * @param string $sig The ECDSA signature to convert
+     *
+     * @return string The encoded DER object
      */
     private static function signatureToDER($sig)
     {
@@ -411,15 +413,15 @@ class JWT
         // Convert r-value and s-value from unsigned big-endian integers to
         // signed two's complement
         if (ord($r[0]) > 0x7f) {
-            $r = "\x00" . $r;
+            $r = "\x00".$r;
         }
         if (ord($s[0]) > 0x7f) {
-            $s = "\x00" . $s;
+            $s = "\x00".$s;
         }
 
         return self::encodeDER(
             self::ASN1_SEQUENCE,
-            self::encodeDER(self::ASN1_INTEGER, $r) .
+            self::encodeDER(self::ASN1_INTEGER, $r).
             self::encodeDER(self::ASN1_INTEGER, $s)
         );
     }
@@ -427,9 +429,10 @@ class JWT
     /**
      * Encodes a value into a DER object.
      *
-     * @param   int     $type DER tag
-     * @param   string  $value the value to encode
-     * @return  string  the encoded object
+     * @param int    $type  DER tag
+     * @param string $value the value to encode
+     *
+     * @return string the encoded object
      */
     private static function encodeDER($type, $value)
     {
@@ -444,15 +447,16 @@ class JWT
         // Length
         $der .= chr(strlen($value));
 
-        return $der . $value;
+        return $der.$value;
     }
 
     /**
      * Encodes signature from a DER object.
      *
-     * @param   string  $der binary signature in DER format
-     * @param   int     $keySize the nubmer of bits in the key
-     * @return  string  the signature
+     * @param string $der     binary signature in DER format
+     * @param int    $keySize the nubmer of bits in the key
+     *
+     * @return string the signature
      */
     private static function signatureFromDER($der, $keySize)
     {
@@ -470,15 +474,16 @@ class JWT
         $r = str_pad($r, $keySize / 8, "\x00", STR_PAD_LEFT);
         $s = str_pad($s, $keySize / 8, "\x00", STR_PAD_LEFT);
 
-        return $r . $s;
+        return $r.$s;
     }
 
     /**
      * Reads binary DER-encoded data and decodes into a single object
      *
-     * @param string $der the binary data in DER format
-     * @param int $offset the offset of the data stream containing the object
-     * to decode
+     * @param string $der    the binary data in DER format
+     * @param int    $offset the offset of the data stream containing the object
+     *                       to decode
+     *
      * @return array [$offset, $data] the new offset and the decoded object
      */
     private static function readDER($der, $offset = 0)
@@ -500,7 +505,7 @@ class JWT
 
         // Value
         if ($type == self::ASN1_BIT_STRING) {
-            $pos++; // Skip the first contents octet (padding indicator)
+            ++$pos; // Skip the first contents octet (padding indicator)
             $data = substr($der, $pos, $len - 1);
             if (!$ignore_bit_strings) {
                 $pos += $len - 1;

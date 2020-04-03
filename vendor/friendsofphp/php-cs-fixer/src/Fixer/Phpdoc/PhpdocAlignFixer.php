@@ -16,6 +16,8 @@ use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\WhitespacesAwareFixerInterface;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Preg;
+use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\Utils;
 
@@ -44,7 +46,7 @@ final class PhpdocAlignFixer extends AbstractFixer implements WhitespacesAwareFi
         $desc = '(?:\s+(?P<desc>\V*))';
 
         $this->regex = '/^'.$indent.' \* @(?:'.$paramTag.'|'.$otherTags.')'.$desc.'\s*$/u';
-        $this->regexCommentLine = '/^'.$indent.' \*(?! @)(?:\s+(?P<desc>\V+))(?<!\*\/)$/u';
+        $this->regexCommentLine = '/^'.$indent.' \*(?! @)(?:\s+(?P<desc>\V+))(?<!\*\/)\r?$/u';
     }
 
     /**
@@ -53,7 +55,7 @@ final class PhpdocAlignFixer extends AbstractFixer implements WhitespacesAwareFi
     public function getDefinition()
     {
         return new FixerDefinition(
-            'All items of the @param, @throws, @return, @var, and @type phpdoc tags must be aligned vertically.',
+            'All items of the `@param`, `@throws`, `@return`, `@var`, and `@type` PHPDoc tags must be aligned vertically.',
             array(new CodeSample('<?php
 /**
  * @param  EngineInterface $templating
@@ -78,7 +80,7 @@ final class PhpdocAlignFixer extends AbstractFixer implements WhitespacesAwareFi
          * annotations are of the correct type, and are grouped correctly
          * before running this fixer.
          */
-        return -11;
+        return -21;
     }
 
     /**
@@ -95,15 +97,19 @@ final class PhpdocAlignFixer extends AbstractFixer implements WhitespacesAwareFi
     protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
         foreach ($tokens as $index => $token) {
-            if ($token->isGivenKind(T_DOC_COMMENT)) {
-                $tokens[$index]->setContent($this->fixDocBlock($token->getContent()));
+            if (!$token->isGivenKind(T_DOC_COMMENT)) {
+                continue;
+            }
+
+            $content = $token->getContent();
+            $newContent = $this->fixDocBlock($content);
+            if ($newContent !== $content) {
+                $tokens[$index] = new Token(array(T_DOC_COMMENT, $newContent));
             }
         }
     }
 
     /**
-     * Fix a given docblock.
-     *
      * @param string $content
      *
      * @return string
@@ -113,9 +119,7 @@ final class PhpdocAlignFixer extends AbstractFixer implements WhitespacesAwareFi
         $lineEnding = $this->whitespacesConfig->getLineEnding();
         $lines = Utils::splitLines($content);
 
-        $l = count($lines);
-
-        for ($i = 0; $i < $l; ++$i) {
+        for ($i = 0, $l = count($lines); $i < $l; ++$i) {
             $items = array();
             $matches = $this->getMatches($lines[$i]);
 
@@ -132,8 +136,7 @@ final class PhpdocAlignFixer extends AbstractFixer implements WhitespacesAwareFi
                 }
 
                 $matches = $this->getMatches($lines[$i], true);
-
-                if (!$matches) {
+                if (null === $matches) {
                     break;
                 }
 
@@ -162,6 +165,7 @@ final class PhpdocAlignFixer extends AbstractFixer implements WhitespacesAwareFi
                 if (null === $item['tag']) {
                     if ($item['desc'][0] === '@') {
                         $lines[$current + $j] = $item['indent'].' * '.$item['desc'].$lineEnding;
+
                         continue;
                     }
 
@@ -211,16 +215,14 @@ final class PhpdocAlignFixer extends AbstractFixer implements WhitespacesAwareFi
     }
 
     /**
-     * Get all matches.
-     *
      * @param string $line
      * @param bool   $matchCommentOnly
      *
-     * @return string[]|null
+     * @return null|string[]
      */
     private function getMatches($line, $matchCommentOnly = false)
     {
-        if (preg_match($this->regex, $line, $matches)) {
+        if (Preg::match($this->regex, $line, $matches)) {
             if (!empty($matches['tag2'])) {
                 $matches['tag'] = $matches['tag2'];
                 $matches['hint'] = $matches['hint2'];
@@ -230,7 +232,7 @@ final class PhpdocAlignFixer extends AbstractFixer implements WhitespacesAwareFi
             return $matches;
         }
 
-        if ($matchCommentOnly && preg_match($this->regexCommentLine, $line, $matches)) {
+        if ($matchCommentOnly && Preg::match($this->regexCommentLine, $line, $matches)) {
             $matches['tag'] = null;
             $matches['var'] = '';
             $matches['hint'] = '';

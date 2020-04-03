@@ -20,34 +20,25 @@ class TextTypeTest extends BaseTypeTest
         parent::testSubmitNull($expected, $norm, '');
     }
 
-    /**
-     * @group legacy
-     */
-    public function testLegacyName()
-    {
-        $form = $this->factory->create('text');
-
-        $this->assertSame('text', $form->getConfig()->getType()->getName());
-    }
-
     public function testSubmitNullReturnsNullWithEmptyDataAsString()
     {
-        $form = $this->factory->create(static::TESTED_TYPE, 'name', array(
+        $form = $this->factory->create(static::TESTED_TYPE, 'name', [
             'empty_data' => '',
-        ));
+        ]);
 
         $form->submit(null);
-
-        $this->assertNull($form->getData());
+        $this->assertSame('', $form->getData());
+        $this->assertSame('', $form->getNormData());
+        $this->assertSame('', $form->getViewData());
     }
 
     public function provideZeros()
     {
-        return array(
-            array(0, '0'),
-            array('0', '0'),
-            array('00000', '00000'),
-        );
+        return [
+            [0, '0'],
+            ['0', '0'],
+            ['00000', '00000'],
+        ];
     }
 
     /**
@@ -57,9 +48,9 @@ class TextTypeTest extends BaseTypeTest
      */
     public function testSetDataThroughParamsWithZero($data, $dataAsString)
     {
-        $form = $this->factory->create(static::TESTED_TYPE, null, array(
+        $form = $this->factory->create(static::TESTED_TYPE, null, [
             'data' => $data,
-        ));
+        ]);
         $view = $form->createView();
 
         $this->assertFalse($form->isEmpty());

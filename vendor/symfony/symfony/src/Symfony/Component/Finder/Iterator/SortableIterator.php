@@ -28,8 +28,6 @@ class SortableIterator implements \IteratorAggregate
     private $sort;
 
     /**
-     * Constructor.
-     *
      * @param \Traversable $iterator The Iterator to filter
      * @param int|callable $sort     The sort type (SORT_BY_NAME, SORT_BY_TYPE, or a PHP callback)
      *
@@ -40,32 +38,32 @@ class SortableIterator implements \IteratorAggregate
         $this->iterator = $iterator;
 
         if (self::SORT_BY_NAME === $sort) {
-            $this->sort = function ($a, $b) {
-                return strcmp($a->getRealpath() ?: $a->getPathname(), $b->getRealpath() ?: $b->getPathname());
+            $this->sort = static function ($a, $b) {
+                return strcmp($a->getRealPath() ?: $a->getPathname(), $b->getRealPath() ?: $b->getPathname());
             };
         } elseif (self::SORT_BY_TYPE === $sort) {
-            $this->sort = function ($a, $b) {
+            $this->sort = static function ($a, $b) {
                 if ($a->isDir() && $b->isFile()) {
                     return -1;
                 } elseif ($a->isFile() && $b->isDir()) {
                     return 1;
                 }
 
-                return strcmp($a->getRealpath() ?: $a->getPathname(), $b->getRealpath() ?: $b->getPathname());
+                return strcmp($a->getRealPath() ?: $a->getPathname(), $b->getRealPath() ?: $b->getPathname());
             };
         } elseif (self::SORT_BY_ACCESSED_TIME === $sort) {
-            $this->sort = function ($a, $b) {
+            $this->sort = static function ($a, $b) {
                 return $a->getATime() - $b->getATime();
             };
         } elseif (self::SORT_BY_CHANGED_TIME === $sort) {
-            $this->sort = function ($a, $b) {
+            $this->sort = static function ($a, $b) {
                 return $a->getCTime() - $b->getCTime();
             };
         } elseif (self::SORT_BY_MODIFIED_TIME === $sort) {
-            $this->sort = function ($a, $b) {
+            $this->sort = static function ($a, $b) {
                 return $a->getMTime() - $b->getMTime();
             };
-        } elseif (is_callable($sort)) {
+        } elseif (\is_callable($sort)) {
             $this->sort = $sort;
         } else {
             throw new \InvalidArgumentException('The SortableIterator takes a PHP callable or a valid built-in sort algorithm as an argument.');

@@ -11,9 +11,8 @@
 
 namespace Symfony\Bundle\FrameworkBundle\Templating\Helper;
 
-use Symfony\Component\Templating\Helper\Helper;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Templating\Helper\Helper;
 
 /**
  * SessionHelper provides read-only access to the session attributes.
@@ -25,23 +24,9 @@ class SessionHelper extends Helper
     protected $session;
     protected $requestStack;
 
-    /**
-     * Constructor.
-     *
-     * @param Request|RequestStack $requestStack A RequestStack instance or a Request instance
-     *
-     * @deprecated since version 2.5, passing a Request instance is deprecated and support for it will be removed in 3.0.
-     */
-    public function __construct($requestStack)
+    public function __construct(RequestStack $requestStack)
     {
-        if ($requestStack instanceof Request) {
-            @trigger_error('Since version 2.5, passing a Request instance into the '.__METHOD__.' is deprecated and support for it will be removed in 3.0. Inject a Symfony\Component\HttpFoundation\RequestStack instance instead.', E_USER_DEPRECATED);
-            $this->session = $requestStack->getSession();
-        } elseif ($requestStack instanceof RequestStack) {
-            $this->requestStack = $requestStack;
-        } else {
-            throw new \InvalidArgumentException('RequestHelper only accepts a Request or a RequestStack instance.');
-        }
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -57,7 +42,7 @@ class SessionHelper extends Helper
         return $this->getSession()->get($name, $default);
     }
 
-    public function getFlash($name, array $default = array())
+    public function getFlash($name, array $default = [])
     {
         return $this->getSession()->getFlashBag()->get($name, $default);
     }

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Security;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Endroid\QrCode\QrCode;
@@ -92,7 +93,7 @@ class LoginController extends BaseController
         if (empty($faceLoginToken)) {
             $content = $this->renderView('default/message.html.twig', array(
                 'type' => 'error',
-                'goto' => $this->generateUrl('homepage', array(), true),
+                'goto' => $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL),
                 'duration' => 1000,
                 'message' => 'user.login.sts_qrcode_invalid',
             ));
@@ -101,7 +102,7 @@ class LoginController extends BaseController
         } elseif (empty($faceLoginToken['data']['status']) || self::FACE_TOKEN_STATUS_SUCCESS != $faceLoginToken['data']['status']) {
             $content = $this->renderView('default/message.html.twig', array(
                 'type' => 'error',
-                'goto' => $this->generateUrl('homepage', array(), true),
+                'goto' => $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL),
                 'duration' => 1000,
                 'message' => 'user.login.sts_discovery_failed',
             ));
@@ -121,7 +122,7 @@ class LoginController extends BaseController
 
         $goto = $request->query->get('goto');
         if (empty($goto)) {
-            $goto = $this->generateUrl('homepage', array(), true);
+            $goto = $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         return $this->redirect($goto);
@@ -187,9 +188,9 @@ class LoginController extends BaseController
     {
         $wechatSetting = $this->getSettingService()->get('wechat', array());
         if (!empty($wechatSetting['wechat_notification_enabled'])) {
-            $loginUrl = $this->generateUrl('login_bind', array('type' => 'weixinmob', '_target_path' => $this->generateUrl('common_wechat_subscribe_wap')), true);
+            $loginUrl = $this->generateUrl('login_bind', array('type' => 'weixinmob', '_target_path' => $this->generateUrl('common_wechat_subscribe_wap')), UrlGeneratorInterface::ABSOLUTE_URL);
             $response = array(
-                'img' => $this->generateUrl('common_qrcode', array('text' => $loginUrl), true),
+                'img' => $this->generateUrl('common_qrcode', array('text' => $loginUrl), UrlGeneratorInterface::ABSOLUTE_URL),
             );
 
             return $this->createJsonResponse($response);
@@ -208,18 +209,18 @@ class LoginController extends BaseController
             $targetPath = $request->headers->get('Referer');
         }
 
-        if ($targetPath == $this->generateUrl('login', array(), true)) {
+        if ($targetPath == $this->generateUrl('login', array(), UrlGeneratorInterface::ABSOLUTE_URL)) {
             return $this->generateUrl('homepage');
         }
 
         $url = explode('?', $targetPath);
 
-        if ($url[0] == $this->generateUrl('partner_logout', array(), true)) {
+        if ($url[0] == $this->generateUrl('partner_logout', array(), UrlGeneratorInterface::ABSOLUTE_URL)) {
             return $this->generateUrl('homepage');
         }
 
-        if ($url[0] == $this->generateUrl('password_reset_update', array(), true)) {
-            $targetPath = $this->generateUrl('homepage', array(), true);
+        if ($url[0] == $this->generateUrl('password_reset_update', array(), UrlGeneratorInterface::ABSOLUTE_URL)) {
+            $targetPath = $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         if (0 === strpos($targetPath, '/app.php')) {

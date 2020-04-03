@@ -32,10 +32,10 @@ class CollectionToArrayTransformerTest extends TestCase
 
     public function testTransform()
     {
-        $array = array(
+        $array = [
             2 => 'foo',
             3 => 'bar',
-        );
+        ];
 
         $this->assertSame($array, $this->transformer->transform(new ArrayCollection($array)));
     }
@@ -49,33 +49,31 @@ class CollectionToArrayTransformerTest extends TestCase
      */
     public function testTransformArray()
     {
-        $array = array(
+        $array = [
             2 => 'foo',
             3 => 'bar',
-        );
+        ];
 
         $this->assertSame($array, $this->transformer->transform($array));
     }
 
     public function testTransformNull()
     {
-        $this->assertSame(array(), $this->transformer->transform(null));
+        $this->assertSame([], $this->transformer->transform(null));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     */
     public function testTransformExpectsArrayOrCollection()
     {
+        $this->expectException('Symfony\Component\Form\Exception\TransformationFailedException');
         $this->transformer->transform('Foo');
     }
 
     public function testReverseTransform()
     {
-        $array = array(
+        $array = [
             2 => 'foo',
             3 => 'bar',
-        );
+        ];
 
         $this->assertEquals(new ArrayCollection($array), $this->transformer->reverseTransform($array));
     }

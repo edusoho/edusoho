@@ -11,16 +11,14 @@
 
 namespace Symfony\Component\Security\Http\RememberMe;
 
-use Symfony\Component\Security\Core\Authentication\RememberMe\TokenProviderInterface;
 use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\RememberMe\PersistentToken;
+use Symfony\Component\Security\Core\Authentication\RememberMe\TokenProviderInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CookieTheftException;
-use Symfony\Component\Security\Core\Authentication\RememberMe\PersistentToken;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Util\SecureRandomInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Concrete implementation of the RememberMeServicesInterface which needs
@@ -31,34 +29,9 @@ use Psr\Log\LoggerInterface;
  */
 class PersistentTokenBasedRememberMeServices extends AbstractRememberMeServices
 {
+    /** @var TokenProviderInterface */
     private $tokenProvider;
 
-    /**
-     * Constructor.
-     *
-     * Note: The $secureRandom parameter is deprecated since version 2.8 and will be removed in 3.0.
-     *
-     * @param array                 $userProviders
-     * @param string                $secret
-     * @param string                $providerKey
-     * @param array                 $options
-     * @param LoggerInterface       $logger
-     * @param SecureRandomInterface $secureRandom
-     */
-    public function __construct(array $userProviders, $secret, $providerKey, array $options = array(), LoggerInterface $logger = null, SecureRandomInterface $secureRandom = null)
-    {
-        if (null !== $secureRandom) {
-            @trigger_error('The $secureRandom parameter in '.__METHOD__.' is deprecated since version 2.8 and will be removed in 3.0.', E_USER_DEPRECATED);
-        }
-
-        parent::__construct($userProviders, $secret, $providerKey, $options, $logger);
-    }
-
-    /**
-     * Sets the token provider.
-     *
-     * @param TokenProviderInterface $tokenProvider
-     */
     public function setTokenProvider(TokenProviderInterface $tokenProvider)
     {
         $this->tokenProvider = $tokenProvider;
@@ -74,7 +47,7 @@ class PersistentTokenBasedRememberMeServices extends AbstractRememberMeServices
 
         // Delete cookie from the tokenProvider
         if (null !== ($cookie = $request->cookies->get($this->options['name']))
-            && count($parts = $this->decodeCookie($cookie)) === 2
+            && 2 === \count($parts = $this->decodeCookie($cookie))
         ) {
             list($series) = $parts;
             $this->tokenProvider->deleteTokenBySeries($series);
@@ -86,7 +59,7 @@ class PersistentTokenBasedRememberMeServices extends AbstractRememberMeServices
      */
     protected function processAutoLoginCookie(array $cookieParts, Request $request)
     {
-        if (count($cookieParts) !== 2) {
+        if (2 !== \count($cookieParts)) {
             throw new AuthenticationException('The cookie is invalid.');
         }
 
@@ -106,7 +79,7 @@ class PersistentTokenBasedRememberMeServices extends AbstractRememberMeServices
         $request->attributes->set(self::COOKIE_ATTR_NAME,
             new Cookie(
                 $this->options['name'],
-                $this->encodeCookie(array($series, $tokenValue)),
+                $this->encodeCookie([$series, $tokenValue]),
                 time() + $this->options['lifetime'],
                 $this->options['path'],
                 $this->options['domain'],
@@ -128,7 +101,7 @@ class PersistentTokenBasedRememberMeServices extends AbstractRememberMeServices
 
         $this->tokenProvider->createNewToken(
             new PersistentToken(
-                get_class($user = $token->getUser()),
+                \get_class($user = $token->getUser()),
                 $user->getUsername(),
                 $series,
                 $tokenValue,
@@ -139,7 +112,7 @@ class PersistentTokenBasedRememberMeServices extends AbstractRememberMeServices
         $response->headers->setCookie(
             new Cookie(
                 $this->options['name'],
-                $this->encodeCookie(array($series, $tokenValue)),
+                $this->encodeCookie([$series, $tokenValue]),
                 time() + $this->options['lifetime'],
                 $this->options['path'],
                 $this->options['domain'],

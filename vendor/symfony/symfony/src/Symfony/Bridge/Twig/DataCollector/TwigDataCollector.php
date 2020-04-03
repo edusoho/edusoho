@@ -11,10 +11,15 @@
 
 namespace Symfony\Bridge\Twig\DataCollector;
 
-use Symfony\Component\HttpKernel\DataCollector\DataCollector;
-use Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\DataCollector\DataCollector;
+use Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface;
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Markup;
+use Twig\Profiler\Dumper\HtmlDumper;
+use Twig\Profiler\Profile;
 
 /**
  * TwigDataCollector.
@@ -24,11 +29,13 @@ use Symfony\Component\HttpFoundation\Response;
 class TwigDataCollector extends DataCollector implements LateDataCollectorInterface
 {
     private $profile;
+    private $twig;
     private $computed;
 
-    public function __construct(\Twig_Profiler_Profile $profile)
+    public function __construct(Profile $profile, Environment $twig = null)
     {
         $this->profile = $profile;
+        $this->twig = $twig;
     }
 
     /**
@@ -41,9 +48,43 @@ class TwigDataCollector extends DataCollector implements LateDataCollectorInterf
     /**
      * {@inheritdoc}
      */
+    public function reset()
+    {
+        $this->profile->reset();
+        $this->computed = null;
+        $this->data = [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function lateCollect()
     {
         $this->data['profile'] = serialize($this->profile);
+        $this->data['template_paths'] = [];
+
+        if (null === $this->twig) {
+            return;
+        }
+
+        $templateFinder = function (Profile $profile) use (&$templateFinder) {
+            if ($profile->isTemplate()) {
+                try {
+                    $template = $this->twig->load($name = $profile->getName());
+                } catch (LoaderError $e) {
+                    $template = null;
+                }
+
+                if (null !== $template && '' !== $path = $template->getSourceContext()->getPath()) {
+                    $this->data['template_paths'][$name] = $path;
+                }
+            }
+
+            foreach ($profile as $p) {
+                $templateFinder($p);
+            }
+        };
+        $templateFinder($this->profile);
     }
 
     public function getTime()
@@ -54,6 +95,11 @@ class TwigDataCollector extends DataCollector implements LateDataCollectorInterf
     public function getTemplateCount()
     {
         return $this->getComputedData('template_count');
+    }
+
+    public function getTemplatePaths()
+    {
+        return $this->data['template_paths'];
     }
 
     public function getTemplates()
@@ -73,27 +119,31 @@ class TwigDataCollector extends DataCollector implements LateDataCollectorInterf
 
     public function getHtmlCallGraph()
     {
-        $dumper = new \Twig_Profiler_Dumper_Html();
+        $dumper = new HtmlDumper();
         $dump = $dumper->dump($this->getProfile());
 
         // needed to remove the hardcoded CSS styles
-        $dump = str_replace(array(
+        $dump = str_replace([
             '<span style="background-color: #ffd">',
             '<span style="color: #d44">',
             '<span style="background-color: #dfd">',
-        ), array(
+        ], [
             '<span class="status-warning">',
             '<span class="status-error">',
             '<span class="status-success">',
-        ), $dump);
+        ], $dump);
 
-        return new \Twig_Markup($dump, 'UTF-8');
+        return new Markup($dump, 'UTF-8');
     }
 
     public function getProfile()
     {
         if (null === $this->profile) {
-            $this->profile = unserialize($this->data['profile']);
+            if (\PHP_VERSION_ID >= 70000) {
+                $this->profile = unserialize($this->data['profile'], ['allowed_classes' => ['Twig_Profiler_Profile', 'Twig\Profiler\Profile']]);
+            } else {
+                $this->profile = unserialize($this->data['profile']);
+            }
         }
 
         return $this->profile;
@@ -108,15 +158,15 @@ class TwigDataCollector extends DataCollector implements LateDataCollectorInterf
         return $this->computed[$index];
     }
 
-    private function computeData(\Twig_Profiler_Profile $profile)
+    private function computeData(Profile $profile)
     {
-        $data = array(
+        $data = [
             'template_count' => 0,
             'block_count' => 0,
             'macro_count' => 0,
-        );
+        ];
 
-        $templates = array();
+        $templates = [];
         foreach ($profile as $p) {
             $d = $this->computeData($p);
 

@@ -1,13 +1,11 @@
 <?php
 
-require_once ("../Spyc.php");
-
 class DumpTest extends PHPUnit_Framework_TestCase {
 
     private $files_to_test = array();
 
     public function setUp() {
-      $this->files_to_test = array ('../spyc.yaml', 'failing1.yaml', 'indent_1.yaml', 'quotes.yaml');
+      $this->files_to_test = array (__DIR__.'/../spyc.yaml', 'failing1.yaml', 'indent_1.yaml', 'quotes.yaml');
     }
 
     public function testShortSyntax() {

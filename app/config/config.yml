@@ -2,7 +2,7 @@ imports:
     - { resource: biz.yml }
     - { resource: parameters_default.yml }
     - { resource: parameters_version.yml }
-    - { resource: parameters_service.yml, ignore_errors: true }
+    - { resource: 'parameters_service.yml', ignore_errors: true }
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.xml }
@@ -144,3 +144,10 @@ services:
         class: AppBundle\Processor\TraceProcessor
         tags:
             - { name: monolog.processor }
+
+    request:
+        class: Symfony\Component\HttpFoundation\RequestStack
+        factory:
+            - '@request_stack'
+            - 'getMasterRequest'
+        shared: true

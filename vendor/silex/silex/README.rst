@@ -1,8 +1,15 @@
 Silex, a simple Web Framework
 =============================
 
+**WARNING**: Silex is in maintenance mode only. Ends of life is set to June
+2018. Read more on `Symfony's blog <http://symfony.com/blog/the-end-of-silex>`_.
+But Silex can be saved! Any **help** to keep Silex alive is greatly appreciated.
+See `#1593 <https://github.com/silexphp/Silex/issues/1593>`_.
+
 Silex is a PHP micro-framework to develop websites based on `Symfony
-components`_::
+components`_:
+
+.. code-block:: php
 
     <?php
 
@@ -42,8 +49,8 @@ To run the test suite, you need `Composer`_ and `PHPUnit`_:
 
 .. code-block:: bash
 
-    $ composer install
-    $ phpunit
+    composer install
+    phpunit
 
 Community
 ---------

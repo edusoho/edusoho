@@ -14,6 +14,9 @@ namespace Symfony\Bridge\Doctrine\Tests\ExpressionLanguage;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Doctrine\ExpressionLanguage\DoctrineParserCache;
 
+/**
+ * @group legacy
+ */
 class DoctrineParserCacheTest extends TestCase
 {
     public function testFetch()
@@ -23,7 +26,7 @@ class DoctrineParserCacheTest extends TestCase
 
         $doctrineCacheMock->expects($this->once())
             ->method('fetch')
-            ->will($this->returnValue('bar'));
+            ->willReturn('bar');
 
         $result = $parserCache->fetch('foo');
 
@@ -38,7 +41,7 @@ class DoctrineParserCacheTest extends TestCase
         $doctrineCacheMock
             ->expects($this->once())
             ->method('fetch')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->assertNull($parserCache->fetch(''));
     }
