@@ -101,6 +101,12 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "more" */'@/containers/more/classroom/index.vue')
   }, {
+    path: '/all/explore',
+    name: 'all_explore',
+    redirect: {
+      name: 'more_course'
+    }
+  }, {
     path: '/course/explore/vip',
     name: 'vip_course',
     meta: {
