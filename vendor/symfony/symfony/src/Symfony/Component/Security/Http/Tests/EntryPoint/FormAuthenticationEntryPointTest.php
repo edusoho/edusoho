@@ -12,16 +12,17 @@
 namespace Symfony\Component\Security\Http\Tests\EntryPoint;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint;
 
 class FormAuthenticationEntryPointTest extends TestCase
 {
     public function testStart()
     {
         $request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')->disableOriginalConstructor()->disableOriginalClone()->getMock();
-        $response = new Response();
+        $response = new RedirectResponse('/the/login/path');
 
         $httpKernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
         $httpUtils = $this->getMockBuilder('Symfony\Component\Security\Http\HttpUtils')->getMock();
@@ -29,7 +30,7 @@ class FormAuthenticationEntryPointTest extends TestCase
             ->expects($this->once())
             ->method('createRedirectResponse')
             ->with($this->equalTo($request), $this->equalTo('/the/login/path'))
-            ->will($this->returnValue($response))
+            ->willReturn($response)
         ;
 
         $entryPoint = new FormAuthenticationEntryPoint($httpKernel, $httpUtils, '/the/login/path', false);
@@ -48,7 +49,7 @@ class FormAuthenticationEntryPointTest extends TestCase
             ->expects($this->once())
             ->method('createRequest')
             ->with($this->equalTo($request), $this->equalTo('/the/login/path'))
-            ->will($this->returnValue($subRequest))
+            ->willReturn($subRequest)
         ;
 
         $httpKernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
@@ -56,7 +57,7 @@ class FormAuthenticationEntryPointTest extends TestCase
             ->expects($this->once())
             ->method('handle')
             ->with($this->equalTo($subRequest), $this->equalTo(HttpKernelInterface::SUB_REQUEST))
-            ->will($this->returnValue($response))
+            ->willReturn($response)
         ;
 
         $entryPoint = new FormAuthenticationEntryPoint($httpKernel, $httpUtils, '/the/login/path', true);
@@ -64,6 +65,6 @@ class FormAuthenticationEntryPointTest extends TestCase
         $entryPointResponse = $entryPoint->start($request);
 
         $this->assertEquals($response, $entryPointResponse);
-        $this->assertEquals(401, $entryPointResponse->headers->get('X-Status-Code'));
+        $this->assertEquals(401, $entryPointResponse->getStatusCode());
     }
 }

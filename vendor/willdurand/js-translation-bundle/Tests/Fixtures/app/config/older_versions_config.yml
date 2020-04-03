@@ -1,22 +1,8 @@
+imports:
+    - { resource: base_config.yml }
+
 framework:
-    secret:        test
-    router:        { resource: "%kernel.root_dir%/config/routing.yml" }
+    # Needed for Symfony 2.7 as the Exception controller from TwigBundle uses
+    # the Templating classes instead of the new Twig template notation.
+    # Probably related to https://github.com/symfony/symfony/pull/15970
     templating:    { engines: [ 'twig' ] }
-    test:          ~
-    translator:    { enabled: true }
-    validation:    { enabled: false }
-
-# Twig Configuration
-twig:
-    debug:            "%kernel.debug%"
-    strict_variables: "%kernel.debug%"
-
-# Traduction dans JS
-bazinga_js_translation:
-    active_locales:
-        - fr
-        - en
-    active_domains:
-        - messages
-        - numerics
-        - foo

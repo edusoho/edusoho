@@ -1,5 +1,5 @@
 {
-    "Version": "2.1.28.79",
+    "Version": "36",
     "Names": {
         "ADP": [
             "ADP",
@@ -216,6 +216,10 @@
         "CLP": [
             "CLP",
             "peso cileno"
+        ],
+        "CNH": [
+            "CNH",
+            "CNH"
         ],
         "CNY": [
             "CN¥",
@@ -600,6 +604,10 @@
         ],
         "MRO": [
             "MRO",
+            "ouguiya della Mauritania (1973–2017)"
+        ],
+        "MRU": [
+            "MRU",
             "ouguiya della Mauritania"
         ],
         "MTL": [
@@ -692,11 +700,11 @@
         ],
         "PEN": [
             "PEN",
-            "nuovo sol peruviano"
+            "sol peruviano"
         ],
         "PES": [
             "PES",
-            "sol peruviano"
+            "sol peruviano (1863–1965)"
         ],
         "PGK": [
             "PGK",
@@ -820,7 +828,11 @@
         ],
         "STD": [
             "STD",
-            "dobra di Sao Tomé e Principe"
+            "dobra di Sao Tomé e Principe (1977–2017)"
+        ],
+        "STN": [
+            "STN",
+            "dobra di Sao Tomé e Príncipe"
         ],
         "SUR": [
             "SUR",
@@ -907,7 +919,7 @@
             "scellino ugandese"
         ],
         "USD": [
-            "US$",
+            "USD",
             "dollaro statunitense"
         ],
         "USN": [
@@ -940,6 +952,10 @@
         ],
         "VEF": [
             "VEF",
+            "bolívar venezuelano (2008–2018)"
+        ],
+        "VES": [
+            "VES",
             "bolívar venezuelano"
         ],
         "VND": [

@@ -58,15 +58,17 @@ EOT
         $version = $input->getArgument('version');
 
         if (in_array($version, $versions)) {
-            return;
+            return 0;
         }
 
         if (!isset($migrations[$version])) {
-            return;
+            return 0;
         }
 
         $container = $this->getContainer();
         $container['phpmig.migrator']->up($migrations[$version]);
+
+        return 0;
     }
 }
 

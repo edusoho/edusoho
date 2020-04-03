@@ -14,9 +14,11 @@ use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\CurlToolkit;
 use AppBundle\Common\FileToolkit;
 use Codeages\Biz\Pay\Service\AccountService;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SettingsController extends BaseController
 {
@@ -314,20 +316,20 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
 
         $form = $this->createFormBuilder()
-            ->add('newPassword', 'password')
-            ->add('confirmPassword', 'password')
+            ->add('newPassword', PasswordType::class)
+            ->add('confirmPassword', PasswordType::class)
             ->getForm();
 
         if ('POST' === $request->getMethod()) {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $passwords = $form->getData();
                 $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
                 $form = $this->createFormBuilder()
-                    ->add('currentUserLoginPassword', 'password')
-                    ->add('newPayPassword', 'password')
-                    ->add('confirmPayPassword', 'password')
+                    ->add('currentUserLoginPassword', PasswordType::class)
+                    ->add('newPayPassword', PasswordType::class)
+                    ->add('confirmPayPassword', PasswordType::class)
                     ->getForm();
 
                 return $this->render('settings/pay-password-modal.html.twig', array(
@@ -393,13 +395,13 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-            ->add('payPassword', 'password')
-            ->add('confirmPayPassword', 'password')
-            ->add('currentUserLoginPassword', 'password')
+            ->add('payPassword', PasswordType::class)
+            ->add('confirmPayPassword', PasswordType::class)
+            ->add('currentUserLoginPassword', PasswordType::class)
             ->getForm();
 
         if ('POST' === $request->getMethod()) {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $data = $form->getData();
@@ -415,7 +417,7 @@ class SettingsController extends BaseController
                     $this->getUserService()->deleteToken('pay-password-reset', $token['token']);
 
                     return $this->render('settings/pay-password-success.html.twig', array(
-                        'goto' => $this->generateUrl('settings_security', array(), true),
+                        'goto' => $this->generateUrl('settings_security', array(), UrlGeneratorInterface::ABSOLUTE_URL),
                         'duration' => 3,
                     ));
                 } else {
@@ -760,7 +762,7 @@ class SettingsController extends BaseController
                     'params' => array(
                         'sitename' => $site['name'],
                         'siteurl' => $site['url'],
-                        'verifyurl' => $this->generateUrl('auth_email_confirm', array('token' => $token), true),
+                        'verifyurl' => $this->generateUrl('auth_email_confirm', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL),
                         'nickname' => $user['nickname'],
                     ),
                 );
@@ -792,7 +794,7 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
-        $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), true);
+        $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
         $site = $this->setting('site', array());
         try {
             $mailOptions = array(
@@ -839,8 +841,8 @@ class SettingsController extends BaseController
         $wechatSetting = $this->getSettingService()->get('wechat', array());
         $loginQrcode = '';
         if (!empty($wechatSetting['wechat_notification_enabled'])) {
-            $loginUrl = $this->generateUrl('login', array('goto' => $wechatSetting['account_code']), true);
-            $loginQrcode = $this->generateUrl('common_qrcode', array('text' => $loginUrl), true);
+            $loginUrl = $this->generateUrl('login', array('goto' => $wechatSetting['account_code']), UrlGeneratorInterface::ABSOLUTE_URL);
+            $loginQrcode = $this->generateUrl('common_qrcode', array('text' => $loginUrl), UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         return $this->render('settings/binds.html.twig', array(
@@ -862,7 +864,7 @@ class SettingsController extends BaseController
     public function bindAction(Request $request, $type)
     {
         $this->checkBindsName($type);
-        $callback = $this->generateUrl('settings_binds_bind_callback', array('type' => $type), true);
+        $callback = $this->generateUrl('settings_binds_bind_callback', array('type' => $type), UrlGeneratorInterface::ABSOLUTE_URL);
         $settings = $this->setting('login_bind');
         $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
         $client = OAuthClientFactory::create($type, $config);
@@ -893,7 +895,7 @@ class SettingsController extends BaseController
             goto response;
         }
 
-        $callbackUrl = $this->generateUrl('settings_binds_bind_callback', array('type' => $type), true);
+        $callbackUrl = $this->generateUrl('settings_binds_bind_callback', array('type' => $type), UrlGeneratorInterface::ABSOLUTE_URL);
         try {
             $token = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
         } catch (\Exception $e) {
@@ -922,8 +924,8 @@ class SettingsController extends BaseController
         $targetPath = $request->query->get('targetPath');
         $showType = $request->query->get('showType', 'modal');
         $form = $this->createFormBuilder()
-            ->add('newPassword', 'password')
-            ->add('confirmPassword', 'password')
+            ->add('newPassword', PasswordType::class)
+            ->add('confirmPassword', PasswordType::class)
             ->getForm();
 
         if ('POST' === $request->getMethod()) {
@@ -932,7 +934,7 @@ class SettingsController extends BaseController
                     'message' => 'user.settings.login_password_fail',
                 ), 500);
             }
-            $form->bind($request);
+            $form->handleRequest($request);
             if ($form->isValid()) {
                 $passwords = $form->getData();
                 $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);

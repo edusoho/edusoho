@@ -2,6 +2,8 @@
 
 namespace ApiBundle\Api\Resource\Trade\Factory;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 class WeChatPayH5Trade extends BaseTrade
 {
     protected $payment = 'wechat';
@@ -14,7 +16,7 @@ class WeChatPayH5Trade extends BaseTrade
             'mwebUrl' => $trade['platform_created_result']['mweb_url'],
             'paymentForm' => array(),
             'paymentHtml' => '',
-            'paymentUrl' => $this->generateUrl('cashier_wechat_mweb_app_trade', array('tradeSn' => $trade['trade_sn']), true),
+            'paymentUrl' => $this->generateUrl('cashier_wechat_mweb_app_trade', array('tradeSn' => $trade['trade_sn']), UrlGeneratorInterface::ABSOLUTE_URL),
         );
     }
 }

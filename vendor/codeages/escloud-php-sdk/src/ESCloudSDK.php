@@ -31,10 +31,10 @@ class ESCloudSDK
     public function __construct(array $options, LoggerInterface $logger = null, ClientInterface $httpClient = null)
     {
         if (empty($options['access_key'])) {
-            throw new SDKException('`access_key` param is missing.');
+            throw new \InvalidArgumentException('`access_key` param is missing.');
         }
         if (empty($options['secret_key'])) {
-            throw new SDKException('`secret_key` param is missing.');
+            throw new InvalidArgumentException('`secret_key` param is missing.');
         }
 
         $this->options = $options;

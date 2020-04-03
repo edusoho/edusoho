@@ -11,8 +11,12 @@
 
 namespace Symfony\Bundle\WebProfilerBundle\Tests\Profiler;
 
-use Symfony\Bundle\WebProfilerBundle\Tests\TestCase;
 use Symfony\Bundle\WebProfilerBundle\Profiler\TemplateManager;
+use Symfony\Bundle\WebProfilerBundle\Tests\TestCase;
+use Symfony\Component\HttpKernel\Profiler\Profile;
+use Twig\Environment;
+use Twig\Loader\LoaderInterface;
+use Twig\Loader\SourceContextLoaderInterface;
 
 /**
  * Test for TemplateManager class.
@@ -22,7 +26,7 @@ use Symfony\Bundle\WebProfilerBundle\Profiler\TemplateManager;
 class TemplateManagerTest extends TestCase
 {
     /**
-     * @var \Twig_Environment
+     * @var Environment
      */
     protected $twigEnvironment;
 
@@ -42,22 +46,19 @@ class TemplateManagerTest extends TestCase
 
         $profiler = $this->mockProfiler();
         $twigEnvironment = $this->mockTwigEnvironment();
-        $templates = array(
-            'data_collector.foo' => array('foo', 'FooBundle:Collector:foo'),
-            'data_collector.bar' => array('bar', 'FooBundle:Collector:bar'),
-            'data_collector.baz' => array('baz', 'FooBundle:Collector:baz'),
-            );
+        $templates = [
+            'data_collector.foo' => ['foo', 'FooBundle:Collector:foo'],
+            'data_collector.bar' => ['bar', 'FooBundle:Collector:bar'],
+            'data_collector.baz' => ['baz', 'FooBundle:Collector:baz'],
+        ];
 
         $this->templateManager = new TemplateManager($profiler, $twigEnvironment, $templates);
     }
 
-    /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     */
     public function testGetNameOfInvalidTemplate()
     {
-        $profile = $this->mockProfile();
-        $this->templateManager->getName($profile, 'notexistingpanel');
+        $this->expectException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
+        $this->templateManager->getName(new Profile('token'), 'notexistingpanel');
     }
 
     /**
@@ -68,14 +69,9 @@ class TemplateManagerTest extends TestCase
         $this->profiler->expects($this->any())
             ->method('has')
             ->withAnyParameters()
-            ->will($this->returnCallback(array($this, 'profilerHasCallback')));
+            ->willReturnCallback([$this, 'profilerHasCallback']);
 
-        $profile = $this->mockProfile();
-        $profile->expects($this->any())
-            ->method('hasCollector')
-            ->will($this->returnCallback(array($this, 'profileHasCollectorCallback')));
-
-        $this->assertEquals('FooBundle:Collector:foo.html.twig', $this->templateManager->getName($profile, 'foo'));
+        $this->assertEquals('FooBundle:Collector:foo.html.twig', $this->templateManager->getName(new ProfileDummy(), 'foo'));
     }
 
     /**
@@ -84,17 +80,12 @@ class TemplateManagerTest extends TestCase
      */
     public function testGetTemplates()
     {
-        $profile = $this->mockProfile();
-        $profile->expects($this->any())
-            ->method('hasCollector')
-            ->will($this->returnCallback(array($this, 'profilerHasCallback')));
-
         $this->profiler->expects($this->any())
             ->method('has')
             ->withAnyParameters()
-            ->will($this->returnCallback(array($this, 'profileHasCollectorCallback')));
+            ->willReturnCallback([$this, 'profileHasCollectorCallback']);
 
-        $result = $this->templateManager->getTemplates($profile);
+        $result = $this->templateManager->getTemplates(new ProfileDummy());
         $this->assertArrayHasKey('foo', $result);
         $this->assertArrayNotHasKey('bar', $result);
         $this->assertArrayNotHasKey('baz', $result);
@@ -129,18 +120,23 @@ class TemplateManagerTest extends TestCase
 
     protected function mockTwigEnvironment()
     {
-        $this->twigEnvironment = $this->getMockBuilder('Twig_Environment')->disableOriginalConstructor()->getMock();
+        $this->twigEnvironment = $this->getMockBuilder('Twig\Environment')->disableOriginalConstructor()->getMock();
 
         $this->twigEnvironment->expects($this->any())
             ->method('loadTemplate')
-            ->will($this->returnValue('loadedTemplate'));
+            ->willReturn('loadedTemplate');
 
-        if (interface_exists('\Twig_SourceContextLoaderInterface')) {
-            $loader = $this->getMockBuilder('\Twig_SourceContextLoaderInterface')->getMock();
+        if (Environment::MAJOR_VERSION > 1) {
+            $loader = $this->createMock(LoaderInterface::class);
+            $loader
+                ->expects($this->any())
+                ->method('exists')
+                ->willReturn(true);
         } else {
-            $loader = $this->getMockBuilder('\Twig_LoaderInterface')->getMock();
+            $loader = $this->createMock(SourceContextLoaderInterface::class);
         }
-        $this->twigEnvironment->expects($this->any())->method('getLoader')->will($this->returnValue($loader));
+
+        $this->twigEnvironment->expects($this->any())->method('getLoader')->willReturn($loader);
 
         return $this->twigEnvironment;
     }
@@ -152,5 +148,24 @@ class TemplateManagerTest extends TestCase
             ->getMock();
 
         return $this->profiler;
+    }
+}
+
+class ProfileDummy extends Profile
+{
+    public function __construct()
+    {
+        parent::__construct('token');
+    }
+
+    public function hasCollector($name)
+    {
+        switch ($name) {
+            case 'foo':
+            case 'bar':
+                return true;
+            default:
+                return false;
+        }
     }
 }

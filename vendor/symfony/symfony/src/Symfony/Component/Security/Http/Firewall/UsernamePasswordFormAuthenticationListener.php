@@ -11,25 +11,23 @@
 
 namespace Symfony\Component\Security\Http\Firewall;
 
-use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderAdapter;
-use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
-use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
-use Symfony\Component\Security\Http\ParameterBagUtils;
-use Symfony\Component\Security\Http\Session\SessionAuthenticationStrategyInterface;
-use Symfony\Component\Security\Http\HttpUtils;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
-use Symfony\Component\Security\Core\Exception\InvalidArgumentException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
+use Symfony\Component\Security\Http\HttpUtils;
+use Symfony\Component\Security\Http\ParameterBagUtils;
+use Symfony\Component\Security\Http\Session\SessionAuthenticationStrategyInterface;
 
 /**
  * UsernamePasswordFormAuthenticationListener is the default implementation of
@@ -41,31 +39,15 @@ class UsernamePasswordFormAuthenticationListener extends AbstractAuthenticationL
 {
     private $csrfTokenManager;
 
-    public function __construct(TokenStorageInterface $tokenStorage, AuthenticationManagerInterface $authenticationManager, SessionAuthenticationStrategyInterface $sessionStrategy, HttpUtils $httpUtils, $providerKey, AuthenticationSuccessHandlerInterface $successHandler, AuthenticationFailureHandlerInterface $failureHandler, array $options = array(), LoggerInterface $logger = null, EventDispatcherInterface $dispatcher = null, $csrfTokenManager = null)
+    public function __construct(TokenStorageInterface $tokenStorage, AuthenticationManagerInterface $authenticationManager, SessionAuthenticationStrategyInterface $sessionStrategy, HttpUtils $httpUtils, $providerKey, AuthenticationSuccessHandlerInterface $successHandler, AuthenticationFailureHandlerInterface $failureHandler, array $options = [], LoggerInterface $logger = null, EventDispatcherInterface $dispatcher = null, CsrfTokenManagerInterface $csrfTokenManager = null)
     {
-        if ($csrfTokenManager instanceof CsrfProviderInterface) {
-            $csrfTokenManager = new CsrfProviderAdapter($csrfTokenManager);
-        } elseif (null !== $csrfTokenManager && !$csrfTokenManager instanceof CsrfTokenManagerInterface) {
-            throw new InvalidArgumentException('The CSRF token manager should be an instance of CsrfProviderInterface or CsrfTokenManagerInterface.');
-        }
-
-        if (isset($options['intention'])) {
-            if (isset($options['csrf_token_id'])) {
-                throw new \InvalidArgumentException(sprintf('You should only define an option for one of "intention" or "csrf_token_id" for the "%s". Use the "csrf_token_id" as it replaces "intention".', __CLASS__));
-            }
-
-            @trigger_error('The "intention" option for the '.__CLASS__.' is deprecated since version 2.8 and will be removed in 3.0. Use the "csrf_token_id" option instead.', E_USER_DEPRECATED);
-
-            $options['csrf_token_id'] = $options['intention'];
-        }
-
-        parent::__construct($tokenStorage, $authenticationManager, $sessionStrategy, $httpUtils, $providerKey, $successHandler, $failureHandler, array_merge(array(
+        parent::__construct($tokenStorage, $authenticationManager, $sessionStrategy, $httpUtils, $providerKey, $successHandler, $failureHandler, array_merge([
             'username_parameter' => '_username',
             'password_parameter' => '_password',
             'csrf_parameter' => '_csrf_token',
             'csrf_token_id' => 'authenticate',
             'post_only' => true,
-        ), $options), $logger, $dispatcher);
+        ], $options), $logger, $dispatcher);
 
         $this->csrfTokenManager = $csrfTokenManager;
     }
@@ -96,14 +78,20 @@ class UsernamePasswordFormAuthenticationListener extends AbstractAuthenticationL
         }
 
         if ($this->options['post_only']) {
-            $username = trim(ParameterBagUtils::getParameterBagValue($request->request, $this->options['username_parameter']));
+            $username = ParameterBagUtils::getParameterBagValue($request->request, $this->options['username_parameter']);
             $password = ParameterBagUtils::getParameterBagValue($request->request, $this->options['password_parameter']);
         } else {
-            $username = trim(ParameterBagUtils::getRequestParameterValue($request, $this->options['username_parameter']));
+            $username = ParameterBagUtils::getRequestParameterValue($request, $this->options['username_parameter']);
             $password = ParameterBagUtils::getRequestParameterValue($request, $this->options['password_parameter']);
         }
 
-        if (strlen($username) > Security::MAX_USERNAME_LENGTH) {
+        if (!\is_string($username) && (!\is_object($username) || !method_exists($username, '__toString'))) {
+            throw new BadRequestHttpException(sprintf('The key "%s" must be a string, "%s" given.', $this->options['username_parameter'], \gettype($username)));
+        }
+
+        $username = trim($username);
+
+        if (\strlen($username) > Security::MAX_USERNAME_LENGTH) {
             throw new BadCredentialsException('Invalid username.');
         }
 

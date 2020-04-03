@@ -11,14 +11,14 @@
 
 namespace Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
-// Adds SessionHandler functionality if available.
-// @see http://php.net/sessionhandler
-if (PHP_VERSION_ID >= 50400) {
-    class NativeSessionHandler extends \SessionHandler
+/**
+ * @deprecated since version 3.4, to be removed in 4.0. Use \SessionHandler instead.
+ * @see https://php.net/sessionhandler
+ */
+class NativeSessionHandler extends \SessionHandler
+{
+    public function __construct()
     {
-    }
-} else {
-    class NativeSessionHandler
-    {
+        @trigger_error('The '.__NAMESPACE__.'\NativeSessionHandler class is deprecated since Symfony 3.4 and will be removed in 4.0. Use the \SessionHandler class instead.', E_USER_DEPRECATED);
     }
 }

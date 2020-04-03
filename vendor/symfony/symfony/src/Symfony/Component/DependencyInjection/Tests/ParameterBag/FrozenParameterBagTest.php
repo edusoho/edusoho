@@ -18,47 +18,39 @@ class FrozenParameterBagTest extends TestCase
 {
     public function testConstructor()
     {
-        $parameters = array(
+        $parameters = [
             'foo' => 'foo',
             'bar' => 'bar',
-        );
+        ];
         $bag = new FrozenParameterBag($parameters);
         $this->assertEquals($parameters, $bag->all(), '__construct() takes an array of parameters as its first argument');
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testClear()
     {
-        $bag = new FrozenParameterBag(array());
+        $this->expectException('LogicException');
+        $bag = new FrozenParameterBag([]);
         $bag->clear();
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testSet()
     {
-        $bag = new FrozenParameterBag(array());
+        $this->expectException('LogicException');
+        $bag = new FrozenParameterBag([]);
         $bag->set('foo', 'bar');
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testAdd()
     {
-        $bag = new FrozenParameterBag(array());
-        $bag->add(array());
+        $this->expectException('LogicException');
+        $bag = new FrozenParameterBag([]);
+        $bag->add([]);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testRemove()
     {
-        $bag = new FrozenParameterBag(array('foo' => 'bar'));
+        $this->expectException('LogicException');
+        $bag = new FrozenParameterBag(['foo' => 'bar']);
         $bag->remove('foo');
     }
 }

@@ -1,5 +1,5 @@
 {
-    "Version": "2.1.29.22",
+    "Version": "36",
     "Names": {
         "AC": "i-Ascension Island",
         "AD": "i-Andorra",
@@ -56,7 +56,7 @@
         "CW": "i-Curaçao",
         "CX": "i-Christmas Island",
         "CY": "i-Cyprus",
-        "CZ": "i-Czech Republic",
+        "CZ": "i-Czechia",
         "DE": "i-Germany",
         "DG": "i-Diego Garcia",
         "DJ": "i-Djibouti",
@@ -146,7 +146,7 @@
         "MF": "i-Saint Martin",
         "MG": "i-Madagascar",
         "MH": "i-Marshall Islands",
-        "MK": "i-Macedonia",
+        "MK": "i-North Macedonia",
         "ML": "iMali",
         "MM": "i-Myanmar (Burma)",
         "MN": "i-Mongolia",
@@ -235,8 +235,7 @@
         "TZ": "i-Tanzania",
         "UA": "i-Ukraine",
         "UG": "i-Uganda",
-        "UM": "i-U.S. Minor Outlying Islands",
-        "UN": "I-United Nations",
+        "UM": "I-U.S. Outlying Islands",
         "US": "i-United States",
         "UY": "i-Uruguay",
         "UZ": "i-Uzbekistan",
@@ -249,10 +248,12 @@
         "VU": "i-Vanuatu",
         "WF": "i-Wallis ne-Futuna",
         "WS": "i-Samoa",
+        "XA": "Pseudo-Accents",
+        "XB": "Pseudo-Bidi",
         "XK": "i-Kosovo",
         "YE": "i-Yemen",
         "YT": "i-Mayotte",
-        "ZA": "i-South Africa",
+        "ZA": "iNingizimu Afrika",
         "ZM": "i-Zambia",
         "ZW": "iZimbabwe"
     }

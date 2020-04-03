@@ -13,6 +13,7 @@ namespace Symfony\Component\Form\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\ButtonBuilder;
+use Symfony\Component\Form\Exception\InvalidArgumentException;
 
 /**
  * @author Alexander Cheprasov <cheprasov.84@ya.ru>
@@ -21,14 +22,14 @@ class ButtonBuilderTest extends TestCase
 {
     public function getValidNames()
     {
-        return array(
-            array('reset'),
-            array('submit'),
-            array('foo'),
-            array('0'),
-            array(0),
-            array('button[]'),
-        );
+        return [
+            ['reset'],
+            ['submit'],
+            ['foo'],
+            ['0'],
+            [0],
+            ['button[]'],
+        ];
     }
 
     /**
@@ -41,11 +42,11 @@ class ButtonBuilderTest extends TestCase
 
     public function getInvalidNames()
     {
-        return array(
-            array(''),
-            array(false),
-            array(null),
-        );
+        return [
+            [''],
+            [false],
+            [null],
+        ];
     }
 
     /**
@@ -53,10 +54,8 @@ class ButtonBuilderTest extends TestCase
      */
     public function testInvalidNames($name)
     {
-        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}(
-            '\Symfony\Component\Form\Exception\InvalidArgumentException',
-            'Buttons cannot have empty names.'
-        );
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Buttons cannot have empty names.');
         new ButtonBuilder($name);
     }
 }

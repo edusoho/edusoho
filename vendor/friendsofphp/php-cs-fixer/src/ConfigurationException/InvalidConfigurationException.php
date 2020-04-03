@@ -12,7 +12,7 @@
 
 namespace PhpCsFixer\ConfigurationException;
 
-use PhpCsFixer\Console\Command\FixCommand;
+use PhpCsFixer\Console\Command\FixCommandExitStatusCalculator;
 
 /**
  * Exceptions of this type are thrown on misconfiguration of the Fixer.
@@ -25,14 +25,14 @@ class InvalidConfigurationException extends \InvalidArgumentException
 {
     /**
      * @param string          $message
-     * @param int|null        $code
-     * @param \Exception|null $previous
+     * @param null|int        $code
+     * @param null|\Exception $previous
      */
     public function __construct($message, $code = null, \Exception $previous = null)
     {
         parent::__construct(
             $message,
-            null === $code ? FixCommand::EXIT_STATUS_FLAG_HAS_INVALID_CONFIG : $code,
+            null === $code ? FixCommandExitStatusCalculator::EXIT_STATUS_FLAG_HAS_INVALID_CONFIG : $code,
             $previous
         );
     }

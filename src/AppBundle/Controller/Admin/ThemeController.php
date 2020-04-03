@@ -2,10 +2,10 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\System;
 use Biz\Theme\Service\ThemeService;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ThemeController extends BaseController
 {
@@ -45,7 +45,7 @@ class ThemeController extends BaseController
     {
         $this->getThemeService()->saveConfirmConfig();
 
-        return $this->redirect($this->generateUrl('admin_setting_theme', array(), true));
+        return $this->redirect($this->generateUrl('admin_setting_theme', array(), UrlGeneratorInterface::ABSOLUTE_URL));
     }
 
     public function manageIndexAction(Request $request, $uri)

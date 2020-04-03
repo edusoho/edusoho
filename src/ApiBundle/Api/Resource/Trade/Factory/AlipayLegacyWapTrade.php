@@ -2,6 +2,8 @@
 
 namespace ApiBundle\Api\Resource\Trade\Factory;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 class AlipayLegacyWapTrade extends BaseTrade
 {
     protected $payment = 'alipay';
@@ -12,8 +14,8 @@ class AlipayLegacyWapTrade extends BaseTrade
     {
         $customFields = array();
         if (empty($params['wap_pay'])) {
-            $customFields['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
-            $customFields['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
+            $customFields['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), UrlGeneratorInterface::ABSOLUTE_URL);
+            $customFields['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         return $customFields;

@@ -21,9 +21,19 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class UnusedTagsPass implements CompilerPassInterface
 {
-    private $whitelist = array(
-        'console.command',
+    private $whitelist = [
+        'annotations.cached_reader',
+        'auto_alias',
+        'cache.pool',
+        'cache.pool.clearer',
         'config_cache.resource_checker',
+        'console.command',
+        'container.env_var_processor',
+        'container.hot_path',
+        'container.service_locator',
+        'container.service_subscriber',
+        'controller.argument_value_resolver',
+        'controller.service_arguments',
         'data_collector',
         'form.type',
         'form.type_extension',
@@ -33,7 +43,12 @@ class UnusedTagsPass implements CompilerPassInterface
         'kernel.event_listener',
         'kernel.event_subscriber',
         'kernel.fragment_renderer',
+        'kernel.reset',
         'monolog.logger',
+        'property_info.access_extractor',
+        'property_info.list_extractor',
+        'property_info.type_extractor',
+        'proxy',
         'routing.expression_language_provider',
         'routing.loader',
         'security.expression_language_provider',
@@ -47,30 +62,30 @@ class UnusedTagsPass implements CompilerPassInterface
         'translation.loader',
         'twig.extension',
         'twig.loader',
+        'twig.runtime',
         'validator.constraint_validator',
         'validator.initializer',
-    );
+        'workflow.definition',
+    ];
 
     public function process(ContainerBuilder $container)
     {
-        $compiler = $container->getCompiler();
-        $formatter = $compiler->getLoggingFormatter();
         $tags = array_unique(array_merge($container->findTags(), $this->whitelist));
 
         foreach ($container->findUnusedTags() as $tag) {
             // skip whitelisted tags
-            if (in_array($tag, $this->whitelist)) {
+            if (\in_array($tag, $this->whitelist)) {
                 continue;
             }
 
             // check for typos
-            $candidates = array();
+            $candidates = [];
             foreach ($tags as $definedTag) {
                 if ($definedTag === $tag) {
                     continue;
                 }
 
-                if (false !== strpos($definedTag, $tag) || levenshtein($tag, $definedTag) <= strlen($tag) / 3) {
+                if (false !== strpos($definedTag, $tag) || levenshtein($tag, $definedTag) <= \strlen($tag) / 3) {
                     $candidates[] = $definedTag;
                 }
             }
@@ -81,7 +96,7 @@ class UnusedTagsPass implements CompilerPassInterface
                 $message .= sprintf(' Did you mean "%s"?', implode('", "', $candidates));
             }
 
-            $compiler->addLogMessage($formatter->format($this, $message));
+            $container->log($this, $message);
         }
     }
 }

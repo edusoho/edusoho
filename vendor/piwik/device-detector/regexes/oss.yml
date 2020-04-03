@@ -31,7 +31,7 @@
 ##########
 # Windows Mobile
 ##########
-- regex: 'Windows Phone (?:OS)?[ ]?(\d+[\.\d]+)'
+- regex: '(?:Windows Phone (?:OS)?|wds)[ ]?(\d+[\.\d]+)'
   name: 'Windows Phone'
   version: '$1'
   
@@ -58,6 +58,19 @@
   name: 'Windows RT'
   version: '8.1'
 
+##########
+# Windows IoT
+##########
+- regex: 'Windows IoT 10.0'
+  name: 'Windows IoT'
+  version: '10'
+
+##########
+# KaiOS
+##########
+- regex: 'KAIOS(?:/(\d+[\.\d]+))?'
+  name: 'KaiOS'
+  version: '$1'
 
 ##########
 # Custom Android Roms
@@ -78,10 +91,14 @@
   name: 'MocorDroid'
   version: '$1'
 
+- regex: 'Fire OS(?:/(\d+[\.\d]*))?'
+  name: 'Fire OS'
+  version: '$1'
+
 ##########
 # Android
 ##########
-- regex: '(?:(?:Orca-)?Android|Adr)[ /](?:[a-z]+ )?(\d+[\.\d]+)'
+- regex: '(?:(?:Orca-)?Android|Adr)[ /](?:[a-z]+ )?(\d+[\.\d]*)'
   name: 'Android'
   version: '$1'
   
@@ -89,6 +106,10 @@
 - regex: 'Android|Silk-Accelerated=[a-z]{4,5}'
   name: 'Android'
   version: ''
+
+- regex: '(?:TwitterAndroid).*[ /](?:[a-z]+ )?(\d+[\.\d]*)'
+  name: 'Android'
+  version: '$1'
 
 - regex: 'BeyondPod|AntennaPod|Podkicker|DoggCatcher|Player FM|okhttp|Podcatcher Deluxe'
   name: 'Android'
@@ -126,6 +147,10 @@
 ##########
 # Linux
 ##########
+- regex: '(Ordissimo|webissimo3)'
+  name: 'Ordissimo'
+  version: ''
+
 - regex: 'Maemo'
   name: 'Maemo'
   version: ''
@@ -243,12 +268,59 @@
 - regex: 'Windows'
   name: 'Windows'
   version: ''
-  
-  
+
+
+##########
+# Haiku OS
+##########
+- regex: 'Haiku'
+  name: 'Haiku OS'
+  version: ''
+
   
 ##########
 # iOS
 ##########
+- regex: 'CFNetwork/889'
+  name: 'iOS'
+  version: '11.1'
+
+- regex: 'CFNetwork/887.*(x86_64)'
+  name: 'Mac'
+  version: '10.13'
+
+- regex: 'CFNetwork/887'
+  name: 'iOS'
+  version: '11.0'
+
+- regex: 'CFNetwork/811.*(x86_64)'
+  name: 'Mac'
+  version: '10.12'
+
+- regex: 'CFNetwork/811'
+  name: 'iOS'
+  version: '10.3'
+
+- regex: 'CFNetwork/808\.3'
+  name: 'iOS'
+  version: '10.3'
+
+- regex: 'CFNetwork/808\.2'
+  name: 'iOS'
+  version: '10.2'
+
+- regex: 'CFNetwork/808\.1'
+  name: 'iOS'
+  version: '10.1'
+
+- regex: 'CFNetwork/808\.0'
+  name: 'iOS'
+  version: '10.0'
+
+- regex: 'CFNetwork/808'
+  name: 'iOS'
+  version: '10'
+
 - regex: 'CFNetwork/758\.4\.3'
   name: 'iOS'
   version: '9.3.2'
@@ -349,7 +421,7 @@
   name: 'iOS'
   version: '$1'
 
-- regex: 'Podcasts/(?:[\d\.]+)|Instacast(?:HD)?/(?:\d\.[\d\.abc]+)|Pocket Casts, iOS|Overcast|Castro|Podcat|i[cC]atcher'
+- regex: 'Podcasts/(?:[\d\.]+)|Instacast(?:HD)?/(?:\d\.[\d\.abc]+)|Pocket Casts, iOS|Overcast|Castro|Podcat|i[cC]atcher|RSSRadio/'
   name: 'iOS'
   version: ''
 
@@ -361,6 +433,10 @@
 ##########
 # Mac
 ##########
+
+- regex: 'CFNetwork/807'
+  name: 'Mac'
+  version: '10.12'
 
 - regex: 'CFNetwork/760'
   name: 'Mac'
@@ -402,7 +478,7 @@
   name: 'Mac'
   version: '10.2'
 
-- regex: 'Mac OS X(?: (?:Version )?(\d+(?:[_\.]\d+)+))?'
+- regex: 'Mac[ +]OS[ +]X(?:[ /](?:Version )?(\d+(?:[_\.]\d+)+))?'
   name: 'Mac'
   version: '$1'
   
@@ -449,14 +525,6 @@
   
 - regex: 'bPod'
   name: 'BlackBerry OS'
-  version: ''
-
-
-##########
-# Haiku OS
-##########
-- regex: 'Haiku'
-  name: 'Haiku OS'
   version: ''
 
 
@@ -660,11 +728,10 @@
 ##########
 # Gaming Console
 ##########
-- regex: 'Nintendo Wii'
+- regex: 'Nintendo (Wii|Switch)'
   name: 'Nintendo'
-  version: 'Wii'
-  
-  
+  version: '$1'
+
 - regex: 'PlayStation ?([3|4])'
   name: 'PlayStation'
   version: '$1'

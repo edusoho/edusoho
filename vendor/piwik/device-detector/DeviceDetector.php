@@ -11,6 +11,7 @@ namespace DeviceDetector;
 use DeviceDetector\Cache\StaticCache;
 use DeviceDetector\Cache\Cache;
 use DeviceDetector\Parser\Bot;
+use DeviceDetector\Parser\BotParserAbstract;
 use DeviceDetector\Parser\Client\Browser;
 use DeviceDetector\Parser\OperatingSystem;
 use DeviceDetector\Parser\Client\ClientParserAbstract;
@@ -49,7 +50,7 @@ class DeviceDetector
     /**
      * Current version number of DeviceDetector
      */
-    const VERSION = '3.7.7';
+    const VERSION = '3.12.3';
 
     /**
      * Holds all registered client types
@@ -89,7 +90,7 @@ class DeviceDetector
 
     /**
      * Holds the device type after parsing the UA
-     * @var string
+     * @var int
      */
     protected $device = null;
 
@@ -152,6 +153,11 @@ class DeviceDetector
     protected $deviceParsers = array();
 
     /**
+     * @var BotParserAbstract[]
+     */
+    public $botParsers = array();
+
+    /**
      * @var bool
      */
     private $parsed = false;
@@ -180,6 +186,8 @@ class DeviceDetector
         $this->addDeviceParser('Camera');
         $this->addDeviceParser('PortableMediaPlayer');
         $this->addDeviceParser('Mobile');
+
+        $this->addBotParser(new Bot());
     }
 
     public function __call($methodName, $arguments)
@@ -270,6 +278,19 @@ class DeviceDetector
     public function getDeviceParsers()
     {
         return $this->deviceParsers;
+    }
+
+    /**
+     * @param BotParserAbstract $parser
+     */
+    public function addBotParser(BotParserAbstract $parser)
+    {
+        $this->botParsers[] = $parser;
+    }
+
+    public function getBotParsers()
+    {
+        return $this->botParsers;
     }
 
     /**
@@ -539,7 +560,7 @@ class DeviceDetector
 
     /**
      * Returns true, if userAgent was already parsed with parse()
-     * 
+     *
      * @return bool
      */
     public function isParsed()
@@ -590,14 +611,21 @@ class DeviceDetector
             return false;
         }
 
-        $botParser = new Bot();
-        $botParser->setUserAgent($this->getUserAgent());
-        $botParser->setYamlParser($this->getYamlParser());
-        $botParser->setCache($this->getCache());
-        if ($this->discardBotInformation) {
-            $botParser->discardDetails();
+        $parsers = $this->getBotParsers();
+
+        foreach ($parsers as $parser) {
+            $parser->setUserAgent($this->getUserAgent());
+            $parser->setYamlParser($this->getYamlParser());
+            $parser->setCache($this->getCache());
+            if ($this->discardBotInformation) {
+                $parser->discardDetails();
+            }
+            $bot = $parser->parse();
+            if (!empty($bot)) {
+                $this->bot = $bot;
+                break;
+            }
         }
-        $this->bot = $botParser->parse();
     }
 
 
@@ -649,11 +677,18 @@ class DeviceDetector
         $clientName = $this->getClient('name');
 
         /**
+         * Assume all devices running iOS / Mac OS are from Apple
+         */
+        if (empty($this->brand) && in_array($osShortName, array('ATV', 'IOS', 'MAC'))) {
+            $this->brand = 'AP';
+        }
+
+        /**
          * Chrome on Android passes the device type based on the keyword 'Mobile'
          * If it is present the device should be a smartphone, otherwise it's a tablet
          * See https://developer.chrome.com/multidevice/user-agent#chrome_for_android_user_agent
          */
-        if (is_null($this->device) && $osFamily == 'Android' && in_array($this->getClient('name'), array('Chrome', 'Chrome Mobile'))) {
+        if (is_null($this->device) && $osFamily == 'Android' && Browser::getBrowserFamily($this->getClient('short_name')) == 'Chrome') {
             if ($this->matchUserAgent('Chrome/[\.0-9]* Mobile')) {
                 $this->device = DeviceParserAbstract::DEVICE_TYPE_SMARTPHONE;
             } else if ($this->matchUserAgent('Chrome/[\.0-9]* (?!Mobile)')) {
@@ -708,7 +743,7 @@ class DeviceDetector
          * all Windows 8 touch devices are tablets.
          */
 
-        if (is_null($this->device) && ($osShortName == 'WRT' || ($osShortName == 'WIN' && version_compare($osVersion, '8.0'))) && $this->isTouchEnabled()) {
+        if (is_null($this->device) && ($osShortName == 'WRT' || ($osShortName == 'WIN' && version_compare($osVersion, '8') >= 0)) && $this->isTouchEnabled()) {
             $this->device = DeviceParserAbstract::DEVICE_TYPE_TABLET;
         }
 

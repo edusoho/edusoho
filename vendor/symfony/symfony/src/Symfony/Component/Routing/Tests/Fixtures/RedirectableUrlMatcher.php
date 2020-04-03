@@ -11,8 +11,8 @@
 
 namespace Symfony\Component\Routing\Tests\Fixtures;
 
-use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\Matcher\RedirectableUrlMatcherInterface;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
 
 /**
  * @author Fabien Potencier <fabien@symfony.com>
@@ -21,10 +21,10 @@ class RedirectableUrlMatcher extends UrlMatcher implements RedirectableUrlMatche
 {
     public function redirect($path, $route, $scheme = null)
     {
-        return array(
+        return [
             '_controller' => 'Some controller reference...',
             'path' => $path,
             'scheme' => $scheme,
-        );
+        ];
     }
 }

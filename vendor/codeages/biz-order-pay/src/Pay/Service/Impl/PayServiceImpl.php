@@ -305,6 +305,7 @@ class PayServiceImpl extends BaseService implements PayService
             } catch (\Exception $e) {
                 $this->rollback();
                 $this->getTargetlogService()->log(TargetlogService::INFO, 'pay.error', $data['trade_sn'], "交易号{$data['trade_sn']}处理失败, {$e->getMessage()}", $data);
+                throw $e;
             }
 
             $this->dispatch('payment_trade.paid', $trade, $data);

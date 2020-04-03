@@ -112,5 +112,7 @@ EOT
                 $container['phpmig.migrator']->up($migration);
             }
         }
+
+        return 0;
     }
 }

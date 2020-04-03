@@ -1,29 +1,18 @@
 <?php
 
-/*
- * This file is part of the Doctrine Bundle
- *
- * The code was originally distributed inside the Symfony framework.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- * (c) Doctrine Project, Benjamin Eberlei <kontakt@beberlei.de>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Doctrine\Bundle\DoctrineBundle\Command;
 
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\DBAL\DriverManager;
+use Exception;
+use InvalidArgumentException;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Database tool allows you to easily drop and create your configured databases.
+ * Database tool allows you to easily create your configured databases.
  *
- * @author Fabien Potencier <fabien@symfony.com>
- * @author Jonathan H. Wage <jonwage@gmail.com>
+ * @final
  */
 class CreateDatabaseDoctrineCommand extends DoctrineCommand
 {
@@ -56,8 +45,8 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $connectionName = $input->getOption('connection');
-        if (empty($connectionName) === true) {
-            $connectionName = $this->getContainer()->get('doctrine')->getDefaultConnectionName();
+        if (empty($connectionName)) {
+            $connectionName = $this->getDoctrine()->getDefaultConnectionName();
         }
         $connection = $this->getDoctrineConnection($connectionName);
 
@@ -74,13 +63,13 @@ EOT
             $shards = $params['shards'];
             // Default select global
             $params = array_merge($params, $params['global']);
-            unset($params['global']['dbname']);
+            unset($params['global']['dbname'], $params['global']['path'], $params['global']['url']);
             if ($input->getOption('shard')) {
                 foreach ($shards as $i => $shard) {
-                    if ($shard['id'] === (int)$input->getOption('shard')) {
+                    if ($shard['id'] === (int) $input->getOption('shard')) {
                         // Select sharded database
                         $params = array_merge($params, $shard);
-                        unset($params['shards'][$i]['dbname'], $params['id']);
+                        unset($params['shards'][$i]['dbname'], $params['shards'][$i]['path'], $params['shards'][$i]['url'], $params['id']);
                         break;
                     }
                 }
@@ -88,18 +77,19 @@ EOT
         }
 
         $hasPath = isset($params['path']);
-        $name = $hasPath ? $params['path'] : (isset($params['dbname']) ? $params['dbname'] : false);
-        if (!$name) {
-            throw new \InvalidArgumentException("Connection does not contain a 'path' or 'dbname' parameter and cannot be dropped.");
+        $name    = $hasPath ? $params['path'] : (isset($params['dbname']) ? $params['dbname'] : false);
+        if (! $name) {
+            throw new InvalidArgumentException("Connection does not contain a 'path' or 'dbname' parameter and cannot be created.");
         }
         // Need to get rid of _every_ occurrence of dbname from connection configuration and we have already extracted all relevant info from url
         unset($params['dbname'], $params['path'], $params['url']);
 
         $tmpConnection = DriverManager::getConnection($params);
+        $tmpConnection->connect($input->getOption('shard'));
         $shouldNotCreateDatabase = $ifNotExists && in_array($name, $tmpConnection->getSchemaManager()->listDatabases());
 
         // Only quote if we don't have a path
-        if (!$hasPath) {
+        if (! $hasPath) {
             $name = $tmpConnection->getDatabasePlatform()->quoteSingleIdentifier($name);
         }
 
@@ -111,7 +101,7 @@ EOT
                 $tmpConnection->getSchemaManager()->createDatabase($name);
                 $output->writeln(sprintf('<info>Created database <comment>%s</comment> for connection named <comment>%s</comment></info>', $name, $connectionName));
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $output->writeln(sprintf('<error>Could not create database <comment>%s</comment> for connection named <comment>%s</comment></error>', $name, $connectionName));
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             $error = true;

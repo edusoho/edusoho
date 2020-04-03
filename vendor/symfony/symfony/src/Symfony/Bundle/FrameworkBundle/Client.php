@@ -11,14 +11,14 @@
 
 namespace Symfony\Bundle\FrameworkBundle;
 
+use Symfony\Component\BrowserKit\CookieJar;
+use Symfony\Component\BrowserKit\History;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\HttpKernel\Client as BaseClient;
-use Symfony\Component\HttpKernel\Profiler\Profile as HttpProfile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\BrowserKit\History;
-use Symfony\Component\BrowserKit\CookieJar;
+use Symfony\Component\HttpKernel\Client as BaseClient;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\HttpKernel\Profiler\Profile as HttpProfile;
 
 /**
  * Client simulates a browser and makes requests to a Kernel object.
@@ -34,7 +34,7 @@ class Client extends BaseClient
     /**
      * {@inheritdoc}
      */
-    public function __construct(KernelInterface $kernel, array $server = array(), History $history = null, CookieJar $cookieJar = null)
+    public function __construct(KernelInterface $kernel, array $server = [], History $history = null, CookieJar $cookieJar = null)
     {
         parent::__construct($kernel, $server, $history, $cookieJar);
     }
@@ -62,11 +62,11 @@ class Client extends BaseClient
     /**
      * Gets the profile associated with the current Response.
      *
-     * @return HttpProfile A Profile instance
+     * @return HttpProfile|false A Profile instance
      */
     public function getProfile()
     {
-        if (!$this->kernel->getContainer()->has('profiler')) {
+        if (null === $this->response || !$this->kernel->getContainer()->has('profiler')) {
             return false;
         }
 
@@ -161,42 +161,44 @@ class Client extends BaseClient
      */
     protected function getScript($request)
     {
-        $kernel = str_replace("'", "\\'", serialize($this->kernel));
-        $request = str_replace("'", "\\'", serialize($request));
+        $kernel = var_export(serialize($this->kernel), true);
+        $request = var_export(serialize($request), true);
+        $errorReporting = error_reporting();
 
-        $r = new \ReflectionObject($this->kernel);
-
-        $autoloader = dirname($r->getFileName()).'/autoload.php';
-        if (is_file($autoloader)) {
-            $autoloader = str_replace("'", "\\'", $autoloader);
-        } else {
-            $autoloader = '';
+        $requires = '';
+        foreach (get_declared_classes() as $class) {
+            if (0 === strpos($class, 'ComposerAutoloaderInit')) {
+                $r = new \ReflectionClass($class);
+                $file = \dirname(\dirname($r->getFileName())).'/autoload.php';
+                if (file_exists($file)) {
+                    $requires .= 'require_once '.var_export($file, true).";\n";
+                }
+            }
         }
 
-        $path = str_replace("'", "\\'", $r->getFileName());
+        if (!$requires) {
+            throw new \RuntimeException('Composer autoloader not found.');
+        }
+
+        $requires .= 'require_once '.var_export((new \ReflectionObject($this->kernel))->getFileName(), true).";\n";
 
         $profilerCode = '';
         if ($this->profiler) {
             $profilerCode = '$kernel->getContainer()->get(\'profiler\')->enable();';
         }
 
-        $errorReporting = error_reporting();
-
         $code = <<<EOF
 <?php
 
 error_reporting($errorReporting);
 
-if ('$autoloader') {
-    require_once '$autoloader';
-}
-require_once '$path';
+$requires
 
-\$kernel = unserialize('$kernel');
+\$kernel = unserialize($kernel);
 \$kernel->boot();
 $profilerCode
 
-\$request = unserialize('$request');
+\$request = unserialize($request);
 EOF;
 
         return $code.$this->getHandleScript();

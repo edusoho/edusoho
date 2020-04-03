@@ -2,8 +2,9 @@
 
 namespace Omnipay\Alipay\Responses;
 
-class VerifyNotifyIdResponse extends \Omnipay\Alipay\Responses\AbstractLegacyResponse
+class VerifyNotifyIdResponse extends AbstractLegacyResponse
 {
+
     /**
      * Is the response successful?
      *
@@ -11,6 +12,6 @@ class VerifyNotifyIdResponse extends \Omnipay\Alipay\Responses\AbstractLegacyRes
      */
     public function isSuccessful()
     {
-        return $this->data['result'] . '' === 'true';
+        return ($this->data['result'] . '') === 'true';
     }
 }

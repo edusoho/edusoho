@@ -1,5 +1,5 @@
 <?php
-class StatusTest extends PHPUnit_Framework_TestCase
+class StatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testSuccess()
     {
@@ -28,5 +28,10 @@ class StatusTest extends PHPUnit_Framework_TestCase
 
     public function testRisky()
     {
+    }
+
+    public function testWarning()
+    {
+        throw new PHPUnit_Framework_Warning;
     }
 }

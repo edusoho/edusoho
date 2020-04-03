@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.6.1 - 2019-09-05
+
+### Added
+
+- [#32](https://github.com/zendframework/zend-escaper/pull/32) adds support for PHP 7.3.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
 ## 2.6.0 - 2018-04-25
 
 ### Added

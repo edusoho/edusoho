@@ -23,19 +23,11 @@ namespace Symfony\Component\CssSelector\Node;
  */
 class SelectorNode extends AbstractNode
 {
-    /**
-     * @var NodeInterface
-     */
     private $tree;
-
-    /**
-     * @var null|string
-     */
     private $pseudoElement;
 
     /**
-     * @param NodeInterface $tree
-     * @param null|string   $pseudoElement
+     * @param string|null $pseudoElement
      */
     public function __construct(NodeInterface $tree, $pseudoElement = null)
     {
@@ -52,7 +44,7 @@ class SelectorNode extends AbstractNode
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getPseudoElement()
     {

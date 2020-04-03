@@ -22,8 +22,6 @@ namespace PhpCsFixer\Error;
 final class ErrorsManager
 {
     /**
-     * Errors.
-     *
      * @var Error[]
      */
     private $errors = array();
@@ -36,7 +34,7 @@ final class ErrorsManager
     public function getInvalidErrors()
     {
         return array_filter($this->errors, function (Error $error) {
-            return $error->getType() === Error::TYPE_INVALID;
+            return Error::TYPE_INVALID === $error->getType();
         });
     }
 
@@ -48,7 +46,7 @@ final class ErrorsManager
     public function getExceptionErrors()
     {
         return array_filter($this->errors, function (Error $error) {
-            return $error->getType() === Error::TYPE_EXCEPTION;
+            return Error::TYPE_EXCEPTION === $error->getType();
         });
     }
 
@@ -60,7 +58,7 @@ final class ErrorsManager
     public function getLintErrors()
     {
         return array_filter($this->errors, function (Error $error) {
-            return $error->getType() === Error::TYPE_LINT;
+            return Error::TYPE_LINT === $error->getType();
         });
     }
 
@@ -75,8 +73,6 @@ final class ErrorsManager
     }
 
     /**
-     * Report error.
-     *
      * @param Error $error
      */
     public function report(Error $error)

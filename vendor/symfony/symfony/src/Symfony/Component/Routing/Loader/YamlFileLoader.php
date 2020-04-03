@@ -11,12 +11,12 @@
 
 namespace Symfony\Component\Routing\Loader;
 
-use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\Route;
+use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\Config\Resource\FileResource;
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Parser as YamlParser;
-use Symfony\Component\Config\Loader\FileLoader;
 
 /**
  * YamlFileLoader loads Yaml routing files.
@@ -26,9 +26,9 @@ use Symfony\Component\Config\Loader\FileLoader;
  */
 class YamlFileLoader extends FileLoader
 {
-    private static $availableKeys = array(
-        'resource', 'type', 'prefix', 'pattern', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options', 'condition',
-    );
+    private static $availableKeys = [
+        'resource', 'type', 'prefix', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options', 'condition', 'controller',
+    ];
     private $yamlParser;
 
     /**
@@ -57,10 +57,18 @@ class YamlFileLoader extends FileLoader
             $this->yamlParser = new YamlParser();
         }
 
+        $prevErrorHandler = set_error_handler(function ($level, $message, $script, $line) use ($file, &$prevErrorHandler) {
+            $message = E_USER_DEPRECATED === $level ? preg_replace('/ on line \d+/', ' in "'.$file.'"$0', $message) : $message;
+
+            return $prevErrorHandler ? $prevErrorHandler($level, $message, $script, $line) : false;
+        });
+
         try {
-            $parsedConfig = $this->yamlParser->parse(file_get_contents($path));
+            $parsedConfig = $this->yamlParser->parseFile($path);
         } catch (ParseException $e) {
             throw new \InvalidArgumentException(sprintf('The file "%s" does not contain valid YAML.', $path), 0, $e);
+        } finally {
+            restore_error_handler();
         }
 
         $collection = new RouteCollection();
@@ -72,22 +80,11 @@ class YamlFileLoader extends FileLoader
         }
 
         // not an array
-        if (!is_array($parsedConfig)) {
+        if (!\is_array($parsedConfig)) {
             throw new \InvalidArgumentException(sprintf('The file "%s" must contain a YAML array.', $path));
         }
 
         foreach ($parsedConfig as $name => $config) {
-            if (isset($config['pattern'])) {
-                if (isset($config['path'])) {
-                    throw new \InvalidArgumentException(sprintf('The file "%s" cannot define both a "path" and a "pattern" attribute. Use only "path".', $path));
-                }
-
-                @trigger_error(sprintf('The "pattern" option in file "%s" is deprecated since version 2.2 and will be removed in 3.0. Use the "path" option in the route definition instead.', $path), E_USER_DEPRECATED);
-
-                $config['path'] = $config['pattern'];
-                unset($config['pattern']);
-            }
-
             $this->validate($config, $name, $path);
 
             if (isset($config['resource'])) {
@@ -105,7 +102,7 @@ class YamlFileLoader extends FileLoader
      */
     public function supports($resource, $type = null)
     {
-        return is_string($resource) && in_array(pathinfo($resource, PATHINFO_EXTENSION), array('yml', 'yaml'), true) && (!$type || 'yaml' === $type);
+        return \is_string($resource) && \in_array(pathinfo($resource, PATHINFO_EXTENSION), ['yml', 'yaml'], true) && (!$type || 'yaml' === $type);
     }
 
     /**
@@ -118,30 +115,16 @@ class YamlFileLoader extends FileLoader
      */
     protected function parseRoute(RouteCollection $collection, $name, array $config, $path)
     {
-        $defaults = isset($config['defaults']) ? $config['defaults'] : array();
-        $requirements = isset($config['requirements']) ? $config['requirements'] : array();
-        $options = isset($config['options']) ? $config['options'] : array();
+        $defaults = isset($config['defaults']) ? $config['defaults'] : [];
+        $requirements = isset($config['requirements']) ? $config['requirements'] : [];
+        $options = isset($config['options']) ? $config['options'] : [];
         $host = isset($config['host']) ? $config['host'] : '';
-        $schemes = isset($config['schemes']) ? $config['schemes'] : array();
-        $methods = isset($config['methods']) ? $config['methods'] : array();
+        $schemes = isset($config['schemes']) ? $config['schemes'] : [];
+        $methods = isset($config['methods']) ? $config['methods'] : [];
         $condition = isset($config['condition']) ? $config['condition'] : null;
 
-        if (isset($requirements['_method'])) {
-            if (0 === count($methods)) {
-                $methods = explode('|', $requirements['_method']);
-            }
-
-            unset($requirements['_method']);
-            @trigger_error(sprintf('The "_method" requirement of route "%s" in file "%s" is deprecated since version 2.2 and will be removed in 3.0. Use the "methods" option instead.', $name, $path), E_USER_DEPRECATED);
-        }
-
-        if (isset($requirements['_scheme'])) {
-            if (0 === count($schemes)) {
-                $schemes = explode('|', $requirements['_scheme']);
-            }
-
-            unset($requirements['_scheme']);
-            @trigger_error(sprintf('The "_scheme" requirement of route "%s" in file "%s" is deprecated since version 2.2 and will be removed in 3.0. Use the "schemes" option instead.', $name, $path), E_USER_DEPRECATED);
+        if (isset($config['controller'])) {
+            $defaults['_controller'] = $config['controller'];
         }
 
         $route = new Route($config['path'], $defaults, $requirements, $options, $host, $schemes, $methods, $condition);
@@ -161,36 +144,47 @@ class YamlFileLoader extends FileLoader
     {
         $type = isset($config['type']) ? $config['type'] : null;
         $prefix = isset($config['prefix']) ? $config['prefix'] : '';
-        $defaults = isset($config['defaults']) ? $config['defaults'] : array();
-        $requirements = isset($config['requirements']) ? $config['requirements'] : array();
-        $options = isset($config['options']) ? $config['options'] : array();
+        $defaults = isset($config['defaults']) ? $config['defaults'] : [];
+        $requirements = isset($config['requirements']) ? $config['requirements'] : [];
+        $options = isset($config['options']) ? $config['options'] : [];
         $host = isset($config['host']) ? $config['host'] : null;
         $condition = isset($config['condition']) ? $config['condition'] : null;
         $schemes = isset($config['schemes']) ? $config['schemes'] : null;
         $methods = isset($config['methods']) ? $config['methods'] : null;
 
-        $this->setCurrentDir(dirname($path));
+        if (isset($config['controller'])) {
+            $defaults['_controller'] = $config['controller'];
+        }
 
-        $subCollection = $this->import($config['resource'], $type, false, $file);
-        /* @var $subCollection RouteCollection */
-        $subCollection->addPrefix($prefix);
-        if (null !== $host) {
-            $subCollection->setHost($host);
-        }
-        if (null !== $condition) {
-            $subCollection->setCondition($condition);
-        }
-        if (null !== $schemes) {
-            $subCollection->setSchemes($schemes);
-        }
-        if (null !== $methods) {
-            $subCollection->setMethods($methods);
-        }
-        $subCollection->addDefaults($defaults);
-        $subCollection->addRequirements($requirements);
-        $subCollection->addOptions($options);
+        $this->setCurrentDir(\dirname($path));
 
-        $collection->addCollection($subCollection);
+        $imported = $this->import($config['resource'], $type, false, $file) ?: [];
+
+        if (!\is_array($imported)) {
+            $imported = [$imported];
+        }
+
+        foreach ($imported as $subCollection) {
+            /* @var $subCollection RouteCollection */
+            $subCollection->addPrefix($prefix);
+            if (null !== $host) {
+                $subCollection->setHost($host);
+            }
+            if (null !== $condition) {
+                $subCollection->setCondition($condition);
+            }
+            if (null !== $schemes) {
+                $subCollection->setSchemes($schemes);
+            }
+            if (null !== $methods) {
+                $subCollection->setMethods($methods);
+            }
+            $subCollection->addDefaults($defaults);
+            $subCollection->addRequirements($requirements);
+            $subCollection->addOptions($options);
+
+            $collection->addCollection($subCollection);
+        }
     }
 
     /**
@@ -205,32 +199,23 @@ class YamlFileLoader extends FileLoader
      */
     protected function validate($config, $name, $path)
     {
-        if (!is_array($config)) {
+        if (!\is_array($config)) {
             throw new \InvalidArgumentException(sprintf('The definition of "%s" in "%s" must be a YAML array.', $name, $path));
         }
         if ($extraKeys = array_diff(array_keys($config), self::$availableKeys)) {
-            throw new \InvalidArgumentException(sprintf(
-                'The routing file "%s" contains unsupported keys for "%s": "%s". Expected one of: "%s".',
-                $path, $name, implode('", "', $extraKeys), implode('", "', self::$availableKeys)
-            ));
+            throw new \InvalidArgumentException(sprintf('The routing file "%s" contains unsupported keys for "%s": "%s". Expected one of: "%s".', $path, $name, implode('", "', $extraKeys), implode('", "', self::$availableKeys)));
         }
         if (isset($config['resource']) && isset($config['path'])) {
-            throw new \InvalidArgumentException(sprintf(
-                'The routing file "%s" must not specify both the "resource" key and the "path" key for "%s". Choose between an import and a route definition.',
-                $path, $name
-            ));
+            throw new \InvalidArgumentException(sprintf('The routing file "%s" must not specify both the "resource" key and the "path" key for "%s". Choose between an import and a route definition.', $path, $name));
         }
         if (!isset($config['resource']) && isset($config['type'])) {
-            throw new \InvalidArgumentException(sprintf(
-                'The "type" key for the route definition "%s" in "%s" is unsupported. It is only available for imports in combination with the "resource" key.',
-                $name, $path
-            ));
+            throw new \InvalidArgumentException(sprintf('The "type" key for the route definition "%s" in "%s" is unsupported. It is only available for imports in combination with the "resource" key.', $name, $path));
         }
         if (!isset($config['resource']) && !isset($config['path'])) {
-            throw new \InvalidArgumentException(sprintf(
-                'You must define a "path" for the route "%s" in file "%s".',
-                $name, $path
-            ));
+            throw new \InvalidArgumentException(sprintf('You must define a "path" for the route "%s" in file "%s".', $name, $path));
+        }
+        if (isset($config['controller']) && isset($config['defaults']['_controller'])) {
+            throw new \InvalidArgumentException(sprintf('The routing file "%s" must not specify both the "controller" key and the defaults key "_controller" for "%s".', $path, $name));
         }
     }
 }

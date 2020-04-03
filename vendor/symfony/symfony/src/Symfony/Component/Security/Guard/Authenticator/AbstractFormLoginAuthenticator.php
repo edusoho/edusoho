@@ -11,13 +11,14 @@
 
 namespace Symfony\Component\Security\Guard\Authenticator;
 
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 /**
  * A base class to make form login authentication easier!
@@ -26,6 +27,8 @@ use Symfony\Component\Security\Core\Security;
  */
 abstract class AbstractFormLoginAuthenticator extends AbstractGuardAuthenticator
 {
+    use TargetPathTrait;
+
     /**
      * Return the URL to the login page.
      *
@@ -34,20 +37,7 @@ abstract class AbstractFormLoginAuthenticator extends AbstractGuardAuthenticator
     abstract protected function getLoginUrl();
 
     /**
-     * The user will be redirected to the secure page they originally tried
-     * to access. But if no such page exists (i.e. the user went to the
-     * login page directly), this returns the URL the user should be redirected
-     * to after logging in successfully (e.g. your homepage).
-     *
-     * @return string
-     */
-    abstract protected function getDefaultSuccessRedirectUrl();
-
-    /**
      * Override to change what happens after a bad username/password is submitted.
-     *
-     * @param Request                 $request
-     * @param AuthenticationException $exception
      *
      * @return RedirectResponse
      */
@@ -65,20 +55,24 @@ abstract class AbstractFormLoginAuthenticator extends AbstractGuardAuthenticator
     /**
      * Override to change what happens after successful authentication.
      *
-     * @param Request        $request
-     * @param TokenInterface $token
-     * @param string         $providerKey
+     * @param string $providerKey
      *
      * @return RedirectResponse
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
+        @trigger_error(sprintf('The AbstractFormLoginAuthenticator::onAuthenticationSuccess() implementation was deprecated in Symfony 3.1 and will be removed in Symfony 4.0. You should implement this method yourself in %s and remove getDefaultSuccessRedirectUrl().', static::class), E_USER_DEPRECATED);
+
+        if (!method_exists($this, 'getDefaultSuccessRedirectUrl')) {
+            throw new \Exception(sprintf('You must implement onAuthenticationSuccess() or getDefaultSuccessRedirectUrl() in %s.', static::class));
+        }
+
         $targetPath = null;
 
         // if the user hit a secure page and start() was called, this was
         // the URL they were on, and probably where you want to redirect to
         if ($request->getSession() instanceof SessionInterface) {
-            $targetPath = $request->getSession()->get('_security.'.$providerKey.'.target_path');
+            $targetPath = $this->getTargetPath($request->getSession(), $providerKey);
         }
 
         if (!$targetPath) {
@@ -96,9 +90,6 @@ abstract class AbstractFormLoginAuthenticator extends AbstractGuardAuthenticator
     /**
      * Override to control what happens when the user hits a secure page
      * but isn't logged in yet.
-     *
-     * @param Request                      $request
-     * @param AuthenticationException|null $authException
      *
      * @return RedirectResponse
      */

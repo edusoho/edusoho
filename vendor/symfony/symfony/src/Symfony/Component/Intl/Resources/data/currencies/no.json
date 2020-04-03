@@ -1,5 +1,5 @@
 {
-    "Version": "2.1.30.7",
+    "Version": "36",
     "Names": {
         "ADP": [
             "ADP",
@@ -219,7 +219,7 @@
         ],
         "BYN": [
             "BYN",
-            "hviterussiske rubler"
+            "nye hviterussiske rubler"
         ],
         "BYR": [
             "BYR",
@@ -260,6 +260,10 @@
         "CLP": [
             "CLP",
             "chilenske pesos"
+        ],
+        "CNH": [
+            "CNH",
+            "kinesiske yuan (offshore)"
         ],
         "CNX": [
             "CNX",
@@ -679,6 +683,10 @@
         ],
         "MRO": [
             "MRO",
+            "mauritanske ouguiya (1973–2017)"
+        ],
+        "MRU": [
+            "MRU",
             "mauritanske ouguiya"
         ],
         "MTL": [
@@ -775,15 +783,15 @@
         ],
         "PEI": [
             "PEI",
-            "peruvianske inti"
+            "peruanske inti"
         ],
         "PEN": [
             "PEN",
-            "peruanske nuevo sol"
+            "peruanske sol"
         ],
         "PES": [
             "PES",
-            "peruvianske sol (1863–1965)"
+            "peruanske sol (1863–1965)"
         ],
         "PGK": [
             "PGK",
@@ -911,7 +919,11 @@
         ],
         "STD": [
             "STD",
-            "São Tomé og Príncipe-dobra"
+            "saotomesiske dobra (1977–2017)"
+        ],
+        "STN": [
+            "STN",
+            "saotomesiske dobra"
         ],
         "SUR": [
             "SUR",
@@ -1031,6 +1043,10 @@
         ],
         "VEF": [
             "VEF",
+            "venezuelanske bolivar (2008–2018)"
+        ],
+        "VES": [
+            "VES",
             "venezuelanske bolivar"
         ],
         "VND": [

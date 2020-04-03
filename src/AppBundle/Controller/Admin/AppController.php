@@ -175,10 +175,10 @@ class AppController extends BaseController
         return $this->createJsonResponse(count($apps));
     }
 
-    public function logsAction()
+    public function logsAction(Request $request)
     {
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getAppService()->findLogCount(),
             30
         );

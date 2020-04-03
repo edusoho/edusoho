@@ -11,6 +11,8 @@
 
 namespace Symfony\Bridge\Doctrine\HttpFoundation;
 
+@trigger_error(sprintf('The class %s is deprecated since Symfony 3.4 and will be removed in 4.0. Use Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler instead.', DbalSessionHandler::class), E_USER_DEPRECATED);
+
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\DriverException;
 use Doctrine\DBAL\Driver\ServerInfoAwareConnection;
@@ -25,6 +27,8 @@ use Doctrine\DBAL\Platforms\SQLServer2008Platform;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  * @author Tobias Schultze <http://tobion.de>
+ *
+ * @deprecated since version 3.4, to be removed in 4.0. Use Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler instead.
  */
 class DbalSessionHandler implements \SessionHandlerInterface
 {
@@ -54,8 +58,6 @@ class DbalSessionHandler implements \SessionHandlerInterface
     private $timeCol = 'sess_time';
 
     /**
-     * Constructor.
-     *
      * @param Connection $con       A connection
      * @param string     $tableName Table name
      */
@@ -246,6 +248,8 @@ class DbalSessionHandler implements \SessionHandlerInterface
                 return "INSERT INTO $this->table ($this->idCol, $this->dataCol, $this->timeCol) VALUES (:id, :data, :time) ".
                     "ON CONFLICT ($this->idCol) DO UPDATE SET ($this->dataCol, $this->timeCol) = (EXCLUDED.$this->dataCol, EXCLUDED.$this->timeCol)";
         }
+
+        return null;
     }
 
     private function getServerVersion()

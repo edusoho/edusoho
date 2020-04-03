@@ -8,6 +8,10 @@ use Biz\Course\Service\ThreadService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
@@ -194,22 +198,22 @@ class TaskPluginController extends BaseController
 
     private function createQuestionForm(array $data = array())
     {
-        $form = $this->get('form.factory')->createNamedBuilder('question', 'form', $data, array());
+        $form = $this->get('form.factory')->createNamedBuilder('question', FormType::class, $data, array());
 
         return $form
-            ->add('title', 'Symfony\Component\Form\Extension\Core\Type\TextType')
-            ->add('content', 'Symfony\Component\Form\Extension\Core\Type\TextareaType')
-            ->add('courseId', 'Symfony\Component\Form\Extension\Core\Type\HiddenType')
-            ->add('taskId', 'Symfony\Component\Form\Extension\Core\Type\HiddenType')
+            ->add('title', TextType::class)
+            ->add('content', TextareaType::class)
+            ->add('courseId', HiddenType::class)
+            ->add('taskId', HiddenType::class)
             ->getForm();
     }
 
     private function createPostForm($data = array())
     {
         return $this->createNamedFormBuilder('post', $data)
-            ->add('content', 'Symfony\Component\Form\Extension\Core\Type\TextareaType')
-            ->add('courseId', 'Symfony\Component\Form\Extension\Core\Type\HiddenType')
-            ->add('threadId', 'Symfony\Component\Form\Extension\Core\Type\HiddenType')
+            ->add('content', TextareaType::class)
+            ->add('courseId', HiddenType::class)
+            ->add('threadId', HiddenType::class)
             ->getForm();
     }
 

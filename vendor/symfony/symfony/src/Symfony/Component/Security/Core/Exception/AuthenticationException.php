@@ -26,32 +26,45 @@ class AuthenticationException extends \RuntimeException implements \Serializable
     /**
      * Get the token.
      *
-     * @return TokenInterface
+     * @return TokenInterface|null
      */
     public function getToken()
     {
         return $this->token;
     }
 
-    /**
-     * Set the token.
-     *
-     * @param TokenInterface $token
-     */
     public function setToken(TokenInterface $token)
     {
         $this->token = $token;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function serialize()
     {
-        return serialize(array(
+        $serialized = [
             $this->token,
             $this->code,
             $this->message,
             $this->file,
             $this->line,
-        ));
+        ];
+
+        return $this->doSerialize($serialized, \func_num_args() ? func_get_arg(0) : null);
+    }
+
+    /**
+     * @internal
+     */
+    protected function doSerialize($serialized, $isCalledFromOverridingMethod)
+    {
+        if (null === $isCalledFromOverridingMethod) {
+            $trace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 3);
+            $isCalledFromOverridingMethod = isset($trace[2]['function'], $trace[2]['object']) && 'serialize' === $trace[2]['function'] && $this === $trace[2]['object'];
+        }
+
+        return $isCalledFromOverridingMethod ? $serialized : serialize($serialized);
     }
 
     public function unserialize($str)
@@ -62,7 +75,7 @@ class AuthenticationException extends \RuntimeException implements \Serializable
             $this->message,
             $this->file,
             $this->line
-        ) = unserialize($str);
+        ) = \is_array($str) ? $str : unserialize($str);
     }
 
     /**
@@ -82,6 +95,6 @@ class AuthenticationException extends \RuntimeException implements \Serializable
      */
     public function getMessageData()
     {
-        return array();
+        return [];
     }
 }

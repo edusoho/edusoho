@@ -71,3 +71,15 @@ The ``SerializerServiceProvider`` provider provides a ``serializer`` service::
         ));
     })->assert("_format", "xml|json")
       ->assert("id", "\d+");
+
+Using a Cache
+-------------
+
+To use a cache, register a class implementing ``Doctrine\Common\Cache\Cache``::
+
+    $app->register(new Silex\Provider\SerializerServiceProvider());
+    $app['serializer.normalizers'] = function () use ($app) {
+        return [new \Symfony\Component\Serializer\Normalizer\CustomNormalizer(),
+            new \Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer(new ClassMetadataFactory(new  AnnotationLoader(new AnnotationReader()), $app['my_custom_cache']))
+        ];
+    };

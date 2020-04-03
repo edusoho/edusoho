@@ -17,7 +17,7 @@ class AuthenticateListener
 
     public function onAuthenticate(AuthenticationEvent $event)
     {
-        $request = $this->container->get('request');
+        $request = $this->container->get('request_stack')->getMasterRequest();
         $authToken = $request->headers->get(XAuthTokenAuthenticationListener::TOKEN_HEADER);
         if (!empty($authToken)) {
             $this->container->get('user.online_track')->track($request->headers->get(XAuthTokenAuthenticationListener::TOKEN_HEADER));

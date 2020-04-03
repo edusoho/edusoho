@@ -1,4 +1,14 @@
-1.3.0 (2016-08-27)
+1.3.0 (2018-10-17)
+------------------
+- Implement fluent interface (Thanks @Menelion)
+- Fix typos in README
+
+1.2.2 (2018-09-25)
+------------------
+- Make tests compatible with PHPUnit 6+
+- Fix #6 (Thanks @wenqinruan)
+
+1.2.1 (2016-08-27)
 ------------------
 - Fixed findJobByRegex not searching comments
 

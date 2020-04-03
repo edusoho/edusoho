@@ -12,8 +12,6 @@ use SebastianBergmann\Diff\Differ;
 
 /**
  * ...
- *
- * @since Class available since Release 3.5.0
  */
 class PHPUnit_Framework_Constraint_StringMatches extends PHPUnit_Framework_Constraint_PCREMatch
 {
@@ -67,7 +65,7 @@ class PHPUnit_Framework_Constraint_StringMatches extends PHPUnit_Framework_Const
     protected function createPatternFromFormat($string)
     {
         $string = str_replace(
-            array(
+            [
             '%e',
             '%s',
             '%S',
@@ -79,8 +77,8 @@ class PHPUnit_Framework_Constraint_StringMatches extends PHPUnit_Framework_Const
             '%x',
             '%f',
             '%c'
-            ),
-            array(
+            ],
+            [
             '\\' . DIRECTORY_SEPARATOR,
             '[^\r\n]+',
             '[^\r\n]*',
@@ -92,7 +90,7 @@ class PHPUnit_Framework_Constraint_StringMatches extends PHPUnit_Framework_Const
             '[0-9a-fA-F]+',
             '[+-]?\.?\d+\.?\d*(?:[Ee][+-]?\d+)?',
             '.'
-            ),
+            ],
             preg_quote($string, '/')
         );
 

@@ -24,7 +24,7 @@
         "symfony/debug": "For tracking deprecated interfaces usages at runtime with DebugClassLoader"
     },
     "conflict": {
-        "phpunit/phpunit": ">=6.0"
+        "phpunit/phpunit": "<4.8.35|<5.4.3,>=5.0|<6.4,>=6.0"
     },
     "autoload": {
         "files": [ "bootstrap.php" ],
@@ -33,10 +33,17 @@
             "/Tests/"
         ]
     },
+    "bin": [
+        "bin/simple-phpunit"
+    ],
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-master": "2.8-dev"
+            "dev-master": "3.4-dev"
+        },
+        "thanks": {
+            "name": "phpunit/phpunit",
+            "url": "https://github.com/sebastianbergmann/phpunit"
         }
     }
 }

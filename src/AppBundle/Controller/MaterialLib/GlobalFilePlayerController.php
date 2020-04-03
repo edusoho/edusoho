@@ -11,6 +11,7 @@ use Biz\Player\PlayerException;
 use Biz\User\TokenException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class GlobalFilePlayerController extends BaseController
 {
@@ -97,7 +98,7 @@ class GlobalFilePlayerController extends BaseController
             'token' => $token['token'],
         );
 
-        return $this->generateUrl('global_file_hls_playlist', $params, true);
+        return $this->generateUrl('global_file_hls_playlist', $params, UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     public function playlistAction(Request $request, $globalId, $token)
@@ -147,7 +148,7 @@ class GlobalFilePlayerController extends BaseController
                 'token' => $token['token'],
             );
 
-            $streams[$level] = $this->generateUrl('global_file_hls_stream', $params, true);
+            $streams[$level] = $this->generateUrl('global_file_hls_stream', $params, UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         $api = CloudAPIFactory::create('leaf');
@@ -216,7 +217,7 @@ class GlobalFilePlayerController extends BaseController
         $params['keyUrl'] = $this->generateUrl('global_file_hls_clef', array(
             'globalId' => $file['no'],
             'token' => $token['token'],
-        ), true);
+        ), UrlGeneratorInterface::ABSOLUTE_URL);
         $params['key'] = $file['metas']['levels'][$level]['key'];
         $params['fileId'] = $file['extno'];
 

@@ -5,6 +5,10 @@
 # @license http://www.gnu.org/licenses/lgpl.html LGPL v3 or later
 ###############
 
+- regex: 'Audacious(?:[ /]([\d\.]+))?'
+  name: 'Audacious'
+  version: '$1'
+
 - regex: 'Banshee(?:[ /]([\d\.]+))?'
   name: 'Banshee'
   version: '$1'
@@ -17,7 +21,11 @@
   name: 'Clementine'
   version: '$1'
 
-- regex: 'iTunes(?:/([\d\.]+))?'
+- regex: 'Deezer(?:/([\d\.]+))?'
+  name: 'Deezer'
+  version: '$1'
+
+- regex: 'iTunes(?:-iPhone|-iPad)?(?:/([\d\.]+))?'
   name: 'iTunes'
   version: '$1'
 
@@ -81,6 +89,14 @@
   name: 'Stagefright'
   version: '$1'
 
-- regex: 'Instacast(?:/([\d\.]+))? CFNetwork/([\d\.]+)'
-  name: 'Instacast'
+- regex: 'GoogleChirp(?:/(\d+[\.\d]+))?'
+  name: 'Google Podcasts'
+  version: '$1'
+
+- regex: 'Music Player Daemon (?:(\d+[\.\d]+))?'
+  name: 'Music Player Daemon'
+  version: '$1'
+
+- regex: 'mpv (?:(\d+[\.\d]+))?'
+  name: 'mpv'
   version: '$1'

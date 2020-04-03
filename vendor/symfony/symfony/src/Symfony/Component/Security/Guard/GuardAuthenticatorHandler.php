@@ -18,9 +18,9 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
+use Symfony\Component\Security\Http\Session\SessionAuthenticationStrategyInterface;
 
 /**
  * A utility class that does much of the *work* during the guard authentication process.
@@ -29,27 +29,34 @@ use Symfony\Component\Security\Http\SecurityEvents;
  * can be called directly (e.g. for manual authentication) or overridden.
  *
  * @author Ryan Weaver <ryan@knpuniversity.com>
+ *
+ * @final since version 3.4
  */
 class GuardAuthenticatorHandler
 {
     private $tokenStorage;
-
     private $dispatcher;
+    private $sessionStrategy;
+    private $statelessProviderKeys;
 
-    public function __construct(TokenStorageInterface $tokenStorage, EventDispatcherInterface $eventDispatcher = null)
+    /**
+     * @param array $statelessProviderKeys An array of provider/firewall keys that are "stateless" and so do not need the session migrated on success
+     */
+    public function __construct(TokenStorageInterface $tokenStorage, EventDispatcherInterface $eventDispatcher = null, array $statelessProviderKeys = [])
     {
         $this->tokenStorage = $tokenStorage;
         $this->dispatcher = $eventDispatcher;
+        $this->statelessProviderKeys = $statelessProviderKeys;
     }
 
     /**
      * Authenticates the given token in the system.
-     *
-     * @param TokenInterface $token
-     * @param Request        $request
      */
-    public function authenticateWithToken(TokenInterface $token, Request $request)
+    public function authenticateWithToken(TokenInterface $token, Request $request/*, string $providerKey */)
     {
+        $providerKey = \func_num_args() > 2 ? func_get_arg(2) : null;
+
+        $this->migrateSession($request, $token, $providerKey);
         $this->tokenStorage->setToken($token);
 
         if (null !== $this->dispatcher) {
@@ -61,12 +68,9 @@ class GuardAuthenticatorHandler
     /**
      * Returns the "on success" response for the given GuardAuthenticator.
      *
-     * @param TokenInterface              $token
-     * @param Request                     $request
-     * @param GuardAuthenticatorInterface $guardAuthenticator
-     * @param string                      $providerKey        The provider (i.e. firewall) key
+     * @param string $providerKey The provider (i.e. firewall) key
      *
-     * @return null|Response
+     * @return Response|null
      */
     public function handleAuthenticationSuccess(TokenInterface $token, Request $request, GuardAuthenticatorInterface $guardAuthenticator, $providerKey)
     {
@@ -77,21 +81,14 @@ class GuardAuthenticatorHandler
             return $response;
         }
 
-        throw new \UnexpectedValueException(sprintf(
-            'The %s::onAuthenticationSuccess method must return null or a Response object. You returned %s.',
-            get_class($guardAuthenticator),
-            is_object($response) ? get_class($response) : gettype($response)
-        ));
+        throw new \UnexpectedValueException(sprintf('The %s::onAuthenticationSuccess method must return null or a Response object. You returned %s.', \get_class($guardAuthenticator), \is_object($response) ? \get_class($response) : \gettype($response)));
     }
 
     /**
      * Convenience method for authenticating the user and returning the
      * Response *if any* for success.
      *
-     * @param UserInterface               $user
-     * @param Request                     $request
-     * @param GuardAuthenticatorInterface $authenticator
-     * @param string                      $providerKey   The provider (i.e. firewall) key
+     * @param string $providerKey The provider (i.e. firewall) key
      *
      * @return Response|null
      */
@@ -100,7 +97,7 @@ class GuardAuthenticatorHandler
         // create an authenticated token for the User
         $token = $authenticator->createAuthenticatedToken($user, $providerKey);
         // authenticate this in the system
-        $this->authenticateWithToken($token, $request);
+        $this->authenticateWithToken($token, $request, $providerKey);
 
         // return the success metric
         return $this->handleAuthenticationSuccess($token, $request, $authenticator, $providerKey);
@@ -110,30 +107,37 @@ class GuardAuthenticatorHandler
      * Handles an authentication failure and returns the Response for the
      * GuardAuthenticator.
      *
-     * @param AuthenticationException     $authenticationException
-     * @param Request                     $request
-     * @param GuardAuthenticatorInterface $guardAuthenticator
-     * @param string                      $providerKey             The key of the firewall
+     * @param string $providerKey The provider (i.e. firewall) key
      *
-     * @return null|Response
+     * @return Response|null
      */
     public function handleAuthenticationFailure(AuthenticationException $authenticationException, Request $request, GuardAuthenticatorInterface $guardAuthenticator, $providerKey)
     {
-        $token = $this->tokenStorage->getToken();
-        if ($token instanceof PostAuthenticationGuardToken && $providerKey === $token->getProviderKey()) {
-            $this->tokenStorage->setToken(null);
-        }
-
         $response = $guardAuthenticator->onAuthenticationFailure($request, $authenticationException);
         if ($response instanceof Response || null === $response) {
             // returning null is ok, it means they want the request to continue
             return $response;
         }
 
-        throw new \UnexpectedValueException(sprintf(
-            'The %s::onAuthenticationFailure method must return null or a Response object. You returned %s.',
-            get_class($guardAuthenticator),
-            is_object($response) ? get_class($response) : gettype($response)
-        ));
+        throw new \UnexpectedValueException(sprintf('The %s::onAuthenticationFailure method must return null or a Response object. You returned %s.', \get_class($guardAuthenticator), \is_object($response) ? \get_class($response) : \gettype($response)));
+    }
+
+    /**
+     * Call this method if your authentication token is stored to a session.
+     *
+     * @final
+     */
+    public function setSessionAuthenticationStrategy(SessionAuthenticationStrategyInterface $sessionStrategy)
+    {
+        $this->sessionStrategy = $sessionStrategy;
+    }
+
+    private function migrateSession(Request $request, TokenInterface $token, $providerKey)
+    {
+        if (!$this->sessionStrategy || !$request->hasSession() || !$request->hasPreviousSession() || \in_array($providerKey, $this->statelessProviderKeys, true)) {
+            return;
+        }
+
+        $this->sessionStrategy->onAuthentication($request, $token);
     }
 }

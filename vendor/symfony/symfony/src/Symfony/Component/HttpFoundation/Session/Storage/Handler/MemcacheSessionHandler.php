@@ -11,16 +11,15 @@
 
 namespace Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
+@trigger_error(sprintf('The class %s is deprecated since Symfony 3.4 and will be removed in 4.0. Use Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler instead.', MemcacheSessionHandler::class), E_USER_DEPRECATED);
+
 /**
- * MemcacheSessionHandler.
- *
  * @author Drak <drak@zikula.org>
+ *
+ * @deprecated since version 3.4, to be removed in 4.0. Use Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler instead.
  */
 class MemcacheSessionHandler implements \SessionHandlerInterface
 {
-    /**
-     * @var \Memcache Memcache driver
-     */
     private $memcache;
 
     /**
@@ -45,12 +44,10 @@ class MemcacheSessionHandler implements \SessionHandlerInterface
      *
      * @throws \InvalidArgumentException When unsupported options are passed
      */
-    public function __construct(\Memcache $memcache, array $options = array())
+    public function __construct(\Memcache $memcache, array $options = [])
     {
-        if ($diff = array_diff(array_keys($options), array('prefix', 'expiretime'))) {
-            throw new \InvalidArgumentException(sprintf(
-                'The following options are not supported "%s"', implode(', ', $diff)
-            ));
+        if ($diff = array_diff(array_keys($options), ['prefix', 'expiretime'])) {
+            throw new \InvalidArgumentException(sprintf('The following options are not supported "%s"', implode(', ', $diff)));
         }
 
         $this->memcache = $memcache;
@@ -95,7 +92,9 @@ class MemcacheSessionHandler implements \SessionHandlerInterface
      */
     public function destroy($sessionId)
     {
-        return $this->memcache->delete($this->prefix.$sessionId);
+        $this->memcache->delete($this->prefix.$sessionId);
+
+        return true;
     }
 
     /**

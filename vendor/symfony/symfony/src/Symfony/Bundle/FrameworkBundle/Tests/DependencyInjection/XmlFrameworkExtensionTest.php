@@ -11,9 +11,9 @@
 
 namespace Symfony\Bundle\FrameworkBundle\Tests\DependencyInjection;
 
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\Config\FileLocator;
 
 class XmlFrameworkExtensionTest extends FrameworkExtensionTest
 {
@@ -21,5 +21,10 @@ class XmlFrameworkExtensionTest extends FrameworkExtensionTest
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/Fixtures/xml'));
         $loader->load($file.'.xml');
+    }
+
+    public function testAssetsHelperIsRemovedWhenPhpTemplatingEngineIsEnabledAndAssetsAreDisabled()
+    {
+        $this->markTestSkipped('The assets key cannot be set to false using the XML configuration format.');
     }
 }

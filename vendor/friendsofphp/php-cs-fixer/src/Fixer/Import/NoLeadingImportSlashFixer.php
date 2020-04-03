@@ -15,6 +15,7 @@ namespace PhpCsFixer\Fixer\Import;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\Tokenizer\TokensAnalyzer;
 
@@ -29,7 +30,7 @@ final class NoLeadingImportSlashFixer extends AbstractFixer
     public function getDefinition()
     {
         return new FixerDefinition(
-            'Remove leading slashes in use clauses.',
+            'Remove leading slashes in `use` clauses.',
             array(new CodeSample("<?php\nnamespace Foo;\nuse \\Bar;"))
         );
     }
@@ -56,26 +57,20 @@ final class NoLeadingImportSlashFixer extends AbstractFixer
      */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
-        $foundNamespace = $tokens->findGivenKind(T_NAMESPACE);
-        if (empty($foundNamespace)) {
-            return;
-        }
-
         $tokensAnalyzer = new TokensAnalyzer($tokens);
-        $firstNamespaceIdx = key($foundNamespace);
+        $usesIndexes = $tokensAnalyzer->getImportUseIndexes();
 
-        $usesIdxs = $tokensAnalyzer->getImportUseIndexes();
-
-        foreach ($usesIdxs as $idx) {
-            if ($idx < $firstNamespaceIdx) {
-                continue;
-            }
-
-            $nextTokenIdx = $tokens->getNextNonWhitespace($idx);
+        foreach ($usesIndexes as $idx) {
+            $nextTokenIdx = $tokens->getNextMeaningfulToken($idx);
             $nextToken = $tokens[$nextTokenIdx];
 
             if ($nextToken->isGivenKind(T_NS_SEPARATOR)) {
-                $nextToken->clear();
+                $tokens->clearAt($nextTokenIdx);
+            } elseif ($nextToken->isGivenKind(array(CT::T_FUNCTION_IMPORT, CT::T_CONST_IMPORT))) {
+                $nextTokenIdx = $tokens->getNextMeaningfulToken($nextTokenIdx);
+                if ($tokens[$nextTokenIdx]->isGivenKind(T_NS_SEPARATOR)) {
+                    $tokens->clearAt($nextTokenIdx);
+                }
             }
         }
     }

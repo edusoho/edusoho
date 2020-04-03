@@ -11,10 +11,9 @@
 
 namespace Silex\Application;
 
-use Symfony\Component\Form;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilder;
-use Symfony\Component\OptionsResolver\OptionsResolver\FormTypeInterface;
+use Symfony\Component\Form\FormTypeInterface;
 
 /**
  * Form trait.
@@ -33,7 +32,7 @@ trait FormTrait
      *
      * @return FormBuilder
      */
-    public function form($data = null, array $options = array(), $type = null)
+    public function form($data = null, array $options = [], $type = null)
     {
         return $this['form.factory']->createBuilder($type ?: FormType::class, $data, $options);
     }
@@ -48,7 +47,7 @@ trait FormTrait
      *
      * @return FormBuilder
      */
-    public function namedForm($name, $data = null, array $options = array(), $type = null)
+    public function namedForm($name, $data = null, array $options = [], $type = null)
     {
         return $this['form.factory']->createNamedBuilder($name, $type ?: FormType::class, $data, $options);
     }

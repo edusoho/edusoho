@@ -12,6 +12,7 @@
 namespace Symfony\Component\DomCrawler\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DomCrawler\Field\TextareaFormField;
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\DomCrawler\FormFieldRegistry;
 
@@ -39,14 +40,14 @@ class FormTest extends TestCase
         $nodes = $dom->getElementsByTagName('input');
 
         try {
-            $form = new Form($nodes->item(0), 'http://example.com');
+            new Form($nodes->item(0), 'http://example.com');
             $this->fail('__construct() throws a \\LogicException if the node has no form ancestor');
         } catch (\LogicException $e) {
             $this->assertTrue(true, '__construct() throws a \\LogicException if the node has no form ancestor');
         }
 
         try {
-            $form = new Form($nodes->item(1), 'http://example.com');
+            new Form($nodes->item(1), 'http://example.com');
             $this->fail('__construct() throws a \\LogicException if the input type is not submit, button, or image');
         } catch (\LogicException $e) {
             $this->assertTrue(true, '__construct() throws a \\LogicException if the input type is not submit, button, or image');
@@ -55,7 +56,7 @@ class FormTest extends TestCase
         $nodes = $dom->getElementsByTagName('button');
 
         try {
-            $form = new Form($nodes->item(0), 'http://example.com');
+            new Form($nodes->item(0), 'http://example.com');
             $this->fail('__construct() throws a \\LogicException if the node has no form ancestor');
         } catch (\LogicException $e) {
             $this->assertTrue(true, '__construct() throws a \\LogicException if the node has no form ancestor');
@@ -63,11 +64,18 @@ class FormTest extends TestCase
     }
 
     /**
-     * __construct() should throw \\LogicException if the form attribute is invalid.
+     * @dataProvider constructorThrowsExceptionIfNoRelatedFormProvider
      *
-     * @expectedException \LogicException
+     * __construct() should throw a \LogicException if the form attribute is invalid.
      */
-    public function testConstructorThrowsExceptionIfNoRelatedForm()
+    public function testConstructorThrowsExceptionIfNoRelatedForm(\DOMElement $node)
+    {
+        $this->expectException('LogicException');
+
+        new Form($node, 'http://example.com');
+    }
+
+    public function constructorThrowsExceptionIfNoRelatedFormProvider()
     {
         $dom = new \DOMDocument();
         $dom->loadHTML('
@@ -82,8 +90,10 @@ class FormTest extends TestCase
 
         $nodes = $dom->getElementsByTagName('input');
 
-        $form = new Form($nodes->item(0), 'http://example.com');
-        $form = new Form($nodes->item(1), 'http://example.com');
+        return [
+            [$nodes->item(0)],
+            [$nodes->item(1)],
+        ];
     }
 
     public function testConstructorLoadsOnlyFieldsOfTheRightForm()
@@ -129,18 +139,18 @@ class FormTest extends TestCase
         $form2 = new Form($buttonElements->item(0), 'http://example.com');
 
         // Tests if form values are correctly assigned to forms
-        $values1 = array(
-            'apples' => array('1', '2'),
+        $values1 = [
+            'apples' => ['1', '2'],
             'form_name' => 'form-1',
             'button_1' => 'Capture fields',
             'outer_field' => 'success',
-        );
-        $values2 = array(
-            'oranges' => array('1', '2', '3'),
+        ];
+        $values2 = [
+            'oranges' => ['1', '2', '3'],
             'form_name' => 'form_2',
             'button_2' => '',
-            'app_frontend_form_type_contact_form_type' => array('contactType' => '', 'firstName' => 'John'),
-        );
+            'app_frontend_form_type_contact_form_type' => ['contactType' => '', 'firstName' => 'John'],
+        ];
 
         $this->assertEquals($values1, $form1->getPhpValues(), 'HTML5-compliant form attribute handled incorrectly');
         $this->assertEquals($values2, $form2->getPhpValues(), 'HTML5-compliant form attribute handled incorrectly');
@@ -149,19 +159,19 @@ class FormTest extends TestCase
     public function testMultiValuedFields()
     {
         $form = $this->createForm('<form>
-            <input type="text" name="foo[4]" value="foo" disabled="disabled" />
-            <input type="text" name="foo" value="foo" disabled="disabled" />
-            <input type="text" name="foo[2]" value="foo" disabled="disabled" />
-            <input type="text" name="foo[]" value="foo" disabled="disabled" />
-            <input type="text" name="bar[foo][]" value="foo" disabled="disabled" />
-            <input type="text" name="bar[foo][foobar]" value="foo" disabled="disabled" />
+            <input type="text" name="foo[4]" value="foo" />
+            <input type="text" name="foo" value="foo" />
+            <input type="text" name="foo[2]" value="foo" />
+            <input type="text" name="foo[]" value="foo" />
+            <input type="text" name="bar[foo][]" value="foo" />
+            <input type="text" name="bar[foo][foobar]" value="foo" />
             <input type="submit" />
         </form>
         ');
 
         $this->assertEquals(
             array_keys($form->all()),
-            array('foo[2]', 'foo[3]', 'bar[foo][0]', 'bar[foo][foobar]')
+            ['foo[2]', 'foo[3]', 'bar[foo][0]', 'bar[foo][foobar]']
         );
 
         $this->assertEquals($form->get('foo[2]')->getValue(), 'foo');
@@ -175,7 +185,7 @@ class FormTest extends TestCase
         $this->assertEquals($form->get('foo[2]')->getValue(), 'bar');
         $this->assertEquals($form->get('foo[3]')->getValue(), 'bar');
 
-        $form['bar'] = array('foo' => array('0' => 'bar', 'foobar' => 'foobar'));
+        $form['bar'] = ['foo' => ['0' => 'bar', 'foobar' => 'foobar']];
 
         $this->assertEquals($form->get('bar[foo][0]')->getValue(), 'bar');
         $this->assertEquals($form->get('bar[foo][foobar]')->getValue(), 'foobar');
@@ -191,9 +201,9 @@ class FormTest extends TestCase
             $values,
             array_map(
                 function ($field) {
-                    $class = get_class($field);
+                    $class = \get_class($field);
 
-                    return array(substr($class, strrpos($class, '\\') + 1), $field->getValue());
+                    return [substr($class, strrpos($class, '\\') + 1), $field->getValue()];
                 },
                 $form->all()
             ),
@@ -203,84 +213,84 @@ class FormTest extends TestCase
 
     public function provideInitializeValues()
     {
-        return array(
-            array(
+        return [
+            [
                 'does not take into account input fields without a name attribute',
                 '<input type="text" value="foo" />
                  <input type="submit" />',
-                array(),
-            ),
-            array(
+                [],
+            ],
+            [
                 'does not take into account input fields with an empty name attribute value',
                 '<input type="text" name="" value="foo" />
                  <input type="submit" />',
-                array(),
-            ),
-            array(
-                'takes into account disabled input fields',
+                [],
+            ],
+            [
+                'skips disabled input fields',
                 '<input type="text" name="foo" value="foo" disabled="disabled" />
                  <input type="submit" />',
-                array('foo' => array('InputFormField', 'foo')),
-            ),
-            array(
+                [],
+            ],
+            [
                 'appends the submitted button value',
                 '<input type="submit" name="bar" value="bar" />',
-                array('bar' => array('InputFormField', 'bar')),
-            ),
-            array(
+                ['bar' => ['InputFormField', 'bar']],
+            ],
+            [
                 'appends the submitted button value for Button element',
                 '<button type="submit" name="bar" value="bar">Bar</button>',
-                array('bar' => array('InputFormField', 'bar')),
-            ),
-            array(
+                ['bar' => ['InputFormField', 'bar']],
+            ],
+            [
                 'appends the submitted button value but not other submit buttons',
                 '<input type="submit" name="bar" value="bar" />
                  <input type="submit" name="foobar" value="foobar" />',
-                 array('foobar' => array('InputFormField', 'foobar')),
-            ),
-            array(
+                 ['foobar' => ['InputFormField', 'foobar']],
+            ],
+            [
                 'turns an image input into x and y fields',
                 '<input type="image" name="bar" />',
-                array('bar.x' => array('InputFormField', '0'), 'bar.y' => array('InputFormField', '0')),
-            ),
-            array(
+                ['bar.x' => ['InputFormField', '0'], 'bar.y' => ['InputFormField', '0']],
+            ],
+            [
                 'returns textareas',
                 '<textarea name="foo">foo</textarea>
                  <input type="submit" />',
-                 array('foo' => array('TextareaFormField', 'foo')),
-            ),
-            array(
+                 ['foo' => ['TextareaFormField', 'foo']],
+            ],
+            [
                 'returns inputs',
                 '<input type="text" name="foo" value="foo" />
                  <input type="submit" />',
-                 array('foo' => array('InputFormField', 'foo')),
-            ),
-            array(
+                 ['foo' => ['InputFormField', 'foo']],
+            ],
+            [
                 'returns checkboxes',
                 '<input type="checkbox" name="foo" value="foo" checked="checked" />
                  <input type="submit" />',
-                 array('foo' => array('ChoiceFormField', 'foo')),
-            ),
-            array(
+                 ['foo' => ['ChoiceFormField', 'foo']],
+            ],
+            [
                 'returns not-checked checkboxes',
                 '<input type="checkbox" name="foo" value="foo" />
                  <input type="submit" />',
-                 array('foo' => array('ChoiceFormField', false)),
-            ),
-            array(
+                 ['foo' => ['ChoiceFormField', false]],
+            ],
+            [
                 'returns radio buttons',
                 '<input type="radio" name="foo" value="foo" />
                  <input type="radio" name="foo" value="bar" checked="bar" />
                  <input type="submit" />',
-                 array('foo' => array('ChoiceFormField', 'bar')),
-            ),
-            array(
+                 ['foo' => ['ChoiceFormField', 'bar']],
+            ],
+            [
                 'returns file inputs',
                 '<input type="file" name="foo" />
                  <input type="submit" />',
-                 array('foo' => array('FileFormField', array('name' => '', 'type' => '', 'tmp_name' => '', 'error' => 4, 'size' => 0))),
-            ),
-        );
+                 ['foo' => ['FileFormField', ['name' => '', 'type' => '', 'tmp_name' => '', 'error' => 4, 'size' => 0]]],
+            ],
+        ];
     }
 
     public function testGetFormNode()
@@ -319,6 +329,12 @@ class FormTest extends TestCase
 
         $form = $this->createForm('<form method="post"><input type="submit" /></form>', 'patch');
         $this->assertEquals('PATCH', $form->getMethod(), '->getMethod() returns the method defined in the constructor if provided');
+    }
+
+    public function testGetMethodWithOverride()
+    {
+        $form = $this->createForm('<form method="get"><input type="submit" formmethod="post" /></form>');
+        $this->assertEquals('POST', $form->getMethod(), '->getMethod() returns the method attribute value of the form');
     }
 
     public function testGetSetValue()
@@ -370,92 +386,109 @@ class FormTest extends TestCase
     {
         $form = $this->createForm('<form><input type="text" name="foo" value="foo" /><input type="submit" /></form>');
         unset($form['foo']);
-        $this->assertFalse(isset($form['foo']), '->offsetUnset() removes a field');
+        $this->assertArrayNotHasKey('foo', $form, '->offsetUnset() removes a field');
     }
 
     public function testOffsetExists()
     {
         $form = $this->createForm('<form><input type="text" name="foo" value="foo" /><input type="submit" /></form>');
 
-        $this->assertTrue(isset($form['foo']), '->offsetExists() return true if the field exists');
-        $this->assertFalse(isset($form['bar']), '->offsetExists() return false if the field does not exist');
+        $this->assertArrayHasKey('foo', $form, '->offsetExists() return true if the field exists');
+        $this->assertArrayNotHasKey('bar', $form, '->offsetExists() return false if the field does not exist');
     }
 
     public function testGetValues()
     {
         $form = $this->createForm('<form><input type="text" name="foo[bar]" value="foo" /><input type="text" name="bar" value="bar" /><select multiple="multiple" name="baz[]"></select><input type="submit" /></form>');
-        $this->assertEquals(array('foo[bar]' => 'foo', 'bar' => 'bar', 'baz' => array()), $form->getValues(), '->getValues() returns all form field values');
+        $this->assertEquals(['foo[bar]' => 'foo', 'bar' => 'bar', 'baz' => []], $form->getValues(), '->getValues() returns all form field values');
 
         $form = $this->createForm('<form><input type="checkbox" name="foo" value="foo" /><input type="text" name="bar" value="bar" /><input type="submit" /></form>');
-        $this->assertEquals(array('bar' => 'bar'), $form->getValues(), '->getValues() does not include not-checked checkboxes');
+        $this->assertEquals(['bar' => 'bar'], $form->getValues(), '->getValues() does not include not-checked checkboxes');
 
         $form = $this->createForm('<form><input type="file" name="foo" value="foo" /><input type="text" name="bar" value="bar" /><input type="submit" /></form>');
-        $this->assertEquals(array('bar' => 'bar'), $form->getValues(), '->getValues() does not include file input fields');
+        $this->assertEquals(['bar' => 'bar'], $form->getValues(), '->getValues() does not include file input fields');
 
         $form = $this->createForm('<form><input type="text" name="foo" value="foo" disabled="disabled" /><input type="text" name="bar" value="bar" /><input type="submit" /></form>');
-        $this->assertEquals(array('bar' => 'bar'), $form->getValues(), '->getValues() does not include disabled fields');
+        $this->assertEquals(['bar' => 'bar'], $form->getValues(), '->getValues() does not include disabled fields');
+
+        $form = $this->createForm('<form><template><input type="text" name="foo" value="foo" /></template><input type="text" name="bar" value="bar" /><input type="submit" /></form>');
+        $this->assertEquals(['bar' => 'bar'], $form->getValues(), '->getValues() does not include template fields');
+        $this->assertFalse($form->has('foo'));
     }
 
     public function testSetValues()
     {
         $form = $this->createForm('<form><input type="checkbox" name="foo" value="foo" checked="checked" /><input type="text" name="bar" value="bar" /><input type="submit" /></form>');
-        $form->setValues(array('foo' => false, 'bar' => 'foo'));
-        $this->assertEquals(array('bar' => 'foo'), $form->getValues(), '->setValues() sets the values of fields');
+        $form->setValues(['foo' => false, 'bar' => 'foo']);
+        $this->assertEquals(['bar' => 'foo'], $form->getValues(), '->setValues() sets the values of fields');
     }
 
     public function testMultiselectSetValues()
     {
         $form = $this->createForm('<form><select multiple="multiple" name="multi"><option value="foo">foo</option><option value="bar">bar</option></select><input type="submit" /></form>');
-        $form->setValues(array('multi' => array('foo', 'bar')));
-        $this->assertEquals(array('multi' => array('foo', 'bar')), $form->getValues(), '->setValue() sets the values of select');
+        $form->setValues(['multi' => ['foo', 'bar']]);
+        $this->assertEquals(['multi' => ['foo', 'bar']], $form->getValues(), '->setValue() sets the values of select');
     }
 
     public function testGetPhpValues()
     {
         $form = $this->createForm('<form><input type="text" name="foo[bar]" value="foo" /><input type="text" name="bar" value="bar" /><input type="submit" /></form>');
-        $this->assertEquals(array('foo' => array('bar' => 'foo'), 'bar' => 'bar'), $form->getPhpValues(), '->getPhpValues() converts keys with [] to arrays');
+        $this->assertEquals(['foo' => ['bar' => 'foo'], 'bar' => 'bar'], $form->getPhpValues(), '->getPhpValues() converts keys with [] to arrays');
 
         $form = $this->createForm('<form><input type="text" name="fo.o[ba.r]" value="foo" /><input type="text" name="ba r" value="bar" /><input type="submit" /></form>');
-        $this->assertEquals(array('fo.o' => array('ba.r' => 'foo'), 'ba r' => 'bar'), $form->getPhpValues(), '->getPhpValues() preserves periods and spaces in names');
+        $this->assertEquals(['fo.o' => ['ba.r' => 'foo'], 'ba r' => 'bar'], $form->getPhpValues(), '->getPhpValues() preserves periods and spaces in names');
 
         $form = $this->createForm('<form><input type="text" name="fo.o[ba.r][]" value="foo" /><input type="text" name="fo.o[ba.r][ba.z]" value="bar" /><input type="submit" /></form>');
-        $this->assertEquals(array('fo.o' => array('ba.r' => array('foo', 'ba.z' => 'bar'))), $form->getPhpValues(), '->getPhpValues() preserves periods and spaces in names recursively');
+        $this->assertEquals(['fo.o' => ['ba.r' => ['foo', 'ba.z' => 'bar']]], $form->getPhpValues(), '->getPhpValues() preserves periods and spaces in names recursively');
 
         $form = $this->createForm('<form><input type="text" name="foo[bar]" value="foo" /><input type="text" name="bar" value="bar" /><select multiple="multiple" name="baz[]"></select><input type="submit" /></form>');
-        $this->assertEquals(array('foo' => array('bar' => 'foo'), 'bar' => 'bar'), $form->getPhpValues(), "->getPhpValues() doesn't return empty values");
+        $this->assertEquals(['foo' => ['bar' => 'foo'], 'bar' => 'bar'], $form->getPhpValues(), "->getPhpValues() doesn't return empty values");
     }
 
     public function testGetFiles()
     {
         $form = $this->createForm('<form><input type="file" name="foo[bar]" /><input type="text" name="bar" value="bar" /><input type="submit" /></form>');
-        $this->assertEquals(array(), $form->getFiles(), '->getFiles() returns an empty array if method is get');
+        $this->assertEquals([], $form->getFiles(), '->getFiles() returns an empty array if method is get');
 
         $form = $this->createForm('<form method="post"><input type="file" name="foo[bar]" /><input type="text" name="bar" value="bar" /><input type="submit" /></form>');
-        $this->assertEquals(array('foo[bar]' => array('name' => '', 'type' => '', 'tmp_name' => '', 'error' => 4, 'size' => 0)), $form->getFiles(), '->getFiles() only returns file fields for POST');
+        $this->assertEquals(['foo[bar]' => ['name' => '', 'type' => '', 'tmp_name' => '', 'error' => 4, 'size' => 0]], $form->getFiles(), '->getFiles() only returns file fields for POST');
 
         $form = $this->createForm('<form method="post"><input type="file" name="foo[bar]" /><input type="text" name="bar" value="bar" /><input type="submit" /></form>', 'put');
-        $this->assertEquals(array('foo[bar]' => array('name' => '', 'type' => '', 'tmp_name' => '', 'error' => 4, 'size' => 0)), $form->getFiles(), '->getFiles() only returns file fields for PUT');
+        $this->assertEquals(['foo[bar]' => ['name' => '', 'type' => '', 'tmp_name' => '', 'error' => 4, 'size' => 0]], $form->getFiles(), '->getFiles() only returns file fields for PUT');
 
         $form = $this->createForm('<form method="post"><input type="file" name="foo[bar]" /><input type="text" name="bar" value="bar" /><input type="submit" /></form>', 'delete');
-        $this->assertEquals(array('foo[bar]' => array('name' => '', 'type' => '', 'tmp_name' => '', 'error' => 4, 'size' => 0)), $form->getFiles(), '->getFiles() only returns file fields for DELETE');
+        $this->assertEquals(['foo[bar]' => ['name' => '', 'type' => '', 'tmp_name' => '', 'error' => 4, 'size' => 0]], $form->getFiles(), '->getFiles() only returns file fields for DELETE');
 
         $form = $this->createForm('<form method="post"><input type="file" name="foo[bar]" /><input type="text" name="bar" value="bar" /><input type="submit" /></form>', 'patch');
-        $this->assertEquals(array('foo[bar]' => array('name' => '', 'type' => '', 'tmp_name' => '', 'error' => 4, 'size' => 0)), $form->getFiles(), '->getFiles() only returns file fields for PATCH');
+        $this->assertEquals(['foo[bar]' => ['name' => '', 'type' => '', 'tmp_name' => '', 'error' => 4, 'size' => 0]], $form->getFiles(), '->getFiles() only returns file fields for PATCH');
 
         $form = $this->createForm('<form method="post"><input type="file" name="foo[bar]" disabled="disabled" /><input type="submit" /></form>');
-        $this->assertEquals(array(), $form->getFiles(), '->getFiles() does not include disabled file fields');
+        $this->assertEquals([], $form->getFiles(), '->getFiles() does not include disabled file fields');
+
+        $form = $this->createForm('<form method="post"><template><input type="file" name="foo"/></template><input type="text" name="bar" value="bar"/><input type="submit"/></form>');
+        $this->assertEquals([], $form->getFiles(), '->getFiles() does not include template file fields');
+        $this->assertFalse($form->has('foo'));
     }
 
     public function testGetPhpFiles()
     {
         $form = $this->createForm('<form method="post"><input type="file" name="foo[bar]" /><input type="text" name="bar" value="bar" /><input type="submit" /></form>');
-        $this->assertEquals(array('foo' => array('bar' => array('name' => '', 'type' => '', 'tmp_name' => '', 'error' => 4, 'size' => 0))), $form->getPhpFiles(), '->getPhpFiles() converts keys with [] to arrays');
+        $this->assertEquals(['foo' => ['bar' => ['name' => '', 'type' => '', 'tmp_name' => '', 'error' => 4, 'size' => 0]]], $form->getPhpFiles(), '->getPhpFiles() converts keys with [] to arrays');
 
         $form = $this->createForm('<form method="post"><input type="file" name="f.o o[bar]" /><input type="text" name="bar" value="bar" /><input type="submit" /></form>');
-        $this->assertEquals(array('f.o o' => array('bar' => array('name' => '', 'type' => '', 'tmp_name' => '', 'error' => 4, 'size' => 0))), $form->getPhpFiles(), '->getPhpFiles() preserves periods and spaces in names');
+        $this->assertEquals(['f.o o' => ['bar' => ['name' => '', 'type' => '', 'tmp_name' => '', 'error' => 4, 'size' => 0]]], $form->getPhpFiles(), '->getPhpFiles() preserves periods and spaces in names');
 
         $form = $this->createForm('<form method="post"><input type="file" name="f.o o[bar][ba.z]" /><input type="file" name="f.o o[bar][]" /><input type="text" name="bar" value="bar" /><input type="submit" /></form>');
-        $this->assertEquals(array('f.o o' => array('bar' => array('ba.z' => array('name' => '', 'type' => '', 'tmp_name' => '', 'error' => 4, 'size' => 0), array('name' => '', 'type' => '', 'tmp_name' => '', 'error' => 4, 'size' => 0)))), $form->getPhpFiles(), '->getPhpFiles() preserves periods and spaces in names recursively');
+        $this->assertEquals(['f.o o' => ['bar' => ['ba.z' => ['name' => '', 'type' => '', 'tmp_name' => '', 'error' => 4, 'size' => 0], ['name' => '', 'type' => '', 'tmp_name' => '', 'error' => 4, 'size' => 0]]]], $form->getPhpFiles(), '->getPhpFiles() preserves periods and spaces in names recursively');
+
+        $form = $this->createForm('<form method="post"><input type="file" name="foo[bar]" /><input type="text" name="bar" value="bar" /><input type="submit" /></form>');
+        $files = $form->getPhpFiles();
+
+        $this->assertSame(0, $files['foo']['bar']['size'], '->getPhpFiles() converts size to int');
+        $this->assertSame(4, $files['foo']['bar']['error'], '->getPhpFiles() converts error to int');
+
+        $form = $this->createForm('<form method="post"><input type="file" name="size[error]" /><input type="text" name="error" value="error" /><input type="submit" /></form>');
+        $this->assertEquals(['size' => ['error' => ['name' => '', 'type' => '', 'tmp_name' => '', 'error' => 4, 'size' => 0]]], $form->getPhpFiles(), '->getPhpFiles() int conversion does not collide with file names');
     }
 
     /**
@@ -528,85 +561,91 @@ class FormTest extends TestCase
         $this->assertEquals('http://localhost/foo/bar', $form->getUri(), '->getUri() returns path if no action defined');
     }
 
+    public function testGetUriWithActionOverride()
+    {
+        $form = $this->createForm('<form action="/foo"><button type="submit" formaction="/bar" /></form>', null, 'http://localhost/foo/');
+        $this->assertEquals('http://localhost/bar', $form->getUri(), '->getUri() returns absolute URIs');
+    }
+
     public function provideGetUriValues()
     {
-        return array(
-            array(
+        return [
+            [
                 'returns the URI of the form',
                 '<form action="/foo"><input type="submit" /></form>',
-                array(),
+                [],
                 '/foo',
-            ),
-            array(
+            ],
+            [
                 'appends the form values if the method is get',
                 '<form action="/foo"><input type="text" name="foo" value="foo" /><input type="submit" /></form>',
-                array(),
+                [],
                 '/foo?foo=foo',
-            ),
-            array(
+            ],
+            [
                 'appends the form values and merges the submitted values',
                 '<form action="/foo"><input type="text" name="foo" value="foo" /><input type="submit" /></form>',
-                array('foo' => 'bar'),
+                ['foo' => 'bar'],
                 '/foo?foo=bar',
-            ),
-            array(
+            ],
+            [
                 'does not append values if the method is post',
                 '<form action="/foo" method="post"><input type="text" name="foo" value="foo" /><input type="submit" /></form>',
-                array(),
+                [],
                 '/foo',
-            ),
-            array(
+            ],
+            [
                 'does not append values if the method is patch',
                 '<form action="/foo" method="post"><input type="text" name="foo" value="foo" /><input type="submit" /></form>',
-                array(),
+                [],
                 '/foo',
                 'PUT',
-            ),
-            array(
+            ],
+            [
                 'does not append values if the method is delete',
                 '<form action="/foo" method="post"><input type="text" name="foo" value="foo" /><input type="submit" /></form>',
-                array(),
+                [],
                 '/foo',
                 'DELETE',
-            ),
-            array(
+            ],
+            [
                 'does not append values if the method is put',
                 '<form action="/foo" method="post"><input type="text" name="foo" value="foo" /><input type="submit" /></form>',
-                array(),
+                [],
                 '/foo',
                 'PATCH',
-            ),
-            array(
+            ],
+            [
                 'appends the form values to an existing query string',
                 '<form action="/foo?bar=bar"><input type="text" name="foo" value="foo" /><input type="submit" /></form>',
-                array(),
+                [],
                 '/foo?bar=bar&foo=foo',
-            ),
-            array(
+            ],
+            [
                 'replaces query values with the form values',
                 '<form action="/foo?bar=bar"><input type="text" name="bar" value="foo" /><input type="submit" /></form>',
-                array(),
+                [],
                 '/foo?bar=foo',
-            ),
-            array(
+            ],
+            [
                 'returns an empty URI if the action is empty',
                 '<form><input type="submit" /></form>',
-                array(),
+                [],
                 '/',
-            ),
-            array(
+            ],
+            [
                 'appends the form values even if the action is empty',
                 '<form><input type="text" name="foo" value="foo" /><input type="submit" /></form>',
-                array(),
+                [],
                 '/?foo=foo',
-            ),
-            array(
+            ],
+            [
                 'chooses the path if the action attribute value is a sharp (#)',
                 '<form action="#" method="post"><input type="text" name="foo" value="foo" /><input type="submit" /></form>',
-                array(),
+                [],
                 '/#',
-            ),
-        );
+            ],
+        ];
     }
 
     public function testHas()
@@ -685,20 +724,16 @@ class FormTest extends TestCase
         $registry->remove('[t:dbt%3adate;]data_daterange_enddate_value');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testFormFieldRegistryGetThrowAnExceptionWhenTheFieldDoesNotExist()
     {
+        $this->expectException('InvalidArgumentException');
         $registry = new FormFieldRegistry();
         $registry->get('foo');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testFormFieldRegistrySetThrowAnExceptionWhenTheFieldDoesNotExist()
     {
+        $this->expectException('InvalidArgumentException');
         $registry = new FormFieldRegistry();
         $registry->set('foo', null);
     }
@@ -732,7 +767,7 @@ class FormTest extends TestCase
         $registry->add($this->getFormFieldMock('bar[baz]'));
 
         $this->assertEquals(
-            array('foo[0]', 'foo[1]', 'bar[5]', 'bar[6]', 'bar[baz]'),
+            ['foo[0]', 'foo[1]', 'bar[5]', 'bar[6]', 'bar[baz]'],
             array_keys($registry->all())
         );
     }
@@ -766,37 +801,33 @@ class FormTest extends TestCase
         $registry->set('foo[3]', 3);
         $registry->set('foo[bar][baz]', 'fbb');
 
-        $registry->set('foo', array(
+        $registry->set('foo', [
             2 => 2,
             3 => 3,
-            'bar' => array(
+            'bar' => [
                 'baz' => 'fbb',
-             ),
-        ));
+             ],
+        ]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Cannot set value on a compound field "foo[bar]".
-     */
     public function testFormRegistrySetValueOnCompoundField()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Cannot set value on a compound field "foo[bar]".');
         $registry = new FormFieldRegistry();
         $registry->add($this->getFormFieldMock('foo[bar][baz]'));
 
         $registry->set('foo[bar]', 'fbb');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unreachable field "0"
-     */
     public function testFormRegistrySetArrayOnNotCompoundField()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Unreachable field "0"');
         $registry = new FormFieldRegistry();
         $registry->add($this->getFormFieldMock('bar'));
 
-        $registry->set('bar', array('baz'));
+        $registry->set('bar', ['baz']);
     }
 
     public function testDifferentFieldTypesWithSameName()
@@ -825,7 +856,7 @@ class FormTest extends TestCase
     {
         $field = $this
             ->getMockBuilder('Symfony\\Component\\DomCrawler\\Field\\FormField')
-            ->setMethods(array('getName', 'getValue', 'setValue', 'initialize'))
+            ->setMethods(['getName', 'getValue', 'setValue', 'initialize'])
             ->disableOriginalConstructor()
             ->getMock()
         ;
@@ -833,13 +864,13 @@ class FormTest extends TestCase
         $field
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue($name))
+            ->willReturn($name)
         ;
 
         $field
             ->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($value))
+            ->willReturn($value)
         ;
 
         return $field;
@@ -848,7 +879,7 @@ class FormTest extends TestCase
     protected function createForm($form, $method = null, $currentUri = null)
     {
         $dom = new \DOMDocument();
-        $dom->loadHTML('<html>'.$form.'</html>');
+        @$dom->loadHTML('<html>'.$form.'</html>');
 
         $xPath = new \DOMXPath($dom);
         $nodes = $xPath->query('//input | //button');
@@ -923,19 +954,49 @@ class FormTest extends TestCase
         return $dom;
     }
 
-    public function testgetPhpValuesWithEmptyTextarea()
+    public function testGetPhpValuesWithEmptyTextarea()
     {
         $dom = new \DOMDocument();
         $dom->loadHTML('
-              <html>
-                  <form>
-                      <textarea name="example"></textarea>
-                  </form>
-              </html>
-          ');
+            <html>
+                <form>
+                    <textarea name="example"></textarea>
+                </form>
+            </html>'
+        );
 
         $nodes = $dom->getElementsByTagName('form');
         $form = new Form($nodes->item(0), 'http://example.com');
-        $this->assertEquals($form->getPhpValues(), array('example' => ''));
+        $this->assertEquals($form->getPhpValues(), ['example' => '']);
+    }
+
+    public function testGetReturnTypes()
+    {
+        $dom = new \DOMDocument();
+        $dom->loadHTML('
+            <html>
+                <form>
+                    <textarea name="foo[collection][0][bar]">item 0</textarea>
+                </form>
+            </html>'
+        );
+
+        $nodes = $dom->getElementsByTagName('form');
+        $form = new Form($nodes->item(0), 'http://example.com');
+
+        // FormField
+        $this->assertInstanceOf(TextareaFormField::class, $textareaFormField = $form->get('foo[collection][0][bar]'));
+
+        // Array of FormField
+        $this->assertSame([
+            'bar' => $textareaFormField,
+        ], $form->get('foo[collection][0]'));
+
+        // Array of array of FormField
+        $this->assertSame([
+            [
+                'bar' => $textareaFormField,
+            ],
+        ], $form->get('foo[collection]'));
     }
 }

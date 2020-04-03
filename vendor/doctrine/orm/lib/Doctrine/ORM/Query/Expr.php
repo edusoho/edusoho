@@ -21,7 +21,7 @@ namespace Doctrine\ORM\Query;
 
 /**
  * This class is used to generate DQL expressions via a set of PHP static functions.
-
+ *
  * @link    www.doctrine-project.org
  * @since   2.0
  * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
@@ -643,5 +643,31 @@ class Expr
     public function trim($x)
     {
         return new Expr\Func('TRIM', $x);
+    }
+
+    /**
+     * Creates an instance of MEMBER OF function, with the given arguments.
+     *
+     * @param string $x Value to be checked
+     * @param string $y Value to be checked against
+     *
+     * @return Expr\Comparison
+     */
+    public function isMemberOf($x, $y)
+    {
+        return new Expr\Comparison($x, 'MEMBER OF', $y);
+    }
+
+    /**
+     * Creates an instance of INSTANCE OF function, with the given arguments.
+     *
+     * @param string $x Value to be checked
+     * @param string $y Value to be checked against
+     *
+     * @return Expr\Comparison
+     */
+    public function isInstanceOf($x, $y)
+    {
+        return new Expr\Comparison($x, 'INSTANCE OF', $y);
     }
 }

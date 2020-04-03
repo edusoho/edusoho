@@ -14,10 +14,12 @@ namespace Silex\Tests\Provider;
 use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
+use PHPUnit\Framework\TestCase;
 use Silex\Application;
 use Silex\Provider\MonologServiceProvider;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
@@ -25,8 +27,21 @@ use Symfony\Component\HttpKernel\Kernel;
  *
  * @author Igor Wiedler <igor@wiedler.ch>
  */
-class MonologServiceProviderTest extends \PHPUnit_Framework_TestCase
+class MonologServiceProviderTest extends TestCase
 {
+    private $currErrorHandler;
+
+    protected function setUp()
+    {
+        $this->currErrorHandler = set_error_handler('var_dump');
+        restore_error_handler();
+    }
+
+    protected function tearDown()
+    {
+        set_error_handler($this->currErrorHandler);
+    }
+
     public function testRequestLogging()
     {
         $app = $this->getApplication();
@@ -72,10 +87,10 @@ class MonologServiceProviderTest extends \PHPUnit_Framework_TestCase
     {
         $app = new Application();
 
-        $app->register(new MonologServiceProvider(), array(
+        $app->register(new MonologServiceProvider(), [
             'monolog.formatter' => new JsonFormatter(),
             'monolog.logfile' => 'php://memory',
-        ));
+        ]);
 
         $this->assertInstanceOf('Monolog\Formatter\JsonFormatter', $app['monolog.handler']->getFormatter());
     }
@@ -96,7 +111,6 @@ class MonologServiceProviderTest extends \PHPUnit_Framework_TestCase
         $request = Request::create('/error');
         $app->handle($request);
 
-        $records = $app['monolog.handler']->getRecords();
         $pattern = "#Symfony\\\\Component\\\\HttpKernel\\\\Exception\\\\NotFoundHttpException: No route found for \"GET /error\" \(uncaught exception\) at .* line \d+#";
         $this->assertMatchingRecord($pattern, Logger::ERROR, $app['monolog.handler']);
 
@@ -137,15 +151,15 @@ class MonologServiceProviderTest extends \PHPUnit_Framework_TestCase
         $app = $this->getApplication();
         $app['monolog.level'] = Logger::ERROR;
 
-        $app->register(new \Silex\Provider\SecurityServiceProvider(), array(
-            'security.firewalls' => array(
-                'admin' => array(
+        $app->register(new \Silex\Provider\SecurityServiceProvider(), [
+            'security.firewalls' => [
+                'admin' => [
                     'pattern' => '^/admin',
                     'http' => true,
-                    'users' => array(),
-                ),
-            ),
-        ));
+                    'users' => [],
+                ],
+            ],
+        ]);
 
         $app->get('/admin', function () {
             return 'SECURE!';
@@ -187,7 +201,32 @@ class MonologServiceProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($app['monolog.handler']->getRecords(), 'Expected no logging to occur');
     }
 
-    protected function assertMatchingRecord($pattern, $level, $handler)
+    public function testExceptionFiltering()
+    {
+        $app = new Application();
+        $app->get('/foo', function () use ($app) {
+            throw new NotFoundHttpException();
+        });
+
+        $level = Logger::ERROR;
+        $app->register(new MonologServiceProvider(), [
+            'monolog.exception.logger_filter' => $app->protect(function () {
+                return Logger::DEBUG;
+            }),
+            'monolog.handler' => function () use ($app) {
+                return new TestHandler($app['monolog.level']);
+            },
+            'monolog.level' => $level,
+            'monolog.logfile' => 'php://memory',
+        ]);
+
+        $request = Request::create('/foo');
+        $app->handle($request);
+
+        $this->assertCount(0, $app['monolog.handler']->getRecords(), 'Expected no logging to occur');
+    }
+
+    protected function assertMatchingRecord($pattern, $level, TestHandler $handler)
     {
         $found = false;
         $records = $handler->getRecords();
@@ -204,14 +243,14 @@ class MonologServiceProviderTest extends \PHPUnit_Framework_TestCase
     {
         $app = new Application();
 
-        $app->register(new MonologServiceProvider(), array(
+        $app->register(new MonologServiceProvider(), [
             'monolog.handler' => function () use ($app) {
                 $level = MonologServiceProvider::translateLevel($app['monolog.level']);
 
                 return new TestHandler($level);
             },
             'monolog.logfile' => 'php://memory',
-        ));
+        ]);
 
         return $app;
     }

@@ -87,7 +87,7 @@ class ControllerGenerator extends Generator
         if (file_exists($file)) {
             $content = file_get_contents($file);
         } elseif (!is_dir($dir = $bundle->getPath().'/Resources/config')) {
-            mkdir($dir);
+            self::mkdir($dir);
         }
 
         $controller = $bundle->getName().':'.$controller.':'.$action['basename'];
@@ -191,6 +191,6 @@ EOT;
 
         list($data['bundle'], $data['controller'], $data['template']) = explode(':', $logicalName);
 
-        return ($part ? $data[$part] : $data);
+        return $part ? $data[$part] : $data;
     }
 }

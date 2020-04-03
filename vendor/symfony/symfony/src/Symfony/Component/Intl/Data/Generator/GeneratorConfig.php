@@ -22,21 +22,18 @@ use Symfony\Component\Intl\Data\Bundle\Writer\BundleWriterInterface;
  */
 class GeneratorConfig
 {
-    /**
-     * @var string
-     */
     private $sourceDir;
-
-    /**
-     * @var string
-     */
     private $icuVersion;
 
     /**
      * @var BundleWriterInterface[]
      */
-    private $bundleWriters = array();
+    private $bundleWriters = [];
 
+    /**
+     * @param string $sourceDir
+     * @param string $icuVersion
+     */
     public function __construct($sourceDir, $icuVersion)
     {
         $this->sourceDir = $sourceDir;

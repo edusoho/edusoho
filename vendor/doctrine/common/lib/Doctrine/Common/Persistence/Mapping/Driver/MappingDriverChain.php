@@ -19,7 +19,6 @@
 
 namespace Doctrine\Common\Persistence\Mapping\Driver;
 
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\Mapping\MappingException;
 
@@ -40,12 +39,12 @@ class MappingDriverChain implements MappingDriver
      *
      * @var MappingDriver|null
      */
-    private $defaultDriver = null;
+    private $defaultDriver;
 
     /**
      * @var array
      */
-    private $drivers = array();
+    private $drivers = [];
 
     /**
      * Gets the default driver.
@@ -118,8 +117,8 @@ class MappingDriverChain implements MappingDriver
      */
     public function getAllClassNames()
     {
-        $classNames = array();
-        $driverClasses = array();
+        $classNames = [];
+        $driverClasses = [];
 
         /* @var $driver MappingDriver */
         foreach ($this->drivers AS $namespace => $driver) {

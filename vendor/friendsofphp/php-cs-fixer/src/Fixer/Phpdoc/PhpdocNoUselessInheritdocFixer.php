@@ -15,7 +15,9 @@ namespace PhpCsFixer\Fixer\Phpdoc;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Preg;
 use PhpCsFixer\Tokenizer\CT;
+use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
@@ -31,7 +33,7 @@ final class PhpdocNoUselessInheritdocFixer extends AbstractFixer
     public function getDefinition()
     {
         return new FixerDefinition(
-            'Classy that does not inherit must not have inheritdoc tags.',
+            'Classy that does not inherit must not have `@inheritdoc` tags.',
             array(
                 new CodeSample("<?php\n/** {@inheritdoc} */\nclass Sample\n{\n}"),
                 new CodeSample("<?php\nclass Sample\n{\n    /**\n     * @inheritdoc\n     */\n    public function Test()\n    {\n    }\n}"),
@@ -44,7 +46,7 @@ final class PhpdocNoUselessInheritdocFixer extends AbstractFixer
      */
     public function getPriority()
     {
-        // Should run before NoEmptyPhpdocFixer, PhpdocInlineTagFixer and NoTrailingWhitespaceInCommentFixer
+        // Should run before NoEmptyPhpdocFixer, NoTrailingWhitespaceInCommentFixer
         // and after PhpdocToCommentFixer.
         return 6;
     }
@@ -138,7 +140,7 @@ final class PhpdocNoUselessInheritdocFixer extends AbstractFixer
     private function fixToken(Tokens $tokens, $tokenIndex)
     {
         $count = 0;
-        $content = preg_replace_callback(
+        $content = Preg::replaceCallback(
             '#(\h*(?:@{*|{*\h*@)\h*inheritdoc\h*)([^}]*)((?:}*)\h*)#i',
             function ($matches) {
                 return ' '.$matches[2];
@@ -149,7 +151,7 @@ final class PhpdocNoUselessInheritdocFixer extends AbstractFixer
         );
 
         if ($count) {
-            $tokens[$tokenIndex]->setContent($content);
+            $tokens[$tokenIndex] = new Token(array(T_DOC_COMMENT, $content));
         }
     }
 

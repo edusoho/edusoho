@@ -3,12 +3,16 @@
 namespace Omnipay\Alipay\Responses;
 
 use Omnipay\Alipay\Requests\AopCompletePurchaseRequest;
-class AopCompletePurchaseResponse extends \Omnipay\Alipay\Responses\AbstractResponse
+
+class AopCompletePurchaseResponse extends AbstractResponse
 {
+
     /**
      * @var AopCompletePurchaseRequest
      */
     protected $request;
+
+
     public function getResponseText()
     {
         if ($this->isSuccessful()) {
@@ -17,6 +21,8 @@ class AopCompletePurchaseResponse extends \Omnipay\Alipay\Responses\AbstractResp
             return 'fail';
         }
     }
+
+
     /**
      * Is the response successful?
      *
@@ -26,6 +32,8 @@ class AopCompletePurchaseResponse extends \Omnipay\Alipay\Responses\AbstractResp
     {
         return true;
     }
+
+
     public function isPaid()
     {
         if (array_get($this->data, 'trade_status')) {

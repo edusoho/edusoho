@@ -18,15 +18,6 @@ use Symfony\Component\Security\Core\Role\Role;
 
 class ExpressionVoterTest extends TestCase
 {
-    public function testSupportsAttribute()
-    {
-        $expression = $this->createExpression();
-        $expressionLanguage = $this->getMockBuilder('Symfony\Component\Security\Core\Authorization\ExpressionLanguage')->getMock();
-        $voter = new ExpressionVoter($expressionLanguage, $this->createTrustResolver(), $this->createRoleHierarchy());
-
-        $this->assertTrue($voter->supportsAttribute($expression));
-    }
-
     /**
      * @dataProvider getVoteTests
      */
@@ -39,15 +30,15 @@ class ExpressionVoterTest extends TestCase
 
     public function getVoteTests()
     {
-        return array(
-            array(array(), array(), VoterInterface::ACCESS_ABSTAIN, false, false),
-            array(array(), array('FOO'), VoterInterface::ACCESS_ABSTAIN, false, false),
+        return [
+            [[], [], VoterInterface::ACCESS_ABSTAIN, false, false],
+            [[], ['FOO'], VoterInterface::ACCESS_ABSTAIN, false, false],
 
-            array(array(), array($this->createExpression()), VoterInterface::ACCESS_DENIED, true, false),
+            [[], [$this->createExpression()], VoterInterface::ACCESS_DENIED, true, false],
 
-            array(array('ROLE_FOO'), array($this->createExpression(), $this->createExpression()), VoterInterface::ACCESS_GRANTED),
-            array(array('ROLE_BAR', 'ROLE_FOO'), array($this->createExpression()), VoterInterface::ACCESS_GRANTED),
-        );
+            [['ROLE_FOO'], [$this->createExpression(), $this->createExpression()], VoterInterface::ACCESS_GRANTED],
+            [['ROLE_BAR', 'ROLE_FOO'], [$this->createExpression()], VoterInterface::ACCESS_GRANTED],
+        ];
     }
 
     protected function getToken(array $roles, $tokenExpectsGetRoles = true)
@@ -60,7 +51,7 @@ class ExpressionVoterTest extends TestCase
         if ($tokenExpectsGetRoles) {
             $token->expects($this->once())
                 ->method('getRoles')
-                ->will($this->returnValue($roles));
+                ->willReturn($roles);
         }
 
         return $token;
@@ -73,7 +64,7 @@ class ExpressionVoterTest extends TestCase
         if ($expressionLanguageExpectsEvaluate) {
             $mock->expects($this->once())
                 ->method('evaluate')
-                ->will($this->returnValue(true));
+                ->willReturn(true);
         }
 
         return $mock;

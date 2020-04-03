@@ -1,10 +1,13 @@
 {
-    "Version": "2.1.27.99",
+    "Version": "36",
     "Names": {
+        "AC": "Isla Ascensión",
+        "BA": "Bosnia-Herzegovina",
+        "CG": "República del Congo",
         "CI": "Costa de Marfil",
+        "GG": "Guernesey",
         "IC": "Islas Canarias",
         "TA": "Tristán da Cunha",
-        "TL": "Timor Oriental",
         "UM": "Islas Ultramarinas de EE.UU."
     }
 }

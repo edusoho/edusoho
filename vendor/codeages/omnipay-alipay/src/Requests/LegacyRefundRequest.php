@@ -5,14 +5,17 @@ namespace Omnipay\Alipay\Requests;
 use Omnipay\Alipay\Responses\LegacyRefundResponse;
 use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Message\ResponseInterface;
+
 /**
  * Class LegacyRefundRequest
  * @package Omnipay\Alipay\Requests
  * @link    https://doc.open.alipay.com/docs/doc.htm?treeId=66&articleId=103600&docType=1
  */
-class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
+class LegacyRefundRequest extends AbstractLegacyRequest
 {
     protected $service = 'refund_fastpay_by_platform_pwd';
+
+
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
      * gateway, but will usually be either an associative array, or a SimpleXMLElement.
@@ -22,24 +25,54 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     public function getData()
     {
         $this->setDefaults();
-        $this->validate('partner', '_input_charset', 'refund_date', 'batch_no', 'refund_items');
-        $this->validateOne('seller_user_id', 'seller_email');
+
+        $this->validate(
+            'partner',
+            '_input_charset',
+            'refund_date',
+            'batch_no',
+            'refund_items'
+        );
+
+        $this->validateOne(
+            'seller_user_id',
+            'seller_email'
+        );
+
         $this->setBatchNum(count($this->getRefundItems()));
         $this->setRefundDetail($this->getDetailData());
-        $data = array('service' => $this->service, 'partner' => $this->getPartner(), 'notify_url' => $this->getNotifyUrl(), 'seller_user_id' => $this->getPartner(), 'refund_date' => $this->getRefundDate(), 'batch_no' => $this->getBatchNo(), 'batch_num' => $this->getBatchNum(), 'detail_data' => $this->getDetailData(), '_input_charset' => $this->getInputCharset());
-        $data['sign'] = $this->sign($data, $this->getSignType());
+
+        $data = [
+            'service'        => $this->service,
+            'partner'        => $this->getPartner(),
+            'notify_url'     => $this->getNotifyUrl(),
+            'seller_user_id' => $this->getPartner(),
+            'refund_date'    => $this->getRefundDate(),
+            'batch_no'       => $this->getBatchNo(),
+            'batch_num'      => $this->getBatchNum(),
+            'detail_data'    => $this->getDetailData(),
+            '_input_charset' => $this->getInputCharset()
+        ];
+
+        $data['sign']      = $this->sign($data, $this->getSignType());
         $data['sign_type'] = $this->getSignType();
+
         return $data;
     }
+
+
     protected function setDefaults()
     {
-        if (!$this->getRefundDate()) {
+        if (! $this->getRefundDate()) {
             $this->setRefundDate(date('Y-m-d H:i:s'));
         }
-        if (!$this->getBatchNo()) {
+
+        if (! $this->getBatchNo()) {
             $this->setBatchNo(date('Ymd') . mt_rand(1000, 9999));
         }
     }
+
+
     /**
      * @return mixed
      */
@@ -47,6 +80,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->getParameter('refund_date');
     }
+
+
     /**
      * @param $value
      *
@@ -56,6 +91,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->setParameter('refund_date', $value);
     }
+
+
     /**
      * @return mixed
      */
@@ -63,6 +100,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->getParameter('batch_no');
     }
+
+
     /**
      * @param $value
      *
@@ -72,6 +111,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->setParameter('batch_no', $value);
     }
+
+
     /**
      * @param $value
      *
@@ -81,6 +122,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->setParameter('batch_num', $value);
     }
+
+
     /**
      * @return mixed
      */
@@ -88,6 +131,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->getParameter('refund_items');
     }
+
+
     /**
      * @param $value
      *
@@ -97,24 +142,34 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->setParameter('refund_detail', $value);
     }
+
+
     protected function getDetailData()
     {
-        $strings = array();
+        $strings = [];
+
         foreach ($this->getRefundItems() as $item) {
             $item = (array) $item;
-            if (!isset($item['out_trade_no'])) {
-                throw new \Omnipay\Common\Exception\InvalidRequestException('The field `out_trade_no` is not exist in item');
+
+            if (! isset($item['out_trade_no'])) {
+                throw new InvalidRequestException('The field `out_trade_no` is not exist in item');
             }
-            if (!isset($item['amount'])) {
-                throw new \Omnipay\Common\Exception\InvalidRequestException('The field `amount` is not exist in item');
+
+            if (! isset($item['amount'])) {
+                throw new InvalidRequestException('The field `amount` is not exist in item');
             }
-            if (!isset($item['reason'])) {
-                throw new \Omnipay\Common\Exception\InvalidRequestException('The field `reason` is not exist in item');
+
+            if (! isset($item['reason'])) {
+                throw new InvalidRequestException('The field `reason` is not exist in item');
             }
-            $strings[] = implode('^', array($item['out_trade_no'], $item['amount'], $item['reason']));
+
+            $strings[] = implode('^', [$item['out_trade_no'], $item['amount'], $item['reason']]);
         }
+
         return implode('#', $strings);
     }
+
+
     /**
      * @return mixed
      */
@@ -122,6 +177,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->getParameter('partner');
     }
+
+
     /**
      * @return mixed
      */
@@ -129,6 +186,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->getParameter('notify_url');
     }
+
+
     /**
      * @return mixed
      */
@@ -136,6 +195,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->getParameter('batch_num');
     }
+
+
     /**
      * @return mixed
      */
@@ -143,6 +204,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->getParameter('_input_charset');
     }
+
+
     /**
      * @return mixed
      */
@@ -150,6 +213,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->getParameter('payment_type');
     }
+
+
     /**
      * @param $value
      *
@@ -159,6 +224,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->setParameter('payment_type', $value);
     }
+
+
     /**
      * Send the request with specified data
      *
@@ -168,8 +235,10 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
      */
     public function sendData($data)
     {
-        return $this->response = new \Omnipay\Alipay\Responses\LegacyRefundResponse($this, $data);
+        return $this->response = new LegacyRefundResponse($this, $data);
     }
+
+
     /**
      * @param $value
      *
@@ -179,6 +248,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->setParameter('partner', $value);
     }
+
+
     /**
      * @param $value
      *
@@ -188,6 +259,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->setParameter('_input_charset', $value);
     }
+
+
     /**
      * @param $value
      *
@@ -197,6 +270,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->setParameter('notify_url', $value);
     }
+
+
     /**
      * @return mixed
      */
@@ -204,6 +279,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->getParameter('seller_email');
     }
+
+
     /**
      * @param $value
      *
@@ -213,6 +290,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->setParameter('seller_email', $value);
     }
+
+
     /**
      * @return mixed
      */
@@ -220,6 +299,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->getSellerUserId();
     }
+
+
     /**
      * @return mixed
      */
@@ -227,6 +308,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->getParameter('seller_user_id');
     }
+
+
     /**
      * @param $value
      *
@@ -236,6 +319,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->setSellerUserId($value);
     }
+
+
     /**
      * @param $value
      *
@@ -245,6 +330,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->setParameter('seller_user_id', $value);
     }
+
+
     /**
      * @param $value
      *
@@ -254,6 +341,8 @@ class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     {
         return $this->setParameter('refund_items', $value);
     }
+
+
     /**
      * @return mixed
      */

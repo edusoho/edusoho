@@ -1,12 +1,12 @@
 <?php
 
 /*
- * This file is part of the Symfony framework.
+ * This file is part of the Symfony package.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Sensio\Bundle\FrameworkExtraBundle\DependencyInjection;
@@ -29,8 +29,14 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('sensio_framework_extra', 'array');
+        $treeBuilder = new TreeBuilder('sensio_framework_extra');
+
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            // BC layer for symfony/config 4.1 and older
+            $rootNode = $treeBuilder->root('sensio_framework_extra');
+        }
 
         $rootNode
             ->children()
@@ -45,6 +51,7 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->booleanNode('converters')->defaultTrue()->end()
                         ->booleanNode('auto_convert')->defaultTrue()->end()
+                        ->arrayNode('disable')->prototype('scalar')->end()->end()
                     ->end()
                 ->end()
                 ->arrayNode('view')

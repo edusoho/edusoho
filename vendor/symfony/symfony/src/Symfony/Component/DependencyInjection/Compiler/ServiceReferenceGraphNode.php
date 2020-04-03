@@ -11,8 +11,8 @@
 
 namespace Symfony\Component\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Alias;
+use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * Represents a node in your service graph.
@@ -24,8 +24,8 @@ use Symfony\Component\DependencyInjection\Alias;
 class ServiceReferenceGraphNode
 {
     private $id;
-    private $inEdges = array();
-    private $outEdges = array();
+    private $inEdges = [];
+    private $outEdges = [];
     private $value;
 
     /**
@@ -38,21 +38,11 @@ class ServiceReferenceGraphNode
         $this->value = $value;
     }
 
-    /**
-     * Adds an in edge to this node.
-     *
-     * @param ServiceReferenceGraphEdge $edge
-     */
     public function addInEdge(ServiceReferenceGraphEdge $edge)
     {
         $this->inEdges[] = $edge;
     }
 
-    /**
-     * Adds an out edge to this node.
-     *
-     * @param ServiceReferenceGraphEdge $edge
-     */
     public function addOutEdge(ServiceReferenceGraphEdge $edge)
     {
         $this->outEdges[] = $edge;
@@ -91,7 +81,7 @@ class ServiceReferenceGraphNode
     /**
      * Returns the in edges.
      *
-     * @return array The in ServiceReferenceGraphEdge array
+     * @return ServiceReferenceGraphEdge[]
      */
     public function getInEdges()
     {
@@ -101,7 +91,7 @@ class ServiceReferenceGraphNode
     /**
      * Returns the out edges.
      *
-     * @return array The out ServiceReferenceGraphEdge array
+     * @return ServiceReferenceGraphEdge[]
      */
     public function getOutEdges()
     {
@@ -116,5 +106,13 @@ class ServiceReferenceGraphNode
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * Clears all edges.
+     */
+    public function clear()
+    {
+        $this->inEdges = $this->outEdges = [];
     }
 }

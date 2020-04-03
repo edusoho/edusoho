@@ -13,8 +13,8 @@ namespace Symfony\Component\Console\Command;
 
 use Symfony\Component\Console\Helper\DescriptorHelper;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -35,12 +35,11 @@ class HelpCommand extends Command
 
         $this
             ->setName('help')
-            ->setDefinition(array(
+            ->setDefinition([
                 new InputArgument('command_name', InputArgument::OPTIONAL, 'The command name', 'help'),
-                new InputOption('xml', null, InputOption::VALUE_NONE, 'To output help as XML'),
                 new InputOption('format', null, InputOption::VALUE_REQUIRED, 'The output format (txt, xml, json, or md)', 'txt'),
                 new InputOption('raw', null, InputOption::VALUE_NONE, 'To output raw command help'),
-            ))
+            ])
             ->setDescription('Displays help for a command')
             ->setHelp(<<<'EOF'
 The <info>%command.name%</info> command displays help for a given command:
@@ -57,11 +56,6 @@ EOF
         ;
     }
 
-    /**
-     * Sets the command.
-     *
-     * @param Command $command The command to set
-     */
     public function setCommand(Command $command)
     {
         $this->command = $command;
@@ -76,17 +70,11 @@ EOF
             $this->command = $this->getApplication()->find($input->getArgument('command_name'));
         }
 
-        if ($input->getOption('xml')) {
-            @trigger_error('The --xml option was deprecated in version 2.7 and will be removed in version 3.0. Use the --format option instead.', E_USER_DEPRECATED);
-
-            $input->setOption('format', 'xml');
-        }
-
         $helper = new DescriptorHelper();
-        $helper->describe($output, $this->command, array(
+        $helper->describe($output, $this->command, [
             'format' => $input->getOption('format'),
             'raw_text' => $input->getOption('raw'),
-        ));
+        ]);
 
         $this->command = null;
     }

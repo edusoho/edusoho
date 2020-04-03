@@ -14,10 +14,11 @@ namespace PhpCsFixer;
 
 use PhpCsFixer\DocBlock\Annotation;
 use PhpCsFixer\DocBlock\DocBlock;
+use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
- * This abstract fixer provides a base for fixers to fix types in phpdoc.
+ * This abstract fixer provides a base for fixers to fix types in PHPDoc.
  *
  * @author Graham Campbell <graham@alt-three.com>
  *
@@ -55,7 +56,7 @@ abstract class AbstractPhpdocTypesFixer extends AbstractFixer
      */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
-        foreach ($tokens as $token) {
+        foreach ($tokens as $index => $token) {
             if (!$token->isGivenKind(T_DOC_COMMENT)) {
                 continue;
             }
@@ -71,7 +72,7 @@ abstract class AbstractPhpdocTypesFixer extends AbstractFixer
                 $this->fixTypes($annotation);
             }
 
-            $token->setContent($doc->getContent());
+            $tokens[$index] = new Token(array(T_DOC_COMMENT, $doc->getContent()));
         }
     }
 
@@ -105,8 +106,6 @@ abstract class AbstractPhpdocTypesFixer extends AbstractFixer
     }
 
     /**
-     * Normalize the given types.
-     *
      * @param string[] $types
      *
      * @return string[]
@@ -129,7 +128,7 @@ abstract class AbstractPhpdocTypesFixer extends AbstractFixer
      */
     private function normalizeType($type)
     {
-        if (substr($type, -2) === '[]') {
+        if ('[]' === substr($type, -2)) {
             return $this->normalize(substr($type, 0, -2)).'[]';
         }
 

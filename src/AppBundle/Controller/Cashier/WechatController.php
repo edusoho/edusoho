@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Cashier;
 use ApiBundle\Api\ApiRequest;
 use AppBundle\Component\Payment\Wxpay\JsApiPay;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class WechatController extends PaymentController
 {
@@ -30,7 +31,7 @@ class WechatController extends PaymentController
                 'account' => $options['mch_id'],
                 'key' => $options['key'],
                 'secret' => $options['secret'],
-                'redirect_uri' => $this->generateUrl('cashier_wechat_js_pay', array(), true),
+                'redirect_uri' => $this->generateUrl('cashier_wechat_js_pay', array(), UrlGeneratorInterface::ABSOLUTE_URL),
                 'isMicroMessenger' => true,
             ), $request);
 
@@ -88,7 +89,7 @@ class WechatController extends PaymentController
                 'account' => $options['mch_id'],
                 'key' => $options['key'],
                 'secret' => $options['secret'],
-                'redirect_uri' => $this->generateUrl('cashier_wechat_js_pay_h5', array(), true),
+                'redirect_uri' => $this->generateUrl('cashier_wechat_js_pay_h5', array(), UrlGeneratorInterface::ABSOLUTE_URL),
                 'isMicroMessenger' => true,
             ), $request);
 

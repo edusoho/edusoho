@@ -1,13 +1,16 @@
 <?php
 
 /*
- * This file is part of the Symfony framework.
+ * This file is part of the Symfony package.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
+
+namespace Tests\Fixtures;
+
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
@@ -18,21 +21,23 @@ class TestKernel extends Kernel
 {
     public function registerBundles()
     {
-        return array(
-            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new Symfony\Bundle\TwigBundle\TwigBundle(),
-            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-            new Tests\Fixtures\FooBundle\FooBundle(),
-            new Tests\Fixtures\ActionArgumentsBundle\ActionArgumentsBundle(),
-        );
+        return [
+            new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+            new \Symfony\Bundle\MonologBundle\MonologBundle(),
+            new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            new \Symfony\Bundle\TwigBundle\TwigBundle(),
+            new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new \Symfony\Bundle\SecurityBundle\SecurityBundle(),
+            new \Tests\Fixtures\FooBundle\FooBundle(),
+            new \Tests\Fixtures\ActionArgumentsBundle\ActionArgumentsBundle(),
+        ];
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load(__DIR__.'/config/config.yml');
 
-        if (PHP_VERSION_ID >= 70100) {
+        if (\PHP_VERSION_ID >= 70100) {
             $loader->load(__DIR__.'/config/nullable_type/config.yml');
         }
     }
@@ -42,3 +47,5 @@ class TestKernel extends Kernel
         return $this->rootDir.'/cache/'.$this->environment;
     }
 }
+
+class_alias('Tests\Fixtures\TestKernel', 'TestKernel');

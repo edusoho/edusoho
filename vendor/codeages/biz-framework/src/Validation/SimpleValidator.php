@@ -2,6 +2,9 @@
 
 namespace Codeages\Biz\Framework\Validation;
 
+/**
+ * @deprecated
+ */
 class SimpleValidator implements Validator
 {
     protected $data = array();

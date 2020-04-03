@@ -15,6 +15,7 @@ namespace PhpCsFixer\Fixer\Comment;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Preg;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
@@ -141,7 +142,7 @@ final class NoEmptyCommentFixer extends AbstractFixer
     {
         $lineCount = 0;
         for ($i = $whiteStart; $i < $whiteEnd; ++$i) {
-            $lineCount += substr_count($tokens[$i]->getContent(), "\n");
+            $lineCount += Preg::matchAll('/\R/u', $tokens[$i]->getContent(), $matches);
         }
 
         return $lineCount;
@@ -154,17 +155,14 @@ final class NoEmptyCommentFixer extends AbstractFixer
      */
     private function isEmptyComment($content)
     {
+        static $mapper = array(
+            self::TYPE_HASH => '|^#\s*$|', // single line comment starting with '#'
+            self::TYPE_SLASH_ASTERISK => '|^/\*\s*\*/$|', // comment starting with '/*' and ending with '*/' (but not a PHPDoc)
+            self::TYPE_DOUBLE_SLASH => '|^//\s*$|', // single line comment starting with '//'
+        );
+
         $type = $this->getCommentType($content);
-        switch ($type) {
-            case self::TYPE_HASH:
-                // single line comment starting with '#'
-                return 1 === preg_match('|^#\s*$|', $content);
-            case self::TYPE_SLASH_ASTERISK:
-                // comment starting with '/*' and ending with '*/' (but not a PHPDoc)
-                return 1 === preg_match('|^/\*\s*\*/$|', $content);
-            case self::TYPE_DOUBLE_SLASH:
-                // single line comment starting with '//'
-                return 1 === preg_match('|^//\s*$|', $content);
-        }
+
+        return 1 === Preg::match($mapper[$type], $content);
     }
 }

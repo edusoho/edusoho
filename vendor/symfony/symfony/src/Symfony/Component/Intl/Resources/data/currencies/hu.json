@@ -1,5 +1,5 @@
 {
-    "Version": "2.1.28.79",
+    "Version": "36",
     "Names": {
         "ADP": [
             "ADP",
@@ -187,7 +187,7 @@
         ],
         "BYN": [
             "BYN",
-            "fehérorosz rubel"
+            "belarusz rubel"
         ],
         "BYR": [
             "BYR",
@@ -224,6 +224,10 @@
         "CLP": [
             "CLP",
             "chilei peso"
+        ],
+        "CNH": [
+            "CNH",
+            "kínai jüan (offshore)"
         ],
         "CNY": [
             "CNY",
@@ -351,7 +355,7 @@
         ],
         "GBP": [
             "GBP",
-            "brit font"
+            "angol font"
         ],
         "GEK": [
             "GEK",
@@ -611,6 +615,10 @@
         ],
         "MRO": [
             "MRO",
+            "mauritániai ouguiya (1973–2017)"
+        ],
+        "MRU": [
+            "MRU",
             "mauritániai ouguiya"
         ],
         "MTL": [
@@ -703,15 +711,15 @@
         ],
         "PEI": [
             "PEI",
-            "Perui inti"
+            "perui inti"
         ],
         "PEN": [
             "PEN",
-            "perui sol nuevo"
+            "perui sol"
         ],
         "PES": [
             "PES",
-            "Perui sol"
+            "perui sol (1863–1965)"
         ],
         "PGK": [
             "PGK",
@@ -839,6 +847,10 @@
         ],
         "STD": [
             "STD",
+            "São Tomé és Príncipe-i dobra (1977–2017)"
+        ],
+        "STN": [
+            "STN",
             "São Tomé és Príncipe-i dobra"
         ],
         "SUR": [
@@ -855,7 +867,7 @@
         ],
         "SZL": [
             "SZL",
-            "szváziföldi lilangeni"
+            "szvázi lilangeni"
         ],
         "THB": [
             "THB",
@@ -959,11 +971,19 @@
         ],
         "VEF": [
             "VEF",
+            "venezuelai bolivar (2008–2018)"
+        ],
+        "VES": [
+            "VES",
             "venezuelai bolivar"
         ],
         "VND": [
             "VND",
-            "vietnami dong"
+            "vietnámi dong"
+        ],
+        "VNN": [
+            "VNN",
+            "vietnámi dong (1978–1985)"
         ],
         "VUV": [
             "VUV",
