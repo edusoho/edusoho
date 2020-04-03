@@ -18,15 +18,14 @@ class LessonManageController extends BaseController
 
         $this->getCourseLessonService()->isLessonCountEnough($course['id']);
 
-        if ('POST' == $request->getMethod()) {
+        if ($request->isMethod('POST')) {
             $formData = $request->request->all();
 
             $formData['_base_url'] = $request->getSchemeAndHttpHost();
             $formData['fromUserId'] = $this->getUser()->getId();
             $formData['fromCourseSetId'] = $course['courseSetId'];
-            $defaultFinishCondition = $this->getDefaultFinishCondition($formData['mediaType']);
 
-            $formData = array_merge($defaultFinishCondition, $formData);
+            $formData = array_merge($this->getDefaultFinishCondition($formData['mediaType']), $formData);
             list($lesson, $task) = $this->getCourseLessonService()->createLesson($formData);
 
             return $this->getTaskJsonView($course, $task);
@@ -42,11 +41,11 @@ class LessonManageController extends BaseController
         if (empty($activityConfig['finish_condition'])) {
             return array();
         }
-        $findishCondition = reset($activityConfig['finish_condition']);
+        $finishCondition = reset($activityConfig['finish_condition']);
 
         return array(
-            'finishType' => $findishCondition['type'],
-            'finishData' => empty($findishCondition['value']) ? '' : $findishCondition['value'],
+            'finishType' => $finishCondition['type'],
+            'finishData' => empty($finishCondition['value']) ? '' : $finishCondition['value'],
         );
     }
 
