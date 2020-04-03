@@ -55,7 +55,7 @@ EOT
 
         $migrations = $this->getMigrations();
         $versions   = $this->getAdapter()->fetchAll();
-        
+
         $version = $input->getOption('target');
 
         ksort($migrations);
@@ -64,9 +64,9 @@ EOT
         // Check we have at least 1 migration to revert
         if (empty($versions) || $version == end($versions)) {
             $output->writeln("<error>No migrations to rollback</error>");
-            return;
+            return 0;
         }
-        
+
         // If no target version was supplied, revert the last migration
         if (null === $version) {
             // Get the migration before the last run migration
@@ -75,17 +75,17 @@ EOT
         } else {
             // Get the first migration number
             $first = reset($versions);
-            
+
             // If the target version is before the first migration, revert all migrations
             if ($version < $first) {
                 $version = 0;
             }
         }
-        
+
         // Check the target version exists
         if (0 !== $version && !isset($migrations[$version])) {
             $output->writeln("<error>Target version ($version) not found</error>");
-            return;
+            return 0;
         }
 
         // Revert the migration(s)
@@ -100,5 +100,7 @@ EOT
                 $container['phpmig.migrator']->down($migration);
             }
         }
+
+        return 0;
     }
 }

@@ -3,6 +3,7 @@
 namespace AppBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\AssetsInstallCommand;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -42,8 +43,10 @@ class InitCommand extends BaseCommand
 
     private function installAssets($output)
     {
+        global $kernel;
         $command = new AssetsInstallCommand();
-        $command->setContainer($this->getContainer());
+        $application = new Application($kernel);
+        $command->setApplication($application);
         $subInput = new StringInput('--symlink --relative');
         $command->run($subInput, $output);
         $output->writeln('<info>installAssets成功</info>');

@@ -19,12 +19,12 @@ class DelegatingEngineTest extends TestCase
 {
     public function testSupportsRetrievesEngineFromTheContainer()
     {
-        $container = $this->getContainerMock(array(
+        $container = $this->getContainerMock([
             'engine.first' => $this->getEngineMock('template.php', false),
             'engine.second' => $this->getEngineMock('template.php', true),
-        ));
+        ]);
 
-        $delegatingEngine = new DelegatingEngine($container, array('engine.first', 'engine.second'));
+        $delegatingEngine = new DelegatingEngine($container, ['engine.first', 'engine.second']);
 
         $this->assertTrue($delegatingEngine->supports('template.php'));
     }
@@ -33,30 +33,28 @@ class DelegatingEngineTest extends TestCase
     {
         $firstEngine = $this->getEngineMock('template.php', false);
         $secondEngine = $this->getEngineMock('template.php', true);
-        $container = $this->getContainerMock(array(
+        $container = $this->getContainerMock([
             'engine.first' => $firstEngine,
             'engine.second' => $secondEngine,
-        ));
+        ]);
 
-        $delegatingEngine = new DelegatingEngine($container, array('engine.first', 'engine.second'));
+        $delegatingEngine = new DelegatingEngine($container, ['engine.first', 'engine.second']);
 
         $this->assertSame($secondEngine, $delegatingEngine->getEngine('template.php'));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage No engine is able to work with the template "template.php"
-     */
     public function testGetInvalidEngine()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('No engine is able to work with the template "template.php"');
         $firstEngine = $this->getEngineMock('template.php', false);
         $secondEngine = $this->getEngineMock('template.php', false);
-        $container = $this->getContainerMock(array(
+        $container = $this->getContainerMock([
             'engine.first' => $firstEngine,
             'engine.second' => $secondEngine,
-        ));
+        ]);
 
-        $delegatingEngine = new DelegatingEngine($container, array('engine.first', 'engine.second'));
+        $delegatingEngine = new DelegatingEngine($container, ['engine.first', 'engine.second']);
         $delegatingEngine->getEngine('template.php');
     }
 
@@ -66,22 +64,22 @@ class DelegatingEngineTest extends TestCase
         $engine = $this->getFrameworkEngineMock('template.php', true);
         $engine->expects($this->once())
             ->method('renderResponse')
-            ->with('template.php', array('foo' => 'bar'))
-            ->will($this->returnValue($response));
-        $container = $this->getContainerMock(array('engine' => $engine));
+            ->with('template.php', ['foo' => 'bar'])
+            ->willReturn($response);
+        $container = $this->getContainerMock(['engine' => $engine]);
 
-        $delegatingEngine = new DelegatingEngine($container, array('engine'));
+        $delegatingEngine = new DelegatingEngine($container, ['engine']);
 
-        $this->assertSame($response, $delegatingEngine->renderResponse('template.php', array('foo' => 'bar')));
+        $this->assertSame($response, $delegatingEngine->renderResponse('template.php', ['foo' => 'bar']));
     }
 
     public function testRenderResponseWithTemplatingEngine()
     {
         $engine = $this->getEngineMock('template.php', true);
-        $container = $this->getContainerMock(array('engine' => $engine));
-        $delegatingEngine = new DelegatingEngine($container, array('engine'));
+        $container = $this->getContainerMock(['engine' => $engine]);
+        $delegatingEngine = new DelegatingEngine($container, ['engine']);
 
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $delegatingEngine->renderResponse('template.php', array('foo' => 'bar')));
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $delegatingEngine->renderResponse('template.php', ['foo' => 'bar']));
     }
 
     private function getEngineMock($template, $supports)
@@ -91,7 +89,7 @@ class DelegatingEngineTest extends TestCase
         $engine->expects($this->once())
             ->method('supports')
             ->with($template)
-            ->will($this->returnValue($supports));
+            ->willReturn($supports);
 
         return $engine;
     }
@@ -103,7 +101,7 @@ class DelegatingEngineTest extends TestCase
         $engine->expects($this->once())
             ->method('supports')
             ->with($template)
-            ->will($this->returnValue($supports));
+            ->willReturn($supports);
 
         return $engine;
     }
@@ -117,7 +115,7 @@ class DelegatingEngineTest extends TestCase
             $container->expects($this->at($i++))
                 ->method('get')
                 ->with($id)
-                ->will($this->returnValue($service));
+                ->willReturn($service);
         }
 
         return $container;

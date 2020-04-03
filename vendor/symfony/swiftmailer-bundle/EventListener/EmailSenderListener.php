@@ -79,7 +79,7 @@ class EmailSenderListener implements EventSubscriberInterface
         );
 
         if (class_exists('Symfony\Component\Console\ConsoleEvents')) {
-            $listeners[ConsoleEvents::EXCEPTION] = 'onException';
+            $listeners[class_exists('Symfony\Component\Console\Event\ConsoleErrorEvent') ? ConsoleEvents::ERROR :  ConsoleEvents::EXCEPTION] = 'onException';
             $listeners[ConsoleEvents::TERMINATE] = 'onTerminate';
         }
 

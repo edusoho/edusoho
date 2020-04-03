@@ -66,32 +66,21 @@ class CaBundle
         if (self::$caPath !== null) {
             return self::$caPath;
         }
+        $caBundlePaths = array();
+
 
         // If SSL_CERT_FILE env variable points to a valid certificate/bundle, use that.
         // This mimics how OpenSSL uses the SSL_CERT_FILE env variable.
-        $envCertFile = getenv('SSL_CERT_FILE');
-        if ($envCertFile && is_readable($envCertFile) && static::validateCaFile($envCertFile, $logger)) {
-            return self::$caPath = $envCertFile;
-        }
+        $caBundlePaths[] = self::getEnvVariable('SSL_CERT_FILE');
 
         // If SSL_CERT_DIR env variable points to a valid certificate/bundle, use that.
         // This mimics how OpenSSL uses the SSL_CERT_FILE env variable.
-        $envCertDir = getenv('SSL_CERT_DIR');
-        if ($envCertDir && is_dir($envCertDir) && is_readable($envCertDir)) {
-            return self::$caPath = $envCertDir;
-        }
+        $caBundlePaths[] = self::getEnvVariable('SSL_CERT_DIR');
 
-        $configured = ini_get('openssl.cafile');
-        if ($configured && strlen($configured) > 0 && is_readable($configured) && static::validateCaFile($configured, $logger)) {
-            return self::$caPath = $configured;
-        }
+        $caBundlePaths[] = ini_get('openssl.cafile');
+        $caBundlePaths[] = ini_get('openssl.capath');
 
-        $configured = ini_get('openssl.capath');
-        if ($configured && is_dir($configured) && is_readable($configured)) {
-            return self::$caPath = $configured;
-        }
-
-        $caBundlePaths = array(
+        $otherLocations = array(
             '/etc/pki/tls/certs/ca-bundle.crt', // Fedora, RHEL, CentOS (ca-certificates package)
             '/etc/ssl/certs/ca-certificates.crt', // Debian, Ubuntu, Gentoo, Arch Linux (ca-certificates package)
             '/etc/ssl/ca-bundle.pem', // SUSE, openSUSE (ca-certificates package)
@@ -103,17 +92,21 @@ class CaBundle
             '/etc/ssl/cert.pem', // OpenBSD
             '/usr/local/etc/ssl/cert.pem', // FreeBSD 10.x
             '/usr/local/etc/openssl/cert.pem', // OS X homebrew, openssl package
+            '/usr/local/etc/openssl@1.1/cert.pem', // OS X homebrew, openssl@1.1 package
         );
 
-        foreach ($caBundlePaths as $caBundle) {
-            if (@is_readable($caBundle) && static::validateCaFile($caBundle, $logger)) {
-                return self::$caPath = $caBundle;
-            }
+        foreach($otherLocations as $location) {
+            $otherLocations[] = dirname($location);
         }
 
+        $caBundlePaths = array_merge($caBundlePaths, $otherLocations);
+
         foreach ($caBundlePaths as $caBundle) {
-            $caBundle = dirname($caBundle);
-            if (@is_dir($caBundle) && glob($caBundle.'/*')) {
+            if (self::caFileUsable($caBundle, $logger)) {
+                return self::$caPath = $caBundle;
+            }
+
+            if (self::caDirUsable($caBundle)) {
                 return self::$caPath = $caBundle;
             }
         }
@@ -130,7 +123,24 @@ class CaBundle
      */
     public static function getBundledCaBundlePath()
     {
-        return __DIR__.'/../res/cacert.pem';
+        $caBundleFile = __DIR__.'/../res/cacert.pem';
+
+        // cURL does not understand 'phar://' paths
+        // see https://github.com/composer/ca-bundle/issues/10
+        if (0 === strpos($caBundleFile, 'phar://')) {
+            file_put_contents(
+                $tempCaBundleFile = tempnam(sys_get_temp_dir(), 'openssl-ca-bundle-'),
+                file_get_contents($caBundleFile)
+            );
+
+            register_shutdown_function(function() use ($tempCaBundleFile) {
+                @unlink($tempCaBundleFile);
+            });
+
+            $caBundleFile = $tempCaBundleFile;
+        }
+
+        return $caBundleFile;
     }
 
     /**
@@ -287,5 +297,28 @@ EOT;
         self::$caFileValidity = array();
         self::$caPath = null;
         self::$useOpensslParse = null;
+    }
+
+    private static function getEnvVariable($name)
+    {
+        if (isset($_SERVER[$name])) {
+            return (string) $_SERVER[$name];
+        }
+
+        if (PHP_SAPI === 'cli' && ($value = getenv($name)) !== false && $value !== null) {
+            return (string) $value;
+        }
+
+        return false;
+    }
+
+    private static function caFileUsable($certFile, LoggerInterface $logger = null)
+    {
+        return $certFile && @is_file($certFile) && @is_readable($certFile) && static::validateCaFile($certFile, $logger);
+    }
+
+    private static function caDirUsable($certDir)
+    {
+        return $certDir && @is_dir($certDir) && @is_readable($certDir) && glob($certDir . '/*');
     }
 }

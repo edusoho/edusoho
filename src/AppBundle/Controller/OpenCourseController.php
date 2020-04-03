@@ -23,6 +23,7 @@ use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class OpenCourseController extends BaseOpenCourseController
 {
@@ -238,13 +239,13 @@ class OpenCourseController extends BaseOpenCourseController
                         'courseId' => $id,
                         'as' => 'preview',
                     ),
-                    true),
+                    UrlGeneratorInterface::ABSOLUTE_URL),
                 'appUrl' => '',
             ),
             'times' => 0,
             'duration' => 3600,
         ));
-        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), UrlGeneratorInterface::ABSOLUTE_URL);
 
         return $url;
     }

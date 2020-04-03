@@ -20,7 +20,7 @@ class LogoutListenerTest extends TestCase
 {
     public function testHandleUnmatchedPath()
     {
-        list($listener, $tokenStorage, $httpUtils, $options) = $this->getListener();
+        list($listener, , $httpUtils, $options) = $this->getListener();
 
         list($event, $request) = $this->getGetResponseEvent();
 
@@ -30,7 +30,7 @@ class LogoutListenerTest extends TestCase
         $httpUtils->expects($this->once())
             ->method('checkRequestPath')
             ->with($request, $options['logout_path'])
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $listener->handle($event);
     }
@@ -49,20 +49,20 @@ class LogoutListenerTest extends TestCase
         $httpUtils->expects($this->once())
             ->method('checkRequestPath')
             ->with($request, $options['logout_path'])
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $tokenManager->expects($this->once())
             ->method('isTokenValid')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $successHandler->expects($this->once())
             ->method('onLogoutSuccess')
             ->with($request)
-            ->will($this->returnValue($response = new Response()));
+            ->willReturn($response = new Response());
 
         $tokenStorage->expects($this->once())
             ->method('getToken')
-            ->will($this->returnValue($token = $this->getToken()));
+            ->willReturn($token = $this->getToken());
 
         $handler = $this->getHandler();
         $handler->expects($this->once())
@@ -93,16 +93,16 @@ class LogoutListenerTest extends TestCase
         $httpUtils->expects($this->once())
             ->method('checkRequestPath')
             ->with($request, $options['logout_path'])
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $successHandler->expects($this->once())
             ->method('onLogoutSuccess')
             ->with($request)
-            ->will($this->returnValue($response = new Response()));
+            ->willReturn($response = new Response());
 
         $tokenStorage->expects($this->once())
             ->method('getToken')
-            ->will($this->returnValue($token = $this->getToken()));
+            ->willReturn($token = $this->getToken());
 
         $handler = $this->getHandler();
         $handler->expects($this->once())
@@ -123,37 +123,36 @@ class LogoutListenerTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @group legacy
      */
     public function testSuccessHandlerReturnsNonResponse()
     {
+        $this->expectException('RuntimeException');
         $successHandler = $this->getSuccessHandler();
 
-        list($listener, $tokenStorage, $httpUtils, $options) = $this->getListener($successHandler);
+        list($listener, , $httpUtils, $options) = $this->getListener($successHandler);
 
         list($event, $request) = $this->getGetResponseEvent();
 
         $httpUtils->expects($this->once())
             ->method('checkRequestPath')
             ->with($request, $options['logout_path'])
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $successHandler->expects($this->once())
             ->method('onLogoutSuccess')
             ->with($request)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $listener->handle($event);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\LogoutException
-     */
     public function testCsrfValidationFails()
     {
+        $this->expectException('Symfony\Component\Security\Core\Exception\LogoutException');
         $tokenManager = $this->getTokenManager();
 
-        list($listener, $tokenStorage, $httpUtils, $options) = $this->getListener(null, $tokenManager);
+        list($listener, , $httpUtils, $options) = $this->getListener(null, $tokenManager);
 
         list($event, $request) = $this->getGetResponseEvent();
 
@@ -162,11 +161,11 @@ class LogoutListenerTest extends TestCase
         $httpUtils->expects($this->once())
             ->method('checkRequestPath')
             ->with($request, $options['logout_path'])
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $tokenManager->expects($this->once())
             ->method('isTokenValid')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $listener->handle($event);
     }
@@ -189,9 +188,9 @@ class LogoutListenerTest extends TestCase
 
         $event->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($request = new Request()));
+            ->willReturn($request = new Request());
 
-        return array($event, $request);
+        return [$event, $request];
     }
 
     private function getHandler()
@@ -212,16 +211,16 @@ class LogoutListenerTest extends TestCase
             $tokenStorage = $this->getTokenStorage(),
             $httpUtils = $this->getHttpUtils(),
             $successHandler ?: $this->getSuccessHandler(),
-            $options = array(
+            $options = [
                 'csrf_parameter' => '_csrf_token',
                 'csrf_token_id' => 'logout',
                 'logout_path' => '/logout',
                 'target_url' => '/',
-            ),
+            ],
             $tokenManager
         );
 
-        return array($listener, $tokenStorage, $httpUtils, $options);
+        return [$listener, $tokenStorage, $httpUtils, $options];
     }
 
     private function getSuccessHandler()

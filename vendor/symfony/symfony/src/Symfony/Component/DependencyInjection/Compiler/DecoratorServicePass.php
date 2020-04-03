@@ -11,8 +11,8 @@
 
 namespace Symfony\Component\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Alias;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Overwrites a service but keeps the overridden one.
@@ -32,11 +32,11 @@ class DecoratorServicePass implements CompilerPassInterface
             if (!$decorated = $definition->getDecoratedService()) {
                 continue;
             }
-            $definitions->insert(array($id, $definition), array($decorated[2], --$order));
+            $definitions->insert([$id, $definition], [$decorated[2], --$order]);
         }
+        $decoratingDefinitions = [];
 
-        foreach ($definitions as $arr) {
-            list($id, $definition) = $arr;
+        foreach ($definitions as list($id, $definition)) {
             list($inner, $renamedId) = $definition->getDecoratedService();
 
             $definition->setDecoratedService(null);
@@ -50,19 +50,32 @@ class DecoratorServicePass implements CompilerPassInterface
             if ($container->hasAlias($inner)) {
                 $alias = $container->getAlias($inner);
                 $public = $alias->isPublic();
-                $container->setAlias($renamedId, new Alias((string) $alias, false));
+                $private = $alias->isPrivate();
+                $container->setAlias($renamedId, new Alias($container->normalizeId($alias), false));
             } else {
                 $decoratedDefinition = $container->getDefinition($inner);
-                $definition->setTags(array_merge($decoratedDefinition->getTags(), $definition->getTags()));
-                $definition->setAutowiringTypes(array_merge($decoratedDefinition->getAutowiringTypes(), $definition->getAutowiringTypes()));
                 $public = $decoratedDefinition->isPublic();
+                $private = $decoratedDefinition->isPrivate();
                 $decoratedDefinition->setPublic(false);
-                $decoratedDefinition->setTags(array());
-                $decoratedDefinition->setAutowiringTypes(array());
                 $container->setDefinition($renamedId, $decoratedDefinition);
+                $decoratingDefinitions[$inner] = $decoratedDefinition;
             }
 
-            $container->setAlias($inner, new Alias($id, $public));
+            if (isset($decoratingDefinitions[$inner])) {
+                $decoratingDefinition = $decoratingDefinitions[$inner];
+                $definition->setTags(array_merge($decoratingDefinition->getTags(), $definition->getTags()));
+                $autowiringTypes = $decoratingDefinition->getAutowiringTypes(false);
+                if ($types = array_merge($autowiringTypes, $definition->getAutowiringTypes(false))) {
+                    $definition->setAutowiringTypes($types);
+                }
+                $decoratingDefinition->setTags([]);
+                if ($autowiringTypes) {
+                    $decoratingDefinition->setAutowiringTypes([]);
+                }
+                $decoratingDefinitions[$inner] = $definition;
+            }
+
+            $container->setAlias($inner, $id)->setPublic($public)->setPrivate($private);
         }
     }
 }

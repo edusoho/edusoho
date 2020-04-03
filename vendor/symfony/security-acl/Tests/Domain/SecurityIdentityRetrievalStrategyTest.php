@@ -14,6 +14,7 @@ namespace Symfony\Component\Security\Acl\Tests\Domain;
 use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\SecurityIdentityRetrievalStrategy;
+use Symfony\Component\Security\Core\Role\Role;
 
 class SecurityIdentityRetrievalStrategyTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,8 +23,6 @@ class SecurityIdentityRetrievalStrategyTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSecurityIdentities($user, array $roles, $authenticationStatus, array $sids)
     {
-        $strategy = $this->getStrategy($roles, $authenticationStatus);
-
         if ('anonymous' === $authenticationStatus) {
             $token = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\AnonymousToken')
                                 ->disableOriginalConstructor()
@@ -38,11 +37,25 @@ class SecurityIdentityRetrievalStrategyTest extends \PHPUnit_Framework_TestCase
                         ->setMockClassName($class)
                         ->getMock();
         }
-        $token
-            ->expects($this->once())
-            ->method('getRoles')
-            ->will($this->returnValue(array('foo')))
-        ;
+
+        if (method_exists($token, 'getRoleNames')) {
+            $strategy = $this->getStrategy($roles, $authenticationStatus, false);
+
+            $token
+                ->expects($this->once())
+                ->method('getRoleNames')
+                ->will($this->returnValue(array('foo')))
+            ;
+        } else {
+            $strategy = $this->getStrategy($roles, $authenticationStatus, true);
+
+            $token
+                ->expects($this->once())
+                ->method('getRoles')
+                ->will($this->returnValue(array(new Role('foo'))))
+            ;
+        }
+
         if ('anonymous' === $authenticationStatus) {
             $token
                 ->expects($this->never())
@@ -119,17 +132,34 @@ class SecurityIdentityRetrievalStrategyTest extends \PHPUnit_Framework_TestCase
         return $account;
     }
 
-    protected function getStrategy(array $roles = array(), $authenticationStatus = 'fullFledged')
+    protected function getStrategy(array $roles = array(), $authenticationStatus = 'fullFledged', $isBC = false)
     {
-        $roleHierarchy = $this->getMock('Symfony\Component\Security\Core\Role\RoleHierarchyInterface');
-        $roleHierarchy
-            ->expects($this->once())
-            ->method('getReachableRoles')
-            ->with($this->equalTo(array('foo')))
-            ->will($this->returnValue($roles))
-        ;
+        $roleHierarchyBuilder = $this->getMockBuilder('Symfony\Component\Security\Core\Role\RoleHierarchyInterface')
+            ->disableProxyingToOriginalMethods()
+            ->disableOriginalConstructor();
 
-        $trustResolver = $this->getMock('Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolver', array(), array('', ''));
+        if ($isBC) {
+            $roleHierarchy = $roleHierarchyBuilder->setMethods(['getReachableRoles'])
+                ->getMockForAbstractClass();
+
+            $roleHierarchy
+                ->expects($this->any())
+                ->method('getReachableRoles')
+                ->with($this->equalTo([new Role('foo')]))
+                ->will($this->returnValue($roles));
+        } else {
+            $roleHierarchy = $roleHierarchyBuilder->setMethods(['getReachableRoleNames'])
+                ->getMockForAbstractClass();
+
+            $roleHierarchy
+                ->expects($this->any())
+                ->method('getReachableRoleNames')
+                ->with($this->equalTo(['foo']))
+                ->will($this->returnValue($roles));
+        }
+
+
+        $trustResolver = $this->getMock('Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface', array(), array('', ''));
 
         $trustResolver
             ->expects($this->at(0))

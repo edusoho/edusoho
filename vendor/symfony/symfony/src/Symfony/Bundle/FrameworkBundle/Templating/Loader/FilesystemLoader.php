@@ -11,9 +11,9 @@
 
 namespace Symfony\Bundle\FrameworkBundle\Templating\Loader;
 
-use Symfony\Component\Templating\Storage\FileStorage;
-use Symfony\Component\Templating\Loader\LoaderInterface;
 use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Templating\Loader\LoaderInterface;
+use Symfony\Component\Templating\Storage\FileStorage;
 use Symfony\Component\Templating\TemplateReferenceInterface;
 
 /**
@@ -25,11 +25,6 @@ class FilesystemLoader implements LoaderInterface
 {
     protected $locator;
 
-    /**
-     * Constructor.
-     *
-     * @param FileLocatorInterface $locator A FileLocatorInterface instance
-     */
     public function __construct(FileLocatorInterface $locator)
     {
         $this->locator = $locator;

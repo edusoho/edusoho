@@ -24,20 +24,41 @@ class ConfigurationTest extends TestCase
     {
         $processor = new Processor();
         $configuration = new Configuration();
-        $config = $processor->processConfiguration($configuration, array($options));
+        $config = $processor->processConfiguration($configuration, [$options]);
+
+        $this->assertEquals($results, $config);
+    }
+
+    /**
+     * @dataProvider getPositionConfig
+     * @group legacy
+     * @expectedDeprecation The "web_profiler.position" configuration key has been deprecated in Symfony 3.4 and it will be removed in 4.0.
+     */
+    public function testPositionConfig($options, $results)
+    {
+        $processor = new Processor();
+        $configuration = new Configuration();
+        $config = $processor->processConfiguration($configuration, [$options]);
 
         $this->assertEquals($results, $config);
     }
 
     public function getDebugModes()
     {
-        return array(
-            array(array(), array('intercept_redirects' => false, 'toolbar' => false, 'position' => 'bottom', 'excluded_ajax_paths' => '^/(app(_[\\w]+)?\\.php/)?_wdt')),
-            array(array('intercept_redirects' => true), array('intercept_redirects' => true, 'toolbar' => false, 'position' => 'bottom', 'excluded_ajax_paths' => '^/(app(_[\\w]+)?\\.php/)?_wdt')),
-            array(array('intercept_redirects' => false), array('intercept_redirects' => false, 'toolbar' => false, 'position' => 'bottom', 'excluded_ajax_paths' => '^/(app(_[\\w]+)?\\.php/)?_wdt')),
-            array(array('toolbar' => true), array('intercept_redirects' => false, 'toolbar' => true, 'position' => 'bottom', 'excluded_ajax_paths' => '^/(app(_[\\w]+)?\\.php/)?_wdt')),
-            array(array('position' => 'top'), array('intercept_redirects' => false, 'toolbar' => false, 'position' => 'top', 'excluded_ajax_paths' => '^/(app(_[\\w]+)?\\.php/)?_wdt')),
-            array(array('excluded_ajax_paths' => 'test'), array('intercept_redirects' => false, 'toolbar' => false, 'position' => 'bottom', 'excluded_ajax_paths' => 'test')),
-        );
+        return [
+            [[], ['intercept_redirects' => false, 'toolbar' => false, 'position' => 'bottom', 'excluded_ajax_paths' => '^/((index|app(_[\w]+)?)\.php/)?_wdt']],
+            [['intercept_redirects' => true], ['intercept_redirects' => true, 'toolbar' => false, 'position' => 'bottom', 'excluded_ajax_paths' => '^/((index|app(_[\w]+)?)\.php/)?_wdt']],
+            [['intercept_redirects' => false], ['intercept_redirects' => false, 'toolbar' => false, 'position' => 'bottom', 'excluded_ajax_paths' => '^/((index|app(_[\w]+)?)\.php/)?_wdt']],
+            [['toolbar' => true], ['intercept_redirects' => false, 'toolbar' => true, 'position' => 'bottom', 'excluded_ajax_paths' => '^/((index|app(_[\w]+)?)\.php/)?_wdt']],
+            [['excluded_ajax_paths' => 'test'], ['intercept_redirects' => false, 'toolbar' => false, 'position' => 'bottom', 'excluded_ajax_paths' => 'test']],
+        ];
+    }
+
+    public function getPositionConfig()
+    {
+        return [
+            [['position' => 'top'], ['intercept_redirects' => false, 'toolbar' => false, 'excluded_ajax_paths' => '^/((index|app(_[\w]+)?)\.php/)?_wdt', 'position' => 'top']],
+            [['position' => 'bottom'], ['intercept_redirects' => false, 'toolbar' => false, 'excluded_ajax_paths' => '^/((index|app(_[\w]+)?)\.php/)?_wdt', 'position' => 'bottom']],
+        ];
     }
 }

@@ -11,24 +11,51 @@
 
 namespace Symfony\Bundle\SecurityBundle\Command;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Schema\SchemaException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Doctrine\DBAL\Schema\SchemaException;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Security\Acl\Dbal\Schema;
+
+@trigger_error(sprintf('Class "%s" is deprecated since Symfony 3.4 and will be removed in 4.0. Use Symfony\Bundle\AclBundle\Command\InitAclCommand instead.', InitAclCommand::class), E_USER_DEPRECATED);
 
 /**
  * Installs the tables required by the ACL system.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
+ *
+ * @deprecated since version 3.4, to be removed in 4.0. See Symfony\Bundle\AclBundle\Command\SetAclCommand instead.
  */
 class InitAclCommand extends ContainerAwareCommand
 {
+    protected static $defaultName = 'init:acl';
+
+    private $connection;
+    private $schema;
+
+    public function __construct($connection = null, Schema $schema = null)
+    {
+        if (!$connection instanceof Connection) {
+            parent::__construct($connection);
+
+            return;
+        }
+
+        parent::__construct();
+
+        $this->connection = $connection;
+        $this->schema = $schema;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function isEnabled()
     {
-        if (!$this->getContainer()->has('security.acl.dbal.connection')) {
+        if (!$this->connection && !$this->getContainer()->has('security.acl.dbal.connection')) {
             return false;
         }
 
@@ -41,7 +68,6 @@ class InitAclCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('init:acl')
             ->setDescription('Mounts ACL tables in the database')
             ->setHelp(<<<'EOF'
 The <info>%command.name%</info> command mounts ACL tables in the database.
@@ -63,23 +89,27 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $container = $this->getContainer();
+        (new SymfonyStyle($input, $output instanceof ConsoleOutputInterface ? $output->getErrorOutput() : $output))->warning('Command "init:acl" is deprecated since Symfony 3.4 and will be removed from SecurityBundle in 4.0. Install symfony/acl-bundle and use "acl:init" instead.');
 
-        $connection = $container->get('security.acl.dbal.connection');
-        $schema = $container->get('security.acl.dbal.schema');
+        if (null === $this->connection) {
+            $this->connection = $this->getContainer()->get('security.acl.dbal.connection');
+            $this->schema = $this->getContainer()->get('security.acl.dbal.schema');
+        }
 
         try {
-            $schema->addToSchema($connection->getSchemaManager()->createSchema());
+            $this->schema->addToSchema($this->connection->getSchemaManager()->createSchema());
         } catch (SchemaException $e) {
             $output->writeln('Aborting: '.$e->getMessage());
 
             return 1;
         }
 
-        foreach ($schema->toSql($connection->getDatabasePlatform()) as $sql) {
-            $connection->exec($sql);
+        foreach ($this->schema->toSql($this->connection->getDatabasePlatform()) as $sql) {
+            $this->connection->exec($sql);
         }
 
         $output->writeln('ACL tables have been initialized successfully.');
+
+        return null;
     }
 }

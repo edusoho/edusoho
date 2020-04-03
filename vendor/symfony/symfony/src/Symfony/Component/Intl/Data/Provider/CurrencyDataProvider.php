@@ -11,9 +11,8 @@
 
 namespace Symfony\Component\Intl\Data\Provider;
 
-use Symfony\Component\Intl\Exception\MissingResourceException;
-use Symfony\Component\Intl\Locale;
 use Symfony\Component\Intl\Data\Bundle\Reader\BundleEntryReaderInterface;
+use Symfony\Component\Intl\Exception\MissingResourceException;
 
 /**
  * Data provider for currency-related data.
@@ -25,21 +24,11 @@ use Symfony\Component\Intl\Data\Bundle\Reader\BundleEntryReaderInterface;
 class CurrencyDataProvider
 {
     const INDEX_SYMBOL = 0;
-
     const INDEX_NAME = 1;
-
     const INDEX_FRACTION_DIGITS = 0;
-
     const INDEX_ROUNDING_INCREMENT = 1;
 
-    /**
-     * @var string
-     */
     private $path;
-
-    /**
-     * @var BundleEntryReaderInterface
-     */
     private $reader;
 
     /**
@@ -57,31 +46,31 @@ class CurrencyDataProvider
 
     public function getCurrencies()
     {
-        return $this->reader->readEntry($this->path, 'meta', array('Currencies'));
+        return $this->reader->readEntry($this->path, 'meta', ['Currencies']);
     }
 
     public function getSymbol($currency, $displayLocale = null)
     {
         if (null === $displayLocale) {
-            $displayLocale = Locale::getDefault();
+            $displayLocale = \Locale::getDefault();
         }
 
-        return $this->reader->readEntry($this->path, $displayLocale, array('Names', $currency, static::INDEX_SYMBOL));
+        return $this->reader->readEntry($this->path, $displayLocale, ['Names', $currency, static::INDEX_SYMBOL]);
     }
 
     public function getName($currency, $displayLocale = null)
     {
         if (null === $displayLocale) {
-            $displayLocale = Locale::getDefault();
+            $displayLocale = \Locale::getDefault();
         }
 
-        return $this->reader->readEntry($this->path, $displayLocale, array('Names', $currency, static::INDEX_NAME));
+        return $this->reader->readEntry($this->path, $displayLocale, ['Names', $currency, static::INDEX_NAME]);
     }
 
     public function getNames($displayLocale = null)
     {
         if (null === $displayLocale) {
-            $displayLocale = Locale::getDefault();
+            $displayLocale = \Locale::getDefault();
         }
 
         // ====================================================================
@@ -90,7 +79,7 @@ class CurrencyDataProvider
         // 3-letter codes (e.g. 32 => "ARA", "ARP", "ARS")
         // ====================================================================
 
-        $names = $this->reader->readEntry($this->path, $displayLocale, array('Names'));
+        $names = $this->reader->readEntry($this->path, $displayLocale, ['Names']);
 
         if ($names instanceof \Traversable) {
             $names = iterator_to_array($names);
@@ -116,9 +105,9 @@ class CurrencyDataProvider
     public function getFractionDigits($currency)
     {
         try {
-            return $this->reader->readEntry($this->path, 'meta', array('Meta', $currency, static::INDEX_FRACTION_DIGITS));
+            return $this->reader->readEntry($this->path, 'meta', ['Meta', $currency, static::INDEX_FRACTION_DIGITS]);
         } catch (MissingResourceException $e) {
-            return $this->reader->readEntry($this->path, 'meta', array('Meta', 'DEFAULT', static::INDEX_FRACTION_DIGITS));
+            return $this->reader->readEntry($this->path, 'meta', ['Meta', 'DEFAULT', static::INDEX_FRACTION_DIGITS]);
         }
     }
 
@@ -128,9 +117,9 @@ class CurrencyDataProvider
     public function getRoundingIncrement($currency)
     {
         try {
-            return $this->reader->readEntry($this->path, 'meta', array('Meta', $currency, static::INDEX_ROUNDING_INCREMENT));
+            return $this->reader->readEntry($this->path, 'meta', ['Meta', $currency, static::INDEX_ROUNDING_INCREMENT]);
         } catch (MissingResourceException $e) {
-            return $this->reader->readEntry($this->path, 'meta', array('Meta', 'DEFAULT', static::INDEX_ROUNDING_INCREMENT));
+            return $this->reader->readEntry($this->path, 'meta', ['Meta', 'DEFAULT', static::INDEX_ROUNDING_INCREMENT]);
         }
     }
 
@@ -139,7 +128,7 @@ class CurrencyDataProvider
      */
     public function getNumericCode($currency)
     {
-        return $this->reader->readEntry($this->path, 'meta', array('Alpha3ToNumeric', $currency));
+        return $this->reader->readEntry($this->path, 'meta', ['Alpha3ToNumeric', $currency]);
     }
 
     /**
@@ -147,6 +136,6 @@ class CurrencyDataProvider
      */
     public function forNumericCode($numericCode)
     {
-        return $this->reader->readEntry($this->path, 'meta', array('NumericToAlpha3', (string) $numericCode));
+        return $this->reader->readEntry($this->path, 'meta', ['NumericToAlpha3', (string) $numericCode]);
     }
 }

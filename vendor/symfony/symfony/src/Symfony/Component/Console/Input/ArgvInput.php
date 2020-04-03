@@ -44,8 +44,6 @@ class ArgvInput extends Input
     private $parsed;
 
     /**
-     * Constructor.
-     *
      * @param array|null           $argv       An array of parameters from the CLI (in the argv format)
      * @param InputDefinition|null $definition A InputDefinition instance
      */
@@ -99,7 +97,7 @@ class ArgvInput extends Input
     {
         $name = substr($token, 1);
 
-        if (strlen($name) > 1) {
+        if (\strlen($name) > 1) {
             if ($this->definition->hasShortcut($name[0]) && $this->definition->getOptionForShortcut($name[0])->acceptValue()) {
                 // an option with a value (with no space)
                 $this->addShortOption($name[0], substr($name, 1));
@@ -120,10 +118,11 @@ class ArgvInput extends Input
      */
     private function parseShortOptionSet($name)
     {
-        $len = strlen($name);
+        $len = \strlen($name);
         for ($i = 0; $i < $len; ++$i) {
             if (!$this->definition->hasShortcut($name[$i])) {
-                throw new RuntimeException(sprintf('The "-%s" option does not exist.', $name[$i]));
+                $encoding = mb_detect_encoding($name, null, true);
+                throw new RuntimeException(sprintf('The "-%s" option does not exist.', false === $encoding ? $name[$i] : mb_substr($name, $i, 1, $encoding)));
             }
 
             $option = $this->definition->getOptionForShortcut($name[$i]);
@@ -147,8 +146,13 @@ class ArgvInput extends Input
         $name = substr($token, 2);
 
         if (false !== $pos = strpos($name, '=')) {
-            if (0 === strlen($value = substr($name, $pos + 1))) {
-                array_unshift($this->parsed, null);
+            if (0 === \strlen($value = substr($name, $pos + 1))) {
+                // if no value after "=" then substr() returns "" since php7 only, false before
+                // see https://php.net/migration70.incompatible.php#119151
+                if (\PHP_VERSION_ID < 70000 && false === $value) {
+                    $value = '';
+                }
+                array_unshift($this->parsed, $value);
             }
             $this->addLongOption(substr($name, 0, $pos), $value);
         } else {
@@ -165,12 +169,12 @@ class ArgvInput extends Input
      */
     private function parseArgument($token)
     {
-        $c = count($this->arguments);
+        $c = \count($this->arguments);
 
         // if input is expecting another argument, add it
         if ($this->definition->hasArgument($c)) {
             $arg = $this->definition->getArgument($c);
-            $this->arguments[$arg->getName()] = $arg->isArray() ? array($token) : $token;
+            $this->arguments[$arg->getName()] = $arg->isArray() ? [$token] : $token;
 
         // if last argument isArray(), append token to last argument
         } elseif ($this->definition->hasArgument($c - 1) && $this->definition->getArgument($c - 1)->isArray()) {
@@ -180,7 +184,7 @@ class ArgvInput extends Input
         // unexpected argument
         } else {
             $all = $this->definition->getArguments();
-            if (count($all)) {
+            if (\count($all)) {
                 throw new RuntimeException(sprintf('Too many arguments, expected arguments "%s".', implode('" "', array_keys($all))));
             }
 
@@ -221,23 +225,16 @@ class ArgvInput extends Input
 
         $option = $this->definition->getOption($name);
 
-        // Convert empty values to null
-        if (!isset($value[0])) {
-            $value = null;
-        }
-
         if (null !== $value && !$option->acceptValue()) {
             throw new RuntimeException(sprintf('The "--%s" option does not accept a value.', $name));
         }
 
-        if (null === $value && $option->acceptValue() && count($this->parsed)) {
+        if (\in_array($value, ['', null], true) && $option->acceptValue() && \count($this->parsed)) {
             // if option accepts an optional or mandatory argument
             // let's see if there is one provided
             $next = array_shift($this->parsed);
-            if (isset($next[0]) && '-' !== $next[0]) {
+            if ((isset($next[0]) && '-' !== $next[0]) || \in_array($next, ['', null], true)) {
                 $value = $next;
-            } elseif (empty($next)) {
-                $value = null;
             } else {
                 array_unshift($this->parsed, $next);
             }
@@ -248,8 +245,8 @@ class ArgvInput extends Input
                 throw new RuntimeException(sprintf('The "--%s" option requires a value.', $name));
             }
 
-            if (!$option->isArray()) {
-                $value = $option->isValueOptional() ? $option->getDefault() : true;
+            if (!$option->isArray() && !$option->isValueOptional()) {
+                $value = true;
             }
         }
 
@@ -265,25 +262,53 @@ class ArgvInput extends Input
      */
     public function getFirstArgument()
     {
-        foreach ($this->tokens as $token) {
+        $isOption = false;
+        foreach ($this->tokens as $i => $token) {
             if ($token && '-' === $token[0]) {
+                if (false !== strpos($token, '=') || !isset($this->tokens[$i + 1])) {
+                    continue;
+                }
+
+                // If it's a long option, consider that everything after "--" is the option name.
+                // Otherwise, use the last char (if it's a short option set, only the last one can take a value with space separator)
+                $name = '-' === $token[1] ? substr($token, 2) : substr($token, -1);
+                if (!isset($this->options[$name]) && !$this->definition->hasShortcut($name)) {
+                    // noop
+                } elseif ((isset($this->options[$name]) || isset($this->options[$name = $this->definition->shortcutToName($name)])) && $this->tokens[$i + 1] === $this->options[$name]) {
+                    $isOption = true;
+                }
+
+                continue;
+            }
+
+            if ($isOption) {
+                $isOption = false;
                 continue;
             }
 
             return $token;
         }
+
+        return null;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function hasParameterOption($values)
+    public function hasParameterOption($values, $onlyParams = false)
     {
         $values = (array) $values;
 
         foreach ($this->tokens as $token) {
+            if ($onlyParams && '--' === $token) {
+                return false;
+            }
             foreach ($values as $value) {
-                if ($token === $value || 0 === strpos($token, $value.'=')) {
+                // Options with values:
+                //   For long options, test for '--option=' at beginning
+                //   For short options, test for '-o' at beginning
+                $leading = 0 === strpos($value, '--') ? $value.'=' : $value;
+                if ($token === $value || '' !== $leading && 0 === strpos($token, $leading)) {
                     return true;
                 }
             }
@@ -295,21 +320,27 @@ class ArgvInput extends Input
     /**
      * {@inheritdoc}
      */
-    public function getParameterOption($values, $default = false)
+    public function getParameterOption($values, $default = false, $onlyParams = false)
     {
         $values = (array) $values;
         $tokens = $this->tokens;
 
-        while (0 < count($tokens)) {
+        while (0 < \count($tokens)) {
             $token = array_shift($tokens);
+            if ($onlyParams && '--' === $token) {
+                return $default;
+            }
 
             foreach ($values as $value) {
-                if ($token === $value || 0 === strpos($token, $value.'=')) {
-                    if (false !== $pos = strpos($token, '=')) {
-                        return substr($token, $pos + 1);
-                    }
-
+                if ($token === $value) {
                     return array_shift($tokens);
+                }
+                // Options with values:
+                //   For long options, test for '--option=' at beginning
+                //   For short options, test for '-o' at beginning
+                $leading = 0 === strpos($value, '--') ? $value.'=' : $value;
+                if ('' !== $leading && 0 === strpos($token, $leading)) {
+                    return substr($token, \strlen($leading));
                 }
             }
         }
@@ -324,14 +355,13 @@ class ArgvInput extends Input
      */
     public function __toString()
     {
-        $self = $this;
-        $tokens = array_map(function ($token) use ($self) {
+        $tokens = array_map(function ($token) {
             if (preg_match('{^(-[^=]+=)(.+)}', $token, $match)) {
-                return $match[1].$self->escapeToken($match[2]);
+                return $match[1].$this->escapeToken($match[2]);
             }
 
-            if ($token && $token[0] !== '-') {
-                return $self->escapeToken($token);
+            if ($token && '-' !== $token[0]) {
+                return $this->escapeToken($token);
             }
 
             return $token;

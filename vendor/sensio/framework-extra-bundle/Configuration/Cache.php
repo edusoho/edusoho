@@ -24,7 +24,7 @@ class Cache extends ConfigurationAnnotation
      *
      * @var string
      */
-    protected $expires;
+    private $expires;
 
     /**
      * The number of seconds that the response is considered fresh by a private
@@ -32,7 +32,7 @@ class Cache extends ConfigurationAnnotation
      *
      * @var int
      */
-    protected $maxage;
+    private $maxage;
 
     /**
      * The number of seconds that the response is considered fresh by a public
@@ -40,35 +40,50 @@ class Cache extends ConfigurationAnnotation
      *
      * @var int
      */
-    protected $smaxage;
+    private $smaxage;
 
     /**
      * Whether the response is public or not.
      *
      * @var bool
      */
-    protected $public;
+    private $public;
+
+    /**
+     * Whether or not the response must be revalidated.
+     *
+     * @var bool
+     */
+    private $mustRevalidate;
 
     /**
      * Additional "Vary:"-headers.
      *
      * @var array
      */
-    protected $vary;
+    private $vary;
 
     /**
      * An expression to compute the Last-Modified HTTP header.
      *
      * @var string
      */
-    protected $lastModified;
+    private $lastModified;
 
     /**
      * An expression to compute the ETag HTTP header.
      *
      * @var string
      */
-    protected $etag;
+    private $etag;
+
+    /**
+     * max-stale Cache-Control header
+     * It can be expressed in seconds or with a relative time format (1 day, 2 weeks, ...).
+     *
+     * @var int|string
+     */
+    private $maxStale;
 
     /**
      * Returns the expiration date for the Expires header field.
@@ -139,7 +154,25 @@ class Cache extends ConfigurationAnnotation
      */
     public function isPublic()
     {
-        return $this->public === true;
+        return true === $this->public;
+    }
+
+    /**
+     * @return bool
+     */
+    public function mustRevalidate()
+    {
+        return true === $this->mustRevalidate;
+    }
+
+    /**
+     * Forces a response to be revalidated.
+     *
+     * @param bool $mustRevalidate
+     */
+    public function setMustRevalidate($mustRevalidate)
+    {
+        $this->mustRevalidate = (bool) $mustRevalidate;
     }
 
     /**
@@ -149,7 +182,7 @@ class Cache extends ConfigurationAnnotation
      */
     public function isPrivate()
     {
-        return $this->public === false;
+        return false === $this->public;
     }
 
     /**
@@ -207,7 +240,7 @@ class Cache extends ConfigurationAnnotation
      *
      * @param string $expression
      */
-    public function setETag($expression)
+    public function setEtag($expression)
     {
         $this->etag = $expression;
     }
@@ -217,9 +250,27 @@ class Cache extends ConfigurationAnnotation
      *
      * @return string
      */
-    public function getETag()
+    public function getEtag()
     {
         return $this->etag;
+    }
+
+    /**
+     * @return int|string
+     */
+    public function getMaxStale()
+    {
+        return $this->maxStale;
+    }
+
+    /**
+     * Sets the number of seconds for the max-stale cache-control header field.
+     *
+     * @param int|string $maxStale A number of seconds
+     */
+    public function setMaxStale($maxStale)
+    {
+        $this->maxStale = $maxStale;
     }
 
     /**

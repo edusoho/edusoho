@@ -16,6 +16,7 @@ use Biz\OpenCourse\Service\OpenCourseService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\OpenCourse\Service\OpenCourseRecommendedService;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class OpenCourseManageController extends BaseController
 {
@@ -58,8 +59,8 @@ class OpenCourseManageController extends BaseController
                     return $this->createMessageResponse('error', '开始时间应晚于当前时间');
                 }
 
-                $data['authUrl'] = $this->generateUrl('live_auth', array(), true);
-                $data['jumpUrl'] = $this->generateUrl('live_jump', array('id' => $course['id']), true);
+                $data['authUrl'] = $this->generateUrl('live_auth', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+                $data['jumpUrl'] = $this->generateUrl('live_jump', array('id' => $course['id']), UrlGeneratorInterface::ABSOLUTE_URL);
             }
             $this->getOpenCourseService()->updateCourse($id, $data);
 
@@ -334,8 +335,8 @@ class OpenCourseManageController extends BaseController
             }
 
             $routes = array(
-                'authUrl' => $this->generateUrl('live_auth', array(), true),
-                'jumpUrl' => $this->generateUrl('live_jump', array('id' => $liveCourse['id']), true),
+                'authUrl' => $this->generateUrl('live_auth', array(), UrlGeneratorInterface::ABSOLUTE_URL),
+                'jumpUrl' => $this->generateUrl('live_jump', array('id' => $liveCourse['id']), UrlGeneratorInterface::ABSOLUTE_URL),
             );
             if ($openLiveLesson) {
                 $live = $this->getLiveCourseService()->editLiveRoom($liveCourse, $liveLesson, $routes);

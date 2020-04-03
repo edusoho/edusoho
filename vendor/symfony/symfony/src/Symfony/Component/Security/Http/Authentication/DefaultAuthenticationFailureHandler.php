@@ -11,9 +11,9 @@
 
 namespace Symfony\Component\Security\Http\Authentication;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\HttpUtils;
@@ -22,8 +22,8 @@ use Symfony\Component\Security\Http\ParameterBagUtils;
 /**
  * Class with the default authentication failure handling logic.
  *
- * Can be optionally be extended from by the developer to alter the behaviour
- * while keeping the default behaviour.
+ * Can be optionally be extended from by the developer to alter the behavior
+ * while keeping the default behavior.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
@@ -35,22 +35,14 @@ class DefaultAuthenticationFailureHandler implements AuthenticationFailureHandle
     protected $httpUtils;
     protected $logger;
     protected $options;
-    protected $defaultOptions = array(
+    protected $defaultOptions = [
         'failure_path' => null,
         'failure_forward' => false,
         'login_path' => '/login',
         'failure_path_parameter' => '_failure_path',
-    );
+    ];
 
-    /**
-     * Constructor.
-     *
-     * @param HttpKernelInterface $httpKernel
-     * @param HttpUtils           $httpUtils
-     * @param array               $options    Options for processing a failed authentication attempt
-     * @param LoggerInterface     $logger     Optional logger
-     */
-    public function __construct(HttpKernelInterface $httpKernel, HttpUtils $httpUtils, array $options = array(), LoggerInterface $logger = null)
+    public function __construct(HttpKernelInterface $httpKernel, HttpUtils $httpUtils, array $options = [], LoggerInterface $logger = null)
     {
         $this->httpKernel = $httpKernel;
         $this->httpUtils = $httpUtils;
@@ -68,11 +60,6 @@ class DefaultAuthenticationFailureHandler implements AuthenticationFailureHandle
         return $this->options;
     }
 
-    /**
-     * Sets the options.
-     *
-     * @param array $options An array of options
-     */
     public function setOptions(array $options)
     {
         $this->options = array_merge($this->defaultOptions, $options);
@@ -93,7 +80,7 @@ class DefaultAuthenticationFailureHandler implements AuthenticationFailureHandle
 
         if ($this->options['failure_forward']) {
             if (null !== $this->logger) {
-                $this->logger->debug('Authentication failure, forward triggered.', array('failure_path' => $this->options['failure_path']));
+                $this->logger->debug('Authentication failure, forward triggered.', ['failure_path' => $this->options['failure_path']]);
             }
 
             $subRequest = $this->httpUtils->createRequest($request, $this->options['failure_path']);
@@ -103,7 +90,7 @@ class DefaultAuthenticationFailureHandler implements AuthenticationFailureHandle
         }
 
         if (null !== $this->logger) {
-            $this->logger->debug('Authentication failure, redirect triggered.', array('failure_path' => $this->options['failure_path']));
+            $this->logger->debug('Authentication failure, redirect triggered.', ['failure_path' => $this->options['failure_path']]);
         }
 
         $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);

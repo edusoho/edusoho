@@ -8,17 +8,161 @@
  * file that was distributed with this source code.
  */
 
+use SebastianBergmann\Environment\Runtime;
+
 /**
  * Utility methods for PHP sub-processes.
- *
- * @since Class available since Release 3.4.0
  */
 abstract class PHPUnit_Util_PHP
 {
     /**
-     * @return PHPUnit_Util_PHP
+     * @var Runtime
+     */
+    protected $runtime;
+
+    /**
+     * @var bool
+     */
+    protected $stderrRedirection = false;
+
+    /**
+     * @var string
+     */
+    protected $stdin = '';
+
+    /**
+     * @var string
+     */
+    protected $args = '';
+
+    /**
+     * @var array
+     */
+    protected $env = [];
+
+    /**
+     * @var int
+     */
+    protected $timeout = 0;
+
+    /**
+     * Creates internal Runtime instance.
+     */
+    public function __construct()
+    {
+        $this->runtime = new Runtime();
+    }
+
+    /**
+     * Defines if should use STDERR redirection or not.
      *
-     * @since  Method available since Release 3.5.12
+     * Then $stderrRedirection is TRUE, STDERR is redirected to STDOUT.
+     *
+     * @throws PHPUnit_Framework_Exception
+     *
+     * @param bool $stderrRedirection
+     */
+    public function setUseStderrRedirection($stderrRedirection)
+    {
+        if (!is_bool($stderrRedirection)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'boolean');
+        }
+
+        $this->stderrRedirection = $stderrRedirection;
+    }
+
+    /**
+     * Returns TRUE if uses STDERR redirection or FALSE if not.
+     *
+     * @return bool
+     */
+    public function useStderrRedirection()
+    {
+        return $this->stderrRedirection;
+    }
+
+    /**
+     * Sets the input string to be sent via STDIN
+     *
+     * @param string $stdin
+     */
+    public function setStdin($stdin)
+    {
+        $this->stdin = (string) $stdin;
+    }
+
+    /**
+     * Returns the input string to be sent via STDIN
+     *
+     * @return string
+     */
+    public function getStdin()
+    {
+        return $this->stdin;
+    }
+
+    /**
+     * Sets the string of arguments to pass to the php job
+     *
+     * @param string $args
+     */
+    public function setArgs($args)
+    {
+        $this->args = (string) $args;
+    }
+
+    /**
+     * Returns the string of arguments to pass to the php job
+     *
+     * @retrun string
+     */
+    public function getArgs()
+    {
+        return $this->args;
+    }
+
+    /**
+     * Sets the array of environment variables to start the child process with
+     *
+     * @param array $env
+     */
+    public function setEnv(array $env)
+    {
+        $this->env = $env;
+    }
+
+    /**
+     * Returns the array of environment variables to start the child process with
+     *
+     * @return array
+     */
+    public function getEnv()
+    {
+        return $this->env;
+    }
+
+    /**
+     * Sets the amount of seconds to wait before timing out
+     *
+     * @param int $timeout
+     */
+    public function setTimeout($timeout)
+    {
+        $this->timeout = (int) $timeout;
+    }
+
+    /**
+     * Returns the amount of seconds to wait before timing out
+     *
+     * @return int
+     */
+    public function getTimeout()
+    {
+        return $this->timeout;
+    }
+
+    /**
+     * @return PHPUnit_Util_PHP
      */
     public static function factory()
     {
@@ -53,6 +197,42 @@ abstract class PHPUnit_Util_PHP
     }
 
     /**
+     * Returns the command based into the configurations.
+     *
+     * @param array       $settings
+     * @param string|null $file
+     *
+     * @return string
+     */
+    public function getCommand(array $settings, $file = null)
+    {
+        $command = $this->runtime->getBinary();
+        $command .= $this->settingsToParameters($settings);
+
+        if ('phpdbg' === PHP_SAPI) {
+            $command .= ' -qrr ';
+
+            if ($file) {
+                $command .= '-e ' . escapeshellarg($file);
+            } else {
+                $command .= escapeshellarg(__DIR__ . '/PHP/eval-stdin.php');
+            }
+        } elseif ($file) {
+            $command .= ' -f ' . escapeshellarg($file);
+        }
+
+        if ($this->args) {
+            $command .= ' -- ' . $this->args;
+        }
+
+        if (true === $this->stderrRedirection) {
+            $command .= ' 2>&1';
+        }
+
+        return $command;
+    }
+
+    /**
      * Runs a single job (PHP code) using a separate PHP process.
      *
      * @param string $job
@@ -62,14 +242,12 @@ abstract class PHPUnit_Util_PHP
      *
      * @throws PHPUnit_Framework_Exception
      */
-    abstract public function runJob($job, array $settings = array());
+    abstract public function runJob($job, array $settings = []);
 
     /**
      * @param array $settings
      *
      * @return string
-     *
-     * @since Method available since Release 4.0.0
      */
     protected function settingsToParameters(array $settings)
     {
@@ -89,8 +267,6 @@ abstract class PHPUnit_Util_PHP
      * @param PHPUnit_Framework_TestResult $result
      * @param string                       $stdout
      * @param string                       $stderr
-     *
-     * @since Method available since Release 3.5.0
      */
     private function processChildResult(PHPUnit_Framework_Test $test, PHPUnit_Framework_TestResult $result, $stdout, $stderr)
     {
@@ -133,6 +309,7 @@ abstract class PHPUnit_Util_PHP
                 $test->addToAssertionCount($childResult['numAssertions']);
 
                 $childResult = $childResult['result'];
+                /* @var $childResult PHPUnit_Framework_TestResult */
 
                 if ($result->getCollectCodeCoverageInformation()) {
                     $result->getCodeCoverage()->merge(
@@ -145,6 +322,7 @@ abstract class PHPUnit_Util_PHP
                 $risky          = $childResult->risky();
                 $skipped        = $childResult->skipped();
                 $errors         = $childResult->errors();
+                $warnings       = $childResult->warnings();
                 $failures       = $childResult->failures();
 
                 if (!empty($notImplemented)) {
@@ -171,6 +349,12 @@ abstract class PHPUnit_Util_PHP
                         $this->getException($errors[0]),
                         $time
                     );
+                } elseif (!empty($warnings)) {
+                    $result->addWarning(
+                        $test,
+                        $this->getException($warnings[0]),
+                        $time
+                    );
                 } elseif (!empty($failures)) {
                     $result->addFailure(
                         $test,
@@ -195,7 +379,6 @@ abstract class PHPUnit_Util_PHP
      *
      * @return Exception
      *
-     * @since  Method available since Release 3.6.0
      * @see    https://github.com/sebastianbergmann/phpunit/issues/74
      */
     private function getException(PHPUnit_Framework_TestFailure $error)
@@ -203,7 +386,7 @@ abstract class PHPUnit_Util_PHP
         $exception = $error->thrownException();
 
         if ($exception instanceof __PHP_Incomplete_Class) {
-            $exceptionArray = array();
+            $exceptionArray = [];
             foreach ((array) $exception as $key => $value) {
                 $key                  = substr($key, strrpos($key, "\0") + 1);
                 $exceptionArray[$key] = $value;

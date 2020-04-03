@@ -52,10 +52,10 @@ final class Utils
      */
     public static function camelCaseToUnderscore($string)
     {
-        return preg_replace_callback(
+        return Preg::replaceCallback(
             '/(^|[a-z0-9])([A-Z])/',
             function (array $matches) {
-                return strtolower(strlen($matches[1]) ? $matches[1].'_'.$matches[2] : $matches[2]);
+                return strtolower('' !== $matches[1] ? $matches[1].'_'.$matches[2] : $matches[2]);
             },
             $string
         );
@@ -95,7 +95,7 @@ final class Utils
      */
     public static function splitLines($content)
     {
-        preg_match_all("/[^\n\r]+[\r\n]*/", $content, $matches);
+        Preg::matchAll("/[^\n\r]+[\r\n]*/", $content, $matches);
 
         return $matches[0];
     }

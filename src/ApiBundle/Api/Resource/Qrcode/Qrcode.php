@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Qrcode;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class Qrcode extends AbstractResource
 {
@@ -15,7 +16,7 @@ class Qrcode extends AbstractResource
         }
         $params = $this->fillParams($request->query->all());
         $user = $this->getCurrentUser();
-        $url = $this->generateUrl($route, $params, true);
+        $url = $this->generateUrl($route, $params, UrlGeneratorInterface::ABSOLUTE_URL);
         $token = $this->getTokenService()->makeToken(
             'qrcode',
             array(
@@ -27,10 +28,10 @@ class Qrcode extends AbstractResource
                 'duration' => 3600,
             )
         );
-        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), UrlGeneratorInterface::ABSOLUTE_URL);
 
         return array(
-            'img' => $this->generateUrl('common_qrcode', array('text' => $url), true),
+            'img' => $this->generateUrl('common_qrcode', array('text' => $url), UrlGeneratorInterface::ABSOLUTE_URL),
         );
     }
 

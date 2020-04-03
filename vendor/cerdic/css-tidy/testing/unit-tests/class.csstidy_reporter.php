@@ -4,7 +4,7 @@
  * Custom test reporter for CSSTidy, adds appropriate CSS declarations
  * for diffs.
  */
-class csstidy_reporter extends HTMLReporter
+class csstidy_reporter extends HtmlReporter
 {
 
 	function _getCss() {

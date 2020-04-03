@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use Biz\Common\CommonException;
 use Codeages\Biz\Order\Service\OrderService;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use VipPlugin\Biz\Vip\Service\VipService;
 use AppBundle\Common\CurlToolkit;
 use AppBundle\Common\ArrayToolkit;
@@ -94,7 +95,7 @@ class DefaultController extends BaseController
     public function getCloudNoticesAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
-            $domain = $this->generateUrl('homepage', array(), true);
+            $domain = $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
             $api = CloudAPIFactory::create('root');
             $result = $api->get('/trial/remainDays', array('domain' => $domain));
 

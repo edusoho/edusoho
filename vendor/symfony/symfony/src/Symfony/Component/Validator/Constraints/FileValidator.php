@@ -13,7 +13,6 @@ namespace Symfony\Component\Validator\Constraints;
 
 use Symfony\Component\HttpFoundation\File\File as FileObject;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -28,13 +27,13 @@ class FileValidator extends ConstraintValidator
     const KIB_BYTES = 1024;
     const MIB_BYTES = 1048576;
 
-    private static $suffices = array(
+    private static $suffices = [
         1 => 'bytes',
         self::KB_BYTES => 'kB',
         self::MB_BYTES => 'MB',
         self::KIB_BYTES => 'KiB',
         self::MIB_BYTES => 'MiB',
-    );
+    ];
 
     /**
      * {@inheritdoc}
@@ -42,7 +41,7 @@ class FileValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         if (!$constraint instanceof File) {
-            throw new UnexpectedTypeException($constraint, __NAMESPACE__.'\File');
+            throw new UnexpectedTypeException($constraint, File::class);
         }
 
         if (null === $value || '' === $value) {
@@ -58,146 +57,82 @@ class FileValidator extends ConstraintValidator
                         $binaryFormat = $constraint->binaryFormat;
                     } else {
                         $limitInBytes = $iniLimitSize;
-                        $binaryFormat = true;
+                        $binaryFormat = null === $constraint->binaryFormat ? true : $constraint->binaryFormat;
                     }
 
-                    list($sizeAsString, $limitAsString, $suffix) = $this->factorizeSizes(0, $limitInBytes, $binaryFormat);
-                    if ($this->context instanceof ExecutionContextInterface) {
-                        $this->context->buildViolation($constraint->uploadIniSizeErrorMessage)
-                            ->setParameter('{{ limit }}', $limitAsString)
-                            ->setParameter('{{ suffix }}', $suffix)
-                            ->setCode(UPLOAD_ERR_INI_SIZE)
-                            ->addViolation();
-                    } else {
-                        $this->buildViolation($constraint->uploadIniSizeErrorMessage)
-                            ->setParameter('{{ limit }}', $limitAsString)
-                            ->setParameter('{{ suffix }}', $suffix)
-                            ->setCode(UPLOAD_ERR_INI_SIZE)
-                            ->addViolation();
-                    }
+                    list(, $limitAsString, $suffix) = $this->factorizeSizes(0, $limitInBytes, $binaryFormat);
+                    $this->context->buildViolation($constraint->uploadIniSizeErrorMessage)
+                        ->setParameter('{{ limit }}', $limitAsString)
+                        ->setParameter('{{ suffix }}', $suffix)
+                        ->setCode(UPLOAD_ERR_INI_SIZE)
+                        ->addViolation();
 
                     return;
                 case UPLOAD_ERR_FORM_SIZE:
-                    if ($this->context instanceof ExecutionContextInterface) {
-                        $this->context->buildViolation($constraint->uploadFormSizeErrorMessage)
-                            ->setCode(UPLOAD_ERR_FORM_SIZE)
-                            ->addViolation();
-                    } else {
-                        $this->buildViolation($constraint->uploadFormSizeErrorMessage)
-                            ->setCode(UPLOAD_ERR_FORM_SIZE)
-                            ->addViolation();
-                    }
+                    $this->context->buildViolation($constraint->uploadFormSizeErrorMessage)
+                        ->setCode(UPLOAD_ERR_FORM_SIZE)
+                        ->addViolation();
 
                     return;
                 case UPLOAD_ERR_PARTIAL:
-                    if ($this->context instanceof ExecutionContextInterface) {
-                        $this->context->buildViolation($constraint->uploadPartialErrorMessage)
-                            ->setCode(UPLOAD_ERR_PARTIAL)
-                            ->addViolation();
-                    } else {
-                        $this->buildViolation($constraint->uploadPartialErrorMessage)
-                            ->setCode(UPLOAD_ERR_PARTIAL)
-                            ->addViolation();
-                    }
+                    $this->context->buildViolation($constraint->uploadPartialErrorMessage)
+                        ->setCode(UPLOAD_ERR_PARTIAL)
+                        ->addViolation();
 
                     return;
                 case UPLOAD_ERR_NO_FILE:
-                    if ($this->context instanceof ExecutionContextInterface) {
-                        $this->context->buildViolation($constraint->uploadNoFileErrorMessage)
-                            ->setCode(UPLOAD_ERR_NO_FILE)
-                            ->addViolation();
-                    } else {
-                        $this->buildViolation($constraint->uploadNoFileErrorMessage)
-                            ->setCode(UPLOAD_ERR_NO_FILE)
-                            ->addViolation();
-                    }
+                    $this->context->buildViolation($constraint->uploadNoFileErrorMessage)
+                        ->setCode(UPLOAD_ERR_NO_FILE)
+                        ->addViolation();
 
                     return;
                 case UPLOAD_ERR_NO_TMP_DIR:
-                    if ($this->context instanceof ExecutionContextInterface) {
-                        $this->context->buildViolation($constraint->uploadNoTmpDirErrorMessage)
-                            ->setCode(UPLOAD_ERR_NO_TMP_DIR)
-                            ->addViolation();
-                    } else {
-                        $this->buildViolation($constraint->uploadNoTmpDirErrorMessage)
-                            ->setCode(UPLOAD_ERR_NO_TMP_DIR)
-                            ->addViolation();
-                    }
+                    $this->context->buildViolation($constraint->uploadNoTmpDirErrorMessage)
+                        ->setCode(UPLOAD_ERR_NO_TMP_DIR)
+                        ->addViolation();
 
                     return;
                 case UPLOAD_ERR_CANT_WRITE:
-                    if ($this->context instanceof ExecutionContextInterface) {
-                        $this->context->buildViolation($constraint->uploadCantWriteErrorMessage)
-                            ->setCode(UPLOAD_ERR_CANT_WRITE)
-                            ->addViolation();
-                    } else {
-                        $this->buildViolation($constraint->uploadCantWriteErrorMessage)
-                            ->setCode(UPLOAD_ERR_CANT_WRITE)
-                            ->addViolation();
-                    }
+                    $this->context->buildViolation($constraint->uploadCantWriteErrorMessage)
+                        ->setCode(UPLOAD_ERR_CANT_WRITE)
+                        ->addViolation();
 
                     return;
                 case UPLOAD_ERR_EXTENSION:
-                    if ($this->context instanceof ExecutionContextInterface) {
-                        $this->context->buildViolation($constraint->uploadExtensionErrorMessage)
-                            ->setCode(UPLOAD_ERR_EXTENSION)
-                            ->addViolation();
-                    } else {
-                        $this->buildViolation($constraint->uploadExtensionErrorMessage)
-                            ->setCode(UPLOAD_ERR_EXTENSION)
-                            ->addViolation();
-                    }
+                    $this->context->buildViolation($constraint->uploadExtensionErrorMessage)
+                        ->setCode(UPLOAD_ERR_EXTENSION)
+                        ->addViolation();
 
                     return;
                 default:
-                    if ($this->context instanceof ExecutionContextInterface) {
-                        $this->context->buildViolation($constraint->uploadErrorMessage)
-                            ->setCode($value->getError())
-                            ->addViolation();
-                    } else {
-                        $this->buildViolation($constraint->uploadErrorMessage)
-                            ->setCode($value->getError())
-                            ->addViolation();
-                    }
+                    $this->context->buildViolation($constraint->uploadErrorMessage)
+                        ->setCode($value->getError())
+                        ->addViolation();
 
                     return;
             }
         }
 
-        if (!is_scalar($value) && !$value instanceof FileObject && !(is_object($value) && method_exists($value, '__toString'))) {
+        if (!is_scalar($value) && !$value instanceof FileObject && !(\is_object($value) && method_exists($value, '__toString'))) {
             throw new UnexpectedTypeException($value, 'string');
         }
 
         $path = $value instanceof FileObject ? $value->getPathname() : (string) $value;
 
         if (!is_file($path)) {
-            if ($this->context instanceof ExecutionContextInterface) {
-                $this->context->buildViolation($constraint->notFoundMessage)
-                    ->setParameter('{{ file }}', $this->formatValue($path))
-                    ->setCode(File::NOT_FOUND_ERROR)
-                    ->addViolation();
-            } else {
-                $this->buildViolation($constraint->notFoundMessage)
-                    ->setParameter('{{ file }}', $this->formatValue($path))
-                    ->setCode(File::NOT_FOUND_ERROR)
-                    ->addViolation();
-            }
+            $this->context->buildViolation($constraint->notFoundMessage)
+                ->setParameter('{{ file }}', $this->formatValue($path))
+                ->setCode(File::NOT_FOUND_ERROR)
+                ->addViolation();
 
             return;
         }
 
         if (!is_readable($path)) {
-            if ($this->context instanceof ExecutionContextInterface) {
-                $this->context->buildViolation($constraint->notReadableMessage)
-                    ->setParameter('{{ file }}', $this->formatValue($path))
-                    ->setCode(File::NOT_READABLE_ERROR)
-                    ->addViolation();
-            } else {
-                $this->buildViolation($constraint->notReadableMessage)
-                    ->setParameter('{{ file }}', $this->formatValue($path))
-                    ->setCode(File::NOT_READABLE_ERROR)
-                    ->addViolation();
-            }
+            $this->context->buildViolation($constraint->notReadableMessage)
+                ->setParameter('{{ file }}', $this->formatValue($path))
+                ->setCode(File::NOT_READABLE_ERROR)
+                ->addViolation();
 
             return;
         }
@@ -205,17 +140,10 @@ class FileValidator extends ConstraintValidator
         $sizeInBytes = filesize($path);
 
         if (0 === $sizeInBytes) {
-            if ($this->context instanceof ExecutionContextInterface) {
-                $this->context->buildViolation($constraint->disallowEmptyMessage)
-                    ->setParameter('{{ file }}', $this->formatValue($path))
-                    ->setCode(File::EMPTY_ERROR)
-                    ->addViolation();
-            } else {
-                $this->buildViolation($constraint->disallowEmptyMessage)
-                    ->setParameter('{{ file }}', $this->formatValue($path))
-                    ->setCode(File::EMPTY_ERROR)
-                    ->addViolation();
-            }
+            $this->context->buildViolation($constraint->disallowEmptyMessage)
+                ->setParameter('{{ file }}', $this->formatValue($path))
+                ->setCode(File::EMPTY_ERROR)
+                ->addViolation();
 
             return;
         }
@@ -225,23 +153,13 @@ class FileValidator extends ConstraintValidator
 
             if ($sizeInBytes > $limitInBytes) {
                 list($sizeAsString, $limitAsString, $suffix) = $this->factorizeSizes($sizeInBytes, $limitInBytes, $constraint->binaryFormat);
-                if ($this->context instanceof ExecutionContextInterface) {
-                    $this->context->buildViolation($constraint->maxSizeMessage)
-                        ->setParameter('{{ file }}', $this->formatValue($path))
-                        ->setParameter('{{ size }}', $sizeAsString)
-                        ->setParameter('{{ limit }}', $limitAsString)
-                        ->setParameter('{{ suffix }}', $suffix)
-                        ->setCode(File::TOO_LARGE_ERROR)
-                        ->addViolation();
-                } else {
-                    $this->buildViolation($constraint->maxSizeMessage)
-                        ->setParameter('{{ file }}', $this->formatValue($path))
-                        ->setParameter('{{ size }}', $sizeAsString)
-                        ->setParameter('{{ limit }}', $limitAsString)
-                        ->setParameter('{{ suffix }}', $suffix)
-                        ->setCode(File::TOO_LARGE_ERROR)
-                        ->addViolation();
-                }
+                $this->context->buildViolation($constraint->maxSizeMessage)
+                    ->setParameter('{{ file }}', $this->formatValue($path))
+                    ->setParameter('{{ size }}', $sizeAsString)
+                    ->setParameter('{{ limit }}', $limitAsString)
+                    ->setParameter('{{ suffix }}', $suffix)
+                    ->setCode(File::TOO_LARGE_ERROR)
+                    ->addViolation();
 
                 return;
             }
@@ -267,27 +185,18 @@ class FileValidator extends ConstraintValidator
                 }
             }
 
-            if ($this->context instanceof ExecutionContextInterface) {
-                $this->context->buildViolation($constraint->mimeTypesMessage)
-                    ->setParameter('{{ file }}', $this->formatValue($path))
-                    ->setParameter('{{ type }}', $this->formatValue($mime))
-                    ->setParameter('{{ types }}', $this->formatValues($mimeTypes))
-                    ->setCode(File::INVALID_MIME_TYPE_ERROR)
-                    ->addViolation();
-            } else {
-                $this->buildViolation($constraint->mimeTypesMessage)
-                    ->setParameter('{{ file }}', $this->formatValue($path))
-                    ->setParameter('{{ type }}', $this->formatValue($mime))
-                    ->setParameter('{{ types }}', $this->formatValues($mimeTypes))
-                    ->setCode(File::INVALID_MIME_TYPE_ERROR)
-                    ->addViolation();
-            }
+            $this->context->buildViolation($constraint->mimeTypesMessage)
+                ->setParameter('{{ file }}', $this->formatValue($path))
+                ->setParameter('{{ type }}', $this->formatValue($mime))
+                ->setParameter('{{ types }}', $this->formatValues($mimeTypes))
+                ->setCode(File::INVALID_MIME_TYPE_ERROR)
+                ->addViolation();
         }
     }
 
     private static function moreDecimalsThan($double, $numberOfDecimals)
     {
-        return strlen((string) $double) > strlen(round($double, $numberOfDecimals));
+        return \strlen((string) $double) > \strlen(round($double, $numberOfDecimals));
     }
 
     /**
@@ -324,6 +233,6 @@ class FileValidator extends ConstraintValidator
             $sizeAsString = (string) round($size / $coef, 2);
         }
 
-        return array($sizeAsString, $limitAsString, self::$suffices[$coef]);
+        return [$sizeAsString, $limitAsString, self::$suffices[$coef]];
     }
 }

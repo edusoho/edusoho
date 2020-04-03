@@ -151,9 +151,9 @@ abstract class BaseResource
 
     protected function destroyedNicknameFilter($user)
     {
-        $user['nickname'] = ($user['destroyed'] == 1) ? "帐号已注销" : $user['nickname'];
+        $user['nickname'] = ($user['destroyed'] == 1) ? '帐号已注销' : $user['nickname'];
 
-        return $user ;
+        return $user;
     }
 
     protected function nextCursorPaging($currentCursor, $currentStart, $currentLimit, $currentRows)

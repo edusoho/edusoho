@@ -3,11 +3,11 @@
 namespace Incenteev\ParameterHandler\Tests;
 
 use Incenteev\ParameterHandler\Processor;
-use Prophecy\PhpUnit\ProphecyTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
 
-class ProcessorTest extends ProphecyTestCase
+class ProcessorTest extends TestCase
 {
     private $io;
     private $environmentBackup = array();
@@ -45,7 +45,12 @@ class ProcessorTest extends ProphecyTestCase
     {
         chdir(__DIR__);
 
-        $this->setExpectedException('InvalidArgumentException', $exceptionMessage);
+        if (method_exists($this, 'expectException')) {
+            $this->expectException('InvalidArgumentException');
+            $this->expectExceptionMessage($exceptionMessage);
+        } else {
+            $this->setExpectedException('InvalidArgumentException', $exceptionMessage);
+        }
 
         $this->processor->processFile($config);
     }

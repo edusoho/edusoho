@@ -1,5 +1,5 @@
 {
-    "Version": "2.1.29.44",
+    "Version": "36",
     "Names": {
         "AED": [
             "AED",
@@ -120,6 +120,10 @@
         "CLP": [
             "CLP",
             "Chili pesosi"
+        ],
+        "CNH": [
+            "CNH",
+            "CNH"
         ],
         "CNY": [
             "CN¥",
@@ -371,6 +375,10 @@
         ],
         "MRO": [
             "MRO",
+            "Mavritaniya uqiyasi (1973–2017)"
+        ],
+        "MRU": [
+            "MRU",
             "Mavritaniya uqiyasi"
         ],
         "MUR": [
@@ -431,7 +439,7 @@
         ],
         "PEN": [
             "PEN",
-            "Peru yangi soli"
+            "Peru soli"
         ],
         "PGK": [
             "PGK",
@@ -519,6 +527,10 @@
         ],
         "STD": [
             "STD",
+            "San-Tome va Prinsipi dobrasi (1977–2017)"
+        ],
+        "STN": [
+            "STN",
             "San-Tome va Prinsipi dobrasi"
         ],
         "SYP": [
@@ -587,6 +599,10 @@
         ],
         "VEF": [
             "VEF",
+            "Venesuela bolivari (2008–2018)"
+        ],
+        "VES": [
+            "VES",
             "Venesuela bolivari"
         ],
         "VND": [

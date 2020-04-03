@@ -4,9 +4,8 @@ namespace Topxia\MobileBundleV2\Processor\Impl;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\ResourceKernel;
-use AppBundle\Common\ArrayToolkit;
-use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Codeages\Biz\Pay\Service\PayService;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
 use Topxia\MobileBundleV2\Processor\OrderProcessor;
@@ -63,13 +62,12 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         $amount = $this->getParam('amount', 0);
         $transactionId = $this->getParam('transaction_id', false);
 
-
         $data = array(
             'receipt' => $receipt,
             'amount' => $amount,
             'transaction_id' => $transactionId,
             'is_sand_box' => false,
-            'user_id' => $user['id']
+            'user_id' => $user['id'],
         );
 
         try {
@@ -81,7 +79,6 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         } catch (\Exception $e) {
             return $this->createErrorResponse('error', $e->getMessage());
         }
-
     }
 
     private function getPayOrderInfo($targetType, $targetId)
@@ -287,7 +284,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                     'couponCode' => $this->getParam('couponCode', ''),
                     'unit' => $this->getParam('unitType', ''),
                     'num' => $this->getParam('duration', 1),
-                    'coinAmount' => $coinAmount
+                    'coinAmount' => $coinAmount,
                 ),
                 array()
             );
@@ -299,12 +296,12 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                 return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => '');
             } else {
                 $platformCreatedResult = $this->getPayService()->getCreateTradeResultByTradeSnFromPlatform($result['sn']);
+
                 return array('status' => 'ok', 'paid' => false, 'message' => '', 'payUrl' => $platformCreatedResult['url']);
             }
         } catch (\Exception $exception) {
             return $this->createErrorResponse('error', $this->controller->get('translator')->trans($exception->getMessage()));
         }
-
     }
 
     /**
@@ -605,7 +602,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         }
 
         if (empty($payment['alipay_type']) || $payment['alipay_type'] != 'direct') {
-            $payUrl = $this->controller->generateUrl('mapi_order_submit_pay_request', array('id' => $order['id'], 'token' => $token), true);
+            $payUrl = $this->controller->generateUrl('mapi_order_submit_pay_request', array('id' => $order['id'], 'token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
             $result['payUrl'] = $payUrl;
         } else {
             $result['payUrl'] = MobileAlipayConfig::createAlipayOrderUrl($this->request, 'edusoho', $order);

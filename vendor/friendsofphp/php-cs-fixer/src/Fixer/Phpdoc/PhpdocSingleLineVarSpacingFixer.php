@@ -15,6 +15,7 @@ namespace PhpCsFixer\Fixer\Phpdoc;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Preg;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
@@ -31,7 +32,7 @@ final class PhpdocSingleLineVarSpacingFixer extends AbstractFixer
     public function getDefinition()
     {
         return new FixerDefinition(
-            'Single line @var PHPDoc should have proper spacing.',
+            'Single line `@var` PHPDoc should have proper spacing.',
             array(new CodeSample("<?php /**@var   MyClass   \$a   */\n\$a = test();"))
         );
     }
@@ -41,7 +42,7 @@ final class PhpdocSingleLineVarSpacingFixer extends AbstractFixer
      */
     public function getPriority()
     {
-        // should be ran after PhpdocNoAliasTagFixer.
+        // should be run after PhpdocNoAliasTagFixer.
         return -10;
     }
 
@@ -61,7 +62,8 @@ final class PhpdocSingleLineVarSpacingFixer extends AbstractFixer
         /** @var Token $token */
         foreach ($tokens as $index => $token) {
             if ($token->isGivenKind(T_DOC_COMMENT)) {
-                $token->setContent($this->fixTokenContent($token->getContent()));
+                $tokens[$index] = new Token(array(T_DOC_COMMENT, $this->fixTokenContent($token->getContent())));
+
                 continue;
             }
 
@@ -72,7 +74,7 @@ final class PhpdocSingleLineVarSpacingFixer extends AbstractFixer
             $content = $token->getContent();
             $fixedContent = $this->fixTokenContent($content);
             if ($content !== $fixedContent) {
-                $tokens->overrideAt($index, array(T_DOC_COMMENT, $fixedContent));
+                $tokens[$index] = new Token(array(T_DOC_COMMENT, $fixedContent));
             }
         }
     }
@@ -84,7 +86,7 @@ final class PhpdocSingleLineVarSpacingFixer extends AbstractFixer
      */
     private function fixTokenContent($content)
     {
-        return preg_replace_callback(
+        return Preg::replaceCallback(
             '#^/\*\*[ \t]*@var[ \t]+(\S+)[ \t]*(\$\S+)?[ \t]*([^\n]*)\*/$#',
             function (array $matches) {
                 $content = '/** @var';

@@ -92,14 +92,18 @@ foreach($connections as $key => $sqlite) {
                 continue;
             }
 
-            $nextIndex = $tokens->getNextMeaningfulToken($index);
-            $nextToken = null !== $nextIndex ? $tokens[$nextIndex] : null;
+            $nextIndex = $index;
+            do {
+                $nextIndex = $tokens->getNextMeaningfulToken($nextIndex);
+            } while (null !== $nextIndex && $tokens[$nextIndex]->equals('('));
 
-            if (null === $nextToken || $nextToken->equals('}')) {
-                $tokens->overrideAt($index, array(T_COMMENT, '/*'.ltrim($token->getContent(), '/*')));
+            if (null === $nextIndex || $tokens[$nextIndex]->equals('}')) {
+                $tokens[$index] = new Token(array(T_COMMENT, '/*'.ltrim($token->getContent(), '/*')));
 
                 continue;
             }
+
+            $nextToken = $tokens[$nextIndex];
 
             if ($this->isStructuralElement($nextToken)) {
                 continue;
@@ -123,13 +127,11 @@ foreach($connections as $key => $sqlite) {
                 continue;
             }
 
-            $tokens->overrideAt($index, array(T_COMMENT, '/*'.ltrim($token->getContent(), '/*')));
+            $tokens[$index] = new Token(array(T_COMMENT, '/*'.ltrim($token->getContent(), '/*')));
         }
     }
 
     /**
-     * Check if token is a structural element.
-     *
      * @see https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md#3-definitions
      *
      * @param Token $token

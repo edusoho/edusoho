@@ -29,7 +29,7 @@ class DumpListenerTest extends TestCase
     public function testSubscribedEvents()
     {
         $this->assertSame(
-            array(ConsoleEvents::COMMAND => array('configure', 1024)),
+            [ConsoleEvents::COMMAND => ['configure', 1024]],
             DumpListener::getSubscribedEvents()
         );
     }
@@ -68,7 +68,7 @@ class MockCloner implements ClonerInterface
 {
     public function cloneVar($var)
     {
-        return new Data(array($var.'-'));
+        return new Data([[$var.'-']]);
     }
 }
 
@@ -76,8 +76,6 @@ class MockDumper implements DataDumperInterface
 {
     public function dump(Data $data)
     {
-        $rawData = $data->getRawData();
-
-        echo '+'.$rawData[0];
+        echo '+'.$data->getValue();
     }
 }

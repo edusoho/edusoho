@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\Validator\Constraints;
 
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -27,14 +26,14 @@ class LengthValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         if (!$constraint instanceof Length) {
-            throw new UnexpectedTypeException($constraint, __NAMESPACE__.'\Length');
+            throw new UnexpectedTypeException($constraint, Length::class);
         }
 
         if (null === $value || '' === $value) {
             return;
         }
 
-        if (!is_scalar($value) && !(is_object($value) && method_exists($value, '__toString'))) {
+        if (!is_scalar($value) && !(\is_object($value) && method_exists($value, '__toString'))) {
             throw new UnexpectedTypeException($value, 'string');
         }
 
@@ -45,65 +44,36 @@ class LengthValidator extends ConstraintValidator
         }
 
         if ($invalidCharset) {
-            if ($this->context instanceof ExecutionContextInterface) {
-                $this->context->buildViolation($constraint->charsetMessage)
-                    ->setParameter('{{ value }}', $this->formatValue($stringValue))
-                    ->setParameter('{{ charset }}', $constraint->charset)
-                    ->setInvalidValue($value)
-                    ->setCode(Length::INVALID_CHARACTERS_ERROR)
-                    ->addViolation();
-            } else {
-                $this->buildViolation($constraint->charsetMessage)
-                    ->setParameter('{{ value }}', $this->formatValue($stringValue))
-                    ->setParameter('{{ charset }}', $constraint->charset)
-                    ->setInvalidValue($value)
-                    ->setCode(Length::INVALID_CHARACTERS_ERROR)
-                    ->addViolation();
-            }
+            $this->context->buildViolation($constraint->charsetMessage)
+                ->setParameter('{{ value }}', $this->formatValue($stringValue))
+                ->setParameter('{{ charset }}', $constraint->charset)
+                ->setInvalidValue($value)
+                ->setCode(Length::INVALID_CHARACTERS_ERROR)
+                ->addViolation();
 
             return;
         }
 
         if (null !== $constraint->max && $length > $constraint->max) {
-            if ($this->context instanceof ExecutionContextInterface) {
-                $this->context->buildViolation($constraint->min == $constraint->max ? $constraint->exactMessage : $constraint->maxMessage)
-                    ->setParameter('{{ value }}', $this->formatValue($stringValue))
-                    ->setParameter('{{ limit }}', $constraint->max)
-                    ->setInvalidValue($value)
-                    ->setPlural((int) $constraint->max)
-                    ->setCode(Length::TOO_LONG_ERROR)
-                    ->addViolation();
-            } else {
-                $this->buildViolation($constraint->min == $constraint->max ? $constraint->exactMessage : $constraint->maxMessage)
-                    ->setParameter('{{ value }}', $this->formatValue($stringValue))
-                    ->setParameter('{{ limit }}', $constraint->max)
-                    ->setInvalidValue($value)
-                    ->setPlural((int) $constraint->max)
-                    ->setCode(Length::TOO_LONG_ERROR)
-                    ->addViolation();
-            }
+            $this->context->buildViolation($constraint->min == $constraint->max ? $constraint->exactMessage : $constraint->maxMessage)
+                ->setParameter('{{ value }}', $this->formatValue($stringValue))
+                ->setParameter('{{ limit }}', $constraint->max)
+                ->setInvalidValue($value)
+                ->setPlural((int) $constraint->max)
+                ->setCode(Length::TOO_LONG_ERROR)
+                ->addViolation();
 
             return;
         }
 
         if (null !== $constraint->min && $length < $constraint->min) {
-            if ($this->context instanceof ExecutionContextInterface) {
-                $this->context->buildViolation($constraint->min == $constraint->max ? $constraint->exactMessage : $constraint->minMessage)
-                    ->setParameter('{{ value }}', $this->formatValue($stringValue))
-                    ->setParameter('{{ limit }}', $constraint->min)
-                    ->setInvalidValue($value)
-                    ->setPlural((int) $constraint->min)
-                    ->setCode(Length::TOO_SHORT_ERROR)
-                    ->addViolation();
-            } else {
-                $this->buildViolation($constraint->min == $constraint->max ? $constraint->exactMessage : $constraint->minMessage)
-                    ->setParameter('{{ value }}', $this->formatValue($stringValue))
-                    ->setParameter('{{ limit }}', $constraint->min)
-                    ->setInvalidValue($value)
-                    ->setPlural((int) $constraint->min)
-                    ->setCode(Length::TOO_SHORT_ERROR)
-                    ->addViolation();
-            }
+            $this->context->buildViolation($constraint->min == $constraint->max ? $constraint->exactMessage : $constraint->minMessage)
+                ->setParameter('{{ value }}', $this->formatValue($stringValue))
+                ->setParameter('{{ limit }}', $constraint->min)
+                ->setInvalidValue($value)
+                ->setPlural((int) $constraint->min)
+                ->setCode(Length::TOO_SHORT_ERROR)
+                ->addViolation();
         }
     }
 }

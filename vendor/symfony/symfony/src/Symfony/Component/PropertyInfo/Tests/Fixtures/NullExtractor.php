@@ -15,7 +15,6 @@ use Symfony\Component\PropertyInfo\PropertyAccessExtractorInterface;
 use Symfony\Component\PropertyInfo\PropertyDescriptionExtractorInterface;
 use Symfony\Component\PropertyInfo\PropertyListExtractorInterface;
 use Symfony\Component\PropertyInfo\PropertyTypeExtractorInterface;
-use Symfony\Component\PropertyInfo\Type;
 
 /**
  * Not able to guess anything.
@@ -27,42 +26,72 @@ class NullExtractor implements PropertyListExtractorInterface, PropertyDescripti
     /**
      * {@inheritdoc}
      */
-    public function getShortDescription($class, $property, array $context = array())
+    public function getShortDescription($class, $property, array $context = [])
     {
+        $this->assertIsString($class);
+        $this->assertIsString($property);
+
+        return null;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getLongDescription($class, $property, array $context = array())
+    public function getLongDescription($class, $property, array $context = [])
     {
+        $this->assertIsString($class);
+        $this->assertIsString($property);
+
+        return null;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getTypes($class, $property, array $context = array())
+    public function getTypes($class, $property, array $context = [])
     {
+        $this->assertIsString($class);
+        $this->assertIsString($property);
+
+        return null;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isReadable($class, $property, array $context = array())
+    public function isReadable($class, $property, array $context = [])
     {
+        $this->assertIsString($class);
+        $this->assertIsString($property);
+
+        return null;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isWritable($class, $property, array $context = array())
+    public function isWritable($class, $property, array $context = [])
     {
+        $this->assertIsString($class);
+        $this->assertIsString($property);
+
+        return null;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getProperties($class, array $context = array())
+    public function getProperties($class, array $context = [])
     {
+        $this->assertIsString($class);
+
+        return null;
+    }
+
+    private function assertIsString($string)
+    {
+        if (!\is_string($string)) {
+            throw new \InvalidArgumentException(sprintf('"%s" expects strings, given "%s".', __CLASS__, \gettype($string)));
+        }
     }
 }

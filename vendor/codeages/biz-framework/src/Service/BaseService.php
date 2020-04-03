@@ -88,4 +88,12 @@ abstract class BaseService
     {
         return new ServiceException($message, $code);
     }
+
+    /**
+     * @return Validator
+     */
+    protected function getValidator()
+    {
+        return $this->biz['validator'];
+    }
 }

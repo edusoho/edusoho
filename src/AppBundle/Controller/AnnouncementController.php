@@ -7,6 +7,7 @@ use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Announcement\Service\AnnouncementService;
 use Biz\Announcement\Processor\AnnouncementProcessor;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AnnouncementController extends BaseController
 {
@@ -89,7 +90,7 @@ class AnnouncementController extends BaseController
 
             if ($request->request->get('notify') == 'notify') {
                 $targetObjectShowRout = $processor->getTargetShowUrl();
-                $targetObjectShowUrl = $this->generateUrl($targetObjectShowRout, array('id' => $targetId), true);
+                $targetObjectShowUrl = $this->generateUrl($targetObjectShowRout, array('id' => $targetId), UrlGeneratorInterface::ABSOLUTE_URL);
 
                 $result = $processor->announcementNotification($targetId, $targetObject, $targetObjectShowUrl);
             }

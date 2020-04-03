@@ -19,6 +19,7 @@ use PhpCsFixer\Cache\DirectoryInterface;
 use PhpCsFixer\Differ\DifferInterface;
 use PhpCsFixer\Error\Error;
 use PhpCsFixer\Error\ErrorsManager;
+use PhpCsFixer\FileReader;
 use PhpCsFixer\Fixer\FixerInterface;
 use PhpCsFixer\FixerFileProcessedEvent;
 use PhpCsFixer\Linter\LinterInterface;
@@ -26,7 +27,7 @@ use PhpCsFixer\Linter\LintingException;
 use PhpCsFixer\Linter\LintingResultInterface;
 use PhpCsFixer\Tokenizer\Tokens;
 use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
 
 /**
@@ -45,7 +46,7 @@ final class Runner
     private $directory;
 
     /**
-     * @var EventDispatcher|null
+     * @var null|EventDispatcherInterface
      */
     private $eventDispatcher;
 
@@ -88,7 +89,7 @@ final class Runner
         $finder,
         array $fixers,
         DifferInterface $differ,
-        EventDispatcher $eventDispatcher = null,
+        EventDispatcherInterface $eventDispatcher = null,
         ErrorsManager $errorsManager,
         LinterInterface $linter,
         $isDryRun,
@@ -163,7 +164,7 @@ final class Runner
             return;
         }
 
-        $old = file_get_contents($file->getRealPath());
+        $old = FileReader::createSingleton()->read($file->getRealPath());
         $tokens = Tokens::fromCode($old);
         $oldHash = $tokens->getCodeHash();
 
@@ -281,8 +282,6 @@ final class Runner
     }
 
     /**
-     * Dispatch event.
-     *
      * @param string $name
      * @param Event  $event
      */

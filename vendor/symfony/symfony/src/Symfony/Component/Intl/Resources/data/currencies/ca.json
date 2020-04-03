@@ -1,5 +1,5 @@
 {
-    "Version": "2.1.28.79",
+    "Version": "36",
     "Names": {
         "ADP": [
             "ADP",
@@ -261,8 +261,12 @@
             "CLP",
             "peso xilè"
         ],
+        "CNH": [
+            "CNH",
+            "iuan xinès extracontinental"
+        ],
         "CNY": [
-            "¥",
+            "CNY",
             "iuan xinès"
         ],
         "COP": [
@@ -275,7 +279,7 @@
         ],
         "CRC": [
             "CRC",
-            "colón costa-riqueny"
+            "colon costa-riqueny"
         ],
         "CSD": [
             "CSD",
@@ -523,7 +527,7 @@
             "dinar jordà"
         ],
         "JPY": [
-            "JP¥",
+            "¥",
             "ien japonès"
         ],
         "KES": [
@@ -676,6 +680,10 @@
         ],
         "MRO": [
             "MRO",
+            "ouguiya maurità (1973–2017)"
+        ],
+        "MRU": [
+            "MRU",
             "ouguiya maurità"
         ],
         "MTL": [
@@ -740,7 +748,7 @@
         ],
         "NIO": [
             "NIO",
-            "córdoba oro nicaragüenca"
+            "córdoba nicaragüenc"
         ],
         "NLG": [
             "NLG",
@@ -772,11 +780,11 @@
         ],
         "PEN": [
             "PEN",
-            "nou sol peruà"
+            "sol peruà"
         ],
         "PES": [
             "PES",
-            "sol peruà"
+            "sol peruà (1863–1965)"
         ],
         "PGK": [
             "PGK",
@@ -904,6 +912,10 @@
         ],
         "STD": [
             "STD",
+            "dobra de São Tomé i Príncipe (1977–2017)"
+        ],
+        "STN": [
+            "STN",
             "dobra de São Tomé i Príncipe"
         ],
         "SUR": [
@@ -912,11 +924,11 @@
         ],
         "SVC": [
             "SVC",
-            "colón salvadorenc"
+            "colon salvadorenc"
         ],
         "SYP": [
             "SYP",
-            "lliura síria"
+            "lliura siriana"
         ],
         "SZL": [
             "SZL",
@@ -1024,6 +1036,10 @@
         ],
         "VEF": [
             "VEF",
+            "bolívar veneçolà (2008–2018)"
+        ],
+        "VES": [
+            "VES",
             "bolívar veneçolà"
         ],
         "VND": [

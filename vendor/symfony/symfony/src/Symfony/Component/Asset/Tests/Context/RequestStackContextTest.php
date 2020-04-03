@@ -37,7 +37,7 @@ class RequestStackContextTest extends TestCase
 
         $requestStackContext = new RequestStackContext($requestStack);
 
-        $this->assertEquals($testBasePath, $requestStackContext->getBasePath());
+        $this->assertSame($testBasePath, $requestStackContext->getBasePath());
     }
 
     public function testIsSecureFalse()
@@ -59,6 +59,15 @@ class RequestStackContextTest extends TestCase
 
         $requestStackContext = new RequestStackContext($requestStack);
 
+        $this->assertTrue($requestStackContext->isSecure());
+    }
+
+    public function testDefaultContext()
+    {
+        $requestStack = $this->getMockBuilder('Symfony\Component\HttpFoundation\RequestStack')->getMock();
+        $requestStackContext = new RequestStackContext($requestStack, 'default-path', true);
+
+        $this->assertSame('default-path', $requestStackContext->getBasePath());
         $this->assertTrue($requestStackContext->isSecure());
     }
 }

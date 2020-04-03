@@ -58,8 +58,9 @@ final class NoShortEchoTagFixer extends AbstractFixer
      */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
+        $isHhvm = defined('HHVM_VERSION');
         $i = count($tokens);
-        $HHVM = defined('HHVM_VERSION');
+
         while ($i--) {
             $token = $tokens[$i];
 
@@ -72,7 +73,7 @@ final class NoShortEchoTagFixer extends AbstractFixer
                      * @see https://github.com/facebook/hhvm/issues/4809
                      * @see https://github.com/facebook/hhvm/issues/7161
                      */
-                    $HHVM && $token->equals(array(T_ECHO, '<?='))
+                    $isHhvm && $token->equals(array(T_ECHO, '<?='))
                 )
             ) {
                 continue;
@@ -80,7 +81,7 @@ final class NoShortEchoTagFixer extends AbstractFixer
 
             $nextIndex = $i + 1;
 
-            $tokens->overrideAt($i, array(T_OPEN_TAG, '<?php '));
+            $tokens[$i] = new Token(array(T_OPEN_TAG, '<?php '));
 
             if (!$tokens[$nextIndex]->isWhitespace()) {
                 $tokens->insertAt($nextIndex, new Token(array(T_WHITESPACE, ' ')));

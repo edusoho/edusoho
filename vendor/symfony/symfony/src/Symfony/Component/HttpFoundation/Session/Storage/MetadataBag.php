@@ -39,7 +39,7 @@ class MetadataBag implements SessionBagInterface
     /**
      * @var array
      */
-    protected $meta = array(self::CREATED => 0, self::UPDATED => 0, self::LIFETIME => 0);
+    protected $meta = [self::CREATED => 0, self::UPDATED => 0, self::LIFETIME => 0];
 
     /**
      * Unix timestamp.
@@ -54,8 +54,6 @@ class MetadataBag implements SessionBagInterface
     private $updateThreshold;
 
     /**
-     * Constructor.
-     *
      * @param string $storageKey      The key used to store bag in the session
      * @param int    $updateThreshold The time to wait between two UPDATED updates
      */

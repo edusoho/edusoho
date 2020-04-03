@@ -44,6 +44,14 @@ final class SpaceAfterSemicolonFixer extends AbstractFixer
     /**
      * {@inheritdoc}
      */
+    public function getPriority()
+    {
+        return -1; // Must run after NoMultilineWhitespaceBeforeSemicolonsFixer
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isCandidate(Tokens $tokens)
     {
         return $tokens->isTokenKindFound(';');
@@ -70,7 +78,7 @@ final class SpaceAfterSemicolonFixer extends AbstractFixer
                 && !$tokens[$index + 2]->isComment()
                 && !$tokens[$index + 2]->equals(')')
             ) {
-                $tokens[$index + 1]->setContent(' ');
+                $tokens[$index + 1] = new Token(array(T_WHITESPACE, ' '));
             }
         }
     }

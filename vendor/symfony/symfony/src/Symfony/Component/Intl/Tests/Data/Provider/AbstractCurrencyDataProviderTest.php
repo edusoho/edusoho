@@ -13,7 +13,6 @@ namespace Symfony\Component\Intl\Tests\Data\Provider;
 
 use Symfony\Component\Intl\Data\Provider\CurrencyDataProvider;
 use Symfony\Component\Intl\Intl;
-use Symfony\Component\Intl\Locale;
 
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
@@ -22,7 +21,7 @@ abstract class AbstractCurrencyDataProviderTest extends AbstractDataProviderTest
 {
     // The below arrays document the state of the ICU data bundled with this package.
 
-    protected static $currencies = array(
+    protected static $currencies = [
         'ADP',
         'AED',
         'AFA',
@@ -77,6 +76,7 @@ abstract class AbstractCurrencyDataProviderTest extends AbstractDataProviderTest
         'BUK',
         'BWP',
         'BYB',
+        'BYN',
         'BYR',
         'BZD',
         'CAD',
@@ -87,6 +87,7 @@ abstract class AbstractCurrencyDataProviderTest extends AbstractDataProviderTest
         'CLE',
         'CLF',
         'CLP',
+        'CNH',
         'CNX',
         'CNY',
         'COP',
@@ -192,6 +193,7 @@ abstract class AbstractCurrencyDataProviderTest extends AbstractDataProviderTest
         'MNT',
         'MOP',
         'MRO',
+        'MRU',
         'MTL',
         'MTP',
         'MUR',
@@ -250,6 +252,7 @@ abstract class AbstractCurrencyDataProviderTest extends AbstractDataProviderTest
         'SRG',
         'SSP',
         'STD',
+        'STN',
         'SUR',
         'SVC',
         'SYP',
@@ -277,9 +280,11 @@ abstract class AbstractCurrencyDataProviderTest extends AbstractDataProviderTest
         'UYI',
         'UYP',
         'UYU',
+        'UYW',
         'UZS',
         'VEB',
         'VEF',
+        'VES',
         'VND',
         'VNN',
         'VUV',
@@ -307,258 +312,284 @@ abstract class AbstractCurrencyDataProviderTest extends AbstractDataProviderTest
         'ZWD',
         'ZWL',
         'ZWR',
-    );
+    ];
 
-    protected static $alpha3ToNumeric = array(
-        'ADP' => 20,
-        'AED' => 784,
+    protected static $alpha3ToNumeric = [
         'AFA' => 4,
-        'AFN' => 971,
+        'ALK' => 8,
         'ALL' => 8,
-        'AMD' => 51,
-        'ANG' => 532,
-        'AOA' => 973,
+        'DZD' => 12,
+        'ADP' => 20,
         'AON' => 24,
-        'AOR' => 982,
+        'AOK' => 24,
+        'AZM' => 31,
         'ARA' => 32,
         'ARP' => 32,
         'ARS' => 32,
-        'ATS' => 40,
         'AUD' => 36,
-        'AWG' => 533,
-        'AZM' => 31,
-        'AZN' => 944,
-        'BAD' => 70,
-        'BAM' => 977,
-        'BBD' => 52,
-        'BDT' => 50,
-        'BEC' => 993,
-        'BEF' => 56,
-        'BEL' => 992,
-        'BGL' => 100,
-        'BGN' => 975,
-        'BHD' => 48,
-        'BIF' => 108,
-        'BMD' => 60,
-        'BND' => 96,
-        'BOB' => 68,
-        'BOV' => 984,
-        'BRC' => 76,
-        'BRE' => 76,
-        'BRL' => 986,
-        'BRN' => 76,
-        'BRR' => 987,
+        'ATS' => 40,
         'BSD' => 44,
+        'BHD' => 48,
+        'BDT' => 50,
+        'AMD' => 51,
+        'BBD' => 52,
+        'BEF' => 56,
+        'BMD' => 60,
         'BTN' => 64,
+        'BOB' => 68,
+        'BOP' => 68,
+        'BAD' => 70,
         'BWP' => 72,
-        'BYB' => 112,
-        'BYR' => 974,
+        'BRN' => 76,
+        'BRE' => 76,
+        'BRC' => 76,
+        'BRB' => 76,
         'BZD' => 84,
+        'SBD' => 90,
+        'BND' => 96,
+        'BGL' => 100,
+        'MMK' => 104,
+        'BUK' => 104,
+        'BIF' => 108,
+        'BYB' => 112,
+        'KHR' => 116,
         'CAD' => 124,
-        'CDF' => 976,
-        'CHE' => 947,
-        'CHF' => 756,
-        'CHW' => 948,
-        'CLF' => 990,
+        'CVE' => 132,
+        'KYD' => 136,
+        'LKR' => 144,
         'CLP' => 152,
         'CNY' => 156,
         'COP' => 170,
-        'COU' => 970,
+        'KMF' => 174,
+        'ZRZ' => 180,
+        'ZRN' => 180,
         'CRC' => 188,
-        'CSD' => 891,
-        'CSK' => 200,
-        'CUC' => 931,
+        'HRK' => 191,
+        'HRD' => 191,
         'CUP' => 192,
-        'CVE' => 132,
         'CYP' => 196,
+        'CSK' => 200,
         'CZK' => 203,
-        'DDM' => 278,
-        'DEM' => 276,
-        'DJF' => 262,
         'DKK' => 208,
         'DOP' => 214,
-        'DZD' => 12,
         'ECS' => 218,
-        'ECV' => 983,
-        'EEK' => 233,
-        'EGP' => 818,
-        'ERN' => 232,
-        'ESA' => 996,
-        'ESB' => 995,
-        'ESP' => 724,
-        'ETB' => 230,
-        'EUR' => 978,
-        'FIM' => 246,
-        'FJD' => 242,
-        'FKP' => 238,
-        'FRF' => 250,
-        'GBP' => 826,
-        'GEK' => 268,
-        'GEL' => 981,
-        'GHC' => 288,
-        'GHS' => 936,
-        'GIP' => 292,
-        'GMD' => 270,
-        'GNF' => 324,
+        'SVC' => 222,
         'GQE' => 226,
+        'ETB' => 230,
+        'ERN' => 232,
+        'EEK' => 233,
+        'FKP' => 238,
+        'FJD' => 242,
+        'FIM' => 246,
+        'FRF' => 250,
+        'DJF' => 262,
+        'GEK' => 268,
+        'GMD' => 270,
+        'DEM' => 276,
+        'DDM' => 278,
+        'GHC' => 288,
+        'GIP' => 292,
         'GRD' => 300,
         'GTQ' => 320,
-        'GWP' => 624,
+        'GNS' => 324,
+        'GNF' => 324,
         'GYD' => 328,
-        'HKD' => 344,
-        'HNL' => 340,
-        'HRD' => 191,
-        'HRK' => 191,
         'HTG' => 332,
+        'HNL' => 340,
+        'HKD' => 344,
         'HUF' => 348,
-        'IDR' => 360,
-        'IEP' => 372,
-        'ILS' => 376,
-        'INR' => 356,
-        'IQD' => 368,
-        'IRR' => 364,
+        'ISJ' => 352,
         'ISK' => 352,
+        'INR' => 356,
+        'IDR' => 360,
+        'IRR' => 364,
+        'IQD' => 368,
+        'IEP' => 372,
+        'ILP' => 376,
+        'ILR' => 376,
+        'ILS' => 376,
         'ITL' => 380,
         'JMD' => 388,
-        'JOD' => 400,
         'JPY' => 392,
+        'KZT' => 398,
+        'JOD' => 400,
         'KES' => 404,
-        'KGS' => 417,
-        'KHR' => 116,
-        'KMF' => 174,
         'KPW' => 408,
         'KRW' => 410,
         'KWD' => 414,
-        'KYD' => 136,
-        'KZT' => 398,
+        'KGS' => 417,
         'LAK' => 418,
         'LBP' => 422,
-        'LKR' => 144,
-        'LRD' => 430,
         'LSL' => 426,
+        'LVR' => 428,
+        'LVL' => 428,
+        'LRD' => 430,
+        'LYD' => 434,
         'LTL' => 440,
         'LTT' => 440,
-        'LUC' => 989,
         'LUF' => 442,
-        'LUL' => 988,
-        'LVL' => 428,
-        'LVR' => 428,
-        'LYD' => 434,
-        'MAD' => 504,
-        'MDL' => 498,
-        'MGA' => 969,
-        'MGF' => 450,
-        'MKD' => 807,
-        'MLF' => 466,
-        'MMK' => 104,
-        'MNT' => 496,
         'MOP' => 446,
-        'MRO' => 478,
-        'MTL' => 470,
-        'MUR' => 480,
-        'MVR' => 462,
+        'MGF' => 450,
         'MWK' => 454,
-        'MXN' => 484,
-        'MXV' => 979,
         'MYR' => 458,
+        'MVR' => 462,
+        'MLF' => 466,
+        'MTL' => 470,
+        'MTP' => 470,
+        'MRO' => 478,
+        'MUR' => 480,
+        'MXP' => 484,
+        'MXN' => 484,
+        'MNT' => 496,
+        'MDL' => 498,
+        'MAD' => 504,
+        'MZE' => 508,
         'MZM' => 508,
-        'MZN' => 943,
-        'NAD' => 516,
-        'NGN' => 566,
-        'NIO' => 558,
-        'NLG' => 528,
-        'NOK' => 578,
-        'NPR' => 524,
-        'NZD' => 554,
         'OMR' => 512,
-        'PAB' => 590,
-        'PEI' => 604,
-        'PEN' => 604,
-        'PES' => 604,
-        'PGK' => 598,
-        'PHP' => 608,
+        'NAD' => 516,
+        'NPR' => 524,
+        'NLG' => 528,
+        'ANG' => 532,
+        'AWG' => 533,
+        'VUV' => 548,
+        'NZD' => 554,
+        'NIC' => 558,
+        'NIO' => 558,
+        'NGN' => 566,
+        'NOK' => 578,
         'PKR' => 586,
-        'PLN' => 985,
+        'PAB' => 590,
+        'PGK' => 598,
+        'PYG' => 600,
+        'PEI' => 604,
+        'PES' => 604,
+        'PEN' => 604,
+        'PHP' => 608,
         'PLZ' => 616,
         'PTE' => 620,
-        'PYG' => 600,
+        'GWP' => 624,
+        'GWE' => 624,
+        'TPE' => 626,
         'QAR' => 634,
         'ROL' => 642,
-        'RON' => 946,
-        'RSD' => 941,
         'RUB' => 643,
-        'RUR' => 810,
         'RWF' => 646,
-        'SAR' => 682,
-        'SBD' => 90,
-        'SCR' => 690,
-        'SDD' => 736,
-        'SDG' => 938,
-        'SEK' => 752,
-        'SGD' => 702,
         'SHP' => 654,
-        'SIT' => 705,
-        'SKK' => 703,
-        'SLL' => 694,
-        'SOS' => 706,
-        'SRD' => 968,
-        'SRG' => 740,
-        'SSP' => 728,
         'STD' => 678,
-        'SVC' => 222,
-        'SYP' => 760,
+        'SAR' => 682,
+        'SCR' => 690,
+        'SLL' => 694,
+        'SGD' => 702,
+        'SKK' => 703,
+        'VND' => 704,
+        'SIT' => 705,
+        'SOS' => 706,
+        'ZAR' => 710,
+        'ZWD' => 716,
+        'RHD' => 716,
+        'YDD' => 720,
+        'ESP' => 724,
+        'SSP' => 728,
+        'SDD' => 736,
+        'SDP' => 736,
+        'SRG' => 740,
         'SZL' => 748,
-        'THB' => 764,
+        'SEK' => 752,
+        'CHF' => 756,
+        'SYP' => 760,
         'TJR' => 762,
-        'TJS' => 972,
-        'TMM' => 795,
-        'TMT' => 934,
-        'TND' => 788,
+        'THB' => 764,
         'TOP' => 776,
-        'TPE' => 626,
-        'TRL' => 792,
-        'TRY' => 949,
         'TTD' => 780,
-        'TWD' => 901,
-        'TZS' => 834,
-        'UAH' => 980,
-        'UAK' => 804,
+        'AED' => 784,
+        'TND' => 788,
+        'TRL' => 792,
+        'TMM' => 795,
         'UGX' => 800,
+        'UGS' => 800,
+        'UAK' => 804,
+        'MKD' => 807,
+        'RUR' => 810,
+        'SUR' => 810,
+        'EGP' => 818,
+        'GBP' => 826,
+        'TZS' => 834,
         'USD' => 840,
-        'USN' => 997,
-        'USS' => 998,
-        'UYI' => 940,
+        'UYP' => 858,
         'UYU' => 858,
         'UZS' => 860,
         'VEB' => 862,
-        'VEF' => 937,
-        'VND' => 704,
-        'VUV' => 548,
         'WST' => 882,
+        'YER' => 886,
+        'YUN' => 890,
+        'YUD' => 890,
+        'YUM' => 891,
+        'CSD' => 891,
+        'ZMK' => 894,
+        'TWD' => 901,
+        'UYW' => 927,
+        'VES' => 928,
+        'MRU' => 929,
+        'STN' => 930,
+        'CUC' => 931,
+        'ZWL' => 932,
+        'BYN' => 933,
+        'TMT' => 934,
+        'ZWR' => 935,
+        'GHS' => 936,
+        'VEF' => 937,
+        'SDG' => 938,
+        'UYI' => 940,
+        'RSD' => 941,
+        'MZN' => 943,
+        'AZN' => 944,
+        'RON' => 946,
+        'CHE' => 947,
+        'CHW' => 948,
+        'TRY' => 949,
         'XAF' => 950,
         'XCD' => 951,
-        'XEU' => 954,
         'XOF' => 952,
         'XPF' => 953,
-        'YDD' => 720,
-        'YER' => 886,
-        'YUM' => 891,
-        'YUN' => 890,
-        'ZAL' => 991,
-        'ZAR' => 710,
-        'ZMK' => 894,
+        'XEU' => 954,
         'ZMW' => 967,
-        'ZRN' => 180,
-        'ZRZ' => 180,
-        'ZWD' => 716,
-        'ZWL' => 932,
-        'ZWR' => 935,
-    );
+        'SRD' => 968,
+        'MGA' => 969,
+        'COU' => 970,
+        'AFN' => 971,
+        'TJS' => 972,
+        'AOA' => 973,
+        'BYR' => 974,
+        'BGN' => 975,
+        'CDF' => 976,
+        'BAM' => 977,
+        'EUR' => 978,
+        'MXV' => 979,
+        'UAH' => 980,
+        'GEL' => 981,
+        'AOR' => 982,
+        'ECV' => 983,
+        'BOV' => 984,
+        'PLN' => 985,
+        'BRL' => 986,
+        'BRR' => 987,
+        'LUL' => 988,
+        'LUC' => 989,
+        'CLF' => 990,
+        'ZAL' => 991,
+        'BEL' => 992,
+        'BEC' => 993,
+        'ESB' => 995,
+        'ESA' => 996,
+        'USN' => 997,
+        'USS' => 998,
+    ];
 
     /**
      * @var CurrencyDataProvider
      */
     protected $dataProvider;
+    private $defaultLocale;
 
     protected function setUp()
     {
@@ -568,6 +599,15 @@ abstract class AbstractCurrencyDataProviderTest extends AbstractDataProviderTest
             $this->getDataDirectory().'/'.Intl::CURRENCY_DIR,
             $this->createEntryReader()
         );
+
+        $this->defaultLocale = \Locale::getDefault();
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        \Locale::setDefault($this->defaultLocale);
     }
 
     abstract protected function getDataDirectory();
@@ -595,12 +635,12 @@ abstract class AbstractCurrencyDataProviderTest extends AbstractDataProviderTest
         $collator = new \Collator($displayLocale);
         $collator->asort($names);
 
-        $this->assertSame($sortedNames, $names);
+        $this->assertEquals($sortedNames, $names);
     }
 
     public function testGetNamesDefaultLocale()
     {
-        Locale::setDefault('de_AT');
+        \Locale::setDefault('de_AT');
 
         $this->assertSame(
             $this->dataProvider->getNames('de_AT'),
@@ -628,7 +668,7 @@ abstract class AbstractCurrencyDataProviderTest extends AbstractDataProviderTest
     public function testGetName($displayLocale)
     {
         $expected = $this->dataProvider->getNames($displayLocale);
-        $actual = array();
+        $actual = [];
 
         foreach ($expected as $currency => $name) {
             $actual[$currency] = $this->dataProvider->getName($currency, $displayLocale);
@@ -639,10 +679,10 @@ abstract class AbstractCurrencyDataProviderTest extends AbstractDataProviderTest
 
     public function testGetNameDefaultLocale()
     {
-        Locale::setDefault('de_AT');
+        \Locale::setDefault('de_AT');
 
         $expected = $this->dataProvider->getNames('de_AT');
-        $actual = array();
+        $actual = [];
 
         foreach ($expected as $currency => $name) {
             $actual[$currency] = $this->dataProvider->getName($currency);
@@ -666,7 +706,7 @@ abstract class AbstractCurrencyDataProviderTest extends AbstractDataProviderTest
     public function provideCurrencies()
     {
         return array_map(
-            function ($currency) { return array($currency); },
+            function ($currency) { return [$currency]; },
             static::$currencies
         );
     }
@@ -676,7 +716,7 @@ abstract class AbstractCurrencyDataProviderTest extends AbstractDataProviderTest
      */
     public function testGetFractionDigits($currency)
     {
-        $this->assertTrue(is_numeric($this->dataProvider->getFractionDigits($currency)));
+        $this->assertIsNumeric($this->dataProvider->getFractionDigits($currency));
     }
 
     /**
@@ -684,13 +724,13 @@ abstract class AbstractCurrencyDataProviderTest extends AbstractDataProviderTest
      */
     public function testGetRoundingIncrement($currency)
     {
-        $this->assertTrue(is_numeric($this->dataProvider->getRoundingIncrement($currency)));
+        $this->assertIsNumeric($this->dataProvider->getRoundingIncrement($currency));
     }
 
     public function provideCurrenciesWithNumericEquivalent()
     {
         return array_map(
-            function ($value) { return array($value); },
+            function ($value) { return [$value]; },
             array_keys(static::$alpha3ToNumeric)
         );
     }
@@ -706,17 +746,17 @@ abstract class AbstractCurrencyDataProviderTest extends AbstractDataProviderTest
     public function provideCurrenciesWithoutNumericEquivalent()
     {
         return array_map(
-            function ($value) { return array($value); },
+            function ($value) { return [$value]; },
             array_diff(static::$currencies, array_keys(static::$alpha3ToNumeric))
         );
     }
 
     /**
      * @dataProvider provideCurrenciesWithoutNumericEquivalent
-     * @expectedException \Symfony\Component\Intl\Exception\MissingResourceException
      */
     public function testGetNumericCodeFailsIfNoNumericEquivalent($currency)
     {
+        $this->expectException('Symfony\Component\Intl\Exception\MissingResourceException');
         $this->dataProvider->getNumericCode($currency);
     }
 
@@ -725,7 +765,7 @@ abstract class AbstractCurrencyDataProviderTest extends AbstractDataProviderTest
         $numericToAlpha3 = $this->getNumericToAlpha3Mapping();
 
         return array_map(
-            function ($numeric, $alpha3) { return array($numeric, $alpha3); },
+            function ($numeric, $alpha3) { return [$numeric, $alpha3]; },
             array_keys($numericToAlpha3),
             $numericToAlpha3
         );
@@ -751,27 +791,27 @@ abstract class AbstractCurrencyDataProviderTest extends AbstractDataProviderTest
         $invalidNumericCodes = array_diff(range(0, 1000), $validNumericCodes);
 
         return array_map(
-            function ($value) { return array($value); },
+            function ($value) { return [$value]; },
             $invalidNumericCodes
         );
     }
 
     /**
      * @dataProvider provideInvalidNumericCodes
-     * @expectedException \Symfony\Component\Intl\Exception\MissingResourceException
      */
     public function testForNumericCodeFailsIfInvalidNumericCode($currency)
     {
+        $this->expectException('Symfony\Component\Intl\Exception\MissingResourceException');
         $this->dataProvider->forNumericCode($currency);
     }
 
     private function getNumericToAlpha3Mapping()
     {
-        $numericToAlpha3 = array();
+        $numericToAlpha3 = [];
 
         foreach (static::$alpha3ToNumeric as $alpha3 => $numeric) {
             if (!isset($numericToAlpha3[$numeric])) {
-                $numericToAlpha3[$numeric] = array();
+                $numericToAlpha3[$numeric] = [];
             }
 
             $numericToAlpha3[$numeric][] = $alpha3;

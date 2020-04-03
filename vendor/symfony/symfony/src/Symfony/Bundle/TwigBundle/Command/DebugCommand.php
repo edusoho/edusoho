@@ -11,32 +11,22 @@
 
 namespace Symfony\Bundle\TwigBundle\Command;
 
+@trigger_error(sprintf('The %s class is deprecated since Symfony 3.4 and will be removed in 4.0. Use Symfony\Bridge\Twig\Command\DebugCommand instead.', DebugCommand::class), E_USER_DEPRECATED);
+
 use Symfony\Bridge\Twig\Command\DebugCommand as BaseDebugCommand;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Lists twig functions, filters, globals and tests present in the current project.
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ *
+ * @deprecated since version 3.4, to be removed in 4.0.
  */
-class DebugCommand extends BaseDebugCommand implements ContainerAwareInterface
+final class DebugCommand extends BaseDebugCommand implements ContainerAwareInterface
 {
-    /**
-     * @var ContainerInterface|null
-     */
-    private $container;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
+    use ContainerAwareTrait;
 
     /**
      * {@inheritdoc}
@@ -44,25 +34,5 @@ class DebugCommand extends BaseDebugCommand implements ContainerAwareInterface
     protected function getTwigEnvironment()
     {
         return $this->container->get('twig');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
-    {
-        parent::configure();
-
-        $this->setAliases(array('twig:debug'));
-    }
-
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $io = new SymfonyStyle($input, $output);
-        if (false !== strpos($input->getFirstArgument(), ':d')) {
-            $io->caution('The use of "twig:debug" command is deprecated since version 2.7 and will be removed in 3.0. Use the "debug:twig" instead.');
-        }
-
-        parent::execute($input, $io);
     }
 }

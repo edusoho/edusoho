@@ -3,13 +3,15 @@
 namespace Omnipay\Alipay;
 
 use Omnipay\Alipay\Requests\LegacyWapPurchaseRequest;
+
 /**
  * Class LegacyWapGateway
  * @package  Omnipay\Alipay
  * @link     https://doc.open.alipay.com/docs/doc.htm?treeId=60&articleId=103564&docType=1
  */
-class LegacyWapGateway extends \Omnipay\Alipay\AbstractLegacyGateway
+class LegacyWapGateway extends AbstractLegacyGateway
 {
+
     /**
      * Get gateway display name
      *
@@ -19,13 +21,15 @@ class LegacyWapGateway extends \Omnipay\Alipay\AbstractLegacyGateway
     {
         return 'Alipay Legacy Wap Gateway';
     }
+
+
     /**
      * @param array $parameters
      *
-     * @return LegacyWapPurchaseRequest
+     * @return \Omnipay\Alipay\Requests\LegacyWapPurchaseRequest
      */
-    public function purchase(array $parameters = array())
+    public function purchase(array $parameters = [])
     {
-        return $this->createRequest('Omnipay\\Alipay\\Requests\\LegacyWapPurchaseRequest', $parameters);
+        return $this->createRequest(LegacyWapPurchaseRequest::class, $parameters);
     }
 }

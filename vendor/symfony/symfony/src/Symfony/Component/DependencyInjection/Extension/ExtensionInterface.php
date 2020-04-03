@@ -23,9 +23,6 @@ interface ExtensionInterface
     /**
      * Loads a specific configuration.
      *
-     * @param array            $configs   An array of configuration values
-     * @param ContainerBuilder $container A ContainerBuilder instance
-     *
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
      */
     public function load(array $configs, ContainerBuilder $container);
@@ -40,7 +37,7 @@ interface ExtensionInterface
     /**
      * Returns the base path for the XSD files.
      *
-     * @return string The XSD base path
+     * @return string|false
      */
     public function getXsdValidationBasePath();
 

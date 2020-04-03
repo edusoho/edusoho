@@ -19,6 +19,11 @@ namespace Symfony\Component\Stopwatch;
 class Stopwatch
 {
     /**
+     * @var bool
+     */
+    private $morePrecision;
+
+    /**
      * @var Section[]
      */
     private $sections;
@@ -28,9 +33,13 @@ class Stopwatch
      */
     private $activeSections;
 
-    public function __construct()
+    /**
+     * @param bool $morePrecision If true, time is stored as float to keep the original microsecond precision
+     */
+    public function __construct($morePrecision = false)
     {
-        $this->sections = $this->activeSections = array('__root__' => new Section('__root__'));
+        $this->morePrecision = $morePrecision;
+        $this->reset();
     }
 
     /**
@@ -76,7 +85,7 @@ class Stopwatch
     {
         $this->stop('__section__');
 
-        if (1 == count($this->activeSections)) {
+        if (1 == \count($this->activeSections)) {
             throw new \LogicException('There is no started section to stop.');
         }
 
@@ -87,8 +96,8 @@ class Stopwatch
     /**
      * Starts an event.
      *
-     * @param string $name     The event name
-     * @param string $category The event category
+     * @param string      $name     The event name
+     * @param string|null $category The event category
      *
      * @return StopwatchEvent
      */
@@ -154,6 +163,14 @@ class Stopwatch
      */
     public function getSectionEvents($id)
     {
-        return isset($this->sections[$id]) ? $this->sections[$id]->getEvents() : array();
+        return isset($this->sections[$id]) ? $this->sections[$id]->getEvents() : [];
+    }
+
+    /**
+     * Resets the stopwatch to its original state.
+     */
+    public function reset()
+    {
+        $this->sections = $this->activeSections = ['__root__' => new Section(null, $this->morePrecision)];
     }
 }

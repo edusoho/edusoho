@@ -70,11 +70,11 @@ class GenerationalCacheStrategyTest extends \PHPUnit_Framework_TestCase
 
     public function createKeyGeneratorMock()
     {
-        return $this->getMock('Asm89\Twig\CacheExtension\CacheStrategy\KeyGeneratorInterface');
+        return $this->createMock('Asm89\Twig\CacheExtension\CacheStrategy\KeyGeneratorInterface');
     }
 
     public function createCacheProviderMock()
     {
-        return $this->getMock('Asm89\Twig\CacheExtension\CacheProviderInterface');
+        return $this->createMock('Asm89\Twig\CacheExtension\CacheProviderInterface');
     }
 }

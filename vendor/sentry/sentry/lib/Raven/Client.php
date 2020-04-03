@@ -16,7 +16,7 @@
 
 class Raven_Client
 {
-    const VERSION = '1.7.1';
+    const VERSION = '1.11.0';
 
     const PROTOCOL = '6';
 
@@ -44,7 +44,13 @@ class Raven_Client
     protected $error_handler;
     protected $error_types;
 
+    /**
+     * @var Raven_Serializer
+     */
     protected $serializer;
+    /**
+     * @var Raven_ReprSerializer
+     */
     protected $reprSerializer;
 
     /**
@@ -83,7 +89,9 @@ class Raven_Client
     public $timeout;
     public $message_limit;
     public $exclude;
+    public $excluded_exceptions;
     public $http_proxy;
+    public $ignore_server_port;
     protected $send_callback;
     public $curl_method;
     public $curl_path;
@@ -122,6 +130,16 @@ class Raven_Client
      */
     protected $_shutdown_function_has_been_set;
 
+    /**
+     * @var bool
+     */
+    public $useCompression;
+
+    /**
+     * @var Raven_TransactionStack
+     */
+    public $transaction;
+
     public function __construct($options_or_dsn = null, $options = array())
     {
         if (is_array($options_or_dsn)) {
@@ -158,13 +176,15 @@ class Raven_Client
         $this->timeout = Raven_Util::get($options, 'timeout', 2);
         $this->message_limit = Raven_Util::get($options, 'message_limit', self::MESSAGE_LIMIT);
         $this->exclude = Raven_Util::get($options, 'exclude', array());
+        $this->excluded_exceptions = Raven_Util::get($options, 'excluded_exceptions', array());
         $this->severity_map = null;
         $this->http_proxy = Raven_Util::get($options, 'http_proxy');
+        $this->ignore_server_port = Raven_Util::get($options, 'ignore_server_port', false);
         $this->extra_data = Raven_Util::get($options, 'extra', array());
         $this->send_callback = Raven_Util::get($options, 'send_callback', null);
         $this->curl_method = Raven_Util::get($options, 'curl_method', 'sync');
         $this->curl_path = Raven_Util::get($options, 'curl_path', 'curl');
-        $this->curl_ipv4 = Raven_Util::get($options, 'curl_ipv4', true);
+        $this->curl_ipv4 = Raven_Util::get($options, 'curl_ipv4', false);
         $this->ca_cert = Raven_Util::get($options, 'ca_cert', static::get_default_ca_cert());
         $this->verify_ssl = Raven_Util::get($options, 'verify_ssl', true);
         $this->curl_ssl_version = Raven_Util::get($options, 'curl_ssl_version');
@@ -189,13 +209,14 @@ class Raven_Client
         $this->context = new Raven_Context();
         $this->breadcrumbs = new Raven_Breadcrumbs();
         $this->_shutdown_function_has_been_set = false;
+        $this->useCompression = function_exists('gzcompress');
 
         $this->sdk = Raven_Util::get($options, 'sdk', array(
             'name' => 'sentry-php',
             'version' => self::VERSION,
         ));
-        $this->serializer = new Raven_Serializer($this->mb_detect_order);
-        $this->reprSerializer = new Raven_ReprSerializer($this->mb_detect_order);
+        $this->serializer = new Raven_Serializer($this->mb_detect_order, $this->message_limit);
+        $this->reprSerializer = new Raven_ReprSerializer($this->mb_detect_order, $this->message_limit);
 
         if ($this->curl_method == 'async') {
             $this->_curl_handler = new Raven_CurlHandler($this->get_curl_options());
@@ -215,6 +236,8 @@ class Raven_Client
         if (Raven_Util::get($options, 'install_shutdown_handler', true)) {
             $this->registerShutdownFunction();
         }
+
+        $this->triggerAutoload();
     }
 
     public function __destruct()
@@ -245,6 +268,11 @@ class Raven_Client
         $this->error_handler->registerExceptionHandler();
         $this->error_handler->registerErrorHandler();
         $this->error_handler->registerShutdownFunction();
+
+        if ($this->_curl_handler) {
+            $this->_curl_handler->registerShutdownFunction();
+        }
+
         return $this;
     }
 
@@ -270,6 +298,21 @@ class Raven_Client
         return $this;
     }
 
+    /**
+     * Note: Prior to PHP 5.6, a stream opened with php://input can
+     * only be read once;
+     *
+     * @see http://php.net/manual/en/wrappers.php.php
+     */
+    protected static function getInputStream()
+    {
+        if (PHP_VERSION_ID < 50600) {
+            return null;
+        }
+
+        return file_get_contents('php://input');
+    }
+
     private static function getDefaultPrefixes()
     {
         $value = get_include_path();
@@ -286,7 +329,7 @@ class Raven_Client
         // base path detection becomes complex if the same
         // prefix is matched
         if (substr($path, 0, 1) === DIRECTORY_SEPARATOR && substr($path, -1) !== DIRECTORY_SEPARATOR) {
-            $path = $path.DIRECTORY_SEPARATOR;
+            $path .= DIRECTORY_SEPARATOR;
         }
         return $path;
     }
@@ -313,7 +356,19 @@ class Raven_Client
 
     public function setExcludedAppPaths($value)
     {
-        $this->excluded_app_paths = $value ? array_map(array($this, '_convertPath'), $value) : null;
+        if ($value) {
+            $excluded_app_paths = array();
+
+            // We should be able to exclude a php files
+            foreach ((array) $value as $path) {
+                $excluded_app_paths[] = substr($path, -4) !== '.php' ? self::_convertPath($path) : $path;
+            }
+        } else {
+            $excluded_app_paths = null;
+        }
+
+        $this->excluded_app_paths = $excluded_app_paths;
+
         return $this;
     }
 
@@ -394,7 +449,7 @@ class Raven_Client
     public function setProcessorsFromOptions($options)
     {
         $processors = array();
-        foreach (Raven_util::get($options, 'processors', static::getDefaultProcessors()) as $processor) {
+        foreach (Raven_Util::get($options, 'processors', static::getDefaultProcessors()) as $processor) {
             /**
              * @var Raven_Processor        $new_processor
              * @var Raven_Processor|string $processor
@@ -419,10 +474,21 @@ class Raven_Client
      * @param string $dsn Raven compatible DSN
      * @return array      parsed DSN
      *
-     * @doc http://raven.readthedocs.org/en/latest/config/#the-sentry-dsn
+     * @see http://raven.readthedocs.org/en/latest/config/#the-sentry-dsn
      */
     public static function parseDSN($dsn)
     {
+        switch (strtolower($dsn)) {
+            case '':
+            case 'false':
+            case '(false)':
+            case 'empty':
+            case '(empty)':
+            case 'null':
+            case '(null)':
+                return array();
+        }
+
         $url = parse_url($dsn);
         $scheme = (isset($url['scheme']) ? $url['scheme'] : '');
         if (!in_array($scheme, array('http', 'https'))) {
@@ -449,7 +515,7 @@ class Raven_Client
         }
         $username = (isset($url['user']) ? $url['user'] : null);
         $password = (isset($url['pass']) ? $url['pass'] : null);
-        if (empty($netloc) || empty($project) || empty($username) || empty($password)) {
+        if (empty($netloc) || empty($project) || empty($username)) {
             throw new InvalidArgumentException('Invalid Sentry DSN: ' . $dsn);
         }
 
@@ -549,18 +615,24 @@ class Raven_Client
     /**
      * Log an exception to sentry
      *
-     * @param Exception $exception The Exception object.
-     * @param array     $data      Additional attributes to pass with this event (see Sentry docs).
-     * @param mixed     $logger
-     * @param mixed     $vars
+     * @param \Throwable|\Exception $exception The Throwable/Exception object.
+     * @param array                 $data      Additional attributes to pass with this event (see Sentry docs).
+     * @param mixed                 $logger
+     * @param mixed                 $vars
      * @return string|null
      */
     public function captureException($exception, $data = null, $logger = null, $vars = null)
     {
-        $has_chained_exceptions = version_compare(PHP_VERSION, '5.3.0', '>=');
+        $has_chained_exceptions = PHP_VERSION_ID >= 50300;
 
         if (in_array(get_class($exception), $this->exclude)) {
             return null;
+        }
+
+        foreach ($this->excluded_exceptions as $exclude) {
+            if ($exception instanceof $exclude) {
+                return null;
+            }
         }
 
         if ($data === null) {
@@ -585,13 +657,6 @@ class Raven_Client
             );
 
             array_unshift($trace, $frame_where_exception_thrown);
-
-            // manually trigger autoloading, as it's not done in some edge cases due to PHP bugs (see #60149)
-            if (!class_exists('Raven_Stacktrace')) {
-                // @codeCoverageIgnoreStart
-                spl_autoload_call('Raven_Stacktrace');
-                // @codeCoverageIgnoreEnd
-            }
 
             $exc_data['stacktrace'] = array(
                 'frames' => Raven_Stacktrace::get_stack_info(
@@ -719,6 +784,11 @@ class Raven_Client
         // instead of a mapping which goes against the defined Sentry spec
         if (!empty($_POST)) {
             $result['data'] = $_POST;
+        } elseif (isset($_SERVER['CONTENT_TYPE']) && stripos($_SERVER['CONTENT_TYPE'], 'application/json') === 0) {
+            $raw_data = $this->getInputStream() ?: false;
+            if ($raw_data !== false) {
+                $result['data'] = (array) json_decode($raw_data, true) ?: null;
+            }
         }
         if (!empty($_COOKIE)) {
             $result['cookies'] = $_COOKIE;
@@ -769,7 +839,7 @@ class Raven_Client
             'tags' => $this->tags,
             'platform' => 'php',
             'sdk' => $this->sdk,
-            'culprit' => $this->transaction->peek(),
+            'transaction' => $this->transaction->peek(),
         );
     }
 
@@ -792,7 +862,7 @@ class Raven_Client
         }
 
         if (isset($data['message'])) {
-            $data['message'] = substr($data['message'], 0, $this->message_limit);
+            $data['message'] = Raven_Compat::substr($data['message'], 0, $this->message_limit);
         }
 
         $data = array_merge($this->get_default_data(), $data);
@@ -832,6 +902,13 @@ class Raven_Client
         if (empty($data['request'])) {
             unset($data['request']);
         }
+        if (empty($data['site'])) {
+            unset($data['site']);
+        }
+
+        $existing_runtime_context = isset($data['contexts']['runtime']) ? $data['contexts']['runtime'] : array();
+        $runtime_context = array('version' => self::cleanup_php_version(), 'name' => 'php');
+        $data['contexts']['runtime'] =  array_merge($runtime_context, $existing_runtime_context);
 
         if (!$this->breadcrumbs->is_empty()) {
             $data['breadcrumbs'] = $this->breadcrumbs->fetch();
@@ -844,29 +921,24 @@ class Raven_Client
             array_shift($stack);
         }
 
-        if (!empty($stack)) {
-            // manually trigger autoloading, as it's not done in some edge cases due to PHP bugs (see #60149)
-            if (!class_exists('Raven_Stacktrace')) {
-                // @codeCoverageIgnoreStart
-                spl_autoload_call('Raven_Stacktrace');
-                // @codeCoverageIgnoreEnd
-            }
-
-            if (!isset($data['stacktrace']) && !isset($data['exception'])) {
-                $data['stacktrace'] = array(
-                    'frames' => Raven_Stacktrace::get_stack_info(
-                        $stack, $this->trace, $vars, $this->message_limit, $this->prefixes,
-                        $this->app_path, $this->excluded_app_paths, $this->serializer, $this->reprSerializer
-                    ),
-                );
-            }
+        if (! empty($stack) && ! isset($data['stacktrace']) && ! isset($data['exception'])) {
+            $data['stacktrace'] = array(
+                'frames' => Raven_Stacktrace::get_stack_info(
+                    $stack, $this->trace, $vars, $this->message_limit, $this->prefixes,
+                    $this->app_path, $this->excluded_app_paths, $this->serializer, $this->reprSerializer
+                ),
+            );
         }
 
         $this->sanitize($data);
         $this->process($data);
 
         if (!$this->store_errors_for_bulk_send) {
-            $this->send($data);
+            if ($this->send($data) === false) {
+                $this->_last_event_id = null;
+
+                return null;
+            }
         } else {
             $this->_pending_events[] = $data;
         }
@@ -880,7 +952,7 @@ class Raven_Client
     {
         // attempt to sanitize any user provided data
         if (!empty($data['request'])) {
-            $data['request'] = $this->serializer->serialize($data['request']);
+            $data['request'] = $this->serializer->serialize($data['request'], 5);
         }
         if (!empty($data['user'])) {
             $data['user'] = $this->serializer->serialize($data['user'], 3);
@@ -895,6 +967,9 @@ class Raven_Client
         }
         if (!empty($data['contexts'])) {
             $data['contexts'] = $this->serializer->serialize($data['contexts'], 5);
+        }
+        if (!empty($data['breadcrumbs'])) {
+            $data['breadcrumbs'] = $this->serializer->serialize($data['breadcrumbs'], 5);
         }
     }
 
@@ -940,7 +1015,7 @@ class Raven_Client
             return false;
         }
 
-        if (function_exists("gzcompress")) {
+        if ($this->useCompression) {
             $message = gzcompress($message);
         }
 
@@ -961,21 +1036,20 @@ class Raven_Client
             && call_user_func_array($this->send_callback, array(&$data)) === false
         ) {
             // if send_callback returns false, end native send
-            return;
+            return false;
         }
 
         if (!$this->server) {
-            return;
+            return false;
         }
 
         if ($this->transport) {
-            call_user_func($this->transport, $this, $data);
-            return;
+            return call_user_func($this->transport, $this, $data);
         }
 
         // should this event be sampled?
         if (rand(1, 100) / 100.0 > $this->sample_rate) {
-            return;
+            return false;
         }
 
         $message = $this->encode($data);
@@ -1010,7 +1084,7 @@ class Raven_Client
 
     /**
      * @return array
-     * @doc http://stackoverflow.com/questions/9062798/php-curl-timeout-is-not-working/9063006#9063006
+     * @see http://stackoverflow.com/questions/9062798/php-curl-timeout-is-not-working/9063006#9063006
      */
     protected function get_curl_options()
     {
@@ -1026,6 +1100,9 @@ class Raven_Client
         }
         if ($this->curl_ssl_version) {
             $options[CURLOPT_SSLVERSION] = $this->curl_ssl_version;
+        }
+        if ($this->verify_ssl === false) {
+            $options[CURLOPT_SSL_VERIFYHOST] = 0;
         }
         if ($this->curl_ipv4) {
             $options[CURLOPT_IPRESOLVE] = CURL_IPRESOLVE_V4;
@@ -1247,6 +1324,13 @@ class Raven_Client
             : (!empty($_SERVER['LOCAL_ADDR'])  ? $_SERVER['LOCAL_ADDR']
             : (!empty($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : '')));
 
+        if (!$this->ignore_server_port) {
+            $hasNonDefaultPort = !empty($_SERVER['SERVER_PORT']) && !in_array((int)$_SERVER['SERVER_PORT'], array(80, 443));
+            if ($hasNonDefaultPort && !preg_match('#:[0-9]*$#', $host)) {
+                $host .= ':' . $_SERVER['SERVER_PORT'];
+            }
+        }
+
         $httpS = $this->isHttps() ? 's' : '';
         return "http{$httpS}://{$host}{$_SERVER['REQUEST_URI']}";
     }
@@ -1267,8 +1351,8 @@ class Raven_Client
         }
 
         if (!empty($this->trust_x_forwarded_proto) &&
-            !empty($_SERVER['X-FORWARDED-PROTO']) &&
-            $_SERVER['X-FORWARDED-PROTO'] === 'https') {
+            !empty($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
+            $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
             return true;
         }
 
@@ -1316,7 +1400,7 @@ class Raven_Client
             case E_STRICT:             return Raven_Client::INFO;
             case E_RECOVERABLE_ERROR:  return Raven_Client::ERROR;
         }
-        if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
+        if (PHP_VERSION_ID >= 50300) {
             switch ($severity) {
             case E_DEPRECATED:         return Raven_Client::WARN;
             case E_USER_DEPRECATED:    return Raven_Client::WARN;
@@ -1433,6 +1517,57 @@ class Raven_Client
         if (!is_null($this->_curl_instance)) {
             curl_close($this->_curl_instance);
             $this->_curl_instance = null;
+        }
+    }
+
+    /**
+     * @param Raven_Serializer $serializer
+     */
+    public function setSerializer(Raven_Serializer $serializer)
+    {
+        $this->serializer = $serializer;
+    }
+
+    /**
+     * @param Raven_ReprSerializer $reprSerializer
+     */
+    public function setReprSerializer(Raven_ReprSerializer $reprSerializer)
+    {
+        $this->reprSerializer = $reprSerializer;
+    }
+
+    /**
+     * Cleans up the PHP version string by extracting junk from the extra part of the version.
+     *
+     * @param string $extra
+     *
+     * @return string
+     */
+    public static function cleanup_php_version($extra = PHP_EXTRA_VERSION)
+    {
+        $version = PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . '.' . PHP_RELEASE_VERSION;
+
+        if (!empty($extra) && preg_match('{^-(?<extra>(beta|rc)-?([0-9]+)?(-dev)?)}i', $extra, $matches) === 1) {
+            $version .= '-' . $matches['extra'];
+        }
+
+        return $version;
+    }
+
+    private function triggerAutoload()
+    {
+        // manually trigger autoloading, as it cannot be done during error handling in some edge cases due to PHP (see #60149)
+
+        if (! class_exists('Raven_Stacktrace')) {
+            spl_autoload_call('Raven_Stacktrace');
+        }
+
+        if (function_exists('mb_detect_encoding')) {
+            mb_detect_encoding('string');
+        }
+
+        if (function_exists('mb_convert_encoding')) {
+            mb_convert_encoding('string', 'UTF8');
         }
     }
 }

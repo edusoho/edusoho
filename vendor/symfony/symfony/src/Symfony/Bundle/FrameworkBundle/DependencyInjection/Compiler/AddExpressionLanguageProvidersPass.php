@@ -11,8 +11,8 @@
 
 namespace Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
@@ -30,16 +30,16 @@ class AddExpressionLanguageProvidersPass implements CompilerPassInterface
         // routing
         if ($container->has('router')) {
             $definition = $container->findDefinition('router');
-            foreach ($container->findTaggedServiceIds('routing.expression_language_provider') as $id => $attributes) {
-                $definition->addMethodCall('addExpressionLanguageProvider', array(new Reference($id)));
+            foreach ($container->findTaggedServiceIds('routing.expression_language_provider', true) as $id => $attributes) {
+                $definition->addMethodCall('addExpressionLanguageProvider', [new Reference($id)]);
             }
         }
 
         // security
-        if ($container->has('security.access.expression_voter')) {
-            $definition = $container->findDefinition('security.access.expression_voter');
-            foreach ($container->findTaggedServiceIds('security.expression_language_provider') as $id => $attributes) {
-                $definition->addMethodCall('addExpressionLanguageProvider', array(new Reference($id)));
+        if ($container->has('security.expression_language')) {
+            $definition = $container->findDefinition('security.expression_language');
+            foreach ($container->findTaggedServiceIds('security.expression_language_provider', true) as $id => $attributes) {
+                $definition->addMethodCall('registerProvider', [new Reference($id)]);
             }
         }
     }

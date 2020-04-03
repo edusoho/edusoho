@@ -14,12 +14,15 @@ namespace PhpCsFixer\Fixer\Import;
 
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
+use PhpCsFixer\Fixer\WhitespacesAwareFixerInterface;
+use PhpCsFixer\FixerConfiguration\AliasedFixerOptionBuilder;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\VersionSpecification;
 use PhpCsFixer\FixerDefinition\VersionSpecificCodeSample;
+use PhpCsFixer\Preg;
 use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
@@ -31,8 +34,9 @@ use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
  * @author SpacePossum
  * @author Darius Matulionis <darius@matulionis.lt>
+ * @author Adriano Pilger <adriano.pilger@gmail.com>
  */
-final class OrderedImportsFixer extends AbstractFixer implements ConfigurationDefinitionFixerInterface
+final class OrderedImportsFixer extends AbstractFixer implements ConfigurationDefinitionFixerInterface, WhitespacesAwareFixerInterface
 {
     const IMPORT_TYPE_CLASS = 'class';
 
@@ -64,7 +68,7 @@ final class OrderedImportsFixer extends AbstractFixer implements ConfigurationDe
     public function getDefinition()
     {
         return new FixerDefinition(
-            'Ordering use statements.',
+            'Ordering `use` statements.',
             array(
                 new CodeSample("<?php\nuse Z; use A;"),
                 new CodeSample(
@@ -74,7 +78,7 @@ use Acme;
 use Barr;
 use Acme\Bar;
 ',
-                    array('sortAlgorithm' => self::SORT_LENGTH)
+                    array('sort_algorithm' => self::SORT_LENGTH)
                 ),
                 new VersionSpecificCodeSample(
                     "<?php\nuse function AAA;\nuse const AAB;\nuse AAC;",
@@ -94,8 +98,8 @@ use function DDD;
 ',
                     new VersionSpecification(70000),
                     array(
-                        'sortAlgorithm' => self::SORT_LENGTH,
-                        'importsOrder' => array(
+                        'sort_algorithm' => self::SORT_LENGTH,
+                        'imports_order' => array(
                             self::IMPORT_TYPE_CONST,
                             self::IMPORT_TYPE_CLASS,
                             self::IMPORT_TYPE_FUNCTION,
@@ -116,8 +120,8 @@ use function CCC\AA;
 ',
                     new VersionSpecification(70000),
                     array(
-                        'sortAlgorithm' => self::SORT_ALPHA,
-                        'importsOrder' => array(
+                        'sort_algorithm' => self::SORT_ALPHA,
+                        'imports_order' => array(
                             self::IMPORT_TYPE_CONST,
                             self::IMPORT_TYPE_CLASS,
                             self::IMPORT_TYPE_FUNCTION,
@@ -174,7 +178,7 @@ use function CCC\AA;
         foreach ($usesOrder as $index => $use) {
             $declarationTokens = Tokens::fromCode('<?php use '.$use['namespace'].';');
             $declarationTokens->clearRange(0, 2); // clear `<?php use `
-            $declarationTokens[count($declarationTokens) - 1]->clear(); // clear `;`
+            $declarationTokens->clearAt(count($declarationTokens) - 1); // clear `;`
             $declarationTokens->clearEmptyTokens();
 
             $tokens->overrideRange($index, $mapStartToEnd[$index], $declarationTokens);
@@ -182,7 +186,7 @@ use function CCC\AA;
                 // a group import must start with `use` and cannot be part of comma separated import list
                 $prev = $tokens->getPrevMeaningfulToken($index);
                 if ($tokens[$prev]->equals(',')) {
-                    $tokens[$prev]->setContent(';');
+                    $tokens[$prev] = new Token(';');
                     $tokens->insertAt($prev + 1, new Token(array(T_USE, 'use')));
                     if (!$tokens[$prev + 2]->isWhitespace()) {
                         $tokens->insertAt($prev + 2, new Token(array(T_WHITESPACE, ' ')));
@@ -199,13 +203,19 @@ use function CCC\AA;
     {
         $supportedSortTypes = $this->supportedSortTypes;
 
-        $sortAlgorithm = new FixerOptionBuilder('sortAlgorithm', 'whether the statements should be sorted alphabetically or by length');
+        $sortAlgorithm = new AliasedFixerOptionBuilder(
+            new FixerOptionBuilder('sort_algorithm', 'whether the statements should be sorted alphabetically or by length'),
+            'sortAlgorithm'
+        );
         $sortAlgorithm
             ->setAllowedValues($this->supportedSortAlgorithms)
             ->setDefault(self::SORT_ALPHA)
         ;
 
-        $importsOrder = new FixerOptionBuilder('importsOrder', 'Defines the order of import types.');
+        $importsOrder = new AliasedFixerOptionBuilder(
+            new FixerOptionBuilder('imports_order', 'Defines the order of import types.'),
+            'importsOrder'
+        );
         $importsOrder
             ->setAllowedTypes(array('array', 'null'))
             ->setAllowedValues(array(function ($value) use ($supportedSortTypes) {
@@ -238,14 +248,6 @@ use function CCC\AA;
             $sortAlgorithm->getOption(),
             $importsOrder->getOption(),
         ));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDescription()
-    {
-        return 'Ordering use statements.';
     }
 
     /**
@@ -299,21 +301,20 @@ use function CCC\AA;
     }
 
     /**
-     * Prepare namespace for sorting.
-     *
      * @param string $namespace
      *
      * @return string
      */
     private function prepareNamespace($namespace)
     {
-        return trim(preg_replace('%/\*(.*)\*/%s', '', $namespace));
+        return trim(Preg::replace('%/\*(.*)\*/%s', '', $namespace));
     }
 
     private function getNewOrder(array $uses, Tokens $tokens)
     {
         $indexes = array();
         $originalIndexes = array();
+        $lineEnding = $this->whitespacesConfig->getLineEnding();
 
         for ($i = count($uses) - 1; $i >= 0; --$i) {
             $index = $uses[$i];
@@ -347,6 +348,7 @@ use function CCC\AA;
                         for ($k = 0; $k < $namespaceTokensCount; ++$k) {
                             if ($namespaceTokens[$k]->isGivenKind(CT::T_GROUP_IMPORT_BRACE_OPEN)) {
                                 $namespace .= '{';
+
                                 break;
                             }
 
@@ -355,6 +357,10 @@ use function CCC\AA;
 
                         // fetch all parts, split up in an array of strings, move comments to the end
                         $parts = array();
+                        $firstIndent = '';
+                        $separator = ', ';
+                        $lastIndent = '';
+
                         for ($k1 = $k + 1; $k1 < $namespaceTokensCount; ++$k1) {
                             $comment = '';
                             $namespacePart = '';
@@ -369,6 +375,17 @@ use function CCC\AA;
                                     continue;
                                 }
 
+                                // if there is any line ending inside the group import, it should be indented properly
+                                if (
+                                    '' === $firstIndent &&
+                                    $namespaceTokens[$k2]->isWhitespace() &&
+                                    false !== strpos($namespaceTokens[$k2]->getContent(), $lineEnding)
+                                ) {
+                                    $lastIndent = $lineEnding;
+                                    $firstIndent = $lineEnding.$this->whitespacesConfig->getIndent();
+                                    $separator = ','.$firstIndent;
+                                }
+
                                 $namespacePart .= $namespaceTokens[$k2]->getContent();
                             }
 
@@ -378,7 +395,7 @@ use function CCC\AA;
                                 $namespacePart .= ' '.$comment;
                             }
 
-                            $parts[] = $namespacePart.', ';
+                            $parts[] = $namespacePart;
 
                             $k1 = $k2;
                         }
@@ -390,7 +407,7 @@ use function CCC\AA;
                         if ($sortedParts === $parts) {
                             $namespace = Tokens::fromArray($namespaceTokens)->generateCode();
                         } else {
-                            $namespace .= substr(implode('', $parts), 0, -2).'}';
+                            $namespace .= $firstIndent.implode($separator, $parts).$lastIndent.'}';
                         }
                     } else {
                         $namespace = Tokens::fromArray($namespaceTokens)->generateCode();
@@ -424,7 +441,7 @@ use function CCC\AA;
         }
 
         // Is sort types provided, sorting by groups and each group by algorithm
-        if ($this->configuration['importsOrder']) {
+        if ($this->configuration['imports_order']) {
             // Grouping indexes by import type.
             $groupedByTypes = array();
             foreach ($indexes as $startIndex => $item) {
@@ -438,7 +455,7 @@ use function CCC\AA;
 
             // Ordering groups
             $sortedGroups = array();
-            foreach ($this->configuration['importsOrder'] as $type) {
+            foreach ($this->configuration['imports_order'] as $type) {
                 if (isset($groupedByTypes[$type]) && !empty($groupedByTypes[$type])) {
                     foreach ($groupedByTypes[$type] as $startIndex => $item) {
                         $sortedGroups[$startIndex] = $item;
@@ -463,21 +480,18 @@ use function CCC\AA;
     }
 
     /**
-     * @param $indexes
+     * @param array[] $indexes
      *
      * @return array
      */
-    private function sortByAlgorithm($indexes)
+    private function sortByAlgorithm(array $indexes)
     {
-        switch ($this->configuration['sortAlgorithm']) {
-            case self::SORT_ALPHA:
-                uasort($indexes, array($this, 'sortAlphabetically'));
-                break;
-            case self::SORT_LENGTH:
-                uasort($indexes, array($this, 'sortByLength'));
-                break;
-            default:
-                throw new \LogicException(sprintf('Sort algorithm "%s" is not supported.', $this->configuration['sortAlgorithm']));
+        if (self::SORT_ALPHA === $this->configuration['sort_algorithm']) {
+            uasort($indexes, array($this, 'sortAlphabetically'));
+        } elseif (self::SORT_LENGTH === $this->configuration['sort_algorithm']) {
+            uasort($indexes, array($this, 'sortByLength'));
+        } else {
+            throw new \LogicException(sprintf('Sort algorithm "%s" is not supported.', $this->configuration['sort_algorithm']));
         }
 
         return $indexes;

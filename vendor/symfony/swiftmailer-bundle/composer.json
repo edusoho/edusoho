@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "swiftmailer/swiftmailer": ">=4.2.0,~5.0",
+        "swiftmailer/swiftmailer": "~4.2|~5.0",
         "symfony/dependency-injection": "~2.7|~3.0",
         "symfony/http-kernel": "~2.7|~3.0",
         "symfony/config": "~2.7|~3.0"
@@ -25,7 +25,7 @@
     "require-dev": {
         "symfony/console": "~2.7|~3.0",
         "symfony/framework-bundle": "~2.7|~3.0",
-        "symfony/phpunit-bridge": "~2.7|~3.0",
+        "symfony/phpunit-bridge": "~3.3@dev",
         "symfony/yaml": "~2.7|~3.0"
     },
     "suggest": {
@@ -36,7 +36,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.5-dev"
+            "dev-master": "2.6-dev"
         }
     }
 }

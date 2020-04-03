@@ -18,8 +18,6 @@
  * type.
  *
  * The expected value is passed in the constructor.
- *
- * @since Class available since Release 3.0.0
  */
 class PHPUnit_Framework_Constraint_IsIdentical extends PHPUnit_Framework_Constraint
 {
@@ -62,7 +60,7 @@ class PHPUnit_Framework_Constraint_IsIdentical extends PHPUnit_Framework_Constra
      */
     public function evaluate($other, $description = '', $returnResult = false)
     {
-        if (is_double($this->value) && is_double($other) &&
+        if (is_float($this->value) && is_float($other) &&
             !is_infinite($this->value) && !is_infinite($other) &&
             !is_nan($this->value) && !is_nan($other)) {
             $success = abs($this->value - $other) < self::EPSILON;

@@ -1,6 +1,39 @@
 CHANGELOG
 =========
 
+3.4.0
+-----
+
+ * added `AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT` context option
+   to disable throwing an `UnexpectedValueException` on a type mismatch
+ * added support for serializing `DateInterval` objects
+ * added getter for extra attributes in `ExtraAttributesException`
+ * improved `CsvEncoder` to handle variable nested structures
+ * CSV headers can be passed to the `CsvEncoder` via the `csv_headers` serialization context variable
+ * added `$context` when checking for encoding, decoding and normalizing in `Serializer`
+
+3.3.0
+-----
+
+ * added `SerializerPass`
+
+3.1.0
+-----
+
+ * added support for serializing objects that implement `JsonSerializable`
+ * added the `DenormalizerAwareTrait` and `NormalizerAwareTrait` traits to
+   support normalizer/denormalizer awareness
+ * added the `DenormalizerAwareInterface` and `NormalizerAwareInterface`
+   interfaces to support normalizer/denormalizer awareness
+ * added a PSR-6 compatible adapter for caching metadata
+ * added a `MaxDepth` option to limit the depth of the object graph when
+   serializing objects
+ * added support for serializing `SplFileInfo` objects
+ * added support for serializing objects that implement `DateTimeInterface`
+ * added `AbstractObjectNormalizer` as a base class for normalizers that deal
+   with objects
+ * added support to relation deserialization
+
 2.7.0
 -----
 
@@ -17,6 +50,8 @@ CHANGELOG
  * [DEPRECATION] the `Exception` interface has been renamed to `ExceptionInterface`
  * added `ObjectNormalizer` leveraging the `PropertyAccess` component to normalize
    objects containing both properties and getters / setters / issers / hassers methods.
+ * added `xml_type_cast_attributes` context option for allowing users to opt-out of typecasting
+   xml attributes.
 
 2.6.0
 -----
@@ -35,7 +70,7 @@ CHANGELOG
 
  * added `$context` support for XMLEncoder.
  * [DEPRECATION] JsonEncode and JsonDecode where modified to throw
-   an exception if error found. No need for get*Error() functions
+   an exception if error found. No need for `get*Error()` functions
 
 2.3.0
 -----

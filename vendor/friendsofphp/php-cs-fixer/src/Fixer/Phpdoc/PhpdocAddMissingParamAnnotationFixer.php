@@ -21,6 +21,9 @@ use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Preg;
+use PhpCsFixer\Tokenizer\Analyzer\ArgumentsAnalyzer;
+use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
@@ -34,7 +37,7 @@ final class PhpdocAddMissingParamAnnotationFixer extends AbstractFunctionReferen
     public function getDefinition()
     {
         return new FixerDefinition(
-            'Phpdoc should contain @param for all params.',
+            'PHPDoc should contain `@param` for all params.',
             array(
                 new CodeSample(
                     '<?php
@@ -74,8 +77,9 @@ function f9(string $foo, $bar, $baz) {}',
      */
     public function getPriority()
     {
-        // must be run after PhpdocNoAliasTagFixer and before PhpdocAlignFixer
-        return -1;
+        // must be run after PhpdocNoAliasTagFixer
+        // must be run before PhpdocAlignFixer and PhpdocNoEmptyReturnFixer
+        return 10;
     }
 
     /**
@@ -99,7 +103,10 @@ function f9(string $foo, $bar, $baz) {}',
      */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
+        $argumentsAnalyzer = new ArgumentsAnalyzer();
+
         for ($index = 0, $limit = $tokens->count(); $index < $limit; ++$index) {
+            $mainIndex = $index;
             $token = $tokens[$index];
 
             if (!$token->isGivenKind(T_DOC_COMMENT)) {
@@ -112,7 +119,7 @@ function f9(string $foo, $bar, $baz) {}',
                 continue;
             }
 
-            // ignore one-line phpdocs like `/** foo */`, as there is no place to put new annotations
+            // ignore one-line PHPDocs like `/** foo */`, as there is no place to put new annotations
             if (false === strpos($tokenContent, "\n")) {
                 continue;
             }
@@ -144,7 +151,7 @@ function f9(string $foo, $bar, $baz) {}',
 
             $arguments = array();
 
-            foreach ($this->getArguments($tokens, $openIndex, $index) as $start => $end) {
+            foreach ($argumentsAnalyzer->getArguments($tokens, $openIndex, $index) as $start => $end) {
                 $argumentInfo = $this->prepareArgumentInformation($tokens, $start, $end);
 
                 if (!$this->configuration['only_untyped'] || '' === $argumentInfo['type']) {
@@ -160,7 +167,7 @@ function f9(string $foo, $bar, $baz) {}',
             $lastParamLine = null;
 
             foreach ($doc->getAnnotationsOfType('param') as $annotation) {
-                $pregMatched = preg_match('/^[^$]+(\$\w+).*$/s', $annotation->getContent(), $matches);
+                $pregMatched = Preg::match('/^[^$]+(\$\w+).*$/s', $annotation->getContent(), $matches);
 
                 if (1 === $pregMatched) {
                     unset($arguments[$matches[1]]);
@@ -176,7 +183,7 @@ function f9(string $foo, $bar, $baz) {}',
             $lines = $doc->getLines();
             $linesCount = count($lines);
 
-            preg_match('/^(\s*).*$/', $lines[$linesCount - 1]->getContent(), $matches);
+            Preg::match('/^(\s*).*$/', $lines[$linesCount - 1]->getContent(), $matches);
             $indent = $matches[1];
 
             $newLines = array();
@@ -204,7 +211,7 @@ function f9(string $foo, $bar, $baz) {}',
                 $newLines
             );
 
-            $token->setContent(implode('', $lines));
+            $tokens[$mainIndex] = new Token(array(T_DOC_COMMENT, implode('', $lines)));
         }
     }
 

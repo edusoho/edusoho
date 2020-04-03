@@ -23,8 +23,9 @@ class FileLoaderLoadException extends \Exception
      * @param string     $sourceResource The original resource importing the new resource
      * @param int        $code           The error code
      * @param \Exception $previous       A previous exception
+     * @param string     $type           The type of resource
      */
-    public function __construct($resource, $sourceResource = null, $code = null, $previous = null)
+    public function __construct($resource, $sourceResource = null, $code = null, $previous = null, $type = null)
     {
         $message = '';
         if ($previous) {
@@ -56,10 +57,17 @@ class FileLoaderLoadException extends \Exception
 
         // Is the resource located inside a bundle?
         if ('@' === $resource[0]) {
-            $parts = explode(DIRECTORY_SEPARATOR, $resource);
+            $parts = explode(\DIRECTORY_SEPARATOR, $resource);
             $bundle = substr($parts[0], 1);
             $message .= sprintf(' Make sure the "%s" bundle is correctly registered and loaded in the application kernel class.', $bundle);
             $message .= sprintf(' If the bundle is registered, make sure the bundle path "%s" is not empty.', $resource);
+        } elseif (null !== $type) {
+            // maybe there is no loader for this specific type
+            if ('annotation' === $type) {
+                $message .= ' Make sure annotations are installed and enabled.';
+            } else {
+                $message .= sprintf(' Make sure there is a loader supporting the "%s" type.', $type);
+            }
         }
 
         parent::__construct($message, $code, $previous);
@@ -67,12 +75,12 @@ class FileLoaderLoadException extends \Exception
 
     protected function varToString($var)
     {
-        if (is_object($var)) {
-            return sprintf('Object(%s)', get_class($var));
+        if (\is_object($var)) {
+            return sprintf('Object(%s)', \get_class($var));
         }
 
-        if (is_array($var)) {
-            $a = array();
+        if (\is_array($var)) {
+            $a = [];
             foreach ($var as $k => $v) {
                 $a[] = sprintf('%s => %s', $k, $this->varToString($v));
             }
@@ -80,7 +88,7 @@ class FileLoaderLoadException extends \Exception
             return sprintf('Array(%s)', implode(', ', $a));
         }
 
-        if (is_resource($var)) {
+        if (\is_resource($var)) {
             return sprintf('Resource(%s)', get_resource_type($var));
         }
 

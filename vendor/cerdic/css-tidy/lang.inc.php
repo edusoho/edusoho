@@ -38,7 +38,7 @@ if (isset($_GET['lang'])) {
 
 $l = (in_array($l, array('de', 'fr', 'zh'))) ? $l : 'en';
 
-// note 5 in all but French, and 40 in all are orphaned
+// note 67 in all but English&French, and 5 and 40 in all are orphaned
 
 $lang = array();
 $lang['en'][0] = 'CSS Formatter and Optimiser/Optimizer (based on CSSTidy ';
@@ -106,7 +106,7 @@ $lang['en'][63] = 'Output CSS code as complete HTML document';
 $lang['en'][64] = 'Code';
 $lang['en'][65] = 'CSS to style CSS output';
 $lang['en'][66] = 'You need to go to about:config in your URL bar, select \'signed.applets.codebase_principal_support\' in the filter field, and set its value to true in order to use this feature; however, be aware that doing so increases security risks.';
-
+$lang['en'][67] = 'Reverse left and right directions';
 
 $lang['de'][0] = 'CSS Formatierer und Optimierer (basierend auf CSSTidy ';
 $lang['de'][1] = 'CSS Formatierer und Optimierer';
@@ -240,6 +240,8 @@ $lang['fr'][63] = 'Sauver le code CSS comme document complet HTML';
 $lang['fr'][64] = 'Code';
 $lang['fr'][65] = 'CSS pour colorier la sortie CSS';
 $lang['fr'][66] = 'Vous devez aller dans about:config dans votre barre d’adresse, sélectionner \'signed.applets.codebase_principal_support\' dans le champ Filtre et attribuez-lui la valeur \'true\' pour utiliser cette fonctionnalité; toutefois, soyez conscient que cela augmente les risques de sécurité.';
+$lang['fr'][67] = 'Inverser gauche et droite';
+
 
 
 $lang['zh'][0] = 'CSS整形與最佳化工具(使用 CSSTidy ';

@@ -12,6 +12,7 @@
 namespace Monolog\Handler\Slack;
 
 use Monolog\Logger;
+use Monolog\Utils;
 use Monolog\Formatter\NormalizerFormatter;
 use Monolog\Formatter\FormatterInterface;
 
@@ -146,7 +147,7 @@ class SlackRecord
 
                     if ($this->useShortAttachment) {
                         $attachment['fields'][] = $this->generateAttachmentField(
-                            ucfirst($key),
+                            $key,
                             $record[$key]
                         );
                     } else {
@@ -207,13 +208,17 @@ class SlackRecord
     {
         $normalized = $this->normalizerFormatter->format($fields);
         $prettyPrintFlag = defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : 128;
+        $flags = 0;
+        if (PHP_VERSION_ID >= 50400) {
+            $flags = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
+        }
 
         $hasSecondDimension = count(array_filter($normalized, 'is_array'));
         $hasNonNumericKeys = !count(array_filter(array_keys($normalized), 'is_numeric'));
 
         return $hasSecondDimension || $hasNonNumericKeys
-            ? json_encode($normalized, $prettyPrintFlag)
-            : json_encode($normalized);
+            ? Utils::jsonEncode($normalized, $prettyPrintFlag | $flags)
+            : Utils::jsonEncode($normalized, $flags);
     }
 
     /**
@@ -229,8 +234,8 @@ class SlackRecord
     /**
      * Generates attachment field
      *
-     * @param string $title
-     * @param string|array $value\
+     * @param string       $title
+     * @param string|array $value
      *
      * @return array
      */
@@ -241,7 +246,7 @@ class SlackRecord
             : $value;
 
         return array(
-            'title' => $title,
+            'title' => ucfirst($title),
             'value' => $value,
             'short' => false
         );
@@ -257,7 +262,7 @@ class SlackRecord
     private function generateAttachmentFields(array $data)
     {
         $fields = array();
-        foreach ($data as $key => $value) {
+        foreach ($this->normalizerFormatter->format($data) as $key => $value) {
             $fields[] = $this->generateAttachmentField($key, $value);
         }
 

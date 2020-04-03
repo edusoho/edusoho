@@ -24,6 +24,8 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory;
 use Symfony\Component\HttpKernel\EventListener\ResponseListener;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\WebLink\EventListener\AddLinkHeaderListener;
+use Symfony\Component\WebLink\HttpHeaderSerializer;
 
 class HttpKernelServiceProvider implements ServiceProviderInterface, EventListenerProviderInterface
 {
@@ -46,16 +48,16 @@ class HttpKernelServiceProvider implements ServiceProviderInterface, EventListen
             };
             $app['argument_value_resolvers'] = function ($app) {
                 if (Kernel::VERSION_ID < 30200) {
-                    return array(
+                    return [
                         new AppArgumentValueResolver($app),
                         new RequestAttributeValueResolver(),
                         new RequestValueResolver(),
                         new DefaultValueResolver(),
                         new VariadicValueResolver(),
-                    );
+                    ];
                 }
 
-                return array_merge(array(new AppArgumentValueResolver($app)), ArgumentResolver::getDefaultArgumentValueResolvers());
+                return array_merge([new AppArgumentValueResolver($app)], ArgumentResolver::getDefaultArgumentValueResolvers());
             };
         }
 
@@ -91,5 +93,9 @@ class HttpKernelServiceProvider implements ServiceProviderInterface, EventListen
         $dispatcher->addSubscriber(new MiddlewareListener($app));
         $dispatcher->addSubscriber(new ConverterListener($app['routes'], $app['callback_resolver']));
         $dispatcher->addSubscriber(new StringToResponseListener());
+
+        if (class_exists(HttpHeaderSerializer::class)) {
+            $dispatcher->addSubscriber(new AddLinkHeaderListener());
+        }
     }
 }

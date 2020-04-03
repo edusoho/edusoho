@@ -25,8 +25,11 @@ class LazyDispatcher extends EventDispatcher implements EventDispatcherInterface
             $event = new Event();
         }
 
-        $event->setDispatcher($this);
-        $event->setName($eventName);
+        /**
+         * 已经在symfony3.0 废弃,禁止使用
+         */
+        // $event->setDispatcher($this);
+        // $event->setName($eventName);
 
         $subscribers = $this->container->get('codeags_plugin.event.lazy_subscribers');
 
@@ -39,7 +42,7 @@ class LazyDispatcher extends EventDispatcher implements EventDispatcherInterface
 
             list($id, $method) = $callback;
             if ($this->container->has($id)) {
-                call_user_func(array($this->container->get($id), $method), $event);
+                call_user_func(array($this->container->get($id), $method), $event, $eventName, $this);
             }
         }
 

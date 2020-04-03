@@ -23,6 +23,7 @@ use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Biz\AppLoggerConstant;
 use AppBundle\Common\ArrayToolkit;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Router;
 
 class WeChatNotificationEventSubscriber extends EventSubscriber implements EventSubscriberInterface
@@ -143,7 +144,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             return;
         }
 
-        $options = array('type' => 'url', 'url' => $this->generateUrl('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']), true));
+        $options = array('type' => 'url', 'url' => $this->generateUrl('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']), UrlGeneratorInterface::ABSOLUTE_URL));
         $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($paperResult['userId']);
         if (empty($weChatUser['isSubscribe']) || $this->isUserLocked($paperResult['userId'])) {
             return;
@@ -176,7 +177,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'keyword4' => array('value' => date('Y-m-d H:i', $trade['pay_time'])),
                 'remark' => array('value' => '快去看看课程吧~'),
             );
-            $options = array('type' => 'url', 'url' => $this->generateUrl('course_set_explore', array(), true));
+            $options = array('type' => 'url', 'url' => $this->generateUrl('course_set_explore', array(), UrlGeneratorInterface::ABSOLUTE_URL));
             $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']);
             $templates = TemplateUtil::templates();
             $templateCode = isset($templates['coinRecharge']['id']) ? $templates['coinRecharge']['id'] : '';
@@ -281,7 +282,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             'thread' => $thread,
             'userIds' => $userIds,
             'title' => "在教课程《{$courseName}》",
-            'goto' => $this->generateUrl('course_thread_show', array('courseId' => $course['id'], 'threadId' => $thread['id']), true),
+            'goto' => $this->generateUrl('course_thread_show', array('courseId' => $course['id'], 'threadId' => $thread['id']), UrlGeneratorInterface::ABSOLUTE_URL),
         );
         $this->askQuestionSendNotification($templateParams);
     }
@@ -303,7 +304,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             'thread' => $thread,
             'userIds' => $userIds,
             'title' => "在教班级《{$classroom['title']}》",
-            'goto' => $this->generateUrl('classroom_thread_show', array('classroomId' => $classroom['id'], 'threadId' => $thread['id']), true),
+            'goto' => $this->generateUrl('classroom_thread_show', array('classroomId' => $classroom['id'], 'threadId' => $thread['id']), UrlGeneratorInterface::ABSOLUTE_URL),
         );
 
         $this->askQuestionSendNotification($templateParams);
@@ -327,7 +328,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                     'content' => $post['content'],
                     'title' => $title,
                     'createdTime' => $thread['createdTime'],
-                    'goto' => $this->generateUrl('course_thread_show', array('courseId' => $course['id'], 'threadId' => $thread['id']), true),
+                    'goto' => $this->generateUrl('course_thread_show', array('courseId' => $course['id'], 'threadId' => $thread['id']), UrlGeneratorInterface::ABSOLUTE_URL),
                 );
                 $this->answerQuestionNotification($templateParams);
             }
@@ -352,7 +353,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                     'content' => $post['content'],
                     'title' => $classroom['title'],
                     'createdTime' => $thread['createdTime'],
-                    'goto' => $this->generateUrl('classroom_thread_show', array('classroomId' => $classroom['id'], 'threadId' => $thread['id']), true),
+                    'goto' => $this->generateUrl('classroom_thread_show', array('classroomId' => $classroom['id'], 'threadId' => $thread['id']), UrlGeneratorInterface::ABSOLUTE_URL),
                 );
                 $this->answerQuestionNotification($templateParams);
             }
@@ -408,7 +409,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                         'misfire_policy' => 'executing',
                         'args' => array(
                             'key' => $key,
-                            'url' => $this->generateUrl('my_courses_learning', array(), true),
+                            'url' => $this->generateUrl('my_courses_learning', array(), UrlGeneratorInterface::ABSOLUTE_URL),
                             'sendTime' => $templates['courseRemind']['sendTime'],
                             'sendDays' => $templates['courseRemind']['sendDays'],
                         ),
@@ -564,13 +565,13 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     {
         switch ($targetType) {
             case 'course':
-                return $this->generateUrl('my_course_show', array('id' => $targetId), true);
+                return $this->generateUrl('my_course_show', array('id' => $targetId), UrlGeneratorInterface::ABSOLUTE_URL);
 
             case 'classroom':
-                return $this->generateUrl('classroom_show', array('id' => $targetId), true);
+                return $this->generateUrl('classroom_show', array('id' => $targetId), UrlGeneratorInterface::ABSOLUTE_URL);
 
             case 'vip':
-                return $this->generateUrl('vip', array(), true);
+                return $this->generateUrl('vip', array(), UrlGeneratorInterface::ABSOLUTE_URL);
 
             default:
                 return '';
@@ -589,7 +590,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'args' => array(
                     'key' => $key,
                     'taskId' => $task['id'],
-                    'url' => $this->generateUrl('my_course_show', array('id' => $task['courseId']), true),
+                    'url' => $this->generateUrl('my_course_show', array('id' => $task['courseId']), UrlGeneratorInterface::ABSOLUTE_URL),
                 ),
             );
             $this->getSchedulerService()->register($job);
@@ -609,7 +610,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'args' => array(
                     'key' => 'liveOpen',
                     'taskId' => $task['id'],
-                    'url' => $this->generateUrl('my_course_show', array('id' => $task['courseId']), true),
+                    'url' => $this->generateUrl('my_course_show', array('id' => $task['courseId']), UrlGeneratorInterface::ABSOLUTE_URL),
                 ),
             );
             $this->getSchedulerService()->register($job);
@@ -624,7 +625,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'args' => array(
                     'key' => 'liveOpen',
                     'taskId' => $task['id'],
-                    'url' => $this->generateUrl('my_course_show', array('id' => $task['courseId']), true),
+                    'url' => $this->generateUrl('my_course_show', array('id' => $task['courseId']), UrlGeneratorInterface::ABSOLUTE_URL),
                 ),
             );
             $this->getSchedulerService()->register($job);
@@ -735,7 +736,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
      *
      * @return mixed
      */
-    private function generateUrl($route, $parameters, $referenceType)
+    private function generateUrl($route, $parameters, $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
     {
         global $kernel;
         $router = $this->decorateRouter($kernel->getContainer()->get('router'));

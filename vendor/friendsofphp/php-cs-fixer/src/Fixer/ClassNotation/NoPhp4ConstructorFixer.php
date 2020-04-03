@@ -32,7 +32,7 @@ final class NoPhp4ConstructorFixer extends AbstractFixer
         return new FixerDefinition(
             'Convert PHP4-style constructors to `__construct`.',
             array(
-               new CodeSample('<?php
+                new CodeSample('<?php
 class Foo
 {
     public function Foo($bar)
@@ -153,7 +153,7 @@ class Foo
 
         if (null === $php5) {
             // no PHP5-constructor, we can rename the old one to __construct
-            $tokens[$php4['nameIndex']]->setContent('__construct');
+            $tokens[$php4['nameIndex']] = new Token(array(T_STRING, '__construct'));
 
             // in some (rare) cases we might have just created an infinite recursion issue
             $this->fixInfiniteRecursion($tokens, $php4['bodyIndex'], $php4['endIndex']);
@@ -166,7 +166,7 @@ class Foo
         if (null !== $tokens->findSequence($seq, $php4['bodyIndex'] - 1, $php4['endIndex'], $case)) {
             // good, delete it!
             for ($i = $php4['startIndex']; $i <= $php4['endIndex']; ++$i) {
-                $tokens[$i]->clear();
+                $tokens->clearAt($i);
             }
 
             return;
@@ -177,10 +177,10 @@ class Foo
         if (null !== $tokens->findSequence($seq, $php5['bodyIndex'] - 1, $php5['endIndex'], $case)) {
             // that was a weird choice, but we can safely delete it and...
             for ($i = $php5['startIndex']; $i <= $php5['endIndex']; ++$i) {
-                $tokens[$i]->clear();
+                $tokens->clearAt($i);
             }
             // rename the PHP4 one to __construct
-            $tokens[$php4['nameIndex']]->setContent('__construct');
+            $tokens[$php4['nameIndex']] = new Token(array(T_STRING, '__construct'));
         }
     }
 
@@ -213,8 +213,8 @@ class Foo
                 // match either of the possibilities
                 if ($tokens[$parentSeq[0]]->equalsAny(array(array(T_STRING, 'parent'), array(T_STRING, $parentClass)), false)) {
                     // replace with parent::__construct
-                    $tokens[$parentSeq[0]]->setContent('parent');
-                    $tokens[$parentSeq[2]]->setContent('__construct');
+                    $tokens[$parentSeq[0]] = new Token(array(T_STRING, 'parent'));
+                    $tokens[$parentSeq[2]] = new Token(array(T_STRING, '__construct'));
                 }
             }
 
@@ -239,7 +239,7 @@ class Foo
                     T_DOUBLE_COLON,
                     '::',
                 ));
-                $tokens[$parentSeq[2]]->setContent('__construct');
+                $tokens[$parentSeq[2]] = new Token(array(T_STRING, '__construct'));
             }
         }
     }
@@ -333,7 +333,7 @@ class Foo
      * @param int    $startIndex the search start index
      * @param int    $endIndex   the search end index
      *
-     * @return array|null An associative array, if a match is found:
+     * @return null|array An associative array, if a match is found:
      *
      *     - nameIndex (int): The index of the function/method name.
      *     - startIndex (int): The index of the function/method start.
@@ -374,7 +374,7 @@ class Foo
         } else {
             // find method body start and the end of the function definition
             $bodyStart = $tokens->getNextTokenOfKind($function[2], array('{'));
-            $funcEnd = $bodyStart !== null ? $tokens->findBlockEnd(Tokens::BLOCK_TYPE_CURLY_BRACE, $bodyStart) : null;
+            $funcEnd = null !== $bodyStart ? $tokens->findBlockEnd(Tokens::BLOCK_TYPE_CURLY_BRACE, $bodyStart) : null;
         }
 
         return array(

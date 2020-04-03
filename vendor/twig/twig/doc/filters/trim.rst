@@ -10,7 +10,7 @@
 The ``trim`` filter strips whitespace (or other characters) from the beginning
 and end of a string:
 
-.. code-block:: jinja
+.. code-block:: twig
 
     {{ '  I like Twig.  '|trim }}
 
@@ -40,6 +40,6 @@ Arguments
 * ``side``: The default is to strip from the left and the right (`both`) sides, but `left`
   and `right` will strip from either the left side or right side only
 
-.. _`trim`: http://php.net/trim
-.. _`ltrim`: http://php.net/ltrim
-.. _`rtrim`: http://php.net/rtrim
+.. _`trim`: https://secure.php.net/trim
+.. _`ltrim`: https://secure.php.net/ltrim
+.. _`rtrim`: https://secure.php.net/rtrim

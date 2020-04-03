@@ -1,6 +1,34 @@
 CHANGELOG
 =========
 
+3.4.0
+-----
+
+ * Added `NoConfigurationException`.
+ * Added the possibility to define a prefix for all routes of a controller via @Route(name="prefix_")
+ * Added support for prioritized routing loaders.
+ * Add matched and default parameters to redirect responses
+ * Added support for a `controller` keyword for configuring route controllers in YAML and XML configurations.
+
+3.3.0
+-----
+
+  * [DEPRECATION] Class parameters have been deprecated and will be removed in 4.0.
+    * router.options.generator_class
+    * router.options.generator_base_class
+    * router.options.generator_dumper_class
+    * router.options.matcher_class
+    * router.options.matcher_base_class
+    * router.options.matcher_dumper_class
+    * router.options.matcher.cache_class
+    * router.options.generator.cache_class
+
+3.2.0
+-----
+
+ * Added support for `bool`, `int`, `float`, `string`, `list` and `map` defaults in XML configurations.
+ * Added support for UTF-8 requirements
+
 2.8.0
 -----
 
@@ -13,7 +41,7 @@ CHANGELOG
    Before:
 
    ```php
-   $router->generate('blog_show', array('slug' => 'my-blog-post'), true);
+   $router->generate('blog_show', ['slug' => 'my-blog-post'], true);
    ```
 
    After:
@@ -21,7 +49,7 @@ CHANGELOG
    ```php
    use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-   $router->generate('blog_show', array('slug' => 'my-blog-post'), UrlGeneratorInterface::ABSOLUTE_URL);
+   $router->generate('blog_show', ['slug' => 'my-blog-post'], UrlGeneratorInterface::ABSOLUTE_URL);
    ```
 
 2.5.0
@@ -29,7 +57,7 @@ CHANGELOG
 
  * [DEPRECATION] The `ApacheMatcherDumper` and `ApacheUrlMatcher` were deprecated and
    will be removed in Symfony 3.0, since the performance gains were minimal and
-   it's hard to replicate the behaviour of PHP implementation.
+   it's hard to replicate the behavior of PHP implementation.
 
 2.3.0
 -----
@@ -86,7 +114,7 @@ CHANGELOG
    ```php
    $route = new Route();
    $route->setPath('/article/{id}');
-   $route->setMethods(array('POST', 'PUT'));
+   $route->setMethods(['POST', 'PUT']);
    $route->setSchemes('https');
    ```
 
@@ -141,10 +169,10 @@ CHANGELOG
    used with a single parameter. The other params `$prefix`, `$default`, `$requirements` and `$options`
    will still work, but have been deprecated. The `addPrefix` method should be used for this
    use-case instead.
-   Before: `$parentCollection->addCollection($collection, '/prefix', array(...), array(...))`
+   Before: `$parentCollection->addCollection($collection, '/prefix', [...], [...])`
    After:
    ```php
-   $collection->addPrefix('/prefix', array(...), array(...));
+   $collection->addPrefix('/prefix', [...], [...]);
    $parentCollection->addCollection($collection);
    ```
  * added support for the method default argument values when defining a @Route
@@ -169,7 +197,7 @@ CHANGELOG
    (only relevant if you implemented your own RouteCompiler).
  * Added possibility to generate relative paths and network paths in the UrlGenerator, e.g.
    "../parent-file" and "//example.com/dir/file". The third parameter in
-   `UrlGeneratorInterface::generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)`
+   `UrlGeneratorInterface::generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH)`
    now accepts more values and you should use the constants defined in `UrlGeneratorInterface` for
    claritiy. The old method calls with a Boolean parameter will continue to work because they
    equal the signature using the constants.

@@ -50,7 +50,7 @@ final class UseTransformer extends AbstractTransformer
     public function process(Tokens $tokens, Token $token, $index)
     {
         if ($token->isGivenKind(T_USE) && $this->isUseForLambda($tokens, $index)) {
-            $token->override(array(CT::T_USE_LAMBDA, $token->getContent()));
+            $tokens[$index] = new Token(array(CT::T_USE_LAMBDA, $token->getContent()));
         }
 
         if (!$token->isClassy()) {
@@ -58,7 +58,7 @@ final class UseTransformer extends AbstractTransformer
         }
 
         $prevTokenIndex = $tokens->getPrevMeaningfulToken($index);
-        $prevToken = $prevTokenIndex === null ? null : $tokens[$prevTokenIndex];
+        $prevToken = null === $prevTokenIndex ? null : $tokens[$prevTokenIndex];
 
         if ($prevToken->isGivenKind(T_DOUBLE_COLON)) {
             return;
@@ -78,9 +78,9 @@ final class UseTransformer extends AbstractTransformer
             }
 
             if ($this->isUseForLambda($tokens, $index)) {
-                $token->override(array(CT::T_USE_LAMBDA, $token->getContent()));
+                $tokens[$index] = new Token(array(CT::T_USE_LAMBDA, $token->getContent()));
             } else {
-                $token->override(array(CT::T_USE_TRAIT, $token->getContent()));
+                $tokens[$index] = new Token(array(CT::T_USE_TRAIT, $token->getContent()));
             }
         }
     }

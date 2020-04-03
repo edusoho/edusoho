@@ -23,19 +23,8 @@ namespace Symfony\Component\CssSelector\Parser;
  */
 class Reader
 {
-    /**
-     * @var string
-     */
     private $source;
-
-    /**
-     * @var int
-     */
     private $length;
-
-    /**
-     * @var int
-     */
     private $position = 0;
 
     /**
@@ -44,7 +33,7 @@ class Reader
     public function __construct($source)
     {
         $this->source = $source;
-        $this->length = strlen($source);
+        $this->length = \strlen($source);
     }
 
     /**
@@ -97,7 +86,7 @@ class Reader
     /**
      * @param string $pattern
      *
-     * @return bool
+     * @return array|false
      */
     public function findPattern($pattern)
     {

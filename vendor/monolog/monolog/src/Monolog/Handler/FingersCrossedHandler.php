@@ -14,6 +14,8 @@ namespace Monolog\Handler;
 use Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy;
 use Monolog\Handler\FingersCrossed\ActivationStrategyInterface;
 use Monolog\Logger;
+use Monolog\ResettableInterface;
+use Monolog\Formatter\FormatterInterface;
 
 /**
  * Buffers all records until a certain level is reached
@@ -38,11 +40,11 @@ class FingersCrossedHandler extends AbstractHandler
     protected $passthruLevel;
 
     /**
-     * @param callable|HandlerInterface       $handler            Handler or factory callable($record, $fingersCrossedHandler).
+     * @param callable|HandlerInterface       $handler            Handler or factory callable($record|null, $fingersCrossedHandler).
      * @param int|ActivationStrategyInterface $activationStrategy Strategy which determines when this handler takes action
      * @param int                             $bufferSize         How many entries should be buffered at most, beyond that the oldest items are removed from the buffer.
-     * @param Boolean                         $bubble             Whether the messages that are handled can bubble up the stack or not
-     * @param Boolean                         $stopBuffering      Whether the handler should stop buffering after being triggered (default true)
+     * @param bool                            $bubble             Whether the messages that are handled can bubble up the stack or not
+     * @param bool                            $stopBuffering      Whether the handler should stop buffering after being triggered (default true)
      * @param int                             $passthruLevel      Minimum level to always flush to handler on close, even if strategy not triggered
      */
     public function __construct($handler, $activationStrategy = null, $bufferSize = 0, $bubble = true, $stopBuffering = true, $passthruLevel = null)
@@ -87,15 +89,7 @@ class FingersCrossedHandler extends AbstractHandler
         if ($this->stopBuffering) {
             $this->buffering = false;
         }
-        if (!$this->handler instanceof HandlerInterface) {
-            $record = end($this->buffer) ?: null;
-
-            $this->handler = call_user_func($this->handler, $record, $this);
-            if (!$this->handler instanceof HandlerInterface) {
-                throw new \RuntimeException("The factory callable should return a HandlerInterface");
-            }
-        }
-        $this->handler->handleBatch($this->buffer);
+        $this->getHandler(end($this->buffer) ?: null)->handleBatch($this->buffer);
         $this->buffer = array();
     }
 
@@ -119,7 +113,7 @@ class FingersCrossedHandler extends AbstractHandler
                 $this->activate();
             }
         } else {
-            $this->handler->handle($record);
+            $this->getHandler($record)->handle($record);
         }
 
         return false === $this->bubble;
@@ -130,24 +124,18 @@ class FingersCrossedHandler extends AbstractHandler
      */
     public function close()
     {
-        if (null !== $this->passthruLevel) {
-            $level = $this->passthruLevel;
-            $this->buffer = array_filter($this->buffer, function ($record) use ($level) {
-                return $record['level'] >= $level;
-            });
-            if (count($this->buffer) > 0) {
-                $this->handler->handleBatch($this->buffer);
-                $this->buffer = array();
-            }
-        }
+        $this->flushBuffer();
     }
 
-    /**
-     * Resets the state of the handler. Stops forwarding records to the wrapped handler.
-     */
     public function reset()
     {
-        $this->buffering = true;
+        $this->flushBuffer();
+
+        parent::reset();
+
+        if ($this->getHandler() instanceof ResettableInterface) {
+            $this->getHandler()->reset();
+        }
     }
 
     /**
@@ -159,5 +147,61 @@ class FingersCrossedHandler extends AbstractHandler
     {
         $this->buffer = array();
         $this->reset();
+    }
+
+    /**
+     * Resets the state of the handler. Stops forwarding records to the wrapped handler.
+     */
+    private function flushBuffer()
+    {
+        if (null !== $this->passthruLevel) {
+            $level = $this->passthruLevel;
+            $this->buffer = array_filter($this->buffer, function ($record) use ($level) {
+                return $record['level'] >= $level;
+            });
+            if (count($this->buffer) > 0) {
+                $this->getHandler(end($this->buffer) ?: null)->handleBatch($this->buffer);
+            }
+        }
+
+        $this->buffer = array();
+        $this->buffering = true;
+    }
+
+    /**
+     * Return the nested handler
+     *
+     * If the handler was provided as a factory callable, this will trigger the handler's instantiation.
+     *
+     * @return HandlerInterface
+     */
+    public function getHandler(array $record = null)
+    {
+        if (!$this->handler instanceof HandlerInterface) {
+            $this->handler = call_user_func($this->handler, $record, $this);
+            if (!$this->handler instanceof HandlerInterface) {
+                throw new \RuntimeException("The factory callable should return a HandlerInterface");
+            }
+        }
+
+        return $this->handler;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setFormatter(FormatterInterface $formatter)
+    {
+        $this->getHandler()->setFormatter($formatter);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFormatter()
+    {
+        return $this->getHandler()->getFormatter();
     }
 }

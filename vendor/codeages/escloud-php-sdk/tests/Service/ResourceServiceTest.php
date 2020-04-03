@@ -19,7 +19,6 @@ class ResourceServiceTest extends BaseTestCase
         $this->assertEquals($mock['reskey'], $result['reskey']);
     }
 
-
     public function testFinishUpload()
     {
         $resource = $this->mockResource();
@@ -102,7 +101,7 @@ class ResourceServiceTest extends BaseTestCase
             'isShare' => 1,
             'processedTime' => 1548915578,
             'createdTime' => 1548915578,
-            'updatedTIme' => 1548915578
+            'updatedTIme' => 1548915578,
         );
     }
 }

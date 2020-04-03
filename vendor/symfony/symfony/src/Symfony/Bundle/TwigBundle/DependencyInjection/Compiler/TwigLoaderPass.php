@@ -11,10 +11,10 @@
 
 namespace Symfony\Bundle\TwigBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Adds services tagged twig.loader as Twig loaders.
@@ -29,36 +29,32 @@ class TwigLoaderPass implements CompilerPassInterface
             return;
         }
 
-        // register additional template loaders
-        $loaderIds = $container->findTaggedServiceIds('twig.loader');
+        $prioritizedLoaders = [];
+        $found = 0;
 
-        if (count($loaderIds) === 0) {
+        foreach ($container->findTaggedServiceIds('twig.loader', true) as $id => $attributes) {
+            $priority = isset($attributes[0]['priority']) ? $attributes[0]['priority'] : 0;
+            $prioritizedLoaders[$priority][] = $id;
+            ++$found;
+        }
+
+        if (!$found) {
             throw new LogicException('No twig loaders found. You need to tag at least one loader with "twig.loader"');
         }
 
-        if (count($loaderIds) === 1) {
-            $container->setAlias('twig.loader', key($loaderIds));
+        if (1 === $found) {
+            $container->setAlias('twig.loader', $id)->setPrivate(true);
         } else {
             $chainLoader = $container->getDefinition('twig.loader.chain');
-
-            $prioritizedLoaders = array();
-
-            foreach ($loaderIds as $id => $tags) {
-                foreach ($tags as $tag) {
-                    $priority = isset($tag['priority']) ? $tag['priority'] : 0;
-                    $prioritizedLoaders[$priority][] = $id;
-                }
-            }
-
             krsort($prioritizedLoaders);
 
             foreach ($prioritizedLoaders as $loaders) {
                 foreach ($loaders as $loader) {
-                    $chainLoader->addMethodCall('addLoader', array(new Reference($loader)));
+                    $chainLoader->addMethodCall('addLoader', [new Reference($loader)]);
                 }
             }
 
-            $container->setAlias('twig.loader', 'twig.loader.chain');
+            $container->setAlias('twig.loader', 'twig.loader.chain')->setPrivate(true);
         }
     }
 }

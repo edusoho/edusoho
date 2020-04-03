@@ -11,6 +11,7 @@
 
 namespace Silex\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Silex\Provider\ServiceControllerServiceProvider;
@@ -20,9 +21,9 @@ use Silex\Provider\ServiceControllerServiceProvider;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class CallbackServicesTest extends \PHPUnit_Framework_TestCase
+class CallbackServicesTest extends TestCase
 {
-    public $called = array();
+    public $called = [];
 
     public function testCallbacksAsServices()
     {
@@ -50,7 +51,7 @@ class CallbackServicesTest extends \PHPUnit_Framework_TestCase
         $response = $app->handle($request);
         $app->terminate($request, $response);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'BEFORE APP',
             'ON REQUEST',
             'BEFORE',
@@ -59,7 +60,7 @@ class CallbackServicesTest extends \PHPUnit_Framework_TestCase
             'AFTER',
             'AFTER APP',
             'FINISH APP',
-        ), $app['service']->called);
+        ], $app['service']->called);
     }
 
     public function controller(Application $app)

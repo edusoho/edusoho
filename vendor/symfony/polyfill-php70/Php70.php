@@ -36,7 +36,7 @@ final class Php70
     public static function preg_replace_callback_array(array $patterns, $subject, $limit = -1, &$count = 0)
     {
         $count = 0;
-        $result = ''.$subject;
+        $result = (string) $subject;
         if (0 === $limit = self::intArg($limit, __FUNCTION__, 3)) {
             return $result;
         }
@@ -53,20 +53,20 @@ final class Php70
     {
         static $handler;
         if (!$handler) {
-             $handler = function() { return false; };
+            $handler = function () { return false; };
         }
         set_error_handler($handler);
         @trigger_error('');
         restore_error_handler();
     }
 
-    public static function intArg($value, $caller, $pos)
+    private static function intArg($value, $caller, $pos)
     {
-        if (is_int($value)) {
+        if (\is_int($value)) {
             return $value;
         }
-        if (!is_numeric($value) || PHP_INT_MAX <= ($value += 0) || ~PHP_INT_MAX >= $value) {
-            throw new \TypeError(sprintf('%s() expects parameter %d to be integer, %s given', $caller, $pos, gettype($value)));
+        if (!\is_numeric($value) || PHP_INT_MAX <= ($value += 0) || ~PHP_INT_MAX >= $value) {
+            throw new \TypeError(sprintf('%s() expects parameter %d to be integer, %s given', $caller, $pos, \gettype($value)));
         }
 
         return (int) $value;

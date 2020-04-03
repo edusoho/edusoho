@@ -18,6 +18,8 @@ namespace Symfony\Component\Finder\Iterator;
  * @see https://bugs.php.net/68557
  *
  * @author Alex Bogomazov
+ *
+ * @deprecated since 3.4, to be removed in 4.0.
  */
 abstract class FilterIterator extends \FilterIterator
 {
@@ -29,7 +31,7 @@ abstract class FilterIterator extends \FilterIterator
      */
     public function rewind()
     {
-        if (PHP_VERSION_ID > 50607 || (PHP_VERSION_ID > 50523 && PHP_VERSION_ID < 50600)) {
+        if (\PHP_VERSION_ID > 50607 || (\PHP_VERSION_ID > 50523 && \PHP_VERSION_ID < 50600)) {
             parent::rewind();
 
             return;

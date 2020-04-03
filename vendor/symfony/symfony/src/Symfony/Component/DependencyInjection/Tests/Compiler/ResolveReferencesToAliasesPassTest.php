@@ -13,10 +13,10 @@ namespace Symfony\Component\DependencyInjection\Tests\Compiler;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Alias;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Compiler\ResolveReferencesToAliasesPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 
 class ResolveReferencesToAliasesPassTest extends TestCase
 {
@@ -26,7 +26,7 @@ class ResolveReferencesToAliasesPassTest extends TestCase
         $container->setAlias('bar', 'foo');
         $def = $container
             ->register('moo')
-            ->setArguments(array(new Reference('bar')))
+            ->setArguments([new Reference('bar')])
         ;
 
         $this->process($container);
@@ -42,7 +42,7 @@ class ResolveReferencesToAliasesPassTest extends TestCase
         $container->setAlias('moo', 'bar');
         $def = $container
             ->register('foobar')
-            ->setArguments(array(new Reference('moo')))
+            ->setArguments([new Reference('moo')])
         ;
 
         $this->process($container);
@@ -51,11 +51,9 @@ class ResolveReferencesToAliasesPassTest extends TestCase
         $this->assertEquals('foo', (string) $arguments[0]);
     }
 
-    /**
-     * @expectedException \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
-     */
     public function testAliasCircularReference()
     {
+        $this->expectException('Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException');
         $container = new ContainerBuilder();
         $container->setAlias('bar', 'foo');
         $container->setAlias('foo', 'bar');
@@ -68,10 +66,10 @@ class ResolveReferencesToAliasesPassTest extends TestCase
         $container->register('factory', 'Factory');
         $container->setAlias('factory_alias', new Alias('factory'));
         $foo = new Definition();
-        $foo->setFactory(array(new Reference('factory_alias'), 'createFoo'));
+        $foo->setFactory([new Reference('factory_alias'), 'createFoo']);
         $container->setDefinition('foo', $foo);
         $bar = new Definition();
-        $bar->setFactory(array('Factory', 'createFoo'));
+        $bar->setFactory(['Factory', 'createFoo']);
         $container->setDefinition('bar', $bar);
 
         $this->process($container);
@@ -81,24 +79,6 @@ class ResolveReferencesToAliasesPassTest extends TestCase
 
         $this->assertSame('factory', (string) $resolvedFooFactory[0]);
         $this->assertSame('Factory', (string) $resolvedBarFactory[0]);
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testResolveFactoryService()
-    {
-        $container = new ContainerBuilder();
-        $container->register('factory', 'Factory');
-        $container->setAlias('factory_alias', new Alias('factory'));
-        $foo = new Definition();
-        $foo->setFactoryService('factory_alias');
-        $foo->setFactoryMethod('createFoo');
-        $container->setDefinition('foo', $foo);
-
-        $this->process($container);
-
-        $this->assertSame('factory', $foo->getFactoryService());
     }
 
     protected function process(ContainerBuilder $container)

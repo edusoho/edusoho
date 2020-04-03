@@ -11,25 +11,25 @@
 
 namespace Symfony\Component\Security\Http\Firewall;
 
-use Symfony\Component\Security\Http\Session\SessionAuthenticationStrategyInterface;
-use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
-use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
-use Symfony\Component\Security\Http\RememberMe\RememberMeServicesInterface;
-use Symfony\Component\Security\Core\Security;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\SessionUnavailableException;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
-use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Component\Security\Http\HttpUtils;
+use Symfony\Component\Security\Http\RememberMe\RememberMeServicesInterface;
+use Symfony\Component\Security\Http\SecurityEvents;
+use Symfony\Component\Security\Http\Session\SessionAuthenticationStrategyInterface;
 
 /**
  * The AbstractAuthenticationListener is the preferred base class for all
@@ -64,23 +64,18 @@ abstract class AbstractAuthenticationListener implements ListenerInterface
     private $rememberMeServices;
 
     /**
-     * Constructor.
-     *
-     * @param TokenStorageInterface                  $tokenStorage          A TokenStorageInterface instance
-     * @param AuthenticationManagerInterface         $authenticationManager An AuthenticationManagerInterface instance
-     * @param SessionAuthenticationStrategyInterface $sessionStrategy
-     * @param HttpUtils                              $httpUtils             An HttpUtilsInterface instance
-     * @param string                                 $providerKey
-     * @param AuthenticationSuccessHandlerInterface  $successHandler
-     * @param AuthenticationFailureHandlerInterface  $failureHandler
-     * @param array                                  $options               An array of options for the processing of a
-     *                                                                      successful, or failed authentication attempt
-     * @param LoggerInterface                        $logger                A LoggerInterface instance
-     * @param EventDispatcherInterface               $dispatcher            An EventDispatcherInterface instance
+     * @param TokenStorageInterface          $tokenStorage          A TokenStorageInterface instance
+     * @param AuthenticationManagerInterface $authenticationManager An AuthenticationManagerInterface instance
+     * @param HttpUtils                      $httpUtils             An HttpUtils instance
+     * @param string                         $providerKey
+     * @param array                          $options               An array of options for the processing of a
+     *                                                              successful, or failed authentication attempt
+     * @param LoggerInterface|null           $logger                A LoggerInterface instance
+     * @param EventDispatcherInterface|null  $dispatcher            An EventDispatcherInterface instance
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct(TokenStorageInterface $tokenStorage, AuthenticationManagerInterface $authenticationManager, SessionAuthenticationStrategyInterface $sessionStrategy, HttpUtils $httpUtils, $providerKey, AuthenticationSuccessHandlerInterface $successHandler, AuthenticationFailureHandlerInterface $failureHandler, array $options = array(), LoggerInterface $logger = null, EventDispatcherInterface $dispatcher = null)
+    public function __construct(TokenStorageInterface $tokenStorage, AuthenticationManagerInterface $authenticationManager, SessionAuthenticationStrategyInterface $sessionStrategy, HttpUtils $httpUtils, $providerKey, AuthenticationSuccessHandlerInterface $successHandler, AuthenticationFailureHandlerInterface $failureHandler, array $options = [], LoggerInterface $logger = null, EventDispatcherInterface $dispatcher = null)
     {
         if (empty($providerKey)) {
             throw new \InvalidArgumentException('$providerKey must not be empty.');
@@ -92,7 +87,7 @@ abstract class AbstractAuthenticationListener implements ListenerInterface
         $this->providerKey = $providerKey;
         $this->successHandler = $successHandler;
         $this->failureHandler = $failureHandler;
-        $this->options = array_merge(array(
+        $this->options = array_merge([
             'check_path' => '/login_check',
             'login_path' => '/login',
             'always_use_default_target_path' => false,
@@ -102,7 +97,7 @@ abstract class AbstractAuthenticationListener implements ListenerInterface
             'failure_path' => null,
             'failure_forward' => false,
             'require_previous_session' => true,
-        ), $options);
+        ], $options);
         $this->logger = $logger;
         $this->dispatcher = $dispatcher;
         $this->httpUtils = $httpUtils;
@@ -110,8 +105,6 @@ abstract class AbstractAuthenticationListener implements ListenerInterface
 
     /**
      * Sets the RememberMeServices implementation to use.
-     *
-     * @param RememberMeServicesInterface $rememberMeServices
      */
     public function setRememberMeServices(RememberMeServicesInterface $rememberMeServices)
     {
@@ -120,8 +113,6 @@ abstract class AbstractAuthenticationListener implements ListenerInterface
 
     /**
      * Handles form based authentication.
-     *
-     * @param GetResponseEvent $event A GetResponseEvent instance
      *
      * @throws \RuntimeException
      * @throws SessionUnavailableException
@@ -170,8 +161,6 @@ abstract class AbstractAuthenticationListener implements ListenerInterface
      * but a subclass could change this to only authenticate requests where a
      * certain parameters is present.
      *
-     * @param Request $request
-     *
      * @return bool
      */
     protected function requiresAuthentication(Request $request)
@@ -182,8 +171,6 @@ abstract class AbstractAuthenticationListener implements ListenerInterface
     /**
      * Performs authentication.
      *
-     * @param Request $request A Request instance
-     *
      * @return TokenInterface|Response|null The authenticated token, null if full authentication is not possible, or a Response
      *
      * @throws AuthenticationException if the authentication fails
@@ -193,7 +180,7 @@ abstract class AbstractAuthenticationListener implements ListenerInterface
     private function onFailure(Request $request, AuthenticationException $failed)
     {
         if (null !== $this->logger) {
-            $this->logger->info('Authentication request failed.', array('exception' => $failed));
+            $this->logger->info('Authentication request failed.', ['exception' => $failed]);
         }
 
         $token = $this->tokenStorage->getToken();
@@ -213,7 +200,7 @@ abstract class AbstractAuthenticationListener implements ListenerInterface
     private function onSuccess(Request $request, TokenInterface $token)
     {
         if (null !== $this->logger) {
-            $this->logger->info('User has been authenticated successfully.', array('username' => $token->getUsername()));
+            $this->logger->info('User has been authenticated successfully.', ['username' => $token->getUsername()]);
         }
 
         $this->tokenStorage->setToken($token);

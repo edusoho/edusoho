@@ -9,6 +9,7 @@ use AppBundle\Common\FileToolkit;
 use Biz\File\UploadFileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Biz\User\Service\UserService;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class LocalFileImplementorImpl extends BaseService implements FileImplementor
 {
@@ -215,7 +216,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     {
         global $kernel;
 
-        $url = $kernel->getContainer()->get('router')->generate('uploadfile_upload', $params, true);
+        $url = $kernel->getContainer()->get('router')->generate('uploadfile_upload', $params, UrlGeneratorInterface::ABSOLUTE_URL);
 
         return $url;
     }

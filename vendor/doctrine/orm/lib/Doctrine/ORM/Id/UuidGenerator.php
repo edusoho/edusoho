@@ -30,14 +30,7 @@ use Doctrine\ORM\EntityManager;
 class UuidGenerator extends AbstractIdGenerator
 {
     /**
-     * Generates an ID for the given entity.
-     *
-     * @param EntityManager $em     The EntityManager to use.
-     * @param object        $entity
-     *
-     * @return string The generated value.
-     *
-     * @override
+     * {@inheritDoc}
      */
     public function generate(EntityManager $em, $entity)
     {

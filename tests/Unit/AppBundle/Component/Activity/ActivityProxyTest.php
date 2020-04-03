@@ -66,9 +66,9 @@ class ActivityProxyTest extends BaseTestCase
 
     public function setUp()
     {
-        parent::setUp();
         $filesystem = new Filesystem();
-        $filesystem->remove($this->getContainer()->getParameter('kernel.cache_dir'));
-        clearstatcache(true);
+        $filesystem->remove($this->getContainer()->getParameter('kernel.cache_dir').'/activities.php');
+        $this->getContainer()->get('cache_clearer')->clear($this->getContainer()->getParameter('kernel.cache_dir').'/activities.php');
+        parent::setUp();
     }
 }
