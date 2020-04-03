@@ -31,6 +31,7 @@ import Api from "@/api";
 import copyUrl from "@/mixins/copyUrl";
 import { mapMutations, mapState } from "vuex";
 import * as types from "@/store/mutation-types";
+import { Toast } from 'vant'
 export default {
   name: "finish-dialog",
   mixins: [copyUrl],
@@ -78,9 +79,14 @@ export default {
       setSourceType: types.SET_SOURCETYPE
     }),
     goNextTask() {
+      if(!this.finishResult.nextTask){
+        Toast('没有下一课');
+        this.show = false;
+        return;
+      }
       const params = {
         courseId: this.courseId,
-        taskId: this.nextTask.id
+        taskId: this.finishResult.nextTask.id
       };
       Api.getCourseData({ query: params }).then(res => {
         this.toLearnTask(res);

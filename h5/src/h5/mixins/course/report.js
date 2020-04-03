@@ -12,6 +12,7 @@ export default {
         courseId: null,
         taskId: null
       },
+      reportResult:null,
       isFinish: false,//是否完成
       reportType: null,//上报类型
       learnTime: 0 // 学习时长
@@ -34,6 +35,7 @@ export default {
       this.isFinish = false;
       this.reportIntervalTime = null;
       this.reportLearnTime = null;
+      this.reportResult = null;
       this.learnTime=0;
       this.reportFinishCondition = null;
       if (reportNow) {
@@ -73,17 +75,19 @@ export default {
      * @param {*} events  //doing finish
      *  @param {*} ContinuousReport //是否每间隔一分钟上报
      */
-    reprtData(events = "doing",ContinuousReport=false) {
+    reprtData(events = "doing",ContinuousReport=false,watchTime=null) {
       if (this.isFinish&&!ContinuousReport) {
         return;
       }
       let params = {};
       if (events === "doing") {
-        let watchTime = this.learnTime;
-        if (["video", "audio"].includes(this.reportType)) {
-          watchTime = this.watchTime;
+        if(this.reportResult!==null){
+          let lastTime=this.reportResult.lastTime
+          params = { lastTime };
         }
-        params = { watchTime };
+        if(watchTime){
+          params.watchTime = watchTime ;
+        }
       }
 
       const query = {
@@ -107,6 +111,7 @@ export default {
      * @param {*} res 
      */
     handleReprtResult(res) {
+      this.reportResult=res;
       if (res.result.status === "finish") {
         this.isFinish = true;
         this.$store.commit(types.SET_TASK_SATUS, "finish");
