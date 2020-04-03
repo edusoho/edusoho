@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\HttpFoundation\Request;
 
 class FileController extends BaseController
@@ -37,7 +38,7 @@ class FileController extends BaseController
         }
 
         return $this->createFormBuilder()
-            ->add('group', 'choice', array(
+            ->add('group', ChoiceType::class, array(
                 'choices' => $groupChoices,
                 'empty_value' => '--文件组--',
                 'required' => false,
