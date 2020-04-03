@@ -33,7 +33,7 @@ class ExerciseManageController extends BaseController
     {
         $biz = $this->getBiz();
 
-        return $biz["activity_type.exercise"];
+        return $biz['activity_type.exercise'];
     }
 
     /**
@@ -51,7 +51,6 @@ class ExerciseManageController extends BaseController
     {
         return $this->createService('QuestionBank:QuestionBankService');
     }
-
 
     protected function getCourseService()
     {

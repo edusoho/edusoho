@@ -161,7 +161,7 @@ class Exercise extends Activity
                     'distribution' => empty($fields['difficulty']) ? array() : array($fields['difficulty'] => 100),
                 ),
                 'item_count' => $fields['itemCount'],
-            )
+            ),
         );
     }
 
