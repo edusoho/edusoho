@@ -28,7 +28,7 @@ function checkQuestionNum() {
     $('[role="questionNum"]').text(0);
 
     $.each(data, function (i, n) {
-      $('[type=\'' + i + '\']').text(n.questionNum);
+      $('[type=\'' + i + '\']').text(n.itemNum);
     });
   });
 }

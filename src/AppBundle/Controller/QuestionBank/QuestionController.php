@@ -298,24 +298,42 @@ class QuestionController extends BaseController
     public function showQuestionTypesNumAction(Request $request)
     {
         $conditions = $request->request->all();
-        if (!empty($conditions['categoryIds'])) {
-            $conditions['category_ids'] = explode(',', $conditions['categoryIds']);
-        }
-
-        if (isset($conditions['categoryId']) && '' != $conditions['categoryId']) {
-            $conditions['category_ids'] = array($conditions['categoryId']);
-        }
-
         if (empty($conditions['bankId'])) {
-            $conditions['bank_id'] = '-1';
-        } else {
-            $conditions['bank_id'] = $conditions['bankId'];
+            return $this->createJsonResponse(array());
         }
+
+        $bank = $this->getQuestionBankService()->getQuestionBank($conditions['bankId']);
+        if (empty($bank)) {
+            return $this->createJsonResponse(array());
+        } else {
+            $conditions['bank_id'] = $bank['itemBankId'];
+        }
+
+        $conditions = $this->filterConditions($conditions);
 
         $typesNum = $this->getItemService()->getItemCountGroupByTypes($conditions);
         $typesNum = ArrayToolkit::index($typesNum, 'type');
 
         return $this->createJsonResponse($typesNum);
+    }
+
+    protected function filterConditions($conditions)
+    {
+        if (!empty($conditions['categoryIds'])) {
+            $conditions['category_ids'] = explode(',', $conditions['categoryIds']);
+            unset($conditions['categoryIds']);
+        }
+
+        if (isset($conditions['categoryId']) && '' != $conditions['categoryId']) {
+            $conditions['category_ids'] = array($conditions['categoryId']);
+            unset($conditions['categoryId']);
+        }
+
+        if (isset($conditions['difficulty']) && '0' == $conditions['difficulty']) {
+            unset($conditions['difficulty']);
+        }
+
+        return $conditions;
     }
 
     protected function getExportFileName($id)

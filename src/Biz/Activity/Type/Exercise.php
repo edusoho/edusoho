@@ -6,7 +6,10 @@ use Biz\Activity\ActivityException;
 use Biz\Activity\Config\Activity;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\ExerciseActivityService;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Testpaper\Service\TestpaperService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 
 class Exercise extends Activity
 {
@@ -17,19 +20,32 @@ class Exercise extends Activity
 
     public function get($targetId)
     {
-        return $this->getTestpaperService()->getTestpaperByIdAndType($targetId, 'exercise');
+        return $this->getExerciseActivityService()->getActivity($targetId);
     }
 
     public function find($targetIds, $showCloud = 1)
     {
-        return $this->getTestpaperService()->findTestpapersByIdsAndType($targetIds, 'exercise');
+        return $this->getExerciseActivityService()->findActivitiesByIds($targetIds);
     }
 
     public function create($fields)
     {
         $fields = $this->filterFields($fields);
 
-        return $this->getTestpaperService()->buildTestpaper($fields, 'exercise');
+        $answerScene = $this->getAnswerSceneService()->create(array(
+            'name' => $fields['name'],
+            'limited_time' => 0,
+            'do_times' => 0,
+            'redo_interval' => 0,
+            'need_score' => 0,
+            'manual_marking' => 0,
+            'start_time' => 0,
+        ));
+
+        return $this->getExerciseActivityService()->createActivity(array(
+            'sceneId' => $answerScene['id'],
+            'drawCondition' => $this->getCondition($fields),
+        ));
     }
 
     public function copy($activity, $config = array())
@@ -37,31 +53,26 @@ class Exercise extends Activity
         $newActivity = $config['newActivity'];
         $exercise = $this->get($activity['mediaId']);
 
-        $newExercise = array(
-            'title' => $exercise['name'],
-            'itemCount' => $exercise['itemCount'],
-            'passedCondition' => $exercise['passedCondition'],
-            'fromCourseId' => $newActivity['fromCourseId'],
-            'courseSetId' => $newActivity['fromCourseSetId'],
-            'metas' => $exercise['metas'],
-            'copyId' => $config['isCopy'] ? $exercise['id'] : 0,
-        );
+        $answerScene = $this->getAnswerSceneService()->create(array(
+            'name' => $newActivity['title'],
+        ));
 
-        return $this->create($newExercise);
+        return $this->getExerciseActivityService()->createActivity(array(
+            'sceneId' => $answerScene['id'],
+            'drawCondition' => $exercise['drawCondition'],
+        ));
     }
 
     public function sync($sourceActivity, $activity)
     {
         $sourceExercise = $this->get($sourceActivity['mediaId']);
+        $exercise = $this->get($activity['mediaId']);
 
-        $fields = array(
-            'name' => $sourceExercise['name'],
-            'passedCondition' => $sourceExercise['passedCondition'],
-            'itemCount' => $sourceExercise['itemCount'],
-            'metas' => $sourceExercise['metas'],
-        );
+        $this->getAnswerSceneService()->update($exercise['sceneId'], array('name' => $sourceActivity['title']));
 
-        return $this->getTestpaperService()->updateTestpaper($activity['mediaId'], $fields);
+        return $this->getExerciseActivityService()->updateActivity($exercise['id'], array(
+            'drawCondition' => $sourceExercise['drawCondition'],
+        ));
     }
 
     public function update($targetId, &$fields, $activity)
@@ -74,12 +85,16 @@ class Exercise extends Activity
 
         $filterFields = $this->filterFields($fields);
 
-        return $this->getTestpaperService()->updateTestpaper($exercise['id'], $filterFields);
+        $this->getAnswerSceneService()->update($exercise['sceneId'], array('name' => $filterFields['name']));
+
+        return $this->getExerciseActivityService()->updateActivity($exercise['id'], array(
+            'drawCondition' => $this->getCondition($filterFields),
+        ));
     }
 
     public function delete($targetId)
     {
-        return $this->getTestpaperService()->deleteTestpaper($targetId, true);
+        return $this->getExerciseActivityService()->deleteActivity($targetId);
     }
 
     public function isFinished($activityId)
@@ -130,6 +145,26 @@ class Exercise extends Activity
         return $filterFields;
     }
 
+    public function getCondition($fields)
+    {
+        $range = $fields['range'];
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($range['bankId']);
+
+        return array(
+            'range' => array(
+                'bank_id' => empty($questionBank['itemBankId']) ? 0 : $questionBank['itemBankId'],
+                'category_ids' => empty($range['categoryIds']) ? array() : explode(',', $range['categoryIds']),
+            ),
+            'section' => array(
+                'conditions' => array(
+                    'item_types' => $fields['questionTypes'],
+                    'distribution' => empty($fields['difficulty']) ? array() : array($fields['difficulty'] => 100),
+                ),
+                'item_count' => $fields['itemCount'],
+            )
+        );
+    }
+
     /**
      * @return TestpaperService
      */
@@ -144,5 +179,29 @@ class Exercise extends Activity
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return ExerciseActivityService
+     */
+    protected function getExerciseActivityService()
+    {
+        return $this->getBiz()->service('Activity:ExerciseActivityService');
+    }
+
+    /**
+     * @return QuestionBankService
+     */
+    protected function getQuestionBankService()
+    {
+        return $this->getBiz()->service('QuestionBank:QuestionBankService');
     }
 }
