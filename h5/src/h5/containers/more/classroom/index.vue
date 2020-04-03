@@ -87,7 +87,7 @@ export default {
   created() {
     this.selectedData = this.transform(this.$route.query)
     // 合并参数
-    const config = Object.assign(this.selectedData, {
+    const config = Object.assign({}, this.selectedData, {
       offset: this.offset,
       limit: this.limit
     })
@@ -128,7 +128,7 @@ export default {
 
     requestCourses(setting) {
       this.isRequestCompile = false
-      const config = Object.assign(this.selectedData, setting)
+      const config = Object.assign({}, this.selectedData, setting)
       return Api.getClassList({
         params: config
       }).then(({ data, paging }) => {
@@ -178,7 +178,7 @@ export default {
 
     isSelectedDataSame(selectedData) {
       for (const key in this.selectedData) {
-        if (this.selectedData[key] !== selectedData[key]) {
+        if (this.selectedData[key] != selectedData[key]) {
           return false;
         }
       }
