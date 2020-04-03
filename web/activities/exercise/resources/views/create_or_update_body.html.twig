@@ -4,7 +4,6 @@
 {% set exercise = activity.ext|default(null) %}
 {% set range = exercise.drawCondition.range|default(null) %}
 {% set section = exercise.drawCondition.section|default(null) %}
-{% set difficulty = section.conditions.distribution|default([])|keys %}
 {% if range.bank_id|default(0) != 0 %}
   {% set questionCategories = data('QuestionCategoryTree', {bankId: range.bank_id}) %}
 {% endif %}
@@ -64,7 +63,7 @@
       <div class="col-sm-2 control-label"><label>{{'course.plan_task.exercise.difficulty'|trans}}</label></div>
       <div class="col-sm-10 controls">
         <select id="course_categoryId" class="form-control width-input width-input-large" name="difficulty"  data-url="{{ path('course_set_manage_show_tasks',{courseSetId:activity.fromCourseSetId})}}" data-check-num-url="{{ path('course_set_manage_question_check_num',{courseSetId:activity.fromCourseSetId}) }}">
-          {{ select_options(dict('difficulty'), difficulty[0]|default('0'),{'0':'course.plan_task.exercise.default_difficulty'|trans}) }}
+          {{ select_options(dict('difficulty'), section.range.difficulty|default('0'),{'0':'course.plan_task.exercise.default_difficulty'|trans}) }}
         </select>
       </div>
     </div>

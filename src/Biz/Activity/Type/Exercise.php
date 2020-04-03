@@ -154,11 +154,11 @@ class Exercise extends Activity
             'range' => array(
                 'bank_id' => empty($questionBank['itemBankId']) ? 0 : $questionBank['itemBankId'],
                 'category_ids' => empty($range['categoryIds']) ? array() : explode(',', $range['categoryIds']),
+                'difficulty' => empty($fields['difficulty']) ? '' : $fields['difficulty'],
             ),
             'section' => array(
                 'conditions' => array(
                     'item_types' => $fields['questionTypes'],
-                    'distribution' => empty($fields['difficulty']) ? array() : array($fields['difficulty'] => 100),
                 ),
                 'item_count' => $fields['itemCount'],
             ),
