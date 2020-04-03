@@ -148,9 +148,9 @@ export default {
       timeChangingList: [],
       // taskPipe: undefined,
       bindAgencyRelation: {}, // 分销代理商绑定信息
-      finishResult:null,
+      finishResult: null,
       finishDialog: false, //下一课时弹出模态框
-      watchTime: 0
+      lastWatchTime: 0 //上一次暂停上报的视频时间
     };
   },
   computed: {
@@ -190,6 +190,12 @@ export default {
     this.initHead();
     this.showTagLink();
   },
+  beforeDestroy(){
+    //销毁播放器
+    if(this.player){
+      this.player.eventManager={}
+    }
+  },
   /*
    * 试看需要传preview=1
    * eg: /api/courses/1/task_medias/1?preview=1
@@ -203,16 +209,6 @@ export default {
         });
       }
     },
-    // watchTime() {
-    //   if (this.isAndroid() && this.taskPipe) {
-    //     return Math.floor(this.taskPipe.getDuration() / 60000);
-    //   }
-    //   let timeCount = this.currentTime - this.startTime;
-    //   this.timeChangingList.forEach(item => {
-    //     timeCount += (item.end - item.start);
-    //   });
-    //   return Math.floor(timeCount / 60);
-    // },
     isAndroid() {
       return !!navigator.userAgent.match(new RegExp("android", "i"));
     },
@@ -330,11 +326,17 @@ export default {
         if (this.player) {
           this.player.taskId = -1;
         }
+        if (this.player&&this.player.eventManager) {
+          this.player.eventManager = {};
+        }
         const player = new SDK(options);
         player.taskId = this.taskId;
         this.player = player;
-        player.on("playing", () => {
-          this.isPlaying = true;
+        player.on("ready", () => {
+          if (player.taskId !== this.taskId) {
+            return;
+          }
+          this.lastWatchTime = 0;
         });
         player.on("unablePlay", () => {
           // 加密模式下在不支持的浏览器下提示
@@ -344,25 +346,24 @@ export default {
               "当前内容不支持该手机浏览器观看，建议您使用Chrome、Safari浏览器观看。"
           }).then(() => {});
         });
-        player.on("paused", () => {
+        player.on("playing", () => {
+          this.isPlaying = true;
+        });
+        player.on("paused", e => {
           this.isPlaying = false;
           if (player.taskId !== this.taskId) {
             return;
           }
-          this.reprtData("doing",true);
-        });
-        player.on("ready", () => {
-          if (player.taskId !== this.taskId) {
-            return;
-          }
-          // this.intervalReportData();
-          // this.intervalReportLearnTime();
+          const watchTime = parseInt(
+            player.getCurrentTime() - this.lastWatchTime
+          );
+          this.lastWatchTime = player.getCurrentTime();
+          this.reprtData("doing", true, watchTime);
         });
         player.on("datapicker.start", e => {
           if (player.taskId !== this.taskId) {
             return;
           }
-          console.log(11);
         });
         player.on("ended", () => {
           if (player.taskId !== this.taskId) {
@@ -376,14 +377,6 @@ export default {
           if (player.taskId !== this.taskId) {
             return;
           }
-          this.watchTime = e.currentTime;
-          // if (this.finishCondition.type === "time") {
-          //   if (e.currentTime / 60 >= parseInt(this.finishCondition.data)) {
-          //     this.reprtData("finish");
-          //   }
-          // }
-          // this.currentTime = e.currentTime;
-          // this.taskPipe.trigger('time', this.watchTime());
         });
       });
     },
@@ -450,7 +443,7 @@ export default {
     },
     toLearned() {
       this.reprtData("finish").then(res => {
-        this.finishResult=res;
+        this.finishResult = res;
         this.finishDialog = true;
       });
     }
