@@ -36,7 +36,7 @@ class QuestionController extends BaseController
 
         $items = $this->getItemService()->searchItems(
             $conditions,
-            array('created_time' => 'DESC'),
+            ['created_time' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -44,7 +44,7 @@ class QuestionController extends BaseController
         $questionCategories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
         $categoryTree = $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']);
 
-        return $this->render('question-bank/question/index.html.twig', array(
+        return $this->render('question-bank/question/index.html.twig', [
             'questions' => $items,
             'paginator' => $paginator,
             'users' => $this->getUserService()->findUsersByIds(ArrayToolkit::column($items, 'updated_user_id')),
@@ -52,7 +52,7 @@ class QuestionController extends BaseController
             'categoryTree' => $categoryTree,
             'categoryTreeArray' => $this->convertCategoryTreeToArray($categoryTree),
             'questionCategories' => ArrayToolkit::index($questionCategories, 'id'),
-        ));
+        ]);
     }
 
     public function importAction(Request $request, $id)
@@ -61,11 +61,11 @@ class QuestionController extends BaseController
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
-        return $this->forward('AppBundle:Question/QuestionParser:read', array(
+        return $this->forward('AppBundle:Question/QuestionParser:read', [
             'request' => $request,
             'type' => 'question',
             'questionBank' => $this->getQuestionBankService()->getQuestionBank($id),
-        ));
+        ]);
     }
 
     public function createAction(Request $request, $id, $type)
@@ -84,29 +84,29 @@ class QuestionController extends BaseController
 
             $item = $this->getItemService()->createItem($fields);
 
-            $goto = $request->query->get('goto', $this->generateUrl('question_bank_manage_question_list', array('id' => $id)));
+            $goto = $request->query->get('goto', $this->generateUrl('question_bank_manage_question_list', ['id' => $id]));
             if ('continue' === $fields['submission']) {
-                $urlParams = ArrayToolkit::parts($item, array('difficulty'));
+                $urlParams = ArrayToolkit::parts($item, ['difficulty']);
                 $urlParams['id'] = $id;
                 $urlParams['type'] = $type;
                 $urlParams['goto'] = $goto;
 
                 return $this->createJsonResponse(
-                    array(
+                    [
                         'goto' => $this->generateUrl('question_bank_manage_question_create', $urlParams),
-                    )
+                    ]
                 );
             }
 
-            return $this->createJsonResponse(array('goto' => $goto));
+            return $this->createJsonResponse(['goto' => $goto]);
         }
 
-        return $this->render('question-manage/question-form-layout.html.twig', array(
+        return $this->render('question-manage/question-form-layout.html.twig', [
             'mode' => 'create',
             'questionBank' => $questionBank,
             'type' => $type,
             'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($id),
-        ));
+        ]);
     }
 
     public function updateAction(Request $request, $id, $questionId)
@@ -127,22 +127,22 @@ class QuestionController extends BaseController
 
         $goto = $request->query->get(
             'goto',
-            $this->generateUrl('question_bank_manage_question_list', array('id' => $id))
+            $this->generateUrl('question_bank_manage_question_list', ['id' => $id])
         );
         if ($request->isMethod('POST')) {
             $this->getItemService()->updateItem($item['id'], json_decode($request->getContent(), true));
 
-            return $this->createJsonResponse(array('goto' => $goto));
+            return $this->createJsonResponse(['goto' => $goto]);
         }
 
-        return $this->render('question-manage/question-form-layout.html.twig', array(
+        return $this->render('question-manage/question-form-layout.html.twig', [
             'mode' => 'edit',
             'questionBank' => $questionBank,
             'item' => $item,
             'type' => $item['type'],
             'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($item['bank_id']),
             'goto' => $goto,
-        ));
+        ]);
     }
 
     public function getQuestionsHtmlAction(Request $request, $id)
@@ -173,20 +173,20 @@ class QuestionController extends BaseController
 
         $questions = $this->getItemService()->searchItems(
             $conditions,
-            array('created_time' => 'DESC'),
+            ['created_time' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         $questionCategories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
 
-        return $this->render('question-bank/question/question-list-table.html.twig', array(
+        return $this->render('question-bank/question/question-list-table.html.twig', [
             'questions' => $questions,
             'paginator' => $paginator,
             'users' => $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'updated_user_id')),
             'questionBank' => $questionBank,
             'questionCategories' => ArrayToolkit::index($questionCategories, 'id'),
-        ));
+        ]);
     }
 
     public function deleteAction(Request $request, $id, $itemId)
@@ -214,9 +214,8 @@ class QuestionController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        $ids = $request->request->get('ids', array());
-        $items = $this->getItemService()->findItemsByIds($ids);
-        if (empty($items)) {
+        $ids = $request->request->get('ids', []);
+        if (empty($this->getItemService()->findItemsByIds($ids))) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
         $this->getItemService()->deleteItems($ids);
@@ -230,12 +229,11 @@ class QuestionController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        $ids = $request->request->get('ids', array());
-        $categoryId = $request->request->get('categoryId', 0);
-        $items = $this->getItemService()->findItemsByIds($ids);
-        if (empty($items)) {
+        $ids = $request->request->get('ids', []);
+        if (empty($this->getItemService()->findItemsByIds($ids))) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
+        $categoryId = $request->request->get('categoryId', 0);
 
         $this->getItemService()->updateItemsCategoryId($ids, $categoryId);
 
@@ -252,19 +250,17 @@ class QuestionController extends BaseController
             $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
 
-        $question = $this->getItemService()->getItem($questionId);
+        $item = $this->getItemService()->getItemWithQuestions($questionId, true);
 
-        if (!$question || $question['bank_id'] != $questionBank['itemBankId']) {
+        if (!$item || $item['bank_id'] != $questionBank['itemBankId']) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
 
         $template = $request->query->get('isNew') ? 'question-manage/preview.html.twig' : 'question-manage/preview-modal.html.twig';
 
-        return $this->render($template, array(
-            'question' => $question,
-            'showAnswer' => 1,
-            'showAnalysis' => 1,
-        ));
+        return $this->render($template, [
+            'item' => $item,
+        ]);
     }
 
     public function exportAction(Request $request, $id)
@@ -284,13 +280,13 @@ class QuestionController extends BaseController
         );
 
         if (empty($result)) {
-            return $this->createMessageResponse('info', '导出题目为空', null, 3000, $this->generateUrl('question_bank_manage_question_list', array('id' => $id)));
+            return $this->createMessageResponse('info', '导出题目为空', null, 3000, $this->generateUrl('question_bank_manage_question_list', ['id' => $id]));
         }
 
-        $headers = array(
+        $headers = [
             'Content-Type' => 'application/msword',
             'Content-Disposition' => 'attachment; filename='.$fileName,
-        );
+        ];
 
         return new BinaryFileResponse($path, 200, $headers);
     }
@@ -303,7 +299,7 @@ class QuestionController extends BaseController
         }
 
         if (isset($conditions['categoryId']) && '' != $conditions['categoryId']) {
-            $conditions['category_ids'] = array($conditions['categoryId']);
+            $conditions['category_ids'] = [$conditions['categoryId']];
         }
 
         if (empty($conditions['bankId'])) {
@@ -330,7 +326,7 @@ class QuestionController extends BaseController
 
     protected function convertCategoryTreeToArray($categoryTree)
     {
-        $categoryTreeArray = array();
+        $categoryTreeArray = [];
         $push = function ($category) use (&$categoryTreeArray, &$push) {
             if (empty($category['children'])) {
                 return;
@@ -341,7 +337,7 @@ class QuestionController extends BaseController
                 unset($child);
             }
         };
-        $push(array('children' => $categoryTree));
+        $push(['children' => $categoryTree]);
 
         return $categoryTreeArray;
     }
