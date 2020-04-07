@@ -85,6 +85,7 @@ export default {
     }
   },
   created() {
+    window.scroll(0, 0);
     this.selectedData = this.transform(this.$route.query)
     // 合并参数
     const config = Object.assign({}, this.selectedData, {
