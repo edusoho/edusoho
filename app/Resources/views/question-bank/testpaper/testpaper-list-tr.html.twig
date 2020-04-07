@@ -39,7 +39,7 @@
           </a>
           <ul class="dropdown-menu pull-right">
             {% if testpaper.status in ['draft', 'closed'] %}
-              <li><a class="open-testpaper" href="javascript:" title="{{'course.testpaper_manage.publish_tips'|trans({'%name%': testpaper.name })}}" data-url="{{ path('question_bank_manage_testpaper_publish', {id: questionBank.id, testpaperId: testpaper.id}) }}">
+              <li><a class="open-testpaper" href="javascript:" title="{{'course.testpaper_manage.publish_tips'|trans({'%name%': testpaper.name })}}" data-url="{{ path('question_bank_manage_testpaper_publish', {id: questionBank.id, assessmentId: testpaper.id}) }}">
                 <span class="es-icon es-icon--check-circle mrm"></span> {{'course.testpaper_manage.publish_btn'|trans}}
               </a></li>
             {% endif %}
@@ -50,18 +50,18 @@
                 {% else %}
                   {{'course.testpaper_manage.close_tips'|trans({'%name%': testpaper.name })}}
                 {% endif %}"
-              data-url="{{ path('question_bank_manage_testpaper_close', {id: questionBank.id, testpaperId: testpaper.id}) }}">
+              data-url="{{ path('question_bank_manage_testpaper_close', {id: questionBank.id, assessmentId: testpaper.id}) }}">
                 <span class="es-icon es-icon-close01 mrm"></span> {{'course.testpaper_manage.close_btn'|trans}}
               </a></li>
             {% endif %}
 
             {% if testpaper.status == 'draft' %}
-              <li><a href="{{ path('question_bank_manage_testpaper_edit', {id: questionBank.id, testpaperId: testpaper.id}) }}"><span class="glyphicon glyphicon-edit mrm"></span> {{'my.teaching.question_bank.testpaper.edit'|trans}}</a></li>
-              <li><a href="javascript:" class="js-delete-btn" data-name='{{'course.testpaper_manage.testpaper'|trans}}' data-url="{{ path('question_bank_manage_testpaper_delete', {id: questionBank.id, testpaperId: testpaper.id}) }}">
+              <li><a href="{{ path('question_bank_manage_testpaper_edit', {id: questionBank.id, assessmentId: testpaper.id}) }}"><span class="glyphicon glyphicon-edit mrm"></span> {{'my.teaching.question_bank.testpaper.edit'|trans}}</a></li>
+              <li><a href="javascript:" class="js-delete-btn" data-name='{{'course.testpaper_manage.testpaper'|trans}}' data-url="{{ path('question_bank_manage_testpaper_delete', {id: questionBank.id, assessmentId: testpaper.id}) }}">
                 <span class="es-icon es-icon-delete mrm"></span> {{'course.testpaper_manage.delete_btn'|trans}}
               </a></li>
             {% endif %}
-            <li><a href="{{ path('question_bank_manage_testpaper_export', {id: questionBank.id, testpaperId: testpaper.id}) }}"><span class="glyphicon glyphicon-export mrm"></span>{{ 'course.testpaper_manage.export'|trans }}</a></li>
+            <li><a href="{{ path('question_bank_manage_testpaper_export', {id: questionBank.id, assessmentId: testpaper.id}) }}"><span class="glyphicon glyphicon-export mrm"></span>{{ 'course.testpaper_manage.export'|trans }}</a></li>
           </ul>
         </div>
       </td>

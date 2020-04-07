@@ -2,9 +2,10 @@
 
 {% set course = get_course(activity.fromCourseId) %}
 {% set exercise = activity.ext|default(null) %}
-{% set range = exercise.metas.range|default(null)|parse_exercise_range %}
-{% if range.bankId|default(0) != 0 %}
-  {% set questionCategories = data('QuestionCategoryTree', {bankId: range.bankId}) %}
+{% set range = exercise.drawCondition.range|default(null) %}
+{% set section = exercise.drawCondition.section|default(null) %}
+{% if range.question_bank_id|default(0) != 0 %}
+  {% set questionCategories = data('QuestionCategoryTree', {bankId: range.question_bank_id}) %}
 {% endif %}
 {% do script(['libs/select2.js', 'libs/ltc-sdk-client.js', 'exerciseactivity/js/create/index.js'],300) %}
 {% block activity_step %}
@@ -24,26 +25,26 @@
         <label for="questionCount" class="control-label-required">{{'course.plan_task.exercise.question_numbers'|trans}}</label>
       </div>
       <div class="col-sm-10 controls">
-        <input type="text" id="itemCount" name="itemCount" required="required" class="form-control width-input width-input-large" value="{{ exercise.itemCount|default(1) }}">
+        <input type="text" id="itemCount" name="itemCount" required="required" class="form-control width-input width-input-large" value="{{ section.item_count|default(1) }}">
       </div>
     </div>
-    {% set questionBankTree = data('QuestionBankTree', {selectId: range.bankId|default(0)}) %}
+    {% set questionBankTree = data('QuestionBankTree', {selectId: range.question_bank_id|default(0)}) %}
 
     <div class="form-group">
       <label class="col-sm-2 control-label">{{'course.testpaper_manage.create.range'|trans}}</label>
       <div class="col-sm-10 controls radios">
         <select class="form-control width-150" id="questionBankSelect" name="range[bankId]" data-url="{{ path('question_bank_manage_question_category_show') }}" data-check-num-url="{{ path('question_bank_manage_question_check_num') }}">
           {% if questionBankTree %}
-            <option value="0" {% if not range.bankId|default(0) %}selected{% endif %}>{{'question.marker_question.select_question_bank'|trans}}</option>
+            <option value="0" {% if not range.question_bank_id|default(0) %}selected{% endif %}>{{'question.marker_question.select_question_bank'|trans}}</option>
             {% for tree in questionBankTree %}
               {% if tree.selected is defined %}
-                <option class="hidden" value={{ tree.id }} {% if range.bankId|default(0) == tree.id %}selected{% endif %}>{{ tree.name }}</option>
+                <option class="hidden" value={{ tree.id }} {% if range.question_bank_id|default(0) == tree.id %}selected{% endif %}>{{ tree.name }}</option>
               {% else %}
-                <option {% if tree.categoryId is not defined %}value disabled="disabled" {% else %}value={{ tree.id }} {% if range.bankId|default(0) == tree.id %}selected{% endif %} {% endif %}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>
+                <option {% if tree.categoryId is not defined %}value disabled="disabled" {% else %}value={{ tree.id }} {% if range.question_bank_id|default(0) == tree.id %}selected{% endif %} {% endif %}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>
               {% endif %}
             {% endfor %}
           {% else %}
-            <option value="0" {% if not range.bankId|default(0) %}selected{% endif %}>{{'question_bank.empty.no_auth'|trans}}</option>
+            <option value="0" {% if not range.question_bank_id|default(0) %}selected{% endif %}>{{'question_bank.empty.no_auth'|trans}}</option>
           {% endif %}
         </select>
         {% set placeholder = 'admin.custom_page_manage.custom_page_category_option'|trans %}
@@ -51,7 +52,7 @@
           placeholder: placeholder,
           id: 'questionCategorySelect',
           data: questionCategories|default([]),
-          ids: range.categoryIds|default([])|join(','),
+          ids: range.category_ids|default([])|join(','),
           treeName: 'range[categoryIds]',
           classNames: 'width-400'
         } %}
@@ -62,7 +63,7 @@
       <div class="col-sm-2 control-label"><label>{{'course.plan_task.exercise.difficulty'|trans}}</label></div>
       <div class="col-sm-10 controls">
         <select id="course_categoryId" class="form-control width-input width-input-large" name="difficulty"  data-url="{{ path('course_set_manage_show_tasks',{courseSetId:activity.fromCourseSetId})}}" data-check-num-url="{{ path('course_set_manage_question_check_num',{courseSetId:activity.fromCourseSetId}) }}">
-          {{ select_options(dict('difficulty'), exercise.metas.difficulty|default('0'),{'0':'course.plan_task.exercise.default_difficulty'|trans}) }}
+          {{ select_options(dict('difficulty'), section.range.difficulty|default('0'),{'0':'course.plan_task.exercise.default_difficulty'|trans}) }}
         </select>
       </div>
     </div>
@@ -72,15 +73,12 @@
         <label class="control-label-required">{{'course.plan_task.exercise.question_type_range'|trans}}</label>
       </div>
       <div class="col-sm-10 controls">
-        {% set questionRange = exercise.metas.questionTypes|default(null) %}
+        {% set questionRange = section.conditions.item_types|default(null) %}
         {% set questionTypes = getQuestionTypes() %}
-        {% set questionNums = find_question_num_by_course_set_id(activity.fromCourseSetId) %}
         {% for questionType,name in questionTypes %}
-          {% set questionNum = questionNums[questionType]|default(null) %}
           <label class="checkbox-inline ml0 width-200 js-question-type">
             <input type="checkbox" class="questionTypes" name="questionTypes[]" value="{{ questionType }}" {% if questionType in questionRange %} checked=checked {% endif %}>{{ name }}
-            （{{ 'course.plan_task.activity_manage.exercise.questionNum'|trans({'%questionType%':questionType, '%questionNum%':questionNum.questionNum|default(0)})|raw }}）
-
+            （{{ 'course.plan_task.activity_manage.exercise.questionNum'|trans({'%questionType%':questionType, '%questionNum%':0})|raw }}）
           </label>
         {% endfor %}
         <input type="hidden" name="checkQuestion" value="false" data-check-url="{{ path('course_manage_exercise_check',{courseId:course.id}) }}" />
