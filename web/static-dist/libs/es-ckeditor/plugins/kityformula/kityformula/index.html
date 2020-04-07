@@ -21,6 +21,8 @@
     <script>
         window.addEventListener("message", function (e) {
             var eventName = e.data.eventName;
+            var editorName = e.data.editorName;
+
             if (eventName === 'kityformula.show') {
                 window.kfe.execCommand( "render", '\\placeholder');
             }
@@ -53,7 +55,7 @@
                     }
                 }
                 var $imgUrl = 'http://formula.edusoho.net/cgi-bin/mimetex.cgi?'+source;
-                window.parent.postMessage({eventName:'es-ckeditor.post', imageUrl:$imgUrl, source:source }, '*');
+                window.parent.postMessage({eventName:'es-ckeditor.post', imageUrl:$imgUrl, source:source , editorName: editorName }, '*');
             }
         }, false);
         jQuery( function ($) {
