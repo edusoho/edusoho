@@ -33,6 +33,14 @@ export default class PagedCourseTaskList extends PagedCourseLesson {
         if (this._displayAllImmediately) {
           this._destroyPaging();
         }
+
+        if ($('.course-tasks-show-more').length < 1) {
+          return;
+        }
+
+        if (finalOptions.data.length && finalOptions.data.length > 25) {
+          $('.course-tasks-show-more').removeClass('hidden');
+        }
       });
     }
   }
