@@ -2,7 +2,6 @@
 
 namespace Biz\Testpaper\Builder;
 
-use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
@@ -48,12 +47,10 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
 
     public function showTestItems($testId, $resultId = 0, $options = array())
     {
-
     }
 
     public function updateSubmitedResult($resultId, $usedTime, $options = array())
     {
-
     }
 
     protected function getRangeAndSections($fields)
