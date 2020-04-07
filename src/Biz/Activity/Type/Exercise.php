@@ -68,7 +68,7 @@ class Exercise extends Activity
         $sourceExercise = $this->get($sourceActivity['mediaId']);
         $exercise = $this->get($activity['mediaId']);
 
-        $this->getAnswerSceneService()->update($exercise['sceneId'], array('name' => $sourceActivity['title']));
+        $this->getAnswerSceneService()->update($exercise['answerSceneId'], array('name' => $sourceActivity['title']));
 
         return $this->getExerciseActivityService()->updateActivity($exercise['id'], array(
             'drawCondition' => $sourceExercise['drawCondition'],
@@ -85,7 +85,7 @@ class Exercise extends Activity
 
         $filterFields = $this->filterFields($fields);
 
-        $this->getAnswerSceneService()->update($exercise['sceneId'], array('name' => $filterFields['name']));
+        $this->getAnswerSceneService()->update($exercise['answerSceneId'], array('name' => $filterFields['name']));
 
         return $this->getExerciseActivityService()->updateActivity($exercise['id'], array(
             'drawCondition' => $this->getCondition($filterFields),
@@ -152,6 +152,7 @@ class Exercise extends Activity
 
         return array(
             'range' => array(
+                'question_bank_id' => $questionBank['id'],
                 'bank_id' => empty($questionBank['itemBankId']) ? 0 : $questionBank['itemBankId'],
                 'category_ids' => empty($range['categoryIds']) ? array() : explode(',', $range['categoryIds']),
                 'difficulty' => empty($fields['difficulty']) ? '' : $fields['difficulty'],
