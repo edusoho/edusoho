@@ -150,7 +150,8 @@ export default {
       bindAgencyRelation: {}, // 分销代理商绑定信息
       finishResult: null,
       finishDialog: false, //下一课时弹出模态框
-      lastWatchTime: 0 //上一次暂停上报的视频时间
+      lastWatchTime: 0, //上一次暂停上报的视频时间
+      nowWatchTime: 0 //当前刚看时间计时
     };
   },
   computed: {
@@ -190,11 +191,13 @@ export default {
     this.initHead();
     this.showTagLink();
   },
-  beforeDestroy(){
+  beforeDestroy() {
     //销毁播放器
-    if(this.player){
-      this.player.eventManager={}
+    if (this.player) {
+      this.player.eventManager = {};
     }
+    //清除计时器
+    this.clearComputeWatchTime();
   },
   /*
    * 试看需要传preview=1
@@ -217,6 +220,9 @@ export default {
         window.scrollTo(0, 0);
         this.initReport();
         this.initPlayer();
+        this.clearComputeWatchTime();
+        this.lastWatchTime = 0;
+        this.nowWatchTime = 0;
       }
     },
     initReport() {
@@ -326,7 +332,7 @@ export default {
         if (this.player) {
           this.player.taskId = -1;
         }
-        if (this.player&&this.player.eventManager) {
+        if (this.player && this.player.eventManager) {
           this.player.eventManager = {};
         }
         const player = new SDK(options);
@@ -336,7 +342,6 @@ export default {
           if (player.taskId !== this.taskId) {
             return;
           }
-          this.lastWatchTime = 0;
         });
         player.on("unablePlay", () => {
           // 加密模式下在不支持的浏览器下提示
@@ -348,16 +353,19 @@ export default {
         });
         player.on("playing", () => {
           this.isPlaying = true;
+          if (player.taskId !== this.taskId) {
+            return;
+          }
+          this.computeWatchTime();
         });
         player.on("paused", e => {
           this.isPlaying = false;
           if (player.taskId !== this.taskId) {
             return;
           }
-          const watchTime = parseInt(
-            player.getCurrentTime() - this.lastWatchTime
-          );
-          this.lastWatchTime = player.getCurrentTime();
+          this.clearComputeWatchTime();
+          const watchTime = parseInt(this.nowWatchTime - this.lastWatchTime);
+          this.lastWatchTime = this.nowWatchTime;
           this.reprtData("doing", true, watchTime);
         });
         player.on("datapicker.start", e => {
@@ -369,6 +377,7 @@ export default {
           if (player.taskId !== this.taskId) {
             return;
           }
+          this.clearComputeWatchTime();
           if (this.finishCondition.type === "end") {
             this.reprtData("finish");
           }
@@ -446,6 +455,16 @@ export default {
         this.finishResult = res;
         this.finishDialog = true;
       });
+    },
+    //计算观看时长计时器，一直累加 nowWatchTime
+    computeWatchTime() {
+      this.intervalWatchTime = setInterval(() => {
+        this.nowWatchTime++;
+      }, 1000);
+    },
+    //清除计时器
+    clearComputeWatchTime() {
+      clearInterval(this.intervalWatchTime);
     }
   }
 };
