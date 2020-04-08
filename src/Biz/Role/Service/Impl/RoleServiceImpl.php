@@ -292,6 +292,7 @@ class RoleServiceImpl extends BaseService implements RoleService
         $adminForbidParentRoles = array(
             'admin_user_avatar',
             'admin_user_change_password',
+            'admin_v2_user_change_nickname',
             'admin_my_cloud',
             'admin_cloud_video_setting',
             'admin_edu_cloud_sms',
