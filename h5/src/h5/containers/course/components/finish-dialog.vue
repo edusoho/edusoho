@@ -6,7 +6,7 @@
           <img class="finish-dialog-img" src="static/images/reportDialog.png" />
           <div class="finish-dialog-top--text">学习完成</div>
         </div>
-        <div class="finish-dialog-close" @click="show = false">
+        <div class="finish-dialog-close" @click="closeFinishDialog">
           <i class="iconfont icon-guanbi"></i>
         </div>
         <div class="progress-bar">
@@ -62,7 +62,7 @@ export default {
       if (!this.finishResult) {
         return "0%";
       }
-      return `${this.finishResult.completionRate}%`;
+      return  `${parseInt(this.finishResult.completionRate)}%`;
     },
     title() {
       if (!this.finishResult) {
@@ -244,6 +244,10 @@ export default {
           }
         });
       }
+    },
+    closeFinishDialog(){
+      this.show = false;
+      this.$emit("closeFinishDialog");
     }
   }
 };
