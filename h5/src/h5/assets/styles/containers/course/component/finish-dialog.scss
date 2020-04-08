@@ -1,6 +1,7 @@
 .finish-dialog {
   &-content {
     position: relative;
+    z-index: 9999;
     width: 80%;
     margin: 40% auto;
     padding: vw(24) vw(16);

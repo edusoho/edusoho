@@ -32,7 +32,7 @@
       </div>
     </div>
     <div
-      v-show="sourceType === 'img' || isEncryptionPlus"
+      v-show="sourceType === 'img' || isEncryptionPlus || finishDialog"
       id="course-detail__head--img"
       class="course-detail__head--img"
     >
@@ -49,9 +49,9 @@
         @sellOut="sellOut"
       />
     </div>
-
+    <!-- 由于在安卓端弹出层会被视频遮挡，因此在弹出层显示时，隐藏视频，显示课程封面图，判断字段 finishDialog-->
     <div
-      v-show="['video', 'audio'].includes(sourceType) && !isEncryptionPlus"
+      v-show="['video', 'audio'].includes(sourceType) && !isEncryptionPlus && !finishDialog"
       id="course-detail__head--video"
       ref="video"
     />
@@ -89,6 +89,7 @@
       v-if="finishDialog"
       :finishResult="finishResult"
       :courseId="selectedPlanId"
+      @closeFinishDialog="closeFinishDialog"
     ></finishDialog>
   </div>
 </template>
@@ -465,6 +466,9 @@ export default {
     //清除计时器
     clearComputeWatchTime() {
       clearInterval(this.intervalWatchTime);
+    },
+    closeFinishDialog(){
+      this.finishDialog=false;
     }
   }
 };
