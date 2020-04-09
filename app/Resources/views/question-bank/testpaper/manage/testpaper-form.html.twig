@@ -29,7 +29,7 @@
           <div class="mtl">
             <form id="testpaper-form" class="form-horizontal" method="post" data-url="
               {% if testpaper is defined %}
-                {{ path('question_bank_manage_testpaper_edit', {id: questionBank.id, testpaperId: testpaper.id}) }}
+                {{ path('question_bank_manage_testpaper_edit', {id: questionBank.id, assessmentId: testpaper.id}) }}
               {% else %}
                 {{ path('question_bank_manage_testpaper_create', {id: questionBank.id}) }}
               {% endif %}
