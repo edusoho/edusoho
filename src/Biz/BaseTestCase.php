@@ -11,6 +11,8 @@ use Biz\Role\Util\PermissionBuilder;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Router;
 use Topxia\Service\Common\ServiceKernel;
 use PHPUnit\Framework\TestCase;
 use Biz\TestTool\MockedRequest;
@@ -178,6 +180,15 @@ class BaseTestCase extends TestCase
         $biz['user'] = $currentUser;
 
         $container = self::$appKernel->getContainer();
+        $router = $this->getMockBuilder(Router::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['generate', 'supports', 'exists', 'getContext'])
+            ->getMock();
+        $router
+            ->expects($this->atLeast(0))
+            ->method('getContext')
+            ->willReturn(new RequestContext());
+        $container->set('router', $router);
         $singletonBiz = $container->get('biz');
         $singletonBiz['user'] = $currentUser;
 
