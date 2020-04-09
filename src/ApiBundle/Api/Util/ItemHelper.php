@@ -104,11 +104,13 @@ class ItemHelper
         foreach ($originItems as $originItem) {
             $item = array();
             if ('task' == $originItem['itemType']) {
+                $originItem['courseUrl'] = $targetUrl;
                 $item['type'] = 'task';
                 $item['seq'] = '0';
                 $item['number'] = strval($number++);
                 $item['title'] = $originItem['title'];
                 $item['task'] = $originItem;
+                $item['courseUrl'] = $targetUrl;
                 $newItems[] = $item;
                 continue;
             }
