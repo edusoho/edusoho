@@ -173,6 +173,7 @@ check env:
   only:
     refs:
       - develop
+      - feature/phpunit-coverage
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
