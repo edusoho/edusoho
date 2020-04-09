@@ -212,16 +212,17 @@
     }
     &--btn{
       position: absolute;
-      top:-38px;
+      top:-40px;
       right: vw(8);
-      padding: vw(6) vw(16);
+      width: 94px;
+      height: 30px;
       font-size: vw(14);
       display: flex;
       align-items: center;
-      color:$primary-color;
+      justify-content: center;
+      color:#fff;
       border-radius: vw(30);
-      border:1px solid  $primary-color;
-      background: #fff;
+      border:1px solid  #fff;
       z-index: 999;
     }
     .icon-markdone{
@@ -230,6 +231,7 @@
     &--activebtn{
       color: #fff;
       background: $primary-color;
+      border:1px solid  $primary-color;
     }
   }
   // plan component

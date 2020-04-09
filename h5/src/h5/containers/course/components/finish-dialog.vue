@@ -11,10 +11,9 @@
         </div>
         <div class="progress-bar">
           <div class="progress-bar__content">
-            <div :style="{ width: rate }" class="progress-bar__rate">
-              {{ rate }}
-            </div>
+            <div :style="{ width: rate }" class="progress-bar__rate"> </div>
           </div>
+          <div class="progress-bar__text">{{ rate }}</div>
         </div>
         <p class="finish-dialog-text">恭喜完成</p>
         <template>

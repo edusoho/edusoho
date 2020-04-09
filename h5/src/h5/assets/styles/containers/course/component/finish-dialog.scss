@@ -67,8 +67,13 @@
       background-color: #f7f7f7;
       border-radius: vw(46);
       height: 30px;
-      flex: 1;
+      flex: 0 0 85%;
       align-items: center;
+    }
+    &__text{
+      flex: 0 0 15%;
+      align-items: center;
+      color: $primary-color;
     }
     &__rate {
       display: flex;
