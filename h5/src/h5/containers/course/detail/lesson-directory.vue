@@ -314,6 +314,11 @@ export default {
           })
           break
         default:
+          //防止视频遮挡了弹出框
+          this.setSourceType({
+            sourceType: 'img',
+            taskId: task.id
+          })
           this.copyPcUrl(task.courseUrl);
       }
     },

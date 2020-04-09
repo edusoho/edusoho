@@ -31,7 +31,7 @@ import Api from "@/api";
 import copyUrl from "@/mixins/copyUrl";
 import { mapMutations, mapState } from "vuex";
 import * as types from "@/store/mutation-types";
-import { Toast } from 'vant'
+import { Toast } from "vant";
 export default {
   name: "finish-dialog",
   mixins: [copyUrl],
@@ -56,13 +56,13 @@ export default {
   },
   computed: {
     ...mapState("course", {
-      allTask: state => state.allTask,
+      allTask: state => state.allTask
     }),
     rate() {
       if (!this.finishResult) {
         return "0%";
       }
-      return  `${parseInt(this.finishResult.completionRate)}%`;
+      return `${parseInt(this.finishResult.completionRate)}%`;
     },
     title() {
       if (!this.finishResult) {
@@ -79,8 +79,8 @@ export default {
       setSourceType: types.SET_SOURCETYPE
     }),
     goNextTask() {
-      if(!this.finishResult.nextTask){
-        Toast('没有下一课');
+      if (!this.finishResult.nextTask) {
+        Toast("没有下一课");
         this.show = false;
         return;
       }
@@ -106,6 +106,10 @@ export default {
       this.$store.commit(`course/${types.GET_NEXT_STUDY}`, { nextTask });
       this.showTypeDetail(task);
       this.show = false;
+      this.setSourceType({
+        sourceType: "img",
+        taskId: task.id
+      });
     },
     showTypeDetail(task) {
       if (task.status !== "published") {
@@ -245,7 +249,7 @@ export default {
         });
       }
     },
-    closeFinishDialog(){
+    closeFinishDialog() {
       this.show = false;
       this.$emit("closeFinishDialog");
     }
