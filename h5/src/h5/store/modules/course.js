@@ -11,7 +11,12 @@ const state = {
   nextStudy: {}, // 下一次学习
   OptimizationCourseLessons: [], // 优化后的课程中所有任务
   allTask: {},
-  taskStatus: '' // 当前task任务完成情况
+  taskStatus: '', // 当前task任务完成情况
+  searchCourseList: {
+    selectedData: {},
+    courseList: [],
+    paging: {}
+  }
 };
 
 const hasJoinedCourse = course => course.member;
@@ -44,6 +49,9 @@ const mutations = {
   },
   [types.SET_ALL_TASK](currentState, payload) {
     currentState.allTask = payload;
+  },
+  [types.SET_COURSELIST](currentState, data) {
+    currentState.searchCourseList = data || {};
   }
 };
 
@@ -213,6 +221,9 @@ const actions = {
           reject(err);
         });
     });
+  },
+  setCourseList({ commit }, data) {
+    commit(types.SET_COURSELIST, data);
   }
 };
 

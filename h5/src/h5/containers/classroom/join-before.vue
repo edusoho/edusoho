@@ -119,7 +119,9 @@ export default {
       marketingActivities: {
         seckill: {}
       },
-      isEmpty: true
+      isEmpty: true,
+      scrollTime: null,
+      isManualSwitch: false,
     }
   },
   computed: {
@@ -199,8 +201,12 @@ export default {
   },
   methods: {
     onTabClick(index, title) {
+      this.isManualSwitch = true
+
       const ref = this.$refs[this.transIndex2Tab(index)]
       window.scrollTo(0, ref.$el.offsetTop - TAB_HEIGHT)
+
+      setTimeout(() => this.isManualSwitch = false, 500);
     },
     transIndex2Tab(index) {
       const tabs = ['about', 'course', 'review']
@@ -215,23 +221,34 @@ export default {
       const tabs = ['about', 'course', 'review'].reverse()
 
       // 滚动节流
-      setTimeout(() => {
+      if (this.scrollTime) clearTimeout(this.scrollTime);
+
+      this.scrollTime = setTimeout(() => {
         Object.keys(refs).forEach(item => {
           this.tops[`${item}Top`] = refs[item].$el.getBoundingClientRect().top
         })
         this.scrollFlag = false
         this.tabsClass = this.tops.aboutTop - TAB_HEIGHT <= 0 ? 'van-tabs--fixed' : ''
+        this.setCurrentActive(tabs);
 
-        for (let index = 0; index < tabs.length; index++) {
-          const activeCondition = this.tops[`${tabs[index]}Top`] - TAB_HEIGHT <= 0
-          if (!activeCondition) {
-            continue
-          }
-          this.active = tabs.length - index - 1
-          return
-        }
       }, 400)
     },
+
+    setCurrentActive(tabs) {
+      if (this.isManualSwitch) return;
+
+      for (let index = 0; index < tabs.length; index++) {
+        if ((this.tops[`${tabs[index]}Top`] - TAB_HEIGHT) > 0) {
+          continue
+        }
+
+        this.active = tabs.length - index - 1
+        return
+      }
+
+      this.active = 0;
+    },
+
     handleJoin() {
       // 会员免费学
       const vipAccessToJoin = this.vipAccessToJoin
