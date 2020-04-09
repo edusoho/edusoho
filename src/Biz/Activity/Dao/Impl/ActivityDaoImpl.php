@@ -78,4 +78,9 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
     {
         return $this->getByFields(array('mediaId' => $mediaId, 'mediaType' => $mediaType, 'copyId' => $copyId));
     }
+
+    public function getByMediaIdAndMediaType($mediaId, $mediaType)
+    {
+        return $this->getByFields(array('mediaId' => $mediaId, 'mediaType' => $mediaType));
+    }
 }

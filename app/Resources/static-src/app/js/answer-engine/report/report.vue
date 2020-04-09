@@ -1,11 +1,12 @@
 <template>
   <div id="app" class="test-vue">
-    <item-engine
+    <item-report
       :sections="sections"
+      :reportSections="reportSections"
       :testpaper="testpaper"
-      @getAnswerData="getAnswerData"
       :showCKEditorData="showCKEditorData"
-    ></item-engine>
+      @doAgainEvent="doAgainEvent"
+    ></item-report>
   </div>
 </template>
 
@@ -21,13 +22,17 @@
       };
     },
     created() {
-       const assessment = JSON.parse($('[name=assessment]').val());
-       console.log(assessment)
-       this.sections = assessment.sections;
-       this.testpaper = assessment;
+        const assessment = JSON.parse($('[name=assessment]').val());
+        const answerReport = JSON.parse($('[name=answer_report]').val());
+        this.sections = assessment.sections
+        this.reportSections = answerReport
+        this.testpaper = assessment
     },
     methods: {
-      getAnswerData(data) {
+      doAgainEvent(data) {
+          
+      },
+      getReviewData(data) {
 
       }
     }

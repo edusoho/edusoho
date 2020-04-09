@@ -15,4 +15,6 @@ interface TestpaperActivityService
     public function updateActivity($id, $fields);
 
     public function deleteActivity($id);
+
+    public function getActivityByAnswerSceneId($answerSceneId);
 }

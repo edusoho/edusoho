@@ -280,6 +280,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->getActivityDao()->getByMediaIdAndMediaTypeAndCopyId($mediaId, $mediaType, $copyId);
     }
 
+    public function getByMediaIdAndMediaType($mediaId, $mediaType)
+    {
+        return $this->getActivityDao()->getByMediaIdAndMediaType($mediaId, $mediaType);
+    }
+
     protected function syncActivityMaterials($activity, $materials, $mode = 'create')
     {
         if ('delete' === $mode) {

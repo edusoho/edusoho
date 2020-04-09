@@ -19,4 +19,6 @@ interface ActivityDao extends GeneralDaoInterface
     public function findFinishedLivesWithinTwoHours();
 
     public function getByMediaIdAndMediaTypeAndCopyId($mediaId, $mediaType, $copyId);
+
+    public function getByMediaIdAndMediaType($mediaId, $mediaType);
 }

@@ -47,13 +47,14 @@ class Testpaper extends Activity
         try {
             $this->getBiz()['db']->beginTransaction();
 
-            $answerScene = $this->getAnswerSceneService()->create( array(
+            $answerScene = $this->getAnswerSceneService()->create(array(
                 'name' => $fields['title'],
                 'limited_time' => $fields['limitedTime'],
                 'do_times' => $fields['doTimes'],
                 'redo_interval' => $fields['redoInterval'],
                 'need_score' => 1,
                 'start_time' => $fields['startTime'],
+                'pass_score' => empty($fields['finishCondition']['finishScore']) ? 0 : $fields['finishCondition']['finishScore'],
             ));
 
             $testpaperActivity = $this->getTestpaperActivityService()->createActivity(array(
@@ -65,6 +66,7 @@ class Testpaper extends Activity
             ));
 
             $this->getBiz()['db']->commit();
+
             return $testpaperActivity;
         } catch (\Exception $e) {
             $this->getBiz()['db']->rollback();
@@ -100,7 +102,7 @@ class Testpaper extends Activity
     {
         $sourceExt = $this->get($sourceActivity['mediaId']);
         $ext = $this->get($activity['mediaId']);
-        
+
         $ext['startTime'] = $sourceActivity['startTime'];
         $ext['title'] = $sourceActivity['title'];
         $ext['testpaperId'] = $sourceExt['mediaId'];
@@ -139,6 +141,7 @@ class Testpaper extends Activity
                 'do_times' => $filterFields['doTimes'],
                 'redo_interval' => $filterFields['redoInterval'],
                 'start_time' => $filterFields['startTime'],
+                'pass_score' => empty($filterFields['finishCondition']['finishScore']) ? 0 : $filterFields['finishCondition']['finishScore'],
             ));
 
             $testpaperActivity = $this->getTestpaperActivityService()->updateActivity($activity['id'], array(
@@ -149,6 +152,7 @@ class Testpaper extends Activity
             ));
 
             $this->getBiz()['db']->commit();
+
             return $testpaperActivity;
         } catch (\Exception $e) {
             $this->getBiz()['db']->rollback();
@@ -168,7 +172,7 @@ class Testpaper extends Activity
         $activity = $this->getActivityService()->getActivity($activityId, true);
         $testpaperActivity = $this->get($activity['mediaId']);
 
-        $answerRecord = $this->getAnswerRecordService()->getLastAnswerRecordByAnswerSceneIdAndUserId(
+        $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId(
             $testpaperActivity['answerScene']['id'],
             $user['id']
         );
@@ -188,7 +192,7 @@ class Testpaper extends Activity
         }
 
         $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
-        if ('score' === $activity['finishType'] && $answerReport['score'] >= $testpaperActivity['finishCondition']['finishScore']) {
+        if ($answerRecord['status'] == AnswerService::ANSWER_RECORD_STATUS_FINISHED && 'score' === $activity['finishType'] && $answerReport['score'] >= $testpaperActivity['finishCondition']['finishScore']) {
             return true;
         }
 

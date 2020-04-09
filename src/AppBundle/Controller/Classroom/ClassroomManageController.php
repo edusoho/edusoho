@@ -30,6 +30,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\Classroom\Service\ClassroomReviewService;
 use Biz\Activity\Service\TestpaperActivityService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 
 class ClassroomManageController extends BaseController
 {
@@ -998,7 +1000,7 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        $testpaper = $this->getAssessmentService()->getAssessment($testpaperId);
         if (!$testpaper) {
             $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
@@ -1014,6 +1016,7 @@ class ClassroomManageController extends BaseController
                 'classroom' => $classroom,
                 'testpaper' => $testpaper,
                 'isTeacher' => true,
+                'activity' => $activity,
                 'activityId' => $activity['id'],
             )
         );
@@ -1031,9 +1034,10 @@ class ClassroomManageController extends BaseController
             return $this->createMessageResponse('error', 'Activity not found');
         }
 
-        $checkResult = $this->getTestpaperService()->getNextReviewingResult($courseIds, $activity['id'], $activity['mediaType']);
+        $answerScene = $this->getAnswerSceneByActivity($activity);
+        $answerRecord = $this->getAnswerRecordService()->getNextReviewingAnswerRecordByAnswerSceneId($answerScene['id']);
 
-        if (empty($checkResult)) {
+        if (empty($answerRecord)) {
             $route = $this->getRedirectRoute('list', $activity['mediaType']);
 
             return $this->redirect($this->generateUrl($route, array('id' => $id)));
@@ -1041,7 +1045,16 @@ class ClassroomManageController extends BaseController
 
         $route = $this->getRedirectRoute('check', $activity['mediaType']);
 
-        return $this->redirect($this->generateUrl($route, array('id' => $id, 'resultId' => $checkResult['id'])));
+        return $this->redirect($this->generateUrl($route, array('id' => $id, 'answerRecordId' => $answerRecord['id'])));
+    }
+
+    protected function getAnswerSceneByActivity($activity)
+    {
+        if ('testpaper' == $activity['mediaType']) {
+            $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+
+            return $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
+        }
     }
 
     public function homeworkAction($id)
@@ -1058,7 +1071,7 @@ class ClassroomManageController extends BaseController
         );
     }
 
-    public function testpaperCheckAction(Request $request, $id, $resultId)
+    public function testpaperCheckAction(Request $request, $id, $answerRecordId)
     {
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
@@ -1067,7 +1080,7 @@ class ClassroomManageController extends BaseController
             'AppBundle:Testpaper/Manage:check',
             array(
                 'request' => $request,
-                'resultId' => $resultId,
+                'answerRecordId' => $answerRecordId,
                 'source' => 'classroom',
                 'targetId' => $classroom['id'],
             )
@@ -1169,6 +1182,22 @@ class ClassroomManageController extends BaseController
         $cashRate = $coinEnable && isset($coinSetting['cash_rate']) ? $coinSetting['cash_rate'] : 1;
 
         return $cashRate;
+    }
+    
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
     }
 
     /**
@@ -1310,5 +1339,10 @@ class ClassroomManageController extends BaseController
     protected function getMemberOperationService()
     {
         return $this->createService('MemberOperation:MemberOperationService');
+    }
+
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 }
