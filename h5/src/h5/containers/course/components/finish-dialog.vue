@@ -145,7 +145,7 @@ export default {
           if (nowDate > endDate) {
             if (
               task.activity &&
-              task.activity.replayStatus == "videoGenerated"
+              task.activity.replayStatus === "videoGenerated"
             ) {
               // 本站文件
               if (task.mediaSource === "self") {
@@ -159,7 +159,7 @@ export default {
               return;
             } else if (
               task.activity &&
-              task.activity.replayStatus == "ungenerated"
+              task.activity.replayStatus === "ungenerated"
             ) {
               Toast("暂无回放");
               return;

@@ -155,7 +155,7 @@ export default {
       const playerSDKUri =
         "//service-cdn.qiqiuyun.net/js-sdk/sdk-v1.js?v=" +
         // const playerSDKUri = '//oilgb9e2p.qnssl.com/js-sdk/sdk-v1.js?v=' // 测试 sdk
-        Date.now() / 1000 / 60;
+        parseInt(Date.now() / 1000 / 60);
 
       loadScript(playerSDKUri, err => {
         if (err) throw err;
