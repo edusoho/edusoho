@@ -5,13 +5,6 @@
       id="course-detail__audio--content"
       ref="audio"
       class="course-detail__audio--content"/>
-    <div v-if="learnMode">
-      <div class="course-detail__head--btn course-detail__head--activebtn" v-if="enableFinish">
-        <i class="iconfont icon-markdone"></i>
-        学过了
-      </div>
-      <div class="course-detail__head--btn" v-if="enableFinish" @click="toToast">完成条件</div>
-    </div>
   </div>
 </template>
 <script>
@@ -19,19 +12,11 @@ import loadScript from 'load-script'
 import { mapState } from 'vuex'
 import Api from '@/api'
 import { Toast } from 'vant'
-import TaskPipe from '@/utils/task-pipe/index';
 
 export default {
   data() {
     return {
-      finishCondition: undefined,
-      learnMode: false,
-      enableFinish: false,
       isEncryptionPlus: false,
-      currentTime: 0,
-      startTime: 0,
-      timeChangingList: [],
-      taskPipe: undefined,
     }
   },
   computed: {
@@ -45,56 +30,13 @@ export default {
     })
   },
   created() {
-    this.initTaskPipe();
     this.initPlayer()
-  },
-  beforeDestroy() {
-    this.taskPipe.clearInterval();
   },
   /*
   * 试看需要传preview=1
   * eg: /api/courses/1/task_medias/1?preview=1
   */
   methods: {
-    toToast() {
-      if (this.finishCondition) {
-        this.$toast({
-          message: this.finishCondition.text,
-          position: 'bottom'
-        });
-      }
-    },
-    watchTime() {
-      if (this.isAndroid() && this.taskPipe) {
-        return Math.floor(this.taskPipe.getDuration() / 60000);
-      }
-      let timeCount = this.currentTime - this.startTime;
-      this.timeChangingList.forEach(item => {
-        timeCount += (item.end - item.start);
-      });
-      return Math.floor(timeCount / 60);
-    },
-    isAndroid() {
-      return !!navigator.userAgent.match(new RegExp("android", "i"));
-    },
-    initTaskPipe() {
-      this.taskPipe = new TaskPipe({
-        reportData: {
-          courseId: this.selectedPlanId,
-          taskId: this.taskId
-        },
-        formatReportData: (data) => {
-          data.watchTime = this.watchTime()
-          return data;
-        }
-      });
-      this.taskPipe.on('courseData', (res) => {
-        this.finishCondition = res.activity && res.activity.finishCondition;
-      });
-      this.taskPipe.on('report.finish', () => {
-        this.enableFinish = true;
-      })
-    },
     getParams() {
       const canTryLookable = !this.joinStatus
       return canTryLookable ? {
@@ -136,28 +78,20 @@ export default {
 
       this.$store.commit('UPDATE_LOADING_STATUS', true)
       this.loadPlayerSDK().then(SDK => {
-        this.learnMode = this.details.learnMode !== 'freeMode';
-        this.enableFinish = !!this.details.enableFinish;
+   
         this.$store.commit('UPDATE_LOADING_STATUS', false)
         const player = new SDK(options)
         player
         .on('ready', () => {
-          this.taskPipe.clearInterval();
-          this.taskPipe.initInterval();
+          
         })
         player.on('datapicker.start', (e) => {
-          this.timeChangingList.push({
-            start: this.startTime,
-            end: e.end,
-          });
-          this.startTime = e.start;
+  
         })
         player.on('ended', () => {
-          this.taskPipe.trigger('end');
         })
         player.on('timeupdate', (e) => {
-          this.currentTime = e.currentTime;
-          this.taskPipe.trigger('time', this.watchTime());
+          
         })
       })
     },

@@ -48,7 +48,6 @@ import Api from "@/api";
 import { mapState, mapMutations } from "vuex";
 import * as types from "@/store/mutation-types";
 import { Toast } from "vant";
-import TaskPipe from "@/utils/task-pipe/index";
 import report from "@/mixins/course/report";
 import finishDialog from "../components/finish-dialog";
 export default {
@@ -124,31 +123,6 @@ export default {
         });
       }
     },
-    // initTaskPipe() {
-    //   if (this.taskPipe) {
-    //     return;
-    //   }
-    //   const { courseId, taskId, type } = this.$route.query
-    //   this.taskPipe = new TaskPipe({
-    //     reportData: {
-    //       courseId: this.selectedPlanId,
-    //       taskId: this.taskId
-    //     },
-    //   });
-    //   this.taskPipe.on('courseData', (res) => {
-    //     this.pageLength = res.length;
-    //   });
-    //   this.taskPipe.on('courseData', (res) => {
-    //     this.finishCondition = res.activity && res.activity.finishCondition;
-    //   });
-    //   this.taskPipe.on('report.finish', () => {
-    //     this.enableFinish = true;
-    //   })
-    //   setInterval(() => {
-    //     const duration = Math.floor(this.taskPipe.getDuration() / 60000);
-    //     this.taskPipe.trigger('time', duration);
-    //   }, 1000);
-    // },
 
     /*
      * 试看需要传preview=1

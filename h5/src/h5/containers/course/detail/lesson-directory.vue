@@ -90,7 +90,6 @@ import copyUrl from '@/mixins/copyUrl'
 import { mapState, mapMutations } from 'vuex'
 import * as types from '@/store/mutation-types'
 import { Dialog, Toast } from 'vant'
-import TaskPipe from '@/utils/task-pipe/index'
 export default {
   name: 'LessonDirectory',
   mixins: [redirectMixin,copyUrl],
