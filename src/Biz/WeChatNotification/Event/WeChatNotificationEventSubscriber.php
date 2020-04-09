@@ -739,6 +739,9 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     private function generateUrl($route, $parameters, $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
     {
         global $kernel;
+        if ($kernel->getEnvironment() === 'test') {
+            return '';
+        }
         $router = $this->decorateRouter($kernel->getContainer()->get('router'));
 
         return $router->generate($route, $parameters, $referenceType);
