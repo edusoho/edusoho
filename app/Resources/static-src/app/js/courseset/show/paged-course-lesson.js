@@ -93,7 +93,7 @@ class PagedCourseLesson {
         },
 
         'getLessonName': function(data, context) {
-          if ('1' == data['isOptional']) {
+          if (context.isItemDisplayedAsOptional(data, context)) {
             return data.title;
           } else {
             return Translator.trans('course.lesson', { part_name: context.i18n.i18nLessonName, number: context.getLessonNum(data, context), title: data.title });
@@ -230,7 +230,7 @@ class PagedCourseLesson {
         'getLessonNum': function(data, context) {
           let lessonNum = data.number;
 
-          if ('1' == context.course.isHideUnpublish || data.isOptional == '0') {
+          if ('1' == context.course.isHideUnpublish) {
             lessonNum = data.published_number;
           }
           return lessonNum;
