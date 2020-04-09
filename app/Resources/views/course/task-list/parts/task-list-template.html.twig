@@ -36,4 +36,4 @@
 
 </div>
 
-{% include 'course/task-list/parts/task-course-data.html.twig' %}
+{% include 'course/task-list/parts/task-course-data.html.twig' with {showOptional:showOptional|default(false)} %}

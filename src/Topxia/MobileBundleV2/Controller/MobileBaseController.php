@@ -782,4 +782,14 @@ class MobileBaseController extends BaseController
     {
         return $this->createService('Discount:Discount.DiscountService');
     }
+
+    public function redirect($url, $status = 302)
+    {
+        return parent::redirect($url,$status);
+    }
+
+    public function forward($controller, array $path = [], array $query = [])
+    {
+        return parent::forward($controller, $path, $query);
+    }
 }

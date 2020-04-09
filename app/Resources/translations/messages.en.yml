@@ -6193,6 +6193,7 @@ admin.magic_setting.disable_web_crontab: 'Turn on web scheduled task or not'
 admin.magic_setting.cloud_search: 'Turn on cloud search service'
 admin.magic_setting.ios_buy_disable: 'Close iOS payment or not'
 admin.magic_setting.ios_vip_close: 'Close iOS VIP module or not'
+admin.magic_setting.ios_exchange_coupon_close: 'Close iOS coupon module or not'
 admin.magic_setting.export_limit: 'Export order limit in single time'
 admin.magic_setting.export_allow_count: 'Maximum order export quantity'
 admin.magic_setting.enable_org: 'Turn on organization settings'
@@ -9466,3 +9467,6 @@ course.live_statistics.checkin_status.all: All
 exception.live_statistic.not_found: Live statistics not found
 exception.live_statistic.not_support: Live statistics not supported function
 admin.article_setting.article_copy_manage: Information copy protection
+
+task.show_optional_tips: Show Optional
+admin_v2.user.manage.change_nickname.heading_title: Modify username

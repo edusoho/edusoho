@@ -204,6 +204,21 @@ class AbstractCloudAPI
         }
 
         if ($this->debug && $this->logger) {
+            $biz = ServiceKernel::instance()->getBiz();
+            if (!$biz->offsetExists('cloud_api_collector')) {
+                $biz->offsetSet('cloud_api_collector', array());
+            }
+
+            $collector = $biz->offsetGet('cloud_api_collector');
+            $collector[] = array(
+                'requestId' => $requestId,
+                'method' => $method,
+                'url' => $url,
+                'params' => $params,
+                'headers' => $headers,
+                'result' => $result,
+            );
+            $biz->offsetSet('cloud_api_collector', $collector);
             $this->logger->debug("[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
         }
 
