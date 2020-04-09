@@ -110,7 +110,6 @@ class ItemHelper
                 $item['number'] = strval($number++);
                 $item['title'] = $originItem['title'];
                 $item['task'] = $originItem;
-                $item['courseUrl'] = $targetUrl;
                 $newItems[] = $item;
                 continue;
             }
