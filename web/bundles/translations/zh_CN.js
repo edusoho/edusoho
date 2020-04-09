@@ -1289,4 +1289,6 @@ t.add("course_manage.live_statistics.empty_tips", "\u6570\u636e\u540c\u6b65\u4e2
 t.add("course_manage.live_statistics.live_not_end", "\u76f4\u64ad\u6570\u636e\u672a\u751f\u6210", "js", "zh_CN");
 t.add("course_manage.live_statistics.checkin_not_support", "\u5f53\u524d\u76f4\u64ad\u8bfe\u6682\u4e0d\u652f\u6301\u70b9\u540d\u529f\u80fd", "js", "zh_CN");
 t.add("course_manage.live_statistics.data_not_valid", "\u6570\u636e\u5f02\u5e38\uff0c\u76f4\u64ad\u95f4\u6570\u636e\u8fd4\u56de\u9519\u8bef", "js", "zh_CN");
+t.add("admin_v2.user.nickname_modify_success_hint", "\u7528\u6237\u540d\u4fee\u6539\u6210\u529f", "js", "zh_CN");
+t.add("admin_v2.user.nickname_modify_error_hint", "\u64cd\u4f5c\u5931\u8d25", "js", "zh_CN");
 })(Translator);

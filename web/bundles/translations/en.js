@@ -868,6 +868,7 @@ t.add("admin.analysis.register_num", "number of registered", "js", "en");
 t.add("admin.analysis.user_total_num", "total number of users", "js", "en");
 t.add("admin.analysis.view_num", "number of views", "js", "en");
 t.add("admin.analysis.vip_income", "vip income", "js", "en");
+t.add("admin.analysis.app\/Resources\/translations\/messages.zh_CN.yml", "number of paid user", "js", "en");
 t.add("admin.announcement.save_error_hint", "Operation failed", "js", "en");
 t.add("admin.announcement.delete_hint", "Are you sure you want to delete this announcement?", "js", "en");
 t.add("admin.app.uninstall_hint", "Really want to uninstall this app?", "js", "en");
@@ -1344,4 +1345,6 @@ t.add("course_manage.live_statistics.empty_tips", "Data syncing, please try agai
 t.add("course_manage.live_statistics.live_not_end", "Live data is not generated", "js", "en");
 t.add("course_manage.live_statistics.checkin_not_support", "Check in is currently not supported", "js", "en");
 t.add("course_manage.live_statistics.data_not_valid", "The data is abnormal", "js", "en");
+t.add("admin_v2.user.nickname_modify_success_hint", "Nickname modified successfully", "js", "en");
+t.add("admin_v2.user.nickname_modify_error_hint", "operation failed", "js", "en");
 })(Translator);

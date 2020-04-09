@@ -1537,6 +1537,6 @@ course_manage.live_statistics.live_not_end: Live data is not generated
 course_manage.live_statistics.checkin_not_support: Check in is currently not supported
 course_manage.live_statistics.data_not_valid: The data is abnormal
 
-admin_v2.user.nickname_password_modify_success_hint: Nickname and password modified successfully
-admin_v2.user.nickname_password_modify_error_hint: operation failed
+admin_v2.user.nickname_modify_success_hint: Nickname modified successfully
+admin_v2.user.nickname_modify_error_hint: operation failed
 

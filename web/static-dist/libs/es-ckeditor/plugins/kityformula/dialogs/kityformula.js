@@ -14,7 +14,7 @@
         }
 
         if(script) {
-          var src = script.src; 
+          var src = script.src;
           src = src.substr(0, src.lastIndexOf("/")+1);
 
           return src + srcpath;
@@ -29,7 +29,7 @@
             $("#editorContainer_"+editor.name).remove();
         }
         var html = '<iframe scrolling="no" id="editorContainer_'+editor.name+'" src="'+ iframeSrcPath("../kityformula/index.html") +'" style="width: 100% !important; height: 300px !important"></iframe>';
-        
+
         return {
             title: '公式编辑器',
             minWidth: 780,
@@ -53,16 +53,16 @@
 
             },
             onShow: function () {
-                $("#editorContainer_"+editor.name)[0].contentWindow.postMessage({eventName: 'kityformula.show'}, '*');
+                $("#editorContainer_"+editor.name)[0].contentWindow.postMessage({eventName: 'kityformula.show', editorName: editor.name }, '*');
             },
             onHide: function () {
-                
+
             },
             onOk: function () {
                 if(isIE){
                     $("#oldFormula").val();
                 }else{
-                    $("#editorContainer_"+editor.name)[0].contentWindow.postMessage({eventName: 'kityformula.ok'}, '*');
+                    $("#editorContainer_"+editor.name)[0].contentWindow.postMessage({eventName: 'kityformula.ok', editorName: editor.name }, '*');
                 }
             },
             onCancel: function () {
@@ -70,11 +70,12 @@
             }
         };
     }
- 
+
     CKEDITOR.dialog.add('kityformula', function (editor) {
         window.addEventListener('message', function (e) {
             var eventName = e.data.eventName;
-            if (eventName === 'es-ckeditor.post') {
+            var editorName = e.data.editorName;
+            if (eventName === 'es-ckeditor.post' && editorName === editor.name ) {
                 var source = e.data.source;
                 var $imgUrl = e.data.imageUrl;
                 $.post($('#'+editor.name).data('imageDownloadUrl'),{url:$imgUrl}, function(result){

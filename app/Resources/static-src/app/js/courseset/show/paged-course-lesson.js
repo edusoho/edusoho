@@ -229,7 +229,8 @@ class PagedCourseLesson {
 
         'getLessonNum': function(data, context) {
           let lessonNum = data.number;
-          if ('1' == context.course.isHideUnpublish) {
+
+          if ('1' == context.course.isHideUnpublish || data.isOptional == '0') {
             lessonNum = data.published_number;
           }
           return lessonNum;
