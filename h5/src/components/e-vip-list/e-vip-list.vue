@@ -1,7 +1,7 @@
 <template>
   <div :class="items.length <= 1 ? 'single' : ''" class="e-vip-list">
     <div v-if="showTitle === 'show'" class="e-vip-list__title text-18 mb20">会员专区</div>
-    <van-swipe v-if="items.length > 1" :width="200" :show-indicators="false" :loop="false" :touchable="true">
+    <van-swipe v-if="items.length > 1" :width="200" :show-indicators="false" :loop="false" :touchable="true" @change="onChange" ref="swipe">
       <van-swipe-item v-for="(item, index) in items" :key="index">
         <vip-item :item="item" :feedback="feedback"/>
       </van-swipe-item>
@@ -25,6 +25,19 @@ export default {
   components: {
     vipItem
   },
-  props: ['items', 'feedback', 'sort', 'showTitle']
+  props: ['items', 'feedback', 'sort', 'showTitle'],
+  methods: {
+    onChange(index) {
+      this.currentPage = index;
+    }
+  },
+  mounted() {
+    window.onresize = () => {
+      console.log(this.currentPage);
+      if (this.items.length - 1 === this.currentPage){
+        this.$refs.swipe.swipeTo(this.currentPage, {immediate: true});
+      }
+    }
+  }
 }
 </script>

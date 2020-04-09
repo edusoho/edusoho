@@ -123,9 +123,23 @@ export default {
         location.href = this.order.targetUrl
         return
       }
-      this.$router.push({
-        path: (this.typeList === 'course_list') ? `/course/${id}` : `/classroom/${id}`
-      })
+
+
+      if (this.typeList === 'class') {
+        return
+      }
+
+      if (this.typeList === 'classroom_list') {
+        this.$router.push({
+          path: `/classroom/${id}`
+        })
+      }
+
+      if (this.typeList === 'course_list') {
+        this.$router.push({
+          path: `/course/${id}`
+        })
+      }
     }
   }
 }

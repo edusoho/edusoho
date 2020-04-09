@@ -15,6 +15,7 @@ export const GET_COURSE_LESSONS = 'GET_COURSE_LESSONS';
 export const GET_OPTIMIZATION_COURSE_LESSONS = 'GET_OPTIMIZATION__COURSE_LESSONS';
 export const GET_NEXT_STUDY = 'GET_NEXT_STUDY';
 export const HAND_EXAM = 'HAND_EXAM';
+export const SET_COURSELIST = 'SET_COURSELIST';
 // register
 export const ADD_USER = 'ADD_USER';
 export const SMS_CENTER = 'SMS_CENTER';
@@ -28,4 +29,7 @@ export const SET_SOCIAL_STATUS = 'SET_SOCIAL_STATUS';
 
 // 优惠券总开关
 export const COUPON_SWITCH = 'COUPON_SWITCH';
+
+// classRoom detail
+export const SET_CLASSROOMLIST = 'SET_CLASSROOMLIST';
 

@@ -25,7 +25,7 @@ import Api from '@/api'
 import treeSelect from '&/components/e-tree-select/e-tree-select.vue'
 import lazyLoading from '&/components/e-lazy-loading/e-lazy-loading.vue'
 import emptyCourse from '../../learning/emptyCourse/emptyCourse.vue'
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import * as types from '@/store/mutation-types'
 import CATEGORY_DEFAULT from '@/config/category-default-config.js'
 
@@ -59,45 +59,39 @@ export default {
       dataDefault: CATEGORY_DEFAULT['classroom_list']
     }
   },
+  computed: {
+    ...mapState({
+      searchClassRoomList: state => state.classroom.searchClassRoomList
+    }),
+  },
   watch: {
     selectedData() {
+      const { courseList, selectedData, paging } = this.searchClassRoomList;
+
+      if (this.isSelectedDataSame(selectedData)) {
+        this.courseList = courseList;
+        this.requestClassRoomSuccess(paging);
+
+        return;
+      }
+
       this.initCourseList()
       const setting = {
         offset: this.offset,
         limit: this.limit
       }
 
-      this.requestCourses(setting)
-        .then(() => {
-          if (this.courseList.length !== 0) {
-            this.isEmptyCourse = false
-          } else {
-            this.isEmptyCourse = true
-          }
-        })
+      this.requestCourses(setting);
     }
   },
   created() {
+    window.scroll(0, 0);
     this.selectedData = this.transform(this.$route.query)
     // 合并参数
-    const config = Object.assign(this.selectedData, {
+    const config = Object.assign({}, this.selectedData, {
       offset: this.offset,
       limit: this.limit
     })
-
-    // // 老接口数据，会被替换暂不处理
-    // Api.getSelectItems()
-    //   .then((data) => {
-    //     console.log(data,categoryDefaultData,77777)
-    //     data[0].data.unshift({
-    //       name: '全部',
-    //       id: '0'
-    //     });
-    //     data[1].data='';
-    //     const items = Object.values(data)
-    //     items.pop();
-    //     this.selectItems = items;
-    //   });
 
     // 获取班级分类数据
     Api.getClassCategories()
@@ -111,9 +105,15 @@ export default {
       })
   },
   methods: {
+    ...mapActions('classroom', [
+      'setClassRoomList',
+    ]),
+
     setQuery(value) {
-      console.log('value', value);
-      this.selectedData = value
+      this.$router.replace({
+        name: 'more_class',
+        query: value,
+      })
     },
 
     initCourseList() {
@@ -123,31 +123,37 @@ export default {
       this.offset = 0
     },
 
-    judegIsAllClassroom(courseInfomation) {
-      if (this.courseList.length == courseInfomation.paging.total) {
-        return true
-      }
-      return false
+    judegIsAllClassroom(paging) {
+      return this.courseList.length == paging.total
     },
 
     requestCourses(setting) {
       this.isRequestCompile = false
-      const config = Object.assign(this.selectedData, setting)
+      const config = Object.assign({}, this.selectedData, setting)
       return Api.getClassList({
         params: config
-      }).then((data) => {
-        data.data.forEach(element => {
+      }).then(({ data, paging }) => {
+        data.forEach(element => {
           this.courseList.push(element)
         })
-        const isAllClassroom = this.judegIsAllClassroom(data)
-        if (!isAllClassroom) {
-          this.offset = this.courseList.length
-        }
-        this.isAllClassroom = isAllClassroom
-        this.isRequestCompile = true
+        this.setClassRoomList({
+          selectedData: this.selectedData,
+          courseList: this.courseList,
+          paging,
+        });
+        this.requestClassRoomSuccess(paging);
       }).catch((err) => {
         console.log(err, 'error')
       })
+    },
+
+    requestClassRoomSuccess(paging = {}) {
+      this.isAllClassroom = this.judegIsAllClassroom(paging)
+      if (!this.isAllClassroom) {
+        this.offset = this.courseList.length
+      }
+      this.isRequestCompile = true
+      this.isEmptyCourse = this.courseList.length === 0
     },
 
     sendRequest() {
@@ -159,25 +165,26 @@ export default {
       if (!this.isAllClassroom) this.requestCourses(args)
     },
 
-    transform(obj) {
-      const config = {}
-      const arr = Object.keys(obj);
-      const defaultData = {
+    transform(obj = {}) {
+      return Object.assign({
         categoryId: this.categoryId,
         type: this.type,
         sort: this.sort
-      };
-      if (!arr.length) {
-        return defaultData;
-      }
-      arr.forEach((current, index) => {
-        config[this.queryForm[current]] = obj[current]
-      })
-      console.log(config, 'arr config')
-      return Object.assign(defaultData, config);
+      }, obj);
     },
+
     toggleHandler(value) {
       this.selecting = value
+    },
+
+    isSelectedDataSame(selectedData) {
+      for (const key in this.selectedData) {
+        if (this.selectedData[key] != selectedData[key]) {
+          return false;
+        }
+      }
+
+      return true;
     }
   }
 }

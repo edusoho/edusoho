@@ -5,6 +5,7 @@ import * as getters from './getters';
 import * as actions from './actions';
 import mutations from './mutations';
 import course from './modules/course';
+import classroom from './modules/classroom';
 
 Vue.use(Vuex);
 
@@ -32,6 +33,7 @@ export default new Vuex.Store({
   actions,
   mutations,
   modules: {
-    course
+    course,
+    classroom
   }
 });

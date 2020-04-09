@@ -72,15 +72,10 @@ export default {
             path: `/${targetType}/${id}` // course/{id} | classroom/{id}
           });
         });
-      } else if (targetNum === 'multi') {
+      } else if (['multi', 'all'].indexOf(targetNum) > -1) {
         // 多个班级/课程
         this.$router.push({
           path: `/${coupon.targetDetail.product}/explore` // course/explore | classroom/explore
-        });
-      } else {
-        // 全站
-        this.$router.push({
-          path: '/'
         });
       }
     },
