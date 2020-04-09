@@ -241,6 +241,12 @@ class CourseController extends CourseBaseController
                 'courseItems' => $courseItems,
                 'nextOffsetSeq' => $nextOffsetSeq,
                 'member' => $member,
+                'optionalTaskCount' => $this->getTaskService()->countTasks(
+                    array(
+                        'courseId' => $course['id'],
+                        'status' => 'published',
+                        'isOptional' => 1,
+                    )),
             )
         );
     }

@@ -740,6 +740,13 @@ admin_v2:
                                             visible: (user.type != 'system')
                                             router_params:
                                                 id: (user.id)
+                                        admin_v2_user_change_nickname:
+                                            name: admin_v2.user.basic.basic_tab.change_nickname_btn
+                                            mode: modal
+                                            group: groupButton
+                                            visible: (user.type != 'system')
+                                            router_params:
+                                                userId: (user.id)
                                         admin_v2_user_avatar:
                                             name: admin_v2.user.basic.basic_tab.update_avatar_btn
                                             mode: modal

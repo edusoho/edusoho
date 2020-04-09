@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\AdminV2\Teach;
 
+use AppBundle\Common\ExportHelp;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Common\CommonException;
@@ -315,10 +316,10 @@ class CourseSetController extends BaseController
         $paginator = new Paginator($this->get('request'), $count, 20);
 
         $students = $this->getMemberService()->searchMembers(
-                array('courseId' => $courseId, 'role' => 'student'),
-                array('createdTime' => 'DESC'),
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
+            array('courseId' => $courseId, 'role' => 'student'),
+            array('createdTime' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
         );
 
         foreach ($students as $key => &$student) {
@@ -660,6 +661,110 @@ class CourseSetController extends BaseController
         $tags = $this->getTagService()->searchTags(array('likeName' => $queryString), array(), 0, PHP_INT_MAX);
 
         return $this->createJsonResponse($tags);
+    }
+
+    public function prepareForExportCourseDetailDataAction(Request $request, $courseId)
+    {
+        if (empty($courseId)) {
+            return $this->createJsonResponse(array('error' => 'courseId can not be null'));
+        }
+
+        list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
+
+        list($title, $members, $courseMemberCount) = $this->getExportCourseMemberData(
+            $courseId,
+            $start,
+            $limit,
+            $exportAllowCount
+        );
+
+        $file = '';
+        if (0 == $start) {
+            $file = ExportHelp::addFileTitle($request, 'course_detail', $title);
+        }
+
+        $datas = implode("\r\n", $members);
+        $fileName = ExportHelp::saveToTempFile($request, $datas, $file);
+
+        $method = ExportHelp::getNextMethod($start + $limit, $courseMemberCount);
+
+        return $this->createJsonResponse(
+            array(
+                'method' => $method,
+                'fileName' => $fileName,
+                'start' => $start + $limit,
+            )
+        );
+    }
+
+    public function exportCourseDetailDataAction(Request $request, $courseId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        if (empty($course)) {
+            return $this->createJsonResponse(array('error' => 'course can not be found'));
+        }
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
+        $courseTitle = 1 == $course['isDefault'] ? $courseSet['title'] : $courseSet['title'].'-'.$course['title'];
+        $fileName = sprintf('%s-(%s).csv', $courseTitle, date('Y-n-d'));
+
+        return ExportHelp::exportCsv($request, $fileName);
+    }
+
+    protected function getExportCourseMemberData($courseId, $start, $limit, $exportAllowCount)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+
+        $count = $this->getMemberService()->countMembers(array('courseId' => $courseId, 'role' => 'student'));
+        $count = ($count > $exportAllowCount) ? $exportAllowCount : $count;
+
+        $students = $this->getMemberService()->searchMembers(
+            array('courseId' => $courseId, 'role' => 'student'),
+            array('createdTime' => 'DESC'),
+            $start,
+            $limit
+        );
+
+        $exportMembers = array();
+        foreach ($students as $key => $student) {
+            $exportMember = array();
+            $user = $this->getUserService()->getUser($student['userId']);
+            $exportMember['nickname'] = $user['nickname'];
+            $exportMember['joinTime'] = date('Y-m-d H:i:s', $student['createdTime']);
+
+            if ($student['finishedTime'] > 0) {
+                $exportMember['finishedTime'] = date('Y-m-d H:i:s', $student['finishedTime']);
+                $exportMember['studyDays'] = intval(($student['finishedTime'] - $student['createdTime']) / (60 * 60 * 24));
+            } else {
+                $exportMember['finishedTime'] = '--';
+                $exportMember['studyDays'] = intval((time() - $student['createdTime']) / (60 * 60 * 24));
+            }
+
+            $learnTime = intval($student['lastLearnTime'] - $student['createdTime']);
+            $exportMember['learnTime'] = $learnTime > 0 ? floor($learnTime / 60) : '--';
+
+            $questionCount = $this->getThreadService()->countThreads(
+                array('courseId' => $courseId, 'type' => 'question', 'userId' => $user['id'])
+            );
+            $exportMember['questionNum'] = $questionCount;
+
+            $exportMember['noteNum'] = $student['noteNum'];
+
+            $exportMembers[] = implode(',', $exportMember);
+        }
+
+        $titles = array(
+            $this->trans('admin.course_manage.statistics.data_detail.name'),
+            $this->trans('admin.course_manage.statistics.data_detail.join_time'),
+            $this->trans('admin.course_manage.statistics.data_detail.finished_time'),
+            $this->trans('admin.course_manage.statistics.data_detail.study_days'),
+            $this->trans('admin.course_manage.statistics.data_detail.study_time'),
+            $this->trans('admin.course_manage.statistics.data_detail.question_number'),
+            $this->trans('admin.course_manage.statistics.data_detail.note_number'),
+        );
+
+        return array(implode(',', $titles), $exportMembers, $count);
     }
 
     protected function getDifferentCourseSetsNum($conditions)

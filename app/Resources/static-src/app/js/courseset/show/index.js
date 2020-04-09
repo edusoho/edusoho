@@ -2,9 +2,6 @@ import { chapterAnimate } from 'app/common/widget/chapter-animate';
 import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
 import { Browser } from 'common/utils';
 import { buyBtn } from 'app/common/widget/btn-util';
-import PagedCourseLesson from 'app/js/courseset/show/paged-course-lesson';
-
-new PagedCourseLesson();
 
 initTaskLearnChart();
 triggerMemberExpired();
