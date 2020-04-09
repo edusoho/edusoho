@@ -103,7 +103,6 @@ import tagLink from "&/components/e-tag-link/e-tag-link";
 import finishDialog from "../components/finish-dialog";
 import qs from "qs";
 import report from "@/mixins/course/report";
-//import TaskPipe from "@/utils/task-pipe/index";
 
 export default {
   components: {
@@ -144,10 +143,7 @@ export default {
         className: "course-tag",
         minDirectRewardRatio: 0
       },
-      // currentTime: 0,
-      // startTime: 0,
       timeChangingList: [],
-      // taskPipe: undefined,
       bindAgencyRelation: {}, // 分销代理商绑定信息
       finishResult: null,
       finishDialog: false, //下一课时弹出模态框
