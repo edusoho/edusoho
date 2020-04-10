@@ -109,13 +109,13 @@ if [[  "$contain" != '' ]]; then
     echo '结束'
 else
     echo '分支不存在，开始全局单元测试'
-    phpunitAll=("bin/phpunit -c app/ --testsuite SpecialTest"
-                "bin/phpunit -c app/ --testsuite UnitA2B"
-                "bin/phpunit -c app/ --testsuite UnitC2C"
-                "bin/phpunit -c app/ --testsuite UnitD2D"
-                "bin/phpunit -c app/ --testsuite UnitE2P"
-                "bin/phpunit -c app/ --testsuite UnitQ2T"
-                "bin/phpunit -c app/ --testsuite UnitU2Z")
+    phpunitAll=("bin/phpunit -c app/ --debug --testsuite SpecialTest"
+                "bin/phpunit -c app/ --debug --testsuite UnitA2B"
+                "bin/phpunit -c app/ --debug --testsuite UnitC2C"
+                "bin/phpunit -c app/ --debug --testsuite UnitD2D"
+                "bin/phpunit -c app/ --debug --testsuite UnitE2P"
+                "bin/phpunit -c app/ --debug --testsuite UnitQ2T"
+                "bin/phpunit -c app/ --debug --testsuite UnitU2Z")
 
     for ((i = 0; i < ${#phpunitAll[@]}; i++))
     do
