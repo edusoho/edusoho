@@ -16,7 +16,7 @@ class AddTableActivityExercise extends Migration
             CREATE TABLE IF NOT EXISTS `activity_exercise` (
               `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
               `answerSceneId` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '场次ID',
-              `drawcondition` TEXT COMMENT '抽题条件',
+              `drawCondition` TEXT COMMENT '抽题条件',
               `createdTime` int(10) UNSIGNED NOT NULL DEFAULT '0',
               `updatedTime` int(10) UNSIGNED NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`)
