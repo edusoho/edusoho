@@ -23,19 +23,19 @@ class TestpaperController extends BaseController
     public function doTestpaperAction(Request $request, $testId, $lessonId)
     {
         $activity = $this->getActivityService()->getActivity($lessonId);
-
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
 
         $canTakeCourse = $this->getCourseService()->canTakeCourse($activity['fromCourseId']);
         if (!$canTakeCourse) {
             $this->createNewException(CourseException::FORBIDDEN_TAKE_COURSE());
         }
-
+        
         return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', array(
             'answerSceneId' => $testpaperActivity['answerSceneId'],
             'assessmentId' => $testpaperActivity['mediaId'],
         ), array(
-            'submit_goto_url' => $this->generateUrl('course_task_activity_show', array('courseId' => $activity['fromCourseId'], 'id' => $lessonId)),
+            'submit_goto_url' => $this->generateUrl('course_task_activity_show', array('courseId' => $activity['fromCourseId'], 'id' => $task['id'])),
         ));
     }
 

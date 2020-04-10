@@ -9,6 +9,8 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Question\Service\QuestionService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\Activity\Service\HomeworkActivityService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class HomeworkController extends BaseActivityController implements ActivityActionInterface
 {
@@ -51,21 +53,11 @@ class HomeworkController extends BaseActivityController implements ActivityActio
     protected function previewHomework($id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
-
-        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
-
-        if (!$homework) {
-            return $this->createMessageResponse('error', 'homework not found');
-        }
-
-        $questions = $this->getTestpaperService()->showTestpaperItems($homework['id']);
-        $attachments = $this->getTestpaperService()->findAttachments($homework['id']);
+        $homeworkctivity = $this->getHomeworkActivityService()->get($activity['mediaId']);
+        $assessment = $this->getAssessmentService()->showAssessment($homeworkctivity['assessmentId']);
 
         return $this->render('activity/homework/preview.html.twig', array(
-            'paper' => $homework,
-            'questions' => $questions,
-            'paperResult' => array(),
-            'activity' => $activity,
+            'assessment' => $assessment,
         ));
     }
 
@@ -169,5 +161,21 @@ class HomeworkController extends BaseActivityController implements ActivityActio
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();
+    }
+
+    /**
+     * @return HomeworkActivityService
+     */
+    protected function getHomeworkActivityService()
+    {
+        return $this->getBiz()->service('Activity:HomeworkActivityService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 }

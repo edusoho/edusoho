@@ -1,0 +1,22 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ assessment.name }} - {{ parent() }}{% endblock %}
+
+{% if app.request.query.get('action') is not empty %}
+  {% set showHeader = 1 %}
+{% else %}
+  {% set showHeader = 0 %}
+{% endif %}
+
+{% block body %}
+  {% block header %}
+    {% if showHeader %}{{ parent() }}{% endif %}
+  {% endblock %}
+
+  <div>业务上的反馈</div>
+  {{ render(controller('AppBundle:AnswerEngine/AnswerEngine:report', {answerRecordId: answerRecordId})) }}
+
+  {% block footer %}
+    {% if showHeader|default(1) %}{{ parent() }}{% endif %}
+  {% endblock %}
+{% endblock %}

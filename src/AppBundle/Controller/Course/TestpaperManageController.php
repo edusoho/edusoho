@@ -14,6 +14,7 @@ use Biz\Activity\Service\TestpaperActivityService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Biz\Activity\Service\HomeworkActivityService;
 
 class TestpaperManageController extends BaseController
 {
@@ -160,6 +161,12 @@ class TestpaperManageController extends BaseController
 
             return $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
         }
+
+        if ('homework' == $activity['mediaType']) {
+            $homeworkActivity = $this->getHomeworkActivityService()->get($activity['mediaId']);
+
+            return $this->getAnswerSceneService()->get($homeworkActivity['answerSceneId']);
+        }
     }
 
     protected function getRedirectRoute($mode, $type)
@@ -245,5 +252,13 @@ class TestpaperManageController extends BaseController
     protected function getAssessmentService()
     {
         return $this->createService('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return HomeworkActivityService
+     */
+    protected function getHomeworkActivityService()
+    {
+        return $this->getBiz()->service('Activity:HomeworkActivityService');
     }
 }

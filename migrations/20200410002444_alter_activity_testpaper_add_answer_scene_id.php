@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class ActivityTestpaperAddAnswerSceneId extends Migration
+class AlterActivityTestpaperAddAnswerSceneId extends Migration
 {
     /**
      * Do the migration
@@ -13,6 +13,7 @@ class ActivityTestpaperAddAnswerSceneId extends Migration
         $connection = $biz['db'];
         $connection->exec("
            ALTER TABLE `activity_testpaper` ADD `answerSceneId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '答题引擎场次id' AFTER `testMode`;
+           ALTER TABLE `activity_testpaper` ADD INDEX(`answerSceneId`);
         ");
     }
 

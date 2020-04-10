@@ -2437,7 +2437,7 @@ homework_show:
   defaults: { _controller: AppBundle:Homework:doTest }
 
 homework_result_show:
-  path: /homework/result/{resultId}/show
+  path: /homework/result/{answerRecordId}/show
   defaults: { _controller: AppBundle:Homework:showResult }
 
 homework_finish:

@@ -94,65 +94,31 @@ class HomeworkManageController extends BaseController
         ));
     }
 
-    public function checkAction(Request $request, $resultId, $targetId, $source = 'course')
+    public function checkAction(Request $request, $answerRecordId, $targetId, $source = 'course')
     {
-        $result = $this->getTestpaperService()->getTestpaperResult($resultId);
-
-        if (!$result) {
-            return $this->createMessageResponse('error', '该作业结果不存在');
+        switch ($source) {
+            case 'course':
+                $this->getCourseService()->tryManageCourse($targetId);
+                break;
+            case 'classroom':
+                $this->getClassroomService()->tryHandleClassroom($targetId);
+                break;
+            default:
+                $this->createNewException(CommonException::ERROR_PARAMETER());
+                break;
         }
 
-        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($result['testId'], $result['type']);
-        if (!$homework) {
-            return $this->createMessageResponse('error', '该作业不存在');
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+        if (!$answerRecord) {
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        $canCheck = $this->getTestpaperService()->canLookTestpaper($result['id']);
-        if (!$canCheck) {
-            return $this->createMessageResponse('warning', '没有权限查看');
+        if ('reviewing' !== $answerRecord['status']) {
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        if ('doing' == $result['status']) {
-            $this->createNewException(TestpaperException::DOING_TESTPAPER());
-        }
-
-        if ('finished' == $result['status']) {
-            return $this->redirect($this->generateUrl('homework_result_show', array('resultId' => $result['id'])));
-        }
-
-        if ('POST' == $request->getMethod()) {
-            $formData = $request->request->all();
-            $isContinue = $formData['isContinue'];
-            unset($formData['isContinue']);
-            $formData['result'] = json_decode($formData['result'], true);
-            $this->getTestpaperService()->checkFinish($result['id'], $formData);
-
-            $data = array('success' => true, 'goto' => '');
-            if ($isContinue) {
-                $route = $this->getRedirectRoute('nextCheck', $source);
-                $data['goto'] = $this->generateUrl($route, array('id' => $targetId, 'activityId' => $result['lessonId']));
-            }
-
-            return $this->createJsonResponse($data);
-        }
-
-        $questions = $this->getTestpaperService()->showTestpaperItems($homework['id'], $result['id']);
-
-        $essayQuestions = $this->getCheckedEssayQuestions($questions);
-
-        $student = $this->getUserService()->getUser($result['userId']);
-
-        return $this->render('homework/manage/teacher-check.html.twig', array(
-            'paper' => $homework,
-            'paperResult' => $result,
-            'questions' => $essayQuestions,
-            'student' => $student,
-            'questionTypes' => array('essay', 'material'),
-            'source' => $source,
-            'targetId' => $targetId,
-            'isTeacher' => true,
-            'total' => array(),
-            'action' => $request->query->get('action', ''),
+        return $this->forward('AppBundle:AnswerEngine/AnswerEngine:reviewAnswer', array(
+            'answerRecordId' => $answerRecordId,
         ));
     }
 
@@ -353,5 +319,20 @@ class HomeworkManageController extends BaseController
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
+    }
+
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 }

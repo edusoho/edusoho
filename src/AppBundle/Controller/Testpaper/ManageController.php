@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\TestpaperActivityService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Biz\Common\CommonException;
+use Biz\Activity\Service\HomeworkActivityService;
 
 class ManageController extends BaseController
 {
@@ -191,6 +192,12 @@ class ManageController extends BaseController
             $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
             return $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
+        }
+
+        if ('homework' == $activity['mediaType']) {
+            $homeworkActivity = $this->getHomeworkActivityService()->get($activity['mediaId']);
+
+            return $this->getAnswerSceneService()->get($homeworkActivity['answerSceneId']);
         }
     }
 
@@ -587,11 +594,16 @@ class ManageController extends BaseController
                 $task['answerSceneId'] = $testpaperActivities[$activity['mediaId']]['answerSceneId'];
             });
         } else {
-            // $ids = ArrayToolkit::column($activities, 'mediaId');
-            // array_walk($tasks, function (&$task, $key) use ($activities) {
-            //     $activity = $activities[$task['activityId']];
-            //     $task['assessmentId'] = $activity['mediaId'];
-            // });
+            $homeworkActivityIds = ArrayToolkit::column($activities, 'mediaId');
+            $homeworkActivities = $this->getHomeworkActivityService()->findByIds($homeworkActivityIds);
+            $homeworkActivities = ArrayToolkit::index($homeworkActivities, 'id');
+            $ids = ArrayToolkit::column($homeworkActivities, 'assessmentId');
+
+            array_walk($tasks, function (&$task, $key) use ($activities, $homeworkActivities) {
+                $activity = $activities[$task['activityId']];
+                $task['testId'] = $homeworkActivities[$activity['mediaId']]['assessmentId'];
+                $task['answerSceneId'] = $homeworkActivities[$activity['mediaId']]['answerSceneId'];
+            });
         }
 
         $testpapers = $this->getAssessmentService()->findAssessmentsByIds($ids);
@@ -749,5 +761,13 @@ class ManageController extends BaseController
     protected function getAnswerReportService()
     {
         return $this->createService('ItemBank:Answer:AnswerReportService');
+    }
+
+    /**
+     * @return HomeworkActivityService
+     */
+    protected function getHomeworkActivityService()
+    {
+        return $this->getBiz()->service('Activity:HomeworkActivityService');
     }
 }

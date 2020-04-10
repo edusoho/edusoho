@@ -170,7 +170,7 @@ class Testpaper extends Activity
         $user = $this->getCurrentUser();
 
         $activity = $this->getActivityService()->getActivity($activityId, true);
-        $testpaperActivity = $this->get($activity['mediaId']);
+        $testpaperActivity = $activity['ext'];
 
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId(
             $testpaperActivity['answerScene']['id'],

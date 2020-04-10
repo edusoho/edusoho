@@ -10,6 +10,8 @@ use Biz\Activity\Service\ExerciseActivityService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Testpaper\Service\TestpaperService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 
 class Exercise extends Activity
 {
@@ -101,16 +103,19 @@ class Exercise extends Activity
     {
         $user = $this->getCurrentUser();
 
-        $activity = $this->getActivityService()->getActivity($activityId);
-        $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], 'exercise');
+        $activity = $this->getActivityService()->getActivity($activityId, true);
+        $exercise = $activity['ext'];
 
-        $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseId'], $activity['id'], 'exercise');
+        $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId(
+            $activity['ext']['answerSceneId'],
+            $user['id']
+        );
 
-        if (!$result) {
+        if (!$answerRecord) {
             return false;
         }
 
-        if (!empty($exercise['passedCondition']) && 'submit' === $activity['finishType'] && in_array($result['status'], array('reviewing', 'finished'))) {
+        if ('submit' === $exercise['finishType'] && in_array($answerRecord['status'], array(AnswerService::ANSWER_RECORD_STATUS_REVIEWING, AnswerService::ANSWER_RECORD_STATUS_FINISHED))) {
             return true;
         }
 
@@ -204,5 +209,13 @@ class Exercise extends Activity
     protected function getQuestionBankService()
     {
         return $this->getBiz()->service('QuestionBank:QuestionBankService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerRecordService');
     }
 }

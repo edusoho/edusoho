@@ -32,6 +32,7 @@ use Biz\Classroom\Service\ClassroomReviewService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Biz\Activity\Service\HomeworkActivityService;
 
 class ClassroomManageController extends BaseController
 {
@@ -1055,6 +1056,12 @@ class ClassroomManageController extends BaseController
 
             return $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
         }
+
+        if ('homework' == $activity['mediaType']) {
+            $homeworkActivity = $this->getHomeworkActivityService()->get($activity['mediaId']);
+
+            return $this->getAnswerSceneService()->get($homeworkActivity['answerSceneId']);
+        }
     }
 
     public function homeworkAction($id)
@@ -1087,7 +1094,7 @@ class ClassroomManageController extends BaseController
         );
     }
 
-    public function homeworkCheckAction(Request $request, $id, $resultId)
+    public function homeworkCheckAction(Request $request, $id, $answerRecordId)
     {
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
@@ -1096,7 +1103,7 @@ class ClassroomManageController extends BaseController
             'AppBundle:HomeworkManage:check',
             array(
                 'request' => $request,
-                'resultId' => $resultId,
+                'answerRecordId' => $answerRecordId,
                 'source' => 'classroom',
                 'targetId' => $classroom['id'],
             )
@@ -1344,5 +1351,13 @@ class ClassroomManageController extends BaseController
     protected function getAssessmentService()
     {
         return $this->createService('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return HomeworkActivityService
+     */
+    protected function getHomeworkActivityService()
+    {
+        return $this->getBiz()->service('Activity:HomeworkActivityService');
     }
 }
