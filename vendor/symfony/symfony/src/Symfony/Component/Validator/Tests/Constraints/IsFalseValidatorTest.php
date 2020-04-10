@@ -13,15 +13,10 @@ namespace Symfony\Component\Validator\Tests\Constraints;
 
 use Symfony\Component\Validator\Constraints\IsFalse;
 use Symfony\Component\Validator\Constraints\IsFalseValidator;
-use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class IsFalseValidatorTest extends AbstractConstraintValidatorTest
+class IsFalseValidatorTest extends ConstraintValidatorTestCase
 {
-    protected function getApiVersion()
-    {
-        return Validation::API_VERSION_2_5;
-    }
-
     protected function createValidator()
     {
         return new IsFalseValidator();
@@ -43,9 +38,9 @@ class IsFalseValidatorTest extends AbstractConstraintValidatorTest
 
     public function testTrueIsInvalid()
     {
-        $constraint = new IsFalse(array(
+        $constraint = new IsFalse([
             'message' => 'myMessage',
-        ));
+        ]);
 
         $this->validator->validate(true, $constraint);
 

@@ -11,6 +11,7 @@ use Biz\File\Service\UploadFileService;
 use Biz\User\TokenException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 abstract class HLSBaseController extends BaseController
 {
@@ -96,7 +97,7 @@ abstract class HLSBaseController extends BaseController
                 $params['protocol'] = 'https';
             }
 
-            $streams[$level] = $this->generateUrl("hls_{$this->getRoutingPrefix()}stream", $params, true);
+            $streams[$level] = $this->generateUrl("hls_{$this->getRoutingPrefix()}stream", $params, UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         $qualities = array(
@@ -191,7 +192,7 @@ abstract class HLSBaseController extends BaseController
 
         $token = $this->getTokenService()->makeToken('hls.clef', $tokenFields);
 
-        $params['keyUrl'] = $this->generateUrl("hls_{$this->getRoutingPrefix()}clef", array('id' => $file['id'], 'token' => $token['token']), true);
+        $params['keyUrl'] = $this->generateUrl("hls_{$this->getRoutingPrefix()}clef", array('id' => $file['id'], 'token' => $token['token']), UrlGeneratorInterface::ABSOLUTE_URL);
 
         $hideBeginning = isset($streamToken['data']['hideBeginning']) ? $streamToken['data']['hideBeginning'] : false;
         if (!$inWhiteList && !$this->getWebExtension()->isHiddenVideoHeader($hideBeginning)) {
@@ -349,7 +350,7 @@ abstract class HLSBaseController extends BaseController
                 $beginning['beginningKeyUrl'] = $this->generateUrl("hls_{$this->getRoutingPrefix()}clef", array(
                     'id' => $file['id'],
                     'token' => $token['token'],
-                ), true);
+                ), UrlGeneratorInterface::ABSOLUTE_URL);
                 break;
             }
         }

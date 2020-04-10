@@ -14,6 +14,7 @@ namespace Symfony\Bundle\SecurityBundle\Tests\DependencyInjection\Security\Facto
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\GuardAuthenticationFactory;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\DependencyInjection\Argument\IteratorArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -36,11 +37,11 @@ class GuardAuthenticationFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @dataProvider getInvalidConfigurationTests
      */
     public function testAddInvalidConfiguration(array $inputConfig)
     {
+        $this->expectException('Symfony\Component\Config\Definition\Exception\InvalidConfigurationException');
         $factory = new GuardAuthenticationFactory();
         $nodeDefinition = new ArrayNodeDefinition('guard');
         $factory->addConfiguration($nodeDefinition);
@@ -53,44 +54,44 @@ class GuardAuthenticationFactoryTest extends TestCase
 
     public function getValidConfigurationTests()
     {
-        $tests = array();
+        $tests = [];
 
         // completely basic
-        $tests[] = array(
-            array(
-                'authenticators' => array('authenticator1', 'authenticator2'),
+        $tests[] = [
+            [
+                'authenticators' => ['authenticator1', 'authenticator2'],
                 'provider' => 'some_provider',
                 'entry_point' => 'the_entry_point',
-            ),
-            array(
-                'authenticators' => array('authenticator1', 'authenticator2'),
+            ],
+            [
+                'authenticators' => ['authenticator1', 'authenticator2'],
                 'provider' => 'some_provider',
                 'entry_point' => 'the_entry_point',
-            ),
-        );
+            ],
+        ];
 
         // testing xml config fix: authenticator -> authenticators
-        $tests[] = array(
-            array(
-                'authenticator' => array('authenticator1', 'authenticator2'),
-            ),
-            array(
-                'authenticators' => array('authenticator1', 'authenticator2'),
+        $tests[] = [
+            [
+                'authenticator' => ['authenticator1', 'authenticator2'],
+            ],
+            [
+                'authenticators' => ['authenticator1', 'authenticator2'],
                 'entry_point' => null,
-            ),
-        );
+            ],
+        ];
 
         return $tests;
     }
 
     public function getInvalidConfigurationTests()
     {
-        $tests = array();
+        $tests = [];
 
         // testing not empty
-        $tests[] = array(
-            array('authenticators' => array()),
-        );
+        $tests[] = [
+            ['authenticators' => []],
+        ];
 
         return $tests;
     }
@@ -98,71 +99,67 @@ class GuardAuthenticationFactoryTest extends TestCase
     public function testBasicCreate()
     {
         // simple configuration
-        $config = array(
-            'authenticators' => array('authenticator123'),
+        $config = [
+            'authenticators' => ['authenticator123'],
             'entry_point' => null,
-        );
+        ];
         list($container, $entryPointId) = $this->executeCreate($config, null);
         $this->assertEquals('authenticator123', $entryPointId);
 
         $providerDefinition = $container->getDefinition('security.authentication.provider.guard.my_firewall');
-        $this->assertEquals(array(
-            'index_0' => array(new Reference('authenticator123')),
+        $this->assertEquals([
+            'index_0' => new IteratorArgument([new Reference('authenticator123')]),
             'index_1' => new Reference('my_user_provider'),
             'index_2' => 'my_firewall',
             'index_3' => new Reference('security.user_checker.my_firewall'),
-        ), $providerDefinition->getArguments());
+        ], $providerDefinition->getArguments());
 
         $listenerDefinition = $container->getDefinition('security.authentication.listener.guard.my_firewall');
         $this->assertEquals('my_firewall', $listenerDefinition->getArgument(2));
-        $this->assertEquals(array(new Reference('authenticator123')), $listenerDefinition->getArgument(3));
+        $this->assertEquals([new Reference('authenticator123')], $listenerDefinition->getArgument(3)->getValues());
     }
 
     public function testExistingDefaultEntryPointUsed()
     {
         // any existing default entry point is used
-        $config = array(
-            'authenticators' => array('authenticator123'),
+        $config = [
+            'authenticators' => ['authenticator123'],
             'entry_point' => null,
-        );
+        ];
         list(, $entryPointId) = $this->executeCreate($config, 'some_default_entry_point');
         $this->assertEquals('some_default_entry_point', $entryPointId);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testCannotOverrideDefaultEntryPoint()
     {
+        $this->expectException('LogicException');
         // any existing default entry point is used
-        $config = array(
-            'authenticators' => array('authenticator123'),
+        $config = [
+            'authenticators' => ['authenticator123'],
             'entry_point' => 'authenticator123',
-        );
+        ];
         $this->executeCreate($config, 'some_default_entry_point');
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testMultipleAuthenticatorsRequiresEntryPoint()
     {
+        $this->expectException('LogicException');
         // any existing default entry point is used
-        $config = array(
-            'authenticators' => array('authenticator123', 'authenticatorABC'),
+        $config = [
+            'authenticators' => ['authenticator123', 'authenticatorABC'],
             'entry_point' => null,
-        );
+        ];
         $this->executeCreate($config, null);
     }
 
     public function testCreateWithEntryPoint()
     {
         // any existing default entry point is used
-        $config = array(
-            'authenticators' => array('authenticator123', 'authenticatorABC'),
+        $config = [
+            'authenticators' => ['authenticator123', 'authenticatorABC'],
             'entry_point' => 'authenticatorABC',
-        );
-        list($container, $entryPointId) = $this->executeCreate($config, null);
+        ];
+        list(, $entryPointId) = $this->executeCreate($config, null);
         $this->assertEquals('authenticatorABC', $entryPointId);
     }
 
@@ -175,8 +172,8 @@ class GuardAuthenticationFactoryTest extends TestCase
         $userProviderId = 'my_user_provider';
 
         $factory = new GuardAuthenticationFactory();
-        list($providerId, $listenerId, $entryPointId) = $factory->create($container, $id, $config, $userProviderId, $defaultEntryPointId);
+        list(, , $entryPointId) = $factory->create($container, $id, $config, $userProviderId, $defaultEntryPointId);
 
-        return array($container, $entryPointId);
+        return [$container, $entryPointId];
     }
 }

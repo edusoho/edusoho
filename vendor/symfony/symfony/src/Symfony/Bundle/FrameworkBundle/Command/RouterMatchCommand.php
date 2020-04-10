@@ -17,21 +17,50 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Matcher\TraceableUrlMatcher;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * A console command to test route matching.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ *
+ * @final since version 3.4
  */
 class RouterMatchCommand extends ContainerAwareCommand
 {
+    protected static $defaultName = 'router:match';
+
+    private $router;
+
+    /**
+     * @param RouterInterface $router
+     */
+    public function __construct($router = null)
+    {
+        if (!$router instanceof RouterInterface) {
+            @trigger_error(sprintf('%s() expects an instance of "%s" as first argument since Symfony 3.4. Not passing it is deprecated and will throw a TypeError in 4.0.', __METHOD__, RouterInterface::class), E_USER_DEPRECATED);
+
+            parent::__construct($router);
+
+            return;
+        }
+
+        parent::__construct();
+
+        $this->router = $router;
+    }
+
     /**
      * {@inheritdoc}
+     *
+     * BC to be removed in 4.0
      */
     public function isEnabled()
     {
+        if (null !== $this->router) {
+            return parent::isEnabled();
+        }
         if (!$this->getContainer()->has('router')) {
             return false;
         }
@@ -49,13 +78,12 @@ class RouterMatchCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('router:match')
-            ->setDefinition(array(
+            ->setDefinition([
                 new InputArgument('path_info', InputArgument::REQUIRED, 'A path info'),
                 new InputOption('method', null, InputOption::VALUE_REQUIRED, 'Sets the HTTP method'),
                 new InputOption('scheme', null, InputOption::VALUE_REQUIRED, 'Sets the URI scheme (usually http or https)'),
                 new InputOption('host', null, InputOption::VALUE_REQUIRED, 'Sets the URI host'),
-            ))
+            ])
             ->setDescription('Helps debug routes by simulating a path info match')
             ->setHelp(<<<'EOF'
 The <info>%command.name%</info> shows which routes match a given request and which don't and for what reason:
@@ -76,10 +104,14 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        // BC to be removed in 4.0
+        if (null === $this->router) {
+            $this->router = $this->getContainer()->get('router');
+        }
+
         $io = new SymfonyStyle($input, $output);
 
-        $router = $this->getContainer()->get('router');
-        $context = $router->getContext();
+        $context = $this->router->getContext();
         if (null !== $method = $input->getOption('method')) {
             $context->setMethod($method);
         }
@@ -90,7 +122,7 @@ EOF
             $context->setHost($host);
         }
 
-        $matcher = new TraceableUrlMatcher($router->getRouteCollection(), $context);
+        $matcher = new TraceableUrlMatcher($this->router->getRouteCollection(), $context);
 
         $traces = $matcher->getTraces($input->getArgument('path_info'));
 
@@ -104,7 +136,7 @@ EOF
                 $io->success(sprintf('Route "%s" matches', $trace['name']));
 
                 $routerDebugCommand = $this->getApplication()->find('debug:router');
-                $routerDebugCommand->run(new ArrayInput(array('name' => $trace['name'])), $output);
+                $routerDebugCommand->run(new ArrayInput(['name' => $trace['name']]), $output);
 
                 $matches = true;
             } elseif ($input->getOption('verbose')) {
@@ -117,5 +149,7 @@ EOF
 
             return 1;
         }
+
+        return null;
     }
 }

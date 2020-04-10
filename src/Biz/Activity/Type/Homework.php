@@ -3,66 +3,79 @@
 namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class Homework extends Activity
 {
     protected function registerListeners()
     {
-        return array();
+        return [];
     }
 
     public function get($targetId)
     {
-        return $this->getTestpaperService()->getTestpaperByIdAndType($targetId, 'homework');
+        return $this->getAssessmentService()->getAssessment($targetId);
     }
 
     public function find($targetIds, $showCloud = 1)
     {
-        return $this->getTestpaperService()->findTestpapersByIdsAndType($targetIds, 'homework');
+        return $this->getAssessmentService()->findAssessmentsByIds($targetIds);
     }
 
     public function create($fields)
     {
-        $fields = $this->filterFields($fields);
+        $items = $this->getItemService()->findItemsByIds($fields['questionIds'], true);
+        $bankIds = array_column($items, 'bank_id');
 
-        return $this->getTestpaperService()->buildTestpaper($fields, 'homework');
+        $homework = [
+            'bank_id' => array_shift($bankIds),
+            'name' => $fields['title'],
+            'description' => $fields['description'],
+            'status' => 'open',
+            'displayable' => 0,
+            'sections' => [
+                [
+                    'name' => '',
+                    'items' => $items,
+                ]
+            ],
+        ];
+
+        $homework = $this->getAssessmentService()->createAssessment($homework);
+
+        return $this->getAssessmentService()->openAssessment($homework['id']);
     }
 
-    public function copy($activity, $config = array())
+    public function copy($activity, $config = [])
     {
-        $newActivity = $config['newActivity'];
         $homework = $this->get($activity['mediaId']);
 
-        $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
-        $questionIds = ArrayToolkit::column($items, 'questionId');
+        $items = $this->getAssessmentSectionItemService()->findSectionItemsByAssessmentId($homework['id']);
 
-        $newHomework = array(
+        $newHomework = [
             'title' => $homework['name'],
             'description' => $homework['description'],
-            'questionIds' => $questionIds,
-            'passedCondition' => $homework['passedCondition'],
-            'fromCourseId' => $newActivity['fromCourseId'],
-            'fromCourseSetId' => $newActivity['fromCourseSetId'],
-            'copyId' => $config['isCopy'] ? $homework['id'] : 0,
-        );
+            'questionIds' => array_column($items, 'item_id'),
+        ];
 
         return $this->create($newHomework);
     }
 
     public function sync($sourceActivity, $activity)
     {
-        $sourceExercise = $this->get($sourceActivity['mediaId']);
+        $sourceHomework = $this->get($sourceActivity['mediaId']);
 
-        $fields = array(
-            'name' => $sourceExercise['name'],
-            'description' => $sourceExercise['description'],
-        );
+        $fields = [
+            'name' => $sourceHomework['name'],
+            'description' => $sourceHomework['description'],
+        ];
 
-        return $this->getTestpaperService()->updateTestpaper($activity['mediaId'], $fields);
+        return $this->getAssessmentService()->updateBasicAssessment($activity['mediaId'], $fields);
     }
 
     public function update($targetId, &$fields, $activity)
@@ -73,14 +86,17 @@ class Homework extends Activity
             throw TestpaperException::NOTFOUND_TESTPAPER();
         }
 
-        $filterFields = $this->filterFields($fields);
+        $filterFields = [
+            'name' => $fields['title'],
+            'description' => $fields['description'],
+        ];
 
-        return $this->getTestpaperService()->updateTestpaper($homework['id'], $filterFields);
+        return $this->getAssessmentService()->updateBasicAssessment($homework['id'], $filterFields);
     }
 
     public function delete($targetId)
     {
-        return $this->getTestpaperService()->deleteTestpaper($targetId, true);
+        return $this->getAssessmentService()->deleteAssessment($targetId);
     }
 
     public function isFinished($activityId)
@@ -101,49 +117,28 @@ class Homework extends Activity
         return false;
     }
 
-    protected function filterFields($fields)
-    {
-        $filterFields = ArrayToolkit::parts($fields, array(
-            'title',
-            'description',
-            'questionIds',
-            'fromCourseId',
-            'fromCourseSetId',
-            'copyId',
-            'passedCondition',
-        ));
-        if (!empty($fields['finishType'])) {
-            $filterFields['passedCondition']['type'] = $fields['finishType'];
-        }
-
-        $filterFields['courseSetId'] = empty($filterFields['fromCourseSetId']) ? 0 : $filterFields['fromCourseSetId'];
-        $filterFields['courseId'] = empty($filterFields['fromCourseId']) ? 0 : $filterFields['fromCourseId'];
-        $filterFields['lessonId'] = 0;
-        $filterFields['name'] = empty($filterFields['title']) ? '' : $filterFields['title'];
-
-        return $filterFields;
-    }
-
-    protected function findQuestionsByCopydIdsAndCourseSetId($copyIds, $courseSetId)
-    {
-        if (empty($copyIds)) {
-            return array();
-        }
-
-        $conditions = array(
-            'copyIds' => $copyIds,
-            'courseSetId' => $courseSetId,
-        );
-
-        return $this->getQuestionService()->search($conditions, array(), 0, PHP_INT_MAX);
-    }
-
     /**
      * @return TestpaperService
      */
     protected function getTestpaperService()
     {
         return $this->getBiz()->service('Testpaper:TestpaperService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->getBiz()->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return AssessmentSectionItemService
+     */
+    protected function getAssessmentSectionItemService()
+    {
+        return $this->getBiz()->service('ItemBank:Assessment:AssessmentSectionItemService');
     }
 
     /**
@@ -154,8 +149,11 @@ class Homework extends Activity
         return $this->getBiz()->service('Activity:ActivityService');
     }
 
-    protected function getQuestionService()
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
     {
-        return $this->getBiz()->service('Question:QuestionService');
+        return $this->getBiz()->service('ItemBank:Item:ItemService');
     }
 }

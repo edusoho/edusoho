@@ -61,9 +61,9 @@ class FrameworkExtension extends BaseFrameworkExtension
             $files[$locale][] = (string) $file;
         }
 
-        $options = $translator->getArgument(3);
+        $options = $translator->getArgument(4);
         $options['resource_files'] = array_merge($options['resource_files'], $files);
 
-        $translator->replaceArgument(3, $options);
+        $translator->replaceArgument(4, $options);
     }
 }

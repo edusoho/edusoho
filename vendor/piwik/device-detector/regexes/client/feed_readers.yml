@@ -22,6 +22,12 @@
   version: ''
   url: 'http://lincgeek.org/bashpodder/'
   type: 'Feed Reader'
+  
+- regex: 'Breaker/v([\d\.]+)'
+  name: 'Breaker'
+  version: '$1'
+  url: 'https://www.breaker.audio/'
+  type: 'Feed Reader App'
 
 - regex: 'Downcast/([\d\.]+)'
   name: 'Downcast'
@@ -41,16 +47,16 @@
   url: 'http://www.chebinliu.com/projects/iphone/feeddler-rss-reader/'
   type: 'Feed Reader App'
 
+- regex: 'QuiteRSS(?:[/ ](\d+[\.\d]+))?'
+  name: 'QuiteRSS'
+  version: '$1'
+  url: https://quiterss.org
+  type: 'Feed Reader App'
+
 - regex: 'gPodder/([\d\.]+)'
   name: 'gPodder'
   version: '$1'
   url: 'http://gpodder.org/'
-  type: 'Feed Reader App'
-
-- regex: 'Instacast/(\d+) CFNetwork/([\d\.]+)'
-  name: 'Instacast'
-  version: '$1'
-  url: 'http://vemedio.com/products/instacast-mac'
   type: 'Feed Reader App'
 
 - regex: 'JetBrains Omea Reader(?:[/ ](\d+[\.\d]+))?'
@@ -95,7 +101,7 @@
   url: 'http://bitlove.org'
   type: 'Feed Reader'
 
-- regex: 'Pulp(?:[/ ](\d+[\.\d]+))?'
+- regex: 'Pulp[/ ](\d+[\.\d]+)'
   name: 'Pulp'
   version: '$1'
   url: 'http://www.acrylicapps.com/pulp/'

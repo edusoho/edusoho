@@ -135,7 +135,6 @@ class QuestionSelect {
 
   onClickPick(event) {
     let $target = $(event.currentTarget);
-    let $modal = this.element.parents('.modal');
     let name = $target.data('name');
     let ids = this.selector.toJson();
     if (ids.length === 0) {
@@ -144,6 +143,7 @@ class QuestionSelect {
     }
     this.cacheQuestionAndBank();
 
+    let $modal = this.element.parents('.modal');
     $modal.trigger('selectQuestion', this.selectTypeQuestion);
     $modal.modal('hide');
     $('.js-close-modal').trigger('click');
@@ -202,10 +202,10 @@ class QuestionSelect {
 
   renderTable(isPaginator) {
     isPaginator || this._resetPage();
-    let self = this;
     let conditions = this.element.find('[data-role="search-conditions"]').serialize() + '&page=' + this.element.find('.js-page').val();
     conditions += '&exclude_ids=' + $('.js-excludeIds').val();
     this._loading();
+    let self = this;
     $.ajax({
       type: 'GET',
       url: this.renderUrl,

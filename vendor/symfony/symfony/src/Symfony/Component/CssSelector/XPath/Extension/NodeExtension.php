@@ -31,14 +31,9 @@ class NodeExtension extends AbstractExtension
     const ATTRIBUTE_NAME_IN_LOWER_CASE = 2;
     const ATTRIBUTE_VALUE_IN_LOWER_CASE = 4;
 
-    /**
-     * @var int
-     */
     private $flags;
 
     /**
-     * Constructor.
-     *
      * @param int $flags
      */
     public function __construct($flags = 0)
@@ -72,7 +67,7 @@ class NodeExtension extends AbstractExtension
      */
     public function hasFlag($flag)
     {
-        return $this->flags & $flag;
+        return (bool) ($this->flags & $flag);
     }
 
     /**
@@ -80,23 +75,20 @@ class NodeExtension extends AbstractExtension
      */
     public function getNodeTranslators()
     {
-        return array(
-            'Selector' => array($this, 'translateSelector'),
-            'CombinedSelector' => array($this, 'translateCombinedSelector'),
-            'Negation' => array($this, 'translateNegation'),
-            'Function' => array($this, 'translateFunction'),
-            'Pseudo' => array($this, 'translatePseudo'),
-            'Attribute' => array($this, 'translateAttribute'),
-            'Class' => array($this, 'translateClass'),
-            'Hash' => array($this, 'translateHash'),
-            'Element' => array($this, 'translateElement'),
-        );
+        return [
+            'Selector' => [$this, 'translateSelector'],
+            'CombinedSelector' => [$this, 'translateCombinedSelector'],
+            'Negation' => [$this, 'translateNegation'],
+            'Function' => [$this, 'translateFunction'],
+            'Pseudo' => [$this, 'translatePseudo'],
+            'Attribute' => [$this, 'translateAttribute'],
+            'Class' => [$this, 'translateClass'],
+            'Hash' => [$this, 'translateHash'],
+            'Element' => [$this, 'translateElement'],
+        ];
     }
 
     /**
-     * @param Node\SelectorNode $node
-     * @param Translator        $translator
-     *
      * @return XPathExpr
      */
     public function translateSelector(Node\SelectorNode $node, Translator $translator)
@@ -105,9 +97,6 @@ class NodeExtension extends AbstractExtension
     }
 
     /**
-     * @param Node\CombinedSelectorNode $node
-     * @param Translator                $translator
-     *
      * @return XPathExpr
      */
     public function translateCombinedSelector(Node\CombinedSelectorNode $node, Translator $translator)
@@ -116,9 +105,6 @@ class NodeExtension extends AbstractExtension
     }
 
     /**
-     * @param Node\NegationNode $node
-     * @param Translator        $translator
-     *
      * @return XPathExpr
      */
     public function translateNegation(Node\NegationNode $node, Translator $translator)
@@ -135,9 +121,6 @@ class NodeExtension extends AbstractExtension
     }
 
     /**
-     * @param Node\FunctionNode $node
-     * @param Translator        $translator
-     *
      * @return XPathExpr
      */
     public function translateFunction(Node\FunctionNode $node, Translator $translator)
@@ -148,9 +131,6 @@ class NodeExtension extends AbstractExtension
     }
 
     /**
-     * @param Node\PseudoNode $node
-     * @param Translator      $translator
-     *
      * @return XPathExpr
      */
     public function translatePseudo(Node\PseudoNode $node, Translator $translator)
@@ -161,9 +141,6 @@ class NodeExtension extends AbstractExtension
     }
 
     /**
-     * @param Node\AttributeNode $node
-     * @param Translator         $translator
-     *
      * @return XPathExpr
      */
     public function translateAttribute(Node\AttributeNode $node, Translator $translator)
@@ -192,9 +169,6 @@ class NodeExtension extends AbstractExtension
     }
 
     /**
-     * @param Node\ClassNode $node
-     * @param Translator     $translator
-     *
      * @return XPathExpr
      */
     public function translateClass(Node\ClassNode $node, Translator $translator)
@@ -205,9 +179,6 @@ class NodeExtension extends AbstractExtension
     }
 
     /**
-     * @param Node\HashNode $node
-     * @param Translator    $translator
-     *
      * @return XPathExpr
      */
     public function translateHash(Node\HashNode $node, Translator $translator)
@@ -218,8 +189,6 @@ class NodeExtension extends AbstractExtension
     }
 
     /**
-     * @param Node\ElementNode $node
-     *
      * @return XPathExpr
      */
     public function translateElement(Node\ElementNode $node)

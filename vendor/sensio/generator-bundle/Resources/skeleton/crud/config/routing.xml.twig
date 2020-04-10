@@ -9,7 +9,7 @@
         <default key="_controller">{{ bundle }}:{{ entity }}:index</default>
     </route>
 
-    <route id="{{ route_name_prefix }}_show" path="/{id}/show" methods="GET">
+    <route id="{{ route_name_prefix }}_show" path="/{{ '{' ~ identifier ~ '}' }}/show" methods="GET">
         <default key="_controller">{{ bundle }}:{{ entity }}:show</default>
     </route>
 
@@ -20,13 +20,13 @@
 {% endif %}
 
 {% if 'edit' in actions %}
-    <route id="{{ route_name_prefix }}_edit" path="/{id}/edit" methods="GET|POST">
+    <route id="{{ route_name_prefix }}_edit" path="/{{ '{' ~ identifier ~ '}' }}/edit" methods="GET|POST">
         <default key="_controller">{{ bundle }}:{{ entity }}:edit</default>
     </route>
 {% endif %}
 
 {% if 'delete' in actions %}
-    <route id="{{ route_name_prefix }}_delete" path="/{id}/delete" methods="DELETE">
+    <route id="{{ route_name_prefix }}_delete" path="/{{ '{' ~ identifier ~ '}' }}/delete" methods="DELETE">
         <default key="_controller">{{ bundle }}:{{ entity }}:delete</default>
     </route>
 {% endif %}

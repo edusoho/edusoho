@@ -15,9 +15,9 @@ namespace PhpCsFixer\Fixer\Whitespace;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
 use PhpCsFixer\Fixer\WhitespacesAwareFixerInterface;
+use PhpCsFixer\FixerConfiguration\AllowedValueSubset;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverRootless;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
-use PhpCsFixer\FixerConfiguration\FixerOptionValidatorGenerator;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\VersionSpecification;
@@ -73,6 +73,10 @@ final class NoExtraConsecutiveBlankLinesFixer extends AbstractFixer implements C
 
     /**
      * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.SwitchStatement)
+     *
+     * @todo drop warning suppression
      */
     public function configure(array $configuration = null)
     {
@@ -84,24 +88,31 @@ final class NoExtraConsecutiveBlankLinesFixer extends AbstractFixer implements C
             switch ($item) {
                 case 'break':
                     $this->tokenKindCallbackMap[T_BREAK] = 'fixAfterToken';
+
                     break;
                 case 'continue':
                     $this->tokenKindCallbackMap[T_CONTINUE] = 'fixAfterToken';
+
                     break;
                 case 'extra':
                     $this->tokenKindCallbackMap[T_WHITESPACE] = 'removeMultipleBlankLines';
+
                     break;
                 case 'return':
                     $this->tokenKindCallbackMap[T_RETURN] = 'fixAfterToken';
+
                     break;
                 case 'throw':
                     $this->tokenKindCallbackMap[T_THROW] = 'fixAfterToken';
+
                     break;
                 case 'use':
                     $this->tokenKindCallbackMap[T_USE] = 'removeBetweenUse';
+
                     break;
                 case 'use_trait':
                     $this->tokenKindCallbackMap[CT::T_USE_TRAIT] = 'removeBetweenUse';
+
                     break;
                 case 'curly_brace_block':
                     $this->tokenEqualsMap['{'] = 'fixStructureOpenCloseIfMultiLine'; // i.e. not: CT::T_ARRAY_INDEX_CURLY_BRACE_OPEN
@@ -219,16 +230,6 @@ function foo($bar)
                 new CodeSample(
 '<?php
 
-function foo($bar)
-{
-    throw new \Exception("Hello!");
-
-}',
-                    array('tokens' => array('throw'))
-                ),
-                new CodeSample(
-'<?php
-
 namespace Foo;
 
 use Bar\Baz;
@@ -289,14 +290,10 @@ class Foo
      */
     protected function createConfigurationDefinition()
     {
-        $generator = new FixerOptionValidatorGenerator();
-
         $tokens = new FixerOptionBuilder('tokens', 'List of tokens to fix.');
         $tokens = $tokens
             ->setAllowedTypes(array('array'))
-            ->setAllowedValues(array(
-                $generator->allowedValueIsSubsetOf(self::$availableTokens),
-            ))
+            ->setAllowedValues(array(new AllowedValueSubset(self::$availableTokens)))
             ->setNormalizer(function (Options $options, $tokens) {
                 foreach ($tokens as &$token) {
                     if ('useTrait' === $token) {
@@ -323,7 +320,7 @@ class Foo
                 continue;
             }
 
-            $this->$callback($index);
+            $this->{$callback}($index);
 
             return;
         }
@@ -333,7 +330,7 @@ class Foo
                 continue;
             }
 
-            $this->$callback($index);
+            $this->{$callback}($index);
 
             return;
         }
@@ -374,7 +371,7 @@ class Foo
             }
         }
 
-        $token->setContent($content);
+        $this->tokens[$index] = new Token(array(T_WHITESPACE, $content));
     }
 
     private function fixAfterToken($index)
@@ -411,6 +408,7 @@ class Foo
             if (false !== strpos($this->tokens[$i]->getContent(), "\n")) {
                 $this->removeEmptyLinesAfterLineWithTokenAt($i);
                 $this->removeEmptyLinesAfterLineWithTokenAt($index);
+
                 break;
             }
         }
@@ -433,20 +431,22 @@ class Foo
             return; // not found, early return
         }
 
+        $ending = $this->whitespacesConfig->getLineEnding();
+
         for ($i = $end; $i < $tokenCount && $this->tokens[$i]->isWhitespace(); ++$i) {
             $content = $this->tokens[$i]->getContent();
             if (substr_count($content, "\n") < 1) {
                 continue;
             }
 
-            $ending = $this->whitespacesConfig->getLineEnding();
-
             $pos = strrpos($content, "\n");
             if ($pos + 2 <= strlen($content)) { // preserve indenting where possible
-                $this->tokens[$i]->setContent($ending.substr($content, $pos + 1));
+                $newContent = $ending.substr($content, $pos + 1);
             } else {
-                $this->tokens[$i]->setContent($ending);
+                $newContent = $ending;
             }
+
+            $this->tokens[$i] = new Token(array(T_WHITESPACE, $newContent));
         }
     }
 }

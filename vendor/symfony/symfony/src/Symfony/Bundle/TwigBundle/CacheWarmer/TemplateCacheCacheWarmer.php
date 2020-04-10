@@ -11,11 +11,14 @@
 
 namespace Symfony\Bundle\TwigBundle\CacheWarmer;
 
+use Psr\Container\ContainerInterface;
+use Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinderInterface;
+use Symfony\Component\DependencyInjection\ServiceSubscriberInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinderInterface;
 use Symfony\Component\Templating\TemplateReference;
+use Twig\Environment;
+use Twig\Error\Error;
 
 /**
  * Generates the Twig cache for all templates.
@@ -25,20 +28,16 @@ use Symfony\Component\Templating\TemplateReference;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class TemplateCacheCacheWarmer implements CacheWarmerInterface
+class TemplateCacheCacheWarmer implements CacheWarmerInterface, ServiceSubscriberInterface
 {
     protected $container;
     protected $finder;
     private $paths;
 
     /**
-     * Constructor.
-     *
-     * @param ContainerInterface      $container The dependency injection container
-     * @param TemplateFinderInterface $finder    The template paths cache warmer
-     * @param array                   $paths     Additional twig paths to warm
+     * @param array $paths Additional twig paths to warm
      */
-    public function __construct(ContainerInterface $container, TemplateFinderInterface $finder = null, array $paths = array())
+    public function __construct(ContainerInterface $container, TemplateFinderInterface $finder = null, array $paths = [])
     {
         // We don't inject the Twig environment directly as it depends on the
         // template locator (via the loader) which might be a cached one.
@@ -76,7 +75,7 @@ class TemplateCacheCacheWarmer implements CacheWarmerInterface
 
             try {
                 $twig->loadTemplate($template);
-            } catch (\Twig_Error $e) {
+            } catch (Error $e) {
                 // problem during compilation, give up
             }
         }
@@ -93,6 +92,16 @@ class TemplateCacheCacheWarmer implements CacheWarmerInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return [
+            'twig' => Environment::class,
+        ];
+    }
+
+    /**
      * Find templates in the given directory.
      *
      * @param string $namespace The namespace for these templates
@@ -103,10 +112,10 @@ class TemplateCacheCacheWarmer implements CacheWarmerInterface
     private function findTemplatesInFolder($namespace, $dir)
     {
         if (!is_dir($dir)) {
-            return array();
+            return [];
         }
 
-        $templates = array();
+        $templates = [];
         $finder = new Finder();
 
         foreach ($finder->files()->followLinks()->in($dir) as $file) {

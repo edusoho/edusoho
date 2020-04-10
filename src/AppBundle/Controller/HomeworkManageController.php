@@ -10,6 +10,8 @@ use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
+use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
 
 class HomeworkManageController extends BaseController
@@ -19,47 +21,43 @@ class HomeworkManageController extends BaseController
         $this->getCourseSetService()->tryManageCourseSet($id);
 
         $conditions = $request->query->all();
-        $conditions['parentId'] = 0;
-        if (!empty($conditions['excludeIds'])) {
-            $excludeQuestions = $this->getQuestionService()->findQuestionsByIds(explode(',', $conditions['excludeIds']));
-            $questionBankIds = ArrayToolkit::column($excludeQuestions, 'bankId');
-            $questionBankIds = array_unique($questionBankIds);
-            $questionBankId = array_shift($questionBankIds);
-            if (!empty($questionBankIds)) {
+        if (!empty($conditions['exclude_ids'])) {
+            $conditions['exclude_ids'] = explode(',', $conditions['exclude_ids']);
+            $excludeItems = $this->getItemService()->findItemsByIds($conditions['exclude_ids']);
+            $itemBankIds = array_unique(array_column($excludeItems, 'bank_id'));
+            if (count($itemBankIds) > 1) {
                 return $this->createJsonResponse(array('result' => 'error', 'message' => 'json_response.no_multi_question_bank.message'));
             }
-            if (!$this->getQuestionBankService()->canManageBank($questionBankId)) {
+            $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId(array_shift($itemBankIds));
+            if (!$this->getQuestionBankService()->canManageBank($questionBank['id'])) {
                 $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
             }
         }
 
-        $parameters = array(
-            'isSelectBank' => 1,
-        );
+        $parameters = ['isSelectBank' => 1];
 
-        if (!empty($questionBankId)) {
-            $conditions['bankId'] = $questionBankId;
+        if (!empty($questionBank)) {
+            $conditions['bank_id'] = $questionBank['itemBankId'];
             $paginator = new Paginator(
                 $request,
-                $this->getQuestionService()->searchCount($conditions),
+                $this->getItemService()->countItems($conditions),
                 10
             );
 
-            $questions = $this->getQuestionService()->search(
+            $items = $this->getItemService()->searchItems(
                 $conditions,
-                array('createdTime' => 'DESC'),
+                ['created_time' => 'DESC'],
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
 
-            $questionCategories = $this->getQuestionCategoryService()->findCategories($questionBankId);
-            $questionCategories = ArrayToolkit::index($questionCategories, 'id');
-            $parameters['questionCategories'] = $questionCategories;
-            $parameters['questions'] = $questions;
+            $questionCategories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
+            $parameters['itemCategories'] = ArrayToolkit::index($questionCategories, 'id');
+            $parameters['items'] = $items;
             $parameters['paginator'] = $paginator;
-            $parameters['questionBank'] = $this->getQuestionBankService()->getQuestionBank($questionBankId);
-            $parameters['categories'] = $this->getQuestionCategoryService()->getCategoryStructureTree($questionBankId);
-            $parameters['excludeIds'] = empty($conditions['excludeIds']) ? '' : $conditions['excludeIds'];
+            $parameters['questionBank'] = $questionBank;
+            $parameters['categoryTree'] = $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']);
+            $parameters['excludeIds'] = empty($conditions['exclude_ids']) ? '' : implode(',', $conditions['exclude_ids']);
         }
 
         return $this->render('question-bank/widgets/question-pick-modal.html.twig', $parameters);
@@ -69,36 +67,28 @@ class HomeworkManageController extends BaseController
     {
         $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
-        $questionIds = $request->request->get('questionIds', array(0));
+        $itemIds = $request->request->get('itemIds', []);
 
-        if (!$questionIds) {
+        if (!$itemIds) {
             return $this->createJsonResponse(array('result' => 'error', 'message' => 'json_response.must_choose_question.message'));
         }
 
-        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+        $questions = $this->getItemService()->findItemsByIds($itemIds);
 
-        $questionBankIds = ArrayToolkit::column($questions, 'bankId');
-        $questionBankIds = array_unique($questionBankIds);
-        $questionBankId = array_shift($questionBankIds);
-        if (!empty($questionBankIds)) {
+        $itemBankIds = array_unique(array_column($questions, 'bank_id'));
+        if (count($itemBankIds) > 1) {
             return $this->createJsonResponse(array('result' => 'error', 'message' => 'json_response.no_multi_question_bank.message'));
         }
-        if (!$this->getQuestionBankService()->canManageBank($questionBankId)) {
+        $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId(array_shift($itemBankIds));
+        if (!$this->getQuestionBankService()->canManageBank($questionBank['id'])) {
             $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
         }
 
-        foreach ($questions as &$question) {
-            if ($question['subCount'] > 0) {
-                $question['subs'] = $this->getQuestionService()->findQuestionsByParentId($question['id']);
-            }
-        }
-
-        $categories = $this->getQuestionCategoryService()->findCategories($questionBankId);
-        $categories = ArrayToolkit::index($categories, 'id');
+        $categories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
 
         return $this->render('homework/manage/question-picked.html.twig', array(
-            'questionBank' => $this->getQuestionBankService()->getQuestionBank($questionBankId),
-            'categories' => $categories,
+            'questionBank' => $questionBank,
+            'categories' => ArrayToolkit::index($categories, 'id'),
             'questions' => $questions,
             'targetType' => $request->query->get('targetType', 'testpaper'),
         ));
@@ -327,6 +317,22 @@ class HomeworkManageController extends BaseController
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->createService('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return ItemCategoryService
+     */
+    protected function getItemCategoryService()
+    {
+        return $this->createService('ItemBank:Item:ItemCategoryService');
     }
 
     protected function getQuestionAnalysisService()

@@ -23,69 +23,19 @@ namespace Symfony\Component\CssSelector\Parser\Tokenizer;
  */
 class TokenizerPatterns
 {
-    /**
-     * @var string
-     */
     private $unicodeEscapePattern;
-
-    /**
-     * @var string
-     */
     private $simpleEscapePattern;
-
-    /**
-     * @var string
-     */
     private $newLineEscapePattern;
-
-    /**
-     * @var string
-     */
     private $escapePattern;
-
-    /**
-     * @var string
-     */
     private $stringEscapePattern;
-
-    /**
-     * @var string
-     */
     private $nonAsciiPattern;
-
-    /**
-     * @var string
-     */
     private $nmCharPattern;
-
-    /**
-     * @var string
-     */
     private $nmStartPattern;
-
-    /**
-     * @var string
-     */
     private $identifierPattern;
-
-    /**
-     * @var string
-     */
     private $hashPattern;
-
-    /**
-     * @var string
-     */
     private $numberPattern;
-
-    /**
-     * @var string
-     */
     private $quotedStringPattern;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->unicodeEscapePattern = '\\\\([0-9a-f]{1,6})(?:\r\n|[ \n\r\t\f])?';
@@ -96,7 +46,7 @@ class TokenizerPatterns
         $this->nonAsciiPattern = '[^\x00-\x7F]';
         $this->nmCharPattern = '[_a-z0-9-]|'.$this->escapePattern.'|'.$this->nonAsciiPattern;
         $this->nmStartPattern = '[_a-z]|'.$this->escapePattern.'|'.$this->nonAsciiPattern;
-        $this->identifierPattern = '(?:'.$this->nmStartPattern.')(?:'.$this->nmCharPattern.')*';
+        $this->identifierPattern = '-?(?:'.$this->nmStartPattern.')(?:'.$this->nmCharPattern.')*';
         $this->hashPattern = '#((?:'.$this->nmCharPattern.')+)';
         $this->numberPattern = '[+-]?(?:[0-9]*\.[0-9]+|[0-9]+)';
         $this->quotedStringPattern = '([^\n\r\f%s]|'.$this->stringEscapePattern.')*';

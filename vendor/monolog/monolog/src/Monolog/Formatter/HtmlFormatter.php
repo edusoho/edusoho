@@ -11,6 +11,7 @@
 namespace Monolog\Formatter;
 
 use Monolog\Logger;
+use Monolog\Utils;
 
 /**
  * Formats incoming records into an HTML table
@@ -58,7 +59,7 @@ class HtmlFormatter extends NormalizerFormatter
             $td = '<pre>'.htmlspecialchars($td, ENT_NOQUOTES, 'UTF-8').'</pre>';
         }
 
-        return "<tr style=\"padding: 4px;spacing: 0;text-align: left;\">\n<th style=\"background: #cccccc\" width=\"100px\">$th:</th>\n<td style=\"padding: 4px;spacing: 0;text-align: left;background: #eeeeee\">".$td."</td>\n</tr>";
+        return "<tr style=\"padding: 4px;text-align: left;\">\n<th style=\"vertical-align: top;background: #ccc;color: #000\" width=\"100\">$th:</th>\n<td style=\"padding: 4px;text-align: left;vertical-align: top;background: #eee;color: #000\">".$td."</td>\n</tr>";
     }
 
     /**
@@ -133,9 +134,9 @@ class HtmlFormatter extends NormalizerFormatter
 
         $data = $this->normalize($data);
         if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
-            return json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            return Utils::jsonEncode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE, true);
         }
 
-        return str_replace('\\/', '/', json_encode($data));
+        return str_replace('\\/', '/', Utils::jsonEncode($data, null, true));
     }
 }

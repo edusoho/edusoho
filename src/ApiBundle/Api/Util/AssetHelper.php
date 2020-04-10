@@ -18,12 +18,12 @@ class AssetHelper
 
     public static function uriForPath($path)
     {
-        return self::$container->get('request')->getUriForPath($path);
+        return self::$container->get('request_stack')->getMasterRequest()->getUriForPath($path);
     }
 
     public static function getScheme()
     {
-        return self::$container->get('request')->getScheme();
+        return self::$container->get('request_stack')->getMasterRequest()->getScheme();
     }
 
     public static function callAppExtensionMethod($method, $params)

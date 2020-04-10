@@ -2,6 +2,8 @@
 
 namespace ApiBundle\Api\Resource\Trade\Factory;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 class AlipayLegacyH5Trade extends BaseTrade
 {
     protected $payment = 'alipay';
@@ -11,7 +13,7 @@ class AlipayLegacyH5Trade extends BaseTrade
     public function getCustomFields($params)
     {
         return array(
-            'return_url' => $this->generateUrl('cashier_pay_return_for_h5', array('payment' => 'alipay'), true),
+            'return_url' => $this->generateUrl('cashier_pay_return_for_h5', array('payment' => 'alipay'), UrlGeneratorInterface::ABSOLUTE_URL),
         );
     }
 

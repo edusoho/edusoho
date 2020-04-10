@@ -12,8 +12,8 @@
 namespace Symfony\Bundle\TwigBundle\Controller;
 
 use Symfony\Component\Debug\Exception\FlattenException;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * PreviewErrorController can be used to test error pages.
@@ -43,13 +43,13 @@ class PreviewErrorController
          * the additional "showException" flag.
          */
 
-        $subRequest = $request->duplicate(null, null, array(
+        $subRequest = $request->duplicate(null, null, [
             '_controller' => $this->controller,
             'exception' => $exception,
             'logger' => null,
             'format' => $request->getRequestFormat(),
             'showException' => false,
-        ));
+        ]);
 
         return $this->kernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
     }

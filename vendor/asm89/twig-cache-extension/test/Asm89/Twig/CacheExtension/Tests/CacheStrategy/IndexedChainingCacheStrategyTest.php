@@ -75,6 +75,6 @@ class IndexedChainingCacheStrategyTest extends \PHPUnit_Framework_TestCase
 
     public function createCacheStrategyMock()
     {
-        return $this->getMock('Asm89\Twig\CacheExtension\CacheStrategyInterface');
+        return $this->createMock('Asm89\Twig\CacheExtension\CacheStrategyInterface');
     }
 }

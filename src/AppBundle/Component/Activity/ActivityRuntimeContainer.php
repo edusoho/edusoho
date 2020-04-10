@@ -38,7 +38,7 @@ class ActivityRuntimeContainer implements ActivityRuntimeContainerInterface
         $this->container = $container;
         $this->biz = $container->get('biz');
         $this->activitiesDir = $container->getParameter('edusoho.activities_dir');
-        $this->request = $container->get('request');
+        $this->request = $container->get('request_stack')->getMasterRequest();
         $this->activityConfigManager = $container->get('activity_config_manager');
         self::$instance = $this;
     }

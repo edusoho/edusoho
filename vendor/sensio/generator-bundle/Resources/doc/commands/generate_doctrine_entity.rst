@@ -3,8 +3,8 @@ Generating a New Doctrine Entity Stub
 
 .. caution::
 
-    If your application is based on Symfony 3, replace ``php app/console`` by
-    ``php bin/console`` before executing any of the console commands included
+    If your application is based on Symfony 2.x version, replace ``php bin/console``
+    with ``php app/console`` before executing any of the console commands included
     in this article.
 
 Usage
@@ -18,33 +18,51 @@ determine the bundle name, location, configuration format and default structure:
 
 .. code-block:: bash
 
-    $ php app/console generate:doctrine:entity
+    $ php bin/console generate:doctrine:entity
 
-The command can be run in a non-interactive mode by using the ``--no-interaction``
-option, but don't forget to pass all needed options:
+To deactivate the interactive mode, use the ``--no-interaction`` option or its
+alias ``-n``, but don't forget to pass all needed options:
 
 .. code-block:: bash
 
-    $ php app/console generate:doctrine:entity --no-interaction --entity=AcmeBlogBundle:Post --fields="title:string(100) body:text" --format=xml
+    $ php bin/console generate:doctrine:entity AcmeBlogBundle:Post -n --fields="title:string(100) body:text" --format=xml
 
-Available Options
------------------
+Arguments
+---------
 
-``--entity``
+``entity``
     The entity name given as a shortcut notation containing the bundle name
     in which the entity is located and the name of the entity (for example,
     ``AcmeBlogBundle:Post``):
 
     .. code-block:: bash
 
-        $ php app/console generate:doctrine:entity --entity=AcmeBlogBundle:Post
+        $ php bin/console generate:doctrine:entity AcmeBlogBundle:Post
+
+Available Options
+-----------------
+
+``--entity``
+
+    .. caution::
+
+        This option has been deprecated in version 3.0, and will be removed in 4.0.
+        Pass it as argument instead.
+
+    The entity name given as a shortcut notation containing the bundle name
+    in which the entity is located and the name of the entity (for example,
+    ``AcmeBlogBundle:Post``):
+
+    .. code-block:: bash
+
+        $ php bin/console generate:doctrine:entity --entity=AcmeBlogBundle:Post
 
 ``--fields``
     The list of fields to generate in the entity class:
 
     .. code-block:: bash
 
-        $ php app/console generate:doctrine:entity --fields="title:string(length=100 nullable=true unique=false) body:text ranking:decimal(precision=10 scale=0)"
+        $ php bin/console generate:doctrine:entity --fields="title:string(length=100 nullable=true unique=false) body:text ranking:decimal(precision=10 scale=0)"
 
     .. versionadded:: 3.0
         Ability to pass named options to fields was added in version 3.0.
@@ -61,4 +79,4 @@ Available Options
 
     .. code-block:: bash
 
-        $ php app/console generate:doctrine:entity --format=annotation
+        $ php bin/console generate:doctrine:entity --format=annotation

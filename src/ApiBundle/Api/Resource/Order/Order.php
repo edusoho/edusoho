@@ -10,6 +10,7 @@ use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class Order extends AbstractResource
 {
@@ -99,8 +100,8 @@ class Order extends AbstractResource
             $params['unencryptedPayPassword'] = $params['payPassword'];
         }
         if ('Alipay_LegacyWap' == $params['gateway']) {
-            $params['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
-            $params['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
+            $params['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), UrlGeneratorInterface::ABSOLUTE_URL);
+            $params['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), UrlGeneratorInterface::ABSOLUTE_URL);
         }
     }
 

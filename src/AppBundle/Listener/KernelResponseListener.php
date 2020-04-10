@@ -6,6 +6,7 @@ use AppBundle\Controller\OAuth2\OAuthUser;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class KernelResponseListener extends AbstractSecurityDisabledListener
 {
@@ -76,7 +77,7 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
         );
     }
 
-    protected function generateUrl($router, $params = array(), $withHost = false)
+    protected function generateUrl($router, $params = array(), $withHost = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         return $this->container->get('router')->generate($router, $params, $withHost);
     }
@@ -91,18 +92,18 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
             $targetPath = $request->headers->get('Referer');
         }
 
-        if ($targetPath == $this->generateUrl('login', array(), true)) {
+        if ($targetPath == $this->generateUrl('login', array(), UrlGeneratorInterface::ABSOLUTE_URL)) {
             return $this->generateUrl('homepage');
         }
 
         $url = explode('?', $targetPath);
 
-        if ($url[0] == $this->generateUrl('partner_logout', array(), true)) {
+        if ($url[0] == $this->generateUrl('partner_logout', array(), UrlGeneratorInterface::ABSOLUTE_URL)) {
             return $this->generateUrl('homepage');
         }
 
-        if ($url[0] == $this->generateUrl('password_reset_update', array(), true)) {
-            $targetPath = $this->generateUrl('homepage', array(), true);
+        if ($url[0] == $this->generateUrl('password_reset_update', array(), UrlGeneratorInterface::ABSOLUTE_URL)) {
+            $targetPath = $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         return $targetPath;

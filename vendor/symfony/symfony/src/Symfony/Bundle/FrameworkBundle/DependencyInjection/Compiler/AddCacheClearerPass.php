@@ -11,12 +11,16 @@
 
 namespace Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+@trigger_error(sprintf('The %s class is deprecated since Symfony 3.4 and will be removed in 4.0. Use tagged iterator arguments instead.', AddCacheClearerPass::class), E_USER_DEPRECATED);
+
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Registers the cache clearers.
+ *
+ * @deprecated since version 3.4, to be removed in 4.0. Use tagged iterator arguments.
  *
  * @author Dustin Dobervich <ddobervich@gmail.com>
  */
@@ -31,8 +35,8 @@ class AddCacheClearerPass implements CompilerPassInterface
             return;
         }
 
-        $clearers = array();
-        foreach ($container->findTaggedServiceIds('kernel.cache_clearer') as $id => $attributes) {
+        $clearers = [];
+        foreach ($container->findTaggedServiceIds('kernel.cache_clearer', true) as $id => $attributes) {
             $clearers[] = new Reference($id);
         }
 

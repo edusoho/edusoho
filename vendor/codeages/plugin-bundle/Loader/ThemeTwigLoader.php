@@ -3,8 +3,9 @@
 namespace Codeages\PluginBundle\Loader;
 
 use Codeages\PluginBundle\System\PluginableHttpKernelInterface;
+use Twig\Loader\FilesystemLoader;
 
-class ThemeTwigLoader extends \Twig_Loader_Filesystem
+class ThemeTwigLoader extends FileSystemLoader
 {
     /**
      * @var PluginableHttpKernelInterface

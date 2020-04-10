@@ -1,5 +1,5 @@
 {
-    "Version": "2.1.28.79",
+    "Version": "36",
     "Names": {
         "AED": [
             "AED",
@@ -132,6 +132,10 @@
         "CLP": [
             "CLP",
             "Čīles peso"
+        ],
+        "CNH": [
+            "CNH",
+            "Ķīnas juaņa (ofšors)"
         ],
         "CNY": [
             "CN¥",
@@ -311,7 +315,7 @@
         ],
         "ISK": [
             "ISK",
-            "Īslandes krona"
+            "Islandes krona"
         ],
         "ITL": [
             "ITL",
@@ -439,6 +443,10 @@
         ],
         "MRO": [
             "MRO",
+            "Mauritānijas ugija (1973–2017)"
+        ],
+        "MRU": [
+            "MRU",
             "Mauritānijas ugija"
         ],
         "MTL": [
@@ -519,7 +527,7 @@
         ],
         "PEN": [
             "PEN",
-            "Peru jaunais sols"
+            "Peru sols"
         ],
         "PGK": [
             "PGK",
@@ -571,7 +579,7 @@
         ],
         "SAR": [
             "SAR",
-            "Saūda riāls"
+            "Saūda Arābijas riāls"
         ],
         "SBD": [
             "SBD",
@@ -627,6 +635,10 @@
         ],
         "STD": [
             "STD",
+            "Santome un Prinsipi dobra (1977–2017)"
+        ],
+        "STN": [
+            "STN",
             "Santome un Prinsipi dobra"
         ],
         "SVC": [
@@ -711,6 +723,10 @@
         ],
         "VEF": [
             "VEF",
+            "Venecuēlas bolivārs (2008–2018)"
+        ],
+        "VES": [
+            "VES",
             "Venecuēlas bolivārs"
         ],
         "VND": [

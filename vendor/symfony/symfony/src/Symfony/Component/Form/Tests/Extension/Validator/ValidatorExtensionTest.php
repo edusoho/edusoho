@@ -12,87 +12,118 @@
 namespace Symfony\Component\Form\Tests\Extension\Validator;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Validator\Constraints\Form as FormConstraint;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
-use Symfony\Component\Validator\ValidatorInterface;
+use Symfony\Component\Form\Extension\Validator\ValidatorTypeGuesser;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormFactoryBuilder;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Mapping\CascadingStrategy;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Mapping\Factory\LazyLoadingMetadataFactory;
+use Symfony\Component\Validator\Mapping\Loader\StaticMethodLoader;
+use Symfony\Component\Validator\Mapping\TraversalStrategy;
+use Symfony\Component\Validator\Tests\Fixtures\FakeMetadataFactory;
+use Symfony\Component\Validator\Validation;
 
 class ValidatorExtensionTest extends TestCase
 {
     public function test2Dot5ValidationApi()
     {
-        $validator = $this->getMockBuilder('Symfony\Component\Validator\Validator\RecursiveValidator')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $metadata = $this->getMockBuilder('Symfony\Component\Validator\Mapping\ClassMetadata')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $metadata = new ClassMetadata(Form::class);
 
-        $validator->expects($this->once())
-            ->method('getMetadataFor')
-            ->with($this->identicalTo('Symfony\Component\Form\Form'))
-            ->will($this->returnValue($metadata));
+        $metadataFactory = new FakeMetadataFactory();
+        $metadataFactory->addMetadata($metadata);
 
-        // Verify that the constraints are added
-        $metadata->expects($this->once())
-            ->method('addConstraint')
-            ->with($this->isInstanceOf('Symfony\Component\Form\Extension\Validator\Constraints\Form'));
-
-        $metadata->expects($this->once())
-            ->method('addPropertyConstraint')
-            ->with('children', $this->isInstanceOf('Symfony\Component\Validator\Constraints\Valid'));
-
-        if ($validator instanceof ValidatorInterface) {
-            $validator
-                ->expects($this->never())
-                ->method('getMetadataFactory');
-        }
+        $validator = Validation::createValidatorBuilder()
+            ->setMetadataFactory($metadataFactory)
+            ->getValidator();
 
         $extension = new ValidatorExtension($validator);
-        $guesser = $extension->loadTypeGuesser();
 
-        $this->assertInstanceOf('Symfony\Component\Form\Extension\Validator\ValidatorTypeGuesser', $guesser);
+        $this->assertInstanceOf(ValidatorTypeGuesser::class, $extension->loadTypeGuesser());
+
+        $this->assertCount(1, $metadata->getConstraints());
+        $this->assertInstanceOf(FormConstraint::class, $metadata->getConstraints()[0]);
+
+        $this->assertSame(CascadingStrategy::CASCADE, $metadata->getPropertyMetadata('children')[0]->cascadingStrategy);
+        $this->assertSame(TraversalStrategy::IMPLICIT, $metadata->getPropertyMetadata('children')[0]->traversalStrategy);
     }
 
-    /**
-     * @group legacy
-     */
-    public function test2Dot4ValidationApi()
+    public function testDataConstraintsInvalidateFormEvenIfFieldIsNotSubmitted()
     {
-        $factory = $this->getMockBuilder('Symfony\Component\Validator\Mapping\Factory\MetadataFactoryInterface')->getMock();
-        $validator = $this->getMockBuilder('Symfony\Component\Validator\ValidatorInterface')->getMock();
-        $metadata = $this->getMockBuilder('Symfony\Component\Validator\Mapping\ClassMetadata')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $form = $this->createForm(FooType::class);
+        $form->submit(['baz' => 'foobar'], false);
 
-        $validator->expects($this->any())
-            ->method('getMetadataFactory')
-            ->will($this->returnValue($factory));
-
-        $factory->expects($this->once())
-            ->method('getMetadataFor')
-            ->with($this->identicalTo('Symfony\Component\Form\Form'))
-            ->will($this->returnValue($metadata));
-
-        // Verify that the constraints are added
-        $metadata->expects($this->once())
-            ->method('addConstraint')
-            ->with($this->isInstanceOf('Symfony\Component\Form\Extension\Validator\Constraints\Form'));
-
-        $metadata->expects($this->once())
-            ->method('addPropertyConstraint')
-            ->with('children', $this->isInstanceOf('Symfony\Component\Validator\Constraints\Valid'));
-
-        $extension = new ValidatorExtension($validator);
-        $guesser = $extension->loadTypeGuesser();
-
-        $this->assertInstanceOf('Symfony\Component\Form\Extension\Validator\ValidatorTypeGuesser', $guesser);
+        $this->assertTrue($form->isSubmitted());
+        $this->assertFalse($form->isValid());
+        $this->assertFalse($form->get('bar')->isSubmitted());
+        $this->assertCount(1, $form->get('bar')->getErrors());
     }
 
-    /**
-     * @expectedException \Symfony\Component\Form\Exception\UnexpectedTypeException
-     * @group legacy
-     */
-    public function testInvalidValidatorInterface()
+    public function testFieldConstraintsDoNotInvalidateFormIfFieldIsNotSubmitted()
     {
-        new ValidatorExtension(null);
+        $form = $this->createForm(FooType::class);
+        $form->submit(['bar' => 'foobar'], false);
+
+        $this->assertTrue($form->isSubmitted());
+        $this->assertTrue($form->isValid());
+    }
+
+    public function testFieldConstraintsInvalidateFormIfFieldIsSubmitted()
+    {
+        $form = $this->createForm(FooType::class);
+        $form->submit(['bar' => 'foobar', 'baz' => ''], false);
+
+        $this->assertTrue($form->isSubmitted());
+        $this->assertFalse($form->isValid());
+        $this->assertTrue($form->get('bar')->isSubmitted());
+        $this->assertTrue($form->get('bar')->isValid());
+        $this->assertTrue($form->get('baz')->isSubmitted());
+        $this->assertFalse($form->get('baz')->isValid());
+    }
+
+    private function createForm($type)
+    {
+        $validator = Validation::createValidatorBuilder()
+            ->setMetadataFactory(new LazyLoadingMetadataFactory(new StaticMethodLoader()))
+            ->getValidator();
+        $formFactoryBuilder = new FormFactoryBuilder();
+        $formFactoryBuilder->addExtension(new ValidatorExtension($validator));
+        $formFactory = $formFactoryBuilder->getFormFactory();
+
+        return $formFactory->create($type);
+    }
+}
+
+class Foo
+{
+    public $bar;
+    public $baz;
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('bar', new NotBlank());
+    }
+}
+
+class FooType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('bar')
+            ->add('baz', null, [
+                'constraints' => [new NotBlank()],
+            ])
+        ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefault('data_class', Foo::class);
     }
 }

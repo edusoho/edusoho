@@ -15,15 +15,10 @@ use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Constraints\AllValidator;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Range;
-use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class AllValidatorTest extends AbstractConstraintValidatorTest
+class AllValidatorTest extends ConstraintValidatorTestCase
 {
-    protected function getApiVersion()
-    {
-        return Validation::API_VERSION_2_5;
-    }
-
     protected function createValidator()
     {
         return new AllValidator();
@@ -31,17 +26,15 @@ class AllValidatorTest extends AbstractConstraintValidatorTest
 
     public function testNullIsValid()
     {
-        $this->validator->validate(null, new All(new Range(array('min' => 4))));
+        $this->validator->validate(null, new All(new Range(['min' => 4])));
 
         $this->assertNoViolation();
     }
 
-    /**
-     * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
-     */
     public function testThrowsExceptionIfNotTraversable()
     {
-        $this->validator->validate('foo.barbar', new All(new Range(array('min' => 4))));
+        $this->expectException('Symfony\Component\Validator\Exception\UnexpectedTypeException');
+        $this->validator->validate('foo.barbar', new All(new Range(['min' => 4])));
     }
 
     /**
@@ -49,12 +42,12 @@ class AllValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testWalkSingleConstraint($array)
     {
-        $constraint = new Range(array('min' => 4));
+        $constraint = new Range(['min' => 4]);
 
         $i = 0;
 
         foreach ($array as $key => $value) {
-            $this->expectValidateValueAt($i++, '['.$key.']', $value, array($constraint));
+            $this->expectValidateValueAt($i++, '['.$key.']', $value, [$constraint]);
         }
 
         $this->validator->validate($array, new All($constraint));
@@ -67,15 +60,15 @@ class AllValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testWalkMultipleConstraints($array)
     {
-        $constraint1 = new Range(array('min' => 4));
+        $constraint1 = new Range(['min' => 4]);
         $constraint2 = new NotNull();
 
-        $constraints = array($constraint1, $constraint2);
+        $constraints = [$constraint1, $constraint2];
 
         $i = 0;
 
         foreach ($array as $key => $value) {
-            $this->expectValidateValueAt($i++, '['.$key.']', $value, array($constraint1, $constraint2));
+            $this->expectValidateValueAt($i++, '['.$key.']', $value, [$constraint1, $constraint2]);
         }
 
         $this->validator->validate($array, new All($constraints));
@@ -85,9 +78,9 @@ class AllValidatorTest extends AbstractConstraintValidatorTest
 
     public function getValidArguments()
     {
-        return array(
-            array(array(5, 6, 7)),
-            array(new \ArrayObject(array(5, 6, 7))),
-        );
+        return [
+            [[5, 6, 7]],
+            [new \ArrayObject([5, 6, 7])],
+        ];
     }
 }

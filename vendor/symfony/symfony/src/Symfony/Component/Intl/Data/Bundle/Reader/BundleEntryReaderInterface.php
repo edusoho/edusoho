@@ -35,7 +35,7 @@ interface BundleEntryReaderInterface extends BundleReaderInterface
      *
      * Then the value can be read by calling:
      *
-     *     $reader->readEntry('...', 'en', array('TopLevel', 'NestedLevel', 'Entry'));
+     *     $reader->readEntry('...', 'en', ['TopLevel', 'NestedLevel', 'Entry']);
      *
      * @param string   $path     The path to the resource bundle
      * @param string   $locale   The locale to read
@@ -46,8 +46,8 @@ interface BundleEntryReaderInterface extends BundleReaderInterface
      *                           (i.e. array or \ArrayAccess) or cannot be found
      *                           in the requested locale.
      *
-     * @return mixed Returns an array or {@link \ArrayAccess} instance for
-     *               complex data and a scalar value for simple data.
+     * @return mixed returns an array or {@link \ArrayAccess} instance for
+     *               complex data and a scalar value for simple data
      *
      * @throws MissingResourceException If the indices cannot be accessed
      */

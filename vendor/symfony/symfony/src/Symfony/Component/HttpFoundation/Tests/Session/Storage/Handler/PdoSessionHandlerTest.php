@@ -48,34 +48,28 @@ class PdoSessionHandlerTest extends TestCase
         return $pdo;
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testWrongPdoErrMode()
     {
+        $this->expectException('InvalidArgumentException');
         $pdo = $this->getMemorySqlitePdo();
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_SILENT);
 
-        $storage = new PdoSessionHandler($pdo);
+        new PdoSessionHandler($pdo);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testInexistentTable()
     {
-        $storage = new PdoSessionHandler($this->getMemorySqlitePdo(), array('db_table' => 'inexistent_table'));
+        $this->expectException('RuntimeException');
+        $storage = new PdoSessionHandler($this->getMemorySqlitePdo(), ['db_table' => 'inexistent_table']);
         $storage->open('', 'sid');
         $storage->read('id');
         $storage->write('id', 'data');
         $storage->close();
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testCreateTableTwice()
     {
+        $this->expectException('RuntimeException');
         $storage = new PdoSessionHandler($this->getMemorySqlitePdo());
         $storage->createTable();
     }
@@ -136,7 +130,7 @@ class PdoSessionHandlerTest extends TestCase
 
     public function testReadConvertsStreamToString()
     {
-        if (defined('HHVM_VERSION')) {
+        if (\defined('HHVM_VERSION')) {
             $this->markTestSkipped('PHPUnit_MockObject cannot mock the PDOStatement class on HHVM. See https://github.com/sebastianbergmann/phpunit-mock-objects/pull/289');
         }
 
@@ -147,7 +141,7 @@ class PdoSessionHandlerTest extends TestCase
         $stream = $this->createStream($content);
 
         $pdo->prepareResult->expects($this->once())->method('fetchAll')
-            ->will($this->returnValue(array(array($stream, 42, time()))));
+            ->willReturn([[$stream, 42, time()]]);
 
         $storage = new PdoSessionHandler($pdo);
         $result = $storage->read('foo');
@@ -157,8 +151,11 @@ class PdoSessionHandlerTest extends TestCase
 
     public function testReadLockedConvertsStreamToString()
     {
-        if (defined('HHVM_VERSION')) {
+        if (\defined('HHVM_VERSION')) {
             $this->markTestSkipped('PHPUnit_MockObject cannot mock the PDOStatement class on HHVM. See https://github.com/sebastianbergmann/phpunit-mock-objects/pull/289');
+        }
+        if (filter_var(ini_get('session.use_strict_mode'), FILTER_VALIDATE_BOOLEAN)) {
+            $this->markTestSkipped('Strict mode needs no locking for new sessions.');
         }
 
         $pdo = new MockPdo('pgsql');
@@ -174,14 +171,14 @@ class PdoSessionHandlerTest extends TestCase
         $exception = null;
 
         $selectStmt->expects($this->atLeast(2))->method('fetchAll')
-            ->will($this->returnCallback(function () use (&$exception, $stream) {
-                return $exception ? array(array($stream, 42, time())) : array();
-            }));
+            ->willReturnCallback(function () use (&$exception, $stream) {
+                return $exception ? [[$stream, 42, time()]] : [];
+            });
 
         $insertStmt->expects($this->once())->method('execute')
-            ->will($this->returnCallback(function () use (&$exception) {
+            ->willReturnCallback(function () use (&$exception) {
                 throw $exception = new \PDOException('', '23');
-            }));
+            });
 
         $storage = new PdoSessionHandler($pdo);
         $result = $storage->read('foo');
@@ -269,6 +266,9 @@ class PdoSessionHandlerTest extends TestCase
         $this->assertSame('', $data, 'Destroyed session returns empty string');
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testSessionGC()
     {
         $previousLifeTime = ini_set('session.gc_maxlifetime', 1000);
@@ -318,6 +318,41 @@ class PdoSessionHandlerTest extends TestCase
         $this->assertInstanceOf('\PDO', $method->invoke($storage));
     }
 
+    /**
+     * @dataProvider provideUrlDsnPairs
+     */
+    public function testUrlDsn($url, $expectedDsn, $expectedUser = null, $expectedPassword = null)
+    {
+        $storage = new PdoSessionHandler($url);
+        $reflection = new \ReflectionClass(PdoSessionHandler::class);
+
+        foreach (['dsn' => $expectedDsn, 'username' => $expectedUser, 'password' => $expectedPassword] as $property => $expectedValue) {
+            if (!isset($expectedValue)) {
+                continue;
+            }
+            $property = $reflection->getProperty($property);
+            $property->setAccessible(true);
+            $this->assertSame($expectedValue, $property->getValue($storage));
+        }
+    }
+
+    public function provideUrlDsnPairs()
+    {
+        yield ['mysql://localhost/test', 'mysql:host=localhost;dbname=test;'];
+        yield ['mysql://localhost:56/test', 'mysql:host=localhost;port=56;dbname=test;'];
+        yield ['mysql2://root:pwd@localhost/test', 'mysql:host=localhost;dbname=test;', 'root', 'pwd'];
+        yield ['postgres://localhost/test', 'pgsql:host=localhost;dbname=test;'];
+        yield ['postgresql://localhost:5634/test', 'pgsql:host=localhost;port=5634;dbname=test;'];
+        yield ['postgres://root:pwd@localhost/test', 'pgsql:host=localhost;dbname=test;', 'root', 'pwd'];
+        yield 'sqlite relative path' => ['sqlite://localhost/tmp/test', 'sqlite:tmp/test'];
+        yield 'sqlite absolute path' => ['sqlite://localhost//tmp/test', 'sqlite:/tmp/test'];
+        yield 'sqlite relative path without host' => ['sqlite:///tmp/test', 'sqlite:tmp/test'];
+        yield 'sqlite absolute path without host' => ['sqlite3:////tmp/test', 'sqlite:/tmp/test'];
+        yield ['sqlite://localhost/:memory:', 'sqlite::memory:'];
+        yield ['mssql://localhost/test', 'sqlsrv:server=localhost;Database=test'];
+        yield ['mssql://localhost:56/test', 'sqlsrv:server=localhost,56;Database=test'];
+    }
+
     private function createStream($content)
     {
         $stream = tmpfile();
@@ -353,10 +388,10 @@ class MockPdo extends \PDO
         return parent::getAttribute($attribute);
     }
 
-    public function prepare($statement, $driverOptions = array())
+    public function prepare($statement, $driverOptions = [])
     {
-        return is_callable($this->prepareResult)
-            ? call_user_func($this->prepareResult, $statement, $driverOptions)
+        return \is_callable($this->prepareResult)
+            ? \call_user_func($this->prepareResult, $statement, $driverOptions)
             : $this->prepareResult;
     }
 

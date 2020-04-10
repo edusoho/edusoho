@@ -24,11 +24,6 @@ class ControllerNameParser
 {
     protected $kernel;
 
-    /**
-     * Constructor.
-     *
-     * @param KernelInterface $kernel A KernelInterface instance
-     */
     public function __construct(KernelInterface $kernel)
     {
         $this->kernel = $kernel;
@@ -47,18 +42,18 @@ class ControllerNameParser
     public function parse($controller)
     {
         $parts = explode(':', $controller);
-        if (3 !== count($parts) || in_array('', $parts, true)) {
+        if (3 !== \count($parts) || \in_array('', $parts, true)) {
             throw new \InvalidArgumentException(sprintf('The "%s" controller is not a valid "a:b:c" controller string.', $controller));
         }
 
         $originalController = $controller;
         list($bundle, $controller, $action) = $parts;
         $controller = str_replace('/', '\\', $controller);
-        $bundles = array();
+        $bundles = [];
 
         try {
             // this throws an exception if there is no such bundle
-            $allBundles = $this->kernel->getBundle($bundle, false);
+            $allBundles = $this->kernel->getBundle($bundle, false, true);
         } catch (\InvalidArgumentException $e) {
             $message = sprintf(
                 'The "%s" (from the _controller value "%s") does not exist or is not enabled in your kernel!',
@@ -73,6 +68,11 @@ class ControllerNameParser
             throw new \InvalidArgumentException($message, 0, $e);
         }
 
+        if (!\is_array($allBundles)) {
+            // happens when HttpKernel is version 4+
+            $allBundles = [$allBundles];
+        }
+
         foreach ($allBundles as $b) {
             $try = $b->getNamespace().'\\Controller\\'.$controller.'Controller';
             if (class_exists($try)) {
@@ -83,7 +83,7 @@ class ControllerNameParser
             $msg = sprintf('The _controller value "%s:%s:%s" maps to a "%s" class, but this class was not found. Create this class or check the spelling of the class and its namespace.', $bundle, $controller, $action, $try);
         }
 
-        if (count($bundles) > 1) {
+        if (\count($bundles) > 1) {
             $msg = sprintf('Unable to find controller "%s:%s" in bundles %s.', $bundle, $controller, implode(', ', $bundles));
         }
 
@@ -141,7 +141,7 @@ class ControllerNameParser
             }
 
             $lev = levenshtein($nonExistentBundleName, $bundleName);
-            if ($lev <= strlen($nonExistentBundleName) / 3 && ($alternative === null || $lev < $shortest)) {
+            if ($lev <= \strlen($nonExistentBundleName) / 3 && (null === $alternative || $lev < $shortest)) {
                 $alternative = $bundleName;
                 $shortest = $lev;
             }

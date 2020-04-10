@@ -6,11 +6,11 @@ use AppBundle\Common\Exception\UnexpectedValueException;
 
 class ActivityConfig implements \ArrayAccess
 {
-    private $config;
+    private $config = array();
 
     public function __construct($config)
     {
-        $this->config = $config;
+        $this->config = empty($config) ? array() : $config;
     }
 
     public function offsetExists($offset)

@@ -11,30 +11,7 @@
 
 namespace Symfony\Bundle\SecurityBundle\Tests\Functional\app;
 
-// get the autoload file
-$dir = __DIR__;
-$lastDir = null;
-while ($dir !== $lastDir) {
-    $lastDir = $dir;
-
-    if (is_file($dir.'/autoload.php')) {
-        require_once $dir.'/autoload.php';
-        break;
-    }
-
-    if (is_file($dir.'/autoload.php.dist')) {
-        require_once $dir.'/autoload.php.dist';
-        break;
-    }
-
-    if (file_exists($dir.'/vendor/autoload.php')) {
-        require_once $dir.'/vendor/autoload.php';
-        break;
-    }
-
-    $dir = dirname($dir);
-}
-
+use Doctrine\ORM\Version;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Kernel;
@@ -46,14 +23,16 @@ use Symfony\Component\HttpKernel\Kernel;
  */
 class AppKernel extends Kernel
 {
+    private $varDir;
     private $testCase;
     private $rootConfig;
 
-    public function __construct($testCase, $rootConfig, $environment, $debug)
+    public function __construct($varDir, $testCase, $rootConfig, $environment, $debug)
     {
         if (!is_dir(__DIR__.'/'.$testCase)) {
             throw new \InvalidArgumentException(sprintf('The test case "%s" does not exist.', $testCase));
         }
+        $this->varDir = $varDir;
         $this->testCase = $testCase;
 
         $fs = new Filesystem();
@@ -71,7 +50,7 @@ class AppKernel extends Kernel
     public function getName()
     {
         if (null === $this->name) {
-            $this->name = parent::getName().md5($this->rootConfig);
+            $this->name = parent::getName().substr(md5($this->rootConfig), -16);
         }
 
         return $this->name;
@@ -93,28 +72,33 @@ class AppKernel extends Kernel
 
     public function getCacheDir()
     {
-        return sys_get_temp_dir().'/'.Kernel::VERSION.'/'.$this->testCase.'/cache/'.$this->environment;
+        return sys_get_temp_dir().'/'.$this->varDir.'/'.$this->testCase.'/cache/'.$this->environment;
     }
 
     public function getLogDir()
     {
-        return sys_get_temp_dir().'/'.Kernel::VERSION.'/'.$this->testCase.'/logs';
+        return sys_get_temp_dir().'/'.$this->varDir.'/'.$this->testCase.'/logs';
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load($this->rootConfig);
+
+        // to be removed once https://github.com/doctrine/DoctrineBundle/pull/684 is merged
+        if ('Acl' === $this->testCase && class_exists(Version::class)) {
+            $loader->load(__DIR__.'/Acl/doctrine.yml');
+        }
     }
 
     public function serialize()
     {
-        return serialize(array($this->testCase, $this->rootConfig, $this->getEnvironment(), $this->isDebug()));
+        return serialize([$this->varDir, $this->testCase, $this->rootConfig, $this->getEnvironment(), $this->isDebug()]);
     }
 
     public function unserialize($str)
     {
         $a = unserialize($str);
-        $this->__construct($a[0], $a[1], $a[2], $a[3]);
+        $this->__construct($a[0], $a[1], $a[2], $a[3], $a[4]);
     }
 
     protected function getKernelParameters()

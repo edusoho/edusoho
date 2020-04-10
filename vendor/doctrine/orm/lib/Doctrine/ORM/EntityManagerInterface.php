@@ -26,10 +26,19 @@ use Doctrine\ORM\Query\ResultSetMapping;
  * EntityManager interface
  *
  * @since   2.4
- * @author  Lars Strojny <lars@strojny.net
+ * @author  Lars Strojny <lars@strojny.net>
+ *
+ * @method Mapping\ClassMetadata getClassMetadata($className)
  */
 interface EntityManagerInterface extends ObjectManager
 {
+    /**
+     * Returns the cache API for managing the second level cache regions or NULL if the cache is not enabled.
+     *
+     * @return \Doctrine\ORM\Cache|null
+     */
+    public function getCache();
+
     /**
      * Gets the database connection object used by the EntityManager.
      *

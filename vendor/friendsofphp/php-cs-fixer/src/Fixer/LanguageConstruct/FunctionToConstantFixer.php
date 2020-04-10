@@ -14,9 +14,9 @@ namespace PhpCsFixer\Fixer\LanguageConstruct;
 
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
+use PhpCsFixer\FixerConfiguration\AllowedValueSubset;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
-use PhpCsFixer\FixerConfiguration\FixerOptionValidatorGenerator;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\Tokenizer\Token;
@@ -61,7 +61,10 @@ final class FunctionToConstantFixer extends AbstractFixer implements Configurati
     {
         return new FixerDefinition(
             'Replace core functions calls returning constants with the constants.',
-            array(new CodeSample("<?php\necho phpversion();\necho pi();\necho php_sapi_name();")),
+            array(
+                new CodeSample("<?php\necho phpversion();\necho pi();\necho php_sapi_name();"),
+                new CodeSample("<?php\necho phpversion();\necho pi();", array('functions' => array('phpversion'))),
+            ),
             null,
             'Risky when any of the configured functions to replace are overridden.'
         );
@@ -121,14 +124,11 @@ final class FunctionToConstantFixer extends AbstractFixer implements Configurati
      */
     protected function createConfigurationDefinition()
     {
-        $generator = new FixerOptionValidatorGenerator();
         $functionNames = array_keys(self::$availableFunctions);
         $functions = new FixerOptionBuilder('functions', 'List of function names to fix.');
         $functions = $functions
             ->setAllowedTypes(array('array'))
-            ->setAllowedValues(array(
-                $generator->allowedValueIsSubsetOf($functionNames),
-            ))
+            ->setAllowedValues(array(new AllowedValueSubset($functionNames)))
             ->setDefault($functionNames)
             ->getOption()
         ;
@@ -147,7 +147,7 @@ final class FunctionToConstantFixer extends AbstractFixer implements Configurati
     {
         $tokens->clearTokenAndMergeSurroundingWhitespace($braceCloseIndex);
         $tokens->clearTokenAndMergeSurroundingWhitespace($braceOpenIndex);
-        $tokens[$index]->clear();
+        $tokens->clearAt($index);
         $tokens->insertAt($index, new Token(array(T_STRING, $replacementConst)));
     }
 

@@ -9,13 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Bundle\TwigBundle\Tests;
+namespace Symfony\Bundle\TwigBundle\Tests\Functional;
 
-use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Bundle\TwigBundle\Tests\TestCase;
+use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
-use Symfony\Bundle\TwigBundle\TwigBundle;
+use Symfony\Component\HttpKernel\Kernel;
 
 class CacheWarmingTest extends TestCase
 {
@@ -82,26 +83,33 @@ class CacheWarmingKernel extends Kernel
 
     public function registerBundles()
     {
-        return array(new FrameworkBundle(), new TwigBundle());
+        return [new FrameworkBundle(), new TwigBundle()];
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load(function ($container) {
-            $container->loadFromExtension('framework', array(
+            $container->loadFromExtension('framework', [
                 'secret' => '$ecret',
-            ));
+                'form' => ['enabled' => false],
+            ]);
         });
 
         if ($this->withTemplating) {
             $loader->load(function ($container) {
-                $container->loadFromExtension('framework', array(
+                $container->loadFromExtension('framework', [
                     'secret' => '$ecret',
-                    'templating' => array('engines' => array('twig')),
-                    'router' => array('resource' => '%kernel.root_dir%/Resources/config/empty_routing.yml'),
-                ));
+                    'templating' => ['engines' => ['twig']],
+                    'router' => ['resource' => '%kernel.project_dir%/Resources/config/empty_routing.yml'],
+                    'form' => ['enabled' => false],
+                ]);
             });
         }
+    }
+
+    public function getProjectDir()
+    {
+        return __DIR__;
     }
 
     public function getCacheDir()

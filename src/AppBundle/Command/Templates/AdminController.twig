@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 
-class  {{bigName}}Controller extends BaseController 
+class  {{bigName}}Controller extends BaseController
 {
 
     public function indexAction (Request $request)
@@ -22,7 +22,7 @@ class  {{bigName}}Controller extends BaseController
         }
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->get{{bigName}}Service()->search{{bigName}}sCount($conditions),
             20
         );

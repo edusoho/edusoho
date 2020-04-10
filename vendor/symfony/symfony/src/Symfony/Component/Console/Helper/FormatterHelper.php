@@ -45,21 +45,21 @@ class FormatterHelper extends Helper
      */
     public function formatBlock($messages, $style, $large = false)
     {
-        if (!is_array($messages)) {
-            $messages = array($messages);
+        if (!\is_array($messages)) {
+            $messages = [$messages];
         }
 
         $len = 0;
-        $lines = array();
+        $lines = [];
         foreach ($messages as $message) {
             $message = OutputFormatter::escape($message);
             $lines[] = sprintf($large ? '  %s  ' : ' %s ', $message);
-            $len = max($this->strlen($message) + ($large ? 4 : 2), $len);
+            $len = max(self::strlen($message) + ($large ? 4 : 2), $len);
         }
 
-        $messages = $large ? array(str_repeat(' ', $len)) : array();
+        $messages = $large ? [str_repeat(' ', $len)] : [];
         for ($i = 0; isset($lines[$i]); ++$i) {
-            $messages[] = $lines[$i].str_repeat(' ', $len - $this->strlen($lines[$i]));
+            $messages[] = $lines[$i].str_repeat(' ', $len - self::strlen($lines[$i]));
         }
         if ($large) {
             $messages[] = str_repeat(' ', $len);
@@ -70,6 +70,26 @@ class FormatterHelper extends Helper
         }
 
         return implode("\n", $messages);
+    }
+
+    /**
+     * Truncates a message to the given length.
+     *
+     * @param string $message
+     * @param int    $length
+     * @param string $suffix
+     *
+     * @return string
+     */
+    public function truncate($message, $length, $suffix = '...')
+    {
+        $computedLength = $length - self::strlen($suffix);
+
+        if ($computedLength > self::strlen($message)) {
+            return $message;
+        }
+
+        return self::substr($message, 0, $length).$suffix;
     }
 
     /**

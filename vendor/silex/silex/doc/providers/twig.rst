@@ -24,6 +24,28 @@ Parameters
   ``bootstrap_3_layout.html.twig``, and
   ``bootstrap_3_horizontal_layout.html.twig``.
 
+* **twig.date.format** (optional): Default format used by the ``date``
+  filter. The format string must conform to the format accepted by
+  `date() <http://www.php.net/date>`_.
+
+* **twig.date.interval_format** (optional): Default format used by the
+  ``date`` filter when the filtered data is of type `DateInterval <http://www.php.net/DateInterval>`_.
+  The format string must conform to the format accepted by
+  `DateInterval::format() <http://www.php.net/DateInterval.format>`_.
+
+* **twig.date.timezone** (optional): Default timezone used when formatting
+  dates. If set to ``null`` the timezone returned by `date_default_timezone_get() <http://www.php.net/date_default_timezone_get>`_
+  is used.
+
+* **twig.number_format.decimals** (optional): Default number of decimals
+  displayed by the ``number_format`` filter.
+
+* **twig.number_format.decimal_point** (optional): Default separator for
+  the decimal point used by the ``number_format`` filter.
+
+* **twig.number_format.thousands_separator** (optional): Default thousands
+  separator used by the ``number_format`` filter.
+
 Services
 --------
 
@@ -80,7 +102,7 @@ additional capabilities.
   <http://symfony.com/doc/current/book/routing.html#generating-urls-from-a-template>`_:
 
   .. code-block:: jinja
-  
+
       {{ path('homepage') }}
       {{ url('homepage') }} {# generates the absolute url http://example.org/ #}
       {{ path('hello', {name: 'Fabien'}) }}
@@ -112,6 +134,15 @@ If you are using the ``SecurityServiceProvider``, you will have access to the
 `Symfony Security documentation
 <http://symfony.com/doc/current/book/security.html#access-control-in-templates>`_.
 
+Web Link Support
+~~~~~~~~~~~~~~~~
+
+If you are using the ``symfony/web-link`` component, you will have access to the
+``preload()``, ``prefetch()``, ``prerender()``, ``dns_prefetch()``,
+``preconnect()`` and ``link()`` functions in templates. You can find more
+information in the `Symfony WebLink documentation
+<https://symfony.com/doc/current/components/weblink/introduction.html>`_.
+
 Global Variable
 ~~~~~~~~~~~~~~~
 
@@ -132,6 +163,9 @@ It gives access to the following methods:
 
     {# The debug flag #}
     {{ global.debug }}
+
+    {# The flash messages (Symfony 3.3 or later) #}
+    {{ global.flashes }}
 
 Rendering a Controller
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -180,6 +214,12 @@ Traits
     use Symfony\Component\HttpFoundation\StreamedResponse;
 
     return $app->render('index.html', ['name' => 'Fabien'], new StreamedResponse());
+
+* **renderView**: Renders a view with the given parameters and returns a string.
+
+.. code-block:: php
+
+    $content = $app->renderView('index.html', ['name' => 'Fabien']);
 
 Customization
 -------------

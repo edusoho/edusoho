@@ -13,13 +13,14 @@ namespace Symfony\Bundle\WebProfilerBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
-use Symfony\Component\Routing\Matcher\TraceableUrlMatcher;
-use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\HttpKernel\DataCollector\RequestDataCollector;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
-use Symfony\Component\HttpKernel\DataCollector\RequestDataCollector;
+use Symfony\Component\Routing\Matcher\TraceableUrlMatcher;
+use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\RouterInterface;
+use Twig\Environment;
 
 /**
  * RouterController.
@@ -33,7 +34,7 @@ class RouterController
     private $matcher;
     private $routes;
 
-    public function __construct(Profiler $profiler = null, \Twig_Environment $twig, UrlMatcherInterface $matcher = null, RouteCollection $routes = null)
+    public function __construct(Profiler $profiler = null, Environment $twig, UrlMatcherInterface $matcher = null, RouteCollection $routes = null)
     {
         $this->profiler = $profiler;
         $this->twig = $twig;
@@ -59,7 +60,7 @@ class RouterController
         $this->profiler->disable();
 
         if (null === $this->matcher || null === $this->routes) {
-            return new Response('The Router is not enabled.', 200, array('Content-Type' => 'text/html'));
+            return new Response('The Router is not enabled.', 200, ['Content-Type' => 'text/html']);
         }
 
         $profile = $this->profiler->loadProfile($token);
@@ -67,18 +68,17 @@ class RouterController
         /** @var RequestDataCollector $request */
         $request = $profile->getCollector('request');
 
-        return new Response($this->twig->render('@WebProfiler/Router/panel.html.twig', array(
+        return new Response($this->twig->render('@WebProfiler/Router/panel.html.twig', [
             'request' => $request,
             'router' => $profile->getCollector('router'),
             'traces' => $this->getTraces($request, $profile->getMethod()),
-        )), 200, array('Content-Type' => 'text/html'));
+        ]), 200, ['Content-Type' => 'text/html']);
     }
 
     /**
      * Returns the routing traces associated to the given request.
      *
-     * @param RequestDataCollector $request
-     * @param string               $method
+     * @param string $method
      *
      * @return array
      */
@@ -86,11 +86,11 @@ class RouterController
     {
         $traceRequest = Request::create(
             $request->getPathInfo(),
-            $request->getRequestServer()->get('REQUEST_METHOD'),
-            array(),
-            $request->getRequestCookies()->all(),
-            array(),
-            $request->getRequestServer()->all()
+            $request->getRequestServer(true)->get('REQUEST_METHOD'),
+            [],
+            $request->getRequestCookies(true)->all(),
+            [],
+            $request->getRequestServer(true)->all()
         );
 
         $context = $this->matcher->getContext();

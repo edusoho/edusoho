@@ -11,6 +11,7 @@ use Biz\Player\PlayerException;
 use Biz\Player\Service\PlayerService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\TokenService;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PlayerServiceImpl extends BaseService implements PlayerService
 {
@@ -95,7 +96,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
                     return array(
                         'route' => 'hls_playlist',
                         'params' => $params,
-                        'referenceType' => true,
+                        'referenceType' => UrlGeneratorInterface::ABSOLUTE_URL,
                     );
                 } else {
                     $this->createNewException(PlayerException::NOT_SUPPORT_TYPE());
@@ -126,7 +127,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
             return array(
                 'route' => 'player_local_media',
                 'params' => $params,
-                'referenceType' => true,
+                'referenceType' => UrlGeneratorInterface::ABSOLUTE_URL,
             );
         }
     }

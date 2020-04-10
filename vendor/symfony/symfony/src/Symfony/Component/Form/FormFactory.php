@@ -12,30 +12,20 @@
 namespace Symfony\Component\Form;
 
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
-use Symfony\Component\Form\Util\StringUtil;
 
 class FormFactory implements FormFactoryInterface
 {
-    /**
-     * @var FormRegistryInterface
-     */
     private $registry;
 
-    /**
-     * @var ResolvedFormTypeFactoryInterface
-     */
-    private $resolvedTypeFactory;
-
-    public function __construct(FormRegistryInterface $registry, ResolvedFormTypeFactoryInterface $resolvedTypeFactory)
+    public function __construct(FormRegistryInterface $registry)
     {
         $this->registry = $registry;
-        $this->resolvedTypeFactory = $resolvedTypeFactory;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function create($type = 'Symfony\Component\Form\Extension\Core\Type\FormType', $data = null, array $options = array())
+    public function create($type = 'Symfony\Component\Form\Extension\Core\Type\FormType', $data = null, array $options = [])
     {
         return $this->createBuilder($type, $data, $options)->getForm();
     }
@@ -43,7 +33,7 @@ class FormFactory implements FormFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createNamed($name, $type = 'Symfony\Component\Form\Extension\Core\Type\FormType', $data = null, array $options = array())
+    public function createNamed($name, $type = 'Symfony\Component\Form\Extension\Core\Type\FormType', $data = null, array $options = [])
     {
         return $this->createNamedBuilder($name, $type, $data, $options)->getForm();
     }
@@ -51,7 +41,7 @@ class FormFactory implements FormFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createForProperty($class, $property, $data = null, array $options = array())
+    public function createForProperty($class, $property, $data = null, array $options = [])
     {
         return $this->createBuilderForProperty($class, $property, $data, $options)->getForm();
     }
@@ -59,57 +49,29 @@ class FormFactory implements FormFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createBuilder($type = 'Symfony\Component\Form\Extension\Core\Type\FormType', $data = null, array $options = array())
+    public function createBuilder($type = 'Symfony\Component\Form\Extension\Core\Type\FormType', $data = null, array $options = [])
     {
-        $name = null;
-
-        if ($type instanceof ResolvedFormTypeInterface) {
-            $typeObject = $type;
-        } elseif ($type instanceof FormTypeInterface) {
-            $typeObject = $type;
-        } elseif (is_string($type)) {
-            $typeObject = $this->registry->getType($type);
-            $name = $type;
-        } else {
-            throw new UnexpectedTypeException($type, 'string, Symfony\Component\Form\ResolvedFormTypeInterface or Symfony\Component\Form\FormTypeInterface');
+        if (!\is_string($type)) {
+            throw new UnexpectedTypeException($type, 'string');
         }
 
-        if (method_exists($typeObject, 'getBlockPrefix')) {
-            // As of Symfony 3.0, the block prefix of the type is used as default name
-            $name = $typeObject->getBlockPrefix();
-        } else {
-            // BC when there is no block prefix
-            if (null === $name) {
-                $name = $typeObject->getName();
-            }
-            if (false !== strpos($name, '\\')) {
-                // FQCN
-                $name = StringUtil::fqcnToBlockPrefix($name);
-            }
-        }
-
-        return $this->createNamedBuilder($name, $type, $data, $options);
+        return $this->createNamedBuilder($this->registry->getType($type)->getBlockPrefix(), $type, $data, $options);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function createNamedBuilder($name, $type = 'Symfony\Component\Form\Extension\Core\Type\FormType', $data = null, array $options = array())
+    public function createNamedBuilder($name, $type = 'Symfony\Component\Form\Extension\Core\Type\FormType', $data = null, array $options = [])
     {
-        if (null !== $data && !array_key_exists('data', $options)) {
+        if (null !== $data && !\array_key_exists('data', $options)) {
             $options['data'] = $data;
         }
 
-        if ($type instanceof FormTypeInterface) {
-            @trigger_error(sprintf('Passing type instances to FormBuilder::add(), Form::add() or the FormFactory is deprecated since version 2.8 and will not be supported in 3.0. Use the fully-qualified type class name instead (%s).', get_class($type)), E_USER_DEPRECATED);
-            $type = $this->resolveType($type);
-        } elseif (is_string($type)) {
-            $type = $this->registry->getType($type);
-        } elseif ($type instanceof ResolvedFormTypeInterface) {
-            @trigger_error(sprintf('Passing type instances to FormBuilder::add(), Form::add() or the FormFactory is deprecated since version 2.8 and will not be supported in 3.0. Use the fully-qualified type class name instead (%s).', get_class($type->getInnerType())), E_USER_DEPRECATED);
-        } else {
-            throw new UnexpectedTypeException($type, 'string, Symfony\Component\Form\ResolvedFormTypeInterface or Symfony\Component\Form\FormTypeInterface');
+        if (!\is_string($type)) {
+            throw new UnexpectedTypeException($type, 'string');
         }
+
+        $type = $this->registry->getType($type);
 
         $builder = $type->createBuilder($this, $name, $options);
 
@@ -123,7 +85,7 @@ class FormFactory implements FormFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createBuilderForProperty($class, $property, $data = null, array $options = array())
+    public function createBuilderForProperty($class, $property, $data = null, array $options = [])
     {
         if (null === $guesser = $this->registry->getTypeGuesser()) {
             return $this->createNamedBuilder($property, 'Symfony\Component\Form\Extension\Core\Type\TextType', $data, $options);
@@ -140,50 +102,28 @@ class FormFactory implements FormFactoryInterface
         $pattern = $patternGuess ? $patternGuess->getValue() : null;
 
         if (null !== $pattern) {
-            $options = array_replace_recursive(array('attr' => array('pattern' => $pattern)), $options);
+            $options = array_replace_recursive(['attr' => ['pattern' => $pattern]], $options);
         }
 
         if (null !== $maxLength) {
-            $options = array_replace_recursive(array('attr' => array('maxlength' => $maxLength)), $options);
+            $options = array_replace_recursive(['attr' => ['maxlength' => $maxLength]], $options);
         }
 
         if ($requiredGuess) {
-            $options = array_merge(array('required' => $requiredGuess->getValue()), $options);
+            $options = array_merge(['required' => $requiredGuess->getValue()], $options);
         }
 
         // user options may override guessed options
         if ($typeGuess) {
-            $options = array_merge($typeGuess->getOptions(), $options);
+            $attrs = [];
+            $typeGuessOptions = $typeGuess->getOptions();
+            if (isset($typeGuessOptions['attr']) && isset($options['attr'])) {
+                $attrs = ['attr' => array_merge($typeGuessOptions['attr'], $options['attr'])];
+            }
+
+            $options = array_merge($typeGuessOptions, $options, $attrs);
         }
 
         return $this->createNamedBuilder($property, $type, $data, $options);
-    }
-
-    /**
-     * Wraps a type into a ResolvedFormTypeInterface implementation and connects
-     * it with its parent type.
-     *
-     * @param FormTypeInterface $type The type to resolve
-     *
-     * @return ResolvedFormTypeInterface The resolved type
-     */
-    private function resolveType(FormTypeInterface $type)
-    {
-        $parentType = $type->getParent();
-
-        if ($parentType instanceof FormTypeInterface) {
-            $parentType = $this->resolveType($parentType);
-        } elseif (null !== $parentType) {
-            $parentType = $this->registry->getType($parentType);
-        }
-
-        return $this->resolvedTypeFactory->createResolvedType(
-            $type,
-            // Type extensions are not supported for unregistered type instances,
-            // i.e. type instances that are passed to the FormFactory directly,
-            // nor for their parents, if getParent() also returns a type instance.
-            array(),
-            $parentType
-        );
     }
 }

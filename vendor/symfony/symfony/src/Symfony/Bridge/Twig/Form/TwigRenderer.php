@@ -12,29 +12,38 @@
 namespace Symfony\Bridge\Twig\Form;
 
 use Symfony\Component\Form\FormRenderer;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Twig\Environment;
+
+@trigger_error(sprintf('The %s class is deprecated since Symfony 3.4 and will be removed in 4.0. Use %s instead.', TwigRenderer::class, FormRenderer::class), E_USER_DEPRECATED);
 
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
+ *
+ * @deprecated since version 3.4, to be removed in 4.0. Use Symfony\Component\Form\FormRenderer instead.
  */
 class TwigRenderer extends FormRenderer implements TwigRendererInterface
 {
-    /**
-     * @var TwigRendererEngineInterface
-     */
-    private $engine;
-
-    public function __construct(TwigRendererEngineInterface $engine, $csrfTokenManager = null)
+    public function __construct(TwigRendererEngineInterface $engine, CsrfTokenManagerInterface $csrfTokenManager = null)
     {
         parent::__construct($engine, $csrfTokenManager);
+    }
 
-        $this->engine = $engine;
+    /**
+     * Returns the engine used by this renderer.
+     *
+     * @return TwigRendererEngineInterface The renderer engine
+     */
+    public function getEngine()
+    {
+        return parent::getEngine();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setEnvironment(\Twig_Environment $environment)
+    public function setEnvironment(Environment $environment)
     {
-        $this->engine->setEnvironment($environment);
+        $this->getEngine()->setEnvironment($environment);
     }
 }

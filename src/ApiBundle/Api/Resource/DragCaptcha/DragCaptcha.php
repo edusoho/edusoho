@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ApiConf;
 use AppBundle\Common\ArrayToolkit;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class DragCaptcha extends AbstractResource
 {
@@ -33,7 +34,7 @@ class DragCaptcha extends AbstractResource
         $limitKey = $limitType.'_'.$request->getHttpRequest()->getClientIp();
 
         $result = $this->getBizDragCaptcha()->generate($fields, $limitKey);
-        $result['url'] = $this->generateUrl('drag_captcha', array('token' => $result['token']), true);
+        $result['url'] = $this->generateUrl('drag_captcha', array('token' => $result['token']), UrlGeneratorInterface::ABSOLUTE_URL);
 
         return $result;
     }

@@ -15,6 +15,9 @@ namespace PhpCsFixer\Fixer\Alias;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Preg;
+use PhpCsFixer\PregException;
+use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\Utils;
 
@@ -47,10 +50,10 @@ final class EregToPregFixer extends AbstractFixer
     public function getDefinition()
     {
         return new FixerDefinition(
-            'Replace deprecated `ereg` regular expression functions with preg.',
+            'Replace deprecated `ereg` regular expression functions with `preg`.',
             array(new CodeSample('<?php $x = ereg(\'[A-Z]\');')),
             null,
-            'Risky if the `ereg` funcion is overridden.'
+            'Risky if the `ereg` function is overridden.'
         );
     }
 
@@ -124,8 +127,8 @@ final class EregToPregFixer extends AbstractFixer
                 }
 
                 // modify function and argument
-                $tokens[$match[2]]->setContent($quote.$preg.$quote);
-                $tokens[$match[0]]->setContent($map[1]);
+                $tokens[$match[0]] = new Token(array(T_STRING, $map[1]));
+                $tokens[$match[2]] = new Token(array(T_CONSTANT_ENCAPSED_STRING, $quote.$preg.$quote));
             }
         }
     }
@@ -139,7 +142,13 @@ final class EregToPregFixer extends AbstractFixer
      */
     private function checkPreg($pattern)
     {
-        return false !== @preg_match($pattern, '');
+        try {
+            Preg::match($pattern, '');
+
+            return true;
+        } catch (PregException $e) {
+            return false;
+        }
     }
 
     /**

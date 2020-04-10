@@ -11,15 +11,15 @@
 
 namespace Symfony\Bundle\FrameworkBundle\Tests\Templating;
 
+use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Bundle\FrameworkBundle\Templating\PhpEngine;
+use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Templating\TemplateNameParser;
-use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 
 class PhpEngineTest extends TestCase
 {
@@ -38,17 +38,14 @@ class PhpEngineTest extends TestCase
         $loader = $this->getMockForAbstractClass('Symfony\Component\Templating\Loader\Loader');
         $engine = new PhpEngine(new TemplateNameParser(), $container, $loader, new GlobalVariables($container));
 
-        $container->set('request_stack', null);
-
+        $this->assertFalse($container->has('request_stack'));
         $globals = $engine->getGlobals();
         $this->assertEmpty($globals['app']->getRequest());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testGetInvalidHelper()
     {
+        $this->expectException('InvalidArgumentException');
         $container = $this->getContainer();
         $loader = $this->getMockForAbstractClass('Symfony\Component\Templating\Loader\Loader');
         $engine = new PhpEngine(new TemplateNameParser(), $container, $loader);

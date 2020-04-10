@@ -97,7 +97,7 @@ class TranslationJsDumperCommand extends BaseCommand
                 $translations[$locale] = array();
             }
 
-            $fileContent = $yaml->parse($filename);
+            $fileContent = $yaml->parse(file_get_contents($filename));
 
             if (!empty($fileContent)) {
                 $translations[$locale] = array_merge($translations[$locale], $fileContent);

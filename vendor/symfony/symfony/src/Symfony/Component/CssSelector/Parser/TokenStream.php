@@ -29,17 +29,12 @@ class TokenStream
     /**
      * @var Token[]
      */
-    private $tokens = array();
-
-    /**
-     * @var bool
-     */
-    private $frozen = false;
+    private $tokens = [];
 
     /**
      * @var Token[]
      */
-    private $used = array();
+    private $used = [];
 
     /**
      * @var int
@@ -49,7 +44,7 @@ class TokenStream
     /**
      * @var Token|null
      */
-    private $peeked = null;
+    private $peeked;
 
     /**
      * @var bool
@@ -58,8 +53,6 @@ class TokenStream
 
     /**
      * Pushes a token.
-     *
-     * @param Token $token
      *
      * @return $this
      */
@@ -77,8 +70,6 @@ class TokenStream
      */
     public function freeze()
     {
-        $this->frozen = true;
-
         return $this;
     }
 
@@ -151,7 +142,7 @@ class TokenStream
     /**
      * Returns nex identifier or star delimiter token.
      *
-     * @return null|string The identifier token value or null if star found
+     * @return string|null The identifier token value or null if star found
      *
      * @throws SyntaxErrorException If next token is not an identifier or a star delimiter
      */
@@ -163,8 +154,8 @@ class TokenStream
             return $next->getValue();
         }
 
-        if ($next->isDelimiter(array('*'))) {
-            return;
+        if ($next->isDelimiter(['*'])) {
+            return null;
         }
 
         throw SyntaxErrorException::unexpectedToken('identifier or "*"', $next);

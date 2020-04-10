@@ -53,7 +53,7 @@ class CloudFileController extends BaseController
         );
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $results['count'],
             20
         );

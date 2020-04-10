@@ -38,3 +38,4 @@ services:
     biz:
         class: Codeages\Biz\Framework\Context\Biz
         arguments: ["%biz_config%"]
+        public: true

@@ -48,7 +48,7 @@ class CourseController extends BaseController
 
         $count = $this->getCourseSetService()->countCourseSets($conditions);
 
-        $paginator = new Paginator($this->get('request'), $count, 20);
+        $paginator = new Paginator($request, $count, 20);
         $courseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
             array(),
@@ -156,7 +156,7 @@ class CourseController extends BaseController
 
         $count = $this->getCourseService()->searchCourseCount($conditions);
 
-        $paginator = new Paginator($this->get('request'), $count, 6);
+        $paginator = new Paginator($request, $count, 6);
 
         $courses = $this->getCourseService()->searchCourses(
             $conditions,
@@ -281,7 +281,7 @@ class CourseController extends BaseController
         $conditions = $this->fillOrgCode($conditions);
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getCourseSetService()->countCourseSets($conditions),
             20
         );
@@ -460,7 +460,7 @@ class CourseController extends BaseController
 
         $count = $this->getCourseService()->searchCourseCount($conditions);
 
-        $paginator = new Paginator($this->get('request'), $count, 20);
+        $paginator = new Paginator($request, $count, 20);
 
         $courses = $this->getCourseService()->searchCourses(
             $conditions,

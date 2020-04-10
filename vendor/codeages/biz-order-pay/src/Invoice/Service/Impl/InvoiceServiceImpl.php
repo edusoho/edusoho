@@ -133,7 +133,7 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
             'company_address' => '',
             'company_mobile' => '',
             'bank' => '',
-            'account' => ',',
+            'account' => ','
         ));
 
         $invoice = $this->getInvoiceDao()->update($id, $fields);

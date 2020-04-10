@@ -14,15 +14,11 @@ namespace Symfony\Component\Validator\Tests\Constraints;
 use Symfony\Component\Intl\Util\IntlTestHelper;
 use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints\RangeValidator;
-use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
+use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class RangeValidatorTest extends AbstractConstraintValidatorTest
+class RangeValidatorTest extends ConstraintValidatorTestCase
 {
-    protected function getApiVersion()
-    {
-        return Validation::API_VERSION_2_5;
-    }
-
     protected function createValidator()
     {
         return new RangeValidator();
@@ -30,43 +26,43 @@ class RangeValidatorTest extends AbstractConstraintValidatorTest
 
     public function testNullIsValid()
     {
-        $this->validator->validate(null, new Range(array('min' => 10, 'max' => 20)));
+        $this->validator->validate(null, new Range(['min' => 10, 'max' => 20]));
 
         $this->assertNoViolation();
     }
 
     public function getTenToTwenty()
     {
-        return array(
-            array(10.00001),
-            array(19.99999),
-            array('10.00001'),
-            array('19.99999'),
-            array(10),
-            array(20),
-            array(10.0),
-            array(20.0),
-        );
+        return [
+            [10.00001],
+            [19.99999],
+            ['10.00001'],
+            ['19.99999'],
+            [10],
+            [20],
+            [10.0],
+            [20.0],
+        ];
     }
 
     public function getLessThanTen()
     {
-        return array(
-            array(9.99999, '9.99999'),
-            array('9.99999', '"9.99999"'),
-            array(5, '5'),
-            array(1.0, '1.0'),
-        );
+        return [
+            [9.99999, '9.99999'],
+            ['9.99999', '"9.99999"'],
+            [5, '5'],
+            [1.0, '1'],
+        ];
     }
 
     public function getMoreThanTwenty()
     {
-        return array(
-            array(20.000001, '20.000001'),
-            array('20.000001', '"20.000001"'),
-            array(21, '21'),
-            array(30.0, '30.0'),
-        );
+        return [
+            [20.000001, '20.000001'],
+            ['20.000001', '"20.000001"'],
+            [21, '21'],
+            [30.0, '30'],
+        ];
     }
 
     /**
@@ -74,7 +70,7 @@ class RangeValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testValidValuesMin($value)
     {
-        $constraint = new Range(array('min' => 10));
+        $constraint = new Range(['min' => 10]);
         $this->validator->validate($value, $constraint);
 
         $this->assertNoViolation();
@@ -85,7 +81,7 @@ class RangeValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testValidValuesMax($value)
     {
-        $constraint = new Range(array('max' => 20));
+        $constraint = new Range(['max' => 20]);
         $this->validator->validate($value, $constraint);
 
         $this->assertNoViolation();
@@ -96,7 +92,7 @@ class RangeValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testValidValuesMinMax($value)
     {
-        $constraint = new Range(array('min' => 10, 'max' => 20));
+        $constraint = new Range(['min' => 10, 'max' => 20]);
         $this->validator->validate($value, $constraint);
 
         $this->assertNoViolation();
@@ -107,10 +103,10 @@ class RangeValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testInvalidValuesMin($value, $formattedValue)
     {
-        $constraint = new Range(array(
+        $constraint = new Range([
             'min' => 10,
             'minMessage' => 'myMessage',
-        ));
+        ]);
 
         $this->validator->validate($value, $constraint);
 
@@ -126,10 +122,10 @@ class RangeValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testInvalidValuesMax($value, $formattedValue)
     {
-        $constraint = new Range(array(
+        $constraint = new Range([
             'max' => 20,
             'maxMessage' => 'myMessage',
-        ));
+        ]);
 
         $this->validator->validate($value, $constraint);
 
@@ -145,12 +141,12 @@ class RangeValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testInvalidValuesCombinedMax($value, $formattedValue)
     {
-        $constraint = new Range(array(
+        $constraint = new Range([
             'min' => 10,
             'max' => 20,
             'minMessage' => 'myMinMessage',
             'maxMessage' => 'myMaxMessage',
-        ));
+        ]);
 
         $this->validator->validate($value, $constraint);
 
@@ -166,12 +162,12 @@ class RangeValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testInvalidValuesCombinedMin($value, $formattedValue)
     {
-        $constraint = new Range(array(
+        $constraint = new Range([
             'min' => 10,
             'max' => 20,
             'minMessage' => 'myMinMessage',
             'maxMessage' => 'myMaxMessage',
-        ));
+        ]);
 
         $this->validator->validate($value, $constraint);
 
@@ -188,17 +184,15 @@ class RangeValidatorTest extends AbstractConstraintValidatorTest
         // the default timezone
         $this->setDefaultTimezone('UTC');
 
-        $tests = array(
-            array(new \DateTime('March 10, 2014')),
-            array(new \DateTime('March 15, 2014')),
-            array(new \DateTime('March 20, 2014')),
-        );
+        $tests = [
+            [new \DateTime('March 10, 2014')],
+            [new \DateTime('March 15, 2014')],
+            [new \DateTime('March 20, 2014')],
+        ];
 
-        if (PHP_VERSION_ID >= 50500) {
-            $tests[] = array(new \DateTimeImmutable('March 10, 2014'));
-            $tests[] = array(new \DateTimeImmutable('March 15, 2014'));
-            $tests[] = array(new \DateTimeImmutable('March 20, 2014'));
-        }
+        $tests[] = [new \DateTimeImmutable('March 10, 2014')];
+        $tests[] = [new \DateTimeImmutable('March 15, 2014')];
+        $tests[] = [new \DateTimeImmutable('March 20, 2014')];
 
         $this->restoreDefaultTimezone();
 
@@ -211,15 +205,13 @@ class RangeValidatorTest extends AbstractConstraintValidatorTest
         // the default timezone
         $this->setDefaultTimezone('UTC');
 
-        $tests = array(
-            array(new \DateTime('March 20, 2013'), 'Mar 20, 2013, 12:00 AM'),
-            array(new \DateTime('March 9, 2014'), 'Mar 9, 2014, 12:00 AM'),
-        );
+        $tests = [
+            [new \DateTime('March 20, 2013'), 'Mar 20, 2013, 12:00 AM'],
+            [new \DateTime('March 9, 2014'), 'Mar 9, 2014, 12:00 AM'],
+        ];
 
-        if (PHP_VERSION_ID >= 50500) {
-            $tests[] = array(new \DateTimeImmutable('March 20, 2013'), 'Mar 20, 2013, 12:00 AM');
-            $tests[] = array(new \DateTimeImmutable('March 9, 2014'), 'Mar 9, 2014, 12:00 AM');
-        }
+        $tests[] = [new \DateTimeImmutable('March 20, 2013'), 'Mar 20, 2013, 12:00 AM'];
+        $tests[] = [new \DateTimeImmutable('March 9, 2014'), 'Mar 9, 2014, 12:00 AM'];
 
         $this->restoreDefaultTimezone();
 
@@ -232,15 +224,13 @@ class RangeValidatorTest extends AbstractConstraintValidatorTest
         // the default timezone
         $this->setDefaultTimezone('UTC');
 
-        $tests = array(
-            array(new \DateTime('March 21, 2014'), 'Mar 21, 2014, 12:00 AM'),
-            array(new \DateTime('March 9, 2015'), 'Mar 9, 2015, 12:00 AM'),
-        );
+        $tests = [
+            [new \DateTime('March 21, 2014'), 'Mar 21, 2014, 12:00 AM'],
+            [new \DateTime('March 9, 2015'), 'Mar 9, 2015, 12:00 AM'],
+        ];
 
-        if (PHP_VERSION_ID >= 50500) {
-            $tests[] = array(new \DateTimeImmutable('March 21, 2014'), 'Mar 21, 2014, 12:00 AM');
-            $tests[] = array(new \DateTimeImmutable('March 9, 2015'), 'Mar 9, 2015, 12:00 AM');
-        }
+        $tests[] = [new \DateTimeImmutable('March 21, 2014'), 'Mar 21, 2014, 12:00 AM'];
+        $tests[] = [new \DateTimeImmutable('March 9, 2015'), 'Mar 9, 2015, 12:00 AM'];
 
         $this->restoreDefaultTimezone();
 
@@ -252,7 +242,7 @@ class RangeValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testValidDatesMin($value)
     {
-        $constraint = new Range(array('min' => 'March 10, 2014'));
+        $constraint = new Range(['min' => 'March 10, 2014']);
         $this->validator->validate($value, $constraint);
 
         $this->assertNoViolation();
@@ -263,7 +253,7 @@ class RangeValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testValidDatesMax($value)
     {
-        $constraint = new Range(array('max' => 'March 20, 2014'));
+        $constraint = new Range(['max' => 'March 20, 2014']);
         $this->validator->validate($value, $constraint);
 
         $this->assertNoViolation();
@@ -274,7 +264,7 @@ class RangeValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testValidDatesMinMax($value)
     {
-        $constraint = new Range(array('min' => 'March 10, 2014', 'max' => 'March 20, 2014'));
+        $constraint = new Range(['min' => 'March 10, 2014', 'max' => 'March 20, 2014']);
         $this->validator->validate($value, $constraint);
 
         $this->assertNoViolation();
@@ -289,10 +279,10 @@ class RangeValidatorTest extends AbstractConstraintValidatorTest
         // Make sure we have the correct version loaded
         IntlTestHelper::requireIntl($this, '57.1');
 
-        $constraint = new Range(array(
+        $constraint = new Range([
             'min' => 'March 10, 2014',
             'minMessage' => 'myMessage',
-        ));
+        ]);
 
         $this->validator->validate($value, $constraint);
 
@@ -312,10 +302,10 @@ class RangeValidatorTest extends AbstractConstraintValidatorTest
         // Make sure we have the correct version loaded
         IntlTestHelper::requireIntl($this, '57.1');
 
-        $constraint = new Range(array(
+        $constraint = new Range([
             'max' => 'March 20, 2014',
             'maxMessage' => 'myMessage',
-        ));
+        ]);
 
         $this->validator->validate($value, $constraint);
 
@@ -335,12 +325,12 @@ class RangeValidatorTest extends AbstractConstraintValidatorTest
         // Make sure we have the correct version loaded
         IntlTestHelper::requireIntl($this, '57.1');
 
-        $constraint = new Range(array(
+        $constraint = new Range([
             'min' => 'March 10, 2014',
             'max' => 'March 20, 2014',
             'minMessage' => 'myMinMessage',
             'maxMessage' => 'myMaxMessage',
-        ));
+        ]);
 
         $this->validator->validate($value, $constraint);
 
@@ -360,12 +350,12 @@ class RangeValidatorTest extends AbstractConstraintValidatorTest
         // Make sure we have the correct version loaded
         IntlTestHelper::requireIntl($this, '57.1');
 
-        $constraint = new Range(array(
+        $constraint = new Range([
             'min' => 'March 10, 2014',
             'max' => 'March 20, 2014',
             'minMessage' => 'myMinMessage',
             'maxMessage' => 'myMaxMessage',
-        ));
+        ]);
 
         $this->validator->validate($value, $constraint);
 
@@ -378,26 +368,51 @@ class RangeValidatorTest extends AbstractConstraintValidatorTest
 
     public function getInvalidValues()
     {
-        return array(
-            array(9.999999),
-            array(20.000001),
-            array('9.999999'),
-            array('20.000001'),
-            array(new \stdClass()),
-        );
+        return [
+            [9.999999],
+            [20.000001],
+            ['9.999999'],
+            ['20.000001'],
+            [new \stdClass()],
+        ];
     }
 
     public function testNonNumeric()
     {
-        $this->validator->validate('abcd', new Range(array(
+        $this->validator->validate('abcd', new Range([
             'min' => 10,
             'max' => 20,
             'invalidMessage' => 'myMessage',
-        )));
+        ]));
 
         $this->buildViolation('myMessage')
             ->setParameter('{{ value }}', '"abcd"')
             ->setCode(Range::INVALID_CHARACTERS_ERROR)
             ->assertRaised();
+    }
+
+    /**
+     * @dataProvider throwsOnInvalidStringDatesProvider
+     */
+    public function testThrowsOnInvalidStringDates($expectedMessage, $value, $min, $max)
+    {
+        $this->expectException(ConstraintDefinitionException::class);
+        $this->expectExceptionMessage($expectedMessage);
+
+        $this->validator->validate($value, new Range([
+            'min' => $min,
+            'max' => $max,
+        ]));
+    }
+
+    public function throwsOnInvalidStringDatesProvider()
+    {
+        return [
+            ['The min value "foo" could not be converted to a "DateTimeImmutable" instance in the "Symfony\Component\Validator\Constraints\Range" constraint.', new \DateTimeImmutable(), 'foo', null],
+            ['The min value "foo" could not be converted to a "DateTime" instance in the "Symfony\Component\Validator\Constraints\Range" constraint.', new \DateTime(), 'foo', null],
+            ['The max value "foo" could not be converted to a "DateTimeImmutable" instance in the "Symfony\Component\Validator\Constraints\Range" constraint.', new \DateTimeImmutable(), null, 'foo'],
+            ['The max value "foo" could not be converted to a "DateTime" instance in the "Symfony\Component\Validator\Constraints\Range" constraint.', new \DateTime(), null, 'foo'],
+            ['The min value "bar" could not be converted to a "DateTimeImmutable" instance in the "Symfony\Component\Validator\Constraints\Range" constraint.', new \DateTimeImmutable(), 'bar', 'ccc'],
+        ];
     }
 }

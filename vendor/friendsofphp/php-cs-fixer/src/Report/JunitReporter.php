@@ -12,6 +12,7 @@
 
 namespace PhpCsFixer\Report;
 
+use PhpCsFixer\Preg;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 
 /**
@@ -34,6 +35,10 @@ final class JunitReporter implements ReporterInterface
      */
     public function generate(ReportSummary $reportSummary)
     {
+        if (!extension_loaded('dom')) {
+            throw new \RuntimeException('Cannot generate report! `ext-dom` is not available!');
+        }
+
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $testsuites = $dom->appendChild($dom->createElement('testsuites'));
         /** @var \DomElement $testsuite */
@@ -111,7 +116,7 @@ final class JunitReporter implements ReporterInterface
     {
         $appliedFixersCount = count($fixResult['appliedFixers']);
 
-        $testName = str_replace('.', '_DOT_', preg_replace('@\.'.pathinfo($file, PATHINFO_EXTENSION).'$@', '', $file));
+        $testName = str_replace('.', '_DOT_', Preg::replace('@\.'.pathinfo($file, PATHINFO_EXTENSION).'$@', '', $file));
 
         $testcase = $dom->createElement('testcase');
         $testcase->setAttribute('name', $testName);

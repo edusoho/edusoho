@@ -11,9 +11,9 @@
 
 namespace Symfony\Bundle\FrameworkBundle\Templating;
 
-use Symfony\Component\Templating\TemplateReferenceInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Templating\TemplateNameParser as BaseTemplateNameParser;
+use Symfony\Component\Templating\TemplateReferenceInterface;
 
 /**
  * TemplateNameParser converts template names from the short notation
@@ -25,13 +25,8 @@ use Symfony\Component\Templating\TemplateNameParser as BaseTemplateNameParser;
 class TemplateNameParser extends BaseTemplateNameParser
 {
     protected $kernel;
-    protected $cache = array();
+    protected $cache = [];
 
-    /**
-     * Constructor.
-     *
-     * @param KernelInterface $kernel A KernelInterface instance
-     */
     public function __construct(KernelInterface $kernel)
     {
         $this->kernel = $kernel;
@@ -49,13 +44,13 @@ class TemplateNameParser extends BaseTemplateNameParser
         }
 
         // normalize name
-        $name = str_replace(':/', ':', preg_replace('#/{2,}#', '/', str_replace('\\', '/', $name)));
+        $name = preg_replace('#/{2,}#', '/', str_replace('\\', '/', $name));
 
         if (false !== strpos($name, '..')) {
             throw new \RuntimeException(sprintf('Template name "%s" contains invalid characters.', $name));
         }
 
-        if (!preg_match('/^(?:([^:]*):([^:]*):)?(.+)\.([^\.]+)\.([^\.]+)$/', $name, $matches) || $this->isAbsolutePath($name) || 0 === strpos($name, '@')) {
+        if ($this->isAbsolutePath($name) || !preg_match('/^(?:([^:]*):([^:]*):)?(.+)\.([^\.]+)\.([^\.]+)$/', $name, $matches) || 0 === strpos($name, '@')) {
             return parent::parse($name);
         }
 
@@ -74,6 +69,12 @@ class TemplateNameParser extends BaseTemplateNameParser
 
     private function isAbsolutePath($file)
     {
-        return (bool) preg_match('#^(?:/|[a-zA-Z]:)#', $file);
+        $isAbsolute = (bool) preg_match('#^(?:/|[a-zA-Z]:)#', $file);
+
+        if ($isAbsolute) {
+            @trigger_error('Absolute template path support is deprecated since Symfony 3.1 and will be removed in 4.0.', E_USER_DEPRECATED);
+        }
+
+        return $isAbsolute;
     }
 }

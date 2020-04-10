@@ -3,7 +3,7 @@ Keeping your Modules independent
 
 .. versionadded:: 2.2
 
-One of the goals of using modules is to create discreet units of functionality
+One of the goals of using modules is to create discrete units of functionality
 that do not have many (if any) dependencies, allowing you to use that
 functionality in other applications without including unnecessary items.
 
@@ -40,6 +40,7 @@ A Customer entity
 
 .. code-block:: php
 
+    <?php
     // src/Acme/AppModule/Entity/Customer.php
 
     namespace Acme\AppModule\Entity;
@@ -62,6 +63,7 @@ An Invoice entity
 
 .. code-block:: php
 
+    <?php
     // src/Acme/InvoiceModule/Entity/Invoice.php
 
     namespace Acme\InvoiceModule\Entity;
@@ -88,6 +90,7 @@ An InvoiceSubjectInterface
 
 .. code-block:: php
 
+    <?php
     // src/Acme/InvoiceModule/Model/InvoiceSubjectInterface.php
 
     namespace Acme\InvoiceModule\Model;
@@ -116,13 +119,15 @@ the targetEntity resolution will occur reliably:
 
 .. code-block:: php
 
-    $evm = new \Doctrine\Common\EventManager;
-
+    <?php
+    $evm  = new \Doctrine\Common\EventManager;
     $rtel = new \Doctrine\ORM\Tools\ResolveTargetEntityListener;
+
+    // Adds a target-entity class
     $rtel->addResolveTargetEntity('Acme\\InvoiceModule\\Model\\InvoiceSubjectInterface', 'Acme\\CustomerModule\\Entity\\Customer', array());
 
     // Add the ResolveTargetEntityListener
-    $evm->addEventSubscriber($rtel);
+    $evm->addEventListener(Doctrine\ORM\Events::loadClassMetadata, $rtel);
 
     $em = \Doctrine\ORM\EntityManager::create($connectionOptions, $config, $evm);
 

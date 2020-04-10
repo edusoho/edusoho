@@ -13,15 +13,10 @@ namespace Symfony\Component\Validator\Tests\Constraints;
 
 use Symfony\Component\Validator\Constraints\Blank;
 use Symfony\Component\Validator\Constraints\BlankValidator;
-use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class BlankValidatorTest extends AbstractConstraintValidatorTest
+class BlankValidatorTest extends ConstraintValidatorTestCase
 {
-    protected function getApiVersion()
-    {
-        return Validation::API_VERSION_2_5;
-    }
-
     protected function createValidator()
     {
         return new BlankValidator();
@@ -46,9 +41,9 @@ class BlankValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testInvalidValues($value, $valueAsString)
     {
-        $constraint = new Blank(array(
+        $constraint = new Blank([
             'message' => 'myMessage',
-        ));
+        ]);
 
         $this->validator->validate($value, $constraint);
 
@@ -60,11 +55,11 @@ class BlankValidatorTest extends AbstractConstraintValidatorTest
 
     public function getInvalidValues()
     {
-        return array(
-            array('foobar', '"foobar"'),
-            array(0, '0'),
-            array(false, 'false'),
-            array(1234, '1234'),
-        );
+        return [
+            ['foobar', '"foobar"'],
+            [0, '0'],
+            [false, 'false'],
+            [1234, '1234'],
+        ];
     }
 }

@@ -21,11 +21,13 @@ interface FormRendererEngineInterface
     /**
      * Sets the theme(s) to be used for rendering a view and its children.
      *
-     * @param FormView $view   The view to assign the theme(s) to
-     * @param mixed    $themes The theme(s). The type of these themes
-     *                         is open to the implementation.
+     * @param FormView $view             The view to assign the theme(s) to
+     * @param mixed    $themes           The theme(s). The type of these themes
+     *                                   is open to the implementation.
+     * @param bool     $useDefaultThemes If true, will use default themes specified
+     *                                   in the engine, will be added to the interface in 4.0
      */
-    public function setTheme(FormView $view, $themes);
+    public function setTheme(FormView $view, $themes /*, $useDefaultThemes = true */);
 
     /**
      * Returns the resource for a block name.
@@ -36,13 +38,13 @@ interface FormRendererEngineInterface
      * The type of the resource is decided by the implementation. The resource
      * is later passed to {@link renderBlock()} by the rendering algorithm.
      *
-     * @param FormView $view      The view for determining the used themes
+     * @param FormView $view      The view for determining the used themes.
      *                            First the themes attached directly to the
      *                            view with {@link setTheme()} are considered,
      *                            then the ones of its parent etc.
      * @param string   $blockName The name of the block to render
      *
-     * @return mixed The renderer resource or false, if none was found
+     * @return mixed the renderer resource or false, if none was found
      */
     public function getResourceForBlockName(FormView $view, $blockName);
 
@@ -53,11 +55,9 @@ interface FormRendererEngineInterface
      * and continues with the child of that root, the child of that child etc.
      * The following is an example for a block hierarchy:
      *
-     * <code>
-     * form_widget
-     * text_widget
-     * url_widget
-     * </code>
+     *     form_widget
+     *     text_widget
+     *     url_widget
      *
      * In this example, "url_widget" is the most specific block, while the other
      * blocks are its ancestors in the hierarchy.
@@ -70,12 +70,12 @@ interface FormRendererEngineInterface
      * The type of the resource is decided by the implementation. The resource
      * is later passed to {@link renderBlock()} by the rendering algorithm.
      *
-     * @param FormView $view               The view for determining the used themes
+     * @param FormView $view               The view for determining the used themes.
      *                                     First the themes  attached directly to
      *                                     the view with {@link setTheme()} are
      *                                     considered, then the ones of its parent etc.
-     * @param array    $blockNameHierarchy The block name hierarchy, with the root block
-     *                                     at the beginning.
+     * @param string[] $blockNameHierarchy The block name hierarchy, with the root block
+     *                                     at the beginning
      * @param int      $hierarchyLevel     The level in the hierarchy at which to start
      *                                     looking. Level 0 indicates the root block, i.e.
      *                                     the first element of $blockNameHierarchy.
@@ -91,11 +91,9 @@ interface FormRendererEngineInterface
      * and continues with the child of that root, the child of that child etc.
      * The following is an example for a block hierarchy:
      *
-     * <code>
-     * form_widget
-     * text_widget
-     * url_widget
-     * </code>
+     *     form_widget
+     *     text_widget
+     *     url_widget
      *
      * The second parameter $hierarchyLevel determines the level of the hierarchy
      * that should be rendered.
@@ -110,12 +108,12 @@ interface FormRendererEngineInterface
      * The type of the resource is decided by the implementation. The resource
      * is later passed to {@link renderBlock()} by the rendering algorithm.
      *
-     * @param FormView $view               The view for determining the used themes
+     * @param FormView $view               The view for determining the used themes.
      *                                     First the themes  attached directly to
      *                                     the view with {@link setTheme()} are
      *                                     considered, then the ones of its parent etc.
-     * @param array    $blockNameHierarchy The block name hierarchy, with the root block
-     *                                     at the beginning.
+     * @param string[] $blockNameHierarchy The block name hierarchy, with the root block
+     *                                     at the beginning
      * @param int      $hierarchyLevel     The level in the hierarchy at which to start
      *                                     looking. Level 0 indicates the root block, i.e.
      *                                     the first element of $blockNameHierarchy.
@@ -138,5 +136,5 @@ interface FormRendererEngineInterface
      *
      * @return string The HTML markup
      */
-    public function renderBlock(FormView $view, $resource, $blockName, array $variables = array());
+    public function renderBlock(FormView $view, $resource, $blockName, array $variables = []);
 }

@@ -11,18 +11,22 @@
 
 namespace Symfony\Component\VarDumper\Cloner;
 
+use Symfony\Component\VarDumper\Caster\Caster;
+
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class Data
+class Data implements \ArrayAccess, \Countable, \IteratorAggregate
 {
     private $data;
+    private $position = 0;
+    private $key = 0;
     private $maxDepth = 20;
     private $maxItemsPerDepth = -1;
     private $useRefHandles = -1;
 
     /**
-     * @param array $data A array as returned by ClonerInterface::cloneVar()
+     * @param array $data An array as returned by ClonerInterface::cloneVar()
      */
     public function __construct(array $data)
     {
@@ -30,10 +34,150 @@ class Data
     }
 
     /**
+     * @return string|null The type of the value
+     */
+    public function getType()
+    {
+        $item = $this->data[$this->position][$this->key];
+
+        if ($item instanceof Stub && Stub::TYPE_REF === $item->type && !$item->position) {
+            $item = $item->value;
+        }
+        if (!$item instanceof Stub) {
+            return \gettype($item);
+        }
+        if (Stub::TYPE_STRING === $item->type) {
+            return 'string';
+        }
+        if (Stub::TYPE_ARRAY === $item->type) {
+            return 'array';
+        }
+        if (Stub::TYPE_OBJECT === $item->type) {
+            return $item->class;
+        }
+        if (Stub::TYPE_RESOURCE === $item->type) {
+            return $item->class.' resource';
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array|bool $recursive Whether values should be resolved recursively or not
+     *
+     * @return string|int|float|bool|array|Data[]|null A native representation of the original value
+     */
+    public function getValue($recursive = false)
+    {
+        $item = $this->data[$this->position][$this->key];
+
+        if ($item instanceof Stub && Stub::TYPE_REF === $item->type && !$item->position) {
+            $item = $item->value;
+        }
+        if (!($item = $this->getStub($item)) instanceof Stub) {
+            return $item;
+        }
+        if (Stub::TYPE_STRING === $item->type) {
+            return $item->value;
+        }
+
+        $children = $item->position ? $this->data[$item->position] : [];
+
+        foreach ($children as $k => $v) {
+            if ($recursive && !($v = $this->getStub($v)) instanceof Stub) {
+                continue;
+            }
+            $children[$k] = clone $this;
+            $children[$k]->key = $k;
+            $children[$k]->position = $item->position;
+
+            if ($recursive) {
+                if (Stub::TYPE_REF === $v->type && ($v = $this->getStub($v->value)) instanceof Stub) {
+                    $recursive = (array) $recursive;
+                    if (isset($recursive[$v->position])) {
+                        continue;
+                    }
+                    $recursive[$v->position] = true;
+                }
+                $children[$k] = $children[$k]->getValue($recursive);
+            }
+        }
+
+        return $children;
+    }
+
+    public function count()
+    {
+        return \count($this->getValue());
+    }
+
+    public function getIterator()
+    {
+        if (!\is_array($value = $this->getValue())) {
+            throw new \LogicException(sprintf('%s object holds non-iterable type "%s".', self::class, \gettype($value)));
+        }
+
+        foreach ($value as $k => $v) {
+            yield $k => $v;
+        }
+    }
+
+    public function __get($key)
+    {
+        if (null !== $data = $this->seek($key)) {
+            $item = $this->getStub($data->data[$data->position][$data->key]);
+
+            return $item instanceof Stub || [] === $item ? $data : $item;
+        }
+
+        return null;
+    }
+
+    public function __isset($key)
+    {
+        return null !== $this->seek($key);
+    }
+
+    public function offsetExists($key)
+    {
+        return $this->__isset($key);
+    }
+
+    public function offsetGet($key)
+    {
+        return $this->__get($key);
+    }
+
+    public function offsetSet($key, $value)
+    {
+        throw new \BadMethodCallException(self::class.' objects are immutable.');
+    }
+
+    public function offsetUnset($key)
+    {
+        throw new \BadMethodCallException(self::class.' objects are immutable.');
+    }
+
+    public function __toString()
+    {
+        $value = $this->getValue();
+
+        if (!\is_array($value)) {
+            return (string) $value;
+        }
+
+        return sprintf('%s (count=%d)', $this->getType(), \count($value));
+    }
+
+    /**
      * @return array The raw data structure
+     *
+     * @deprecated since version 3.3. Use array or object access instead.
      */
     public function getRawData()
     {
+        @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 3.3 and will be removed in 4.0. Use the array or object access instead.', __METHOD__));
+
         return $this->data;
     }
 
@@ -42,7 +186,7 @@ class Data
      *
      * @param int $maxDepth The max dumped depth level
      *
-     * @return self A clone of $this
+     * @return static
      */
     public function withMaxDepth($maxDepth)
     {
@@ -57,7 +201,7 @@ class Data
      *
      * @param int $maxItemsPerDepth The max number of items dumped per depth level
      *
-     * @return self A clone of $this
+     * @return static
      */
     public function withMaxItemsPerDepth($maxItemsPerDepth)
     {
@@ -72,7 +216,7 @@ class Data
      *
      * @param bool $useRefHandles False to hide global ref. handles
      *
-     * @return self A clone of $this
+     * @return static
      */
     public function withRefHandles($useRefHandles)
     {
@@ -83,24 +227,49 @@ class Data
     }
 
     /**
-     * Returns a depth limited clone of $this.
+     * Seeks to a specific key in nested data structures.
      *
-     * @param int  $maxDepth         The max dumped depth level
-     * @param int  $maxItemsPerDepth The max number of items dumped per depth level
-     * @param bool $useRefHandles    False to hide ref. handles
+     * @param string|int $key The key to seek to
      *
-     * @return self A depth limited clone of $this
-     *
-     * @deprecated since Symfony 2.7, to be removed in 3.0. Use withMaxDepth, withMaxItemsPerDepth or withRefHandles instead.
+     * @return static|null Null if the key is not set
      */
-    public function getLimitedClone($maxDepth, $maxItemsPerDepth, $useRefHandles = true)
+    public function seek($key)
     {
-        @trigger_error('The '.__METHOD__.' method is deprecated since Symfony 2.7 and will be removed in 3.0. Use withMaxDepth, withMaxItemsPerDepth or withRefHandles methods instead.', E_USER_DEPRECATED);
+        $item = $this->data[$this->position][$this->key];
 
-        $data = clone $this;
-        $data->maxDepth = (int) $maxDepth;
-        $data->maxItemsPerDepth = (int) $maxItemsPerDepth;
-        $data->useRefHandles = $useRefHandles ? -1 : 0;
+        if ($item instanceof Stub && Stub::TYPE_REF === $item->type && !$item->position) {
+            $item = $item->value;
+        }
+        if (!($item = $this->getStub($item)) instanceof Stub || !$item->position) {
+            return null;
+        }
+        $keys = [$key];
+
+        switch ($item->type) {
+            case Stub::TYPE_OBJECT:
+                $keys[] = Caster::PREFIX_DYNAMIC.$key;
+                $keys[] = Caster::PREFIX_PROTECTED.$key;
+                $keys[] = Caster::PREFIX_VIRTUAL.$key;
+                $keys[] = "\0$item->class\0$key";
+                // no break
+            case Stub::TYPE_ARRAY:
+            case Stub::TYPE_RESOURCE:
+                break;
+            default:
+                return null;
+        }
+
+        $data = null;
+        $children = $this->data[$item->position];
+
+        foreach ($keys as $key) {
+            if (isset($children[$key]) || \array_key_exists($key, $children)) {
+                $data = clone $this;
+                $data->key = $key;
+                $data->position = $item->position;
+                break;
+            }
+        }
 
         return $data;
     }
@@ -110,8 +279,8 @@ class Data
      */
     public function dump(DumperInterface $dumper)
     {
-        $refs = array(0);
-        $this->dumpItem($dumper, new Cursor(), $refs, $this->data[0][0]);
+        $refs = [0];
+        $this->dumpItem($dumper, new Cursor(), $refs, $this->data[$this->position][$this->key]);
     }
 
     /**
@@ -130,7 +299,11 @@ class Data
         $firstSeen = true;
 
         if (!$item instanceof Stub) {
-            $type = gettype($item);
+            $cursor->attr = [];
+            $type = \gettype($item);
+            if ($item && 'array' === $type) {
+                $item = $this->getStub($item);
+            }
         } elseif (Stub::TYPE_REF === $item->type) {
             if ($item->handle) {
                 if (!isset($refs[$r = $item->handle - (PHP_INT_MAX >> 1)])) {
@@ -142,8 +315,9 @@ class Data
                 $cursor->hardRefHandle = $this->useRefHandles & $item->handle;
                 $cursor->hardRefCount = $item->refCount;
             }
-            $type = $item->class ?: gettype($item->value);
-            $item = $item->value;
+            $cursor->attr = $item->attr;
+            $type = $item->class ?: \gettype($item->value);
+            $item = $this->getStub($item->value);
         }
         if ($item instanceof Stub) {
             if ($item->refCount) {
@@ -156,6 +330,7 @@ class Data
             }
             $cursor->softRefHandle = $this->useRefHandles & $item->handle;
             $cursor->softRefCount = $item->refCount;
+            $cursor->attr = $item->attr;
             $cut = $item->cut;
 
             if ($item->position && $firstSeen) {
@@ -163,12 +338,12 @@ class Data
 
                 if ($cursor->stop) {
                     if ($cut >= 0) {
-                        $cut += count($children);
+                        $cut += \count($children);
                     }
-                    $children = array();
+                    $children = [];
                 }
             } else {
-                $children = array();
+                $children = [];
             }
             switch ($item->type) {
                 case Stub::TYPE_STRING:
@@ -179,16 +354,22 @@ class Data
                     $item = clone $item;
                     $item->type = $item->class;
                     $item->class = $item->value;
-                    // No break;
+                    // no break
                 case Stub::TYPE_OBJECT:
                 case Stub::TYPE_RESOURCE:
                     $withChildren = $children && $cursor->depth !== $this->maxDepth && $this->maxItemsPerDepth;
                     $dumper->enterHash($cursor, $item->type, $item->class, $withChildren);
                     if ($withChildren) {
-                        $cut = $this->dumpChildren($dumper, $cursor, $refs, $children, $cut, $item->type);
+                        if ($cursor->skipChildren) {
+                            $withChildren = false;
+                            $cut = -1;
+                        } else {
+                            $cut = $this->dumpChildren($dumper, $cursor, $refs, $children, $cut, $item->type, null !== $item->class);
+                        }
                     } elseif ($children && 0 <= $cut) {
-                        $cut += count($children);
+                        $cut += \count($children);
                     }
+                    $cursor->skipChildren = false;
                     $dumper->leaveHash($cursor, $item->type, $item->class, $withChildren, $cut);
                     break;
 
@@ -214,20 +395,21 @@ class Data
      * @param array           $children     The children to dump
      * @param int             $hashCut      The number of items removed from the original hash
      * @param string          $hashType     A Cursor::HASH_* const
+     * @param bool            $dumpKeys     Whether keys should be dumped or not
      *
      * @return int The final number of removed items
      */
-    private function dumpChildren($dumper, $parentCursor, &$refs, $children, $hashCut, $hashType)
+    private function dumpChildren($dumper, $parentCursor, &$refs, $children, $hashCut, $hashType, $dumpKeys)
     {
         $cursor = clone $parentCursor;
         ++$cursor->depth;
         $cursor->hashType = $hashType;
         $cursor->hashIndex = 0;
-        $cursor->hashLength = count($children);
+        $cursor->hashLength = \count($children);
         $cursor->hashCut = $hashCut;
         foreach ($children as $key => $child) {
             $cursor->hashKeyIsBinary = isset($key[0]) && !preg_match('//u', $key);
-            $cursor->hashKey = $key;
+            $cursor->hashKey = $dumpKeys ? $key : null;
             $this->dumpItem($dumper, $cursor, $refs, $child);
             if (++$cursor->hashIndex === $this->maxItemsPerDepth || $cursor->stop) {
                 $parentCursor->stop = true;
@@ -237,5 +419,23 @@ class Data
         }
 
         return $hashCut;
+    }
+
+    private function getStub($item)
+    {
+        if (!$item || !\is_array($item)) {
+            return $item;
+        }
+
+        $stub = new Stub();
+        $stub->type = Stub::TYPE_ARRAY;
+        foreach ($item as $stub->class => $stub->position) {
+        }
+        if (isset($item[0])) {
+            $stub->cut = $item[0];
+        }
+        $stub->value = $stub->cut + ($stub->position ? \count($this->data[$stub->position]) : 0);
+
+        return $stub;
     }
 }

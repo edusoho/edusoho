@@ -46,7 +46,7 @@ class Ip extends Constraint
 
     const INVALID_IP_ERROR = 'b1b427ae-9f6f-41b0-aa9b-84511fbb3c5b';
 
-    protected static $versions = array(
+    protected static $versions = [
         self::V4,
         self::V6,
         self::ALL,
@@ -62,11 +62,11 @@ class Ip extends Constraint
         self::V4_ONLY_PUBLIC,
         self::V6_ONLY_PUBLIC,
         self::ALL_ONLY_PUBLIC,
-    );
+    ];
 
-    protected static $errorNames = array(
+    protected static $errorNames = [
         self::INVALID_IP_ERROR => 'INVALID_IP_ERROR',
-    );
+    ];
 
     public $version = self::V4;
 
@@ -79,7 +79,7 @@ class Ip extends Constraint
     {
         parent::__construct($options);
 
-        if (!in_array($this->version, self::$versions)) {
+        if (!\in_array($this->version, self::$versions)) {
             throw new ConstraintDefinitionException(sprintf('The option "version" must be one of "%s"', implode('", "', self::$versions)));
         }
     }

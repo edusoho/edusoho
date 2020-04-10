@@ -15,6 +15,8 @@ namespace PhpCsFixer\Fixer\Whitespace;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Preg;
+use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
@@ -65,7 +67,7 @@ final class NoTrailingWhitespaceFixer extends AbstractFixer
                 continue;
             }
 
-            $lines = preg_split("/([\r\n]+)/", $token->getContent(), -1, PREG_SPLIT_DELIM_CAPTURE);
+            $lines = Preg::split("/([\r\n]+)/", $token->getContent(), -1, PREG_SPLIT_DELIM_CAPTURE);
             $linesSize = count($lines);
 
             // fix only multiline whitespaces or singleline whitespaces at the end of file
@@ -79,7 +81,12 @@ final class NoTrailingWhitespaceFixer extends AbstractFixer
                     }
                 }
 
-                $token->setContent(implode($lines));
+                $content = implode($lines);
+                if ('' !== $content) {
+                    $tokens[$index] = new Token(array($token->getId(), $content));
+                } else {
+                    $tokens->clearAt($index);
+                }
             }
         }
     }

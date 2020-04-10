@@ -2,8 +2,9 @@
 
 use Codeages\RateLimiter\RateLimiter;
 use Codeages\RateLimiter\Storage\Storage;
+use PHPUnit\Framework\TestCase;
 
-class RateLimiterTest extends \PHPUnit_Framework_TestCase
+class RateLimiterTest extends TestCase
 {
     const NAME = 'RateLimiterTest';
     const MAX_REQUESTS = 10;
@@ -21,6 +22,32 @@ class RateLimiterTest extends \PHPUnit_Framework_TestCase
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $storage = new \Codeages\RateLimiter\Storage\MySQLPDOStorage($pdo);
         $this->check($storage);
+    }
+
+    public function testCheckArray()
+    {
+        $storage = new \Codeages\RateLimiter\Storage\ArrayStorage();
+        $this->check($storage);
+    }
+
+    public function testUpdateAllowanceRedis()
+    {
+        $storage = new \Codeages\RateLimiter\Storage\RedisStorage();
+        $this->updateAllowance($storage);
+    }
+
+    public function testUpdateAllowanceMySQLPDO()
+    {
+        $pdo = new PDO(getenv('MYSQL_DSN'), getenv('MYSQL_USER'), getenv('MYSQL_MYSQL_PASSWORD'));
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $storage = new \Codeages\RateLimiter\Storage\MySQLPDOStorage($pdo);
+        $this->updateAllowance($storage);
+    }
+
+    public function testUpdateAllowanceArray()
+    {
+        $storage = new \Codeages\RateLimiter\Storage\ArrayStorage();
+        $this->updateAllowance($storage);
     }
 
     private function check($storage)
@@ -50,6 +77,23 @@ class RateLimiterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(self::MAX_REQUESTS, $rateLimit->check($ip));
 
         $rateLimit->purge($ip);
+    }
+
+    private function updateAllowance($storage)
+    {
+        $name = 'testUpdateAllowance';
+        $rateLimit = $this->getRateLimiter($storage);
+
+        $this->assertEquals(self::MAX_REQUESTS, $rateLimit->updateAllowance($name, self::MAX_REQUESTS));
+        $this->assertEquals(0, $rateLimit->updateAllowance($name, -self::MAX_REQUESTS));
+        $this->assertEquals(0, $rateLimit->updateAllowance($name, -self::MAX_REQUESTS));
+
+        for ($i = 0, $j = 0; $i < self::MAX_REQUESTS; ++$i) {
+            $j += $i;
+            $this->assertEquals($j, $rateLimit->updateAllowance($name, $i));
+        }
+
+        $rateLimit->purge($name);
     }
 
     private function getRateLimiter(Storage $storage)

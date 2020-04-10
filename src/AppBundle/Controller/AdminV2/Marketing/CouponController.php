@@ -17,6 +17,7 @@ use Codeages\Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class CouponController extends BaseController
 {
@@ -316,7 +317,7 @@ class CouponController extends BaseController
 
         return $this->render('admin-v2/marketing/coupon/get-receive-url-modal.html.twig', array(
             'batch' => $batch,
-            'url' => $this->generateUrl('coupon_receive', array('token' => $batch['token']), true),
+            'url' => $this->generateUrl('coupon_receive', array('token' => $batch['token']), UrlGeneratorInterface::ABSOLUTE_URL),
         ));
     }
 
@@ -325,7 +326,7 @@ class CouponController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            $goto = $this->generateUrl('coupon_receive', array('token' => $token), true);
+            $goto = $this->generateUrl('coupon_receive', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
 
             return $this->redirect($this->generateUrl('login', array('goto' => $goto)));
         }
