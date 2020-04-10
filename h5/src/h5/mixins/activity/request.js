@@ -1,9 +1,7 @@
 import Vue from 'vue';
 import Api from '@/api';
-import VueClipboard from 'vue-clipboard2';
 import { Toast, Dialog } from 'vant';
 
-Vue.use(VueClipboard);
 
 const isWeixinBrowser = /micromessenger/.test(navigator.userAgent.toLowerCase());
 

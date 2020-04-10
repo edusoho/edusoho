@@ -6,7 +6,7 @@
         :id="lessonItem.tasks[lessonItem.index].id"
         :class="{'zb-ks' : doubleLine(lessonItem.tasks[lessonItem.index])}"
         class="lesson-title"
-        @click="lessonCellClick(lessonItem.tasks[lessonItem.index])"
+        @click="lessonCellClick(lessonItem.tasks[lessonItem.index],lessonIndex,lessonItem.index)"
       >
         <div class="lesson-title-r">
           <div class="lesson-title-des">
@@ -60,7 +60,7 @@
           :id="taskItem.id"
           :key="taskIndex"
           class="litem"
-          @click="lessonCellClick(taskItem)"
+          @click="lessonCellClick(taskItem,lessonIndex,taskIndex)"
         >
           <div
             :class="{ 'lessonactive': (currentTask==Number(taskItem.id)) }"
@@ -86,12 +86,13 @@
 </template>
 <script>
 import redirectMixin from '@/mixins/saveRedirect'
+import copyUrl from '@/mixins/copyUrl'
 import { mapState, mapMutations } from 'vuex'
 import * as types from '@/store/mutation-types'
 import { Dialog, Toast } from 'vant'
 export default {
   name: 'LessonDirectory',
-  mixins: [redirectMixin],
+  mixins: [redirectMixin,copyUrl],
   props: {
     lesson: {
       type: Array,
@@ -139,6 +140,15 @@ export default {
       return this.taskNumber===0 && this.unitNum===0
     }
   },
+  mounted(){
+    if(Object.keys(this.$route.query).length){
+      const { sourceType,taskId }=this.$route.query;
+      this.setSourceType({
+          sourceType: sourceType,
+          taskId: taskId
+        });
+    }
+  },
   methods: {
     ...mapMutations('course', {
       setSourceType: types.SET_SOURCETYPE
@@ -173,15 +183,21 @@ export default {
       }
       return result
     },
-    lessonCellClick(task) {
+    lessonCellClick(task,lessonIndex,taskIndex) {
+      this.$store.commit(types.SET_TASK_SATUS, '');
       // 课程错误和未发布状态，不允许学习任务
       if (this.errorMsg) {
-        this.$emit('showDialog')
-        return
+        this.$emit("showDialog");
+        return;
       }
-      if (task.status === 'create') {
-        Toast('敬请期待')
-        return
+      if (task.lock) {
+        Toast("需要解锁上一个任务");
+        return;
+      }
+      //课程再创建阶段或者和未发布状态
+      if (task.status === "create" || task.status !== "published") {
+        Toast("敬请期待");
+        return;
       }
       const nextTask = {
         id: task.id
@@ -257,7 +273,6 @@ export default {
               replay = true
             }
           }
-
           this.$router.push({
             name: 'live',
             query: {
@@ -270,7 +285,7 @@ export default {
           })
           break
         case 'testpaper':
-          const testId = task.activity.testpaperInfo.testpaperId
+          const testId = task.activity.testpaperInfo.testpaperId;
           this.$router.push({
             name: 'testpaperIntro',
             query: {
@@ -298,7 +313,12 @@ export default {
           })
           break
         default:
-          Toast('暂不支持此类型')
+          //防止视频遮挡了弹出框
+          this.setSourceType({
+            sourceType: 'img',
+            taskId: task.id
+          })
+          this.copyPcUrl(task.courseUrl);
       }
     },
     // 任务图标(缺少下载)

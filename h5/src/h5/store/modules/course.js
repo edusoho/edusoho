@@ -10,6 +10,8 @@ const state = {
   courseLessons: [], // 课程中所有任务
   nextStudy: {}, // 下一次学习
   OptimizationCourseLessons: [], // 优化后的课程中所有任务
+  allTask: {},
+  taskStatus: '', // 当前task任务完成情况
   searchCourseList: {
     selectedData: {},
     courseList: [],
@@ -41,6 +43,12 @@ const mutations = {
   [types.SET_SOURCETYPE](currentState, payload) {
     currentState.sourceType = payload.sourceType;
     currentState.taskId = payload.taskId;
+  },
+  [types.UPDATE_PROGRESS](currentState, payload) {
+    currentState.details.progress.percent = payload;
+  },
+  [types.SET_ALL_TASK](currentState, payload) {
+    currentState.allTask = payload;
   },
   [types.SET_COURSELIST](currentState, data) {
     currentState.searchCourseList = data || {};

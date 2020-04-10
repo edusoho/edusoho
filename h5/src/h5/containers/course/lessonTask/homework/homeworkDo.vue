@@ -70,6 +70,7 @@ import itemBank from '../component/itemBank'
 
 import homeworkMixin from '@/mixins/lessonTask/homework.js'
 import testMixin from '@/mixins/lessonTask/index.js'
+import report from "@/mixins/course/report";
 // 由于会重定向到说明页或者结果页，为了避免跳转后不能返回，添加backUrl机制
 let backUrl = ''
 export default {
@@ -78,7 +79,7 @@ export default {
     itemBank,
     guidePage
   },
-  mixins: [homeworkMixin, testMixin],
+  mixins: [homeworkMixin, testMixin, report],
   data() {
     return {
       info: [], // 作业信息
@@ -109,7 +110,8 @@ export default {
     }
   },
   created() {
-    this.getData()
+    this.getData();
+    this.initReport();
   },
   beforeRouteEnter(to, from, next) {
     // 通过链接进来
@@ -148,6 +150,10 @@ export default {
       setNavbarTitle: types.SET_NAVBAR_TITLE
     }),
     ...mapActions('course', ['handHomeworkdo']),
+    //初始化上报数据
+    initReport() {
+      this.initReportData(this.$route.query.courseId,this.$route.query.targetId, "homework");
+    },
     // 请求接口获取数据
     getData() {
       const homeworkId = this.$route.query.homeworkId
@@ -243,66 +249,6 @@ export default {
         }
       })
     },
-    // //处理六大题型数据
-    // sixType(type, item) {
-    //   if (type == "single_choice") {
-    //     //刷新页面或意外中断回来数据会丢失，因此要判断本地是否有缓存数据，如果有要把数据塞回
-    //     if (this.lastAnswer) {
-    //       this.$set(this.answer, item.id, this.lastAnswer[item.id]);
-    //     } else {
-    //       this.$set(this.answer, item.id, []);
-    //     }
-    //     this.info.push(item);
-    //   }
-    //   if (type == "choice" || type == "uncertain_choice") {
-    //     if (this.lastAnswer) {
-    //       this.$set(this.answer, item.id, this.lastAnswer[item.id]);
-    //     } else {
-    //       this.$set(this.answer, item.id, []);
-    //     }
-    //     this.info.push(item);
-    //   }
-    //   if (type == "essay") {
-    //     if (this.lastAnswer) {
-    //       this.$set(this.answer, item.id, this.lastAnswer[item.id]);
-    //     } else {
-    //       this.$set(this.answer, item.id, [""]);
-    //     }
-    //     this.info.push(item);
-    //   }
-
-    //   if (type == "fill") {
-    //     let fillstem = item.stem;
-    //     let { stem, index } = this.fillReplce(fillstem, 0);
-    //     item.stem = stem;
-    //     item.fillnum = index;
-    //     if (this.lastAnswer) {
-    //       this.$set(this.answer, item.id, this.lastAnswer[item.id]);
-    //     } else {
-    //       this.$set(this.answer, item.id, new Array(index).fill(""));
-    //     }
-    //     this.info.push(item);
-    //   }
-
-    //   if (type == "determine") {
-    //     if (this.lastAnswer) {
-    //       this.$set(this.answer, item.id, this.lastAnswer[item.id]);
-    //     } else {
-    //       this.$set(this.answer, item.id, []);
-    //     }
-    //     this.info.push(item);
-    //   }
-    // },
-    // //处理富文本，并统计填空题的空格个数
-    // fillReplce(stem, index) {
-    //   const reg = /\[\[.+?\]\]/;
-    //   while (reg.exec(stem)) {
-    //     stem = stem.replace(reg, () => {
-    //       return `<span class="fill-bank">（${++index}）</span>`;
-    //     });
-    //   }
-    //   return { stem, index };
-    // },
     // 答题卡状态判断,finish 0是未完成  1是已完成
     formatStatus(type, id) {
       let finish = 0
@@ -424,7 +370,9 @@ export default {
         this.handHomeworkdo(datas)
           .then(res => {
             this.isHandHomework = true
-            resolve()
+            resolve();
+            //上报完成作业课时
+            this.reprtData("finish")
             // 跳转到结果页
             this.showResult()
           })

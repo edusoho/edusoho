@@ -199,6 +199,7 @@
 
   &__head {
     background-color: #DCDBDC;
+    min-height: vw(210);
     &--img {
       >img {
         height: vw(210);
@@ -208,6 +209,29 @@
     }
     #course-detail__head--video {
       height: vw(210);
+    }
+    &--btn{
+      position: absolute;
+      top:-40px;
+      right: vw(8);
+      width: 94px;
+      height: 30px;
+      font-size: vw(14);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color:#fff;
+      border-radius: vw(30);
+      border:1px solid  #fff;
+      z-index: 999;
+    }
+    .icon-markdone{
+      margin-right: vw(4);
+    }
+    &--activebtn{
+      color: #fff;
+      background: $primary-color;
+      border:1px solid  $primary-color;
     }
   }
   // plan component

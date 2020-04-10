@@ -65,10 +65,11 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 import * as types from '@/store/mutation-types'
 
 import exerciseMixin from '@/mixins/lessonTask/exercise.js'
+import report from "@/mixins/course/report";
 
 export default {
   name: 'ExerciseResult',
-  mixins: [exerciseMixin],
+  mixins: [exerciseMixin,report],
   data() {
     return {
       result: null,
@@ -102,6 +103,7 @@ export default {
   },
   created() {
     this.getexerciseResult()
+    this.initReport();
   },
   beforeRouteEnter(to, from, next) {
     document.getElementById('app').style.background = '#f6f6f6'
@@ -130,6 +132,10 @@ export default {
           this.formatData(res)
           this.calSubjectHeight()
         })
+    },
+    //初始化上报数据
+    initReport() {
+      this.initReportData(this.$route.query.courseId,this.$route.query.taskId,"exercise",false);
     },
     // 异常中断
     interruption() {
@@ -189,6 +195,8 @@ export default {
       // 提交练习+跳转到结果页
       this.handExercisedo(datas)
         .then(res => {
+          //上报完成作业课时
+          this.reprtData("finish")
           this.$router.replace({
             name: 'exerciseResult',
             query: {

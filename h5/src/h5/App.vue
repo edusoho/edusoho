@@ -10,7 +10,7 @@
       style="z-index: 1001;"
       @click-left="backFn()"
     />
-    <router-view/>
+    <router-view v-if="isRouterAlive"/>
   </div>
 </template>
 <script>
@@ -25,7 +25,13 @@ export default {
       isQrcode: false,
       hideNavbar: true,
       isShare: false,
-      color: ''
+      color: '',
+      isRouterAlive:true
+    }
+  },
+  provide(){
+    return {
+      reload:this.reload
     }
   },
   methods: {
@@ -44,6 +50,12 @@ export default {
         return
       }
       this.$router.go(-1)
+    },
+    reload () {
+      this.isRouterAlive=false;
+      this.$nextTick(()=>{
+        this.isRouterAlive=true;
+      })
     }
   },
   computed: {

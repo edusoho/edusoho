@@ -1,17 +1,21 @@
 <template>
   <div class="afterjoin-directory">
-    <div v-if="lessonNum>0">
+    <div v-if="lessonNum > 0">
       <swiper-directory
-        v-if="chapterNum>0 || unitNum>0"
+        v-if="chapterNum > 0 || unitNum > 0"
         id="swiper-directory"
         :item="item"
         :slide-index="slideIndex"
         :has-chapter="hasChapter"
         @changeChapter="changeChapter"
       />
-      <div v-if="item.length>0" id="lesson-directory">
-        <template v-if="chapterNum>0">
-          <div v-for="(list, index) in item[slideIndex].children" :key="index" class="pd-bo">
+      <div v-if="item.length > 0" id="lesson-directory">
+        <template v-if="chapterNum > 0">
+          <div
+            v-for="(list, index) in item[slideIndex].children"
+            :key="index"
+            class="pd-bo"
+          >
             <util-directory :util="list" />
             <lesson-directory
               :lesson="list.children"
@@ -36,7 +40,7 @@
       </div>
     </div>
 
-    <div v-if="nodata && lessonNum==0" class="noneItem">
+    <div v-if="nodata && lessonNum == 0" class="noneItem">
       <img src="static/images/none.png" class="nodata" />
       <p>暂时还没有课程哦...</p>
     </div>
@@ -48,6 +52,7 @@ import utilDirectory from "./util-directory.vue";
 import lessonDirectory from "./lesson-directory.vue";
 import Api from "@/api";
 import { mapState, mapMutations } from "vuex";
+import * as types from '@/store/mutation-types'
 export default {
   name: "AfterjoinDirectory",
   components: {
@@ -68,14 +73,19 @@ export default {
       currentLesson: 0, // 课时数目的索引
       slideIndex: 0, // 顶部滑动的索引
       taskId: null,
-      nodata: false
+      nodata: false,
+      allTask: {},
+      allTaskId: [] //所有task的id
     };
   },
   computed: {
     ...mapState("course", {
       nextStudy: state => state.nextStudy,
       selectedPlanId: state => state.selectedPlanId,
-      OptimizationCourseLessons: state => state.OptimizationCourseLessons
+      OptimizationCourseLessons: state => state.OptimizationCourseLessons,
+      details: state => state.details,
+      // allTask: state => state.allTask,
+      taskStatus: state => state.taskStatus
     }),
     hasChapter: function() {
       return this.chapterNum > 0;
@@ -90,12 +100,25 @@ export default {
       handler: "processItem",
       immediate: true,
       deep: true
+    },
+    taskStatus: {
+      handler: "changeTaskStatus",
+      immediate: false
     }
   },
   methods: {
     getNextStudy() {
       if (this.nextStudy.nextTask) {
         this.taskId = Number(this.nextStudy.nextTask.id);
+        const task = this.allTask[this.taskId];
+        if (!task) {
+          return;
+        }
+        if (this.hasChapter) {
+          this.slideIndex = task.chapterIndex;
+        } else {
+          this.slideIndex = task.unitIndex;
+        }
       }
     },
     // 处理数据
@@ -110,6 +133,7 @@ export default {
       this.setItems(res);
       this.mapChild(this.item);
       this.startScroll();
+      this.$store.commit(`course/${types.SET_ALL_TASK}`,this.allTask)
     },
     resetData() {
       this.chapterNum = 0; // 章节数
@@ -117,6 +141,7 @@ export default {
       this.lessonNum = 0; // 课时数
     },
     setItems(res) {
+      // 有章 level等于3  无章level等于2
       this.level = res.length === 1 && res[0].isExist == 0 ? 2 : 3;
       if (res.length === 1) {
         this.item = this.level === 2 ? res[0].children : res;
@@ -215,6 +240,11 @@ export default {
       // 把任务所属的章和节塞入到任务数组中,便于查找
       task.chapterIndex = this.currentChapter;
       task.unitIndex = this.currentUnit;
+      task.LessonIndex = this.currentLesson;
+      task.level = this.level;
+      task.taskIndex = index;
+      this.allTask[task.id] = { ...task };
+      this.allTaskId.push(task.id);
     },
     getLessonIndex(task, index) {
       // 非默认教学计划 是0  默认计划是lesson的index
@@ -252,8 +282,58 @@ export default {
     // 更改当前子数据
     changeChapter(slideIndex) {
       this.slideIndex = slideIndex;
+    },
+    //更改当前课时学识进度状态
+    changeTaskStatus(val) {
+      if (!val) {
+        return;
+      }
+      if (val === "finish") {
+        this.changeLockStatus();
+      }
+      const task = this.allTask[this.taskId];
+      let result = {};
+      if (task.level === 2) {
+        const nowTask = this.item[task.unitIndex].children[task.LessonIndex]
+          .tasks[task.taskIndex];
+        if (nowTask.result) {
+          nowTask.result.status = val;
+        } else {
+          result.status = val;
+          nowTask.result = result;
+        }
+      } else {
+        const nowTask = this.item[task.chapterIndex].children[task.unitIndex]
+          .children[task.LessonIndex].tasks[task.taskIndex];
+        if (nowTask.result) {
+          nowTask.result.status = val;
+        } else {
+          result.status = val;
+          nowTask.result = result;
+        }
+      }
+    },
+    changeLockStatus() {
+      if (this.details.learnMode !== "lockMode") {
+        return;
+      }
+      const taskIndex = this.allTaskId.indexOf(this.taskId.toString());
+      if (taskIndex < this.allTaskId.length - 1) {
+        const nextTaskId = this.allTaskId[taskIndex + 1];
+        const nextTask = this.allTask[nextTaskId];
+        if (nextTask.level === 2) {
+          const nowTask = this.item[nextTask.unitIndex].children[
+            nextTask.LessonIndex
+          ].tasks[nextTask.taskIndex];
+          nowTask.lock = false;
+        } else {
+          const nowTask = this.item[nextTask.chapterIndex].children[
+            nextTask.unitIndex
+          ].children[nextTask.LessonIndex].tasks[nextTask.taskIndex];
+          nowTask.lock = false;
+        }
+      }
     }
   }
 };
 </script>
-
