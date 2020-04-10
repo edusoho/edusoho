@@ -7,12 +7,14 @@ use Biz\User\Service\UserService;
 use Biz\Course\Service\CourseService;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Activity\Service\ActivityService;
-use Biz\Question\Service\QuestionService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\HomeworkActivityService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Biz\Common\CommonException;
+use Biz\Course\Exception\CourseException;
+use Biz\User\UserException;
 
 class HomeworkController extends BaseController
 {
@@ -73,7 +75,7 @@ class HomeworkController extends BaseController
 
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
         $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
-        
+
         return $this->render('homework/result.html.twig', array(
             'answerRecordId' => $answerRecordId,
             'assessment' => $assessment,
@@ -104,7 +106,7 @@ class HomeworkController extends BaseController
 
         $homeworkActivity = $this->getHomeworkActivityService()->getByAnswerSceneId($answerRecord['answer_scene_id']);
         $activity = $this->getActivityService()->getByMediaIdAndMediaType($homeworkActivity['id'], 'testpaper');
-        
+
         $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
         $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
 
@@ -128,41 +130,12 @@ class HomeworkController extends BaseController
         return false;
     }
 
-    public function submitAction(Request $request, $resultId)
-    {
-        $result = $this->getTestpaperService()->getTestpaperResult($resultId);
-
-        if (!empty($result) && !in_array($result['status'], array('doing', 'paused'))) {
-            return $this->createJsonResponse(array('result' => false, 'message' => 'json_response.homework_has_submitted_cannot_change.message'));
-        }
-
-        if ('POST' === $request->getMethod()) {
-            $formData = $request->request->all();
-
-            $paperResult = $this->getTestpaperService()->finishTest($result['id'], $formData);
-
-            $goto = $this->generateUrl('homework_result_show', array('resultId' => $paperResult['id']));
-
-            return $this->createJsonResponse(array('result' => true, 'message' => '', 'goto' => $goto));
-        }
-
-        return $this->createJsonResponse(array('result' => false, 'message' => 'result not found'));
-    }
-
     /**
      * @return TestpaperService
      */
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
-    }
-
-    /**
-     * @return QuestionService
-     */
-    protected function getQuestionService()
-    {
-        return $this->createService('Question:QuestionService');
     }
 
     /**

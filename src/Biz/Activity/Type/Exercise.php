@@ -115,7 +115,7 @@ class Exercise extends Activity
             return false;
         }
 
-        if ('submit' === $exercise['finishType'] && in_array($answerRecord['status'], array(AnswerService::ANSWER_RECORD_STATUS_REVIEWING, AnswerService::ANSWER_RECORD_STATUS_FINISHED))) {
+        if ('submit' === $activity['finishType'] && in_array($answerRecord['status'], array(AnswerService::ANSWER_RECORD_STATUS_REVIEWING, AnswerService::ANSWER_RECORD_STATUS_FINISHED))) {
             return true;
         }
 
@@ -167,6 +167,7 @@ class Exercise extends Activity
                     'item_types' => $fields['questionTypes'],
                 ),
                 'item_count' => $fields['itemCount'],
+                'name' => '练习题目',
             ),
         );
     }
