@@ -9470,3 +9470,5 @@ admin.article_setting.article_copy_manage: Information copy protection
 
 task.show_optional_tips: Show Optional
 admin_v2.user.manage.change_nickname.heading_title: Modify username
+
+course.plan_task.activity_manage.discuss.tips: Discussion tasks are used in PC and APP, and are not supported in Microschool and Applet for now!
