@@ -16,7 +16,7 @@ import { Toast } from 'vant'
 export default {
   data() {
     return {
-      isEncryptionPlus: false
+      isEncryptionPlus: false,
     }
   },
   computed: {
@@ -78,8 +78,17 @@ export default {
 
       this.$store.commit('UPDATE_LOADING_STATUS', true)
       this.loadPlayerSDK().then(SDK => {
+
         this.$store.commit('UPDATE_LOADING_STATUS', false)
         const player = new SDK(options)
+        player.on('ready', () => {
+        })
+        player.on('datapicker.start', (e) => {
+        })
+        player.on('ended', () => {
+        })
+        player.on('timeupdate', (e) => {
+        })
       })
     },
     loadPlayerSDK() {

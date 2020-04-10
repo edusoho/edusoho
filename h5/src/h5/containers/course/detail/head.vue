@@ -2,10 +2,14 @@
   <div id="course-detail__head" class="course-detail__head pos-rl">
     <div
       v-if="textContent"
-      v-show="['audio'].includes(sourceType) && !isEncryptionPlus && !isCoverOpen"
+      v-show="
+        ['audio'].includes(sourceType) && !isEncryptionPlus && !isCoverOpen
+      "
       class="course-detail__nav--btn"
       @click="viewAudioDoc"
-    >文稿</div>
+    >
+      文稿
+    </div>
     <div
       v-if="textContent"
       v-show="['audio'].includes(sourceType) && !isEncryptionPlus"
@@ -13,32 +17,80 @@
       class="course-detail__nav--cover web-view"
     >
       <div class="media-text" v-html="textContent" />
-      <div v-show="isCoverOpen" class="course-detail__nav--cover-control" @click="handlePlayer">
-        <i :class="!isPlaying ? 'h5-icon-bofang' : 'h5-icon-zanting'" class="h5-icon" />
+      <div
+        v-show="isCoverOpen"
+        class="course-detail__nav--cover-control"
+        @click="handlePlayer"
+      >
+        <i
+          :class="!isPlaying ? 'icon-bofang' : 'icon-zanting'"
+          class="iconfont"
+        />
       </div>
       <div class="course-detail__nav--cover-close-btn" @click="hideAudioDoc">
         <i class="van-icon van-icon-arrow van-nav-bar__arrow" />
       </div>
     </div>
     <div
-      v-show="sourceType === 'img' || isEncryptionPlus"
+      v-show="sourceType === 'img' || isEncryptionPlus || finishDialog"
       id="course-detail__head--img"
       class="course-detail__head--img"
     >
       <img v-if="courseSet.cover" :src="courseSet.cover.large" alt />
       <countDown
-        v-if="seckillActivities && seckillActivities.status === 'ongoing' && counting && !isEmpty"
+        v-if="
+          seckillActivities &&
+            seckillActivities.status === 'ongoing' &&
+            counting &&
+            !isEmpty
+        "
         :activity="seckillActivities"
         @timesUp="expire"
         @sellOut="sellOut"
       />
     </div>
+    <!-- 由于在安卓端弹出层会被视频遮挡，因此在弹出层显示时，隐藏视频，显示课程封面图，判断字段 finishDialog-->
     <div
-      v-show="['video', 'audio'].includes(sourceType) && !isEncryptionPlus"
+      v-show="['video', 'audio'].includes(sourceType) && !isEncryptionPlus && !finishDialog"
       id="course-detail__head--video"
       ref="video"
     />
+    <!-- 学习上报按钮 -->
+    <template v-if="showLearnBtn">
+      <div
+        v-if="isFinish"
+        class="course-detail__head--btn course-detail__head--activebtn"
+      >
+        <i class="iconfont icon-markdone"></i>
+        学过了
+      </div>
+
+      <div v-if="!isFinish">
+        <div
+          class="course-detail__head--btn"
+          v-if="enableFinish"
+          @click="toLearned"
+        >
+          学过了
+        </div>
+        <div
+          class="course-detail__head--btn"
+          v-if="!enableFinish"
+          @click="toToast"
+        >
+          完成条件
+        </div>
+      </div>
+    </template>
+    <!-- 学习上报按钮 -->
+
     <tagLink :tag-data="tagData" />
+    <finishDialog
+      v-if="finishDialog"
+      :finishResult="finishResult"
+      :courseId="selectedPlanId"
+      @closeFinishDialog="closeFinishDialog"
+    ></finishDialog>
   </div>
 </template>
 <script>
@@ -48,13 +100,17 @@ import Api from "@/api";
 import { Toast, Dialog } from "vant";
 import countDown from "&/components/e-marketing/e-count-down/index";
 import tagLink from "&/components/e-tag-link/e-tag-link";
+import finishDialog from "../components/finish-dialog";
 import qs from "qs";
+import report from "@/mixins/course/report";
 
 export default {
   components: {
     countDown,
-    tagLink
+    tagLink,
+    finishDialog
   },
+  mixins: [report],
   props: {
     courseSet: {
       type: Object,
@@ -69,6 +125,9 @@ export default {
   },
   data() {
     return {
+      finishCondition: undefined,
+      learnMode: false,
+      enableFinish: false,
       isEncryptionPlus: false,
       mediaOpts: {},
       isCoverOpen: false,
@@ -84,7 +143,12 @@ export default {
         className: "course-tag",
         minDirectRewardRatio: 0
       },
-      bindAgencyRelation: {} // 分销代理商绑定信息
+      timeChangingList: [],
+      bindAgencyRelation: {}, // 分销代理商绑定信息
+      finishResult: null,
+      finishDialog: false, //下一课时弹出模态框
+      lastWatchTime: 0, //上一次暂停上报的视频时间
+      nowWatchTime: 0 //当前刚看时间计时
     };
   },
   computed: {
@@ -99,29 +163,74 @@ export default {
     }),
     textContent() {
       return this.mediaOpts.text;
+    },
+    showLearnBtn() {
+      return ["video", "audio"].includes(this.sourceType);
     }
   },
   watch: {
     taskId(value, oldValue) {
       // 未登录情况下，详情页面不需要初始化播放器
       if (this.$route.name === "course" && !this.joinStatus) return;
-      if (value > 0) this.initHead();
+      if (value > 0) {
+        this.initHead();
+      }
+    },
+    selectedPlanId() {
+      // 未登录情况下，详情页面不需要初始化播放器
+      if (this.$route.name === "course" && !this.joinStatus) return;
+      if (value > 0) {
+        this.initHead();
+      }
     }
   },
   created() {
     this.initHead();
     this.showTagLink();
   },
+  beforeDestroy() {
+    //销毁播放器
+    if (this.player) {
+      this.player.eventManager = {};
+    }
+    //清除计时器
+    this.clearComputeWatchTime();
+  },
   /*
    * 试看需要传preview=1
    * eg: /api/courses/1/task_medias/1?preview=1
    */
   methods: {
+    toToast() {
+      if (this.finishCondition) {
+        this.$toast({
+          message: this.finishCondition.text,
+          position: "bottom"
+        });
+      }
+    },
+    isAndroid() {
+      return !!navigator.userAgent.match(new RegExp("android", "i"));
+    },
     initHead() {
       if (["video", "audio"].includes(this.sourceType)) {
         window.scrollTo(0, 0);
+        this.initReport();
         this.initPlayer();
+        this.clearComputeWatchTime();
+        this.lastWatchTime = 0;
+        this.nowWatchTime = 0;
       }
+    },
+    initReport() {
+      this.initReportData(this.selectedPlanId, this.taskId, this.sourceType);
+      this.finishDialog = false;
+      this.getFinishCondition();
+    },
+    getFinishCondition() {
+      this.getCourseData(this.selectedPlanId, this.taskId).then(res => {
+        this.finishCondition = res.activity && res.activity.finishCondition;
+      });
     },
     viewAudioDoc() {
       this.isCoverOpen = true;
@@ -156,7 +265,7 @@ export default {
     },
     async initPlayer() {
       this.$refs.video && (this.$refs.video.innerHTML = "");
-
+      this.enableFinish = !!parseInt(this.details.enableFinish);
       const player = await Api.getMedia(this.getParams()).catch(err => {
         const courseId = Number(this.details.id);
         // 后台课程设置里设置了不允许未登录用户观看免费试看的视频
@@ -170,7 +279,6 @@ export default {
         }
         Toast.fail(err.message);
       });
-      console.log(player);
       if (!player) return; // 如果没有初始化成功
 
       if (player.mediaType === "video" && !player.media.url) {
@@ -218,9 +326,19 @@ export default {
       this.$store.commit("UPDATE_LOADING_STATUS", true);
       this.loadPlayerSDK().then(SDK => {
         this.$store.commit("UPDATE_LOADING_STATUS", false);
+        if (this.player) {
+          this.player.taskId = -1;
+        }
+        if (this.player && this.player.eventManager) {
+          this.player.eventManager = {};
+        }
         const player = new SDK(options);
-        player.on("playing", () => {
-          this.isPlaying = true;
+        player.taskId = this.taskId;
+        this.player = player;
+        player.on("ready", () => {
+          if (player.taskId !== this.taskId) {
+            return;
+          }
         });
         player.on("unablePlay", () => {
           // 加密模式下在不支持的浏览器下提示
@@ -230,10 +348,42 @@ export default {
               "当前内容不支持该手机浏览器观看，建议您使用Chrome、Safari浏览器观看。"
           }).then(() => {});
         });
-        player.on("paused", () => {
-          this.isPlaying = false;
+        player.on("playing", () => {
+          this.isPlaying = true;
+          if (player.taskId !== this.taskId) {
+            return;
+          }
+          this.computeWatchTime();
         });
-        this.player = player;
+        player.on("paused", e => {
+          this.isPlaying = false;
+          if (player.taskId !== this.taskId) {
+            return;
+          }
+          this.clearComputeWatchTime();
+          const watchTime = parseInt(this.nowWatchTime - this.lastWatchTime);
+          this.lastWatchTime = this.nowWatchTime;
+          this.reprtData("doing", true, watchTime);
+        });
+        player.on("datapicker.start", e => {
+          if (player.taskId !== this.taskId) {
+            return;
+          }
+        });
+        player.on("ended", () => {
+          if (player.taskId !== this.taskId) {
+            return;
+          }
+          this.clearComputeWatchTime();
+          if (this.finishCondition.type === "end") {
+            this.reprtData("finish");
+          }
+        });
+        player.on("timeupdate", e => {
+          if (player.taskId !== this.taskId) {
+            return;
+          }
+        });
       });
     },
     loadPlayerSDK() {
@@ -296,6 +446,25 @@ export default {
           (this.drpSetting.minDirectRewardRatio / 100) * this.details.price;
         this.tagData.earnings = (Math.floor(earnings * 100) / 100).toFixed(2);
       });
+    },
+    toLearned() {
+      this.reprtData("finish").then(res => {
+        this.finishResult = res;
+        this.finishDialog = true;
+      });
+    },
+    //计算观看时长计时器，一直累加 nowWatchTime
+    computeWatchTime() {
+      this.intervalWatchTime = setInterval(() => {
+        this.nowWatchTime++;
+      }, 1000);
+    },
+    //清除计时器
+    clearComputeWatchTime() {
+      clearInterval(this.intervalWatchTime);
+    },
+    closeFinishDialog(){
+      this.finishDialog=false;
     }
   }
 };

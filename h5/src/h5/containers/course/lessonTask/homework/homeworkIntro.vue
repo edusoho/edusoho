@@ -22,10 +22,11 @@ import { mapState, mapActions } from 'vuex'
 import { Dialog, Toast } from 'vant'
 
 import homeworkMixin from '@/mixins/lessonTask/homework.js'
+import report from "@/mixins/course/report";
 
 export default {
   name: 'HomeworkIntro',
-  mixins: [homeworkMixin],
+  mixins: [homeworkMixin,report],
   data() {
     return {
       courseId: null,
@@ -44,7 +45,8 @@ export default {
     })
   },
   created() {
-    this.getInfo()
+    this.getInfo();
+    this.initReport();
   },
   beforeRouteEnter(to, from, next) {
     document.getElementById('app').style.background = '#f6f6f6'
@@ -71,6 +73,10 @@ export default {
 
         this.interruption()
       })
+    },
+    //初始化上报数据
+    initReport() {
+      this.initReportData(this.$route.query.courseId,this.taskId,"homework",false);
     },
     // 异常中断
     interruption() {
@@ -116,6 +122,8 @@ export default {
       }
       // 提交作业+跳转到结果页
       this.handHomeworkdo(datas).then(res => {
+        //上报完成作业课时
+        this.reprtData("finish");
         this.showResult()
       }).catch((err) => {
         Toast.fail(err.message)
