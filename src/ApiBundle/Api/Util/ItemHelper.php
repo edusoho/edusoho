@@ -3,18 +3,23 @@
 namespace ApiBundle\Api\Util;
 
 use AppBundle\Common\ArrayToolkit;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ItemHelper
 {
     private $biz;
 
+    private $container;
+
     private $blankChapter = array('type' => 'chapter', 'isExist' => 0);
 
     private $blankUnit = array('type' => 'unit', 'isExist' => 0);
 
-    public function __construct($biz)
+    public function __construct($biz, ContainerInterface $container)
     {
         $this->biz = $biz;
+        $this->container = $container;
     }
 
     /**
@@ -95,9 +100,11 @@ class ItemHelper
         $courseId = $course['id'];
         $newItems = array();
         $number = 1;
+        $targetUrl = $this->generateUrl('my_course_show', array('id' => $courseId));
         foreach ($originItems as $originItem) {
             $item = array();
             if ('task' == $originItem['itemType']) {
+                $originItem['courseUrl'] = $targetUrl;
                 $item['type'] = 'task';
                 $item['seq'] = '0';
                 $item['number'] = strval($number++);
@@ -114,6 +121,7 @@ class ItemHelper
                 $originItem['tasks'] = empty($originItem['tasks']) ? array() : $originItem['tasks'];
                 $taskSeq = count($originItem['tasks']) > 1 ? 1 : 0;
                 foreach ($originItem['tasks'] as $task) {
+                    $task['courseUrl'] = $targetUrl;
                     $item['type'] = 'task';
                     $item['seq'] = strval($taskSeq);
                     $item['number'] = strval($number);
@@ -241,6 +249,11 @@ class ItemHelper
         }
 
         return $result;
+    }
+
+    protected function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
+    {
+        return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
 
     protected function getSubtitleService()

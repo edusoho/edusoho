@@ -10787,3 +10787,5 @@ admin.article_setting.article_copy_manage: 资讯防复制
 
 task.show_optional_tips: 显示选修课时
 admin_v2.user.manage.change_nickname.heading_title: 修改用户名
+
+course.plan_task.activity_manage.discuss.tips: 讨论任务在PC和APP中使用，暂不支持在微网校和小程序中使用!
