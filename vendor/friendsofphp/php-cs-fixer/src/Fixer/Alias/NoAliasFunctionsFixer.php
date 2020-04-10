@@ -16,6 +16,7 @@ use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\Tokenizer\CT;
+use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
@@ -101,7 +102,7 @@ $a = strchr($haystack, $needle);
      */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
-        /** @var $token \PhpCsFixer\Tokenizer\Token */
+        /** @var \PhpCsFixer\Tokenizer\Token $token */
         foreach ($tokens->findGivenKind(T_STRING) as $index => $token) {
             // check mapping hit
             $tokenContent = strtolower($token->getContent());
@@ -131,7 +132,7 @@ $a = strchr($haystack, $needle);
                 }
             }
 
-            $token->setContent(self::$aliases[$tokenContent]);
+            $tokens[$index] = new Token(array(T_STRING, self::$aliases[$tokenContent]));
         }
     }
 }

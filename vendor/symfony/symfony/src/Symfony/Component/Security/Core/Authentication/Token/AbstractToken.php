@@ -11,11 +11,11 @@
 
 namespace Symfony\Component\Security\Core\Authentication\Token;
 
-use Symfony\Component\Security\Core\Role\RoleInterface;
 use Symfony\Component\Security\Core\Role\Role;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Role\RoleInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Base class for Token instances.
@@ -26,24 +26,22 @@ use Symfony\Component\Security\Core\User\EquatableInterface;
 abstract class AbstractToken implements TokenInterface
 {
     private $user;
-    private $roles = array();
+    private $roles = [];
     private $authenticated = false;
-    private $attributes = array();
+    private $attributes = [];
 
     /**
-     * Constructor.
-     *
      * @param (RoleInterface|string)[] $roles An array of roles
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct(array $roles = array())
+    public function __construct(array $roles = [])
     {
         foreach ($roles as $role) {
-            if (is_string($role)) {
+            if (\is_string($role)) {
                 $role = new Role($role);
             } elseif (!$role instanceof RoleInterface) {
-                throw new \InvalidArgumentException(sprintf('$roles must be an array of strings, or RoleInterface instances, but got %s.', gettype($role)));
+                throw new \InvalidArgumentException(sprintf('$roles must be an array of strings, Role instances or RoleInterface instances, but got %s.', \gettype($role)));
             }
 
             $this->roles[] = $role;
@@ -79,18 +77,11 @@ abstract class AbstractToken implements TokenInterface
     }
 
     /**
-     * Sets the user in the token.
-     *
-     * The user can be a UserInterface instance, or an object implementing
-     * a __toString method or the username as a regular string.
-     *
-     * @param string|object $user The user
-     *
-     * @throws \InvalidArgumentException
+     * {@inheritdoc}
      */
     public function setUser($user)
     {
-        if (!($user instanceof UserInterface || (is_object($user) && method_exists($user, '__toString')) || is_string($user))) {
+        if (!($user instanceof UserInterface || (\is_object($user) && method_exists($user, '__toString')) || \is_string($user))) {
             throw new \InvalidArgumentException('$user must be an instanceof UserInterface, an object implementing a __toString method, or a primitive string.');
         }
 
@@ -146,14 +137,9 @@ abstract class AbstractToken implements TokenInterface
      */
     public function serialize()
     {
-        return serialize(
-            array(
-                is_object($this->user) ? clone $this->user : $this->user,
-                $this->authenticated,
-                $this->roles,
-                $this->attributes,
-            )
-        );
+        $serialized = [$this->user, $this->authenticated, $this->roles, $this->attributes];
+
+        return $this->doSerialize($serialized, \func_num_args() ? func_get_arg(0) : null);
     }
 
     /**
@@ -161,7 +147,7 @@ abstract class AbstractToken implements TokenInterface
      */
     public function unserialize($serialized)
     {
-        list($this->user, $this->authenticated, $this->roles, $this->attributes) = unserialize($serialized);
+        list($this->user, $this->authenticated, $this->roles, $this->attributes) = \is_array($serialized) ? $serialized : unserialize($serialized);
     }
 
     /**
@@ -193,7 +179,7 @@ abstract class AbstractToken implements TokenInterface
      */
     public function hasAttribute($name)
     {
-        return array_key_exists($name, $this->attributes);
+        return \array_key_exists($name, $this->attributes);
     }
 
     /**
@@ -207,7 +193,7 @@ abstract class AbstractToken implements TokenInterface
      */
     public function getAttribute($name)
     {
-        if (!array_key_exists($name, $this->attributes)) {
+        if (!\array_key_exists($name, $this->attributes)) {
             throw new \InvalidArgumentException(sprintf('This token has no "%s" attribute.', $name));
         }
 
@@ -230,15 +216,28 @@ abstract class AbstractToken implements TokenInterface
      */
     public function __toString()
     {
-        $class = get_class($this);
+        $class = static::class;
         $class = substr($class, strrpos($class, '\\') + 1);
 
-        $roles = array();
+        $roles = [];
         foreach ($this->roles as $role) {
             $roles[] = $role->getRole();
         }
 
         return sprintf('%s(user="%s", authenticated=%s, roles="%s")', $class, $this->getUsername(), json_encode($this->authenticated), implode(', ', $roles));
+    }
+
+    /**
+     * @internal
+     */
+    protected function doSerialize($serialized, $isCalledFromOverridingMethod)
+    {
+        if (null === $isCalledFromOverridingMethod) {
+            $trace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 3);
+            $isCalledFromOverridingMethod = isset($trace[2]['function'], $trace[2]['object']) && 'serialize' === $trace[2]['function'] && $this === $trace[2]['object'];
+        }
+
+        return $isCalledFromOverridingMethod ? $serialized : serialize($serialized);
     }
 
     private function hasUserChanged(UserInterface $user)

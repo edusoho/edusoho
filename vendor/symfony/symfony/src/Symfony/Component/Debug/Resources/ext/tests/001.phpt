@@ -1,7 +1,9 @@
 --TEST--
 Test symfony_zval_info API
 --SKIPIF--
-<?php if (!extension_loaded('symfony_debug')) print 'skip'; ?>
+<?php if (!extension_loaded('symfony_debug')) {
+    echo 'skip';
+} ?>
 --FILE--
 <?php
 
@@ -9,7 +11,7 @@ $int = 42;
 $float = 42.42;
 $str = 'foobar';
 $object = new StdClass();
-$array = array('foo', 'bar');
+$array = ['foo', 'bar'];
 $resource = tmpfile();
 $null = null;
 $bool = true;
@@ -17,7 +19,7 @@ $bool = true;
 $anotherint = 42;
 $refcount2 = &$anotherint;
 
-$var = array(
+$var = [
     'int' => $int,
     'float' => $float,
     'str' => $str,
@@ -27,7 +29,7 @@ $var = array(
     'null' => $null,
     'bool' => $bool,
     'refcount' => &$refcount2,
-);
+];
 
 var_dump(symfony_zval_info('int', $var));
 var_dump(symfony_zval_info('float', $var));

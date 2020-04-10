@@ -20,23 +20,19 @@ use Symfony\Component\Validator\Constraints\Valid;
  */
 class AllTest extends TestCase
 {
-    /**
-     * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
-     */
     public function testRejectNonConstraints()
     {
-        new All(array(
+        $this->expectException('Symfony\Component\Validator\Exception\ConstraintDefinitionException');
+        new All([
             'foo',
-        ));
+        ]);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
-     */
     public function testRejectValidConstraint()
     {
-        new All(array(
+        $this->expectException('Symfony\Component\Validator\Exception\ConstraintDefinitionException');
+        new All([
             new Valid(),
-        ));
+        ]);
     }
 }

@@ -6,7 +6,7 @@
         {%- if ('edit' in actions) and (not hide_edit) %}
 
         <li>
-            <a href="{{ "{{ path('" ~ route_name_prefix ~ "_edit', { 'id': " ~ entity_singularized ~ "."~ identifier ~" }) }}" }}">Edit</a>
+            <a href="{{ "{{ path('" ~ route_name_prefix ~ "_edit', { '"~ identifier ~"': " ~ entity_singularized ~ "."~ identifier ~" }) }}" }}">Edit</a>
         </li>
 
         {%- endif %}

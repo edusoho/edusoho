@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <!--
+        The following service isn't prefixed by the "doctrine.orm" namespace in order for end-users to just use
+        the "doctrine_transaction" shortcut in message buses middleware config
+        -->
+        <service id="messenger.middleware.doctrine_transaction" class="Symfony\Bridge\Doctrine\Messenger\DoctrineTransactionMiddleware" abstract="true" public="false">
+            <argument type="service" id="doctrine" />
+        </service>
+    </services>
+</container>

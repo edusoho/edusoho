@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Pay\Service\Impl\PayServiceImpl;
 
 class InvoiceServiceTest extends IntegrationTestCase

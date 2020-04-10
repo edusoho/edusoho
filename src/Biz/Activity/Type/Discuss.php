@@ -8,7 +8,6 @@ class Discuss extends Activity
 {
     protected function registerListeners()
     {
-        return array(
-        );
+        return [];
     }
 }

@@ -104,7 +104,10 @@ class Ppt extends Activity
     public function get($targetId)
     {
         $activity = $this->getPptActivityDao()->get($targetId);
-        $activity['file'] = $this->getUploadFileService()->getFullFile($activity['mediaId']);
+
+        if ($activity) {
+            $activity['file'] = $this->getUploadFileService()->getFullFile($activity['mediaId']);
+        }
 
         return $activity;
     }

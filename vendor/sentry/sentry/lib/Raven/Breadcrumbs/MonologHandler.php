@@ -61,9 +61,9 @@ class Raven_Breadcrumbs_MonologHandler extends AbstractProcessingHandler
             return;
         }
 
-        if (isset($record['context']['exception']) && $record['context']['exception'] instanceof \Exception) {
+        if (isset($record['context']['exception']) && ($record['context']['exception'] instanceof \Exception || (PHP_VERSION_ID >= 70000 && $record['context']['exception'] instanceof \Throwable))) {
             /**
-             * @var Exception $exc
+             * @var \Exception|\Throwable $exc
              */
             $exc = $record['context']['exception'];
             $crumb = array(
@@ -92,6 +92,7 @@ class Raven_Breadcrumbs_MonologHandler extends AbstractProcessingHandler
                     'level' => $this->logLevels[$record['level']],
                     'category' => $record['channel'],
                     'message' => $record['message'],
+                    'data' => $record['context'],
                 );
             }
         }

@@ -11,11 +11,11 @@
 
 namespace Symfony\Component\Routing\Loader;
 
-use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\Route;
-use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Config\Loader\FileLoader;
+use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Config\Util\XmlUtils;
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 
 /**
  * XmlFileLoader loads XML routing files.
@@ -36,8 +36,8 @@ class XmlFileLoader extends FileLoader
      *
      * @return RouteCollection A RouteCollection instance
      *
-     * @throws \InvalidArgumentException When the file cannot be loaded or when the XML cannot be
-     *                                   parsed because it does not validate against the scheme.
+     * @throws \InvalidArgumentException when the file cannot be loaded or when the XML cannot be
+     *                                   parsed because it does not validate against the scheme
      */
     public function load($file, $type = null)
     {
@@ -93,7 +93,7 @@ class XmlFileLoader extends FileLoader
      */
     public function supports($resource, $type = null)
     {
-        return is_string($resource) && 'xml' === pathinfo($resource, PATHINFO_EXTENSION) && (!$type || 'xml' === $type);
+        return \is_string($resource) && 'xml' === pathinfo($resource, PATHINFO_EXTENSION) && (!$type || 'xml' === $type);
     }
 
     /**
@@ -107,43 +107,14 @@ class XmlFileLoader extends FileLoader
      */
     protected function parseRoute(RouteCollection $collection, \DOMElement $node, $path)
     {
-        if ('' === ($id = $node->getAttribute('id')) || (!$node->hasAttribute('pattern') && !$node->hasAttribute('path'))) {
+        if ('' === ($id = $node->getAttribute('id')) || !$node->hasAttribute('path')) {
             throw new \InvalidArgumentException(sprintf('The <route> element in file "%s" must have an "id" and a "path" attribute.', $path));
-        }
-
-        if ($node->hasAttribute('pattern')) {
-            if ($node->hasAttribute('path')) {
-                throw new \InvalidArgumentException(sprintf('The <route> element in file "%s" cannot define both a "path" and a "pattern" attribute. Use only "path".', $path));
-            }
-
-            @trigger_error(sprintf('The "pattern" option in file "%s" is deprecated since version 2.2 and will be removed in 3.0. Use the "path" option in the route definition instead.', $path), E_USER_DEPRECATED);
-
-            $node->setAttribute('path', $node->getAttribute('pattern'));
-            $node->removeAttribute('pattern');
         }
 
         $schemes = preg_split('/[\s,\|]++/', $node->getAttribute('schemes'), -1, PREG_SPLIT_NO_EMPTY);
         $methods = preg_split('/[\s,\|]++/', $node->getAttribute('methods'), -1, PREG_SPLIT_NO_EMPTY);
 
         list($defaults, $requirements, $options, $condition) = $this->parseConfigs($node, $path);
-
-        if (isset($requirements['_method'])) {
-            if (0 === count($methods)) {
-                $methods = explode('|', $requirements['_method']);
-            }
-
-            unset($requirements['_method']);
-            @trigger_error(sprintf('The "_method" requirement of route "%s" in file "%s" is deprecated since version 2.2 and will be removed in 3.0. Use the "methods" attribute instead.', $id, $path), E_USER_DEPRECATED);
-        }
-
-        if (isset($requirements['_scheme'])) {
-            if (0 === count($schemes)) {
-                $schemes = explode('|', $requirements['_scheme']);
-            }
-
-            unset($requirements['_scheme']);
-            @trigger_error(sprintf('The "_scheme" requirement of route "%s" in file "%s" is deprecated since version 2.2 and will be removed in 3.0. Use the "schemes" attribute instead.', $id, $path), E_USER_DEPRECATED);
-        }
 
         $route = new Route($node->getAttribute('path'), $defaults, $requirements, $options, $node->getAttribute('host'), $schemes, $methods, $condition);
         $collection->add($id, $route);
@@ -173,28 +144,36 @@ class XmlFileLoader extends FileLoader
 
         list($defaults, $requirements, $options, $condition) = $this->parseConfigs($node, $path);
 
-        $this->setCurrentDir(dirname($path));
+        $this->setCurrentDir(\dirname($path));
 
-        $subCollection = $this->import($resource, ('' !== $type ? $type : null), false, $file);
-        /* @var $subCollection RouteCollection */
-        $subCollection->addPrefix($prefix);
-        if (null !== $host) {
-            $subCollection->setHost($host);
-        }
-        if (null !== $condition) {
-            $subCollection->setCondition($condition);
-        }
-        if (null !== $schemes) {
-            $subCollection->setSchemes($schemes);
-        }
-        if (null !== $methods) {
-            $subCollection->setMethods($methods);
-        }
-        $subCollection->addDefaults($defaults);
-        $subCollection->addRequirements($requirements);
-        $subCollection->addOptions($options);
+        /** @var RouteCollection[] $imported */
+        $imported = $this->import($resource, ('' !== $type ? $type : null), false, $file) ?: [];
 
-        $collection->addCollection($subCollection);
+        if (!\is_array($imported)) {
+            $imported = [$imported];
+        }
+
+        foreach ($imported as $subCollection) {
+            /* @var $subCollection RouteCollection */
+            $subCollection->addPrefix($prefix);
+            if (null !== $host) {
+                $subCollection->setHost($host);
+            }
+            if (null !== $condition) {
+                $subCollection->setCondition($condition);
+            }
+            if (null !== $schemes) {
+                $subCollection->setSchemes($schemes);
+            }
+            if (null !== $methods) {
+                $subCollection->setMethods($methods);
+            }
+            $subCollection->addDefaults($defaults);
+            $subCollection->addRequirements($requirements);
+            $subCollection->addOptions($options);
+
+            $collection->addCollection($subCollection);
+        }
     }
 
     /**
@@ -225,18 +204,23 @@ class XmlFileLoader extends FileLoader
      */
     private function parseConfigs(\DOMElement $node, $path)
     {
-        $defaults = array();
-        $requirements = array();
-        $options = array();
+        $defaults = [];
+        $requirements = [];
+        $options = [];
         $condition = null;
 
+        /** @var \DOMElement $n */
         foreach ($node->getElementsByTagNameNS(self::NAMESPACE_URI, '*') as $n) {
+            if ($node !== $n->parentNode) {
+                continue;
+            }
+
             switch ($n->localName) {
                 case 'default':
                     if ($this->isElementValueNull($n)) {
                         $defaults[$n->getAttribute('key')] = null;
                     } else {
-                        $defaults[$n->getAttribute('key')] = trim($n->textContent);
+                        $defaults[$n->getAttribute('key')] = $this->parseDefaultsConfig($n, $path);
                     }
 
                     break;
@@ -244,17 +228,124 @@ class XmlFileLoader extends FileLoader
                     $requirements[$n->getAttribute('key')] = trim($n->textContent);
                     break;
                 case 'option':
-                    $options[$n->getAttribute('key')] = trim($n->textContent);
+                    $options[$n->getAttribute('key')] = XmlUtils::phpize(trim($n->textContent));
                     break;
                 case 'condition':
                     $condition = trim($n->textContent);
                     break;
                 default:
-                    throw new \InvalidArgumentException(sprintf('Unknown tag "%s" used in file "%s". Expected "default", "requirement" or "option".', $n->localName, $path));
+                    throw new \InvalidArgumentException(sprintf('Unknown tag "%s" used in file "%s". Expected "default", "requirement", "option" or "condition".', $n->localName, $path));
             }
         }
 
-        return array($defaults, $requirements, $options, $condition);
+        if ($controller = $node->getAttribute('controller')) {
+            if (isset($defaults['_controller'])) {
+                $name = $node->hasAttribute('id') ? sprintf('"%s"', $node->getAttribute('id')) : sprintf('the "%s" tag', $node->tagName);
+
+                throw new \InvalidArgumentException(sprintf('The routing file "%s" must not specify both the "controller" attribute and the defaults key "_controller" for %s.', $path, $name));
+            }
+
+            $defaults['_controller'] = $controller;
+        }
+
+        return [$defaults, $requirements, $options, $condition];
+    }
+
+    /**
+     * Parses the "default" elements.
+     *
+     * @param \DOMElement $element The "default" element to parse
+     * @param string      $path    Full path of the XML file being processed
+     *
+     * @return array|bool|float|int|string|null The parsed value of the "default" element
+     */
+    private function parseDefaultsConfig(\DOMElement $element, $path)
+    {
+        if ($this->isElementValueNull($element)) {
+            return null;
+        }
+
+        // Check for existing element nodes in the default element. There can
+        // only be a single element inside a default element. So this element
+        // (if one was found) can safely be returned.
+        foreach ($element->childNodes as $child) {
+            if (!$child instanceof \DOMElement) {
+                continue;
+            }
+
+            if (self::NAMESPACE_URI !== $child->namespaceURI) {
+                continue;
+            }
+
+            return $this->parseDefaultNode($child, $path);
+        }
+
+        // If the default element doesn't contain a nested "bool", "int", "float",
+        // "string", "list", or "map" element, the element contents will be treated
+        // as the string value of the associated default option.
+        return trim($element->textContent);
+    }
+
+    /**
+     * Recursively parses the value of a "default" element.
+     *
+     * @param \DOMElement $node The node value
+     * @param string      $path Full path of the XML file being processed
+     *
+     * @return array|bool|float|int|string The parsed value
+     *
+     * @throws \InvalidArgumentException when the XML is invalid
+     */
+    private function parseDefaultNode(\DOMElement $node, $path)
+    {
+        if ($this->isElementValueNull($node)) {
+            return null;
+        }
+
+        switch ($node->localName) {
+            case 'bool':
+                return 'true' === trim($node->nodeValue) || '1' === trim($node->nodeValue);
+            case 'int':
+                return (int) trim($node->nodeValue);
+            case 'float':
+                return (float) trim($node->nodeValue);
+            case 'string':
+                return trim($node->nodeValue);
+            case 'list':
+                $list = [];
+
+                foreach ($node->childNodes as $element) {
+                    if (!$element instanceof \DOMElement) {
+                        continue;
+                    }
+
+                    if (self::NAMESPACE_URI !== $element->namespaceURI) {
+                        continue;
+                    }
+
+                    $list[] = $this->parseDefaultNode($element, $path);
+                }
+
+                return $list;
+            case 'map':
+                $map = [];
+
+                foreach ($node->childNodes as $element) {
+                    if (!$element instanceof \DOMElement) {
+                        continue;
+                    }
+
+                    if (self::NAMESPACE_URI !== $element->namespaceURI) {
+                        continue;
+                    }
+
+                    $map[$element->getAttribute('key')] = $this->parseDefaultNode($element, $path);
+                }
+
+                return $map;
+            default:
+                throw new \InvalidArgumentException(sprintf('Unknown tag "%s" used in file "%s". Expected "bool", "int", "float", "string", "list", or "map".', $node->localName, $path));
+        }
     }
 
     private function isElementValueNull(\DOMElement $element)

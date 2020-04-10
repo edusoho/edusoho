@@ -12,15 +12,15 @@
 namespace Symfony\Component\Translation\Tests\Dumper;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Translation\MessageCatalogue;
 use Symfony\Component\Translation\Dumper\PoFileDumper;
+use Symfony\Component\Translation\MessageCatalogue;
 
 class PoFileDumperTest extends TestCase
 {
     public function testFormatCatalogue()
     {
         $catalogue = new MessageCatalogue('en');
-        $catalogue->add(array('foo' => 'bar'));
+        $catalogue->add(['foo' => 'bar', 'bar' => 'foo']);
 
         $dumper = new PoFileDumper();
 

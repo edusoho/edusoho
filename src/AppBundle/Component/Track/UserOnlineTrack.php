@@ -63,7 +63,7 @@ class UserOnlineTrack
 
     private function getRequest()
     {
-        return $this->container->get('request');
+        return $this->container->get('request_stack')->getMasterRequest();
     }
 
     private function getClientIp()

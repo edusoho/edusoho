@@ -2,17 +2,25 @@
 
 namespace Omnipay\Alipay;
 
+use Omnipay\Alipay\Requests\LegacyCloseRequest;
 use Omnipay\Alipay\Requests\LegacyCompletePurchaseRequest;
+use Omnipay\Alipay\Requests\LegacyCompleteRefundRequest;
 use Omnipay\Alipay\Requests\LegacyQueryRequest;
 use Omnipay\Alipay\Requests\LegacyRefundRequest;
-use Omnipay\Alipay\Requests\LegacyCloseRequest;
+use Omnipay\Common\AbstractGateway;
 
-abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
+abstract class AbstractLegacyGateway extends AbstractGateway
 {
     public function getDefaultParameters()
     {
-        return array('inputCharset' => 'UTF-8', 'signType' => 'MD5', 'paymentType' => '1', 'alipaySdk' => 'lokielse/omnipay-alipay');
+        return [
+            'inputCharset' => 'UTF-8',
+            'signType'     => 'MD5',
+            'paymentType'  => '1',
+            'alipaySdk'    => 'lokielse/omnipay-alipay',
+        ];
     }
+
 
     /**
      * @return mixed
@@ -21,6 +29,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
     {
         return $this->getParameter('partner');
     }
+
 
     /**
      * @param $value
@@ -32,6 +41,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
         return $this->setParameter('partner', $value);
     }
 
+
     /**
      * @return mixed
      */
@@ -39,6 +49,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
     {
         return $this->getParameter('sign_type');
     }
+
 
     /**
      * @param $value
@@ -50,6 +61,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
         return $this->setParameter('sign_type', $value);
     }
 
+
     /**
      * @return mixed
      */
@@ -57,6 +69,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
     {
         return $this->getParameter('payment_type');
     }
+
 
     /**
      * @param $value
@@ -68,6 +81,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
         return $this->setParameter('payment_type', $value);
     }
 
+
     /**
      * @return mixed
      */
@@ -75,6 +89,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
     {
         return $this->getParameter('key');
     }
+
 
     /**
      * @param $value
@@ -86,6 +101,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
         return $this->setParameter('key', $value);
     }
 
+
     /**
      * @return mixed
      */
@@ -93,6 +109,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
     {
         return $this->getParameter('private_key');
     }
+
 
     /**
      * @param $value
@@ -104,6 +121,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
         return $this->setParameter('private_key', $value);
     }
 
+
     /**
      * @return mixed
      */
@@ -111,6 +129,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
     {
         return $this->getParameter('alipay_public_key');
     }
+
 
     /**
      * @param $value
@@ -122,6 +141,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
         return $this->setParameter('alipay_public_key', $value);
     }
 
+
     /**
      * @return mixed
      */
@@ -129,6 +149,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
     {
         return $this->getParameter('seller_id');
     }
+
 
     /**
      * @param $value
@@ -140,6 +161,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
         return $this->setParameter('seller_id', $value);
     }
 
+
     /**
      * @return mixed
      */
@@ -147,6 +169,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
     {
         return $this->getParameter('seller_email');
     }
+
 
     /**
      * @param $value
@@ -158,6 +181,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
         return $this->setParameter('seller_email', $value);
     }
 
+
     /**
      * @return mixed
      */
@@ -165,6 +189,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
     {
         return $this->getParameter('seller_account_name');
     }
+
 
     /**
      * @param $value
@@ -176,6 +201,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
         return $this->setParameter('seller_account_name', $value);
     }
 
+
     /**
      * @return mixed
      */
@@ -183,6 +209,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
     {
         return $this->getParameter('notify_url');
     }
+
 
     /**
      * @param $value
@@ -194,6 +221,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
         return $this->setParameter('notify_url', $value);
     }
 
+
     /**
      * @return mixed
      */
@@ -201,6 +229,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
     {
         return $this->getParameter('return_url');
     }
+
 
     /**
      * @param $value
@@ -212,6 +241,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
         return $this->setParameter('return_url', $value);
     }
 
+
     /**
      * @return mixed
      */
@@ -219,6 +249,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
     {
         return $this->getParameter('_input_charset');
     }
+
 
     /**
      * @param $value
@@ -230,6 +261,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
         return $this->setParameter('_input_charset', $value);
     }
 
+
     /**
      * @return mixed
      */
@@ -237,6 +269,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
     {
         return $this->getParameter('it_b_pay');
     }
+
 
     /**
      * @param $value
@@ -248,6 +281,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
         return $this->setParameter('it_b_pay', $value);
     }
 
+
     /**
      * @return mixed
      */
@@ -255,6 +289,7 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
     {
         return $this->getParameter('alipay_sdk');
     }
+
 
     /**
      * @param $value
@@ -266,47 +301,51 @@ abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
         return $this->setParameter('alipay_sdk', $value);
     }
 
-    /**
-     * @param array $parameters
-     *
-     * @return LegacyCompletePurchaseRequest
-     */
-    public function completePurchase(array $parameters = array())
-    {
-        return $this->createRequest('Omnipay\\Alipay\\Requests\\LegacyCompletePurchaseRequest', $parameters);
-    }
 
     /**
      * @param array $parameters
      *
-     * @return LegacyRefundRequest
+     * @return \Omnipay\Alipay\Requests\LegacyCompletePurchaseRequest
      */
-    public function refund(array $parameters = array())
+    public function completePurchase(array $parameters = [])
     {
-        return $this->createRequest('Omnipay\\Alipay\\Requests\\LegacyRefundRequest', $parameters);
+        return $this->createRequest(LegacyCompletePurchaseRequest::class, $parameters);
     }
+
 
     /**
      * @param array $parameters
      *
-     * @return LegacyRefundRequest
+     * @return \Omnipay\Alipay\Requests\LegacyRefundRequest
      */
-    public function completeRefund(array $parameters = array())
+    public function refund(array $parameters = [])
     {
-        return $this->createRequest('Omnipay\\Alipay\\Requests\\LegacyCompleteRefundRequest', $parameters);
+        return $this->createRequest(LegacyRefundRequest::class, $parameters);
     }
+
 
     /**
      * @param array $parameters
      *
-     * @return LegacyQueryRequest
+     * @return \Omnipay\Alipay\Requests\LegacyRefundRequest
      */
-    public function query(array $parameters = array())
+    public function completeRefund(array $parameters = [])
     {
-        return $this->createRequest('Omnipay\\Alipay\\Requests\\LegacyQueryRequest', $parameters);
+        return $this->createRequest(LegacyCompleteRefundRequest::class, $parameters);
     }
 
-    public function close(array $parameters = array())
+
+    /**
+     * @param array $parameters
+     *
+     * @return \Omnipay\Alipay\Requests\LegacyQueryRequest
+     */
+    public function query(array $parameters = [])
+    {
+        return $this->createRequest(LegacyQueryRequest::class, $parameters);
+    }
+
+    public function close(array $parameters = [])
     {
         $request = new LegacyCloseRequest(array('key' => $this->getPartner(), 'secret' => $this->getKey()));
         $request->setParams($parameters);

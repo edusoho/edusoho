@@ -11,9 +11,9 @@
 
 namespace Symfony\Bridge\Doctrine\Tests\Fixtures;
 
-use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\Id;
 
 /** @Entity */
 class SingleIntIdEntity
@@ -23,6 +23,9 @@ class SingleIntIdEntity
 
     /** @Column(type="string", nullable=true) */
     public $name;
+
+    /** @Column(type="array", nullable=true) */
+    public $phoneNumbers = [];
 
     public function __construct($id, $name)
     {

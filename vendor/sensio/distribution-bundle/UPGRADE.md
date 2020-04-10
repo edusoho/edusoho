@@ -11,4 +11,4 @@ UPGRADE FROM 4.0 to 5.0
  * If you have been using the Symfony 3 directory structure already, you need to
    overwrite the cache and log directories in your `AppKernel` as it is also done
    in Symfony 3 now (see
-   [`app/AppKernel.php`](https://github.com/symfony/symfony-standard/blob/master/app/AppKernel.php#L31-L44)).
+   [`app/AppKernel.php`](https://github.com/symfony/symfony-standard/blob/3.3/app/AppKernel.php#L40-L48)).

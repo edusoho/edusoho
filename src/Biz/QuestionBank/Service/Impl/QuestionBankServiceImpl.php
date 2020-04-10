@@ -29,6 +29,13 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         return $this->wrapQuestionBank($questionBank);
     }
 
+    public function getQuestionBankByItemBankId($itemBankId)
+    {
+        $questionBank = $this->getQuestionBankDao()->getByItemBankId($itemBankId);
+
+        return $this->wrapQuestionBank($questionBank);
+    }
+
     public function findQuestionBanksByIds($ids)
     {
         $questionBanks = $this->getQuestionBankDao()->findByIds($ids);

@@ -15,6 +15,8 @@ interface QuestionBankService
 
     public function getQuestionBankByCourseSetId($courseSetId);
 
+    public function getQuestionBankByItemBankId($itemBankId);
+
     public function findQuestionBanksByIds($ids);
 
     public function searchQuestionBanks($conditions, $orderBys, $start, $limit, $columns = array());

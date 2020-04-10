@@ -3,8 +3,8 @@ Generating a New Controller
 
 .. caution::
 
-    If your application is based on Symfony 3, replace ``php app/console`` by
-    ``php bin/console`` before executing any of the console commands included
+    If your application is based on Symfony 2.x version, replace ``php bin/console``
+    with ``php app/console`` before executing any of the console commands included
     in this article.
 
 Usage
@@ -19,14 +19,14 @@ structure:
 
 .. code-block:: bash
 
-    $ php app/console generate:controller
+    $ php bin/console generate:controller
 
 The command can be run in a non-interactive mode by using the ``--no-interaction``
 option without forgetting all needed options:
 
 .. code-block:: bash
 
-    $ php app/console generate:controller --no-interaction --controller=AcmeBlogBundle:Post
+    $ php bin/console generate:controller --no-interaction --controller=AcmeBlogBundle:Post
 
 Available Options
 -----------------
@@ -39,7 +39,7 @@ Available Options
 
     .. code-block:: bash
 
-        $ php app/console generate:controller --controller=AcmeBlogBundle:Post
+        $ php bin/console generate:controller --controller=AcmeBlogBundle:Post
 
 ``--actions``
     The list of actions to generate in the controller class. This has a format
@@ -47,10 +47,10 @@ Available Options
 
     .. code-block:: bash
 
-        $ php app/console generate:controller --actions="showPostAction:/article/{id} getListAction:/_list-posts/{max}:AcmeBlogBundle:Post:list_posts.html.twig"
+        $ php bin/console generate:controller --actions="showPostAction:/article/{id} getListAction:/_list-posts/{max}:AcmeBlogBundle:Post:list_posts.html.twig"
 
         # or
-        $ php app/console generate:controller --actions=showPostAction:/article/{id} --actions=getListAction:/_list-posts/{max}:AcmeBlogBundle:Post:list_posts.html.twig
+        $ php bin/console generate:controller --actions=showPostAction:/article/{id} --actions=getListAction:/_list-posts/{max}:AcmeBlogBundle:Post:list_posts.html.twig
 
 ``--route-format``
     **allowed values**: ``annotation|php|yml|xml`` **default**: ``annotation``
@@ -60,7 +60,7 @@ Available Options
 
     .. code-block:: bash
 
-        $ php app/console generate:controller --route-format=annotation
+        $ php bin/console generate:controller --route-format=annotation
 
 ``--template-format``
     **allowed values**: ``php|twig`` **default**: ``twig``
@@ -70,4 +70,4 @@ Available Options
 
     .. code-block:: bash
 
-        $ php app/console generate:controller --template-format=twig
+        $ php bin/console generate:controller --template-format=twig

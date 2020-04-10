@@ -18,9 +18,22 @@ use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
  * Generates the Class Cache (classes.php) file.
  *
  * @author Tugdual Saunier <tucksaun@gmail.com>
+ *
+ * @deprecated since version 3.3, to be removed in 4.0.
  */
 class ClassCacheCacheWarmer implements CacheWarmerInterface
 {
+    private $declaredClasses;
+
+    public function __construct(array $declaredClasses = null)
+    {
+        if (\PHP_VERSION_ID >= 70000) {
+            @trigger_error('The '.__CLASS__.' class is deprecated since Symfony 3.3 and will be removed in 4.0.', E_USER_DEPRECATED);
+        }
+
+        $this->declaredClasses = $declaredClasses;
+    }
+
     /**
      * Warms up the cache.
      *
@@ -37,8 +50,9 @@ class ClassCacheCacheWarmer implements CacheWarmerInterface
         if (file_exists($cacheDir.'/classes.php')) {
             return;
         }
+        $declared = null !== $this->declaredClasses ? $this->declaredClasses : array_merge(get_declared_classes(), get_declared_interfaces(), get_declared_traits());
 
-        ClassCollectionLoader::load(include($classmap), $cacheDir, 'classes', false);
+        ClassCollectionLoader::inline(include($classmap), $cacheDir.'/classes.php', $declared);
     }
 
     /**

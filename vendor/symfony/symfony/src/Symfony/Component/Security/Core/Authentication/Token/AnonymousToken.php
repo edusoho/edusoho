@@ -11,7 +11,7 @@
 
 namespace Symfony\Component\Security\Core\Authentication\Token;
 
-use Symfony\Component\Security\Core\Role\RoleInterface;
+use Symfony\Component\Security\Core\Role\Role;
 
 /**
  * AnonymousToken represents an anonymous token.
@@ -23,13 +23,11 @@ class AnonymousToken extends AbstractToken
     private $secret;
 
     /**
-     * Constructor.
-     *
-     * @param string          $secret A secret used to make sure the token is created by the app and not by a malicious client
-     * @param string|object   $user   The user can be a UserInterface instance, or an object implementing a __toString method or the username as a regular string
-     * @param RoleInterface[] $roles  An array of roles
+     * @param string        $secret A secret used to make sure the token is created by the app and not by a malicious client
+     * @param string|object $user   The user can be a UserInterface instance, or an object implementing a __toString method or the username as a regular string
+     * @param Role[]        $roles  An array of roles
      */
-    public function __construct($secret, $user, array $roles = array())
+    public function __construct($secret, $user, array $roles = [])
     {
         parent::__construct($roles);
 
@@ -47,16 +45,6 @@ class AnonymousToken extends AbstractToken
     }
 
     /**
-     * @deprecated Since version 2.8, to be removed in 3.0. Use getSecret() instead.
-     */
-    public function getKey()
-    {
-        @trigger_error(__method__.'() is deprecated since version 2.8 and will be removed in 3.0. Use getSecret() instead.', E_USER_DEPRECATED);
-
-        return $this->getSecret();
-    }
-
-    /**
      * Returns the secret.
      *
      * @return string
@@ -71,7 +59,9 @@ class AnonymousToken extends AbstractToken
      */
     public function serialize()
     {
-        return serialize(array($this->secret, parent::serialize()));
+        $serialized = [$this->secret, parent::serialize(true)];
+
+        return $this->doSerialize($serialized, \func_num_args() ? func_get_arg(0) : null);
     }
 
     /**
@@ -79,7 +69,7 @@ class AnonymousToken extends AbstractToken
      */
     public function unserialize($serialized)
     {
-        list($this->secret, $parentStr) = unserialize($serialized);
+        list($this->secret, $parentStr) = \is_array($serialized) ? $serialized : unserialize($serialized);
         parent::unserialize($parentStr);
     }
 }

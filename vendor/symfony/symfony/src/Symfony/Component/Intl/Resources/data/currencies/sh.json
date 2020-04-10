@@ -1,5 +1,5 @@
 {
-    "Version": "2.1.29.33",
+    "Version": "36",
     "Names": {
         "ADP": [
             "ADP",
@@ -225,6 +225,10 @@
             "CLP",
             "Čileanski pezos"
         ],
+        "CNH": [
+            "CNH",
+            "Kineski juan (ostrvski)"
+        ],
         "CNY": [
             "CN¥",
             "Kineski juan"
@@ -279,7 +283,7 @@
         ],
         "DJF": [
             "DJF",
-            "Džibutanski franak"
+            "Džibutski franak"
         ],
         "DKK": [
             "DKK",
@@ -619,7 +623,11 @@
         ],
         "MRO": [
             "MRO",
-            "Mauritanijska ogija"
+            "Mauritanijska ogija (1973–2017)"
+        ],
+        "MRU": [
+            "MRU",
+            "Mauritanska ogija"
         ],
         "MTL": [
             "MTL",
@@ -715,11 +723,11 @@
         ],
         "PEN": [
             "PEN",
-            "Peruanski novi sol"
+            "Peruanski sol"
         ],
         "PES": [
             "PES",
-            "Peruanski sol"
+            "Peruanski sol (1863–1965)"
         ],
         "PGK": [
             "PGK",
@@ -759,11 +767,11 @@
         ],
         "ROL": [
             "ROL",
-            "Rumunski lej"
+            "Rumunski lej (1952–2006)"
         ],
         "RON": [
             "RON",
-            "Rumunski lej (1952–2006)"
+            "Rumunski lej"
         ],
         "RSD": [
             "RSD",
@@ -815,7 +823,7 @@
         ],
         "SHP": [
             "SHP",
-            "Sv. jelenska funta"
+            "Svete Jelene funta"
         ],
         "SIT": [
             "SIT",
@@ -847,6 +855,10 @@
         ],
         "STD": [
             "STD",
+            "Saotomska dobra (1977–2017)"
+        ],
+        "STN": [
+            "STN",
             "Saotomska dobra"
         ],
         "SUR": [
@@ -967,6 +979,10 @@
         ],
         "VEF": [
             "VEF",
+            "Venecuelanski bolivar (2008–2018)"
+        ],
+        "VES": [
+            "VES",
             "Venecuelanski bolivar"
         ],
         "VND": [

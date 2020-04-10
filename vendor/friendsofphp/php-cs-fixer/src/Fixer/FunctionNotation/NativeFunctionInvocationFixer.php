@@ -130,7 +130,7 @@ function baz($options)
             }
 
             // do not bother if previous token is already namespace separator
-            if ($tokens[$index - 1]->isGivenKind(T_NS_SEPARATOR)) {
+            if ($tokens[$tokens->getPrevMeaningfulToken($index)]->isGivenKind(T_NS_SEPARATOR)) {
                 continue;
             }
 
@@ -153,7 +153,7 @@ function baz($options)
             ->setAllowedTypes(array('array'))
             ->setAllowedValues(array(function ($value) {
                 foreach ($value as $functionName) {
-                    if (!\is_string($functionName) || \trim($functionName) === '' || \trim($functionName) !== $functionName) {
+                    if (!\is_string($functionName) || '' === \trim($functionName) || \trim($functionName) !== $functionName) {
                         throw new InvalidOptionsException(\sprintf(
                             'Each element must be a non-empty, trimmed string, got "%s" instead.',
                             \is_object($functionName) ? \get_class($functionName) : \gettype($functionName)
@@ -190,6 +190,8 @@ function baz($options)
      */
     private function normalizeFunctionNames(array $functionNames)
     {
-        return \array_map('strtolower', $functionNames);
+        return \array_map(function ($functionName) {
+            return \strtolower($functionName);
+        }, $functionNames);
     }
 }

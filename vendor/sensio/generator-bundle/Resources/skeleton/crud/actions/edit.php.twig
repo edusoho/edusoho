@@ -6,7 +6,7 @@
      *
 {% block phpdoc_method_annotations %}
 {% if 'annotation' == format %}
-     * @Route("/{id}/edit", name="{{ route_name_prefix }}_edit")
+     * @Route("/{{ '{' ~ identifier ~ '}' }}/edit", name="{{ route_name_prefix }}_edit")
      * @Method({"GET", "POST"})
 {% endif %}
 {% endblock phpdoc_method_annotations %}
@@ -27,7 +27,7 @@
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('{{ route_name_prefix }}_edit', array('id' => ${{ entity_singularized }}->getId()));
+            return $this->redirectToRoute('{{ route_name_prefix }}_edit', array('{{ identifier }}' => ${{ entity_singularized }}->get{{ identifier|capitalize }}()));
         }
 {% endblock method_body %}
 

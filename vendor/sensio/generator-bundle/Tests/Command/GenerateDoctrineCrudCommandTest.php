@@ -29,7 +29,8 @@ class GenerateDoctrineCrudCommandTest extends GenerateCommandTest
             ->with($this->getBundle(), $entity, $this->getDoctrineMetadata(), $format, $prefix, $withWrite)
         ;
 
-        $tester = new CommandTester($this->getCommand($generator, $input));
+        $tester = new CommandTester($command = $this->getCommand($generator));
+        $this->setInputs($tester, $command, $input);
         $tester->execute($options);
     }
 
@@ -37,11 +38,15 @@ class GenerateDoctrineCrudCommandTest extends GenerateCommandTest
     {
         return array(
             array(array(), "AcmeBlogBundle:Blog/Post\n", array('Blog\\Post', 'annotation', 'blog_post', false)),
-            array(array('--entity' => 'AcmeBlogBundle:Blog/Post'), '', array('Blog\\Post', 'annotation', 'blog_post', false)),
             array(array(), "AcmeBlogBundle:Blog/Post\ny\nyml\nfoobar\n", array('Blog\\Post', 'yml', 'foobar', true)),
             array(array(), "AcmeBlogBundle:Blog/Post\ny\nyml\n/foobar\n", array('Blog\\Post', 'yml', 'foobar', true)),
-            array(array('--entity' => 'AcmeBlogBundle:Blog/Post', '--format' => 'yml', '--route-prefix' => 'foo', '--with-write' => true), '', array('Blog\\Post', 'yml', 'foo', true)),
             array(array('entity' => 'AcmeBlogBundle:Blog/Post'), "\ny\nyml\nfoobar\n", array('Blog\\Post', 'yml', 'foobar', true)),
+            array(array('entity' => 'AcmeBlogBundle:Blog/Post'), '', array('Blog\\Post', 'annotation', 'blog_post', false)),
+            array(array('entity' => 'AcmeBlogBundle:Blog/Post', '--format' => 'yml', '--route-prefix' => 'foo', '--with-write' => true), '', array('Blog\\Post', 'yml', 'foo', true)),
+            // Deprecated, to be removed in 4.0
+            array(array('--entity' => 'AcmeBlogBundle:Blog/Post'), '', array('Blog\\Post', 'annotation', 'blog_post', false)),
+            array(array('--entity' => 'AcmeBlogBundle:Blog/Post', '--format' => 'yml', '--route-prefix' => 'foo', '--with-write' => true), '', array('Blog\\Post', 'yml', 'foo', true)),
+
         );
     }
 
@@ -59,13 +64,16 @@ class GenerateDoctrineCrudCommandTest extends GenerateCommandTest
             ->with($this->getBundle(), $entity, $this->getDoctrineMetadata(), $format, $prefix, $withWrite)
         ;
 
-        $tester = new CommandTester($this->getCommand($generator, ''));
+        $tester = new CommandTester($this->getCommand($generator));
         $tester->execute($options, array('interactive' => false));
     }
 
     public function getNonInteractiveCommandData()
     {
         return array(
+            array(array('entity' => 'AcmeBlogBundle:Blog/Post'), array('Blog\\Post', 'annotation', 'blog_post', false)),
+            array(array('entity' => 'AcmeBlogBundle:Blog/Post', '--format' => 'yml', '--route-prefix' => 'foo', '--with-write' => true), array('Blog\\Post', 'yml', 'foo', true)),
+            // Deprecated, to be removed in 4.0
             array(array('--entity' => 'AcmeBlogBundle:Blog/Post'), array('Blog\\Post', 'annotation', 'blog_post', false)),
             array(array('--entity' => 'AcmeBlogBundle:Blog/Post', '--format' => 'yml', '--route-prefix' => 'foo', '--with-write' => true), array('Blog\\Post', 'yml', 'foo', true)),
         );
@@ -81,6 +89,7 @@ acme_blog:
     prefix:   /
 DATA;
 
+        @mkdir($rootDir.'/config', 0777, true);
         file_put_contents($rootDir.'/config/routing.yml', $routing);
 
         $options = array();
@@ -96,12 +105,11 @@ DATA;
             ->with($this->getBundle(), $entity, $this->getDoctrineMetadata(), $format, $prefix, $withWrite)
         ;
 
-        $tester = new CommandTester($this->getCommand($generator, $input));
+        $tester = new CommandTester($command = $this->getCommand($generator));
+        $this->setInputs($tester, $command, $input);
         $tester->execute($options);
 
-        $expected = 'acme_blog_post:';
-
-        $this->assertContains($expected, file_get_contents($rootDir.'/config/routing.yml'));
+        $this->assertContains('acme_blog_post:', file_get_contents($rootDir.'/config/routing.yml'));
     }
 
     public function testCreateCrudWithAnnotationInAnnotationBundle()
@@ -114,6 +122,7 @@ acme_blog:
     type:     annotation
 DATA;
 
+        @mkdir($rootDir.'/config', 0777, true);
         file_put_contents($rootDir.'/config/routing.yml', $routing);
 
         $options = array();
@@ -129,7 +138,8 @@ DATA;
             ->with($this->getBundle(), $entity, $this->getDoctrineMetadata(), $format, $prefix, $withWrite)
         ;
 
-        $tester = new CommandTester($this->getCommand($generator, $input));
+        $tester = new CommandTester($command = $this->getCommand($generator));
+        $this->setInputs($tester, $command, $input);
         $tester->execute($options);
 
         $this->assertEquals($routing, file_get_contents($rootDir.'/config/routing.yml'));
@@ -145,6 +155,7 @@ acme_blog:
     type:     annotation
 DATA;
 
+        @mkdir($rootDir.'/config', 0777, true);
         file_put_contents($rootDir.'/config/routing.yml', $routing);
 
         $options = array();
@@ -160,7 +171,8 @@ DATA;
             ->with($this->getBundle(), $entity, $this->getDoctrineMetadata(), $format, $prefix, $withWrite)
         ;
 
-        $tester = new CommandTester($this->getCommand($generator, $input));
+        $tester = new CommandTester($command = $this->getCommand($generator));
+        $this->setInputs($tester, $command, $input);
         $tester->execute($options);
 
         $expected = '@AcmeBlogBundle/Controller/PostController.php';
@@ -168,7 +180,7 @@ DATA;
         $this->assertContains($expected, file_get_contents($rootDir.'/config/routing.yml'));
     }
 
-    protected function getCommand($generator, $input)
+    protected function getCommand($generator)
     {
         $command = $this
             ->getMockBuilder('Sensio\Bundle\GeneratorBundle\Command\GenerateDoctrineCrudCommand')
@@ -183,7 +195,7 @@ DATA;
         ;
 
         $command->setContainer($this->getContainer());
-        $command->setHelperSet($this->getHelperSet($input));
+        $command->setHelperSet($this->getHelperSet());
         $command->setGenerator($generator);
         $command->setFormGenerator($this->getFormGenerator());
 
@@ -223,7 +235,6 @@ DATA;
     protected function getBundle()
     {
         $bundle = parent::getBundle();
-
         $bundle
             ->expects($this->any())
             ->method('getName')

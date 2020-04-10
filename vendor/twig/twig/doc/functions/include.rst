@@ -6,7 +6,7 @@
 
 The ``include`` function returns the rendered content of a template:
 
-.. code-block:: jinja
+.. code-block:: twig
 
     {{ include('template.html') }}
     {{ include(some_var) }}
@@ -19,7 +19,7 @@ paths defined by it.
 The context is passed by default to the template but you can also pass
 additional variables:
 
-.. code-block:: jinja
+.. code-block:: twig
 
     {# template.html will have access to the variables from the current context and the additional ones provided #}
     {{ include('template.html', {foo: 'bar'}) }}
@@ -27,18 +27,18 @@ additional variables:
 You can disable access to the context by setting ``with_context`` to
 ``false``:
 
-.. code-block:: jinja
+.. code-block:: twig
 
     {# only the foo variable will be accessible #}
     {{ include('template.html', {foo: 'bar'}, with_context = false) }}
 
-.. code-block:: jinja
+.. code-block:: twig
 
     {# no variables will be accessible #}
     {{ include('template.html', with_context = false) }}
 
-And if the expression evaluates to a ``Twig_Template`` or a
-``Twig_TemplateWrapper`` instance, Twig will use it directly::
+And if the expression evaluates to a ``\Twig\Template`` or a
+``\Twig\TemplateWrapper`` instance, Twig will use it directly::
 
     // {{ include(template) }}
 
@@ -48,19 +48,19 @@ And if the expression evaluates to a ``Twig_Template`` or a
     // as of Twig 1.28
     $template = $twig->load('some_template.twig');
 
-    $twig->display('template.twig', array('template' => $template));
+    $twig->display('template.twig', ['template' => $template]);
 
 When you set the ``ignore_missing`` flag, Twig will return an empty string if
 the template does not exist:
 
-.. code-block:: jinja
+.. code-block:: twig
 
     {{ include('sidebar.html', ignore_missing = true) }}
 
 You can also provide a list of templates that are checked for existence before
 inclusion. The first template that exists will be rendered:
 
-.. code-block:: jinja
+.. code-block:: twig
 
     {{ include(['page_detailed.html', 'page.html']) }}
 
@@ -70,7 +70,7 @@ of the templates exist, otherwise it will throw an exception.
 When including a template created by an end user, you should consider
 sandboxing it:
 
-.. code-block:: jinja
+.. code-block:: twig
 
     {{ include('page.html', sandboxed = true) }}
 

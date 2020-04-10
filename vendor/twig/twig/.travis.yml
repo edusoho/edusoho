@@ -1,5 +1,7 @@
 language: php
 
+dist: trusty
+
 sudo: false
 
 cache:
@@ -7,37 +9,38 @@ cache:
         - vendor
         - $HOME/.composer/cache/files
 
-php:
-    - 5.2
-    - 5.3
-    - 5.4
-    - 5.5
-    - 5.6
-    - 7.0
-    - 7.1
-    - hhvm
 
 env:
-    - TWIG_EXT=no
-    - TWIG_EXT=yes
+    global:
+        - TWIG_EXT=no
+        - SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT=1
 
 before_install:
-    - if [[ ! $TRAVIS_PHP_VERSION = hhvm* ]]; then phpenv config-rm xdebug.ini || echo "xdebug not available"; fi
+    - phpenv config-rm xdebug.ini || return 0
 
 install:
-    # Composer is not available on PHP 5.2
-    - if [ ${TRAVIS_PHP_VERSION:0:3} != "5.2" ]; then travis_retry composer install; fi
+    - travis_retry composer install
 
 before_script:
     - if [ "$TWIG_EXT" == "yes" ]; then sh -c "cd ext/twig && phpize && ./configure --enable-twig && make && make install"; fi
     - if [ "$TWIG_EXT" == "yes" ]; then echo "extension=twig.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`; fi
 
-matrix:
+script: ./vendor/bin/simple-phpunit
+
+jobs:
     fast_finish: true
-    exclude:
-        - php: hhvm
+    include:
+        - php: 5.5
+        - php: 5.5
+          env: TWIG_EXT=yes
+        - php: 5.6
+        - php: 5.6
           env: TWIG_EXT=yes
         - php: 7.0
-          env: TWIG_EXT=yes
         - php: 7.1
-          env: TWIG_EXT=yes
+        - php: 7.2
+        - php: 7.3
+        - php: 7.4snapshot
+        - stage: integration tests
+          php: 7.3
+          script: ./drupal_test.sh

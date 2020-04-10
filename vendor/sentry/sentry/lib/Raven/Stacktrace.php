@@ -35,20 +35,34 @@ class Raven_Stacktrace
          */
         $result = array();
         for ($i = 0; $i < count($frames); $i++) {
-            $frame = isset($frames[$i]) ? $frames[$i] : null;
-            $nextframe = isset($frames[$i + 1]) ? $frames[$i + 1] : null;
+            $frame = isset($frames[$i]) ? $frames[$i] : array();
+            $nextframe = isset($frames[$i + 1]) ? $frames[$i + 1] : array();
 
             if (!array_key_exists('file', $frame)) {
+                $context = array();
+
                 if (!empty($frame['class'])) {
-                    $context['line'] = sprintf('%s%s%s',
-                        $frame['class'], $frame['type'], $frame['function']);
-                } else {
+                    $context['line'] = sprintf('%s%s%s', $frame['class'], $frame['type'], $frame['function']);
+
+                    try {
+                        $reflect = new ReflectionClass($frame['class']);
+                        $context['filename'] = $filename = $reflect->getFileName();
+                    } catch (ReflectionException $e) {
+                        // Forget it if we run into errors, it's not worth it.
+                    }
+                } elseif (!empty($frame['function'])) {
                     $context['line'] = sprintf('%s(anonymous)', $frame['function']);
+                } else {
+                    $context['line'] = sprintf('(anonymous)');
                 }
+
+                if (empty($context['filename'])) {
+                    $context['filename'] = $filename = '[Anonymous function]';
+                }
+
                 $abs_path = '';
                 $context['prefix'] = '';
                 $context['suffix'] = '';
-                $context['filename'] = $filename = '[Anonymous function]';
                 $context['lineno'] = 0;
             } else {
                 $context = self::read_source_file($frame['file'], $frame['line']);
@@ -80,7 +94,11 @@ class Raven_Stacktrace
             // detect in_app based on app path
             if ($app_path) {
                 $norm_abs_path = @realpath($abs_path) ?: $abs_path;
-                $in_app = (bool)(substr($norm_abs_path, 0, strlen($app_path)) === $app_path);
+                if (!$abs_path) {
+                    $in_app = false;
+                } else {
+                    $in_app = (bool)(substr($norm_abs_path, 0, strlen($app_path)) === $app_path);
+                }
                 if ($in_app && $excluded_app_paths) {
                     foreach ($excluded_app_paths as $path) {
                         if (substr($norm_abs_path, 0, strlen($path)) === $path) {
@@ -99,7 +117,7 @@ class Raven_Stacktrace
                 foreach ($vars as $key => $value) {
                     $value = $reprSerializer->serialize($value);
                     if (is_string($value) || is_numeric($value)) {
-                        $cleanVars[(string)$key] = substr($value, 0, $frame_var_limit);
+                        $cleanVars[(string)$key] = Raven_Compat::substr($value, 0, $frame_var_limit);
                     } else {
                         $cleanVars[(string)$key] = $value;
                     }
@@ -168,8 +186,10 @@ class Raven_Stacktrace
                 } else {
                     $reflection = new ReflectionMethod($frame['class'], '__call');
                 }
-            } else {
+            } elseif (function_exists($frame['function'])) {
                 $reflection = new ReflectionFunction($frame['function']);
+            } else {
+                return self::get_default_context($frame, $frame_arg_limit);
             }
         } catch (ReflectionException $e) {
             return self::get_default_context($frame, $frame_arg_limit);
@@ -197,14 +217,14 @@ class Raven_Stacktrace
             $_arg = array();
             foreach ($arg as $key => $value) {
                 if (is_string($value) || is_numeric($value)) {
-                    $_arg[$key] = substr($value, 0, $frame_arg_limit);
+                    $_arg[$key] = Raven_Compat::substr($value, 0, $frame_arg_limit);
                 } else {
                     $_arg[$key] = $value;
                 }
             }
             return $_arg;
         } elseif (is_string($arg) || is_numeric($arg)) {
-            return substr($arg, 0, $frame_arg_limit);
+            return Raven_Compat::substr($arg, 0, $frame_arg_limit);
         } else {
             return $arg;
         }
@@ -256,6 +276,10 @@ class Raven_Stacktrace
         if ($matched) {
             $frame['filename'] = $filename = $matches[1];
             $frame['lineno'] = $lineno = $matches[2];
+        }
+        
+        if (!file_exists($filename)) {
+            return $frame;
         }
 
         try {

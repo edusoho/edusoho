@@ -22,6 +22,7 @@
         </testsuite>
         <testsuite name="UnitC2C">
             <directory>../tests/Unit/C*</directory>
+            <exclude>../tests/Unit/CloudPlatform/Service/AppServiceTest.php</exclude>
         </testsuite>
         <testsuite name="UnitD2D">
             <directory>../tests/Unit/D*</directory>
@@ -54,12 +55,18 @@
             <directory>../tests/Unit/Y*</directory>
             <directory>../tests/Unit/Z*</directory>
         </testsuite>
+        <testsuite name="SpecialTest">
+            <file>../tests/Unit/CloudPlatform/Service/AppServiceTest.php</file>
+        </testsuite>
         <testsuite name="CustomBundle">
             <directory>../src/CustomBundle/Tests</directory>
             <directory>../src/CustomBundle/Extensions/DataTag/Tests</directory>
         </testsuite>
     </testsuites>
 
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
+    </listeners>
     <php>
         <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
     </php>

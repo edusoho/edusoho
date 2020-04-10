@@ -22,8 +22,6 @@ class RoleHierarchy implements RoleHierarchyInterface
     protected $map;
 
     /**
-     * Constructor.
-     *
      * @param array $hierarchy An array defining the hierarchy
      */
     public function __construct(array $hierarchy)
@@ -54,10 +52,10 @@ class RoleHierarchy implements RoleHierarchyInterface
 
     protected function buildRoleMap()
     {
-        $this->map = array();
+        $this->map = [];
         foreach ($this->hierarchy as $main => $roles) {
             $this->map[$main] = $roles;
-            $visited = array();
+            $visited = [];
             $additionalRoles = $roles;
             while ($role = array_shift($additionalRoles)) {
                 if (!isset($this->hierarchy[$role])) {

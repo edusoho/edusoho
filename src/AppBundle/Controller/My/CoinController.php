@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
 use Codeages\Biz\Order\Service\OrderService;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class CoinController extends BaseController
 {
@@ -132,7 +133,7 @@ class CoinController extends BaseController
 
         $site = $this->getSettingService()->get('site', array());
 
-        $registerUrl = $this->generateUrl('register', array('inviteCode' => $user['inviteCode']), true);
+        $registerUrl = $this->generateUrl('register', array('inviteCode' => $user['inviteCode']), UrlGeneratorInterface::ABSOLUTE_URL);
 
         if (isset($inviteSetting['inviteInfomation_template'])) {
             $variables = array(

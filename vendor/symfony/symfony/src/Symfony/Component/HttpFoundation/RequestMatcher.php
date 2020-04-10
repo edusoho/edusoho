@@ -31,32 +31,31 @@ class RequestMatcher implements RequestMatcherInterface
     /**
      * @var string[]
      */
-    private $methods = array();
+    private $methods = [];
 
     /**
      * @var string[]
      */
-    private $ips = array();
+    private $ips = [];
 
     /**
      * @var array
      */
-    private $attributes = array();
+    private $attributes = [];
 
     /**
      * @var string[]
      */
-    private $schemes = array();
+    private $schemes = [];
 
     /**
      * @param string|null          $path
      * @param string|null          $host
      * @param string|string[]|null $methods
      * @param string|string[]|null $ips
-     * @param array                $attributes
      * @param string|string[]|null $schemes
      */
-    public function __construct($path = null, $host = null, $methods = null, $ips = null, array $attributes = array(), $schemes = null)
+    public function __construct($path = null, $host = null, $methods = null, $ips = null, array $attributes = [], $schemes = null)
     {
         $this->matchPath($path);
         $this->matchHost($host);
@@ -76,7 +75,7 @@ class RequestMatcher implements RequestMatcherInterface
      */
     public function matchScheme($scheme)
     {
-        $this->schemes = null !== $scheme ? array_map('strtolower', (array) $scheme) : array();
+        $this->schemes = null !== $scheme ? array_map('strtolower', (array) $scheme) : [];
     }
 
     /**
@@ -116,7 +115,7 @@ class RequestMatcher implements RequestMatcherInterface
      */
     public function matchIps($ips)
     {
-        $this->ips = null !== $ips ? (array) $ips : array();
+        $this->ips = null !== $ips ? (array) $ips : [];
     }
 
     /**
@@ -126,7 +125,7 @@ class RequestMatcher implements RequestMatcherInterface
      */
     public function matchMethod($method)
     {
-        $this->methods = null !== $method ? array_map('strtoupper', (array) $method) : array();
+        $this->methods = null !== $method ? array_map('strtoupper', (array) $method) : [];
     }
 
     /**
@@ -145,11 +144,11 @@ class RequestMatcher implements RequestMatcherInterface
      */
     public function matches(Request $request)
     {
-        if ($this->schemes && !in_array($request->getScheme(), $this->schemes, true)) {
+        if ($this->schemes && !\in_array($request->getScheme(), $this->schemes, true)) {
             return false;
         }
 
-        if ($this->methods && !in_array($request->getMethod(), $this->methods, true)) {
+        if ($this->methods && !\in_array($request->getMethod(), $this->methods, true)) {
             return false;
         }
 
@@ -173,6 +172,6 @@ class RequestMatcher implements RequestMatcherInterface
 
         // Note to future implementors: add additional checks above the
         // foreach above or else your check might not be run!
-        return count($this->ips) === 0;
+        return 0 === \count($this->ips);
     }
 }

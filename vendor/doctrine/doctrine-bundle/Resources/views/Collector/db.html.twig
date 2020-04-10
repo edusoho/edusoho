@@ -1,4 +1,6 @@
-{% extends app.request.isXmlHttpRequest ? '@WebProfiler/Profiler/ajax_layout.html.twig' : '@WebProfiler/Profiler/layout.html.twig' %}
+{% extends request.isXmlHttpRequest ? '@WebProfiler/Profiler/ajax_layout.html.twig' : '@WebProfiler/Profiler/layout.html.twig' %}
+
+{% import _self as helper %}
 
 {% block toolbar %}
     {% if collector.querycount > 0 or collector.invalidEntityCount > 0 %}
@@ -113,8 +115,8 @@
         {{ render(controller('DoctrineBundle:Profiler:explain', {
             token: token,
             panel: 'db',
-            connectionName: app.request.query.get('connection'),
-            query: app.request.query.get('query')
+            connectionName: request.query.get('connection'),
+            query: request.query.get('query')
         })) }}
     {% else %}
         {{ block('queries') }}
@@ -122,8 +124,8 @@
 {% endblock %}
 
 {% block queries %}
-    {% if profiler_markup_version == 1 %}
-        <style>
+    <style>
+        {% if profiler_markup_version == 1 %}
             .hidden { display: none; }
             .queries-table td, .queries-table th { vertical-align: top; }
             .queries-table td > div { margin-bottom: 6px; }
@@ -137,8 +139,12 @@
             .highlight .string    { color: #718C00; }
             .highlight .number    { color: #F5871F; font-weight: bold; }
             .highlight .error     { color: #C82829; }
-        </style>
-    {% endif %}
+        {% endif %}
+
+        .time-container { position: relative; }
+        .time-container .nowrap { position: relative; z-index: 1; text-shadow: 0 0 2px #fff; }
+        .time-bar { display: block; position: absolute; top: 0; left: 0; bottom: 0; background: #e0e0e0; }
+    </style>
 
     {% if profiler_markup_version > 1 %}
         <h2>Query Metrics</h2>
@@ -147,6 +153,11 @@
             <div class="metric">
                 <span class="value">{{ collector.querycount }}</span>
                 <span class="label">Database Queries</span>
+            </div>
+
+            <div class="metric">
+                <span class="value">{{ collector.groupedQueryCount }}</span>
+                <span class="label">Different statements</span>
             </div>
     
             <div class="metric">
@@ -176,7 +187,14 @@
         </div>
     {% endif %}
 
-    <h2>Queries</h2>
+    {% set group_queries = request.query.getBoolean('group') %}
+    {% if group_queries %}
+        <h2>Grouped Statements</h2>
+        <p><a href="{{ path('_profiler', { panel: 'db', token: token }) }}">Show all queries</a></p>
+    {% else %}
+        <h2>Queries</h2>
+        <p><a href="{{ path('_profiler', { panel: 'db', token: token, group: true }) }}">Group similar statements</a></p>
+    {% endif %}
 
     {% for connection, queries in collector.queries %}
         {% if collector.connections|length > 1 %}
@@ -188,24 +206,41 @@
                 <p>No database queries were performed.</p>
             </div>
         {% else %}
+            {% if group_queries %}
+                {% set queries = collector.groupedQueries[connection] %}
+            {% endif %}
             <table class="alt queries-table">
                 <thead>
                 <tr>
-                    <th class="nowrap" onclick="javascript:sortTable(this, 0, 'queries-{{ loop.index }}')" data-sort-direction="-1" style="cursor: pointer;">#<span class="text-muted">&#9650;</span></th>
-                    <th class="nowrap" onclick="javascript:sortTable(this, 1, 'queries-{{ loop.index }}')" style="cursor: pointer;">Time<span></span></th>
+                    {% if group_queries %}
+                        <th class="nowrap" onclick="javascript:sortTable(this, 0, 'queries-{{ loop.index }}')" data-sort-direction="1" style="cursor: pointer;">Time<span class="text-muted">&#9660;</span></th>
+                        <th class="nowrap" onclick="javascript:sortTable(this, 1, 'queries-{{ loop.index }}')" style="cursor: pointer;">Count<span></span></th>
+                    {% else %}
+                        <th class="nowrap" onclick="javascript:sortTable(this, 0, 'queries-{{ loop.index }}')" data-sort-direction="-1" style="cursor: pointer;">#<span class="text-muted">&#9650;</span></th>
+                        <th class="nowrap" onclick="javascript:sortTable(this, 1, 'queries-{{ loop.index }}')" style="cursor: pointer;">Time<span></span></th>
+                    {% endif %}
                     <th style="width: 100%;">Info</th>
                 </tr>
                 </thead>
                 <tbody id="queries-{{ loop.index }}">
                     {% for i, query in queries %}
+                        {% set i = group_queries ? query.index : i %}
                         <tr id="queryNo-{{ i }}-{{ loop.parent.loop.index }}">
-                            <td class="nowrap">{{ loop.index }}</td>
-                            <td class="nowrap">{{ '%0.2f'|format(query.executionMS * 1000) }}&nbsp;ms</td>
+                            {% if group_queries %}
+                                <td class="time-container">
+                                    <span class="time-bar" style="width:{{ '%0.2f'|format(query.executionPercent) }}%"></span>
+                                    <span class="nowrap">{{ '%0.2f'|format(query.executionMS * 1000) }}&nbsp;ms<br />({{ '%0.2f'|format(query.executionPercent) }}%)</span>
+                                </td>
+                                <td class="nowrap">{{ query.count }}</td>
+                            {% else %}
+                                <td class="nowrap">{{ loop.index }}</td>
+                                <td class="nowrap">{{ '%0.2f'|format(query.executionMS * 1000) }}&nbsp;ms</td>
+                            {% endif %}
                             <td>
                                 {{ query.sql|doctrine_pretty_query(highlight_only = true) }}
 
                                 <div>
-                                    <strong class="font-normal text-small">Parameters</strong>: {{ query.params|yaml_encode }}
+                                    <strong class="font-normal text-small">Parameters</strong>: {{ profiler_dump(query.params, 2) }}
                                 </div>
 
                                 <div class="text-small font-normal">
@@ -230,7 +265,7 @@
                                 </div>
 
                                 {% if query.explainable %}
-                                    <div id="explain-{{ i }}-{{ loop.parent.loop.index }}"></div>
+                                    <div id="explain-{{ i }}-{{ loop.parent.loop.index }}" class="sql-explain"></div>
                                 {% endif %}
                             </td>
                         </tr>
@@ -247,7 +282,7 @@
             <p>There are no configured database connections.</p>
         </div>
     {% else %}
-        {{ include('@WebProfiler/Profiler/table.html.twig', { data: collector.connections, labels: ['Name', 'Service'] }, with_context = false ) }}
+        {{ helper.render_simple_table('Name', 'Service', collector.connections) }}
     {% endif %}
 
     <h2>Entity Managers</h2>
@@ -257,7 +292,7 @@
             <p>There are no configured entity managers.</p>
         </div>
     {% else %}
-        {{ include('@WebProfiler/Profiler/table.html.twig', { data: collector.managers, labels: ['Name', 'Service'] }, with_context = false ) }}
+        {{ helper.render_simple_table('Name', 'Service', collector.managers) }}
     {% endif %}
 
     <h2>Second Level Cache</h2>
@@ -273,7 +308,7 @@
             </div>
         {% else %}
             {% if profiler_markup_version == 1 %}
-                {{ include('@WebProfiler/Profiler/table.html.twig', { data: collector.cacheCounts }, with_context = false) }}
+                {{ helper.render_simple_table('Key', 'Value', collector.cacheCounts) }}
             {% else %}
                 <div class="metrics">
                     <div class="metric">
@@ -295,17 +330,17 @@
 
             {% if collector.cacheRegions.hits %}
                 <h3>Number of cache hits</h3>
-                {{ include('@WebProfiler/Profiler/table.html.twig', { data: collector.cacheRegions.hits }, with_context = false) }}
+                {{ helper.render_simple_table('Region', 'Hits', collector.cacheRegions.hits) }}
             {% endif %}
 
             {% if collector.cacheRegions.misses %}
                 <h3>Number of cache misses</h3>
-                {{ include('@WebProfiler/Profiler/table.html.twig', { data: collector.cacheRegions.misses }, with_context = false) }}
+                {{ helper.render_simple_table('Region', 'Misses', collector.cacheRegions.misses) }}
             {% endif %}
 
             {% if collector.cacheRegions.puts %}
                 <h3>Number of cache puts</h3>
-                {{ include('@WebProfiler/Profiler/table.html.twig', { data: collector.cacheRegions.puts }, with_context = false) }}
+                {{ helper.render_simple_table('Region', 'Puts', collector.cacheRegions.puts) }}
             {% endif %}
         {% endif %}
     {% endif %}
@@ -430,3 +465,22 @@
 
         //]]></script>
 {% endblock %}
+
+{% macro render_simple_table(label1, label2, data) %}
+    <table>
+        <thead>
+        <tr>
+            <th scope="col" class="key">{{ label1 }}</th>
+            <th scope="col">{{ label2 }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for key, value in data %}
+            <tr>
+                <th scope="row">{{ key }}</th>
+                <td>{{ value }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endmacro %}

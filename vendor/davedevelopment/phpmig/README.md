@@ -191,7 +191,7 @@ In configuration file you need to provide the table name where the migrations wi
 be stored and a create statement. You can use one of the configurations provided
 in the config folder for some common RDBMS.
 
-Here is how the bootstrap file should look like:
+Here is how the bootstrap file should look:
 
 ```php
 <?php
@@ -391,11 +391,13 @@ $container['phpmig.sets'] = function ($container) {
     return array(
         'cms' => array(
             'adapter' => new Adapter\File\Flat('modules/migrationLogs/cms_migrations.log'),
-            'migrations_path' => 'migrations/cms'
+            'migrations_path' => 'migrations/cms',
+            'migrations_template_path' => 'PhpmigCmsTemplate.php'
         ),
         'blog' => array(
             'adapter' => new Adapter\File\Flat('modules/migrationLogs/blog_migrations.log'),
-            'migrations_path' => 'migrations/blog'
+            'migrations_path' => 'migrations/blog',
+            'migrations_template_path' => 'PhpmigBlogTemplate.php',
         )
     );
 };

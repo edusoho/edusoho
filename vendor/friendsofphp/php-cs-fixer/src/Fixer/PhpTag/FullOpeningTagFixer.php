@@ -15,6 +15,8 @@ namespace PhpCsFixer\Fixer\PhpTag;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Preg;
+use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
@@ -67,7 +69,7 @@ echo "Hello!";
         $content = $tokensOrg->generateCode();
 
         // replace all <? with <?php to replace all short open tags even without short_open_tag option enabled
-        $newContent = preg_replace('/<\?(?:phP|pHp|pHP|Php|PhP|PHp|PHP)?(\s|$)/', '<?php$1', $content, -1, $count);
+        $newContent = Preg::replace('/<\?(?:phP|pHp|pHP|Php|PhP|PHp|PHP)?(\s|$)/', '<?php$1', $content, -1, $count);
 
         if (!$count) {
             return;
@@ -83,7 +85,7 @@ echo "Hello!";
         $tokensOldContent = '';
         $tokensOldContentLength = 0;
 
-        foreach ($tokens as $token) {
+        foreach ($tokens as $index => $token) {
             if ($token->isGivenKind(T_OPEN_TAG)) {
                 $tokenContent = $token->getContent();
 
@@ -93,6 +95,7 @@ echo "Hello!";
 
                 $tokensOldContent .= $tokenContent;
                 $tokensOldContentLength += strlen($tokenContent);
+
                 continue;
             }
 
@@ -118,7 +121,8 @@ echo "Hello!";
                     }
                 }
 
-                $token->setContent($tokenContent);
+                $tokens[$index] = new Token(array($token->getId(), $tokenContent));
+                $token = $tokens[$index];
             }
 
             $tokensOldContent .= $token->getContent();

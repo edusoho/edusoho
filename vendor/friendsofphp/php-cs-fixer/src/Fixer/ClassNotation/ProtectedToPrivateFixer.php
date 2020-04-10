@@ -16,6 +16,7 @@ use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\Tokenizer\CT;
+use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
@@ -59,7 +60,7 @@ final class Sample
      */
     public function isCandidate(Tokens $tokens)
     {
-        return $tokens->isTokenKindFound(T_CLASS);
+        return $tokens->isAllTokenKindsFound(array(T_CLASS, T_FINAL, T_PROTECTED));
     }
 
     /**
@@ -94,6 +95,7 @@ final class Sample
         for ($index = $classOpenIndex + 1; $index < $classCloseIndex; ++$index) {
             if ($tokens[$index]->equals('{')) {
                 $index = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_CURLY_BRACE, $index);
+
                 continue;
             }
 
@@ -101,7 +103,7 @@ final class Sample
                 continue;
             }
 
-            $tokens->overrideAt($index, array(T_PRIVATE, 'private'));
+            $tokens[$index] = new Token(array(T_PRIVATE, 'private'));
         }
     }
 

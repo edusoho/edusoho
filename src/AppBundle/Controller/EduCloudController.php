@@ -13,6 +13,7 @@ use Biz\System\Service\SettingService;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class EduCloudController extends BaseController
@@ -134,7 +135,7 @@ class EduCloudController extends BaseController
 
         $url = $this->setting('site.url', '');
         $url = empty($url) ? $url : rtrim($url, ' \/');
-        $url = empty($url) ? $this->generateUrl('edu_cloud_sms_send_callback', array('targetType' => $targetType, 'targetId' => $targetId), true) : $url.$this->generateUrl('edu_cloud_sms_send_callback', array('targetType' => $targetType, 'targetId' => $targetId));
+        $url = empty($url) ? $this->generateUrl('edu_cloud_sms_send_callback', array('targetType' => $targetType, 'targetId' => $targetId), UrlGeneratorInterface::ABSOLUTE_URL) : $url.$this->generateUrl('edu_cloud_sms_send_callback', array('targetType' => $targetType, 'targetId' => $targetId));
         $url .= '?index='.$index.'&smsType='.$smsType;
         $api = CloudAPIFactory::create('leaf');
         $sign = $this->getSignEncoder()->encodePassword($url, $api->getAccessKey());

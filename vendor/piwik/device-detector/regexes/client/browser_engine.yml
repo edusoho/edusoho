@@ -28,3 +28,9 @@
 
 - regex: 'KHTML'
   name: 'KHTML'
+
+- regex: 'NetSurf'
+  name: 'NetSurf'
+
+- regex: 'Servo'
+  name: 'Servo'

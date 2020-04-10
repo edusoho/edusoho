@@ -11,13 +11,11 @@
 
 namespace Symfony\Component\Routing\Loader\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Routing\Loader\ObjectRouteLoader;
 
 /**
  * A route loader that executes a service to load the routes.
- *
- * This depends on the DependencyInjection component.
  *
  * @author Ryan Weaver <ryan@knpuniversity.com>
  */

@@ -22,20 +22,23 @@ class ParameterNotFoundException extends InvalidArgumentException
     private $sourceId;
     private $sourceKey;
     private $alternatives;
+    private $nonNestedAlternative;
 
     /**
-     * @param string     $key          The requested parameter key
-     * @param string     $sourceId     The service id that references the non-existent parameter
-     * @param string     $sourceKey    The parameter key that references the non-existent parameter
-     * @param \Exception $previous     The previous exception
-     * @param string[]   $alternatives Some parameter name alternatives
+     * @param string      $key                  The requested parameter key
+     * @param string      $sourceId             The service id that references the non-existent parameter
+     * @param string      $sourceKey            The parameter key that references the non-existent parameter
+     * @param \Exception  $previous             The previous exception
+     * @param string[]    $alternatives         Some parameter name alternatives
+     * @param string|null $nonNestedAlternative The alternative parameter name when the user expected dot notation for nested parameters
      */
-    public function __construct($key, $sourceId = null, $sourceKey = null, \Exception $previous = null, array $alternatives = array())
+    public function __construct($key, $sourceId = null, $sourceKey = null, \Exception $previous = null, array $alternatives = [], $nonNestedAlternative = null)
     {
         $this->key = $key;
         $this->sourceId = $sourceId;
         $this->sourceKey = $sourceKey;
         $this->alternatives = $alternatives;
+        $this->nonNestedAlternative = $nonNestedAlternative;
 
         parent::__construct('', 0, $previous);
 
@@ -53,12 +56,14 @@ class ParameterNotFoundException extends InvalidArgumentException
         }
 
         if ($this->alternatives) {
-            if (1 == count($this->alternatives)) {
+            if (1 == \count($this->alternatives)) {
                 $this->message .= ' Did you mean this: "';
             } else {
                 $this->message .= ' Did you mean one of these: "';
             }
             $this->message .= implode('", "', $this->alternatives).'"?';
+        } elseif (null !== $this->nonNestedAlternative) {
+            $this->message .= ' You cannot access nested array items, do you want to inject "'.$this->nonNestedAlternative.'" instead?';
         }
     }
 

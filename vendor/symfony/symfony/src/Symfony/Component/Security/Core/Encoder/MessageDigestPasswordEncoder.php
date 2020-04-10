@@ -25,8 +25,6 @@ class MessageDigestPasswordEncoder extends BasePasswordEncoder
     private $iterations;
 
     /**
-     * Constructor.
-     *
      * @param string $algorithm          The digest algorithm to use
      * @param bool   $encodeHashAsBase64 Whether to base64 encode the password hash
      * @param int    $iterations         The number of iterations to use to stretch the password hash
@@ -47,7 +45,7 @@ class MessageDigestPasswordEncoder extends BasePasswordEncoder
             throw new BadCredentialsException('Invalid password.');
         }
 
-        if (!in_array($this->algorithm, hash_algos(), true)) {
+        if (!\in_array($this->algorithm, hash_algos(), true)) {
             throw new \LogicException(sprintf('The algorithm "%s" is not supported.', $this->algorithm));
         }
 

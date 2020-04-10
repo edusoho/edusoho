@@ -19,6 +19,7 @@ use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverRootless;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\Tokenizer\TokensAnalyzer;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
@@ -42,19 +43,51 @@ final class PhpdocReturnSelfReferenceFixer extends AbstractFixer implements Conf
     {
         return new FixerDefinition(
             'The type of `@return` annotations of methods returning a reference to itself must the configured one.',
-            array(new CodeSample('
-<?php
+            array(
+                new CodeSample(
+'<?php
 class Sample
 {
     /**
      * @return this
      */
-    public function test()
+    public function test1()
+    {
+        return $this;
+    }
+
+    /**
+     * @return $self
+     */
+    public function test2()
     {
         return $this;
     }
 }'
-            ))
+                ),
+                new CodeSample(
+'<?php
+class Sample
+{
+    /**
+     * @return this
+     */
+    public function test1()
+    {
+        return $this;
+    }
+
+    /**
+     * @return $self
+     */
+    public function test2()
+    {
+        return $this;
+    }
+}',
+                    array('replacements' => array('this' => 'self'))
+                ),
+            )
         );
     }
 
@@ -181,6 +214,6 @@ class Sample
         }
 
         $returnsBlock->setTypes($newTypes);
-        $tokens[$docIndex]->setContent($docBlock->getContent());
+        $tokens[$docIndex] = new Token(array(T_DOC_COMMENT, $docBlock->getContent()));
     }
 }

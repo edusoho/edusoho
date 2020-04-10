@@ -45,6 +45,17 @@ class DateAddFunction extends FunctionNode
     public function getSql(SqlWalker $sqlWalker)
     {
         switch (strtolower($this->unit->value)) {
+            case 'second':
+                return $sqlWalker->getConnection()->getDatabasePlatform()->getDateAddSecondsExpression(
+                    $this->firstDateExpression->dispatch($sqlWalker),
+                    $this->intervalExpression->dispatch($sqlWalker)
+                );
+
+            case 'hour':
+                return $sqlWalker->getConnection()->getDatabasePlatform()->getDateAddHourExpression(
+                    $this->firstDateExpression->dispatch($sqlWalker),
+                    $this->intervalExpression->dispatch($sqlWalker)
+                );
             case 'day':
                 return $sqlWalker->getConnection()->getDatabasePlatform()->getDateAddDaysExpression(
                     $this->firstDateExpression->dispatch($sqlWalker),
@@ -59,7 +70,7 @@ class DateAddFunction extends FunctionNode
 
             default:
                 throw QueryException::semanticalError(
-                    'DATE_ADD() only supports units of type day and month.'
+                    'DATE_ADD() only supports units of type second, hour, day and month.'
                 );
         }
     }

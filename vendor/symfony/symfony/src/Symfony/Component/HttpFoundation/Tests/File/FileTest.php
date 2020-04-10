@@ -64,7 +64,7 @@ class FileTest extends TestCase
 
     public function testConstructWhenFileNotExists()
     {
-        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException');
+        $this->expectException('Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException');
 
         new File(__DIR__.'/Fixtures/not_here');
     }
@@ -110,14 +110,14 @@ class FileTest extends TestCase
 
     public function getFilenameFixtures()
     {
-        return array(
-            array('original.gif', 'original.gif'),
-            array('..\\..\\original.gif', 'original.gif'),
-            array('../../original.gif', 'original.gif'),
-            array('файлfile.gif', 'файлfile.gif'),
-            array('..\\..\\файлfile.gif', 'файлfile.gif'),
-            array('../../файлfile.gif', 'файлfile.gif'),
-        );
+        return [
+            ['original.gif', 'original.gif'],
+            ['..\\..\\original.gif', 'original.gif'],
+            ['../../original.gif', 'original.gif'],
+            ['файлfile.gif', 'файлfile.gif'],
+            ['..\\..\\файлfile.gif', 'файлfile.gif'],
+            ['../../файлfile.gif', 'файлfile.gif'],
+        ];
     }
 
     /**
@@ -172,7 +172,7 @@ class FileTest extends TestCase
             ->expects($this->once())
             ->method('guess')
             ->with($this->equalTo($path))
-            ->will($this->returnValue($mimeType))
+            ->willReturn($mimeType)
         ;
 
         return $guesser;

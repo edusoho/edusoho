@@ -3330,16 +3330,16 @@ question_bank_manage_random_testpaper_build_check:
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:buildCheck }
 
 question_bank_manage_testpaper_edit:
-    path: /question_bank/{id}/testpaper/{testpaperId}/edit
+    path: /question_bank/{id}/testpaper/{assessmentId}/edit
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:edit }
 
 question_bank_manage_testpaper_publish:
-    path: /question_bank/{id}/testpaper/{testpaperId}/publish
+    path: /question_bank/{id}/testpaper/{assessmentId}/publish
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:publish }
     methods: [POST]
 
 question_bank_manage_testpaper_close:
-    path: /question_bank/{id}/testpaper/{testpaperId}/close
+    path: /question_bank/{id}/testpaper/{assessmentId}/close
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:close }
     methods: [POST]
 
@@ -3348,11 +3348,11 @@ question_bank_manage_testpaper_preview:
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:preview }
 
 question_bank_manage_testpaper_delete:
-    path: /question_bank/{id}/testpaper/{testpaperId}/delete
+    path: /question_bank/{id}/testpaper/{assessmentId}/delete
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:delete }
 
 question_bank_manage_testpaper_export:
-    path: /question_bank/{id}/testpaper/{testpaperId}/export
+    path: /question_bank/{id}/testpaper/{assessmentId}/export
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:export }
 
 question_bank_manage_testpaper_json:

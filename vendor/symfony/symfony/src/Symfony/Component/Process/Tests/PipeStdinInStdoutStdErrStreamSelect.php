@@ -14,8 +14,8 @@ define('ERR_TIMEOUT', 2);
 define('ERR_READ_FAILED', 3);
 define('ERR_WRITE_FAILED', 4);
 
-$read = array(STDIN);
-$write = array(STDOUT, STDERR);
+$read = [STDIN];
+$write = [STDOUT, STDERR];
 
 stream_set_blocking(STDIN, 0);
 stream_set_blocking(STDOUT, 0);
@@ -29,31 +29,31 @@ while ($read || $write) {
     $n = stream_select($r, $w, $e, 5);
 
     if (false === $n) {
-        die(ERR_SELECT_FAILED);
+        exit(ERR_SELECT_FAILED);
     } elseif ($n < 1) {
-        die(ERR_TIMEOUT);
+        exit(ERR_TIMEOUT);
     }
 
     if (in_array(STDOUT, $w) && strlen($out) > 0) {
-        $written = fwrite(STDOUT, (binary) $out, 32768);
+        $written = fwrite(STDOUT, (string) $out, 32768);
         if (false === $written) {
-            die(ERR_WRITE_FAILED);
+            exit(ERR_WRITE_FAILED);
         }
-        $out = (binary) substr($out, $written);
+        $out = (string) substr($out, $written);
     }
     if (null === $read && '' === $out) {
-        $write = array_diff($write, array(STDOUT));
+        $write = array_diff($write, [STDOUT]);
     }
 
     if (in_array(STDERR, $w) && strlen($err) > 0) {
-        $written = fwrite(STDERR, (binary) $err, 32768);
+        $written = fwrite(STDERR, (string) $err, 32768);
         if (false === $written) {
-            die(ERR_WRITE_FAILED);
+            exit(ERR_WRITE_FAILED);
         }
-        $err = (binary) substr($err, $written);
+        $err = (string) substr($err, $written);
     }
     if (null === $read && '' === $err) {
-        $write = array_diff($write, array(STDERR));
+        $write = array_diff($write, [STDERR]);
     }
 
     if ($r) {
@@ -65,7 +65,7 @@ while ($read || $write) {
         if (false === $str || feof(STDIN)) {
             $read = null;
             if (!feof(STDIN)) {
-                die(ERR_READ_FAILED);
+                exit(ERR_READ_FAILED);
             }
         }
     }

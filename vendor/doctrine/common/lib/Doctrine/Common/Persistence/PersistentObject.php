@@ -19,9 +19,9 @@
 
 namespace Doctrine\Common\Persistence;
 
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 
 /**
  * PersistentObject base class that implements getter/setter methods for all mapped fields and associations
@@ -198,7 +198,7 @@ abstract class PersistentObject implements ObjectManagerAware
                 throw new \InvalidArgumentException("Expected persistent object of type '".$targetClass."'");
             }
             if (!($this->$field instanceof Collection)) {
-                $this->$field = new ArrayCollection($this->$field ?: array());
+                $this->$field = new ArrayCollection($this->$field ?: []);
             }
             $this->$field->add($args[0]);
             $this->completeOwningSide($field, $targetClass, $args[0]);

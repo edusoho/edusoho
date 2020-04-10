@@ -2,6 +2,9 @@
 
 namespace Codeages\Biz\Framework\Validation;
 
+/**
+ * @deprecated
+ */
 interface Validator
 {
     public function validate($data, $rules, $throwException = true);

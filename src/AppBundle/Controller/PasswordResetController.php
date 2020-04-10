@@ -6,6 +6,7 @@ use Biz\System\Service\LogService;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\TokenService;
 use AppBundle\Common\SmsToolkit;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Request;
 
 class PasswordResetController extends BaseController
@@ -43,12 +44,12 @@ class PasswordResetController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-            ->add('password', 'password')
-            ->add('confirmPassword', 'password')
+            ->add('password', PasswordType::class)
+            ->add('confirmPassword', PasswordType::class)
             ->getForm();
 
         if ('POST' === $request->getMethod()) {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
                 $data = $form->getData();

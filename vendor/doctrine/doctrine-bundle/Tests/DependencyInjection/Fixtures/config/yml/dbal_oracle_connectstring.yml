@@ -1,3 +1,0 @@
-doctrine:
-    dbal:
-        connectstring: scott@sales-server:1521/sales.us.example.com

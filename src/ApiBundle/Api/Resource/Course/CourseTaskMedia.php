@@ -23,6 +23,7 @@ use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\User\UserException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class CourseTaskMedia extends AbstractResource
 {
@@ -294,7 +295,7 @@ class CourseTaskMedia extends AbstractResource
             $format = 'Y-m-d H:i';
 
             return array(
-                'entryUrl' => $this->generateUrl('task_live_entry', array('courseId' => $course['id'], 'activityId' => $activity['id']), true),
+                'entryUrl' => $this->generateUrl('task_live_entry', array('courseId' => $course['id'], 'activityId' => $activity['id']), UrlGeneratorInterface::ABSOLUTE_URL),
                 'startTime' => date('c', $activity['startTime']),
                 'endTime' => date('c', $activity['endTime']),
             );

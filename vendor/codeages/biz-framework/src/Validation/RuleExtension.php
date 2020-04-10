@@ -2,6 +2,9 @@
 
 namespace Codeages\Biz\Framework\Validation;
 
+/**
+ * @deprecated
+ */
 interface RuleExtension
 {
     public function rules();

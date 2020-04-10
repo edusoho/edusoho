@@ -39,11 +39,11 @@ class GenerateCommandCommand extends GeneratorCommand
                 new InputArgument('name', InputArgument::OPTIONAL, 'The command\'s name (e.g. app:my-command)'),
             ))
             ->setHelp(<<<EOT
-The <info>generate:command</info> command helps you generate new commands
+The <info>%command.name%</info> command helps you generate new commands
 inside bundles. Provide the bundle name as the first argument and the command
 name as the second argument:
 
-<info>php app/console generate:command AppBundle blog:publish-posts</info>
+<info>php %command.full_name% AppBundle blog:publish-posts</info>
 
 If any of the arguments is missing, the command will ask for their values
 interactively. If you want to disable any user interaction, use
@@ -116,7 +116,7 @@ EOT
             $question = new Question($questionHelper->getQuestion('Command name', $name), $name);
             $question->setValidator(function ($answer) {
                 if (empty($answer)) {
-                   throw new \RuntimeException('The command name cannot be empty.');
+                    throw new \RuntimeException('The command name cannot be empty.');
                 }
 
                 return $answer;
@@ -128,10 +128,8 @@ EOT
         }
 
         // summary and confirmation
+        $questionHelper->writeSection($output, 'Summary before generation');
         $output->writeln(array(
-            '',
-            $this->getHelper('formatter')->formatBlock('Summary before generation', 'bg=blue;fg-white', true),
-            '',
             sprintf('You are going to generate a <info>%s</info> command inside <info>%s</info> bundle.', $name, $bundle),
         ));
 

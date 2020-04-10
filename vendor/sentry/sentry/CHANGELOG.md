@@ -1,8 +1,79 @@
 # CHANGELOG
 
-## Unreleased
+## 1.11.0 (2020-02-12)
+
+- Fixed array and string offset access syntax with curly braces deprecations (#975)
+- Fixed curl verify host for synchronous mode (#767)
+- Use `mb_substr` instead of `substr` if available (#734)
+- Make it possible to change `default_max_depth` in `Raven_Serializer` (#632)
+
+## 1.10.0 (2018-11-09)
+
+- Added passing data from context in monolog breadcrumb handler (#683)
+- Do not return error id if we know we did not send the error (#667)
+- Do not force IPv4 protocol by default (#654)
+
+## 1.9.2 (2018-08-17)
+
+- Remove secret_key from required keys for CLI test command. (#645)
+- Proper case in Raven_Util class name usage. (#642)
+- Support longer creditcard numbers. (#635)
+- Use configured message limit when creating serializers. (#634)
+- Do not truncate strings if message limit is set to zero. (#630)
+- Add option to ignore SERVER_PORT getting added to url. (#629)
+- Cleanup the PHP version reported. (#604)
+
+## 1.9.1 (2018-06-19)
+
+- Allow the use of a public DSN (private part of the DSN was deprecated in Sentry 9) (#615)
+- Send transaction as transaction not as culprit (#601)
+
+## 1.9.0 (2018-05-03)
+
+- Fixed undefined variable (#588)
+- Fix for exceptions throwing exceptions when setting event id (#587)
+- Fix monolog handler not accepting Throwable (#586)
+- Add `excluded_exceptions` option to exclude exceptions and their extending exceptions (#583)
+- Fix `HTTP_X_FORWARDED_PROTO` header detection (#578)
+- Fix sending events async in PHP 5 (#576)
+- Avoid double reporting due to `ErrorException`s (#574)
+- Make it possible to overwrite serializer message limit of 1024 (#559)
+- Allow request data to be nested up to 5 levels deep (#554)
+- Update serializer to handle UTF-8 characters correctly (#553)
+
+## 1.8.4 (2018-03-20)
+
+- Revert ignoring fatal errors on PHP 7+ (#571)
+- Add PHP runtime information (#564)
+- Cleanup the `site` value if it's empty (#555)
+- Add `application/json` input handling (#546)
+
+## 1.8.3 (2018-02-07)
+
+- Serialize breadcrumbs to prevent issues with binary data (#538)
+- Fix notice array_key_exists() expects parameter 2 to be array, null given (#527)
+
+## 1.8.2 (2017-12-21)
+
+- Improve handling DSN with "null" like values (#522)
+- Prevent warning in Raven_Stacktrace (#493)
+
+## 1.8.1 (2017-11-09)
+
+- Add setters for the serializers on the `Raven_Client` (#515)
+- Avoid to capture `E_ERROR` in PHP 7+, because it's also a `Throwable` that gets captured and duplicates the error (#514)
+
+## 1.8.0 (2017-10-29)
+
+- Use namespaced classes in test for PHPUnit (#506)
+- Prevent segmentation fault on PHP `<5.6` (#504)
+- Remove `ini_set` call for unneeded functionality (#501)
+- Exclude single `.php` files from the app path (#500)
+- Start testing PHP 7.2 (#489)
+- Exclude anonymous frames from app path (#482)
 
 ## 1.7.1 (2017-08-02)
+
 - Fix of filtering sensitive data when there is an exception with multiple 'values' (#483)
 
 ## 1.7.0 (2017-06-07)

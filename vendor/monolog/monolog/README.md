@@ -2,7 +2,6 @@
 
 [![Total Downloads](https://img.shields.io/packagist/dt/monolog/monolog.svg)](https://packagist.org/packages/monolog/monolog)
 [![Latest Stable Version](https://img.shields.io/packagist/v/monolog/monolog.svg)](https://packagist.org/packages/monolog/monolog)
-[![Reference Status](https://www.versioneye.com/php/monolog:monolog/reference_badge.svg)](https://www.versioneye.com/php/monolog:monolog/references)
 
 
 Monolog sends your logs to files, sockets, inboxes, databases and various
@@ -91,5 +90,5 @@ Monolog is licensed under the MIT License - see the `LICENSE` file for details
 
 ### Acknowledgements
 
-This library is heavily inspired by Python's [Logbook](http://packages.python.org/Logbook/)
+This library is heavily inspired by Python's [Logbook](https://logbook.readthedocs.io/en/stable/)
 library, although most concepts have been adjusted to fit to the PHP world.
