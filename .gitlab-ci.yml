@@ -77,16 +77,14 @@ check env:
     variables:
       - $REPOSITORY == "custom"
 
-5.5 with php-cs-fixer only for main:
+5.6 with php-cs-fixer only for main:
   stage: test
-  image: codeages/ci-php:5.5-5
+  image: zhongyunchang/php56-ci
   services:
     - mysql:5.5
     - redis:latest
   script:
-    #    - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
-    - composer remove phpunit/phpunit --ignore-platform-reqs
-    - composer require-dev bin/phpunit --ignore-platform-reqs
+    - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
     - bin/phpunit-diff
   only:
     refs:
