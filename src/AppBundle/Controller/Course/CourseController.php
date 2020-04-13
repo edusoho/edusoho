@@ -45,6 +45,12 @@ class CourseController extends CourseBaseController
                 'member' => $member,
                 'isMarketingPage' => $isMarketingPage,
                 'courseItems' => $courseItems,
+                'optionalTaskCount' => $this->getTaskService()->countTasks(
+                    array(
+                        'courseId' => $course['id'],
+                        'status' => 'published',
+                        'isOptional' => 1,
+                    )),
             )
         );
     }
@@ -440,8 +446,11 @@ class CourseController extends CourseBaseController
         );
     }
 
-    public function tasksAction($course, $member = array(), $paged = false)
+    public function renderTaskListAction(Request $request, $courseId, $type, $paged = false)
     {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $member = $this->getCourseMember($request, $course);
+
         list($isMarketingPage, $member) = $this->isMarketingPage($course['id'], $member);
 
         $pageSize = $paged ? 25 : 10000;  //前台>25个，才会有 显示全部 按钮
@@ -449,15 +458,30 @@ class CourseController extends CourseBaseController
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
+        return $this->render("course/task-list/{$type}-task-list.html.twig", array(
+            'course' => $course,
+            'member' => $member,
+            'courseSet' => $courseSet,
+            'courseItems' => $courseItems,
+            'nextOffsetSeq' => $nextOffsetSeq,
+            'isMarketingPage' => $isMarketingPage,
+            'showOptional' => $request->query->getBoolean('showOptional'),
+        ));
+    }
+
+    public function tasksAction($course, $member = array(), $paged = false)
+    {
         return $this->render(
             'course/tabs/tasks.html.twig',
             array(
                 'course' => $course,
-                'courseSet' => $courseSet,
-                'courseItems' => $courseItems,
-                'nextOffsetSeq' => $nextOffsetSeq,
-                'member' => $member,
-                'isMarketingPage' => $isMarketingPage,
+                'paged' => $paged,
+                'optionalTaskCount' => $this->getTaskService()->countTasks(
+                    array(
+                        'courseId' => $course['id'],
+                        'status' => 'published',
+                        'isOptional' => 1,
+                    )),
             )
         );
     }

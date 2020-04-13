@@ -97,6 +97,6 @@ services:
 
     api.util.item_helper:
         class: ApiBundle\Api\Util\ItemHelper
-        arguments: ['@biz']
+        arguments: ['@biz','@service_container']
 
 

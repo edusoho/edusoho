@@ -3385,3 +3385,7 @@ answer_engine_review:
     path: /answer_engine/review
     defaults: { _controller: AppBundle:AnswerEngine/AnswerEngine:reviewSave }
     methods: ['POST']
+    
+course_task_list_render:
+    path: /course/{courseId}/task/list/render/{type}/{paged}
+    defaults: { _controller: AppBundle:Course/Course:renderTaskList, paged:false }

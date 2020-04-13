@@ -170,7 +170,7 @@ class ExerciseResult extends AbstractResource
             }
         }
 
-        return intval($rightNum / ($num - $subjectivityNum) * 100 + 0.5);
+        return ($num - $subjectivityNum) ? intval($rightNum / ($num - $subjectivityNum) * 100 + 0.5) : 0;
     }
 
     protected function fillItems($items, $exerciseResult)

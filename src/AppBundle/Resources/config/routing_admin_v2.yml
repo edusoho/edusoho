@@ -118,6 +118,15 @@ admin_v2_course_set_detail_data:
     path:  /course_set/detail/data/{id}
     defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:detailData }
 
+admin_v2_course_set_detail_data_export_prepare:
+    path: /course_set/detail/data/{courseId}/export/prepare
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:prepareForExportCourseDetailData }
+    permissions: [admin_v2_course_set_data]
+
+admin_v2_course_set_detail_data_export:
+    path: /course_set/detail/data/{courseId}/export
+    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:exportCourseDetailData}
+
 admin_v2_courses_data:
     path:  /courses/data/{courseSetId}
     defaults: { _controller: AppBundle:AdminV2/Teach/Course:coursesData }
@@ -1227,6 +1236,11 @@ admin_v2_user_create_nickname_check:
     defaults: { _controller: AppBundle:AdminV2/User/UserManage:nicknameCheck }
     permissions: [admin_v2_user_manage]
 
+admin_v2_user_update_nickname_check:
+    path:  /user/update/{userId}/nickname/check
+    defaults: { _controller: AppBundle:AdminV2/User/UserManage:updateNicknameCheck }
+    permissions: [admin_v2_user_manage]
+
 admin_v2_user_show:
     path:  /user/{id}
     defaults: { _controller: AppBundle:AdminV2/User/UserManage:show }
@@ -1262,6 +1276,10 @@ admin_v2_user_avatar_crop:
     path:  /user/{id}/avatar/crop
     defaults: { _controller: AppBundle:AdminV2/User/UserManage:avatarCrop }
     permissions: [admin_v2_user_avatar]
+
+admin_v2_user_change_nickname:
+    path:  /user/{userId}/change/nickname
+    defaults: { _controller: AppBundle:AdminV2/User/UserManage:changeNickname }
 
 admin_v2_user_change_password:
     path:  /user/{userId}/change/password
