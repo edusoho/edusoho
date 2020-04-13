@@ -2,12 +2,19 @@
 
 {% do script(['app/js/assessment/show/index.js']) %}
 
+{% block title %}{{ assessment.name }} - {{ parent() }}{% endblock %}
+
 {% block body %}
-    <div id="app"></div>
+    {% block header %}
+        {% if showHeader|default(0) %}{{ parent() }}{% endif %}
+    {% endblock %}
 
+    <div id="app" style="min-height:500px"></div>
     <input type="hidden" name="assessment" value='{{ assessment|json_encode|raw }}'>
-
     <input type="hidden" name="image_upload_url" value="{{ path('editor_upload', {token:upload_token('course')}) }}">
-
     <input type="hidden" name="image_download_url" value="{{ path('editor_download', {token:upload_token('course')}) }}">
+    
+    {% block footer %}
+        {% if showHeader|default(0) %}{{ parent() }}{% endif %}
+    {% endblock %}
 {% endblock %}

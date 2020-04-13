@@ -3344,7 +3344,7 @@ question_bank_manage_testpaper_close:
     methods: [POST]
 
 question_bank_manage_testpaper_preview:
-    path: /question_bank/{id}/testpaper/{testpaperId}/preview
+    path: /question_bank/{id}/testpaper/{assessmentId}/preview
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:preview }
 
 question_bank_manage_testpaper_delete:

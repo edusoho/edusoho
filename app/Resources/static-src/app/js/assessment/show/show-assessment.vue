@@ -1,11 +1,11 @@
 <template>
   <div id="app" class="test-vue">
-    <item-engine
-      :sections="sections"
-      :testpaper="testpaper"
-      @getAnswerData="getAnswerData"
+    <assessment-preview
+      :assessment="assessment"
+      :answerRecord="answerRecord"
+      :answerScene="answerScene"
       :showCKEditorData="showCKEditorData"
-    ></item-engine>
+    ></assessment-preview>
   </div>
 </template>
 
@@ -13,6 +13,9 @@
   export default {
     data() {
       return {
+        scene: 1,
+        answerRecord:{},
+        answerScene:{},
         showCKEditorData: {
           publicPath: '/static-dist/libs/es-ckeditor/ckeditor.js',
           filebrowserImageUploadUrl: $('[name=image_upload_url]').val(),
@@ -22,9 +25,7 @@
     },
     created() {
        const assessment = JSON.parse($('[name=assessment]').val());
-       console.log(assessment)
-       this.sections = assessment.sections;
-       this.testpaper = assessment;
+       this.assessment = assessment;
     },
     methods: {
       getAnswerData(data) {

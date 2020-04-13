@@ -4,10 +4,6 @@
 {% set side_nav = 'my-question-bank' %}
 {% set active_tab = 'question-list' %}
 
-{% block bodyClass %}
-  {{ 'es-main-' ~ maincolor }} {{ 'es-nav-' ~ navigationcolor }} {{ 'cd-design test-vue' }}
-{% endblock %}
-
 {% do script(['libs/select2.js', 'app/js/question-bank/question/index.js'])  %}
 
 {% block main %}

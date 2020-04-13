@@ -1,11 +1,13 @@
 <template>
   <div id="app" class="test-vue">
     <item-engine
-      :sections="sections"
-      :testpaper="testpaper"
-      @saveAnswerData="saveAnswerData"
+      mode="do"
+      :assessment="assessment"
+      :answerRecord="answerRecord"
+      :answerScene="answerScene"
       @getAnswerData="getAnswerData"
-      :showCKEditorData="showCKEditorData"
+      @saveAnswerData="saveAnswerData"
+      @checkResult="checkResult"
     ></item-engine>
   </div>
 </template>
@@ -25,20 +27,12 @@
     created() {
        this.emitter = new ActivityEmitter();
        this.emitter.emit('doing', {data: ''});
-       const assessment = JSON.parse($('[name=assessment]').val());
-       this.sections = assessment.sections;
-       this.testpaper = assessment;
+       this.assessment = JSON.parse($('[name=assessment]').val());
+       this.answerRecord = JSON.parse($('[name=answer_record]').val());
+       this.answerScene = JSON.parse($('[name=answer_scene]').val());
     },
     methods: {
-      getAnswerData(sectionResponses) {
-        const that = this;
-        const answerRecord = JSON.parse($('[name=answer_record]').val());
-        const assessmentResponse = {
-          'assessment_id': this.testpaper.id,
-          'answer_record_id': answerRecord.id,
-          'used_time': 300,
-          'section_responses': sectionResponses,
-        };
+      getAnswerData(assessmentResponse) {
         $.ajax({
           url: $("[name='answer_engine_submit_url']").val(),
           contentType: 'application/json;charset=utf-8',
@@ -52,25 +46,21 @@
           location.href = $('[name=submit_goto_url]').val();
         })
       },
-      saveAnswerData(sectionResponses){
-        // const answerRecord = JSON.parse($('[name=answer_record]').val());
-        // const assessmentResponse = {
-        //   'assessment_id': this.testpaper.id,
-        //   'answer_record_id': answerRecord.id,
-        //   'used_time': 300,
-        //   'section_responses': sectionResponses,
-        // };
-        // $.ajax({
-        //   url: $("[name='answer_engine_save_url']").val(),
-        //   contentType: 'application/json;charset=utf-8',
-        //   type: 'post',
-        //   data: JSON.stringify(assessmentResponse),
-        //   beforeSend(request) {
-        //     request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
-        //   }
-        // }).done(function (resp) {
-        //   location.href = $('[name=save_goto_url]').val();
-        // })
+      checkResult(data) {
+
+      },
+      saveAnswerData(assessmentResponse){
+        $.ajax({
+          url: $("[name='answer_engine_save_url']").val(),
+          contentType: 'application/json;charset=utf-8',
+          type: 'post',
+          data: JSON.stringify(assessmentResponse),
+          beforeSend(request) {
+            request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+          }
+        }).done(function (resp) {
+          location.href = $('[name=save_goto_url]').val();
+        })
       }
     }
   }

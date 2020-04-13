@@ -1,10 +1,10 @@
 <template>
   <div id="app" class="test-vue">
     <item-report
-      :sections="sections"
-      :reportSections="reportSections"
-      :testpaper="testpaper"
-      :showCKEditorData="showCKEditorData"
+      :answerReport="answerReport"
+      :assessment="assessment"
+      :answerRecord="answerRecord"
+      :answerScene="answerScene"
       @doAgainEvent="doAgainEvent"
     ></item-report>
   </div>
@@ -22,11 +22,10 @@
       };
     },
     created() {
-        const assessment = JSON.parse($('[name=assessment]').val());
-        const answerReport = JSON.parse($('[name=answer_report]').val());
-        this.sections = assessment.sections
-        this.reportSections = answerReport
-        this.testpaper = assessment
+        this.assessment = JSON.parse($('[name=assessment]').val());
+        this.answerReport = JSON.parse($('[name=answer_report]').val());
+        this.answerRecord = JSON.parse($('[name=answer_record]').val());
+        this.answerScene = JSON.parse($('[name=answer_scene]').val());
     },
     methods: {
       doAgainEvent(data) {
