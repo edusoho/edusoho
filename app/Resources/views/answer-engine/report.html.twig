@@ -1,0 +1,9 @@
+
+{% do script(['app/js/answer-engine/report/index.js']) %}
+
+{% include 'answer-engine/common.html.twig' %}
+
+<input type="hidden" name="assessment" value='{{ assessment|json_encode|raw }}'>
+<input type="hidden" name="answer_record" value='{{ answerRecord|json_encode|raw }}'>
+<input type="hidden" name="answer_scene" value='{{ answerScene|json_encode|raw }}'>
+<input type="hidden" name="answer_report" value='{{ answerReport|json_encode|raw }}'>

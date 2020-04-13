@@ -1,4 +1,5 @@
-{% set showTypeBar = 0 %}
-{% set showHeader = 0 %}
-
-{% include 'exercise/do.html.twig' %}
+{% if assessment|default('') %}
+  {% include 'assessment/show.html.twig' %}
+{% else %}
+  {{ 'course.plan_task.activity_manage.testpaper.empty_tips'|trans }}
+{% endif %}

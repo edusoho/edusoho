@@ -13,4 +13,6 @@ interface ExerciseActivityService
     public function updateActivity($id, $fields);
 
     public function deleteActivity($id);
+
+    public function getByAnswerSceneId($answerSceneId);
 }

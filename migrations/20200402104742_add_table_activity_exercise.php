@@ -19,7 +19,8 @@ class AddTableActivityExercise extends Migration
               `drawCondition` TEXT COMMENT '抽题条件',
               `createdTime` int(10) UNSIGNED NOT NULL DEFAULT '0',
               `updatedTime` int(10) UNSIGNED NOT NULL DEFAULT '0',
-              PRIMARY KEY (`id`)
+              PRIMARY KEY (`id`),
+              KEY `answerSceneId` (`answerSceneId`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='练习活动表';
         ");
     }

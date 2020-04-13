@@ -68,4 +68,6 @@ interface ActivityService
     public function getActivityFinishCondition($activity);
 
     public function getByMediaIdAndMediaTypeAndCopyId($mediaId, $mediaType, $copyId);
+
+    public function getByMediaIdAndMediaType($mediaId, $mediaType);
 }

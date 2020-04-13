@@ -10,14 +10,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class HomeworkManageController extends BaseController
 {
-    public function checkAction(Request $request, $id, $resultId)
+    public function checkAction(Request $request, $id, $answerRecordId)
     {
         $course = $this->getCourseService()->getCourse($id);
         $course = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
 
         return $this->forward('AppBundle:HomeworkManage:check', array(
             'request' => $request,
-            'resultId' => $resultId,
+            'answerRecordId' => $answerRecordId,
             'source' => 'course',
             'targetId' => $course['id'],
         ));

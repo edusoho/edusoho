@@ -47,40 +47,34 @@ class ExerciseController extends BaseActivityController implements ActivityActio
 
     protected function previewExercise($id, $courseId)
     {
+        // todo 判断题目数据是否够
         $activity = $this->getActivityService()->getActivity($id, true);
-//        $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
-        $exercise = $activity['exercise'];
 
-        if (!$exercise) {
-            return $this->createMessageResponse('error', 'exercise not found');
-        }
-
-        $sections = $this->getAssessmentService()->drawItems(
-            $exercise['drawCondition']['range'],
-            array($exercise['drawCondition']['section'])
+        $assessment = $this->showAssessment(
+            $activity['title'],
+            $activity['ext']['drawCondition']['range'],
+            array($activity['ext']['drawCondition']['section'])
         );
-        foreach ($sections as $section) {
-            if (!empty($section['items']['miss'])) {
-                return $this->render('activity/exercise/show.html.twig', array(
-                    'activity' => $activity,
-                    'exercise' => $exercise,
-                    'courseId' => $activity['fromCourseId'],
-                    'questionLack' => true,
-                ));
-            }
-        }
-
-        $questions = $this->getTestpaperService()->showTestpaperItems($exercise['id']);
-        $attachments = $this->getTestpaperService()->findAttachments($exercise['id']);
-
-        $exercise['itemCount'] = $this->getActureQuestionNum($questions);
 
         return $this->render('activity/exercise/preview.html.twig', array(
-            'paper' => $exercise,
-            'questions' => $questions,
-            'paperResult' => array(),
-            'activity' => $activity,
+            'assessment' => $assessment,
         ));
+    }
+
+    protected function showAssessment($name, $range, $sections)
+    {
+        $sections = $this->getAssessmentService()->drawItems($range, $sections);
+        $assessment = array(
+            'id' => 0,
+            'name' => $name,
+            'description' => '',
+            'total_score' => 0,
+            'item_count' => 0,
+            'question_count' => 0,
+            'sections' => $sections,
+        );
+
+        return $assessment;
     }
 
     public function editAction(Request $request, $id, $courseId)

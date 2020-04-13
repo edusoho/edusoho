@@ -3,12 +3,14 @@
 namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
-use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
-use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
+use Biz\Activity\Service\HomeworkActivityService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 
 class Homework extends Activity
 {
@@ -19,63 +21,117 @@ class Homework extends Activity
 
     public function get($targetId)
     {
-        return $this->getAssessmentService()->getAssessment($targetId);
+        $homework = $this->getHomeworkActivityService()->get($targetId);
+
+        $homework['assessment'] = $this->getAssessmentService()->getAssessment($homework['assessmentId']);
+
+        return $homework;
     }
 
     public function find($targetIds, $showCloud = 1)
     {
-        return $this->getAssessmentService()->findAssessmentsByIds($targetIds);
+        return $this->getHomeworkActivityService()->findByIds($targetIds);
     }
 
     public function create($fields)
     {
-        $items = $this->getItemService()->findItemsByIds($fields['questionIds'], true);
-        $bankIds = array_column($items, 'bank_id');
+        try {
+            $this->getBiz()['db']->beginTransaction();
 
-        $homework = [
+            $answerScene = $this->getAnswerSceneService()->create(array(
+                'name' => $fields['title'],
+                'limited_time' => 0,
+                'do_times' => 0,
+                'redo_interval' => 0,
+                'need_score' => 0,
+                'manual_marking' => 1,
+                'start_time' => 0,
+            ));
+
+            $assessment = $this->createAssessment($fields['title'], $fields['description'], $fields['questionIds']);
+
+            $activity = $this->getHomeworkActivityService()->create(array(
+                'answerSceneId' => $answerScene['id'],
+                'assessmentId' => $assessment['id'],
+            ));
+
+            $this->getBiz()['db']->commit();
+
+            return $activity;
+        } catch (\Exception $e) {
+            $this->getBiz()['db']->rollback();
+            throw $e;
+        }
+    }
+
+    protected function createAssessment($name, $description, $itemIds = array())
+    {
+        $items = $this->getItemService()->findItemsByIds($itemIds, true);
+        $bankIds = array_column($items, 'bank_id');
+        
+        $assessment = [
             'bank_id' => array_shift($bankIds),
-            'name' => $fields['title'],
-            'description' => $fields['description'],
-            'status' => 'open',
+            'name' => $name,
+            'description' => $description,
             'displayable' => 0,
             'sections' => [
                 [
-                    'name' => '',
+                    'name' => '作业题目',
                     'items' => $items,
                 ]
             ],
         ];
 
-        $homework = $this->getAssessmentService()->createAssessment($homework);
+        $assessment = $this->getAssessmentService()->createAssessment($assessment);
 
-        return $this->getAssessmentService()->openAssessment($homework['id']);
+        return $this->getAssessmentService()->openAssessment($assessment['id']);
     }
 
     public function copy($activity, $config = [])
     {
         $homework = $this->get($activity['mediaId']);
 
-        $items = $this->getAssessmentSectionItemService()->findSectionItemsByAssessmentId($homework['id']);
+        try {
+            $this->getBiz()['db']->beginTransaction();
 
-        $newHomework = [
-            'title' => $homework['name'],
-            'description' => $homework['description'],
-            'questionIds' => array_column($items, 'item_id'),
-        ];
+            $answerScene = $this->getAnswerSceneService()->get($homework['answerSceneId']);
+            $answerScene = $this->getAnswerSceneService()->create(array(
+                'name' => $answerScene['name'],
+                'limited_time' => 0,
+                'do_times' => 0,
+                'redo_interval' => 0,
+                'need_score' => 0,
+                'manual_marking' => 1,
+                'start_time' => 0,
+            ));
 
-        return $this->create($newHomework);
+            $activity = $this->getHomeworkActivityService()->create(array(
+                'answerSceneId' => $answerScene['id'],
+                'assessmentId' => $homework['assessmentId'],
+            ));
+
+            $this->getBiz()['db']->commit();
+
+            return $activity;
+        } catch (\Exception $e) {
+            $this->getBiz()['db']->rollback();
+            throw $e;
+        }
     }
 
     public function sync($sourceActivity, $activity)
     {
         $sourceHomework = $this->get($sourceActivity['mediaId']);
+        $homework = $this->get($activity['mediaId']);
 
         $fields = [
-            'name' => $sourceHomework['name'],
-            'description' => $sourceHomework['description'],
+            'name' => $sourceHomework['assessment']['name'],
+            'description' => $sourceHomework['assessment']['description'],
         ];
 
-        return $this->getAssessmentService()->updateBasicAssessment($activity['mediaId'], $fields);
+        $this->getAssessmentService()->updateBasicAssessment($homework['assessmentId'], $fields);
+
+        return $activity;
     }
 
     public function update($targetId, &$fields, $activity)
@@ -91,38 +147,36 @@ class Homework extends Activity
             'description' => $fields['description'],
         ];
 
-        return $this->getAssessmentService()->updateBasicAssessment($homework['id'], $filterFields);
+        $this->getAssessmentService()->updateBasicAssessment($homework['assessmentId'], $filterFields);
+
+        return $homework;
     }
 
     public function delete($targetId)
     {
-        return $this->getAssessmentService()->deleteAssessment($targetId);
+        return $this->getHomeworkActivityService()->delete($targetId);
     }
 
     public function isFinished($activityId)
     {
         $user = $this->getCurrentUser();
 
-        $activity = $this->getActivityService()->getActivity($activityId);
+        $activity = $this->getActivityService()->getActivity($activityId, true);
 
-        $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseId'], $activity['id'], 'homework');
-        if (!$result) {
+        $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId(
+            $activity['ext']['answerSceneId'],
+            $user['id']
+        );
+
+        if (empty($answerRecord)) {
             return false;
         }
 
-        if ('submit' === $activity['finishType'] && in_array($result['status'], array('reviewing', 'finished'))) {
+        if ('submit' === $activity['finishType'] && in_array($answerRecord['status'], array(AnswerService::ANSWER_RECORD_STATUS_REVIEWING, AnswerService::ANSWER_RECORD_STATUS_FINISHED))) {
             return true;
         }
 
         return false;
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->getBiz()->service('Testpaper:TestpaperService');
     }
 
     /**
@@ -134,26 +188,34 @@ class Homework extends Activity
     }
 
     /**
-     * @return AssessmentSectionItemService
-     */
-    protected function getAssessmentSectionItemService()
-    {
-        return $this->getBiz()->service('ItemBank:Assessment:AssessmentSectionItemService');
-    }
-
-    /**
-     * @return ActivityService
-     */
-    protected function getActivityService()
-    {
-        return $this->getBiz()->service('Activity:ActivityService');
-    }
-
-    /**
      * @return ItemService
      */
     protected function getItemService()
     {
         return $this->getBiz()->service('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return HomeworkActivityService
+     */
+    protected function getHomeworkActivityService()
+    {
+        return $this->getBiz()->service('Activity:HomeworkActivityService');
     }
 }

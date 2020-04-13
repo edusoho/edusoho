@@ -28,7 +28,7 @@
             {% set do = macro.link('notification.test-paper.perusal.do'|trans, path('testpaper_check',{resultId:data.id})) %}
           {% endif %}
         {% elseif data.type == 'read' %}
-          {% set do = macro.link('notification.test-paper.read.do'|trans, path('testpaper_result_show',{resultId:data.id,action:1})) %}
+          {% set do = macro.link('notification.test-paper.read.do'|trans, path('testpaper_result_show',{answerRecordId:data.id,action:1})) %}
         {% endif %}
 
       {% endif %}

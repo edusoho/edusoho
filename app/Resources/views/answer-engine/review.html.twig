@@ -1,0 +1,20 @@
+{% extends 'layout.html.twig' %}
+
+{% do script(['app/js/answer-engine/review/index.js']) %}
+
+{% block title %}{{ assessment.name }} - {{ parent() }}{% endblock %}
+
+{% block body %}
+    {% block header %}
+        {% if showHeader|default(1) %}{{ parent() }}{% endif %}
+    {% endblock %}
+
+    {% include 'answer-engine/common.html.twig' %}
+    <input type="hidden" name="assessment" value='{{ assessment|json_encode|raw }}'>
+    <input type="hidden" name="answer_record" value='{{ answerRecord|json_encode|raw }}'>
+    <input type="hidden" name="answer_scene" value='{{ answerScene|json_encode|raw }}'>
+    <input type="hidden" name="answer_report" value='{{ answerReport|json_encode|raw }}'>
+    {% block footer %}
+        {% if showHeader|default(1) %}{{ parent() }}{% endif %}
+    {% endblock %}
+{% endblock %}

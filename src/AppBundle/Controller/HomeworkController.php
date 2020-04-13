@@ -7,38 +7,34 @@ use Biz\User\Service\UserService;
 use Biz\Course\Service\CourseService;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Activity\Service\ActivityService;
-use Biz\Question\Service\QuestionService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\Activity\Service\HomeworkActivityService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Biz\Common\CommonException;
+use Biz\Course\Exception\CourseException;
+use Biz\User\UserException;
 
 class HomeworkController extends BaseController
 {
     public function startDoAction(Request $request, $lessonId, $homeworkId)
     {
-        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($homeworkId, 'homework');
-        if (empty($homework)) {
-            return $this->createMessageResponse('info', 'homework not found');
-        }
-
         $activity = $this->getActivityService()->getActivity($lessonId);
-        if ($activity['mediaId'] != $homeworkId) {
-            //homeworkId not belong to activity(lessonId)
-            return $this->createMessageResponse('info', "homework#{$homeworkId} not found in activity#{$lessonId}");
+        $homeworkActivity = $this->getHomeworkActivityService()->get($activity['mediaId']);
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+
+        $canTakeCourse = $this->getCourseService()->canTakeCourse($activity['fromCourseId']);
+        if (!$canTakeCourse) {
+            $this->createNewException(CourseException::FORBIDDEN_TAKE_COURSE());
         }
 
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($activity['fromCourseId']);
-
-        $result = $this->getTestpaperService()->startTestpaper($homeworkId, array('lessonId' => $lessonId, 'courseId' => $course['id']));
-
-        if ('doing' === $result['status']) {
-            return $this->redirect($this->generateUrl('homework_show', array(
-                'resultId' => $result['id'],
-            )));
-        }
-
-        return $this->redirect($this->generateUrl('homework_result_show', array(
-            'resultId' => $result['id'],
-        )));
+        return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', array(
+            'answerSceneId' => $homeworkActivity['answerSceneId'],
+            'assessmentId' => $homeworkActivity['assessmentId'],
+        ), array(
+            'submit_goto_url' => $this->generateUrl('course_task_activity_show', array('courseId' => $activity['fromCourseId'], 'id' => $task['id'])),
+        ));
     }
 
     public function doTestAction(Request $request, $resultId)
@@ -71,65 +67,67 @@ class HomeworkController extends BaseController
         ));
     }
 
-    public function showResultAction(Request $request, $resultId)
+    public function showResultAction(Request $request, $answerRecordId)
     {
-        $homeworkResult = $this->getTestpaperService()->getTestpaperResult($resultId);
-
-        $homework = $this->getTestpaperService()->getTestpaperByIdAndType($homeworkResult['testId'], $homeworkResult['type']);
-
-        if (!$homework) {
-            return $this->createMessageResponse('info', '该作业已删除，不能查看结果');
+        if (!$this->canLookAnswerRecord($answerRecordId)) {
+            $this->createNewException(CommonException::FORBIDDEN_DRAG_CAPTCHA_ERROR());
         }
 
-        if (in_array($homeworkResult['status'], array('doing', 'paused'))) {
-            return $this->redirect($this->generateUrl('homework_result_show', array('resultId' => $homeworkResult['id'])));
-        }
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+        $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
 
-        $canLookHomework = $this->getTestpaperService()->canLookTestpaper($homeworkResult['id']);
-
-        if (!$canLookHomework) {
-            return $this->createMessageResponse('info', '无权查看作业！');
-        }
-
-        $questions = $this->getTestpaperService()->showTestpaperItems($homework['id'], $homeworkResult['id']);
-
-        $student = $this->getUserService()->getUser($homeworkResult['userId']);
-
-        $attachments = $this->getTestpaperService()->findAttachments($homework['id']);
-
-        $activity = $this->getActivityService()->getActivity($homeworkResult['lessonId']);
-        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
-
-        return $this->render('homework/do.html.twig', array(
-            'questions' => $questions,
-            'paper' => $homework,
-            'paperResult' => $homeworkResult,
-            'student' => $student,
-            'attachments' => $attachments,
-            'task' => $task,
-            'action' => $request->query->get('action', ''),
+        return $this->render('homework/result.html.twig', array(
+            'answerRecordId' => $answerRecordId,
+            'assessment' => $assessment,
         ));
     }
 
-    public function submitAction(Request $request, $resultId)
+    protected function canLookAnswerRecord($answerRecordId)
     {
-        $result = $this->getTestpaperService()->getTestpaperResult($resultId);
+        $user = $this->getCurrentUser();
 
-        if (!empty($result) && !in_array($result['status'], array('doing', 'paused'))) {
-            return $this->createJsonResponse(array('result' => false, 'message' => 'json_response.homework_has_submitted_cannot_change.message'));
+        if (!$user->isLogin()) {
+            $this->createNewException(UserException::UN_LOGIN());
         }
 
-        if ('POST' === $request->getMethod()) {
-            $formData = $request->request->all();
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
 
-            $paperResult = $this->getTestpaperService()->finishTest($result['id'], $formData);
-
-            $goto = $this->generateUrl('homework_result_show', array('resultId' => $paperResult['id']));
-
-            return $this->createJsonResponse(array('result' => true, 'message' => '', 'goto' => $goto));
+        if (!$answerRecord) {
+            $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        return $this->createJsonResponse(array('result' => false, 'message' => 'result not found'));
+        if ('doing' === $answerRecord['status'] && ($answerRecord['user_id'] != $user['id'])) {
+            $this->createNewException(CommonException::FORBIDDEN_DRAG_CAPTCHA_ERROR());
+        }
+
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        $homeworkActivity = $this->getHomeworkActivityService()->getByAnswerSceneId($answerRecord['answer_scene_id']);
+        $activity = $this->getActivityService()->getByMediaIdAndMediaType($homeworkActivity['id'], 'testpaper');
+
+        $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
+        $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
+
+        if ('teacher' === $member['role']) {
+            return true;
+        }
+
+        if ($answerRecord['user_id'] == $user['id']) {
+            return true;
+        }
+
+        if ($course['parentId'] > 0) {
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+            $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
+
+            if ($member && array_intersect($member['role'], array('assistant', 'teacher', 'headTeacher'))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -138,14 +136,6 @@ class HomeworkController extends BaseController
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
-    }
-
-    /**
-     * @return QuestionService
-     */
-    protected function getQuestionService()
-    {
-        return $this->createService('Question:QuestionService');
     }
 
     /**
@@ -186,5 +176,34 @@ class HomeworkController extends BaseController
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return HomeworkActivityService
+     */
+    protected function getHomeworkActivityService()
+    {
+        return $this->getBiz()->service('Activity:HomeworkActivityService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
     }
 }

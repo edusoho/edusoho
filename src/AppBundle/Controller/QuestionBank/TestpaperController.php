@@ -302,35 +302,23 @@ class TestpaperController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function previewAction(Request $request, $id, $testpaperId)
+    public function previewAction(Request $request, $id, $assessmentId)
     {
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-        if (!$testpaper || $testpaper['bankId'] != $id) {
+        $assessment = $this->getAssessmentService()->showAssessment($assessmentId);
+        if (!$assessment || $assessment['bank_id'] != $id) {
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
-        if ('closed' === $testpaper['status']) {
+        if ('closed' === $assessment['status']) {
             return $this->createMessageResponse('warning', 'testpaper already closed');
         }
-
-        $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
-
-        $total = $this->getTestpaperService()->countQuestionTypes($testpaper, $questions);
-
-        $attachments = $this->getTestpaperService()->findAttachments($testpaper['id']);
-
+        
         return $this->render('testpaper/manage/preview.html.twig', [
-            'questions' => $questions,
-            'limitedTime' => $testpaper['limitedTime'],
-            'paper' => $testpaper,
-            'paperResult' => [],
-            'total' => $total,
-            'attachments' => $attachments,
-            'questionTypes' => $this->getTestpaperService()->getCheckedQuestionTypeBySeq($testpaper),
+            'assessment' => $assessment,
         ]);
     }
 
@@ -372,11 +360,11 @@ class TestpaperController extends BaseController
             return $this->createJsonResponse([]);
         }
 
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        $conditions = [
-            'bank_id' => $questionBank['itemBankId'],
-            'nameLike' => $request->query->get('keyword', ''),
-        ];
+        $conditions = array(
+            'bank_id' => $id,
+            'displayable' => 1,
+            'keyword' => $request->query->get('keyword', ''),
+        );
         $totalCount = $this->getAssessmentService()->countAssessments($conditions);
         $conditions['status'] = 'open';
         $openCount = $this->getAssessmentService()->countAssessments($conditions);
@@ -395,11 +383,11 @@ class TestpaperController extends BaseController
         );
 
         foreach ($testPapers as &$testPaper) {
-            $testPaper = ArrayToolkit::parts($testPaper, [
-                'id',
-                'name',
-                'total_score',
-            ]);
+            $testPaper = array(
+                'id' => $testPaper['id'],
+                'name' => $testPaper['name'],
+                'score' => $testPaper['total_score'],
+            );
         }
 
         return $this->createJsonResponse([

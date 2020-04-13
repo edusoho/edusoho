@@ -1,0 +1,13 @@
+{% extends 'layout.html.twig' %}
+
+{% do script(['app/js/answer-engine/answer/index.js']) %}
+
+{% block body %}
+    {% include 'answer-engine/common.html.twig' %}
+    <input type="hidden" name="assessment" value='{{ assessment|json_encode|raw }}'>
+    <input type="hidden" name="assessment_response" value='{{ assessmentResponse|json_encode|raw }}'>
+    <input type="hidden" name="answer_scene" value='{{ answerScene|json_encode|raw }}'>
+    <input type="hidden" name="answer_record" value='{{ answerRecord|json_encode|raw }}'>
+    <input type="hidden" name="submit_goto_url" value='{{ app.request.query.get('submit_goto_url') }}'>
+    <input type="hidden" name="save_goto_url" value='{{ app.request.query.get('save_goto_url') }}'>
+{% endblock %}

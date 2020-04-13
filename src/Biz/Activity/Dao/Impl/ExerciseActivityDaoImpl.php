@@ -14,6 +14,11 @@ class ExerciseActivityDaoImpl extends GeneralDaoImpl implements ExerciseActivity
         return $this->findInField('id', $ids);
     }
 
+    public function getByAnswerSceneId($answerSceneId)
+    {
+        return $this->getByFields(array('answerSceneId' => $answerSceneId));
+    }
+
     public function declares()
     {
         return array(

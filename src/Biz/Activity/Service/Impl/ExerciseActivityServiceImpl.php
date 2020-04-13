@@ -18,6 +18,11 @@ class ExerciseActivityServiceImpl extends BaseService implements ExerciseActivit
         return $this->getExerciseActivityDao()->findByIds($ids);
     }
 
+    public function getByAnswerSceneId($answerSceneId)
+    {
+        return $this->getExerciseActivityDao()->getByAnswerSceneId($answerSceneId);
+    }
+
     public function createActivity($fields)
     {
         return $this->getExerciseActivityDao()->create($fields);
