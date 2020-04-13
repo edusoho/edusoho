@@ -141,7 +141,6 @@ check env:
       - /^release/.*$/
       - develop
       - master
-      - feature/edusoho-symfony34
     variables:
       - $REPOSITORY == "main"
 
@@ -213,9 +212,9 @@ AT With Java And Selenium:
     variables:
       - $REPOSITORY == "main"
 
-Api Test With 5.5:
+Api Test With 7.1:
   stage: test
-  image: ruanwenqin/ci-php:5.5-7
+  image: codeages/ci-php71
   services:
     - mysql:5.5
     - redis:latest
@@ -245,6 +244,7 @@ Api Test With 5.5:
     refs:
       - /^release/.*$/
       - develop
+      - feature/phpunit-coverage
     variables:
       - $REPOSITORY == "main"
 # 5.5 with js-test-unit:
