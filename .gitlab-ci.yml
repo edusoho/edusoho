@@ -244,7 +244,6 @@ Api Test With 7.1:
     refs:
       - /^release/.*$/
       - develop
-      - feature/phpunit-coverage
     variables:
       - $REPOSITORY == "main"
 # 5.5 with js-test-unit:
