@@ -832,6 +832,19 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         );
     }
 
+    public function removeStudents($classroomId, $userIds, $info = [])
+    {
+        if (empty($userIds)) {
+            return false;
+        }
+
+        foreach ($userIds as $userId) {
+            $this->removeStudent($classroomId, $userId, $info);
+        }
+
+        return true;
+    }
+
     public function isClassroomStudent($classroomId, $userId)
     {
         $member = $this->getClassroomMember($classroomId, $userId);

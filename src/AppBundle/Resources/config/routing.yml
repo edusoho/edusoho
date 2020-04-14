@@ -560,7 +560,7 @@ notification:
 
 batch_notification_show:
     path: /notification/{id}
-    defaults: { _controller:AppBundle:Notification:show }
+    defaults: { _controller: AppBundle:Notification:show }
 
 my_teaching_course_sets:
     path: /my/teaching/course_sets/{filter}
@@ -1974,6 +1974,11 @@ course_set_manage_course_students_remove:
   defaults: {_controller: AppBundle:Course/StudentManage:removeCourseStudent}
   methods: [POST]
 
+course_set_manage_course_students_remove_students:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/students/remove
+  defaults: { _controller: AppBundle:Course/StudentManage:removeCourseStudents }
+  methods: [POST]
+
 course_set_manage_course_students_remark:
   path:  /course_set/{courseSetId}/manage/course/{courseId}/student/{userId}/remark
   defaults: { _controller: AppBundle:Course/StudentManage:remark }
@@ -2545,7 +2550,7 @@ classroom_manage_set_price:
 
 classroom_manage_students:
     path: /classroom/{id}/manage/students
-    defaults: { _controller:AppBundle:Classroom/ClassroomManage:students }
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:students }
 
 classroom_manage_aduitor:
     path: /classroom/{id}/manage/aduitor
@@ -2593,6 +2598,10 @@ classroom_manage_student_remove:
     path:  /classroom/{classroomId}/manage/student/{userId}/remove
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:remove }
     methods: [POST]
+
+classroom_manage_student_batch_remove:
+  path: /classroom/{id}/manage/student/remove
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:removeStudents }
 
 classroom_manage_student_create:
     path:  /classroom/{id}/manage/student/create
@@ -2660,7 +2669,7 @@ classroom_manage_students_show:
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:studentShow }
 
 classroom_manage_member_deadline:
-    path: /classroom/{classroomId}/manage/member/{userId}/deadline
+    path: /classroom/{classroomId}/manage/member/deadline
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:setClassroomMemberDeadline }
 
 classroom_member_deadline_reach:

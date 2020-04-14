@@ -175,6 +175,8 @@ interface ClassroomService
 
     public function removeStudent($classroomId, $userId);
 
+    public function removeStudents($classroomId, $userIds, $info);
+
     public function becomeStudent($classroomId, $userId, $info = array());
 
     public function becomeStudentWithOrder($classroomId, $userId, $info = array());

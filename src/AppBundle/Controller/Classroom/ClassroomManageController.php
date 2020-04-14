@@ -184,7 +184,7 @@ class ClassroomManageController extends BaseController
     public function studentsAction(Request $request, $id, $role = 'student')
     {
         $this->getClassroomService()->tryManageClassroom($id);
-        $classroom = $this->getClassroomService()->getClassroom($id);
+
         $fields = $request->query->all();
         $condition = array();
 
@@ -207,17 +207,14 @@ class ClassroomManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $studentUserIds = ArrayToolkit::column($students, 'userId');
-        $users = $this->getUserService()->findUsersByIds($studentUserIds);
-
         $this->appendLearningProgress($students);
 
         return $this->render(
             'classroom-manage/student.html.twig',
             array(
-                'classroom' => $classroom,
+                'classroom' => $this->getClassroomService()->getClassroom($id),
                 'students' => $students,
-                'users' => $users,
+                'users' => $this->getUserService()->findUsersByIds(array_column($students, 'userId')),
                 'paginator' => $paginator,
                 'role' => $role,
             )
@@ -325,6 +322,23 @@ class ClassroomManageController extends BaseController
                 'reason_type' => 'remove',
             )
         );
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function removeStudentsAction(Request $request, $id)
+    {
+        $this->getClassroomService()->tryManageClassroom($id);
+
+        $studentIds = $request->request->get('studentIds', []);
+        if (empty($this->getUserService()->findUsersByIds($studentIds))) {
+            return $this->createJsonResponse(false);
+        }
+
+        $this->getClassroomService()->removeStudents($id, $studentIds, [
+            'reason' => 'site.remove_by_manual',
+            'reason_type' => 'remove',
+        ]);
 
         return $this->createJsonResponse(true);
     }
@@ -540,7 +554,7 @@ class ClassroomManageController extends BaseController
 
     public function studentDefinedShowAction(Request $request, $classroomId, $userId)
     {
-        $classroom = $this->getClassroomService()->tryManageClassroom($classroomId);
+        $this->getClassroomService()->tryManageClassroom($classroomId);
         $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
         if (empty($member)) {
             $this->createNewException(ClassroomException::NOTFOUND_MEMBER());
@@ -552,11 +566,16 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function setClassroomMemberDeadlineAction(Request $request, $classroomId, $userId)
+    public function setClassroomMemberDeadlineAction(Request $request, $classroomId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
 
-        $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
+        $userIds = $request->query->get('userIds', '');
+        $userIds = is_array($userIds) ? $userIds : explode(',', $userIds);
+
+        if (1 == count($userIds)) {
+            $member = $this->getClassroomService()->getClassroomMember($classroomId, $userIds[0]);
+        }
 
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
@@ -576,14 +595,13 @@ class ClassroomManageController extends BaseController
 
             return $this->createJsonResponse(true);
         }
-
-        $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        $user = $this->getUserService()->getUser($userId);
+        $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('classroom-manage/member/set-deadline-modal.html.twig', array(
-            'classroom' => $classroom,
-            'user' => $user,
-            'member' => $member,
+            'classroom' => $this->getClassroomService()->getClassroom($classroomId),
+            'users' => $users,
+            'userIds' => array_column($users, 'id'),
+            'member' => empty($member) ? [] : $member,
         ));
     }
 
