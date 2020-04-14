@@ -138,7 +138,7 @@ class BaseTestCase extends TestCase
     {
         $biz = $this->getBiz();
         $biz['db']->rollback();
-        echo '运行后内存：'.round(memory_get_usage() / 1024 / 1024, 2).'MB', '';
+        //echo '运行后内存：'.round(memory_get_usage() / 1024 / 1024, 2).'MB', '';
     }
 
     protected function initDevelopSetting()
