@@ -123,7 +123,6 @@ check env:
       - /^release/.*$/
       - develop
       - master
-      - feature/edusoho-symfony34
     variables:
       - $REPOSITORY == "main"
 
@@ -170,7 +169,6 @@ check env:
   only:
     refs:
       - develop
-      - feature/phpunit-coverage
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
