@@ -727,6 +727,13 @@ admin_v2.data_statictics.analysis.basic_group: Data Analysis
 admin_v2.data_statistics.statistics.menu: Data Statistics
 admin_v2.data_statistics.statistics.basic_tab: Data Statistics
 
+# 应用中心-内容云-内容结算
+admin_v2.basic_app_resource_group: Resource Cloud
+admin_v2.cloud.app_resource_settlement_menu: Resource Settlement
+admin_v2.app_resource_settlement.balance.basic_tab: Balance Detail
+admin_v2.app_resource_settlement.order.basic_tab: Order Manage
+admin_v2.app_resource_settlement.product.basic_tab: Selected Product
+
 # 应用中心-营销云-营销应用
 admin_v2.basic_app_center_group: Marketing Cloud
 admin_v2.cloud.app_center_menu: ES App Center

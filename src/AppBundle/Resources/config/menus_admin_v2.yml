@@ -1163,6 +1163,26 @@ admin_v2:
             class: js-new-corner-mark
             visible: (not (setting('copyright.thirdCopyright', false) == 1) and not is_without_network()) #第三方授权和无网情况下不显示云市场
             children:
+                # 内容云
+                admin_v2_basic_app_resources_group:
+                    name: admin_v2.basic_app_resource_group
+                    is_group: true
+                    children:
+                        admin_v2_app_resource_settlement:
+                            name: admin_v2.cloud.app_resource_settlement_menu
+                            children:
+                                admin_v2_resource_settlement_balance:
+                                    name: admin_v2.app_resource_settlement.balance.basic_tab
+                                    router_name: admin_v2_resource_settlement_balance
+                                    disable: true
+                                admin_v2_resource_settlement_order:
+                                     name: admin_v2.app_resource_settlement.order.basic_tab
+                                     router_name: admin_v2_resource_settlement_order
+                                     disable: true
+                                admin_v2_resource_settlement_product:
+                                     name: admin_v2.app_resource_settlement.product.basic_tab
+                                     router_name: admin_v2_resource_settlement_product
+                                     disable: true
                 #营销云
                 admin_v2_basic_app_center_group:
                     name: admin_v2.basic_app_center_group

@@ -10789,3 +10789,45 @@ task.show_optional_tips: 显示选修课时
 admin_v2.user.manage.change_nickname.heading_title: 修改用户名
 
 course.plan_task.activity_manage.discuss.tips: 讨论任务在PC和APP中使用，暂不支持在微网校和小程序中使用!
+
+admin_v2.app_center.resource_settlement.supplier_name: 内容供应商
+admin_v2.app_center.resource_settlement.supplier_contact_name: 联系人
+admin_v2.app_center.resource_settlement.supplier_mobile: 联系人手机号
+admin_v2.app_center.resource_settlement.coop_level_name: 合作关系
+admin_v2.app_center.resource_settlement.supplier_email: 联系邮箱
+admin_v2.app_center.resource_settlement.address: 地址
+
+admin_v2.app_center.resource_settlement.balance: 账户余额
+admin_v2.app_center.resource_settlement.debt: 采购欠款
+admin_v2.app_center.resource_settlement.more: 点击查看
+
+admin_v2.app_center.resource_settlement.start_time: 开始时间
+admin_v2.app_center.resource_settlement.end_time: 结束时间
+
+admin_v2.app_center.resource_settlement.balance.deal_time: 交易时间
+admin_v2.app_center.resource_settlement.balance.title: 名称
+admin_v2.app_center.resource_settlement.balance.sn: 流水号
+admin_v2.app_center.resource_settlement.balance.created_time: 交易时间
+admin_v2.app_center.resource_settlement.balance.amount: 收入/支出
+admin_v2.app_center.resource_settlement.balance.balance: 账户余额
+admin_v2.app_center.resource_settlement.balance.action: 支付方式
+admin_v2.app_center.resource_settlement.balance.recharge: 余额充值
+admin_v2.app_center.resource_settlement.balance.recharge_manually: 手动充值
+admin_v2.app_center.resource_settlement.balance.balance_payment: 余额支付
+admin_v2.app_center.resource_settlement.balance.balance_refund: 余额退款
+admin_v2.app_center.resource_settlement.balance.detail: 明细详情
+admin_v2.app_center.resource_settlement.balance.detail_information: 明细信息
+admin_v2.app_center.resource_settlement.balance.status: 支付状态
+admin_v2.app_center.resource_settlement.balance.detail.success: 成功
+
+admin_v2.app_center.resource_settlement.balance.order.detail: 采购单信息
+admin_v2.app_center.resource_settlement.balance.order: 采购单
+admin_v2.app_center.resource_settlement.balance.order.sn: 采购单号码
+
+admin_v2.app_center.resource_settlement.balance.operation.detail: 操作信息
+admin_v2.app_center.resource_settlement.balance.operator: 操作人
+
+admin_v2.app_center.resource_settlement.order.create_time: 创建时间
+admin_v2.app_center.resource_settlement.filter_type: 筛选条件
+admin_v2.app_center.resource_settlement.order.pay: 待支付
+admin_v2.app_center.resource_settlement.order.title: 采购单名称

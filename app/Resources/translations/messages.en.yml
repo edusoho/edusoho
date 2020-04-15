@@ -9472,3 +9472,27 @@ task.show_optional_tips: Show Optional
 admin_v2.user.manage.change_nickname.heading_title: Modify username
 
 course.plan_task.activity_manage.discuss.tips: Discussion tasks are used in PC and APP, and are not supported in Microschool and Applet for now!
+
+admin_v2.app_center.resource_settlement.balance: Balance
+admin_v2.app_center.resource_settlement.debt: Debt
+admin_v2.app_center.resource_settlement.more: More
+
+admin_v2.app_center.resource_settlement.deal_time: Deal time
+admin_v2.app_center.resource_settlement.start_time: Start time
+admin_v2.app_center.resource_settlement.end_time: End time
+admin_v2.app_center.resource_settlement.balance.detail: Detail
+admin_v2.app_center.resource_settlement.balance.detail_information: Detail information
+admin_v2.app_center.resource_settlement.balance.status: Status
+admin_v2.app_center.resource_settlement.balance.detail.success: Success
+
+admin_v2.app_center.resource_settlement.balance.order.detail: Order information
+admin_v2.app_center.resource_settlement.balance.order: Order
+admin_v2.app_center.resource_settlement.balance.order.sn: Sn
+
+admin_v2.app_center.resource_settlement.balance.operation.detail: Operation
+admin_v2.app_center.resource_settlement.balance.operator: Operator
+
+admin_v2.app_center.resource_settlement.order.create_time: Created time
+admin_v2.app_center.resource_settlement.filter_type: Filter
+admin_v2.app_center.resource_settlement.order.pay: Paying
+admin_v2.app_center.resource_settlement.order.title: Title
