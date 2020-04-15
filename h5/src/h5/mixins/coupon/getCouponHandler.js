@@ -73,6 +73,20 @@ export default {
           });
         });
       } else if (['multi', 'all'].indexOf(targetNum) > -1) {
+        if (targetType === 'vip') {
+          // 全部vip
+          this.$router.push({
+            path: `/${coupon.targetDetail.product}` // vip
+          });
+          return;
+        }
+        if (targetType === 'all') {
+          // 全站
+          this.$router.push({
+            path: '/'
+          });
+          return;
+        }
         // 多个班级/课程
         this.$router.push({
           path: `/${coupon.targetDetail.product}/explore` // course/explore | classroom/explore
