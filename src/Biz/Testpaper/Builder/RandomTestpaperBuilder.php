@@ -4,7 +4,6 @@ namespace Biz\Testpaper\Builder;
 
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
-use PhpOffice\PhpWord\Exception\Exception;
 
 class RandomTestpaperBuilder implements TestpaperBuilderInterface
 {
@@ -39,6 +38,7 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
 
         try {
             $this->getAssessmentService()->drawItems($range, $sections);
+
             return true;
         } catch (\Exception $e) {
             return false;
