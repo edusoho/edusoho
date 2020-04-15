@@ -23,7 +23,7 @@
 
         {% if data.type == 'perusal' %}
           {% if data.courseId|default(0) %}
-            {% set do = macro.link('notification.test-paper.perusal.do'|trans, path('course_manage_testpaper_check',{id:data.courseId,resultId:data.id})) %}
+            {% set do = macro.link('notification.test-paper.perusal.do'|trans, path('course_manage_testpaper_check',{id:data.courseId,answerRecordId:data.id})) %}
           {% else %}
             {% set do = macro.link('notification.test-paper.perusal.do'|trans, path('testpaper_check',{resultId:data.id})) %}
           {% endif %}

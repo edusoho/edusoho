@@ -17,6 +17,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
 
 class QuestionMarkerController extends BaseController
@@ -25,6 +26,7 @@ class QuestionMarkerController extends BaseController
     public function showQuestionMakersAction(Request $request, $mediaId)
     {
         $questionMakers = $this->getQuestionMarkerService()->findQuestionMarkersMetaByMediaId($mediaId);
+        $items = $this->getItemService()->findItemsByIds(ArrayToolkit::column($questionMakers, 'questionId'), true);
         $baseUrl = $request->getSchemeAndHttpHost();
         $headerLength = 0;
         if (!$this->getWebExtension()->isHiddenVideoHeader()) {
@@ -36,38 +38,40 @@ class QuestionMarkerController extends BaseController
         $result = array();
 
         foreach ($questionMakers as $index => $questionMaker) {
-            $isChoice = in_array($questionMaker['type'], array('choice', 'single_choice', 'uncertain_choice'));
-            $isDetermine = 'determine' == $questionMaker['type'];
+            if (empty($items[$questionMaker['questionId']]) || empty($items[$questionMaker['questionId']]['questions'])) {
+                continue;
+            }
+            $item = $items[$questionMaker['questionId']];
+            $question = array_shift($item['questions']);
+            $isChoice = in_array($item['type'], array('choice', 'single_choice', 'uncertain_choice'));
+            $isFill = 'fill' == $item['type'];
 
             $result[$index]['id'] = $questionMaker['id'];
             $result[$index]['questionMarkerId'] = $questionMaker['id'];
             $result[$index]['markerId'] = $questionMaker['markerId'];
             $result[$index]['time'] = $questionMaker['second'] + $headerLength;
-            $result[$index]['type'] = $questionMaker['type'];
-            $result[$index]['question'] = self::convertAbsoluteUrl($baseUrl, $questionMaker['stem']);
+            $result[$index]['type'] = $item['type'];
+            $result[$index]['question'] = self::convertAbsoluteUrl($baseUrl, $question['stem']);
             if ($isChoice) {
-                $questionMetas = $questionMaker['metas'];
-                if (!empty($questionMetas['choices'])) {
-                    foreach ($questionMetas['choices'] as $choiceIndex => $choice) {
-                        $result[$index]['options'][$choiceIndex]['option_key'] = chr(65 + $choiceIndex);
-                        $result[$index]['options'][$choiceIndex]['option_val'] = self::convertAbsoluteUrl(
-                            $baseUrl,
-                            $choice
-                        );
+                if (!empty($question['response_points'])) {
+                    foreach ($question['response_points'] as $key => $point) {
+                        $options = array_shift($point);
+                        $result[$index]['options'][$key]['option_key'] = $options['val'];
+                        $result[$index]['options'][$key]['option_val'] = $options['text'];
                     }
                 }
             }
-            $answers = $questionMaker['answer'];
-            foreach ($answers as $answerIndex => $answer) {
-                if ($isChoice) {
-                    $result[$index]['answer'][$answerIndex] = chr(65 + $answer);
-                } elseif ($isDetermine) {
-                    $result[$index]['answer'][$answerIndex] = 1 == $answer ? 'T' : 'F';
-                } else {
-                    $result[$index]['answer'][$answerIndex] = $answer;
-                }
+            if ($isFill) {
+                $key = 0;
+                $result[$index]['question'] = preg_replace_callback('/\[\[.*?]]/', function () use ($question, &$key) {
+                    return empty($question['answer'][$key]) ? '[[]]' : '[['.$question['answer'][$key++].']]';
+                }, $result[$index]['question']);
             }
-            $result[$index]['analysis'] = self::convertAbsoluteUrl($baseUrl, $questionMaker['analysis']);
+            $answers = $question['answer'];
+            foreach ($answers as $answerIndex => $answer) {
+                $result[$index]['answer'][$answerIndex] = $answer;
+            }
+            $result[$index]['analysis'] = self::convertAbsoluteUrl($baseUrl, $question['analysis']);
         }
 
         return $this->createJsonResponse($result);
@@ -88,45 +92,21 @@ class QuestionMarkerController extends BaseController
     {
         $this->getCourseService()->tryManageCourse($courseId);
 
-        $question = $this->getQuestionService()->get($id);
+        $item = $this->getItemService()->getItemWithQuestions($id, true);
 
-        if (empty($question)) {
+        if (empty($item)) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
-        if (!$this->getQuestionBankService()->canManageBank($question['bankId'])) {
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($item['bank_id']);
+        if (!$this->getQuestionBankService()->canManageBank($questionBank['id'])) {
             $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
         }
 
-        $item = array(
-            'questionId' => $question['id'],
-            'questionType' => $question['type'],
-            'question' => $question,
-        );
-
-        if ($question['subCount'] > 0) {
-            $questions = $this->getQuestionService()->findQuestionsByParentId($id);
-
-            $items = array();
-            foreach ($questions as $value) {
-                $items[] = array(
-                    'questionId' => $value['id'],
-                    'questionType' => $value['type'],
-                    'question' => $value,
-                );
-            }
-
-            $item['items'] = $items;
-        }
-
-        $type = in_array($question['type'], array('single_choice', 'uncertain_choice')) ? 'choice' : $question['type'];
-        $questionPreview = true;
-
         return $this->render(
-            'marker/question-preview/preview-modal.html.twig',
+            'question-manage/preview-modal.html.twig',
             array(
                 'item' => $item,
-                'type' => $type,
-                'questionPreview' => $questionPreview,
             )
         );
     }
@@ -176,12 +156,17 @@ class QuestionMarkerController extends BaseController
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
 
         $data['questionId'] = isset($data['questionId']) ? $data['questionId'] : 0;
-        $question = $this->getQuestionService()->get($data['questionId']);
+        $item = $this->getItemService()->getItem($data['questionId']);
 
-        if (empty($question)) {
+        if (empty($item)) {
             return $this->createMessageResponse('error', '该题目不存在!');
         }
-        if (!$this->getQuestionBankService()->canManageBank($question['bankId'])) {
+        $bank = $this->getQuestionBankService()->getQuestionBankByItemBankId($item['bank_id']);
+        if (empty($bank)) {
+            return $this->createMessageResponse('error', '题库不存在');
+        }
+
+        if (!$this->getQuestionBankService()->canManageBank($bank['id'])) {
             return $this->createMessageResponse('error', '没有管理该题目的权限');
         }
 
@@ -214,16 +199,6 @@ class QuestionMarkerController extends BaseController
 
         if (AccessorInterface::SUCCESS !== $access['code']) {
             $this->createNewException(CourseException::FORBIDDEN_LEARN_COURSE());
-        }
-
-        if (in_array($data['type'], array('uncertain_choice', 'single_choice', 'choice'))) {
-            foreach ($data['answer'] as &$answerItem) {
-                $answerItem = (string) (ord($answerItem) - 65);
-            }
-        } elseif ('determine' == $data['type']) {
-            foreach ($data['answer'] as &$answerItem) {
-                $answerItem = 'T' == $answerItem ? '1' : '0';
-            }
         }
 
         $user = $this->getCurrentUser();
@@ -260,7 +235,7 @@ class QuestionMarkerController extends BaseController
 
         $task = $this->getTaskService()->getTask($taskId);
 
-        list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $task);
+        list($paginator, $items) = $this->getPaginatorAndQuestion($request, $task);
 
         return $this->render(
             'marker/question-tr.html.twig',
@@ -268,7 +243,7 @@ class QuestionMarkerController extends BaseController
                 'course' => $course,
                 'task' => $task,
                 'paginator' => $paginator,
-                'questions' => $questions,
+                'items' => $items,
             )
         );
     }
@@ -287,29 +262,33 @@ class QuestionMarkerController extends BaseController
 
     protected function getPaginatorAndQuestion(Request $request, $task)
     {
-        $conditions = $request->request->all();
+        $fields = $request->request->all();
 
-        if (empty($conditions['bankId'])) {
+        if (empty($fields['bankId'])) {
             return array(new Paginator($request, 0), array());
         }
-        if (!$this->getQuestionBankService()->canManageBank($conditions['bankId'])) {
+        if (!$this->getQuestionBankService()->canManageBank($fields['bankId'])) {
             $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
         }
-        if (!empty($conditions['keyword'])) {
-            $conditions['stem'] = $conditions['keyword'];
+        $bank = $this->getQuestionBankService()->getQuestionBank($fields['bankId']);
+        $conditions = array(
+            'bank_id' => $bank['itemBankId'],
+            'types' => array('determine', 'single_choice', 'uncertain_choice', 'fill', 'choice'),
+            'category_id' => $fields['categoryId'],
+        );
+        if (!empty($fields['keyword'])) {
+            $conditions['material'] = $fields['keyword'];
         }
-        $conditions['parentId'] = 0;
-        $conditions['types'] = array('determine', 'single_choice', 'uncertain_choice', 'fill', 'choice');
 
         $paginator = new Paginator(
             $request,
-            $this->getQuestionService()->searchCount($conditions),
-            empty($conditions['pageSize']) ? 1 : $conditions['pageSize']
+            $this->getItemService()->countItems($conditions),
+            empty($fields['pageSize']) ? 1 : $fields['pageSize']
         );
 
-        $questions = $this->getQuestionService()->search(
+        $items = $this->getItemService()->searchItems(
             $conditions,
-            array('createdTime' => 'DESC'),
+            array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -324,11 +303,11 @@ class QuestionMarkerController extends BaseController
             'questionId'
         );
 
-        foreach ($questions as $key => $question) {
-            $questions[$key]['exist'] = in_array($question['id'], $questionMarkerIds) ? true : false;
+        foreach ($items as $key => $item) {
+            $items[$key]['exist'] = in_array($item['id'], $questionMarkerIds) ? true : false;
         }
 
-        return array($paginator, $questions);
+        return array($paginator, $items);
     }
 
     protected function tryManageQuestionMarker()
@@ -429,5 +408,13 @@ class QuestionMarkerController extends BaseController
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->createService('ItemBank:Item:ItemService');
     }
 }

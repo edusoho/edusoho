@@ -4,6 +4,7 @@ namespace Biz\Testpaper\Builder;
 
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use PhpOffice\PhpWord\Exception\Exception;
 
 class RandomTestpaperBuilder implements TestpaperBuilderInterface
 {
@@ -35,14 +36,13 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
     public function canBuild($options)
     {
         list($range, $sections) = $this->getRangeAndSections($options);
-        $sections = $this->getAssessmentService()->drawItems($range, $sections);
-        foreach ($sections as $section) {
-            if (!empty($section['items']['miss'])) {
-                return false;
-            }
-        }
 
-        return true;
+        try {
+            $this->getAssessmentService()->drawItems($range, $sections);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     public function showTestItems($testId, $resultId = 0, $options = array())

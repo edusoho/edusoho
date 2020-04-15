@@ -23,7 +23,7 @@ class QuestionMarkerStats {
     let legendData = [], data = [];
 
     $.each(stats, function(index, stat) {
-      let key = String.fromCharCode(index+65);
+      let key = index;
       legendData.push(key);
 
       data.push({

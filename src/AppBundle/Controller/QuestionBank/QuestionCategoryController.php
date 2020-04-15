@@ -93,7 +93,7 @@ class QuestionCategoryController extends BaseController
         if ($isTree) {
             $categories = $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']);
         } else {
-            $categories = $this->getQuestionCategoryService()->getCategoryTree($bankId);
+            $categories = $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']);
         }
 
         return $this->createJsonResponse($categories);

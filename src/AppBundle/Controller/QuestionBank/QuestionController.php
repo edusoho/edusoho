@@ -105,7 +105,7 @@ class QuestionController extends BaseController
             'mode' => 'create',
             'questionBank' => $questionBank,
             'type' => $type,
-            'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($id),
+            'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']),
         ]);
     }
 

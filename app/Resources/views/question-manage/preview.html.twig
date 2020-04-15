@@ -1,18 +1,18 @@
 {% extends 'layout.html.twig' %}
 
+{% do script(['app/js/question-manage/preview/index.js']) %}
+
+{% block title %}{{'course.question_manage.preview'|trans}}{% endblock %}
+
+{% block bodyClass %}
+  {{ 'es-main-' ~ maincolor }} {{ 'es-nav-' ~ navigationcolor }} {{ 'cd-design test-vue' }}
+{% endblock %}
+
 {% block body %}
-  <style>
-    body {
-      background-color: #fff;
-    }
-  </style>
-  <div style="padding:20px;">
+  {% verbatim %}
+    <div id="app">
+    </div>
+  {% endverbatim %}
 
-    {% set questionTemplate = getQuestionTypeTemplate(question.type,'do') %}
-    {% if questionTemplate %}
-      {% include questionTemplate %}
-    {% endif %}
-
-  </div>
-  <div id="attachment-modal" class="modal"></div>
+  <input type="hidden" name="item" value="{{ item|json_encode }}">
 {% endblock %}

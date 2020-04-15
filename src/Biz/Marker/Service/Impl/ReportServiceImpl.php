@@ -15,6 +15,7 @@ use Biz\Marker\Service\QuestionMarkerService;
 use Biz\Marker\Service\ReportService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class ReportServiceImpl extends BaseService implements ReportService
 {
@@ -22,8 +23,12 @@ class ReportServiceImpl extends BaseService implements ReportService
     {
         $this->preCheck($courseId, $taskId);
         $questionMarker = $this->getQuestionMarkerService()->getQuestionMarker($questionMarkerId);
-
         if (empty($questionMarker)) {
+            $this->createNewException(QuestionMarkerException::NOTFOUND_QUESTION_MARKER());
+        }
+
+        $item = $this->getItemService()->getItemWithQuestions($questionMarker['questionId']);
+        if (empty($item) || empty($item['questions'])) {
             $this->createNewException(QuestionMarkerException::NOTFOUND_QUESTION_MARKER());
         }
 
@@ -35,8 +40,8 @@ class ReportServiceImpl extends BaseService implements ReportService
         $analysis['count'] = count($results);
 
         //根据不同的题目类型，调用不同的解析逻辑，
-        $method = $this->getMethodName($questionMarker['type']);
-        $analysis['metaStats'] = call_user_func_array(array($this, $method), array($questionMarker, $results));
+        $method = $this->getMethodName($item['type']);
+        $analysis['metaStats'] = call_user_func_array(array($this, $method), array($item, $results));
 
         return $analysis;
     }
@@ -139,9 +144,9 @@ class ReportServiceImpl extends BaseService implements ReportService
         return 'analysis'.$replacedType;
     }
 
-    protected function analysisSingleChoice($questionMarker, $results)
+    protected function analysisSingleChoice($item, $results)
     {
-        $choices = $questionMarker['metas']['choices'];
+        $choices = array_shift($item['questions'])['response_points'];
         $stats = $this->generateStats($choices, $results);
         $count = count($results);
 
@@ -152,23 +157,23 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $stats;
     }
 
-    protected function analysisUncertainChoice($questionMarker, $results)
+    protected function analysisUncertainChoice($item, $results)
     {
-        return $this->analysisChoice($questionMarker, $results);
+        return $this->analysisChoice($item, $results);
     }
 
-    protected function analysisChoice($questionMarker, $results)
+    protected function analysisChoice($item, $results)
     {
-        $choices = $questionMarker['metas']['choices'];
+        $choices = array_shift($item['questions'])['response_points'];
         $stats = $this->generateStats($choices, $results);
         $this->appendPct($stats, count($results));
 
         return $stats;
     }
 
-    protected function analysisFill($questionMarker, $results)
+    protected function analysisFill($item, $results)
     {
-        $questionAnswers = array_values($questionMarker['answer']);
+        $questionAnswers = array_shift($item['questions'])['response_points'];
         $stats = array_fill_keys(array_keys($questionAnswers), array('answerNum' => 0, 'pct' => 0));
         foreach ($results as $result) {
             $userAnswers = $result['answer'];
@@ -180,7 +185,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $stats;
     }
 
-    protected function analysisDetermine($questionMarker, $results)
+    protected function analysisDetermine($item, $results)
     {
         $stats = $this->generateStats(array('0', '1'), $results);
         $count = count($results);
@@ -196,6 +201,7 @@ class ReportServiceImpl extends BaseService implements ReportService
     {
         foreach ($questionAnswers as $index => $rightAnswer) {
             $expectAnswer = array();
+            $rightAnswer = explode('|', $rightAnswer);
             foreach ($rightAnswer as $value) {
                 $value = trim($value);
                 $value = preg_replace("/([\x20\s\t]){2,}/", ' ', $value);
@@ -234,7 +240,12 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     private function generateStats($options, $results)
     {
-        $stats = array_fill_keys(array_keys($options), array('answerNum' => 0, 'pct' => 0));
+        $stats = array();
+        foreach ($options as $option) {
+            $option = array_shift($option);
+            $stats[$option['val']] = array('answerNum' => 0, 'pct' => 0);
+        }
+
         foreach ($results as $result) {
             foreach ($result['answer'] as $index) {
                 if (isset($stats[$index])) {
@@ -328,5 +339,13 @@ class ReportServiceImpl extends BaseService implements ReportService
     protected function getQuestionMarkerResultDao()
     {
         return $this->createDao('Marker:QuestionMarkerResultDao');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->biz->service('ItemBank:Item:ItemService');
     }
 }
