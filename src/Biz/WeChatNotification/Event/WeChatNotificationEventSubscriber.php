@@ -744,7 +744,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         return $router->generate($route, $parameters, $referenceType);
     }
 
-    private function decorateRouter(Router $router)
+    private function decorateRouter($router)
     {
         $routerContext = $router->getContext();
         if ('localhost' == $routerContext->getHost()) {
