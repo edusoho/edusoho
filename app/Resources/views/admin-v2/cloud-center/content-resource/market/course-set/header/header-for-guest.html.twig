@@ -1,0 +1,86 @@
+{% do script('app/js/course/header-top/index.js') %}
+
+<div class="container cd-container">
+  <div class="es-section course-detail-section course-detail-section--normal clearfix">
+
+    <div class="course-detail-bottom">
+      <div class="course-detail-img">
+        <img class="img-responsive" src="{{ courseSet.cover.large }}"
+             alt="{{ course.title }} ">
+        <div class="image-overlay"></div>
+        {# 是否支持试看 #}
+        {% if previewTask | default(null) %}
+          <a href="#modal" data-toggle="modal"
+             data-url="{{ path('course_task_preview',{courseId:course.id, id:previewTask.id}) }}"
+             class="course-img-cover">
+            <i class="es-icon es-icon-playcircleoutline"></i>
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="course-detail-info">
+        <div class="course-detail-info__text js-course-detail-info">
+          <div>
+            <div class="course-detail-info__title">
+              {% if marketingPage %}{{ courseSet.title }}{% else %}{{ course.title }}{% endif %}
+            </div>
+          </div>
+
+          <div class="course-detail-gray course-detail-gray--market">
+            <div class="course-detail-content">
+              <span class="course-detail-title vertical-middle">{{ 'course.teaching_plan'|trans }}</span>
+              <ul class="nav nav-pills nav-pills-sm nav-pills-transparent course-detail-nav">
+                {% for course in courses if course.status == 'published' %}
+                  <li class="mb5 mrs">
+                    <a data-toggle="tooltip" data-placement="top" data-container="body" title="{{ course.subtitle }}"
+                       data-trigger="hover" title="{{ course.title }}">{{ course.title|sub_text(10)|default('course.unname_title'|trans) }}
+                    </a>
+                    <i class="es-icon es-icon-done done-icon"></i>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+
+          <div data-label="价格" style="margin-top: 40px; font-size:13px">
+            <div class="form-group">
+              <label> {{ '首个计划合作面额'|trans }} </label>
+              {% set courseSet = courseSet|wrap('courseSet.price') %}
+              <span style="margin-left:20px; font-size: 80%; color: #999;">
+                {% set amountAfterDeduct = course.cooperationPrice * merchant.coop_level_deduct|default(100) / 100 %}
+                {{ amountAfterDeduct|number_format(2) }}
+              </span>
+            </div>
+
+            <div class="form-group">
+              <label>{{ '首个计划建议零售'|trans }}</label>
+              <span style="margin-left:20px; font-size: 80%; color: #999;">{{ course.suggestionPrice }}</span>
+            </div>
+          </div>
+        </div>
+
+        {% set canChoose = (merchant.coop_status|default('') != 'cooperation' or hasChosen or courseSet.wholeEditStatus|default() == 'unpublished') %}
+        <div class="course-detail-info__btn js-course-header-operation">
+          <div class="text-right buy-btn-group course-operation-btn ">
+            <a href="{{ path('admin_v2_resource_market_product') }}" style="margin-right: 30px;">返回内容市场</a>
+              <button id="js-course-select-btn"
+                      data-id="{{ courseSet.id }}"
+                      class="btn btn-fat btn-primary course-v2-btn{% if canChoose %} disabled {% endif %}"
+                      data-course-set="{{ courseSet|json_encode() }}"
+                      data-choose-url="{{ path('admin_v2_resource_market_choose_course_product') }}"
+                      style="{% if canChoose %} background-color: #ccc; border-color: #ccc;{% else %} border-color: #409eff; background-color: #409eff; {% endif %}">
+                {% if hasChosen %}
+                  {{ 'merchant.resource.has_chosen'|trans }}
+                {% elseif courseSet.wholeEditStatus|default() == 'unpublished' %}
+                  {{ 'merchant.resource.editing'|trans }}
+                {% else %}
+                  {{ 'merchant.resource.choose'|trans }}
+                {% endif %}
+              </button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

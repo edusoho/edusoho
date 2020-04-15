@@ -1163,6 +1163,23 @@ admin_v2:
             class: js-new-corner-mark
             visible: (not (setting('copyright.thirdCopyright', false) == 1) and not is_without_network()) #第三方授权和无网情况下不显示云市场
             children:
+                #内容云
+                admin_v2_basic_content_resource_group:
+                    name: admin_v2.basic_content_resource_group
+                    is_group: true
+                    children:
+                        #采购市场
+                        admin_v2_purchase_market_menu:
+                            name: admin_v2.purchase_market_menu
+                            children:
+                                admin_v2_purchase_market_tab:
+                                    name: admin_v2.purchase_market_tab
+                                    router_name: admin_v2_purchase_market
+                                    disable: true
+                                admin_v2_products_version_tab:
+                                    name: admin_v2.products_version_tab
+                                    router_name: admin_v2_content_resource_products_version
+                                    disable: true
                 #营销云
                 admin_v2_basic_app_center_group:
                     name: admin_v2.basic_app_center_group
