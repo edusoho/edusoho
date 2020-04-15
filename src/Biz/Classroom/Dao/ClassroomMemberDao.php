@@ -2,9 +2,9 @@
 
 namespace Biz\Classroom\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface ClassroomMemberDao extends GeneralDaoInterface
+interface ClassroomMemberDao extends AdvancedDaoInterface
 {
     public function countStudents($classroomId);
 

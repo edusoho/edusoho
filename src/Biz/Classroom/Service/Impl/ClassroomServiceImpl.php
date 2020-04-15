@@ -457,6 +457,86 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomMemberDao()->update($memberId, $deadline);
     }
 
+    public function updateMembersDeadlineByDay($classroomId, $userIds, $day, $waveType = 'plus')
+    {
+        $this->tryManageClassroom($classroomId);
+
+        if ($this->checkDayAndWaveTypeForUpdateDeadline($classroomId, $userIds, $day, $waveType)) {
+            $members = $this->findMembersByClassroomIdAndUserIds($classroomId, $userIds);
+            $updateDeadlines = [];
+            foreach ($members as $member) {
+                $member['deadline'] = $member['deadline'] > 0 ? $member['deadline'] : time();
+                $deadline = 'plus' == $waveType ? $member['deadline'] + $day * 24 * 60 * 60 : $member['deadline'] - $day * 24 * 60 * 60;
+                $updateDeadlines[] = ['deadline' => $deadline];
+            }
+            $this->getClassroomMemberDao()->batchUpdate(array_column($members, 'id'), $updateDeadlines, 'id');
+        }
+    }
+
+    public function updateMembersDeadlineByDate($classroomId, $userIds, $date)
+    {
+        $this->tryManageClassroom($classroomId);
+
+        $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date.' 23:59:59');
+        if ($this->checkDeadlineForUpdateDeadline($classroomId, $userIds, $date)) {
+            $members = $this->findMembersByClassroomIdAndUserIds($classroomId, $userIds);
+            $updateDeadlines = [];
+            foreach ($members as $member) {
+                $updateDeadlines[] = ['deadline' => $date];
+            }
+            $this->getClassroomMemberDao()->batchUpdate(array_column($members, 'id'), $updateDeadlines, 'id');
+        }
+    }
+
+    public function checkDayAndWaveTypeForUpdateDeadline($classroomId, $userIds, $day, $waveType = 'plus')
+    {
+        $classroom = $this->getClassroom($classroomId);
+        if ('forever' == $classroom['expiryMode']) {
+            return false;
+        }
+        $members = $this->searchMembers(
+            ['userIds' => $userIds, 'classroomId' => $classroomId],
+            ['deadline' => 'ASC'],
+            0,
+            1
+        );
+        if (empty($members)) {
+            return false;
+        }
+        if ('minus' == $waveType) {
+            $member = array_shift($members);
+            $maxAllowMinusDay = intval(($member['deadline'] - time()) / (24 * 3600));
+            if ($day > $maxAllowMinusDay) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function checkDeadlineForUpdateDeadline($classroomId, $userIds, $date)
+    {
+        $classroom = $this->getClassroom($classroomId);
+        if ('forever' == $classroom['expiryMode']) {
+            return false;
+        }
+        $members = $this->searchMembers(
+            ['userIds' => $userIds, 'classroomId' => $classroomId],
+            ['deadline' => 'ASC'],
+            0,
+            1
+        );
+        if (empty($members)) {
+            return false;
+        }
+        $member = array_shift($members);
+        if ($date < $member['deadline'] || time() > $date) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function findWillOverdueClassrooms()
     {
         $user = $this->getCurrentUser();

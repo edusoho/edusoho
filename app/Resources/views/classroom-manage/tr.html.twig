@@ -16,6 +16,7 @@
     {{ student.learningProgressPercent }}%
   {% endif %}
   </td>
+  <td style="vertical-align: middle;">{% if student.deadline|default(0) %}{{student.deadline|date('Y-n-d H:i')}}{% else %}{{'course.expiry_date.forever_mode'|trans}}{% endif %}</td>
   <td style="vertical-align: middle;">
     <div class="btn-group">
       {% if app.user.id != user.id %}

@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Classroom;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ExportHelp;
+use AppBundle\Common\TimeMachine;
 use Biz\Activity\ActivityException;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\LearningDataAnalysisService;
@@ -332,7 +333,7 @@ class ClassroomManageController extends BaseController
 
         $studentIds = $request->request->get('studentIds', []);
         if (empty($this->getUserService()->findUsersByIds($studentIds))) {
-            return $this->createJsonResponse(false);
+            return $this->createJsonResponse(['success' => false]);
         }
 
         $this->getClassroomService()->removeStudents($id, $studentIds, [
@@ -340,7 +341,7 @@ class ClassroomManageController extends BaseController
             'reason_type' => 'remove',
         ]);
 
-        return $this->createJsonResponse(true);
+        return $this->createJsonResponse(['success' => true]);
     }
 
     public function createAction(Request $request, $id)
@@ -573,36 +574,52 @@ class ClassroomManageController extends BaseController
         $userIds = $request->query->get('userIds', '');
         $userIds = is_array($userIds) ? $userIds : explode(',', $userIds);
 
-        if (1 == count($userIds)) {
-            $member = $this->getClassroomService()->getClassroomMember($classroomId, $userIds[0]);
-        }
-
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
 
-            if (empty($fields['deadline'])) {
-                $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+            if ('day' == $fields['updateType']) {
+                $this->getClassroomService()->updateMembersDeadlineByDay($classroomId, $userIds, $fields['day'], $fields['waveType']);
+
+                return $this->createJsonResponse(true);
             }
-
-            $deadline = ClassroomToolkit::buildMemberDeadline(array(
-                'expiryMode' => 'date',
-                'expiryValue' => strtotime($fields['deadline'].' 23:59:59'),
-            ));
-
-            $this->getClassroomService()->updateMemberDeadlineByMemberId($member['id'], array(
-                'deadline' => $deadline,
-            ));
+            $this->getClassroomService()->updateMembersDeadlineByDate($classroomId, $userIds, $fields['deadline']);
 
             return $this->createJsonResponse(true);
         }
+
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('classroom-manage/member/set-deadline-modal.html.twig', array(
+        return $this->render('classroom-manage/member/set-deadline-modal.html.twig', [
             'classroom' => $this->getClassroomService()->getClassroom($classroomId),
             'users' => $users,
             'userIds' => array_column($users, 'id'),
-            'member' => empty($member) ? [] : $member,
-        ));
+        ]);
+    }
+
+    public function checkDeadlineAction(Request $request, $classroomId)
+    {
+        $deadline = $request->query->get('deadline');
+        $deadline = TimeMachine::isTimestamp($deadline) ? $deadline : strtotime($deadline.' 23:59:59');
+        $userIds = $request->query->get('userIds');
+        $userIds = is_array($userIds) ? $userIds : explode(',', $userIds);
+        if ($this->getClassroomService()->checkDeadlineForUpdateDeadline($classroomId, $userIds, $deadline)) {
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->createJsonResponse(false);
+    }
+
+    public function checkDayAction(Request $request, $classroomId)
+    {
+        $waveType = $request->query->get('waveType');
+        $day = $request->query->get('day');
+        $userIds = $request->query->get('userIds');
+        $userIds = is_array($userIds) ? $userIds : explode(',', $userIds);
+        if ($this->getClassroomService()->checkDayAndWaveTypeForUpdateDeadline($classroomId, $userIds, $day, $waveType)) {
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->createJsonResponse(false);
     }
 
     public function teachersAction(Request $request, $id)

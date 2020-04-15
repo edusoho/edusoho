@@ -2672,6 +2672,14 @@ classroom_manage_member_deadline:
     path: /classroom/{classroomId}/manage/member/deadline
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:setClassroomMemberDeadline }
 
+classroom_manage_member_deadline_check_deadline:
+    path: /classroom/{classroomId}/manage/member/deadline/check
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:checkDeadline }
+
+classroom_manage_member_deadline_check_day:
+    path: /classroom/{classroomId}/manage/member/day/check
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:checkDay }
+
 classroom_member_deadline_reach:
     path: /classroom/{classroomId}/member/deadline/reach
     defaults: { _controller: AppBundle:Classroom/Classroom:deadlineReach }

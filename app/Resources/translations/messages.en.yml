@@ -2325,6 +2325,7 @@ classroom.buy_price_label: Price
 classroom.username: Username
 classroom.student_name: Student
 classroom.student_study_status: 'Learning progress'
+classroom.student_study_expiry_date: Available
 classroom.student_opertion: Action
 classroom.student_empty: 'No student'
 classroom.student_exporting: Exporting
