@@ -1,0 +1,90 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-lg" %}
+
+{% block title %}{{ 'admin_v2.app_center.resource_settlement.balance.detail'|trans }}{% endblock %}
+
+{% block body %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">{{ 'admin_v2.app_center.resource_settlement.balance.detail_information'|trans }}</div>
+    </div>
+    <div class="panel-body">
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>{{ 'admin_v2.app_center.resource_settlement.balance.title'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.balance.amount'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.balance.created_time'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.balance.action'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.balance.status'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>{{ detail.balance.title }}</td>
+          <td>
+            {% if detail.balance.type == 'inflow' %}
+              <span class="text-success">+ {{ detail.balance.amount|default(0) / 100|currency }}</span>
+            {% elseif detail.balance.type == 'outflow' %}
+              <span class="text-danger">- {{ detail.balance.amount|default(0) / 100 |currency }}</span>
+            {% endif %}
+          </td>
+          <td>{{ detail.balance.created_time|date('Y-m-d H:i:s') }}</td>
+          <td>{% if detail.balance.action == 'recharge' %}
+              {{ 'admin_v2.app_center.resource_settlement.balance.recharge_manually'|trans }}
+            {% elseif detail.balance.action == 'purchase' %}
+              {{ 'admin_v2.app_center.resource_settlement.balance.balance_payment'|trans }}
+            {% elseif detail.balance.action == 'refund' %}
+              {{ 'admin_v2.app_center.resource_settlement.balance.balance_refund'|trans }}
+            {% endif %}</td>
+          <td>{{ 'admin_v2.app_center.resource_settlement.balance.detail.success'|trans }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">{{ 'admin_v2.app_center.resource_settlement.balance.order.detail'|trans }}</div>
+    </div>
+    <div class="panel-body">
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>{{ 'admin_v2.app_center.resource_settlement.balance.order'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.balance.order.sn'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>{{ detail.order.title|default('-') }}</td>
+          <td>{{ detail.order.sn|default('-') }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">{{ 'admin_v2.app_center.resource_settlement.balance.operation.detail'|trans }}</div>
+    </div>
+    <div class="panel-body">
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>{{ 'admin_v2.app_center.resource_settlement.balance.operator'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>{{ detail.operator|default('-') }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+{% endblock %}

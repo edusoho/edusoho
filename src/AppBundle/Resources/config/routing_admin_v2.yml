@@ -1971,6 +1971,24 @@ admin_cloud_doc:
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:doc }
     permissions: [admin_v2_my_cloud_overview]
 
+# 应用中心-内容云-内容结算-余额明细
+admin_v2_resource_settlement_balance:
+    path:  /app/resources_settlement/balance
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourceSettlement:balance }
+
+admin_v2_resource_settlement_balance_modal:
+  path:  /app/resources_settlement/balance/{id}
+  defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourceSettlement:balanceModal }
+
+# 应用中心-内容云-内容结算-采购单管理
+admin_v2_resource_settlement_order:
+    path:  /app/resources_settlement/order
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourceSettlement:order }
+
+# 应用中心-内容云-内容结算-已选商品
+admin_v2_resource_settlement_product:
+    path:  /app/resources_settlement/product
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourceSettlement:product }
 # 应用中心-营销云-营销应用
 admin_v2_app_center:
     path:  /app/center/{postStatus}
