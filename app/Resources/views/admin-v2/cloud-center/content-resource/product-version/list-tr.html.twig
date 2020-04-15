@@ -1,0 +1,65 @@
+{% import "macro.html.twig" as web_macro %}
+
+<table class="table table-striped table-hover" id="order-table">
+  <thead>
+  <tr>
+    <th width="30%">{{ 'merchant.content_resource.product_title'|trans }}</th>
+    <th width="30%">{{ 'merchant.content_resource.product_change_log_publish'|trans }}</th>
+    <th>{{ 'merchant.content_resource.product_change_publish_time'|trans }} </th>
+    <th>{{ 'merchant.content_resource.product_version_num'|trans }}</th>
+    <th width='120'>{{'merchant.content_resource.operation'|trans}}</th>
+  </tr>
+  </thead>
+  <tbody class="js-table-container">
+  {% for index,productVersion in productVersionList|default() %}
+    {% set productCourse = courses[productVersion.productId]|default() %}
+    {% set productCourseSet = courseSets[productCourse.id]|default() %}
+
+    {% if startDateTime > 0 and productVersion.updatedTime < startDateTime %}
+      {% set startDateShow = 0 %}
+    {% endif %}
+    {% if endDateTime > 0 and productVersion.updatedTime > endDateTime %}
+      {% set endDateShow = 0 %}
+    {% endif %}
+    {% set isShow = startDateShow|default(1) and endDateShow|default(1) and (productCourseSet.sourceVersion < productVersion.productVersion) %}
+    {% if isShow and not hasData|default(0) %}
+      {% set hasData = 1 %}
+    {% endif %}
+
+    {% if productCourseSet and isShow %}
+      <tr id="product-version-table" style="word-break: break-all;word-wrap: break-word;">
+        <td>
+          <img src="{{ filepath(course_set_cover(productCourseSet, 'small'), 'courseSet.png') }}" class="img-responsive" style="float: left;margin-right: 10px;width: 45%;">
+          <span title="《{{ productCourseSet.title }}》">{{ 'course'|trans }}《{{ productCourseSet.title|sub_text(25) }}》</span>
+        </td>
+        <td>
+          <div class="middle-info pull-left short-long-text">
+            <div class="short-text text-muted">{{ productVersion.changeLog|plain_text(80) }} <span
+                  class="trigger">({{ 'admin.app_center.description_open'|trans }})</span></div>
+            <div class="long-text text-muted" style="color:black;">{{ productVersion.changeLog|raw }} <span class="trigger">({{ 'admin.app_center.description_close'|trans }})</span></div>
+          </div>
+        </td>
+        <td>{{ productVersion.updatedTime|date('Y-m-d') }}</td>
+        <td>
+          <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_content_resource_products_version', {productId: productVersion.productId}) }}">{{ 'merchant.content_resource.product_version'|trans }}{{ productVersion.productVersion }}</a>
+        </td>
+        <td>
+          <a target="_blank" href="{{ path('course_set_manage_course_tasks', {courseSetId: productCourseSet.id, courseId: productCourse.id, hasNewVersion: 1}) }}">{{'merchant.content_resource.product_version.view_btn'|trans}}</a>
+
+          {% if productVersion.status|default('') == 'published' %}
+            <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_content_resource_update_product_version', {productId: productVersion.productId}) }}">{{ 'merchant.content_resource.product_version.update_btn'|trans }}</a>
+          {% endif %}
+        </td>
+      </tr>
+    {% endif %}
+    {% if loop.last == index +1 and not hasData|default(0) %}
+      <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+    {% endif %}
+  {% else %}
+    <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+<div class="paginator">
+{#  {{ admin_macro.paginator(paginator) }}#}
+</div>

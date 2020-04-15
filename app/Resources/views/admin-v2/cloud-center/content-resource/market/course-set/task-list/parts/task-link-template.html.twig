@@ -1,0 +1,34 @@
+{% set isOvertime = (course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U')) or (course.expiryEndDate and course.expiryEndDate < 'now'|date('U')) %}
+
+<tmp hide-if="{isItemDisplayedAsUnpublished}">
+
+  <span class="title" href="javascript:;" data-toggle="modal" style="margin-top:-6px">{getTaskName}</span>
+  <span class="right-menu color-gray ">
+  <span class="hidden-xs mr20" display-if="{hasWatchLimitRemaining}">
+    {{ 'course.task.learning.remaining.watch_time'|trans }}：{watchLimitRemaining}
+  </span>
+  {% set now = date().timestamp %}
+
+  <tmp display-if="{isLive}">
+    <tmp display-if="{isLiveReplayGenerated}">{{ 'course.block_grid.live_back'|trans }}</tmp>
+
+    <tmp hide-if="{isLiveReplayGenerated}">
+      <tmp display-if="{isLiveNotStarted}">{activityStartTimeStr}</tmp>
+
+      <tmp display-if="{isLiveStarting}">{{ 'course.block_grid.onlive'|trans }}</tmp>
+
+      <tmp display-if="{isLiveFinished}">{{ 'course.block_grid.live_finish'|trans }}</tmp>
+    </tmp>
+  </tmp>
+
+  <tmp hide-if="{isLive}">{activityLength}</tmp>
+  <i class="{getMetaIcon}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{getMetaName}任务"
+     data-container="body"></i>
+</span>
+
+</tmp>
+
+<tmp display-if="{isItemDisplayedAsUnpublished}">
+  <span class="title">{getTaskName}</span>
+  <span class="right-menu color-gray">{{ 'course.catalogue.task_status.looking_forward'|trans }}</span>
+</tmp>
