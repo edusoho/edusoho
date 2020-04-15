@@ -1980,6 +1980,10 @@ admin_v2_resource_settlement_balance_modal:
   path:  /app/resources_settlement/balance/{id}
   defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourceSettlement:balanceModal }
 
+admin_v2_resource_settlement_order_modal:
+    path:  /app/resources_settlement/order/{sn}
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourceSettlement:orderModal }
+
 # 应用中心-内容云-内容结算-采购单管理
 admin_v2_resource_settlement_order:
     path:  /app/resources_settlement/order

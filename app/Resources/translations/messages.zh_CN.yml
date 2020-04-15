@@ -10829,8 +10829,46 @@ admin_v2.app_center.resource_settlement.balance.operator: 操作人
 
 admin_v2.app_center.resource_settlement.order.create_time: 创建时间
 admin_v2.app_center.resource_settlement.filter_type: 筛选条件
+admin_v2.app_center.resource_settlement.filter_placeholder: 请选择状态
 admin_v2.app_center.resource_settlement.order.pay: 待支付
+admin_v2.app_center.resource_settlement.order.paid: 已支付
+admin_v2.app_center.resource_settlement.order.refunded: 已退款
+admin_v2.app_center.resource_settlement.switch_show_debt:  仅看欠款（已欠款%amount%）
+
 admin_v2.app_center.resource_settlement.order.title: 采购单名称
+admin_v2.app_center.resource_settlement.order.sn: 采购单号
+admin_v2.app_center.resource_settlement.order.coop_price: 合作面额
+admin_v2.app_center.resource_settlement.order.price_amount: 实际支付价
+admin_v2.app_center.resource_settlement.order.debt_amount: 欠款金额
+admin_v2.app_center.resource_settlement.order.status: 采购单状态
+
+admin_v2.app_center.resource_settlement.order.detail: 采购单详情
+admin_v2.app_center.resource_settlement.order.detail.information: 采购单信息
+admin_v2.app_center.resource_settlement.order.detail.price_amount: 商品合作面额
+admin_v2.app_center.resource_settlement.order.detail.discount: 优惠价格
+admin_v2.app_center.resource_settlement.order.detail.pay_amount: 实际采购单价
+admin_v2.app_center.resource_settlement.order.detail.status: 订单状态
+
+admin_v2.app_center.resource_settlement.order.detail.pay_information: 支付信息
+admin_v2.app_center.resource_settlement.order.detail.pay_time: 支付时间
+
+admin_v2.app_center.resource_settlement.order.detail.order_information: 订单信息
+admin_v2.app_center.resource_settlement.order.detail.order_title: 订单名称
+admin_v2.app_center.resource_settlement.order.detail.order_sn: 订单号
+admin_v2.app_center.resource_settlement.order.detail.order_user: 订单用户
+
+admin_v2.app_center.resource_settlement.product.id: 编号
+admin_v2.app_center.resource_settlement.product.time: 选择时间
+admin_v2.app_center.resource_settlement.product.student_number: 用户数
+admin_v2.app_center.resource_settlement.product.max_course_price: 实际售价
+admin_v2.app_center.resource_settlement.product.suggestion_price: 建议售价
+admin_v2.app_center.resource_settlement.product.cooperation_price: 合作面额
+admin_v2.app_center.resource_settlement.product.item_status: 商品状态
+admin_v2.app_center.resource_settlement.product.item_status.published: 已上架
+admin_v2.app_center.resource_settlement.product.item_status.closed: 已下架
+
+admin_v2.app_center.resource_settlement.empty: 暂无数据
+
 
 
 
