@@ -23,6 +23,7 @@ class AppDevice extends AbstractResource
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
+        $params = ArrayToolkit::parts($params, ['imei', 'platform', 'version', 'screenresolution', 'kernel']);
         if ($this->getMobileDeviceService()->addMobileDevice($params)) {
             $this->getLogService()->info(MobileBaseController::MOBILE_MODULE, 'regist_device', '注册客户端', $params);
         }
