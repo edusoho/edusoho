@@ -9496,3 +9496,22 @@ admin_v2.app_center.resource_settlement.order.create_time: Created time
 admin_v2.app_center.resource_settlement.filter_type: Filter
 admin_v2.app_center.resource_settlement.order.pay: Paying
 admin_v2.app_center.resource_settlement.order.title: Title
+
+
+
+merchant.content_resource.product_title: Product name
+merchant.content_resource.product_change_publish_time: Publish time
+merchant.content_resource.product_change_log_publish: Publish changelog
+merchant.content_resource.product_change_log: update changelog
+merchant.content_resource.product_version_date: Version date
+merchant.content_resource.product_version_num: Version num
+merchant.content_resource.operation: Operation
+merchant.content_resource.product_version: Version
+merchant.content_resource.product_version.view_btn: Show Detail
+merchant.content_resource.product_version.update: Update
+merchant.content_resource.product_version.update_btn: Update
+merchant.content_resource.course_product_update: Course Update
+merchant.content_resource.course_product_update_tips: After confirming the update course, the latest version content provided by the supplier will be synchronized, confirm the update?
+
+
+

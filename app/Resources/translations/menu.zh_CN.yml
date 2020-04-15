@@ -770,6 +770,12 @@ admin_v2.cloud_service.sms_overview_tab: 概览
 admin_v2.cloud.im_setting_menu: 即时聊天设置
 admin_v2.cloud.im_setting.basic_tab: 即时聊天设置
 
+# 应用中心-内容云-内容市场：
+admin_v2.basic_content_resource_group: 内容云
+admin_v2.purchase_market_menu: 内容市场
+admin_v2.purchase_market_tab: 采购市场
+admin_v2.products_version_tab: 内容更新
+
 # 数据-数据统计
 admin_v2.data_statictics.analysis.basic_group: 数据分析
 admin_v2.data_statistics.statistics.menu: 数据统计

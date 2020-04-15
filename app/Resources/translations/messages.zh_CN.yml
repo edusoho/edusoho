@@ -10831,3 +10831,19 @@ admin_v2.app_center.resource_settlement.order.create_time: 创建时间
 admin_v2.app_center.resource_settlement.filter_type: 筛选条件
 admin_v2.app_center.resource_settlement.order.pay: 待支付
 admin_v2.app_center.resource_settlement.order.title: 采购单名称
+
+
+
+merchant.content_resource.product_title: 商品名称
+merchant.content_resource.product_change_publish_time: 发布时间
+merchant.content_resource.product_change_log_publish: 发布日志
+merchant.content_resource.product_change_log: 更新日志
+merchant.content_resource.product_version_date: 版本时间
+merchant.content_resource.product_version_num: 发布版本
+merchant.content_resource.operation: 操作
+merchant.content_resource.product_version: 版本
+merchant.content_resource.product_version.view_btn: 查看
+merchant.content_resource.product_version.update: 更新
+merchant.content_resource.product_version.update_btn: 更新
+merchant.content_resource.course_product_update: 课程更新
+merchant.content_resource.course_product_update_tips: 确定更新课程后，将会同步供应商提供的最新版本内容，确认更新？
