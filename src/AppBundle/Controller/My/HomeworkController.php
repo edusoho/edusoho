@@ -7,6 +7,12 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\HomeworkActivityService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class HomeworkController extends BaseController
 {
@@ -91,46 +97,82 @@ class HomeworkController extends BaseController
     public function listAction(Request $request, $status)
     {
         $user = $this->getUser();
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('error', '请先登录！', '', 5, $this->generateUrl('login'));
+        }
+
+        $courseIds = ArrayToolkit::column(
+            $this->getCourseMemberService()->searchMembers(array('userId' => $user['id']), array(), 0, PHP_INT_MAX),
+            'courseId'
+        );
+        if (empty($courseIds)) {
+            return $this->render('my/homework/my-homework-list.html.twig', array(
+                'answerRecords' => array(),
+                'status' => $status,
+            ));
+        }
+        $activities = ArrayToolkit::index(
+            $this->getActivityService()->search(array('courseIds' => $courseIds, 'mediaType' => 'homework'), array(), 0, PHP_INT_MAX),
+            'mediaId'
+        );
+        $homeworkActivities = ArrayToolkit::index(
+            $this->getHomeworkActivityService()->findByIds(array_keys($activities)),
+            'answerSceneId'
+        );
+        if (empty(array_keys($homeworkActivities))) {
+            return $this->render('my/homework/my-homework-list.html.twig', array(
+                'answerRecords' => array(),
+                'status' => $status,
+            ));
+        }
 
         $conditions = array(
+            'answer_scene_ids' => array_keys($homeworkActivities),
+            'user_id' => $user['id'],
             'status' => $status,
-            'type' => 'homework',
-            'userId' => $user['id'],
         );
 
         $paginator = new Paginator(
             $request,
-            $this->getTestpaperService()->searchTestpaperResultsCount($conditions),
+            $this->getAnswerRecordService()->count($conditions),
             10
         );
 
-        $paperResults = $this->getTestpaperService()->searchTestpaperResults(
+        $answerRecords = $this->getAnswerRecordService()->search(
             $conditions,
-            array('updateTime' => 'DESC'),
+            array('begin_time' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $courseIds = ArrayToolkit::column($paperResults, 'courseId');
+        if (empty($answerRecords)) {
+            return $this->render('my/homework/my-homework-list.html.twig', array(
+                'answerRecords' => array(),
+                'status' => $status,
+            ));
+        }
+
+        $answerReports = ArrayToolkit::index(
+            $this->getAnswerReportService()->findByIds(ArrayToolkit::column($answerRecords, 'answer_report_id')),
+            'id'
+        );
+        $tasks = ArrayToolkit::index(
+            $this->getTaskService()->findTasksByActivityIds(ArrayToolkit::column($activities, 'id')),
+            'activityId'
+        );
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-
-        $courseSetIds = ArrayToolkit::column($paperResults, 'courseSetId');
-        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
-
-        $activityIds = ArrayToolkit::column($paperResults, 'lessonId');
-        $tasks = $this->getTaskService()->findTasksByActivityIds($activityIds);
-
-        $homeworkIds = ArrayToolkit::column($paperResults, 'testId');
-        $homeworks = $this->getTestpaperService()->findTestpapersByIds($homeworkIds);
+        $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($answerRecords, 'assessment_id'));
 
         return $this->render('my/homework/my-homework-list.html.twig', array(
-            'paperResults' => $paperResults,
+            'homeworkActivities' => $homeworkActivities,
+            'answerReports' => $answerReports,
+            'answerRecords' => $answerRecords,
             'paginator' => $paginator,
             'courses' => $courses,
-            'courseSets' => $courseSets,
-            'status' => $status,
-            'homeworks' => $homeworks,
+            'assessments' => $assessments,
             'tasks' => $tasks,
+            'activities' => $activities,
+            'status' => $status,
         ));
     }
 
@@ -186,5 +228,53 @@ class HomeworkController extends BaseController
     protected function getTaskService()
     {
         return $this->getBiz()->service('Task:TaskService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return HomeworkActivityService
+     */
+    protected function getHomeworkActivityService()
+    {
+        return $this->getBiz()->service('Activity:HomeworkActivityService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->getBiz()->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerReportService');
     }
 }
