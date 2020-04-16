@@ -1,8 +1,7 @@
 <template>
-  <div id="app">
+  <div id="app" class="test-vue">
     <item-preview
       :item="item"
-      :showCKEditorData="showCKEditorData"
     ></item-preview>
   </div>
 </template>
@@ -11,12 +10,7 @@
   export default {
     data() {
       return {
-        item: JSON.parse($('[name=item]').val()),
-        showCKEditorData: {
-          publicPath: '/static-dist/libs/es-ckeditor/ckeditor.js',
-          // filebrowserImageUploadUrl: $('[name=image_upload_url]').val(),
-          // filebrowserImageDownloadUrl: $('[name=image_download_url]').val(),
-        },
+        item: JSON.parse($('[name=item]').val())
       }
     }
   }

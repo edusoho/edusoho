@@ -5,9 +5,11 @@
       :assessment="assessment"
       :answerRecord="answerRecord"
       :answerScene="answerScene"
+      :showCKEditorData="showCKEditorData"
       @getAnswerData="getAnswerData"
       @saveAnswerData="saveAnswerData"
       @checkResult="checkResult"
+      @showCKEditorData="showCKEditorData"
     ></item-engine>
   </div>
 </template>
@@ -18,9 +20,9 @@
     data() {
       return {
         showCKEditorData: {
-          publicPath: '/static-dist/libs/es-ckeditor/ckeditor.js',
-          filebrowserImageUploadUrl: $('[name=image_upload_url]').val(),
-          filebrowserImageDownloadUrl: $('[name=image_download_url]').val(),
+          publicPath: $('[name=ckeditor_path]').val(),
+          filebrowserImageUploadUrl: $('[name=ckeditor_image_upload_url]').val(),
+          filebrowserImageDownloadUrl: $('[name=ckeditor_image_download_url]').val(),
         },
       };
     },
@@ -33,6 +35,9 @@
     },
     methods: {
       getAnswerData(assessmentResponse) {
+        const that = this;
+        assessmentResponse.answer_record_id = this.answerRecord.id
+        assessmentResponse.used_time = 0
         $.ajax({
           url: $("[name='answer_engine_submit_url']").val(),
           contentType: 'application/json;charset=utf-8',
@@ -43,7 +48,7 @@
           }
         }).done(function (resp) {
           that.emitter.emit('finish', {data: ''});
-          location.href = $('[name=submit_goto_url]').val();
+          location.replace = $('[name=submit_goto_url]').val();
         })
       },
       checkResult(data) {

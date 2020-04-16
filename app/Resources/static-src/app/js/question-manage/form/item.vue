@@ -41,9 +41,9 @@
         subject: item,
         type: $('[name=type]').val(),
         showCKEditorData: {
-          publicPath: '/static-dist/libs/es-ckeditor/ckeditor.js',
-          filebrowserImageUploadUrl: $('[name=image_upload_url]').val(),
-          filebrowserImageDownloadUrl: $('[name=image_download_url]').val(),
+          publicPath: $('[name=ckeditor_path]').val(),
+          filebrowserImageUploadUrl: $('[name=ckeditor_image_upload_url]').val(),
+          filebrowserImageDownloadUrl: $('[name=ckeditor_image_download_url]').val(),
         },
       };
     },
