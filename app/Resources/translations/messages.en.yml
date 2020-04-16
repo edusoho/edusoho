@@ -9496,8 +9496,45 @@ admin_v2.app_center.resource_settlement.balance.operator: Operator
 
 admin_v2.app_center.resource_settlement.order.create_time: Created time
 admin_v2.app_center.resource_settlement.filter_type: Filter
+admin_v2.app_center.resource_settlement.filter_placeholder: Choose status
 admin_v2.app_center.resource_settlement.order.pay: Paying
+admin_v2.app_center.resource_settlement.order.paid: Paid
+admin_v2.app_center.resource_settlement.order.refunded: Refunded
+admin_v2.app_center.resource_settlement.switch_show_debt:  Only show debt(%amount% owed)
+
 admin_v2.app_center.resource_settlement.order.title: Title
+admin_v2.app_center.resource_settlement.order.sn: Sn
+admin_v2.app_center.resource_settlement.order.coop_price: Cooperation Denomination
+admin_v2.app_center.resource_settlement.order.price_amount: Actual Paid
+admin_v2.app_center.resource_settlement.order.debt_amount: Amount owed
+admin_v2.app_center.resource_settlement.order.status: Status
+
+admin_v2.app_center.resource_settlement.order.detail: Order Detail
+admin_v2.app_center.resource_settlement.order.detail.information: Order Information
+admin_v2.app_center.resource_settlement.order.detail.price_amount: Cooperation Denomination
+admin_v2.app_center.resource_settlement.order.detail.discount: Discount
+admin_v2.app_center.resource_settlement.order.detail.pay_amount: Actual Price
+admin_v2.app_center.resource_settlement.order.detail.status: Status
+
+admin_v2.app_center.resource_settlement.order.detail.pay_information: Payment Information
+admin_v2.app_center.resource_settlement.order.detail.pay_time: Payment time
+
+admin_v2.app_center.resource_settlement.order.detail.order_information: Order Information
+admin_v2.app_center.resource_settlement.order.detail.order_title: Title
+admin_v2.app_center.resource_settlement.order.detail.order_sn: Sn
+admin_v2.app_center.resource_settlement.order.detail.order_user: User
+
+admin_v2.app_center.resource_settlement.product.id: Id
+admin_v2.app_center.resource_settlement.product.time: Choose Time
+admin_v2.app_center.resource_settlement.product.student_number: Student Number
+admin_v2.app_center.resource_settlement.product.max_course_price: Actual Price
+admin_v2.app_center.resource_settlement.product.suggestion_price: Suggested  Price
+admin_v2.app_center.resource_settlement.product.cooperation_price: Cooperation Denomination
+admin_v2.app_center.resource_settlement.product.item_status: Status
+admin_v2.app_center.resource_settlement.product.item_status.published: Published
+admin_v2.app_center.resource_settlement.product.item_status.closed: Closed
+
+admin_v2.app_center.resource_settlement.empty: Empty
 
 
 

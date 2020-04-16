@@ -2,13 +2,8 @@
 
 {% set menu="admin_v2_resource_settlement_balance" %}
 
-{% block styleshoot %}
-  {{ parent() }}
-  <link href="{{ asset('static-dist/app/css/admin-v2.css') }}" rel="stylesheet"/>
-{% endblock %}
-
 {% block main %}
-  <div class="jumbotron mbm ptl pbl">
+  <div class="well mbm ptl pbl">
     <div class="row admin-data">
       <div class="col-md-3 text-center">
         <div class="admin-data__value">{{ merchant.balance|default(0) / 100|currency }}</div>
@@ -18,7 +13,8 @@
         <div class="resource-settlement-float-center">
           <span>{{ 'admin_v2.app_center.resource_settlement.debt'|trans }}：</span>
           {{ merchant.debt_sum|default(0) / 100 }}
-          <a href="{{ path('admin_v2_resource_settlement_order') }}">{{ 'admin_v2.app_center.resource_settlement.more'|trans }} >>></a>
+          <a href="{{ path('admin_v2_resource_settlement_order') }}">{{ 'admin_v2.app_center.resource_settlement.more'|trans }}
+            >>></a>
         </div>
       </div>
     </div>
@@ -87,7 +83,14 @@
           {% endif %}
         </td>
         <td>
-          <a href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_resource_settlement_balance_modal', {id:item.id}) }}">{{ 'site.btn.detail'|trans }}</a>
+          <a href="#modal" data-toggle="modal"
+             data-url="{{ path('admin_v2_resource_settlement_balance_modal', {id:item.id}) }}">{{ 'site.btn.detail'|trans }}</a>
+        </td>
+      </tr>
+    {% else %}
+      <tr>
+        <td colspan="20">
+          <div class="empty">{{ 'admin_v2.app_center.resource_settlement.empty'|trans }}</div>
         </td>
       </tr>
     {% endfor %}

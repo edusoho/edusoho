@@ -17,16 +17,14 @@ class ResourceSettlementController extends BaseController
 
     public function balanceAction(Request $request)
     {
-//        TODO： merchant获取
-//        TODO： balanceResult获取
-        $merchant = $this->getS2B2CFacadeService()->getMe();
+        // TODO： balanceResult获取
         $resultSet = $this->mockBalanceResult(35);
         $paginator = new Paginator($request, $resultSet['count'], $this->pageSize);
 
         return $this->render('admin-v2/resource-settlement/balance/index.html.twig', array(
             'paginator' => $paginator,
             'items' => $resultSet['items'],
-            'merchant' => $merchant,
+            'merchant' => $this->getS2B2CFacadeService()->getMe(),
             'total' => $resultSet['count'],
             'pageSize' => $this->pageSize,
         ));
@@ -45,39 +43,46 @@ class ResourceSettlementController extends BaseController
 
     public function orderAction(Request $request)
     {
-//        TODO： merchant获取
-//        TODO： balanceResult获取
-        $merchant = $this->getS2B2CFacadeService()->getMe();
-        $resultSet = $this->mockBalanceResult(35);
+        // TODO： balanceResult获取
+        $resultSet = $this->mockOrderResult(35);
         $paginator = new Paginator($request, $resultSet['count'], $this->pageSize);
 
         return $this->render('admin-v2/resource-settlement/order/index.html.twig', array(
             'paginator' => $paginator,
             'items' => $resultSet['items'],
-            'merchant' => $merchant,
+            'merchant' => $this->getS2B2CFacadeService()->getMe(),
             'total' => $resultSet['count'],
             'pageSize' => $this->pageSize,
         ));
     }
 
+    public function orderModalAction(Request $request, $sn)
+    {
+        // TODO： 获取detail
+        $detail = $this->mockOrderDetail($sn);
+        if (empty($detail)) {
+            throw $this->createNotFoundException("Flow#{$sn} not found");
+        }
+
+        return $this->render('admin-v2/resource-settlement/order/modal.html.twig', array(
+            'detail' => $detail,
+            'merchant' => $this->getS2B2CFacadeService()->getMe(),
+        ));
+    }
+
     public function productAction(Request $request)
     {
-//        $merchant = $this->getS2B2CService()->getMe();
-
-        $merchant = array('supplier_name' => '供应商名称',
-            'supplier_contact_name' => '联系人',
-            'coop_level_name' => '合作关系',
-            'supplier_mobile' => 'XXXXXXXXXXX',
-            'supplier_email' => 'xxxxxxx@163.com',
-            'supplier_province' => 'xx省',
-            'supplier_city' => 'xx市',
-            'supplier_area' => 'xx区',
-            'supplier_address' => 'xx地址', );
+        $resultSet = $this->mockProductResult(25);
+        $paginator = new Paginator($request, $resultSet['count'], $this->pageSize);
 
         return $this->render(
             'admin-v2/resource-settlement/product.html.twig',
             array(
-                'merchant' => $merchant,
+                'paginator' => $paginator,
+                'items' => $resultSet['items'],
+                'merchant' => $this->getS2B2CFacadeService()->getMe(),
+                'total' => $resultSet['count'],
+                'pageSize' => $this->pageSize,
             ));
     }
 
@@ -93,7 +98,8 @@ class ResourceSettlementController extends BaseController
             'supplier_area' => 'xx区',
             'supplier_address' => 'xx地址',
             'balance' => 10000,
-            'debt_sum' => 0,
+            'debt_sum' => 1,
+            'name' => 'merchant名',
         );
     }
 
@@ -150,6 +156,98 @@ class ResourceSettlementController extends BaseController
                 'title' => '采购单title'.rand(10, 99),
                 'sn' => '20200401131457546'.rand(10, 99),
             ),
+        );
+    }
+
+    protected function mockOrderResult($count = 30)
+    {
+        $status = array('success', 'refunded', 'purchase');
+
+        $balance = 1000000;
+        $i = 0;
+        while ($i < $count) {
+            $amount = rand(1, 10000);
+            $balance -= $amount;
+            $result['items'][] = array(
+                'id' => rand(1, 100),
+                'sn' => '20200401131457546'.rand(10, 99),
+                'created_time' => '1586'.rand(100000, 999999),
+                'status' => $status[array_rand($status, 1)], //recharge purchase refund
+                'title' => '测试名称购买'.rand(1, 99),
+                'coop_price' => rand(100, 9900),
+                'price_amount' => $amount,
+                'debt_amount' => 0,
+            );
+            ++$i;
+        }
+
+        $result['count'] = $count;
+
+        return $result;
+    }
+
+    protected function mockProductResult($count = 30)
+    {
+        $i = 0;
+        $status = array('published', 'closed');
+        while ($i < $count) {
+            $result['items'][] = array(
+                'id' => rand(1, 100),
+                'createdTime' => '1586'.rand(100000, 999999),
+                'title' => '测试Product名'.rand(1, 99),
+                'status' => $status[array_rand($status, 1)],
+                'studentNum' => rand(1, 10),
+                'maxCoursePrice' => 100,
+                'suggestionPrice' => 100,
+                'cooperationPrice' => 2,
+            );
+            ++$i;
+        }
+
+        $result['count'] = $count;
+
+        return $result;
+    }
+
+    private function mockOrderDetail($sn)
+    {
+        $actions = array('recharge', 'refund', 'purchase');
+        $types = array('inflow', 'outflow');
+
+        $amount = rand(1, 10000);
+
+        $flows = array();
+
+        for ($i = 0; $i < 5; ++$i) {
+            $flows[] = array(
+                'amount' => $amount,
+                'sn' => '20200401131457546'.rand(10, 99),
+                'action' => $actions[array_rand($actions, 1)],
+                'type' => $types[array_rand($types, 1)], //inflow outflow
+                'created_time' => '1586'.rand(100000, 999999),
+            );
+        }
+
+        return array(
+            'order' => array(
+                'id' => rand(1, 100),
+                'sn' => $sn,
+                'created_time' => '1586'.rand(100000, 999999),
+                'status' => $actions[array_rand($actions, 1)], //recharge purchase refund
+                'title' => '测试名称购买'.rand(1, 99),
+                'coop_price' => rand(100, 9900),
+                'price_amount' => $amount,
+                'debt_amount' => 0,
+                'paid_coin_amount' => 100,
+                'create_extra' => array(
+                    'merchant_order' => array(
+                        'title' => '测试名称购买'.rand(1, 99),
+                        'sn' => '20200401131457546'.rand(10, 99),
+                        'nickname' => '用户'.rand(1, 10),
+                    ),
+                ),
+            ),
+            'flows' => $flows,
         );
     }
 
