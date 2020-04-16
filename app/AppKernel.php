@@ -191,6 +191,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz->register(new \Biz\System\LogServiceProvider());
         $biz->register(new \Biz\DefaultServiceProvider());
         $biz->register(new \Biz\DefaultSdkProvider());
+        $biz->register(new \Biz\S2B2C\S2B2CProvider());
 
         $collector = $this->getContainer()->get('biz.service_provider.collector');
         foreach ($collector->all() as $provider) {

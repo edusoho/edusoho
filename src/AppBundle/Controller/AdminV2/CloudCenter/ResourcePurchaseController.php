@@ -7,6 +7,7 @@ use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -27,13 +28,8 @@ class ResourcePurchaseController extends BaseController
      */
     protected function courseSetMarket(Request $request)
     {
-        $supplierSiteSetting = [
-            'logo' => 'zyp.s2.wyxtest.edusoho.cn/files/system/2020/04-06/23101138dc16010027.png',
-            'name' => '阔知分课内容市场',
-        ];
-        $merchant = [
-            'status' => 'active',
-        ];
+        $supplierSiteSetting = $this->getS2B2CFacadeService()->getSupplier();
+        $merchant = $this->getS2B2CFacadeService()->getMe();
 
         return $this->render(
             'admin-v2/cloud-center/content-resource/market/course-set/explore.html.twig',
@@ -93,16 +89,12 @@ class ResourcePurchaseController extends BaseController
             100,
         ];
 
-        $merchant = [
-            'status' => 'active',
-        ];
+        $merchant = $this->getS2B2CFacadeService()->getMe();
 
         $paginator = new Paginator($request, $total, $pageSize);
         $paginator->setBaseUrl($this->generateUrl('admin_v2_purchase_market_products_list'));
 
-        $supplierSettings = [
-            'supplierId' => 0,
-        ];
+        $supplierSettings = $this->getS2B2CFacadeService()->getSupplier();
         if (!empty($supplierSettings['supplierId'])) {
             $chosenCourses = $this->getCourseSetService()->findCourseSetByOriginPlatformId($supplierSettings['supplierId']);
             $chosenCourses = ArrayToolkit::index($chosenCourses, 'sourceCourseSetId');
@@ -132,9 +124,7 @@ class ResourcePurchaseController extends BaseController
         /**
          * mock
          */
-        $merchant = [
-            'status' => 'active',
-        ];
+        $merchant = $this->getS2B2CFacadeService()->getMe();
 
         return $this->render(
             'admin-v2/cloud-center/content-resource/market/course-set/show.html.twig', array(
@@ -181,9 +171,7 @@ class ResourcePurchaseController extends BaseController
         /**
          * mock
          */
-        $merchant = [
-            'status' => 'active',
-        ];
+        $merchant = $this->getS2B2CFacadeService()->getMe();
 
         return $this->render(
             'admin-v2/cloud-center/content-resource/product-version/list.html.twig',
@@ -208,9 +196,7 @@ class ResourcePurchaseController extends BaseController
             /**
              * mock
              */
-            $merchant = $merchant = [
-                'status' => 'active',
-            ];
+            $merchant = $merchant = $this->getS2B2CFacadeService()->getMe();
             if (empty($merchant['status']) || 'active' != $merchant['status'] || 'cooperation' != $merchant['coop_status']) {
                 return $this->createJsonResponse(array('status' => false, 'error' => '更新失败'));
             }
@@ -268,5 +254,13 @@ class ResourcePurchaseController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->createService('S2B2C:S2B2CFacadeService');
     }
 }

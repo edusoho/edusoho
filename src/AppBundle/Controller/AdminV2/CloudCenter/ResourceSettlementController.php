@@ -5,6 +5,7 @@ namespace AppBundle\Controller\AdminV2\CloudCenter;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Course\Service\CourseSetService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\S2B2C\SupplierPlatformApi;
 use Codeages\Biz\Order\Service\Impl\OrderServiceImpl;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,15 +17,14 @@ class ResourceSettlementController extends BaseController
 
     public function balanceAction(Request $request)
     {
-//        TODO： merchant获取
-//        TODO： balanceResult获取
+        // TODO： balanceResult获取
         $resultSet = $this->mockBalanceResult(35);
         $paginator = new Paginator($request, $resultSet['count'], $this->pageSize);
 
         return $this->render('admin-v2/resource-settlement/balance/index.html.twig', array(
             'paginator' => $paginator,
             'items' => $resultSet['items'],
-            'merchant' => $this->mockMerchant(),
+            'merchant' => $this->getS2B2CFacadeService()->getMe(),
             'total' => $resultSet['count'],
             'pageSize' => $this->pageSize,
         ));
@@ -43,15 +43,14 @@ class ResourceSettlementController extends BaseController
 
     public function orderAction(Request $request)
     {
-//        TODO： merchant获取
-//        TODO： balanceResult获取
+        // TODO： balanceResult获取
         $resultSet = $this->mockOrderResult(35);
         $paginator = new Paginator($request, $resultSet['count'], $this->pageSize);
 
         return $this->render('admin-v2/resource-settlement/order/index.html.twig', array(
             'paginator' => $paginator,
             'items' => $resultSet['items'],
-            'merchant' => $this->mockMerchant(),
+            'merchant' => $this->getS2B2CFacadeService()->getMe(),
             'total' => $resultSet['count'],
             'pageSize' => $this->pageSize,
         ));
@@ -59,7 +58,7 @@ class ResourceSettlementController extends BaseController
 
     public function orderModalAction(Request $request, $sn)
     {
-//        TODO： 获取detail
+        // TODO： 获取detail
         $detail = $this->mockOrderDetail($sn);
         if (empty($detail)) {
             throw $this->createNotFoundException("Flow#{$sn} not found");
@@ -67,7 +66,7 @@ class ResourceSettlementController extends BaseController
 
         return $this->render('admin-v2/resource-settlement/order/modal.html.twig', array(
             'detail' => $detail,
-            'merchant' => $this->mockMerchant(),
+            'merchant' => $this->getS2B2CFacadeService()->getMe(),
         ));
     }
 
@@ -81,7 +80,7 @@ class ResourceSettlementController extends BaseController
             array(
                 'paginator' => $paginator,
                 'items' => $resultSet['items'],
-                'merchant' => $this->mockMerchant(),
+                'merchant' => $this->getS2B2CFacadeService()->getMe(),
                 'total' => $resultSet['count'],
                 'pageSize' => $this->pageSize,
             ));
@@ -148,7 +147,7 @@ class ResourceSettlementController extends BaseController
                 'sn' => '20200401131457546'.rand(10, 99),
                 'created_time' => '1586'.rand(100000, 999999),
                 'action' => $actions[array_rand($actions, 1)], //recharge purchase refund
-                'title' => '测试采购单'.rand(1, 99),
+                'title' => '测试名称购买'.rand(1, 99),
                 'type' => $types[array_rand($types, 1)], //inflow outflow
                 'amount' => $amount,
                 'user_balance' => $balance,
@@ -312,5 +311,13 @@ class ResourceSettlementController extends BaseController
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->createService('S2B2C:S2B2CFacadeService');
     }
 }
