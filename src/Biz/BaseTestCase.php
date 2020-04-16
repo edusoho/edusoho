@@ -11,6 +11,8 @@ use Biz\Role\Util\PermissionBuilder;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Router;
 use Topxia\Service\Common\ServiceKernel;
 use PHPUnit\Framework\TestCase;
 use Biz\TestTool\MockedRequest;
@@ -101,6 +103,17 @@ class BaseTestCase extends TestCase
     protected function initBiz()
     {
         $container = self::$appKernel->getContainer();
+        //所有的generateUrl 都将mock，单元测试要注意
+        $router = $this->getMockBuilder(Router::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['generate', 'supports', 'exists', 'getContext'])
+            ->getMock();
+        $router
+            ->expects($this->atLeast(0))
+            ->method('getContext')
+            ->willReturn(new RequestContext());
+        $container->set('router', $router);
+
         $oldBiz = $container->get('biz');
         $biz = new Biz($container->getParameter('biz_config'));
         self::$appKernel->initializeBiz($biz);
@@ -125,6 +138,7 @@ class BaseTestCase extends TestCase
     {
         $biz = $this->getBiz();
         $biz['db']->rollback();
+        //echo '运行后内存：'.round(memory_get_usage() / 1024 / 1024, 2).'MB', '';
     }
 
     protected function initDevelopSetting()
@@ -177,6 +191,7 @@ class BaseTestCase extends TestCase
         $biz['user'] = $currentUser;
 
         $container = self::$appKernel->getContainer();
+
         $singletonBiz = $container->get('biz');
         $singletonBiz['user'] = $currentUser;
 
