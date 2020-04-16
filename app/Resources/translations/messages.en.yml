@@ -9551,6 +9551,9 @@ merchant.content_resource.product_version.update: Update
 merchant.content_resource.product_version.update_btn: Update
 merchant.content_resource.course_product_update: Course Update
 merchant.content_resource.course_product_update_tips: After confirming the update course, the latest version content provided by the supplier will be synchronized, confirm the update?
+merchant.content_resource.has_chosen: Choosed
+merchant.content_resource.editing: Editing
+merchant.content_resource.choose: Choose
 
 
 

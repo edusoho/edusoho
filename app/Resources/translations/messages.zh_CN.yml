@@ -10887,3 +10887,6 @@ merchant.content_resource.product_version.update: 更新
 merchant.content_resource.product_version.update_btn: 更新
 merchant.content_resource.course_product_update: 课程更新
 merchant.content_resource.course_product_update_tips: 确定更新课程后，将会同步供应商提供的最新版本内容，确认更新？
+merchant.content_resource.has_chosen: 已选择
+merchant.content_resource.editing: 编辑中
+merchant.content_resource.choose: 选择

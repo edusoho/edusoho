@@ -6,7 +6,7 @@
       {% set course = data('PublishedCourseByCourseSet',{ courseSetId: courseSet.id } ) %}
     {% endif %}
 
-    <a href="{{ path('admin_v2_resource_market_product_detail', {courseSetId: courseSet.id}) }}" target="_blank">
+    <a href="{{ path('admin_v2_content_resource_product_detail', {courseSetId: courseSet.id}) }}" target="_blank">
       {% if courseSet.serializeMode == 'serialized' %}
         <span class="tags"><span class="tag-serialing"></span></span>
       {% elseif courseSet.serializeMode == 'finished' %}
@@ -28,7 +28,7 @@
   </div>
   <div class="course-info">
     <div class="title">
-      <a class="link-dark" href="{{ path('admin_v2_resource_market_product_detail', {courseSetId: courseSet.id}) }}" target="_blank">
+      <a class="link-dark" href="{{ path('admin_v2_content_resource_product_detail', {courseSetId: courseSet.id}) }}" target="_blank">
         {{ courseSet.title }}
       </a>
     </div>
@@ -68,15 +68,15 @@
       {% set canChoose = (merchant.coop_status|default('') != 'cooperation' or hasChosen or courseSet.wholeEditStatus|default() == 'unpublished' ) %}
       <button id="course_selected_{{ courseSet.id }}"
               data-course-set="{{ courseSet|json_encode() }}"
-              data-choose-url="{{ path('admin_v2_resource_market_choose_course_product') }}"
+{#              data-choose-url="{{ path('admin_v2_resource_market_choose_course_product') }} 选择课程暂时禁用"#}
               class="btn btn-fat btn-primary course-v2-btn{% if canChoose %} disabled {% endif %}"
               style="{% if canChoose %} background-color: #ccc; border-color: #ccc;{% else %} border-color: #409eff; background-color: #409eff;{% endif %}">
         {% if hasChosen %}
-          {{ 'merchant.resource.has_chosen'|trans }}
+          {{ 'merchant.content_resource.has_chosen'|trans }}
         {% elseif courseSet.wholeEditStatus|default() == 'unpublished' %}
-          {{ 'merchant.resource.editing'|trans }}
+          {{ 'merchant.content_resource.editing'|trans }}
         {% else %}
-          {{ 'merchant.resource.choose'|trans }}
+          {{ 'merchant.content_resource.choose'|trans }}
         {% endif %}
       </button>
     </div>
