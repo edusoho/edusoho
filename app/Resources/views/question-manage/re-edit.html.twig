@@ -1,17 +1,21 @@
-{% extends 'testpaper/subject/layout.html.twig' %}
+{% extends 'layout.html.twig' %}
 
-{% block subtitle %}
-  <div class="subject-data__subtitle subject-data__subtitle--question">
-    <span class="js-total-num">{{ 'course.testpaper_manage.import.re_edit.total_count'|trans({'%count%': questions|length}) }}</span>
-  </div>
-{% endblock %}
+{% do script(['app/js/re-edit/index.js']) %}
 
-{% block testpaper %}
-  {% for key,item in questions if item.type in ['choice', 'determine', 'essay', 'fill', 'single_choice', 'uncertain_choice', 'material'] %}
-    {% include 'testpaper/subject/item/show/' ~ item.type ~ '.html.twig' %}
-  {% endfor %}
-{% endblock %}
+{% block title %}{{ 'course.testpaper_manage.import.re_edit.title'|trans }} - {{ parent() }}{% endblock %}
 
-{% block save_btn %}
-  <button class="cd-btn cd-btn-primary subject-button js-import-btn" data-loading-text="{{ 'form.btn.import.submiting'|trans }}" data-redirect-url="{{ path('question_bank_manage_question_list', {id: questionBankId}) }}" data-url="{{ path('questions_import_save', {token: app.request.get('token')}) }}" type="button">{{ 'course.testpaper_manage.import.re_edit.finish_import'|trans }}</button>
+{% block body %}
+  <div id="app"></div>
+  <input type="hidden" name="filename" value='{{ filename }}'>
+  <input type="hidden" name="items" value='{{ items|json_encode }}'>
+  <input type="hidden" name="bankId" value='{{ questionBankId }}'>
+  <input type="hidden" name="categoryTree" value='{{ categoryTree|json_encode }}'>
+  <input type="hidden" name="type" value="{{ type }}">
+  <input type="hidden" name="saveUrl" value="
+    {% if type == 'item' %}
+      {{ path('questions_import_save', {token: app.request.get('token')}) }}
+    {% else %}
+      {{ path('testpaper_import_save', {token: app.request.get('token')}) }}
+    {% endif %}
+  ">
 {% endblock %}

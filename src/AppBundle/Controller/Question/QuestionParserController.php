@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Question;
 
+use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use ExamParser\Parser\Parser;
 use ExamParser\Reader\ReadDocx;
@@ -26,7 +27,7 @@ class QuestionParserController extends BaseController
                 $result = $this->getFileService()->uploadFile('course_private', $file);
                 $uploadFile = $this->getFileService()->parseFileUri($result['uri']);
                 try {
-                    $questions = $this->parseQuestions($uploadFile['fullpath']);
+                    $items = $this->parseQuestions($uploadFile['fullpath']);
                 } catch (\Exception $e) {
                     return $this->render($templateInfo['readErrorModalTemplate']);
                 }
@@ -38,7 +39,7 @@ class QuestionParserController extends BaseController
                         'fileuri' => $result['uri'],
                         'filepath' => $uploadFile['fullpath'],
                         'questionBankId' => $questionBank['id'],
-                        'cacheFilePath' => $this->cacheQuestions($questions, $uploadFile),
+                        'cacheFilePath' => $this->cacheQuestions($items, $uploadFile),
                     ),
                     'duration' => 86400,
                     'userId' => $this->getCurrentUser()->getId(),
@@ -71,47 +72,26 @@ class QuestionParserController extends BaseController
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
-        $questionsJson = file_get_contents($data['cacheFilePath']);
-        $questions = json_decode($questionsJson, true);
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($data['questionBankId']);
+        $categoryTree = $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']);
+        $itemsJson = file_get_contents($data['cacheFilePath']);
+        $items = json_decode($itemsJson, true);
 
-        $questionAnalysis = array(
-            'choice' => 0,
-            'single_choice' => 0,
-            'uncertain_choice' => 0,
-            'fill' => 0,
-            'essay' => 0,
-            'material' => 0,
-            'determine' => 0,
-        );
-
-        $totalScore = 0;
-
-        foreach ($questions as $question) {
-            ++$questionAnalysis[$question['type']];
-            if ('material' == $question['type']) {
-                foreach ($question['subQuestions'] as $subQuestion) {
-                    $totalScore += $subQuestion['score'];
-                }
-            } else {
-                $totalScore += $question['score'];
-            }
-        }
         $templateInfo = $this->getTemplateInfo($type);
 
         return $this->render($templateInfo['reEditTemplate'], array(
             'filename' => mb_substr(str_replace('.docx', '', $data['filename']), 0, 50, 'utf-8'),
-            'questions' => $questions,
-            'questionAnalysis' => $questionAnalysis,
-            'questionBankId' => $data['questionBankId'],
-            'totalScore' => $totalScore,
+            'items' => $items,
+            'questionBankId' => $questionBank['itemBankId'],
+            'categoryTree' => $categoryTree,
+            'type' => $type,
         ));
     }
 
     protected function parseQuestions($fullpath)
     {
         $tmpPath = $this->get('kernel')->getContainer()->getParameter('topxia.upload.public_directory').'/tmp';
-        $wordRead = new ReadDocx($fullpath, array('resourceTmpPath' => $tmpPath));
-        $text = $wordRead->read();
+        $text = $this->getItemService()->readWordFile($fullpath, $tmpPath);
         $self = $this;
         $fileService = $this->getFileService();
         $text = preg_replace_callback(
@@ -126,9 +106,7 @@ class QuestionParserController extends BaseController
             $text
         );
 
-        $parser = new Parser($text);
-
-        return $parser->parser();
+        return $this->getItemService()->parseItems($text);
     }
 
     protected function cacheQuestions($questions, $uploadFile)
@@ -142,7 +120,7 @@ class QuestionParserController extends BaseController
 
     protected function getTemplateInfo($type)
     {
-        if (!in_array($type, array('testpaper', 'question'))) {
+        if (!in_array($type, array('testpaper', 'item'))) {
             return $this->createNotFoundException('parser type not found');
         }
 
@@ -153,11 +131,11 @@ class QuestionParserController extends BaseController
                 'readModalTemplate' => 'testpaper/manage/read-modal.html.twig',
                 'readErrorModalTemplate' => 'testpaper/manage/read-error.html.twig',
                 'reEditRoute' => 'testpaper_re_edit',
-                'reEditTemplate' => 'testpaper/manage/re-edit.html.twig',
+                'reEditTemplate' => 'question-manage/re-edit.html.twig',
             );
         }
 
-        if ('question' == $type) {
+        if ('item' == $type) {
             $info = array(
                 'readModalTemplate' => 'question-manage/read-modal.html.twig',
                 'readErrorModalTemplate' => 'question-manage/read-error.html.twig',
@@ -191,6 +169,14 @@ class QuestionParserController extends BaseController
     protected function getItemService()
     {
         return $this->createService('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return ItemCategoryService
+     */
+    protected function getItemCategoryService()
+    {
+        return $this->createService('ItemBank:Item:ItemCategoryService');
     }
 
     /**

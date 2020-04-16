@@ -1493,6 +1493,7 @@ course.testpaper_manage.manage_btn: 'Edit the test questions'
 course.testpaper_manage.repead_btn: Re-generate
 course.testpaper_manage.export: Export
 course.testpaper_manage.import: Import
+course.testpaper_manage.import.re_edit.title: Import Edit
 course.testpaper_manage.import.re_edit.add_option: Add Option
 course.testpaper_manage.import.re_edit.upload_stem_attachment: Upload Stem Attachment
 course.testpaper_manage.import.re_edit.edit_analysis: Edit Analysis

@@ -63,7 +63,7 @@ class QuestionController extends BaseController
 
         return $this->forward('AppBundle:Question/QuestionParser:read', [
             'request' => $request,
-            'type' => 'question',
+            'type' => 'item',
             'questionBank' => $this->getQuestionBankService()->getQuestionBank($id),
         ]);
     }
