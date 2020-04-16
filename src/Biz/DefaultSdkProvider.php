@@ -144,9 +144,32 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
             return $service;
         };
+
+        /*S2B2C-CUSTOM*/
+        $biz['qiQiuYunSdk.s2b2cService'] = function (Biz $biz) use ($that) {
+            $service = null;
+//            $sdk = $that->generateSdk($biz, array('s2b2c' => array('host' => $host)), $biz->offsetGet('s2b2c.merchant.logger'));
+            $sdk = $that->generateSdk($biz, $this->getS2B2CConfig($biz), $biz['s2b2c.merchant.logger']);
+
+            if (!empty($sdk)) {
+                $service = $sdk->getS2B2CService();
+            }
+
+            return $service;
+        };
+        /*END*/
     }
 
-    public function generateSdk($biz, $serviceConfig)
+    /**
+     * @param $biz
+     * @param $serviceConfig
+     * @param null $logger
+     *
+     * @return \QiQiuYun\SDK\QiQiuYunSDK|null
+     *
+     * @throws \QiQiuYun\SDK\Exception\SDKException
+     */
+    public function generateSdk($biz, $serviceConfig, $logger = null)
     {
         $setting = $biz->service('System:SettingService');
 
@@ -159,11 +182,31 @@ class DefaultSdkProvider implements ServiceProviderInterface
                     'access_key' => $storageSetting['cloud_access_key'],
                     'secret_key' => $storageSetting['cloud_secret_key'],
                     'service' => $serviceConfig,
-                )
+                ),
+                $logger
             );
         }
 
         return $sdk;
+    }
+
+    public function getS2B2CConfig($biz)
+    {
+        $setting = $biz->service('System:SettingService');
+        $developerSetting = $setting->get('developer', array());
+
+        if (!empty($developerSetting['s2b2c_server'])) {
+            $urlSegs = explode('://', $developerSetting['s2b2c_server']);
+            if (2 == count($urlSegs)) {
+                $hostUrl = $urlSegs[1];
+            }
+        }
+
+        if (empty($hostUrl)) {
+            $hostUrl = '';
+        }
+
+        return array('s2b2c' => array('host' => $hostUrl));
     }
 
     public function getDrpConfig($biz)

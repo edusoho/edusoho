@@ -45,6 +45,7 @@ class DeveloperSettingController extends BaseController
             $storageSetting['cloud_api_es_op_server'] = $developerSetting['cloud_api_es_op_server'];
             $storageSetting['cloud_api_notification_server'] = $developerSetting['cloud_api_notification_server'];
             $storageSetting['cloud_api_wechat_server'] = $developerSetting['cloud_api_wechat_server'];
+            $storageSetting['s2b2c_server'] = $developerSetting['s2b2c_server'];
             $this->getSettingService()->set('storage', $storageSetting);
             $this->getSettingService()->set('developer', $developerSetting);
 

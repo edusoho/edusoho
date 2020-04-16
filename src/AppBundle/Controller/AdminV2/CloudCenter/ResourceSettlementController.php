@@ -5,6 +5,7 @@ namespace AppBundle\Controller\AdminV2\CloudCenter;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Course\Service\CourseSetService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\S2B2C\SupplierPlatformApi;
 use Codeages\Biz\Order\Service\Impl\OrderServiceImpl;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +19,7 @@ class ResourceSettlementController extends BaseController
     {
 //        TODO： merchant获取
 //        TODO： balanceResult获取
-        $merchant = $this->mockMerchant();
+        $merchant = $this->getS2B2CFacadeService()->getMe();
         $resultSet = $this->mockBalanceResult(35);
         $paginator = new Paginator($request, $resultSet['count'], $this->pageSize);
 
@@ -46,7 +47,7 @@ class ResourceSettlementController extends BaseController
     {
 //        TODO： merchant获取
 //        TODO： balanceResult获取
-        $merchant = $this->mockMerchant();
+        $merchant = $this->getS2B2CFacadeService()->getMe();
         $resultSet = $this->mockBalanceResult(35);
         $paginator = new Paginator($request, $resultSet['count'], $this->pageSize);
 
@@ -71,7 +72,7 @@ class ResourceSettlementController extends BaseController
             'supplier_province' => 'xx省',
             'supplier_city' => 'xx市',
             'supplier_area' => 'xx区',
-            'supplier_address' => 'xx地址',);
+            'supplier_address' => 'xx地址', );
 
         return $this->render(
             'admin-v2/resource-settlement/product.html.twig',
@@ -108,15 +109,15 @@ class ResourceSettlementController extends BaseController
             $balance -= $amount;
             $result['items'][] = array(
                 'id' => rand(1, 100),
-                'sn' => '20200401131457546' . rand(10, 99),
-                'created_time' => '1586' . rand(100000, 999999),
+                'sn' => '20200401131457546'.rand(10, 99),
+                'created_time' => '1586'.rand(100000, 999999),
                 'action' => $actions[array_rand($actions, 1)], //recharge purchase refund
-                'title' => '测试名称购买' . rand(1, 99),
+                'title' => '测试名称购买'.rand(1, 99),
                 'type' => $types[array_rand($types, 1)], //inflow outflow
                 'amount' => $amount,
                 'user_balance' => $balance,
             );
-            $i++;
+            ++$i;
         }
 
         $result['count'] = $count;
@@ -137,18 +138,18 @@ class ResourceSettlementController extends BaseController
             'operator' => '操作人-XXX',
             'balance' => array(
                 'id' => $id,
-                'sn' => '20200401131457546' . rand(10, 99),
-                'created_time' => '1586' . rand(100000, 999999),
+                'sn' => '20200401131457546'.rand(10, 99),
+                'created_time' => '1586'.rand(100000, 999999),
                 'action' => $actions[array_rand($actions, 1)], //recharge purchase refund
-                'title' => '测试名称购买' . rand(1, 99),
+                'title' => '测试名称购买'.rand(1, 99),
                 'type' => $types[array_rand($types, 1)], //inflow outflow
                 'amount' => $amount,
                 'user_balance' => $balance,
             ),
             'order' => array(
-                'title' => '采购单title' . rand(10, 99),
-                'sn' => '20200401131457546' . rand(10, 99)
-            )
+                'title' => '采购单title'.rand(10, 99),
+                'sn' => '20200401131457546'.rand(10, 99),
+            ),
         );
     }
 
@@ -158,10 +159,10 @@ class ResourceSettlementController extends BaseController
         unset($conditions['page']);
         unset($conditions['pageSize']);
 
-        $page = (int)$request->query->get('page', 1);
+        $page = (int) $request->query->get('page', 1);
         $page = $page < 1 ? 1 : $page;
 
-        $limit = (int)$request->query->get('pageSize', 20);
+        $limit = (int) $request->query->get('pageSize', 20);
         $limit = $limit < 1 ? 1 : $limit;
 
         $start = ($page - 1) * $limit;
@@ -212,5 +213,13 @@ class ResourceSettlementController extends BaseController
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->createService('S2B2C:S2B2CFacadeService');
     }
 }

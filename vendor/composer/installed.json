@@ -738,17 +738,17 @@
     },
     {
         "name": "codeages/qiqiuyun-php-sdk",
-        "version": "v0.3.7",
-        "version_normalized": "0.3.7.0",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-            "reference": "955076f4df301c8a2592e26cf4e32071142fe376"
+            "reference": "8ecc4ea0ed2acaefb27ce5acf07c3752dfbeb9dd"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/955076f4df301c8a2592e26cf4e32071142fe376",
-            "reference": "955076f4df301c8a2592e26cf4e32071142fe376",
+            "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/8ecc4ea0ed2acaefb27ce5acf07c3752dfbeb9dd",
+            "reference": "8ecc4ea0ed2acaefb27ce5acf07c3752dfbeb9dd",
             "shasum": "",
             "mirrors": [
                 {
@@ -766,9 +766,9 @@
             "monolog/monolog": "^1.18",
             "phpunit/phpunit": "^4 || ^5 || ^6"
         },
-        "time": "2019-11-26T06:24:57+00:00",
+        "time": "2020-04-15T11:11:28+00:00",
         "type": "library",
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "files": [
                 "src/functions.php"
