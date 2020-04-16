@@ -24,11 +24,19 @@ admin_v2:
                                     children:
                                         admin_v2_course_content_manage:
                                             name: admin_v2.course.basic.basic_tab.manage_btn
+                                        admin_v2_go_to_choose:
+                                            name: admin_v2.course.basic.basic_tab.go_to_choose_btn
+                                            class: btn-warning
+                                            router_name: course_set_manage_create
+                                            group: topBtn
+                                            blank: 1
+                                            visible: (hasSupplier())
                                         admin_v2_course_add:
                                             name: admin_v2.course.basic.basic_tab.create_btn
                                             router_name: course_set_manage_create
                                             group: topBtn
                                             blank: 1
+                                            visible: (canOperateCourseSet())
                                         admin_v2_course_set_recommend:
                                             name: admin_v2.course.basic.basic_tab.recommend_btn
                                             router_params:
@@ -87,7 +95,7 @@ admin_v2:
                                             class: 'js-course-set-clone'
                                             icon: 'glyphicon glyphicon-repeat'
                                             mode: none
-                                            visible: (courseSet.parentId == 0 and courseSet.type != 'live')
+                                            visible: (courseSet.parentId == 0 and courseSet.type != 'live' and courseSet.sourceCourseSetId|default(0) == 0)
                                         admin_v2_course_set_publish:
                                             name: admin_v2.course.basic.basic_tab.publish_submit_btn
                                             router_params:
@@ -108,7 +116,7 @@ admin_v2:
                                             group: groupButton
                                             icon: 'glyphicon glyphicon-trash'
                                             mode: none
-                                            visible: ( courseSet.status in ['closed', 'draft', 'published'])
+                                            visible: ( courseSet.status in ['closed', 'draft', 'published'] and courseSet.sourceCourseSetId|default(0) == 0)
                                 admin_v2_course_set_recommend_list:
                                     name: admin_v2.course.basic.recommend_list_tab
                                 admin_v2_course_set_data:

@@ -6,6 +6,7 @@ use AppBundle\Common\ExportHelp;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Common\CommonException;
+use Biz\Course\CourseSetException;
 use Biz\Crontab\SystemCrontabInitializer;
 use Biz\Task\Service\TaskService;
 use Biz\User\UserException;
@@ -144,6 +145,15 @@ class CourseSetController extends BaseController
     public function publishAction(Request $request, $id)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($id);
+        $this->createNewException(CourseSetException::SOURCE_COURSE_CLOSED());
+
+        if (!empty($courseSet['sourceCourseSetId'])) {
+            $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
+            foreach ($courses as $course) {
+                $this->createNewException(CourseSetException::SOURCE_COURSE_CLOSED());
+//                $this->getProductService()->checkSourceProductStatus($course['id']);
+            }
+        }
 
         if ('live' == $courseSet['type']) {
             $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);

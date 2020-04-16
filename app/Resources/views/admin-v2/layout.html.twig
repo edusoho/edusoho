@@ -136,8 +136,9 @@
                                   {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
                               {% endfor %}
                           {% else %}
-                              {% for m in sub_permissions(currentMenu.code,'topBtn') %}
-                                  {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                              {% for m in arrays_key_convert(sub_permissions(currentMenu.code,'topBtn'), 'visible', 'visable')|visible_menus %}
+                                {% set class = m.class|default() ? "btn btn-sm " ~  m.class : 'btn btn-success btn-sm' %}
+                                  {{ self_macro.menu_link_html(_context, m, class) }}
                               {% endfor %}
                           {% endif %}
                       {% endblock %}

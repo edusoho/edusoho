@@ -912,3 +912,5 @@ admin_v2.developer.crontab: crontab管理
 admin_v2.developer.mobile_iap_product_menu: iOS内购商品设置
 admin_v2.developer.mobile_iap_product.basic_tab: iOS内购商品设置iOS Purchase Setting
 # 新版后台结束
+
+admin_v2.course.basic.basic_tab.go_to_choose_btn: 去内容市场选择

@@ -9553,4 +9553,8 @@ merchant.content_resource.course_product_update: Course Update
 merchant.content_resource.course_product_update_tips: After confirming the update course, the latest version content provided by the supplier will be synchronized, confirm the update?
 
 
+admin_v2.course_manage.create_btn: Create Course
+admin_v2.course_manage.merchant_course: Purchase
+admin_v2.course_manage.has_version_change: Has Change
 
+exception.courseset.source_course_closed: Course closed,please contact the supplier.

@@ -17,6 +17,10 @@
     {% if courseSet.type == 'live' %}
       <span class="label label-success live-label mls">{{ 'admin.course_manage.manage.live_course'|trans }}</span>
     {% endif %}
+
+    {% if courseSet.sourceCourseSetId|default(0) > 0 %}
+      <span class="label label-success live-label mls">{{ 'admin_v2.course_manage.merchant_course'|trans }}</span>
+    {% endif %}
     <br>
     <span class="text-muted text-sm">{{ 'admin.course_manage.manage.category'|trans }}：{{ category.name|default('--') }}</span>
     {% if courseSet.recommended %}
@@ -82,6 +86,10 @@
   <td>{{ dict_macro.courseStatus( courseSet.status) }}<br>
     {% if filter != 'open' and filter != 'liveOpen' %}
       <span class="text-muted text-sm">{{ dict_text('courseSerializeMode',courseSet.serializeMode) }}</span>
+    {% endif %}
+
+    {% if courseSet.hasNewVersion|default(0) > 0 %}
+      <br/><a class="text-sm color-danger" target="_blank" href="{{ path('admin_v2_content_resource_products_version') }}">{{ 'admin_v2.course_manage.has_version_change'|trans }} >></a>
     {% endif %}
   </td>
   <td>

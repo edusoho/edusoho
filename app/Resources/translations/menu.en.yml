@@ -896,3 +896,5 @@ admin_v2.developer.crontab: Crontab Manage
 admin_v2.developer.mobile_iap_product_menu: iOS Purchase Setting
 admin_v2.developer.mobile_iap_product.basic_tab: iOS Purchase Setting
 # 新版后台结束
+
+admin_v2.course.basic.basic_tab.go_to_choose_btn: Go to the market

@@ -38,6 +38,8 @@ class DataExtension extends \Twig_Extension
             new \Twig_SimpleFunction('cloudStatus', array($this, 'getCloudStatus'), $options),
             new \Twig_SimpleFunction('cloudConsultPath', array($this, 'getCloudConsultPath'), $options),
             new \Twig_SimpleFunction('cloud_info', array($this, 'getCloudInfo'), $options),
+            new \Twig_SimpleFunction('canOperateCourseSet', array($this, 'canOperateCourseSet'), $options),
+            new \Twig_SimpleFunction('hasSupplier', array($this, 'hasSupplier'), $options),
         );
     }
 
@@ -94,6 +96,16 @@ class DataExtension extends \Twig_Extension
     public function getCloudStatus()
     {
         return $this->getEduCloudService()->isVisibleCloud();
+    }
+
+    public function hasSupplier()
+    {
+        return true;
+    }
+
+    public function canOperateCourseSet()
+    {
+        return false;
     }
 
     public function getCloudConsultPath()
