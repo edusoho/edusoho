@@ -429,14 +429,14 @@ class ManageController extends BaseController
             'name' => $postData['fileName'],
             'bank_id' => $questionBank['itemBankId'],
             'displayable' => 1,
-            'sections' => $this->getSections($items),
+            'sections' => $this->assembleSections($items),
         );
         $this->getAssessmentService()->importAssessment($assessment);
 
         return $this->createJsonResponse(array('goto' => $this->generateUrl('question_bank_manage_testpaper_list', array('id' => $questionBank['id']))));
     }
 
-    protected function getSections($items)
+    protected function assembleSections($items)
     {
         $typeGroupItems = ArrayToolkit::group($items, 'type');
         $sections = array();
