@@ -6,7 +6,7 @@
       {% set course = data('PublishedCourseByCourseSet',{ courseSetId: courseSet.id } ) %}
     {% endif %}
 
-    <a href="{{ path('admin_v2_content_resource_product_detail', {courseSetId: courseSet.id}) }}" target="_blank">
+    <a href="{{ path('admin_v2_content_resource_product_detail', {id: courseSet.id}) }}" target="_blank">
       {% if courseSet.serializeMode == 'serialized' %}
         <span class="tags"><span class="tag-serialing"></span></span>
       {% elseif courseSet.serializeMode == 'finished' %}
@@ -28,7 +28,7 @@
   </div>
   <div class="course-info">
     <div class="title">
-      <a class="link-dark" href="{{ path('admin_v2_content_resource_product_detail', {courseSetId: courseSet.id}) }}" target="_blank">
+      <a class="link-dark" href="{{ path('admin_v2_content_resource_product_detail', {id: courseSet.id}) }}" target="_blank">
         {{ courseSet.title }}
       </a>
     </div>

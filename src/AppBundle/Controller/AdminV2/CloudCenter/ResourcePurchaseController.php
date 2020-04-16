@@ -113,8 +113,8 @@ class ResourcePurchaseController extends BaseController
     public function productDetailAction(Request $request, $id, $tab = 'summary')
     {
         //当前静默是课程，不过真是情况是会有多种模式的课程
-        $courseSet = [];
-//        $courseSet = $this->getSupplierPlatformApi()->getSupplierCourseSetProductDetail($id);
+        $courseSet = $this->getS2B2CFacadeService()->getSupplierPlatformApi()
+            ->getSupplierCourseSetProductDetail($id);
         if (empty($courseSet) || !empty($courseSet['error'])) {
             throw $this->createNotFoundException('原课程未找到或出错了');
         }

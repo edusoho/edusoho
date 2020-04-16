@@ -2,9 +2,9 @@
 {% set bodyClass = 'course-dashboard-page' %}
 
 {% block full_content %}
-{#  ！！！！！用到的样式要扣出来 #}
-{#  <link href="{{ asset('static-dist/app/css/bootstrap.css') }}" rel="stylesheet" />#}
-{#  <link href="{{ asset('static-dist/app/css/main.css') }}" rel="stylesheet" />#}
+  {# 除了顶部，完整使用了中台页面，暂不删除#}
+  <link href="{{ asset('static-dist/app/css/bootstrap.css') }}" rel="stylesheet" />
+  <link href="{{ asset('static-dist/app/css/main.css') }}" rel="stylesheet" />
 
   {% include 'admin-v2/cloud-center/content-resource/market/course-set/header/header-for-guest.html.twig' %}
 
