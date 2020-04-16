@@ -2,8 +2,6 @@
   <div id="app" class="test-vue">
     <assessment-preview
       :assessment="assessment"
-      :answerRecord="answerRecord"
-      :answerScene="answerScene"
       :showCKEditorData="showCKEditorData"
     ></assessment-preview>
   </div>
@@ -13,13 +11,10 @@
   export default {
     data() {
       return {
-        scene: 1,
-        answerRecord:{},
-        answerScene:{},
         showCKEditorData: {
-          publicPath: '/static-dist/libs/es-ckeditor/ckeditor.js',
-          filebrowserImageUploadUrl: $('[name=image_upload_url]').val(),
-          filebrowserImageDownloadUrl: $('[name=image_download_url]').val(),
+          publicPath: $('[name=ckeditor_path]').val(),
+          filebrowserImageUploadUrl: $('[name=ckeditor_image_upload_url]').val(),
+          filebrowserImageDownloadUrl: $('[name=ckeditor_image_download_url]').val(),
         },
       };
     },
@@ -28,9 +23,6 @@
        this.assessment = assessment;
     },
     methods: {
-      getAnswerData(data) {
-
-      }
     }
   }
 </script>
