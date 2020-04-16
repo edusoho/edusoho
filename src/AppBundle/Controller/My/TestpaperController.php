@@ -10,6 +10,12 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class TestpaperController extends BaseController
 {
@@ -99,43 +105,76 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('error', '请先登录！', '', 5, $this->generateUrl('login'));
         }
 
-        $conditions = array(
-            'userId' => $user['id'],
-            'type' => 'testpaper',
+        $courseIds = ArrayToolkit::column(
+            $this->getCourseMemberService()->searchMembers(array('userId' => $user['id']), array(), 0, PHP_INT_MAX), 
+            'courseId'
         );
+        if (empty($courseIds)) {
+            return $this->render('my/testpaper/my-testpaper-list.html.twig', array(
+                'answerRecords' => array(),
+                'nav' => 'testpaper',
+            ));
+        }
+        $activities = ArrayToolkit::index(
+            $this->getActivityService()->search(array('courseIds' => $courseIds, 'mediaType' => 'testpaper'), array(), 0, PHP_INT_MAX),
+            'mediaId'
+        );
+        $testpeaperActivities = ArrayToolkit::index(
+            $this->getTestpaperActivityService()->findActivitiesByIds(array_keys($activities)),
+            'answerSceneId'
+        );
+        if (empty(array_keys($testpeaperActivities))) {
+            return $this->render('my/testpaper/my-testpaper-list.html.twig', array(
+                'answerRecords' => array(),
+                'nav' => 'testpaper',
+            ));
+        }
 
+        $conditions = array(
+            'answer_scene_ids' => array_keys($testpeaperActivities),
+            'user_id' => $user['id'],
+        );
+    
         $paginator = new Paginator(
             $request,
-            $this->getTestpaperService()->searchTestpaperResultsCount($conditions),
+            $this->getAnswerRecordService()->count($conditions),
             10
         );
 
-        $paperResults = $this->getTestpaperService()->searchTestpaperResults(
+        $answerRecords = $this->getAnswerRecordService()->search(
             $conditions,
-            array('beginTime' => 'DESC'),
+            array('begin_time' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $courseSetIds = ArrayToolkit::column($paperResults, 'courseSetId');
-        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        if (empty($answerRecords)) {
+            return $this->render('my/testpaper/my-testpaper-list.html.twig', array(
+                'answerRecords' => array(),
+                'nav' => 'testpaper',
+            ));
+        }
 
-        $courseIds = ArrayToolkit::column($paperResults, 'courseId');
+        $answerReports = ArrayToolkit::index(
+            $this->getAnswerReportService()->findByIds(ArrayToolkit::column($answerRecords, 'answer_report_id')),
+            'id'
+        );
+        $tasks = ArrayToolkit::index(
+            $this->getTaskService()->findTasksByActivityIds(ArrayToolkit::column($activities, 'id')),
+            'activityId'
+        );
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-
-        $testpaperIds = ArrayToolkit::column($paperResults, 'testId');
-        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
-
-        $activityIds = ArrayToolkit::column($paperResults, 'lessonId');
-        $tasks = $this->getTaskService()->findTasksByActivityIds($activityIds);
+        $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($answerRecords, 'assessment_id'));
 
         return $this->render('my/testpaper/my-testpaper-list.html.twig', array(
-            'paperResults' => $paperResults,
+            'testpeaperActivities' => $testpeaperActivities,
+            'answerReports' => $answerReports,
+            'answerRecords' => $answerRecords,
             'paginator' => $paginator,
             'courses' => $courses,
-            'courseSets' => $courseSets,
-            'testpapers' => $testpapers,
+            'assessments' => $assessments,
             'tasks' => $tasks,
+            'activities' => $activities,
             'nav' => 'testpaper',
         ));
     }
@@ -180,5 +219,53 @@ class TestpaperController extends BaseController
     protected function getTaskService()
     {
         return $this->getBiz()->service('Task:TaskService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return TestpaperActivityService
+     */
+    protected function getTestpaperActivityService()
+    {
+        return $this->getBiz()->service('Activity:TestpaperActivityService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->getBiz()->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerReportService');
     }
 }
