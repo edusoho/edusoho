@@ -132,12 +132,12 @@
                       {% block page_buttons %}
 
                           {% if currentMenu.mode|default('') == 'capsules' and capsule|default(false) %}
-                              {% for m in sub_permissions(permission(capsule).code,'topBtn') %}
+                              {% for m in sub_permissions(permission(capsule).code,'topBtn') if m.visible is not defined or m.visible == true %}
                                   {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
                               {% endfor %}
                           {% else %}
-                              {% for m in sub_permissions(currentMenu.code,'topBtn') %}
-                                  {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                              {% for m in sub_permissions(currentMenu.code,'topBtn') if m.visible is not defined or m.visible == true %}
+                                {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
                               {% endfor %}
                           {% endif %}
                       {% endblock %}
