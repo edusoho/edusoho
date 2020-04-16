@@ -4,8 +4,6 @@ namespace AppBundle\Controller\Question;
 
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
-use ExamParser\Parser\Parser;
-use ExamParser\Reader\ReadDocx;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Content\Service\FileService;

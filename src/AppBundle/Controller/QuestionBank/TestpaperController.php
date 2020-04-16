@@ -317,7 +317,7 @@ class TestpaperController extends BaseController
         if ('closed' === $assessment['status']) {
             return $this->createMessageResponse('warning', 'testpaper already closed');
         }
-        
+
         return $this->render('testpaper/manage/preview.html.twig', [
             'assessment' => $assessment,
         ]);
