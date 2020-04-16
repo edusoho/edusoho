@@ -23,7 +23,7 @@
               {% set answerReport = answerReports[answerRecord['answer_report_id']]|default(null) %}
                 <tr>
                   <td width="55%">
-                    {{ assessment.name|plain_text(60) }}
+                    {{ task.title|default(assessment.name)|plain_text(60) }}
                     <div>
                       <small class="color-gray">
                         {{ 'come.from'|trans }}<a class="link-primary" href="{{ path('course_show',{id:course.id}) }}" target="_blank">《{{get_formated_course_title(course)}}》</a>
