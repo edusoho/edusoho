@@ -3,6 +3,12 @@
 {% set menu = 'admin_v2_purchase_market_tab' %}
 {% do script(['app/js/admin-v2/edu-cloud/content-resource/market/course-set/explore/index.js']) %}
 
+{% block page_title %}
+  {% if merchant.coop_status|default('') == 'cooperation'%}
+    <div style="background-color: #fd9e0d;color: white;font-size: 16px;" class="alert">{{ 'merchant.content_resource.supplier.no_cooperation_hint'|trans({'%supplierName%': supplier.name|default('') }) }}</div>
+  {% endif %}
+  {{ parent() }}
+{% endblock %}
 {% block main %}
   <div class="page-header clearfix pvm">
     <div class="pull-left">
@@ -46,6 +52,6 @@
       </div>
     </div>
   {% else %}
-    <div class="text-center">{{ 'merchant.resource.no_supplier'|trans }}</div>
+    <div class="text-center">{{ 'merchant.content_resource.no_supplier'|trans }}</div>
   {% endif %}
 {% endblock %}
