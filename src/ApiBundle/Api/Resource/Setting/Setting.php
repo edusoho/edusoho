@@ -130,7 +130,7 @@ class Setting extends AbstractResource
         );
 
         return array(
-            'enabled' => empty($mobileSetting['enabled']) ? true : (bool) $mobileSetting['enabled'],
+            'enabled' => isset($mobileSetting['enabled']) ? (bool) $mobileSetting['enabled'] : true,
             'logo' => empty($mobileSetting['logo']) ? '' : AssetHelper::uriForPath('/'.$mobileSetting['logo']),
             'splashs' => $splashs,
             'appDiscoveryVersion' => $this->getH5SettingService()->getAppDiscoveryVersion(),
