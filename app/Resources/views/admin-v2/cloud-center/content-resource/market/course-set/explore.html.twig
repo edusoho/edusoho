@@ -4,7 +4,7 @@
 {% do script(['app/js/admin-v2/edu-cloud/content-resource/market/course-set/explore/index.js']) %}
 
 {% block page_title %}
-  {% if merchant.coop_status|default('') == 'cooperation'%}
+  {% if merchant.coop_status|default('') != 'cooperation'%}
     <div style="background-color: #fd9e0d;color: white;font-size: 16px;" class="alert">{{ 'merchant.content_resource.supplier.no_cooperation_hint'|trans({'%supplierName%': supplier.name|default('') }) }}</div>
   {% endif %}
   {{ parent() }}
