@@ -174,7 +174,7 @@ class SiteSettingController extends BaseController
 
         $response = array(
             'path' => $consult['webchatURI'],
-            'url' => $this->container->get('templating.helper.assets')->getUrl($consult['webchatURI']),
+            'url' => $this->container->get('assets.packages')->getUrl($consult['webchatURI']),
         );
 
         return $this->createJsonResponse($response);
