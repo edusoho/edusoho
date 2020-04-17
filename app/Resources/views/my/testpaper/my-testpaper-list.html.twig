@@ -37,7 +37,7 @@
                     {% if answerRecord.status == 'reviewing' %}
                       <span class="color-warning">{{'my.teaching.testpaper.checking'|trans}}</span>
                     {% elseif answerRecord.status == 'finished' %}
-                      <span class="color-gray">{{'my.teaching.testpaper.check_total_score'|trans({'%totalScore%': answerReport.total_score})|raw}}</span><br>
+                      <span class="color-gray">{{'my.teaching.testpaper.check_total_score'|trans({'%totalScore%': answerReport.score})|raw}}</span><br>
                       <small class="color-gray">
                         {{'my.teaching.testpaper.check_right_count'|trans({'%rightCount%': answerReport.right_question_count})|raw}}
                         {% if assessment %}/{{'my.teaching.testpaper.check_total_count'|trans({'%totalCount%': assessment.question_count})|raw}}{% endif %}

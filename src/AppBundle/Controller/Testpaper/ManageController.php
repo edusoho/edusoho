@@ -271,29 +271,72 @@ class ManageController extends BaseController
 
     public function resultGraphAction($activityId)
     {
-        $activity = $this->getActivityService()->getActivity($activityId);
+        $activity = $this->getActivityService()->getActivity($activityId, true);
 
         if (!$activity || 'testpaper' != $activity['mediaType']) {
             return $this->createMessageResponse('error', 'Argument Invalid');
         }
 
-        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
-        $userFirstResults = $this->getTestpaperService()->findResultsByTestIdAndActivityId($testpaper['id'], $activity['id']);
-
-        $data = $this->fillGraphData($testpaper, $userFirstResults);
-        $analysis = $this->analysisFirstResults($userFirstResults);
-
+        $answerRecords = $this->getAnswerRecordsByAnswerSceneId($activity['ext']['answerSceneId']);
+        $firstAndMaxScore = $this->getCalculateRecordsFirstAndMaxScore($answerRecords, $activity);
+        $data = $this->fillGraphData($firstAndMaxScore, $activity);
+        $analysis = $this->analysisFirstResults($firstAndMaxScore);
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
 
         return $this->render('testpaper/manage/result-graph-modal.html.twig', array(
             'activity' => $activity,
-            'testpaper' => $testpaper,
             'data' => $data,
             'analysis' => $analysis,
             'task' => $task,
         ));
+    }
+
+    protected function getAnswerRecordsByAnswerSceneId($answerSceneId)
+    {
+        $conditions = array(
+            'status' => 'finished',
+            'answer_scene_id' => $answerSceneId,
+        );
+        $answerRecords = $this->getAnswerRecordService()->search($conditions, array(), 0, $this->getAnswerRecordService()->count($conditions));
+        $answerReports = ArrayToolkit::index(
+            $this->getAnswerReportService()->findByIds(ArrayToolkit::column($answerRecords, 'answer_report_id')),
+            'id'
+        );
+        foreach ($answerRecords as &$answerRecord) {
+            $answerRecord['score'] = $answerReports[$answerRecord['answer_report_id']]['score'];
+        }
+
+        $answerRecords = ArrayToolkit::group($answerRecords, 'user_id');
+
+        return $answerRecords;
+    }
+
+    protected function getCalculateRecordsFirstAndMaxScore($answerRecords, $activity)
+    {
+        $data = array();
+        foreach ($answerRecords as $userAnswerRecords) {
+            $firstScore = $userAnswerRecords[0]['score'];
+            $maxScore = $this->getUserMaxScore($userAnswerRecords);
+            $data[] = array(
+                'firstScore' => $firstScore,
+                'maxScore' => $maxScore,
+                'firstPassedStatus' => $firstScore >= $activity['ext']['answerScene']['pass_score'] ? 'passed' : 'unpassed',
+                'maxPassedStatus' => $maxScore >= $activity['ext']['answerScene']['pass_score'] ? 'passed' : 'unpassed',
+            );
+        }
+
+        return $data;
+    }
+
+    protected function getUserMaxScore($userAnswerRecords)
+    {
+        if (1 == count($userAnswerRecords)) {
+            return $userAnswerRecords[0]['score'];
+        }
+
+        $scores = ArrayToolkit::column($userAnswerRecords, 'score');
+
+        return max($scores);
     }
 
     public function reEditAction(Request $request, $token)
@@ -468,11 +511,10 @@ class ManageController extends BaseController
         ));
     }
 
-    protected function fillGraphData($testpaper, $userFirstResults)
+    protected function fillGraphData($firstAndMaxScore, $activity)
     {
         $data = array('xScore' => array(), 'yFirstNum' => array(), 'yMaxNum' => array());
-
-        $totalScore = $testpaper['score'];
+        $totalScore = $activity['ext']['testpaper']['total_score'];
         $maxTmpScore = 0;
 
         $column = $totalScore <= 5 ? ($totalScore / 1) : 5;
@@ -482,7 +524,7 @@ class ManageController extends BaseController
             $minTmpScore = $maxTmpScore;
             $maxTmpScore = $totalScore * ($i / $column);
 
-            foreach ($userFirstResults as $result) {
+            foreach ($firstAndMaxScore as $result) {
                 if ($maxTmpScore == $totalScore) {
                     if ($result['firstScore'] >= $minTmpScore && $result['firstScore'] <= $maxTmpScore) {
                         ++$firstScoreCount;
@@ -510,25 +552,25 @@ class ManageController extends BaseController
         return json_encode($data);
     }
 
-    protected function analysisFirstResults($userFirstResults)
+    protected function analysisFirstResults($firstAndMaxScore)
     {
-        if (empty($userFirstResults)) {
+        if (empty($firstAndMaxScore)) {
             return array();
         }
 
         $data = array();
-        $scores = ArrayToolkit::column($userFirstResults, 'firstScore');
-        $data['avg'] = round(array_sum($scores) / count($userFirstResults), 1);
+        $scores = ArrayToolkit::column($firstAndMaxScore, 'firstScore');
+        $data['avg'] = sprintf('%.1f', array_sum($scores) / count($firstAndMaxScore));
         $data['maxScore'] = max($scores);
 
         $count = 0;
-        foreach ($userFirstResults as $result) {
+        foreach ($firstAndMaxScore as $result) {
             if ('unpassed' != $result['firstPassedStatus']) {
                 ++$count;
             }
         }
 
-        $data['passPercent'] = round($count / count($userFirstResults) * 100, 1);
+        $data['passPercent'] = round($count / count($firstAndMaxScore) * 100, 1);
 
         return $data;
     }

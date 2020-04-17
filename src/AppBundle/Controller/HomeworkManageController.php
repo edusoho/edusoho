@@ -9,10 +9,11 @@ use Biz\Question\Service\QuestionService;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Testpaper\Service\TestpaperService;
-use Biz\Testpaper\TestpaperException;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 
 class HomeworkManageController extends BaseController
 {
@@ -149,45 +150,68 @@ class HomeworkManageController extends BaseController
 
     public function resultGraphAction($activityId)
     {
-        $activity = $this->getActivityService()->getActivity($activityId);
+        $activity = $this->getActivityService()->getActivity($activityId, true);
 
         if (!$activity || 'homework' != $activity['mediaType']) {
             return $this->createMessageResponse('error', 'Argument Invalid');
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
-        $userFirstResults = $this->getTestpaperService()->findResultsByTestIdAndActivityId($testpaper['id'], $activity['id']);
-
-        $data = $this->fillGraphData($userFirstResults);
-        $analysis = $this->analysisFirstResults($userFirstResults);
-
+        $answerRecords = $this->getAnswerRecordsByAnswerSceneId($activity['ext']['answerSceneId']);
+        $firstAndMaxGrade = $this->getCalculateRecordsFirstAndMaxGrade($answerRecords);
+        $data = $this->fillGraphData($firstAndMaxGrade);
+        $analysis = $this->analysisFirstResults($firstAndMaxGrade);
         $task = $this->getCourseTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
 
         return $this->render('homework/manage/result-graph-modal.html.twig', array(
-            'activity' => $activity,
-            'testpaper' => $testpaper,
             'data' => $data,
             'analysis' => $analysis,
             'task' => $task,
         ));
     }
 
-    protected function getCheckedEssayQuestions($questions)
+    protected function getAnswerRecordsByAnswerSceneId($answerSceneId)
     {
-        $essayQuestions = array();
-
-        foreach ($questions as $question) {
-            if ('essay' == $question['type'] && empty($question['parentId'])) {
-                $essayQuestions[$question['id']] = $question;
-            } elseif ('material' == $question['type']) {
-                $types = ArrayToolkit::column($question['subs'], 'type');
-                if (in_array('essay', $types)) {
-                    $essayQuestions[$question['id']] = $question;
-                }
-            }
+        $conditions = array(
+            'status' => 'finished',
+            'answer_scene_id' => $answerSceneId,
+        );
+        $answerRecords = $this->getAnswerRecordService()->search($conditions, array(), 0, $this->getAnswerRecordService()->count($conditions));
+        $answerReports = ArrayToolkit::index(
+            $this->getAnswerReportService()->findByIds(ArrayToolkit::column($answerRecords, 'answer_report_id')),
+            'id'
+        );
+        foreach ($answerRecords as &$answerRecord) {
+            $answerRecord['grade'] = $answerReports[$answerRecord['answer_report_id']]['grade'];
         }
 
-        return $essayQuestions;
+        $answerRecords = ArrayToolkit::group($answerRecords, 'user_id');
+
+        return $answerRecords;
+    }
+
+    protected function getCalculateRecordsFirstAndMaxGrade($answerRecords)
+    {
+        $data = array();
+        foreach ($answerRecords as $userAnswerRecords) {
+            $data[] = array(
+                'firstGrade' => $userAnswerRecords[0]['grade'],
+                'maxGrade' => $this->getUserMaxGrade($userAnswerRecords),
+            );
+        }
+
+        return $data;
+    }
+
+    protected function getUserMaxGrade($userAnswerRecords)
+    {
+        if (1 == count($userAnswerRecords)) {
+            return $userAnswerRecords[0]['grade'];
+        }
+
+        $grades = ArrayToolkit::column($userAnswerRecords, 'grade');
+        sort($grades);
+
+        return $grades[0];
     }
 
     protected function findRelatedData($activity, $paper)
@@ -205,38 +229,38 @@ class HomeworkManageController extends BaseController
         return $relatedData;
     }
 
-    protected function fillGraphData($userFirstResults)
+    protected function fillGraphData($firstAndMaxGrade)
     {
         $data = array('xScore' => array(), 'yFirstNum' => array(), 'yMaxNum' => array());
         $status = $this->get('codeages_plugin.dict_twig_extension')->getDict('passedStatus');
 
-        $firstStatusGroup = ArrayToolkit::group($userFirstResults, 'firstPassedStatus');
-        $maxStatusGroup = ArrayToolkit::group($userFirstResults, 'maxPassedStatus');
+        $firstGradeGroup = ArrayToolkit::group($firstAndMaxGrade, 'firstGrade');
+        $maxGradeGroup = ArrayToolkit::group($firstAndMaxGrade, 'maxGrade');
 
         foreach ($status as $key => $name) {
             $data['xScore'][] = $name;
-            $data['yFirstNum'][] = empty($firstStatusGroup[$key]) ? 0 : count($firstStatusGroup[$key]);
-            $data['yMaxNum'][] = empty($maxStatusGroup[$key]) ? 0 : count($maxStatusGroup[$key]);
+            $data['yFirstNum'][] = empty($firstGradeGroup[$key]) ? 0 : count($firstGradeGroup[$key]);
+            $data['yMaxNum'][] = empty($maxGradeGroup[$key]) ? 0 : count($maxGradeGroup[$key]);
         }
 
         return json_encode($data);
     }
 
-    protected function analysisFirstResults($userFirstResults)
+    protected function analysisFirstResults($firstAndMaxGrade)
     {
-        if (empty($userFirstResults)) {
+        if (empty($firstAndMaxGrade)) {
             return array('passPercent' => 0);
         }
 
         $data = array();
         $count = 0;
-        foreach ($userFirstResults as $result) {
-            if ('unpassed' != $result['firstPassedStatus']) {
+        foreach ($firstAndMaxGrade as $grade) {
+            if ('unpassed' != $grade['firstGrade']) {
                 ++$count;
             }
         }
 
-        $data['passPercent'] = round($count / count($userFirstResults) * 100, 1);
+        $data['passPercent'] = round($count / count($firstAndMaxGrade) * 100, 1);
 
         return $data;
     }
@@ -321,6 +345,9 @@ class HomeworkManageController extends BaseController
         return $this->createService('Activity:ActivityService');
     }
 
+    /**
+     * @return AnswerRecordService
+     */
     protected function getAnswerRecordService()
     {
         return $this->createService('ItemBank:Answer:AnswerRecordService');
@@ -334,5 +361,13 @@ class HomeworkManageController extends BaseController
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerReportService');
     }
 }
