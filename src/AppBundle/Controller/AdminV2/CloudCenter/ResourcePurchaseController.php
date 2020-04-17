@@ -70,8 +70,8 @@ class ResourcePurchaseController extends BaseController
             'categories' => $categories,
             'subCategories' => $subCategories,
             'thirdLevelCategories' => $thirdLevelCategories,
-            'subCategoriesData' => ArrayToolkit::group($subCategories, 'parentId'),
-            'thirdLevelCategoriesData' => ArrayToolkit::group($thirdLevelCategories, 'parentId'),
+            'subCategoriesData' => empty($subCategories) ? array() : ArrayToolkit::group($subCategories, 'parentId'),
+            'thirdLevelCategoriesData' => empty($thirdLevelCategories) ? array() : ArrayToolkit::group($thirdLevelCategories, 'parentId'),
             'request' => $request,
         ));
     }
@@ -88,7 +88,7 @@ class ResourcePurchaseController extends BaseController
         /*
          * mock
          */
-        list($courseSets, $total) = $this->getS2B2CProductService()->searchProduct($conditions);;
+        list($courseSets, $total) = $this->getS2B2CProductService()->searchProduct($conditions);
 
         $merchant = $this->getS2B2CFacadeService()->getMe();
 

@@ -33,6 +33,14 @@ class ProductServiceImpl extends BaseService implements ProductService
         return array($courseSets, $total);
     }
 
+    public function searchSelectedItemProduct($conditions)
+    {
+        $conditions['merchant_access_key'] = $this->getAccessKey();
+        $resultSet = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->searchPurchaseProducts($conditions);
+
+        return $resultSet;
+    }
+
     protected function getAccessKey()
     {
         $settings = $this->getSettingService()->get('storage', array());

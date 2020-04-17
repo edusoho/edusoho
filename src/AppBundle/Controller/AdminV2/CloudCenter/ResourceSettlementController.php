@@ -5,20 +5,32 @@ namespace AppBundle\Controller\AdminV2\CloudCenter;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Course\Service\CourseSetService;
+use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
-use Biz\S2B2C\SupplierPlatformApi;
 use Codeages\Biz\Order\Service\Impl\OrderServiceImpl;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class ResourceSettlementController extends BaseController
 {
     private $pageSize = 20;
 
+    const TYPE_BALANCE = 'balance';
+
+    const TYPE_ORDER = 'order';
+
+    const TYPE_PRODUCT = 'product';
+
     public function balanceAction(Request $request)
     {
-        // TODO： balanceResult获取
-        $resultSet = $this->mockBalanceResult(35);
+        $conditions = $this->prepareConditionsByType($request->query->all(), self::TYPE_BALANCE);
+
+        $resultSet = $this->getS2B2CFacadeService()->getS2B2CService()->searchMerchantFlow(
+            $conditions,
+            array('created_time' => 'DESC'),
+            $request->query->get('page', 0),
+            $this->pageSize
+        );
+
         $paginator = new Paginator($request, $resultSet['count'], $this->pageSize);
 
         return $this->render('admin-v2/resource-settlement/balance/index.html.twig', array(
@@ -26,14 +38,12 @@ class ResourceSettlementController extends BaseController
             'items' => $resultSet['items'],
             'merchant' => $this->getS2B2CFacadeService()->getMe(),
             'total' => $resultSet['count'],
-            'pageSize' => $this->pageSize,
         ));
     }
 
     public function balanceModalAction(Request $request, $id)
     {
-//        TODO： 获取detail
-        $detail = $this->mockBalanceDetail($id);
+        $detail = $this->getS2B2CFacadeService()->getS2B2CService()->getFlowDetail($id);
         if (empty($detail)) {
             throw $this->createNotFoundException("Flow#{$id} not found");
         }
@@ -43,8 +53,15 @@ class ResourceSettlementController extends BaseController
 
     public function orderAction(Request $request)
     {
-        // TODO： balanceResult获取
-        $resultSet = $this->mockOrderResult(35);
+        $conditions = $this->prepareConditionsByType($request->query->all(), self::TYPE_ORDER);
+
+        $resultSet = $this->getS2B2CFacadeService()->getS2B2CService()->searchMerchantOrder(
+            $conditions,
+            array('created_time' => 'DESC'),
+            $request->query->get('page', 0),
+            $this->pageSize
+        );
+
         $paginator = new Paginator($request, $resultSet['count'], $this->pageSize);
 
         return $this->render('admin-v2/resource-settlement/order/index.html.twig', array(
@@ -58,8 +75,7 @@ class ResourceSettlementController extends BaseController
 
     public function orderModalAction(Request $request, $sn)
     {
-        // TODO： 获取detail
-        $detail = $this->mockOrderDetail($sn);
+        $detail = $this->getS2B2CFacadeService()->getS2B2CService()->getOrderDetail($sn);
         if (empty($detail)) {
             throw $this->createNotFoundException("Flow#{$sn} not found");
         }
@@ -72,7 +88,12 @@ class ResourceSettlementController extends BaseController
 
     public function productAction(Request $request)
     {
-        $resultSet = $this->mockProductResult(25);
+        $conditions = $this->prepareConditionsByType($request->query->all(), self::TYPE_PRODUCT);
+
+        $conditions['offset'] = $request->query->get('page', 0);
+
+        $resultSet = $this->getProductService()->searchSelectedItemProduct($conditions);
+
         $paginator = new Paginator($request, $resultSet['count'], $this->pageSize);
 
         return $this->render(
@@ -86,215 +107,29 @@ class ResourceSettlementController extends BaseController
             ));
     }
 
-    protected function mockMerchant()
+    protected function prepareConditionsByType($conditions, $type)
     {
-        return array('supplier_name' => '供应商名称',
-            'supplier_contact_name' => '联系人',
-            'coop_level_name' => '合作关系',
-            'supplier_mobile' => 'XXXXXXXXXXX',
-            'supplier_email' => 'xxxxxxx@163.com',
-            'supplier_province' => 'xx省',
-            'supplier_city' => 'xx市',
-            'supplier_area' => 'xx区',
-            'supplier_address' => 'xx地址',
-            'balance' => 10000,
-            'debt_sum' => 1,
-            'name' => 'merchant名',
-        );
-    }
-
-    protected function mockBalanceResult($count = 30)
-    {
-        $actions = array('recharge', 'refund', 'purchase');
-        $types = array('inflow', 'outflow');
-
-        $balance = 1000000;
-        $i = 0;
-        while ($i < $count) {
-            $amount = rand(1, 10000);
-            $balance -= $amount;
-            $result['items'][] = array(
-                'id' => rand(1, 100),
-                'sn' => '20200401131457546'.rand(10, 99),
-                'created_time' => '1586'.rand(100000, 999999),
-                'action' => $actions[array_rand($actions, 1)], //recharge purchase refund
-                'title' => '测试名称购买'.rand(1, 99),
-                'type' => $types[array_rand($types, 1)], //inflow outflow
-                'amount' => $amount,
-                'user_balance' => $balance,
-            );
-            ++$i;
-        }
-
-        $result['count'] = $count;
-
-        return $result;
-    }
-
-    private function mockBalanceDetail($id)
-    {
-        $actions = array('recharge', 'refund', 'purchase');
-        $types = array('inflow', 'outflow');
-
-        $balance = 1000000;
-        $amount = rand(1, 10000);
-        $balance -= $amount;
-
-        return array(
-            'operator' => '操作人-XXX',
-            'balance' => array(
-                'id' => $id,
-                'sn' => '20200401131457546'.rand(10, 99),
-                'created_time' => '1586'.rand(100000, 999999),
-                'action' => $actions[array_rand($actions, 1)], //recharge purchase refund
-                'title' => '测试名称购买'.rand(1, 99),
-                'type' => $types[array_rand($types, 1)], //inflow outflow
-                'amount' => $amount,
-                'user_balance' => $balance,
+        $conditionTypes = array(
+            self::TYPE_BALANCE => array(
+                'created_time_GTE' => empty($conditions['startTime']) ? null : strtotime($conditions['startTime']),
+                'created_time_LTE' => empty($conditions['endTime']) ? null : strtotime($conditions['endTime']),
+                'title_like' => empty($conditions['title']) ? null : $conditions['title'],
             ),
-            'order' => array(
-                'title' => '采购单title'.rand(10, 99),
-                'sn' => '20200401131457546'.rand(10, 99),
+            self::TYPE_ORDER => array(
+                'only_show_debt' => empty($conditions['showDebt']) ? 0 : 1,
+                'start_time' => empty($conditions['startTime']) ? null : strtotime($conditions['startTime']),
+                'end_time' => empty($conditions['endTime']) ? null : strtotime($conditions['endTime']),
+                'status' => empty($conditions['status']) ? null : $conditions['status'],
+                'title_like' => empty($conditions['title']) ? null : $conditions['title'],
+            ),
+            self::TYPE_PRODUCT => array(
+                'productName' => empty($conditions['title']) ? null : $conditions['title'],
+                'limit' => $this->pageSize,
+                'sorts' => array('created_time' => 'DESC'),
             ),
         );
-    }
 
-    protected function mockOrderResult($count = 30)
-    {
-        $status = array('success', 'refunded', 'purchase');
-
-        $balance = 1000000;
-        $i = 0;
-        while ($i < $count) {
-            $amount = rand(1, 10000);
-            $balance -= $amount;
-            $result['items'][] = array(
-                'id' => rand(1, 100),
-                'sn' => '20200401131457546'.rand(10, 99),
-                'created_time' => '1586'.rand(100000, 999999),
-                'status' => $status[array_rand($status, 1)], //recharge purchase refund
-                'title' => '测试名称购买'.rand(1, 99),
-                'coop_price' => rand(100, 9900),
-                'price_amount' => $amount,
-                'debt_amount' => 0,
-            );
-            ++$i;
-        }
-
-        $result['count'] = $count;
-
-        return $result;
-    }
-
-    protected function mockProductResult($count = 30)
-    {
-        $i = 0;
-        $status = array('published', 'closed');
-        while ($i < $count) {
-            $result['items'][] = array(
-                'id' => rand(1, 100),
-                'createdTime' => '1586'.rand(100000, 999999),
-                'title' => '测试Product名'.rand(1, 99),
-                'status' => $status[array_rand($status, 1)],
-                'studentNum' => rand(1, 10),
-                'maxCoursePrice' => 100,
-                'suggestionPrice' => 100,
-                'cooperationPrice' => 2,
-            );
-            ++$i;
-        }
-
-        $result['count'] = $count;
-
-        return $result;
-    }
-
-    private function mockOrderDetail($sn)
-    {
-        $actions = array('recharge', 'refund', 'purchase');
-        $types = array('inflow', 'outflow');
-
-        $amount = rand(1, 10000);
-
-        $flows = array();
-
-        for ($i = 0; $i < 5; ++$i) {
-            $flows[] = array(
-                'amount' => $amount,
-                'sn' => '20200401131457546'.rand(10, 99),
-                'action' => $actions[array_rand($actions, 1)],
-                'type' => $types[array_rand($types, 1)], //inflow outflow
-                'created_time' => '1586'.rand(100000, 999999),
-            );
-        }
-
-        return array(
-            'order' => array(
-                'id' => rand(1, 100),
-                'sn' => $sn,
-                'created_time' => '1586'.rand(100000, 999999),
-                'status' => $actions[array_rand($actions, 1)], //recharge purchase refund
-                'title' => '测试名称购买'.rand(1, 99),
-                'coop_price' => rand(100, 9900),
-                'price_amount' => $amount,
-                'debt_amount' => 0,
-                'paid_coin_amount' => 100,
-                'create_extra' => array(
-                    'merchant_order' => array(
-                        'title' => '测试名称购买'.rand(1, 99),
-                        'sn' => '20200401131457546'.rand(10, 99),
-                        'nickname' => '用户'.rand(1, 10),
-                    ),
-                ),
-            ),
-            'flows' => $flows,
-        );
-    }
-
-    protected function parseTableConditions(Request $request)
-    {
-        $conditions = $request->query->all();
-        unset($conditions['page']);
-        unset($conditions['pageSize']);
-
-        $page = (int) $request->query->get('page', 1);
-        $page = $page < 1 ? 1 : $page;
-
-        $limit = (int) $request->query->get('pageSize', 20);
-        $limit = $limit < 1 ? 1 : $limit;
-
-        $start = ($page - 1) * $limit;
-
-        return array($conditions, $start, $limit);
-    }
-
-    /**
-     * @return \Biz\S2B2C\Service\ProductService
-     */
-    protected function getProductService()
-    {
-        return $this->createService('S2B2C:ProductService');
-    }
-
-    /**
-     * @return SupplierPlatformApi
-     */
-    protected function getSupplierPlatformApi()
-    {
-        return $this->getBiz()->offsetGet('supplier.platform_api');
-    }
-
-    /**
-     * @return \QiQiuYun\SDK\Service\S2B2CService
-     */
-    protected function getS2B2CService()
-    {
-        return $this->getBiz()->offsetGet('qiQiuYunSdk.s2b2cService');
-    }
-
-    private function getSettingService()
-    {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return empty($conditionTypes[$type]) ? array() : $conditionTypes[$type];
     }
 
     /**
@@ -319,5 +154,13 @@ class ResourceSettlementController extends BaseController
     protected function getS2B2CFacadeService()
     {
         return $this->createService('S2B2C:S2B2CFacadeService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('S2B2C:ProductService');
     }
 }

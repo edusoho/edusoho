@@ -133,11 +133,11 @@
 
 
                         {% if currentMenu.mode|default('') == 'capsules' and capsule|default(false) %}
-                          {% for m in sub_permissions(permission(capsule).code,'topBtn') if m.visible is not defined or m.visible == true or eval_expression(m.visible) %}
+                          {% for m in sub_permissions(permission(capsule).code,'topBtn') if m.visible is not defined or eval_expression(m.visible) %}
                             {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
                           {% endfor %}
                         {% else %}
-                          {% for m in sub_permissions(currentMenu.code,'topBtn') if m.visible is not defined or m.visible == true or eval_expression(m.visible) %}
+                          {% for m in sub_permissions(currentMenu.code,'topBtn') if m.visible is not defined or eval_expression(m.visible) %}
                             {% set class = m.class|default() ? "btn btn-sm " ~  m.class : 'btn btn-success btn-sm' %}
                             {{ self_macro.menu_link_html(_context, m, class) }}
                           {% endfor %}

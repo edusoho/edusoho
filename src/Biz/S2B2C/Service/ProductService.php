@@ -6,4 +6,5 @@ interface ProductService
 {
     public function searchProduct($conditions);
 
+    public function searchSelectedItemProduct($conditions);
 }
