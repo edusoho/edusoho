@@ -802,14 +802,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->createOperateRecord($member, 'exit', $info);
 
-        $user = $this->getUserService()->getUser($member['userId']);
+        $currentUser = $this->getCurrentUser();
         $message = array(
             'classroomId' => $classroom['id'],
             'classroomTitle' => $classroom['title'],
-            'userId' => $user['id'],
-            'userName' => $user['nickname'],
+            'userId' => $currentUser['id'],
+            'userName' => $currentUser['nickname'],
             'type' => 'remove',
         );
+        $user = $this->getUserService()->getUser($member['userId']);
         $this->getNotificationService()->notify($user['id'], 'classroom-student', $message);
 
         $infoData = array(
