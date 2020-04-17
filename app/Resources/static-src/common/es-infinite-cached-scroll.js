@@ -109,7 +109,7 @@ export default class ESInfiniteCachedScroll extends Emitter {
   }
 
   chapterAnimate(
-    delegateTarget = 'course-detail-content',
+    delegateTarget = 'body',
     target = '.js-task-chapter',
     $expandIconClass = 'es-icon-remove',
     $putIconClass = 'es-icon-anonymous-iconfont') {
@@ -119,7 +119,7 @@ export default class ESInfiniteCachedScroll extends Emitter {
       self.toggleIcon($this, $expandIconClass, $putIconClass).then(() => {
         $this.nextUntil(target).animate({ height: 'toggle', opacity: 'toggle' }, 'normal');
       });
-    });
+    })
   }
 
   _initUpLoading() {
@@ -157,7 +157,7 @@ export default class ESInfiniteCachedScroll extends Emitter {
     }
     //适配介绍页的查看全部要固定25个
     if (this._pageSize > 25 && $('.js-only-display-one-page').length != 0) {
-      this._pageSize = 25;
+      this._pageSize = 25
     }
 
     this._afterFirstLoad = this._options['afterFirstLoad'] ? this._options['afterFirstLoad'] : null;
