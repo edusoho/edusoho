@@ -7,6 +7,7 @@ use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,7 +52,10 @@ class ResourcePurchaseController extends BaseController
         /**
          * mock
          */
-        $categoryList = [[['id' => 1, 'name' => 'tests']], [], []];
+        $categoryList = $this->getS2B2CFacadeService()->getSupplierPlatformApi()
+            ->searchProductCategories(array(
+                'group' => $group,
+            ));
 
         if (!empty($categoryList['error'])) {
             $categories = $subCategories = $thirdLevelCategories = array();
@@ -84,10 +88,7 @@ class ResourcePurchaseController extends BaseController
         /*
          * mock
          */
-        list($courseSets, $total) = [
-            [],
-            100,
-        ];
+        list($courseSets, $total) = $this->getS2B2CProductService()->searchProduct($conditions);;
 
         $merchant = $this->getS2B2CFacadeService()->getMe();
 
@@ -95,10 +96,10 @@ class ResourcePurchaseController extends BaseController
         $paginator->setBaseUrl($this->generateUrl('admin_v2_purchase_market_products_list'));
 
         $supplierSettings = $this->getS2B2CFacadeService()->getSupplier();
-        if (!empty($supplierSettings['supplierId'])) {
-            $chosenCourses = $this->getCourseSetService()->findCourseSetByOriginPlatformId($supplierSettings['supplierId']);
-            $chosenCourses = ArrayToolkit::index($chosenCourses, 'sourceCourseSetId');
-        }
+//        if (!empty($supplierSettings['supplierId'])) {
+//            $chosenCourses = $this->getCourseSetService()->findCourseSetByOriginPlatformId($supplierSettings['supplierId']);
+//            $chosenCourses = ArrayToolkit::index($chosenCourses, 'sourceCourseSetId');
+//        }
 
         return $this->render(
             'admin-v2/cloud-center/content-resource/market/course-set/course-list.html.twig', array(
@@ -112,8 +113,8 @@ class ResourcePurchaseController extends BaseController
     public function productDetailAction(Request $request, $id, $tab = 'summary')
     {
         //当前静默是课程，不过真是情况是会有多种模式的课程
-        $courseSet = [];
-//        $courseSet = $this->getSupplierPlatformApi()->getSupplierCourseSetProductDetail($id);
+        $courseSet = $this->getS2B2CFacadeService()->getSupplierPlatformApi()
+            ->getSupplierCourseSetProductDetail($id);
         if (empty($courseSet) || !empty($courseSet['error'])) {
             throw $this->createNotFoundException('原课程未找到或出错了');
         }
@@ -224,7 +225,7 @@ class ResourcePurchaseController extends BaseController
         if (empty($supplierSettings['supplierId'])) {
             throw $this->createNotFoundException();
         }
-        $course = $this->getProductService()->getOriginPlatformCourse('supplier', $supplierSettings['supplierId'], $productId);
+        $course = $this->getS2B2CProductService()->getOriginPlatformCourse('supplier', $supplierSettings['supplierId'], $productId);
         if (empty($course)) {
             throw $this->createNotFoundException();
         }
@@ -262,5 +263,13 @@ class ResourcePurchaseController extends BaseController
     protected function getS2B2CFacadeService()
     {
         return $this->createService('S2B2C:S2B2CFacadeService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getS2B2CProductService()
+    {
+        return $this->createService('S2B2C:ProductService');
     }
 }

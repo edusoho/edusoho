@@ -1,3 +1,11 @@
+
+.link-dark {
+  cursor: pointer;
+  color: @gray-dark !important;
+  &:hover {
+    color: @brand-primary !important;
+  }
+}
 .cloud-banner-top {
   img {
     width: 100%;
@@ -105,4 +113,38 @@
     text-decoration:none;
   }
 }
+.course-list .course-item {
+  .title {
+    height: 40px;
+    margin-top: 10px;
+    padding: 0 10px;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+  }
 
+  .metas {
+    position: relative;
+    padding: 10px;
+    color: #c1c1c1;
+  }
+  .course-info {
+    .form-group .control-label {
+      width: 6em;
+      padding: 0 10px;
+    }
+    .form-group.row {
+      margin-right: -10px;
+      margin-left: -10px;
+    }
+  }
+
+  #explore-card .course-item .title .link-dark {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+}

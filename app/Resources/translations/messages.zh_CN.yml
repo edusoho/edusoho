@@ -10889,8 +10889,14 @@ merchant.content_resource.course_product_update: 课程更新
 merchant.content_resource.course_product_update_tips: 确定更新课程后，将会同步供应商提供的最新版本内容，确认更新？
 
 
-
 admin_v2.course_manage.create_btn: 创建课程
 admin_v2.course_manage.merchant_course: 采购
 admin_v2.course_manage.has_version_change: 有变更
 exception.courseset.source_course_closed: 供应商已下架课程，如需发布，请联系商家！
+
+merchant.content_resource.has_chosen: 已选择
+merchant.content_resource.editing: 编辑中
+merchant.content_resource.choose: 选择
+merchant.content_resource.no_supplier: 暂无合作供应商！
+merchant.content_resource.supplier.no_cooperation_hint: 与供应商%supplierName%之间商品合作关系已经取消，供应商的商品不能购买加入，但不影响已购学员学习，如需恢复，请联系供应商！
+

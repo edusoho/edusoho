@@ -62,19 +62,19 @@
         {% set canChoose = (merchant.coop_status|default('') != 'cooperation' or hasChosen or courseSet.wholeEditStatus|default() == 'unpublished') %}
         <div class="course-detail-info__btn js-course-header-operation">
           <div class="text-right buy-btn-group course-operation-btn ">
-            <a href="{{ path('admin_v2_resource_market_product') }}" style="margin-right: 30px;">返回内容市场</a>
+            <a href="{{ path('admin_v2_purchase_market') }}" style="margin-right: 30px;">返回内容市场</a>
               <button id="js-course-select-btn"
                       data-id="{{ courseSet.id }}"
                       class="btn btn-fat btn-primary course-v2-btn{% if canChoose %} disabled {% endif %}"
                       data-course-set="{{ courseSet|json_encode() }}"
-                      data-choose-url="{{ path('admin_v2_resource_market_choose_course_product') }}"
+{#                      data-choose-url="{{ path('admin_v2_resource_market_choose_course_product') }}"#}
                       style="{% if canChoose %} background-color: #ccc; border-color: #ccc;{% else %} border-color: #409eff; background-color: #409eff; {% endif %}">
                 {% if hasChosen %}
-                  {{ 'merchant.resource.has_chosen'|trans }}
+                  {{ 'merchant.content_resource.has_chosen'|trans }}
                 {% elseif courseSet.wholeEditStatus|default() == 'unpublished' %}
-                  {{ 'merchant.resource.editing'|trans }}
+                  {{ 'merchant.content_resource.editing'|trans }}
                 {% else %}
-                  {{ 'merchant.resource.choose'|trans }}
+                  {{ 'merchant.content_resource.choose'|trans }}
                 {% endif %}
               </button>
 
