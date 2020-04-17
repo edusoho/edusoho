@@ -69,7 +69,6 @@ class ResourceSettlementController extends BaseController
             'items' => $resultSet['items'],
             'merchant' => $this->getS2B2CFacadeService()->getMe(),
             'total' => $resultSet['count'],
-            'pageSize' => $this->pageSize,
         ));
     }
 
@@ -103,7 +102,6 @@ class ResourceSettlementController extends BaseController
                 'items' => $resultSet['items'],
                 'merchant' => $this->getS2B2CFacadeService()->getMe(),
                 'total' => $resultSet['count'],
-                'pageSize' => $this->pageSize,
             ));
     }
 
