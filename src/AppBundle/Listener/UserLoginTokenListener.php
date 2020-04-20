@@ -2,13 +2,17 @@
 
 namespace AppBundle\Listener;
 
+use Biz\System\Service\SettingService;
+use Biz\User\Service\TokenService;
+use Biz\User\Service\UserService;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Biz\User\UserException;
+use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
 class UserLoginTokenListener
 {
@@ -73,6 +77,19 @@ class UserLoginTokenListener
 
         $loginBind = $this->getSettingService()->get('login_bind');
 
+        if (!empty($loginBind['client_login_limit'])) {
+            $tokens = $this->getTokenService()->findTokensByUserIdAndType($user['id'], MobileBaseController::TOKEN_TYPE);
+            foreach ($tokens as $token) {
+                if (!isset($token['data']['client']) || 'app' == $token['data']['client']) {
+                    $request->getSession()->invalidate();
+                    $response = $this->logout();
+                    $event->setResponse($response);
+
+                    return;
+                }
+            }
+        }
+
         if (empty($loginBind['login_limit'])) {
             return;
         }
@@ -104,16 +121,23 @@ class UserLoginTokenListener
             }
             $request->getSession()->invalidate();
 
-            $this->container->get('security.token_storage')->setToken(null);
-
-            $goto = $this->container->get('router')->generate('login');
-
-            $response = new RedirectResponse($goto, '302');
-            setcookie('REMEMBERME', '', -1);
-            $this->container->get('session')->getFlashBag()->add('danger', '此帐号已在别处登录，请重新登录');
+            $response = $this->logout();
 
             $event->setResponse($response);
         }
+    }
+
+    protected function logout()
+    {
+        $this->container->get('security.token_storage')->setToken(null);
+
+        $this->container->get('session')->getFlashBag()->add('danger', '此帐号已在别处登录，请重新登录');
+
+        $goto = $this->container->get('router')->generate('login');
+        $response = new RedirectResponse($goto, '302');
+        $response->headers->clearCookie('REMEMBERME');
+
+        return $response;
     }
 
     private function makeHash($user)
@@ -123,19 +147,28 @@ class UserLoginTokenListener
         return md5($string);
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->getBiz()->service('User:UserService');
     }
 
+    /**
+     * @return TokenService
+     */
+    protected function getTokenService()
+    {
+        return $this->getBiz()->service('User:TokenService');
+    }
+
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
-    }
-
-    protected function getAuthService()
-    {
-        return $this->getBiz()->service('User:AuthService');
     }
 
     protected function getBiz()

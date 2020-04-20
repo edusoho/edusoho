@@ -82,7 +82,7 @@ class Login extends AbstractResource
         $user['currentIp'] = $request->getHttpRequest()->getClientIp();
         $this->appendUser($user);
 
-        $token = $this->getLoginToken($user['id']);
+        $token = $this->getLoginToken($user['id'], ['client' => $request->request->get('client', 'app')]);
 
         $this->afterLogin($user, $token, $client);
 
