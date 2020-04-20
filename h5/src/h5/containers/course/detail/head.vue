@@ -159,7 +159,8 @@ export default {
       taskId: state => state.taskId,
       details: state => state.details,
       joinStatus: state => state.joinStatus,
-      user: state => state.user
+      user: state => state.user,
+      allTask: state => state.allTask
     }),
     textContent() {
       return this.mediaOpts.text;
@@ -226,11 +227,18 @@ export default {
       this.initReportData(this.selectedPlanId, this.taskId, this.sourceType);
       this.finishDialog = false;
       this.getFinishCondition();
+      this.IsLivePlayback();
     },
     getFinishCondition() {
       this.getCourseData(this.selectedPlanId, this.taskId).then(res => {
         this.finishCondition = res.activity && res.activity.finishCondition;
       });
+    },
+    //直播视频回放刚进入课程就算学习完成
+    IsLivePlayback(){
+      if(this.allTask[this.taskId].type==="live"){
+         this.reprtData("finish");
+      }
     },
     viewAudioDoc() {
       this.isCoverOpen = true;
