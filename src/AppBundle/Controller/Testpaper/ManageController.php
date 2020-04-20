@@ -98,11 +98,22 @@ class ManageController extends BaseController
 
     public function checkAction(Request $request, $answerRecordId, $targetId, $source = 'course')
     {
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+        if (!$answerRecord) {
+            $this->createNewException(TestpaperException::NOTFOUND_RESULT());
+        }
+
+        if ('reviewing' !== $answerRecord['status']) {
+            $this->createNewException(CommonException::ERROR_PARAMETER());
+        }
+
         switch ($source) {
             case 'course':
+                $successContinueGotoUrl = $this->generateUrl('course_manage_exam_next_result_check', array('id' => $targetId, 'activityId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id'])));
                 $this->getCourseService()->tryManageCourse($targetId);
                 break;
             case 'classroom':
+                $successContinueGotoUrl = $this->generateUrl('classroom_manage_exam_next_result_check', array('id' => $targetId, 'activityId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id'])));
                 $this->getClassroomService()->tryHandleClassroom($targetId);
                 break;
             default:
@@ -110,18 +121,17 @@ class ManageController extends BaseController
                 break;
         }
 
-        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
-        if (!$answerRecord) {
-            $this->createNewException(CommonException::ERROR_PARAMETER());
-        }
-
-        if ('reviewing' !== $answerRecord['status']) {
-            $this->createNewException(CommonException::ERROR_PARAMETER());
-        }
-
         return $this->forward('AppBundle:AnswerEngine/AnswerEngine:reviewAnswer', array(
             'answerRecordId' => $answerRecordId,
+            'successGotoUrl' => $this->generateUrl('testpaper_result_show', array('action' => 'check', 'answerRecordId' => $answerRecordId)),
+            'successContinueGotoUrl' => $successContinueGotoUrl,
         ));
+    }
+
+    protected function getActivityIdByAnswerSceneId($answerSceneId)
+    {
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerSceneId);
+        return $this->getActivityService()->getByMediaIdAndMediaType($testpaperActivity['id'], 'testpaper');
     }
 
     public function resultListAction(Request $request, $testpaperId, $source, $targetId, $activityId)

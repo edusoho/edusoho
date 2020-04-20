@@ -79,7 +79,14 @@ class HomeworkController extends BaseController
         return $this->render('homework/result.html.twig', array(
             'answerRecordId' => $answerRecordId,
             'assessment' => $assessment,
+            'restartUrl' => $this->generateUrl('homework_start_do', array('lessonId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id']), 'homeworkId' => 1)),
         ));
+    }
+
+    protected function getActivityIdByAnswerSceneId($answerSceneId)
+    {
+        $homeworkActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerSceneId);
+        return $this->getActivityService()->getByMediaIdAndMediaType($homeworkActivity['id'], 'homework');
     }
 
     protected function canLookAnswerRecord($answerRecordId)

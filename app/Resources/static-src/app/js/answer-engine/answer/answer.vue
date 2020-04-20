@@ -6,10 +6,11 @@
       :answerRecord="answerRecord"
       :answerScene="answerScene"
       :showCKEditorData="showCKEditorData"
+      :assessmentResponse="assessmentResponse"
       @getAnswerData="getAnswerData"
       @saveAnswerData="saveAnswerData"
-      @checkResult="checkResult"
-      @showCKEditorData="showCKEditorData"
+      @timeSaveAnswerData="timeSaveAnswerData"
+      @reachTimeSubmitAnswerData="reachTimeSubmitAnswerData"
     ></item-engine>
   </div>
 </template>
@@ -32,12 +33,11 @@
        this.assessment = JSON.parse($('[name=assessment]').val());
        this.answerRecord = JSON.parse($('[name=answer_record]').val());
        this.answerScene = JSON.parse($('[name=answer_scene]').val());
+       this.assessmentResponse = JSON.parse($('[name=assessment_response]').val());
     },
     methods: {
       getAnswerData(assessmentResponse) {
         const that = this;
-        assessmentResponse.answer_record_id = this.answerRecord.id
-        assessmentResponse.used_time = 0
         $.ajax({
           url: $("[name='answer_engine_submit_url']").val(),
           contentType: 'application/json;charset=utf-8',
@@ -48,11 +48,23 @@
           }
         }).done(function (resp) {
           that.emitter.emit('finish', {data: ''});
-          location.replace = $('[name=submit_goto_url]').val();
+          location.replace($('[name=submit_goto_url]').val());
         })
       },
-      checkResult(data) {
-
+      reachTimeSubmitAnswerData(assessmentResponse) {
+        alert('倒计时到了')
+      },
+      timeSaveAnswerData(assessmentResponse) {
+        $.ajax({
+          url: $("[name='answer_engine_save_url']").val(),
+          contentType: 'application/json;charset=utf-8',
+          type: 'post',
+          data: JSON.stringify(assessmentResponse),
+          beforeSend(request) {
+            request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+          }
+        }).done(function (resp) {
+        })
       },
       saveAnswerData(assessmentResponse){
         $.ajax({
@@ -64,7 +76,7 @@
             request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
           }
         }).done(function (resp) {
-          location.href = $('[name=save_goto_url]').val();
+          // location.href = $('[name=save_goto_url]').val();
         })
       }
     }

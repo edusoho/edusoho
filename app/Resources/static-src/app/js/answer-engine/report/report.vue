@@ -30,7 +30,7 @@
     },
     methods: {
       doAgainEvent(data) {
-          
+        location.href = $('[name=restart_url]').val();
       }
     }
   }

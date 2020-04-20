@@ -31,7 +31,6 @@
     },
     methods: {
       getReviewData(reviewReport) {
-        
         $.ajax({
           url: $("[name='answer_engine_review_url']").val(),
           contentType: 'application/json;charset=utf-8',
@@ -41,13 +40,21 @@
             request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
           }
         }).done(function (resp) {
-          console.log(333333333)
+          location.href = $('[name=success_goto_url]').val();
         })
-
-        console.log(reviewReport)
       },
       getReviewDataAagin(reviewReport){
-
+        $.ajax({
+          url: $("[name='answer_engine_review_url']").val(),
+          contentType: 'application/json;charset=utf-8',
+          type: 'post',
+          data: JSON.stringify(reviewReport),
+          beforeSend(request) {
+            request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+          }
+        }).done(function (resp) {
+          location.href = $('[name=success_continue_goto_url]').val();
+        })
       }
     }
   }

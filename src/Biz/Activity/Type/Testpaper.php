@@ -54,7 +54,7 @@ class Testpaper extends Activity
                 'redo_interval' => $fields['redoInterval'],
                 'need_score' => 1,
                 'start_time' => $fields['startTime'],
-                'pass_score' => empty($fields['finishCondition']['finishScore']) ? 0 : $fields['finishCondition']['finishScore'],
+                'pass_score' => empty($fields['passScore']) ? 0 : $fields['passScore'],
             ));
 
             $testpaperActivity = $this->getTestpaperActivityService()->createActivity(array(
@@ -141,7 +141,7 @@ class Testpaper extends Activity
                 'do_times' => $filterFields['doTimes'],
                 'redo_interval' => $filterFields['redoInterval'],
                 'start_time' => $filterFields['startTime'],
-                'pass_score' => empty($filterFields['finishCondition']['finishScore']) ? 0 : $filterFields['finishCondition']['finishScore'],
+                'pass_score' => empty($filterFields['passScore']) ? 0 : $filterFields['passScore'],
             ));
 
             $testpaperActivity = $this->getTestpaperActivityService()->updateActivity($activity['id'], array(
@@ -201,12 +201,14 @@ class Testpaper extends Activity
 
     protected function filterFields($fields)
     {
+        $testPaper = $this->getAssessmentService()->getAssessment($fields['testpaperId']);
+        $fields['passScore'] = empty($fields['finishData']) ? 0 : round($testPaper['total_score'] * $fields['finishData'], 0);
+        
         if (!empty($fields['finishType'])) {
             if ('score' == $fields['finishType']) {
-                $testPaper = $this->getAssessmentService()->getAssessment($fields['testpaperId']);
                 $fields['finishCondition'] = array(
                     'type' => 'score',
-                    'finishScore' => empty($fields['finishData']) ? 0 : round($testPaper['total_score'] * $fields['finishData'], 0),
+                    'finishScore' => $passScore,
                 );
             } else {
                 $fields['finishCondition'] = array();
@@ -227,6 +229,7 @@ class Testpaper extends Activity
                 'testMode',
                 'finishCondition',
                 'startTime',
+                'passScore',
             )
         );
 

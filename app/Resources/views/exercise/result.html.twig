@@ -13,7 +13,6 @@
     {% if showHeader %}{{ parent() }}{% endif %}
   {% endblock %}
 
-  <div>业务上的反馈</div>
   {{ render(controller('AppBundle:AnswerEngine/AnswerEngine:report', {answerRecordId: answerRecordId, restartUrl:restartUrl})) }}
 
   {% block footer %}

@@ -14,6 +14,8 @@
     <input type="hidden" name="answer_record" value='{{ answerRecord|json_encode|raw }}'>
     <input type="hidden" name="answer_scene" value='{{ answerScene|json_encode|raw }}'>
     <input type="hidden" name="answer_report" value='{{ answerReport|json_encode|raw }}'>
+    <input type="hidden" name="success_goto_url" value='{{ successGotoUrl }}'>
+    <input type="hidden" name="success_continue_goto_url" value='{{ successContinueGotoUrl }}'>
     {% block footer %}
         {% if showHeader|default(1) %}{{ parent() }}{% endif %}
     {% endblock %}

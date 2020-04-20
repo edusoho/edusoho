@@ -51,7 +51,14 @@ class TestpaperController extends BaseController
         return $this->render('testpaper/result.html.twig', array(
             'answerRecordId' => $answerRecordId,
             'assessment' => $assessment,
+            'restartUrl' => $this->generateUrl('testpaper_do', array('lessonId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id']), 'testId' => 1)),
         ));
+    }
+
+    protected function getActivityIdByAnswerSceneId($answerSceneId)
+    {
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerSceneId);
+        return $this->getActivityService()->getByMediaIdAndMediaType($testpaperActivity['id'], 'testpaper');
     }
 
     protected function canLookAnswerRecord($answerRecordId)

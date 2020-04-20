@@ -19,10 +19,7 @@ class AnswerEngineController extends BaseController
 
         $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($answerSceneId, $user['id']);
 
-        if (
-            empty($latestAnswerRecord) ||
-            (1 == $request->query->get('redo', '0') && AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status'])
-        ) {
+        if (empty($latestAnswerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
             return $this->forward('AppBundle:AnswerEngine/AnswerEngine:startAnswer', array(
                 'answerSceneId' => $answerSceneId,
                 'assessmentId' => $assessmentId,
@@ -115,7 +112,7 @@ class AnswerEngineController extends BaseController
         return $this->createJsonResponse($assessmentResponse);
     }
 
-    public function reportAction(Request $request, $answerRecordId)
+    public function reportAction(Request $request, $answerRecordId, $restartUrl)
     {
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
 
@@ -124,6 +121,7 @@ class AnswerEngineController extends BaseController
             'answerReport' => $this->getAnswerReportService()->get($answerRecord['answer_report_id']),
             'answerScene' => $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']),
             'assessment' => $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']),
+            'restartUrl' => $restartUrl,
         ));
     }
 
@@ -135,11 +133,13 @@ class AnswerEngineController extends BaseController
         return $this->createJsonResponse($reviewReport);
     }
 
-    public function reviewAnswerAction(Request $request, $answerRecordId)
+    public function reviewAnswerAction(Request $request, $answerRecordId, $successGotoUrl, $successContinueGotoUrl)
     {
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
 
         return $this->render('answer-engine/review.html.twig', array(
+            'successGotoUrl' => $successGotoUrl,
+            'successContinueGotoUrl' => $successContinueGotoUrl,
             'answerRecord' => $answerRecord,
             'answerReport' => $this->getAnswerReportService()->get($answerRecord['answer_report_id']),
             'answerScene' => $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']),

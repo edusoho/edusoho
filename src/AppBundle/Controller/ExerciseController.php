@@ -71,12 +71,19 @@ class ExerciseController extends BaseController
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
         $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
 
-        return $this->render('testpaper/result.html.twig', array(
+        return $this->render('exercise/result.html.twig', array(
             'answerRecordId' => $answerRecordId,
             'assessment' => $assessment,
+            'restartUrl' => $this->generateUrl('exercise_start_do', array('lessonId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id']), 'exerciseId' => 1)),
         ));
     }
 
+    protected function getActivityIdByAnswerSceneId($answerSceneId)
+    {
+        $homeworkActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerSceneId);
+        return $this->getActivityService()->getByMediaIdAndMediaType($homeworkActivity['id'], 'homework');
+    }
+    
     protected function canLookAnswerRecord($answerRecordId)
     {
         $user = $this->getCurrentUser();
