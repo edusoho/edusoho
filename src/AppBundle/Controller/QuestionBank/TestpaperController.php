@@ -308,15 +308,16 @@ class TestpaperController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
         $assessment = $this->getAssessmentService()->showAssessment($assessmentId);
-        if (!$assessment || $assessment['bank_id'] != $id) {
+        if (!$assessment || $assessment['bank_id'] != $questionBank['itemBankId']) {
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
         if ('closed' === $assessment['status']) {
             return $this->createMessageResponse('warning', 'testpaper already closed');
         }
-        
+
         return $this->render('testpaper/manage/preview.html.twig', [
             'assessment' => $assessment,
         ]);

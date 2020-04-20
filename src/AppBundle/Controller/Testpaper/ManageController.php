@@ -470,15 +470,40 @@ class ManageController extends BaseController
     public function saveImportTestpaperAction(Request $request, $token)
     {
         $content = $request->getContent();
-        $testpaper = json_decode($content, true);
+        $postData = json_decode($content, true);
         $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
         $data = $token['data'];
         if (!$this->getQuestionBankService()->canManageBank($data['questionBankId'])) {
             $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
         }
-        $this->getTestpaperService()->importTestpaper($testpaper, $token);
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($data['questionBankId']);
+        $items = $postData['items'];
+        $assessment = array(
+            'name' => $postData['fileName'],
+            'bank_id' => $questionBank['itemBankId'],
+            'displayable' => 1,
+            'sections' => $this->assembleSections($items),
+        );
+        $this->getAssessmentService()->importAssessment($assessment);
 
-        return $this->createJsonResponse(true);
+        return $this->createJsonResponse(array('goto' => $this->generateUrl('question_bank_manage_testpaper_list', array('id' => $questionBank['id']))));
+    }
+
+    protected function assembleSections($items)
+    {
+        $typeGroupItems = ArrayToolkit::group($items, 'type');
+        $sections = array();
+        $questionTypes = $this->getQuestionTypes();
+        foreach ($questionTypes as $type => $config) {
+            if (!empty($typeGroupItems[$type])) {
+                $sections[] = array(
+                    'name' => $this->trans($config['name']),
+                    'items' => $typeGroupItems[$type],
+                );
+            }
+        }
+
+        return $sections;
     }
 
     public function optionTemplateAction(Request $request, $type)
@@ -700,6 +725,11 @@ class ManageController extends BaseController
         );
 
         return $routes[$mode][$type];
+    }
+
+    protected function getQuestionTypes()
+    {
+        return $this->get('extension.manager')->getQuestionTypes();
     }
 
     /**
