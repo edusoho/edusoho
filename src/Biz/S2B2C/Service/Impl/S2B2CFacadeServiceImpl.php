@@ -5,6 +5,7 @@ namespace Biz\S2B2C\Service\Impl;
 use Biz\BaseService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\S2B2C\SupplierPlatformApi;
+use Biz\System\Service\CacheService;
 
 class S2B2CFacadeServiceImpl extends BaseService implements S2B2CFacadeService
 {
@@ -42,6 +43,19 @@ class S2B2CFacadeServiceImpl extends BaseService implements S2B2CFacadeService
         }
 
         return $supplier;
+    }
+
+    public function getMerchantDisabledPermissionList()
+    {
+        $disabledList = $this->getCacheService()->get('s2b2c_disabled_permission_list');
+        if (empty($disabledList)) {
+            $disabledList = $this->getSupplierPlatformApi()->getMerchantDisabledPermissionList();
+            $this->getCacheService()->set('s2b2c_disabled_permission_list', $disabledList, time() + 86400);
+
+            return $disabledList;
+        }
+
+        return $disabledList;
     }
 
     /**
@@ -93,5 +107,13 @@ class S2B2CFacadeServiceImpl extends BaseService implements S2B2CFacadeService
         }
 
         $this->biz->offsetSet('s2b2c_info', $s2b2cInfo);
+    }
+
+    /**
+     * @return CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 }

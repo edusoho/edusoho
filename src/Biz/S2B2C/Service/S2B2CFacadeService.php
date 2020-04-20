@@ -11,6 +11,8 @@ interface S2B2CFacadeService
 
     public function getSupplier();
 
+    public function getMerchantDisabledPermissionList();
+
     public function getSupplierPlatformApi();
 
     public function getS2B2CService();

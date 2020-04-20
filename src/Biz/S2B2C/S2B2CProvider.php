@@ -21,6 +21,10 @@ class S2B2CProvider implements ServiceProviderInterface
         };
 
         // 接口
+        /*
+         * @param $biz
+         * @return SupplierPlatformApi
+         */
         $biz['supplier.platform_api'] = function ($biz) {
             return new SupplierPlatformApi($biz);
         };

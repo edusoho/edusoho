@@ -48,6 +48,17 @@ class SupplierPlatformApi extends AbstractPlatformApi
     }
 
     /**
+     * @return string[]
+     *                  mocked
+     */
+    public function getMerchantDisabledPermissionList()
+    {
+        return [
+            '',
+        ];
+    }
+
+    /**
      * 获取供应商产品详情
      *
      * @return array()
