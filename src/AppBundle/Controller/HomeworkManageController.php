@@ -129,8 +129,8 @@ class HomeworkManageController extends BaseController
 
     protected function getActivityIdByAnswerSceneId($answerSceneId)
     {
-        $homeworkActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerSceneId);
-        return $this->getActivityService()->getByMediaIdAndMediaType($homeworkActivity['id'], 'homework');
+        $homeworkActivity = $this->getHomeworkActivityService()->getByAnswerSceneId($answerSceneId);
+        return $this->getActivityService()->getByMediaIdAndMediaType($homeworkActivity['id'], 'homework')['id'];
     }
 
     public function resultAnalysisAction(Request $request, $targetId, $targetType, $activityId, $studentNum)

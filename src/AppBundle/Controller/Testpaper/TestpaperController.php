@@ -58,7 +58,7 @@ class TestpaperController extends BaseController
     protected function getActivityIdByAnswerSceneId($answerSceneId)
     {
         $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerSceneId);
-        return $this->getActivityService()->getByMediaIdAndMediaType($testpaperActivity['id'], 'testpaper');
+        return $this->getActivityService()->getByMediaIdAndMediaType($testpaperActivity['id'], 'testpaper')['id'];
     }
 
     protected function canLookAnswerRecord($answerRecordId)

@@ -80,8 +80,8 @@ class ExerciseController extends BaseController
 
     protected function getActivityIdByAnswerSceneId($answerSceneId)
     {
-        $homeworkActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerSceneId);
-        return $this->getActivityService()->getByMediaIdAndMediaType($homeworkActivity['id'], 'homework');
+        $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerSceneId);
+        return $this->getActivityService()->getByMediaIdAndMediaType($exerciseActivity['id'], 'exercise')['id'];
     }
     
     protected function canLookAnswerRecord($answerRecordId)

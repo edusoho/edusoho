@@ -131,7 +131,7 @@ class ManageController extends BaseController
     protected function getActivityIdByAnswerSceneId($answerSceneId)
     {
         $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerSceneId);
-        return $this->getActivityService()->getByMediaIdAndMediaType($testpaperActivity['id'], 'testpaper');
+        return $this->getActivityService()->getByMediaIdAndMediaType($testpaperActivity['id'], 'testpaper')['id'];
     }
 
     public function resultListAction(Request $request, $testpaperId, $source, $targetId, $activityId)

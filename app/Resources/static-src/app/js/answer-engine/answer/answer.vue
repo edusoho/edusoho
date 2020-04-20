@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="test-vue">
+    <div id="cd-modal"></div>
     <item-engine
-      mode="do"
       :assessment="assessment"
       :answerRecord="answerRecord"
       :answerScene="answerScene"
@@ -28,12 +28,12 @@
       };
     },
     created() {
-       this.emitter = new ActivityEmitter();
-       this.emitter.emit('doing', {data: ''});
-       this.assessment = JSON.parse($('[name=assessment]').val());
-       this.answerRecord = JSON.parse($('[name=answer_record]').val());
-       this.answerScene = JSON.parse($('[name=answer_scene]').val());
-       this.assessmentResponse = JSON.parse($('[name=assessment_response]').val());
+      this.emitter = new ActivityEmitter();
+      this.emitter.emit('doing', {data: ''});
+      this.assessment = JSON.parse($('[name=assessment]').val());
+      this.answerRecord = JSON.parse($('[name=answer_record]').val());
+      this.answerScene = JSON.parse($('[name=answer_scene]').val());
+      this.assessmentResponse = JSON.parse($('[name=assessment_response]').val());
     },
     methods: {
       getAnswerData(assessmentResponse) {
@@ -52,7 +52,29 @@
         })
       },
       reachTimeSubmitAnswerData(assessmentResponse) {
-        alert('倒计时到了')
+        const that = this;
+        $.ajax({
+          url: $("[name='answer_engine_submit_url']").val(),
+          contentType: 'application/json;charset=utf-8',
+          type: 'post',
+          data: JSON.stringify(assessmentResponse),
+          beforeSend(request) {
+            request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+          }
+        }).done(function (resp) {
+          that.emitter.emit('finish', {data: ''});
+          cd.confirm({
+            title: '答题结束',
+            content: '答题已结束，您的试卷已提交，请点击下面的按钮查看结果！',
+            okText: '查看结果',
+            cancelText: '返回',
+            className: '',
+          }).on('ok', () => {
+            location.replace($('[name=submit_goto_url]').val());
+          }).on('cancel', () => {
+            
+          })
+        })
       },
       timeSaveAnswerData(assessmentResponse) {
         $.ajax({

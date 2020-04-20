@@ -109,7 +109,7 @@ class QuestionController extends BaseController
             $this->createNewException(QuestionException::FORBIDDEN_PREVIEW_QUESTION());
         }
 
-        $item = $this->getItemService()->getItemWithQuestions($id);
+        $item = $this->getItemService()->getItemWithQuestions($id, true);
 
         if (empty($item)) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
