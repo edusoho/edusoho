@@ -3,13 +3,47 @@
 namespace Biz\S2B2C\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\BaseService;
+use Biz\Common\CommonException;
+use Biz\S2B2C\Dao\ProductDao;
 use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
-use Codeages\Biz\Framework\Service\BaseService;
 
+/**
+ * Class ProductServiceImpl
+ * @package Biz\S2B2C\Service\Impl
+ * 这里书写抽象的Product业务逻辑代码
+ */
 class ProductServiceImpl extends BaseService implements ProductService
 {
+    public function getProduct($id)
+    {
+        return $this->getS2B2CProductDao()->get($id);
+    }
+
+    public function createProduct($fields)
+    {
+        if (!ArrayToolkit::requireds($fields, array('supplierId', 'resourceType', 'remoteResourceId', 'localResourceId', 'cooperationPrice', 'suggestionPrice', 'localVersion'))) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+        $fields = ArrayToolkit::parts(
+            $fields,
+            array(
+                'supplierId',
+                'resourceType',
+                'remoteResourceId',
+                'localResourceId',
+                'cooperationPrice',
+                'suggestionPrice',
+                'localVersion',
+                'createdTime',
+                'updatedTime'
+            )
+        );
+        return $this->getS2B2CProductDao()->create($fields);
+    }
+
     public function searchProduct($conditions)
     {
         $selectedConditions = array('title', 'offset', 'limit', 'categoryId', 'sort');
@@ -57,5 +91,13 @@ class ProductServiceImpl extends BaseService implements ProductService
     protected function getS2B2CFacadeService()
     {
         return $this->biz->service('S2B2C:S2B2CFacadeService');
+    }
+
+    /**
+     * @return ProductDao
+     */
+    protected function getS2B2CProductDao()
+    {
+        return $this->biz->dao('S2B2C:ProductDao');
     }
 }
