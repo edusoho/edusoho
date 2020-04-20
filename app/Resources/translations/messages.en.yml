@@ -5945,9 +5945,11 @@ admin.user_auth.Name_setting.help_block: 'Note: After editing the site field, al
 admin.user_auth.mobile_bind_tips: >
   According to the "Internet Regulations Review Service Management Regulations"，<b>It is not allowed to provide follow-up comments to users who do not authenticate true identity information</b>.The post comment service here refers to Internet sites, applications, interactive communication platforms, and other communication platforms with news and public opinion attributes and social mobilization functions. It provides users with posts by <b> posting, replying, leaving messages, and “barrage”<b>. Services for text, symbols, expressions, pictures, audio and video information.Bind mobile phone number meets the requirements of real-name authentication. To avoid legal risks, it is recommended to use <b>“mobile registration”</b>.After switching to "mobile phone registration", for users who have not previously bound the mobile phone number, the user will be prompted to bind the mobile phone number after the first login every day (the user can choose to skip this step).
 admin.login_connect.User_login_restrictions: 'User login restrictions'
+admin.login_connect.client_login_restrictions: 'Client login restrictions'
 admin.login_connect.open: 'Turned on'
 admin.login_connect.closed: Close
 admin.login_connect.User_login_restrictions.help_block: 'If turned on, an account can only login at one place (a browser in a IP)'
+admin.login_connect.client_login_restrictions.help_block: 'If turned on, an account can only login at one client (App or Web)'
 admin.login_connect.Third_party_login: 'Third-party login'
 admin.login_connect.Third_party_login.help_block: 'When turned on, users who continuously enter the wrong password will be blocked temporarily. This feature does not affect webmaster to to banned user permanently.'
 admin.login_connect.User_login_protection: 'User login protection'
