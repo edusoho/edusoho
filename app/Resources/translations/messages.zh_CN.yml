@@ -10821,6 +10821,7 @@ admin_v2.app_center.resource_settlement.balance.detail: 明细详情
 admin_v2.app_center.resource_settlement.balance.detail_information: 明细信息
 admin_v2.app_center.resource_settlement.balance.status: 支付状态
 admin_v2.app_center.resource_settlement.balance.detail.success: 成功
+admin_v2.app_center.resource_settlement.balance.detail.default_operator: 系统
 
 admin_v2.app_center.resource_settlement.balance.order.detail: 采购单信息
 admin_v2.app_center.resource_settlement.balance.order: 采购单

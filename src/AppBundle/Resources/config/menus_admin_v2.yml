@@ -36,7 +36,7 @@ admin_v2:
                                             router_name: course_set_manage_create
                                             group: topBtn
                                             blank: 1
-                                            visible: (canOperateCourseSet())
+                                            visible: (canAddCourse())
                                         admin_v2_course_set_recommend:
                                             name: admin_v2.course.basic.basic_tab.recommend_btn
                                             router_params:
@@ -733,7 +733,7 @@ admin_v2:
                                             name: admin_v2.user.basic.basic_tab.create_btn
                                             mode: modal
                                             group: topBtn
-                                            visible: (user.type != 'system')
+                                            visible: (app.user.type != 'system')
                                         admin_v2_user_edit:
                                             name: admin_v2.user.basic.basic_tab.edit_btn
                                             mode: modal

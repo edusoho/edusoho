@@ -19,6 +19,8 @@ use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
 use Biz\Player\Service\PlayerService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
+use Biz\System\Service\SettingService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
@@ -45,6 +47,8 @@ class WebExtension extends \Twig_Extension
     protected $locale;
 
     protected $defaultCloudSdkHost;
+
+    protected $allowedCoopMode = array(S2B2CFacadeService::DEALER_MODE);
 
     public function __construct($container, Biz $biz, RequestStack $requestStack)
     {
@@ -184,6 +188,10 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('uniqid', array($this, 'uniqid')),
             new \Twig_SimpleFunction('get_days', array($this, 'getDays')),
             new \Twig_SimpleFunction('is_question_lack', array($this, 'isQuestionLack')),
+            new \Twig_SimpleFunction('canModifySiteName', array($this, 'canModifySiteName')),
+            new \Twig_SimpleFunction('canModifySiteUrl', array($this, 'canModifySiteUrl')),
+            new \Twig_SimpleFunction('canModifySiteLogo', array($this, 'canModifySiteLogo')),
+            new \Twig_SimpleFunction('canModifySiteFavicon', array($this, 'canModifySiteFavicon')),
         );
     }
 
@@ -1932,6 +1940,50 @@ class WebExtension extends \Twig_Extension
         return $this->getTestPaperService()->isQuestionsLackedByTestId($testpaperId);
     }
 
+    public function canModifySiteName()
+    {
+        $merchantSetting = $this->getSettingService()->get('merchant_setting');
+
+        if (empty($merchantSetting['coop_mode']) || empty($merchantSetting['auth_node'])) {
+            return true;
+        }
+
+        return in_array($merchantSetting['coop_mode'], $this->allowedCoopMode) || !empty($merchantSetting['auth_node']['title']);
+    }
+
+    public function canModifySiteUrl()
+    {
+        $merchantSetting = $this->getSettingService()->get('merchant_setting');
+
+        if (empty($merchantSetting['coop_mode']) || empty($merchantSetting['auth_node'])) {
+            return true;
+        }
+
+        return empty($merchantSetting['coop_mode']) ? true : in_array($merchantSetting['coop_mode'], $this->allowedCoopMode);
+    }
+
+    public function canModifySiteLogo()
+    {
+        $merchantSetting = $this->getSettingService()->get('merchant_setting');
+
+        if (empty($merchantSetting['coop_mode']) || empty($merchantSetting['auth_node'])) {
+            return true;
+        }
+
+        return in_array($merchantSetting['coop_mode'], $this->allowedCoopMode) || !empty($merchantSetting['auth_node']['logo']);
+    }
+
+    public function canModifySiteFavicon()
+    {
+        $merchantSetting = $this->getSettingService()->get('merchant_setting');
+
+        if (empty($merchantSetting['coop_mode']) || empty($merchantSetting['auth_node'])) {
+            return true;
+        }
+
+        return in_array($merchantSetting['coop_mode'], $this->allowedCoopMode) || !empty($merchantSetting['auth_node']['favicon']);
+    }
+
     /**
      * @return PlayerService
      */
@@ -1946,5 +1998,13 @@ class WebExtension extends \Twig_Extension
     protected function getTestPaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }

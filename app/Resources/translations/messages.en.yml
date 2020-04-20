@@ -9486,6 +9486,7 @@ admin_v2.app_center.resource_settlement.balance.detail: Detail
 admin_v2.app_center.resource_settlement.balance.detail_information: Detail information
 admin_v2.app_center.resource_settlement.balance.status: Status
 admin_v2.app_center.resource_settlement.balance.detail.success: Success
+admin_v2.app_center.resource_settlement.balance.detail.default_operator: System
 
 admin_v2.app_center.resource_settlement.balance.order.detail: Order information
 admin_v2.app_center.resource_settlement.balance.order: Order

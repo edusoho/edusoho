@@ -12,8 +12,6 @@ use Biz\System\Service\SettingService;
 
 /**
  * Class ProductServiceImpl
- * @package Biz\S2B2C\Service\Impl
- * 这里书写抽象的Product业务逻辑代码
  */
 class ProductServiceImpl extends BaseService implements ProductService
 {
@@ -38,9 +36,10 @@ class ProductServiceImpl extends BaseService implements ProductService
                 'suggestionPrice',
                 'localVersion',
                 'createdTime',
-                'updatedTime'
+                'updatedTime',
             )
         );
+
         return $this->getS2B2CProductDao()->create($fields);
     }
 
@@ -65,6 +64,14 @@ class ProductServiceImpl extends BaseService implements ProductService
         }
 
         return array($courseSets, $total);
+    }
+
+    public function searchSelectedItemProduct($conditions)
+    {
+        $conditions['merchant_access_key'] = $this->getAccessKey();
+        $resultSet = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->searchPurchaseProducts($conditions);
+
+        return $resultSet;
     }
 
     protected function getAccessKey()

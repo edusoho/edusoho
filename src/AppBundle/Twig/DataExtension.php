@@ -4,6 +4,7 @@ namespace AppBundle\Twig;
 
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\EduCloud\Service\ConsultService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use AppBundle\Common\ExtensionManager;
@@ -38,7 +39,7 @@ class DataExtension extends \Twig_Extension
             new \Twig_SimpleFunction('cloudStatus', array($this, 'getCloudStatus'), $options),
             new \Twig_SimpleFunction('cloudConsultPath', array($this, 'getCloudConsultPath'), $options),
             new \Twig_SimpleFunction('cloud_info', array($this, 'getCloudInfo'), $options),
-            new \Twig_SimpleFunction('canOperateCourseSet', array($this, 'canOperateCourseSet'), $options),
+            new \Twig_SimpleFunction('canAddCourse', array($this, 'canAddCourse'), $options),
             new \Twig_SimpleFunction('hasSupplier', array($this, 'hasSupplier'), $options),
         );
     }
@@ -100,12 +101,18 @@ class DataExtension extends \Twig_Extension
 
     public function hasSupplier()
     {
-        return true;
+        return !empty($this->getS2B2CFacadeService()->getSupplier());
     }
 
-    public function canOperateCourseSet()
+    public function canAddCourse()
     {
-        return false;
+        $allowCoopMode = array(
+            S2B2CFacadeService::DEALER_MODE,
+        );
+
+        $setting = $this->getSettingService()->get('merchant_setting');
+
+        return empty($setting['coop_mode']) ? true : in_array($setting['coop_mode'], $allowCoopMode);
     }
 
     public function getCloudConsultPath()
@@ -148,5 +155,13 @@ class DataExtension extends \Twig_Extension
     public function getName()
     {
         return 'topxia_data_twig';
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->biz->service('S2B2C:S2B2CFacadeService');
     }
 }
