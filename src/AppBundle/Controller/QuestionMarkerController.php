@@ -35,7 +35,7 @@ class QuestionMarkerController extends BaseController
                 $headerLength = $videoHeaderFile['length'];
             }
         }
-        $result = array();
+        $results = array();
 
         foreach ($questionMakers as $index => $questionMaker) {
             if (empty($items[$questionMaker['questionId']]) || empty($items[$questionMaker['questionId']]['questions'])) {
@@ -46,35 +46,36 @@ class QuestionMarkerController extends BaseController
             $isChoice = in_array($item['type'], array('choice', 'single_choice', 'uncertain_choice'));
             $isFill = 'fill' == $item['type'];
 
-            $result[$index]['id'] = $questionMaker['id'];
-            $result[$index]['questionMarkerId'] = $questionMaker['id'];
-            $result[$index]['markerId'] = $questionMaker['markerId'];
-            $result[$index]['time'] = $questionMaker['second'] + $headerLength;
-            $result[$index]['type'] = $item['type'];
-            $result[$index]['question'] = self::convertAbsoluteUrl($baseUrl, $question['stem']);
+            $result['id'] = $questionMaker['id'];
+            $result['questionMarkerId'] = $questionMaker['id'];
+            $result['markerId'] = $questionMaker['markerId'];
+            $result['time'] = $questionMaker['second'] + $headerLength;
+            $result['type'] = $item['type'];
+            $result['question'] = self::convertAbsoluteUrl($baseUrl, $question['stem']);
             if ($isChoice) {
                 if (!empty($question['response_points'])) {
                     foreach ($question['response_points'] as $key => $point) {
                         $options = array_shift($point);
-                        $result[$index]['options'][$key]['option_key'] = $options['val'];
-                        $result[$index]['options'][$key]['option_val'] = $options['text'];
+                        $result['options'][$key]['option_key'] = $options['val'];
+                        $result['options'][$key]['option_val'] = $options['text'];
                     }
                 }
             }
             if ($isFill) {
                 $key = 0;
-                $result[$index]['question'] = preg_replace_callback('/\[\[.*?]]/', function () use ($question, &$key) {
+                $result['question'] = preg_replace_callback('/\[\[.*?]]/', function () use ($question, &$key) {
                     return empty($question['answer'][$key]) ? '[[]]' : '[['.$question['answer'][$key++].']]';
-                }, $result[$index]['question']);
+                }, $result['question']);
             }
             $answers = $question['answer'];
             foreach ($answers as $answerIndex => $answer) {
-                $result[$index]['answer'][$answerIndex] = $answer;
+                $result['answer'][$answerIndex] = $answer;
             }
-            $result[$index]['analysis'] = self::convertAbsoluteUrl($baseUrl, $question['analysis']);
+            $result['analysis'] = self::convertAbsoluteUrl($baseUrl, $question['analysis']);
+            $results[] = $result;
         }
 
-        return $this->createJsonResponse($result);
+        return $this->createJsonResponse($results);
     }
 
     /**

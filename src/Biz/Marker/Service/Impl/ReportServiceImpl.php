@@ -109,8 +109,25 @@ class ReportServiceImpl extends BaseService implements ReportService
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $markers = $this->getMarkerService()->findMarkersByMediaId($activity['ext']['mediaId']);
         $questionMarkers = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerIds(ArrayToolkit::column($markers, 'id'));
+        $questionMarkers = $this->setQuestionMarkerStem($questionMarkers);
 
         $stats['questionMarkers'] = $this->sortAndMerge($markers, $questionMarkers);
+    }
+
+    protected function setQuestionMarkerStem($questionMarkers)
+    {
+        $items = $this->getItemService()->findItemsByIds(ArrayToolkit::column($questionMarkers, 'questionId'), true);
+        foreach ($questionMarkers as $key => &$questionMarker) {
+            if (!empty($items[$questionMarker['questionId']]['questions'])) {
+                $item = $items[$questionMarker['questionId']];
+                $question = reset($items[$questionMarker['questionId']]['questions']);
+                $questionMarker['stem'] = ('fill' == $item['type']) ? preg_replace('/\[\[]]/', '____', $question['stem']) : $question['stem'];
+            } else {
+                unset($questionMarkers[$key]);
+            }
+        }
+
+        return $questionMarkers;
     }
 
     protected function buildUserNum(&$stats)
