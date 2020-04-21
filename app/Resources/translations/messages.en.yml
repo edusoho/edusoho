@@ -8772,6 +8772,7 @@ exception.testpaper.not_found_result: The test result does not exist
 exception.testpaper.modify_committed_testpaper: The test paper that has been submitted cannot be modified!
 exception.testpaper.doing: The test paper has not been submitted
 exception.testpaper.redo_interval_exist: Teacher set retry interval
+exception.testpaper.forbidden_delete_open_testpaper: Opne testpaper can not be deleted
 exception.uploadfile.file_not_found: file does not exist
 exception.uploadfile.forbidden_manage_file: No rights to manage resources
 exception.uploadfile.error_status: Incorrect state
