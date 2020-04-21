@@ -13,8 +13,30 @@
     {% if showHeader %}{{ parent() }}{% endif %}
   {% endblock %}
 
-  <div>业务上的反馈</div>
-  {{ render(controller('AppBundle:AnswerEngine/AnswerEngine:report', {answerRecordId: answerRecordId, restartUrl:restartUrl})) }}
+  {% if answerRecord.status == 'finished' %}
+  <div class="item-bank-result">
+    <div class="clearfix item-bank-result-content">
+      <div class="item-bank-result-info text-center">
+        <div class="item-bank-result-info__text">
+          <span class="gray-darker">作业结果：</span>
+          {% if answerReport.grade == 'unpassed' %}
+          <span class="color-warning">{{ dict_text('passedStatus', answerReport.grade) }}</span>
+          {% else %}
+          <span class="color-success">{{ dict_text('passedStatus', answerReport.grade) }}</span>
+          {% endif %}
+        </div>
+        <div class="color-gray cd-text-sm">教师评语：{{ answerReport.comment|default('-') }}</div>
+      </div>
+    </div>
+  </div>
+
+  {% endif %}
+
+  {% if app.request.query.get('action', '') == 'check' %}
+    {{ render(controller('AppBundle:AnswerEngine/AnswerEngine:assessmentResult', {answerRecordId: answerRecord.id})) }}
+  {% else %}
+    {{ render(controller('AppBundle:AnswerEngine/AnswerEngine:report', {answerRecordId: answerRecord.id, restartUrl:restartUrl})) }}
+  {% endif %}
 
   {% block footer %}
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}

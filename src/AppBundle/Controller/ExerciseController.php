@@ -41,6 +41,7 @@ class ExerciseController extends BaseController
             'assessmentId' => $assessmentId,
         ), array(
             'submit_goto_url' => $this->generateUrl('course_task_activity_show', array('courseId' => $activity['fromCourseId'], 'id' => $task['id'])),
+            'save_goto_url' => $this->generateUrl('my_course_show', array('id' => $activity['fromCourseId'])),
         ));
     }
 
@@ -81,9 +82,10 @@ class ExerciseController extends BaseController
     protected function getActivityIdByAnswerSceneId($answerSceneId)
     {
         $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerSceneId);
+
         return $this->getActivityService()->getByMediaIdAndMediaType($exerciseActivity['id'], 'exercise')['id'];
     }
-    
+
     protected function canLookAnswerRecord($answerRecordId)
     {
         $user = $this->getCurrentUser();

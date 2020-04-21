@@ -3,9 +3,7 @@
 namespace AppBundle\Controller\Testpaper;
 
 use Biz\Task\Service\TaskService;
-use Biz\Testpaper\TestpaperException;
 use Biz\User\Service\UserService;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
@@ -16,6 +14,8 @@ use Biz\Common\CommonException;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 
 class TestpaperController extends BaseController
 {
@@ -30,12 +30,13 @@ class TestpaperController extends BaseController
         if (!$canTakeCourse) {
             $this->createNewException(CourseException::FORBIDDEN_TAKE_COURSE());
         }
-        
+
         return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', array(
             'answerSceneId' => $testpaperActivity['answerSceneId'],
             'assessmentId' => $testpaperActivity['mediaId'],
         ), array(
             'submit_goto_url' => $this->generateUrl('course_task_activity_show', array('courseId' => $activity['fromCourseId'], 'id' => $task['id'])),
+            'save_goto_url' => $this->generateUrl('my_course_show', array('id' => $activity['fromCourseId'])),
         ));
     }
 
@@ -46,18 +47,40 @@ class TestpaperController extends BaseController
         }
 
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+        $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
-        
+
+        if ('my' == $request->query->get('action', '')) {
+            $task = $this->getTaskByAnswerSceneId($answerRecord['answer_scene_id']);
+            $restartUrl = $this->generateUrl('course_task_show', array('id' => $task['id'], 'courseId' => $task['courseId']));
+        } elseif ('' == $request->query->get('action', '')) {
+            $restartUrl = $this->generateUrl('testpaper_do', array('lessonId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id']), 'testId' => 1));
+        } else {
+            $restartUrl = '';
+        }
+
         return $this->render('testpaper/result.html.twig', array(
-            'answerRecordId' => $answerRecordId,
+            'passedStatus' => $answerReport['score'] >= $answerScene['pass_score'],
+            'answerReport' => $answerReport,
+            'answerRecord' => $answerRecord,
             'assessment' => $assessment,
-            'restartUrl' => $this->generateUrl('testpaper_do', array('lessonId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id']), 'testId' => 1)),
+            'restartUrl' => $restartUrl,
         ));
+    }
+
+    protected function getTaskByAnswerSceneId($answerSceneId)
+    {
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerSceneId);
+        $activity = $this->getActivityService()->getByMediaIdAndMediaType($testpaperActivity['id'], 'testpaper');
+
+        return $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
     }
 
     protected function getActivityIdByAnswerSceneId($answerSceneId)
     {
         $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerSceneId);
+
         return $this->getActivityService()->getByMediaIdAndMediaType($testpaperActivity['id'], 'testpaper')['id'];
     }
 
@@ -85,7 +108,7 @@ class TestpaperController extends BaseController
 
         $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
         $activity = $this->getActivityService()->getByMediaIdAndMediaType($testpaperActivity['id'], 'testpaper');
-        
+
         $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
         $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
 
@@ -168,5 +191,21 @@ class TestpaperController extends BaseController
     protected function getAnswerRecordService()
     {
         return $this->createService('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerReportService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerSceneService');
     }
 }

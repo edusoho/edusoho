@@ -47,18 +47,21 @@ class ExerciseController extends BaseActivityController implements ActivityActio
 
     protected function previewExercise($id, $courseId)
     {
-        // todo 判断题目数据是否够
         $activity = $this->getActivityService()->getActivity($id, true);
 
-        $assessment = $this->showAssessment(
-            $activity['title'],
-            $activity['ext']['drawCondition']['range'],
-            array($activity['ext']['drawCondition']['section'])
-        );
+        try {
+            $assessment = $this->showAssessment(
+                $activity['title'],
+                $activity['ext']['drawCondition']['range'],
+                array($activity['ext']['drawCondition']['section'])
+            );
 
-        return $this->render('activity/exercise/preview.html.twig', array(
-            'assessment' => $assessment,
-        ));
+            return $this->render('activity/exercise/preview.html.twig', array(
+                'assessment' => $assessment,
+            ));
+        } catch (\Exception $e) {
+            return $this->render('activity/exercise/item-not-enough-tips.html.twig', array());
+        }
     }
 
     protected function showAssessment($name, $range, $sections)

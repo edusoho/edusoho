@@ -7,7 +7,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Question\QuestionException;
 use Symfony\Component\HttpFoundation\Request;
-use Codeages\Biz\ItemBank\Item\Service\ItemFavoriteService;
+use Codeages\Biz\ItemBank\Item\Service\QuestionFavoriteService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
@@ -27,26 +27,26 @@ class QuestionController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getItemFavoriteService()->count($conditions),
+            $this->getQuestionFavoriteService()->count($conditions),
             10
         );
 
-        $favoriteItems = $this->getItemFavoriteService()->search(
+        $favoriteQuestions = $this->getQuestionFavoriteService()->search(
             $conditions,
             array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $items = $this->getItemService()->findItemsByIds(ArrayToolkit::column($favoriteItems, 'item_id'));
+        $questions = $this->getItemService()->findQuestionsByQuestionIds(ArrayToolkit::column($favoriteQuestions, 'question_id'));
         $assessments = $this->getAssessmentService()->findAssessmentsByIds(
-            ArrayToolkit::column($favoriteItems, 'target_id')
+            ArrayToolkit::column($favoriteQuestions, 'target_id')
         );
 
         return $this->render('my/question/favorite-list.html.twig', array(
-            'favoriteItems' => $favoriteItems,
+            'favoriteQuestions' => $favoriteQuestions,
             'paginator' => $paginator,
-            'items' => $items,
+            'questions' => $questions,
             'nav' => 'questionFavorite',
             'assessments' => $assessments,
         ));
@@ -82,7 +82,7 @@ class QuestionController extends BaseController
                 return $this->createJsonResponse(array('result' => false, 'message' => 'noLogin'));
             }
 
-            $this->getItemFavoriteService()->delete($id);
+            $this->getQuestionFavoriteService()->delete($id);
 
             return $this->createJsonResponse(array('result' => true, 'message' => ''));
         }
@@ -97,11 +97,11 @@ class QuestionController extends BaseController
             'target_type' => 'assessment',
         );
 
-        $favoriteItems = $this->getItemFavoriteService()->search(
+        $favoriteItems = $this->getQuestionFavoriteService()->search(
             $conditions,
             array('created_time' => 'DESC'),
             0,
-            $this->getItemFavoriteService()->count($conditions)
+            $this->getQuestionFavoriteService()->count($conditions)
         );
         $favoriteItems = ArrayToolkit::index($favoriteItems, 'item_id');
 
@@ -131,11 +131,11 @@ class QuestionController extends BaseController
     }
 
     /**
-     * @return ItemFavoriteService
+     * @return QuestionFavoriteService
      */
-    protected function getItemFavoriteService()
+    protected function getQuestionFavoriteService()
     {
-        return $this->createService('ItemBank:Item:ItemFavoriteService');
+        return $this->createService('ItemBank:Item:QuestionFavoriteService');
     }
 
     /**

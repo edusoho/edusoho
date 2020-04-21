@@ -10,6 +10,7 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\User\Service\UserService;
 
 class AnswerEngineController extends BaseController
 {
@@ -46,7 +47,7 @@ class AnswerEngineController extends BaseController
             $answerRecord = $this->getAnswerService()->startAnswer($answerSceneId, $assessmentId, $user['id']);
             $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
             $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
-            $assessmentResponse = array();
+            $assessmentResponse = (object) array();
         } catch (\Exception $e) {
             return $this->createAnswerException($e);
         }
@@ -114,7 +115,7 @@ class AnswerEngineController extends BaseController
 
     public function reportAction(Request $request, $answerRecordId, $restartUrl)
     {
-        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+        $answerRecord = $this->wrapperAnswerRecord($this->getAnswerRecordService()->get($answerRecordId));
 
         return $this->render('answer-engine/report.html.twig', array(
             'answerRecord' => $answerRecord,
@@ -122,6 +123,18 @@ class AnswerEngineController extends BaseController
             'answerScene' => $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']),
             'assessment' => $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']),
             'restartUrl' => $restartUrl,
+        ));
+    }
+
+    public function assessmentResultAction(Request $request, $answerRecordId)
+    {
+        $answerRecord = $this->wrapperAnswerRecord($this->getAnswerRecordService()->get($answerRecordId));
+
+        return $this->render('answer-engine/assessment-result.html.twig', array(
+            'answerRecord' => $answerRecord,
+            'answerReport' => $this->getAnswerReportService()->get($answerRecord['answer_report_id']),
+            'answerScene' => $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']),
+            'assessment' => $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']),
         ));
     }
 
@@ -135,7 +148,7 @@ class AnswerEngineController extends BaseController
 
     public function reviewAnswerAction(Request $request, $answerRecordId, $successGotoUrl, $successContinueGotoUrl)
     {
-        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+        $answerRecord = $this->wrapperAnswerRecord($this->getAnswerRecordService()->get($answerRecordId));
 
         return $this->render('answer-engine/review.html.twig', array(
             'successGotoUrl' => $successGotoUrl,
@@ -145,6 +158,14 @@ class AnswerEngineController extends BaseController
             'answerScene' => $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']),
             'assessment' => $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']),
         ));
+    }
+
+    protected function wrapperAnswerRecord($answerRecord)
+    {
+        $user = $this->getUserService()->getUser($answerRecord['user_id']);
+        $answerRecord['username'] = $user['nickname'];
+
+        return $answerRecord;
     }
 
     protected function createAnswerException(\Exception $e)
@@ -215,5 +236,13 @@ class AnswerEngineController extends BaseController
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 }

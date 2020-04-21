@@ -72,7 +72,7 @@
           }).on('ok', () => {
             location.replace($('[name=submit_goto_url]').val());
           }).on('cancel', () => {
-            
+            location.replace($('[name=submit_goto_url]').val());
           })
         })
       },
@@ -98,7 +98,7 @@
             request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
           }
         }).done(function (resp) {
-          // location.href = $('[name=save_goto_url]').val();
+          parent.location.href = $('[name=save_goto_url]').val();
         })
       }
     }

@@ -27,6 +27,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Common\SimpleValidator;
 use ApiBundle\Api\Util\AssetHelper;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class WebExtension extends \Twig_Extension
 {
@@ -1927,9 +1928,15 @@ class WebExtension extends \Twig_Extension
         return MathToolkit::uniqid();
     }
 
-    public function isQuestionLack($testpaperId)
+    public function isQuestionLack($activity)
     {
-        return $this->getTestPaperService()->isQuestionsLackedByTestId($testpaperId);
+        try {
+            $this->getAssessmentService()->drawItems($activity['ext']['drawCondition']['range'], array($activity['ext']['drawCondition']['section']));
+
+            return false;
+        } catch (\Exception $e) {
+            return true;
+        }
     }
 
     /**
@@ -1946,5 +1953,13 @@ class WebExtension extends \Twig_Extension
     protected function getTestPaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 }
