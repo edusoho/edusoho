@@ -71,8 +71,6 @@ class MarkerController extends BaseController
 
         foreach ($markersMeta as $key => $value) {
             foreach ($markersMeta[$key]['questionMarkers'] as $index => $questionMarker) {
-                $markersMeta[$key]['questionMarkers'][$index]['includeImg'] = (preg_match('/<img (.*?)>/', $questionMarker['stem'])) ? true : false;
-
                 if ($questionMarker['type'] == 'fill') {
                     $markersMeta[$key]['questionMarkers'][$index]['stem'] = preg_replace('/\[\[.+?\]\]/', '____', $questionMarker['stem']);
                 }
