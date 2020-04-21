@@ -5221,10 +5221,9 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank-test@^0.1.18:
-  version "0.1.18"
-  resolved "https://registry.npm.taobao.org/item-bank-test/download/item-bank-test-0.1.18.tgz#7dad56e3f1da53d56ff7a670c639d6b465906b8d"
-  integrity sha1-fa1W4/HaU9Vv96ZwxjnWtGWQa40=
+item-bank-test@^0.1.19:
+  version "0.1.19"
+  resolved "https://registry.npm.taobao.org/item-bank-test/download/item-bank-test-0.1.19.tgz#cd34066c23be301c11eab6419b46f3fe73a3a67d"
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"

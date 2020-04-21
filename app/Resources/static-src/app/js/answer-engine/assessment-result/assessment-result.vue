@@ -26,6 +26,7 @@
         this.answerReport = JSON.parse($('[name=answer_report]').val());
         this.answerRecord = JSON.parse($('[name=answer_record]').val());
         this.answerScene = JSON.parse($('[name=answer_scene]').val());
+        this.questionFavorites = [];
     }
   }
 </script>

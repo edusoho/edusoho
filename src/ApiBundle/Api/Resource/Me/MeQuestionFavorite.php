@@ -19,7 +19,11 @@ class MeQuestionFavorite extends AbstractResource
 
     public function remove(ApiRequest $request, $id)
     {
-        $this->getQuestionFavoriteService()->delete($id);
+        $questionFavorite = $request->request->all();
+
+        $questionFavorite['user_id'] = $this->getCurrentUser()['id'];
+
+        $this->getQuestionFavoriteService()->deleteByQuestionFavorite($questionFavorite);
 
         return array('result' => true);
     }

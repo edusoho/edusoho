@@ -11,6 +11,7 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\User\Service\UserService;
+use Codeages\Biz\ItemBank\Item\Service\QuestionFavoriteService;
 
 class AnswerEngineController extends BaseController
 {
@@ -116,12 +117,20 @@ class AnswerEngineController extends BaseController
     public function reportAction(Request $request, $answerRecordId, $restartUrl)
     {
         $answerRecord = $this->wrapperAnswerRecord($this->getAnswerRecordService()->get($answerRecordId));
+        $conditions = array('target_type' => 'assessment', 'target_id' => $answerRecord['assessment_id'], 'user_id' => $answerRecord['user_id']);
+        $questionFavorites = $this->getQuestionFavoriteService()->search(
+            $conditions,
+            array(),
+            0,
+            $this->getQuestionFavoriteService()->count($conditions)
+        );
 
         return $this->render('answer-engine/report.html.twig', array(
             'answerRecord' => $answerRecord,
             'answerReport' => $this->getAnswerReportService()->get($answerRecord['answer_report_id']),
             'answerScene' => $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']),
             'assessment' => $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']),
+            'questionFavorites' => $questionFavorites,
             'restartUrl' => $restartUrl,
         ));
     }
@@ -244,5 +253,13 @@ class AnswerEngineController extends BaseController
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return QuestionFavoriteService
+     */
+    protected function getQuestionFavoriteService()
+    {
+        return $this->createService('ItemBank:Item:QuestionFavoriteService');
     }
 }
