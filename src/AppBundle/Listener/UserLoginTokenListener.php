@@ -7,6 +7,7 @@ use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -82,7 +83,7 @@ class UserLoginTokenListener
             foreach ($tokens as $token) {
                 if (!isset($token['data']['client']) || 'app' == $token['data']['client']) {
                     $request->getSession()->invalidate();
-                    $response = $this->logout();
+                    $response = $this->logout($request->isXmlHttpRequest());
                     $event->setResponse($response);
 
                     return;
@@ -127,14 +128,14 @@ class UserLoginTokenListener
         }
     }
 
-    protected function logout()
+    protected function logout($isXmlHttpRequest = false)
     {
         $this->container->get('security.token_storage')->setToken(null);
 
         $this->container->get('session')->getFlashBag()->add('danger', '此帐号已在别处登录，请重新登录');
 
         $goto = $this->container->get('router')->generate('login');
-        $response = new RedirectResponse($goto, '302');
+        $response = $isXmlHttpRequest ? new JsonResponse(['goto' => $goto], 403) : new RedirectResponse($goto, '302');
         $response->headers->clearCookie('REMEMBERME');
 
         return $response;

@@ -6,7 +6,6 @@ class Live {
   }
 
   init() {
-    let self = this;
     this.isLiveRoomOpened = false;
     let intervalId = 0;
     let tryCount = 1;
@@ -68,8 +67,9 @@ class Live {
     let eventName = null;
     let timestamp = Date.parse( new Date() ).toString();
     timestamp = timestamp.substr(0,10);
+
     let eventTrigger = setInterval(function() {
-      if (!self.isLiveRoomOpened || $('meta[name="trigger_url"]').length == 0) return;
+      if (!self.isLiveRoomOpened || $('meta[name="trigger_url"]').length === 0) return;
       eventName = eventName ? 'doing' : 'start';
       $.ajax({
         url: $('meta[name="trigger_url"]').attr('content'),
@@ -78,6 +78,12 @@ class Live {
         success: function(response) {
           if (response.live_end) {
             clearInterval(eventTrigger);
+          }
+        },
+        error: function (jqxhr) {
+          let goto = jqxhr.responseJSON.goto;
+          if (goto !== undefined) {
+            window.location.href = goto;
           }
         }
       });
