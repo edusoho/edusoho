@@ -147,7 +147,7 @@ class Testpaper extends Activity
             $testpaperActivity = $this->getTestpaperActivityService()->updateActivity($activity['id'], array(
                 'mediaId' => $filterFields['mediaId'],
                 'checkType' => empty($filterFields['checkType']) ? '' : $filterFields['checkType'],
-                'requireCredit' => empty($filterFields['requireCredit']) ? '' : $filterFields['requireCredit'],
+                'requireCredit' => empty($filterFields['requireCredit']) ? 0 : $filterFields['requireCredit'],
                 'finishCondition' => $filterFields['finishCondition'],
             ));
 
