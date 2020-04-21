@@ -240,12 +240,19 @@ class TestpaperController extends BaseController
 
         $ids = $request->request->get('ids');
 
-        $testpapers = $this->getAssessmentService()->findAssessmentsByIds($ids);
-        if (empty($testpapers)) {
+        $assessments = $this->getAssessmentService()->findAssessmentsByIds($ids);
+        if (empty($assessments)) {
             $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
-        $this->getTestpaperService()->deleteTestpapers($ids);
+        $status = ArrayToolkit::column($assessments, 'status');
+        if (in_array('open', $status)) {
+            $this->createNewException(TestpaperException::OPEN_TESTPAPER_FORBIDDEN_DELETE());
+        }
+
+        foreach ($assessments as $assessment) {
+            $this->getAssessmentService()->deleteAssessment($assessment['id']);
+        }
 
         return $this->createJsonResponse(true);
     }
