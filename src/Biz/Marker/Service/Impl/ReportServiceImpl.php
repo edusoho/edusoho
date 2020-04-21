@@ -27,13 +27,14 @@ class ReportServiceImpl extends BaseService implements ReportService
             $this->createNewException(QuestionMarkerException::NOTFOUND_QUESTION_MARKER());
         }
 
-        $item = $this->getItemService()->getItemWithQuestions($questionMarker['questionId']);
+        $item = $this->getItemService()->getItemWithQuestions($questionMarker['questionId'], true);
         if (empty($item) || empty($item['questions'])) {
             $this->createNewException(QuestionMarkerException::NOTFOUND_QUESTION_MARKER());
         }
 
         $analysis = array();
-        $analysis['questionMarker'] = $questionMarker;
+        $analysis['item'] = $item;
+        $analysis['question'] = current($item['questions']);
 
         $results = $this->getQuestionMarkerResultService()->findByTaskIdAndQuestionMarkerId($taskId, $questionMarkerId);
 
@@ -173,7 +174,7 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     protected function analysisFill($item, $results)
     {
-        $questionAnswers = array_shift($item['questions'])['response_points'];
+        $questionAnswers = array_shift($item['questions'])['answer'];
         $stats = array_fill_keys(array_keys($questionAnswers), array('answerNum' => 0, 'pct' => 0));
         foreach ($results as $result) {
             $userAnswers = $result['answer'];
@@ -187,14 +188,15 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     protected function analysisDetermine($item, $results)
     {
-        $stats = $this->generateStats(array('0', '1'), $results);
+        $determine = array_shift($item['questions'])['response_points'];
+        $stats = $this->generateStats($determine, $results);
         $count = count($results);
 
         if ($count > 0) {
             $this->largestRemainderMethod($stats, $count);
         }
 
-        return array($stats[1], $stats[0]);
+        return array($stats['T'], $stats['F']);
     }
 
     protected function countFillRightAnswer($questionAnswers, $userAnswers, &$context)

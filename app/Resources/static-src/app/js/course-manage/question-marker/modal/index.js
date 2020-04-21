@@ -80,9 +80,11 @@ class QuestionMarkerStats {
       if (questionType === 'fill') {
         xData.push(Translator.trans('course.question_marker.gap_filling')+(index+1));
         seriesName = Translator.trans('course.question_marker.correct_rate');
-      } else {
+      } else if (questionType === 'determine') {
         let key = String.fromCharCode(index+65);
         xData.push(key);
+      } else {
+        xData.push(index);
       }
 
       seriesData.push(stat['pct']);
