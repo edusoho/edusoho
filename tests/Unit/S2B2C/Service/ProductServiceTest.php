@@ -25,9 +25,9 @@ class ProductServiceTest extends BaseTestCase
     {
         return array_merge([
             'supplierId' => 1,
-            'resourceType' => 'course',
-            'remoteResourceId' => 1,
-            'localResourceId' => 1,
+            'productType' => 'course',
+            'remoteProductId' => 1,
+            'localProductId' => 1,
             'cooperationPrice' => (float) 2.00,
             'suggestionPrice' => (float) 3.00,
             'localVersion' => 1,

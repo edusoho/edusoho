@@ -22,16 +22,16 @@ class ProductServiceImpl extends BaseService implements ProductService
 
     public function createProduct($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('supplierId', 'resourceType', 'remoteResourceId', 'localResourceId', 'cooperationPrice', 'suggestionPrice', 'localVersion'))) {
+        if (!ArrayToolkit::requireds($fields, array('supplierId', 'productType', 'remoteProductId', 'localProductId', 'cooperationPrice', 'suggestionPrice', 'localVersion'))) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
         $fields = ArrayToolkit::parts(
             $fields,
             array(
                 'supplierId',
-                'resourceType',
-                'remoteResourceId',
-                'localResourceId',
+                'productType',
+                'remoteProductId',
+                'localProductId',
                 'cooperationPrice',
                 'suggestionPrice',
                 'localVersion',
