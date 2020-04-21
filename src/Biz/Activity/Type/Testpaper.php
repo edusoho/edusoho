@@ -60,7 +60,7 @@ class Testpaper extends Activity
             $testpaperActivity = $this->getTestpaperActivityService()->createActivity(array(
                 'mediaId' => $fields['mediaId'],
                 'checkType' => empty($fields['checkType']) ? '' : $fields['checkType'],
-                'requireCredit' => empty($fields['requireCredit']) ? '' : $fields['requireCredit'],
+                'requireCredit' => empty($fields['requireCredit']) ? 0 : $fields['requireCredit'],
                 'answerSceneId' => $answerScene['id'],
                 'finishCondition' => $fields['finishCondition'],
             ));
