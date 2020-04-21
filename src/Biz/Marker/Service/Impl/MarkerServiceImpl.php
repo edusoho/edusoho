@@ -45,20 +45,24 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         foreach ($markers as $index => $marker) {
             if (!empty($questionMarkerGroups[$marker['id']])) {
                 $markers[$index]['questionMarkers'] = $questionMarkerGroups[$marker['id']];
+            } else {
+                unset($markers[$index]);
             }
         }
 
-        return $markers;
+        return array_values($markers);
     }
 
     protected function findQuestionMarkersWithItem($markerIds)
     {
         $questionMarkers = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerIds($markerIds);
         $items = $this->getItemService()->findItemsByIds(ArrayToolkit::column($questionMarkers, 'questionId'), true);
-        foreach ($questionMarkers as &$questionMarker) {
+        foreach ($questionMarkers as $key => &$questionMarker) {
             if (!empty($items[$questionMarker['questionId']]['questions'])) {
                 $questionMarker['item'] = $items[$questionMarker['questionId']];
                 $questionMarker['question'] = current($items[$questionMarker['questionId']]['questions']);
+            } else {
+                unset($questionMarkers[$key]);
             }
         }
 
