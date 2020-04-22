@@ -45,7 +45,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('error', '上传失败 ～请重新尝试!');
         }
 
-        $urlPath = $this->controller->get('web.twig.extension')->getFilePath($record['uri']);
+        $urlPath = $this->getContainer()->get('web.twig.extension')->getFilePath($record['uri']);
         if ($this->isAbsoluteUrl($urlPath)) {
             $url = $this->request->getScheme().':'.ltrim($urlPath, ':');
         } else {

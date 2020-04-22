@@ -257,15 +257,15 @@ abstract class HLSBaseController extends BaseController
             return $this->makeFakeTokenString();
         }
 
-        if (!empty($token['data']['fromApi'])) {
-            return $this->responseEnhanced($file[$this->getMediaAttr()][$token['data']['level']]['hlsKey']);
-        }
-
         if ($this->isHlsEncryptionPlusEnabled() || !$isMobileUserAgent) {
             $api = CloudAPIFactory::create('leaf');
             $result = $api->get("/hls/clef_plus/{$file[$this->getMediaAttr()][$token['data']['level']]['hlsKey']}");
 
             return $this->responseEnhanced($result['key']);
+        }
+
+        if (!empty($token['data']['fromApi'])) {
+            return $this->responseEnhanced($file[$this->getMediaAttr()][$token['data']['level']]['hlsKey']);
         }
 
         return $this->responseEnhanced($file[$this->getMediaAttr()][$token['data']['level']]['hlsKey']);

@@ -546,10 +546,12 @@ course.manage.live_replay_upload_error_hint: Please upload the video file
 course.manage.buy_expiry_time_required_error_hint: Please enter the entry deadline
 course.manage.buy_expiry_time_error_hint: Please select a valid entry deadline
 course.manage.student_delete_hint: Are you sure you want to delete the student?
+course.manage.students_delete_hint: Are you sure you want to delete these students?
 course.manage.min_teacher_num_error_hint: Program requires at least one teacher
 course.manage.teacher_display_label: display
 course.manage.sort_cancel: Cancel current sort
 course.manage.student.add_expiry_day.select_tips: Please select at least one item
+course.manage.student.batch_remove.select_tips: Please select at least one item
 course.manage.reward_point_required_hint: please input the reward point
 course.manage.task_reward_point_required_hint: please input the task reward point
 course.manage.max_point_error_hint: Please input an integer from 0-10000000

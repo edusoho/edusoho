@@ -188,7 +188,7 @@ class SettingController extends BaseController
 
         $response = array(
             'path' => $mobile[$type],
-            'url' => $this->container->get('templating.helper.assets')->getUrl($mobile[$type]),
+            'url' => $this->container->get('assets.packages')->getUrl($mobile[$type]),
         );
 
         return new Response(json_encode($response));
@@ -231,7 +231,7 @@ class SettingController extends BaseController
 
         $response = array(
             'path' => $site['logo'],
-            'url' => $this->container->get('templating.helper.assets')->getUrl($site['logo']),
+            'url' => $this->container->get('assets.packages')->getUrl($site['logo']),
         );
 
         return $this->createJsonResponse($response);
@@ -283,7 +283,7 @@ class SettingController extends BaseController
 
         $response = array(
             'path' => $site['logo_path'],
-            'url' => $this->container->get('templating.helper.assets')->getUrl($site['logo_path']),
+            'url' => $this->container->get('assets.packages')->getUrl($site['logo_path']),
         );
 
         return $this->createJsonResponse($response);
@@ -321,7 +321,7 @@ class SettingController extends BaseController
 
         $response = array(
             'path' => $site['favicon'],
-            'url' => $this->container->get('templating.helper.assets')->getUrl($site['favicon']),
+            'url' => $this->container->get('assets.packages')->getUrl($site['favicon']),
         );
 
         return $this->createJsonResponse($response);
