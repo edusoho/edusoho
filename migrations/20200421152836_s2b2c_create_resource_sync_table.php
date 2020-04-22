@@ -23,7 +23,7 @@ class S2b2cCreateResourceSyncTable extends Migration
               `extendedData` text COMMENT '其他关联数据',
               `syncTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '同步时间',
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
-              `updateTime` int(10) unsigned NOT NULL DEFAULT '0',
+              `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");

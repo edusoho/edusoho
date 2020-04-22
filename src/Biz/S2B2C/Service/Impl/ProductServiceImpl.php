@@ -22,12 +22,15 @@ class ProductServiceImpl extends BaseService implements ProductService
 
     public function createProduct($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('supplierId', 'productType', 'remoteProductId', 'localProductId', 'cooperationPrice', 'suggestionPrice', 'localVersion'))) {
+        if (!ArrayToolkit::requireds(
+            $fields,
+            ['supplierId', 'productType', 'remoteProductId', 'localProductId', 'cooperationPrice', 'suggestionPrice', 'localVersion']
+        )) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
         $fields = ArrayToolkit::parts(
             $fields,
-            array(
+            [
                 'supplierId',
                 'productType',
                 'remoteProductId',
@@ -37,7 +40,7 @@ class ProductServiceImpl extends BaseService implements ProductService
                 'localVersion',
                 'createdTime',
                 'updatedTime',
-            )
+            ]
         );
 
         return $this->getS2B2CProductDao()->create($fields);

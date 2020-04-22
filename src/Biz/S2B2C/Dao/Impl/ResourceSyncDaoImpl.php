@@ -15,8 +15,9 @@ class ResourceSyncDaoImpl extends GeneralDaoImpl implements ResourceSyncDao
             'timestamps' => ['createdTime', 'updatedTime'],
             'conditions' => [
                 'id = :id',
+                'supplierId = :supplierId',
             ],
-            'orderbys' => ['id'],
+            'orderbys' => ['id', 'localResourceId', 'remoteResourceId', 'syncTime'],
         ];
     }
 }
