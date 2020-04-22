@@ -32,7 +32,7 @@
   {% if app.request.query.get('action', '') == 'check' %}
     {{ render(controller('AppBundle:AnswerEngine/AnswerEngine:assessmentResult', {answerRecordId: answerRecord.id})) }}
   {% else %}
-    {{ render(controller('AppBundle:AnswerEngine/AnswerEngine:report', {answerRecordId: answerRecord.id, restartUrl:restartUrl})) }}
+    {{ render(controller('AppBundle:AnswerEngine/AnswerEngine:report', {answerRecordId: answerRecord.id, restartUrl:restartUrl, answerShow:answerShow})) }}
   {% endif %}
 
   {% block footer %}

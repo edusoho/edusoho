@@ -114,7 +114,7 @@ class AnswerEngineController extends BaseController
         return $this->createJsonResponse($assessmentResponse);
     }
 
-    public function reportAction(Request $request, $answerRecordId, $restartUrl)
+    public function reportAction(Request $request, $answerRecordId, $restartUrl, $answerShow = 'show')
     {
         $answerRecord = $this->wrapperAnswerRecord($this->getAnswerRecordService()->get($answerRecordId));
         $conditions = array('target_type' => 'assessment', 'target_id' => $answerRecord['assessment_id'], 'user_id' => $answerRecord['user_id']);
@@ -132,6 +132,7 @@ class AnswerEngineController extends BaseController
             'assessment' => $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']),
             'questionFavorites' => $questionFavorites,
             'restartUrl' => $restartUrl,
+            'answerShow' => $answerShow,
         ));
     }
 

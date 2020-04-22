@@ -16,6 +16,7 @@ use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Biz\System\Service\SettingService;
 
 class TestpaperController extends BaseController
 {
@@ -66,7 +67,31 @@ class TestpaperController extends BaseController
             'answerRecord' => $answerRecord,
             'assessment' => $assessment,
             'restartUrl' => $restartUrl,
+            'answerShow' => $this->getAnswerShowByAnswerSceneId($answerRecord['answer_scene_id']),
         ));
+    }
+
+    protected function getAnswerShowByAnswerSceneId($answerSceneId)
+    {
+        $questionSetting = $this->getSettingService()->get('questions', array());
+        $answerShowMode = empty($questionSetting['testpaper_answers_show_mode']) ? 'submitted' : $questionSetting['testpaper_answers_show_mode'];
+        switch ($answerShowMode) {
+            case 'hide':
+                return 'none';
+                break;
+
+            case 'reviewed':
+                if ($this->getAnswerRecordService()->count(array('answer_scene_id' => $answerSceneId, 'statusNeq' => 'finished'))) {
+                    return 'none';
+                } else {
+                    return 'show';
+                }
+                break;
+
+            default:
+                return 'show';
+                break;
+        }
     }
 
     protected function getTaskByAnswerSceneId($answerSceneId)
@@ -207,5 +232,13 @@ class TestpaperController extends BaseController
     protected function getAnswerSceneService()
     {
         return $this->createService('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }

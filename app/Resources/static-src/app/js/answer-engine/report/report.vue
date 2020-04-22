@@ -1,6 +1,7 @@
 <template>
   <div id="app" class="test-vue">
     <item-report
+      :answerShow="answerShow"
       :answerReport="answerReport"
       :assessment="assessment"
       :answerRecord="answerRecord"
@@ -18,6 +19,7 @@
   export default {
     data() {
       return {
+        answerShow: $('[name=answer_show]').val(),
         showCKEditorData: {
           publicPath: $('[name=ckeditor_path]').val(),
           filebrowserImageUploadUrl: $('[name=ckeditor_image_upload_url]').val(),
