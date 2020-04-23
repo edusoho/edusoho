@@ -44,15 +44,11 @@ class AnswerEngineController extends BaseController
     public function startAnswerAction(Request $request, $answerSceneId, $assessmentId)
     {
         $user = $this->getCurrentUser();
-        try {
-            $answerRecord = $this->getAnswerService()->startAnswer($answerSceneId, $assessmentId, $user['id']);
-            $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
-            $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
-            $assessmentResponse = (object) array();
-        } catch (\Exception $e) {
-            return $this->createAnswerException($e);
-        }
-
+        $answerRecord = $this->getAnswerService()->startAnswer($answerSceneId, $assessmentId, $user['id']);
+        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
+        $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
+        $assessmentResponse = (object) array();
+        
         return $this->render('answer-engine/answer.html.twig', array(
             'assessment' => $assessment,
             'assessmentResponse' => $assessmentResponse,
@@ -69,14 +65,10 @@ class AnswerEngineController extends BaseController
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('exception.blacklist.forbidden_take'));
         }
 
-        try {
-            $answerRecord = $this->getAnswerService()->continueAnswer($answerRecordId);
-            $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
-            $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
-            $assessmentResponse = $this->getAnswerService()->getAssessmentResponseByAnswerRecordId($answerRecordId);
-        } catch (\Exception $e) {
-            return $this->createAnswerException($e);
-        }
+        $answerRecord = $this->getAnswerService()->continueAnswer($answerRecordId);
+        $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
+        $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
+        $assessmentResponse = $this->getAnswerService()->getAssessmentResponseByAnswerRecordId($answerRecordId);
 
         return $this->render('answer-engine/answer.html.twig', array(
             'assessment' => $assessment,
@@ -175,28 +167,6 @@ class AnswerEngineController extends BaseController
         $answerRecord['username'] = $user['nickname'];
 
         return $answerRecord;
-    }
-
-    protected function createAnswerException(\Exception $e)
-    {
-        $error = array(
-            '40495201' => '场次不存在',
-            '50095202' => '答题时间未到',
-            '40495203' => '答题记录不存在',
-            '50095204' => '未在进行中',
-            '50095205' => '未在暂停状态',
-            '40495206' => '答题报告不存在',
-            '50095207' => '无法再次开始答题',
-            '50095208' => '无法批阅',
-            '40495101' => 'exception.testpaper.not_found',
-            '50095106' => 'exception.testpaper.draft',
-        );
-
-        if (empty($error[$e->getCode()])) {
-            throw $e;
-        } else {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans($error[$e->getCode()]));
-        }
     }
 
     /**

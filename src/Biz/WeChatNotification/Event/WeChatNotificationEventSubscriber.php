@@ -25,6 +25,8 @@ use Biz\AppLoggerConstant;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Router;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 
 class WeChatNotificationEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
@@ -40,7 +42,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             'course.task.publish' => 'onTaskPublish',
             'course.task.update' => 'onTaskUpdate',
             'course.task.delete' => 'onTaskDelete',
-            'exam.reviewed' => 'onTestpaperReviewd',
+            'answer.finished' => 'onAnswerFinished',
             'payment_trade.paid' => 'onPaid',
             'course.task.create.sync' => 'onTaskCreateSync',
             'course.task.update.sync' => 'onTaskUpdateSync',
@@ -89,31 +91,33 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         $this->deleteLiveNotificationJob($task);
     }
 
-    public function onTestpaperReviewd(Event $event)
+    public function onAnswerFinished(Event $event)
     {
-        $paperResult = $event->getSubject();
-        $activity = $this->getActivityService()->getActivity($paperResult['lessonId']);
+        $answerReport = $event->getSubject();
+        $answerRecord = $this->getAnswerRecordService()->get($answerReport['answer_record_id']);
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+        $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
         if (empty($task)) {
             $this->getLogService()->error(AppLoggerConstant::NOTIFY, 'wechat_notification_error', '发送微信通知失败:获取任务失败', $paperResult);
 
             return;
         }
 
-        if (!in_array($paperResult['type'], array('testpaper', 'homework'))) {
+        if (!in_array($activity['mediaType'], array('testpaper', 'homework'))) {
             return;
         }
 
-        if ('testpaper' == $paperResult['type']) {
+        if ('testpaper' == $activity['mediaType']) {
             $key = 'examResult';
             $logName = 'wechat_notify_exam_result';
             $data = array(
                 'first' => array('value' => '同学，您好，您的试卷已批阅完成'),
                 'keyword1' => array('value' => $task['title']),
-                'keyword2' => array('value' => $paperResult['score']),
+                'keyword2' => array('value' => $answerReport['score']),
                 'remark' => array('value' => '再接再厉哦'),
             );
-        } elseif ('homework' == $paperResult['type']) {
+        } elseif ('homework' == $activity['mediaType']) {
             $key = 'homeworkResult';
             $logName = 'wechat_notify_homework_result';
             $course = $this->getCourseService()->getCourse($task['courseId']);
@@ -135,7 +139,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'keyword1' => array('value' => $task['title']),
                 'keyword2' => array('value' => $course['courseSetTitle']),
                 'keyword3' => array('value' => $nickname),
-                'remark' => array('value' => '作业结果：'.$this->testpaperStatus[$paperResult['passedStatus']]),
+                'remark' => array('value' => '作业结果：'.$this->testpaperStatus[$answerReport['grade']]),
             );
         }
 
@@ -145,8 +149,8 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         }
 
         $options = array('type' => 'url', 'url' => $this->generateUrl('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']), UrlGeneratorInterface::ABSOLUTE_URL));
-        $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($paperResult['userId']);
-        if (empty($weChatUser['isSubscribe']) || $this->isUserLocked($paperResult['userId'])) {
+        $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($answerRecord['user_id']);
+        if (empty($weChatUser['isSubscribe']) || $this->isUserLocked($answerRecord['user_id'])) {
             return;
         }
 
@@ -895,5 +899,21 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    public function getAnswerRecordService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    public function getAssessmentService()
+    {
+        return $this->getBiz()->service('ItemBank:Assessment:AssessmentService');
     }
 }

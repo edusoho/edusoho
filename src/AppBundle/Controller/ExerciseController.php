@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Biz\Common\CommonException;
-use Biz\Course\Exception\CourseException;
+use Biz\Course\CourseException;
 
 class ExerciseController extends BaseController
 {
