@@ -22,6 +22,7 @@ class S2b2cCreateProductTable extends Migration
           `cooperationPrice` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '合作价格',
           `suggestionPrice` float(10,2) DEFAULT '0.00' COMMENT '建议零售价',
           `localVersion` int(11) unsigned NOT NULL DEFAULT '1' COMMENT '本地版本:默认1',
+          `changelog` mediumtext COMMENT '更新日志',
           `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
           `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
           PRIMARY KEY (`id`)

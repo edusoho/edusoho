@@ -35,7 +35,7 @@ class ProductDaoImpl extends GeneralDaoImpl implements ProductDao
     public function findBySupplierIdAndRemoteProductIds($supplierId, $remoteProductIds)
     {
         $marks = str_repeat('?,', count($remoteProductIds) - 1).'?';
-        $sql = "SELECT * FROM {$this->table} WHERE supplierId= ? AND remoteProductId IN ({$marks})";
+        $sql = "SELECT * FROM {$this->table} WHERE supplierId= ? AND remoteProductId IN ({$marks});";
 
         return $this->db()->fetchAll($sql, array_merge([$supplierId], array_values($remoteProductIds)));
     }

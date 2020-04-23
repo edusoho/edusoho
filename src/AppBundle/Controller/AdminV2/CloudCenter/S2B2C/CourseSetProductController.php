@@ -5,6 +5,7 @@ namespace AppBundle\Controller\AdminV2\CloudCenter\S2B2C;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseSetService;
+use Biz\S2B2C\Service\CourseProductService;
 use Biz\S2B2C\Service\ProductService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -45,14 +46,15 @@ class CourseSetProductController extends ProductController
         if (!empty($result['success']) && true == $result['success']) {
             $result = $this->getS2B2CFacadeService()->getS2B2CService()->purchaseProducts($purchaseProducts);
             if (!empty($result['status']) && true === $result['status']) {
-                $newCourseSet = $this->getCourseSetService()->createCourseSet($prepareCourseSet);
-                $this->getS2B2CProductService()->createProduct([
+                $newCourseSet = $this->getCourseSetService()->addCourseSet($prepareCourseSet);
+                $product = $this->getS2B2CProductService()->createProduct([
                     'supplierId' => $prepareCourseSet['originPlatformId'],
                     'productType' => 'course',
                     'remoteProductId' => $prepareCourseSet['s2b2cDistributeId'],
                     'remoteResourceId' => $courseSetData['id'],
                     'localResourceId' => $newCourseSet['id'],
                 ]);
+                $this->getCourseProductService()->syncCourses($newCourseSet, $product);
             }
 
             return $this->createJsonResponse($result);
@@ -114,14 +116,6 @@ class CourseSetProductController extends ProductController
         return $purchaseProducts;
     }
 
-    protected function hasChosenCourseProduct($request, $product)
-    {
-        $chosenCourseSet = $this->getCourseSetService()->getCourseSetBySourceCourseSetId($request->request->get('sourceCourseSetId'));
-        $chosenCourse = $this->getProductService()->getOriginPlatformCourse($request->request->get('originPlatform'), $request->request->get('originPlatformId'), $request->request->get('sourceCourseId'));
-
-        return !empty($chosenCourseSet) || !empty($chosenCourse);
-    }
-
     /**
      * @return CourseSetService
      */
@@ -141,5 +135,13 @@ class CourseSetProductController extends ProductController
     protected function getS2B2CProductService()
     {
         return $this->createService('S2B2C:ProductService');
+    }
+
+    /**
+     * @return CourseProductService
+     */
+    protected function getCourseProductService()
+    {
+        return $this->createService('S2B2C:CourseProductService');
     }
 }
