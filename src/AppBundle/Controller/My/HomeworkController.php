@@ -19,7 +19,6 @@ class HomeworkController extends BaseController
     public function checkListAction(Request $request, $status)
     {
         $user = $this->getUser();
-
         if (!$user->isTeacher()) {
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
@@ -30,67 +29,75 @@ class HomeworkController extends BaseController
 
         $teacherCourses = $this->getCourseMemberService()->findTeacherMembersByUserId($user['id']);
         $courseIds = ArrayToolkit::column($teacherCourses, 'courseId');
-
-        $conditions = array(
-            'status' => $status,
-            'type' => 'homework',
-            'courseIds' => $courseIds,
-        );
-
         if (!empty($courseIds) && 'courseTitle' == $keywordType) {
-            $likeCourseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($keyword);
-            $likeCourseSetIds = ArrayToolkit::column($likeCourseSets, 'id');
-            $likeCourses = $this->getCourseService()->findCoursesByCourseSetIds($likeCourseSetIds);
-            $likeCourseIds = ArrayToolkit::column($likeCourses, 'id');
-            $conditions['courseIds'] = array_intersect($conditions['courseIds'], $likeCourseIds);
+            $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($keyword);
+            $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+            $courses = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
+            $courseIds = array_values(array_intersect($courseIds, ArrayToolkit::column($courses, 'id')));
         }
 
-        $courses = $this->getCourseService()->findCoursesByIds(array_values($conditions['courseIds']));
+        $activities = ArrayToolkit::index(
+            $this->getActivityService()->search(array('courseIds' => empty($courseIds) ? array(-1) : $courseIds, 'mediaType' => 'homework'), array(), 0, PHP_INT_MAX),
+            'mediaId'
+        );
+        $homeworkActivities = ArrayToolkit::index(
+            $this->getHomeworkActivityService()->findByIds(array_keys($activities)),
+            'answerSceneId'
+        );
+
+        $conditions = array(
+            'answer_scene_ids' => empty(array_keys($homeworkActivities)) ? array(-1) : array_keys($homeworkActivities),
+            'status' => $status,
+        );
 
         if ('nickname' == $keywordType && $keyword) {
             $searchUser = $this->getUserService()->getUserByNickname($keyword);
-            $conditions['userId'] = $searchUser ? $searchUser['id'] : '-1';
+            $conditions['user_id'] = $searchUser ? $searchUser['id'] : '-1';
         }
 
         $paginator = new Paginator(
             $request,
-            $this->getTestpaperService()->searchTestpaperResultsCount($conditions),
+            $this->getAnswerRecordService()->count($conditions),
             10
         );
 
-        $orderBy = $status == 'reviewing' ? array('endTime' => 'ASC') : array('checkedTime' => 'DESC');
-
-        $paperResults = $this->getTestpaperService()->searchTestpaperResults(
+        $orderBy = $status == 'reviewing' ? array('end_time' => 'ASC') : array('updated_time' => 'DESC');
+        $answerRecords = $this->getAnswerRecordService()->search(
             $conditions,
             $orderBy,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $userIds = ArrayToolkit::column($paperResults, 'userId');
-        $userIds = array_merge($userIds, ArrayToolkit::column($paperResults, 'checkTeacherId'));
+        $answerReports = ArrayToolkit::index(
+            $this->getAnswerReportService()->findByIds(ArrayToolkit::column($answerRecords, 'answer_report_id')),
+            'id'
+        );
+
+        $userIds = ArrayToolkit::column($answerRecords, 'user_id');
+        $userIds = array_merge($userIds, ArrayToolkit::column($answerReports, 'review_user_id'));
         $users = $this->getUserService()->findUsersByIds($userIds);
-
-        $courseSetIds = ArrayToolkit::column($paperResults, 'courseSetId');
-        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
-
-        $testpaperIds = ArrayToolkit::column($paperResults, 'testId');
-        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
-
-        $activityIds = ArrayToolkit::column($paperResults, 'lessonId');
-        $tasks = $this->getTaskService()->findTasksByActivityIds($activityIds);
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($activities, 'fromCourseId'));
+        $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($answerRecords, 'assessment_id'));
+        $tasks = ArrayToolkit::index(
+            $this->getTaskService()->findTasksByActivityIds(ArrayToolkit::column($activities, 'id')),
+            'activityId'
+        );
 
         return $this->render('my/homework/check-list.html.twig', array(
-            'paperResults' => $paperResults,
+            'answerRecords' => $answerRecords,
+            'answerReports' => $answerReports,
             'paginator' => $paginator,
             'courses' => $courses,
-            'courseSets' => $courseSets,
             'users' => $users,
             'status' => $status,
-            'testpapers' => $testpapers,
-            'tasks' => $tasks,
-            'keyword' => $keyword,
+            'assessments' => $assessments,
             'keywordType' => $keywordType,
+            'keyword' => $keyword,
+            'activities' => $activities,
+            'homeworkActivities' => $homeworkActivities,
+            'tasks' => $tasks,
         ));
     }
 

@@ -15,6 +15,9 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Listener\ActivityLearnLogListener;
 use Biz\Util\EdusohoLiveClient;
+use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Activity\Service\HomeworkActivityService;
+use Biz\Activity\Service\ExerciseActivityService;
 
 class ActivityServiceImpl extends BaseService implements ActivityService
 {
@@ -588,6 +591,33 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->biz["activity_type.{$type}"];
     }
 
+    public function getActivityByAnswerSceneId($answerSceneId)
+    {
+        $homeworkActivity = $this->getHomeworkActivityService()->getByAnswerSceneId($answerSceneId);
+        if ($homeworkActivity) {
+            $activity = $this->getByMediaIdAndMediaType($homeworkActivity['id'], 'homework');
+            if (!empty($activity)) {
+                return $activity;
+            }
+        }
+
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerSceneId);
+        if ($testpaperActivity) {
+            $activity = $this->getByMediaIdAndMediaType($testpaperActivity['id'], 'testpaper');
+            if (!empty($activity)) {
+                return $activity;
+            }
+        }
+
+        $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerSceneId);
+        if ($exerciseActivity) {
+            $activity = $this->getByMediaIdAndMediaType($exerciseActivity['id'], 'exercise');
+            if (!empty($activity)) {
+                return $activity;
+            }
+        }
+    }
+
     protected function checkLiveFinished($activity)
     {
         $isEsLive = EdusohoLiveClient::isEsLive($activity['ext']['liveProvider']);
@@ -714,5 +744,29 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
 
         return $cloudFiles;
+    }
+
+    /**
+     * @return TestpaperActivityService
+     */
+    protected function getTestpaperActivityService()
+    {
+        return $this->createService('Activity:TestpaperActivityService');
+    }
+
+    /**
+     * @return HomeworkActivityService
+     */
+    protected function getHomeworkActivityService()
+    {
+        return $this->createService('Activity:HomeworkActivityService');
+    }
+
+    /**
+     * @return ExerciseActivityService
+     */
+    protected function getExerciseActivityService()
+    {
+        return $this->createService('Activity:ExerciseActivityService');
     }
 }

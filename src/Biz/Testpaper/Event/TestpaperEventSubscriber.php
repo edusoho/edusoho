@@ -2,84 +2,74 @@
 
 namespace Biz\Testpaper\Event;
 
-use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 
 class TestpaperEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return array(
-            'exam.finish' => 'onTestpaperFinish',
-            'exam.reviewed' => 'onTestpaperReviewd',
+            'answer.submitted' => 'onAnswerSubmitted',
+            'answer.finished' => 'onAnswerFinished',
         );
     }
 
-    public function onTestpaperFinish(Event $event)
+    public function onAnswerSubmitted(Event $event)
     {
-        $paperResult = $event->getSubject();
+        $answerRecord = $event->getSubject();
 
-        $biz = $this->getBiz();
-        $user = $biz['user'];
-
-        $itemCount = $this->getTestpaperService()->searchItemCount(array(
-            'testId' => $paperResult['testId'],
-            'questionTypes' => array('essay'),
-        ));
-
-        if ($itemCount) {
-            $course = $this->getCourseService()->getCourse($paperResult['courseId']);
-
+        if ('reviewing' == $answerRecord['status']) {
+            $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
+            if (empty($activity['mediaType']) || !in_array($activity['mediaType'], array('homework', 'testpaper'))) {
+                return;
+            }
+            $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
+            $user = $this->getBiz()['user'];
             $message = array(
-                'id' => $paperResult['id'],
-                'courseId' => $paperResult['courseId'],
-                'name' => $paperResult['paperName'],
+                'id' => $answerRecord['id'],
+                'courseId' => $activity['fromCourseId'],
+                'name' => $assessment['name'],
                 'userId' => $user['id'],
                 'userName' => $user['nickname'],
-                'testpaperType' => $paperResult['type'],
+                'testpaperType' => $activity['mediaType'],
                 'type' => 'perusal',
             );
 
+            $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
             if (!empty($course['teacherIds'])) {
-                foreach ($course['teacherIds'] as $receiverId) {
-                    $result = $this->getNotificationService()->notify($receiverId, 'test-paper', $message);
+                foreach ($course['teacherIds'] as $teacherId) {
+                    $this->getNotificationService()->notify($teacherId, 'test-paper', $message);
                 }
             }
         }
     }
 
-    public function onTestpaperReviewd(Event $event)
+    public function onAnswerFinished(Event $event)
     {
-        $paperResult = $event->getSubject();
-
-        $biz = $this->getBiz();
-        $user = $biz['user'];
-
-        $itemResults = $this->getTestpaperService()->findItemResultsByResultId($paperResult['id']);
-        $itemResults = ArrayToolkit::group($itemResults, 'status');
-
-        if (!empty($itemResults['right'])) {
-            $rightItemCount = count($itemResults['right']);
-            $this->getTestpaperService()->updateTestpaperResult($paperResult['id'], array('rightItemCount' => $rightItemCount));
-        }
-
-        if (!in_array($paperResult['type'], array('testpaper', 'homework'))) {
+        $answerReport = $event->getSubject();
+        $answerRecord = $this->getAnswerRecordService()->get($answerReport['answer_record_id']);
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
+        if (empty($activity['mediaType']) || !in_array($activity['mediaType'], array('homework', 'testpaper'))) {
             return;
         }
 
+        $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
+        $user = $this->getBiz()['user'];
         $message = array(
-            'id' => $paperResult['id'],
-            'courseId' => $paperResult['courseId'],
-            'name' => $paperResult['paperName'],
+            'id' => $answerRecord['id'],
+            'courseId' => $activity['fromCourseId'],
+            'name' => $assessment['name'],
             'userId' => $user['id'],
             'userName' => $user['nickname'],
             'type' => 'read',
-            'testpaperType' => $paperResult['type'],
+            'testpaperType' => $activity['mediaType'],
         );
 
-        $result = $this->getNotificationService()->notify($paperResult['userId'], 'test-paper', $message);
+        $result = $this->getNotificationService()->notify($answerRecord['user_id'], 'test-paper', $message);
     }
 
     public function getTestpaperService()
@@ -102,6 +92,9 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         return $this->getBiz()->service('Classroom:ClassroomService');
     }
 
+    /**
+     * @return ActivityService
+     */
     public function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
@@ -110,5 +103,29 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
     public function getStatusService()
     {
         return $this->getBiz()->service('User:StatusService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->getBiz()->service('User:UserService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->getBiz()->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    public function getAnswerRecordService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerRecordService');
     }
 }

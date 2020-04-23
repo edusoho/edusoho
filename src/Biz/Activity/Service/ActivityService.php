@@ -70,4 +70,6 @@ interface ActivityService
     public function getByMediaIdAndMediaTypeAndCopyId($mediaId, $mediaType, $copyId);
 
     public function getByMediaIdAndMediaType($mediaId, $mediaType);
+
+    public function getActivityByAnswerSceneId($answerSceneId);
 }
