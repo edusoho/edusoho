@@ -391,10 +391,12 @@ t.add("course.manage.live_replay_upload_error_hint", "\u8bf7\u4e0a\u4f20\u5f55\u
 t.add("course.manage.buy_expiry_time_required_error_hint", "\u8bf7\u8f93\u5165\u52a0\u5165\u622a\u6b62\u65e5\u671f", "js", "zh_CN");
 t.add("course.manage.buy_expiry_time_error_hint", "\u8bf7\u9009\u62e9\u6709\u6548\u7684\u52a0\u5165\u622a\u6b62\u65e5\u671f", "js", "zh_CN");
 t.add("course.manage.student_delete_hint", "\u662f\u5426\u786e\u5b9a\u5220\u9664\u8be5\u5b66\u5458\uff1f", "js", "zh_CN");
+t.add("course.manage.students_delete_hint", "\u662f\u5426\u79fb\u9664\u8fd9\u4e9b\u5b66\u5458\uff1f", "js", "zh_CN");
 t.add("course.manage.min_teacher_num_error_hint", "\u6559\u5b66\u8ba1\u5212\u81f3\u5c11\u9700\u8981\u4e00\u4f4d\u6559\u5e08", "js", "zh_CN");
 t.add("course.manage.teacher_display_label", "\u663e\u793a", "js", "zh_CN");
 t.add("course.manage.sort_cancel", "\u53d6\u6d88\u5f53\u524d\u6392\u5e8f", "js", "zh_CN");
 t.add("course.manage.student.add_expiry_day.select_tips", "\u8bf7\u81f3\u5c11\u9009\u4e2d\u4e00\u9879\u540e\u8fdb\u884c\u4fee\u6539", "js", "zh_CN");
+t.add("course.manage.student.batch_remove.select_tips", "\u8bf7\u81f3\u5c11\u9009\u4e2d\u4e00\u9879\u540e\u5220\u9664", "js", "zh_CN");
 t.add("course.manage.reward_point_required_hint", "\u8bf7\u8f93\u5165\u6559\u5b66\u8ba1\u5212\u5956\u52b1\u79ef\u5206", "js", "zh_CN");
 t.add("course.manage.task_reward_point_required_hint", "\u8bf7\u8f93\u5165\u8ba1\u5212\u4efb\u52a1\u5956\u52b1\u79ef\u5206", "js", "zh_CN");
 t.add("course.manage.max_point_error_hint", "\u8bf7\u8f93\u51650-100000\u7684\u6574\u6570", "js", "zh_CN");
