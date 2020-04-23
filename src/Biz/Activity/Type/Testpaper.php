@@ -55,6 +55,7 @@ class Testpaper extends Activity
                 'need_score' => 1,
                 'start_time' => $fields['startTime'],
                 'pass_score' => empty($fields['passScore']) ? 0 : $fields['passScore'],
+                'enable_facein' => empty($fields['enable_facein']) ? 0 : $fields['enable_facein'],
             ));
 
             $testpaperActivity = $this->getTestpaperActivityService()->createActivity(array(
@@ -85,10 +86,12 @@ class Testpaper extends Activity
         $newExt = array(
             'title' => $activity['title'],
             'startTime' => $activity['startTime'],
+            'finishData' => $activity['finishData'],
             'testpaperId' => $testpaperActivity['mediaId'],
             'doTimes' => $testpaperActivity['answerScene']['do_times'],
             'redoInterval' => $testpaperActivity['answerScene']['redo_interval'],
             'limitedTime' => $testpaperActivity['answerScene']['limited_time'],
+            'enable_facein' => $testpaperActivity['answerScene']['enable_facein'],
             'checkType' => $testpaperActivity['checkType'],
             'requireCredit' => $testpaperActivity['requireCredit'],
             'testMode' => $testpaperActivity['testMode'],
@@ -105,10 +108,12 @@ class Testpaper extends Activity
 
         $ext['startTime'] = $sourceActivity['startTime'];
         $ext['title'] = $sourceActivity['title'];
+        $ext['finishData'] = $sourceActivity['finishData'];
         $ext['testpaperId'] = $sourceExt['mediaId'];
         $ext['doTimes'] = $sourceExt['answerScene']['do_times'];
         $ext['redoInterval'] = $sourceExt['answerScene']['redo_interval'];
         $ext['limitedTime'] = $sourceExt['answerScene']['limited_time'];
+        $ext['enable_facein'] = $sourceExt['answerScene']['enable_facein'];
         $ext['checkType'] = $sourceExt['checkType'];
         $ext['requireCredit'] = $sourceExt['requireCredit'];
         $ext['testMode'] = $sourceExt['testMode'];
@@ -126,7 +131,7 @@ class Testpaper extends Activity
         }
 
         //引用传递，当考试时间设置改变时，时间值也改变
-        if (0 == $fields['doTimes'] || 'normal' == $fields['testMode']) {
+        if (0 == $fields['doTimes']) {
             $fields['startTime'] = 0;
         }
 
@@ -142,6 +147,7 @@ class Testpaper extends Activity
                 'redo_interval' => $filterFields['redoInterval'],
                 'start_time' => $filterFields['startTime'],
                 'pass_score' => empty($filterFields['passScore']) ? 0 : $filterFields['passScore'],
+                'enable_facein' => empty($filterFields['enable_facein']) ? 0 : $filterFields['enable_facein'],
             ));
 
             $testpaperActivity = $this->getTestpaperActivityService()->updateActivity($activity['id'], array(
@@ -230,6 +236,7 @@ class Testpaper extends Activity
                 'finishCondition',
                 'startTime',
                 'passScore',
+                'enable_facein',
             )
         );
 
