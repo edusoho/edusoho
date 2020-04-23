@@ -5,6 +5,7 @@ namespace AppBundle\Controller\AdminV2\CloudCenter\S2B2C;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseSetService;
+use Biz\S2B2C\Service\ProductService;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseSetProductController extends ProductController
@@ -30,18 +31,28 @@ class CourseSetProductController extends ProductController
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $request = $this->setRequestDefaultParams($request, $courseSetData);
-        if ($this->hasChosenCourseProduct($request)) {
+        $prepareCourseSet = $this->prepareCourseSetData($courseSetData);
+        /**
+         * 以前通过preparePurchaseData函数去实现，现在直接通过Product函数去实现
+         */
+        $localProduct = $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteProductId($prepareCourseSet['originPlatformId'], $prepareCourseSet['s2b2cDistributeId']);
+        if ($localProduct) {
             return $this->createJsonResponse(array('status' => 'repeat'));
         }
 
-        $purchaseProducts = $this->preparePurchaseData($request, $courseSetData);
+        $purchaseProducts = $this->preparePurchaseData($courseSetData);
         $result = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->checkPurchaseProducts($purchaseProducts);
-
         if (!empty($result['success']) && true == $result['success']) {
             $result = $this->getS2B2CFacadeService()->getS2B2CService()->purchaseProducts($purchaseProducts);
             if (!empty($result['status']) && true === $result['status']) {
-                $this->forward($visibleCourseTypes[$type]['saveAction'], array('request' => $request));
+                $newCourseSet = $this->getCourseSetService()->createCourseSet($prepareCourseSet);
+                $this->getS2B2CProductService()->createProduct([
+                    'supplierId' => $prepareCourseSet['originPlatformId'],
+                    'productType' => 'course',
+                    'remoteProductId' => $prepareCourseSet['s2b2cDistributeId'],
+                    'remoteResourceId' => $courseSetData['id'],
+                    'localResourceId' => $newCourseSet['id'],
+                ]);
             }
 
             return $this->createJsonResponse($result);
@@ -50,13 +61,14 @@ class CourseSetProductController extends ProductController
         return $this->createJsonResponse(array_merge($result, array('status' => false)));
     }
 
-    protected function setRequestDefaultParams(Request $request, $courseSetData)
+    protected function prepareCourseSetData($courseSetData)
     {
         $supplierSettings = $this->getSettingService()->get('supplierSettings', array());
         if (empty($supplierSettings['supplierId']) || empty($courseSetData['s2b2cDistributeId'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
-        $defaultParams = array(
+
+        return [
             'originPlatform' => 'supplier',
             'originPlatformId' => $supplierSettings['supplierId'],
             'syncStatus' => 'waiting',
@@ -71,19 +83,14 @@ class CourseSetProductController extends ProductController
             'minCoursePrice' => $courseSetData['minCoursePrice'],
             'courseSetData' => '',
             's2b2cDistributeId' => $courseSetData['s2b2cDistributeId'],
-        );
-        foreach ($defaultParams as $paramsName => $value) {
-            $request->request->set($paramsName, $value);
-        }
-
-        return $request;
+        ];
     }
 
-    protected function preparePurchaseData(Request $request, $courseSetData)
+    protected function preparePurchaseData($courseSetData)
     {
         $settings = $this->getSettingService()->get('storage', array());
         $supplierSettings = $this->getSettingService()->get('supplierSettings', array());
-        $sourceCourseSetId = $request->request->get('sourceCourseSetId');
+        $sourceCourseSetId = $courseSetData['id'];
         $sourceCourseSet = $this->getS2B2CFacadeService()->getSupplierPlatformApi()
             ->getSupplierCourseSetProductDetail($sourceCourseSetId);
         $sourcesCourses = $sourceCourseSet['courses'];
@@ -107,7 +114,7 @@ class CourseSetProductController extends ProductController
         return $purchaseProducts;
     }
 
-    protected function hasChosenCourseProduct($request)
+    protected function hasChosenCourseProduct($request, $product)
     {
         $chosenCourseSet = $this->getCourseSetService()->getCourseSetBySourceCourseSetId($request->request->get('sourceCourseSetId'));
         $chosenCourse = $this->getProductService()->getOriginPlatformCourse($request->request->get('originPlatform'), $request->request->get('originPlatformId'), $request->request->get('sourceCourseId'));
@@ -126,5 +133,13 @@ class CourseSetProductController extends ProductController
     protected function getCourseTypes()
     {
         return $this->get('web.twig.course_extension')->getCourseTypes();
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getS2B2CProductService()
+    {
+        return $this->createService('S2B2C:ProductService');
     }
 }

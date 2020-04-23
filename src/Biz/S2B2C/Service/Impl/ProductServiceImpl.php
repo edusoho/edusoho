@@ -20,11 +20,21 @@ class ProductServiceImpl extends BaseService implements ProductService
         return $this->getS2B2CProductDao()->get($id);
     }
 
+    public function getProductBySupplierIdAndRemoteProductId($supplierId, $remoteProductId)
+    {
+        return $this->getS2B2CProductDao()->getBySupplierIdAndRemoteProductId($supplierId, $remoteProductId);
+    }
+
+    public function findProductsBySupplierIdAndRemoteProductIds($supplierId, $remoteProductIds)
+    {
+        return $this->getS2B2CProductDao()->findBySupplierIdAndRemoteProductIds($supplierId, $remoteProductIds);
+    }
+
     public function createProduct($fields)
     {
         if (!ArrayToolkit::requireds(
             $fields,
-            ['supplierId', 'productType', 'remoteProductId', 'localProductId', 'cooperationPrice', 'suggestionPrice', 'localVersion']
+            ['supplierId', 'productType', 'remoteProductId', 'remoteResourceId', 'localResourceId']
         )) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
@@ -34,7 +44,8 @@ class ProductServiceImpl extends BaseService implements ProductService
                 'supplierId',
                 'productType',
                 'remoteProductId',
-                'localProductId',
+                'remoteResourceId',
+                'localResourceId',
                 'cooperationPrice',
                 'suggestionPrice',
                 'localVersion',

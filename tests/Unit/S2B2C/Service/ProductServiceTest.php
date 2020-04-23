@@ -21,13 +21,21 @@ class ProductServiceTest extends BaseTestCase
         $this->assertEquals($savedProduct, $getProduct);
     }
 
+    public function testGetBySupplierIdAndRemoteProductId_whenDataCreated_thenGot()
+    {
+        $createdProduct = $this->getS2B2CProductService()->createProduct($this->mockProductFields());
+        $gotProduct = $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteProductId($createdProduct['supplierId'], $createdProduct['remoteProductId']);
+        $this->assertEquals($createdProduct, $gotProduct);
+    }
+
     protected function mockProductFields($customFields = [])
     {
         return array_merge([
             'supplierId' => 1,
             'productType' => 'course',
             'remoteProductId' => 1,
-            'localProductId' => 1,
+            'remoteResourceId' => 1,
+            'localResourceId' => 1,
             'cooperationPrice' => (float) 2.00,
             'suggestionPrice' => (float) 3.00,
             'localVersion' => 1,
