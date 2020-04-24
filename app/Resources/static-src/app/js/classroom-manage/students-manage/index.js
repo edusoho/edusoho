@@ -54,10 +54,10 @@ $('#batch-remove').on('click', function () {
   }
   $.post($(this).data('url'), {studentIds: ids}, function (resp) {
     if (resp.success) {
-      cd.message({ type: 'success', message: Translator.trans('site.delete_success_hint') });
+      cd.message({ type: 'success', message: Translator.trans('member.delete_success_hint') });
       location.reload();
     } else {
-      cd.message({ type: 'danger', message: Translator.trans('site.delete_fail_hint') + ':' + resp.message });
+      cd.message({ type: 'danger', message: Translator.trans('member.delete_fail_hint') + ':' + resp.message });
     }
   });
 });
