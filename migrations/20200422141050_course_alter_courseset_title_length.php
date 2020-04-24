@@ -17,6 +17,5 @@ class CourseAlterCourseSetTitleLength extends Migration
      */
     public function down()
     {
-
     }
 }
