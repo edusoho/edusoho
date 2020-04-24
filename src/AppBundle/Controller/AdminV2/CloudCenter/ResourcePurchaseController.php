@@ -95,18 +95,19 @@ class ResourcePurchaseController extends BaseController
         $paginator = new Paginator($request, $total, $pageSize);
         $paginator->setBaseUrl($this->generateUrl('admin_v2_purchase_market_products_list'));
 
-        $supplierSettings = $this->getS2B2CFacadeService()->getSupplier();
-//        if (!empty($supplierSettings['supplierId'])) {
-//            $chosenCourses = $this->getCourseSetService()->findCourseSetByOriginPlatformId($supplierSettings['supplierId']);
-//            $chosenCourses = ArrayToolkit::index($chosenCourses, 'sourceCourseSetId');
-//        }
+        $supplierSettings = $this->getSettingService()->get('supplierSettings', array());
+        $remoteProductIds = ArrayToolkit::column($courseSets, 's2b2cDistributeId');
+        if (!empty($supplierSettings['supplierId'])) {
+            $chosenProducts = $this->getS2B2CProductService()->findProductsBySupplierIdAndRemoteProductIds($supplierSettings['supplierId'], $remoteProductIds);
+            $chosenProducts = ArrayToolkit::index($chosenProducts, 'remoteProductId');
+        }
 
         return $this->render(
             'admin-v2/cloud-center/content-resource/market/course-set/course-list.html.twig', array(
             'courseSets' => $courseSets,
             'paginator' => $paginator,
             'merchant' => $merchant,
-            'chosenCourses' => empty($chosenCourses) ? array() : $chosenCourses,
+            'chosenCourses' => empty($chosenProducts) ? array() : $chosenProducts,
         ));
     }
 

@@ -5,6 +5,7 @@ namespace Biz\S2B2C\Service\Impl;
 use Biz\BaseService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\S2B2C\SupplierPlatformApi;
+use QiQiuYun\SDK\Service\S2B2CService;
 
 class S2B2CFacadeServiceImpl extends BaseService implements S2B2CFacadeService
 {
@@ -54,8 +55,8 @@ class S2B2CFacadeServiceImpl extends BaseService implements S2B2CFacadeService
     }
 
     /**
-     * @return \QiQiuYun\SDK\Service\S2B2CService
-     *                                            除了需要缓存的接口，其他的通过getS2B2CService调用
+     * @return S2B2CService
+     *                      除了需要缓存的接口，其他的通过getS2B2CService调用
      */
     public function getS2B2CService()
     {

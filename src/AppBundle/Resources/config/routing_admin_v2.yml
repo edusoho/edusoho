@@ -2491,7 +2491,7 @@ admin_v2_content_resource_product_detail:
   path:  /app/resource_product/{id}/{tab}
   defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:productDetail, tab: 'summary' }
 
-admin_v2_content_resource_choose_course_product:
-  path:  /app/resource_course_choose
-  defaults: { _controller: AppBundle:AdminV2/S2B2C/Products:chooseSupplierCourse }
+admin_v2_content_resource_choose_product:
+  path:  /app/content_resource/type/{productType}/product_id/{productId}
+  defaults: { _controller: AppBundle:AdminV2/CloudCenter/S2B2C/Product:pullSupplierProduct }
   methods: [POST]

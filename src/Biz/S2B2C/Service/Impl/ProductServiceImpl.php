@@ -20,16 +20,30 @@ class ProductServiceImpl extends BaseService implements ProductService
         return $this->getS2B2CProductDao()->get($id);
     }
 
+    public function getProductBySupplierIdAndRemoteProductId($supplierId, $remoteProductId)
+    {
+        return $this->getS2B2CProductDao()->getBySupplierIdAndRemoteProductId($supplierId, $remoteProductId);
+    }
+
+    public function findProductsBySupplierIdAndRemoteProductIds($supplierId, $remoteProductIds)
+    {
+        return $this->getS2B2CProductDao()->findBySupplierIdAndRemoteProductIds($supplierId, $remoteProductIds);
+    }
+
     public function createProduct($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('supplierId', 'resourceType', 'remoteResourceId', 'localResourceId', 'cooperationPrice', 'suggestionPrice', 'localVersion'))) {
+        if (!ArrayToolkit::requireds(
+            $fields,
+            ['supplierId', 'productType', 'remoteProductId', 'remoteResourceId', 'localResourceId']
+        )) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
         $fields = ArrayToolkit::parts(
             $fields,
-            array(
+            [
                 'supplierId',
-                'resourceType',
+                'productType',
+                'remoteProductId',
                 'remoteResourceId',
                 'localResourceId',
                 'cooperationPrice',
@@ -37,7 +51,7 @@ class ProductServiceImpl extends BaseService implements ProductService
                 'localVersion',
                 'createdTime',
                 'updatedTime',
-            )
+            ]
         );
 
         return $this->getS2B2CProductDao()->create($fields);
