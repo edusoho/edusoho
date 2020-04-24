@@ -70,7 +70,7 @@ class UploadFileController extends BaseController
 
         $this->getLogService()->info('upload_file', 'download', "文件Id #{$fileId}");
 
-        if ('cloud' == $file['storage']) {
+        if (in_array($file['storage'], array('cloud', 'supplier'))) {
             return $this->downloadCloudFile($request, $file, $ssl);
         } else {
             return $this->downloadLocalFile($request, $file);

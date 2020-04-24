@@ -204,7 +204,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
                 $error['message'] = 'PPT文档还在转换中，还不能查看，请稍等。';
             }
         }
-        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+        $result = $this->getPlayerByFile($file, $ssl);
         $result['resId'] = $file['globalId'];
 
         if (isset($result['error'])) {

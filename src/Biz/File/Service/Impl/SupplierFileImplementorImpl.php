@@ -124,6 +124,16 @@ class SupplierFileImplementorImpl extends BaseService implements FileImplementor
 
     public function getDownloadFile($file, $ssl = false)
     {
+        $params = array();
+        if ($ssl) {
+            $params['protocol'] = 'https';
+        }
+
+        $file = $this->getS2B2CFileSourceService()->getFullFileInfo($file);
+        $download = $this->getS2B2CFacedService()->getS2B2CService()->getProductResDownload("/resources/{$file['globalId']}/download", $file, $params);
+        $download['type'] = 'url';
+
+        return $download;
     }
 
     public function getDefaultHumbnails($globalId)
