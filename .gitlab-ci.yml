@@ -89,6 +89,7 @@ check env:
   only:
     refs:
       - merge_requests
+      - project/b2c
     variables:
       - $REPOSITORY == "main"
 
@@ -123,6 +124,7 @@ check env:
       - /^release/.*$/
       - develop
       - master
+      - project/b2c
     variables:
       - $REPOSITORY == "main"
 
@@ -140,6 +142,7 @@ check env:
       - /^release/.*$/
       - develop
       - master
+      - project/b2c
     variables:
       - $REPOSITORY == "main"
 
