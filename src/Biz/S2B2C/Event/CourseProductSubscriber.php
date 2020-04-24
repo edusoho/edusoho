@@ -13,8 +13,7 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
     public static function getSubscribedEvents()
     {
         return array(
-            //同步暂时关闭
-//            'course.create' => 'onCourseCreate',
+            'course.create' => 'onCourseCreate',
             'course.update' => 'onCourseUpdate',
         );
     }

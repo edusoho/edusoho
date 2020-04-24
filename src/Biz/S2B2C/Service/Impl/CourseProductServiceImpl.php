@@ -15,6 +15,11 @@ use Monolog\Logger;
  */
 class CourseProductServiceImpl extends BaseService implements CourseProductService
 {
+    /**
+     * @param $localCourseSet
+     * @param $product
+     * 更新课程的计划列表
+     */
     public function syncCourses($localCourseSet, $product)
     {
         // 获取供应商的原课程
@@ -49,7 +54,12 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         }
     }
 
-    public function syncCourse($courseId)
+    /**
+     * @param $courseId
+     * @return bool
+     * 更新单个课程计划下的所有资源
+     */
+    public function syncCourseMain($courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
         $this->getLogger()->info("开始尝试同步课程(#{$courseId})");
