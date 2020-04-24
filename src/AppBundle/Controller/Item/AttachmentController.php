@@ -2,9 +2,7 @@
 
 namespace AppBundle\Controller\Item;
 
-use AppBundle\Common\FileToolkit;
 use AppBundle\Controller\BaseController;
-use Biz\File\Service\Impl\CloudFileImplementorImpl;
 use Biz\File\Service\UploadFileService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\System\Service\SettingService;
@@ -56,15 +54,15 @@ class AttachmentController extends BaseController
     public function deleteAction(Request $request, $id)
     {
         if (!$this->canDeleteAttachment($request)) {
-            $this->createJsonResponse(array('result' => false,'msg' => '您无权删除该附件'));
+            $this->createJsonResponse(array('result' => false, 'msg' => '您无权删除该附件'));
         }
 
         $result = $this->getUploadFileService()->deleteAttachment($id);
         if ($result) {
-            return $this->createJsonResponse(array('result' => true,'msg' => '附件删除成功'));
+            return $this->createJsonResponse(array('result' => true, 'msg' => '附件删除成功'));
         }
 
-        return $this->createJsonResponse(array('result' => false,'msg' => '附件删除失败'));
+        return $this->createJsonResponse(array('result' => false, 'msg' => '附件删除失败'));
     }
 
     protected function canDeleteAttachment($request)
