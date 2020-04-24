@@ -20,7 +20,7 @@ class MobileDeviceServicelTest extends BaseTestCase
         $this->assertTrue($result);
 
         $device = $this->_createDevice();
-        $result = $this->getMobileDeviceService()->addMobileDevice(array('imei' => $device['imei']));
+        $result = $this->getMobileDeviceService()->addMobileDevice(['imei' => $device['imei'], 'platform' => 'iOS iPhone8,1']);
 
         $this->assertFalse($result);
     }

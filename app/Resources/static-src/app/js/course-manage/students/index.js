@@ -1,5 +1,6 @@
 import BatchSelect from 'app/common/widget/batch-select';
 new BatchSelect($('#student-table-container'));
+
 class Students {
   constructor() {
     this.initTooltips();
@@ -24,10 +25,10 @@ class Students {
       }
       $.post($(evt.target).data('url'), function (data) {
         if (data.success) {
-          cd.message({ type: 'success', message: Translator.trans('site.delete_success_hint') });
+          cd.message({ type: 'success', message: Translator.trans('member.delete_success_hint') });
           location.reload();
         } else {
-          cd.message({ type: 'danger', message: Translator.trans('site.delete_fail_hint') + ':' + data.message });
+          cd.message({ type: 'danger', message: Translator.trans('member.delete_fail_hint') + ':' + data.message });
         }
       });
     });
@@ -51,18 +52,40 @@ class Students {
   }
 
   initBatchUpdateActions() {
-    $('#student-table-container').on('click', '#batch-update-expiry-day', function () {
+    let getSelectIds = function () {
       let ids = [];
-      $('#course-student-list').find('[data-role="batch-item"]:checked').each(function(){
+      $('#course-student-list').find('[data-role="batch-item"]:checked').each(function () {
         ids.push(this.value);
       });
-      console.log(ids);
-      if (ids.length == 0) {
-        cd.message({ type: 'danger', message: Translator.trans('course.manage.student.add_expiry_day.select_tips') });
-        return ;
+
+      return ids;
+    };
+
+    $('#student-table-container').on('click', '#batch-update-expiry-day', function () {
+      let ids = getSelectIds();
+      if (ids.length === 0) {
+        cd.message({type: 'danger', message: Translator.trans('course.manage.student.add_expiry_day.select_tips')});
+        return;
       }
-      $.get($(this).data('url'), {ids:ids}, function(html) {
+      $.get($(this).data('url'), {ids: ids}, function (html) {
         $('#modal').html(html).modal('show');
+      });
+    }).on('click', '#batch-remove', function () {
+      let ids = getSelectIds();
+      if (ids.length === 0) {
+        cd.message({type: 'danger', message: Translator.trans('course.manage.student.batch_remove.select_tips')});
+        return;
+      }
+      if (!confirm(Translator.trans('course.manage.students_delete_hint'))) {
+        return;
+      }
+      $.post($(this).data('url'), {studentIds: ids}, function (resp) {
+        if (resp.success) {
+          cd.message({ type: 'success', message: Translator.trans('member.delete_success_hint') });
+          location.reload();
+        } else {
+          cd.message({ type: 'danger', message: Translator.trans('member.delete_fail_hint') + ':' + resp.message });
+        }
       });
     });
   }

@@ -148,8 +148,7 @@ class UserSettingController extends BaseController
         $loginConnect = array_merge($default, $loginConnect);
 
         if ($request->isMethod('POST')) {
-            $loginConnect = $request->request->all();
-            $loginConnect = ArrayToolkit::trim($loginConnect);
+            $loginConnect = ArrayToolkit::trim($request->request->all());
             $formerLoginConnect = $this->getSettingService()->get('login_bind');
             $loginConnect = array_merge($formerLoginConnect, $loginConnect);
             $loginConnect = $this->decideEnabledLoginConnect($loginConnect);
@@ -460,6 +459,7 @@ class UserSettingController extends BaseController
     {
         $default = array(
             'login_limit' => 0,
+            'client_login_limit' => 0,
             'enabled' => 0,
             'verify_code' => '',
             'captcha_enabled' => 0,
