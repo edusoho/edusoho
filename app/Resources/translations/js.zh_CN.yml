@@ -487,15 +487,19 @@ course.manage.live_replay_generate_error: 未开启直播回放或视频正在�
 course.manage.live_replay_upload_error_hint: 请上传录像文件
 course.manage.buy_expiry_time_required_error_hint: 请输入加入截止日期
 course.manage.buy_expiry_time_error_hint: 请选择有效的加入截止日期
-course.manage.student_delete_hint: 是否确定删除该学员？
+course.manage.student_delete_hint: 是否确定移除该学员？
+course.manage.students_delete_hint: 是否移除这些学员？
 course.manage.min_teacher_num_error_hint: 教学计划至少需要一位教师
 course.manage.teacher_display_label: 显示
 course.manage.sort_cancel: 取消当前排序
 course.manage.student.add_expiry_day.select_tips: 请至少选中一项后进行修改
+course.manage.student.batch_remove.select_tips: 请至少选中一项后移除
 course.manage.reward_point_required_hint: 请输入教学计划奖励积分
 course.manage.task_reward_point_required_hint: 请输入计划任务奖励积分
 course.manage.max_point_error_hint: 请输入0-100000的整数
 course.manage.student_expiry_day_hint: 只有按天数设置的学习有效期，才可手动增加有效期。
+member.delete_success_hint: 移除成功
+member.delete_fail_hint: 移除失败
 
 material_lib.content_title: 教学资料库
 material_lib.detail.content_title: 资源详情

@@ -2,8 +2,10 @@
 
 namespace Biz\WeChatNotification\Event;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Notification\WeChatTemplateMessage\TemplateUtil;
 use Biz\Activity\Service\ActivityService;
+use Biz\AppLoggerConstant;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -15,16 +17,13 @@ use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Biz\Util\TextHelper;
 use Biz\WeChat\Service\WeChatService;
+use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Queue\Service\QueueService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
-use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Biz\AppLoggerConstant;
-use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\Router;
 
 class WeChatNotificationEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
@@ -744,7 +743,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         return $router->generate($route, $parameters, $referenceType);
     }
 
-    private function decorateRouter(Router $router)
+    private function decorateRouter($router)
     {
         $routerContext = $router->getContext();
         if ('localhost' == $routerContext->getHost()) {

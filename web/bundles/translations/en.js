@@ -451,14 +451,18 @@ t.add("course.manage.live_replay_upload_error_hint", "Please upload the video fi
 t.add("course.manage.buy_expiry_time_required_error_hint", "Please enter the entry deadline", "js", "en");
 t.add("course.manage.buy_expiry_time_error_hint", "Please select a valid entry deadline", "js", "en");
 t.add("course.manage.student_delete_hint", "Are you sure you want to delete the student?", "js", "en");
+t.add("course.manage.students_delete_hint", "Are you sure you want to delete these students?", "js", "en");
 t.add("course.manage.min_teacher_num_error_hint", "Program requires at least one teacher", "js", "en");
 t.add("course.manage.teacher_display_label", "display", "js", "en");
 t.add("course.manage.sort_cancel", "Cancel current sort", "js", "en");
 t.add("course.manage.student.add_expiry_day.select_tips", "Please select at least one item", "js", "en");
+t.add("course.manage.student.batch_remove.select_tips", "Please select at least one item", "js", "en");
 t.add("course.manage.reward_point_required_hint", "please input the reward point", "js", "en");
 t.add("course.manage.task_reward_point_required_hint", "please input the task reward point", "js", "en");
 t.add("course.manage.max_point_error_hint", "Please input an integer from 0-10000000", "js", "en");
 t.add("course.manage.student_expiry_day_hint", "The validity period can be manually increased only by the learning expiration date set by the number of days.", "js", "en");
+t.add("member.delete_success_hint", "Remove successful", "js", "en");
+t.add("member.delete_fail_hint", "Remove failed", "js", "en");
 t.add("material_lib.content_title", "Teaching Lib", "js", "en");
 t.add("material_lib.detail.content_title", "Resource detail", "js", "en");
 t.add("material_lib.have_no_permission_hint", "Sorry, you have no permission", "js", "en");
