@@ -7,7 +7,7 @@ use Biz\Question\Service\QuestionService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
-use Codeages\Biz\ItemBank\Item\Service\ItemAttachmentService;
+use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class QuestionExtension extends \Twig_Extension
@@ -98,7 +98,7 @@ class QuestionExtension extends \Twig_Extension
         $accessKey = empty($setting['cloud_access_key']) ? '' : $setting['cloud_access_key'];
         $secretKey = empty($setting['cloud_secret_key']) ? '' : $setting['cloud_secret_key'];
 
-        return $this->getItemAttachmentService()->makeToken($user, $accessKey, $secretKey);
+        return $this->getAttachmentService()->makeToken($user, $accessKey, $secretKey);
     }
 
     /**
@@ -118,11 +118,11 @@ class QuestionExtension extends \Twig_Extension
     }
 
     /**
-     * @return ItemAttachmentService
+     * @return AttachmentService
      */
-    protected function getItemAttachmentService()
+    protected function getAttachmentService()
     {
-        return $this->biz->service('ItemBank:Item:ItemAttachmentService');
+        return $this->biz->service('ItemBank:Item:AttachmentService');
     }
 
     public function getName()

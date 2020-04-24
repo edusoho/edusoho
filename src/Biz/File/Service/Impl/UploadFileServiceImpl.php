@@ -21,7 +21,7 @@ use Biz\File\FireWall\FireWallFactory;
 use Biz\System\Service\SettingService;
 use Biz\File\Service\UploadFileService;
 use Biz\User\UserException;
-use Codeages\Biz\ItemBank\Item\Service\ItemAttachmentService;
+use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Codeages\Biz\Framework\Event\Event;
@@ -997,14 +997,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function setAttachmentConvertStatus($globalId, array $result)
     {
-        $attachment = $this->getItemAttachmentService()->getAttachmentByGlobalId($globalId);
+        $attachment = $this->getAttachmentService()->getAttachmentByGlobalId($globalId);
         if (empty($attachment)) {
             return array();
         }
 
         $fields = $this->filterConvertResult($result);
 
-        return $this->getItemAttachmentService()->updateAttachment($attachment['id'], array(
+        return $this->getAttachmentService()->updateAttachment($attachment['id'], array(
             'convert_status' => $fields['convertStatus'],
             'audio_convert_status' => $fields['audioConvertStatus'],
             'mp4_convert_status' => $fields['mp4ConvertStatus'],
@@ -1254,10 +1254,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 'hash_id' => $params['hashId'],
             );
 
-            $attachment = $this->getItemAttachmentService()->createAttachment($attachment);
+            $attachment = $this->getAttachmentService()->createAttachment($attachment);
             $params['id'] = $attachment['id'];
             $result = $implementor->initUpload($params);
-            $this->getItemAttachmentService()->updateAttachment($attachment['id'], array('global_id' => $result['globalId']));
+            $this->getAttachmentService()->updateAttachment($attachment['id'], array('global_id' => $result['globalId']));
 
             $this->commit();
 
@@ -1276,7 +1276,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         try {
             $this->beginTransaction();
-            $attachment = $this->getItemAttachmentService()->getAttachment($params['id']);
+            $attachment = $this->getAttachmentService()->getAttachment($params['id']);
             $file = array(
                 'id' => $attachment['id'],
                 'filename' => $attachment['file_name'],
@@ -1289,7 +1289,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             if (empty($result) || !$result['success']) {
                 $this->createNewException(UploadFileException::UPLOAD_FAILED());
             }
-            $this->getItemAttachmentService()->finishUpload($attachment['id']);
+            $this->getAttachmentService()->finishUpload($attachment['id']);
 
             $this->commit();
 
@@ -1302,7 +1302,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function deleteAttachment($id)
     {
-        $file = $this->getItemAttachmentService()->getAttachment($id);
+        $file = $this->getAttachmentService()->getAttachment($id);
 
         if (empty($file)) {
             return false;
@@ -1313,7 +1313,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         if ((isset($result['success']) && $result['success'])
             || (!empty($result['error']) && '资源不存在，或已删除！' == $result['error'])
         ) {
-            return $this->getItemAttachmentService()->deleteAttachment($id);
+            return $this->getAttachmentService()->deleteAttachment($id);
         }
 
         return false;
@@ -1780,10 +1780,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     }
 
     /**
-     * @return ItemAttachmentService
+     * @return AttachmentService
      */
-    protected function getItemAttachmentService()
+    protected function getAttachmentService()
     {
-        return $this->createService('ItemBank:Item:ItemAttachmentService');
+        return $this->createService('ItemBank:Item:AttachmentService');
     }
 }

@@ -7,7 +7,7 @@ use Biz\File\Service\UploadFileService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
-use Codeages\Biz\ItemBank\Item\Service\ItemAttachmentService;
+use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -94,15 +94,15 @@ class AttachmentController extends BaseController
         $accessKey = empty($setting['cloud_access_key']) ? '' : $setting['cloud_access_key'];
         $secretKey = empty($setting['cloud_secret_key']) ? '' : $setting['cloud_secret_key'];
 
-        return $this->getItemAttachmentService()->parseToken($token, $accessKey, $secretKey);
+        return $this->getAttachmentService()->parseToken($token, $accessKey, $secretKey);
     }
 
     /**
-     * @return ItemAttachmentService
+     * @return AttachmentService
      */
-    protected function getItemAttachmentService()
+    protected function getAttachmentService()
     {
-        return $this->getBiz()->service('ItemBank:Item:ItemAttachmentService');
+        return $this->getBiz()->service('ItemBank:Item:AttachmentService');
     }
 
     /**
