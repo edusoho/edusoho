@@ -6,6 +6,9 @@
             :bank_id="bank_id"
             :category="category"
             :importType="importType"
+            :showAttachment="showAttachment"
+            :cdnHost="cdnHost"
+            :uploadSDKInitData="uploadSDKInitData"
             @getImportData="getImportData"
         ></item-import>
     </div>
@@ -21,12 +24,24 @@
         },
         showCKEditorData: {
           publicPath: '/static-dist/libs/es-ckeditor/ckeditor.js',
-          // filebrowserImageUploadUrl: $('[name=image_upload_url]').val(),
-          // filebrowserImageDownloadUrl: $('[name=image_download_url]').val(),
+          filebrowserImageUploadUrl: $('[name=ckeditor_image_upload_url]').val(),
+          filebrowserImageDownloadUrl: $('[name=ckeditor_image_download_url]').val(),
         },
         bank_id: $('[name=bankId]').val(),
         category: JSON.parse($('[name=categoryTree]').val()),
         importType: $('[name=type]').val(),
+        showAttachment: $('[name=show_attachment]').val(),
+        cdnHost: $('[name=cdn_host]').val(),
+        uploadSDKInitData: {
+          sdkBaseUri: app.cloudSdkBaseUri,
+          disableDataUpload: app.cloudDisableLogReport,
+          disableSentry: app.cloudDisableLogReport,
+          initUrl: $('[name=upload_init_url]').val(),
+          finishUrl: $('[name=upload_finish_url]').val(),
+          accept: JSON.parse($('[name=upload_accept]').val()),
+          fileSingleSizeLimit: $('[name=upload_size_limit]').val(),
+          locale: document.documentElement.lang
+        }
       }
     },
     methods: {

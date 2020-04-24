@@ -368,8 +368,9 @@ class TestpaperController extends BaseController
             return $this->createJsonResponse([]);
         }
 
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
         $conditions = array(
-            'bank_id' => $id,
+            'bank_id' => $questionBank['itemBankId'],
             'displayable' => 1,
             'keyword' => $request->query->get('keyword', ''),
         );

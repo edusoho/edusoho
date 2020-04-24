@@ -7,6 +7,9 @@
       :answerScene="answerScene"
       :showCKEditorData="showCKEditorData"
       :assessmentResponse="assessmentResponse"
+      :showAttachment="showAttachment"
+      :cdnHost="cdnHost"
+      :uploadSDKInitData="uploadSDKInitData"
       @getAnswerData="getAnswerData"
       @saveAnswerData="saveAnswerData"
       @timeSaveAnswerData="timeSaveAnswerData"
@@ -25,6 +28,18 @@
           filebrowserImageUploadUrl: $('[name=ckeditor_image_upload_url]').val(),
           filebrowserImageDownloadUrl: $('[name=ckeditor_image_download_url]').val(),
         },
+        showAttachment: $('[name=show_attachment]').val(),
+        cdnHost: $('[name=cdn_host]').val(),
+        uploadSDKInitData: {
+          sdkBaseUri: app.cloudSdkBaseUri,
+          disableDataUpload: app.cloudDisableLogReport,
+          disableSentry: app.cloudDisableLogReport,
+          initUrl: $('[name=upload_init_url]').val(),
+          finishUrl: $('[name=upload_finish_url]').val(),
+          accept: JSON.parse($('[name=upload_accept]').val()),
+          fileSingleSizeLimit: $('[name=upload_size_limit]').val(),
+          locale: document.documentElement.lang
+        }
       };
     },
     created() {
