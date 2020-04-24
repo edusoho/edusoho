@@ -40,7 +40,7 @@ class PlayerController extends BaseController
         if ('audio' == $file['type']) {
             $cloudSdk = 'audio'; //webExtension->getCloudSdkUrl
         }
-        if ('video' == $file['type'] && 'cloud' == $file['storage']) {
+        if ('video' == $file['type'] && in_array($file['storage'], array('cloud', 'supplier'))) {
             $cloudSdk = 'video'; //webExtension->getCloudSdkUrl
             $videoPlayer = $this->getPlayerService()->getVideoFilePlayer($file, $agentInWhiteList, $context, $ssl);
             $isEncryptionPlus = $videoPlayer['isEncryptionPlus'];
