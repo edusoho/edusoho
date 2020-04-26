@@ -13,13 +13,23 @@ class Audio extends Activity
         return $this->getAudioActivityDao()->create($newAudio);
     }
 
+    /**
+     * @param $activity
+     * @param array $config
+     *
+     * @return |null
+     */
     public function updateToLastedVersion($activity, $config = array())
     {
         $newAudio = $this->getAudioActivityFields($activity, $config);
 
-        $existAudio = $this->getAudioActivityDao()->search(array('syncId' => $newAudio['syncId']), array(), 0, PHP_INT_MAX);
-        if (!empty($existAudio)) {
-            return $this->getAudioActivityDao()->update($existAudio[0]['id'], $newAudio);
+        $sync = $this->getSyncByRemoteResourceIdAndResourceType($newAudio['syncId'], 'activity_audio');
+        unset($newAudio['syncId']);
+        if (!empty($sync)) {
+            $existAudio = $this->getAudioActivityDao()->get($sync['localResourceId']);
+            if (!empty($existAudio)) {
+                return $this->getAudioActivityDao()->update($existAudio[0]['id'], $newAudio);
+            }
         }
 
         return $this->getAudioActivityDao()->create($newAudio);
