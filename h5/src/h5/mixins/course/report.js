@@ -96,7 +96,7 @@ export default {
         events
       };
       return new Promise((resolve, reject) => {
-        Api.reportTask({ query, params })
+        Api.reportTask({ query, data:params })
           .then(res => {
             this.handleReprtResult(res);
             resolve(res);
