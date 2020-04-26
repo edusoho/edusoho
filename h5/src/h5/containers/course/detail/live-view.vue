@@ -18,8 +18,8 @@ export default {
     return {
       playUrl: "",
       requestCount: 0,
-      courseId:"",
-      taskId:""
+      courseId: "",
+      taskId: ""
     };
   },
   computed: {
@@ -31,8 +31,8 @@ export default {
     })
   },
   async mounted() {
-    this.courseId=this.$route.query.courseId;
-    this.taskId=this.$route.query.taskId;
+    this.courseId = this.$route.query.courseId;
+    this.taskId = this.$route.query.taskId;
     if (!this.$store.state.token) {
       this.$router.push({
         name: "login",
@@ -43,12 +43,6 @@ export default {
       return;
     }
     this.handleLive();
-    this.initReportData(
-      this.courseId,
-      this.taskId,
-      "live",
-      false
-    );
   },
   methods: {
     ...mapMutations({
@@ -59,10 +53,12 @@ export default {
       this.setNavbarTitle(title);
 
       if (String(replay) == "true") {
+        this.initReportData(this.courseId, this.taskId, "live", true);
         // query boolean 被转成字符串了
         this.getReplayUrl(taskId);
         return;
       }
+      this.initReportData(this.courseId, this.taskId, "live", false);
       this.requestLiveNo(taskId);
     },
     getReplayUrl(taskId) {
@@ -80,6 +76,7 @@ export default {
             if (res.url.indexOf("/error/") > -1) {
               Toast("暂无回放");
             } else {
+               this.reprtData("finish");
               const index = res.url.indexOf("/");
               this.playUrl = index == 0 ? res.url : res.url.substring(index);
             }
@@ -125,7 +122,7 @@ export default {
             const index = res.roomUrl.indexOf("/");
             // 由于在safari中从https转到http的地址会出错
             this.playUrl =
-            index == 0 ? res.roomUrl : res.roomUrl.substring(index);
+              index == 0 ? res.roomUrl : res.roomUrl.substring(index);
             this.reprtData("finish");
           } else {
             if (this.requestCount < 30) {
