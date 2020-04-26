@@ -388,10 +388,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function createCourseSet($courseSet)
     {
-        if (!$this->hasCourseSetManageRole()) {
-            $this->createNewException(CourseSetException::FORBIDDEN_MANAGE());
-        }
-
         $created = $this->addCourseSet($courseSet);
         $defaultCourse = $this->addDefaultCourse($courseSet, $created);
 
@@ -857,6 +853,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
     }
 
+    /**
+     * @param $id
+     *
+     * @return mixed|void
+     *
+     * @throws \Exception
+     *                    默认策略更新课程defaultCourseId
+     */
     public function updateCourseSetDefaultCourseId($id)
     {
         //获取发布课程中排序第一位的教学计划
@@ -869,6 +873,30 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $this->createNewException(CourseSetException::NO_COURSE());
         }
         $this->getCourseSetDao()->update($id, array('defaultCourseId' => $course['id']));
+    }
+
+    /**
+     * @param $courseSetId
+     * @param $courseId
+     *
+     * @return mixed
+     *
+     * @throws \Exception
+     *                    手动策略更新课程defaultCourseId
+     */
+    public function updateDefaultCourseId($courseSetId, $courseId)
+    {
+        $courseSet = $this->getCourseSet($courseSetId);
+        if (!$courseSet) {
+            $this->createNewException(CourseSetException::NOTFOUND_COURSESET());
+        }
+
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (!$course) {
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
+        }
+
+        return $this->getCourseSetDao()->update($courseSetId, array('defaultCourseId' => $courseId));
     }
 
     public function updateMaxRate($id, $maxRate)
@@ -1209,8 +1237,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
      * @throws CommonException
      * @throws \Exception
      */
-    protected function addCourseSet($courseSet)
+    public function addCourseSet($courseSet)
     {
+        if (!$this->hasCourseSetManageRole()) {
+            $this->createNewException(CourseSetException::FORBIDDEN_MANAGE());
+        }
+
         if (!ArrayToolkit::requireds($courseSet, array('title', 'type'))) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }

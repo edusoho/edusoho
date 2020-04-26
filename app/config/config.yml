@@ -151,3 +151,5 @@ services:
             - '@request_stack'
             - 'getMasterRequest'
         shared: true
+    
+    templating.helper.assets: '@assets.packages'

@@ -11,4 +11,8 @@ interface ProductService
     public function createProduct($fields);
 
     public function getProduct($id);
+
+    public function getProductBySupplierIdAndRemoteProductId($supplierId, $remoteProductId);
+
+    public function findProductsBySupplierIdAndRemoteProductIds($supplierId, $remoteProductIds);
 }

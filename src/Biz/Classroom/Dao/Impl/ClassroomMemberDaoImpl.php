@@ -156,7 +156,7 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
                 'teacherIds' => 'json',
                 'service' => 'json',
             ),
-            'orderbys' => array('name', 'createdTime', 'updatedTime', 'id'),
+            'orderbys' => array('name', 'createdTime', 'updatedTime', 'id', 'deadline'),
             'conditions' => array(
                 'userId = :userId',
                 'classroomId = :classroomId',
