@@ -1,4 +1,4 @@
-$('body').on('click', '.js-social-share', function() {
+$('.js-es-share').on('click', '.js-social-share', function() {
   var $btn = $(this);
   var type = $btn.data('share');
   var params = $btn.parents('.js-social-share-params').data();
