@@ -30,7 +30,7 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
     {
         $course = $event->getSubject();
         if ($this->isSupplierCourse($course)) {
-            $this->getCourseProductService()->syncCourse($course['id']);
+            $this->getCourseProductService()->syncCourseMain($course['id']);
         }
     }
 

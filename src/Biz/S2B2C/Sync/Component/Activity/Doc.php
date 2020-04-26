@@ -16,6 +16,7 @@ class Doc extends Activity
     public function updateToLastedVersion($activity, $config = array())
     {
         $newDoc = $this->getDocActivityFields($activity, $config);
+        $sync = $this->getSyncByRemoteResourceIdAndResourceType();
 
         $existDoc = $this->getDocActivityDao()->search(array('syncId' => $newDoc['syncId']), array(), 0, PHP_INT_MAX);
         if (!empty($existDoc)) {
