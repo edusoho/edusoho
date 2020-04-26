@@ -33,6 +33,6 @@ class S2b2cCourseV8Extend extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec('DROP TABLE `s2b2c_course_v8_extend` IF EXISTS;');
+        $connection->exec('DROP TABLE  IF EXISTS `s2b2c_course_v8_extend`;');
     }
 }

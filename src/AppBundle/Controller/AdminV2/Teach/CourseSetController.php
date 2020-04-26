@@ -145,7 +145,6 @@ class CourseSetController extends BaseController
     public function publishAction(Request $request, $id)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($id);
-        $this->createNewException(CourseSetException::SOURCE_COURSE_CLOSED());
 
         if (!empty($courseSet['sourceCourseSetId'])) {
             $courses = $this->getCourseService()->findCoursesByCourseSetId($id);

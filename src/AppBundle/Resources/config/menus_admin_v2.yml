@@ -27,7 +27,7 @@ admin_v2:
                                         admin_v2_go_to_choose:
                                             name: admin_v2.course.basic.basic_tab.go_to_choose_btn
                                             class: btn-warning
-                                            router_name: course_set_manage_create
+                                            router_name: admin_v2_purchase_market
                                             group: topBtn
                                             blank: 1
                                             visible: (hasSupplier())

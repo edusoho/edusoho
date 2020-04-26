@@ -5,6 +5,7 @@ namespace Biz\S2B2C\Service\Impl;
 use Biz\BaseService;
 use Biz\File\Service\Impl\SupplierFileImplementorImpl;
 use Biz\S2B2C\Service\FileSourceService;
+use Biz\S2B2C\Service\ProductService;
 
 class FileSourceServiceImpl extends BaseService implements FileSourceService
 {
@@ -13,10 +14,9 @@ class FileSourceServiceImpl extends BaseService implements FileSourceService
         $file['globalId'] = empty($file['s2b2cGlobalId']) ? $file['globalId'] : $file['s2b2cGlobalId'];
         $file['hashId'] = empty($file['s2b2cHashId']) ? $file['hashId'] : $file['s2b2cHashId'];
 
-//        TODO: 获取课程中的同步信息
-        $course['s2b2cDistributeId'] = 412;
+        $courseProduct = $this->getS2B2CProductService()->getByTypeAndLocalResourceId('course', $file['targetId']);
 
-        $file['sourceTargetId'] = empty($course['s2b2cDistributeId']) ? 0 : $course['s2b2cDistributeId'];
+        $file['sourceTargetId'] = empty($courseProduct['remoteProductId']) ? 0 : $courseProduct['remoteProductId'];
 
         return $file;
     }
@@ -32,5 +32,13 @@ class FileSourceServiceImpl extends BaseService implements FileSourceService
     protected function getSupplierFileImplementor()
     {
         return $this->createService('File:SupplierFileImplementor');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getS2B2CProductService()
+    {
+        return $this->createService('S2B2C:ProductService');
     }
 }
