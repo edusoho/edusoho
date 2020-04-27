@@ -49,9 +49,10 @@ Put this content inside:
 <?php
 
 /*
- * This file is part of the PHP CS utility.
+ * This file is part of PHP CS Fixer.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
@@ -70,17 +71,26 @@ final class RemoveCommentsFixer extends AbstractFixer
     /**
      * {@inheritdoc}
      */
-    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
+    public function getDefinition()
     {
-        // Add the fixing logic of the fixer here.
+        // Return a definition of the fixer, it will be used in the README.rst.
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDefinition()
+    public function isCandidate(Tokens $tokens)
     {
-        // Return a definition of the fixer, it will be used in the README.rst.
+        // Check whether the collection is a candidate for fixing.
+        // Has to be ultra cheap to execute.
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
+    {
+        // Add the fixing logic of the fixer here.
     }
 }
 ```
@@ -97,9 +107,10 @@ Now let us create the test file at
 <?php
 
 /*
- * This file is part of the PHP CS utility.
+ * This file is part of PHP CS Fixer.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
@@ -113,10 +124,15 @@ use PhpCsFixer\Tests\Test\AbstractFixerTestCase;
  * @author Your name <your@email.com>
  *
  * @internal
+ *
+ * @covers \PhpCsFixer\Fixer\Comment\RemoveCommentsFixer
  */
 final class RemoveCommentsFixerTest extends AbstractFixerTestCase
 {
     /**
+     * @param string      $expected
+     * @param null|string $input
+     *
      * @dataProvider provideFixCases
      */
     public function testFix($expected, $input = null)
@@ -126,17 +142,10 @@ final class RemoveCommentsFixerTest extends AbstractFixerTestCase
 
     public function provideFixCases()
     {
-        return array();
+        return [];
     }
 }
 ```
-
-The files are created, one thing is still missing though: we need to
-update the README.md. Fortunately, PHP CS Fixer can help you here.
-Execute the following command in your command shell:
-
-`$ php php-cs-fixer readme > README.rst`
-
 ### Step 2 - Using tests to define fixers behavior
 
 Now that the files are created, you can start writing test to define the
@@ -150,9 +159,9 @@ fixer does not change what is not supposed to change. Thus:
     ...
     public function provideFixCases()
     {
-        return array(
-            array('<?php echo "This should not be changed";') // Each sub-array is a test
-        );
+        return [
+            ['<?php echo "This should not be changed";'], // Each sub-array is a test
+        ];
     }
     ...
 ```
@@ -163,12 +172,12 @@ fixer does not change what is not supposed to change. Thus:
     ...
     public function provideFixCases()
     {
-        return array(
-            array(
+        return [
+            [
                 '<?php echo "This should be changed"; ', // This is expected output
                 '<?php echo "This should be changed"; /* Comment */', // This is input
-            )
-        );
+            ],
+        ];
     }
     ...
 ```
@@ -182,9 +191,10 @@ like:
 <?php
 
 /*
- * This file is part of the PHP CS utility.
+ * This file is part of PHP CS Fixer.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
@@ -202,6 +212,9 @@ use PhpCsFixer\Tests\Fixer\AbstractFixerTestBase;
 final class RemoveCommentsFixerTest extends AbstractFixerTestBase
 {
     /**
+     * @param string      $expected
+     * @param null|string $input
+     *
      * @dataProvider provideFixCases
      */
     public function testFix($expected, $input = null)
@@ -211,12 +224,12 @@ final class RemoveCommentsFixerTest extends AbstractFixerTestBase
 
     public function provideFixCases()
     {
-        return array(
-            array(
+        return [
+            [
                '<?php echo "This should be changed"; ', // This is expected output
                '<?php echo "This should be changed"; /* Comment */', // This is input
-            )
-        );
+            ],
+        ];
     }
 }
 ```
@@ -227,7 +240,7 @@ final class RemoveCommentsFixerTest extends AbstractFixerTestBase
 You have defined the behavior of your fixer in tests. Now it is time to
 implement it.
 
-We need first to create one method to describe what this fixer does:
+First, we need to create one method to describe what this fixer does:
 `src/Fixer/Comment/RemoveCommentsFixer.php`:
 ```php
 final class RemoveCommentsFixer extends AbstractFixer
@@ -248,6 +261,11 @@ final class RemoveCommentsFixer extends AbstractFixer
     }
 }
 ```
+Next, we need to update the `README.rst`.
+Fortunately, PHP CS Fixer can help you here.
+Execute the following command in your command shell:
+
+`$ php php-cs-fixer readme > README.rst`
 
 Next, we must filter what type of tokens we want to fix. Here, we are interested in code that contains `T_COMMENT` tokens:
 `src/Fixer/Comment/RemoveCommentsFixer.php`:
@@ -255,6 +273,7 @@ Next, we must filter what type of tokens we want to fix. Here, we are interested
 final class RemoveCommentsFixer extends AbstractFixer
 {
     ...
+
     /**
      * {@inheritdoc}
      */
@@ -270,6 +289,8 @@ For now, let us just make a fixer that applies no modification:
 ```php
 class RemoveCommentsFixer extends AbstractFixer
 {
+    ...
+
     /**
      * {@inheritdoc}
      */
@@ -277,7 +298,6 @@ class RemoveCommentsFixer extends AbstractFixer
     {
         // no action
     }
-    ...
 }
 ```
 
@@ -320,12 +340,14 @@ iterate the token(s) we are interested in.
 ```php
 final class RemoveCommentsFixer extends AbstractFixer
 {
+    ...
+
     /**
      * {@inheritdoc}
      */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
-        foreach($tokens as $index => $token){
+        foreach ($tokens as $index => $token) {
             if (!$token->isGivenKind(T_COMMENT)) {
                 continue;
             }
@@ -333,7 +355,6 @@ final class RemoveCommentsFixer extends AbstractFixer
             // need to figure out what to do here!
         }
     }
-    ...
 }
 ```
 
@@ -343,56 +364,14 @@ token is a semicolon.
 ```php
 final class RemoveCommentsFixer extends AbstractFixer
 {
+    ...
+
     /**
      * {@inheritdoc}
      */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
-        foreach($tokens as $index => $token){
-            if (!$token->isGivenKind(T_COMMENT)) {
-                continue;
-            }
-
-            $prevTokenIndex = $tokens->getPrevMeaningfulToken($index);
-            $prevToken = $tokens[$prevTokenIndex];
-
-            if($prevToken->equals(';')){
-                $tokens->clearAt($index);
-            }
-        }
-    }
-    ...
-}
-```
-
-So the fixer in the end looks like this:
-```php
-<?php
-
-/*
- * This file is part of the PHP CS utility.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- *
- */
-
-namespace PhpCsFixer\Fixer\Comment;
-
-use PhpCsFixer\AbstractFixer;
-use PhpCsFixer\Tokenizer\Tokens;
-
-/**
- * @author Your name <your@email.com>
- */
-final class RemoveCommentsFixer extends AbstractFixer {
-    /**
-     * {@inheritdoc}
-     */
-    protected function applyFix(\SplFileInfo $file, Tokens $tokens) {
-        foreach($tokens as $index => $token){
+        foreach ($tokens as $index => $token) {
             if (!$token->isGivenKind(T_COMMENT)) {
                 continue;
             }
@@ -405,7 +384,33 @@ final class RemoveCommentsFixer extends AbstractFixer {
             }
         }
     }
+}
+```
 
+So the fixer in the end looks like this:
+```php
+<?php
+
+/*
+ * This file is part of PHP CS Fixer.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
+namespace PhpCsFixer\Fixer\Comment;
+
+use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\Tokenizer\Tokens;
+
+/**
+ * @author Your name <your@email.com>
+ */
+final class RemoveCommentsFixer extends AbstractFixer
+{
     /**
      * {@inheritdoc}
      */
@@ -427,6 +432,24 @@ final class RemoveCommentsFixer extends AbstractFixer {
     public function isCandidate(Tokens $tokens)
     {
         return $tokens->isTokenKindFound(T_COMMENT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function applyFix(\SplFileInfo $file, Tokens $tokens) {
+        foreach($tokens as $index => $token){
+            if (!$token->isGivenKind(T_COMMENT)) {
+                continue;
+            }
+
+            $prevTokenIndex = $tokens->getPrevMeaningfulToken($index);
+            $prevToken = $tokens[$prevTokenIndex];
+
+            if ($prevToken->equals(';')) {
+                $tokens->clearAt($index);
+            }
+        }
     }
 }
 ```
@@ -488,11 +511,6 @@ PHP CS Fixer community to partake on the review debates of your fixer.
 
 In any case, we care a lot about what you do and we want to see it being
 part of the application as soon as possible.
-
-#### May I use short arrays (`$a = []`)?
-
-No. Short arrays were introduced in PHP 5.4 and PHP CS Fixer still
-supports PHP 5.3.6.
 
 #### Why am I asked to use `getPrevMeaningfulToken()` instead of `getPrevNonWhitespace()`?
 

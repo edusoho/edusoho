@@ -32,16 +32,17 @@ final class NoWhitespaceInBlankLineFixer extends AbstractFixer implements Whites
     {
         return new FixerDefinition(
             'Remove trailing whitespace at the end of blank lines.',
-            array(new CodeSample("<?php\n   \n\$a = 1;"))
+            [new CodeSample("<?php\n   \n\$a = 1;\n")]
         );
     }
 
     /**
      * {@inheritdoc}
+     *
+     * Must run after CombineConsecutiveIssetsFixer, CombineConsecutiveUnsetsFixer, FunctionToConstantFixer, NoEmptyCommentFixer, NoEmptyPhpdocFixer, NoEmptyStatementFixer, NoUselessElseFixer, NoUselessReturnFixer.
      */
     public function getPriority()
     {
-        // should be run after the NoUselessReturnFixer, NoEmptyPhpdocFixer and NoUselessElseFixer.
         return -19;
     }
 
@@ -59,7 +60,7 @@ final class NoWhitespaceInBlankLineFixer extends AbstractFixer implements Whites
     protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
         // skip first as it cannot be a white space token
-        for ($i = 1, $count = count($tokens); $i < $count; ++$i) {
+        for ($i = 1, $count = \count($tokens); $i < $count; ++$i) {
             if ($tokens[$i]->isWhitespace()) {
                 $this->fixWhitespaceToken($tokens, $i);
             }
@@ -67,14 +68,13 @@ final class NoWhitespaceInBlankLineFixer extends AbstractFixer implements Whites
     }
 
     /**
-     * @param Tokens $tokens
-     * @param int    $index
+     * @param int $index
      */
     private function fixWhitespaceToken(Tokens $tokens, $index)
     {
         $content = $tokens[$index]->getContent();
         $lines = Preg::split("/(\r\n|\n)/", $content);
-        $lineCount = count($lines);
+        $lineCount = \count($lines);
 
         if (
             // fix T_WHITESPACES with at least 3 lines (eg `\n   \n`)
@@ -94,7 +94,7 @@ final class NoWhitespaceInBlankLineFixer extends AbstractFixer implements Whites
             }
             $content = implode($this->whitespacesConfig->getLineEnding(), $lines);
             if ('' !== $content) {
-                $tokens[$index] = new Token(array(T_WHITESPACE, $content));
+                $tokens[$index] = new Token([T_WHITESPACE, $content]);
             } else {
                 $tokens->clearAt($index);
             }

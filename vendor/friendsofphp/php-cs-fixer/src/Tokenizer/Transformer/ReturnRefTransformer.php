@@ -31,7 +31,7 @@ final class ReturnRefTransformer extends AbstractTransformer
      */
     public function getCustomTokens()
     {
-        return array(CT::T_RETURN_REF);
+        return [CT::T_RETURN_REF];
     }
 
     /**
@@ -47,11 +47,16 @@ final class ReturnRefTransformer extends AbstractTransformer
      */
     public function process(Tokens $tokens, Token $token, $index)
     {
+        $prevKinds = [T_FUNCTION];
+        if (\PHP_VERSION_ID >= 70400) {
+            $prevKinds[] = T_FN;
+        }
+
         if (
             $token->equals('&')
-            && $tokens[$tokens->getPrevMeaningfulToken($index)]->isGivenKind(T_FUNCTION)
+            && $tokens[$tokens->getPrevMeaningfulToken($index)]->isGivenKind($prevKinds)
         ) {
-            $tokens[$index] = new Token(array(CT::T_RETURN_REF, '&'));
+            $tokens[$index] = new Token([CT::T_RETURN_REF, '&']);
         }
     }
 }

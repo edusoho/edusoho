@@ -60,6 +60,7 @@ class DefaultController extends BaseController
 
     public function statisticsDailyAction(Request $request)
     {
+
         $todayTimeStart = strtotime(date('Y-m-d', time()));
         $todayTimeEnd = strtotime(date('Y-m-d', time() + 24 * 3600));
 

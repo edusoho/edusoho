@@ -34,7 +34,7 @@ interface CacheInterface
     /**
      * @param string $file
      *
-     * @return int
+     * @return int|null
      */
     public function get($file);
 
