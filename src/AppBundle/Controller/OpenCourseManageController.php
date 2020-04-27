@@ -69,15 +69,13 @@ class OpenCourseManageController extends BaseController
 
         $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'openCourse', 'ownerId' => $id));
 
-        $default = $this->getSettingService()->get('default', array());
-
         return $this->render(
             'open-course-manage/base-info.html.twig',
             array(
                 'course' => $course,
                 'openLiveLesson' => $liveLesson,
                 'tags' => ArrayToolkit::column($tags, 'name'),
-                'default' => $default,
+                'default' => $this->getSettingService()->get('default', []),
                 'canUpdateStartTime' => $canUpdateStartTime,
             )
         );

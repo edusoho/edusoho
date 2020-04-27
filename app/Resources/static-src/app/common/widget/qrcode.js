@@ -1,4 +1,4 @@
-$('body').on('click', '.es-qrcode', (event) => {
+$('.es-qrcode').on('click', (event) => {
   const $target = $(event.currentTarget);
   if ($target.hasClass('open')) {
     $target.removeClass('open');
@@ -15,7 +15,7 @@ $('body').on('click', '.es-qrcode', (event) => {
   }
 });
 
-$('body').on('click', () => {
+$('.es-wrap').on('click', () => {
   const $qrcode = $('.es-qrcode');
   if ($qrcode.hasClass('open')) {
     $qrcode.removeClass('open');

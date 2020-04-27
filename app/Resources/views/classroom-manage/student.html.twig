@@ -13,13 +13,22 @@
     </div>
     <div class="clearfix"></div>
   </form>
-  
+
+  {% if students|length > 0 %}
+    {% if 'forever' != classroom.expiryMode %}
+      <button id="batch-update-expiry-day" type="button" class="cd-btn cd-btn-primary cd-mb16" data-url="{{ path('classroom_manage_member_deadline', {classroomId: classroom.id}) }}">{{ 'classroom.student_batch_update_expiry_date'|trans }}</button>
+    {% endif %}
+    <button id="batch-remove" type="button" class="cd-btn cd-btn-primary cd-mb16" data-url="{{ path('classroom_manage_student_batch_remove', {id: classroom.id}) }}">{{ 'classroom.student_batch_remove'|trans }}</button>
+  {% endif %}
+
   <table class="table table-striped" id="course-student-list">
     <thead>
       <tr>
-        <th width="40%">{{'classroom,student_name'|trans}}</th>
-        <th width="30%">{{'classroom,student_study_status'|trans}}</th>
-        <th width="30%">{{'classroom,student_opertion'|trans}}</th>
+        <th><input type="checkbox" autocomplete="off" data-role="batch-select"></th>
+        <th width="30%">{{'classroom.student_name'|trans}}</th>
+        <th width="20%">{{'classroom.student_study_status'|trans}}</th>
+        <th width="20%">{{'classroom.student_study_expiry_date'|trans}}</th>
+        <th width="30%">{{'classroom.student_opertion'|trans}}</th>
       </tr>
     </thead>
     <tbody>
@@ -27,7 +36,7 @@
         {% set user = users[student.userId] %}
         {% include ('classroom-manage/tr.html.twig') %}
       {% else %}
-        <tr class="empty"><td colspan="20">{{'classroom,student_empty'|trans}}</td></tr>
+        <tr class="empty"><td colspan="20">{{'classroom.student_empty'|trans}}</td></tr>
       {% endfor %}
     </tbody>
   </table>

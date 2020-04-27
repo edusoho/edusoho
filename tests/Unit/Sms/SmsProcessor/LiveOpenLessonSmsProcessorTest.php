@@ -45,7 +45,8 @@ class LiveOpenLessonSmsProcessorTest extends BaseTestCase
 
         $result = $processor->getUrls(1, 'course');
         $this->assertEquals(1, $result['count']);
-        $this->assertContains('http://www.edusoho.com/edu_cloud/sms/callback/liveOpenLesson/1?index=0&smsType=course&sign=8SXJQGtEnSSw033yDDnJisYSqPTIrmvRIc7gVTshkoU%3D', $result['urls']);
+        $this->assertRegExp('/^http:\/\/www.edusoho.com\/*/', reset($result['urls']));
+        $this->assertRegExp('/index=0&smsType=course&sign=/', reset($result['urls']));
     }
 
     public function testGetSmsInfo()
@@ -92,10 +93,11 @@ class LiveOpenLessonSmsProcessorTest extends BaseTestCase
                 array(
                     'functionName' => 'getShortLink',
                     'returnValue' => 'http://baidu.com/32Ba',
-                    'withParams' => array(
-                        'http://www.edusoho.com/open/course/1',
-                        array(),
-                    ),
+//                    不做路由path的指定
+//                    'withParams' => array(
+//                        'http://www.edusoho.com/open/course/1',
+//                        array(),
+//                    ),
                 ),
             )
         );

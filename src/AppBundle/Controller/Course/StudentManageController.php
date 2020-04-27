@@ -56,14 +56,12 @@ class StudentManageController extends BaseController
         );
         $this->appendLearningProgress($members);
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
-
         return $this->render('course-manage/student/index.html.twig', array(
             'courseSet' => $this->getCourseSetService()->getCourseSet($courseSetId),
             'course' => $course,
             'students' => $members,
             'followings' => $this->findCurrentUserFollowings(),
-            'users' => $users,
+            'users' => $this->getUserService()->findUsersByIds(array_column($members, 'userId')),
             'paginator' => $paginator,
         ));
     }
@@ -140,6 +138,19 @@ class StudentManageController extends BaseController
         return $this->createJsonResponse(array('success' => true));
     }
 
+    public function removeCourseStudentsAction(Request $request, $courseSetId, $courseId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+
+        $studentIds = $request->request->get('studentIds', []);
+        if (empty($this->getUserService()->findUsersByIds($studentIds))) {
+            return $this->createJsonResponse(['success' => false]);
+        }
+        $this->getCourseMemberService()->removeCourseStudents($courseId, $studentIds);
+
+        return $this->createJsonResponse(['success' => true]);
+    }
+
     public function remarkAction(Request $request, $courseSetId, $courseId, $userId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
@@ -186,7 +197,6 @@ class StudentManageController extends BaseController
             return $this->createJsonResponse(true);
         }
         $users = $this->getUserService()->findUsersByIds($ids);
-        $default = $this->getSettingService()->get('default', array());
 
         $course['title'] = CourseTitleUtils::getDisplayedTitle($course);
 
@@ -196,7 +206,7 @@ class StudentManageController extends BaseController
                 'course' => $course,
                 'users' => $users,
                 'ids' => implode(',', ArrayToolkit::column($users, 'id')),
-                'default' => $default,
+                'default' => $this->getSettingService()->get('default', []),
             )
         );
     }

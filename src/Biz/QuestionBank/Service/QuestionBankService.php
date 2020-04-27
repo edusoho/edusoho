@@ -35,8 +35,6 @@ interface QuestionBankService
 
     public function updateQuestionBank($id, $fields);
 
-    public function updateQuestionBankByCourseSetId($courseSetId, $fields);
-
     /**
      * @param $id
      *
