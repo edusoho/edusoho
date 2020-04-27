@@ -90,9 +90,9 @@ class PlayerServiceTest extends BaseTestCase
     {
         $this->mockBiz('File:UploadFileService', array(
             array('functionName' => 'getFullFile', 'returnValue' => array(), 'withParams' => array(1)),
-            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'document', 'convertStatus' => 'success'), 'withParams' => array(2)),
-            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'document', 'convertStatus' => 'error'), 'withParams' => array(3)),
-            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'document', 'convertStatus' => 'processing'), 'withParams' => array(4)),
+            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'document', 'convertStatus' => 'success', 'storage' => 'cloud'), 'withParams' => array(2)),
+            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'document', 'convertStatus' => 'error', 'storage' => 'cloud'), 'withParams' => array(3)),
+            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'document', 'convertStatus' => 'processing', 'storage' => 'cloud'), 'withParams' => array(4)),
         ));
         $this->mockBiz('MaterialLib:MaterialLibService', array(
             array('functionName' => 'player', 'returnValue' => array('url' => 'www.baidu.com')),

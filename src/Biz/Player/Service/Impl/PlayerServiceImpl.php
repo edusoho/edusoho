@@ -166,7 +166,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
             $this->createNewException(PlayerException::FILE_TYPE_INVALID());
         }
 
-        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+        $result = $this->getPlayerByFile($file, $ssl);
         $result['resId'] = $file['globalId'];
 
         $isConvertNotSuccess = isset($file['convertStatus']) && FileImplementor::CONVERT_STATUS_SUCCESS != $file['convertStatus'];
