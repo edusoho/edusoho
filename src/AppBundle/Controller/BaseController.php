@@ -226,7 +226,8 @@ class BaseController extends Controller
 
     protected function agentInWhiteList($userAgent)
     {
-        $whiteList = array('iPhone', 'iPad', 'Android', 'HTC');
+        // com.tencent.mm.app.Application 是安卓端小程序在播放视频时的UA，无法找到为什么UA是这样的具体原因，为了容错
+        $whiteList = array('iPhone', 'iPad', 'Android', 'HTC', 'com.tencent.mm.app.Application');
 
         return ArrayToolkit::some($whiteList, function ($agent) use ($userAgent) {
             return strpos($userAgent, $agent) > -1;
