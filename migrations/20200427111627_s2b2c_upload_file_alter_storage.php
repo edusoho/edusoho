@@ -17,6 +17,5 @@ class S2b2cUploadFileAlterStorage extends Migration
      */
     public function down()
     {
-
     }
 }
