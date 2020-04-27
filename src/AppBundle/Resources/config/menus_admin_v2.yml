@@ -95,7 +95,7 @@ admin_v2:
                                             class: 'js-course-set-clone'
                                             icon: 'glyphicon glyphicon-repeat'
                                             mode: none
-                                            visible: (courseSet.parentId == 0 and courseSet.type != 'live' and courseSet.sourceCourseSetId|default(0) == 0)
+                                            visible: (courseSet.parentId == 0 and courseSet.type != 'live' and courseSet.platform|default('self') == 'self')
                                         admin_v2_course_set_publish:
                                             name: admin_v2.course.basic.basic_tab.publish_submit_btn
                                             router_params:
@@ -116,7 +116,7 @@ admin_v2:
                                             group: groupButton
                                             icon: 'glyphicon glyphicon-trash'
                                             mode: none
-                                            visible: ( courseSet.status in ['closed', 'draft', 'published'] and courseSet.sourceCourseSetId|default(0) == 0)
+                                            visible: ( courseSet.status in ['closed', 'draft', 'published'] and courseSet.platform|default('self') == 'self')
                                 admin_v2_course_set_recommend_list:
                                     name: admin_v2.course.basic.recommend_list_tab
                                 admin_v2_course_set_data:
