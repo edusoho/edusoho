@@ -12,18 +12,22 @@
 
 namespace PhpCsFixer\Console\Command;
 
+use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Console\Application;
 use PhpCsFixer\Fixer\ConfigurableFixerInterface;
 use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
-use PhpCsFixer\Fixer\DefinedFixerInterface;
+use PhpCsFixer\Fixer\DeprecatedFixerInterface;
 use PhpCsFixer\Fixer\FixerInterface;
 use PhpCsFixer\FixerConfiguration\AliasedFixerOption;
 use PhpCsFixer\FixerConfiguration\AllowedValueSubset;
+use PhpCsFixer\FixerConfiguration\DeprecatedFixerOption;
 use PhpCsFixer\FixerConfiguration\FixerOptionInterface;
 use PhpCsFixer\FixerFactory;
 use PhpCsFixer\Preg;
 use PhpCsFixer\RuleSet;
+use PhpCsFixer\Utils;
 use Symfony\Component\Console\Command\HelpCommand as BaseHelpCommand;
+use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -37,7 +41,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 final class HelpCommand extends BaseHelpCommand
 {
-    const COMMAND_NAME = 'help';
+    protected static $defaultName = 'help';
 
     /**
      * Returns help-copy suitable for console output.
@@ -60,13 +64,25 @@ to merge paths from the config file and from the argument:
 
     <info>$ php %command.full_name% --path-mode=intersection /path/to/dir</info>
 
-The <comment>--format</comment> option for the output format. Supported formats are ``txt`` (default one), ``json``, ``xml`` and ``junit``.
+The <comment>--format</comment> option for the output format. Supported formats are ``txt`` (default one), ``json``, ``xml``, ``checkstyle``, ``junit`` and ``gitlab``.
 
-NOTE: When using ``junit`` format report generates in accordance with JUnit xml schema from Jenkins (see docs/junit-10.xsd).
+NOTE: the output for the following formats are generated in accordance with XML schemas
 
-The <comment>--verbose</comment> option will show the applied rules. When using the ``txt`` format it will also displays progress notifications.
+* ``junit`` follows the `JUnit xml schema from Jenkins </doc/junit-10.xsd>`_
+* ``checkstyle`` follows the common `"checkstyle" xml schema </doc/checkstyle.xsd>`_
 
-The <comment>--rules</comment> option limits the rules to apply on the
+The <comment>--quiet</comment> Do not output any message.
+
+The <comment>--verbose</comment> option will show the applied rules. When using the ``txt`` format it will also display progress notifications.
+
+NOTE: if there is an error like "errors reported during linting after fixing", you can use this to be even more verbose for debugging purpose
+
+* ``--verbose=0`` or no option: normal
+* ``--verbose``, ``--verbose=1``, ``-v``: verbose
+* ``--verbose=2``, ``-vv``: very verbose
+* ``--verbose=3``, ``-vvv``: debug
+
+The <comment>--rules</comment> option limits the rules to apply to the
 project:
 
     <info>$ php %command.full_name% /path/to/project --rules=@PSR2</info>
@@ -85,25 +101,33 @@ using <comment>-name_of_fixer</comment>:
 
 When using combinations of exact and blacklist rules, applying exact rules along with above blacklisted results:
 
-    <info>$ php %command.full_name% /path/to/project --rules=@Symfony,-@PSR1,-blank_line_before_return,strict_comparison</info>
+    <info>$ php %command.full_name% /path/to/project --rules=@Symfony,-@PSR1,-blank_line_before_statement,strict_comparison</info>
 
 Complete configuration for rules can be supplied using a ``json`` formatted string.
 
     <info>$ php %command.full_name% /path/to/project --rules='{"concat_space": {"spacing": "none"}}'</info>
 
-A combination of <comment>--dry-run</comment> and <comment>--diff</comment> will
-display a summary of proposed fixes, leaving your files unchanged.
+The <comment>--dry-run</comment> flag will run the fixer without making changes to your files.
+
+The <comment>--diff</comment> flag can be used to let the fixer output all the changes it makes.
+
+The <comment>--diff-format</comment> option allows to specify in which format the fixer should output the changes it makes:
+
+* <comment>udiff</comment>: unified diff format;
+* <comment>sbd</comment>: Sebastianbergmann/diff format (default when using `--diff` without specifying `diff-format`).
 
 The <comment>--allow-risky</comment> option (pass ``yes`` or ``no``) allows you to set whether risky rules may run. Default value is taken from config file.
-Risky rule is a rule, which could change code behaviour. By default no risky rules are run.
+A rule is considered risky if it could change code behaviour. By default no risky rules are run.
 
-The <comment>--stop-on-violation</comment> flag stops execution upon first file that needs to be fixed.
+The <comment>--stop-on-violation</comment> flag stops the execution upon first file that needs to be fixed.
 
 The <comment>--show-progress</comment> option allows you to choose the way process progress is rendered:
 
 * <comment>none</comment>: disables progress output;
-* <comment>run-in</comment>: simple single-line progress output;
-* <comment>estimating</comment>: multiline progress output with number of files and percentage on each line. Note that with this option, the files list is evaluated before processing to get the total number of files and then kept in memory to avoid using the file iterator twice. This has an impact on memory usage so using this option is not recommended on very large projects.
+* <comment>run-in</comment>: [deprecated] simple single-line progress output;
+* <comment>estimating</comment>: [deprecated] multiline progress output with number of files and percentage on each line. Note that with this option, the files list is evaluated before processing to get the total number of files and then kept in memory to avoid using the file iterator twice. This has an impact on memory usage so using this option is not recommended on very large projects;
+* <comment>estimating-max</comment>: [deprecated] same as <comment>dots</comment>;
+* <comment>dots</comment>: same as <comment>estimating</comment> but using all terminal columns instead of default 80.
 
 If the option is not provided, it defaults to <comment>run-in</comment> unless a config file that disables output is used, in which case it defaults to <comment>none</comment>. This option has no effect if the verbosity of the command is less than <comment>verbose</comment>.
 
@@ -113,6 +137,11 @@ The command can also read from standard input, in which case it won't
 automatically fix anything:
 
     <info>$ cat foo.php | php %command.full_name% --diff -</info>
+
+Finally, if you don't need BC kept on CLI level, you might use `PHP_CS_FIXER_FUTURE_MODE` to start using options that
+would be default in next MAJOR release (unified differ, estimating, full-width progress indicator):
+
+    <info>$ PHP_CS_FIXER_FUTURE_MODE=1 php %command.full_name% -v --diff</info>
 
 Choose from the list of available rules:
 
@@ -147,17 +176,18 @@ The example below will add two rules to the default list of PSR2 set rules:
     ;
 
     return PhpCsFixer\Config::create()
-        ->setRules(array(
+        ->setRules([
             '@PSR2' => true,
             'strict_param' => true,
-            'array_syntax' => array('syntax' => 'short'),
-        ))
+            'array_syntax' => ['syntax' => 'short'],
+        ])
         ->setFinder($finder)
     ;
 
     ?>
 
 **NOTE**: ``exclude`` will work only for directories, so if you need to exclude file, try ``notPath``.
+Both ``exclude`` and ``notPath`` methods accept only relative paths to the ones defined with the ``in`` method.
 
 See `Symfony\Finder` (<url>https://symfony.com/doc/current/components/finder.html</url>)
 online documentation for other `Finder` methods.
@@ -173,10 +203,10 @@ The following example shows how to use all ``Symfony`` rules but the ``full_open
     ;
 
     return PhpCsFixer\Config::create()
-        ->setRules(array(
+        ->setRules([
             '@Symfony' => true,
             'full_opening_tag' => false,
-        ))
+        ])
         ->setFinder($finder)
     ;
 
@@ -237,36 +267,36 @@ Then, add the following command to your CI:
 
 %%%CI_INTEGRATION%%%
 
-Where ``$COMMIT_RANGE`` is your range of commits, eg ``$TRAVIS_COMMIT_RANGE`` or ``HEAD~..HEAD``.
+Where ``$COMMIT_RANGE`` is your range of commits, e.g. ``$TRAVIS_COMMIT_RANGE`` or ``HEAD~..HEAD``.
 
-Exit codes
-----------
+Exit code
+---------
 
 Exit code is built using following bit flags:
 
-*  0 OK.
-*  1 General error (or PHP/HHVM minimal requirement not matched).
-*  4 Some files have invalid syntax (only in dry-run mode).
-*  8 Some files need fixing (only in dry-run mode).
-* 16 Configuration error of the application.
-* 32 Configuration error of a Fixer.
-* 64 Exception raised within the application.
+*  0 - OK.
+*  1 - General error (or PHP minimal requirement not matched).
+*  4 - Some files have invalid syntax (only in dry-run mode).
+*  8 - Some files need fixing (only in dry-run mode).
+* 16 - Configuration error of the application.
+* 32 - Configuration error of a Fixer.
+* 64 - Exception raised within the application.
 
-(applies to exit codes of the `fix` command only)
+(Applies to exit code of the ``fix`` command only)
 EOF
         ;
 
-        return strtr($template, array(
+        return strtr($template, [
             '%%%CONFIG_INTERFACE_URL%%%' => sprintf(
                 'https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/v%s/src/ConfigInterface.php',
                 self::getLatestReleaseVersionFromChangeLog()
             ),
             '%%%CI_INTEGRATION%%%' => implode("\n", array_map(
-                function ($line) { return '    $ '.$line; },
-                array_slice(file(__DIR__.'/../../../dev-tools/ci-integration.sh', FILE_IGNORE_NEW_LINES), 3)
+                static function ($line) { return '    $ '.$line; },
+                \array_slice(file(__DIR__.'/../../../ci-integration.sh', FILE_IGNORE_NEW_LINES), 3)
             )),
             '%%%FIXERS_DETAILS%%%' => self::getFixersHelp(),
-        ));
+        ]);
     }
 
     /**
@@ -276,7 +306,7 @@ EOF
      */
     public static function toString($value)
     {
-        if (is_array($value)) {
+        if (\is_array($value)) {
             // Output modifications:
             // - remove new-lines
             // - combine multiple whitespaces
@@ -284,10 +314,10 @@ EOF
             // - remove whitespace at array opening
             // - remove trailing array comma and whitespace at array closing
             // - remove numeric array indexes
-            static $replaces = array(
-                array('#\r|\n#', '#\s{1,}#', '#array\s*\((.*)\)#s', '#\[\s+#', '#,\s*\]#', '#\d+\s*=>\s*#'),
-                array('', ' ', '[$1]', '[', ']', ''),
-            );
+            static $replaces = [
+                ['#\r|\n#', '#\s{1,}#', '#array\s*\((.*)\)#s', '#\[\s+#', '#,\s*\]#', '#\d+\s*=>\s*#'],
+                ['', ' ', '[$1]', '[', ']', ''],
+            ];
 
             $str = var_export($value, true);
             do {
@@ -313,20 +343,18 @@ EOF
     /**
      * Returns the allowed values of the given option that can be converted to a string.
      *
-     * @param FixerOptionInterface $option
-     *
-     * @return null|array
+     * @return array|null
      */
     public static function getDisplayableAllowedValues(FixerOptionInterface $option)
     {
         $allowed = $option->getAllowedValues();
 
         if (null !== $allowed) {
-            $allowed = array_filter($allowed, function ($value) {
+            $allowed = array_filter($allowed, static function ($value) {
                 return !($value instanceof \Closure);
             });
 
-            usort($allowed, function ($valueA, $valueB) {
+            usort($allowed, static function ($valueA, $valueB) {
                 if ($valueA instanceof AllowedValueSubset) {
                     return -1;
                 }
@@ -336,12 +364,12 @@ EOF
                 }
 
                 return strcasecmp(
-                    HelpCommand::toString($valueA),
-                    HelpCommand::toString($valueB)
+                    self::toString($valueA),
+                    self::toString($valueB)
                 );
             });
 
-            if (0 === count($allowed)) {
+            if (0 === \count($allowed)) {
                 $allowed = null;
             }
         }
@@ -373,14 +401,10 @@ EOF
         if (false === $changelog) {
             $error = error_get_last();
 
-            throw new \RuntimeException(sprintf(
-                'Failed to read content of the changelog file "%s".%s',
-                $changelogFile,
-                $error ? ' '.$error['message'] : ''
-            ));
+            throw new \RuntimeException(sprintf('Failed to read content of the changelog file "%s".%s', $changelogFile, $error ? ' '.$error['message'] : ''));
         }
 
-        for ($i = (int) Application::VERSION; $i > 0; --$i) {
+        for ($i = Application::getMajorVersion(); $i > 0; --$i) {
             if (1 === Preg::match('/Changelog for v('.$i.'.\d+.\d+)/', $changelog, $matches)) {
                 $version = $matches[1];
 
@@ -404,7 +428,7 @@ EOF
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     private static function getChangeLogFile()
     {
@@ -420,23 +444,24 @@ EOF
     {
         $help = '';
         $fixerFactory = new FixerFactory();
+        /** @var AbstractFixer[] $fixers */
         $fixers = $fixerFactory->registerBuiltInFixers()->getFixers();
 
         // sort fixers by name
         usort(
             $fixers,
-            function (FixerInterface $a, FixerInterface $b) {
+            static function (FixerInterface $a, FixerInterface $b) {
                 return strcmp($a->getName(), $b->getName());
             }
         );
 
-        $ruleSets = array();
+        $ruleSets = [];
         foreach (RuleSet::create()->getSetDefinitionNames() as $setName) {
-            $ruleSets[$setName] = new RuleSet(array($setName => true));
+            $ruleSets[$setName] = new RuleSet([$setName => true]);
         }
 
-        $getSetsWithRule = function ($rule) use ($ruleSets) {
-            $sets = array();
+        $getSetsWithRule = static function ($rule) use ($ruleSets) {
+            $sets = [];
 
             foreach ($ruleSets as $setName => $ruleSet) {
                 if ($ruleSet->hasRule($rule)) {
@@ -447,14 +472,18 @@ EOF
             return $sets;
         };
 
-        $count = count($fixers) - 1;
+        $count = \count($fixers) - 1;
         foreach ($fixers as $i => $fixer) {
             $sets = $getSetsWithRule($fixer->getName());
 
-            if ($fixer instanceof DefinedFixerInterface) {
-                $description = $fixer->getDefinition()->getSummary();
-            } else {
-                $description = '[n/a]';
+            $description = $fixer->getDefinition()->getSummary();
+
+            if ($fixer instanceof DeprecatedFixerInterface) {
+                $successors = $fixer->getSuccessorsNames();
+                $message = [] === $successors
+                    ? 'will be removed on next major version'
+                    : sprintf('use %s instead', Utils::naturalLanguageJoinWithBackticks($successors));
+                $description .= sprintf(' DEPRECATED: %s.', $message);
             }
 
             $description = implode("\n   | ", self::wordwrap(
@@ -482,18 +511,18 @@ EOF
             if ($fixer instanceof ConfigurationDefinitionFixerInterface) {
                 $configurationDefinition = $fixer->getConfigurationDefinition();
                 $configurationDefinitionOptions = $configurationDefinition->getOptions();
-                if (count($configurationDefinitionOptions)) {
+                if (\count($configurationDefinitionOptions)) {
                     $help .= "   |\n   | Configuration options:\n";
 
                     usort(
                         $configurationDefinitionOptions,
-                        function (FixerOptionInterface $optionA, FixerOptionInterface $optionB) {
+                        static function (FixerOptionInterface $optionA, FixerOptionInterface $optionB) {
                             return strcmp($optionA->getName(), $optionB->getName());
                         }
                     );
 
                     foreach ($configurationDefinitionOptions as $option) {
-                        $line = '<info>'.$option->getName().'</info>';
+                        $line = '<info>'.OutputFormatter::escape($option->getName()).'</info>';
 
                         $allowed = self::getDisplayableAllowedValues($option);
                         if (null !== $allowed) {
@@ -506,7 +535,7 @@ EOF
                             }
                         } else {
                             $allowed = array_map(
-                                function ($type) {
+                                static function ($type) {
                                     return '<comment>'.$type.'</comment>';
                                 },
                                 $option->getAllowedTypes()
@@ -520,12 +549,20 @@ EOF
                         $line .= ': '.Preg::replace(
                             '/(`.+?`)/',
                             '<info>$1</info>',
-                            lcfirst(Preg::replace('/\.$/', '', $option->getDescription()))
+                            lcfirst(Preg::replace('/\.$/', '', OutputFormatter::escape($option->getDescription())))
                         ).'; ';
                         if ($option->hasDefault()) {
                             $line .= 'defaults to <comment>'.self::toString($option->getDefault()).'</comment>';
                         } else {
                             $line .= 'required';
+                        }
+
+                        if ($option instanceof DeprecatedFixerOption) {
+                            $line .= '. DEPRECATED: '.Preg::replace(
+                                '/(`.+?`)/',
+                                '<info>$1</info>',
+                                lcfirst(Preg::replace('/\.$/', '', OutputFormatter::escape($option->getDeprecationMessage())))
+                            );
                         }
 
                         if ($option instanceof AliasedFixerOption) {
@@ -560,11 +597,11 @@ EOF
      */
     private static function wordwrap($string, $width)
     {
-        $result = array();
+        $result = [];
         $currentLine = 0;
         $lineLength = 0;
         foreach (explode(' ', $string) as $word) {
-            $wordLength = strlen(Preg::replace('~</?(\w+)>~', '', $word));
+            $wordLength = \strlen(Preg::replace('~</?(\w+)>~', '', $word));
             if (0 !== $lineLength) {
                 ++$wordLength; // space before word
             }
@@ -578,7 +615,7 @@ EOF
             $lineLength += $wordLength;
         }
 
-        return array_map(function ($line) {
+        return array_map(static function ($line) {
             return implode(' ', $line);
         }, $result);
     }

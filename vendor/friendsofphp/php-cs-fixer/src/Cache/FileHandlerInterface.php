@@ -25,12 +25,9 @@ interface FileHandlerInterface
     public function getFile();
 
     /**
-     * @return CacheInterface
+     * @return CacheInterface|null
      */
     public function read();
 
-    /**
-     * @param CacheInterface $cache
-     */
     public function write(CacheInterface $cache);
 }

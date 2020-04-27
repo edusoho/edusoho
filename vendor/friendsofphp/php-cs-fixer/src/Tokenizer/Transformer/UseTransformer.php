@@ -33,7 +33,16 @@ final class UseTransformer extends AbstractTransformer
      */
     public function getCustomTokens()
     {
-        return array(CT::T_USE_TRAIT, CT::T_USE_LAMBDA);
+        return [CT::T_USE_TRAIT, CT::T_USE_LAMBDA];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPriority()
+    {
+        // Should run after CurlyBraceTransformer and before TypeColonTransformer
+        return -5;
     }
 
     /**
@@ -50,24 +59,23 @@ final class UseTransformer extends AbstractTransformer
     public function process(Tokens $tokens, Token $token, $index)
     {
         if ($token->isGivenKind(T_USE) && $this->isUseForLambda($tokens, $index)) {
-            $tokens[$index] = new Token(array(CT::T_USE_LAMBDA, $token->getContent()));
-        }
+            $tokens[$index] = new Token([CT::T_USE_LAMBDA, $token->getContent()]);
 
-        if (!$token->isClassy()) {
             return;
         }
 
-        $prevTokenIndex = $tokens->getPrevMeaningfulToken($index);
-        $prevToken = null === $prevTokenIndex ? null : $tokens[$prevTokenIndex];
+        // Only search inside class/trait body for `T_USE` for traits.
+        // Cannot import traits inside interfaces or anywhere else
 
-        if ($prevToken->isGivenKind(T_DOUBLE_COLON)) {
+        if (!$token->isGivenKind([T_CLASS, T_TRAIT])) {
             return;
         }
 
-        // Skip whole class braces content.
-        // That way we can skip whole tokens in class declaration, therefore skip `T_USE` for traits.
+        if ($tokens[$tokens->getPrevMeaningfulToken($index)]->isGivenKind(T_DOUBLE_COLON)) {
+            return;
+        }
 
-        $index = $tokens->getNextTokenOfKind($index, array('{'));
+        $index = $tokens->getNextTokenOfKind($index, ['{']);
         $innerLimit = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_CURLY_BRACE, $index);
 
         while ($index < $innerLimit) {
@@ -78,9 +86,9 @@ final class UseTransformer extends AbstractTransformer
             }
 
             if ($this->isUseForLambda($tokens, $index)) {
-                $tokens[$index] = new Token(array(CT::T_USE_LAMBDA, $token->getContent()));
+                $tokens[$index] = new Token([CT::T_USE_LAMBDA, $token->getContent()]);
             } else {
-                $tokens[$index] = new Token(array(CT::T_USE_TRAIT, $token->getContent()));
+                $tokens[$index] = new Token([CT::T_USE_TRAIT, $token->getContent()]);
             }
         }
     }
@@ -88,8 +96,7 @@ final class UseTransformer extends AbstractTransformer
     /**
      * Check if token under given index is `use` statement for lambda function.
      *
-     * @param Tokens $tokens
-     * @param int    $index
+     * @param int $index
      *
      * @return bool
      */

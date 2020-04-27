@@ -67,7 +67,7 @@
     "sensio/generator-bundle": "3.1.7",
     "symfony/phpunit-bridge": "4.4.4",
     "mockery/mockery": "0.9.11",
-    "friendsofphp/php-cs-fixer": "2.2.20"
+    "friendsofphp/php-cs-fixer": "^2.16.3"
   },
   "scripts": {
     "post-install-cmd": [

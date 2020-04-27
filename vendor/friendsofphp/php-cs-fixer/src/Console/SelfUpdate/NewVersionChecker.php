@@ -32,13 +32,10 @@ final class NewVersionChecker implements NewVersionCheckerInterface
     private $versionParser;
 
     /**
-     * @var null|string[]
+     * @var string[]|null
      */
     private $availableVersions;
 
-    /**
-     * @param GithubClientInterface $githubClient
-     */
     public function __construct(GithubClientInterface $githubClient)
     {
         $this->githubClient = $githubClient;

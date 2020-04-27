@@ -12,19 +12,19 @@
 
 namespace PhpCsFixer\Fixer\Casing;
 
-use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\AbstractProxyFixer;
+use PhpCsFixer\Fixer\DeprecatedFixerInterface;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
-use PhpCsFixer\Tokenizer\CT;
-use PhpCsFixer\Tokenizer\Token;
-use PhpCsFixer\Tokenizer\Tokens;
 
 /**
  * Fixer for rules defined in PSR2 ¶2.5.
  *
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ *
+ * @deprecated proxy to ConstantCaseFixer
  */
-final class LowercaseConstantsFixer extends AbstractFixer
+final class LowercaseConstantsFixer extends AbstractProxyFixer implements DeprecatedFixerInterface
 {
     /**
      * {@inheritdoc}
@@ -33,79 +33,28 @@ final class LowercaseConstantsFixer extends AbstractFixer
     {
         return new FixerDefinition(
             'The PHP constants `true`, `false`, and `null` MUST be in lower case.',
-            array(new CodeSample("<?php\n\$a = FALSE;\n\$b = True;\n\$c = nuLL;"))
+            [new CodeSample("<?php\n\$a = FALSE;\n\$b = True;\n\$c = nuLL;\n")]
         );
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function isCandidate(Tokens $tokens)
-    {
-        return $tokens->isTokenKindFound(T_STRING);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
-    {
-        foreach ($tokens as $index => $token) {
-            if (!$token->isNativeConstant()) {
-                continue;
-            }
-
-            if (
-                $this->isNeighbourAccepted($tokens, $tokens->getPrevMeaningfulToken($index)) &&
-                $this->isNeighbourAccepted($tokens, $tokens->getNextMeaningfulToken($index))
-            ) {
-                $tokens[$index] = new Token(array($token->getId(), strtolower($token->getContent())));
-            }
-        }
-    }
-
-    /**
-     * @param Tokens $tokens
-     * @param int    $index
+     * Returns names of fixers to use instead, if any.
      *
-     * @return bool
+     * @return string[]
      */
-    private function isNeighbourAccepted(Tokens $tokens, $index)
+    public function getSuccessorsNames()
     {
-        static $forbiddenTokens = null;
+        return array_keys($this->proxyFixers);
+    }
 
-        if (null === $forbiddenTokens) {
-            $forbiddenTokens = array(
-                T_AS,
-                T_CLASS,
-                T_CONST,
-                T_EXTENDS,
-                T_IMPLEMENTS,
-                T_INSTANCEOF,
-                T_INTERFACE,
-                T_NEW,
-                T_NS_SEPARATOR,
-                T_PAAMAYIM_NEKUDOTAYIM,
-                T_USE,
-                CT::T_USE_TRAIT,
-                CT::T_USE_LAMBDA,
-            );
+    /**
+     * {@inheritdoc}
+     */
+    protected function createProxyFixers()
+    {
+        $fixer = new ConstantCaseFixer();
+        $fixer->configure(['case' => 'lower']);
 
-            if (defined('T_TRAIT')) {
-                $forbiddenTokens[] = T_TRAIT;
-            }
-
-            if (defined('T_INSTEADOF')) {
-                $forbiddenTokens[] = T_INSTEADOF;
-            }
-        }
-
-        $token = $tokens[$index];
-
-        if ($token->equalsAny(array('{', '}'))) {
-            return false;
-        }
-
-        return !$token->isGivenKind($forbiddenTokens);
+        return [$fixer];
     }
 }

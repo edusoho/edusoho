@@ -24,7 +24,7 @@ final class ErrorsManager
     /**
      * @var Error[]
      */
-    private $errors = array();
+    private $errors = [];
 
     /**
      * Returns errors reported during linting before fixing.
@@ -33,7 +33,7 @@ final class ErrorsManager
      */
     public function getInvalidErrors()
     {
-        return array_filter($this->errors, function (Error $error) {
+        return array_filter($this->errors, static function (Error $error) {
             return Error::TYPE_INVALID === $error->getType();
         });
     }
@@ -45,7 +45,7 @@ final class ErrorsManager
      */
     public function getExceptionErrors()
     {
-        return array_filter($this->errors, function (Error $error) {
+        return array_filter($this->errors, static function (Error $error) {
             return Error::TYPE_EXCEPTION === $error->getType();
         });
     }
@@ -57,7 +57,7 @@ final class ErrorsManager
      */
     public function getLintErrors()
     {
-        return array_filter($this->errors, function (Error $error) {
+        return array_filter($this->errors, static function (Error $error) {
             return Error::TYPE_LINT === $error->getType();
         });
     }
@@ -72,9 +72,6 @@ final class ErrorsManager
         return empty($this->errors);
     }
 
-    /**
-     * @param Error $error
-     */
     public function report(Error $error)
     {
         $this->errors[] = $error;

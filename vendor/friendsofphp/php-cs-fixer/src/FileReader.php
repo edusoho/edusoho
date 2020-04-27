@@ -24,12 +24,12 @@ namespace PhpCsFixer;
 final class FileReader
 {
     /**
-     * @var null|self
+     * @var self|null
      */
     private static $instance;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     private $stdinContent;
 
@@ -70,6 +70,14 @@ final class FileReader
      */
     private function readRaw($realPath)
     {
-        return file_get_contents($realPath);
+        $content = @file_get_contents($realPath);
+
+        if (false === $content) {
+            $error = error_get_last();
+
+            throw new \RuntimeException(sprintf('Failed to read content from "%s".%s', $realPath, $error ? ' '.$error['message'] : ''));
+        }
+
+        return $content;
     }
 }
