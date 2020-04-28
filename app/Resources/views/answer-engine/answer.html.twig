@@ -4,7 +4,7 @@
 
 {% block body %}
     {% include 'answer-engine/common.html.twig' %}
-    {% include 'attachment-upload/upload-data.html.twig' %}
+    {% include 'attachment-upload/upload-data.html.twig' with {targetType: 'answer', targetId: answerRecord.id} %}
     <input type="hidden" name="assessment" value='{{ assessment|json_encode|raw }}'>
     <input type="hidden" name="assessment_response" value='{{ assessmentResponse|json_encode|raw }}'>
     <input type="hidden" name="answer_scene" value='{{ answerScene|json_encode|raw }}'>

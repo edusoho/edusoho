@@ -10,10 +10,16 @@
       :showAttachment="showAttachment"
       :cdnHost="cdnHost"
       :uploadSDKInitData="uploadSDKInitData"
+      :deleteAttachmentCallback="deleteAttachmentCallback"
+      :previewAttachmentCallback="previewAttachmentCallback"
+      :downloadAttachmentCallback="downloadAttachmentCallback"
       @getAnswerData="getAnswerData"
       @saveAnswerData="saveAnswerData"
       @timeSaveAnswerData="timeSaveAnswerData"
       @reachTimeSubmitAnswerData="reachTimeSubmitAnswerData"
+      @deleteAttachment="deleteAttachment"
+      @previewAttachment="previewAttachment"
+      @downloadAttachment="downloadAttachment"
     ></item-engine>
   </div>
 </template>
@@ -39,7 +45,8 @@
           accept: JSON.parse($('[name=upload_accept]').val()),
           fileSingleSizeLimit: $('[name=upload_size_limit]').val(),
           locale: document.documentElement.lang
-        }
+        },
+        fileId: 0,
       };
     },
     created() {
@@ -115,6 +122,69 @@
         }).done(function (resp) {
           parent.location.href = $('[name=save_goto_url]').val();
         })
+      },
+      deleteAttachment(fileId, flag) {
+        if (flag) {
+          this.fileId = fileId;
+        }
+      },
+      previewAttachment(fileId) {
+        this.fileId = fileId;
+      },
+      downloadAttachment(fileId) {
+        this.fileId = fileId;
+      },
+      previewAttachmentCallback() {
+        let self = this;
+        return new Promise(resolve => {
+          $.ajax({
+            url: $('[name=preview-attachment-url]').val(),
+            type: 'post',
+            data: {id: this.fileId},
+            beforeSend(request) {
+              request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+            }
+          }).done(function (resp) {
+            resp.data['playServer'] = app.cloudPlayServer;
+            resp.data['sdkBaseUri'] = app.cloudSdkBaseUri;
+            resp.data['disableDataUpload'] = app.cloudDisableLogReport;
+            resp.data['disableSentry'] = app.cloudDisableLogReport;
+            resolve(resp);
+            self.fileId = 0;
+          })
+        });
+      },
+      downloadAttachmentCallback() {
+        let self = this;
+        return new Promise(resolve => {
+          $.ajax({
+            url: $('[name=download-attachment-url]').val(),
+            type: 'post',
+            data: {id: this.fileId},
+            beforeSend(request) {
+              request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+            }
+          }).done(function (resp) {
+            resolve(resp);
+            self.fileId = 0;
+          })
+        });
+      },
+      deleteAttachmentCallback() {
+        let self = this;
+        return new Promise(resolve => {
+          $.ajax({
+            url: $('[name=delete-attachment-url]').val(),
+            type: 'post',
+            data: {id: this.fileId},
+            beforeSend(request) {
+              request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+            }
+          }).done(function (resp) {
+            resolve(resp);
+            self.fileId = 0;
+          })
+        });
       }
     }
   }

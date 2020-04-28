@@ -1308,6 +1308,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return false;
         }
 
+        $file['globalId'] = $file['global_id'];
         $result = $this->getFileImplementor('cloud')->deleteFile($file);
 
         if ((isset($result['success']) && $result['success'])
@@ -1317,6 +1318,20 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         return false;
+    }
+
+    public function downloadAttachment($id, $ssl)
+    {
+        $file = $this->getAttachmentService()->getAttachment($id);
+
+        if (empty($file)) {
+            return false;
+        }
+
+        $file['globalId'] = $file['global_id'];
+        $result = $this->getFileImplementor('cloud')->getDownloadFile($file, $ssl);
+
+        return $result;
     }
 
     protected function updateTags($localFile, $fields)

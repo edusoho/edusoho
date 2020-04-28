@@ -14,7 +14,7 @@
   {% endverbatim %}
 
   <input type="hidden" name="item" value="{{ item|json_encode }}">
-
+  {% include 'attachment-upload/upload-data.html.twig'  %}
 {% endblock %}
 
 {% block footer %}

@@ -3,11 +3,14 @@
 namespace AppBundle\Controller\Item;
 
 use AppBundle\Controller\BaseController;
+use Biz\CloudFile\Service\CloudFileService;
 use Biz\File\Service\UploadFileService;
+use Biz\MaterialLib\Service\MaterialLibService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -51,8 +54,9 @@ class AttachmentController extends BaseController
         return $this->createJsonpResponse($file, $request->query->get('callback'));
     }
 
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request)
     {
+        $id = $request->request->get('id', 0);
         if (!$this->canDeleteAttachment($request)) {
             $this->createJsonResponse(array('result' => false, 'msg' => '您无权删除该附件'));
         }
@@ -65,24 +69,92 @@ class AttachmentController extends BaseController
         return $this->createJsonResponse(array('result' => false, 'msg' => '附件删除失败'));
     }
 
-    protected function canDeleteAttachment($request)
+    public function previewAction(Request $request)
     {
-        $type = $request->query->get('targetType', '');
-        $id = $request->query->get('targetId', 0);
+        $id = $request->request->get('id', 0);
+        $user = $this->getUser();
+
+        if (!$user->isLogin()) {
+            return $this->createJsonResponse(array('result' => false, 'msg' => '用户未登录', 'data' => array()));
+        }
+
+        $attachment = $this->getAttachmentService()->getAttachment($id);
+        if (empty($attachment)) {
+            return $this->createJsonResponse(array('result' => false, 'msg' => '文件不存在', 'data' => array()));
+        }
+
+        $file = $this->getCloudFileService()->getByGlobalId($attachment['global_id']);
+        if (empty($file)) {
+            return $this->createJsonResponse(array('result' => false, 'msg' => '文件不存在', 'data' => array()));
+        }
+
+        $ssl = $request->isSecure() ? true : false;
+        if (in_array($file['type'], array('video', 'ppt', 'document'))) {
+            return $this->globalPlayer($file, $ssl);
+        } elseif ('audio' == $file['type']) {
+            return $this->audioPlayer($file, $ssl);
+        }
+
+        return $this->createJsonResponse(array('result' => false, 'msg' => '无法预览该类文件', 'data' => array()));
+    }
+
+    protected function globalPlayer($file, $ssl)
+    {
+        $user= $this->getCurrentUser();
+        $player = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+
+        return $this->createJsonResponse(array('result' => true, 'msg' => '', 'data' => array(
+            'token' => $player['token'],
+            'resNo' => $file['globalId'],
+            'user' => array('id' => $user['id'], 'name' => $user['nickname']),
+            'type' => $file['type'],
+        )));
+    }
+
+    protected function audioPlayer($file, $ssl)
+    {
+        $user= $this->getCurrentUser();
+        $player = $this->getMaterialLibService()->player($file['no'], $ssl);
+        $setting = $this->getSettingService()->get('storage', array());
+
+        return $this->createJsonResponse(array('result' => true, 'msg' => '', 'data' => array(
+            'playlist' => $player['url'],
+            'type' => $file['type'],
+            'statsInfo' => array(
+                'accesskey' => empty($setting['cloud_access_key']) ? '' : $setting['cloud_access_key'],
+                'globalId' => $file['globalId'],
+                'userId' => $user['id'],
+                'userName' => $user['nickname'],
+            ),
+        )));
+    }
+
+    public function downloadAction(Request $request)
+    {
+        $id = $request->request->get('id', 0);
+        $user = $this->getUser();
+        if (!$user->isLogin()) {
+            return $this->createJsonResponse(array('result' => false, 'msg' => '用户未登录', 'url' => ''));
+        }
+
+        $ssl = $request->isSecure() ? true : false;
+        $result = $this->getUploadFileService()->downloadAttachment($id, $ssl);
+        if ($result) {
+            return $this->createJsonResponse(array('result' => true, 'msg' => '', 'url' => $result['url']));
+        }
+
+        return $this->createJsonResponse(array('result' => false, 'msg' => '获取文件失败', 'url' => ''));
+    }
+
+    protected function canDeleteAttachment($id)
+    {
         $user = $this->getCurrentUser();
         if ($user->isAdmin()) {
             return true;
         }
-
-        if ('item' == $type) {
-            return $this->getQuestionBankService()->canManageBank($id);
-        }
-
-        if ('answer' == $type) {
-            $answerRecord = $this->getAnswerRecordService()->get($id);
-            if (!empty($answerRecord) && $answerRecord['user_id'] == $user['id']) {
-                return true;
-            }
+        $attachment = $this->getAttachmentService()->getAttachment($id);
+        if (!empty($attachment) && $attachment['created_user_id'] == $user['id']) {
+            return true;
         }
 
         return false;
@@ -130,10 +202,18 @@ class AttachmentController extends BaseController
     }
 
     /**
-     * @return AnswerRecordService
+     * @return CloudFileService
      */
-    protected function getAnswerRecordService()
+    protected function getCloudFileService()
     {
-        return $this->createService('ItemBank:Answer:AnswerRecordService');
+        return $this->createService('CloudFile:CloudFileService');
+    }
+
+    /**
+     * @return MaterialLibService
+     */
+    protected function getMaterialLibService()
+    {
+        return $this->createService('MaterialLib:MaterialLibService');
     }
 }

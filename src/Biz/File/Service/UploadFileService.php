@@ -185,4 +185,8 @@ interface UploadFileService
     public function initUploadAttachment($params);
 
     public function finishUploadAttachment($params);
+
+    public function deleteAttachment($id);
+
+    public function downloadAttachment($id, $ssl);
 }

@@ -3395,5 +3395,17 @@ item_attachment_init_upload:
     defaults: { _controller: AppBundle:Item/Attachment:initUpload }
 
 item_attachment_finish_upload:
-  path: /item/attachment/upload/finish
-  defaults: { _controller: AppBundle:Item/Attachment:finishUpload }
+    path: /item/attachment/upload/finish
+    defaults: { _controller: AppBundle:Item/Attachment:finishUpload }
+
+item_attachment_delete:
+    path: /item/attachment/delete
+    defaults: { _controller: AppBundle:Item/Attachment:delete }
+
+item_attachment_preview:
+    path: /item/attachment/preview
+    defaults: { _controller: AppBundle:Item/Attachment:preview }
+
+item_attachment_download:
+    path: /item/attachment/download
+    defaults: { _controller: AppBundle:Item/Attachment:download }
