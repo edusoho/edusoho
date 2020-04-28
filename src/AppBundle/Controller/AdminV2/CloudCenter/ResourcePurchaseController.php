@@ -22,8 +22,6 @@ class ResourcePurchaseController extends BaseController
     }
 
     /**
-     * @param Request $request
-     *
      * @return \Symfony\Component\HttpFoundation\Response
      *                                                    called from marketAction
      */
@@ -34,12 +32,12 @@ class ResourcePurchaseController extends BaseController
 
         return $this->render(
             'admin-v2/cloud-center/content-resource/market/course-set/explore.html.twig',
-            array(
+            [
                 'tags' => [],
                 'supplierSiteSetting' => $supplierSiteSetting,
                 'merchant' => $merchant,
                 'supplier' => [],
-            )
+            ]
         );
     }
 
@@ -53,27 +51,27 @@ class ResourcePurchaseController extends BaseController
          * mock
          */
         $categoryList = $this->getS2B2CFacadeService()->getSupplierPlatformApi()
-            ->searchProductCategories(array(
+            ->searchProductCategories([
                 'group' => $group,
-            ));
+            ]);
 
         if (!empty($categoryList['error'])) {
-            $categories = $subCategories = $thirdLevelCategories = array();
+            $categories = $subCategories = $thirdLevelCategories = [];
         } else {
             list($categories, $subCategories, $thirdLevelCategories) = $categoryList;
         }
 
-        return $this->render('admin-v2/cloud-center/content-resource/market/course-set/category.html.twig', array(
+        return $this->render('admin-v2/cloud-center/content-resource/market/course-set/category.html.twig', [
             'selectedCategory' => $selectedCategory,
             'selectedSubCategory' => $selectedSubCategory,
             'selectedThirdLevelCategory' => $selectedThirdLevelCategory,
             'categories' => $categories,
             'subCategories' => $subCategories,
             'thirdLevelCategories' => $thirdLevelCategories,
-            'subCategoriesData' => empty($subCategories) ? array() : ArrayToolkit::group($subCategories, 'parentId'),
-            'thirdLevelCategoriesData' => empty($thirdLevelCategories) ? array() : ArrayToolkit::group($thirdLevelCategories, 'parentId'),
+            'subCategoriesData' => empty($subCategories) ? [] : ArrayToolkit::group($subCategories, 'parentId'),
+            'thirdLevelCategoriesData' => empty($thirdLevelCategories) ? [] : ArrayToolkit::group($thirdLevelCategories, 'parentId'),
             'request' => $request,
-        ));
+        ]);
     }
 
     public function productsAction(Request $request)
@@ -95,20 +93,23 @@ class ResourcePurchaseController extends BaseController
         $paginator = new Paginator($request, $total, $pageSize);
         $paginator->setBaseUrl($this->generateUrl('admin_v2_purchase_market_products_list'));
 
-        $supplierSettings = $this->getSettingService()->get('supplierSettings', array());
+        $supplierSettings = $this->getSettingService()->get('supplierSettings', []);
+
         $remoteProductIds = ArrayToolkit::column($courseSets, 's2b2cDistributeId');
+
         if (!empty($supplierSettings['supplierId'])) {
             $chosenProducts = $this->getS2B2CProductService()->findProductsBySupplierIdAndRemoteProductIds($supplierSettings['supplierId'], $remoteProductIds);
+
             $chosenProducts = ArrayToolkit::index($chosenProducts, 'remoteProductId');
         }
 
         return $this->render(
-            'admin-v2/cloud-center/content-resource/market/course-set/course-list.html.twig', array(
+            'admin-v2/cloud-center/content-resource/market/course-set/course-list.html.twig', [
             'courseSets' => $courseSets,
             'paginator' => $paginator,
             'merchant' => $merchant,
-            'chosenCourses' => empty($chosenProducts) ? array() : $chosenProducts,
-        ));
+            'chosenCourses' => empty($chosenProducts) ? [] : $chosenProducts,
+        ]);
     }
 
     public function productDetailAction(Request $request, $id, $tab = 'summary')
@@ -120,7 +121,7 @@ class ResourcePurchaseController extends BaseController
             throw $this->createNotFoundException('原课程未找到或出错了');
         }
 
-        $chosenCourseSet = $this->getCourseSetService()->searchCourseSets(array('originProductId' => $courseSet['id']), array(), 0, 1);
+        $chosenCourseSet = $this->getCourseSetService()->searchCourseSets(['originProductId' => $courseSet['id']], [], 0, 1);
         $productDetail['hasChosen'] = !empty($chosenCourseSet);
 
         /**
@@ -129,24 +130,24 @@ class ResourcePurchaseController extends BaseController
         $merchant = $this->getS2B2CFacadeService()->getMe();
 
         return $this->render(
-            'admin-v2/cloud-center/content-resource/market/course-set/show.html.twig', array(
+            'admin-v2/cloud-center/content-resource/market/course-set/show.html.twig', [
             'tab' => $tab,
             'courseSet' => $courseSet,
             'courses' => $courseSet['courses'],
             'merchant' => $merchant,
             'hasChosen' => $chosenCourseSet,
             'marketingPage' => true,
-        ));
+        ]);
     }
 
     public function productsVersionAction(Request $request)
     {
-        $necessaryConditions = array(
+        $necessaryConditions = [
             'originProductId_GT' => 0,
             'syncStatus' => 'finished',
-        );
+        ];
         $conditions = $request->query->all();
-        $courseSets = $this->getCourseSetService()->searchCourseSets(array_merge($conditions, $necessaryConditions), array(), 0, PHP_INT_MAX);
+        $courseSets = $this->getCourseSetService()->searchCourseSets(array_merge($conditions, $necessaryConditions), [], 0, PHP_INT_MAX);
         $courseIds = ArrayToolkit::column($courseSets, 'defaultCourseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
@@ -177,7 +178,7 @@ class ResourcePurchaseController extends BaseController
 
         return $this->render(
             'admin-v2/cloud-center/content-resource/product-version/list.html.twig',
-            array(
+            [
                 'request' => $request,
                 'productVersionList' => $productVersionList,
                 'courses' => $courses,
@@ -186,7 +187,7 @@ class ResourcePurchaseController extends BaseController
                 'endDateTime' => empty($conditions['endDateTime']) ? 0 : strtotime($conditions['endDateTime']),
                 'merchant' => $merchant,
                 'supplier' => [],
-            )
+            ]
         );
     }
 
@@ -200,7 +201,7 @@ class ResourcePurchaseController extends BaseController
              */
             $merchant = $merchant = $this->getS2B2CFacadeService()->getMe();
             if (empty($merchant['status']) || 'active' != $merchant['status'] || 'cooperation' != $merchant['coop_status']) {
-                return $this->createJsonResponse(array('status' => false, 'error' => '更新失败'));
+                return $this->createJsonResponse(['status' => false, 'error' => '更新失败']);
             }
             /**
              * mock
@@ -213,16 +214,16 @@ class ResourcePurchaseController extends BaseController
 
         return $this->render(
             'admin-v2/cloud-center/content-resource/product-version/update-modal.html.twig',
-            array(
+            [
                 'request' => $request,
                 'productId' => $productId,
-            )
+            ]
         );
     }
 
     protected function getCourseByProductId($productId)
     {
-        $supplierSettings = $this->getSettingService()->get('supplierSettings', array());
+        $supplierSettings = $this->getSettingService()->get('supplierSettings', []);
         if (empty($supplierSettings['supplierId'])) {
             throw $this->createNotFoundException();
         }

@@ -27,6 +27,10 @@ class ProductServiceImpl extends BaseService implements ProductService
 
     public function findProductsBySupplierIdAndRemoteProductIds($supplierId, $remoteProductIds)
     {
+        if (empty($remoteProductIds)) {
+            return [];
+        }
+
         return $this->getS2B2CProductDao()->findBySupplierIdAndRemoteProductIds($supplierId, $remoteProductIds);
     }
 
@@ -59,7 +63,7 @@ class ProductServiceImpl extends BaseService implements ProductService
 
     public function searchProduct($conditions)
     {
-        $selectedConditions = array('title', 'offset', 'limit', 'categoryId', 'sort');
+        $selectedConditions = ['title', 'offset', 'limit', 'categoryId', 'sort'];
         $conditions = ArrayToolkit::parts($conditions, $selectedConditions);
         $conditions['merchant_access_key'] = $this->getAccessKey();
         if (isset($conditions['title']) && empty($conditions['title'])) {
@@ -71,13 +75,13 @@ class ProductServiceImpl extends BaseService implements ProductService
 
         if (!empty($courseSets['error'])) {
             $total = 0;
-            $courseSets = array();
+            $courseSets = [];
         } else {
             $total = $courseSets['paging']['total'];
             $courseSets = $courseSets['data'];
         }
 
-        return array($courseSets, $total);
+        return [$courseSets, $total];
     }
 
     public function searchSelectedItemProduct($conditions)
@@ -90,7 +94,7 @@ class ProductServiceImpl extends BaseService implements ProductService
 
     protected function getAccessKey()
     {
-        $settings = $this->getSettingService()->get('storage', array());
+        $settings = $this->getSettingService()->get('storage', []);
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             throw new \RuntimeException('系统尚未配置AccessKey/SecretKey');
         }
