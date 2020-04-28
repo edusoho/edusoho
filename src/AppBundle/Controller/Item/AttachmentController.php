@@ -8,9 +8,7 @@ use Biz\File\Service\UploadFileService;
 use Biz\MaterialLib\Service\MaterialLibService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\System\Service\SettingService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
-use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -100,7 +98,7 @@ class AttachmentController extends BaseController
 
     protected function globalPlayer($file, $ssl)
     {
-        $user= $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $player = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
         return $this->createJsonResponse(array('result' => true, 'msg' => '', 'data' => array(
@@ -113,7 +111,7 @@ class AttachmentController extends BaseController
 
     protected function audioPlayer($file, $ssl)
     {
-        $user= $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $player = $this->getMaterialLibService()->player($file['no'], $ssl);
         $setting = $this->getSettingService()->get('storage', array());
 
