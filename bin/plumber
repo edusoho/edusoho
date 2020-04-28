@@ -1,0 +1,43 @@
+#!/usr/bin/env php
+<?php
+$autoloader = require __DIR__.'/../autoload.php';
+if (!$autoloader()) {
+    die('class autoloader not found.');
+}
+
+$workDir = getcwd();
+$version = '2.0.0';
+$ops = ['run', 'start', 'restart', 'stop'];
+
+$usage = sprintf('%s (%s)  [--bootstrap=<file>]', $argv[0], implode('|', $ops));
+$doc = <<<DOC
+Plumber {$version}
+
+Usage:
+  {$usage}
+
+Options:
+  -h|--help    show this
+  -b <file> --bootstrap=<file>  Load configuration file [default: plumber.php]
+DOC;
+
+$args = \Docopt::handle($doc, array('version'=>'Naval Fate 2.0'));
+
+$op = null;
+foreach($ops as $o) {
+    if ($args[$o] === true) {
+        $op = $o;
+        break;
+    }
+}
+
+$bootstrapFile = ($args['--bootstrap'][0] == '/') ? $args['--bootstrap'] : $workDir.'/'.$args['--bootstrap'];
+if (!file_exists($bootstrapFile)) {
+    echo "Error: bootstrap file `{$args['--bootstrap']}` is not exist.";
+    exit(1);
+}
+
+$plumber = new \Codeages\Plumber\Plumber($op, $bootstrapFile);
+
+$plumber->main();
+
