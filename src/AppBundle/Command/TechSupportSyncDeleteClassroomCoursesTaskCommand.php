@@ -2,20 +2,23 @@
 
 namespace AppBundle\Command;
 
+use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskService;
+use Biz\Task\Strategy\CourseStrategy;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class TaskListNullFixCommand extends BaseCommand
+class TechSupportSyncDeleteClassroomCoursesTaskCommand extends BaseCommand
 {
     public function configure()
     {
-        $this->setName('prod:task-list-null-fix')
-            ->setDescription('处理班级课程出现课时为null的数据处理[脚本为8.6.21新增]：--real 真正删除')
+        $this->setName('tech-support:classroom-course-task-sync-delete')
+            ->setDescription('处理班级课程出现原课程删除了课时但是个别班级课程没有同步删除成功的问题[脚本为8.6.21新增]：--real 真正删除')
             ->addArgument(
                 'courseId',
-                InputArgument::REQUIRED
+                InputArgument::REQUIRED,
+                '班级内的课程计划ID（注意：不是原课程ID）'
             )
             ->addOption(
                 'real',
@@ -30,7 +33,11 @@ class TaskListNullFixCommand extends BaseCommand
         $biz = $this->getBiz();
         $real = $input->getOption('real');
         $courseId = $input->getArgument('courseId');
-        $sql = "SELECT course_task.id AS id,course_task.title AS title FROM course_task LEFT JOIN course_chapter ON course_task.categoryId = course_chapter.id WHERE course_task.courseId = {$courseId} AND course_chapter.id IS NULL;";
+        $course = $this->getCourseService()->getCourse($courseId);
+        if ($course['locked'] == 1) {
+            $output->writeln('<info>输入的课程不是班级课程，执行结束</info>');
+        }
+        $sql = "SELECT copytask.* FROM course_task copytask LEFT JOIN course_task oritask ON oritask.id=copytask.copyId WHERE copytask.copyId != 0 AND oritask.id IS NULL AND copytask.courseId={$courseId};";
         $results = $biz['db']->fetchAll($sql);
         if (empty($results)) {
             $output->writeln('<info>不存在问题数据,无需处理</info>');
@@ -42,11 +49,21 @@ class TaskListNullFixCommand extends BaseCommand
         foreach ($results as $task) {
             $output->writeln("<info>待删除的多余的任务:{$task['id']},《{$task['title']}》</info>");
             if ($real) {
-                $this->getTaskService()->deleteTask($task['id']);
+                $this->createCourseStrategy($course)->deleteTask($task);
                 $output->writeln("<info>删除多余的任务:{$task['id']}成功</info>");
             }
         }
         $output->writeln('<info>结束</info>');
+    }
+
+    /**
+     * @param $course
+     *
+     * @return CourseStrategy
+     */
+    private function createCourseStrategy($course)
+    {
+        return $this->getBiz()->offsetGet('course.strategy_context')->createStrategy($course['courseType']);
     }
 
     /**
@@ -55,5 +72,13 @@ class TaskListNullFixCommand extends BaseCommand
     public function getTaskService()
     {
         return $this->getBiz()->service('Task:TaskService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 }
