@@ -20,5 +20,5 @@
       {{ path('testpaper_import_save', {token: app.request.get('token')}) }}
     {% endif %}
   ">
-  {% include 'attachment-upload/upload-data.html.twig' with {targetType: 'item', targetId: questionBankId} %}
+  {% include 'attachment-upload/upload-data.html.twig' %}
 {% endblock %}
