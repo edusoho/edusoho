@@ -353,6 +353,55 @@
         ]
     },
     {
+        "name": "codeages/beanstalk-client",
+        "version": "v0.1.4",
+        "version_normalized": "0.1.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/beanstalk-client.git",
+            "reference": "097acad3cd9489413863f6cad86791216bc972e1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/codeages/beanstalk-client/zipball/097acad3cd9489413863f6cad86791216bc972e1",
+            "reference": "097acad3cd9489413863f6cad86791216bc972e1",
+            "shasum": "",
+            "mirrors": [
+                {
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                    "preferred": true
+                }
+            ]
+        },
+        "require": {
+            "php": ">=5.4.1"
+        },
+        "time": "2016-12-27T16:45:13+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Beanstalk\\": "src/",
+                "Codeages\\Beanstalk\\Tests\\": "tests/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Codeages Team",
+                "email": "team@codeages.com"
+            }
+        ],
+        "description": "含断线重连机制的Beanstalk PHP客户端。",
+        "homepage": "https://github.com/codeages/beanstalk-client",
+        "keywords": [
+            "beanstalk"
+        ]
+    },
+    {
         "name": "codeages/biz-framework",
         "version": "v0.9.35",
         "version_normalized": "0.9.35.0",
@@ -734,6 +783,64 @@
             "extension",
             "plugin",
             "theme"
+        ]
+    },
+    {
+        "name": "codeages/plumber2",
+        "version": "v0.5.0",
+        "version_normalized": "0.5.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/plumber2.git",
+            "reference": "7f3f01cd6a64dabf160e64e65e26713487afe771"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/codeages/plumber2/zipball/7f3f01cd6a64dabf160e64e65e26713487afe771",
+            "reference": "7f3f01cd6a64dabf160e64e65e26713487afe771",
+            "shasum": "",
+            "mirrors": [
+                {
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                    "preferred": true
+                }
+            ]
+        },
+        "require": {
+            "codeages/beanstalk-client": "^0.1.4",
+            "codeages/rate-limiter": "^0.2.2",
+            "docopt/docopt": "^1.0",
+            "ext-pcntl": "*",
+            "ext-posix": "*",
+            "monolog/monolog": "^1.24",
+            "php": "^7.1.3",
+            "psr/container": "^1.0"
+        },
+        "require-dev": {
+            "ext-redis": "*",
+            "phpunit/phpunit": "^6 || ^7 || ^8",
+            "swoft/swoole-ide-helper": "^4.2"
+        },
+        "time": "2020-04-04T16:00:05+00:00",
+        "bin": [
+            "bin/plumber"
+        ],
+        "type": "project",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Plumber\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "L1 L31",
+                "email": "wellming.li@howzhi.com"
+            }
         ]
     },
     {
@@ -1255,6 +1362,60 @@
         "keywords": [
             "database migrations",
             "migrations"
+        ]
+    },
+    {
+        "name": "docopt/docopt",
+        "version": "1.0.4",
+        "version_normalized": "1.0.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/docopt/docopt.php.git",
+            "reference": "bf3683a16e09fa1665e493eb4d5a29469e132a4f"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/docopt/docopt.php/zipball/bf3683a16e09fa1665e493eb4d5a29469e132a4f",
+            "reference": "bf3683a16e09fa1665e493eb4d5a29469e132a4f",
+            "shasum": "",
+            "mirrors": [
+                {
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                    "preferred": true
+                }
+            ]
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "4.1.*"
+        },
+        "time": "2019-12-03T02:48:46+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/docopt.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Blake Williams",
+                "email": "code@shabbyrobe.org",
+                "homepage": "http://docopt.org/",
+                "role": "Developer"
+            }
+        ],
+        "description": "Port of Python's docopt for PHP >=5.3",
+        "homepage": "http://github.com/docopt/docopt.php",
+        "keywords": [
+            "cli",
+            "docs"
         ]
     },
     {

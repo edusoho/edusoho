@@ -6,60 +6,66 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
 {
-    public static $files = [
-        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__.'/..'.'/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
-        '92c8763cd6170fce6fcfe7e26b4e8c10' => __DIR__.'/..'.'/symfony/phpunit-bridge/bootstrap.php',
-        '1d1b89d124cc9cb8219922c9d5569199' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest.php',
-        '5255c38a0faeba867671b61dfda6d864' => __DIR__.'/..'.'/paragonie/random_compat/lib/random.php',
-        '023d27dca8066ef29e6739335ea73bad' => __DIR__.'/..'.'/symfony/polyfill-php70/bootstrap.php',
-        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__.'/..'.'/symfony/polyfill-ctype/bootstrap.php',
-        '25072dd6e2470089de65ae7bf11d3109' => __DIR__.'/..'.'/symfony/polyfill-php72/bootstrap.php',
-        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__.'/..'.'/ralouphie/getallheaders/src/getallheaders.php',
-        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__.'/..'.'/guzzlehttp/psr7/src/functions_include.php',
-        '2c102faa651ef8ea5874edb585946bce' => __DIR__.'/..'.'/swiftmailer/swiftmailer/lib/swift_required.php',
-        '9c67151ae59aff4788964ce8eb2a0f43' => __DIR__.'/..'.'/clue/stream-filter/src/functions_include.php',
-        '8cff32064859f4559445b89279f3199c' => __DIR__.'/..'.'/php-http/message/src/filters.php',
-        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__.'/..'.'/guzzlehttp/promises/src/functions_include.php',
-        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__.'/..'.'/guzzlehttp/guzzle/src/functions_include.php',
-        'e40631d46120a9c38ea139981f8dab26' => __DIR__.'/..'.'/ircmaxell/password-compat/lib/password.php',
-        'edc6464955a37aa4d5fbf39d40fb6ee7' => __DIR__.'/..'.'/symfony/polyfill-php55/bootstrap.php',
-        '3a6ac12a64116221776bf6b30b9b866b' => __DIR__.'/..'.'/codeages/biz-framework/src/functions.php',
-        '32dcc8afd4335739640db7d200c1971d' => __DIR__.'/..'.'/symfony/polyfill-apcu/bootstrap.php',
-        '6a47392539ca2329373e0d33e1dba053' => __DIR__.'/..'.'/symfony/polyfill-intl-icu/bootstrap.php',
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__.'/..'.'/symfony/polyfill-mbstring/bootstrap.php',
-        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__.'/..'.'/symfony/polyfill-php56/bootstrap.php',
-        '299dfe369c68155fbe2a6dcdb576d58e' => __DIR__.'/..'.'/codeages/omnipay-alipay/src/Common/helpers.php',
-        'ce89ac35a6c330c55f4710717db9ff78' => __DIR__.'/..'.'/kriswallsmith/assetic/src/functions.php',
-        '04c6c5c2f7095ccf6c481d3e53e1776f' => __DIR__.'/..'.'/mustangostang/spyc/Spyc.php',
-        'e39a8b23c42d4e1452234d762b03835a' => __DIR__.'/..'.'/ramsey/uuid/src/functions.php',
-        'aef137864a7aaf34614936d4960886a7' => __DIR__.'/..'.'/codeages/escloud-php-sdk/src/functions.php',
-        '0b994ed09d88003af15ffbb9ef2e73ce' => __DIR__.'/..'.'/codeages/qiqiuyun-php-sdk/src/functions.php',
-        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__.'/..'.'/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
-        '3e2471375464aac821502deb0ac64275' => __DIR__.'/..'.'/symfony/polyfill-php54/bootstrap.php',
-        '2a404a48a0596622a2af787408f2be5e' => __DIR__.'/..'.'/xxtea/xxtea/xxtea.php',
-        '1aa6994384dc421cb384ab1d1a3c3b61' => __DIR__.'/../..'.'/app/AppKernel.php',
-    ];
+    public static $files = array (
+        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
+        '92c8763cd6170fce6fcfe7e26b4e8c10' => __DIR__ . '/..' . '/symfony/phpunit-bridge/bootstrap.php',
+        '1d1b89d124cc9cb8219922c9d5569199' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest.php',
+        '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
+        '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
+        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
+        '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
+        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
+        '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
+        '9c67151ae59aff4788964ce8eb2a0f43' => __DIR__ . '/..' . '/clue/stream-filter/src/functions_include.php',
+        '8cff32064859f4559445b89279f3199c' => __DIR__ . '/..' . '/php-http/message/src/filters.php',
+        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        'e40631d46120a9c38ea139981f8dab26' => __DIR__ . '/..' . '/ircmaxell/password-compat/lib/password.php',
+        'edc6464955a37aa4d5fbf39d40fb6ee7' => __DIR__ . '/..' . '/symfony/polyfill-php55/bootstrap.php',
+        '3a6ac12a64116221776bf6b30b9b866b' => __DIR__ . '/..' . '/codeages/biz-framework/src/functions.php',
+        '32dcc8afd4335739640db7d200c1971d' => __DIR__ . '/..' . '/symfony/polyfill-apcu/bootstrap.php',
+        '6a47392539ca2329373e0d33e1dba053' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/bootstrap.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
+        '299dfe369c68155fbe2a6dcdb576d58e' => __DIR__ . '/..' . '/codeages/omnipay-alipay/src/Common/helpers.php',
+        'ce89ac35a6c330c55f4710717db9ff78' => __DIR__ . '/..' . '/kriswallsmith/assetic/src/functions.php',
+        '04c6c5c2f7095ccf6c481d3e53e1776f' => __DIR__ . '/..' . '/mustangostang/spyc/Spyc.php',
+        'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
+        'aef137864a7aaf34614936d4960886a7' => __DIR__ . '/..' . '/codeages/escloud-php-sdk/src/functions.php',
+        '0b994ed09d88003af15ffbb9ef2e73ce' => __DIR__ . '/..' . '/codeages/qiqiuyun-php-sdk/src/functions.php',
+        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
+        '3e2471375464aac821502deb0ac64275' => __DIR__ . '/..' . '/symfony/polyfill-php54/bootstrap.php',
+        '2a404a48a0596622a2af787408f2be5e' => __DIR__ . '/..' . '/xxtea/xxtea/xxtea.php',
+        '1aa6994384dc421cb384ab1d1a3c3b61' => __DIR__ . '/../..' . '/app/AppKernel.php',
+    );
 
-    public static $prefixLengthsPsr4 = [
-        'p' => [
+    public static $prefixLengthsPsr4 = array (
+        'p' => 
+        array (
             'phpDocumentor\\Reflection\\' => 25,
-        ],
-        'Z' => [
+        ),
+        'Z' => 
+        array (
             'Zend\\Escaper\\' => 13,
-        ],
-        'W' => [
+        ),
+        'W' => 
+        array (
             'Webmozart\\Assert\\' => 17,
-        ],
-        'V' => [
+        ),
+        'V' => 
+        array (
             'Valitron\\' => 9,
-        ],
-        'T' => [
+        ),
+        'T' => 
+        array (
             'Twig\\' => 5,
             'Topxia\\Api\\' => 11,
             'TiBeN\\' => 6,
             'Tests\\' => 6,
-        ],
-        'S' => [
+        ),
+        'S' => 
+        array (
             'Symfony\\Polyfill\\Util\\' => 22,
             'Symfony\\Polyfill\\Php72\\' => 23,
             'Symfony\\Polyfill\\Php70\\' => 23,
@@ -87,14 +93,17 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
             'Sensio\\Bundle\\FrameworkExtraBundle\\' => 35,
             'Sensio\\Bundle\\DistributionBundle\\' => 33,
             'SensioLabs\\Security\\' => 20,
-        ],
-        'R' => [
+        ),
+        'R' => 
+        array (
             'Ramsey\\Uuid\\' => 12,
-        ],
-        'Q' => [
+        ),
+        'Q' => 
+        array (
             'QiQiuYun\\SDK\\' => 13,
-        ],
-        'P' => [
+        ),
+        'P' => 
+        array (
             'Psr\\SimpleCache\\' => 16,
             'Psr\\Log\\' => 8,
             'Psr\\Link\\' => 9,
@@ -105,44 +114,52 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
             'PhpOffice\\PhpWord\\' => 18,
             'PhpOffice\\Common\\' => 17,
             'PhpCsFixer\\' => 11,
-        ],
-        'O' => [
+        ),
+        'O' => 
+        array (
             'Omnipay\\WechatPay\\' => 18,
             'Omnipay\\Common\\' => 15,
             'Omnipay\\Alipay\\Tests\\' => 21,
             'Omnipay\\Alipay\\' => 15,
-        ],
-        'M' => [
+        ),
+        'M' => 
+        array (
             'Monolog\\' => 8,
             'Money\\' => 6,
-        ],
-        'I' => [
+        ),
+        'I' => 
+        array (
             'Incenteev\\ParameterHandler\\' => 27,
             'Imagine\\' => 8,
-        ],
-        'H' => [
+        ),
+        'H' => 
+        array (
             'Http\\Promise\\' => 13,
             'Http\\Message\\' => 13,
             'Http\\Discovery\\' => 15,
             'Http\\Client\\' => 12,
             'Http\\Adapter\\Guzzle6\\' => 21,
-        ],
-        'G' => [
+        ),
+        'G' => 
+        array (
             'GuzzleHttp\\Psr7\\' => 16,
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
             'Gregwar\\' => 8,
-        ],
-        'F' => [
+        ),
+        'F' => 
+        array (
             'Firebase\\JWT\\' => 13,
             'Fig\\Link\\' => 9,
-        ],
-        'E' => [
+        ),
+        'E' => 
+        array (
             'ExamParser\\' => 11,
             'Endroid\\QrCode\\' => 15,
             'ESCloud\\SDK\\' => 12,
-        ],
-        'D' => [
+        ),
+        'D' => 
+        array (
             'Doctrine\\Instantiator\\' => 22,
             'Doctrine\\Common\\Lexer\\' => 22,
             'Doctrine\\Common\\Cache\\' => 22,
@@ -151,8 +168,9 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
             'Doctrine\\Bundle\\DoctrineBundle\\' => 31,
             'DeviceDetector\\' => 15,
             'DeepCopy\\' => 9,
-        ],
-        'C' => [
+        ),
+        'C' => 
+        array (
             'Cron\\' => 5,
             'Composer\\XdebugHandler\\' => 23,
             'Composer\\Semver\\' => 16,
@@ -161,990 +179,1143 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
             'Codeages\\RestApiClient\\Tests\\' => 29,
             'Codeages\\RestApiClient\\' => 23,
             'Codeages\\RateLimiter\\' => 21,
+            'Codeages\\Plumber\\' => 17,
             'Codeages\\PluginBundle\\' => 22,
             'Codeages\\Biz\\RateLimiter\\' => 25,
             'Codeages\\Biz\\Pay\\' => 17,
             'Codeages\\Biz\\Order\\' => 19,
             'Codeages\\Biz\\Invoice\\' => 21,
             'Codeages\\Biz\\Framework\\' => 23,
+            'Codeages\\Beanstalk\\Tests\\' => 25,
+            'Codeages\\Beanstalk\\' => 19,
             'Clue\\StreamFilter\\' => 18,
-        ],
-        'B' => [
+        ),
+        'B' => 
+        array (
             'Bazinga\\Bundle\\JsTranslationBundle\\' => 35,
-        ],
-    ];
+        ),
+    );
 
-    public static $prefixDirsPsr4 = [
-        'phpDocumentor\\Reflection\\' => [
-            0 => __DIR__.'/..'.'/phpdocumentor/reflection-common/src',
-            1 => __DIR__.'/..'.'/phpdocumentor/reflection-docblock/src',
-            2 => __DIR__.'/..'.'/phpdocumentor/type-resolver/src',
-        ],
-        'Zend\\Escaper\\' => [
-            0 => __DIR__.'/..'.'/zendframework/zend-escaper/src',
-        ],
-        'Webmozart\\Assert\\' => [
-            0 => __DIR__.'/..'.'/webmozart/assert/src',
-        ],
-        'Valitron\\' => [
-            0 => __DIR__.'/..'.'/vlucas/valitron/src/Valitron',
-        ],
-        'Twig\\' => [
-            0 => __DIR__.'/..'.'/twig/twig/src',
-        ],
-        'Topxia\\Api\\' => [
-            0 => __DIR__.'/../..'.'/api/src/Topxia/Api',
-        ],
-        'TiBeN\\' => [
-            0 => __DIR__.'/..'.'/tiben/crontab-manager/src',
-        ],
-        'Tests\\' => [
-            0 => __DIR__.'/../..'.'/tests',
-        ],
-        'Symfony\\Polyfill\\Util\\' => [
-            0 => __DIR__.'/..'.'/symfony/polyfill-util',
-        ],
-        'Symfony\\Polyfill\\Php72\\' => [
-            0 => __DIR__.'/..'.'/symfony/polyfill-php72',
-        ],
-        'Symfony\\Polyfill\\Php70\\' => [
-            0 => __DIR__.'/..'.'/symfony/polyfill-php70',
-        ],
-        'Symfony\\Polyfill\\Php56\\' => [
-            0 => __DIR__.'/..'.'/symfony/polyfill-php56',
-        ],
-        'Symfony\\Polyfill\\Php55\\' => [
-            0 => __DIR__.'/..'.'/symfony/polyfill-php55',
-        ],
-        'Symfony\\Polyfill\\Php54\\' => [
-            0 => __DIR__.'/..'.'/symfony/polyfill-php54',
-        ],
-        'Symfony\\Polyfill\\Mbstring\\' => [
-            0 => __DIR__.'/..'.'/symfony/polyfill-mbstring',
-        ],
-        'Symfony\\Polyfill\\Ctype\\' => [
-            0 => __DIR__.'/..'.'/symfony/polyfill-ctype',
-        ],
-        'Symfony\\Polyfill\\Apcu\\' => [
-            0 => __DIR__.'/..'.'/symfony/polyfill-apcu',
-        ],
-        'Symfony\\Component\\Security\\Acl\\' => [
-            0 => __DIR__.'/..'.'/symfony/security-acl',
-        ],
-        'Symfony\\Component\\Lock\\' => [
-            0 => __DIR__.'/..'.'/codeages/symfony-lock-lite',
-        ],
-        'Symfony\\Component\\' => [
-            0 => __DIR__.'/..'.'/symfony/symfony/src/Symfony/Component',
-        ],
-        'Symfony\\Bundle\\SwiftmailerBundle\\' => [
-            0 => __DIR__.'/..'.'/symfony/swiftmailer-bundle',
-        ],
-        'Symfony\\Bundle\\MonologBundle\\' => [
-            0 => __DIR__.'/..'.'/symfony/monolog-bundle',
-        ],
-        'Symfony\\Bundle\\AsseticBundle\\' => [
-            0 => __DIR__.'/..'.'/symfony/assetic-bundle',
-        ],
-        'Symfony\\Bundle\\' => [
-            0 => __DIR__.'/..'.'/symfony/symfony/src/Symfony/Bundle',
-        ],
-        'Symfony\\Bridge\\Twig\\' => [
-            0 => __DIR__.'/..'.'/symfony/symfony/src/Symfony/Bridge/Twig',
-        ],
-        'Symfony\\Bridge\\ProxyManager\\' => [
-            0 => __DIR__.'/..'.'/symfony/symfony/src/Symfony/Bridge/ProxyManager',
-        ],
-        'Symfony\\Bridge\\PhpUnit\\' => [
-            0 => __DIR__.'/..'.'/symfony/phpunit-bridge',
-        ],
-        'Symfony\\Bridge\\Monolog\\' => [
-            0 => __DIR__.'/..'.'/symfony/symfony/src/Symfony/Bridge/Monolog',
-        ],
-        'Symfony\\Bridge\\Doctrine\\' => [
-            0 => __DIR__.'/..'.'/symfony/symfony/src/Symfony/Bridge/Doctrine',
-        ],
-        'Silex\\' => [
-            0 => __DIR__.'/..'.'/silex/silex/src/Silex',
-        ],
-        'Sentry\\SentryBundle\\' => [
-            0 => __DIR__.'/..'.'/sentry/sentry-symfony/src/Sentry/SentryBundle',
-        ],
-        'Sensio\\Bundle\\GeneratorBundle\\' => [
-            0 => __DIR__.'/..'.'/sensio/generator-bundle',
-        ],
-        'Sensio\\Bundle\\FrameworkExtraBundle\\' => [
-            0 => __DIR__.'/..'.'/sensio/framework-extra-bundle',
-        ],
-        'Sensio\\Bundle\\DistributionBundle\\' => [
-            0 => __DIR__.'/..'.'/sensio/distribution-bundle',
-        ],
-        'SensioLabs\\Security\\' => [
-            0 => __DIR__.'/..'.'/sensiolabs/security-checker/SensioLabs/Security',
-        ],
-        'Ramsey\\Uuid\\' => [
-            0 => __DIR__.'/..'.'/ramsey/uuid/src',
-        ],
-        'QiQiuYun\\SDK\\' => [
-            0 => __DIR__.'/..'.'/codeages/qiqiuyun-php-sdk/src',
-        ],
-        'Psr\\SimpleCache\\' => [
-            0 => __DIR__.'/..'.'/psr/simple-cache/src',
-        ],
-        'Psr\\Log\\' => [
-            0 => __DIR__.'/..'.'/psr/log/Psr/Log',
-        ],
-        'Psr\\Link\\' => [
-            0 => __DIR__.'/..'.'/psr/link/src',
-        ],
-        'Psr\\Http\\Message\\' => [
-            0 => __DIR__.'/..'.'/psr/http-message/src',
-        ],
-        'Psr\\Container\\' => [
-            0 => __DIR__.'/..'.'/psr/container/src',
-        ],
-        'Psr\\Cache\\' => [
-            0 => __DIR__.'/..'.'/psr/cache/src',
-        ],
-        'Prophecy\\' => [
-            0 => __DIR__.'/..'.'/phpspec/prophecy/src/Prophecy',
-        ],
-        'PhpOffice\\PhpWord\\' => [
-            0 => __DIR__.'/..'.'/phpoffice/phpword/src/PhpWord',
-        ],
-        'PhpOffice\\Common\\' => [
-            0 => __DIR__.'/..'.'/phpoffice/common/src/Common',
-        ],
-        'PhpCsFixer\\' => [
-            0 => __DIR__.'/..'.'/friendsofphp/php-cs-fixer/src',
-        ],
-        'Omnipay\\WechatPay\\' => [
-            0 => __DIR__.'/..'.'/lokielse/omnipay-wechatpay/src',
-        ],
-        'Omnipay\\Common\\' => [
-            0 => __DIR__.'/..'.'/omnipay/common/src/Common',
-        ],
-        'Omnipay\\Alipay\\Tests\\' => [
-            0 => __DIR__.'/..'.'/codeages/omnipay-alipay/tests',
-        ],
-        'Omnipay\\Alipay\\' => [
-            0 => __DIR__.'/..'.'/codeages/omnipay-alipay/src',
-        ],
-        'Monolog\\' => [
-            0 => __DIR__.'/..'.'/monolog/monolog/src/Monolog',
-        ],
-        'Money\\' => [
-            0 => __DIR__.'/..'.'/moneyphp/money/src',
-        ],
-        'Incenteev\\ParameterHandler\\' => [
-            0 => __DIR__.'/..'.'/incenteev/composer-parameter-handler',
-        ],
-        'Imagine\\' => [
-            0 => __DIR__.'/..'.'/imagine/imagine/src',
-        ],
-        'Http\\Promise\\' => [
-            0 => __DIR__.'/..'.'/php-http/promise/src',
-        ],
-        'Http\\Message\\' => [
-            0 => __DIR__.'/..'.'/php-http/message/src',
-            1 => __DIR__.'/..'.'/php-http/message-factory/src',
-        ],
-        'Http\\Discovery\\' => [
-            0 => __DIR__.'/..'.'/php-http/discovery/src',
-        ],
-        'Http\\Client\\' => [
-            0 => __DIR__.'/..'.'/php-http/httplug/src',
-        ],
-        'Http\\Adapter\\Guzzle6\\' => [
-            0 => __DIR__.'/..'.'/php-http/guzzle6-adapter/src',
-        ],
-        'GuzzleHttp\\Psr7\\' => [
-            0 => __DIR__.'/..'.'/guzzlehttp/psr7/src',
-        ],
-        'GuzzleHttp\\Promise\\' => [
-            0 => __DIR__.'/..'.'/guzzlehttp/promises/src',
-        ],
-        'GuzzleHttp\\' => [
-            0 => __DIR__.'/..'.'/guzzlehttp/guzzle/src',
-        ],
-        'Gregwar\\' => [
-            0 => __DIR__.'/..'.'/gregwar/captcha/src/Gregwar',
-        ],
-        'Firebase\\JWT\\' => [
-            0 => __DIR__.'/..'.'/firebase/php-jwt/src',
-        ],
-        'Fig\\Link\\' => [
-            0 => __DIR__.'/..'.'/fig/link-util/src',
-        ],
-        'ExamParser\\' => [
-            0 => __DIR__.'/..'.'/codeages/exam-parser/src',
-        ],
-        'Endroid\\QrCode\\' => [
-            0 => __DIR__.'/..'.'/endroid/qrcode/src',
-        ],
-        'ESCloud\\SDK\\' => [
-            0 => __DIR__.'/..'.'/codeages/escloud-php-sdk/src',
-        ],
-        'Doctrine\\Instantiator\\' => [
-            0 => __DIR__.'/..'.'/doctrine/instantiator/src/Doctrine/Instantiator',
-        ],
-        'Doctrine\\Common\\Lexer\\' => [
-            0 => __DIR__.'/..'.'/doctrine/lexer/lib/Doctrine/Common/Lexer',
-        ],
-        'Doctrine\\Common\\Cache\\' => [
-            0 => __DIR__.'/..'.'/doctrine/cache/lib/Doctrine/Common/Cache',
-        ],
-        'Doctrine\\Common\\' => [
-            0 => __DIR__.'/..'.'/doctrine/common/lib/Doctrine/Common',
-        ],
-        'Doctrine\\Bundle\\DoctrineCacheBundle\\' => [
-            0 => __DIR__.'/..'.'/doctrine/doctrine-cache-bundle',
-        ],
-        'Doctrine\\Bundle\\DoctrineBundle\\' => [
-            0 => __DIR__.'/..'.'/doctrine/doctrine-bundle',
-        ],
-        'DeviceDetector\\' => [
-            0 => __DIR__.'/..'.'/piwik/device-detector',
-        ],
-        'DeepCopy\\' => [
-            0 => __DIR__.'/..'.'/myclabs/deep-copy/src/DeepCopy',
-        ],
-        'Cron\\' => [
-            0 => __DIR__.'/..'.'/mtdowling/cron-expression/src/Cron',
-        ],
-        'Composer\\XdebugHandler\\' => [
-            0 => __DIR__.'/..'.'/composer/xdebug-handler/src',
-        ],
-        'Composer\\Semver\\' => [
-            0 => __DIR__.'/..'.'/composer/semver/src',
-        ],
-        'Composer\\CaBundle\\' => [
-            0 => __DIR__.'/..'.'/composer/ca-bundle/src',
-        ],
-        'Codeages\\Weblib\\' => [
-            0 => __DIR__.'/..'.'/codeages/web-lib/src',
-        ],
-        'Codeages\\RestApiClient\\Tests\\' => [
-            0 => __DIR__.'/..'.'/codeages/rest-api-client/tests',
-        ],
-        'Codeages\\RestApiClient\\' => [
-            0 => __DIR__.'/..'.'/codeages/rest-api-client/src',
-        ],
-        'Codeages\\RateLimiter\\' => [
-            0 => __DIR__.'/..'.'/codeages/rate-limiter/src',
-        ],
-        'Codeages\\PluginBundle\\' => [
-            0 => __DIR__.'/..'.'/codeages/plugin-bundle',
-        ],
-        'Codeages\\Biz\\RateLimiter\\' => [
-            0 => __DIR__.'/..'.'/codeages/biz-rate-limiter/src',
-        ],
-        'Codeages\\Biz\\Pay\\' => [
-            0 => __DIR__.'/..'.'/codeages/biz-order-pay/src/Pay',
-        ],
-        'Codeages\\Biz\\Order\\' => [
-            0 => __DIR__.'/..'.'/codeages/biz-order-pay/src/Order',
-        ],
-        'Codeages\\Biz\\Invoice\\' => [
-            0 => __DIR__.'/..'.'/codeages/biz-order-pay/src/Invoice',
-        ],
-        'Codeages\\Biz\\Framework\\' => [
-            0 => __DIR__.'/..'.'/codeages/biz-framework/src',
-        ],
-        'Clue\\StreamFilter\\' => [
-            0 => __DIR__.'/..'.'/clue/stream-filter/src',
-        ],
-        'Bazinga\\Bundle\\JsTranslationBundle\\' => [
-            0 => __DIR__.'/..'.'/willdurand/js-translation-bundle',
-        ],
-    ];
+    public static $prefixDirsPsr4 = array (
+        'phpDocumentor\\Reflection\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+        ),
+        'Zend\\Escaper\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-escaper/src',
+        ),
+        'Webmozart\\Assert\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/webmozart/assert/src',
+        ),
+        'Valitron\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/vlucas/valitron/src/Valitron',
+        ),
+        'Twig\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/twig/twig/src',
+        ),
+        'Topxia\\Api\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/api/src/Topxia/Api',
+        ),
+        'TiBeN\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/tiben/crontab-manager/src',
+        ),
+        'Tests\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/tests',
+        ),
+        'Symfony\\Polyfill\\Util\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-util',
+        ),
+        'Symfony\\Polyfill\\Php72\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php72',
+        ),
+        'Symfony\\Polyfill\\Php70\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php70',
+        ),
+        'Symfony\\Polyfill\\Php56\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php56',
+        ),
+        'Symfony\\Polyfill\\Php55\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php55',
+        ),
+        'Symfony\\Polyfill\\Php54\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php54',
+        ),
+        'Symfony\\Polyfill\\Mbstring\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Symfony\\Polyfill\\Ctype\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
+        ),
+        'Symfony\\Polyfill\\Apcu\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-apcu',
+        ),
+        'Symfony\\Component\\Security\\Acl\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/security-acl',
+        ),
+        'Symfony\\Component\\Lock\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/symfony-lock-lite',
+        ),
+        'Symfony\\Component\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Component',
+        ),
+        'Symfony\\Bundle\\SwiftmailerBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/swiftmailer-bundle',
+        ),
+        'Symfony\\Bundle\\MonologBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/monolog-bundle',
+        ),
+        'Symfony\\Bundle\\AsseticBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/assetic-bundle',
+        ),
+        'Symfony\\Bundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Bundle',
+        ),
+        'Symfony\\Bridge\\Twig\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Bridge/Twig',
+        ),
+        'Symfony\\Bridge\\ProxyManager\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Bridge/ProxyManager',
+        ),
+        'Symfony\\Bridge\\PhpUnit\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/phpunit-bridge',
+        ),
+        'Symfony\\Bridge\\Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Bridge/Monolog',
+        ),
+        'Symfony\\Bridge\\Doctrine\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Bridge/Doctrine',
+        ),
+        'Silex\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/silex/silex/src/Silex',
+        ),
+        'Sentry\\SentryBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/sentry/sentry-symfony/src/Sentry/SentryBundle',
+        ),
+        'Sensio\\Bundle\\GeneratorBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/sensio/generator-bundle',
+        ),
+        'Sensio\\Bundle\\FrameworkExtraBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/sensio/framework-extra-bundle',
+        ),
+        'Sensio\\Bundle\\DistributionBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/sensio/distribution-bundle',
+        ),
+        'SensioLabs\\Security\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/sensiolabs/security-checker/SensioLabs/Security',
+        ),
+        'Ramsey\\Uuid\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ramsey/uuid/src',
+        ),
+        'QiQiuYun\\SDK\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/qiqiuyun-php-sdk/src',
+        ),
+        'Psr\\SimpleCache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/simple-cache/src',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+        ),
+        'Psr\\Link\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/link/src',
+        ),
+        'Psr\\Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
+        'Psr\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
+        'Psr\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/cache/src',
+        ),
+        'Prophecy\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy',
+        ),
+        'PhpOffice\\PhpWord\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpoffice/phpword/src/PhpWord',
+        ),
+        'PhpOffice\\Common\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpoffice/common/src/Common',
+        ),
+        'PhpCsFixer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/friendsofphp/php-cs-fixer/src',
+        ),
+        'Omnipay\\WechatPay\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lokielse/omnipay-wechatpay/src',
+        ),
+        'Omnipay\\Common\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/omnipay/common/src/Common',
+        ),
+        'Omnipay\\Alipay\\Tests\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/omnipay-alipay/tests',
+        ),
+        'Omnipay\\Alipay\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/omnipay-alipay/src',
+        ),
+        'Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+        ),
+        'Money\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/moneyphp/money/src',
+        ),
+        'Incenteev\\ParameterHandler\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/incenteev/composer-parameter-handler',
+        ),
+        'Imagine\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/imagine/imagine/src',
+        ),
+        'Http\\Promise\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-http/promise/src',
+        ),
+        'Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-http/message/src',
+            1 => __DIR__ . '/..' . '/php-http/message-factory/src',
+        ),
+        'Http\\Discovery\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-http/discovery/src',
+        ),
+        'Http\\Client\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-http/httplug/src',
+        ),
+        'Http\\Adapter\\Guzzle6\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-http/guzzle6-adapter/src',
+        ),
+        'GuzzleHttp\\Psr7\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
+        ),
+        'GuzzleHttp\\Promise\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
+        ),
+        'GuzzleHttp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
+        ),
+        'Gregwar\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/gregwar/captcha/src/Gregwar',
+        ),
+        'Firebase\\JWT\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
+        ),
+        'Fig\\Link\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fig/link-util/src',
+        ),
+        'ExamParser\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/exam-parser/src',
+        ),
+        'Endroid\\QrCode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/endroid/qrcode/src',
+        ),
+        'ESCloud\\SDK\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/escloud-php-sdk/src',
+        ),
+        'Doctrine\\Instantiator\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
+        ),
+        'Doctrine\\Common\\Lexer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/lexer/lib/Doctrine/Common/Lexer',
+        ),
+        'Doctrine\\Common\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache',
+        ),
+        'Doctrine\\Common\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/common/lib/Doctrine/Common',
+        ),
+        'Doctrine\\Bundle\\DoctrineCacheBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/doctrine-cache-bundle',
+        ),
+        'Doctrine\\Bundle\\DoctrineBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/doctrine-bundle',
+        ),
+        'DeviceDetector\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/piwik/device-detector',
+        ),
+        'DeepCopy\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
+        ),
+        'Cron\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mtdowling/cron-expression/src/Cron',
+        ),
+        'Composer\\XdebugHandler\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/composer/xdebug-handler/src',
+        ),
+        'Composer\\Semver\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/composer/semver/src',
+        ),
+        'Composer\\CaBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/composer/ca-bundle/src',
+        ),
+        'Codeages\\Weblib\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/web-lib/src',
+        ),
+        'Codeages\\RestApiClient\\Tests\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/rest-api-client/tests',
+        ),
+        'Codeages\\RestApiClient\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/rest-api-client/src',
+        ),
+        'Codeages\\RateLimiter\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/rate-limiter/src',
+        ),
+        'Codeages\\Plumber\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/plumber2/src',
+        ),
+        'Codeages\\PluginBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/plugin-bundle',
+        ),
+        'Codeages\\Biz\\RateLimiter\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/biz-rate-limiter/src',
+        ),
+        'Codeages\\Biz\\Pay\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/biz-order-pay/src/Pay',
+        ),
+        'Codeages\\Biz\\Order\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/biz-order-pay/src/Order',
+        ),
+        'Codeages\\Biz\\Invoice\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/biz-order-pay/src/Invoice',
+        ),
+        'Codeages\\Biz\\Framework\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/biz-framework/src',
+        ),
+        'Codeages\\Beanstalk\\Tests\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/beanstalk-client/tests',
+        ),
+        'Codeages\\Beanstalk\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/beanstalk-client/src',
+        ),
+        'Clue\\StreamFilter\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/clue/stream-filter/src',
+        ),
+        'Bazinga\\Bundle\\JsTranslationBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/willdurand/js-translation-bundle',
+        ),
+    );
 
-    public static $fallbackDirsPsr4 = [
-        0 => __DIR__.'/..'.'/asm89/twig-cache-extension/lib',
-    ];
+    public static $fallbackDirsPsr4 = array (
+        0 => __DIR__ . '/..' . '/asm89/twig-cache-extension/lib',
+    );
 
-    public static $prefixesPsr0 = [
-        'W' => [
-            'Webpatser\\Uuid' => [
-                0 => __DIR__.'/..'.'/webpatser/laravel-uuid/src',
-            ],
-        ],
-        'T' => [
-            'Twig_' => [
-                0 => __DIR__.'/..'.'/twig/twig/lib',
-            ],
-        ],
-        'R' => [
-            'Raven_' => [
-                0 => __DIR__.'/..'.'/sentry/sentry/lib',
-            ],
-        ],
-        'P' => [
-            'Pimple' => [
-                0 => __DIR__.'/..'.'/pimple/pimple/src',
-            ],
-            'Phpmig' => [
-                0 => __DIR__.'/..'.'/davedevelopment/phpmig/src',
-            ],
-            'PHPExcel' => [
-                0 => __DIR__.'/..'.'/phpoffice/phpexcel/Classes',
-            ],
-        ],
-        'O' => [
-            'OAuth2\\ServerBundle' => [
-                0 => __DIR__.'/..'.'/bshaffer/oauth2-server-bundle',
-            ],
-            'OAuth2\\HttpFoundationBridge' => [
-                0 => __DIR__.'/..'.'/bshaffer/oauth2-server-httpfoundation-bridge/src',
-            ],
-            'OAuth2' => [
-                0 => __DIR__.'/..'.'/bshaffer/oauth2-server-php/src',
-            ],
-        ],
-        'M' => [
-            'Mockery' => [
-                0 => __DIR__.'/..'.'/mockery/mockery/library',
-            ],
-        ],
-        'H' => [
-            'HTMLPurifier' => [
-                0 => __DIR__.'/..'.'/ezyang/htmlpurifier/library',
-            ],
-        ],
-        'D' => [
-            'Doctrine\\ORM\\' => [
-                0 => __DIR__.'/..'.'/doctrine/orm/lib',
-            ],
-            'Doctrine\\DBAL\\' => [
-                0 => __DIR__.'/..'.'/doctrine/dbal/lib',
-            ],
-            'Doctrine\\Common\\Inflector\\' => [
-                0 => __DIR__.'/..'.'/doctrine/inflector/lib',
-            ],
-            'Doctrine\\Common\\Collections\\' => [
-                0 => __DIR__.'/..'.'/doctrine/collections/lib',
-            ],
-            'Doctrine\\Common\\Annotations\\' => [
-                0 => __DIR__.'/..'.'/doctrine/annotations/lib',
-            ],
-        ],
-        'A' => [
-            'Assetic' => [
-                0 => __DIR__.'/..'.'/kriswallsmith/assetic/src',
-            ],
-        ],
-    ];
+    public static $prefixesPsr0 = array (
+        'W' => 
+        array (
+            'Webpatser\\Uuid' => 
+            array (
+                0 => __DIR__ . '/..' . '/webpatser/laravel-uuid/src',
+            ),
+        ),
+        'T' => 
+        array (
+            'Twig_' => 
+            array (
+                0 => __DIR__ . '/..' . '/twig/twig/lib',
+            ),
+        ),
+        'R' => 
+        array (
+            'Raven_' => 
+            array (
+                0 => __DIR__ . '/..' . '/sentry/sentry/lib',
+            ),
+        ),
+        'P' => 
+        array (
+            'Pimple' => 
+            array (
+                0 => __DIR__ . '/..' . '/pimple/pimple/src',
+            ),
+            'Phpmig' => 
+            array (
+                0 => __DIR__ . '/..' . '/davedevelopment/phpmig/src',
+            ),
+            'PHPExcel' => 
+            array (
+                0 => __DIR__ . '/..' . '/phpoffice/phpexcel/Classes',
+            ),
+        ),
+        'O' => 
+        array (
+            'OAuth2\\ServerBundle' => 
+            array (
+                0 => __DIR__ . '/..' . '/bshaffer/oauth2-server-bundle',
+            ),
+            'OAuth2\\HttpFoundationBridge' => 
+            array (
+                0 => __DIR__ . '/..' . '/bshaffer/oauth2-server-httpfoundation-bridge/src',
+            ),
+            'OAuth2' => 
+            array (
+                0 => __DIR__ . '/..' . '/bshaffer/oauth2-server-php/src',
+            ),
+        ),
+        'M' => 
+        array (
+            'Mockery' => 
+            array (
+                0 => __DIR__ . '/..' . '/mockery/mockery/library',
+            ),
+        ),
+        'H' => 
+        array (
+            'HTMLPurifier' => 
+            array (
+                0 => __DIR__ . '/..' . '/ezyang/htmlpurifier/library',
+            ),
+        ),
+        'D' => 
+        array (
+            'Doctrine\\ORM\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/orm/lib',
+            ),
+            'Doctrine\\DBAL\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/dbal/lib',
+            ),
+            'Doctrine\\Common\\Inflector\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/inflector/lib',
+            ),
+            'Doctrine\\Common\\Collections\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/collections/lib',
+            ),
+            'Doctrine\\Common\\Annotations\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/annotations/lib',
+            ),
+        ),
+        'A' => 
+        array (
+            'Assetic' => 
+            array (
+                0 => __DIR__ . '/..' . '/kriswallsmith/assetic/src',
+            ),
+        ),
+    );
 
-    public static $fallbackDirsPsr0 = [
-        0 => __DIR__.'/../..'.'/src',
-        1 => __DIR__.'/../..'.'/plugins',
-    ];
+    public static $fallbackDirsPsr0 = array (
+        0 => __DIR__ . '/../..' . '/src',
+        1 => __DIR__ . '/../..' . '/plugins',
+    );
 
-    public static $classMap = [
-        'ArithmeticError' => __DIR__.'/..'.'/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
-        'AssertionError' => __DIR__.'/..'.'/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
-        'CallbackFilterIterator' => __DIR__.'/..'.'/symfony/polyfill-php54/Resources/stubs/CallbackFilterIterator.php',
-        'Collator' => __DIR__.'/..'.'/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/Collator.php',
-        'DivisionByZeroError' => __DIR__.'/..'.'/symfony/polyfill-php70/Resources/stubs/DivisionByZeroError.php',
-        'Error' => __DIR__.'/..'.'/symfony/polyfill-php70/Resources/stubs/Error.php',
-        'File_Iterator' => __DIR__.'/..'.'/phpunit/php-file-iterator/src/Iterator.php',
-        'File_Iterator_Facade' => __DIR__.'/..'.'/phpunit/php-file-iterator/src/Facade.php',
-        'File_Iterator_Factory' => __DIR__.'/..'.'/phpunit/php-file-iterator/src/Factory.php',
-        'Hamcrest\\Arrays\\IsArray' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Arrays/IsArray.php',
-        'Hamcrest\\Arrays\\IsArrayContaining' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Arrays/IsArrayContaining.php',
-        'Hamcrest\\Arrays\\IsArrayContainingInAnyOrder' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Arrays/IsArrayContainingInAnyOrder.php',
-        'Hamcrest\\Arrays\\IsArrayContainingInOrder' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Arrays/IsArrayContainingInOrder.php',
-        'Hamcrest\\Arrays\\IsArrayContainingKey' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Arrays/IsArrayContainingKey.php',
-        'Hamcrest\\Arrays\\IsArrayContainingKeyValuePair' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Arrays/IsArrayContainingKeyValuePair.php',
-        'Hamcrest\\Arrays\\IsArrayWithSize' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Arrays/IsArrayWithSize.php',
-        'Hamcrest\\Arrays\\MatchingOnce' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Arrays/MatchingOnce.php',
-        'Hamcrest\\Arrays\\SeriesMatchingOnce' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Arrays/SeriesMatchingOnce.php',
-        'Hamcrest\\AssertionError' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/AssertionError.php',
-        'Hamcrest\\BaseDescription' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/BaseDescription.php',
-        'Hamcrest\\BaseMatcher' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/BaseMatcher.php',
-        'Hamcrest\\Collection\\IsEmptyTraversable' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Collection/IsEmptyTraversable.php',
-        'Hamcrest\\Collection\\IsTraversableWithSize' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Collection/IsTraversableWithSize.php',
-        'Hamcrest\\Core\\AllOf' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/AllOf.php',
-        'Hamcrest\\Core\\AnyOf' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/AnyOf.php',
-        'Hamcrest\\Core\\CombinableMatcher' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/CombinableMatcher.php',
-        'Hamcrest\\Core\\DescribedAs' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/DescribedAs.php',
-        'Hamcrest\\Core\\Every' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/Every.php',
-        'Hamcrest\\Core\\HasToString' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/HasToString.php',
-        'Hamcrest\\Core\\Is' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/Is.php',
-        'Hamcrest\\Core\\IsAnything' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/IsAnything.php',
-        'Hamcrest\\Core\\IsCollectionContaining' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/IsCollectionContaining.php',
-        'Hamcrest\\Core\\IsEqual' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/IsEqual.php',
-        'Hamcrest\\Core\\IsIdentical' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/IsIdentical.php',
-        'Hamcrest\\Core\\IsInstanceOf' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/IsInstanceOf.php',
-        'Hamcrest\\Core\\IsNot' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/IsNot.php',
-        'Hamcrest\\Core\\IsNull' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/IsNull.php',
-        'Hamcrest\\Core\\IsSame' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/IsSame.php',
-        'Hamcrest\\Core\\IsTypeOf' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/IsTypeOf.php',
-        'Hamcrest\\Core\\Set' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/Set.php',
-        'Hamcrest\\Core\\ShortcutCombination' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/ShortcutCombination.php',
-        'Hamcrest\\Description' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Description.php',
-        'Hamcrest\\DiagnosingMatcher' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/DiagnosingMatcher.php',
-        'Hamcrest\\FeatureMatcher' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/FeatureMatcher.php',
-        'Hamcrest\\Internal\\SelfDescribingValue' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Internal/SelfDescribingValue.php',
-        'Hamcrest\\Matcher' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Matcher.php',
-        'Hamcrest\\MatcherAssert' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/MatcherAssert.php',
-        'Hamcrest\\Matchers' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Matchers.php',
-        'Hamcrest\\NullDescription' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/NullDescription.php',
-        'Hamcrest\\Number\\IsCloseTo' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Number/IsCloseTo.php',
-        'Hamcrest\\Number\\OrderingComparison' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Number/OrderingComparison.php',
-        'Hamcrest\\SelfDescribing' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/SelfDescribing.php',
-        'Hamcrest\\StringDescription' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/StringDescription.php',
-        'Hamcrest\\Text\\IsEmptyString' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Text/IsEmptyString.php',
-        'Hamcrest\\Text\\IsEqualIgnoringCase' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Text/IsEqualIgnoringCase.php',
-        'Hamcrest\\Text\\IsEqualIgnoringWhiteSpace' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Text/IsEqualIgnoringWhiteSpace.php',
-        'Hamcrest\\Text\\MatchesPattern' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Text/MatchesPattern.php',
-        'Hamcrest\\Text\\StringContains' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Text/StringContains.php',
-        'Hamcrest\\Text\\StringContainsIgnoringCase' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Text/StringContainsIgnoringCase.php',
-        'Hamcrest\\Text\\StringContainsInOrder' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Text/StringContainsInOrder.php',
-        'Hamcrest\\Text\\StringEndsWith' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Text/StringEndsWith.php',
-        'Hamcrest\\Text\\StringStartsWith' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Text/StringStartsWith.php',
-        'Hamcrest\\Text\\SubstringMatcher' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Text/SubstringMatcher.php',
-        'Hamcrest\\TypeSafeDiagnosingMatcher' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/TypeSafeDiagnosingMatcher.php',
-        'Hamcrest\\TypeSafeMatcher' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/TypeSafeMatcher.php',
-        'Hamcrest\\Type\\IsArray' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsArray.php',
-        'Hamcrest\\Type\\IsBoolean' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsBoolean.php',
-        'Hamcrest\\Type\\IsCallable' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsCallable.php',
-        'Hamcrest\\Type\\IsDouble' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsDouble.php',
-        'Hamcrest\\Type\\IsInteger' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsInteger.php',
-        'Hamcrest\\Type\\IsNumeric' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsNumeric.php',
-        'Hamcrest\\Type\\IsObject' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsObject.php',
-        'Hamcrest\\Type\\IsResource' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsResource.php',
-        'Hamcrest\\Type\\IsScalar' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsScalar.php',
-        'Hamcrest\\Type\\IsString' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsString.php',
-        'Hamcrest\\Util' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Util.php',
-        'Hamcrest\\Xml\\HasXPath' => __DIR__.'/..'.'/hamcrest/hamcrest-php/hamcrest/Hamcrest/Xml/HasXPath.php',
-        'IntlDateFormatter' => __DIR__.'/..'.'/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/IntlDateFormatter.php',
-        'Locale' => __DIR__.'/..'.'/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/Locale.php',
-        'NumberFormatter' => __DIR__.'/..'.'/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/NumberFormatter.php',
-        'Omnipay\\Omnipay' => __DIR__.'/..'.'/omnipay/common/src/Omnipay.php',
-        'PHPUnit\\Framework\\Assert' => __DIR__.'/..'.'/phpunit/phpunit/src/ForwardCompatibility/Assert.php',
-        'PHPUnit\\Framework\\AssertionFailedError' => __DIR__.'/..'.'/phpunit/phpunit/src/ForwardCompatibility/AssertionFailedError.php',
-        'PHPUnit\\Framework\\BaseTestListener' => __DIR__.'/..'.'/phpunit/phpunit/src/ForwardCompatibility/BaseTestListener.php',
-        'PHPUnit\\Framework\\Test' => __DIR__.'/..'.'/phpunit/phpunit/src/ForwardCompatibility/Test.php',
-        'PHPUnit\\Framework\\TestCase' => __DIR__.'/..'.'/phpunit/phpunit/src/ForwardCompatibility/TestCase.php',
-        'PHPUnit\\Framework\\TestListener' => __DIR__.'/..'.'/phpunit/phpunit/src/ForwardCompatibility/TestListener.php',
-        'PHPUnit\\Framework\\TestSuite' => __DIR__.'/..'.'/phpunit/phpunit/src/ForwardCompatibility/TestSuite.php',
-        'PHPUnit_Exception' => __DIR__.'/..'.'/phpunit/phpunit/src/Exception.php',
-        'PHPUnit_Extensions_GroupTestSuite' => __DIR__.'/..'.'/phpunit/phpunit/src/Extensions/GroupTestSuite.php',
-        'PHPUnit_Extensions_PhptTestCase' => __DIR__.'/..'.'/phpunit/phpunit/src/Extensions/PhptTestCase.php',
-        'PHPUnit_Extensions_PhptTestSuite' => __DIR__.'/..'.'/phpunit/phpunit/src/Extensions/PhptTestSuite.php',
-        'PHPUnit_Extensions_RepeatedTest' => __DIR__.'/..'.'/phpunit/phpunit/src/Extensions/RepeatedTest.php',
-        'PHPUnit_Extensions_TestDecorator' => __DIR__.'/..'.'/phpunit/phpunit/src/Extensions/TestDecorator.php',
-        'PHPUnit_Extensions_TicketListener' => __DIR__.'/..'.'/phpunit/phpunit/src/Extensions/TicketListener.php',
-        'PHPUnit_Framework_Assert' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Assert.php',
-        'PHPUnit_Framework_AssertionFailedError' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/AssertionFailedError.php',
-        'PHPUnit_Framework_BaseTestListener' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/BaseTestListener.php',
-        'PHPUnit_Framework_CodeCoverageException' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/CodeCoverageException.php',
-        'PHPUnit_Framework_Constraint' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint.php',
-        'PHPUnit_Framework_Constraint_And' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/And.php',
-        'PHPUnit_Framework_Constraint_ArrayHasKey' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/ArrayHasKey.php',
-        'PHPUnit_Framework_Constraint_ArraySubset' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/ArraySubset.php',
-        'PHPUnit_Framework_Constraint_Attribute' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/Attribute.php',
-        'PHPUnit_Framework_Constraint_Callback' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/Callback.php',
-        'PHPUnit_Framework_Constraint_ClassHasAttribute' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/ClassHasAttribute.php',
-        'PHPUnit_Framework_Constraint_ClassHasStaticAttribute' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/ClassHasStaticAttribute.php',
-        'PHPUnit_Framework_Constraint_Composite' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/Composite.php',
-        'PHPUnit_Framework_Constraint_Count' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/Count.php',
-        'PHPUnit_Framework_Constraint_DirectoryExists' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/DirectoryExists.php',
-        'PHPUnit_Framework_Constraint_Exception' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/Exception.php',
-        'PHPUnit_Framework_Constraint_ExceptionCode' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/ExceptionCode.php',
-        'PHPUnit_Framework_Constraint_ExceptionMessage' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/ExceptionMessage.php',
-        'PHPUnit_Framework_Constraint_ExceptionMessageRegExp' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/ExceptionMessageRegExp.php',
-        'PHPUnit_Framework_Constraint_FileExists' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/FileExists.php',
-        'PHPUnit_Framework_Constraint_GreaterThan' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/GreaterThan.php',
-        'PHPUnit_Framework_Constraint_IsAnything' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/IsAnything.php',
-        'PHPUnit_Framework_Constraint_IsEmpty' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/IsEmpty.php',
-        'PHPUnit_Framework_Constraint_IsEqual' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/IsEqual.php',
-        'PHPUnit_Framework_Constraint_IsFalse' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/IsFalse.php',
-        'PHPUnit_Framework_Constraint_IsFinite' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/IsFinite.php',
-        'PHPUnit_Framework_Constraint_IsIdentical' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/IsIdentical.php',
-        'PHPUnit_Framework_Constraint_IsInfinite' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/IsInfinite.php',
-        'PHPUnit_Framework_Constraint_IsInstanceOf' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/IsInstanceOf.php',
-        'PHPUnit_Framework_Constraint_IsJson' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/IsJson.php',
-        'PHPUnit_Framework_Constraint_IsNan' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/IsNan.php',
-        'PHPUnit_Framework_Constraint_IsNull' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/IsNull.php',
-        'PHPUnit_Framework_Constraint_IsReadable' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/IsReadable.php',
-        'PHPUnit_Framework_Constraint_IsTrue' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/IsTrue.php',
-        'PHPUnit_Framework_Constraint_IsType' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/IsType.php',
-        'PHPUnit_Framework_Constraint_IsWritable' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/IsWritable.php',
-        'PHPUnit_Framework_Constraint_JsonMatches' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/JsonMatches.php',
-        'PHPUnit_Framework_Constraint_JsonMatches_ErrorMessageProvider' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/JsonMatches/ErrorMessageProvider.php',
-        'PHPUnit_Framework_Constraint_LessThan' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/LessThan.php',
-        'PHPUnit_Framework_Constraint_Not' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/Not.php',
-        'PHPUnit_Framework_Constraint_ObjectHasAttribute' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/ObjectHasAttribute.php',
-        'PHPUnit_Framework_Constraint_Or' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/Or.php',
-        'PHPUnit_Framework_Constraint_PCREMatch' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/PCREMatch.php',
-        'PHPUnit_Framework_Constraint_SameSize' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/SameSize.php',
-        'PHPUnit_Framework_Constraint_StringContains' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/StringContains.php',
-        'PHPUnit_Framework_Constraint_StringEndsWith' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/StringEndsWith.php',
-        'PHPUnit_Framework_Constraint_StringMatches' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/StringMatches.php',
-        'PHPUnit_Framework_Constraint_StringStartsWith' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/StringStartsWith.php',
-        'PHPUnit_Framework_Constraint_TraversableContains' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/TraversableContains.php',
-        'PHPUnit_Framework_Constraint_TraversableContainsOnly' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/TraversableContainsOnly.php',
-        'PHPUnit_Framework_Constraint_Xor' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Constraint/Xor.php',
-        'PHPUnit_Framework_CoveredCodeNotExecutedException' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/CoveredCodeNotExecutedException.php',
-        'PHPUnit_Framework_Error' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Error.php',
-        'PHPUnit_Framework_Error_Deprecated' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Error/Deprecated.php',
-        'PHPUnit_Framework_Error_Notice' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Error/Notice.php',
-        'PHPUnit_Framework_Error_Warning' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Error/Warning.php',
-        'PHPUnit_Framework_Exception' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Exception.php',
-        'PHPUnit_Framework_ExceptionWrapper' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/ExceptionWrapper.php',
-        'PHPUnit_Framework_ExpectationFailedException' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/ExpectationFailedException.php',
-        'PHPUnit_Framework_IncompleteTest' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/IncompleteTest.php',
-        'PHPUnit_Framework_IncompleteTestCase' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/IncompleteTestCase.php',
-        'PHPUnit_Framework_IncompleteTestError' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/IncompleteTestError.php',
-        'PHPUnit_Framework_InvalidCoversTargetException' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/InvalidCoversTargetException.php',
-        'PHPUnit_Framework_MissingCoversAnnotationException' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/MissingCoversAnnotationException.php',
-        'PHPUnit_Framework_MockObject_BadMethodCallException' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Exception/BadMethodCallException.php',
-        'PHPUnit_Framework_MockObject_Builder_Identity' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Builder/Identity.php',
-        'PHPUnit_Framework_MockObject_Builder_InvocationMocker' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Builder/InvocationMocker.php',
-        'PHPUnit_Framework_MockObject_Builder_Match' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Builder/Match.php',
-        'PHPUnit_Framework_MockObject_Builder_MethodNameMatch' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Builder/MethodNameMatch.php',
-        'PHPUnit_Framework_MockObject_Builder_Namespace' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Builder/Namespace.php',
-        'PHPUnit_Framework_MockObject_Builder_ParametersMatch' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Builder/ParametersMatch.php',
-        'PHPUnit_Framework_MockObject_Builder_Stub' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Builder/Stub.php',
-        'PHPUnit_Framework_MockObject_Exception' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Exception/Exception.php',
-        'PHPUnit_Framework_MockObject_Generator' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Generator.php',
-        'PHPUnit_Framework_MockObject_Invocation' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Invocation.php',
-        'PHPUnit_Framework_MockObject_InvocationMocker' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/InvocationMocker.php',
-        'PHPUnit_Framework_MockObject_Invocation_Object' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Invocation/Object.php',
-        'PHPUnit_Framework_MockObject_Invocation_Static' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Invocation/Static.php',
-        'PHPUnit_Framework_MockObject_Invokable' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Invokable.php',
-        'PHPUnit_Framework_MockObject_Matcher' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher.php',
-        'PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/AnyInvokedCount.php',
-        'PHPUnit_Framework_MockObject_Matcher_AnyParameters' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/AnyParameters.php',
-        'PHPUnit_Framework_MockObject_Matcher_ConsecutiveParameters' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/ConsecutiveParameters.php',
-        'PHPUnit_Framework_MockObject_Matcher_Invocation' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/Invocation.php',
-        'PHPUnit_Framework_MockObject_Matcher_InvokedAtIndex' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/InvokedAtIndex.php',
-        'PHPUnit_Framework_MockObject_Matcher_InvokedAtLeastCount' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/InvokedAtLeastCount.php',
-        'PHPUnit_Framework_MockObject_Matcher_InvokedAtLeastOnce' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/InvokedAtLeastOnce.php',
-        'PHPUnit_Framework_MockObject_Matcher_InvokedAtMostCount' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/InvokedAtMostCount.php',
-        'PHPUnit_Framework_MockObject_Matcher_InvokedCount' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/InvokedCount.php',
-        'PHPUnit_Framework_MockObject_Matcher_InvokedRecorder' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/InvokedRecorder.php',
-        'PHPUnit_Framework_MockObject_Matcher_MethodName' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/MethodName.php',
-        'PHPUnit_Framework_MockObject_Matcher_Parameters' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/Parameters.php',
-        'PHPUnit_Framework_MockObject_Matcher_StatelessInvocation' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/StatelessInvocation.php',
-        'PHPUnit_Framework_MockObject_MockBuilder' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/MockBuilder.php',
-        'PHPUnit_Framework_MockObject_MockObject' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/MockObject.php',
-        'PHPUnit_Framework_MockObject_RuntimeException' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Exception/RuntimeException.php',
-        'PHPUnit_Framework_MockObject_Stub' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Stub.php',
-        'PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Stub/ConsecutiveCalls.php',
-        'PHPUnit_Framework_MockObject_Stub_Exception' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Stub/Exception.php',
-        'PHPUnit_Framework_MockObject_Stub_MatcherCollection' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Stub/MatcherCollection.php',
-        'PHPUnit_Framework_MockObject_Stub_Return' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Stub/Return.php',
-        'PHPUnit_Framework_MockObject_Stub_ReturnArgument' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Stub/ReturnArgument.php',
-        'PHPUnit_Framework_MockObject_Stub_ReturnCallback' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Stub/ReturnCallback.php',
-        'PHPUnit_Framework_MockObject_Stub_ReturnReference' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Stub/ReturnReference.php',
-        'PHPUnit_Framework_MockObject_Stub_ReturnSelf' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Stub/ReturnSelf.php',
-        'PHPUnit_Framework_MockObject_Stub_ReturnValueMap' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Stub/ReturnValueMap.php',
-        'PHPUnit_Framework_MockObject_Verifiable' => __DIR__.'/..'.'/phpunit/phpunit-mock-objects/src/Framework/MockObject/Verifiable.php',
-        'PHPUnit_Framework_OutputError' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/OutputError.php',
-        'PHPUnit_Framework_RiskyTest' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/RiskyTest.php',
-        'PHPUnit_Framework_RiskyTestError' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/RiskyTestError.php',
-        'PHPUnit_Framework_SelfDescribing' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/SelfDescribing.php',
-        'PHPUnit_Framework_SkippedTest' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/SkippedTest.php',
-        'PHPUnit_Framework_SkippedTestCase' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/SkippedTestCase.php',
-        'PHPUnit_Framework_SkippedTestError' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/SkippedTestError.php',
-        'PHPUnit_Framework_SkippedTestSuiteError' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/SkippedTestSuiteError.php',
-        'PHPUnit_Framework_SyntheticError' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/SyntheticError.php',
-        'PHPUnit_Framework_Test' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Test.php',
-        'PHPUnit_Framework_TestCase' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/TestCase.php',
-        'PHPUnit_Framework_TestFailure' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/TestFailure.php',
-        'PHPUnit_Framework_TestListener' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/TestListener.php',
-        'PHPUnit_Framework_TestResult' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/TestResult.php',
-        'PHPUnit_Framework_TestSuite' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/TestSuite.php',
-        'PHPUnit_Framework_TestSuite_DataProvider' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/TestSuite/DataProvider.php',
-        'PHPUnit_Framework_UnintentionallyCoveredCodeError' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/UnintentionallyCoveredCodeError.php',
-        'PHPUnit_Framework_Warning' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/Warning.php',
-        'PHPUnit_Framework_WarningTestCase' => __DIR__.'/..'.'/phpunit/phpunit/src/Framework/WarningTestCase.php',
-        'PHPUnit_Runner_BaseTestRunner' => __DIR__.'/..'.'/phpunit/phpunit/src/Runner/BaseTestRunner.php',
-        'PHPUnit_Runner_Exception' => __DIR__.'/..'.'/phpunit/phpunit/src/Runner/Exception.php',
-        'PHPUnit_Runner_Filter_Factory' => __DIR__.'/..'.'/phpunit/phpunit/src/Runner/Filter/Factory.php',
-        'PHPUnit_Runner_Filter_GroupFilterIterator' => __DIR__.'/..'.'/phpunit/phpunit/src/Runner/Filter/Group.php',
-        'PHPUnit_Runner_Filter_Group_Exclude' => __DIR__.'/..'.'/phpunit/phpunit/src/Runner/Filter/Group/Exclude.php',
-        'PHPUnit_Runner_Filter_Group_Include' => __DIR__.'/..'.'/phpunit/phpunit/src/Runner/Filter/Group/Include.php',
-        'PHPUnit_Runner_Filter_Test' => __DIR__.'/..'.'/phpunit/phpunit/src/Runner/Filter/Test.php',
-        'PHPUnit_Runner_StandardTestSuiteLoader' => __DIR__.'/..'.'/phpunit/phpunit/src/Runner/StandardTestSuiteLoader.php',
-        'PHPUnit_Runner_TestSuiteLoader' => __DIR__.'/..'.'/phpunit/phpunit/src/Runner/TestSuiteLoader.php',
-        'PHPUnit_Runner_Version' => __DIR__.'/..'.'/phpunit/phpunit/src/Runner/Version.php',
-        'PHPUnit_TextUI_Command' => __DIR__.'/..'.'/phpunit/phpunit/src/TextUI/Command.php',
-        'PHPUnit_TextUI_ResultPrinter' => __DIR__.'/..'.'/phpunit/phpunit/src/TextUI/ResultPrinter.php',
-        'PHPUnit_TextUI_TestRunner' => __DIR__.'/..'.'/phpunit/phpunit/src/TextUI/TestRunner.php',
-        'PHPUnit_Util_Blacklist' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/Blacklist.php',
-        'PHPUnit_Util_Configuration' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/Configuration.php',
-        'PHPUnit_Util_ConfigurationGenerator' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/ConfigurationGenerator.php',
-        'PHPUnit_Util_ErrorHandler' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/ErrorHandler.php',
-        'PHPUnit_Util_Fileloader' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/Fileloader.php',
-        'PHPUnit_Util_Filesystem' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/Filesystem.php',
-        'PHPUnit_Util_Filter' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/Filter.php',
-        'PHPUnit_Util_Getopt' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/Getopt.php',
-        'PHPUnit_Util_GlobalState' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/GlobalState.php',
-        'PHPUnit_Util_InvalidArgumentHelper' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/InvalidArgumentHelper.php',
-        'PHPUnit_Util_Log_JSON' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/Log/JSON.php',
-        'PHPUnit_Util_Log_JUnit' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/Log/JUnit.php',
-        'PHPUnit_Util_Log_TAP' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/Log/TAP.php',
-        'PHPUnit_Util_Log_TeamCity' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/Log/TeamCity.php',
-        'PHPUnit_Util_PHP' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/PHP.php',
-        'PHPUnit_Util_PHP_Default' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/PHP/Default.php',
-        'PHPUnit_Util_PHP_Windows' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/PHP/Windows.php',
-        'PHPUnit_Util_Printer' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/Printer.php',
-        'PHPUnit_Util_Regex' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/Regex.php',
-        'PHPUnit_Util_String' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/String.php',
-        'PHPUnit_Util_Test' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/Test.php',
-        'PHPUnit_Util_TestDox_NamePrettifier' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/TestDox/NamePrettifier.php',
-        'PHPUnit_Util_TestDox_ResultPrinter' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/TestDox/ResultPrinter.php',
-        'PHPUnit_Util_TestDox_ResultPrinter_HTML' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/TestDox/ResultPrinter/HTML.php',
-        'PHPUnit_Util_TestDox_ResultPrinter_Text' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/TestDox/ResultPrinter/Text.php',
-        'PHPUnit_Util_TestDox_ResultPrinter_XML' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/TestDox/ResultPrinter/XML.php',
-        'PHPUnit_Util_TestSuiteIterator' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/TestSuiteIterator.php',
-        'PHPUnit_Util_Type' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/Type.php',
-        'PHPUnit_Util_XML' => __DIR__.'/..'.'/phpunit/phpunit/src/Util/XML.php',
-        'PHP_Timer' => __DIR__.'/..'.'/phpunit/php-timer/src/Timer.php',
-        'PHP_Token' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_TokenWithScope' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_TokenWithScopeAndVisibility' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_ABSTRACT' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_AMPERSAND' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_AND_EQUAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_ARRAY' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_ARRAY_CAST' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_AS' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_ASYNC' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_AT' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_AWAIT' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_BACKTICK' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_BAD_CHARACTER' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_BOOLEAN_AND' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_BOOLEAN_OR' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_BOOL_CAST' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_BREAK' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_CALLABLE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_CARET' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_CASE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_CATCH' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_CHARACTER' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_CLASS' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_CLASS_C' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_CLASS_NAME_CONSTANT' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_CLONE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_CLOSE_BRACKET' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_CLOSE_CURLY' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_CLOSE_SQUARE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_CLOSE_TAG' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_COALESCE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_COLON' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_COMMA' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_COMMENT' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_COMPILER_HALT_OFFSET' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_CONCAT_EQUAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_CONST' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_CONSTANT_ENCAPSED_STRING' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_CONTINUE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_CURLY_OPEN' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_DEC' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_DECLARE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_DEFAULT' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_DIR' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_DIV' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_DIV_EQUAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_DNUMBER' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_DO' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_DOC_COMMENT' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_DOLLAR' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_DOLLAR_OPEN_CURLY_BRACES' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_DOT' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_DOUBLE_ARROW' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_DOUBLE_CAST' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_DOUBLE_COLON' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_DOUBLE_QUOTES' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_ECHO' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_ELLIPSIS' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_ELSE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_ELSEIF' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_EMPTY' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_ENCAPSED_AND_WHITESPACE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_ENDDECLARE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_ENDFOR' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_ENDFOREACH' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_ENDIF' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_ENDSWITCH' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_ENDWHILE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_END_HEREDOC' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_ENUM' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_EQUAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_EQUALS' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_EVAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_EXCLAMATION_MARK' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_EXIT' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_EXTENDS' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_FILE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_FINAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_FINALLY' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_FOR' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_FOREACH' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_FUNCTION' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_FUNC_C' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_GLOBAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_GOTO' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_GT' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_HALT_COMPILER' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_IF' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_IMPLEMENTS' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_IN' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_INC' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_INCLUDE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_INCLUDE_ONCE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_INLINE_HTML' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_INSTANCEOF' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_INSTEADOF' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_INTERFACE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_INT_CAST' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_ISSET' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_IS_EQUAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_IS_GREATER_OR_EQUAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_IS_IDENTICAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_IS_NOT_EQUAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_IS_NOT_IDENTICAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_IS_SMALLER_OR_EQUAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_Includes' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_JOIN' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_LAMBDA_ARROW' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_LAMBDA_CP' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_LAMBDA_OP' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_LINE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_LIST' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_LNUMBER' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_LOGICAL_AND' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_LOGICAL_OR' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_LOGICAL_XOR' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_LT' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_METHOD_C' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_MINUS' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_MINUS_EQUAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_MOD_EQUAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_MULT' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_MUL_EQUAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_NAMESPACE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_NEW' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_NS_C' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_NS_SEPARATOR' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_NULLSAFE_OBJECT_OPERATOR' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_NUM_STRING' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_OBJECT_CAST' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_OBJECT_OPERATOR' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_ONUMBER' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_OPEN_BRACKET' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_OPEN_CURLY' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_OPEN_SQUARE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_OPEN_TAG' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_OPEN_TAG_WITH_ECHO' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_OR_EQUAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_PAAMAYIM_NEKUDOTAYIM' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_PERCENT' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_PIPE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_PLUS' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_PLUS_EQUAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_POW' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_POW_EQUAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_PRINT' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_PRIVATE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_PROTECTED' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_PUBLIC' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_QUESTION_MARK' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_REQUIRE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_REQUIRE_ONCE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_RETURN' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_SEMICOLON' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_SHAPE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_SL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_SL_EQUAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_SPACESHIP' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_SR' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_SR_EQUAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_START_HEREDOC' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_STATIC' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_STRING' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_STRING_CAST' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_STRING_VARNAME' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_SUPER' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_SWITCH' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_Stream' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token/Stream.php',
-        'PHP_Token_Stream_CachingFactory' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token/Stream/CachingFactory.php',
-        'PHP_Token_THROW' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_TILDE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_TRAIT' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_TRAIT_C' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_TRY' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_TYPE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_TYPELIST_GT' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_TYPELIST_LT' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_UNSET' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_UNSET_CAST' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_USE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_USE_FUNCTION' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_VAR' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_VARIABLE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_WHERE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_WHILE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_WHITESPACE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_XHP_ATTRIBUTE' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_XHP_CATEGORY' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_XHP_CATEGORY_LABEL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_XHP_CHILDREN' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_XHP_LABEL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_XHP_REQUIRED' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_XHP_TAG_GT' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_XHP_TAG_LT' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_XHP_TEXT' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_XOR_EQUAL' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_YIELD' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'PHP_Token_YIELD_FROM' => __DIR__.'/..'.'/phpunit/php-token-stream/src/Token.php',
-        'ParseError' => __DIR__.'/..'.'/symfony/polyfill-php70/Resources/stubs/ParseError.php',
-        'PclZip' => __DIR__.'/..'.'/pclzip/pclzip/pclzip.lib.php',
-        'PhpCsFixer\\Diff\\GeckoPackages\\DiffOutputBuilder\\ConfigurationException' => __DIR__.'/..'.'/php-cs-fixer/diff/src/GeckoPackages/DiffOutputBuilder/ConfigurationException.php',
-        'PhpCsFixer\\Diff\\GeckoPackages\\DiffOutputBuilder\\UnifiedDiffOutputBuilder' => __DIR__.'/..'.'/php-cs-fixer/diff/src/GeckoPackages/DiffOutputBuilder/UnifiedDiffOutputBuilder.php',
-        'PhpCsFixer\\Diff\\v1_4\\Chunk' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v1_4/Chunk.php',
-        'PhpCsFixer\\Diff\\v1_4\\Diff' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v1_4/Diff.php',
-        'PhpCsFixer\\Diff\\v1_4\\Differ' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v1_4/Differ.php',
-        'PhpCsFixer\\Diff\\v1_4\\LCS\\LongestCommonSubsequence' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v1_4/LCS/LongestCommonSubsequence.php',
-        'PhpCsFixer\\Diff\\v1_4\\LCS\\MemoryEfficientImplementation' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v1_4/LCS/MemoryEfficientLongestCommonSubsequenceImplementation.php',
-        'PhpCsFixer\\Diff\\v1_4\\LCS\\TimeEfficientImplementation' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v1_4/LCS/TimeEfficientLongestCommonSubsequenceImplementation.php',
-        'PhpCsFixer\\Diff\\v1_4\\Line' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v1_4/Line.php',
-        'PhpCsFixer\\Diff\\v1_4\\Parser' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v1_4/Parser.php',
-        'PhpCsFixer\\Diff\\v2_0\\Chunk' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v2_0/Chunk.php',
-        'PhpCsFixer\\Diff\\v2_0\\Diff' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v2_0/Diff.php',
-        'PhpCsFixer\\Diff\\v2_0\\Differ' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v2_0/Differ.php',
-        'PhpCsFixer\\Diff\\v2_0\\Exception' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v2_0/Exception/Exception.php',
-        'PhpCsFixer\\Diff\\v2_0\\InvalidArgumentException' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v2_0/Exception/InvalidArgumentException.php',
-        'PhpCsFixer\\Diff\\v2_0\\Line' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v2_0/Line.php',
-        'PhpCsFixer\\Diff\\v2_0\\LongestCommonSubsequenceCalculator' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v2_0/LongestCommonSubsequenceCalculator.php',
-        'PhpCsFixer\\Diff\\v2_0\\MemoryEfficientLongestCommonSubsequenceCalculator' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v2_0/MemoryEfficientLongestCommonSubsequenceCalculator.php',
-        'PhpCsFixer\\Diff\\v2_0\\Output\\AbstractChunkOutputBuilder' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v2_0/Output/AbstractChunkOutputBuilder.php',
-        'PhpCsFixer\\Diff\\v2_0\\Output\\DiffOnlyOutputBuilder' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v2_0/Output/DiffOnlyOutputBuilder.php',
-        'PhpCsFixer\\Diff\\v2_0\\Output\\DiffOutputBuilderInterface' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v2_0/Output/DiffOutputBuilderInterface.php',
-        'PhpCsFixer\\Diff\\v2_0\\Output\\UnifiedDiffOutputBuilder' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v2_0/Output/UnifiedDiffOutputBuilder.php',
-        'PhpCsFixer\\Diff\\v2_0\\Parser' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v2_0/Parser.php',
-        'PhpCsFixer\\Diff\\v2_0\\TimeEfficientLongestCommonSubsequenceCalculator' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v2_0/TimeEfficientLongestCommonSubsequenceCalculator.php',
-        'PhpCsFixer\\Diff\\v3_0\\Chunk' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v3_0/Chunk.php',
-        'PhpCsFixer\\Diff\\v3_0\\ConfigurationException' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v3_0/Exception/ConfigurationException.php',
-        'PhpCsFixer\\Diff\\v3_0\\Diff' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v3_0/Diff.php',
-        'PhpCsFixer\\Diff\\v3_0\\Differ' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v3_0/Differ.php',
-        'PhpCsFixer\\Diff\\v3_0\\Exception' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v3_0/Exception/Exception.php',
-        'PhpCsFixer\\Diff\\v3_0\\InvalidArgumentException' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v3_0/Exception/InvalidArgumentException.php',
-        'PhpCsFixer\\Diff\\v3_0\\Line' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v3_0/Line.php',
-        'PhpCsFixer\\Diff\\v3_0\\LongestCommonSubsequenceCalculator' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v3_0/LongestCommonSubsequenceCalculator.php',
-        'PhpCsFixer\\Diff\\v3_0\\MemoryEfficientLongestCommonSubsequenceCalculator' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v3_0/MemoryEfficientLongestCommonSubsequenceCalculator.php',
-        'PhpCsFixer\\Diff\\v3_0\\Output\\AbstractChunkOutputBuilder' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v3_0/Output/AbstractChunkOutputBuilder.php',
-        'PhpCsFixer\\Diff\\v3_0\\Output\\DiffOnlyOutputBuilder' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v3_0/Output/DiffOnlyOutputBuilder.php',
-        'PhpCsFixer\\Diff\\v3_0\\Output\\DiffOutputBuilderInterface' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v3_0/Output/DiffOutputBuilderInterface.php',
-        'PhpCsFixer\\Diff\\v3_0\\Output\\StrictUnifiedDiffOutputBuilder' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v3_0/Output/StrictUnifiedDiffOutputBuilder.php',
-        'PhpCsFixer\\Diff\\v3_0\\Output\\UnifiedDiffOutputBuilder' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v3_0/Output/UnifiedDiffOutputBuilder.php',
-        'PhpCsFixer\\Diff\\v3_0\\Parser' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v3_0/Parser.php',
-        'PhpCsFixer\\Diff\\v3_0\\TimeEfficientLongestCommonSubsequenceCalculator' => __DIR__.'/..'.'/php-cs-fixer/diff/src/v3_0/TimeEfficientLongestCommonSubsequenceCalculator.php',
-        'PhpCsFixer\\Tests\\TestCase' => __DIR__.'/..'.'/friendsofphp/php-cs-fixer/tests/TestCase.php',
-        'PhpCsFixer\\Tests\\Test\\AbstractFixerTestCase' => __DIR__.'/..'.'/friendsofphp/php-cs-fixer/tests/Test/AbstractFixerTestCase.php',
-        'PhpCsFixer\\Tests\\Test\\AbstractIntegrationCaseFactory' => __DIR__.'/..'.'/friendsofphp/php-cs-fixer/tests/Test/AbstractIntegrationCaseFactory.php',
-        'PhpCsFixer\\Tests\\Test\\AbstractIntegrationTestCase' => __DIR__.'/..'.'/friendsofphp/php-cs-fixer/tests/Test/AbstractIntegrationTestCase.php',
-        'PhpCsFixer\\Tests\\Test\\Assert\\AssertTokensTrait' => __DIR__.'/..'.'/friendsofphp/php-cs-fixer/tests/Test/Assert/AssertTokensTrait.php',
-        'PhpCsFixer\\Tests\\Test\\IntegrationCase' => __DIR__.'/..'.'/friendsofphp/php-cs-fixer/tests/Test/IntegrationCase.php',
-        'PhpCsFixer\\Tests\\Test\\IntegrationCaseFactory' => __DIR__.'/..'.'/friendsofphp/php-cs-fixer/tests/Test/IntegrationCaseFactory.php',
-        'PhpCsFixer\\Tests\\Test\\IntegrationCaseFactoryInterface' => __DIR__.'/..'.'/friendsofphp/php-cs-fixer/tests/Test/IntegrationCaseFactoryInterface.php',
-        'PhpCsFixer\\Tests\\Test\\InternalIntegrationCaseFactory' => __DIR__.'/..'.'/friendsofphp/php-cs-fixer/tests/Test/InternalIntegrationCaseFactory.php',
-        'PhpCsFixer\\Tests\\Test\\IsIdenticalConstraint' => __DIR__.'/..'.'/friendsofphp/php-cs-fixer/tests/Test/IsIdenticalConstraint.php',
-        'RecursiveCallbackFilterIterator' => __DIR__.'/..'.'/symfony/polyfill-php54/Resources/stubs/RecursiveCallbackFilterIterator.php',
-        'SebastianBergmann\\CodeCoverage\\CodeCoverage' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/CodeCoverage.php',
-        'SebastianBergmann\\CodeCoverage\\CoveredCodeNotExecutedException' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Exception/CoveredCodeNotExecutedException.php',
-        'SebastianBergmann\\CodeCoverage\\Driver\\Driver' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Driver/Driver.php',
-        'SebastianBergmann\\CodeCoverage\\Driver\\HHVM' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Driver/HHVM.php',
-        'SebastianBergmann\\CodeCoverage\\Driver\\PHPDBG' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Driver/PHPDBG.php',
-        'SebastianBergmann\\CodeCoverage\\Driver\\Xdebug' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Driver/Xdebug.php',
-        'SebastianBergmann\\CodeCoverage\\Exception' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Exception/Exception.php',
-        'SebastianBergmann\\CodeCoverage\\Filter' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Filter.php',
-        'SebastianBergmann\\CodeCoverage\\InvalidArgumentException' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Exception/InvalidArgumentException.php',
-        'SebastianBergmann\\CodeCoverage\\MissingCoversAnnotationException' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Exception/MissingCoversAnnotationException.php',
-        'SebastianBergmann\\CodeCoverage\\Node\\AbstractNode' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Node/AbstractNode.php',
-        'SebastianBergmann\\CodeCoverage\\Node\\Builder' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Node/Builder.php',
-        'SebastianBergmann\\CodeCoverage\\Node\\Directory' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Node/Directory.php',
-        'SebastianBergmann\\CodeCoverage\\Node\\File' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Node/File.php',
-        'SebastianBergmann\\CodeCoverage\\Node\\Iterator' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Node/Iterator.php',
-        'SebastianBergmann\\CodeCoverage\\Report\\Clover' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Report/Clover.php',
-        'SebastianBergmann\\CodeCoverage\\Report\\Crap4j' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Report/Crap4j.php',
-        'SebastianBergmann\\CodeCoverage\\Report\\Html\\Dashboard' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Report/Html/Renderer/Dashboard.php',
-        'SebastianBergmann\\CodeCoverage\\Report\\Html\\Directory' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Report/Html/Renderer/Directory.php',
-        'SebastianBergmann\\CodeCoverage\\Report\\Html\\Facade' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Report/Html/Facade.php',
-        'SebastianBergmann\\CodeCoverage\\Report\\Html\\File' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Report/Html/Renderer/File.php',
-        'SebastianBergmann\\CodeCoverage\\Report\\Html\\Renderer' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Report/Html/Renderer.php',
-        'SebastianBergmann\\CodeCoverage\\Report\\PHP' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Report/PHP.php',
-        'SebastianBergmann\\CodeCoverage\\Report\\Text' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Report/Text.php',
-        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\Coverage' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Report/Xml/Coverage.php',
-        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\Directory' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Report/Xml/Directory.php',
-        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\Facade' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Report/Xml/Facade.php',
-        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\File' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Report/Xml/File.php',
-        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\Method' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Report/Xml/Method.php',
-        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\Node' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Report/Xml/Node.php',
-        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\Project' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Report/Xml/Project.php',
-        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\Report' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Report/Xml/Report.php',
-        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\Tests' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Report/Xml/Tests.php',
-        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\Totals' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Report/Xml/Totals.php',
-        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\Unit' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Report/Xml/Unit.php',
-        'SebastianBergmann\\CodeCoverage\\RuntimeException' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Exception/RuntimeException.php',
-        'SebastianBergmann\\CodeCoverage\\UnintentionallyCoveredCodeException' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Exception/UnintentionallyCoveredCodeException.php',
-        'SebastianBergmann\\CodeCoverage\\Util' => __DIR__.'/..'.'/phpunit/php-code-coverage/src/Util.php',
-        'SebastianBergmann\\CodeUnitReverseLookup\\Wizard' => __DIR__.'/..'.'/sebastian/code-unit-reverse-lookup/src/Wizard.php',
-        'SebastianBergmann\\Comparator\\ArrayComparator' => __DIR__.'/..'.'/sebastian/comparator/src/ArrayComparator.php',
-        'SebastianBergmann\\Comparator\\Comparator' => __DIR__.'/..'.'/sebastian/comparator/src/Comparator.php',
-        'SebastianBergmann\\Comparator\\ComparisonFailure' => __DIR__.'/..'.'/sebastian/comparator/src/ComparisonFailure.php',
-        'SebastianBergmann\\Comparator\\DOMNodeComparator' => __DIR__.'/..'.'/sebastian/comparator/src/DOMNodeComparator.php',
-        'SebastianBergmann\\Comparator\\DateTimeComparator' => __DIR__.'/..'.'/sebastian/comparator/src/DateTimeComparator.php',
-        'SebastianBergmann\\Comparator\\DoubleComparator' => __DIR__.'/..'.'/sebastian/comparator/src/DoubleComparator.php',
-        'SebastianBergmann\\Comparator\\ExceptionComparator' => __DIR__.'/..'.'/sebastian/comparator/src/ExceptionComparator.php',
-        'SebastianBergmann\\Comparator\\Factory' => __DIR__.'/..'.'/sebastian/comparator/src/Factory.php',
-        'SebastianBergmann\\Comparator\\MockObjectComparator' => __DIR__.'/..'.'/sebastian/comparator/src/MockObjectComparator.php',
-        'SebastianBergmann\\Comparator\\NumericComparator' => __DIR__.'/..'.'/sebastian/comparator/src/NumericComparator.php',
-        'SebastianBergmann\\Comparator\\ObjectComparator' => __DIR__.'/..'.'/sebastian/comparator/src/ObjectComparator.php',
-        'SebastianBergmann\\Comparator\\ResourceComparator' => __DIR__.'/..'.'/sebastian/comparator/src/ResourceComparator.php',
-        'SebastianBergmann\\Comparator\\ScalarComparator' => __DIR__.'/..'.'/sebastian/comparator/src/ScalarComparator.php',
-        'SebastianBergmann\\Comparator\\SplObjectStorageComparator' => __DIR__.'/..'.'/sebastian/comparator/src/SplObjectStorageComparator.php',
-        'SebastianBergmann\\Comparator\\TypeComparator' => __DIR__.'/..'.'/sebastian/comparator/src/TypeComparator.php',
-        'SebastianBergmann\\Diff\\Chunk' => __DIR__.'/..'.'/sebastian/diff/src/Chunk.php',
-        'SebastianBergmann\\Diff\\Diff' => __DIR__.'/..'.'/sebastian/diff/src/Diff.php',
-        'SebastianBergmann\\Diff\\Differ' => __DIR__.'/..'.'/sebastian/diff/src/Differ.php',
-        'SebastianBergmann\\Diff\\LCS\\LongestCommonSubsequence' => __DIR__.'/..'.'/sebastian/diff/src/LCS/LongestCommonSubsequence.php',
-        'SebastianBergmann\\Diff\\LCS\\MemoryEfficientImplementation' => __DIR__.'/..'.'/sebastian/diff/src/LCS/MemoryEfficientLongestCommonSubsequenceImplementation.php',
-        'SebastianBergmann\\Diff\\LCS\\TimeEfficientImplementation' => __DIR__.'/..'.'/sebastian/diff/src/LCS/TimeEfficientLongestCommonSubsequenceImplementation.php',
-        'SebastianBergmann\\Diff\\Line' => __DIR__.'/..'.'/sebastian/diff/src/Line.php',
-        'SebastianBergmann\\Diff\\Parser' => __DIR__.'/..'.'/sebastian/diff/src/Parser.php',
-        'SebastianBergmann\\Environment\\Console' => __DIR__.'/..'.'/sebastian/environment/src/Console.php',
-        'SebastianBergmann\\Environment\\Runtime' => __DIR__.'/..'.'/sebastian/environment/src/Runtime.php',
-        'SebastianBergmann\\Exporter\\Exporter' => __DIR__.'/..'.'/sebastian/exporter/src/Exporter.php',
-        'SebastianBergmann\\GlobalState\\Blacklist' => __DIR__.'/..'.'/sebastian/global-state/src/Blacklist.php',
-        'SebastianBergmann\\GlobalState\\CodeExporter' => __DIR__.'/..'.'/sebastian/global-state/src/CodeExporter.php',
-        'SebastianBergmann\\GlobalState\\Exception' => __DIR__.'/..'.'/sebastian/global-state/src/Exception.php',
-        'SebastianBergmann\\GlobalState\\Restorer' => __DIR__.'/..'.'/sebastian/global-state/src/Restorer.php',
-        'SebastianBergmann\\GlobalState\\RuntimeException' => __DIR__.'/..'.'/sebastian/global-state/src/RuntimeException.php',
-        'SebastianBergmann\\GlobalState\\Snapshot' => __DIR__.'/..'.'/sebastian/global-state/src/Snapshot.php',
-        'SebastianBergmann\\ObjectEnumerator\\Enumerator' => __DIR__.'/..'.'/sebastian/object-enumerator/src/Enumerator.php',
-        'SebastianBergmann\\ObjectEnumerator\\Exception' => __DIR__.'/..'.'/sebastian/object-enumerator/src/Exception.php',
-        'SebastianBergmann\\ObjectEnumerator\\InvalidArgumentException' => __DIR__.'/..'.'/sebastian/object-enumerator/src/InvalidArgumentException.php',
-        'SebastianBergmann\\RecursionContext\\Context' => __DIR__.'/..'.'/sebastian/recursion-context/src/Context.php',
-        'SebastianBergmann\\RecursionContext\\Exception' => __DIR__.'/..'.'/sebastian/recursion-context/src/Exception.php',
-        'SebastianBergmann\\RecursionContext\\InvalidArgumentException' => __DIR__.'/..'.'/sebastian/recursion-context/src/InvalidArgumentException.php',
-        'SebastianBergmann\\ResourceOperations\\ResourceOperations' => __DIR__.'/..'.'/sebastian/resource-operations/src/ResourceOperations.php',
-        'SebastianBergmann\\Version' => __DIR__.'/..'.'/sebastian/version/src/Version.php',
-        'SessionHandlerInterface' => __DIR__.'/..'.'/symfony/polyfill-php54/Resources/stubs/SessionHandlerInterface.php',
-        'SessionUpdateTimestampHandlerInterface' => __DIR__.'/..'.'/symfony/polyfill-php70/Resources/stubs/SessionUpdateTimestampHandlerInterface.php',
-        'SqlFormatter' => __DIR__.'/..'.'/jdorn/sql-formatter/lib/SqlFormatter.php',
-        'Text_Template' => __DIR__.'/..'.'/phpunit/php-text-template/src/Template.php',
-        'TypeError' => __DIR__.'/..'.'/symfony/polyfill-php70/Resources/stubs/TypeError.php',
-        'csstidy' => __DIR__.'/..'.'/cerdic/css-tidy/class.csstidy.php',
-        'csstidy_optimise' => __DIR__.'/..'.'/cerdic/css-tidy/class.csstidy_optimise.php',
-        'csstidy_print' => __DIR__.'/..'.'/cerdic/css-tidy/class.csstidy_print.php',
-    ];
+    public static $classMap = array (
+        'ArithmeticError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
+        'AssertionError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
+        'CallbackFilterIterator' => __DIR__ . '/..' . '/symfony/polyfill-php54/Resources/stubs/CallbackFilterIterator.php',
+        'Collator' => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/Collator.php',
+        'DivisionByZeroError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/DivisionByZeroError.php',
+        'Docopt' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
+        'Docopt\\Argument' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
+        'Docopt\\BranchPattern' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
+        'Docopt\\Command' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
+        'Docopt\\Either' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
+        'Docopt\\ExitException' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
+        'Docopt\\Handler' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
+        'Docopt\\LanguageError' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
+        'Docopt\\LeafPattern' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
+        'Docopt\\OneOrMore' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
+        'Docopt\\Option' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
+        'Docopt\\Optional' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
+        'Docopt\\OptionsShortcut' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
+        'Docopt\\Pattern' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
+        'Docopt\\Required' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
+        'Docopt\\Response' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
+        'Docopt\\SingleMatch' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
+        'Docopt\\Tokens' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
+        'Error' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/Error.php',
+        'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',
+        'File_Iterator_Facade' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Facade.php',
+        'File_Iterator_Factory' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Factory.php',
+        'Hamcrest\\Arrays\\IsArray' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Arrays/IsArray.php',
+        'Hamcrest\\Arrays\\IsArrayContaining' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Arrays/IsArrayContaining.php',
+        'Hamcrest\\Arrays\\IsArrayContainingInAnyOrder' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Arrays/IsArrayContainingInAnyOrder.php',
+        'Hamcrest\\Arrays\\IsArrayContainingInOrder' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Arrays/IsArrayContainingInOrder.php',
+        'Hamcrest\\Arrays\\IsArrayContainingKey' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Arrays/IsArrayContainingKey.php',
+        'Hamcrest\\Arrays\\IsArrayContainingKeyValuePair' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Arrays/IsArrayContainingKeyValuePair.php',
+        'Hamcrest\\Arrays\\IsArrayWithSize' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Arrays/IsArrayWithSize.php',
+        'Hamcrest\\Arrays\\MatchingOnce' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Arrays/MatchingOnce.php',
+        'Hamcrest\\Arrays\\SeriesMatchingOnce' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Arrays/SeriesMatchingOnce.php',
+        'Hamcrest\\AssertionError' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/AssertionError.php',
+        'Hamcrest\\BaseDescription' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/BaseDescription.php',
+        'Hamcrest\\BaseMatcher' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/BaseMatcher.php',
+        'Hamcrest\\Collection\\IsEmptyTraversable' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Collection/IsEmptyTraversable.php',
+        'Hamcrest\\Collection\\IsTraversableWithSize' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Collection/IsTraversableWithSize.php',
+        'Hamcrest\\Core\\AllOf' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/AllOf.php',
+        'Hamcrest\\Core\\AnyOf' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/AnyOf.php',
+        'Hamcrest\\Core\\CombinableMatcher' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/CombinableMatcher.php',
+        'Hamcrest\\Core\\DescribedAs' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/DescribedAs.php',
+        'Hamcrest\\Core\\Every' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/Every.php',
+        'Hamcrest\\Core\\HasToString' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/HasToString.php',
+        'Hamcrest\\Core\\Is' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/Is.php',
+        'Hamcrest\\Core\\IsAnything' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/IsAnything.php',
+        'Hamcrest\\Core\\IsCollectionContaining' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/IsCollectionContaining.php',
+        'Hamcrest\\Core\\IsEqual' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/IsEqual.php',
+        'Hamcrest\\Core\\IsIdentical' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/IsIdentical.php',
+        'Hamcrest\\Core\\IsInstanceOf' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/IsInstanceOf.php',
+        'Hamcrest\\Core\\IsNot' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/IsNot.php',
+        'Hamcrest\\Core\\IsNull' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/IsNull.php',
+        'Hamcrest\\Core\\IsSame' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/IsSame.php',
+        'Hamcrest\\Core\\IsTypeOf' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/IsTypeOf.php',
+        'Hamcrest\\Core\\Set' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/Set.php',
+        'Hamcrest\\Core\\ShortcutCombination' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Core/ShortcutCombination.php',
+        'Hamcrest\\Description' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Description.php',
+        'Hamcrest\\DiagnosingMatcher' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/DiagnosingMatcher.php',
+        'Hamcrest\\FeatureMatcher' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/FeatureMatcher.php',
+        'Hamcrest\\Internal\\SelfDescribingValue' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Internal/SelfDescribingValue.php',
+        'Hamcrest\\Matcher' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Matcher.php',
+        'Hamcrest\\MatcherAssert' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/MatcherAssert.php',
+        'Hamcrest\\Matchers' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Matchers.php',
+        'Hamcrest\\NullDescription' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/NullDescription.php',
+        'Hamcrest\\Number\\IsCloseTo' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Number/IsCloseTo.php',
+        'Hamcrest\\Number\\OrderingComparison' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Number/OrderingComparison.php',
+        'Hamcrest\\SelfDescribing' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/SelfDescribing.php',
+        'Hamcrest\\StringDescription' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/StringDescription.php',
+        'Hamcrest\\Text\\IsEmptyString' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Text/IsEmptyString.php',
+        'Hamcrest\\Text\\IsEqualIgnoringCase' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Text/IsEqualIgnoringCase.php',
+        'Hamcrest\\Text\\IsEqualIgnoringWhiteSpace' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Text/IsEqualIgnoringWhiteSpace.php',
+        'Hamcrest\\Text\\MatchesPattern' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Text/MatchesPattern.php',
+        'Hamcrest\\Text\\StringContains' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Text/StringContains.php',
+        'Hamcrest\\Text\\StringContainsIgnoringCase' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Text/StringContainsIgnoringCase.php',
+        'Hamcrest\\Text\\StringContainsInOrder' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Text/StringContainsInOrder.php',
+        'Hamcrest\\Text\\StringEndsWith' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Text/StringEndsWith.php',
+        'Hamcrest\\Text\\StringStartsWith' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Text/StringStartsWith.php',
+        'Hamcrest\\Text\\SubstringMatcher' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Text/SubstringMatcher.php',
+        'Hamcrest\\TypeSafeDiagnosingMatcher' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/TypeSafeDiagnosingMatcher.php',
+        'Hamcrest\\TypeSafeMatcher' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/TypeSafeMatcher.php',
+        'Hamcrest\\Type\\IsArray' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsArray.php',
+        'Hamcrest\\Type\\IsBoolean' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsBoolean.php',
+        'Hamcrest\\Type\\IsCallable' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsCallable.php',
+        'Hamcrest\\Type\\IsDouble' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsDouble.php',
+        'Hamcrest\\Type\\IsInteger' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsInteger.php',
+        'Hamcrest\\Type\\IsNumeric' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsNumeric.php',
+        'Hamcrest\\Type\\IsObject' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsObject.php',
+        'Hamcrest\\Type\\IsResource' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsResource.php',
+        'Hamcrest\\Type\\IsScalar' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsScalar.php',
+        'Hamcrest\\Type\\IsString' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsString.php',
+        'Hamcrest\\Util' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Util.php',
+        'Hamcrest\\Xml\\HasXPath' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Xml/HasXPath.php',
+        'IntlDateFormatter' => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/IntlDateFormatter.php',
+        'Locale' => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/Locale.php',
+        'NumberFormatter' => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/NumberFormatter.php',
+        'Omnipay\\Omnipay' => __DIR__ . '/..' . '/omnipay/common/src/Omnipay.php',
+        'PHPUnit\\Framework\\Assert' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/Assert.php',
+        'PHPUnit\\Framework\\AssertionFailedError' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/AssertionFailedError.php',
+        'PHPUnit\\Framework\\BaseTestListener' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/BaseTestListener.php',
+        'PHPUnit\\Framework\\Test' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/Test.php',
+        'PHPUnit\\Framework\\TestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestCase.php',
+        'PHPUnit\\Framework\\TestListener' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestListener.php',
+        'PHPUnit\\Framework\\TestSuite' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestSuite.php',
+        'PHPUnit_Exception' => __DIR__ . '/..' . '/phpunit/phpunit/src/Exception.php',
+        'PHPUnit_Extensions_GroupTestSuite' => __DIR__ . '/..' . '/phpunit/phpunit/src/Extensions/GroupTestSuite.php',
+        'PHPUnit_Extensions_PhptTestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/Extensions/PhptTestCase.php',
+        'PHPUnit_Extensions_PhptTestSuite' => __DIR__ . '/..' . '/phpunit/phpunit/src/Extensions/PhptTestSuite.php',
+        'PHPUnit_Extensions_RepeatedTest' => __DIR__ . '/..' . '/phpunit/phpunit/src/Extensions/RepeatedTest.php',
+        'PHPUnit_Extensions_TestDecorator' => __DIR__ . '/..' . '/phpunit/phpunit/src/Extensions/TestDecorator.php',
+        'PHPUnit_Extensions_TicketListener' => __DIR__ . '/..' . '/phpunit/phpunit/src/Extensions/TicketListener.php',
+        'PHPUnit_Framework_Assert' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert.php',
+        'PHPUnit_Framework_AssertionFailedError' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/AssertionFailedError.php',
+        'PHPUnit_Framework_BaseTestListener' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/BaseTestListener.php',
+        'PHPUnit_Framework_CodeCoverageException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/CodeCoverageException.php',
+        'PHPUnit_Framework_Constraint' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint.php',
+        'PHPUnit_Framework_Constraint_And' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/And.php',
+        'PHPUnit_Framework_Constraint_ArrayHasKey' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/ArrayHasKey.php',
+        'PHPUnit_Framework_Constraint_ArraySubset' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/ArraySubset.php',
+        'PHPUnit_Framework_Constraint_Attribute' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/Attribute.php',
+        'PHPUnit_Framework_Constraint_Callback' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/Callback.php',
+        'PHPUnit_Framework_Constraint_ClassHasAttribute' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/ClassHasAttribute.php',
+        'PHPUnit_Framework_Constraint_ClassHasStaticAttribute' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/ClassHasStaticAttribute.php',
+        'PHPUnit_Framework_Constraint_Composite' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/Composite.php',
+        'PHPUnit_Framework_Constraint_Count' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/Count.php',
+        'PHPUnit_Framework_Constraint_DirectoryExists' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/DirectoryExists.php',
+        'PHPUnit_Framework_Constraint_Exception' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/Exception.php',
+        'PHPUnit_Framework_Constraint_ExceptionCode' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/ExceptionCode.php',
+        'PHPUnit_Framework_Constraint_ExceptionMessage' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/ExceptionMessage.php',
+        'PHPUnit_Framework_Constraint_ExceptionMessageRegExp' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/ExceptionMessageRegExp.php',
+        'PHPUnit_Framework_Constraint_FileExists' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/FileExists.php',
+        'PHPUnit_Framework_Constraint_GreaterThan' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/GreaterThan.php',
+        'PHPUnit_Framework_Constraint_IsAnything' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsAnything.php',
+        'PHPUnit_Framework_Constraint_IsEmpty' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsEmpty.php',
+        'PHPUnit_Framework_Constraint_IsEqual' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsEqual.php',
+        'PHPUnit_Framework_Constraint_IsFalse' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsFalse.php',
+        'PHPUnit_Framework_Constraint_IsFinite' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsFinite.php',
+        'PHPUnit_Framework_Constraint_IsIdentical' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsIdentical.php',
+        'PHPUnit_Framework_Constraint_IsInfinite' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsInfinite.php',
+        'PHPUnit_Framework_Constraint_IsInstanceOf' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsInstanceOf.php',
+        'PHPUnit_Framework_Constraint_IsJson' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsJson.php',
+        'PHPUnit_Framework_Constraint_IsNan' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsNan.php',
+        'PHPUnit_Framework_Constraint_IsNull' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsNull.php',
+        'PHPUnit_Framework_Constraint_IsReadable' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsReadable.php',
+        'PHPUnit_Framework_Constraint_IsTrue' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsTrue.php',
+        'PHPUnit_Framework_Constraint_IsType' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsType.php',
+        'PHPUnit_Framework_Constraint_IsWritable' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsWritable.php',
+        'PHPUnit_Framework_Constraint_JsonMatches' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/JsonMatches.php',
+        'PHPUnit_Framework_Constraint_JsonMatches_ErrorMessageProvider' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/JsonMatches/ErrorMessageProvider.php',
+        'PHPUnit_Framework_Constraint_LessThan' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/LessThan.php',
+        'PHPUnit_Framework_Constraint_Not' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/Not.php',
+        'PHPUnit_Framework_Constraint_ObjectHasAttribute' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/ObjectHasAttribute.php',
+        'PHPUnit_Framework_Constraint_Or' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/Or.php',
+        'PHPUnit_Framework_Constraint_PCREMatch' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/PCREMatch.php',
+        'PHPUnit_Framework_Constraint_SameSize' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/SameSize.php',
+        'PHPUnit_Framework_Constraint_StringContains' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/StringContains.php',
+        'PHPUnit_Framework_Constraint_StringEndsWith' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/StringEndsWith.php',
+        'PHPUnit_Framework_Constraint_StringMatches' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/StringMatches.php',
+        'PHPUnit_Framework_Constraint_StringStartsWith' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/StringStartsWith.php',
+        'PHPUnit_Framework_Constraint_TraversableContains' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/TraversableContains.php',
+        'PHPUnit_Framework_Constraint_TraversableContainsOnly' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/TraversableContainsOnly.php',
+        'PHPUnit_Framework_Constraint_Xor' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/Xor.php',
+        'PHPUnit_Framework_CoveredCodeNotExecutedException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/CoveredCodeNotExecutedException.php',
+        'PHPUnit_Framework_Error' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Error.php',
+        'PHPUnit_Framework_Error_Deprecated' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Error/Deprecated.php',
+        'PHPUnit_Framework_Error_Notice' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Error/Notice.php',
+        'PHPUnit_Framework_Error_Warning' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Error/Warning.php',
+        'PHPUnit_Framework_Exception' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Exception.php',
+        'PHPUnit_Framework_ExceptionWrapper' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/ExceptionWrapper.php',
+        'PHPUnit_Framework_ExpectationFailedException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/ExpectationFailedException.php',
+        'PHPUnit_Framework_IncompleteTest' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/IncompleteTest.php',
+        'PHPUnit_Framework_IncompleteTestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/IncompleteTestCase.php',
+        'PHPUnit_Framework_IncompleteTestError' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/IncompleteTestError.php',
+        'PHPUnit_Framework_InvalidCoversTargetException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/InvalidCoversTargetException.php',
+        'PHPUnit_Framework_MissingCoversAnnotationException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MissingCoversAnnotationException.php',
+        'PHPUnit_Framework_MockObject_BadMethodCallException' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Exception/BadMethodCallException.php',
+        'PHPUnit_Framework_MockObject_Builder_Identity' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Builder/Identity.php',
+        'PHPUnit_Framework_MockObject_Builder_InvocationMocker' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Builder/InvocationMocker.php',
+        'PHPUnit_Framework_MockObject_Builder_Match' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Builder/Match.php',
+        'PHPUnit_Framework_MockObject_Builder_MethodNameMatch' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Builder/MethodNameMatch.php',
+        'PHPUnit_Framework_MockObject_Builder_Namespace' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Builder/Namespace.php',
+        'PHPUnit_Framework_MockObject_Builder_ParametersMatch' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Builder/ParametersMatch.php',
+        'PHPUnit_Framework_MockObject_Builder_Stub' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Builder/Stub.php',
+        'PHPUnit_Framework_MockObject_Exception' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Exception/Exception.php',
+        'PHPUnit_Framework_MockObject_Generator' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Generator.php',
+        'PHPUnit_Framework_MockObject_Invocation' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Invocation.php',
+        'PHPUnit_Framework_MockObject_InvocationMocker' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/InvocationMocker.php',
+        'PHPUnit_Framework_MockObject_Invocation_Object' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Invocation/Object.php',
+        'PHPUnit_Framework_MockObject_Invocation_Static' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Invocation/Static.php',
+        'PHPUnit_Framework_MockObject_Invokable' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Invokable.php',
+        'PHPUnit_Framework_MockObject_Matcher' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher.php',
+        'PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/AnyInvokedCount.php',
+        'PHPUnit_Framework_MockObject_Matcher_AnyParameters' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/AnyParameters.php',
+        'PHPUnit_Framework_MockObject_Matcher_ConsecutiveParameters' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/ConsecutiveParameters.php',
+        'PHPUnit_Framework_MockObject_Matcher_Invocation' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/Invocation.php',
+        'PHPUnit_Framework_MockObject_Matcher_InvokedAtIndex' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/InvokedAtIndex.php',
+        'PHPUnit_Framework_MockObject_Matcher_InvokedAtLeastCount' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/InvokedAtLeastCount.php',
+        'PHPUnit_Framework_MockObject_Matcher_InvokedAtLeastOnce' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/InvokedAtLeastOnce.php',
+        'PHPUnit_Framework_MockObject_Matcher_InvokedAtMostCount' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/InvokedAtMostCount.php',
+        'PHPUnit_Framework_MockObject_Matcher_InvokedCount' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/InvokedCount.php',
+        'PHPUnit_Framework_MockObject_Matcher_InvokedRecorder' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/InvokedRecorder.php',
+        'PHPUnit_Framework_MockObject_Matcher_MethodName' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/MethodName.php',
+        'PHPUnit_Framework_MockObject_Matcher_Parameters' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/Parameters.php',
+        'PHPUnit_Framework_MockObject_Matcher_StatelessInvocation' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Matcher/StatelessInvocation.php',
+        'PHPUnit_Framework_MockObject_MockBuilder' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/MockBuilder.php',
+        'PHPUnit_Framework_MockObject_MockObject' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/MockObject.php',
+        'PHPUnit_Framework_MockObject_RuntimeException' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Exception/RuntimeException.php',
+        'PHPUnit_Framework_MockObject_Stub' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Stub.php',
+        'PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Stub/ConsecutiveCalls.php',
+        'PHPUnit_Framework_MockObject_Stub_Exception' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Stub/Exception.php',
+        'PHPUnit_Framework_MockObject_Stub_MatcherCollection' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Stub/MatcherCollection.php',
+        'PHPUnit_Framework_MockObject_Stub_Return' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Stub/Return.php',
+        'PHPUnit_Framework_MockObject_Stub_ReturnArgument' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Stub/ReturnArgument.php',
+        'PHPUnit_Framework_MockObject_Stub_ReturnCallback' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Stub/ReturnCallback.php',
+        'PHPUnit_Framework_MockObject_Stub_ReturnReference' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Stub/ReturnReference.php',
+        'PHPUnit_Framework_MockObject_Stub_ReturnSelf' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Stub/ReturnSelf.php',
+        'PHPUnit_Framework_MockObject_Stub_ReturnValueMap' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Stub/ReturnValueMap.php',
+        'PHPUnit_Framework_MockObject_Verifiable' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Framework/MockObject/Verifiable.php',
+        'PHPUnit_Framework_OutputError' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/OutputError.php',
+        'PHPUnit_Framework_RiskyTest' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/RiskyTest.php',
+        'PHPUnit_Framework_RiskyTestError' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/RiskyTestError.php',
+        'PHPUnit_Framework_SelfDescribing' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/SelfDescribing.php',
+        'PHPUnit_Framework_SkippedTest' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/SkippedTest.php',
+        'PHPUnit_Framework_SkippedTestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/SkippedTestCase.php',
+        'PHPUnit_Framework_SkippedTestError' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/SkippedTestError.php',
+        'PHPUnit_Framework_SkippedTestSuiteError' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/SkippedTestSuiteError.php',
+        'PHPUnit_Framework_SyntheticError' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/SyntheticError.php',
+        'PHPUnit_Framework_Test' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Test.php',
+        'PHPUnit_Framework_TestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/TestCase.php',
+        'PHPUnit_Framework_TestFailure' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/TestFailure.php',
+        'PHPUnit_Framework_TestListener' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/TestListener.php',
+        'PHPUnit_Framework_TestResult' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/TestResult.php',
+        'PHPUnit_Framework_TestSuite' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/TestSuite.php',
+        'PHPUnit_Framework_TestSuite_DataProvider' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/TestSuite/DataProvider.php',
+        'PHPUnit_Framework_UnintentionallyCoveredCodeError' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/UnintentionallyCoveredCodeError.php',
+        'PHPUnit_Framework_Warning' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Warning.php',
+        'PHPUnit_Framework_WarningTestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/WarningTestCase.php',
+        'PHPUnit_Runner_BaseTestRunner' => __DIR__ . '/..' . '/phpunit/phpunit/src/Runner/BaseTestRunner.php',
+        'PHPUnit_Runner_Exception' => __DIR__ . '/..' . '/phpunit/phpunit/src/Runner/Exception.php',
+        'PHPUnit_Runner_Filter_Factory' => __DIR__ . '/..' . '/phpunit/phpunit/src/Runner/Filter/Factory.php',
+        'PHPUnit_Runner_Filter_GroupFilterIterator' => __DIR__ . '/..' . '/phpunit/phpunit/src/Runner/Filter/Group.php',
+        'PHPUnit_Runner_Filter_Group_Exclude' => __DIR__ . '/..' . '/phpunit/phpunit/src/Runner/Filter/Group/Exclude.php',
+        'PHPUnit_Runner_Filter_Group_Include' => __DIR__ . '/..' . '/phpunit/phpunit/src/Runner/Filter/Group/Include.php',
+        'PHPUnit_Runner_Filter_Test' => __DIR__ . '/..' . '/phpunit/phpunit/src/Runner/Filter/Test.php',
+        'PHPUnit_Runner_StandardTestSuiteLoader' => __DIR__ . '/..' . '/phpunit/phpunit/src/Runner/StandardTestSuiteLoader.php',
+        'PHPUnit_Runner_TestSuiteLoader' => __DIR__ . '/..' . '/phpunit/phpunit/src/Runner/TestSuiteLoader.php',
+        'PHPUnit_Runner_Version' => __DIR__ . '/..' . '/phpunit/phpunit/src/Runner/Version.php',
+        'PHPUnit_TextUI_Command' => __DIR__ . '/..' . '/phpunit/phpunit/src/TextUI/Command.php',
+        'PHPUnit_TextUI_ResultPrinter' => __DIR__ . '/..' . '/phpunit/phpunit/src/TextUI/ResultPrinter.php',
+        'PHPUnit_TextUI_TestRunner' => __DIR__ . '/..' . '/phpunit/phpunit/src/TextUI/TestRunner.php',
+        'PHPUnit_Util_Blacklist' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Blacklist.php',
+        'PHPUnit_Util_Configuration' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Configuration.php',
+        'PHPUnit_Util_ConfigurationGenerator' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/ConfigurationGenerator.php',
+        'PHPUnit_Util_ErrorHandler' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/ErrorHandler.php',
+        'PHPUnit_Util_Fileloader' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Fileloader.php',
+        'PHPUnit_Util_Filesystem' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Filesystem.php',
+        'PHPUnit_Util_Filter' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Filter.php',
+        'PHPUnit_Util_Getopt' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Getopt.php',
+        'PHPUnit_Util_GlobalState' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/GlobalState.php',
+        'PHPUnit_Util_InvalidArgumentHelper' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/InvalidArgumentHelper.php',
+        'PHPUnit_Util_Log_JSON' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Log/JSON.php',
+        'PHPUnit_Util_Log_JUnit' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Log/JUnit.php',
+        'PHPUnit_Util_Log_TAP' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Log/TAP.php',
+        'PHPUnit_Util_Log_TeamCity' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Log/TeamCity.php',
+        'PHPUnit_Util_PHP' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/PHP.php',
+        'PHPUnit_Util_PHP_Default' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/PHP/Default.php',
+        'PHPUnit_Util_PHP_Windows' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/PHP/Windows.php',
+        'PHPUnit_Util_Printer' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Printer.php',
+        'PHPUnit_Util_Regex' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Regex.php',
+        'PHPUnit_Util_String' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/String.php',
+        'PHPUnit_Util_Test' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Test.php',
+        'PHPUnit_Util_TestDox_NamePrettifier' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/TestDox/NamePrettifier.php',
+        'PHPUnit_Util_TestDox_ResultPrinter' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/TestDox/ResultPrinter.php',
+        'PHPUnit_Util_TestDox_ResultPrinter_HTML' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/TestDox/ResultPrinter/HTML.php',
+        'PHPUnit_Util_TestDox_ResultPrinter_Text' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/TestDox/ResultPrinter/Text.php',
+        'PHPUnit_Util_TestDox_ResultPrinter_XML' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/TestDox/ResultPrinter/XML.php',
+        'PHPUnit_Util_TestSuiteIterator' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/TestSuiteIterator.php',
+        'PHPUnit_Util_Type' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Type.php',
+        'PHPUnit_Util_XML' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/XML.php',
+        'PHP_Timer' => __DIR__ . '/..' . '/phpunit/php-timer/src/Timer.php',
+        'PHP_Token' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_TokenWithScope' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_TokenWithScopeAndVisibility' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_ABSTRACT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_AMPERSAND' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_AND_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_ARRAY' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_ARRAY_CAST' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_AS' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_ASYNC' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_AT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_AWAIT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_BACKTICK' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_BAD_CHARACTER' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_BOOLEAN_AND' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_BOOLEAN_OR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_BOOL_CAST' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_BREAK' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_CALLABLE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_CARET' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_CASE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_CATCH' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_CHARACTER' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_CLASS' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_CLASS_C' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_CLASS_NAME_CONSTANT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_CLONE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_CLOSE_BRACKET' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_CLOSE_CURLY' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_CLOSE_SQUARE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_CLOSE_TAG' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_COALESCE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_COLON' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_COMMA' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_COMMENT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_COMPILER_HALT_OFFSET' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_CONCAT_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_CONST' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_CONSTANT_ENCAPSED_STRING' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_CONTINUE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_CURLY_OPEN' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_DEC' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_DECLARE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_DEFAULT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_DIR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_DIV' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_DIV_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_DNUMBER' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_DO' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_DOC_COMMENT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_DOLLAR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_DOLLAR_OPEN_CURLY_BRACES' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_DOT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_DOUBLE_ARROW' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_DOUBLE_CAST' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_DOUBLE_COLON' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_DOUBLE_QUOTES' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_ECHO' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_ELLIPSIS' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_ELSE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_ELSEIF' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_EMPTY' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_ENCAPSED_AND_WHITESPACE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_ENDDECLARE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_ENDFOR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_ENDFOREACH' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_ENDIF' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_ENDSWITCH' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_ENDWHILE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_END_HEREDOC' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_ENUM' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_EQUALS' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_EVAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_EXCLAMATION_MARK' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_EXIT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_EXTENDS' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_FILE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_FINAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_FINALLY' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_FOR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_FOREACH' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_FUNCTION' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_FUNC_C' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_GLOBAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_GOTO' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_GT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_HALT_COMPILER' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_IF' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_IMPLEMENTS' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_IN' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_INC' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_INCLUDE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_INCLUDE_ONCE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_INLINE_HTML' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_INSTANCEOF' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_INSTEADOF' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_INTERFACE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_INT_CAST' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_ISSET' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_IS_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_IS_GREATER_OR_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_IS_IDENTICAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_IS_NOT_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_IS_NOT_IDENTICAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_IS_SMALLER_OR_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_Includes' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_JOIN' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_LAMBDA_ARROW' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_LAMBDA_CP' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_LAMBDA_OP' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_LINE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_LIST' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_LNUMBER' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_LOGICAL_AND' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_LOGICAL_OR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_LOGICAL_XOR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_LT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_METHOD_C' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_MINUS' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_MINUS_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_MOD_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_MULT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_MUL_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_NAMESPACE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_NEW' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_NS_C' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_NS_SEPARATOR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_NULLSAFE_OBJECT_OPERATOR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_NUM_STRING' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_OBJECT_CAST' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_OBJECT_OPERATOR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_ONUMBER' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_OPEN_BRACKET' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_OPEN_CURLY' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_OPEN_SQUARE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_OPEN_TAG' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_OPEN_TAG_WITH_ECHO' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_OR_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_PAAMAYIM_NEKUDOTAYIM' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_PERCENT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_PIPE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_PLUS' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_PLUS_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_POW' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_POW_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_PRINT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_PRIVATE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_PROTECTED' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_PUBLIC' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_QUESTION_MARK' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_REQUIRE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_REQUIRE_ONCE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_RETURN' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_SEMICOLON' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_SHAPE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_SL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_SL_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_SPACESHIP' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_SR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_SR_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_START_HEREDOC' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_STATIC' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_STRING' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_STRING_CAST' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_STRING_VARNAME' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_SUPER' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_SWITCH' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_Stream' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token/Stream.php',
+        'PHP_Token_Stream_CachingFactory' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token/Stream/CachingFactory.php',
+        'PHP_Token_THROW' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_TILDE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_TRAIT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_TRAIT_C' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_TRY' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_TYPE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_TYPELIST_GT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_TYPELIST_LT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_UNSET' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_UNSET_CAST' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_USE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_USE_FUNCTION' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_VAR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_VARIABLE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_WHERE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_WHILE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_WHITESPACE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_XHP_ATTRIBUTE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_XHP_CATEGORY' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_XHP_CATEGORY_LABEL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_XHP_CHILDREN' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_XHP_LABEL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_XHP_REQUIRED' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_XHP_TAG_GT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_XHP_TAG_LT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_XHP_TEXT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_XOR_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_YIELD' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_YIELD_FROM' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'ParseError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ParseError.php',
+        'PclZip' => __DIR__ . '/..' . '/pclzip/pclzip/pclzip.lib.php',
+        'PhpCsFixer\\Diff\\GeckoPackages\\DiffOutputBuilder\\ConfigurationException' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/GeckoPackages/DiffOutputBuilder/ConfigurationException.php',
+        'PhpCsFixer\\Diff\\GeckoPackages\\DiffOutputBuilder\\UnifiedDiffOutputBuilder' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/GeckoPackages/DiffOutputBuilder/UnifiedDiffOutputBuilder.php',
+        'PhpCsFixer\\Diff\\v1_4\\Chunk' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v1_4/Chunk.php',
+        'PhpCsFixer\\Diff\\v1_4\\Diff' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v1_4/Diff.php',
+        'PhpCsFixer\\Diff\\v1_4\\Differ' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v1_4/Differ.php',
+        'PhpCsFixer\\Diff\\v1_4\\LCS\\LongestCommonSubsequence' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v1_4/LCS/LongestCommonSubsequence.php',
+        'PhpCsFixer\\Diff\\v1_4\\LCS\\MemoryEfficientImplementation' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v1_4/LCS/MemoryEfficientLongestCommonSubsequenceImplementation.php',
+        'PhpCsFixer\\Diff\\v1_4\\LCS\\TimeEfficientImplementation' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v1_4/LCS/TimeEfficientLongestCommonSubsequenceImplementation.php',
+        'PhpCsFixer\\Diff\\v1_4\\Line' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v1_4/Line.php',
+        'PhpCsFixer\\Diff\\v1_4\\Parser' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v1_4/Parser.php',
+        'PhpCsFixer\\Diff\\v2_0\\Chunk' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v2_0/Chunk.php',
+        'PhpCsFixer\\Diff\\v2_0\\Diff' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v2_0/Diff.php',
+        'PhpCsFixer\\Diff\\v2_0\\Differ' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v2_0/Differ.php',
+        'PhpCsFixer\\Diff\\v2_0\\Exception' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v2_0/Exception/Exception.php',
+        'PhpCsFixer\\Diff\\v2_0\\InvalidArgumentException' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v2_0/Exception/InvalidArgumentException.php',
+        'PhpCsFixer\\Diff\\v2_0\\Line' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v2_0/Line.php',
+        'PhpCsFixer\\Diff\\v2_0\\LongestCommonSubsequenceCalculator' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v2_0/LongestCommonSubsequenceCalculator.php',
+        'PhpCsFixer\\Diff\\v2_0\\MemoryEfficientLongestCommonSubsequenceCalculator' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v2_0/MemoryEfficientLongestCommonSubsequenceCalculator.php',
+        'PhpCsFixer\\Diff\\v2_0\\Output\\AbstractChunkOutputBuilder' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v2_0/Output/AbstractChunkOutputBuilder.php',
+        'PhpCsFixer\\Diff\\v2_0\\Output\\DiffOnlyOutputBuilder' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v2_0/Output/DiffOnlyOutputBuilder.php',
+        'PhpCsFixer\\Diff\\v2_0\\Output\\DiffOutputBuilderInterface' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v2_0/Output/DiffOutputBuilderInterface.php',
+        'PhpCsFixer\\Diff\\v2_0\\Output\\UnifiedDiffOutputBuilder' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v2_0/Output/UnifiedDiffOutputBuilder.php',
+        'PhpCsFixer\\Diff\\v2_0\\Parser' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v2_0/Parser.php',
+        'PhpCsFixer\\Diff\\v2_0\\TimeEfficientLongestCommonSubsequenceCalculator' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v2_0/TimeEfficientLongestCommonSubsequenceCalculator.php',
+        'PhpCsFixer\\Diff\\v3_0\\Chunk' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v3_0/Chunk.php',
+        'PhpCsFixer\\Diff\\v3_0\\ConfigurationException' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v3_0/Exception/ConfigurationException.php',
+        'PhpCsFixer\\Diff\\v3_0\\Diff' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v3_0/Diff.php',
+        'PhpCsFixer\\Diff\\v3_0\\Differ' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v3_0/Differ.php',
+        'PhpCsFixer\\Diff\\v3_0\\Exception' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v3_0/Exception/Exception.php',
+        'PhpCsFixer\\Diff\\v3_0\\InvalidArgumentException' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v3_0/Exception/InvalidArgumentException.php',
+        'PhpCsFixer\\Diff\\v3_0\\Line' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v3_0/Line.php',
+        'PhpCsFixer\\Diff\\v3_0\\LongestCommonSubsequenceCalculator' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v3_0/LongestCommonSubsequenceCalculator.php',
+        'PhpCsFixer\\Diff\\v3_0\\MemoryEfficientLongestCommonSubsequenceCalculator' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v3_0/MemoryEfficientLongestCommonSubsequenceCalculator.php',
+        'PhpCsFixer\\Diff\\v3_0\\Output\\AbstractChunkOutputBuilder' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v3_0/Output/AbstractChunkOutputBuilder.php',
+        'PhpCsFixer\\Diff\\v3_0\\Output\\DiffOnlyOutputBuilder' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v3_0/Output/DiffOnlyOutputBuilder.php',
+        'PhpCsFixer\\Diff\\v3_0\\Output\\DiffOutputBuilderInterface' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v3_0/Output/DiffOutputBuilderInterface.php',
+        'PhpCsFixer\\Diff\\v3_0\\Output\\StrictUnifiedDiffOutputBuilder' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v3_0/Output/StrictUnifiedDiffOutputBuilder.php',
+        'PhpCsFixer\\Diff\\v3_0\\Output\\UnifiedDiffOutputBuilder' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v3_0/Output/UnifiedDiffOutputBuilder.php',
+        'PhpCsFixer\\Diff\\v3_0\\Parser' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v3_0/Parser.php',
+        'PhpCsFixer\\Diff\\v3_0\\TimeEfficientLongestCommonSubsequenceCalculator' => __DIR__ . '/..' . '/php-cs-fixer/diff/src/v3_0/TimeEfficientLongestCommonSubsequenceCalculator.php',
+        'PhpCsFixer\\Tests\\TestCase' => __DIR__ . '/..' . '/friendsofphp/php-cs-fixer/tests/TestCase.php',
+        'PhpCsFixer\\Tests\\Test\\AbstractFixerTestCase' => __DIR__ . '/..' . '/friendsofphp/php-cs-fixer/tests/Test/AbstractFixerTestCase.php',
+        'PhpCsFixer\\Tests\\Test\\AbstractIntegrationCaseFactory' => __DIR__ . '/..' . '/friendsofphp/php-cs-fixer/tests/Test/AbstractIntegrationCaseFactory.php',
+        'PhpCsFixer\\Tests\\Test\\AbstractIntegrationTestCase' => __DIR__ . '/..' . '/friendsofphp/php-cs-fixer/tests/Test/AbstractIntegrationTestCase.php',
+        'PhpCsFixer\\Tests\\Test\\Assert\\AssertTokensTrait' => __DIR__ . '/..' . '/friendsofphp/php-cs-fixer/tests/Test/Assert/AssertTokensTrait.php',
+        'PhpCsFixer\\Tests\\Test\\IntegrationCase' => __DIR__ . '/..' . '/friendsofphp/php-cs-fixer/tests/Test/IntegrationCase.php',
+        'PhpCsFixer\\Tests\\Test\\IntegrationCaseFactory' => __DIR__ . '/..' . '/friendsofphp/php-cs-fixer/tests/Test/IntegrationCaseFactory.php',
+        'PhpCsFixer\\Tests\\Test\\IntegrationCaseFactoryInterface' => __DIR__ . '/..' . '/friendsofphp/php-cs-fixer/tests/Test/IntegrationCaseFactoryInterface.php',
+        'PhpCsFixer\\Tests\\Test\\InternalIntegrationCaseFactory' => __DIR__ . '/..' . '/friendsofphp/php-cs-fixer/tests/Test/InternalIntegrationCaseFactory.php',
+        'PhpCsFixer\\Tests\\Test\\IsIdenticalConstraint' => __DIR__ . '/..' . '/friendsofphp/php-cs-fixer/tests/Test/IsIdenticalConstraint.php',
+        'RecursiveCallbackFilterIterator' => __DIR__ . '/..' . '/symfony/polyfill-php54/Resources/stubs/RecursiveCallbackFilterIterator.php',
+        'SebastianBergmann\\CodeCoverage\\CodeCoverage' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/CodeCoverage.php',
+        'SebastianBergmann\\CodeCoverage\\CoveredCodeNotExecutedException' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Exception/CoveredCodeNotExecutedException.php',
+        'SebastianBergmann\\CodeCoverage\\Driver\\Driver' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Driver/Driver.php',
+        'SebastianBergmann\\CodeCoverage\\Driver\\HHVM' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Driver/HHVM.php',
+        'SebastianBergmann\\CodeCoverage\\Driver\\PHPDBG' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Driver/PHPDBG.php',
+        'SebastianBergmann\\CodeCoverage\\Driver\\Xdebug' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Driver/Xdebug.php',
+        'SebastianBergmann\\CodeCoverage\\Exception' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Exception/Exception.php',
+        'SebastianBergmann\\CodeCoverage\\Filter' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Filter.php',
+        'SebastianBergmann\\CodeCoverage\\InvalidArgumentException' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Exception/InvalidArgumentException.php',
+        'SebastianBergmann\\CodeCoverage\\MissingCoversAnnotationException' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Exception/MissingCoversAnnotationException.php',
+        'SebastianBergmann\\CodeCoverage\\Node\\AbstractNode' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Node/AbstractNode.php',
+        'SebastianBergmann\\CodeCoverage\\Node\\Builder' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Node/Builder.php',
+        'SebastianBergmann\\CodeCoverage\\Node\\Directory' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Node/Directory.php',
+        'SebastianBergmann\\CodeCoverage\\Node\\File' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Node/File.php',
+        'SebastianBergmann\\CodeCoverage\\Node\\Iterator' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Node/Iterator.php',
+        'SebastianBergmann\\CodeCoverage\\Report\\Clover' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Report/Clover.php',
+        'SebastianBergmann\\CodeCoverage\\Report\\Crap4j' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Report/Crap4j.php',
+        'SebastianBergmann\\CodeCoverage\\Report\\Html\\Dashboard' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Report/Html/Renderer/Dashboard.php',
+        'SebastianBergmann\\CodeCoverage\\Report\\Html\\Directory' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Report/Html/Renderer/Directory.php',
+        'SebastianBergmann\\CodeCoverage\\Report\\Html\\Facade' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Report/Html/Facade.php',
+        'SebastianBergmann\\CodeCoverage\\Report\\Html\\File' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Report/Html/Renderer/File.php',
+        'SebastianBergmann\\CodeCoverage\\Report\\Html\\Renderer' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Report/Html/Renderer.php',
+        'SebastianBergmann\\CodeCoverage\\Report\\PHP' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Report/PHP.php',
+        'SebastianBergmann\\CodeCoverage\\Report\\Text' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Report/Text.php',
+        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\Coverage' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Report/Xml/Coverage.php',
+        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\Directory' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Report/Xml/Directory.php',
+        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\Facade' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Report/Xml/Facade.php',
+        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\File' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Report/Xml/File.php',
+        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\Method' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Report/Xml/Method.php',
+        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\Node' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Report/Xml/Node.php',
+        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\Project' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Report/Xml/Project.php',
+        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\Report' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Report/Xml/Report.php',
+        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\Tests' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Report/Xml/Tests.php',
+        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\Totals' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Report/Xml/Totals.php',
+        'SebastianBergmann\\CodeCoverage\\Report\\Xml\\Unit' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Report/Xml/Unit.php',
+        'SebastianBergmann\\CodeCoverage\\RuntimeException' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Exception/RuntimeException.php',
+        'SebastianBergmann\\CodeCoverage\\UnintentionallyCoveredCodeException' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Exception/UnintentionallyCoveredCodeException.php',
+        'SebastianBergmann\\CodeCoverage\\Util' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Util.php',
+        'SebastianBergmann\\CodeUnitReverseLookup\\Wizard' => __DIR__ . '/..' . '/sebastian/code-unit-reverse-lookup/src/Wizard.php',
+        'SebastianBergmann\\Comparator\\ArrayComparator' => __DIR__ . '/..' . '/sebastian/comparator/src/ArrayComparator.php',
+        'SebastianBergmann\\Comparator\\Comparator' => __DIR__ . '/..' . '/sebastian/comparator/src/Comparator.php',
+        'SebastianBergmann\\Comparator\\ComparisonFailure' => __DIR__ . '/..' . '/sebastian/comparator/src/ComparisonFailure.php',
+        'SebastianBergmann\\Comparator\\DOMNodeComparator' => __DIR__ . '/..' . '/sebastian/comparator/src/DOMNodeComparator.php',
+        'SebastianBergmann\\Comparator\\DateTimeComparator' => __DIR__ . '/..' . '/sebastian/comparator/src/DateTimeComparator.php',
+        'SebastianBergmann\\Comparator\\DoubleComparator' => __DIR__ . '/..' . '/sebastian/comparator/src/DoubleComparator.php',
+        'SebastianBergmann\\Comparator\\ExceptionComparator' => __DIR__ . '/..' . '/sebastian/comparator/src/ExceptionComparator.php',
+        'SebastianBergmann\\Comparator\\Factory' => __DIR__ . '/..' . '/sebastian/comparator/src/Factory.php',
+        'SebastianBergmann\\Comparator\\MockObjectComparator' => __DIR__ . '/..' . '/sebastian/comparator/src/MockObjectComparator.php',
+        'SebastianBergmann\\Comparator\\NumericComparator' => __DIR__ . '/..' . '/sebastian/comparator/src/NumericComparator.php',
+        'SebastianBergmann\\Comparator\\ObjectComparator' => __DIR__ . '/..' . '/sebastian/comparator/src/ObjectComparator.php',
+        'SebastianBergmann\\Comparator\\ResourceComparator' => __DIR__ . '/..' . '/sebastian/comparator/src/ResourceComparator.php',
+        'SebastianBergmann\\Comparator\\ScalarComparator' => __DIR__ . '/..' . '/sebastian/comparator/src/ScalarComparator.php',
+        'SebastianBergmann\\Comparator\\SplObjectStorageComparator' => __DIR__ . '/..' . '/sebastian/comparator/src/SplObjectStorageComparator.php',
+        'SebastianBergmann\\Comparator\\TypeComparator' => __DIR__ . '/..' . '/sebastian/comparator/src/TypeComparator.php',
+        'SebastianBergmann\\Diff\\Chunk' => __DIR__ . '/..' . '/sebastian/diff/src/Chunk.php',
+        'SebastianBergmann\\Diff\\Diff' => __DIR__ . '/..' . '/sebastian/diff/src/Diff.php',
+        'SebastianBergmann\\Diff\\Differ' => __DIR__ . '/..' . '/sebastian/diff/src/Differ.php',
+        'SebastianBergmann\\Diff\\LCS\\LongestCommonSubsequence' => __DIR__ . '/..' . '/sebastian/diff/src/LCS/LongestCommonSubsequence.php',
+        'SebastianBergmann\\Diff\\LCS\\MemoryEfficientImplementation' => __DIR__ . '/..' . '/sebastian/diff/src/LCS/MemoryEfficientLongestCommonSubsequenceImplementation.php',
+        'SebastianBergmann\\Diff\\LCS\\TimeEfficientImplementation' => __DIR__ . '/..' . '/sebastian/diff/src/LCS/TimeEfficientLongestCommonSubsequenceImplementation.php',
+        'SebastianBergmann\\Diff\\Line' => __DIR__ . '/..' . '/sebastian/diff/src/Line.php',
+        'SebastianBergmann\\Diff\\Parser' => __DIR__ . '/..' . '/sebastian/diff/src/Parser.php',
+        'SebastianBergmann\\Environment\\Console' => __DIR__ . '/..' . '/sebastian/environment/src/Console.php',
+        'SebastianBergmann\\Environment\\Runtime' => __DIR__ . '/..' . '/sebastian/environment/src/Runtime.php',
+        'SebastianBergmann\\Exporter\\Exporter' => __DIR__ . '/..' . '/sebastian/exporter/src/Exporter.php',
+        'SebastianBergmann\\GlobalState\\Blacklist' => __DIR__ . '/..' . '/sebastian/global-state/src/Blacklist.php',
+        'SebastianBergmann\\GlobalState\\CodeExporter' => __DIR__ . '/..' . '/sebastian/global-state/src/CodeExporter.php',
+        'SebastianBergmann\\GlobalState\\Exception' => __DIR__ . '/..' . '/sebastian/global-state/src/Exception.php',
+        'SebastianBergmann\\GlobalState\\Restorer' => __DIR__ . '/..' . '/sebastian/global-state/src/Restorer.php',
+        'SebastianBergmann\\GlobalState\\RuntimeException' => __DIR__ . '/..' . '/sebastian/global-state/src/RuntimeException.php',
+        'SebastianBergmann\\GlobalState\\Snapshot' => __DIR__ . '/..' . '/sebastian/global-state/src/Snapshot.php',
+        'SebastianBergmann\\ObjectEnumerator\\Enumerator' => __DIR__ . '/..' . '/sebastian/object-enumerator/src/Enumerator.php',
+        'SebastianBergmann\\ObjectEnumerator\\Exception' => __DIR__ . '/..' . '/sebastian/object-enumerator/src/Exception.php',
+        'SebastianBergmann\\ObjectEnumerator\\InvalidArgumentException' => __DIR__ . '/..' . '/sebastian/object-enumerator/src/InvalidArgumentException.php',
+        'SebastianBergmann\\RecursionContext\\Context' => __DIR__ . '/..' . '/sebastian/recursion-context/src/Context.php',
+        'SebastianBergmann\\RecursionContext\\Exception' => __DIR__ . '/..' . '/sebastian/recursion-context/src/Exception.php',
+        'SebastianBergmann\\RecursionContext\\InvalidArgumentException' => __DIR__ . '/..' . '/sebastian/recursion-context/src/InvalidArgumentException.php',
+        'SebastianBergmann\\ResourceOperations\\ResourceOperations' => __DIR__ . '/..' . '/sebastian/resource-operations/src/ResourceOperations.php',
+        'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
+        'SessionHandlerInterface' => __DIR__ . '/..' . '/symfony/polyfill-php54/Resources/stubs/SessionHandlerInterface.php',
+        'SessionUpdateTimestampHandlerInterface' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/SessionUpdateTimestampHandlerInterface.php',
+        'SqlFormatter' => __DIR__ . '/..' . '/jdorn/sql-formatter/lib/SqlFormatter.php',
+        'Text_Template' => __DIR__ . '/..' . '/phpunit/php-text-template/src/Template.php',
+        'TypeError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/TypeError.php',
+        'csstidy' => __DIR__ . '/..' . '/cerdic/css-tidy/class.csstidy.php',
+        'csstidy_optimise' => __DIR__ . '/..' . '/cerdic/css-tidy/class.csstidy_optimise.php',
+        'csstidy_print' => __DIR__ . '/..' . '/cerdic/css-tidy/class.csstidy_print.php',
+    );
 
     public static function getInitializer(ClassLoader $loader)
     {
@@ -1155,6 +1326,7 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
             $loader->prefixesPsr0 = ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8::$prefixesPsr0;
             $loader->fallbackDirsPsr0 = ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8::$fallbackDirsPsr0;
             $loader->classMap = ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8::$classMap;
+
         }, null, ClassLoader::class);
     }
 }
