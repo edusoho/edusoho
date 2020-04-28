@@ -38,3 +38,10 @@ parameters:
 
     #二维码域名白名单,填写例子：www.edusoho.com
     #qrcode_site_whitelist: []
+
+    #plumber配置
+        #plumber_queue_databases:
+        #    example_queue:
+        #        host: 127.0.0.1
+        #        port: 11300
+        #        password: ~
