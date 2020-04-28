@@ -14,19 +14,29 @@
   {% endblock %}
 
   {% if answerRecord.status == 'finished' %}
-  <div class="item-bank-result">
-    <div class="clearfix item-bank-result-content">
-      {# <img class="pull-left" src="http://es-dev.com/files/course/2020/01-08/152609175feb848803.png"> #}
-      <div class="item-bank-result-info text-left">
-        {% if passedStatus == true %}
-        <div class="color-success item-bank-result-info__text">恭喜您已通过本次考试!</div>
-        {% else %}
-        <div class="color-warning item-bank-result-info__text">很遗憾，您未通过本次考试</div>
-        {% endif %}
-        <div class="color-gray cd-text-sm">教师评语：{{ answerReport.comment|default('-') }}</div>
+    <div class="test-vue" style="background-color: transparent;">
+      <div class="ant-row">
+        <div class="ant-col ant-col-offset-2 ibs-resutl-item">
+          <div class="item-bank-result">
+            <div class="clearfix item-bank-result-content">
+              {% if passedStatus == true %}
+                <img class="pull-left" src="{{ asset('static-dist/app/img/item-bank/passed.png') }}" srcset="{{ asset('static-dist/app/img/item-bank/unpassed.png') }} 1x, {{ asset('static-dist/app/img/item-bank/unpassed@2x.png') }} 2x">
+              {% else %}
+                <img class="pull-left" src="{{ asset('static-dist/app/img/item-bank/passed.png') }}" srcset="{{ asset('static-dist/app/img/item-bank/passed.png') }} 1x, {{ asset('static-dist/app/img/item-bank/passed@2x.png') }} 2x">
+              {% endif %}
+              <div class="item-bank-result-info text-left">
+                {% if passedStatus == true %}
+                <div class="color-success item-bank-result-info__text">恭喜您已通过本次考试!</div>
+                {% else %}
+                <div class="color-warning item-bank-result-info__text">很遗憾，您未通过本次考试</div>
+                {% endif %}
+                <div class="color-gray cd-text-sm">教师评语：{{ answerReport.comment|default('-') }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
   {% endif %}
 
   {% if app.request.query.get('action', '') == 'check' %}

@@ -14,21 +14,27 @@
   {% endblock %}
 
   {% if answerRecord.status == 'finished' %}
-  <div class="item-bank-result">
-    <div class="clearfix item-bank-result-content">
-      <div class="item-bank-result-info text-center">
-        <div class="item-bank-result-info__text">
-          <span class="gray-darker">作业结果：</span>
-          {% if answerReport.grade == 'unpassed' %}
-          <span class="color-warning">{{ dict_text('passedStatus', answerReport.grade) }}</span>
-          {% else %}
-          <span class="color-success">{{ dict_text('passedStatus', answerReport.grade) }}</span>
-          {% endif %}
+    <div class="test-vue" style="background-color: transparent;">
+      <div class="ant-row">
+        <div class="ant-col ant-col-offset-2 ibs-resutl-item">
+          <div class="item-bank-result">
+            <div class="clearfix item-bank-result-content">
+              <div class="item-bank-result-info text-center">
+                <div class="item-bank-result-info__text">
+                  <span class="gray-darker">作业结果：</span>
+                  {% if answerReport.grade == 'unpassed' %}
+                  <span class="color-warning">{{ dict_text('passedStatus', answerReport.grade) }}</span>
+                  {% else %}
+                  <span class="color-success">{{ dict_text('passedStatus', answerReport.grade) }}</span>
+                  {% endif %}
+                </div>
+                <div class="color-gray cd-text-sm">教师评语：{{ answerReport.comment|default('-') }}</div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="color-gray cd-text-sm">教师评语：{{ answerReport.comment|default('-') }}</div>
       </div>
     </div>
-  </div>
 
   {% endif %}
 
