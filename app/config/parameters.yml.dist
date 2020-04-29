@@ -40,8 +40,20 @@ parameters:
     #qrcode_site_whitelist: []
 
     #plumber配置
-        #plumber_queue_databases:
-        #    example_queue:
-        #        host: 127.0.0.1
-        #        port: 11300
-        #        password: ~
+    #plumber_queues_options:
+        default:
+            type: beanstalk
+            host: 127.0.0.1
+            port: 11300
+            password: ~
+            persistent: true
+            timeout: 2
+            socket_timeout: 20
+            logger: null
+        redis_default:
+            type: redis
+            host: 127.0.0.1
+            port: 6380
+            password: ~
+            timeout: 1
+            dbindex: null

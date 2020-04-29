@@ -8,10 +8,9 @@ class CrontabJobWorker extends BaseWorker
 {
     public function doExecute(Job $job)
     {
-        $data = json_decode($job->getBody(), true);
-        $this->logger->info("execute crontab job job #{$job->getId()}, body: ".json_encode($data));
+        $this->logger->info("execute crontab job job #{$job->getId()}, body: {$job->getBody()}");
         try {
-            $res = $this->execCronTabJob($data['options']);
+            $res = $this->execCronTabJob();
         } catch (\Exception $e) {
             $this->logger->info('execute crontab job failed'.$e->getMessage().',traceString:'.$e->getTraceAsString());
 
@@ -23,12 +22,8 @@ class CrontabJobWorker extends BaseWorker
         }
     }
 
-    protected function execCronTabJob($dbConfig)
+    protected function execCronTabJob()
     {
-        if (empty($dbConfig)) {
-            return true;
-        }
-
         $root_dir = __DIR__.'/../../../';
         $this->exec_shell("cd {$root_dir}");
 

@@ -4,18 +4,12 @@ return [
     'app_name' => 's2b2c_m_plumber',
     'queues' => [
         'example_queue' => [
-            'type' => 'beanstalk',
             'enable_queue' => true,
-            'host' => '127.0.0.1',
-            'port' => 11300,
-            'password' => '',
+            'queue_options' => 'default',
         ],
         'crontab_job_queue' => [
-            'type' => 'beanstalk',
             'enable_queue' => true,
-            'host' => '127.0.0.1',
-            'port' => 11300,
-            'password' => '',
+            'queue_options' => 'default',
         ],
     ],
     'workers' => [
