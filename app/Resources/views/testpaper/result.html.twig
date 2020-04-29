@@ -20,9 +20,9 @@
           <div class="item-bank-result">
             <div class="clearfix item-bank-result-content">
               {% if passedStatus == true %}
-                <img class="pull-left" src="{{ asset('static-dist/app/img/item-bank/passed.png') }}" srcset="{{ asset('static-dist/app/img/item-bank/unpassed.png') }} 1x, {{ asset('static-dist/app/img/item-bank/unpassed@2x.png') }} 2x">
-              {% else %}
                 <img class="pull-left" src="{{ asset('static-dist/app/img/item-bank/passed.png') }}" srcset="{{ asset('static-dist/app/img/item-bank/passed.png') }} 1x, {{ asset('static-dist/app/img/item-bank/passed@2x.png') }} 2x">
+              {% else %}
+                <img class="pull-left" src="{{ asset('static-dist/app/img/item-bank/unpassed.png') }}" srcset="{{ asset('static-dist/app/img/item-bank/unpassed.png') }} 1x, {{ asset('static-dist/app/img/item-bank/unpassed@2x.png') }} 2x">
               {% endif %}
               <div class="item-bank-result-info text-left">
                 {% if passedStatus == true %}
