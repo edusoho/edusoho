@@ -51,7 +51,11 @@
     </div>
     <!-- 由于在安卓端弹出层会被视频遮挡，因此在弹出层显示时，隐藏视频，显示课程封面图，判断字段 finishDialog-->
     <div
-      v-show="['video', 'audio'].includes(sourceType) && !isEncryptionPlus && !finishDialog"
+      v-show="
+        ['video', 'audio'].includes(sourceType) &&
+          !isEncryptionPlus &&
+          !finishDialog
+      "
       id="course-detail__head--video"
       ref="video"
     />
@@ -129,12 +133,12 @@ export default {
       learnMode: false,
       enableFinish: false,
       isEncryptionPlus: false,
-      mediaOpts: {},
       isCoverOpen: false,
       isPlaying: false,
       player: null,
       counting: true,
       isEmpty: false,
+      textContent: null,
       tagData: {
         // 分销标签信息
         earnings: 0,
@@ -159,12 +163,9 @@ export default {
       taskId: state => state.taskId,
       details: state => state.details,
       joinStatus: state => state.joinStatus,
-      user: state => state.user,
+      user: state => state.joinStatus.user,
       allTask: state => state.allTask
     }),
-    textContent() {
-      return this.mediaOpts.text;
-    },
     showLearnBtn() {
       return ["video", "audio"].includes(this.sourceType);
     }
@@ -191,8 +192,8 @@ export default {
   },
   beforeDestroy() {
     //销毁播放器
-    if (this.player) {
-      this.player.eventManager = {};
+    if (this.player && this.player.destory) {
+      this.player.destory();
     }
     //清除计时器
     this.clearComputeWatchTime();
@@ -217,7 +218,7 @@ export default {
       if (["video", "audio"].includes(this.sourceType)) {
         window.scrollTo(0, 0);
         this.initReport();
-        this.initPlayer();
+        this.initData();
         this.clearComputeWatchTime();
         this.lastWatchTime = 0;
         this.nowWatchTime = 0;
@@ -235,9 +236,9 @@ export default {
       });
     },
     //直播视频回放刚进入课程就算学习完成
-    IsLivePlayback(){
-      if(this.allTask[this.taskId].type==="live"){
-         this.reprtData("finish");
+    IsLivePlayback() {
+      if (this.allTask[this.taskId].type === "live") {
+        this.reprtData("finish");
       }
     },
     viewAudioDoc() {
@@ -271,37 +272,51 @@ export default {
             }
           };
     },
-    async initPlayer() {
+    initData() {
       this.$refs.video && (this.$refs.video.innerHTML = "");
+      //是否为无限制任务
       this.enableFinish = !!parseInt(this.details.enableFinish);
-      const player = await Api.getMedia(this.getParams()).catch(err => {
-        const courseId = Number(this.details.id);
-        // 后台课程设置里设置了不允许未登录用户观看免费试看的视频
-        if (err.code == 4040101) {
-          this.$router.push({
-            name: "login",
-            query: {
-              redirect: `/course/${courseId}`
-            }
-          });
-        }
-        Toast.fail(err.message);
-      });
-      if (!player) return; // 如果没有初始化成功
-
-      if (player.mediaType === "video" && !player.media.url) {
-        Toast("课程内容准备中，请稍候查看");
-        return;
+      //销毁播放器
+      if (this.player && this.player.destory) {
+        this.player.destory();
       }
-
+      this.getData();
+    },
+    getData() {
+      Api.getMedia(this.getParams())
+        .then(res => {
+          if (res.mediaType === "video" && !res.media.url) {
+            Toast("课程内容准备中，请稍候查看");
+            return;
+          }
+          this.isEncryptionPlus = res.media.isEncryptionPlus;
+          if (res.media.isEncryptionPlus) {
+            Toast("该浏览器不支持云视频播放，请下载App");
+            return;
+          }
+          this.formatePlayerData(res);
+        })
+        .catch(err => {
+          const courseId = Number(this.details.id);
+          // 后台课程设置里设置了不允许未登录用户观看免费试看的视频
+          if (err.code == 4040101) {
+            this.$router.push({
+              name: "login",
+              query: {
+                redirect: `/course/${courseId}`
+              }
+            });
+          }
+          Toast.fail(err.message);
+        });
+    },
+    formatePlayerData(player) {
       const timelimit = player.media.timeLimit;
-
-      this.isEncryptionPlus = player.media.isEncryptionPlus;
-      if (player.media.isEncryptionPlus) {
-        Toast("该浏览器不支持云视频播放，请下载App");
-        return;
-      }
       const media = player.media;
+      // 试看判断
+      const canTryLookable =
+        !this.joinStatus && Number(this.details.tryLookable);
+
       const options = {
         id: "course-detail__head--video",
         user: this.user,
@@ -313,41 +328,33 @@ export default {
         pluck: {
           timelimit: timelimit
         },
-        resId: media.resId,
-        disableDataUpload: true
-        // poster: "https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg"
+        resNo: media.resId,
+        disableDataUpload: true,
+        watermark: {
+          pos: "top.right",
+          width: 30,
+          height: 30
+        },
+        token: media.token
       };
-      // 试看判断
-      const canTryLookable =
-        !this.joinStatus && Number(this.details.tryLookable);
+
       if (!canTryLookable) {
         delete options.pluck;
       }
-
-      this.mediaOpts = Object.assign(
-        {
-          text: player.media.text
-        },
-        options
-      );
+      this.textContent = player.media.text;
 
       this.$store.commit("UPDATE_LOADING_STATUS", true);
-      this.loadPlayerSDK().then(SDK => {
+      this.initPlayer(options);
+    },
+    initPlayer(options) {
+      const playerSDKUri =
+        "//service-cdn.qiqiuyun.net/js-sdk-v2/sdk-v1.js?" +
+        ~~(Date.now() / 1000 / 60);
+      loadScript(playerSDKUri, err => {
         this.$store.commit("UPDATE_LOADING_STATUS", false);
-        if (this.player) {
-          this.player.taskId = -1;
-        }
-        if (this.player && this.player.eventManager) {
-          this.player.eventManager = {};
-        }
-        const player = new SDK(options);
-        player.taskId = this.taskId;
+        if (err) throw err;
+        const player = new window.QiQiuYun.Player(options);
         this.player = player;
-        player.on("ready", () => {
-          if (player.taskId !== this.taskId) {
-            return;
-          }
-        });
         player.on("unablePlay", () => {
           // 加密模式下在不支持的浏览器下提示
           this.$refs.video.innerHTML = "";
@@ -356,61 +363,27 @@ export default {
               "当前内容不支持该手机浏览器观看，建议您使用Chrome、Safari浏览器观看。"
           }).then(() => {});
         });
+        player.on("ready", () => {
+
+        });
         player.on("playing", () => {
           this.isPlaying = true;
-          if (player.taskId !== this.taskId) {
-            return;
-          }
           this.computeWatchTime();
         });
         player.on("paused", e => {
           this.isPlaying = false;
-          if (player.taskId !== this.taskId) {
-            return;
-          }
           this.clearComputeWatchTime();
           const watchTime = parseInt(this.nowWatchTime - this.lastWatchTime);
           this.lastWatchTime = this.nowWatchTime;
           this.reprtData("doing", true, watchTime);
         });
-        player.on("datapicker.start", e => {
-          if (player.taskId !== this.taskId) {
-            return;
-          }
-        });
         player.on("ended", () => {
-          if (player.taskId !== this.taskId) {
-            return;
-          }
           this.clearComputeWatchTime();
           if (this.finishCondition.type === "end") {
             this.reprtData("finish");
           }
         });
-        player.on("timeupdate", e => {
-          if (player.taskId !== this.taskId) {
-            return;
-          }
-        });
       });
-    },
-    loadPlayerSDK() {
-      if (!window.VideoPlayerSDK) {
-        const VEDIOURL =
-          "//service-cdn.qiqiuyun.net/js-sdk/video-player/sdk-v1.js?v=";
-        const scrptSrc = VEDIOURL + Date.now() / 1000 / 60;
-        // Cache SDK for 1 min.
-
-        return new Promise((resolve, reject) => {
-          loadScript(scrptSrc, err => {
-            if (err) {
-              reject(err);
-            }
-            resolve(window.VideoPlayerSDK);
-          });
-        });
-      }
-      return Promise.resolve(window.VideoPlayerSDK);
     },
     expire() {
       this.counting = false;
@@ -471,8 +444,8 @@ export default {
     clearComputeWatchTime() {
       clearInterval(this.intervalWatchTime);
     },
-    closeFinishDialog(){
-      this.finishDialog=false;
+    closeFinishDialog() {
+      this.finishDialog = false;
     }
   }
 };
