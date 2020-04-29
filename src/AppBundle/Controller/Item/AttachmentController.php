@@ -137,7 +137,7 @@ class AttachmentController extends BaseController
 
         $ssl = $request->isSecure() ? true : false;
         $result = $this->getUploadFileService()->downloadAttachment($id, $ssl);
-        if ($result) {
+        if (!empty($result['url'])) {
             return $this->createJsonResponse(array('result' => true, 'msg' => '', 'url' => $result['url']));
         }
 
