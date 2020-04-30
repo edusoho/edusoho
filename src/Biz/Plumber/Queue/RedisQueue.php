@@ -17,17 +17,26 @@ class RedisQueue implements BaseQueue
     }
 
     /**
+     * @param $id
      * @param $topic
      * @param $message
      * @param array $options
      *
+     * @return bool|int
+     *
      * @throws \Exception
      */
-    public function putJob($topic, $message, $options = [])
+    public function putJob($id, $topic, $message = null, $options = [])
     {
         $this->getConnected();
 
-        $pushedId = $this->client->lPush($topic, $message);
+        $body = [
+            'id' => $id,
+            'topic' => $topic,
+            'message' => $message,
+        ];
+
+        $pushedId = $this->client->lPush($topic, json_encode($body));
 
         if (false === $pushedId) {
             throw new \Exception("Push redis '{$topic}' queue failed.");

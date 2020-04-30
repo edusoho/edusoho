@@ -4,6 +4,7 @@ namespace AppBundle\Command;
 
 use Biz\Plumber\Queue\QueueFactory;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -62,13 +63,15 @@ class SchedulerCommand extends BaseCommand
         try {
             $queue = $this->getCrontabJobQueue();
 
-            $queueJobId = $queue->putJob('crontab_job_worker', 'Put job into worker');
+            $jobId = Uuid::uuid1();
+
+            $queueJobId = $queue->putJob($jobId, 'crontab_job_worker', 'Put job into worker');
 
             if (false === $queueJobId) {
                 $logger->info('Crontab:定时任务放入队列失败');
             }
 
-            $logger->info("Crontab:定时任务{$queueJobId}放入plumber成功");
+            $logger->info("Crontab:定时任务# {$jobId} 放入plumber成功");
         } catch (\Exception $e) {
             $logger->error('Crontab:定时任务放入队列出错 error:'.$e->getMessage().' TraceString:'.$e->getTraceAsString());
         }
