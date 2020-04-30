@@ -134,8 +134,7 @@ class CaptureController extends BaseController
             return false;
         }
         $scene = $this->getAnswerSceneService()->get($answerSceneId);
-        var_dump($scene);
-        if (empty($scene) && $scene['enable_facein'] < 1) {
+        if (empty($scene) || $scene['enable_facein'] != 1) {
             return false;
         }
         $record = $this->getAnswerRecordService()->get($answerRecordId);
