@@ -211,10 +211,10 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
     {
         if (isset($conditions['faceStatus'])) {
             if ('capture' == $conditions['faceStatus']) {
-                $builder->andStaticWhere('id in (select user_id from plugin_facein_user_face )');
+                $builder->andStaticWhere('id in (select user_id from user_face )');
             }
             if ('noCapture' == $conditions['faceStatus']) {
-                $builder->andStaticWhere('id not in (select user_id from plugin_facein_user_face )');
+                $builder->andStaticWhere('id not in (select user_id from user_face )');
             }
         }
 
