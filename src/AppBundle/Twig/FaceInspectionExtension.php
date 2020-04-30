@@ -5,7 +5,6 @@ namespace AppBundle\Twig;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
-use Codeages\Biz\ItemBank\FaceInspection\Service\FaceInspectionService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class FaceInspectionExtension extends \Twig_Extension
@@ -19,7 +18,7 @@ class FaceInspectionExtension extends \Twig_Extension
      */
     protected $biz;
 
-    public function __construct($container ,Biz $biz)
+    public function __construct($container, Biz $biz)
     {
         $this->container = $container;
         $this->biz = $biz;
@@ -51,7 +50,7 @@ class FaceInspectionExtension extends \Twig_Extension
         }
 
         $scene = $this->getAnswerSceneService()->get($sceneId);
-        if ($scene['enable_facein'] != 1) {
+        if (1 != $scene['enable_facein']) {
             return false;
         }
 
