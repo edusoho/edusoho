@@ -1312,15 +1312,15 @@ admin_v2:
                                     name: admin_v2.cloud.face_identify
                         # 云监考
                         admin_v2_cloud_facein:
-                          name: 云监考
+                          name: admin_v2.cloud.face_inspection
                           visible: (cloudStatus())
                           children:
                             admin_v2_edu_cloud_facein_overview:
-                              name: 采集结果
+                              name: admin_v2.cloud.face_inspection_result
                               disable: true
                               children:
                                 admin_v2_edu_cloud_facein_generate_link:
-                                  name: 生成采集链接
+                                  name: admin_v2.cloud.face_inspection_link
                                   disable: true
                                   visible: (setting('cloud_facein.enabled', 0) == 1)
                                   group: topBtn
