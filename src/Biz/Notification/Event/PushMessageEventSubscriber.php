@@ -29,6 +29,9 @@ use Codeages\PluginBundle\Event\EventSubscriber;
 use AppBundle\Common\StringToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Course\Util\CourseTitleUtils;
+use Biz\Activity\Service\ActivityService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 
 class PushMessageEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
@@ -106,8 +109,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
             'coupon.update' => 'onCouponUpdate',
 
-            'exam.reviewed' => 'onExamReviewed',
-            'exam.finish' => 'onExamFinish',
+            'answer.submitted' => 'onAnswerSubmitted',
+            'answer.finished' => 'onAnswerFinished',
 
             'course.review.add' => 'onCourseReviewAdd',
             'classReview.add' => 'onClassroomReviewAdd',
@@ -1227,66 +1230,72 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         }
     }
 
-    public function onExamReviewed(Event $event)
+    public function onAnswerFinished(Event $event)
     {
-        $testpaperResult = $event->getSubject();
-
+        $answerReport = $event->getSubject();
+        $answerRecord = $this->getAnswerRecordService()->get($answerReport['answer_record_id']);
         if ($this->isIMEnabled()) {
-            $teacher = $this->getUserService()->getUser($testpaperResult['checkTeacherId']);
+            $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
+            if (empty($activity) || !in_array($activity['mediaType'], array('testpaper'))) {
+                return;
+            }
+            $teacher = $this->getUserService()->getUser($answerReport['review_user_id']);
 
             $testType = '';
-            if ('testpaper' == $testpaperResult['type']) {
+            if ('testpaper' == $activity['mediaType']) {
                 $testType = '试卷';
-            } elseif ('homework' == $testpaperResult['type']) {
+            } elseif ('homework' == $activity['mediaType']) {
                 $testType = '作业';
             }
 
             $from = array(
                 'type' => 'testpaper',
-                'id' => $testpaperResult['testId'],
+                'id' => $answerRecord['assessment_id'],
             );
 
             $to = array(
                 'type' => 'user',
-                'id' => $testpaperResult['userId'],
+                'id' => $answerRecord['user_id'],
                 'convNo' => $this->getConvNo(),
             );
 
+            $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
             $body = array(
                 'type' => 'testpaper.reviewed',
-                'testpaperResultId' => $testpaperResult['id'],
-                'testpaperResultName' => $testpaperResult['paperName'],
-                'testId' => $testpaperResult['testId'],
-                'title' => "《{$testpaperResult['paperName']}》",
-                'message' => "{$teacher['nickname']}批阅了你的{$testType}《{$testpaperResult['paperName']}》,快去查看吧！",
+                'testpaperResultId' => $answerRecord['id'],
+                'testpaperResultName' => $assessment['name'],
+                'testId' => $assessment['id'],
+                'title' => "《{$assessment['name']}》",
+                'message' => "{$teacher['nickname']}批阅了你的{$testType}《{$assessment['name']}》,快去查看吧！",
             );
 
             $this->createPushJob($from, $to, $body);
         }
     }
 
-    public function onExamFinish(Event $event)
+    public function onAnswerSubmitted(Event $event)
     {
-        $testpaperResult = $event->getSubject();
-
+        $answerRecord = $event->getSubject();
         if ($this->isIMEnabled()) {
-            $course = $this->getCourseService()->getCourse($testpaperResult['courseId']);
-
-            $user = $this->getUserService()->getUser($testpaperResult['userId']);
-
+            $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
+            if (empty($activity) || !in_array($activity['mediaType'], array('testpaper'))) {
+                return;
+            }
+            $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
+            $user = $this->getUserService()->getUser($answerRecord['user_id']);
             $imSetting = $this->getSettingService()->get('app_im', array());
             $convNo = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
 
             $testType = '';
-            if ('testpaper' == $testpaperResult['type']) {
+            if ('testpaper' == $activity['mediaType']) {
                 $testType = '试卷';
-            } elseif ('homework' == $testpaperResult['type']) {
+            } elseif ('homework' == $activity['mediaType']) {
                 $testType = '作业';
             }
 
             $from = array(
                 'type' => 'testpaper',
-                'id' => $testpaperResult['testId'],
+                'id' => $answerRecord['assessment_id'],
             );
 
             $to = array(
@@ -1294,13 +1303,14 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'convNo' => $convNo,
             );
 
+            $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
             $body = array(
                 'type' => 'testpaper.finished',
-                'testpaperResultId' => $testpaperResult['id'],
-                'testpaperResultName' => $testpaperResult['paperName'],
-                'testId' => $testpaperResult['testId'],
-                'title' => "《{$testpaperResult['paperName']}》",
-                'message' => "{$user['nickname']}刚刚完成了{$testType}《{$testpaperResult['paperName']}》,快去查看吧！",
+                'testpaperResultId' => $answerRecord['id'],
+                'testpaperResultName' => $assessment['name'],
+                'testId' => $answerRecord['assessment_id'],
+                'title' => "《{$assessment['name']}》",
+                'message' => "{$user['nickname']}刚刚完成了{$testType}《{$assessment['name']}》,快去查看吧！",
             );
 
             if (empty($course['teacherIds'])) {
@@ -2400,5 +2410,29 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         } catch (\Exception $e) {
             IMAPIFactory::getLogger()->warning('API REQUEST ERROR:'.$e->getMessage());
         }
+    }
+
+    /**
+     * @return ActivityService
+     */
+    public function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    public function getAssessmentService()
+    {
+        return $this->getBiz()->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    public function getAnswerRecordService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerRecordService');
     }
 }

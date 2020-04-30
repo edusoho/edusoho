@@ -105,7 +105,7 @@ class CaptureController extends BaseController
             return $this->render('face-inspection/inspection.html.twig', array(
                 'token' => '',
                 'imgUrl' => '',
-                'record' => 0,
+                'recordId' => $answerRecordId,
             ));
         }
 
@@ -134,6 +134,7 @@ class CaptureController extends BaseController
             return false;
         }
         $scene = $this->getAnswerSceneService()->get($answerSceneId);
+        var_dump($scene);
         if (empty($scene) && $scene['enable_facein'] < 1) {
             return false;
         }

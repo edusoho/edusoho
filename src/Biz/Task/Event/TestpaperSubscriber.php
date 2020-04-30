@@ -17,7 +17,6 @@ class TestpaperSubscriber extends EventSubscriber implements EventSubscriberInte
     public static function getSubscribedEvents()
     {
         return array(
-            'exam.reviewed' => 'onTestPaperReviewed',
             'answer.finished' => 'onAnswerFinished',
         );
     }
@@ -40,19 +39,6 @@ class TestpaperSubscriber extends EventSubscriber implements EventSubscriberInte
         if ('score' == $activity['finishType'] && $answerReport['total_score'] >= $testpaperActivity['finishCondition']['finishScore']) {
             $answerRecord = $this->getAnswerRecordService()->get($answerReport['answer_record_id']);
             $this->finishTaskResult($task['id'], $answerRecord['user_id']);
-        }
-    }
-
-    public function onTestPaperReviewed(Event $event)
-    {
-        $testpaperResult = $event->getSubject();
-
-        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($testpaperResult['courseId'], $testpaperResult['lessonId']);
-        $activity = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
-        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-
-        if (!empty($testpaperActivity['finishCondition']) && $testpaperResult['score'] >= $testpaperActivity['finishCondition']['finishScore']) {
-            $this->finishTaskResult($task['id'], $testpaperResult['userId']);
         }
     }
 

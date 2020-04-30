@@ -17,14 +17,15 @@ class Token extends AbstractResource
     public function add(ApiRequest $request)
     {
         $type = $request->request->get('type');
+        $client = $request->request->get('client', '');
         $user = $this->getCurrentUser()->toArray();
 
-        $token = $this->getUserService()->makeToken(self::TOKEN_TYPE, $user['id'], time() + 3600 * 24 * 30);
+        $token = $this->getUserService()->makeToken(self::TOKEN_TYPE, $user['id'], time() + 3600 * 24 * 30, ['client' => $client]);
 
         $this->appendUser($user);
         $this->getUserService()->markLoginInfo($type);
 
-        if ('app' == $request->request->get('client')) {
+        if ('app' == $client) {
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
 
             $delTokens = $this->getTokenService()->findTokensByUserIdAndType($user['id'], self::TOKEN_TYPE);

@@ -136,7 +136,7 @@ class SettingController extends BaseController
 
         $response = array(
             'path' => $site['logo'],
-            'url' => $this->container->get('templating.helper.assets')->getUrl($site['logo']),
+            'url' => $this->container->get('assets.packages')->getUrl($site['logo']),
         );
 
         return $this->createJsonResponse($response);
@@ -191,7 +191,7 @@ class SettingController extends BaseController
 
         $response = array(
             'path' => $site['favicon'],
-            'url' => $this->container->get('templating.helper.assets')->getUrl($site['favicon']),
+            'url' => $this->container->get('assets.packages')->getUrl($site['favicon']),
         );
 
         return $this->createJsonResponse($response);

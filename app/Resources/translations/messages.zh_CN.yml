@@ -1069,6 +1069,7 @@ course.members_manage: 学员管理
 course.members_manage.official_student: 正式学员
 course.members_manage.official_student.search: 搜索
 course.members_manage.official_student.batch_upload_deadline: 批量修改有效期
+course.members_manage.official_student.batch_remove: 批量移除
 course.members_manage.official_student.input_placeholder: 请输入用户名/邮箱/手机号
 course.members_manage.official_student.progress: 学习进度
 course.members_manage.official_student.operation: 操作
@@ -2675,16 +2676,19 @@ classroom.student_placeholder: 请输入用户名/邮箱/手机号
 classroom.add_student_tips: 只能添加系统中已注册的用户
 classroom.buy_price_label: 购买价格
 classroom.username: 用户名
-classroom,student_name: 学员
-classroom,student_study_status: 学习进度
-classroom,student_opertion: 操作
-classroom,student_empty: 无学员记录
+classroom.student_name: 学员
+classroom.student_study_status: 学习进度
+classroom.student_study_expiry_date: 学习有效期
+classroom.student_opertion: 操作
+classroom.student_empty: 无学员记录
 classroom.student_exporting: 正在导出
 classroom.student_export_auditor: 导出旁听生
 classroom.student_export: 导出学生
 classroom.add_student_btn: 添加学员
 classroom.add_student.already_exists_tips: 该用户已是本班级的学员了
 classroom.add_student_title: 添加学员
+classroom.student_batch_update_expiry_date: 批量修改有效期
+classroom.student_batch_remove: 批量移除
 classroom.student_batch_import: 批量导入
 classroom.student_import_tips: 班级未发布,不可导入学员
 classroom.student_add_tips: 班级未发布,不可添加学员
@@ -7218,9 +7222,11 @@ admin.user_auth.Name_setting.help_block: 注：修改网校字段后，站内相
 admin.user_auth.mobile_bind_tips: >
   据国家《互联网跟帖评论服务管理规定》，<b>不得向未认证真实身份信息的用户提供跟帖评论服务</b>。这里的跟帖评论服务，是指互联网站、应用程序、互动传播平台以及其他具有新闻舆论属性和社会动员功能的传播平台，以<b>发帖、回复、留言、“弹幕”</b>等方式，为用户提供发表文字、符号、表情、图片、音视频等信息的服务。绑定手机号符合实名认证的规定，为规避法律风险，建议选用<b>“手机注册”</b>。切换成“手机注册”后，对于之前未绑定手机号的用户，会在每日首次登录成功后弹框提醒用户绑定手机号（用户可选择跳过此步骤）。
 admin.login_connect.User_login_restrictions: 用户登录限制
+admin.login_connect.client_login_restrictions: 设备终端登录限制
 admin.login_connect.open: 开启
 admin.login_connect.closed: 关闭
 admin.login_connect.User_login_restrictions.help_block: 开启后同一帐号只能在一处（同一IP下使用一个浏览器）进行登录
+admin.login_connect.client_login_restrictions.help_block: 开启后，同一帐号同时只能在APP或WEB一个设备终端上进行登录
 admin.login_connect.Third_party_login: 第三方登录
 admin.login_connect.Third_party_login.help_block: 开启后，登录时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户
 admin.login_connect.User_login_protection: 用户登录保护
@@ -10794,6 +10800,11 @@ admin_v2.user.manage.change_nickname.heading_title: 修改用户名
 
 course.plan_task.activity_manage.discuss.tips: 讨论任务在PC和APP中使用，暂不支持在微网校和小程序中使用!
 
+testpaper.result.unpassed: '很遗憾，您未通过本次考试'
+testpaper.result.passed: '恭喜您已通过本次考试!'
+testpaper.result.comment: '教师评语'
+homework.result.tips: '作业结果'
+
 #云监考
 course.task.enable_facein: 云监考
 admin.edu_cloud.edu_facein.basic_info: 基本信息
@@ -10825,3 +10836,4 @@ facein.capture_face.inspection_data.result_count: 参加人数
 facein.capture_face.inspection_data.no_cheating_count: 无作弊人数
 facein.capture_face.inspection_data.inspection_count: 疑似作弊人数
 facein.capture_face.inspection_result_modal.title: 监考抓拍
+

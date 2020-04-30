@@ -12,6 +12,8 @@ interface MemberService
 
     public function removeCourseStudent($courseId, $userId);
 
+    public function removeCourseStudents($courseId, array $userIs);
+
     public function searchMembers($conditions, $orderBy, $start, $limit, $columns = array());
 
     /**

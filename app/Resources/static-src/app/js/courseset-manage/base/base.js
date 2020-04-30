@@ -15,12 +15,12 @@ export default class Base {
     const self = this;
     const $form = $('#title').closest('form');
     let $oldSummary = $('#courseset-summary-field').val();
-    const validator = $form.validate({
+    $form.validate({
       currentDom: '#courseset-base-submit',
       ajax: true,
       rules: {
         title: {
-          maxlength: 60,
+          byte_maxlength: 200,
           required: {
             depends () {
               $(this).val($.trim($(this).val()));

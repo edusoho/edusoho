@@ -150,16 +150,6 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         return $this->wrapQuestionBank($questionBank);
     }
 
-    public function updateQuestionBankByCourseSetId($courseSetId, $fields)
-    {
-        $bank = $this->getQuestionBankByCourseSetId($courseSetId);
-        if (empty($bank)) {
-            return array();
-        }
-
-        return $this->updateQuestionBank($bank['id'], $fields);
-    }
-
     public function deleteQuestionBank($id)
     {
         $questionBank = $this->getQuestionBank($id);

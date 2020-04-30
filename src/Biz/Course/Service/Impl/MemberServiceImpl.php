@@ -183,6 +183,15 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $result;
     }
 
+    public function removeCourseStudents($courseId, array $userIds)
+    {
+        foreach ($userIds as $userId) {
+            $this->removeCourseStudent($courseId, $userId);
+        }
+
+        return true;
+    }
+
     public function searchMembers($conditions, $orderBy, $start, $limit, $columns = array())
     {
         $conditions = $this->prepareConditions($conditions);

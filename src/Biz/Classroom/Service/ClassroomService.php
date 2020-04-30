@@ -175,6 +175,8 @@ interface ClassroomService
 
     public function removeStudent($classroomId, $userId);
 
+    public function removeStudents($classroomId, $userIds, $info);
+
     public function becomeStudent($classroomId, $userId, $info = array());
 
     public function becomeStudentWithOrder($classroomId, $userId, $info = array());
@@ -250,6 +252,14 @@ interface ClassroomService
     public function isClassroomOverDue($classroom);
 
     public function updateMemberDeadlineByMemberId($memberId, $deadline);
+
+    public function updateMembersDeadlineByDay($classroomId, $userIds, $day, $waveType);
+
+    public function updateMembersDeadlineByDate($classroomId, $userIds, $date);
+
+    public function checkDeadlineForUpdateDeadline($classroomId, $userIds, $date);
+
+    public function checkDayAndWaveTypeForUpdateDeadline($classroomId, $userIds, $day, $waveType);
 
     public function updateMembersDeadlineByClassroomId($classroomId, $deadline);
 
