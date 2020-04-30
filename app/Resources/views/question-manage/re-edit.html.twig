@@ -11,6 +11,8 @@
   <input type="hidden" name="bankId" value='{{ questionBankId }}'>
   <input type="hidden" name="categoryTree" value='{{ categoryTree|json_encode }}'>
   <input type="hidden" name="type" value="{{ type }}">
+  <input type="hidden" name="ckeditor_image_upload_url" value="{{ path('editor_upload', {token:upload_token('course')}) }}">
+  <input type="hidden" name="ckeditor_image_download_url" value="{{ path('editor_download', {token:upload_token('course')}) }}">
   <input type="hidden" name="saveUrl" value="
     {% if type == 'item' %}
       {{ path('questions_import_save', {token: app.request.get('token')}) }}
@@ -18,4 +20,5 @@
       {{ path('testpaper_import_save', {token: app.request.get('token')}) }}
     {% endif %}
   ">
+  {% include 'attachment-upload/upload-data.html.twig' %}
 {% endblock %}

@@ -14,7 +14,8 @@
     <input type="hidden" name="ckeditor_path" value="/static-dist/libs/es-ckeditor/ckeditor.js">
     <input type="hidden" name="ckeditor_image_upload_url" value="{{ path('editor_upload', {token:upload_token('course')}) }}">
     <input type="hidden" name="ckeditor_image_download_url" value="{{ path('editor_download', {token:upload_token('course')}) }}">
-    
+    {% include 'attachment-upload/upload-data.html.twig'  %}
+
     {% block footer %}
         {% if showHeader|default(0) %}{{ parent() }}{% endif %}
     {% endblock %}

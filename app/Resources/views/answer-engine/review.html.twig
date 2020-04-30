@@ -10,6 +10,7 @@
     {% endblock %}
 
     {% include 'answer-engine/common.html.twig' %}
+    {% include 'attachment-upload/upload-data.html.twig' %}
     <input type="hidden" name="assessment" value='{{ assessment|json_encode|raw }}'>
     <input type="hidden" name="answer_record" value='{{ answerRecord|json_encode|raw }}'>
     <input type="hidden" name="answer_scene" value='{{ answerScene|json_encode|raw }}'>

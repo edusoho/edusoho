@@ -3406,3 +3406,23 @@ answer_engine_review:
 course_task_list_render:
     path: /course/{courseId}/task/list/render/{type}/{paged}
     defaults: { _controller: AppBundle:Course/Course:renderTaskList, paged:false }
+
+item_attachment_init_upload:
+    path: /item/attachment/upload/init
+    defaults: { _controller: AppBundle:Item/Attachment:initUpload }
+
+item_attachment_finish_upload:
+    path: /item/attachment/upload/finish
+    defaults: { _controller: AppBundle:Item/Attachment:finishUpload }
+
+item_attachment_delete:
+    path: /item/attachment/delete
+    defaults: { _controller: AppBundle:Item/Attachment:delete }
+
+item_attachment_preview:
+    path: /item/attachment/preview
+    defaults: { _controller: AppBundle:Item/Attachment:preview }
+
+item_attachment_download:
+    path: /item/attachment/download
+    defaults: { _controller: AppBundle:Item/Attachment:download }
