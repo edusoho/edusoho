@@ -3409,3 +3409,30 @@ item_attachment_preview:
 item_attachment_download:
     path: /item/attachment/download
     defaults: { _controller: AppBundle:Item/Attachment:download }
+
+#采集头像
+facein_capture_index:
+    path:     /my/facein/capture/{code}
+    defaults: { _controller: AppBundle:FaceInspection/Capture:index }
+
+facein_capture_upload:
+    path:     /facein/capture/{code}/upload
+    defaults: { _controller: AppBundle:FaceInspection/Capture:upload,code:'face' }
+    methods:  [POST]
+
+facein_capture_check:
+    path:     /facein/user_face/check
+    defaults: { _controller: AppBundle:FaceInspection/Capture:check }
+
+facein_inspection_save:
+    path:     /facein/inspection/{recordId}/save
+    defaults: { _controller: AppBundle:FaceInspection/Capture:save }
+    methods:  [POST]
+
+facein_inspection_results:
+    path:     /facein/inspection/{activityId}/results
+    defaults: { _controller: AppBundle:FaceInspection/InspectionResult:index }
+
+facein_inspection_results_detail:
+    path:     /facein/{activityId}/inspection/{userId}/results
+    defaults: { _controller: AppBundle:FaceInspection/InspectionResult:detail }

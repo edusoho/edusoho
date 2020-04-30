@@ -20,14 +20,20 @@
       @deleteAttachment="deleteAttachment"
       @previewAttachment="previewAttachment"
       @downloadAttachment="downloadAttachment"
-    ></item-engine>
+    >
+      <template slot="inspection" v-if="inspectionOpen">
+        <inspection-control mode="watching" ref="inspection" @ready="readyHandler" @cheatHappened="saveCheatRecord" @faceCaptured="captureHandler"></inspection-control>
+      </template>
+    </item-engine>
   </div>
 </template>
 
 <script>
   import ActivityEmitter from '../../activity/activity-emitter';
+  import dataURLToBlob from "dataurl-to-blob";
   export default {
     data() {
+      let inspectionOpen = $('[name=token]').length > 0 && $('[name=token]').val() !== '';
       return {
         showCKEditorData: {
           publicPath: $('[name=ckeditor_path]').val(),
@@ -47,6 +53,7 @@
           locale: document.documentElement.lang
         },
         fileId: 0,
+        inspectionOpen: inspectionOpen,
       };
     },
     created() {
@@ -184,6 +191,57 @@
             resolve(resp);
             self.fileId = 0;
           })
+        });
+      },
+      readyHandler() {
+        let $node = $('[name=img-url]');
+        if ($node.length > 0 && $node.val() !== '') {
+          this.$refs['inspection'].captureModal({
+            token: $('[name=token]').val(),
+            faceUrl: $node.val()
+          });
+        } else {
+          this.$refs['inspection'].captureModal({
+            token: $('[name=token]').val(),
+          });
+        }
+      },
+      saveCheatRecord(cheating) {
+        let data = new FormData();
+        data.append('status', cheating.status);
+        data.append('level', cheating.level);
+        data.append('duration', cheating.duration);
+        data.append('behavior', cheating.behavior);
+        data.append('picture', dataURLToBlob(cheating.picture));
+
+        $.ajax({
+          url: $('[name=inspection-save-url]').val(),
+          type: 'POST',
+          contentType: false,
+          processData: false,
+          data: data,
+          success: function (result) {
+            console.log(result)
+          }
+        });
+      },
+      captureHandler(data) {
+        let img = new Image(480);
+        img.src = data.capture;
+        let params = new FormData();
+        params.append('picture', dataURLToBlob(data.capture));
+
+        $.ajax({
+          url: $('[name=upload-url]').val(),
+          type: 'POST',
+          contentType: false,
+          processData: false,
+          data: params,
+          beforeSend(request) {
+            request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+          },
+          success: function (response) {
+          }
         });
       }
     }
