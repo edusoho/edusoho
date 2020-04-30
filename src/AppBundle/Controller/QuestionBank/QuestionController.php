@@ -269,11 +269,12 @@ class QuestionController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+        $bank = $this->getQuestionBankService()->getQuestionBank($id);
         $fileName = $this->getExportFileName($id);
         $path = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory').DIRECTORY_SEPARATOR.$fileName;
 
         $result = $this->getItemService()->exportItems(
-            $id,
+            $bank['itemBankId'],
             $request->query->all(),
             $path,
             $this->get('kernel')->getContainer()->getParameter('kernel.root_dir').'/../web'

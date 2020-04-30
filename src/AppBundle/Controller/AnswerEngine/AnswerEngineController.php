@@ -48,7 +48,7 @@ class AnswerEngineController extends BaseController
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
         $assessmentResponse = (object) array();
-        
+
         return $this->render('answer-engine/answer.html.twig', array(
             'assessment' => $assessment,
             'assessmentResponse' => $assessmentResponse,
@@ -159,6 +159,18 @@ class AnswerEngineController extends BaseController
             'answerReport' => $this->getAnswerReportService()->get($answerRecord['answer_report_id']),
             'answerScene' => $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']),
             'assessment' => $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']),
+        ));
+    }
+
+    public function sceneReportAction(Request $request, $assessmentId, $answerSceneId)
+    {
+        $answerSceneReport = $this->getAnswerSceneService()->getAnswerSceneReport($answerSceneId);
+        $assessment = $this->getAssessmentService()->showAssessment($assessmentId);
+
+        return $this->render('answer-engine/scene-report.html.twig', array(
+            'answerSceneReport' => $answerSceneReport,
+            'assessment' => $assessment,
+            'answerScene' => $this->getAnswerSceneService()->get($answerSceneId),
         ));
     }
 

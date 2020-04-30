@@ -1236,7 +1236,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $answerRecord = $this->getAnswerRecordService()->get($answerReport['answer_record_id']);
         if ($this->isIMEnabled()) {
             $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
-            if (empty($activity) || !in_array($activity['mediaType'], array('homework', 'testpaper'))) {
+            if (empty($activity) || !in_array($activity['mediaType'], array('testpaper'))) {
                 return;
             }
             $teacher = $this->getUserService()->getUser($answerReport['review_user_id']);
@@ -1278,7 +1278,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $answerRecord = $event->getSubject();
         if ($this->isIMEnabled()) {
             $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
-            if (empty($activity) || !in_array($activity['mediaType'], array('homework', 'testpaper'))) {
+            if (empty($activity) || !in_array($activity['mediaType'], array('testpaper'))) {
                 return;
             }
             $course = $this->getCourseService()->getCourse($activity['fromCourseId']);

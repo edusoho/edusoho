@@ -131,6 +131,7 @@ class ManageController extends BaseController
     protected function getActivityIdByAnswerSceneId($answerSceneId)
     {
         $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerSceneId);
+
         return $this->getActivityService()->getByMediaIdAndMediaType($testpaperActivity['id'], 'testpaper')['id'];
     }
 
@@ -249,32 +250,26 @@ class ManageController extends BaseController
 
     public function resultAnalysisAction(Request $request, $targetId, $targetType, $activityId, $studentNum)
     {
-        $activity = $this->getActivityService()->getActivity($activityId);
-
+        $activity = $this->getActivityService()->getActivity($activityId, true);
         if (empty($activity) || 'testpaper' != $activity['mediaType']) {
             return $this->createMessageResponse('error', 'Argument invalid');
         }
 
-        $analyses = $this->getQuestionAnalysisService()->searchAnalysis(array('activityId' => $activity['id']), array(), 0, PHP_INT_MAX);
-
-        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-
-        $paper = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
-        if (empty($paper)) {
+        if (empty($activity['ext']['testpaper'])) {
             return $this->createMessageResponse('info', 'Paper not found');
         }
 
-        $questions = $this->getTestpaperService()->showTestpaperItems($paper['id']);
-
-        $relatedData = $this->findRelatedData($activity, $paper);
-        $relatedData['studentNum'] = $studentNum;
+        $answerSceneReport = $this->getAnswerSceneService()->getAnswerSceneReport($activity['ext']['answerScene']['id']);
+        if (empty($answerSceneReport['question_reports'])) {
+            $this->getAnswerSceneService()->buildAnswerSceneReport($activity['ext']['answerScene']['id']);
+            $answerSceneReport = $this->getAnswerSceneService()->getAnswerSceneReport($activity['ext']['answerScene']['id']);
+        }
 
         return $this->render('testpaper/manage/result-analysis.html.twig', array(
-            'analyses' => ArrayToolkit::groupIndex($analyses, 'questionId', 'choiceIndex'),
-            'paper' => $paper,
-            'questions' => $questions,
-            'questionTypes' => $this->getTestpaperService()->getCheckedQuestionTypeBySeq($paper),
-            'relatedData' => $relatedData,
+            'activity' => $activity,
+            'studentNum' => $studentNum,
+            'answerSceneReport' => $answerSceneReport,
+            'assessment' => $activity['ext']['testpaper'],
             'targetType' => $targetType,
         ));
     }

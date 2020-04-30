@@ -131,30 +131,32 @@ class HomeworkManageController extends BaseController
     protected function getActivityIdByAnswerSceneId($answerSceneId)
     {
         $homeworkActivity = $this->getHomeworkActivityService()->getByAnswerSceneId($answerSceneId);
+
         return $this->getActivityService()->getByMediaIdAndMediaType($homeworkActivity['id'], 'homework')['id'];
     }
 
     public function resultAnalysisAction(Request $request, $targetId, $targetType, $activityId, $studentNum)
     {
-        $activity = $this->getActivityService()->getActivity($activityId);
-
+        $activity = $this->getActivityService()->getActivity($activityId, true);
         if (empty($activity) || 'homework' != $activity['mediaType']) {
             return $this->createMessageResponse('error', 'Argument invalid');
         }
 
-        $analyses = $this->getQuestionAnalysisService()->searchAnalysis(array('activityId' => $activity['id']), array(), 0, PHP_INT_MAX);
+        if (empty($activity['ext']['assessment'])) {
+            return $this->createMessageResponse('info', 'Paper not found');
+        }
 
-        $paper = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
-        $questions = $this->getTestpaperService()->showTestpaperItems($paper['id']);
-
-        $relatedData = $this->findRelatedData($activity, $paper);
-        $relatedData['studentNum'] = $studentNum;
+        $answerSceneReport = $this->getAnswerSceneService()->getAnswerSceneReport($activity['ext']['answerSceneId']);
+        if (empty($answerSceneReport['question_reports'])) {
+            $this->getAnswerSceneService()->buildAnswerSceneReport($activity['ext']['answerSceneId']);
+            $answerSceneReport = $this->getAnswerSceneService()->getAnswerSceneReport($activity['ext']['answerSceneId']);
+        }
 
         return $this->render('homework/manage/result-analysis.html.twig', array(
-            'analyses' => ArrayToolkit::groupIndex($analyses, 'questionId', 'choiceIndex'),
-            'paper' => $paper,
-            'questions' => $questions,
-            'relatedData' => $relatedData,
+            'activity' => $activity,
+            'studentNum' => $studentNum,
+            'answerSceneReport' => $answerSceneReport,
+            'assessment' => $activity['ext']['assessment'],
             'targetType' => $targetType,
         ));
     }
@@ -388,5 +390,15 @@ class HomeworkManageController extends BaseController
     protected function getHomeworkActivityService()
     {
         return $this->createService('Activity:HomeworkActivityService');
+    }
+
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
+    }
+
+    protected function getAnswerSceneService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerSceneService');
     }
 }
