@@ -3,6 +3,7 @@
 namespace AppBundle\Command;
 
 use Biz\Plumber\Queue\QueueFactory;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -58,9 +59,9 @@ class SchedulerCommand extends BaseCommand
     {
         $logger = $this->getBiz()->offsetGet('s2b2c.merchant.logger');
         $logger->info('Crontab:开始将定时任务放入plumber');
-
         try {
             $queue = $this->getCrontabJobQueue();
+
             $queueJobId = $queue->putJob('crontab_job_worker', 'Put job into worker');
 
             if (false === $queueJobId) {
@@ -101,6 +102,9 @@ class SchedulerCommand extends BaseCommand
         }
     }
 
+    /**
+     * @return SchedulerService
+     */
     protected function getSchedulerService()
     {
         return $this->getServiceKernel()->createService('Scheduler:SchedulerService');

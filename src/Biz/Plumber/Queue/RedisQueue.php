@@ -2,6 +2,8 @@
 
 namespace Biz\Plumber\Queue;
 
+use Redis;
+
 class RedisQueue implements BaseQueue
 {
     private $client;
@@ -10,7 +12,7 @@ class RedisQueue implements BaseQueue
 
     public function __construct($config)
     {
-        $this->client = new \Redis();
+        $this->client = new Redis();
         $this->config = $config;
     }
 
@@ -25,11 +27,13 @@ class RedisQueue implements BaseQueue
     {
         $this->getConnected();
 
-        $pushed = $this->client->lPush($topic, $message);
+        $pushedId = $this->client->lPush($topic, $message);
 
-        if (false === $pushed) {
+        if (false === $pushedId) {
             throw new \Exception("Push redis '{$topic}' queue failed.");
         }
+
+        return $pushedId;
     }
 
     private function getConnected()
@@ -56,5 +60,9 @@ class RedisQueue implements BaseQueue
             $options['retryInterval'],
             $options['readTimeout']
         );
+
+        if ($this->config['password']) {
+            $this->client->auth($this->config['password']);
+        }
     }
 }

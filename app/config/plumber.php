@@ -5,7 +5,7 @@ return [
     'queues' => [
         'example_queue' => [
             'enable_queue' => true,
-            'queue_options' => 'default',
+            'queue_options' => 'redis_default',
         ],
         'crontab_job_queue' => [
             'enable_queue' => true,

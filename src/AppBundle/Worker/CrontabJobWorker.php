@@ -8,11 +8,11 @@ class CrontabJobWorker extends BaseWorker
 {
     public function doExecute(Job $job)
     {
-        $this->logger->info("execute crontab job job #{$job->getId()}, body: {$job->getBody()}");
+        $this->logger->info("JobWorker:execute crontab job job #{$job->getId()}, body: {$job->getBody()}");
         try {
             $res = $this->execCronTabJob();
         } catch (\Exception $e) {
-            $this->logger->info('execute crontab job failed'.$e->getMessage().',traceString:'.$e->getTraceAsString());
+            $this->logger->info('JobWorker:execute crontab job failed'.$e->getMessage().',traceString:'.$e->getTraceAsString());
 
             return self::FINISH;
         }
