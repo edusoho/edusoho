@@ -17,4 +17,6 @@ interface TestpaperActivityService
     public function deleteActivity($id);
 
     public function getActivityByAnswerSceneId($answerSceneId);
+
+    public function findByAnswerSceneIds($answerSceneIds);
 }

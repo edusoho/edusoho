@@ -16,6 +16,8 @@ interface ActivityService
 
     public function findActivitiesByCourseSetIdAndType($courseSetId, $type, $fetchMedia = false);
 
+    public function findActivitiesByMediaIdsAndMediaType($mediaIds, $mediaType);
+
     /**
      * 创建之前检查完整性
      *

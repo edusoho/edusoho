@@ -27,7 +27,12 @@ class HomeworkActivityServiceImpl extends BaseService implements HomeworkActivit
     {
         return $this->getHomeworkActivityDao()->findByIds($ids);
     }
-    
+
+    public function findByAnswerSceneIds($answerSceneIds)
+    {
+        return $this->getHomeworkActivityDao()->findByAnswerSceneIds($answerSceneIds);
+    }
+
     public function delete($id)
     {
         return $this->getHomeworkActivityDao()->delete($id);

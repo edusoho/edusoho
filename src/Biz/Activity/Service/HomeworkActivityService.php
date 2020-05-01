@@ -13,4 +13,6 @@ interface HomeworkActivityService
     public function findByIds($ids);
 
     public function delete($id);
+
+    public function findByAnswerSceneIds($answerSceneIds);
 }

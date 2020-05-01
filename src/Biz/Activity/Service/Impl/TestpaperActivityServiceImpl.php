@@ -46,6 +46,11 @@ class TestpaperActivityServiceImpl extends BaseService implements TestpaperActiv
         return $this->getTestpaperActivityDao()->getActivityByAnswerSceneId($answerSceneId);
     }
 
+    public function findByAnswerSceneIds($answerSceneIds)
+    {
+        return $this->getTestpaperActivityDao()->findByAnswerSceneIds($answerSceneIds);
+    }
+
     /**
      * @return TestpaperActivityDao
      */
