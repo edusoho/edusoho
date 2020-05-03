@@ -1,0 +1,252 @@
+.init-container {
+  height: 600px;
+  margin-top: 60px;
+  h4 {
+    margin-left: 10px;
+  }
+  .face-title {
+    text-align: center;
+    font-size: 16px;
+    position: absolute;
+    line-height: 360px;
+    color: #666666;
+    left: 200px;
+    font-weight: 400;
+    z-index: 99999;
+  }
+
+  .face-capture{
+    width: 445px;
+    height: 360px;
+    background: #EEEEEE;
+    position: relative;
+    img {
+      position: absolute;
+      height: 360px !important;
+      width: 445px !important;
+      top: 0px;
+      left: 0px;
+    }
+  }
+
+  .face-capture-tips{
+    width: 445px;
+    margin-top: 10px
+  }
+
+  .img-title {
+    text-align: center;
+    font-size: 16px;
+    position: absolute;
+    line-height: 360px;
+    color: #666666;
+    left: 240px;
+    font-weight: 400;
+    z-index: 99999;
+  }
+
+  .capture-btn-group {
+    margin-right: 80px;
+    text-align: center;
+    margin-top: 40px;
+  }
+}
+
+.face-modal-dialog {
+  margin: 10% auto;
+  position: relative;
+  width: auto;
+  padding: 10px;
+  @media (min-width: @screen-sm-min) {
+    width: 688px;
+  }
+
+  .modal-header{
+    height: 54px;
+    margin-left: 24px;
+    margin-right: 24px;
+    padding-top: 15px;
+    padding-left: 0px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  h4{
+    margin-left: 26px;
+    margin-top: 13px;
+    margin-bottom: 16px;
+  }
+
+  .init-modal-content{
+    width: 688px;
+    height: 450px;
+  }
+
+  .face-init-container {
+    .face-title {
+      text-align: center;
+      font-size: 16px;
+      position: absolute;
+      line-height: 360px;
+      color: #666666;
+      left: 200px;
+      font-weight: 400;
+    }
+
+    .face-capture{
+      width: 240px;
+      height: 180px;
+      background: #EEEEEE;
+      img {
+        width: 240px !important;
+        height: 180px !important;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+      }
+    }
+
+    .face-img{
+      width: 240px;
+      height: 180px;
+      background: #EEEEEE;
+      img {
+        width: 240px !important;
+        height: 180px !important;
+      }
+    }
+
+    .loading-tips{
+      text-align: center;
+      font-size: 18px;
+      color: #676464;
+      font-weight: 500;
+    }
+
+    .img-title {
+      text-align: center;
+      font-size: 16px;
+      position: absolute;
+      line-height: 360px;
+      color: #666666;
+      left: 240px;
+      font-weight: 400;
+    }
+
+    .capture-btn-group {
+      margin-top: 32px;
+      margin-right: 36px;
+    }
+  }
+}
+
+.inspection-container {
+  text-align: center;
+  .tips {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  .face-capture {
+    width: 240px;
+    height: 180px;
+    background: #EEEEEE;
+  }
+}
+
+.inspection-result-container {
+  margin-top: 10px;
+  .back-btn {
+    height: 50px;
+    font-size: 18px;
+    color: #666666;
+  }
+  .result-paginator {
+    text-align: center;
+  }
+  .panel-result {
+    height: 800px;
+    .result-empty {
+      text-align: center;
+      line-height: 720px;
+    }
+    .panel-body {
+      height: 700px;
+    }
+    .title {
+      font-size: 18px;
+      color: #F59A23;
+    }
+    .img-container {
+      margin-left: -12px;
+    }
+    .list-item {
+      width:112px;
+      height:112px;
+      margin-left: 12px;
+      margin-right: 12px;
+      margin-top: 45px;
+      img {
+        width:112px !important;
+        height:112px !important;
+      }
+      .item-title {
+        width:112px;
+        color: #666666;
+        text-align:center;
+        font-size:14px;
+        margin-top: 5px;
+      }
+    }
+  }
+  .num {
+    font-weight: 500;
+    font-size: 16px;
+    color: #333333;
+  }
+}
+
+.inspection-result-detail-container {
+  height: 670px !important;
+  .modal-body {
+    margin-top: 25px;
+    margin-left: 10px;
+    padding: 0px !important;
+    .list-item {
+      width:260px;
+      height:240px;
+      img {
+        width:236px;
+        height:180px;
+      }
+      .item-time {
+        color: #FFFFFF;
+        width: 236px;
+        height: 36px;
+        position: absolute;
+        background: rgba(0,0,0,1);
+        bottom: 60px;
+        opacity: 0.3;
+        text-align: center;
+        line-height: 36px;
+      }
+      .item-title {
+        color: #69666A;
+        margin-top: 12px;
+        width: 236px;
+        height: 48px;
+      }
+    }
+  }
+  .inspection-paginator {
+    position: absolute;
+    bottom: 30px;
+    text-align: center;
+    width: 800px;
+  }
+
+  .close-btn {
+    position: absolute;
+    bottom: 30px;
+    right: 50px;
+  }
+}

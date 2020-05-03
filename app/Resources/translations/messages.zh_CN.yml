@@ -10804,3 +10804,36 @@ testpaper.result.unpassed: '很遗憾，您未通过本次考试'
 testpaper.result.passed: '恭喜您已通过本次考试!'
 testpaper.result.comment: '教师评语'
 homework.result.tips: '作业结果'
+
+#云监考
+course.task.enable_facein: 云监考
+admin.edu_cloud.edu_facein.basic_info: 基本信息
+
+admin.edu_cloud.edu_facein.service_suspend_tips: 您的云监考服务已被暂停，不能使用，请联系客服人员：4008041114。
+admin.edu_cloud.edu_facein.setting.title: 开启云监考
+admin.edu_cloud.edu_facein.setting.tips: >
+  开启云监考后，老师在创建考试课时的页面上会多一个“云监考”的开启选项，开启该选项后，学生一旦进入考试课时，监考系统就会自动启动。<a href="%url%" target="_blank">点击查看使用手册</a>
+admin.edu_cloud.edu_facein.detail.title: 采集详情
+admin.edu_cloud.edu_facein.list.status: 是否采集
+admin.edu_cloud.edu_facein.list.time: 采集时间
+admin.edu_cloud.edu_facein.list.empty: 暂无搜索结果
+admin.edu_cloud.edu_facein.no_enabled: 暂不支持该服务
+admin.edu_cloud.edu_facein.capture_link.title: 采集链接
+admin.edu_cloud.edu_facein.capture_link.tips1: '说明：1、对于同一个采集链接，一个用户只能采集一次；'
+admin.edu_cloud.edu_facein.capture_link.tips2: '2、重新生成采集链接后，旧链接会失效，不会影响之前采集成功的用户。'
+admin.edu_cloud.edu_facein.capture_link.tips3: '3、云监考功能暂不支持IE浏览器'
+facein.capture_face.title: 采集考生头像
+facein.capture_face.face_title: 摄像头画面
+facein.capture_face.face_title.tips: '请正脸对着摄像头，数秒后，系统将自动完成采集'
+facein.capture_face.img_title: 头像
+facein.capture_face.capture_btn: 采集头像
+facein.capture_face.capture_finish_btn: 完成采集
+facein.capture_face.inspection_result: 监考结果
+facein.capture_face.inspection_result.title: 疑似作弊考生
+facein.capture_face.inspection_data.title: 监考数据
+facein.capture_face.inspection_data.course_count: 计划人数
+facein.capture_face.inspection_data.result_count: 参加人数
+facein.capture_face.inspection_data.no_cheating_count: 无作弊人数
+facein.capture_face.inspection_data.inspection_count: 疑似作弊人数
+facein.capture_face.inspection_result_modal.title: 监考抓拍
+

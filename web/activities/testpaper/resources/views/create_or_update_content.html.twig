@@ -105,6 +105,14 @@
           </div>
       </div>
       {{ slot('course.task.facein.settings', {'activity': activity|default([])}) }}
+      {% if is_facein_open() %}
+        <div class="form-group">
+          <div class="col-sm-2 control-label"><label>{{'course.task.enable_facein'|trans}}</label></div>
+          <div class="col-sm-10 controls radios">
+            {{ radios('enable_facein', {'1':'form.radio_btn.open'|trans, '0':'form.radio_btn.close'|trans}, enable_facein|default(0)) }}
+          </div>
+        </div>
+      {% endif %}
 
     </form>
   </div>

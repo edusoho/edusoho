@@ -57,7 +57,9 @@
                 <a class="testpaper-mark-operation__link testpaper-mark-operation__link--disabled" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_check'|trans }}" ><i class="es-icon es-icon-double-check gray-medium"></i></a>
               {% endif %}
             </div>
-            {{ slot('course.task.facein.result',{task:task|default([])}) }}
+            {% if is_scene_facein_open(task.answerSceneId) %}
+              <div class="text-center mt10" style="position: absolute;right: 10px;"><a class="testpaper-mark-operation__link" href="{{ path('facein_inspection_results', {activityId:task.activityId}) }}" target="_blank" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'facein.capture_face.inspection_result'|trans }}"><i class="es-icon es-icon-inspection-result"></i></a></div>
+            {% endif %}
           </div>
         </div>
       {% endif %}
