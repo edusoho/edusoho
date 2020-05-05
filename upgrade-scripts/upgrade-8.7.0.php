@@ -5,7 +5,7 @@ use AppBundle\Common\ArrayToolkit;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
-    const SETTING_KEY = 'upgrade_8.7.36';
+    const SETTING_KEY = 'upgrade_8.7.43';
 
     public function __construct($biz)
     {
@@ -353,9 +353,9 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function converDrawCondition($activity)
     {
-        $metas = json_decode($activity['metas'], true);      
+        $metas = json_decode($activity['metas'], true);
         $drawCondition = array();
-        if (isset($metas['range']['lessonId']) || isset($metas['range']['courseId'])) {
+        if (isset($metas['range']['lessonId']) || isset($metas['range']['courseId']) || !is_array($metas['range'])) {
             return $drawCondition;
         }
 
@@ -365,7 +365,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'category_ids' => explode(',', $metas['range']['categoryIds']),
             'difficulty' => empty($metas['difficulty']) ? '' : $metas['difficulty'],
         );
-
+        
         $drawCondition['section'] = array(
             'conditions' => array(
                 'item_types' => $metas['questionTypes'],
@@ -581,7 +581,7 @@ class EduSohoUpgrade extends AbstractUpdater
         foreach ($testpapers as $testpaper) {
             $questionCount = 0;
             $itemCount = 0;
-            $items = $testpaperItems[$testpaper['id']];
+            $items = empty($testpaperItems[$testpaper['id']]) ? array() : $testpaperItems[$testpaper['id']];
             if (count($items) > 0) {
                 if ('homework' == $testpaper['type']) {
                    $sectionAndItems = $this->getSectionAndItems($items, $testpaper);
@@ -623,7 +623,7 @@ class EduSohoUpgrade extends AbstractUpdater
                         $sectionAndItems = $this->getSectionAndItems(array_values($sectionItems), $testpaper);
                         $questionCount += $sectionAndItems['section']['question_count'];
                         $itemCount += $sectionAndItems['section']['item_count'];
-                        $sectionAndItems['section']['name'] = $dict[$questionType];
+                        $sectionAndItems['section']['name'] = empty($dict[$questionType]) ? '其他' : $dict[$questionType];
                         $assessmentSections[] = $sectionAndItems['section'];
                         $assessmentSectionItems = array_merge($assessmentSectionItems, $sectionAndItems['items']);
                     }
@@ -645,8 +645,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 'updated_time' => $testpaper['createdTime'],
                 'updated_time' => $testpaper['updatedTime'],
             );
-        }
 
+        }
+        
         $this->getAssessmentDao()->batchCreate($assessments);
         $this->getAssessmentSectionDao()->batchCreate($assessmentSections);
         $this->getAssessmentSectionItemDao()->batchCreate($assessmentSectionItems);
@@ -800,16 +801,28 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
-        $this->getConnection()->exec("
-            DELETE FROM biz_item_category;
-        ");
+        $startData = $this->startPage(__FUNCTION__, 'SELECT COUNT(*) AS num FROM question_category;', 5000);
+        if (empty($startData)) {
+            return 1;
+        }
+        if (1 == $startData['page']) {
+            $this->getConnection()->exec("DELETE FROM `biz_item_category`");
+        }
+        $this->logger('info', __FUNCTION__.' page:'.$startData['page'].'/'.$startData['pageCount']);
 
+        $start = $startData['start'];
+        $limit = $startData['limit'];
         $this->getConnection()->exec("
             INSERT INTO biz_item_category (id, `name`, weight, parent_id, bank_id, created_user_id, updated_user_id, created_time, updated_time)
-            SELECT id, `name`, weight, parentId, bankId, userId, userId, createdTime, updatedTime FROM question_category;
+            SELECT id, `name`, weight, parentId, bankId, userId, userId, createdTime, updatedTime FROM question_category LIMIT {$start}, {$limit};
         ");
 
-        return 1;
+        $endData = $this->endPage(__FUNCTION__);
+        if (empty($endData)) {
+            return 1;
+        } else {
+            return $endData['page'];
+        }
     }
 
     public function processBizItem($page)
@@ -892,7 +905,7 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
-        $startData = $this->startPage(__FUNCTION__, "SELECT COUNT(*) AS num FROM question WHERE `type` <> 'material';", 2000);
+        $startData = $this->startPage(__FUNCTION__, "SELECT COUNT(*) AS num FROM question WHERE `type` <> 'material';", 500);
         if (empty($startData)) {
             return 1;
         }
