@@ -53,20 +53,20 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            // 'updateQuestionBankItemBankId',
-            // 'processBizItemBank',
-            // 'processBizItemCategory',
-            // 'processBizItem', 
-            // 'processBizQuestion',
-            // 'processBizAssessmentAndSectionAndSectionItem',
-            // 'processQuestionMarkerResultAnswerStep1', //处理选择题
-            // 'processQuestionMarkerResultAnswerStep2', //处理判断题
-            // 'processBizQuestionFavorite',
-            // 'processActivityMediaId',
-            // 'processActivityTestpaper',
-            // 'processActivityHomework',
-            // 'processActivityExercise',
-            // 'processBizAnswerScene',
+            'updateQuestionBankItemBankId',
+            'processBizItemBank',
+            'processBizItemCategory',
+            'processBizItem', 
+            'processBizQuestion',
+            'processBizAssessmentAndSectionAndSectionItem',
+            'processQuestionMarkerResultAnswerStep1', //处理选择题
+            'processQuestionMarkerResultAnswerStep2', //处理判断题
+            'processBizQuestionFavorite',
+            'processActivityMediaId',
+            'processActivityTestpaper',
+            'processActivityHomework',
+            'processActivityExercise',
+            'processBizAnswerScene',
         );
 
         $funcNames = array();
@@ -329,10 +329,14 @@ class EduSohoUpgrade extends AbstractUpdater
         
         $exerciseActivities = array();
         foreach ($activities as $activity) {
+            $drawCondition = $this->converDrawCondition($activity);
+            if (empty($drawCondition)) {
+                continue;
+            }
             $exerciseActivities[] = array(
                 'id' => $activity['id'],
                 'answerSceneId' => $activity['id'],
-                'drawCondition' => $this->converDrawCondition($activity),
+                'drawCondition' => $drawCondition,
                 'createdTime' => $activity['createdTime'],
                 'updatedTime' => $activity['updatedTime'],
             );
@@ -431,7 +435,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $limit = $startData['limit'];
         $sql = "
             UPDATE `question_marker_result` SET  
-                answer = replace(answer, '0', 'A'),
+                answer = replace(answer, '0\"', 'A\"'),
                 answer = replace(answer, '1', 'B'), 
                 answer = replace(answer, '2', 'C'), 
                 answer = replace(answer, '3', 'D'), 
@@ -441,7 +445,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 answer = replace(answer, '7', 'H'),
                 answer = replace(answer, '8', 'I'),
                 answer = replace(answer, '9', 'J'),
-                answer = replace(answer, '10', 'K')
+                answer = replace(answer, '10\"', 'K\"')
             WHERE questionMarkerId IN (
                 SELECT id FROM (
                     SELECT id FROM question_marker WHERE type IN ('uncertain_choice', 'single_choice', 'choice') LIMIT {$start}, {$limit}
@@ -570,7 +574,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $testpaperItems = ArrayToolkit::group(
             $this->getTestpaperItemDao()->findItemsByTestIds(ArrayToolkit::column($testpapers, 'id')), 'testId'
         );
-
+        
         $assessments = array();
         $assessmentSections = array();
         $assessmentSectionItems = array();
@@ -601,17 +605,20 @@ class EduSohoUpgrade extends AbstractUpdater
                         if ($questionType == 'material') {
                             //把子题加回去
                             foreach ($items as $key => $item) {
-                                if ($item['questionId'] > 0) {
+                                if ($item['parentId'] > 0) {
                                     $sectionItems[] = $item;
                                 }
                             }
                         } else {
                             //把子题去掉
                             foreach ($sectionItems as $key => $item) {
-                                if ($item['questionId'] > 0) {
-                                    unset($items[$key]);
+                                if ($item['parentId'] > 0) {
+                                    unset($sectionItems[$key]);
                                 }
                             }
+                        }
+                        if (empty($sectionItems)) {
+                            continue;
                         }
                         $sectionAndItems = $this->getSectionAndItems(array_values($sectionItems), $testpaper);
                         $questionCount += $sectionAndItems['section']['question_count'];
@@ -687,11 +694,11 @@ class EduSohoUpgrade extends AbstractUpdater
                     'question_id' => $subQuestion['questionId'],
                     'seq' => $subQuestion['seq'],
                     'rule' => array(
-                        array('all_right' => $subQuestion['score']),
-                        array('no_answer' => 0),
-                        array('reviewing' => 0),
-                        array('wrong' => 0),
-                        array('part_right' => $subQuestion['missScore']),
+                        array('name' => 'all_right', 'score' => $subQuestion['score']),
+                        array('name' => 'no_answer', 'score' => 0),
+                        array('name' => 'reviewing', 'score' => 0),
+                        array('name' => 'wrong', 'score'=> 0),
+                        array('name' => 'part_right', 'score' => $subQuestion['missScore']),
                     ),
                 );
             }
@@ -826,7 +833,7 @@ class EduSohoUpgrade extends AbstractUpdater
                     KEY `bank_id` (`bank_id`),
                     KEY `difficulty` (`difficulty`),
                     KEY `category_id` (`category_id`)
-                ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COMMENT='题目表';
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题目表';
             ");
         }
 
@@ -895,11 +902,11 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->logger('info', __FUNCTION__.' page:'.$startData['page'].'/'.$startData['pageCount']);
 
         $questions = $this->getQuestionDao()->search(array('types' => array('choice', 'essay', 'determine', 'fill', 'uncertain_choice', 'single_choice')), array(), $startData['start'], $startData['limit']);
-        $bizQuestion = array();
+        $bizQuestions = array();
         foreach ($questions as $question) {
-            $bizQuestion[] = $this->converBizQuestion($question);
+            $bizQuestions[] = $this->converBizQuestion($question);
         }
-        $this->getBizQuestionDao()->batchCreate($bizQuestion);
+        $this->getBizQuestionDao()->batchCreate($bizQuestions);
         
         $endData = $this->endPage(__FUNCTION__);
         if (empty($endData)) {
