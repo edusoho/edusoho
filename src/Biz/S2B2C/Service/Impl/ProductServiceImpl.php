@@ -101,6 +101,11 @@ class ProductServiceImpl extends BaseService implements ProductService
         return $resultSet;
     }
 
+    public function getByTypeAndLocalResourceId($type, $localResourceId)
+    {
+        return $this->getS2B2CProductDao()->getByTypeAndLocalResourceId($type, $localResourceId);
+    }
+
     protected function getAccessKey()
     {
         $settings = $this->getSettingService()->get('storage', []);
