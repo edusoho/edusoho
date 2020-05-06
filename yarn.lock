@@ -3278,9 +3278,9 @@ es-abstract@^1.17.0, es-abstract@^1.17.0-next.1, es-abstract@^1.17.2, es-abstrac
     string.prototype.trimleft "^2.1.1"
     string.prototype.trimright "^2.1.1"
 
-es-ckeditor@4.7.2-patch11, "es-ckeditor@git+https://github.com/cd-fez/es-ckeditor.git#c76a09d4ef65199f1ba5a6e0c42576376239a868":
+es-ckeditor@4.7.2-patch11, "es-ckeditor@git+https://github.com/cd-fez/es-ckeditor.git#e09fb4a33eed6bacb573e8f656accd0d83b50899":
   version "4.7.2-patch11"
-  resolved "git+https://github.com/cd-fez/es-ckeditor.git#c76a09d4ef65199f1ba5a6e0c42576376239a868"
+  resolved "git+https://github.com/cd-fez/es-ckeditor.git#e09fb4a33eed6bacb573e8f656accd0d83b50899"
 
 es-commit-msg-validator@1.0.2:
   version "1.0.2"
@@ -5221,10 +5221,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank-test@^0.1.20:
-  version "0.1.20"
-  resolved "https://registry.yarnpkg.com/item-bank-test/-/item-bank-test-0.1.20.tgz#634a4c5b5e13dcd8c76fa25aaa1e6b94bcc67300"
-  integrity sha512-Nmlt53573Jp/9NbX/KGiZKDqifcyAc3zU4Bbne7eup3Sy49V8jX4IegGmZ51ivv2ici6o9WdpYfmE7XicReMNw==
+item-bank-test@^0.1.26:
+  version "0.1.26"
+  resolved "https://registry.yarnpkg.com/item-bank-test/-/item-bank-test-0.1.26.tgz#f629b82cd74cfb1e4fb16a18b1074954b7b72576"
+  integrity sha512-+vIION+hUaO31FLi15hJYYebKheVMTRUHlf6rVTmLRCMatsBn1BiBC4kvt/voeoLNuGXtLbWs2+Vdf5KY0GPDw==
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"
