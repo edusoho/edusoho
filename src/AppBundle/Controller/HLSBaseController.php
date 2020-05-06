@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use Biz\File\UploadFileException;
+use Biz\S2B2C\Service\FileSourceService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\User\Service\UserService;
 use Biz\User\Service\TokenService;
 use Biz\CloudPlatform\CloudAPIFactory;
@@ -108,16 +110,32 @@ abstract class HLSBaseController extends BaseController
 
         //新版api需要返回json形式的m3u8
         if ('json' == strtolower($format)) {
-            $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
+            $uri = '/hls/playlist/json';
+            $params = array('streams' => $streams, 'qualities' => $qualities);
+
+            if ('cloud' == $file['storage']) {
+                $playlist = $api->get($uri, $params);
+            } else {
+                $fileInfo = $this->getS2B2CFileSourceService()->getFullFileInfo($file);
+                $playlist = $this->getS2B2CFacedService()->getS2B2CService()->getProductHlsPlaylistJson($uri, $fileInfo, $params);
+            }
 
             return $this->createJsonResponse($playlist);
         }
 
-        $playlist = $api->get('/hls/playlist', array(
+        $uri = '/hls/playlist';
+        $params = array(
             'streams' => $streams,
             'qualities' => $qualities,
             'clientIp' => $clientIp,
-        ));
+        );
+
+        if ('cloud' == $file['storage']) {
+            $playlist = $api->get($uri, $params);
+        } else {
+            $fileInfo = $this->getS2B2CFileSourceService()->getFullFileInfo($file);
+            $playlist = $this->getS2B2CFacedService()->getS2B2CService()->getProductHlsPlaylist($uri, $fileInfo, $params);
+        }
 
         if (empty($playlist['playlist'])) {
             return $this->createMessageResponse('error', '生成视频播放列表失败！');
@@ -218,7 +236,13 @@ abstract class HLSBaseController extends BaseController
 
         $api = CloudAPIFactory::create('leaf');
 
-        $stream = $api->get('/hls/stream', $params);
+        $uri = '/hls/stream';
+        if ('supplier' == $file['storage']) {
+            $fileInfo = $this->getS2B2CFileSourceService()->getFullFileInfo($file);
+            $stream = $this->getS2B2CFacedService()->getS2B2CService()->getProductHlsStream($uri, $fileInfo, $params);
+        } else {
+            $stream = $api->get($uri, $params);
+        }
 
         if (empty($stream['stream'])) {
             return $this->createMessageResponse('error', '生成视频播放地址失败！');
@@ -259,7 +283,15 @@ abstract class HLSBaseController extends BaseController
 
         if ($this->isHlsEncryptionPlusEnabled() || !$isMobileUserAgent) {
             $api = CloudAPIFactory::create('leaf');
-            $result = $api->get("/hls/clef_plus/{$file[$this->getMediaAttr()][$token['data']['level']]['hlsKey']}");
+
+            $hlsKey = $file[$this->getMediaAttr()][$token['data']['level']]['hlsKey'];
+            $uri = "/hls/clef_plus/{$hlsKey}";
+            if ($file['storage'] == 'supplier') {
+                $fileInfo = $this->getS2B2CFileSourceService()->getFullFileInfo($file);
+                $result = $this->getS2B2CFacedService()->getS2B2CService()->getProductHlsClefPlus($uri, $fileInfo, array('hlsKey' => $hlsKey));
+            } else {
+                $result = $api->get($uri);
+            }
 
             return $this->responseEnhanced($result['key']);
         }
@@ -368,6 +400,22 @@ abstract class HLSBaseController extends BaseController
         }
 
         return $file;
+    }
+
+    /**
+     * @return FileSourceService
+     */
+    protected function getS2B2CFileSourceService()
+    {
+        return $this->createService('S2B2C:FileSourceService');
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacedService()
+    {
+        return $this->createService('S2B2C:S2B2CFacadeService');
     }
 
     /**

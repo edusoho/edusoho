@@ -27,10 +27,10 @@ use Codeages\Biz\Framework\Event\Event;
 
 class UploadFileServiceImpl extends BaseService implements UploadFileService
 {
-    public static $implementor
-    = array(
+    public static $implementor = array(
         'local' => 'File:LocalFileImplementor',
         'cloud' => 'File:CloudFileImplementor',
+        'supplier' => 'File:SupplierFileImplementor',
     );
 
     /**

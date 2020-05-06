@@ -18,7 +18,7 @@
       <span class="label label-success live-label mls">{{ 'admin.course_manage.manage.live_course'|trans }}</span>
     {% endif %}
 
-    {% if courseSet.sourceCourseSetId|default(0) > 0 %}
+    {% if courseSet.platform|default('self') == 'supplier' %}
       <span class="label label-success live-label mls">{{ 'admin_v2.course_manage.merchant_course'|trans }}</span>
     {% endif %}
     <br>

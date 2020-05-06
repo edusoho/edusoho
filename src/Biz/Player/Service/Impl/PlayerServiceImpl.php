@@ -9,6 +9,7 @@ use Biz\File\Service\UploadFileService;
 use Biz\MaterialLib\Service\MaterialLibService;
 use Biz\Player\PlayerException;
 use Biz\Player\Service\PlayerService;
+use Biz\S2B2C\Service\FileSourceService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\TokenService;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -54,7 +55,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
             $file['videoWatermarkEmbedded'] = 1;
         }
 
-        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+        $result = $this->getPlayerByFile($file, $ssl);
 
         if (isset($result['subtitles'])) {
             $this->filterSubtitles($result['subtitles']);
@@ -82,7 +83,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
 
     public function getVideoPlayUrl($file, $context, $ssl)
     {
-        if ('cloud' == $file['storage']) {
+        if (in_array($file['storage'], array('cloud', 'supplier'))) {
             if (!empty($file['metas2'])) {
                 if (isset($file['convertParams']['convertor']) && ('HLSEncryptedVideo' == $file['convertParams']['convertor'])) {
                     $hideBeginning = isset($context['hideBeginning']) ? $context['hideBeginning'] : false;
@@ -110,7 +111,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
                 }
 
                 if ($key) {
-                    $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+                    $result = $this->getPlayerByFile($file, $ssl);
                 }
             }
 
@@ -165,7 +166,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
             $this->createNewException(PlayerException::FILE_TYPE_INVALID());
         }
 
-        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+        $result = $this->getPlayerByFile($file, $ssl);
         $result['resId'] = $file['globalId'];
 
         $isConvertNotSuccess = isset($file['convertStatus']) && FileImplementor::CONVERT_STATUS_SUCCESS != $file['convertStatus'];
@@ -203,7 +204,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
                 $error['message'] = 'PPT文档还在转换中，还不能查看，请稍等。';
             }
         }
-        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+        $result = $this->getPlayerByFile($file, $ssl);
         $result['resId'] = $file['globalId'];
 
         if (isset($result['error'])) {
@@ -245,6 +246,19 @@ class PlayerServiceImpl extends BaseService implements PlayerService
         return $token;
     }
 
+    protected function getPlayerByFile($file, $ssl = false)
+    {
+        if ('cloud' == $file['storage']) {
+            return $this->getMaterialLibService()->player($file['globalId'], $ssl);
+        }
+
+        if ('supplier' == $file['storage']) {
+            return $this->getS2B2CFileSourceService()->player($file['globalId'], $ssl);
+        }
+
+        return array();
+    }
+
     /**
      * @return UploadFileService
      */
@@ -275,5 +289,13 @@ class PlayerServiceImpl extends BaseService implements PlayerService
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
+    }
+
+    /**
+     * @return FileSourceService
+     */
+    protected function getS2B2CFileSourceService()
+    {
+        return $this->createService('S2B2C:FileSourceService');
     }
 }

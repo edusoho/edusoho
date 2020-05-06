@@ -6,6 +6,8 @@ use AppBundle\Common\FileToolkit;
 use Biz\File\UploadFileException;
 use Biz\Player\PlayerException;
 use Biz\Player\Service\PlayerService;
+use Biz\S2B2C\Service\FileSourceService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\User\Service\TokenService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\File\Service\UploadFileService;
@@ -40,7 +42,7 @@ class PlayerController extends BaseController
         if ('audio' == $file['type']) {
             $cloudSdk = 'audio'; //webExtension->getCloudSdkUrl
         }
-        if ('video' == $file['type'] && 'cloud' == $file['storage']) {
+        if ('video' == $file['type'] && in_array($file['storage'], array('cloud', 'supplier'))) {
             $cloudSdk = 'video'; //webExtension->getCloudSdkUrl
             $videoPlayer = $this->getPlayerService()->getVideoFilePlayer($file, $agentInWhiteList, $context, $ssl);
             $isEncryptionPlus = $videoPlayer['isEncryptionPlus'];
@@ -227,9 +229,32 @@ class PlayerController extends BaseController
             'audio' => $file['directives']['audioQuality'],
         );
 
-        $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
+        $uri = '/hls/playlist/json';
+        $params = array('streams' => $streams, 'qualities' => $qualities);
+        if ('supplier' == $file['storage']) {
+            $fileInfo = $this->getS2B2CFileSourceService()->getFullFileInfo($file);
+            $playlist = $this->getS2B2CFacedService()->getS2B2CService()->getProductHlsPlaylistJson($uri, $fileInfo, $params);
+        } else {
+            $playlist = $api->get($uri, $params);
+        }
 
         return $this->createJsonResponse($playlist);
+    }
+
+    /**
+     * @return FileSourceService
+     */
+    protected function getS2B2CFileSourceService()
+    {
+        return $this->createService('S2B2C:FileSourceService');
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacedService()
+    {
+        return $this->createService('S2B2C:S2B2CFacadeService');
     }
 
     /**

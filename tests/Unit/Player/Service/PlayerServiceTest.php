@@ -53,7 +53,7 @@ class PlayerServiceTest extends BaseTestCase
             array('functionName' => 'player', 'returnValue' => array('subtitles' => array(array('name' => 'test.srt')), 'mp4url' => 'www.baidu.com')),
         ));
 
-        $result = $this->getPlayerService()->getVideoFilePlayer(array('convertParams' => array('hasVideoWatermark' => true), 'mcStatus' => 'yes', 'globalId' => 1), true, array(), true);
+        $result = $this->getPlayerService()->getVideoFilePlayer(array('convertParams' => array('hasVideoWatermark' => true), 'mcStatus' => 'yes', 'globalId' => 1, 'storage' => 'cloud'), true, array(), true);
         $this->assertEquals('www.baidu.com', $result['mp4Url']);
         $this->assertEquals(1, $result['resId']);
         $this->assertEquals('te', $result['context']['subtitles'][0]['name']);
@@ -90,9 +90,9 @@ class PlayerServiceTest extends BaseTestCase
     {
         $this->mockBiz('File:UploadFileService', array(
             array('functionName' => 'getFullFile', 'returnValue' => array(), 'withParams' => array(1)),
-            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'document', 'convertStatus' => 'success'), 'withParams' => array(2)),
-            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'document', 'convertStatus' => 'error'), 'withParams' => array(3)),
-            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'document', 'convertStatus' => 'processing'), 'withParams' => array(4)),
+            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'document', 'convertStatus' => 'success', 'storage' => 'cloud'), 'withParams' => array(2)),
+            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'document', 'convertStatus' => 'error', 'storage' => 'cloud'), 'withParams' => array(3)),
+            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'document', 'convertStatus' => 'processing', 'storage' => 'cloud'), 'withParams' => array(4)),
         ));
         $this->mockBiz('MaterialLib:MaterialLibService', array(
             array('functionName' => 'player', 'returnValue' => array('url' => 'www.baidu.com')),
@@ -127,10 +127,10 @@ class PlayerServiceTest extends BaseTestCase
     public function testGetPptFilePlayer()
     {
         $this->mockBiz('File:UploadFileService', array(
-            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'live'), 'withParams' => array(1)),
-            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'ppt', 'convertStatus' => 'success'), 'withParams' => array(2)),
-            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'ppt', 'convertStatus' => 'error'), 'withParams' => array(3)),
-            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'ppt', 'convertStatus' => 'processing'), 'withParams' => array(4)),
+            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'live', 'storage' => 'cloud'), 'withParams' => array(1)),
+            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'ppt', 'convertStatus' => 'success', 'storage' => 'cloud'), 'withParams' => array(2)),
+            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'ppt', 'convertStatus' => 'error', 'storage' => 'cloud'), 'withParams' => array(3)),
+            array('functionName' => 'getFullFile', 'returnValue' => array('globalId' => 1, 'type' => 'ppt', 'convertStatus' => 'processing', 'storage' => 'cloud'), 'withParams' => array(4)),
         ));
         $this->mockBiz('MaterialLib:MaterialLibService', array(
             array('functionName' => 'player', 'returnValue' => array('url' => 'www.baidu.com')),
