@@ -2,21 +2,38 @@
 
 namespace AppBundle\Worker;
 
+use Biz\Plumber\Service\PlumberQueueService;
 use Codeages\Plumber\AbstractWorker;
 use Codeages\Plumber\Queue\Job;
 
 abstract class BaseWorker extends AbstractWorker
 {
+    protected $logger;
+
     abstract public function doExecute(Job $job);
 
     public function execute(Job $job)
     {
+        $queue = $this->getPlumberQueueService()->createQueue($job, 'acquired');
+        $this->logger = $this->getBiz()->offsetGet('plumber.queue.logger');
+
         try {
             $this->reconnect();
 
-            return $this->doExecute($job);
+            $this->getPlumberQueueService()->updateQueueStatus($queue['id'], 'executing');
+
+            $result = $this->doExecute($job);
         } catch (\Exception $exception) {
-            $this->logger->error(sprintf('Worker Execute Failed: %s %s', $exception->getMessage(), json_encode($exception->getTrace())));
+            $this->logger->error("Worker Execute Failed: {$exception->getMessage()}, {$exception->getTraceAsString()}");
+
+            $this->getPlumberQueueService()->updateQueueStatus($queue['id'], 'failed', $exception->getTraceAsString());
+
+            return self::FINISH;
+        }
+
+        if ($result) {
+            $this->getPlumberQueueService()->updateQueueStatus($queue['id'], 'success');
+            $this->logger->info('JobWorker:execute crontab job succeed');
 
             return self::FINISH;
         }
@@ -43,5 +60,13 @@ abstract class BaseWorker extends AbstractWorker
         $biz = $this->getBiz();
 
         return $biz['db'];
+    }
+
+    /**
+     * @return PlumberQueueService
+     */
+    protected function getPlumberQueueService()
+    {
+        return $this->getBiz()->service('Plumber:PlumberQueueService');
     }
 }
