@@ -25,12 +25,30 @@ $container = $kernel->getContainer();
 $biz = $container->get('biz');
 $biz['biz'] = $biz;
 
-$plumberQueueDatabases = $container->getParameter('plumber_queue_databases');
+$plumberQueueOptions = $container->getParameter('plumber_queues_options');
+$defaultQueueOptions = [
+    'type' => 'beanstalk',
+    'host' => '127.0.0.1',
+    'port' => 11300,
+    'password' => '',
+    'persistent' => true,
+    'timeout' => 2,
+    'socket_timeout' => 20,
+    'logger' => null,
+];
 
-foreach ($options['queues'] as $key => &$queue) {
-    if (!empty($plumberQueueDatabases[$key])) {
-        $queue = array_merge($queue, $plumberQueueDatabases[$key]);
+foreach ($options['queues'] as &$queue) {
+    if (!isset($queue['queue_options'])) {
+        throw new InvalidArgumentException('queue_options not exist');
     }
+
+    if (empty($plumberQueueOptions[$queue['queue_options']])) {
+        $queue = array_merge($queue, $defaultQueueOptions);
+    } else {
+        $queue = array_merge($queue, $plumberQueueOptions[$queue['queue_options']]);
+    }
+
+    unset($queue['queue_options']);
 }
 
 $options = array_merge($options, [
