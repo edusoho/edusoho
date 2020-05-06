@@ -15,7 +15,8 @@ class ProductDaoImpl extends GeneralDaoImpl implements ProductDao
            'timestamps' => ['createdTime', 'updatedTime'],
            'serializes' => [],
            'conditions' => [
-                'id = :id',
+               'id = :id',
+               'productType = :productType',
            ],
            'orderbys' => ['id'],
        ];
@@ -38,5 +39,13 @@ class ProductDaoImpl extends GeneralDaoImpl implements ProductDao
         $sql = "SELECT * FROM {$this->table} WHERE supplierId= ? AND remoteProductId IN ({$marks});";
 
         return $this->db()->fetchAll($sql, array_merge([$supplierId], array_values($remoteProductIds)));
+    }
+
+    public function findBySupplierIdAndRemoteResourceTypeAndIds($supplierId, $productType, $remoteResourceIds)
+    {
+        $marks = str_repeat('?,', count($remoteResourceIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE supplierId= ? AND productType = ? AND remoteResourceId IN ({$marks});";
+
+        return $this->db()->fetchAll($sql, array_merge([$supplierId, $productType], array_values($remoteResourceIds)));
     }
 }

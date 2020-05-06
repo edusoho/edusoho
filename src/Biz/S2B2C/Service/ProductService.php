@@ -15,4 +15,6 @@ interface ProductService
     public function getProductBySupplierIdAndRemoteProductId($supplierId, $remoteProductId);
 
     public function findProductsBySupplierIdAndRemoteProductIds($supplierId, $remoteProductIds);
+
+    public function findProductsBySupplierIdAndRemoteResourceTypeAndIds($supplierId, $productType, $remoteProductIds);
 }

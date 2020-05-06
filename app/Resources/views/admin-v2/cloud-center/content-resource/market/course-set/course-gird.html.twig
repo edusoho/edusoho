@@ -64,7 +64,7 @@
     </div>
 
     <div class="selected_btn">
-      {% set hasChosen = chosenCourses[courseSet.s2b2cDistributeId]|default() %}
+      {% set hasChosen = chosenCourses[courseSet.id]|default() %}
       {% set canChoose = (merchant.coop_status|default('') != 'cooperation' or hasChosen or courseSet.wholeEditStatus|default() == 'unpublished' ) %}
       <button id="course_selected_{{ courseSet.id }}"
               data-course-set="{{ courseSet|json_encode() }}"

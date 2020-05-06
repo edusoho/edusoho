@@ -82,7 +82,6 @@ class ResourcePurchaseController extends BaseController
         $conditions['offset'] = ($request->query->get('page', 1) - 1) * $pageSize;
         $conditions['limit'] = $pageSize;
         $conditions['sort'] = '-created_time,-id';
-
         /*
          * mock
          */
@@ -95,12 +94,11 @@ class ResourcePurchaseController extends BaseController
 
         $supplierSettings = $this->getSettingService()->get('supplierSettings', []);
 
-        $remoteProductIds = ArrayToolkit::column($courseSets, 's2b2cDistributeId');
+        $remoteResourceIds = ArrayToolkit::column($courseSets, 'id');
 
         if (!empty($supplierSettings['supplierId'])) {
-            $chosenProducts = $this->getS2B2CProductService()->findProductsBySupplierIdAndRemoteProductIds($supplierSettings['supplierId'], $remoteProductIds);
-
-            $chosenProducts = ArrayToolkit::index($chosenProducts, 'remoteProductId');
+            $chosenProducts = $this->getS2B2CProductService()->findProductsBySupplierIdAndRemoteResourceTypeAndIds($supplierSettings['supplierId'], 'course_set', $remoteResourceIds);
+            $chosenProducts = ArrayToolkit::index($chosenProducts, 'remoteResourceId');
         }
 
         return $this->render(
@@ -117,6 +115,7 @@ class ResourcePurchaseController extends BaseController
         //当前静默是课程，不过真是情况是会有多种模式的课程
         $courseSet = $this->getS2B2CFacadeService()->getSupplierPlatformApi()
             ->getSupplierCourseSetProductDetail($id);
+
         if (empty($courseSet) || !empty($courseSet['error'])) {
             throw $this->createNotFoundException('原课程未找到或出错了');
         }
