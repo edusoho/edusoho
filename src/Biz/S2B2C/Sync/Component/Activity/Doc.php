@@ -6,19 +6,18 @@ use Biz\Activity\Dao\DocActivityDao;
 
 class Doc extends Activity
 {
-    public function sync($activity, $config = array())
+    public function sync($activity, $config = [])
     {
         $newDoc = $this->getDocActivityFields($activity, $config);
 
         return $this->getDocActivityDao()->create($newDoc);
     }
 
-    public function updateToLastedVersion($activity, $config = array())
+    public function updateToLastedVersion($activity, $config = [])
     {
         $newDoc = $this->getDocActivityFields($activity, $config);
-        $sync = $this->getSyncByRemoteResourceIdAndResourceType();
 
-        $existDoc = $this->getDocActivityDao()->search(array('syncId' => $newDoc['syncId']), array(), 0, PHP_INT_MAX);
+        $existDoc = $this->getDocActivityDao()->search(['syncId' => $newDoc['syncId']], [], 0, PHP_INT_MAX);
         if (!empty($existDoc)) {
             unset($newDoc['createdUserId']);
 
@@ -34,13 +33,13 @@ class Doc extends Activity
         $doc = $activity[$activity['mediaType'].'Activity'];
         $newUploadFiles = $config['newUploadFiles'];
 
-        return array(
+        return [
             'mediaId' => empty($newUploadFiles[$doc['mediaId']]) ? 0 : $newUploadFiles[$doc['mediaId']]['id'],
             'finishType' => $doc['finishType'],
             'finishDetail' => $doc['finishDetail'],
             'createdUserId' => $user['id'],
             'syncId' => $doc['id'],
-        );
+        ];
     }
 
     /**

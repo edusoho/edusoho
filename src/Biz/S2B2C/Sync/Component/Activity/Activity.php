@@ -4,7 +4,6 @@ namespace Biz\S2B2C\Sync\Component\Activity;
 
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\File\Service\UploadFileService;
-use Biz\S2B2C\Service\ResourceSyncService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Testpaper\Service\TestpaperService;
@@ -35,11 +34,6 @@ class Activity
     public function updateToLastedVersion($sourceActivity, $activity)
     {
         return null;
-    }
-
-    protected function getSyncByRemoteResourceIdAndResourceType($remoteResourceId, $resourceType)
-    {
-        return $this->getResourceSyncService()->getSyncByRemoteResourceIdAndResourceType($remoteResourceId, $resourceType);
     }
 
     protected function getCurrentUser()
@@ -115,14 +109,6 @@ class Activity
     protected function getTestpaperService()
     {
         return $this->getBiz()->service('Testpaper:TestpaperService');
-    }
-
-    /**
-     * @return ResourceSyncService
-     */
-    protected function getResourceSyncService()
-    {
-        return $this->getBiz()->service('S2B2C:ResourceSyncService');
     }
 
     protected function getLogger()
