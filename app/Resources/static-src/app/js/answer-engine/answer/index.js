@@ -1,8 +1,8 @@
 import Vue from 'vue';
-import itemBank from 'item-bank-test';
+import { itemEngine} from 'item-bank-test';
 import Answer from './answer';
 
-Vue.use(itemBank);
+Vue.use(itemEngine);
 
 Vue.config.productionTip = false;
 

@@ -1,8 +1,8 @@
 import Vue from 'vue';
-import itemBank from 'item-bank-test';
+import { sceneReport } from 'item-bank-test';
 import SceneReport from './scene-report';
 
-Vue.use(itemBank);
+Vue.use(sceneReport);
 
 Vue.config.productionTip = false;
 
