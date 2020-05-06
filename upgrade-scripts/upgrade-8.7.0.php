@@ -5,7 +5,7 @@ use AppBundle\Common\ArrayToolkit;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
-    const SETTING_KEY = 'upgrade_8.7.43';
+    const SETTING_KEY = 'upgrade_8.7.0';
 
     public function __construct($biz)
     {
@@ -53,6 +53,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
+            'createFunctionConverQuestionAnswer',
             'updateQuestionBankItemBankId',
             'processBizItemBank',
             'processBizItemCategory',
@@ -67,6 +68,11 @@ class EduSohoUpgrade extends AbstractUpdater
             'processActivityHomework',
             'processActivityExercise',
             'processBizAnswerScene',
+            'processBizAnswerRecord',
+            'processBizAnswerReport',
+            'processBizAnswerQuestionReport',
+            'processBizAnswerSceneQuestionReport',
+            'deleteFunctionConverQuestionAnswer',
         );
 
         $funcNames = array();
@@ -101,7 +107,273 @@ class EduSohoUpgrade extends AbstractUpdater
             );
         }
     }
-    
+
+    public function processBizAnswerSceneQuestionReport($page)
+    {
+        $this->logger('info', __FUNCTION__);
+        if (!$this->isTableExist('biz_answer_scene_question_report')) {
+            $sql = "
+                CREATE TABLE `biz_answer_scene_question_report` (
+                    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+                    `answer_scene_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '场次id',
+                    `question_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '问题id',
+                    `item_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目id',
+                    `right_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答对人数',
+                    `wrong_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答错人数',
+                    `no_answer_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '未作答人数',
+                    `part_right_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '部分正确人数',
+                    `response_points_report` text COMMENT '输入点报告',
+                    `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+                    `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+                    PRIMARY KEY (`id`),
+                    KEY `answer_scene_id` (`answer_scene_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='场次报告';
+            ";
+            $this->getConnection()->exec($sql);
+        }
+        return 1;
+    }
+
+    public function deleteFunctionConverQuestionAnswer($page)
+    {
+        $this->logger('info', __FUNCTION__);
+        $sql = "
+            drop function if exists conver_question_answer;
+        ";
+        $this->getConnection()->exec($sql);
+        return 1;
+    }
+
+    public function createFunctionConverQuestionAnswer($page)
+    {
+        $this->logger('info', __FUNCTION__);
+        $sql = "
+            drop function if exists conver_question_answer;
+            CREATE FUNCTION conver_question_answer(answer_mode VARCHAR(100), answer text) RETURNS text
+            begin
+                if answer_mode = 'uncertain_choice' or answer_mode = 'single_choice' or answer_mode = 'choice' then 
+                    set answer = replace(answer, '0\"', 'A\"');
+                    set answer = replace(answer, '1', 'B'); 
+                    set answer = replace(answer, '2', 'C'); 
+                    set answer = replace(answer, '3', 'D'); 
+                    set answer = replace(answer, '4', 'E');
+                    set answer = replace(answer, '5', 'F');
+                    set answer = replace(answer, '6', 'G');
+                    set answer = replace(answer, '7', 'H');
+                    set answer = replace(answer, '8', 'I');
+                    set answer = replace(answer, '9', 'J');
+                    set answer = replace(answer, '10\"', 'K\"');
+                elseif answer_mode = 'determine' or answer_mode = 'true_false' then
+                    set answer = replace(answer, '0', 'T');
+                    set answer = replace(answer, '1', 'F'); 
+                else
+                    set answer = answer;
+                end if;
+                return answer;
+            end;
+        ";
+        $this->getConnection()->exec($sql);
+        return 1;
+    }
+
+    public function processBizAnswerQuestionReport($page)
+    {
+        if (!$this->isTableExist('biz_answer_question_report')) {
+            $this->getConnection()->exec("
+                CREATE TABLE `biz_answer_question_report` (
+                    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                    `identify` varchar(255) NOT NULL COMMENT '唯一标识，(answer_record_id)_(question_id)',
+                    `answer_record_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题记录id',
+                    `assessment_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷id',
+                    `section_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷模块id',
+                    `item_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目id',
+                    `question_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '问题id',
+                    `score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '得分',
+                    `total_score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '满分数',
+                    `response` text,
+                    `status` enum('reviewing','right','wrong','no_answer', 'part_right') NOT NULL DEFAULT 'reviewing' COMMENT '状态',
+                    `comment` text COMMENT '评语',
+                    `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+                    `updated_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+                    PRIMARY KEY (`id`),
+                    KEY `answer_record_id` (`answer_record_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题目问题报告表';
+            ");
+        }
+
+        $startData = $this->startPage(__FUNCTION__, "SELECT id AS num FROM testpaper_item_result_v8 ORDER BY id DESC LIMIT 1;", 50000);
+        if (empty($startData)) {
+            return 1;
+        }
+        $this->logger('info', __FUNCTION__.' page:'.$startData['page'].'/'.$startData['pageCount']);
+
+        $start = $startData['start'];
+        $limit = $startData['limit'];
+        $sql = "
+            INSERT INTO `biz_answer_question_report` (id, identify, answer_record_id, assessment_id, section_id, item_id, question_id, score, total_score, response, status, comment)
+            SELECT
+                a.id,
+                concat_ws('_', a.resultId, a.questionId),
+                a.resultId,
+                a.testId,
+                '0',
+                b.item_id,
+                a.questionId,
+                a.score,
+                '0',
+                conver_question_answer(b.answer_mode,a.answer),
+                CASE a.status
+                    WHEN 'noAnswer' THEN 'no_answer'
+                    WHEN 'none' THEN 'reviewing'
+                    WHEN 'partRight' THEN 'part_right'
+                    ELSE a.status
+                END,
+                a.teacherSay
+            FROM `testpaper_item_result_v8` a 
+            LEFT JOIN `biz_question` b ON a.questionId = b.id
+            WHERE a.`type` <> 'exercise' LIMIT {$start}, {$limit};
+        ";
+        try {
+            $this->getConnection()->exec($sql);
+        } catch (\Exception $e) {}
+
+        $endData = $this->endPage(__FUNCTION__);
+        if (empty($endData)) {
+            return 1;
+        } else {
+            return $endData['page'];
+        }
+    }
+
+    public function processBizAnswerReport($page)
+    {
+        if (!$this->isTableExist('biz_answer_report')) {
+            $this->getConnection()->exec("
+                CREATE TABLE `biz_answer_report` (
+                    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                    `assessment_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷id',
+                    `answer_record_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题记录id',
+                    `answer_scene_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '场次id',
+                    `total_score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '总分',
+                    `score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '总得分',
+                    `right_rate` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '正确率',
+                    `right_question_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答对问题数',
+                    `objective_score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '客观题得分',
+                    `subjective_score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '主观题得分',
+                    `grade` enum('none','excellent','good','passed','unpassed') NOT NULL DEFAULT 'unpassed' COMMENT '等级',
+                    `comment` text COMMENT '评语',
+                    `review_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '批阅时间',
+                    `review_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '批阅人id',
+                    `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+                    `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+                    PRIMARY KEY (`id`),
+                    KEY `answer_record_id` (`answer_record_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='答题报告';
+            ");
+        }
+
+        $startData = $this->startPage(__FUNCTION__, "SELECT id AS num FROM testpaper_result_v8 ORDER BY id DESC LIMIT 1;", 50000);
+        if (empty($startData)) {
+            return 1;
+        }
+        $this->logger('info', __FUNCTION__.' page:'.$startData['page'].'/'.$startData['pageCount']);
+
+        $start = $startData['start'];
+        $limit = $startData['limit'];
+        $sql = "
+            INSERT INTO `biz_answer_report` (id, assessment_id, answer_record_id, answer_scene_id, total_score, score, right_rate, right_question_count, objective_score, subjective_score, grade, comment, review_time, review_user_id, created_time, updated_time) 
+            SELECT 
+                a.id,
+                a.testId,
+                a.id,
+                a.lessonId,
+                b.score,
+                a.score,
+                a.rightItemCount / b.itemCount,
+                a.rightItemCount,
+                a.objectiveScore,
+                a.subjectiveScore,
+                a.passedStatus,
+                a.teacherSay,
+                a.checkedTime,
+                a.checkTeacherId,
+                a.endTime,
+                a.updateTime
+            FROM `testpaper_result_v8` a LEFT JOIN `testpaper_v8` b ON a.testId = b.id
+            WHERE a.`type` <> 'exercise' LIMIT {$start}, {$limit};
+        ";
+        try {
+            $this->getConnection()->exec($sql);
+        } catch (\Exception $e) {}
+
+        $endData = $this->endPage(__FUNCTION__);
+        if (empty($endData)) {
+            return 1;
+        } else {
+            return $endData['page'];
+        }
+    }
+
+    public function processBizAnswerRecord($page)
+    {
+        if (!$this->isTableExist('biz_answer_record')) {
+            $this->getConnection()->exec("
+                CREATE TABLE `biz_answer_record` (
+                        `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+                        `answer_scene_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '场次id',
+                        `assessment_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷id',
+                        `answer_report_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题报告id',
+                        `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题者id',
+                        `begin_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始答题时间',
+                        `end_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束答题时间',
+                        `used_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题时长-秒',
+                        `status` enum('doing','paused','reviewing','finished') NOT NULL DEFAULT 'doing' COMMENT '答题状态',
+                        `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+                        `updated_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+                        PRIMARY KEY (`id`),
+                        KEY `answer_scene_id` (`answer_scene_id`),
+                        KEY `user_id` (`user_id`),
+                        KEY `answer_scene_id_status` (`answer_scene_id`,`status`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='答题记录表';
+            ");
+        }
+
+        $startData = $this->startPage(__FUNCTION__, "SELECT id AS num FROM testpaper_result_v8 ORDER BY id DESC LIMIT 1;", 50000);
+        if (empty($startData)) {
+            return 1;
+        }
+        $this->logger('info', __FUNCTION__.' page:'.$startData['page'].'/'.$startData['pageCount']);
+
+        $start = $startData['start'];
+        $limit = $startData['limit'];
+        $sql = "
+            INSERT INTO biz_answer_record (id, answer_scene_id, assessment_id, answer_report_id, user_id, begin_time, end_time, used_time, status, created_time, updated_time)
+            SELECT  id,
+                    lessonId,
+                    testId,
+                    id,
+                    userId,
+                    beginTime,
+                    endTime,
+                    usedTime,
+                    `status`,
+                    beginTime,
+                    updateTime
+            FROM `testpaper_result_v8`
+            WHERE `type` <> 'exercise' LIMIT {$start}, {$limit}
+        ";
+        try {
+            $this->getConnection()->exec($sql);
+        } catch (\Exception $e) {}
+
+        $endData = $this->endPage(__FUNCTION__);
+        if (empty($endData)) {
+            return 1;
+        } else {
+            return $endData['page'];
+        }
+    }
+
     public function processBizAnswerScene($page)
     {
         if (!$this->isTableExist('biz_answer_scene')) {
