@@ -14,13 +14,13 @@ class RedisTopic implements TopicInterface
      */
     private $name;
 
-    public function __construct(\Redis $redis, string $name)
+    public function __construct(\Redis $redis, $name)
     {
         $this->redis = $redis;
         $this->name = $name;
     }
 
-    public function reserveJob($blocking = false, $timeout = 2): ?Job
+    public function reserveJob($blocking = false, $timeout = 2)
     {
         if ($blocking) {
             $message = $this->redis->brPop($this->name, $timeout);

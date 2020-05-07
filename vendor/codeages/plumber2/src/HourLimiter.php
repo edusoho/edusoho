@@ -17,13 +17,13 @@ class HourLimiter
      */
     private $end;
 
-    public function __construct(int $start, int $end)
+    public function __construct($start, $end)
     {
         $this->start = $start;
         $this->end = $end;
     }
 
-    public function isLimited(int $timestamp = null)
+    public function isLimited($timestamp = null)
     {
         if ($this->start > $this->end) {
             $hours = range($this->start, 23);

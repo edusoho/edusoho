@@ -39,7 +39,7 @@ class RateLimiterFactory
                     "plumber:rate_limiter:{$name}",
                     $options['allowance'],
                     $options['period'],
-                    new RedisStorage($options['redis']['host'], $options['redis']['port'], $options['redis']['password'] ?? null)
+                    new RedisStorage($options['redis']['host'], $options['redis']['port'], isset($options['redis']['password']) ? $options['redis']['password'] : null)
                 );
                 break;
             default:

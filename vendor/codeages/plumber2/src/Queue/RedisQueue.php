@@ -34,12 +34,12 @@ class RedisQueue implements QueueInterface
         $this->redis = $redis;
     }
 
-    public function listenTopic(string $name): TopicInterface
+    public function listenTopic($name)
     {
         return new RedisTopic($this->redis, $name);
     }
 
-    public function clearTopic(string $name)
+    public function clearTopic($name)
     {
         // TODO: Implement clearTopic() method.
     }

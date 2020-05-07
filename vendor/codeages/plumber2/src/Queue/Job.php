@@ -68,7 +68,7 @@ class Job
     /**
      * @return int
      */
-    public function getPriority(): int
+    public function getPriority()
     {
         return $this->priority;
     }
@@ -76,7 +76,7 @@ class Job
     /**
      * @param int $priority
      */
-    public function setPriority(int $priority): void
+    public function setPriority($priority)
     {
         $this->priority = $priority;
     }
@@ -84,7 +84,7 @@ class Job
     /**
      * @return int
      */
-    public function getDelay(): int
+    public function getDelay()
     {
         return $this->delay;
     }
@@ -92,7 +92,7 @@ class Job
     /**
      * @param int $delay
      */
-    public function setDelay(int $delay): void
+    public function setDelay($delay)
     {
         $this->delay = $delay;
     }
@@ -100,7 +100,7 @@ class Job
     /**
      * @return int
      */
-    public function getTtr(): int
+    public function getTtr()
     {
         return $this->ttr;
     }
@@ -108,12 +108,12 @@ class Job
     /**
      * @param int $ttr
      */
-    public function setTtr(int $ttr): void
+    public function setTtr($ttr)
     {
         $this->ttr = $ttr;
     }
 
-    public function toArray(): array
+    public function toArray()
     {
         return get_object_vars($this);
     }

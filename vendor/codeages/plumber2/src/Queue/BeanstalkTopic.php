@@ -23,7 +23,7 @@ class BeanstalkTopic implements TopicInterface
      */
     private $logger;
 
-    public function __construct($client, string $name, LoggerInterface $logger)
+    public function __construct($client, $name, LoggerInterface $logger)
     {
         $this->client = $client;
         $this->name = $name;
@@ -38,7 +38,7 @@ class BeanstalkTopic implements TopicInterface
      *
      * @throws QueueException
      */
-    public function reserveJob($blocking = false, $timeout = 2): ?Job
+    public function reserveJob($blocking = false, $timeout = 2)
     {
         $message = null;
         try {
