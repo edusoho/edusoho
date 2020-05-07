@@ -393,7 +393,7 @@ class AssessmentServiceTest extends IntegrationTestCase
     {
         $this->mockObjectIntoBiz('ItemBank:Assessment:AssessmentSectionItemService', [
             [
-                'functionName' => 'getAssessmentSectionItem',
+                'functionName' => 'findSectionItemsByAssessmentId',
                 'returnValue' => [
                     [
                         'item_id' => 1, 

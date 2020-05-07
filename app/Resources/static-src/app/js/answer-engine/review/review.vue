@@ -33,9 +33,13 @@
       };
     },
     created() {
+        this.answerRecord = JSON.parse($('[name=answer_record]').val());
+        if ('finished' == this.answerRecord.status) {
+          location.href = $('[name=success_goto_url]').val();
+          return;
+        }
         this.assessment = JSON.parse($('[name=assessment]').val());
         this.answerReport = JSON.parse($('[name=answer_report]').val());
-        this.answerRecord = JSON.parse($('[name=answer_record]').val());
         this.answerScene = JSON.parse($('[name=answer_scene]').val());
     },
     methods: {

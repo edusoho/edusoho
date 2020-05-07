@@ -68,6 +68,7 @@ class ItemParser
 
         foreach ($data as $question) {
             $item = [
+                'category_id' => '0',
                 'type' => $question['type'],
                 'material' => ('material' == $question['type']) ? $question['stem'] : '',
                 'analysis' => ('material' == $question['type']) ? $question['analysis'] : '',
