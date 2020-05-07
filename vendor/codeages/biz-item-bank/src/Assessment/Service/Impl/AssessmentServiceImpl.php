@@ -339,7 +339,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
 
     public function findAssessmentQuestions($assessmentId)
     {
-        $assessmentItems = $this->getSectionItemService()->getAssessmentSectionItem($assessmentId);
+        $assessmentItems = $this->getSectionItemService()->findSectionItemsByAssessmentId($assessmentId);
         if (empty($assessmentItems)) {
             return [];
         }

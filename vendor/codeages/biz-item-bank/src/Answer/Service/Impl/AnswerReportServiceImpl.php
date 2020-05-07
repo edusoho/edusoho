@@ -78,7 +78,7 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
 
         $answerQuestionReports = $this->wrapperAnswerQuestionReports(
             $this->getAnswerQuestionReportService()->findByAnswerRecordId($simpleAnswerReport['answer_record_id']), 
-            $assessmentId
+            $simpleAnswerReport['assessment_id']
         );
         $attachments = $this->getAttachmentService()->findAttachmentsByTargetIdsAndTargetType(
             ArrayToolkit::column($answerQuestionReports, 'id'),
@@ -127,7 +127,7 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
 
     protected function wrapperAnswerQuestionReports($answerQuestionReports, $assessmentId)
     {
-        $assessmentQuestions = $this->getAssessmentService()->findAssessmentQuestions($simpleAnswerReport['assessment_id']);
+        $assessmentQuestions = $this->getAssessmentService()->findAssessmentQuestions($assessmentId);
         foreach ($answerQuestionReports as &$questionReport) {
             if (!empty($assessmentQuestions[$questionReport['question_id']])) {
                 $questionReport['total_score'] = $assessmentQuestions[$questionReport['question_id']]['score'];
