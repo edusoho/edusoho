@@ -1,5 +1,10 @@
 {% extends 'layout.html.twig' %}
 
+{% block head_scripts %}
+  {{ parent() }}
+  <base target="_blank">
+{% endblock %}
+
 {% do script(['app/js/answer-engine/answer/index.js']) %}
 
 {% block body %}
