@@ -49,7 +49,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getSettingService()->set('crontab_next_executed_time', time());
     }
 
-    // todo 附件表跟人脸识别相关的表 copyid的处理
     private function updateScheme($index)
     {
         $definedFuncNames = array(
@@ -59,6 +58,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'processBizItemCategory',
             'processBizItem', 
             'processBizQuestion',
+            'processBizItemAttachment',
             'processBizAssessmentAndSectionAndSectionItem',
             'processQuestionMarkerResultAnswerStep1', //处理选择题
             'processQuestionMarkerResultAnswerStep2', //处理判断题
@@ -70,6 +70,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'processBizAnswerScene',
             'processBizAnswerRecord',
             'processBizAnswerReport',
+            'processUserFace',
+            'processBizFaceinCheatRecord',
             'processBizAnswerQuestionReport',
             'processBizAnswerSceneQuestionReport',
             'deleteFunctionConverQuestionAnswer',
@@ -105,6 +107,223 @@ class EduSohoUpgrade extends AbstractUpdater
                 'message' => '升级数据...',
                 'progress' => 0,
             );
+        }
+    }
+
+    public function processBizItemAttachment($page)
+    {
+        if (!$this->isTableExist('biz_item_attachment')) {
+            $sql = "
+                CREATE TABLE `biz_item_attachment` (
+                    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+                    `global_id` varchar(32) NOT NULL DEFAULT '' COMMENT '云文件ID',
+                    `hash_id` varchar(128) NOT NULL DEFAULT '' COMMENT '文件的HashID',
+                    `target_id` int(10) NOT NULL DEFAULT '0' COMMENT '对象id',
+                    `target_type` varchar(32) NOT NULL DEFAULT '' COMMENT '对象类型', 
+                    `module` varchar(32) NOT NULL DEFAULT '' COMMENT '附件所属题目模块',
+                    `file_name` varchar(1024) NOT NULL DEFAULT '' COMMENT '附件名',
+                    `ext` varchar(12) NOT NULL DEFAULT '' COMMENT '后缀',
+                    `size` int(10) NOT NULL DEFAULT '0' COMMENT '文件大小',
+                    `status` varchar(32) NOT NULL DEFAULT '' COMMENT '上传状态',
+                    `file_type` varchar(32) NOT NULL DEFAULT '' COMMENT '文件类型',
+                    `created_user_id` int(10) NOT NULL DEFAULT '0' COMMENT '用户Id',
+                    `convert_status` varchar(32) NOT NULL DEFAULT 'none' COMMENT '转码状态',
+                    `audio_convert_status` varchar(32) NOT NULL DEFAULT 'none' COMMENT '转音频状态',
+                    `mp4_convert_status` varchar(32) NOT NULL DEFAULT 'none' COMMENT '转mp4状态',
+                    `updated_time` int(10) NOT NULL DEFAULT '0',
+                    `created_time` int(10) NOT NULL DEFAULT '0',
+                    PRIMARY KEY (`id`),
+                    KEY `target_id` (`target_id`),
+                    KEY `target_type` (`target_type`),
+                    KEY `global_id` (`global_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题目附件表';
+            ";
+            $this->getConnection()->exec($sql);
+        }
+
+        $startData = $this->startPage(__FUNCTION__, "SELECT count(id) AS num FROM upload_files WHERE useType IN ('question.stem', 'question.analysis', 'question.answer');", 5);
+        if (empty($startData)) {
+            return 1;
+        }
+        $this->logger('info', __FUNCTION__.' page:'.$startData['page'].'/'.$startData['pageCount']);
+
+        $start = $startData['start'];
+        $limit = $startData['limit'];
+        if (1 == $startData['page']) {
+            $this->getConnection()->exec("
+                DELETE FROM `biz_item_attachment`;
+            ");
+        }
+        
+        $files = $this->getConnection()->fetchAll("
+            SELECT a.*, b.targetId as tid FROM `upload_files` a 
+            LEFT JOIN `file_used` b ON a.id = b.fileId 
+            WHERE a.useType IN ('question.stem', 'question.analysis', 'question.answer') 
+            LIMIT {$start}, {$limit};
+        ", array());
+        $filesGroup = ArrayToolkit::group($files, 'useType');
+        $questionFiles = array_merge(
+            empty($filesGroup['question.stem']) ? array() : $filesGroup['question.stem'],
+            empty($filesGroup['question.analysis']) ? array() : $filesGroup['question.analysis']
+        );
+        $questions = ArrayToolkit::index(
+            $this->getQuestionDao()->findQuestionsByIds(ArrayToolkit::column($questionFiles, 'tid')),
+            'id'
+        );
+
+        $insetFiles = array();
+        foreach ($files as $file) {
+            $targetId = '';
+            switch ($file['useType']) {
+                case 'question.stem':
+                    $question = $questions[$file['tid']];
+                    $targetType = 'material' == $question['type'] ? 'item' : 'question';
+                    $targetId = $file['tid'];
+                    $module = 'material' == $question['type'] ? 'material' : 'stem';
+                    break;
+                
+                case 'question.analysis':
+                    $question = $questions[$file['tid']];
+                    $targetType = 'material' == $question['type'] ? 'item' : 'question';
+                    $targetId = $file['tid'];
+                    $module = 'analysis';
+                    break;
+                
+                case 'question.answer':
+                    $targetType = 'answer';
+                    $targetId = $file['tid'];
+                    $module = 'answer';
+                    break;
+                default:
+                    continue;
+                    break;
+            }
+            $insetFiles[] = array(
+                'id' => $file['id'],
+                'global_id' => $file['globalId'],
+                'hash_id' => $file['hashId'],
+                'target_id' => $targetId,
+                'target_type' => $targetType,
+                'module' => $module,
+                'file_name' => $file['filename'],
+                'ext' => $file['ext'],
+                'size' => $file['fileSize'],
+                'status' => $file['status'] == 'ok' ? 'finish' : $file['status'],
+                'file_type' => $file['type'],
+                'created_user_id' => $file['createdUserId'],
+                'convert_status' => $file['convertStatus'],
+                'audio_convert_status' => $file['audioConvertStatus'],
+                'mp4_convert_status' => $file['mp4ConvertStatus'],
+                'updated_time' => $file['updatedTime'],
+                'created_time' => $file['createdTime'],
+            );
+        }
+        $this->getAttachmentDao()->batchCreate($insetFiles);
+
+        $endData = $this->endPage(__FUNCTION__);
+        if (empty($endData)) {
+            return 1;
+        } else {
+            return $endData['page'];
+        }
+    }
+
+    public function processUserFace($page)
+    {
+        $this->logger('info', __FUNCTION__);
+        if (!$this->isTableExist('user_face')) {
+            $sql = "
+                CREATE TABLE IF NOT EXISTS `user_face` (
+                    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+                    `user_id` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
+                    `picture` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '文件路径',
+                    `capture_code` varchar (20) NOT NULL DEFAULT '' COMMENT '采集头像时链接码',
+                    `created_time` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+                    `updated_time` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+                    PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='云监考头像采集';
+            ";
+            $this->getConnection()->exec($sql);
+        }
+
+        if ($this->isTableExist('plugin_facein_user_face')) {
+            $this->getConnection()->exec("
+                DELETE FROM `user_face`;
+            ");
+            $this->getConnection()->exec("
+                INSERT INTO `user_face` (id, user_id, picture, capture_code, created_time, updated_time)
+                SELECT
+                    id, user_id, picture, capture_code, created_time, updated_time
+                FROM `plugin_facein_user_face`;
+            ");
+        }
+
+        return 1;
+    }
+
+    public function processBizFaceinCheatRecord($page)
+    {
+        if (!$this->isTableExist('biz_facein_cheat_record')) {
+            $sql = "
+                CREATE TABLE IF NOT EXISTS `biz_facein_cheat_record` (
+                    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+                    `user_id` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
+                    `answer_scene_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '场次id',
+                    `answer_record_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题记录id',
+                    `status` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '作弊状态',
+                    `level` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '作弊等级',
+                    `duration` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '',
+                    `behavior` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '作弊行为',
+                    `picture_path` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '文件路径',
+                    `created_time` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+                    PRIMARY KEY (`id`),
+                    KEY `answer_scene_id` (`answer_scene_id`),
+                    KEY `answer_record_id` (`answer_record_id`),
+                    KEY `user_id` (`user_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 COMMENT='云监考作弊记录';
+            ";
+            $this->getConnection()->exec($sql);
+        }
+
+        if ($this->isTableExist('plugin_facein_testpaper_result')) {
+            $startData = $this->startPage(__FUNCTION__, "SELECT count(id) AS num FROM plugin_facein_testpaper_result;", 50000);
+            if (empty($startData)) {
+                return 1;
+            }
+            $this->logger('info', __FUNCTION__.' page:'.$startData['page'].'/'.$startData['pageCount']);
+
+            $start = $startData['start'];
+            $limit = $startData['limit'];
+            if (1 == $startData['page']) {
+                $this->getConnection()->exec("
+                    DELETE FROM `biz_facein_cheat_record`;
+                ");
+            }
+            
+            $this->getConnection()->exec("
+                INSERT INTO `biz_facein_cheat_record` (id, user_id, answer_scene_id, answer_record_id, status, level, duration, behavior, picture_path, created_time)
+                SELECT
+                    a.id, 
+                    a.user_id, 
+                    b.answer_scene_id, 
+                    a.testpaper_result_id, 
+                    a.status, 
+                    a.level, 
+                    a.duration, 
+                    a.behavior, 
+                    a.picture, 
+                    a.created_time
+                FROM `plugin_facein_testpaper_result` a LEFT JOIN `biz_answer_record` b ON a.testpaper_result_id = b.id LIMIT {$start}, {$limit};
+            ");
+
+            $endData = $this->endPage(__FUNCTION__);
+            if (empty($endData)) {
+                return 1;
+            } else {
+                return $endData['page'];
+            }
+        } else {
+            return 1;
         }
     }
 
@@ -183,11 +402,11 @@ class EduSohoUpgrade extends AbstractUpdater
                 CREATE TABLE `biz_answer_question_report` (
                     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                     `identify` varchar(255) NOT NULL COMMENT '唯一标识，(answer_record_id)_(question_id)',
-                    `answer_record_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题记录id',
-                    `assessment_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷id',
-                    `section_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷模块id',
-                    `item_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目id',
-                    `question_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '问题id',
+                    `answer_record_id` int(10) unsigned NOT NULL COMMENT '答题记录id',
+                    `assessment_id` int(10) unsigned NOT NULL COMMENT '试卷id',
+                    `section_id` int(10) unsigned NOT NULL COMMENT '试卷模块id',
+                    `item_id` int(10) unsigned NOT NULL COMMENT '题目id',
+                    `question_id` int(10) unsigned NOT NULL COMMENT '问题id',
                     `score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '得分',
                     `total_score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '满分数',
                     `response` text,
@@ -196,12 +415,13 @@ class EduSohoUpgrade extends AbstractUpdater
                     `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
                     `updated_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
                     PRIMARY KEY (`id`),
-                    KEY `answer_record_id` (`answer_record_id`)
+                    KEY `answer_record_id` (`answer_record_id`),
+                    UNIQUE KEY `identify` (`identify`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题目问题报告表';
             ");
         }
 
-        $startData = $this->startPage(__FUNCTION__, "SELECT id AS num FROM testpaper_item_result_v8 ORDER BY id DESC LIMIT 1;", 50000);
+        $startData = $this->startPage(__FUNCTION__, "SELECT count(id) AS num FROM testpaper_item_result_v8 where type <> 'exercise';", 80000);
         if (empty($startData)) {
             return 1;
         }
@@ -251,28 +471,30 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("
                 CREATE TABLE `biz_answer_report` (
                     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                    `assessment_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷id',
-                    `answer_record_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题记录id',
-                    `answer_scene_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '场次id',
+                    `user_id` int(10) unsigned NOT NULL COMMENT '用户id',
+                    `assessment_id` int(10) unsigned NOT NULL COMMENT '试卷id',
+                    `answer_record_id` int(10) unsigned NOT NULL COMMENT '答题记录id',
+                    `answer_scene_id` int(10) unsigned NOT NULL COMMENT '场次id',
                     `total_score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '总分',
                     `score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '总得分',
                     `right_rate` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '正确率',
                     `right_question_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答对问题数',
                     `objective_score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '客观题得分',
                     `subjective_score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '主观题得分',
-                    `grade` enum('none','excellent','good','passed','unpassed') NOT NULL DEFAULT 'unpassed' COMMENT '等级',
+                    `grade` enum('none', 'excellent','good','passed','unpassed') NOT NULL DEFAULT 'unpassed' COMMENT '等级',
                     `comment` text COMMENT '评语',
                     `review_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '批阅时间',
                     `review_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '批阅人id',
                     `created_time` int(10) unsigned NOT NULL DEFAULT '0',
                     `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
                     PRIMARY KEY (`id`),
-                    KEY `answer_record_id` (`answer_record_id`)
+                    KEY `answer_record_id` (`answer_record_id`),
+                    KEY `user_id` (`user_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='答题报告';
             ");
         }
 
-        $startData = $this->startPage(__FUNCTION__, "SELECT id AS num FROM testpaper_result_v8 ORDER BY id DESC LIMIT 1;", 50000);
+        $startData = $this->startPage(__FUNCTION__, "SELECT COUNT(id) AS num FROM testpaper_result_v8 WHERE `type` <> 'exercise';", 50000);
         if (empty($startData)) {
             return 1;
         }
@@ -281,9 +503,10 @@ class EduSohoUpgrade extends AbstractUpdater
         $start = $startData['start'];
         $limit = $startData['limit'];
         $sql = "
-            INSERT INTO `biz_answer_report` (id, assessment_id, answer_record_id, answer_scene_id, total_score, score, right_rate, right_question_count, objective_score, subjective_score, grade, comment, review_time, review_user_id, created_time, updated_time) 
+            INSERT INTO `biz_answer_report` (id, user_id, assessment_id, answer_record_id, answer_scene_id, total_score, score, right_rate, right_question_count, objective_score, subjective_score, grade, comment, review_time, review_user_id, created_time, updated_time) 
             SELECT 
                 a.id,
+                a.userId,
                 a.testId,
                 a.id,
                 a.lessonId,
@@ -319,26 +542,26 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isTableExist('biz_answer_record')) {
             $this->getConnection()->exec("
                 CREATE TABLE `biz_answer_record` (
-                        `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-                        `answer_scene_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '场次id',
-                        `assessment_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷id',
-                        `answer_report_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题报告id',
-                        `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题者id',
-                        `begin_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始答题时间',
-                        `end_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束答题时间',
-                        `used_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题时长-秒',
-                        `status` enum('doing','paused','reviewing','finished') NOT NULL DEFAULT 'doing' COMMENT '答题状态',
-                        `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-                        `updated_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
-                        PRIMARY KEY (`id`),
-                        KEY `answer_scene_id` (`answer_scene_id`),
-                        KEY `user_id` (`user_id`),
-                        KEY `answer_scene_id_status` (`answer_scene_id`,`status`)
+                    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+                    `answer_scene_id` int(10) unsigned NOT NULL COMMENT '场次id',
+                    `assessment_id` int(10) unsigned NOT NULL COMMENT '试卷id',
+                    `answer_report_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题报告id',
+                    `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题者id',
+                    `begin_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始答题时间',
+                    `end_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束答题时间',
+                    `used_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题时长-秒',
+                    `status` enum('doing','paused','reviewing','finished') NOT NULL DEFAULT 'doing' COMMENT '答题状态',
+                    `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+                    `updated_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+                    PRIMARY KEY (`id`),
+                    KEY `answer_scene_id` (`answer_scene_id`),
+                    KEY `user_id` (`user_id`),
+                    KEY `answer_scene_id_status` (`answer_scene_id`,`status`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='答题记录表';
             ");
         }
 
-        $startData = $this->startPage(__FUNCTION__, "SELECT id AS num FROM testpaper_result_v8 ORDER BY id DESC LIMIT 1;", 50000);
+        $startData = $this->startPage(__FUNCTION__, "SELECT COUNT(id) AS num FROM testpaper_result_v8 WHERE `type` <> 'exercise';", 50000);
         if (empty($startData)) {
             return 1;
         }
@@ -380,7 +603,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("
                 CREATE TABLE `biz_answer_scene` (
                     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                    `name` varchar(255) NOT NULL DEFAULT '' COMMENT '场次名称',
+                    `name` varchar(255) NOT NULL COMMENT '场次名称',
                     `limited_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题限制时长(分钟) 0表示不限制',
                     `do_times` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '可作答次数 0表示不限制',
                     `redo_interval` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题间隔时长(分钟)',
@@ -1177,7 +1400,7 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
-        $startData = $this->startPage(__FUNCTION__, "SELECT COUNT(*) AS num FROM question WHERE `type` <> 'material';", 500);
+        $startData = $this->startPage(__FUNCTION__, "SELECT COUNT(*) AS num FROM question WHERE `type` <> 'material';", 1000);
         if (empty($startData)) {
             return 1;
         }
@@ -1497,5 +1720,10 @@ abstract class AbstractUpdater
     protected function getTestpaperActivityDao()
     {
         return $this->createDao('Activity:TestpaperActivityDao');
+    }
+
+    protected function getAttachmentDao()
+    {
+        return $this->biz->dao('ItemBank:Item:AttachmentDao');
     }
 }
