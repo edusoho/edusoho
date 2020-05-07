@@ -9,18 +9,10 @@ class CrontabJobWorker extends BaseWorker
     public function doExecute(Job $job)
     {
         $body = json_decode($job->getBody(), true);
-        $this->logger->info("JobWorker:execute crontab job job #{$body['id']}, body: {$job->getBody()}");
-        try {
-            $res = $this->execCronTabJob();
-        } catch (\Exception $e) {
-            $this->logger->info('JobWorker:execute crontab job failed'.$e->getMessage().',traceString:'.$e->getTraceAsString());
 
-            return self::FINISH;
-        }
+        $this->logger->info("JobWorker:execute crontab job job #{$body['id']}, priority: {$job->getPriority()} body: {$job->getBody()}");
 
-        if ($res) {
-            return self::FINISH;
-        }
+        return $this->execCronTabJob();
     }
 
     protected function execCronTabJob()
@@ -28,7 +20,7 @@ class CrontabJobWorker extends BaseWorker
         $root_dir = __DIR__.'/../../../';
         $this->exec_shell("cd {$root_dir}");
 
-        return $this->exec_shell('app/console util:scheduler exec');
+        return $this->exec_shell('app/console util:scheduler');
     }
 
     protected function exec_shell($cmd)
@@ -46,10 +38,5 @@ class CrontabJobWorker extends BaseWorker
         proc_close($process);
 
         return true;
-    }
-
-    protected function getBiz()
-    {
-        return $this->container->get('biz');
     }
 }

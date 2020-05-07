@@ -54,7 +54,7 @@ class Plumber
      * @param string $bootstrapFile
      * @throws PlumberException
      */
-    public function __construct(string $op, string $bootstrapFile)
+    public function __construct($op, $bootstrapFile)
     {
         $this->op = $op;
         $this->bootstrapFile = $bootstrapFile;
@@ -342,7 +342,8 @@ class Plumber
         $options = [];
         $workerId = 0;
         foreach ($this->options['workers'] as $workerOptions) {
-            for ($i = 1; $i <= $workerOptions['num'] ?? 1; ++$i) {
+            $num = isset($workerOptions['num']) ? $workerOptions['num'] : 1;
+            for ($i = 1; $i <= $num; ++$i) {
                 $options[$workerId] = $workerOptions;
                 ++$workerId;
             }
@@ -355,7 +356,7 @@ class Plumber
     {
         $name = sprintf(
             'plumber:%s:rate_limiter:worker_recreate',
-            $this->options['app_name'] ?? ''
+            isset($this->options['app_name']) ? $this->options['app_name'] : ''
         );
 
         return new RateLimiter(

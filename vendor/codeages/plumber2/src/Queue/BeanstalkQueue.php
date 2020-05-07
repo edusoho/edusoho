@@ -21,7 +21,7 @@ class BeanstalkQueue implements QueueInterface
         $this->logger = $logger;
     }
 
-    public function listenTopic(string $name): TopicInterface
+    public function listenTopic($name)
     {
         $beanstalk = $this->createBeanstalk($this->options);
         $beanstalk->connect();
@@ -32,7 +32,7 @@ class BeanstalkQueue implements QueueInterface
         return new BeanstalkTopic($beanstalk, $name, $this->logger);
     }
 
-    public function clearTopic(string $name)
+    public function clearTopic($name)
     {
         // TODO: Implement clearTopic() method.
     }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f71b4487456e6109a506de2bf4a8a9ec",
+    "content-hash": "3e86ba4b7d7379fbd1e3b9e60d87a935",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -766,16 +766,16 @@
         },
         {
             "name": "codeages/plumber2",
-            "version": "v0.5.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/plumber2.git",
-                "reference": "7f3f01cd6a64dabf160e64e65e26713487afe771"
+                "reference": "48e833a771a960c71623c30bba4c9c926bebd409"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/plumber2/zipball/7f3f01cd6a64dabf160e64e65e26713487afe771",
-                "reference": "7f3f01cd6a64dabf160e64e65e26713487afe771",
+                "url": "https://api.github.com/repos/codeages/plumber2/zipball/48e833a771a960c71623c30bba4c9c926bebd409",
+                "reference": "48e833a771a960c71623c30bba4c9c926bebd409",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -791,12 +791,12 @@
                 "ext-pcntl": "*",
                 "ext-posix": "*",
                 "monolog/monolog": "^1.24",
-                "php": "^7.1.3",
+                "php": ">=5.6.0",
                 "psr/container": "^1.0"
             },
             "require-dev": {
                 "ext-redis": "*",
-                "phpunit/phpunit": "^6 || ^7 || ^8",
+                "phpunit/phpunit": "^5 || ^6 || ^7 || ^8",
                 "swoft/swoole-ide-helper": "^4.2"
             },
             "bin": [
@@ -818,7 +818,7 @@
                     "email": "wellming.li@howzhi.com"
                 }
             ],
-            "time": "2020-04-04T16:00:05+00:00"
+            "time": "2020-05-07T03:20:20+00:00"
         },
         {
             "name": "codeages/qiqiuyun-php-sdk",
@@ -8494,7 +8494,8 @@
         "codeages/plugin-bundle": 20,
         "codeages/qiqiuyun-php-sdk": 20,
         "codeages/exam-parser": 20,
-        "codeages/biz-order-pay": 20
+        "codeages/biz-order-pay": 20,
+        "codeages/plumber2": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

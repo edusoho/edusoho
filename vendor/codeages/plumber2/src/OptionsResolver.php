@@ -66,7 +66,7 @@ class OptionsResolver
                 throw new PlumberException("Option 'workers[$i].topic' value length must be between 1 ~ 64");
             }
 
-            $workerOptions['num'] = $workerOptions['num'] ?? 1;
+            $workerOptions['num'] = isset($workerOptions['num']) ? $workerOptions['num'] : 1;
 
             if (!is_int($workerOptions['num'])) {
                 throw new PlumberException("Option 'workers[$i].num' value type must be int.");

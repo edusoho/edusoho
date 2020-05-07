@@ -20,13 +20,6 @@ class S2B2CProvider implements ServiceProviderInterface
             return $logger;
         };
 
-        $biz['s2b2c.merchant.job.logger'] = function () {
-            $logger = new Logger('S2B2CMerchantJob');
-            $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/crontab.log', Logger::DEBUG));
-
-            return $logger;
-        };
-
         // 接口
         $biz['supplier.platform_api'] = function ($biz) {
             return new SupplierPlatformApi($biz);

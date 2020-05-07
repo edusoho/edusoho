@@ -9,9 +9,9 @@ interface QueueInterface
      *
      * @return TopicInterface
      */
-    public function listenTopic(string $name): TopicInterface;
+    public function listenTopic($name);
 
-    public function clearTopic(string $name);
+    public function clearTopic($name);
 
     public function stats();
 }

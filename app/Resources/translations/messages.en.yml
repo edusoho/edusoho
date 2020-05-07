@@ -9570,3 +9570,12 @@ admin_v2.course_manage.merchant_course: Purchase
 admin_v2.course_manage.has_version_change: Has Change
 
 exception.courseset.source_course_closed: Course closed,please contact the supplier.
+
+admin_v2.plumber.job_id: ID
+admin_v2.plumber.job_time: Time
+admin_v2.plumber.job_worker: Worker Topic
+admin_v2.plumber.job_status: Status
+admin_v2.plumber.job_body: Body
+admin_v2.plumber.job_empty_hint: Empty
+
+exception.plumber.not_found_queue: Queue not founded

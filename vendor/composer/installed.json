@@ -787,17 +787,17 @@
     },
     {
         "name": "codeages/plumber2",
-        "version": "v0.5.0",
-        "version_normalized": "0.5.0.0",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/plumber2.git",
-            "reference": "7f3f01cd6a64dabf160e64e65e26713487afe771"
+            "reference": "48e833a771a960c71623c30bba4c9c926bebd409"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/plumber2/zipball/7f3f01cd6a64dabf160e64e65e26713487afe771",
-            "reference": "7f3f01cd6a64dabf160e64e65e26713487afe771",
+            "url": "https://api.github.com/repos/codeages/plumber2/zipball/48e833a771a960c71623c30bba4c9c926bebd409",
+            "reference": "48e833a771a960c71623c30bba4c9c926bebd409",
             "shasum": "",
             "mirrors": [
                 {
@@ -813,20 +813,20 @@
             "ext-pcntl": "*",
             "ext-posix": "*",
             "monolog/monolog": "^1.24",
-            "php": "^7.1.3",
+            "php": ">=5.6.0",
             "psr/container": "^1.0"
         },
         "require-dev": {
             "ext-redis": "*",
-            "phpunit/phpunit": "^6 || ^7 || ^8",
+            "phpunit/phpunit": "^5 || ^6 || ^7 || ^8",
             "swoft/swoole-ide-helper": "^4.2"
         },
-        "time": "2020-04-04T16:00:05+00:00",
+        "time": "2020-05-07T03:20:20+00:00",
         "bin": [
             "bin/plumber"
         ],
         "type": "project",
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-4": {
                 "Codeages\\Plumber\\": "src/"

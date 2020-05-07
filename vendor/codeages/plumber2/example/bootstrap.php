@@ -41,7 +41,7 @@ $options = [
         ]
     ],
     'hour_limits' => [
-        'example_hour_limit' => ['start' => 23, 'end' => 7], // 允许在 凌晨1:00点 ~ 早上7:00点 执行 Job。（注意需要在启动脚本开头设置时区）
+        'example_hour_limit' => ['start' => 23, 'end' => 7], // 允许在 晚上23:00点 ~ 早上7:00点 执行 Job。（注意需要在启动脚本开头设置时区）
     ],
     'log_path' => __DIR__ . '/plumber.log',
     'pid_path' => __DIR__ . '/plumber.pid',
