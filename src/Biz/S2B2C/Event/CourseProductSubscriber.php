@@ -12,11 +12,10 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
 {
     public static function getSubscribedEvents()
     {
-        return array(
-            //同步暂时关闭
-//            'course.create' => 'onCourseCreate',
+        return [
+            'course.create' => 'onCourseCreate',
             'course.update' => 'onCourseUpdate',
-        );
+        ];
     }
 
     public function onCourseUpdate(Event $event)
@@ -29,15 +28,15 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
 
     public function onCourseCreate(Event $event)
     {
-        $course = $event->getSubject();
-        if ($this->isSupplierCourse($course)) {
-            $this->getCourseProductService()->syncCourse($course['id']);
-        }
+//        $course = $event->getSubject();
+//        if ($this->isSupplierCourse($course)) {
+//            $this->getCourseProductService()->syncCourseMain($course['id']);
+//        }
     }
 
     protected function isSupplierCourse($course)
     {
-        return !empty($course['sourceCourseId']);
+        return 'supplier' === $course['platform'];
     }
 
     /**

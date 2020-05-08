@@ -14,7 +14,7 @@ class CourseSetProductController extends ProductController
     public function dealAction(Request $request, $product)
     {
         $courseSetData = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getSupplierCourseSetProductDetail($product['id']);
-        if (!ArrayToolkit::requireds($courseSetData, array('title', 'type', 'id', 'defaultCourseId'))) {
+        if (!ArrayToolkit::requireds($courseSetData, ['title', 'type', 'id', 'defaultCourseId'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
         if ('published' != $courseSetData['editStatus']) {
@@ -38,7 +38,7 @@ class CourseSetProductController extends ProductController
          */
         $localProduct = $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteProductId($prepareCourseSet['originPlatformId'], $prepareCourseSet['s2b2cDistributeId']);
         if ($localProduct) {
-            return $this->createJsonResponse(array('status' => 'repeat'));
+            return $this->createJsonResponse(['status' => 'repeat']);
         }
 
         $purchaseProducts = $this->preparePurchaseData($courseSetData);
@@ -49,7 +49,7 @@ class CourseSetProductController extends ProductController
                 $newCourseSet = $this->getCourseSetService()->addCourseSet($prepareCourseSet);
                 $product = $this->getS2B2CProductService()->createProduct([
                     'supplierId' => $prepareCourseSet['originPlatformId'],
-                    'productType' => 'course',
+                    'productType' => 'course_set',
                     'remoteProductId' => $prepareCourseSet['s2b2cDistributeId'],
                     'remoteResourceId' => $courseSetData['id'],
                     'localResourceId' => $newCourseSet['id'],
@@ -60,12 +60,12 @@ class CourseSetProductController extends ProductController
             return $this->createJsonResponse($result);
         }
 
-        return $this->createJsonResponse(array_merge($result, array('status' => false)));
+        return $this->createJsonResponse(array_merge($result, ['status' => false]));
     }
 
     protected function prepareCourseSetData($courseSetData)
     {
-        $supplierSettings = $this->getSettingService()->get('supplierSettings', array());
+        $supplierSettings = $this->getSettingService()->get('supplierSettings', []);
         if (empty($supplierSettings['supplierId']) || empty($courseSetData['s2b2cDistributeId'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
@@ -90,19 +90,19 @@ class CourseSetProductController extends ProductController
 
     protected function preparePurchaseData($courseSetData)
     {
-        $settings = $this->getSettingService()->get('storage', array());
-        $supplierSettings = $this->getSettingService()->get('supplierSettings', array());
+        $settings = $this->getSettingService()->get('storage', []);
+        $supplierSettings = $this->getSettingService()->get('supplierSettings', []);
         $sourceCourseSetId = $courseSetData['id'];
         $sourceCourseSet = $this->getS2B2CFacadeService()->getSupplierPlatformApi()
             ->getSupplierCourseSetProductDetail($sourceCourseSetId);
         $sourcesCourses = $sourceCourseSet['courses'];
 
-        $purchaseProducts = array();
+        $purchaseProducts = [];
         foreach ($sourcesCourses as $course) {
             if (empty($course['s2b2cDistributeId'])) {
                 continue;
             }
-            $purchaseProducts[] = array(
+            $purchaseProducts[] = [
                 'product_id' => $course['id'],
                 'product_type' => 'course',
                 'access_key' => $settings['cloud_access_key'],
@@ -110,7 +110,7 @@ class CourseSetProductController extends ProductController
                 'cooperation_price' => $course['cooperationPrice'],
                 'suggestion_price' => $course['suggestionPrice'],
                 's2b2cDistributeId' => $course['s2b2cDistributeId'],
-            );
+            ];
         }
 
         return $purchaseProducts;

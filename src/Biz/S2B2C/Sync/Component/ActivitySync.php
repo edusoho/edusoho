@@ -11,7 +11,7 @@ use Biz\S2B2C\Sync\Component\Activity\Activity;
 
 class ActivitySync extends AbstractEntitySync
 {
-    protected function syncEntity($source, $config = array())
+    protected function syncEntity($source, $config = [])
     {
         $newCourseId = $config['newCourse']['id'];
         if (empty($config['newCourseSetId'])) {
@@ -23,11 +23,11 @@ class ActivitySync extends AbstractEntitySync
         // 获取课程所有的activities
         $activities = $source['activityList'];
         if (empty($activities)) {
-            return array();
+            return [];
         }
 
-        $activityMap = array();
-        $testpaperSyncMap = array(0);
+        $activityMap = [];
+        $testpaperSyncMap = [0];
         $newUploadFiles = ArrayToolkit::index($config['newUploadFiles'], 'syncId');
         foreach ($activities as $activity) {
             $newActivity = $this->filterFields($activity);
@@ -40,10 +40,10 @@ class ActivitySync extends AbstractEntitySync
 
             //create testpaper
             $testId = 0;
-            if (in_array($activity['mediaType'], array('testpaper', 'homework', 'exercise')) && !empty($activity['testpaper'])) {
+            if (in_array($activity['mediaType'], ['testpaper', 'homework', 'exercise']) && !empty($activity['testpaper'])) {
                 if (!in_array($activity['testpaper']['id'], array_keys($testpaperSyncMap))) {
                     $activityTestpaperCopy = new ActivityTestpaperSync($this->biz);
-                    $testpaper = $activityTestpaperCopy->sync($activity, array(
+                    $testpaper = $activityTestpaperCopy->sync($activity, [
                         'newCourseId' => $newCourseId,
                         'newCourseSetId' => $courseSetId,
                         'isCopy' => false,
@@ -51,7 +51,7 @@ class ActivitySync extends AbstractEntitySync
                             ArrayToolkit::column($source['childrenQuestions'], 'id'),
                             ArrayToolkit::column($source['parentQuestions'], 'id')
                         ),
-                    ));
+                    ]);
                     $testpaperSyncMap[$activity['testpaper']['id']] = $testpaper['id'];
                     $testId = $testpaper['id'];
                 } else {
@@ -61,13 +61,13 @@ class ActivitySync extends AbstractEntitySync
 
             //create activity config
             $activityConfig = $this->getSyncActivityConfig($activity['mediaType']);
-            $ext = $activityConfig->sync($activity, array(
+            $ext = $activityConfig->sync($activity, [
                 'refLiveroom' => $activity['fromCourseSetId'] != $courseSetId,
                 'testId' => $testId,
                 'newActivity' => $newActivity,
                 'isCopy' => $isCopy,
                 'newUploadFiles' => $newUploadFiles,
-            ));
+            ]);
             //对于testpaper，mediaId指向testpaper_activity.id
             if (!empty($ext)) {
                 $newActivity['mediaId'] = $ext['id'];
@@ -77,7 +77,7 @@ class ActivitySync extends AbstractEntitySync
                 $newActivity['startTime'] = time();
                 $newActivity['endTime'] = $newActivity['startTime'] + $newActivity['length'] * 60;
             }
-            if (in_array($activity['mediaType'], array('exercise', 'homework'))) {
+            if (in_array($activity['mediaType'], ['exercise', 'homework'])) {
                 $newActivity['mediaId'] = $testId;
             }
             $newActivity = $this->getActivityDao()->create($newActivity);
@@ -93,20 +93,20 @@ class ActivitySync extends AbstractEntitySync
     protected function syncDownloadMaterials($newActivity)
     {
         $materials = $this->getMaterialService()->searchMaterials(
-            array(
+            [
                 'courseId' => $newActivity['fromCourseId'],
                 'courseSetId' => $newActivity['fromCourseSetId'],
                 'lessonId' => 0,
                 'source' => 'coursematerial',
-            ), null, 0, PHP_INT_MAX);
+            ], null, 0, PHP_INT_MAX);
         foreach ($materials as $material) {
-            $this->getMaterialDao()->update($material['id'], array('lessonId' => $newActivity['id']));
+            $this->getMaterialDao()->update($material['id'], ['lessonId' => $newActivity['id']]);
         }
     }
 
     protected function getFields()
     {
-        return array(
+        return [
             'mediaType',
             'title',
             'remark',
@@ -116,10 +116,10 @@ class ActivitySync extends AbstractEntitySync
             'endTime',
             'finishType',
             'finishData',
-        );
+        ];
     }
 
-    protected function updateEntityToLastedVersion($source, $config = array())
+    protected function updateEntityToLastedVersion($source, $config = [])
     {
         $newCourseId = $config['newCourse']['id'];
         if (empty($config['newCourseSetId'])) {
@@ -130,18 +130,18 @@ class ActivitySync extends AbstractEntitySync
         $isCopy = $config['isCopy'];
         // 获取课程所有的activities
         $activities = $source['activityList'];
-        $existActivities = $this->getActivityDao()->search(array('fromCourseId' => $newCourseId), array(), 0, PHP_INT_MAX);
+        $existActivities = $this->getActivityDao()->search(['fromCourseId' => $newCourseId], [], 0, PHP_INT_MAX);
         if (empty($activities)) {
             foreach ($existActivities as $existActivity) {
                 $this->getActivityService()->deleteActivity($existActivity['id']);
             }
 
-            return array();
+            return [];
         }
 
         // 1、判断这个activity是不是已经有了，没有就增加，存在就update,不存在就传入参数，进行删除
-        $activityMap = array();
-        $testpaperSyncMap = array(0);
+        $activityMap = [];
+        $testpaperSyncMap = [0];
         $newUploadFiles = ArrayToolkit::index($config['newUploadFiles'], 'syncId');
         $existActivities = ArrayToolkit::index($existActivities, 'syncId');
         foreach ($activities as $activity) {
@@ -155,10 +155,10 @@ class ActivitySync extends AbstractEntitySync
 
             //create testpaper
             $testId = 0;
-            if (in_array($activity['mediaType'], array('testpaper', 'homework', 'exercise')) && !empty($activity['testpaper'])) {
+            if (in_array($activity['mediaType'], ['testpaper', 'homework', 'exercise']) && !empty($activity['testpaper'])) {
                 if (!in_array($activity['testpaper']['id'], array_keys($testpaperSyncMap))) {
                     $activityTestpaperCopy = new ActivityTestpaperSync($this->biz);
-                    $testpaper = $activityTestpaperCopy->updateEntityToLastedVersion($activity, array(
+                    $testpaper = $activityTestpaperCopy->updateEntityToLastedVersion($activity, [
                         'newCourseId' => $newCourseId,
                         'newCourseSetId' => $courseSetId,
                         'isCopy' => false,
@@ -166,7 +166,7 @@ class ActivitySync extends AbstractEntitySync
                             ArrayToolkit::column($source['childrenQuestions'], 'id'),
                             ArrayToolkit::column($source['parentQuestions'], 'id')
                         ),
-                    ));
+                    ]);
                     $testpaperSyncMap[$activity['testpaper']['id']] = $testpaper['id'];
                     $testId = $testpaper['id'];
                 } else {
@@ -176,13 +176,13 @@ class ActivitySync extends AbstractEntitySync
 
             //create activity config
             $activityConfig = $this->getSyncActivityConfig($activity['mediaType']);
-            $ext = $activityConfig->updateToLastedVersion($activity, array(
+            $ext = $activityConfig->updateToLastedVersion($activity, [
                 'refLiveroom' => $activity['fromCourseSetId'] != $courseSetId,
                 'testId' => $testId,
                 'newActivity' => $newActivity,
                 'isCopy' => $isCopy,
                 'newUploadFiles' => $newUploadFiles,
-            ));
+            ]);
             //对于testpaper，mediaId指向testpaper_activity.id
             if (!empty($ext)) {
                 $newActivity['mediaId'] = $ext['id'];
@@ -192,7 +192,7 @@ class ActivitySync extends AbstractEntitySync
                 $newActivity['startTime'] = time();
                 $newActivity['endTime'] = $newActivity['startTime'] + $newActivity['length'] * 60;
             }
-            if (in_array($activity['mediaType'], array('exercise', 'homework'))) {
+            if (in_array($activity['mediaType'], ['exercise', 'homework'])) {
                 $newActivity['mediaId'] = $testId;
             }
 
@@ -217,7 +217,7 @@ class ActivitySync extends AbstractEntitySync
      */
     private function getSyncActivityConfig($type)
     {
-        return $this->biz["sync_activity_type.{$type}"];
+        return $this->biz["s2b2c.sync_activity_type.{$type}"];
     }
 
     /**

@@ -14,14 +14,46 @@ class ResourceSyncServiceImpl extends BaseService
         return $this->getResourceSyncDao()->get($id);
     }
 
+    public function getSyncByRemoteResourceIdAndResourceType($remoteResourceId, $resourceType)
+    {
+        return $this->getResourceSyncDao()->getByRemoteResourceIdAndResourceType($remoteResourceId, $resourceType);
+    }
+
     /**
      * @param $sync
      *
      * @return mixed
-     *
-     * @throws \Exception
      */
     public function createSync($sync)
+    {
+        $sync = $this->validateSync($sync);
+
+        return $this->getResourceSyncDao()->create($sync);
+    }
+
+    /**
+     * @param $syncs
+     *
+     * @return array
+     */
+    public function batchCreateSyncs($syncs)
+    {
+        if (empty($syncs)) {
+            return [];
+        }
+        foreach ($syncs as &$sync) {
+            $sync = $this->validateSync($sync);
+        }
+
+        $this->getResourceSyncDao()->batchCreate($syncs);
+    }
+
+    public function searchSyncs($conditions, $orderBys, $start, $limit, $columns = [])
+    {
+        return $this->getResourceSyncDao()->search($conditions, $orderBys, $start, $limit, $columns);
+    }
+
+    protected function validateSync($sync)
     {
         if (!ArrayToolkit::requireds(
             $sync,
@@ -30,7 +62,7 @@ class ResourceSyncServiceImpl extends BaseService
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $sync = ArrayToolkit::parts($sync, [
+        return ArrayToolkit::parts($sync, [
             'supplierId',
             'resourceType',
             'localResourceId',
@@ -40,13 +72,6 @@ class ResourceSyncServiceImpl extends BaseService
             'extendedData',
             'syncTime',
         ]);
-
-        return $this->getResourceSyncDao()->create($sync);
-    }
-
-    public function searchSyncs($conditions, $orderBys, $start, $limit, $columns = [])
-    {
-        return $this->getResourceSyncDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
     /**

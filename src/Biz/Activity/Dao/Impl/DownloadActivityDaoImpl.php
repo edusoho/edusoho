@@ -11,10 +11,17 @@ class DownloadActivityDaoImpl extends GeneralDaoImpl implements DownloadActivity
 
     public function declares()
     {
-        return array(
-            'timestamps' => array('createdTime', 'updatedTime'),
-            'serializes' => array('fileIds' => 'json'),
-        );
+        return [
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'serializes' => ['fileIds' => 'json'],
+            'conditions' => [
+                /*S2B2C 增加syncId*/
+                'syncId = :syncId',
+                'syncId in (:syncIds)',
+                'syncId > :syncIdGT',
+                /*END*/
+            ],
+        ];
     }
 
     public function findByIds($Ids)

@@ -30,7 +30,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
 
     public function agentInWhiteList($userAgent)
     {
-        $whiteList = array('iPhone', 'iPad', 'Android', 'HTC');
+        $whiteList = ['iPhone', 'iPad', 'Android', 'HTC'];
 
         return ArrayToolkit::some($whiteList, function ($agent) use ($userAgent) {
             return strpos($userAgent, $agent) > -1;
@@ -73,37 +73,37 @@ class PlayerServiceImpl extends BaseService implements PlayerService
             }
         }
 
-        return array(
+        return [
             'resId' => $file['globalId'],
             'mp4Url' => isset($mp4Url) ? $mp4Url : null,
             'isEncryptionPlus' => $isEncryptionPlus,
             'context' => $context,
-        );
+        ];
     }
 
     public function getVideoPlayUrl($file, $context, $ssl)
     {
-        if (in_array($file['storage'], array('cloud', 'supplier'))) {
+        if (in_array($file['storage'], ['cloud', 'supplier'])) {
             if (!empty($file['metas2'])) {
                 if (isset($file['convertParams']['convertor']) && ('HLSEncryptedVideo' == $file['convertParams']['convertor'])) {
                     $hideBeginning = isset($context['hideBeginning']) ? $context['hideBeginning'] : false;
                     $context['hideBeginning'] = $this->isHiddenVideoHeader($hideBeginning);
                     $token = $this->makeToken('hls.playlist', $file['id'], $context);
-                    $params = array(
+                    $params = [
                         'id' => $file['id'],
                         'token' => $token['token'],
-                    );
+                    ];
 
-                    return array(
+                    return [
                         'route' => 'hls_playlist',
                         'params' => $params,
                         'referenceType' => UrlGeneratorInterface::ABSOLUTE_URL,
-                    );
+                    ];
                 } else {
                     $this->createNewException(PlayerException::NOT_SUPPORT_TYPE());
                 }
             } else {
-                $result = array();
+                $result = [];
                 if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
                     $key = $file['metas']['hd']['key'];
                 } else {
@@ -115,21 +115,21 @@ class PlayerServiceImpl extends BaseService implements PlayerService
                 }
             }
 
-            return array(
+            return [
                 'url' => isset($result['url']) ? $result['url'] : '',
-            );
+            ];
         } else {
             $token = $this->makeToken('local.media', $file['id']);
-            $params = array(
+            $params = [
                 'id' => $file['id'],
                 'token' => $token['token'],
-            );
+            ];
 
-            return array(
+            return [
                 'route' => 'player_local_media',
                 'params' => $params,
                 'referenceType' => UrlGeneratorInterface::ABSOLUTE_URL,
-            );
+            ];
         }
     }
 
@@ -157,9 +157,9 @@ class PlayerServiceImpl extends BaseService implements PlayerService
         $file = $this->getUploadFileService()->getFullFile($doc['mediaId']);
 
         if (empty($file) || empty($file['globalId'])) {
-            $error = array('code' => 'error', 'message' => '抱歉，文档文件不存在，暂时无法学习。');
+            $error = ['code' => 'error', 'message' => '抱歉，文档文件不存在，暂时无法学习。'];
 
-            return array(array(), $error);
+            return [[], $error];
         }
 
         if ('document' != $file['type']) {
@@ -174,24 +174,24 @@ class PlayerServiceImpl extends BaseService implements PlayerService
         if ($isConvertNotSuccess) {
             if (FileImplementor::CONVERT_STATUS_ERROR == $file['convertStatus']) {
                 $message = '文档转换失败，请到课程文件管理中，重新转换。';
-                $error = array('code' => 'error', 'message' => $message);
+                $error = ['code' => 'error', 'message' => $message];
             } else {
-                $error = array('code' => 'processing', 'message' => '文档还在转换中，还不能查看，请稍等。');
+                $error = ['code' => 'processing', 'message' => '文档还在转换中，还不能查看，请稍等。'];
             }
         } else {
-            $error = array();
+            $error = [];
         }
 
-        return array($result, $error);
+        return [$result, $error];
     }
 
     public function getPptFilePlayer($ppt, $ssl)
     {
         $file = $this->getUploadFileService()->getFullFile($ppt['mediaId']);
 
-        $error = array();
+        $error = [];
         if (empty($file) || 'ppt' !== $file['type']) {
-            $error = array('code' => 'error', 'message' => '抱歉，PPT文件不存在，暂时无法学习。');
+            $error = ['code' => 'error', 'message' => '抱歉，PPT文件不存在，暂时无法学习。'];
         }
 
         if (isset($file['convertStatus']) && 'success' != $file['convertStatus']) {
@@ -212,7 +212,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
             $error['message'] = $result['error'];
         }
 
-        return array($result, $error);
+        return [$result, $error];
     }
 
     private function filterSubtitles(&$subtitles)
@@ -222,16 +222,16 @@ class PlayerServiceImpl extends BaseService implements PlayerService
         }
     }
 
-    protected function makeToken($type, $fileId, $context = array())
+    protected function makeToken($type, $fileId, $context = [])
     {
-        $fields = array(
-            'data' => array(
+        $fields = [
+            'data' => [
                 'id' => $fileId,
-            ),
+            ],
             'times' => 10,
             'duration' => 3600,
             'userId' => $this->getCurrentUser()->getId(),
-        );
+        ];
 
         if (isset($context['watchTimeLimit'])) {
             $fields['data']['watchTimeLimit'] = $context['watchTimeLimit'];
@@ -256,7 +256,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
             return $this->getS2B2CFileSourceService()->player($file['globalId'], $ssl);
         }
 
-        return array();
+        return [];
     }
 
     /**

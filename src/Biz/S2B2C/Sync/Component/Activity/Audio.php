@@ -6,18 +6,18 @@ use Biz\Activity\Dao\AudioActivityDao;
 
 class Audio extends Activity
 {
-    public function sync($activity, $config = array())
+    public function sync($activity, $config = [])
     {
         $newAudio = $this->getAudioActivityFields($activity, $config);
 
         return $this->getAudioActivityDao()->create($newAudio);
     }
 
-    public function updateToLastedVersion($activity, $config = array())
+    public function updateToLastedVersion($activity, $config = [])
     {
         $newAudio = $this->getAudioActivityFields($activity, $config);
 
-        $existAudio = $this->getAudioActivityDao()->search(array('syncId' => $newAudio['syncId']), array(), 0, PHP_INT_MAX);
+        $existAudio = $this->getAudioActivityDao()->search(['syncId' => $newAudio['syncId']], [], 0, PHP_INT_MAX);
         if (!empty($existAudio)) {
             return $this->getAudioActivityDao()->update($existAudio[0]['id'], $newAudio);
         }
@@ -30,11 +30,11 @@ class Audio extends Activity
         $audio = $activity[$activity['mediaType'].'Activity'];
         $newUploadFiles = $config['newUploadFiles'];
 
-        return array(
+        return [
             'mediaId' => empty($newUploadFiles[$audio['mediaId']]) ? 0 : $newUploadFiles[$audio['mediaId']]['id'],
             'hasText' => $audio['hasText'],
             'syncId' => $audio['id'],
-        );
+        ];
     }
 
     /**

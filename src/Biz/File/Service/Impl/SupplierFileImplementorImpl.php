@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class SupplierFileImplementorImpl extends BaseService implements FileImplementor
 {
-    public function moveFile($targetType, $targetId, UploadedFile $originalFile = null, $data = array())
+    public function moveFile($targetType, $targetId, UploadedFile $originalFile = null, $data = [])
     {
     }
 
@@ -32,7 +32,7 @@ class SupplierFileImplementorImpl extends BaseService implements FileImplementor
         $resourceFile = $this->getS2B2CFacedService()->getS2B2CService()->getProductResource(
             "/resources/{$file['globalId']}",
             $fileInfo,
-            array('canNoSdInMetas' => 1)
+            ['canNoSdInMetas' => 1]
         );
 
         return $this->mergeResourceFile($file, $resourceFile);
@@ -46,7 +46,7 @@ class SupplierFileImplementorImpl extends BaseService implements FileImplementor
         $resourceFile = $this->getS2B2CFacedService()->getS2B2CService()->getProductResource(
             "/resources/{$globalId}",
             $fileInfo,
-            array()
+            []
         );
 
         return $this->mergeResourceFile($file, $resourceFile);
@@ -54,7 +54,7 @@ class SupplierFileImplementorImpl extends BaseService implements FileImplementor
 
     public function player($globalId, $ssl = false)
     {
-        $params = array();
+        $params = [];
         if ($ssl) {
             $params['protocol'] = 'https';
         }
@@ -70,7 +70,7 @@ class SupplierFileImplementorImpl extends BaseService implements FileImplementor
         );
     }
 
-    public function addFile($targetType, $targetId, array $fileInfo = array(), UploadedFile $originalFile = null)
+    public function addFile($targetType, $targetId, array $fileInfo = [], UploadedFile $originalFile = null)
     {
     }
 
@@ -124,7 +124,7 @@ class SupplierFileImplementorImpl extends BaseService implements FileImplementor
 
     public function getDownloadFile($file, $ssl = false)
     {
-        $params = array();
+        $params = [];
         if ($ssl) {
             $params['protocol'] = 'https';
         }
@@ -163,7 +163,7 @@ class SupplierFileImplementorImpl extends BaseService implements FileImplementor
     private function mergeResourceFile($localFile, $resourceFile)
     {
         if (empty($localFile)) {
-            $localFile = array(
+            $localFile = [
                 'id' => 0,
                 'storage' => 'supplier',
                 'globalId' => $resourceFile['no'],
@@ -171,7 +171,7 @@ class SupplierFileImplementorImpl extends BaseService implements FileImplementor
                 'hashId' => $resourceFile['reskey'],
                 'fileSize' => $resourceFile['size'],
                 'filename' => $resourceFile['name'],
-            );
+            ];
         }
 
         unset($resourceFile['id']);
@@ -188,7 +188,7 @@ class SupplierFileImplementorImpl extends BaseService implements FileImplementor
     protected function decodeMetas($metas)
     {
         if (empty($metas)) {
-            return array();
+            return [];
         }
 
         if (is_array($metas)) {
@@ -226,16 +226,16 @@ class SupplierFileImplementorImpl extends BaseService implements FileImplementor
 
     protected function parseConvertParamsAndMetas($file)
     {
-        $file['convertParams'] = array();
-        $file['metas2'] = array();
+        $file['convertParams'] = [];
+        $file['metas2'] = [];
 
         if (!empty($file['directives']['output'])) {
             if ('video' == $file['type']) {
-                $file['convertParams'] = array(
+                $file['convertParams'] = [
                     'convertor' => 'HLSEncryptedVideo',
                     'videoQuality' => isset($file['directives']['videoQuality']) ? $file['directives']['videoQuality'] : 'normal',
                     'audioQuality' => isset($file['directives']['audioQuality']) ? $file['directives']['audioQuality'] : 'normal',
-                );
+                ];
 
                 if (isset($file['metas']['levels'])) {
                     foreach ($file['metas']['levels'] as $key => $value) {
@@ -264,18 +264,18 @@ class SupplierFileImplementorImpl extends BaseService implements FileImplementor
                 if (isset($file['metas']['mp4levels']) && !empty($file['metas']['mp4levels'])) {
                     $file['hasMp4'] = 1;
                 }
-            } elseif (in_array($file['type'], array('ppt', 'document'))) {
-                $file['convertParams'] = array(
+            } elseif (in_array($file['type'], ['ppt', 'document'])) {
+                $file['convertParams'] = [
                     'convertor' => $file['directives']['output'],
-                );
+                ];
                 $file['metas2'] = $file['metas'];
             } elseif ('audio' == $file['type']) {
-                $file['convertParams'] = array(
+                $file['convertParams'] = [
                     'convertor' => $file['directives']['output'],
                     'videoQuality' => 'normal',
                     'audioQuality' => 'normal',
-                );
-                $file['metas2'] = isset($file['metas']['levels']) ? $file['metas']['levels'] : array();
+                ];
+                $file['metas2'] = isset($file['metas']['levels']) ? $file['metas']['levels'] : [];
             }
         }
 

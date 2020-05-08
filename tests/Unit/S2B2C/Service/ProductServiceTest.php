@@ -28,6 +28,22 @@ class ProductServiceTest extends BaseTestCase
         $this->assertEquals($createdProduct, $gotProduct);
     }
 
+    public function testFindProductsBySupplierIdAndRemoteProductIds_whenDataCreated_thenFound()
+    {
+        $createdProduct = $this->getS2B2CProductService()->createProduct($this->mockProductFields());
+        $findProducts = $this->getS2B2CProductService()->findProductsBySupplierIdAndRemoteProductIds($createdProduct['supplierId'], [$createdProduct['remoteProductId']]);
+        $this->assertCount(1, $findProducts);
+        $this->assertEquals($createdProduct, reset($findProducts));
+    }
+
+    public function testFindProductsBySupplierIdAndRemoteResourceTypeAndIds_whenCreated_thenFound()
+    {
+        $createdProduct = $this->getS2B2CProductService()->createProduct($this->mockProductFields());
+        $findProducts = $this->getS2B2CProductService()->findProductsBySupplierIdAndRemoteResourceTypeAndIds($createdProduct['supplierId'], $createdProduct['productType'], [$createdProduct['remoteResourceId']]);
+        $this->assertCount(1, $findProducts);
+        $this->assertEquals($createdProduct, reset($findProducts));
+    }
+
     protected function mockProductFields($customFields = [])
     {
         return array_merge([
