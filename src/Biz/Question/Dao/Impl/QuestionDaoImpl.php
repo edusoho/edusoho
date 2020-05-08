@@ -16,17 +16,17 @@ class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
 
     public function findQuestionsByParentId($id)
     {
-        return $this->findInField('parentId', array($id));
+        return $this->findInField('parentId', [$id]);
     }
 
     public function findQuestionsByCourseSetId($courseSetId)
     {
-        return $this->findInField('courseSetId', array($courseSetId));
+        return $this->findInField('courseSetId', [$courseSetId]);
     }
 
     public function findQuestionsByCopyId($copyId)
     {
-        return $this->findInField('copyId', array($copyId));
+        return $this->findInField('copyId', [$copyId]);
     }
 
     public function findQuestionsByCategoryIds($categoryIds)
@@ -36,19 +36,19 @@ class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
 
     public function deleteSubQuestions($parentId)
     {
-        return $this->db()->delete($this->table(), array('parentId' => $parentId));
+        return $this->db()->delete($this->table(), ['parentId' => $parentId]);
     }
 
     public function deleteByCourseSetId($courseSetId)
     {
-        return $this->db()->delete($this->table(), array('courseSetId' => $courseSetId));
+        return $this->db()->delete($this->table(), ['courseSetId' => $courseSetId]);
     }
 
     public function copyQuestionsUpdateSubCount($parentId, $subCount)
     {
         $sql = "UPDATE {$this->table()} SET subCount = ? WHERE copyId = ?";
 
-        return $this->db()->executeUpdate($sql, array($subCount, $parentId));
+        return $this->db()->executeUpdate($sql, [$subCount, $parentId]);
     }
 
     public function getQuestionCountGroupByTypes($conditions)
@@ -58,23 +58,28 @@ class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
 
         $builder->addGroupBy('type');
 
-        return $builder->execute()->fetchAll() ?: array();
+        return $builder->execute()->fetchAll() ?: [];
+    }
+
+    public function findBySyncIds(array $syncIds)
+    {
+        return $this->findInField('syncId', $syncIds);
     }
 
     public function declares()
     {
-        $declares['timestamps'] = array(
+        $declares['timestamps'] = [
             'createdTime',
             'updatedTime',
-        );
+        ];
 
-        $declares['orderbys'] = array(
+        $declares['orderbys'] = [
             'id',
             'createdTime',
             'updatedTime',
-        );
+        ];
 
-        $declares['conditions'] = array(
+        $declares['conditions'] = [
             'id IN ( :ids )',
             'parentId = :parentId',
             'difficulty = :difficulty',
@@ -97,12 +102,12 @@ class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
             'categoryId IN (:categoryIds)',
             'bankId = :bankId',
             'categoryId = :categoryId',
-        );
+        ];
 
-        $declares['serializes'] = array(
+        $declares['serializes'] = [
             'answer' => 'json',
             'metas' => 'json',
-        );
+        ];
 
         return $declares;
     }

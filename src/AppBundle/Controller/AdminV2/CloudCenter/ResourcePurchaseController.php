@@ -85,7 +85,7 @@ class ResourcePurchaseController extends BaseController
         /*
          * mock
          */
-        list($courseSets, $total) = $this->getS2B2CProductService()->searchProduct($conditions);
+        list($courseSets, $total) = $this->getS2B2CProductService()->searchRemoteProducts($conditions);
 
         $merchant = $this->getS2B2CFacadeService()->getMe();
 

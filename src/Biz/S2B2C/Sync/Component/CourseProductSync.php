@@ -18,51 +18,50 @@ class CourseProductSync extends AbstractEntitySync
      *
      * @return array|mixed
      */
-    protected function syncEntity($source, $config = array())
+    protected function syncEntity($source, $config = [])
     {
         $course = array_merge($source, $config);
 
         $syncCourseFields = $this->filterFields($course);
         $syncCourseFields['price'] = $course['suggestionPrice'];
         $syncCourseFields['originPrice'] = $course['suggestionPrice'];
-        $syncCourseFields['sourceVersion'] = $course['editVersion'];
         $syncCourse = $this->getCourseDao()->update($course['syncCourseId'], $syncCourseFields);
 
-        $config = array('newCourse' => $syncCourse, 'isCopy' => false);
+        $config = ['newCourse' => $syncCourse, 'isCopy' => false];
         $this->processChainsDoSync($source, $config);
 
         return $syncCourse;
     }
 
-    protected function updateEntityToLastedVersion($source, $config = array())
+    protected function updateEntityToLastedVersion($source, $config = [])
     {
         $course = array_merge($source, $config);
 
         $syncCourseFields = $this->filterUpdateFields($course);
         $syncCourse = $this->getCourseDao()->update($course['syncCourseId'], $syncCourseFields);
 
-        $config = array('newCourse' => $syncCourse, 'isCopy' => false);
+        $config = ['newCourse' => $syncCourse, 'isCopy' => false];
         $this->processChainsDoUpdate($source, $config);
     }
 
     protected function getFields()
     {
-        return array(
+        return [
             'title', 'subtitle', 'summary', 'type', 'cover', 'learnMode', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate',
             'goals', 'audiences', 'maxStudentNum', 'isFree', 'price', 'buyable', 'tryLookable', 'tryLookLength', 'watchLimit', 'services',
             'taskNum', 'originPrice', 'coinPrice', 'originCoinPrice', 'showStudentNumType', 'serializeMode', 'about', 'deadlineNotify',
             'daysOfNotifyBeforeDeadline', 'freeStartTime', 'freeEndTime', 'cover', 'buyExpiryTime', 'enableFinish', 'materialNum', 'compulsoryTaskNum',
-            'lessonNum', 'publishLessonNum', 'showServices', 'courseType', 'enableAudio', 'isHideUnpublish', 'suggestionPrice', 'cooperationPrice',
-        );
+            'lessonNum', 'publishLessonNum', 'showServices', 'courseType', 'enableAudio', 'isHideUnpublish',
+        ];
     }
 
     protected function filterUpdateFields($course)
     {
-        $fields = array(
+        $fields = [
             'learnMode', 'tryLookable', 'tryLookLength', 'watchLimit',
             'taskNum', 'enableFinish', 'materialNum', 'compulsoryTaskNum',
             'lessonNum', 'publishLessonNum', 'enableAudio',
-        );
+        ];
 
         return ArrayToolkit::parts($course, $fields);
     }

@@ -70,7 +70,7 @@ class ProductServiceImpl extends BaseService implements ProductService
         return $this->getS2B2CProductDao()->create($fields);
     }
 
-    public function searchProduct($conditions)
+    public function searchRemoteProducts($conditions)
     {
         $selectedConditions = ['title', 'offset', 'limit', 'categoryId', 'sort'];
         $conditions = ArrayToolkit::parts($conditions, $selectedConditions);
@@ -91,6 +91,16 @@ class ProductServiceImpl extends BaseService implements ProductService
         }
 
         return [$courseSets, $total];
+    }
+
+    public function searchProducts($conditions, $orderBys, $start, $limit, $columns = [])
+    {
+        return $this->getS2B2CProductDao()->search($conditions, $orderBys, $start, $limit, $columns);
+    }
+
+    public function countProducts($conditions)
+    {
+        return $this->getS2B2CProductDao()->count($conditions);
     }
 
     public function searchSelectedItemProduct($conditions)

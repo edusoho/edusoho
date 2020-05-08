@@ -17,6 +17,9 @@ class ProductDaoImpl extends GeneralDaoImpl implements ProductDao
            'conditions' => [
                'id = :id',
                'productType = :productType',
+               'remoteResourceId = :remoteResourceId',
+               'localResourceId = :localResourceId',
+               'remoteProductId = :remoteProductId',
            ],
            'orderbys' => ['id'],
        ];
