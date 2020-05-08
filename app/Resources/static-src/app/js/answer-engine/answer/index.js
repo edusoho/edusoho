@@ -1,9 +1,9 @@
-import Vue from 'vue';
-import { itemEngine, inspectionControl} from 'item-bank-test';
+// import Vue from 'vue';
+// import { itemEngine, inspectionControl} from 'item-bank-test';
 import Answer from './answer';
 
-Vue.use(itemEngine);
-Vue.use(inspectionControl);
+// Vue.use(itemEngine);
+// Vue.use(inspectionControl);
 
 Vue.config.productionTip = false;
 
