@@ -8,13 +8,25 @@
   {% set showHeader = 0 %}
 {% endif %}
 
+
+{% block stylesheets %}
+  {{ parent() }}
+  {% if maincolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
+    <link href="{{ asset('static-dist/libs/item-bank-test/styles/item-bank-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+  {% else %}
+    <link href="{{ asset('static-dist/libs/item-bank-test/styles/item-bank.css') }}" rel="stylesheet" />
+  {% endif %}
+{% endblock %}
+
+
 {% block body %}
   {% block header %}
     {% if showHeader %}{{ parent() }}{% endif %}
   {% endblock %}
 
+
   {% if answerRecord.status == 'finished' %}
-    <div class="test-vue" style="background-color: transparent;">
+    <div class="ibs-vue" style="background-color: transparent;">
       <div class="ant-row">
         <div class="ant-col ant-col-offset-2 ibs-resutl-item">
           <div class="item-bank-result">

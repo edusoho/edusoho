@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="test-vue">
+  <div id="app" class="ibs-vue">
     <assessment-preview
       :assessment="assessment"
       :showCKEditorData="showCKEditorData"
