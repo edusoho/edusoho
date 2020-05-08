@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="test-vue">
+  <div id="app" class="ibs-vue">
     <item-review
       :assessment="assessment"
       :answerReport="answerReport"
