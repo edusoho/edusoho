@@ -269,7 +269,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             list($score, $status) = $this->getQuestionReportScoreAndStatus(
                 $answerScene,
                 $questionReport,
-                $reviewQuestionReports[$questionReport['id']]
+                empty($reviewQuestionReports[$questionReport['id']]) ? array() : $reviewQuestionReports[$questionReport['id']]
             );
             $questionReport['score'] = $score;
             $questionReport['status'] = $status;
@@ -318,6 +318,10 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
     protected function getQuestionReportScoreAndStatus($answerScene, $questionReport, $reviewQuestionReport)
     {
+        if (empty($reviewQuestionReport)) {
+            return [0, AnswerQuestionReportService::STATUS_NOANSWER];
+        }
+        
         if (0 == $answerScene['need_score']) {
             return [0, AnswerQuestionReportService::STATUS_PART_RIGHT];
         }
