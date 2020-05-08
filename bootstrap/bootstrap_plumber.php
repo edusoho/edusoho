@@ -51,11 +51,6 @@ foreach ($options['queues'] as &$queue) {
     unset($queue['queue_options']);
 }
 
-$options = array_merge($options, [
-    'log_path' => $container->getParameter('kernel.logs_dir').'/plumber.log',
-    'pid_path' => $container->getParameter('kernel.root_dir').'/data/plumber.pid',
-]);
-
 return [
     'options' => $options,
     'container' => new PsrContainer($biz),

@@ -10907,6 +10907,11 @@ merchant.content_resource.choose: 选择
 merchant.content_resource.no_supplier: 暂无合作供应商！
 merchant.content_resource.supplier.no_cooperation_hint: 与供应商%supplierName%之间商品合作关系已经取消，供应商的商品不能购买加入，但不影响已购学员学习，如需恢复，请联系供应商！
 
+admin_v2.plumber.status: 运行状态
+admin_v2.plumber.start: 启用
+admin_v2.plumber.stop: 停止
+admin_v2.plumber.restart: 重启
+
 admin_v2.plumber.job_id: ID
 admin_v2.plumber.job_time: 时间
 admin_v2.plumber.job_worker: Worker Topic
