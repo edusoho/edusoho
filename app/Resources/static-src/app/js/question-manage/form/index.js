@@ -1,8 +1,8 @@
-import Vue from 'vue';
-import { itemManage } from 'item-bank-test';
+// import Vue from 'vue';
+// import { itemManage } from 'item-bank-test';
 import Item from './item';
 
-Vue.use(itemManage);
+// Vue.use(itemManage);
 
 Vue.config.productionTip = false;
 

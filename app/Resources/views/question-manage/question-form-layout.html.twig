@@ -1,6 +1,16 @@
 {% extends 'question-bank/question/index.html.twig' %}
 
-{% do script(['app/js/question-manage/form/index.js']) %}
+{% do script(['libs/vue.js','libs/item-bank-test/lib/itemBank.umd.min.js','app/js/question-manage/form/index.js']) %}
+
+
+{% block stylesheets %}
+  {{ parent() }}
+  {% if maincolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
+    <link href="{{ asset('static-dist/libs/item-bank-test/styles/item-bank-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+  {% else %}
+    <link href="{{ asset('static-dist/libs/item-bank-test/styles/item-bank.css') }}" rel="stylesheet" />
+  {% endif %}
+{% endblock %}
 
 {% block container %}
 
