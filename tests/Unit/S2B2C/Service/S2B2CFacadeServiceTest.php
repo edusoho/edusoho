@@ -8,17 +8,17 @@ use Biz\S2B2C\SupplierPlatformApi;
 
 class S2B2CFacadeServiceTest extends BaseTestCase
 {
-    public function testGetMerchantDisabledPermissionList_whenNotCached_thenGetAndCached()
+    public function testGetMerchantDisabledPermissions_whenNotCached_thenGetAndCached()
     {
         $disabledPermissions = ['course_set_manage_create'];
         $mockeryPlatformApi = \Mockery::mock(new SupplierPlatformApi($this->biz));
-        $mockeryPlatformApi->shouldReceive('getMerchantDisabledPermissionList')->times(1)->andReturn($disabledPermissions);
+        $mockeryPlatformApi->shouldReceive('getMerchantDisabledPermissions')->times(1)->andReturn($disabledPermissions);
         $this->biz['supplier.platform_api'] = $mockeryPlatformApi;
-        $result = $this->getS2B2CFacadeSercice()->getMerchantDisabledPermissionList();
+        $result = $this->getS2B2CFacadeSercice()->getMerchantDisabledPermissions();
         $this->assertEquals($disabledPermissions, $result);
     }
 
-    public function testGetMerchantDisabledPermissionList_whenCached_thenGet()
+    public function testGetMerchantDisabledPermissions_whenCached_thenGet()
     {
         $disabledPermissions = ['course_set_manage_create', 'course_set_show'];
         $this->mockBiz(
@@ -31,7 +31,7 @@ class S2B2CFacadeServiceTest extends BaseTestCase
                 ],
             ]
         );
-        $result = $this->getS2B2CFacadeSercice()->getMerchantDisabledPermissionList();
+        $result = $this->getS2B2CFacadeSercice()->getMerchantDisabledPermissions();
         $this->assertEquals($disabledPermissions, $result);
     }
 

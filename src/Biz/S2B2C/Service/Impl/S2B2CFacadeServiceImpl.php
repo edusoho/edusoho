@@ -45,11 +45,11 @@ class S2B2CFacadeServiceImpl extends BaseService implements S2B2CFacadeService
         return $supplier;
     }
 
-    public function getMerchantDisabledPermissionList()
+    public function getMerchantDisabledPermissions()
     {
         $disabledList = $this->getCacheService()->get('s2b2c_disabled_permission_list');
         if (empty($disabledList)) {
-            $disabledList = $this->getSupplierPlatformApi()->getMerchantDisabledPermissionList();
+            $disabledList = $this->getSupplierPlatformApi()->getMerchantDisabledPermissions();
             $this->getCacheService()->set('s2b2c_disabled_permission_list', $disabledList, time() + 86400);
 
             return $disabledList;
