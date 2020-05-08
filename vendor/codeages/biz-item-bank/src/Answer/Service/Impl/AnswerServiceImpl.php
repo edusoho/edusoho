@@ -95,7 +95,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
         $this->dispatch('answer.submitted', $answerRecord);
         if (true === $canFinished) {
-            $this->dispatch('answer.finished', $answerReport);
             $this->getAnswerSceneService()->buildAnswerSceneReport($answerReport['answer_scene_id']);
         }
 
