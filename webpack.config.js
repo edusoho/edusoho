@@ -33,7 +33,8 @@ module.exports = {
     'fullcalendar': ['libs/fullcalendar/index.js'],
     'ltc-sdk-client': ['libs/ltc-sdk-client/index.js'],
     'ltc-sdk-server': ['libs/ltc-sdk-server/index.js'],
-    'bootstrap-treeview': ['libs/bootstrap-treeview/index.js']
+    'bootstrap-treeview': ['libs/bootstrap-treeview/index.js'],
+    'vue': ['vue']
   },
   noParseDeps: { // 不解析依赖，加快编译速度
     'jquery': 'jquery/dist/jquery.js',
@@ -53,6 +54,7 @@ module.exports = {
     'echo-js': 'echo-js/dist/echo.js',
     'jquery-waypoints': 'jquery-waypoints/waypoints.js',
     'echarts': 'echarts/dist/echarts.js',
+    'vue': 'vue/dist/vue.min.js',
     'handlebars': 'handlebars/dist/handlebars.min.js',
     'moment': 'moment/moment.js',
     'fullcalendar': 'es-fullcalendar/dist/fullcalendar.js',
@@ -64,6 +66,17 @@ module.exports = {
       ignore: [
         '**/samples/**',
         '**/kityformula/libs/**',
+      ]
+    },
+    {
+      name: 'item-bank-test',
+      ignore: [
+        'node_modules/**',
+        'public/**',
+        'src/**',
+        'examples/**',
+        'build/**',
+        'build-style/**'
       ]
     },
     {
