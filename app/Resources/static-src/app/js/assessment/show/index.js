@@ -1,8 +1,8 @@
-import Vue from 'vue';
-import { assessmentPreview } from 'item-bank-test';
+// import Vue from 'vue';
+// import { assessmentPreview } from 'item-bank-test';
 import ShowAssessment from './show-assessment';
 
-Vue.use(assessmentPreview);
+// Vue.use(assessmentPreview);
 
 Vue.config.productionTip = false;
 
