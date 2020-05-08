@@ -96,6 +96,21 @@ class ActivityCopyTest extends BaseTestCase
             )),
         ));
 
+        $this->mockBiz('ItemBank:Answer:AnswerSceneService', array(
+            array('functionName' => 'get', 'returnValue' => array(
+                'limited_time' => 1,
+                'redoInterval' => 1,
+                'limitedTime' => 1,
+                'enable_facein' => 1,
+            )),
+            array('functionName' => 'create', 'returnValue' => array(
+                'limited_time' => 1,
+                'redoInterval' => 1,
+                'limitedTime' => 1,
+                'enable_facein' => 1,
+            )),
+        ));
+
         $this->mockBiz('Activity:VideoActivityDao', array(
             array('functionName' => 'get', 'returnValue' => array(
                 'mediaSource' => 'self',

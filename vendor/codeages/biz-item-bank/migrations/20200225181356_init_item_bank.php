@@ -40,7 +40,7 @@ class InitItemBank extends Migration
                 `right_question_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答对问题数',
                 `objective_score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '客观题得分',
                 `subjective_score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '主观题得分',
-                `grade` enum('none', 'excellent','good','passed','unpassed') NOT NULL DEFAULT 'unpassed' COMMENT '等级',
+                `grade` enum('none', 'excellent','good','passed','unpassed') NOT NULL DEFAULT 'none' COMMENT '等级',
                 `comment` text COMMENT '评语',
                 `review_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '批阅时间',
                 `review_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '批阅人id',
