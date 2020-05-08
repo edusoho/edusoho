@@ -32,24 +32,26 @@ final class NoSpacesInsideParenthesisFixer extends AbstractFixer
     {
         return new FixerDefinition(
             'There MUST NOT be a space after the opening parenthesis. There MUST NOT be a space before the closing parenthesis.',
-            array(
-                new CodeSample("<?php\nif ( \$a ) {\n    foo( );\n}"),
+            [
+                new CodeSample("<?php\nif ( \$a ) {\n    foo( );\n}\n"),
                 new CodeSample(
-                    '<?php
-function foo( $bar, $baz )
+                    "<?php
+function foo( \$bar, \$baz )
 {
-}'
+}\n"
                 ),
-            )
+            ]
         );
     }
 
     /**
      * {@inheritdoc}
+     *
+     * Must run before FunctionToConstantFixer.
+     * Must run after CombineConsecutiveIssetsFixer, CombineNestedDirnameFixer, PowToExponentiationFixer.
      */
     public function getPriority()
     {
-        // must run before FunctionToConstantFixer
         return 2;
     }
 
@@ -95,8 +97,7 @@ function foo( $bar, $baz )
     /**
      * Remove spaces from token at a given index.
      *
-     * @param Tokens $tokens
-     * @param int    $index
+     * @param int $index
      */
     private function removeSpaceAroundToken(Tokens $tokens, $index)
     {

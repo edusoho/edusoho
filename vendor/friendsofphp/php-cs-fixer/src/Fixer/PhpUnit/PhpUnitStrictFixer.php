@@ -20,6 +20,7 @@ use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\Tokenizer\Analyzer\ArgumentsAnalyzer;
+use PhpCsFixer\Tokenizer\Analyzer\FunctionsAnalyzer;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
@@ -28,12 +29,12 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class PhpUnitStrictFixer extends AbstractFixer implements ConfigurationDefinitionFixerInterface
 {
-    private static $assertionMap = array(
+    private static $assertionMap = [
         'assertAttributeEquals' => 'assertAttributeSame',
         'assertAttributeNotEquals' => 'assertAttributeNotSame',
         'assertEquals' => 'assertSame',
         'assertNotEquals' => 'assertNotSame',
-    );
+    ];
 
     /**
      * {@inheritdoc}
@@ -42,9 +43,9 @@ final class PhpUnitStrictFixer extends AbstractFixer implements ConfigurationDef
     {
         return new FixerDefinition(
             'PHPUnit methods like `assertSame` should be used instead of `assertEquals`.',
-            array(
+            [
                 new CodeSample(
-'<?php
+                    '<?php
 final class MyTest extends \PHPUnit_Framework_TestCase
 {
     public function testSomeTest()
@@ -68,10 +69,11 @@ final class MyTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(a(), b());
         $this->assertNotEquals(a(), b());
     }
-}',
-                    array('assertions' => array('assertEquals'))
+}
+',
+                    ['assertions' => ['assertEquals']]
                 ),
-            ),
+            ],
             null,
             'Risky when any of the functions are overridden or when testing object equality.'
         );
@@ -99,40 +101,34 @@ final class MyTest extends \PHPUnit_Framework_TestCase
     protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
         $argumentsAnalyzer = new ArgumentsAnalyzer();
+        $functionsAnalyzer = new FunctionsAnalyzer();
 
         foreach ($this->configuration['assertions'] as $methodBefore) {
             $methodAfter = self::$assertionMap[$methodBefore];
 
             for ($index = 0, $limit = $tokens->count(); $index < $limit; ++$index) {
-                $sequence = $tokens->findSequence(
-                    array(
-                        array(T_VARIABLE, '$this'),
-                        array(T_OBJECT_OPERATOR, '->'),
-                        array(T_STRING, $methodBefore),
-                        '(',
-                    ),
-                    $index
-                );
+                $methodIndex = $tokens->getNextTokenOfKind($index, [[T_STRING, $methodBefore]]);
 
-                if (null === $sequence) {
+                if (null === $methodIndex) {
                     break;
                 }
 
-                $sequenceIndexes = array_keys($sequence);
-
-                $argumentsCount = $argumentsAnalyzer->countArguments(
-                    $tokens,
-                    $sequenceIndexes[3],
-                    $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $sequenceIndexes[3])
-                );
-
-                if (2 !== $argumentsCount && 3 !== $argumentsCount) {
+                if (!$functionsAnalyzer->isTheSameClassCall($tokens, $methodIndex)) {
                     continue;
                 }
 
-                $tokens[$sequenceIndexes[2]] = new Token(array(T_STRING, $methodAfter));
+                $openingParenthesisIndex = $tokens->getNextMeaningfulToken($methodIndex);
+                $argumentsCount = $argumentsAnalyzer->countArguments(
+                    $tokens,
+                    $openingParenthesisIndex,
+                    $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $openingParenthesisIndex)
+                );
 
-                $index = $sequenceIndexes[3];
+                if (2 === $argumentsCount || 3 === $argumentsCount) {
+                    $tokens[$methodIndex] = new Token([T_STRING, $methodAfter]);
+                }
+
+                $index = $methodIndex;
             }
         }
     }
@@ -142,19 +138,17 @@ final class MyTest extends \PHPUnit_Framework_TestCase
      */
     protected function createConfigurationDefinition()
     {
-        $assertions = new FixerOptionBuilder('assertions', 'List of assertion methods to fix.');
-        $assertions = $assertions
-            ->setAllowedTypes(array('array'))
-            ->setAllowedValues(array(new AllowedValueSubset(array_keys(self::$assertionMap))))
-            ->setDefault(array(
-                'assertAttributeEquals',
-                'assertAttributeNotEquals',
-                'assertEquals',
-                'assertNotEquals',
-            ))
-            ->getOption()
-        ;
-
-        return new FixerConfigurationResolverRootless('assertions', array($assertions));
+        return new FixerConfigurationResolverRootless('assertions', [
+            (new FixerOptionBuilder('assertions', 'List of assertion methods to fix.'))
+                ->setAllowedTypes(['array'])
+                ->setAllowedValues([new AllowedValueSubset(array_keys(self::$assertionMap))])
+                ->setDefault([
+                    'assertAttributeEquals',
+                    'assertAttributeNotEquals',
+                    'assertEquals',
+                    'assertNotEquals',
+                ])
+                ->getOption(),
+        ], $this->getName());
     }
 }

@@ -10,7 +10,7 @@ class SchedulerCommand extends BaseCommand
     protected function configure()
     {
         $this->setName('util:scheduler')
-        ->setDescription('执行定时任务');
+            ->setDescription('执行定时任务');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -28,7 +28,7 @@ class SchedulerCommand extends BaseCommand
 
     protected function setDisableWebCrontab()
     {
-        $setting = $this->getSettingService()->get('magic', array());
+        $setting = $this->getSettingService()->get('magic', []);
         if (empty($setting['disable_web_crontab'])) {
             $setting['disable_web_crontab'] = 1;
             $this->getSettingService()->set('magic', $setting);

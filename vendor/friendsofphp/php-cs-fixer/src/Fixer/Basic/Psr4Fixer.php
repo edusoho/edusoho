@@ -33,7 +33,7 @@ final class Psr4Fixer extends AbstractPsrAutoloadingFixer
     {
         return new FixerDefinition(
             'Class names should match the file name.',
-            array(
+            [
                 new FileSpecificCodeSample(
                     '<?php
 namespace PhpCsFixer\FIXER\Basic;
@@ -41,9 +41,9 @@ class InvalidName {}
 ',
                     new \SplFileInfo(__FILE__)
                 ),
-            ),
+            ],
             null,
-            'This fixer may change your class name, which will break the code that is depended on old name.'
+            'This fixer may change your class name, which will break the code that depends on the old name.'
         );
     }
 
@@ -52,24 +52,24 @@ class InvalidName {}
      */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
-        $namespace = false;
-        $classyName = null;
+        $isNamespaceFound = false;
         $classyIndex = 0;
+        $classyName = null;
 
         foreach ($tokens as $index => $token) {
             if ($token->isGivenKind(T_NAMESPACE)) {
-                if (false !== $namespace) {
+                if ($isNamespaceFound) {
                     return;
                 }
 
-                $namespace = true;
+                $isNamespaceFound = true;
             } elseif ($token->isClassy()) {
-                if (null !== $classyName) {
-                    return;
-                }
-
                 $prevToken = $tokens[$tokens->getPrevMeaningfulToken($index)];
                 if ($prevToken->isGivenKind(T_NEW)) {
+                    continue;
+                }
+
+                if (null !== $classyName) {
                     return;
                 }
 
@@ -82,18 +82,18 @@ class InvalidName {}
             return;
         }
 
-        if (false !== $namespace) {
+        if ($isNamespaceFound) {
             $filename = basename(str_replace('\\', '/', $file->getRealPath()), '.php');
 
             if ($classyName !== $filename) {
-                $tokens[$classyIndex] = new Token(array(T_STRING, $filename));
+                $tokens[$classyIndex] = new Token([T_STRING, $filename]);
             }
         } else {
             $normClass = str_replace('_', '/', $classyName);
-            $filename = substr(str_replace('\\', '/', $file->getRealPath()), -strlen($normClass) - 4, -4);
+            $filename = substr(str_replace('\\', '/', $file->getRealPath()), -\strlen($normClass) - 4, -4);
 
             if ($normClass !== $filename && strtolower($normClass) === strtolower($filename)) {
-                $tokens[$classyIndex] = new Token(array(T_STRING, str_replace('/', '_', $filename)));
+                $tokens[$classyIndex] = new Token([T_STRING, str_replace('/', '_', $filename)]);
             }
         }
     }

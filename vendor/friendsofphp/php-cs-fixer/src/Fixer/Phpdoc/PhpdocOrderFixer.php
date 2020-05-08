@@ -39,13 +39,13 @@ final class PhpdocOrderFixer extends AbstractFixer
     {
         return new FixerDefinition(
             'Annotations in PHPDoc should be ordered so that `@param` annotations come first, then `@throws` annotations, then `@return` annotations.',
-            array(
+            [
                 new CodeSample(
                     '<?php
 /**
  * Hello there!
  *
- * @throws Exception|RuntimeException dfsdf
+ * @throws Exception|RuntimeException foo
  * @custom Test!
  * @return int  Return the number of changes.
  * @param string $foo
@@ -53,22 +53,18 @@ final class PhpdocOrderFixer extends AbstractFixer
  */
 '
                 ),
-            )
+            ]
         );
     }
 
     /**
      * {@inheritdoc}
+     *
+     * Must run before PhpdocAlignFixer, PhpdocSeparationFixer, PhpdocTrimFixer.
+     * Must run after CommentToPhpdocFixer, PhpdocAddMissingParamAnnotationFixer, PhpdocIndentFixer, PhpdocNoAccessFixer, PhpdocNoEmptyReturnFixer, PhpdocNoPackageFixer, PhpdocScalarFixer, PhpdocToCommentFixer, PhpdocTypesFixer.
      */
     public function getPriority()
     {
-        // must be run before the PhpdocSeparationFixer
-
-        /*
-         * Should be run before the php_doc_separation fixer so that if we
-         * create incorrect annotation grouping while moving the annotations
-         * about, we're still ok.
-         */
         return -2;
     }
 
@@ -89,7 +85,7 @@ final class PhpdocOrderFixer extends AbstractFixer
             // state of the dockblock is correct after the modifications
             $content = $this->moveReturnAnnotations($content);
             // persist the content at the end
-            $tokens[$index] = new Token(array(T_DOC_COMMENT, $content));
+            $tokens[$index] = new Token([T_DOC_COMMENT, $content]);
         }
     }
 
@@ -110,7 +106,7 @@ final class PhpdocOrderFixer extends AbstractFixer
             return $content;
         }
 
-        $others = $doc->getAnnotationsOfType(array('throws', 'return'));
+        $others = $doc->getAnnotationsOfType(['throws', 'return']);
 
         if (empty($others)) {
             return $content;
@@ -150,7 +146,7 @@ final class PhpdocOrderFixer extends AbstractFixer
             return $content;
         }
 
-        $others = $doc->getAnnotationsOfType(array('param', 'throws'));
+        $others = $doc->getAnnotationsOfType(['param', 'throws']);
 
         // nothing to do if there are no other annotations
         if (empty($others)) {

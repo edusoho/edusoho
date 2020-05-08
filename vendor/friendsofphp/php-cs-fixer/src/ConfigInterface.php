@@ -23,7 +23,7 @@ interface ConfigInterface
     /**
      * Returns the path to the cache file.
      *
-     * @return null|string Returns null if not using cache
+     * @return string|null Returns null if not using cache
      */
     public function getCacheFile();
 
@@ -75,7 +75,7 @@ interface ConfigInterface
     /**
      * Get configured PHP executable, if any.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getPhpExecutable();
 
@@ -158,7 +158,7 @@ interface ConfigInterface
     /**
      * Set PHP executable.
      *
-     * @param null|string $phpExecutable
+     * @param string|null $phpExecutable
      *
      * @return self
      */
@@ -180,8 +180,6 @@ interface ConfigInterface
      * Value for set must be bool (turn it on or off).
      * Value for fixer may be bool (turn it on or off) or array of configuration
      * (turn it on and contains configuration for FixerInterface::configure method).
-     *
-     * @param array $rules
      *
      * @return self
      */

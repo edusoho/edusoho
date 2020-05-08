@@ -50,20 +50,30 @@ final class ConcatSpaceFixer extends AbstractFixer implements ConfigurationDefin
     {
         return new FixerDefinition(
             'Concatenation should be spaced according configuration.',
-            array(
+            [
                 new CodeSample(
-                    "<?php\n\$foo = 'bar' . 3 . 'baz'.'qux';"
+                    "<?php\n\$foo = 'bar' . 3 . 'baz'.'qux';\n"
                 ),
                 new CodeSample(
-                    "<?php\n\$foo = 'bar' . 3 . 'baz'.'qux';",
-                    array('spacing' => 'none')
+                    "<?php\n\$foo = 'bar' . 3 . 'baz'.'qux';\n",
+                    ['spacing' => 'none']
                 ),
                 new CodeSample(
-                    "<?php\n\$foo = 'bar' . 3 . 'baz'.'qux';",
-                    array('spacing' => 'one')
+                    "<?php\n\$foo = 'bar' . 3 . 'baz'.'qux';\n",
+                    ['spacing' => 'one']
                 ),
-            )
+            ]
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * Must run after SingleLineThrowFixer.
+     */
+    public function getPriority()
+    {
+        return 0;
     }
 
     /**
@@ -92,35 +102,31 @@ final class ConcatSpaceFixer extends AbstractFixer implements ConfigurationDefin
      */
     protected function createConfigurationDefinition()
     {
-        $spacing = new FixerOptionBuilder('spacing', 'Spacing to apply around concatenation operator.');
-        $spacing = $spacing
-            ->setAllowedValues(array('one', 'none'))
-            ->setDefault('none')
-            ->getOption()
-        ;
-
-        return new FixerConfigurationResolver(array($spacing));
+        return new FixerConfigurationResolver([
+            (new FixerOptionBuilder('spacing', 'Spacing to apply around concatenation operator.'))
+                ->setAllowedValues(['one', 'none'])
+                ->setDefault('none')
+                ->getOption(),
+        ]);
     }
 
     /**
-     * @param Tokens $tokens
-     * @param int    $index  index of concatenation '.' token
+     * @param int $index index of concatenation '.' token
      */
     private function fixConcatenationToNoSpace(Tokens $tokens, $index)
     {
         $prevNonWhitespaceToken = $tokens[$tokens->getPrevNonWhitespace($index)];
-        if (!$prevNonWhitespaceToken->isGivenKind(array(T_LNUMBER, T_COMMENT, T_DOC_COMMENT)) || '/*' === substr($prevNonWhitespaceToken->getContent(), 0, 2)) {
+        if (!$prevNonWhitespaceToken->isGivenKind([T_LNUMBER, T_COMMENT, T_DOC_COMMENT]) || '/*' === substr($prevNonWhitespaceToken->getContent(), 0, 2)) {
             $tokens->removeLeadingWhitespace($index, " \t");
         }
 
-        if (!$tokens[$tokens->getNextNonWhitespace($index)]->isGivenKind(array(T_LNUMBER, T_COMMENT, T_DOC_COMMENT))) {
+        if (!$tokens[$tokens->getNextNonWhitespace($index)]->isGivenKind([T_LNUMBER, T_COMMENT, T_DOC_COMMENT])) {
             $tokens->removeTrailingWhitespace($index, " \t");
         }
     }
 
     /**
-     * @param Tokens $tokens
-     * @param int    $index  index of concatenation '.' token
+     * @param int $index index of concatenation '.' token
      */
     private function fixConcatenationToSingleSpace(Tokens $tokens, $index)
     {
@@ -129,16 +135,15 @@ final class ConcatSpaceFixer extends AbstractFixer implements ConfigurationDefin
     }
 
     /**
-     * @param Tokens $tokens
-     * @param int    $index  index of concatenation '.' token
-     * @param int    $offset 1 or -1
+     * @param int $index  index of concatenation '.' token
+     * @param int $offset 1 or -1
      */
     private function fixWhiteSpaceAroundConcatToken(Tokens $tokens, $index, $offset)
     {
         $offsetIndex = $index + $offset;
 
         if (!$tokens[$offsetIndex]->isWhitespace()) {
-            $tokens->insertAt($index + (1 === $offset ?: 0), new Token(array(T_WHITESPACE, ' ')));
+            $tokens->insertAt($index + (1 === $offset ?: 0), new Token([T_WHITESPACE, ' ']));
 
             return;
         }
@@ -151,6 +156,6 @@ final class ConcatSpaceFixer extends AbstractFixer implements ConfigurationDefin
             return;
         }
 
-        $tokens[$offsetIndex] = new Token(array(T_WHITESPACE, ' '));
+        $tokens[$offsetIndex] = new Token([T_WHITESPACE, ' ']);
     }
 }

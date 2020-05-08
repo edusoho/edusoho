@@ -1,0 +1,14 @@
+# Default option 0 value:
+r"""Usage: prog [-a <foo>]
+Options: -a <foo>  An option [default: 0]."""
+$ prog
+{"-a": "0"}
+
+
+# Default option '' value:
+r"""Usage: prog [-a <foo>]
+Options: -a <foo>  An option [default: ]."""
+$ prog
+{"-a": ""}
+
+

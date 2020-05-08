@@ -1,25 +1,64 @@
 import notify from 'common/notify';
+import BatchSelect from 'app/common/widget/batch-select';
 
-var $list = $('#course-student-list');
+let $list = $('#course-student-list');
+new BatchSelect($list);
 
 $list.on('click', '.student-remove', function () {
-  var $tr = $(this).parents('tr');
-  var user_name = $('.student-remove').data('user');
+  let $tr = $(this).parents('tr');
+  let user_name = $('.student-remove').data('user');
   if (!confirm(Translator.trans('classroom_manage.student_manage_remove_hint', { username: user_name }))) {
     return;
   }
 
   $.post($(this).data('url'), function (response) {
-    var user_name = $('.student-remove').data('user');
-    if (response.code == 'error') {
-      notify('danger',Translator.trans(response.message, {username: user_name}));
+    if (response.code === 'error') {
+      notify('danger', Translator.trans(response.message, {username: user_name}));
     } else {
-      notify('success',Translator.trans('classroom_manage.student_manage_remove_success_hint', { username: user_name }));
+      notify('success', Translator.trans('classroom_manage.student_manage_remove_success_hint', { username: user_name }));
       $tr.remove();
     }
   }).error(function () {
-    var user_name = $('.student-remove').data('user');
-    notify('danger',Translator.trans('classroom_manage.student_manage_remove_failed_hint', { username: user_name }));
+    notify('danger', Translator.trans('classroom_manage.student_manage_remove_failed_hint', { username: user_name }));
+  });
+});
+
+let getSelectIds = function () {
+  let ids = [];
+  $list.find('[data-role="batch-item"]:checked').each(function () {
+    ids.push(this.value);
+  });
+
+  return ids;
+};
+
+$('#batch-update-expiry-day').on('click', function () {
+  let ids = getSelectIds();
+  if (ids.length === 0) {
+    cd.message({type: 'danger', message: Translator.trans('course.manage.student.add_expiry_day.select_tips')});
+    return;
+  }
+  $.get($(this).data('url'), {userIds: ids}, function (html) {
+    $('#modal').html(html).modal('show');
+  });
+});
+
+$('#batch-remove').on('click', function () {
+  let ids = getSelectIds();
+  if (ids.length === 0) {
+    cd.message({type: 'danger', message: Translator.trans('course.manage.student.batch_remove.select_tips')});
+    return;
+  }
+  if (!confirm(Translator.trans('course.manage.students_delete_hint'))) {
+    return;
+  }
+  $.post($(this).data('url'), {studentIds: ids}, function (resp) {
+    if (resp.success) {
+      cd.message({ type: 'success', message: Translator.trans('member.delete_success_hint') });
+      location.reload();
+    } else {
+      cd.message({ type: 'danger', message: Translator.trans('member.delete_fail_hint') + ':' + resp.message });
+    }
   });
 });
 
@@ -30,9 +69,8 @@ $('#refund-coin-tips').popover({
   content: $('#refund-coin-tips-html').html()
 });
 
-$('#course-student-list').on('click', '.follow-student-btn, .unfollow-student-btn', function () {
-
-  var $this = $(this);
+$list.on('click', '.follow-student-btn, .unfollow-student-btn', function () {
+  let $this = $(this);
 
   $.post($this.data('url'), function () {
     $this.hide();
@@ -42,31 +80,26 @@ $('#course-student-list').on('click', '.follow-student-btn, .unfollow-student-bt
       $this.parent().find('.follow-student-btn').show();
     }
   });
-
 });
 
-$('#export-students-btn').on('click', function () {
-  $('#export-students-btn').button('loading');
-  $.get($('#export-students-btn').data('datasUrl'), { start: 0 }, function (response) {
-    if (response.status === 'getData') {
-      exportStudents(response.start, response.fileName);
-    } else {
-      $('#export-students-btn').button('reset');
-      location.href = $('#export-students-btn').data('url') + '&fileName=' + response.fileName;
-    }
-  });
+let $exportBtn = $('#export-students-btn');
+
+$exportBtn.on('click', function () {
+  $exportBtn.button('loading');
+
+  exportStudents();
 });
 
 function exportStudents(start, fileName) {
-  start = start || 0,
-  fileName = fileName || '';
+  start = start || 0;
+  let query = fileName ? {start: start, fileName: fileName} : {start: start};
 
-  $.get($('#export-students-btn').data('datasUrl'), { start: start, fileName: fileName }, function (response) {
+  $.get($exportBtn.data('datasUrl'), query, function (response) {
     if (response.status === 'getData') {
       exportStudents(response.start, response.fileName);
     } else {
-      $('#export-students-btn').button('reset');
-      location.href = $('#export-students-btn').data('url') + '&fileName=' + response.fileName;
+      $exportBtn.button('reset');
+      location.href = $exportBtn.data('url') + '&fileName=' + response.fileName;
     }
   });
 }

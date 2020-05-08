@@ -3,22 +3,24 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\FileToolkit;
-use Biz\File\UploadFileException;
-use Biz\Player\PlayerException;
-use Biz\Player\Service\PlayerService;
-use Biz\User\Service\TokenService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\File\Service\UploadFileService;
+use Biz\File\UploadFileException;
+use Biz\MaterialLib\Service\MaterialLibService;
+use Biz\Player\PlayerException;
+use Biz\Player\Service\PlayerService;
+use Biz\S2B2C\Service\FileSourceService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
+use Biz\User\Service\TokenService;
 use Biz\User\TokenException;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Biz\MaterialLib\Service\MaterialLibService;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PlayerController extends BaseController
 {
-    public function showAction(Request $request, $id, $isPart = false, $context = array(), $remeberLastPos = true)
+    public function showAction(Request $request, $id, $isPart = false, $context = [], $remeberLastPos = true)
     {
         $ssl = $request->isSecure() ? true : false;
 
@@ -26,7 +28,7 @@ class PlayerController extends BaseController
         if (empty($file)) {
             $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
-        if (!in_array($file['type'], array('audio', 'video'))) {
+        if (!in_array($file['type'], ['audio', 'video'])) {
             $this->createNewException(PlayerException::NOT_SUPPORT_TYPE());
         }
 
@@ -40,7 +42,7 @@ class PlayerController extends BaseController
         if ('audio' == $file['type']) {
             $cloudSdk = 'audio'; //webExtension->getCloudSdkUrl
         }
-        if ('video' == $file['type'] && 'cloud' == $file['storage']) {
+        if ('video' == $file['type'] && in_array($file['storage'], ['cloud', 'supplier'])) {
             $cloudSdk = 'video'; //webExtension->getCloudSdkUrl
             $videoPlayer = $this->getPlayerService()->getVideoFilePlayer($file, $agentInWhiteList, $context, $ssl);
             $isEncryptionPlus = $videoPlayer['isEncryptionPlus'];
@@ -51,7 +53,7 @@ class PlayerController extends BaseController
         }
         $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($file, $context, $ssl);
 
-        $params = array(
+        $params = [
             'file' => $file,
             'url' => isset($url) ? $url : null,
             'context' => $context,
@@ -60,7 +62,7 @@ class PlayerController extends BaseController
             'isEncryptionPlus' => $isEncryptionPlus,
             'cloudSdk' => isset($cloudSdk) ? $cloudSdk : null,
             'remeberLastPos' => $remeberLastPos,
-        );
+        ];
 
         if ($isPart) {
             return $this->render('player/play.html.twig', $params);
@@ -87,7 +89,7 @@ class PlayerController extends BaseController
             $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
-        if (!in_array($file['type'], array('audio', 'video'))) {
+        if (!in_array($file['type'], ['audio', 'video'])) {
             $this->createNewException(PlayerException::NOT_SUPPORT_TYPE());
         }
 
@@ -96,7 +98,7 @@ class PlayerController extends BaseController
             $this->createNewException(TokenException::TOKEN_INVALID());
         }
 
-        $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
+        $response = BinaryFileResponse::create($file['fullpath'], 200, [], false);
         $response::trustXSendfileTypeHeader();
 
         $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
@@ -132,15 +134,15 @@ class PlayerController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $tokenFields = array(
-            'data' => array(
+        $tokenFields = [
+            'data' => [
                 'globalId' => $file['no'],
                 'level' => $level,
                 'keyencryption' => 0,
-            ),
+            ],
             'times' => 1,
             'duration' => 3600,
-        );
+        ];
 
         if (!empty($token['userId'])) {
             $tokenFields['userId'] = $token['userId'];
@@ -148,11 +150,11 @@ class PlayerController extends BaseController
 
         $token = $this->getTokenService()->makeToken('hls.clef', $tokenFields);
 
-        $params = array();
-        $params['keyUrl'] = $this->generateUrl('global_file_hls_clef', array(
+        $params = [];
+        $params['keyUrl'] = $this->generateUrl('global_file_hls_clef', [
             'globalId' => $file['no'],
             'token' => $token['token'],
-        ), UrlGeneratorInterface::ABSOLUTE_URL);
+        ], UrlGeneratorInterface::ABSOLUTE_URL);
         $params['key'] = $file['metas']['levels'][$level]['key'];
         $params['fileId'] = $file['id'];
 
@@ -164,10 +166,10 @@ class PlayerController extends BaseController
             return $this->createMessageResponse('error', '生成视频播放地址失败！');
         }
 
-        return new Response($stream['stream'], 200, array(
+        return new Response($stream['stream'], 200, [
             'Content-Type' => 'application/vnd.apple.mpegurl',
             'Content-Disposition' => 'inline; filename="stream.m3u8"',
-        ));
+        ]);
     }
 
     public function playlistAction(Request $request, $globalId, $token)
@@ -190,20 +192,20 @@ class PlayerController extends BaseController
             $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
-        $streams = array();
+        $streams = [];
 
-        foreach (array('sd', 'hd', 'shd') as $level) {
+        foreach (['sd', 'hd', 'shd'] as $level) {
             if (empty($file['metas']['levels'][$level])) {
                 continue;
             }
 
-            $tokenFields = array(
-                'data' => array(
+            $tokenFields = [
+                'data' => [
                     'globalId' => $file['no'].$level,
-                ),
+                ],
                 'times' => $this->agentInWhiteList($request->headers->get('user-agent')) ? 0 : 1,
                 'duration' => 3600,
-            );
+            ];
 
             if (!empty($token['userId'])) {
                 $tokenFields['userId'] = $token['userId'];
@@ -211,25 +213,48 @@ class PlayerController extends BaseController
 
             $token = $this->getTokenService()->makeToken('hls.stream', $tokenFields);
 
-            $params = array(
+            $params = [
                 'globalId' => $file['no'],
                 'level' => $level,
                 'token' => $token['token'],
-            );
+            ];
 
             $streams[$level] = $this->generateUrl('global_file_hls_stream', $params, UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         $api = CloudAPIFactory::create('leaf');
 
-        $qualities = array(
+        $qualities = [
             'video' => $file['directives']['videoQuality'],
             'audio' => $file['directives']['audioQuality'],
-        );
+        ];
 
-        $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
+        $uri = '/hls/playlist/json';
+        $params = ['streams' => $streams, 'qualities' => $qualities];
+        if ('supplier' == $file['storage']) {
+            $fileInfo = $this->getS2B2CFileSourceService()->getFullFileInfo($file);
+            $playlist = $this->getS2B2CFacedService()->getS2B2CService()->getProductHlsPlaylistJson($uri, $fileInfo, $params);
+        } else {
+            $playlist = $api->get($uri, $params);
+        }
 
         return $this->createJsonResponse($playlist);
+    }
+
+    /**
+     * @return FileSourceService
+     */
+    protected function getS2B2CFileSourceService()
+    {
+        return $this->createService('S2B2C:FileSourceService');
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacedService()
+    {
+        return $this->createService('S2B2C:S2B2CFacadeService');
     }
 
     /**

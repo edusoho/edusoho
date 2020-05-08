@@ -21,15 +21,19 @@ class TestpaperActivityDaoImpl extends AdvancedDaoImpl implements TestpaperActiv
 
     public function declares()
     {
-        $declares['conditions'] = array(
-            'id = :id',
-            'id IN (:ids)',
-        );
-
-        $declares['serializes'] = array(
-            'finishCondition' => 'json',
-        );
-
-        return $declares;
+        return [
+            'conditions' => [
+                'id = :id',
+                'id IN (:ids)',
+                /*S2B2C增加syncId*/
+                'syncId = :syncId',
+                'syncId in (:syncIds)',
+                'syncId > :syncIdGT',
+                /*END*/
+            ],
+            'serializes' => [
+                'finishCondition' => 'json',
+            ],
+        ];
     }
 }

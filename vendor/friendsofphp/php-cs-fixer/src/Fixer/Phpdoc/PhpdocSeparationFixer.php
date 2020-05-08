@@ -33,7 +33,7 @@ final class PhpdocSeparationFixer extends AbstractFixer
     {
         return new FixerDefinition(
             'Annotations in PHPDoc should be grouped together so that annotations of the same type immediately follow each other, and annotations of a different type are separated by a single blank line.',
-            array(
+            [
                 new CodeSample(
                     '<?php
 /**
@@ -45,14 +45,18 @@ final class PhpdocSeparationFixer extends AbstractFixer
  * @throws Exception|RuntimeException
  * @return bool
  */
-function fnc($foo, $bar) {}'
+function fnc($foo, $bar) {}
+'
                 ),
-            )
+            ]
         );
     }
 
     /**
      * {@inheritdoc}
+     *
+     * Must run before PhpdocAlignFixer.
+     * Must run after CommentToPhpdocFixer, GeneralPhpdocAnnotationRemoveFixer, PhpdocIndentFixer, PhpdocNoAccessFixer, PhpdocNoEmptyReturnFixer, PhpdocNoPackageFixer, PhpdocOrderFixer, PhpdocScalarFixer, PhpdocToCommentFixer, PhpdocTypesFixer.
      */
     public function getPriority()
     {
@@ -81,14 +85,12 @@ function fnc($foo, $bar) {}'
             $this->fixDescription($doc);
             $this->fixAnnotations($doc);
 
-            $tokens[$index] = new Token(array(T_DOC_COMMENT, $doc->getContent()));
+            $tokens[$index] = new Token([T_DOC_COMMENT, $doc->getContent()]);
         }
     }
 
     /**
      * Make sure the description is separated from the annotations.
-     *
-     * @param DocBlock $doc
      */
     private function fixDescription(DocBlock $doc)
     {
@@ -100,7 +102,7 @@ function fnc($foo, $bar) {}'
             if ($line->containsUsefulContent()) {
                 $next = $doc->getLine($index + 1);
 
-                if ($next->containsATag()) {
+                if (null !== $next && $next->containsATag()) {
                     $line->addBlank();
 
                     break;
@@ -111,8 +113,6 @@ function fnc($foo, $bar) {}'
 
     /**
      * Make sure the annotations are correctly separated.
-     *
-     * @param DocBlock $doc
      *
      * @return string
      */
@@ -139,10 +139,6 @@ function fnc($foo, $bar) {}'
 
     /**
      * Force the given annotations to immediately follow each other.
-     *
-     * @param DocBlock   $doc
-     * @param Annotation $first
-     * @param Annotation $second
      */
     private function ensureAreTogether(DocBlock $doc, Annotation $first, Annotation $second)
     {
@@ -156,10 +152,6 @@ function fnc($foo, $bar) {}'
 
     /**
      * Force the given annotations to have one empty line between each other.
-     *
-     * @param DocBlock   $doc
-     * @param Annotation $first
-     * @param Annotation $second
      */
     private function ensureAreSeparate(DocBlock $doc, Annotation $first, Annotation $second)
     {

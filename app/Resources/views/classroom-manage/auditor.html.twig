@@ -21,7 +21,7 @@
       <tr>
         <th width="40%">{{'classroom.auditor'|trans}}</th>
          <th width="30%"></th>
-        <th width="30%">{{'classroom,student_opertion'|trans}}</th>
+        <th width="30%">{{'classroom.student_opertion'|trans}}</th>
       </tr>
     </thead>
     <tbody>
@@ -29,7 +29,7 @@
         {% set user = users[student.userId] %}
         {% include ('classroom-manage/tr.html.twig') %}
       {% else %}
-        <tr class="empty"><td colspan="20">{{'classroom,student_empty'|trans}}</td></tr>
+        <tr class="empty"><td colspan="20">{{'classroom.student_empty'|trans}}</td></tr>
       {% endfor %}
     </tbody>
   </table>

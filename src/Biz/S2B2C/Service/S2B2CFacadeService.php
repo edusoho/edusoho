@@ -2,6 +2,9 @@
 
 namespace Biz\S2B2C\Service;
 
+use Biz\S2B2C\SupplierPlatformApi;
+use QiQiuYun\SDK\Service\S2B2CService;
+
 interface S2B2CFacadeService
 {
     const DEALER_MODE = 'dealer'; // 经销模式
@@ -13,7 +16,13 @@ interface S2B2CFacadeService
 
     public function getMerchantDisabledPermissions();
 
+    /**
+     * @return SupplierPlatformApi
+     */
     public function getSupplierPlatformApi();
 
+    /**
+     * @return S2B2CService
+     */
     public function getS2B2CService();
 }

@@ -6,4 +6,11 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface ProductDao extends GeneralDaoInterface
 {
+    public function getBySupplierIdAndRemoteProductId($supplierId, $remoteProductId);
+
+    public function findBySupplierIdAndRemoteProductIds($supplierId, $remoteProductIds);
+
+    public function findBySupplierIdAndRemoteResourceTypeAndIds($supplierId, $productType, $remoteResourceIds);
+
+    public function getByTypeAndLocalResourceId($type, $localResourceId);
 }

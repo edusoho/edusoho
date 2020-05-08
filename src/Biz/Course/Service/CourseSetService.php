@@ -124,8 +124,17 @@ interface CourseSetService
      *
      * @return mixed
      * @Log(module="course",action="create")
+     * 对外开放唯一完整创建courseSet接口
      */
     public function createCourseSet($courseSet);
+
+    /**
+     * @param $courseSet
+     *
+     * @return mixed
+     *               仅包含courseSet表的创建，不包含初始化其他信息，开放给数据同步使用
+     */
+    public function addCourseSet($courseSet);
 
     /**
      * 复制课程到班级.
@@ -304,6 +313,15 @@ interface CourseSetService
      * @return mixed
      */
     public function updateCourseSetDefaultCourseId($courseSetId);
+
+    /**
+     * @param $courseSetId
+     * @param $courseId
+     *
+     * @return mixed
+     *               手动策略更新defaultCourseId,默认使用updateCourseSetDefaultCourseId，特殊业务才使用本方法
+     */
+    public function updateDefaultCourseId($courseSetId, $courseId);
 
     public function unlockCourseSet($id, $shouldClose = false);
 

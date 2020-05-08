@@ -32,9 +32,9 @@ final class SwitchCaseSemicolonToColonFixer extends AbstractFixer
     {
         return new FixerDefinition(
             'A case should be followed by a colon and not a semicolon.',
-            array(
+            [
                 new CodeSample(
-'<?php
+                    '<?php
     switch ($a) {
         case 1;
             break;
@@ -43,8 +43,18 @@ final class SwitchCaseSemicolonToColonFixer extends AbstractFixer
     }
 '
                 ),
-            )
+            ]
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * Must run after NoEmptyStatementFixer.
+     */
+    public function getPriority()
+    {
+        return 0;
     }
 
     /**
@@ -52,7 +62,7 @@ final class SwitchCaseSemicolonToColonFixer extends AbstractFixer
      */
     public function isCandidate(Tokens $tokens)
     {
-        return $tokens->isAnyTokenKindsFound(array(T_CASE, T_DEFAULT));
+        return $tokens->isAnyTokenKindsFound([T_CASE, T_DEFAULT]);
     }
 
     /**
@@ -61,21 +71,20 @@ final class SwitchCaseSemicolonToColonFixer extends AbstractFixer
     protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
         foreach ($tokens as $index => $token) {
-            if ($token->isGivenKind(array(T_CASE, T_DEFAULT))) {
+            if ($token->isGivenKind([T_CASE, T_DEFAULT])) {
                 $this->fixSwitchCase($tokens, $index);
             }
         }
     }
 
     /**
-     * @param Tokens $tokens
-     * @param int    $index
+     * @param int $index
      */
     protected function fixSwitchCase(Tokens $tokens, $index)
     {
         $ternariesCount = 0;
         do {
-            if ($tokens[$index]->equalsAny(array('(', '{'))) { // skip constructs
+            if ($tokens[$index]->equalsAny(['(', '{'])) { // skip constructs
                 $type = Tokens::detectBlockType($tokens[$index]);
                 $index = $tokens->findBlockEnd($type['type'], $index);
 
@@ -88,7 +97,7 @@ final class SwitchCaseSemicolonToColonFixer extends AbstractFixer
                 continue;
             }
 
-            if ($tokens[$index]->equalsAny(array(':', ';'))) {
+            if ($tokens[$index]->equalsAny([':', ';'])) {
                 if (0 === $ternariesCount) {
                     break;
                 }

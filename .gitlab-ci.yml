@@ -71,26 +71,29 @@ check env:
     - mysql:5.5
     - redis:latest
   script:
+    - git config diff.nodiff.command /usr/bin/true
     - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
+    - git config --unset diff.nodiff.command
     - bin/phpunit-diff
   only:
     variables:
       - $REPOSITORY == "custom"
 
-5.5 with php-cs-fixer only for main:
+5.6 with php-cs-fixer only for main:
   stage: test
-  image: codeages/ci-php:5.5-5
+  image: zhongyunchang/php56-ci
   services:
     - mysql:5.5
     - redis:latest
   script:
-    #    - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
-    - composer remove phpunit/phpunit --ignore-platform-reqs
-    - composer require-dev bin/phpunit --ignore-platform-reqs
+    - git config diff.nodiff.command /usr/bin/true
+    - bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
+    - git config --unset diff.nodiff.command
     - bin/phpunit-diff
   only:
     refs:
       - merge_requests
+      - project/b2c
     variables:
       - $REPOSITORY == "main"
 
@@ -125,7 +128,7 @@ check env:
       - /^release/.*$/
       - develop
       - master
-      - feature/edusoho-symfony34
+      - project/b2c
     variables:
       - $REPOSITORY == "main"
 
@@ -143,7 +146,7 @@ check env:
       - /^release/.*$/
       - develop
       - master
-      - feature/edusoho-symfony34
+      - project/b2c
     variables:
       - $REPOSITORY == "main"
 
@@ -155,13 +158,13 @@ check env:
     - redis:latest
   script:
     - sed -i 's/memory_limit.*/memory_limit = 3000M/g' /etc/php/7.1/phpdbg/php.ini
-    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitA2B --coverage-clover reports_tmp/phpunit.coverage.xml_1 --log-junit reports_tmp/phpunit.xml_1
-    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitC2C --coverage-clover reports_tmp/phpunit.coverage.xml_2 --log-junit reports_tmp/phpunit.xml_2
-    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitD2D --coverage-clover reports_tmp/phpunit.coverage.xml_3 --log-junit reports_tmp/phpunit.xml_3
-    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitE2P --coverage-clover reports_tmp/phpunit.coverage.xml_4 --log-junit reports_tmp/phpunit.xml_4
-    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitQ2T --coverage-clover reports_tmp/phpunit.coverage.xml_5 --log-junit reports_tmp/phpunit.xml_5
-    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite UnitU2Z --coverage-clover reports_tmp/phpunit.coverage.xml_6 --log-junit reports_tmp/phpunit.xml_6
-    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --testsuite SpecialTest --coverage-clover reports_tmp/phpunit.coverage.xml_7 --log-junit reports_tmp/phpunit.xml_7
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitA2B --coverage-clover reports_tmp/phpunit.coverage.xml_1 --log-junit reports_tmp/phpunit.xml_1
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitC2C --coverage-clover reports_tmp/phpunit.coverage.xml_2 --log-junit reports_tmp/phpunit.xml_2
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitD2D --coverage-clover reports_tmp/phpunit.coverage.xml_3 --log-junit reports_tmp/phpunit.xml_3
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitE2P --coverage-clover reports_tmp/phpunit.coverage.xml_4 --log-junit reports_tmp/phpunit.xml_4
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitQ2T --coverage-clover reports_tmp/phpunit.coverage.xml_5 --log-junit reports_tmp/phpunit.xml_5
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite UnitU2Z --coverage-clover reports_tmp/phpunit.coverage.xml_6 --log-junit reports_tmp/phpunit.xml_6
+    - phpdbg -qrr bin/phpunit -c app/ --debug --coverage-text --colors=never --testsuite SpecialTest --coverage-clover reports_tmp/phpunit.coverage.xml_7 --log-junit reports_tmp/phpunit.xml_7
 
     - mkdir reports
     - bin/caculate
@@ -214,9 +217,9 @@ AT With Java And Selenium:
     variables:
       - $REPOSITORY == "main"
 
-Api Test With 5.5:
+Api Test With 7.1:
   stage: test
-  image: ruanwenqin/ci-php:5.5-7
+  image: codeages/ci-php71
   services:
     - mysql:5.5
     - redis:latest

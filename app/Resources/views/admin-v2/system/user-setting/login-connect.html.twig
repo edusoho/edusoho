@@ -25,6 +25,18 @@
     <fieldset>
       <div class="form-group">
         <div class="col-md-3 control-label">
+          <label>{{ 'admin.login_connect.client_login_restrictions'|trans }}</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          {{ radios('client_login_limit', {1:'admin.login_connect.open'|trans, 0:'admin.login_connect.closed'|trans}, loginConnect.client_login_limit) }}
+          <p class="help-block">{{ 'admin.login_connect.client_login_restrictions.help_block'|trans }}</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
           <label>{{ 'admin.login_connect.Third_party_login'|trans }}</label>
         </div>
         <div class="controls col-md-8 radios">

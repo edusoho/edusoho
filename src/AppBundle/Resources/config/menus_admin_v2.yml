@@ -27,7 +27,7 @@ admin_v2:
                                         admin_v2_go_to_choose:
                                             name: admin_v2.course.basic.basic_tab.go_to_choose_btn
                                             class: btn-warning
-                                            router_name: course_set_manage_create
+                                            router_name: admin_v2_purchase_market
                                             group: topBtn
                                             blank: 1
                                             visible: (hasSupplier())
@@ -95,7 +95,7 @@ admin_v2:
                                             class: 'js-course-set-clone'
                                             icon: 'glyphicon glyphicon-repeat'
                                             mode: none
-                                            visible: (courseSet.parentId == 0 and courseSet.type != 'live' and courseSet.sourceCourseSetId|default(0) == 0)
+                                            visible: (courseSet.parentId == 0 and courseSet.type != 'live' and courseSet.platform|default('self') == 'self')
                                         admin_v2_course_set_publish:
                                             name: admin_v2.course.basic.basic_tab.publish_submit_btn
                                             router_params:
@@ -116,7 +116,7 @@ admin_v2:
                                             group: groupButton
                                             icon: 'glyphicon glyphicon-trash'
                                             mode: none
-                                            visible: ( courseSet.status in ['closed', 'draft', 'published'] and courseSet.sourceCourseSetId|default(0) == 0)
+                                            visible: ( courseSet.status in ['closed', 'draft', 'published'] and courseSet.platform|default('self') == 'self')
                                 admin_v2_course_set_recommend_list:
                                     name: admin_v2.course.basic.recommend_list_tab
                                 admin_v2_course_set_data:
@@ -1431,6 +1431,12 @@ admin_v2:
                                     name: admin_v2.developer.job_logs
                                 admin_v2_crontab:
                                     name: admin_v2.developer.crontab
+                        admin_v2_plumber_manage:
+                            name: admin_v2.developer.plumber_manage_menu
+                            disable: true
+                            children:
+                                admin_v2_plumber_job_logs:
+                                    name: admin_v2.developer.plumber_job_logs
                         admin_v2_setting_mobile_iap_product:
                             name: admin_v2.developer.mobile_iap_product_menu
                             disable: true

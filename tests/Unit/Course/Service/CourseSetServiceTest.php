@@ -15,6 +15,29 @@ use Biz\User\Service\UserService;
 
 class CourseSetServiceTest extends BaseTestCase
 {
+    public function testUpdateDefaultCourseId_whenSet_thenGet()
+    {
+        $courseSet = array(
+                'title' => '新课程开始！',
+                'type' => 'normal',
+            );
+        $created = $this->getCourseSetService()->createCourseSet($courseSet);
+        $courseFields1 = array(
+                'courseSetId' => $created['id'],
+                'title' => '计划名称1',
+                'learnMode' => 'freeMode',
+                'expiryDays' => 0,
+                'expiryMode' => 'forever',
+                'courseType' => 'normal',
+            );
+        $course = $this->getCourseService()->createCourse($courseFields1);
+        $before = $this->getCourseSetService()->getCourseSet($created['id']);
+        $this->assertNotEquals($before['defaultCourseId'], $course['id']);
+
+        $updated = $this->getCourseSetService()->updateDefaultCourseId($created['id'], $course['id']);
+        $this->assertEquals($course['id'], $updated['defaultCourseId']);
+    }
+
     public function testCreateNormal()
     {
         $courseSet = array(

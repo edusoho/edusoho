@@ -33,16 +33,16 @@ final class ProcessLinter implements LinterInterface
     private $fileRemoval;
 
     /**
+     * @var ProcessLinterProcessBuilder
+     */
+    private $processBuilder;
+
+    /**
      * Temporary file for code linting.
      *
      * @var null|string
      */
     private $temporaryFile;
-
-    /**
-     * @var ProcessLinterProcessBuilder
-     */
-    private $processBuilder;
 
     /**
      * @param null|string $executable PHP executable, null for autodetection
@@ -57,7 +57,7 @@ final class ProcessLinter implements LinterInterface
                 throw new UnavailableLinterException('Cannot find PHP executable.');
             }
 
-            if ('phpdbg' === PHP_SAPI) {
+            if ('phpdbg' === \PHP_SAPI) {
                 if (false === strpos($executable, 'phpdbg')) {
                     throw new UnavailableLinterException('Automatically found PHP executable is non-standard phpdbg. Could not find proper PHP executable.');
                 }

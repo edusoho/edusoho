@@ -21,11 +21,35 @@ class ProductServiceTest extends BaseTestCase
         $this->assertEquals($savedProduct, $getProduct);
     }
 
+    public function testGetBySupplierIdAndRemoteProductId_whenDataCreated_thenGot()
+    {
+        $createdProduct = $this->getS2B2CProductService()->createProduct($this->mockProductFields());
+        $gotProduct = $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteProductId($createdProduct['supplierId'], $createdProduct['remoteProductId']);
+        $this->assertEquals($createdProduct, $gotProduct);
+    }
+
+    public function testFindProductsBySupplierIdAndRemoteProductIds_whenDataCreated_thenFound()
+    {
+        $createdProduct = $this->getS2B2CProductService()->createProduct($this->mockProductFields());
+        $findProducts = $this->getS2B2CProductService()->findProductsBySupplierIdAndRemoteProductIds($createdProduct['supplierId'], [$createdProduct['remoteProductId']]);
+        $this->assertCount(1, $findProducts);
+        $this->assertEquals($createdProduct, reset($findProducts));
+    }
+
+    public function testFindProductsBySupplierIdAndRemoteResourceTypeAndIds_whenCreated_thenFound()
+    {
+        $createdProduct = $this->getS2B2CProductService()->createProduct($this->mockProductFields());
+        $findProducts = $this->getS2B2CProductService()->findProductsBySupplierIdAndRemoteResourceTypeAndIds($createdProduct['supplierId'], $createdProduct['productType'], [$createdProduct['remoteResourceId']]);
+        $this->assertCount(1, $findProducts);
+        $this->assertEquals($createdProduct, reset($findProducts));
+    }
+
     protected function mockProductFields($customFields = [])
     {
         return array_merge([
             'supplierId' => 1,
-            'resourceType' => 'course',
+            'productType' => 'course',
+            'remoteProductId' => 1,
             'remoteResourceId' => 1,
             'localResourceId' => 1,
             'cooperationPrice' => (float) 2.00,
