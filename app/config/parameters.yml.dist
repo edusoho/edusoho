@@ -39,6 +39,9 @@ parameters:
     #二维码域名白名单,填写例子：www.edusoho.com
     #qrcode_site_whitelist: []
 
+    #运行plumber时使用的php
+    # php_bash: '/usr/local/opt/php@7.3/bin/php'
+
     #plumber配置
     #plumber_queues_options:
     #    default:
