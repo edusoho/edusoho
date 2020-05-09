@@ -51,30 +51,30 @@ class TestpaperWrapper
             'updatedTime' => $assessment['updated_time'],
             'metas' => array(
                 'counts' => array(
-                    "single_choice" => 0,
-                    "choice" => 0,
-                    "essay" => 0,
-                    "uncertain_choice" => 0,
-                    "determine" => 0,
-                    "fill" => 0,
-                    "material" => 0,
+                    'single_choice' => 0,
+                    'choice' => 0,
+                    'essay' => 0,
+                    'uncertain_choice' => 0,
+                    'determine' => 0,
+                    'fill' => 0,
+                    'material' => 0,
                 ),
                 'scores' => array(
-                    "single_choice" => 0,
-                    "choice" => 0,
-                    "essay" => 0,
-                    "uncertain_choice" => 0,
-                    "determine" => 0,
-                    "fill" => 0,
-                    "material" => 0,
+                    'single_choice' => 0,
+                    'choice' => 0,
+                    'essay' => 0,
+                    'uncertain_choice' => 0,
+                    'determine' => 0,
+                    'fill' => 0,
+                    'material' => 0,
                 ),
                 'totalScore' => $assessment['total_score'],
             ),
         );
         foreach ($assessment['sections'] as $section) {
             foreach ($section['items'] as $item) {
-                if ($item['isDelete'] != 1) {
-                    $testpaper['metas']['counts'][$item['type']]++;
+                if (1 != $item['isDelete']) {
+                    ++$testpaper['metas']['counts'][$item['type']];
                     $testpaper['metas']['scores'][$item['type']] += $item['score'];
                 }
             }
@@ -88,7 +88,7 @@ class TestpaperWrapper
         if (empty($record)) {
             return array();
         }
-        
+
         return array(
             'id' => $record['id'],
             'paperName' => $assessment['name'],
@@ -119,7 +119,7 @@ class TestpaperWrapper
 
         foreach ($assessment['sections'] as $section) {
             foreach ($section['items'] as $item) {
-                if ($item['isDelete'] != 1) {
+                if (1 != $item['isDelete']) {
                     $items[$item['id']] = $this->wrapItem($item);
                 }
             }
@@ -146,7 +146,7 @@ class TestpaperWrapper
                 'subs' => array(),
             );
             foreach ($item['questions'] as $itemQuestion) {
-                if ($itemQuestion['isDelete'] != 1) {
+                if (1 != $itemQuestion['isDelete']) {
                     $question['subs'][$itemQuestion['id']] = $this->wrapQuestion($item, $itemQuestion);
                 }
             }
@@ -198,7 +198,6 @@ class TestpaperWrapper
 
     protected function convertStatus()
     {
-
     }
 
     protected function convertAnswer($answer, $question)

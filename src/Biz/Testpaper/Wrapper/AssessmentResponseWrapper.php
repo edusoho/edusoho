@@ -51,7 +51,7 @@ class AssessmentResponseWrapper
             foreach ($answers as &$answer) {
                 $answer = chr(65 + $answer);
             }
-        } elseif ($question['answer_mode'] == TrueFalseAnswerMode::NAME) {
+        } elseif (TrueFalseAnswerMode::NAME == $question['answer_mode']) {
             foreach ($answers as &$answer) {
                 $answer = 1 == $answer ? 'T' : 'F';
             }
