@@ -18,7 +18,11 @@ class ExerciseManageController extends BaseController
 
         $condition = $this->getExerciseConfig()->getCondition($fields);
 
-        $result = $this->getAssessmentService()->drawItems($condition['range'], array($condition['section']));
+        try {
+            $result = $this->getAssessmentService()->drawItems($condition['range'], array($condition['section']));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(false);
+        }
 
         foreach ($result as $section) {
             if (!empty($section['items']['miss'])) {
