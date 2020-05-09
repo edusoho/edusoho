@@ -14,6 +14,11 @@ class HomeworkActivityDaoImpl extends GeneralDaoImpl implements HomeworkActivity
         return $this->getByFields(array('answerSceneId' => $answerSceneId));
     }
 
+    public function getByAssessmentId($assessmentId)
+    {
+        return $this->getByFields(array('assessmentId' => $assessmentId));
+    }
+
     public function findByIds($ids)
     {
         return $this->findInField('id', $ids);
