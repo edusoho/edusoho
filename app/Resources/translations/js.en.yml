@@ -1544,6 +1544,6 @@ course_manage.live_statistics.data_not_valid: The data is abnormal
 admin_v2.user.nickname_modify_success_hint: Nickname modified successfully
 admin_v2.user.nickname_modify_error_hint: operation failed
 
-admin_v2.developer.plumber_operate_hint: 正在操作中，可能需要一段时间，请稍后……
+admin_v2.developer.plumber_operate_hint: In operation, it may take a while, please wait ...
 admin_v2.developer.plumber_operate_error_hint: Success
 admin_v2.developer.plumber_operate_success_hint: Failed
