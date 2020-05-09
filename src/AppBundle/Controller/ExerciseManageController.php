@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use PhpOffice\PhpWord\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 class ExerciseManageController extends BaseController
@@ -18,7 +19,11 @@ class ExerciseManageController extends BaseController
 
         $condition = $this->getExerciseConfig()->getCondition($fields);
 
-        $result = $this->getAssessmentService()->drawItems($condition['range'], array($condition['section']));
+        try {
+            $result = $this->getAssessmentService()->drawItems($condition['range'], array($condition['section']));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(false);
+        }
 
         foreach ($result as $section) {
             if (!empty($section['items']['miss'])) {
