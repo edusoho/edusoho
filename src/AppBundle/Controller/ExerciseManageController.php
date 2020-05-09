@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
-use PhpOffice\PhpWord\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 class ExerciseManageController extends BaseController
