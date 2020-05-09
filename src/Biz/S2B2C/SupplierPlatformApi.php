@@ -29,7 +29,7 @@ class SupplierPlatformApi extends AbstractPlatformApi
     // 获取供应商的商品更新列表
     private $productVersionListPath = '/api/merchant/s2b2c/product/s2b2c/version/s2b2c/list';
 
-    private $permissionListPath = 'api/merchant/{accesskey}/permission';
+    private $permissionListPath = '/api/merchant/{accesskey}/permission';
 
     public function __construct(Biz $biz)
     {
@@ -58,20 +58,23 @@ class SupplierPlatformApi extends AbstractPlatformApi
         if (!$this->apiValid) {
             return $this->createErrorResult();
         }
-        $sotorageSetting = $this->getSettingService()->get('storage');
-        $accessKey = $sotorageSetting['cloud_access_key'];
+        $storageSetting = $this->getSettingService()->get('storage');
+        if (empty($storageSetting['cloud_access_key'])) {
+            return $this->createErrorResult('accesskey unexist');
+        }
+        
+        $this->uri = str_replace('{accesskey}', $storageSetting['cloud_access_key'], $this->permissionListPath);
 
-        $this->uri = str_replace('{accessKey}', $accessKey, $this->permissionListPath);
         $options = array(
             'connectTimeout' => 300,
             'timeout' => 300,
         );
-        
+
         return $this->sendRequest('getMerchantDisabledPermissions', [], $options);
     }
 
     /**
-     * 获取供应商产品详情
+     * 获取供应商产品详情 
      *
      * @return array()
      */

@@ -402,7 +402,7 @@ class PermissionBuilder
         $merchantDisabledPermissions = $this->getS2B2CFacadeService()->getMerchantDisabledPermissions();
         $i = 1;
         foreach ($menus as $code => &$menu) {
-            if (in_array($code, $merchantDisabledPermissions)) {
+            if (is_array($merchantDisabledPermissions) && in_array($code, $merchantDisabledPermissions)) {
                 unset($menus[$code]);
                 continue;
             }
