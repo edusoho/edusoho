@@ -18,6 +18,11 @@ class HomeworkActivityServiceImpl extends BaseService implements HomeworkActivit
         return $this->getHomeworkActivityDao()->getByAnswerSceneId($answerSceneId);
     }
 
+    public function getByAssessmentId($assessmentId)
+    {
+        return $this->getHomeworkActivityDao()->getByAssessmentId($assessmentId);
+    }
+
     public function get($id)
     {
         return $this->getHomeworkActivityDao()->get($id);
