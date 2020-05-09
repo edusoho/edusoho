@@ -5221,10 +5221,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank-test@^0.1.26:
-  version "0.1.26"
-  resolved "https://registry.yarnpkg.com/item-bank-test/-/item-bank-test-0.1.26.tgz#f629b82cd74cfb1e4fb16a18b1074954b7b72576"
-  integrity sha512-+vIION+hUaO31FLi15hJYYebKheVMTRUHlf6rVTmLRCMatsBn1BiBC4kvt/voeoLNuGXtLbWs2+Vdf5KY0GPDw==
+item-bank-test@^0.1.29:
+  version "0.1.29"
+  resolved "https://registry.yarnpkg.com/item-bank-test/-/item-bank-test-0.1.29.tgz#7bf68a4988f87034e429b729150b04039dad6cbc"
+  integrity sha512-39yGqSJIceXaep0vBoNox1n53f76aXJsRfyhCrS2Xs3mv0+dVBu5M9CpJyX6XZQqfc7UqawhTFzwH9ZTXA1gVQ==
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"
