@@ -49,9 +49,8 @@ class ItemParser
         $this->setConfig($filePath, $options);
 
         $wordRead = new ReadDocx($this->filePath, ['resourceTmpPath' => $this->resourceTmpPath]);
-        $text = $wordRead->read();
-
-        return htmlspecialchars($text);
+        
+        return $wordRead->read();
     }
 
     public function parse($text)
