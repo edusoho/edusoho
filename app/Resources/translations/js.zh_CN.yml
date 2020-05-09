@@ -1484,3 +1484,8 @@ course_manage.live_statistics.data_not_valid: 数据异常，直播间数据返�
 
 admin_v2.user.nickname_modify_success_hint: 用户名修改成功
 admin_v2.user.nickname_modify_error_hint: 操作失败
+
+admin_v2.developer.plumber_operate_hint: 正在操作中，可能需要一段时间，请稍后……
+admin_v2.developer.plumber_operate_error_hint: 操作失败
+admin_v2.developer.plumber_operate_success_hint: 操作成功
+

@@ -13,8 +13,6 @@ class PlumberController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        list($status, $process) = $this->getPlumberService()->getPlumberStatus();
-
         if ($request->isMethod('POST')) {
             $action = $request->request->get('action');
 
@@ -22,8 +20,22 @@ class PlumberController extends BaseController
                 throw $this->createNewException(CommonException::ERROR_PARAMETER());
             }
 
-            list($status, $process) = $this->getPlumberService()->$action();
+            $result = $this->getPlumberService()->$action();
+            $template = null;
+
+            if ($result) {
+                list($status, $process) = $this->getPlumberService()->getPlumberStatus();
+                $template = $this->renderView('admin-v2/developer/plumber/info.html.twig', [
+                    'canOperate' => $this->getPlumberService()->canOperate(),
+                    'status' => $status,
+                    'process' => $process,
+                ]);
+            }
+
+            return $this->createJsonResponse(['result' => $result, 'template' => $template]);
         }
+
+        list($status, $process) = $this->getPlumberService()->getPlumberStatus();
 
         return $this->render('admin-v2/developer/plumber/index.html.twig', [
             'canOperate' => $this->getPlumberService()->canOperate(),

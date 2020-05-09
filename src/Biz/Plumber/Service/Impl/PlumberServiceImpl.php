@@ -4,6 +4,7 @@ namespace Biz\Plumber\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Plumber\Service\PlumberService;
+use Topxia\Service\Common\ServiceKernel;
 
 class PlumberServiceImpl extends BaseService implements PlumberService
 {
@@ -15,14 +16,14 @@ class PlumberServiceImpl extends BaseService implements PlumberService
             return true;
         }
 
-        exec("ps au -l|grep {$pid}", $activeProcess);
+        exec("ps aux -l|grep {$pid}|grep -v grep", $activeProcess);
 
         if (empty($activeProcess)) {
             return true;
         }
 
         $currentExecUser = getenv('USER');
-        exec("ps au -l|grep {$pid} |grep {$currentExecUser}", $process);
+        exec("ps aux -l|grep {$pid} |grep {$currentExecUser} |grep -v grep", $process);
 
         return !empty($process);
     }
@@ -38,7 +39,7 @@ class PlumberServiceImpl extends BaseService implements PlumberService
             return [self::STATUS_STOPPED, []];
         }
 
-        exec("ps au -l|head -1; ps au -l|grep -a {$pid}", $output);
+        exec("ps -lg {$pid}", $output);
 
         return [
             count($output) > 1 ? self::STATUS_EXECUTING : self::STATUS_STOPPED,
@@ -48,38 +49,39 @@ class PlumberServiceImpl extends BaseService implements PlumberService
 
     public function start()
     {
-        $result = $this->execPlumberCmd('bin/plumber run -b bootstrap/bootstrap_plumber.php');
-
-        file_put_contents("{$this->biz['kernel.root_dir']}/logs/test.log", 'start result'.json_encode($result).PHP_EOL, FILE_APPEND);
-
-        return $this->getPlumberStatus();
+        return $this->execPlumberCmd('bin/plumber start -b bootstrap/bootstrap_plumber.php');
     }
 
     public function restart()
     {
-        $result = $this->execPlumberCmd('bin/plumber restart -b bootstrap/bootstrap_plumber.php');
-
-        file_put_contents("{$this->biz['kernel.root_dir']}/logs/test.log", 'restart result'.json_encode($result).PHP_EOL, FILE_APPEND);
-
-        return $this->getPlumberStatus();
+        return $this->execPlumberCmd('bin/plumber restart -b bootstrap/bootstrap_plumber.php');
     }
 
     public function stop()
     {
-        $result = $this->execPlumberCmd('bin/plumber stop -b bootstrap/bootstrap_plumber.php');
-
-        file_put_contents("{$this->biz['kernel.root_dir']}/logs/test.log", 'result'.json_encode($result).PHP_EOL, FILE_APPEND);
-
-        return $this->getPlumberStatus();
+        return $this->execPlumberCmd('bin/plumber stop -b bootstrap/bootstrap_plumber.php');
     }
 
     protected function execPlumberCmd($cmd)
     {
+        $oldPid = $this->getProcessId();
+
         $rootDir = $this->biz['kernel.root_dir'].'/../';
 
-        exec("cd {$rootDir} && $cmd", $result);
+        $php = empty(ServiceKernel::instance()->getParameter('php_bash')) ? 'php' : ServiceKernel::instance()->getParameter('php_bash');
 
-        return $result;
+        $process = popen("cd {$rootDir} && {$php} {$cmd} &", 'r');
+
+        sleep(2);
+
+        $result = fgets($process);
+
+        $logger = $this->biz['plumber.logger'];
+        $logger->info(json_encode([$cmd, $this->getProcessId(), $result]));
+
+        pclose($process);
+
+        return $oldPid != $this->getProcessId();
     }
 
     protected function getProcessId()

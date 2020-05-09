@@ -1,0 +1,32 @@
+<div class="cd-panel">
+  <div class="cd-panel-heading">
+    <div
+      class="cd-panel-title {% if status|default('stopped') == 'stopped' %}color-danger{% else %}color-success{% endif %}">
+      <label>{{ 'admin_v2.plumber.status'|trans }}:</label>
+      {{ dict_text('adminPlumberStatus', status|default('stopped')) }}
+    </div>
+  </div>
+  <div class="cd-panel-body">
+    {% for message in process %}
+      <div>{{ message }}</div>
+    {% endfor %}
+  </div>
+</div>
+
+  {% if canOperate|default(false) %}
+    <div>
+      <button class="cd-btn cd-btn-ghost-success js-operator-plumber"
+              data-action="start"
+              {% if status|default('stopped') != 'stopped' %}disabled{% endif %}>
+        {{ 'admin_v2.plumber.start'|trans }}
+      </button>
+      <button class="cd-btn cd-btn-ghost-warning js-operator-plumber" data-action="restart">
+        {{ 'admin_v2.plumber.restart'|trans }}
+      </button>
+      <button class="cd-btn cd-btn-ghost-danger js-operator-plumber"
+              data-action="stop"
+              {% if status|default('stopped') == 'stopped' %}disabled{% endif %}>
+        {{ 'admin_v2.plumber.stop'|trans }}
+      </button>
+    </div>
+  {% endif %}
