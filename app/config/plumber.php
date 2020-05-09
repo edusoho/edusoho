@@ -26,4 +26,6 @@ return [
             'queue' => 'crontab_job_queue',
         ],
     ],
+    'log_path' => __DIR__.'/../logs/plumber.log',
+    'pid_path' => __DIR__.'/../data/plumber.pid',
 ];

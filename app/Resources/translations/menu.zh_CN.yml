@@ -909,8 +909,9 @@ admin_v2.developer.job_logs: 任务日志
 admin_v2.developer.crontab: crontab管理
 
 # Plumber队列（隐藏路由）
-admin_v2.developer.plumber_manage_menu: Plumber队列
-admin_v2.developer.plumber_job_logs: 任务日志
+admin_v2.developer.plumber_manage_menu: Plumber管理
+admin_v2.developer.plumber_manage: Plumber管理
+admin_v2.developer.plumber_queue: 队列信息
 
 # IAP
 admin_v2.developer.mobile_iap_product_menu: iOS内购商品设置

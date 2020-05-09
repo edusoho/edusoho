@@ -9571,6 +9571,11 @@ admin_v2.course_manage.has_version_change: Has Change
 
 exception.courseset.source_course_closed: Course closed,please contact the supplier.
 
+admin_v2.plumber.status: Status
+admin_v2.plumber.start: start
+admin_v2.plumber.stop: stop
+admin_v2.plumber.restart: restart
+
 admin_v2.plumber.job_id: ID
 admin_v2.plumber.job_time: Time
 admin_v2.plumber.job_worker: Worker Topic
