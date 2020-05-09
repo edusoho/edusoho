@@ -196,10 +196,6 @@ class TestpaperWrapper
         return $question;
     }
 
-    protected function convertStatus()
-    {
-    }
-
     protected function convertAnswer($answer, $question)
     {
         if (in_array($question['type'], array('uncertain_choice', 'single_choice', 'choice'))) {
