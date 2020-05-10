@@ -1,7 +1,12 @@
 {% extends 'question-bank/question/index.html.twig' %}
 
-{% do script(['libs/vue.js','libs/item-bank-test/lib/itemBank.umd.min.js','app/js/question-manage/form/index.js']) %}
+{% set lang = app.request.getLocale() %}
 
+{% if lang == 'en' %}
+  {% do script(['libs/vue.js','libs/item-bank-test/lib/itemBank.umd.min.js', 'libs/item-bank-test/lib/locale/en-US.js', 'app/js/question-manage/form/index.js']) %}
+{% else %}
+  {% do script(['libs/vue.js','libs/item-bank-test/lib/itemBank.umd.min.js','app/js/question-manage/form/index.js']) %}
+{% endif %}
 
 {% block stylesheets %}
   {{ parent() }}
@@ -13,7 +18,6 @@
 {% endblock %}
 
 {% block container %}
-
 <div class="panel panel-default panel-col">
   <div class="panel-body">
     <div id="question-creator-widget">
