@@ -76,6 +76,10 @@ module.exports = {
     {
       name: 'item-bank-test/lib/styles',
     },
+    // 纯拷贝item-bank-test/lib/local目录下的语言包
+    {
+      name: 'item-bank-test/lib/locale',
+    },
     {
       name: 'es5-shim/es5-shim.js',
     },
