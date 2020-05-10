@@ -26,7 +26,7 @@
 
 
   {% if answerRecord.status == 'finished' %}
-    <div class="ibs-vue" style="background-color: transparent;">
+    <div class="ibs-vue">
       <div class="ant-row">
         <div class="ant-col ant-col-offset-2 ibs-resutl-item">
           <div class="item-bank-result">
@@ -40,17 +40,18 @@
                 {% if passedStatus == true %}
                 <div class="color-success item-bank-result-info__text">{{ 'testpaper.result.passed'|trans }}</div>
                 {% else %}
-                <div class="color-warning item-bank-result-info__text">
+                <div class="ibs-color-warning item-bank-result-info__text">
                 {{ 'testpaper.result.unpassed'|trans }}
                 </div>
                 {% endif %}
-                <div class="color-gray cd-text-sm">{{ 'testpaper.result.comment'|trans }}：{{ answerReport.comment|default('-') }}</div>
+                <div class="color-gray item-bank-result__comment">{{ 'testpaper.result.comment'|trans }}：{{ answerReport.comment|default('-')|sub_text(44) }}</div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
   {% endif %}
 
   {% if app.request.query.get('action', '') == 'check' %}
