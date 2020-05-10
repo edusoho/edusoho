@@ -1,6 +1,12 @@
 {% extends 'layout.html.twig' %}
 
-{% do script(['libs/vue.js','libs/item-bank-test/lib/itemBank.umd.min.js', 'app/js/assessment/show/index.js']) %}
+{% set lang = app.request.getLocale() %}
+
+{% if lang == 'en' %}
+  {% do script(['libs/vue.js','libs/item-bank-test/lib/itemBank.umd.min.js', 'libs/item-bank-test/lib/locale/en-US.js', 'app/js/assessment/show/index.js']) %}
+{% else %}
+  {% do script(['libs/vue.js','libs/item-bank-test/lib/itemBank.umd.min.js','app/js/assessment/show/index.js']) %}
+{% endif %}
 
 {% block title %}{{ assessment.name }} - {{ parent() }}{% endblock %}
 

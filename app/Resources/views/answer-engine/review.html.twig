@@ -1,6 +1,12 @@
 {% extends 'layout.html.twig' %}
+{% set lang = app.request.getLocale() %}
 
-{% do script(['libs/vue.js','libs/item-bank-test/lib/itemBank.umd.min.js','app/js/answer-engine/review/index.js']) %}
+{% if lang == 'en' %}
+  {% do script(['libs/vue.js','libs/item-bank-test/lib/itemBank.umd.min.js', 'libs/item-bank-test/lib/locale/en-US.js', 'app/js/answer-engine/review/index.js']) %}
+{% else %}
+  {% do script(['libs/vue.js','libs/item-bank-test/lib/itemBank.umd.min.js','app/js/answer-engine/review/index.js']) %}
+{% endif %}
+
 
 {% block title %}{{ assessment.name }} - {{ parent() }}{% endblock %}
 

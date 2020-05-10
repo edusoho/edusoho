@@ -1,5 +1,10 @@
+{% set lang = app.request.getLocale() %}
 
-{% do script(['libs/vue.js','libs/item-bank-test/lib/itemBank.umd.min.js','app/js/answer-engine/scene-report/index.js']) %}
+{% if lang == 'en' %}
+  {% do script(['libs/vue.js','libs/item-bank-test/lib/itemBank.umd.min.js', 'libs/item-bank-test/lib/locale/en-US.js', 'app/js/answer-engine/scene-report/index.js']) %}
+{% else %}
+  {% do script(['libs/vue.js','libs/item-bank-test/lib/itemBank.umd.min.js','app/js/answer-engine/scene-report/index.js']) %}
+{% endif %}
 
 {% include 'answer-engine/common.html.twig' %}
 {% include 'attachment-upload/upload-data.html.twig' %}

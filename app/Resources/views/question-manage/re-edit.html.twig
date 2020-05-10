@@ -1,6 +1,12 @@
 {% extends 'layout.html.twig' %}
 
-{% do script(['libs/vue.js','libs/item-bank-test/lib/itemBank.umd.min.js', 'app/js/re-edit/index.js']) %}
+{% set lang = app.request.getLocale() %}
+
+{% if lang == 'en' %}
+  {% do script(['libs/vue.js','libs/item-bank-test/lib/itemBank.umd.min.js', 'libs/item-bank-test/lib/locale/en-US.js', 'app/js/re-edit/index.js']) %}
+{% else %}
+  {% do script(['libs/vue.js','libs/item-bank-test/lib/itemBank.umd.min.js','app/js/re-edit/index.js']) %}
+{% endif %}
 
 {% block title %}{{ 'course.testpaper_manage.import.re_edit.title'|trans }} - {{ parent() }}{% endblock %}
 
