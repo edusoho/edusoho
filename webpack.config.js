@@ -68,16 +68,13 @@ module.exports = {
         '**/kityformula/libs/**',
       ]
     },
+    // 纯拷贝itemBank.umd.min.js
     {
-      name: 'item-bank-test',
-      ignore: [
-        'node_modules/**',
-        'public/**',
-        'src/**',
-        'examples/**',
-        'build/**',
-        'build-style/**'
-      ]
+      name: 'item-bank-test/lib/itemBank.umd.min.js',
+    },
+    // 纯拷贝item-bank-test/lib/styles目录下的简墨主色调
+    {
+      name: 'item-bank-test/lib/styles',
     },
     {
       name: 'es5-shim/es5-shim.js',
