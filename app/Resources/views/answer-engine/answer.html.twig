@@ -11,6 +11,11 @@
   {% endif %}
 {% endblock %}
 
+{% block head_scripts %}
+  {{ parent() }}
+  <base target="_blank">
+{% endblock %}
+
 
 {% block body %}
   {% include 'answer-engine/common.html.twig' %}

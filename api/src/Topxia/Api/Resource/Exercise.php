@@ -3,7 +3,14 @@
 namespace Topxia\Api\Resource;
 
 use Biz\Accessor\AccessorInterface;
+use Biz\Activity\Service\ExerciseActivityService;
 use Biz\Course\Service\CourseService;
+use Biz\Testpaper\Wrapper\TestpaperWrapper;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Silex\Application;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +20,7 @@ class Exercise extends BaseResource
     public function get(Application $app, Request $request, $id)
     {
         $idType = $request->query->get('_idType');
+        $user= $this->getCurrentUser();
         if ('lesson' == $idType) {
             $task = $this->getTaskService()->getTask($id);
             $course = $this->getCourseService()->getCourse($task['courseId']);
@@ -33,26 +41,44 @@ class Exercise extends BaseResource
             }
             $exerciseTask = $exerciseTasks[0];
 
-            $activity = $this->getActivityService()->getActivity($exerciseTask['activityId']);
-            $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
+            $activity = $this->getActivityService()->getActivity($exerciseTask['activityId'], true);
+            $assessment = $this->createAssessment($activity['title'], $activity['ext']['drawCondition']['range'], array($activity['ext']['drawCondition']['section']));
+            $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+            $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         } else {
-            $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($id, 'exercise');
+            $assessment = $this->getAssessmentService()->showAssessment($id);
+            $answerRecords = $this->getAnswerRecordService()->search(
+                array('user_id' => $user['id'], 'assessment_id' => $assessment['id']),
+                array('created_time' => 'desc'),
+                0,
+                1
+            );
+
+            if (empty($answerRecords)) {
+                return $this->error('404', '该练习任务不存在!');
+            }
+
+            $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerRecords[0]['answerSceneId']);
+            if (empty($exerciseActivity)) {
+                return $this->error('404', '该练习任务不存在!');
+            }
 
             $conditions = array(
-                'mediaId' => $exercise['id'],
+                'mediaId' => $exerciseActivity['id'],
                 'mediaType' => 'exercise',
-                'fromCourseId' => $exercise['courseId'],
             );
             $activities = $this->getActivityService()->search($conditions, null, 0, 1);
-
             if (!$activities) {
                 return $this->error('404', '该练习任务不存在!');
             }
             $activity = $activities[0];
+            $scene = $this->getAnswerSceneService()->get($answerRecords[0]['answer_scene_id']);
         }
+        $testpaperWrapper = new TestpaperWrapper();
+        $exercise = $testpaperWrapper->wrapTestpaper($assessment);
         $exercise['lessonId'] = $activity['id'];
 
-        $access = $this->getCourseService()->canLearnCourse($exercise['courseId']);
+        $access = $this->getCourseService()->canLearnCourse($activity['fromCourseId']);
         if (AccessorInterface::SUCCESS !== $access['code']) {
             return $this->error($access['code'], $access['msg']);
         }
@@ -61,20 +87,19 @@ class Exercise extends BaseResource
             return $this->error('404', '该练习不存在!');
         }
 
-        $course = $this->getCourseService()->getCourse($exercise['courseId']);
+        $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
         $exercise['courseTitle'] = $course['title'];
         $exercise['lessonTitle'] = $activity['title'];
         $exercise['description'] = $activity['title'];
 
-        $result = $this->getTestpaperService()->startTestpaper($exercise['id'], array('lessonId' => $activity['id'], 'courseId' => $exercise['courseId']));
+        $answerRecord = $this->getAnswerService()->startAnswer($scene['id'], $exercise['id'], $user['id']);
 
-        if (empty($result)) {
+        if (empty($answerRecord)) {
             return $this->error('404', '该练习结果不存在!');
         }
 
         if ('lesson' != $idType) {
-            $builder = $this->getTestpaperService()->getTestpaperBuilder('exercise');
-            $items = $builder->showTestItems($exercise['id']);
+            $items = $testpaperWrapper->wrapTestpaperItems($assessment, array());
 
             $exercise['items'] = $this->filterItem($items, null);
         }
@@ -85,17 +110,26 @@ class Exercise extends BaseResource
     public function result(Application $app, Request $request, $id)
     {
         $user = $this->getCurrentUser();
-        $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($id, 'exercise');
+        $assessment = $this->getAssessmentService()->showAssessment($id);
+        $answerRecords = $this->getAnswerRecordService()->search(
+            array('user_id' => $user['id'], 'assessment_id' => $assessment['id']),
+            array('created_time' => 'desc'),
+            0,
+            1
+        );
 
-        $canTakeCourse = $this->getCourseService()->canTakeCourse($exercise['courseId']);
-        if (!$canTakeCourse) {
-            return $this->error('500', '无权限访问!');
+        if (empty($answerRecords)) {
+            return $this->error('404', '该练习任务不存在!');
+        }
+
+        $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerRecords[0]['answerSceneId']);
+        if (empty($exerciseActivity)) {
+            return $this->error('404', '该练习任务不存在!');
         }
 
         $conditions = array(
-            'mediaId' => $exercise['id'],
+            'mediaId' => $exerciseActivity['id'],
             'mediaType' => 'exercise',
-            'fromCourseId' => $exercise['courseId'],
         );
         $activities = $this->getActivityService()->search($conditions, null, 0, 1);
         if (!$activities) {
@@ -103,26 +137,48 @@ class Exercise extends BaseResource
         }
         $activity = $activities[0];
 
-        $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $exercise['id'], $exercise['courseId'], $activity['id'], 'exercise');
+        $canTakeCourse = $this->getCourseService()->canTakeCourse($activity['fromCourseId']);
+        if (!$canTakeCourse) {
+            return $this->error('500', '无权限访问!');
+        }
 
-        if (!$result) {
+        $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($exerciseActivity['answerSceneId'], $user['id']);
+        if (!$answerRecord) {
             return $this->error('404', '不存在该练习的答题结果记录!');
         }
 
-        $course = $this->getCourseService()->getCourse($exercise['courseId']);
+        $testpaperWrapper = new TestpaperWrapper();
+        $scene = $this->getAnswerSceneService()->get($exerciseActivity['answerSceneId']);
+        $exercise = $testpaperWrapper->wrapTestpaper($assessment, $scene);
+        $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
         $exercise['courseTitle'] = $course['title'];
         $exercise['lessonTitle'] = $exercise['name'];
         $exercise['description'] = $exercise['description'];
 
-        $builder = $this->getTestpaperService()->getTestpaperBuilder('exercise');
-        $items = $builder->showTestItems($exercise['id'], $result['id']);
+        $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
+        $items = $testpaperWrapper->wrapTestpaperItems($assessment, $questionReports);
 
-        $itemResults = $this->getTestpaperService()->findItemResultsByResultId($result['id']);
-        $itemResults = ArrayToolkit::index($itemResults, 'questionId');
-
-        $exercise['items'] = $this->filterItem($items, $itemResults);
+        $exercise['items'] = $this->filterItem($items, $questionReports);
 
         return $this->filterResult($exercise);
+    }
+
+    protected function createAssessment($name, $range, $sections)
+    {
+        $sections = $this->getAssessmentService()->drawItems($range, $sections);
+        $assessment = array(
+            'name' => $name,
+            'displayable' => 0,
+            'description' => '',
+            'bank_id' => $range['bank_id'],
+            'sections' => $sections,
+        );
+
+        $assessment = $this->getAssessmentService()->createAssessment($assessment);
+
+        $this->getAssessmentService()->openAssessment($assessment['id']);
+
+        return $assessment;
     }
 
     private function filterItem($items, $itemSetResults)
@@ -144,8 +200,8 @@ class Exercise extends BaseResource
                 $item['result'] = null;
             }
 
-            if ($itemSetResults && !empty($itemSetResults[$item['id']])) {
-                $itemResult = $itemSetResults[$item['id']];
+            if ($itemSetResults && !empty($item['testResult'])) {
+                $itemResult = $item['testResult'];
                 if (!empty($itemResult['answer'][0])) {
                     $itemResult['answer'][0] = $this->filterHtml($itemResult['answer'][0]);
                 }
@@ -294,11 +350,6 @@ class Exercise extends BaseResource
         return substr($questionTypeRangeStr, 0, -1);
     }
 
-    protected function getTestpaperService()
-    {
-        return $this->getServiceKernel()->createService('Testpaper:TestpaperService');
-    }
-
     protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question:QuestionService');
@@ -317,5 +368,53 @@ class Exercise extends BaseResource
     protected function getActivityService()
     {
         return $this->getServiceKernel()->createService('Activity:ActivityService');
+    }
+
+    /**
+     * @return ExerciseActivityService
+     */
+    protected function getExerciseActivityService()
+    {
+        return $this->getServiceKernel()->createService('Activity:ExerciseActivityService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->getServiceKernel()->createService('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->getServiceKernel()->createService('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AnswerService
+     */
+    protected function getAnswerService()
+    {
+        return $this->getServiceKernel()->createService('ItemBank:Answer:AnswerService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->getServiceKernel()->createService('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return AnswerQuestionReportService
+     */
+    protected function getAnswerQuestionReportService()
+    {
+        return $this->getServiceKernel()->createService('ItemBank:Answer:AnswerQuestionReportService');
     }
 }

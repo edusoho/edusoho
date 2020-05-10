@@ -4,16 +4,25 @@ namespace ApiBundle\Api\Resource\Testpaper;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
+use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Tests\Answer\Service\AnswerReportServiceTest;
 
 class TestpaperAction extends AbstractResource
 {
@@ -26,16 +35,16 @@ class TestpaperAction extends AbstractResource
     public function add(ApiRequest $request, $id)
     {
         $action = $request->request->get('action');
-        $testpaper = $this->getTestpaperService()->getTestpaper($id);
+        $assessment = $this->getAssessmentService()->getAssessment($id);
         $method = $action.'Testpaper';
         if (!method_exists($this, $method)) {
             throw CommonException::NOTFOUND_METHOD();
         }
 
-        return $this->$method($request, $testpaper);
+        return $this->$method($request, $assessment);
     }
 
-    protected function doTestpaper(ApiRequest $request, $testpaper)
+    protected function doTestpaper(ApiRequest $request, $assessment)
     {
         $targetType = $request->request->get('targetType'); // => task
         $targetId = $request->request->get('targetId'); // => taskId
@@ -60,7 +69,7 @@ class TestpaperAction extends AbstractResource
             throw CourseException::FORBIDDEN_TAKE_COURSE();
         }
 
-        if (empty($testpaper)) {
+        if (empty($assessment)) {
             throw TestpaperException::NOTFOUND_TESTPAPER();
         }
 
@@ -68,37 +77,37 @@ class TestpaperAction extends AbstractResource
         $task['activity'] = $activity;
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
-        $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $activity['fromCourseId'], $activity['id'], $activity['mediaType']);
-
-        $items = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
-        $testpaper['metas']['question_type_seq'] = array_keys($items);
-        if (empty($testpaperResult)) {
-            if ('draft' == $testpaper['status']) {
+        $scene = $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
+        $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($testpaperActivity['answerSceneId'], $user['id']);
+        if (empty($answerRecord)) {
+            if ('draft' == $assessment['status']) {
                 throw TestpaperException::DRAFT_TESTPAPER();
             }
-            if ('closed' == $testpaper['status']) {
+            if ('closed' == $assessment['status']) {
                 throw TestpaperException::CLOSED_TESTPAPER();
             }
 
-            $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], array('lessonId' => $activity['id'], 'courseId' => $activity['fromCourseId'], 'limitedTime' => $testpaperActivity['limitedTime']));
-
-            return array(
-                'testpaperResult' => $testpaperResult,
-                'testpaper' => $testpaper,
-                'items' => $items,
-                'isShowTestResult' => 1,
-            );
-        } else {
-            return array(
-                'testpaperResult' => $testpaperResult,
-                'testpaper' => $testpaper,
-                'items' => $items,
-                'isShowTestResult' => 1,
-            );
+            $answerRecord = $this->getAnswerService()->startAnswer($scene['id'], $assessment['id'], $user['id']);
         }
+
+        $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+        $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
+        $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+
+        $testpaperWrapper = new TestpaperWrapper();
+        $items = $testpaperWrapper->wrapTestpaperItems($assessment, $questionReports);
+        $testpaper = $testpaperWrapper->wrapTestpaper($assessment, $scene);
+        $testpaper['metas']['question_type_seq'] = array_keys($items);
+
+        return array(
+            'testpaperResult' => $testpaperWrapper->wrapTestpaperResult($answerRecord, $assessment, $scene, $answerReport),
+            'testpaper' => $testpaper,
+            'items' => ArrayToolkit::groupIndex($items, 'type', 'id'),
+            'isShowTestResult' => 1,
+        );
     }
 
-    protected function redoTestpaper(ApiRequest $request, $testpaper)
+    protected function redoTestpaper(ApiRequest $request, $assessment)
     {
         $targetType = $request->request->get('targetType'); // => task
         $targetId = $request->request->get('targetId'); // => taskId
@@ -113,15 +122,15 @@ class TestpaperAction extends AbstractResource
             throw TaskException::NOTFOUND_TASK();
         }
 
-        if (empty($testpaper)) {
+        if (empty($assessment)) {
             throw TestpaperException::NOTFOUND_TESTPAPER();
         }
 
-        if ('draft' == $testpaper['status']) {
+        if ('draft' == $assessment['status']) {
             throw TestpaperException::DRAFT_TESTPAPER();
         }
 
-        if ('closed' == $testpaper['status']) {
+        if ('closed' == $assessment['status']) {
             throw TestpaperException::CLOSED_TESTPAPER();
         }
 
@@ -139,28 +148,35 @@ class TestpaperAction extends AbstractResource
         $task['activity'] = $activity;
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
-        $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaper['id'], $activity['fromCourseId'], $activity['id'], $testpaper['type']);
+        $scene = $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
+        $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($scene['id'], $user['id']);
+        $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
 
-        if ($testpaperActivity['doTimes'] && $testpaperResult && 'finished' == $testpaperResult['status']) {
+        if ($scene['do_times'] && $answerRecord && 'finished' == $answerRecord['status']) {
             throw TestpaperException::FORBIDDEN_RESIT();
-        } elseif ($testpaperActivity['redoInterval']) {
-            $nextDoTime = $testpaperResult['checkedTime'] + $testpaperActivity['redoInterval'] * 3600;
+        } elseif ($scene['redo_interval'] && $answerReport) {
+            $nextDoTime = $answerReport['review_time'] + $scene['redo_interval'] * 3600;
             if ($nextDoTime > time()) {
                 throw TestpaperException::REDO_INTERVAL_EXIST();
             }
         }
 
-        if (!$testpaperResult || ($testpaperResult && 'finished' == $testpaperResult['status'])) {
-            $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], array('lessonId' => $activity['id'], 'courseId' => $activity['fromCourseId'], 'limitedTime' => $testpaperActivity['limitedTime']));
+        if (!$answerRecord || ($answerRecord && 'finished' == $answerRecord['status'])) {
+            $answerRecord = $this->getAnswerService()->startAnswer($scene['id'], $assessment['id'], $user['id']);
+            $answerReport = array();
         }
 
-        $items = $this->getTestpaperService()->showTestpaperItems($testpaper['id'], $testpaperResult['id']);
+        $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+        $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
+        $testpaperWrapper = new TestpaperWrapper();
+        $items = $testpaperWrapper->wrapTestpaperItems($assessment, $questionReports);
+        $testpaper = $testpaperWrapper->wrapTestpaper($assessment, $scene);
         $testpaper['metas']['question_type_seq'] = array_keys($items);
 
         return array(
-            'testpaperResult' => $testpaperResult,
+            'testpaperResult' => $testpaperWrapper->wrapTestpaperResult($answerRecord, $assessment, $scene, $answerReport),
             'testpaper' => $testpaper,
-            'items' => $items,
+            'items' => ArrayToolkit::groupIndex($items, 'type', 'id'),
             'isShowTestResult' => 0,
         );
     }
@@ -182,14 +198,6 @@ class TestpaperAction extends AbstractResource
     }
 
     /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->service('Testpaper:TestpaperService');
-    }
-
-    /**
      * @return CourseService
      */
     protected function getCourseService()
@@ -203,5 +211,53 @@ class TestpaperAction extends AbstractResource
     protected function getTaskService()
     {
         return $this->service('Task:TaskService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->service('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->service('ItemBank:Answer:AnswerReportService');
+    }
+
+    /**
+     * @return AnswerQuestionReportService
+     */
+    protected function getAnswerQuestionReportService()
+    {
+        return $this->service('ItemBank:Answer:AnswerQuestionReportService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->service('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return AnswerService
+     */
+    protected function getAnswerService()
+    {
+        return $this->service('ItemBank:Answer:AnswerService');
     }
 }

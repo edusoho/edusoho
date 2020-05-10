@@ -103,10 +103,6 @@ class HomeworkManageController extends BaseController
             $this->createNewException(TestpaperException::NOTFOUND_RESULT());
         }
 
-        if ('reviewing' !== $answerRecord['status']) {
-            $this->createNewException(CommonException::ERROR_PARAMETER());
-        }
-
         switch ($source) {
             case 'course':
                 $successContinueGotoUrl = $this->generateUrl('course_manage_exam_next_result_check', array('id' => $targetId, 'activityId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id'])));

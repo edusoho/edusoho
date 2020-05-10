@@ -3,7 +3,6 @@
 namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
@@ -22,8 +21,9 @@ class Homework extends Activity
     public function get($targetId)
     {
         $homework = $this->getHomeworkActivityService()->get($targetId);
-
-        $homework['assessment'] = $this->getAssessmentService()->getAssessment($homework['assessmentId']);
+        if ($homework) {
+            $homework['assessment'] = $this->getAssessmentService()->getAssessment($homework['assessmentId']);
+        }
 
         return $homework;
     }
@@ -68,7 +68,7 @@ class Homework extends Activity
     {
         $items = $this->getItemService()->findItemsByIds($itemIds, true);
         $bankIds = array_column($items, 'bank_id');
-        
+
         $assessment = [
             'bank_id' => array_shift($bankIds),
             'name' => $name,
@@ -78,7 +78,7 @@ class Homework extends Activity
                 [
                     'name' => '作业题目',
                     'items' => $items,
-                ]
+                ],
             ],
         ];
 

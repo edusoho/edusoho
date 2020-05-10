@@ -4,13 +4,19 @@ namespace ApiBundle\Api\Resource\TestpaperInfo;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
+use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use FaceInspectionPlugin\Biz\FaceInspection\Service\FaceInspectionService;
 
 class TestpaperInfo extends AbstractResource
@@ -22,13 +28,15 @@ class TestpaperInfo extends AbstractResource
             throw UserException::UN_LOGIN();
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testId);
+        $assessment = $this->getAssessmentService()->showAssessment($testId);
 
-        if (empty($testpaper)) {
+        if (empty($assessment)) {
             throw TestpaperException::NOTFOUND_TESTPAPER();
         }
 
-        $items = $this->getTestpaperService()->showTestpaperItems($testId);
+        $testpaperWrapper = new TestpaperWrapper();
+        $testpaper = $testpaperWrapper->wrapTestpaper($assessment);
+        $items = ArrayToolkit::groupIndex($testpaperWrapper->wrapTestpaperItems($assessment), 'type', 'id');
         $testpaper['metas']['question_type_seq'] = array_keys($items);
         $results = array(
             'testpaper' => $testpaper,
@@ -60,15 +68,13 @@ class TestpaperInfo extends AbstractResource
             throw TestpaperException::NOT_TESTPAPER_TASK();
         }
 
-        $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId(
-            $user['id'],
-            $testpaper['id'],
-            $activity['fromCourseId'],
-            $activity['id'],
-            $testpaper['type']
-        );
+        $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
+        $testpaperRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $user['id']);
 
-        if (!empty($testpaperResult)) {
+        if (!empty($testpaperRecord)) {
+            $answerReport = $this->getAnswerReportService()->get($testpaperRecord['answer_report_id']);
+            $testpaperWrapper = new TestpaperWrapper();
+            $testpaperResult = $testpaperWrapper->wrapTestpaperResult($testpaperRecord, $testpaper, $scene, $answerReport);
             $results['testpaperResult'] = $testpaperResult;
         }
 
@@ -99,14 +105,6 @@ class TestpaperInfo extends AbstractResource
     }
 
     /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->getBiz()->service('Testpaper:TestpaperService');
-    }
-
-    /**
      * @return TaskService
      */
     protected function getTaskService()
@@ -128,5 +126,37 @@ class TestpaperInfo extends AbstractResource
     protected function getFaceInspectionService()
     {
         return $this->getBiz()->service('FaceInspectionPlugin:FaceInspection:FaceInspectionService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->service('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->service('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->service('ItemBank:Answer:AnswerReportService');
     }
 }

@@ -11,8 +11,7 @@
     },
     "psr-4": {
       "Topxia\\Api\\": "api/src/Topxia/Api",
-      "Tests\\": "tests",
-      "Codeages\\Biz\\ItemBank\\": "php-sdk/src"
+      "Tests\\": "tests"
     },
     "files": [
       "app/AppKernel.php"
@@ -62,7 +61,8 @@
     "codeages/biz-order-pay": "dev-master",
     "codeages/escloud-php-sdk": "^1.1",
     "vlucas/valitron": "^1.4",
-    "firebase/php-jwt": "^5.1"
+    "firebase/php-jwt": "^5.1",
+    "codeages/biz-item-bank": "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": "5.7.27",

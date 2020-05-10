@@ -8,6 +8,8 @@ interface HomeworkActivityService
 
     public function getByAnswerSceneId($answerSceneId);
 
+    public function getByAssessmentId($assessmentId);
+
     public function get($id);
 
     public function findByIds($ids);
