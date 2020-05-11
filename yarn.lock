@@ -1624,12 +1624,6 @@ axios@^0.18.0:
     follow-redirects "1.5.10"
     is-buffer "^2.0.2"
 
-axios@^0.19.2:
-  version "0.19.2"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
-  dependencies:
-    follow-redirects "1.5.10"
-
 babel-code-frame@^6.22.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-code-frame/-/babel-code-frame-6.26.0.tgz#63fd43f7dc1e3bb7ce35947db8fe369a3f58c74b"
@@ -4384,10 +4378,6 @@ gulp-less@^4.0.1:
     through2 "^2.0.0"
     vinyl-sourcemaps-apply "^0.2.0"
 
-gulp-rename@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/gulp-rename/-/gulp-rename-2.0.0.tgz#9bbc3962b0c0f52fc67cd5eaff6c223ec5b9cf6c"
-
 gulp@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/gulp/-/gulp-4.0.2.tgz#543651070fd0f6ab0a0650c6a3e6ff5a7cb09caa"
@@ -5159,14 +5149,13 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank-test@^0.1.29:
-  version "0.1.29"
-  resolved "https://registry.yarnpkg.com/item-bank-test/-/item-bank-test-0.1.29.tgz#7bf68a4988f87034e429b729150b04039dad6cbc"
-  integrity sha512-39yGqSJIceXaep0vBoNox1n53f76aXJsRfyhCrS2Xs3mv0+dVBu5M9CpJyX6XZQqfc7UqawhTFzwH9ZTXA1gVQ==
+item-bank-test@^0.1.30:
+  version "0.1.30"
+  resolved "https://registry.yarnpkg.com/item-bank-test/-/item-bank-test-0.1.30.tgz#7ee7c7db4c84b922f2ff24bea33ab0de90c92d49"
+  integrity sha512-P+/Qm4mKUAJiLzngZXQrFAeKZQ6jlP1R8lZQAO4X5jYAG3OuLCe+ws8nXoRY2fDcoOt3Zb8emAv5g4bMtagx3w==
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"
-    axios "^0.19.2"
     babel-plugin-import "^1.13.0"
     ckeditor4 "^4.14.0"
     core-js "^3.6.4"
@@ -5176,7 +5165,6 @@ item-bank-test@^0.1.29:
     gulp-clean-css "^4.2.0"
     gulp-concat "^2.6.1"
     gulp-less "^4.0.1"
-    gulp-rename "^2.0.0"
     jquery "^3.4.1"
     js-cookie "^2.2.1"
     less "^3.11.1"
