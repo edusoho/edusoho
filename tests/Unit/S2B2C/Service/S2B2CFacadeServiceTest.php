@@ -26,13 +26,87 @@ class S2B2CFacadeServiceTest extends BaseTestCase
             [
                 [
                     'functionName' => 'get',
-                    'withParams' => ['s2b2c_disabled_permission_list'],
+                    'withParams' => ['s2b2c_disabled_permissions'],
                     'returnValue' => $disabledPermissions,
+                ],
+                [
+                    'functionName' => 'set',
+                    'withParams' => ['s2b2c_disabled_permissions', $disabledPermissions],
+                    'returnValue' => true,
                 ],
             ]
         );
         $result = $this->getS2B2CFacadeSercice()->getMerchantDisabledPermissions();
         $this->assertEquals($disabledPermissions, $result);
+    }
+
+    public function testGetBehaviourPermissions_whenS2B2CDisable_thenHasPermissions()
+    {
+        $behaviourPermissions = $this->getS2B2CFacadeSercice()->getBehaviourPermissions();
+        $this->assertTrue($behaviourPermissions['canModifySiteName']);
+        $this->assertTrue($behaviourPermissions['canAddCourse']);
+    }
+
+    public function testGetBehaviourPermissions_whenS2B2CEnableAndDealer_thenHasPermissions()
+    {
+        $this->biz['s2b2c.config'] = [
+            'enabled' => true,
+            'supplierId' => 1,
+            'supplierDomain' => 'www.supplier.com',
+            'businessMode' => S2B2CFacadeService::DEALER_MODE,
+        ];
+        $this->mockBiz(
+            'System:SettingService',
+            [
+                [
+                    'functionName' => 'get',
+                    'withParams' => ['s2b2c', []],
+                    'returnValue' => [
+                        'auth_node' => [
+                            'title' => 1,
+                            'logo' => 0,
+                            'favicon' => 1,
+                        ],
+                    ],
+                ],
+            ]
+        );
+        $behaviourPermissions = $this->getS2B2CFacadeSercice()->getBehaviourPermissions();
+        $this->assertTrue($behaviourPermissions['canModifySiteName']);
+        $this->assertTrue($behaviourPermissions['canModifySiteLogo']);
+        $this->assertTrue($behaviourPermissions['canModifySiteFavicon']);
+        $this->assertTrue($behaviourPermissions['canAddCourse']);
+    }
+
+    public function testGetBehaviourPermissions_whenS2B2CEnableAndFranchisee_thenHasPermissions()
+    {
+        $this->biz['s2b2c.config'] = [
+            'enabled' => true,
+            'supplierId' => 1,
+            'supplierDomain' => 'www.supplier.com',
+            'businessMode' => S2B2CFacadeService::FRANCHISEE_MODE,
+        ];
+        $this->mockBiz(
+            'System:SettingService',
+            [
+                [
+                    'functionName' => 'get',
+                    'withParams' => ['s2b2c', []],
+                    'returnValue' => [
+                        'auth_node' => [
+                            'title' => 1,
+                            'logo' => 0,
+                            'favicon' => 1,
+                        ],
+                    ],
+                ],
+            ]
+        );
+        $behaviourPermissions = $this->getS2B2CFacadeSercice()->getBehaviourPermissions();
+        $this->assertTrue($behaviourPermissions['canModifySiteName']);
+        $this->assertFalse($behaviourPermissions['canModifySiteLogo']);
+        $this->assertTrue($behaviourPermissions['canModifySiteFavicon']);
+        $this->assertFalse($behaviourPermissions['canAddCourse']);
     }
 
     /**

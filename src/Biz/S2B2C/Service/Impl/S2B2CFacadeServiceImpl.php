@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\S2B2C\SupplierPlatformApi;
 use Biz\System\Service\CacheService;
+use Biz\System\Service\SettingService;
 use QiQiuYun\SDK\Service\S2B2CService;
 
 class S2B2CFacadeServiceImpl extends BaseService implements S2B2CFacadeService
@@ -44,6 +45,29 @@ class S2B2CFacadeServiceImpl extends BaseService implements S2B2CFacadeService
         }
 
         return $supplier;
+    }
+
+    public function getBehaviourPermissions()
+    {
+        if ($this->isS2B2CInfoValid('behaviour_permissions')) {
+            return $this->biz['s2b2c_info']['behaviour_permissions']['data'];
+        }
+
+        $s2b2cConfig = $this->biz['s2b2c.config'];
+        $s2b2cSetting = $this->getSettingService()->get('s2b2c', []);
+        $authNode = empty($s2b2cSetting['auth_node']) ? [] : $s2b2cSetting['auth_node'];
+        $behaviourPermissions = [
+            'canModifySiteName' => !$s2b2cConfig['enabled'] || in_array($s2b2cConfig['businessMode'], [self::DEALER_MODE]) || !empty($authNode['title']),
+            'canModifySiteUrl' => !$s2b2cConfig['enabled'] || in_array($s2b2cConfig['businessMode'], [self::DEALER_MODE]),
+            'canModifySiteLogo' => !$s2b2cConfig['enabled'] || in_array($s2b2cConfig['businessMode'], [self::DEALER_MODE]) || !empty($authNode['logo']),
+            'canModifySiteFavicon' => !$s2b2cConfig['enabled'] || in_array($s2b2cConfig['businessMode'], [self::DEALER_MODE]) || !empty($authNode['favicon']),
+            'canModifyCoursePrice' => !$s2b2cConfig['enabled'] || in_array($s2b2cConfig['businessMode'], [self::DEALER_MODE]),
+            'canAddCourse' => !$s2b2cConfig['enabled'] || in_array($s2b2cConfig['businessMode'], [self::DEALER_MODE]),
+            'canAddLiveCourse' => !$s2b2cConfig['enabled'] || in_array($s2b2cConfig['businessMode'], [self::DEALER_MODE]),
+        ];
+        $this->cacheS2B2CInfo('behaviour_permissions', $behaviourPermissions);
+
+        return $behaviourPermissions;
     }
 
     public function getMerchantDisabledPermissions()
@@ -116,5 +140,13 @@ class S2B2CFacadeServiceImpl extends BaseService implements S2B2CFacadeService
     protected function getCacheService()
     {
         return $this->createService('System:CacheService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }
