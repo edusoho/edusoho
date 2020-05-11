@@ -220,6 +220,9 @@
           contentType: false,
           processData: false,
           data: data,
+          beforeSend(request) {
+            request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+          },
           success: function (result) {
             console.log(result)
           }
