@@ -102,11 +102,11 @@ class HomeworkTest extends BaseTypeTestCase
         $this->mockBiz('ItemBank:Assessment:AssessmentService', array(
             array(
                 'functionName' => 'updateBasicAssessment',
-                'returnValue' => array('id' => 1),
+                'returnValue' => array('id' => 1, 'name' => 'name', 'description' => 'description'),
             ),
             array(
                 'functionName' => 'getAssessment',
-                'returnValue' => array('id' => 1),
+                'returnValue' => array('id' => 1, 'name' => 'name', 'description' => 'description'),
             ),
         ));
 
@@ -127,7 +127,7 @@ class HomeworkTest extends BaseTypeTestCase
 
         $update = ['title' => 'homework update name', 'description' => 'homework update description'];
 
-        $updated = $type->update($activity['id'], $update, []);
+        $updated = $type->update(1, $update, []);
     }
 
     public function testDelete()
@@ -159,7 +159,7 @@ class HomeworkTest extends BaseTypeTestCase
         $this->mockBiz('Activity:ActivityService', array(
             array(
                 'functionName' => 'getActivity',
-                'returnValue' => array('finishType' => 'submit', 'ext' => array()),
+                'returnValue' => array('finishType' => 'submit', 'ext' => array('answerSceneId' => 1)),
             ),
         ));
 
@@ -184,7 +184,7 @@ class HomeworkTest extends BaseTypeTestCase
         $this->mockBiz('Activity:ActivityService', array(
             array(
                 'functionName' => 'getActivity',
-                'returnValue' => array('finishType' => 'doing', 'ext' => array()),
+                'returnValue' => array('finishType' => 'doing', 'ext' => array('answerSceneId' => 1)),
             ),
         ));
 

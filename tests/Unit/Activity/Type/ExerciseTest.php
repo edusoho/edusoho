@@ -35,6 +35,8 @@ class ExerciseTest extends BaseTypeTestCase
         $fields = array(
             'title' => 'exercise activity',
             'questionTypes' => array('single_choice'),
+            'range' => array('bankId' => 1),
+            'itemCount' => 1,
         );
         $activity = $type->create($fields);
 
@@ -122,7 +124,12 @@ class ExerciseTest extends BaseTypeTestCase
 
         $mockExerciseActivity = $this->_mockExerciseActivity();
 
-        $field = array('title' => 'test2');
+        $field = array(
+            'title' => 'test2',
+            'range' => array('bankId' => 1),
+            'itemCount' => 1,
+            'questionTypes' => array(),
+        );
         $result = $type->update(1, $field, array());
 
         $this->assertEquals($result['id'], '1');
@@ -153,7 +160,7 @@ class ExerciseTest extends BaseTypeTestCase
         $this->mockBiz('Activity:ActivityService', array(
             array(
                 'functionName' => 'getActivity',
-                'returnValue' => array('finishType' => 'submit', 'ext' => array()),
+                'returnValue' => array('finishType' => 'submit', 'ext' => array('answerSceneId' => 1)),
             ),
         ));
 
@@ -178,7 +185,7 @@ class ExerciseTest extends BaseTypeTestCase
         $this->mockBiz('Activity:ActivityService', array(
             array(
                 'functionName' => 'getActivity',
-                'returnValue' => array('finishType' => 'submit', 'ext' => array()),
+                'returnValue' => array('finishType' => 'submit', 'ext' => array('answerSceneId' => 1)),
             ),
         ));
 
