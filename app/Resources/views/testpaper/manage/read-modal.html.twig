@@ -47,6 +47,18 @@
 {% endblock %}
 
 {% block footer %}
+  {% if is_plugin_installed('QuestionPlus') %}
+    {% set disable = version_compare(plugin_version('QuestionPlus'), '2.1.0', '<=') %}
+    <p class="cd-mt8 mb0 text-left">
+      {% if not disable %}
+        {% set needUprade = version_compare(plugin_version('QuestionPlus'), '2.1.2', '<=') %}
+        <a class="cd-link-primary" href="javascript:;" data-need-upgrade="{{ needUprade }}" id="old-template-btn">{{ 'course.question_manage.import.use_old_template'|trans }}</a>
+      {% else %}
+        <span class="text-muted">{{ 'course.question_manage.import.use_old_template'|trans }}</span>
+        <a class="link-medium" href="javascript:;" data-container="body" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="{{ 'question_plus_upgrade_tip'|trans }}"><i class="es-icon es-icon-help"></i></a>
+      {% endif %}
+    </p>
+  {% endif %}
   <button class="btn hidden"></button>
   <button type="button" class="btn cd-btn cd-btn-lg cd-btn-flat-default pull-right js-step3-btn hidden" data-dismiss="modal">{{ 'course.question_manage.impport.cancle'|trans }}</button>
   <button type="button" id="re-import-btn"

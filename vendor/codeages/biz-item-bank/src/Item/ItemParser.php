@@ -61,16 +61,16 @@ class ItemParser
         return $this->formatData($data);
     }
 
-    protected function formatData($data)
+    public function formatData($data)
     {
         $formatData = [];
 
         foreach ($data as $question) {
             $item = [
-                'category_id' => '0',
+                'category_id' => empty($question['category_id']) ? '0' : $question['category_id'],
                 'type' => $question['type'],
                 'material' => ('material' == $question['type']) ? $question['stem'] : '',
-                'analysis' => ('material' == $question['type']) ? $question['analysis'] : '',
+                'analysis' => ('material' == $question['type']) ? empty($question['analysis']) ? '' : $question['analysis'] : '',
                 'difficulty' => $question['difficulty'],
                 'score' => ('material' == $question['type']) ? 0 : (float) $question['score'],
                 'attachments' => [],
@@ -99,7 +99,7 @@ class ItemParser
             'stem' => $question['stem'],
             'score' => (float) $question['score'],
             'options' => empty($question['options']) ? '' : $question['options'],
-            'analysis' => $question['analysis'],
+            'analysis' => empty($question['analysis']) ? '' : $question['analysis'],
             'stemShow' => empty($question['stemShow']) ? '' : $question['stemShow'],
             'attachments' => [],
         ];

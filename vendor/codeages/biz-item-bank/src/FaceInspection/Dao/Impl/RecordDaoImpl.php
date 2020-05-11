@@ -24,6 +24,7 @@ class RecordDaoImpl extends AdvancedDaoImpl implements RecordDao
                 'user_id in (:user_ids)',
                 'answer_scene_id = :answer_scene_id',
                 'answer_record_id = :answer_record_id',
+                'answer_record_id in (:answer_record_ids)',
             ],
         ];
     }

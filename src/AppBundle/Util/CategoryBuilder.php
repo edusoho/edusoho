@@ -26,6 +26,11 @@ class CategoryBuilder
         $this->categories = $this->getQuestionCategoryService()->getCategoryTree($bankId);
     }
 
+    public function buildForItem($itemBankId)
+    {
+        $this->categories = $this->getItemCategoryService()->getItemCategoryTreeList($itemBankId);
+    }
+
     public function build($categories)
     {
         $this->categories = $categories;
@@ -61,6 +66,14 @@ class CategoryBuilder
     private function getQuestionCategoryService()
     {
         return $this->createService('Question:CategoryService');
+    }
+
+    /**
+     * @return \Codeages\Biz\ItemBank\Item\Service\ItemCategoryService
+     */
+    private function getItemCategoryService()
+    {
+        return $this->createService('ItemBank:Item:ItemCategoryService');
     }
 
     protected function createService($alias)

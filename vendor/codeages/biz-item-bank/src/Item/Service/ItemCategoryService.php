@@ -21,4 +21,6 @@ interface ItemCategoryService
     public function getItemCategoryTree($bankId);
 
     public function findCategoryChildrenIds($id);
+
+    public function getItemCategoryTreeList($bankId);
 }
