@@ -18,7 +18,7 @@
           <label for="name">{{ 'admin.setting.site.name'|trans }}</label>
         </div>
         <div class="col-md-8 controls">
-          {% if canModifySiteName() %}
+          {% if s2b2c_has_behaviour_permission('canModifySiteName') %}
             <input type="text" id="name" name="name" class="form-control" value="{{ site.name }}">
           {% else %}
             <div class="form-control form-control-unset-bg">{{ site.name }}</div>
@@ -40,7 +40,7 @@
           <label for="url">{{ 'admin.setting.site.url'|trans }}</label>
         </div>
         <div class="col-md-8 controls">
-          {% if canModifySiteUrl() %}
+          {% if s2b2c_has_behaviour_permission('canModifySiteUrl') %}
             <input type="text" id="url" name="url" class="form-control" value="{{ site.url }}">
             <p class="help-block">{{ 'admin.setting.site.url.help_block'|trans({'%http%':app.request.getScheme()}) }}</p>
           {% else %}
@@ -54,7 +54,7 @@
           <label for="logo">{{ 'admin.setting.site.logo'|trans }}</label>
         </div>
         <div class="col-md-8 controls">
-          {% if canModifySiteLogo() %}
+          {% if s2b2c_has_behaviour_permission('canModifySiteLogo') %}
             <div id="site-logo-container">{% if site.logo %}<img src="{{ asset(site.logo) }}">{% endif %}</div>
             <a class="btn btn-default" id="site-logo-upload"
                data-upload-token="{{ upload_token('system', 'image') }}"
@@ -79,7 +79,7 @@
           <label for="favicon">{{ 'admin.setting.site.favicon'|trans }}</label>
         </div>
         <div class="col-md-8 controls">
-          {% if canModifySiteFavicon() %}
+          {% if s2b2c_has_behaviour_permission('canModifySiteFavicon') %}
             <div id="site-favicon-container">{% if site.favicon %}<img src="{{ asset(site.favicon) }}">{% endif %}</div>
             <a class="btn btn-default"
                id="site-favicon-upload"

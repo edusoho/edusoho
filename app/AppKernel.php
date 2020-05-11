@@ -191,7 +191,21 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz->register(new \Biz\System\LogServiceProvider());
         $biz->register(new \Biz\DefaultServiceProvider());
         $biz->register(new \Biz\DefaultSdkProvider());
-        $biz->register(new \Biz\S2B2C\S2B2CProvider());
+        if ($this->getContainer()->hasParameter('school_mode')) {
+            $schoolMode = $this->getContainer()->getParameter('school_mode');
+        }
+        $biz->register(
+            new \Biz\S2B2C\S2B2CProvider(),
+            [
+                's2b2c.options' => [
+                    'enabled' => !empty($schoolMode['type']) && 'merchant' == $schoolMode['type'],
+                    'supplierId' => empty($schoolMode['supplier']) ? null : $schoolMode['supplier']['id'],
+                    'supplierDomain' => empty($schoolMode['supplier']) ? null : $schoolMode['supplier']['domain'],
+                    'businessMode' => empty($schoolMode['business_mode']) ? null : $schoolMode['business_mode'],
+                ],
+            ]
+        );
+
         $biz->register(new \Biz\Plumber\PlumberProvider());
 
         $collector = $this->getContainer()->get('biz.service_provider.collector');
