@@ -42,6 +42,12 @@ class S2B2CFacadeServiceTest extends BaseTestCase
 
     public function testGetBehaviourPermissions_whenS2B2CDisable_thenHasPermissions()
     {
+        $this->biz['s2b2c.config'] = [
+            'enabled' => false,
+            'supplierId' => null,
+            'supplierDomain' => null,
+            'businessMode' => null,
+        ];
         $behaviourPermissions = $this->getS2B2CFacadeSercice()->getBehaviourPermissions();
         $this->assertTrue($behaviourPermissions['canModifySiteName']);
         $this->assertTrue($behaviourPermissions['canAddCourse']);
