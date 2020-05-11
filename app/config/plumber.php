@@ -18,6 +18,7 @@ return [
             'num' => 1,
             'class' => 'AppBundle\Worker\ExampleWorker',
             'queue' => 'example_queue',
+            'hour_limit' => 'default_hour_limit',
         ],
         'crontab_job_worker' => [
             'topic' => 'crontab_job_worker',
