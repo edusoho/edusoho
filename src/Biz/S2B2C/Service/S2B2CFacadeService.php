@@ -14,6 +14,8 @@ interface S2B2CFacadeService
 
     public function getSupplier();
 
+    public function getBehaviourPermissions();
+
     public function getMerchantDisabledPermissions();
 
     /**

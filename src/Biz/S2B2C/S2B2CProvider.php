@@ -26,6 +26,20 @@ class S2B2CProvider implements ServiceProviderInterface
 {
     public function register(Container $biz)
     {
+        /*
+         * @param $biz
+         * @return array
+         * S2B2C基本配置
+         */
+        $biz['s2b2c.config'] = function ($biz) {
+            return [
+                'enabled' => $biz['s2b2c.options']['enabled'],
+                'supplierId' => $biz['s2b2c.options']['supplierId'],
+                'supplierDomain' => $biz['s2b2c.options']['supplierDomain'],
+                'businessMode' => $biz['s2b2c.options']['businessMode'],
+            ];
+        };
+
         // 日志
         $biz['s2b2c.merchant.logger'] = function () {
             $logger = new Logger('S2B2CMerchant');
