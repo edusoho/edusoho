@@ -163,7 +163,7 @@ class Exercise extends Activity
 
         return array(
             'range' => array(
-                'question_bank_id' => $questionBank['id'],
+                'question_bank_id' => empty($questionBank['id']) ? 0 : $questionBank['id'],
                 'bank_id' => empty($questionBank['itemBankId']) ? 0 : $questionBank['itemBankId'],
                 'category_ids' => empty($range['categoryIds']) ? array() : explode(',', $range['categoryIds']),
                 'difficulty' => empty($fields['difficulty']) ? '' : $fields['difficulty'],

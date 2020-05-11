@@ -16,6 +16,13 @@ class ScoreRuleProcessor
 
     public function review($questionResult, $rules)
     {
+        if ('none' == $questionResult['result']) {
+            return [
+                'status' => AnswerQuestionReportService::STATUS_REVIEWING,
+                'score' => 0,
+            ];
+        }
+        
         foreach ($rules as $rule) {
             if (empty($this->biz['score_rule.'.$rule['name']])) {
                 continue;
@@ -28,7 +35,7 @@ class ScoreRuleProcessor
         }
 
         return [
-            'status' => AnswerQuestionReportService::STATUS_REVIEWING,
+            'status' => AnswerQuestionReportService::STATUS_WRONG,
             'score' => 0,
         ];
     }
