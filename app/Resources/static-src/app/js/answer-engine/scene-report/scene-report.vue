@@ -21,6 +21,7 @@
           publicPath: $('[name=ckeditor_path]').val(),
           filebrowserImageUploadUrl: $('[name=ckeditor_image_upload_url]').val(),
           filebrowserImageDownloadUrl: $('[name=ckeditor_image_download_url]').val(),
+          language: document.documentElement.lang
         },
         cdnHost: $('[name=cdn_host]').val(),
         fileId: 0,
