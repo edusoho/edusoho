@@ -4,7 +4,6 @@ return [
     'app_name' => 's2b2c_m_plumber',
     'queues' => [
         'crontab_job_queue' => [
-            'enable_queue' => true,
             'queue_options' => 'default',
         ],
     ],
