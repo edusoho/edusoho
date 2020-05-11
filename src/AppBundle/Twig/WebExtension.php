@@ -120,6 +120,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('category_choices', array($this, 'getCategoryChoices')),
             new \Twig_SimpleFunction('build_category_choices', array($this, 'buildCategoryChoices')),
             new \Twig_SimpleFunction('question_category_choices', array($this, 'getQuestionCategoryChoices')),
+            new \Twig_SimpleFunction('item_category_choices', array($this, 'getItemCategoryChoices')),
             new \Twig_SimpleFunction('upload_max_filesize', array($this, 'getUploadMaxFilesize')),
             new \Twig_SimpleFunction('js_paths', array($this, 'getJsPaths')),
             new \Twig_SimpleFunction('is_plugin_installed', array($this, 'isPluginInstalled')),
@@ -1643,6 +1644,15 @@ class WebExtension extends \Twig_Extension
     {
         $builder = new CategoryBuilder();
         $builder->buildForQuestion($bankId);
+        $builder->setIndent($indent);
+
+        return $builder->convertToChoices();
+    }
+
+    public function getItemCategoryChoices($itemBankId, $indent = '　')
+    {
+        $builder = new CategoryBuilder();
+        $builder->buildForItem($itemBankId);
         $builder->setIndent($indent);
 
         return $builder->convertToChoices();

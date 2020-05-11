@@ -124,6 +124,38 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
         return $tree;
     }
 
+    public function getItemCategoryTreeList($bankId)
+    {
+        if (empty($this->getItemBankService()->getItemBank($bankId))) {
+            throw new ItemBankException('', ErrorCode::ITEM_BANK_NOT_FOUND);
+        }
+
+        $categories = $this->findItemCategoriesByBankId($bankId);
+        $categories = ArrayToolkit::group($categories, 'parent_id');
+       
+        $tree = array();
+        $this->prepareCategoryTreeList($tree, $categories, 0);
+        return $tree;
+    }
+
+    protected function prepareCategoryTreeList(&$tree, &$categories, $parentId)
+    {
+        static $depth = 0;
+
+        if (isset($categories[$parentId]) && is_array($categories[$parentId])) {
+            foreach ($categories[$parentId] as $category) {
+                ++$depth;
+                $category['depth'] = $depth;
+                $category['selectable'] = true;
+                $tree[] = $category;
+                $this->prepareCategoryTreeList($tree, $categories, $category['id']);
+                --$depth;
+            }
+        }
+
+        return $tree;
+    }
+
     public function findCategoryChildrenIds($id)
     {
         $category = $this->getItemCategory($id);
