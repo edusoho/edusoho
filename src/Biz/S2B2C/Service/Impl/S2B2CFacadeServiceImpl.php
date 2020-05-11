@@ -108,7 +108,8 @@ class S2B2CFacadeServiceImpl extends BaseService implements S2B2CFacadeService
      */
     private function isS2B2CInfoValid($module)
     {
-        if (isset($this->biz['s2b2c_info'][$module]) && time() < $this->biz['s2b2c_info'][$module]['deadline']) {
+        $s2b2cInfo = $this->biz->offsetExists('s2b2c_info') ? $this->biz->offsetGet('s2b2c_info') : [];
+        if (isset($s2b2cInfo[$module]) && time() < $s2b2cInfo[$module]['deadline']) {
             return true;
         }
 
