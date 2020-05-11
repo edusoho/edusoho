@@ -1,5 +1,5 @@
 <template>
-    <div id="app" class="test-vue">
+    <div id="app" class="ibs-vue">
         <item-import
             :subject="subject"
             :showCKEditorData="showCKEditorData"

@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="test-vue">
+  <div id="app" class="ibs-vue">
     <item-manage
       v-if="mode === 'create'"
       :bank_id="bank_id"

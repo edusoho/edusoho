@@ -3,6 +3,15 @@
 {% block title %}{{ assessment.name }} - {{ parent() }}{% endblock %}
 {% set showHeader = 1 %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  {% if maincolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
+    <link href="{{ asset('static-dist/libs/item-bank-test/lib/styles/item-bank-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+  {% else %}
+    <link href="{{ asset('static-dist/libs/item-bank-test/lib/styles/item-bank.css') }}" rel="stylesheet" />
+  {% endif %}
+{% endblock %}
+
 {% block body %}
   {% block header %}
     {% if showHeader %}{{ parent() }}{% endif %}
