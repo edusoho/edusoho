@@ -181,10 +181,15 @@ class TestpaperWrapper
             $question['parentId'] = $item['id'];
         }
 
+        if ('fill' == $question['type']) {
+            $question['stem'] = $this->fillStemAnswer($question['stem'], $question['answer']);
+        }
+
         if (!empty($this->questionReports[$question['id']])) {
             $questionReport = $this->questionReports[$question['id']];
             $question['testResult'] = array(
                 'id' => $questionReport['id'],
+                'resultId' => $questionReport['answer_record_id'],
                 'questionId' => $questionReport['question_id'],
                 'status' => $this->answerStatus[$questionReport['status']],
                 'score' => $questionReport['score'],
@@ -194,6 +199,15 @@ class TestpaperWrapper
         }
 
         return $question;
+    }
+
+    protected function fillStemAnswer($stem, $answers)
+    {
+        foreach ($answers as $answer) {
+            preg_replace('/(\[\[]])/is', '[['.$answer.']]', $stem, 1);
+        }
+
+        return $stem;
     }
 
     protected function convertAnswer($answer, $question)
