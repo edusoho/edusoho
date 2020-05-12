@@ -3238,9 +3238,10 @@ es-abstract@^1.17.0, es-abstract@^1.17.0-next.1, es-abstract@^1.17.2, es-abstrac
     string.prototype.trimleft "^2.1.1"
     string.prototype.trimright "^2.1.1"
 
-es-ckeditor@4.7.2-patch11, "es-ckeditor@git+https://github.com/cd-fez/es-ckeditor.git#8d8f02901621aa094f74505baec223e9e1625bd1":
-  version "4.7.2-patch11"
-  resolved "git+https://github.com/cd-fez/es-ckeditor.git#8d8f02901621aa094f74505baec223e9e1625bd1"
+es-ckeditor@4.7.2-patch13:
+  version "4.7.2-patch13"
+  resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch13.tgz#a740df84a7d2e952f352fe727e1565409f1d0e1d"
+  integrity sha512-ZRwmo39MJujytpgs7giJYAhFFBkMzFhS/wdL8Yvu3GqQ6xjbhb1it45VR4q8UlGdOGFR6clzuNJ4mosxZZTbhQ==
 
 es-commit-msg-validator@1.0.2:
   version "1.0.2"
@@ -5149,17 +5150,17 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank-test@^0.1.31:
-  version "0.1.31"
-  resolved "https://registry.yarnpkg.com/item-bank-test/-/item-bank-test-0.1.31.tgz#371a8935bc8a2bbac383dadd7d2221c5cb9a5520"
-  integrity sha512-+LQwMGrMu79Mm7t8bLSg299D7DneoQBYsLHAeK08lBA4RkgtoP4waZt9D+/XJ3xKM6yR1rqEPBau91Fto7/7IA==
+item-bank@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/item-bank/-/item-bank-1.0.0.tgz#f8425f8aef1484e2ab7c276584a8dde53a17f31e"
+  integrity sha512-MdAu5PpBCOn+C/qLCT+a9fQ9x/IXMrYJIOKkJTFDEh3eXkzMo6x5RiCvXMXedgdRlYI64U2Ncs7X7IU+A25t6Q==
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"
     babel-plugin-import "^1.13.0"
     ckeditor4 "^4.14.0"
     core-js "^3.6.4"
-    es-ckeditor "4.7.2-patch11"
+    es-ckeditor "4.7.2-patch13"
     gulp "^4.0.2"
     gulp-autoprefixer "^7.0.1"
     gulp-clean-css "^4.2.0"
