@@ -120,12 +120,13 @@ class TestpaperResult extends AbstractResource
         $items = ArrayToolkit::groupIndex($items, 'type', 'id');
         $testpaper['metas']['question_type_seq'] = array_keys($items);
         $answerReport = $this->getAnswerReportService()->get($testpaperRecord['answer_scene_id']);
+        $testpaperResult = $testpaperWrapper->wrapTestpaperResult($testpaperRecord, $assessment, $scene, $answerReport);
 
         return array(
             'testpaper' => $testpaperWrapper->wrapTestpaper($assessment, $scene),
             'items' => $items,
             'accuracy' => $accuracy,
-            'testpaperResult' => $testpaperWrapper->wrapTestpaperResult($testpaperRecord, $assessment, $scene, $answerReport),
+            'testpaperResult' => $testpaperResult,
             'favorites' => ArrayToolkit::column($favorites, 'question_id'),
             'resultShow' => $resultShow,
         );
@@ -192,7 +193,7 @@ class TestpaperResult extends AbstractResource
             ++$resultStatus['right'];
         }
 
-        if ('partRight' == $status) {
+        if ('part_right' == $status) {
             ++$resultStatus['partRight'];
         }
 
@@ -200,7 +201,7 @@ class TestpaperResult extends AbstractResource
             ++$resultStatus['wrong'];
         }
 
-        if ('noAnswer' == $status) {
+        if ('no_answer' == $status) {
             ++$resultStatus['noAnswer'];
         }
 

@@ -95,7 +95,7 @@ class TestpaperAction extends AbstractResource
         $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
 
         $testpaperWrapper = new TestpaperWrapper();
-        $items = $testpaperWrapper->wrapTestpaperItems($assessment, $questionReports);
+        $items = ArrayToolkit::groupIndex($testpaperWrapper->wrapTestpaperItems($assessment, $questionReports), 'type', 'id');
         $testpaper = $testpaperWrapper->wrapTestpaper($assessment, $scene);
         $testpaper['metas']['question_type_seq'] = array_keys($items);
 

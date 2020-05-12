@@ -22,7 +22,7 @@ class AssessmentResponseWrapper
             'section_responses' => array(),
         );
 
-        $questionAnswers = $data['data'];
+        $questionAnswers = empty($data['data']) ? array() : $data['data'];
         foreach ($assessment['sections'] as $section) {
             $sectionResponse = array('section_id' => $section['id'], 'item_responses' => array());
             foreach ($section['items'] as $item) {
