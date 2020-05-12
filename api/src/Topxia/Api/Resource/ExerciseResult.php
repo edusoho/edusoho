@@ -41,7 +41,7 @@ class ExerciseResult extends BaseResource
             return $this->error('404', '该练习任务不存在!');
         }
 
-        $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerRecords[0]['answerSceneId']);
+        $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerRecords[0]['answer_scene_id']);
         if (empty($exerciseActivity)) {
             return $this->error('404', '该练习任务不存在!');
         }
