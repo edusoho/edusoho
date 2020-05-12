@@ -56,7 +56,7 @@ class ReportServiceTest extends BaseTestCase
                                     'text' => '选项D',
                                 ],
                             ],
-                        ]
+                        ],
                     ))),
                 ),
             )
@@ -109,7 +109,7 @@ class ReportServiceTest extends BaseTestCase
                                 ],
                             ],
                         ],
-                        'answer' => ['三国之见龙卸甲', '刘德华']
+                        'answer' => ['三国之见龙卸甲', '刘德华'],
                     ))),
                 ),
             )
@@ -162,7 +162,7 @@ class ReportServiceTest extends BaseTestCase
                                 ],
                             ],
                         ],
-                        'answer' => ['T']
+                        'answer' => ['T'],
                     ))),
                 ),
             )
@@ -201,7 +201,7 @@ class ReportServiceTest extends BaseTestCase
                     'returnValue' => array('1' => array(
                         'id' => 1,
                         'type' => 'single_choice',
-                        'questions' => array(array('id' => 1, 'stem' => 'test'))
+                        'questions' => array(array('id' => 1, 'stem' => 'test')),
                     )),
                 ),
             )
