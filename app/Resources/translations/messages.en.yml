@@ -9483,6 +9483,11 @@ admin_v2.user.manage.change_nickname.heading_title: Modify username
 
 course.plan_task.activity_manage.discuss.tips: Discussion tasks are used in PC and APP, and are not supported in Microschool and Applet for now!
 
+testpaper.result.unpassed: '很遗憾，您未通过本次考试'
+testpaper.result.passed: '恭喜您已通过本次考试!'
+testpaper.result.comment: '教师评语'
+homework.result.tips: '作业结果'
+
 #云监考
 course.task.enable_facein: 云监考
 admin.edu_cloud.edu_facein.basic_info: 基本信息
@@ -9499,6 +9504,7 @@ admin.edu_cloud.edu_facein.no_enabled: 暂不支持该服务
 admin.edu_cloud.edu_facein.capture_link.title: 采集链接
 admin.edu_cloud.edu_facein.capture_link.tips1: '说明：1、对于同一个采集链接，一个用户只能采集一次；'
 admin.edu_cloud.edu_facein.capture_link.tips2: '2、重新生成采集链接后，旧链接会失效，不会影响之前采集成功的用户。'
+admin.edu_cloud.edu_facein.capture_link.tips3: '3、云监考功能暂不支持IE浏览器'
 facein.capture_face.title: 采集考生头像
 facein.capture_face.face_title: 摄像头画面
 facein.capture_face.face_title.tips: '请正脸对着摄像头，数秒后，系统将自动完成采集'
