@@ -2,9 +2,9 @@
 {% set lang = app.request.getLocale() %}
 
 {% if lang == 'en' %}
-  {% do script(['libs/vue.js','libs/item-bank-test/lib/itemBank.umd.min.js', 'libs/item-bank-test/lib/locale/en-US.js', 'app/js/question-manage/preview/index.js']) %}
+  {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js', 'libs/item-bank/lib/locale/en-US.js', 'app/js/question-manage/preview/index.js']) %}
 {% else %}
-  {% do script(['libs/vue.js','libs/item-bank-test/lib/itemBank.umd.min.js','app/js/question-manage/preview/index.js']) %}
+  {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js','app/js/question-manage/preview/index.js']) %}
 {% endif %}
 
 {% block title %}{{'course.question_manage.preview'|trans}}{% endblock %}
@@ -14,9 +14,9 @@
 {% set modal_class = 'modal-lg' %}
 
 {% if maincolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
-  {% do css(['libs/item-bank-test/lib/styles/item-bank-' ~ maincolor ~ '.css']) %}
+  {% do css(['libs/item-bank/lib/styles/item-bank-' ~ maincolor ~ '.css']) %}
 {% else %}
-  {% do css(['libs/item-bank-test/lib/styles/item-bank.css']) %}
+  {% do css(['libs/item-bank/lib/styles/item-bank.css']) %}
 {% endif %}
 
 {% block body %}
