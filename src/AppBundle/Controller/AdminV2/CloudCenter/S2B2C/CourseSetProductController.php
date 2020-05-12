@@ -32,15 +32,20 @@ class CourseSetProductController extends ProductController
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $prepareCourseSet = $this->prepareCourseSetData($courseSetData);
+        $supplierSettings = $this->getSettingService()->get('supplierSettings', []);
+        if (empty($supplierSettings['supplierId']) || empty($courseSetData['s2b2cDistributeId'])) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
         /**
          * 以前通过preparePurchaseData函数去实现，现在直接通过Product函数去实现
          */
-        $localProduct = $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteProductId($prepareCourseSet['originPlatformId'], $prepareCourseSet['s2b2cDistributeId']);
+        $localProduct = $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteProductId($supplierSettings['supplierId'], $courseSetData['s2b2cDistributeId']);
         if ($localProduct) {
             return $this->createJsonResponse(['status' => 'repeat']);
         }
 
+        $prepareCourseSet = $this->prepareCourseSetData($courseSetData);
         $purchaseProducts = $this->preparePurchaseData($courseSetData);
         $result = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->checkPurchaseProducts($purchaseProducts);
         if (!empty($result['success']) && true == $result['success']) {
@@ -48,9 +53,9 @@ class CourseSetProductController extends ProductController
             if (!empty($result['status']) && true === $result['status']) {
                 $newCourseSet = $this->getCourseSetService()->addCourseSet($prepareCourseSet);
                 $product = $this->getS2B2CProductService()->createProduct([
-                    'supplierId' => $prepareCourseSet['originPlatformId'],
+                    'supplierId' => $supplierSettings['supplierId'],
                     'productType' => 'course_set',
-                    'remoteProductId' => $prepareCourseSet['s2b2cDistributeId'],
+                    'remoteProductId' => $courseSetData['s2b2cDistributeId'],
                     'remoteResourceId' => $courseSetData['id'],
                     'localResourceId' => $newCourseSet['id'],
                 ]);
@@ -65,14 +70,7 @@ class CourseSetProductController extends ProductController
 
     protected function prepareCourseSetData($courseSetData)
     {
-        $supplierSettings = $this->getSettingService()->get('supplierSettings', []);
-        if (empty($supplierSettings['supplierId']) || empty($courseSetData['s2b2cDistributeId'])) {
-            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
-        }
-
         return [
-            'originPlatform' => 'supplier',
-            'originPlatformId' => $supplierSettings['supplierId'],
             'syncStatus' => 'waiting',
             'sourceCourseSetId' => $courseSetData['id'],
             'title' => $courseSetData['title'],
@@ -83,8 +81,7 @@ class CourseSetProductController extends ProductController
             'cover' => $courseSetData['cover'],
             'maxCoursePrice' => $courseSetData['maxCoursePrice'],
             'minCoursePrice' => $courseSetData['minCoursePrice'],
-            'courseSetData' => '',
-            's2b2cDistributeId' => $courseSetData['s2b2cDistributeId'],
+            'platform' => 'supplier',
         ];
     }
 
