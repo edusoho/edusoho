@@ -44,7 +44,7 @@
     "easy-pie-chart": "2.1.7",
     "echarts": "3.1.10",
     "echo-js": "1.7.3",
-    "es-ckeditor": "git+https://github.com/cd-fez/es-ckeditor.git#e09fb4a33eed6bacb573e8f656accd0d83b50899",
+    "es-ckeditor": "git+https://github.com/cd-fez/es-ckeditor.git#8d8f02901621aa094f74505baec223e9e1625bd1",
     "es-fullcalendar": "3.7.0-patch5",
     "es-jcrop": "latest",
     "es-jquery-sortable": "0.9.13-patch2",
