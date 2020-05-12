@@ -3,17 +3,17 @@
 {% set lang = app.request.getLocale() %}
 
 {% if lang == 'en' %}
-  {% do script(['libs/vue.js','libs/item-bank-test/lib/itemBank.umd.min.js', 'libs/item-bank-test/lib/locale/en-US.js', 'app/js/question-manage/form/index.js']) %}
+  {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js', 'libs/item-bank/lib/locale/en-US.js', 'app/js/question-manage/form/index.js']) %}
 {% else %}
-  {% do script(['libs/vue.js','libs/item-bank-test/lib/itemBank.umd.min.js','app/js/question-manage/form/index.js']) %}
+  {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js','app/js/question-manage/form/index.js']) %}
 {% endif %}
 
 {% block stylesheets %}
   {{ parent() }}
   {% if maincolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
-    <link href="{{ asset('static-dist/libs/item-bank-test/lib/styles/item-bank-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+    <link href="{{ asset('static-dist/libs/item-bank/lib/styles/item-bank-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
   {% else %}
-    <link href="{{ asset('static-dist/libs/item-bank-test/lib/styles/item-bank.css') }}" rel="stylesheet" />
+    <link href="{{ asset('static-dist/libs/item-bank/lib/styles/item-bank.css') }}" rel="stylesheet" />
   {% endif %}
 {% endblock %}
 

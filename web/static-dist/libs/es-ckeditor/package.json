@@ -1,6 +1,6 @@
 {
   "name": "es-ckeditor",
-  "version": "4.7.2-patch11",
+  "version": "4.7.2-patch13",
   "description": "CKEditor-based implementation and add some plugins, For example kityformula etc.",
   "main": "ckeditor.js",
   "repository": {
