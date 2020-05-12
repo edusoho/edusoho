@@ -37,7 +37,7 @@
           <a class="unfollow-student-btn" href="javascript:;" data-url="{{path('user_unfollow', {id : student.userId})}}" {% if not followings[student.userId]|default(null) %} style="display: none;"{% endif %}>{{'course.members_manage.official_student.cancel_follow_btn'|trans}}</a>
           <a class="follow-student-btn" href="javascript:;" data-url="{{path('user_follow', {id : student.userId})}}" {% if followings[student.userId]|default(null) %} style="display: none;"{% endif %}>{{'course.members_manage.official_student.follow_btn'|trans}}</a>
         </li>
-        {% if (app.user.isAdmin() or  app.user.isTeacher()) and 'forever' != course.expiryMode %}
+        {% if (app.user.isAdmin() or  app.user.isTeacher()) %}
           <li>
             <a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_deadline_batch', {courseSetId: course.courseSetId, courseId: course.id, ids: student.userId})}}">{{'course.members_manage.official_student.update_expiry_day_btn'|trans}}</a>
           </li>
