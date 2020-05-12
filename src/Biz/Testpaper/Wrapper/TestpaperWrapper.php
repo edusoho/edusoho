@@ -215,7 +215,7 @@ class TestpaperWrapper
         if (in_array($question['type'], array('uncertain_choice', 'single_choice', 'choice'))) {
             foreach ($answer as &$answerItem) {
                 if ('' !== $answerItem) {
-                    $answerItem = (string)(ord($answerItem) - 65);
+                    $answerItem = (string) (ord($answerItem) - 65);
                 } else {
                     unset($answerItem);
                 }
