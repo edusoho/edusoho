@@ -24,6 +24,7 @@ class S2b2cAddSyncid extends Migration
         $connection->exec("ALTER TABLE `activity_live` ADD `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
         $connection->exec("ALTER TABLE `upload_files` ADD `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
         $connection->exec("ALTER TABLE `course_material_v8` ADD `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
+        $connection->exec("ALTER TABLE `testpaper_v8` ADD `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
         $connection->exec("ALTER TABLE `testpaper_item_v8` ADD `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
         $connection->exec("ALTER TABLE `question` ADD `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
         $connection->exec("ALTER TABLE `course_chapter` ADD `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
@@ -50,6 +51,7 @@ class S2b2cAddSyncid extends Migration
         $connection->exec('ALTER TABLE `activity_live` DROP `syncId`;');
         $connection->exec('ALTER TABLE `upload_files` DROP `syncId`;');
         $connection->exec('ALTER TABLE `course_material_v8` DROP `syncId`;');
+        $connection->exec('ALTER TABLE `testpaper_v8` DROP `syncId`;');
         $connection->exec('ALTER TABLE `testpaper_item_v8` DROP `syncId`;');
         $connection->exec('ALTER TABLE `question` DROP `syncId`;');
         $connection->exec('ALTER TABLE `course_chapter` DROP `syncId`;');

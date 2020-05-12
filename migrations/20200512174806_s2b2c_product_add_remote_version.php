@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class S2b2cProductAddSyncStatus extends Migration
+class S2b2cProductAddRemoteVersion extends Migration
 {
     /**
      * Do the migration
@@ -11,7 +11,7 @@ class S2b2cProductAddSyncStatus extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("ALTER TABLE `s2b2c_product` ADD COLUMN `syncStatus` varchar(32) NOT NULL DEFAULT 'waiting' COMMENT '产品资源同步状态 waiting,finished' AFTER `productType`;");
+        $connection->exec("ALTER TABLE `s2b2c_product` ADD COLUMN `remoteVersion` int(11) unsigned NOT NULL DEFAULT '1' COMMENT '远程版本:默认1' AFTER `localVersion`;");
     }
 
     /**
@@ -21,6 +21,6 @@ class S2b2cProductAddSyncStatus extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec('ALTER TABLE `s2b2c_product` DROP COLUMN `syncStatus`;');
+        $connection->exec('ALTER TABLE `s2b2c_product` DROP COLUMN `remoteVersion`;');
     }
 }
