@@ -204,7 +204,7 @@ class TestpaperWrapper
     protected function fillStemAnswer($stem, $answers)
     {
         foreach ($answers as $answer) {
-            preg_replace('/(\[\[]])/is', '[['.$answer.']]', $stem, 1);
+            $stem = preg_replace('/(\[\[]])/is', '[['.$answer.']]', $stem, 1);
         }
 
         return $stem;
