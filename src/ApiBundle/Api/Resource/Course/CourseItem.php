@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Course\CourseException;
 
 class CourseItem extends AbstractResource
@@ -27,6 +28,15 @@ class CourseItem extends AbstractResource
             $request->query->get('fetchSubtitlesUrls', 0),
             $request->query->get('onlyPublished', 0)
         );
+
+        foreach ($items as &$item) {
+            foreach ($item['tasks'] as &$task) {
+                if ('homework' == $task['type'] && !empty($task['activity'])) {
+                    $homeworkActivity = $this->getHomeworkActivityService()->get($task['activity']['mediaId']);
+                    $task['activity']['mediaId'] = $homeworkActivity['assessmentId'];
+                }
+            }
+        }
 
         $request->query->has('format') ? $format = $request->query->get('format') : $format = 0;
 
@@ -57,5 +67,13 @@ class CourseItem extends AbstractResource
     protected function getSubtitleService()
     {
         return $this->service('Subtitle:SubtitleService');
+    }
+
+    /**
+     * @return HomeworkActivityService
+     */
+    protected function getHomeworkActivityService()
+    {
+        return $this->service('Activity:HomeworkActivityService');
     }
 }
