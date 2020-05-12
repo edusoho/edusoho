@@ -41,12 +41,14 @@ class HomeworkResult extends BaseResource
             return $this->error('500', '无权限访问!');
         }
 
-        $answerRecord = $this->getAnswerService()->startAnswer($homeworkActivity['answerSceneId'], $assessment['id'], $user['id']);
+        $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($homeworkActivity['answerSceneId'], $user['id']);
+        if (empty($answerRecord) || $answerRecord['status'] == AnswerService::ANSWER_RECORD_STATUS_FINISHED) {
+            $answerRecord = $this->getAnswerService()->startAnswer($homeworkActivity['answerSceneId'], $assessment['id'], $user['id']);
+        }
 
         try {
             $wrapper = new AssessmentResponseWrapper();
-            $scene = $this->getAnswerSceneService()->get($homeworkActivity['answerSceneId']);
-            $responses = $wrapper->wrap($answers, $assessment, $scene);
+            $responses = $wrapper->wrap($answers, $assessment, $answerRecord);
             $this->getAnswerService()->submitAnswer($responses);
         } catch (\Exception $e) {
             return $this->error('500', $e->getMessage());

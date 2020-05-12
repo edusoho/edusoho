@@ -58,7 +58,8 @@ class Exercise extends BaseResource
                 return $this->error('404', '该练习任务不存在!');
             }
 
-            $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerRecords[0]['answerSceneId']);
+            $answerRecord = $answerRecords[0];
+            $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerRecord['answer_scene_id']);
             if (empty($exerciseActivity)) {
                 return $this->error('404', '该练习任务不存在!');
             }
@@ -92,10 +93,8 @@ class Exercise extends BaseResource
         $exercise['lessonTitle'] = $activity['title'];
         $exercise['description'] = $activity['title'];
 
-        $answerRecord = $this->getAnswerService()->startAnswer($scene['id'], $exercise['id'], $user['id']);
-
-        if (empty($answerRecord)) {
-            return $this->error('404', '该练习结果不存在!');
+        if (empty($answerRecord) || $answerRecord['status'] == AnswerService::ANSWER_RECORD_STATUS_FINISHED) {
+            $answerRecord = $this->getAnswerService()->startAnswer($scene['id'], $exercise['id'], $user['id']);
         }
 
         if ('lesson' != $idType) {
@@ -122,7 +121,7 @@ class Exercise extends BaseResource
             return $this->error('404', '该练习任务不存在!');
         }
 
-        $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerRecords[0]['answerSceneId']);
+        $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerRecords[0]['answer_scene_id']);
         if (empty($exerciseActivity)) {
             return $this->error('404', '该练习任务不存在!');
         }
