@@ -1,15 +1,15 @@
-  
+
 <div class="settings-list js-settings-list clearfix">
   <div class="settings-item {% if tasks.preparation|default(null) %} active {% endif %}">
-    <a href="javascript:;" 
+    <a href="javascript:;"
       data-backdrop="static" data-keyboard="false"
       data-help="popover" data-placement="top" data-html="true" data-trigger="hover"
       {% if not tasks.preparation|default(null) %}
-        class="js-lesson-create-btn"
+        class="{% if course.platform == 'self' %}js-lesson-create-btn{% endif %}" {#S2B2C#}
         data-content="{{'course.plan_task.preparation_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}"
         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'preparation', categoryId: lesson.id}) }}">
       {% else %}
-        data-toggle="modal" data-target="#modal"
+        {% if course.platform == 'self' %}data-toggle="modal" data-target="#modal"{% endif %} {#S2B2C#}
         data-content="<i class='mr10 es-icon
           {% if activity_metas(tasks.preparation.type) %}
             {{ activity_metas(tasks.preparation.type).icon }}
@@ -26,7 +26,7 @@
     <i class="es-icon es-icon-angledoubleright after"></i>
   </div>
   <div class="settings-item js-settings-item active">
-    <a href="javascript:;" data-role='update-task' data-toggle="modal" data-target="#modal"
+    <a href="javascript:;" data-role='update-task' {% if course.platform == 'self' %}data-toggle="modal" data-target="#modal"{% endif %} {#S2B2C#}
       data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId, type:'lesson'}) }}"
       data-help="popover" data-placement="top" data-html="true" data-trigger="hover"
       data-content="<i class='mr10 es-icon
@@ -42,11 +42,11 @@
     <a href="javascript:;" data-backdrop="static" data-keyboard="false"
       data-help="popover" data-placement="top" data-html="true" data-trigger="hover"
       {% if not tasks.exercise|default(null) %}
-        class="js-lesson-create-btn" 
+        class="{% if course.platform == 'self' %}js-lesson-create-btn{% endif %}"
         data-content="{{'course.plan_task.practice_tips'|trans}}"
         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'exercise', categoryId: lesson.id}) }}">
       {% else %}
-        data-toggle="modal" data-target="#modal"
+        {% if course.platform == 'self' %}data-toggle="modal" data-target="#modal"{% endif %}{#S2B2C#}
         data-content="<i class='mr10 es-icon
           {% if activity_metas(tasks.exercise.type) %}
             {{ activity_metas(tasks.exercise.type).icon }}
@@ -60,15 +60,15 @@
     <i class="es-icon es-icon-angledoubleright after"></i>
   </div>
   <div class="settings-item {% if tasks.homework|default(null) %} active {% endif %}">
-    <a href="javascript:;" 
+    <a href="javascript:;"
       data-backdrop="static" data-keyboard="false"
       data-help="popover" data-placement="top" data-html="true" data-trigger="hover"
       {% if not tasks.homework|default(null) %}
-        class="js-lesson-create-btn"
+        class="{% if course.platform == 'self' %}js-lesson-create-btn{% endif %}" {#S2B2C#}
         data-content="{{'course.plan_task.homework_tips'|trans}}"
         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'homework', categoryId: lesson.id}) }}">
       {% else %}
-        data-toggle="modal" data-target="#modal"
+        {% if course.platform == 'self' %}data-toggle="modal" data-target="#modal"{% endif %}{#S2B2C#}
         data-content="<i class='mr10 es-icon
           {% if activity_metas(tasks.homework.type) %}
             {{ activity_metas(tasks.homework.type).icon }}
@@ -83,15 +83,15 @@
   </div>
 
   <div class="settings-item {% if tasks.extraClass|default(null) %} active {% endif %}">
-    <a href="javascript:;" 
+    <a href="javascript:;"
       data-backdrop="static" data-keyboard="false"
       data-help="popover" data-placement="top" data-html="true" data-trigger="hover"
       {% if not  tasks.extraClass|default(null) %}
-        class="js-lesson-create-btn"
+        class="{% if course.platform == 'self' %}js-lesson-create-btn{% endif %}" {#S2B2C#}
         data-content="{{'course.plan_task.extra_class_tips'|trans}}"
         data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'extraClass', categoryId: lesson.id}) }}">
       {% else %}
-        data-toggle="modal" data-target="#modal"
+        {% if course.platform == 'self' %}data-toggle="modal" data-target="#modal"{% endif %}{#endif#}
         data-content="<i class='mr10 es-icon
         {% if activity_metas(tasks.extraClass.type) %}
           {{ activity_metas(tasks.extraClass.type).icon }}

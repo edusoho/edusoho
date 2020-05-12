@@ -43,6 +43,15 @@ class ProductServiceImpl extends BaseService implements ProductService
         return $this->getS2B2CProductDao()->findBySupplierIdAndRemoteResourceTypeAndIds($supplierId, $productType, $remoteResourceIds);
     }
 
+    public function findProductsBySupplierIdAndProductTypeAndLocalResourceIds($supplierId, $productType, $localResourceIds)
+    {
+        if (empty($localResourceIds)) {
+            return [];
+        }
+
+        return $this->getS2B2CProductDao()->findBySupplierIdAndProductTypeAndLocalResourceIds($supplierId, $productType, $localResourceIds);
+    }
+
     public function createProduct($fields)
     {
         if (!ArrayToolkit::requireds(

@@ -1,0 +1,23 @@
+{#S2B2C-CUSTOM#}
+<style>
+  .popover {
+    white-space: pre-wrap !important;
+  }
+</style>
+{% set lessonChangeLog = '' %}
+{% for key, changeLog in course.versionChangeLog|default() %}
+  {% for index,log in changeLog['lessons']|default() %}
+    {% if index == 0 %}{% set lessonChangeLog = lessonChangeLog ~ '\n版本' ~ key ~':\n' %}{% endif %}
+    {% if index >0 %}{% set lessonChangeLog = lessonChangeLog ~ '\n' %}{% endif %}
+    {% set lessonChangeLog = lessonChangeLog ~ (index+1) ~ '.' ~ log %}
+  {% else %}
+    {% if changeLog['lessons']|default() %}
+      {% if lessonChangeLog %}{% set lessonChangeLog = lessonChangeLog ~ '\n' %}{% endif %}
+      {% set lessonChangeLog = lessonChangeLog ~ '\n版本' ~ key ~':\n' ~ '1.' ~ changeLog['lessons'] %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+{% if lessonChangeLog %}
+  <i class="es-icon es-icon-tip admin-update__icon" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="{{ lessonChangeLog }}" style="color: red!important;"></i>
+{% endif %}
+{#END#}
