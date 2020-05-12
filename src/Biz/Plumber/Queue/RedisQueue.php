@@ -32,7 +32,7 @@ class RedisQueue implements BaseQueue
 
         $body = [
             'id' => $id,
-            'topic' => $worker,
+            'worker' => $worker,
             'message' => $message,
         ];
 

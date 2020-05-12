@@ -68,3 +68,18 @@ parameters:
     #        reserved: null
     #        timeout: 1
     #        dbindex: null
+
+    #plumber_worker_rate_limits:
+    #    default_rate_limit:
+    #        storage: redis
+    #        redis:
+    #            host: 127.0.0.1
+    #            port: 6380
+    #            password: null
+    #        allowance: 5
+    #        period: 60
+
+    #plumber_worker_hour_limits:
+    #      default_hour_limit:
+    #        start: 23
+    #        end: 7

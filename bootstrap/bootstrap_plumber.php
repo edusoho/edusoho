@@ -4,6 +4,8 @@ use Pimple\Psr11\Container as PsrContainer;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\HttpFoundation\Request;
 
+date_default_timezone_set('Asia/Shanghai');
+
 $loader = require __DIR__.'/../vendor/autoload.php';
 \Doctrine\Common\Annotations\AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 
@@ -36,6 +38,9 @@ $defaultQueueOptions = [
     'socket_timeout' => 20,
     'logger' => null,
 ];
+
+$options['rate_limits'] = $container->getParameter('plumber_worker_rate_limits');
+$options['hour_limits'] = $container->getParameter('plumber_worker_hour_limits');
 
 foreach ($options['queues'] as &$queue) {
     if (!isset($queue['queue_options'])) {

@@ -72,12 +72,10 @@ class PlumberServiceImpl extends BaseService implements PlumberService
 
         $process = popen("cd {$rootDir} && {$php} {$cmd} &", 'r');
 
-        sleep(2);
-
-        $result = fgets($process);
+        sleep(5);
 
         $logger = $this->biz['plumber.logger'];
-        $logger->info(json_encode([$cmd, $this->getProcessId(), $result]));
+        $logger->info(json_encode([$cmd, $this->getProcessId()]));
 
         pclose($process);
 
