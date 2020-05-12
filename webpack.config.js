@@ -68,17 +68,17 @@ module.exports = {
         '**/kityformula/libs/**',
       ]
     },
-    // 纯拷贝itemBank.umd.min.js
+    // 纯拷贝item-bank/lib/itemBank.umd.min.js
     {
-      name: 'item-bank-test/lib/itemBank.umd.min.js',
+      name: 'item-bank/lib/itemBank.umd.min.js',
     },
-    // 纯拷贝item-bank-test/lib/styles目录下的简墨主色调
+    // 纯拷贝item-bank/lib/styles目录下的简墨主色调
     {
-      name: 'item-bank-test/lib/styles',
+      name: 'item-bank/lib/styles',
     },
-    // 纯拷贝item-bank-test/lib/local目录下的语言包
+    // 纯拷贝item-bank/lib/local目录下的语言包
     {
-      name: 'item-bank-test/lib/locale',
+      name: 'item-bank/lib/locale',
     },
     {
       name: 'es5-shim/es5-shim.js',
