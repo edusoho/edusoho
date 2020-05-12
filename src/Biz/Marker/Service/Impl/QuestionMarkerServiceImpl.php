@@ -77,7 +77,6 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         $item = $this->getItemService()->getItemWithQuestions($itemId, true);
 
         if (!empty($item['questions'])) {
-            $question = array_shift($item['questions']);
             $questionMarker = array(
                 'markerId' => $markerId,
                 'questionId' => $itemId,

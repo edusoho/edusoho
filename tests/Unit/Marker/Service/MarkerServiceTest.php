@@ -20,23 +20,20 @@ class MarkerServiceTest extends BaseTestCase
 
     public function testAddMarker()
     {
+        $this->mockBiz(
+            'ItemBank:Item:ItemService',
+            array(
+                array(
+                    'functionName' => 'getItemWithQuestions',
+                    'returnValue' => array('id' => 1, 'questions' => array(array('id' => 1))),
+                ),
+            )
+        );
         $fields = array(
             'second' => 30,
             'questionId' => 1,
         );
-        $arguments = array(
-            'type' => 'single_choice',
-            'parentId' => 0,
-            'stem' => '111',
-            'answer' => array(1),
-            'choices' => array(1, 2, 3, 4),
-            'target' => 'course-1',
-            'courseSetId' => 1,
-        );
-
-        $this->getQuestionService()->create($arguments);
         $marker = $this->getMarkerService()->addMarker(1, $fields);
-        $this->assertEquals($marker['markerId'], 1);
         $this->assertEquals($marker['questionId'], 1);
 
         return $marker;
@@ -48,17 +45,15 @@ class MarkerServiceTest extends BaseTestCase
             'second' => 30,
             'questionId' => 1,
         );
-        $arguments = array(
-            'type' => 'single_choice',
-            'parentId' => 0,
-            'stem' => '111',
-            'answer' => array(1),
-            'choices' => array(1, 2, 3, 4),
-            'target' => 'course-1',
-            'courseSetId' => 1,
+        $this->mockBiz(
+            'ItemBank:Item:ItemService',
+            array(
+                array(
+                    'functionName' => 'getItemWithQuestions',
+                    'returnValue' => array('id' => 1, 'questions' => array(array('id' => 1))),
+                ),
+            )
         );
-
-        $this->getQuestionService()->create($arguments);
         $marker = $this->getMarkerService()->addMarker(1, $fields);
         $marker = $this->getMarkerService()->getMarker($marker['id']);
         $this->assertEquals($marker['mediaId'], 0);
@@ -131,18 +126,21 @@ class MarkerServiceTest extends BaseTestCase
             'second' => 30,
             'questionId' => 1,
         );
-        $arguments = array(
-            'type' => 'single_choice',
-            'parentId' => 0,
-            'stem' => '111',
-            'answer' => array(1),
-            'choices' => array(1, 2, 3, 4),
-            'target' => 'course-1',
-            'courseSetId' => 1,
+        $this->mockBiz(
+            'ItemBank:Item:ItemService',
+            array(
+                array(
+                    'functionName' => 'getItemWithQuestions',
+                    'returnValue' => array('id' => 1, 'questions' => array(array('id' => 1))),
+                ),
+                array(
+                    'functionName' => 'findItemsByIds',
+                    'returnValue' => array('1' => array('id' => 1, 'questions' => array(array('id' => 1)))),
+                ),
+            )
         );
 
         $this->mockUploadFile(1);
-        $this->getQuestionService()->create($arguments);
         $this->getMarkerService()->addMarker(1, $fields);
         $this->mockUploadFile(2);
         $this->getMarkerService()->addMarker(2, $fields);
@@ -157,17 +155,6 @@ class MarkerServiceTest extends BaseTestCase
             'second' => 30,
             'questionId' => 1,
         );
-        $arguments = array(
-            'type' => 'single_choice',
-            'parentId' => 0,
-            'stem' => '111',
-            'answer' => array(1),
-            'choices' => array(1, 2, 3, 4),
-            'target' => 'course-1',
-            'courseSetId' => 1,
-        );
-
-        $this->getQuestionService()->create($arguments);
         $this->getMarkerService()->addMarker(1, $fields);
         $this->getMarkerService()->addMarker(3, $fields);
         $this->getMarkerService()->addMarker(3, $fields);
@@ -221,17 +208,15 @@ class MarkerServiceTest extends BaseTestCase
             'second' => 30,
             'questionId' => 1,
         );
-        $arguments = array(
-            'type' => 'single_choice',
-            'parentId' => 0,
-            'stem' => '111',
-            'answer' => array(1),
-            'choices' => array(1, 2, 3, 4),
-            'target' => 'course-1',
-            'courseSetId' => 1,
+        $this->mockBiz(
+            'ItemBank:Item:ItemService',
+            array(
+                array(
+                    'functionName' => 'getItemWithQuestions',
+                    'returnValue' => array('id' => 1, 'questions' => array(array('id' => 1))),
+                ),
+            )
         );
-
-        $this->getQuestionService()->create($arguments);
         $marker1 = $this->getMarkerService()->addMarker(1, $fields);
         $marker1 = $this->getMarkerService()->getMarker($marker1['markerId']);
 
@@ -261,17 +246,15 @@ class MarkerServiceTest extends BaseTestCase
             'second' => 30,
             'questionId' => 1,
         );
-        $arguments = array(
-            'type' => 'single_choice',
-            'parentId' => 0,
-            'stem' => '111',
-            'answer' => array(1),
-            'choices' => array(1, 2, 3, 4),
-            'target' => 'course-1',
-            'courseSetId' => 1,
+        $this->mockBiz(
+            'ItemBank:Item:ItemService',
+            array(
+                array(
+                    'functionName' => 'getItemWithQuestions',
+                    'returnValue' => array('id' => 1, 'questions' => array(array('id' => 1))),
+                ),
+            )
         );
-
-        $this->getQuestionService()->create($arguments);
         $marker1 = $this->getMarkerService()->addMarker(1, $fields);
         $marker1 = $this->getMarkerService()->getMarker($marker1['markerId']);
         $this->assertEquals($marker1['second'], 30);
@@ -437,38 +420,15 @@ class MarkerServiceTest extends BaseTestCase
 
     public function testMerge()
     {
-        $question = array(
-            'type' => 'single_choice',
-            'stem' => 'question.',
-            'difficulty' => 'normal',
-            'answer' => array('answer'),
-            'target' => 'course-1',
-            'choices' => array('爱', '测', '额', '恶'),
-            'uncertain' => 0,
-            'analysis' => '',
-            'score' => '2',
-            'submission' => 'submit',
-            'parentId' => 0,
-            'copyId' => 1,
-            'courseSetId' => 1,
+        $this->mockBiz(
+            'ItemBank:Item:ItemService',
+            array(
+                array(
+                    'functionName' => 'getItemWithQuestions',
+                    'returnValue' => array('id' => 1, 'questions' => array(array('id' => 1))),
+                ),
+            )
         );
-        $question1 = array(
-            'type' => 'choice',
-            'stem' => 'adealllll',
-            'difficulty' => 'difficult',
-            'answer' => array('answer'),
-            'target' => 'course-1',
-            'choices' => array('爱', '测', '额', '恶'),
-            'uncertain' => 0,
-            'analysis' => '',
-            'score' => '2',
-            'submission' => 'submit',
-            'parentId' => 0,
-            'copyId' => 1,
-            'courseSetId' => 1,
-        );
-        $question = $this->getQuestionService()->create($question);
-        $question1 = $this->getQuestionService()->create($question1);
         $fields = array(
             'second' => 30,
             'questionId' => 1,
