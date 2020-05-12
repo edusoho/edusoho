@@ -75,6 +75,8 @@ class TestpaperInfo extends AbstractResource
             $answerReport = $this->getAnswerReportService()->get($testpaperRecord['answer_report_id']);
             $testpaperWrapper = new TestpaperWrapper();
             $testpaperResult = $testpaperWrapper->wrapTestpaperResult($testpaperRecord, $testpaper, $scene, $answerReport);
+            $testpaperResult['courseId'] = $task['courseId'];
+            $testpaperResult['lessonId'] = $task['id'];
             $results['testpaperResult'] = $testpaperResult;
         }
 

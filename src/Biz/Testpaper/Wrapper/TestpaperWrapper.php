@@ -214,11 +214,19 @@ class TestpaperWrapper
     {
         if (in_array($question['type'], array('uncertain_choice', 'single_choice', 'choice'))) {
             foreach ($answer as &$answerItem) {
-                $answerItem = (string) (ord($answerItem) - 65);
+                if ('' !== $answerItem) {
+                    $answerItem = (string)(ord($answerItem) - 65);
+                } else {
+                    unset($answerItem);
+                }
             }
         } elseif ('determine' == $question['type']) {
             foreach ($answer as &$answerItem) {
-                $answerItem = 'T' == $answerItem ? '1' : '0';
+                if ('' !== $answerItem) {
+                    $answerItem = 'T' == $answerItem ? '1' : '0';
+                } else {
+                    unset($answerItem);
+                }
             }
         }
 
