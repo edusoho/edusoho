@@ -49,7 +49,7 @@ class AssessmentResponseWrapper
     {
         if (in_array($question['answer_mode'], array(SingleChoiceAnswerMode::NAME, ChoiceAnswerMode::NAME, UncertainChoiceAnswerMode::NAME))) {
             foreach ($answers as &$answer) {
-                $answer = chr(65 + $answer);
+                $answer = chr(65 + intval($answer));
             }
         } elseif (TrueFalseAnswerMode::NAME == $question['answer_mode']) {
             foreach ($answers as &$answer) {
