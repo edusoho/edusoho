@@ -118,6 +118,8 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         return true;
     }
 
+//    public function setProductHasNewVersion($)
+
     protected function validateCourseData($course, $product)
     {
         if (empty($course)) {
