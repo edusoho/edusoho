@@ -63,6 +63,7 @@ class CourseTask extends AbstractResource
             $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($exerciseActivity['answerSceneId'], $user['id']);
             if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
                 $assessment = $this->createAssessment($activity['title'], $exerciseActivity['drawCondition']['range'], array($exerciseActivity['drawCondition']['section']));
+                $this->getAnswerService()->startAnswer($exerciseActivity['answerSceneId'], $assessment['id'], $user['id']);
                 $activity['mediaId'] = $assessment['id'];
             } else {
                 $activity['mediaId'] = $answerRecord['assessment_id'];
@@ -136,6 +137,14 @@ class CourseTask extends AbstractResource
     protected function getAnswerRecordService()
     {
         return $this->service('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AnswerService
+     */
+    protected function getAnswerService()
+    {
+        return $this->service('ItemBank:Answer:AnswerService');
     }
 
     /**
