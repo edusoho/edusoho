@@ -214,7 +214,7 @@ class Testpaper extends Activity
             if ('score' == $fields['finishType']) {
                 $fields['finishCondition'] = array(
                     'type' => 'score',
-                    'finishScore' => $passScore,
+                    'finishScore' => $fields['passScore'],
                 );
             } else {
                 $fields['finishCondition'] = array();
