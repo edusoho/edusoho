@@ -189,6 +189,7 @@ class TestpaperWrapper
             $questionReport = $this->questionReports[$question['id']];
             $question['testResult'] = array(
                 'id' => $questionReport['id'],
+                'testId' => $questionReport['assessment_id'],
                 'resultId' => $questionReport['answer_record_id'],
                 'questionId' => $questionReport['question_id'],
                 'status' => $this->answerStatus[$questionReport['status']],

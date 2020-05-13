@@ -127,24 +127,13 @@ class HomeworkResult extends BaseResource
     {
         $newItems = array();
         foreach ($items as &$item) {
-            unset($item['answer']);
-
-            $item['questionParentId'] = $item['parentId'];
-            $item['status'] = 'noAnswer';
-            $item['score'] = '0';
-            $item['resultId'] = $resultId;
-            $item['teacherSay'] = null;
-
-            $itemResult = empty($items['testResult']) ? array() : $items['testResult'];
-
-            if ($itemResult) {
-                $item['status'] = $itemResult['status'];
-                $item['score'] = $itemResult['score'];
-                $item['teacherSay'] = $this->filterHtml($itemResult['teacherSay']);
-            }
+            $item = $this->filterQuestion($item, $resultId);
 
             if ('material' == $item['type']) {
                 $subs = empty($item['subs']) ? array() : array_values($item['subs']);
+                foreach ($subs as &$subItem) {
+                    $subItem = $this->filterQuestion($subItem, $resultId);
+                }
                 $item['items'] = $subs;
             }
 
@@ -153,6 +142,29 @@ class HomeworkResult extends BaseResource
 
 
         return array_values($newItems);
+    }
+
+    protected function filterQuestion($question, $resultId)
+    {
+        if (isset($question['answer'])) {
+            unset($question['answer']);
+        }
+
+        $question['questionParentId'] = $question['parentId'];
+        $question['status'] = 'noAnswer';
+        $question['score'] = '0';
+        $question['resultId'] = $resultId;
+        $question['teacherSay'] = null;
+
+        $itemResult = empty($question['testResult']) ? array() : $question['testResult'];
+
+        if ($itemResult) {
+            $question['status'] = $itemResult['status'];
+            $question['score'] = $itemResult['score'];
+            $question['teacherSay'] = $this->filterHtml($itemResult['teacherSay']);
+        }
+
+        return $question;
     }
 
     public function filter($res)

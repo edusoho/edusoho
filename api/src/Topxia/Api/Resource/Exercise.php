@@ -184,7 +184,6 @@ class Exercise extends BaseResource
     {
         krsort($items);
         $newItmes = array();
-        $materialMap = array();
         foreach ($items as $item) {
             $item = $this->filterItemFields($item, $itemSetResults);
 
@@ -197,19 +196,6 @@ class Exercise extends BaseResource
 
                 $item['items'] = $subs;
                 $item['result'] = null;
-            }
-
-            if ($itemSetResults && !empty($item['testResult'])) {
-                $itemResult = $item['testResult'];
-                if (!empty($itemResult['answer'][0])) {
-                    $itemResult['answer'][0] = $this->filterHtml($itemResult['answer'][0]);
-                }
-
-                if (!empty($itemResult['teacherSay'])) {
-                    $itemResult['teacherSay'] = $this->filterHtml($itemResult['teacherSay']);
-                }
-
-                $item['result'] = $itemResult;
             }
 
             unset($item['subs']);
@@ -269,6 +255,19 @@ class Exercise extends BaseResource
         }
 
         $item['answer'] = $this->filterAnswer($item, $itemResults);
+
+        if ($itemResults && !empty($item['testResult'])) {
+            $itemResult = $item['testResult'];
+            if (!empty($itemResult['answer'][0])) {
+                $itemResult['answer'][0] = $this->filterHtml($itemResult['answer'][0]);
+            }
+
+            if (!empty($itemResult['teacherSay'])) {
+                $itemResult['teacherSay'] = $this->filterHtml($itemResult['teacherSay']);
+            }
+
+            $item['result'] = $itemResult;
+        }
 
         return $item;
     }
