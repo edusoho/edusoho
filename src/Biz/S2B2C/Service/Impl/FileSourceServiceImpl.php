@@ -14,7 +14,7 @@ class FileSourceServiceImpl extends BaseService implements FileSourceService
         $file['globalId'] = empty($file['s2b2cGlobalId']) ? $file['globalId'] : $file['s2b2cGlobalId'];
         $file['hashId'] = empty($file['s2b2cHashId']) ? $file['hashId'] : $file['s2b2cHashId'];
 
-        $courseProduct = $this->getS2B2CProductService()->getByTypeAndLocalResourceId('course', $file['targetId']);
+        $courseProduct = $this->getS2B2CProductService()->getByTypeAndLocalResourceId('course_set', $file['targetId']);
 
         $file['sourceTargetId'] = empty($courseProduct['remoteProductId']) ? 0 : $courseProduct['remoteProductId'];
 
