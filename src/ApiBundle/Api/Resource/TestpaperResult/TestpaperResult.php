@@ -118,12 +118,13 @@ class TestpaperResult extends AbstractResource
         $favorites = $this->findQuestionFavorites($user['id']);
 
         $items = ArrayToolkit::groupIndex($items, 'type', 'id');
+        $testpaper = $testpaperWrapper->wrapTestpaper($assessment, $scene);
         $testpaper['metas']['question_type_seq'] = array_keys($items);
         $answerReport = $this->getAnswerReportService()->get($testpaperRecord['answer_scene_id']);
         $testpaperResult = $testpaperWrapper->wrapTestpaperResult($testpaperRecord, $assessment, $scene, $answerReport);
 
         return array(
-            'testpaper' => $testpaperWrapper->wrapTestpaper($assessment, $scene),
+            'testpaper' => $testpaper,
             'items' => $items,
             'accuracy' => $accuracy,
             'testpaperResult' => $testpaperResult,
