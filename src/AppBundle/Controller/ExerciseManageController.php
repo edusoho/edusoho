@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ExerciseManageController extends BaseController
@@ -14,20 +15,25 @@ class ExerciseManageController extends BaseController
 
         $fields = $request->request->all();
         $fields['questionTypes'] = explode(',', $fields['types']);
-        $fields['range'] = json_decode($fields['range'], true);
+        $range = json_decode($fields['range'], true);
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($range['bankId']);
 
-        $condition = $this->getExerciseConfig()->getCondition($fields);
+        $conditions = array(
+            'bank_id' => empty($questionBank['itemBankId']) ? 0 : $questionBank['itemBankId'],
+            'types' => $fields['questionTypes'],
+        );
 
-        try {
-            $result = $this->getAssessmentService()->drawItems($condition['range'], array($condition['section']));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(false);
+        if (!empty($range['categoryIds'])) {
+            $conditions['category_ids'] = explode(',', $range['categoryIds']);
         }
 
-        foreach ($result as $section) {
-            if (!empty($section['items']['miss'])) {
-                return $this->createJsonResponse(false);
-            }
+        if (!empty($fields['difficulty'])) {
+            $conditions['difficulty'] = $fields['difficulty'];
+        }
+
+        $count = $this->getItemService()->countItems($conditions);
+        if ($count < $fields['itemCount']) {
+            return $this->createJsonResponse(false);
         }
 
         return $this->createJsonResponse(true);
@@ -46,6 +52,14 @@ class ExerciseManageController extends BaseController
     protected function getAssessmentService()
     {
         return $this->createService('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->createService('ItemBank:Item:ItemService');
     }
 
     /**
