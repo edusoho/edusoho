@@ -9,6 +9,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
+use Biz\System\Service\CacheService;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -92,12 +93,12 @@ class ResourcePurchaseController extends BaseController
         $paginator = new Paginator($request, $total, $pageSize);
         $paginator->setBaseUrl($this->generateUrl('admin_v2_purchase_market_products_list'));
 
-        $supplierSettings = $this->getSettingService()->get('supplierSettings', []);
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
 
         $remoteResourceIds = ArrayToolkit::column($courseSets, 'id');
 
-        if (!empty($supplierSettings['supplierId'])) {
-            $chosenProducts = $this->getS2B2CProductService()->findProductsBySupplierIdAndRemoteResourceTypeAndIds($supplierSettings['supplierId'], 'course_set', $remoteResourceIds);
+        if (!empty($s2b2cConfig['supplierId'])) {
+            $chosenProducts = $this->getS2B2CProductService()->findProductsBySupplierIdAndRemoteResourceTypeAndIds($s2b2cConfig['supplierId'], 'course_set', $remoteResourceIds);
             $chosenProducts = ArrayToolkit::index($chosenProducts, 'remoteResourceId');
         }
 
@@ -142,37 +143,37 @@ class ResourcePurchaseController extends BaseController
     public function productsVersionAction(Request $request)
     {
         $necessaryConditions = [
-            'originProductId_GT' => 0,
-            'syncStatus' => 'finished',
+            'platform' => 'supplier',
         ];
         $conditions = $request->query->all();
         $courseSets = $this->getCourseSetService()->searchCourseSets(array_merge($conditions, $necessaryConditions), [], 0, PHP_INT_MAX);
-        $courseIds = ArrayToolkit::column($courseSets, 'defaultCourseId');
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
-        $courseSets = ArrayToolkit::index($courseSets, 'defaultCourseId');
-        $courses = ArrayToolkit::index($courses, 'sourceCourseId');
+        $courses = [];
+        foreach ($courseSets as $courseSet) {
+            $coursesInCourseSet = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+            foreach ($coursesInCourseSet as &$course) {
+                $course['courseSet'] = $courseSet;
+            }
+            $courses = array_merge($courses, $coursesInCourseSet);
+        }
 
-        /**
-         * mock
-         * 暂时无法获取完整数据结构
-         */
-        $productVersionList = [];
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+
+        $products = $this->getS2B2CProductService()->findProductsBySupplierIdAndProductTypeAndLocalResourceIds($s2b2cConfig['supplierId'], 'course', ArrayToolkit::column($courses, 'id'));
+
+        $courseSetProducts = $this->getS2B2CProductService()->findProductsBySupplierIdAndProductTypeAndLocalResourceIds($s2b2cConfig['supplierId'], 'course_set', ArrayToolkit::column($courseSets, 'id'));
+
+        $productVersionList = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getProductVersionList(ArrayToolkit::column($products, 'remoteResourceId'));
         if (!empty($productVersionList['error'])) {
             throw $this->createNotFoundException();
         }
-        foreach ($courseSets as $courseSet) {
-            /*
-             * 暂时容错处理
-             */
-            if (!empty($courseSet['hasNewVersion'])) {
-                $this->getProductService()->changeCourseProductHasNewVersionStatus($courseSet['id'], 0);
-            }
+
+        $hasNewVersion = $this->getCacheService()->get('s2b2c.hasNewVersion') ?: [];
+        if (!empty($hasNewVersion['courseSet'])) {
+            $hasNewVersion['courseSet'] = 0;
+            $this->getCacheService()->set('s2b2c.hasNewVersion', $hasNewVersion);
         }
 
-        /**
-         * mock
-         */
         $merchant = $this->getS2B2CFacadeService()->getMe();
 
         return $this->render(
@@ -180,12 +181,37 @@ class ResourcePurchaseController extends BaseController
             [
                 'request' => $request,
                 'productVersionList' => $productVersionList,
-                'courses' => $courses,
+                'courses' => ArrayToolkit::index($courses, 'id'),
                 'courseSets' => $courseSets,
                 'startDateTime' => empty($conditions['startDateTime']) ? 0 : strtotime($conditions['startDateTime']),
                 'endDateTime' => empty($conditions['endDateTime']) ? 0 : strtotime($conditions['endDateTime']),
                 'merchant' => $merchant,
                 'supplier' => [],
+                'products' => ArrayToolkit::index($products, 'remoteResourceId'), //remoteResourceId == remoteResourceId.productId
+                'courseSetProducts' => ArrayToolkit::index($courseSetProducts, 'localResourceId'),
+            ]
+        );
+    }
+
+    public function productVersionDetailAction(Request $request, $productId)
+    {
+        $product = $this->getS2B2CProductService()->getProduct($productId);
+        $course = $this->getCourseService()->getCourse($product['localResourceId']);
+        if (empty($course)) {
+            throw $this->createNotFoundException();
+        }
+
+        $productVersions = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getProductVersions($product['remoteResourceId']);
+        if (!empty($productVersions['error']) || (!empty($productVersions) && $product['remoteResourceId'] != $productVersions[0]['productId'])) {
+            throw $this->createNotFoundException();
+        }
+//        $versionChangeLogs = $this->getProductService()->generateVersionChangeLogs($course['sourceVersion'], $productVersions);
+//        $this->getProductService()->setCourseNewVersionChangeLogs($course['id'], $versionChangeLogs);
+
+        return $this->render(
+            'admin-v2/cloud-center/content-resource/product-version/detail.html.twig',
+            [
+                'productVersions' => $productVersions,
             ]
         );
     }
@@ -222,11 +248,8 @@ class ResourcePurchaseController extends BaseController
 
     protected function getCourseByProductId($productId)
     {
-        $supplierSettings = $this->getSettingService()->get('supplierSettings', []);
-        if (empty($supplierSettings['supplierId'])) {
-            throw $this->createNotFoundException();
-        }
-        $course = $this->getS2B2CProductService()->getOriginPlatformCourse('supplier', $supplierSettings['supplierId'], $productId);
+        $product = $this->getS2B2CProductService()->getProduct($productId);
+        $course = $this->getCourseService()->getCourse($product['localResourceId']);
         if (empty($course)) {
             throw $this->createNotFoundException();
         }
@@ -272,5 +295,13 @@ class ResourcePurchaseController extends BaseController
     protected function getS2B2CProductService()
     {
         return $this->createService('S2B2C:ProductService');
+    }
+
+    /**
+     * @return CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 }

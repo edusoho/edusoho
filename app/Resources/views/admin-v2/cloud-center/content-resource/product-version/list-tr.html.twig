@@ -12,8 +12,10 @@
   </thead>
   <tbody class="js-table-container">
   {% for index,productVersion in productVersionList|default() %}
-    {% set productCourse = courses[productVersion.productId]|default() %}
-    {% set productCourseSet = courseSets[productCourse.id]|default() %}
+    {% set product = products[productVersion.productId] %}
+    {% set course = courses[product.localResourceId]|default() %}
+    {% set courseSet = course.courseSet|default() %}
+    {% set courseSetProduct = courseSetProducts[courseSet.id] %}
 
     {% if startDateTime > 0 and productVersion.updatedTime < startDateTime %}
       {% set startDateShow = 0 %}
@@ -21,16 +23,16 @@
     {% if endDateTime > 0 and productVersion.updatedTime > endDateTime %}
       {% set endDateShow = 0 %}
     {% endif %}
-    {% set isShow = startDateShow|default(1) and endDateShow|default(1) and (productCourseSet.sourceVersion < productVersion.productVersion) %}
+    {% set isShow = startDateShow|default(1) and endDateShow|default(1) and (product.localVersion <= productVersion.productVersion) %}
     {% if isShow and not hasData|default(0) %}
       {% set hasData = 1 %}
     {% endif %}
 
-    {% if productCourseSet and isShow %}
+    {% if courseSetProduct and isShow %}
       <tr id="product-version-table" style="word-break: break-all;word-wrap: break-word;">
         <td>
-          <img src="{{ filepath(course_set_cover(productCourseSet, 'small'), 'courseSet.png') }}" class="img-responsive" style="float: left;margin-right: 10px;width: 45%;">
-          <span title="《{{ productCourseSet.title }}》">{{ 'course'|trans }}《{{ productCourseSet.title|sub_text(25) }}》</span>
+          <img src="{{ filepath(course_set_cover(courseSet, 'small'), 'courseSet.png') }}" class="img-responsive" style="float: left;margin-right: 10px;width: 45%;">
+          <span title="《{{ courseSet.title }}》">{{ 'course'|trans }}《{{ courseSet.title|sub_text(25) }}》- {{ course.title }}</span>
         </td>
         <td>
           <div class="middle-info pull-left short-long-text">
@@ -41,10 +43,10 @@
         </td>
         <td>{{ productVersion.updatedTime|date('Y-m-d') }}</td>
         <td>
-          <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_content_resource_products_version', {productId: productVersion.productId}) }}">{{ 'merchant.content_resource.product_version'|trans }}{{ productVersion.productVersion }}</a>
+          <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_content_resource_product_version_detail', {productId: product.id}) }}">{{ 'merchant.content_resource.product_version'|trans }}{{ productVersion.productVersion }}</a>
         </td>
         <td>
-          <a target="_blank" href="{{ path('course_set_manage_course_tasks', {courseSetId: productCourseSet.id, courseId: productCourse.id, hasNewVersion: 1}) }}">{{'merchant.content_resource.product_version.view_btn'|trans}}</a>
+          <a target="_blank" href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id, hasNewVersion: 1}) }}">{{'merchant.content_resource.product_version.view_btn'|trans}}</a>
 
           {% if productVersion.status|default('') == 'published' %}
             <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_content_resource_update_product_version', {productId: productVersion.productId}) }}">{{ 'merchant.content_resource.product_version.update_btn'|trans }}</a>

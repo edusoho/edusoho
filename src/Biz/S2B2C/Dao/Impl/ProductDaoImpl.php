@@ -56,4 +56,12 @@ class ProductDaoImpl extends GeneralDaoImpl implements ProductDao
 
         return $this->db()->fetchAll($sql, array_merge([$supplierId, $productType], array_values($remoteResourceIds)));
     }
+
+    public function findBySupplierIdAndProductTypeAndLocalResourceIds($supplierId, $productType, $localResourceIds)
+    {
+        $marks = str_repeat('?,', count($localResourceIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE supplierId= ? AND productType = ? AND localResourceId IN ({$marks});";
+
+        return $this->db()->fetchAll($sql, array_merge([$supplierId, $productType], array_values($localResourceIds)));
+    }
 }

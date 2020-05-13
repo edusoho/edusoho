@@ -2483,6 +2483,10 @@ admin_v2_content_resource_products_version:
     path:  /app/content_resource/products/version
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:productsVersion }
 
+admin_v2_content_resource_product_version_detail:
+  path:  /app/content_resource/product/{productId}/version_detail
+  defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:productVersionDetail }
+
 admin_v2_content_resource_update_product_version:
   path:  /app/resources/product/{productId}/update/version
   defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:updateProductToLatestVersion }

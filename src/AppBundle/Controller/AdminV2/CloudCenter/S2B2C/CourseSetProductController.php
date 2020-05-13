@@ -32,15 +32,20 @@ class CourseSetProductController extends ProductController
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $prepareCourseSet = $this->prepareCourseSetData($courseSetData);
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+        if (empty($s2b2cConfig['supplierId']) || empty($courseSetData['s2b2cDistributeId'])) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
         /**
          * 以前通过preparePurchaseData函数去实现，现在直接通过Product函数去实现
          */
-        $localProduct = $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteProductId($prepareCourseSet['originPlatformId'], $prepareCourseSet['s2b2cDistributeId']);
+        $localProduct = $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteProductId($s2b2cConfig['supplierId'], $courseSetData['s2b2cDistributeId']);
         if ($localProduct) {
             return $this->createJsonResponse(['status' => 'repeat']);
         }
 
+        $prepareCourseSet = $this->prepareCourseSetData($courseSetData);
         $purchaseProducts = $this->preparePurchaseData($courseSetData);
         $result = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->checkPurchaseProducts($purchaseProducts);
         if (!empty($result['success']) && true == $result['success']) {
@@ -48,9 +53,9 @@ class CourseSetProductController extends ProductController
             if (!empty($result['status']) && true === $result['status']) {
                 $newCourseSet = $this->getCourseSetService()->addCourseSet($prepareCourseSet);
                 $product = $this->getS2B2CProductService()->createProduct([
-                    'supplierId' => $prepareCourseSet['originPlatformId'],
+                    'supplierId' => $s2b2cConfig['supplierId'],
                     'productType' => 'course_set',
-                    'remoteProductId' => $prepareCourseSet['s2b2cDistributeId'],
+                    'remoteProductId' => $courseSetData['s2b2cDistributeId'],
                     'remoteResourceId' => $courseSetData['id'],
                     'localResourceId' => $newCourseSet['id'],
                 ]);
@@ -65,14 +70,7 @@ class CourseSetProductController extends ProductController
 
     protected function prepareCourseSetData($courseSetData)
     {
-        $supplierSettings = $this->getSettingService()->get('supplierSettings', []);
-        if (empty($supplierSettings['supplierId']) || empty($courseSetData['s2b2cDistributeId'])) {
-            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
-        }
-
         return [
-            'originPlatform' => 'supplier',
-            'originPlatformId' => $supplierSettings['supplierId'],
             'syncStatus' => 'waiting',
             'sourceCourseSetId' => $courseSetData['id'],
             'title' => $courseSetData['title'],
@@ -83,15 +81,14 @@ class CourseSetProductController extends ProductController
             'cover' => $courseSetData['cover'],
             'maxCoursePrice' => $courseSetData['maxCoursePrice'],
             'minCoursePrice' => $courseSetData['minCoursePrice'],
-            'courseSetData' => '',
-            's2b2cDistributeId' => $courseSetData['s2b2cDistributeId'],
+            'platform' => 'supplier',
         ];
     }
 
     protected function preparePurchaseData($courseSetData)
     {
         $settings = $this->getSettingService()->get('storage', []);
-        $supplierSettings = $this->getSettingService()->get('supplierSettings', []);
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
         $sourceCourseSetId = $courseSetData['id'];
         $sourceCourseSet = $this->getS2B2CFacadeService()->getSupplierPlatformApi()
             ->getSupplierCourseSetProductDetail($sourceCourseSetId);
@@ -106,7 +103,7 @@ class CourseSetProductController extends ProductController
                 'product_id' => $course['id'],
                 'product_type' => 'course',
                 'access_key' => $settings['cloud_access_key'],
-                'supplier_id' => $supplierSettings['supplierId'],
+                'supplier_id' => $s2b2cConfig['supplierId'],
                 'cooperation_price' => $course['cooperationPrice'],
                 'suggestion_price' => $course['suggestionPrice'],
                 's2b2cDistributeId' => $course['s2b2cDistributeId'],

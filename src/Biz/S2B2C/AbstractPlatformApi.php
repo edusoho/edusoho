@@ -3,6 +3,7 @@
 namespace Biz\S2B2C;
 
 use Biz\Course\Service\CourseService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
 use Codeages\Biz\Framework\Service\BaseService;
 use QiQiuYun\SDK\Auth;
 
@@ -17,7 +18,7 @@ class AbstractPlatformApi extends BaseService
 
     protected $uri;
 
-    protected function request($method, $params = array(), $options = array())
+    protected function request($method, $params = [], $options = [])
     {
         $url = $this->host.$this->uri;
 
@@ -34,7 +35,7 @@ class AbstractPlatformApi extends BaseService
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_HEADER, 1);
 
-        $setting = $this->getSettingService()->get('storage', array());
+        $setting = $this->getSettingService()->get('storage', []);
         if (empty($setting['cloud_access_key'])) {
             $params['merchantAccessKey'] = $setting['cloud_access_key'];
         }
@@ -53,7 +54,7 @@ class AbstractPlatformApi extends BaseService
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
             curl_setopt($curl, CURLOPT_POSTFIELDS, $this->jsonEncode($params));
         } else {
-            if (!empty($options['params']) && $options['params'] == 'body') {
+            if (!empty($options['params']) && 'body' == $options['params']) {
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET');
                 $body = $this->jsonEncode($params);
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $body);
@@ -79,7 +80,7 @@ class AbstractPlatformApi extends BaseService
         curl_close($curl);
 
         if (empty($curlinfo['namelookup_time'])) {
-            return array();
+            return [];
         }
 
         if (isset($options['contentType']) && 'plain' == $options['contentType']) {
@@ -93,10 +94,10 @@ class AbstractPlatformApi extends BaseService
 
     protected function makeAuthorization($options, $body)
     {
-        $storageSetting = $this->getSettingService()->get('storage', array());
+        $storageSetting = $this->getSettingService()->get('storage', []);
 
         if (empty($storageSetting['cloud_access_key']) || empty($storageSetting['cloud_secret_key'])) {
-            $this->getLogger()->error('makeAuthorization error: cloud_access_key or cloud_secret_key not exist', array('DATA' => $storageSetting));
+            $this->getLogger()->error('makeAuthorization error: cloud_access_key or cloud_secret_key not exist', ['DATA' => $storageSetting]);
 
             return $options;
         }
@@ -126,7 +127,7 @@ class AbstractPlatformApi extends BaseService
 
     protected function createErrorResult($message = 'unexpected error')
     {
-        return array('error' => $message);
+        return ['error' => $message];
     }
 
     protected function getLogger()
@@ -148,5 +149,13 @@ class AbstractPlatformApi extends BaseService
     protected function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->biz->service('S2B2C:S2B2CFacadeService');
     }
 }

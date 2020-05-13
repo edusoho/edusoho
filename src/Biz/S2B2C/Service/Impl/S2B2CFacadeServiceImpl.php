@@ -47,6 +47,20 @@ class S2B2CFacadeServiceImpl extends BaseService implements S2B2CFacadeService
         return $supplier;
     }
 
+    /**
+     * @return array []
+     *               [
+     *               'enabled' => $biz['s2b2c.options']['enabled'],
+     *               'supplierId' => $biz['s2b2c.options']['supplierId'],
+     *               'supplierDomain' => $biz['s2b2c.options']['supplierDomain'],
+     *               'businessMode' => $biz['s2b2c.options']['businessMode'],
+     *               ]
+     */
+    public function getS2B2CConfig()
+    {
+        return $this->biz['s2b2c.config'];
+    }
+
     public function getBehaviourPermissions()
     {
         if ($this->isS2B2CInfoValid('behaviour_permissions')) {
