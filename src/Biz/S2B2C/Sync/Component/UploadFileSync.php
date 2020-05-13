@@ -60,7 +60,7 @@ class UploadFileSync extends AbstractEntitySync
         $newCourse = $config['newCourse'];
         $newCourseSetId = $newCourse['courseSetId'];
 
-        $existsFiles = $this->getUploadFileDao()->search(['storage' => 'cloud'], null, 0, PHP_INT_MAX);
+        $existsFiles = $this->getUploadFileDao()->search(['storage' => 'supplier'], null, 0, PHP_INT_MAX);
         $existsFiles = ArrayToolkit::index($existsFiles, 'hashId');
 
         $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
