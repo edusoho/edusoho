@@ -13,7 +13,7 @@ class ProductDaoImpl extends GeneralDaoImpl implements ProductDao
     {
         return [
            'timestamps' => ['createdTime', 'updatedTime'],
-           'serializes' => [],
+           'serializes' => ['changelog' => 'json'],
            'conditions' => [
                'id = :id',
                'productType = :productType',

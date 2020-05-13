@@ -30,13 +30,13 @@ admin_v2:
                                             router_name: admin_v2_purchase_market
                                             group: topBtn
                                             blank: 1
-                                            visible: (hasSupplier())
+                                            visible: (is_s2b2c_enabled())
                                         admin_v2_course_add:
                                             name: admin_v2.course.basic.basic_tab.create_btn
                                             router_name: course_set_manage_create
                                             group: topBtn
                                             blank: 1
-                                            visible: (canAddCourse())
+                                            visible: (s2b2c_has_behaviour_permission('canAddCourse'))
                                         admin_v2_course_set_recommend:
                                             name: admin_v2.course.basic.basic_tab.recommend_btn
                                             router_params:

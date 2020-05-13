@@ -9,7 +9,10 @@ class S2b2cUploadFileAlterStorage extends Migration
      */
     public function up()
     {
-        $this->getContainer()->offsetGet('db')->exec("ALTER TABLE `upload_files` MODIFY COLUMN `storage` ENUM('local','cloud','supplier') NOT NULL COMMENT '文件存储方式';");
+        $this->getContainer()->offsetGet('db')->exec("
+            ALTER TABLE `upload_files` MODIFY COLUMN `storage` ENUM('local','cloud','supplier') NOT NULL COMMENT '文件存储方式';
+            ALTER TABLE `upload_file_inits` MODIFY COLUMN `storage` ENUM('local','cloud','supplier') NOT NULL COMMENT '文件存储方式';
+        ");
     }
 
     /**

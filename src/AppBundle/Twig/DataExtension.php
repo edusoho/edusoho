@@ -2,12 +2,12 @@
 
 namespace AppBundle\Twig;
 
+use AppBundle\Common\ExtensionManager;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\EduCloud\Service\ConsultService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
-use AppBundle\Common\ExtensionManager;
 
 class DataExtension extends \Twig_Extension
 {
@@ -28,20 +28,18 @@ class DataExtension extends \Twig_Extension
 
     public function getFunctions()
     {
-        $options = array('is_safe' => array('html'));
+        $options = ['is_safe' => ['html']];
 
-        return array(
-            new \Twig_SimpleFunction('data', array($this, 'getData'), $options),
-            new \Twig_SimpleFunction('datas', array($this, 'getDatas'), $options),
-            new \Twig_SimpleFunction('datas_count', array($this, 'getDatasCount'), $options),
-            new \Twig_SimpleFunction('service', array($this, 'callService'), $options),
-            new \Twig_SimpleFunction('isOldSmsUser', array($this, 'getOldSmsUserStatus'), $options),
-            new \Twig_SimpleFunction('cloudStatus', array($this, 'getCloudStatus'), $options),
-            new \Twig_SimpleFunction('cloudConsultPath', array($this, 'getCloudConsultPath'), $options),
-            new \Twig_SimpleFunction('cloud_info', array($this, 'getCloudInfo'), $options),
-            new \Twig_SimpleFunction('canAddCourse', array($this, 'canAddCourse'), $options),
-            new \Twig_SimpleFunction('hasSupplier', array($this, 'hasSupplier'), $options),
-        );
+        return [
+            new \Twig_SimpleFunction('data', [$this, 'getData'], $options),
+            new \Twig_SimpleFunction('datas', [$this, 'getDatas'], $options),
+            new \Twig_SimpleFunction('datas_count', [$this, 'getDatasCount'], $options),
+            new \Twig_SimpleFunction('service', [$this, 'callService'], $options),
+            new \Twig_SimpleFunction('isOldSmsUser', [$this, 'getOldSmsUserStatus'], $options),
+            new \Twig_SimpleFunction('cloudStatus', [$this, 'getCloudStatus'], $options),
+            new \Twig_SimpleFunction('cloudConsultPath', [$this, 'getCloudConsultPath'], $options),
+            new \Twig_SimpleFunction('cloud_info', [$this, 'getCloudInfo'], $options),
+        ];
     }
 
     public function getCloudInfo()
@@ -62,7 +60,7 @@ class DataExtension extends \Twig_Extension
     {
         $method = 'get'.ucfirst($name).'Datas';
         if (!method_exists($this, $method)) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('尚未定义批量获取"%name%"数据', array('%name%' => $name)));
+            throw new \RuntimeException($this->getServiceKernel()->trans('尚未定义批量获取"%name%"数据', ['%name%' => $name]));
         }
 
         return $this->{$method}($conditions, $sort, $start, $limit);
@@ -72,7 +70,7 @@ class DataExtension extends \Twig_Extension
     {
         $method = 'get'.ucfirst($name).'DatasdeCount';
         if (!method_exists($this, $method)) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('尚未定义获取"%name%"数据的记录条数', array('%name%' => $name)));
+            throw new \RuntimeException($this->getServiceKernel()->trans('尚未定义获取"%name%"数据的记录条数', ['%name%' => $name]));
         }
 
         return $this->{$method}($conditions);
@@ -106,9 +104,9 @@ class DataExtension extends \Twig_Extension
 
     public function canAddCourse()
     {
-        $allowCoopMode = array(
+        $allowCoopMode = [
             S2B2CFacadeService::DEALER_MODE,
-        );
+        ];
 
         $setting = $this->getSettingService()->get('merchant_setting');
 
@@ -117,7 +115,7 @@ class DataExtension extends \Twig_Extension
 
     public function getCloudConsultPath()
     {
-        $cloudConsult = $this->getSettingService()->get('cloud_consult', array());
+        $cloudConsult = $this->getSettingService()->get('cloud_consult', []);
         if (empty($cloudConsult)) {
             return false;
         }
