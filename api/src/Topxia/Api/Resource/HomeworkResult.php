@@ -134,7 +134,8 @@ class HomeworkResult extends BaseResource
                 foreach ($subs as &$subItem) {
                     $subItem = $this->filterQuestion($subItem, $resultId);
                 }
-                $item['items'] = $subs;
+                $item['items'] = array_values($subs);
+                unset($items['subs']);
             }
 
             $newItems[$item['id']] = $item;
