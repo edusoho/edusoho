@@ -470,6 +470,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $updateDeadlines[] = ['deadline' => $deadline];
             }
             $this->getClassroomMemberDao()->batchUpdate(array_column($members, 'id'), $updateDeadlines, 'id');
+
+            foreach ($this->findCoursesByClassroomId($classroomId) as $classroomCourse) {
+                $this->getCourseMemberService()->batchUpdateMemberDeadlinesByDay($classroomCourse['id'], $userIds, $day, $waveType);
+            }
         }
     }
 
@@ -485,6 +489,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $updateDeadlines[] = ['deadline' => $date];
             }
             $this->getClassroomMemberDao()->batchUpdate(array_column($members, 'id'), $updateDeadlines, 'id');
+
+            foreach ($this->findCoursesByClassroomId($classroomId) as $classroomCourse) {
+                $this->getCourseMemberService()->batchUpdateMemberDeadlinesByDate($classroomCourse['id'], $userIds, $date);
+            }
         }
     }
 
