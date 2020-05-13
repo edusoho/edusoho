@@ -481,7 +481,7 @@ class EduSohoUpgrade extends AbstractUpdater
                     `right_question_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答对问题数',
                     `objective_score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '客观题得分',
                     `subjective_score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '主观题得分',
-                    `grade` enum('none', 'excellent','good','passed','unpassed') NOT NULL DEFAULT 'unpassed' COMMENT '等级',
+                    `grade` enum('none', 'excellent','good','passed','unpassed') NOT NULL DEFAULT 'none' COMMENT '等级',
                     `comment` text COMMENT '评语',
                     `review_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '批阅时间',
                     `review_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '批阅人id',
@@ -761,7 +761,12 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->getConnection()->exec("
             INSERT INTO activity_homework (id, assessmentId, answerSceneId, createdTime, updatedTime)
-            SELECT id, mediaIdBackup as assessmentId, id AS answerSceneId, createdTime, updatedTime FROM activity WHERE mediaType = 'homework';
+            SELECT 
+                a.id, if(c.locked = 1, b.copyId, b.id) AS assessmentId, a.id AS answerSceneId, a.createdTime, a.updatedTime
+                FROM activity a 
+                LEFT JOIN testpaper_v8 b ON a.mediaIdBackup = b.id 
+                LEFT JOIN course_set_v8 c ON b.courseSetId = c.id
+            WHERE a.mediaType = 'homework';
         ");
 
         return 1;
@@ -777,11 +782,20 @@ class EduSohoUpgrade extends AbstractUpdater
                 ALTER TABLE `activity_testpaper` ADD INDEX(`answerSceneId`);
             ");
         }
+
+        if (!$this->isFieldExist('activity_testpaper', 'mediaIdBackup')) {
+            $this->getConnection()->exec("
+                ALTER TABLE `activity_testpaper` ADD `mediaIdBackup` INT(10) NOT NULL DEFAULT '0' COMMENT '公共题库升级备份用' AFTER `mediaId`;
+                UPDATE `activity_testpaper` SET `mediaIdBackup` = `mediaId`;
+            ");
+        }
         
         $this->getConnection()->exec("
             UPDATE activity_testpaper
-            LEFT JOIN activity ON activity.mediaId = activity_testpaper.id
-            SET activity_testpaper.answerSceneId = activity.id
+                LEFT JOIN activity ON activity.mediaId = activity_testpaper.id
+                LEFT JOIN testpaper_v8 ON activity_testpaper.mediaIdBackup = testpaper_v8.id
+                LEFT JOIN course_set_v8 ON testpaper_v8.courseSetId = course_set_v8.id
+                SET activity_testpaper.answerSceneId = activity.id, activity_testpaper.mediaId = if(course_set_v8.locked = 1, testpaper_v8.copyId, testpaper_v8.id)
             WHERE activity.mediaType = 'testpaper';
         ");
 
@@ -818,7 +832,13 @@ class EduSohoUpgrade extends AbstractUpdater
         $start = $startData['start'];
         $limit = $startData['limit'];
         $sql = "
-            SELECT a.id, a.createdTime, b.updatedTime, b.metas, b.itemCount FROM activity a LEFT JOIN testpaper_v8 b ON a.mediaIdBackup = b.id WHERE a.mediaType = 'exercise' LIMIT {$start}, {$limit};    
+            SELECT 
+                a.id, a.createdTime, b.updatedTime, if(c.locked = 1, d.metas, b.metas) as metas, b.itemCount
+                FROM activity a 
+                LEFT JOIN testpaper_v8 b ON a.mediaIdBackup = b.id 
+                LEFT JOIN course_set_v8 c ON b.courseSetId = c.id
+                LEFT JOIN testpaper_v8 d ON b.copyId = d.id
+            WHERE a.mediaType = 'exercise' LIMIT {$start}, {$limit};    
         ";
         $activities = $this->getConnection()->fetchAll($sql, array());
         
@@ -1186,16 +1206,18 @@ class EduSohoUpgrade extends AbstractUpdater
                     'question_id' => $subQuestion['questionId'],
                     'score' => $subQuestion['score'],
                 );
+                $rule = array(
+                    array('name' => 'all_right', 'score' => $subQuestion['score']),
+                    array('name' => 'no_answer', 'score' => 0),
+                    array('name' => 'wrong', 'score'=> 0),
+                );
+                if ($subQuestion['missScore'] > 0) {
+                    $rule[] = array('name' => 'part_right', 'score' => $subQuestion['missScore']);
+                }
                 $scoreRule[] = array(
                     'question_id' => $subQuestion['questionId'],
                     'seq' => $subQuestion['seq'],
-                    'rule' => array(
-                        array('name' => 'all_right', 'score' => $subQuestion['score']),
-                        array('name' => 'no_answer', 'score' => 0),
-                        array('name' => 'reviewing', 'score' => 0),
-                        array('name' => 'wrong', 'score'=> 0),
-                        array('name' => 'part_right', 'score' => $subQuestion['missScore']),
-                    ),
+                    'rule' => $rule
                 );
             }
             $assessmentItems[] = array(
