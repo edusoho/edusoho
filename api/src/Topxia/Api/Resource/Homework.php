@@ -160,7 +160,7 @@ class Homework extends BaseResource
 
     protected function filterQuestion($question, $questionResults, $homeworkId, $resultId)
     {
-        $question = ArrayToolkit::parts($question, array('id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty', 'parentId'));
+        $question = ArrayToolkit::parts($question, array('id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty', 'parentId', 'subs'));
         $question['stem'] = $this->filterHtml($question['stem']);
         $question['analysis'] = $this->filterHtml($question['analysis']);
 
@@ -176,9 +176,7 @@ class Homework extends BaseResource
             }, $metas);
         }
 
-        if (isset($question['answer'])) {
-            $question['answer'] = $this->filterAnswer($question, $questionResults);
-        }
+        $question['answer'] = $this->filterAnswer($question, $questionResults);
 
         if ($questionResults && !empty($question['testResult'])) {
             $itemResult = $question['testResult'];
@@ -197,7 +195,7 @@ class Homework extends BaseResource
                 'itemId' => '0',
                 'testId' => $homeworkId,
                 'resultId' => $resultId,
-                'answer' => null,
+                'answer' => array(),
                 'questionId' => $question['id'],
                 'status' => 'noAnswer',
                 'score' => '0',

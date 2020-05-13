@@ -61,7 +61,10 @@ class ExerciseResult extends BaseResource
             return $this->error('500', '无权限访问!');
         }
 
-        $record = $this->getAnswerService()->startAnswer($exerciseActivity['answerSceneId'], $assessment['id'], $user['id']);
+        $record = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($exerciseActivity['answerSceneId'], $user['id']);
+        if (empty($record) || 'finished' == $record['status']) {
+            $record = $this->getAnswerService()->startAnswer($exerciseActivity['answerSceneId'], $assessment['id'], $user['id']);
+        }
 
         $wrapper = new AssessmentResponseWrapper();
         $responses = $wrapper->wrap($answers, $assessment, $record);
