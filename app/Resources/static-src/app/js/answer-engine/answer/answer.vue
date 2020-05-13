@@ -21,7 +21,7 @@
       @previewAttachment="previewAttachment"
       @downloadAttachment="downloadAttachment"
     >
-      <template slot="inspection" v-if="inspectionOpen">
+      <template slot="inspection" v-if="inspectionOpen && isNotMobile">
         <inspection-control mode="watching" ref="inspection" @ready="readyHandler" @cheatHappened="saveCheatRecord" @faceCaptured="captureHandler"></inspection-control>
       </template>
     </item-engine>
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+  import { isMobileDevice } from 'common/utils';
   import ActivityEmitter from '../../activity/activity-emitter';
   import dataURLToBlob from "dataurl-to-blob";
   export default {
@@ -55,6 +56,7 @@
         },
         fileId: 0,
         inspectionOpen: inspectionOpen,
+        isNotMobile: !isMobileDevice()
       };
     },
     created() {
