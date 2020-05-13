@@ -5150,10 +5150,17 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
+<<<<<<< Updated upstream
 item-bank@1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/item-bank/-/item-bank-1.0.3.tgz#d70556de0b670a64e29d9d14a9c133b52027ccbc"
   integrity sha512-nxiuQAosJ32fRL+VyNWfK8rg0HjR3m6c6CnYl7kMgN9Viky/uIrb5kxVVHbpgyJfdaI4v9WzltWUyxUycqF7zw==
+=======
+item-bank-test@0.1.18:
+  version "0.1.18"
+  resolved "https://registry.yarnpkg.com/item-bank-test/-/item-bank-test-0.1.18.tgz#7dad56e3f1da53d56ff7a670c639d6b465906b8d"
+  integrity sha512-la7kNeI5zTT+K1GyUvqqF9JElONZm+oKK3HHI5p2BsHywFuCae8qn7YzdXvejQof5Qe5hgJijyej0sfZma7EmA==
+>>>>>>> Stashed changes
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"
