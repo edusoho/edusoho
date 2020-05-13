@@ -120,7 +120,7 @@ class TestpaperResult extends AbstractResource
         $items = ArrayToolkit::groupIndex($items, 'type', 'id');
         $testpaper = $testpaperWrapper->wrapTestpaper($assessment, $scene);
         $testpaper['metas']['question_type_seq'] = array_keys($items);
-        $answerReport = $this->getAnswerReportService()->get($testpaperRecord['answer_scene_id']);
+        $answerReport = $this->getAnswerReportService()->get($testpaperRecord['answer_report_id']);
         $testpaperResult = $testpaperWrapper->wrapTestpaperResult($testpaperRecord, $assessment, $scene, $answerReport);
 
         return array(
