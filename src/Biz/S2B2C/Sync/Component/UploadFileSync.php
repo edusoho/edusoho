@@ -82,7 +82,7 @@ class UploadFileSync extends AbstractEntitySync
             $newUploadFile['createdTime'] = time();
             $newUploadFile['convertStatus'] = 'success';
             $newUploadFile['convertStatus'] = 'success';
-            $newUploadFile['originPlatform'] = $newCourse['originPlatform'];
+            $newUploadFile['originPlatform'] = $newCourse['platform'];
             $newUploadFile['originPlatformId'] = $s2b2cConfig['supplierId'];
 
             unset($newUploadFile['id']);
