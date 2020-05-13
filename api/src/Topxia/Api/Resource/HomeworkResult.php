@@ -144,7 +144,7 @@ class HomeworkResult extends BaseResource
             }
 
             if ('material' == $item['type']) {
-                $subs = empty($item['subs']) ? array() : $item['subs'];
+                $subs = empty($item['subs']) ? array() : array_values($item['subs']);
                 $item['items'] = $subs;
             }
 

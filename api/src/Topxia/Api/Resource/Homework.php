@@ -160,8 +160,10 @@ class Homework extends BaseResource
             $item['answer'] = $this->filterAnswer($item, $itemSetResults);
 
             if ('material' == $item['type']) {
-                $subs = empty($item['subs']) ? array() : $item['subs'];
+                $subs = empty($item['subs']) ? array() : array_values($item['subs']);
                 $item['items'] = $subs;
+            } else {
+                $item['items'] = array();
             }
 
             if ($itemSetResults && !empty($item['testResult'])) {
@@ -193,7 +195,6 @@ class Homework extends BaseResource
 
             $item['stem'] = $this->coverDescription($item['stem']);
 
-            $item['items'] = array();
             $newItmes[$item['id']] = $item;
         }
 
