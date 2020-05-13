@@ -20,6 +20,12 @@
 {% endblock %}
 
 {% block body %}
+
+  {% set showHeader = 1 %}
+  {% block header %}
+    {% if showHeader %}{{ parent() }}{% endif %}
+  {% endblock %}
+  
   <div id="app"></div>
   <input type="hidden" name="filename" value='{{ filename }}'>
   <input type="hidden" name="items" value='{{ items|json_encode }}'>
@@ -36,4 +42,8 @@
     {% endif %}
   ">
   {% include 'attachment-upload/upload-data.html.twig' %}
+
+  {% block footer %}
+    {% if showHeader|default(1) %}{{ parent() }}{% endif %}
+  {% endblock %}
 {% endblock %}
