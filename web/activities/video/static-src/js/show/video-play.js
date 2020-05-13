@@ -3,6 +3,7 @@ import EsMessenger from 'app/common/messenger';
 import { getSupportedPlayer } from 'common/video-player-judge';
 import ActivityEmitter from 'app/js/activity/activity-emitter';
 import LocalVideoPlayer from 'app/js/player/local-video-player';
+import 'store';
 
 export default class VideoPlay {
   constructor(recorder) {
@@ -95,13 +96,16 @@ export default class VideoPlay {
     });
 
     messenger.on('timechange', (msg) => {
+      console.log('timechange');
+      console.log(msg);
       this.player.currentTime = msg.currentTime;
     });
   }
 
   _onFinishLearnTask(msg) {
     this.emitter.emit('finish', { data: msg }).then(() => {
-      clearInterval(this.intervalId);
+      console.log('finish send');
+      store.set('activity_id_' + this.record.activityId + '_playing_counter', 0);
     }).catch((error) => {
       console.error(error);
     });

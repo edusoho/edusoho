@@ -110,6 +110,7 @@ class BalloonCloudVideoPlayer extends Emitter {
     });
 
     player.on('timeupdate', function(e) {
+      console.log('balloon timechange');
       //    player.__events get all the event;
       self.emit('timechange', e);
     });
