@@ -190,7 +190,7 @@ class Exercise extends BaseResource
 
             $item['items'] = array();
             if ('material' == $item['type']) {
-                $subs = empty($item['subs']) ? array() : $item['subs'];
+                $subs = empty($item['subs']) ? array() :array_values($item['subs']);
                 foreach ($subs as &$sub) {
                     $sub = $this->filterItemFields($sub, $itemSetResults);
                 }
