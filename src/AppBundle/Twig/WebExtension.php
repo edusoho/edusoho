@@ -21,6 +21,7 @@ use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
 use Biz\Player\Service\PlayerService;
+use Biz\S2B2C\Service\FileSourceService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
 use Biz\Testpaper\Service\TestpaperService;
@@ -96,6 +97,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('wrap', [$this, 'wrap']),
             new \Twig_SimpleFilter('convert_absolute_url', [$this, 'convertAbsoluteUrl']),
             new \Twig_SimpleFilter('url_decode', [$this, 'urlDecode']),
+            new \Twig_SimpleFilter('s2b2c_file_convert', [$this, 's2b2cFileConvert']),
         ];
     }
 
@@ -218,6 +220,11 @@ class WebExtension extends \Twig_Extension
     public function urlDecode($url)
     {
         return !empty($url) ? urldecode($url) : '';
+    }
+
+    public function s2b2cFileConvert($file)
+    {
+        return $this->getS2b2cFileSourceService()->getFullFileInfo($file);
     }
 
     public function getDays($days)
@@ -2028,5 +2035,13 @@ class WebExtension extends \Twig_Extension
     protected function getS2B2CFacadeService()
     {
         return $this->createService('S2B2C:S2B2CFacadeService');
+    }
+
+    /**
+     * @return FileSourceService
+     */
+    protected function getS2b2cFileSourceService()
+    {
+        return $this->createService('S2B2C:FileSourceService');
     }
 }
