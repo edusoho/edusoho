@@ -462,6 +462,7 @@ course_manage.student_remark_success_hint: Remarks %username% succeed
 course_manage.student_remark_failed_hint: Remarks %username% failed, please try again!
 
 course_manage.student_create.field_required_error_hint: Please enter student email / mobile number / username
+course_manage.student_create.price_min_error_hint: The price can not be less than 0!
 course_manage.student_create.price_max_error_hint: The price can not exceed the orignial price of the course.
 
 course_set.show.count_down_format_hint: Remaining <span>%D</ span> days <span>%H</ span> <span>%M</ span> minutes <span>%S</ span> seconds
@@ -1547,3 +1548,5 @@ admin_v2.user.nickname_modify_error_hint: operation failed
 admin_v2.developer.plumber_operate_hint: In operation, it may take a while, please wait ...
 admin_v2.developer.plumber_operate_error_hint: Success
 admin_v2.developer.plumber_operate_success_hint: Failed
+
+course_manage.positive_currency.message: Please enter a valid price greater than 0, up to two decimal places, no more than 8 bits!

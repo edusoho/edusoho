@@ -188,10 +188,6 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('uniqid', [$this, 'uniqid']),
             new \Twig_SimpleFunction('get_days', [$this, 'getDays']),
             new \Twig_SimpleFunction('is_question_lack', [$this, 'isQuestionLack']),
-            new \Twig_SimpleFunction('canModifySiteName', [$this, 'canModifySiteName']),
-            new \Twig_SimpleFunction('canModifySiteUrl', [$this, 'canModifySiteUrl']),
-            new \Twig_SimpleFunction('canModifySiteLogo', [$this, 'canModifySiteLogo']),
-            new \Twig_SimpleFunction('canModifySiteFavicon', [$this, 'canModifySiteFavicon']),
             new \Twig_SimpleFunction('is_s2b2c_enabled', [$this, 'isS2B2CEnabled']),
             new \Twig_SimpleFunction('s2b2c_has_behaviour_permission', [$this, 's2b2cHasBehaviourPermission']),
         ];
@@ -203,7 +199,7 @@ class WebExtension extends \Twig_Extension
      */
     public function isS2B2CEnabled()
     {
-        return isset($this->biz['s2b2c.config']['enabled']);
+        return !empty($this->biz['s2b2c.config']['enabled']);
     }
 
     /**

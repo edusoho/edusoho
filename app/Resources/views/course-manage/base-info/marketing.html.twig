@@ -1,9 +1,41 @@
+{% if is_s2b2c_enabled() %}
+  <div class="form-group mb0">
+    <div class="col-sm-2 control-label">
+      <label for="cooperationPrice">{{ 's2b2c.product.cooperation_price'|trans }}</label>
+    </div>
+    <div class="col-sm-8">
+      <div class="form-control course-mangae-info__input price-from-control-unset-bg"
+           id="cooperationPrice">{{ courseProduct.cooperationPrice|default(0) }}</div>
+      <span class="ml5">{{ 'site.currency.CNY'|trans }}</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label for="course_price">{{ 's2b2c.product.suggestion_price'|trans }}</label>
+    </div>
+    <div class="col-sm-8">
+      <div class="form-control course-mangae-info__input price-from-control-unset-bg" id="suggestionPrice">
+        {{ courseProduct.suggestionPrice|default(0) }}
+      </div>
+      <span class="ml5">{{ 'site.currency.CNY'|trans }}</span>
+    </div>
+  </div>
+{% endif %}
+
+<div class="hidden" id="js-course-info"
+     data-hint-message="{% if course.platform|default('self') == 'self' %}validate_old.positive_currency.message{% else %}course_manage.positive_currency.message{% endif %}"
+     data-min-price="{% if course.platform|default('self') == 'self' %}0{% else %}0.01{% endif %}">
+</div>
+
 <div class="form-group">
   <div class="col-sm-2 control-label">
     <label class="control-label-required" for="course_price">{{ 'site.price'|trans }}</label>
   </div>
   <div class="col-sm-8">
-    <input class="form-control course-mangae-info__input mrs" id="course_price" type="text" name="originPrice" value="{{ course.originPrice|default(0) }}" aria-required="true" aria-describedby="course_price-error" aria-invalid="true">
+    <input class="form-control course-mangae-info__input mrs" id="course_price" type="text" name="originPrice"
+           {% if course.platform|default('self') == 'supplier' and not s2b2c_has_behaviour_permission('canModifyCoursePrice') %}disabled{% endif %}
+           value="{{ course.originPrice|default(0) }}" aria-required="true" aria-describedby="course_price-error"
+           aria-invalid="true">
     <span class="ml5">{{ 'site.currency.CNY'|trans }}</span>
   </div>
 </div>
@@ -11,7 +43,9 @@
 <div class="form-group">
   <label class="col-sm-2 control-label mb5">
     {{ 'course.marketing_setup.setup.can_join'|trans }}
-    <a class="es-icon es-icon-help text-normal course-mangae-info__help" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{ 'course.marketing_setup.setup.can_join.tips'|trans }}"></a>
+    <a class="es-icon es-icon-help text-normal course-mangae-info__help" data-container="body" data-toggle="popover"
+       data-trigger="hover" data-placement="top"
+       data-content="{{ 'course.marketing_setup.setup.can_join.tips'|trans }}"></a>
   </label>
   <div class="col-sm-8 cd-radio-group mb0">
     {{ cd_radios('buyable', { '1': 'course.marketing_setup.setup.can_join'|trans, '0': 'course.marketing_setup.setup.can_not_join'|trans }, course.buyable|default(1)) }}
@@ -25,8 +59,10 @@
     </div>
     <div class="col-sm-8 cd-radio-group course-mangae-info__group mb0">
       {{ cd_radios('enableBuyExpiryTime', {'0': 'course.marketing_setup.expiry_date.anytime'|trans, '1': 'course.marketing_setup.expiry_date.custom'|trans,}, course.buyExpiryTime|default(0) > 0 ? 1 : 0 ) }}
-      <input type="text" class="form-control course-mangae-info__input mlm {% if course.buyExpiryTime == 0 %} hidden {% endif %}" id="buyExpiryTime" name="buyExpiryTime"
-              value="{% if course.buyExpiryTime > 0 %}{{ course.buyExpiryTime|date_format('Y-m-d') }}{% endif %}">
+      <input type="text"
+             class="form-control course-mangae-info__input mlm {% if course.buyExpiryTime == 0 %} hidden {% endif %}"
+             id="buyExpiryTime" name="buyExpiryTime"
+             value="{% if course.buyExpiryTime > 0 %}{{ course.buyExpiryTime|date_format('Y-m-d') }}{% endif %}">
     </div>
   </div>
   {#缺少学员数限制#}
@@ -35,8 +71,8 @@
       <label class="col-sm-2 control-label">
         {{ 'course.marketing_setup.approval'|trans }}
         <a class="es-icon es-icon-help text-normal course-mangae-info__help"
-            data-container="body" data-toggle="popover" data-trigger="hover"
-            data-placement="top" data-content="{{ 'course.marketing_setup.approval_tips'|trans }}"></a></label>
+           data-container="body" data-toggle="popover" data-trigger="hover"
+           data-placement="top" data-content="{{ 'course.marketing_setup.approval_tips'|trans }}"></a></label>
       <div class="col-sm-8 cd-radio-group">
         {{ cd_radios('approval', { '1': 'site.datagrid.radios.yes'|trans, '0': 'site.datagrid.radios.no'|trans }, course.approval|default(0)) }}
       </div>
