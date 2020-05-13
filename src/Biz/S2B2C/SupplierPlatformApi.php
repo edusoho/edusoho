@@ -34,18 +34,18 @@ class SupplierPlatformApi extends AbstractPlatformApi
     public function __construct(Biz $biz)
     {
         parent::__construct($biz);
-        $developerSetting = $this->getSettingService()->get('developer', array());
+        $developerSetting = $this->getSettingService()->get('developer', []);
         if (!empty($developerSetting['s2b2c_supplier_server'])) {
             $this->host = $developerSetting['s2b2c_supplier_server'];
         } else {
-            $supplierSettings = $this->getSettingService()->get('supplierSettings', array());
-            if (empty($supplierSettings)) {
-                $this->getLogger()->error('construct supplierPlatformApi error no supplierSettings');
+            $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+            if (empty($s2b2cConfig['enabled'])) {
+                $this->getLogger()->error('construct supplierPlatformApi error no S2B2CSettings');
                 $this->apiValid = false;
 
                 return false;
             }
-            $this->host = $supplierSettings['domainUrl'];
+            $this->host = $s2b2cConfig['supplierDomain'];
         }
     }
 
@@ -62,19 +62,19 @@ class SupplierPlatformApi extends AbstractPlatformApi
         if (empty($storageSetting['cloud_access_key'])) {
             return $this->createErrorResult('accesskey unexist');
         }
-        
+
         $this->uri = str_replace('{accesskey}', $storageSetting['cloud_access_key'], $this->permissionListPath);
 
-        $options = array(
+        $options = [
             'connectTimeout' => 300,
             'timeout' => 300,
-        );
+        ];
 
         return $this->sendRequest('getMerchantDisabledPermissions', [], $options);
     }
 
     /**
-     * 获取供应商产品详情 
+     * 获取供应商产品详情
      *
      * @return array()
      */
@@ -83,12 +83,12 @@ class SupplierPlatformApi extends AbstractPlatformApi
         if (!$this->apiValid) {
             return $this->createErrorResult();
         }
-        $data = array();
+        $data = [];
         $this->uri = $this->productsPath.'/'.$distributeId;
-        $options = array(
+        $options = [
             'connectTimeout' => 300,
             'timeout' => 300,
-        );
+        ];
 
         return $this->sendRequest('getSupplierProductDetail', $data, $options);
     }
@@ -99,12 +99,12 @@ class SupplierPlatformApi extends AbstractPlatformApi
             return $this->createErrorResult();
         }
 
-        $data = array();
+        $data = [];
         $this->uri = "{$this->courseSetProductPath}/{$courseSetId}";
-        $options = array(
+        $options = [
             'connectTimeout' => 300,
             'timeout' => 300,
-        );
+        ];
 
         return $this->sendRequest('getSupplierCourseSetProductDetail', $data, $options);
     }
@@ -119,12 +119,12 @@ class SupplierPlatformApi extends AbstractPlatformApi
         if (!$this->apiValid) {
             return $this->createErrorResult();
         }
-        $data = array();
+        $data = [];
         $this->uri = $this->productSyncDataPath.'/'.$distributeId;
-        $options = array(
+        $options = [
             'connectTimeout' => 300,
             'timeout' => 300,
-        );
+        ];
 
         return $this->sendRequest('getSupplierProductSyncData', $data, $options);
     }
@@ -134,7 +134,7 @@ class SupplierPlatformApi extends AbstractPlatformApi
      *
      * @return array()
      */
-    public function searchSupplierProducts($conditions = array())
+    public function searchSupplierProducts($conditions = [])
     {
         if (!$this->apiValid) {
             return $this->createErrorResult();
@@ -143,17 +143,17 @@ class SupplierPlatformApi extends AbstractPlatformApi
         $data = $conditions;
         ksort($data);
         $this->uri = $this->productsPath;
-        $options = array(
+        $options = [
             'connectTimeout' => 3,
             'timeout' => 5,
-        );
+        ];
 
         try {
-            $this->getLogger()->info('try searchSupplierProducts: ', array('DATA' => $data));
+            $this->getLogger()->info('try searchSupplierProducts: ', ['DATA' => $data]);
             $result = $this->request('GET', $data, $options);
             $this->getLogger()->info('searchSupplierProducts SUCCEED');
         } catch (\Exception $e) {
-            $this->getLogger()->error('searchSupplierProducts error: '.$e->getMessage(), array('DATA' => $data));
+            $this->getLogger()->error('searchSupplierProducts error: '.$e->getMessage(), ['DATA' => $data]);
 
             return $this->createErrorResult($e->getMessage());
         }
@@ -163,25 +163,25 @@ class SupplierPlatformApi extends AbstractPlatformApi
 
     public function checkPurchaseProducts($purchaseProducts)
     {
-        $settings = $this->getSettingService()->get('storage', array());
+        $settings = $this->getSettingService()->get('storage', []);
         $checkPurchaseProductsPath = "/api/merchant/{$settings['cloud_access_key']}/action/check_purchase";
 
         $this->uri = $checkPurchaseProductsPath;
-        $options = array(
+        $options = [
             'connectTimeout' => 300,
             'timeout' => 300,
-            'headers' => array(
+            'headers' => [
                 'Content-Type: application/json',
-            ),
+            ],
             'params' => 'body',
-        );
+        ];
 
         try {
-            $this->getLogger()->info('try checkPurchaseProducts: ', array('DATA' => $purchaseProducts));
+            $this->getLogger()->info('try checkPurchaseProducts: ', ['DATA' => $purchaseProducts]);
             $result = $this->request('GET', $purchaseProducts, $options);
             $this->getLogger()->info('checkPurchaseProducts SUCCEED');
         } catch (\Exception $e) {
-            $this->getLogger()->error('checkPurchaseProducts error: '.$e->getMessage(), array('DATA' => $purchaseProducts));
+            $this->getLogger()->error('checkPurchaseProducts error: '.$e->getMessage(), ['DATA' => $purchaseProducts]);
 
             return $this->createErrorResult($e->getMessage());
         }
@@ -194,7 +194,7 @@ class SupplierPlatformApi extends AbstractPlatformApi
      *
      * @return array()
      */
-    public function searchPurchaseProducts($conditions = array())
+    public function searchPurchaseProducts($conditions = [])
     {
         if (!$this->apiValid) {
             return $this->createErrorResult();
@@ -203,17 +203,17 @@ class SupplierPlatformApi extends AbstractPlatformApi
         $data = $conditions;
         ksort($data);
         $this->uri = $this->purchaseProductsPath;
-        $options = array(
+        $options = [
             'connectTimeout' => 3,
             'timeout' => 5,
-        );
+        ];
 
         try {
-            $this->getLogger()->info('try searchPurchaseProducts: ', array('DATA' => $data));
+            $this->getLogger()->info('try searchPurchaseProducts: ', ['DATA' => $data]);
             $result = $this->request('GET', $data, $options);
             $this->getLogger()->info('searchPurchaseProducts SUCCEED');
         } catch (\Exception $e) {
-            $this->getLogger()->error('searchPurchaseProducts error: '.$e->getMessage(), array('DATA' => $data));
+            $this->getLogger()->error('searchPurchaseProducts error: '.$e->getMessage(), ['DATA' => $data]);
 
             return $this->createErrorResult($e->getMessage());
         }
@@ -228,14 +228,14 @@ class SupplierPlatformApi extends AbstractPlatformApi
         }
 
         $this->uri = $this->siteSettingPath;
-        $options = array(
+        $options = [
             'connectTimeout' => 3,
             'timeout' => 5,
-        );
+        ];
 
         try {
             $this->getLogger()->info('try getSupplierSiteSetting');
-            $result = $this->request('GET', array(), $options);
+            $result = $this->request('GET', [], $options);
             $this->getLogger()->info('getSupplierSiteSetting SUCCEED');
         } catch (\Exception $e) {
             $this->getLogger()->error('getSupplierSiteSetting error: '.$e->getMessage());
@@ -251,7 +251,7 @@ class SupplierPlatformApi extends AbstractPlatformApi
      *
      * @return array()
      */
-    public function searchProductCategories($conditions = array())
+    public function searchProductCategories($conditions = [])
     {
         if (!$this->apiValid) {
             return $this->createErrorResult();
@@ -260,10 +260,10 @@ class SupplierPlatformApi extends AbstractPlatformApi
         $data = $conditions;
         ksort($data);
         $this->uri = $this->productCategoryPath;
-        $options = array(
+        $options = [
             'connectTimeout' => 5,
             'timeout' => 5,
-        );
+        ];
 
         return $this->sendRequest('searchProductCategories', $data, $options);
     }
@@ -279,18 +279,18 @@ class SupplierPlatformApi extends AbstractPlatformApi
             return $this->createErrorResult();
         }
         if (empty($productIds)) {
-            return array();
+            return [];
         }
 
-        $data = array(
+        $data = [
             'productIds' => $productIds,
-        );
+        ];
         ksort($data);
         $this->uri = $this->productVersionListPath;
-        $options = array(
+        $options = [
             'connectTimeout' => 5,
             'timeout' => 5,
-        );
+        ];
 
         return $this->sendRequest('getProductVersionList', $data, $options);
     }
@@ -300,18 +300,18 @@ class SupplierPlatformApi extends AbstractPlatformApi
      *
      * @return array()
      */
-    public function getProductVersions($productId = array())
+    public function getProductVersions($productId = [])
     {
         if (!$this->apiValid) {
             return $this->createErrorResult();
         }
 
-        $data = array();
+        $data = [];
         $this->uri = $this->productVersionListPath.'/'.$productId;
-        $options = array(
+        $options = [
             'connectTimeout' => 5,
             'timeout' => 5,
-        );
+        ];
 
         return $this->sendRequest('getProductVersions', $data, $options);
     }
@@ -319,15 +319,15 @@ class SupplierPlatformApi extends AbstractPlatformApi
     private function sendRequest($action, $data, $options, $requestMethod = 'GET')
     {
         try {
-            $this->getLogger()->info('try '.$action.': ', array('DATA' => $data));
+            $this->getLogger()->info('try '.$action.': ', ['DATA' => $data]);
             $result = $this->request($requestMethod, $data, $options);
             if (!empty($result['error']) || (!empty($result['code']) && 200 != $result['code'])) {
-                $this->getLogger()->info($action.' 调用接口失败', array('DATA' => $result));
+                $this->getLogger()->info($action.' 调用接口失败', ['DATA' => $result]);
                 throw $this->createServiceException($action.' 调用接口失败');
             }
-            $this->getLogger()->info($action.' SUCCEED', array($result));
+            $this->getLogger()->info($action.' SUCCEED', [$result]);
         } catch (\Exception $e) {
-            $this->getLogger()->error($action.' error: '.$e->getMessage(), array('DATA' => $data));
+            $this->getLogger()->error($action.' error: '.$e->getMessage(), ['DATA' => $data]);
 
             return $this->createErrorResult($e->getMessage());
         }
