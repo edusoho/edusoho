@@ -13,6 +13,7 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -60,7 +61,7 @@ class CourseTask extends AbstractResource
             $user = $this->getCurrentUser();
             $exerciseActivity = $this->getExerciseActivityService()->getActivity($activity['mediaId']);
             $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($exerciseActivity['answerSceneId'], $user['id']);
-            if (empty($answerRecord)) {
+            if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
                 $assessment = $this->createAssessment($activity['title'], $exerciseActivity['drawCondition']['range'], array($exerciseActivity['drawCondition']['section']));
                 $activity['mediaId'] = $assessment['id'];
             } else {
