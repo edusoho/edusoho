@@ -176,7 +176,7 @@ class TestpaperAction extends AbstractResource
         return array(
             'testpaperResult' => $testpaperWrapper->wrapTestpaperResult($answerRecord, $assessment, $scene, $answerReport),
             'testpaper' => $testpaper,
-            'items' => ArrayToolkit::groupIndex($items, 'type', 'id'),
+            'items' => $items,
             'isShowTestResult' => 0,
         );
     }
