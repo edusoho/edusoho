@@ -33,6 +33,10 @@ class VideoMediaStatusUpdateJobTest extends BaseTestCase
                     'functionName' => 'setResourceConvertStatus',
                     'withParams' => array(1, $mockRemoteResources['data'][0]),
                 ),
+                array(
+                    'functionName' => 'setAttachmentConvertStatus',
+                    'withParams' => array(1, $mockRemoteResources['data'][0]),
+                ),
             )
         );
 
