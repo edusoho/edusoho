@@ -198,7 +198,7 @@ class Testpaper extends Activity
         }
 
         $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
-        if ($answerRecord['status'] == AnswerService::ANSWER_RECORD_STATUS_FINISHED && 'score' === $activity['finishType'] && $answerReport['score'] >= $testpaperActivity['finishCondition']['finishScore']) {
+        if (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status'] && 'score' === $activity['finishType'] && $answerReport['score'] >= $testpaperActivity['finishCondition']['finishScore']) {
             return true;
         }
 
@@ -209,7 +209,7 @@ class Testpaper extends Activity
     {
         $testPaper = $this->getAssessmentService()->getAssessment($fields['testpaperId']);
         $fields['passScore'] = empty($fields['finishData']) ? 0 : round($testPaper['total_score'] * $fields['finishData'], 0);
-        
+
         if (!empty($fields['finishType'])) {
             if ('score' == $fields['finishType']) {
                 $fields['finishCondition'] = array(
