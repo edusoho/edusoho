@@ -51,19 +51,20 @@ class ItemDraw
         }
 
         if (!empty($conditions['distribution'])) {
-            return $this->selectItemsByDifficulty($sectionItemRange, $conditions['distribution'], $count);
+            $items = $this->selectItemsByDifficulty($sectionItemRange, $conditions['distribution'], $count);
         } else {
-            return $this->randomSelectItems($sectionItemRange, $count);
+            $items = $this->randomSelectItems($sectionItemRange, $count);
         }
+
+        return array_values($this->getItemService()->findItemsByIds(ArrayToolkit::column($items, 'id'), true));
     }
 
     protected function setItemRange($range)
     {
         $conditions = $this->prepareConditions($range);
         $itemCount = $this->getItemService()->countItems($conditions);
-        $items = $this->getItemService()->searchItems($conditions, ['created_time' => 'DESC'], 0, $itemCount);
-
-        $this->itemRange = $this->getItemService()->findItemsByIds(ArrayToolkit::column($items, 'id'), true);
+        
+        $this->itemRange = $this->getItemService()->searchItems($conditions, ['created_time' => 'DESC'], 0, $itemCount, array('id', 'difficulty', 'type'));
     }
 
     protected function prepareConditions($range)
