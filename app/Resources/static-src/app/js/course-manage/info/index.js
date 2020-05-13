@@ -166,7 +166,7 @@ class CourseInfo {
     if ($('.js-courseset-title').length) {
       $('.js-courseset-title').rules('add', {
         required: true,
-        maxlength: 60,
+        byte_maxlength: 200,
         trim: true,
         course_title: true,
       });

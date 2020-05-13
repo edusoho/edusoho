@@ -34,17 +34,12 @@ class CourseSetManageController extends BaseController
             $this->createNewException(CourseSetException::FORBIDDEN_MANAGE());
         }
 
-        $user = $this->getUser();
-        $userProfile = $this->getUserService()->getUserProfile($user->getId());
-
-        $defaultType = $request->query->get('default', CourseSetService::NORMAL_TYPE);
-
         return $this->render(
             'courseset-manage/create.html.twig',
             array(
-                'userProfile' => $userProfile,
+                'userProfile' => $this->getUserService()->getUserProfile($this->getUser()->getId()),
                 'courseTypes' => $visibleCourseTypes,
-                'defaultType' => $defaultType,
+                'defaultType' => $request->query->get('default', CourseSetService::NORMAL_TYPE),
             )
         );
     }
@@ -177,13 +172,11 @@ class CourseSetManageController extends BaseController
             'ownerId' => $id,
         ));
 
-        $isCoursesSummaryEmpty = $this->getCourseService()->isCourseSetCoursesSummaryEmpty($courseSet['id']);
-
         return $this->render(
             'courseset-manage/base.html.twig',
             array(
                 'courseSet' => $courseSet,
-                'isCoursesSummaryEmpty' => $isCoursesSummaryEmpty,
+                'isCoursesSummaryEmpty' => $this->getCourseService()->isCourseSetCoursesSummaryEmpty($courseSet['id']),
                 'tags' => ArrayToolkit::column($tags, 'name'),
             )
         );

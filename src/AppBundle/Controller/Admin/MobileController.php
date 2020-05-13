@@ -328,7 +328,7 @@ class MobileController extends BaseController
 
         $response = array(
             'path' => $mobile[$type],
-            'url' => $this->container->get('templating.helper.assets')->getUrl($mobile[$type]),
+            'url' => $this->container->get('assets.packages')->getUrl($mobile[$type]),
         );
 
         return new Response(json_encode($response));

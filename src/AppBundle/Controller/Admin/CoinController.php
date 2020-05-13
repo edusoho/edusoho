@@ -252,11 +252,11 @@ class CoinController extends BaseController
             'path_30_30' => $coin['coin_picture_30_30'],
             'path_20_20' => $coin['coin_picture_20_20'],
             'path_10_10' => $coin['coin_picture_10_10'],
-            'url' => $this->container->get('templating.helper.assets')->getUrl($coin['coin_picture']),
-            'coin_picture_50_50' => $this->container->get('templating.helper.assets')->getUrl($coin['coin_picture_50_50']),
-            'coin_picture_30_30' => $this->container->get('templating.helper.assets')->getUrl($coin['coin_picture_30_30']),
-            'coin_picture_20_20' => $this->container->get('templating.helper.assets')->getUrl($coin['coin_picture_20_20']),
-            'coin_picture_10_10' => $this->container->get('templating.helper.assets')->getUrl($coin['coin_picture_10_10']),
+            'url' => $this->container->get('assets.packages')->getUrl($coin['coin_picture']),
+            'coin_picture_50_50' => $this->container->get('assets.packages')->getUrl($coin['coin_picture_50_50']),
+            'coin_picture_30_30' => $this->container->get('assets.packages')->getUrl($coin['coin_picture_30_30']),
+            'coin_picture_20_20' => $this->container->get('assets.packages')->getUrl($coin['coin_picture_20_20']),
+            'coin_picture_10_10' => $this->container->get('assets.packages')->getUrl($coin['coin_picture_10_10']),
         );
 
         return new Response(json_encode($response));

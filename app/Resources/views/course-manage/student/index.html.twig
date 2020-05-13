@@ -20,8 +20,9 @@
         </div>
         <div class="clearfix"></div>
       </form>
-      {% if 'forever' != course.expiryMode and students|length > 0 %}
-        <button id="batch-update-expiry-day" type="button" class="cd-btn cd-btn-primary cd-mb16" data-url="{{path('course_set_manage_course_students_deadline_batch', {courseSetId: course.courseSetId, courseId: course.id})}}">{{'course.members_manage.official_student.batch_upload_deadline'|trans}}</button>
+      {% if students|length > 0 %}
+          <button id="batch-update-expiry-day" type="button" class="cd-btn cd-btn-primary cd-mb16" data-url="{{ path('course_set_manage_course_students_deadline_batch', {courseSetId: course.courseSetId, courseId: course.id}) }}">{{'course.members_manage.official_student.batch_upload_deadline'|trans}}</button>
+        <button id="batch-remove" type="button" class="cd-btn cd-btn-primary cd-mb16" data-url="{{ path('course_set_manage_course_students_remove_students', {courseSetId: course.courseSetId, courseId: course.id}) }}">{{ 'course.members_manage.official_student.batch_remove'|trans }}</button>
       {% endif %}
       <table class="table table-striped" id="course-student-list">
         <thead>
