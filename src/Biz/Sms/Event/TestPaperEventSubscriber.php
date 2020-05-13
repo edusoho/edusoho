@@ -27,7 +27,9 @@ class TestPaperEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         $paperResult = $event->getSubject();
 
-        if ($paperResult['type'] === 'testpaper') {
+        if ($paperResult['type'] === 'homework') {
+            $this->notifyHomeworkResult($paperResult);
+        } elseif ($paperResult['type'] === 'testpaper') {
             $this->notifyTestpaperResult($paperResult);
         }
     }
