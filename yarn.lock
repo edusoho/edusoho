@@ -5150,10 +5150,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/item-bank/-/item-bank-1.0.3.tgz#d70556de0b670a64e29d9d14a9c133b52027ccbc"
-  integrity sha512-nxiuQAosJ32fRL+VyNWfK8rg0HjR3m6c6CnYl7kMgN9Viky/uIrb5kxVVHbpgyJfdaI4v9WzltWUyxUycqF7zw==
+item-bank@1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/item-bank/-/item-bank-1.0.4.tgz#82fca4cff48ef8f86b8dbc68252f85f491d7a44b"
+  integrity sha512-xnv+vgxpVvGB9KCbVIy33MP+TW/Pg1hWxPkHkbqixl6OJhZ8z5acBfmjItfHqpiQPgpeQF9Qdk3bhpKHhC2i9g==
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"
