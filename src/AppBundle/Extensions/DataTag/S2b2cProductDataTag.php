@@ -10,7 +10,7 @@ class S2b2cProductDataTag extends BaseDataTag implements DataTag
     public function getData(array $localResource)
     {
         if (!ArrayToolkit::requireds($localResource, ['id', 'type'])) {
-            throw new \InvalidArgumentException('Id and type not exist');
+            throw new \InvalidArgumentException('Id or type not exist in local resource');
         }
 
         return $this->getS2b2cProductService()->getByTypeAndLocalResourceId($localResource['type'], $localResource['id']);

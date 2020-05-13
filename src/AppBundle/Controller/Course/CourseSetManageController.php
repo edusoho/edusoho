@@ -133,7 +133,6 @@ class CourseSetManageController extends BaseController
                 'courseSet' => $courseSet,
                 'curCourse' => $curCourse,
                 'courses' => $courses,
-                'defaultCourse' => empty($courses[$courseSet['defaultCourseId']]) ? [] : $courses[$courseSet['defaultCourseId']],
                 'course_side_nav' => $courseSideNav,
                 'hasLiveTasks' => $hasLiveTasks,
             ]

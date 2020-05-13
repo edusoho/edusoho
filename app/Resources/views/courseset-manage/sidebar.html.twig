@@ -1,4 +1,4 @@
-{% set courseProduct = defaultCourse.platform|default('self') == 'self' ? null : data('S2b2cProduct', { id:defaultCourse.id, type:'course' }) %}
+{% set courseProduct = curCourse.platform|default('self') == 'self' ? null : data('S2b2cProduct', { id:curCourse.id, type:'course' }) %}
 {% set hasFreeTaskChanged = 0 %}
 {% set hasLessonChanged = 0 %}
 
