@@ -149,7 +149,7 @@ class SupplierPlatformApi extends AbstractPlatformApi
         ];
 
         try {
-            $this->getLogger()->info('try searchSupplierProducts: ', ['DATA' => $data]);
+            $this->getLogger()->info('try searchSupplierProducts: ', ['DATA' => $data, 'HOST' => $this->host]);
             $result = $this->request('GET', $data, $options);
             $this->getLogger()->info('searchSupplierProducts SUCCEED');
         } catch (\Exception $e) {
