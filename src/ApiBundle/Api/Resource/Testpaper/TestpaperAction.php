@@ -102,7 +102,7 @@ class TestpaperAction extends AbstractResource
         return array(
             'testpaperResult' => $testpaperWrapper->wrapTestpaperResult($answerRecord, $assessment, $scene, $answerReport),
             'testpaper' => $testpaper,
-            'items' => ArrayToolkit::groupIndex($items, 'type', 'id'),
+            'items' => $items,
             'isShowTestResult' => 1,
         );
     }
@@ -169,14 +169,14 @@ class TestpaperAction extends AbstractResource
         $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
         $testpaperWrapper = new TestpaperWrapper();
-        $items = $testpaperWrapper->wrapTestpaperItems($assessment, $questionReports);
+        $items = ArrayToolkit::groupIndex($testpaperWrapper->wrapTestpaperItems($assessment, $questionReports), 'type', 'id');
         $testpaper = $testpaperWrapper->wrapTestpaper($assessment, $scene);
         $testpaper['metas']['question_type_seq'] = array_keys($items);
 
         return array(
             'testpaperResult' => $testpaperWrapper->wrapTestpaperResult($answerRecord, $assessment, $scene, $answerReport),
             'testpaper' => $testpaper,
-            'items' => ArrayToolkit::groupIndex($items, 'type', 'id'),
+            'items' => $items,
             'isShowTestResult' => 0,
         );
     }
