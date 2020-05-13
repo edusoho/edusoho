@@ -33,8 +33,8 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
 
             return;
         }
-        $supplierSettings = $this->getSettingService()->get('supplierSettings', []);
-        if (empty($supplierSettings['supplierId']) || empty($courseSet['s2b2cDistributeId'])) {
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+        if (empty($s2b2cConfig['supplierId']) || empty($courseSet['s2b2cDistributeId'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
@@ -50,7 +50,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             $course['platform'] = 'supplier';
             $localCourse = $this->getCourseService()->createCourse($course);
             $product = $this->getProductService()->createProduct([
-                'supplierId' => $supplierSettings['supplierId'],
+                'supplierId' => $s2b2cConfig['supplierId'],
                 'productType' => 'course',
                 'remoteProductId' => $course['s2b2cDistributeId'],
                 'remoteResourceId' => $course['id'],
