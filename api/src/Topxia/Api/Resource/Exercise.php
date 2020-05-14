@@ -46,17 +46,27 @@ class Exercise extends BaseResource
             $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
             $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         } else {
-            $activity = $this->getActivityService()->getActivity($id, true);
-            if (empty($activity)) {
+            $exerciseActivity = $this->getExerciseActivityService()->getActivity($id);
+            if (empty($exerciseActivity)) {
                 return $this->error('404', '该练习不存在!');
             }
-            $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
+            $conditions = array(
+                'mediaId' => $exerciseActivity['id'],
+                'mediaType' => 'exercise',
+            );
+            $activities = $this->getActivityService()->search($conditions, null, 0, 1);
+            if (!$activities) {
+                return $this->error('404', '该练习任务不存在!');
+            }
+            $activity = $activities[0];
+
+            $scene = $this->getAnswerSceneService()->get($exerciseActivity['answerSceneId']);
             if (empty($scene)) {
                 return $this->error('404', '该练习不存在!');
             }
-            $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $user['id']);
+            $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($exerciseActivity['answerSceneId'], $user['id']);
             if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
-                $assessment = $this->createAssessment($activity['title'], $activity['ext']['drawCondition']['range'], array($activity['ext']['drawCondition']['section']));
+                $assessment = $this->createAssessment($activity['title'], $exerciseActivity['drawCondition']['range'], array($exerciseActivity['drawCondition']['section']));
                 $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
             } else {
                 $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
