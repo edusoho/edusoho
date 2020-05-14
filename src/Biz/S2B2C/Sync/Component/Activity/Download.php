@@ -8,7 +8,7 @@ use Biz\Course\Dao\CourseMaterialDao;
 
 class Download extends Activity
 {
-    public function sync($activity, $config = array())
+    public function sync($activity, $config = [])
     {
         $download = $activity[$activity['mediaType'].'Activity'];
         $newUploadFiles = $config['newUploadFiles'];
@@ -16,7 +16,7 @@ class Download extends Activity
 
         $newDownload = $this->getDownloadActivityDao()->create($newDownloadFields);
 
-        $newMaterials = array();
+        $newMaterials = [];
         if (!empty($download['materials'])) {
             foreach ($download['materials'] as $courseMaterial) {
                 $newMaterial = $courseMaterial;
@@ -36,29 +36,28 @@ class Download extends Activity
         return $newDownload;
     }
 
-    public function updateToLastedVersion($activity, $config = array())
+    public function updateToLastedVersion($activity, $config = [])
     {
         $download = $activity[$activity['mediaType'].'Activity'];
         $newUploadFiles = $config['newUploadFiles'];
         $newDownloadFields = $this->getNewDownloadFields($download, $newUploadFiles);
 
-        $existDownload = $this->getDownloadActivityDao()->search(array('syncId' => $newDownloadFields['syncId']), array(), 0, PHP_INT_MAX);
+        $existDownload = $this->getDownloadActivityDao()->search(['syncId' => $newDownloadFields['syncId']], [], 0, PHP_INT_MAX);
         if (!empty($existDownload)) {
             $newDownload = $this->getDownloadActivityDao()->update($existDownload[0]['id'], $newDownloadFields);
         } else {
             $newDownload = $this->getDownloadActivityDao()->create($newDownloadFields);
         }
 
-        $newMaterials = array();
-        $existMaterials = $this->getMaterialDao()->search(array(
-            'courseSetId' => $config['newActivity']['fromCourseSetId'],
-            'courseId' => $config['newActivity']['fromCourseId'],
-            'source' => 'coursematerial',
-            'fileIds' => ArrayToolkit::column($newUploadFiles, 'id'),
-        ), array(), 0, PHP_INT_MAX);
-        $existMaterials = ArrayToolkit::index($existMaterials, 'syncId');
-
+        $newMaterials = [];
         if (!empty($download['materials'])) {
+            $existMaterials = $this->getMaterialDao()->search([
+                'courseSetId' => $config['newActivity']['fromCourseSetId'],
+                'courseId' => $config['newActivity']['fromCourseId'],
+                'source' => 'coursematerial',
+                'syncIds' => ArrayToolkit::column($download['materials'], 'id'),
+            ], [], 0, PHP_INT_MAX);
+            $existMaterials = ArrayToolkit::index($existMaterials, 'syncId');
             foreach ($download['materials'] as $courseMaterial) {
                 $newMaterial = $courseMaterial;
                 $newMaterial['syncId'] = $courseMaterial['id'];
@@ -85,7 +84,7 @@ class Download extends Activity
 
     protected function getNewDownloadFields($download, $newUploadFiles)
     {
-        $newDownloadFileIds = array();
+        $newDownloadFileIds = [];
         foreach ($download['fileIds'] as $fileSyncId) {
             if (!empty($newUploadFiles[$fileSyncId])) {
                 $newDownloadFileIds[] = (int) $newUploadFiles[$fileSyncId]['id'];
@@ -94,11 +93,11 @@ class Download extends Activity
             }
         }
 
-        return array(
+        return [
             'mediaCount' => $download['mediaCount'],
             'fileIds' => $newDownloadFileIds,
             'syncId' => $download['id'],
-        );
+        ];
     }
 
     /**

@@ -8,6 +8,7 @@ use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Testpaper\Service\TestpaperService;
 use Codeages\Biz\Framework\Context\Biz;
+use Monolog\Logger;
 
 class Activity
 {
@@ -111,6 +112,9 @@ class Activity
         return $this->getBiz()->service('Testpaper:TestpaperService');
     }
 
+    /**
+     * @return Logger
+     */
     protected function getLogger()
     {
         return $this->getBiz()->offsetGet('s2b2c.merchant.logger');

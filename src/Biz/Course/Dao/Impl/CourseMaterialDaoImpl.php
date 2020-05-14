@@ -11,10 +11,10 @@ class CourseMaterialDaoImpl extends AdvancedDaoImpl implements CourseMaterialDao
 
     public function declares()
     {
-        return array(
-            'timestamps' => array('createdTime'),
-            'orderbys' => array('createdTime'),
-            'conditions' => array(
+        return [
+            'timestamps' => ['createdTime'],
+            'orderbys' => ['createdTime'],
+            'conditions' => [
                 'id in (:ids)',
                 'id = :id',
                 'courseId = :courseId',
@@ -31,38 +31,41 @@ class CourseMaterialDaoImpl extends AdvancedDaoImpl implements CourseMaterialDao
                 'source IN (:sources)',
                 'courseSetId IN (:courseSetIds)',
                 'courseId IN (:courseIds)',
-            ),
-        );
+                'syncId = :syncId',
+                'syncId in (:syncIds)',
+                'syncId > :syncIdGT',
+            ],
+        ];
     }
 
     public function findByCopyIdAndLockedCourseIds($copyId, $courseIds)
     {
         if (empty($courseIds)) {
-            return array();
+            return [];
         }
 
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
 
-        $parmaters = array_merge(array($copyId), $courseIds);
+        $parmaters = array_merge([$copyId], $courseIds);
 
         $sql = "SELECT * FROM {$this->table()} WHERE copyId= ? AND courseId IN ({$marks})";
 
-        return $this->db()->fetchAll($sql, $parmaters) ?: array();
+        return $this->db()->fetchAll($sql, $parmaters) ?: [];
     }
 
     public function deleteByLessonId($lessonId, $courseType)
     {
-        return $this->db()->delete($this->table(), array('lessonId' => $lessonId, 'type' => $courseType));
+        return $this->db()->delete($this->table(), ['lessonId' => $lessonId, 'type' => $courseType]);
     }
 
     public function deleteByCourseId($courseId, $courseType)
     {
-        return $this->db()->delete($this->table(), array('courseId' => $courseId, 'type' => $courseType));
+        return $this->db()->delete($this->table(), ['courseId' => $courseId, 'type' => $courseType]);
     }
 
     public function findMaterialsByLessonIdAndSource($lessonId, $source)
     {
-        return $this->findByFields(array('lessonId' => $lessonId, 'source' => $source));
+        return $this->findByFields(['lessonId' => $lessonId, 'source' => $source]);
     }
 
     public function findMaterialsByIds($ids)
@@ -72,12 +75,12 @@ class CourseMaterialDaoImpl extends AdvancedDaoImpl implements CourseMaterialDao
 
     public function deleteByCourseSetId($courseSetId, $courseType)
     {
-        return $this->db()->delete($this->table(), array('courseSetId' => $courseSetId, 'type' => $courseType));
+        return $this->db()->delete($this->table(), ['courseSetId' => $courseSetId, 'type' => $courseType]);
     }
 
     public function deleteByFileId($fileId)
     {
-        return $this->db()->delete($this->table, array('fileId' => $fileId));
+        return $this->db()->delete($this->table, ['fileId' => $fileId]);
     }
 
     public function searchDistinctFileIds($conditions, $orderBys, $start, $limit)
@@ -88,11 +91,11 @@ class CourseMaterialDaoImpl extends AdvancedDaoImpl implements CourseMaterialDao
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        foreach ($orderBys ?: array() as $field => $direction) {
+        foreach ($orderBys ?: [] as $field => $direction) {
             $builder->addOrderBy($field, $direction);
         }
 
-        return $builder->execute()->fetchAll() ?: array();
+        return $builder->execute()->fetchAll() ?: [];
     }
 
     public function countGroupByFileId($conditions)
