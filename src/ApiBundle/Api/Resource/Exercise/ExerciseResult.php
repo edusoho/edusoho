@@ -32,17 +32,27 @@ class ExerciseResult extends AbstractResource
         $targetType = $request->request->get('targetType');
         $targetId = $request->request->get('targetId');
 
-        $activity = $this->getActivityService()->getActivity($mediaId, true);
+        $exerciseActivity = $this->getExerciseActivityService()->getActivity($mediaId);
         if (empty($activity)) {
             throw TaskException::NOTFOUND_TASK();
         }
-        $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
+        $conditions = array(
+            'mediaId' => $exerciseActivity['id'],
+            'mediaType' => 'exercise',
+        );
+        $activities = $this->getActivityService()->search($conditions, null, 0, 1);
+        if (!$activities) {
+            return $this->error('404', '该练习任务不存在!');
+        }
+        $activity = $activities[0];
+
+        $scene = $this->getAnswerSceneService()->get($exerciseActivity['answerSceneId']);
         if (empty($scene)) {
             throw TaskException::NOTFOUND_TASK();
         }
-        $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $user['id']);
+        $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($exerciseActivity['answerSceneId'], $user['id']);
         if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
-            $assessment = $this->createAssessment($activity['title'], $activity['ext']['drawCondition']['range'], array($activity['ext']['drawCondition']['section']));
+            $assessment = $this->createAssessment($activity['title'], $exerciseActivity['drawCondition']['range'], array($exerciseActivity['drawCondition']['section']));
             $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
         } else {
             $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
@@ -62,7 +72,7 @@ class ExerciseResult extends AbstractResource
             throw CourseException::FORBIDDEN_TAKE_COURSE();
         }
 
-        $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
+        $answerScene = $this->getAnswerSceneService()->get($exerciseActivity['answerSceneId']);
         $testpaperWrapper = new TestpaperWrapper();
 
         if (empty($answerRecord) || 'finished' == $answerRecord['status']) {
