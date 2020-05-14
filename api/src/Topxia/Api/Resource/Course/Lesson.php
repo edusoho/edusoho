@@ -5,6 +5,7 @@ namespace Topxia\Api\Resource\Course;
 use Biz\Accessor\AccessorInterface;
 use Biz\Course\Service\CourseService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Silex\Application;
 use AppBundle\Common\SettingToolkit;
@@ -188,6 +189,9 @@ class Lesson extends BaseResource
         $course = $this->getCourseService()->getCourse($lesson['courseId']);
 
         $testRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($testpaperActivity['answerSceneId'], $user['id']);
+        $scene = $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
+        $lesson['testMode'] = !empty($scene['start_time']) ? 'realTime' : 'normal';
+        $lesson['testStartTime'] = $scene['start_time'];
 
         $lesson['content'] = array(
             'status' => empty($testRecord) ? 'nodo' : $testRecord['status'],
@@ -495,5 +499,13 @@ class Lesson extends BaseResource
     protected function getAnswerRecordService()
     {
         return $this->createService('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerSceneService');
     }
 }
