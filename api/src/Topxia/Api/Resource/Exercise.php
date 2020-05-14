@@ -98,6 +98,7 @@ class Exercise extends BaseResource
             $items = $testpaperWrapper->wrapTestpaperItems($assessment, array());
 
             $exercise['items'] = $this->filterItem($items, null);
+            $exercise['id'] = $id;
         }
 
         return $this->filter($exercise);
