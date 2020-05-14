@@ -635,7 +635,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $start = $startData['start'];
         $limit = $startData['limit'];
         $sql = "
-            SELECT id, title, startTime, mediaId, mediaType FROM activity WHERE mediaType IN ('exercise', 'testpaper', 'homework') LIMIT {$start}, {$limit};    
+            SELECT id, title, startTime, mediaId, mediaType, finishData FROM activity WHERE mediaType IN ('exercise', 'testpaper', 'homework') LIMIT {$start}, {$limit};    
         ";
         $activities = $this->getConnection()->fetchAll($sql, array());
         $activitiesGroup = ArrayToolkit::group($activities, 'mediaType');
@@ -693,6 +693,11 @@ class EduSohoUpgrade extends AbstractUpdater
                 }
             }
             foreach ($activitiesGroup['testpaper'] as $activity) {
+                $assessment = $this->getAssessmentDao()->get($testpaperActivities[$activity['mediaId']]['mediaId']);
+                $passScore = 0;
+                if ($assessment) {
+                    $passScore = intval($assessment['total_score'] * $activity['finishData']);
+                }
                 $answerScenes[] = array(
                     'id' => $activity['id'],
                     'name' => $activity['title'],
@@ -702,7 +707,7 @@ class EduSohoUpgrade extends AbstractUpdater
                     'need_score' => 1,
                     'manual_marking' => 1,
                     'start_time' => $activity['startTime'],
-                    'pass_score' => empty($testpaperActivities[$activity['mediaId']]['finishCondition']['finishScore']) ? 0 : $testpaperActivities[$activity['mediaId']]['finishCondition']['finishScore'],
+                    'pass_score' => $passScore,
                     'enable_facein' => empty($faceinCourseTasks[$activity['id']]) ? 0 : $faceinCourseTasks[$activity['id']]['enable_facein'],
                 );
             }
