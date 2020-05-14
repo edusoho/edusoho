@@ -54,6 +54,7 @@ t.add("site.capacity", "\u5bb9\u91cf(G)", "js", "zh_CN");
 t.add("site.step_two", "\u6b65\u9aa42", "js", "zh_CN");
 t.add("site.step_one", "\u6b65\u9aa41", "js", "zh_CN");
 t.add("site.information", "\u4fe1\u606f", "js", "zh_CN");
+t.add("site.tips", "\u63d0\u793a", "js", "zh_CN");
 t.add("site.unknow_server_error", "\u53d1\u751f\u672a\u77e5\u9519\u8bef", "js", "zh_CN");
 t.add("site.incorrect.password", "\u5bc6\u7801\u9519\u8bef", "js", "zh_CN");
 t.add("user.settings.security.mobile_bind.success", "\u624b\u673a\u7ed1\u5b9a\u6210\u529f", "js", "zh_CN");
@@ -1257,6 +1258,7 @@ t.add("coupon.target_type.multi_course", "\u90e8\u5206\u8bfe\u7a0b", "js", "zh_C
 t.add("coupon.target_type.multi_classroom", "\u90e8\u5206\u73ed\u7ea7", "js", "zh_CN");
 t.add("admin.wechat.live_open_scenes_error.hint", "\u8bf7\u81f3\u5c11\u52fe\u9009\u4e00\u4e2a\u9009\u9879\u3002", "js", "zh_CN");
 t.add("course.question_manage.manage.delete_tips", "\u5220\u9664\u9898\u76ee\uff0c\u53ef\u80fd\u4f1a\u5f71\u54cd\u8bfe\u65f6\u7684\u7ec3\u4e60\uff0c\u8bf7\u8c28\u614e\u64cd\u4f5c\uff01", "js", "zh_CN");
+t.add("course.question_manage.upgrade_tips", "\u4e3a\u4e86\u66f4\u597d\u7684\u4f7f\u7528\u4f53\u9a8c\uff0c\u8bf7\u5148\u5347\u7ea7\u63d2\u4ef6\u3002<br \/>\u8def\u5f84\uff1a\u3010\u540e\u53f0\u3011 - \u3010\u4e91\u5e02\u573a\u3011- \u3010\u8425\u9500\u5e94\u7528\u3011 - \u3010\u9898\u5e93\u589e\u5f3a\u63d2\u4ef6\u3011\u3002", "js", "zh_CN");
 t.add("admin.setting.invite.coupon.empty.tips", "\u8bf7\u8bbe\u7f6e\u4f18\u60e0\u5238\u6279\u6b21", "js", "zh_CN");
 t.add("course.plan_task.activity_ppt_animation_img", "\u5207\u6362\u56fe\u7247\u6a21\u5f0f", "js", "zh_CN");
 t.add("course.plan_task.activity_ppt_animation_slide", "\u5207\u6362\u52a8\u753b\u6a21\u5f0f", "js", "zh_CN");
