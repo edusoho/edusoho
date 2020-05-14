@@ -1492,3 +1492,5 @@ admin_v2.developer.plumber_operate_success_hint: 操作成功
 
 course_manage.positive_currency.message: 请输入大于0的有效价格，最多两位小数，整数位不超过8位！
 
+merchant.resource.product_version.update_success_hint: 更新成功
+merchant.resource.product_version.update_failed_hint: 更新失败
