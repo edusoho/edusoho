@@ -30,6 +30,7 @@ class ItemDraw
     {
         foreach ($sections as &$section) {
             $section['items'] = $this->findSectionItems($section['conditions'], $section['item_count']);
+            $section['question_count'] = array_sum(ArrayToolkit::column($section['items'], 'question_num'));
         }
 
         return $sections;
