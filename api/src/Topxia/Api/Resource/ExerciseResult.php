@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ExerciseResult extends BaseResource
 {
-    public function post(Application $app, Request $request, $mediaId)
+    public function post(Application $app, Request $request, $exerciseId)
     {
         $answers = $request->request->all();
 
@@ -25,6 +25,7 @@ class ExerciseResult extends BaseResource
         $answers['usedTime'] = 0;
 
         $user = $this->getCurrentUser();
+        $mediaId = $exerciseId;
         $exerciseActivity = $this->getExerciseActivityService()->getActivity($mediaId);
         if (empty($exerciseActivity)) {
             return $this->error('404', '该练习不存在!');
