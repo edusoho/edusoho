@@ -32,7 +32,8 @@
           publicPath: '/static-dist/libs/es-ckeditor/ckeditor.js',
           filebrowserImageUploadUrl: $('[name=ckeditor_image_upload_url]').val(),
           filebrowserImageDownloadUrl: $('[name=ckeditor_image_download_url]').val(),
-          language: document.documentElement.lang === 'zh_CN' ? 'zh-cn' : document.documentElement.lang
+          language: document.documentElement.lang === 'zh_CN' ? 'zh-cn' : document.documentElement.lang,
+          jqueryPath: '/static-dist/libs/jquery/dist/jquery.min.js',
         },
         bank_id: $('[name=bankId]').val(),
         category: JSON.parse($('[name=categoryTree]').val()),
