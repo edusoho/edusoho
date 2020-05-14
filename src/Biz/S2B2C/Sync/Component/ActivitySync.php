@@ -90,6 +90,10 @@ class ActivitySync extends AbstractEntitySync
         return $activityMap;
     }
 
+    /**
+     * @param $newActivity
+     * 这里的问题是，默认认为当前lessonId的material都是接下来要处理的activity对应的ID了
+     */
     protected function syncDownloadMaterials($newActivity)
     {
         $materials = $this->getMaterialService()->searchMaterials(
