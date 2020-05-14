@@ -1484,6 +1484,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 $answerMode = 'text';
                 $answer = array();
                 $responsePoints = array();
+                $question['stem'] = preg_replace('/\[\[.+?\]\]/', '[[]]', $question['stem']);
                 foreach ($question['answer'] as $questionAnswer) {
                     $answer[] = implode($questionAnswer, '|');
                     $responsePoints[] = array('text' => array());
