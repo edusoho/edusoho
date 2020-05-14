@@ -51,10 +51,20 @@
           locale: document.documentElement.lang
         },
         fileId: 0,
+        redirect:true
       }
+    },
+    created() {
+      let self = this;
+      $(window).on('beforeunload',function(){
+        if (self.redirect) {
+          return Translator.trans('admin.block.not_saved_data_hint');
+        }
+      });
     },
     methods: {
       getImportData(subject) {
+        this.redirect = false;
         $.ajax({
           url: $('[name=saveUrl]').val(),
           contentType: 'application/json;charset=utf-8',
