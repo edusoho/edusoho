@@ -5937,7 +5937,7 @@ admin.user_auth.privacy_policy_settings: 'Privacy policy settings'
 admin.user_auth.privacy_policy_settings.Enable: 'Status of privacy policy'
 admin.user_auth.privacy_policy_settings.open: 'Turned on'
 admin.user_auth.privacy_policy_settings.closed: 'Closed'
-admin.user_auth.privacy_policy_settings.Enable.help_block: 'Users need to agree the terms to register if turned on'
+admin.user_auth.privacy_policy_settings.Enable.help_block: 'Users need to agree the terms to register if turned on. The privacy agreement should be uploaded by Kuozhi uniformly to those who use the online school of Kuozhi School App.'
 admin.user_auth.privacy_policy_settings.details: 'Privacy Policy'
 admin.user_auth.Name_setting: Name
 admin.user_auth.Name_setting.user_name: 'Username'

@@ -7212,7 +7212,7 @@ admin.user_auth.privacy_policy_settings: 隐私政策设置
 admin.user_auth.privacy_policy_settings.Enable: 是否开启隐私政策
 admin.user_auth.privacy_policy_settings.open: 开启
 admin.user_auth.privacy_policy_settings.closed: 关闭
-admin.user_auth.privacy_policy_settings.Enable.help_block: 开启后用户注册时必须同意隐私政策才能注册
+admin.user_auth.privacy_policy_settings.Enable.help_block: 开启后用户注册时必须同意隐私政策才能注册。使用阔知学堂app的网校，需要由阔知统一上传隐私协议。
 admin.user_auth.privacy_policy_settings.details: 隐私政策内容
 admin.user_auth.Name_setting: 名称设置
 admin.user_auth.Name_setting.user_name: 用户名称
