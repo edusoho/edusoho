@@ -6,7 +6,9 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Activity\Service\HomeworkActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Course\CourseException;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 
 class CourseItem extends AbstractResource
 {
@@ -34,6 +36,15 @@ class CourseItem extends AbstractResource
                 if ('homework' == $task['type'] && !empty($task['activity'])) {
                     $homeworkActivity = $this->getHomeworkActivityService()->get($task['activity']['mediaId']);
                     $task['activity']['mediaId'] = $homeworkActivity['assessmentId'];
+                }
+                if ('testpaper' == $task['type'] && !empty($task['activity']['ext'])) {
+                    $testpaperActivity = $this->getTestpaperActivityService()->getActivity($task['activity']['mediaId']);
+                    $scene = $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
+                    if (!empty($scene)) {
+                        $task['activity']['ext']['doTimes'] = $scene['do_times'];
+                        $task['activity']['ext']['redoInterval'] = $scene['redo_interval'];
+                        $task['activity']['ext']['limitedTime'] = $scene['limited_time'];
+                    }
                 }
             }
         }
@@ -75,5 +86,21 @@ class CourseItem extends AbstractResource
     protected function getHomeworkActivityService()
     {
         return $this->service('Activity:HomeworkActivityService');
+    }
+
+    /**
+     * @return TestpaperActivityService
+     */
+    protected function getTestpaperActivityService()
+    {
+        return $this->service('Activity:TestpaperActivityService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->service('ItemBank:Answer:AnswerSceneService');
     }
 }

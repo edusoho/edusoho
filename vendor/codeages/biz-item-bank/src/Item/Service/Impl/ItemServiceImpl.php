@@ -64,7 +64,7 @@ class ItemServiceImpl extends BaseService implements ItemService
                 foreach ($group as $item) {
                     $item['bank_id'] = $bankId;
                     $savedItem = $this->createItem($item);
-                    $savedItems[] = array_merge($savedItem, $item);
+                    $savedItems[] = array_merge($savedItems, $savedItem);
                 }
             }
             $this->commit();

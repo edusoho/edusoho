@@ -30,6 +30,7 @@ class Testpaper extends Activity
             $testpaper = $this->getAssessmentService()->getAssessment($activity['mediaId']);
             $activity['testpaper'] = $testpaper;
             $activity['answerScene'] = $this->getAnswerSceneService()->get($activity['answerSceneId']);
+            $activity = $this->filterActivity($activity, $activity['answerScene']);
         }
 
         return $activity;
@@ -253,6 +254,17 @@ class Testpaper extends Activity
         unset($filterFields['testpaperId']);
 
         return $filterFields;
+    }
+
+    protected function filterActivity($activity, $scene)
+    {
+        if (!empty($scene)) {
+            $activity['doTimes'] = $scene['do_times'];
+            $activity['redoInterval'] = $scene['redo_interval'];
+            $activity['limitedTime'] = $scene['limited_time'];
+        }
+
+        return $activity;
     }
 
     /**
