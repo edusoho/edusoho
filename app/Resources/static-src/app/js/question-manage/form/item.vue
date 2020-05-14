@@ -62,7 +62,8 @@
           publicPath: $('[name=ckeditor_path]').val(),
           filebrowserImageUploadUrl: $('[name=ckeditor_image_upload_url]').val(),
           filebrowserImageDownloadUrl: $('[name=ckeditor_image_download_url]').val(),
-          language: document.documentElement.lang === 'zh_CN' ? 'zh-cn' : document.documentElement.lang
+          language: document.documentElement.lang === 'zh_CN' ? 'zh-cn' : document.documentElement.lang,
+          jqueryPath: $('[name=jquery_path]').val()
         },
         showAttachment: $('[name=show_attachment]').val(),
         cdnHost: $('[name=cdn_host]').val(),

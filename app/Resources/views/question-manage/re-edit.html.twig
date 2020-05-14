@@ -33,6 +33,7 @@
   <input type="hidden" name="categoryTree" value='{{ categoryTree|json_encode }}'>
   <input type="hidden" name="type" value="{{ type }}">
   <input type="hidden" name="ckeditor_path" value="{{ asset('static-dist/libs/es-ckeditor/ckeditor.js') }}">
+  <input type="hidden" name="jquery_path" value="{{ asset('static-dist/libs/jquery/dist/jquery.min.js') }}">
   <input type="hidden" name="ckeditor_image_upload_url" value="{{ path('editor_upload', {token:upload_token('course')}) }}">
   <input type="hidden" name="ckeditor_image_download_url" value="{{ path('editor_download', {token:upload_token('course')}) }}">
   <input type="hidden" name="saveUrl" value="
