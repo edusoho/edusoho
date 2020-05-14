@@ -215,6 +215,11 @@ class PlayerServiceImpl extends BaseService implements PlayerService
         return [$result, $error];
     }
 
+    public function getFlashFilePlayer($flash, $ssl)
+    {
+        return $this->getPlayerByFile($flash, $ssl);
+    }
+
     private function filterSubtitles(&$subtitles)
     {
         foreach ($subtitles as &$subtitle) {
