@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ExerciseResult extends BaseResource
 {
-    public function post(Application $app, Request $request, $exerciseId)
+    public function post(Application $app, Request $request, $mediaId)
     {
         $answers = $request->request->all();
 
@@ -25,25 +25,19 @@ class ExerciseResult extends BaseResource
         $answers['usedTime'] = 0;
 
         $user = $this->getCurrentUser();
-        $assessment = $this->getAssessmentService()->showAssessment($exerciseId);
-        if (empty($assessment)) {
+        $exerciseActivity = $this->getExerciseActivityService()->getActivity($mediaId);
+        if (empty($exerciseActivity)) {
             return $this->error('404', '该练习不存在!');
         }
 
-        $answerRecords = $this->getAnswerRecordService()->search(
-            array('user_id' => $user['id'], 'assessment_id' => $assessment['id']),
-            array('created_time' => 'desc'),
-            0,
-            1
-        );
-
-        if (empty($answerRecords)) {
-            return $this->error('404', '该练习任务不存在!');
+        $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($exerciseActivity['answerSceneId'], $user['id']);
+        if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
+            return $this->error('404', '该练习不存在!');
         }
 
-        $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerRecords[0]['answer_scene_id']);
-        if (empty($exerciseActivity)) {
-            return $this->error('404', '该练习任务不存在!');
+        $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
+        if (empty($assessment)) {
+            return $this->error('404', '该练习不存在!');
         }
 
         $conditions = array(
@@ -61,17 +55,12 @@ class ExerciseResult extends BaseResource
             return $this->error('500', '无权限访问!');
         }
 
-        $record = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($exerciseActivity['answerSceneId'], $user['id']);
-        if (empty($record) || 'finished' == $record['status']) {
-            $record = $this->getAnswerService()->startAnswer($exerciseActivity['answerSceneId'], $assessment['id'], $user['id']);
-        }
-
         $wrapper = new AssessmentResponseWrapper();
-        $responses = $wrapper->wrap($answers, $assessment, $record);
+        $responses = $wrapper->wrap($answers, $assessment, $answerRecord);
         $this->getAnswerService()->submitAnswer($responses);
 
         return array(
-            'id' => $record['id'],
+            'id' => $answerRecord['id'],
         );
     }
 
