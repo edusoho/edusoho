@@ -903,6 +903,3 @@ admin_v2.developer.mobile_iap_product.basic_tab: iOS Purchase Setting
 # 新版后台结束
 
 admin_v2.course.basic.basic_tab.go_to_choose_btn: Go to the market
-
-merchant.resource.product_version.update_success_hint: Update Success
-merchant.resource.product_version.update_failed_hint: Update Failed
