@@ -11,6 +11,9 @@ class FileSourceServiceImpl extends BaseService implements FileSourceService
 {
     public function getFullFileInfo($file)
     {
+        if (empty($file)) {
+            return null;
+        }
         $file['globalId'] = empty($file['s2b2cGlobalId']) ? $file['globalId'] : $file['s2b2cGlobalId'];
         $file['hashId'] = empty($file['s2b2cHashId']) ? $file['hashId'] : $file['s2b2cHashId'];
 
