@@ -10,6 +10,10 @@ interface ProductService
 
     public function createProduct($fields);
 
+    public function updateProduct($id, $productFields);
+
+    public function deleteProduct($id);
+
     public function getProduct($id);
 
     public function getProductBySupplierIdAndRemoteProductId($supplierId, $remoteProductId);

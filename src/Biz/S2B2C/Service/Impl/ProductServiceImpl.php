@@ -71,12 +71,42 @@ class ProductServiceImpl extends BaseService implements ProductService
                 'cooperationPrice',
                 'suggestionPrice',
                 'localVersion',
+                'remoteVersion',
                 'createdTime',
                 'updatedTime',
+                'syncStatus',
             ]
         );
 
         return $this->getS2B2CProductDao()->create($fields);
+    }
+
+    public function updateProduct($id, $productFields)
+    {
+        $productFields = ArrayToolkit::parts(
+            $productFields,
+            [
+                'supplierId',
+                'productType',
+                'remoteProductId',
+                'remoteResourceId',
+                'localResourceId',
+                'cooperationPrice',
+                'suggestionPrice',
+                'localVersion',
+                'remoteVersion',
+                'createdTime',
+                'updatedTime',
+                'syncStatus',
+            ]
+        );
+
+        return $this->getS2B2CProductDao()->update($id, $productFields);
+    }
+
+    public function deleteProduct($id)
+    {
+        return $this->getS2B2CProductDao()->delete($id);
     }
 
     public function searchRemoteProducts($conditions)

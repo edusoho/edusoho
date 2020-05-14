@@ -23,7 +23,7 @@
     {% if endDateTime > 0 and productVersion.updatedTime > endDateTime %}
       {% set endDateShow = 0 %}
     {% endif %}
-    {% set isShow = startDateShow|default(1) and endDateShow|default(1) and (product.localVersion <= productVersion.productVersion) %}
+    {% set isShow = startDateShow|default(1) and endDateShow|default(1) and (product.localVersion < productVersion.productVersion) %}
     {% if isShow and not hasData|default(0) %}
       {% set hasData = 1 %}
     {% endif %}
@@ -49,7 +49,7 @@
           <a target="_blank" href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id, hasNewVersion: 1}) }}">{{'merchant.content_resource.product_version.view_btn'|trans}}</a>
 
           {% if productVersion.status|default('') == 'published' %}
-            <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_content_resource_update_product_version', {productId: productVersion.productId}) }}">{{ 'merchant.content_resource.product_version.update_btn'|trans }}</a>
+            <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_content_resource_update_product_version', {productId: product.id}) }}">{{ 'merchant.content_resource.product_version.update_btn'|trans }}</a>
           {% endif %}
         </td>
       </tr>

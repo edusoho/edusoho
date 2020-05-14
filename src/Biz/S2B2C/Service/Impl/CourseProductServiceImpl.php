@@ -19,6 +19,10 @@ use Monolog\Logger;
  */
 class CourseProductServiceImpl extends BaseService implements CourseProductService
 {
+    const SYNC_STATUS_FINISHED = 'finished';
+
+    const SYNC_STATUS_ERROR = 'error';
+
     /**
      * @param $localCourseSet
      * @param $product
@@ -85,6 +89,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
     {
         $course = $this->getCourseService()->getCourse($courseId);
         $product = $product = $this->getProductService()->getByTypeAndLocalResourceId('course', $course['id']);
+        $courseSetProduct = $this->getProductService()->getByTypeAndLocalResourceId('course_set', $course['courseSetId']);
         $this->getLogger()->info("开始尝试同步课程(#{$courseId})");
         if (!$this->validateCourseData($course, $product)) {
             return false;
@@ -95,9 +100,8 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             $sourceCourse = $this->tryGetSupplierProductSyncData($product['remoteProductId']);
 
             $this->biz['s2b2c.course_product_sync']->sync($sourceCourse, ['syncCourseId' => $courseId]);
-//
-//            $syncCourse = $this->getCourseProductDao()->update($courseId, array('statusSyncTime' => time(), 'syncStatus' => self::SYNC_STATUS_FINISHED));
-//            $this->getCourseSetProductDao()->update($syncCourse['courseSetId'], array('sourceVersion' => $syncCourse['sourceVersion'], 'syncStatus' => self::SYNC_STATUS_FINISHED, 'minCoursePrice' => $syncCourse['price'], 'maxCoursePrice' => $syncCourse['price']));
+            $syncCourse = $this->getProductService()->updateProduct($product['id'], ['localVersion' => $sourceCourse['editVersion'], 'syncStatus' => self::SYNC_STATUS_FINISHED]);
+            $this->getProductService()->updateProduct($courseSetProduct['id'], ['syncStatus' => self::SYNC_STATUS_FINISHED]);
             $this->getLogService()->info('course', 'create', "内容市场选择商品(#{$courseId})《{$course['courseSetTitle']}》同步数据成功", ['userId' => $this->getCurrentUser()->getId()]);
             $this->commit();
             $this->getLogger()->info("[syncCourseProduct] 同步课程 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 成功", ['courseId' => $course['id']]);
@@ -107,15 +111,63 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             $courseCounts = $this->getProductService()->countProducts(['remoteResourceId' => $course['courseSetId']]);
             //删除CourseSet存在一定风险，如果第一个计划就报错，会造成数据丢失
             if (1 == $courseCounts) {
-//                $this->getCourseSetService()->delete($course['courseSetId']);
+                $this->getCourseSetService()->deleteCourseSet($course['courseSetId']);
+                $this->getProductService()->deleteProduct($courseSetProduct['id']);
             }
-//            $this->getCourseProductDao()->delete($courseId);
+            $this->getCourseService()->deleteCourse($courseId);
+            $this->getProductService()->deleteProduct($product['id']);
             $this->getLogService()->error('course', 'create', "内容市场选择商品(#{$courseId})《{$course['courseSetTitle']}》同步数据失败", ['userId' => $this->getCurrentUser()->getId()]);
 
             return false;
         }
 
         return true;
+    }
+
+    public function updateCourseVersionData($courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $product = $product = $this->getProductService()->getByTypeAndLocalResourceId('course', $course['id']);
+        $courseSetProduct = $this->getProductService()->getByTypeAndLocalResourceId('course_set', $course['courseSetId']);
+        $this->getLogger()->info("开始尝试更新课程(#{$courseId})到最新版本");
+        if (empty($course)) {
+            $this->getLogger()->error('课程不存在，拒绝操作');
+
+            return ['status' => false, 'error' => '更新失败'];
+        }
+        if (self::SYNC_STATUS_FINISHED !== $product['syncStatus']) {
+            $this->getLogger()->error("课程 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 状态异常，无法处理", ['syncStatus' => $course['syncStatus']]);
+
+            return ['status' => false, 'error' => '更新失败'];
+        }
+
+        try {
+            $this->beginTransaction();
+            $sourceCourse = $this->tryGetSupplierProductSyncData($product['remoteProductId']);
+            if ($product['localVersion'] >= $sourceCourse['editVersion']) {
+                $this->getLogger()->info("课程 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 版本已经是最新，无需处理", ['nowVersion' => $product['localVersion'], 'sourceVersion' => $sourceCourse['editVersion']]);
+
+                $this->commit();
+
+                return ['status' => false, 'error' => '版本已经是最新，无需处理'];
+            }
+            $this->biz['s2b2c.course_product_sync']->updateToLastedVersion($sourceCourse, ['syncCourseId' => $courseId]);
+
+            $syncCourse = $this->getProductService()->updateProduct($product['id'], ['localVersion' => $sourceCourse['editVersion'], 'changelog' => []]);
+            $this->getProductService()->updateProduct($courseSetProduct['id'], ['localVersion' => $sourceCourse['editVersion']]);
+            $this->getLogger()->info("[syncCourseProduct] 更新课程到最新 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 成功", ['courseId' => $course['id']]);
+            $this->getLogService()->info('course', 'update', "(#{$courseId})《{$course['courseSetTitle']}》更新版本到最新成功,版本变动：V{$product['localVersion']}->V{$sourceCourse['editVersion']}", ['userId' => $this->getCurrentUser()->getId()]);
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            $this->getLogger()->error("[syncCourseProduct] 更新课程到最新 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 失败", ['error' => $e]);
+            $this->getLogService()->error('course', 'update', "(#{$courseId})《{$course['courseSetTitle']}》更新版本到最新失败，版本无变化：V{$product['localVersion']}", ['userId' => $this->getCurrentUser()->getId()]);
+            $errorMsg = in_array($e->getCode(), [5001730, 5001731]) ? $e->getMessage() : '更新失败';
+
+            return ['status' => false, 'error' => $errorMsg];
+        }
+
+        return ['status' => true, 'error' => ''];
     }
 
     protected function validateCourseData($course, $product)

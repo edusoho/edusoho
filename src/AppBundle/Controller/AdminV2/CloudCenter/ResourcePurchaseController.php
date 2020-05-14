@@ -7,6 +7,7 @@ use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\S2B2C\Service\CourseProductService;
 use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\CacheService;
@@ -228,11 +229,8 @@ class ResourcePurchaseController extends BaseController
             if (empty($merchant['status']) || 'active' != $merchant['status'] || 'cooperation' != $merchant['coop_status']) {
                 return $this->createJsonResponse(['status' => false, 'error' => '更新失败']);
             }
-            /**
-             * mock
-             */
-            $result = [];
-//            $result = $this->getProductService()->updateCourseVersionData($course['id']);
+
+            $result = $this->getS2B2CCourseProductService()->updateCourseVersionData($course['id']);
 
             return $this->createJsonResponse($result);
         }
@@ -303,5 +301,13 @@ class ResourcePurchaseController extends BaseController
     protected function getCacheService()
     {
         return $this->createService('System:CacheService');
+    }
+
+    /**
+     * @return CourseProductService
+     */
+    protected function getS2B2CCourseProductService()
+    {
+        return $this->createService('S2B2C:CourseProductService');
     }
 }
