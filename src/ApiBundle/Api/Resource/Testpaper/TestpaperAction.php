@@ -155,7 +155,7 @@ class TestpaperAction extends AbstractResource
         if ($scene['do_times'] && $answerRecord && 'finished' == $answerRecord['status']) {
             throw TestpaperException::FORBIDDEN_RESIT();
         } elseif ($scene['redo_interval'] && $answerReport) {
-            $nextDoTime = $answerReport['review_time'] + $scene['redo_interval'] * 3600;
+            $nextDoTime = $answerReport['review_time'] + $scene['redo_interval'] * 60;
             if ($nextDoTime > time()) {
                 throw TestpaperException::REDO_INTERVAL_EXIST();
             }

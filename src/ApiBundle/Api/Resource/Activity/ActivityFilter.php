@@ -38,7 +38,7 @@ class ActivityFilter extends Filter
                 $data['testpaperInfo']['testpaperId'] = $data['ext']['mediaId'];
                 $data['testpaperInfo']['testMode'] = $data['ext']['testMode'];
                 $data['testpaperInfo']['limitTime'] = $data['ext']['limitedTime'];
-                $data['testpaperInfo']['redoInterval'] = $data['ext']['redoInterval'] * 60; //分钟
+                $data['testpaperInfo']['redoInterval'] = $data['ext']['redoInterval']; //分钟
                 $data['testpaperInfo']['doTimes'] = $data['ext']['doTimes'];
                 $data['testpaperInfo']['startTime'] = !empty($data['startTime']) ? $data['startTime'] : null;
             }

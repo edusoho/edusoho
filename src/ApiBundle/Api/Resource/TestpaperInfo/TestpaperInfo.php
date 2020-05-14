@@ -81,8 +81,8 @@ class TestpaperInfo extends AbstractResource
         }
 
         $task['activity'] = $activity;
-        
-        $results['testpaper']['limitedTime'] = empty($scene['limited_time']) ? 0 : $scene['limited_time'];
+
+        $results['testpaper']['limitedTime'] = empty($scene['limited_time']) ? '0' : $scene['limited_time'];
         $results['task'] = $task;
     }
 
