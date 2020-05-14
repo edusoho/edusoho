@@ -57,38 +57,7 @@ class CourseTask extends AbstractResource
             $activity['mediaId'] = $homeworkActivity['assessmentId'];
         }
 
-        if ('exercise' == $activity['mediaType']) {
-            $user = $this->getCurrentUser();
-            $exerciseActivity = $this->getExerciseActivityService()->getActivity($activity['mediaId']);
-            $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($exerciseActivity['answerSceneId'], $user['id']);
-            if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
-                $assessment = $this->createAssessment($activity['title'], $exerciseActivity['drawCondition']['range'], array($exerciseActivity['drawCondition']['section']));
-                $this->getAnswerService()->startAnswer($exerciseActivity['answerSceneId'], $assessment['id'], $user['id']);
-                $activity['mediaId'] = $assessment['id'];
-            } else {
-                $activity['mediaId'] = $answerRecord['assessment_id'];
-            }
-        }
-
         return $activity;
-    }
-
-    protected function createAssessment($name, $range, $sections)
-    {
-        $sections = $this->getAssessmentService()->drawItems($range, $sections);
-        $assessment = array(
-            'name' => $name,
-            'displayable' => 0,
-            'description' => '',
-            'bank_id' => $range['bank_id'],
-            'sections' => $sections,
-        );
-
-        $assessment = $this->getAssessmentService()->createAssessment($assessment);
-
-        $this->getAssessmentService()->openAssessment($assessment['id']);
-
-        return $assessment;
     }
 
     /**

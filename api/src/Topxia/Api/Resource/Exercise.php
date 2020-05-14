@@ -46,34 +46,21 @@ class Exercise extends BaseResource
             $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
             $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         } else {
-            $assessment = $this->getAssessmentService()->showAssessment($id);
-            $answerRecords = $this->getAnswerRecordService()->search(
-                array('user_id' => $user['id'], 'assessment_id' => $assessment['id']),
-                array('created_time' => 'desc'),
-                0,
-                1
-            );
-
-            if (empty($answerRecords)) {
-                return $this->error('404', '该练习任务不存在!');
+            $activity = $this->getActivityService()->getActivity($id, true);
+            if (empty($activity)) {
+                return $this->error('404', '该练习不存在!');
             }
-
-            $answerRecord = $answerRecords[0];
-            $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerRecord['answer_scene_id']);
-            if (empty($exerciseActivity)) {
-                return $this->error('404', '该练习任务不存在!');
+            $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
+            if (empty($scene)) {
+                return $this->error('404', '该练习不存在!');
             }
-
-            $conditions = array(
-                'mediaId' => $exerciseActivity['id'],
-                'mediaType' => 'exercise',
-            );
-            $activities = $this->getActivityService()->search($conditions, null, 0, 1);
-            if (!$activities) {
-                return $this->error('404', '该练习任务不存在!');
+            $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $user['id']);
+            if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
+                $assessment = $this->createAssessment($activity['title'], $activity['ext']['drawCondition']['range'], array($activity['ext']['drawCondition']['section']));
+                $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+            } else {
+                $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
             }
-            $activity = $activities[0];
-            $scene = $this->getAnswerSceneService()->get($answerRecords[0]['answer_scene_id']);
         }
         $testpaperWrapper = new TestpaperWrapper();
         $exercise = $testpaperWrapper->wrapTestpaper($assessment);
