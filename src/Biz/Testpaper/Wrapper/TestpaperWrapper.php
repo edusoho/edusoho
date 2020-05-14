@@ -134,11 +134,12 @@ class TestpaperWrapper
             $question = array(
                 'id' => $item['id'],
                 'type' => 'material',
+                'questionType' => 'material',
                 'stem' => $item['material'],
                 'score' => empty($item['score']) ? '0' : strval($item['score']),
                 'metas' => array(),
                 'difficulty' => $item['difficulty'],
-                'subCount' => count($item['questions']),
+                'subCount' => strval(count($item['questions'])),
                 'seq' => strval($item['seq']),
                 'categoryId' => $item['category_id'],
                 'analysis' => $item['analysis'],
@@ -162,6 +163,7 @@ class TestpaperWrapper
         $question = array(
             'id' => $itemQuestion['id'],
             'type' => $this->modeToType[$itemQuestion['answer_mode']],
+            'questionType' => $this->modeToType[$itemQuestion['answer_mode']],
             'stem' => $itemQuestion['stem'],
             'score' => strval($itemQuestion['score']),
             'metas' => $this->convertMetas($itemQuestion),
