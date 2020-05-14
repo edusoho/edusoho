@@ -1473,10 +1473,10 @@ class EduSohoUpgrade extends AbstractUpdater
 
             case 'determine':
                 $answerMode = 'true_false';
-                $answer = $question['answer'][0] == '0' ? 'T' : 'F';
+                $answer = $question['answer'][0] == '1' ? array('T') : array('F');
                 $responsePoints = array(
-                    array('radio' => array('val' => 'T', '正确')),
-                    array('radio' => array('val' => 'F', '错误')),
+                    array('radio' => array('val' => 'T', 'text' => '正确')),
+                    array('radio' => array('val' => 'F', 'text' => '错误')),
                 );
                 break;
             
