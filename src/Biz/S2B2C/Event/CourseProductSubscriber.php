@@ -3,6 +3,7 @@
 namespace Biz\S2B2C\Event;
 
 use Biz\S2B2C\Service\CourseProductService;
+use Biz\S2B2C\Service\ProductService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use QiQiuYun\SDK\Service\S2B2CService;
@@ -13,7 +14,6 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
     public static function getSubscribedEvents()
     {
         return [
-            'course.create' => 'onCourseCreate',
             'course.update' => 'onCourseUpdate',
         ];
     }
@@ -22,16 +22,9 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
     {
         $course = $event->getSubject();
         if ($this->isSupplierCourse($course)) {
-            $this->getS2B2CService()->changeProductSellingPrice($course['sourceCourseId'], 'course', $course['price']);
+            $courseProduct = $this->getS2b2cProductService()->getByTypeAndLocalResourceId('course', $course['id']);
+            $this->getS2B2CService()->changeProductSellingPrice($courseProduct['remoteProductId'], 'course', $course['price']);
         }
-    }
-
-    public function onCourseCreate(Event $event)
-    {
-//        $course = $event->getSubject();
-//        if ($this->isSupplierCourse($course)) {
-//            $this->getCourseProductService()->syncCourseMain($course['id']);
-//        }
     }
 
     protected function isSupplierCourse($course)
@@ -53,5 +46,13 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
     protected function getS2B2CService()
     {
         return $this->getBiz()->offsetGet('qiQiuYunSdk.s2b2cService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getS2b2cProductService()
+    {
+        return $this->getBiz()->service('S2B2C:ProductService');
     }
 }
