@@ -794,7 +794,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 LEFT JOIN activity ON activity.mediaId = activity_testpaper.id
                 LEFT JOIN testpaper_v8 ON activity_testpaper.mediaIdBackup = testpaper_v8.id
                 LEFT JOIN course_set_v8 ON testpaper_v8.courseSetId = course_set_v8.id
-                SET activity_testpaper.answerSceneId = activity.id, activity_testpaper.mediaId = if(course_set_v8.locked = 1, testpaper_v8.copyId, testpaper_v8.id)
+                SET activity_testpaper.answerSceneId = activity.id, activity_testpaper.mediaId = if(course_set_v8.locked = 1, testpaper_v8.copyId, if(testpaper_v8.id is null, 0, testpaper_v8.id ))
             WHERE activity.mediaType = 'testpaper';
         ");
 
