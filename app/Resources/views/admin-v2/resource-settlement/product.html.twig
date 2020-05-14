@@ -19,7 +19,7 @@
       <th>{{ 'admin_v2.app_center.resource_settlement.product.id'|trans }}</th>
       <th>{{ 'admin_v2.app_center.resource_settlement.product.time'|trans }}</th>
       <th>{{ 'merchant.content_resource.product_title'|trans }}</th>
-      <th>{{ 'admin_v2.app_center.resource_settlement.product.student_number'|trans }}</th>
+      <th>{{ 'admin_v2.app_center.resource_settlement.product.order_count'|trans }}</th>
       <th>{{ 'admin_v2.app_center.resource_settlement.product.max_course_price'|trans }}</th>
       <th>{{ 'admin_v2.app_center.resource_settlement.product.suggestion_price'|trans }}</th>
       <th>{{ 'admin_v2.app_center.resource_settlement.product.cooperation_price'|trans }}</th>
@@ -31,11 +31,17 @@
       <tr>
         <td>{{ item.id }}</td>
         <td>{{ item.createdTime|date('Y-m-d H:i:s') }}</td>
-        <td>{{ item.title }}</td>
-        <td>{{ item.studentNum }}</td>
-        <td>{{ item.maxCoursePrice|currency }}</td>
-        <td>{{ item.suggestionPrice|currency }}</td>
-        <td>{{ item.cooperationPrice|currency }}</td>
+        <td>{{ item.title|default('') }}</td>
+        <td>{{ item.orderCount|default(0) }}</td>
+        <td>
+          {{ item.minCoursePrice|default(0) == item.maxCoursePrice|default(0) ? '￥' ~ item.minCoursePrice|currency : '￥' ~ item.minCoursePrice|currency ~ '~ ￥' ~ item.maxCoursePrice|currency }}
+        </td>
+        <td>
+          {{ item.minSuggestionPrice|default(0) == item.maxSuggestionPrice|default(0) ? '￥' ~ item.minSuggestionPrice|currency : '￥' ~ item.minSuggestionPrice|currency ~ '~ ￥' ~ item.maxSuggestionPrice|currency }}
+        </td>
+        <td>
+          {{ item.minCooperationPrice|default(0) == item.maxCooperationPrice|default(0) ? '￥' ~ item.minCooperationPrice|currency : '￥' ~ item.minCooperationPrice|currency ~ '~ ￥' ~ item.maxCooperationPrice|currency }}
+        </td>
         <td>
           {% if item.status == 'published' %}
             {{ 'admin_v2.app_center.resource_settlement.product.item_status.published'|trans }}

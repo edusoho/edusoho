@@ -112,12 +112,11 @@ class ProductServiceImpl extends BaseService implements ProductService
         return $this->getS2B2CProductDao()->count($conditions);
     }
 
-    public function searchSelectedItemProduct($conditions)
+    public function searchSelectedProducts($conditions)
     {
         $conditions['merchant_access_key'] = $this->getAccessKey();
-        $resultSet = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->searchPurchaseProducts($conditions);
 
-        return $resultSet;
+        return $this->getS2B2CFacadeService()->getSupplierPlatformApi()->searchPurchaseProducts($conditions);
     }
 
     public function getByTypeAndLocalResourceId($type, $localResourceId)
