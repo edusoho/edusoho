@@ -136,7 +136,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             return ['status' => false, 'error' => '更新失败'];
         }
         if (self::SYNC_STATUS_FINISHED !== $product['syncStatus']) {
-            $this->getLogger()->error("课程 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 状态异常，无法处理", ['syncStatus' => $course['syncStatus']]);
+            $this->getLogger()->error("课程 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 状态异常，无法处理", ['syncStatus' => $product['syncStatus']]);
 
             return ['status' => false, 'error' => '更新失败'];
         }
