@@ -10868,7 +10868,7 @@ admin_v2.app_center.resource_settlement.order.detail.order_user: 订单用户
 
 admin_v2.app_center.resource_settlement.product.id: 编号
 admin_v2.app_center.resource_settlement.product.time: 选择时间
-admin_v2.app_center.resource_settlement.product.student_number: 用户数
+admin_v2.app_center.resource_settlement.product.order_count: 订单数
 admin_v2.app_center.resource_settlement.product.max_course_price: 实际售价
 admin_v2.app_center.resource_settlement.product.suggestion_price: 建议售价
 admin_v2.app_center.resource_settlement.product.cooperation_price: 合作面额

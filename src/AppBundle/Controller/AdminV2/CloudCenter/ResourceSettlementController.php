@@ -26,19 +26,19 @@ class ResourceSettlementController extends BaseController
 
         $resultSet = $this->getS2B2CFacadeService()->getS2B2CService()->searchMerchantFlow(
             $conditions,
-            array('created_time' => 'DESC'),
+            ['created_time' => 'DESC'],
             $request->query->get('page', 0),
             $this->pageSize
         );
 
         $paginator = new Paginator($request, $resultSet['count'], $this->pageSize);
 
-        return $this->render('admin-v2/resource-settlement/balance/index.html.twig', array(
+        return $this->render('admin-v2/resource-settlement/balance/index.html.twig', [
             'paginator' => $paginator,
             'items' => $resultSet['items'],
             'merchant' => $this->getS2B2CFacadeService()->getMe(),
             'total' => $resultSet['count'],
-        ));
+        ]);
     }
 
     public function balanceModalAction(Request $request, $id)
@@ -48,7 +48,7 @@ class ResourceSettlementController extends BaseController
             throw $this->createNotFoundException("Flow#{$id} not found");
         }
 
-        return $this->render('admin-v2/resource-settlement/balance/modal.html.twig', array('detail' => $detail));
+        return $this->render('admin-v2/resource-settlement/balance/modal.html.twig', ['detail' => $detail]);
     }
 
     public function orderAction(Request $request)
@@ -57,19 +57,19 @@ class ResourceSettlementController extends BaseController
 
         $resultSet = $this->getS2B2CFacadeService()->getS2B2CService()->searchMerchantOrder(
             $conditions,
-            array('created_time' => 'DESC'),
+            ['created_time' => 'DESC'],
             $request->query->get('page', 0),
             $this->pageSize
         );
 
         $paginator = new Paginator($request, $resultSet['count'], $this->pageSize);
 
-        return $this->render('admin-v2/resource-settlement/order/index.html.twig', array(
+        return $this->render('admin-v2/resource-settlement/order/index.html.twig', [
             'paginator' => $paginator,
             'items' => $resultSet['items'],
             'merchant' => $this->getS2B2CFacadeService()->getMe(),
             'total' => $resultSet['count'],
-        ));
+        ]);
     }
 
     public function orderModalAction(Request $request, $sn)
@@ -79,10 +79,10 @@ class ResourceSettlementController extends BaseController
             throw $this->createNotFoundException("Flow#{$sn} not found");
         }
 
-        return $this->render('admin-v2/resource-settlement/order/modal.html.twig', array(
+        return $this->render('admin-v2/resource-settlement/order/modal.html.twig', [
             'detail' => $detail,
             'merchant' => $this->getS2B2CFacadeService()->getMe(),
-        ));
+        ]);
     }
 
     public function productAction(Request $request)
@@ -91,43 +91,43 @@ class ResourceSettlementController extends BaseController
 
         $conditions['offset'] = $request->query->get('page', 0);
 
-        $resultSet = $this->getProductService()->searchSelectedItemProduct($conditions);
+        $products = $this->getProductService()->searchSelectedProducts($conditions);
 
-        $paginator = new Paginator($request, $resultSet['count'], $this->pageSize);
+        $paginator = new Paginator($request, $products['count'], $this->pageSize);
 
         return $this->render(
             'admin-v2/resource-settlement/product.html.twig',
-            array(
+            [
                 'paginator' => $paginator,
-                'items' => $resultSet['items'],
+                'items' => $products['items'],
                 'merchant' => $this->getS2B2CFacadeService()->getMe(),
-                'total' => $resultSet['count'],
-            ));
+                'total' => $products['count'],
+            ]);
     }
 
     protected function prepareConditionsByType($conditions, $type)
     {
-        $conditionTypes = array(
-            self::TYPE_BALANCE => array(
+        $conditionTypes = [
+            self::TYPE_BALANCE => [
                 'created_time_GTE' => empty($conditions['startTime']) ? null : strtotime($conditions['startTime']),
                 'created_time_LTE' => empty($conditions['endTime']) ? null : strtotime($conditions['endTime']),
                 'title_like' => empty($conditions['title']) ? null : $conditions['title'],
-            ),
-            self::TYPE_ORDER => array(
+            ],
+            self::TYPE_ORDER => [
                 'only_show_debt' => empty($conditions['showDebt']) ? 0 : 1,
                 'start_time' => empty($conditions['startTime']) ? null : strtotime($conditions['startTime']),
                 'end_time' => empty($conditions['endTime']) ? null : strtotime($conditions['endTime']),
                 'status' => empty($conditions['status']) ? null : $conditions['status'],
                 'title_like' => empty($conditions['title']) ? null : $conditions['title'],
-            ),
-            self::TYPE_PRODUCT => array(
-                'productName' => empty($conditions['title']) ? null : $conditions['title'],
+            ],
+            self::TYPE_PRODUCT => [
+                'parentTitleLike' => empty($conditions['title']) ? null : $conditions['title'],
                 'limit' => $this->pageSize,
-                'sorts' => array('created_time' => 'DESC'),
-            ),
-        );
+                'sorts' => ['created_time' => 'DESC'],
+            ],
+        ];
 
-        return empty($conditionTypes[$type]) ? array() : $conditionTypes[$type];
+        return empty($conditionTypes[$type]) ? [] : $conditionTypes[$type];
     }
 
     /**

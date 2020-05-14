@@ -68,11 +68,11 @@ $('div[data-role="market"]').on('click', '.selected_btn button', function (e) {
 //     }
 //   }
 
-function getProductList(url) {
+function getProductList(url, conditions = {}) {
   let content = $('div[data-role="market"]');
   const loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">' + Translator.trans('admin.cloud_file.detail_loading_hints') + '</div>';
   content.html(loading);
-  $.get(url, function (data) {
+  $.get(url, conditions, function (data) {
     content.html(data);
   }).fail(function () {
     let loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">' + Translator.trans('site.loading_error') + '</div>';
@@ -173,3 +173,12 @@ function hideSubCategory() {
 function hideThirdCategory() {
   $('.js-third-level-group').hide();
 }
+
+$('.js-search-product').on('click', () => {
+  let conditions = {
+    categoryId: $('.js-categories.active').data('categoryId'),
+    title: $('input[name="title"]').val(),
+  };
+
+  getProductList($('.js-search-product').data('url'), conditions);
+});

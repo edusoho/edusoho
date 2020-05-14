@@ -6,7 +6,7 @@ interface ProductService
 {
     public function searchRemoteProducts($conditions);
 
-    public function searchSelectedItemProduct($conditions);
+    public function searchSelectedProducts($conditions);
 
     public function createProduct($fields);
 

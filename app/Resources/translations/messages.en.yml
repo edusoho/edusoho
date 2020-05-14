@@ -9533,7 +9533,7 @@ admin_v2.app_center.resource_settlement.order.detail.order_user: User
 
 admin_v2.app_center.resource_settlement.product.id: Id
 admin_v2.app_center.resource_settlement.product.time: Choose Time
-admin_v2.app_center.resource_settlement.product.student_number: Student Number
+admin_v2.app_center.resource_settlement.product.order_count: Order Count
 admin_v2.app_center.resource_settlement.product.max_course_price: Actual Price
 admin_v2.app_center.resource_settlement.product.suggestion_price: Suggested  Price
 admin_v2.app_center.resource_settlement.product.cooperation_price: Cooperation Denomination
