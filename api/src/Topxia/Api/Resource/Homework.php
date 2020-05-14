@@ -160,7 +160,7 @@ class Homework extends BaseResource
 
     protected function filterQuestion($question, $questionResults, $homeworkId, $resultId)
     {
-        $question = ArrayToolkit::parts($question, array('id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty', 'parentId', 'subs'));
+        $question = ArrayToolkit::parts($question, array('id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty', 'parentId', 'subs', 'testResult'));
         $question['stem'] = $this->filterHtml($question['stem']);
         $question['analysis'] = $this->filterHtml($question['analysis']);
 
