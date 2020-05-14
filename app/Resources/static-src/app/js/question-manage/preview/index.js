@@ -1,4 +1,5 @@
 import Item from './item';
+import { Browser } from 'common/utils';
 
 Vue.config.productionTip = false;
 if (app.lang == 'en') {
@@ -9,3 +10,10 @@ if (app.lang == 'en') {
 new Vue({
   render: createElement => createElement(Item)
 }).$mount('#app');
+
+
+if (Browser.ie || Browser.ie10|| Browser.ie11 || Browser.edge) {
+  $('.modal').on('hide.bs.modal', function() {
+    window.location.reload();
+  });
+}
