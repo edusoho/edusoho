@@ -141,7 +141,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec($sql);
         }
 
-        $startData = $this->startPage(__FUNCTION__, "SELECT count(id) AS num FROM upload_files WHERE useType IN ('question.stem', 'question.analysis', 'question.answer');", 5);
+        $startData = $this->startPage(__FUNCTION__, "SELECT count(id) AS num FROM upload_files WHERE useType IN ('question.stem', 'question.analysis', 'question.answer');", 200);
         if (empty($startData)) {
             return 1;
         }
@@ -199,7 +199,6 @@ class EduSohoUpgrade extends AbstractUpdater
                     break;
             }
             $insetFiles[] = array(
-                'id' => $file['id'],
                 'global_id' => $file['globalId'],
                 'hash_id' => $file['hashId'],
                 'target_id' => $targetId,
