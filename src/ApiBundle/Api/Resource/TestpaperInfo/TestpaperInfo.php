@@ -81,8 +81,9 @@ class TestpaperInfo extends AbstractResource
         }
 
         $task['activity'] = $activity;
-
-        $results['task'] = $this->filterFaceInspectionTask($task);
+        
+        $results['testpaper']['limitedTime'] = empty($scene['limited_time']) ? 0 : $scene['limited_time'];
+        $results['task'] = $task;
     }
 
     private function filterTestpaperItems($items)
@@ -94,16 +95,6 @@ class TestpaperInfo extends AbstractResource
         }
 
         return $itemArray;
-    }
-
-    private function filterFaceInspectionTask($task)
-    {
-        if ($this->isPluginInstalled('FaceInspection')) {
-            $courseTask = $this->getFaceInspectionService()->getCourseTask($task['id']);
-            $task['enable_facein'] = empty($courseTask['enable_facein']) ? 0 : 1;
-        }
-
-        return $task;
     }
 
     /**
@@ -120,14 +111,6 @@ class TestpaperInfo extends AbstractResource
     protected function getActivityService()
     {
         return $this->service('Activity:ActivityService');
-    }
-
-    /**
-     * @return FaceInspectionService
-     */
-    protected function getFaceInspectionService()
-    {
-        return $this->getBiz()->service('FaceInspectionPlugin:FaceInspection:FaceInspectionService');
     }
 
     /**
