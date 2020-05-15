@@ -786,7 +786,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getConnection()->exec("
             INSERT INTO activity_homework (id, assessmentId, answerSceneId, createdTime, updatedTime)
             SELECT 
-                a.id, if(c.locked = 1, b.copyId, b.id) AS assessmentId, a.id AS answerSceneId, a.createdTime, a.updatedTime
+                a.id, if(c.locked = 1, b.copyId, if(b.id is null, 0, b.id)) AS assessmentId, a.id AS answerSceneId, a.createdTime, a.updatedTime
                 FROM activity a 
                 LEFT JOIN testpaper_v8 b ON a.mediaIdBackup = b.id 
                 LEFT JOIN course_set_v8 c ON b.courseSetId = c.id
