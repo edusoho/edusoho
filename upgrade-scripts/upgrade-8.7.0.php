@@ -425,8 +425,7 @@ class EduSohoUpgrade extends AbstractUpdater
                     `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
                     `updated_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
                     PRIMARY KEY (`id`),
-                    KEY `answer_record_id` (`answer_record_id`),
-                    UNIQUE KEY `identify` (`identify`)
+                    KEY `answer_record_id` (`answer_record_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题目问题报告表';
             ");
         }
