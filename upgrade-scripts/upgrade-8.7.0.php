@@ -154,7 +154,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 DELETE FROM `biz_item_attachment`;
             ");
         }
-        
+
         $files = $this->getConnection()->fetchAll("
             SELECT a.*, b.targetId as tid FROM `upload_files` a 
             LEFT JOIN `file_used` b ON a.id = b.fileId 
@@ -173,6 +173,9 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $insetFiles = array();
         foreach ($files as $file) {
+            if (empty($questions[$file['tid']])) {
+                continue;
+            }
             $targetId = '';
             switch ($file['useType']) {
                 case 'question.stem':
@@ -396,6 +399,14 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function processBizAnswerQuestionReport($page)
     {
+        $startData = $this->startPage(__FUNCTION__, "SELECT count(id) AS num FROM testpaper_item_result_v8 where type <> 'exercise';", 80000);
+       
+        if (1 == $startData['page'] && $this->isTableExist('biz_answer_question_report')) {
+            $this->getConnection()->exec("
+                DROP TABLE `biz_answer_question_report`;
+            ");
+        }
+
         if (!$this->isTableExist('biz_answer_question_report')) {
             $this->getConnection()->exec("
                 CREATE TABLE `biz_answer_question_report` (
@@ -420,7 +431,6 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
-        $startData = $this->startPage(__FUNCTION__, "SELECT count(id) AS num FROM testpaper_item_result_v8 where type <> 'exercise';", 80000);
         if (empty($startData)) {
             return 1;
         }
@@ -452,9 +462,8 @@ class EduSohoUpgrade extends AbstractUpdater
             LEFT JOIN `biz_question` b ON a.questionId = b.id
             WHERE a.`type` <> 'exercise' LIMIT {$start}, {$limit};
         ";
-        try {
-            $this->getConnection()->exec($sql);
-        } catch (\Exception $e) {}
+        
+        $this->getConnection()->exec($sql);
 
         $endData = $this->endPage(__FUNCTION__);
         if (empty($endData)) {
@@ -466,6 +475,14 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function processBizAnswerReport($page)
     {
+        $startData = $this->startPage(__FUNCTION__, "SELECT COUNT(id) AS num FROM testpaper_result_v8 WHERE `type` <> 'exercise';", 50000);
+
+        if (1 == $startData['page'] && $this->isTableExist('biz_answer_report')) {
+            $this->getConnection()->exec("
+                DROP TABLE `biz_answer_report`;
+            ");
+        }
+
         if (!$this->isTableExist('biz_answer_report')) {
             $this->getConnection()->exec("
                 CREATE TABLE `biz_answer_report` (
@@ -493,7 +510,6 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
-        $startData = $this->startPage(__FUNCTION__, "SELECT COUNT(id) AS num FROM testpaper_result_v8 WHERE `type` <> 'exercise';", 50000);
         if (empty($startData)) {
             return 1;
         }
@@ -524,9 +540,8 @@ class EduSohoUpgrade extends AbstractUpdater
             FROM `testpaper_result_v8` a LEFT JOIN `testpaper_v8` b ON a.testId = b.id
             WHERE a.`type` <> 'exercise' LIMIT {$start}, {$limit};
         ";
-        try {
-            $this->getConnection()->exec($sql);
-        } catch (\Exception $e) {}
+        
+        $this->getConnection()->exec($sql);
 
         $endData = $this->endPage(__FUNCTION__);
         if (empty($endData)) {
@@ -538,6 +553,13 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function processBizAnswerRecord($page)
     {
+        $startData = $this->startPage(__FUNCTION__, "SELECT COUNT(id) AS num FROM testpaper_result_v8 WHERE `type` <> 'exercise';", 50000);
+        if (1 == $startData['page'] && $this->isTableExist('biz_answer_record')) {
+            $this->getConnection()->exec("
+                DROP TABLE `biz_answer_record`;
+            ");
+        }
+
         if (!$this->isTableExist('biz_answer_record')) {
             $this->getConnection()->exec("
                 CREATE TABLE `biz_answer_record` (
@@ -559,8 +581,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='答题记录表';
             ");
         }
-
-        $startData = $this->startPage(__FUNCTION__, "SELECT COUNT(id) AS num FROM testpaper_result_v8 WHERE `type` <> 'exercise';", 50000);
+        
         if (empty($startData)) {
             return 1;
         }
@@ -584,10 +605,9 @@ class EduSohoUpgrade extends AbstractUpdater
             FROM `testpaper_result_v8`
             WHERE `type` <> 'exercise' LIMIT {$start}, {$limit}
         ";
-        try {
-            $this->getConnection()->exec($sql);
-        } catch (\Exception $e) {}
-
+        
+        $this->getConnection()->exec($sql);
+        
         $endData = $this->endPage(__FUNCTION__);
         if (empty($endData)) {
             return 1;
