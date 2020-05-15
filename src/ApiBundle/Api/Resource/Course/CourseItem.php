@@ -35,18 +35,20 @@ class CourseItem extends AbstractResource
         );
 
         foreach ($items as &$item) {
-            foreach ($item['tasks'] as &$task) {
-                if ('homework' == $task['type'] && !empty($task['activity'])) {
-                    $homeworkActivity = $this->getHomeworkActivityService()->get($task['activity']['mediaId']);
-                    $task['activity']['mediaId'] = $homeworkActivity['assessmentId'];
-                }
-                if ('testpaper' == $task['type'] && !empty($task['activity']['ext'])) {
-                    $testpaperActivity = $this->getTestpaperActivityService()->getActivity($task['activity']['mediaId']);
-                    $scene = $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
-                    if (!empty($scene)) {
-                        $task['activity']['ext']['doTimes'] = $scene['do_times'];
-                        $task['activity']['ext']['redoInterval'] = $scene['redo_interval'];
-                        $task['activity']['ext']['limitedTime'] = $scene['limited_time'];
+            if (!empty($item['tasks'])) {
+                foreach ($item['tasks'] as &$task) {
+                    if ('homework' == $task['type'] && !empty($task['activity'])) {
+                        $homeworkActivity = $this->getHomeworkActivityService()->get($task['activity']['mediaId']);
+                        $task['activity']['mediaId'] = $homeworkActivity['assessmentId'];
+                    }
+                    if ('testpaper' == $task['type'] && !empty($task['activity']['ext'])) {
+                        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($task['activity']['mediaId']);
+                        $scene = $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
+                        if (!empty($scene)) {
+                            $task['activity']['ext']['doTimes'] = $scene['do_times'];
+                            $task['activity']['ext']['redoInterval'] = $scene['redo_interval'];
+                            $task['activity']['ext']['limitedTime'] = $scene['limited_time'];
+                        }
                     }
                 }
             }
