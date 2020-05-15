@@ -11,7 +11,7 @@
     <div class="title">{{ 'category'|trans }}:</div>
     <ul class="content clearfix" data-label="default">
       <li class="js-all-categories {% if not selectedCategory %}active{% endif %}">
-        <a class="nav-link" href="javascript:;" data-url="{{ path(path, {orderBy:orderBy}) }}">
+        <a class="nav-link" href="javascript:;" data-url="{{ path(path, {type:'courseSet', orderBy:orderBy}) }}">
           {{ 'category.all_category'|trans }}
         </a>
       </li>
@@ -19,7 +19,7 @@
         <li class="js-categories {% if category.id == selectedCategory %}active{% endif %}"
             data-category-id="{{ category.id }}">
           <a class="nav-link" href="javascript:;"
-             data-url="{{ path(path, {categoryId:category.id, orderBy:orderBy}) }}">
+             data-url="{{ path(path, {categoryId:category.id, orderBy:orderBy, type:'courseSet'}) }}">
             {{ category.name }}
           </a>
         </li>

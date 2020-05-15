@@ -3,11 +3,13 @@
 namespace AppBundle\Controller\AdminV2\CloudCenter\S2B2C;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseSetService;
 use Biz\S2B2C\Service\CourseProductService;
 use Biz\S2B2C\Service\ProductService;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CourseSetProductController extends ProductController
 {
@@ -66,6 +68,91 @@ class CourseSetProductController extends ProductController
         }
 
         return $this->createJsonResponse(array_merge($result, ['status' => false]));
+    }
+
+    /**
+     * @return Response
+     */
+    public function marketAction(Request $request)
+    {
+        $supplierSiteSetting = $this->getS2B2CFacadeService()->getSupplier();
+        $merchant = $this->getS2B2CFacadeService()->getMe();
+
+        return $this->render(
+            'admin-v2/cloud-center/content-resource/market/course-set/explore.html.twig',
+            [
+                'tags' => [],
+                'supplierSiteSetting' => $supplierSiteSetting,
+                'merchant' => $merchant,
+                'supplier' => [],
+            ]
+        );
+    }
+
+    /**
+     * @return Response
+     */
+    public function categoriesAction(Request $request)
+    {
+        $selectedCategory = $request->query->get('selectedCategory', 0);
+        $selectedSubCategory = $request->query->get('selectedSubCategory', 0);
+        $selectedThirdLevelCategory = $request->query->get('selectedThirdLevelCategory', 0);
+
+        $categoryList = $this->getS2B2CFacadeService()->getSupplierPlatformApi()
+            ->searchProductCategories([
+                'group' => 'course',
+            ]);
+
+        if (!empty($categoryList['error'])) {
+            $categories = $subCategories = $thirdLevelCategories = [];
+        } else {
+            list($categories, $subCategories, $thirdLevelCategories) = $categoryList;
+        }
+
+        return $this->render('admin-v2/cloud-center/content-resource/market/course-set/category.html.twig', [
+            'selectedCategory' => $selectedCategory,
+            'selectedSubCategory' => $selectedSubCategory,
+            'selectedThirdLevelCategory' => $selectedThirdLevelCategory,
+            'categories' => $categories,
+            'subCategories' => $subCategories,
+            'thirdLevelCategories' => $thirdLevelCategories,
+            'subCategoriesData' => empty($subCategories) ? [] : ArrayToolkit::group($subCategories, 'parentId'),
+            'thirdLevelCategoriesData' => empty($thirdLevelCategories) ? [] : ArrayToolkit::group($thirdLevelCategories, 'parentId'),
+            'request' => $request,
+        ]);
+    }
+
+    public function productListAction(Request $request)
+    {
+        $pageSize = 16;
+        $conditions = $request->query->all();
+        $conditions['offset'] = ($request->query->get('page', 1) - 1) * $pageSize;
+        $conditions['limit'] = $pageSize;
+        $conditions['sort'] = '-created_time,-id';
+
+        list($courseSets, $total) = $this->getS2B2CProductService()->searchRemoteProducts($conditions);
+
+        $merchant = $this->getS2B2CFacadeService()->getMe();
+
+        $paginator = new Paginator($request, $total, $pageSize);
+        $paginator->setBaseUrl($this->generateUrl('admin_v2_purchase_market_products_list', ['type' => 'courseSet']));
+
+        $supplierSettings = $this->getSettingService()->get('supplierSettings', []);
+
+        $remoteResourceIds = ArrayToolkit::column($courseSets, 'id');
+
+        if (!empty($supplierSettings['supplierId'])) {
+            $chosenProducts = $this->getS2B2CProductService()->findProductsBySupplierIdAndRemoteResourceTypeAndIds($supplierSettings['supplierId'], 'course_set', $remoteResourceIds);
+            $chosenProducts = ArrayToolkit::index($chosenProducts, 'remoteResourceId');
+        }
+
+        return $this->render(
+            'admin-v2/cloud-center/content-resource/market/course-set/course-list.html.twig', [
+            'courseSets' => $courseSets,
+            'paginator' => $paginator,
+            'merchant' => $merchant,
+            'chosenCourses' => empty($chosenProducts) ? [] : $chosenProducts,
+        ]);
     }
 
     protected function prepareCourseSetData($courseSetData)

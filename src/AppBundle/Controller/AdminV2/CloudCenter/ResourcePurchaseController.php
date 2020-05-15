@@ -3,112 +3,73 @@
 namespace AppBundle\Controller\AdminV2\CloudCenter;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\S2B2C\S2B2CProductException;
 use Biz\S2B2C\Service\CourseProductService;
 use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\CacheService;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ResourcePurchaseController extends BaseController
 {
-    public function marketAction(Request $request, $tab)
-    {
-        $methodName = "{$tab}Market";
-
-        return $this->$methodName($request);
-    }
+    public $productController = [
+        'courseSet' => 'AppBundle:AdminV2/CloudCenter/S2B2C/CourseSetProduct',
+    ];
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
-     *                                                    called from marketAction
+     * @param $tab
+     *
+     * @return Response
+     *
+     * @throws \Exception
+     *                    这里是分课营销的入口，具体产品的渲染放到$productController中
      */
-    protected function courseSetMarket(Request $request)
+    public function marketAction(Request $request, $tab)
     {
-        $supplierSiteSetting = $this->getS2B2CFacadeService()->getSupplier();
-        $merchant = $this->getS2B2CFacadeService()->getMe();
-
-        return $this->render(
-            'admin-v2/cloud-center/content-resource/market/course-set/explore.html.twig',
-            [
-                'tags' => [],
-                'supplierSiteSetting' => $supplierSiteSetting,
-                'merchant' => $merchant,
-                'supplier' => [],
-            ]
-        );
-    }
-
-    public function categoriesAction(Request $request, $group = 'course')
-    {
-        $selectedCategory = $request->query->get('selectedCategory', 0);
-        $selectedSubCategory = $request->query->get('selectedSubCategory', 0);
-        $selectedThirdLevelCategory = $request->query->get('selectedThirdLevelCategory', 0);
-
-        /**
-         * mock
-         */
-        $categoryList = $this->getS2B2CFacadeService()->getSupplierPlatformApi()
-            ->searchProductCategories([
-                'group' => $group,
-            ]);
-
-        if (!empty($categoryList['error'])) {
-            $categories = $subCategories = $thirdLevelCategories = [];
-        } else {
-            list($categories, $subCategories, $thirdLevelCategories) = $categoryList;
+        $controller = $this->getProductController($tab);
+        if (empty($controller)) {
+            $this->createNewException(S2B2CProductException::INVALID_S2B2C_PRODUCT_TYPE());
         }
 
-        return $this->render('admin-v2/cloud-center/content-resource/market/course-set/category.html.twig', [
-            'selectedCategory' => $selectedCategory,
-            'selectedSubCategory' => $selectedSubCategory,
-            'selectedThirdLevelCategory' => $selectedThirdLevelCategory,
-            'categories' => $categories,
-            'subCategories' => $subCategories,
-            'thirdLevelCategories' => $thirdLevelCategories,
-            'subCategoriesData' => empty($subCategories) ? [] : ArrayToolkit::group($subCategories, 'parentId'),
-            'thirdLevelCategoriesData' => empty($thirdLevelCategories) ? [] : ArrayToolkit::group($thirdLevelCategories, 'parentId'),
+        return $this->forward("{$controller}:market", [
             'request' => $request,
         ]);
     }
 
-    public function productsAction(Request $request)
+    /**
+     * @param $type
+     *
+     * @return Response
+     *
+     * @throws \Exception
+     *                    这里是分课分类模块的入口，具体的分类模块实现放到了$productController中
+     */
+    public function categoriesAction(Request $request, $type)
     {
-        $pageSize = 16;
-
-        $conditions = $request->query->all();
-        $conditions['offset'] = ($request->query->get('page', 1) - 1) * $pageSize;
-        $conditions['limit'] = $pageSize;
-        $conditions['sort'] = '-created_time,-id';
-        /*
-         * mock
-         */
-        list($courseSets, $total) = $this->getS2B2CProductService()->searchRemoteProducts($conditions);
-
-        $merchant = $this->getS2B2CFacadeService()->getMe();
-
-        $paginator = new Paginator($request, $total, $pageSize);
-        $paginator->setBaseUrl($this->generateUrl('admin_v2_purchase_market_products_list'));
-
-        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
-
-        $remoteResourceIds = ArrayToolkit::column($courseSets, 'id');
-
-        if (!empty($s2b2cConfig['supplierId'])) {
-            $chosenProducts = $this->getS2B2CProductService()->findProductsBySupplierIdAndRemoteResourceTypeAndIds($s2b2cConfig['supplierId'], 'course_set', $remoteResourceIds);
-            $chosenProducts = ArrayToolkit::index($chosenProducts, 'remoteResourceId');
+        $controller = $this->getProductController($type);
+        if (empty($controller)) {
+            $this->createNewException(S2B2CProductException::INVALID_S2B2C_PRODUCT_TYPE());
         }
 
-        return $this->render(
-            'admin-v2/cloud-center/content-resource/market/course-set/course-list.html.twig', [
-            'courseSets' => $courseSets,
-            'paginator' => $paginator,
-            'merchant' => $merchant,
-            'chosenCourses' => empty($chosenProducts) ? [] : $chosenProducts,
+        return $this->forward("{$controller}:categories", [
+            'request' => $request,
+        ]);
+    }
+
+    public function productsAction(Request $request, $type)
+    {
+        $controller = $this->getProductController($type);
+        if (empty($controller)) {
+            $this->createNewException(S2B2CProductException::INVALID_S2B2C_PRODUCT_TYPE());
+        }
+
+        return $this->forward("{$controller}:productList", [
+            'request' => $request,
         ]);
     }
 
@@ -253,6 +214,11 @@ class ResourcePurchaseController extends BaseController
         }
 
         return $course;
+    }
+
+    protected function getProductController($type)
+    {
+        return $this->productController[$type];
     }
 
     /**

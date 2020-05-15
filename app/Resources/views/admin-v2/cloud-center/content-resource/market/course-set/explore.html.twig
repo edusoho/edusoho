@@ -46,9 +46,9 @@
 {#    <link href="{{ asset('static-dist/app/css/bootstrap.css') }}" rel="stylesheet"/>#}
 {#    <link href="{{ asset('static-dist/app/css/main.css') }}" rel="stylesheet"/>#}
     <div id="explore-card">
-      {{ render(controller('AppBundle:AdminV2/CloudCenter/ResourcePurchase:categories',{request:app.request, category:'category', group:'course'})) }}
+      {{ render(controller('AppBundle:AdminV2/CloudCenter/ResourcePurchase:categories',{request:app.request, category:'category', type:'courseSet'})) }}
       <div data-role="market">
-        {{ render(controller('AppBundle:AdminV2/CloudCenter/ResourcePurchase:products',{request:app.request})) }}
+        {{ render(controller('AppBundle:AdminV2/CloudCenter/ResourcePurchase:products',{request:app.request, type:'courseSet'})) }}
       </div>
     </div>
   {% else %}
