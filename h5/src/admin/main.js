@@ -21,7 +21,13 @@ import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
-  MessageBox
+  MessageBox,
+  Col,
+  Row,
+  Menu,
+  Submenu,
+  MenuItem,
+  MenuItemGroup
 } from 'element-ui';
 
 import {
@@ -56,6 +62,12 @@ Vue.use(Dropdown);
 Vue.use(DropdownItem);
 Vue.use(DropdownMenu);
 Vue.use(Lazyload);
+Vue.use(Col);
+Vue.use(Row);
+Vue.use(Menu);
+Vue.use(Submenu);
+Vue.use(MenuItem);
+Vue.use(MenuItemGroup);
 
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;
