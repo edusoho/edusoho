@@ -7,11 +7,16 @@ use ApiBundle\Api\Resource\AbstractResource;
 
 class QuestionMarker extends AbstractResource
 {
-    public function get(ApiRequest $request, $mediaId)
+    public function search(ApiRequest $request)
     {
-        $questionMarkers = $this->getMarkerService()->findMarkersMetaByMediaId($mediaId);
-
+        $questionMarkers = $this->getMarkerService()->findMarkersMetaByMediaId($request->query->get('mediaId'));
+        
         return $questionMarkers;
+    }
+
+    public function add(ApiRequest $request)
+    {
+
     }
 
     protected function getMarkerService()
