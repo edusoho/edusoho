@@ -32,7 +32,8 @@
           publicPath: $('[name=ckeditor_path]').val(),
           filebrowserImageUploadUrl: $('[name=ckeditor_image_upload_url]').val(),
           filebrowserImageDownloadUrl: $('[name=ckeditor_image_download_url]').val(),
-          language: document.documentElement.lang === 'zh_CN' ? 'zh-cn' : document.documentElement.lang
+          language: document.documentElement.lang === 'zh_CN' ? 'zh-cn' : document.documentElement.lang,
+          jqueryPath:  $('[name=jquery_path]').val(),
         },
         bank_id: $('[name=bankId]').val(),
         category: JSON.parse($('[name=categoryTree]').val()),
@@ -50,10 +51,20 @@
           locale: document.documentElement.lang
         },
         fileId: 0,
+        redirect:true
       }
+    },
+    created() {
+      let self = this;
+      $(window).on('beforeunload',function(){
+        if (self.redirect) {
+          return Translator.trans('admin.block.not_saved_data_hint');
+        }
+      });
     },
     methods: {
       getImportData(subject) {
+        this.redirect = false;
         $.ajax({
           url: $('[name=saveUrl]').val(),
           contentType: 'application/json;charset=utf-8',

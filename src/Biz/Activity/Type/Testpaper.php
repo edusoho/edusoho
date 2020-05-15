@@ -262,6 +262,7 @@ class Testpaper extends Activity
             $activity['doTimes'] = $scene['do_times'];
             $activity['redoInterval'] = $scene['redo_interval'];
             $activity['limitedTime'] = $scene['limited_time'];
+            $activity['testMode'] = !empty($scene['start_time']) ? 'realTime' : 'normal';
         }
 
         return $activity;

@@ -46,24 +46,10 @@ class Exercise extends BaseResource
             $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
             $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         } else {
-            $assessment = $this->getAssessmentService()->showAssessment($id);
-            $answerRecords = $this->getAnswerRecordService()->search(
-                array('user_id' => $user['id'], 'assessment_id' => $assessment['id']),
-                array('created_time' => 'desc'),
-                0,
-                1
-            );
-
-            if (empty($answerRecords)) {
-                return $this->error('404', '该练习任务不存在!');
-            }
-
-            $answerRecord = $answerRecords[0];
-            $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerRecord['answer_scene_id']);
+            $exerciseActivity = $this->getExerciseActivityService()->getActivity($id);
             if (empty($exerciseActivity)) {
-                return $this->error('404', '该练习任务不存在!');
+                return $this->error('404', '该练习不存在!');
             }
-
             $conditions = array(
                 'mediaId' => $exerciseActivity['id'],
                 'mediaType' => 'exercise',
@@ -73,7 +59,18 @@ class Exercise extends BaseResource
                 return $this->error('404', '该练习任务不存在!');
             }
             $activity = $activities[0];
-            $scene = $this->getAnswerSceneService()->get($answerRecords[0]['answer_scene_id']);
+
+            $scene = $this->getAnswerSceneService()->get($exerciseActivity['answerSceneId']);
+            if (empty($scene)) {
+                return $this->error('404', '该练习不存在!');
+            }
+            $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($exerciseActivity['answerSceneId'], $user['id']);
+            if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
+                $assessment = $this->createAssessment($activity['title'], $exerciseActivity['drawCondition']['range'], array($exerciseActivity['drawCondition']['section']));
+                $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+            } else {
+                $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
+            }
         }
         $testpaperWrapper = new TestpaperWrapper();
         $exercise = $testpaperWrapper->wrapTestpaper($assessment);
@@ -101,6 +98,7 @@ class Exercise extends BaseResource
             $items = $testpaperWrapper->wrapTestpaperItems($assessment, array());
 
             $exercise['items'] = $this->filterItem($items, null);
+            $exercise['id'] = $id;
         }
 
         return $this->filter($exercise);
@@ -109,22 +107,18 @@ class Exercise extends BaseResource
     public function result(Application $app, Request $request, $id)
     {
         $user = $this->getCurrentUser();
-        $assessment = $this->getAssessmentService()->showAssessment($id);
-        $answerRecords = $this->getAnswerRecordService()->search(
-            array('user_id' => $user['id'], 'assessment_id' => $assessment['id']),
-            array('created_time' => 'desc'),
-            0,
-            1
-        );
-
-        if (empty($answerRecords)) {
-            return $this->error('404', '该练习任务不存在!');
-        }
-
-        $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($answerRecords[0]['answer_scene_id']);
+        $mediaId = $id;
+        $exerciseActivity = $this->getExerciseActivityService()->getActivity($mediaId);
         if (empty($exerciseActivity)) {
-            return $this->error('404', '该练习任务不存在!');
+            return $this->error('404', '该练习不存在!');
         }
+
+        $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($exerciseActivity['answerSceneId'], $user['id']);
+        if (empty($answerRecord)) {
+            return $this->error('404', '不存在该练习的答题结果记录!');
+        }
+
+        $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
 
         $conditions = array(
             'mediaId' => $exerciseActivity['id'],
@@ -139,11 +133,6 @@ class Exercise extends BaseResource
         $canTakeCourse = $this->getCourseService()->canTakeCourse($activity['fromCourseId']);
         if (!$canTakeCourse) {
             return $this->error('500', '无权限访问!');
-        }
-
-        $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($exerciseActivity['answerSceneId'], $user['id']);
-        if (!$answerRecord) {
-            return $this->error('404', '不存在该练习的答题结果记录!');
         }
 
         $testpaperWrapper = new TestpaperWrapper();

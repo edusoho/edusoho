@@ -46,6 +46,7 @@ class QuestionMarkerController extends BaseController
             $isChoice = in_array($item['type'], array('choice', 'single_choice', 'uncertain_choice'));
             $isFill = 'fill' == $item['type'];
 
+            $result = array();
             $result['id'] = $questionMaker['id'];
             $result['questionMarkerId'] = $questionMaker['id'];
             $result['markerId'] = $questionMaker['markerId'];

@@ -52,7 +52,6 @@ class ExerciseResult extends AbstractResource
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-
         $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($answerScene['id'], $user['id']);
@@ -113,7 +112,7 @@ class ExerciseResult extends AbstractResource
             throw ExerciseException::NOTFOUND_RESULT();
         }
 
-        $exercise = $this->getAssessmentService()->getAssessment($exerciseId);
+        $exercise = $this->getAssessmentService()->getAssessment($exerciseRecord['assessment_id']);
         if (empty($exercise) || '0' != $exercise['displayable']) {
             throw ExerciseException::NOTFOUND_EXERCISE();
         }

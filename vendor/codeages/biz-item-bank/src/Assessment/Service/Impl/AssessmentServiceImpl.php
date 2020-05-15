@@ -345,12 +345,13 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         }
         $questions = [];
         foreach ($assessmentItems as $item) {
-            foreach ($item['question_scores'] as $questionScore) {
+            foreach ($item['question_scores'] as $index => $questionScore) {
                 $questions[] = [
                     'question_id' => $questionScore['question_id'],
                     'item_id' => $item['item_id'],
                     'section_id' => $item['section_id'],
                     'score' => $questionScore['score'],
+                    'seq' => $item['score_rule'][$index]['seq'],
                 ];
             }
         }

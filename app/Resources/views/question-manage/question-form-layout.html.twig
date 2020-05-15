@@ -31,6 +31,7 @@
       <input type="hidden" name="create_url" value="{{ path('question_bank_manage_question_create', {id: questionBank.id, type: type}) }}">
       <input type="hidden" name="back_url" value="{{ path('question_bank_manage_question_list', {id: questionBank.id}) }}">
       <input type="hidden" name="ckeditor_path" value="{{ asset('static-dist/libs/es-ckeditor/ckeditor.js') }}">
+      <input type="hidden" name="jquery_path" value="{{ asset('static-dist/libs/jquery/dist/jquery.min.js') }}">
       <input type="hidden" name="ckeditor_image_upload_url" value="{{ path('editor_upload', {token:upload_token('course')}) }}">
       <input type="hidden" name="ckeditor_image_download_url" value="{{ path('editor_download', {token:upload_token('course')}) }}">
       <input type="hidden" name="category" value="{{ categoryTree|json_encode }}">
