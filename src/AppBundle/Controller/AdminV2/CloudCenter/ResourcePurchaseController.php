@@ -73,32 +73,16 @@ class ResourcePurchaseController extends BaseController
         ]);
     }
 
-    public function productDetailAction(Request $request, $id, $tab = 'summary')
+    public function productDetailAction(Request $request, $productType, $remoteResourceId)
     {
-        //当前静默是课程，不过真是情况是会有多种模式的课程
-        $courseSet = $this->getS2B2CFacadeService()->getSupplierPlatformApi()
-            ->getSupplierCourseSetProductDetail($id);
-
-        if (empty($courseSet) || !empty($courseSet['error'])) {
-            throw $this->createNotFoundException('原课程未找到或出错了');
+        $controller = $this->getProductController($productType);
+        if (empty($controller)) {
+            $this->createNewException(S2B2CProductException::INVALID_S2B2C_PRODUCT_TYPE());
         }
 
-        $chosenCourseSet = $this->getCourseSetService()->searchCourseSets(['originProductId' => $courseSet['id']], [], 0, 1);
-        $productDetail['hasChosen'] = !empty($chosenCourseSet);
-
-        /**
-         * mock
-         */
-        $merchant = $this->getS2B2CFacadeService()->getMe();
-
-        return $this->render(
-            'admin-v2/cloud-center/content-resource/market/course-set/show.html.twig', [
-            'tab' => $tab,
-            'courseSet' => $courseSet,
-            'courses' => $courseSet['courses'],
-            'merchant' => $merchant,
-            'hasChosen' => $chosenCourseSet,
-            'marketingPage' => true,
+        return $this->forward("{$controller}:productDetail", [
+            'request' => $request,
+            'remoteResourceId' => $remoteResourceId,
         ]);
     }
 
