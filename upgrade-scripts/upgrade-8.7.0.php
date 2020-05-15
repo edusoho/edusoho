@@ -894,10 +894,10 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $metas = json_decode($activity['metas'], true);
         $drawCondition = array();
-        if (isset($metas['range']['lessonId']) || isset($metas['range']['courseId']) || !is_array($metas['range'])) {
+        if (isset($metas['range']['lessonId']) || isset($metas['range']['courseId']) || empty($metas['range']) || !is_array($metas['range'])) {
             return $drawCondition;
         }
-
+        
         $drawCondition['range'] = array(
             'question_bank_id' => $metas['range']['bankId'],
             'bank_id' => $metas['range']['bankId'],
