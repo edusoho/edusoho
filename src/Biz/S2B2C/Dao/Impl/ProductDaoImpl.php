@@ -16,6 +16,7 @@ class ProductDaoImpl extends GeneralDaoImpl implements ProductDao
            'serializes' => ['changelog' => 'json'],
            'conditions' => [
                'id = :id',
+               'supplierId = :supplierId',
                'productType = :productType',
                'remoteResourceId = :remoteResourceId',
                'localResourceId = :localResourceId',
