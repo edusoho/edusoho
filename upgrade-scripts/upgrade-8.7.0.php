@@ -929,7 +929,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $limit = $startData['limit'];
         $sql = "
             INSERT INTO biz_question_favorite (id, target_type, target_id, question_id, item_id, user_id, created_time)
-            SELECT a.id, 'assessment', a.targetId, a.questionId, b.item_id, a.userId, a.createdTime FROM question_favorite a LEFT JOIN biz_question AS b ON a.questionId = b.id LIMIT {$start}, {$limit}
+            SELECT a.id, 'assessment', a.targetId, a.questionId, b.item_id, a.userId, a.createdTime FROM question_favorite a INNER JOIN biz_question AS b ON a.questionId = b.id LIMIT {$start}, {$limit}
         ";
 
         $this->getConnection()->exec($sql);
