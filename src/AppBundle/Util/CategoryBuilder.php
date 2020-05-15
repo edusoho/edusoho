@@ -7,7 +7,7 @@ use Topxia\Service\Common\ServiceKernel;
 
 class CategoryBuilder
 {
-    protected $categories = array();
+    protected $categories = [];
 
     protected $indent = '　';
 
@@ -26,6 +26,11 @@ class CategoryBuilder
         $this->categories = $this->getQuestionCategoryService()->getCategoryTree($bankId);
     }
 
+    public function buildForItem($itemBankId)
+    {
+        $this->categories = $this->getItemCategoryService()->getItemCategoryTreeList($itemBankId);
+    }
+
     public function build($categories)
     {
         $this->categories = $categories;
@@ -33,7 +38,7 @@ class CategoryBuilder
 
     public function convertToChoices()
     {
-        $choices = array();
+        $choices = [];
 
         foreach ($this->categories as $category) {
             $choices[$category['id']] = str_repeat(is_null($this->indent) ? '' : $this->indent, ($category['depth'] - 1)).$category['name'];
@@ -61,6 +66,14 @@ class CategoryBuilder
     private function getQuestionCategoryService()
     {
         return $this->createService('Question:CategoryService');
+    }
+
+    /**
+     * @return \Codeages\Biz\ItemBank\Item\Service\ItemCategoryService
+     */
+    private function getItemCategoryService()
+    {
+        return $this->createService('ItemBank:Item:ItemCategoryService');
     }
 
     protected function createService($alias)

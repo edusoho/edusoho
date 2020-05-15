@@ -804,12 +804,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
             $this->getCourseDao()->update($courses[0]['id'], $fields);
 
-            // todo 修改到bankSubscriber
-            $this->getQuestionBankService()->updateQuestionBankByCourseSetId(
-                $courseSet['id'],
-                ['isHidden' => 0]
-            );
-
             $this->dispatchEvent('course-set.unlock', new Event($courseSet));
 
             $this->commit();

@@ -11,9 +11,9 @@
 {% block body %}
 <div class="question-add js-select-container">
   {% if isSelectBank|default(0) %}
-    {% set questionBankTree = data('QuestionBankTree', {}) %}
     <div class="width-150" id="question-bank-field">
       <select class="form-control js-question-bank" name="questionBankId" data-url="{{ path('question_bank_manage_question_pick', {id: 0}) }}">
+        {% set questionBankTree = data('QuestionBankTree', {}) %}
         {% if questionBankTree %}
           <option value="0">{{ 'question.select_question_bank'|trans }}</option>
           {% for bank in questionBankTree %}
@@ -33,7 +33,7 @@
       </div>
       <div class="question-add__right">
         {% include 'question-bank/widgets/search-form.html.twig' %}
-        <input class="js-excludeIds" type="hidden" name="excludeIds" value="{{ excludeIds|default() }}">
+        <input class="js-excludeIds" type="hidden" name="exclude_ids" value="{{ excludeIds|join(',')|default() }}">
         <div class="js-select-table" data-url="{{ path('question_bank_manage_question_search', {id: questionBank.id}) }}">
           {% include 'question-bank/widgets/question-pick-body.html.twig' %}
         </div>

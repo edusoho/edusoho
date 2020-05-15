@@ -1,7 +1,7 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 
 {% block title %}
-  {{ dict_text('questionType', analysis.questionMarker.type) }}
+  {{ dict_text('questionType', analysis.item.type) }}
 {% endblock %}
 
 {% set modal_class = 'mark-questions-modal topic-player-statistical' %}
@@ -9,19 +9,20 @@
 {% do script(['libs/echarts.js', 'app/js/course-manage/question-marker/modal/index.js']) %}
 
 {% block body %}
-  {% set question = analysis.questionMarker %}
+  {% set item = analysis.item %}
+  {% set question = analysis.question %}
   {% set stats = analysis.metaStats %}
 
-  <ul class="popup-topic" data-type={{ question.type }}>
+  <ul class="popup-topic" data-type={{ item.type }}>
     <li class="title">
-      {% if question.type == 'fill' %}
+      {% if item.type == 'fill' %}
         {{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
       {% else %}
         {{ question.stem|bbCode2Html|raw }}
       {% endif %}
     </li>
 
-    {% if question.type == 'fill' %}
+    {% if item.type == 'fill' %}
       {% for index,subAnswer in question.answer %}
         <li class="list clearfix ">
           <span class="num">{{ loop.index }}</span>
@@ -29,24 +30,24 @@
           <span class="pull-right">{{ 'question.correct_rate'|trans }}：<span class="badge badge-primary">{{ stats[loop.index0].pct }}%</span></span></li>
       {% endfor %}
 
-    {% elseif question.type == 'determine' %}
-      <li class="list {% if question.answer[0] == 1 %} right {% endif %}">
+    {% elseif item.type == 'determine' %}
+      <li class="list {% if question.answer[0] == 'T' %} right {% endif %}">
         <span class="num">A</span>
         <div class="info">{{ 'question.answer_correct'|trans }}</div>
         <span class="pull-right">{{ 'question.selection_rate'|trans }}：<span class="badge">{{ stats[0].pct }}%</span>
       </li>
-      <li class="list {% if question.answer[0] == 0 %} right {% endif %}">
+      <li class="list {% if question.answer[0] == 'F' %} right {% endif %}">
         <span class="num">B</span>
         <div class="info">{{ 'question.answer_wrong'|trans }}</div>
         <span class="pull-right">{{ 'question.selection_rate'|trans }}：<span class="badge">{{ stats[1].pct }}%</span>
       </li>
     {% else %}
-      {% for subAnswer in question.metas.choices %}
-        {% set choice = question.metas.choices[loop.index0] %}
-        <li class="list clearfix {% if loop.index0 in question.answer %} right {% endif %}">
+      {% for subAnswer in question.response_points %}
+        {% set choice = question.response_points[loop.index0].radio is defined ? question.response_points[loop.index0].radio : question.response_points[loop.index0].checkbox %}
+        <li class="list clearfix {% if choice.val in question.answer %} right {% endif %}">
           <span class="num" >{{ (loop.index0+65)|chr }}</span>
-          <div  class="info">{{  choice|bbCode2Html|raw }}</div>
-          <span class="pull-right">{{ 'question.selection_rate'|trans }}：<span class="badge">{{ stats[loop.index0].pct }}%</span>
+          <div  class="info">{{  choice.text|bbCode2Html|raw }}</div>
+          <span class="pull-right">{{ 'question.selection_rate'|trans }}：<span class="badge">{{ stats[choice.val].pct }}%</span>
         </li>
       {% endfor %}
     {% endif %}

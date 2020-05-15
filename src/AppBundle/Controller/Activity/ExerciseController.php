@@ -3,10 +3,11 @@
 namespace AppBundle\Controller\Activity;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\Course\Service\CourseService;
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseService;
 use Biz\Question\Service\QuestionService;
 use Biz\Testpaper\Service\TestpaperService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ExerciseController extends BaseActivityController implements ActivityActionInterface
@@ -24,19 +25,19 @@ class ExerciseController extends BaseActivityController implements ActivityActio
         $exerciseResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $exercise['id'], $activity['fromCourseId'], $activity['id'], $activity['mediaType']);
 
         if (!$exerciseResult || ('doing' == $exerciseResult['status'] && !$exerciseResult['updateTime'])) {
-            return $this->render('activity/exercise/show.html.twig', array(
+            return $this->render('activity/exercise/show.html.twig', [
                 'activity' => $activity,
                 'exerciseResult' => $exerciseResult,
                 'exercise' => $exercise,
                 'courseId' => $activity['fromCourseId'],
                 'questionLack' => $this->getTestpaperService()->isQuestionsLackedByTestId($activity['mediaId']),
-            ));
+            ]);
         }
 
-        return $this->forward('AppBundle:Exercise:startDo', array(
+        return $this->forward('AppBundle:Exercise:startDo', [
             'lessonId' => $activity['id'],
             'exerciseId' => $activity['mediaId'],
-        ));
+        ]);
     }
 
     public function previewAction(Request $request, $task)
@@ -46,33 +47,37 @@ class ExerciseController extends BaseActivityController implements ActivityActio
 
     protected function previewExercise($id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivity($id);
-        $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
+        $activity = $this->getActivityService()->getActivity($id, true);
 
-        if (!$exercise) {
-            return $this->createMessageResponse('error', 'exercise not found');
+        try {
+            $assessment = $this->showAssessment(
+                $activity['title'],
+                $activity['ext']['drawCondition']['range'],
+                [$activity['ext']['drawCondition']['section']]
+            );
+
+            return $this->render('activity/exercise/preview.html.twig', [
+                'assessment' => $assessment,
+            ]);
+        } catch (\Exception $e) {
+            return $this->render('activity/exercise/item-not-enough-tips.html.twig', []);
         }
+    }
 
-        if ($this->getTestpaperService()->isQuestionsLackedByTestId($activity['mediaId'])) {
-            return $this->render('activity/exercise/show.html.twig', array(
-                'activity' => $activity,
-                'exercise' => $exercise,
-                'courseId' => $activity['fromCourseId'],
-                'questionLack' => true,
-            ));
-        }
+    protected function showAssessment($name, $range, $sections)
+    {
+        $sections = $this->getAssessmentService()->drawItems($range, $sections);
+        $assessment = [
+            'id' => 0,
+            'name' => $name,
+            'description' => '',
+            'total_score' => 0,
+            'item_count' => 0,
+            'question_count' => 0,
+            'sections' => $sections,
+        ];
 
-        $questions = $this->getTestpaperService()->showTestpaperItems($exercise['id']);
-        $attachments = $this->getTestpaperService()->findAttachments($exercise['id']);
-
-        $exercise['itemCount'] = $this->getActureQuestionNum($questions);
-
-        return $this->render('activity/exercise/preview.html.twig', array(
-            'paper' => $exercise,
-            'questions' => $questions,
-            'paperResult' => array(),
-            'activity' => $activity,
-        ));
+        return $assessment;
     }
 
     public function editAction(Request $request, $id, $courseId)
@@ -83,17 +88,17 @@ class ExerciseController extends BaseActivityController implements ActivityActio
         unset($exercise['id']);
         $activity = array_merge($activity, $exercise);
 
-        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes(array('courseSetId' => $course['courseSetId']));
+        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes(['courseSetId' => $course['courseSetId']]);
         $questionNums = ArrayToolkit::index($questionNums, 'type');
 
-        $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount(array('type' => 'material', 'subCount' => 0, 'courseSetId' => $course['courseSetId']));
+        $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount(['type' => 'material', 'subCount' => 0, 'courseSetId' => $course['courseSetId']]);
 
         $user = $this->getUser();
 
         $range = $this->parseRange($activity);
         $courseTasks = $this->findCourseTasksByCourseId($range['courseId']);
 
-        return $this->render('activity/exercise/modal.html.twig', array(
+        return $this->render('activity/exercise/modal.html.twig', [
             'questionNums' => $questionNums,
             'activity' => $activity,
             'courseSetId' => $course['courseSetId'],
@@ -101,47 +106,47 @@ class ExerciseController extends BaseActivityController implements ActivityActio
             'courseTasks' => $courseTasks,
             'range' => $range,
             'courseId' => $course['id'],
-        ));
+        ]);
     }
 
     public function createAction(Request $request, $courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
-        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes(array('courseSetId' => $course['courseSetId']));
+        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes(['courseSetId' => $course['courseSetId']]);
         $questionNums = ArrayToolkit::index($questionNums, 'type');
 
-        $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount(array('type' => 'material', 'subCount' => 0, 'courseSetId' => $course['courseSetId']));
+        $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount(['type' => 'material', 'subCount' => 0, 'courseSetId' => $course['courseSetId']]);
 
         $user = $this->getUser();
 
-        return $this->render('activity/exercise/modal.html.twig', array(
+        return $this->render('activity/exercise/modal.html.twig', [
             'courseId' => $courseId,
             'questionNums' => $questionNums,
             'courseSetId' => $course['courseSetId'],
             'course' => $course,
-        ));
+        ]);
     }
 
     public function finishConditionAction(Request $request, $activity)
     {
         $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
 
-        return $this->render('activity/exercise/finish-condition.html.twig', array(
+        return $this->render('activity/exercise/finish-condition.html.twig', [
             'exercise' => $exercise,
-        ));
+        ]);
     }
 
     protected function findCourseTestpapers($courseId)
     {
-        $conditions = array(
+        $conditions = [
             'courseId' => $courseId,
             'status' => 'open',
-        );
+        ];
 
         $testpapers = $this->getTestpaperService()->searchTestpapers(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             0,
             PHP_INT_MAX
         );
@@ -151,7 +156,7 @@ class ExerciseController extends BaseActivityController implements ActivityActio
 
     protected function parseRange($activity)
     {
-        $rangeDefault = array('courseId' => 0);
+        $rangeDefault = ['courseId' => 0];
         $range = empty($activity['metas']['range']) ? $rangeDefault : $activity['metas']['range'];
 
         if (is_array($range)) {
@@ -160,24 +165,24 @@ class ExerciseController extends BaseActivityController implements ActivityActio
             return $rangeDefault;
         } elseif ('lesson' == $range) {
             //兼容老数据
-            $conditions = array(
+            $conditions = [
                 'activityId' => $activity['id'],
                 'type' => 'exercise',
                 'courseId' => $activity['fromCourseId'],
-            );
+            ];
             $task = $this->getCourseTaskService()->searchTasks($conditions, null, 0, 1);
 
             if (!$task) {
                 return $rangeDefault;
             }
 
-            $conditions = array(
+            $conditions = [
                 'categoryId' => $task[0]['categoryId'],
                 'mode' => 'lesson',
-            );
+            ];
             $lessonTask = $this->getCourseTaskService()->searchTasks($conditions, null, 0, 1);
             if ($lessonTask) {
-                return array('courseId' => $lessonTask[0]['courseId'], 'lessonId' => $lessonTask[0]['id']);
+                return ['courseId' => $lessonTask[0]['courseId'], 'lessonId' => $lessonTask[0]['id']];
             }
 
             return $rangeDefault;
@@ -203,7 +208,7 @@ class ExerciseController extends BaseActivityController implements ActivityActio
     protected function findCourseTasksByCourseId($courseId)
     {
         if (empty($courseId)) {
-            return array();
+            return [];
         }
 
         return $this->getTaskService()->findTasksByCourseId($courseId);
@@ -249,5 +254,13 @@ class ExerciseController extends BaseActivityController implements ActivityActio
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 }

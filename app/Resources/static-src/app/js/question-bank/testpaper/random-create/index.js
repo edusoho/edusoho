@@ -217,8 +217,8 @@ class TestpaperForm {
       if(questionNum>2000){
         cd.message({ type: 'danger', message: Translator.trans('activity.testpaper_manage.questions_length_hint') });
       }else{
-        $.post($target.data('checkUrl'),this.$form.serialize(),result => {
-          if (result.status == 'no') {
+        $.post($target.data('checkUrl'), this.$form.serialize(), result => {
+          if (!result) {
             $('.js-build-check').html(Translator.trans('activity.testpaper_manage.question_num_error'));
           } else {
             $('.js-build-check').html('');
@@ -247,7 +247,7 @@ function checkQuestionNum(url) {
     $('[role="questionNum"]').text(0);
 
     $.each(data,function(i,n){
-      $('[type=\''+i+'\']').text(n.questionNum);
+      $('[type=\''+i+'\']').text(n.itemNum);
     });
   });
 }

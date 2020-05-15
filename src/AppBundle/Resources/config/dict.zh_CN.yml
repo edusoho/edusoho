@@ -393,6 +393,7 @@ userInfoFields:
     weixin: 微信
 
 passedStatus:
+    none: -
     excellent: 优秀
     good: 良好
     passed: 合格

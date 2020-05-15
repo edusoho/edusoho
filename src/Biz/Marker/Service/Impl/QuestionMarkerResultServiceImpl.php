@@ -8,6 +8,7 @@ use Biz\Marker\Dao\QuestionMarkerResultDao;
 use Biz\Marker\Service\QuestionMarkerResultService;
 use Biz\Marker\Service\QuestionMarkerService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMarkerResultService
 {
@@ -28,17 +29,20 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
 
     public function finishQuestionMarker($questionMarkerId, $fields)
     {
-        $fields = ArrayToolkit::parts($fields, array('answer', 'userId', 'taskId'));
+        $fields = ArrayToolkit::parts($fields, ['answer', 'userId', 'taskId']);
 
         $questionMarker = $this->getQuestionMarkerService()->getQuestionMarker($questionMarkerId);
+        $item = $this->getItemService()->getItemWithQuestions($questionMarker['questionId']);
+        $itemResponse = [
+            'item_id' => $item['id'],
+            'question_responses' => [[
+                'question_id' => empty($item['questions']) ? 0 : array_shift($item['questions'])['id'],
+                'response' => $fields['answer'],
+            ]],
+        ];
+        $reviewResult = $this->getItemService()->review([$itemResponse]);
 
-        $questionConfig = $this->getQuestionConfig($questionMarker['type']);
-
-        $questionMarker['score'] = 0;
-        $questionMarker['missScore'] = 0;
-        $status = $questionConfig->judge($questionMarker, $fields['answer']);
-
-        $fields['status'] = $status['status'];
+        $fields['status'] = $reviewResult[0]['result'];
         $fields['markerId'] = $questionMarker['markerId'];
         $fields['questionMarkerId'] = $questionMarker['id'];
 
@@ -93,5 +97,13 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
     protected function getQuestionMarkerService()
     {
         return $this->biz->service('Marker:QuestionMarkerService');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->biz->service('ItemBank:Item:ItemService');
     }
 }

@@ -5,7 +5,7 @@
 
 {% set side_nav = 'testpaper-check' %}
   
-{% if testpaper.type == 'homework' %}
+{% if activity.mediaType == 'homework' %}
   {% set side_nav = 'homework-check' %}
   {% set typeName = 'classroom.homework'|trans %}
 {% else %}

@@ -15,9 +15,11 @@ interface QuestionBankService
 
     public function getQuestionBankByCourseSetId($courseSetId);
 
+    public function getQuestionBankByItemBankId($itemBankId);
+
     public function findQuestionBanksByIds($ids);
 
-    public function searchQuestionBanks($conditions, $orderBys, $start, $limit, $columns = array());
+    public function searchQuestionBanks($conditions, $orderBys, $start, $limit, $columns = []);
 
     public function countQuestionBanks($conditions);
 
@@ -33,8 +35,6 @@ interface QuestionBankService
 
     public function updateQuestionBank($id, $fields);
 
-    public function updateQuestionBankByCourseSetId($courseSetId, $fields);
-
     /**
      * @param $id
      *
@@ -44,10 +44,6 @@ interface QuestionBankService
     public function deleteQuestionBank($id);
 
     public function canManageBank($bankId);
-
-    public function waveTestpaperNum($id, $diff);
-
-    public function waveQuestionNum($id, $diff);
 
     public function findUserManageBanks();
 }

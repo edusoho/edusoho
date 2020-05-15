@@ -14,21 +14,22 @@ class VideoMediaStatusUpdateJob extends AbstractJob
             $successNum = 0;
             foreach ($results['data'] as $result) {
                 $file = $this->getUploadFileService()->setResourceConvertStatus($result['resourceNo'], $result);
+                $attachment = $this->getUploadFileService()->setAttachmentConvertStatus($result['resourceNo'], $result);
 
-                if (empty($file)) {
+                if (empty($file) && empty($attachment)) {
                     continue;
                 }
                 ++$successNum;
             }
 
-            $this->getSchedulerService()->updateJob($this->id, array('args' => $results['next']));
+            $this->getSchedulerService()->updateJob($this->id, ['args' => $results['next']]);
             $this->getLogService()->info(
                 'upload_file',
                 'update',
                 'video media status update success',
-                array(
+                [
                     'success' => round($successNum / count($results['data']) * 100, 2).'%',
-                ));
+                ]);
         }
     }
 
@@ -36,11 +37,11 @@ class VideoMediaStatusUpdateJob extends AbstractJob
     {
         $jobArgs = $this->args;
         if (empty($jobArgs)) {
-            $jobArgs = array(
+            $jobArgs = [
                 'cursor' => 0,
                 'start' => 0,
                 'limit' => 1000,
-            );
+            ];
         }
 
         return $jobArgs;

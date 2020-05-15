@@ -4,14 +4,18 @@ namespace ApiBundle\Api\Resource\TestpaperInfo;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
+use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\User\UserException;
-use FaceInspectionPlugin\Biz\FaceInspection\Service\FaceInspectionService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class TestpaperInfo extends AbstractResource
 {
@@ -22,18 +26,20 @@ class TestpaperInfo extends AbstractResource
             throw UserException::UN_LOGIN();
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testId);
+        $assessment = $this->getAssessmentService()->showAssessment($testId);
 
-        if (empty($testpaper)) {
+        if (empty($assessment)) {
             throw TestpaperException::NOTFOUND_TESTPAPER();
         }
 
-        $items = $this->getTestpaperService()->showTestpaperItems($testId);
+        $testpaperWrapper = new TestpaperWrapper();
+        $testpaper = $testpaperWrapper->wrapTestpaper($assessment);
+        $items = ArrayToolkit::groupIndex($testpaperWrapper->wrapTestpaperItems($assessment), 'type', 'id');
         $testpaper['metas']['question_type_seq'] = array_keys($items);
-        $results = array(
+        $results = [
             'testpaper' => $testpaper,
             'items' => $this->filterTestpaperItems($items),
-        );
+        ];
 
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
@@ -60,50 +66,33 @@ class TestpaperInfo extends AbstractResource
             throw TestpaperException::NOT_TESTPAPER_TASK();
         }
 
-        $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId(
-            $user['id'],
-            $testpaper['id'],
-            $activity['fromCourseId'],
-            $activity['id'],
-            $testpaper['type']
-        );
+        $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
+        $testpaperRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $user['id']);
 
-        if (!empty($testpaperResult)) {
+        if (!empty($testpaperRecord)) {
+            $answerReport = $this->getAnswerReportService()->get($testpaperRecord['answer_report_id']);
+            $testpaperWrapper = new TestpaperWrapper();
+            $testpaperResult = $testpaperWrapper->wrapTestpaperResult($testpaperRecord, $testpaper, $scene, $answerReport);
+            $testpaperResult['courseId'] = $task['courseId'];
+            $testpaperResult['lessonId'] = $task['id'];
             $results['testpaperResult'] = $testpaperResult;
         }
 
         $task['activity'] = $activity;
 
-        $results['task'] = $this->filterFaceInspectionTask($task);
+        $results['testpaper']['limitedTime'] = empty($scene['limited_time']) ? '0' : $scene['limited_time'];
+        $results['task'] = $task;
     }
 
     private function filterTestpaperItems($items)
     {
-        $itemArray = array();
+        $itemArray = [];
 
         foreach ($items as $questionType => $item) {
             $itemArray[$questionType] = count($item);
         }
 
         return $itemArray;
-    }
-
-    private function filterFaceInspectionTask($task)
-    {
-        if ($this->isPluginInstalled('FaceInspection')) {
-            $courseTask = $this->getFaceInspectionService()->getCourseTask($task['id']);
-            $task['enable_facein'] = empty($courseTask['enable_facein']) ? 0 : 1;
-        }
-
-        return $task;
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->getBiz()->service('Testpaper:TestpaperService');
     }
 
     /**
@@ -123,10 +112,34 @@ class TestpaperInfo extends AbstractResource
     }
 
     /**
-     * @return FaceInspectionService
+     * @return AssessmentService
      */
-    protected function getFaceInspectionService()
+    protected function getAssessmentService()
     {
-        return $this->getBiz()->service('FaceInspectionPlugin:FaceInspection:FaceInspectionService');
+        return $this->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->service('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->service('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->service('ItemBank:Answer:AnswerReportService');
     }
 }

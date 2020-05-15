@@ -3,17 +3,18 @@
 namespace AppBundle\Controller\QuestionBank;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Controller\BaseController;
-use Biz\Question\Service\CategoryService;
-use Biz\Question\Service\QuestionService;
-use Biz\QuestionBank\Service\QuestionBankService;
-use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Paginator;
+use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\TestpaperActivityService;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
-use ExamParser\Writer\WriteDocx;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
+use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class TestpaperController extends BaseController
 {
@@ -25,36 +26,31 @@ class TestpaperController extends BaseController
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
 
-        $conditions = array(
-            'bankId' => $questionBank['id'],
-            'type' => 'testpaper',
-        );
+        $conditions = [
+            'bank_id' => $questionBank['itemBankId'],
+            'displayable' => 1,
+        ];
 
         $paginator = new Paginator(
-            $this->get('request'),
-            $this->getTestpaperService()->searchTestpaperCount($conditions),
+            $request,
+            $this->getAssessmentService()->countAssessments($conditions),
             10
         );
 
-        $testpapers = $this->getTestpaperService()->searchTestpapers(
+        $assessments = $this->getAssessmentService()->searchAssessments(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['created_time' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $userIds = ArrayToolkit::column($testpapers, 'updatedUserId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByMediaIds(ArrayToolkit::column($testpapers, 'id'));
-
-        return $this->render('question-bank/testpaper/index.html.twig', array(
+        return $this->render('question-bank/testpaper/index.html.twig', [
             'questionBank' => $questionBank,
-            'testpapers' => $testpapers,
-            'users' => $users,
+            'testpapers' => $assessments,
+            'users' => $this->getUserService()->findUsersByIds(array_column($assessments, 'updated_user_id')),
             'paginator' => $paginator,
-            'testpaperActivities' => $testpaperActivities,
-        ));
+            'testpaperActivities' => $this->getTestpaperActivityService()->findActivitiesByMediaIds(array_column($assessments, 'id')),
+        ]);
     }
 
     public function getTestpaperHtmlAction(Request $request, $id)
@@ -65,38 +61,33 @@ class TestpaperController extends BaseController
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
 
-        $conditions = array(
-            'bankId' => $questionBank['id'],
-            'type' => 'testpaper',
-            'keyword' => $request->query->get('keyword', ''),
-        );
+        $conditions = [
+            'bank_id' => $questionBank['itemBankId'],
+            'nameLike' => $request->query->get('keyword', ''),
+            'displayable' => 1,
+        ];
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getTestpaperService()->searchTestpaperCount($conditions),
+            $this->getAssessmentService()->countAssessments($conditions),
             10
         );
 
-        $testpapers = $this->getTestpaperService()->searchTestpapers(
+        $assessments = $this->getAssessmentService()->searchAssessments(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['created_time' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $userIds = ArrayToolkit::column($testpapers, 'updatedUserId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByMediaIds(ArrayToolkit::column($testpapers, 'id'));
-
-        return $this->render('question-bank/testpaper/testpaper-list-tr.html.twig', array(
+        return $this->render('question-bank/testpaper/testpaper-list-tr.html.twig', [
             'questionBank' => $questionBank,
-            'testpapers' => $testpapers,
-            'users' => $users,
+            'testpapers' => $assessments,
+            'users' => $this->getUserService()->findUsersByIds(array_column($assessments, 'updated_user_id')),
             'paginator' => $paginator,
-            'testpaperActivities' => $testpaperActivities,
+            'testpaperActivities' => $this->getTestpaperActivityService()->findActivitiesByMediaIds(array_column($assessments, 'id')),
             'isSearch' => true,
-        ));
+        ]);
     }
 
     public function importAction(Request $request, $id)
@@ -105,13 +96,11 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-
-        return $this->forward('AppBundle:Question/QuestionParser:read', array(
+        return $this->forward('AppBundle:Question/QuestionParser:read', [
             'request' => $request,
             'type' => 'testpaper',
-            'questionBank' => $questionBank,
-        ));
+            'questionBank' => $this->getQuestionBankService()->getQuestionBank($id),
+        ]);
     }
 
     public function createAction(Request $request, $id)
@@ -120,43 +109,37 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
-        if ('POST' === $request->getMethod()) {
-            $baseInfo = $request->request->get('baseInfo', array());
-            $questionInfo = $request->request->get('questionInfo', array());
-            $baseInfo['pattern'] = 'questionType';
-            $baseInfo['bankId'] = $id;
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
 
-            if (empty($questionInfo['questions'])) {
-                return $this->createMessageResponse('error', '试卷题目不能为空！');
+        if ($request->isMethod('POST')) {
+            $assessment = $request->request->get('baseInfo', []);
+            $sections = $request->request->get('sections', []);
+            $assessment['bank_id'] = $questionBank['itemBankId'];
+            $assessment['displayable'] = 1;
+
+            if (empty($sections)) {
+                return $this->createMessageResponse('error', '试卷模块不能为空！');
             }
-            $questionInfo['questions'] = json_decode($questionInfo['questions'], true);
+            $assessment['sections'] = json_decode($sections, true);
 
-            if (empty($questionInfo['questionTypeSeq'])) {
-                return $this->createMessageResponse('error', '题型排序错误');
-            }
-            $questionInfo['questionTypeSeq'] = json_decode($questionInfo['questionTypeSeq'], true);
-
-            if (count($questionInfo['questions']) > 2000) {
+            if ($this->calculateItemCount($assessment['sections']) > 2000) {
                 return $this->createMessageResponse('error', '试卷题目数量不能超过2000！');
             }
 
-            $testpaper = $this->getTestpaperService()->buildTestpaper($baseInfo, 'testpaper');
-            $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $questionInfo);
+            $assessment['bank_id'] = $questionBank['itemBankId'];
 
-            return $this->createJsonResponse(array(
-                'goto' => $this->generateUrl('question_bank_manage_testpaper_list', array('id' => $id)),
-            ));
+            $this->getAssessmentService()->createAssessment($assessment);
+
+            return $this->createJsonResponse([
+                'goto' => $this->generateUrl('question_bank_manage_testpaper_list', ['id' => $id]),
+            ]);
         }
 
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-
-        $types = $this->getQuestionTypes();
-
-        return $this->render('question-bank/testpaper/manage/testpaper-form.html.twig', array(
-            'types' => $types,
+        return $this->render('question-bank/testpaper/manage/testpaper-form.html.twig', [
+            'types' => $this->getQuestionTypes(),
             'questionBank' => $questionBank,
             'showBaseInfo' => '1',
-        ));
+        ]);
     }
 
     public function createRandomTestpaperAction(Request $request, $id)
@@ -167,98 +150,86 @@ class TestpaperController extends BaseController
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
 
-        if ('POST' === $request->getMethod()) {
+        if ($request->isMethod('POST')) {
             $fields = $request->request->all();
+            $fields['itemBankId'] = $questionBank['itemBankId'];
 
-            $fields['bankId'] = $id;
-            $fields['pattern'] = 'questionType';
-
-            $testpaper = $this->getTestpaperService()->buildTestpaper($fields, 'random_testpaper');
+            $assessment = $this->getTestpaperService()->buildTestpaper($fields, 'random_testpaper');
 
             return $this->redirect(
                 $this->generateUrl(
                     'question_bank_manage_testpaper_edit',
-                    array('id' => $id, 'testpaperId' => $testpaper['id'], 'showBaseInfo' => '0')
+                    ['id' => $id, 'assessmentId' => $assessment['id'], 'showBaseInfo' => '0']
                 )
             );
         }
 
         $types = $this->getQuestionTypes();
 
-        $conditions = array(
-            'types' => array_keys($types),
-            'bankId' => $id,
-            'parentId' => 0,
-        );
+        $conditions = [
+            'bank_id' => $questionBank['itemBankId'],
+        ];
 
-        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
-        $questionNums = ArrayToolkit::index($questionNums, 'type');
-        $categoryTree = $this->getCategoryService()->getCategoryTree($questionBank['id']);
+        $typesNum = $this->getItemService()->getItemCountGroupByTypes($conditions);
+        $typesNum = ArrayToolkit::index($typesNum, 'type');
 
-        return $this->render('question-bank/testpaper/random/testpaper-form.html.twig', array(
-            'categoryTree' => $categoryTree,
+        return $this->render('question-bank/testpaper/random/testpaper-form.html.twig', [
+            'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']),
             'types' => $types,
-            'questionNums' => $questionNums,
+            'typesNum' => $typesNum,
             'questionBank' => $questionBank,
-        ));
+        ]);
     }
 
-    public function editAction(Request $request, $id, $testpaperId)
+    public function editAction(Request $request, $id, $assessmentId)
     {
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
 
-        $showBaseInfo = $request->query->get('showBaseInfo', '1');
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
-        if (!$testpaper || $testpaper['bankId'] != $id) {
+        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
+
+        if (!$assessment || $assessment['bank_id'] != $questionBank['itemBankId']) {
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
-        if ('draft' != $testpaper['status']) {
+        if ('draft' != $assessment['status']) {
             return $this->createMessageResponse('error', '已发布或已关闭的试卷不能再修改题目');
         }
 
-        if ('POST' === $request->getMethod()) {
-            $baseInfo = $request->request->get('baseInfo', array());
-            $questionInfo = $request->request->get('questionInfo', array());
+        if ($request->isMethod('POST')) {
+            $assessment = $request->request->get('baseInfo', []);
+            $sections = $request->request->get('sections', []);
 
-            if (empty($questionInfo['questions'])) {
-                return $this->createMessageResponse('error', '试卷题目不能为空！');
+            if (empty($sections)) {
+                return $this->createMessageResponse('error', '试卷模块不能为空！');
             }
-            $questionInfo['questions'] = json_decode($questionInfo['questions'], true);
+            $assessment['sections'] = json_decode($sections, true);
 
-            if (empty($questionInfo['questionTypeSeq'])) {
-                return $this->createMessageResponse('error', '题型排序错误');
-            }
-            $questionInfo['questionTypeSeq'] = json_decode($questionInfo['questionTypeSeq'], true);
-
-            if (count($questionInfo['questions']) > 2000) {
+            if ($this->calculateItemCount($assessment['sections']) > 2000) {
                 return $this->createMessageResponse('error', '试卷题目数量不能超过2000！');
             }
 
-            $this->getTestpaperService()->updateTestpaper($testpaper['id'], $baseInfo);
-            $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $questionInfo);
+            $this->getAssessmentService()->updateAssessment($assessmentId, $assessment);
 
-            return $this->createJsonResponse(array(
-                'goto' => $this->generateUrl('question_bank_manage_testpaper_list', array('id' => $id)),
-            ));
+            return $this->createJsonResponse([
+                'goto' => $this->generateUrl('question_bank_manage_testpaper_list', ['id' => $id]),
+            ]);
         }
 
-        $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
-        $questionCategories = $this->getCategoryService()->findCategories($questionBank['id']);
-        $questionCategories = ArrayToolkit::index($questionCategories, 'id');
+        $assessmentDetail = $this->getAssessmentService()->showAssessment($assessment['id']);
+        $itemCategories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
+        $itemCategories = ArrayToolkit::index($itemCategories, 'id');
 
-        return $this->render('question-bank/testpaper/manage/testpaper-form.html.twig', array(
+        return $this->render('question-bank/testpaper/manage/testpaper-form.html.twig', [
             'questionBank' => $questionBank,
-            'testpaper' => $testpaper,
-            'questions' => $questions,
-            'subCounts' => empty($questions['material']) ? 0 : array_sum(array_column($questions['material'], 'subCount')),
-            'questionCategories' => $questionCategories,
-            'showBaseInfo' => $showBaseInfo,
-        ));
+            'testpaper' => $assessment,
+            'sections' => $this->setSectionsType($assessmentDetail['sections']),
+            'itemCategories' => $itemCategories,
+            'showBaseInfo' => $request->query->get('showBaseInfo', '1'),
+        ]);
     }
 
     public function deleteTestpapersAction(Request $request, $id)
@@ -269,126 +240,124 @@ class TestpaperController extends BaseController
 
         $ids = $request->request->get('ids');
 
-        $testpapers = $this->getTestpaperService()->findTestpapersByIds($ids);
-        if (empty($testpapers)) {
+        $assessments = $this->getAssessmentService()->findAssessmentsByIds($ids);
+        if (empty($assessments)) {
             $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
-        $this->getTestpaperService()->deleteTestpapers($ids);
+        $status = ArrayToolkit::column($assessments, 'status');
+        if (in_array('open', $status)) {
+            $this->createNewException(TestpaperException::OPEN_TESTPAPER_FORBIDDEN_DELETE());
+        }
+
+        foreach ($assessments as $assessment) {
+            $this->getAssessmentService()->deleteAssessment($assessment['id']);
+        }
 
         return $this->createJsonResponse(true);
     }
 
-    public function deleteAction(Request $request, $id, $testpaperId)
+    public function deleteAction(Request $request, $id, $assessmentId)
     {
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
 
-        if (empty($testpaper) || $testpaper['bankId'] != $id) {
+        if (empty($assessment) || $assessment['bank_id'] != $questionBank['itemBankId']) {
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
-        $this->getTestpaperService()->deleteTestpaper($testpaperId);
+        $this->getAssessmentService()->deleteAssessment($assessmentId);
 
         return $this->createJsonResponse(true);
     }
 
-    public function publishAction(Request $request, $id, $testpaperId)
+    public function publishAction(Request $request, $id, $assessmentId)
     {
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-        if (empty($testpaper) || $testpaper['bankId'] != $id) {
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
+        if (empty($assessment) || $assessment['bank_id'] != $questionBank['itemBankId']) {
             $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
-        $testpaper = $this->getTestpaperService()->publishTestpaper($testpaperId);
-
-        $user = $this->getUserService()->getUser($testpaper['updatedUserId']);
+        $this->getAssessmentService()->openAssessment($assessmentId);
 
         return $this->createJsonResponse(true);
     }
 
-    public function closeAction(Request $request, $id, $testpaperId)
+    public function closeAction(Request $request, $id, $assessmentId)
     {
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-        if (empty($testpaper) || $testpaper['bankId'] != $id) {
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
+        if (empty($assessment) || $assessment['bank_id'] != $questionBank['itemBankId']) {
             $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
-        $testpaper = $this->getTestpaperService()->closeTestpaper($testpaperId);
-
-        $user = $this->getUserService()->getUser($testpaper['updatedUserId']);
+        $this->getAssessmentService()->closeAssessment($assessmentId);
 
         return $this->createJsonResponse(true);
     }
 
-    public function previewAction(Request $request, $id, $testpaperId)
+    public function previewAction(Request $request, $id, $assessmentId)
     {
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-        if (!$testpaper || $testpaper['bankId'] != $id) {
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        $assessment = $this->getAssessmentService()->showAssessment($assessmentId);
+        if (!$assessment || $assessment['bank_id'] != $questionBank['itemBankId']) {
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
-        if ('closed' === $testpaper['status']) {
+        if ('closed' === $assessment['status']) {
             return $this->createMessageResponse('warning', 'testpaper already closed');
         }
 
-        $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
-
-        $total = $this->getTestpaperService()->countQuestionTypes($testpaper, $questions);
-
-        $attachments = $this->getTestpaperService()->findAttachments($testpaper['id']);
-
-        return $this->render('testpaper/manage/preview.html.twig', array(
-            'questions' => $questions,
-            'limitedTime' => $testpaper['limitedTime'],
-            'paper' => $testpaper,
-            'paperResult' => array(),
-            'total' => $total,
-            'attachments' => $attachments,
-            'questionTypes' => $this->getTestpaperService()->getCheckedQuestionTypeBySeq($testpaper),
-        ));
+        return $this->render('testpaper/manage/preview.html.twig', [
+            'assessment' => $assessment,
+        ]);
     }
 
-    public function exportAction(Request $request, $id, $testpaperId)
+    public function exportAction(Request $request, $id, $assessmentId)
     {
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
 
-        if (empty($testpaper) || $testpaper['bankId'] != $id) {
+        if (empty($assessment) || $assessment['bank_id'] != $questionBank['itemBankId']) {
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
-        $questions = $this->getTestpaperService()->buildExportTestpaperItems($testpaperId);
-
-        $fileName = $testpaper['name'].'.docx';
+        $imgRootDir = $this->get('kernel')->getContainer()->getParameter('kernel.root_dir').'/../web';
+        $fileName = $assessment['name'].'.docx';
         $baseDir = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory');
         $path = $baseDir.DIRECTORY_SEPARATOR.$fileName;
 
-        $writer = new WriteDocx($path);
-        $writer->write($questions);
+        $result = $this->getAssessmentService()->exportAssessment($assessmentId, $path, $imgRootDir);
 
-        $headers = array(
+        if (empty($result)) {
+            return $this->createMessageResponse('info', '导出试卷为空', null, 3000, $this->generateUrl('question_bank_manage_testpaper_list', ['id' => $id]));
+        }
+
+        $headers = [
             'Content-Type' => 'application/msword',
             'Content-Disposition' => 'attachment; filename='.$fileName,
-        );
+        ];
 
         return new BinaryFileResponse($path, 200, $headers);
     }
@@ -396,17 +365,18 @@ class TestpaperController extends BaseController
     public function jsonAction(Request $request, $id)
     {
         if (!$this->getQuestionBankService()->canManageBank($id)) {
-            return $this->createJsonResponse(array());
+            return $this->createJsonResponse([]);
         }
 
-        $conditions = array(
-            'bankId' => $id,
-            'type' => 'testpaper',
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        $conditions = [
+            'bank_id' => $questionBank['itemBankId'],
+            'displayable' => 1,
             'keyword' => $request->query->get('keyword', ''),
-        );
-        $totalCount = $this->getTestpaperService()->searchTestpaperCount($conditions);
+        ];
+        $totalCount = $this->getAssessmentService()->countAssessments($conditions);
         $conditions['status'] = 'open';
-        $openCount = $this->getTestpaperService()->searchTestpaperCount($conditions);
+        $openCount = $this->getAssessmentService()->countAssessments($conditions);
 
         $pagination = new Paginator(
             $request,
@@ -414,28 +384,26 @@ class TestpaperController extends BaseController
             10
         );
 
-        $testPapers = $this->getTestpaperService()->searchTestpapers(
+        $testPapers = $this->getAssessmentService()->searchAssessments(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['created_time' => 'DESC'],
             $pagination->getOffsetCount(),
             $pagination->getPerPageCount()
         );
 
         foreach ($testPapers as &$testPaper) {
-            $testPaper = ArrayToolkit::parts($testPaper, array(
-                'id',
-                'name',
-                'score',
-            ));
+            $testPaper = [
+                'id' => $testPaper['id'],
+                'name' => $testPaper['name'],
+                'score' => $testPaper['total_score'],
+            ];
         }
 
-        $data = array(
+        return $this->createJsonResponse([
             'testPapers' => $testPapers,
             'totalCount' => $totalCount,
             'openCount' => $openCount,
-        );
-
-        return $this->createJsonResponse($data);
+        ]);
     }
 
     public function questionPickAction(Request $request, $id)
@@ -443,41 +411,39 @@ class TestpaperController extends BaseController
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
-
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        $conditions = $request->query->all();
 
-        $conditions['bankId'] = $id;
-        $conditions['parentId'] = empty($conditions['parentId']) ? 0 : $conditions['parentId'];
-        $orderBy = array('createdTime' => 'DESC');
+        $conditions = $request->query->all();
+        $conditions['bank_id'] = $questionBank['itemBankId'];
+        if (!empty($conditions['exclude_ids'])) {
+            $conditions['exclude_ids'] = explode(',', $conditions['exclude_ids']);
+        }
+
         $paginator = new Paginator(
-            $this->get('request'),
-            $this->getQuestionService()->searchCount($conditions),
+            $request,
+            $this->getItemService()->countItems($conditions),
             10
         );
 
-        $questions = $this->getQuestionService()->search(
+        $items = $this->getItemService()->searchItems(
             $conditions,
-            $orderBy,
+            ['created_time' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $categories = $this->getCategoryService()->getCategoryStructureTree($questionBank['id']);
-        $categoryTree = $this->getCategoryService()->getCategoryTree($questionBank['id']);
-        $questionCategories = $this->getCategoryService()->findCategories($questionBank['id']);
-        $questionCategories = ArrayToolkit::index($questionCategories, 'id');
+        $itemCategories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
+        $itemCategories = ArrayToolkit::index($itemCategories, 'id');
 
-        return $this->render('question-bank/widgets/question-pick-modal.html.twig', array(
+        return $this->render('question-bank/widgets/question-pick-modal.html.twig', [
             'isSelectBank' => $request->request->get('isSelectBank', 0),
-            'questions' => $questions,
+            'items' => $items,
             'paginator' => $paginator,
             'questionBank' => $questionBank,
-            'categories' => $categories,
-            'categoryTree' => $categoryTree,
-            'questionCategories' => $questionCategories,
-            'excludeIds' => empty($conditions['excludeIds']) ? '' : $conditions['excludeIds'],
-        ));
+            'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']),
+            'itemCategories' => $itemCategories,
+            'excludeIds' => empty($conditions['exclude_ids']) ? '' : $conditions['exclude_ids'],
+        ]);
     }
 
     public function questionSearchAction(Request $request, $id)
@@ -487,40 +453,41 @@ class TestpaperController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        $conditions = $request->query->all();
 
-        $conditions['bankId'] = $id;
-        $conditions['parentId'] = empty($conditions['parentId']) ? 0 : $conditions['parentId'];
-        $orderBy = array('createdTime' => 'DESC');
+        $conditions = $request->query->all();
+        $conditions['bank_id'] = $questionBank['itemBankId'];
+        if (!empty($conditions['exclude_ids'])) {
+            $conditions['exclude_ids'] = explode(',', $conditions['exclude_ids']);
+        }
         $paginator = new Paginator(
-            $this->get('request'),
-            $this->getQuestionService()->searchCount($conditions),
+            $request,
+            $this->getItemService()->countItems($conditions),
             10
         );
 
         if (!empty($conditions['categoryId'])) {
-            $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+            $childrenIds = $this->getItemCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
             $childrenIds[] = $conditions['categoryId'];
-            $conditions['categoryIds'] = $childrenIds;
+            $conditions['category_ids'] = $childrenIds;
             unset($conditions['categoryId']);
         }
 
-        $questions = $this->getQuestionService()->search(
+        $items = $this->getItemService()->searchItems(
             $conditions,
-            $orderBy,
+            ['created_time' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $questionCategories = $this->getCategoryService()->findCategories($questionBank['id']);
-        $questionCategories = ArrayToolkit::index($questionCategories, 'id');
+        $itemCategories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
+        $itemCategories = ArrayToolkit::index($itemCategories, 'id');
 
-        return $this->render('question-bank/widgets/question-pick-body.html.twig', array(
-            'questions' => $questions,
+        return $this->render('question-bank/widgets/question-pick-body.html.twig', [
+            'items' => $items,
             'paginator' => $paginator,
             'questionBank' => $questionBank,
-            'questionCategories' => $questionCategories,
-        ));
+            'itemCategories' => $itemCategories,
+        ]);
     }
 
     public function pickedQuestionAction(Request $request, $id)
@@ -529,30 +496,23 @@ class TestpaperController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        $typeQuestions = $request->request->get('typeQuestions', array());
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        $questionCategories = $this->getCategoryService()->findCategories($questionBank['id']);
-        $questionCategories = ArrayToolkit::index($questionCategories, 'id');
-        $typeHtml = array();
-        foreach ($typeQuestions as $type => $questions) {
-            if (empty($questions)) {
+        $itemCategories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
+        $itemCategories = ArrayToolkit::index($itemCategories, 'id');
+
+        $typeHtml = [];
+        $typeQuestions = $request->request->get('typeQuestions', []);
+        foreach ($typeQuestions as $type => $items) {
+            if (empty($items)) {
                 continue;
             }
 
-            $questionIds = array_keys($questions);
-            $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
-            if ('material' == $type) {
-                foreach ($questions as &$question) {
-                    $question['subs'] = $this->getQuestionService()->findQuestionsByParentId($question['id']);
-                }
-            }
-
-            $typeHtml[$type] = $this->renderView('question-bank/widgets/picked-question.html.twig', array(
-                'questions' => $questions,
+            $typeHtml[$type] = $this->renderView('question-bank/widgets/picked-question.html.twig', [
+                'items' => $this->getItemService()->findItemsByIds(array_keys($items), true),
                 'questionBank' => $questionBank,
-                'questionCategories' => $questionCategories,
+                'itemCategories' => $itemCategories,
                 'type' => $type,
-            ));
+            ]);
         }
 
         return $this->createJsonResponse($typeHtml);
@@ -560,30 +520,51 @@ class TestpaperController extends BaseController
 
     public function buildCheckAction(Request $request, $id, $type)
     {
-        $bank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($bank)) {
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank)) {
             throw $this->createAccessDeniedException();
         }
 
         $data = $request->request->all();
-        $data['bankId'] = $id;
+        $data['itemBankId'] = $questionBank['itemBankId'];
 
         $result = $this->getTestpaperService()->canBuildTestpaper($type, $data);
 
         return $this->createJsonResponse($result);
     }
 
+    protected function calculateItemCount($sections)
+    {
+        $itemCount = 0;
+        foreach ($sections as $section) {
+            if (!empty($section['items'])) {
+                $itemCount += count($section['items']);
+            }
+        }
+
+        return $itemCount;
+    }
+
+    protected function setSectionsType($sections)
+    {
+        foreach ($sections as &$section) {
+            $section['type'] = $section['items'][0]['type'];
+        }
+
+        return ArrayToolkit::index($sections, 'type');
+    }
+
     protected function getQuestionTypes()
     {
         $typesConfig = $this->get('extension.manager')->getQuestionTypes();
 
-        $types = array();
+        $types = [];
         foreach ($typesConfig as $type => $typeConfig) {
-            $types[$type] = array(
+            $types[$type] = [
                 'name' => $typeConfig['name'],
                 'hasMissScore' => $typeConfig['hasMissScore'],
                 'seqNum' => $typeConfig['seqNum'],
-            );
+            ];
         }
 
         return $types;
@@ -595,6 +576,38 @@ class TestpaperController extends BaseController
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
+    }
+
+    /**
+     * @return ItemBankService
+     */
+    protected function getItemBankService()
+    {
+        return $this->createService('ItemBank:ItemBank:ItemBankService');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->createService('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return ItemCategoryService
+     */
+    protected function getItemCategoryService()
+    {
+        return $this->createService('ItemBank:Item:ItemCategoryService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 
     /**
@@ -611,21 +624,5 @@ class TestpaperController extends BaseController
     protected function getTestpaperActivityService()
     {
         return $this->createService('Activity:TestpaperActivityService');
-    }
-
-    /**
-     * @return QuestionService
-     */
-    protected function getQuestionService()
-    {
-        return $this->createService('Question:QuestionService');
-    }
-
-    /**
-     * @return CategoryService
-     */
-    protected function getCategoryService()
-    {
-        return $this->createService('Question:CategoryService');
     }
 }

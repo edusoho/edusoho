@@ -4,15 +4,23 @@ namespace ApiBundle\Api\Resource\Homework;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Course\CourseException;
-use Biz\Testpaper\HomeworkException;
-use Biz\Task\TaskException;
-use Biz\Task\Service\TaskService;
-use Biz\Activity\Service\TestpaperActivityService;
-use Biz\Activity\Service\ActivityService;
-use Biz\Testpaper\Service\TestpaperService;
-use Biz\Course\Service\CourseService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\HomeworkActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Course\CourseException;
+use Biz\Course\Service\CourseService;
+use Biz\Task\Service\TaskService;
+use Biz\Task\TaskException;
+use Biz\Testpaper\HomeworkException;
+use Biz\Testpaper\Wrapper\AssessmentResponseWrapper;
+use Biz\Testpaper\Wrapper\TestpaperWrapper;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class HomeworkResult extends AbstractResource
 {
@@ -23,8 +31,8 @@ class HomeworkResult extends AbstractResource
         $targetType = $request->request->get('targetType');
         $targetId = $request->request->get('targetId');
 
-        $homework = $this->getTestpaperService()->getTestpaper($homeworkId);
-        if (empty($homework) || 'homework' != $homework['type']) {
+        $homework = $this->getAssessmentService()->showAssessment($homeworkId);
+        if (empty($homework) || '0' != $homework['displayable']) {
             throw HomeworkException::NOTFOUND_HOMEWORK();
         }
 
@@ -44,9 +52,9 @@ class HomeworkResult extends AbstractResource
 
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
 
-        $homeworkResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseId'], $activity['id'], $activity['mediaType']);
+        $homeworkRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $user['id']);
 
-        if (empty($homeworkResult) || 'finished' == $homeworkResult['status']) {
+        if (empty($homeworkRecord) || 'finished' == $homeworkRecord['status']) {
             if ('draft' == $homework['status']) {
                 throw HomeworkException::DRAFT_HOMEWORK();
             }
@@ -54,12 +62,17 @@ class HomeworkResult extends AbstractResource
                 throw HomeworkException::CLOSED_HOMEWORK();
             }
 
-            $homeworkResult = $this->getTestpaperService()->startTestpaper($homework['id'], array('lessonId' => $activity['id'], 'courseId' => $activity['fromCourseId'], 'limitedTime' => $homework['limitedTime']));
-        } elseif ('reviewing' == $homeworkResult['status']) {
+            $homeworkRecord = $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $homework['id'], $user['id']);
+        } elseif ('reviewing' == $homeworkRecord['status']) {
             throw HomeworkException::REVIEWING_HOMEWORK();
         }
 
-        $homeworkResult['items'] = array_values($this->getTestpaperService()->showTestpaperItems($homework['id']));
+        $testpaperWrapper = new TestpaperWrapper();
+        $scene = $this->getAnswerSceneService()->get($homeworkRecord['answer_scene_id']);
+        $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($homeworkRecord['id']);
+        $answerReport = $this->getAnswerReportService()->get($homeworkRecord['answer_report_id']);
+        $homeworkResult = $testpaperWrapper->wrapTestpaperResult($homeworkRecord, $homework, $scene, $answerReport);
+        $homeworkResult['items'] = array_values($testpaperWrapper->wrapTestpaperItems($homework, $questionReports));
 
         return $homeworkResult;
     }
@@ -69,52 +82,66 @@ class HomeworkResult extends AbstractResource
         $user = $this->getCurrentUser();
 
         $data = $request->request->all();
-        $homeworkResult = $this->getTestpaperService()->getTestpaperResult($homeworkResultId);
+        $homeworkRecord = $this->getAnswerRecordService()->get($homeworkResultId);
 
-        if (!empty($homeworkResult) && !in_array($homeworkResult['status'], array('doing', 'paused'))) {
+        if (!empty($homeworkRecord) && !in_array($homeworkRecord['status'], ['doing', 'paused'])) {
             throw HomeworkException::FORBIDDEN_DUPLICATE_COMMIT();
         }
 
-        $homeworkResult = $this->getTestpaperService()->finishTest($homeworkResult['id'], $data);
-        $homework = $this->getTestpaperService()->getTestpaper($homeworkResult['testId']);
+        $wrapper = new AssessmentResponseWrapper();
+        $assessment = $this->getAssessmentService()->showAssessment($homeworkRecord['assessment_id']);
+        $assessmentResponse = $wrapper->wrap($data, $assessment, $homeworkRecord);
+        $homeworkRecord = $this->getAnswerService()->submitAnswer($assessmentResponse);
+        $scene = $this->getAnswerSceneService()->get($homeworkRecord['answer_scene_id']);
 
-        if ($homeworkResult['userId'] != $user['id']) {
-            $course = $this->getCourseService()->tryManageCourse($homeworkResult['courseId']);
+        if ($homeworkRecord['user_id'] != $user['id']) {
+            $homeworkActivity = $this->getHomeworkActivityService()->getByAnswerSceneId($scene['id']);
+            $activity = $this->getActivityService()->getByMediaIdAndMediaType($homeworkActivity['id'], 'homework');
+            $course = $this->getCourseService()->tryManageCourse($activity['fromCourseId']);
         }
 
-        if (empty($course) && $homeworkResult['userId'] != $user['id']) {
+        if (empty($course) && $homeworkRecord['user_id'] != $user['id']) {
             throw HomeworkException::FORBIDDEN_ACCESS_HOMEWORK();
         }
 
-        return $homeworkResult;
+        $testpaperWrapper = new TestpaperWrapper();
+        $answerReport = $this->getAnswerReportService()->get($homeworkRecord['answer_report_id']);
+
+        return $testpaperWrapper->wrapTestpaperResult($homeworkRecord, $assessment, $scene, $answerReport);
     }
 
     public function get(ApiRequest $request, $homeworkId, $homeworkResultId)
     {
         $user = $this->getCurrentUser();
 
-        $homeworkResult = $this->getTestpaperService()->getTestpaperResult($homeworkResultId);
-        if (empty($homeworkResult)) {
+        $homeworkRecord = $this->getAnswerRecordService()->get($homeworkResultId);
+        if (empty($homeworkRecord)) {
             throw HomeworkException::NOTFOUND_RESULT();
         }
 
-        $homework = $this->getTestpaperService()->getTestpaper($homeworkId);
+        $homework = $this->getAssessmentService()->showAssessment($homeworkId);
         if (empty($homework)) {
             throw HomeworkException::NOTFOUND_HOMEWORK();
         }
 
-        $canTakeCourse = $this->getCourseService()->canTakeCourse($homework['courseId']);
+        $scene = $this->getAnswerSceneService()->get($homeworkRecord['answer_scene_id']);
+        $homeworkActivity = $this->getHomeworkActivityService()->getByAnswerSceneId($scene['id']);
+        $activity = $this->getActivityService()->getByMediaIdAndMediaType($homeworkActivity['id'], 'homework');
+        $canTakeCourse = $this->getCourseService()->canTakeCourse($activity['fromCourseId']);
         if (!$canTakeCourse) {
             throw CourseException::FORBIDDEN_TAKE_COURSE();
         }
 
-        $canCheckHomework = $this->getTestpaperService()->canLookTestpaper($homeworkResult['id']);
-        if (empty($user) || (!$canCheckHomework && $homeworkResult['userId'] != $user['id'])) {
+        if ('doing' === $homeworkRecord['status'] && ($homeworkRecord['user_id'] != $user['id'])) {
             throw HomeworkException::FORBIDDEN_ACCESS_HOMEWORK();
         }
 
-        $homeworkResult['items'] = array_values($this->getTestpaperService()->showTestpaperItems($homework['id'], $homeworkResultId));
-        $homeworkResult['items'] = $this->fillItems($homeworkResult['items'], $homeworkResult);
+        $testpaperWrapper = new TestpaperWrapper();
+        $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($homeworkRecord['id']);
+        $answerReport = $this->getAnswerReportService()->get($homeworkRecord['answer_report_id']);
+        $homeworkResult = $testpaperWrapper->wrapTestpaperResult($homeworkRecord, $homework, $scene, $answerReport);
+        $homeworkResult['items'] = array_values($testpaperWrapper->wrapTestpaperItems($homework, $questionReports));
+        $homeworkResult['items'] = $this->fillItems($homeworkResult['items'], $questionReports);
         $homeworkResult['rightRate'] = $this->getRightRate($homeworkResult['items']);
 
         return $homeworkResult;
@@ -146,18 +173,16 @@ class HomeworkResult extends AbstractResource
         return intval($rightNum / $num * 100 + 0.5);
     }
 
-    protected function fillItems($items, $homeworkResult)
+    protected function fillItems($items, $questionReports)
     {
-        $itemSetResults = $this->getTestpaperService()->findItemResultsByResultId($homeworkResult['id']);
-        $itemSetResults = ArrayToolkit::index($itemSetResults, 'questionId');
-
+        $questionReports = ArrayToolkit::index($questionReports, 'question_id');
         foreach ($items as &$item) {
             if (isset($item['subs'])) {
                 foreach ($item['subs'] as &$sub) {
-                    $sub['testResult'] = isset($itemSetResults[$sub['id']]) ? $itemSetResults[$sub['id']] : null;
+                    $sub['testResult'] = isset($questionReports[$sub['id']]) ? $sub['testResult'] : null;
                 }
             } else {
-                $item['testResult'] = isset($itemSetResults[$item['id']]) ? $itemSetResults[$item['id']] : null;
+                $item['testResult'] = isset($questionReports[$item['id']]) ? $item['testResult'] : null;
             }
         }
 
@@ -181,14 +206,6 @@ class HomeworkResult extends AbstractResource
     }
 
     /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->service('Testpaper:TestpaperService');
-    }
-
-    /**
      * @return CourseService
      */
     protected function getCourseService()
@@ -202,5 +219,61 @@ class HomeworkResult extends AbstractResource
     protected function getTaskService()
     {
         return $this->service('Task:TaskService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->service('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->service('ItemBank:Answer:AnswerReportService');
+    }
+
+    /**
+     * @return AnswerQuestionReportService
+     */
+    protected function getAnswerQuestionReportService()
+    {
+        return $this->service('ItemBank:Answer:AnswerQuestionReportService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->service('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return AnswerService
+     */
+    protected function getAnswerService()
+    {
+        return $this->service('ItemBank:Answer:AnswerService');
+    }
+
+    /**
+     * @return HomeworkActivityService
+     */
+    protected function getHomeworkActivityService()
+    {
+        return $this->service('Activity:HomeworkActivityService');
     }
 }

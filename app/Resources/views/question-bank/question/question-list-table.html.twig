@@ -18,18 +18,18 @@
         <td>
           <a class="color-info" href="#modal" data-toggle="modal" data-url="{{  path('question_bank_manage_question_preview', {id: questionBank.id, questionId: question.id}) }}">
             {% if question.includeImg|default(null) %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
-            {{ question.stem |fill_question_stem_text| plain_text(30) }}
+            {{ question.material |fill_question_stem_text| plain_text(30) }}
             <br/>
             <span class="color-gray text-sm">{{ 'category'|trans }}：
-              {% if question.categoryId %}
-                {{ questionCategories[question.categoryId].name }}
+              {% if question.category_id %}
+                {{ questionCategories[question.category_id].name }}
               {% else %}
                 {{ 'site.data.empty'|trans }}
               {% endif %}
             </span>
           </a>
           <div>
-            {% if question.type == 'material' and not question.subCount %}
+            {% if question.type == 'material' and not question.question_num %}
               <span class="label label-danger">{{'course.question_manage.question.unfinished'|trans}}</span>
             {% endif %}
           </div>
@@ -37,7 +37,7 @@
         <td>
           {{ questionTypesDict[question.type] }}
           {% if question.type == 'material'%}
-            <br><small class="color-gray">({{ question.subCount }}{{'course.question_manage.question.sub_question'|trans}})</small>
+            <br><small class="color-gray">({{ question.question_num }}{{'course.question_manage.question.sub_question'|trans}})</small>
           {% endif %}
         </td>
         <td>
@@ -50,18 +50,15 @@
           {% endif %}
         </td>
         <td>
-          {{ web_macro.user_link(users[question.updatedUserId]) }}
+          {{ web_macro.user_link(users[question.updated_user_id]) }}
           <br />
-          <span class="color-gray text-sm">{{question.updatedTime | date('Y-n-d H:i:s')}}</span>
+          <span class="color-gray text-sm">{{question.updated_time | date('Y-n-d H:i:s')}}</span>
         </td>
         <td>
           <div class="btn-group">
-            {% if question.type == 'material'%}
-              <a href="{{ path('question_bank_manage_question_list', {id:questionBank.id, parentId:question.id}) }}" class="color-info">{{'course.question_manage.question.manage_sub_btn'|trans}}</a>
-            {% endif %}
             <a  href="javascript:" class="color-info js-update-btn" data-url="{{ path('question_bank_manage_question_update', {id:questionBank.id, questionId:question.id, goto: paginator.getPageUrl(paginator.currentPage)}) }}"  class="color-info"> {{'course.question_manage.question.edit_btn'|trans}}</a>
-            <a href="javascript:" class="color-info js-delete-btn" data-name='{{'course.question_manage.question'|trans}}{% if question.type == 'material'%}({{'course.question_manage.question.include_sub'|trans}}){% endif %}'
-            data-url="{{ path('question_bank_manage_question_delete', {id: questionBank.id, questionId: question.id}) }}">
+            <a href="javascript:" class="color-info js-delete-btn" data-name='{{'course.question_manage.question'|trans}}'
+            data-url="{{ path('question_bank_manage_question_delete', {id: questionBank.id, itemId: question.id}) }}">
               {{'course.question_manage.question.delete_btn'|trans}}
             </a>
           </div>
@@ -78,9 +75,7 @@
   <label class="checkbox-inline"><input type="checkbox" autocomplete="off" class="js-select-all"> {{'course.question_manage.select_all'|trans}}</label>
   <span class="color-gray mlm vertical-middle">{{ 'my.teaching.question_bank.question.selected'|trans }}：<span class="js-select-number">0</span></span>
   <button class="cd-btn cd-btn-default cd-btn-sm mlm js-batch-delete" data-name="{{'course.question_manage.question'|trans}}" data-url="{{ path('question_bank_manage_question_batch_delete', {id: questionBank.id}) }}" data-loading-text="{{'form.btn.delete.submiting'|trans}}">{{'form.btn.delete'|trans}}</button>
-  {% if not parentQuestion %}
-    <button class="cd-btn cd-btn-default cd-btn-sm mlm js-batch-set" data-name="{{'course.question_manage.question'|trans}}" data-url="" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'my.teaching.question_bank.question.set_category'|trans}}</button>
-  {% endif %}
+  <button class="cd-btn cd-btn-default cd-btn-sm mlm js-batch-set" data-name="{{'course.question_manage.question'|trans}}" data-url="" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'my.teaching.question_bank.question.set_category'|trans}}</button>
   <span class="pull-right color-gray">{{'course.question_manage.count'|trans({'%getItemCount()%': paginator.getItemCount() })}}</span>
 </div>
 <nav class="text-center">

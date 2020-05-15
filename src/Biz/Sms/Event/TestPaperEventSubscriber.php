@@ -8,6 +8,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Sms\Service\SmsService;
 use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -18,66 +19,68 @@ class TestPaperEventSubscriber extends EventSubscriber implements EventSubscribe
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            'exam.reviewed' => 'onExamReviewed',
-        );
+        return [
+            'answer.finished' => 'onAnswerFinished',
+        ];
     }
 
-    public function onExamReviewed(Event $event)
+    public function onAnswerFinished(Event $event)
     {
-        $paperResult = $event->getSubject();
+        $answerReport = $event->getSubject();
+        $answerRecord = $this->getAnswerRecordService()->get($answerReport['answer_record_id']);
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
 
-        if ($paperResult['type'] === 'homework') {
-            $this->notifyHomeworkResult($paperResult);
-        } elseif ($paperResult['type'] === 'testpaper') {
-            $this->notifyTestpaperResult($paperResult);
+        if ('homework' === $activity['mediaType']) {
+            $this->notifyHomeworkResult($activity, $answerRecord);
+        } elseif ('testpaper' === $activity['mediaType']) {
+            $this->notifyTestpaperResult($activity, $answerRecord);
         }
     }
 
-    protected function notifyTestpaperResult($result)
+    protected function notifyTestpaperResult($activity, $answerRecord)
     {
         $smsType = 'sms_testpaper_check';
 
         if ($this->getSmsService()->isOpen($smsType)) {
-            $parameters = array();
+            $parameters = [];
 
-            $courseSet = $this->getCourseSetService()->getCourseSet($result['courseSetId']);
+            $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
 
             if (!empty($courseSet)) {
                 $courseSet['title'] = StringToolkit::cutter($courseSet['title'], 20, 15, 4);
                 $task = $this->getTaskService()->getTaskByCourseIdAndActivityId(
-                    $result['courseId'],
-                    $result['lessonId']
+                    $activity['fromCourseId'],
+                    $activity['id']
                 );
                 $parameters['lesson_title'] = '《'.$task['title'].'》的试卷';
                 $parameters['course_title'] = '《'.$courseSet['title'].'》';
                 $description = $parameters['course_title'].' '.$parameters['lesson_title'].'批阅提醒';
-                $userId = $result['userId'];
-                $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
+                $userId = $answerRecord['user_id'];
+                $this->getSmsService()->smsSend($smsType, [$userId], $description, $parameters);
             }
         }
     }
 
-    protected function notifyHomeworkResult($result)
+    protected function notifyHomeworkResult($activity, $answerRecord)
     {
         $smsType = 'sms_homework_check';
 
         if ($this->getSmsService()->isOpen($smsType)) {
-            $parameters = array();
+            $parameters = [];
 
-            $courseSet = $this->getCourseSetService()->getCourseSet($result['courseSetId']);
+            $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
 
             if (!empty($courseSet)) {
                 $courseSet['title'] = StringToolkit::cutter($courseSet['title'], 20, 15, 4);
                 $task = $this->getTaskService()->getTaskByCourseIdAndActivityId(
-                    $result['courseId'],
-                    $result['lessonId']
+                    $activity['fromCourseId'],
+                    $activity['id']
                 );
                 $parameters['lesson_title'] = '《'.$task['title'].'》的作业';
                 $parameters['course_title'] = '《'.$courseSet['title'].'》';
                 $description = $parameters['course_title'].' '.$parameters['lesson_title'].'批阅提醒';
-                $userId = $result['userId'];
-                $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
+                $userId = $answerRecord['user_id'];
+                $this->getSmsService()->smsSend($smsType, [$userId], $description, $parameters);
             }
         }
     }
@@ -112,5 +115,13 @@ class TestPaperEventSubscriber extends EventSubscriber implements EventSubscribe
     protected function getSmsService()
     {
         return $this->getBiz()->service('Sms:SmsService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    public function getAnswerRecordService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerRecordService');
     }
 }

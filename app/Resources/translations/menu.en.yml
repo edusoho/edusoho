@@ -779,6 +779,11 @@ admin_v2.cloud.cloud_setting.basic_tab: License
 # 人脸识别
 admin_v2.cloud.face_identify: Face Identify
 
+# 云监考
+admin_v2.cloud.face_inspection: Face Inspection
+admin_v2.cloud.face_inspection_result: Face Inspection Result
+admin_v2.cloud.face_inspection_link: Face Inspection Link
+
 #功能实验室
 admin_v2.cloud.feature_lab: Feature Lab
 

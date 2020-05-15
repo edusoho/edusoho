@@ -2,25 +2,25 @@
 
 namespace AppBundle\Controller\Course;
 
-use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
-use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Symfony\Component\HttpFoundation\Request;
 
 class HomeworkManageController extends BaseController
 {
-    public function checkAction(Request $request, $id, $resultId)
+    public function checkAction(Request $request, $id, $answerRecordId)
     {
         $course = $this->getCourseService()->getCourse($id);
         $course = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
 
-        return $this->forward('AppBundle:HomeworkManage:check', array(
+        return $this->forward('AppBundle:HomeworkManage:check', [
             'request' => $request,
-            'resultId' => $resultId,
+            'answerRecordId' => $answerRecordId,
             'source' => 'course',
             'targetId' => $course['id'],
-        ));
+        ]);
     }
 
     public function checkListAction(Request $request, $id)
@@ -31,11 +31,11 @@ class HomeworkManageController extends BaseController
         $user = $this->getUser();
         $isTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
 
-        return $this->render('course-manage/homework-check/check-list.html.twig', array(
+        return $this->render('course-manage/homework-check/check-list.html.twig', [
             'courseSet' => $courseSet,
             'course' => $course,
             'isTeacher' => $isTeacher,
-        ));
+        ]);
     }
 
     /**
