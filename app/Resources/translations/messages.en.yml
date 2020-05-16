@@ -9590,3 +9590,14 @@ s2b2c.product.suggestion_price: Suggestion Price
 
 s2b2c.course_product.free_tasks: Free tasks
 s2b2c.course_product.tag: Merchant course
+
+exception.s2b2c_product.update_type_invalid: Update type invalid
+
+admin_v2.cloud_center.content_resource.product_update_setting: Update Setting
+admin_v2.cloud_center.content_resource.product_update_auto: Auto
+admin_v2.cloud_center.content_resource.product_update_manual: Manual
+
+
+admin_v2.cloud_center.content_resource.product_update_auto.tips: Update product automatically when product updated
+admin_v2.cloud_center.content_resource.product_update_manual.tips: Update product manually when product updated
+
