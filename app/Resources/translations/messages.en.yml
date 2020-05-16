@@ -9601,3 +9601,8 @@ admin_v2.cloud_center.content_resource.product_update_manual: Manual
 admin_v2.cloud_center.content_resource.product_update_auto.tips: Update product automatically when product updated
 admin_v2.cloud_center.content_resource.product_update_manual.tips: Update product manually when product updated
 
+s2b2c.resource.all_choose: Choose All
+s2b2c.resource.return_market: Return
+
+
+

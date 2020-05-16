@@ -10936,4 +10936,9 @@ admin_v2.cloud_center.content_resource.product_update_manual: 手动更新
 
 admin_v2.cloud_center.content_resource.product_update_auto.tips: 如果S端内容有更新，自动进行同步更新
 admin_v2.cloud_center.content_resource.product_update_manual.tips: 供应商内容更新，需要手动进行更新
+s2b2c.resource.all_choose: 全部选择
+s2b2c.resource.return_market: 返回内容市场
+
+
+
 
