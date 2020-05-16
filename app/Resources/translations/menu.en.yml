@@ -728,7 +728,7 @@ admin_v2.data_statistics.statistics.menu: Data Statistics
 admin_v2.data_statistics.statistics.basic_tab: Data Statistics
 
 # 应用中心-内容云-内容市场：
-admin_v2.basic_content_resource_group: 内容云
+admin_v2.basic_content_resource_group: Market
 admin_v2.purchase_market_menu: Market
 admin_v2.purchase_market_tab: Market
 admin_v2.products_version_tab: Updating
