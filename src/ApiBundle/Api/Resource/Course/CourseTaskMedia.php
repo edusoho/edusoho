@@ -238,7 +238,6 @@ class CourseTaskMedia extends AbstractResource
         $testpaperWrapper = new TestpaperWrapper();
         if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
             $assessment = $this->createAssessment($activity['title'], $activity['ext']['drawCondition']['range'], [$activity['ext']['drawCondition']['section']]);
-            $this->getAnswerService()->startAnswer($answerScene['id'], $assessment['id'], $user['id']);
             $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
             $activity['ext'] = $testpaperWrapper->wrapTestpaper($assessment, $answerScene);
             $activity['ext']['latestExerciseResult'] = null;
