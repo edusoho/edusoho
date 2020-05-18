@@ -10931,6 +10931,7 @@ s2b2c.course_product.free_tasks: 免费学习任务为
 s2b2c.course_product.tag: 采购
 
 exception.s2b2c_product.update_type_invalid: 设置的更新类型不合法
+exception.s2b2c_product.not_found: 不存在对应商品
 
 
 admin_v2.cloud_center.content_resource.product_update_setting: 更新设置

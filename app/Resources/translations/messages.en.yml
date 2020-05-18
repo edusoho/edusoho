@@ -9595,6 +9595,7 @@ s2b2c.course_product.free_tasks: Free tasks
 s2b2c.course_product.tag: Merchant course
 
 exception.s2b2c_product.update_type_invalid: Update type invalid
+exception.s2b2c_product.not_found: Product not found
 
 admin_v2.cloud_center.content_resource.product_update_setting: Update Setting
 admin_v2.cloud_center.content_resource.product_update_auto: Auto
