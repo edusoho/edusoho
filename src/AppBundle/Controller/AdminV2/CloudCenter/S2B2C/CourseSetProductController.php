@@ -137,12 +137,12 @@ class CourseSetProductController extends ProductController
         $paginator = new Paginator($request, $total, $pageSize);
         $paginator->setBaseUrl($this->generateUrl('admin_v2_purchase_market_products_list', ['type' => 'courseSet']));
 
-        $supplierSettings = $this->getSettingService()->get('supplierSettings', []);
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
 
         $remoteResourceIds = ArrayToolkit::column($courseSets, 'id');
 
-        if (!empty($supplierSettings['supplierId'])) {
-            $chosenProducts = $this->getS2B2CProductService()->findProductsBySupplierIdAndRemoteResourceTypeAndIds($supplierSettings['supplierId'], 'course_set', $remoteResourceIds);
+        if (!empty($s2b2cConfig['supplierId'])) {
+            $chosenProducts = $this->getS2B2CProductService()->findProductsBySupplierIdAndRemoteResourceTypeAndIds($s2b2cConfig['supplierId'], 'course_set', $remoteResourceIds);
             $chosenProducts = ArrayToolkit::index($chosenProducts, 'remoteResourceId');
         }
 

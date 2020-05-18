@@ -9,6 +9,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
 use Biz\S2B2C\Service\CourseProductService;
+use Biz\S2B2C\Service\SupplierProductNotifyService;
 
 class SupplierProductNotify extends AbstractResource
 {
@@ -36,7 +37,10 @@ class SupplierProductNotify extends AbstractResource
 
         $func = $this->notifyModels[$params['model']];
 
-        return $this->getCourseProductService()->$func($params);
+        /*
+         * 目前Products并不是抽象的Products,无法转化成通用的产品服务中去处理，直接到CourseProduct处理（这种调用方式本身就不合理）
+         */
+        return $this->getSupplierProductNotifyService()->$func($params);
     }
 
     /**
@@ -45,5 +49,13 @@ class SupplierProductNotify extends AbstractResource
     private function getCourseProductService()
     {
         return $this->service('S2B2C:CourseProductService');
+    }
+
+    /**
+     * @return SupplierProductNotifyService
+     */
+    protected function getSupplierProductNotifyService()
+    {
+        return $this->service('S2B2C:SupplierProductNotifyService');
     }
 }

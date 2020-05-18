@@ -7,9 +7,11 @@ use Biz\Common\CommonException;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\S2B2C\S2B2CProductException;
 use Biz\S2B2C\Service\CourseProductService;
 use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
+use Biz\System\Service\CacheService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Monolog\Logger;
@@ -170,6 +172,41 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         return ['status' => true, 'error' => ''];
     }
 
+    public function setProductHasNewVersion($productType, $remoteResourceId)
+    {
+        //获取更新的课程和计划
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+        $product = $this->getProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($s2b2cConfig['supplierId'], $remoteResourceId, $productType);
+        if (empty($product)) {
+            $this->createNewException(S2B2CProductException::NOT_FOUND_PRODUCT());
+        }
+        $course = $this->getCourseService()->getCourse($product['localResourceId']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $courseSetProduct = $this->getProductService()->getProductBySupplierIdAndLocalResourceIdAndType($s2b2cConfig['supplierId'], $courseSet['id'], 'course_set');
+        if (empty($courseSetProduct) || self::SYNC_STATUS_FINISHED != $courseSetProduct['syncStatus']) {
+            $this->createNewException(S2B2CProductException::NOT_FOUND_PRODUCT());
+        }
+        $this->getLogger()->info("[setProductHasNewVersion] 商品(#{$courseSet['id']}-{$courseSet['title']})存在新版本，进行更新字段", ['productId' => $product['remoteResourceId']]);
+
+        //检验远程的数据是否有更新
+        $productDetail = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getSupplierProductDetail($product['remoteProductId']);
+        $productVersions = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getProductVersions($product['remoteResourceId']);
+        if (!empty($productVersions['error']) || empty($productDetail['course']) || (!empty($productVersions) && $product['remoteResourceId'] != $productVersions[0]['productId'])) {
+            return false;
+        }
+
+        //更新Changelog,标记有新版本生成
+        $productVersions = $this->getProductService()->generateVersionChangeLogs($product['localVersion'], $productVersions);
+        $hasNewVersion = $this->getCacheService()->get('s2b2c.hasNewVersion') ?: [];
+        if (!empty($hasNewVersion['courseSet'])) {
+            $this->getCacheService()->set('s2b2c.hasNewVersion', array_merge($hasNewVersion, ['courseSet' => 1]));
+        }
+        return $this->getProductService()->updateProduct($product['id'], [
+            'remoteVersion' => $productDetail['course']['editVersion'],
+            'changelog' => $productVersions,
+        ]);
+    }
+
     protected function validateCourseData($course, $product)
     {
         if (empty($course)) {
@@ -264,5 +301,13 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
     protected function getCourseSetDao()
     {
         return $this->createDao('Course:CourseSetDao');
+    }
+
+    /**
+     * @return CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 }

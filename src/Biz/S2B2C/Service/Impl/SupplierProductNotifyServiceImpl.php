@@ -7,6 +7,7 @@ use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\S2B2C\Service\CourseProductService;
 use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\SupplierProductNotifyService;
 use Monolog\Logger;
@@ -19,7 +20,7 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
         if (!ArrayToolkit::requireds($params, ['productId', 'productType'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
-        $result = $this->getProductService()->setProductHasNewVersion($params['productId'], $params['productType']);
+        $result = $this->getCourseProductService()->setProductHasNewVersion($params['productType'], $params['productId']);
 
         return ['status' => !empty($result['id'])];
     }
@@ -121,6 +122,14 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
     protected function getProductService()
     {
         return $this->createService('S2B2C:ProductService');
+    }
+
+    /**
+     * @return CourseProductService
+     */
+    protected function getCourseProductService()
+    {
+        return $this->createService('S2B2C:CourseProductService');
     }
 
     /**
