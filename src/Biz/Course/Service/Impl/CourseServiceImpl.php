@@ -226,8 +226,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             $currentUser = $this->getCurrentUser();
             //set default teacher
             $this->getMemberService()->setDefaultTeacher($created['id']);
-            $this->commit();
             $this->dispatchEvent('course.create', new Event($created));
+            $this->commit();
 
             return $created;
         } catch (\Exception $e) {
