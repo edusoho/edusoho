@@ -3,6 +3,7 @@
 namespace AppBundle\Extensions\DataTag;
 
 use Biz\S2B2C\Service\S2B2CFacadeService;
+use Biz\System\Service\CacheService;
 use Biz\System\Service\SettingService;
 
 class S2B2CNoticeDataTag extends BaseDataTag
@@ -12,7 +13,7 @@ class S2B2CNoticeDataTag extends BaseDataTag
         $merchant = $this->getS2B2CFacadeService()->getMe();
         $supplier = $this->getS2B2CFacadeService()->getSupplier();
 
-        $hasNewVersion = $this->getSettingService()->get('s2b2c.hasNewVersion', []);
+        $hasNewVersion = $this->getCacheService()->get('s2b2c.hasNewVersion');
         $balance = empty($merchant['balance']) ? 0 : $merchant['balance'];
 
         $noticeNum = 0;
@@ -25,7 +26,7 @@ class S2B2CNoticeDataTag extends BaseDataTag
         if ($contents['notEnoughBalance']) {
             ++$noticeNum;
         }
-        if ($hasNewVersion) {
+        if ($contents['hasNewVersionProducts']) {
             ++$noticeNum;
         }
         $contents['noticeNum'] = $noticeNum;
@@ -55,5 +56,13 @@ class S2B2CNoticeDataTag extends BaseDataTag
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 }
