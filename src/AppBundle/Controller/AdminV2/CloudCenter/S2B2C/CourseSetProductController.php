@@ -48,11 +48,11 @@ class CourseSetProductController extends ProductController
         }
 
         $prepareCourseSet = $this->prepareCourseSetData($courseSetData);
-        $purchaseProducts = $this->preparePurchaseData($courseSetData);
+        list($purchaseProducts, $purchaseRecord) = $this->preparePurchaseData($courseSetData);
         $result = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->checkPurchaseProducts($purchaseProducts);
         if (!empty($result['success']) && true == $result['success']) {
-            $result = $this->getS2B2CFacadeService()->getS2B2CService()->purchaseProducts($purchaseProducts);
-            if (!empty($result['status']) && true === $result['status']) {
+            $result = $this->getS2B2CFacadeService()->getS2B2CService()->purchaseProducts($purchaseProducts, $purchaseRecord);
+            if (!empty($result['status']) && 'success' === $result['status']) {
                 $newCourseSet = $this->getCourseSetService()->addCourseSet($prepareCourseSet);
                 $product = $this->getS2B2CProductService()->createProduct([
                     'supplierId' => $s2b2cConfig['supplierId'],
@@ -235,7 +235,14 @@ class CourseSetProductController extends ProductController
             ];
         }
 
-        return $purchaseProducts;
+        $purchaseRecord = [
+            'parent_id' => $sourceCourseSet['id'],
+            'parent_title' => $sourceCourseSet['title'],
+            'type' => 'course',
+            'product_ids' => ArrayToolkit::column($sourcesCourses, 'id'),
+        ];
+
+        return [$purchaseProducts, $purchaseRecord];
     }
 
     /**
