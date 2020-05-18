@@ -17,7 +17,7 @@ class BeanstalkQueue implements BaseQueue
     /**
      * @param $id
      * @param $worker
-     * @param $message
+     * @param array $messages
      * @param array $options
      *
      * @return bool|int
@@ -25,7 +25,7 @@ class BeanstalkQueue implements BaseQueue
      * @throws ConnectionException
      * @throws \Codeages\Beanstalk\Exception\ServerException
      */
-    public function putJob($id, $worker, $message = null, $options = [])
+    public function putJob($id, $worker, $messages = [], $options = [])
     {
         $default = ['pri' => 500, 'delay' => 0, 'ttr' => 60];
         $options = array_merge($default, $options);
@@ -36,7 +36,7 @@ class BeanstalkQueue implements BaseQueue
         $body = [
             'id' => $id,
             'worker' => $worker,
-            'message' => $message,
+            'messages' => $messages,
         ];
         $pushId = $this->client->put($options['pri'], $options['delay'], $options['ttr'], json_encode($body));
 

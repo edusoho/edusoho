@@ -14,26 +14,28 @@ abstract class BaseWorker extends AbstractWorker
 
     public function execute(Job $job)
     {
-        $queue = $this->getPlumberQueueService()->createQueue($job, 'acquired');
+        $body = json_decode($job->getBody(), true);
         $this->logger = $this->getBiz()->offsetGet('plumber.queue.logger');
 
+        $this->logger->info("{$body['worker']}:Begin to execute job #{$body['id']}, priority: {$job->getPriority()} body: {$job->getBody()}");
+        $queue = $this->getPlumberQueueService()->createQueue($job, 'acquired');
         try {
             $this->reconnect();
 
+            $this->logger->info("{$body['worker']}:Executing job #{$body['id']}, priority: {$job->getPriority()} body: {$job->getBody()}");
             $this->getPlumberQueueService()->updateQueueStatus($queue['id'], 'executing');
 
             $result = $this->doExecute($job);
         } catch (\Exception $exception) {
-            $this->logger->error("Worker Execute Failed: {$exception->getMessage()}, {$exception->getTraceAsString()}");
-
-            $this->getPlumberQueueService()->updateQueueStatus($queue['id'], 'failed', $exception->getTraceAsString());
+            $this->logger->error("{$body['worker']}:Execute job failed: {$exception->getMessage()}, {$exception->getTraceAsString()}");
+            $this->getPlumberQueueService()->updateQueueStatus($queue['id'], 'failure', $exception->getTraceAsString());
 
             return self::FINISH;
         }
 
         if ($result) {
+            $this->logger->info("{$body['worker']}:Execute job successfully.");
             $this->getPlumberQueueService()->updateQueueStatus($queue['id'], 'success');
-            $this->logger->info('JobWorker:execute crontab job succeed');
 
             return self::FINISH;
         }

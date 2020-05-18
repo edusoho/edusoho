@@ -189,6 +189,22 @@ class ResourcePurchaseController extends BaseController
         );
     }
 
+    public function productUpdateSettingAction(Request $request)
+    {
+        if ('POST' == $request->getMethod()) {
+            $type = $this->getS2B2CProductService()->setProductUpdateType($request->request->get('type'));
+
+            $this->setFlashMessage('success', $this->trans('site.modify.success'));
+        }
+
+        return $this->render(
+            'admin-v2/cloud-center/content-resource/update-product-setting.html.twig',
+            [
+                'type' => !empty($type) ? $type : $this->getSettingService()->get('productUpdateType', ProductService::UPDATE_TYPE_MANUAL),
+            ]
+        );
+    }
+
     protected function getCourseByProductId($productId)
     {
         $product = $this->getS2B2CProductService()->getProduct($productId);

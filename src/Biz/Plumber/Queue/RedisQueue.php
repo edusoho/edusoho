@@ -19,21 +19,21 @@ class RedisQueue implements BaseQueue
     /**
      * @param $id
      * @param $worker
-     * @param $message
+     * @param array $messages
      * @param array $options
      *
      * @return bool|int
      *
      * @throws \Exception
      */
-    public function putJob($id, $worker, $message = null, $options = [])
+    public function putJob($id, $worker, $messages = [], $options = [])
     {
         $this->getConnected();
 
         $body = [
             'id' => $id,
             'worker' => $worker,
-            'message' => $message,
+            'messages' => $messages,
         ];
 
         $pushedId = $this->client->lPush($worker, json_encode($body));

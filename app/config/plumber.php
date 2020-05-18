@@ -17,6 +17,12 @@ return [
             'class' => 'AppBundle\Worker\CrontabJobWorker',
             'queue' => 'beanstalk_queue',
         ],
+        'update_product_worker' => [
+            'topic' => 'update_product_worker',
+            'num' => 1,
+            'class' => 'AppBundle\Worker\UpdateProductWorker',
+            'queue' => 'beanstalk_queue',
+        ],
     ],
     'log_path' => __DIR__.'/../logs/plumber.log',
     'pid_path' => __DIR__.'/../data/plumber.pid',

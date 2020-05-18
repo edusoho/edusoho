@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\S2B2C\Dao\ProductDao;
+use Biz\S2B2C\S2B2CProductException;
 use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
@@ -152,6 +153,20 @@ class ProductServiceImpl extends BaseService implements ProductService
     public function getByTypeAndLocalResourceId($type, $localResourceId)
     {
         return $this->getS2B2CProductDao()->getByTypeAndLocalResourceId($type, $localResourceId);
+    }
+
+    public function getProductUpdateType()
+    {
+        return $this->getSettingService()->get('productUpdateType');
+    }
+
+    public function setProductUpdateType($type)
+    {
+        if (!in_array($type, [self::UPDATE_TYPE_AUTO, self::UPDATE_TYPE_MANUAL])) {
+            $this->createNewException(S2B2CProductException::INVALID_S2B2C_PRODUCT_TYPE());
+        }
+
+        return $this->getSettingService()->set('productUpdateType', $type);
     }
 
     protected function getAccessKey()
