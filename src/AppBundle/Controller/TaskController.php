@@ -81,7 +81,7 @@ class TaskController extends BaseController
         if (null !== $member && 'student' === $member['role']) {
             $wrappedTasks = ArrayToolkit::index($this->getTaskService()->wrapTaskResultToTasks($courseId, $this->getTaskService()->findTasksByCourseId($courseId)), 'id');
             if (!empty($wrappedTasks[$task['id']]) && $wrappedTasks[$task['id']]['lock']) {
-                return $this->createMessageResponse('info', '请先学习完已解锁的课程', '', 3, $this->generateUrl('my_course_show', array('id' => $courseId)));
+                return $this->createMessageResponse('info', 'message_response.task_locked.message', '', 3, $this->generateUrl('my_course_show', array('id' => $courseId)));
             }
 
             if ($activityConfig->allowTaskAutoStart($task)) {
