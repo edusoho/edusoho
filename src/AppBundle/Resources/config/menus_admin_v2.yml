@@ -116,7 +116,7 @@ admin_v2:
                                             group: groupButton
                                             icon: 'glyphicon glyphicon-trash'
                                             mode: none
-                                            visible: ( courseSet.status in ['closed', 'draft', 'published'] and courseSet.platform|default('self') == 'self')
+                                            visible: ( courseSet.status in ['closed', 'draft', 'published'])
                                 admin_v2_course_set_recommend_list:
                                     name: admin_v2.course.basic.recommend_list_tab
                                 admin_v2_course_set_data:

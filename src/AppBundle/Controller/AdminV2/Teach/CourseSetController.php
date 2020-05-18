@@ -17,6 +17,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
 use Biz\Crontab\SystemCrontabInitializer;
+use Biz\S2B2C\Service\CourseProductService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -105,6 +106,13 @@ class CourseSetController extends BaseController
         if (!empty($subCourses) || ($courseSet['parentId'] && 1 == $courseSet['locked'])) {
             return $this->createJsonResponse(['code' => 2, 'message' => '请先删除班级课程']);
         }
+
+        $result = $this->getCourseProductService()->deleteProductsByCourseSet($courseSet);
+
+        if (!empty($result['error'])) {
+            return $this->createJsonResponse(['code' => 2, 'message' => '采购关系移除失败']);
+        }
+
         if ('draft' == $courseSet['status']) {
             $this->getCourseSetService()->deleteCourseSet($id);
 
@@ -1062,5 +1070,13 @@ class CourseSetController extends BaseController
     protected function getWebExtension()
     {
         return $this->get('web.twig.extension');
+    }
+
+    /**
+     * @return CourseProductService
+     */
+    protected function getCourseProductService()
+    {
+        return $this->createService('S2B2C:CourseProductService');
     }
 }

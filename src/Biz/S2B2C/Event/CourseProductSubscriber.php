@@ -23,7 +23,7 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
         $course = $event->getSubject();
         if ($this->isSupplierCourse($course)) {
             $courseProduct = $this->getS2b2cProductService()->getByTypeAndLocalResourceId('course', $course['id']);
-            $this->getS2B2CService()->changeProductSellingPrice($courseProduct['remoteProductId'], 'course', $course['price']);
+            $this->getS2B2CService()->changeProductSellingPrice($courseProduct['remoteSourceId'], 'course', $course['price']);
         }
     }
 

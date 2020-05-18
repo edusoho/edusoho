@@ -52,6 +52,14 @@ class ProductServiceTest extends BaseTestCase
         $this->assertEquals($createdProduct, reset($findProducts));
     }
 
+    public function testDeleteByIds()
+    {
+        $product = $this->getS2B2CProductService()->createProduct($this->mockProductFields());
+
+        $result = $this->getS2B2CProductService()->deleteByIds([$product['id'], 2, 3]);
+        $this->assertEquals(1, $result);
+    }
+
     protected function mockProductFields($customFields = [])
     {
         return array_merge([

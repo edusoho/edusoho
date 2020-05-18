@@ -2,6 +2,7 @@
 
 namespace Biz\S2B2C\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Course\Dao\CourseSetDao;
@@ -201,10 +202,38 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         if (!empty($hasNewVersion['courseSet'])) {
             $this->getCacheService()->set('s2b2c.hasNewVersion', array_merge($hasNewVersion, ['courseSet' => 1]));
         }
+
         return $this->getProductService()->updateProduct($product['id'], [
             'remoteVersion' => $productDetail['course']['editVersion'],
             'changelog' => $productVersions,
         ]);
+    }
+
+    /**
+     * @param $courseSet
+     *
+     * @return array|null[]|string[]
+     */
+    public function deleteProductsByCourseSet($courseSet)
+    {
+        if ('supplier' != $courseSet['platform']) {
+            return ['error' => null];
+        }
+
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+
+        $courseSetProduct = $this->getProductService()->getByTypeAndLocalResourceId('course_set', $courseSet['id']);
+
+        $courseProducts = $this->getProductService()->findProductsBySupplierIdAndProductTypeAndLocalResourceIds($courseSetProduct['supplierId'], 'course', ArrayToolkit::column($courses, 'id'));
+
+        $productIds = ArrayToolkit::column($courseProducts, 'remoteResourceId');
+
+        $result = $this->getS2B2CFacadeService()->getS2B2CService()->changePurchaseStatusToRemoved($courseSetProduct['remoteResourceId'], $productIds, 'course');
+
+        $this->getProductService()->deleteByIds(ArrayToolkit::column($courseProducts, 'id'));
+        $this->getProductService()->deleteProduct($courseSetProduct['id']);
+
+        return $result;
     }
 
     protected function validateCourseData($course, $product)

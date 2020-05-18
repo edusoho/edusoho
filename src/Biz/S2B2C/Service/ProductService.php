@@ -43,4 +43,6 @@ interface ProductService
     public function setProductUpdateType($type);
 
     public function generateVersionChangeLogs($nowVersion, $productVersions);
+
+    public function deleteByIds($ids);
 }

@@ -242,6 +242,11 @@ class ProductServiceImpl extends BaseService implements ProductService
         return $this->getSettingService()->set('productUpdateType', $type);
     }
 
+    public function deleteByIds($ids)
+    {
+        return $this->getS2B2CProductDao()->deleteByIds($ids);
+    }
+
     protected function getAccessKey()
     {
         $settings = $this->getSettingService()->get('storage', []);
