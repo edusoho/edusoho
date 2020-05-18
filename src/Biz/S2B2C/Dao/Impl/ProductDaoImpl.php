@@ -65,4 +65,12 @@ class ProductDaoImpl extends GeneralDaoImpl implements ProductDao
 
         return $this->db()->fetchAll($sql, array_merge([$supplierId, $productType], array_values($localResourceIds)));
     }
+
+    public function deleteByIds($ids)
+    {
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql = "DELETE FROM {$this->table} WHERE id IN ({$marks});";
+
+        return $this->db()->executeUpdate($sql, $ids);
+    }
 }
