@@ -37,4 +37,6 @@ interface ProductService
     public function getProductUpdateType();
 
     public function setProductUpdateType($type);
+
+    public function deleteByIds($ids);
 }

@@ -15,4 +15,6 @@ interface ProductDao extends GeneralDaoInterface
     public function getByTypeAndLocalResourceId($type, $localResourceId);
 
     public function findBySupplierIdAndProductTypeAndLocalResourceIds($supplierId, $productType, $localResourceIds);
+
+    public function deleteByIds($ids);
 }
