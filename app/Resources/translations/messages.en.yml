@@ -7223,6 +7223,7 @@ message_response.not_student_cannot_join_live.message: You are not a course stud
 message_response.mass_title_and_text_cannot_empty: The bulk title or content can not be empty
 message_response.only_admin_can_create_class.message: Only allow administrators to create classes!
 message_response.upload_pic_format_error.message: Upload image format is wrong, please upload jpg, gif, png format files.
+message_response.task_locked.message: Please study the unlocked course first!
 
 classroom.manage.side_nav.setting: %classroom% setting
 classroom.manage.side_nav.manage: %classroom% config
