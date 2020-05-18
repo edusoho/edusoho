@@ -8536,6 +8536,7 @@ message_response.not_student_cannot_join_live.message: 您不是课程学员，�
 message_response.mass_title_and_text_cannot_empty: 群发标题或内容不能为空
 message_response.only_admin_can_create_class.message: 只允许管理员创建班级!
 message_response.upload_pic_format_error.message: 上传图片格式错误，请上传jpg, gif, png格式的文件。
+message_response.task_locked.message: 请先学习完已解锁的课程！
 
 classroom.manage.side_nav.setting: %classroom%设置
 classroom.manage.side_nav.manage: %classroom%管理
