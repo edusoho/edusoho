@@ -1,6 +1,6 @@
 {% if is_s2b2c_enabled() %}
   {% set notice = data('S2B2CNotice', {}) %}
-  {% if notice.noticeNum > 0%}
+  {% if notice.noticeNum > 0 %}
     <div class="notify-container">
       <input class="hidden" type="checkbox" checked id="listUnfold" />
       {% if notice.noticeNum > 2 %}
@@ -14,12 +14,12 @@
       <div class="alert-list notify-List" style="height: {{rowNum * 36 + 16}}px">
         {% if notice.notEnoughBalance %}
           <div class="alert alert-warning clearfix" role="alert">
-            <span>您与 {{ notice.supplierName }} 合作的采购账户余额还剩{{ notice.balance|default(0) / 100 }}，请及时联系 {{ notice.supplierName }} 进行充值</span>
+            <span>{{ 's2b2c.resource.no_fee_notice_hint'|trans({'%supplierName%':notice.supplierName, '%balance%':notice.balance|default(0) / 100}) }}</span>
           </div>
         {% endif %}
         {% if notice.hasNewVersionProducts %}
           <div class="alert alert-warning clearfix" role="alert">
-            <span>您采购的内容有更新</span>
+            <span>{{ 's2b2c.resource.has_new_notice_hint'|trans }}</span>
             <a class="alert-link" href="{{ path('admin_v2_purchase_market_products_list', {type: 'courseSet'}) }}" target="_blank">{{ '前去更新>>'|trans }}</a>
           </div>
         {% endif %}

@@ -26,7 +26,7 @@ class S2B2CNoticeDataTag extends BaseDataTag
         if ($contents['notEnoughBalance']) {
             ++$noticeNum;
         }
-        if ($hasNewVersion) {
+        if ($contents['hasNewVersionProducts']) {
             ++$noticeNum;
         }
         $contents['noticeNum'] = $noticeNum;
