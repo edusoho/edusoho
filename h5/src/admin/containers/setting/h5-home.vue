@@ -19,10 +19,10 @@
                   :index="`1-${index}`"
                   v-for="(item, index) in baseModules"
                   :key="`base-${index}`"
+                  @click="addModule(item, index)"
                 >
                   <i
                     :class="['iconfont', item.icon]"
-                    @click="addModule(item, index)"
                   ></i>
                   {{ item.name }}
                 </el-menu-item>
@@ -38,10 +38,10 @@
                   :index="`1-${index}`"
                   v-for="(item, index) in marketingModules"
                   :key="`marketing-${index}`"
+                  @click="addModule(item, index)"
                 >
                   <i
                     :class="['iconfont', item.icon]"
-                    @click="addModule(item, index)"
                   ></i>
                   {{ item.name }}
                 </el-menu-item>
@@ -73,31 +73,32 @@
                   filter: stopDraggleClasses,
                   preventOnFilter: false
                 }"
+                @start="startDrag"
               >
-                <module-template
-                  v-for="(module, index) in modules"
-                  :key="index"
-                  :saveFlag="saveFlag"
-                  :startValidate="startValidate"
-                  :index="index"
-                  :module="module"
-                  :active="isActive(index)"
-                  :moduleKey="`${module.type}-${index}`"
-                  @activeModule="activeModule"
-                  @updateModule="updateModule($event, index)"
-                  @removeModule="removeModule($event, index)"
-                >
-                </module-template>
+                  <module-template
+                    v-for="(module, index) in modules"
+                    :key="index"
+                    :saveFlag="saveFlag"
+                    :startValidate="startValidate"
+                    :index="index"
+                    :module="module"
+                    :active="isActive(index)"
+                    :moduleKey="`${module.type}-${index}`"
+                    @activeModule="activeModule"
+                    @updateModule="updateModule($event, index)"
+                    @removeModule="removeModule($event, index)"
+                  >
+                  </module-template>
               </draggable>
             </div>
-            
+
             <find-footer :portal="portal"></find-footer>
           </div>
         </div>
       </el-col>
-      <el-col :span="10">
+      <!-- <el-col :span="10">
         <div class="h5-home-right"></div>
-      </el-col>
+      </el-col> -->
     </el-row>
   </div>
 </template>
@@ -129,7 +130,7 @@ export default {
   data() {
     return {
       windowHeight:
-        document.body.clientHeight || document.documentElement.clientHeight,
+        document.documentElement.clientHeight,
       title: "EduSoho 微网校",
       modules: [],
       //保存标志，只有点击过保存或者预览按钮才开始实时校验，具体表现错误模块为有错误模块边框变红提示！。这里设置成为数字原因是：每次点击发布或者预览按钮时都需要去实时校验一次，
@@ -201,6 +202,14 @@ export default {
         default:
           return "微网校";
       }
+    },
+    dragOptions() {
+      return {
+        animation: 200,
+        group: "description",
+        disabled: false,
+        ghostClass: "ghost"
+      };
     }
   },
   created() {
@@ -322,6 +331,14 @@ export default {
       }
 
       // 新增一个模块
+      if(data.default.type==='search' && this.typeCount.getCounterByType(data.default.type) >= 1){
+        this.$message({
+          message: "搜索组件最多添加 1 个",
+          type: "warning"
+        });
+        return;
+      }
+
       if (this.typeCount.getCounterByType(data.default.type) >= 5) {
         this.$message({
           message: "同一类型组件最多添加 5 个",
@@ -471,6 +488,16 @@ export default {
         }
       }
       this.incomplete = false;
+    },
+    startDrag(){
+
+      const settings=document.getElementsByClassName("module-frame__setting");
+      settings[this.currentModuleIndex].style.left="400%"
+     console.log(settings[this.currentModuleIndex].style.left="400%")
+    //  for(let i=0;i<settings.length;i++){
+    //    settings[i].style.display="none"
+    //     console.log(settings[i].style.display)
+    //  }
     }
   }
 };

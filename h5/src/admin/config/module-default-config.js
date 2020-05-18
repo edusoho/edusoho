@@ -242,7 +242,7 @@ const H5_BASE_MODULE = [
   }, {
     name: '图文导航',
     default: MODULE_DEFAULT.graphicNavigation,
-    icon: 'tuwendaohang'
+    icon: 'icon-tuwendaohang'
   }, {
     name: '搜索',
     default: MODULE_DEFAULT.search,

@@ -5,7 +5,7 @@ module.exports = {
   },
   try6: {
     url: "http://try6.edusoho.cn",
-    token: "2ggsc28azq3ookoswkw8sg4ggosocw0",
+    token: "ec12qo57a6g44owso0skcs484cwc8k0",
   },
   gdy: {
     url: "ttp://gdy.st.edusoho.cn",
@@ -23,4 +23,4 @@ module.exports = {
   mock: {
     url: "https://www.easy-mock.com/mock/5b1742522de86c43cc2dc73a/edusoho",
   },
-}['gdy'];
+}['try6'];

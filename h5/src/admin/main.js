@@ -33,7 +33,8 @@ import {
 import {
   Swipe,
   SwipeItem,
-  Lazyload
+  Lazyload,
+  Search
 } from 'vant';
 
 import router from './router';
@@ -44,6 +45,7 @@ import App from './App';
 // 按需引入组件
 Vue.component('van-swipe', Swipe);
 Vue.component('van-swipe-item', SwipeItem);
+Vue.component('van-search', Search);
 
 Vue.use(Loading);
 Vue.use(Input);
