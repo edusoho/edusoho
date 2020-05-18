@@ -10,6 +10,7 @@ export default class TaskPipe {
     this.learnTimeSec = this.element.data('learnTimeSec');
     this.userId = this.element.data('userId');
     this.fileId = this.element.data('fileId');
+    this.isLogout = false;
     if (parseInt(this.element.data('lastLearnTime')) != parseInt(DurationStorage.get(this.userId, this.fileId))) {
       DurationStorage.del(this.userId, this.fileId);
       DurationStorage.set(this.userId, this.fileId, this.element.data('lastLearnTime'));
@@ -77,6 +78,8 @@ export default class TaskPipe {
   }
 
   _flush(param = {}) {
+    if (this.isLogout) return;
+
     let ajax = $.post(this.eventUrl, { data: { lastTime: this.lastTime, lastLearnTime: DurationStorage.get(this.userId, this.fileId), events: this.eventDatas}})
       .done((response) => {
         this._publishResponse(response);
@@ -97,9 +100,10 @@ export default class TaskPipe {
         }
       })
       .fail((error) => {
-        if (error.status == 403) {
+        if (error.status == 403 && !this.isLogout) {
           this._clearInterval();
           cd.message({ type: 'danger', message: Translator.trans('task_show.user_login_protect_tip') });
+          this.isLogout = true;
           window.location.href = '/logout';
         }
       });
