@@ -48,11 +48,11 @@ class CourseSetProductController extends ProductController
         }
 
         $prepareCourseSet = $this->prepareCourseSetData($courseSetData);
-        $purchaseProducts = $this->preparePurchaseData($courseSetData);
+        list($purchaseProducts, $purchaseRecord) = $this->preparePurchaseData($courseSetData);
         $result = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->checkPurchaseProducts($purchaseProducts);
         if (!empty($result['success']) && true == $result['success']) {
-            $result = $this->getS2B2CFacadeService()->getS2B2CService()->purchaseProducts($purchaseProducts);
-            if (!empty($result['status']) && true === $result['status']) {
+            $result = $this->getS2B2CFacadeService()->getS2B2CService()->purchaseProducts($purchaseProducts, $purchaseRecord);
+            if (!empty($result['status']) && 'success' === $result['status']) {
                 $newCourseSet = $this->getCourseSetService()->addCourseSet($prepareCourseSet);
                 $product = $this->getS2B2CProductService()->createProduct([
                     'supplierId' => $s2b2cConfig['supplierId'],
@@ -155,6 +155,44 @@ class CourseSetProductController extends ProductController
         ]);
     }
 
+    public function productDetailAction(Request $request, $remoteResourceId)
+    {
+        $courseSet = $this->getS2B2CFacadeService()->getSupplierPlatformApi()
+            ->getSupplierCourseSetProductDetail($remoteResourceId);
+
+        if (empty($courseSet) || !empty($courseSet['error'])) {
+            throw $this->createNotFoundException('原课程未找到或出错了');
+        }
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+
+        $chosenCourseSet = $this->getS2B2CProductService()->searchProducts(
+            ['supplierId' => $s2b2cConfig['supplierId'], 'productType' => 'course_set', 'remoteResourceId' => $courseSet['id']],
+            [],
+            0,
+            1
+        );
+        $productDetail['hasChosen'] = !empty($chosenCourseSet);
+
+        $courses = $courseSet['courses'];
+        $courses = ArrayToolkit::index($courses, 's2b2cDistributeId');
+        $remoteCourseResourceId = $request->get('remoteCourseResourceId');
+        $course = !empty($courses[$remoteCourseResourceId]) ? $courses[$remoteCourseResourceId] : $courses[$courseSet['s2b2cDistributeId']];
+        unset($courseSet['courses']);
+
+        $merchant = $this->getS2B2CFacadeService()->getMe();
+
+        return $this->render(
+            'admin-v2/cloud-center/content-resource/market/course-set/show.html.twig', [
+            'tab' => $request->get('tab'),
+            'courseSet' => $courseSet,
+            'courses' => $courses,
+            'course' => $course,
+            'merchant' => $merchant,
+            'hasChosen' => $chosenCourseSet,
+            'marketingPage' => true,
+        ]);
+    }
+
     protected function prepareCourseSetData($courseSetData)
     {
         return [
@@ -197,7 +235,14 @@ class CourseSetProductController extends ProductController
             ];
         }
 
-        return $purchaseProducts;
+        $purchaseRecord = [
+            'parent_id' => $sourceCourseSet['id'],
+            'parent_title' => $sourceCourseSet['title'],
+            'type' => 'course',
+            'product_ids' => ArrayToolkit::column($sourcesCourses, 'id'),
+        ];
+
+        return [$purchaseProducts, $purchaseRecord];
     }
 
     /**

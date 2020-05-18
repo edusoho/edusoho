@@ -4,6 +4,10 @@ namespace Biz\S2B2C\Service;
 
 interface ProductService
 {
+    const UPDATE_TYPE_MANUAL = 'manual';
+
+    const UPDATE_TYPE_AUTO = 'auto';
+
     public function searchRemoteProducts($conditions);
 
     public function searchSelectedProducts($conditions);
@@ -29,4 +33,8 @@ interface ProductService
     public function findProductsBySupplierIdAndProductTypeAndLocalResourceIds($supplierId, $productType, $localResourceIds);
 
     public function getByTypeAndLocalResourceId($type, $localResourceId);
+
+    public function getProductUpdateType();
+
+    public function setProductUpdateType($type);
 }

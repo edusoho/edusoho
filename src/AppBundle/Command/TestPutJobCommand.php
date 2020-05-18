@@ -2,7 +2,8 @@
 
 namespace AppBundle\Command;
 
-use Codeages\Beanstalk\Client;
+use Biz\Plumber\Queue\QueueFactory;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,21 +19,73 @@ class TestPutJobCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln("<info>Start put {$input->getArgument('topic')}.</info>");
-        $beanstalk = new Client();
+        $json = '{"productId":2}';
 
-        $beanstalk->connect();
-        $beanstalk->useTube($input->getArgument('topic'));
+        $logger = $this->getBiz()->offsetGet('s2b2c.merchant.logger');
 
-        $beanstalk->put(
-            500, // Give the job a priority of 23.
-            0,  // Do not wait to put job into the ready queue.
-            60, // Give the job 1 minute to run.
-            $input->getArgument('body')
-        );
+        $topic = $input->getArgument('topic');
+        $output->writeln("<info>开始创建队列任务 {$topic}.</info>");
 
-        $beanstalk->disconnect();
+        $queue = $this->getQueueByWorkerTopic($topic);
 
-        $output->writeln('<info>End.</info>');
+        $jobId = Uuid::uuid1();
+
+        $body = $input->getArgument('body');
+
+        if (json_decode($body, true)) {
+            $body = json_decode($body, true);
+        }
+
+        $queueJobId = $queue->putJob($jobId, $topic, $body);
+
+        if (false === $queueJobId) {
+            $logger->info('创建队列任务失败');
+            $output->writeln('<error>创建队列任务失败.</error>');
+        }
+
+        $logger->info('创建队列任务成功');
+        $output->writeln('<info>创建队列任务成功.</info>');
+    }
+
+    protected function getConfig()
+    {
+        $configFilePath = $this->getContainer()->getParameter('kernel.root_dir').'/config/plumber.php';
+        if (!$this->getContainer()->hasParameter('plumber_queues_options') || !file_exists($configFilePath)) {
+            return [];
+        }
+
+        return [
+            include "{$configFilePath}",
+            $this->getContainer()->getParameter('plumber_queues_options'),
+        ];
+    }
+
+    protected function getQueueByWorkerTopic($topic)
+    {
+        $defaultConfig = [
+            'type' => 'beanstalk',
+            'host' => '127.0.0.1',
+            'port' => 11300,
+            'password' => '',
+            'persistent' => true,
+            'timeout' => 2,
+            'socket_timeout' => 20,
+            'logger' => null,
+        ];
+
+        list($plumberQueues, $plumberQueueOptions) = $this->getConfig();
+        if (empty($plumberQueues) || empty($plumberQueueOptions)) {
+            return ['queue' => null, 'message' => 'Config not exist in plumber.php or parameters.yml.'];
+        }
+
+        if (empty($plumberQueues['workers']) || empty($plumberQueues['workers'][$topic])) {
+            return ['queue' => null, 'message' => 'Workers config not exist.'];
+        }
+
+        $worker = $plumberQueues['workers'][$topic];
+
+        $config = empty($plumberQueueOptions[$worker['queue']]) ? $defaultConfig : $plumberQueueOptions[$worker['queue']];
+
+        return QueueFactory::create($config['type'], $config);
     }
 }

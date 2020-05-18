@@ -39,8 +39,8 @@ $defaultQueueOptions = [
     'logger' => null,
 ];
 
-$options['rate_limits'] = $container->getParameter('plumber_worker_rate_limits');
-$options['hour_limits'] = $container->getParameter('plumber_worker_hour_limits');
+$options['rate_limits'] = $container->hasParameter('plumber_worker_rate_limits') ? $container->getParameter('plumber_worker_rate_limits') : null;
+$options['hour_limits'] = $container->hasParameter('plumber_worker_hour_limits') ? $container->getParameter('plumber_worker_hour_limits') : null;
 
 foreach ($options['queues'] as &$queue) {
     if (!isset($queue['queue_options'])) {

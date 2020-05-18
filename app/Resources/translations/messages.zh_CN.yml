@@ -10879,6 +10879,9 @@ admin_v2.app_center.resource_settlement.product.cooperation_price: 合作面额
 admin_v2.app_center.resource_settlement.product.item_status: 商品状态
 admin_v2.app_center.resource_settlement.product.item_status.published: 已上架
 admin_v2.app_center.resource_settlement.product.item_status.closed: 已下架
+admin_v2.app_center.resource_settlement.product.choosen_status: 选择状态
+admin_v2.app_center.resource_settlement.product.choosen_status.chosen: 已选择
+admin_v2.app_center.resource_settlement.product.choosen_status.removed: 已移除
 
 admin_v2.app_center.resource_settlement.empty: 暂无数据
 
@@ -10967,4 +10970,19 @@ facein.capture_face.inspection_data.result_count: 参加人数
 facein.capture_face.inspection_data.no_cheating_count: 无作弊人数
 facein.capture_face.inspection_data.inspection_count: 疑似作弊人数
 facein.capture_face.inspection_result_modal.title: 监考抓拍
+exception.s2b2c_product.update_type_invalid: 设置的更新类型不合法
+
+
+admin_v2.cloud_center.content_resource.product_update_setting: 更新设置
+admin_v2.cloud_center.content_resource.product_update_auto: 自动更新
+admin_v2.cloud_center.content_resource.product_update_manual: 手动更新
+
+admin_v2.cloud_center.content_resource.product_update_auto.tips: 如果S端内容有更新，自动进行同步更新
+admin_v2.cloud_center.content_resource.product_update_manual.tips: 供应商内容更新，需要手动进行更新
+s2b2c.resource.all_choose: 全部选择
+s2b2c.resource.return_market: 返回内容市场
+s2b2c.resource.has_new_notice_hint: 您采购的内容有更新
+s2b2c.resource.no_fee_notice_hint: 您与%supplierName%合作的采购账户余额还剩%balance%，请及时联系%supplierName%进行充值
+
+
 

@@ -10,7 +10,10 @@ class S2B2CProductException extends AbstractException
 
     const INVALID_S2B2C_PRODUCT_TYPE = 5007001;
 
+    const INVALID_S2B2C_PRODUCT_UPDATE_TYPE = 5007002;
+
     public $message = [
         5007001 => 'exception.s2b2c_product.type_invalid',
+        5007002 => 'exception.s2b2c_product.update_type_invalid',
     ];
 }

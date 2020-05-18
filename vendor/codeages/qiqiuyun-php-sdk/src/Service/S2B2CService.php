@@ -215,6 +215,40 @@ class S2B2CService extends BaseService
         return $this->sendRequest('changeProductSellingPrice', $sendData, 'POST');
     }
 
+    public function changePurchaseStatusToRemoved($parentId, $productIds, $productType)
+    {
+        $this->uri = '/purchase/removed';
+
+        $sendData = array(
+            'parent_id' => $parentId,
+            'product_ids' => $productIds,
+            'product_type' => $productType,
+        );
+
+        return $this->sendRequest('changePurchaseStatusToRemoved', $sendData, 'POST');
+    }
+
+    public function upgrade($params)
+    {
+        $this->uri = '/upgrade';
+
+        return $this->sendRequest('upgrade', $params, 'POST');
+    }
+
+    public function searchPurchaseProduct($conditions, $sorts, $start, $limit)
+    {
+        $this->uri = '/contents/search_purchase_product';
+
+        $body = array(
+            'conditions' => $conditions,
+            'sorts' => $sorts,
+            'start' => $start,
+            'limit' => $limit,
+        );
+
+        return $this->sendRequest('searchPurchaseProduct', $body, 'GET');
+    }
+
     // 调用接口路径
     protected $uri;
 
@@ -355,11 +389,15 @@ class S2B2CService extends BaseService
         return $this->sendRequest('getProductResDownload', $sendData);
     }
 
-    public function purchaseProducts($purchaseProducts)
+    public function purchaseProducts($purchaseProducts, $purchaseRecord)
     {
         $this->uri = $this->purchaseProductPath;
+        $body = array(
+            'products' => $purchaseProducts,
+            'record' => $purchaseRecord,
+        );
 
-        return $this->sendRequest('purchaseProducts', $purchaseProducts, 'POST');
+        return $this->sendRequest('purchaseProducts', $body, 'POST');
     }
 
     /**

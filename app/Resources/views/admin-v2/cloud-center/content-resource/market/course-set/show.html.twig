@@ -9,8 +9,7 @@
   'app/js/admin-v2/edu-cloud/content-resource/market/course-set/index.js']) %}
 
 {% block container %}
-  {% set course = courseSet.courses[0]|default() %}
-  {% set courseItems = courseSet.courses[0]['courseItems']|default() %}
+  {% set courseItems = course['courseItems']|default() %}
   {% include 'admin-v2/cloud-center/content-resource/market/course-set/show-main.html.twig' %}
 {% endblock %}
 

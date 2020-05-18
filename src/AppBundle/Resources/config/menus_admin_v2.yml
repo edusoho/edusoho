@@ -1189,6 +1189,10 @@ admin_v2:
                                     name: admin_v2.products_version_tab
                                     router_name: admin_v2_content_resource_products_version
                                     disable: true
+                                admin_v2_product_update_setting_tab:
+                                  name: admin_v2.product_update_setting_tab
+                                  router_name: admin_v2_product_update_setting
+                                  disable: true
 
                         admin_v2_app_resource_settlement:
                             name: admin_v2.cloud.app_resource_settlement_menu
