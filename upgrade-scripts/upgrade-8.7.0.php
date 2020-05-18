@@ -454,7 +454,9 @@ class EduSohoUpgrade extends AbstractUpdater
                     WHEN 'noAnswer' THEN 'no_answer'
                     WHEN 'none' THEN 'reviewing'
                     WHEN 'partRight' THEN 'part_right'
-                    ELSE a.status
+                    WHEN 'right' THEN 'right'
+                    WHEN 'wrong' THEN 'wrong'
+                    ELSE 'reviewing'
                 END,
                 a.teacherSay
             FROM `testpaper_item_result_v8` a 
@@ -526,7 +528,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 a.lessonId,
                 if(b.score is null, 0, b.score),
                 a.score,
-                if(b.score is null, 0, a.rightItemCount / b.itemCount),
+                if(b.itemCount = 0, 0, if(b.score is null, 0, a.rightItemCount / b.itemCount)),
                 a.rightItemCount,
                 a.objectiveScore,
                 a.subjectiveScore,
