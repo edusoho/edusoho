@@ -10875,6 +10875,9 @@ admin_v2.app_center.resource_settlement.product.cooperation_price: 合作面额
 admin_v2.app_center.resource_settlement.product.item_status: 商品状态
 admin_v2.app_center.resource_settlement.product.item_status.published: 已上架
 admin_v2.app_center.resource_settlement.product.item_status.closed: 已下架
+admin_v2.app_center.resource_settlement.product.choosen_status: 选择状态
+admin_v2.app_center.resource_settlement.product.choosen_status.chosen: 已选择
+admin_v2.app_center.resource_settlement.product.choosen_status.removed: 已移除
 
 admin_v2.app_center.resource_settlement.empty: 暂无数据
 

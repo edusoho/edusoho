@@ -24,29 +24,37 @@
       <th>{{ 'admin_v2.app_center.resource_settlement.product.suggestion_price'|trans }}</th>
       <th>{{ 'admin_v2.app_center.resource_settlement.product.cooperation_price'|trans }}</th>
       <th>{{ 'admin_v2.app_center.resource_settlement.product.item_status'|trans }}</th>
+      <th>{{ 'admin_v2.app_center.resource_settlement.product.choosen_status'|trans }}</th>
     </tr>
     </thead>
     <tbody>
     {% for item in items %}
       <tr>
         <td>{{ item.id }}</td>
-        <td>{{ item.createdTime|date('Y-m-d H:i:s') }}</td>
-        <td>{{ item.title|default('') }}</td>
-        <td>{{ item.orderCount|default(0) }}</td>
+        <td>{{ item.created_time|date('Y-m-d H:i:s') }}</td>
+        <td>{{ item.parent_title|default('') }}</td>
+        <td>{{ item.order_count|default(0) }}</td>
         <td>
-          {{ item.minCoursePrice|default(0) == item.maxCoursePrice|default(0) ? '￥' ~ item.minCoursePrice|currency : '￥' ~ item.minCoursePrice|currency ~ '~ ￥' ~ item.maxCoursePrice|currency }}
+          {{ item.min_selling_price|default(0) == item.max_selling_price|default(0) ? '￥' ~ item.min_selling_price|currency : '￥' ~ item.min_selling_price|currency ~ '~ ￥' ~ item.max_selling_price|currency }}
         </td>
         <td>
-          {{ item.minSuggestionPrice|default(0) == item.maxSuggestionPrice|default(0) ? '￥' ~ item.minSuggestionPrice|currency : '￥' ~ item.minSuggestionPrice|currency ~ '~ ￥' ~ item.maxSuggestionPrice|currency }}
+          {{ item.min_suggest_price|default(0) == item.max_suggest_price|default(0) ? '￥' ~ item.min_suggest_price|currency : '￥' ~ item.min_suggest_price|currency ~ '~ ￥' ~ item.max_suggest_price|currency }}
         </td>
         <td>
-          {{ item.minCooperationPrice|default(0) == item.maxCooperationPrice|default(0) ? '￥' ~ item.minCooperationPrice|currency : '￥' ~ item.minCooperationPrice|currency ~ '~ ￥' ~ item.maxCooperationPrice|currency }}
+          {{ item.min_cooperate_price|default(0) == item.max_cooperate_price|default(0) ? '￥' ~ item.min_cooperate_price|currency : '￥' ~ item.min_cooperate_price|currency ~ '~ ￥' ~ item.max_cooperate_price|currency }}
         </td>
         <td>
-          {% if item.status == 'published' %}
+          {% if item.course_set_status == 'published' %}
             {{ 'admin_v2.app_center.resource_settlement.product.item_status.published'|trans }}
-          {% elseif item.status =='closed' %}
+          {% elseif item.course_set_status =='closed' %}
             {{ 'admin_v2.app_center.resource_settlement.product.item_status.closed'|trans }}
+          {% endif %}
+        </td>
+        <td>
+          {% if item.status == 'chosen' %}
+            {{ 'admin_v2.app_center.resource_settlement.product.choosen_status.chosen'|trans }}
+          {% elseif item.status == 'removed' %}
+            {{ 'admin_v2.app_center.resource_settlement.product.choosen_status.removed'|trans }}
           {% endif %}
         </td>
       </tr>

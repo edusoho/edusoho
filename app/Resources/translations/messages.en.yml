@@ -9540,6 +9540,9 @@ admin_v2.app_center.resource_settlement.product.cooperation_price: Cooperation D
 admin_v2.app_center.resource_settlement.product.item_status: Status
 admin_v2.app_center.resource_settlement.product.item_status.published: Published
 admin_v2.app_center.resource_settlement.product.item_status.closed: Closed
+admin_v2.app_center.resource_settlement.product.choosen_status: Choosen status
+admin_v2.app_center.resource_settlement.product.choosen_status.chosen: Choosen
+admin_v2.app_center.resource_settlement.product.choosen_status.removed: Removed
 
 admin_v2.app_center.resource_settlement.empty: Empty
 
