@@ -230,8 +230,13 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
 
         $result = $this->getS2B2CFacadeService()->getS2B2CService()->changePurchaseStatusToRemoved($courseSetProduct['remoteResourceId'], $productIds, 'course');
 
-        $this->getProductService()->deleteByIds(ArrayToolkit::column($courseProducts, 'id'));
         $this->getProductService()->deleteProduct($courseSetProduct['id']);
+
+        if (empty($courseProducts)) {
+            return $result;
+        }
+
+        $this->getProductService()->deleteByIds(ArrayToolkit::column($courseProducts, 'id'));
 
         return $result;
     }
