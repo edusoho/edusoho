@@ -166,7 +166,7 @@ export default {
       return this.mediaOpts.text;
     },
     showLearnBtn() {
-      return  ["video", "audio"].includes(this.sourceType);
+      return  this.joinStatus && ["video", "audio"].includes(this.sourceType);
     }
   },
   watch: {
