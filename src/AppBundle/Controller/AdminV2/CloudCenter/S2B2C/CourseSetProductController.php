@@ -231,6 +231,7 @@ class CourseSetProductController extends ProductController
                 'supplier_id' => $s2b2cConfig['supplierId'],
                 'cooperation_price' => $course['cooperationPrice'],
                 'suggestion_price' => $course['suggestionPrice'],
+                'selling_price' => $course['cooperationPrice'],
                 's2b2cDistributeId' => $course['s2b2cDistributeId'],
             ];
         }
