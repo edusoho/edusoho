@@ -1680,7 +1680,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function getSettingService()
     {
-        return $this->createService('System:SettingService');
+        return new \Biz\System\Service\Impl\SettingServiceImpl($this->biz);
     }
 }
 
