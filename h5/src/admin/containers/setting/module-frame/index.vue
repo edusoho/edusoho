@@ -8,7 +8,7 @@
     </template>
     <!-- 右侧设置区域 -->
     <template>
-      <div v-show="isActive" class="module-frame__setting" :style="settingStyle">
+      <div v-show="isActive" class="module-frame__setting">
         <slot name="setting"/>
       </div>
     </template>
@@ -32,23 +32,6 @@ export default {
     isIncomplete: {
       type: Boolean,
       default: false
-    }
-  },
-  data(){
-    return {
-      pathName: this.$route.name,
-      windowHeight:
-        document.documentElement.clientHeight,
-      settingStyle:{}
-    }
-  },
-  mounted(){
-    if(this.pathName==='h5Setting'){
-      this.settingStyle={
-        height: this.windowHeight+'px',
-        overflow: 'auto',
-        background:'#ffffff'
-      }
     }
   }
 }

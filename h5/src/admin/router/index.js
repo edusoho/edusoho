@@ -12,7 +12,7 @@ const routes = [
     meta: {
       title: 'h5后台配置'
     },
-    component: () => import(/* webpackChunkName: "setting" */'admin/containers/setting/h5-home.vue')
+    component: () => import(/* webpackChunkName: "setting" */'admin/containers/setting/index.vue')
   },
   {
     path: '/preview',
