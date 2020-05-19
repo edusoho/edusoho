@@ -34,12 +34,14 @@
               <a href={% if course.status|default('') == 'published' %}"{{basepath}}"{% else %}"{{ path('course_show', { id: course.id, previewAs: 'guest' }) }}"{% endif %} target="_blank">{% if course.status|default('') == 'published' %}{{ 'course.check.plan'|trans }}{% else %}{{ 'course.preview.plan'|trans }}{% endif %}</a>
             </li>
             {% if course.status|default('') == 'published' %}
-              <li>
-                <a class="js-copy-plan" href="javascript:;"
-                  data-url="{{ path('course_set_manage_course_copy', {courseSetId: courseSet.id, courseId: course.id}) }}">
-                  {{ 'course.teaching_plan.copy_btn'|trans }}
-                </a>
-              </li>
+              {% if courseSet.platform|default('self') == 'self' %}
+                <li>
+                  <a class="js-copy-plan" href="javascript:;"
+                    data-url="{{ path('course_set_manage_course_copy', {courseSetId: courseSet.id, courseId: course.id}) }}">
+                    {{ 'course.teaching_plan.copy_btn'|trans }}
+                  </a>
+                </li>
+              {% endif %}
               <li>
                 <a href="javascript:;"
                   data-check-url="{{ path('course_set_manage_course_close_check', {courseSetId: courseSet.id, courseId: course.id}) }}"
@@ -56,17 +58,19 @@
                   data-save-url="{{ path('course_set_manage_course_publish_set_title', {courseSetId: courseSet.id, courseId: course.id}) }}"
                   class="js-publish-course">{{ 'course.teaching_plan.publish_btn'|trans }}</a><!-- 已发布的不能删除，可关闭 -->
               </li>
-              <li>
-                <a class="js-copy-plan" href="javascript:;"
-                  data-url="{{ path('course_set_manage_course_copy', {courseSetId: courseSet.id, courseId: course.id}) }}">
-                  {{ 'course.teaching_plan.copy_btn'|trans }}
-                </a>
-              </li>
-              <li>
-                <a href="javascript:;"
-                  data-url="{{ path('course_set_manage_course_delete', {courseSetId: courseSet.id, courseId: course.id}) }}"
-                  class="js-delete-course">{{ 'course.teaching_plan.delete_btn'|trans }}</a>
-              </li>
+              {% if courseSet.platform|default('self') == 'self' %}
+                <li>
+                  <a class="js-copy-plan" href="javascript:;"
+                    data-url="{{ path('course_set_manage_course_copy', {courseSetId: courseSet.id, courseId: course.id}) }}">
+                    {{ 'course.teaching_plan.copy_btn'|trans }}
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:;"
+                    data-url="{{ path('course_set_manage_course_delete', {courseSetId: courseSet.id, courseId: course.id}) }}"
+                    class="js-delete-course">{{ 'course.teaching_plan.delete_btn'|trans }}</a>
+                </li>
+              {% endif %}
             {% endif %}
 
           </ul>
