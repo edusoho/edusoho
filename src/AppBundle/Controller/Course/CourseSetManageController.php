@@ -10,6 +10,7 @@ use Biz\Course\CourseSetException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\S2B2C\Service\CourseProductService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
@@ -219,6 +220,10 @@ class CourseSetManageController extends BaseController
     public function publishAction($id)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($id);
+
+        if (!empty($courseSet['sourceCourseSetId'])) {
+            $this->getCourseProductService()->checkSourceCourseSetStatus($courseSet['sourceCourseSetId']);
+        }
 
         if ('live' == $courseSet['type']) {
             $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
@@ -458,5 +463,13 @@ class CourseSetManageController extends BaseController
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return CourseProductService
+     */
+    protected function getCourseProductService()
+    {
+        return $this->createService('S2B2C:CourseProductService');
     }
 }
