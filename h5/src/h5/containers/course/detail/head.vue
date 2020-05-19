@@ -166,7 +166,7 @@ export default {
       return this.mediaOpts.text;
     },
     showLearnBtn() {
-      return ["video", "audio"].includes(this.sourceType);
+      return  ["video", "audio"].includes(this.sourceType);
     }
   },
   watch: {
@@ -216,11 +216,13 @@ export default {
     initHead() {
       if (["video", "audio"].includes(this.sourceType)) {
         window.scrollTo(0, 0);
-        this.initReport();
+         if(this.joinStatus){
+          this.initReport();
+          this.clearComputeWatchTime();
+          this.lastWatchTime = 0;
+          this.nowWatchTime = 0;
+        }
         this.initPlayer();
-        this.clearComputeWatchTime();
-        this.lastWatchTime = 0;
-        this.nowWatchTime = 0;
       }
     },
     initReport() {
