@@ -2,8 +2,14 @@
 
 namespace Biz\S2B2C\Event;
 
+use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
+use Biz\OrderFacade\Service\OrderRefundService;
 use Biz\S2B2C\Service\CourseProductService;
 use Biz\S2B2C\Service\ProductService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
+use Biz\System\Service\LogService;
+use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use QiQiuYun\SDK\Service\S2B2CService;
@@ -15,6 +21,8 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
     {
         return [
             'course.update' => 'onCourseUpdate',
+            'order.success' => 'onOrderSuccess',
+            'order.refunded' => 'onOrderRefunded',
         ];
     }
 
@@ -25,6 +33,129 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
             $courseProduct = $this->getS2b2cProductService()->getByTypeAndLocalResourceId('course', $course['id']);
             $this->getS2B2CService()->changeProductSellingPrice($courseProduct['remoteSourceId'], 'course', $course['price']);
         }
+    }
+
+    public function onOrderSuccess(Event $event)
+    {
+        $this->getLogger()->info('[onOrderSuccess] start order report');
+        $context = $event->getSubject();
+        try {
+            $targetType = ArrayToolkit::column($context['items'], 'target_type');
+            if (!in_array('course', $targetType)) {
+                $this->getLogger()->info('[onOrderSuccess] no need report');
+
+                return true;
+            }
+            $courseIds = ArrayToolkit::column($context['items'], 'target_id');
+            $courses = ArrayToolkit::index($this->getCourseService()->findCoursesByIds($courseIds), 'id');
+
+            $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+            $productIds = [];
+            foreach ($context['items'] as &$item) {
+                $itemProduct = $courses[$item['target_id']];
+                $product = $this->getS2b2cProductService()->getProductBySupplierIdAndLocalResourceIdAndType($s2b2cConfig['supplierId'], $itemProduct['id'], 'course');
+                if (!empty($product['remoteResourceId'])) {
+                    $productIds[] = $product['remoteResourceId'];
+                }
+                $item['origin_product_id'] = $product['remoteResourceId'];
+            }
+
+            if (!empty($productIds)) {
+                $this->setUserInfo($context);
+                $this->getS2B2CService()->reportSuccessOrder($context, $context['items']);
+                $this->getLogger()->info('[onOrderSuccess] order report succeed');
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            $this->getLogger()->error("[onOrderSuccess] order report failed message: {$e->getMessage()}!", ['DATA' => $context]);
+            $this->getLogService()->error('order', 'course_callback', '用户支付成功，但订单与供应商结算异常！（#'.$context['id'].'）', ['error' => $e->getMessage(), 'context' => $context]);
+
+            return true;
+        }
+    }
+
+    public function onOrderRefunded(Event $event)
+    {
+        $this->getLogger()->info('[onOrderRefunded] start order report');
+        $context = $event->getSubject();
+        try {
+            $targetType = ArrayToolkit::column($context['items'], 'target_type');
+            if (!in_array('course', $targetType)) {
+                $this->getLogger()->info('[onOrderRefunded] no need report');
+
+                return true;
+            }
+            $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+            $courseIds = ArrayToolkit::column($context['items'], 'target_id');
+            $productIds = ArrayToolkit::column($this->getS2b2cProductService()->findProductsBySupplierIdAndProductTypeAndLocalResourceIds($s2b2cConfig['supplierId'], 'course', $courseIds), 'remoteResourceId');
+            $orderRefund = $this->getOrderRefundService()->getOrderRefundById($context['items'][0]['refund_id']);
+            $orderItemRefunds = $this->getBaseOrderRefundService()->findOrderItemRefundsByOrderRefundId($orderRefund['id']);
+
+            if (!empty($productIds) && max($productIds) > 0) {
+                $this->setUserInfo($context);
+                $this->getS2B2CService()->reportRefundOrder($context, $orderRefund, $orderItemRefunds);
+                $this->getLogger()->info('[onOrderRefunded] order report succeed');
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            $this->getLogger()->error("[onOrderRefunded] order report failed message: {$e->getMessage()}!", ['DATA' => $context]);
+            $this->getLogService()->error('order', 'course_callback', '用户退款成功，但与供应商结算异常！（#'.$context['id'].'）', ['error' => $e->getMessage(), 'context' => $context]);
+
+            return true;
+        }
+    }
+
+    protected function setUserInfo(&$order)
+    {
+        $user = $this->getUserService()->getUser($order['user_id']);
+        $order['nickname'] = $user['nickname'];
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->getBiz()->service('Course:CourseService');
+    }
+
+    /**
+     * @return OrderRefundService
+     */
+    protected function getOrderRefundService()
+    {
+        return $this->getBiz()->service('OrderFacade:OrderRefundService');
+    }
+
+    /**
+     * @return \Codeages\Biz\Order\Service\OrderRefundService
+     */
+    protected function getBaseOrderRefundService()
+    {
+        return $this->getBiz()->service('Order:OrderRefundService');
+    }
+
+    protected function getLogger()
+    {
+        return $this->getBiz()->offsetGet('s2b2c.merchant.logger');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->getBiz()->service('System:LogService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function isSupplierCourse($course)
@@ -45,7 +176,15 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
      */
     protected function getS2B2CService()
     {
-        return $this->getBiz()->offsetGet('qiQiuYunSdk.s2b2cService');
+        return $this->getS2B2CFacadeService()->getS2B2CService();
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->getBiz()->service('S2B2C:S2B2CFacadeService');
     }
 
     /**
