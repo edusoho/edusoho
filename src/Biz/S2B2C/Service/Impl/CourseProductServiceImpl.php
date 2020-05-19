@@ -5,6 +5,7 @@ namespace Biz\S2B2C\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -215,6 +216,32 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
     }
 
     /**
+     * @param $products
+     * 下架对应商品
+     */
+    public function closeProducts($products)
+    {
+        foreach ($products as $product) {
+            if ('closed' != $product['syncStatus']) {
+                $this->getLogger()->info("[closeSupplierCourseProduct] 开始关闭采购商品#{$product['id']}");
+                $this->getProductService()->updateProduct($product['id'], ['syncStatus' => 'closed']);
+                try {
+                    if ('course' == $product['productType']) {
+                        $this->getCourseDao()->update($product['localResourceId'], ['status' => 'closed']);
+                    }
+
+                    if ('course_set' == $product['productType']) {
+                        $this->getCourseSetDao()->update($product['localResourceId'], ['status' => 'closed']);
+                    }
+                } catch (\Exception $e) {
+                    $this->getLogger()->info("[closeSupplierCourseProduct] 关闭具体商品类型{$product['productType']}#{$product['localResourceId']}，操作出现问题，忽略");
+                }
+                $this->getLogger()->info("[closeSupplierCourseProduct] 关闭采购商品#{$product['id']}，操作成功");
+            }
+        }
+    }
+
+    /**
      * @param $courseSet
      *
      * @return array|null[]|string[]
@@ -348,5 +375,14 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
     protected function getCacheService()
     {
         return $this->createService('System:CacheService');
+    }
+
+    /**
+     * @return CourseDao
+     *                   不推荐直接调用CourseDao
+     */
+    protected function getCourseDao()
+    {
+        return $this->createDao('Course:CourseDao');
     }
 }

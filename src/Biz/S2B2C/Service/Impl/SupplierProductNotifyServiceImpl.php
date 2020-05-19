@@ -25,6 +25,13 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
         return ['status' => !empty($result['id'])];
     }
 
+    /**
+     * @param $params
+     *
+     * @return bool[]
+     *                业务逻辑： 当网校不合作的时候，需要关闭所有的课程，是合作状态的时候，关闭某个课程
+     * @Todo ？职责不单一奇怪的逻辑，S端必须改造这个逻辑！
+     */
     public function refreshProductsStatus($params)
     {
         if (!ArrayToolkit::requireds($params, ['supplierId'])) {
@@ -38,13 +45,16 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
             return ['status' => true];
         }
         $this->getLogger()->info('[refreshProductsStatus] 获取渠道商信息成功');
-        if ('cooperation' != $merchant['coop_status']) {
+        if ('cooperatio1n' != $merchant['coop_status']) {
             $this->getLogger()->info("[refreshProductsStatus] 渠道商合作状态为:{$merchant['coop_status']}，非'cooperation',将对所有S课程下架处理");
-            $supplierCourses = $this->getProductService()->findOriginPlatformCourses('supplier', $params['supplierId']);
-            $this->closeCourses($supplierCourses);
+            $courseProducts = $this->getProductService()->findProductsBySupplierIdAndProductType($params['supplierId'], 'course');
+            $courseSetProducts = $this->getProductService()->findProductsBySupplierIdAndProductType($params['supplierId'], 'course_set');
+            $this->getCourseProductService()->closeProducts($courseProducts);
+            $this->getCourseProductService()->closeProducts($courseSetProducts);
 
             return ['status' => true];
         }
+        //=====================分割线 上面是针对非合作模式的处理，需要关闭所有的课程；否则只关闭单个课程 分割线=================
         if (!ArrayToolkit::requireds($params, ['productId', 'productType'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
@@ -53,38 +63,31 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
 
             return ['status' => true];
         }
-        $supplierCourses = $this->getProductService()->getOriginPlatformCourse('supplier', $params['supplierId'], $params['productId']);
-        $this->closeCourses([$supplierCourses]);
-
-        $this->getLogger()->info('[refreshProductsStatus] 处理完毕');
+        //既要关闭课程商品还要关闭计划商品。
+        $courseProduct = $this->getProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($params['supplierId'], $params['productId'], $params['productType']);
+        if (!empty($courseProduct)) {
+            $this->getCourseProductService()->closeProducts([$courseProduct]);
+            $course = $this->getCourseService()->getCourse($courseProduct['localResourceId']);
+            $courseSetProduct = $this->getProductService()->getProductBySupplierIdAndLocalResourceIdAndType($params['supplierId'], $course['courseSetId'], 'course_set');
+            $this->getCourseProductService()->closeProducts([$courseSetProduct]);
+            $this->getLogger()->info('[refreshProductsStatus] 处理完毕');
+        }
+        $this->getLogger()->info("[refreshProductsStatus] 对应商品不存在{$params['productId']}");
 
         return ['status' => true];
     }
 
-    private function closeCourses($supplierCourses)
-    {
-        foreach ($supplierCourses as $course) {
-            if ('published' != $course['status']) {
-                $this->getLogger()->info("课程#:{$course['id']}，未发布，不进行处理");
-                continue;
-            }
-            $this->getLogger()->info("开始下架#:{$course['id']}，课程");
-            $this->getProductService()->closeSupplierCourseProduct($course['id']);
-            $this->getLogger()->info("课程#:{$course['id']}，下架成功");
-        }
-    }
-
     public function supplierCourseClosed($params)
     {
-        $course = $this->getProductService()->getOriginPlatformCourse('supplier', $params['supplier_id'], $params['course_id']);
-        if (empty($course)) {
+        $courseProduct = $this->getProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($params['supplier_id'], $params['course_id'], 'course');
+        if (empty($courseProduct)) {
             $this->getLogger()->info('[supplierCloseCourse] course not found in Merchant', $params);
 
             return ['status' => false];
         }
 
         try {
-            $this->getCourseService()->closeCourse($course['id']);
+            $this->getCourseService()->closeCourse($courseProduct['localResourceId']);
             $this->getLogger()->info('[supplierCloseCourse] success');
         } catch (\Exception $e) {
             $this->getLogger()->err('[supplierCloseCourse] failed'.$e->getMessage().$e->getTraceAsString(), $params);
@@ -97,15 +100,15 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
 
     public function supplierCourseSetClosed($params)
     {
-        $courseSet = $this->getProductService()->getOriginPlatformCourseSet('supplier', $params['supplier_id'], $params['course_set_id']);
-        if (empty($courseSet)) {
+        $courseSetProduct = $this->getProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($params['supplier_id'], $params['course_set_id'], 'course_set');
+        if (empty($courseSetProduct)) {
             $this->getLogger()->info('[supplierCourseSetClosed] course_set not found in Merchant', $params);
 
             return ['status' => false];
         }
 
         try {
-            $this->getCourseSetService()->closeCourseSet($courseSet['id']);
+            $this->getCourseSetService()->closeCourseSet($courseSetProduct['localResourceId']);
             $this->getLogger()->info('[supplierCourseSetClosed] success');
         } catch (\Exception $e) {
             $this->getLogger()->err('[supplierCourseSetClosed] failed'.$e->getMessage().$e->getTraceAsString(), $params);
