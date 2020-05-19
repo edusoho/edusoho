@@ -5,6 +5,8 @@ namespace Biz\S2B2C\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\Course\CourseException;
+use Biz\Course\CourseSetException;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseService;
@@ -303,6 +305,57 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         }
 
         return $sourceCourse;
+    }
+
+    /**
+     * @param $localCourseId
+     *
+     * @throws \Exception
+     *                    检查计划是否有操作权限
+     */
+    public function checkCourseStatus($localCourseId)
+    {
+        $this->checkMerchantStatus();
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+        $courseProduct = $this->getProductService()->getProductBySupplierIdAndLocalResourceIdAndType($s2b2cConfig['supplierId'], $localCourseId, 'course');
+        $sourceCourseSet = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getSupplierProductDetail($courseProduct['remoteProductId']);
+        if (empty($sourceCourseSet['id']) || isset($sourceCourseSet['error'])) {
+            $this->createNewException(CourseSetException::SOURCE_COURSE_NOTFOUND());
+        }
+        if ('published' != $sourceCourseSet['course']['status']) {
+            $this->createNewException(CourseException::SOURCE_COURSE_CLOSED());
+        }
+    }
+
+    /**
+     * @param $localCourseSetId
+     *
+     * @throws \Exception
+     *                    检查课程是否有操作权限
+     */
+    public function checkCourseSetStatus($localCourseSetId)
+    {
+        $this->checkMerchantStatus();
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+        $courseSetProduct = $this->getProductService()->getProductBySupplierIdAndLocalResourceIdAndType($s2b2cConfig['supplierId'], $localCourseSetId, 'course_set');
+        $sourceCourseSet = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getSupplierCourseSetProductDetail($courseSetProduct['remoteResourceId']);
+        if (!empty($sourceCourseSet['error']) || empty($sourceCourseSet['id'])) {
+            $this->createNewException(CourseSetException::SOURCE_COURSE_NOTFOUND());
+        }
+        if ('published' != $sourceCourseSet['status']) {
+            $this->createNewException(CourseSetException::SOURCE_COURSE_CLOSED());
+        }
+    }
+
+    protected function checkMerchantStatus()
+    {
+        $merchant = $this->getS2B2CFacadeService()->getMe();
+        if (!empty($merchant['error']) || empty($merchant['status'])) {
+            $this->createNewException(CourseSetException::SOURCE_COURSE_NOTFOUND());
+        }
+        if ('cooperation' != $merchant['coop_status']) {
+            $this->createNewException(CourseSetException::SOURCE_COURSE_CLOSED());
+        }
     }
 
     /**
