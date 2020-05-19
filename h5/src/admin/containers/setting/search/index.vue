@@ -9,6 +9,12 @@
     </div>
 
     <div slot="setting">
+        <header class="title">
+        搜索设置
+      </header>
+      <div  class="text-14 color-gray mts">
+        <i class="el-icon-warning"></i> 
+        搜索功能目前只支持搜索班级和课程</div>
     </div>
 
   </module-frame>

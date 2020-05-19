@@ -43,13 +43,13 @@ export default {
     }
   },
   mounted(){
-    // if(this.pathName==='h5Setting'){
-    //   this.settingStyle={
-    //     height: this.windowHeight+'px',
-    //     overflow: 'auto',
-    //     background:'#ffffff'
-    //   }
-    // }
+    if(this.pathName==='h5Setting'){
+      this.settingStyle={
+        height: this.windowHeight+'px',
+        overflow: 'auto',
+        background:'#ffffff'
+      }
+    }
   }
 }
 </script>

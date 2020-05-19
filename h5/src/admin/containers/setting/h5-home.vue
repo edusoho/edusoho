@@ -2,13 +2,11 @@
   <div class="h5-home" :style="{ minHeight: windowHeight + 'px' }">
     <el-row>
       <el-col :span="8">
-        <div class="h5-home-left">
+        <div class="h5-home-left" :style="menuStyle">
           <el-menu
-            default-active="1"
-            :default-openeds="['1']"
+            default-active="1-0"
             class="el-menu-vertical-demo"
             :collapse="false"
-            :unique-opened="true"
           >
             <el-submenu index="1">
               <template slot="title">
@@ -21,9 +19,7 @@
                   :key="`base-${index}`"
                   @click="addModule(item, index)"
                 >
-                  <i
-                    :class="['iconfont', item.icon]"
-                  ></i>
+                  <i :class="['iconfont', item.icon]"></i>
                   {{ item.name }}
                 </el-menu-item>
               </el-menu-item-group>
@@ -35,14 +31,12 @@
               </template>
               <el-menu-item-group>
                 <el-menu-item
-                  :index="`1-${index}`"
+                  :index="`2-${index}`"
                   v-for="(item, index) in marketingModules"
                   :key="`marketing-${index}`"
                   @click="addModule(item, index)"
                 >
-                  <i
-                    :class="['iconfont', item.icon]"
-                  ></i>
+                  <i :class="['iconfont', item.icon]"></i>
                   {{ item.name }}
                 </el-menu-item>
               </el-menu-item-group>
@@ -71,24 +65,26 @@
                 v-model="modules"
                 :options="{
                   filter: stopDraggleClasses,
-                  preventOnFilter: false
+                  preventOnFilter: false,
+                  forceFallback: true
                 }"
                 @start="startDrag"
+                @end="endDrag"
               >
-                  <module-template
-                    v-for="(module, index) in modules"
-                    :key="index"
-                    :saveFlag="saveFlag"
-                    :startValidate="startValidate"
-                    :index="index"
-                    :module="module"
-                    :active="isActive(index)"
-                    :moduleKey="`${module.type}-${index}`"
-                    @activeModule="activeModule"
-                    @updateModule="updateModule($event, index)"
-                    @removeModule="removeModule($event, index)"
-                  >
-                  </module-template>
+                <module-template
+                  v-for="(module, index) in modules"
+                  :key="index"
+                  :saveFlag="saveFlag"
+                  :startValidate="startValidate"
+                  :index="index"
+                  :module="module"
+                  :active="isActive(index)"
+                  :moduleKey="`${module.type}-${index}`"
+                  @activeModule="activeModule"
+                  @updateModule="updateModule($event, index)"
+                  @removeModule="removeModule($event, index)"
+                >
+                </module-template>
               </draggable>
             </div>
 
@@ -96,10 +92,32 @@
           </div>
         </div>
       </el-col>
-      <!-- <el-col :span="10">
-        <div class="h5-home-right"></div>
-      </el-col> -->
     </el-row>
+    <!-- 发布预览按钮 -->
+    <div class="setting-button-group">
+      <el-button
+        class="setting-button-group__button text-14 btn-border-primary"
+        size="mini"
+        @click="reset"
+        :disabled="isLoading"
+        >重 置</el-button
+      >
+      <el-button
+        class="setting-button-group__button text-14 btn-border-primary"
+        size="mini"
+        @click="save('draft')"
+        :disabled="isLoading"
+        >预 览</el-button
+      >
+      <el-button
+        class="setting-button-group__button text-14"
+        type="primary"
+        size="mini"
+        @click="save('published')"
+        :disabled="isLoading"
+        >发 布</el-button
+      >
+    </div>
   </div>
 </template>
 <script>
@@ -129,8 +147,7 @@ export default {
   mixins: [marketingMixins],
   data() {
     return {
-      windowHeight:
-        document.documentElement.clientHeight,
+      windowHeight: document.documentElement.clientHeight,
       title: "EduSoho 微网校",
       modules: [],
       //保存标志，只有点击过保存或者预览按钮才开始实时校验，具体表现错误模块为有错误模块边框变红提示！。这里设置成为数字原因是：每次点击发布或者预览按钮时都需要去实时校验一次，
@@ -139,14 +156,15 @@ export default {
       startValidate: false,
       incomplete: true,
       validateResults: [],
-      currentModuleIndex: "0",
+      currentModuleIndex: 0,
       baseModules: H5_BASE_MODULE,
       marketingModules: H5_MARKETING_MODULE,
       typeCount: {},
       pathName: this.$route.name,
       currentMPVersion: "0.0.0",
       couponSwitch: 0,
-      moduleLength: 0
+      moduleLength: 0,
+      menuStyle:{}//右侧菜单栏样式
     };
   },
   computed: {
@@ -213,6 +231,8 @@ export default {
     }
   },
   created() {
+    //设置样式
+    this.setStyle();
     // 请求发现页配置
     this.load();
     // 获得课程分类列表
@@ -222,6 +242,12 @@ export default {
     // 获得优惠券开关
     this.getCouponSwitch();
   },
+  beforeDestroy(){
+    document.getElementById("app").style.background="#ffffff";
+  },
+  mounted() {
+
+  },
   methods: {
     ...mapActions([
       "getCourseCategories",
@@ -230,6 +256,15 @@ export default {
       "saveDraft",
       "getDraft"
     ]),
+    setStyle(){
+      //设置背景色
+      const windowHeight = document.documentElement.clientHeight;
+      document.getElementById("app").style.background="#f5f5f5";
+      this.menuStyle = {
+        height: this.windowHeight + "px",
+        overflow: "auto"
+      };
+    },
     getCouponSwitch() {
       Api.getCouponSetting().then(res => {
         this.couponSwitch = parseInt(res.enabled, 10);
@@ -262,6 +297,10 @@ export default {
       this.typeCount.removeByType(data.type);
       this.currentModuleIndex = Math.max(this.currentModuleIndex - 1, 0);
       this.modules.splice(index, 1);
+    },
+    scrollBottom(){
+      const top =document.body.clientHeight;
+      window.scroll({top:top,left:0,behavior:'smooth' });
     },
     addModule(data, index) {
       /*
@@ -331,7 +370,10 @@ export default {
       }
 
       // 新增一个模块
-      if(data.default.type==='search' && this.typeCount.getCounterByType(data.default.type) >= 1){
+      if (
+        data.default.type === "search" &&
+        this.typeCount.getCounterByType(data.default.type) >= 1
+      ) {
         this.$message({
           message: "搜索组件最多添加 1 个",
           type: "warning"
@@ -359,6 +401,8 @@ export default {
 
       this.modules.push(defaultCopied);
       this.currentModuleIndex = Math.max(this.modules.length - 1, 0);
+      //使用异步，保证组件添加完成
+      setTimeout(()=>{this.scrollBottom(),500})
     },
     load() {
       // 读取草稿配置
@@ -489,15 +533,15 @@ export default {
       }
       this.incomplete = false;
     },
-    startDrag(){
-
-      const settings=document.getElementsByClassName("module-frame__setting");
-      settings[this.currentModuleIndex].style.left="400%"
-     console.log(settings[this.currentModuleIndex].style.left="400%")
-    //  for(let i=0;i<settings.length;i++){
-    //    settings[i].style.display="none"
-    //     console.log(settings[i].style.display)
-    //  }
+    startDrag() {
+      const settings = document.getElementsByClassName("module-frame__setting");
+      for (let i = 0; i < settings.length; i++) {
+        settings[i].style.display = "none";
+      }
+    },
+    endDrag() {
+      const settings = document.getElementsByClassName("module-frame__setting");
+      settings[this.currentModuleIndex].style.display = "block";
     }
   }
 };
