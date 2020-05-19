@@ -91,7 +91,9 @@ export default {
       setNavbarTitle: types.SET_NAVBAR_TITLE
     }),
     async initData() {
-      this.initReport();
+      if(this.joinStatus){
+        this.initReport();
+      }
       this.enableFinish = !!parseInt(this.details.enableFinish);
       const player = await Api.getMedia(this.getParams()).catch(err => {
         Toast(err.message);
