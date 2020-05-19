@@ -11,7 +11,7 @@
       {% else %}
         {% set rowNum = notice.noticeNum %}
       {% endif %}
-      <div class="alert-list notify-List" style="height: {{rowNum * 36 + 16}}px">
+      <div class="alert-list notify-List">
         {% if notice.notEnoughBalance %}
           <div class="alert alert-warning clearfix" role="alert">
             <span>{{ 's2b2c.resource.no_fee_notice_hint'|trans({'%supplierName%':notice.supplierName, '%balance%':notice.balance|default(0) / 100}) }}</span>

@@ -157,7 +157,8 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             $this->biz['s2b2c.course_product_sync']->updateToLastedVersion($sourceCourse, ['syncCourseId' => $courseId]);
 
             $syncCourse = $this->getProductService()->updateProduct($product['id'], ['localVersion' => $sourceCourse['editVersion'], 'changelog' => []]);
-            $this->getProductService()->updateProduct($courseSetProduct['id'], ['localVersion' => $sourceCourse['editVersion']]);
+            //课程没有版本号，只有计划有，所以升级后版本号归1默认值
+            $this->getProductService()->updateProduct($courseSetProduct['id'], ['localVersion' => 1, 'remoteVersion' => 1]);
             $this->getLogger()->info("[syncCourseProduct] 更新课程到最新 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 成功", ['courseId' => $course['id']]);
             $this->getLogService()->info('course', 'update', "(#{$courseId})《{$course['courseSetTitle']}》更新版本到最新成功,版本变动：V{$product['localVersion']}->V{$sourceCourse['editVersion']}", ['userId' => $this->getCurrentUser()->getId()]);
             $this->commit();
@@ -202,6 +203,10 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         if (empty($hasNewVersion['courseSet'])) {
             $this->getCacheService()->set('s2b2c.hasNewVersion', array_merge($hasNewVersion, ['courseSet' => 1]));
         }
+        //课程当前没有Version,所以本地版本+1
+        $this->getProductService()->updateProduct($courseSetProduct['id'], [
+            'remoteVersion' => $courseSetProduct['localVersion'] + 1,
+        ]);
 
         return $this->getProductService()->updateProduct($product['id'], [
             'remoteVersion' => $productDetail['course']['editVersion'],
