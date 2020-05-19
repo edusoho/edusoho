@@ -5,7 +5,7 @@ use AppBundle\Common\ArrayToolkit;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
-    const SETTING_KEY = 'upgrade_8.7.0';
+    const SETTING_KEY = 'upgrade870';
 
     public function __construct($biz)
     {
