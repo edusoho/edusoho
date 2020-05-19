@@ -21,11 +21,51 @@ class ProductServiceImpl extends BaseService implements ProductService
         return $this->getS2B2CProductDao()->get($id);
     }
 
+    /**
+     * @param $supplierId
+     * @param $remoteProductId
+     *
+     * @return mixed
+     *               通过supplierId 和 remoteProductId（第三方商品ID）唯一确定一个商品
+     */
     public function getProductBySupplierIdAndRemoteProductId($supplierId, $remoteProductId)
     {
         return $this->getS2B2CProductDao()->getBySupplierIdAndRemoteProductId($supplierId, $remoteProductId);
     }
 
+    /**
+     * @param $supplierId
+     * @param $remoteResourceId
+     * @param $type
+     *
+     * @return mixed
+     *               通过supplierId 和 remoteResourceId（第三方具体资源ID）和 类型 唯一确定一个商品
+     */
+    public function getProductBySupplierIdAndRemoteResourceIdAndType($supplierId, $remoteResourceId, $type)
+    {
+        return $this->getS2B2CProductDao()->getBySupplierIdAndRemoteResourceIdAndType($supplierId, $remoteResourceId, $type);
+    }
+
+    /**
+     * @param $supplierId
+     * @param $localResourceId
+     * @param $type
+     *
+     * @return mixed
+     *               通过supplierId 和 localResourceId（本地具体资源ID）和 类型 唯一确定一个商品
+     */
+    public function getProductBySupplierIdAndLocalResourceIdAndType($supplierId, $localResourceId, $type)
+    {
+        return $this->getS2B2CProductDao()->getBySupplierIdAndLocalResourceIdAndType($supplierId, $localResourceId, $type);
+    }
+
+    /**
+     * @param $supplierId
+     * @param $remoteProductIds
+     *
+     * @return array
+     *               通过supplierId 和 remoteProductIds（第三方商品IDS）唯一确定一批商品
+     */
     public function findProductsBySupplierIdAndRemoteProductIds($supplierId, $remoteProductIds)
     {
         if (empty($remoteProductIds)) {
@@ -35,6 +75,14 @@ class ProductServiceImpl extends BaseService implements ProductService
         return $this->getS2B2CProductDao()->findBySupplierIdAndRemoteProductIds($supplierId, $remoteProductIds);
     }
 
+    /**
+     * @param $supplierId
+     * @param $productType
+     * @param $remoteResourceIds
+     *
+     * @return array
+     *               通过supplierId 和 remoteResourceIds (远程的具体商品的ID) 和 商品类型 productType唯一确定一批商品
+     */
     public function findProductsBySupplierIdAndRemoteResourceTypeAndIds($supplierId, $productType, $remoteResourceIds)
     {
         if (empty($remoteResourceIds)) {
@@ -44,6 +92,14 @@ class ProductServiceImpl extends BaseService implements ProductService
         return $this->getS2B2CProductDao()->findBySupplierIdAndRemoteResourceTypeAndIds($supplierId, $productType, $remoteResourceIds);
     }
 
+    /**
+     * @param $supplierId
+     * @param $productType
+     * @param $localResourceIds
+     *
+     * @return array
+     *               通过supplierId 和 localResourceIds (本地的具体商品的ID) 和 商品类型 productType唯一确定一批商品
+     */
     public function findProductsBySupplierIdAndProductTypeAndLocalResourceIds($supplierId, $productType, $localResourceIds)
     {
         if (empty($localResourceIds)) {
@@ -99,6 +155,7 @@ class ProductServiceImpl extends BaseService implements ProductService
                 'createdTime',
                 'updatedTime',
                 'syncStatus',
+                'changelog',
             ]
         );
 
@@ -108,6 +165,22 @@ class ProductServiceImpl extends BaseService implements ProductService
     public function deleteProduct($id)
     {
         return $this->getS2B2CProductDao()->delete($id);
+    }
+
+    public function generateVersionChangeLogs($nowVersion, $productVersions)
+    {
+        if (empty($productVersions)) {
+            return [];
+        }
+        $changeLogs = [];
+        foreach ($productVersions as $productVersion) {
+            if ($productVersion['productVersion'] <= $nowVersion) {
+                continue;
+            }
+            $changeLogs[$productVersion['productVersion']] = $productVersion['changeDetail'];
+        }
+
+        return $changeLogs;
     }
 
     public function searchRemoteProducts($conditions)
@@ -167,6 +240,11 @@ class ProductServiceImpl extends BaseService implements ProductService
         }
 
         return $this->getSettingService()->set('productUpdateType', $type);
+    }
+
+    public function deleteByIds($ids)
+    {
+        return $this->getS2B2CProductDao()->deleteByIds($ids);
     }
 
     protected function getAccessKey()

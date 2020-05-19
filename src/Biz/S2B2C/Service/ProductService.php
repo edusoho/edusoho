@@ -22,6 +22,10 @@ interface ProductService
 
     public function getProductBySupplierIdAndRemoteProductId($supplierId, $remoteProductId);
 
+    public function getProductBySupplierIdAndRemoteResourceIdAndType($supplierId, $remoteResourceId, $type);
+
+    public function getProductBySupplierIdAndLocalResourceIdAndType($supplierId, $localResourceId, $type);
+
     public function searchProducts($conditions, $orderBys, $start, $limit, $columns = []);
 
     public function countProducts($conditions);
@@ -37,4 +41,8 @@ interface ProductService
     public function getProductUpdateType();
 
     public function setProductUpdateType($type);
+
+    public function generateVersionChangeLogs($nowVersion, $productVersions);
+
+    public function deleteByIds($ids);
 }

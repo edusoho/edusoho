@@ -31,6 +31,16 @@ class ProductDaoImpl extends GeneralDaoImpl implements ProductDao
         return $this->getByFields(['supplierId' => $supplierId, 'remoteProductId' => $remoteProductId]);
     }
 
+    public function getBySupplierIdAndRemoteResourceIdAndType($supplierId, $remoteResourceId, $type)
+    {
+        return $this->getByFields(['supplierId' => $supplierId, 'remoteResourceId' => $remoteResourceId, 'productType' => $type]);
+    }
+
+    public function getBySupplierIdAndLocalResourceIdAndType($supplierId, $localResourceId, $type)
+    {
+        return $this->getByFields(['supplierId' => $supplierId, 'localResourceId' => $localResourceId, 'productType' => $type]);
+    }
+
     public function getByTypeAndLocalResourceId($type, $localResourceId)
     {
         return $this->getByFields(['productType' => $type, 'localResourceId' => $localResourceId]);
@@ -64,5 +74,13 @@ class ProductDaoImpl extends GeneralDaoImpl implements ProductDao
         $sql = "SELECT * FROM {$this->table} WHERE supplierId= ? AND productType = ? AND localResourceId IN ({$marks});";
 
         return $this->db()->fetchAll($sql, array_merge([$supplierId, $productType], array_values($localResourceIds)));
+    }
+
+    public function deleteByIds($ids)
+    {
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql = "DELETE FROM {$this->table} WHERE id IN ({$marks});";
+
+        return $this->db()->executeUpdate($sql, $ids);
     }
 }
