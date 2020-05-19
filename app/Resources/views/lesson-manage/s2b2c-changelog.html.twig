@@ -1,23 +1,17 @@
-{#S2B2C-CUSTOM#}
-<style>
-  .popover {
-    white-space: pre-wrap !important;
-  }
-</style>
-{% set lessonChangeLog = '' %}
-{% for key, changeLog in course.versionChangeLog|default() %}
-  {% for index,log in changeLog['lessons']|default() %}
-    {% if index == 0 %}{% set lessonChangeLog = lessonChangeLog ~ '\n版本' ~ key ~':\n' %}{% endif %}
-    {% if index >0 %}{% set lessonChangeLog = lessonChangeLog ~ '\n' %}{% endif %}
-    {% set lessonChangeLog = lessonChangeLog ~ (index+1) ~ '.' ~ log %}
-  {% else %}
-    {% if changeLog['lessons']|default() %}
-      {% if lessonChangeLog %}{% set lessonChangeLog = lessonChangeLog ~ '\n' %}{% endif %}
-      {% set lessonChangeLog = lessonChangeLog ~ '\n版本' ~ key ~':\n' ~ '1.' ~ changeLog['lessons'] %}
-    {% endif %}
-  {% endfor %}
+{% set lessonChangelog = '' %}
+{% for key, changelog in courseProduct.changelog|default() %}
+  {% if changelog['lessons']|default() %}
+    {% set lessonChangelog = lessonChangelog ~ 'merchant.content_resource.product_version'|trans ~ key ~': <br>' %}
+    {% for index,log in changelog['lessons']|default() %}
+      {% set lessonChangelog = lessonChangelog ~ (index+1) ~ '.' ~ log ~ '<br>' %}
+    {% else %}
+      {% if changelog['lessons']|default() %}
+        {% set lessonChangelog = lessonChangelog ~ '1.' ~ changelog['lessons'] ~ '<br>' %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
 {% endfor %}
-{% if lessonChangeLog %}
-  <i class="es-icon es-icon-tip admin-update__icon" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="{{ lessonChangeLog }}" style="color: red!important;"></i>
+{% if lessonChangelog %}
+  <i class="es-icon es-icon-tip admin-update__icon" data-container="body" data-toggle="popover" data-trigger="hover"
+     data-placement="right" data-content="{{ lessonChangelog }}" style="color: red!important;"></i>
 {% endif %}
-{#END#}
