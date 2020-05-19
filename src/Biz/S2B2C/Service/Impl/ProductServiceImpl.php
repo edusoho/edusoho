@@ -61,6 +61,18 @@ class ProductServiceImpl extends BaseService implements ProductService
 
     /**
      * @param $supplierId
+     * @param $productType
+     *
+     * @return mixed
+     *               通过supplierId和productType唯一确定一批products
+     */
+    public function findProductsBySupplierIdAndProductType($supplierId, $productType)
+    {
+        return $this->getS2B2CProductDao()->findBySupplierIdAndProductType($supplierId, $productType);
+    }
+
+    /**
+     * @param $supplierId
      * @param $remoteProductIds
      *
      * @return array

@@ -3,9 +3,9 @@
 namespace Biz\S2B2C\Dao\Impl;
 
 use Biz\S2B2C\Dao\ProductDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class ProductDaoImpl extends GeneralDaoImpl implements ProductDao
+class ProductDaoImpl extends AdvancedDaoImpl implements ProductDao
 {
     protected $table = 's2b2c_product';
 
@@ -44,6 +44,17 @@ class ProductDaoImpl extends GeneralDaoImpl implements ProductDao
     public function getByTypeAndLocalResourceId($type, $localResourceId)
     {
         return $this->getByFields(['productType' => $type, 'localResourceId' => $localResourceId]);
+    }
+
+    /**
+     * @param $supplierId
+     * @param $productType
+     *
+     * @return array
+     */
+    public function findBySupplierIdAndProductType($supplierId, $productType)
+    {
+        return $this->findByFields(['productType' => $productType, 'supplierId' => $supplierId]);
     }
 
     /**
