@@ -1141,6 +1141,7 @@ class EduSohoUpgrade extends AbstractUpdater
                         'material' => '材料题',
                     );
                     $sections = ArrayToolkit::group($items, 'questionType');
+                    $sectionSeq = 1;
                     foreach ($sections as $questionType => $sectionItems) {
                         if ($questionType == 'material') {
                             //把子题加回去
@@ -1160,12 +1161,13 @@ class EduSohoUpgrade extends AbstractUpdater
                         if (empty($sectionItems)) {
                             continue;
                         }
-                        $sectionAndItems = $this->getSectionAndItems(array_values($sectionItems), $testpaper);
+                        $sectionAndItems = $this->getSectionAndItems(array_values($sectionItems), $testpaper, $sectionSeq);
                         $questionCount += $sectionAndItems['section']['question_count'];
                         $itemCount += $sectionAndItems['section']['item_count'];
                         $sectionAndItems['section']['name'] = empty($dict[$questionType]) ? '其他' : $dict[$questionType];
                         $assessmentSections[] = $sectionAndItems['section'];
                         $assessmentSectionItems = array_merge($assessmentSectionItems, $sectionAndItems['items']);
+                        $sectionSeq++;
                     }
                 }
             }
@@ -1202,7 +1204,7 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
-    protected function getSectionAndItems($items, $testpaper)
+    protected function getSectionAndItems($items, $testpaper, $sectionSeq = 1)
     {
         $itemCount = 0;
         $questionCount = 0;
@@ -1263,7 +1265,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 'id' => $items[0]['id'],
                 'assessment_id' => $testpaper['id'],
                 'name' => '',
-                'seq' => '1',
+                'seq' => $sectionSeq,
                 'item_count' => $itemCount,
                 'question_count' => $questionCount,
                 'total_score' => array_sum(ArrayToolkit::column($assessmentItems, 'score')),
