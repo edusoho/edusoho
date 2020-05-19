@@ -21,13 +21,20 @@ import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
-  MessageBox
+  MessageBox,
+  Col,
+  Row,
+  Menu,
+  Submenu,
+  MenuItem,
+  MenuItemGroup
 } from 'element-ui';
 
 import {
   Swipe,
   SwipeItem,
-  Lazyload
+  Lazyload,
+  Search
 } from 'vant';
 
 import router from './router';
@@ -38,6 +45,7 @@ import App from './App';
 // 按需引入组件
 Vue.component('van-swipe', Swipe);
 Vue.component('van-swipe-item', SwipeItem);
+Vue.component('van-search', Search);
 
 Vue.use(Loading);
 Vue.use(Input);
@@ -56,6 +64,12 @@ Vue.use(Dropdown);
 Vue.use(DropdownItem);
 Vue.use(DropdownMenu);
 Vue.use(Lazyload);
+Vue.use(Col);
+Vue.use(Row);
+Vue.use(Menu);
+Vue.use(Submenu);
+Vue.use(MenuItem);
+Vue.use(MenuItemGroup);
 
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;
