@@ -7,7 +7,7 @@
     <div v-show="media === 'text'" ref="text" class="media-text" />
 
     <!-- 学习上报按钮 -->
-    <template>
+    <template v-if="joinStatus">
       <div
         v-if="isFinish"
         class="web-view--btn web-view--activebtn"
@@ -177,7 +177,7 @@ export default {
         });
         player.on("pagechanged", e => {
           if (e.pageNum === e.total) {
-            if (this.finishCondition.type === "end") {
+            if (this.finishCondition && this.finishCondition.type === "end") {
               this.reprtData("finish");
             }
           }
