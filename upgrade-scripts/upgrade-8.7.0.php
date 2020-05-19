@@ -71,9 +71,9 @@ class EduSohoUpgrade extends AbstractUpdater
             'processBizAnswerRecord',
             'processBizAnswerReport',
             'processUserFace',
+            'processBizAnswerSceneQuestionReport',
             'processBizFaceinCheatRecord',
             'processBizAnswerQuestionReport',
-            'processBizAnswerSceneQuestionReport',
             'deleteFunctionConverQuestionAnswer',
         );
 
