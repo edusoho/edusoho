@@ -7212,8 +7212,10 @@ admin.user_auth.privacy_policy_settings: 隐私政策设置
 admin.user_auth.privacy_policy_settings.Enable: 是否开启隐私政策
 admin.user_auth.privacy_policy_settings.open: 开启
 admin.user_auth.privacy_policy_settings.closed: 关闭
-admin.user_auth.privacy_policy_settings.Enable.help_block: 开启后用户注册时必须同意隐私政策才能注册
+admin.user_auth.privacy_policy_settings.Enable.help_block: 开启后用户注册时必须同意隐私政策才能注册。
 admin.user_auth.privacy_policy_settings.details: 隐私政策内容
+admin.user_auth.privacy_policy_settings.tooltip: >
+  <h5>隐私政策配置仅对有独立APP的网校生效，使用阔知学堂APP的网校的隐私政策需阔知统一配置。</h5> 
 admin.user_auth.Name_setting: 名称设置
 admin.user_auth.Name_setting.user_name: 用户名称
 admin.user_auth.Name_setting.help_block: 注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
