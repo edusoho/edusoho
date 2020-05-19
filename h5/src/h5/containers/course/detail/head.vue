@@ -385,7 +385,7 @@ export default {
             return;
           }
           this.clearComputeWatchTime();
-          if (this.finishCondition.type === "end") {
+          if (this.finishCondition && this.finishCondition.type === "end") {
             this.reprtData("finish");
           }
         });
