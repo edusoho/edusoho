@@ -1585,6 +1585,7 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function startPage($funcName, $countSql, $limit = 50000)
     {
         $upgradeSetting = $this->getSettingService()->get(self::SETTING_KEY, array());
+        $this->logger('info', 'startPage:get'.json_encode($upgradeSetting));
         if (empty($upgradeSetting[$funcName])) {
             $pageCount = ceil($this->countTable($countSql) / $limit);
             if (0 == $pageCount) {
@@ -1598,6 +1599,7 @@ class EduSohoUpgrade extends AbstractUpdater
             );
             $upgradeSetting[$funcName] = $startData;
             $this->getSettingService()->set(self::SETTING_KEY, $upgradeSetting);
+            $this->logger('info', 'startPage:set'.json_encode($this->getSettingService()->get(self::SETTING_KEY, array())));
             return $startData;
         }
         
@@ -1611,14 +1613,17 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function endPage($funcName)
     {
         $upgradeSetting = $this->getSettingService()->get(self::SETTING_KEY, array());
+        $this->logger('info', 'endPage:get'.json_encode($upgradeSetting));
         if ($upgradeSetting[$funcName]['page'] >= $upgradeSetting[$funcName]['pageCount']) {
             $upgradeSetting[$funcName] = array();
             $this->getSettingService()->set(self::SETTING_KEY, $upgradeSetting);
+            $this->logger('info', 'endPage:set'.json_encode($upgradeSetting));
             return;
         } else {
             $upgradeSetting[$funcName]['page']++;
             $upgradeSetting[$funcName]['start'] = ($upgradeSetting[$funcName]['page'] - 1) * $upgradeSetting[$funcName]['limit'];
             $this->getSettingService()->set(self::SETTING_KEY, $upgradeSetting);
+            $this->logger('info', 'endPage:set'.json_encode($upgradeSetting));
             return $upgradeSetting[$funcName]['page'];
         }
     }
