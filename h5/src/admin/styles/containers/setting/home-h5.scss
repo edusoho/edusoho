@@ -1,0 +1,84 @@
+.h5-home{
+  padding-bottom: 60px;
+  background: #F5F5F5;
+}
+.h5-home-left{
+  position: fixed;
+  top:0;
+  left: 0;
+  bottom: 0;
+  min-width:110px;
+  box-sizing: border-box;
+  background: #fff;
+  padding-bottom: 60px;
+}
+.h5-home-center{
+  margin-left: 110px;
+  text-align: center;
+}
+.h5-home-right{
+  position: fixed;
+  top:0;
+  right: 0;
+  bottom: 0;
+  width:432px;
+  background: #fff;
+}
+
+.el-menu{
+    border: 0;
+}
+
+.el-submenu .el-menu-item {
+  height: 50px;
+  line-height: 50px;
+  padding: 0 0 0 10px!important;
+  min-width: auto;
+  cursor: default;
+}
+
+.el-submenu__title i{
+  font-size: 16px;
+  margin-left: 8px;
+}
+
+.el-submenu__icon-arrow{
+  right: 10px;
+}
+
+.el-menu-item-group__title{
+  padding: 0;
+}
+
+.iconfont{
+  font-size: 16px;
+  color: #ccc;
+  margin-right: 4px;
+  vertical-align: baseline;
+}
+
+.el-submenu__title {
+  font-size: 16px;
+  font-weight: bold;
+  padding: 0 10px!important; 
+}
+
+.setting-page-h5{
+  background: #fff;
+  margin: auto;
+  text-align: left;
+  .find-body{
+    padding-bottom: 60px;
+  }
+  .module-frame {
+    &__setting {
+      position: fixed;
+      top:0px;
+      right: 0px;
+      left: auto;
+      bottom: 0px;
+      padding-bottom: 60px;
+      width: 416px;
+    }
+  }
+}

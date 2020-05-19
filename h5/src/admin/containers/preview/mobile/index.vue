@@ -48,6 +48,12 @@
         :sort="part.data.sort"
         :show-title="part.data.titleShow"
         class="gray-border-bottom"/>
+      <van-search
+        v-if="part.type == 'search'"
+        shape="round"
+        background="#ffffff"
+        placeholder="搜索课程、班级"`
+      />
     </div>
     <!-- 垫底的 -->
     <div class="mt50"/>
