@@ -199,7 +199,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         //更新Changelog,标记有新版本生成
         $productVersions = $this->getProductService()->generateVersionChangeLogs($product['localVersion'], $productVersions);
         $hasNewVersion = $this->getCacheService()->get('s2b2c.hasNewVersion') ?: [];
-        if (!empty($hasNewVersion['courseSet'])) {
+        if (empty($hasNewVersion['courseSet'])) {
             $this->getCacheService()->set('s2b2c.hasNewVersion', array_merge($hasNewVersion, ['courseSet' => 1]));
         }
 
