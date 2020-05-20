@@ -10944,6 +10944,6 @@ s2b2c.resource.all_choose: 全部选择
 s2b2c.resource.return_market: 返回内容市场
 s2b2c.resource.has_new_notice_hint: 您采购的内容有更新
 s2b2c.resource.no_fee_notice_hint: 您与%supplierName%合作的采购账户余额还剩%balance%，请及时联系%supplierName%进行充值
-
+s2b2c.resource.sync.prev_price.notify: 上个版本价格为
 
 

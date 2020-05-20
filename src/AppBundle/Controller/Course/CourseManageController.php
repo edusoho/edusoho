@@ -19,6 +19,9 @@ use Biz\Course\Service\ReportService;
 use Biz\Course\Service\ThreadService;
 use Biz\File\Service\UploadFileService;
 use Biz\S2B2C\Service\CourseProductService;
+use Biz\S2B2C\Service\ProductService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
+use Biz\S2B2C\Service\SyncEventService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -480,6 +483,14 @@ class CourseManageController extends BaseController
         $course = $this->getCourseService()->canUpdateCourseBaseInfo($courseId, $courseSetId);
 
         $freeTasks = $this->getTaskService()->findFreeTasksByCourseId($courseId);
+
+        $notifies = [];
+        if ('supplier' == $course['platform']) {
+            $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+            $product = $this->getS2B2CProductService()->getProductBySupplierIdAndLocalResourceIdAndType($s2b2cConfig['supplierId'], $course['id'], 'course');
+            $notifies = $this->getSyncEventService()->confirmByEvents($product['remoteResourceId'], [SyncEventService::EVENT_MODIFY_PRICE]);
+        }
+
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
 
@@ -546,6 +557,7 @@ class CourseManageController extends BaseController
                 'audioServiceStatus' => $audioServiceStatus,
                 'canFreeTasks' => $this->findCanFreeTasks($course),
                 'freeTasks' => $freeTasks,
+                'notifies' => empty($notifies) ? [] : $notifies,
             ]
         );
     }
@@ -1227,5 +1239,29 @@ class CourseManageController extends BaseController
     protected function getCourseProductService()
     {
         return $this->createService('S2B2C:CourseProductService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getS2B2CProductService()
+    {
+        return $this->createService('S2B2C:ProductService');
+    }
+
+    /**
+     * @return SyncEventService
+     */
+    protected function getSyncEventService()
+    {
+        return $this->createService('S2B2C:SyncEventService');
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->createService('S2B2C:S2B2CFacadeService');
     }
 }
