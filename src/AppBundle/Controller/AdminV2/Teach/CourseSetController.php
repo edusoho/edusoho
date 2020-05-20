@@ -117,7 +117,6 @@ class CourseSetController extends BaseController
 
         $this->getCourseSetService()->deleteCourseSet($id);
 
-
         return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
     }
 
