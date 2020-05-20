@@ -19,11 +19,11 @@
     <div class="col-sm-8">
       <div class="form-control course-mangae-info__input price-from-control-unset-bg" id="suggestionPrice">
         {{ courseProduct.suggestionPrice|default(0) }}
-        {% if( notifies.modifyPrice | default(false)) %}
-          <i class="es-icon es-icon-tip admin-update__icon v2-color-warning" style="color: red;" data-container="body" data-toggle="popover" data-trigger="hover"  data-content="{{ 's2b2c.resource.sync.prev_price.notify'|trans }} {{ notifies.modifyPrice.data.old.suggestionPrice|default('--') }}"></i>
-        {% endif %}
       </div>
       <span class="ml5">{{ 'site.currency.CNY'|trans }}</span>
+      {% if( notifies.modifyPrice | default(false)) %}
+        <i class="es-icon es-icon-tip admin-update__icon v2-color-warning" style="color: red;" data-container="body" data-toggle="popover" data-trigger="hover"  data-content="{{ 's2b2c.resource.sync.prev_price.notify'|trans }} {{ notifies.modifyPrice.data.old.suggestionPrice|default('--') }}"></i>
+      {% endif %}
     </div>
   </div>
 {% endif %}
