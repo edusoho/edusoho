@@ -34,7 +34,7 @@ class S2B2CProductUpdateNotifyDataTag extends BaseDataTag implements DataTag
         }
 
         $products = $this->getProductService()->findProductsBySupplierIdAndRemoteResourceTypeAndIds($s2b2cConfig['supplierId'], 'course', $productIds);
-        $products = ArrayToolkit::index($products, 'localResourceId');
+        $products = ArrayToolkit::index($products, 'remoteResourceId');
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($products, 'localResourceId'));
         $courses = ArrayToolkit::index($courses, 'id');
 
