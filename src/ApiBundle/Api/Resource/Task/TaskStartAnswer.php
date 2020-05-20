@@ -52,7 +52,7 @@ class TaskStartAnswer extends AbstractResource
     protected function startExercise($task, $activity)
     {
         $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $this->getCurrentUser()['id']);
-        if (empty($latestAnswerRecord)) {
+        if (empty($latestAnswerRecord) || 'finished' == $latestAnswerRecord['status']) {
             $assessment = $this->createExerciseAssessment($activity);
 
             return $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $assessment['id'], $this->getCurrentUser()['id']);
