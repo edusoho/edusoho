@@ -176,6 +176,7 @@ check env:
   only:
     refs:
       - develop
+      - project/b2c
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
