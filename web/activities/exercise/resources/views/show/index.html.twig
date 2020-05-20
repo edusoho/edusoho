@@ -15,7 +15,7 @@
               {% if questionLack|default(false) %}
                 {{ 'course.plan_task.activity_manage.exercise.info_tips.question_lack'|trans }}
               {% else %}
-                {{ 'course.plan_task.activity_manage.exercise.info_tips'|trans({'%itemCount%':exercise.itemCount})|raw }}
+                {{ 'course.plan_task.activity_manage.exercise.info_tips'|trans({'%itemCount%':exercise.drawCondition.section.item_count|default(0)})|raw }}
               {% endif %}
             </div>
           </div>

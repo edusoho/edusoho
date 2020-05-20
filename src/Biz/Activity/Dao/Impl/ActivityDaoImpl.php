@@ -36,6 +36,14 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
         return $this->db()->fetchAll($sql, array());
     }
 
+    public function findActivitiesByMediaIdsAndMediaType($mediaIds, $mediaType)
+    {
+        $marks = str_repeat('?,', count($mediaIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE mediaId IN({$marks}) AND mediaType = ?;";
+
+        return $this->db()->fetchAll($sql, array_merge($mediaIds, array($mediaType)));
+    }
+
     public function findFinishedLivesWithinTwoHours()
     {
         $currentTime = time();
@@ -77,5 +85,10 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
     public function getByMediaIdAndMediaTypeAndCopyId($mediaId, $mediaType, $copyId)
     {
         return $this->getByFields(array('mediaId' => $mediaId, 'mediaType' => $mediaType, 'copyId' => $copyId));
+    }
+
+    public function getByMediaIdAndMediaType($mediaId, $mediaType)
+    {
+        return $this->getByFields(array('mediaId' => $mediaId, 'mediaType' => $mediaType));
     }
 }

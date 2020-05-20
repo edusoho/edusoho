@@ -51,7 +51,8 @@
     {% set disable = version_compare(plugin_version('QuestionPlus'), '2.1.0', '<=') %}
     <p class="cd-mt8 mb0 text-left">
       {% if not disable %}
-        <a class="cd-link-primary" href="javascript:;" id="old-template-btn">{{ 'course.question_manage.import.use_old_template'|trans }}</a>
+        {% set needUprade = version_compare(plugin_version('QuestionPlus'), '2.1.2', '<=') %}
+        <a class="cd-link-primary" href="javascript:;" data-need-upgrade="{{ needUprade }}" id="old-template-btn">{{ 'course.question_manage.import.use_old_template'|trans }}</a>
       {% else %}
         <span class="text-muted">{{ 'course.question_manage.import.use_old_template'|trans }}</span>
         <a class="link-medium" href="javascript:;" data-container="body" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="{{ 'question_plus_upgrade_tip'|trans }}"><i class="es-icon es-icon-help"></i></a>

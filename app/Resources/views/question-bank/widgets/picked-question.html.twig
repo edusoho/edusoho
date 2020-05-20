@@ -1,8 +1,7 @@
-{% for question in questions|default(null) if question %}
-  {% include 'question-bank/testpaper/manage/question-picked.html.twig' %}
-  {% if question.subs|default(null) %}
-    {% for question in question.subs %}
-      {% include 'question-bank/testpaper/manage/question-picked.html.twig' %}
-    {% endfor %}
+{% for item in items|default(null) if items %}
+  {% if item.type == 'material' %}
+    {% include 'question-bank/widgets/picked-item/material-question-item.html.twig' %}
+  {% else %}
+    {% include 'question-bank/widgets/picked-item/question-item.html.twig' %}
   {% endif %}
 {% endfor %}

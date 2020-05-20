@@ -4,7 +4,10 @@ namespace ApiBundle\Api\Resource\Exercise;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Activity\Service\ExerciseActivityService;
 use Biz\Course\CourseException;
+use Biz\Testpaper\Wrapper\AssessmentResponseWrapper;
+use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\Testpaper\ExerciseException;
 use Biz\Task\TaskException;
 use Biz\Task\Service\TaskService;
@@ -13,6 +16,12 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Course\Service\CourseService;
 use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class ExerciseResult extends AbstractResource
 {
@@ -23,8 +32,8 @@ class ExerciseResult extends AbstractResource
         $targetType = $request->request->get('targetType');
         $targetId = $request->request->get('targetId');
 
-        $exercise = $this->getTestpaperService()->getTestpaper($exerciseId);
-        if (empty($exercise) || 'exercise' != $exercise['type']) {
+        $assessment = $this->getAssessmentService()->getAssessment($exerciseId);
+        if (empty($assessment) || '0' != $assessment['displayable']) {
             throw ExerciseException::NOTFOUND_EXERCISE();
         }
 
@@ -43,40 +52,29 @@ class ExerciseResult extends AbstractResource
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
+        $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+        $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($answerScene['id'], $user['id']);
+        $testpaperWrapper = new TestpaperWrapper();
 
-        $exerciseResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseId'], $activity['id'], $activity['mediaType']);
-
-        if (empty($exerciseResult) || 'finished' == $exerciseResult['status']) {
-            if ('draft' == $exercise['status']) {
+        if (empty($answerRecord) || 'finished' == $answerRecord['status']) {
+            if ('draft' == $assessment['status']) {
                 throw ExerciseException::DRAFT_EXERCISE();
             }
-            if ('closed' == $exercise['status']) {
+            if ('closed' == $assessment['status']) {
                 throw ExerciseException::CLOSED_EXERCISE();
             }
 
-            $exerciseResult = $this->getTestpaperService()->startTestpaper($exercise['id'], array('lessonId' => $activity['id'], 'courseId' => $activity['fromCourseId'], 'limitedTime' => $exercise['limitedTime']));
-            $exerciseResult['items'] = array_values($this->getTestpaperService()->showTestpaperItems($exercise['id']));
-
-            $this->updateOrders($exerciseResult['id'], $exerciseResult['items']);
-        } else {
-            $exerciseResult['items'] = array_values($this->getTestpaperService()->showTestpaperItems($exercise['id'], $exerciseResult['id']));
+            $answerRecord = $this->getAnswerService()->startAnswer($answerScene['id'], $assessment['id'], $user['id']);
         }
+
+        $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
+        $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+        $items = $testpaperWrapper->wrapTestpaperItems($assessment, $questionReports);
+        $exerciseResult = $testpaperWrapper->wrapTestpaperResult($answerRecord, $assessment, $answerScene, $answerReport);
+        $exerciseResult['items'] = array_values($items);
 
         return $exerciseResult;
-    }
-
-    protected function updateOrders($exerciseResultId, $items)
-    {
-        $orders = array();
-        foreach ($items as $item) {
-            $orders[] = $item['id'];
-            if (!empty($item['subs'])) {
-                foreach ($item['subs'] as $subItem) {
-                    $orders[] = $subItem['id'];
-                }
-            }
-        }
-        $this->getTestpaperService()->updateTestpaperResult($exerciseResultId, array('metas' => array('orders' => $orders)));
     }
 
     public function update(ApiRequest $request, $exerciseId, $exerciseResultId)
@@ -84,56 +82,61 @@ class ExerciseResult extends AbstractResource
         $user = $this->getCurrentUser();
 
         $data = $request->request->all();
-        $exerciseResult = $this->getTestpaperService()->getTestpaperResult($exerciseResultId);
+        $exerciseRecord = $this->getAnswerRecordService()->get($exerciseResultId);
 
-        if (!empty($exerciseResult) && !in_array($exerciseResult['status'], array('doing', 'paused'))) {
+        if (!empty($exerciseRecord) && !in_array($exerciseRecord['status'], array('doing', 'paused'))) {
             throw ExerciseException::FORBIDDEN_DUPLICATE_COMMIT();
         }
 
-        if (!empty($exerciseResult['metas']['orders'])) {
-            $data['seq'] = $exerciseResult['metas']['orders'];
-        }
-
-        $exerciseResult = $this->getTestpaperService()->finishTest($exerciseResult['id'], $data);
-        $exercise = $this->getTestpaperService()->getTestpaper($exerciseResult['testId']);
-
-        if ($exerciseResult['userId'] != $user['id']) {
-            $course = $this->getCourseService()->tryManageCourse($exerciseResult['courseId']);
-        }
-
-        if (empty($course) && $exerciseResult['userId'] != $user['id']) {
+        if ($exerciseRecord['user_id'] != $user['id']) {
             throw ExerciseException::FORBIDDEN_ACCESS_EXERCISE();
         }
 
-        return $exerciseResult;
+        $wrapper = new AssessmentResponseWrapper();
+        $assessment = $this->getAssessmentService()->showAssessment($exerciseRecord['assessment_id']);
+        $assessmentResponse = $wrapper->wrap($data, $assessment, $exerciseRecord);
+        $answerRecord = $this->getAnswerService()->submitAnswer($assessmentResponse);
+        $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+        $scene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
+        $testpaperWrapper = new TestpaperWrapper();
+
+        return $testpaperWrapper->wrapTestpaperResult($answerRecord, $assessment, $scene, $answerReport);
     }
 
     public function get(ApiRequest $request, $exerciseId, $exerciseResultId)
     {
         $user = $this->getCurrentUser();
 
-        $exerciseResult = $this->getTestpaperService()->getTestpaperResult($exerciseResultId);
-        if (empty($exerciseResult)) {
+        $exerciseRecord = $this->getAnswerRecordService()->get($exerciseResultId);
+        if (empty($exerciseRecord)) {
             throw ExerciseException::NOTFOUND_RESULT();
         }
 
-        $exercise = $this->getTestpaperService()->getTestpaper($exerciseId);
-        if (empty($exercise) || 'exercise' != $exercise['type']) {
+        $exercise = $this->getAssessmentService()->getAssessment($exerciseRecord['assessment_id']);
+        if (empty($exercise) || '0' != $exercise['displayable']) {
             throw ExerciseException::NOTFOUND_EXERCISE();
         }
 
-        $canTakeCourse = $this->getCourseService()->canTakeCourse($exercise['courseId']);
+        $scene = $this->getAnswerSceneService()->get($exerciseRecord['answer_scene_id']);
+        $exerciseActivity = $this->getExerciseActivityService()->getByAnswerSceneId($scene['id']);
+        $activity = $this->getActivityService()->getByMediaIdAndMediaType($exerciseActivity['id'], 'exercise');
+
+        $canTakeCourse = $this->getCourseService()->canTakeCourse($activity['fromCourseId']);
         if (!$canTakeCourse) {
             throw CourseException::FORBIDDEN_TAKE_COURSE();
         }
 
-        $canCheckExercise = $this->getTestpaperService()->canLookTestpaper($exerciseResult['id']);
-        if (empty($user) || (!$canCheckExercise && $exerciseResult['userId'] != $user['id'])) {
+        if ('doing' === $exerciseRecord['status'] && ($exerciseRecord['user_id'] != $user['id'])) {
             throw ExerciseException::FORBIDDEN_ACCESS_EXERCISE();
         }
 
-        $exerciseResult['items'] = array_values($this->getTestpaperService()->showTestpaperItems($exercise['id'], $exerciseResultId));
-        $exerciseResult['items'] = $this->fillItems($exerciseResult['items'], $exerciseResult);
+        $testpaperWrapper= new TestpaperWrapper();
+        $assessment = $this->getAssessmentService()->showAssessment($exercise['id']);
+        $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($exerciseRecord['id']);
+        $answerReport = $this->getAnswerReportService()->get($exerciseRecord['answer_report_id']);
+        $exerciseResult = $testpaperWrapper->wrapTestpaperResult($exerciseRecord, $exercise, $scene, $answerReport);
+        $exerciseResult['items'] = array_values($testpaperWrapper->wrapTestpaperItems($assessment, $questionReports));
+        $exerciseResult['items'] = $this->fillItems($exerciseResult['items'], $questionReports);
         $exerciseResult['rightRate'] = $this->getRightRate($exerciseResult['items']);
 
         return $exerciseResult;
@@ -173,18 +176,16 @@ class ExerciseResult extends AbstractResource
         return ($num - $subjectivityNum) ? intval($rightNum / ($num - $subjectivityNum) * 100 + 0.5) : 0;
     }
 
-    protected function fillItems($items, $exerciseResult)
+    protected function fillItems($items, $questionReports)
     {
-        $itemSetResults = $this->getTestpaperService()->findItemResultsByResultId($exerciseResult['id']);
-        $itemSetResults = ArrayToolkit::index($itemSetResults, 'questionId');
-
+        $questionReports = ArrayToolkit::index($questionReports, 'question_id');
         foreach ($items as &$item) {
             if (isset($item['subs'])) {
                 foreach ($item['subs'] as &$sub) {
-                    $sub['testResult'] = isset($itemSetResults[$sub['id']]) ? $itemSetResults[$sub['id']] : null;
+                    $sub['testResult'] = isset($questionReports[$sub['id']]) ? $sub['testResult'] : null;
                 }
             } else {
-                $item['testResult'] = isset($itemSetResults[$item['id']]) ? $itemSetResults[$item['id']] : null;
+                $item['testResult'] = isset($questionReports[$item['id']]) ? $item['testResult'] : null;
             }
         }
 
@@ -208,14 +209,6 @@ class ExerciseResult extends AbstractResource
     }
 
     /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->service('Testpaper:TestpaperService');
-    }
-
-    /**
      * @return CourseService
      */
     protected function getCourseService()
@@ -229,5 +222,61 @@ class ExerciseResult extends AbstractResource
     protected function getTaskService()
     {
         return $this->service('Task:TaskService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->service('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->service('ItemBank:Answer:AnswerReportService');
+    }
+
+    /**
+     * @return AnswerQuestionReportService
+     */
+    protected function getAnswerQuestionReportService()
+    {
+        return $this->service('ItemBank:Answer:AnswerQuestionReportService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->service('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return AnswerService
+     */
+    protected function getAnswerService()
+    {
+        return $this->service('ItemBank:Answer:AnswerService');
+    }
+
+    /**
+     * @return ExerciseActivityService
+     */
+    protected function getExerciseActivityService()
+    {
+        return $this->service('Activity:ExerciseActivityService');
     }
 }
