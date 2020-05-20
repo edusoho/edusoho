@@ -4,11 +4,13 @@ namespace Biz\S2B2C\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
-use Biz\DatabaseConfig\Service\ConfigService;
-use Biz\S2B2C\Service\CoopModeService;
-use Biz\S2B2C\Service\MerchantSettingService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\S2B2C\Service\SupplierNotifyService;
 use Biz\System\Service\SettingService;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Yaml\Yaml;
+use Topxia\Service\Common\ServiceKernel;
 
 class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifyService
 {
@@ -32,29 +34,40 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
             return ['status' => false];
         }
 
-        $merchantSetting = $this->getSettingService()->get('merchant_setting', []);
-        $this->getSettingService()->set('merchant_setting', array_merge($merchantSetting, [
-            'coop_mode' => $new['coop_mode'],
-        ]));
+        $config = $this->getParameters();
+        if (isset($config['parameters']['school_mode']['business_mode'])) {
+            $config['parameters']['school_mode']['business_mode'] = $new['coop_mode'];
+            $content = $this->dumpParameters($config);
+            $this->writeParameters($content);
+        }
         $this->getLogger()->info("[onCoopModeChange] 更新渠道商#{$new['name']}合作模式#{$new['coop_mode']}成功");
 
         return ['success' => true];
     }
 
+    /**
+     * @param $params
+     *
+     * @return null
+     *              EduSoho 不存在更新B端URL
+     */
     public function onMerchantDomainUrlChange($params)
     {
-        $siteSetting = $this->getSettingService()->get('site');
-        $siteSetting['url'] = $params['domain_url'];
-        $this->getSettingService()->set('site', $siteSetting);
-
-        $this->getDatabaseConfigService()->updateSiteUrlBySiteId($params['site_id'], $params['domain_url']);
+        return null;
     }
 
     public function onSupplierDomainUrlChange($params)
     {
-        $supplierSetting = $this->getSettingService()->get('supplierSettings');
-        $supplierSetting['domainUrl'] = $params['domain_url'];
-        $this->getSettingService()->set('supplierSettings', $supplierSetting);
+        $config = $this->getParameters();
+        if (isset($config['parameters']['school_mode']['supplier']['domain'])) {
+            $config['parameters']['school_mode']['supplier']['domain'] = $params['domain_url'];
+            $content = $this->dumpParameters($config);
+            $this->backupParameters();
+            $this->writeParameters($content);
+            $this->getLogger()->info("[onCoopModeChange] 更新渠道商URL成功:{$params['domain_url']}");
+        }
+
+        return ['success' => true];
     }
 
     public function onSupplierSiteLogoChange($params)
@@ -82,27 +95,120 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
         $authNode = isset($me['auth_node']) ? $me['auth_node'] : [];
         $this->checkAuthNode($authNode);
 
-        $setting = $this->getSettingService()->get('merchant_setting');
+        $setting = $this->getSettingService()->get('s2b2c');
         $setting['auth_node'] = [
             'logo' => $me['auth_node']['logo'],
             'title' => $me['auth_node']['title'],
             'favicon' => $me['auth_node']['favicon'],
         ];
-        $this->getSettingService()->set('merchant_setting', $setting);
-
-        if (!$me['auth_node']['logo']) {
-            $this->getMerchantSettingService()->resetSiteLogo();
-        }
-
-        if (!$me['auth_node']['title']) {
-            $this->getMerchantSettingService()->resetSiteTitle();
-        }
-
-        if (!$me['auth_node']['favicon']) {
-            $this->getMerchantSettingService()->resetSiteFavicon();
-        }
+        $this->getSettingService()->set('s2b2c', $setting);
 
         return ['success' => true];
+    }
+
+    public function onResetMerchantBrand($params)
+    {
+        $this->resetSiteTitle();
+        $this->resetSiteLogo();
+        $this->resetSiteFavicon();
+
+        return ['success' => true];
+    }
+
+    protected function dumpParameters($config)
+    {
+        $yaml = new Yaml();
+
+        return $yaml->dump($config, 4);
+    }
+
+    protected function getParameters()
+    {
+        $filePath = ServiceKernel::instance()->getParameter('kernel.root_dir').'/config/parameters.yml';
+
+        $yaml = new Yaml();
+
+        return $yaml->parseFile($filePath);
+    }
+
+    protected function writeParameters($content)
+    {
+        $filePath = ServiceKernel::instance()->getParameter('kernel.root_dir').'/config/parameters.yml';
+        $fh = fopen($filePath, 'w');
+        fwrite($fh, $content);
+        fclose($fh);
+    }
+
+    protected function backupParameters()
+    {
+        $filePath = ServiceKernel::instance()->getParameter('kernel.root_dir').'/config/parameters.yml';
+        $time = time();
+        $backupPath = ServiceKernel::instance()->getParameter('kernel.root_dir')."/data/backup/parameter_{$time}.yml.bak";
+        $fileSystem = new Filesystem();
+        if ($fileSystem->exists($filePath)) {
+            $fileSystem->copy($filePath, $backupPath, true);
+        }
+    }
+
+    protected function resetSiteLogo()
+    {
+        $setting = $this->getSettingService()->get('supplierSettings', ['domainUrl' => '']);
+        $parseUrl = parse_url($setting['domainUrl']);
+        $host = $parseUrl['host'];
+
+        $logo = [
+            'logo' => sprintf('%s/logo/%s_logo.png', $setting['domainUrl'], $host),
+        ];
+
+        $site = $this->getSettingService()->get('site');
+        $site = array_merge($site, $logo);
+        $this->getSettingService()->set('site', $site);
+
+        return true;
+    }
+
+    protected function resetSiteFavicon()
+    {
+        $setting = $this->getSettingService()->get('supplierSettings', ['domainUrl' => '']);
+        $parseUrl = parse_url($setting['domainUrl']);
+        $host = $parseUrl['host'];
+
+        $favicon = [
+            'favicon' => sprintf('%s/favicon/%s_favicon.ico', $setting['domainUrl'], $host),
+        ];
+        $site = $this->getSettingService()->get('site');
+        $site = array_merge($site, $favicon);
+        $this->getSettingService()->set('site', $site);
+    }
+
+    protected function resetSiteTitle()
+    {
+        $merchant = $this->getS2B2CServiceApi()->getMe();
+        if (!$merchant['site_title']) {
+            throw new ServiceException('resetSiteTitle failed: '.json_encode($merchant));
+        }
+
+        $site = array_merge(
+            $this->getSettingService()->get('site'),
+            ['name' => $merchant['site_title']]
+        );
+
+        $this->getSettingService()->set('site', $site);
+    }
+
+    protected function resetSiteUrl()
+    {
+        $merchant = $this->getS2B2CServiceApi()->getMe();
+        if (!$merchant['domain_url']) {
+            throw new ServiceException('resetSiteTitle failed: '.json_encode($merchant));
+        }
+
+        $site = array_merge(
+            $this->getSettingService()->get('site'),
+            ['url' => $merchant['domain_url']]
+        );
+
+        $this->getSettingService()->set('site', $site);
     }
 
     protected function checkAuthNode($authNode)
@@ -114,14 +220,6 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
         if (!$whole) {
             $this->getLogger()->error('[onMerchantAuthNodeChange] 获取渠道商权限节点失败，停止处理[DATA]：'.json_encode($authNode));
         }
-    }
-
-    /**
-     * @return ConfigService
-     */
-    protected function getDatabaseConfigService()
-    {
-        return $this->createService('DatabaseConfig:ConfigService');
     }
 
     /**
@@ -137,7 +235,7 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
      */
     protected function getS2B2CServiceApi()
     {
-        return $this->biz->offsetGet('qiQiuYunSdk.s2b2cService');
+        return $this->getS2B2CFacadeService()->getS2B2CService();
     }
 
     /**
@@ -149,18 +247,10 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
     }
 
     /**
-     * @return CoopModeService
+     * @return S2B2CFacadeService
      */
-    protected function getCoopModeService()
+    protected function getS2B2CFacadeService()
     {
-        return $this->createService('S2B2C:CoopModeService');
-    }
-
-    /**
-     * @return MerchantSettingService
-     */
-    protected function getMerchantSettingService()
-    {
-        return $this->createService('S2B2C:MerchantSettingService');
+        return $this->createService('S2B2C:S2B2CFacadeService');
     }
 }
