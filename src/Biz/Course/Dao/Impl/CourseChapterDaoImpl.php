@@ -11,60 +11,60 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
 
     public function getByCopyIdAndLockedCourseId($copyId, $courseId)
     {
-        return $this->getByFields(array('copyId' => $copyId, 'courseId' => $courseId));
+        return $this->getByFields(['copyId' => $copyId, 'courseId' => $courseId]);
     }
 
     public function findByCopyId($copyId)
     {
-        return $this->findByFields(array('copyId' => $copyId));
+        return $this->findByFields(['copyId' => $copyId]);
     }
 
     public function findChaptersByCourseId($courseId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? ORDER BY createdTime ASC";
 
-        return $this->db()->fetchAll($sql, array($courseId));
+        return $this->db()->fetchAll($sql, [$courseId]);
     }
 
     public function findLessonsByCourseId($courseId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? AND type = 'lesson' ORDER BY createdTime ASC";
 
-        return $this->db()->fetchAll($sql, array($courseId));
+        return $this->db()->fetchAll($sql, [$courseId]);
     }
 
     public function getChapterCountByCourseIdAndType($courseId, $type)
     {
         $sql = "SELECT COUNT(*) FROM {$this->table()} WHERE  courseId = ? AND type = ?";
 
-        return $this->db()->fetchColumn($sql, array($courseId, $type));
+        return $this->db()->fetchColumn($sql, [$courseId, $type]);
     }
 
     public function getLastChapterByCourseIdAndType($courseId, $type)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE  courseId = ? AND type = ? ORDER BY seq DESC LIMIT 1";
 
-        return $this->db()->fetchAssoc($sql, array($courseId, $type)) ?: null;
+        return $this->db()->fetchAssoc($sql, [$courseId, $type]) ?: null;
     }
 
     public function getLastChapterByCourseId($courseId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE  courseId = ? ORDER BY seq DESC LIMIT 1";
 
-        return $this->db()->fetchAssoc($sql, array($courseId)) ?: null;
+        return $this->db()->fetchAssoc($sql, [$courseId]) ?: null;
     }
 
     public function getChapterMaxSeqByCourseId($courseId)
     {
         $sql = "SELECT MAX(seq) FROM {$this->table()} WHERE  courseId = ?";
 
-        return $this->db()->fetchColumn($sql, array($courseId));
+        return $this->db()->fetchColumn($sql, [$courseId]);
     }
 
     public function deleteChaptersByCourseId($courseId)
     {
         $sql = "DELETE FROM {$this->table()} WHERE courseId = ?";
-        $result = $this->db()->executeUpdate($sql, array($courseId));
+        $result = $this->db()->executeUpdate($sql, [$courseId]);
 
         return $result;
     }
@@ -72,22 +72,22 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
     public function findChaptersByCopyIdAndLockedCourseIds($copyId, $courseIds)
     {
         if (empty($courseIds)) {
-            return array();
+            return [];
         }
 
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
 
-        $parmaters = array_merge(array($copyId), $courseIds);
+        $parmaters = array_merge([$copyId], $courseIds);
 
         $sql = "SELECT * FROM {$this->table()} WHERE copyId= ? AND courseId IN ({$marks})";
 
-        return $this->db()->fetchAll($sql, $parmaters) ?: array();
+        return $this->db()->fetchAll($sql, $parmaters) ?: [];
     }
 
     public function findByCopyIdsAndLockedCourseIds($copyIds, $courseIds)
     {
         if (empty($courseIds) || empty($copyIds)) {
-            return array();
+            return [];
         }
 
         $copyIdMarks = str_repeat('?,', count($copyIds) - 1).'?';
@@ -97,14 +97,14 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
 
         $sql = "SELECT * FROM {$this->table()} WHERE copyId IN ({$copyIdMarks}) AND courseId IN ({$courseIdMarks})";
 
-        return $this->db()->fetchAll($sql, $parmaters) ?: array();
+        return $this->db()->fetchAll($sql, $parmaters) ?: [];
     }
 
     public function declares()
     {
-        return array(
-            'timestamps' => array('createdTime', 'updatedTime'),
-            'conditions' => array(
+        return [
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'conditions' => [
                 'id = :id',
                 'copyId = :copyId',
                 'courseId = :courseId',
@@ -115,7 +115,10 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
                 'type = :type',
                 'type in (:types)',
                 'status = :status',
-            ),
-        );
+                'syncId = :syncId',
+                'syncId in (:syncIds)',
+                'syncId > :syncIdGT',
+            ],
+        ];
     }
 }
