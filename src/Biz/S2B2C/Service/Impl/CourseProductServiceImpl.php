@@ -226,7 +226,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         foreach ($products as $product) {
             if ('closed' != $product['syncStatus']) {
                 $this->getLogger()->info("[closeSupplierCourseProduct] 开始关闭采购商品#{$product['id']}");
-                $this->getProductService()->updateProduct($product['id'], ['syncStatus' => 'closed']);
+//                $this->getProductService()->updateProduct($product['id'], ['syncStatus' => 'closed']);
                 try {
                     if ('course' == $product['productType']) {
                         $this->getCourseDao()->update($product['localResourceId'], ['status' => 'closed']);
