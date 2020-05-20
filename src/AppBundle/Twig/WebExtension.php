@@ -66,6 +66,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('tags_html', array($this, 'tagsHtmlFilter'), array('is_safe' => array('html'))),
             new \Twig_SimpleFilter('file_size', array($this, 'fileSizeFilter')),
             new \Twig_SimpleFilter('plain_text', array($this, 'plainTextFilter'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFilter('plain_text_with_p_tag', array($this, 'plainTextWithPTagFilter'), array('is_safe' => array('html'))),
             new \Twig_SimpleFilter('sub_text', array($this, 'subTextFilter'), array('is_safe' => array('html'))),
             new \Twig_SimpleFilter('duration', array($this, 'durationFilter')),
             new \Twig_SimpleFilter('duration_text', array($this, 'durationTextFilter')),
@@ -1367,6 +1368,17 @@ class WebExtension extends \Twig_Extension
             default:
                 return null;
         }
+    }
+
+    public function plainTextWithPTagFilter($text)
+    {
+        $text = strip_tags($text, '<p>');
+
+        $text = str_replace(array("\n", "\r", "\t"), '', $text);
+        $text = str_replace('&nbsp;', ' ', $text);
+        $text = trim($text);
+
+        return $text;
     }
 
     public function plainTextFilter($text, $length = null)
