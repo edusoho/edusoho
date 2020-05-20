@@ -16,17 +16,12 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
 {
     public function onSiteStatusChange($params)
     {
-        if (!ArrayToolkit::requireds($params, ['site_id', 'site_status'])) {
-            throw new \InvalidArgumentException('Params Missing');
-        }
-
-        $this->getDatabaseConfigService()->updateSiteStatusBySiteId($params['site_id'], $params['site_status']);
-
-        return ['success' => true];
+        return null;
     }
 
     public function onCoopModeChange($params)
     {
+        $this->getLogger()->info('[onCoopModeChange]通知参数', $params);
         $new = $this->getS2B2CServiceApi()->getMe();
         if (!isset($new['coop_mode'])) {
             $this->getLogger()->error('[onCoopModeChange] 获取渠道商信息失败，停止处理[DATA]：'.json_encode($new));
@@ -58,6 +53,7 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
 
     public function onSupplierDomainUrlChange($params)
     {
+        $this->getLogger()->info('[onSupplierDomainUrlChange]通知参数', $params);
         $config = $this->getParameters();
         if (isset($config['parameters']['school_mode']['supplier']['domain'])) {
             $config['parameters']['school_mode']['supplier']['domain'] = $params['domain_url'];
@@ -72,6 +68,7 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
 
     public function onSupplierSiteLogoChange($params)
     {
+        $this->getLogger()->info('[onSupplierSiteLogoChange]通知参数', $params);
         $site = $this->getSettingService()->get('site');
 
         if (!empty($site['logo'])) {
@@ -91,6 +88,7 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
 
     public function onMerchantAuthNodeChange($params)
     {
+        $this->getLogger()->info('[onMerchantAuthNodeChange]通知参数', $params);
         $me = $this->getS2B2CServiceApi()->getMe();
         $authNode = isset($me['auth_node']) ? $me['auth_node'] : [];
         $this->checkAuthNode($authNode);
@@ -108,6 +106,7 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
 
     public function onResetMerchantBrand($params)
     {
+        $this->getLogger()->info('[onResetMerchantBrand]通知参数', $params);
         $this->resetSiteTitle();
         $this->resetSiteLogo();
         $this->resetSiteFavicon();
