@@ -1497,7 +1497,9 @@ class EduSohoUpgrade extends AbstractUpdater
             case 'essay':
                 $answerMode = 'rich_text';
                 $answer = $question['answer'];
-                $responsePoints = array('rich_text' => array());
+                $responsePoints = array(
+                    array('rich_text' => array())
+                );
                 break;
 
             case 'determine':
