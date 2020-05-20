@@ -226,7 +226,6 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         foreach ($products as $product) {
             if ('closed' != $product['syncStatus']) {
                 $this->getLogger()->info("[closeSupplierCourseProduct] 开始关闭采购商品#{$product['id']}");
-//                $this->getProductService()->updateProduct($product['id'], ['syncStatus' => 'closed']);
                 try {
                     if ('course' == $product['productType']) {
                         $this->getCourseDao()->update($product['localResourceId'], ['status' => 'closed']);
@@ -240,6 +239,36 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
                 }
                 $this->getLogger()->info("[closeSupplierCourseProduct] 关闭采购商品#{$product['id']}，操作成功");
             }
+        }
+    }
+
+    public function syncProductPrice($remoteResourceId, $priceFields)
+    {
+        $this->beginTransaction();
+        try {
+            $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+            $product = $this->getProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($s2b2cConfig['supplierId'], $remoteResourceId, 'course');
+            if (empty($product)) {
+                $this->createNewException(CourseSetException::SOURCE_COURSE_NOTFOUND());
+            }
+
+            $product = $this->getProductService()->updateProduct($product['id'], ArrayToolkit::parts($priceFields, ['suggestionPrice', 'cooperationPrice']));
+            $course = $this->getCourseService()->getCourse($product['localResourceId']);
+
+            $merchantSetting = $this->getSettingService()->get('merchant_setting');
+
+            $this->getLogger()->info('[syncProductPrice] $merchantSetting', $merchantSetting);
+
+            if (isset($s2b2cConfig['businessMode']) && S2B2CFacadeService::FRANCHISEE_MODE == $s2b2cConfig['businessMode']) {
+                $this->getCourseService()->updateCourseMarketing($course['id'], array_merge($course, ['originPrice' => $priceFields['suggestionPrice']]));
+            }
+            $this->commit();
+
+            return true;
+        } catch (\Exception $e) {
+            $this->rollback();
+            $this->getLogger()->error('[syncProductPriceError]'.$e->getMessage());
+            throw $e;
         }
     }
 

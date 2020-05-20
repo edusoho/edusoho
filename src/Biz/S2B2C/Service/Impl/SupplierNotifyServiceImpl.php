@@ -152,12 +152,12 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
 
     protected function resetSiteLogo()
     {
-        $setting = $this->getSettingService()->get('supplierSettings', ['domainUrl' => '']);
-        $parseUrl = parse_url($setting['domainUrl']);
-        $host = $parseUrl['host'];
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+        $parseUrl = parse_url($s2b2cConfig['supplierDomain']);
+        $host = empty($parseUrl['host']) ? $parseUrl['path'] : $parseUrl['host'];
 
         $logo = [
-            'logo' => sprintf('%s/logo/%s_logo.png', $setting['domainUrl'], $host),
+            'logo' => sprintf('%s/logo/%s_logo.png', $s2b2cConfig['supplierDomain'], $host),
         ];
 
         $site = $this->getSettingService()->get('site');
@@ -169,12 +169,12 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
 
     protected function resetSiteFavicon()
     {
-        $setting = $this->getSettingService()->get('supplierSettings', ['domainUrl' => '']);
-        $parseUrl = parse_url($setting['domainUrl']);
-        $host = $parseUrl['host'];
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+        $parseUrl = parse_url($s2b2cConfig['supplierDomain']);
+        $host = empty($parseUrl['host']) ? $parseUrl['path'] : $parseUrl['host'];
 
         $favicon = [
-            'favicon' => sprintf('%s/favicon/%s_favicon.ico', $setting['domainUrl'], $host),
+            'favicon' => sprintf('%s/favicon/%s_favicon.ico', $s2b2cConfig['supplierDomain'], $host),
         ];
         $site = $this->getSettingService()->get('site');
         $site = array_merge($site, $favicon);

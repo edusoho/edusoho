@@ -2,11 +2,13 @@
 
 namespace Biz\S2B2C\Service\Impl;
 
+use ApiBundle\Api\Resource\SyncProductNotify\NotifyEvent;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\S2B2C\Dao\SyncEventDao;
 use Biz\S2B2C\Service\CourseProductService;
 use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\SupplierProductNotifyService;
@@ -119,6 +121,40 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
         return ['status' => true];
     }
 
+    public function syncSupplierProductEvent($notifyEvent)
+    {
+        $this->getLogger()->info('[syncSupplierProductEvent] 同步supplier端信息', $notifyEvent->getData());
+        $handle = [
+            'modifyPrice' => 'modifyPriceEvent',
+        ];
+
+        if (!array_key_exists($notifyEvent->getEvent(), $handle)) {
+            return false;
+        }
+
+        return $this->{$handle[$notifyEvent->getEvent()]}($notifyEvent);
+    }
+
+    /**
+     * @param $notifyEvent
+     *
+     * @return bool
+     */
+    protected function modifyPriceEvent(NotifyEvent $notifyEvent)
+    {
+        $changeData = $notifyEvent->getData();
+
+        $this->getCourseProductService()->syncProductPrice($notifyEvent->getProductId(), ArrayToolkit::parts($changeData['new'], ['suggestionPrice', 'cooperationPrice']));
+
+        $this->getSyncEventDao()->create([
+            'productId' => $notifyEvent->getProductId(),
+            'event' => $notifyEvent->getEvent(),
+            'data' => $notifyEvent->getData(),
+        ]);
+
+        return true;
+    }
+
     /**
      * @return ProductService
      */
@@ -165,5 +201,13 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
     protected function getLogger()
     {
         return $this->biz->offsetGet('s2b2c.merchant.logger');
+    }
+
+    /**
+     * @return SyncEventDao
+     */
+    protected function getSyncEventDao()
+    {
+        return $this->biz->dao('S2B2C:SyncEventDao');
     }
 }

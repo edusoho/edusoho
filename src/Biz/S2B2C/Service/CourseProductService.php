@@ -17,4 +17,6 @@ interface CourseProductService
     public function checkCourseStatus($localCourseId);
 
     public function checkCourseSetStatus($localCourseSetId);
+
+    public function syncProductPrice($remoteResourceId, $priceFields);
 }
