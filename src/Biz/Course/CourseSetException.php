@@ -26,7 +26,9 @@ class CourseSetException extends AbstractException
 
     const SOURCE_COURSE_CLOSED = 4031780;
 
-    public $messages = array(
+    const SOURCE_COURSE_NOTFOUND = 4041781;
+
+    public $messages = [
         4041701 => 'exception.courseset.not_found',
         4031702 => 'exception.courseset.forbidden_manage',
         5001703 => 'exception.courseset.sub_courseset_exist',
@@ -35,7 +37,7 @@ class CourseSetException extends AbstractException
         5001706 => 'exception.courseset.unpublished',
         5001707 => 'exception.courseset.no_course',
         5001708 => 'exception.courseset.unlock_failed',
-
         4031780 => 'exception.courseset.source_course_closed',
-    );
+        4041781 => 'exception.courseset.source_course_not_found',
+    ];
 }
