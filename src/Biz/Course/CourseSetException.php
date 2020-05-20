@@ -28,6 +28,8 @@ class CourseSetException extends AbstractException
 
     const SOURCE_COURSE_NOTFOUND = 4041781;
 
+    const FORBIDDEN_CREATE = 4031703;
+
     public $messages = [
         4041701 => 'exception.courseset.not_found',
         4031702 => 'exception.courseset.forbidden_manage',
@@ -39,5 +41,6 @@ class CourseSetException extends AbstractException
         5001708 => 'exception.courseset.unlock_failed',
         4031780 => 'exception.courseset.source_course_closed',
         4041781 => 'exception.courseset.source_course_not_found',
+        4031703 => 'exception.courseset.forbidden_create',
     ];
 }

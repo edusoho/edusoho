@@ -11,6 +11,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Biz\S2B2C\Service\CourseProductService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,6 +20,10 @@ class CourseSetManageController extends BaseController
 {
     public function createAction(Request $request)
     {
+        if (!$this->canCreateCourse()) {
+            return $this->createMessageResponse('info', $this->trans('exception.courseset.forbidden_create'));
+        }
+
         $visibleCourseTypes = $this->getCourseTypes();
 
         if ($request->isMethod('POST')) {
@@ -410,6 +415,21 @@ class CourseSetManageController extends BaseController
     protected function getCourseTypes()
     {
         return $this->get('web.twig.course_extension')->getCourseTypes();
+    }
+
+    protected function canCreateCourse()
+    {
+        $behaviourPermissions = $this->getS2b2cFacedService()->getBehaviourPermissions();
+
+        return isset($behaviourPermissions['canAddCourse']) ? $behaviourPermissions['canAddCourse'] : true;
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2b2cFacedService()
+    {
+        return $this->createService('S2B2C:S2B2CFacadeService');
     }
 
     /**
