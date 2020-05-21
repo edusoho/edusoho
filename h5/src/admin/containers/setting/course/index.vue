@@ -6,6 +6,7 @@
         :feedback="false"
         :type-list="type"
         show-mode="admin"
+        :uiStyle="uiStyle"
         @fetchCourse="fetchCourse"/>
     </div>
     <div slot="setting">
@@ -173,6 +174,16 @@ export default {
         return this.active
       },
       set() {}
+    },
+    uiStyle:{
+     get() {
+        if (this.$route.name === 'miniprogramSetting'
+        || this.$route.query.from === 'miniprogramSetting') {
+          return 'old'
+        }else{
+          return "new"
+        }
+      },
     },
     isIncomplete: {
       get() {
