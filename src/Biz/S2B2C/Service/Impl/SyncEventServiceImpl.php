@@ -6,6 +6,8 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Course\Service\CourseService;
 use Biz\S2B2C\Dao\SyncEventDao;
+use Biz\S2B2C\Service\ProductService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\S2B2C\Service\SyncEventService;
 
 class SyncEventServiceImpl extends BaseService implements SyncEventService
@@ -28,19 +30,33 @@ class SyncEventServiceImpl extends BaseService implements SyncEventService
         return ArrayToolkit::index($syncEvents, 'event');
     }
 
+    /**
+     * @param $courseSetIds
+     * @return array
+     * Function From S2B2C：方法设计存在问题，返回内容和业务不匹配
+     */
     public function findNotifyByCourseSetIds($courseSetIds)
     {
+        $s2b2cConf = $this->getS2B2CFacadeService()->getS2B2CConfig();
+        if (!$s2b2cConf['supplierId']) {
+            return [];
+        }
         $courses = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
-        $productIds = ArrayToolkit::column($courses, 'sourceCourseId');
+        $products = ArrayToolkit::index($this->getProductService()->findProductsBySupplierIdAndProductTypeAndLocalResourceIds(
+            $s2b2cConf['supplierId'],
+            'course',
+            ArrayToolkit::column($courses, 'id')
+        ), 'remoteResourceId');
+        $remoteResourceIds = ArrayToolkit::column($products, 'remoteResourceId');
 
-        $notifies = $this->searchSyncEvent(['productIds' => $productIds, 'events' => [SyncEventService::EVENT_MODIFY_PRICE, 'isConfirm' => 0]], ['createdTime' => 'asc'], 0, PHP_INT_MAX);
-        $notifyProductIds = ArrayToolkit::column($notifies, 'productId');
+        $notifies = $this->searchSyncEvent(['productIds' => $remoteResourceIds, 'events' => [SyncEventService::EVENT_MODIFY_PRICE, 'isConfirm' => 0]], ['createdTime' => 'asc'], 0, PHP_INT_MAX);
+        foreach ($notifies as &$notify) {
+            $course = empty($products[$notify['productId']]) ? null : $products[$notify['productId']]['localResourceId'];
+            $notify['courseId'] = empty($course) ? null : $course['id'];
+            $notify['courseSetId'] = empty($course) ? null : $course['courseSetId'];
+        }
 
-        $courses = array_filter($courses, function ($course) use ($notifyProductIds) {
-            return in_array($course['sourceCourseId'], $notifyProductIds);
-        });
-
-        return ArrayToolkit::index($courses, 'courseSetId');
+        return $notifies;
     }
 
     /**
@@ -57,5 +73,21 @@ class SyncEventServiceImpl extends BaseService implements SyncEventService
     protected function getSyncEventDao()
     {
         return $this->biz->dao('S2B2C:SyncEventDao');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('S2B2C:ProductService');
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->createService('S2B2C:S2B2CFacadeService');
     }
 }

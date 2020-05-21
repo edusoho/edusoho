@@ -63,7 +63,7 @@ class CourseSetController extends BaseController
         /**
          * S2B2C
          */
-        $notifyCourseSets = $this->getSyncEventService()->findNotifyByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
+        $notifies = ArrayToolkit::index($this->getSyncEventService()->findNotifyByCourseSetIds(ArrayToolkit::column($courseSets, 'id')), 'courseSetId');
 
         return $this->render(
             'admin-v2/teach/course-set/index.html.twig',
@@ -77,7 +77,7 @@ class CourseSetController extends BaseController
                 'tag' => empty($conditions['tagId']) ? [] : $this->getTagService()->getTag($conditions['tagId']),
                 'courseSetStatusNum' => $courseSetStatusNum,
                 'coursesCount' => $coursesCount,
-                'notifyCourseSets' => $notifyCourseSets,
+                'notifies' => $notifies,
             ]
         );
     }
