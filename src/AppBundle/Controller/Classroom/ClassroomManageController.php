@@ -8,7 +8,7 @@ use AppBundle\Common\TimeMachine;
 use Biz\Activity\ActivityException;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\LearningDataAnalysisService;
-use Biz\Common\CommonException;
+use Biz\Course\Service\CourseSetService;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Order\Service\OrderService;
@@ -17,7 +17,6 @@ use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
 use Biz\Testpaper\TestpaperException;
 use Biz\Thread\Service\ThreadService;
-use AppBundle\Common\ClassroomToolkit;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
 use Biz\Task\Service\TaskResultService;
@@ -873,6 +872,33 @@ class ClassroomManageController extends BaseController
         return $this->createJsonResponse(array('success' => true));
     }
 
+    public function deleteCourseSetAction(Request $request, $classroomId, $courseSetId, $courseId)
+    {
+        $currentUser = $this->getUser();
+
+        if (!$currentUser->hasPermission('admin_v2_course_set_delete')) {
+            $this->createNewException(UserException::PERMISSION_DENIED());
+        }
+
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        if ('draft' == $courseSet['status']) {
+            $this->getCourseSetService()->deleteCourseSet($courseSetId);
+
+            return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
+        }
+
+        $isCheckPasswordLifeTime = $request->getSession()->get('checkPassword');
+        if (!$isCheckPasswordLifeTime || $isCheckPasswordLifeTime < time()) {
+            return $this->render('check-password/check-password-modal.twig', array('jsonp' => $request->query->get('jsonp')));
+        }
+
+        $this->getClassroomService()->deleteClassroomCourses($classroomId, array($courseId));
+
+        $this->getCourseSetService()->deleteCourseSet($courseId);
+
+        return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
+    }
+
     public function coursesAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
@@ -1236,6 +1262,14 @@ class ClassroomManageController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     /**
