@@ -343,7 +343,7 @@ class TaskController extends BaseController
             array(
                 'result' => $result,
                 'lastTime' => time(),
-                'event' => 'start',
+                'event' => 'start'
             )
         );
     }
