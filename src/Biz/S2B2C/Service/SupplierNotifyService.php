@@ -15,4 +15,6 @@ interface SupplierNotifyService
     public function onSupplierSiteLogoChange($params);
 
     public function onMerchantAuthNodeChange($params);
+
+    public function onResetMerchantBrand($params);
 }

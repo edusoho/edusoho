@@ -17,7 +17,8 @@ class SupplierNotify extends AbstractResource
         'merchant_domain_url_change' => 'onMerchantDomainUrlChange',
         'supplier_domain_url_change' => 'onSupplierDomainUrlChange',
         'site_logo_change' => 'onSupplierSiteLogoChange',
-        'auth_node_change' => 'onMerchantAuthNodeChange', // setting => merchant_setting => auth_node (array)
+        'auth_node_change' => 'onMerchantAuthNodeChange', // setting => s2b2c => auth_node (array)
+        'reset_brand' => 'onResetMerchantBrand',
     ];
 
     /**

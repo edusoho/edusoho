@@ -5,6 +5,9 @@ namespace Biz\S2B2C\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\Course\CourseException;
+use Biz\Course\CourseSetException;
+use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -157,7 +160,8 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             $this->biz['s2b2c.course_product_sync']->updateToLastedVersion($sourceCourse, ['syncCourseId' => $courseId]);
 
             $syncCourse = $this->getProductService()->updateProduct($product['id'], ['localVersion' => $sourceCourse['editVersion'], 'changelog' => []]);
-            $this->getProductService()->updateProduct($courseSetProduct['id'], ['localVersion' => $sourceCourse['editVersion']]);
+            //课程没有版本号，只有计划有，所以升级后版本号归1默认值
+            $this->getProductService()->updateProduct($courseSetProduct['id'], ['localVersion' => 1, 'remoteVersion' => 1]);
             $this->getLogger()->info("[syncCourseProduct] 更新课程到最新 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 成功", ['courseId' => $course['id']]);
             $this->getLogService()->info('course', 'update', "(#{$courseId})《{$course['courseSetTitle']}》更新版本到最新成功,版本变动：V{$product['localVersion']}->V{$sourceCourse['editVersion']}", ['userId' => $this->getCurrentUser()->getId()]);
             $this->commit();
@@ -199,14 +203,73 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         //更新Changelog,标记有新版本生成
         $productVersions = $this->getProductService()->generateVersionChangeLogs($product['localVersion'], $productVersions);
         $hasNewVersion = $this->getCacheService()->get('s2b2c.hasNewVersion') ?: [];
-        if (!empty($hasNewVersion['courseSet'])) {
+        if (empty($hasNewVersion['courseSet'])) {
             $this->getCacheService()->set('s2b2c.hasNewVersion', array_merge($hasNewVersion, ['courseSet' => 1]));
         }
+        //课程当前没有Version,所以本地版本+1
+        $this->getProductService()->updateProduct($courseSetProduct['id'], [
+            'remoteVersion' => $courseSetProduct['localVersion'] + 1,
+        ]);
 
         return $this->getProductService()->updateProduct($product['id'], [
             'remoteVersion' => $productDetail['course']['editVersion'],
             'changelog' => $productVersions,
         ]);
+    }
+
+    /**
+     * @param $products
+     * 下架对应商品
+     */
+    public function closeProducts($products)
+    {
+        foreach ($products as $product) {
+            if ('closed' != $product['syncStatus']) {
+                $this->getLogger()->info("[closeSupplierCourseProduct] 开始关闭采购商品#{$product['id']}");
+                try {
+                    if ('course' == $product['productType']) {
+                        $this->getCourseDao()->update($product['localResourceId'], ['status' => 'closed']);
+                    }
+
+                    if ('course_set' == $product['productType']) {
+                        $this->getCourseSetDao()->update($product['localResourceId'], ['status' => 'closed']);
+                    }
+                } catch (\Exception $e) {
+                    $this->getLogger()->info("[closeSupplierCourseProduct] 关闭具体商品类型{$product['productType']}#{$product['localResourceId']}，操作出现问题，忽略");
+                }
+                $this->getLogger()->info("[closeSupplierCourseProduct] 关闭采购商品#{$product['id']}，操作成功");
+            }
+        }
+    }
+
+    public function syncProductPrice($remoteResourceId, $priceFields)
+    {
+        $this->beginTransaction();
+        try {
+            $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+            $product = $this->getProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($s2b2cConfig['supplierId'], $remoteResourceId, 'course');
+            if (empty($product)) {
+                $this->createNewException(CourseSetException::SOURCE_COURSE_NOTFOUND());
+            }
+
+            $product = $this->getProductService()->updateProduct($product['id'], ArrayToolkit::parts($priceFields, ['suggestionPrice', 'cooperationPrice']));
+            $course = $this->getCourseService()->getCourse($product['localResourceId']);
+
+            $merchantSetting = $this->getSettingService()->get('merchant_setting');
+
+            $this->getLogger()->info('[syncProductPrice] $merchantSetting', $merchantSetting);
+
+            if (isset($s2b2cConfig['businessMode']) && S2B2CFacadeService::FRANCHISEE_MODE == $s2b2cConfig['businessMode']) {
+                $this->getCourseService()->updateCourseMarketing($course['id'], array_merge($course, ['originPrice' => $priceFields['suggestionPrice']]));
+            }
+            $this->commit();
+
+            return true;
+        } catch (\Exception $e) {
+            $this->rollback();
+            $this->getLogger()->error('[syncProductPriceError]'.$e->getMessage());
+            throw $e;
+        }
     }
 
     /**
@@ -271,6 +334,57 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         }
 
         return $sourceCourse;
+    }
+
+    /**
+     * @param $localCourseId
+     *
+     * @throws \Exception
+     *                    检查计划是否有操作权限
+     */
+    public function checkCourseStatus($localCourseId)
+    {
+        $this->checkMerchantStatus();
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+        $courseProduct = $this->getProductService()->getProductBySupplierIdAndLocalResourceIdAndType($s2b2cConfig['supplierId'], $localCourseId, 'course');
+        $sourceCourseSet = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getSupplierProductDetail($courseProduct['remoteProductId']);
+        if (empty($sourceCourseSet['id']) || isset($sourceCourseSet['error'])) {
+            $this->createNewException(CourseSetException::SOURCE_COURSE_NOTFOUND());
+        }
+        if ('published' != $sourceCourseSet['course']['status']) {
+            $this->createNewException(CourseException::SOURCE_COURSE_CLOSED());
+        }
+    }
+
+    /**
+     * @param $localCourseSetId
+     *
+     * @throws \Exception
+     *                    检查课程是否有操作权限
+     */
+    public function checkCourseSetStatus($localCourseSetId)
+    {
+        $this->checkMerchantStatus();
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+        $courseSetProduct = $this->getProductService()->getProductBySupplierIdAndLocalResourceIdAndType($s2b2cConfig['supplierId'], $localCourseSetId, 'course_set');
+        $sourceCourseSet = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getSupplierCourseSetProductDetail($courseSetProduct['remoteResourceId']);
+        if (!empty($sourceCourseSet['error']) || empty($sourceCourseSet['id'])) {
+            $this->createNewException(CourseSetException::SOURCE_COURSE_NOTFOUND());
+        }
+        if ('published' != $sourceCourseSet['status']) {
+            $this->createNewException(CourseSetException::SOURCE_COURSE_CLOSED());
+        }
+    }
+
+    protected function checkMerchantStatus()
+    {
+        $merchant = $this->getS2B2CFacadeService()->getMe();
+        if (!empty($merchant['error']) || empty($merchant['status'])) {
+            $this->createNewException(CourseSetException::SOURCE_COURSE_NOTFOUND());
+        }
+        if ('cooperation' != $merchant['coop_status']) {
+            $this->createNewException(CourseSetException::SOURCE_COURSE_CLOSED());
+        }
     }
 
     /**
@@ -343,5 +457,14 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
     protected function getCacheService()
     {
         return $this->createService('System:CacheService');
+    }
+
+    /**
+     * @return CourseDao
+     *                   不推荐直接调用CourseDao
+     */
+    protected function getCourseDao()
+    {
+        return $this->createDao('Course:CourseDao');
     }
 }

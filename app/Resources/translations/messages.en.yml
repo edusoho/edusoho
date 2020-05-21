@@ -8721,6 +8721,7 @@ exception.courseset.published_course_required: When publishing a course, please 
 exception.courseset.unpublished: Course not published
 exception.courseset.no_course: There are no teaching plans available in the course
 exception.courseset.unlock_failed: Unlocking course failed
+exception.courseset.forbidden_create: No right to create
 exception.classroom.member_not_in_classroom: Student not in classroom
 exception.classroom.not_found: The classroom doesn't exist
 exception.classroom.forbidden_manage_classroom: Forbidden manage classroom
@@ -9650,3 +9651,4 @@ s2b2c.resource.all_choose: Choose All
 s2b2c.resource.return_market: Return
 s2b2c.resource.has_new_notice_hint: 您采购的内容有更新
 s2b2c.resource.no_fee_notice_hint: 您与%supplierName%合作的采购账户余额还剩%balance%，请及时联系%supplierName%进行充值
+s2b2c.resource.sync.prev_price.notify: 上个版本价格为

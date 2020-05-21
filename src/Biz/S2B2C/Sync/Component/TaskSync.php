@@ -23,15 +23,15 @@ class TaskSync extends AbstractEntitySync
      * $source = $originalCourse
      * $config = $newCourse
      */
-    protected function syncEntity($source, $config = array())
+    protected function syncEntity($source, $config = [])
     {
-        $this->logger->info('[syncEntity] 开始哦同步章节');
+        $this->logger->info('[syncEntity] 开始同步章节');
         $chapterMap = $this->doSyncChapters($source, $config);
         $this->logger->info('[syncEntity] 章节同步完成');
 
         $tasks = $source['taskList'];
         if (empty($tasks)) {
-            return array();
+            return [];
         }
         $this->logger->info('[syncEntity] 开始同步课程上传资源');
         $newUploadFiles = $this->doSyncUploadFiles($source, $config);
@@ -55,7 +55,7 @@ class TaskSync extends AbstractEntitySync
         //sort tasks
         $newCourse = $config['newCourse'];
         $newCourseSetId = $newCourse['courseSetId'];
-        $newTasks = array();
+        $newTasks = [];
         $user = $this->biz['user'];
         foreach ($tasks as $task) {
             $newTask = $this->filterTaskFields($task);
@@ -106,7 +106,7 @@ class TaskSync extends AbstractEntitySync
         return $activitySync->sync($source, $config);
     }
 
-    protected function updateEntityToLastedVersion($source, $config = array())
+    protected function updateEntityToLastedVersion($source, $config = [])
     {
         $this->logger->info('[updateEntityToLastedVersion] 开始更新课程章节数据');
         $chapterMap = $this->doUpdateChapters($source, $config);
@@ -114,10 +114,10 @@ class TaskSync extends AbstractEntitySync
         $newCourse = $config['newCourse'];
 
         $tasks = $source['taskList'];
-        $exitTasks = $this->getTaskDao()->search(array(
+        $exitTasks = $this->getTaskDao()->search([
             'fromCourseSetId' => $newCourse['courseSetId'],
             'courseId' => $newCourse['id'],
-        ), array(), 0, PHP_INT_MAX);
+        ], [], 0, PHP_INT_MAX);
         $exitTasks = ArrayToolkit::index($exitTasks, 'syncId');
         if (empty($tasks)) {
             $this->logger->info('[updateEntityToLastedVersion] 新版本中不存在任务，开始对现有任务进行删除');
@@ -126,7 +126,7 @@ class TaskSync extends AbstractEntitySync
             }
             $this->logger->info('[updateEntityToLastedVersion] 现有任务删除成功，更新版本完成');
 
-            return array();
+            return [];
         }
         $newUploadFiles = $this->doUpdateUploadFiles($source, $config);
 
@@ -146,7 +146,7 @@ class TaskSync extends AbstractEntitySync
 
         $this->logger->info('[updateEntityToLastedVersion] 优先更新已存在的课时任务信息,tasks');
         $user = $this->biz['user'];
-        $newTasks = array();
+        $newTasks = [];
         foreach ($tasks as $task) {
             $newTask = $this->filterTaskFields($task);
             $newTask['courseId'] = $newCourse['id'];
@@ -175,11 +175,11 @@ class TaskSync extends AbstractEntitySync
 
         if (!empty($exitTasks) && !empty($needDeleteTaskSyncIds)) {
             $this->logger->info('[updateEntityToLastedVersion] 开始删除已经不存在的课时任务,tasks');
-            $needDeleteTasks = $this->getTaskDao()->search(array(
+            $needDeleteTasks = $this->getTaskDao()->search([
                 'fromCourseSetId' => $newCourse['courseSetId'],
                 'courseId' => $newCourse['id'],
                 'syncIds' => $needDeleteTaskSyncIds,
-            ), array(), 0, PHP_INT_MAX);
+            ], [], 0, PHP_INT_MAX);
 
             foreach ($needDeleteTasks as $needDeleteTask) {
                 $this->getTaskService()->deleteTask($needDeleteTask['id']);
@@ -221,7 +221,7 @@ class TaskSync extends AbstractEntitySync
 
     protected function getFields()
     {
-        return array(
+        return [
             'seq',
             'activityId',
             'categoryId',
@@ -237,7 +237,7 @@ class TaskSync extends AbstractEntitySync
             'status',
             'length',
             'isLesson',
-        );
+        ];
     }
 
     private function filterTaskFields($task)

@@ -11,4 +11,12 @@ interface CourseProductService
     public function setProductHasNewVersion($productType, $remoteResourceId);
 
     public function deleteProductsByCourseSet($courseSet);
+
+    public function closeProducts($products);
+
+    public function checkCourseStatus($localCourseId);
+
+    public function checkCourseSetStatus($localCourseSetId);
+
+    public function syncProductPrice($remoteResourceId, $priceFields);
 }

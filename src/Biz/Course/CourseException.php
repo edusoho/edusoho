@@ -64,7 +64,11 @@ class CourseException extends AbstractException
 
     const EXPIRYDAYS_INVALID = 5001628;
 
-    public $messages = array(
+    const SOURCE_COURSE_CLOSED_JOIN_DENIED = 4031680;
+
+    const SOURCE_COURSE_CLOSED = 4031681;
+
+    public $messages = [
         4041601 => 'exception.course.not_found',
         4031602 => 'exception.course.forbidden_take_course',
         5001603 => 'exception.course.learnmode_invalid',
@@ -93,5 +97,7 @@ class CourseException extends AbstractException
         4031626 => 'exception.course.search_order_closed',
         4031627 => 'exception.course.forbidden_learn_course',
         5001628 => 'exception.course.expirydays_invalid',
-    );
+        4031680 => 'exception.course.source_course_closed_join_denied',
+        4031681 => 'exception.course.source_course_closed',
+    ];
 }

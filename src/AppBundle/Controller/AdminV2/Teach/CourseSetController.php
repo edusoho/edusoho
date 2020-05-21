@@ -10,7 +10,6 @@ use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Common\CommonException;
-use Biz\Course\CourseSetException;
 use Biz\Course\Service\CourseDeleteService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -154,12 +153,9 @@ class CourseSetController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($id);
 
-        if (!empty($courseSet['sourceCourseSetId'])) {
-            $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
-            foreach ($courses as $course) {
-                $this->createNewException(CourseSetException::SOURCE_COURSE_CLOSED());
-//                $this->getProductService()->checkSourceProductStatus($course['id']);
-            }
+        //检查课程状态
+        if ('supplier' == $courseSet['platform']) {
+            $this->getCourseProductService()->checkCourseSetStatus($courseSet['id']);
         }
 
         if ('live' == $courseSet['type']) {

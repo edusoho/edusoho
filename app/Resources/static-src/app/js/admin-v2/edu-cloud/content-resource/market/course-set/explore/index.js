@@ -1,12 +1,5 @@
 import notify from 'common/notify';
 
-$('#search').on('click', function () {
-  let title = 'title=' + $('#title').val();
-  let param = title + '&' + $('#urlParameter').val();
-  let url = $(this).attr('data-url') + '?' + param;
-  getProductList(url);
-});
-
 // 分页
 $('div[data-role="market"]').on('click', 'li', function () {
   let url = $(this).data('url');
