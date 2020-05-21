@@ -49,11 +49,11 @@ const getDisplayStyle = (data, listObj) => {
     }
   };
 };
-const getNewDisplayStyle = (data, listObj, setting) => {
+const getNewDisplayStyle = (data, listObj, platform) => {
   const dataPrice = Number(data.price2.amount);
   const primaryColor = {
-    appSetting: '#20B573',
-    h5Setting: '#408FFB'
+    app: '#20B573',
+    h5: '#408FFB'
   };
   let price;
   if (dataPrice > 0 && data.price2.currency === 'coin') {
@@ -61,7 +61,7 @@ const getNewDisplayStyle = (data, listObj, setting) => {
   } else if (dataPrice > 0 && data.price2.currency === 'RMB') {
     price = `<span style="color: #ff5353">¥ ${data.price2.amount}</span>`;
   } else {
-    price = `<span style="color:${primaryColor[setting]}">免费</span>`;
+    price = `<span style="color:${primaryColor[platform]}">免费</span>`;
   }
 
   if (listObj.typeList === 'classroom_list') {
@@ -102,12 +102,12 @@ const getNewDisplayStyle = (data, listObj, setting) => {
     }
   };
 };
-const courseListData = (data, listObj, setting = '') => {
+const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
   // h5和app用了新版ui,小程序还是用旧版ui
   switch (listObj.type) {
     case 'price':
-      if (setting !== 'miniprogramSetting') {
-        return getNewDisplayStyle(data, listObj, setting);
+      if (uiStyle !== 'old') {
+        return getNewDisplayStyle(data, listObj, platform);
       }
       return getDisplayStyle(data, listObj);
 
