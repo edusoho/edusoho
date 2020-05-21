@@ -7214,8 +7214,10 @@ admin.user_auth.privacy_policy_settings: 隐私政策设置
 admin.user_auth.privacy_policy_settings.Enable: 是否开启隐私政策
 admin.user_auth.privacy_policy_settings.open: 开启
 admin.user_auth.privacy_policy_settings.closed: 关闭
-admin.user_auth.privacy_policy_settings.Enable.help_block: 开启后用户注册时必须同意隐私政策才能注册
+admin.user_auth.privacy_policy_settings.Enable.help_block: 开启后用户注册时必须同意隐私政策才能注册。
 admin.user_auth.privacy_policy_settings.details: 隐私政策内容
+admin.user_auth.privacy_policy_settings.tooltip: >
+  <h5>隐私政策配置仅对有独立APP的网校生效，使用阔知学堂APP的网校的隐私政策需阔知统一配置。</h5> 
 admin.user_auth.Name_setting: 名称设置
 admin.user_auth.Name_setting.user_name: 用户名称
 admin.user_auth.Name_setting.help_block: 注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
@@ -8538,6 +8540,7 @@ message_response.not_student_cannot_join_live.message: 您不是课程学员，�
 message_response.mass_title_and_text_cannot_empty: 群发标题或内容不能为空
 message_response.only_admin_can_create_class.message: 只允许管理员创建班级!
 message_response.upload_pic_format_error.message: 上传图片格式错误，请上传jpg, gif, png格式的文件。
+message_response.task_locked.message: 请先学习完已解锁的课程！
 
 classroom.manage.side_nav.setting: %classroom%设置
 classroom.manage.side_nav.manage: %classroom%管理
@@ -10799,6 +10802,7 @@ task.show_optional_tips: 显示选修课时
 admin_v2.user.manage.change_nickname.heading_title: 修改用户名
 
 course.plan_task.activity_manage.discuss.tips: 讨论任务在PC和APP中使用，暂不支持在微网校和小程序中使用!
+<<<<<<< HEAD
 
 testpaper.result.unpassed: '很遗憾，您未通过本次考试'
 testpaper.result.passed: '恭喜您已通过本次考试!'

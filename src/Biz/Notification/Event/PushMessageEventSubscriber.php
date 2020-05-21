@@ -1245,7 +1245,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             if ('testpaper' == $activity['mediaType']) {
                 $testType = '试卷';
             } elseif ('homework' == $activity['mediaType']) {
-                $testType = '作业';
+                return;
             }
 
             $from = array(
