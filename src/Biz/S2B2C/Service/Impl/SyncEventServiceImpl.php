@@ -32,8 +32,9 @@ class SyncEventServiceImpl extends BaseService implements SyncEventService
 
     /**
      * @param $courseSetIds
+     *
      * @return array
-     * Function From S2B2C：方法设计存在问题，返回内容和业务不匹配
+     *               Function From S2B2C：方法设计存在问题，返回内容和业务不匹配
      */
     public function findNotifyByCourseSetIds($courseSetIds)
     {
