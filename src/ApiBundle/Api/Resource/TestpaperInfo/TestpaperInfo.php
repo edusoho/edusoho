@@ -104,7 +104,6 @@ class TestpaperInfo extends AbstractResource
         return $task;
     }
 
-
     /**
      * @return TaskService
      */
