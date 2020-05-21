@@ -9,7 +9,7 @@ use QiQiuYun\SDK\HttpClient\ClientInterface;
 class S2B2CService extends BaseService
 {
     //@todo 此处测试站，后改为正式站
-    protected $defaultHost = 's2b2c-service.cloud-test.edusoho.cn';
+    protected $defaultHost = 's2b2c-service.qiqiuyun.net';
 
     public function __construct(Auth $auth, array $options = array(), LoggerInterface $logger = null, ClientInterface $client = null)
     {
