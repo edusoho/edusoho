@@ -335,7 +335,7 @@ class TaskController extends BaseController
             'start',
             array(
                 'taskId' => $id,
-                'desc' => 'restart'
+                'desc' => 'restart',
             )
         );
 
@@ -343,7 +343,7 @@ class TaskController extends BaseController
             array(
                 'result' => $result,
                 'lastTime' => time(),
-                'event' => 'start'
+                'event' => 'start',
             )
         );
     }
