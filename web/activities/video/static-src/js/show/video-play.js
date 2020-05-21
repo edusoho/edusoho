@@ -14,6 +14,8 @@ export default class VideoPlay {
   }
 
   play() {
+    this['activity_id_' + this.recorder.activityId + '_finish'] = false;
+
     if ($('#local-video-player').length) {
       this._playerLocalVideo();
     }else if ($('#swf-player').length) {
@@ -96,16 +98,27 @@ export default class VideoPlay {
     });
 
     messenger.on('timechange', (msg) => {
-      console.log('timechange');
-      console.log(msg);
+      if (this['activity_id_' + this.recorder.activityId + '_finish'] && this.player.playing){
+        this._onRestartLearnTask(msg);
+      }
       this.player.currentTime = msg.currentTime;
     });
   }
 
   _onFinishLearnTask(msg) {
+    this['activity_id_' + this.recorder.activityId + '_finish'] = true;
     this.emitter.emit('finish', { data: msg }).then(() => {
-      console.log('finish send');
-      store.set('activity_id_' + this.record.activityId + '_playing_counter', 0);
+      clearInterval(this.intervalId);
+      store.set('activity_id_' + this.recorder.activityId + '_playing_counter', 0);
+    }).catch((error) => {
+      console.error(error);
+    });
+  }
+
+  _onRestartLearnTask(msg) {
+    this['activity_id_' + this.recorder.activityId + '_finish'] = false;
+    this.record();
+    this.emitter.emit('restart', true).then(() => {
     }).catch((error) => {
       console.error(error);
     });

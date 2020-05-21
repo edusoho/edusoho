@@ -328,6 +328,26 @@ class TaskController extends BaseController
         return $this->createJsonResponse($toolbars);
     }
 
+    protected function reStartTask($id)
+    {
+        $result = $this->getTaskService()->trigger(
+            $id,
+            'start',
+            array(
+                'taskId' => $id,
+                'desc' => 'restart'
+            )
+        );
+
+        return $this->createJsonResponse(
+            array(
+                'result' => $result,
+                'lastTime' => time(),
+                'event' => 'start',
+            )
+        );
+    }
+
     public function triggerAction(Request $request, $courseId, $id)
     {
         $eventName = 'doing';
@@ -335,6 +355,10 @@ class TaskController extends BaseController
         $data['taskId'] = $id;
 
         $this->getCourseService()->tryTakeCourse($courseId);
+
+        if (!empty($data['events']['restart'])) {
+            return $this->reStartTask($id);
+        }
 
         if (!empty($data['events']) || $this->validTaskLearnStat($request, $id)) {
             $result = $this->getTaskService()->trigger($id, $eventName, $data);
