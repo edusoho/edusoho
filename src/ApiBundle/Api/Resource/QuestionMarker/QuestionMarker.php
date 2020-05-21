@@ -36,11 +36,11 @@ class QuestionMarker extends AbstractResource
         foreach ($markers as &$marker) {
             foreach ($marker['questionMarkers'] as &$questionMarker) {
                 if (!empty($results[$marker['id']][$questionMarker['id']])) {
-                    $result = end($results[$marker['id']][$questionMarker['id']]);
+                    $questionResult = end($results[$marker['id']][$questionMarker['id']]);
                     $questionMarker['item_report'] = array(
                         'item_id' => $questionMarker['item']['id'],
                         'question_reports' => array(
-                            array('question_id' => $questionMarker['item']['questions'][0]['id'], 'status' => $result['status'], 'response' => $result['answer']),
+                            array('question_id' => $questionMarker['item']['questions'][0]['id'], 'status' => $questionResult['status'], 'response' => $questionResult['answer']),
                         ),
                     );
                 } else {
