@@ -317,8 +317,6 @@ export default {
       const defaultString = JSON.stringify(data.default); // 需要一个深拷贝对象
       let defaultCopied = JSON.parse(defaultString);
 
-      //app默认两行展示，这里要手动修改
-      defaultCopied=this.formateAppDisplay(data.default.type,defaultCopied);
       //oldIndex用于组件的key,减少组件重新创建
       defaultCopied.oldIndex=this.moduleLength;
 
@@ -336,7 +334,6 @@ export default {
       }).then(res => {
         //app默认两行展示，这里要手动修改
         Object.keys(res).forEach((element ,index)=> {
-          res[element]=this.formateAppDisplay(res[element].type,res[element]);
           res[element].oldIndex=index;        //oldIndex用于组件的key,减少组件重新创建
         });
        this.moduleLength=Object.keys(res).length-1;
@@ -349,13 +346,6 @@ export default {
           type: 'error'
         });
       });
-    },
-    //处理app布局方式
-    formateAppDisplay(type,item){
-      if((type==='course_list' || type==='classroom_list') && this.portal==="apps"){
-          item.data.displayStyle='distichous'
-      }
-      return item;
     },
     reset() {
       // 删除草稿配置配置
@@ -441,7 +431,7 @@ export default {
         }
       }
       this.incomplete = false;
-    },
+    }
   }
 }
 

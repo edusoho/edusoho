@@ -20,7 +20,7 @@
         </setting-cell>
 
         <!-- 排列方式： -->
-        <setting-cell v-if="portal==='apps'" title="排列方式：" >
+        <setting-cell v-if="portal!=='miniprogram'" title="排列方式：" >
           <el-select v-model="displayStyle" placeholder="排列方式" size="mini">
             <el-option v-for="item in layoutOptions" :key="item.value" :label="item.label" :value="item.value"/>
           </el-select>
