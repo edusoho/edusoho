@@ -52,7 +52,7 @@ class SyncEventServiceImpl extends BaseService implements SyncEventService
 
         $notifies = $this->searchSyncEvent(['productIds' => $remoteResourceIds, 'events' => [SyncEventService::EVENT_MODIFY_PRICE, 'isConfirm' => 0]], ['createdTime' => 'asc'], 0, PHP_INT_MAX);
         foreach ($notifies as &$notify) {
-            $course = empty($products[$notify['productId']]) ? null : $products[$notify['productId']]['localResourceId'];
+            $course = empty($products[$notify['productId']]['localResourceId']) ? null : $courses[$products[$notify['productId']]['localResourceId']];
             $notify['courseId'] = empty($course) ? null : $course['id'];
             $notify['courseSetId'] = empty($course) ? null : $course['courseSetId'];
         }
