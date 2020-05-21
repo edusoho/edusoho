@@ -17,6 +17,7 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
 use Biz\Crontab\SystemCrontabInitializer;
 use Biz\S2B2C\Service\CourseProductService;
+use Biz\S2B2C\Service\SyncEventService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -59,6 +60,11 @@ class CourseSetController extends BaseController
         $courseSetStatusNum = $this->getDifferentCourseSetsNum($conditions);
         $courseSets = $this->buildCourseSetTags($courseSets);
 
+        /**
+         * S2B2C
+         */
+        $notifyCourseSets = $this->getSyncEventService()->findNotifyByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
+
         return $this->render(
             'admin-v2/teach/course-set/index.html.twig',
             [
@@ -71,6 +77,7 @@ class CourseSetController extends BaseController
                 'tag' => empty($conditions['tagId']) ? [] : $this->getTagService()->getTag($conditions['tagId']),
                 'courseSetStatusNum' => $courseSetStatusNum,
                 'coursesCount' => $coursesCount,
+                'notifyCourseSets' => $notifyCourseSets,
             ]
         );
     }
@@ -1074,5 +1081,13 @@ class CourseSetController extends BaseController
     protected function getCourseProductService()
     {
         return $this->createService('S2B2C:CourseProductService');
+    }
+
+    /**
+     * @return SyncEventService
+     */
+    protected function getSyncEventService()
+    {
+        return $this->createService('S2B2C:SyncEventService');
     }
 }
