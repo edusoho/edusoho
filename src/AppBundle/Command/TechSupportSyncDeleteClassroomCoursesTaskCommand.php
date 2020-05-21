@@ -34,7 +34,7 @@ class TechSupportSyncDeleteClassroomCoursesTaskCommand extends BaseCommand
         $real = $input->getOption('real');
         $courseId = $input->getArgument('courseId');
         $course = $this->getCourseService()->getCourse($courseId);
-        if ($course['locked'] == 1) {
+        if (1 == $course['locked']) {
             $output->writeln('<info>输入的课程不是班级课程，执行结束</info>');
         }
         $sql = "SELECT copytask.* FROM course_task copytask LEFT JOIN course_task oritask ON oritask.id=copytask.copyId WHERE copytask.copyId != 0 AND oritask.id IS NULL AND copytask.courseId={$courseId};";

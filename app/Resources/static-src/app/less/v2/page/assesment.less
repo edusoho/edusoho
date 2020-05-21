@@ -1,0 +1,68 @@
+.ibs-resutl-item {
+  @media (max-width: @screen-xs-min) {
+    margin: 0 !important;
+    width: 100% !important;
+  }
+}
+.item-bank-result {
+  padding: 40px 0;
+  background-color: #fff;
+  text-align: center;
+  .item-bank-result-content {
+    max-width: 661px;
+    margin: auto;
+  }
+  img {
+    width: 132.5px;
+    margin-right: 64.5px;
+  }
+  @media (max-width: @screen-xs-min) {
+    padding: 16px 0;
+    .item-bank-result-content {
+      max-width: 100%;
+      margin: auto;
+    }
+    img {
+      width: 88px;
+      margin-right: 16px;
+    }
+  }
+  .ibs-color-warning {
+    color: #ff8836;
+  }
+
+  .item-bank-result-info {
+    text-align: left;
+    .item-bank-result-info__text {
+      margin-top: 4px;
+      margin-bottom: 16px;
+      line-height: 32px;
+      font-size: 24px;
+      font-weight: 500;
+      @media (max-width: @screen-xs-max) {
+        margin-bottom: 8px;
+        font-size: 16px;
+        line-height: 24px;
+      }
+    }
+    line-height: 24px;
+  }
+  .item-bank-result__comment {
+    font-size: 16px;
+    line-height: 24px;
+    @media (max-width: @screen-xs-max) {
+      font-size: 12px;
+      line-height: 16px;
+    }
+  }
+  .item-bank-result-homework {
+    width: 372px;
+    margin: auto;
+    @media (max-width: @screen-xs-max) {
+      width: 100%;
+      .item-bank-result-info {
+        text-align: center !important;
+      }
+    }
+  }
+}

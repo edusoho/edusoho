@@ -37,4 +37,8 @@ interface UserDao extends GeneralDaoInterface
     public function deleteCounterById($id, $name);
 
     public function analysisRegisterDataByTime($startTime, $endTime);
+
+    public function searchUsersJoinUserFace($conditions, $start, $limit);
+
+    public function countUsersJoinUserFace($conditions);
 }

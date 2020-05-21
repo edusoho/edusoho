@@ -4,6 +4,9 @@ namespace Topxia\Api\Resource\Course;
 
 use Biz\Accessor\AccessorInterface;
 use Biz\Course\Service\CourseService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Silex\Application;
 use AppBundle\Common\SettingToolkit;
 use AppBundle\Component\MediaParser\ParserProxy;
@@ -178,18 +181,21 @@ class Lesson extends BaseResource
         $activity = $this->getActivityService()->getActivity($lesson['activityId']);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
-        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperActivity['mediaId'], $activity['mediaType']);
-        if (empty($testpaper)) {
+        $assessment = $this->getAssessmentService()->getAssessment($testpaperActivity['mediaId']);
+        if (empty($assessment)) {
             return $this->error('error', '试卷不存在!');
         }
 
         $course = $this->getCourseService()->getCourse($lesson['courseId']);
 
-        $testResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaper['id'], $lesson['courseId'], $lesson['activityId'], 'testpaper');
+        $testRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($testpaperActivity['answerSceneId'], $user['id']);
+        $scene = $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
+        $lesson['testMode'] = !empty($scene['start_time']) ? 'realTime' : 'normal';
+        $lesson['testStartTime'] = $scene['start_time'];
 
         $lesson['content'] = array(
-            'status' => empty($testResult) ? 'nodo' : $testResult['status'],
-            'resultId' => empty($testResult) ? 0 : $testResult['id'],
+            'status' => empty($testRecord) ? 'nodo' : $testRecord['status'],
+            'resultId' => empty($testRecord) ? 0 : $testRecord['id'],
         );
 
         return $lesson;
@@ -439,11 +445,6 @@ class Lesson extends BaseResource
         return $this->createService('File:UploadFileService');
     }
 
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
-    }
-
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
@@ -482,5 +483,29 @@ class Lesson extends BaseResource
     protected function getSubtitleService()
     {
         return $this->createService('Subtitle:SubtitleService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerSceneService');
     }
 }

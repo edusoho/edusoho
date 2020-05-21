@@ -27,6 +27,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Common\SimpleValidator;
 use ApiBundle\Api\Util\AssetHelper;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class WebExtension extends \Twig_Extension
 {
@@ -120,6 +121,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('category_choices', array($this, 'getCategoryChoices')),
             new \Twig_SimpleFunction('build_category_choices', array($this, 'buildCategoryChoices')),
             new \Twig_SimpleFunction('question_category_choices', array($this, 'getQuestionCategoryChoices')),
+            new \Twig_SimpleFunction('item_category_choices', array($this, 'getItemCategoryChoices')),
             new \Twig_SimpleFunction('upload_max_filesize', array($this, 'getUploadMaxFilesize')),
             new \Twig_SimpleFunction('js_paths', array($this, 'getJsPaths')),
             new \Twig_SimpleFunction('is_plugin_installed', array($this, 'isPluginInstalled')),
@@ -1504,7 +1506,7 @@ class WebExtension extends \Twig_Extension
 
     public function fillQuestionStemTextFilter($stem)
     {
-        return preg_replace('/\[\[.+?\]\]/', '____', $stem);
+        return preg_replace('/\[\[\]\]/', '____', preg_replace('/\[\[.+?\]\]/', '____', $stem));
     }
 
     public function fillQuestionStemHtmlFilter($stem)
@@ -1654,6 +1656,15 @@ class WebExtension extends \Twig_Extension
     {
         $builder = new CategoryBuilder();
         $builder->buildForQuestion($bankId);
+        $builder->setIndent($indent);
+
+        return $builder->convertToChoices();
+    }
+
+    public function getItemCategoryChoices($itemBankId, $indent = '　')
+    {
+        $builder = new CategoryBuilder();
+        $builder->buildForItem($itemBankId);
         $builder->setIndent($indent);
 
         return $builder->convertToChoices();
@@ -1939,9 +1950,15 @@ class WebExtension extends \Twig_Extension
         return MathToolkit::uniqid();
     }
 
-    public function isQuestionLack($testpaperId)
+    public function isQuestionLack($activity)
     {
-        return $this->getTestPaperService()->isQuestionsLackedByTestId($testpaperId);
+        try {
+            $this->getAssessmentService()->drawItems($activity['ext']['drawCondition']['range'], array($activity['ext']['drawCondition']['section']));
+
+            return false;
+        } catch (\Exception $e) {
+            return true;
+        }
     }
 
     /**
@@ -1958,5 +1975,13 @@ class WebExtension extends \Twig_Extension
     protected function getTestPaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 }

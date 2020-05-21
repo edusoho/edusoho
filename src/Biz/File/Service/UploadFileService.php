@@ -116,6 +116,8 @@ interface UploadFileService
 
     public function setResourceConvertStatus($globalId, array $result);
 
+    public function setAttachmentConvertStatus($globalId, array $result);
+
     public function makeUploadParams($params);
 
     public function getFileByTargetType($targetType);
@@ -179,4 +181,12 @@ interface UploadFileService
     public function searchCloudFilesFromLocal($conditions, $orderBy, $start, $limit);
 
     public function countCloudFilesFromLocal($conditions);
+
+    public function initUploadAttachment($params);
+
+    public function finishUploadAttachment($params);
+
+    public function deleteAttachment($id);
+
+    public function downloadAttachment($id, $ssl);
 }

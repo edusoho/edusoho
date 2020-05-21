@@ -187,6 +187,40 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
         return $builder;
     }
 
+    public function searchUsersJoinUserFace($conditions, $start, $limit)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('user.*')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        $builder = $this->buildJoinCondition($builder, $conditions);
+
+        return $builder->execute()->fetchAll();
+    }
+
+    public function countUsersJoinUserFace($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('COUNT(user.id)');
+        $builder = $this->buildJoinCondition($builder, $conditions);
+
+        return $builder->execute()->fetchColumn();
+    }
+
+    protected function buildJoinCondition($builder, $conditions)
+    {
+        if (isset($conditions['faceStatus'])) {
+            if ('capture' == $conditions['faceStatus']) {
+                $builder->andStaticWhere('id in (select user_id from user_face )');
+            }
+            if ('noCapture' == $conditions['faceStatus']) {
+                $builder->andStaticWhere('id not in (select user_id from user_face )');
+            }
+        }
+
+        return $builder;
+    }
+
     public function declares()
     {
         return array(

@@ -1,0 +1,30 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_edu_cloud_facein_setting' %}
+{% set script_controller = 'face-inspection/setting' %}
+
+{% block main %}
+
+  {% if account.enabled|default()  %}
+    <div class="clearfix sts-setting-item">
+      <div class="pull-left">
+        <h5 class="sts-setting-item__title">{{ 'admin.edu_cloud.edu_facein.setting.title'|trans }}</h5>
+        <div class="text-sm text-muted" style="max-width: 430px">{{ 'admin.edu_cloud.edu_facein.setting.tips'|trans({'%url%': 'http://www.qiqiuyu.com/faq/1178/detail'})|raw }}</div>
+      </div>
+      <form class="pull-right sts-switch" id="face_identify">
+        <div class="admin-common-switch pull-right">
+          <label
+            class="switch switch-lg switch-green js-switch {% if setting('cloud_facein.enabled')|default(0) == 1 %}checked{% endif %}">
+            <input class="js-switch-input" type="checkbox" name="enabled"
+                   value="{{ setting('cloud_facein.enabled', 0) }}" data-url="{{path('admin_v2_edu_cloud_facein_update')}}">
+          </label>
+        </div>
+      </form>
+    </div>
+  {% else %}
+    <div class="text-center">
+      <h1 class="text-muted">{{ 'admin.edu_cloud.edu_facein.no_enabled' }}</h1>
+    </div>
+  {% endif %}
+
+{% endblock %}

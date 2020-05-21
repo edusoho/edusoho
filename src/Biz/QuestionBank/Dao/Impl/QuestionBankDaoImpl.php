@@ -14,6 +14,11 @@ class QuestionBankDaoImpl extends AdvancedDaoImpl implements QuestionBankDao
         return $this->getByFields(array('fromCourseSetId' => $courseSetId));
     }
 
+    public function getByItemBankId($itemBankId)
+    {
+        return $this->getByFields(['itemBankId' => $itemBankId]);
+    }
+
     public function findByIds($ids)
     {
         if (empty($ids)) {

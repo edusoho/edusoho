@@ -31,6 +31,7 @@ class ActivityCopyTest extends BaseTestCase
                     'mediaId' => 1,
                     'startTime' => time() - 3600,
                     'endTime' => time(),
+                    'finishData' => array()
                 ),
                 array(
                     'id' => 2,
@@ -42,6 +43,7 @@ class ActivityCopyTest extends BaseTestCase
                     'mediaId' => 2,
                     'startTime' => time() - 3600,
                     'endTime' => time(),
+                    'finishData' => array()
                 ),
                 array(
                     'id' => 3,
@@ -53,6 +55,7 @@ class ActivityCopyTest extends BaseTestCase
                     'mediaId' => 2,
                     'startTime' => time() - 3600,
                     'endTime' => time(),
+                    'finishData' => array()
                 ),
             )),
             array('functionName' => 'get', 'returnValue' => array(
@@ -82,6 +85,7 @@ class ActivityCopyTest extends BaseTestCase
                 'finishCondition' => array(),
                 'requireCredit' => 0,
                 'testMode' => 'normal',
+                'answerSceneId' => 1,
             )),
             array('functionName' => 'createActivity', 'returnValue' => array(
                 'id' => 1,
@@ -93,6 +97,27 @@ class ActivityCopyTest extends BaseTestCase
                 'finishCondition' => array(),
                 'requireCredit' => 0,
                 'testMode' => 'normal',
+            )),
+        ));
+
+        $this->mockBiz('ItemBank:Answer:AnswerSceneService', array(
+            array('functionName' => 'get', 'returnValue' => array(
+                'id' => 1,
+                'limited_time' => 1,
+                'redoInterval' => 1,
+                'limitedTime' => 1,
+                'enable_facein' => 1,
+                'redo_interval' => 1,
+                'do_times' => 1,
+            )),
+            array('functionName' => 'create', 'returnValue' => array(
+                'id' => 1,
+                'limited_time' => 1,
+                'redoInterval' => 1,
+                'limitedTime' => 1,
+                'enable_facein' => 1,
+                'redo_interval' => 1,
+                'do_times' => 1,
             )),
         ));
 

@@ -19,9 +19,16 @@ use Biz\File\Service\UploadFileService;
 use Biz\File\UploadFileException;
 use Biz\Player\PlayerException;
 use Biz\Player\Service\PlayerService;
+use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -204,31 +211,68 @@ class CourseTaskMedia extends AbstractResource
     protected function getHomework($course, $task, $activity, $request, $ssl = fals)
     {
         $user = $this->getCurrentUser();
-
-        $activity['ext']['latestHomeworkResult'] = $this->getTestpaperService()->getUserLatelyResultByTestId(
-            $user['id'],
-            $activity['mediaId'],
-            $activity['fromCourseId'],
-            $activity['id'],
-            'homework'
-        );
+        $assessment = $this->getAssessmentService()->showAssessment($activity['ext']['assessmentId']);
+        $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
+        $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($answerScene['id'], $user['id']);
+        $testpaperWrapper = new TestpaperWrapper();
+        $activity['ext'] = $testpaperWrapper->wrapTestpaper($assessment, $answerScene);
+        if (empty($answerRecord)) {
+            $activity['ext']['latestHomeworkResult'] = null;
+        } else {
+            $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+            $activity['ext']['latestHomeworkResult'] = $testpaperWrapper->wrapTestpaperResult(
+                $answerRecord,
+                $assessment,
+                $answerScene,
+                $answerReport
+            );
+        }
 
         return $activity['ext'];
     }
 
-    protected function getExercise($course, $task, $activity, $request, $ssl = fals)
+    protected function getExercise($course, $task, $activity, $request, $ssl = false)
     {
         $user = $this->getCurrentUser();
-
-        $activity['ext']['latestExerciseResult'] = $this->getTestpaperService()->getUserLatelyResultByTestId(
-            $user['id'],
-            $activity['mediaId'],
-            $activity['fromCourseId'],
-            $activity['id'],
-            'exercise'
-        );
+        $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
+        $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($answerScene['id'], $user['id']);
+        $testpaperWrapper = new TestpaperWrapper();
+        if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
+            $assessment = $this->createAssessment($activity['title'], $activity['ext']['drawCondition']['range'], array($activity['ext']['drawCondition']['section']));
+            $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+            $activity['ext'] = $testpaperWrapper->wrapTestpaper($assessment, $answerScene);
+            $activity['ext']['latestExerciseResult'] = null;
+        } else {
+            $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
+            $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+            $activity['ext'] = $testpaperWrapper->wrapTestpaper($assessment, $answerScene);
+            $activity['ext']['latestExerciseResult'] = $testpaperWrapper->wrapTestpaperResult(
+                $answerRecord,
+                $assessment,
+                $answerScene,
+                $answerReport
+            );
+        }
 
         return $activity['ext'];
+    }
+
+    protected function createAssessment($name, $range, $sections)
+    {
+        $sections = $this->getAssessmentService()->drawItems($range, $sections);
+        $assessment = array(
+            'name' => $name,
+            'displayable' => 0,
+            'description' => '',
+            'bank_id' => $range['bank_id'],
+            'sections' => $sections,
+        );
+
+        $assessment = $this->getAssessmentService()->createAssessment($assessment);
+
+        $this->getAssessmentService()->openAssessment($assessment['id']);
+
+        return $assessment;
     }
 
     protected function getAudio($course, $task, $activity, $request, $ssl = false)
@@ -321,14 +365,6 @@ class CourseTaskMedia extends AbstractResource
     }
 
     /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->getBiz()->service('Testpaper:TestpaperService');
-    }
-
-    /**
      * @return CourseService
      */
     protected function getCourseService()
@@ -390,5 +426,53 @@ class CourseTaskMedia extends AbstractResource
     protected function getMaterialService()
     {
         return $this->getBiz()->service('Course:MaterialService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->service('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->service('ItemBank:Answer:AnswerReportService');
+    }
+
+    /**
+     * @return AnswerQuestionReportService
+     */
+    protected function getAnswerQuestionReportService()
+    {
+        return $this->service('ItemBank:Answer:AnswerQuestionReportService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->service('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return AnswerService
+     */
+    protected function getAnswerService()
+    {
+        return $this->service('ItemBank:Answer:AnswerService');
     }
 }

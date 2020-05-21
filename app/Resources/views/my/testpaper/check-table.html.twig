@@ -1,13 +1,15 @@
-{% if paperResults %}
+{% if answerRecords %}
 
 <table class="table table-striped">
   <tbody>
-    {% for paperResult in paperResults if testpapers[paperResult.testId] is defined %}
-      {% set testpaper = testpapers[paperResult.testId] %}
-      {% set student = users[paperResult.userId] %}
-      {% set teacher = users[paperResult.checkTeacherId]|default(null) %}
-      {% set courseSet = courseSets[paperResult.courseSetId]|default(null) %}
-      {% set course = courses[paperResult.courseId]|default(null) %}
+    {% for answerRecord in answerRecords %}
+      {% set assessment = assessments[answerRecord.assessment_id] %}
+      {% set student = users[answerRecord.user_id] %}
+      {% set answerReport = answerReports[answerRecord.answer_report_id] %}
+      {% set teacher = users[answerReport.review_user_id]|default(null) %}
+      {% set activity = activities[testpeaperActivities[answerRecord['answer_scene_id']]['id']]|default(null) %}
+      {% set course = courses[activity.fromCourseId]|default(null) %}
+      {% set courseSet = courseSets[activity.fromCourseId]|default(null) %}
       
       {% include 'my/testpaper/check-list-tr.html.twig' %}
 

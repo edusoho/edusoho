@@ -1,0 +1,32 @@
+{
+    "name": "codeages/biz-item-bank",
+    "description": "item bank with biz-framework",
+    "type": "library",
+    "require": {
+        "php": ">=5.5.0",
+        "ext-json": "*",
+        "codeages/biz-framework": "^0.9.33",
+        "codeages/exam-parser": "dev-master",
+        "ezyang/htmlpurifier": "4.12.0",
+        "vlucas/valitron": "^1.4",
+        "firebase/php-jwt": "^5.1"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Codeages\\Biz\\ItemBank\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "require-dev": {
+        "mockery/mockery": "^0.9.9",
+        "phpunit/phpunit": "^5|^6"
+    }
+}

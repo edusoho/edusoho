@@ -7,6 +7,9 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Question\QuestionException;
 use Symfony\Component\HttpFoundation\Request;
+use Codeages\Biz\ItemBank\Item\Service\QuestionFavoriteService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class QuestionController extends BaseController
 {
@@ -18,40 +21,34 @@ class QuestionController extends BaseController
         }
 
         $conditions = array(
-            'userId' => $user['id'],
+            'user_id' => $user['id'],
+            'target_type' => 'assessment',
         );
 
         $paginator = new Paginator(
             $request,
-            $this->getQuestionService()->searchFavoriteCount($conditions),
+            $this->getQuestionFavoriteService()->count($conditions),
             10
         );
 
-        $favoriteQuestions = $this->getQuestionService()->searchFavoriteQuestions(
+        $favoriteQuestions = $this->getQuestionFavoriteService()->search(
             $conditions,
-            array('createdTime' => 'DESC'),
+            array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $questionIds = ArrayToolkit::column($favoriteQuestions, 'questionId');
-        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
-
-        $testpaperIds = array();
-        $testpaperIds = array_map(function ($favorite) {
-            if ($favorite['targetType'] == 'testpaper') {
-                return $favorite['targetId'];
-            }
-        }, $favoriteQuestions);
-
-        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
+        $questions = $this->getItemService()->findQuestionsByQuestionIds(ArrayToolkit::column($favoriteQuestions, 'question_id'));
+        $assessments = $this->getAssessmentService()->findAssessmentsByIds(
+            ArrayToolkit::column($favoriteQuestions, 'target_id')
+        );
 
         return $this->render('my/question/favorite-list.html.twig', array(
             'favoriteQuestions' => $favoriteQuestions,
             'paginator' => $paginator,
             'questions' => $questions,
             'nav' => 'questionFavorite',
-            'testpapers' => $testpapers,
+            'assessments' => $assessments,
         ));
     }
 
@@ -85,12 +82,7 @@ class QuestionController extends BaseController
                 return $this->createJsonResponse(array('result' => false, 'message' => 'noLogin'));
             }
 
-            $myFavorite = $this->getQuestionService()->getFavoriteQuestion($id);
-            if (!$myFavorite) {
-                return $this->createJsonResponse(array('result' => false, 'message' => 'favorite question not found'));
-            }
-
-            $this->getQuestionService()->deleteFavoriteQuestion($myFavorite['id']);
+            $this->getQuestionFavoriteService()->delete($id);
 
             return $this->createJsonResponse(array('result' => true, 'message' => ''));
         }
@@ -100,29 +92,31 @@ class QuestionController extends BaseController
     {
         $user = $this->getUser();
 
-        $userFavorites = $this->getQuestionService()->findUserFavoriteQuestions($user['id']);
-        $userFavorites = ArrayToolkit::index($userFavorites, 'questionId');
+        $conditions = array(
+            'user_id' => $user['id'],
+            'target_type' => 'assessment',
+        );
 
-        if (empty($userFavorites[$id])) {
+        $favoriteItems = $this->getQuestionFavoriteService()->search(
+            $conditions,
+            array('created_time' => 'DESC'),
+            0,
+            $this->getQuestionFavoriteService()->count($conditions)
+        );
+        $favoriteItems = ArrayToolkit::index($favoriteItems, 'item_id');
+
+        if (empty($favoriteItems[$id])) {
             $this->createNewException(QuestionException::FORBIDDEN_PREVIEW_QUESTION());
         }
 
-        $question = $this->getQuestionService()->get($id);
+        $item = $this->getItemService()->getItemWithQuestions($id, true);
 
-        if (empty($question)) {
+        if (empty($item)) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
 
-        if ($question['subCount'] > 0) {
-            $questionSubs = $this->getQuestionService()->findQuestionsByParentId($question['id']);
-
-            $question['subs'] = $questionSubs;
-        }
-
         return $this->render('question-manage/preview-modal.html.twig', array(
-            'question' => $question,
-            'showAnswer' => 1,
-            'showAnalysis' => 1,
+            'item' => $item,
         ));
     }
 
@@ -134,5 +128,29 @@ class QuestionController extends BaseController
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
+    }
+
+    /**
+     * @return QuestionFavoriteService
+     */
+    protected function getQuestionFavoriteService()
+    {
+        return $this->createService('ItemBank:Item:QuestionFavoriteService');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->createService('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 }
