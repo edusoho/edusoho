@@ -81,7 +81,7 @@ class TestpaperInfo extends AbstractResource
         $task['activity'] = $activity;
 
         $results['testpaper']['limitedTime'] = empty($scene['limited_time']) ? '0' : $scene['limited_time'];
-        $results['task'] = $task;
+        $results['task'] = $this->filterFaceInspectionTask($task, $scene);
     }
 
     private function filterTestpaperItems($items)
@@ -94,6 +94,16 @@ class TestpaperInfo extends AbstractResource
 
         return $itemArray;
     }
+
+    private function filterFaceInspectionTask($task, $scene)
+    {
+        if (!empty($scene['enable_facein'])) {
+            $task['enable_facein'] = $scene['enable_facein'];
+        }
+
+        return $task;
+    }
+
 
     /**
      * @return TaskService
