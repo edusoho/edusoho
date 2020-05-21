@@ -1,7 +1,7 @@
 <template>
   <!-- 详见showMode注释 -->
   <div v-if="(showMode==='h5' && courseList.items.length) || showMode==='admin'" class="e-course-list">
-    <div v-if="pathName!=='appSetting'" class="e-course-list__header" >
+    <div v-if="pathName==='miniprogramSetting'" class="e-course-list__header" >
       <div class="clearfix">
         <span class="e-course-list__list-title text-overflow">{{ courseList.title }}</span>
         <span class="e-course-list__more">
@@ -10,7 +10,7 @@
       </div>
     </div>
     <!-- 现在style中写样式，后续三端统一后再把上面那段div干掉，把style的样式写入到class中 -->
-    <div v-if="pathName==='appSetting'" class="e-course-list__header" style="padding:16px">
+    <div v-if="pathName!=='miniprogramSetting'" class="e-course-list__header" style="padding:16px">
       <div class="clearfix">
         <span class="e-course-list__list-title text-overflow" style="font-size:16px">{{ courseList.title }}</span>
         <span class="e-course-list__more">
@@ -22,9 +22,9 @@
       <div class="e-course-list__body">
         <e-class
           v-for="item in courseList.items"
-          v-if="pathName!=='appSetting'"
+          v-if="pathName==='miniprogramSetting'"
           :key="item.id"
-          :course="item | courseListData(listObj)"
+          :course="item | courseListData(listObj,pathName)"
           :discountType="typeList === 'course_list' ? item.courseSet.discountType : ''"
           :discount="typeList === 'course_list' ? item.courseSet.discount : ''"
           :course-type="typeList === 'course_list' ? item.courseSet.type : ''"
@@ -37,7 +37,7 @@
         <!-- 一行一列  目前只正对app -->
         <e-row-class
           v-for="item in courseList.items"
-          v-if="pathName==='appSetting' && courseList.displayStyle==='row'"
+          v-if="pathName!=='miniprogramSetting' && courseList.displayStyle==='row'"
           :key="item.id"
           :course="item | courseListData(listObj,pathName)"
           :discountType="typeList === 'course_list' ? item.courseSet.discountType : ''"
@@ -51,7 +51,7 @@
           :feedback="feedback"
         />
         <!-- 一行两列  目前只正对app -->
-        <div v-if="pathName==='appSetting' && courseList.displayStyle==='distichous'" class="clearfix">
+        <div v-if="pathName!=='miniprogramSetting' && courseList.displayStyle==='distichous'" class="clearfix">
           <e-column-class
             v-for="item in courseList.items"
             :key="item.id"

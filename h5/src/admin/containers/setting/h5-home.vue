@@ -48,16 +48,9 @@
         <div class="h5-home-center">
           <div
             class="setting-page setting-page-h5"
-            :class="{
-              'setting-page-miniprogram':
-                portal === 'miniprogram' && supportActivityVersion
-            }"
+            :class="{'setting-page-miniprogram': portal === 'miniprogram' }"
           >
-            <img class="find-head-img" :src="headImg" alt="" />
-            <div class="find-navbar" :class="`find-navbar-${portal}`">
-              <i v-if="portal === 'apps'" class="iconfont icon-search"></i>
-              <i class="h5-icon h5-icon-houtui"></i>{{ headTitle }}
-            </div>
+          <find-header :portal="portal"></find-header>
 
             <!-- 操作预览区域 -->
             <div class="find-body">
@@ -134,6 +127,7 @@ import marketingMixins from "admin/mixins/marketing";
 import ObjectArray2ObjectByKey from "@/utils/array2object";
 import moduleTemplate from "./module-template";
 import findFooter from "./footer";
+import findHeader from "./header";
 import draggable from "vuedraggable";
 import { mapActions, mapState } from "vuex";
 
@@ -142,7 +136,8 @@ export default {
   components: {
     moduleTemplate,
     draggable,
-    findFooter
+    findFooter,
+    findHeader
   },
   mixins: [marketingMixins],
   data() {
@@ -161,7 +156,6 @@ export default {
       marketingModules: H5_MARKETING_MODULE,
       typeCount: {},
       pathName: this.$route.name,
-      currentMPVersion: "0.0.0",
       couponSwitch: 0,
       moduleLength: 0,
       menuStyle:{}//右侧菜单栏样式
@@ -173,8 +167,7 @@ export default {
       "vipLevels",
       "vipSettings",
       "vipSetupStatus",
-      "vipPlugin",
-      "settings"
+      "vipPlugin"
     ]),
     stopDraggleClasses() {
       return (
@@ -184,50 +177,6 @@ export default {
     },
     portal() {
       return pathName2Portal[this.pathName];
-    },
-    supportActivityVersion() {
-      return true;
-      // return this.supportVersion('1.3.7');
-    },
-    supportClassroomVersion() {
-      return true;
-      // return this.supportVersion('1.3.1');
-    },
-    supportCouponVersion() {
-      return true;
-      // return this.supportVersion('1.3.2');
-    },
-    supportVipVersion() {
-      return this.vipSetupStatus;
-      // return this.supportVersion('1.3.4') && this.vipSetupStatus;
-    },
-    headImg() {
-      switch (this.portal) {
-        case "miniprogram":
-          return "static/images/miniprogram_head.jpg";
-        case "apps":
-          return "static/images/app_head.jpg";
-        default:
-          return "static/images/find_head_url.jpg";
-      }
-    },
-    headTitle() {
-      switch (this.portal) {
-        case "miniprogram":
-          return "小程序";
-        case "apps":
-          return this.settings.name;
-        default:
-          return "微网校";
-      }
-    },
-    dragOptions() {
-      return {
-        animation: 200,
-        group: "description",
-        disabled: false,
-        ghostClass: "ghost"
-      };
     }
   },
   created() {
@@ -244,9 +193,6 @@ export default {
   },
   beforeDestroy(){
     document.getElementById("app").style.background="#ffffff";
-  },
-  mounted() {
-
   },
   methods: {
     ...mapActions([
@@ -269,9 +215,6 @@ export default {
       Api.getCouponSetting().then(res => {
         this.couponSwitch = parseInt(res.enabled, 10);
       });
-    },
-    supportVersion(version) {
-      return !needUpgrade(version, this.currentMPVersion);
     },
     moduleCountInit() {
       // 模块类型计数初始化
@@ -390,18 +333,11 @@ export default {
       }
       this.moduleLength = this.moduleLength + 1;
       this.typeCount.addByType(data.default.type);
-
-      const defaultString = JSON.stringify(data.default); // 需要一个深拷贝对象
-      let defaultCopied = JSON.parse(defaultString);
-
-      //app默认两行展示，这里要手动修改
-      defaultCopied = this.formateAppDisplay(data.default.type, defaultCopied);
-      //oldIndex用于组件的key,减少组件重新创建
-      defaultCopied.oldIndex = this.moduleLength;
-
+      const defaultCopied = JSON.parse(JSON.stringify(data.default));
+      defaultCopied.oldIndex = this.moduleLength;      //oldIndex用于组件的key,减少组件重新创建
       this.modules.push(defaultCopied);
       this.currentModuleIndex = Math.max(this.modules.length - 1, 0);
-      //使用异步，保证组件添加完成
+      //使用异步，保证组件添加完成再滑动到底部
       setTimeout(()=>{this.scrollBottom(),500})
     },
     load() {
@@ -414,10 +350,10 @@ export default {
         mode
       })
         .then(res => {
-          //app默认两行展示，这里要手动修改
+          //默认排列方式
           Object.keys(res).forEach((element, index) => {
             res[element] = this.formateAppDisplay(
-              res[element].type,
+              res[element].type, //测试数据，上线删除
               res[element]
             );
             res[element].oldIndex = index; //oldIndex用于组件的key,减少组件重新创建
@@ -434,13 +370,11 @@ export default {
           });
         });
     },
-    //处理app布局方式
+    //处理班级课程排列（可删）
     formateAppDisplay(type, item) {
       if (
-        (type === "course_list" || type === "classroom_list") &&
-        this.portal === "apps"
-      ) {
-        item.data.displayStyle = "distichous";
+        (type === "course_list" || type === "classroom_list") && this.portal === "h5") {
+          item.data.displayStyle = "row";
       }
       return item;
     },
@@ -534,12 +468,14 @@ export default {
       this.incomplete = false;
     },
     startDrag() {
+      //开始拖动
       const settings = document.getElementsByClassName("module-frame__setting");
       for (let i = 0; i < settings.length; i++) {
         settings[i].style.display = "none";
       }
     },
     endDrag() {
+      //结束拖动
       const settings = document.getElementsByClassName("module-frame__setting");
       settings[this.currentModuleIndex].style.display = "block";
     }
