@@ -42,15 +42,16 @@ class SyncEventServiceImpl extends BaseService implements SyncEventService
         if (!$s2b2cConf['supplierId']) {
             return [];
         }
-        $courses = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
+        $courses = ArrayToolkit::index($this->getCourseService()->findCoursesByCourseSetIds($courseSetIds), 'id');
         $products = ArrayToolkit::index($this->getProductService()->findProductsBySupplierIdAndProductTypeAndLocalResourceIds(
             $s2b2cConf['supplierId'],
             'course',
             ArrayToolkit::column($courses, 'id')
         ), 'remoteResourceId');
+
         $remoteResourceIds = ArrayToolkit::column($products, 'remoteResourceId');
 
-        $notifies = $this->searchSyncEvent(['productIds' => $remoteResourceIds, 'events' => [SyncEventService::EVENT_MODIFY_PRICE, 'isConfirm' => 0]], ['createdTime' => 'asc'], 0, PHP_INT_MAX);
+        $notifies = $this->searchSyncEvent(['productIds' => $remoteResourceIds, 'events' => SyncEventService::EVENT_MODIFY_PRICE, 'isConfirm' => 0], ['createdTime' => 'asc'], 0, PHP_INT_MAX);
         foreach ($notifies as &$notify) {
             $course = empty($products[$notify['productId']]['localResourceId']) ? null : $courses[$products[$notify['productId']]['localResourceId']];
             $notify['courseId'] = empty($course) ? null : $course['id'];
