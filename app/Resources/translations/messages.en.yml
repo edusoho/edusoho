@@ -9484,7 +9484,6 @@ task.show_optional_tips: Show Optional
 admin_v2.user.manage.change_nickname.heading_title: Modify username
 
 course.plan_task.activity_manage.discuss.tips: Discussion tasks are used in PC and APP, and are not supported in Microschool and Applet for now!
-<<<<<<< HEAD
 
 testpaper.result.unpassed: '很遗憾，您未通过本次考试'
 testpaper.result.passed: '恭喜您已通过本次考试!'
