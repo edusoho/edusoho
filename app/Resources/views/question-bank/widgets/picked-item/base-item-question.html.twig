@@ -31,8 +31,8 @@
     {% endif %}
   </td>
   {% if item.type in ['choice', 'uncertain_choice'] %}
-    <td class="js-miss-score" data-miss-score="{{ question.missScore|default(0)|score_text }}">
-      {{ question.missScore|default(0)|score_text }}
+    <td class="js-miss-score" data-miss-score="{{ question.miss_score|default(0)|score_text }}">
+      {{ question.miss_score|default(0)|score_text }}
     </td>
   {% elseif item.type == 'material' %}
     <td></td>
