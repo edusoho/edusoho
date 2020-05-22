@@ -1,3 +1,5 @@
+import notify from 'common/notify';
+
 const $form = $('#delete-form');
 const _window = window;
 $form.validate({
@@ -27,7 +29,7 @@ $form.validate({
       } else {
         $('.js-delete-btn').button('reset');
         $('#delete-form').children('div').addClass('has-error');
-        $('#delete-form').find('.help-block').show().text(Translator.trans('admin.course.delete_course.check_password_fail_hint'));
+        notify('danger', Translator.trans('admin.course.delete_course.check_password_fail_hint'));
       }
     });
   }

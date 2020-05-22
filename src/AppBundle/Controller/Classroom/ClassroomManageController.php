@@ -894,7 +894,7 @@ class ClassroomManageController extends BaseController
 
         $this->getClassroomService()->deleteClassroomCourses($classroomId, array($courseId));
 
-        $this->getCourseSetService()->deleteCourseSet($courseId);
+        $this->getCourseSetService()->deleteCourseSet($courseSetId);
 
         return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
     }
