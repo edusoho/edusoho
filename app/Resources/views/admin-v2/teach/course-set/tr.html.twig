@@ -35,6 +35,9 @@
     {% else %}
       {{ courseSet.minCoursePrice|default() }}-{{ courseSet.maxCoursePrice|default() }}
     {% endif %}
+    {% if notifies[courseSet.id]|default(null)%} {#S2B2C#}
+      <a class="text-danger" target="_blank" href="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: notifies[courseSet.id].courseId}) }}">{{ 's2b2c.resource.sync.has_new.notify'|trans }}</a>
+    {% endif %}
   </td>
 
   {% if filter == 'normal' %}

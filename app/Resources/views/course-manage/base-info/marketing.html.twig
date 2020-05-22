@@ -1,4 +1,4 @@
-{% if is_s2b2c_enabled() %}
+{% if course.platform|default('self') == 'supplier' %}
   <div class="form-group mb0">
     <div class="col-sm-2 control-label">
       <label for="cooperationPrice">{{ 's2b2c.product.cooperation_price'|trans }}</label>
