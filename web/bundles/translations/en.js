@@ -388,6 +388,7 @@ t.add("course_manage.student_remark_validate_error_hint", "Remarks words does no
 t.add("course_manage.student_remark_success_hint", "Remarks %username% succeed", "js", "en");
 t.add("course_manage.student_remark_failed_hint", "Remarks %username% failed, please try again!", "js", "en");
 t.add("course_manage.student_create.field_required_error_hint", "Please enter student email \/ mobile number \/ username", "js", "en");
+t.add("course_manage.student_create.price_min_error_hint", "The price can not be less than 0!", "js", "en");
 t.add("course_manage.student_create.price_max_error_hint", "The price can not exceed the orignial price of the course.", "js", "en");
 t.add("course_set.show.count_down_format_hint", "Remaining <span>%D<\/ span> days <span>%H<\/ span> <span>%M<\/ span> minutes <span>%S<\/ span> seconds", "js", "en");
 t.add("course_set.show.time_finish_hint", "Activity times up. Refreshing page, please wait ...", "js", "en");
@@ -1351,4 +1352,10 @@ t.add("course_manage.live_statistics.checkin_not_support", "Check in is currentl
 t.add("course_manage.live_statistics.data_not_valid", "The data is abnormal", "js", "en");
 t.add("admin_v2.user.nickname_modify_success_hint", "Nickname modified successfully", "js", "en");
 t.add("admin_v2.user.nickname_modify_error_hint", "operation failed", "js", "en");
+t.add("admin_v2.developer.plumber_operate_hint", "In operation, it may take a while, please wait ...", "js", "en");
+t.add("admin_v2.developer.plumber_operate_error_hint", "Success", "js", "en");
+t.add("admin_v2.developer.plumber_operate_success_hint", "Failed", "js", "en");
+t.add("course_manage.positive_currency.message", "Please enter a valid price greater than 0, up to two decimal places, no more than 8 bits!", "js", "en");
+t.add("merchant.resource.product_version.update_success_hint", "Update Success", "js", "en");
+t.add("merchant.resource.product_version.update_failed_hint", "Update Failed", "js", "en");
 })(Translator);
