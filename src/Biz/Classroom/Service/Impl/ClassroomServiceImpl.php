@@ -516,10 +516,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function checkDeadlineForUpdateDeadline($classroomId, $userIds, $date)
     {
-        $classroom = $this->getClassroom($classroomId);
-        if ('forever' == $classroom['expiryMode']) {
-            return false;
-        }
         $members = $this->searchMembers(
             ['userIds' => $userIds, 'classroomId' => $classroomId],
             ['deadline' => 'ASC'],
