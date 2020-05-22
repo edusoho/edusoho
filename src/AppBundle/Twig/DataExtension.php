@@ -7,6 +7,7 @@ use Biz\EduCloud\Service\ConsultService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use AppBundle\Common\ExtensionManager;
+use ESCloud\SDK\ESCloudSDK;
 
 class DataExtension extends \Twig_Extension
 {
@@ -36,6 +37,7 @@ class DataExtension extends \Twig_Extension
             new \Twig_SimpleFunction('service', array($this, 'callService'), $options),
             new \Twig_SimpleFunction('isOldSmsUser', array($this, 'getOldSmsUserStatus'), $options),
             new \Twig_SimpleFunction('cloudStatus', array($this, 'getCloudStatus'), $options),
+            new \Twig_SimpleFunction('cloudFaceStatus', array($this, 'getCloudFaceStatus'), $options),
             new \Twig_SimpleFunction('cloudConsultPath', array($this, 'getCloudConsultPath'), $options),
             new \Twig_SimpleFunction('cloud_info', array($this, 'getCloudInfo'), $options),
         );
@@ -94,6 +96,23 @@ class DataExtension extends \Twig_Extension
     public function getCloudStatus()
     {
         return $this->getEduCloudService()->isVisibleCloud();
+    }
+
+    public function getCloudFaceStatus()
+    {
+        try {
+            $settings = $this->getSettingService()->get('storage', array());
+            $sdk = new ESCloudSDK(array('access_key' => $settings['cloud_access_key'], 'secret_key' => $settings['cloud_secret_key']));
+            $service = $sdk->getInspectionService();
+            $account = $service->getAccount();
+            if (!empty($account['enabled'])) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     public function getCloudConsultPath()
