@@ -2359,7 +2359,7 @@ course_set_manage_testpaper_info:
   methods: [POST]
 
 course_manage_testpaper_check:
-  path: /course/{id}/manage/testpaper/{resultId}/check
+  path: /course/{id}/manage/testpaper/{answerRecordId}/check
   defaults: { _controller: AppBundle:Course/TestpaperManage:check }
 
 course_manage_exam_next_result_check:
@@ -2399,7 +2399,7 @@ testpaper_show:
   defaults: { _controller: AppBundle:Testpaper/Testpaper:doTest }
 
 testpaper_result_show:
-  path: /testpaper/result/{resultId}/show
+  path: /testpaper/result/{answerRecordId}/show
   defaults: { _controller: AppBundle:Testpaper/Testpaper:showResult }
 
 testpaper_result_submit:
@@ -2430,7 +2430,7 @@ course_manage_homework_check_list:
   defaults: { _controller: AppBundle:Course/HomeworkManage:checkList }
 
 course_manage_homework_check:
-  path: /course/{id}/manage/homework/{resultId}/check
+  path: /course/{id}/manage/homework/{answerRecordId}/check
   defaults: { _controller: AppBundle:Course/HomeworkManage:check }
 
 homework_start_do:
@@ -2442,7 +2442,7 @@ homework_show:
   defaults: { _controller: AppBundle:Homework:doTest }
 
 homework_result_show:
-  path: /homework/result/{resultId}/show
+  path: /homework/result/{answerRecordId}/show
   defaults: { _controller: AppBundle:Homework:showResult }
 
 homework_finish:
@@ -2522,6 +2522,11 @@ classroom_manage_courses:
 classroom_manage_course_remove:
     path: /classroom/{id}/manage/course/{courseId}/remove
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:removeCourse }
+
+classroom_manage_course_delete:
+    path: /classroom/{classroomId}/manage/course_set/{courseSetId}/course/{courseId}/delete
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:deleteCourseSet }
+    permissions: [admin_v2_course_manage]
 
 classroom_courses_select:
     path: /classroom/{id}/courses/select
@@ -2637,7 +2642,7 @@ classroom_manage_testpaper_result_list:
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaperResultList }
 
 classroom_manage_testpaper_check:
-  path: /classroom/{id}/manage/testpaper/{resultId}/check
+  path: /classroom/{id}/manage/testpaper/{answerRecordId}/check
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaperCheck }
 
 classroom_manage_exam_result_anlysis:
@@ -2657,7 +2662,7 @@ classroom_manage_homework:
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:homework }
 
 classroom_manage_homework_check:
-  path: /classroom/{id}/manage/homework/{resultId}/check
+  path: /classroom/{id}/manage/homework/{answerRecordId}/check
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:homeworkCheck }
 
 classroom_manage_students_defined_show:
@@ -3229,12 +3234,8 @@ oauth2_es_user_info:
   defaults: { _controller: AppBundle:OAuth2/Server/Authorization:getUserInfo }
 
 question_bank_list:
-    path: /my/question_banks/{categoryId}
-    defaults: { _controller: AppBundle:QuestionBank/Manage:index, categoryId:'' }
-
-question_bank_category_tree_nav:
-    path: /question_banks/tree/{category}
-    defaults: { _controller: AppBundle:QuestionBank/Category:treeNav, category:'' }
+    path: /my/question_banks
+    defaults: { _controller: AppBundle:QuestionBank/Manage:index }
 
 question_bank_create:
     path: /question_bank/create
@@ -3299,7 +3300,7 @@ question_bank_manage_question_preview:
     defaults: { _controller: AppBundle:QuestionBank/Question:preview }
 
 question_bank_manage_question_delete:
-    path: /question_bank/{id}/question/{questionId}/delete
+    path: /question_bank/{id}/question/{itemId}/delete
     defaults: { _controller: AppBundle:QuestionBank/Question:delete }
 
 question_bank_manage_question_export:
@@ -3351,29 +3352,29 @@ question_bank_manage_random_testpaper_build_check:
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:buildCheck }
 
 question_bank_manage_testpaper_edit:
-    path: /question_bank/{id}/testpaper/{testpaperId}/edit
+    path: /question_bank/{id}/testpaper/{assessmentId}/edit
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:edit }
 
 question_bank_manage_testpaper_publish:
-    path: /question_bank/{id}/testpaper/{testpaperId}/publish
+    path: /question_bank/{id}/testpaper/{assessmentId}/publish
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:publish }
     methods: [POST]
 
 question_bank_manage_testpaper_close:
-    path: /question_bank/{id}/testpaper/{testpaperId}/close
+    path: /question_bank/{id}/testpaper/{assessmentId}/close
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:close }
     methods: [POST]
 
 question_bank_manage_testpaper_preview:
-    path: /question_bank/{id}/testpaper/{testpaperId}/preview
+    path: /question_bank/{id}/testpaper/{assessmentId}/preview
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:preview }
 
 question_bank_manage_testpaper_delete:
-    path: /question_bank/{id}/testpaper/{testpaperId}/delete
+    path: /question_bank/{id}/testpaper/{assessmentId}/delete
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:delete }
 
 question_bank_manage_testpaper_export:
-    path: /question_bank/{id}/testpaper/{testpaperId}/export
+    path: /question_bank/{id}/testpaper/{assessmentId}/export
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:export }
 
 question_bank_manage_testpaper_json:
@@ -3392,6 +3393,68 @@ question_bank_manage_question_picked:
     path: /question_bank/{id}/question/picked
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:pickedQuestion }
 
+answer_engine_submit:
+    path: /answer_engine/submit
+    defaults: { _controller: AppBundle:AnswerEngine/AnswerEngine:submitAnswer }
+    methods: ['POST']
+
+answer_engine_save:
+    path: /answer_engine/save
+    defaults: { _controller: AppBundle:AnswerEngine/AnswerEngine:saveAnswer }
+    methods: ['POST']
+
+answer_engine_review:
+    path: /answer_engine/review
+    defaults: { _controller: AppBundle:AnswerEngine/AnswerEngine:reviewSave }
+    methods: ['POST']
+    
 course_task_list_render:
     path: /course/{courseId}/task/list/render/{type}/{paged}
     defaults: { _controller: AppBundle:Course/Course:renderTaskList, paged:false }
+
+item_attachment_init_upload:
+    path: /item/attachment/upload/init
+    defaults: { _controller: AppBundle:Item/Attachment:initUpload }
+
+item_attachment_finish_upload:
+    path: /item/attachment/upload/finish
+    defaults: { _controller: AppBundle:Item/Attachment:finishUpload }
+
+item_attachment_delete:
+    path: /item/attachment/delete
+    defaults: { _controller: AppBundle:Item/Attachment:delete }
+
+item_attachment_preview:
+    path: /item/attachment/preview
+    defaults: { _controller: AppBundle:Item/Attachment:preview }
+
+item_attachment_download:
+    path: /item/attachment/download
+    defaults: { _controller: AppBundle:Item/Attachment:download }
+
+#采集头像
+facein_capture_index:
+    path:     /my/facein/capture/{code}
+    defaults: { _controller: AppBundle:FaceInspection/Capture:index }
+
+facein_capture_upload:
+    path:     /facein/capture/{code}/upload
+    defaults: { _controller: AppBundle:FaceInspection/Capture:upload,code:'face' }
+    methods:  [POST]
+
+facein_capture_check:
+    path:     /facein/user_face/check
+    defaults: { _controller: AppBundle:FaceInspection/Capture:check }
+
+facein_inspection_save:
+    path:     /facein/inspection/{recordId}/save
+    defaults: { _controller: AppBundle:FaceInspection/Capture:save }
+    methods:  [POST]
+
+facein_inspection_results:
+    path:     /facein/inspection/{activityId}/results
+    defaults: { _controller: AppBundle:FaceInspection/InspectionResult:index }
+
+facein_inspection_results_detail:
+    path:     /facein/{activityId}/inspection/{userId}/results
+    defaults: { _controller: AppBundle:FaceInspection/InspectionResult:detail }

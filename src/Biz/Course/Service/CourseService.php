@@ -164,6 +164,8 @@ interface CourseService
 
     public function findTeachersByCourseId($courseId);
 
+    public function findTeachersByCourseIds($courseIds);
+
     public function countStudentsByCourseId($courseId);
 
     public function getUserRoleInCourse($courseId, $userId);

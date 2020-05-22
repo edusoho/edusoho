@@ -24,6 +24,8 @@ class TestpaperException extends AbstractException
 
     const NOT_TESTPAPER_TASK = 4032208;
 
+    const OPEN_TESTPAPER_FORBIDDEN_DELETE = 4032215;
+
     const NOTFOUND_EXERCISE = 4042209;
 
     const STATUS_INVALID = 5002210;
@@ -51,5 +53,6 @@ class TestpaperException extends AbstractException
         5002212 => 'exception.testpaper.modify_committed_testpaper',
         5002213 => 'exception.testpaper.doing',
         5002214 => 'exception.testpaper.redo_interval_exist',
+        4032215 => 'exception.testpaper.forbidden_delete_open_testpaper',
     );
 }

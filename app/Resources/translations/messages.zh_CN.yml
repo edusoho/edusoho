@@ -1549,7 +1549,7 @@ course.question_manage.more_btn: 更多
 course.question_manage.content_title: 课程题库
 course.question_manage.filter.question_type: --按题型--
 course.question_manage.filter.course: 按课程
-course.question_manage.filter.keywords: 关键字
+course.question_manage.filter.keywords: 关键词
 course.question_manage.filter.select: 请选择
 course.question_manage.stem: 题干
 course.question_manage.score: 得分
@@ -1612,11 +1612,12 @@ course.question_manage.manage.belong_change_tips: 此题目若被引用，更改
 course.question_manage.edit: 编辑题目
 course.question_manage.import.btn: 导入题目
 course.question_manage.import.modal_title: 题目导入
-course.question_manage.import.new_hint: 全新导入机制，导入更高效
+course.question_manage.import.new_hint: 上传文档前， 请先仔细阅读
 course.question_manage.import.drag_document_hint: 或将文档拖拽至此
-course.question_manage.import.docx_support_hint: 仅支持DOCX格式，
+course.question_manage.import.docx_support_hint: 文档仅支持DOCX格式，
 course.question_manage.import.download_template: 模板下载
 course.question_manage.import.doc_to_docx_hint: DOC如何转换成DOCX?
+question_manage.import.doc_to_docx_hint.tutorial: 查看教程
 course.question_manage.import.upload_document: 上传文档
 course.question_manage.import.reupload_document: 重新上传文档
 course.question_manage.import.uploading: 上传中...
@@ -1669,6 +1670,7 @@ course.testpaper_manage.repead_btn: 重新生成题目
 course.testpaper_manage.delete_btn: 删除试卷
 course.testpaper_manage.export: 导出试卷
 course.testpaper_manage.import: 导入试卷
+course.testpaper_manage.import.re_edit.title: 导入编辑
 course.testpaper_manage.import.re_edit.add_option: 添加选项
 course.testpaper_manage.import.re_edit.upload_stem_attachment: 上传题干附件
 course.testpaper_manage.import.re_edit.edit_analysis: 编辑解析
@@ -7212,8 +7214,10 @@ admin.user_auth.privacy_policy_settings: 隐私政策设置
 admin.user_auth.privacy_policy_settings.Enable: 是否开启隐私政策
 admin.user_auth.privacy_policy_settings.open: 开启
 admin.user_auth.privacy_policy_settings.closed: 关闭
-admin.user_auth.privacy_policy_settings.Enable.help_block: 开启后用户注册时必须同意隐私政策才能注册
+admin.user_auth.privacy_policy_settings.Enable.help_block: 开启后用户注册时必须同意隐私政策才能注册。
 admin.user_auth.privacy_policy_settings.details: 隐私政策内容
+admin.user_auth.privacy_policy_settings.tooltip: >
+  <h5>隐私政策配置仅对有独立APP的网校生效，使用阔知学堂APP的网校的隐私政策需阔知统一配置。</h5> 
 admin.user_auth.Name_setting: 名称设置
 admin.user_auth.Name_setting.user_name: 用户名称
 admin.user_auth.Name_setting.help_block: 注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
@@ -8536,6 +8540,7 @@ message_response.not_student_cannot_join_live.message: 您不是课程学员，�
 message_response.mass_title_and_text_cannot_empty: 群发标题或内容不能为空
 message_response.only_admin_can_create_class.message: 只允许管理员创建班级!
 message_response.upload_pic_format_error.message: 上传图片格式错误，请上传jpg, gif, png格式的文件。
+message_response.task_locked.message: 请先学习完已解锁的课程！
 
 classroom.manage.side_nav.setting: %classroom%设置
 classroom.manage.side_nav.manage: %classroom%管理
@@ -10071,6 +10076,7 @@ exception.testpaper.not_found_result: 试卷结果不存在
 exception.testpaper.modify_committed_testpaper: 已经交卷的试卷不能修改!
 exception.testpaper.doing: 试卷还未提交
 exception.testpaper.redo_interval_exist: 教师设置了重考间隔
+exception.testpaper.forbidden_delete_open_testpaper: 已发布试卷无法删除
 exception.homework.not_found: 作业不存在
 exception.homework.draft: 该作业未发布，如有疑问请联系老师！
 exception.homework.closed: 该作业已关闭，如有疑问请联系老师！
@@ -10588,6 +10594,7 @@ question_reedit.category_text: 分类
 question_reedit.category_empty: 无
 question_plus_upgrade_tip: 当前插件版本过低，前往后台升级“题库增强版”插件后，才可继续使用旧模板导入。
 question_bank.to_select.hint: 请先选择题库
+question_bank.select_bank_category_hint: --选择题库分类--
 
 # 新版后台开始
 
@@ -10795,3 +10802,41 @@ task.show_optional_tips: 显示选修课时
 admin_v2.user.manage.change_nickname.heading_title: 修改用户名
 
 course.plan_task.activity_manage.discuss.tips: 讨论任务在PC和APP中使用，暂不支持在微网校和小程序中使用!
+
+testpaper.result.unpassed: '很遗憾，您未通过本次考试'
+testpaper.result.passed: '恭喜您已通过本次考试!'
+testpaper.result.comment: '教师评语'
+homework.result.tips: '作业结果'
+
+#云监考
+course.task.enable_facein: 云监考
+admin.edu_cloud.edu_facein.basic_info: 基本信息
+
+admin.edu_cloud.edu_facein.service_suspend_tips: 您的云监考服务已被暂停，不能使用，请联系客服人员：4008041114。
+admin.edu_cloud.edu_facein.setting.title: 开启云监考
+admin.edu_cloud.edu_facein.setting.tips: >
+  开启云监考后，老师在创建考试课时的页面上会多一个“云监考”的开启选项，开启该选项后，学生一旦进入考试课时，监考系统就会自动启动。<a href="%url%" target="_blank">点击查看使用手册</a>
+admin.edu_cloud.edu_facein.detail.title: 采集详情
+admin.edu_cloud.edu_facein.list.status: 是否采集
+admin.edu_cloud.edu_facein.list.time: 采集时间
+admin.edu_cloud.edu_facein.list.empty: 暂无搜索结果
+admin.edu_cloud.edu_facein.no_enabled: 暂不支持该服务
+admin.edu_cloud.edu_facein.capture_link.title: 采集链接
+admin.edu_cloud.edu_facein.capture_link.tips1: '说明：1、对于同一个采集链接，一个用户只能采集一次；'
+admin.edu_cloud.edu_facein.capture_link.tips2: '2、重新生成采集链接后，旧链接会失效，不会影响之前采集成功的用户。'
+admin.edu_cloud.edu_facein.capture_link.tips3: '3、云监考功能暂不支持IE浏览器'
+facein.capture_face.title: 采集考生头像
+facein.capture_face.face_title: 摄像头画面
+facein.capture_face.face_title.tips: '请正脸对着摄像头，数秒后，系统将自动完成采集'
+facein.capture_face.img_title: 头像
+facein.capture_face.capture_btn: 采集头像
+facein.capture_face.capture_finish_btn: 完成采集
+facein.capture_face.inspection_result: 监考结果
+facein.capture_face.inspection_result.title: 疑似作弊考生
+facein.capture_face.inspection_data.title: 监考数据
+facein.capture_face.inspection_data.course_count: 计划人数
+facein.capture_face.inspection_data.result_count: 参加人数
+facein.capture_face.inspection_data.no_cheating_count: 无作弊人数
+facein.capture_face.inspection_data.inspection_count: 疑似作弊人数
+facein.capture_face.inspection_result_modal.title: 监考抓拍
+

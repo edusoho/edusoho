@@ -110,18 +110,17 @@ class CourseSetController extends BaseController
             return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
         }
 
-        $isCheckPassword = $request->getSession()->get('checkPassword');
-        if (!$isCheckPassword) {
+        $isCheckPasswordLifeTime = $request->getSession()->get('checkPassword');
+        if (!$isCheckPasswordLifeTime || $isCheckPasswordLifeTime < time()) {
             return $this->render('admin-v2/teach/course/delete.html.twig', array('courseSet' => $courseSet));
         }
-
-        $request->getSession()->remove('checkPassword');
 
         $this->getCourseSetService()->deleteCourseSet($id);
 
         return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
     }
 
+    //todo 和CourseController 有一样的
     public function checkPasswordAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {

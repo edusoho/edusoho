@@ -13,6 +13,8 @@ interface QuestionBankDao extends GeneralDaoInterface
      */
     public function getByCourseSetId($courseSetId);
 
+    public function getByItemBankId($itemBankId);
+
     public function findByIds($ids);
 
     public function findAll();

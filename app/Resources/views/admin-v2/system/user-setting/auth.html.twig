@@ -214,7 +214,9 @@
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label for="privacy_policy">{{'admin.user_auth.privacy_policy_settings.Enable'|trans}}</label>
+        <label for="privacy_policy">{{'admin.user_auth.privacy_policy_settings.Enable'|trans}}
+          {% include 'admin-v2/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: 'admin.user_auth.privacy_policy_settings.tooltip'|trans|raw, placement: 'top'} %}
+        </label>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('privacy_policy', {'opened':'admin.user_auth.privacy_policy_settings.open'|trans, 'closed':'admin.user_auth.privacy_policy_settings.closed'|trans}, auth.privacy_policy) }}

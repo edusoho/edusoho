@@ -10,26 +10,35 @@ use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 
 class TestpaperSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return array(
-            'exam.reviewed' => 'onTestPaperReviewed',
+            'answer.finished' => 'onAnswerFinished',
         );
     }
 
-    public function onTestPaperReviewed(Event $event)
+    public function onAnswerFinished(Event $event)
     {
-        $testpaperResult = $event->getSubject();
+        $answerReport = $event->getSubject();
 
-        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($testpaperResult['courseId'], $testpaperResult['lessonId']);
-        $activity = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
-        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
+        if (empty($testpaperActivity)) {
+            return;
+        }
 
-        if (!empty($testpaperActivity['finishCondition']) && $testpaperResult['score'] >= $testpaperActivity['finishCondition']['finishScore']) {
-            $this->finishTaskResult($task['id'], $testpaperResult['userId']);
+        $activity = $this->getActivityService()->getByMediaIdAndMediaType($testpaperActivity['id'], 'testpaper');
+        if (empty($activity)) {
+            return;
+        }
+
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+        if ('score' == $activity['finishType'] && $answerReport['total_score'] >= $testpaperActivity['finishCondition']['finishScore']) {
+            $answerRecord = $this->getAnswerRecordService()->get($answerReport['answer_record_id']);
+            $this->finishTaskResult($task['id'], $answerRecord['user_id']);
         }
     }
 
@@ -93,5 +102,13 @@ class TestpaperSubscriber extends EventSubscriber implements EventSubscriberInte
     protected function getUserService()
     {
         return $this->getBiz()->service('User:UserService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerRecordService');
     }
 }

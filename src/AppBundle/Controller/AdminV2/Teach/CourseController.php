@@ -108,7 +108,7 @@ class CourseController extends BaseController
 
             if ($password == $currentUser->password) {
                 $response = array('success' => true, 'message' => '密码正确');
-                $request->getSession()->set('checkPassword', true);
+                $request->getSession()->set('checkPassword', time() + 1800);
             } else {
                 $response = array('success' => false, 'message' => '密码错误');
             }

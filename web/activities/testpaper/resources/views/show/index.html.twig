@@ -8,24 +8,25 @@
             <div class="title font-blod">
               <i class="es-icon es-icon-xinxi color-info"></i>{{'course.plan_task.activity_manage.testpaper.info'|trans}}
             </div>
+            {% set testMode = activity.ext.answerScene.start_time > 0 ? 'realTime' : 'normal' %}
             {% if testpaper.status == 'open' %}
               <div class="content">
-                {% if activity.ext.testMode == 'realTime' and activity.startTime and activity.startTime > "now"|date("U") %}
+                {% if testMode == 'realTime' and activity.startTime and activity.startTime > "now"|date("U") %}
                   <div class="text-16 ">
                     {{'course.plan_task.activity_manage.testpaper.will_begin_tips'|trans({'%startTime%':activity.startTime|date('Y-m-d H:i:s')})}}
                   </div>
                 {% else %}
                   <div class="text-16 ">
-                    {{'course.plan_task.activity_manage.testpaper.total_question'|trans({'%itemCount%':testpaper.itemCount, '%score%':testpaper.score})|raw}}
+                    {{'course.plan_task.activity_manage.testpaper.total_question'|trans({'%itemCount%':testpaper.item_count, '%score%':testpaper.total_score})|raw}}
                     {% if activity.finishType|default('') == 'score' %}
                       {{'course.plan_task.activity_manage.testpaper.pass_score'|trans({'%finishScore%': activity.ext.finishCondition.finishScore })|raw}}
                     {% endif %}
-                    {% if activity.ext.limitedTime %}
+                    {% if activity.ext.answerScene.limited_time %}
                       <div class="mt5">
-                        {{'course.plan_task.activity_manage.testpaper.answer'|trans({'%limitedTime%': activity.ext.limitedTime})|raw}}
+                        {{'course.plan_task.activity_manage.testpaper.answer'|trans({'%limitedTime%': activity.ext.answerScene.limited_time})|raw}}
                       </div>
                     {% endif %}
-                    {% if activity.ext.doTimes %}
+                    {% if activity.ext.answerScene.do_times %}
                       {{'course.plan_task.activity_manage.testpaper.once_trance'|trans|raw}}
                     {% endif %}
                   </div>

@@ -11,6 +11,7 @@ use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
 use Biz\Question\Service\QuestionService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ManageController extends BaseController
@@ -65,7 +66,7 @@ class ManageController extends BaseController
         return $this->forward('AppBundle:Question/QuestionParser:reEdit', array(
             'request' => $request,
             'token' => $token,
-            'type' => 'question',
+            'type' => 'item',
         ));
     }
 
@@ -76,11 +77,11 @@ class ManageController extends BaseController
         if (!$this->getQuestionBankService()->canManageBank($data['questionBankId'])) {
             $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
         }
-        $content = $request->getContent();
-        $postData = json_decode($content, true);
-        $this->getQuestionService()->importQuestions($postData['questions'], $token);
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($data['questionBankId']);
+        $postData = json_decode($request->getContent(), true);
+        $this->getItemService()->importItems($postData['items'], $questionBank['itemBankId']);
 
-        return $this->createJsonResponse(true);
+        return $this->createJsonResponse(array('goto' => $this->generateUrl('question_bank_manage_question_list', ['id' => $data['questionBankId']])));
     }
 
     /**
@@ -129,5 +130,13 @@ class ManageController extends BaseController
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->createService('ItemBank:Item:ItemService');
     }
 }

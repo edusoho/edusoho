@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\TestpaperActivityService;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class TestpaperController extends BaseActivityController implements ActivityActionInterface
 {
@@ -59,28 +60,10 @@ class TestpaperController extends BaseActivityController implements ActivityActi
     {
         $activity = $this->getActivityService()->getActivity($id);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperActivity['mediaId'], $activity['mediaType']);
-
-        if (!$testpaper) {
-            return $this->render('activity/testpaper/preview.html.twig', array(
-                'paper' => null,
-            ));
-        }
-
-        $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
-
-        $total = $this->getTestpaperService()->countQuestionTypes($testpaper, $questions);
-
-        $attachments = $this->getTestpaperService()->findAttachments($testpaper['id']);
+        $assessment = $this->getAssessmentService()->showAssessment($testpaperActivity['mediaId']);
 
         return $this->render('activity/testpaper/preview.html.twig', array(
-            'questions' => $questions,
-            'limitedTime' => $testpaperActivity['limitedTime'],
-            'paper' => $testpaper,
-            'paperResult' => array(),
-            'total' => $total,
-            'attachments' => $attachments,
-            'questionTypes' => $this->getTestpaperService()->getCheckedQuestionTypeBySeq($testpaper),
+            'assessment' => $assessment
         ));
     }
 
@@ -226,5 +209,13 @@ class TestpaperController extends BaseActivityController implements ActivityActi
     protected function getTestpaperActivityService()
     {
         return $this->createService('Activity:TestpaperActivityService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 }

@@ -119,6 +119,21 @@ const registerEvent = function($importBox) {
   }
 
   $oldTemplate.click(function() {
+    if ('1' == $(this).data('need-upgrade')) {
+      $('#modal').modal('hide');
+      cd.confirm({
+        title: Translator.trans('site.tips'),
+        content: '<div class="cd-pb24 cd-dark-major">' + Translator.trans('course.question_manage.upgrade_tips') + '</div>',
+        okText: Translator.trans('site.close'),
+        cancelText: Translator.trans('site.confirm'),
+        className: '',
+      }).on('ok', () => {
+        $('#modal').modal('show');
+      }).on('cancel', () => {
+        $('#modal').modal('show');
+      });
+      return;
+    }
     $.ajax({
       type: 'get',
       url: $form.data('plumberUrl'),

@@ -7,6 +7,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Question\Service\QuestionService;
 use Biz\Testpaper\Service\TestpaperService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ExerciseController extends BaseActivityController implements ActivityActionInterface
@@ -46,33 +47,37 @@ class ExerciseController extends BaseActivityController implements ActivityActio
 
     protected function previewExercise($id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivity($id);
-        $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
+        $activity = $this->getActivityService()->getActivity($id, true);
 
-        if (!$exercise) {
-            return $this->createMessageResponse('error', 'exercise not found');
-        }
+        try {
+            $assessment = $this->showAssessment(
+                $activity['title'],
+                $activity['ext']['drawCondition']['range'],
+                array($activity['ext']['drawCondition']['section'])
+            );
 
-        if ($this->getTestpaperService()->isQuestionsLackedByTestId($activity['mediaId'])) {
-            return $this->render('activity/exercise/show.html.twig', array(
-                'activity' => $activity,
-                'exercise' => $exercise,
-                'courseId' => $activity['fromCourseId'],
-                'questionLack' => true,
+            return $this->render('activity/exercise/preview.html.twig', array(
+                'assessment' => $assessment,
             ));
+        } catch (\Exception $e) {
+            return $this->render('activity/exercise/item-not-enough-tips.html.twig', array());
         }
+    }
 
-        $questions = $this->getTestpaperService()->showTestpaperItems($exercise['id']);
-        $attachments = $this->getTestpaperService()->findAttachments($exercise['id']);
+    protected function showAssessment($name, $range, $sections)
+    {
+        $sections = $this->getAssessmentService()->drawItems($range, $sections);
+        $assessment = array(
+            'id' => 0,
+            'name' => $name,
+            'description' => '',
+            'total_score' => 0,
+            'item_count' => 0,
+            'question_count' => 0,
+            'sections' => $sections,
+        );
 
-        $exercise['itemCount'] = $this->getActureQuestionNum($questions);
-
-        return $this->render('activity/exercise/preview.html.twig', array(
-            'paper' => $exercise,
-            'questions' => $questions,
-            'paperResult' => array(),
-            'activity' => $activity,
-        ));
+        return $assessment;
     }
 
     public function editAction(Request $request, $id, $courseId)
@@ -249,5 +254,13 @@ class ExerciseController extends BaseActivityController implements ActivityActio
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 }

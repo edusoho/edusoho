@@ -8,7 +8,7 @@ use AppBundle\Common\TimeMachine;
 use Biz\Activity\ActivityException;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\LearningDataAnalysisService;
-use Biz\Common\CommonException;
+use Biz\Course\Service\CourseSetService;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Order\Service\OrderService;
@@ -17,7 +17,6 @@ use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
 use Biz\Testpaper\TestpaperException;
 use Biz\Thread\Service\ThreadService;
-use AppBundle\Common\ClassroomToolkit;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
 use Biz\Task\Service\TaskResultService;
@@ -31,6 +30,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\Classroom\Service\ClassroomReviewService;
 use Biz\Activity\Service\TestpaperActivityService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Biz\Activity\Service\HomeworkActivityService;
 
 class ClassroomManageController extends BaseController
 {
@@ -873,6 +875,33 @@ class ClassroomManageController extends BaseController
         return $this->createJsonResponse(array('success' => true));
     }
 
+    public function deleteCourseSetAction(Request $request, $classroomId, $courseSetId, $courseId)
+    {
+        $currentUser = $this->getUser();
+
+        if (!$currentUser->hasPermission('admin_v2_course_set_delete')) {
+            $this->createNewException(UserException::PERMISSION_DENIED());
+        }
+
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        if ('draft' == $courseSet['status']) {
+            $this->getCourseSetService()->deleteCourseSet($courseSetId);
+
+            return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
+        }
+
+        $isCheckPasswordLifeTime = $request->getSession()->get('checkPassword');
+        if (!$isCheckPasswordLifeTime || $isCheckPasswordLifeTime < time()) {
+            return $this->render('check-password/check-password-modal.twig', array('jsonp' => $request->query->get('jsonp')));
+        }
+
+        $this->getClassroomService()->deleteClassroomCourses($classroomId, array($courseId));
+
+        $this->getCourseSetService()->deleteCourseSet($courseId);
+
+        return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
+    }
+
     public function coursesAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
@@ -1033,7 +1062,7 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        $testpaper = $this->getAssessmentService()->getAssessment($testpaperId);
         if (!$testpaper) {
             $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
@@ -1049,6 +1078,7 @@ class ClassroomManageController extends BaseController
                 'classroom' => $classroom,
                 'testpaper' => $testpaper,
                 'isTeacher' => true,
+                'activity' => $activity,
                 'activityId' => $activity['id'],
             )
         );
@@ -1066,9 +1096,10 @@ class ClassroomManageController extends BaseController
             return $this->createMessageResponse('error', 'Activity not found');
         }
 
-        $checkResult = $this->getTestpaperService()->getNextReviewingResult($courseIds, $activity['id'], $activity['mediaType']);
+        $answerScene = $this->getAnswerSceneByActivity($activity);
+        $answerRecord = $this->getAnswerRecordService()->getNextReviewingAnswerRecordByAnswerSceneId($answerScene['id']);
 
-        if (empty($checkResult)) {
+        if (empty($answerRecord)) {
             $route = $this->getRedirectRoute('list', $activity['mediaType']);
 
             return $this->redirect($this->generateUrl($route, array('id' => $id)));
@@ -1076,7 +1107,22 @@ class ClassroomManageController extends BaseController
 
         $route = $this->getRedirectRoute('check', $activity['mediaType']);
 
-        return $this->redirect($this->generateUrl($route, array('id' => $id, 'resultId' => $checkResult['id'])));
+        return $this->redirect($this->generateUrl($route, array('id' => $id, 'answerRecordId' => $answerRecord['id'])));
+    }
+
+    protected function getAnswerSceneByActivity($activity)
+    {
+        if ('testpaper' == $activity['mediaType']) {
+            $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+
+            return $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
+        }
+
+        if ('homework' == $activity['mediaType']) {
+            $homeworkActivity = $this->getHomeworkActivityService()->get($activity['mediaId']);
+
+            return $this->getAnswerSceneService()->get($homeworkActivity['answerSceneId']);
+        }
     }
 
     public function homeworkAction($id)
@@ -1093,7 +1139,7 @@ class ClassroomManageController extends BaseController
         );
     }
 
-    public function testpaperCheckAction(Request $request, $id, $resultId)
+    public function testpaperCheckAction(Request $request, $id, $answerRecordId)
     {
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
@@ -1102,14 +1148,14 @@ class ClassroomManageController extends BaseController
             'AppBundle:Testpaper/Manage:check',
             array(
                 'request' => $request,
-                'resultId' => $resultId,
+                'answerRecordId' => $answerRecordId,
                 'source' => 'classroom',
                 'targetId' => $classroom['id'],
             )
         );
     }
 
-    public function homeworkCheckAction(Request $request, $id, $resultId)
+    public function homeworkCheckAction(Request $request, $id, $answerRecordId)
     {
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
@@ -1118,7 +1164,7 @@ class ClassroomManageController extends BaseController
             'AppBundle:HomeworkManage:check',
             array(
                 'request' => $request,
-                'resultId' => $resultId,
+                'answerRecordId' => $answerRecordId,
                 'source' => 'classroom',
                 'targetId' => $classroom['id'],
             )
@@ -1205,6 +1251,22 @@ class ClassroomManageController extends BaseController
 
         return $cashRate;
     }
+    
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
+    }
 
     /**
      * @return ClassroomService
@@ -1236,6 +1298,14 @@ class ClassroomManageController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     /**
@@ -1345,5 +1415,18 @@ class ClassroomManageController extends BaseController
     protected function getMemberOperationService()
     {
         return $this->createService('MemberOperation:MemberOperationService');
+    }
+
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return HomeworkActivityService
+     */
+    protected function getHomeworkActivityService()
+    {
+        return $this->getBiz()->service('Activity:HomeworkActivityService');
     }
 }

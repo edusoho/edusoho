@@ -50,6 +50,7 @@ site.capacity: 容量(G)
 site.step_two: 步骤2
 site.step_one: 步骤1
 site.information: 信息
+site.tips: 提示
 site.unknow_server_error: 发生未知错误
 
 site.incorrect.password: 密码错误
@@ -567,6 +568,7 @@ classroom.manage.expiry_mode_date_error_hint: 请输入截至日期
 classroom.manage.coin_price_hint: 相当于%coinPrice%%coinName%
 classroom.live_room.entry_error_hint: 进入直播教室错误，请联系管理员，<a href="javascript:document.location.reload()">重试</a>或<a href="javascript:window.close();">关闭</a>
 classroom.live_room.retry_or_close: <a href="javascript:document.location.reload()">重试</a>或<a href="javascript:window.close();">关闭</a>
+classroom.manage.admin_delete_course_set_hint: 同时删除此班级课程（不会影响源课程以及其他班级）
 
 thread.post.reply: 回复
 thread.post.reply_error_hint: 发表回复失败，请重试
@@ -1436,6 +1438,7 @@ coupon.target_type.multi_course: 部分课程
 coupon.target_type.multi_classroom: 部分班级
 admin.wechat.live_open_scenes_error.hint: 请至少勾选一个选项。
 course.question_manage.manage.delete_tips: 删除题目，可能会影响课时的练习，请谨慎操作！
+course.question_manage.upgrade_tips: 为了更好的使用体验，请先升级插件。<br />路径：【后台】 - 【云市场】- 【营销应用】 - 【题库增强插件】。
 admin.setting.invite.coupon.empty.tips: 请设置优惠券批次
 
 course.plan_task.activity_ppt_animation_img: 切换图片模式

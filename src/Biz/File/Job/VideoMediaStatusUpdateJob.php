@@ -14,8 +14,9 @@ class VideoMediaStatusUpdateJob extends AbstractJob
             $successNum = 0;
             foreach ($results['data'] as $result) {
                 $file = $this->getUploadFileService()->setResourceConvertStatus($result['resourceNo'], $result);
+                $attachment = $this->getUploadFileService()->setAttachmentConvertStatus($result['resourceNo'], $result);
 
-                if (empty($file)) {
+                if (empty($file) && empty($attachment)) {
                     continue;
                 }
                 ++$successNum;

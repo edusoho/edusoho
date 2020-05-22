@@ -3,10 +3,11 @@
 namespace AppBundle\Controller\QuestionBank;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\TreeToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Question\Service\CategoryService;
 use Biz\QuestionBank\Service\QuestionBankService;
+use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
 
 class QuestionCategoryController extends BaseController
@@ -18,68 +19,64 @@ class QuestionCategoryController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        $categories = $this->getQuestionCategoryService()->getCategoryTree($questionBank['id']);
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($categories, 'userId'));
-        $categories = TreeToolkit::makeTree($categories, 'weight');
+        $categories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
 
         return $this->render('question-bank/question-category/index.html.twig', array(
             'questionBank' => $questionBank,
-            'categories' => $categories,
-            'users' => $users,
+            'categories' => $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']),
+            'users' => $this->getUserService()->findUsersByIds(ArrayToolkit::column($categories, 'updated_user_id')),
         ));
     }
 
     public function batchCreateAction(Request $request, $id)
     {
-        if ('POST' == $request->getMethod()) {
+        if ($request->isMethod('POST')) {
             $categoryNames = $request->request->get('categoryNames');
-            $parentId = $request->request->get('parentId');
             $categoryNames = trim($categoryNames);
             $categoryNames = explode("\r\n", $categoryNames);
             $categoryNames = array_filter($categoryNames);
+            $parentId = $request->request->get('parentId');
+            $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
 
-            $this->getQuestionCategoryService()->batchCreateCategory($id, $parentId, $categoryNames);
+            $this->getItemCategoryService()->createItemCategories($questionBank['itemBankId'], $parentId, $categoryNames);
 
             return $this->createJsonResponse(array('success' => true, 'parentId' => $parentId));
         }
 
-        $parentId = $request->query->get('parentId', 0);
-
         return $this->render('question-bank/question-category/batch-create-modal.html.twig', array(
-            'parentId' => $parentId,
+            'parentId' => $request->query->get('parentId', 0),
             'bankId' => $id,
         ));
     }
 
     public function editAction(Request $request, $id)
     {
-        if ('POST' == $request->getMethod()) {
+        if ($request->isMethod('POST')) {
             $name = $request->request->get('name', '');
 
-            $this->getQuestionCategoryService()->updateCategory($id, array('name' => $name));
+            $this->getItemCategoryService()->updateItemCategory($id, array('name' => $name));
 
             return $this->createJsonResponse(array('success' => true));
         }
 
-        $category = $this->getQuestionCategoryService()->getCategory($id);
-
         return $this->render('question-bank/question-category/update-modal.html.twig', array(
-            'category' => $category,
+            'category' => $this->getItemCategoryService()->getItemCategory($id),
         ));
     }
 
     public function getQuestionCountAction(Request $request, $id)
     {
-        $children = $this->getQuestionCategoryService()->findCategoryChildrenIds($id);
+        $children = $this->getItemCategoryService()->findCategoryChildrenIds($id);
         $children[] = $id;
-        $questionCount = $this->getQuestionService()->searchCount(array('categoryIds' => $children));
 
-        return $this->createJsonResponse(array('questionCount' => $questionCount));
+        return $this->createJsonResponse(array(
+            'questionCount' => $this->getItemService()->countItems(array('category_ids' => $children)),
+        ));
     }
 
     public function deleteAction(Request $request, $id)
     {
-        $this->getQuestionCategoryService()->deleteCategory($id);
+        $this->getItemCategoryService()->deleteItemCategory($id);
 
         return $this->createJsonResponse(array('success' => true));
     }
@@ -91,11 +88,12 @@ class QuestionCategoryController extends BaseController
         if (!$this->getQuestionBankService()->canManageBank($bankId)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($bankId);
 
         if ($isTree) {
-            $categories = $this->getQuestionCategoryService()->getCategoryStructureTree($bankId);
+            $categories = $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']);
         } else {
-            $categories = $this->getQuestionCategoryService()->getCategoryTree($bankId);
+            $categories = $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']);
         }
 
         return $this->createJsonResponse($categories);
@@ -117,8 +115,19 @@ class QuestionCategoryController extends BaseController
         return $this->createService('Question:CategoryService');
     }
 
-    protected function getQuestionService()
+    /**
+     * @return ItemCategoryService
+     */
+    protected function getItemCategoryService()
     {
-        return $this->createService('Question:QuestionService');
+        return $this->createService('ItemBank:Item:ItemCategoryService');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->createService('ItemBank:Item:ItemService');
     }
 }
