@@ -28,8 +28,33 @@ class TestpaperInfo extends AbstractResource
             throw UserException::UN_LOGIN();
         }
 
-        $assessment = $this->getAssessmentService()->showAssessment($testId);
+        $results = array();
+        $targetType = $request->query->get('targetType');
+        $targetId = $request->query->get('targetId');
+        if (empty($targetType) || empty($targetId)) {
+            throw CommonException::ERROR_PARAMETER();
+        }
+        $method = 'handle'.$targetType;
+        if (!method_exists($this, $method)) {
+            throw CommonException::NOTFOUND_METHOD();
+        }
+        $this->$method($user, $targetId, $results);
 
+        return $results;
+    }
+
+    protected function handleTask($user, $taskId, &$results)
+    {
+        $task = $this->getTaskService()->tryTakeTask($taskId);
+        if (empty($task)) {
+            throw TaskException::NOTFOUND_TASK();
+        }
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        if ('testpaper' != $activity['mediaType']) {
+            throw TestpaperException::NOT_TESTPAPER_TASK();
+        }
+
+        $assessment = $this->getAssessmentService()->showAssessment($activity['ext']['mediaId']);
         if (empty($assessment)) {
             throw TestpaperException::NOTFOUND_TESTPAPER();
         }
@@ -42,31 +67,6 @@ class TestpaperInfo extends AbstractResource
             'testpaper' => $testpaper,
             'items' => $this->filterTestpaperItems($items),
         );
-
-        $targetType = $request->query->get('targetType');
-        $targetId = $request->query->get('targetId');
-        if (empty($targetType) || empty($targetId)) {
-            throw CommonException::ERROR_PARAMETER();
-        }
-        $method = 'handle'.$targetType;
-        if (!method_exists($this, $method)) {
-            throw CommonException::NOTFOUND_METHOD();
-        }
-        $this->$method($user, $testpaper, $targetId, $results);
-
-        return $results;
-    }
-
-    protected function handleTask($user, $testpaper, $taskId, &$results)
-    {
-        $task = $this->getTaskService()->tryTakeTask($taskId);
-        if (empty($task)) {
-            throw TaskException::NOTFOUND_TASK();
-        }
-        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-        if ('testpaper' != $activity['mediaType'] || $activity['ext']['mediaId'] != $testpaper['id']) {
-            throw TestpaperException::NOT_TESTPAPER_TASK();
-        }
 
         $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         $testpaperRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $user['id']);
