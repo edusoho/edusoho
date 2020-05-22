@@ -11,6 +11,7 @@
         :feedback="feedback"
         :vip-tag-show="true"
         :index="index"
+        uiStyle="new"
         class="gray-border-bottom"
         @fetchCourse="fetchCourse"/>
       <e-poster
