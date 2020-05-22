@@ -25,8 +25,8 @@
         var isIE=!-[1,];
 
         //防止modal关闭后重新打开创建多个iframe导致BUG
-        if($("#editorContainer_"+editor.name).length > 0 ){
-            $("#editorContainer_"+editor.name).remove();
+        if($(document.getElementById("editorContainer_" + editor.name)).length > 0 ){
+            $(document.getElementById("editorContainer_" + editor.name)).remove();
         }
         var html = '<iframe scrolling="no" id="editorContainer_'+editor.name+'" src="'+ iframeSrcPath("../kityformula/index.html") +'" style="width: 100% !important; height: 300px !important"></iframe>';
 
@@ -53,7 +53,7 @@
 
             },
             onShow: function () {
-                $("#editorContainer_"+editor.name)[0].contentWindow.postMessage({eventName: 'kityformula.show', editorName: editor.name }, '*');
+                $(document.getElementById("editorContainer_" + editor.name))[0].contentWindow.postMessage({eventName: 'kityformula.show', editorName: editor.name }, '*');
             },
             onHide: function () {
 
@@ -62,7 +62,7 @@
                 if(isIE){
                     $("#oldFormula").val();
                 }else{
-                    $("#editorContainer_"+editor.name)[0].contentWindow.postMessage({eventName: 'kityformula.ok', editorName: editor.name }, '*');
+                    $(document.getElementById("editorContainer_" + editor.name))[0].contentWindow.postMessage({eventName: 'kityformula.ok', editorName: editor.name }, '*');
                 }
             },
             onCancel: function () {
@@ -78,7 +78,19 @@
             if (eventName === 'es-ckeditor.post' && editorName === editor.name ) {
                 var source = e.data.source;
                 var $imgUrl = e.data.imageUrl;
-                $.post($('#'+editor.name).data('imageDownloadUrl'),{url:$imgUrl}, function(result){
+                $.ajax({
+                    type: "post",
+                    url: $(document.getElementById(editor.name)).data(
+                    "imageDownloadUrl"
+                    ),
+                    data: { url: $imgUrl },
+                    beforeSend(request) {
+                        request.setRequestHeader(
+                            "X-CSRF-Token",
+                            $("meta[name=csrf-token]").attr("content")
+                        );
+                    }
+                }).done(function(result) {
                     var insertHtml='<img kityformula="true" src="'+result+'" alt="'+source+'">';
                     editor.insertHtml(insertHtml);
                 });

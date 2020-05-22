@@ -2,39 +2,54 @@
 
 namespace Biz\QuestionBank\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\QuestionBank\Dao\QuestionBankDao;
+use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
-use AppBundle\Common\ArrayToolkit;
-use Biz\System\Service\SettingService;
 use Biz\Taxonomy\CategoryException;
-use Biz\Common\CommonException;
-use Biz\QuestionBank\QuestionBankException;
+use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
 
 class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 {
     public function getQuestionBank($id)
     {
-        return $this->getQuestionBankDao()->get($id);
+        $questionBank = $this->getQuestionBankDao()->get($id);
+
+        return $this->wrapQuestionBank($questionBank);
     }
 
     public function getQuestionBankByCourseSetId($courseSetId)
     {
-        return $this->getQuestionBankDao()->getByCourseSetId($courseSetId);
+        $questionBank = $this->getQuestionBankDao()->getByCourseSetId($courseSetId);
+
+        return $this->wrapQuestionBank($questionBank);
+    }
+
+    public function getQuestionBankByItemBankId($itemBankId)
+    {
+        $questionBank = $this->getQuestionBankDao()->getByItemBankId($itemBankId);
+
+        return $this->wrapQuestionBank($questionBank);
     }
 
     public function findQuestionBanksByIds($ids)
     {
-        return $this->getQuestionBankDao()->findByIds($ids);
+        $questionBanks = $this->getQuestionBankDao()->findByIds($ids);
+
+        return $this->wrapQuestionBanks($questionBanks);
     }
 
     public function searchQuestionBanks($conditions, $orderBys, $start, $limit, $columns = array())
     {
         $conditions = $this->prepareConditions($conditions);
 
-        return $this->getQuestionBankDao()->search($conditions, $orderBys, $start, $limit, $columns);
+        $questionBanks = $this->getQuestionBankDao()->search($conditions, $orderBys, $start, $limit, $columns);
+
+        return $this->wrapQuestionBanks($questionBanks);
     }
 
     public function countQuestionBanks($conditions)
@@ -63,6 +78,8 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
                 'orgCode' => $this->getCurrentUser()->getSelectOrgCode(),
             );
             $questionBank = $this->fillOrgId($questionBank);
+            $itemBank = $this->getItemBankService()->createItemBank(array('name' => $questionBank['name']));
+            $questionBank['itemBankId'] = $itemBank['id'];
             $questionBank = $this->getQuestionBankDao()->create($questionBank);
             $this->getCategoryService()->waveCategoryBankNum($fields['categoryId'], 1);
 
@@ -77,7 +94,7 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
             throw $e;
         }
 
-        return $questionBank;
+        return $this->wrapQuestionBank($questionBank);
     }
 
     public function updateQuestionBankWithMembers($id, $fields, $members)
@@ -127,24 +144,10 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
         $fields = $this->fillOrgId($fields);
 
-        return $this->getQuestionBankDao()->update($id, $fields);
-    }
+        $questionBank = $this->getQuestionBankDao()->update($id, $fields);
+        $this->getItemBankService()->updateItemBank($questionBank['itemBankId'], ['name' => $questionBank['name']]);
 
-    public function updateQuestionBankByCourseSetId($courseSetId, $fields)
-    {
-        $bank = $this->getQuestionBankByCourseSetId($courseSetId);
-        if (empty($bank)) {
-            return array();
-        }
-
-        $fields = ArrayToolkit::parts($fields, array('name', 'categoryId', 'isHidden'));
-        if (empty($fields)) {
-            $this->createNewException(CommonException::ERROR_PARAMETER());
-        }
-
-        $fields = $this->fillOrgId($fields);
-
-        return $this->getQuestionBankDao()->update($bank['id'], $fields);
+        return $this->wrapQuestionBank($questionBank);
     }
 
     public function deleteQuestionBank($id)
@@ -162,6 +165,7 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
             $this->beginTransaction();
 
             $this->getQuestionBankDao()->delete($id);
+            $this->getItemBankService()->deleteItemBank($questionBank['itemBankId']);
 
             $this->getCategoryService()->waveCategoryBankNum($questionBank['categoryId'], -1);
 
@@ -193,16 +197,6 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         return false;
     }
 
-    public function waveTestpaperNum($id, $diff)
-    {
-        return $this->getQuestionBankDao()->wave(array($id), array('testpaperNum' => $diff));
-    }
-
-    public function waveQuestionNum($id, $diff)
-    {
-        return $this->getQuestionBankDao()->wave(array($id), array('questionNum' => $diff));
-    }
-
     public function findUserManageBanks()
     {
         $user = $this->getCurrentUser();
@@ -213,12 +207,33 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
         if ($user->isSuperAdmin() || $user->hasPermission('admin_question_bank') || $user->hasPermission('admin_v2_question_bank')) {
             $banks = $this->getQuestionBankDao()->findAll();
+            $banks = $this->wrapQuestionBanks($banks);
         } else {
             $members = $this->getMemberService()->findMembersByUserId($user['id']);
-            $banks = $this->findQuestionBanksByIds(ArrayToolkit::column($members, 'bankId'));
+            $banks = $this->findQuestionBanksByIds(array_column($members, 'bankId'));
         }
 
         return $banks;
+    }
+
+    protected function wrapQuestionBank($questionBank)
+    {
+        $questionBank['itemBank'] = $this->getItemBankService()->getItemBank($questionBank['itemBankId']);
+
+        return $questionBank;
+    }
+
+    protected function wrapQuestionBanks($questionBanks)
+    {
+        $itemBanks = $this->getItemBankService()->searchItemBanks(['ids' => array_column($questionBanks, 'itemBankId')], [], 0, PHP_INT_MAX);
+        $itemBanks = ArrayToolkit::index($itemBanks, 'id');
+
+        foreach ($questionBanks as &$questionBank) {
+            $questionBank['itemBank'] = empty($itemBanks[$questionBank['itemBankId']]) ? [] : $itemBanks[$questionBank['itemBankId']];
+            unset($questionBank);
+        }
+
+        return $questionBanks;
     }
 
     protected function changeQuestionBankCategory($newCategoryId, $oldCategoryId)
@@ -254,14 +269,6 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
     }
 
     /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->createService('System:SettingService');
-    }
-
-    /**
      * @return CategoryService
      */
     protected function getCategoryService()
@@ -275,5 +282,13 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
     protected function getMemberService()
     {
         return $this->createService('QuestionBank:MemberService');
+    }
+
+    /**
+     * @return ItemBankService
+     */
+    protected function getItemBankService()
+    {
+        return $this->createService('ItemBank:ItemBank:ItemBankService');
     }
 }

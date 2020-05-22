@@ -21,6 +21,7 @@ use Biz\File\FireWall\FireWallFactory;
 use Biz\System\Service\SettingService;
 use Biz\File\Service\UploadFileService;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Codeages\Biz\Framework\Event\Event;
@@ -989,6 +990,29 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return array();
         }
 
+        $fields = $this->filterConvertResult($result);
+
+        return $this->getUploadFileDao()->update($file['id'], $fields);
+    }
+
+    public function setAttachmentConvertStatus($globalId, array $result)
+    {
+        $attachment = $this->getAttachmentService()->getAttachmentByGlobalId($globalId);
+        if (empty($attachment)) {
+            return array();
+        }
+
+        $fields = $this->filterConvertResult($result);
+
+        return $this->getAttachmentService()->updateAttachment($attachment['id'], array(
+            'convert_status' => $fields['convertStatus'],
+            'audio_convert_status' => $fields['audioConvertStatus'],
+            'mp4_convert_status' => $fields['mp4ConvertStatus'],
+        ));
+    }
+
+    protected function filterConvertResult($result)
+    {
         $convertStatus = CloudFileStatusToolkit::convertProcessStatus($result['status']);
 
         if ('error' == $convertStatus && isset($result['errorType']) && 'client' == $result['errorType']) {
@@ -1010,7 +1034,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $fields['mp4ConvertStatus'] = $convertStatus;
         }
 
-        return $this->getUploadFileDao()->update($file['id'], $fields);
+        return $fields;
     }
 
     public function makeUploadParams($params)
@@ -1213,6 +1237,101 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function waveUsedCount($id, $num)
     {
         return $this->getUploadFileDao()->waveUsedCount($id, $num);
+    }
+
+    public function initUploadAttachment($params)
+    {
+        try {
+            $this->beginTransaction();
+            $implementor = $this->getFileImplementor('cloud');
+            $file = $implementor->prepareUpload($params);
+            $params = array_merge($params, $file);
+            $attachment = array(
+                'file_name' => $params['filename'],
+                'ext' => $params['ext'],
+                'size' => $params['fileSize'],
+                'file_type' => $params['type'],
+                'hash_id' => $params['hashId'],
+            );
+
+            $attachment = $this->getAttachmentService()->createAttachment($attachment);
+            $params['id'] = $attachment['id'];
+            $result = $implementor->initUpload($params);
+            $this->getAttachmentService()->updateAttachment($attachment['id'], array('global_id' => $result['globalId']));
+
+            $this->commit();
+
+            return $result;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    public function finishUploadAttachment($params)
+    {
+        if (empty($params['length'])) {
+            $params['length'] = 0;
+        }
+
+        try {
+            $this->beginTransaction();
+            $attachment = $this->getAttachmentService()->getAttachment($params['id']);
+            $file = array(
+                'id' => $attachment['id'],
+                'filename' => $attachment['file_name'],
+                'targetType' => 'attachment',
+                'globalId' => $attachment['global_id'],
+                'length' => $params['length'],
+            );
+            $result = $this->getFileImplementor('cloud')->finishedUpload($file, $params);
+
+            if (empty($result) || !$result['success']) {
+                $this->createNewException(UploadFileException::UPLOAD_FAILED());
+            }
+            $this->getAttachmentService()->finishUpload($attachment['id']);
+
+            $this->commit();
+
+            return $file;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    public function deleteAttachment($id)
+    {
+        $file = $this->getAttachmentService()->getAttachment($id);
+
+        if (empty($file)) {
+            return false;
+        }
+
+        $file['globalId'] = $file['global_id'];
+        $result = $this->getFileImplementor('cloud')->deleteFile($file);
+
+        if ((isset($result['success']) && $result['success'])
+            || (!empty($result['error']) && '资源不存在，或已删除！' == $result['error'])
+        ) {
+            return $this->getAttachmentService()->deleteAttachment($id);
+        }
+
+        return false;
+    }
+
+    public function downloadAttachment($id, $ssl)
+    {
+        $file = $this->getAttachmentService()->getAttachment($id);
+
+        if (empty($file)) {
+            return false;
+        }
+
+        $file['globalId'] = $file['global_id'];
+        $result = $this->getFileImplementor('cloud')->getDownloadFile($file, $ssl);
+
+        return $result;
     }
 
     protected function updateTags($localFile, $fields)
@@ -1673,5 +1792,13 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     protected function getMaterialService()
     {
         return $this->createService('Course:MaterialService');
+    }
+
+    /**
+     * @return AttachmentService
+     */
+    protected function getAttachmentService()
+    {
+        return $this->createService('ItemBank:Item:AttachmentService');
     }
 }

@@ -1,0 +1,40 @@
+{% set questionTypesDict = getQuestionTypes() %}
+
+{% include 'question-bank/widgets/picked-item/base-item-question.html.twig' %}
+
+{% for question in item.questions %}
+  <tr id="testpaper-item-{{ item.id }}" data-id="{{ item.id }}" data-question-id="{{ question.id|default(0) }}" data-type="{{ item.type }}" class="is-sub-question">
+  <td></td>
+  <td>
+    <input class="notMoveHandle" type="checkbox" value="{{item.id}}" data-role="batch-item" >
+  </td>
+  <td class="seq"></td>
+  <td>
+    <a class="color-info" href="#modal" data-toggle="modal" data-url="{{ path('question_bank_manage_question_preview', {id: questionBank.id, questionId: item.id}) }}">
+      {% if item.includeImg|default('') %}<span class="glyphicon glyphicon-picture"/>{% endif %}
+      {{question.stem|plain_text(40) }}
+    </a>
+    <br/>
+    <span class="color-gray text-sm">{{ 'category'|trans }}：
+      {% if item.category_id %}
+        {{ itemCategories[item.category_id].name }}
+      {% else %}
+        {{ 'site.data.empty'|trans }}
+      {% endif %}
+    </span>
+  </td>
+  <td class="js-question-score" data-score="{{ question.score|default(0)|score_text }}">
+    {{ question.score|default(0)|score_text }}
+  </td>
+  {% if question.answer_mode in ['uncertain_choice', 'choice'] %}
+    <td class="js-miss-score" data-miss-score="{{ question.miss_score|default(0)|score_text }}">
+      {{ question.miss_score|default(0)|score_text }}
+    </td>
+  {% else %}
+    <td></td>
+  {% endif %}
+  <td>{{ dict_text('difficulty', item.difficulty)}}</td>
+  <td>
+  </td>
+  </tr>
+{% endfor %}

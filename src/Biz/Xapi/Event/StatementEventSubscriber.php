@@ -11,13 +11,14 @@ use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use QiQiuYun\SDK\Constants\XAPIVerbs;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Biz\Activity\Service\ActivityService;
 
 class StatementEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return array(
-            'exam.finish' => 'onExamFinish',
+            'answer.submitted' => 'onAnswerSubmitted',
             'question_marker.finish' => 'onQuestionMarkerFinish',
             'order.paid' => 'onOrderPaid',
             'classReview.add' => 'onClassroomReviewAdd',
@@ -32,6 +33,16 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'courseSet.favorite' => 'onCourseSetFavorite',
             'course.review.add' => 'onCourseReviewAdd',
         );
+    }
+
+    public function onAnswerSubmitted(Event $event)
+    {
+        $answerRecord = $event->getSubject();
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
+        if (empty($activity) || !in_array($activity['mediaType'], array('homework', 'testpaper', 'exercise'))) {
+            return;
+        }
+        $this->createStatement($answerRecord['user_id'], 'completed', $answerRecord['id'], $activity['mediaType']);
     }
 
     public function onCourseTaskFinish(Event $event)
@@ -59,30 +70,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         $questionMarkerResult = $event->getSubject();
 
         $this->createStatement($user['id'], 'answered', $questionMarkerResult['id'], 'question');
-    }
-
-    public function onExamFinish(Event $event)
-    {
-        $user = $this->getCurrentUser();
-        if (empty($user) || !$user->isLogin()) {
-            return;
-        }
-        // testpaper, exercise, homework
-        $examResult = $event->getSubject();
-
-        switch ($examResult['type']) {
-            case 'testpaper':
-                $this->testpaperFinish($examResult);
-                break;
-            case 'homework':
-                $this->homeworkFinish($examResult);
-                break;
-            case 'exercise':
-                $this->exerciseFinish($examResult);
-                break;
-            default:
-                break;
-        }
     }
 
     public function onUserSearch(Event $event)
@@ -230,5 +217,13 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     protected function createService($alias)
     {
         return $this->getBiz()->service($alias);
+    }
+
+    /**
+     * @return ActivityService
+     */
+    public function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 }

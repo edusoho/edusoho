@@ -50,6 +50,7 @@ site.capacity: 容量(G)
 site.step_two: 步骤2
 site.step_one: 步骤1
 site.information: 信息
+site.tips: 提示
 site.unknow_server_error: 发生未知错误
 
 site.incorrect.password: 密码错误
@@ -1437,6 +1438,7 @@ coupon.target_type.multi_course: 部分课程
 coupon.target_type.multi_classroom: 部分班级
 admin.wechat.live_open_scenes_error.hint: 请至少勾选一个选项。
 course.question_manage.manage.delete_tips: 删除题目，可能会影响课时的练习，请谨慎操作！
+course.question_manage.upgrade_tips: 为了更好的使用体验，请先升级插件。<br />路径：【后台】 - 【云市场】- 【营销应用】 - 【题库增强插件】。
 admin.setting.invite.coupon.empty.tips: 请设置优惠券批次
 
 course.plan_task.activity_ppt_animation_img: 切换图片模式

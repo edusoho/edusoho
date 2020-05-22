@@ -11,16 +11,20 @@ use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\TestpaperActivityService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Biz\Activity\Service\HomeworkActivityService;
 
 class TestpaperManageController extends BaseController
 {
-    public function checkAction(Request $request, $id, $resultId)
+    public function checkAction(Request $request, $id, $answerRecordId)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
         return $this->forward('AppBundle:Testpaper/Manage:check', array(
             'request' => $request,
-            'resultId' => $resultId,
+            'answerRecordId' => $answerRecordId,
             'source' => 'course',
             'targetId' => $course['id'],
         ));
@@ -62,7 +66,7 @@ class TestpaperManageController extends BaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $user = $this->getUser();
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        $testpaper = $this->getAssessmentService()->getAssessment($testpaperId);
         if (!$testpaper) {
             $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
@@ -80,6 +84,7 @@ class TestpaperManageController extends BaseController
             'testpaper' => $testpaper,
             'isTeacher' => $isTeacher,
             'activityId' => $activity['id'],
+            'activity' => $activity,
         ));
     }
 
@@ -135,9 +140,10 @@ class TestpaperManageController extends BaseController
             return $this->createMessageResponse('error', 'Activity not found');
         }
 
-        $checkResult = $this->getTestpaperService()->getNextReviewingResult(array($id), $activity['id'], $activity['mediaType']);
+        $answerScene = $this->getAnswerSceneByActivity($activity);
+        $answerRecord = $this->getAnswerRecordService()->getNextReviewingAnswerRecordByAnswerSceneId($answerScene['id']);
 
-        if (empty($checkResult)) {
+        if (empty($answerRecord)) {
             $route = $this->getRedirectRoute('list', $activity['mediaType']);
 
             return $this->redirect($this->generateUrl($route, array('id' => $id)));
@@ -145,7 +151,22 @@ class TestpaperManageController extends BaseController
 
         $route = $this->getRedirectRoute('check', $activity['mediaType']);
 
-        return $this->redirect($this->generateUrl($route, array('id' => $id, 'resultId' => $checkResult['id'])));
+        return $this->redirect($this->generateUrl($route, array('id' => $id, 'answerRecordId' => $answerRecord['id'])));
+    }
+
+    protected function getAnswerSceneByActivity($activity)
+    {
+        if ('testpaper' == $activity['mediaType']) {
+            $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+
+            return $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
+        }
+
+        if ('homework' == $activity['mediaType']) {
+            $homeworkActivity = $this->getHomeworkActivityService()->get($activity['mediaId']);
+
+            return $this->getAnswerSceneService()->get($homeworkActivity['answerSceneId']);
+        }
     }
 
     protected function getRedirectRoute($mode, $type)
@@ -162,6 +183,22 @@ class TestpaperManageController extends BaseController
         );
 
         return $routes[$mode][$type];
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
     }
 
     /**
@@ -207,5 +244,21 @@ class TestpaperManageController extends BaseController
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return HomeworkActivityService
+     */
+    protected function getHomeworkActivityService()
+    {
+        return $this->getBiz()->service('Activity:HomeworkActivityService');
     }
 }

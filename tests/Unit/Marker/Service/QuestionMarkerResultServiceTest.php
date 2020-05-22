@@ -40,29 +40,26 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
 
     public function testFinishQuestionMarker()
     {
-        $question = array(
-            'type' => 'single_choice',
-            'stem' => 'question.',
-            'difficulty' => 'normal',
-            'answer' => array('answer'),
-            'target' => 'course-1',
-            'choices' => array('爱', '测', '额', '恶'),
-            'uncertain' => 0,
-            'analysis' => '',
-            'score' => '2',
-            'submission' => 'submit',
-            'parentId' => 0,
-            'copyId' => 1,
-            'courseSetId' => 1,
+        $this->mockBiz(
+            'ItemBank:Item:ItemService',
+            array(
+                array(
+                    'functionName' => 'getItemWithQuestions',
+                    'returnValue' => array('id' => 1, 'questions' => array(array('id' => 1))),
+                ),
+                array(
+                    'functionName' => 'review',
+                    'returnValue' => array(array('result' => 'right')),
+                ),
+            )
         );
         $fields = array(
             'second' => 30,
             'questionId' => 1,
         );
 
-        $question = $this->getQuestionService()->create($question);
         $this->getMarkerService()->addMarker(1, $fields);
-        $questionMarker = $this->getQuestionMarkerService()->addQuestionMarker($question['id'], 1, 1);
+        $questionMarker = $this->getQuestionMarkerService()->addQuestionMarker(1, 1, 1);
 
         $savedResult = $this->getQuestionMarkerResultService()->finishQuestionMarker($questionMarker['id'], array(
             'answer' => array('answer'),

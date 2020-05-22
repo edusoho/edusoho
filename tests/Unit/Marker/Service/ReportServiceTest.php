@@ -9,6 +9,7 @@ class ReportServiceTest extends BaseTestCase
     public function testAnalysisTaskQuestionMarkerWithChoice()
     {
         $expectedQuestionMarker = array(
+            'questionId' => 1,
             'type' => 'single_choice',
             'stem' => '当过中国总理的是谁?',
             'answer' => array(3),
@@ -17,21 +18,58 @@ class ReportServiceTest extends BaseTestCase
             )),
         );
         $expectedResults = array(
-            array('answer' => array('1')),
-            array('answer' => array('2')),
-            array('answer' => array('3')),
-            array('answer' => array('0')),
-            array('answer' => array('1')),
+            array('answer' => array('B')),
+            array('answer' => array('C')),
+            array('answer' => array('D')),
+            array('answer' => array('A')),
+            array('answer' => array('B')),
+        );
+        $this->mockBiz(
+            'ItemBank:Item:ItemService',
+            array(
+                array(
+                    'functionName' => 'getItemWithQuestions',
+                    'returnValue' => array('id' => 1, 'type' => 'single_choice', 'questions' => array(array(
+                        'id' => 1,
+                        'response_points' => [
+                            [
+                                'radio' => [
+                                    'val' => 'A',
+                                    'text' => '选项A',
+                                ],
+                            ],
+                            [
+                                'radio' => [
+                                    'val' => 'B',
+                                    'text' => '选项B',
+                                ],
+                            ],
+                            [
+                                'radio' => [
+                                    'val' => 'C',
+                                    'text' => '选项C',
+                                ],
+                            ],
+                            [
+                                'radio' => [
+                                    'val' => 'D',
+                                    'text' => '选项D',
+                                ],
+                            ],
+                        ],
+                    ))),
+                ),
+            )
         );
         $this->mockCourseAndTaskService();
         $this->mockQuestionMarkerService($expectedQuestionMarker);
         $this->mockQuestionMarkerResultService($expectedResults);
         $result = $this->getReportService()->analysisQuestionMarker(1, 1, 1);
 
-        $this->assertEquals($expectedQuestionMarker, $result['questionMarker']);
+        $this->assertEquals($expectedQuestionMarker['questionId'], $result['item']['id']);
         $this->assertEquals(5, $result['count']);
-        $this->assertEquals(1, $result['metaStats'][0]['answerNum']);
-        $this->assertEquals(2, $result['metaStats'][1]['answerNum']);
+        $this->assertEquals(1, $result['metaStats']['A']['answerNum']);
+        $this->assertEquals(2, $result['metaStats']['B']['answerNum']);
         $this->assertEquals(100, array_reduce($result['metaStats'], function ($value, $item) {
             $value += $item['pct'];
 
@@ -42,6 +80,7 @@ class ReportServiceTest extends BaseTestCase
     public function testAnalysisTaskQuestionMarkerWithFill()
     {
         $expectedQuestionMarker = array(
+            'questionId' => 1,
             'type' => 'fill',
             'stem' => '飞碟帽三部曲中第一部是___,说出其中的演员有___.',
             'answer' => array(array('三国之见龙卸甲'), array('刘德华', '李美琪', '洪金宝')),
@@ -53,42 +92,89 @@ class ReportServiceTest extends BaseTestCase
             array('answer' => array('三国之见龙卸甲', '刘德华')),
             array('answer' => array('三国之见龙卸甲', '李美琪')),
         );
+        $this->mockBiz(
+            'ItemBank:Item:ItemService',
+            array(
+                array(
+                    'functionName' => 'getItemWithQuestions',
+                    'returnValue' => array('id' => 1, 'type' => 'fill', 'questions' => array(array(
+                        'id' => 1,
+                        'response_points' => [
+                            [
+                                'text' => [
+                                ],
+                            ],
+                            [
+                                'text' => [
+                                ],
+                            ],
+                        ],
+                        'answer' => ['三国之见龙卸甲', '刘德华'],
+                    ))),
+                ),
+            )
+        );
         $this->mockCourseAndTaskService();
         $this->mockQuestionMarkerService($expectedQuestionMarker);
         $this->mockQuestionMarkerResultService($expectedResults);
         $result = $this->getReportService()->analysisQuestionMarker(1, 1, 1);
 
-        $this->assertEquals($expectedQuestionMarker, $result['questionMarker']);
+        $this->assertEquals($expectedQuestionMarker['questionId'], $result['item']['id']);
         $this->assertEquals(5, $result['count']);
         $this->assertEquals(3, $result['metaStats'][0]['answerNum']);
-        $this->assertEquals(4, $result['metaStats'][1]['answerNum']);
-        $this->assertEquals(80, $result['metaStats'][1]['pct']);
+        $this->assertEquals(2, $result['metaStats'][1]['answerNum']);
+        $this->assertEquals(40.0, $result['metaStats'][1]['pct']);
     }
 
     public function testAnalysisTaskQuestionMarkerWithDetermine()
     {
         $expectedQuestionMarker = array(
+            'questionId' => 1,
             'type' => 'determine',
             'stem' => '张艺谋属于第四代导演',
             'answer' => array(0),
         );
         $expectedResults = array(
-            array('answer' => array(1)),
-            array('answer' => array(0)),
-            array('answer' => array(0)),
-            array('answer' => array(0)),
-            array('answer' => array(1)),
+            array('answer' => array('T')),
+            array('answer' => array('F')),
+            array('answer' => array('F')),
+            array('answer' => array('F')),
+            array('answer' => array('T')),
+        );
+        $this->mockBiz(
+            'ItemBank:Item:ItemService',
+            array(
+                array(
+                    'functionName' => 'getItemWithQuestions',
+                    'returnValue' => array('id' => 1, 'type' => 'fill', 'questions' => array(array(
+                        'id' => 1,
+                        'response_points' => [
+                            [
+                                'radio' => [
+                                    'val' => 'T',
+                                    'text' => '正确',
+                                ],
+                            ],
+                            [
+                                'radio' => [
+                                    'val' => 'F',
+                                    'text' => '错误',
+                                ],
+                            ],
+                        ],
+                        'answer' => ['T'],
+                    ))),
+                ),
+            )
         );
         $this->mockCourseAndTaskService();
         $this->mockQuestionMarkerService($expectedQuestionMarker);
         $this->mockQuestionMarkerResultService($expectedResults);
         $result = $this->getReportService()->analysisQuestionMarker(1, 1, 1);
 
-        $this->assertEquals($expectedQuestionMarker, $result['questionMarker']);
+        $this->assertEquals($expectedQuestionMarker['questionId'], $result['item']['id']);
         $this->assertEquals(5, $result['count']);
         $this->assertEquals(2, $result['metaStats'][0]['answerNum']);
-        $this->assertEquals(3, $result['metaStats'][1]['answerNum']);
-        $this->assertEquals(60, $result['metaStats'][1]['pct']);
     }
 
     /**
@@ -101,6 +187,25 @@ class ReportServiceTest extends BaseTestCase
 
     public function testStatLessonQuestionMarkerSuccess()
     {
+        $this->mockBiz(
+            'ItemBank:Item:ItemService',
+            array(
+                array(
+                    'functionName' => 'getItemWithQuestions',
+                    'returnValue' => array('id' => 1, 'type' => 'single_choice', 'questions' => array(array(
+                        'id' => 1,
+                    ))),
+                ),
+                array(
+                    'functionName' => 'findItemsByIds',
+                    'returnValue' => array('1' => array(
+                        'id' => 1,
+                        'type' => 'single_choice',
+                        'questions' => array(array('id' => 1, 'stem' => 'test')),
+                    )),
+                ),
+            )
+        );
         $this->mockCourseAndTaskService();
         $this->mockMarkerService();
         $this->mockQuestionMarkerService();
@@ -153,9 +258,9 @@ class ReportServiceTest extends BaseTestCase
     private function mockQuestionMarkerService($expectedQMarker = array())
     {
         $questionMarkers = array(
-            array('id' => 1, 'lessonId' => 1, 'markerId' => 1),
-            array('id' => 2, 'lessonId' => 2, 'markerId' => 1),
-            array('id' => 3, 'lessonId' => 3, 'markerId' => 1),
+            array('id' => 1, 'lessonId' => 1, 'markerId' => 1, 'questionId' => 1),
+            array('id' => 2, 'lessonId' => 2, 'markerId' => 1, 'questionId' => 1),
+            array('id' => 3, 'lessonId' => 3, 'markerId' => 1, 'questionId' => 1),
         );
         $this->mockBiz('Marker:QuestionMarkerService', array(
             array('functionName' => 'findQuestionMarkersByMarkerIds', 'runTimes' => 1, 'returnValue' => $questionMarkers),

@@ -4,8 +4,10 @@ namespace AppBundle\Twig;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Question\Service\QuestionService;
+use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
+use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class QuestionExtension extends \Twig_Extension
@@ -36,6 +38,7 @@ class QuestionExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('find_question_num_by_course_set_id', array($this, 'findQuestionNumsByCourseSetId')),
             new \Twig_SimpleFunction('question_html_filter', array($this, 'questionHtmlFilter')),
+            new \Twig_SimpleFunction('attachment_uploader_token', array($this, 'makeAttachmentToken')),
         );
     }
 
@@ -88,6 +91,16 @@ class QuestionExtension extends \Twig_Extension
         }
     }
 
+    public function makeAttachmentToken()
+    {
+        $user = $this->biz['user'];
+        $setting = $this->getSettingService()->get('storage', array());
+        $accessKey = empty($setting['cloud_access_key']) ? '' : $setting['cloud_access_key'];
+        $secretKey = empty($setting['cloud_secret_key']) ? '' : $setting['cloud_secret_key'];
+
+        return $this->getAttachmentService()->makeToken($user, $accessKey, $secretKey);
+    }
+
     /**
      * @return QuestionService
      */
@@ -96,9 +109,20 @@ class QuestionExtension extends \Twig_Extension
         return $this->biz->service('Question:QuestionService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->biz->service('System:SettingService');
+    }
+
+    /**
+     * @return AttachmentService
+     */
+    protected function getAttachmentService()
+    {
+        return $this->biz->service('ItemBank:Item:AttachmentService');
     }
 
     public function getName()

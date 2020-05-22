@@ -95,6 +95,7 @@ return array(
     'Codeages\\Biz\\RateLimiter\\' => array($vendorDir . '/codeages/biz-rate-limiter/src'),
     'Codeages\\Biz\\Pay\\' => array($vendorDir . '/codeages/biz-order-pay/src/Pay'),
     'Codeages\\Biz\\Order\\' => array($vendorDir . '/codeages/biz-order-pay/src/Order'),
+    'Codeages\\Biz\\ItemBank\\' => array($vendorDir . '/codeages/biz-item-bank/src'),
     'Codeages\\Biz\\Invoice\\' => array($vendorDir . '/codeages/biz-order-pay/src/Invoice'),
     'Codeages\\Biz\\Framework\\' => array($vendorDir . '/codeages/biz-framework/src'),
     'Clue\\StreamFilter\\' => array($vendorDir . '/clue/stream-filter/src'),

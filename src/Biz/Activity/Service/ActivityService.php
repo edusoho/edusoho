@@ -16,6 +16,8 @@ interface ActivityService
 
     public function findActivitiesByCourseSetIdAndType($courseSetId, $type, $fetchMedia = false);
 
+    public function findActivitiesByMediaIdsAndMediaType($mediaIds, $mediaType);
+
     /**
      * 创建之前检查完整性
      *
@@ -68,4 +70,8 @@ interface ActivityService
     public function getActivityFinishCondition($activity);
 
     public function getByMediaIdAndMediaTypeAndCopyId($mediaId, $mediaType, $copyId);
+
+    public function getByMediaIdAndMediaType($mediaId, $mediaType);
+
+    public function getActivityByAnswerSceneId($answerSceneId);
 }

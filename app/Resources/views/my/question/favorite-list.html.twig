@@ -16,25 +16,25 @@
         <table class="table table-striped table-hover">
           <tbody>
           {% for favoriteQuestion in favoriteQuestions %}
-            {% set paper = testpapers[favoriteQuestion.targetId]|default(null) %}
-            {% set question = questions[favoriteQuestion.questionId] %}
-
+            {% set assessment = assessments[favoriteQuestion.target_id]|default(null) %}
+            {% set question = questions[favoriteQuestion.question_id]|default(null) %}
+            {% if question.id|default(0) > 0  %}
             <tr>
               <td>
-                <a class="link-primary" href="#modal" data-toggle="modal" data-url="{{ path('my_favorite_question_preview', {id:question.id}) }}">{{ question.stem|plain_text(40) }}</a>
+                <a class="link-primary" href="#modal" data-toggle="modal" data-url="{{ path('my_favorite_question_preview', {id:question.item_id}) }}">{{ question.stem|plain_text(40) }}</a>
                 <div class="color-gray">
-                  {% if paper.id|default(0) > 0  %}
-                    <small>{{'my.learning.testpaper.target_testpaper'|trans({'%name%':paper.name })}}</small>
+                  {% if assessment.id|default(0) > 0  %}
+                    <small>{{'my.learning.testpaper.target_testpaper'|trans({'%name%':assessment.name })}}</small>
                     <small class="mhs">•</small>
                   {% endif %}
-                  <small>{{'my.learning.testpaper.favorite_time'|trans({'%time%': favoriteQuestion.createdTime|date('Y-n-d H:i:s')})}}</small>
+                  <small>{{'my.learning.testpaper.favorite_time'|trans({'%time%': favoriteQuestion.created_time|date('Y-n-d H:i:s')})}}</small>
                 </div>
               </td>
               <td class="vertical-middle">
                 <button data-url="{{ path('my_question_unfavorite', {id:favoriteQuestion.id}) }}" class="btn btn-default btn-sm pull-right js-cancel-btn"><span class="glyphicon glyphicon-star-empty"></span> {{'my.learning.testpaper.cancel_favorite_btn'|trans}}</button>
               </td>
             </tr>
-
+            {% endif %}
           {% endfor %}
           </tbody>
         </table>

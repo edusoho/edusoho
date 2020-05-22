@@ -1,6 +1,5 @@
 {% extends 'default/base-index.html.twig' %}
 {% do script(['app/js/index/index.js']) %}
-
 {% block content %}
     {% cache 'jianmo/home/top/banner' 600 %}
     {{ block_show('jianmo:home_top_banner') }}

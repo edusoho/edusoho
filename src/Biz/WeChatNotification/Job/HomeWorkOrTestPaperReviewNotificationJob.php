@@ -5,31 +5,24 @@ namespace Biz\WeChatNotification\Job;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Notification\WeChatTemplateMessage\TemplateUtil;
 use Biz\Testpaper\Service\TestpaperService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Biz\Activity\Service\HomeworkActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseService;
 
 class HomeWorkOrTestPaperReviewNotificationJob extends AbstractNotificationJob
 {
     public function execute()
     {
         $key = $this->args['key'];
-        $sendTime = $this->args['sendTime'];
         $templateId = $this->getWeChatService()->getTemplateId($key);
 
         if (empty($templateId)) {
             return;
         }
 
-        $date = date('Y-m-d', time());
-        $sendTime = strtotime($date.$sendTime.':00');
-        $conditions = array(
-            'beginTime_LE' => $sendTime,
-            'beginTime_GE' => $sendTime - 24 * 60 * 60,
-            'role' => 'teacher',
-            'types' => array('homework', 'testpaper'),
-            'status' => 'reviewing',
-        );
-        $nums = $this->getTestPaperService()->searchTestpaperResultsCountJoinCourseMemberGroupByUserId($conditions);
-
-        $userIds = ArrayToolkit::column($nums, 'userId');
+        $nums = $this->getSendUserIdAndNum();
         if (0 == count($nums)) {
             return;
         }
@@ -53,7 +46,114 @@ class HomeWorkOrTestPaperReviewNotificationJob extends AbstractNotificationJob
             );
         }
 
-        $this->sendNotifications($key, 'wechat_notify_lesson_publish', $userIds, $templateData);
+        $this->sendNotifications($key, 'wechat_notify_lesson_publish', ArrayToolkit::column($nums, 'userId'), $templateData);
+    }
+
+    protected function getSendUserIdAndNum()
+    {
+        $endTime = strtotime(date('Y-m-d '.$this->args['sendTime'].':00'));
+        $startTime = $endTime - 86400;
+
+        $conditions = array(
+            'status' => 'reviewing',
+            'beginTime_GT' => $startTime,
+            'beginTime_ELT' => $endTime,
+        );
+
+        $answerSceneGroups = ArrayToolkit::group(
+            $this->getAnswerRecordService()->search($conditions, array(), 0, $this->getAnswerRecordService()->count($conditions)),
+            'answer_scene_id'
+        );
+        if (empty($answerSceneGroups)) {
+            return array();
+        }
+
+        $activities = array_merge($this->getTestpaperActivities(array_keys($answerSceneGroups)), $this->getHomeworkActivities(array_keys($answerSceneGroups)));
+        foreach ($activities as &$activity) {
+            $activity['num'] = count($answerSceneGroups[$activity['answerSceneId']]);
+        }
+
+        $courses = ArrayToolkit::group($activities, 'fromCourseId');
+        foreach ($courses as $courseId => &$course) {
+            $course = array(
+                'courseId' => $courseId,
+                'num' => array_sum(ArrayToolkit::column($course, 'num')),
+            );
+        }
+
+        $teachers = $this->getCourseService()->findTeachersByCourseIds(array_keys($courses));
+        foreach ($teachers as &$teacher) {
+            $teacher['num'] = $courses[$teacher['courseId']]['num'];
+        }
+        $teacherGroups = ArrayToolkit::group($teachers, 'userId');
+        foreach ($teacherGroups as $userId => &$teacherGroup) {
+            $teacherGroup = array(
+                'userId' => $userId,
+                'num' => array_sum(ArrayToolkit::column($teacherGroup, 'num')),
+            );
+        }
+
+        return $teacherGroups;
+    }
+
+    protected function getHomeworkActivities($answerSceneIds)
+    {
+        $homeworkActivities = ArrayToolkit::index(
+            $this->getHomeworkActivityService()->findByAnswerSceneIds($answerSceneIds),
+            'id'
+        );
+        $activities = $this->getActivityService()->findActivitiesByMediaIdsAndMediaType(ArrayToolkit::column($homeworkActivities, 'id'), 'homework');
+        foreach ($activities as &$activity) {
+            $activity['answerSceneId'] = $homeworkActivities[$activity['mediaId']]['answerSceneId'];
+        }
+
+        return $activities;
+    }
+
+    protected function getTestpaperActivities($answerSceneIds)
+    {
+        $testpaperActivities = ArrayToolkit::index(
+            $this->getTestpaperActivityService()->findByAnswerSceneIds($answerSceneIds),
+            'id'
+        );
+        $activities = $this->getActivityService()->findActivitiesByMediaIdsAndMediaType(ArrayToolkit::column($testpaperActivities, 'id'), 'testpaper');
+        foreach ($activities as &$activity) {
+            $activity['answerSceneId'] = $testpaperActivities[$activity['mediaId']]['answerSceneId'];
+        }
+
+        return $activities;
+    }
+
+    /**
+     * @return HomeworkActivityService
+     */
+    protected function getHomeworkActivityService()
+    {
+        return $this->biz->service('Activity:HomeworkActivityService');
+    }
+
+    /**
+     * @return TestpaperActivityService
+     */
+    protected function getTestpaperActivityService()
+    {
+        return $this->biz->service('Activity:TestpaperActivityService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->biz->service('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->biz->service('Activity:ActivityService');
     }
 
     /**
@@ -62,5 +162,13 @@ class HomeWorkOrTestPaperReviewNotificationJob extends AbstractNotificationJob
     protected function getTestPaperService()
     {
         return $this->biz->service('Testpaper:TestpaperService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
     }
 }

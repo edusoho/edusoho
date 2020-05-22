@@ -1,0 +1,38 @@
+{% extends 'layout.html.twig' %}
+{% set lang = app.request.getLocale() %}
+
+{% if lang == 'en' %}
+  {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js', 'libs/item-bank/lib/locale/en-US.js', 'app/js/answer-engine/review/index.js']) %}
+{% else %}
+  {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js','app/js/answer-engine/review/index.js']) %}
+{% endif %}
+
+
+{% block title %}{{ assessment.name }} - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  {% if maincolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
+    <link href="{{ asset('static-dist/libs/item-bank/lib/styles/item-bank-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+  {% else %}
+    <link href="{{ asset('static-dist/libs/item-bank/lib/styles/item-bank.css') }}" rel="stylesheet" />
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+    {% block header %}
+        {% if showHeader|default(1) %}{{ parent() }}{% endif %}
+    {% endblock %}
+
+    {% include 'answer-engine/common.html.twig' %}
+    {% include 'attachment-upload/upload-data.html.twig' %}
+    <input type="hidden" name="assessment" value='{{ assessment|json_encode }}'>
+    <input type="hidden" name="answer_record" value='{{ answerRecord|json_encode }}'>
+    <input type="hidden" name="answer_scene" value='{{ answerScene|json_encode }}'>
+    <input type="hidden" name="answer_report" value='{{ answerReport|json_encode }}'>
+    <input type="hidden" name="success_goto_url" value='{{ successGotoUrl }}'>
+    <input type="hidden" name="success_continue_goto_url" value='{{ successContinueGotoUrl }}'>
+    {% block footer %}
+        {% if showHeader|default(1) %}{{ parent() }}{% endif %}
+    {% endblock %}
+{% endblock %}

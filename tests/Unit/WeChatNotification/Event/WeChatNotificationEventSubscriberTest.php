@@ -136,64 +136,6 @@ class WeChatNotificationEventSubscriberTest extends BaseTestCase
         $this->assertNotEmpty($job);
     }
 
-    public function testOnTestpaperReviewd()
-    {
-        $subscriber = new WeChatNotificationEventSubscriber($this->biz);
-        $this->mockBiz('Activity:ActivityService', array(
-            array(
-                'functionName' => 'getActivity',
-                'returnValue' => array('id' => 123, 'fromCourseId' => 123),
-                'withParams' => array(123),
-            ),
-        ));
-        $result = $subscriber->onTestpaperReviewd($this->getPaperResultEvent());
-        $this->assertNull($result);
-
-        $this->mockBiz('Task:TaskService', array(
-            array(
-                'functionName' => 'getTaskByCourseIdAndActivityId',
-                'returnValue' => array('id' => 123, 'title' => 'testTask', 'courseId' => 123),
-                'withParams' => array(123, 123),
-            ),
-        ));
-        $this->getSettingService()->set('storage', array('cloud_access_key' => 'accessKey', 'cloud_secret_key' => 'secretKey'));
-        $weChatService = $this->mockBiz('WeChat:WeChatService', array(
-            array(
-                'functionName' => 'getTemplateId',
-                'returnValue' => 'test',
-                'withParams' => array('examResult'),
-            ),
-            array(
-                'functionName' => 'getTemplateId',
-                'returnValue' => 'test',
-                'withParams' => array('homeworkResult'),
-            ),
-            array(
-                'functionName' => 'getOfficialWeChatUserByUserId',
-                'returnValue' => array('id' => 2, 'isSubscribe' => 1, 'openId' => 'testOpenId'),
-                'withParams' => array('2'),
-            ),
-            array(
-                'functionName' => 'getWeChatSendChannel',
-                'returnValue' => 'wechat',
-            ),
-        ));
-        $result = $subscriber->onTestpaperReviewd($this->getPaperResultEvent());
-        $weChatService->shouldHaveReceived('getOfficialWeChatUserByUserId');
-        $this->assertNull($result);
-
-        $this->mockBiz('Course:CourseService', array(
-            array(
-                'functionName' => 'getCourse',
-                'returnValue' => array('id' => 123, 'courseSetTitle' => 'title'),
-                'withParams' => array(123),
-            ),
-        ));
-        $result = $subscriber->onTestpaperReviewd($this->getPaperResultEvent(array('type' => 'homework')));
-        $weChatService->shouldHaveReceived('getOfficialWeChatUserByUserId');
-        $this->assertNull($result);
-    }
-
     public function testOnPaid()
     {
         $subscriber = new WeChatNotificationEventSubscriber($this->biz);
