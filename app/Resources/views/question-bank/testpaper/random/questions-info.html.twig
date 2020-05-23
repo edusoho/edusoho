@@ -29,7 +29,7 @@
       <option value="" selected>{{ 'my.teaching.question_bank.question.all'|trans }}</option>
       <option value="">{{ 'my.teaching.question_bank.question.all'|trans }}</option>
       <option value="0">{{ 'my.teaching.question_bank.question.no_category'|trans }}</option>
-      {{ select_options(build_category_choices(categoryTree)) }}
+      {{ select_options(item_category_choices(questionBank.itemBank.id)) }}
     </select>
   </div>
 </div>
