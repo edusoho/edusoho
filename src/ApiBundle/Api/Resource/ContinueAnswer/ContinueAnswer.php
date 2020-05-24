@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\ContinueAnswer;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
+use ApiBundle\Api\Resource\Assessment\AssessmentResponseFilter;
 use Biz\Common\CommonException;
 
 class ContinueAnswer extends AbstractResource
@@ -22,9 +23,13 @@ class ContinueAnswer extends AbstractResource
         $assessmentFilter = new AssessmentFilter();
         $assessmentFilter->filter($assessment);
 
+        $assessmentResponse = $this->getAnswerService()->getAssessmentResponseByAnswerRecordId($answerRecord['id']);
+        $assessmentResponseFilter = new AssessmentResponseFilter();
+        $assessmentResponseFilter->filter($assessmentResponse);
+
         return [
             'assessment' => $assessment,
-            'assessment_response' => $this->getAnswerService()->getAssessmentResponseByAnswerRecordId($answerRecord['id']),
+            'assessment_response' => $assessmentResponse,
             'answer_scene' => $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']),
             'answer_record' => $answerRecord,
         ];
