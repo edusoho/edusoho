@@ -10,6 +10,8 @@ use Biz\Activity\Service\TestpaperActivityService;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 
 class TestpaperController extends BaseActivityController implements ActivityActionInterface
 {
@@ -63,7 +65,7 @@ class TestpaperController extends BaseActivityController implements ActivityActi
         $assessment = $this->getAssessmentService()->showAssessment($testpaperActivity['mediaId']);
 
         return $this->render('activity/testpaper/preview.html.twig', array(
-            'assessment' => $assessment
+            'assessment' => $assessment,
         ));
     }
 
@@ -140,7 +142,7 @@ class TestpaperController extends BaseActivityController implements ActivityActi
 
         $userIds = ArrayToolkit::column($taskResults, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
-        $testpaperResults = $this->getTestpaperService()->findTestResultsByTestpaperIdAndUserIds($userIds, $testpaper['id']);
+        $testpaperResults = $this->getTestpaperResults($activity, $userIds);
 
         return $this->render('activity/testpaper/learn-data-detail-modal.html.twig', array(
             'task' => $task,
@@ -149,6 +151,55 @@ class TestpaperController extends BaseActivityController implements ActivityActi
             'testpaperResults' => $testpaperResults,
             'paginator' => $paginator,
         ));
+    }
+
+    protected function getTestpaperResults($activity, $userIds)
+    {
+        $testpaperResults = [];
+        $answerRecords = $this->getAnswerRecords($activity['ext']['answerScene']['id'], $userIds);
+
+        foreach ($answerRecords as $userId => $userAnswerRecords) {
+            $userFirstRecord = $userAnswerRecords[0];
+            $scores = ArrayToolkit::column($userAnswerRecords, 'score');
+            $testpaperResults[$userId] = [
+                'usedTime' => round($userFirstRecord['used_time'] / 60, 1),
+                'firstScore' => $userFirstRecord['score'],
+                'maxScore' => max($scores),
+            ];
+        }
+
+        return $testpaperResults;
+    }
+
+    protected function getAnswerRecords($answerSceneId, $userIds)
+    {
+        $answerReports = $this->getAnswerReportService()->search(
+            ['answer_scene_id' => $answerSceneId],
+            [],
+            0,
+            $this->getAnswerReportService()->count(['answer_scene_id' => $answerSceneId]),
+            ['score', 'user_id', 'answer_record_id']
+        );
+        $answerReports = ArrayToolkit::index($answerReports, 'answer_record_id');
+
+        $conditions = [
+            'answer_scene_id' => $answerSceneId,
+            'user_ids' => $userIds,
+            'status' => 'finished',
+        ];
+        $answerRecords = $this->getAnswerRecordService()->search(
+            $conditions,
+            [],
+            0,
+            $this->getAnswerRecordService()->count($conditions),
+            ['user_id', 'used_time', 'id']
+        );
+        foreach ($answerRecords as &$answerRecord) {
+            $answerRecord['score'] = $answerReports[$answerRecord['id']]['score'];
+        }
+        $answerRecords = ArrayToolkit::group($answerRecords, 'user_id');
+
+        return $answerRecords;
     }
 
     protected function findCourseTestpapers($course)
@@ -217,5 +268,21 @@ class TestpaperController extends BaseActivityController implements ActivityActi
     protected function getAssessmentService()
     {
         return $this->createService('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerReportService');
     }
 }
