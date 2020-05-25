@@ -3,6 +3,7 @@
 namespace Tests\Unit\S2B2C\Service;
 
 use Biz\BaseTestCase;
+use Biz\Common\CommonException;
 use Biz\S2B2C\Service\ProductService;
 
 class ProductServiceTest extends BaseTestCase
@@ -14,6 +15,12 @@ class ProductServiceTest extends BaseTestCase
         $this->assertEquals($product['supplierId'], $savedProduct['supplierId']);
     }
 
+    public function testCreateProduct_whenParamsInvalid_thenThrowException()
+    {
+        $this->expectException(CommonException::class);
+        $this->getS2B2CProductService()->createProduct([]);
+    }
+
     public function testsGetProduct_whenCreated_thenGot()
     {
         $savedProduct = $this->getS2B2CProductService()->createProduct($this->mockProductFields());
@@ -21,10 +28,17 @@ class ProductServiceTest extends BaseTestCase
         $this->assertEquals($savedProduct, $getProduct);
     }
 
-    public function testGetBySupplierIdAndRemoteProductId_whenDataCreated_thenGot()
+    public function testGetProductBySupplierIdAndRemoteProductId_whenDataCreated_thenGot()
     {
         $createdProduct = $this->getS2B2CProductService()->createProduct($this->mockProductFields());
         $gotProduct = $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteProductId($createdProduct['supplierId'], $createdProduct['remoteProductId']);
+        $this->assertEquals($createdProduct, $gotProduct);
+    }
+
+    public function testGetProductBySupplierIdAndRemoteResourceIdAndType_whenDataCreated_thenGot()
+    {
+        $createdProduct = $this->getS2B2CProductService()->createProduct($this->mockProductFields());
+        $gotProduct = $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($createdProduct['supplierId'], $createdProduct['remoteResourceId'], $createdProduct['productType']);
         $this->assertEquals($createdProduct, $gotProduct);
     }
 
