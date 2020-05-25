@@ -96,7 +96,7 @@
             {% endif %}
           </div>
 
-          {% if classroom.expiryMode != 'forever' %}
+          {% if memberDeadline != 0 %}
             {% if 'student' in member.role or 'member' in member.role %}
               <div class="cd-text-xs hidden-sm cd-mb16">
                 <span class="class-info__label">{{ 'classroom.expiryDays'|trans }}</span>
