@@ -8,19 +8,30 @@ class AnswerReportServiceTest extends IntegrationTestCase
 {
     public function testGet()
     {
+        $this->mockObjectIntoBiz('ItemBank:Assessment:AssessmentService', [
+            [
+                'functionName' => 'findAssessmentQuestions',
+                'returnValue' => [
+                    ['item_id' => 1, 'question_id' => '1', 'score' => '2', 'section_id' => '1', 'seq' => 1],
+                    ['item_id' => 2, 'question_id' => '2', 'score' => '2', 'section_id' => '1', 'seq' => 2],
+                    ['item_id' => 3, 'question_id' => '3', 'score' => '2', 'section_id' => '1', 'seq' => 3],
+                    ['item_id' => 4, 'question_id' => '4', 'score' => '2', 'section_id' => '1', 'seq' => 4],
+                    ['item_id' => 5, 'question_id' => '5', 'score' => '2', 'section_id' => '1', 'seq' => 5],
+                ],
+            ]
+        ]);
+
         $answerReport = $this->fakeAnswerReport();
 
         $testAnswerReport = $this->getAnswerReportService()->get(1);
-
         $this->assertEquals($answerReport['id'], $testAnswerReport['id']);
-        $this->assertEquals($testAnswerReport['section_reports'][0]['item_reports'][0]['question_reports'][0]['id'], 1);
         $this->assertEquals($testAnswerReport['section_reports'][0]['total_score'], 10);
         $this->assertEquals($testAnswerReport['section_reports'][0]['score'], 0);
         $this->assertEquals($testAnswerReport['section_reports'][0]['question_count'], 5);
         $this->assertEquals($testAnswerReport['section_reports'][0]['right_question_num'], 1);
-        $this->assertEquals($testAnswerReport['section_reports'][0]['wrong_question_num'], 1);
-        $this->assertEquals($testAnswerReport['section_reports'][0]['reviewing_question_num'], 1);
-        $this->assertEquals($testAnswerReport['section_reports'][0]['no_answer_question_num'], 1);
+        $this->assertEquals($testAnswerReport['section_reports'][0]['wrong_question_num'], 0);
+        $this->assertEquals($testAnswerReport['section_reports'][0]['reviewing_question_num'], 0);
+        $this->assertEquals($testAnswerReport['section_reports'][0]['no_answer_question_num'], 3);
         $this->assertEquals($testAnswerReport['section_reports'][0]['part_right_question_num'], 1);
     }
 

@@ -155,6 +155,8 @@ class SingleChoiceAnswerModeTest extends IntegrationTestCase
     public function testGetAnswerSceneQuestionReport()
     {
         $question = [
+            'id' => 1,
+            'item_id' => 1,
             'response_points' => [
                 [
                     'radio' => [
