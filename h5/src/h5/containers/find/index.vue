@@ -65,6 +65,13 @@
           :feedback="feedback"
           :graphicNavigation="part.data"
         />
+      <van-search
+        v-if="part.type === 'search'"
+        shape="round"
+        background="#ffffff"
+        placeholder="搜索课程、班级"
+        @focus="goSearch"
+      />
     </div>
     <e-switch-loading v-if="wechatSwitch && showFlag" :close-date="closeDate" />
   </div>
@@ -172,6 +179,9 @@ export default {
 
         this.parts[index].data.items = res.data;
       });
+    },
+    goSearch(){
+      this.$router.push({ name: 'search' })
     }
   }
 };

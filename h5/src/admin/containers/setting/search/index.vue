@@ -20,6 +20,7 @@
   </module-frame>
 </template>
 <script>
+import courseList from "&/components/e-course-list/e-course-list.vue";
 import moduleFrame from '../module-frame';
 export default {
   name:"search",
