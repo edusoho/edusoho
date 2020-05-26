@@ -79,6 +79,7 @@ class S2B2CFacadeServiceImpl extends BaseService implements S2B2CFacadeService
             'canAddCourse' => !$s2b2cConfig['enabled'] || in_array($s2b2cConfig['businessMode'], [self::DEALER_MODE]),
             'canAddLiveCourse' => !$s2b2cConfig['enabled'] || in_array($s2b2cConfig['businessMode'], [self::DEALER_MODE]),
             'canAddOpenCourse' => !$s2b2cConfig['enabled'] || in_array($s2b2cConfig['businessMode'], [self::DEALER_MODE]),
+            'canManageCourseSetFiles' => !$s2b2cConfig['enabled'], //文件的读写收到多方面因素的影响，原逻辑并不完善
         ];
         $this->cacheS2B2CInfo('behaviour_permissions', $behaviourPermissions);
 
