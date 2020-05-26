@@ -11,7 +11,7 @@ class AssessmentSectionDaoImpl extends AdvancedDaoImpl implements AssessmentSect
 
     public function findByAssessmentId($assessmentId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE assessment_id = ? order by seq ASC";
+        $sql = "SELECT * FROM {$this->table} WHERE assessment_id = ? order by seq ASC, id DESC";
 
         return $this->db()->fetchAll($sql, [$assessmentId]);
     }

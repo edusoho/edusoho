@@ -241,4 +241,9 @@ class TestpaperController extends BaseController
     {
         return $this->createService('System:SettingService');
     }
+
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
+    }
 }

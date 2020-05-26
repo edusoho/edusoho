@@ -65,8 +65,8 @@ class QuestionFavoriteServiceTest extends IntegrationTestCase
     public function testDelete()
     {
         $this->mockQuestionFavorite();
-        $result = $this->getQuestionFavoriteService()->delete($id);
-        $this->assertEmpty($result);
+        $result = $this->getQuestionFavoriteService()->delete(1);
+        $this->assertEquals($result, 1);
     }
 
     public function testDeleteByQuestionFavorite()

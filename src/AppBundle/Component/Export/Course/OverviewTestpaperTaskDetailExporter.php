@@ -53,7 +53,7 @@ class OverviewTestpaperTaskDetailExporter extends Exporter
 
         $userIds = ArrayToolkit::column($taskResults, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
-        $testpaperResults = $this->getTestpaperService()->findTestResultsByTestpaperIdAndUserIds($userIds, $testpaper['id']);
+        $testpaperResults = $this->getTestpaperResults($activity, $userIds);
 
         $datas = array();
 
@@ -72,6 +72,55 @@ class OverviewTestpaperTaskDetailExporter extends Exporter
         }
 
         return $datas;
+    }
+
+    protected function getTestpaperResults($activity, $userIds)
+    {
+        $testpaperResults = [];
+        $answerRecords = $this->getAnswerRecords($activity['ext']['answerScene']['id'], $userIds);
+
+        foreach ($answerRecords as $userId => $userAnswerRecords) {
+            $userFirstRecord = $userAnswerRecords[0];
+            $scores = ArrayToolkit::column($userAnswerRecords, 'score');
+            $testpaperResults[$userId] = [
+                'usedTime' => round($userFirstRecord['used_time'] / 60, 1),
+                'firstScore' => $userFirstRecord['score'],
+                'maxScore' => max($scores),
+            ];
+        }
+
+        return $testpaperResults;
+    }
+
+    protected function getAnswerRecords($answerSceneId, $userIds)
+    {
+        $answerReports = $this->getAnswerReportService()->search(
+            ['answer_scene_id' => $answerSceneId],
+            [],
+            0,
+            $this->getAnswerReportService()->count(['answer_scene_id' => $answerSceneId]),
+            ['score', 'user_id', 'answer_record_id']
+        );
+        $answerReports = ArrayToolkit::index($answerReports, 'answer_record_id');
+
+        $conditions = [
+            'answer_scene_id' => $answerSceneId,
+            'user_ids' => $userIds,
+            'status' => 'finished',
+        ];
+        $answerRecords = $this->getAnswerRecordService()->search(
+            $conditions,
+            [],
+            0,
+            $this->getAnswerRecordService()->count($conditions),
+            ['user_id', 'used_time', 'id']
+        );
+        foreach ($answerRecords as &$answerRecord) {
+            $answerRecord['score'] = $answerReports[$answerRecord['id']]['score'];
+        }
+        $answerRecords = ArrayToolkit::group($answerRecords, 'user_id');
+
+        return $answerRecords;
     }
 
     public function buildParameter($conditions)
@@ -132,5 +181,21 @@ class OverviewTestpaperTaskDetailExporter extends Exporter
     protected function getTestpaperService()
     {
         return $this->getBiz()->service('Testpaper:TestpaperService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerReportService');
     }
 }

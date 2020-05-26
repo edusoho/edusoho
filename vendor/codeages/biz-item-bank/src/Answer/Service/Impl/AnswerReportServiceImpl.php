@@ -77,8 +77,8 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
         }
 
         $answerQuestionReports = $this->wrapperAnswerQuestionReports(
-            $this->getAnswerQuestionReportService()->findByAnswerRecordId($simpleAnswerReport['answer_record_id']), 
-            $simpleAnswerReport['assessment_id']
+            $simpleAnswerReport['answer_record_id'],
+            $this->getAnswerQuestionReportService()->findByAnswerRecordId($simpleAnswerReport['answer_record_id'])
         );
         $attachments = $this->getAttachmentService()->findAttachmentsByTargetIdsAndTargetType(
             ArrayToolkit::column($answerQuestionReports, 'id'),
@@ -125,17 +125,42 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
         return $answerReport;
     }
 
-    protected function wrapperAnswerQuestionReports($answerQuestionReports, $assessmentId)
+    public function wrapperAnswerQuestionReports($answerRecordId, $answerQuestionReports)
     {
-        $assessmentQuestions = $this->getAssessmentService()->findAssessmentQuestions($assessmentId);
-        foreach ($answerQuestionReports as &$questionReport) {
-            if (!empty($assessmentQuestions[$questionReport['question_id']])) {
-                $questionReport['total_score'] = $assessmentQuestions[$questionReport['question_id']]['score'];
-                $questionReport['section_id'] = $assessmentQuestions[$questionReport['question_id']]['section_id'];
-                $questionReport['seq'] = $assessmentQuestions[$questionReport['question_id']]['seq'];
+        $questionReports = [];
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+        $answerQuestionReports = ArrayToolkit::index($answerQuestionReports, 'question_id');
+        $assessmentQuestions = $this->getAssessmentService()->findAssessmentQuestions($answerRecord['assessment_id']);
+        $questions = $this->getItemService()->findQuestionsByQuestionIds(
+            ArrayToolkit::column($assessmentQuestions, 'question_id')
+        );
+        
+        foreach ($assessmentQuestions as $questionId => $assessmentQuestion) {
+            if (!empty($questions[$questionId]) && 'rich_text' == $questions[$questionId]['answer_mode'] && 'reviewing' == $answerRecord['status']) {
+                $status = AnswerQuestionReportService::STATUS_REVIEWING;
+            } else {
+                $status = empty($answerQuestionReports[$questionId]) ? AnswerQuestionReportService::STATUS_NOANSWER : $answerQuestionReports[$questionId]['status'];
             }
+            $questionReports[] = [
+                'id' => empty($answerQuestionReports[$questionId]) ? '0' : $answerQuestionReports[$questionId]['id'],
+                'identify' => empty($answerQuestionReports[$questionId]) ? '' : $answerQuestionReports[$questionId]['identify'],
+                'answer_record_id' => empty($answerQuestionReports[$questionId]) ? '0' : $answerQuestionReports[$questionId]['answer_record_id'],
+                'assessment_id' => $answerRecord['assessment_id'],
+                'section_id' => $assessmentQuestion['section_id'],
+                'item_id' => $assessmentQuestion['item_id'],
+                'question_id' => $assessmentQuestion['question_id'],
+                'seq' => $assessmentQuestion['seq'],
+                'score' => empty($answerQuestionReports[$questionId]) ? '0' : $answerQuestionReports[$questionId]['score'],
+                'total_score' => $assessmentQuestion['score'],
+                'response' => empty($answerQuestionReports[$questionId]) ? [] : $answerQuestionReports[$questionId]['response'],
+                'status' => $status,
+                'comment' => empty($answerQuestionReports[$questionId]) ? '' : $answerQuestionReports[$questionId]['comment'],
+                'created_time' => empty($answerQuestionReports[$questionId]) ? '0' : $answerQuestionReports[$questionId]['created_time'],
+                'updated_time' => empty($answerQuestionReports[$questionId]) ? '0' : $answerQuestionReports[$questionId]['updated_time'],
+            ];
         }
-        return $this->sortPerArrayValue($answerQuestionReports, 'seq');
+
+        return $this->sortPerArrayValue($questionReports, 'seq');
     }
 
     protected function sortPerArrayValue($arr, $attrName, $ascending = true)
@@ -222,5 +247,13 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
     protected function getAttachmentService()
     {
         return $this->biz->service('ItemBank:Item:AttachmentService');
+    }
+
+    /**
+     * @return \Codeages\Biz\ItemBank\Item\Service\ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->biz->service('ItemBank:Item:ItemService');
     }
 }
