@@ -50,10 +50,29 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'createS2B2CTables',
-            'tableAddSyncId',
+            'courseV8AddPlatform',
+            'courseSetV8AddPlatform',
+            'tableAddSyncIdCourseTask',
+            'tableAddSyncIdFileUsed',
+            'tableAddSyncIdActivity',
+            'tableAddSyncIdActivityDownload',
+            'tableAddSyncIdActivityVideo',
+            'tableAddSyncIdActivityHomework',
+            'tableAddSyncIdActivityExercise',
+            'tableAddSyncIdActivityAudio',
+            'tableAddSyncIdActivityDoc',
+            'tableAddSyncIdActivityPpt',
+            'tableAddSyncIdActivityFlash',
+            'tableAddSyncIdActivityText',
+            'tableAddSyncIdActivityTestpaper',
+            'tableAddSyncIdActivityLive',
+            'tableAddSyncIdActivityCourseMaterialV8',
+            'tableAddSyncIdActivityUploadFiles',
+            'tableAddSyncIdActivityCourseChapter',
             'uploadFileChangeStorageColumn',
             'addPlumberQueueTable',
             'addSyncEventsTable',
+            'addResourceSyncTable',
         );
 
         $funcNames = array();
@@ -108,100 +127,171 @@ class EduSohoUpgrade extends AbstractUpdater
                   `changelog` mediumtext COMMENT '更新日志',
                   `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
                   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`)
+                  PRIMARY KEY (`id`),
+                  KEY `remoteProductId` (`remoteProductId`),
+                  KEY `remoteResourceId` (`remoteResourceId`),
+                  KEY `localResourceId` (`localResourceId`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
         }
 
+        return 1;
+    }
+
+    public function courseV8AddPlatform()
+    {
         if (!$this->isFieldExist('course_v8', 'platform')) {
             $this->getConnection()->exec("
                 ALTER TABLE `course_v8` 
                 ADD `platform` varchar(32) NOT NULL DEFAULT 'self' COMMENT '课程来源平台：self 自己平台创建，supplier S端提供';
             ");
         }
+        return 1;
+    }
+
+    public function courseSetV8AddPlatform()
+    {
         if (!$this->isFieldExist('course_set_v8', 'platform')) {
             $this->getConnection()->exec("
                ALTER TABLE `course_set_v8` 
                 ADD `platform` varchar(32) NOT NULL DEFAULT 'self' COMMENT '课程来源平台：self 自己平台创建，supplier S端提供';
             ");
         }
-
         return 1;
     }
 
-    public function tableAddSyncId()
+    public function tableAddSyncIdCourseTask()
     {
         if (!$this->isFieldExist('course_task', 'syncId')) {
             $this->getConnection()->exec("ALTER TABLE `course_task` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
         }
+        return 1;
+    }
 
-        if (!$this->isFieldExist('activity', 'syncId')) {
-            $this->getConnection()->exec("ALTER TABLE `activity` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
-        }
-
-        if (!$this->isFieldExist('activity_download', 'syncId')) {
-            $this->getConnection()->exec("ALTER TABLE `activity_download` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
-        }
-
-        if (!$this->isFieldExist('activity_video', 'syncId')) {
-            $this->getConnection()->exec("ALTER TABLE `activity_video` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
-        }
-
-        if (!$this->isFieldExist('activity_audio', 'syncId')) {
-            $this->getConnection()->exec("ALTER TABLE `activity_audio` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
-        }
-
-        if (!$this->isFieldExist('activity_doc', 'syncId')) {
-            $this->getConnection()->exec("ALTER TABLE `activity_doc` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
-        }
-
-        if (!$this->isFieldExist('activity_ppt', 'syncId')) {
-            $this->getConnection()->exec("ALTER TABLE `activity_ppt` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
-        }
-
-        if (!$this->isFieldExist('activity_flash', 'syncId')) {
-            $this->getConnection()->exec("ALTER TABLE `activity_flash` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
-        }
-
-        if (!$this->isFieldExist('activity_text', 'syncId')) {
-            $this->getConnection()->exec("ALTER TABLE `activity_text` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
-        }
-
-        if (!$this->isFieldExist('activity_testpaper', 'syncId')) {
-            $this->getConnection()->exec("ALTER TABLE `activity_testpaper` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
-        }
-
-        if (!$this->isFieldExist('activity_live', 'syncId')) {
-            $this->getConnection()->exec("ALTER TABLE `activity_live` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
-        }
-
-        if (!$this->isFieldExist('course_material_v8', 'syncId')) {
-            $this->getConnection()->exec("ALTER TABLE `course_material_v8` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
-        }
-
-        if (!$this->isFieldExist('upload_files', 'syncId')) {
-            $this->getConnection()->exec("ALTER TABLE `upload_files` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
-        }
-
-        if (!$this->isFieldExist('testpaper_v8', 'syncId')) {
-            $this->getConnection()->exec("ALTER TABLE `testpaper_v8` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
-        }
-
-        if (!$this->isFieldExist('testpaper_item_v8', 'syncId')) {
-            $this->getConnection()->exec("ALTER TABLE `testpaper_item_v8` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
-        }
-
-        if (!$this->isFieldExist('question', 'syncId')) {
-            $this->getConnection()->exec("ALTER TABLE `question` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
-        }
-
-        if (!$this->isFieldExist('course_chapter', 'syncId')) {
-            $this->getConnection()->exec("ALTER TABLE `course_chapter` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
-        }
-
+    public function tableAddSyncIdFileUsed()
+    {
         if (!$this->isFieldExist('file_used', 'syncId')) {
             $this->getConnection()->exec("ALTER TABLE `file_used` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
         }
+        return 1;
+    }
 
+    public function tableAddSyncIdActivity()
+    {
+        if (!$this->isFieldExist('activity', 'syncId')) {
+            $this->getConnection()->exec("ALTER TABLE `activity` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
+        }
+        return 1;
+    }
+
+    public function tableAddSyncIdActivityDownload()
+    {
+        if (!$this->isFieldExist('activity_download', 'syncId')) {
+            $this->getConnection()->exec("ALTER TABLE `activity_download` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
+        }
+        return 1;
+    }
+
+    public function tableAddSyncIdActivityVideo()
+    {
+        if (!$this->isFieldExist('activity_video', 'syncId')) {
+            $this->getConnection()->exec("ALTER TABLE `activity_video` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
+        }
+        return 1;
+    }
+
+    public function tableAddSyncIdActivityHomework()
+    {
+        if (!$this->isFieldExist('activity_homework', 'syncId')) {
+            $this->getConnection()->exec("ALTER TABLE `activity_homework` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
+        }
+        return 1;
+    }
+
+    public function tableAddSyncIdActivityExercise()
+    {
+        if (!$this->isFieldExist('activity_exercise', 'syncId')) {
+            $this->getConnection()->exec("ALTER TABLE `activity_exercise` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
+        }
+        return 1;
+    }
+
+    public function tableAddSyncIdActivityAudio()
+    {
+        if (!$this->isFieldExist('activity_audio', 'syncId')) {
+            $this->getConnection()->exec("ALTER TABLE `activity_audio` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
+        }
+        return 1;
+    }
+
+    public function tableAddSyncIdActivityDoc()
+    {
+        if (!$this->isFieldExist('activity_doc', 'syncId')) {
+            $this->getConnection()->exec("ALTER TABLE `activity_doc` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
+        }
+        return 1;
+    }
+
+    public function tableAddSyncIdActivityPpt()
+    {
+        if (!$this->isFieldExist('activity_ppt', 'syncId')) {
+            $this->getConnection()->exec("ALTER TABLE `activity_ppt` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
+        }
+        return 1;
+    }
+
+    public function tableAddSyncIdActivityFlash()
+    {
+        if (!$this->isFieldExist('activity_flash', 'syncId')) {
+            $this->getConnection()->exec("ALTER TABLE `activity_flash` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
+        }
+        return 1;
+    }
+
+    public function tableAddSyncIdActivityText()
+    {
+        if (!$this->isFieldExist('activity_text', 'syncId')) {
+            $this->getConnection()->exec("ALTER TABLE `activity_text` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
+        }
+        return 1;
+    }
+
+    public function tableAddSyncIdActivityTestpaper()
+    {
+        if (!$this->isFieldExist('activity_testpaper', 'syncId')) {
+            $this->getConnection()->exec("ALTER TABLE `activity_testpaper` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
+        }
+        return 1;
+    }
+
+    public function tableAddSyncIdActivityLive()
+    {
+        if (!$this->isFieldExist('activity_live', 'syncId')) {
+            $this->getConnection()->exec("ALTER TABLE `activity_live` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
+        }
+        return 1;
+    }
+
+    public function tableAddSyncIdActivityCourseMaterialV8()
+    {
+        if (!$this->isFieldExist('course_material_v8', 'syncId')) {
+            $this->getConnection()->exec("ALTER TABLE `course_material_v8` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
+        }
+        return 1;
+    }
+
+    public function tableAddSyncIdActivityUploadFiles()
+    {
+        if (!$this->isFieldExist('upload_files', 'syncId')) {
+            $this->getConnection()->exec("ALTER TABLE `upload_files` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
+        }
+        return 1;
+    }
+
+    public function tableAddSyncIdActivityCourseChapter()
+    {
+        if (!$this->isFieldExist('course_chapter', 'syncId')) {
+            $this->getConnection()->exec("ALTER TABLE `course_chapter` ADD COLUMN `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id';");
+        }
         return 1;
     }
 
@@ -213,19 +303,13 @@ class EduSohoUpgrade extends AbstractUpdater
         ");
 
         if (!$this->isFieldExist('upload_files', 'originPlatform')) {
-            $this->getConnection()->exec("ALTER TABLE `upload_files` ADD `originPlatform` varchar(50) NOT NULL DEFAULT 'self' COMMENT '资源来源平台：self 自己平台创建，supplier S端提供';");
-        }
-
-        if (!$this->isFieldExist('upload_files', 'originPlatformId')) {
-            $this->getConnection()->exec("ALTER TABLE `upload_files` ADD `originPlatformId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '来源平台对应的ID：supplierId S的ID';");
-        }
-
-        if (!$this->isFieldExist('upload_files', 's2b2cGlobalId')) {
-            $this->getConnection()->exec("ALTER TABLE `upload_files` ADD `s2b2cGlobalId` varchar(32) NOT NULL DEFAULT '' COMMENT '真实的globalId，防止资源引用无法知道真实分发信息';");
-        }
-
-        if (!$this->isFieldExist('upload_files', 's2b2cHashId')) {
-            $this->getConnection()->exec("ALTER TABLE `upload_files` ADD `s2b2cHashId` varchar(128) NOT NULL DEFAULT '' COMMENT '真实的hashId，防止资源引用无法知道真实分发信息';");
+            $this->getConnection()->exec("
+                ALTER TABLE `upload_files` 
+                ADD `originPlatform` varchar(50) NOT NULL DEFAULT 'self' COMMENT '资源来源平台：self 自己平台创建，supplier S端提供',
+                ADD `originPlatformId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '来源平台对应的ID：supplierId S的ID',
+                ADD `s2b2cGlobalId` varchar(32) NOT NULL DEFAULT '' COMMENT '真实的globalId，防止资源引用无法知道真实分发信息',
+                ADD `s2b2cHashId` varchar(128) NOT NULL DEFAULT '' COMMENT '真实的hashId，防止资源引用无法知道真实分发信息';
+            ");
         }
 
         return 1;
@@ -249,9 +333,7 @@ class EduSohoUpgrade extends AbstractUpdater
              ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
         ");
         }
-
         return 1;
-
     }
 
     public function addSyncEventsTable()
@@ -271,7 +353,30 @@ class EduSohoUpgrade extends AbstractUpdater
             );
         }
         return 1;
+    }
 
+    public function addResourceSyncTable()
+    {
+        if (!$this->isTableExist('s2b2c_resource_sync')) {
+            $this->getConnection()->exec("
+                    CREATE TABLE `s2b2c_resource_sync` (
+                      `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                      `supplierId` int(10) unsigned NOT NULL COMMENT '供应商ID',
+                      `resourceType` varchar(64) NOT NULL DEFAULT '' COMMENT '资源类型',
+                      `localResourceId` int(10) unsigned NOT NULL COMMENT '本地资源ID',
+                      `remoteResourceId` int(10) unsigned NOT NULL COMMENT '远程资源ID',
+                      `localVersion` varchar(32) DEFAULT NULL COMMENT '本地版本',
+                      `remoteVersion` varchar(32) DEFAULT NULL COMMENT '远程版本',
+                      `extendedData` text COMMENT '其他关联数据',
+                      `syncTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '同步时间',
+                      `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+                      `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+                      PRIMARY KEY (`id`),
+                      KEY `supplierId_remoteResourceId_type` (`supplierId`,`remoteResourceId`,`resourceType`)
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+                ");
+        }
+        return 1;
     }
 
     protected function generateIndex($step, $page)
