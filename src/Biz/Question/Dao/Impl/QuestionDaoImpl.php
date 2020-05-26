@@ -102,6 +102,9 @@ class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
             'categoryId IN (:categoryIds)',
             'bankId = :bankId',
             'categoryId = :categoryId',
+            'syncId = :syncId',
+            'syncId in (:syncIds)',
+            'syncId > :syncIdGT',
         ];
 
         $declares['serializes'] = [

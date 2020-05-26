@@ -4,11 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
-    "content-hash": "3e86ba4b7d7379fbd1e3b9e60d87a935",
-=======
     "content-hash": "080b6be9efba3e723f4568635b32cef4",
->>>>>>> d0f4129868564d1b2c321af66f7a2c91f7ef91e3
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -8545,7 +8541,7 @@
         "codeages/qiqiuyun-php-sdk": 20,
         "codeages/exam-parser": 20,
         "codeages/biz-order-pay": 20,
-        "codeages/plumber2": 20
+        "codeages/plumber2": 20,
         "codeages/biz-item-bank": 20
     },
     "prefer-stable": true,
