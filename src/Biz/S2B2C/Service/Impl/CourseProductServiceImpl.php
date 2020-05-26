@@ -113,18 +113,19 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             $this->getLogger()->info("[syncCourseProduct] 同步课程 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 成功", ['courseId' => $course['id']]);
         } catch (\Exception $e) {
             $this->rollback();
-            $this->getLogger()->error("[syncCourseProduct] 同步课程 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 失败", ['message' => $e->getMessage(), 'error' => $e->getTraceAsString()]);
+            $this->getLogger()->error("[syncCourseProduct] 同步课程 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 失败", ['message' => $e->getMessage(), 'errorFile' => $e->getFile().$e->getLine(), 'error' => $e->getTraceAsString()]);
             $courseCounts = $this->getProductService()->countProducts(['remoteResourceId' => $course['courseSetId']]);
             //删除CourseSet存在一定风险，如果第一个计划就报错，会造成数据丢失
             if (1 == $courseCounts) {
                 $this->getCourseSetService()->deleteCourseSet($course['courseSetId']);
                 $this->getProductService()->deleteProduct($courseSetProduct['id']);
             }
-            $this->getCourseService()->deleteCourse($courseId);
+//            $this->getCourseService()->deleteCourse($courseId);
             $this->getProductService()->deleteProduct($product['id']);
+            $this->getProductService()->deleteProduct($courseSetProduct['id']);
             $this->getLogService()->error('course', 'create', "内容市场选择商品(#{$courseId})《{$course['courseSetTitle']}》同步数据失败", ['userId' => $this->getCurrentUser()->getId()]);
 
-            return false;
+            throw $e;
         }
 
         return true;
@@ -167,7 +168,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
-            $this->getLogger()->error("[syncCourseProduct] 更新课程到最新 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 失败", ['error' => $e]);
+            $this->getLogger()->error("[syncCourseProduct] 更新课程到最新 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 失败", ['message' => $e->getMessage(), 'errorFile' => $e->getFile().$e->getLine(), 'error' => $e->getTraceAsString()]);
             $this->getLogService()->error('course', 'update', "(#{$courseId})《{$course['courseSetTitle']}》更新版本到最新失败，版本无变化：V{$product['localVersion']}", ['userId' => $this->getCurrentUser()->getId()]);
             $errorMsg = in_array($e->getCode(), [5001730, 5001731]) ? $e->getMessage() : '更新失败';
 

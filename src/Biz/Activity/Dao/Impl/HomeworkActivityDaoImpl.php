@@ -36,6 +36,11 @@ class HomeworkActivityDaoImpl extends GeneralDaoImpl implements HomeworkActivity
             'conditions' => [
                 'answerSceneId = :answerSceneId',
                 'assessmentId = :assessmentId',
+                /*S2B2C增加syncId*/
+                'syncId = :syncId',
+                'syncId in (:syncIds)',
+                'syncId > :syncIdGT',
+                /*END*/
             ],
         ];
     }

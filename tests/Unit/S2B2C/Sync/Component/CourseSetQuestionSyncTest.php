@@ -10,6 +10,6 @@ class CourseSetQuestionSyncTest extends BaseTestCase
     {
         $file = $this->getContainer()->getParameter('kernel.root_dir').'/../tests/Unit/S2B2C/Fixtures/testpaper_only_sync.json';
         $data = json_decode(file_get_contents($file), true);
-        $this->biz['s2b2c.course_product_sync']->sync($data);
+//        $this->biz['s2b2c.course_product_sync']->sync($data);
     }
 }

@@ -30,7 +30,15 @@ class ActivityTestpaperSync extends TestpaperSync
             return null;
         }
 
+        $s2b2cConfig = $this->getS2B2CConfig();
         list($assessment, $assessmentSectionItems) = $this->createTestpaper($testpaper);
+        $this->getResourceSyncService()->createSync([
+            'supplierId' => $s2b2cConfig['supplierId'],
+            'resourceType' => 'assessment',
+            'localResourceId' => $assessment['id'],
+            'remoteResourceId' => $testpaper['id'],
+            'syncTime' => time(),
+        ]);
 
         return $assessment;
     }
@@ -42,7 +50,7 @@ class ActivityTestpaperSync extends TestpaperSync
 
     protected function updateEntityToLastedVersion($source, $config = [])
     {
-        if (!in_array($source['mediaType'], ['testpaper', 'homework', 'exercise'])) {
+        if (!in_array($source['mediaType'], ['testpaper', 'homework'])) {
             return [];
         }
 
@@ -50,25 +58,31 @@ class ActivityTestpaperSync extends TestpaperSync
         if (empty($testpaper)) {
             return null;
         }
+        $s2b2cConfig = $this->getS2B2CConfig();
 
-        $newTestpaper = $this->baseSyncTestpaper($testpaper);
-        $newTestpaper['courseSetId'] = $config['newCourseSetId'];
-        $newTestpaper['courseId'] = $config['newCourseId'];
+        $resourceSync = $this->getResourceSyncService()->getSyncBySupplierIdAndRemoteResourceIdAndResourceType(
+            $s2b2cConfig['supplierId'],
+            $testpaper['id'],
+            'assessment'
+        );
 
-        $exitTestpaper = $this->getTestpaperDao()->search(['courseSetId' => $newTestpaper['courseSetId'], 'syncId' => $newTestpaper['syncId']], [], 0, 1);
-
-        $newTestpaper['updatedUserId'] = $this->biz['user']['id'];
-        if (!empty($exitTestpaper)) {
-            $newTestpaper = $this->getTestpaperDao()->update($exitTestpaper[0]['id'], $newTestpaper);
-            $newTestpaper['items'] = $testpaper['items'];
-            $this->doUpdateTestpaperItems([$newTestpaper['syncId'] => $newTestpaper], $config['isCopy'], $config['questionSyncIds']);
+        if (!empty($resourceSync)) {
+            /**
+             * 已经存在的情况下无法更新，数据结构完全不一致
+             */
+            $assessment = $this->getAssessmentDao()->get($resourceSync['localResourceId']);
         } else {
-            $newTestpaper = $this->getTestpaperService()->createTestpaper($newTestpaper);
-            $newTestpaper['items'] = $testpaper['items'];
-            $this->doSyncTestpaperItems([$newTestpaper['syncId'] => $newTestpaper], $config['isCopy'], $config['questionSyncIds']);
+            list($assessment, $assessmentSectionItems) = $this->createTestpaper($testpaper);
+            $this->getResourceSyncService()->createSync([
+                'supplierId' => $s2b2cConfig['supplierId'],
+                'resourceType' => 'assessment',
+                'localResourceId' => $assessment['id'],
+                'remoteResourceId' => $testpaper['id'],
+                'syncTime' => time(),
+            ]);
         }
 
-        return $newTestpaper;
+        return $assessment;
     }
 
     /**
