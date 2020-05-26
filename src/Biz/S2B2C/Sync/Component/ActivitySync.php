@@ -43,6 +43,9 @@ class ActivitySync extends AbstractEntitySync
             if (in_array($activity['mediaType'], ['testpaper', 'homework', 'exercise']) && !empty($activity['testpaper'])) {
                 if (!in_array($activity['testpaper']['id'], array_keys($testpaperSyncMap))) {
                     $activityTestpaperCopy = new ActivityTestpaperSync($this->biz);
+                    /**
+                     * $testpaper = assessment
+                     */
                     $testpaper = $activityTestpaperCopy->sync($activity, [
                         'newCourseId' => $newCourseId,
                         'newCourseSetId' => $courseSetId,

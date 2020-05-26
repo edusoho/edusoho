@@ -10,7 +10,7 @@ class HomeworkTest extends BaseTypeTestCase
     {
         $type = $this->getActivityConfig(self::TYPE);
 
-        $this->_mockTestpaper();
+        $this->_mockHomeworkActivity();
 
         $result = $type->get(1);
 
@@ -21,92 +21,70 @@ class HomeworkTest extends BaseTypeTestCase
     {
         $type = $this->getActivityConfig(self::TYPE);
 
-        $this->_mockTestpaper();
+        $this->_mockHomeworkActivity();
 
-        $results = $type->find(array(1, 2));
+        $results = $type->find([1, 2]);
 
         $this->assertEquals(1, count($results));
-        $this->assertEquals(1, $results[0]['id']);
     }
 
     public function testCreate()
     {
-        $this->_mockTestpaper();
-
         $type = $this->getActivityConfig(self::TYPE);
 
-        $fields = array(
+        $fields = [
             'title' => 'homework activity',
-            'questionIds' => array(1, 2),
-            'fromCourseId' => 1,
-            'fromCourseSetId' => 1,
-            'finishCondition' => 'submit',
-        );
+            'description' => '',
+            'questionIds' => [1, 2],
+        ];
+
+        $this->mockBiz('ItemBank:Assessment:AssessmentService', [
+            [
+                'functionName' => 'createAssessment',
+                'returnValue' => ['id' => 1],
+            ],
+            [
+                'functionName' => 'openAssessment',
+                'returnValue' => ['id' => 1],
+            ],
+        ]);
+
         $activity = $type->create($fields);
 
-        $this->assertEquals(2, $activity['id']);
+        $this->assertEquals(1, $activity['id']);
     }
 
     public function testCopy()
     {
-        $this->_mockTestpaper();
+        $this->_mockHomeworkActivity();
 
-        $type = $this->getActivityConfig(self::TYPE);
+        $this->mockBiz('ItemBank:Assessment:AssessmentService', [
+            [
+                'functionName' => 'createAssessment',
+                'returnValue' => ['id' => 1],
+            ],
+            [
+                'functionName' => 'getAssessment',
+                'returnValue' => ['id' => 1],
+            ],
+            [
+                'functionName' => 'openAssessment',
+                'returnValue' => ['id' => 1],
+            ],
+        ]);
 
-        $config = array(
-            'newActivity' => array(
-                'fromCourseId' => 1,
-                'fromCourseSetId' => 1,
-            ),
-            'isCopy' => 1,
-        );
-        $copy = $type->copy(array('mediaId' => 1), $config);
-        $this->assertEquals(2, $copy['id']);
+        $this->mockBiz('ItemBank:Answer:AnswerSceneService', [
+            [
+                'functionName' => 'get',
+                'returnValue' => ['id' => 1, 'name' => 'test'],
+            ],
+            [
+                'functionName' => 'create',
+                'returnValue' => ['id' => 2, 'name' => 'test'],
+            ],
+        ]);
 
-        $config = array(
-            'newActivity' => array(
-                'fromCourseId' => 1,
-                'fromCourseSetId' => 1,
-            ),
-            'isCopy' => 0,
-        );
-        $copy = $type->copy(array('mediaId' => 1), $config);
-        $this->assertEquals(2, $copy['id']);
-    }
-
-    public function testCopyQuestionEmpty()
-    {
-        $type = $this->getActivityConfig(self::TYPE);
-
-        $this->mockBiz('Testpaper:TestpaperService', array(
-            array(
-                'functionName' => 'getTestpaperByIdAndType',
-                'returnValue' => array(
-                    'id' => 1,
-                    'name' => 'homework name',
-                    'description' => 'homework description',
-                    'itemCount' => 2,
-                    'passedCondition' => array('type' => 'submit'),
-                ),
-            ),
-            array(
-                'functionName' => 'buildTestpaper',
-                'returnValue' => array('id' => 2, 'name' => 'testpaper name'),
-            ),
-            array(
-                'functionName' => 'findItemsByTestId',
-                'returnValue' => array(array('id' => 1)),
-            ),
-        ));
-
-        $config = array(
-            'newActivity' => array(
-                'fromCourseId' => 1,
-                'fromCourseSetId' => 1,
-            ),
-            'isCopy' => 1,
-        );
-        $copy = $type->copy(array('mediaId' => 1), $config);
+        $copy = $this->getActivityConfig(self::TYPE)->copy(['mediaId' => 1], []);
         $this->assertEquals(2, $copy['id']);
     }
 
@@ -114,18 +92,29 @@ class HomeworkTest extends BaseTypeTestCase
     {
         $type = $this->getActivityConfig(self::TYPE);
 
-        $fields = $this->mockField();
-        $this->_mockQuestionService();
+        $homework = $this->_mockHomeworkActivity();
+        $homework2 = $this->getHomeworkActivityDao()->create([
+            'id' => 2,
+            'answerSceneId' => 2,
+            'assessmentId' => 2,
+        ]);
 
-        $homework = $type->create($fields);
-        $homework2 = $type->create(array_merge($fields, array('copyId' => $homework['id'], 'fromCourseId' => 3, 'name' => 'homework2 name', 'description' => 'homework2 description')));
+        $this->mockBiz('ItemBank:Assessment:AssessmentService', [
+            [
+                'functionName' => 'updateBasicAssessment',
+                'returnValue' => ['id' => 1, 'name' => 'name', 'description' => 'description'],
+            ],
+            [
+                'functionName' => 'getAssessment',
+                'returnValue' => ['id' => 1, 'name' => 'name', 'description' => 'description'],
+            ],
+        ]);
 
-        $syncedActivity = $type->sync(array('mediaId' => $homework['id']), array('mediaId' => $homework2['id']));
+        $type->sync(['mediaId' => $homework['id']], ['mediaId' => $homework2['id']]);
 
-        $activity = $type->get($homework2['id']);
+        $syncHomework2 = $type->get($homework2['id']);
 
-        $this->assertEquals($homework['name'], $activity['name']);
-        $this->assertEquals($homework['description'], $activity['description']);
+        $this->assertEquals($syncHomework2['id'], 2);
     }
 
     /**
@@ -136,76 +125,46 @@ class HomeworkTest extends BaseTypeTestCase
     {
         $type = $this->getActivityConfig(self::TYPE);
 
-        $this->_mockQuestionService();
-        $fields = $this->mockField();
-        $activity = $type->create($fields);
+        $update = ['title' => 'homework update name', 'description' => 'homework update description'];
 
-        $update = array('title' => 'homework update name', 'finishCondition' => 'submit');
-
-        $updated = $type->update($activity['id'], $update, array());
-        $activity = $type->get($updated['id']);
-
-        $this->assertEquals($update['title'], $activity['name']);
-
-        $type->update(123, $update, array());
+        $updated = $type->update(1, $update, []);
     }
 
     public function testDelete()
     {
         $type = $this->getActivityConfig(self::TYPE);
 
-        $this->_mockQuestionService();
-        $fields = $this->mockField();
-        $activity = $type->create($fields);
-
-        $this->assertNotNull($activity);
-        $this->assertEquals($fields['title'], $activity['name']);
+        $activity = $this->_mockHomeworkActivity();
 
         $type->delete($activity['id']);
+
         $result = $type->get($activity['id']);
 
         $this->assertNull($result);
-    }
-
-    public function testIsFinishedEmpty()
-    {
-        $type = $this->getActivityConfig(self::TYPE);
-
-        $this->_mockActivityService();
-
-        $this->mockBiz('Testpaper:TestpaperService', array(
-            array(
-                'functionName' => 'getTestpaperByIdAndType',
-                'returnValue' => array('mediaId' => 1),
-            ),
-            array(
-                'functionName' => 'getUserLatelyResultByTestId',
-                'returnValue' => array(),
-            ),
-        ));
-
-        $result = $type->isFinished(1);
-        $this->assertFalse($result);
     }
 
     public function testIsFinished()
     {
         $type = $this->getActivityConfig(self::TYPE);
 
-        $this->_mockActivityService();
+        $this->_mockHomeworkActivity();
 
-        $this->mockBiz('Testpaper:TestpaperService', array(
-            array(
-                'functionName' => 'getTestpaperByIdAndType',
-                'returnValue' => array('mediaId' => 1, 'passedCondition' => array('type' => 'submit')),
-            ),
-            array(
-                'functionName' => 'getUserLatelyResultByTestId',
-                'returnValue' => array('status' => 'finished'),
-            ),
-        ));
+        $this->mockBiz('ItemBank:Answer:AnswerRecordService', [
+            [
+                'functionName' => 'getLatestAnswerRecordByAnswerSceneIdAndUserId',
+                'returnValue' => ['status' => 'finished'],
+            ],
+        ]);
+
+        $this->mockBiz('Activity:ActivityService', [
+            [
+                'functionName' => 'getActivity',
+                'returnValue' => ['finishType' => 'submit', 'ext' => ['answerSceneId' => 1]],
+            ],
+        ]);
 
         $result = $type->isFinished(1);
+
         $this->assertTrue($result);
     }
 
@@ -213,20 +172,24 @@ class HomeworkTest extends BaseTypeTestCase
     {
         $type = $this->getActivityConfig(self::TYPE);
 
-        $this->_mockActivityService();
+        $this->_mockHomeworkActivity();
 
-        $this->mockBiz('Testpaper:TestpaperService', array(
-            array(
-                'functionName' => 'getTestpaperByIdAndType',
-                'returnValue' => array('mediaId' => 1, 'passedCondition' => array('type' => 'submit')),
-            ),
-            array(
-                'functionName' => 'getUserLatelyResultByTestId',
-                'returnValue' => array('status' => 'doing'),
-            ),
-        ));
+        $this->mockBiz('ItemBank:Answer:AnswerRecordService', [
+            [
+                'functionName' => 'getLatestAnswerRecordByAnswerSceneIdAndUserId',
+                'returnValue' => ['status' => 'finished'],
+            ],
+        ]);
+
+        $this->mockBiz('Activity:ActivityService', [
+            [
+                'functionName' => 'getActivity',
+                'returnValue' => ['finishType' => 'doing', 'ext' => ['answerSceneId' => 1]],
+            ],
+        ]);
 
         $result = $type->isFinished(1);
+
         $this->assertFalse($result);
     }
 
@@ -238,78 +201,17 @@ class HomeworkTest extends BaseTypeTestCase
         $this->assertEmpty($return);
     }
 
-    private function _mockTestpaper()
+    private function _mockHomeworkActivity()
     {
-        $this->mockBiz('Testpaper:TestpaperService', array(
-            array(
-                'functionName' => 'getTestpaperByIdAndType',
-                'returnValue' => array(
-                    'id' => 1,
-                    'name' => 'homework name',
-                    'description' => 'homework description',
-                    'itemCount' => 2,
-                    'passedCondition' => array('type' => 'submit'),
-                ),
-            ),
-            array(
-                'functionName' => 'findTestpapersByIdsAndType',
-                'returnValue' => array(array('id' => 1)),
-            ),
-            array(
-                'functionName' => 'buildTestpaper',
-                'returnValue' => array('id' => 2, 'name' => 'testpaper name'),
-            ),
-            array(
-                'functionName' => 'updateTestpaper',
-                'returnValue' => array(),
-            ),
-            array(
-                'functionName' => 'findItemsByTestId',
-                'returnValue' => array(array('questionId' => 1)),
-            ),
-        ));
+        return $this->getHomeworkActivityDao()->create([
+            'id' => 1,
+            'answerSceneId' => 1,
+            'assessmentId' => 1,
+        ]);
     }
 
-    private function _mockQuestionService()
+    protected function getHomeworkActivityDao()
     {
-        $this->mockBiz('Question:QuestionService', array(
-            array(
-                'functionName' => 'findQuestionsByIds',
-                'returnValue' => array(array('id' => 1, 'type' => 'choice', 'parentId' => 0)),
-            ),
-        ));
-    }
-
-    private function _mockActivityService()
-    {
-        $this->mockBiz('Activity:ActivityService', array(
-            array(
-                'functionName' => 'getActivity',
-                'returnValue' => array('id' => 1, 'mediaId' => 1, 'fromCourseId' => 1, 'finishType' => 'submit', 'finishData' => ''),
-            ),
-        ));
-    }
-
-    /**
-     * @param string $source
-     * @param string $uri
-     * @param int    $mediaId
-     *
-     * @return array
-     */
-    private function mockField()
-    {
-        return array(
-            'title' => 'homework',
-            'description' => 'homework description',
-            'questionIds' => array(1),
-            'courseSetId' => 1,
-            'courseId' => 2,
-            'pattern' => 'questionType',
-            'finishCondition' => 'submit',
-            'itemCount' => 5,
-            'metas' => array(),
-            'type' => 'homework',
-        );
+        return $this->getBiz()->dao('Activity:HomeworkActivityDao');
     }
 }

@@ -45,19 +45,21 @@
       {% if testpaper %}
         <div class="col-md-4">
           <div class="testpaper-mark-operation testpaper-mark-inspection-{{task.activityId}}">
-            <div class="col-xs-4 text-center mt10">
+            <div class="col-xs-3 text-center mt10">
               <a class="testpaper-mark-operation__link" href="#modal" data-toggle="modal" data-url="{{ graphUrl }}" data-tooltip="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_score_distribution'|trans }}"><i class="es-icon es-icon-chart"></i></a>
             </div>
-            <div class="col-xs-4 text-center mt10"><a class="testpaper-mark-operation__link" href="{{ analysisUrl }}" target="_blank" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_question_distribution'|trans }}"><i class="es-icon es-icon-list"></i></a></div>
+            <div class="col-xs-3 text-center mt10"><a class="testpaper-mark-operation__link" href="{{ analysisUrl }}" target="_blank" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_question_distribution'|trans }}"><i class="es-icon es-icon-list"></i></a></div>
             
-            <div class="col-xs-4 text-center mt10">
+            <div class="col-xs-3 text-center mt10">
               {% if targetResultInfo.reviewing|default(0) > 0 %}
                 <a class="testpaper-mark-operation__link" href="{{ checkUrl }}" target="_blank" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_check'|trans }}" ><i class="es-icon es-icon-double-check"></i></a>
               {% else %}
                 <a class="testpaper-mark-operation__link testpaper-mark-operation__link--disabled" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_check'|trans }}" ><i class="es-icon es-icon-double-check gray-medium"></i></a>
               {% endif %}
             </div>
-            {{ slot('course.task.facein.result',{task:task|default([])}) }}
+            {% if is_scene_facein_open(task.answerSceneId) %}
+              <div class="col-xs-3 text-center mt10"><a class="testpaper-mark-operation__link" href="{{ path('facein_inspection_results', {activityId:task.activityId}) }}" target="_blank" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'facein.capture_face.inspection_result'|trans }}"><i class="es-icon es-icon-inspection-result"></i></a></div>
+            {% endif %}
           </div>
         </div>
       {% endif %}

@@ -2,16 +2,16 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\Exception\InvalidArgumentException;
+use AppBundle\Util\UploaderToken;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\CourseStrategy;
-use AppBundle\Util\UploaderToken;
 use Biz\Task\TaskException;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\Exception\InvalidArgumentException;
 
 class TaskManageController extends BaseController
 {
@@ -21,7 +21,7 @@ class TaskManageController extends BaseController
         $task['fromCourseId'] = $courseId;
         $this->getTaskService()->preCreateTaskCheck($this->parseTimeFields($task));
 
-        return $this->createJsonResponse(array('success' => 1));
+        return $this->createJsonResponse(['success' => 1]);
     }
 
     public function preUpdateCheckAction(Request $request, $courseId, $activityId)
@@ -33,7 +33,7 @@ class TaskManageController extends BaseController
         $task['fromCourseId'] = $courseId;
         $this->getTaskService()->preUpdateTaskCheck($taskId, $this->parseTimeFields($task));
 
-        return $this->createJsonResponse(array('success' => 1));
+        return $this->createJsonResponse(['success' => 1]);
     }
 
     public function createAction(Request $request, $courseId)
@@ -42,7 +42,7 @@ class TaskManageController extends BaseController
 
         $categoryId = $request->query->get('categoryId', 0);
 
-        $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'], 'categoryId' => $categoryId));
+        $taskCount = $this->getTaskService()->countTasks(['courseId' => $course['id'], 'categoryId' => $categoryId]);
         if ($taskCount >= 6) {
             return $this->createNewException(TaskException::TASK_NUM_LIMIT());
         }
@@ -58,16 +58,16 @@ class TaskManageController extends BaseController
 
         $html = $this->renderView(
             'task-manage/modal.html.twig',
-            array(
+            [
                 'mode' => 'create',
                 'course' => $course,
                 'courseSet' => $courseSet,
                 'categoryId' => $categoryId,
                 'taskMode' => $taskMode,
-            )
+            ]
         );
 
-        return $this->createJsonResponse(array('code' => true, 'message', 'html' => $html));
+        return $this->createJsonResponse(['code' => true, 'message', 'html' => $html]);
     }
 
     public function batchCreateTasksAction(Request $request, $courseId)
@@ -78,8 +78,8 @@ class TaskManageController extends BaseController
             $fileId = $request->request->get('fileId');
             $file = $this->getUploadFileService()->getFile($fileId);
 
-            if (!in_array($file['type'], array('document', 'video', 'audio', 'ppt', 'flash'))) {
-                return $this->createJsonResponse(array('error' => '不支持的文件类型'));
+            if (!in_array($file['type'], ['document', 'video', 'audio', 'ppt', 'flash'])) {
+                return $this->createJsonResponse(['error' => '不支持的文件类型']);
             }
 
             $course = $this->getCourseService()->getCourse($courseId);
@@ -94,34 +94,34 @@ class TaskManageController extends BaseController
         $params = $parser->parse($token);
 
         if (!$params) {
-            return $this->createJsonResponse(array('error' => 'bad token'));
+            return $this->createJsonResponse(['error' => 'bad token']);
         }
 
         return $this->render(
             'course-manage/batch-create/batch-create-modal.html.twig',
-            array(
+            [
                 'token' => $token,
                 'targetType' => $params['targetType'],
                 'courseId' => $courseId,
                 'mode' => $mode,
-            )
+            ]
         );
     }
 
     private function createTaskByFileAndCourse($file, $course)
     {
-        $task = array(
+        $task = [
             'mediaType' => $file['type'],
             'fromCourseId' => $course['id'],
             'courseSetType' => 'normal',
-            'media' => json_encode(array('source' => 'self', 'id' => $file['id'], 'name' => $file['filename'])),
+            'media' => json_encode(['source' => 'self', 'id' => $file['id'], 'name' => $file['filename']]),
             'mediaId' => $file['id'],
             'type' => $file['type'],
             'length' => $file['length'],
             'title' => str_replace(strrchr($file['filename'], '.'), '', $file['filename']),
-            'ext' => array('mediaSource' => 'self', 'mediaId' => $file['id']),
+            'ext' => ['mediaSource' => 'self', 'mediaId' => $file['id']],
             'categoryId' => 0,
-        );
+        ];
         if ('document' == $file['type']) {
             $task['type'] = 'doc';
             $task['mediaType'] = 'doc';
@@ -131,9 +131,8 @@ class TaskManageController extends BaseController
     }
 
     /**
-     * @param Request $request
-     * @param         $task
-     * @param         $course
+     * @param $task
+     * @param $course
      *
      * @return \Symfony\Component\HttpFoundation\JsonResponse|\Symfony\Component\HttpFoundation\Response
      */
@@ -162,6 +161,7 @@ class TaskManageController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $task = $request->request->all();
+            $task['redoInterval'] = empty($task['redoInterval']) ? 0 : $task['redoInterval'] * 60;
             if (!isset($task['fromCourseSetId'])) {
                 $task['fromCourseSetId'] = $course['courseSetId'];
             }
@@ -176,7 +176,7 @@ class TaskManageController extends BaseController
 
         return $this->render(
             'task-manage/modal.html.twig',
-            array(
+            [
                 'mode' => 'edit',
                 'customTitle' => $customTitle,
                 'currentType' => $activity['mediaType'],
@@ -184,7 +184,7 @@ class TaskManageController extends BaseController
                 'courseSet' => $courseSet,
                 'task' => $task,
                 'taskMode' => $taskMode,
-            )
+            ]
         );
     }
 
@@ -208,10 +208,10 @@ class TaskManageController extends BaseController
         $this->tryManageCourse($courseId);
         $task = $this->getTaskService()->publishTask($id);
         if (false === $task) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $this->trans('course.task.classroom_sync_job_executing_tips')));
+            return $this->createJsonResponse(['success' => false, 'message' => $this->trans('course.task.classroom_sync_job_executing_tips')]);
         }
 
-        return $this->createJsonResponse(array('success' => true));
+        return $this->createJsonResponse(['success' => true]);
     }
 
     public function unPublishAction(Request $request, $courseId, $id)
@@ -219,7 +219,7 @@ class TaskManageController extends BaseController
         $this->tryManageCourse($courseId);
         $this->getTaskService()->unpublishTask($id);
 
-        return $this->createJsonResponse(array('success' => true));
+        return $this->createJsonResponse(['success' => true]);
     }
 
     public function taskFieldsAction(Request $request, $courseId, $mode)
@@ -231,10 +231,10 @@ class TaskManageController extends BaseController
 
             return $this->forward(
                 'AppBundle:Activity/Activity:create',
-                array(
+                [
                     'courseId' => $courseId,
                     'type' => $type,
-                )
+                ]
             );
         } else {
             $id = $request->query->get('id');
@@ -243,10 +243,10 @@ class TaskManageController extends BaseController
 
             return $this->forward(
                 'AppBundle:Activity/Activity:update',
-                array(
+                [
                     'id' => $task['activityId'],
                     'courseId' => $courseId,
-                )
+                ]
             );
         }
     }
@@ -260,7 +260,7 @@ class TaskManageController extends BaseController
 
         $this->getTaskService()->deleteTask($taskId);
 
-        return $this->createJsonResponse(array('success' => true));
+        return $this->createJsonResponse(['success' => true]);
     }
 
     protected function tryManageCourse($courseId)
@@ -312,14 +312,14 @@ class TaskManageController extends BaseController
         $activityConfigManager = $this->get('activity_config_manager');
         $activityConfig = $activityConfigManager->getInstalledActivity($mediaType);
         if (empty($activityConfig['finish_condition'])) {
-            return array();
+            return [];
         }
         $findishCondition = reset($activityConfig['finish_condition']);
 
-        return array(
+        return [
             'finishType' => $findishCondition['type'],
             'finishData' => empty($findishCondition['value']) ? '' : $findishCondition['value'],
-        );
+        ];
     }
 
     protected function parseTimeFields($fields)

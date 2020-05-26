@@ -790,6 +790,11 @@ admin_v2.cloud.data_lab_setting: 设置
 # 人脸识别
 admin_v2.cloud.face_identify: 人脸识别
 
+# 云监考
+admin_v2.cloud.face_inspection: 云监考
+admin_v2.cloud.face_inspection_result: 采集结果
+admin_v2.cloud.face_inspection_link: 生成采集链接
+
 #功能实验室
 admin_v2.cloud.feature_lab: 功能实验室
 

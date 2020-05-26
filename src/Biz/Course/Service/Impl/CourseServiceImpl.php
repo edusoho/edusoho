@@ -1344,6 +1344,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->analysisCourseDataByTime($startTime, $endTime);
     }
 
+    public function findTeachersByCourseIds($courseIds)
+    {
+        $conditions = [
+            'role' => 'teacher',
+            'courseIds' => $courseIds,
+        ];
+
+        return $this->getMemberDao()->search($conditions, [], 0, $this->getMemberDao()->count($conditions));
+    }
+
     public function findUserManageCoursesByCourseSetId($userId, $courseSetId)
     {
         $user = $this->getUserService()->getUser($userId);

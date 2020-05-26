@@ -19,6 +19,16 @@ class TestpaperActivityDaoImpl extends AdvancedDaoImpl implements TestpaperActiv
         return $this->findInField('mediaId', $mediaIds);
     }
 
+    public function getActivityByAnswerSceneId($answerSceneId)
+    {
+        return $this->getByFields(['answerSceneId' => $answerSceneId]);
+    }
+
+    public function findByAnswerSceneIds($answerSceneIds)
+    {
+        return $this->findInField('answerSceneId', $answerSceneIds);
+    }
+
     public function declares()
     {
         return [

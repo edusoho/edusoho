@@ -2,7 +2,6 @@
 
 namespace Biz\S2B2C\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\S2B2C\Service\SupplierNotifyService;

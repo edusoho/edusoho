@@ -63,7 +63,7 @@ export default class Homework {
     });
     this.$questionPickedModal.modal().data('manager', this);
     $.get($btn.data('url'), {
-      excludeIds: excludeIds.join(',')
+      exclude_ids: excludeIds.join(',')
     }, html => {
       this.$questionPickedModal.html(html);
     });
@@ -87,7 +87,7 @@ export default class Homework {
     });
     let url = $('.js-pick-modal').data('pickUrl');
     let self = this;
-    $.post(url, {questionIds: questionIds}, html => {
+    $.post(url, {itemIds: questionIds}, html => {
       let $tbody = self.$step2_form.find('tbody:visible');
       if ($tbody.length <= 0) {
         $tbody = self.$step2_form.find('tbody');

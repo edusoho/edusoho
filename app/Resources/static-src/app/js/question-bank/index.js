@@ -17,5 +17,10 @@ $('.question-bank-wrap').each(function(){
   }
 });
 
-
+$('[name="categoryId"]').select2({
+  treeview: true,
+  dropdownAutoWidth: true,
+  treeviewInitState: 'collapsed',
+  placeholderOption: 'first'
+});
 

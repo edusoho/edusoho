@@ -60,8 +60,10 @@
     "doctrine/cache": "1.6.2",
     "codeages/biz-order-pay": "dev-master",
     "codeages/escloud-php-sdk": "^1.1",
+    "codeages/plumber2": "dev-master",
+    "vlucas/valitron": "^1.4",
     "firebase/php-jwt": "^5.1",
-    "codeages/plumber2": "dev-master"
+    "codeages/biz-item-bank": "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": "5.7.27",

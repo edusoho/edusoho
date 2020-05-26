@@ -2,10 +2,10 @@
 
 namespace Biz\Activity\Service\Impl;
 
-use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Dao\TestpaperActivityDao;
 use Biz\Activity\Service\TestpaperActivityService;
+use Biz\BaseService;
 
 class TestpaperActivityServiceImpl extends BaseService implements TestpaperActivityService
 {
@@ -39,6 +39,16 @@ class TestpaperActivityServiceImpl extends BaseService implements TestpaperActiv
     public function deleteActivity($id)
     {
         return $this->getTestpaperActivityDao()->delete($id);
+    }
+
+    public function getActivityByAnswerSceneId($answerSceneId)
+    {
+        return $this->getTestpaperActivityDao()->getActivityByAnswerSceneId($answerSceneId);
+    }
+
+    public function findByAnswerSceneIds($answerSceneIds)
+    {
+        return $this->getTestpaperActivityDao()->findByAnswerSceneIds($answerSceneIds);
     }
 
     /**

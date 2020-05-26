@@ -2,12 +2,13 @@
 
 namespace Biz\Marker\Service\Impl;
 
-use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\BaseService;
 use Biz\Marker\MarkerException;
-use Biz\Marker\Service\MarkerService;
 use Biz\Marker\QuestionMarkerException;
+use Biz\Marker\Service\MarkerService;
 use Biz\Marker\Service\QuestionMarkerService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerService
 {
@@ -42,7 +43,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         $markers = $this->getMarkerService()->findMarkersByMediaId($mediaId);
 
         if (empty($markers)) {
-            return array();
+            return [];
         }
 
         $markersGroups = ArrayToolkit::index($markers, 'id');
@@ -71,28 +72,21 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         return $this->getQuestionMarkerDao()->count($conditions);
     }
 
-    public function addQuestionMarker($questionId, $markerId, $seq)
+    public function addQuestionMarker($itemId, $markerId, $seq)
     {
-        $question = $this->getQuestionService()->get($questionId);
+        $item = $this->getItemService()->getItemWithQuestions($itemId, true);
 
-        if (!empty($question)) {
-            $questionMarker = array(
+        if (!empty($item['questions'])) {
+            $questionMarker = [
                 'markerId' => $markerId,
-                'questionId' => $questionId,
+                'questionId' => $itemId,
                 'seq' => $seq,
-                'type' => $question['type'],
-                'stem' => $question['stem'],
-                'answer' => $question['answer'],
-                'analysis' => $question['analysis'],
-                'metas' => $question['metas'],
-                'difficulty' => $question['difficulty'],
                 'createdTime' => time(),
-            );
-            $questionMarkers = $this->findQuestionMarkersByMarkerId($markerId);
+            ];
+            $this->findQuestionMarkersByMarkerId($markerId);
             $this->getQuestionMarkerDao()->waveSeqBehind($markerId, $seq);
-            $questionmarker = $this->getQuestionMarkerDao()->create($questionMarker);
 
-            return $questionmarker;
+            return $this->getQuestionMarkerDao()->create($questionMarker);
         }
     }
 
@@ -131,7 +125,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         foreach ($ids as $itemId) {
             ++$seq;
             $item = $this->getQuestionMarker($itemId);
-            $fields = array('seq' => $seq);
+            $fields = ['seq' => $seq];
 
             if ($fields['seq'] != $item['seq']) {
                 $this->updateQuestionMarker($item['id'], $fields);
@@ -164,9 +158,12 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         return $this->biz->service('System:LogService');
     }
 
-    protected function getQuestionService()
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
     {
-        return $this->biz->service('Question:QuestionService');
+        return $this->biz->service('ItemBank:Item:ItemService');
     }
 
     protected function getQuestionMarkerResultService()

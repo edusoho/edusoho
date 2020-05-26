@@ -3,6 +3,8 @@
 namespace Biz\S2B2C\Sync\Component;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\S2B2C\Service\ResourceSyncService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
 use Codeages\Biz\Framework\Context\Biz;
 
 abstract class AbstractEntitySync
@@ -13,7 +15,7 @@ abstract class AbstractEntitySync
 
     protected $processNodes;
 
-    public function __construct(Biz $biz, $processNodes = array())
+    public function __construct(Biz $biz, $processNodes = [])
     {
         $this->biz = $biz;
         $this->processNodes = $processNodes;
@@ -50,7 +52,7 @@ abstract class AbstractEntitySync
      *
      * @return mixed
      */
-    abstract protected function syncEntity($source, $config = array());
+    abstract protected function syncEntity($source, $config = []);
 
     /**
      * 依次处理要复制的每一个节点
@@ -60,7 +62,7 @@ abstract class AbstractEntitySync
      */
     protected function processChainsDoSync($originalData, $config)
     {
-        $childNodes = $this->processNodes['children'] ?: array();
+        $childNodes = $this->processNodes['children'] ?: [];
 
         foreach ($childNodes as  $currentNode) {
             $nextSyncClass = $currentNode['class'];
@@ -79,7 +81,7 @@ abstract class AbstractEntitySync
      *
      * @return mixed
      */
-    final public function sync($originalCourse, $course = array())
+    final public function sync($originalCourse, $course = [])
     {
         try {
             $this->biz['db']->beginTransaction();
@@ -104,7 +106,7 @@ abstract class AbstractEntitySync
      *
      * @return mixed
      */
-    abstract protected function updateEntityToLastedVersion($source, $config = array());
+    abstract protected function updateEntityToLastedVersion($source, $config = []);
 
     /**
      * 用于更新现有课程的版本
@@ -116,7 +118,7 @@ abstract class AbstractEntitySync
      *
      * @return mixed
      */
-    final public function updateToLastedVersion($originalCourse, $course = array())
+    final public function updateToLastedVersion($originalCourse, $course = [])
     {
         try {
             $this->biz['db']->beginTransaction();
@@ -140,7 +142,7 @@ abstract class AbstractEntitySync
      */
     protected function processChainsDoUpdate($originalData, $config)
     {
-        $childNodes = $this->processNodes['children'] ?: array();
+        $childNodes = $this->processNodes['children'] ?: [];
 
         foreach ($childNodes as  $currentNode) {
             $nextSyncClass = $currentNode['class'];
@@ -149,8 +151,29 @@ abstract class AbstractEntitySync
         }
     }
 
+    protected function getS2B2CConfig()
+    {
+        return $this->getS2B2CFacadeService()->getS2B2CConfig();
+    }
+
     protected function getLogger()
     {
         return $this->biz->offsetGet('s2b2c.merchant.logger');
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->biz->service('S2B2C:S2B2CFacadeService');
+    }
+
+    /**
+     * @return ResourceSyncService
+     */
+    protected function getResourceSyncService()
+    {
+        return $this->biz->service('S2B2C:ResourceSyncService');
     }
 }

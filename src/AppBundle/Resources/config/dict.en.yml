@@ -375,6 +375,7 @@ userInfoFields:
     weixin: Wechat
 
 passedStatus:
+    none: -
     excellent: Excellent
     good: Good
     passed: Passed

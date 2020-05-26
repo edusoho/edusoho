@@ -1357,6 +1357,24 @@ admin_v2:
                             children:
                                 admin_v2_cloud_face_identify_setting:
                                     name: admin_v2.cloud.face_identify
+                        # 云监考
+                        admin_v2_cloud_facein:
+                          name: admin_v2.cloud.face_inspection
+                          visible: (cloudStatus() and setting('cloud_facein.enabled', 0) == 1)
+                          children:
+                            admin_v2_edu_cloud_facein_overview:
+                              name: admin_v2.cloud.face_inspection_result
+                              disable: true
+                              children:
+                                admin_v2_edu_cloud_facein_generate_link:
+                                  name: admin_v2.cloud.face_inspection_link
+                                  disable: true
+                                  visible: (setting('cloud_facein.enabled', 0) == 1)
+                                  group: topBtn
+                                  mode: modal
+                            admin_v2_edu_cloud_facein_setting:
+                              name: 设置
+                              disable: true
                         #功能实验室
                         admin_v2_cloud_feature_lab:
                             name: admin_v2.cloud.feature_lab

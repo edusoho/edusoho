@@ -27,6 +27,7 @@ use Biz\System\Service\SettingService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Topxia\Service\Common\ServiceKernel;
@@ -125,6 +126,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('category_choices', [$this, 'getCategoryChoices']),
             new \Twig_SimpleFunction('build_category_choices', [$this, 'buildCategoryChoices']),
             new \Twig_SimpleFunction('question_category_choices', [$this, 'getQuestionCategoryChoices']),
+            new \Twig_SimpleFunction('item_category_choices', [$this, 'getItemCategoryChoices']),
             new \Twig_SimpleFunction('upload_max_filesize', [$this, 'getUploadMaxFilesize']),
             new \Twig_SimpleFunction('js_paths', [$this, 'getJsPaths']),
             new \Twig_SimpleFunction('is_plugin_installed', [$this, 'isPluginInstalled']),
@@ -1521,7 +1523,7 @@ class WebExtension extends \Twig_Extension
 
     public function fillQuestionStemTextFilter($stem)
     {
-        return preg_replace('/\[\[.+?\]\]/', '____', $stem);
+        return preg_replace('/\[\[\]\]/', '____', preg_replace('/\[\[.+?\]\]/', '____', $stem));
     }
 
     public function fillQuestionStemHtmlFilter($stem)
@@ -1671,6 +1673,15 @@ class WebExtension extends \Twig_Extension
     {
         $builder = new CategoryBuilder();
         $builder->buildForQuestion($bankId);
+        $builder->setIndent($indent);
+
+        return $builder->convertToChoices();
+    }
+
+    public function getItemCategoryChoices($itemBankId, $indent = '　')
+    {
+        $builder = new CategoryBuilder();
+        $builder->buildForItem($itemBankId);
         $builder->setIndent($indent);
 
         return $builder->convertToChoices();
@@ -1956,9 +1967,15 @@ class WebExtension extends \Twig_Extension
         return MathToolkit::uniqid();
     }
 
-    public function isQuestionLack($testpaperId)
+    public function isQuestionLack($activity)
     {
-        return $this->getTestPaperService()->isQuestionsLackedByTestId($testpaperId);
+        try {
+            $this->getAssessmentService()->drawItems($activity['ext']['drawCondition']['range'], [$activity['ext']['drawCondition']['section']]);
+
+            return false;
+        } catch (\Exception $e) {
+            return true;
+        }
     }
 
     public function canModifySiteName()
@@ -2043,5 +2060,13 @@ class WebExtension extends \Twig_Extension
     protected function getS2b2cFileSourceService()
     {
         return $this->createService('S2B2C:FileSourceService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 }

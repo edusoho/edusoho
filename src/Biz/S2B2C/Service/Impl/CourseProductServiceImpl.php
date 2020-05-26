@@ -113,7 +113,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             $this->getLogger()->info("[syncCourseProduct] 同步课程 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 成功", ['courseId' => $course['id']]);
         } catch (\Exception $e) {
             $this->rollback();
-            $this->getLogger()->error("[syncCourseProduct] 同步课程 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 失败", ['error' => $e]);
+            $this->getLogger()->error("[syncCourseProduct] 同步课程 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 失败", ['message' => $e->getMessage(), 'error' => $e->getTraceAsString()]);
             $courseCounts = $this->getProductService()->countProducts(['remoteResourceId' => $course['courseSetId']]);
             //删除CourseSet存在一定风险，如果第一个计划就报错，会造成数据丢失
             if (1 == $courseCounts) {

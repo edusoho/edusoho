@@ -2,8 +2,8 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use Biz\Question\Service\CategoryService;
 use Biz\QuestionBank\Service\QuestionBankService;
+use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Topxia\Service\Common\ServiceKernel;
 
 class QuestionCategoryTreeDataTag
@@ -11,16 +11,17 @@ class QuestionCategoryTreeDataTag
     public function getData(array $arguments)
     {
         $bankId = $arguments['bankId'];
+        $bank = $this->getQuestionBankService()->getQuestionBank($bankId);
 
-        return json_encode($this->getCategoryService()->getCategoryStructureTree($bankId));
+        return json_encode($this->getItemCategoryService()->getItemCategoryTree($bank['itemBankId']));
     }
 
     /**
-     * @return CategoryService
+     * @return ItemCategoryService
      */
-    protected function getCategoryService()
+    protected function getItemCategoryService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Question:CategoryService');
+        return ServiceKernel::instance()->getBiz()->service('ItemBank:Item:ItemCategoryService');
     }
 
     /**
