@@ -94,6 +94,44 @@ const MODULE_DEFAULT = {
       }
     }]
   },
+  h5GraphicNavigation: {
+    type: 'graphic_navigation',
+    moduleType: 'navigation-1',
+    data: [{
+      title: '公开课',
+      image: {
+        url: '',
+        uri: `${baseUri}static/images/openCourse.png`
+      },
+      link: {
+        type: 'course',
+        target: '跳转课程“全部”列表',
+        url: ''
+      }
+    }, {
+      title: '热门课',
+      image: {
+        url: '',
+        uri: `${baseUri}static/images/hotcourse.png`
+      },
+      link: {
+        type: 'course',
+        target: '跳转课程“全部”列表',
+        url: ''
+      }
+    }, {
+      title: '热销班',
+      image: {
+        url: '',
+        uri: `${baseUri}static/images/hotclass.png`
+      },
+      link: {
+        type: 'classroom',
+        target: '跳转班级“全部”列表',
+        url: ''
+      }
+    }]
+  },
   poster: {
     type: 'poster',
     moduleType: '',
@@ -241,7 +279,7 @@ const H5_BASE_MODULE = [
     icon: 'icon-tuwenguanggao'
   }, {
     name: '图文导航',
-    default: MODULE_DEFAULT.graphicNavigation,
+    default: MODULE_DEFAULT.h5GraphicNavigation,
     icon: 'icon-tuwendaohang'
   }, {
     name: '搜索',

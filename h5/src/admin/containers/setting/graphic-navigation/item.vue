@@ -53,9 +53,6 @@
         accept=".jpg,.jpeg,.png,.gif,.bmp,.JPG,.JPEG,.PBG,.GIF,.BMP"
       >
         <el-button type="primary">上传图片</el-button>
-        <!-- <img v-if="!item.image.url"  :src="getDefaultImg(item.link.type)" class="graphic-navigation-img">
-        <img v-else :src="item.image.url" class="graphic-navigation-img"> -->
-        <!-- <div  class="graphic-navigation-img-mask"></div> -->
       </el-upload>
       </span>
     </el-dialog>
@@ -107,10 +104,17 @@ export default {
       chooseVisible: false,
       chooseType: '',
       imgChooseList: ICON_LIST,
-      typeBaseList: [{
+      appTypeBaseList: [{
         value: 'openCourse',
         label: '公开课分类'
       }, {
+        value: 'classroom',
+        label: '班级分类'
+      }, {
+        value: 'course',
+        label: '课程分类'
+      }],
+      h5TypeBaseList: [{
         value: 'classroom',
         label: '班级分类'
       }, {
@@ -150,12 +154,16 @@ export default {
             || !this.vipSettings.h5Enabled);
     },
     typeOptions() {
-      console.log('vipDisabled', this.vipDisabled);
-      const vipItem = !this.vipDisabled ? [{
-        value: 'vip',
-        label: '会员专区'
-      }] : []
-      return [ ...vipItem, ...this.typeBaseList ];
+      if(this.pathName==="h5Setting"){
+        return this.h5TypeBaseList;
+      }
+      if(this.pathName==="appSetting"){
+        const vipItem = !this.vipDisabled ? [{
+          value: 'vip',
+          label: '会员专区'
+        }] : []
+        return [ ...vipItem, ...this.appTypeBaseList ];
+      }
     },
   },
   created() {
