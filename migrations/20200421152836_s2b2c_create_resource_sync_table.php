@@ -24,7 +24,8 @@ class S2b2cCreateResourceSyncTable extends Migration
               `syncTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '同步时间',
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
               `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
-              PRIMARY KEY (`id`)
+              PRIMARY KEY (`id`),
+              KEY `supplierId_remoteResourceId_type` (`supplierId`,`remoteResourceId`,`resourceType`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");
     }

@@ -37,6 +37,10 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
 
     public function onOrderSuccess(Event $event)
     {
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+        if (empty($s2b2cConfig['supplierId'])) {
+            return;
+        }
         $this->getLogger()->info('[onOrderSuccess] start order report');
         $context = $event->getSubject();
         try {

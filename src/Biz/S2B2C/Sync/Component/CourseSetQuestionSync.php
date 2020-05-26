@@ -41,15 +41,16 @@ class CourseSetQuestionSync extends AbstractEntitySync
         $this->syncParentQuestions($newCourse, $sourceCourse);
         $this->syncChildrenQuestions($newCourse, $sourceCourse);
 
-//            $syncIds = array_merge(
-//                ArrayToolkit::column($sourceCourse['childrenQuestions'], 'id'),
-//                ArrayToolkit::column($sourceCourse['parentQuestions'], 'id')
-//            );
-//            $questions = $this->getQuestionService()->findQuestionsBySyncIds($syncIds);
-//
-//            $questions = ArrayToolkit::index($questions, 'syncId');
-//            $this->syncAttachments($questions, $newCourse, $sourceCourse);
+        /*
+        $syncIds = array_merge(
+            ArrayToolkit::column($sourceCourse['childrenQuestions'], 'id'),
+            ArrayToolkit::column($sourceCourse['parentQuestions'], 'id')
+        );
+        $questions = $this->getQuestionService()->findQuestionsBySyncIds($syncIds);
 
+        $questions = ArrayToolkit::index($questions, 'syncId');
+        $this->syncAttachments($questions, $newCourse, $sourceCourse);
+        **/
         return [];
     }
 
@@ -195,13 +196,13 @@ class CourseSetQuestionSync extends AbstractEntitySync
         $newCourse = $config['newCourse'];
         $this->updateParentQuestions($newCourse, $source);
         $this->updateChildrenQuestions($newCourse, $source);
-
+        /*
         $questions = $this->getQuestionService()->findQuestionsByCourseSetId($newCourse['courseSetId']);
         $questions = ArrayToolkit::index($questions, 'syncId');
 
         $this->updateAttachments($questions, $newCourse, $source);
-
-        return $questions;
+        **/
+        return [];
     }
 
     /**
@@ -231,25 +232,42 @@ class CourseSetQuestionSync extends AbstractEntitySync
 
         $existSyncResources = ArrayToolkit::index($existSyncResources, 'remoteResourceId');
         foreach ($parentQuestions as $question) {
-            $newQuestion = $this->processFields($newCourse, $question);
+            $newItem = $this->processFields($newCourse, $question);
             if (!empty($existSyncResources[$question['id']])) {
-                $newItem = $this->getItemDao()->update($existSyncResources[$question['id']]['localResourceId'], $newQuestion);
-                $this->getBizQuestionDao()->batchDelete(['itemId' => $existSyncResources[$question['id']]['localResourceId']]);
+                $newItem = $this->getItemDao()->update($existSyncResources[$question['id']]['localResourceId'], $newItem);
+//                $this->getBizQuestionDao()->batchDelete(['item_id' => $existSyncResources[$question['id']]['localResourceId']]);
                 //如果是材料题，则忽略
                 if ('material' == $question['type']) {
                     continue;
                 }
+                $bizQuestion = $this->getBizQuestionDao()->findByItemId($newItem['id']);
                 $newQuestion = $this->converBizQuestion($question, $newItem['id']);
-                $newQuestion = $this->getBizQuestionDao()->create($newQuestion);
-                $this->getResourceSyncService()->createSync([
-                    'supplierId' => $s2b2cConfig['supplierId'],
-                    'resourceType' => 'question',
-                    'localResourceId' => $newQuestion['id'],
-                    'remoteResourceId' => $question['id'],
-                    'syncTime' => time(),
-                ]);
+                if (!empty($bizQuestion)) {
+                    $this->getBizQuestionDao()->update($bizQuestion[0]['id'], $newQuestion);
+                }
                 continue;
             }
+            $newItem = $this->getItemDao()->create($newItem);
+            $this->getResourceSyncService()->createSync([
+                'supplierId' => $s2b2cConfig['supplierId'],
+                'resourceType' => 'item',
+                'localResourceId' => $newItem['id'],
+                'remoteResourceId' => $question['id'],
+                'syncTime' => time(),
+            ]);
+            if ('material' == $question['type']) {
+                continue;
+            }
+            $newQuestion = $this->converBizQuestion($question, $newItem['id']);
+            $bizQuestion = $this->getBizQuestionDao()->create($newQuestion);
+            //子题依然采用远程的questionId 做关联
+            $this->getResourceSyncService()->createSync([
+                'supplierId' => $s2b2cConfig['supplierId'],
+                'resourceType' => 'question',
+                'localResourceId' => $bizQuestion['id'],
+                'remoteResourceId' => $question['id'],
+                'syncTime' => time(),
+            ]);
         }
 
 //        $needDeleteParentQuestionSyncIds = array_values(array_diff(array_keys($existSyncResources), ArrayToolKit::column($parentQuestions, 'id')));
@@ -274,7 +292,7 @@ class CourseSetQuestionSync extends AbstractEntitySync
     {
         $s2b2cConfig = $this->getS2B2CConfig();
         $childrenQuestions = $sourceCourse['childrenQuestions'];
-        $parentQuestions = $sourceCourse['childrenQuestions'];
+        $parentQuestions = $sourceCourse['parentQuestions'];
         $subQuestionResourceSyncs = ArrayToolkit::index($this->getResourceSyncService()->findSyncBySupplierIdAndRemoteResourceIdsAndResourceType(
             $s2b2cConfig['supplierId'],
             ArrayToolkit::column($childrenQuestions, 'id'),
@@ -306,7 +324,7 @@ class CourseSetQuestionSync extends AbstractEntitySync
             $newQuestion = $this->getBizQuestionDao()->create($newQuestion);
             $this->getResourceSyncService()->createSync([
                 'supplierId' => $s2b2cConfig['supplierId'],
-                'resourceType' => 'sub_question',
+                'resourceType' => 'question',
                 'localResourceId' => $newQuestion['id'],
                 'remoteResourceId' => $question['id'],
                 'syncTime' => time(),
@@ -322,46 +340,15 @@ class CourseSetQuestionSync extends AbstractEntitySync
 //        }
     }
 
+    /**
+     * @param $questionMaps
+     * @param $newCourse
+     * @param $sourceCourse
+     * 附件存在形式不一样，不支持
+     */
     private function updateAttachments($questionMaps, $newCourse, $sourceCourse)
     {
         return;
-        $attachments = $sourceCourse['questionAttachments'];
-        $files = $this->getUploadFileService()->searchFiles(['targetId' => $newCourse['courseSetId']], [], 0, PHP_INT_MAX);
-        $files = ArrayToolkit::index($files, 'syncId');
-        $existUsedFiles = $this->getFileUsedDao()->search([
-            'type' => 'attachment',
-            'fileIds' => ArrayToolkit::column($files, 'id'),
-            'syncIds' => ArrayToolkit::column($files, 'syncId'),
-        ], [], 0, PHP_INT_MAX);
-
-        if (empty($attachments)) {
-            foreach ($existUsedFiles as $existUsedFile) {
-                $this->getFileUsedDao()->delete($existUsedFile['id']);
-            }
-
-            return;
-        }
-
-        $newAttachments = [];
-        $existUsedFiles = ArrayToolkit::index($existUsedFiles, 'syncId');
-        foreach ($attachments as $attachment) {
-            $newTargetId = empty($questionMaps[$attachment['targetId']]) ? 0 : $questionMaps[$attachment['targetId']]['id'];
-            $newAttachment = [
-                'syncId' => $attachment['id'],
-                'type' => 'attachment',
-                'fileId' => empty($files[$attachment['fileId']]) ? 0 : $files[$attachment['fileId']]['id'],
-                'targetType' => $attachment['targetType'],
-                'targetId' => $newTargetId,
-            ];
-            if (!empty($existUsedFiles[$attachment['id']])) {
-                $this->getFileUsedDao()->update($existUsedFiles[$attachment['id']]['id'], $newAttachment);
-                continue;
-            }
-
-            $newAttachments[] = $newAttachment;
-        }
-
-        $this->getUploadFileService()->batchCreateUseFiles($newAttachments);
     }
 
     /**

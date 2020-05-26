@@ -25,7 +25,10 @@ class S2b2cCreateProductTable extends Migration
           `changelog` mediumtext COMMENT '更新日志',
           `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
           `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
-          PRIMARY KEY (`id`)
+          PRIMARY KEY (`id`),
+          KEY `remoteProductId` (`remoteProductId`),
+          KEY `remoteResourceId` (`remoteResourceId`),
+          KEY `localResourceId` (`localResourceId`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
     }
 

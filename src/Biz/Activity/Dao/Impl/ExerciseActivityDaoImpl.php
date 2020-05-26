@@ -24,6 +24,13 @@ class ExerciseActivityDaoImpl extends AdvancedDaoImpl implements ExerciseActivit
         return [
             'timestamps' => ['createdTime', 'updatedTime'],
             'serializes' => ['drawCondition' => 'json'],
+            'conditions' => [
+                /*S2B2C增加syncId*/
+                'syncId = :syncId',
+                'syncId in (:syncIds)',
+                'syncId > :syncIdGT',
+                /*END*/
+            ],
         ];
     }
 }

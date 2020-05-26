@@ -2,7 +2,9 @@
 
 namespace Biz\S2B2C\Sync\Component\Activity;
 
+use Biz\Activity\Dao\ExerciseActivityDao;
 use Biz\Activity\Service\ExerciseActivityService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 
 class Exercise extends Activity
 {
@@ -11,9 +13,10 @@ class Exercise extends Activity
         if ('exercise' !== $activity['mediaType']) {
             return null;
         }
+        $scene = $this->createScene($activity);
 
         $newExt = [
-            'answerSceneId' => $activity['answerSceneId'],
+            'answerSceneId' => $scene['id'],
             'drawCondition' => $this->convertDrawCondition($activity),
         ];
 
@@ -25,20 +28,25 @@ class Exercise extends Activity
         if ('exercise' !== $activity['mediaType']) {
             return null;
         }
-
-        $testpaperActivity = $activity[$activity['mediaType'].'Activity'];
-        if (empty($testpaperActivity)) {
+        $exerciseActivity = $activity[$activity['mediaType'].'Activity'];
+        if (empty($exerciseActivity)) {
             return [];
         }
-        $newExt = $this->getTestpaperActivityFields($testpaperActivity, $config);
-        $newTestpaperFields = $this->filterFields($newExt);
+        $existExercise = $this->getExerciseActivityDao()->search(['syncId' => $exerciseActivity['id']], [], 0, PHP_INT_MAX);
 
-        $existTestpaper = $this->getTestpaperActivityDao()->search(['syncId' => $newTestpaperFields['syncId']], [], 0, PHP_INT_MAX);
-        if (!empty($existTestpaper)) {
-            return $this->getTestpaperActivityDao()->update($existTestpaper[0]['id'], $newTestpaperFields);
+        /**
+         * scene无对应关系，每次重新创建
+         */
+        $scene = $this->createScene($activity);
+        $newExt = [
+            'answerSceneId' => $scene['id'],
+            'drawCondition' => $this->convertDrawCondition($activity),
+        ];
+        if (!empty($existExercise)) {
+            return $this->getExerciseActivityDao()->update($existExercise[0]['id'], $newExt);
         }
 
-        return $this->getTestpaperActivityDao()->create($newTestpaperFields);
+        return $this->create($newExt);
     }
 
     protected function convertDrawCondition($activity)
@@ -60,7 +68,7 @@ class Exercise extends Activity
             'conditions' => [
                 'item_types' => $metas['questionTypes'],
             ],
-            'item_count' => $activity['itemCount'],
+            'item_count' => $activity['testpaper']['itemCount'],
             'name' => '练习题目',
         ];
 
@@ -69,15 +77,12 @@ class Exercise extends Activity
 
     public function create($fields)
     {
-        $fields = $this->filterFields($fields);
-
         return $this->getExerciseActivityService()->createActivity($fields);
     }
 
     protected function createScene($activity)
     {
-        [
-            'id' => $activity['id'],
+        return $this->getAnswerSceneService()->create([
             'name' => $activity['title'],
             'limited_time' => 0,
             'do_times' => 0,
@@ -87,7 +92,7 @@ class Exercise extends Activity
             'start_time' => 0,
             'pass_score' => 0,
             'enable_facein' => 0,
-        ];
+        ]);
     }
 
     /**
@@ -96,5 +101,21 @@ class Exercise extends Activity
     protected function getExerciseActivityService()
     {
         return $this->getBiz()->service('Activity:ExerciseActivityService');
+    }
+
+    /**
+     * @return ExerciseActivityDao
+     */
+    protected function getExerciseActivityDao()
+    {
+        return $this->getBiz()->dao('Activity:ExerciseActivityDao');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerSceneService');
     }
 }
