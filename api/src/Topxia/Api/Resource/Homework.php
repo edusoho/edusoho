@@ -2,8 +2,9 @@
 
 namespace Topxia\Api\Resource;
 
-use Biz\Activity\Service\ExerciseActivityService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\HomeworkActivityService;
+use Biz\Course\Service\CourseService;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -11,9 +12,7 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Silex\Application;
-use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\Course\Service\CourseService;
 
 class Homework extends BaseResource
 {
@@ -29,11 +28,11 @@ class Homework extends BaseResource
             }
 
             //只为兼容移动端学习引擎2.0以前的版本，之后需要修改
-            $conditions = array(
+            $conditions = [
                 'categoryId' => $task['categoryId'],
                 'status' => 'published',
                 'type' => 'homework',
-            );
+            ];
             $homeworkTasks = $this->getTaskService()->searchTasks($conditions, null, 0, 1);
             if (!$homeworkTasks) {
                 return $this->error('404', '该作业不存在!');
@@ -52,10 +51,10 @@ class Homework extends BaseResource
         }
 
         $homeworkActivity = $this->getHomeworkActivityService()->getByAssessmentId($assessment['id']);
-        $conditions = array(
+        $conditions = [
             'mediaId' => $homeworkActivity['id'],
             'mediaType' => 'homework',
-        );
+        ];
         $activities = $this->getActivityService()->search($conditions, null, 0, 1);
         if (!$activities) {
             return $this->error('404', '该作业任务不存在!');
@@ -75,7 +74,7 @@ class Homework extends BaseResource
         $homework['lessonId'] = $id;
 
         if ('lesson' != $idType) {
-            $items = $testpaperWrapper->wrapTestpaperItems($assessment, array());
+            $items = $testpaperWrapper->wrapTestpaperItems($assessment, []);
             $homework['items'] = $this->filterItem($items, null, 0, 0);
         }
 
@@ -95,10 +94,10 @@ class Homework extends BaseResource
             return $this->error('404', '作业任务不存在！');
         }
 
-        $conditions = array(
+        $conditions = [
             'mediaId' => $homeworkActivity['id'],
             'mediaType' => 'homework',
-        );
+        ];
         $activities = $this->getActivityService()->search($conditions, null, 0, 1);
         if (!$activities) {
             return $this->error('404', '作业任务不存在!');
@@ -119,7 +118,7 @@ class Homework extends BaseResource
             return $this->error('500', '不能查看该作业结果！');
         }
 
-        if (!in_array($answerRecord['status'], array('finished', 'reviewing'))) {
+        if (!in_array($answerRecord['status'], ['finished', 'reviewing'])) {
             return $this->error('500', '作业还未做完！');
         }
 
@@ -139,17 +138,17 @@ class Homework extends BaseResource
 
     private function filterItem($items, $itemSetResults, $homeworkId, $resultId)
     {
-        $newItmes = array();
+        $newItmes = [];
         foreach ($items as $item) {
             $item = $this->filterQuestion($item, $itemSetResults, $homeworkId, $resultId);
             if ('material' == $item['type']) {
-                $subs = empty($item['subs']) ? array() : array_values($item['subs']);
+                $subs = empty($item['subs']) ? [] : array_values($item['subs']);
                 foreach ($subs as &$subQuestion) {
                     $subQuestion = $this->filterQuestion($subQuestion, $itemSetResults, $homeworkId, $resultId);
                 }
                 $item['items'] = $subs;
             } else {
-                $item['items'] = array();
+                $item['items'] = [];
             }
 
             $newItmes[$item['id']] = $item;
@@ -160,12 +159,12 @@ class Homework extends BaseResource
 
     protected function filterQuestion($question, $questionResults, $homeworkId, $resultId)
     {
-        $question = ArrayToolkit::parts($question, array('id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty', 'parentId', 'subs', 'testResult'));
+        $question = ArrayToolkit::parts($question, ['id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty', 'parentId', 'subs', 'testResult']);
         $question['stem'] = $this->filterHtml($question['stem']);
         $question['analysis'] = $this->filterHtml($question['analysis']);
 
         if (empty($question['metas'])) {
-            $question['metas'] = array();
+            $question['metas'] = [];
         }
         if (isset($question['metas']['choices'])) {
             $metas = array_values($question['metas']['choices']);
@@ -190,18 +189,18 @@ class Homework extends BaseResource
 
             $question['result'] = $itemResult;
         } else {
-            $question['result'] = array(
+            $question['result'] = [
                 'id' => '0',
                 'itemId' => '0',
                 'testId' => $homeworkId,
                 'resultId' => $resultId,
-                'answer' => array(),
+                'answer' => [],
                 'questionId' => $question['id'],
                 'status' => 'noAnswer',
                 'score' => '0',
                 'teacherSay' => null,
                 'type' => $question['type'],
-            );
+            ];
         }
 
         $question['stem'] = $this->coverDescription($question['stem']);
@@ -211,7 +210,7 @@ class Homework extends BaseResource
 
     public function filter($res)
     {
-        $res = ArrayToolkit::parts($res, array('id', 'courseId', 'lessonId', 'description', 'itemCount', 'items', 'courseTitle', 'lessonTitle'));
+        $res = ArrayToolkit::parts($res, ['id', 'courseId', 'lessonId', 'description', 'itemCount', 'items', 'courseTitle', 'lessonTitle']);
 
         return $res;
     }
@@ -246,7 +245,7 @@ class Homework extends BaseResource
             return $answer;
         }
 
-        return array();
+        return [];
     }
 
     private function coverDescription($stem)

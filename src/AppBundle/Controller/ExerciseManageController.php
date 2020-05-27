@@ -18,10 +18,10 @@ class ExerciseManageController extends BaseController
         $range = json_decode($fields['range'], true);
         $questionBank = $this->getQuestionBankService()->getQuestionBank($range['bankId']);
 
-        $conditions = array(
+        $conditions = [
             'bank_id' => empty($questionBank['itemBankId']) ? 0 : $questionBank['itemBankId'],
             'types' => $fields['questionTypes'],
-        );
+        ];
 
         if (!empty($range['categoryIds'])) {
             $conditions['category_ids'] = explode(',', $range['categoryIds']);

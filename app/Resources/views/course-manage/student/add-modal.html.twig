@@ -5,59 +5,69 @@
 {% do script(['libs/jquery-validation.js', 'app/js/course-manage/students/add/index.js']) %}
 
 {% block title %}
-  {{'course.members_manage.official_student.add'|trans}}
-     {{'site.default.student'|trans}}
+  {{ 'course.members_manage.official_student.add'|trans }}
+  {{ 'site.default.student'|trans }}
 {% endblock %}
 {% block body %}
 
-<form id="student-add-form" class="form-horizontal" method="post" action="{{ path('course_set_manage_course_students_add', {courseSetId: courseSetId, courseId: course.id}) }}">
-  {% if course.status == 'published' %}
-  	<div class="row form-group">
-      <div class="col-md-2 control-label">
-        <label for="student-nickname">{{'site.default.student'|trans}}</label>
-      </div>
-      <div class="col-md-7 controls">
-        <input type="text" id="student-nickname" name="queryfield" class="form-control"
-        data-url="{{ path('course_set_manage_course_students_check',{courseSetId: courseSetId, courseId: course.id})}}" placeholder='{{'course.members_manage.official_student.add.input_placeholder'|trans}}' >
-      	<div class="help-block">{{'course.members_manage.official_student.add_tips'|trans}}</div>
-    	</div>
-    </div>
-
-    <div class="row form-group">
-      <div class="col-md-2 control-label">
-        <label for="buy-price">{{'course.members_manage.official_student.add.price'|trans}}</label>
-      </div>
-      <div class="col-md-7 controls">
-        <div class="input-group">
-          <input type="text" id="buy-price" name="price" data-price="{{ course.price|currency }}" value="{{ course.price|currency }}" class="form-control">
-          <div class="input-group-addon">{{'site.currency.CNY'|trans}}</div>
+  <form id="student-add-form" class="form-horizontal" method="post"
+        action="{{ path('course_set_manage_course_students_add', {courseSetId: courseSetId, courseId: course.id}) }}">
+    {% if course.status == 'published' %}
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="student-nickname">{{ 'site.default.student'|trans }}</label>
         </div>
-        <div class="help-block">{{'course.members_manage.official_student.add.price_tips'|trans}}{{course.price}}{{'site.currency.CNY'|trans}}</div>
+        <div class="col-md-7 controls">
+          <input type="text" id="student-nickname" name="queryfield" class="form-control"
+                 data-url="{{ path('course_set_manage_course_students_check',{courseSetId: courseSetId, courseId: course.id}) }}"
+                 placeholder='{{ 'course.members_manage.official_student.add.input_placeholder'|trans }}'>
+          <div class="help-block">{{ 'course.members_manage.official_student.add_tips'|trans }}</div>
+        </div>
       </div>
-    </div>
 
-    <div class="row form-group">
-      <div class="col-md-2 control-label">
-        <label for="student-remark">{{'course.members_manage.official_student.add.remark'|trans}}</label>
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="buy-price">{{ 'course.members_manage.official_student.add.price'|trans }}</label>
+        </div>
+        <div class="col-md-7 controls">
+          <div class="input-group">
+            <input type="text" id="buy-price" name="price" data-price="{{ course.price|currency }}"
+                   value="{{ course.price|currency }}" class="form-control">
+            <div class="input-group-addon">{{ 'site.currency.CNY'|trans }}</div>
+            {% if course.platform|default('self') != 'self' %}
+              <div type="hidden" id="min-price" data-price="0.01"></div>
+            {% endif %}
+          </div>
+          <div
+            class="help-block">{{ 'course.members_manage.official_student.add.price_tips'|trans }}{{ course.price }}{{ 'site.currency.CNY'|trans }}</div>
+        </div>
       </div>
-      <div class="col-md-7 controls">
-        <input type="text" id="student-remark" name="remark" class="form-control">
-        <div class="help-block">{{'course.members_manage.official_student.add.remark_tips'|trans}}</div>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="student-remark">{{ 'course.members_manage.official_student.add.remark'|trans }}</label>
+        </div>
+        <div class="col-md-7 controls">
+          <input type="text" id="student-remark" name="remark" class="form-control">
+          <div class="help-block">{{ 'course.members_manage.official_student.add.remark_tips'|trans }}</div>
+        </div>
       </div>
-    </div>
-  {% else %}
-    <div class="empty">{{dict_text('courseStatus', course.status)}}{{'course.members_manage.official_student.add.failed_tips'|trans}} {{'site.default.student'|trans}}，{{'course.members_manage.official_student.add.publish_tips'|trans}}</div>
-  {% endif %}
+    {% else %}
+      <div
+        class="empty">{{ dict_text('courseStatus', course.status) }}{{ 'course.members_manage.official_student.add.failed_tips'|trans }} {{ 'site.default.student'|trans }}
+        ，{{ 'course.members_manage.official_student.add.publish_tips'|trans }}</div>
+    {% endif %}
 
-  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
-</form>
+  </form>
 
 {% endblock %}
 
 {% block footer %}
   {% if course.status == 'published' %}
-    <button id="student-add-submit" type="button" class="btn btn-primary pull-right" data-loading-text="{{'form.btn.save.submiting'|trans}}" >{{'form.btn.save'|trans}}</button>
+    <button id="student-add-submit" type="button" class="btn btn-primary pull-right"
+            data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
   {% endif %}
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
 {% endblock %}

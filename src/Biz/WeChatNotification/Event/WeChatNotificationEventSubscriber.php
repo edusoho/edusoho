@@ -20,24 +20,23 @@ use Biz\WeChat\Service\WeChatService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Queue\Service\QueueService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\Router;
-use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 
 class WeChatNotificationEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
-    private $testpaperStatus = array('excellent' => '优秀', 'good' => '良好', 'passed' => '合格', 'unpassed' => '不合格');
+    private $testpaperStatus = ['excellent' => '优秀', 'good' => '良好', 'passed' => '合格', 'unpassed' => '不合格'];
 
     /**
      * @return mixed
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'course.task.unpublish' => 'onTaskUnpublish',
             'course.task.publish' => 'onTaskPublish',
             'course.task.update' => 'onTaskUpdate',
@@ -52,7 +51,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             'course.thread.post.create' => 'onCourseQuestionAnswerCreate',
             'thread.post.create' => 'onClassroomQuestionAnswerCreate',
             'wechat.template_setting.save' => 'onWeChatTemplateSettingSave',
-        );
+        ];
     }
 
     public function onTaskUnpublish(Event $event)
@@ -70,7 +69,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             return;
         }
 
-        $this->sendTasksPublishNotification(array($task));
+        $this->sendTasksPublishNotification([$task]);
     }
 
     public function onTaskUpdate(Event $event)
@@ -104,26 +103,26 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             return;
         }
 
-        if (!in_array($activity['mediaType'], array('testpaper', 'homework'))) {
+        if (!in_array($activity['mediaType'], ['testpaper', 'homework'])) {
             return;
         }
 
         if ('testpaper' == $activity['mediaType']) {
             $key = 'examResult';
             $logName = 'wechat_notify_exam_result';
-            $data = array(
-                'first' => array('value' => '同学，您好，您的试卷已批阅完成'),
-                'keyword1' => array('value' => $task['title']),
-                'keyword2' => array('value' => $answerReport['score']),
-                'remark' => array('value' => '再接再厉哦'),
-            );
+            $data = [
+                'first' => ['value' => '同学，您好，您的试卷已批阅完成'],
+                'keyword1' => ['value' => $task['title']],
+                'keyword2' => ['value' => $answerReport['score']],
+                'remark' => ['value' => '再接再厉哦'],
+            ];
         } elseif ('homework' == $activity['mediaType']) {
             $key = 'homeworkResult';
             $logName = 'wechat_notify_homework_result';
             $course = $this->getCourseService()->getCourse($task['courseId']);
             $teachers = $this->getCourseMemberService()->searchMembers(
-                array('courseId' => $course['id'], 'role' => 'teacher', 'isVisible' => 1),
-                array('id' => 'asc'),
+                ['courseId' => $course['id'], 'role' => 'teacher', 'isVisible' => 1],
+                ['id' => 'asc'],
                 0,
                 1
             );
@@ -134,13 +133,13 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 $nickname = $user['nickname'];
             }
 
-            $data = array(
-                'first' => array('value' => '同学，您好，您的作业已批阅完成'),
-                'keyword1' => array('value' => $task['title']),
-                'keyword2' => array('value' => $course['courseSetTitle']),
-                'keyword3' => array('value' => $nickname),
-                'remark' => array('value' => '作业结果：'.$this->testpaperStatus[$answerReport['grade']]),
-            );
+            $data = [
+                'first' => ['value' => '同学，您好，您的作业已批阅完成'],
+                'keyword1' => ['value' => $task['title']],
+                'keyword2' => ['value' => $course['courseSetTitle']],
+                'keyword3' => ['value' => $nickname],
+                'remark' => ['value' => '作业结果：'.$this->testpaperStatus[$answerReport['grade']]],
+            ];
         }
 
         $templateId = $this->getWeChatService()->getTemplateId($key);
@@ -148,7 +147,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             return;
         }
 
-        $options = array('type' => 'url', 'url' => $this->generateUrl('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']), UrlGeneratorInterface::ABSOLUTE_URL));
+        $options = ['type' => 'url', 'url' => $this->generateUrl('course_task_show', ['courseId' => $task['courseId'], 'id' => $task['id']], UrlGeneratorInterface::ABSOLUTE_URL)];
         $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($answerRecord['user_id']);
         if (empty($weChatUser['isSubscribe']) || $this->isUserLocked($answerRecord['user_id'])) {
             return;
@@ -156,14 +155,14 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
         $templates = TemplateUtil::templates();
         $templateCode = isset($templates[$key]['id']) ? $templates[$key]['id'] : '';
-        $list = array(array(
+        $list = [[
             'channel' => $this->getWeChatService()->getWeChatSendChannel(),
             'to_id' => $weChatUser['openId'],
             'template_id' => $templateId,
             'template_code' => $templateCode,
             'template_args' => $data,
             'goto' => $options,
-        ));
+        ]];
         $this->sendCloudWeChatNotification($key, $logName, $list);
     }
 
@@ -173,58 +172,58 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         $chargeTemplateId = $this->getWeChatService()->getTemplateId('coinRecharge');
         $payTemplateId = $this->getWeChatService()->getTemplateId('paySuccess');
         if (!empty($chargeTemplateId) && 'recharge' == $trade['type']) {
-            $data = array(
-                'first' => array('value' => '尊敬的客户，您已充值成功'),
-                'keyword1' => array('value' => '现金充值'),
-                'keyword2' => array('value' => $trade['trade_sn']),
-                'keyword3' => array('value' => ($trade['amount'] / 100).'元'),
-                'keyword4' => array('value' => date('Y-m-d H:i', $trade['pay_time'])),
-                'remark' => array('value' => '快去看看课程吧~'),
-            );
-            $options = array('type' => 'url', 'url' => $this->generateUrl('course_set_explore', array(), UrlGeneratorInterface::ABSOLUTE_URL));
+            $data = [
+                'first' => ['value' => '尊敬的客户，您已充值成功'],
+                'keyword1' => ['value' => '现金充值'],
+                'keyword2' => ['value' => $trade['trade_sn']],
+                'keyword3' => ['value' => ($trade['amount'] / 100).'元'],
+                'keyword4' => ['value' => date('Y-m-d H:i', $trade['pay_time'])],
+                'remark' => ['value' => '快去看看课程吧~'],
+            ];
+            $options = ['type' => 'url', 'url' => $this->generateUrl('course_set_explore', [], UrlGeneratorInterface::ABSOLUTE_URL)];
             $weChatUser = $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']);
             $templates = TemplateUtil::templates();
             $templateCode = isset($templates['coinRecharge']['id']) ? $templates['coinRecharge']['id'] : '';
             if (!empty($weChatUser['isSubscribe']) && !$this->isUserLocked($trade['user_id'])) {
-                $list = array(array(
+                $list = [[
                     'channel' => $this->getWeChatService()->getWeChatSendChannel(),
                     'to_id' => $weChatUser['openId'],
                     'template_id' => $chargeTemplateId,
                     'template_code' => $templateCode,
                     'template_args' => $data,
                     'goto' => $options,
-                ));
+                ]];
                 $this->sendCloudWeChatNotification('coinRecharge', 'wechat_notify_coin_recharge', $list);
             }
         }
 
         if (!empty($payTemplateId)) {
-            $data = array(
-                'first' => array('value' => '尊敬的客户，您已支付成功'),
-                'keyword1' => array('value' => $trade['title']),
-                'keyword2' => array('value' => ($trade['amount'] / 100).'元'),
-                'keyword3' => array('value' => date('Y-m-d H:i', $trade['pay_time'])),
-                'keyword4' => array('value' => '无'),
-                'remark' => array('value' => '请前往查看'),
-            );
+            $data = [
+                'first' => ['value' => '尊敬的客户，您已支付成功'],
+                'keyword1' => ['value' => $trade['title']],
+                'keyword2' => ['value' => ($trade['amount'] / 100).'元'],
+                'keyword3' => ['value' => date('Y-m-d H:i', $trade['pay_time'])],
+                'keyword4' => ['value' => '无'],
+                'remark' => ['value' => '请前往查看'],
+            ];
             $order = $this->getOrderService()->getOrderBySn($trade['order_sn']);
             if (empty($order)) {
                 return;
             }
             $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
-            $options = array('type' => 'url', 'url' => $this->getOrderTargetDetailUrl($orderItems[0]['target_type'], $orderItems[0]['target_id']));
+            $options = ['type' => 'url', 'url' => $this->getOrderTargetDetailUrl($orderItems[0]['target_type'], $orderItems[0]['target_id'])];
             $weChatUser = empty($weChatUser) ? $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']) : $weChatUser;
             $templates = TemplateUtil::templates();
             $templateCode = isset($templates['paySuccess']['id']) ? $templates['paySuccess']['id'] : '';
             if (!empty($weChatUser['isSubscribe']) && !$this->isUserLocked($trade['user_id'])) {
-                $list = array(array(
+                $list = [[
                     'channel' => $this->getWeChatService()->getWeChatSendChannel(),
                     'to_id' => $weChatUser['openId'],
                     'template_id' => $payTemplateId,
                     'template_code' => $templateCode,
                     'template_args' => $data,
                     'goto' => $options,
-                ));
+                ]];
                 $this->sendCloudWeChatNotification('paySuccess', 'wechat_notify_pay_success', $list);
             }
         }
@@ -282,12 +281,12 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
         $courseName = empty($course['title']) ? $course['courseSetTitle'] : $course['title'];
 
-        $templateParams = array(
+        $templateParams = [
             'thread' => $thread,
             'userIds' => $userIds,
             'title' => "在教课程《{$courseName}》",
-            'goto' => $this->generateUrl('course_thread_show', array('courseId' => $course['id'], 'threadId' => $thread['id']), UrlGeneratorInterface::ABSOLUTE_URL),
-        );
+            'goto' => $this->generateUrl('course_thread_show', ['courseId' => $course['id'], 'threadId' => $thread['id']], UrlGeneratorInterface::ABSOLUTE_URL),
+        ];
         $this->askQuestionSendNotification($templateParams);
     }
 
@@ -304,12 +303,12 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             return;
         }
 
-        $templateParams = array(
+        $templateParams = [
             'thread' => $thread,
             'userIds' => $userIds,
             'title' => "在教班级《{$classroom['title']}》",
-            'goto' => $this->generateUrl('classroom_thread_show', array('classroomId' => $classroom['id'], 'threadId' => $thread['id']), UrlGeneratorInterface::ABSOLUTE_URL),
-        );
+            'goto' => $this->generateUrl('classroom_thread_show', ['classroomId' => $classroom['id'], 'threadId' => $thread['id']], UrlGeneratorInterface::ABSOLUTE_URL),
+        ];
 
         $this->askQuestionSendNotification($templateParams);
     }
@@ -327,13 +326,13 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         if ($this->getCourseMemberService()->isCourseTeacher($post['courseId'], $post['userId'])) {
             $title = empty($course['title']) ? $course['courseSetTitle'] : $course['title'];
             if (!$this->isUserLocked($thread['userId'])) {
-                $templateParams = array(
+                $templateParams = [
                     'userId' => $thread['userId'],
                     'content' => $post['content'],
                     'title' => $title,
                     'createdTime' => $thread['createdTime'],
-                    'goto' => $this->generateUrl('course_thread_show', array('courseId' => $course['id'], 'threadId' => $thread['id']), UrlGeneratorInterface::ABSOLUTE_URL),
-                );
+                    'goto' => $this->generateUrl('course_thread_show', ['courseId' => $course['id'], 'threadId' => $thread['id']], UrlGeneratorInterface::ABSOLUTE_URL),
+                ];
                 $this->answerQuestionNotification($templateParams);
             }
         }
@@ -352,13 +351,13 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
         if ($this->getClassroomService()->isClassroomTeacher($post['targetId'], $post['userId'])) {
             if (!$this->isUserLocked($thread['userId'])) {
-                $templateParams = array(
+                $templateParams = [
                     'userId' => $thread['userId'],
                     'content' => $post['content'],
                     'title' => $classroom['title'],
                     'createdTime' => $thread['createdTime'],
-                    'goto' => $this->generateUrl('classroom_thread_show', array('classroomId' => $classroom['id'], 'threadId' => $thread['id']), UrlGeneratorInterface::ABSOLUTE_URL),
-                );
+                    'goto' => $this->generateUrl('classroom_thread_show', ['classroomId' => $classroom['id'], 'threadId' => $thread['id']], UrlGeneratorInterface::ABSOLUTE_URL),
+                ];
                 $this->answerQuestionNotification($templateParams);
             }
         }
@@ -368,8 +367,8 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     {
         $fields = $event->getSubject();
         $key = $event->getArgument('key');
-        $wechatSetting = $this->getSettingService()->get('wechat', array());
-        $templates = empty($wechatSetting['templates']) ? array() : $wechatSetting['templates'];
+        $wechatSetting = $this->getSettingService()->get('wechat', []);
+        $templates = empty($wechatSetting['templates']) ? [] : $wechatSetting['templates'];
         if ('homeworkOrTestPaperReview' == $key) {
             $templates['homeworkOrTestPaperReview']['sendTime'] = $fields['sendTime'];
             $notificationJob = $this->getSchedulerService()->getJobByName('WeChatNotificationJob_HomeWorkOrTestPaperReview');
@@ -380,16 +379,16 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 $expression = $this->getSendTimeExpression($fields['sendTime']);
 
                 if (1 == $templates['homeworkOrTestPaperReview']['status']) {
-                    $job = array(
+                    $job = [
                         'name' => 'WeChatNotificationJob_HomeWorkOrTestPaperReview',
                         'expression' => $expression,
                         'class' => 'Biz\WeChatNotification\Job\HomeWorkOrTestPaperReviewNotificationJob',
                         'misfire_policy' => 'executing',
-                        'args' => array(
+                        'args' => [
                             'key' => $key,
                             'sendTime' => $templates['homeworkOrTestPaperReview']['sendTime'],
-                        ),
-                    );
+                        ],
+                    ];
                     $this->getSchedulerService()->register($job);
                 }
             }
@@ -397,7 +396,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
         if ('courseRemind' == $key) {
             $templates['courseRemind']['sendTime'] = $fields['sendTime'];
-            $templates['courseRemind']['sendDays'] = empty($fields['sendDays']) ? array() : $fields['sendDays'];
+            $templates['courseRemind']['sendDays'] = empty($fields['sendDays']) ? [] : $fields['sendDays'];
             $notificationJob = $this->getSchedulerService()->getJobByName('WeChatNotificationJob_CourseRemind');
             if ($notificationJob) {
                 $this->getSchedulerService()->deleteJob($notificationJob['id']);
@@ -406,18 +405,18 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 $expression = $this->getSendDayAndTimeExpression($templates['courseRemind']['sendDays'], $templates['courseRemind']['sendTime']);
 
                 if (1 == $templates['courseRemind']['status']) {
-                    $job = array(
+                    $job = [
                         'name' => 'WeChatNotificationJob_CourseRemind',
                         'expression' => $expression,
                         'class' => 'Biz\WeChatNotification\Job\CourseRemindNotificationJob',
                         'misfire_policy' => 'executing',
-                        'args' => array(
+                        'args' => [
                             'key' => $key,
-                            'url' => $this->generateUrl('my_courses_learning', array(), UrlGeneratorInterface::ABSOLUTE_URL),
+                            'url' => $this->generateUrl('my_courses_learning', [], UrlGeneratorInterface::ABSOLUTE_URL),
                             'sendTime' => $templates['courseRemind']['sendTime'],
                             'sendDays' => $templates['courseRemind']['sendDays'],
-                        ),
-                    );
+                        ],
+                    ];
                     $this->getSchedulerService()->register($job);
                 }
             }
@@ -426,13 +425,13 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
     protected function answerQuestionNotification($templateParams)
     {
-        $templateParams = ArrayToolkit::filter($templateParams, array(
+        $templateParams = ArrayToolkit::filter($templateParams, [
             'userId' => null,
             'content' => null,
             'title' => null,
             'createdTime' => null,
             'goto' => null,
-        ));
+        ]);
 
         $templateId = $this->getWeChatService()->getTemplateId('answerQuestion');
         if (!empty($templateId)) {
@@ -442,26 +441,26 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 return;
             }
             $content = TextHelper::truncate($templateParams['content'], 30);
-            $data = array(
-                'first' => array('value' => '亲爱的学员，您在《'.$templateParams['title'].'》中的发表的问题有了新的回答'),
-                'keyword1' => array('value' => date('Y-m-d H:i:s', $templateParams['createdTime'])),
-                'keyword2' => array('value' => $content),
-                'remark' => array('value' => ''),
-            );
+            $data = [
+                'first' => ['value' => '亲爱的学员，您在《'.$templateParams['title'].'》中的发表的问题有了新的回答'],
+                'keyword1' => ['value' => date('Y-m-d H:i:s', $templateParams['createdTime'])],
+                'keyword2' => ['value' => $content],
+                'remark' => ['value' => ''],
+            ];
 
             $templates = TemplateUtil::templates();
             $templateCode = isset($templates['answerQuestion']['id']) ? $templates['answerQuestion']['id'] : '';
-            $list = array(array(
+            $list = [[
                 'channel' => $this->getWeChatService()->getWeChatSendChannel(),
                 'to_id' => $weChatUser['openId'],
                 'template_id' => $templateId,
                 'template_code' => $templateCode,
                 'template_args' => $data,
-                'goto' => array(
+                'goto' => [
                     'type' => 'url',
                     'url' => $templateParams['goto'],
-                ),
-            ));
+                ],
+            ]];
 
             $this->sendCloudWeChatNotification('answerQuestion', 'wechat_notify_answer_question', $list);
         }
@@ -469,16 +468,16 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
     protected function askQuestionSendNotification($templateParams)
     {
-        $templateParams = ArrayToolkit::filter($templateParams, array(
-            'thread' => array(),
-            'userIds' => array(),
+        $templateParams = ArrayToolkit::filter($templateParams, [
+            'thread' => [],
+            'userIds' => [],
             'title' => null,
             'goto' => null,
-        ));
+        ]);
 
         $users = $this->getUserService()->searchUsers(
-            array('userIds' => $templateParams['userIds'], 'locked' => 0),
-            array(),
+            ['userIds' => $templateParams['userIds'], 'locked' => 0],
+            [],
             0,
             PHP_INT_MAX
         );
@@ -491,42 +490,42 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         if (!empty($templateId)) {
             $user = $this->getUserService()->getUser($templateParams['thread']['userId']);
             $weChatUsers = $this->getWeChatService()->searchWeChatUsers(
-                array('userIds' => $userIds),
-                array('lastRefreshTime' => 'ASC'),
+                ['userIds' => $userIds],
+                ['lastRefreshTime' => 'ASC'],
                 0,
                 PHP_INT_MAX,
-                array('id', 'openId', 'unionId', 'userId')
+                ['id', 'openId', 'unionId', 'userId']
             );
 
             if (empty($weChatUsers)) {
                 return;
             }
 
-            $data = array(
-                'first' => array('value' => '尊敬的老师，您的'.$templateParams['title'].'中有学员发布了提问'),
-                'keyword1' => array('value' => $user['nickname']),
-                'keyword2' => array('value' => mb_substr($templateParams['thread']['title'], 0, 30, 'utf-8')),
-                'keyword3' => array('value' => date('Y-m-d H:i:s', $templateParams['thread']['createdTime'])),
-                'remark' => array('value' => ''),
-            );
+            $data = [
+                'first' => ['value' => '尊敬的老师，您的'.$templateParams['title'].'中有学员发布了提问'],
+                'keyword1' => ['value' => $user['nickname']],
+                'keyword2' => ['value' => mb_substr($templateParams['thread']['title'], 0, 30, 'utf-8')],
+                'keyword3' => ['value' => date('Y-m-d H:i:s', $templateParams['thread']['createdTime'])],
+                'remark' => ['value' => ''],
+            ];
             $templates = TemplateUtil::templates();
             $templateCode = isset($templates['askQuestion']['id']) ? $templates['askQuestion']['id'] : '';
-            $templateData = array(
+            $templateData = [
                 'template_id' => $templateId,
                 'template_code' => $templateCode,
                 'template_args' => $data,
-            );
+            ];
 
-            $list = array();
+            $list = [];
             foreach ($weChatUsers as $weChatUser) {
-                $list[] = array_merge(array(
+                $list[] = array_merge([
                     'channel' => $this->getWeChatService()->getWeChatSendChannel(),
                     'to_id' => $weChatUser['openId'],
-                    'goto' => array(
+                    'goto' => [
                         'type' => 'url',
                         'url' => $templateParams['goto'],
-                    ),
-                ), $templateData);
+                    ],
+                ], $templateData);
             }
 
             $this->sendCloudWeChatNotification('askQuestion', 'wechat_notify_ask_question', $list);
@@ -538,7 +537,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         try {
             $result = $this->getCloudNotificationClient()->sendNotifications($list);
         } catch (\Exception $e) {
-            $this->getLogService()->error(AppLoggerConstant::NOTIFY, $logName, "发送微信通知失败:template:{$key}", array('error' => $e->getMessage()));
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, $logName, "发送微信通知失败:template:{$key}", ['error' => $e->getMessage()]);
 
             return;
         }
@@ -569,13 +568,13 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     {
         switch ($targetType) {
             case 'course':
-                return $this->generateUrl('my_course_show', array('id' => $targetId), UrlGeneratorInterface::ABSOLUTE_URL);
+                return $this->generateUrl('my_course_show', ['id' => $targetId], UrlGeneratorInterface::ABSOLUTE_URL);
 
             case 'classroom':
-                return $this->generateUrl('classroom_show', array('id' => $targetId), UrlGeneratorInterface::ABSOLUTE_URL);
+                return $this->generateUrl('classroom_show', ['id' => $targetId], UrlGeneratorInterface::ABSOLUTE_URL);
 
             case 'vip':
-                return $this->generateUrl('vip', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+                return $this->generateUrl('vip', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
             default:
                 return '';
@@ -586,17 +585,17 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     {
         $templateId = $this->getWeChatService()->getTemplateId($key);
         if (!empty($templateId)) {
-            $job = array(
+            $job = [
                 'name' => 'WeChatNotificationJob_LessonPublish_'.$task['id'],
                 'expression' => time(),
                 'class' => 'Biz\WeChatNotification\Job\LessonPublishNotificationJob',
                 'misfire_threshold' => 60 * 60,
-                'args' => array(
+                'args' => [
                     'key' => $key,
                     'taskId' => $task['id'],
-                    'url' => $this->generateUrl('my_course_show', array('id' => $task['courseId']), UrlGeneratorInterface::ABSOLUTE_URL),
-                ),
-            );
+                    'url' => $this->generateUrl('my_course_show', ['id' => $task['courseId']], UrlGeneratorInterface::ABSOLUTE_URL),
+                ],
+            ];
             $this->getSchedulerService()->register($job);
         }
     }
@@ -606,32 +605,32 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         $hourTemplateId = $this->getWeChatService()->getTemplateId(TemplateUtil::TEMPLATE_LIVE_OPEN, 'beforeOneHour');
         $dayTemplateId = $this->getWeChatService()->getTemplateId(TemplateUtil::TEMPLATE_LIVE_OPEN, 'beforeOneDay');
         if (!empty($dayTemplateId) && $task['startTime'] >= (time() + 24 * 60 * 60)) {
-            $job = array(
+            $job = [
                 'name' => 'WeChatNotificationJob_LiveOneDay_'.$task['id'],
                 'expression' => intval($task['startTime'] - 24 * 60 * 60),
                 'class' => 'Biz\WeChatNotification\Job\LiveNotificationJob',
                 'misfire_threshold' => 60 * 60,
-                'args' => array(
+                'args' => [
                     'key' => 'liveOpen',
                     'taskId' => $task['id'],
-                    'url' => $this->generateUrl('my_course_show', array('id' => $task['courseId']), UrlGeneratorInterface::ABSOLUTE_URL),
-                ),
-            );
+                    'url' => $this->generateUrl('my_course_show', ['id' => $task['courseId']], UrlGeneratorInterface::ABSOLUTE_URL),
+                ],
+            ];
             $this->getSchedulerService()->register($job);
         }
 
         if (!empty($hourTemplateId) && $task['startTime'] >= (time() + 60 * 60)) {
-            $job = array(
+            $job = [
                 'name' => 'WeChatNotificationJob_LiveOneHour_'.$task['id'],
                 'expression' => intval($task['startTime'] - 60 * 60),
                 'class' => 'Biz\WeChatNotification\Job\LiveNotificationJob',
                 'misfire_threshold' => 60 * 10,
-                'args' => array(
+                'args' => [
                     'key' => 'liveOpen',
                     'taskId' => $task['id'],
-                    'url' => $this->generateUrl('my_course_show', array('id' => $task['courseId']), UrlGeneratorInterface::ABSOLUTE_URL),
-                ),
-            );
+                    'url' => $this->generateUrl('my_course_show', ['id' => $task['courseId']], UrlGeneratorInterface::ABSOLUTE_URL),
+                ],
+            ];
             $this->getSchedulerService()->register($job);
         }
     }
@@ -639,7 +638,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     private function getCopiedTasks($task)
     {
         if (empty($task)) {
-            return array();
+            return [];
         }
 
         $courses = $this->getCourseService()->findCoursesByParentIdAndLocked($task['courseId'], 1);
@@ -661,9 +660,9 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
     protected function getSendDayAndTimeExpression($days, $time)
     {
-        $filterDays = array();
+        $filterDays = [];
 
-        $allDays = array(
+        $allDays = [
             'Sun' => 0,
             'Mon' => 1,
             'Tue' => 2,
@@ -671,7 +670,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             'Thu' => 4,
             'Fri' => 5,
             'Sat' => 6,
-        );
+        ];
 
         foreach ($allDays as $key => $day) {
             if (in_array($key, $days)) {
@@ -726,7 +725,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
     private function deleteByJobName($jobName)
     {
-        $jobs = $this->getSchedulerService()->searchJobs(array('name' => $jobName), array(), 0, PHP_INT_MAX);
+        $jobs = $this->getSchedulerService()->searchJobs(['name' => $jobName], [], 0, PHP_INT_MAX);
 
         foreach ($jobs as $job) {
             $this->getSchedulerService()->deleteJob($job['id']);

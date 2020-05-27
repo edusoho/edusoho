@@ -3,18 +3,18 @@
 namespace AppBundle\Controller\FaceInspection;
 
 use AppBundle\Controller\BaseController;
+use Biz\FaceInspection\Common\FileToolkit;
+use Biz\FaceInspection\Service\FaceInspectionService;
 use Biz\System\Service\Impl\SettingServiceImpl;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
-use Biz\FaceInspection\Service\FaceInspectionService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\FaceInspection\Common\FileToolkit;
 
 class CaptureController extends BaseController
 {
     public function indexAction(Request $request, $code)
     {
-        $setting = $this->getSettingService()->get('cloud_facein', array());
+        $setting = $this->getSettingService()->get('cloud_facein', []);
         if (empty($setting['enabled'])) {
             $error = '监考服务未开启';
         }
@@ -28,21 +28,21 @@ class CaptureController extends BaseController
             $error = '此链接已失效，请联系管理员索取新链接';
         }
         if (empty($error)) {
-            $cloud = $this->getSettingService()->get('storage', array());
+            $cloud = $this->getSettingService()->get('storage', []);
             $token = $this->getSDKFaceInspectionService()->makeToken($user['id'], $cloud['cloud_access_key'], $cloud['cloud_secret_key']);
         }
 
-        return $this->render('face-inspection/index.html.twig', array(
+        return $this->render('face-inspection/index.html.twig', [
             'token' => empty($token) ? '' : $token,
             'user_no' => $user->getId(),
             'code' => $code,
             'error' => empty($error) ? '' : $error,
-        ));
+        ]);
     }
 
     public function uploadAction(Request $request, $code = 'face')
     {
-        $setting = $this->getSettingService()->get('cloud_facein', array());
+        $setting = $this->getSettingService()->get('cloud_facein', []);
         if (empty($setting['enabled'])) {
             return $this->createJsonResponse(false);
         }
@@ -52,9 +52,9 @@ class CaptureController extends BaseController
             $path = FileToolkit::saveBlobImage($_FILES['picture']);
 
             if (empty($userFace)) {
-                $this->getFaceInspectionService()->createUserFace(array('capture_code' => $code, 'user_id' => $user->getId(), 'picture' => $path));
+                $this->getFaceInspectionService()->createUserFace(['capture_code' => $code, 'user_id' => $user->getId(), 'picture' => $path]);
             } else {
-                $this->getFaceInspectionService()->updateUserFace($userFace['id'], array('capture_code' => $code, 'picture' => $path));
+                $this->getFaceInspectionService()->updateUserFace($userFace['id'], ['capture_code' => $code, 'picture' => $path]);
             }
         }
 
@@ -76,7 +76,7 @@ class CaptureController extends BaseController
 
     public function saveAction(Request $request, $recordId)
     {
-        $setting = $this->getSettingService()->get('cloud_facein', array());
+        $setting = $this->getSettingService()->get('cloud_facein', []);
         if (empty($setting['enabled'])) {
             return $this->createJsonResponse(false);
         }
@@ -102,11 +102,11 @@ class CaptureController extends BaseController
     public function inspectionAction(Request $request, $answerSceneId, $answerRecordId)
     {
         if (!$this->canInspectionFace($answerSceneId, $answerRecordId)) {
-            return $this->render('face-inspection/inspection.html.twig', array(
+            return $this->render('face-inspection/inspection.html.twig', [
                 'token' => '',
                 'imgUrl' => '',
                 'recordId' => $answerRecordId,
-            ));
+            ]);
         }
 
         $user = $this->getCurrentUser();
@@ -117,19 +117,19 @@ class CaptureController extends BaseController
             $imgUrl = 'https://'.$request->getHost().'/files'.$path;
         }
 
-        $cloud = $this->getSettingService()->get('storage', array());
+        $cloud = $this->getSettingService()->get('storage', []);
         $token = $this->getSDKFaceInspectionService()->makeToken($user['id'], $cloud['cloud_access_key'], $cloud['cloud_secret_key']);
 
-        return $this->render('face-inspection/inspection.html.twig', array(
+        return $this->render('face-inspection/inspection.html.twig', [
             'token' => $token,
             'imgUrl' => $imgUrl,
             'recordId' => $answerRecordId,
-        ));
+        ]);
     }
 
     protected function canInspectionFace($answerSceneId, $answerRecordId)
     {
-        $setting = $this->getSettingService()->get('cloud_facein', array());
+        $setting = $this->getSettingService()->get('cloud_facein', []);
         if (empty($setting['enabled'])) {
             return false;
         }

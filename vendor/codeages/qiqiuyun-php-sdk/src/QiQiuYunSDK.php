@@ -139,6 +139,14 @@ class QiQiuYunSDK
     }
 
     /**
+    * @return \QiQiuYun\SDK\Service\S2B2CService
+    */
+    public function getS2B2CService()
+    {
+        return $this->getService('S2B2C');
+    }
+
+    /**
      * 创建API请求认证类实例
      *
      * @param string $accessKey

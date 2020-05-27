@@ -22,7 +22,7 @@ class ManageController extends BaseController
 
         $conditions = $request->query->all();
         $conditions['ids'] = ArrayToolkit::column($this->getQuestionBankService()->findUserManageBanks(), 'id');
-        $conditions['ids'] = empty($conditions['ids']) ? array(-1) : $conditions['ids'];
+        $conditions['ids'] = empty($conditions['ids']) ? [-1] : $conditions['ids'];
         $conditions = $this->fillOrgCode($conditions);
 
         $pagination = new Paginator(
@@ -33,17 +33,17 @@ class ManageController extends BaseController
 
         $questionBanks = $this->getQuestionBankService()->searchQuestionBanks(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $pagination->getOffsetCount(),
             $pagination->getPerPageCount()
         );
 
-        return $this->render('question-bank/list.html.twig', array(
+        return $this->render('question-bank/list.html.twig', [
             'paginator' => $pagination,
             'questionBanks' => $questionBanks,
             'categoryTree' => $this->getCategoryService()->getCategoryTree(),
             'categoryId' => empty($conditions['categoryId']) ? 0 : $conditions['categoryId'],
-        ));
+        ]);
     }
 
     public function createAction(Request $request)
@@ -53,14 +53,14 @@ class ManageController extends BaseController
             $data['members'] = $this->getCurrentUser()->getId();
             $questionBank = $this->getQuestionBankService()->createQuestionBank($data);
 
-            return $this->createJsonResponse(array(
-                'goto' => $this->generateUrl('question_bank_manage_question_category', array('id' => $questionBank['id'])),
-            ));
+            return $this->createJsonResponse([
+                'goto' => $this->generateUrl('question_bank_manage_question_category', ['id' => $questionBank['id']]),
+            ]);
         }
 
-        return $this->render('question-bank/manage/create-modal.html.twig', array(
+        return $this->render('question-bank/manage/create-modal.html.twig', [
             'categoryTree' => $this->getCategoryService()->getCategoryTree(),
-        ));
+        ]);
     }
 
     public function manageAction(Request $request, $id)
@@ -76,24 +76,24 @@ class ManageController extends BaseController
                 $request->request->get('members', '')
             );
 
-            return $this->createJsonResponse(array(
-                'goto' => $this->generateUrl('question_bank_manage_question_category', array('id' => $questionBank['id'])),
-            ));
+            return $this->createJsonResponse([
+                'goto' => $this->generateUrl('question_bank_manage_question_category', ['id' => $questionBank['id']]),
+            ]);
         }
 
         $users = $this->getUserService()->findUsersByIds(
             ArrayToolkit::column($this->getMemberService()->findMembersByBankId($id), 'userId')
         );
-        $bankMembers = array();
+        $bankMembers = [];
         foreach ($users as $user) {
-            $bankMembers[] = array('id' => $user['id'], 'name' => $user['nickname']);
+            $bankMembers[] = ['id' => $user['id'], 'name' => $user['nickname']];
         }
 
-        return $this->render('question-bank/manage/info.html.twig', array(
+        return $this->render('question-bank/manage/info.html.twig', [
             'questionBank' => $this->getQuestionBankService()->getQuestionBank($id),
             'categoryTree' => $this->getCategoryService()->getCategoryTree(),
             'bankMembers' => json_encode($bankMembers),
-        ));
+        ]);
     }
 
     public function memberMatchAction(Request $request)
@@ -101,11 +101,11 @@ class ManageController extends BaseController
         $queryField = $request->query->get('q');
 
         $users = $this->getUserService()->searchUsers(
-            array('nickname' => $queryField, 'roles' => 'ROLE_TEACHER'),
-            array('createdTime' => 'DESC'),
+            ['nickname' => $queryField, 'roles' => 'ROLE_TEACHER'],
+            ['createdTime' => 'DESC'],
             0,
             10,
-            array('id', 'nickname')
+            ['id', 'nickname']
         );
 
         return $this->createJsonResponse($users);

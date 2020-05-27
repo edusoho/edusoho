@@ -2,14 +2,14 @@
 
 namespace AppBundle\Controller\My;
 
-use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Question\QuestionException;
-use Symfony\Component\HttpFoundation\Request;
-use Codeages\Biz\ItemBank\Item\Service\QuestionFavoriteService;
-use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
+use Codeages\Biz\ItemBank\Item\Service\QuestionFavoriteService;
+use Symfony\Component\HttpFoundation\Request;
 
 class QuestionController extends BaseController
 {
@@ -20,10 +20,10 @@ class QuestionController extends BaseController
             return $this->createMessageResponse('error', '请先登录！', '', 5, $this->generateUrl('login'));
         }
 
-        $conditions = array(
+        $conditions = [
             'user_id' => $user['id'],
             'target_type' => 'assessment',
-        );
+        ];
 
         $paginator = new Paginator(
             $request,
@@ -33,7 +33,7 @@ class QuestionController extends BaseController
 
         $favoriteQuestions = $this->getQuestionFavoriteService()->search(
             $conditions,
-            array('created_time' => 'DESC'),
+            ['created_time' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -43,22 +43,22 @@ class QuestionController extends BaseController
             ArrayToolkit::column($favoriteQuestions, 'target_id')
         );
 
-        return $this->render('my/question/favorite-list.html.twig', array(
+        return $this->render('my/question/favorite-list.html.twig', [
             'favoriteQuestions' => $favoriteQuestions,
             'paginator' => $paginator,
             'questions' => $questions,
             'nav' => 'questionFavorite',
             'assessments' => $assessments,
-        ));
+        ]);
     }
 
     public function favoriteAction(Request $request, $questionId)
     {
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $user = $this->getUser();
 
             if (!$user->isLogin()) {
-                return $this->createJsonResponse(array('result' => false, 'message' => 'noLogin'));
+                return $this->createJsonResponse(['result' => false, 'message' => 'noLogin']);
             }
 
             $fields = $request->request->all();
@@ -67,24 +67,24 @@ class QuestionController extends BaseController
 
             $favorite = $this->getQuestionService()->createFavoriteQuestion($fields);
 
-            $cancelUrl = $this->generateUrl('my_question_unfavorite', array('id' => $favorite['id']));
+            $cancelUrl = $this->generateUrl('my_question_unfavorite', ['id' => $favorite['id']]);
 
-            return $this->createJsonResponse(array('result' => true, 'message' => '', 'url' => $cancelUrl));
+            return $this->createJsonResponse(['result' => true, 'message' => '', 'url' => $cancelUrl]);
         }
     }
 
     public function unFavoriteAction(Request $request, $id)
     {
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $user = $this->getUser();
 
             if (!$user->isLogin()) {
-                return $this->createJsonResponse(array('result' => false, 'message' => 'noLogin'));
+                return $this->createJsonResponse(['result' => false, 'message' => 'noLogin']);
             }
 
             $this->getQuestionFavoriteService()->delete($id);
 
-            return $this->createJsonResponse(array('result' => true, 'message' => ''));
+            return $this->createJsonResponse(['result' => true, 'message' => '']);
         }
     }
 
@@ -92,14 +92,14 @@ class QuestionController extends BaseController
     {
         $user = $this->getUser();
 
-        $conditions = array(
+        $conditions = [
             'user_id' => $user['id'],
             'target_type' => 'assessment',
-        );
+        ];
 
         $favoriteItems = $this->getQuestionFavoriteService()->search(
             $conditions,
-            array('created_time' => 'DESC'),
+            ['created_time' => 'DESC'],
             0,
             $this->getQuestionFavoriteService()->count($conditions)
         );
@@ -115,9 +115,9 @@ class QuestionController extends BaseController
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
 
-        return $this->render('question-manage/preview-modal.html.twig', array(
+        return $this->render('question-manage/preview-modal.html.twig', [
             'item' => $item,
-        ));
+        ]);
     }
 
     protected function getQuestionService()

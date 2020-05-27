@@ -2,13 +2,13 @@
 
 namespace AppBundle\Controller\Question;
 
-use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
-use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Content\Service\FileService;
-use Biz\User\Service\TokenService;
 use Biz\QuestionBank\Service\QuestionBankService;
+use Biz\User\Service\TokenService;
+use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File as FileObject;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,33 +30,33 @@ class QuestionParserController extends BaseController
                     return $this->render($templateInfo['readErrorModalTemplate']);
                 }
 
-                $token = $this->getTokenService()->makeToken('upload.course_private_file', array(
-                    'data' => array(
+                $token = $this->getTokenService()->makeToken('upload.course_private_file', [
+                    'data' => [
                         'id' => $result['id'],
                         'filename' => $file->getClientOriginalName(),
                         'fileuri' => $result['uri'],
                         'filepath' => $uploadFile['fullpath'],
                         'questionBankId' => $questionBank['id'],
                         'cacheFilePath' => $this->cacheQuestions($items, $uploadFile),
-                    ),
+                    ],
                     'duration' => 86400,
                     'userId' => $this->getCurrentUser()->getId(),
-                ));
+                ]);
 
-                return $this->createJsonResponse(array(
-                    'url' => $this->generateUrl($templateInfo['reEditRoute'], array(
+                return $this->createJsonResponse([
+                    'url' => $this->generateUrl($templateInfo['reEditRoute'], [
                         'token' => $token['token'],
-                    )),
+                    ]),
                     'success' => true,
-                ));
+                ]);
             } else {
                 return $this->render($templateInfo['readErrorModalTemplate']);
             }
         }
 
-        return $this->render($templateInfo['readModalTemplate'], array(
+        return $this->render($templateInfo['readModalTemplate'], [
             'questionBank' => $questionBank,
-        ));
+        ]);
     }
 
     public function reEditAction(Request $request, $token, $type)
@@ -77,13 +77,13 @@ class QuestionParserController extends BaseController
 
         $templateInfo = $this->getTemplateInfo($type);
 
-        return $this->render($templateInfo['reEditTemplate'], array(
+        return $this->render($templateInfo['reEditTemplate'], [
             'filename' => mb_substr(str_replace('.docx', '', $data['filename']), 0, 50, 'utf-8'),
             'items' => $items,
             'questionBankId' => $questionBank['itemBankId'],
             'categoryTree' => $categoryTree,
             'type' => $type,
-        ));
+        ]);
     }
 
     protected function parseQuestions($fullpath)
@@ -118,28 +118,28 @@ class QuestionParserController extends BaseController
 
     protected function getTemplateInfo($type)
     {
-        if (!in_array($type, array('testpaper', 'item'))) {
+        if (!in_array($type, ['testpaper', 'item'])) {
             return $this->createNotFoundException('parser type not found');
         }
 
-        $info = array();
+        $info = [];
 
         if ('testpaper' == $type) {
-            $info = array(
+            $info = [
                 'readModalTemplate' => 'testpaper/manage/read-modal.html.twig',
                 'readErrorModalTemplate' => 'testpaper/manage/read-error.html.twig',
                 'reEditRoute' => 'testpaper_re_edit',
                 'reEditTemplate' => 'question-manage/re-edit.html.twig',
-            );
+            ];
         }
 
         if ('item' == $type) {
-            $info = array(
+            $info = [
                 'readModalTemplate' => 'question-manage/read-modal.html.twig',
                 'readErrorModalTemplate' => 'question-manage/read-error.html.twig',
                 'reEditRoute' => 'question_re_edit',
                 'reEditTemplate' => 'question-manage/re-edit.html.twig',
-            );
+            ];
         }
 
         return $info;

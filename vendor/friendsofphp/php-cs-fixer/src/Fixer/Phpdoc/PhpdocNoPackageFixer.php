@@ -29,7 +29,7 @@ final class PhpdocNoPackageFixer extends AbstractProxyFixer
     {
         return new FixerDefinition(
             '`@package` and `@subpackage` annotations should be omitted from PHPDoc.',
-            array(
+            [
                 new CodeSample(
                     '<?php
 /**
@@ -39,20 +39,32 @@ final class PhpdocNoPackageFixer extends AbstractProxyFixer
  */
 class Baz
 {
-}'
+}
+'
                 ),
-            )
+            ]
         );
     }
 
     /**
      * {@inheritdoc}
+     *
+     * Must run before NoEmptyPhpdocFixer, PhpdocAlignFixer, PhpdocOrderFixer, PhpdocSeparationFixer, PhpdocTrimFixer.
+     * Must run after CommentToPhpdocFixer, PhpdocIndentFixer, PhpdocScalarFixer, PhpdocToCommentFixer, PhpdocTypesFixer.
      */
-    protected function createProxyFixer()
+    public function getPriority()
+    {
+        return parent::getPriority();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function createProxyFixers()
     {
         $fixer = new GeneralPhpdocAnnotationRemoveFixer();
-        $fixer->configure(array('annotations' => array('package', 'subpackage')));
+        $fixer->configure(['annotations' => ['package', 'subpackage']]);
 
-        return $fixer;
+        return [$fixer];
     }
 }

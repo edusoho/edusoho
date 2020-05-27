@@ -32,7 +32,7 @@ do
             ((i++))
         done
 
-        if [[ $fixedClass = *\.php* ]]; then
+        if [[ $fixedClass = *\.php* ]] && [[ $fixedClass != *vendor/* ]]; then
             echo 'bin/php-cs-fixer fix '$fixedClass
             bin/php-cs-fixer fix $fixedClass
         fi

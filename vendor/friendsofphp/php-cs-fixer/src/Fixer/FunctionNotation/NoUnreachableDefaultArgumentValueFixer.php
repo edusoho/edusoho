@@ -32,13 +32,13 @@ final class NoUnreachableDefaultArgumentValueFixer extends AbstractFixer
     {
         return new FixerDefinition(
             'In function arguments there must not be arguments with default values before non-default ones.',
-            array(
+            [
                 new CodeSample(
                     '<?php
 function example($foo = "two words", $bar) {}
 '
                 ),
-            ),
+            ],
             null,
             'Modifies the signature of functions; therefore risky when using systems (such as some Symfony components) that rely on those (for example through reflection).'
         );
@@ -46,9 +46,23 @@ function example($foo = "two words", $bar) {}
 
     /**
      * {@inheritdoc}
+     *
+     * Must run after NullableTypeDeclarationForDefaultNullValueFixer.
+     */
+    public function getPriority()
+    {
+        return 0;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function isCandidate(Tokens $tokens)
     {
+        if (\PHP_VERSION_ID >= 70400 && $tokens->isTokenKindFound(T_FN)) {
+            return true;
+        }
+
         return $tokens->isTokenKindFound(T_FUNCTION);
     }
 
@@ -66,11 +80,14 @@ function example($foo = "two words", $bar) {}
     protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
         for ($i = 0, $l = $tokens->count(); $i < $l; ++$i) {
-            if (!$tokens[$i]->isGivenKind(T_FUNCTION)) {
+            if (
+                !$tokens[$i]->isGivenKind(T_FUNCTION)
+                && (\PHP_VERSION_ID < 70400 || !$tokens[$i]->isGivenKind(T_FN))
+            ) {
                 continue;
             }
 
-            $startIndex = $tokens->getNextTokenOfKind($i, array('('));
+            $startIndex = $tokens->getNextTokenOfKind($i, ['(']);
             $i = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $startIndex);
 
             $this->fixFunctionDefinition($tokens, $startIndex, $i);
@@ -78,9 +95,8 @@ function example($foo = "two words", $bar) {}
     }
 
     /**
-     * @param Tokens $tokens
-     * @param int    $startIndex
-     * @param int    $endIndex
+     * @param int $startIndex
+     * @param int $endIndex
      */
     private function fixFunctionDefinition(Tokens $tokens, $startIndex, $endIndex)
     {
@@ -99,20 +115,19 @@ function example($foo = "two words", $bar) {}
                 continue;
             }
 
-            if (!$token->equals('=') || $this->isTypehintedNullableVariable($tokens, $i)) {
+            if (!$token->equals('=') || $this->isNonNullableTypehintedNullableVariable($tokens, $i)) {
                 continue;
             }
 
-            $endIndex = $tokens->getPrevTokenOfKind($lastArgumentIndex, array(','));
+            $endIndex = $tokens->getPrevTokenOfKind($lastArgumentIndex, [',']);
             $endIndex = $tokens->getPrevMeaningfulToken($endIndex);
             $this->removeDefaultArgument($tokens, $i, $endIndex);
         }
     }
 
     /**
-     * @param Tokens $tokens
-     * @param int    $startIndex
-     * @param int    $endIndex
+     * @param int $startIndex
+     * @param int $endIndex
      *
      * @return null|int
      */
@@ -131,27 +146,23 @@ function example($foo = "two words", $bar) {}
                 return $i;
             }
         }
+
+        return null;
     }
 
     /**
-     * @param Tokens $tokens
-     * @param int    $variableIndex
+     * @param int $variableIndex
      *
      * @return bool
      */
     private function isEllipsis(Tokens $tokens, $variableIndex)
     {
-        if (!defined('T_ELLIPSIS')) {
-            return $tokens[$tokens->getPrevMeaningfulToken($variableIndex)]->equals('.');
-        }
-
         return $tokens[$tokens->getPrevMeaningfulToken($variableIndex)]->isGivenKind(T_ELLIPSIS);
     }
 
     /**
-     * @param Tokens $tokens
-     * @param int    $startIndex
-     * @param int    $endIndex
+     * @param int $startIndex
+     * @param int $endIndex
      */
     private function removeDefaultArgument(Tokens $tokens, $startIndex, $endIndex)
     {
@@ -163,37 +174,34 @@ function example($foo = "two words", $bar) {}
     }
 
     /**
-     * @param Tokens $tokens
-     * @param int    $index  Index of "="
+     * @param int $index Index of "="
      *
      * @return bool
      */
-    private function isTypehintedNullableVariable(Tokens $tokens, $index)
+    private function isNonNullableTypehintedNullableVariable(Tokens $tokens, $index)
     {
         $nextToken = $tokens[$tokens->getNextMeaningfulToken($index)];
 
-        if (!$nextToken->equals(array(T_STRING, 'null'), false)) {
+        if (!$nextToken->equals([T_STRING, 'null'], false)) {
             return false;
         }
 
         $variableIndex = $tokens->getPrevMeaningfulToken($index);
 
-        $searchTokens = array(',', '(', array(T_STRING), array(CT::T_ARRAY_TYPEHINT));
-        $typehintKinds = array(T_STRING, CT::T_ARRAY_TYPEHINT);
-
-        if (defined('T_CALLABLE')) {
-            $searchTokens[] = array(T_CALLABLE);
-            $typehintKinds[] = T_CALLABLE;
-        }
+        $searchTokens = [',', '(', [T_STRING], [CT::T_ARRAY_TYPEHINT], [T_CALLABLE]];
+        $typehintKinds = [T_STRING, CT::T_ARRAY_TYPEHINT, T_CALLABLE];
 
         $prevIndex = $tokens->getPrevTokenOfKind($variableIndex, $searchTokens);
 
-        return $tokens[$prevIndex]->isGivenKind($typehintKinds);
+        if (!$tokens[$prevIndex]->isGivenKind($typehintKinds)) {
+            return false;
+        }
+
+        return !$tokens[$tokens->getPrevMeaningfulToken($prevIndex)]->isGivenKind(CT::T_NULLABLE_TYPE);
     }
 
     /**
-     * @param Tokens $tokens
-     * @param int    $index
+     * @param int $index
      */
     private function clearWhitespacesBeforeIndex(Tokens $tokens, $index)
     {

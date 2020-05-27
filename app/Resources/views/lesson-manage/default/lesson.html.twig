@@ -61,7 +61,7 @@
     </div>
 
     <div class="item-actions">
-      <a class="cd-mr24" data-role='update-task' href="javascript:;"
+      <a class="cd-mr24 {% if course.platform == 'supplier' %}hidden{% endif %}" data-role='update-task' href="javascript:;"
         data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_update', {id:task.id, courseId:task.courseId}) }}">
         <i class="es-icon es-icon-edit" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.modify'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}" data-placement="top"></i>
       </a>

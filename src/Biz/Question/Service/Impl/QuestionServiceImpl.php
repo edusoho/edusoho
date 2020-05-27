@@ -2,18 +2,18 @@
 
 namespace Biz\Question\Service\Impl;
 
-use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\BaseService;
 use Biz\Question\Dao\QuestionDao;
 use Biz\Question\Dao\QuestionFavoriteDao;
 use Biz\Question\QuestionException;
+use Biz\Question\Service\QuestionService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\Framework\Event\Event;
-use Biz\Question\Service\QuestionService;
 
 class QuestionServiceImpl extends BaseService implements QuestionService
 {
-    protected $defaultQuestionTypeSeq = array('single_choice', 'choice', 'essay', 'uncertain_choice', 'determine', 'fill', 'material');
+    protected $defaultQuestionTypeSeq = ['single_choice', 'choice', 'essay', 'uncertain_choice', 'determine', 'fill', 'material'];
 
     public function get($id)
     {
@@ -52,14 +52,14 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $question = $this->getQuestionDao()->create($fields);
 
             if ($question['parentId'] > 0) {
-                $this->waveCount($question['parentId'], array('subCount' => '1'));
+                $this->waveCount($question['parentId'], ['subCount' => '1']);
             }
 
             if (!empty($question['bankId']) && 0 == $question['parentId']) {
                 $this->getQuestionBankService()->waveQuestionNum($question['bankId'], 1);
             }
 
-            $this->dispatchEvent('question.create', new Event($question, array('argument' => $argument)));
+            $this->dispatchEvent('question.create', new Event($question, ['argument' => $argument]));
 
             $this->commit();
 
@@ -72,7 +72,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function importQuestions($questions, $token)
     {
-        $savedQuestions = array();
+        $savedQuestions = [];
         //按照题型分组
         $groupQuestions = $this->groupQuestions($questions);
         $questionBankId = $token['data']['questionBankId'];
@@ -106,9 +106,9 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     protected function groupQuestions($questions)
     {
         $questions = ArrayToolkit::group($questions, 'type');
-        $groupQuestions = array();
+        $groupQuestions = [];
         foreach ($this->defaultQuestionTypeSeq as $type) {
-            $groupQuestions[$type] = isset($questions[$type]) ? $questions[$type] : array();
+            $groupQuestions[$type] = isset($questions[$type]) ? $questions[$type] : [];
         }
 
         return $groupQuestions;
@@ -118,7 +118,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     {
         $question = $this->filterImportQuestion($question);
         $savedQuestion = $this->create($question);
-        if (in_array($savedQuestion['type'], array('choice', 'uncertain_choice'))) {
+        if (in_array($savedQuestion['type'], ['choice', 'uncertain_choice'])) {
             $savedQuestion['missScore'] = empty($question['missScore']) ? 0 : $question['missScore'];
         }
 
@@ -127,7 +127,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     protected function filterImportQuestion($question)
     {
-        if (in_array($question['type'], array('choice', 'single_choice', 'uncertain_choice'))) {
+        if (in_array($question['type'], ['choice', 'single_choice', 'uncertain_choice'])) {
             $question['choices'] = $question['options'];
             $question['answer'] = $question['answers'];
             unset($question['options']);
@@ -136,11 +136,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         if ('determine' == $question['type']) {
             $result = $question['answer'] ? 1 : 0;
-            $question['answer'] = array($result);
+            $question['answer'] = [$result];
         }
 
         if ('essay' == $question['type']) {
-            $question['answer'] = array($question['answer']);
+            $question['answer'] = [$question['answer']];
         }
 
         return $question;
@@ -149,7 +149,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function batchCreateQuestions($questions)
     {
         if (empty($questions)) {
-            return array();
+            return [];
         }
 
         return $this->getQuestionDao()->batchCreate($questions);
@@ -158,12 +158,12 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function batchUpdateCategoryId($ids, $categoryId)
     {
         if (empty($ids)) {
-            return array();
+            return [];
         }
 
-        $updateFields = array();
+        $updateFields = [];
         foreach ($ids as $id) {
-            $updateFields[] = array('categoryId' => $categoryId);
+            $updateFields[] = ['categoryId' => $categoryId];
         }
 
         return $this->batchUpdateQuestions($ids, $updateFields);
@@ -172,7 +172,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function batchUpdateQuestions($ids, $fields)
     {
         if (empty($ids) || empty($fields)) {
-            return array();
+            return [];
         }
 
         return $this->getQuestionDao()->batchUpdate($ids, $fields, 'id');
@@ -181,7 +181,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function update($id, $fields)
     {
         $question = $this->get($id);
-        $argument = array('question' => $question, 'fields' => $fields);
+        $argument = ['question' => $question, 'fields' => $fields];
         if (!$question) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
@@ -208,12 +208,12 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         $question = $this->getQuestionDao()->update($id, $fields);
 
-        $this->getQuestionDao()->update(array('parentId' => $question['id']), array(
+        $this->getQuestionDao()->update(['parentId' => $question['id']], [
             'categoryId' => $question['categoryId'],
             'updatedUserId' => $question['updatedUserId'],
-        ));
+        ]);
 
-        $this->dispatchEvent('question.update', new Event($question, array('argument' => $argument)));
+        $this->dispatchEvent('question.update', new Event($question, ['argument' => $argument]));
 
         return $question;
     }
@@ -238,7 +238,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $result = $this->getQuestionDao()->delete($id);
 
         if ($question['parentId'] > 0) {
-            $this->waveCount($question['parentId'], array('subCount' => '-1'));
+            $this->waveCount($question['parentId'], ['subCount' => '-1']);
         }
 
         if ($question['subCount'] > 0) {
@@ -260,7 +260,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             return false;
         }
 
-        foreach ($ids ?: array() as $id) {
+        foreach ($ids ?: [] as $id) {
             $this->delete($id);
         }
 
@@ -299,7 +299,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->findQuestionsByCategoryIds($categoryIds);
     }
 
-    public function search($conditions, $sort, $start, $limit, $columns = array())
+    public function search($conditions, $sort, $start, $limit, $columns = [])
     {
         $conditions = $this->filterQuestionFields($conditions);
         $questions = $this->getQuestionDao()->search($conditions, $sort, $start, $limit, $columns);
@@ -328,17 +328,17 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function waveCount($id, $diffs)
     {
-        return $this->getQuestionDao()->wave(array($id), $diffs);
+        return $this->getQuestionDao()->wave([$id], $diffs);
     }
 
     public function judgeQuestion($question, $answer)
     {
         if (!$question) {
-            return array('status' => 'notFound', 'score' => 0);
+            return ['status' => 'notFound', 'score' => 0];
         }
 
         if (!$answer) {
-            return array('status' => 'noAnswer', 'score' => 0);
+            return ['status' => 'noAnswer', 'score' => 0];
         }
 
         // 判断values为空["","",""]
@@ -352,7 +352,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             }
 
             if ($isEmpty) {
-                return array('status' => 'noAnswer', 'score' => 0);
+                return ['status' => 'noAnswer', 'score' => 0];
             }
         }
 
@@ -374,7 +374,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function hasEssay($questionIds)
     {
-        $count = $this->searchCount(array('ids' => $questionIds, 'type' => 'essay'));
+        $count = $this->searchCount(['ids' => $questionIds, 'type' => 'essay']);
 
         if ($count) {
             return true;
@@ -469,14 +469,14 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function findAttachments($questionIds)
     {
         if (empty($questionIds)) {
-            return array();
+            return [];
         }
 
-        $conditions = array(
+        $conditions = [
             'type' => 'attachment',
-            'targetTypes' => array('question.stem', 'question.analysis'),
+            'targetTypes' => ['question.stem', 'question.analysis'],
             'targetIds' => $questionIds,
-        );
+        ];
         $attachments = $this->getUploadFileService()->searchUseFiles($conditions);
         array_walk($attachments, function (&$attachment) {
             $attachment['dkey'] = $attachment['targetType'].$attachment['targetId'];
@@ -494,6 +494,13 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
 
         return $question;
+    }
+
+    public function findQuestionsBySyncIds(array $syncIds)
+    {
+        $questions = $this->getQuestionDao()->findBySyncIds($syncIds);
+
+        return ArrayToolkit::index($questions, 'syncId');
     }
 
     /**

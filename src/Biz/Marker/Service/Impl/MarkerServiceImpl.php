@@ -2,8 +2,8 @@
 
 namespace Biz\Marker\Service\Impl;
 
-use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\BaseService;
 use Biz\Marker\MarkerException;
 use Biz\Marker\Service\MarkerService;
 use Biz\System\SettingException;
@@ -34,7 +34,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         $markers = $this->findMarkersByMediaId($mediaId);
 
         if (empty($markers)) {
-            return array();
+            return [];
         }
 
         $markerIds = ArrayToolkit::column($markers, 'id');
@@ -101,10 +101,10 @@ class MarkerServiceImpl extends BaseService implements MarkerService
             $this->createNewException(MarkerException::FIELD_SECOND_REQUIRED());
         }
 
-        $marker = array(
+        $marker = [
             'mediaId' => $media['id'],
             'second' => $fields['second'],
-        );
+        ];
         $marker = $this->getMarkerDao()->create($marker);
         $question = $this->getQuestionMarkerService()->addQuestionMarker($fields['questionId'], $marker['id'], 1);
 

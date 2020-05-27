@@ -4,18 +4,17 @@ namespace ApiBundle\Api\Resource\Exercise;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\ExerciseActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Course\CourseException;
+use Biz\Course\Service\CourseService;
+use Biz\Task\Service\TaskService;
+use Biz\Task\TaskException;
+use Biz\Testpaper\ExerciseException;
 use Biz\Testpaper\Wrapper\AssessmentResponseWrapper;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
-use Biz\Testpaper\ExerciseException;
-use Biz\Task\TaskException;
-use Biz\Task\Service\TaskService;
-use Biz\Activity\Service\TestpaperActivityService;
-use Biz\Activity\Service\ActivityService;
-use Biz\Testpaper\Service\TestpaperService;
-use Biz\Course\Service\CourseService;
-use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
@@ -84,7 +83,7 @@ class ExerciseResult extends AbstractResource
         $data = $request->request->all();
         $exerciseRecord = $this->getAnswerRecordService()->get($exerciseResultId);
 
-        if (!empty($exerciseRecord) && !in_array($exerciseRecord['status'], array('doing', 'paused'))) {
+        if (!empty($exerciseRecord) && !in_array($exerciseRecord['status'], ['doing', 'paused'])) {
             throw ExerciseException::FORBIDDEN_DUPLICATE_COMMIT();
         }
 
@@ -130,7 +129,7 @@ class ExerciseResult extends AbstractResource
             throw ExerciseException::FORBIDDEN_ACCESS_EXERCISE();
         }
 
-        $testpaperWrapper= new TestpaperWrapper();
+        $testpaperWrapper = new TestpaperWrapper();
         $assessment = $this->getAssessmentService()->showAssessment($exercise['id']);
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($exerciseRecord['id']);
         $answerReport = $this->getAnswerReportService()->get($exerciseRecord['answer_report_id']);

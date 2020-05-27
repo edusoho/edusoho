@@ -15,7 +15,8 @@ export default class Intro {
     if (!this.$intro.length) {
       return;
     }
-    if (!store.get(COURSE_BASE_INTRO)) {
+    let isS2b2cEnabled = $('#s2b2c_enabled').val();
+    if (!store.get(COURSE_BASE_INTRO) && !isS2b2cEnabled) {
       store.set(COURSE_BASE_INTRO, true);
       this.introStart(this.initAllSteps());
       this.$intro.addClass('hidden');

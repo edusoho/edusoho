@@ -11,10 +11,10 @@ class DeveloperSettingController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $developerSetting = $this->getSettingService()->get('developer', array());
-        $storageSetting = $this->getSettingService()->get('storage', array());
+        $developerSetting = $this->getSettingService()->get('developer', []);
+        $storageSetting = $this->getSettingService()->get('storage', []);
 
-        $default = array(
+        $default = [
             'debug' => '0',
             'without_network' => '0',
             'cloud_api_server' => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
@@ -29,7 +29,7 @@ class DeveloperSettingController extends BaseController
             'cloud_sdk_cdn' => '',
             'hls_encrypted' => '1',
             'mp_service_url' => 'http://mp-service.qiqiuyun.net',
-        );
+        ];
 
         $developerSetting = array_merge($default, $developerSetting);
 
@@ -45,6 +45,7 @@ class DeveloperSettingController extends BaseController
             $storageSetting['cloud_api_es_op_server'] = $developerSetting['cloud_api_es_op_server'];
             $storageSetting['cloud_api_notification_server'] = $developerSetting['cloud_api_notification_server'];
             $storageSetting['cloud_api_wechat_server'] = $developerSetting['cloud_api_wechat_server'];
+            $storageSetting['s2b2c_server'] = $developerSetting['s2b2c_server'];
             $this->getSettingService()->set('storage', $storageSetting);
             $this->getSettingService()->set('developer', $developerSetting);
 
@@ -55,9 +56,9 @@ class DeveloperSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin/developer-setting/index.html.twig', array(
+        return $this->render('admin/developer-setting/index.html.twig', [
             'developerSetting' => $developerSetting,
-        ));
+        ]);
     }
 
     protected function dealServerConfigFile()
@@ -85,9 +86,9 @@ class DeveloperSettingController extends BaseController
         $appCount = $this->getAppservice()->findAppCount();
         $apps = $this->getAppservice()->findApps(0, $appCount);
 
-        return $this->render('admin/developer-setting/version.html.twig', array(
+        return $this->render('admin/developer-setting/version.html.twig', [
             'apps' => $apps,
-        ));
+        ]);
     }
 
     public function magicAction(Request $request)
@@ -97,7 +98,7 @@ class DeveloperSettingController extends BaseController
             $setting = json_decode($setting, true);
 
             if (empty($setting)) {
-                $setting = array('export_allow_count' => 100000, 'export_limit' => 10000, 'enable_org' => 0);
+                $setting = ['export_allow_count' => 100000, 'export_limit' => 10000, 'enable_org' => 0];
             }
 
             $this->getSettingService()->set('magic', $setting);
@@ -105,12 +106,12 @@ class DeveloperSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        $setting = $this->getSettingService()->get('magic', array());
+        $setting = $this->getSettingService()->get('magic', []);
         $setting = JsonToolkit::prettyPrint(json_encode($setting));
 
-        return $this->render('admin/developer-setting/magic.html.twig', array(
+        return $this->render('admin/developer-setting/magic.html.twig', [
             'setting' => $setting,
-        ));
+        ]);
     }
 
     private function openDevModeIfDebugEnable($developerSetting)

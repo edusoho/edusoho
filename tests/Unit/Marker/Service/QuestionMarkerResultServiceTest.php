@@ -9,13 +9,13 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
 {
     public function testAddQuestionMarkerResult()
     {
-        $result = array(
+        $result = [
             'markerId' => 1,
             'questionMarkerId' => 2,
             'taskId' => 1,
             'userId' => 1,
             'status' => 'none',
-        );
+        ];
         $savedResult = $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result);
         $this->assertNotNull($savedResult);
         $this->assertEquals($result['markerId'], $savedResult['markerId']);
@@ -26,13 +26,13 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
 
     public function testGetQuestionMarkerResult()
     {
-        $result = array(
+        $result = [
             'markerId' => 1,
             'questionMarkerId' => 2,
             'taskId' => 1,
             'userId' => 1,
             'status' => 'none',
-        );
+        ];
         $savedResult = $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result);
         $result = $this->getQuestionMarkerResultService()->getQuestionMarkerResult($savedResult['id']);
         $this->assertEquals($savedResult, $result);
@@ -42,42 +42,42 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
     {
         $this->mockBiz(
             'ItemBank:Item:ItemService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getItemWithQuestions',
-                    'returnValue' => array('id' => 1, 'questions' => array(array('id' => 1))),
-                ),
-                array(
+                    'returnValue' => ['id' => 1, 'questions' => [['id' => 1]]],
+                ],
+                [
                     'functionName' => 'review',
-                    'returnValue' => array(array('result' => 'right')),
-                ),
-            )
+                    'returnValue' => [['result' => 'right']],
+                ],
+            ]
         );
-        $fields = array(
+        $fields = [
             'second' => 30,
             'questionId' => 1,
-        );
+        ];
 
         $this->getMarkerService()->addMarker(1, $fields);
         $questionMarker = $this->getQuestionMarkerService()->addQuestionMarker(1, 1, 1);
 
-        $savedResult = $this->getQuestionMarkerResultService()->finishQuestionMarker($questionMarker['id'], array(
-            'answer' => array('answer'),
+        $savedResult = $this->getQuestionMarkerResultService()->finishQuestionMarker($questionMarker['id'], [
+            'answer' => ['answer'],
             'taskId' => 1,
             'userId' => 1,
-        ));
+        ]);
         $this->assertEquals($questionMarker['id'], $savedResult['questionMarkerId']);
     }
 
     public function testFindByUserIdAndQuestionMarkerId()
     {
-        $result = array(
+        $result = [
             'markerId' => 1,
             'questionMarkerId' => 2,
             'taskId' => 1,
             'userId' => 1,
             'status' => 'none',
-        );
+        ];
         $savedResult = $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result);
         $results = $this->getQuestionMarkerResultService()->findByUserIdAndQuestionMarkerId(1, 2);
 
@@ -86,37 +86,37 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
 
     public function testFindResultByIds()
     {
-        $result = array(
+        $result = [
             'markerId' => 1,
             'questionMarkerId' => 2,
             'taskId' => 1,
             'userId' => 1,
             'status' => 'none',
-        );
+        ];
         $savedResult = $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result);
-        $results = $this->getQuestionMarkerResultService()->findResultsByIds(array($savedResult['id']));
+        $results = $this->getQuestionMarkerResultService()->findResultsByIds([$savedResult['id']]);
 
         $this->assertContains($savedResult, $results);
     }
 
     public function testUpdateQuestionMarkerResult()
     {
-        $result = array(
+        $result = [
             'markerId' => 3,
             'questionMarkerId' => 4,
             'taskId' => 1,
             'userId' => 6,
             'status' => 'noAnswer',
-        );
+        ];
         $savedResult = $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result);
 
-        $result = array(
+        $result = [
             'markerId' => 6,
             'questionMarkerId' => 1,
             'taskId' => 1,
             'userId' => 7,
             'status' => 'right',
-        );
+        ];
 
         $updatedResult = $this->getQuestionMarkerResultService()->updateQuestionMarkerResult($savedResult['id'], $result);
 
@@ -135,31 +135,31 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
         $andy = 10;
         $markerId = 3;
 
-        $result1 = array(
+        $result1 = [
             'markerId' => $markerId,
             'questionMarkerId' => $questionMarkerId,
             'taskId' => 1,
             'userId' => $jim,
             'status' => 'noAnswer',
-        );
+        ];
         $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result1);
 
-        $result2 = array(
+        $result2 = [
             'markerId' => $markerId,
             'questionMarkerId' => $questionMarkerId,
             'taskId' => 1,
             'userId' => $tony,
             'status' => 'wrong',
-        );
+        ];
         $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result2);
 
-        $result3 = array(
+        $result3 = [
             'markerId' => $markerId,
             'questionMarkerId' => $questionMarkerId,
             'taskId' => 1,
             'userId' => $andy,
             'status' => 'right',
-        );
+        ];
         $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result3);
 
         $this->getQuestionMarkerResultService()->deleteByQuestionMarkerId($questionMarkerId);
@@ -178,13 +178,13 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
         $jim = 3;
         $markerId = 3;
 
-        $result1 = array(
+        $result1 = [
             'markerId' => $markerId,
             'questionMarkerId' => $questionMarkerId,
             'taskId' => 1,
             'userId' => $jim,
             'status' => 'noAnswer',
-        );
+        ];
         $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result1);
 
         $jimResult = $this->getQuestionMarkerResultService()->findByUserIdAndMarkerId($jim, $markerId);
@@ -195,31 +195,31 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
 
     public function testFindByLessonIdAndQuestionMarkerId()
     {
-        $result1 = array(
+        $result1 = [
             'markerId' => 1,
             'questionMarkerId' => 1,
             'taskId' => 1,
             'userId' => 1,
             'status' => 'noAnswer',
-        );
+        ];
         $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result1);
 
-        $result2 = array(
+        $result2 = [
             'markerId' => 1,
             'questionMarkerId' => 1,
             'taskId' => 1,
             'userId' => 2,
             'status' => 'noAnswer',
-        );
+        ];
         $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result2);
 
-        $result3 = array(
+        $result3 = [
             'markerId' => 1,
             'questionMarkerId' => 2,
             'taskId' => 2,
             'userId' => 1,
             'status' => 'noAnswer',
-        );
+        ];
         $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result3);
 
         $result = $this->getQuestionMarkerResultService()->findByTaskIdAndQuestionMarkerId(1, 1);

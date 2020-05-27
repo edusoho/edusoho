@@ -4,17 +4,15 @@ namespace ApiBundle\Api\Resource\Homework;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Activity\Service\ExerciseActivityService;
-use Biz\Activity\Service\HomeworkActivityService;
-use Biz\Course\CourseException;
-use Biz\Testpaper\HomeworkException;
-use Biz\Task\TaskException;
-use Biz\Task\Service\TaskService;
-use Biz\Activity\Service\TestpaperActivityService;
-use Biz\Activity\Service\ActivityService;
-use Biz\Testpaper\Service\TestpaperService;
-use Biz\Course\Service\CourseService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\HomeworkActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Course\CourseException;
+use Biz\Course\Service\CourseService;
+use Biz\Task\Service\TaskService;
+use Biz\Task\TaskException;
+use Biz\Testpaper\HomeworkException;
 use Biz\Testpaper\Wrapper\AssessmentResponseWrapper;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
@@ -69,7 +67,7 @@ class HomeworkResult extends AbstractResource
             throw HomeworkException::REVIEWING_HOMEWORK();
         }
 
-        $testpaperWrapper= new TestpaperWrapper();
+        $testpaperWrapper = new TestpaperWrapper();
         $scene = $this->getAnswerSceneService()->get($homeworkRecord['answer_scene_id']);
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($homeworkRecord['id']);
         $answerReport = $this->getAnswerReportService()->get($homeworkRecord['answer_report_id']);
@@ -86,7 +84,7 @@ class HomeworkResult extends AbstractResource
         $data = $request->request->all();
         $homeworkRecord = $this->getAnswerRecordService()->get($homeworkResultId);
 
-        if (!empty($homeworkRecord) && !in_array($homeworkRecord['status'], array('doing', 'paused'))) {
+        if (!empty($homeworkRecord) && !in_array($homeworkRecord['status'], ['doing', 'paused'])) {
             throw HomeworkException::FORBIDDEN_DUPLICATE_COMMIT();
         }
 
@@ -138,7 +136,7 @@ class HomeworkResult extends AbstractResource
             throw HomeworkException::FORBIDDEN_ACCESS_HOMEWORK();
         }
 
-        $testpaperWrapper= new TestpaperWrapper();
+        $testpaperWrapper = new TestpaperWrapper();
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($homeworkRecord['id']);
         $answerReport = $this->getAnswerReportService()->get($homeworkRecord['answer_report_id']);
         $homeworkResult = $testpaperWrapper->wrapTestpaperResult($homeworkRecord, $homework, $scene, $answerReport);

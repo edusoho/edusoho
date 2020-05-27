@@ -3,15 +3,15 @@
 namespace AppBundle\Controller\AnswerEngine;
 
 use AppBundle\Controller\BaseController;
-use Symfony\Component\HttpFoundation\Request;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
-use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\User\Service\UserService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\QuestionFavoriteService;
+use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class AnswerEngineController extends BaseController
 {
@@ -22,22 +22,22 @@ class AnswerEngineController extends BaseController
         $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($answerSceneId, $user['id']);
 
         if (empty($latestAnswerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
-            return $this->forward('AppBundle:AnswerEngine/AnswerEngine:startAnswer', array(
+            return $this->forward('AppBundle:AnswerEngine/AnswerEngine:startAnswer', [
                 'answerSceneId' => $answerSceneId,
                 'assessmentId' => $assessmentId,
-            ), array(
+            ], [
                 'submit_goto_url' => $request->query->get('submit_goto_url'),
                 'save_goto_url' => $request->query->get('save_goto_url'),
-            ));
+            ]);
         }
 
-        if (in_array($latestAnswerRecord['status'], array(AnswerService::ANSWER_RECORD_STATUS_DOING, AnswerService::ANSWER_RECORD_STATUS_PAUSED))) {
-            return $this->forward('AppBundle:AnswerEngine/AnswerEngine:continueAnswer', array(
+        if (in_array($latestAnswerRecord['status'], [AnswerService::ANSWER_RECORD_STATUS_DOING, AnswerService::ANSWER_RECORD_STATUS_PAUSED])) {
+            return $this->forward('AppBundle:AnswerEngine/AnswerEngine:continueAnswer', [
                 'answerRecordId' => $latestAnswerRecord['id'],
-            ), array(
+            ], [
                 'submit_goto_url' => $request->query->get('submit_goto_url'),
                 'save_goto_url' => $request->query->get('save_goto_url'),
-            ));
+            ]);
         }
     }
 
@@ -47,14 +47,14 @@ class AnswerEngineController extends BaseController
         $answerRecord = $this->getAnswerService()->startAnswer($answerSceneId, $assessmentId, $user['id']);
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
-        $assessmentResponse = (object) array();
+        $assessmentResponse = (object) [];
 
-        return $this->render('answer-engine/answer.html.twig', array(
+        return $this->render('answer-engine/answer.html.twig', [
             'assessment' => $assessment,
             'assessmentResponse' => $assessmentResponse,
             'answerScene' => $answerScene,
             'answerRecord' => $answerRecord,
-        ));
+        ]);
     }
 
     public function continueAnswerAction(Request $request, $answerRecordId)
@@ -70,12 +70,12 @@ class AnswerEngineController extends BaseController
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
         $assessmentResponse = $this->getAnswerService()->getAssessmentResponseByAnswerRecordId($answerRecordId);
 
-        return $this->render('answer-engine/answer.html.twig', array(
+        return $this->render('answer-engine/answer.html.twig', [
             'assessment' => $assessment,
             'assessmentResponse' => $assessmentResponse,
             'answerScene' => $answerScene,
             'answerRecord' => $answerRecord,
-        ));
+        ]);
     }
 
     public function submitAnswerAction(Request $request)
@@ -109,15 +109,15 @@ class AnswerEngineController extends BaseController
     public function reportAction(Request $request, $answerRecordId, $restartUrl, $answerShow = 'show')
     {
         $answerRecord = $this->wrapperAnswerRecord($this->getAnswerRecordService()->get($answerRecordId));
-        $conditions = array('target_type' => 'assessment', 'target_id' => $answerRecord['assessment_id'], 'user_id' => $answerRecord['user_id']);
+        $conditions = ['target_type' => 'assessment', 'target_id' => $answerRecord['assessment_id'], 'user_id' => $answerRecord['user_id']];
         $questionFavorites = $this->getQuestionFavoriteService()->search(
             $conditions,
-            array(),
+            [],
             0,
             $this->getQuestionFavoriteService()->count($conditions)
         );
 
-        return $this->render('answer-engine/report.html.twig', array(
+        return $this->render('answer-engine/report.html.twig', [
             'answerRecord' => $answerRecord,
             'answerReport' => $this->getAnswerReportService()->get($answerRecord['answer_report_id']),
             'answerScene' => $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']),
@@ -125,19 +125,19 @@ class AnswerEngineController extends BaseController
             'questionFavorites' => $questionFavorites,
             'restartUrl' => $restartUrl,
             'answerShow' => $answerShow,
-        ));
+        ]);
     }
 
     public function assessmentResultAction(Request $request, $answerRecordId)
     {
         $answerRecord = $this->wrapperAnswerRecord($this->getAnswerRecordService()->get($answerRecordId));
 
-        return $this->render('answer-engine/assessment-result.html.twig', array(
+        return $this->render('answer-engine/assessment-result.html.twig', [
             'answerRecord' => $answerRecord,
             'answerReport' => $this->getAnswerReportService()->get($answerRecord['answer_report_id']),
             'answerScene' => $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']),
             'assessment' => $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']),
-        ));
+        ]);
     }
 
     public function reviewSaveAction(Request $request)
@@ -152,14 +152,14 @@ class AnswerEngineController extends BaseController
     {
         $answerRecord = $this->wrapperAnswerRecord($this->getAnswerRecordService()->get($answerRecordId));
 
-        return $this->render('answer-engine/review.html.twig', array(
+        return $this->render('answer-engine/review.html.twig', [
             'successGotoUrl' => $successGotoUrl,
             'successContinueGotoUrl' => $successContinueGotoUrl,
             'answerRecord' => $answerRecord,
             'answerReport' => $this->getAnswerReportService()->get($answerRecord['answer_report_id']),
             'answerScene' => $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']),
             'assessment' => $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']),
-        ));
+        ]);
     }
 
     public function sceneReportAction(Request $request, $assessmentId, $answerSceneId)
@@ -167,11 +167,11 @@ class AnswerEngineController extends BaseController
         $answerSceneReport = $this->getAnswerSceneService()->getAnswerSceneReport($answerSceneId);
         $assessment = $this->getAssessmentService()->showAssessment($assessmentId);
 
-        return $this->render('answer-engine/scene-report.html.twig', array(
+        return $this->render('answer-engine/scene-report.html.twig', [
             'answerSceneReport' => $answerSceneReport,
             'assessment' => $assessment,
             'answerScene' => $this->getAnswerSceneService()->get($answerSceneId),
-        ));
+        ]);
     }
 
     protected function wrapperAnswerRecord($answerRecord)

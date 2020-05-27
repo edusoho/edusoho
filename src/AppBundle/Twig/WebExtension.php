@@ -2,6 +2,7 @@
 
 namespace AppBundle\Twig;
 
+use ApiBundle\Api\Util\AssetHelper;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\CloudFileStatusToolkit;
 use AppBundle\Common\ConvertIpToolkit;
@@ -11,6 +12,7 @@ use AppBundle\Common\FileToolkit;
 use AppBundle\Common\MathToolkit;
 use AppBundle\Common\NumberToolkit;
 use AppBundle\Common\PluginVersionToolkit;
+use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\UserToolkit;
 use AppBundle\Component\DeviceDetector\DeviceDetectorAdapter;
 use AppBundle\Component\ShareSdk\WeixinShare;
@@ -19,15 +21,16 @@ use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
 use Biz\Player\Service\PlayerService;
+use Biz\S2B2C\Service\FileSourceService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
+use Biz\System\Service\SettingService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Topxia\Service\Common\ServiceKernel;
-use AppBundle\Common\SimpleValidator;
-use ApiBundle\Api\Util\AssetHelper;
-use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class WebExtension extends \Twig_Extension
 {
@@ -47,6 +50,8 @@ class WebExtension extends \Twig_Extension
 
     protected $defaultCloudSdkHost;
 
+    protected $allowedCoopMode = [S2B2CFacadeService::DEALER_MODE];
+
     public function __construct($container, Biz $biz, RequestStack $requestStack)
     {
         $this->container = $container;
@@ -56,143 +61,173 @@ class WebExtension extends \Twig_Extension
 
     public function getFilters()
     {
-        return array(
-            new \Twig_SimpleFilter('smart_time', array($this, 'smarttimeFilter')),
-            new \Twig_SimpleFilter('date_format', array($this, 'dateformatFilter')),
-            new \Twig_SimpleFilter('time_range', array($this, 'timeRangeFilter')),
-            new \Twig_SimpleFilter('time_diff', array($this, 'timeDiffFilter')),
-            new \Twig_SimpleFilter('remain_time', array($this, 'remainTimeFilter')),
-            new \Twig_SimpleFilter('time_formatter', array($this, 'timeFormatterFilter')),
-            new \Twig_SimpleFilter('location_text', array($this, 'locationTextFilter')),
-            new \Twig_SimpleFilter('tags_html', array($this, 'tagsHtmlFilter'), array('is_safe' => array('html'))),
-            new \Twig_SimpleFilter('file_size', array($this, 'fileSizeFilter')),
-            new \Twig_SimpleFilter('plain_text', array($this, 'plainTextFilter'), array('is_safe' => array('html'))),
-            new \Twig_SimpleFilter('plain_text_with_p_tag', array($this, 'plainTextWithPTagFilter'), array('is_safe' => array('html'))),
-            new \Twig_SimpleFilter('sub_text', array($this, 'subTextFilter'), array('is_safe' => array('html'))),
-            new \Twig_SimpleFilter('duration', array($this, 'durationFilter')),
-            new \Twig_SimpleFilter('duration_text', array($this, 'durationTextFilter')),
-            new \Twig_SimpleFilter('tags_join', array($this, 'tagsJoinFilter')),
-            new \Twig_SimpleFilter('navigation_url', array($this, 'navigationUrlFilter')),
-            new \Twig_SimpleFilter('chr', array($this, 'chrFilter')),
-            new \Twig_SimpleFilter('bbCode2Html', array($this, 'bbCode2HtmlFilter')),
-            new \Twig_SimpleFilter('score_text', array($this, 'scoreTextFilter')),
-            new \Twig_SimpleFilter('simple_template', array($this, 'simpleTemplateFilter')),
-            new \Twig_SimpleFilter('fill_question_stem_text', array($this, 'fillQuestionStemTextFilter')),
-            new \Twig_SimpleFilter('fill_question_stem_html', array($this, 'fillQuestionStemHtmlFilter')),
-            new \Twig_SimpleFilter('get_course_id', array($this, 'getCourseidFilter')),
-            new \Twig_SimpleFilter('purify_html', array($this, 'getPurifyHtml')),
-            new \Twig_SimpleFilter('purify_and_trim_html', array($this, 'getPurifyAndTrimHtml')),
-            new \Twig_SimpleFilter('file_type', array($this, 'getFileType')),
-            new \Twig_SimpleFilter('at', array($this, 'atFilter')),
-            new \Twig_SimpleFilter('copyright_less', array($this, 'removeCopyright')),
-            new \Twig_SimpleFilter('array_merge', array($this, 'arrayMerge')),
-            new \Twig_SimpleFilter('space2nbsp', array($this, 'spaceToNbsp')),
-            new \Twig_SimpleFilter('number_to_human', array($this, 'numberFilter')),
-            new \Twig_SimpleFilter('array_column', array($this, 'arrayColumn')),
-            new \Twig_SimpleFilter('rename_locale', array($this, 'renameLocale')),
-            new \Twig_SimpleFilter('cdn', array($this, 'cdn')),
-            new \Twig_SimpleFilter('wrap', array($this, 'wrap')),
-            new \Twig_SimpleFilter('convert_absolute_url', array($this, 'convertAbsoluteUrl')),
-            new \Twig_SimpleFilter('url_decode', array($this, 'urlDecode')),
-        );
+        return [
+            new \Twig_SimpleFilter('smart_time', [$this, 'smarttimeFilter']),
+            new \Twig_SimpleFilter('date_format', [$this, 'dateformatFilter']),
+            new \Twig_SimpleFilter('time_range', [$this, 'timeRangeFilter']),
+            new \Twig_SimpleFilter('time_diff', [$this, 'timeDiffFilter']),
+            new \Twig_SimpleFilter('remain_time', [$this, 'remainTimeFilter']),
+            new \Twig_SimpleFilter('time_formatter', [$this, 'timeFormatterFilter']),
+            new \Twig_SimpleFilter('location_text', [$this, 'locationTextFilter']),
+            new \Twig_SimpleFilter('tags_html', [$this, 'tagsHtmlFilter'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFilter('file_size', [$this, 'fileSizeFilter']),
+            new \Twig_SimpleFilter('plain_text', [$this, 'plainTextFilter'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFilter('plain_text_with_p_tag', [$this, 'plainTextWithPTagFilter'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFilter('sub_text', [$this, 'subTextFilter'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFilter('duration', [$this, 'durationFilter']),
+            new \Twig_SimpleFilter('duration_text', [$this, 'durationTextFilter']),
+            new \Twig_SimpleFilter('tags_join', [$this, 'tagsJoinFilter']),
+            new \Twig_SimpleFilter('navigation_url', [$this, 'navigationUrlFilter']),
+            new \Twig_SimpleFilter('chr', [$this, 'chrFilter']),
+            new \Twig_SimpleFilter('bbCode2Html', [$this, 'bbCode2HtmlFilter']),
+            new \Twig_SimpleFilter('score_text', [$this, 'scoreTextFilter']),
+            new \Twig_SimpleFilter('simple_template', [$this, 'simpleTemplateFilter']),
+            new \Twig_SimpleFilter('fill_question_stem_text', [$this, 'fillQuestionStemTextFilter']),
+            new \Twig_SimpleFilter('fill_question_stem_html', [$this, 'fillQuestionStemHtmlFilter']),
+            new \Twig_SimpleFilter('get_course_id', [$this, 'getCourseidFilter']),
+            new \Twig_SimpleFilter('purify_html', [$this, 'getPurifyHtml']),
+            new \Twig_SimpleFilter('purify_and_trim_html', [$this, 'getPurifyAndTrimHtml']),
+            new \Twig_SimpleFilter('file_type', [$this, 'getFileType']),
+            new \Twig_SimpleFilter('at', [$this, 'atFilter']),
+            new \Twig_SimpleFilter('copyright_less', [$this, 'removeCopyright']),
+            new \Twig_SimpleFilter('array_merge', [$this, 'arrayMerge']),
+            new \Twig_SimpleFilter('space2nbsp', [$this, 'spaceToNbsp']),
+            new \Twig_SimpleFilter('number_to_human', [$this, 'numberFilter']),
+            new \Twig_SimpleFilter('array_column', [$this, 'arrayColumn']),
+            new \Twig_SimpleFilter('rename_locale', [$this, 'renameLocale']),
+            new \Twig_SimpleFilter('cdn', [$this, 'cdn']),
+            new \Twig_SimpleFilter('wrap', [$this, 'wrap']),
+            new \Twig_SimpleFilter('convert_absolute_url', [$this, 'convertAbsoluteUrl']),
+            new \Twig_SimpleFilter('url_decode', [$this, 'urlDecode']),
+            new \Twig_SimpleFilter('s2b2c_file_convert', [$this, 's2b2cFileConvert']),
+        ];
     }
 
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('theme_global_script', array($this, 'getThemeGlobalScript')),
-            new \Twig_SimpleFunction('file_uri_parse', array($this, 'parseFileUri')),
+        return [
+            new \Twig_SimpleFunction('theme_global_script', [$this, 'getThemeGlobalScript']),
+            new \Twig_SimpleFunction('file_uri_parse', [$this, 'parseFileUri']),
             // file_path 即将废弃，不要再使用
-            new \Twig_SimpleFunction('file_path', array($this, 'getFilePath')),
+            new \Twig_SimpleFunction('file_path', [$this, 'getFilePath']),
             // default_path 即将废弃，不要再使用
-            new \Twig_SimpleFunction('default_path', array($this, 'getDefaultPath')),
+            new \Twig_SimpleFunction('default_path', [$this, 'getDefaultPath']),
             // file_url 即将废弃，不要再使用
-            new \Twig_SimpleFunction('file_url', array($this, 'getFileUrl')),
+            new \Twig_SimpleFunction('file_url', [$this, 'getFileUrl']),
             // system_default_path，即将废弃，不要再使用
-            new \Twig_SimpleFunction('system_default_path', array($this, 'getSystemDefaultPath')),
-            new \Twig_SimpleFunction('fileurl', array($this, 'getFurl')),
-            new \Twig_SimpleFunction('filepath', array($this, 'getFpath')),
-            new \Twig_SimpleFunction('lazy_img', array($this, 'makeLazyImg'), array('is_safe' => array('html'))),
-            new \Twig_SimpleFunction('avatar_path', array($this, 'avatarPath')),
-            new \Twig_SimpleFunction('object_load', array($this, 'loadObject')),
-            new \Twig_SimpleFunction('setting', array($this, 'getSetting')),
-            new \Twig_SimpleFunction('set_price', array($this, 'getSetPrice')),
-            new \Twig_SimpleFunction('percent', array($this, 'calculatePercent')),
-            new \Twig_SimpleFunction('category_choices', array($this, 'getCategoryChoices')),
-            new \Twig_SimpleFunction('build_category_choices', array($this, 'buildCategoryChoices')),
-            new \Twig_SimpleFunction('question_category_choices', array($this, 'getQuestionCategoryChoices')),
-            new \Twig_SimpleFunction('item_category_choices', array($this, 'getItemCategoryChoices')),
-            new \Twig_SimpleFunction('upload_max_filesize', array($this, 'getUploadMaxFilesize')),
-            new \Twig_SimpleFunction('js_paths', array($this, 'getJsPaths')),
-            new \Twig_SimpleFunction('is_plugin_installed', array($this, 'isPluginInstalled')),
-            new \Twig_SimpleFunction('plugin_version', array($this, 'getPluginVersion')),
-            new \Twig_SimpleFunction('version_compare', array($this, 'versionCompare')),
-            new \Twig_SimpleFunction('is_exist_in_subarray_by_id', array($this, 'isExistInSubArrayById')),
-            new \Twig_SimpleFunction('context_value', array($this, 'getContextValue')),
-            new \Twig_SimpleFunction('is_feature_enabled', array($this, 'isFeatureEnabled')),
-            new \Twig_SimpleFunction('parameter', array($this, 'getParameter')),
-            new \Twig_SimpleFunction('upload_token', array($this, 'makeUploadToken')),
-            new \Twig_SimpleFunction('countdown_time', array($this, 'getCountdownTime')),
+            new \Twig_SimpleFunction('system_default_path', [$this, 'getSystemDefaultPath']),
+            new \Twig_SimpleFunction('fileurl', [$this, 'getFurl']),
+            new \Twig_SimpleFunction('filepath', [$this, 'getFpath']),
+            new \Twig_SimpleFunction('lazy_img', [$this, 'makeLazyImg'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFunction('avatar_path', [$this, 'avatarPath']),
+            new \Twig_SimpleFunction('object_load', [$this, 'loadObject']),
+            new \Twig_SimpleFunction('setting', [$this, 'getSetting']),
+            new \Twig_SimpleFunction('set_price', [$this, 'getSetPrice']),
+            new \Twig_SimpleFunction('percent', [$this, 'calculatePercent']),
+            new \Twig_SimpleFunction('category_choices', [$this, 'getCategoryChoices']),
+            new \Twig_SimpleFunction('build_category_choices', [$this, 'buildCategoryChoices']),
+            new \Twig_SimpleFunction('question_category_choices', [$this, 'getQuestionCategoryChoices']),
+            new \Twig_SimpleFunction('item_category_choices', [$this, 'getItemCategoryChoices']),
+            new \Twig_SimpleFunction('upload_max_filesize', [$this, 'getUploadMaxFilesize']),
+            new \Twig_SimpleFunction('js_paths', [$this, 'getJsPaths']),
+            new \Twig_SimpleFunction('is_plugin_installed', [$this, 'isPluginInstalled']),
+            new \Twig_SimpleFunction('plugin_version', [$this, 'getPluginVersion']),
+            new \Twig_SimpleFunction('version_compare', [$this, 'versionCompare']),
+            new \Twig_SimpleFunction('is_exist_in_subarray_by_id', [$this, 'isExistInSubArrayById']),
+            new \Twig_SimpleFunction('context_value', [$this, 'getContextValue']),
+            new \Twig_SimpleFunction('is_feature_enabled', [$this, 'isFeatureEnabled']),
+            new \Twig_SimpleFunction('parameter', [$this, 'getParameter']),
+            new \Twig_SimpleFunction('upload_token', [$this, 'makeUploadToken']),
+            new \Twig_SimpleFunction('countdown_time', [$this, 'getCountdownTime']),
             //todo covertIP 要删除
-            new \Twig_SimpleFunction('convertIP', array($this, 'getConvertIP')),
-            new \Twig_SimpleFunction('convert_ip', array($this, 'getConvertIP')),
-            new \Twig_SimpleFunction('isHide', array($this, 'isHideThread')),
-            new \Twig_SimpleFunction('user_coin_amount', array($this, 'userCoinAmount')),
+            new \Twig_SimpleFunction('convertIP', [$this, 'getConvertIP']),
+            new \Twig_SimpleFunction('convert_ip', [$this, 'getConvertIP']),
+            new \Twig_SimpleFunction('isHide', [$this, 'isHideThread']),
+            new \Twig_SimpleFunction('user_coin_amount', [$this, 'userCoinAmount']),
 
-            new \Twig_SimpleFunction('user_balance', array($this, 'getBalance')),
+            new \Twig_SimpleFunction('user_balance', [$this, 'getBalance']),
 
-            new \Twig_SimpleFunction('blur_user_name', array($this, 'blurUserName')),
-            new \Twig_SimpleFunction('blur_phone_number', array($this, 'blur_phone_number')),
-            new \Twig_SimpleFunction('blur_idcard_number', array($this, 'blur_idcard_number')),
-            new \Twig_SimpleFunction('blur_number', array($this, 'blur_number')),
-            new \Twig_SimpleFunction('sub_str', array($this, 'subStr')),
-            new \Twig_SimpleFunction('load_script', array($this, 'loadScript')),
-            new \Twig_SimpleFunction('export_scripts', array($this, 'exportScripts')),
-            new \Twig_SimpleFunction('order_payment', array($this, 'getOrderPayment')),
-            new \Twig_SimpleFunction('classroom_permit', array($this, 'isPermitRole')),
-            new \Twig_SimpleFunction('crontab_next_executed_time', array($this, 'getNextExecutedTime')),
-            new \Twig_SimpleFunction('finger_print', array($this, 'getFingerprint')),
-            new \Twig_SimpleFunction('get_parameters_from_url', array($this, 'getParametersFromUrl')),
-            new \Twig_SimpleFunction('is_trial', array($this, 'isTrial')),
-            new \Twig_SimpleFunction('timestamp', array($this, 'timestamp')),
-            new \Twig_SimpleFunction('get_user_vip_level', array($this, 'getUserVipLevel')),
-            new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork')),
-            new \Twig_SimpleFunction('get_admin_roles', array($this, 'getAdminRoles')),
-            new \Twig_SimpleFunction('render_notification', array($this, 'renderNotification')),
-            new \Twig_SimpleFunction('route_exsit', array($this, 'routeExists')),
-            new \Twig_SimpleFunction('is_micro_messenger', array($this, 'isMicroMessenger')),
-            new \Twig_SimpleFunction('wx_js_sdk_config', array($this, 'weixinConfig')),
-            new \Twig_SimpleFunction('plugin_update_notify', array($this, 'pluginUpdateNotify')),
-            new \Twig_SimpleFunction('tag_equal', array($this, 'tagEqual')),
-            new \Twig_SimpleFunction('array_index', array($this, 'arrayIndex')),
-            new \Twig_SimpleFunction('cdn', array($this, 'getCdn')),
-            new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
-            new \Twig_SimpleFunction('is_mobile_client', array($this, 'isMobileClient')),
-            new \Twig_SimpleFunction('is_ios_client', array($this, 'isIOSClient')),
-            new \Twig_SimpleFunction('is_ES_copyright', array($this, 'isESCopyright')),
-            new \Twig_SimpleFunction('get_classroom_name', array($this, 'getClassroomName')),
-            new \Twig_SimpleFunction('pop_reward_point_notify', array($this, 'popRewardPointNotify')),
-            new \Twig_SimpleFunction('array_filter', array($this, 'arrayFilter')),
-            new \Twig_SimpleFunction('base_path', array($this, 'basePath')),
-            new \Twig_SimpleFunction('get_login_email_address', array($this, 'getLoginEmailAddress')),
-            new \Twig_SimpleFunction('cloud_sdk_url', array($this, 'getCloudSdkUrl')),
-            new \Twig_SimpleFunction('math_format', array($this, 'mathFormat')),
-            new \Twig_SimpleFunction('parse_user_agent', array($this, 'parseUserAgent')),
-            new \Twig_SimpleFunction('wechat_login_bind_enabled', array($this, 'isWechatLoginBind')),
-            new \Twig_SimpleFunction('can_send_message', array($this, 'canSendMessage')),
-            new \Twig_SimpleFunction('is_hidden_video_header', array($this, 'isHiddenVideoHeader')),
-            new \Twig_SimpleFunction('arrays_key_convert', array($this, 'arraysKeyConvert')),
-            new \Twig_SimpleFunction('is_system_generated_email', array($this, 'isSystemGeneratedEmail')),
-            new \Twig_SimpleFunction('get_transcode_error_message_key', array($this, 'getTranscodeErrorMessageKeyByCode')),
-            new \Twig_SimpleFunction('uniqid', array($this, 'uniqid')),
-            new \Twig_SimpleFunction('get_days', array($this, 'getDays')),
-            new \Twig_SimpleFunction('is_question_lack', array($this, 'isQuestionLack')),
-        );
+            new \Twig_SimpleFunction('blur_user_name', [$this, 'blurUserName']),
+            new \Twig_SimpleFunction('blur_phone_number', [$this, 'blur_phone_number']),
+            new \Twig_SimpleFunction('blur_idcard_number', [$this, 'blur_idcard_number']),
+            new \Twig_SimpleFunction('blur_number', [$this, 'blur_number']),
+            new \Twig_SimpleFunction('sub_str', [$this, 'subStr']),
+            new \Twig_SimpleFunction('load_script', [$this, 'loadScript']),
+            new \Twig_SimpleFunction('export_scripts', [$this, 'exportScripts']),
+            new \Twig_SimpleFunction('order_payment', [$this, 'getOrderPayment']),
+            new \Twig_SimpleFunction('classroom_permit', [$this, 'isPermitRole']),
+            new \Twig_SimpleFunction('crontab_next_executed_time', [$this, 'getNextExecutedTime']),
+            new \Twig_SimpleFunction('finger_print', [$this, 'getFingerprint']),
+            new \Twig_SimpleFunction('get_parameters_from_url', [$this, 'getParametersFromUrl']),
+            new \Twig_SimpleFunction('is_trial', [$this, 'isTrial']),
+            new \Twig_SimpleFunction('timestamp', [$this, 'timestamp']),
+            new \Twig_SimpleFunction('get_user_vip_level', [$this, 'getUserVipLevel']),
+            new \Twig_SimpleFunction('is_without_network', [$this, 'isWithoutNetwork']),
+            new \Twig_SimpleFunction('get_admin_roles', [$this, 'getAdminRoles']),
+            new \Twig_SimpleFunction('render_notification', [$this, 'renderNotification']),
+            new \Twig_SimpleFunction('route_exsit', [$this, 'routeExists']),
+            new \Twig_SimpleFunction('is_micro_messenger', [$this, 'isMicroMessenger']),
+            new \Twig_SimpleFunction('wx_js_sdk_config', [$this, 'weixinConfig']),
+            new \Twig_SimpleFunction('plugin_update_notify', [$this, 'pluginUpdateNotify']),
+            new \Twig_SimpleFunction('tag_equal', [$this, 'tagEqual']),
+            new \Twig_SimpleFunction('array_index', [$this, 'arrayIndex']),
+            new \Twig_SimpleFunction('cdn', [$this, 'getCdn']),
+            new \Twig_SimpleFunction('is_show_mobile_page', [$this, 'isShowMobilePage']),
+            new \Twig_SimpleFunction('is_mobile_client', [$this, 'isMobileClient']),
+            new \Twig_SimpleFunction('is_ios_client', [$this, 'isIOSClient']),
+            new \Twig_SimpleFunction('is_ES_copyright', [$this, 'isESCopyright']),
+            new \Twig_SimpleFunction('get_classroom_name', [$this, 'getClassroomName']),
+            new \Twig_SimpleFunction('pop_reward_point_notify', [$this, 'popRewardPointNotify']),
+            new \Twig_SimpleFunction('array_filter', [$this, 'arrayFilter']),
+            new \Twig_SimpleFunction('base_path', [$this, 'basePath']),
+            new \Twig_SimpleFunction('get_login_email_address', [$this, 'getLoginEmailAddress']),
+            new \Twig_SimpleFunction('cloud_sdk_url', [$this, 'getCloudSdkUrl']),
+            new \Twig_SimpleFunction('math_format', [$this, 'mathFormat']),
+            new \Twig_SimpleFunction('parse_user_agent', [$this, 'parseUserAgent']),
+            new \Twig_SimpleFunction('wechat_login_bind_enabled', [$this, 'isWechatLoginBind']),
+            new \Twig_SimpleFunction('can_send_message', [$this, 'canSendMessage']),
+            new \Twig_SimpleFunction('is_hidden_video_header', [$this, 'isHiddenVideoHeader']),
+            new \Twig_SimpleFunction('arrays_key_convert', [$this, 'arraysKeyConvert']),
+            new \Twig_SimpleFunction('is_system_generated_email', [$this, 'isSystemGeneratedEmail']),
+            new \Twig_SimpleFunction('get_transcode_error_message_key', [$this, 'getTranscodeErrorMessageKeyByCode']),
+            new \Twig_SimpleFunction('uniqid', [$this, 'uniqid']),
+            new \Twig_SimpleFunction('get_days', [$this, 'getDays']),
+            new \Twig_SimpleFunction('is_question_lack', [$this, 'isQuestionLack']),
+            new \Twig_SimpleFunction('is_s2b2c_enabled', [$this, 'isS2B2CEnabled']),
+            new \Twig_SimpleFunction('s2b2c_has_behaviour_permission', [$this, 's2b2cHasBehaviourPermission']),
+        ];
+    }
+
+    /**
+     * @return bool
+     *              s2b2c.config由S2B2CProvider初始化，初始化后存在与否决定了是否开启了s2b2c
+     */
+    public function isS2B2CEnabled()
+    {
+        return !empty($this->biz['s2b2c.config']['enabled']);
+    }
+
+    /**
+     * @param $action
+     *
+     * @return bool
+     *              未定义的action 默认为有权限，true
+     */
+    public function s2b2cHasBehaviourPermission($action)
+    {
+        $behaviourPermissions = $this->getS2B2CFacadeService()->getBehaviourPermissions();
+
+        return isset($behaviourPermissions[$action]) ? $behaviourPermissions[$action] : true;
     }
 
     public function urlDecode($url)
     {
         return !empty($url) ? urldecode($url) : '';
+    }
+
+    public function s2b2cFileConvert($file)
+    {
+        return $this->getS2b2cFileSourceService()->getFullFileInfo($file);
     }
 
     public function getDays($days)
@@ -254,17 +289,17 @@ class WebExtension extends \Twig_Extension
     {
         $deviceDetector = new DeviceDetectorAdapter($userAgent);
 
-        return array(
+        return [
             'device' => $deviceDetector->getDevice(),
             'client' => $deviceDetector->getClient(),
             'os' => $deviceDetector->getOs(),
-        );
+        ];
     }
 
     public function arrayFilter($data, $filterName)
     {
         if (empty($data) || !is_array($data)) {
-            return array();
+            return [];
         }
 
         return array_filter($data, function ($value) use ($filterName) {
@@ -280,7 +315,7 @@ class WebExtension extends \Twig_Extension
 
     public function isShowMobilePage()
     {
-        $wapSetting = $this->getSetting('wap', array('version' => 0));
+        $wapSetting = $this->getSetting('wap', ['version' => 0]);
 
         if (empty($wapSetting['version'])) {
             return false;
@@ -345,7 +380,7 @@ class WebExtension extends \Twig_Extension
     public function arrayIndex($array, $key)
     {
         if (empty($array) || !is_array($array)) {
-            return array();
+            return [];
         }
 
         return ArrayToolkit::index($array, $key);
@@ -354,14 +389,14 @@ class WebExtension extends \Twig_Extension
     public function timeFormatterFilter($time)
     {
         if ($time <= 60) {
-            return $this->trans('site.twig.extension.time_interval.minute', array('%diff%' => 0));
+            return $this->trans('site.twig.extension.time_interval.minute', ['%diff%' => 0]);
         }
 
         if ($time <= 3600) {
-            return $this->trans('site.twig.extension.time_interval.minute', array('%diff%' => round($time / 60)));
+            return $this->trans('site.twig.extension.time_interval.minute', ['%diff%' => round($time / 60)]);
         }
 
-        return $this->trans('site.twig.extension.time_interval.hour_minute', array('%diff_hour%' => floor($time / 3600), '%diff_minute%' => round($time % 3600 / 60)));
+        return $this->trans('site.twig.extension.time_interval.hour_minute', ['%diff_hour%' => floor($time / 3600), '%diff_minute%' => round($time % 3600 / 60)]);
     }
 
     public function pluginUpdateNotify()
@@ -383,7 +418,7 @@ class WebExtension extends \Twig_Extension
 
                 return $notifies;
             },
-            array()
+            []
         );
 
         return $notifies;
@@ -391,7 +426,7 @@ class WebExtension extends \Twig_Extension
 
     public function getAdminRoles()
     {
-        return $this->createService('Role:RoleService')->searchRoles(array(), 'created', 0, 1000);
+        return $this->createService('Role:RoleService')->searchRoles([], 'created', 0, 1000);
     }
 
     public function getCdn($type = 'default')
@@ -442,25 +477,25 @@ class WebExtension extends \Twig_Extension
         $key = $this->getSetting('login_bind.weixinmob_key');
         $secret = $this->getSetting('login_bind.weixinmob_secret');
         if (empty($jsApiTicket)) {
-            $config = array('key' => $key, 'secret' => $secret);
+            $config = ['key' => $key, 'secret' => $secret];
             $weixinshare = new WeixinShare($config);
             $token = $weixinshare->getJsApiTicket();
             if (empty($token)) {
-                return array();
+                return [];
             }
 
             $jsApiTicket = $this->createService('User:TokenService')->makeToken(
                 'jsapi.ticket',
-                array('data' => $token, 'duration' => $token['expires_in'])
+                ['data' => $token, 'duration' => $token['expires_in']]
             );
         }
 
-        $config = array(
+        $config = [
             'appId' => $key,
             'timestamp' => time(),
             'nonceStr' => uniqid($prefix = 'edusoho'),
-            'jsApiList' => array('onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQZone', 'onMenuShareQQ'),
-        );
+            'jsApiList' => ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQZone', 'onMenuShareQQ'],
+        ];
 
         $jsapi_ticket = $jsApiTicket['data']['ticket'];
         $url = empty($url) ? $this->requestStack->getMasterRequest()->getUri() : $url;
@@ -507,14 +542,14 @@ class WebExtension extends \Twig_Extension
         if (isset($BaseUrl['query'])) {
             if (strstr($BaseUrl['query'], '&')) {
                 $parameter = explode('&', $BaseUrl['query']);
-                $parameters = array();
+                $parameters = [];
 
                 foreach ($parameter as $key => $value) {
                     $parameters[$key] = explode('=', $value);
                 }
             } else {
                 $parameter = explode('=', $BaseUrl['query']);
-                $parameters = array();
+                $parameters = [];
                 $parameters[0] = $parameter;
             }
         } else {
@@ -622,11 +657,11 @@ class WebExtension extends \Twig_Extension
             $condition['created_time_GTE'] = strtotime($startDateTime);
         }
 
-        $condition = array(
+        $condition = [
             'user_id' => $userId,
             'type' => $type,
             'amount_type' => 'coin',
-        );
+        ];
         $amount = $this->getAccountProxyService()->sumColumnByConditions('amount', $condition);
 
         return $amount;
@@ -715,8 +750,8 @@ class WebExtension extends \Twig_Extension
         $theme = $this->getSetting('theme.uri', 'default');
 
         $plugins = $this->container->get('kernel')->getPlugins();
-        $names = array();
-        $newPluginNames = array();
+        $names = [];
+        $newPluginNames = [];
 
         foreach ($plugins as $plugin) {
             if (is_array($plugin)) {
@@ -745,10 +780,10 @@ class WebExtension extends \Twig_Extension
         $names[] = 'permission';
         $names[] = 'org';
 
-        $paths = array(
+        $paths = [
             'common' => 'common',
             'theme' => "{$basePath}/themes/{$theme}/js",
-        );
+        ];
 
         foreach ($names as $name) {
             $name = strtolower($name);
@@ -772,13 +807,7 @@ class WebExtension extends \Twig_Extension
 
         foreach ($keys as $key) {
             if (!isset($value[$key])) {
-                throw new \InvalidArgumentException(
-                    sprintf(
-                        'Key `%s` is not in context with %s',
-                        $key,
-                        implode(array_keys($context), ', ')
-                    )
-                );
+                throw new \InvalidArgumentException(sprintf('Key `%s` is not in context with %s', $key, implode(array_keys($context), ', ')));
             }
 
             $value = $value[$key];
@@ -791,7 +820,7 @@ class WebExtension extends \Twig_Extension
     {
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter(
             'enabled_features'
-        ) : array();
+        ) : [];
 
         return in_array($feature, $features);
     }
@@ -853,19 +882,19 @@ class WebExtension extends \Twig_Extension
         }
 
         if ($diff < 60) {
-            return $this->trans('site.twig.extension.smarttime.previous_second', array('%diff%' => $diff));
+            return $this->trans('site.twig.extension.smarttime.previous_second', ['%diff%' => $diff]);
         }
 
         if ($diff < 3600) {
-            return $this->trans('site.twig.extension.smarttime.previous_minute', array('%diff%' => round($diff / 60)));
+            return $this->trans('site.twig.extension.smarttime.previous_minute', ['%diff%' => round($diff / 60)]);
         }
 
         if ($diff < 86400) {
-            return $this->trans('site.twig.extension.smarttime.previous_hour', array('%diff%' => round($diff / 3600)));
+            return $this->trans('site.twig.extension.smarttime.previous_hour', ['%diff%' => round($diff / 3600)]);
         }
 
         if ($diff < 2592000) {
-            return $this->trans('site.twig.extension.smarttime.previous_day', array('%diff%' => round($diff / 86400)));
+            return $this->trans('site.twig.extension.smarttime.previous_day', ['%diff%' => round($diff / 86400)]);
         }
 
         if ($diff < 31536000) {
@@ -877,7 +906,7 @@ class WebExtension extends \Twig_Extension
 
     public function remainTimeFilter($value, $timeType = '')
     {
-        $remainTime = array();
+        $remainTime = [];
         $remain = $value - time();
 
         if ($remain <= 0 && empty($timeType)) {
@@ -903,7 +932,7 @@ class WebExtension extends \Twig_Extension
 
     public function getCountdownTime($value)
     {
-        $countdown = array('days' => 0, 'hours' => 0, 'minutes' => 0, 'seconds' => 0);
+        $countdown = ['days' => 0, 'hours' => 0, 'minutes' => 0, 'seconds' => 0];
 
         $remain = $value - time();
 
@@ -942,7 +971,7 @@ class WebExtension extends \Twig_Extension
             return $seconds.$this->trans('site.date.second');
         }
 
-        return $this->trans('site.twig.extension.time_interval.minute_second', array('%diff_minute%' => $minutes, '%diff_second%' => $seconds));
+        return $this->trans('site.twig.extension.time_interval.minute_second', ['%diff_minute%' => $minutes, '%diff_second%' => $seconds]);
     }
 
     public function timeRangeFilter($start, $end)
@@ -1047,11 +1076,11 @@ class WebExtension extends \Twig_Extension
 
     public function tagsHtmlFilter($tags, $class = '')
     {
-        $links = array();
+        $links = [];
         $tags = $this->createService('Taxonomy:TagService')->findTagsByIds($tags);
 
         foreach ($tags as $tag) {
-            $url = $this->container->get('router')->generate('course_explore', array('tagId' => $tag['id']));
+            $url = $this->container->get('router')->generate('course_explore', ['tagId' => $tag['id']]);
             $links[] = "<a href=\"{$url}\" class=\"{$class}\">{$tag['name']}</a>";
         }
 
@@ -1110,7 +1139,7 @@ class WebExtension extends \Twig_Extension
             $publicUrlpath = 'assets/img/default/';
             $url = $assets->getUrl($publicUrlpath.$size.$category);
 
-            $defaultSetting = $this->createService('System:SettingService')->get('default', array());
+            $defaultSetting = $this->createService('System:SettingService')->get('default', []);
 
             $key = 'default'.ucfirst($category);
             $fileName = $key.'FileName';
@@ -1173,7 +1202,7 @@ class WebExtension extends \Twig_Extension
     public function getSystemDefaultPath($defaultKey, $absolute = false)
     {
         $assets = $this->container->get('assets.packages');
-        $defaultSetting = $this->getSetting('default', array());
+        $defaultSetting = $this->getSetting('default', []);
 
         if (array_key_exists($defaultKey, $defaultSetting)
             && $defaultSetting[$defaultKey]
@@ -1197,7 +1226,7 @@ class WebExtension extends \Twig_Extension
 
     public function loadScript($js)
     {
-        $js = is_array($js) ? $js : array($js);
+        $js = is_array($js) ? $js : [$js];
 
         if ($this->pageScripts) {
             $this->pageScripts = array_merge($this->pageScripts, $js);
@@ -1209,7 +1238,7 @@ class WebExtension extends \Twig_Extension
     public function exportScripts()
     {
         if (empty($this->pageScripts)) {
-            $this->pageScripts = array();
+            $this->pageScripts = [];
         }
 
         return array_values(array_unique($this->pageScripts));
@@ -1256,7 +1285,7 @@ class WebExtension extends \Twig_Extension
         $assets = $this->container->get('assets.packages');
 
         if (empty($path)) {
-            $defaultSetting = $this->getSetting('default', array());
+            $defaultSetting = $this->getSetting('default', []);
 
             if ((('course.png' == $defaultKey && array_key_exists(
                             'defaultCoursePicture',
@@ -1317,7 +1346,7 @@ class WebExtension extends \Twig_Extension
     public function fileSizeFilter($size)
     {
         $currentValue = $currentUnit = null;
-        $unitExps = array('B' => 0, 'KB' => 1, 'MB' => 2, 'GB' => 3);
+        $unitExps = ['B' => 0, 'KB' => 1, 'MB' => 2, 'GB' => 3];
 
         foreach ($unitExps as $unit => $exp) {
             $divisor = pow(1024, $exp);
@@ -1339,7 +1368,7 @@ class WebExtension extends \Twig_Extension
         }
 
         $currentValue = $currentUnit = null;
-        $unitExps = array('千' => 3, '万' => 4, '亿' => 8);
+        $unitExps = ['千' => 3, '万' => 4, '亿' => 8];
 
         foreach ($unitExps as $unit => $exp) {
             $divisor = pow(10, $exp);
@@ -1376,7 +1405,7 @@ class WebExtension extends \Twig_Extension
     {
         $text = strip_tags($text, '<p>');
 
-        $text = str_replace(array("\n", "\r", "\t"), '', $text);
+        $text = str_replace(["\n", "\r", "\t"], '', $text);
         $text = str_replace('&nbsp;', ' ', $text);
         $text = trim($text);
 
@@ -1387,7 +1416,7 @@ class WebExtension extends \Twig_Extension
     {
         $text = strip_tags($text);
 
-        $text = str_replace(array("\n", "\r", "\t"), '', $text);
+        $text = str_replace(["\n", "\r", "\t"], '', $text);
         $text = str_replace('&nbsp;', ' ', $text);
         $text = trim($text);
 
@@ -1405,7 +1434,7 @@ class WebExtension extends \Twig_Extension
     {
         $text = strip_tags($text);
 
-        $text = str_replace(array("\n", "\r", "\t"), '', $text);
+        $text = str_replace(["\n", "\r", "\t"], '', $text);
         $text = str_replace('&nbsp;', ' ', $text);
         $text = trim($text);
 
@@ -1544,7 +1573,7 @@ class WebExtension extends \Twig_Extension
         return $biz['html_helper']->purify($html, $trusted);
     }
 
-    public function atFilter($text, $ats = array())
+    public function atFilter($text, $ats = [])
     {
         if (empty($ats) || !is_array($ats)) {
             return $text;
@@ -1553,7 +1582,7 @@ class WebExtension extends \Twig_Extension
         $router = $this->container->get('router');
 
         foreach ($ats as $nickname => $userId) {
-            $path = $router->generate('user_show', array('id' => $userId));
+            $path = $router->generate('user_show', ['id' => $userId]);
             $html = "<a href=\"{$path}\" data-uid=\"{$userId}\" target=\"_blank\">@{$nickname}</a>";
 
             $text = preg_replace("/@{$nickname}/ui", $html, $text);
@@ -1578,7 +1607,7 @@ class WebExtension extends \Twig_Extension
 
     public function getOrderPayment($order, $default = null)
     {
-        $coinSettings = $this->createService('System:SettingService')->get('coin', array());
+        $coinSettings = $this->createService('System:SettingService')->get('coin', []);
 
         if (!isset($coinSettings['price_type'])) {
             $coinSettings['price_type'] = 'RMB';
@@ -1774,7 +1803,7 @@ class WebExtension extends \Twig_Extension
         return ArrayToolkit::column($array, $column);
     }
 
-    private function trans($key, $parameters = array())
+    private function trans($key, $parameters = [])
     {
         return $this->container->get('translator')->trans($key, $parameters);
     }
@@ -1784,8 +1813,8 @@ class WebExtension extends \Twig_Extension
         $bothEnds = $ltrim && $rtrim;
 
         $charClassInner = preg_replace(
-            array('/[\^\-\]\\\]/S', '/\\\{4}/S'),
-            array('\\\\\\0', '\\'),
+            ['/[\^\-\]\\\]/S', '/\\\{4}/S'],
+            ['\\\\\\0', '\\'],
             $charlist
         );
 
@@ -1813,7 +1842,7 @@ class WebExtension extends \Twig_Extension
     {
         $dress = explode('@', $email);
         $dress = strtolower($dress[1]);
-        $emailAddressMap = array(
+        $emailAddressMap = [
             'gmail.com' => 'mail.google.com',
             'vip.qq.com' => 'mail.qq.com',
             'vip.163.com' => 'vip.163.com',
@@ -1824,7 +1853,7 @@ class WebExtension extends \Twig_Extension
             '139.com' => 'mail.10086.cn',
             '126.com' => 'www.126.com',
             'yeah.net' => 'yeah.net',
-        );
+        ];
 
         if (!empty($emailAddressMap[$dress])) {
             return 'http://'.$emailAddressMap[$dress];
@@ -1837,7 +1866,7 @@ class WebExtension extends \Twig_Extension
     {
         $cdnHost = $this->getSetting('developer.cloud_sdk_cdn') ?: 'service-cdn.qiqiuyun.net';
 
-        $paths = array(
+        $paths = [
             'player' => 'js-sdk/sdk-v1.js',
             'newPlayer' => 'js-sdk/sdk-v2.js',
             'video' => 'js-sdk/video-player/sdk-v1.js',
@@ -1846,7 +1875,7 @@ class WebExtension extends \Twig_Extension
             'old_document' => 'js-sdk/document-player/v7/viewer.html',
             'faq' => 'js-sdk/faq/sdk-v1.js',
             'audio' => 'js-sdk/audio-player/sdk-v1.js',
-        );
+        ];
 
         if (isset($paths[$type])) {
             $path = $paths[$type];
@@ -1896,7 +1925,7 @@ class WebExtension extends \Twig_Extension
             return true;
         }
 
-        $messageSetting = $this->getSetting('message', array());
+        $messageSetting = $this->getSetting('message', []);
 
         if (empty($messageSetting['teacherToStudent']) && $this->isTeacher($user['roles']) && $this->isOnlyStudent($toUser['roles'])) {
             return false;
@@ -1953,12 +1982,56 @@ class WebExtension extends \Twig_Extension
     public function isQuestionLack($activity)
     {
         try {
-            $this->getAssessmentService()->drawItems($activity['ext']['drawCondition']['range'], array($activity['ext']['drawCondition']['section']));
+            $this->getAssessmentService()->drawItems($activity['ext']['drawCondition']['range'], [$activity['ext']['drawCondition']['section']]);
 
             return false;
         } catch (\Exception $e) {
             return true;
         }
+    }
+
+    public function canModifySiteName()
+    {
+        $merchantSetting = $this->getSettingService()->get('merchant_setting');
+
+        if (empty($merchantSetting['coop_mode']) || empty($merchantSetting['auth_node'])) {
+            return true;
+        }
+
+        return in_array($merchantSetting['coop_mode'], $this->allowedCoopMode) || !empty($merchantSetting['auth_node']['title']);
+    }
+
+    public function canModifySiteUrl()
+    {
+        $merchantSetting = $this->getSettingService()->get('merchant_setting');
+
+        if (empty($merchantSetting['coop_mode']) || empty($merchantSetting['auth_node'])) {
+            return true;
+        }
+
+        return empty($merchantSetting['coop_mode']) ? true : in_array($merchantSetting['coop_mode'], $this->allowedCoopMode);
+    }
+
+    public function canModifySiteLogo()
+    {
+        $merchantSetting = $this->getSettingService()->get('merchant_setting');
+
+        if (empty($merchantSetting['coop_mode']) || empty($merchantSetting['auth_node'])) {
+            return true;
+        }
+
+        return in_array($merchantSetting['coop_mode'], $this->allowedCoopMode) || !empty($merchantSetting['auth_node']['logo']);
+    }
+
+    public function canModifySiteFavicon()
+    {
+        $merchantSetting = $this->getSettingService()->get('merchant_setting');
+
+        if (empty($merchantSetting['coop_mode']) || empty($merchantSetting['auth_node'])) {
+            return true;
+        }
+
+        return in_array($merchantSetting['coop_mode'], $this->allowedCoopMode) || !empty($merchantSetting['auth_node']['favicon']);
     }
 
     /**
@@ -1975,6 +2048,30 @@ class WebExtension extends \Twig_Extension
     protected function getTestPaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->createService('S2B2C:S2B2CFacadeService');
+    }
+
+    /**
+     * @return FileSourceService
+     */
+    protected function getS2b2cFileSourceService()
+    {
+        return $this->createService('S2B2C:FileSourceService');
     }
 
     /**

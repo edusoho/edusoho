@@ -2,19 +2,19 @@
 
 namespace AppBundle\Controller\Course;
 
-use Biz\Activity\ActivityException;
-use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
-use Biz\Course\Service\CourseSetService;
+use Biz\Activity\ActivityException;
 use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\HomeworkActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
-use Symfony\Component\HttpFoundation\Request;
-use Biz\Activity\Service\TestpaperActivityService;
-use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
-use Biz\Activity\Service\HomeworkActivityService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Symfony\Component\HttpFoundation\Request;
 
 class TestpaperManageController extends BaseController
 {
@@ -22,12 +22,12 @@ class TestpaperManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
-        return $this->forward('AppBundle:Testpaper/Manage:check', array(
+        return $this->forward('AppBundle:Testpaper/Manage:check', [
             'request' => $request,
             'answerRecordId' => $answerRecordId,
             'source' => 'course',
             'targetId' => $course['id'],
-        ));
+        ]);
     }
 
     /**
@@ -37,12 +37,12 @@ class TestpaperManageController extends BaseController
     {
         $result = $this->getTestpaperService()->getTestpaperResult($resultId);
 
-        return $this->forward('AppBundle:Course/TestpaperManage:check', array(
+        return $this->forward('AppBundle:Course/TestpaperManage:check', [
             'request' => $request,
             'resultId' => $result['id'],
             'source' => 'course',
             'targetId' => $result['courseId'],
-        ));
+        ]);
     }
 
     public function checkListAction(Request $request, $id)
@@ -52,11 +52,11 @@ class TestpaperManageController extends BaseController
         $user = $this->getUser();
         $isTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
 
-        return $this->render('course-manage/testpaper-check/check-list.html.twig', array(
+        return $this->render('course-manage/testpaper-check/check-list.html.twig', [
             'courseSet' => $courseSet,
             'course' => $course,
             'isTeacher' => $isTeacher,
-        ));
+        ]);
     }
 
     public function resultListAction(Request $request, $id, $testpaperId, $activityId)
@@ -78,14 +78,14 @@ class TestpaperManageController extends BaseController
 
         $isTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
 
-        return $this->render('course-manage/testpaper-check/result-list.html.twig', array(
+        return $this->render('course-manage/testpaper-check/result-list.html.twig', [
             'course' => $course,
             'courseSet' => $courseSet,
             'testpaper' => $testpaper,
             'isTeacher' => $isTeacher,
             'activityId' => $activity['id'],
             'activity' => $activity,
-        ));
+        ]);
     }
 
     public function resultGraphAction(Request $request, $id, $activityId)
@@ -103,9 +103,9 @@ class TestpaperManageController extends BaseController
             $controller = 'AppBundle:Testpaper/Manage:resultGraph';
         }
 
-        return $this->forward($controller, array(
+        return $this->forward($controller, [
             'activityId' => $activityId,
-        ));
+        ]);
     }
 
     public function resultAnalysisAction(Request $request, $id, $activityId)
@@ -113,7 +113,7 @@ class TestpaperManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($id);
 
         $activity = $this->getActivityService()->getActivity($activityId);
-        if (empty($activity) || !in_array($activity['mediaType'], array('homework', 'testpaper'))) {
+        if (empty($activity) || !in_array($activity['mediaType'], ['homework', 'testpaper'])) {
             return $this->createMessageResponse('error', 'Argument invalid');
         }
 
@@ -123,12 +123,12 @@ class TestpaperManageController extends BaseController
             $controller = 'AppBundle:Testpaper/Manage:resultAnalysis';
         }
 
-        return $this->forward($controller, array(
+        return $this->forward($controller, [
             'activityId' => $activityId,
             'targetId' => $course['id'],
             'targetType' => 'course',
             'studentNum' => $course['studentNum'],
-        ));
+        ]);
     }
 
     public function resultNextCheckAction($id, $activityId)
@@ -146,12 +146,12 @@ class TestpaperManageController extends BaseController
         if (empty($answerRecord)) {
             $route = $this->getRedirectRoute('list', $activity['mediaType']);
 
-            return $this->redirect($this->generateUrl($route, array('id' => $id)));
+            return $this->redirect($this->generateUrl($route, ['id' => $id]));
         }
 
         $route = $this->getRedirectRoute('check', $activity['mediaType']);
 
-        return $this->redirect($this->generateUrl($route, array('id' => $id, 'answerRecordId' => $answerRecord['id'])));
+        return $this->redirect($this->generateUrl($route, ['id' => $id, 'answerRecordId' => $answerRecord['id']]));
     }
 
     protected function getAnswerSceneByActivity($activity)
@@ -171,16 +171,16 @@ class TestpaperManageController extends BaseController
 
     protected function getRedirectRoute($mode, $type)
     {
-        $routes = array(
-            'list' => array(
+        $routes = [
+            'list' => [
                 'testpaper' => 'course_manage_testpaper_check_list',
                 'homework' => 'course_manage_homework_check_list',
-            ),
-            'check' => array(
+            ],
+            'check' => [
                 'testpaper' => 'course_manage_testpaper_check',
                 'homework' => 'course_manage_homework_check',
-            ),
-        );
+            ],
+        ];
 
         return $routes[$mode][$type];
     }

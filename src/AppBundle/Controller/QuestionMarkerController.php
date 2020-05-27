@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use Biz\Accessor\AccessorInterface;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\CourseException;
@@ -12,8 +14,6 @@ use Biz\Marker\Service\QuestionMarkerResultService;
 use Biz\Marker\Service\QuestionMarkerService;
 use Biz\Question\QuestionException;
 use Biz\Question\Service\QuestionService;
-use AppBundle\Common\Paginator;
-use AppBundle\Common\ArrayToolkit;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
@@ -35,7 +35,7 @@ class QuestionMarkerController extends BaseController
                 $headerLength = $videoHeaderFile['length'];
             }
         }
-        $results = array();
+        $results = [];
 
         foreach ($questionMakers as $index => $questionMaker) {
             if (empty($items[$questionMaker['questionId']]) || empty($items[$questionMaker['questionId']]['questions'])) {
@@ -43,10 +43,10 @@ class QuestionMarkerController extends BaseController
             }
             $item = $items[$questionMaker['questionId']];
             $question = array_shift($item['questions']);
-            $isChoice = in_array($item['type'], array('choice', 'single_choice', 'uncertain_choice'));
+            $isChoice = in_array($item['type'], ['choice', 'single_choice', 'uncertain_choice']);
             $isFill = 'fill' == $item['type'];
 
-            $result = array();
+            $result = [];
             $result['id'] = $questionMaker['id'];
             $result['questionMarkerId'] = $questionMaker['id'];
             $result['markerId'] = $questionMaker['markerId'];
@@ -82,7 +82,6 @@ class QuestionMarkerController extends BaseController
     /**
      * 视频弹题预览.
      *
-     * @param Request $request
      * @param $courseId
      * @param $id
      *
@@ -107,9 +106,9 @@ class QuestionMarkerController extends BaseController
 
         return $this->render(
             'question-manage/preview-modal.html.twig',
-            array(
+            [
                 'item' => $item,
-            )
+            ]
         );
     }
 
@@ -135,7 +134,7 @@ class QuestionMarkerController extends BaseController
         }
 
         $data = $request->request->all();
-        $data = isset($data['questionIds']) ? $data['questionIds'] : array();
+        $data = isset($data['questionIds']) ? $data['questionIds'] : [];
         $result = $this->getQuestionMarkerService()->sortQuestionMarkers($data);
 
         return $this->createJsonResponse($result);
@@ -207,7 +206,7 @@ class QuestionMarkerController extends BaseController
         $data['userId'] = $user['id'];
         $this->getQuestionMarkerResultService()->finishQuestionMarker($data['questionMarkerId'], $data);
 
-        return $this->createJsonResponse(array('success' => 1));
+        return $this->createJsonResponse(['success' => 1]);
     }
 
     public function questionAction(Request $request, $courseId, $taskId)
@@ -217,17 +216,17 @@ class QuestionMarkerController extends BaseController
         $video = $this->getActivityService()->getActivity($task['activityId'], true);
 
         if ($course['id'] != $task['courseId']) {
-            $task = $video = array();
+            $task = $video = [];
         }
 
         return $this->render(
             'marker/question.html.twig',
-            array(
+            [
                 'course' => $course,
                 'task' => $task,
                 'video' => $video,
                 'questionBankChoices' => $this->getQuestionBankChoices(),
-            )
+            ]
         );
     }
 
@@ -241,12 +240,12 @@ class QuestionMarkerController extends BaseController
 
         return $this->render(
             'marker/question-tr.html.twig',
-            array(
+            [
                 'course' => $course,
                 'task' => $task,
                 'paginator' => $paginator,
                 'items' => $items,
-            )
+            ]
         );
     }
 
@@ -254,7 +253,7 @@ class QuestionMarkerController extends BaseController
     {
         $questionBanks = $this->getQuestionBankService()->findUserManageBanks();
 
-        $choices = array();
+        $choices = [];
         foreach ($questionBanks as &$questionBank) {
             $choices[$questionBank['id']] = $questionBank['name'];
         }
@@ -267,17 +266,17 @@ class QuestionMarkerController extends BaseController
         $fields = $request->request->all();
 
         if (empty($fields['bankId'])) {
-            return array(new Paginator($request, 0), array());
+            return [new Paginator($request, 0), []];
         }
         if (!$this->getQuestionBankService()->canManageBank($fields['bankId'])) {
             $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
         }
         $bank = $this->getQuestionBankService()->getQuestionBank($fields['bankId']);
-        $conditions = array(
+        $conditions = [
             'bank_id' => $bank['itemBankId'],
-            'types' => array('determine', 'single_choice', 'uncertain_choice', 'fill', 'choice'),
+            'types' => ['determine', 'single_choice', 'uncertain_choice', 'fill', 'choice'],
             'category_id' => $fields['categoryId'],
-        );
+        ];
         if (!empty($fields['keyword'])) {
             $conditions['material'] = $fields['keyword'];
         }
@@ -290,7 +289,7 @@ class QuestionMarkerController extends BaseController
 
         $items = $this->getItemService()->searchItems(
             $conditions,
-            array('created_time' => 'DESC'),
+            ['created_time' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -309,7 +308,7 @@ class QuestionMarkerController extends BaseController
             $items[$key]['exist'] = in_array($item['id'], $questionMarkerIds) ? true : false;
         }
 
-        return array($paginator, $items);
+        return [$paginator, $items];
     }
 
     protected function tryManageQuestionMarker()

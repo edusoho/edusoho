@@ -12,32 +12,32 @@ use Codeages\Biz\ItemBank\Item\AnswerMode\UncertainChoiceAnswerMode;
 
 class TestpaperWrapper
 {
-    protected $modeToType = array(
+    protected $modeToType = [
         SingleChoiceAnswerMode::NAME => 'single_choice',
         ChoiceAnswerMode::NAME => 'choice',
         UncertainChoiceAnswerMode::NAME => 'uncertain_choice',
         TrueFalseAnswerMode::NAME => 'determine',
         TextAnswerMode::NAME => 'fill',
         RichTextAnswerMode::NAME => 'essay',
-    );
+    ];
 
-    protected $answerStatus = array(
+    protected $answerStatus = [
         'right' => 'right',
         'wrong' => 'wrong',
         'no_answer' => 'noAnswer',
         'part_right' => 'partRight',
         'reviewing' => 'none',
-    );
+    ];
 
-    protected $questionReports = array();
+    protected $questionReports = [];
 
     public function __construct()
     {
     }
 
-    public function wrapTestpaper($assessment, $scene = array())
+    public function wrapTestpaper($assessment, $scene = [])
     {
-        $testpaper = array(
+        $testpaper = [
             'id' => $assessment['id'],
             'name' => $assessment['name'],
             'description' => $assessment['description'],
@@ -49,8 +49,8 @@ class TestpaperWrapper
             'createdTime' => $assessment['created_time'],
             'updatedUserId' => $assessment['updated_user_id'],
             'updatedTime' => $assessment['updated_time'],
-            'metas' => array(
-                'counts' => array(
+            'metas' => [
+                'counts' => [
                     'single_choice' => '0',
                     'choice' => '0',
                     'essay' => '0',
@@ -58,8 +58,8 @@ class TestpaperWrapper
                     'determine' => '0',
                     'fill' => '0',
                     'material' => '0',
-                ),
-                'scores' => array(
+                ],
+                'scores' => [
                     'single_choice' => '0',
                     'choice' => '0',
                     'essay' => '0',
@@ -67,10 +67,10 @@ class TestpaperWrapper
                     'determine' => '0',
                     'fill' => '0',
                     'material' => '0',
-                ),
+                ],
                 'totalScore' => $assessment['total_score'],
-            ),
-        );
+            ],
+        ];
         foreach ($assessment['sections'] as $section) {
             foreach ($section['items'] as $item) {
                 if (1 != $item['isDelete']) {
@@ -83,13 +83,13 @@ class TestpaperWrapper
         return $testpaper;
     }
 
-    public function wrapTestpaperResult($record, $assessment, $scene, $report = array())
+    public function wrapTestpaperResult($record, $assessment, $scene, $report = [])
     {
         if (empty($record)) {
-            return array();
+            return [];
         }
 
-        return array(
+        return [
             'id' => $record['id'],
             'paperName' => $assessment['name'],
             'testId' => $assessment['id'],
@@ -104,17 +104,17 @@ class TestpaperWrapper
             'beginTime' => $record['begin_time'],
             'endTime' => $record['end_time'],
             'updateTime' => $record['updated_time'],
-            'metas' => array(),
+            'metas' => [],
             'status' => $record['status'],
             'checkTeacherId' => empty($report['review_user_id']) ? '0' : $report['review_user_id'],
             'checkedTime' => empty($report['review_time']) ? '0' : $report['review_time'],
             'usedTime' => $record['used_time'],
-        );
+        ];
     }
 
-    public function wrapTestpaperItems($assessment, $questionReports = array())
+    public function wrapTestpaperItems($assessment, $questionReports = [])
     {
-        $items = array();
+        $items = [];
         $this->questionReports = ArrayToolkit::index($questionReports, 'question_id');
 
         foreach ($assessment['sections'] as $section) {
@@ -131,21 +131,21 @@ class TestpaperWrapper
     protected function wrapItem($item)
     {
         if ('material' == $item['type']) {
-            $question = array(
+            $question = [
                 'id' => $item['id'],
                 'type' => 'material',
                 'questionType' => 'material',
                 'stem' => $item['material'],
                 'score' => empty($item['score']) ? '0' : strval($item['score']),
-                'metas' => array(),
+                'metas' => [],
                 'difficulty' => $item['difficulty'],
                 'subCount' => strval(count($item['questions'])),
                 'seq' => strval($item['seq']),
                 'categoryId' => $item['category_id'],
                 'analysis' => $item['analysis'],
                 'parentId' => '0',
-                'subs' => array(),
-            );
+                'subs' => [],
+            ];
             foreach ($item['questions'] as $itemQuestion) {
                 if (1 != $itemQuestion['isDelete']) {
                     $question['subs'][$itemQuestion['id']] = $this->wrapQuestion($item, $itemQuestion);
@@ -160,7 +160,7 @@ class TestpaperWrapper
 
     protected function wrapQuestion($item, $itemQuestion)
     {
-        $question = array(
+        $question = [
             'id' => $itemQuestion['id'],
             'type' => $this->modeToType[$itemQuestion['answer_mode']],
             'questionType' => $this->modeToType[$itemQuestion['answer_mode']],
@@ -174,8 +174,8 @@ class TestpaperWrapper
             'categoryId' => $item['category_id'],
             'analysis' => $itemQuestion['analysis'],
             'parentId' => '0',
-            'testResult' => array(),
-        );
+            'testResult' => [],
+        ];
 
         $question['answer'] = $this->convertAnswer($itemQuestion['answer'], $question);
 
@@ -189,7 +189,7 @@ class TestpaperWrapper
 
         if (!empty($this->questionReports[$question['id']])) {
             $questionReport = $this->questionReports[$question['id']];
-            $question['testResult'] = array(
+            $question['testResult'] = [
                 'id' => $questionReport['id'],
                 'testId' => $questionReport['assessment_id'],
                 'resultId' => $questionReport['answer_record_id'],
@@ -198,7 +198,7 @@ class TestpaperWrapper
                 'score' => $questionReport['score'],
                 'answer' => $this->convertAnswer($questionReport['response'], $question),
                 'teacherSay' => $questionReport['comment'],
-            );
+            ];
         }
 
         return $question;
@@ -215,7 +215,7 @@ class TestpaperWrapper
 
     protected function convertAnswer($answer, $question)
     {
-        if (in_array($question['type'], array('uncertain_choice', 'single_choice', 'choice'))) {
+        if (in_array($question['type'], ['uncertain_choice', 'single_choice', 'choice'])) {
             foreach ($answer as &$answerItem) {
                 if ('' !== $answerItem) {
                     $answerItem = (string) (ord($answerItem) - 65);
@@ -238,8 +238,8 @@ class TestpaperWrapper
 
     protected function convertMetas($question)
     {
-        $metas = array();
-        if (in_array($this->modeToType[$question['answer_mode']], array('uncertain_choice', 'single_choice', 'choice'))) {
+        $metas = [];
+        if (in_array($this->modeToType[$question['answer_mode']], ['uncertain_choice', 'single_choice', 'choice'])) {
             foreach ($question['response_points'] as $points) {
                 $point = array_shift($points);
                 if (!empty($point['text'])) {
