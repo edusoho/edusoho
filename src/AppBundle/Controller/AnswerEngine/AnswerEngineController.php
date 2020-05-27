@@ -186,7 +186,7 @@ class AnswerEngineController extends BaseController
     {
         foreach ($assessment['sections'] as &$section) {
             foreach ($section['items'] as &$item) {
-                if ($item['type'] != 'material') {
+                if ('material' != $item['type']) {
                     $item['material'] = '';
                 }
                 foreach ($item['questions'] as &$question) {
