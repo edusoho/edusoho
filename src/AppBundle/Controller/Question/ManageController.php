@@ -2,15 +2,15 @@
 
 namespace AppBundle\Controller\Question;
 
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Controller\BaseController;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Question\Service\QuestionService;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\TokenService;
-use AppBundle\Common\ArrayToolkit;
-use Biz\Course\Service\CourseService;
-use AppBundle\Controller\BaseController;
-use Biz\Course\Service\CourseSetService;
-use Biz\Question\Service\QuestionService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -22,22 +22,22 @@ class ManageController extends BaseController
 
         $sync = $request->query->get('sync');
         if ($courseSet['locked'] && empty($sync)) {
-            return $this->redirectToRoute('course_set_manage_sync', array(
+            return $this->redirectToRoute('course_set_manage_sync', [
                 'id' => $id,
                 'sideNav' => 'question',
-            ));
+            ]);
         }
 
-        return $this->render('question-manage/index.html.twig', array(
+        return $this->render('question-manage/index.html.twig', [
             'courseSet' => $courseSet,
-        ));
+        ]);
     }
 
     public function showTasksAction(Request $request, $courseSetId)
     {
         $courseId = $request->request->get('courseId', 0);
         if (empty($courseId)) {
-            return $this->createJsonResponse(array());
+            return $this->createJsonResponse([]);
         }
 
         $this->getCourseService()->tryManageCourse($courseId);
@@ -63,11 +63,11 @@ class ManageController extends BaseController
 
     public function reEditAction(Request $request, $token)
     {
-        return $this->forward('AppBundle:Question/QuestionParser:reEdit', array(
+        return $this->forward('AppBundle:Question/QuestionParser:reEdit', [
             'request' => $request,
             'token' => $token,
             'type' => 'item',
-        ));
+        ]);
     }
 
     public function saveImportQuestionsAction(Request $request, $token)
@@ -81,7 +81,7 @@ class ManageController extends BaseController
         $postData = json_decode($request->getContent(), true);
         $this->getItemService()->importItems($postData['items'], $questionBank['itemBankId']);
 
-        return $this->createJsonResponse(array('goto' => $this->generateUrl('question_bank_manage_question_list', ['id' => $data['questionBankId']])));
+        return $this->createJsonResponse(['goto' => $this->generateUrl('question_bank_manage_question_list', ['id' => $data['questionBankId']])]);
     }
 
     /**

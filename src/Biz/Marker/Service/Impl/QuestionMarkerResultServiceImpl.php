@@ -29,18 +29,18 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
 
     public function finishQuestionMarker($questionMarkerId, $fields)
     {
-        $fields = ArrayToolkit::parts($fields, array('answer', 'userId', 'taskId'));
+        $fields = ArrayToolkit::parts($fields, ['answer', 'userId', 'taskId']);
 
         $questionMarker = $this->getQuestionMarkerService()->getQuestionMarker($questionMarkerId);
         $item = $this->getItemService()->getItemWithQuestions($questionMarker['questionId']);
-        $itemResponse = array(
+        $itemResponse = [
             'item_id' => $item['id'],
-            'question_responses' => array(array(
+            'question_responses' => [[
                 'question_id' => empty($item['questions']) ? 0 : array_shift($item['questions'])['id'],
                 'response' => $fields['answer'],
-            )),
-        );
-        $reviewResult = $this->getItemService()->review(array($itemResponse));
+            ]],
+        ];
+        $reviewResult = $this->getItemService()->review([$itemResponse]);
 
         $fields['status'] = $reviewResult[0]['result'];
         $fields['markerId'] = $questionMarker['markerId'];

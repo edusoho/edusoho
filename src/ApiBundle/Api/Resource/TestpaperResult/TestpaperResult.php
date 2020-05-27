@@ -6,12 +6,10 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Question\Service\QuestionService;
 use Biz\System\Service\SettingService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
 use Biz\Testpaper\Wrapper\AssessmentResponseWrapper;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
@@ -23,7 +21,6 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Codeages\Biz\ItemBank\Item\Service\QuestionFavoriteService;
-use PHPUnit\Util\Test;
 
 class TestpaperResult extends AbstractResource
 {
@@ -38,7 +35,7 @@ class TestpaperResult extends AbstractResource
         $data = $request->request->all();
         $testpaperRecord = $this->getAnswerRecordService()->get($data['resultId']);
 
-        if (!empty($testpaperRecord) && !in_array($testpaperRecord['status'], array('doing', 'paused'))) {
+        if (!empty($testpaperRecord) && !in_array($testpaperRecord['status'], ['doing', 'paused'])) {
             throw TestpaperException::FORBIDDEN_DUPLICATE_COMMIT();
         }
 
@@ -68,15 +65,15 @@ class TestpaperResult extends AbstractResource
 
         $testpaper['metas']['question_type_seq'] = array_keys($items);
 
-        return array(
+        return [
             'testpaper' => $testpaper,
             'testpaperResult' => $testpaperWrapper->wrapTestpaperResult($testpaperRecord, $assessment, $scene, $answerReport),
-        );
+        ];
     }
 
     public function get(ApiRequest $request, $resultId)
     {
-        $questionSetting = $this->getSettingService()->get('questions', array());
+        $questionSetting = $this->getSettingService()->get('questions', []);
 
         $answerShowMode = empty($questionSetting['testpaper_answers_show_mode']) ? 'submitted' : $questionSetting['testpaper_answers_show_mode'];
 
@@ -123,38 +120,38 @@ class TestpaperResult extends AbstractResource
         $answerReport = $this->getAnswerReportService()->get($testpaperRecord['answer_report_id']);
         $testpaperResult = $testpaperWrapper->wrapTestpaperResult($testpaperRecord, $assessment, $scene, $answerReport);
 
-        return array(
+        return [
             'testpaper' => $testpaper,
             'items' => $items,
             'accuracy' => $accuracy,
             'testpaperResult' => $testpaperResult,
             'favorites' => ArrayToolkit::column($favorites, 'question_id'),
             'resultShow' => $resultShow,
-        );
+        ];
     }
 
     protected function findQuestionFavorites($userId)
     {
-        $count = $this->getQuestionFavoriteService()->count(array('user_id' => $userId));
-        $favorites = $this->getQuestionFavoriteService()->search(array('user_id' => $userId), array(), 0, $count);
+        $count = $this->getQuestionFavoriteService()->count(['user_id' => $userId]);
+        $favorites = $this->getQuestionFavoriteService()->search(['user_id' => $userId], [], 0, $count);
 
         return $favorites;
     }
 
     protected function makeAccuracy($items, $questionReports)
     {
-        $accuracy = array();
+        $accuracy = [];
 
         $questionReports = ArrayToolkit::index($questionReports, 'question_id');
         foreach ($items as $item) {
-            $questionReport = empty($questionReports[$item['id']]) ? array() : $questionReports[$item['id']];
+            $questionReport = empty($questionReports[$item['id']]) ? [] : $questionReports[$item['id']];
 
             if (!empty($item['subs']) || 'material' == $item['type']) {
-                $accuracy['material'] = empty($accuracy['material']) ? array() : $accuracy['material'];
+                $accuracy['material'] = empty($accuracy['material']) ? [] : $accuracy['material'];
 
                 $accuracy['material'] = $this->countItemResultStatus($accuracy['material'], $item, $questionReport);
             } else {
-                $accuracy[$item['type']] = empty($accuracy[$item['type']]) ? array() : $accuracy[$item['type']];
+                $accuracy[$item['type']] = empty($accuracy[$item['type']]) ? [] : $accuracy[$item['type']];
 
                 $accuracyResult = $this->countItemResultStatus($accuracy[$item['type']], $item, $questionReport);
 
@@ -167,7 +164,7 @@ class TestpaperResult extends AbstractResource
 
     protected function countItemResultStatus($resultStatus, $item, $questionResult)
     {
-        $resultStatus = array(
+        $resultStatus = [
             'score' => empty($resultStatus['score']) ? 0 : $resultStatus['score'],
             'totalScore' => empty($resultStatus['totalScore']) ? 0 : $resultStatus['totalScore'],
             'all' => empty($resultStatus['all']) ? 0 : $resultStatus['all'],
@@ -175,7 +172,7 @@ class TestpaperResult extends AbstractResource
             'partRight' => empty($resultStatus['partRight']) ? 0 : $resultStatus['partRight'],
             'wrong' => empty($resultStatus['wrong']) ? 0 : $resultStatus['wrong'],
             'noAnswer' => empty($resultStatus['noAnswer']) ? 0 : $resultStatus['noAnswer'],
-        );
+        ];
 
         $score = empty($questionResult['score']) ? 0 : $questionResult['score'];
         $status = empty($questionResult['status']) ? 'noAnswer' : $questionResult['status'];

@@ -2,20 +2,20 @@
 
 namespace AppBundle\Controller\My;
 
-use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Testpaper\Service\TestpaperService;
-use Symfony\Component\HttpFoundation\Request;
-use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\TestpaperActivityService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Symfony\Component\HttpFoundation\Request;
 
 class TestpaperController extends BaseController
 {
@@ -40,7 +40,7 @@ class TestpaperController extends BaseController
         }
 
         $activities = ArrayToolkit::index(
-            $this->getActivityService()->search(array('courseIds' => empty($courseIds) ? array(-1) : $courseIds, 'mediaType' => 'testpaper'), array(), 0, PHP_INT_MAX),
+            $this->getActivityService()->search(['courseIds' => empty($courseIds) ? [-1] : $courseIds, 'mediaType' => 'testpaper'], [], 0, PHP_INT_MAX),
             'mediaId'
         );
         $testpeaperActivities = ArrayToolkit::index(
@@ -48,22 +48,22 @@ class TestpaperController extends BaseController
             'answerSceneId'
         );
 
-        $conditions = array(
-            'answer_scene_ids' => empty(array_keys($testpeaperActivities)) ? array(-1) : array_keys($testpeaperActivities),
+        $conditions = [
+            'answer_scene_ids' => empty(array_keys($testpeaperActivities)) ? [-1] : array_keys($testpeaperActivities),
             'status' => $status,
-        );
+        ];
 
         if ('nickname' == $keywordType && $keyword) {
             $searchUser = $this->getUserService()->getUserByNickname($keyword);
             $conditions['user_id'] = $searchUser ? $searchUser['id'] : '-1';
         }
 
-        if ($status == 'finished') {
+        if ('finished' == $status) {
             $answerRecordIds = ArrayToolkit::column(
-                $this->getAnswerReportService()->search(array('review_user_id' => $user['id']), array(), 0, PHP_INT_MAX),
+                $this->getAnswerReportService()->search(['review_user_id' => $user['id']], [], 0, PHP_INT_MAX),
                 'answer_record_id'
             );
-            $conditions['ids'] = empty($answerRecordIds) ? array(-1) : $answerRecordIds;
+            $conditions['ids'] = empty($answerRecordIds) ? [-1] : $answerRecordIds;
         }
 
         $paginator = new Paginator(
@@ -72,8 +72,7 @@ class TestpaperController extends BaseController
             10
         );
 
-        
-        $orderBy = $status == 'reviewing' ? array('end_time' => 'ASC') : array('updated_time' => 'DESC');
+        $orderBy = 'reviewing' == $status ? ['end_time' => 'ASC'] : ['updated_time' => 'DESC'];
         $answerRecords = $this->getAnswerRecordService()->search(
             $conditions,
             $orderBy,
@@ -93,7 +92,7 @@ class TestpaperController extends BaseController
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($activities, 'fromCourseId'));
         $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($answerRecords, 'assessment_id'));
 
-        return $this->render('my/testpaper/check-list.html.twig', array(
+        return $this->render('my/testpaper/check-list.html.twig', [
             'answerRecords' => $answerRecords,
             'answerReports' => $answerReports,
             'paginator' => $paginator,
@@ -105,7 +104,7 @@ class TestpaperController extends BaseController
             'keyword' => $keyword,
             'activities' => $activities,
             'testpeaperActivities' => $testpeaperActivities,
-        ));
+        ]);
     }
 
     public function listAction(Request $request)
@@ -116,17 +115,17 @@ class TestpaperController extends BaseController
         }
 
         $courseIds = ArrayToolkit::column(
-            $this->getCourseMemberService()->searchMembers(array('userId' => $user['id']), array(), 0, PHP_INT_MAX),
+            $this->getCourseMemberService()->searchMembers(['userId' => $user['id']], [], 0, PHP_INT_MAX),
             'courseId'
         );
         if (empty($courseIds)) {
-            return $this->render('my/testpaper/my-testpaper-list.html.twig', array(
-                'answerRecords' => array(),
+            return $this->render('my/testpaper/my-testpaper-list.html.twig', [
+                'answerRecords' => [],
                 'nav' => 'testpaper',
-            ));
+            ]);
         }
         $activities = ArrayToolkit::index(
-            $this->getActivityService()->search(array('courseIds' => $courseIds, 'mediaType' => 'testpaper'), array(), 0, PHP_INT_MAX),
+            $this->getActivityService()->search(['courseIds' => $courseIds, 'mediaType' => 'testpaper'], [], 0, PHP_INT_MAX),
             'mediaId'
         );
         $testpeaperActivities = ArrayToolkit::index(
@@ -134,16 +133,16 @@ class TestpaperController extends BaseController
             'answerSceneId'
         );
         if (empty(array_keys($testpeaperActivities))) {
-            return $this->render('my/testpaper/my-testpaper-list.html.twig', array(
-                'answerRecords' => array(),
+            return $this->render('my/testpaper/my-testpaper-list.html.twig', [
+                'answerRecords' => [],
                 'nav' => 'testpaper',
-            ));
+            ]);
         }
 
-        $conditions = array(
+        $conditions = [
             'answer_scene_ids' => array_keys($testpeaperActivities),
             'user_id' => $user['id'],
-        );
+        ];
 
         $paginator = new Paginator(
             $request,
@@ -153,16 +152,16 @@ class TestpaperController extends BaseController
 
         $answerRecords = $this->getAnswerRecordService()->search(
             $conditions,
-            array('begin_time' => 'DESC'),
+            ['begin_time' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         if (empty($answerRecords)) {
-            return $this->render('my/testpaper/my-testpaper-list.html.twig', array(
-                'answerRecords' => array(),
+            return $this->render('my/testpaper/my-testpaper-list.html.twig', [
+                'answerRecords' => [],
                 'nav' => 'testpaper',
-            ));
+            ]);
         }
 
         $answerReports = ArrayToolkit::index(
@@ -176,7 +175,7 @@ class TestpaperController extends BaseController
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($answerRecords, 'assessment_id'));
 
-        return $this->render('my/testpaper/my-testpaper-list.html.twig', array(
+        return $this->render('my/testpaper/my-testpaper-list.html.twig', [
             'testpeaperActivities' => $testpeaperActivities,
             'answerReports' => $answerReports,
             'answerRecords' => $answerRecords,
@@ -186,7 +185,7 @@ class TestpaperController extends BaseController
             'tasks' => $tasks,
             'activities' => $activities,
             'nav' => 'testpaper',
-        ));
+        ]);
     }
 
     /**

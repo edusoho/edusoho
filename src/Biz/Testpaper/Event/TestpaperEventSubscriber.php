@@ -3,19 +3,19 @@
 namespace Biz\Testpaper\Event;
 
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 
 class TestpaperEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'answer.submitted' => 'onAnswerSubmitted',
             'answer.finished' => 'onAnswerFinished',
-        );
+        ];
     }
 
     public function onAnswerSubmitted(Event $event)
@@ -24,12 +24,12 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
 
         if ('reviewing' == $answerRecord['status']) {
             $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
-            if (empty($activity['mediaType']) || !in_array($activity['mediaType'], array('homework', 'testpaper'))) {
+            if (empty($activity['mediaType']) || !in_array($activity['mediaType'], ['homework', 'testpaper'])) {
                 return;
             }
             $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
             $user = $this->getBiz()['user'];
-            $message = array(
+            $message = [
                 'id' => $answerRecord['id'],
                 'courseId' => $activity['fromCourseId'],
                 'name' => $assessment['name'],
@@ -37,7 +37,7 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
                 'userName' => $user['nickname'],
                 'testpaperType' => $activity['mediaType'],
                 'type' => 'perusal',
-            );
+            ];
 
             $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
             if (!empty($course['teacherIds'])) {
@@ -53,13 +53,13 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         $answerReport = $event->getSubject();
         $answerRecord = $this->getAnswerRecordService()->get($answerReport['answer_record_id']);
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
-        if (empty($activity['mediaType']) || !in_array($activity['mediaType'], array('homework', 'testpaper'))) {
+        if (empty($activity['mediaType']) || !in_array($activity['mediaType'], ['homework', 'testpaper'])) {
             return;
         }
 
         $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
         $user = $this->getBiz()['user'];
-        $message = array(
+        $message = [
             'id' => $answerRecord['id'],
             'courseId' => $activity['fromCourseId'],
             'name' => $assessment['name'],
@@ -67,7 +67,7 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
             'userName' => $user['nickname'],
             'type' => 'read',
             'testpaperType' => $activity['mediaType'],
-        );
+        ];
 
         $result = $this->getNotificationService()->notify($answerRecord['user_id'], 'test-paper', $message);
     }

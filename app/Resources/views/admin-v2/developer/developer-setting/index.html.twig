@@ -146,6 +146,24 @@
 
   <div class="form-group">
     <div class="col-md-3 control-label">
+      <label>{{ 'admin.developer_setting.s2b2c_api'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="s2b2c_server" value="{{ developerSetting.s2b2c_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'admin.developer_setting.s2b2c_supplier_api'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="s2b2c_supplier_server" value="{{ developerSetting.s2b2c_supplier_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
       <label>{{ 'admin.developer_setting.hls_encrypted'|trans }}</label>
     </div>
     <div class="controls col-md-8 radios">

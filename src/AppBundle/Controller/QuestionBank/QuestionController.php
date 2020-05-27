@@ -81,7 +81,6 @@ class QuestionController extends BaseController
         if ($request->isMethod('POST')) {
             $fields = json_decode($request->getContent(), true);
             $fields['bank_id'] = $questionBank['itemBankId'];
-
             $item = $this->getItemService()->createItem($fields);
 
             $goto = $request->query->get('goto', $this->generateUrl('question_bank_manage_question_list', ['id' => $id]));
@@ -296,12 +295,12 @@ class QuestionController extends BaseController
     {
         $conditions = $request->request->all();
         if (empty($conditions['bankId'])) {
-            return $this->createJsonResponse(array());
+            return $this->createJsonResponse([]);
         }
 
         $bank = $this->getQuestionBankService()->getQuestionBank($conditions['bankId']);
         if (empty($bank)) {
-            return $this->createJsonResponse(array());
+            return $this->createJsonResponse([]);
         } else {
             $conditions['bank_id'] = $bank['itemBankId'];
         }

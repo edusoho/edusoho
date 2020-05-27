@@ -1971,6 +1971,28 @@ admin_cloud_doc:
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/Cloud:doc }
     permissions: [admin_v2_my_cloud_overview]
 
+# 应用中心-内容云-内容结算-余额明细
+admin_v2_resource_settlement_balance:
+    path:  /app/resources_settlement/balance
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourceSettlement:balance }
+
+admin_v2_resource_settlement_balance_modal:
+  path:  /app/resources_settlement/balance/{id}
+  defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourceSettlement:balanceModal }
+
+admin_v2_resource_settlement_order_modal:
+    path:  /app/resources_settlement/order/{sn}
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourceSettlement:orderModal }
+
+# 应用中心-内容云-内容结算-采购单管理
+admin_v2_resource_settlement_order:
+    path:  /app/resources_settlement/order
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourceSettlement:order }
+
+# 应用中心-内容云-内容结算-已选商品
+admin_v2_resource_settlement_product:
+    path:  /app/resources_settlement/product
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourceSettlement:product }
 # 应用中心-营销云-营销应用
 admin_v2_app_center:
     path:  /app/center/{postStatus}
@@ -2475,3 +2497,45 @@ admin_v2_setting_mobile_iap_product_delete:
     path:  /setting/mobile_iap_product_delete/{productId}
     defaults: { _controller: AppBundle:AdminV2/Developer/IAP:mobileIapProductDelete }
     methods: [POST]
+
+admin_v2_purchase_market:
+    path: /app/content_resource/purchase_market/resource_type/{tab}
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:market, tab: 'courseSet' }
+
+admin_v2_purchase_market_products_list:
+    path: /app/content_resource/purchase_market/{type}/goods_list
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:products, type: 'courseSet'}
+
+admin_v2_content_resource_products_version:
+    path:  /app/content_resource/products/version
+    defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:productsVersion }
+
+admin_v2_content_resource_product_version_detail:
+  path:  /app/content_resource/product/{productId}/version_detail
+  defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:productVersionDetail }
+
+admin_v2_content_resource_update_product_version:
+  path:  /app/resources/product/{productId}/update/version
+  defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:updateProductToLatestVersion }
+
+admin_v2_content_resource_product_detail:
+  path:  /app/resourses/type/{productType}/remote_resource/{remoteResourceId}
+  defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:productDetail }
+
+admin_v2_content_resource_choose_product:
+  path:  /app/content_resource/type/{productType}/product_id/{productId}
+  defaults: { _controller: AppBundle:AdminV2/CloudCenter/S2B2C/Product:pullSupplierProduct }
+  methods: [POST]
+
+admin_v2_product_update_setting:
+  path:  /app/resource_product/product/update/setting
+  defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:productUpdateSetting }
+
+# Plumber队列（隐藏路由）
+admin_v2_plumber:
+  path: /plumber
+  defaults: { _controller: AppBundle:AdminV2/Developer/Plumber:index }
+
+admin_v2_plumber_queue:
+  path: /plumber/queue
+  defaults: { _controller: AppBundle:AdminV2/Developer/Plumber:queue }

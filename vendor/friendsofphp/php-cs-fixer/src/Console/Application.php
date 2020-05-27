@@ -35,7 +35,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 final class Application extends BaseApplication
 {
-    const VERSION = '2.2.20';
+    const VERSION = '2.16.3';
+    const VERSION_CODENAME = 'Yellow Bird';
 
     /**
      * @var ToolInfo
@@ -44,7 +45,9 @@ final class Application extends BaseApplication
 
     public function __construct()
     {
-        error_reporting(-1);
+        if (!getenv('PHP_CS_FIXER_FUTURE_MODE')) {
+            error_reporting(-1);
+        }
 
         parent::__construct('PHP CS Fixer', self::VERSION);
 
@@ -58,6 +61,14 @@ final class Application extends BaseApplication
             $this->toolInfo,
             new PharChecker()
         ));
+    }
+
+    /**
+     * @return int
+     */
+    public static function getMajorVersion()
+    {
+        return (int) explode('.', self::VERSION)[0];
     }
 
     /**
@@ -86,7 +97,12 @@ final class Application extends BaseApplication
      */
     public function getLongVersion()
     {
-        $version = parent::getLongVersion().' by <comment>Fabien Potencier</comment> and <comment>Dariusz Ruminski</comment>';
+        $version = sprintf(
+            '%s <info>%s</info> by <comment>Fabien Potencier</comment> and <comment>Dariusz Ruminski</comment>',
+            parent::getLongVersion(),
+            self::VERSION_CODENAME
+        );
+
         $commit = '@git-commit@';
 
         if ('@'.'git-commit@' !== $commit) {
@@ -101,6 +117,6 @@ final class Application extends BaseApplication
      */
     protected function getDefaultCommands()
     {
-        return array(new HelpCommand(), new ListCommand());
+        return [new HelpCommand(), new ListCommand()];
     }
 }

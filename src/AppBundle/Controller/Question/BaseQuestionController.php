@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller\Question;
 
+use AppBundle\Controller\BaseController;
 use Biz\Question\QuestionException;
 use Biz\Question\Service\CategoryService;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
-use AppBundle\Controller\BaseController;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,11 +33,11 @@ class BaseQuestionController extends BaseController
             'goto',
             $this->generateUrl(
                 'question_bank_manage_question_list',
-                array('id' => $questionBankId, 'parentId' => $questionId)
+                ['id' => $questionBankId, 'parentId' => $questionId]
             )
         );
 
-        return $this->render($view, array(
+        return $this->render($view, [
             'mode' => 'edit',
             'questionBank' => $questionBank,
             'item' => $item,
@@ -45,7 +45,7 @@ class BaseQuestionController extends BaseController
             'request' => $request,
             'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($questionBankId),
             'goto' => $goto,
-        ));
+        ]);
     }
 
     protected function baseCreateAction(Request $request, $questionBankId, $type, $view)
@@ -59,12 +59,12 @@ class BaseQuestionController extends BaseController
             $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
 
-        return $this->render($view, array(
+        return $this->render($view, [
             'mode' => 'create',
             'questionBank' => $questionBank,
             'type' => $type,
             'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($questionBankId),
-        ));
+        ]);
     }
 
     /**

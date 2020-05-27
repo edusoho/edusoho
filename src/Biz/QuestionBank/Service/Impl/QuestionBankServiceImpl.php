@@ -43,7 +43,7 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         return $this->wrapQuestionBanks($questionBanks);
     }
 
-    public function searchQuestionBanks($conditions, $orderBys, $start, $limit, $columns = array())
+    public function searchQuestionBanks($conditions, $orderBys, $start, $limit, $columns = [])
     {
         $conditions = $this->prepareConditions($conditions);
 
@@ -61,7 +61,7 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
     public function createQuestionBank($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('name', 'categoryId'))) {
+        if (!ArrayToolkit::requireds($fields, ['name', 'categoryId'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
@@ -72,13 +72,13 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
         try {
             $this->beginTransaction();
-            $questionBank = array(
+            $questionBank = [
                 'name' => $fields['name'],
                 'categoryId' => $fields['categoryId'],
                 'orgCode' => $this->getCurrentUser()->getSelectOrgCode(),
-            );
+            ];
             $questionBank = $this->fillOrgId($questionBank);
-            $itemBank = $this->getItemBankService()->createItemBank(array('name' => $questionBank['name']));
+            $itemBank = $this->getItemBankService()->createItemBank(['name' => $questionBank['name']]);
             $questionBank['itemBankId'] = $itemBank['id'];
             $questionBank = $this->getQuestionBankDao()->create($questionBank);
             $this->getCategoryService()->waveCategoryBankNum($fields['categoryId'], 1);
@@ -114,10 +114,10 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         try {
             $this->beginTransaction();
 
-            $updateFields = array(
+            $updateFields = [
                 'name' => empty($fields['name']) ? $questionBank['name'] : $fields['name'],
                 'categoryId' => empty($fields['categoryId']) ? $questionBank['categoryId'] : $fields['categoryId'],
-            );
+            ];
             $newQuestionBank = $this->updateQuestionBank($id, $updateFields);
 
             if (!empty($fields['categoryId'])) {
@@ -137,7 +137,7 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
     public function updateQuestionBank($id, $fields)
     {
-        $fields = ArrayToolkit::parts($fields, array('name', 'categoryId', 'isHidden'));
+        $fields = ArrayToolkit::parts($fields, ['name', 'categoryId', 'isHidden']);
         if (empty($fields)) {
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
@@ -202,7 +202,7 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return array();
+            return [];
         }
 
         if ($user->isSuperAdmin() || $user->hasPermission('admin_question_bank') || $user->hasPermission('admin_v2_question_bank')) {
@@ -247,10 +247,10 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
     protected function prepareConditions($conditions)
     {
         if (isset($conditions['categoryId'])) {
-            $conditions['categoryIds'] = array();
+            $conditions['categoryIds'] = [];
             if (!empty($conditions['categoryId'])) {
                 $childrenIds = $this->getCategoryService()->findAllChildrenIdsByParentId($conditions['categoryId']);
-                $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+                $conditions['categoryIds'] = array_merge([$conditions['categoryId']], $childrenIds);
             }
             unset($conditions['categoryId']);
         }

@@ -2,8 +2,8 @@
 
 namespace Biz\File\Service;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Biz\System\Annotation\Log;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 // TODO refactor.
 interface UploadFileService
@@ -38,7 +38,7 @@ interface UploadFileService
      */
     public function finishedUpload($params);
 
-    public function moveFile($targetType, $targetId, $originalFile = null, $data = array());
+    public function moveFile($targetType, $targetId, $originalFile = null, $data = []);
 
     public function setFileProcessed($params);
 
@@ -50,7 +50,7 @@ interface UploadFileService
      */
     public function deleteByGlobalId($globalId);
 
-    public function reconvertFile($id, $options = array());
+    public function reconvertFile($id, $options = []);
 
     public function reconvertOldFile($id, $convertCallback, $pipeline);
 
@@ -70,7 +70,7 @@ interface UploadFileService
 
     public function getFileByConvertHash($hash);
 
-    public function findFilesByIds(array $ids, $showCloud = 0, $params = array());
+    public function findFilesByIds(array $ids, $showCloud = 0, $params = []);
 
     public function searchFiles($conditions, $sort, $start, $limit);
 
@@ -83,14 +83,12 @@ interface UploadFileService
     /**
      * @param $targetType
      * @param $targetId
-     * @param array             $fileInfo
-     * @param string            $implemtor
-     * @param UploadedFile|null $originalFile
+     * @param string $implemtor
      *
      * @return mixed
      * @Log(module="upload_file",action="create")
      */
-    public function addFile($targetType, $targetId, array $fileInfo = array(), $implemtor = 'local', UploadedFile $originalFile = null);
+    public function addFile($targetType, $targetId, array $fileInfo = [], $implemtor = 'local', UploadedFile $originalFile = null);
 
     public function renameFile($id, $newFilename);
 
@@ -104,11 +102,11 @@ interface UploadFileService
 
     public function deleteFiles(array $ids);
 
-    public function convertFile($id, $status, array $result = array(), $callback = null);
+    public function convertFile($id, $status, array $result = [], $callback = null);
 
-    public function saveConvertResult($id, array $result = array());
+    public function saveConvertResult($id, array $result = []);
 
-    public function saveConvertResult3($id, array $result = array());
+    public function saveConvertResult3($id, array $result = []);
 
     public function setFileConverting($id, $convertHash);
 
@@ -165,7 +163,7 @@ interface UploadFileService
 
     public function countUseFile($conditions);
 
-    public function searchUseFiles($conditions, $bindFile = true, $sort = array('createdTime' => 'DESC'));
+    public function searchUseFiles($conditions, $bindFile = true, $sort = ['createdTime' => 'DESC']);
 
     //file-used api
     public function createUseFiles($fileIds, $targetId, $targetType, $type);

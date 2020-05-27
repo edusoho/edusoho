@@ -78,13 +78,13 @@ class CourseItem extends AbstractResource
     protected function createAssessment($name, $range, $sections)
     {
         $sections = $this->getAssessmentService()->drawItems($range, $sections);
-        $assessment = array(
+        $assessment = [
             'name' => $name,
             'displayable' => 0,
             'description' => '',
             'bank_id' => $range['bank_id'],
             'sections' => $sections,
-        );
+        ];
 
         $assessment = $this->getAssessmentService()->createAssessment($assessment);
 

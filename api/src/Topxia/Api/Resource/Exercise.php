@@ -2,6 +2,7 @@
 
 namespace Topxia\Api\Resource;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Accessor\AccessorInterface;
 use Biz\Activity\Service\ExerciseActivityService;
 use Biz\Course\Service\CourseService;
@@ -12,7 +13,6 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Silex\Application;
-use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class Exercise extends BaseResource
@@ -20,7 +20,7 @@ class Exercise extends BaseResource
     public function get(Application $app, Request $request, $id)
     {
         $idType = $request->query->get('_idType');
-        $user= $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         if ('lesson' == $idType) {
             $task = $this->getTaskService()->getTask($id);
             $course = $this->getCourseService()->getCourse($task['courseId']);
@@ -30,11 +30,11 @@ class Exercise extends BaseResource
             }
 
             //只为兼容移动端学习引擎2.0以前的版本，之后需要修改
-            $conditions = array(
+            $conditions = [
                 'categoryId' => $task['categoryId'],
                 'status' => 'published',
                 'type' => 'exercise',
-            );
+            ];
             $exerciseTasks = $this->getTaskService()->searchTasks($conditions, null, 0, 1);
             if (!$exerciseTasks) {
                 return $this->error('404', '该练习不存在!');
@@ -42,7 +42,7 @@ class Exercise extends BaseResource
             $exerciseTask = $exerciseTasks[0];
 
             $activity = $this->getActivityService()->getActivity($exerciseTask['activityId'], true);
-            $assessment = $this->createAssessment($activity['title'], $activity['ext']['drawCondition']['range'], array($activity['ext']['drawCondition']['section']));
+            $assessment = $this->createAssessment($activity['title'], $activity['ext']['drawCondition']['range'], [$activity['ext']['drawCondition']['section']]);
             $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
             $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         } else {
@@ -50,10 +50,10 @@ class Exercise extends BaseResource
             if (empty($exerciseActivity)) {
                 return $this->error('404', '该练习不存在!');
             }
-            $conditions = array(
+            $conditions = [
                 'mediaId' => $exerciseActivity['id'],
                 'mediaType' => 'exercise',
-            );
+            ];
             $activities = $this->getActivityService()->search($conditions, null, 0, 1);
             if (!$activities) {
                 return $this->error('404', '该练习任务不存在!');
@@ -66,7 +66,7 @@ class Exercise extends BaseResource
             }
             $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($exerciseActivity['answerSceneId'], $user['id']);
             if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
-                $assessment = $this->createAssessment($activity['title'], $exerciseActivity['drawCondition']['range'], array($exerciseActivity['drawCondition']['section']));
+                $assessment = $this->createAssessment($activity['title'], $exerciseActivity['drawCondition']['range'], [$exerciseActivity['drawCondition']['section']]);
                 $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
             } else {
                 $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
@@ -90,12 +90,12 @@ class Exercise extends BaseResource
         $exercise['lessonTitle'] = $activity['title'];
         $exercise['description'] = $activity['title'];
 
-        if (empty($answerRecord) || $answerRecord['status'] == AnswerService::ANSWER_RECORD_STATUS_FINISHED) {
+        if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
             $answerRecord = $this->getAnswerService()->startAnswer($scene['id'], $exercise['id'], $user['id']);
         }
 
         if ('lesson' != $idType) {
-            $items = $testpaperWrapper->wrapTestpaperItems($assessment, array());
+            $items = $testpaperWrapper->wrapTestpaperItems($assessment, []);
 
             $exercise['items'] = $this->filterItem($items, null);
             $exercise['id'] = $id;
@@ -120,10 +120,10 @@ class Exercise extends BaseResource
 
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
 
-        $conditions = array(
+        $conditions = [
             'mediaId' => $exerciseActivity['id'],
             'mediaType' => 'exercise',
-        );
+        ];
         $activities = $this->getActivityService()->search($conditions, null, 0, 1);
         if (!$activities) {
             return $this->error('404', '该练习任务不存在!');
@@ -154,13 +154,13 @@ class Exercise extends BaseResource
     protected function createAssessment($name, $range, $sections)
     {
         $sections = $this->getAssessmentService()->drawItems($range, $sections);
-        $assessment = array(
+        $assessment = [
             'name' => $name,
             'displayable' => 0,
             'description' => '',
             'bank_id' => $range['bank_id'],
             'sections' => $sections,
-        );
+        ];
 
         $assessment = $this->getAssessmentService()->createAssessment($assessment);
 
@@ -172,13 +172,13 @@ class Exercise extends BaseResource
     private function filterItem($items, $itemSetResults)
     {
         krsort($items);
-        $newItmes = array();
+        $newItmes = [];
         foreach ($items as $item) {
             $item = $this->filterItemFields($item, $itemSetResults);
 
-            $item['items'] = array();
+            $item['items'] = [];
             if ('material' == $item['type']) {
-                $subs = empty($item['subs']) ? array() :array_values($item['subs']);
+                $subs = empty($item['subs']) ? [] : array_values($item['subs']);
                 foreach ($subs as &$sub) {
                     $sub = $this->filterItemFields($sub, $itemSetResults);
                 }
@@ -214,7 +214,7 @@ class Exercise extends BaseResource
 
     public function filter($res)
     {
-        $res = ArrayToolkit::parts($res, array('id', 'courseId', 'lessonId', 'description', 'itemCount', 'items', 'courseTitle', 'lessonTitle'));
+        $res = ArrayToolkit::parts($res, ['id', 'courseId', 'lessonId', 'description', 'itemCount', 'items', 'courseTitle', 'lessonTitle']);
 
         return $res;
     }
@@ -222,14 +222,14 @@ class Exercise extends BaseResource
     public function filterItemFields($item, $itemResults)
     {
         if (empty($item)) {
-            return array();
+            return [];
         }
 
-        $item = ArrayToolkit::parts($item, array('id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty', 'parentId', 'subs', 'testResult'));
+        $item = ArrayToolkit::parts($item, ['id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty', 'parentId', 'subs', 'testResult']);
 
         $item['stem'] = $this->filterHtml($item['stem']);
         $item['analysis'] = $this->filterHtml($item['analysis']);
-        $item['metas'] = empty($item['metas']) ? array() : $item['metas'];
+        $item['metas'] = empty($item['metas']) ? [] : $item['metas'];
 
         if (isset($item['metas']['choices'])) {
             $metas = array_values($item['metas']['choices']);
@@ -263,16 +263,16 @@ class Exercise extends BaseResource
 
     public function filterResult(&$res)
     {
-        $res = ArrayToolkit::parts($res, array('id', 'courseId', 'lessonId', 'description', 'itemCount', 'items', 'courseTitle', 'lessonTitle'));
+        $res = ArrayToolkit::parts($res, ['id', 'courseId', 'lessonId', 'description', 'itemCount', 'items', 'courseTitle', 'lessonTitle']);
         $items = $res['items'];
         foreach ($items as &$item) {
             unset($item['result']['score']);
             unset($item['result']['missScore']);
             unset($item['result']['question']);
-            $item['result'] = empty($item['result']) ? (object) array() : $item['result'];
+            $item['result'] = empty($item['result']) ? (object) [] : $item['result'];
             if (!empty($item['items'])) {
                 foreach ($item['items'] as &$subItem) {
-                    $subItem['result'] = empty($subItem['result']) ? (object) array() : $subItem['result'];
+                    $subItem['result'] = empty($subItem['result']) ? (object) [] : $subItem['result'];
                 }
             }
         }
@@ -311,7 +311,7 @@ class Exercise extends BaseResource
             return $answer;
         }
 
-        return array();
+        return [];
     }
 
     public function getByLesson(Application $app, Request $request, $id)

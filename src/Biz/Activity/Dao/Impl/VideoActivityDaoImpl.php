@@ -2,8 +2,8 @@
 
 namespace Biz\Activity\Dao\Impl;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 use Biz\Activity\Dao\VideoActivityDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class VideoActivityDaoImpl extends GeneralDaoImpl implements VideoActivityDao
 {
@@ -11,9 +11,16 @@ class VideoActivityDaoImpl extends GeneralDaoImpl implements VideoActivityDao
 
     public function declares()
     {
-        return array(
-            'serializes' => array('media' => 'json'),
-        );
+        return [
+            'serializes' => ['media' => 'json'],
+            'conditions' => [
+                /*S2B2C新增syncId*/
+                'syncId = :syncId',
+                'syncId in (:syncIds)',
+                'syncId > :syncIdGT',
+                /*END*/
+            ],
+        ];
     }
 
     public function findByIds($ids)

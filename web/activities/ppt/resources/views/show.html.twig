@@ -1,7 +1,7 @@
 {% extends 'activity/content-layout.html.twig' %}
 
 {% set ppt = activity.ext|default(null) %}
-{% set file = ppt.file|default(null) %}
+{% set file = ppt.file|default(null)|s2b2c_file_convert %}
 {% set pptPlayer = ppt_player(ppt, app.request.secure) %}
 
 {% if pptPlayer.error is empty %}

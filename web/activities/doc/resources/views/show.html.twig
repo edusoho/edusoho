@@ -2,7 +2,7 @@
 
 {% set enableCopy  = setting('course.copy_enabled') %}
 {% set doc = activity.ext|default(null) %}
-{% set file = doc.file|default(null) %}
+{% set file = doc.file|default(null)|s2b2c_file_convert %}
 {% set docPlayer = doc_player(doc, app.request.secure) %}
 {% block body %}
   {% if not docPlayer.error is empty %}

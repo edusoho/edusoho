@@ -382,3 +382,10 @@ services:
         public: true
         tags:
             - { name: codeages_plugin.event.subscriber }
+
+    # S2B2C
+    course_product_event_subscriber:
+        class: Biz\S2B2C\Event\CourseProductSubscriber
+        arguments: ['@biz']
+        tags:
+             - { name: codeages_plugin.event.subscriber }

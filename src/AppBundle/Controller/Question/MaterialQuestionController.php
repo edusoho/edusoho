@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Question;
 
-use Biz\QuestionBank\QuestionBankException;
 use Symfony\Component\HttpFoundation\Request;
 
 class MaterialQuestionController extends BaseQuestionController

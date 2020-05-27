@@ -11,7 +11,8 @@
   </div>
   {# 章可以创建课时，节
   节只能创建课时 #}
-  <div class="item-actions">
+  {#S2B2C课程不允许更改章节#}
+  <div class="item-actions {% if course.platform == 'supplier' %}hidden{% endif %}">
     {% if chapter.type == 'chapter' %}
       <div class="cd-dropdown cd-mr24" data-toggle="cd-dropdown" data-trigger="hover">
         <a class="cd-link-assist" href="javascript:;">

@@ -18,7 +18,6 @@ use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
-use PhpCsFixer\Utils;
 
 /**
  * @author Ceeram <ceeram@cakephp.org>
@@ -40,7 +39,7 @@ final class NoBlankLinesAfterClassOpeningFixer extends AbstractFixer implements 
     {
         return new FixerDefinition(
             'There should be no empty lines after class opening brace.',
-            array(
+            [
                 new CodeSample(
                     '<?php
 final class Sample
@@ -52,8 +51,18 @@ final class Sample
 }
 '
                 ),
-            )
+            ]
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * Must run after OrderedClassElementsFixer.
+     */
+    public function getPriority()
+    {
+        return 0;
     }
 
     /**
@@ -66,7 +75,7 @@ final class Sample
                 continue;
             }
 
-            $startBraceIndex = $tokens->getNextTokenOfKind($index, array('{'));
+            $startBraceIndex = $tokens->getNextTokenOfKind($index, ['{']);
             if (!$tokens[$startBraceIndex + 1]->isWhitespace()) {
                 continue;
             }
@@ -78,8 +87,7 @@ final class Sample
     /**
      * Cleanup a whitespace token.
      *
-     * @param Tokens $tokens
-     * @param int    $index
+     * @param int $index
      */
     private function fixWhitespace(Tokens $tokens, $index)
     {
@@ -87,8 +95,7 @@ final class Sample
         // if there is more than one new line in the whitespace, then we need to fix it
         if (substr_count($content, "\n") > 1) {
             // the final bit of the whitespace must be the next statement's indentation
-            $lines = Utils::splitLines($content);
-            $tokens[$index] = new Token(array(T_WHITESPACE, $this->whitespacesConfig->getLineEnding().end($lines)));
+            $tokens[$index] = new Token([T_WHITESPACE, $this->whitespacesConfig->getLineEnding().substr($content, strrpos($content, "\n") + 1)]);
         }
     }
 }

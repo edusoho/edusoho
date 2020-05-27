@@ -31,8 +31,8 @@ class AddTableActivityHomework extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("
+        $connection->exec('
             ADROP TABLE IF EXISTS `activity_homework`;
-        ");
+        ');
     }
 }

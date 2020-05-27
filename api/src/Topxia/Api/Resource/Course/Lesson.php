@@ -2,16 +2,16 @@
 
 namespace Topxia\Api\Resource\Course;
 
+use AppBundle\Common\SettingToolkit;
+use AppBundle\Component\MediaParser\ParserProxy;
 use Biz\Accessor\AccessorInterface;
 use Biz\Course\Service\CourseService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Silex\Application;
-use AppBundle\Common\SettingToolkit;
-use AppBundle\Component\MediaParser\ParserProxy;
-use Topxia\Api\Resource\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Api\Resource\BaseResource;
 
 class Lesson extends BaseResource
 {
@@ -32,7 +32,7 @@ class Lesson extends BaseResource
 
         $course = $this->getCourseService()->getCourse($task['courseId']);
 
-        $lesson = $this->getCourseService()->convertTasks(array($task), $course);
+        $lesson = $this->getCourseService()->convertTasks([$task], $course);
         $lesson = array_shift($lesson);
 
         //直播回放
@@ -113,9 +113,9 @@ class Lesson extends BaseResource
 
         $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
-        $lesson['content'] = array(
+        $lesson['content'] = [
             'resource' => $result['images'],
-        );
+        ];
 
         return $lesson;
     }
@@ -139,10 +139,10 @@ class Lesson extends BaseResource
 
         $resourceUrl = ($ssl ? 'https://' : 'http://').$_SERVER['HTTP_HOST']."/global_file/{$file['globalId']}/player?token={$result['token']}";
 
-        $lesson['content'] = array(
+        $lesson['content'] = [
             'resource' => $resourceUrl,
             'previewUrl' => $resourceUrl,
-        );
+        ];
 
         return $lesson;
     }
@@ -155,13 +155,13 @@ class Lesson extends BaseResource
         }
 
         if (empty($file['globalId'])) {
-            $token = $this->getTokenService()->makeToken('local.media', array(
-                'data' => array(
+            $token = $this->getTokenService()->makeToken('local.media', [
+                'data' => [
                     'id' => $file['id'],
-                ),
+                ],
                 'duration' => 3600,
                 'userId' => 0,
-            ));
+            ]);
             $lesson['mediaUri'] = $this->getHttpHost()."/player/{$file['id']}/file/{$token['token']}";
         } else {
             $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
@@ -193,10 +193,10 @@ class Lesson extends BaseResource
         $lesson['testMode'] = !empty($scene['start_time']) ? 'realTime' : 'normal';
         $lesson['testStartTime'] = $scene['start_time'];
 
-        $lesson['content'] = array(
+        $lesson['content'] = [
             'status' => empty($testRecord) ? 'nodo' : $testRecord['status'],
             'resultId' => empty($testRecord) ? 0 : $testRecord['id'],
-        );
+        ];
 
         return $lesson;
     }
@@ -204,9 +204,9 @@ class Lesson extends BaseResource
     private function getTextLesson($lesson)
     {
         $lesson['content'] = $this->filterHtml($lesson['content']);
-        $template = $this->render('course/lesson-text-content.html.twig', array(
+        $template = $this->render('course/lesson-text-content.html.twig', [
             'content' => $lesson['content'],
-        ));
+        ]);
         $lesson['content'] = $template;
 
         return $lesson;
@@ -236,20 +236,20 @@ class Lesson extends BaseResource
 
                     if (isset($file['processAudioStatus']) && 'ok' == $file['processAudioStatus']) {
                         if (!empty($file['audioMetas2']) && !empty($file['audioMetas2']['sd']['key'])) {
-                            $data = array(
+                            $data = [
                                 'id' => $file['id'],
                                 'fromApi' => !$hlsEncryption,
-                            );
+                            ];
 
-                            $token = $this->getTokenService()->makeToken('hls.playlist', array(
+                            $token = $this->getTokenService()->makeToken('hls.playlist', [
                                 'data' => $data,
                                 'times' => 2,
                                 'duration' => 3600,
-                            ));
+                            ]);
 
-                            $audioUrl = array(
+                            $audioUrl = [
                                 'url' => $this->getHttpHost()."/hls/{$file['id']}/audio/playlist/{$token['token']}.m3u8?format=json&line=".$line,
-                            );
+                            ];
 
                             if (isset($audioUrl) && is_array($audioUrl) && !empty($audioUrl['url'])) {
                                 $lesson['audioUri'] = $audioUrl['url'];
@@ -262,40 +262,40 @@ class Lesson extends BaseResource
                             $headLeaderInfo = $this->getHeadLeaderInfo();
 
                             if ($headLeaderInfo) {
-                                $token = $this->getTokenService()->makeToken('hls.playlist', array(
-                                    'data' => array(
+                                $token = $this->getTokenService()->makeToken('hls.playlist', [
+                                    'data' => [
                                         'id' => $headLeaderInfo['id'],
                                         'fromApi' => !$hlsEncryption,
-                                    ),
+                                    ],
                                     'times' => 2,
                                     'duration' => 3600,
-                                ));
+                                ]);
 
-                                $headUrl = array(
+                                $headUrl = [
                                     'url' => $this->getHttpHost()."/hls/{$headLeaderInfo['id']}/playlist/{$token['token']}.m3u8?format=json&line=".$line,
-                                );
+                                ];
 
                                 $lesson['headUrl'] = $headUrl['url'];
                                 $lesson['headLength'] = $headLeaderInfo['length'];
                             }
 
-                            $data = array(
+                            $data = [
                                 'id' => $file['id'],
                                 'fromApi' => !$hlsEncryption,
-                            );
+                            ];
                             if ($watchTimeLimit) {
                                 $data['watchTimeLimit'] = $watchTimeLimit;
                             }
 
-                            $token = $this->getTokenService()->makeToken('hls.playlist', array(
+                            $token = $this->getTokenService()->makeToken('hls.playlist', [
                                 'data' => $data,
                                 'times' => 2,
                                 'duration' => 3600,
-                            ));
+                            ]);
 
-                            $url = array(
+                            $url = [
                                 'url' => $this->getHttpHost()."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format=json&line=".$line,
-                            );
+                            ];
                         } else {
                             return $this->error('404', '当前视频格式不能被播放！');
                         }
@@ -320,13 +320,13 @@ class Lesson extends BaseResource
                         }
                     }
                 } else {
-                    $token = $this->getTokenService()->makeToken('local.media', array(
-                        'data' => array(
+                    $token = $this->getTokenService()->makeToken('local.media', [
+                        'data' => [
                             'id' => $file['id'],
-                        ),
+                        ],
                         'duration' => 3600,
                         'userId' => 0,
-                    ));
+                    ]);
                     $lesson['mediaUri'] = $this->getHttpHost()."/player/{$file['id']}/file/{$token['token']}";
                 }
             } else {
@@ -373,7 +373,7 @@ class Lesson extends BaseResource
 
     protected function simplify($res)
     {
-        $lesson = array();
+        $lesson = [];
         $lesson['id'] = $res['id'];
         $lesson['courseId'] = $res['courseId'];
         $lesson['courseSetId'] = $res['fromCourseSetId'];

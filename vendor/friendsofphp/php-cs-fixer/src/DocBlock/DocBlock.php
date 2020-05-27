@@ -12,7 +12,7 @@
 
 namespace PhpCsFixer\DocBlock;
 
-use PhpCsFixer\Utils;
+use PhpCsFixer\Preg;
 
 /**
  * This class represents a docblock.
@@ -28,12 +28,12 @@ class DocBlock
      *
      * @var Line[]
      */
-    private $lines = array();
+    private $lines = [];
 
     /**
      * The array of annotations.
      *
-     * @var null|Annotation[]
+     * @var Annotation[]|null
      */
     private $annotations;
 
@@ -44,7 +44,7 @@ class DocBlock
      */
     public function __construct($content)
     {
-        foreach (Utils::splitLines($content) as $line) {
+        foreach (Preg::split('/([^\n\r]+\R*)/', $content, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE) as $line) {
             $this->lines[] = new Line($line);
         }
     }
@@ -74,13 +74,11 @@ class DocBlock
      *
      * @param int $pos
      *
-     * @return null|Line
+     * @return Line|null
      */
     public function getLine($pos)
     {
-        if (isset($this->lines[$pos])) {
-            return $this->lines[$pos];
-        }
+        return isset($this->lines[$pos]) ? $this->lines[$pos] : null;
     }
 
     /**
@@ -90,40 +88,101 @@ class DocBlock
      */
     public function getAnnotations()
     {
-        if (null === $this->annotations) {
-            $this->annotations = array();
-            $total = count($this->lines);
+        if (null !== $this->annotations) {
+            return $this->annotations;
+        }
 
-            for ($index = 0; $index < $total; ++$index) {
-                if ($this->lines[$index]->containsATag()) {
-                    // get all the lines that make up the annotation
-                    $lines = array_slice($this->lines, $index, $this->findAnnotationLength($index), true);
-                    $annotation = new Annotation($lines);
-                    // move the index to the end of the annotation to avoid
-                    // checking it again because we know the lines inside the
-                    // current annotation cannot be part of another annotation
-                    $index = $annotation->getEnd();
-                    // add the current annotation to the list of annotations
-                    $this->annotations[] = $annotation;
-                }
+        $this->annotations = [];
+        $total = \count($this->lines);
+
+        for ($index = 0; $index < $total; ++$index) {
+            if ($this->lines[$index]->containsATag()) {
+                // get all the lines that make up the annotation
+                $lines = \array_slice($this->lines, $index, $this->findAnnotationLength($index), true);
+                $annotation = new Annotation($lines);
+                // move the index to the end of the annotation to avoid
+                // checking it again because we know the lines inside the
+                // current annotation cannot be part of another annotation
+                $index = $annotation->getEnd();
+                // add the current annotation to the list of annotations
+                $this->annotations[] = $annotation;
             }
         }
 
         return $this->annotations;
     }
 
+    public function isMultiLine()
+    {
+        return 1 !== \count($this->lines);
+    }
+
+    /**
+     * Take a one line doc block, and turn it into a multi line doc block.
+     *
+     * @param string $indent
+     * @param string $lineEnd
+     */
+    public function makeMultiLine($indent, $lineEnd)
+    {
+        if ($this->isMultiLine()) {
+            return;
+        }
+
+        $lineContent = $this->getSingleLineDocBlockEntry($this->lines[0]);
+
+        if ('' === $lineContent) {
+            $this->lines = [
+                new Line('/**'.$lineEnd),
+                new Line($indent.' *'.$lineEnd),
+                new Line($indent.' */'),
+            ];
+
+            return;
+        }
+
+        $this->lines = [
+            new Line('/**'.$lineEnd),
+            new Line($indent.' * '.$lineContent.$lineEnd),
+            new Line($indent.' */'),
+        ];
+    }
+
+    public function makeSingleLine()
+    {
+        if (!$this->isMultiLine()) {
+            return;
+        }
+
+        $usefulLines = array_filter(
+            $this->lines,
+            static function (Line $line) {
+                return $line->containsUsefulContent();
+            }
+        );
+
+        if (1 < \count($usefulLines)) {
+            return;
+        }
+
+        $lineContent = '';
+        if (\count($usefulLines)) {
+            $lineContent = $this->getSingleLineDocBlockEntry(array_shift($usefulLines));
+        }
+
+        $this->lines = [new Line('/** '.$lineContent.' */')];
+    }
+
     /**
      * @param int $pos
      *
-     * @return null|Annotation
+     * @return Annotation|null
      */
     public function getAnnotation($pos)
     {
         $annotations = $this->getAnnotations();
 
-        if (isset($annotations[$pos])) {
-            return $annotations[$pos];
-        }
+        return isset($annotations[$pos]) ? $annotations[$pos] : null;
     }
 
     /**
@@ -137,7 +196,7 @@ class DocBlock
      */
     public function getAnnotationsOfType($types)
     {
-        $annotations = array();
+        $annotations = [];
         $types = (array) $types;
 
         foreach ($this->getAnnotations() as $annotation) {
@@ -159,7 +218,7 @@ class DocBlock
      */
     public function getContent()
     {
-        return implode($this->lines);
+        return implode('', $this->lines);
     }
 
     private function findAnnotationLength($start)
@@ -173,7 +232,7 @@ class DocBlock
             }
 
             if (!$line->containsUsefulContent()) {
-                // if we next line is also non-useful, or contains a tag, then we're done here
+                // if next line is also non-useful, or contains a tag, then we're done here
                 $next = $this->getLine($index + 1);
                 if (null === $next || !$next->containsUsefulContent() || $next->containsATag()) {
                     break;
@@ -183,5 +242,28 @@ class DocBlock
         }
 
         return $index - $start;
+    }
+
+    /**
+     * @return string
+     */
+    private function getSingleLineDocBlockEntry(Line $line)
+    {
+        $lineString = $line->getContent();
+
+        if (0 === \strlen($lineString)) {
+            return $lineString;
+        }
+
+        $lineString = str_replace('*/', '', $lineString);
+        $lineString = trim($lineString);
+
+        if ('/**' === substr($lineString, 0, 3)) {
+            $lineString = substr($lineString, 3);
+        } elseif ('*' === substr($lineString, 0, 1)) {
+            $lineString = substr($lineString, 1);
+        }
+
+        return trim($lineString);
     }
 }

@@ -2,7 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\FileToolkit;
 use AppBundle\Common\MessageToolkit;
+use AppBundle\Common\Paginator;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Content\Service\FileService;
 use Biz\Course\Service\CourseService;
@@ -12,13 +14,11 @@ use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserService;
-use AppBundle\Common\Paginator;
-use AppBundle\Common\FileToolkit;
 use Biz\User\TokenException;
 use Biz\User\UserException;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class UploadFileController extends BaseController
 {
@@ -70,7 +70,7 @@ class UploadFileController extends BaseController
 
         $this->getLogService()->info('upload_file', 'download', "文件Id #{$fileId}");
 
-        if ('cloud' == $file['storage']) {
+        if (in_array($file['storage'], ['cloud', 'supplier'])) {
             return $this->downloadCloudFile($request, $file, $ssl);
         } else {
             return $this->downloadLocalFile($request, $file);
@@ -92,7 +92,7 @@ class UploadFileController extends BaseController
 
     protected function downloadLocalFile(Request $request, $file)
     {
-        $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
+        $response = BinaryFileResponse::create($file['fullpath'], 200, [], false);
         $response->trustXSendfileTypeHeader();
 
         $fileName = urlencode(str_replace(' ', '', $file['filename']));
@@ -137,7 +137,7 @@ class UploadFileController extends BaseController
 
         $files = $this->getUploadFileService()->searchFiles(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -163,7 +163,7 @@ class UploadFileController extends BaseController
             }
         }
 
-        $files = $this->getUploadFileService()->searchFiles($conditions, array('updatedTime' => 'DESC'), 0, 10000);
+        $files = $this->getUploadFileService()->searchFiles($conditions, ['updatedTime' => 'DESC'], 0, 10000);
 
         return $this->createFilesJsonResponse($files);
     }
@@ -179,7 +179,7 @@ class UploadFileController extends BaseController
         $params = $request->query->all();
 
         $params['user'] = $user->id;
-        $params['defaultUploadUrl'] = $this->generateUrl('uploadfile_upload', array('targetType' => $params['targetType'], 'targetId' => $params['targetId'] ?: '0'));
+        $params['defaultUploadUrl'] = $this->generateUrl('uploadfile_upload', ['targetType' => $params['targetType'], 'targetId' => $params['targetId'] ?: '0']);
 
         if (empty($params['lazyConvert'])) {
         } else {
@@ -218,10 +218,10 @@ class UploadFileController extends BaseController
         if (!empty($paginator)) {
             $paginator = Paginator::toArray($paginator);
 
-            return $this->createJsonResponse(array(
+            return $this->createJsonResponse([
                 'files' => $files,
                 'paginator' => $paginator,
-            ));
+            ]);
         } else {
             return $this->createJsonResponse($files);
         }

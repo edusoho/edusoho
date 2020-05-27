@@ -9,7 +9,6 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\User\UserException;
@@ -17,7 +16,6 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
-use FaceInspectionPlugin\Biz\FaceInspection\Service\FaceInspectionService;
 
 class TestpaperInfo extends AbstractResource
 {
@@ -38,10 +36,10 @@ class TestpaperInfo extends AbstractResource
         $testpaper = $testpaperWrapper->wrapTestpaper($assessment);
         $items = ArrayToolkit::groupIndex($testpaperWrapper->wrapTestpaperItems($assessment), 'type', 'id');
         $testpaper['metas']['question_type_seq'] = array_keys($items);
-        $results = array(
+        $results = [
             'testpaper' => $testpaper,
             'items' => $this->filterTestpaperItems($items),
-        );
+        ];
 
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
@@ -88,7 +86,7 @@ class TestpaperInfo extends AbstractResource
 
     private function filterTestpaperItems($items)
     {
-        $itemArray = array();
+        $itemArray = [];
 
         foreach ($items as $questionType => $item) {
             $itemArray[$questionType] = count($item);
@@ -105,7 +103,6 @@ class TestpaperInfo extends AbstractResource
 
         return $task;
     }
-
 
     /**
      * @return TaskService

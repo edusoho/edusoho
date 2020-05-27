@@ -44,7 +44,7 @@ interface QuestionService
 
     public function findQuestionsByCategoryIds($categoryIds);
 
-    public function search($conditions, $sort, $start, $limit, $columns = array());
+    public function search($conditions, $sort, $start, $limit, $columns = []);
 
     public function searchCount($conditions);
 
@@ -84,4 +84,6 @@ interface QuestionService
     public function findAttachments($questionIds);
 
     public function hasStemImg($question);
+
+    public function findQuestionsBySyncIds(array $syncIds);
 }

@@ -81,7 +81,7 @@ class CourseInfo {
 
   initValidator() {
     let $form = $('#course-info-form');
-    $('.js-task-price-setting').perfectScrollbar();
+    $('.js-task-price-setting-scroll ').perfectScrollbar();
     this.validator = $form.validate({
       currentDom: '#course-submit',
       ajax: true,
@@ -105,7 +105,7 @@ class CourseInfo {
         originPrice: {
           required: true,
           positive_price: true,
-          min: 0
+          min: parseFloat($('#js-course-info').data('minPrice')),
         },
         expiryStartDate: {
           required: () => {
@@ -130,7 +130,7 @@ class CourseInfo {
         },
       },
       messages: {
-        originPrice: Translator.trans('validate_old.positive_currency.message'),
+        originPrice: Translator.trans($('#js-course-info').data('hintMessage')),
         maxStudentNum: {
           required: Translator.trans('course.manage.max_student_num_error_hint')
         },

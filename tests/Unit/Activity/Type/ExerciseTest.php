@@ -23,7 +23,7 @@ class ExerciseTest extends BaseTypeTestCase
 
         $this->_mockExerciseActivity();
 
-        $result = $type->find(array(1));
+        $result = $type->find([1]);
 
         $this->assertEquals(1, count($result));
     }
@@ -32,12 +32,12 @@ class ExerciseTest extends BaseTypeTestCase
     {
         $type = $this->getActivityConfig(self::TYPE);
 
-        $fields = array(
+        $fields = [
             'title' => 'exercise activity',
-            'questionTypes' => array('single_choice'),
-            'range' => array('bankId' => 1),
+            'questionTypes' => ['single_choice'],
+            'range' => ['bankId' => 1],
             'itemCount' => 1,
-        );
+        ];
         $activity = $type->create($fields);
 
         $this->assertEquals(1, $activity['id']);
@@ -48,16 +48,16 @@ class ExerciseTest extends BaseTypeTestCase
         $type = $this->getActivityConfig(self::TYPE);
         $mockExerciseActivity = $this->_mockExerciseActivity();
 
-        $config = array(
-            'newActivity' => array(
+        $config = [
+            'newActivity' => [
                 'fromCourseId' => 1,
                 'fromCourseSetId' => 1,
                 'title' => 'test',
-            ),
+            ],
             'isSync' => 1,
             'isCopy' => 0,
-        );
-        $copy = $type->copy(array('mediaId' => 1), $config);
+        ];
+        $copy = $type->copy(['mediaId' => 1], $config);
         $this->assertEquals(2, $copy['id']);
     }
 
@@ -66,34 +66,34 @@ class ExerciseTest extends BaseTypeTestCase
         $type = $this->getActivityConfig(self::TYPE);
 
         $mockExerciseActivity = $this->_mockExerciseActivity();
-        $mockExerciseActivity2 = $this->getExerciseActivityDao()->create(array(
+        $mockExerciseActivity2 = $this->getExerciseActivityDao()->create([
             'id' => 2,
             'answerSceneId' => 1,
-            'drawCondition' => array(
-                'range' => array(
+            'drawCondition' => [
+                'range' => [
                     'question_bank_id' => 1,
                     'bank_id' => 1,
-                    'category_ids' => array(),
+                    'category_ids' => [],
                     'difficulty' => '',
-                ),
-                'section' => array(
-                    'conditions' => array(
-                        'item_types' => array('single_choice'),
-                    ),
+                ],
+                'section' => [
+                    'conditions' => [
+                        'item_types' => ['single_choice'],
+                    ],
                     'item_count' => 2,
                     'name' => '练习题目',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
-        $this->mockBiz('ItemBank:Answer:AnswerSceneService', array(
-            array(
+        $this->mockBiz('ItemBank:Answer:AnswerSceneService', [
+            [
                 'functionName' => 'update',
-                'returnValue' => array(),
-            ),
-        ));
+                'returnValue' => [],
+            ],
+        ]);
 
-        $type->sync(array('mediaId' => $mockExerciseActivity['id'], 'title' => 'test'), array('title' => 'test', 'mediaId' => $mockExerciseActivity2['id']));
+        $type->sync(['mediaId' => $mockExerciseActivity['id'], 'title' => 'test'], ['title' => 'test', 'mediaId' => $mockExerciseActivity2['id']]);
 
         $activity = $type->get($mockExerciseActivity2['id']);
 
@@ -107,30 +107,30 @@ class ExerciseTest extends BaseTypeTestCase
     public function testUpdate_returnException()
     {
         $type = $this->getActivityConfig(self::TYPE);
-        $field = array('title' => 'test2');
-        $result = $type->update(1, $field, array());
+        $field = ['title' => 'test2'];
+        $result = $type->update(1, $field, []);
     }
 
     public function testUpdate()
     {
-        $this->mockBiz('ItemBank:Answer:AnswerSceneService', array(
-            array(
+        $this->mockBiz('ItemBank:Answer:AnswerSceneService', [
+            [
                 'functionName' => 'update',
-                'returnValue' => array(),
-            ),
-        ));
+                'returnValue' => [],
+            ],
+        ]);
 
         $type = $this->getActivityConfig(self::TYPE);
 
         $mockExerciseActivity = $this->_mockExerciseActivity();
 
-        $field = array(
+        $field = [
             'title' => 'test2',
-            'range' => array('bankId' => 1),
+            'range' => ['bankId' => 1],
             'itemCount' => 1,
-            'questionTypes' => array(),
-        );
-        $result = $type->update(1, $field, array());
+            'questionTypes' => [],
+        ];
+        $result = $type->update(1, $field, []);
 
         $this->assertEquals($result['id'], '1');
     }
@@ -150,19 +150,19 @@ class ExerciseTest extends BaseTypeTestCase
 
         $this->_mockExerciseActivity();
 
-        $this->mockBiz('ItemBank:Answer:AnswerRecordService', array(
-            array(
+        $this->mockBiz('ItemBank:Answer:AnswerRecordService', [
+            [
                 'functionName' => 'getLatestAnswerRecordByAnswerSceneIdAndUserId',
-                'returnValue' => array('status' => 'finished'),
-            ),
-        ));
+                'returnValue' => ['status' => 'finished'],
+            ],
+        ]);
 
-        $this->mockBiz('Activity:ActivityService', array(
-            array(
+        $this->mockBiz('Activity:ActivityService', [
+            [
                 'functionName' => 'getActivity',
-                'returnValue' => array('finishType' => 'submit', 'ext' => array('answerSceneId' => 1)),
-            ),
-        ));
+                'returnValue' => ['finishType' => 'submit', 'ext' => ['answerSceneId' => 1]],
+            ],
+        ]);
 
         $result = $type->isFinished(1);
 
@@ -175,19 +175,19 @@ class ExerciseTest extends BaseTypeTestCase
 
         $this->_mockExerciseActivity();
 
-        $this->mockBiz('ItemBank:Answer:AnswerRecordService', array(
-            array(
+        $this->mockBiz('ItemBank:Answer:AnswerRecordService', [
+            [
                 'functionName' => 'getLatestAnswerRecordByAnswerSceneIdAndUserId',
-                'returnValue' => array('status' => 'doing'),
-            ),
-        ));
+                'returnValue' => ['status' => 'doing'],
+            ],
+        ]);
 
-        $this->mockBiz('Activity:ActivityService', array(
-            array(
+        $this->mockBiz('Activity:ActivityService', [
+            [
                 'functionName' => 'getActivity',
-                'returnValue' => array('finishType' => 'submit', 'ext' => array('answerSceneId' => 1)),
-            ),
-        ));
+                'returnValue' => ['finishType' => 'submit', 'ext' => ['answerSceneId' => 1]],
+            ],
+        ]);
 
         $result = $type->isFinished(1);
         $this->assertFalse($result);
@@ -203,25 +203,25 @@ class ExerciseTest extends BaseTypeTestCase
 
     private function _mockExerciseActivity()
     {
-        return $this->getExerciseActivityDao()->create(array(
+        return $this->getExerciseActivityDao()->create([
             'id' => 1,
             'answerSceneId' => 1,
-            'drawCondition' => array(
-                'range' => array(
+            'drawCondition' => [
+                'range' => [
                     'question_bank_id' => 1,
                     'bank_id' => 1,
-                    'category_ids' => array(),
+                    'category_ids' => [],
                     'difficulty' => '',
-                ),
-                'section' => array(
-                    'conditions' => array(
-                        'item_types' => array('single_choice'),
-                    ),
+                ],
+                'section' => [
+                    'conditions' => [
+                        'item_types' => ['single_choice'],
+                    ],
                     'item_count' => 2,
                     'name' => '练习题目',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
     }
 
     protected function getExerciseActivityDao()

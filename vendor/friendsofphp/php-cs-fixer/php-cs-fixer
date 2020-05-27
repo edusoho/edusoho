@@ -2,7 +2,7 @@
 <?php
 
 /*
- * This file is part of the PHP CS utility.
+ * This file is part of PHP CS Fixer.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
  *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
@@ -11,22 +11,20 @@
  * with this source code in the file LICENSE.
  */
 
-/**
- * @author Fabien Potencier <fabien@symfony.com>
- * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
- */
-if (defined('HHVM_VERSION_ID')) {
-    if (HHVM_VERSION_ID < 31800) {
-        fwrite(STDERR, "HHVM needs to be a minimum version of HHVM 3.18.0.\n");
+if (getenv('PHP_CS_FIXER_FUTURE_MODE')) {
+    error_reporting(-1);
+}
 
-        if (getenv('PHP_CS_FIXER_IGNORE_ENV')) {
-            fwrite(STDERR, "Ignoring environment requirements because `PHP_CS_FIXER_IGNORE_ENV` is set. Execution may be unstable.\n");
-        } else {
-            exit(1);
-        }
+if (defined('HHVM_VERSION_ID')) {
+    fwrite(STDERR, "HHVM is not supported.\n");
+
+    if (getenv('PHP_CS_FIXER_IGNORE_ENV')) {
+        fwrite(STDERR, "Ignoring environment requirements because `PHP_CS_FIXER_IGNORE_ENV` is set. Execution may be unstable.\n");
+    } else {
+        exit(1);
     }
-} elseif (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 50306 || PHP_VERSION_ID >= 70300) {
-    fwrite(STDERR, "PHP needs to be a minimum version of PHP 5.3.6 and maximum version of PHP 7.2.*.\n");
+} elseif (!defined('PHP_VERSION_ID') || \PHP_VERSION_ID < 50600 || \PHP_VERSION_ID >= 70500) {
+    fwrite(STDERR, "PHP needs to be a minimum version of PHP 5.6.0 and maximum version of PHP 7.4.*.\n");
 
     if (getenv('PHP_CS_FIXER_IGNORE_ENV')) {
         fwrite(STDERR, "Ignoring environment requirements because `PHP_CS_FIXER_IGNORE_ENV` is set. Execution may be unstable.\n");
@@ -35,7 +33,20 @@ if (defined('HHVM_VERSION_ID')) {
     }
 }
 
-set_error_handler(function ($severity, $message, $file, $line) {
+foreach (['json', 'tokenizer'] as $extension) {
+    if (!extension_loaded($extension)) {
+        fwrite(STDERR, sprintf("PHP extension ext-%s is missing from your system. Install or enable it.\n", $extension));
+
+        if (getenv('PHP_CS_FIXER_IGNORE_ENV')) {
+            fwrite(STDERR, "Ignoring environment requirements because `PHP_CS_FIXER_IGNORE_ENV` is set. Execution may be unstable.\n");
+        } else {
+            exit(1);
+        }
+    }
+}
+unset($extension);
+
+set_error_handler(static function ($severity, $message, $file, $line) {
     if ($severity & error_reporting()) {
         throw new ErrorException($message, 0, $severity, $file, $line);
     }
@@ -51,13 +62,26 @@ if (class_exists('Phar')) {
     } catch (PharException $e) {
     }
 }
+
 if ($require) {
     // OK, it's not, let give Composer autoloader a try!
-    if (file_exists($a = __DIR__.'/../../autoload.php')) {
-        require_once $a;
-    } else {
-        require_once __DIR__.'/vendor/autoload.php';
+    $possibleFiles = [__DIR__.'/../../autoload.php', __DIR__.'/../autoload.php', __DIR__.'/vendor/autoload.php'];
+    $file = null;
+    foreach ($possibleFiles as $possibleFile) {
+        if (file_exists($possibleFile)) {
+            $file = $possibleFile;
+
+            break;
+        }
     }
+
+    if (null === $file) {
+        throw new RuntimeException('Unable to locate autoload.php file.');
+    }
+
+    require_once $file;
+
+    unset($possibleFiles, $possibleFile, $file);
 }
 unset($require);
 

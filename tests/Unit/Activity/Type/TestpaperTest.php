@@ -25,7 +25,7 @@ class TestpaperTest extends BaseTypeTestCase
 
         $this->_mockTestpaperActivity();
 
-        $results = $type->find(array(1, 2));
+        $results = $type->find([1, 2]);
 
         $this->assertEquals(1, count($results));
         $this->assertEquals(1, $results[0]['id']);
@@ -37,7 +37,7 @@ class TestpaperTest extends BaseTypeTestCase
 
         $this->_mockTestpaperActivity();
 
-        $activity = $type->create(array(
+        $activity = $type->create([
             'title' => 'title',
             'redoInterval' => 1,
             'startTime' => 1,
@@ -47,7 +47,7 @@ class TestpaperTest extends BaseTypeTestCase
             'checkType' => '',
             'requireCredit' => '',
             'finishCondition' => 2,
-        ));
+        ]);
 
         $this->assertEquals(2, $activity['mediaId']);
     }
@@ -57,10 +57,10 @@ class TestpaperTest extends BaseTypeTestCase
         $type = $this->getActivityConfig(self::TYPE);
 
         $mockTestpaperActivity = $this->_mockTestpaperActivity();
-        $result = $type->copy(array('mediaType' => 'homework', array()));
+        $result = $type->copy(['mediaType' => 'homework', []]);
         $this->assertNull($result);
 
-        $copy = $type->copy(array('mediaType' => 'testpaper', 'mediaId' => 1, 'redoInterval' => 1, 'title' => '1', 'startTime' => time(), 'doTimes' => 1, 'finishData' => array()), array());
+        $copy = $type->copy(['mediaType' => 'testpaper', 'mediaId' => 1, 'redoInterval' => 1, 'title' => '1', 'startTime' => time(), 'doTimes' => 1, 'finishData' => []], []);
         $this->assertEquals(1, $copy['mediaId']);
     }
 
@@ -70,13 +70,13 @@ class TestpaperTest extends BaseTypeTestCase
 
         $mockTestpaperActivity = $this->_mockTestpaperActivity();
 
-        $mockTestpaperActivity2 = $this->getTestpaperActivityDao()->create(array(
+        $mockTestpaperActivity2 = $this->getTestpaperActivityDao()->create([
             'id' => 2,
             'answerSceneId' => 2,
             'mediaId' => 1,
-        ));
+        ]);
 
-        $syncedActivity = $type->sync(array('finishData' => array(), 'title' => 'title', 'mediaId' => $mockTestpaperActivity['id'], 'startTime' => 1), array('mediaId' => $mockTestpaperActivity2['id'], 'fromCourseSetId' => 2));
+        $syncedActivity = $type->sync(['finishData' => [], 'title' => 'title', 'mediaId' => $mockTestpaperActivity['id'], 'startTime' => 1], ['mediaId' => $mockTestpaperActivity2['id'], 'fromCourseSetId' => 2]);
 
         $this->assertEquals($syncedActivity['answerSceneId'], 2);
     }
@@ -89,9 +89,9 @@ class TestpaperTest extends BaseTypeTestCase
     {
         $type = $this->getActivityConfig(self::TYPE);
 
-        $update = array('name' => 'test');
+        $update = ['name' => 'test'];
 
-        $result = $type->update(1, $update, array());
+        $result = $type->update(1, $update, []);
     }
 
     public function testDelete()
@@ -112,19 +112,19 @@ class TestpaperTest extends BaseTypeTestCase
 
         $this->_mockTestpaperActivity();
 
-        $this->mockBiz('ItemBank:Answer:AnswerRecordService', array(
-            array(
+        $this->mockBiz('ItemBank:Answer:AnswerRecordService', [
+            [
                 'functionName' => 'getLatestAnswerRecordByAnswerSceneIdAndUserId',
-                'returnValue' => array('status' => 'finished', 'answer_report_id' => 1),
-            ),
-        ));
+                'returnValue' => ['status' => 'finished', 'answer_report_id' => 1],
+            ],
+        ]);
 
-        $this->mockBiz('Activity:ActivityService', array(
-            array(
+        $this->mockBiz('Activity:ActivityService', [
+            [
                 'functionName' => 'getActivity',
-                'returnValue' => array('finishType' => 'submit', 'ext' => array('answerScene' => array('id' => 1))),
-            ),
-        ));
+                'returnValue' => ['finishType' => 'submit', 'ext' => ['answerScene' => ['id' => 1]]],
+            ],
+        ]);
 
         $result = $type->isFinished(1);
 
@@ -137,41 +137,41 @@ class TestpaperTest extends BaseTypeTestCase
 
         $this->_mockTestpaperActivity();
 
-        $this->mockBiz('ItemBank:Answer:AnswerRecordService', array(
-            array(
+        $this->mockBiz('ItemBank:Answer:AnswerRecordService', [
+            [
                 'functionName' => 'getLatestAnswerRecordByAnswerSceneIdAndUserId',
-                'returnValue' => array('status' => 'finished', 'score' => 20, 'answer_report_id' => 1),
-            ),
-        ));
+                'returnValue' => ['status' => 'finished', 'score' => 20, 'answer_report_id' => 1],
+            ],
+        ]);
 
-        $this->mockBiz('ItemBank:Answer:AnswerReportService', array(
-            array(
+        $this->mockBiz('ItemBank:Answer:AnswerReportService', [
+            [
                 'functionName' => 'getSimple',
-                'returnValue' => array('score' => 20),
-            ),
-        ));
+                'returnValue' => ['score' => 20],
+            ],
+        ]);
 
-        $this->mockBiz('Activity:ActivityService', array(
-            array(
+        $this->mockBiz('Activity:ActivityService', [
+            [
                 'functionName' => 'getActivity',
-                'returnValue' => array(
+                'returnValue' => [
                     'id' => 1,
                     'mediaId' => 1,
                     'fromCourseId' => 1,
-                    'ext' => array(
+                    'ext' => [
                         'id' => 1,
-                        'testpaper' => array(
+                        'testpaper' => [
                             'id' => 2,
                             'score' => 10,
-                        ),
-                        'answerScene' => array('id' => 1),
-                        'finishCondition' => array('finishType' => 'score', 'finishScore' => 1),
-                    ),
+                        ],
+                        'answerScene' => ['id' => 1],
+                        'finishCondition' => ['finishType' => 'score', 'finishScore' => 1],
+                    ],
                     'finishType' => 'score',
                     'finishData' => '0.8',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
         $result = $type->isFinished(1);
         $this->assertTrue($result);
@@ -183,19 +183,19 @@ class TestpaperTest extends BaseTypeTestCase
 
         $this->_mockTestpaperActivity();
 
-        $this->mockBiz('ItemBank:Answer:AnswerRecordService', array(
-            array(
+        $this->mockBiz('ItemBank:Answer:AnswerRecordService', [
+            [
                 'functionName' => 'getLatestAnswerRecordByAnswerSceneIdAndUserId',
-                'returnValue' => array('status' => 'finished', 'answer_report_id' => 1),
-            ),
-        ));
+                'returnValue' => ['status' => 'finished', 'answer_report_id' => 1],
+            ],
+        ]);
 
-        $this->mockBiz('Activity:ActivityService', array(
-            array(
+        $this->mockBiz('Activity:ActivityService', [
+            [
                 'functionName' => 'getActivity',
-                'returnValue' => array('finishType' => 'doing', 'ext' => array('answerScene' => array('id' => 1))),
-            ),
-        ));
+                'returnValue' => ['finishType' => 'doing', 'ext' => ['answerScene' => ['id' => 1]]],
+            ],
+        ]);
 
         $result = $type->isFinished(1);
 
@@ -212,33 +212,33 @@ class TestpaperTest extends BaseTypeTestCase
 
     private function _mockTestpaperActivity()
     {
-        $this->mockBiz('ItemBank:Assessment:AssessmentService', array(
-            array(
+        $this->mockBiz('ItemBank:Assessment:AssessmentService', [
+            [
                 'functionName' => 'getAssessment',
-                'returnValue' => array('id' => 1),
-            ),
-        ));
+                'returnValue' => ['id' => 1],
+            ],
+        ]);
 
-        $this->mockBiz('ItemBank:Answer:AnswerSceneService', array(
-            array(
+        $this->mockBiz('ItemBank:Answer:AnswerSceneService', [
+            [
                 'functionName' => 'get',
-                'returnValue' => array('id' => 1, 'do_times' => 1, 'redo_interval' => 1, 'limited_time' => 1, 'enable_facein' => 1),
-            ),
-            array(
+                'returnValue' => ['id' => 1, 'do_times' => 1, 'redo_interval' => 1, 'limited_time' => 1, 'enable_facein' => 1],
+            ],
+            [
                 'functionName' => 'create',
-                'returnValue' => array('id' => 1),
-            ),
-            array(
+                'returnValue' => ['id' => 1],
+            ],
+            [
                 'functionName' => 'update',
-                'returnValue' => array('id' => 1),
-            ),
-        ));
+                'returnValue' => ['id' => 1],
+            ],
+        ]);
 
-        return $this->getTestpaperActivityDao()->create(array(
+        return $this->getTestpaperActivityDao()->create([
             'id' => 1,
             'answerSceneId' => 1,
             'mediaId' => 1,
-        ));
+        ]);
     }
 
     protected function getTestpaperActivityDao()
