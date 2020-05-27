@@ -38,7 +38,15 @@
               {% endif %}
                 <img class="course-picture" src="{{ filepath(course_cover(course, 'middle'), 'courseSet.png') }}" alt="{{ course.title }}">
               </a>
-              <button class="close course-close-btn js-delete-btn mrl mts mll" data-role="item-delete" type="button" title="{{'classroom.delete_btn'|trans}}" data-id="{{course.id}}" data-url="{{path('classroom_manage_course_remove', {id: classroom.id, courseId: course.id})}}">× </button>
+              <button class="close course-close-btn js-delete-btn mrl mts mll"
+                      data-role="item-delete" type="button"
+                      title="{{'classroom.delete_btn'|trans}}"
+                      data-id="{{course.id}}"
+                      data-url="{{path('classroom_manage_course_remove', {id: classroom.id, courseId: course.id})}}"
+                      {% if has_permission('admin_v2_course_manage') %}
+                      data-del-url="{{path('classroom_manage_course_delete', {courseSetId: course.courseSet.id, classroomId: classroom.id, courseId: course.id}) }}"
+                      {% endif %}
+              >× </button>
                   <div class="course-body clearfix">
                    <div class="color-gray mls pull-right cd-mr40">
                       {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}

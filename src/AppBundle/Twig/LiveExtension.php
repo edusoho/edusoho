@@ -3,11 +3,11 @@
 namespace AppBundle\Twig;
 
 use Biz\CloudPlatform\Client\CloudAPIIOException;
+use Biz\Course\Service\LiveReplayService;
 use Biz\File\Service\UploadFileService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Biz\Course\Service\LiveReplayService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -31,21 +31,21 @@ class LiveExtension extends \Twig_Extension
 
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('live_can_record', array($this, 'canRecord')),
-            new \Twig_SimpleFunction('is_live_finished', array($this, 'isLiveFinished')),
-            new \Twig_SimpleFunction('get_live_room_type', array($this, 'getLiveRoomType')),
-            new \Twig_SimpleFunction('get_live_account', array($this, 'getLiveAccount')),
-            new \Twig_SimpleFunction('get_live_replays', array($this, 'getLiveReplays')),
-            new \Twig_SimpleFunction('fresh_task_learn_stat', array($this, 'freshTaskLearnStat')),
-        );
+        return [
+            new \Twig_SimpleFunction('live_can_record', [$this, 'canRecord']),
+            new \Twig_SimpleFunction('is_live_finished', [$this, 'isLiveFinished']),
+            new \Twig_SimpleFunction('get_live_room_type', [$this, 'getLiveRoomType']),
+            new \Twig_SimpleFunction('get_live_account', [$this, 'getLiveAccount']),
+            new \Twig_SimpleFunction('get_live_replays', [$this, 'getLiveReplays']),
+            new \Twig_SimpleFunction('fresh_task_learn_stat', [$this, 'freshTaskLearnStat']),
+        ];
     }
 
     public function freshTaskLearnStat(Request $request, $activityId)
     {
         $key = 'activity.'.$activityId;
         $session = $request->getSession();
-        $taskStore = $session->get($key, array());
+        $taskStore = $session->get($key, []);
         $taskStore['start'] = time();
         $taskStore['lastTriggerTime'] = 0;
 
@@ -59,7 +59,7 @@ class LiveExtension extends \Twig_Extension
         $activity = $this->getActivityService()->getActivity($activityId, true);
 
         if (LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS == $activity['ext']['replayStatus']) {
-            return array($this->_getLiveVideoReplay($activity));
+            return [$this->_getLiveVideoReplay($activity)];
         } else {
             return $this->_getLiveReplays($activity);
         }
@@ -70,22 +70,23 @@ class LiveExtension extends \Twig_Extension
         if (LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS == $activity['ext']['replayStatus']) {
             $file = $this->getUploadFileService()->getFullFile($activity['ext']['mediaId']);
 
-            return array(
-                'url' => $this->generateUrl('task_live_replay_player', array(
+            return [
+                'url' => $this->generateUrl('task_live_replay_player', [
                     'activityId' => $activity['id'],
                     'courseId' => $activity['fromCourseId'],
-                )),
+                ]),
                 'title' => $file['filename'],
-            );
+            ];
         } else {
-            return array();
+            return [];
         }
     }
 
     protected function _getLiveReplays($activity)
     {
         if (LiveReplayService::REPLAY_GENERATE_STATUS === $activity['ext']['replayStatus']) {
-            $copyId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
+            $originActivity = $this->getOriginActivity($activity);
+            $copyId = empty($originActivity['copyId']) ? $originActivity['id'] : $originActivity['copyId'];
 
             $replays = $this->getLiveReplayService()->findReplayByLessonId($copyId);
 
@@ -96,19 +97,29 @@ class LiveExtension extends \Twig_Extension
 
             $self = $this;
             $replays = array_map(function ($replay) use ($activity, $self) {
-                $replay['url'] = $self->generateUrl('live_activity_replay_entry', array(
+                $replay['url'] = $self->generateUrl('live_activity_replay_entry', [
                     'courseId' => $activity['fromCourseId'],
                     'activityId' => $activity['id'],
                     'replayId' => $replay['id'],
-                ));
+                ]);
 
                 return $replay;
             }, $replays);
         } else {
-            $replays = array();
+            $replays = [];
         }
 
         return $replays;
+    }
+
+    protected function getOriginActivity($activity)
+    {
+        if (empty($activity['copyId'])) {
+            return $activity;
+        }
+        $copyActivity = $this->getActivityService()->getActivity($activity['copyId']);
+
+        return $this->getOriginActivity($copyActivity);
     }
 
     public function canRecord($liveId)
@@ -135,23 +146,23 @@ class LiveExtension extends \Twig_Extension
     {
         $liveAccount = $this->getEdusohoLiveAccount();
         if (isset($liveAccount['error'])) {
-            return array();
+            return [];
         }
 
-        $default = array(
+        $default = [
             'large' => 'course.live_activity.large_room_type',
             'small' => 'course.live_activity.small_room_type',
-        );
+        ];
 
         $roomTypes = $liveAccount['roomType'];
         if (empty($roomTypes)) {
-            return array();
+            return [];
         }
 
         if (count($roomTypes) >= 2) {
             return $default;
         } else {
-            return array($roomTypes[0] => $default[$roomTypes[0]]);
+            return [$roomTypes[0] => $default[$roomTypes[0]]];
         }
     }
 
@@ -169,7 +180,7 @@ class LiveExtension extends \Twig_Extension
         try {
             return $client->getLiveAccount();
         } catch (CloudAPIIOException $cloudAPIIOException) {
-            return array('error' => $cloudAPIIOException->getMessage());
+            return ['error' => $cloudAPIIOException->getMessage()];
         }
     }
 
@@ -181,7 +192,7 @@ class LiveExtension extends \Twig_Extension
         return 'live';
     }
 
-    public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    public function generateUrl($route, $parameters = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
