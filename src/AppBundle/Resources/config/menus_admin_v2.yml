@@ -24,11 +24,19 @@ admin_v2:
                                     children:
                                         admin_v2_course_content_manage:
                                             name: admin_v2.course.basic.basic_tab.manage_btn
+                                        admin_v2_go_to_choose:
+                                            name: admin_v2.course.basic.basic_tab.go_to_choose_btn
+                                            class: btn-warning
+                                            router_name: admin_v2_purchase_market
+                                            group: topBtn
+                                            blank: 1
+                                            visible: (is_s2b2c_enabled())
                                         admin_v2_course_add:
                                             name: admin_v2.course.basic.basic_tab.create_btn
                                             router_name: course_set_manage_create
                                             group: topBtn
                                             blank: 1
+                                            visible: (s2b2c_has_behaviour_permission('canAddCourse'))
                                         admin_v2_course_set_recommend:
                                             name: admin_v2.course.basic.basic_tab.recommend_btn
                                             router_params:
@@ -87,7 +95,7 @@ admin_v2:
                                             class: 'js-course-set-clone'
                                             icon: 'glyphicon glyphicon-repeat'
                                             mode: none
-                                            visible: (courseSet.parentId == 0 and courseSet.type != 'live')
+                                            visible: (courseSet.parentId == 0 and courseSet.type != 'live' and courseSet.platform|default('self') == 'self')
                                         admin_v2_course_set_publish:
                                             name: admin_v2.course.basic.basic_tab.publish_submit_btn
                                             router_params:
@@ -238,6 +246,7 @@ admin_v2:
                                         admin_v2_open_course_add:
                                             name: admin_v2.course.open_course.basic_tab.create_btn
                                             router_name: course_set_manage_create
+                                            visible: (s2b2c_has_behaviour_permission('canAddOpenCourse'))
                                             router_params:
                                                 default: 'open'
                                             group: topBtn
@@ -725,7 +734,7 @@ admin_v2:
                                             name: admin_v2.user.basic.basic_tab.create_btn
                                             mode: modal
                                             group: topBtn
-                                            visible: (user.type != 'system')
+                                            visible: (app.user.type != 'system')
                                         admin_v2_user_edit:
                                             name: admin_v2.user.basic.basic_tab.edit_btn
                                             mode: modal
@@ -1163,6 +1172,44 @@ admin_v2:
             class: js-new-corner-mark
             visible: (not (setting('copyright.thirdCopyright', false) == 1) and not is_without_network()) #第三方授权和无网情况下不显示云市场
             children:
+                #内容云
+                admin_v2_basic_content_resource_group:
+                    name: admin_v2.basic_content_resource_group
+                    visible: (is_s2b2c_enabled())
+                    is_group: true
+                    children:
+                        #采购市场
+                        admin_v2_purchase_market_menu:
+                            name: admin_v2.purchase_market_menu
+                            children:
+                                admin_v2_purchase_market_tab:
+                                    name: admin_v2.purchase_market_tab
+                                    router_name: admin_v2_purchase_market
+                                    disable: true
+                                admin_v2_products_version_tab:
+                                    name: admin_v2.products_version_tab
+                                    router_name: admin_v2_content_resource_products_version
+                                    disable: true
+                                admin_v2_product_update_setting_tab:
+                                  name: admin_v2.product_update_setting_tab
+                                  router_name: admin_v2_product_update_setting
+                                  disable: true
+
+                        admin_v2_app_resource_settlement:
+                            name: admin_v2.cloud.app_resource_settlement_menu
+                            children:
+                                admin_v2_resource_settlement_balance:
+                                    name: admin_v2.app_resource_settlement.balance.basic_tab
+                                    router_name: admin_v2_resource_settlement_balance
+                                    disable: true
+                                admin_v2_resource_settlement_order:
+                                     name: admin_v2.app_resource_settlement.order.basic_tab
+                                     router_name: admin_v2_resource_settlement_order
+                                     disable: true
+                                admin_v2_resource_settlement_product:
+                                     name: admin_v2.app_resource_settlement.product.basic_tab
+                                     router_name: admin_v2_resource_settlement_product
+                                     disable: true
                 #营销云
                 admin_v2_basic_app_center_group:
                     name: admin_v2.basic_app_center_group
@@ -1190,7 +1237,7 @@ admin_v2:
                                 admin_v2_app_upgrades:
                                     name: admin_v2.cloud.app_center.upgrades_tab
                                     class: app-upgrade
-                                    visible: (cloudStatus())
+                                    visible: (cloudStatus() and not is_s2b2c_enabled())
                                     disable: true
                                 admin_v2_app_logs:
                                     name: admin_v2.cloud.app_center.logs_tab
@@ -1286,17 +1333,17 @@ admin_v2:
                         # 即时聊天设置
                         admin_v2_app_im:
                             name: admin_v2.cloud.im_setting_menu
-                            visible: (cloudStatus())
+                            visible: (cloudStatus() and not is_s2b2c_enabled())
                             children:
                                 admin_v2_app_im_setting:
                                     name: admin_v2.cloud.im_setting.basic_tab
                                     router_name: admin_v2_app_im
                                     disable: true
                         #数据实验室
-                        admin_v2_cloud_data_lab_manage:
+                        admin_v2is_s2b2c_enabled_cloud_data_lab_manage:
                             name: admin_v2.cloud.data_lab
                             class: js-new-corner-mark
-                            visible: (cloudStatus())
+                            visible: (cloudStatus() and not is_s2b2c_enabled())
                             children:
                                 admin_v2_cloud_data_lab:
                                     name: admin_v2.cloud.data_lab
@@ -1306,7 +1353,7 @@ admin_v2:
                         # 人脸识别
                         admin_v2_cloud_face_identify:
                             name: admin_v2.cloud.face_identify
-                            visible: (cloudStatus() and cloud_info()['ai.face']|default(0) and setting('feature.face_enabled'))
+                            visible: (cloudStatus() and cloud_info()['ai.face']|default(0) and setting('feature.face_enabled') and not is_s2b2c_enabled())
                             children:
                                 admin_v2_cloud_face_identify_setting:
                                     name: admin_v2.cloud.face_identify
@@ -1331,13 +1378,14 @@ admin_v2:
                         #功能实验室
                         admin_v2_cloud_feature_lab:
                             name: admin_v2.cloud.feature_lab
-                            visible: (cloudStatus())
+                            visible: (cloudStatus() and not is_s2b2c_enabled())
                             children:
                                 admin_v2_cloud_feature_lab_setting:
                                     name: admin_v2.cloud.feature_lab
                         #授权信息
                         admin_v2_setting_cloud:
                             name: admin_v2.cloud.cloud_setting_menu
+                            visible: (not is_s2b2c_enabled())
                             children:
                                 admin_v2_setting_my_cloud:
                                     name: admin_v2.cloud.cloud_setting.basic_tab
@@ -1408,6 +1456,14 @@ admin_v2:
                                     name: admin_v2.developer.job_logs
                                 admin_v2_crontab:
                                     name: admin_v2.developer.crontab
+                        admin_v2_plumber_manage:
+                            name: admin_v2.developer.plumber_manage_menu
+                            disable: true
+                            children:
+                                admin_v2_plumber:
+                                    name: admin_v2.developer.plumber_manage
+                                admin_v2_plumber_queue:
+                                    name: admin_v2.developer.plumber_queue
                         admin_v2_setting_mobile_iap_product:
                             name: admin_v2.developer.mobile_iap_product_menu
                             disable: true

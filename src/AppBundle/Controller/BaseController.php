@@ -2,23 +2,23 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Exception\AbstractException;
+use AppBundle\Common\Exception\ResourceNotFoundException;
+use AppBundle\Common\JWTAuth;
 use Biz\Common\CommonException;
 use Biz\QiQiuYun\Service\QiQiuYunSdkProxyService;
 use Biz\User\CurrentUser;
-use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Http\SecurityEvents;
-use AppBundle\Common\Exception\ResourceNotFoundException;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use AppBundle\Common\Exception\AbstractException;
-use AppBundle\Common\JWTAuth;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\Security\Http\SecurityEvents;
 
 class BaseController extends Controller
 {
@@ -47,9 +47,6 @@ class BaseController extends Controller
 
     /**
      * switch current user.
-     *
-     * @param Request     $request
-     * @param CurrentUser $user
      *
      * @return CurrentUser
      */
@@ -127,12 +124,12 @@ class BaseController extends Controller
 
         //判断手机发送的客户端标志,兼容性有待提高
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
-            $clientkeywords = array(
+            $clientkeywords = [
                 'nokia', 'sony', 'ericsson', 'mot', 'samsung', 'htc', 'sgh', 'lg', 'sharp',
                 'sie-', 'philips', 'panasonic', 'alcatel', 'lenovo', 'iphone', 'ipod', 'blackberry', 'meizu',
                 'android', 'netfront', 'symbian', 'ucweb', 'windowsce', 'palm', 'operamini', 'operamobi',
                 'openwave', 'nexusone', 'cldc', 'midp', 'wap', 'mobile',
-            );
+            ];
 
             // 从HTTP_USER_AGENT中查找手机浏览器的关键字
             if (preg_match('/('.implode('|', $clientkeywords).')/i', strtolower($_SERVER['HTTP_USER_AGENT']))) {
@@ -163,7 +160,7 @@ class BaseController extends Controller
         return $htmlHelper->purify($html, $trusted);
     }
 
-    protected function trans($id, array $parameters = array(), $domain = null, $locale = null)
+    protected function trans($id, array $parameters = [], $domain = null, $locale = null)
     {
         return $this->container->get('translator')->trans($id, $parameters, $domain, $locale);
     }
@@ -187,33 +184,33 @@ class BaseController extends Controller
             return $this->generateUrl('homepage');
         }
 
-        if ($targetPath == $this->generateUrl('login', array(), UrlGeneratorInterface::ABSOLUTE_URL)) {
+        if ($targetPath == $this->generateUrl('login', [], UrlGeneratorInterface::ABSOLUTE_URL)) {
             return $this->generateUrl('homepage');
         }
 
         $url = explode('?', $targetPath);
 
-        if ($url[0] == $this->generateUrl('partner_logout', array(), UrlGeneratorInterface::ABSOLUTE_URL)) {
+        if ($url[0] == $this->generateUrl('partner_logout', [], UrlGeneratorInterface::ABSOLUTE_URL)) {
             return $this->generateUrl('homepage');
         }
 
-        if ($url[0] == $this->generateUrl('password_reset_update', array(), UrlGeneratorInterface::ABSOLUTE_URL)) {
-            $targetPath = $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+        if ($url[0] == $this->generateUrl('password_reset_update', [], UrlGeneratorInterface::ABSOLUTE_URL)) {
+            $targetPath = $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         if (strpos($url[0], $request->getPathInfo()) > -1) {
-            $targetPath = $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+            $targetPath = $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         if (false !== strpos($url[0], 'callback')
             || false !== strpos($url[0], '/login/bind')
             || false !== strpos($url[0], 'crontab')
         ) {
-            $targetPath = $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+            $targetPath = $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         if (empty($targetPath)) {
-            $targetPath = $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+            $targetPath = $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         return $this->filterRedirectUrl($targetPath);
@@ -227,24 +224,24 @@ class BaseController extends Controller
     protected function agentInWhiteList($userAgent)
     {
         // com.tencent.mm.app.Application 是安卓端小程序在播放视频时的UA，无法找到为什么UA是这样的具体原因，为了容错
-        $whiteList = array('iPhone', 'iPad', 'Android', 'HTC', 'com.tencent.mm.app.Application');
+        $whiteList = ['iPhone', 'iPad', 'Android', 'HTC', 'com.tencent.mm.app.Application'];
 
         return ArrayToolkit::some($whiteList, function ($agent) use ($userAgent) {
             return strpos($userAgent, $agent) > -1;
         });
     }
 
-    protected function createNamedFormBuilder($name, $data = null, array $options = array())
+    protected function createNamedFormBuilder($name, $data = null, array $options = [])
     {
         return $this->container->get('form.factory')->createNamedBuilder($name, FormType::class, $data, $options);
     }
 
-    protected function createJsonResponse($data = null, $status = 200, $headers = array())
+    protected function createJsonResponse($data = null, $status = 200, $headers = [])
     {
         return new JsonResponse($data, $status, $headers);
     }
 
-    protected function createJsonpResponse($data = null, $callback = 'callback', $status = 200, $headers = array())
+    protected function createJsonpResponse($data = null, $callback = 'callback', $status = 200, $headers = [])
     {
         $response = $this->createJsonResponse($data, $status, $headers);
 
@@ -254,7 +251,7 @@ class BaseController extends Controller
     //@todo 此方法是为了和旧的调用兼容，考虑清理掉
     protected function createErrorResponse($request, $name, $message)
     {
-        $error = array('error' => array('name' => $name, 'message' => $message));
+        $error = ['error' => ['name' => $name, 'message' => $message]];
 
         return new JsonResponse($error, '200');
     }
@@ -284,17 +281,17 @@ class BaseController extends Controller
      */
     protected function createMessageResponse($type, $message, $title = '', $duration = 0, $goto = null)
     {
-        if (!in_array($type, array('info', 'warning', 'error'))) {
+        if (!in_array($type, ['info', 'warning', 'error'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        return $this->render('default/message.html.twig', array(
+        return $this->render('default/message.html.twig', [
             'type' => $type,
             'message' => $message,
             'title' => $title,
             'duration' => $duration,
             'goto' => $this->filterRedirectUrl($goto),
-        ));
+        ]);
     }
 
     protected function createResourceNotFoundException($resourceType, $resourceId, $message = '')
@@ -333,7 +330,7 @@ class BaseController extends Controller
         return $this->redirect($url, $status);
     }
 
-    public function render($view, array $parameters = array(), Response $response = null)
+    public function render($view, array $parameters = [], Response $response = null)
     {
         $biz = $this->getBiz();
         foreach ($biz['render_view_resolvers'] as $resolver) {
@@ -343,7 +340,7 @@ class BaseController extends Controller
         return parent::render($view, $parameters, $response);
     }
 
-    public function renderView($view, array $parameters = array())
+    public function renderView($view, array $parameters = [])
     {
         $biz = $this->getBiz();
         foreach ($biz['render_view_resolvers'] as $resolver) {
@@ -365,28 +362,28 @@ class BaseController extends Controller
     public function filterRedirectUrl($url)
     {
         $host = $this->get('request_stack')->getCurrentRequest()->getHost();
-        $safeHosts = array($host);
+        $safeHosts = [$host];
 
         $parsedUrl = parse_url($url);
         $isUnsafeHost = isset($parsedUrl['host']) && !in_array($parsedUrl['host'], $safeHosts);
 
         if (empty($url) || $isUnsafeHost) {
-            $url = $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+            $url = $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         return strip_tags($url);
     }
 
-    protected function createSuccessJsonResponse($data = array())
+    protected function createSuccessJsonResponse($data = [])
     {
-        $data = array_merge(array('success' => 1), $data);
+        $data = array_merge(['success' => 1], $data);
 
         return $this->createJsonResponse($data);
     }
 
-    protected function createFailJsonResponse($data = array())
+    protected function createFailJsonResponse($data = [])
     {
-        $data = array_merge(array('success' => 0), $data);
+        $data = array_merge(['success' => 0], $data);
 
         return $this->createJsonResponse($data);
     }
@@ -439,7 +436,7 @@ class BaseController extends Controller
 
     protected function getJWTAuth()
     {
-        $setting = $this->setting('storage', array());
+        $setting = $this->setting('storage', []);
         $accessKey = !empty($setting['cloud_access_key']) ? $setting['cloud_access_key'] : '';
         $secretKey = !empty($setting['cloud_secret_key']) ? $setting['cloud_secret_key'] : '';
         $key = md5($accessKey.$secretKey);

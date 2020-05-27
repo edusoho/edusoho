@@ -50,7 +50,7 @@ final class SingleClassElementPerStatementFixer extends AbstractFixer implements
     {
         return new FixerDefinition(
             'There MUST NOT be more than one property or constant declared per statement.',
-            array(
+            [
                 new CodeSample(
                     '<?php
 final class Example
@@ -68,9 +68,9 @@ final class Example
     private static $bar1 = array(1,2,3), $bar2 = [1,2,3];
 }
 ',
-                    array('elements' => array('property'))
+                    ['elements' => ['property']]
                 ),
-            )
+            ]
         );
     }
 
@@ -83,11 +83,11 @@ final class Example
         $elements = array_reverse($analyzer->getClassyElements(), true);
 
         foreach ($elements as $index => $element) {
-            if (!in_array($element['type'], $this->configuration['elements'], true)) {
+            if (!\in_array($element['type'], $this->configuration['elements'], true)) {
                 continue; // not in configuration
             }
 
-            $this->fixElement($tokens, $index);
+            $this->fixElement($tokens, $element['type'], $index);
         }
     }
 
@@ -96,24 +96,22 @@ final class Example
      */
     protected function createConfigurationDefinition()
     {
-        $values = array('const', 'property');
+        $values = ['const', 'property'];
 
-        $elements = new FixerOptionBuilder('elements', 'List of strings which element should be modified.');
-        $elements = $elements
-            ->setDefault($values)
-            ->setAllowedTypes(array('array'))
-            ->setAllowedValues(array(new AllowedValueSubset($values)))
-            ->getOption()
-        ;
-
-        return new FixerConfigurationResolverRootless('elements', array($elements));
+        return new FixerConfigurationResolverRootless('elements', [
+            (new FixerOptionBuilder('elements', 'List of strings which element should be modified.'))
+                ->setDefault($values)
+                ->setAllowedTypes(['array'])
+                ->setAllowedValues([new AllowedValueSubset($values)])
+                ->getOption(),
+        ], $this->getName());
     }
 
     /**
-     * @param Tokens $tokens
+     * @param string $type
      * @param int    $index
      */
-    private function fixElement(Tokens $tokens, $index)
+    private function fixElement(Tokens $tokens, $type, $index)
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
         $repeatIndex = $index;
@@ -124,7 +122,7 @@ final class Example
 
             if ($tokensAnalyzer->isArray($repeatIndex)) {
                 if ($repeatToken->isGivenKind(T_ARRAY)) {
-                    $repeatIndex = $tokens->getNextTokenOfKind($repeatIndex, array('('));
+                    $repeatIndex = $tokens->getNextTokenOfKind($repeatIndex, ['(']);
                     $repeatIndex = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $repeatIndex);
                 } else {
                     $repeatIndex = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_ARRAY_SQUARE_BRACE, $repeatIndex);
@@ -142,20 +140,21 @@ final class Example
             }
         }
 
-        $start = $tokens->getPrevTokenOfKind($index, array(';', '{', '}'));
+        $start = $tokens->getPrevTokenOfKind($index, [';', '{', '}']);
         $this->expandElement(
             $tokens,
+            $type,
             $tokens->getNextMeaningfulToken($start),
-            $tokens->getNextTokenOfKind($index, array(';'))
+            $tokens->getNextTokenOfKind($index, [';'])
         );
     }
 
     /**
-     * @param Tokens $tokens
+     * @param string $type
      * @param int    $startIndex
      * @param int    $endIndex
      */
-    private function expandElement(Tokens $tokens, $startIndex, $endIndex)
+    private function expandElement(Tokens $tokens, $type, $startIndex, $endIndex)
     {
         $divisionContent = null;
         if ($tokens[$startIndex - 1]->isWhitespace()) {
@@ -191,36 +190,41 @@ final class Example
             }
 
             if (null !== $divisionContent && '' !== $divisionContent) {
-                $tokens->insertAt($i + 1, new Token(array(T_WHITESPACE, $divisionContent)));
+                $tokens->insertAt($i + 1, new Token([T_WHITESPACE, $divisionContent]));
             }
 
             // collect modifiers
-            $sequence = $this->getModifiersSequences($tokens, $startIndex, $endIndex);
+            $sequence = $this->getModifiersSequences($tokens, $type, $startIndex, $endIndex);
             $tokens->insertAt($i + 2, $sequence);
         }
     }
 
     /**
-     * @param Tokens $tokens
+     * @param string $type
      * @param int    $startIndex
      * @param int    $endIndex
      *
      * @return Token[]
      */
-    private function getModifiersSequences(Tokens $tokens, $startIndex, $endIndex)
+    private function getModifiersSequences(Tokens $tokens, $type, $startIndex, $endIndex)
     {
-        $sequence = array();
+        if ('property' === $type) {
+            $tokenKinds = [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_STATIC, T_VAR, T_STRING, T_NS_SEPARATOR, CT::T_NULLABLE_TYPE, CT::T_ARRAY_TYPEHINT];
+        } else {
+            $tokenKinds = [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_CONST];
+        }
+
+        $sequence = [];
         for ($i = $startIndex; $i < $endIndex - 1; ++$i) {
-            if ($tokens[$i]->isWhitespace() || $tokens[$i]->isComment()) {
+            if ($tokens[$i]->isComment()) {
                 continue;
             }
 
-            if (!$tokens[$i]->isGivenKind(array(T_PUBLIC, T_PROTECTED, T_PRIVATE, T_STATIC, T_CONST, T_VAR))) {
+            if (!$tokens[$i]->isWhitespace() && !$tokens[$i]->isGivenKind($tokenKinds)) {
                 break;
             }
 
             $sequence[] = clone $tokens[$i];
-            $sequence[] = new Token(array(T_WHITESPACE, ' '));
         }
 
         return $sequence;

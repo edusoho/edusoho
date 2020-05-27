@@ -32,29 +32,31 @@ final class SimplifiedNullReturnFixer extends AbstractFixer
     {
         return new FixerDefinition(
             'A return statement wishing to return `void` should not return `null`.',
-            array(
-                new CodeSample('<?php return null;'),
+            [
+                new CodeSample("<?php return null;\n"),
                 new VersionSpecificCodeSample(
-<<<'EOT'
+                    <<<'EOT'
 <?php
 function foo() { return null; }
 function bar(): int { return null; }
 function baz(): ?int { return null; }
 function xyz(): void { return null; }
+
 EOT
                     ,
                     new VersionSpecification(70100)
                 ),
-            )
+            ]
         );
     }
 
     /**
      * {@inheritdoc}
+     *
+     * Must run before NoUselessReturnFixer.
      */
     public function getPriority()
     {
-        // should be run before NoUselessReturnFixer
         return -17;
     }
 
@@ -85,8 +87,7 @@ EOT
     /**
      * Clear the return statement located at a given index.
      *
-     * @param Tokens $tokens
-     * @param int    $index
+     * @param int $index
      */
     private function clear(Tokens $tokens, $index)
     {
@@ -100,8 +101,7 @@ EOT
     /**
      * Does the return statement located at a given index need fixing?
      *
-     * @param Tokens $tokens
-     * @param int    $index
+     * @param int $index
      *
      * @return bool
      */
@@ -126,8 +126,7 @@ EOT
     /**
      * Is the return within a function with a non-void or nullable return type?
      *
-     * @param Tokens $tokens
-     * @param int    $returnIndex Current return token index
+     * @param int $returnIndex Current return token index
      *
      * @return bool
      */
@@ -135,18 +134,18 @@ EOT
     {
         $functionIndex = $returnIndex;
         do {
-            $functionIndex = $tokens->getPrevTokenOfKind($functionIndex, array(array(T_FUNCTION)));
+            $functionIndex = $tokens->getPrevTokenOfKind($functionIndex, [[T_FUNCTION]]);
             if (null === $functionIndex) {
                 return false;
             }
-            $openingCurlyBraceIndex = $tokens->getNextTokenOfKind($functionIndex, array('{'));
+            $openingCurlyBraceIndex = $tokens->getNextTokenOfKind($functionIndex, ['{']);
             $closingCurlyBraceIndex = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_CURLY_BRACE, $openingCurlyBraceIndex);
         } while ($closingCurlyBraceIndex < $returnIndex);
 
         $possibleVoidIndex = $tokens->getPrevMeaningfulToken($openingCurlyBraceIndex);
         $isStrictReturnType = $tokens[$possibleVoidIndex]->isGivenKind(T_STRING) && 'void' !== $tokens[$possibleVoidIndex]->getContent();
 
-        $nullableTypeIndex = $tokens->getNextTokenOfKind($functionIndex, array(array(CT::T_NULLABLE_TYPE)));
+        $nullableTypeIndex = $tokens->getNextTokenOfKind($functionIndex, [[CT::T_NULLABLE_TYPE]]);
         $isNullableReturnType = null !== $nullableTypeIndex && $nullableTypeIndex < $openingCurlyBraceIndex;
 
         return $isStrictReturnType || $isNullableReturnType;
@@ -158,8 +157,7 @@ EOT
      * If the token is a comment, or is whitespace that is immediately before a
      * comment, then we'll leave it alone.
      *
-     * @param Tokens $tokens
-     * @param int    $index
+     * @param int $index
      *
      * @return bool
      */

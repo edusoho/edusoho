@@ -17,4 +17,6 @@ interface PlayerService
     public function getPptFilePlayer($ppt, $ssl);
 
     public function getVideoPlayUrl($file, $context, $ssl);
+
+    public function getFlashFilePlayer($flash, $ssl);
 }

@@ -15,16 +15,16 @@ class MarkerController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $task = $this->getTaskService()->getCourseTask($courseId, $taskId);
-        $activity = array();
+        $activity = [];
         if (!empty($task)) {
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         }
 
-        return $this->render('marker/index.html.twig', array(
+        return $this->render('marker/index.html.twig', [
             'course' => $course,
             'task' => $task,
             'activity' => $activity,
-        ));
+        ]);
     }
 
     public function previewAction(Request $request, $courseId, $taskId)
@@ -32,16 +32,16 @@ class MarkerController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $task = $this->getTaskService()->getCourseTask($courseId, $taskId);
 
-        $activity = array();
+        $activity = [];
         if (!empty($task)) {
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         }
 
-        return $this->render('marker/preview.html.twig', array(
+        return $this->render('marker/preview.html.twig', [
             'course' => $course,
             'task' => $task,
             'activity' => $activity,
-        ));
+        ]);
     }
 
     //驻点合并
@@ -77,10 +77,10 @@ class MarkerController extends BaseController
             }
         }
 
-        $result = array(
+        $result = [
             'markersMeta' => $markersMeta,
             'videoTime' => $file['length'],
-        );
+        ];
 
         return $this->createJsonResponse($result);
     }
@@ -94,10 +94,10 @@ class MarkerController extends BaseController
 
         $data = $request->request->all();
         $data['id'] = isset($data['id']) ? $data['id'] : 0;
-        $fields = array(
+        $fields = [
             'updatedTime' => time(),
             'second' => isset($data['second']) ? $data['second'] : '',
-        );
+        ];
         $marker = $this->getMarkerService()->updateMarker($data['id'], $fields);
 
         return $this->createJsonResponse($marker);
@@ -112,11 +112,11 @@ class MarkerController extends BaseController
         $storage = $this->getSettingService()->get('storage');
         $video_header = $this->getUploadFileService()->getFileByTargetType('headLeader');
         $markers = $this->getMarkerService()->findMarkersByMediaId($activity['ext']['file']['id']);
-        $results = array();
+        $results = [];
         $user = $this->getUserService()->getCurrentUser();
 
         if ($this->agentInWhiteList($request->headers->get('user-agent')) ? 1 : 0) {
-            return $this->createJsonResponse(array());
+            return $this->createJsonResponse([]);
         }
 
         foreach ($markers as $key => $marker) {

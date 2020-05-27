@@ -30,7 +30,7 @@ final class SemicolonAfterInstructionFixer extends AbstractFixer
     {
         return new FixerDefinition(
             'Instructions must be terminated with a semicolon.',
-            array(new CodeSample('<?php echo 1 ?>'))
+            [new CodeSample("<?php echo 1 ?>\n")]
         );
     }
 
@@ -47,13 +47,13 @@ final class SemicolonAfterInstructionFixer extends AbstractFixer
      */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens)
     {
-        for ($index = count($tokens) - 1; $index > 1; --$index) {
+        for ($index = \count($tokens) - 1; $index > 1; --$index) {
             if (!$tokens[$index]->isGivenKind(T_CLOSE_TAG)) {
                 continue;
             }
 
             $prev = $tokens->getPrevMeaningfulToken($index);
-            if ($tokens[$prev]->equalsAny(array(';', '{', '}', ':', array(T_OPEN_TAG)))) {
+            if ($tokens[$prev]->equalsAny([';', '{', '}', ':', [T_OPEN_TAG]])) {
                 continue;
             }
 

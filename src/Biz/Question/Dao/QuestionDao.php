@@ -23,4 +23,6 @@ interface QuestionDao extends AdvancedDaoInterface
     public function copyQuestionsUpdateSubCount($parentId, $subCount);
 
     public function getQuestionCountGroupByTypes($conditions);
+
+    public function findBySyncIds(array $syncIds);
 }

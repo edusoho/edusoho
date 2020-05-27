@@ -3,6 +3,7 @@
 namespace Biz\Xapi\Event;
 
 use AppBundle\Common\MathToolkit;
+use Biz\Activity\Service\ActivityService;
 use Biz\OrderFacade\Product\ClassroomProduct;
 use Biz\OrderFacade\Product\CourseProduct;
 use Biz\User\CurrentUser;
@@ -11,13 +12,12 @@ use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use QiQiuYun\SDK\Constants\XAPIVerbs;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Biz\Activity\Service\ActivityService;
 
 class StatementEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'answer.submitted' => 'onAnswerSubmitted',
             'question_marker.finish' => 'onQuestionMarkerFinish',
             'order.paid' => 'onOrderPaid',
@@ -32,14 +32,14 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'course.thread.create' => 'onCourseThreadCreate',
             'courseSet.favorite' => 'onCourseSetFavorite',
             'course.review.add' => 'onCourseReviewAdd',
-        );
+        ];
     }
 
     public function onAnswerSubmitted(Event $event)
     {
         $answerRecord = $event->getSubject();
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
-        if (empty($activity) || !in_array($activity['mediaType'], array('homework', 'testpaper', 'exercise'))) {
+        if (empty($activity) || !in_array($activity['mediaType'], ['homework', 'testpaper', 'exercise'])) {
             return;
         }
         $this->createStatement($answerRecord['user_id'], 'completed', $answerRecord['id'], $activity['mediaType']);
@@ -81,14 +81,14 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     public function onOrderPaid(Event $event)
     {
         $order = $event->getSubject();
-        $orderItem = empty($order['items']) ? array() : $order['items'][0];
+        $orderItem = empty($order['items']) ? [] : $order['items'][0];
         // TODO 如果改成一个订单多个商品的话，每一个 item 需要保存真实支付的现金
-        $isSuiteOrder = 'outside' != $order['source'] && $order['pay_amount'] > 0 && $orderItem && in_array($orderItem['target_type'], array(CourseProduct::TYPE, ClassroomProduct::TYPE));
+        $isSuiteOrder = 'outside' != $order['source'] && $order['pay_amount'] > 0 && $orderItem && in_array($orderItem['target_type'], [CourseProduct::TYPE, ClassroomProduct::TYPE]);
         if ($isSuiteOrder) {
-            $this->createStatement($order['user_id'], XAPIVerbs::PURCHASED, $orderItem['target_id'], $orderItem['target_type'], array(
+            $this->createStatement($order['user_id'], XAPIVerbs::PURCHASED, $orderItem['target_id'], $orderItem['target_type'], [
                 'pay_amount' => round(MathToolkit::simple($order['pay_amount'], 0.01), 2),
                 'title' => $orderItem['title'],
-            ));
+            ]);
         }
     }
 
@@ -139,22 +139,22 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         $favorite = $event->getSubject();
         $course = $event->getArgument('course');
 
-        $this->createStatement($favorite['userId'], XAPIVerbs::BOOKMARKED, $course['id'], 'course', array(
-        ));
+        $this->createStatement($favorite['userId'], XAPIVerbs::BOOKMARKED, $course['id'], 'course', [
+        ]);
     }
 
     public function onCourseReviewAdd(Event $event)
     {
         $review = $event->getSubject();
 
-        $this->createStatement($review['userId'], XAPIVerbs::RATED, $review['courseId'], 'course', array(
-            'score' => array(
+        $this->createStatement($review['userId'], XAPIVerbs::RATED, $review['courseId'], 'course', [
+            'score' => [
                 'raw' => $review['rating'],
                 'max' => 5,
                 'min' => 1,
-            ),
+            ],
             'response' => $review['content'],
-        ));
+        ]);
     }
 
     public function onClassroomReviewAdd(Event $event)
@@ -162,34 +162,34 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         $review = $event->getSubject();
         $classroom = $event->getArgument('classroom');
 
-        $this->createStatement($review['userId'], XAPIVerbs::RATED, $review['classroomId'], 'classroom', array(
-            'score' => array('raw' => $review['rating'], 'max' => 5, 'min' => 1),
+        $this->createStatement($review['userId'], XAPIVerbs::RATED, $review['classroomId'], 'classroom', [
+            'score' => ['raw' => $review['rating'], 'max' => 5, 'min' => 1],
             'response' => $review['content'],
             'name' => $classroom['title'],
-        ));
+        ]);
     }
 
     public function onUserRegistered(Event $event)
     {
         $user = $event->getSubject();
 
-        $this->createStatement($user['id'], XAPIVerbs::REGISTERED, $user['id'], 'user', array());
+        $this->createStatement($user['id'], XAPIVerbs::REGISTERED, $user['id'], 'user', []);
     }
 
-    private function createStatement($userId, $verb, $targetId, $targetType, $context = array())
+    private function createStatement($userId, $verb, $targetId, $targetType, $context = [])
     {
         if (empty($userId)) {
             return;
         }
         try {
-            $statement = array(
+            $statement = [
                 'user_id' => $userId,
                 'verb' => $verb,
                 'target_id' => $targetId,
                 'target_type' => $targetType,
                 'context' => $context,
                 'occur_time' => time(),
-            );
+            ];
 
             $this->getXapiService()->createStatement($statement);
         } catch (\Exception $e) {

@@ -1,0 +1,126 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-lg" %}
+
+{% block title %}{{ 'admin_v2.app_center.resource_settlement.order.detail'|trans }}{% endblock %}
+
+{% block body %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">{{ 'admin_v2.app_center.resource_settlement.order.detail.information'|trans }}</div>
+    </div>
+    <div class="panel-body">
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>{{ 'admin_v2.app_center.resource_settlement.order.title'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.order.detail.price_amount'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.order.detail.discount'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.order.detail.pay_amount'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.order.create_time'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.order.debt_amount'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.order.detail.status'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>
+            <div>{{ detail.order.title }}</div>
+            <div class="text-muted text-sm">{{ 'admin_v2.app_center.resource_settlement.order.sn'|trans }}：{{ detail.order.sn }}</div>
+          </td>
+          <td>
+            <span class="text-danger">- {{ detail.order.price_amount|default(0) / 100 |currency }}</span>
+          </td>
+          <td>
+            <span class="text-danger">
+              {{ (detail.order.price_amount - detail.order.paid_coin_amount)/100|currency }}
+            </span>
+          </td>
+          <td>
+            <span class="text-danger">
+              {{ detail.order.pay_amount|default(0) /100|currency }}
+            </span>
+          </td>
+          <td>{{ detail.order.created_time|date_format('Y-m-d H:i:s') }}</td>
+          <td><span class="text-danger">{{ detail.order.debt_amount|default(0) / 100|currency }}</span></td>
+          <td>
+            {% if detail.order.status == 'success' %}
+              {{ 'admin_v2.app_center.resource_settlement.order.paid'|trans }}
+            {% elseif detail.order.status == 'refunded' %}
+              {{ 'admin_v2.app_center.resource_settlement.order.refunded'|trans }}
+            {% else %}
+              {{ 'admin_v2.app_center.resource_settlement.order.pay'|trans }}
+            {% endif %}
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">{{ 'admin_v2.app_center.resource_settlement.order.detail.pay_information'|trans }}</div>
+    </div>
+    <div class="panel-body">
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>{{ 'admin_v2.app_center.resource_settlement.balance.sn'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.balance.amount'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.balance.action'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.order.detail.pay_time'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for flow in detail.flows %}
+          <tr>
+            <td>{{ flow.sn|default('-') }}</td>
+            <td>
+              {% if flow.type =='inflow' %}
+                <span class="text-success">+ {{ flow.amount|default(0)/100|currency }}</span>
+              {% elseif flow.type == 'outflow' %}
+                <span class="text-danger">- {{ flow.amount|default(0)/100|currency }}</span>
+              {% endif %}
+            </td>
+            <td>{% if flow.action == 'recharge' %}
+                {{ 'admin_v2.app_center.resource_settlement.balance.recharge_manually'|trans }}
+              {% elseif flow.action == 'purchase' %}
+                {{ 'admin_v2.app_center.resource_settlement.balance.balance_payment'|trans }}
+              {% elseif flow.action == 'refund' %}
+                {{ 'admin_v2.app_center.resource_settlement.balance.balance_refund'|trans }}
+              {% endif %}
+            <td>{{ flow.created_time|date_format('Y-m-d H:i:s')|default('-') }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div
+          class="panel-title">{{ 'admin_v2.app_center.resource_settlement.order.detail.order_information'|trans }}</div>
+    </div>
+    <div class="panel-body">
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>{{ 'admin_v2.app_center.resource_settlement.order.detail.order_title'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.order.detail.order_sn'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.order.detail.order_user'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <td>{{ detail.order.create_extra.merchant_order.title }}</td>
+        <td>{{ detail.order.create_extra.merchant_order.sn }}</td>
+        <td>
+          {{ merchant.name }} - {{ detail.order.create_extra.merchant_order.nickname }}
+        </td>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+{% endblock %}

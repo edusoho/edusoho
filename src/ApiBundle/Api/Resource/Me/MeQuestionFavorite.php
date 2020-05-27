@@ -25,7 +25,7 @@ class MeQuestionFavorite extends AbstractResource
 
         $this->getQuestionFavoriteService()->deleteByQuestionFavorite($questionFavorite);
 
-        return array('result' => true);
+        return ['result' => true];
     }
 
     /**

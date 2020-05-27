@@ -2,6 +2,7 @@
 
 namespace Topxia\Api\Resource;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ExerciseActivityService;
 use Biz\Testpaper\Wrapper\AssessmentResponseWrapper;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
@@ -12,7 +13,6 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Silex\Application;
-use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class ExerciseResult extends BaseResource
@@ -41,10 +41,10 @@ class ExerciseResult extends BaseResource
             return $this->error('404', '该练习不存在!');
         }
 
-        $conditions = array(
+        $conditions = [
             'mediaId' => $exerciseActivity['id'],
             'mediaType' => 'exercise',
-        );
+        ];
         $activities = $this->getActivityService()->search($conditions, null, 0, 1);
         if (!$activities) {
             return $this->error('404', '该练习任务不存在!');
@@ -60,9 +60,9 @@ class ExerciseResult extends BaseResource
         $responses = $wrapper->wrap($answers, $assessment, $answerRecord);
         $this->getAnswerService()->submitAnswer($responses);
 
-        return array(
+        return [
             'id' => $answerRecord['id'],
-        );
+        ];
     }
 
     public function get(Application $app, Request $request, $lessonId)
@@ -91,9 +91,9 @@ class ExerciseResult extends BaseResource
         $questionIds = ArrayToolkit::column($items, 'questionId');
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
-        $materialMap = array();
-        $itemIndexMap = array();
-        $newItems = array();
+        $materialMap = [];
+        $itemIndexMap = [];
+        $newItems = [];
         foreach ($items as &$item) {
             unset($item['answer']);
             unset($item['userId']);
@@ -104,7 +104,7 @@ class ExerciseResult extends BaseResource
 
             if ('material' == $item['questionType']) {
                 $itemIndexMap[$item['questionId']] = $item['id'];
-                $materialMap[$item['questionId']] = array();
+                $materialMap[$item['questionId']] = [];
             }
 
             if (0 != $item['questionParentId'] && isset($materialMap[$item['questionParentId']])) {
@@ -134,15 +134,15 @@ class ExerciseResult extends BaseResource
     private function answerFormat($answers)
     {
         if (empty($answers['data'])) {
-            return array();
+            return [];
         }
 
-        $data = array();
+        $data = [];
         foreach ($answers['data'] as $questionId => $value) {
             $data[$questionId] = empty($value['answer']) ? '' : $value['answer'];
         }
 
-        return array('data' => $data);
+        return ['data' => $data];
     }
 
     protected function getQuestionService()

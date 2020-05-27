@@ -8,8 +8,8 @@ use Biz\BaseService;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Marker\Dao\QuestionMarkerResultDao;
-use Biz\Marker\Service\MarkerService;
 use Biz\Marker\QuestionMarkerException;
+use Biz\Marker\Service\MarkerService;
 use Biz\Marker\Service\QuestionMarkerResultService;
 use Biz\Marker\Service\QuestionMarkerService;
 use Biz\Marker\Service\ReportService;
@@ -32,7 +32,7 @@ class ReportServiceImpl extends BaseService implements ReportService
             $this->createNewException(QuestionMarkerException::NOTFOUND_QUESTION_MARKER());
         }
 
-        $analysis = array();
+        $analysis = [];
         $analysis['item'] = $item;
         $analysis['question'] = current($item['questions']);
 
@@ -42,7 +42,7 @@ class ReportServiceImpl extends BaseService implements ReportService
 
         //根据不同的题目类型，调用不同的解析逻辑，
         $method = $this->getMethodName($item['type']);
-        $analysis['metaStats'] = call_user_func_array(array($this, $method), array($item, $results));
+        $analysis['metaStats'] = call_user_func_array([$this, $method], [$item, $results]);
 
         return $analysis;
     }
@@ -50,14 +50,14 @@ class ReportServiceImpl extends BaseService implements ReportService
     public function statTaskQuestionMarker($courseId, $taskId)
     {
         $this->preCheck($courseId, $taskId);
-        $stats = array(
+        $stats = [
             'courseId' => $courseId,
             'taskId' => $taskId,
-            'tasks' => array(),
-            'questionMarkers' => array(),
+            'tasks' => [],
+            'questionMarkers' => [],
             'totalUserNum' => 0,
             'totalAnswerNum' => 0,
-        );
+        ];
         $this->buildTasks($stats);
         $this->buildQuestionMarkers($stats);
         $this->buildUserNum($stats);
@@ -82,19 +82,19 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     protected function buildTasks(&$stats)
     {
-        $conditions = array(
+        $conditions = [
             'type' => 'video',
             'courseId' => $stats['courseId'],
             'mediaSource' => 'self',
-        );
-        $tasks = $this->getTaskService()->searchTasks($conditions, array('seq' => 'ASC'), 0, PHP_INT_MAX);
+        ];
+        $tasks = $this->getTaskService()->searchTasks($conditions, ['seq' => 'ASC'], 0, PHP_INT_MAX);
 
-        $stats['tasks'] = ArrayToolkit::thin($tasks, array('id', 'title'));
+        $stats['tasks'] = ArrayToolkit::thin($tasks, ['id', 'title']);
     }
 
     protected function buildQuestionMarkers(&$stats)
     {
-        $stats['questionMarkers'] = array();
+        $stats['questionMarkers'] = [];
         if (empty($stats['taskId']) && empty($stats['tasks'])) {
             return;
         }
@@ -143,8 +143,8 @@ class ReportServiceImpl extends BaseService implements ReportService
     {
         $totalAnswerNum = 0;
         foreach ($stats['questionMarkers'] as &$questionMarker) {
-            $questionMarker['answerNum'] = $this->getQuestionMarkerResultDao()->count(array('questionMarkerId' => $questionMarker['id'], 'taskId' => $stats['taskId']));
-            $questionMarker['rightNum'] = $this->getQuestionMarkerResultDao()->count(array('questionMarkerId' => $questionMarker['id'], 'taskId' => $stats['taskId'], 'status' => 'right'));
+            $questionMarker['answerNum'] = $this->getQuestionMarkerResultDao()->count(['questionMarkerId' => $questionMarker['id'], 'taskId' => $stats['taskId']]);
+            $questionMarker['rightNum'] = $this->getQuestionMarkerResultDao()->count(['questionMarkerId' => $questionMarker['id'], 'taskId' => $stats['taskId'], 'status' => 'right']);
             $totalAnswerNum += $questionMarker['answerNum'];
             $questionMarker['pct'] = empty($questionMarker['answerNum']) ? 0 :
                 floor($questionMarker['rightNum'] / $questionMarker['answerNum'] * 100);
@@ -192,7 +192,7 @@ class ReportServiceImpl extends BaseService implements ReportService
     protected function analysisFill($item, $results)
     {
         $questionAnswers = array_shift($item['questions'])['answer'];
-        $stats = array_fill_keys(array_keys($questionAnswers), array('answerNum' => 0, 'pct' => 0));
+        $stats = array_fill_keys(array_keys($questionAnswers), ['answerNum' => 0, 'pct' => 0]);
         foreach ($results as $result) {
             $userAnswers = $result['answer'];
             $this->countFillRightAnswer($questionAnswers, $userAnswers, $stats);
@@ -213,13 +213,13 @@ class ReportServiceImpl extends BaseService implements ReportService
             $this->largestRemainderMethod($stats, $count);
         }
 
-        return array($stats['T'], $stats['F']);
+        return [$stats['T'], $stats['F']];
     }
 
     protected function countFillRightAnswer($questionAnswers, $userAnswers, &$context)
     {
         foreach ($questionAnswers as $index => $rightAnswer) {
-            $expectAnswer = array();
+            $expectAnswer = [];
             $rightAnswer = explode('|', $rightAnswer);
             foreach ($rightAnswer as $value) {
                 $value = trim($value);
@@ -242,14 +242,14 @@ class ReportServiceImpl extends BaseService implements ReportService
             return $marker1['second'] > $marker2['second'];
         });
 
-        $place = array_fill_keys(array_keys($markers), array());
+        $place = array_fill_keys(array_keys($markers), []);
         foreach ($questionMarkers as &$questionMarker) {
             $markerId = $questionMarker['markerId'];
             $questionMarker['markTime'] = $markers[$markerId]['second'];
             $place[$markerId][] = $questionMarker;
         }
 
-        $result = array();
+        $result = [];
         foreach ($place as $qMarkers) {
             $result = array_merge($result, $qMarkers);
         }
@@ -259,10 +259,10 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     private function generateStats($options, $results)
     {
-        $stats = array();
+        $stats = [];
         foreach ($options as $option) {
             $option = array_shift($option);
-            $stats[$option['val']] = array('answerNum' => 0, 'pct' => 0);
+            $stats[$option['val']] = ['answerNum' => 0, 'pct' => 0];
         }
 
         foreach ($results as $result) {

@@ -42,7 +42,7 @@ final class FileHandler implements FileHandlerInterface
     public function read()
     {
         if (!file_exists($this->file)) {
-            return;
+            return null;
         }
 
         $content = file_get_contents($this->file);
@@ -50,7 +50,7 @@ final class FileHandler implements FileHandlerInterface
         try {
             $cache = Cache::fromJson($content);
         } catch (\InvalidArgumentException $exception) {
-            return;
+            return null;
         }
 
         return $cache;
@@ -62,21 +62,11 @@ final class FileHandler implements FileHandlerInterface
 
         if (file_exists($this->file)) {
             if (is_dir($this->file)) {
-                throw new IOException(
-                    sprintf('Cannot write cache file "%s" as the location exists as directory.', realpath($this->file)),
-                    0,
-                    null,
-                    $this->file
-                );
+                throw new IOException(sprintf('Cannot write cache file "%s" as the location exists as directory.', realpath($this->file)), 0, null, $this->file);
             }
 
             if (!is_writable($this->file)) {
-                throw new IOException(
-                    sprintf('Cannot write to file "%s" as it is not writable.', realpath($this->file)),
-                    0,
-                    null,
-                    $this->file
-                );
+                throw new IOException(sprintf('Cannot write to file "%s" as it is not writable.', realpath($this->file)), 0, null, $this->file);
             }
         } else {
             @touch($this->file);
@@ -88,12 +78,7 @@ final class FileHandler implements FileHandlerInterface
         if (false === $bytesWritten) {
             $error = error_get_last();
 
-            throw new IOException(
-                sprintf('Failed to write file "%s", "%s".', $this->file, isset($error['message']) ? $error['message'] : 'no reason available'),
-                0,
-                null,
-                $this->file
-            );
+            throw new IOException(sprintf('Failed to write file "%s", "%s".', $this->file, isset($error['message']) ? $error['message'] : 'no reason available'), 0, null, $this->file);
         }
     }
 }

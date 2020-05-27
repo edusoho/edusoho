@@ -508,3 +508,7 @@ weekDays:
 adminCourseTypes:
     normal: 普通课程
     classroom: 班级课程
+
+adminPlumberStatus:
+    executing: 正在运行中
+    stopped: 已停止

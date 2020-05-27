@@ -26,15 +26,15 @@ class FaceInspectionExtension extends \Twig_Extension
 
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('is_facein_open', array($this, 'isFaceInspectionOpen')),
-            new \Twig_SimpleFunction('is_scene_facein_open', array($this, 'isSceneFaceInspectionOpen')),
-        );
+        return [
+            new \Twig_SimpleFunction('is_facein_open', [$this, 'isFaceInspectionOpen']),
+            new \Twig_SimpleFunction('is_scene_facein_open', [$this, 'isSceneFaceInspectionOpen']),
+        ];
     }
 
     public function isFaceInspectionOpen()
     {
-        $setting = $this->getSettingService()->get('cloud_facein', array());
+        $setting = $this->getSettingService()->get('cloud_facein', []);
         if (!empty($setting['enabled'])) {
             return true;
         }
@@ -44,7 +44,7 @@ class FaceInspectionExtension extends \Twig_Extension
 
     public function isSceneFaceInspectionOpen($sceneId)
     {
-        $setting = $this->getSettingService()->get('cloud_facein', array());
+        $setting = $this->getSettingService()->get('cloud_facein', []);
         if (empty($setting['enabled'])) {
             return false;
         }

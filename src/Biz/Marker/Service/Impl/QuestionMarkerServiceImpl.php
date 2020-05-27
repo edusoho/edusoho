@@ -2,11 +2,11 @@
 
 namespace Biz\Marker\Service\Impl;
 
-use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\BaseService;
 use Biz\Marker\MarkerException;
-use Biz\Marker\Service\MarkerService;
 use Biz\Marker\QuestionMarkerException;
+use Biz\Marker\Service\MarkerService;
 use Biz\Marker\Service\QuestionMarkerService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
@@ -43,7 +43,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         $markers = $this->getMarkerService()->findMarkersByMediaId($mediaId);
 
         if (empty($markers)) {
-            return array();
+            return [];
         }
 
         $markersGroups = ArrayToolkit::index($markers, 'id');
@@ -77,12 +77,12 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         $item = $this->getItemService()->getItemWithQuestions($itemId, true);
 
         if (!empty($item['questions'])) {
-            $questionMarker = array(
+            $questionMarker = [
                 'markerId' => $markerId,
                 'questionId' => $itemId,
                 'seq' => $seq,
                 'createdTime' => time(),
-            );
+            ];
             $this->findQuestionMarkersByMarkerId($markerId);
             $this->getQuestionMarkerDao()->waveSeqBehind($markerId, $seq);
 
@@ -125,7 +125,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         foreach ($ids as $itemId) {
             ++$seq;
             $item = $this->getQuestionMarker($itemId);
-            $fields = array('seq' => $seq);
+            $fields = ['seq' => $seq];
 
             if ($fields['seq'] != $item['seq']) {
                 $this->updateQuestionMarker($item['id'], $fields);

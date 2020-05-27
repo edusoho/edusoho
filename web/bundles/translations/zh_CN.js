@@ -328,6 +328,7 @@ t.add("course_manage.student_remark_validate_error_hint", "\u5907\u6ce8\u5b57\u6
 t.add("course_manage.student_remark_success_hint", "\u5907\u6ce8%username%\u6210\u529f", "js", "zh_CN");
 t.add("course_manage.student_remark_failed_hint", "\u5907\u6ce8%username%\u5931\u8d25\uff0c\u8bf7\u91cd\u8bd5\uff01", "js", "zh_CN");
 t.add("course_manage.student_create.field_required_error_hint", "\u8bf7\u8f93\u5165\u5b66\u5458\u90ae\u7bb1\/\u624b\u673a\u53f7\/\u7528\u6237\u540d", "js", "zh_CN");
+t.add("course_manage.student_create.price_min_error_hint", "\u91c7\u8d2d\u7684\u8bfe\u7a0b\u8d2d\u4e70\u4ef7\u683c\u4e0d\u80fd\u4e3a0!", "js", "zh_CN");
 t.add("course_manage.student_create.price_max_error_hint", "\u8d2d\u4e70\u4ef7\u683c\u4e0d\u80fd\u5927\u4e8e\u8bfe\u7a0b\u539f\u4ef7!", "js", "zh_CN");
 t.add("course_set.show.count_down_format_hint", "\u5269\u4f59 <span>%D<\/span>\u5929 <span>%H<\/span>\u65f6 <span>%M<\/span>\u5206 <span>%S<\/span>\u79d2", "js", "zh_CN");
 t.add("course_set.show.time_finish_hint", "\u6d3b\u52a8\u65f6\u95f4\u5230\uff0c\u6b63\u5728\u5237\u65b0\u7f51\u9875\uff0c\u8bf7\u7a0d\u7b49...", "js", "zh_CN");
@@ -1297,4 +1298,10 @@ t.add("course_manage.live_statistics.checkin_not_support", "\u5f53\u524d\u76f4\u
 t.add("course_manage.live_statistics.data_not_valid", "\u6570\u636e\u5f02\u5e38\uff0c\u76f4\u64ad\u95f4\u6570\u636e\u8fd4\u56de\u9519\u8bef", "js", "zh_CN");
 t.add("admin_v2.user.nickname_modify_success_hint", "\u7528\u6237\u540d\u4fee\u6539\u6210\u529f", "js", "zh_CN");
 t.add("admin_v2.user.nickname_modify_error_hint", "\u64cd\u4f5c\u5931\u8d25", "js", "zh_CN");
+t.add("admin_v2.developer.plumber_operate_hint", "\u6b63\u5728\u64cd\u4f5c\u4e2d\uff0c\u53ef\u80fd\u9700\u8981\u4e00\u6bb5\u65f6\u95f4\uff0c\u8bf7\u7a0d\u540e\u2026\u2026", "js", "zh_CN");
+t.add("admin_v2.developer.plumber_operate_error_hint", "\u64cd\u4f5c\u5931\u8d25", "js", "zh_CN");
+t.add("admin_v2.developer.plumber_operate_success_hint", "\u64cd\u4f5c\u6210\u529f", "js", "zh_CN");
+t.add("course_manage.positive_currency.message", "\u8bf7\u8f93\u5165\u5927\u4e8e0\u7684\u6709\u6548\u4ef7\u683c\uff0c\u6700\u591a\u4e24\u4f4d\u5c0f\u6570\uff0c\u6574\u6570\u4f4d\u4e0d\u8d85\u8fc78\u4f4d\uff01", "js", "zh_CN");
+t.add("merchant.resource.product_version.update_success_hint", "\u66f4\u65b0\u6210\u529f", "js", "zh_CN");
+t.add("merchant.resource.product_version.update_failed_hint", "\u66f4\u65b0\u5931\u8d25", "js", "zh_CN");
 })(Translator);

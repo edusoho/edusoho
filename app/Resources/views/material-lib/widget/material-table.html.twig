@@ -47,7 +47,7 @@
             {% endif %}
 
             <p class="status-parent">
-              {% if uploadFile.storage != 'cloud' %}
+              {% if uploadFile.storage == 'local' %}
                 <span class="cd-tag cd-tag-blue">{{ 'material.common_table.file.local'|trans }}</span>
               {% endif %}
               {% if type|default('') == 'courseFile' %}
@@ -155,6 +155,7 @@
               <i class="cd-icon cd-icon-arrow-down cd-text-sm"></i>
               <span class="sr-only">Toggle Dropdown</span>
             </button>
+            {% if s2b2c_has_behaviour_permission('canManageCourseSetFiles') %} {#S2B2C#}
             <ul class="dropdown-menu btn-group__menu text-center">
               {# 下载 #}
               <li>
@@ -216,6 +217,7 @@
                 </li>
               {% endif %}
             </ul>
+            {% endif %}
           </div>
         </td>
       </tr>

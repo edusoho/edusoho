@@ -17,7 +17,7 @@ class FaceInspectionServiceImpl extends BaseService implements FaceInspectionSer
 {
     public function createUserFace($fields)
     {
-        $fields = ArrayToolkit::parts($fields, array('picture', 'capture_code', 'user_id'));
+        $fields = ArrayToolkit::parts($fields, ['picture', 'capture_code', 'user_id']);
 
         return $this->getUserFaceDao()->create($fields);
     }

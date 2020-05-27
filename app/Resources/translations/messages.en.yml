@@ -6171,6 +6171,8 @@ admin.setting_wechat_auth.account_code_view: View Larger Image
 admin.setting_wechat_auth.account_code_download: Download QR code
 admin.developer_setting.cloud_notification_api: Notification API
 admin.developer_setting.cloud_wechat_api: WeChat API
+admin.developer_setting.s2b2c_api: S2B2C Server API
+admin.developer_setting.s2b2c_supplier_api: S2B2C Supplier API
 admin.developer_setting.content_title: 'Developer settings'
 admin.developer_setting.debug_label: Debugging
 admin.developer_setting.app_center_api_address: 'Application Center API address'
@@ -8721,6 +8723,7 @@ exception.courseset.published_course_required: When publishing a course, please 
 exception.courseset.unpublished: Course not published
 exception.courseset.no_course: There are no teaching plans available in the course
 exception.courseset.unlock_failed: Unlocking course failed
+exception.courseset.forbidden_create: No right to create
 exception.classroom.member_not_in_classroom: Student not in classroom
 exception.classroom.not_found: The classroom doesn't exist
 exception.classroom.forbidden_manage_classroom: Forbidden manage classroom
@@ -9485,6 +9488,119 @@ admin_v2.user.manage.change_nickname.heading_title: Modify username
 
 course.plan_task.activity_manage.discuss.tips: Discussion tasks are used in PC and APP, and are not supported in Microschool and Applet for now!
 
+admin_v2.app_center.resource_settlement.balance: Balance
+admin_v2.app_center.resource_settlement.debt: Debt
+admin_v2.app_center.resource_settlement.more: More
+
+admin_v2.app_center.resource_settlement.deal_time: Deal time
+admin_v2.app_center.resource_settlement.start_time: Start time
+admin_v2.app_center.resource_settlement.end_time: End time
+admin_v2.app_center.resource_settlement.balance.detail: Detail
+admin_v2.app_center.resource_settlement.balance.detail_information: Detail information
+admin_v2.app_center.resource_settlement.balance.status: Status
+admin_v2.app_center.resource_settlement.balance.detail.success: Success
+admin_v2.app_center.resource_settlement.balance.detail.default_operator: System
+
+admin_v2.app_center.resource_settlement.balance.order.detail: Order information
+admin_v2.app_center.resource_settlement.balance.order: Order
+admin_v2.app_center.resource_settlement.balance.order.sn: Sn
+
+admin_v2.app_center.resource_settlement.balance.operation.detail: Operation
+admin_v2.app_center.resource_settlement.balance.operator: Operator
+
+admin_v2.app_center.resource_settlement.order.create_time: Created time
+admin_v2.app_center.resource_settlement.filter_type: Filter
+admin_v2.app_center.resource_settlement.filter_placeholder: Choose status
+admin_v2.app_center.resource_settlement.order.pay: Paying
+admin_v2.app_center.resource_settlement.order.paid: Paid
+admin_v2.app_center.resource_settlement.order.refunded: Refunded
+admin_v2.app_center.resource_settlement.switch_show_debt:  Only show debt(%amount% owed)
+
+admin_v2.app_center.resource_settlement.order.title: Title
+admin_v2.app_center.resource_settlement.order.sn: Sn
+admin_v2.app_center.resource_settlement.order.coop_price: Cooperation Denomination
+admin_v2.app_center.resource_settlement.order.price_amount: Actual Paid
+admin_v2.app_center.resource_settlement.order.debt_amount: Amount owed
+admin_v2.app_center.resource_settlement.order.status: Status
+
+admin_v2.app_center.resource_settlement.order.detail: Order Detail
+admin_v2.app_center.resource_settlement.order.detail.information: Order Information
+admin_v2.app_center.resource_settlement.order.detail.price_amount: Cooperation Denomination
+admin_v2.app_center.resource_settlement.order.detail.discount: Discount
+admin_v2.app_center.resource_settlement.order.detail.pay_amount: Actual Price
+admin_v2.app_center.resource_settlement.order.detail.status: Status
+
+admin_v2.app_center.resource_settlement.order.detail.pay_information: Payment Information
+admin_v2.app_center.resource_settlement.order.detail.pay_time: Payment time
+
+admin_v2.app_center.resource_settlement.order.detail.order_information: Order Information
+admin_v2.app_center.resource_settlement.order.detail.order_title: Title
+admin_v2.app_center.resource_settlement.order.detail.order_sn: Sn
+admin_v2.app_center.resource_settlement.order.detail.order_user: User
+
+admin_v2.app_center.resource_settlement.product.id: Id
+admin_v2.app_center.resource_settlement.product.time: Choose Time
+admin_v2.app_center.resource_settlement.product.order_count: Order Count
+admin_v2.app_center.resource_settlement.product.max_course_price: Actual Price
+admin_v2.app_center.resource_settlement.product.suggestion_price: Suggested  Price
+admin_v2.app_center.resource_settlement.product.cooperation_price: Cooperation Denomination
+admin_v2.app_center.resource_settlement.product.item_status: Status
+admin_v2.app_center.resource_settlement.product.item_status.published: Published
+admin_v2.app_center.resource_settlement.product.item_status.closed: Closed
+admin_v2.app_center.resource_settlement.product.choosen_status: Choosen status
+admin_v2.app_center.resource_settlement.product.choosen_status.chosen: Choosen
+admin_v2.app_center.resource_settlement.product.choosen_status.removed: Removed
+
+admin_v2.app_center.resource_settlement.empty: Empty
+
+
+
+merchant.content_resource.product_title: Product name
+merchant.content_resource.product_change_publish_time: Publish time
+merchant.content_resource.product_change_log_publish: Publish changelog
+merchant.content_resource.product_change_log: update changelog
+merchant.content_resource.product_version_date: Version date
+merchant.content_resource.product_version_num: Version num
+merchant.content_resource.operation: Operation
+merchant.content_resource.product_version: Version
+merchant.content_resource.product_version.view_btn: Show Detail
+merchant.content_resource.product_version.update: Update
+merchant.content_resource.product_version.update_btn: Update
+merchant.content_resource.course_product_update: Course Update
+merchant.content_resource.course_product_update_tips: After confirming the update course, the latest version content provided by the supplier will be synchronized, confirm the update?
+merchant.content_resource.has_chosen: Choosed
+merchant.content_resource.editing: Editing
+merchant.content_resource.choose: Choose
+merchant.content_resource.no_supplier: No Supplier!
+merchant.content_resource.supplier.no_cooperation_hint: 与供应商%supplierName%之间商品合作关系已经取消，供应商的商品不能购买加入，但不影响已购学员学习，如需恢复，请联系供应商！
+
+
+admin_v2.course_manage.create_btn: Create Course
+admin_v2.course_manage.merchant_course: Purchase
+admin_v2.course_manage.has_version_change: Has Change
+
+exception.courseset.source_course_closed: Course closed,please contact the supplier.
+
+admin_v2.plumber.status: Status
+admin_v2.plumber.start: start
+admin_v2.plumber.stop: stop
+admin_v2.plumber.restart: restart
+
+admin_v2.plumber.job_id: ID
+admin_v2.plumber.job_time: Time
+admin_v2.plumber.job_worker: Worker Topic
+admin_v2.plumber.job_status: Status
+admin_v2.plumber.job_body: Body
+admin_v2.plumber.job_empty_hint: Empty
+
+exception.plumber.not_found_queue: Queue not founded
+
+s2b2c.product.cooperation_price: Cooperation Price
+s2b2c.product.suggestion_price: Suggestion Price
+
+s2b2c.course_product.free_tasks: Free tasks
+s2b2c.course_product.tag: Merchant course
+
 testpaper.result.unpassed: '很遗憾，您未通过本次考试'
 testpaper.result.passed: '恭喜您已通过本次考试!'
 testpaper.result.comment: '教师评语'
@@ -9522,3 +9638,20 @@ facein.capture_face.inspection_data.no_cheating_count: 无作弊人数
 facein.capture_face.inspection_data.inspection_count: 疑似作弊人数
 facein.capture_face.inspection_result_modal.title: 监考抓拍
 
+exception.s2b2c_product.update_type_invalid: Update type invalid
+exception.s2b2c_product.not_found: Product not found
+
+admin_v2.cloud_center.content_resource.product_update_setting: Update Setting
+admin_v2.cloud_center.content_resource.product_update_auto: Auto
+admin_v2.cloud_center.content_resource.product_update_manual: Manual
+
+
+admin_v2.cloud_center.content_resource.product_update_auto.tips: Update product automatically when product updated
+admin_v2.cloud_center.content_resource.product_update_manual.tips: Update product manually when product updated
+
+s2b2c.resource.all_choose: Choose All
+s2b2c.resource.return_market: Return
+s2b2c.resource.has_new_notice_hint: 您采购的内容有更新
+s2b2c.resource.no_fee_notice_hint: 您与%supplierName%合作的采购账户余额还剩%balance%，请及时联系%supplierName%进行充值
+s2b2c.resource.sync.prev_price.notify: 上个版本价格为
+s2b2c.resource.sync.has_new.notify: 有价格更新

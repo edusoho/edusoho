@@ -45,7 +45,7 @@ class CourseTask extends AbstractResource
         $task['activity'] = $this->filterActivity($activity);
         $task['activity']['finishCondition'] = $this->getActivityService()->getActivityFinishCondition($task['activity']);
         $task['result'] = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
-        $task['courseUrl'] = $this->generateUrl('my_course_show', array('id' => $courseId), UrlGeneratorInterface::ABSOLUTE_URL);
+        $task['courseUrl'] = $this->generateUrl('my_course_show', ['id' => $courseId], UrlGeneratorInterface::ABSOLUTE_URL);
 
         return $task;
     }

@@ -1,7 +1,12 @@
 {% extends 'course-manage/tasks/layout.html.twig' %}
 {% do script(['libs/jquery-sortable.js','app/js/course-manage/lesson-manage/normal/index.js']) %}
 
-{% block page_title %}{{ 'course.plan_task.content_title'|trans }}{% endblock %}
+{% block page_title %}
+  {{ 'course.plan_task.content_title'|trans }}
+  {% if course.platform == 'supplier' %}
+    {% include 'lesson-manage/s2b2c-changelog.html.twig' %}
+  {% endif %}
+{% endblock %}
 {% block main_body %}
   {% set locales = app.request.session.get('_locale',app.request.locale)|default('zh_CN') %}
   <span class="js-data-local hidden" data-local="{{ locales }}"></span>

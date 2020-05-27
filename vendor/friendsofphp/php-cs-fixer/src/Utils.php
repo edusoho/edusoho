@@ -12,6 +12,7 @@
 
 namespace PhpCsFixer;
 
+use PhpCsFixer\Fixer\FixerInterface;
 use PhpCsFixer\Tokenizer\Token;
 
 /**
@@ -35,8 +36,8 @@ final class Utils
         $bitmask = 0;
 
         foreach ($options as $optionName) {
-            if (defined($optionName)) {
-                $bitmask |= constant($optionName);
+            if (\defined($optionName)) {
+                $bitmask |= \constant($optionName);
             }
         }
 
@@ -44,7 +45,7 @@ final class Utils
     }
 
     /**
-     * Converts a camel cased string to an snake cased string.
+     * Converts a camel cased string to a snake cased string.
      *
      * @param string $string
      *
@@ -52,13 +53,7 @@ final class Utils
      */
     public static function camelCaseToUnderscore($string)
     {
-        return Preg::replaceCallback(
-            '/(^|[a-z0-9])([A-Z])/',
-            function (array $matches) {
-                return strtolower('' !== $matches[1] ? $matches[1].'_'.$matches[2] : $matches[2]);
-            },
-            $string
-        );
+        return strtolower(Preg::replace('/(?<!^)((?=[A-Z][^A-Z])|(?<![A-Z])(?=[A-Z]))/', '_', $string));
     }
 
     /**
@@ -82,30 +77,9 @@ final class Utils
     }
 
     /**
-     * Split a multi-line string up into an array of strings.
-     *
-     * We're retaining a newline character at the end of non-blank lines, and
-     * discarding other lines, so this function is unsuitable for anyone for
-     * wishing to retain the exact number of line endings. If a single-line
-     * string is passed, we'll just return an array with a element.
-     *
-     * @param string $content
-     *
-     * @return string[]
-     */
-    public static function splitLines($content)
-    {
-        Preg::matchAll("/[^\n\r]+[\r\n]*/", $content, $matches);
-
-        return $matches[0];
-    }
-
-    /**
      * Calculate the trailing whitespace.
      *
      * What we're doing here is grabbing everything after the final newline.
-     *
-     * @param Token $token
      *
      * @return string
      */
@@ -116,7 +90,7 @@ final class Utils
         }
 
         $str = strrchr(
-            str_replace(array("\r\n", "\r"), "\n", $token->getContent()),
+            str_replace(["\r\n", "\r"], "\n", $token->getContent()),
             "\n"
         );
 
@@ -125,5 +99,87 @@ final class Utils
         }
 
         return ltrim($str, "\n");
+    }
+
+    /**
+     * Perform stable sorting using provided comparison function.
+     *
+     * Stability is ensured by using Schwartzian transform.
+     *
+     * @param mixed[]  $elements
+     * @param callable $getComparedValue a callable that takes a single element and returns the value to compare
+     * @param callable $compareValues    a callable that compares two values
+     *
+     * @return mixed[]
+     */
+    public static function stableSort(array $elements, callable $getComparedValue, callable $compareValues)
+    {
+        array_walk($elements, static function (&$element, $index) use ($getComparedValue) {
+            $element = [$element, $index, $getComparedValue($element)];
+        });
+
+        usort($elements, static function ($a, $b) use ($compareValues) {
+            $comparison = $compareValues($a[2], $b[2]);
+
+            if (0 !== $comparison) {
+                return $comparison;
+            }
+
+            return self::cmpInt($a[1], $b[1]);
+        });
+
+        return array_map(static function (array $item) {
+            return $item[0];
+        }, $elements);
+    }
+
+    /**
+     * Sort fixers by their priorities.
+     *
+     * @param FixerInterface[] $fixers
+     *
+     * @return FixerInterface[]
+     */
+    public static function sortFixers(array $fixers)
+    {
+        // Schwartzian transform is used to improve the efficiency and avoid
+        // `usort(): Array was modified by the user comparison function` warning for mocked objects.
+        return self::stableSort(
+            $fixers,
+            static function (FixerInterface $fixer) {
+                return $fixer->getPriority();
+            },
+            static function ($a, $b) {
+                return self::cmpInt($b, $a);
+            }
+        );
+    }
+
+    /**
+     * Join names in natural language wrapped in backticks, e.g. `a`, `b` and `c`.
+     *
+     * @param string[] $names
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return string
+     */
+    public static function naturalLanguageJoinWithBackticks(array $names)
+    {
+        if (empty($names)) {
+            throw new \InvalidArgumentException('Array of names cannot be empty');
+        }
+
+        $names = array_map(static function ($name) {
+            return sprintf('`%s`', $name);
+        }, $names);
+
+        $last = array_pop($names);
+
+        if ($names) {
+            return implode(', ', $names).' and '.$last;
+        }
+
+        return $last;
     }
 }

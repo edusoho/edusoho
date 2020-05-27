@@ -1,0 +1,86 @@
+{# category 如果其他商品模型一致，需要迁移到外层 #}
+{% set filter = request.query.get('filter')|default(null) %}
+{% set path = 'admin_v2_purchase_market_products_list' %}
+{% set orderByDefault = 'latest' %}
+
+{% set orderBy = request.query.get('orderBy', orderByDefault|default(null)) %}
+
+<input type="hidden" id="urlParameter">
+<div class="tabs-wrapper">
+  <div class="tabs-group">
+    <div class="title">{{ 'category'|trans }}:</div>
+    <ul class="content clearfix" data-label="default">
+      <li class="js-all-categories {% if not selectedCategory %}active{% endif %}">
+        <a class="nav-link" href="javascript:;" data-url="{{ path(path, {type:'courseSet', orderBy:orderBy}) }}">
+          {{ 'category.all_category'|trans }}
+        </a>
+      </li>
+      {% for category in categories %}
+        <li class="js-categories {% if category.id == selectedCategory %}active{% endif %}"
+            data-category-id="{{ category.id }}">
+          <a class="nav-link" href="javascript:;"
+             data-url="{{ path(path, {categoryId:category.id, orderBy:orderBy, type:'courseSet'}) }}">
+            {{ category.name }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  {% if subCategories|default(null) %}
+    <div class="tabs-group js-sub-group" {% if not selectedSubCategory %}style="display: none;"{% endif %}>
+      <div class="title"></div>
+      <ul class="content clearfix" data-label="subCategories">
+        <li class="js-all-sub-categories {% if not selectedSubCategory %}active{% endif %}">
+          <a class="nav-link js-all-sub-categories-search" href="javascript:;"
+             data-url="{{ path(path, {categoryId:selectedCategory, orderBy:orderBy}) }}">
+            {{ 'category.all_category'|trans }}
+          </a>
+        </li>
+        {% for category in subCategories %}
+          <li class="js-sub-categories js-sub-category-parent-{{ category.parentId }}
+            {% if category.id == selectedSubCategory %}active{% endif %}"
+              {% if selectedCategory > 0 and category.parentId != selectedCategory %}style="display: none;"{% endif %}
+              data-category-id="{{ category.id }}">
+            <a class="nav-link" href="javascript:;"
+               data-url="{{ path(path, {categoryId:category.id, orderBy:orderBy}) }}">
+              {{ category.name }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+
+  {% if thirdLevelCategories|default(null) %}
+    <div class="tabs-group js-third-level-group" {% if not selectedSubCategory %}style="display: none;"{% endif %}>
+      <div class="title"></div>
+      <ul class="content clearfix" data-label="thirdLevelCategories">
+        <li class="js-all-third-categories {% if not selectedThirdLevelCategory %}active{% endif %}">
+          <a class="nav-link js-all-third-categories-search" href="javascript:;"
+             data-url="{{ path(path, {categoryId:selectedSubCategory, orderBy:orderBy}) }}">
+            {{ 'category.all_category'|trans }}
+          </a>
+        </li>
+        {% for category in thirdLevelCategories %}
+          <li class="js-third-categories js-third-category-parent-{{ category.parentId }}
+            {% if category.id == selectedThirdLevelCategory %}active{% endif %}"
+              {% if selectedSubCategory > 0 and category.parentId != selectedSubCategory %}style="display: none;"{% endif %}
+              data-category-id="{{ category.id }}">
+            <a class="nav-link" href="javascript:;"
+               data-url="{{ path(path, {categoryId:category.id, orderBy:orderBy}) }}">
+              {{ category.name }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+  <div id="categoryDataList" class="hidden"
+       data-categories="{{ categories|json_encode }}"
+       data-sub-categories="{{ subCategoriesData|json_encode }}"
+       data-third-level-categories="{{ thirdLevelCategoriesData|json_encode }}"
+       data-search-url="{{ path(path, {orderBy:orderBy}) }}"
+  ></div>
+</div>

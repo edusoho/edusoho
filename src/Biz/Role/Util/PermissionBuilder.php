@@ -396,13 +396,16 @@ class PermissionBuilder
         }
 
         $menus = $this->loadPermissions();
-
         if (empty($menus)) {
             return new Tree();
         }
-
+        $merchantDisabledPermissions = $this->getS2B2CFacadeService()->getMerchantDisabledPermissions();
         $i = 1;
         foreach ($menus as $code => &$menu) {
+            if (is_array($merchantDisabledPermissions) && in_array($code, $merchantDisabledPermissions)) {
+                unset($menus[$code]);
+                continue;
+            }
             $menu['code'] = $code;
             $menu['weight'] = $i * 100;
 
@@ -413,7 +416,7 @@ class PermissionBuilder
             ++$i;
             unset($menu);
         }
-
+       
         foreach ($menus as &$menu) {
             if (!empty($menu['before']) && !empty($menus[$menu['before']]['weight'])) {
                 $menu['weight'] = $menus[$menu['before']]['weight'] - 1;
@@ -550,6 +553,14 @@ class PermissionBuilder
     protected function getRoleService()
     {
         return $this->getServiceKernel()->createService('Role:RoleService');
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->getServiceKernel()->createService('S2B2C:S2B2CFacadeService');
     }
 
     protected function getServiceKernel()

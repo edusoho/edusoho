@@ -3,13 +3,13 @@
 namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
+use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Testpaper\TestpaperException;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
-use Biz\Activity\Service\HomeworkActivityService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 
 class Homework extends Activity
 {
@@ -38,7 +38,7 @@ class Homework extends Activity
         try {
             $this->getBiz()['db']->beginTransaction();
 
-            $answerScene = $this->getAnswerSceneService()->create(array(
+            $answerScene = $this->getAnswerSceneService()->create([
                 'name' => $fields['title'],
                 'limited_time' => 0,
                 'do_times' => 0,
@@ -46,14 +46,14 @@ class Homework extends Activity
                 'need_score' => 0,
                 'manual_marking' => 1,
                 'start_time' => 0,
-            ));
+            ]);
 
             $assessment = $this->createAssessment($fields['title'], $fields['description'], $fields['questionIds']);
 
-            $activity = $this->getHomeworkActivityService()->create(array(
+            $activity = $this->getHomeworkActivityService()->create([
                 'answerSceneId' => $answerScene['id'],
                 'assessmentId' => $assessment['id'],
-            ));
+            ]);
 
             $this->getBiz()['db']->commit();
 
@@ -64,7 +64,7 @@ class Homework extends Activity
         }
     }
 
-    protected function createAssessment($name, $description, $itemIds = array())
+    protected function createAssessment($name, $description, $itemIds = [])
     {
         $items = $this->getItemService()->findItemsByIds($itemIds, true);
         $bankIds = array_column($items, 'bank_id');
@@ -95,7 +95,7 @@ class Homework extends Activity
             $this->getBiz()['db']->beginTransaction();
 
             $answerScene = $this->getAnswerSceneService()->get($homework['answerSceneId']);
-            $answerScene = $this->getAnswerSceneService()->create(array(
+            $answerScene = $this->getAnswerSceneService()->create([
                 'name' => $answerScene['name'],
                 'limited_time' => 0,
                 'do_times' => 0,
@@ -103,12 +103,12 @@ class Homework extends Activity
                 'need_score' => 0,
                 'manual_marking' => 1,
                 'start_time' => 0,
-            ));
+            ]);
 
-            $activity = $this->getHomeworkActivityService()->create(array(
+            $activity = $this->getHomeworkActivityService()->create([
                 'answerSceneId' => $answerScene['id'],
                 'assessmentId' => $homework['assessmentId'],
-            ));
+            ]);
 
             $this->getBiz()['db']->commit();
 
@@ -172,7 +172,7 @@ class Homework extends Activity
             return false;
         }
 
-        if ('submit' === $activity['finishType'] && in_array($answerRecord['status'], array(AnswerService::ANSWER_RECORD_STATUS_REVIEWING, AnswerService::ANSWER_RECORD_STATUS_FINISHED))) {
+        if ('submit' === $activity['finishType'] && in_array($answerRecord['status'], [AnswerService::ANSWER_RECORD_STATUS_REVIEWING, AnswerService::ANSWER_RECORD_STATUS_FINISHED])) {
             return true;
         }
 

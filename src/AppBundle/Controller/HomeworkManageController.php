@@ -2,19 +2,19 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use Biz\Common\CommonException;
 use Biz\Question\Service\CategoryService;
 use Biz\Question\Service\QuestionService;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Testpaper\Service\TestpaperService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
-use Biz\Common\CommonException;
 
 class HomeworkManageController extends BaseController
 {
@@ -28,7 +28,7 @@ class HomeworkManageController extends BaseController
             $excludeItems = $this->getItemService()->findItemsByIds($conditions['exclude_ids']);
             $itemBankIds = array_unique(array_column($excludeItems, 'bank_id'));
             if (count($itemBankIds) > 1) {
-                return $this->createJsonResponse(array('result' => 'error', 'message' => 'json_response.no_multi_question_bank.message'));
+                return $this->createJsonResponse(['result' => 'error', 'message' => 'json_response.no_multi_question_bank.message']);
             }
             $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId(array_shift($itemBankIds));
             if (!$this->getQuestionBankService()->canManageBank($questionBank['id'])) {
@@ -72,14 +72,14 @@ class HomeworkManageController extends BaseController
         $itemIds = $request->request->get('itemIds', []);
 
         if (!$itemIds) {
-            return $this->createJsonResponse(array('result' => 'error', 'message' => 'json_response.must_choose_question.message'));
+            return $this->createJsonResponse(['result' => 'error', 'message' => 'json_response.must_choose_question.message']);
         }
 
         $questions = $this->getItemService()->findItemsByIds($itemIds);
 
         $itemBankIds = array_unique(array_column($questions, 'bank_id'));
         if (count($itemBankIds) > 1) {
-            return $this->createJsonResponse(array('result' => 'error', 'message' => 'json_response.no_multi_question_bank.message'));
+            return $this->createJsonResponse(['result' => 'error', 'message' => 'json_response.no_multi_question_bank.message']);
         }
         $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId(array_shift($itemBankIds));
         if (!$this->getQuestionBankService()->canManageBank($questionBank['id'])) {
@@ -88,12 +88,12 @@ class HomeworkManageController extends BaseController
 
         $categories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
 
-        return $this->render('homework/manage/question-picked.html.twig', array(
+        return $this->render('homework/manage/question-picked.html.twig', [
             'questionBank' => $questionBank,
             'categories' => ArrayToolkit::index($categories, 'id'),
             'questions' => $questions,
             'targetType' => $request->query->get('targetType', 'testpaper'),
-        ));
+        ]);
     }
 
     public function checkAction(Request $request, $answerRecordId, $targetId, $source = 'course')
@@ -105,11 +105,11 @@ class HomeworkManageController extends BaseController
 
         switch ($source) {
             case 'course':
-                $successContinueGotoUrl = $this->generateUrl('course_manage_exam_next_result_check', array('id' => $targetId, 'activityId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id'])));
+                $successContinueGotoUrl = $this->generateUrl('course_manage_exam_next_result_check', ['id' => $targetId, 'activityId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id'])]);
                 $this->getCourseService()->tryManageCourse($targetId);
                 break;
             case 'classroom':
-                $successContinueGotoUrl = $this->generateUrl('classroom_manage_exam_next_result_check', array('id' => $targetId, 'activityId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id'])));
+                $successContinueGotoUrl = $this->generateUrl('classroom_manage_exam_next_result_check', ['id' => $targetId, 'activityId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id'])]);
                 $this->getClassroomService()->tryHandleClassroom($targetId);
                 break;
             default:
@@ -117,11 +117,11 @@ class HomeworkManageController extends BaseController
                 break;
         }
 
-        return $this->forward('AppBundle:AnswerEngine/AnswerEngine:reviewAnswer', array(
+        return $this->forward('AppBundle:AnswerEngine/AnswerEngine:reviewAnswer', [
             'answerRecordId' => $answerRecordId,
-            'successGotoUrl' => $this->generateUrl('homework_result_show', array('action' => 'check', 'answerRecordId' => $answerRecordId)),
+            'successGotoUrl' => $this->generateUrl('homework_result_show', ['action' => 'check', 'answerRecordId' => $answerRecordId]),
             'successContinueGotoUrl' => $successContinueGotoUrl,
-        ));
+        ]);
     }
 
     protected function getActivityIdByAnswerSceneId($answerSceneId)
@@ -148,13 +148,13 @@ class HomeworkManageController extends BaseController
             $answerSceneReport = $this->getAnswerSceneService()->getAnswerSceneReport($activity['ext']['answerSceneId']);
         }
 
-        return $this->render('homework/manage/result-analysis.html.twig', array(
+        return $this->render('homework/manage/result-analysis.html.twig', [
             'activity' => $activity,
             'studentNum' => $studentNum,
             'answerSceneReport' => $answerSceneReport,
             'assessment' => $activity['ext']['assessment'],
             'targetType' => $targetType,
-        ));
+        ]);
     }
 
     public function resultGraphAction($activityId)
@@ -171,20 +171,20 @@ class HomeworkManageController extends BaseController
         $analysis = $this->analysisFirstResults($firstAndMaxGrade);
         $task = $this->getCourseTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
 
-        return $this->render('homework/manage/result-graph-modal.html.twig', array(
+        return $this->render('homework/manage/result-graph-modal.html.twig', [
             'data' => $data,
             'analysis' => $analysis,
             'task' => $task,
-        ));
+        ]);
     }
 
     protected function getAnswerRecordsByAnswerSceneId($answerSceneId)
     {
-        $conditions = array(
+        $conditions = [
             'status' => 'finished',
             'answer_scene_id' => $answerSceneId,
-        );
-        $answerRecords = $this->getAnswerRecordService()->search($conditions, array(), 0, $this->getAnswerRecordService()->count($conditions));
+        ];
+        $answerRecords = $this->getAnswerRecordService()->search($conditions, [], 0, $this->getAnswerRecordService()->count($conditions));
         $answerReports = ArrayToolkit::index(
             $this->getAnswerReportService()->findByIds(ArrayToolkit::column($answerRecords, 'answer_report_id')),
             'id'
@@ -200,12 +200,12 @@ class HomeworkManageController extends BaseController
 
     protected function getCalculateRecordsFirstAndMaxGrade($answerRecords)
     {
-        $data = array();
+        $data = [];
         foreach ($answerRecords as $userAnswerRecords) {
-            $data[] = array(
+            $data[] = [
                 'firstGrade' => $userAnswerRecords[0]['grade'],
                 'maxGrade' => $this->getUserMaxGrade($userAnswerRecords),
-            );
+            ];
         }
 
         return $data;
@@ -225,13 +225,13 @@ class HomeworkManageController extends BaseController
 
     protected function findRelatedData($activity, $paper)
     {
-        $relatedData = array();
+        $relatedData = [];
         $userFirstResults = $this->getTestpaperService()->findExamFirstResults($paper['id'], $paper['type'], $activity['id']);
 
         $relatedData['total'] = count($userFirstResults);
 
         $userFirstResults = ArrayToolkit::group($userFirstResults, 'status');
-        $finishedResults = empty($userFirstResults['finished']) ? array() : $userFirstResults['finished'];
+        $finishedResults = empty($userFirstResults['finished']) ? [] : $userFirstResults['finished'];
 
         $relatedData['finished'] = count($finishedResults);
 
@@ -240,7 +240,7 @@ class HomeworkManageController extends BaseController
 
     protected function fillGraphData($firstAndMaxGrade)
     {
-        $data = array('xScore' => array(), 'yFirstNum' => array(), 'yMaxNum' => array());
+        $data = ['xScore' => [], 'yFirstNum' => [], 'yMaxNum' => []];
         $status = $this->get('codeages_plugin.dict_twig_extension')->getDict('passedStatus');
 
         $firstGradeGroup = ArrayToolkit::group($firstAndMaxGrade, 'firstGrade');
@@ -258,10 +258,10 @@ class HomeworkManageController extends BaseController
     protected function analysisFirstResults($firstAndMaxGrade)
     {
         if (empty($firstAndMaxGrade)) {
-            return array('passPercent' => 0);
+            return ['passPercent' => 0];
         }
 
-        $data = array();
+        $data = [];
         $count = 0;
         foreach ($firstAndMaxGrade as $grade) {
             if ('unpassed' != $grade['firstGrade']) {
@@ -276,12 +276,12 @@ class HomeworkManageController extends BaseController
 
     protected function getRedirectRoute($mode, $type)
     {
-        $routes = array(
-            'nextCheck' => array(
+        $routes = [
+            'nextCheck' => [
                 'course' => 'course_manage_exam_next_result_check',
                 'classroom' => 'classroom_manage_exam_next_result_check',
-            ),
-        );
+            ],
+        ];
 
         return $routes[$mode][$type];
     }

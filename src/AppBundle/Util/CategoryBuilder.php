@@ -7,7 +7,7 @@ use Topxia\Service\Common\ServiceKernel;
 
 class CategoryBuilder
 {
-    protected $categories = array();
+    protected $categories = [];
 
     protected $indent = '　';
 
@@ -38,7 +38,7 @@ class CategoryBuilder
 
     public function convertToChoices()
     {
-        $choices = array();
+        $choices = [];
 
         foreach ($this->categories as $category) {
             $choices[$category['id']] = str_repeat(is_null($this->indent) ? '' : $this->indent, ($category['depth'] - 1)).$category['name'];

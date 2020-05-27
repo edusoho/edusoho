@@ -62,30 +62,37 @@ final class DiffConsoleFormatter
             implode(
                 PHP_EOL,
                 array_map(
-                    function ($string) use ($isDecorated, $lineTemplate) {
+                    static function ($line) use ($isDecorated, $lineTemplate) {
                         if ($isDecorated) {
-                            $string = Preg::replaceCallback(
-                                array(
+                            $count = 0;
+                            $line = Preg::replaceCallback(
+                                [
                                     '/^(\+.*)/',
                                     '/^(\-.*)/',
                                     '/^(@.*)/',
-                                ),
-                                function ($matches) {
+                                ],
+                                static function ($matches) {
                                     if ('+' === $matches[0][0]) {
-                                        $c = 'green';
+                                        $colour = 'green';
                                     } elseif ('-' === $matches[0][0]) {
-                                        $c = 'red';
+                                        $colour = 'red';
                                     } else {
-                                        $c = 'cyan';
+                                        $colour = 'cyan';
                                     }
 
-                                    return sprintf('<fg=%s>%s</fg=%s>', $c, OutputFormatter::escape($matches[0]), $c);
+                                    return sprintf('<fg=%s>%s</fg=%s>', $colour, OutputFormatter::escape($matches[0]), $colour);
                                 },
-                                $string
+                                $line,
+                                1,
+                                $count
                             );
+
+                            if (0 === $count) {
+                                $line = OutputFormatter::escape($line);
+                            }
                         }
 
-                        return sprintf($lineTemplate, $string);
+                        return sprintf($lineTemplate, $line);
                     },
                     Preg::split('#\R#u', $diff)
                 )

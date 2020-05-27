@@ -10,11 +10,10 @@ use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
-use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
+use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -22,7 +21,6 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
-use Tests\Answer\Service\AnswerReportServiceTest;
 
 class TestpaperAction extends AbstractResource
 {
@@ -99,12 +97,12 @@ class TestpaperAction extends AbstractResource
         $testpaper = $testpaperWrapper->wrapTestpaper($assessment, $scene);
         $testpaper['metas']['question_type_seq'] = array_keys($items);
 
-        return array(
+        return [
             'testpaperResult' => $testpaperWrapper->wrapTestpaperResult($answerRecord, $assessment, $scene, $answerReport),
             'testpaper' => $testpaper,
             'items' => $items,
             'isShowTestResult' => 1,
-        );
+        ];
     }
 
     protected function redoTestpaper(ApiRequest $request, $assessment)
@@ -163,7 +161,7 @@ class TestpaperAction extends AbstractResource
 
         if (!$answerRecord || ($answerRecord && 'finished' == $answerRecord['status'])) {
             $answerRecord = $this->getAnswerService()->startAnswer($scene['id'], $assessment['id'], $user['id']);
-            $answerReport = array();
+            $answerReport = [];
         }
 
         $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
@@ -173,12 +171,12 @@ class TestpaperAction extends AbstractResource
         $testpaper = $testpaperWrapper->wrapTestpaper($assessment, $scene);
         $testpaper['metas']['question_type_seq'] = array_keys($items);
 
-        return array(
+        return [
             'testpaperResult' => $testpaperWrapper->wrapTestpaperResult($answerRecord, $assessment, $scene, $answerReport),
             'testpaper' => $testpaper,
             'items' => $items,
             'isShowTestResult' => 0,
-        );
+        ];
     }
 
     /**

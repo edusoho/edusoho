@@ -44,7 +44,7 @@ interface ActivityService
 
     public function deleteActivity($id);
 
-    public function search($conditions, $orderBy, $start, $limit, $columns = array());
+    public function search($conditions, $orderBy, $start, $limit, $columns = []);
 
     public function count($conditions);
 
@@ -55,7 +55,7 @@ interface ActivityService
      */
     public function getActivityConfig($type);
 
-    public function trigger($activityId, $name, $data = array());
+    public function trigger($activityId, $name, $data = []);
 
     public function isFinished($activityId);
 

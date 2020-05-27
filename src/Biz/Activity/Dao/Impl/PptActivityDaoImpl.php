@@ -11,6 +11,15 @@ class PptActivityDaoImpl extends GeneralDaoImpl implements PptActivityDao
 
     public function declares()
     {
+        return [
+            'conditions' => [
+                /*S2B2C 增加syncId*/
+                'syncId = :syncId',
+                'syncId in (:syncIds)',
+                'syncId > :syncIdGT',
+                /*END*/
+            ],
+        ];
     }
 
     public function findByIds($Ids)

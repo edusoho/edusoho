@@ -55,8 +55,6 @@ final class FixerOption implements FixerOptionInterface
      * @param bool          $isRequired
      * @param mixed         $default
      * @param null|string[] $allowedTypes
-     * @param null|array    $allowedValues
-     * @param null|\Closure $normalizer
      */
     public function __construct(
         $name,
@@ -165,16 +163,10 @@ final class FixerOption implements FixerOptionInterface
      *
      * See {@see https://bugs.php.net/bug.php?id=69639 Bug #69639} for details.
      *
-     * @param \Closure $closure
-     *
      * @return \Closure
      */
     private function unbind(\Closure $closure)
     {
-        if (PHP_VERSION_ID < 50400) {
-            return $closure;
-        }
-
         return $closure->bindTo(null);
     }
 }

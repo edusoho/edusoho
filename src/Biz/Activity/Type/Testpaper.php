@@ -2,25 +2,25 @@
 
 namespace Biz\Activity\Type;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\ActivityException;
 use Biz\Activity\Config\Activity;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Testpaper\Service\TestpaperService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class Testpaper extends Activity
 {
     protected function registerListeners()
     {
-        return array(
+        return [
             'activity.created' => 'Biz\Activity\Listener\TestpaperActivityCreateListener',
-        );
+        ];
     }
 
     public function get($targetId)
@@ -48,7 +48,7 @@ class Testpaper extends Activity
         try {
             $this->getBiz()['db']->beginTransaction();
 
-            $answerScene = $this->getAnswerSceneService()->create(array(
+            $answerScene = $this->getAnswerSceneService()->create([
                 'name' => $fields['title'],
                 'limited_time' => $fields['limitedTime'],
                 'do_times' => $fields['doTimes'],
@@ -57,15 +57,15 @@ class Testpaper extends Activity
                 'start_time' => $fields['startTime'],
                 'pass_score' => empty($fields['passScore']) ? 0 : $fields['passScore'],
                 'enable_facein' => empty($fields['enable_facein']) ? 0 : $fields['enable_facein'],
-            ));
+            ]);
 
-            $testpaperActivity = $this->getTestpaperActivityService()->createActivity(array(
+            $testpaperActivity = $this->getTestpaperActivityService()->createActivity([
                 'mediaId' => $fields['mediaId'],
                 'checkType' => empty($fields['checkType']) ? '' : $fields['checkType'],
                 'requireCredit' => empty($fields['requireCredit']) ? 0 : $fields['requireCredit'],
                 'answerSceneId' => $answerScene['id'],
                 'finishCondition' => $fields['finishCondition'],
-            ));
+            ]);
 
             $this->getBiz()['db']->commit();
 
@@ -76,7 +76,7 @@ class Testpaper extends Activity
         }
     }
 
-    public function copy($activity, $config = array())
+    public function copy($activity, $config = [])
     {
         if ('testpaper' !== $activity['mediaType']) {
             return null;
@@ -84,7 +84,7 @@ class Testpaper extends Activity
 
         $testpaperActivity = $this->get($activity['mediaId']);
 
-        $newExt = array(
+        $newExt = [
             'title' => $activity['title'],
             'startTime' => $activity['startTime'],
             'finishData' => $activity['finishData'],
@@ -97,7 +97,7 @@ class Testpaper extends Activity
             'requireCredit' => $testpaperActivity['requireCredit'],
             'testMode' => $testpaperActivity['testMode'],
             'finishCondition' => $testpaperActivity['finishCondition'],
-        );
+        ];
 
         return $this->create($newExt);
     }
@@ -141,7 +141,7 @@ class Testpaper extends Activity
         try {
             $this->getBiz()['db']->beginTransaction();
 
-            $answerScene = $this->getAnswerSceneService()->update($activity['answerScene']['id'], array(
+            $answerScene = $this->getAnswerSceneService()->update($activity['answerScene']['id'], [
                 'name' => $filterFields['title'],
                 'limited_time' => $filterFields['limitedTime'],
                 'do_times' => $filterFields['doTimes'],
@@ -149,14 +149,14 @@ class Testpaper extends Activity
                 'start_time' => $filterFields['startTime'],
                 'pass_score' => empty($filterFields['passScore']) ? 0 : $filterFields['passScore'],
                 'enable_facein' => empty($filterFields['enable_facein']) ? 0 : $filterFields['enable_facein'],
-            ));
+            ]);
 
-            $testpaperActivity = $this->getTestpaperActivityService()->updateActivity($activity['id'], array(
+            $testpaperActivity = $this->getTestpaperActivityService()->updateActivity($activity['id'], [
                 'mediaId' => $filterFields['mediaId'],
                 'checkType' => empty($filterFields['checkType']) ? '' : $filterFields['checkType'],
                 'requireCredit' => empty($filterFields['requireCredit']) ? 0 : $filterFields['requireCredit'],
                 'finishCondition' => $filterFields['finishCondition'],
-            ));
+            ]);
 
             $this->getBiz()['db']->commit();
 
@@ -189,7 +189,7 @@ class Testpaper extends Activity
         }
         if (!in_array(
             $answerRecord['status'],
-            array(AnswerService::ANSWER_RECORD_STATUS_REVIEWING, AnswerService::ANSWER_RECORD_STATUS_FINISHED)
+            [AnswerService::ANSWER_RECORD_STATUS_REVIEWING, AnswerService::ANSWER_RECORD_STATUS_FINISHED]
         )) {
             return false;
         }
@@ -213,18 +213,18 @@ class Testpaper extends Activity
 
         if (!empty($fields['finishType'])) {
             if ('score' == $fields['finishType']) {
-                $fields['finishCondition'] = array(
+                $fields['finishCondition'] = [
                     'type' => 'score',
                     'finishScore' => $fields['passScore'],
-                );
+                ];
             } else {
-                $fields['finishCondition'] = array();
+                $fields['finishCondition'] = [];
             }
         }
 
         $filterFields = ArrayToolkit::parts(
             $fields,
-            array(
+            [
                 'title',
                 'testpaperId',
                 'doTimes',
@@ -238,7 +238,7 @@ class Testpaper extends Activity
                 'startTime',
                 'passScore',
                 'enable_facein',
-            )
+            ]
         );
 
         if (isset($filterFields['length'])) {

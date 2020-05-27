@@ -16,14 +16,21 @@ class ExerciseActivityDaoImpl extends AdvancedDaoImpl implements ExerciseActivit
 
     public function getByAnswerSceneId($answerSceneId)
     {
-        return $this->getByFields(array('answerSceneId' => $answerSceneId));
+        return $this->getByFields(['answerSceneId' => $answerSceneId]);
     }
 
     public function declares()
     {
-        return array(
-            'timestamps' => array('createdTime', 'updatedTime'),
-            'serializes' => array('drawCondition' => 'json'),
-        );
+        return [
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'serializes' => ['drawCondition' => 'json'],
+            'conditions' => [
+                /*S2B2C增加syncId*/
+                'syncId = :syncId',
+                'syncId in (:syncIds)',
+                'syncId > :syncIdGT',
+                /*END*/
+            ],
+        ];
     }
 }

@@ -11,27 +11,27 @@ class MemberDaoImpl extends GeneralDaoImpl implements MemberDao
 
     public function findByUserId($userId)
     {
-        return $this->findByFields(array('userId' => $userId));
+        return $this->findByFields(['userId' => $userId]);
     }
 
     public function getByGroupIdAndUserId($groupId, $userId)
     {
-        return $this->getByFields(array('groupId' => $groupId, 'userId' => $userId));
+        return $this->getByFields(['groupId' => $groupId, 'userId' => $userId]);
     }
 
     public function declares()
     {
-        return array(
-            'timestamps' => array('createdTime'),
-            'serializes' => array(),
-            'orderbys' => array('postNum', 'name', 'createdTime'),
-            'conditions' => array(
+        return [
+            'timestamps' => ['createdTime'],
+            'serializes' => [],
+            'orderbys' => ['postNum', 'name', 'createdTime'],
+            'conditions' => [
                 'groupId = :groupId',
                 'role = :role',
                 'userId = :userId',
                 'courseId = :courseId',
                 'courseId IN (:courseIds)',
-            ),
-        );
+            ],
+        ];
     }
 }

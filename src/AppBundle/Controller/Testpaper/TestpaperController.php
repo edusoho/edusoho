@@ -2,21 +2,21 @@
 
 namespace AppBundle\Controller\Testpaper;
 
-use Biz\Task\Service\TaskService;
-use Biz\User\Service\UserService;
-use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
-use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\TestpaperActivityService;
-use Biz\Course\CourseException;
 use Biz\Common\CommonException;
+use Biz\Course\CourseException;
+use Biz\Course\Service\CourseService;
+use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
 use Biz\User\UserException;
-use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
-use Biz\System\Service\SettingService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Symfony\Component\HttpFoundation\Request;
 
 class TestpaperController extends BaseController
 {
@@ -32,13 +32,13 @@ class TestpaperController extends BaseController
             $this->createNewException(CourseException::FORBIDDEN_TAKE_COURSE());
         }
 
-        return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', array(
+        return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', [
             'answerSceneId' => $testpaperActivity['answerSceneId'],
             'assessmentId' => $testpaperActivity['mediaId'],
-        ), array(
-            'submit_goto_url' => $this->generateUrl('course_task_activity_show', array('courseId' => $activity['fromCourseId'], 'id' => $task['id'])),
-            'save_goto_url' => $this->generateUrl('my_course_show', array('id' => $activity['fromCourseId'])),
-        ));
+        ], [
+            'submit_goto_url' => $this->generateUrl('course_task_activity_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]),
+            'save_goto_url' => $this->generateUrl('my_course_show', ['id' => $activity['fromCourseId']]),
+        ]);
     }
 
     public function showResultAction(Request $request, $answerRecordId)
@@ -54,26 +54,26 @@ class TestpaperController extends BaseController
 
         if ('my' == $request->query->get('action', '')) {
             $task = $this->getTaskByAnswerSceneId($answerRecord['answer_scene_id']);
-            $restartUrl = $this->generateUrl('course_task_show', array('id' => $task['id'], 'courseId' => $task['courseId']));
+            $restartUrl = $this->generateUrl('course_task_show', ['id' => $task['id'], 'courseId' => $task['courseId']]);
         } elseif ('' == $request->query->get('action', '')) {
-            $restartUrl = $this->generateUrl('testpaper_do', array('lessonId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id']), 'testId' => 1));
+            $restartUrl = $this->generateUrl('testpaper_do', ['lessonId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id']), 'testId' => 1]);
         } else {
             $restartUrl = '';
         }
 
-        return $this->render('testpaper/result.html.twig', array(
+        return $this->render('testpaper/result.html.twig', [
             'passedStatus' => $answerReport['score'] >= $answerScene['pass_score'],
             'answerReport' => $answerReport,
             'answerRecord' => $answerRecord,
             'assessment' => $assessment,
             'restartUrl' => $restartUrl,
             'answerShow' => $this->getAnswerShowByAnswerSceneId($answerRecord['answer_scene_id']),
-        ));
+        ]);
     }
 
     protected function getAnswerShowByAnswerSceneId($answerSceneId)
     {
-        $questionSetting = $this->getSettingService()->get('questions', array());
+        $questionSetting = $this->getSettingService()->get('questions', []);
         $answerShowMode = empty($questionSetting['testpaper_answers_show_mode']) ? 'submitted' : $questionSetting['testpaper_answers_show_mode'];
         switch ($answerShowMode) {
             case 'hide':
@@ -81,7 +81,7 @@ class TestpaperController extends BaseController
                 break;
 
             case 'reviewed':
-                if ($this->getAnswerRecordService()->count(array('answer_scene_id' => $answerSceneId, 'statusNeq' => 'finished'))) {
+                if ($this->getAnswerRecordService()->count(['answer_scene_id' => $answerSceneId, 'statusNeq' => 'finished'])) {
                     return 'none';
                 } else {
                     return 'show';
@@ -149,7 +149,7 @@ class TestpaperController extends BaseController
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
 
-            if ($member && array_intersect($member['role'], array('assistant', 'teacher', 'headTeacher'))) {
+            if ($member && array_intersect($member['role'], ['assistant', 'teacher', 'headTeacher'])) {
                 return true;
             }
         }

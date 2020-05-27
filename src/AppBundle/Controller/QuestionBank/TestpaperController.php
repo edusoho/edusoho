@@ -351,7 +351,7 @@ class TestpaperController extends BaseController
         $result = $this->getAssessmentService()->exportAssessment($assessmentId, $path, $imgRootDir);
 
         if (empty($result)) {
-            return $this->createMessageResponse('info', '导出试卷为空', null, 3000, $this->generateUrl('question_bank_manage_testpaper_list', array('id' => $id)));
+            return $this->createMessageResponse('info', '导出试卷为空', null, 3000, $this->generateUrl('question_bank_manage_testpaper_list', ['id' => $id]));
         }
 
         $headers = [
@@ -369,11 +369,11 @@ class TestpaperController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        $conditions = array(
+        $conditions = [
             'bank_id' => $questionBank['itemBankId'],
             'displayable' => 1,
             'keyword' => $request->query->get('keyword', ''),
-        );
+        ];
         $totalCount = $this->getAssessmentService()->countAssessments($conditions);
         $conditions['status'] = 'open';
         $openCount = $this->getAssessmentService()->countAssessments($conditions);
@@ -392,11 +392,11 @@ class TestpaperController extends BaseController
         );
 
         foreach ($testPapers as &$testPaper) {
-            $testPaper = array(
+            $testPaper = [
                 'id' => $testPaper['id'],
                 'name' => $testPaper['name'],
                 'score' => $testPaper['total_score'],
-            );
+            ];
         }
 
         return $this->createJsonResponse([
