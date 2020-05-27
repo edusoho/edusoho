@@ -256,7 +256,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         $key = 'activity.'.$activityId;
         $session = $request->getSession($key);
         $taskStore = $session->get($key);
-        if (!empty($taskStore) && !empty($taskStore['trigger_type']) && $taskStore['trigger_type'] == 'live') {
+        if (!empty($taskStore)) {
             $now = time();
             //任务连续学习超过5小时则不再统计时长
             if ($now - $taskStore['start'] > 60 * 60 * 5) {
@@ -267,7 +267,6 @@ class LiveController extends BaseActivityController implements ActivityActionInt
                 return false;
             }
             $taskStore['lastTriggerTime'] = $now;
-            $taskStore['trigger_type'] = 'live';
             $session->set($key, $taskStore);
 
             return true;
