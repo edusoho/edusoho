@@ -491,3 +491,7 @@ weekDays:
 adminCourseTypes:
     normal: Course
     classroom: Classroom course
+
+adminPlumberStatus:
+    executing: Excuting
+    stopped: Stopped

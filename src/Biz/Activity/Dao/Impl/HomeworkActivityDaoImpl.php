@@ -11,12 +11,12 @@ class HomeworkActivityDaoImpl extends GeneralDaoImpl implements HomeworkActivity
 
     public function getByAnswerSceneId($answerSceneId)
     {
-        return $this->getByFields(array('answerSceneId' => $answerSceneId));
+        return $this->getByFields(['answerSceneId' => $answerSceneId]);
     }
 
     public function getByAssessmentId($assessmentId)
     {
-        return $this->getByFields(array('assessmentId' => $assessmentId));
+        return $this->getByFields(['assessmentId' => $assessmentId]);
     }
 
     public function findByIds($ids)
@@ -31,12 +31,17 @@ class HomeworkActivityDaoImpl extends GeneralDaoImpl implements HomeworkActivity
 
     public function declares()
     {
-        return array(
-            'timestamps' => array('createdTime', 'updatedTime'),
-            'conditions' => array(
+        return [
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'conditions' => [
                 'answerSceneId = :answerSceneId',
                 'assessmentId = :assessmentId',
-            ),
-        );
+                /*S2B2C增加syncId*/
+                'syncId = :syncId',
+                'syncId in (:syncIds)',
+                'syncId > :syncIdGT',
+                /*END*/
+            ],
+        ];
     }
 }

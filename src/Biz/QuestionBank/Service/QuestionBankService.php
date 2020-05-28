@@ -19,7 +19,7 @@ interface QuestionBankService
 
     public function findQuestionBanksByIds($ids);
 
-    public function searchQuestionBanks($conditions, $orderBys, $start, $limit, $columns = array());
+    public function searchQuestionBanks($conditions, $orderBys, $start, $limit, $columns = []);
 
     public function countQuestionBanks($conditions);
 

@@ -15,12 +15,35 @@ use Biz\User\Service\UserService;
 
 class CourseSetServiceTest extends BaseTestCase
 {
+    public function testUpdateDefaultCourseId_whenSet_thenGet()
+    {
+        $courseSet = [
+                'title' => '新课程开始！',
+                'type' => 'normal',
+            ];
+        $created = $this->getCourseSetService()->createCourseSet($courseSet);
+        $courseFields1 = [
+                'courseSetId' => $created['id'],
+                'title' => '计划名称1',
+                'learnMode' => 'freeMode',
+                'expiryDays' => 0,
+                'expiryMode' => 'forever',
+                'courseType' => 'normal',
+            ];
+        $course = $this->getCourseService()->createCourse($courseFields1);
+        $before = $this->getCourseSetService()->getCourseSet($created['id']);
+        $this->assertNotEquals($before['defaultCourseId'], $course['id']);
+
+        $updated = $this->getCourseSetService()->updateDefaultCourseId($created['id'], $course['id']);
+        $this->assertEquals($course['id'], $updated['defaultCourseId']);
+    }
+
     public function testCreateNormal()
     {
-        $courseSet = array(
+        $courseSet = [
             'title' => '新课程开始！',
             'type' => 'normal',
-        );
+        ];
         $created = $this->getCourseSetService()->createCourseSet($courseSet);
         $this->assertTrue($created['id'] > 0);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($created['id']);
@@ -33,11 +56,11 @@ class CourseSetServiceTest extends BaseTestCase
 
     public function testCreateNormalCourseSetWithDefaultCourseMode()
     {
-        $courseSet = array(
+        $courseSet = [
             'title' => '新课程开始！',
             'type' => 'normal',
             'learnMode' => 'lockMode',
-        );
+        ];
         $created = $this->getCourseSetService()->createCourseSet($courseSet);
         $this->assertTrue($created['id'] > 0);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($created['id']);
@@ -50,10 +73,10 @@ class CourseSetServiceTest extends BaseTestCase
 
     public function testCreateLive()
     {
-        $courseSet = array(
+        $courseSet = [
             'title' => '新课程开始！',
             'type' => 'live',
-        );
+        ];
         $created = $this->getCourseSetService()->createCourseSet($courseSet);
         $this->assertTrue($created['id'] > 0);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($created['id']);
@@ -63,10 +86,10 @@ class CourseSetServiceTest extends BaseTestCase
 
     public function testCreateLiveOpen()
     {
-        $courseSet = array(
+        $courseSet = [
             'title' => '新课程开始！',
             'type' => 'liveOpen',
-        );
+        ];
         $created = $this->getCourseSetService()->createCourseSet($courseSet);
         $this->assertTrue($created['id'] > 0);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($created['id']);
@@ -76,10 +99,10 @@ class CourseSetServiceTest extends BaseTestCase
 
     public function testCreateOpen()
     {
-        $courseSet = array(
+        $courseSet = [
             'title' => '新课程开始！',
             'type' => 'open',
-        );
+        ];
         $created = $this->getCourseSetService()->createCourseSet($courseSet);
         $this->assertTrue($created['id'] > 0);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($created['id']);
@@ -92,9 +115,9 @@ class CourseSetServiceTest extends BaseTestCase
      */
     public function testCreateError()
     {
-        $courseSet = array(
+        $courseSet = [
             'title' => '新课程开始！',
-        );
+        ];
         $this->getCourseSetService()->createCourseSet($courseSet);
     }
 
@@ -104,10 +127,10 @@ class CourseSetServiceTest extends BaseTestCase
      */
     public function testRecommendCourseException()
     {
-        $courseSet = array(
+        $courseSet = [
             'title' => '新课程',
             'type' => 'normal',
-        );
+        ];
 
         $this->getCourseSetService()->createCourseSet($courseSet);
         $this->getCourseSetService()->recommendCourse(1, 'a');
@@ -115,10 +138,10 @@ class CourseSetServiceTest extends BaseTestCase
 
     private function createAndPublishCourseSet($title, $type)
     {
-        $courseSet = array(
+        $courseSet = [
             'title' => $title,
             'type' => $type,
-        );
+        ];
 
         $courseSet = $this->getCourseSetService()->createCourseSet($courseSet);
         $this->getCourseSetService()->publishCourseSet($courseSet['id']);
@@ -139,21 +162,21 @@ class CourseSetServiceTest extends BaseTestCase
 
     public function testCancelRecommendCourse()
     {
-        $courseSet = array(
+        $courseSet = [
             'title' => '新课程哇',
             'type' => 'normal',
-        );
+        ];
 
         $this->getCourseSetService()->createCourseSet($courseSet);
         $this->getCourseSetService()->recommendCourse(1, 20);
         $this->getCourseSetService()->cancelRecommendCourse(1);
         $courseSet = $this->getCourseSetService()->getCourseSet(1);
 
-        $excepted = array(
+        $excepted = [
             'recommended' => 0,
             'recommendedTime' => 0,
             'recommendedSeq' => 0,
-        );
+        ];
 
         $this->assertArraySternEquals($excepted, $courseSet);
     }
@@ -166,22 +189,22 @@ class CourseSetServiceTest extends BaseTestCase
         sleep(1);
         $courseSet3 = $this->createAndPublishCourseSet('新课程3', 'open');
         sleep(1);
-        $this->getCourseSetService()->createCourseSet(array('title' => '新课程4', 'type' => 'normal'));
+        $this->getCourseSetService()->createCourseSet(['title' => '新课程4', 'type' => 'normal']);
         sleep(1);
         $this->createAndPublishCourseSet('新课程5', 'open');
         $this->getCourseSetService()->recommendCourse(5, 2321);
         $courseSet5 = $this->getCourseSetService()->getCourseSet(5);
 
-        $conditionsA = array(
+        $conditionsA = [
             'status' => 'published',
             'recommended' => 1,
             'parentId' => 0,
-        );
+        ];
 
-        $conditionsB = array(
+        $conditionsB = [
             'status' => 'published',
             'parentId' => 0,
-        );
+        ];
 
         $courseSetsA = $this->getCourseSetService()->findRandomCourseSets($conditionsA, 5);
 
@@ -189,7 +212,7 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertArraySternEquals($courseSetsA[0], $courseSet5);
 
         $courseSetsB = $this->getCourseSetService()->findRandomCourseSets($conditionsB, 5);
-        $expected = array($courseSet5, $courseSet3, $courseSet2, $courseSet1);
+        $expected = [$courseSet5, $courseSet3, $courseSet2, $courseSet1];
 
         $this->assertArraySternEquals($expected, $courseSetsB);
     }
@@ -246,13 +269,13 @@ class CourseSetServiceTest extends BaseTestCase
         $this->createAndPublishCourseSet('课程1', 'normal');
 
         $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
+        $currentUser->fromArray([
             'id' => 0,
             'nickname' => '游客',
             'currentIp' => '127.0.0.1',
-            'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
-            'org' => array('id' => 1),
-        ));
+            'roles' => ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'],
+            'org' => ['id' => 1],
+        ]);
 
         $this->getServiceKernel()->setBiz($this->getBiz());
         $this->getServiceKernel()->setCurrentUser($currentUser);
@@ -264,17 +287,17 @@ class CourseSetServiceTest extends BaseTestCase
     {
         $this->createAndPublishCourseSet('课程1', 'normal');
 
-        $user = $this->getUserService()->register(array(
+        $user = $this->getUserService()->register([
             'nickname' => 'user',
             'email' => 'user@user.com',
             'password' => 'user123',
             'createdIp' => '127.0.0.1',
             'orgCode' => '1.',
             'orgId' => '1',
-        ));
+        ]);
 
         $user['currentIp'] = $user['createdIp'];
-        $user['org'] = array('id' => 1);
+        $user['org'] = ['id' => 1];
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $this->grantPermissionToUser($currentUser);
@@ -304,13 +327,13 @@ class CourseSetServiceTest extends BaseTestCase
     public function testTryManageCourseSetUnLogin()
     {
         $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
+        $currentUser->fromArray([
             'id' => 0,
             'nickname' => '游客',
             'currentIp' => '127.0.0.1',
-            'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
-            'org' => array('id' => 1),
-        ));
+            'roles' => ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'],
+            'org' => ['id' => 1],
+        ]);
 
         $this->getServiceKernel()->setBiz($this->getBiz());
         $this->getServiceKernel()->setCurrentUser($currentUser);
@@ -332,16 +355,16 @@ class CourseSetServiceTest extends BaseTestCase
         $this->createAndPublishCourseSet('新课程1', 'normal');
         $this->createAndPublishCourseSet('新课程2', 'normal');
         $this->createAndPublishCourseSet('新课程3', 'open');
-        $this->getCourseSetService()->createCourseSet(array('title' => '新课程4', 'type' => 'normal'));
+        $this->getCourseSetService()->createCourseSet(['title' => '新课程4', 'type' => 'normal']);
         $this->createAndPublishCourseSet('新课程5', 'open');
         $this->getCourseSetService()->recommendCourse(5, 2321);
         $this->getCourseSetService()->getCourseSet(5);
 
-        $conditions = array('type' => 'normal', 'status' => 'published');
+        $conditions = ['type' => 'normal', 'status' => 'published'];
         $count = $this->getCourseSetService()->countCourseSets($conditions);
         $this->assertEquals(2, $count);
 
-        $conditions = array();
+        $conditions = [];
         $count = $this->getCourseSetService()->countCourseSets($conditions);
         $this->assertEquals(5, $count);
     }
@@ -353,14 +376,14 @@ class CourseSetServiceTest extends BaseTestCase
 
         $user = $this->createNormalUser();
         $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
-        $course = $this->mockNewCourseAndPublished(array('courseSetId' => $courseSet['id']));
-        $member = array(
+        $course = $this->mockNewCourseAndPublished(['courseSetId' => $courseSet['id']]);
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => $courseSet['id'],
             'joinedType' => 'course',
             'role' => 'student',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
         $count = $this->getCourseSetService()->countUserLearnCourseSets($user['id']);
@@ -374,14 +397,14 @@ class CourseSetServiceTest extends BaseTestCase
 
         $user = $this->createNormalUser();
         $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
-        $course = $this->mockNewCourseAndPublished(array('courseSetId' => $courseSet['id']));
-        $member = array(
+        $course = $this->mockNewCourseAndPublished(['courseSetId' => $courseSet['id']]);
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => $courseSet['id'],
             'joinedType' => 'course',
             'role' => 'student',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
         $result = $this->getCourseSetService()->searchUserLearnCourseSets($user['id'], 0, 10);
@@ -390,67 +413,67 @@ class CourseSetServiceTest extends BaseTestCase
 
     public function testcountUserTeachingCourseSets()
     {
-        $count = $this->getCourseSetService()->countUserTeachingCourseSets(-1, array());
+        $count = $this->getCourseSetService()->countUserTeachingCourseSets(-1, []);
         $this->assertEquals(0, $count);
 
         $user = $this->createNormalUser();
         $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
-        $course = $this->mockNewCourseAndPublished(array('courseSetId' => $courseSet['id']));
-        $member = array(
+        $course = $this->mockNewCourseAndPublished(['courseSetId' => $courseSet['id']]);
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => $courseSet['id'],
             'joinedType' => 'course',
             'role' => 'teacher',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
-        $count = $this->getCourseSetService()->countUserTeachingCourseSets($user['id'], array());
+        $count = $this->getCourseSetService()->countUserTeachingCourseSets($user['id'], []);
         $this->assertEquals(1, $count);
     }
 
     public function testSearchUserTeachingCourseSets()
     {
-        $result = $this->getCourseSetService()->searchUserTeachingCourseSets(-1, array(), 0, 10);
+        $result = $this->getCourseSetService()->searchUserTeachingCourseSets(-1, [], 0, 10);
         $this->assertEmpty($result);
 
         $user = $this->createNormalUser();
         $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
-        $course = $this->mockNewCourseAndPublished(array('courseSetId' => $courseSet['id']));
-        $member = array(
+        $course = $this->mockNewCourseAndPublished(['courseSetId' => $courseSet['id']]);
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => $courseSet['id'],
             'joinedType' => 'course',
             'role' => 'teacher',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
-        $result = $this->getCourseSetService()->searchUserTeachingCourseSets($user['id'], array(), 0, 10);
+        $result = $this->getCourseSetService()->searchUserTeachingCourseSets($user['id'], [], 0, 10);
         $this->assertEquals('新课程1', $result[0]['title']);
     }
 
     public function testSearchCourseSetsByTeacherOrderByStickTime()
     {
-        $result = $this->getCourseSetService()->searchCourseSetsByTeacherOrderByStickTime(array(), array('createdTime' => 'DESC'), 1, 0, 10);
+        $result = $this->getCourseSetService()->searchCourseSetsByTeacherOrderByStickTime([], ['createdTime' => 'DESC'], 1, 0, 10);
         $this->assertEmpty($result);
     }
 
     public function testFindCourseSetsByCourseIds()
     {
         $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
-        $course = $this->mockNewCourseAndPublished(array('courseSetId' => $courseSet['id']));
+        $course = $this->mockNewCourseAndPublished(['courseSetId' => $courseSet['id']]);
 
-        $result = $this->getCourseSetService()->findCourseSetsByCourseIds(array($course['id']));
+        $result = $this->getCourseSetService()->findCourseSetsByCourseIds([$course['id']]);
         $this->assertEquals('新课程1', $result[1]['title']);
     }
 
     public function testFindCourseSetsLikeTitle()
     {
-        $courseSet = array(
+        $courseSet = [
             'title' => '新课程开始！',
             'type' => 'normal',
-        );
+        ];
         $expected = $this->getCourseSetService()->createCourseSet($courseSet);
         $res = $this->getCourseSetService()->findCourseSetsLikeTitle('开始');
 
@@ -459,10 +482,10 @@ class CourseSetServiceTest extends BaseTestCase
 
     public function testUpdate()
     {
-        $courseSet = array(
+        $courseSet = [
             'title' => '新课程开始！',
             'type' => 'normal',
-        );
+        ];
         $created = $this->getCourseSetService()->createCourseSet($courseSet);
 
         $created['title'] = '新课程开始(更新)！';
@@ -476,25 +499,25 @@ class CourseSetServiceTest extends BaseTestCase
 
     public function testChangeCover()
     {
-        $courseSet = array(
+        $courseSet = [
             'title' => '新课程开始！',
             'type' => 'normal',
-        );
+        ];
         $created = $this->getCourseSetService()->createCourseSet($courseSet);
-        $updated = $this->getCourseSetService()->changeCourseSetCover($created['id'], array(
+        $updated = $this->getCourseSetService()->changeCourseSetCover($created['id'], [
             'large' => 1,
             'middle' => 2,
             'small' => 3,
-        ));
+        ]);
         $this->assertNotEmpty($updated['cover']);
     }
 
     public function testDelete()
     {
-        $courseSet = array(
+        $courseSet = [
             'title' => '新课程开始！',
             'type' => 'normal',
-        );
+        ];
         $created = $this->getCourseSetService()->createCourseSet($courseSet);
         $this->assertNotEmpty($created);
         $this->getCourseSetService()->deleteCourseSet($created['id']);
@@ -504,90 +527,90 @@ class CourseSetServiceTest extends BaseTestCase
 
     public function testUpdateCourseSetStatistics()
     {
-        $courseSet = array(
+        $courseSet = [
             'title' => '新课程开始！',
             'type' => 'normal',
-        );
+        ];
         $created = $this->getCourseSetService()->createCourseSet($courseSet);
         $this->assertNotEmpty($created);
 
-        $result = $this->getCourseSetService()->updateCourseSetStatistics($created['id'], array('ratingNum'));
+        $result = $this->getCourseSetService()->updateCourseSetStatistics($created['id'], ['ratingNum']);
 
         $this->assertEquals(0, $result['ratingNum']);
     }
 
     private function initTags()
     {
-        $tagA = array();
+        $tagA = [];
         $tagA['name'] = 'TagA';
         $tagA = $this->getTagService()->addTag($tagA);
 
-        $tagB = array();
+        $tagB = [];
         $tagB['name'] = 'TagB';
         $tagB = $this->getTagService()->addTag($tagB);
 
-        $tagC = array();
+        $tagC = [];
         $tagC['name'] = 'TagC';
         $tagC = $this->getTagService()->addTag($tagC);
 
-        return array($tagA, $tagB, $tagC);
+        return [$tagA, $tagB, $tagC];
     }
 
     public function testRelatedCourseSet()
     {
         list($tagA, $tagB, $tagC) = $this->initTags();
 
-        $courseSetA = array(
+        $courseSetA = [
             'title' => 'TagABC',
             'type' => 'normal',
-        );
+        ];
         $createdA = $this->getCourseSetService()->createCourseSet($courseSetA);
         $createdA['tags'] = $tagA['name'].','.$tagB['name'].','.$tagC['name'];
         $createdA = $this->getCourseSetService()->updateCourseSet($createdA['id'], $createdA);
 
-        $courseSetB = array(
+        $courseSetB = [
             'title' => '新课程开始！',
             'type' => 'normal',
-        );
+        ];
         $createdB = $this->getCourseSetService()->createCourseSet($courseSetB);
         $this->getCourseSetService()->publishCourseSet($createdB['id']);
         $createdB['tags'] = $tagB['name'].','.$tagC['name'];
         $createdB = $this->getCourseSetService()->updateCourseSet($createdB['id'], $createdB);
 
-        $courseSetC = array(
+        $courseSetC = [
             'title' => '新课程开始！',
             'type' => 'normal',
-        );
+        ];
         $createdC = $this->getCourseSetService()->createCourseSet($courseSetC);
         $this->getCourseSetService()->publishCourseSet($createdC['id']);
 
         $createdC['tags'] = $tagC['name'].','.$tagA['name'].','.$tagB['name'];
         $createdC = $this->getCourseSetService()->updateCourseSet($createdC['id'], $createdC);
 
-        $courseSetD = array(
+        $courseSetD = [
             'title' => '新课程开始！',
             'type' => 'normal',
-        );
+        ];
         $createdD = $this->getCourseSetService()->createCourseSet($courseSetD);
         $this->getCourseSetService()->publishCourseSet($createdD['id']);
         $createdD['tags'] = $tagA['name'];
         $createdD = $this->getCourseSetService()->updateCourseSet($createdD['id'], $createdD);
 
         $relatedCourseSets = $this->getCourseSetService()->findRelatedCourseSetsByCourseSetId($createdA['id'], 4);
-        $this->assertArraySternEquals($relatedCourseSets, array($createdC, $createdB, $createdD));
+        $this->assertArraySternEquals($relatedCourseSets, [$createdC, $createdB, $createdD]);
     }
 
     public function testRelatedCourseSetNoTags()
     {
-        $courseSetA = array(
+        $courseSetA = [
             'title' => '新课程开始！',
             'type' => 'normal',
-        );
+        ];
         $createdA = $this->getCourseSetService()->createCourseSet($courseSetA);
-        $courseSetB = array(
+        $courseSetB = [
             'title' => '新课程开始！',
             'type' => 'normal',
-        );
+        ];
         $createdB = $this->getCourseSetService()->createCourseSet($courseSetB);
         $relatedCourseSets = $this->getCourseSetService()->findRelatedCourseSetsByCourseSetId($createdA['id'], 4);
         $this->assertEmpty($relatedCourseSets);
@@ -595,11 +618,11 @@ class CourseSetServiceTest extends BaseTestCase
 
     public function testRefreshHotSeq()
     {
-        $fields = array(
+        $fields = [
             'title' => '新课程开始！',
             'type' => 'normal',
             'hotSeq' => 10,
-        );
+        ];
         $courseSet = $this->getCourseSetDao()->create($fields);
         $this->assertEquals($fields['hotSeq'], $courseSet['hotSeq']);
 
@@ -612,12 +635,12 @@ class CourseSetServiceTest extends BaseTestCase
 
     public function testUpdateCourseSummary()
     {
-        $courseSet = array(
+        $courseSet = [
             'title' => 'courseSetTitle',
             'type' => 'normal',
-        );
+        ];
         $courseSet = $this->getCourseSetService()->createCourseSet($courseSet);
-        $courseFields = array(
+        $courseFields = [
             'id' => 2,
             'courseSetId' => $courseSet['id'],
             'title' => '计划名称',
@@ -625,12 +648,12 @@ class CourseSetServiceTest extends BaseTestCase
             'expiryDays' => 0,
             'expiryMode' => 'forever',
             'courseType' => 'normal',
-        );
+        ];
         $this->getCourseService()->createCourse($courseFields);
-        $firstCourse = $this->getCourseService()->updateCourse(1, array('summary' => '计划简介1'));
-        $secondCourse = $this->getCourseService()->updateCourse(2, array('summary' => '计划简介2'));
+        $firstCourse = $this->getCourseService()->updateCourse(1, ['summary' => '计划简介1']);
+        $secondCourse = $this->getCourseService()->updateCourse(2, ['summary' => '计划简介2']);
 
-        ReflectionUtils::invokeMethod($this->getCourseSetService(), 'updateCourseSummary', array($courseSet));
+        ReflectionUtils::invokeMethod($this->getCourseSetService(), 'updateCourseSummary', [$courseSet]);
         $result = $this->getCourseService()->getCourse($firstCourse['id']);
         $this->assertEmpty($result['summary']);
 
@@ -641,20 +664,20 @@ class CourseSetServiceTest extends BaseTestCase
     public function testCloneCourseSet()
     {
         $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
-        $this->getCourseSetService()->cloneCourseSet($courseSet['id'], array());
-        $result = $this->getCourseSetService()->searchCourseSets(array(), 'latest', 0, 10);
+        $this->getCourseSetService()->cloneCourseSet($courseSet['id'], []);
+        $result = $this->getCourseSetService()->searchCourseSets([], 'latest', 0, 10);
         $this->assertEquals(2, count($result));
     }
 
     public function testUpdateCourseSerializeMode()
     {
         $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
-        $course = $this->mockNewCourseAndPublished(array('courseSetId' => $courseSet['id']));
+        $course = $this->mockNewCourseAndPublished(['courseSetId' => $courseSet['id']]);
 
-        ReflectionUtils::invokeMethod($this->getCourseSetService(), 'updateCourseSerializeMode', array(array(
+        ReflectionUtils::invokeMethod($this->getCourseSetService(), 'updateCourseSerializeMode', [[
             'id' => $courseSet['id'],
             'serializeMode' => 'none',
-        ), array('serializeMode' => 'serilized')));
+        ], ['serializeMode' => 'serilized']]);
 
         $result = $this->getCourseService()->getCourse($course['id']);
 
@@ -665,10 +688,10 @@ class CourseSetServiceTest extends BaseTestCase
     {
         $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
 
-        $result = $this->getCourseSetService()->updateCourseSetMarketing($courseSet['id'], array(
+        $result = $this->getCourseSetService()->updateCourseSetMarketing($courseSet['id'], [
             'discountId' => 2,
             'discount' => 0.01,
-        ));
+        ]);
 
         $this->assertEquals(2, $result['discountId']);
         $this->assertEquals(0.01, $result['discount']);
@@ -678,14 +701,14 @@ class CourseSetServiceTest extends BaseTestCase
     {
         $user = $this->createNormalUser();
         $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
-        $course = $this->mockNewCourseAndPublished(array('courseSetId' => $courseSet['id']));
-        $member = array(
+        $course = $this->mockNewCourseAndPublished(['courseSetId' => $courseSet['id']]);
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => $courseSet['id'],
             'joinedType' => 'course',
             'role' => 'teacher',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
         $result = $this->getCourseSetService()->findTeachingCourseSetsByUserId($user['id'], true);
@@ -699,14 +722,14 @@ class CourseSetServiceTest extends BaseTestCase
     {
         $user = $this->createNormalUser();
         $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
-        $course = $this->mockNewCourseAndPublished(array('courseSetId' => $courseSet['id']));
-        $member = array(
+        $course = $this->mockNewCourseAndPublished(['courseSetId' => $courseSet['id']]);
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => $courseSet['id'],
             'joinedType' => 'course',
             'role' => 'student',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
         $result = $this->getCourseSetService()->findLearnCourseSetsByUserId($user['id']);
@@ -716,11 +739,11 @@ class CourseSetServiceTest extends BaseTestCase
     public function testCloseCourseSet()
     {
         $courseSet = $this->createAndPublishCourseSet('新课程1', 'normal');
-        $course = $this->mockNewCourseAndPublished(array('courseSetId' => $courseSet['id']));
+        $course = $this->mockNewCourseAndPublished(['courseSetId' => $courseSet['id']]);
 
-        $this->mockBiz('Classroom:ClassroomService', array(
-            array('functionName' => 'getClassroomCourseByCourseSetId', 'returnValue' => array('courseId' => $course['id'])),
-        ));
+        $this->mockBiz('Classroom:ClassroomService', [
+            ['functionName' => 'getClassroomCourseByCourseSetId', 'returnValue' => ['courseId' => $course['id']]],
+        ]);
         $this->getCourseSetService()->closeCourseSet($courseSet['id']);
 
         $result = $this->getCourseSetService()->getCourseSet($courseSet['id']);
@@ -755,7 +778,7 @@ class CourseSetServiceTest extends BaseTestCase
         $this->getCourseSetService()->favorite($courseSet['id']);
 
         $user = $this->getCurrentUser();
-        $result = $this->getCourseSetService()->searchFavorites(array('userId' => $user['id']), array('createdTime' => 'DESC'), 0, 10);
+        $result = $this->getCourseSetService()->searchFavorites(['userId' => $user['id']], ['createdTime' => 'DESC'], 0, 10);
 
         $this->assertEquals($user['id'], $result[0]['userId']);
     }
@@ -764,7 +787,7 @@ class CourseSetServiceTest extends BaseTestCase
     {
         $courseSet = $this->createAndPublishCourseSet('测试课程', 'normal');
 
-        $result = $this->getCourseSetService()->findCourseSetIncomesByCourseSetIds(array($courseSet['id']));
+        $result = $this->getCourseSetService()->findCourseSetIncomesByCourseSetIds([$courseSet['id']]);
 
         $this->assertEquals('0.00', $result[0]['income']);
     }
@@ -793,7 +816,7 @@ class CourseSetServiceTest extends BaseTestCase
      */
     public function testValidateCourseSetFieldsError()
     {
-        ReflectionUtils::invokeMethod($this->getCourseSetService(), 'validateCourseSet', array(array()));
+        ReflectionUtils::invokeMethod($this->getCourseSetService(), 'validateCourseSet', [[]]);
     }
 
     /**
@@ -802,17 +825,17 @@ class CourseSetServiceTest extends BaseTestCase
      */
     public function testValidateCourseSetError()
     {
-        ReflectionUtils::invokeMethod($this->getCourseSetService(), 'validateCourseSet', array(array(
+        ReflectionUtils::invokeMethod($this->getCourseSetService(), 'validateCourseSet', [[
             'title' => 'test',
             'type' => '',
-        )));
+        ]]);
     }
 
     public function testCountStudentNumById()
     {
         $courseSet = $this->createAndPublishCourseSet('测试课程', 'normal');
-        $this->mockNewCourseAndPublished(array('courseSetId' => $courseSet['id']));
-        $result = ReflectionUtils::invokeMethod($this->getCourseSetService(), 'countStudentNumById', array($courseSet['id']));
+        $this->mockNewCourseAndPublished(['courseSetId' => $courseSet['id']]);
+        $result = ReflectionUtils::invokeMethod($this->getCourseSetService(), 'countStudentNumById', [$courseSet['id']]);
 
         $this->assertEquals(0, $result);
     }
@@ -859,16 +882,16 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertEquals(0, $course['parentId']);
     }
 
-    protected function mockNewCourseAndPublished($fields = array())
+    protected function mockNewCourseAndPublished($fields = [])
     {
-        $course = array(
+        $course = [
             'title' => 'test Course',
             'courseSetId' => 1,
             'learnMode' => 'lockMode',
             'expiryDays' => 0,
             'expiryMode' => 'forever',
             'courseType' => 'default',
-        );
+        ];
 
         $course = array_merge($course, $fields);
 
@@ -880,13 +903,13 @@ class CourseSetServiceTest extends BaseTestCase
 
     private function createNormalUser()
     {
-        $user = array();
+        $user = [];
         $user['email'] = 'normal@user.com';
         $user['nickname'] = 'normal';
         $user['password'] = 'user123';
         $user = $this->getUserService()->register($user);
         $user['currentIp'] = '127.0.0.1';
-        $user['roles'] = array('ROLE_USER');
+        $user['roles'] = ['ROLE_USER'];
 
         return $user;
     }

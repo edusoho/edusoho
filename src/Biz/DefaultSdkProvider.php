@@ -34,7 +34,7 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
         $biz['qiQiuYunSdk.play'] = function ($biz) use ($that) {
             $service = null;
-            $sdk = $that->generateSdk($biz, array());
+            $sdk = $that->generateSdk($biz, []);
             if (!empty($sdk)) {
                 $service = $sdk->getPlayService();
             }
@@ -125,7 +125,7 @@ class DefaultSdkProvider implements ServiceProviderInterface
         $biz['qiQiuYunSdk.sms'] = function ($biz) use ($that) {
             $service = null;
 
-            $sdk = $that->generateSdk($biz, array());
+            $sdk = $that->generateSdk($biz, []);
             if (!empty($sdk)) {
                 $service = $sdk->getSmsService();
             }
@@ -144,32 +144,75 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
             return $service;
         };
+
+        /*S2B2C-CUSTOM*/
+        $biz['qiQiuYunSdk.s2b2cService'] = function (Biz $biz) use ($that) {
+            $service = null;
+//            $sdk = $that->generateSdk($biz, array('s2b2c' => array('host' => $host)), $biz->offsetGet('s2b2c.merchant.logger'));
+            $sdk = $that->generateSdk($biz, $this->getS2B2CConfig($biz), $biz['s2b2c.merchant.logger']);
+
+            if (!empty($sdk)) {
+                $service = $sdk->getS2B2CService();
+            }
+
+            return $service;
+        };
+        /*END*/
     }
 
-    public function generateSdk($biz, $serviceConfig)
+    /**
+     * @param $biz
+     * @param $serviceConfig
+     * @param null $logger
+     *
+     * @return \QiQiuYun\SDK\QiQiuYunSDK|null
+     *
+     * @throws \QiQiuYun\SDK\Exception\SDKException
+     */
+    public function generateSdk($biz, $serviceConfig, $logger = null)
     {
         $setting = $biz->service('System:SettingService');
 
-        $storageSetting = $setting->get('storage', array());
+        $storageSetting = $setting->get('storage', []);
 
         $sdk = null;
         if (!empty($storageSetting['cloud_access_key']) && !empty($storageSetting['cloud_secret_key'])) {
             $sdk = new \QiQiuYun\SDK\QiQiuYunSDK(
-                array(
+                [
                     'access_key' => $storageSetting['cloud_access_key'],
                     'secret_key' => $storageSetting['cloud_secret_key'],
                     'service' => $serviceConfig,
-                )
+                ],
+                $logger
             );
         }
 
         return $sdk;
     }
 
+    public function getS2B2CConfig($biz)
+    {
+        $setting = $biz->service('System:SettingService');
+        $developerSetting = $setting->get('developer', []);
+
+        if (!empty($developerSetting['s2b2c_server'])) {
+            $urlSegs = explode('://', $developerSetting['s2b2c_server']);
+            if (2 == count($urlSegs)) {
+                $hostUrl = $urlSegs[1];
+            }
+        }
+
+        if (empty($hostUrl)) {
+            $hostUrl = '';
+        }
+
+        return ['s2b2c' => ['host' => $hostUrl]];
+    }
+
     public function getDrpConfig($biz)
     {
         $setting = $biz->service('System:SettingService');
-        $developerSetting = $setting->get('developer', array());
+        $developerSetting = $setting->get('developer', []);
 
         if (!empty($developerSetting['distributor_server'])) {
             $urlSegs = explode('://', $developerSetting['distributor_server']);
@@ -182,13 +225,13 @@ class DefaultSdkProvider implements ServiceProviderInterface
             $hostUrl = '';
         }
 
-        return array('drp' => array('host' => $hostUrl));
+        return ['drp' => ['host' => $hostUrl]];
     }
 
     public function getESopConfig($biz)
     {
         $setting = $biz->service('System:SettingService');
-        $developerSetting = $setting->get('developer', array());
+        $developerSetting = $setting->get('developer', []);
 
         if (!empty($developerSetting['cloud_api_es_op_server'])) {
             $urlSegs = explode('://', $developerSetting['cloud_api_es_op_server']);
@@ -201,14 +244,14 @@ class DefaultSdkProvider implements ServiceProviderInterface
             $hostUrl = '';
         }
 
-        return array('esop' => array('host' => $hostUrl));
+        return ['esop' => ['host' => $hostUrl]];
     }
 
     public function getXAPIConfig(Biz $biz)
     {
         $settingService = $biz->service('System:SettingService');
-        $siteSettings = $settingService->get('site', array());
-        $xapiSetting = $settingService->get('xapi', array());
+        $siteSettings = $settingService->get('site', []);
+        $xapiSetting = $settingService->get('xapi', []);
         $pushUrl = !empty($xapiSetting['push_url']) ? $xapiSetting['push_url'] : 'lrs.qiqiuyun.net/v1/xapi/';
         $pushUrl = ltrim($pushUrl, ' ');
         $pushUrl = rtrim($pushUrl, '/');
@@ -217,20 +260,20 @@ class DefaultSdkProvider implements ServiceProviderInterface
         $siteName = empty($siteSettings['name']) ? 'none' : $siteSettings['name'];
         $siteUrl = empty($siteSettings['url']) ? '' : $siteSettings['url'];
 
-        return array(
-            'xapi' => array(
+        return [
+            'xapi' => [
                 'host' => $pushUrl,
                 'school_name' => $siteName,
                 'school_url' => $siteUrl,
                 'school_version' => System::VERSION,
-            ),
-        );
+            ],
+        ];
     }
 
     public function getMpConfig(Biz $biz)
     {
         $setting = $biz->service('System:SettingService');
-        $developerSetting = $setting->get('developer', array());
+        $developerSetting = $setting->get('developer', []);
         if (isset($developerSetting['mp_service_url']) && !empty($developerSetting['mp_service_url'])) {
             $urlSegs = explode('://', $developerSetting['mp_service_url']);
             if (2 == count($urlSegs)) {
@@ -241,13 +284,13 @@ class DefaultSdkProvider implements ServiceProviderInterface
             $hostUrl = '';
         }
 
-        return array('mp' => array('host' => $hostUrl));
+        return ['mp' => ['host' => $hostUrl]];
     }
 
     public function getAIFaceConfig(Biz $biz)
     {
         $setting = $biz->service('System:SettingService');
-        $developerSetting = $setting->get('developer', array());
+        $developerSetting = $setting->get('developer', []);
 
         if (isset($developerSetting['ai_face_url']) && !empty($developerSetting['ai_face_url'])) {
             $urlSegs = explode('://', $developerSetting['ai_face_url']);
@@ -259,13 +302,13 @@ class DefaultSdkProvider implements ServiceProviderInterface
             $hostUrl = '';
         }
 
-        return array('ai' => array('host' => $hostUrl));
+        return ['ai' => ['host' => $hostUrl]];
     }
 
     public function getPushConfig(Biz $biz)
     {
         $setting = $biz->service('System:SettingService');
-        $developerSetting = $setting->get('developer', array());
+        $developerSetting = $setting->get('developer', []);
 
         if (isset($developerSetting['push_url']) && !empty($developerSetting['push_url'])) {
             $urlSegs = explode('://', $developerSetting['push_url']);
@@ -277,78 +320,78 @@ class DefaultSdkProvider implements ServiceProviderInterface
             $hostUrl = '';
         }
 
-        return array('push' => array('host' => $hostUrl));
+        return ['push' => ['host' => $hostUrl]];
     }
 
     public function getPlayV2Config($biz)
     {
         $setting = $biz->service('System:SettingService');
-        $developerSetting = $setting->get('developer', array());
+        $developerSetting = $setting->get('developer', []);
 
         if (empty($developerSetting['cloud_play_server'])) {
-            return array();
+            return [];
         }
 
         $url = parse_url($developerSetting['cloud_play_server']);
 
         if (empty($url['host'])) {
-            return array();
+            return [];
         }
 
-        return array('playv2' => array('host' => $url['host']));
+        return ['playv2' => ['host' => $url['host']]];
     }
 
     public function getNotificationConfig($biz)
     {
         $setting = $biz->service('System:SettingService');
-        $developerSetting = $setting->get('developer', array());
+        $developerSetting = $setting->get('developer', []);
 
         if (empty($developerSetting['cloud_api_notification_server'])) {
-            return array();
+            return [];
         }
 
         $url = parse_url($developerSetting['cloud_api_notification_server']);
 
         if (empty($url['host'])) {
-            return array();
+            return [];
         }
 
-        return array('notification' => array('host' => $url['host']));
+        return ['notification' => ['host' => $url['host']]];
     }
 
     public function getWechatConfig($biz)
     {
         $setting = $biz->service('System:SettingService');
-        $developerSetting = $setting->get('developer', array());
+        $developerSetting = $setting->get('developer', []);
 
         if (empty($developerSetting['cloud_api_wechat_server'])) {
-            return array();
+            return [];
         }
 
         $url = parse_url($developerSetting['cloud_api_wechat_server']);
 
         if (empty($url['host'])) {
-            return array();
+            return [];
         }
 
-        return array('wechat' => array('host' => $url['host']));
+        return ['wechat' => ['host' => $url['host']]];
     }
 
     public function getPlatformNewsConfig($biz)
     {
         $setting = $biz->service('System:SettingService');
-        $developerSetting = $setting->get('developer', array());
+        $developerSetting = $setting->get('developer', []);
 
         if (empty($developerSetting['platform_news_api_server'])) {
-            return array();
+            return [];
         }
 
         $url = parse_url($developerSetting['platform_news_api_server']);
 
         if (empty($url['host'])) {
-            return array();
+            return [];
         }
 
-        return array('platformnews' => array('host' => $url['host']));
+        return ['platformnews' => ['host' => $url['host']]];
     }
 }

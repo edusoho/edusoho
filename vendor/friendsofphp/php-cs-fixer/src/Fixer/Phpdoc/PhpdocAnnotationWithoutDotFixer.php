@@ -25,7 +25,7 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class PhpdocAnnotationWithoutDotFixer extends AbstractFixer
 {
-    private $tags = array('throws', 'return', 'param', 'internal', 'deprecated', 'var', 'type');
+    private $tags = ['throws', 'return', 'param', 'internal', 'deprecated', 'var', 'type'];
 
     /**
      * {@inheritdoc}
@@ -34,13 +34,24 @@ final class PhpdocAnnotationWithoutDotFixer extends AbstractFixer
     {
         return new FixerDefinition(
             'PHPDoc annotation descriptions should not be a sentence.',
-            array(new CodeSample('<?php
+            [new CodeSample('<?php
 /**
  * @param string $bar Some string.
  */
 function foo ($bar) {}
-'))
+')]
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * Must run before PhpdocAlignFixer, PhpdocTypesFixer, PhpdocTypesOrderFixer.
+     * Must run after CommentToPhpdocFixer, PhpdocIndentFixer, PhpdocToCommentFixer.
+     */
+    public function getPriority()
+    {
+        return 17;
     }
 
     /**
@@ -70,22 +81,31 @@ function foo ($bar) {}
 
             foreach ($annotations as $annotation) {
                 if (
-                    !$annotation->getTag()->valid() || !in_array($annotation->getTag()->getName(), $this->tags, true)
+                    !$annotation->getTag()->valid() || !\in_array($annotation->getTag()->getName(), $this->tags, true)
                 ) {
                     continue;
+                }
+
+                $lineAfterAnnotation = $doc->getLine($annotation->getEnd() + 1);
+                if (null !== $lineAfterAnnotation) {
+                    $lineAfterAnnotationTrimmed = ltrim($lineAfterAnnotation->getContent());
+                    if ('' === $lineAfterAnnotationTrimmed || '*' !== $lineAfterAnnotationTrimmed[0]) {
+                        // malformed PHPDoc, missing asterisk !
+                        continue;
+                    }
                 }
 
                 $content = $annotation->getContent();
 
                 if (
-                    1 !== Preg::match('/[.。]$/u', $content)
-                    || 0 !== Preg::match('/[.。](?!$)/u', $content, $matches)
+                    1 !== Preg::match('/[.。]\h*$/u', $content)
+                    || 0 !== Preg::match('/[.。](?!\h*$)/u', $content, $matches)
                 ) {
                     continue;
                 }
 
                 $endLine = $doc->getLine($annotation->getEnd());
-                $endLine->setContent(Preg::replace('/(?<![.。])[.。](\s+)$/u', '\1', $endLine->getContent()));
+                $endLine->setContent(Preg::replace('/(?<![.。])[.。]\h*(\H+)$/u', '\1', $endLine->getContent()));
 
                 $startLine = $doc->getLine($annotation->getStart());
                 $optionalTypeRegEx = $annotation->supportTypes()
@@ -93,7 +113,7 @@ function foo ($bar) {}
                     : '';
                 $content = Preg::replaceCallback(
                     '/^(\s*\*\s*@\w+\s+'.$optionalTypeRegEx.')(\p{Lu}?(?=\p{Ll}|\p{Zs}))(.*)$/',
-                    function (array $matches) {
+                    static function (array $matches) {
                         return $matches[1].strtolower($matches[2]).$matches[3];
                     },
                     $startLine->getContent(),
@@ -102,7 +122,7 @@ function foo ($bar) {}
                 $startLine->setContent($content);
             }
 
-            $tokens[$index] = new Token(array(T_DOC_COMMENT, $doc->getContent()));
+            $tokens[$index] = new Token([T_DOC_COMMENT, $doc->getContent()]);
         }
     }
 }

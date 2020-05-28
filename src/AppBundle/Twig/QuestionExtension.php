@@ -30,21 +30,21 @@ class QuestionExtension extends \Twig_Extension
 
     public function getFilters()
     {
-        return array();
+        return [];
     }
 
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('find_question_num_by_course_set_id', array($this, 'findQuestionNumsByCourseSetId')),
-            new \Twig_SimpleFunction('question_html_filter', array($this, 'questionHtmlFilter')),
-            new \Twig_SimpleFunction('attachment_uploader_token', array($this, 'makeAttachmentToken')),
-        );
+        return [
+            new \Twig_SimpleFunction('find_question_num_by_course_set_id', [$this, 'findQuestionNumsByCourseSetId']),
+            new \Twig_SimpleFunction('question_html_filter', [$this, 'questionHtmlFilter']),
+            new \Twig_SimpleFunction('attachment_uploader_token', [$this, 'makeAttachmentToken']),
+        ];
     }
 
     public function findQuestionNumsByCourseSetId($courseSetId)
     {
-        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes(array('courseSetId' => $courseSetId, 'parentId' => 0));
+        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes(['courseSetId' => $courseSetId, 'parentId' => 0]);
         $questionNums = ArrayToolkit::index($questionNums, 'type');
 
         return $questionNums;
@@ -62,13 +62,13 @@ class QuestionExtension extends \Twig_Extension
         if (!empty($security['safe_iframe_domains'])) {
             $safeDomains = $security['safe_iframe_domains'];
         } else {
-            $safeDomains = array();
+            $safeDomains = [];
         }
 
-        $config = array(
+        $config = [
             'cacheDir' => $this->biz['cache_directory'].'/htmlpurifier',
             'safeIframeDomains' => $safeDomains,
-        );
+        ];
 
         $this->warmUp($config['cacheDir']);
         $htmlConfig = \HTMLPurifier_Config::createDefault();
@@ -94,7 +94,7 @@ class QuestionExtension extends \Twig_Extension
     public function makeAttachmentToken()
     {
         $user = $this->biz['user'];
-        $setting = $this->getSettingService()->get('storage', array());
+        $setting = $this->getSettingService()->get('storage', []);
         $accessKey = empty($setting['cloud_access_key']) ? '' : $setting['cloud_access_key'];
         $secretKey = empty($setting['cloud_secret_key']) ? '' : $setting['cloud_secret_key'];
 

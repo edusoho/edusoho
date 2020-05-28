@@ -2,15 +2,15 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Course\Service\CourseService;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Activity\Service\ActivityService;
-use Biz\Testpaper\Service\TestpaperService;
-use Symfony\Component\HttpFoundation\Request;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
+use Biz\Course\Service\CourseService;
+use Biz\Testpaper\Service\TestpaperService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class ExerciseController extends BaseController
 {
@@ -25,36 +25,36 @@ class ExerciseController extends BaseController
             $this->createNewException(CourseException::FORBIDDEN_TAKE_COURSE());
         }
 
-        if (empty($latestAnswerRecord) || $latestAnswerRecord['status'] == AnswerService::ANSWER_RECORD_STATUS_FINISHED) {
+        if (empty($latestAnswerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
             $assessment = $this->createAssessment(
                 $activity['title'],
                 $activity['ext']['drawCondition']['range'],
-                array($activity['ext']['drawCondition']['section'])
+                [$activity['ext']['drawCondition']['section']]
             );
             $assessmentId = $assessment['id'];
         } else {
             $assessmentId = $latestAnswerRecord['assessment_id'];
         }
 
-        return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', array(
+        return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', [
             'answerSceneId' => $activity['ext']['answerSceneId'],
             'assessmentId' => $assessmentId,
-        ), array(
-            'submit_goto_url' => $this->generateUrl('course_task_activity_show', array('courseId' => $activity['fromCourseId'], 'id' => $task['id'])),
-            'save_goto_url' => $this->generateUrl('my_course_show', array('id' => $activity['fromCourseId'])),
-        ));
+        ], [
+            'submit_goto_url' => $this->generateUrl('course_task_activity_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]),
+            'save_goto_url' => $this->generateUrl('my_course_show', ['id' => $activity['fromCourseId']]),
+        ]);
     }
 
     protected function createAssessment($name, $range, $sections)
     {
         $sections = $this->getAssessmentService()->drawItems($range, $sections);
-        $assessment = array(
+        $assessment = [
             'name' => $name,
             'displayable' => 0,
             'description' => '',
             'bank_id' => $range['bank_id'],
             'sections' => $sections,
-        );
+        ];
 
         $assessment = $this->getAssessmentService()->createAssessment($assessment);
 
@@ -72,11 +72,11 @@ class ExerciseController extends BaseController
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
         $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
 
-        return $this->render('exercise/result.html.twig', array(
+        return $this->render('exercise/result.html.twig', [
             'answerRecordId' => $answerRecordId,
             'assessment' => $assessment,
-            'restartUrl' => $this->generateUrl('exercise_start_do', array('lessonId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id']), 'exerciseId' => 1)),
-        ));
+            'restartUrl' => $this->generateUrl('exercise_start_do', ['lessonId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id']), 'exerciseId' => 1]),
+        ]);
     }
 
     protected function getActivityIdByAnswerSceneId($answerSceneId)
@@ -126,7 +126,7 @@ class ExerciseController extends BaseController
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
 
-            if ($member && array_intersect($member['role'], array('assistant', 'teacher', 'headTeacher'))) {
+            if ($member && array_intersect($member['role'], ['assistant', 'teacher', 'headTeacher'])) {
                 return true;
             }
         }

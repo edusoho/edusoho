@@ -2,20 +2,20 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Task\Service\TaskService;
-use Biz\User\Service\UserService;
-use Biz\Course\Service\CourseService;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Activity\Service\ActivityService;
-use Biz\Testpaper\Service\TestpaperService;
-use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\HomeworkActivityService;
-use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Biz\Common\CommonException;
 use Biz\Course\Exception\CourseException;
+use Biz\Course\Service\CourseService;
+use Biz\Task\Service\TaskService;
+use Biz\Testpaper\Service\TestpaperService;
+use Biz\User\Service\UserService;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class HomeworkController extends BaseController
 {
@@ -30,13 +30,13 @@ class HomeworkController extends BaseController
             $this->createNewException(CourseException::FORBIDDEN_TAKE_COURSE());
         }
 
-        return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', array(
+        return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', [
             'answerSceneId' => $homeworkActivity['answerSceneId'],
             'assessmentId' => $homeworkActivity['assessmentId'],
-        ), array(
-            'submit_goto_url' => $this->generateUrl('course_task_activity_show', array('courseId' => $activity['fromCourseId'], 'id' => $task['id'])),
-            'save_goto_url' => $this->generateUrl('my_course_show', array('id' => $activity['fromCourseId'])),
-        ));
+        ], [
+            'submit_goto_url' => $this->generateUrl('course_task_activity_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]),
+            'save_goto_url' => $this->generateUrl('my_course_show', ['id' => $activity['fromCourseId']]),
+        ]);
     }
 
     public function doTestAction(Request $request, $resultId)
@@ -57,7 +57,7 @@ class HomeworkController extends BaseController
 
         $activity = $this->getActivityService()->getActivity($result['lessonId']);
 
-        return $this->render('homework/do.html.twig', array(
+        return $this->render('homework/do.html.twig', [
             'paper' => $homework,
             'questions' => $questions,
             'course' => $course,
@@ -66,7 +66,7 @@ class HomeworkController extends BaseController
             'showTypeBar' => 0,
             'showHeader' => 0,
             'isDone' => true,
-        ));
+        ]);
     }
 
     public function showResultAction(Request $request, $answerRecordId)
@@ -81,20 +81,20 @@ class HomeworkController extends BaseController
 
         if ('my' == $request->query->get('action', '')) {
             $task = $this->getTaskByAnswerSceneId($answerRecord['answer_scene_id']);
-            $restartUrl = $this->generateUrl('course_task_show', array('id' => $task['id'], 'courseId' => $task['courseId']));
+            $restartUrl = $this->generateUrl('course_task_show', ['id' => $task['id'], 'courseId' => $task['courseId']]);
         } elseif ('' == $request->query->get('action', '')) {
-            $restartUrl = $this->generateUrl('homework_start_do', array('lessonId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id']), 'homeworkId' => 1));
+            $restartUrl = $this->generateUrl('homework_start_do', ['lessonId' => $this->getActivityIdByAnswerSceneId($answerRecord['answer_scene_id']), 'homeworkId' => 1]);
         } else {
             $restartUrl = '';
         }
 
-        return $this->render('homework/result.html.twig', array(
+        return $this->render('homework/result.html.twig', [
             'answerReport' => $answerReport,
             'answerRecord' => $answerRecord,
             'answerRecordId' => $answerRecordId,
             'assessment' => $assessment,
             'restartUrl' => $restartUrl,
-        ));
+        ]);
     }
 
     protected function getTaskByAnswerSceneId($answerSceneId)
@@ -152,7 +152,7 @@ class HomeworkController extends BaseController
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
 
-            if ($member && array_intersect($member['role'], array('assistant', 'teacher', 'headTeacher'))) {
+            if ($member && array_intersect($member['role'], ['assistant', 'teacher', 'headTeacher'])) {
                 return true;
             }
         }

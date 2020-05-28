@@ -1,0 +1,95 @@
+{% extends 'admin-v2/resource-settlement/layout.html.twig' %}
+
+{% set menu="admin_v2_resource_settlement_order" %}
+
+{% block main %}
+  <form class="form-inline well well-sm mbm" action="" method="get" novalidate>
+    <div class="mbm">
+      <div class="form-group">
+        <label class="control-label">{{ 'admin_v2.app_center.resource_settlement.order.create_time'|trans }}</label>
+        <input class="form-control" type="text" id="startTime" name="startTime"
+               value="{{ app.request.query.get('startTime') }}"
+               placeholder="{{ 'admin_v2.app_center.resource_settlement.start_time'|trans }}" autocomplete="off">
+        -
+        <input class="form-control" type="text" id="endTime" name="endTime"
+               value="{{ app.request.query.get('endTime') }}"
+               placeholder="{{ 'admin_v2.app_center.resource_settlement.end_time'|trans }}" autocomplete="off">
+      </div>
+
+      <div class="form-group">
+        <label class="control-label">{{ 'admin_v2.app_center.resource_settlement.filter_type'|trans }}</label>
+        <select class="form-control" name="status">
+          {{ select_options({'':'admin_v2.app_center.resource_settlement.filter_placeholder'|trans,paid:'admin_v2.app_center.resource_settlement.order.pay'|trans,success:'admin_v2.app_center.resource_settlement.order.paid'|trans,refunded:'admin_v2.app_center.resource_settlement.order.refunded'|trans}, app.request.get('status')) }}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label
+            class="control-label">{{ 'admin_v2.app_center.resource_settlement.switch_show_debt'|trans({'%amount%':merchant.debt_sum|default(0) / 100}) }}</label>
+        <div class="form-control form-control-unset-bg">
+          <label class="form-switch {% if app.request.query.get('showDebt')|default(0) == 1 %}checked{% endif %}">
+            <input type="checkbox" name="showDebt" value="{{ app.request.query.get('showDebt') }}" id="showDebt"
+                   data-toggle="switch">
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="title"
+             class="control-label">{{ 'admin_v2.app_center.resource_settlement.order.title'|trans }}</label>
+      <input class="form-control" type="text" id="title" name="title" value="{{ app.request.query.get('title') }}">
+    </div>
+
+    <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
+  </form>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th>{{ 'admin_v2.app_center.resource_settlement.order.title'|trans }}</th>
+      <th>{{ 'admin_v2.app_center.resource_settlement.order.sn'|trans }}</th>
+      <th>{{ 'admin_v2.app_center.resource_settlement.order.coop_price'|trans }}</th>
+      <th>{{ 'admin_v2.app_center.resource_settlement.order.price_amount'|trans }}</th>
+      <th>{{ 'admin_v2.app_center.resource_settlement.order.debt_amount'|trans }}</th>
+      <th>{{ 'admin_v2.app_center.resource_settlement.order.status'|trans }}</th>
+      <th>{{ 'admin_v2.app_center.resource_settlement.order.create_time'|trans }}</th>
+      <th>{{ 'operation'|trans }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in items %}
+      <tr>
+        <td>{{ item.title }}</td>
+        <td>{{ item.sn }}</td>
+        <td>{{ item.coop_price|default(0) / 100|currency }}</td>
+        <td><span class="text-warning">{{ item.price_amount|default(0) / 100|currency }}</span></td>
+        <td><span class="text-danger">{{ item.debt_amount|default(0) / 100|currency }}</span></td>
+        <td>
+          {% if item.status == 'success' %}
+            {{ 'admin_v2.app_center.resource_settlement.order.paid'|trans }}
+          {% elseif item.status == 'refunded' %}
+            {{ 'admin_v2.app_center.resource_settlement.order.refunded'|trans }}
+          {% else %}
+            {{ 'admin_v2.app_center.resource_settlement.order.pay'|trans }}
+          {% endif %}
+        </td>
+        <td>{{ item.created_time|date_format('Y-m-d H:i:s') }}</td>
+        <td>
+          <a href="#modal" data-toggle="modal"
+             data-url="{{ path('admin_v2_resource_settlement_order_modal', {sn:item.sn}) }}">{{ 'site.btn.detail'|trans }}</a>
+        </td>
+      </tr>
+    {% else %}
+      <tr>
+        <td colspan="20">
+          <div class="empty">{{ 'admin_v2.app_center.resource_settlement.empty'|trans }}</div>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  {{ admin_macro.paginator(paginator) }}
+
+{% endblock %}

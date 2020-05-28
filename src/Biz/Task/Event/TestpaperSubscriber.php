@@ -4,21 +4,21 @@ namespace Biz\Task\Event;
 
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
-use Biz\Task\Service\TaskService;
 use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 
 class TestpaperSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'answer.finished' => 'onAnswerFinished',
-        );
+        ];
     }
 
     public function onAnswerFinished(Event $event)
@@ -56,7 +56,7 @@ class TestpaperSubscriber extends EventSubscriber implements EventSubscriberInte
         $taskResult = $this->getTaskResultService()->updateTaskResult($taskResult['id'], $update);
 
         $user = $this->getUserService()->getUser($userId);
-        $this->dispatch('course.task.finish', new Event($taskResult, array('user' => $user)));
+        $this->dispatch('course.task.finish', new Event($taskResult, ['user' => $user]));
     }
 
     protected function dispatch($eventName, $event)

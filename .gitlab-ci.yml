@@ -71,7 +71,9 @@ check env:
     - mysql:5.5
     - redis:latest
   script:
+    - git config diff.nodiff.command /usr/bin/true
     - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
+    - git config --unset diff.nodiff.command
     - bin/phpunit-diff
   only:
     variables:
@@ -84,11 +86,14 @@ check env:
     - mysql:5.5
     - redis:latest
   script:
+    - git config diff.nodiff.command /usr/bin/true
     - bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
+    - git config --unset diff.nodiff.command
     - bin/phpunit-diff
   only:
     refs:
       - merge_requests
+      - project/b2c
     variables:
       - $REPOSITORY == "main"
 
@@ -123,6 +128,7 @@ check env:
       - /^release/.*$/
       - develop
       - master
+      - project/b2c
     variables:
       - $REPOSITORY == "main"
 
@@ -140,6 +146,7 @@ check env:
       - /^release/.*$/
       - develop
       - master
+      - project/b2c
     variables:
       - $REPOSITORY == "main"
 
@@ -169,6 +176,7 @@ check env:
   only:
     refs:
       - develop
+      - project/b2c
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"

@@ -20,14 +20,14 @@ class AttachmentController extends BaseController
         $params = $this->parseToken($token);
 
         if (!$params) {
-            return $this->createJsonResponse(array('error' => '上传授权码不正确，请重试！'));
+            return $this->createJsonResponse(['error' => '上传授权码不正确，请重试！']);
         }
 
         $params = array_merge($request->query->all(), $params);
 
         $result = $this->getUploadFileService()->initUploadAttachment($params);
-        $result['uploadProxyUrl'] = $this->generateUrl('uploader_entry', array(), UrlGeneratorInterface::ABSOLUTE_URL);
-        $result['authUrl'] = $this->generateUrl('uploader_auth', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+        $result['uploadProxyUrl'] = $this->generateUrl('uploader_entry', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $result['authUrl'] = $this->generateUrl('uploader_auth', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
         return $this->createJsonpResponse($result, $request->query->get('callback'));
     }
@@ -38,7 +38,7 @@ class AttachmentController extends BaseController
         $params = $this->parseToken($token);
 
         if (!$params) {
-            return $this->createJsonResponse(array('error' => '上传授权码不正确，请重试！'));
+            return $this->createJsonResponse(['error' => '上传授权码不正确，请重试！']);
         }
 
         $params = array_merge($request->query->all(), $params);
@@ -46,7 +46,7 @@ class AttachmentController extends BaseController
         try {
             $file = $this->getUploadFileService()->finishUploadAttachment($params);
         } catch (\Exception $e) {
-            return $this->createJsonpResponse(array('error' => $e->getMessage()), $request->query->get('callback'), method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500);
+            return $this->createJsonpResponse(['error' => $e->getMessage()], $request->query->get('callback'), method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500);
         }
 
         return $this->createJsonpResponse($file, $request->query->get('callback'));
@@ -56,15 +56,15 @@ class AttachmentController extends BaseController
     {
         $id = $request->request->get('id', 0);
         if (!$this->canDeleteAttachment($request)) {
-            $this->createJsonResponse(array('result' => false, 'msg' => '您无权删除该附件'));
+            $this->createJsonResponse(['result' => false, 'msg' => '您无权删除该附件']);
         }
 
         $result = $this->getUploadFileService()->deleteAttachment($id);
         if ($result) {
-            return $this->createJsonResponse(array('result' => true, 'msg' => '附件删除成功'));
+            return $this->createJsonResponse(['result' => true, 'msg' => '附件删除成功']);
         }
 
-        return $this->createJsonResponse(array('result' => false, 'msg' => '附件删除失败'));
+        return $this->createJsonResponse(['result' => false, 'msg' => '附件删除失败']);
     }
 
     public function previewAction(Request $request)
@@ -73,27 +73,27 @@ class AttachmentController extends BaseController
         $user = $this->getUser();
 
         if (!$user->isLogin()) {
-            return $this->createJsonResponse(array('result' => false, 'msg' => '用户未登录', 'data' => array()));
+            return $this->createJsonResponse(['result' => false, 'msg' => '用户未登录', 'data' => []]);
         }
 
         $attachment = $this->getAttachmentService()->getAttachment($id);
         if (empty($attachment)) {
-            return $this->createJsonResponse(array('result' => false, 'msg' => '文件不存在', 'data' => array()));
+            return $this->createJsonResponse(['result' => false, 'msg' => '文件不存在', 'data' => []]);
         }
 
         $file = $this->getCloudFileService()->getByGlobalId($attachment['global_id']);
         if (empty($file)) {
-            return $this->createJsonResponse(array('result' => false, 'msg' => '文件不存在', 'data' => array()));
+            return $this->createJsonResponse(['result' => false, 'msg' => '文件不存在', 'data' => []]);
         }
 
         $ssl = $request->isSecure() ? true : false;
-        if (in_array($file['type'], array('video', 'ppt', 'document'))) {
+        if (in_array($file['type'], ['video', 'ppt', 'document'])) {
             return $this->globalPlayer($file, $ssl);
         } elseif ('audio' == $file['type']) {
             return $this->audioPlayer($file, $ssl);
         }
 
-        return $this->createJsonResponse(array('result' => false, 'msg' => '无法预览该类文件', 'data' => array()));
+        return $this->createJsonResponse(['result' => false, 'msg' => '无法预览该类文件', 'data' => []]);
     }
 
     protected function globalPlayer($file, $ssl)
@@ -101,30 +101,30 @@ class AttachmentController extends BaseController
         $user = $this->getCurrentUser();
         $player = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
-        return $this->createJsonResponse(array('result' => true, 'msg' => '', 'data' => array(
+        return $this->createJsonResponse(['result' => true, 'msg' => '', 'data' => [
             'token' => $player['token'],
             'resNo' => $file['globalId'],
-            'user' => array('id' => $user['id'], 'name' => $user['nickname']),
+            'user' => ['id' => $user['id'], 'name' => $user['nickname']],
             'type' => $file['type'],
-        )));
+        ]]);
     }
 
     protected function audioPlayer($file, $ssl)
     {
         $user = $this->getCurrentUser();
         $player = $this->getMaterialLibService()->player($file['no'], $ssl);
-        $setting = $this->getSettingService()->get('storage', array());
+        $setting = $this->getSettingService()->get('storage', []);
 
-        return $this->createJsonResponse(array('result' => true, 'msg' => '', 'data' => array(
+        return $this->createJsonResponse(['result' => true, 'msg' => '', 'data' => [
             'playlist' => $player['url'],
             'type' => $file['type'],
-            'statsInfo' => array(
+            'statsInfo' => [
                 'accesskey' => empty($setting['cloud_access_key']) ? '' : $setting['cloud_access_key'],
                 'globalId' => $file['globalId'],
                 'userId' => $user['id'],
                 'userName' => $user['nickname'],
-            ),
-        )));
+            ],
+        ]]);
     }
 
     public function downloadAction(Request $request)
@@ -132,16 +132,16 @@ class AttachmentController extends BaseController
         $id = $request->request->get('id', 0);
         $user = $this->getUser();
         if (!$user->isLogin()) {
-            return $this->createJsonResponse(array('result' => false, 'msg' => '用户未登录', 'url' => ''));
+            return $this->createJsonResponse(['result' => false, 'msg' => '用户未登录', 'url' => '']);
         }
 
         $ssl = $request->isSecure() ? true : false;
         $result = $this->getUploadFileService()->downloadAttachment($id, $ssl);
         if (!empty($result['url'])) {
-            return $this->createJsonResponse(array('result' => true, 'msg' => '', 'url' => $result['url']));
+            return $this->createJsonResponse(['result' => true, 'msg' => '', 'url' => $result['url']]);
         }
 
-        return $this->createJsonResponse(array('result' => false, 'msg' => '获取文件失败', 'url' => ''));
+        return $this->createJsonResponse(['result' => false, 'msg' => '获取文件失败', 'url' => '']);
     }
 
     protected function canDeleteAttachment($id)
@@ -160,7 +160,7 @@ class AttachmentController extends BaseController
 
     protected function parseToken($token)
     {
-        $setting = $this->getSettingService()->get('storage', array());
+        $setting = $this->getSettingService()->get('storage', []);
         $accessKey = empty($setting['cloud_access_key']) ? '' : $setting['cloud_access_key'];
         $secretKey = empty($setting['cloud_secret_key']) ? '' : $setting['cloud_secret_key'];
 

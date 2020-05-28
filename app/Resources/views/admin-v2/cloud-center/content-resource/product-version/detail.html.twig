@@ -1,0 +1,41 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+  {{ 'merchant.content_resource.product_version.update'|trans }}
+{% endblock %}
+
+{% block body %}
+
+  <table class="table table-striped table-hover js-table-container" id="order-table">
+    <thead>
+    <tr>
+      <th width="30%">{{ 'merchant.content_resource.product_change_log'|trans }}</th>
+      <th>{{ 'merchant.content_resource.product_change_publish_time'|trans }} </th>
+      <th>{{ 'merchant.content_resource.product_version_num'|trans }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for productVersion in productVersions|default() %}
+      <tr id="product-version-table" style="word-break: break-all;word-wrap: break-word;">
+        <td>
+          <div class="middle-info pull-left short-long-text">
+            <div class="short-text text-muted">{{ productVersion.changeLog|plain_text(80) }} <span
+                  class="trigger">({{ 'admin.app_center.description_open'|trans }})</span></div>
+            <div class="long-text text-muted" style="color:black;">{{ productVersion.changeLog|raw }} <span class="trigger">({{ 'admin.app_center.description_close'|trans }})</span></div>
+          </div>
+        </td>
+        <td>{{ productVersion.updatedTime|date('Y-m-d') }}</td>
+        <td>{{ 'merchant.content_resource.product_version'|trans }}{{ productVersion.productVersion }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
+  <script>app.load('content-resource/product-version/version-list')</script>
+{% endblock %}
+

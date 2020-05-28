@@ -18,18 +18,18 @@ class QuestionBankController extends BaseController
         $paginator = new Paginator($request, $this->getQuestionBankService()->countQuestionBanks($conditions), 20);
         $questionBanks = $this->getQuestionBankService()->searchQuestionBanks(
             $conditions,
-            array('id' => 'desc'),
+            ['id' => 'desc'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        return $this->render('admin-v2/teach/question-bank/index.html.twig', array(
+        return $this->render('admin-v2/teach/question-bank/index.html.twig', [
             'questionBanks' => $questionBanks,
             'categories' => $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($questionBanks, 'categoryId')),
             'paginator' => $paginator,
             'categoryTree' => $this->getCategoryService()->getCategoryTree(),
             'categoryId' => empty($conditions['categoryId']) ? 0 : $conditions['categoryId'],
-        ));
+        ]);
     }
 
     public function createAction(Request $request)
@@ -40,16 +40,16 @@ class QuestionBankController extends BaseController
             return $this->createJsonResponse($questionBank);
         }
 
-        $questionBank = array(
+        $questionBank = [
             'id' => 0,
             'name' => '',
             'categoryId' => 0,
-        );
+        ];
 
-        return $this->render('admin-v2/teach/question-bank/modal.html.twig', array(
+        return $this->render('admin-v2/teach/question-bank/modal.html.twig', [
             'questionBank' => $questionBank,
             'categoryTree' => $this->getCategoryService()->getCategoryTree(),
-        ));
+        ]);
     }
 
     public function editAction(Request $request, $id)
@@ -67,16 +67,16 @@ class QuestionBankController extends BaseController
         $users = $this->getUserService()->findUsersByIds(
             ArrayToolkit::column($this->getMemberService()->findMembersByBankId($id), 'userId')
         );
-        $bankMembers = array();
+        $bankMembers = [];
         foreach ($users as $user) {
-            $bankMembers[] = array('id' => $user['id'], 'name' => $user['nickname']);
+            $bankMembers[] = ['id' => $user['id'], 'name' => $user['nickname']];
         }
 
-        return $this->render('admin-v2/teach/question-bank/modal.html.twig', array(
+        return $this->render('admin-v2/teach/question-bank/modal.html.twig', [
             'questionBank' => $this->getQuestionBankService()->getQuestionBank($id),
             'categoryTree' => $this->getCategoryService()->getCategoryTree(),
             'bankMembers' => json_encode($bankMembers),
-        ));
+        ]);
     }
 
     public function deleteAction(Request $request, $id)

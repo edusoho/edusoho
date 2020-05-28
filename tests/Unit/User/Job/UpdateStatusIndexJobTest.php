@@ -13,7 +13,7 @@ class UpdateStatusIndexJobTest extends BaseTestCase
             $this->getConnection()->exec('DROP INDEX classroomId ON status');
         }
         $this->assertFalse($this->isIndexExist('status', 'classroomId', 'classroomId'));
-        $job = new UpdateStatusIndexJob(array(), $this->biz);
+        $job = new UpdateStatusIndexJob([], $this->biz);
         $result = $job->execute();
         $this->assertNull($result);
         $this->assertTrue($this->isIndexExist('status', 'classroomId', 'classroomId'));

@@ -11,7 +11,16 @@ class DocActivityDaoImpl extends GeneralDaoImpl implements DocActivityDao
 
     public function declares()
     {
-        return array('timestamps' => array('createdTime', 'updatedTime'));
+        return [
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'conditions' => [
+                /*S2B2C 增加syncId*/
+                'syncId = :syncId',
+                'syncId in (:syncIds)',
+                'syncId > :syncIdGT',
+                /*END*/
+            ],
+        ];
     }
 
     public function findByIds($Ids)

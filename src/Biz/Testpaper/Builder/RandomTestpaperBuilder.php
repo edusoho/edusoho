@@ -21,13 +21,13 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
         $sections = $this->getAssessmentService()->drawItems($range, $sections);
         $sections = $this->setSectionQuestionScore($sections);
 
-        $assessment = array(
+        $assessment = [
             'bank_id' => $fields['itemBankId'],
             'name' => $fields['name'],
             'displayable' => 1,
             'description' => $fields['description'],
             'sections' => $sections,
-        );
+        ];
 
         return $this->getAssessmentService()->createAssessment($assessment);
     }
@@ -45,31 +45,31 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
         }
     }
 
-    public function showTestItems($testId, $resultId = 0, $options = array())
+    public function showTestItems($testId, $resultId = 0, $options = [])
     {
     }
 
-    public function updateSubmitedResult($resultId, $usedTime, $options = array())
+    public function updateSubmitedResult($resultId, $usedTime, $options = [])
     {
     }
 
     protected function getRangeAndSections($fields)
     {
-        $range = array(
+        $range = [
             'bank_id' => $fields['itemBankId'],
-            'category_ids' => empty($fields['ranges']['categoryId']) ? array() : array($fields['ranges']['categoryId']),
-        );
+            'category_ids' => empty($fields['ranges']['categoryId']) ? [] : [$fields['ranges']['categoryId']],
+        ];
 
-        $sections = array();
+        $sections = [];
         foreach ($fields['sections'] as $type => $section) {
-            $section = array(
-                'conditions' => array(
-                    'item_types' => array($type),
-                ),
+            $section = [
+                'conditions' => [
+                    'item_types' => [$type],
+                ],
                 'item_count' => $section['count'],
                 'name' => $section['name'],
                 'score' => $fields['scores'][$type],
-            );
+            ];
 
             if (!empty($fields['missScores'][$type])) {
                 $section['miss_score'] = $fields['missScores'][$type];
@@ -82,7 +82,7 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
             $sections[] = $section;
         }
 
-        return array($range, $sections);
+        return [$range, $sections];
     }
 
     protected function setSectionQuestionScore($sections)

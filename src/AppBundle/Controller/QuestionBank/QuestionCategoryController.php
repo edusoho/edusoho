@@ -21,11 +21,11 @@ class QuestionCategoryController extends BaseController
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
         $categories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
 
-        return $this->render('question-bank/question-category/index.html.twig', array(
+        return $this->render('question-bank/question-category/index.html.twig', [
             'questionBank' => $questionBank,
             'categories' => $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']),
             'users' => $this->getUserService()->findUsersByIds(ArrayToolkit::column($categories, 'updated_user_id')),
-        ));
+        ]);
     }
 
     public function batchCreateAction(Request $request, $id)
@@ -40,13 +40,13 @@ class QuestionCategoryController extends BaseController
 
             $this->getItemCategoryService()->createItemCategories($questionBank['itemBankId'], $parentId, $categoryNames);
 
-            return $this->createJsonResponse(array('success' => true, 'parentId' => $parentId));
+            return $this->createJsonResponse(['success' => true, 'parentId' => $parentId]);
         }
 
-        return $this->render('question-bank/question-category/batch-create-modal.html.twig', array(
+        return $this->render('question-bank/question-category/batch-create-modal.html.twig', [
             'parentId' => $request->query->get('parentId', 0),
             'bankId' => $id,
-        ));
+        ]);
     }
 
     public function editAction(Request $request, $id)
@@ -54,14 +54,14 @@ class QuestionCategoryController extends BaseController
         if ($request->isMethod('POST')) {
             $name = $request->request->get('name', '');
 
-            $this->getItemCategoryService()->updateItemCategory($id, array('name' => $name));
+            $this->getItemCategoryService()->updateItemCategory($id, ['name' => $name]);
 
-            return $this->createJsonResponse(array('success' => true));
+            return $this->createJsonResponse(['success' => true]);
         }
 
-        return $this->render('question-bank/question-category/update-modal.html.twig', array(
+        return $this->render('question-bank/question-category/update-modal.html.twig', [
             'category' => $this->getItemCategoryService()->getItemCategory($id),
-        ));
+        ]);
     }
 
     public function getQuestionCountAction(Request $request, $id)
@@ -69,16 +69,16 @@ class QuestionCategoryController extends BaseController
         $children = $this->getItemCategoryService()->findCategoryChildrenIds($id);
         $children[] = $id;
 
-        return $this->createJsonResponse(array(
-            'questionCount' => $this->getItemService()->countItems(array('category_ids' => $children)),
-        ));
+        return $this->createJsonResponse([
+            'questionCount' => $this->getItemService()->countItems(['category_ids' => $children]),
+        ]);
     }
 
     public function deleteAction(Request $request, $id)
     {
         $this->getItemCategoryService()->deleteItemCategory($id);
 
-        return $this->createJsonResponse(array('success' => true));
+        return $this->createJsonResponse(['success' => true]);
     }
 
     public function showCategoriesAction(Request $request)

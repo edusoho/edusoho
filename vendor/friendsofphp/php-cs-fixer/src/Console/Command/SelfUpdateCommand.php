@@ -32,7 +32,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 final class SelfUpdateCommand extends Command
 {
-    const COMMAND_NAME = 'self-update';
+    protected static $defaultName = 'self-update';
 
     /**
      * @var NewVersionCheckerInterface
@@ -67,12 +67,11 @@ final class SelfUpdateCommand extends Command
     protected function configure()
     {
         $this
-            ->setName(self::COMMAND_NAME)
-            ->setAliases(array('selfupdate'))
+            ->setAliases(['selfupdate'])
             ->setDefinition(
-                array(
+                [
                     new InputOption('--force', '-f', InputOption::VALUE_NONE, 'Force update to next major version if available.'),
-                )
+                ]
             )
             ->setDescription('Update php-cs-fixer.phar to the latest stable version.')
             ->setHelp(
@@ -149,7 +148,7 @@ EOT
             return 1;
         }
 
-        $tempFilename = dirname($localFilename).'/'.basename($localFilename, '.phar').'-tmp.phar';
+        $tempFilename = \dirname($localFilename).'/'.basename($localFilename, '.phar').'-tmp.phar';
         $remoteFilename = $this->toolInfo->getPharDownloadUri($remoteTag);
 
         if (false === @copy($remoteFilename, $tempFilename)) {
@@ -172,5 +171,7 @@ EOT
         rename($tempFilename, $localFilename);
 
         $output->writeln(sprintf('<info>php-cs-fixer updated</info> (<comment>%s</comment>)', $remoteTag));
+
+        return 0;
     }
 }

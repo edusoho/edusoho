@@ -21,17 +21,17 @@ class QuestionTypeExtension extends \Twig_Extension
 
     public function getFilters()
     {
-        return array();
+        return [];
     }
 
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('getQuestionTypes', array($this, 'getQuestionTypes')),
-            new \Twig_SimpleFunction('getQuestionTypeTemplate', array($this, 'getQuestionTypeTemplate')),
-            new \Twig_SimpleFunction('getQuestionTypeSeq', array($this, 'getQuestionTypeSeq')),
-            new \Twig_SimpleFunction('sortQuestionTypes', array($this, 'sortQuestionTypes')),
-        );
+        return [
+            new \Twig_SimpleFunction('getQuestionTypes', [$this, 'getQuestionTypes']),
+            new \Twig_SimpleFunction('getQuestionTypeTemplate', [$this, 'getQuestionTypeTemplate']),
+            new \Twig_SimpleFunction('getQuestionTypeSeq', [$this, 'getQuestionTypeSeq']),
+            new \Twig_SimpleFunction('sortQuestionTypes', [$this, 'sortQuestionTypes']),
+        ];
     }
 
     public function getQuestionTypes()
@@ -39,7 +39,7 @@ class QuestionTypeExtension extends \Twig_Extension
         $questionExtension = $this->container->get('extension.manager')->getQuestionTypes();
         $container = $this->container;
 
-        $types = array();
+        $types = [];
         array_walk($questionExtension, function ($value, $type) use (&$types, $container) {
             $types[$type] = $container->get('translator')->trans($value['name']);
         });
@@ -62,7 +62,7 @@ class QuestionTypeExtension extends \Twig_Extension
     {
         $questionExtension = $this->container->get('extension.manager')->getQuestionTypes();
 
-        $typeSeq = array();
+        $typeSeq = [];
         array_walk($questionExtension, function ($value, $type) use (&$typeSeq) {
             $typeSeq[$type] = $value['seqNum'];
         });
@@ -70,13 +70,13 @@ class QuestionTypeExtension extends \Twig_Extension
         return $typeSeq;
     }
 
-    public function sortQuestionTypes($types, $sections = array())
+    public function sortQuestionTypes($types, $sections = [])
     {
         if (empty($sections)) {
             return $types;
         }
 
-        $newTypes = array();
+        $newTypes = [];
         $questionExtension = $this->container->get('extension.manager')->getQuestionTypes();
 
         foreach ($sections as $section) {

@@ -4,12 +4,12 @@ namespace Biz\WeChatNotification\Job;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Notification\WeChatTemplateMessage\TemplateUtil;
-use Biz\Testpaper\Service\TestpaperService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
-use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
+use Biz\Testpaper\Service\TestpaperService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 
 class HomeWorkOrTestPaperReviewNotificationJob extends AbstractNotificationJob
 {
@@ -27,23 +27,23 @@ class HomeWorkOrTestPaperReviewNotificationJob extends AbstractNotificationJob
             return;
         }
 
-        $data = array(
-            'first' => array('value' => '尊敬的老师，您今日仍有作业/试卷未批改'),
-            'keyword1' => array('value' => date('Y-m-d', time())),
-            'keyword2' => array('value' => ''),
-            'remark' => array('value' => '请及时批改'),
-        );
+        $data = [
+            'first' => ['value' => '尊敬的老师，您今日仍有作业/试卷未批改'],
+            'keyword1' => ['value' => date('Y-m-d', time())],
+            'keyword2' => ['value' => ''],
+            'remark' => ['value' => '请及时批改'],
+        ];
 
-        $templateData = array();
+        $templateData = [];
         $templates = TemplateUtil::templates();
         $templateCode = isset($templates[$key]['id']) ? $templates[$key]['id'] : '';
         foreach ($nums as $num) {
-            $data['keyword2'] = array('value' => $num['num']);
-            $templateData[$num['userId']] = array(
+            $data['keyword2'] = ['value' => $num['num']];
+            $templateData[$num['userId']] = [
                 'template_id' => $templateId,
                 'template_code' => $templateCode,
                 'template_args' => $data,
-            );
+            ];
         }
 
         $this->sendNotifications($key, 'wechat_notify_lesson_publish', ArrayToolkit::column($nums, 'userId'), $templateData);
@@ -54,18 +54,18 @@ class HomeWorkOrTestPaperReviewNotificationJob extends AbstractNotificationJob
         $endTime = strtotime(date('Y-m-d '.$this->args['sendTime'].':00'));
         $startTime = $endTime - 86400;
 
-        $conditions = array(
+        $conditions = [
             'status' => 'reviewing',
             'beginTime_GT' => $startTime,
             'beginTime_ELT' => $endTime,
-        );
+        ];
 
         $answerSceneGroups = ArrayToolkit::group(
-            $this->getAnswerRecordService()->search($conditions, array(), 0, $this->getAnswerRecordService()->count($conditions)),
+            $this->getAnswerRecordService()->search($conditions, [], 0, $this->getAnswerRecordService()->count($conditions)),
             'answer_scene_id'
         );
         if (empty($answerSceneGroups)) {
-            return array();
+            return [];
         }
 
         $activities = array_merge($this->getTestpaperActivities(array_keys($answerSceneGroups)), $this->getHomeworkActivities(array_keys($answerSceneGroups)));
@@ -75,10 +75,10 @@ class HomeWorkOrTestPaperReviewNotificationJob extends AbstractNotificationJob
 
         $courses = ArrayToolkit::group($activities, 'fromCourseId');
         foreach ($courses as $courseId => &$course) {
-            $course = array(
+            $course = [
                 'courseId' => $courseId,
                 'num' => array_sum(ArrayToolkit::column($course, 'num')),
-            );
+            ];
         }
 
         $teachers = $this->getCourseService()->findTeachersByCourseIds(array_keys($courses));
@@ -87,10 +87,10 @@ class HomeWorkOrTestPaperReviewNotificationJob extends AbstractNotificationJob
         }
         $teacherGroups = ArrayToolkit::group($teachers, 'userId');
         foreach ($teacherGroups as $userId => &$teacherGroup) {
-            $teacherGroup = array(
+            $teacherGroup = [
                 'userId' => $userId,
                 'num' => array_sum(ArrayToolkit::column($teacherGroup, 'num')),
-            );
+            ];
         }
 
         return $teacherGroups;

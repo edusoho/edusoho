@@ -6,15 +6,17 @@
 
 {% block main %}
   <div class="cd-mb16">
-   
+
     <div class="pull-right hidden-xs">
       <a class="link-primary question-bank-use" href="http://www.qiqiuyu.com/faq/1164/detail" target="view_window">
         <i class="es-icon es-icon-tip"></i>
         {{ 'my.teaching.question_bank.instructions'|trans }}
       </a>
-      <a class="cd-btn cd-btn-primary" data-url="{{ path('question_bank_create') }}" data-toggle="modal" data-target="#modal">
-        {{ 'my.teaching.question_bank.create'|trans }}
-      </a>
+      {% if not is_s2b2c_enabled() %}
+        <a class="cd-btn cd-btn-primary" data-url="{{ path('question_bank_create') }}" data-toggle="modal" data-target="#modal">
+          {{ 'my.teaching.question_bank.create'|trans }}
+        </a>
+      {% endif %}
     </div>
     <div class="nav nav-pills mtm">
       <h5 class="text-18">{{'my.teaching.question_bank.list'|trans}}</h5>

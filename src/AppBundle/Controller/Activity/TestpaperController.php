@@ -2,16 +2,16 @@
 
 namespace AppBundle\Controller\Activity;
 
-use Biz\Course\Service\CourseService;
-use Biz\Activity\Service\ActivityService;
-use Biz\Testpaper\Service\TestpaperService;
-use Symfony\Component\HttpFoundation\Request;
-use Biz\Activity\Service\TestpaperActivityService;
-use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
-use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use AppBundle\Common\Paginator;
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Course\Service\CourseService;
+use Biz\Testpaper\Service\TestpaperService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Symfony\Component\HttpFoundation\Request;
 
 class TestpaperController extends BaseActivityController implements ActivityActionInterface
 {
@@ -26,31 +26,31 @@ class TestpaperController extends BaseActivityController implements ActivityActi
         $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperActivity['mediaId'], $activity['mediaType']);
 
         if (!$testpaper) {
-            return $this->render('activity/testpaper/preview.html.twig', array(
+            return $this->render('activity/testpaper/preview.html.twig', [
                 'paper' => null,
-            ));
+            ]);
         }
 
         $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $activity['fromCourseId'], $activity['id'], $activity['mediaType']);
 
         if (!$testpaperResult || ('doing' == $testpaperResult['status'] && !$testpaperResult['updateTime']) || 'open' != $testpaper['status']) {
-            return $this->render('activity/testpaper/show.html.twig', array(
+            return $this->render('activity/testpaper/show.html.twig', [
                 'activity' => $activity,
                 'testpaperActivity' => $testpaperActivity,
                 'testpaperResult' => $testpaperResult,
                 'testpaper' => $testpaper,
                 'courseId' => $activity['fromCourseId'],
-            ));
+            ]);
         } elseif ('finished' === $testpaperResult['status']) {
-            return $this->forward('AppBundle:Testpaper/Testpaper:showResult', array(
+            return $this->forward('AppBundle:Testpaper/Testpaper:showResult', [
                 'resultId' => $testpaperResult['id'],
-            ));
+            ]);
         }
 
-        return $this->forward('AppBundle:Testpaper/Testpaper:doTestpaper', array(
+        return $this->forward('AppBundle:Testpaper/Testpaper:doTestpaper', [
             'testId' => $testpaperActivity['mediaId'],
             'lessonId' => $activity['id'],
-        ));
+        ]);
     }
 
     public function previewAction(Request $request, $task)
@@ -64,9 +64,9 @@ class TestpaperController extends BaseActivityController implements ActivityActi
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
         $assessment = $this->getAssessmentService()->showAssessment($testpaperActivity['mediaId']);
 
-        return $this->render('activity/testpaper/preview.html.twig', array(
+        return $this->render('activity/testpaper/preview.html.twig', [
             'assessment' => $assessment,
-        ));
+        ]);
     }
 
     public function editAction(Request $request, $id, $courseId)
@@ -84,15 +84,15 @@ class TestpaperController extends BaseActivityController implements ActivityActi
 
         $testpapers = $this->findCourseTestpapers($course);
 
-        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : [];
 
-        return $this->render('activity/testpaper/modal.html.twig', array(
+        return $this->render('activity/testpaper/modal.html.twig', [
             'activity' => $activity,
             'testpapers' => $testpapers,
             'features' => $features,
             'courseId' => $activity['fromCourseId'],
             'course' => $course,
-        ));
+        ]);
     }
 
     public function createAction(Request $request, $courseId)
@@ -100,22 +100,22 @@ class TestpaperController extends BaseActivityController implements ActivityActi
         $course = $this->getCourseService()->getCourse($courseId);
         $testpapers = $this->findCourseTestpapers($course);
 
-        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : [];
 
-        return $this->render('activity/testpaper/modal.html.twig', array(
+        return $this->render('activity/testpaper/modal.html.twig', [
             'testpapers' => $testpapers,
             'features' => $features,
             'course' => $course,
-        ));
+        ]);
     }
 
     public function finishConditionAction(Request $request, $activity)
     {
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
-        return $this->render('activity/testpaper/finish-condition.html.twig', array(
+        return $this->render('activity/testpaper/finish-condition.html.twig', [
             'testpaperActivity' => $testpaperActivity,
-        ));
+        ]);
     }
 
     public function learnDataDetailAction(Request $request, $task)
@@ -123,9 +123,9 @@ class TestpaperController extends BaseActivityController implements ActivityActi
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($activity['ext']['mediaId'], $activity['mediaType']);
 
-        $conditions = array(
+        $conditions = [
             'courseTaskId' => $task['id'],
-        );
+        ];
 
         $paginator = new Paginator(
             $request,
@@ -135,7 +135,7 @@ class TestpaperController extends BaseActivityController implements ActivityActi
 
         $taskResults = $this->getTaskResultService()->searchTaskResults(
             $conditions,
-            array('createdTime' => 'ASC'),
+            ['createdTime' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -144,13 +144,13 @@ class TestpaperController extends BaseActivityController implements ActivityActi
         $users = $this->getUserService()->findUsersByIds($userIds);
         $testpaperResults = $this->getTestpaperResults($activity, $userIds);
 
-        return $this->render('activity/testpaper/learn-data-detail-modal.html.twig', array(
+        return $this->render('activity/testpaper/learn-data-detail-modal.html.twig', [
             'task' => $task,
             'taskResults' => $taskResults,
             'users' => $users,
             'testpaperResults' => $testpaperResults,
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     protected function getTestpaperResults($activity, $userIds)
@@ -205,11 +205,11 @@ class TestpaperController extends BaseActivityController implements ActivityActi
     protected function findCourseTestpapers($course)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $conditions = array(
+        $conditions = [
             'courseSetId' => $course['courseSetId'],
             'status' => 'open',
             'type' => 'testpaper',
-        );
+        ];
 
         if ($courseSet['parentId'] > 0 && $courseSet['locked']) {
             $conditions['copyIdGT'] = 0;
@@ -217,7 +217,7 @@ class TestpaperController extends BaseActivityController implements ActivityActi
 
         $testpapers = $this->getTestpaperService()->searchTestpapers(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             0,
             PHP_INT_MAX
         );

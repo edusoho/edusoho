@@ -8,11 +8,15 @@
 
 {% block container %}
   <div class="container admin-v2-container">
+    {# S2B2C 通知提示 #}
+    {% include 'admin-v2/default/s2b2c-notice.html.twig' %}
     <div class="alert-list">
       {# 插件、主题升级提示 #}
       {{ render(controller('AppBundle:AdminV2/Default:validateUpgrade')) }}
-      {# 域名检查提示 #}
-      {{ render(controller('AppBundle:AdminV2/Default:validateDomain')) }}
+      {% if not is_s2b2c_enabled() %}{#S2B2C#}
+        {# 域名检查提示,分课模式下不需要提示域名不一致的问题 #}
+        {{ render(controller('AppBundle:AdminV2/Default:validateDomain')) }}
+      {% endif %}
       {% if not (setting('copyright.thirdCopyright')|default(0) == 1) and is_trial() %}
         {# 教育云推送通知 #}
         {{ render(controller('AppBundle:AdminV2/Default:getCloudNotices')) }}

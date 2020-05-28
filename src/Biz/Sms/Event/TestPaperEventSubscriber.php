@@ -8,9 +8,9 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Sms\Service\SmsService;
 use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 
 class TestPaperEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
@@ -19,9 +19,9 @@ class TestPaperEventSubscriber extends EventSubscriber implements EventSubscribe
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'answer.finished' => 'onAnswerFinished',
-        );
+        ];
     }
 
     public function onAnswerFinished(Event $event)
@@ -30,9 +30,9 @@ class TestPaperEventSubscriber extends EventSubscriber implements EventSubscribe
         $answerRecord = $this->getAnswerRecordService()->get($answerReport['answer_record_id']);
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
 
-        if ($activity['mediaType'] === 'homework') {
+        if ('homework' === $activity['mediaType']) {
             $this->notifyHomeworkResult($activity, $answerRecord);
-        } elseif ($activity['mediaType'] === 'testpaper') {
+        } elseif ('testpaper' === $activity['mediaType']) {
             $this->notifyTestpaperResult($activity, $answerRecord);
         }
     }
@@ -42,7 +42,7 @@ class TestPaperEventSubscriber extends EventSubscriber implements EventSubscribe
         $smsType = 'sms_testpaper_check';
 
         if ($this->getSmsService()->isOpen($smsType)) {
-            $parameters = array();
+            $parameters = [];
 
             $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
 
@@ -56,7 +56,7 @@ class TestPaperEventSubscriber extends EventSubscriber implements EventSubscribe
                 $parameters['course_title'] = '《'.$courseSet['title'].'》';
                 $description = $parameters['course_title'].' '.$parameters['lesson_title'].'批阅提醒';
                 $userId = $answerRecord['user_id'];
-                $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
+                $this->getSmsService()->smsSend($smsType, [$userId], $description, $parameters);
             }
         }
     }
@@ -66,7 +66,7 @@ class TestPaperEventSubscriber extends EventSubscriber implements EventSubscribe
         $smsType = 'sms_homework_check';
 
         if ($this->getSmsService()->isOpen($smsType)) {
-            $parameters = array();
+            $parameters = [];
 
             $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
 
@@ -80,7 +80,7 @@ class TestPaperEventSubscriber extends EventSubscriber implements EventSubscribe
                 $parameters['course_title'] = '《'.$courseSet['title'].'》';
                 $description = $parameters['course_title'].' '.$parameters['lesson_title'].'批阅提醒';
                 $userId = $answerRecord['user_id'];
-                $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
+                $this->getSmsService()->smsSend($smsType, [$userId], $description, $parameters);
             }
         }
     }

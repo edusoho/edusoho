@@ -16,6 +16,7 @@
           title="{{ m.name|trans({}, 'menu') }}"
           class="{{ m.class|default('') }}"
           href="{{ path }}"
+          id="{{ 'tab_'~menu }}"
         >
           {{ m.name|trans({}, 'menu') }}
         </a>

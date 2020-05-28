@@ -6,10 +6,34 @@
 {% set hasMulCourses = has_mul_courses(courseSet.id) %}
 {% set side_nav =  hasMulCourses ? 'plan' : 'default-course-info' %}
 
+{% set courseProduct = course.platform|default('self') == 'self' ? null : data('S2b2cProduct', { id:course.id, type:'course' }) %}
+{% set hasLessonChanged = 0 %}
+{% set hasBaseInfoChanged = 0 %}
+{% set hasFreeTaskChanged = 0 %}
+{% for changelog in courseProduct.changelog|default() if course.isDefault|default(0) %}
+  {% for log in changelog.lessons|default() %}
+    {% set hasLessonChanged = 1 %}
+  {% else %}
+    {% if changelog.lessons|default() %}
+      {% set hasLessonChanged = 1 %}
+    {% endif %}
+  {% endfor %}
+  {% if changelog.courseSetImg|default() %}
+    {% set hasBaseInfoChanged = 1 %}
+  {% endif %}
+  {% if changelog.freeTasks|default() %}
+    {% set hasFreeTaskChanged = 1 %}
+  {% endif %}
+{% endfor %}
+
+
 {% block breadcrumb %}
   <ol class="breadcrumb breadcrumb-o">
-    <li class="text-overflow"><a href="{{ path('my_teaching_course_sets') }}">{{ 'my.teaching.course_set_menu'|trans }}</a></li>
-    <li class="text-overflow courseset-header-section__breadcrumb"><a class="active" title="{{courseSet.title}}">{{courseSet.title}}</a></li>
+    <li class="text-overflow"><a
+        href="{{ path('my_teaching_course_sets') }}">{{ 'my.teaching.course_set_menu'|trans }}</a></li>
+    <li class="text-overflow courseset-header-section__breadcrumb">
+      <a class="active" title="{{ courseSet.title }}">{{ courseSet.title }}</a>
+    </li>
   </ol>
 {% endblock %}
 

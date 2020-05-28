@@ -11,9 +11,16 @@ class AudioActivityDaoImpl extends GeneralDaoImpl implements AudioActivityDao
 
     public function declares()
     {
-        return array(
-            'serializes' => array('media' => 'json'),
-        );
+        return [
+            'serializes' => ['media' => 'json'],
+            'conditions' => [
+                /*S2B2C 增加syncId*/
+                'syncId = :syncId',
+                'syncId in (:syncIds)',
+                'syncId > :syncIdGT',
+                /*END*/
+            ],
+        ];
     }
 
     public function findByIds($Ids)

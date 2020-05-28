@@ -406,6 +406,7 @@ course_manage.student_remark_success_hint: 备注%username%成功
 course_manage.student_remark_failed_hint: 备注%username%失败，请重试！
 
 course_manage.student_create.field_required_error_hint: 请输入学员邮箱/手机号/用户名
+course_manage.student_create.price_min_error_hint: 采购的课程购买价格不能为0!
 course_manage.student_create.price_max_error_hint: 购买价格不能大于课程原价!
 
 course_set.show.count_down_format_hint: 剩余 <span>%D</span>天 <span>%H</span>时 <span>%M</span>分 <span>%S</span>秒
@@ -1487,3 +1488,12 @@ course_manage.live_statistics.data_not_valid: 数据异常，直播间数据返�
 
 admin_v2.user.nickname_modify_success_hint: 用户名修改成功
 admin_v2.user.nickname_modify_error_hint: 操作失败
+
+admin_v2.developer.plumber_operate_hint: 正在操作中，可能需要一段时间，请稍后……
+admin_v2.developer.plumber_operate_error_hint: 操作失败
+admin_v2.developer.plumber_operate_success_hint: 操作成功
+
+course_manage.positive_currency.message: 请输入大于0的有效价格，最多两位小数，整数位不超过8位！
+
+merchant.resource.product_version.update_success_hint: 更新成功
+merchant.resource.product_version.update_failed_hint: 更新失败

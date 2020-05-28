@@ -2,7 +2,6 @@
 
 namespace Topxia\Api\Resource;
 
-use Biz\Activity\Service\ExerciseActivityService;
 use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Testpaper\Wrapper\AssessmentResponseWrapper;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
@@ -13,7 +12,6 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Silex\Application;
-use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class HomeworkResult extends BaseResource
@@ -27,10 +25,10 @@ class HomeworkResult extends BaseResource
 
         $assessment = $this->getAssessmentService()->showAssessment($homeworkId);
         $homeworkActivity = $this->getHomeworkActivityService()->getByAssessmentId($assessment['id']);
-        $conditions = array(
+        $conditions = [
             'mediaId' => $homeworkActivity['id'],
             'mediaType' => 'homework',
-        );
+        ];
         $activities = $this->getActivityService()->search($conditions, null, 0, 1);
         if (!$activities) {
             return $this->error('404', '该作业任务不存在!');
@@ -42,7 +40,7 @@ class HomeworkResult extends BaseResource
         }
 
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($homeworkActivity['answerSceneId'], $user['id']);
-        if (empty($answerRecord) || $answerRecord['status'] == AnswerService::ANSWER_RECORD_STATUS_FINISHED) {
+        if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
             $answerRecord = $this->getAnswerService()->startAnswer($homeworkActivity['answerSceneId'], $assessment['id'], $user['id']);
         }
 
@@ -54,9 +52,9 @@ class HomeworkResult extends BaseResource
             return $this->error('500', $e->getMessage());
         }
 
-        return array(
+        return [
             'id' => $answerRecord['id'],
-        );
+        ];
     }
 
     public function get(Application $app, Request $request, $lessonId)
@@ -64,12 +62,12 @@ class HomeworkResult extends BaseResource
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($lessonId);
 
-        if ($task['type'] != 'homework') {
-            $conditions = array(
+        if ('homework' != $task['type']) {
+            $conditions = [
                 'categoryId' => $task['categoryId'],
                 'type' => 'homework',
                 'mode' => 'homework',
-            );
+            ];
             $tasks = $this->getTaskService()->searchTasks($conditions, null, 0, 1);
             if (!$tasks) {
                 return $this->error('404', '该作业不存在!');
@@ -85,10 +83,10 @@ class HomeworkResult extends BaseResource
         }
 
         $homeworkActivity = $this->getHomeworkActivityService()->getByAssessmentId($assessment['id']);
-        $conditions = array(
+        $conditions = [
             'mediaId' => $homeworkActivity['id'],
             'mediaType' => 'homework',
-        );
+        ];
         $activities = $this->getActivityService()->search($conditions, null, 0, 1);
         if (!$activities) {
             return $this->error('404', '该作业任务不存在!');
@@ -125,12 +123,12 @@ class HomeworkResult extends BaseResource
 
     private function filterItem($items, $resultId)
     {
-        $newItems = array();
+        $newItems = [];
         foreach ($items as &$item) {
             $item = $this->filterQuestion($item, $resultId);
 
             if ('material' == $item['type']) {
-                $subs = empty($item['subs']) ? array() : array_values($item['subs']);
+                $subs = empty($item['subs']) ? [] : array_values($item['subs']);
                 foreach ($subs as &$subItem) {
                     $subItem = $this->filterQuestion($subItem, $resultId);
                 }
@@ -140,7 +138,6 @@ class HomeworkResult extends BaseResource
 
             $newItems[$item['id']] = $item;
         }
-
 
         return array_values($newItems);
     }
@@ -157,7 +154,7 @@ class HomeworkResult extends BaseResource
         $question['resultId'] = $resultId;
         $question['teacherSay'] = null;
 
-        $itemResult = empty($question['testResult']) ? array() : $question['testResult'];
+        $itemResult = empty($question['testResult']) ? [] : $question['testResult'];
 
         if ($itemResult) {
             $question['status'] = $itemResult['status'];

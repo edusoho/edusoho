@@ -2,17 +2,17 @@
 
 namespace AppBundle\Controller\My;
 
-use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
-use Biz\Course\Service\CourseService;
-use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\HomeworkActivityService;
+use Biz\Course\Service\CourseService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Symfony\Component\HttpFoundation\Request;
 
 class HomeworkController extends BaseController
 {
@@ -37,7 +37,7 @@ class HomeworkController extends BaseController
         }
 
         $activities = ArrayToolkit::index(
-            $this->getActivityService()->search(array('courseIds' => empty($courseIds) ? array(-1) : $courseIds, 'mediaType' => 'homework'), array(), 0, PHP_INT_MAX),
+            $this->getActivityService()->search(['courseIds' => empty($courseIds) ? [-1] : $courseIds, 'mediaType' => 'homework'], [], 0, PHP_INT_MAX),
             'mediaId'
         );
         $homeworkActivities = ArrayToolkit::index(
@@ -45,10 +45,10 @@ class HomeworkController extends BaseController
             'answerSceneId'
         );
 
-        $conditions = array(
-            'answer_scene_ids' => empty(array_keys($homeworkActivities)) ? array(-1) : array_keys($homeworkActivities),
+        $conditions = [
+            'answer_scene_ids' => empty(array_keys($homeworkActivities)) ? [-1] : array_keys($homeworkActivities),
             'status' => $status,
-        );
+        ];
 
         if ('nickname' == $keywordType && $keyword) {
             $searchUser = $this->getUserService()->getUserByNickname($keyword);
@@ -61,7 +61,7 @@ class HomeworkController extends BaseController
             10
         );
 
-        $orderBy = $status == 'reviewing' ? array('end_time' => 'ASC') : array('updated_time' => 'DESC');
+        $orderBy = 'reviewing' == $status ? ['end_time' => 'ASC'] : ['updated_time' => 'DESC'];
         $answerRecords = $this->getAnswerRecordService()->search(
             $conditions,
             $orderBy,
@@ -85,7 +85,7 @@ class HomeworkController extends BaseController
             'activityId'
         );
 
-        return $this->render('my/homework/check-list.html.twig', array(
+        return $this->render('my/homework/check-list.html.twig', [
             'answerRecords' => $answerRecords,
             'answerReports' => $answerReports,
             'paginator' => $paginator,
@@ -98,7 +98,7 @@ class HomeworkController extends BaseController
             'activities' => $activities,
             'homeworkActivities' => $homeworkActivities,
             'tasks' => $tasks,
-        ));
+        ]);
     }
 
     public function listAction(Request $request, $status)
@@ -109,17 +109,17 @@ class HomeworkController extends BaseController
         }
 
         $courseIds = ArrayToolkit::column(
-            $this->getCourseMemberService()->searchMembers(array('userId' => $user['id']), array(), 0, PHP_INT_MAX),
+            $this->getCourseMemberService()->searchMembers(['userId' => $user['id']], [], 0, PHP_INT_MAX),
             'courseId'
         );
         if (empty($courseIds)) {
-            return $this->render('my/homework/my-homework-list.html.twig', array(
-                'answerRecords' => array(),
+            return $this->render('my/homework/my-homework-list.html.twig', [
+                'answerRecords' => [],
                 'status' => $status,
-            ));
+            ]);
         }
         $activities = ArrayToolkit::index(
-            $this->getActivityService()->search(array('courseIds' => $courseIds, 'mediaType' => 'homework'), array(), 0, PHP_INT_MAX),
+            $this->getActivityService()->search(['courseIds' => $courseIds, 'mediaType' => 'homework'], [], 0, PHP_INT_MAX),
             'mediaId'
         );
         $homeworkActivities = ArrayToolkit::index(
@@ -127,17 +127,17 @@ class HomeworkController extends BaseController
             'answerSceneId'
         );
         if (empty(array_keys($homeworkActivities))) {
-            return $this->render('my/homework/my-homework-list.html.twig', array(
-                'answerRecords' => array(),
+            return $this->render('my/homework/my-homework-list.html.twig', [
+                'answerRecords' => [],
                 'status' => $status,
-            ));
+            ]);
         }
 
-        $conditions = array(
+        $conditions = [
             'answer_scene_ids' => array_keys($homeworkActivities),
             'user_id' => $user['id'],
             'status' => $status,
-        );
+        ];
 
         $paginator = new Paginator(
             $request,
@@ -147,16 +147,16 @@ class HomeworkController extends BaseController
 
         $answerRecords = $this->getAnswerRecordService()->search(
             $conditions,
-            array('begin_time' => 'DESC'),
+            ['begin_time' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         if (empty($answerRecords)) {
-            return $this->render('my/homework/my-homework-list.html.twig', array(
-                'answerRecords' => array(),
+            return $this->render('my/homework/my-homework-list.html.twig', [
+                'answerRecords' => [],
                 'status' => $status,
-            ));
+            ]);
         }
 
         $answerReports = ArrayToolkit::index(
@@ -170,7 +170,7 @@ class HomeworkController extends BaseController
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($answerRecords, 'assessment_id'));
 
-        return $this->render('my/homework/my-homework-list.html.twig', array(
+        return $this->render('my/homework/my-homework-list.html.twig', [
             'homeworkActivities' => $homeworkActivities,
             'answerReports' => $answerReports,
             'answerRecords' => $answerRecords,
@@ -180,7 +180,7 @@ class HomeworkController extends BaseController
             'tasks' => $tasks,
             'activities' => $activities,
             'status' => $status,
-        ));
+        ]);
     }
 
     protected function _getHomeworkDoTime($homeworkResults)

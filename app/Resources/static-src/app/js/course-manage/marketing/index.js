@@ -71,7 +71,7 @@ class Marketing {
 
   initValidator() {
     let $form = $('#course-marketing-form');
-    $('.js-task-price-setting').perfectScrollbar();
+    $('.js-task-price-setting-scroll ').perfectScrollbar();
     this.validator = $form.validate({
       groups: {
         date: 'expiryStartDate expiryEndDate'

@@ -15,26 +15,26 @@ class AssessmentResponseWrapper
 
     public function wrap($data, $assessment, $answerRecord)
     {
-        $assessmentResponse = array(
+        $assessmentResponse = [
             'assessment_id' => $assessment['id'],
             'answer_record_id' => $answerRecord['id'],
             'used_time' => empty($data['usedTime']) ? 0 : $data['usedTime'],
-            'section_responses' => array(),
-        );
+            'section_responses' => [],
+        ];
 
-        $questionAnswers = empty($data['data']) ? array() : $data['data'];
+        $questionAnswers = empty($data['data']) ? [] : $data['data'];
         foreach ($assessment['sections'] as $section) {
-            $sectionResponse = array('section_id' => $section['id'], 'item_responses' => array());
+            $sectionResponse = ['section_id' => $section['id'], 'item_responses' => []];
             foreach ($section['items'] as $item) {
-                $itemResponse = array('item_id' => $item['id'], 'question_responses' => array());
+                $itemResponse = ['item_id' => $item['id'], 'question_responses' => []];
                 foreach ($item['questions'] as $question) {
                     if (!empty($questionAnswers[$question['id']])) {
-                        $itemResponse['question_responses'][] = array(
+                        $itemResponse['question_responses'][] = [
                             'question_id' => $question['id'],
                             'response' => $this->convertAnswer($questionAnswers[$question['id']], $question),
-                        );
+                        ];
                     } else {
-                        $itemResponse['question_responses'][] = array('question_id' => $question['id'], 'response' => array());
+                        $itemResponse['question_responses'][] = ['question_id' => $question['id'], 'response' => []];
                     }
                 }
                 $sectionResponse['item_responses'][] = $itemResponse;
@@ -47,7 +47,7 @@ class AssessmentResponseWrapper
 
     protected function convertAnswer($answers, $question)
     {
-        if (in_array($question['answer_mode'], array(SingleChoiceAnswerMode::NAME, ChoiceAnswerMode::NAME, UncertainChoiceAnswerMode::NAME))) {
+        if (in_array($question['answer_mode'], [SingleChoiceAnswerMode::NAME, ChoiceAnswerMode::NAME, UncertainChoiceAnswerMode::NAME])) {
             foreach ($answers as &$answer) {
                 if ('' !== $answer) {
                     $answer = chr(65 + intval($answer));

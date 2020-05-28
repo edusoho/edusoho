@@ -3,14 +3,14 @@
 namespace AppBundle\Controller\Activity;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\Course\Service\CourseService;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\HomeworkActivityService;
+use Biz\Course\Service\CourseService;
 use Biz\Question\Service\QuestionService;
 use Biz\Testpaper\Service\TestpaperService;
-use Symfony\Component\HttpFoundation\Request;
-use Biz\Activity\Service\HomeworkActivityService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class HomeworkController extends BaseActivityController implements ActivityActionInterface
 {
@@ -26,23 +26,23 @@ class HomeworkController extends BaseActivityController implements ActivityActio
         $homework = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
         $homeworkResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $homework['id'], $activity['fromCourseId'], $activity['id'], $activity['mediaType']);
 
-        if (!$homeworkResult || ($homeworkResult['status'] == 'doing' && !$homeworkResult['updateTime'])) {
-            return $this->render('activity/homework/show.html.twig', array(
+        if (!$homeworkResult || ('doing' == $homeworkResult['status'] && !$homeworkResult['updateTime'])) {
+            return $this->render('activity/homework/show.html.twig', [
                 'activity' => $activity,
                 'homeworkResult' => $homeworkResult,
                 'homework' => $homework,
                 'courseId' => $activity['fromCourseId'],
-            ));
-        } elseif ($homeworkResult['status'] == 'finished') {
-            return $this->forward('AppBundle:Homework:showResult', array(
+            ]);
+        } elseif ('finished' == $homeworkResult['status']) {
+            return $this->forward('AppBundle:Homework:showResult', [
                 'resultId' => $homeworkResult['id'],
-            ));
+            ]);
         }
 
-        return $this->forward('AppBundle:Homework:startDo', array(
+        return $this->forward('AppBundle:Homework:startDo', [
             'lessonId' => $activity['id'],
             'homeworkId' => $activity['mediaId'],
-        ));
+        ]);
     }
 
     public function previewAction(Request $request, $task)
@@ -56,9 +56,9 @@ class HomeworkController extends BaseActivityController implements ActivityActio
         $homeworkctivity = $this->getHomeworkActivityService()->get($activity['mediaId']);
         $assessment = $this->getAssessmentService()->showAssessment($homeworkctivity['assessmentId']);
 
-        return $this->render('activity/homework/preview.html.twig', array(
+        return $this->render('activity/homework/preview.html.twig', [
             'assessment' => $assessment,
-        ));
+        ]);
     }
 
     public function editAction(Request $request, $id, $courseId)
@@ -69,53 +69,53 @@ class HomeworkController extends BaseActivityController implements ActivityActio
         $homeworkActivity = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
 
         $questionItems = $this->getTestpaperService()->searchItems(
-            array('testId' => $activity['mediaId']),
-            array('id' => 'DESC'),
+            ['testId' => $activity['mediaId']],
+            ['id' => 'DESC'],
             0,
             PHP_INT_MAX
         );
 
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($questionItems, 'questionId'));
 
-        return $this->render('activity/homework/modal.html.twig', array(
+        return $this->render('activity/homework/modal.html.twig', [
             'activity' => $activity,
             'courseId' => $activity['fromCourseId'],
             'questionItems' => $questionItems,
             'questions' => $questions,
             'courseSetId' => $course['courseSetId'],
             'homework' => $homeworkActivity,
-        ));
+        ]);
     }
 
     public function createAction(Request $request, $courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
-        return $this->render('activity/homework/modal.html.twig', array(
+        return $this->render('activity/homework/modal.html.twig', [
             'courseId' => $courseId,
             'courseSetId' => $course['courseSetId'],
-        ));
+        ]);
     }
 
     public function finishConditionAction(Request $request, $activity)
     {
         $homework = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
 
-        return $this->render('activity/homework/finish-condition.html.twig', array(
+        return $this->render('activity/homework/finish-condition.html.twig', [
             'homework' => $homework,
-        ));
+        ]);
     }
 
     protected function findCourseTestpapers($courseId)
     {
-        $conditions = array(
+        $conditions = [
             'courseId' => $courseId,
             'status' => 'open',
-        );
+        ];
 
         $testpapers = $this->getTestpaperService()->searchTestpapers(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             0,
             PHP_INT_MAX
         );

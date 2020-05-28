@@ -36,7 +36,7 @@ final class Psr0Fixer extends AbstractPsrAutoloadingFixer implements Configurati
     {
         return new FixerDefinition(
             'Classes must be in a path that matches their namespace, be at least one namespace deep and the class name should match the file name.',
-            array(
+            [
                 new FileSpecificCodeSample(
                     '<?php
 namespace PhpCsFixer\FIXER\Basic;
@@ -50,11 +50,11 @@ namespace PhpCsFixer\FIXER\Basic;
 class InvalidName {}
 ',
                     new \SplFileInfo(__FILE__),
-                    array('dir' => realpath(__DIR__.'/../..'))
+                    ['dir' => realpath(__DIR__.'/../..')]
                 ),
-            ),
+            ],
             null,
-            'This fixer may change your class name, which will break the code that is depended on old name.'
+            'This fixer may change your class name, which will break the code that depends on the old name.'
         );
     }
 
@@ -77,16 +77,16 @@ class InvalidName {}
                 }
 
                 $namespaceIndex = $tokens->getNextMeaningfulToken($index);
-                $namespaceEndIndex = $tokens->getNextTokenOfKind($index, array(';'));
+                $namespaceEndIndex = $tokens->getNextTokenOfKind($index, [';']);
 
                 $namespace = trim($tokens->generatePartialCode($namespaceIndex, $namespaceEndIndex - 1));
             } elseif ($token->isClassy()) {
-                if (null !== $classyName) {
-                    return;
-                }
-
                 $prevToken = $tokens[$tokens->getPrevMeaningfulToken($index)];
                 if ($prevToken->isGivenKind(T_NEW)) {
+                    continue;
+                }
+
+                if (null !== $classyName) {
                     return;
                 }
 
@@ -102,25 +102,27 @@ class InvalidName {}
         if (false !== $namespace) {
             $normNamespace = str_replace('\\', '/', $namespace);
             $path = str_replace('\\', '/', $file->getRealPath());
-            $dir = dirname($path);
+            $dir = \dirname($path);
 
             if ('' !== $this->configuration['dir']) {
-                $dir = substr($dir, strlen(realpath($this->configuration['dir'])) + 1);
+                /** @var false|string $dir until support for PHP 5.6 is dropped */
+                $dir = substr($dir, \strlen(realpath($this->configuration['dir'])) + 1);
 
                 if (false === $dir) {
                     $dir = '';
                 }
 
-                if (strlen($normNamespace) > strlen($dir)) {
+                if (\strlen($normNamespace) > \strlen($dir)) {
                     if ('' !== $dir) {
-                        $normNamespace = substr($normNamespace, -strlen($dir));
+                        $normNamespace = substr($normNamespace, -\strlen($dir));
                     } else {
                         $normNamespace = '';
                     }
                 }
             }
 
-            $dir = substr($dir, -strlen($normNamespace));
+            /** @var false|string $dir until support for PHP 5.6 is dropped */
+            $dir = substr($dir, -\strlen($normNamespace));
             if (false === $dir) {
                 $dir = '';
             }
@@ -128,14 +130,14 @@ class InvalidName {}
             $filename = basename($path, '.php');
 
             if ($classyName !== $filename) {
-                $tokens[$classyIndex] = new Token(array(T_STRING, $filename));
+                $tokens[$classyIndex] = new Token([T_STRING, $filename]);
             }
 
             if ($normNamespace !== $dir && strtolower($normNamespace) === strtolower($dir)) {
                 for ($i = $namespaceIndex; $i <= $namespaceEndIndex; ++$i) {
                     $tokens->clearAt($i);
                 }
-                $namespace = substr($namespace, 0, -strlen($dir)).str_replace('/', '\\', $dir);
+                $namespace = substr($namespace, 0, -\strlen($dir)).str_replace('/', '\\', $dir);
 
                 $newNamespace = Tokens::fromCode('<?php namespace '.$namespace.';');
                 $newNamespace->clearRange(0, 2);
@@ -146,10 +148,10 @@ class InvalidName {}
         } else {
             $normClass = str_replace('_', '/', $classyName);
             $path = str_replace('\\', '/', $file->getRealPath());
-            $filename = substr($path, -strlen($normClass) - 4, -4);
+            $filename = substr($path, -\strlen($normClass) - 4, -4);
 
             if ($normClass !== $filename && strtolower($normClass) === strtolower($filename)) {
-                $tokens[$classyIndex] = new Token(array(T_STRING, str_replace('/', '_', $filename)));
+                $tokens[$classyIndex] = new Token([T_STRING, str_replace('/', '_', $filename)]);
             }
         }
     }
@@ -159,13 +161,11 @@ class InvalidName {}
      */
     protected function createConfigurationDefinition()
     {
-        $dir = new FixerOptionBuilder('dir', 'The directory where the project code is placed.');
-        $dir = $dir
-            ->setAllowedTypes(array('string'))
-            ->setDefault('')
-            ->getOption()
-        ;
-
-        return new FixerConfigurationResolver(array($dir));
+        return new FixerConfigurationResolver([
+            (new FixerOptionBuilder('dir', 'The directory where the project code is placed.'))
+                ->setAllowedTypes(['string'])
+                ->setDefault('')
+                ->getOption(),
+        ]);
     }
 }

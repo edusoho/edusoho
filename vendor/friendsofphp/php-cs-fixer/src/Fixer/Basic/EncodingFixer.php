@@ -41,14 +41,14 @@ final class EncodingFixer extends AbstractFixer
     {
         return new FixerDefinition(
             'PHP code MUST use only UTF-8 without BOM (remove BOM).',
-            array(
+            [
                 new CodeSample(
-$this->BOM.'<?php
+                    $this->BOM.'<?php
 
 echo "Hello!";
 '
                 ),
-            )
+            ]
         );
     }
 
@@ -77,6 +77,7 @@ echo "Hello!";
         $content = $tokens[0]->getContent();
 
         if (0 === strncmp($content, $this->BOM, 3)) {
+            /** @var false|string $newContent until support for PHP 5.6 is dropped */
             $newContent = substr($content, 3);
 
             if (false === $newContent) {
@@ -86,7 +87,7 @@ echo "Hello!";
             if ('' === $newContent) {
                 $tokens->clearAt(0);
             } else {
-                $tokens[0] = new Token(array($tokens[0]->getId(), $newContent));
+                $tokens[0] = new Token([$tokens[0]->getId(), $newContent]);
             }
         }
     }

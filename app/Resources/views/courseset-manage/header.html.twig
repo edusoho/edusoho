@@ -42,6 +42,8 @@
       {% block courseType %}
         {% if is_un_multi_courseset(courseSet.id) %}
           <span class="cd-tag cd-tag-orange">{{ dict('courseType')[courseSet.type] }}</span>
+        {% elseif courseSet.platform|default('self') != 'self' %}
+          <span class="cd-tag cd-tag-orange">{{ 's2b2c.course_product.tag'|trans }}</span>
         {% endif %}
       {% endblock %}
       <div class="courseset-manage-header-info__price color-danger">

@@ -38,7 +38,7 @@ class TestpaperException extends AbstractException
 
     const REDO_INTERVAL_EXIST = 5002214;
 
-    public $messages = array(
+    public $messages = [
         4042201 => 'exception.testpaper.not_found',
         4032202 => 'exception.testpaper.draft',
         4032203 => 'exception.testpaper.closed',
@@ -54,5 +54,5 @@ class TestpaperException extends AbstractException
         5002213 => 'exception.testpaper.doing',
         5002214 => 'exception.testpaper.redo_interval_exist',
         4032215 => 'exception.testpaper.forbidden_delete_open_testpaper',
-    );
+    ];
 }

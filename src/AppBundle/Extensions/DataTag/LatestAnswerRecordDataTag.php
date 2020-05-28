@@ -10,9 +10,9 @@ class LatestAnswerRecordDataTag extends BaseDataTag
     {
         $user = $this->getCurrentUser();
 
-        $this->checkArguments($arguments, array(
+        $this->checkArguments($arguments, [
             'answerSceneId',
-        ));
+        ]);
 
         return $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($arguments['answerSceneId'], $user['id']);
     }

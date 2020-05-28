@@ -47,20 +47,33 @@ final class Error
     private $filePath;
 
     /**
-     * @var null|\Throwable
+     * @var \Throwable|null
      */
     private $source;
 
     /**
+     * @var array
+     */
+    private $appliedFixers;
+
+    /**
+     * @var string|null
+     */
+    private $diff;
+
+    /**
      * @param int             $type
      * @param string          $filePath
-     * @param null|\Throwable $source
+     * @param \Throwable|null $source
+     * @param string|null     $diff
      */
-    public function __construct($type, $filePath, $source = null)
+    public function __construct($type, $filePath, $source = null, array $appliedFixers = [], $diff = null)
     {
         $this->type = $type;
         $this->filePath = $filePath;
         $this->source = $source;
+        $this->appliedFixers = $appliedFixers;
+        $this->diff = $diff;
     }
 
     /**
@@ -72,7 +85,7 @@ final class Error
     }
 
     /**
-     * @return null|\Throwable
+     * @return \Throwable|null
      */
     public function getSource()
     {
@@ -85,5 +98,21 @@ final class Error
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAppliedFixers()
+    {
+        return $this->appliedFixers;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDiff()
+    {
+        return $this->diff;
     }
 }

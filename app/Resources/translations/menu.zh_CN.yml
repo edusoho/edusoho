@@ -729,6 +729,14 @@ admin_v2.trade.coin.basic_tab: 虚拟币管理
 # 交易-发票管理
 admin_v2.trade.invoice_manage.basic_group: 发票管理
 
+# 应用中心-内容云-内容结算
+admin_v2.basic_app_resource_group: 内容云
+admin_v2.cloud.app_resource_settlement_menu: 内容结算
+admin_v2.app_resource_settlement.balance.basic_tab: 余额明细
+admin_v2.app_resource_settlement.order.basic_tab: 采购单管理
+admin_v2.app_resource_settlement.product.basic_tab: 已选商品
+
+
 # 应用中心-营销云-营销应用
 admin_v2.basic_app_center_group: 营销云
 admin_v2.cloud.app_center_menu: 营销应用
@@ -761,6 +769,13 @@ admin_v2.cloud_service.sms_overview_tab: 概览
 # 应用中心-基础云-云服务-即时聊天设置
 admin_v2.cloud.im_setting_menu: 即时聊天设置
 admin_v2.cloud.im_setting.basic_tab: 即时聊天设置
+
+# 应用中心-内容云-内容市场：
+admin_v2.basic_content_resource_group: 内容云
+admin_v2.purchase_market_menu: 内容市场
+admin_v2.purchase_market_tab: 采购市场
+admin_v2.products_version_tab: 内容更新
+admin_v2.product_update_setting_tab: 更新设置
 
 # 数据-数据统计
 admin_v2.data_statictics.analysis.basic_group: 数据分析
@@ -899,7 +914,14 @@ admin_v2.developer.jobs_manage: 任务调度
 admin_v2.developer.job_logs: 任务日志
 admin_v2.developer.crontab: crontab管理
 
+# Plumber队列（隐藏路由）
+admin_v2.developer.plumber_manage_menu: Plumber管理
+admin_v2.developer.plumber_manage: Plumber管理
+admin_v2.developer.plumber_queue: 队列信息
+
 # IAP
 admin_v2.developer.mobile_iap_product_menu: iOS内购商品设置
 admin_v2.developer.mobile_iap_product.basic_tab: iOS内购商品设置iOS Purchase Setting
 # 新版后台结束
+
+admin_v2.course.basic.basic_tab.go_to_choose_btn: 去内容市场选择

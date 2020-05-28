@@ -10,6 +10,7 @@
 
 {% block main_body %}
   {% set hasMulCourses = has_mul_courses(courseSet.id) %}
+  <input type="hidden" id="s2b2c_enabled" value="{{ is_s2b2c_enabled() }}">
   {#添加admin_v2#}
   {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or ('ROLE_TEACHER' in app.user.roles and setting('course.teacher_manage_marketing', 0) == 1) or has_permission('admin_course_content_manage') or has_permission('admin_v2_course_content_manage')%}
     <form class="form-horizontal" role="form" id="course-info-form" action="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
