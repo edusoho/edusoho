@@ -354,10 +354,11 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             throw new AnswerException('Answer record not found.', ErrorCode::ANSWER_RECORD_NOTFOUND);
         }
 
-        $answerQuestionReports = $this->getAnswerReportService()->wrapperAnswerQuestionReports(
-            $answerRecord['id'],
-            $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecordId)
-        );
+        $answerQuestionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecordId);
+        if (!empty($answerQuestionReports)) {
+            $answerQuestionReports = $this->getAnswerReportService()->wrapperAnswerQuestionReports($answerRecord['id'], $answerQuestionReports);
+        }
+       
         $attachments = $this->getAttachmentService()->findAttachmentsByTargetIdsAndTargetType(
             ArrayToolkit::column($answerQuestionReports, 'id'),
             AttachmentService::ANSWER_TYPE

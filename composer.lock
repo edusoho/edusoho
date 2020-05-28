@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "080b6be9efba3e723f4568635b32cef4",
+    "content-hash": "06a80836670cb12e9bdbfe8bd64c55c2",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -463,12 +463,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-item-bank.git",
-                "reference": "5401bf5d88f9365d88c613fb711243ab9f787598"
+                "reference": "dfb77ed26240c31a406f08684e6a8bc854e7a69f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/5401bf5d88f9365d88c613fb711243ab9f787598",
-                "reference": "5401bf5d88f9365d88c613fb711243ab9f787598",
+                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/dfb77ed26240c31a406f08684e6a8bc854e7a69f",
+                "reference": "dfb77ed26240c31a406f08684e6a8bc854e7a69f",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -501,7 +501,7 @@
                 "MIT"
             ],
             "description": "item bank with biz-framework",
-            "time": "2020-05-25T11:50:56+00:00"
+            "time": "2020-05-28T05:05:10+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
