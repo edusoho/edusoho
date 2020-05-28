@@ -48,6 +48,42 @@ class OverviewTestpaperTaskDetailExporterTest extends BaseTestCase
             )
         );
 
+         $this->mockBiz(
+            'ItemBank:Answer:AnswerReportService',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(
+                       array('id' => 1, 'answer_record_id' => 1, 'score' => 1, 'user_id' => 1),
+                       array('id' => 2, 'answer_record_id' => 2, 'score' => 41, 'user_id' => 1),
+                    ),
+                ),
+                array(
+                    'functionName' => 'count',
+                    'returnValue' => array(
+                        'id' => 1,
+                    ),
+                ),
+            )
+        );
+
+        $this->mockBiz(
+            'ItemBank:Answer:AnswerRecordService',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(
+                       array('id' => 1, 'user_id' => 1, 'used_time' => 60),
+                       array('id' => 2, 'user_id' => 1, 'used_time' => 60),
+                    ),
+                ),
+                array(
+                    'functionName' => 'count',
+                    'returnValue' => 1
+                ),
+            )
+        );
+
         $this->mockBiz(
             'Task:TaskResultService',
             array(
@@ -74,9 +110,9 @@ class OverviewTestpaperTaskDetailExporterTest extends BaseTestCase
             'lalala',
             '1970-01-01 08:00:12',
             '1970-01-01 08:22:21',
-            '41',
             '1',
-            '14',
+            '1',
+            '41',
         ), $result[0]);
     }
 
