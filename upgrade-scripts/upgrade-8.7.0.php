@@ -385,8 +385,8 @@ class EduSohoUpgrade extends AbstractUpdater
                     set answer = replace(answer, '9', 'J');
                     set answer = replace(answer, '10\"', 'K\"');
                 elseif answer_mode = 'determine' or answer_mode = 'true_false' then
-                    set answer = replace(answer, '0', 'T');
-                    set answer = replace(answer, '1', 'F'); 
+                    set answer = replace(answer, '1', 'T');
+                    set answer = replace(answer, '0', 'F'); 
                 else
                     set answer = answer;
                 end if;
@@ -1015,8 +1015,8 @@ class EduSohoUpgrade extends AbstractUpdater
         $limit = $startData['limit'];
         $sql = "
             UPDATE `question_marker_result` SET  
-                answer = replace(answer, '0', 'T'),
-                answer = replace(answer, '1', 'F')
+                answer = replace(answer, '1', 'T'),
+                answer = replace(answer, '0', 'F')
             WHERE questionMarkerId IN (
                 SELECT t.id FROM (
                     SELECT id FROM question_marker WHERE type = 'determine' LIMIT {$start}, {$limit}
