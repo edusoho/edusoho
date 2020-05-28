@@ -19,7 +19,7 @@ class MemberServiceTest extends BaseTestCase
      */
     public function testBecomeStudentAndCreateOrderWithParamFilterException()
     {
-        $this->getMemberService()->becomeStudentAndCreateOrder(1, 1, array());
+        $this->getMemberService()->becomeStudentAndCreateOrder(1, 1, []);
     }
 
     /**
@@ -28,11 +28,11 @@ class MemberServiceTest extends BaseTestCase
      */
     public function testBecomeStudentAndCreateOrderWithNotExistUser()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'tryManageCourse', 'returnValue' => array()),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'tryManageCourse', 'returnValue' => []],
+        ]);
 
-        $this->getMemberService()->becomeStudentAndCreateOrder(-1, 1, array('price' => 0.01, 'remark' => 'test'));
+        $this->getMemberService()->becomeStudentAndCreateOrder(-1, 1, ['price' => 0.01, 'remark' => 'test']);
     }
 
     /**
@@ -42,12 +42,12 @@ class MemberServiceTest extends BaseTestCase
     public function testBecomeStudentAndCreateOrderWithNotExistCourse()
     {
         $user = $this->createNormalUser();
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'tryManageCourse', 'returnValue' => array()),
-            array('functionName' => 'getCourse', 'returnValue' => array()),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'tryManageCourse', 'returnValue' => []],
+            ['functionName' => 'getCourse', 'returnValue' => []],
+        ]);
 
-        $this->getMemberService()->becomeStudentAndCreateOrder($user['id'], 1, array('price' => 0.01, 'remark' => 'test'));
+        $this->getMemberService()->becomeStudentAndCreateOrder($user['id'], 1, ['price' => 0.01, 'remark' => 'test']);
     }
 
     /**
@@ -58,16 +58,16 @@ class MemberServiceTest extends BaseTestCase
     {
         $user = $this->createNormalUser();
         $course = $this->mockNewCourse();
-        $member = array(
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
             'deadline' => time() + 3600,
-        );
+        ];
         $this->getMemberDao()->create($member);
 
-        $this->getMemberService()->becomeStudentAndCreateOrder($user['id'], $course['id'], array('price' => 0.01, 'remark' => 'test'));
+        $this->getMemberService()->becomeStudentAndCreateOrder($user['id'], $course['id'], ['price' => 0.01, 'remark' => 'test']);
     }
 
     public function testBecomeStudentAndCreateOrderByAdminAdded()
@@ -77,7 +77,7 @@ class MemberServiceTest extends BaseTestCase
         $this->getCourseService()->publishCourse($newCourse['id']);
         $this->mockNewCourseSet();
 
-        list($course, $member, $order) = $this->getMemberService()->becomeStudentAndCreateOrder($newUser['id'], $newCourse['id'], array('price' => 0, 'remark' => 'test', 'isAdminAdded' => 1));
+        list($course, $member, $order) = $this->getMemberService()->becomeStudentAndCreateOrder($newUser['id'], $newCourse['id'], ['price' => 0, 'remark' => 'test', 'isAdminAdded' => 1]);
         $this->assertNotEmpty($member);
         $this->assertEquals(0, $order['id']);
     }
@@ -85,13 +85,13 @@ class MemberServiceTest extends BaseTestCase
     public function testStickMyCourseByCourseSetId()
     {
         $courseSet = $this->mockNewCourseSet();
-        $member = array(
+        $member = [
             'courseId' => 3,
             'userId' => 1,
             'courseSetId' => $courseSet['id'],
             'joinedType' => 'course',
             'role' => 'teacher',
-        );
+        ];
 
         $member = $this->getMemberDao()->create($member);
         $oldStickyTime = $member['stickyTime'];
@@ -116,14 +116,14 @@ class MemberServiceTest extends BaseTestCase
     public function testUnStickMyCourseByCourseSetId()
     {
         $courseSet = $this->mockNewCourseSet();
-        $member = array(
+        $member = [
             'courseId' => 3,
             'userId' => 1,
             'courseSetId' => $courseSet['id'],
             'joinedType' => 'course',
             'role' => 'teacher',
             'stickyTime' => time(),
-        );
+        ];
 
         $member = $this->getMemberDao()->create($member);
         $oldStickyTime = $member['stickyTime'];
@@ -150,28 +150,28 @@ class MemberServiceTest extends BaseTestCase
         $user = $this->getCurrentUser();
         $this->mockBiz(
             'Course:CourseService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'findCoursesByIds',
-                    'withParams' => array(array(1)),
-                    'returnValue' => array(
-                        array('id' => 1),
-                    ),
-                ),
-            )
+                    'withParams' => [[1]],
+                    'returnValue' => [
+                        ['id' => 1],
+                    ],
+                ],
+            ]
         );
-        $member = array(
+        $member = [
             'courseId' => 1,
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
             'deadline' => time() + 3600,
-        );
+        ];
         $member = $this->getMemberDao()->create($member);
 
         $results = $this->getMemberService()->findWillOverdueCourses();
 
-        $this->assertEquals(array('id' => 1), reset($results[0]));
+        $this->assertEquals(['id' => 1], reset($results[0]));
         $this->assertEquals($member, reset($results[1]));
     }
 
@@ -189,13 +189,13 @@ class MemberServiceTest extends BaseTestCase
     public function testFindLatestStudentsByCourseSetId()
     {
         $user = $this->getCurrentUser();
-        $member = array(
+        $member = [
             'courseId' => 1,
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
             'deadline' => time() + 3600,
-        );
+        ];
         $member = $this->getMemberDao()->create($member);
 
         $results = $this->getMemberService()->findLatestStudentsByCourseSetId(1, 0, 10);
@@ -207,13 +207,13 @@ class MemberServiceTest extends BaseTestCase
     {
         $user = $this->createNormalUser();
         $course = $this->mockNewCourse();
-        $member = array(
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
             'deadline' => time() + 3600,
-        );
+        ];
         $member = $this->getMemberDao()->create($member);
         $this->assertNotEmpty($member);
         $this->getMemberService()->removeStudent($course['id'], $user['id']);
@@ -236,13 +236,13 @@ class MemberServiceTest extends BaseTestCase
      */
     public function testRemoveStudentWithNotExistMember()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1)),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'getCourse', 'returnValue' => ['id' => 1]],
+        ]);
 
-        $this->mockBiz('Course:CourseMemberService', array(
-            array('functionName' => 'getByCourseIdAndUserId', 'returnValue' => array()),
-        ));
+        $this->mockBiz('Course:CourseMemberService', [
+            ['functionName' => 'getByCourseIdAndUserId', 'returnValue' => []],
+        ]);
 
         $this->getMemberService()->removeStudent(1, 1);
     }
@@ -250,15 +250,15 @@ class MemberServiceTest extends BaseTestCase
     public function testWaveMember()
     {
         $user = $this->createNormalUser();
-        $member = array(
+        $member = [
             'courseId' => 1,
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
-        );
+        ];
         $member = $this->getMemberDao()->create($member);
 
-        $this->getMemberService()->waveMember($member['id'], array('learnedNum' => 2));
+        $this->getMemberService()->waveMember($member['id'], ['learnedNum' => 2]);
         $waveMember = $this->getMemberService()->getCourseMember(1, $user['id']);
 
         $this->assertEquals(2, $waveMember['learnedNum']);
@@ -268,24 +268,24 @@ class MemberServiceTest extends BaseTestCase
     {
         $this->mockBiz(
             'CloudPlatform:AppService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getAppByCode',
-                    'withParams' => array('vip'),
+                    'withParams' => ['vip'],
                     'returnValue' => false,
-                ),
-            )
+                ],
+            ]
         );
 
-        $course = array(
+        $course = [
             'id' => 1,
-        );
+        ];
 
-        $member = array(
+        $member = [
             'id' => 1,
             'levelId' => 2,
             'deadline' => 0,
-        );
+        ];
 
         $result = $this->getMemberService()->isMemberNonExpired($course, $member);
 
@@ -298,18 +298,18 @@ class MemberServiceTest extends BaseTestCase
      */
     public function testIsMemberNonExpiredWithException()
     {
-        $this->getMemberService()->isMemberNonExpired(array(), array());
+        $this->getMemberService()->isMemberNonExpired([], []);
     }
 
     public function testIsCourseMember()
     {
         $user = $this->createNormalUser();
-        $member = array(
+        $member = [
             'courseId' => 1,
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
         $result = $this->getMemberService()->isCourseMember(1, $user['id']);
@@ -324,27 +324,27 @@ class MemberServiceTest extends BaseTestCase
     {
         $user = $this->createNormalUser();
         $course = $this->mockNewCourse();
-        $member = array(
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
             'role' => 'teacher',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
-        $this->getMemberService()->setCourseTeachers($course['id'], array(array()));
+        $this->getMemberService()->setCourseTeachers($course['id'], [[]]);
     }
 
     public function testRemarkStudent()
     {
         $user = $this->createNormalUser();
-        $member = array(
+        $member = [
             'courseId' => 1,
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
         $result = $this->getMemberService()->remarkStudent(1, $user['id'], 'add student');
@@ -358,18 +358,18 @@ class MemberServiceTest extends BaseTestCase
      */
     public function testRemarkStudentWithNotExistMember()
     {
-        $this->mockBiz('Course:CourseMemberDao', array(
-            array('functionName' => 'getByCourseIdAndUserId', 'returnValue' => array()),
-        ));
+        $this->mockBiz('Course:CourseMemberDao', [
+            ['functionName' => 'getByCourseIdAndUserId', 'returnValue' => []],
+        ]);
 
         $this->getMemberService()->remarkStudent(1, 1, 'remark');
     }
 
     public function testGetMemberDeadline()
     {
-        $course = $this->mockNewCourse(array('expiryMode' => 'days', 'expiryDays' => 10, 'courseType' => 'default'));
+        $course = $this->mockNewCourse(['expiryMode' => 'days', 'expiryDays' => 10, 'courseType' => 'default']);
 
-        $result = ReflectionUtils::invokeMethod($this->getMemberService(), 'getMemberDeadline', array($course));
+        $result = ReflectionUtils::invokeMethod($this->getMemberService(), 'getMemberDeadline', [$course]);
 
         $this->assertNotEmpty($result);
     }
@@ -380,12 +380,12 @@ class MemberServiceTest extends BaseTestCase
     public function testLockStudentWithNotFoundException()
     {
         $user = $this->createNormalUser();
-        $member = array(
+        $member = [
             'courseId' => 1,
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
         $this->getMemberService()->lockStudent(1, $user['id']);
@@ -393,12 +393,12 @@ class MemberServiceTest extends BaseTestCase
 
     public function testLockStudentWithNotMember()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1)),
-        ));
-        $this->mockBiz('Course:CourseMemberDao', array(
-            array('functionName' => 'getByCourseIdAndUserId', 'returnValue' => array()),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'getCourse', 'returnValue' => ['id' => 1]],
+        ]);
+        $this->mockBiz('Course:CourseMemberDao', [
+            ['functionName' => 'getByCourseIdAndUserId', 'returnValue' => []],
+        ]);
 
         $result = $this->getMemberService()->lockStudent(1, 1);
         $this->assertEmpty($result);
@@ -410,24 +410,24 @@ class MemberServiceTest extends BaseTestCase
      */
     public function testLockStudentWithNotStudent()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1)),
-        ));
-        $this->mockBiz('Course:CourseMemberDao', array(
-            array('functionName' => 'getByCourseIdAndUserId', 'returnValue' => array('role' => 'teacher')),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'getCourse', 'returnValue' => ['id' => 1]],
+        ]);
+        $this->mockBiz('Course:CourseMemberDao', [
+            ['functionName' => 'getByCourseIdAndUserId', 'returnValue' => ['role' => 'teacher']],
+        ]);
 
         $this->getMemberService()->lockStudent(1, 1);
     }
 
     public function testLockStudentWithUnLocked()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1)),
-        ));
-        $this->mockBiz('Course:CourseMemberDao', array(
-            array('functionName' => 'getByCourseIdAndUserId', 'returnValue' => array('role' => 'student', 'locked' => 1)),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'getCourse', 'returnValue' => ['id' => 1]],
+        ]);
+        $this->mockBiz('Course:CourseMemberDao', [
+            ['functionName' => 'getByCourseIdAndUserId', 'returnValue' => ['role' => 'student', 'locked' => 1]],
+        ]);
 
         $result = $this->getMemberService()->lockStudent(1, 1);
         $this->assertEmpty($result);
@@ -439,12 +439,12 @@ class MemberServiceTest extends BaseTestCase
     public function testUnlockStudentWithNotFoundException()
     {
         $user = $this->createNormalUser();
-        $member = array(
+        $member = [
             'courseId' => 1,
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
         $this->getMemberService()->unlockStudent(1, $user['id']);
@@ -452,12 +452,12 @@ class MemberServiceTest extends BaseTestCase
 
     public function testUnLockStudentWithNotMember()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1)),
-        ));
-        $this->mockBiz('Course:CourseMemberDao', array(
-            array('functionName' => 'getByCourseIdAndUserId', 'returnValue' => array()),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'getCourse', 'returnValue' => ['id' => 1]],
+        ]);
+        $this->mockBiz('Course:CourseMemberDao', [
+            ['functionName' => 'getByCourseIdAndUserId', 'returnValue' => []],
+        ]);
 
         $result = $this->getMemberService()->unlockStudent(1, 1);
         $this->assertEmpty($result);
@@ -469,24 +469,24 @@ class MemberServiceTest extends BaseTestCase
      */
     public function testUnLockStudentWithNotStudent()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1)),
-        ));
-        $this->mockBiz('Course:CourseMemberDao', array(
-            array('functionName' => 'getByCourseIdAndUserId', 'returnValue' => array('role' => 'teacher')),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'getCourse', 'returnValue' => ['id' => 1]],
+        ]);
+        $this->mockBiz('Course:CourseMemberDao', [
+            ['functionName' => 'getByCourseIdAndUserId', 'returnValue' => ['role' => 'teacher']],
+        ]);
 
         $this->getMemberService()->unlockStudent(1, 1);
     }
 
     public function testUnLockStudentWithUnLocked()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1)),
-        ));
-        $this->mockBiz('Course:CourseMemberDao', array(
-            array('functionName' => 'getByCourseIdAndUserId', 'returnValue' => array('role' => 'student')),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'getCourse', 'returnValue' => ['id' => 1]],
+        ]);
+        $this->mockBiz('Course:CourseMemberDao', [
+            ['functionName' => 'getByCourseIdAndUserId', 'returnValue' => ['role' => 'student']],
+        ]);
 
         $result = $this->getMemberService()->unlockStudent(1, 1);
         $this->assertEmpty($result);
@@ -496,12 +496,12 @@ class MemberServiceTest extends BaseTestCase
     {
         $user = $this->createNormalUser();
         $course = $this->mockNewCourse();
-        $member = array(
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
         $this->getMemberService()->lockStudent(1, $user['id']);
@@ -515,12 +515,12 @@ class MemberServiceTest extends BaseTestCase
     {
         $user = $this->createNormalUser();
         $course = $this->mockNewCourse();
-        $member = array(
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
-        );
+        ];
         $this->getMemberDao()->create($member);
         $this->getMemberService()->lockStudent(1, $user['id']);
 
@@ -533,7 +533,7 @@ class MemberServiceTest extends BaseTestCase
 
     public function testBatchCreateMembersWithNotExistMembers()
     {
-        $result = $this->getMemberService()->batchCreateMembers(array());
+        $result = $this->getMemberService()->batchCreateMembers([]);
         $this->assertNull($result);
     }
 
@@ -541,13 +541,13 @@ class MemberServiceTest extends BaseTestCase
     {
         $user = $this->createNormalUser();
         $course = $this->mockNewCourse();
-        $member = array(
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
             'role' => 'teacher',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
         $result = $this->getMemberService()->findCourseSetTeachers($course['id']);
@@ -558,13 +558,13 @@ class MemberServiceTest extends BaseTestCase
     {
         $user = $this->createNormalUser();
         $course = $this->mockNewCourse();
-        $member = array(
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
             'role' => 'teacher',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
         $result = $this->getMemberService()->isCourseTeacher($course['id'], $user['id']);
@@ -576,13 +576,13 @@ class MemberServiceTest extends BaseTestCase
     {
         $user = $this->createNormalUser();
         $course = $this->mockNewCourse();
-        $member = array(
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
             'role' => 'student',
-        );
+        ];
         $this->getMemberDao()->create($member);
         $result = $this->getMemberService()->isCourseStudent($course['id'], $user['id']);
 
@@ -593,13 +593,13 @@ class MemberServiceTest extends BaseTestCase
     {
         $user = $this->createNormalUser();
         $course = $this->mockNewCourse();
-        $member = array(
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
             'role' => 'student',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
         $result = $this->getMemberService()->getCourseStudentCount($course['id']);
@@ -608,20 +608,20 @@ class MemberServiceTest extends BaseTestCase
 
     public function testIsVipMemberNonExpired()
     {
-        $this->mockBiz('CloudPlatform:AppService', array(
-            array('functionName' => 'getAppByCode', 'returnValue' => true),
-        ));
-        $this->mockBiz('Classroom:ClassroomService', array(
-            array('functionName' => 'getClassroom', 'returnValue' => array('vipLevelId' => 3)),
-        ));
-        $this->mockBiz('VipPlugin:Vip:VipService', array(
-            array('functionName' => 'checkUserInMemberLevel', 'returnValue' => 'ok', 'withParams' => array(1, 3)),
-            array('functionName' => 'checkUserInMemberLevel', 'returnValue' => 'no', 'withParams' => array(1, 2)),
-        ));
+        $this->mockBiz('CloudPlatform:AppService', [
+            ['functionName' => 'getAppByCode', 'returnValue' => true],
+        ]);
+        $this->mockBiz('Classroom:ClassroomService', [
+            ['functionName' => 'getClassroom', 'returnValue' => ['vipLevelId' => 3]],
+        ]);
+        $this->mockBiz('VipPlugin:Vip:VipService', [
+            ['functionName' => 'checkUserInMemberLevel', 'returnValue' => 'ok', 'withParams' => [1, 3]],
+            ['functionName' => 'checkUserInMemberLevel', 'returnValue' => 'no', 'withParams' => [1, 2]],
+        ]);
 
-        $result = ReflectionUtils::invokeMethod($this->getMemberService(), 'isVipMemberNonExpired', array(array('vipLevelId' => 2), array('joinedType' => 'classroom', 'userId' => 1, 'classroomId' => 1)));
+        $result = ReflectionUtils::invokeMethod($this->getMemberService(), 'isVipMemberNonExpired', [['vipLevelId' => 2], ['joinedType' => 'classroom', 'userId' => 1, 'classroomId' => 1]]);
         $this->assertTrue($result);
-        $result = ReflectionUtils::invokeMethod($this->getMemberService(), 'isVipMemberNonExpired', array(array('vipLevelId' => 2), array('joinedType' => 'course', 'userId' => 1, 'classroomId' => 1)));
+        $result = ReflectionUtils::invokeMethod($this->getMemberService(), 'isVipMemberNonExpired', [['vipLevelId' => 2], ['joinedType' => 'course', 'userId' => 1, 'classroomId' => 1]]);
         $this->assertFalse($result);
     }
 
@@ -629,16 +629,16 @@ class MemberServiceTest extends BaseTestCase
     {
         $user = $this->createNormalUser();
         $course = $this->mockNewCourse();
-        $member = array(
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
             'role' => 'student',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
-        $results = $this->getMemberService()->findCourseStudentsByCourseIds(array($course['id']));
+        $results = $this->getMemberService()->findCourseStudentsByCourseIds([$course['id']]);
 
         $this->assertCount(2, $results);
     }
@@ -647,13 +647,13 @@ class MemberServiceTest extends BaseTestCase
     {
         $user = $this->createNormalUser();
         $course = $this->mockNewCourse();
-        $member = array(
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
             'role' => 'student',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
         $result = $this->getMemberService()->removeCourseStudent($course['id'], $user['id']);
@@ -668,13 +668,13 @@ class MemberServiceTest extends BaseTestCase
     {
         $user = $this->createNormalUser();
         $course = $this->mockNewCourse();
-        $member = array(
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
             'role' => 'student',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
         $this->getMemberService()->removeCourseStudent($course['id'], 10);
@@ -686,9 +686,9 @@ class MemberServiceTest extends BaseTestCase
      */
     public function testRemoveCourseStudentWithNotExistMember()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'tryManageCourse', 'returnValue' => array()),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'tryManageCourse', 'returnValue' => []],
+        ]);
 
         $this->getMemberService()->removeCourseStudent(1, 1);
     }
@@ -699,12 +699,12 @@ class MemberServiceTest extends BaseTestCase
      */
     public function testRemoveCourseStudentWithNotStudent()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'tryManageCourse', 'returnValue' => array()),
-        ));
-        $this->mockBiz('Course:CourseMemberDao', array(
-            array('functionName' => 'getByCourseIdAndUserId', 'returnValue' => array('role' => 'teacher')),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'tryManageCourse', 'returnValue' => []],
+        ]);
+        $this->mockBiz('Course:CourseMemberDao', [
+            ['functionName' => 'getByCourseIdAndUserId', 'returnValue' => ['role' => 'teacher']],
+        ]);
 
         $this->getMemberService()->removeCourseStudent(1, 1);
     }
@@ -712,13 +712,13 @@ class MemberServiceTest extends BaseTestCase
     public function testPrepareConditions()
     {
         $user = $this->createNormalUser();
-        $conditions = array(
+        $conditions = [
             'date' => 'yesterday',
             'creator' => $user['nickname'],
             'nickname' => $user['nickname'],
-        );
+        ];
 
-        $result = ReflectionUtils::invokeMethod($this->getMemberService(), 'prepareConditions', array($conditions));
+        $result = ReflectionUtils::invokeMethod($this->getMemberService(), 'prepareConditions', [$conditions]);
 
         $this->assertNotEmpty($result['startTimeGreaterThan']);
         $this->assertNotEmpty($result['startTimeLessThan']);
@@ -731,7 +731,7 @@ class MemberServiceTest extends BaseTestCase
         $course = $this->mockNewCourse();
         $this->getCourseService()->publishCourse($course['id']);
 
-        $results = $this->getMemberService()->batchBecomeStudents($course['id'], array($user['id']));
+        $results = $this->getMemberService()->batchBecomeStudents($course['id'], [$user['id']]);
 
         // teacher 1 student 1
         $this->assertCount(2, $results);
@@ -739,7 +739,7 @@ class MemberServiceTest extends BaseTestCase
 
     public function testBatchBecomeStudentsWithNotExistMemberIds()
     {
-        $result = $this->getMemberService()->batchBecomeStudents(1, array());
+        $result = $this->getMemberService()->batchBecomeStudents(1, []);
 
         $this->assertEmpty($result);
     }
@@ -750,11 +750,11 @@ class MemberServiceTest extends BaseTestCase
      */
     public function testBatchBecomeStudentsWithNotExistCourse()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array()),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'getCourse', 'returnValue' => []],
+        ]);
 
-        $this->getMemberService()->batchBecomeStudents(1, array(1));
+        $this->getMemberService()->batchBecomeStudents(1, [1]);
     }
 
     /**
@@ -763,45 +763,45 @@ class MemberServiceTest extends BaseTestCase
      */
     public function testBatchBecomeStudentsWithUnpublishedCourse()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('status' => 'draft')),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'getCourse', 'returnValue' => ['status' => 'draft']],
+        ]);
 
-        $this->getMemberService()->batchBecomeStudents(1, array(1));
+        $this->getMemberService()->batchBecomeStudents(1, [1]);
     }
 
     public function testGetMemberDeadline2()
     {
-        $result = ReflectionUtils::invokeMethod($this->getMemberService(), 'getMemberDeadline', array(array('expiryMode' => 'date', 'expiryEndDate' => '2019-07-05')));
+        $result = ReflectionUtils::invokeMethod($this->getMemberService(), 'getMemberDeadline', [['expiryMode' => 'date', 'expiryEndDate' => '2019-07-05']]);
 
         $this->assertEquals('2019-07-05', $result);
     }
 
     public function testFindLastLearnTimeRecordStudentsWithEmptyUserIds()
     {
-        $results = $this->getMemberService()->findLastLearnTimeRecordStudents(array());
+        $results = $this->getMemberService()->findLastLearnTimeRecordStudents([]);
 
-        $this->assertEquals(array(), $results);
+        $this->assertEquals([], $results);
     }
 
     public function testFindLastLearnTimeRecordStudents()
     {
-        $results = $this->getMemberService()->findLastLearnTimeRecordStudents(array('1'));
+        $results = $this->getMemberService()->findLastLearnTimeRecordStudents(['1']);
 
-        $this->assertEquals(array(), $results);
+        $this->assertEquals([], $results);
     }
 
     public function testFindMembersByUserIdAndJoinType()
     {
         $user = $this->createNormalUser();
         $course = $this->mockNewCourse();
-        $member = array(
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
             'role' => 'student',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
         $results = $this->getMemberService()->findMembersByUserIdAndJoinType($user['id']);
@@ -813,13 +813,13 @@ class MemberServiceTest extends BaseTestCase
     {
         $user = $this->createNormalUser();
         $course = $this->mockNewCourse();
-        $member = array(
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
             'role' => 'teacher',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
         $this->getMemberService()->cancelTeacherInAllCourses($user['id']);
@@ -832,14 +832,14 @@ class MemberServiceTest extends BaseTestCase
     {
         $user = $this->createNormalUser();
         $course = $this->mockNewCourse();
-        $member = array(
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
             'role' => 'student',
             'deadline' => time() - 84600,
-        );
+        ];
         $this->getMemberDao()->create($member);
 
         $this->getMemberService()->quitCourseByDeadlineReach($user['id'], $course['id']);
@@ -854,9 +854,9 @@ class MemberServiceTest extends BaseTestCase
      */
     public function testQuitCourseByDeadlineReachWithNotExistCourse()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array()),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'getCourse', 'returnValue' => []],
+        ]);
 
         $this->getMemberService()->quitCourseByDeadlineReach(1, -1);
     }
@@ -869,13 +869,13 @@ class MemberServiceTest extends BaseTestCase
     {
         $user = $this->createNormalUser();
         $course = $this->mockNewCourse();
-        $member = array(
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
             'role' => 'teacher',
-        );
+        ];
         $this->getMemberDao()->create($member);
 
         $this->getMemberService()->quitCourseByDeadlineReach($user['id'], $course['id']);
@@ -889,14 +889,14 @@ class MemberServiceTest extends BaseTestCase
     {
         $user = $this->createNormalUser();
         $course = $this->mockNewCourse();
-        $member = array(
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
             'role' => 'student',
             'deadline' => time() + 84600,
-        );
+        ];
         $this->getMemberDao()->create($member);
 
         $this->getMemberService()->quitCourseByDeadlineReach($user['id'], $course['id']);
@@ -908,9 +908,9 @@ class MemberServiceTest extends BaseTestCase
      */
     public function testBecomeStudentWithNotExistCourse()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array()),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'getCourse', 'returnValue' => []],
+        ]);
 
         $this->getMemberService()->becomeStudent(1, 1);
     }
@@ -921,9 +921,9 @@ class MemberServiceTest extends BaseTestCase
      */
     public function testBecomeStudentWithUnpublishedCourse()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('status' => 'draft')),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'getCourse', 'returnValue' => ['status' => 'draft']],
+        ]);
 
         $this->getMemberService()->becomeStudent(1, 1);
     }
@@ -934,9 +934,9 @@ class MemberServiceTest extends BaseTestCase
      */
     public function testBecomeStudentWithNotfoundUser()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('status' => 'published')),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'getCourse', 'returnValue' => ['status' => 'published']],
+        ]);
 
         $this->getMemberService()->becomeStudent(1, 3);
     }
@@ -947,26 +947,26 @@ class MemberServiceTest extends BaseTestCase
      */
     public function testBecomeStudentWithDuplicateMember()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('status' => 'published')),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'getCourse', 'returnValue' => ['status' => 'published']],
+        ]);
 
-        $this->mockBiz('Course:CourseMemberDao', array(
-            array('functionName' => 'getByCourseIdAndUserId', 'returnValue' => array('role' => 'student')),
-        ));
+        $this->mockBiz('Course:CourseMemberDao', [
+            ['functionName' => 'getByCourseIdAndUserId', 'returnValue' => ['role' => 'student']],
+        ]);
 
         $this->getMemberService()->becomeStudent(1, 1);
     }
 
     public function testBecomeStudent()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('status' => 'published')),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'getCourse', 'returnValue' => ['status' => 'published']],
+        ]);
 
-        $this->mockBiz('Course:CourseMemberDao', array(
-            array('functionName' => 'getByCourseIdAndUserId', 'returnValue' => array('role' => 'teacher')),
-        ));
+        $this->mockBiz('Course:CourseMemberDao', [
+            ['functionName' => 'getByCourseIdAndUserId', 'returnValue' => ['role' => 'teacher']],
+        ]);
 
         $result = $this->getMemberService()->becomeStudent(1, 1);
         $this->assertEquals('teacher', $result['role']);
@@ -978,17 +978,17 @@ class MemberServiceTest extends BaseTestCase
      */
     public function testBecomeStudentWithNotExistOrder()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('status' => 'published', 'expiryMode' => 'days', 'expiryDays' => 1)),
-        ));
-        $this->mockBiz('Course:CourseMemberDao', array(
-            array('functionName' => 'getByCourseIdAndUserId', 'returnValue' => array()),
-        ));
-        $this->mockBiz('Order:OrderService', array(
-            array('functionName' => 'getOrder', 'returnValue' => array()),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'getCourse', 'returnValue' => ['status' => 'published', 'expiryMode' => 'days', 'expiryDays' => 1]],
+        ]);
+        $this->mockBiz('Course:CourseMemberDao', [
+            ['functionName' => 'getByCourseIdAndUserId', 'returnValue' => []],
+        ]);
+        $this->mockBiz('Order:OrderService', [
+            ['functionName' => 'getOrder', 'returnValue' => []],
+        ]);
 
-        $this->getMemberService()->becomeStudent(1, 1, array('orderId' => 1));
+        $this->getMemberService()->becomeStudent(1, 1, ['orderId' => 1]);
     }
 
     /**
@@ -997,30 +997,30 @@ class MemberServiceTest extends BaseTestCase
      */
     public function testBecomeStudentWithNotExistOrder2()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('status' => 'published', 'expiryMode' => 'date', 'expiryEndDate' => date('Y-m-d', time()))),
-        ));
-        $this->mockBiz('Course:CourseMemberDao', array(
-            array('functionName' => 'getByCourseIdAndUserId', 'returnValue' => array()),
-        ));
-        $this->mockBiz('Order:OrderService', array(
-            array('functionName' => 'getOrder', 'returnValue' => array()),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'getCourse', 'returnValue' => ['status' => 'published', 'expiryMode' => 'date', 'expiryEndDate' => date('Y-m-d', time())]],
+        ]);
+        $this->mockBiz('Course:CourseMemberDao', [
+            ['functionName' => 'getByCourseIdAndUserId', 'returnValue' => []],
+        ]);
+        $this->mockBiz('Order:OrderService', [
+            ['functionName' => 'getOrder', 'returnValue' => []],
+        ]);
 
-        $this->getMemberService()->becomeStudent(1, 1, array('orderId' => 1));
+        $this->getMemberService()->becomeStudent(1, 1, ['orderId' => 1]);
     }
 
     public function testFindTeacherMembersByUserIdAndCourseSetId()
     {
         $user = $this->createNormalUser();
-        $member = array(
+        $member = [
             'courseId' => 1,
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
             'role' => 'teacher',
             'deadline' => time() + 84600,
-        );
+        ];
         $this->getMemberDao()->create($member);
 
         $members = $this->getMemberService()->findTeacherMembersByUserIdAndCourseSetId($user['id'], 1);
@@ -1030,7 +1030,7 @@ class MemberServiceTest extends BaseTestCase
 
     public function testCountQuestionsByCourseIdAndUserId()
     {
-        $this->mockCourseThread(array('courseId' => 1, 'userId' => 1, 'type' => 'question'));
+        $this->mockCourseThread(['courseId' => 1, 'userId' => 1, 'type' => 'question']);
 
         $result = $this->getMemberService()->countQuestionsByCourseIdAndUserId(1, 1);
         $this->assertEquals(1, $result);
@@ -1038,7 +1038,7 @@ class MemberServiceTest extends BaseTestCase
 
     public function testCountDiscussionsByCourseIdAndUserId()
     {
-        $this->mockCourseThread(array('courseId' => 1, 'userId' => 1, 'type' => 'discussion'));
+        $this->mockCourseThread(['courseId' => 1, 'userId' => 1, 'type' => 'discussion']);
 
         $result = $this->getMemberService()->countDiscussionsByCourseIdAndUserId(1, 1);
         $this->assertEquals(1, $result);
@@ -1046,7 +1046,7 @@ class MemberServiceTest extends BaseTestCase
 
     public function testCountActivitiesByCourseIdAndUserId()
     {
-        $this->mockTaskResult(array('userId' => 3, 'courseTaskId' => 12, 'time' => 1, 'courseId' => 1));
+        $this->mockTaskResult(['userId' => 3, 'courseTaskId' => 12, 'time' => 1, 'courseId' => 1]);
 
         $result = $this->getMemberService()->countActivitiesByCourseIdAndUserId(1, 3);
         $this->assertEquals(1, $result);
@@ -1054,8 +1054,8 @@ class MemberServiceTest extends BaseTestCase
 
     public function testCountPostsByCourseIdAndUserId()
     {
-        $thread = $this->mockCourseThread(array('courseId' => 1, 'userId' => 1, 'type' => 'discussion'));
-        $this->mockCourseThreadPost(array('userId' => 1, 'threadId' => $thread['id']));
+        $thread = $this->mockCourseThread(['courseId' => 1, 'userId' => 1, 'type' => 'discussion']);
+        $this->mockCourseThreadPost(['userId' => 1, 'threadId' => $thread['id']]);
 
         $result = $this->getMemberService()->countPostsByCourseIdAndUserId(1, 1);
         $this->assertEquals(1, $result);
@@ -1063,16 +1063,16 @@ class MemberServiceTest extends BaseTestCase
 
     public function testSearchMemberCountGroupByFields()
     {
-        $member = array(
+        $member = [
             'courseId' => 1,
             'userId' => 2,
             'courseSetId' => 1,
             'joinedType' => 'course',
             'role' => 'student',
             'deadline' => time() + 84600,
-        );
+        ];
         $this->getMemberDao()->create($member);
-        $result = $this->getMemberService()->searchMemberCountGroupByFields(array('courseId' => 1), 'courseId', 0, 10);
+        $result = $this->getMemberService()->searchMemberCountGroupByFields(['courseId' => 1], 'courseId', 0, 10);
 
         $this->assertEquals(1, $result[0]['count']);
     }
@@ -1080,22 +1080,25 @@ class MemberServiceTest extends BaseTestCase
     public function testBatchUpdateMemberDeadlinesByDay()
     {
         $user = $this->createNormalUser();
-        $course = $this->mockNewCourse();
-        $member = array(
+        $course = $this->mockNewCourse([
+            'expiryMode' => 'days',
+            'expiryDays' => 1,
+        ]);
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
             'role' => 'student',
             'deadline' => time(),
-        );
+        ];
         $this->getMemberDao()->create($member);
 
-        $this->getMemberService()->batchUpdateMemberDeadlinesByDay($course['id'], array(0 => $user['id']), 1, 'minus');
+        $this->getMemberService()->batchUpdateMemberDeadlinesByDay($course['id'], [0 => $user['id']], 1, 'minus');
         $result = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
         $this->assertEquals($member['deadline'], (int) $result['deadline']);
 
-        $this->getMemberService()->batchUpdateMemberDeadlinesByDay($course['id'], array(0 => $user['id']), 1);
+        $this->getMemberService()->batchUpdateMemberDeadlinesByDay($course['id'], [0 => $user['id']], 1);
         $result = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
         $this->assertEquals($member['deadline'] + 1 * 24 * 60 * 60, $result['deadline']);
     }
@@ -1104,56 +1107,56 @@ class MemberServiceTest extends BaseTestCase
     {
         $user = $this->createNormalUser();
         $course = $this->mockNewCourse();
-        $member = array(
+        $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
             'courseSetId' => 1,
             'joinedType' => 'course',
             'role' => 'student',
             'deadline' => time(),
-        );
+        ];
         $this->getMemberDao()->create($member);
 
-        $this->getMemberService()->batchUpdateMemberDeadlinesByDate($course['id'], array(0 => $user['id']), time() - 86400);
+        $this->getMemberService()->batchUpdateMemberDeadlinesByDate($course['id'], [0 => $user['id']], time() - 86400);
         $result = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
         $this->assertEquals($member['deadline'], (int) $result['deadline']);
 
-        $this->getMemberService()->batchUpdateMemberDeadlinesByDate($course['id'], array(0 => $user['id']), time() + 86400);
+        $this->getMemberService()->batchUpdateMemberDeadlinesByDate($course['id'], [0 => $user['id']], time() + 86400);
         $result = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
         $this->assertEquals($member['deadline'] + 24 * 60 * 60, $result['deadline']);
     }
 
-    protected function mockNewCourseSet($fields = array())
+    protected function mockNewCourseSet($fields = [])
     {
-        $courseSetFields = array(
+        $courseSetFields = [
             'title' => '新课程开始！',
             'type' => 'normal',
-        );
+        ];
         $courseSetFields = array_merge($courseSetFields, $fields);
         $courseSet = $this->getCourseSetService()->createCourseSet($courseSetFields);
 
         return $courseSet;
     }
 
-    protected function mockNewCourse($fields = array())
+    protected function mockNewCourse($fields = [])
     {
-        $course = array(
+        $course = [
             'title' => 'test Course',
             'courseSetId' => 1,
             'learnMode' => 'lockMode',
             'expiryDays' => 0,
             'expiryMode' => 'forever',
             'courseType' => 'default',
-        );
+        ];
 
         $course = array_merge($course, $fields);
 
         return $this->getCourseService()->createCourse($course);
     }
 
-    protected function mockCourseThread($fields = array())
+    protected function mockCourseThread($fields = [])
     {
-        $defaultFields = array(
+        $defaultFields = [
             'courseId' => 1,
             'taskId' => 1,
             'userId' => 1,
@@ -1161,29 +1164,29 @@ class MemberServiceTest extends BaseTestCase
             'title' => 'course thread title',
             'content' => 'course thread content',
             'courseSetId' => 1,
-        );
+        ];
 
         $fields = array_merge($defaultFields, $fields);
 
         return $this->getThreadDao()->create($fields);
     }
 
-    protected function mockCourseThreadPost($fields = array())
+    protected function mockCourseThreadPost($fields = [])
     {
-        $defaultFields = array(
+        $defaultFields = [
             'courseId' => 1,
             'taskId' => 1,
             'threadId' => 1,
             'userId' => 1,
             'content' => 'post content',
-        );
+        ];
 
         $fields = array_merge($defaultFields, $fields);
 
         return $this->getThreadPostDao()->create($fields);
     }
 
-    protected function mockTaskResult($fields = array())
+    protected function mockTaskResult($fields = [])
     {
         $taskReult = array_merge($this->getDefaultMockFields(), $fields);
         $this->getTaskResultDao()->create($taskReult);
@@ -1191,21 +1194,21 @@ class MemberServiceTest extends BaseTestCase
 
     protected function getDefaultMockFields()
     {
-        return array('activityId' => 1, 'courseTaskId' => 2, 'time' => 1, 'watchTime' => 1);
+        return ['activityId' => 1, 'courseTaskId' => 2, 'time' => 1, 'watchTime' => 1];
     }
 
     protected function createNewCourse($courseSetId)
     {
-        $courses = $this->getCourseService()->findCoursesByCourseSetIds(array($courseSetId));
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds([$courseSetId]);
 
         if (empty($courses)) {
-            $courseFields = array(
+            $courseFields = [
                 'title' => '第一个教学计划',
                 'courseSetId' => 1,
                 'learnMode' => 'lockMode',
                 'expiryDays' => 0,
                 'expiryMode' => 'forever',
-            );
+            ];
 
             $course = $this->getCourseService()->createCourse($courseFields);
         } else {
@@ -1219,13 +1222,13 @@ class MemberServiceTest extends BaseTestCase
 
     private function createNormalUser()
     {
-        $user = array();
+        $user = [];
         $user['email'] = 'normal@user.com';
         $user['nickname'] = 'normal';
         $user['password'] = 'user123';
         $user = $this->getUserService()->register($user);
         $user['currentIp'] = '127.0.0.1';
-        $user['roles'] = array('ROLE_USER');
+        $user['roles'] = ['ROLE_USER'];
 
         return $user;
     }
@@ -1233,13 +1236,13 @@ class MemberServiceTest extends BaseTestCase
     private function mockUnLoginUser()
     {
         $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
+        $currentUser->fromArray([
             'id' => 0,
             'nickname' => '游客',
             'currentIp' => '127.0.0.1',
-            'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
-            'org' => array('id' => 1),
-        ));
+            'roles' => ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'],
+            'org' => ['id' => 1],
+        ]);
 
         $this->getServiceKernel()->setBiz($this->getBiz());
         $this->getServiceKernel()->setCurrentUser($currentUser);
