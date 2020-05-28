@@ -49,9 +49,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            'createItemBankIndex1',
-            'createItemBankIndex2',
-            'createItemBankIndex3',
+            'addTableIndex',
             'createItemBankAnswer',
         );
 
@@ -88,39 +86,49 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    public function createItemBankIndex1()
+    public function addTableIndex()
     {
-        $this->logger('info', 'createItemBankIndex1');
-        if (!$this->isIndexExist('biz_answer_question_report', 'identify')) {
-            $this->getConnection()->exec("
-                ALTER TABLE `biz_answer_question_report` ADD INDEX(`identify`);
-            ");
+        if ($this->isJobExist('HandlingTimeConsumingUpdateStructuresJob')) {
+            return 1;
         }
 
-        return 1;
-    }
+        $currentTime = time();
+        $today = strtotime(date('Y-m-d', $currentTime) . '02:00:00');
 
-    public function createItemBankIndex2()
-    {
-        $this->logger('info', 'createItemBankIndex2');
-        if (!$this->isIndexExist('biz_assessment_section_item', 'seq')) {
-            $this->getConnection()->exec("
-                ALTER TABLE `biz_assessment_section_item` ADD INDEX(`seq`);
-            ");
+        if ($currentTime > $today) {
+            $time = strtotime(date('Y-m-d', strtotime('+1 day')) . '02:00:00');
         }
 
-        return 1;
-    }
-
-    public function createItemBankIndex3()
-    {
-        $this->logger('info', 'createItemBankIndex3');
-        if (!$this->isIndexExist('biz_answer_report', 'answer_scene_id')) {
-            $this->getConnection()->exec("
-                ALTER TABLE `biz_answer_report` ADD INDEX(`answer_scene_id`);
-            ");
-        }
-
+        $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
+              `name`,
+              `expression`,
+              `class`,
+              `args`,
+              `priority`,
+              `pre_fire_time`,
+              `next_fire_time`,
+              `misfire_threshold`,
+              `misfire_policy`,
+              `enabled`,
+              `creator_id`,
+              `updated_time`,
+              `created_time`
+        ) VALUES (
+              'HandlingTimeConsumingUpdateStructuresJob',
+              '',
+              'Biz\\\\UpdateDatabaseStructure\\\\\Job\\\\HandlingTimeConsumingUpdateStructuresJob',
+              '',
+              '200',
+              '0',
+              '{$time}',
+              '300',
+              'executing',
+              '1',
+              '0',
+              '{$currentTime}',
+              '{$currentTime}'
+        )");
+        $this->logger('info', 'INSERT增加索引的定时任务HandlingTimeConsumingUpdateStructuresJob');
         return 1;
     }
 
