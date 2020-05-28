@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use AppBundle\Common\TimeMachine;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\ActivityService;
@@ -12,6 +13,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
+use Biz\Course\Util\CourseTitleUtils;
 use Biz\MemberOperation\Service\MemberOperationService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
@@ -23,8 +25,6 @@ use Biz\User\UserException;
 use Codeages\Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
-use AppBundle\Common\TimeMachine;
-use Biz\Course\Util\CourseTitleUtils;
 
 class StudentManageController extends BaseController
 {
@@ -32,10 +32,10 @@ class StudentManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
-        $conditions = array(
+        $conditions = [
             'courseId' => $course['id'],
             'role' => 'student',
-        );
+        ];
 
         $keyword = $request->query->get('keyword', '');
         if (!empty($keyword)) {
@@ -50,20 +50,20 @@ class StudentManageController extends BaseController
 
         $members = $this->getCourseMemberService()->searchMembers(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
         $this->appendLearningProgress($members);
 
-        return $this->render('course-manage/student/index.html.twig', array(
+        return $this->render('course-manage/student/index.html.twig', [
             'courseSet' => $this->getCourseSetService()->getCourseSet($courseSetId),
             'course' => $course,
             'students' => $members,
             'followings' => $this->findCurrentUserFollowings(),
             'users' => $this->getUserService()->findUsersByIds(array_column($members, 'userId')),
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     public function findCurrentUserFollowings()
@@ -74,7 +74,7 @@ class StudentManageController extends BaseController
             return ArrayToolkit::index($followings, 'id');
         }
 
-        return array();
+        return [];
     }
 
     public function studentRecordsAction(Request $request, $courseSetId, $courseId, $type)
@@ -84,11 +84,11 @@ class StudentManageController extends BaseController
 
         return $this->render(
             'course-manage/student/records.html.twig',
-            array(
+            [
                 'courseSet' => $courseSet,
                 'course' => $course,
                 'type' => $type,
-            )
+            ]
         );
     }
 
@@ -114,7 +114,7 @@ class StudentManageController extends BaseController
             return $this->redirect(
                 $this->generateUrl(
                     'course_set_manage_course_students',
-                    array('courseSetId' => $courseSetId, 'courseId' => $courseId)
+                    ['courseSetId' => $courseSetId, 'courseId' => $courseId]
                 )
             );
         }
@@ -122,10 +122,10 @@ class StudentManageController extends BaseController
 
         return $this->render(
             'course-manage/student/add-modal.html.twig',
-            array(
+            [
                 'course' => $course,
                 'courseSetId' => $courseSetId,
-            )
+            ]
         );
     }
 
@@ -135,7 +135,7 @@ class StudentManageController extends BaseController
 
         $this->getCourseMemberService()->removeCourseStudent($courseId, $userId);
 
-        return $this->createJsonResponse(array('success' => true));
+        return $this->createJsonResponse(['success' => true]);
     }
 
     public function removeCourseStudentsAction(Request $request, $courseSetId, $courseId)
@@ -165,18 +165,18 @@ class StudentManageController extends BaseController
             $data = $request->request->all();
             $this->getCourseMemberService()->remarkStudent($course['id'], $user['id'], $data['remark']);
 
-            return $this->createJsonResponse(array('success' => 1));
+            return $this->createJsonResponse(['success' => 1]);
         }
-        $default = $this->getSettingService()->get('default', array());
+        $default = $this->getSettingService()->get('default', []);
 
         return $this->render(
             'course-manage/student/remark-modal.html.twig',
-            array(
+            [
                 'member' => $member,
                 'user' => $user,
                 'course' => $course,
                 'default' => $default,
-            )
+            ]
         );
     }
 
@@ -202,12 +202,12 @@ class StudentManageController extends BaseController
 
         return $this->render(
             'course-manage/student/set-deadline-modal.html.twig',
-            array(
+            [
                 'course' => $course,
                 'users' => $users,
                 'ids' => implode(',', ArrayToolkit::column($users, 'id')),
                 'default' => $this->getSettingService()->get('default', []),
-            )
+            ]
         );
     }
 
@@ -268,10 +268,10 @@ class StudentManageController extends BaseController
             $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
-        return $this->forward('AppBundle:Student:show', array(
+        return $this->forward('AppBundle:Student:show', [
             'request' => $request,
             'userId' => $userId,
-        ));
+        ]);
     }
 
     public function definedShowAction(Request $request, $courseId, $userId)
@@ -287,10 +287,10 @@ class StudentManageController extends BaseController
             return $this->createMessageResponse('error', sprintf('学员#%s不属于教学计划#%s的学员', $userId, $courseId));
         }
 
-        return $this->forward('AppBundle:Student:definedShow', array(
+        return $this->forward('AppBundle:Student:definedShow', [
             'request' => $request,
             'userId' => $userId,
-        ));
+        ]);
     }
 
     public function studyProcessAction($courseSetId, $courseId, $userId)
@@ -315,7 +315,7 @@ class StudentManageController extends BaseController
 
         return $this->render(
             'course-manage/student/process-modal.html.twig',
-            array(
+            [
                 'course' => $course,
                 'student' => $student,
                 'user' => $user,
@@ -326,7 +326,7 @@ class StudentManageController extends BaseController
                 'daysCount' => $daysCount,
                 'learnedTime' => round($learnedTime / 60 / 60, 2, PHP_ROUND_HALF_EVEN),
                 'learnedTimePerDay' => round($learnedTimePerDay / 60 / 60, 2, PHP_ROUND_HALF_EVEN),
-            )
+            ]
         );
     }
 
@@ -371,23 +371,30 @@ class StudentManageController extends BaseController
         foreach ($activitiesWithMeta as $activity) {
             if ('homework' === $activity['mediaType']) {
                 ++$homeworksCount;
-                $activities[] = array(
+                $activities[] = [
                     'id' => $activity['id'],
                     'mediaType' => 'homework',
                     'mediaId' => $activity['ext']['assessmentId'],
                     'name' => $activity['title'],
                     'answerSceneId' => $activity['ext']['answerSceneId'],
-                );
+                ];
             } elseif ('testpaper' === $activity['mediaType']) {
                 ++$testpapersCount;
-                $activities[] = array(
+                $activities[] = [
                     'id' => $activity['id'],
                     'mediaType' => 'testpaper',
                     'mediaId' => $activity['ext']['mediaId'],
                     'name' => $activity['title'],
                     'answerSceneId' => $activity['ext']['answerSceneId'],
-                );
+                ];
             }
+        }
+
+        if (empty($activities)) {
+            return [
+                'finishedHomeworksCount' => 0,
+                'finishedTestpapersCount' => 0,
+            ];
         }
 
         $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($activities, 'mediaId'));
@@ -470,7 +477,7 @@ class StudentManageController extends BaseController
             return true;
         }
 
-        $levels = array('excellent', 'good', 'passed', 'unpassed', 'none');
+        $levels = ['excellent', 'good', 'passed', 'unpassed', 'none'];
         $levels = array_values($levels);
         $sourceIndex = array_search($source['passedStatus'], $levels);
         $targetIndex = array_search($target['passedStatus'], $levels);
