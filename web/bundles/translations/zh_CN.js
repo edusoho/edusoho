@@ -465,6 +465,7 @@ t.add("classroom.manage.expiry_mode_date_error_hint", "\u8bf7\u8f93\u5165\u622a\
 t.add("classroom.manage.coin_price_hint", "\u76f8\u5f53\u4e8e%coinPrice%%coinName%", "js", "zh_CN");
 t.add("classroom.live_room.entry_error_hint", "\u8fdb\u5165\u76f4\u64ad\u6559\u5ba4\u9519\u8bef\uff0c\u8bf7\u8054\u7cfb\u7ba1\u7406\u5458\uff0c<a href=\"javascript:document.location.reload()\">\u91cd\u8bd5<\/a>\u6216<a href=\"javascript:window.close();\">\u5173\u95ed<\/a>", "js", "zh_CN");
 t.add("classroom.live_room.retry_or_close", "<a href=\"javascript:document.location.reload()\">\u91cd\u8bd5<\/a>\u6216<a href=\"javascript:window.close();\">\u5173\u95ed<\/a>", "js", "zh_CN");
+t.add("classroom.manage.admin_delete_course_set_hint", "\u540c\u65f6\u5220\u9664\u6b64\u73ed\u7ea7\u8bfe\u7a0b\uff08\u4e0d\u4f1a\u5f71\u54cd\u6e90\u8bfe\u7a0b\u4ee5\u53ca\u5176\u4ed6\u73ed\u7ea7\uff09", "js", "zh_CN");
 t.add("thread.post.reply", "\u56de\u590d", "js", "zh_CN");
 t.add("thread.post.reply_error_hint", "\u53d1\u8868\u56de\u590d\u5931\u8d25\uff0c\u8bf7\u91cd\u8bd5", "js", "zh_CN");
 t.add("thread.post.put_away", "\u6536\u8d77", "js", "zh_CN");
