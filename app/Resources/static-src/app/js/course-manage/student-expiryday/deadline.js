@@ -10,6 +10,7 @@ export default class Deadline {
     this.initRadioChange();
     this.initSelectChange();
     this.initValidator();
+    this.initUpdateType();
   }
 
   initDatePicker($id) {
@@ -84,6 +85,7 @@ export default class Deadline {
         $deadline.prop('disabled', false);
         $day.val(0);
         $('[name="waveType"]').val('plus');
+        console.log(111);
         this.elementAddRules($deadline, this.getDateRules());
         break;
       default:
