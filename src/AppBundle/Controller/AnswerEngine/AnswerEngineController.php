@@ -190,7 +190,9 @@ class AnswerEngineController extends BaseController
                     $item['material'] = '';
                 }
                 foreach ($item['questions'] as &$question) {
-                    $question['answer'] = '';
+                    foreach ($question['answer'] as &$answer) {
+                        $answer = '';
+                    }
                     $question['analysis'] = '';
                 }
             }
