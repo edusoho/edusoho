@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use AppBundle\Common\TimeMachine;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\ActivityService;
@@ -12,6 +13,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
+use Biz\Course\Util\CourseTitleUtils;
 use Biz\MemberOperation\Service\MemberOperationService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
@@ -23,8 +25,6 @@ use Biz\User\UserException;
 use Codeages\Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
-use AppBundle\Common\TimeMachine;
-use Biz\Course\Util\CourseTitleUtils;
 
 class StudentManageController extends BaseController
 {
@@ -32,10 +32,10 @@ class StudentManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
-        $conditions = array(
+        $conditions = [
             'courseId' => $course['id'],
             'role' => 'student',
-        );
+        ];
 
         $keyword = $request->query->get('keyword', '');
         if (!empty($keyword)) {
@@ -50,20 +50,20 @@ class StudentManageController extends BaseController
 
         $members = $this->getCourseMemberService()->searchMembers(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
         $this->appendLearningProgress($members);
 
-        return $this->render('course-manage/student/index.html.twig', array(
+        return $this->render('course-manage/student/index.html.twig', [
             'courseSet' => $this->getCourseSetService()->getCourseSet($courseSetId),
             'course' => $course,
             'students' => $members,
             'followings' => $this->findCurrentUserFollowings(),
             'users' => $this->getUserService()->findUsersByIds(array_column($members, 'userId')),
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     public function findCurrentUserFollowings()
@@ -74,7 +74,7 @@ class StudentManageController extends BaseController
             return ArrayToolkit::index($followings, 'id');
         }
 
-        return array();
+        return [];
     }
 
     public function studentRecordsAction(Request $request, $courseSetId, $courseId, $type)
@@ -84,11 +84,11 @@ class StudentManageController extends BaseController
 
         return $this->render(
             'course-manage/student/records.html.twig',
-            array(
+            [
                 'courseSet' => $courseSet,
                 'course' => $course,
                 'type' => $type,
-            )
+            ]
         );
     }
 
@@ -114,7 +114,7 @@ class StudentManageController extends BaseController
             return $this->redirect(
                 $this->generateUrl(
                     'course_set_manage_course_students',
-                    array('courseSetId' => $courseSetId, 'courseId' => $courseId)
+                    ['courseSetId' => $courseSetId, 'courseId' => $courseId]
                 )
             );
         }
@@ -122,10 +122,10 @@ class StudentManageController extends BaseController
 
         return $this->render(
             'course-manage/student/add-modal.html.twig',
-            array(
+            [
                 'course' => $course,
                 'courseSetId' => $courseSetId,
-            )
+            ]
         );
     }
 
@@ -135,7 +135,7 @@ class StudentManageController extends BaseController
 
         $this->getCourseMemberService()->removeCourseStudent($courseId, $userId);
 
-        return $this->createJsonResponse(array('success' => true));
+        return $this->createJsonResponse(['success' => true]);
     }
 
     public function removeCourseStudentsAction(Request $request, $courseSetId, $courseId)
@@ -165,18 +165,18 @@ class StudentManageController extends BaseController
             $data = $request->request->all();
             $this->getCourseMemberService()->remarkStudent($course['id'], $user['id'], $data['remark']);
 
-            return $this->createJsonResponse(array('success' => 1));
+            return $this->createJsonResponse(['success' => 1]);
         }
-        $default = $this->getSettingService()->get('default', array());
+        $default = $this->getSettingService()->get('default', []);
 
         return $this->render(
             'course-manage/student/remark-modal.html.twig',
-            array(
+            [
                 'member' => $member,
                 'user' => $user,
                 'course' => $course,
                 'default' => $default,
-            )
+            ]
         );
     }
 
@@ -202,12 +202,12 @@ class StudentManageController extends BaseController
 
         return $this->render(
             'course-manage/student/set-deadline-modal.html.twig',
-            array(
+            [
                 'course' => $course,
                 'users' => $users,
                 'ids' => implode(',', ArrayToolkit::column($users, 'id')),
                 'default' => $this->getSettingService()->get('default', []),
-            )
+            ]
         );
     }
 
@@ -268,10 +268,10 @@ class StudentManageController extends BaseController
             $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
-        return $this->forward('AppBundle:Student:show', array(
+        return $this->forward('AppBundle:Student:show', [
             'request' => $request,
             'userId' => $userId,
-        ));
+        ]);
     }
 
     public function definedShowAction(Request $request, $courseId, $userId)
@@ -287,10 +287,10 @@ class StudentManageController extends BaseController
             return $this->createMessageResponse('error', sprintf('学员#%s不属于教学计划#%s的学员', $userId, $courseId));
         }
 
-        return $this->forward('AppBundle:Student:definedShow', array(
+        return $this->forward('AppBundle:Student:definedShow', [
             'request' => $request,
             'userId' => $userId,
-        ));
+        ]);
     }
 
     public function studyProcessAction($courseSetId, $courseId, $userId)
@@ -315,7 +315,7 @@ class StudentManageController extends BaseController
 
         return $this->render(
             'course-manage/student/process-modal.html.twig',
-            array(
+            [
                 'course' => $course,
                 'student' => $student,
                 'user' => $user,
@@ -326,7 +326,7 @@ class StudentManageController extends BaseController
                 'daysCount' => $daysCount,
                 'learnedTime' => round($learnedTime / 60 / 60, 2, PHP_ROUND_HALF_EVEN),
                 'learnedTimePerDay' => round($learnedTimePerDay / 60 / 60, 2, PHP_ROUND_HALF_EVEN),
-            )
+            ]
         );
     }
 
@@ -357,131 +357,112 @@ class StudentManageController extends BaseController
 
     private function createReportCard($course, $user)
     {
-        $reportCard = array();
-
-        //homeworks&testpapers合并处理，定义为：test(type=[homework,testpaper])
-        $activities = array();
-        $allTests = array();
-        $finishedTests = array();
-        $reviewingTests = array();
-        $bestTests = array();
+        $reportCard = [];
+        $activities = [];
         $homeworksCount = 0;
         $testpapersCount = 0;
         $finishedHomeworksCount = 0;
         $finishedTestpapersCount = 0;
 
         $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
-
-        if (empty($tasks)) {
-            goto result;
-        }
         $activitiyIds = ArrayToolkit::column($tasks, 'activityId');
         $activitiesWithMeta = $this->getActivityService()->findActivities($activitiyIds, true);
 
         foreach ($activitiesWithMeta as $activity) {
             if ('homework' === $activity['mediaType']) {
                 ++$homeworksCount;
-                $activities[] = array(
+                $activities[] = [
                     'id' => $activity['id'],
-                    'mediaId' => $activity['mediaId'],
+                    'mediaType' => 'homework',
+                    'mediaId' => $activity['ext']['assessmentId'],
                     'name' => $activity['title'],
-                );
+                    'answerSceneId' => $activity['ext']['answerSceneId'],
+                ];
             } elseif ('testpaper' === $activity['mediaType']) {
                 ++$testpapersCount;
-                $activities[] = array(
+                $activities[] = [
                     'id' => $activity['id'],
+                    'mediaType' => 'testpaper',
                     'mediaId' => $activity['ext']['mediaId'],
                     'name' => $activity['title'],
-                );
+                    'answerSceneId' => $activity['ext']['answerSceneId'],
+                ];
             }
         }
 
-        $finishedTargets = array();
-        $reviewingTargets = array();
-        if (!empty($activities)) {
-            $testIds = ArrayToolkit::column($activities, 'mediaId');
-            $allTests = $this->getTestpaperService()->searchTestpapers(
-                array(
-                    'ids' => $testIds,
-                ),
-                array('createdTime' => 'ASC'),
-                0,
-                PHP_INT_MAX
-            );
-
-            $finishedTargets = $this->getTestpaperService()->searchTestpaperResults(
-                array(
-                    'courseId' => $course['id'],
-                    'userId' => $user['id'],
-                    'status' => 'finished',
-                    'types' => array('homework', 'testpaper'),
-                ),
-                array('lessonId' => 'ASC', 'beginTime' => 'ASC'),
-                0,
-                PHP_INT_MAX
-            );
-
-            $reviewingTargets = $this->getTestpaperService()->searchTestpaperResults(
-                array(
-                    'courseId' => $course['id'],
-                    'userId' => $user['id'],
-                    'status' => 'reviewing',
-                    'types' => array('homework', 'testpaper'),
-                ),
-                array('lessonId' => 'ASC', 'beginTime' => 'ASC'),
-                0,
-                PHP_INT_MAX
-            );
+        if (empty($activities)) {
+            return [
+                'finishedHomeworksCount' => 0,
+                'finishedTestpapersCount' => 0,
+            ];
         }
 
-        if (!empty($finishedTargets)) {
-            $currentActivityId = 0;
-            foreach ($finishedTargets as $target) {
-                if (0 == $currentActivityId || $currentActivityId != $target['lessonId']) {
-                    $currentActivityId = $target['lessonId'];
-                }
-                if ('homework' === $target['type']) {
-                    ++$finishedHomeworksCount;
-                } else {
+        $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($activities, 'mediaId'));
+        $activities = ArrayToolkit::index($activities, 'answerSceneId');
+
+        $answerRecords = $this->getAnswerRecordService()->search(
+            ['user_id' => $user['id'], 'answer_scene_ids' => ArrayToolkit::column($activities, 'answerSceneId')],
+            [],
+            0,
+            PHP_INT_MAX
+        );
+        $answerReports = ArrayToolkit::index(
+            $this->getAnswerReportService()->findByIds(ArrayToolkit::column($answerRecords, 'answer_report_id')),
+            'id'
+        );
+        foreach ($answerRecords as &$answerRecord) {
+            if (empty($answerReports[$answerRecord['answer_report_id']])) {
+                $answerRecord['score'] = 0;
+                $answerRecord['grade'] = 'none';
+                $answerRecord['comment'] = '';
+            } else {
+                $answerRecord['score'] = $answerReports[$answerRecord['answer_report_id']]['score'];
+                $answerRecord['grade'] = $answerReports[$answerRecord['answer_report_id']]['grade'];
+                $answerRecord['comment'] = $answerReports[$answerRecord['answer_report_id']]['comment'];
+            }
+        }
+        $answerRecords = ArrayToolkit::group($answerRecords, 'answer_scene_id');
+
+        foreach ($answerRecords as $answerSceneId => &$answerSceneRecords) {
+            $answerSceneRecords = ArrayToolkit::group($answerSceneRecords, 'status');
+            !isset($answerSceneRecords['finished']) && $answerSceneRecords['finished'] = [];
+            !isset($answerSceneRecords['paused']) && $answerSceneRecords['paused'] = [];
+            !isset($answerSceneRecords['doing']) && $answerSceneRecords['doing'] = [];
+            !isset($answerSceneRecords['reviewing']) && $answerSceneRecords['reviewing'] = [];
+            if (empty($answerSceneRecords['finished']) && empty($answerSceneRecords['reviewing'])) {
+                continue;
+            }
+            if (!empty($answerSceneRecords['finished']) || !empty($answerSceneRecords['reviewing'])) {
+                if ('testpaper' == $activities[$answerSceneId]['mediaType']) {
                     ++$finishedTestpapersCount;
+                    $sortRecords = ArrayToolkit::sortPerArrayValue($answerSceneRecords['finished'], 'score', false);
+                    $answerSceneRecords['bestRecord'] = empty($sortRecords[0]) ? [] : $sortRecords[0];
+                } else {
+                    ++$finishedHomeworksCount;
+                    $bestRecord = [];
+                    $homeworkGroupGrade = ArrayToolkit::group($answerSceneRecords['finished'], 'grade');
+                    if (!empty($homeworkGroupGrade['excellent'])) {
+                        $bestRecord = $homeworkGroupGrade['excellent'][0];
+                    } elseif (!empty($homeworkGroupGrade['good'])) {
+                        $bestRecord = $homeworkGroupGrade['good'][0];
+                    } elseif (!empty($homeworkGroupGrade['passed'])) {
+                        $bestRecord = $homeworkGroupGrade['passed'][0];
+                    } elseif (!empty($homeworkGroupGrade['unpassed'])) {
+                        $bestRecord = $homeworkGroupGrade['unpassed'][0];
+                    } elseif (!empty($homeworkGroupGrade['none'])) {
+                        $bestRecord = $homeworkGroupGrade['none'][0];
+                    } else {
+                        $bestRecord = [];
+                    }
+                    $answerSceneRecords['bestRecord'] = $bestRecord;
                 }
-
-                if (empty($bestTests[$currentActivityId])) {
-                    $bestTests[$currentActivityId] = array();
-                }
-                if ($this->gradeBetterThan($target, $bestTests[$currentActivityId])) {
-                    $bestTests[$currentActivityId] = $target;
-                }
-
-                if (empty($finishedTests[$currentActivityId])) {
-                    $finishedTests[$currentActivityId] = array();
-                }
-                $finishedTests[$currentActivityId][] = $target;
             }
+
+            $activities[$answerSceneId]['data'] = $answerSceneRecords;
         }
 
-        if (!empty($reviewingTargets)) {
-            $currentActivityId = 0;
-            foreach ($reviewingTargets as $target) {
-                if (0 == $currentActivityId || $currentActivityId != $target['lessonId']) {
-                    $currentActivityId = $target['lessonId'];
-                }
-                if (empty($reviewingTests[$currentActivityId])) {
-                    $reviewingTests[$currentActivityId] = array();
-                }
-                $reviewingTests[$currentActivityId][] = $target;
-            }
-        }
-
-        goto result;
-
-        result:
         $reportCard['activities'] = $activities;
-        $reportCard['allTests'] = ArrayToolkit::index($allTests, 'id');
-        $reportCard['finishedTests'] = $finishedTests;
-        $reportCard['reviewingTests'] = $reviewingTests;
-        $reportCard['bestTests'] = $bestTests;
-
+        $reportCard['assessments'] = $assessments;
         $reportCard['homeworksCount'] = $homeworksCount;
         $reportCard['testpapersCount'] = $testpapersCount;
         $reportCard['finishedHomeworksCount'] = $finishedHomeworksCount;
@@ -496,7 +477,7 @@ class StudentManageController extends BaseController
             return true;
         }
 
-        $levels = array('excellent', 'good', 'passed', 'unpassed', 'none');
+        $levels = ['excellent', 'good', 'passed', 'unpassed', 'none'];
         $levels = array_values($levels);
         $sourceIndex = array_search($source['passedStatus'], $levels);
         $targetIndex = array_search($target['passedStatus'], $levels);
@@ -621,6 +602,21 @@ class StudentManageController extends BaseController
     protected function getMemberOperationService()
     {
         return $this->createService('MemberOperation:MemberOperationService');
+    }
+
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
+    }
+
+    protected function getAnswerReportService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerReportService');
+    }
+
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 
     protected function getServiceKernel()

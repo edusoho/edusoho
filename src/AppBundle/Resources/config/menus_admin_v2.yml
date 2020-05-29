@@ -1360,7 +1360,7 @@ admin_v2:
                         # 云监考
                         admin_v2_cloud_facein:
                           name: admin_v2.cloud.face_inspection
-                          visible: (cloudStatus() and setting('cloud_facein.enabled', 0) == 1)
+                          visible: (cloudStatus() and cloudFaceStatus())
                           children:
                             admin_v2_edu_cloud_facein_overview:
                               name: admin_v2.cloud.face_inspection_result

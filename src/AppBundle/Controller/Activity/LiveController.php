@@ -161,13 +161,13 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         if ('live' !== $activity['mediaType']) {
             return $this->createJsonResponse(['success' => true, 'status' => 'not_live']);
         }
-
         if ($this->validTaskLearnStat($request, $activity['id'])) {
+           
             //当前业务逻辑：看过即视为完成
             $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
             $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
             if (empty($taskResult)) {
-                $this->getTaskService()->startTask($task['id']);
+                $taskResult = $this->getTaskService()->startTask($task['id']);
             }
             $eventName = $request->query->get('eventName');
             $data = $request->query->get('data');

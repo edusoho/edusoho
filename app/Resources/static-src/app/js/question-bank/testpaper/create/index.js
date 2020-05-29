@@ -46,6 +46,7 @@ class TestpaperForm {
 
     this.questionsCount = 0;
     this.questions = [];
+    this.sections = [];
     let stats = this._calTestpaperStats();
 
     let html = '';

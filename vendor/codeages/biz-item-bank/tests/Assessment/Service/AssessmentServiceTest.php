@@ -401,13 +401,17 @@ class AssessmentServiceTest extends IntegrationTestCase
                         'question_scores' => [
                             ['question_id' => 1, 'score' => 2],
                             ['question_id' => 2, 'score' => 2],
-                        ]
+                        ],
+                        'score_rule' => [
+                            ['seq' => 1],
+                            ['seq' => 2],
+                        ],
                     ],
                 ],
             ]
         ]);
 
-        $assessmentQuestions = $this->getAssessmentService()->findAssessmentQuestions($assessment['id']);
+        $assessmentQuestions = $this->getAssessmentService()->findAssessmentQuestions(1);
 
         $this->assertEquals(1, $assessmentQuestions['1']['question_id']);
         $this->assertEquals(2, $assessmentQuestions['1']['score']);

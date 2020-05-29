@@ -6,18 +6,18 @@ use Biz\Activity\Dao\TextActivityDao;
 
 class Text extends Activity
 {
-    public function sync($activity, $config = array())
+    public function sync($activity, $config = [])
     {
         $newTextFields = $this->getTextActivityFields($activity, $config);
 
         return $this->getTextActivityDao()->create($newTextFields);
     }
 
-    public function updateToLastedVersion($activity, $config = array())
+    public function updateToLastedVersion($activity, $config = [])
     {
         $newTextFields = $this->getTextActivityFields($activity, $config);
 
-        $existText = $this->getTextActivityDao()->search(array('syncId' => $newTextFields['syncId']), array(), 0, PHP_INT_MAX);
+        $existText = $this->getTextActivityDao()->search(['syncId' => $newTextFields['syncId']], [], 0, PHP_INT_MAX);
         if (!empty($existText)) {
             unset($existText['createdUserId']);
 
@@ -32,12 +32,12 @@ class Text extends Activity
         $user = $this->getCurrentUser();
         $text = $activity[$activity['mediaType'].'Activity'];
 
-        return array(
+        return [
             'syncId' => $text['id'],
             'finishType' => $text['finishType'],
             'finishDetail' => $text['finishDetail'],
             'createdUserId' => $user['id'],
-        );
+        ];
     }
 
     /**

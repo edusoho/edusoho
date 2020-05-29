@@ -9,69 +9,64 @@
       <span class="include">  {{ 'student.report_card.homework'|trans }}:{{ finishedHomeworksCount }}/{{ homeworksCount }}&nbsp;&nbsp;&nbsp;{{ 'student.report_card.testpaper'|trans}}:{{ finishedTestpapersCount }}
         /{{ testpapersCount }}</span>
     </div>
-    {% for activity in activities if allTests[activity['mediaId']]|default(null) %}
-    {% set test = allTests[activity['mediaId']]|default(null) %}
-    {% set bestTest = bestTests[activity.id]|default('') %}
-    {% set finishedResults = finishedTests[activity.id]|default('') %}
-    {% set reviewingResults = reviewingTests[activity.id]|default('') %}
-    {% set typeName = test.type == 'homework' ? 'student.report_card.homework'|trans : 'student.report_card.testpaper'|trans %}
-    {% set _index = 0 %}
-    {% if finishedResults %}
+    {% for activity in activities if activity.data|default(null) %}
+      {% set assessment = assessments[activity.mediaId] %}
+      {% set typeName = activity.mediaType == 'homework' ? 'student.report_card.homework'|trans : 'student.report_card.testpaper'|trans %}
+    {% if activity.data.finished %}
     <div class="report-card-main">
       <div class="card-main-title open"><i class="es-icon es-icon-exam mrs"></i>
         {{ typeName }}：{{ activity.name }}
         <span class="score hidden-xs">
-          {% if test.type == 'homework' %}
-            <span>{{ dict_text('passedStatus', bestTest.passedStatus) }}</span>
+          {% if activity.mediaType == 'homework' %}
+            <span>{{ dict_text('passedStatus', activity.data.bestRecord.grade) }}</span>
           {% else %}
-            <span>{{ bestTest.score|default(0) }}</span>
-            {{ 'site.data.score'|trans }} / {{ test.score|default(0) }}{{ 'site.data.score'|trans }}
+            <span>{{ activity.data.bestRecord.score|default(0) }}</span>
+            {{ 'site.data.score'|trans }} / {{ assessment.total_score|default(0) }}{{ 'site.data.score'|trans }}
           {% endif %}
         </span>
       </div>
       <ul class="score-list">
-        {% for result in finishedResults %}
-          {% set _index = loop.index %}
+        {% for record in activity.data.finished %}
           <li>
             <span class="name">
               {{ 'student.report_card.loop_index'|trans({'%loopIndex%':loop.index, '%typeName%':typeName}) }}
             </span>
             <span class="date">
-              {{ result.beginTime|date('Y/m/d') }}
+              {{ record.begin_time|date('Y/m/d') }}
             </span>
             <span class="score">
-              {% if test.type == 'homework' %}
-                {{ dict_text('passedStatus', result.passedStatus) }}
+              {% if activity.mediaType == 'homework' %}
+                {{ dict_text('passedStatus', record.grade) }}
               {% else %}
-                {{ result.score }}
+                {{ record.score }}
               {% endif %}
             </span>
             <span class="reviews hidden-xs pull-right" data-toggle="tooltip" data-placement="top"
-              title="{% if result.teacherSay|default('') %}{{ result.teacherSay }}{% else %}{{ 'student.report_card.teacherSay.empty'|trans }}{% endif %}">{{ 'student.report_card.teacherSay'|trans }}</span>
+              title="{% if record.comment|default('') %}{{ record.comment }}{% else %}{{ 'student.report_card.teacherSay.empty'|trans }}{% endif %}">{{ 'student.report_card.teacherSay'|trans }}</span>
           </li>
         {% endfor %}
-        {% if reviewingResults %}
-          {% for result in reviewingResults %}
+        {% if activity.data.reviewing %}
+          {% for result in activity.data.reviewing %}
             <li>
               <span class="name">{{ 'student.report_card.loop_index'|trans({'%loopIndex%':loop.index, '%typeName%':typeName}) }}</span>
-              <span class="date">{{ result.beginTime|date('Y/m/d') }}</span>
+              <span class="date">{{ result.begin_time|date('Y/m/d') }}</span>
               <span class="score">{{ 'student.report_card.review'|trans }}</span>
             </li>
           {% endfor %}
         {% endif %}
       </ul>
     </div>
-  {% elseif reviewingResults %}
+  {% elseif activity.data.reviewing %}
     <div class="report-card-main">
       <div class="card-main-title open"><i class="es-icon es-icon-exam mrs"></i>
         {{ typeName }}：{{ activity.name }}
         <span class="score hidden-xs">{{ 'student.report_card.review'|trans }}</span>
       </div>
       <ul class="score-list">
-        {% for result in reviewingResults %}
+        {% for record in activity.data.reviewing %}
           <li>
             <span class="name">{{ 'student.report_card.loop_index'|trans({'%loopIndex%':loop.index, '%typeName%':typeName}) }}</span>
-            <span class="date">{{ result.beginTime|date('Y/m/d') }}</span>
+            <span class="date">{{ record.begin_time|date('Y/m/d') }}</span>
             <span class="score">{{ 'student.report_card.review'|trans }}</span>
           </li>
         {% endfor %}
