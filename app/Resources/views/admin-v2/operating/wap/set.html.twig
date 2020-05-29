@@ -10,51 +10,112 @@
 
   <div class="h5-find-body">
     <ul class="nav nav-tabs setting-nav-tab js-nav-tab">
-      <li class="active">
-        <a href="#find-page" data-toggle="tab">
-          {{ 'admin.wap_setting.find'|trans|raw }}
-        </a>
-      </li>
-      <li><a href="#site-page" data-toggle="tab">{{ 'admin.wap_setting.site'|trans|raw }}</a></li>
+      <li class="active"><a href="#find-page" data-toggle="tab">微网校</a></li>
+      <li ><a href="#theme-page" data-toggle="tab">装修主题</a></li>
+      <li ><a href="#site-page" data-toggle="tab">微网校设置</a></li>
     </ul>
     <div class="tab-content h5-tab-content">
 
       {# 发现页设置 #}
       <div class="tab-pane fade in active" id="find-page">
         {% if 2 != wapSetting.version %}
-          <div class="h5-text-content">
-            <div class="title">
-              <span class="h5-color-primary">{{ 'admin.wap_setting.find'|trans|raw }}</span><span class="text-gray-medium">{{ 'admin.wap_setting.online'|trans|raw }}</span>
-            </div>
-            <ul class="feature-info">{{ 'admin.wap_setting.function'|trans|raw }}</ul>
-            <a class="btn-h5-open js-site-set" href="#site-page" data-toggle="tab">{{ 'admin.wap_setting.open'|trans|raw }}</a>
+        <div class="row">
+          <div class="col-md-4 find-page__left">
+              <img class="find-page__left--img" src="{{ asset('static-dist/app/img/admin/h5/new_default_all.jpg') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}" />
           </div>
-          <img class="find-bg-plate" src="{{ asset('static-dist/app/img/admin/h5/find_plate@2x.png') }}" alt="">
-        {% else %}
+          <div class="col-md-7 find-page__right">
+            <p class="find-page__right--text">
+                微网校是通过浏览器打开应用，无需下载。网校可以链接发给学员，或在推送的短信中加入链接，学员点击链接后，即可立即进入微网校内进行学习、购买课程、课程分享等。微网校比较适用于通过营销活动促进学员分享、拉新、促活等目的。
+            </p>
+            <a class="btn-h5-open js-site-set" href="#theme-page" data-toggle="tab">{{ 'admin.wap_setting.open'|trans|raw }}</a>
+          </div>
+        </div>
+         {% else %}
           <iframe src="/h5/admin/index.html" frameborder="0" style="width: 100%;height: 700px;border: none;"></iframe>
         {% endif %}
       </div>
-
-      {# 站点页设置 #}
+       {# 站点页设置 #}
       <div class="tab-pane fade" id="site-page">
-        <form class="form-horizontal" method="post" id="wap-setting-form" novalidate>
-          <div class="site-img-content clearfix">
-            <div class="clearfix site-module-container js-checked-radio">
-              <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/new_default_img@2x.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}">
-              {{radios('version', {'2':'admin.wap_setting.new'|trans},wapSetting.version)}}
-            </div>
-            <div class="clearfix site-module-container js-checked-radio">
-              <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/old_default_img@2x.png') }}" alt="{{ 'admin.wap_setting.old'|trans|raw }}">
-              {{radios('version', {'1':'admin.wap_setting.old'|trans},wapSetting.version)}}
-            </div>
-            <div class="clearfix site-module-container js-checked-radio">
-              <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/no_default_img@2x.png') }}" alt="{{ 'admin.wap_setting.off'|trans|raw }}">
-              {{radios('version', {'0':'admin.wap_setting.off'|trans},wapSetting.version)}}
-            </div>
+          <div class="help-block-container">
+              <h4 class="mbl">首次开启微网校，请修改微信支付配置</h4>
+              <p>1、首次开启微网校，需要修改微信配置，否则用户无法在微网校中支付购课。</p>
+              <p>2、旧版微网校改用新版微网校的客户，需修改微信配置。</p>
+              <a href="http://www.qiqiuyu.com/faq/793/detail" target="_blank">【查看教程】</a>
           </div>
-          <div class="help-block-container">{{ 'admin.wap_setting.hint'|trans|raw }}</div>
-          <div class="text-center">
-            <button type="submit" class="btn btn-h5-save js-site-save">{{'form.btn.save'|trans}}</button>
+      </div>
+
+      {# 装修主题 #}
+      <div class="tab-pane fade" id="theme-page">
+        <form class="form-horizontal" method="post" id="wap-setting-form" novalidate>
+          <div class="row">
+            <div class="col-md-6 ">
+              <div class="row">
+                <div class="col-md-7   theme-left"> 
+                  <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/new_default_img.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}" />
+                </div>
+                <div class="col-md-5 theme-right">
+                  <div class="theme-right__title"><b>主题名称：</b>新版微网校</div>
+                  <div >
+                    <p class="mbm"><b>主题亮点：</b><p>
+                    <div class="theme-right__content">
+                      <p>(1) 通过设计用户路径，推荐免费课程和低价课程，可达到促进用户快速试看和低客单价转化的目的。</p>
+                      <p>(2) 装修组件更齐全，例如搜索、图文导航、课程班级推荐等。</p>
+                      <p>(3) 针对微网校设计，用户体验更佳。</p>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-h5-save js-site-save">立即应用</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-10 col-xs-12">
+              <div class="row">
+                <div class="col-md-7  theme-left"> 
+                    <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/old_default_img@2x.png') }}" alt="{{ 'admin.wap_setting.old'|trans|raw }}"/>
+                </div>
+                <div class="col-md-5  theme-right">
+                  <div class="theme-right__title"><b>主题名称：</b>简墨</div>
+                  <div >
+                    <p class="mbm"><b>主题亮点 ：</b><p>
+                    <div class="theme-right__content">
+                      <p>PC端使用主题装修后，微网校端可直接应用。</p>
+                    </div>
+                  </div>
+                  <div >
+                    <p class="mbm"><b>主题劣势：</b><p>
+                    <div class="theme-right__content">
+                      <p>(1) 不可对该主题进行二次装修编辑。</p>
+                      <p>(2) PC端主题自适应应用微网校时，会遇到适配问题，导致体验性能不佳。</p>
+                      <p>(3) 商品体验和购买过程中，在微网校中使用了PC端的交互，导致用户体验不佳。</p>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-h5-save js-site-save">立即应用</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="row">
+                  <div class="col-md-7 theme-left"> 
+                      <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/old_default_img@2x.png') }}" alt="{{ 'admin.wap_setting.old'|trans|raw }}"/>
+                  </div>
+                  <div class="col-md-5  theme-right">
+                    <div class="theme-right__title"><b>主题名称：</b>简墨</div>
+                    <div >
+                      <p class="mbm"><b>主题亮点 ：</b><p>
+                      <div class="theme-right__content">
+                        <p>PC端使用主题装修后，微网校端可直接应用。</p>
+                      </div>
+                    </div>
+                    <div >
+                      <p class="mbm"><b>主题劣势：</b><p>
+                      <div class="theme-right__content">
+                        <p>(1) 不可对该主题进行二次装修编辑。</p>
+                        <p>(2) PC端主题自适应应用微网校时，会遇到适配问题，导致体验性能不佳。</p>
+                        <p>(3) 商品体验和购买过程中，在微网校中使用了PC端的交互，导致用户体验不佳。</p>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-h5-save js-site-save">立即应用</button>
+                  </div>
+              </div>
           </div>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         </form>

@@ -10,12 +10,9 @@
 
   <div class="h5-find-body">
     <ul class="nav nav-tabs setting-nav-tab js-nav-tab">
-      <li class="active">
-        <a href="#find-page" data-toggle="tab">
-          {{ 'admin.wap_setting.find'|trans|raw }}
-        </a>
-      </li>
-      <li><a href="#site-page" data-toggle="tab">{{ 'admin.wap_setting.site'|trans|raw }}</a></li>
+      <li class="active"><a href="#find-page" data-toggle="tab">微网校</a></li>
+      <li ><a href="#theme-page" data-toggle="tab">装修主题</a></li>
+      <li ><a href="#site-page" data-toggle="tab">微网校设置</a></li>
     </ul>
     <div class="tab-content h5-tab-content">
 
@@ -33,6 +30,10 @@
         {% else %}
           <iframe src="/h5/admin/index.html" frameborder="0" style="width: 100%;height: 700px;border: none;"></iframe>
         {% endif %}
+      </div>
+
+      {# 装修主题 #}
+      <div class="tab-pane fade" id="theme-page">
       </div>
 
       {# 站点页设置 #}
