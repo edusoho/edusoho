@@ -26,19 +26,19 @@ class TestpaperSync extends AbstractEntitySync
      * - $source = originalCourse
      * - $config : newCourse
      * */
-    protected function syncEntity($source, $config = array())
+    protected function syncEntity($source, $config = [])
     {
         return null;
     }
 
-    protected function updateEntityToLastedVersion($source, $config = array())
+    protected function updateEntityToLastedVersion($source, $config = [])
     {
         return null;
     }
 
     protected function getFields()
     {
-        return array(
+        return [
             'name',
             'description',
             'limitedTime',
@@ -50,7 +50,7 @@ class TestpaperSync extends AbstractEntitySync
             'metas',
             'type',
             'bankId',
-        );
+        ];
     }
 
     protected function baseSyncTestpaper($testpaper)
@@ -75,9 +75,9 @@ class TestpaperSync extends AbstractEntitySync
 
         $copyQuestions = $this->getQuestionService()->findQuestionsBySyncIds($questionSyncIds);
 
-        $newItems = array();
+        $newItems = [];
         foreach ($items as $item) {
-            $question = empty($copyQuestions[$item['questionId']]) ? array() : $copyQuestions[$item['questionId']];
+            $question = empty($copyQuestions[$item['questionId']]) ? [] : $copyQuestions[$item['questionId']];
 
             if (empty($question)) {
                 continue;
@@ -86,7 +86,7 @@ class TestpaperSync extends AbstractEntitySync
             $newTestpaper = $newTestpapers[$item['testId']];
             $parentId = empty($item['parentId']) ? 0 : $copyQuestions[$item['parentId']]['id'];
 
-            $newItem = array(
+            $newItem = [
                 'testId' => $newTestpaper['id'],
                 'seq' => $item['seq'],
                 'questionId' => $question['id'],
@@ -97,7 +97,7 @@ class TestpaperSync extends AbstractEntitySync
                 'copyId' => 0,
                 'type' => $item['type'],
                 'syncId' => $item['id'],
-            );
+            ];
 
             $newItems[] = $newItem;
         }
@@ -109,7 +109,7 @@ class TestpaperSync extends AbstractEntitySync
     {
         $newTestpaper = current($newTestpapers);
         $items = $newTestpaper['items'];
-        $existItems = $this->getItemDao()->search(array('testId' => $newTestpaper['id']), array(), 0, PHP_INT_MAX);
+        $existItems = $this->getItemDao()->search(['testId' => $newTestpaper['id']], [], 0, PHP_INT_MAX);
         if (empty($items)) {
             foreach ($existItems as $existItem) {
                 $this->getItemDao()->delete($existItem['id']);
@@ -122,9 +122,9 @@ class TestpaperSync extends AbstractEntitySync
 
         $existItems = ArrayToolkit::index($existItems, 'syncId');
 
-        $newItems = array();
+        $newItems = [];
         foreach ($items as $item) {
-            $question = empty($copyQuestions[$item['questionId']]) ? array() : $copyQuestions[$item['questionId']];
+            $question = empty($copyQuestions[$item['questionId']]) ? [] : $copyQuestions[$item['questionId']];
 
             if (empty($question)) {
                 continue;
@@ -133,7 +133,7 @@ class TestpaperSync extends AbstractEntitySync
             $newTestpaper = $newTestpapers[$item['testId']];
             $parentId = empty($item['parentId']) ? 0 : $copyQuestions[$item['parentId']]['id'];
 
-            $newItem = array(
+            $newItem = [
                 'testId' => $newTestpaper['id'],
                 'seq' => $item['seq'],
                 'questionId' => $question['id'],
@@ -144,7 +144,7 @@ class TestpaperSync extends AbstractEntitySync
                 'copyId' => 0,
                 'type' => $item['type'],
                 'syncId' => $item['id'],
-            );
+            ];
             if (!empty($existItems[$newItem['syncId']])) {
                 $this->getItemDao()->update($existItems[$newItem['syncId']]['id'], $newItem);
                 continue;
@@ -157,7 +157,7 @@ class TestpaperSync extends AbstractEntitySync
 
         $needDeleteItemSyncIds = array_values(array_diff(array_keys($existItems), ArrayToolkit::column($items, 'id')));
         if (!empty($existItems) && !empty($needDeleteItemSyncIds)) {
-            $needDeleteItems = $this->getItemDao()->search(array('testId' => $newTestpaper['id'], 'syncIds' => $needDeleteItemSyncIds), array(), 0, PHP_INT_MAX);
+            $needDeleteItems = $this->getItemDao()->search(['testId' => $newTestpaper['id'], 'syncIds' => $needDeleteItemSyncIds], [], 0, PHP_INT_MAX);
             foreach ($needDeleteItems as $needDeleteItem) {
                 $this->getItemDao()->delete($needDeleteItem['id']);
             }

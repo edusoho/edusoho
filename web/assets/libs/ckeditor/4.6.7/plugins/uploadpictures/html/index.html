@@ -15,3 +15,16 @@
         <div class="start-upload-btn"><i class="glyphicon glyphicon-upload"></i>开始上传</div>
     </div>
 </div>
+
+<script>
+  function receiveMessage(event) {
+    var eventName = event.data.eventName;
+    if (eventName === 'dialogDefinition.Load') {
+      var outerHtml = document.getElementsByTagName('div')[0].outerHTML;
+      event.source.postMessage(outerHtml, event.origin);
+    }
+  }
+
+  window.addEventListener("message", receiveMessage, false);
+</script>
+

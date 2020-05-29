@@ -50,7 +50,7 @@ class AnswerEngineController extends BaseController
         $assessmentResponse = (object) [];
 
         return $this->render('answer-engine/answer.html.twig', [
-            'assessment' => $assessment,
+            'assessment' => $this->filterAssessmentAnswerAndAnalysis($assessment),
             'assessmentResponse' => $assessmentResponse,
             'answerScene' => $answerScene,
             'answerRecord' => $answerRecord,
@@ -71,7 +71,7 @@ class AnswerEngineController extends BaseController
         $assessmentResponse = $this->getAnswerService()->getAssessmentResponseByAnswerRecordId($answerRecordId);
 
         return $this->render('answer-engine/answer.html.twig', [
-            'assessment' => $assessment,
+            'assessment' => $this->filterAssessmentAnswerAndAnalysis($assessment),
             'assessmentResponse' => $assessmentResponse,
             'answerScene' => $answerScene,
             'answerRecord' => $answerRecord,
@@ -180,6 +180,25 @@ class AnswerEngineController extends BaseController
         $answerRecord['username'] = $user['nickname'];
 
         return $answerRecord;
+    }
+
+    protected function filterAssessmentAnswerAndAnalysis($assessment)
+    {
+        foreach ($assessment['sections'] as &$section) {
+            foreach ($section['items'] as &$item) {
+                if ('material' != $item['type']) {
+                    $item['material'] = '';
+                }
+                foreach ($item['questions'] as &$question) {
+                    foreach ($question['answer'] as &$answer) {
+                        $answer = '';
+                    }
+                    $question['analysis'] = '';
+                }
+            }
+        }
+
+        return $assessment;
     }
 
     /**

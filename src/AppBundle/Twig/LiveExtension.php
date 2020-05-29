@@ -85,7 +85,8 @@ class LiveExtension extends \Twig_Extension
     protected function _getLiveReplays($activity)
     {
         if (LiveReplayService::REPLAY_GENERATE_STATUS === $activity['ext']['replayStatus']) {
-            $copyId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
+            $originActivity = $this->getOriginActivity($activity);
+            $copyId = empty($originActivity['copyId']) ? $originActivity['id'] : $originActivity['copyId'];
 
             $replays = $this->getLiveReplayService()->findReplayByLessonId($copyId);
 
@@ -109,6 +110,16 @@ class LiveExtension extends \Twig_Extension
         }
 
         return $replays;
+    }
+
+    protected function getOriginActivity($activity)
+    {
+        if (empty($activity['copyId'])) {
+            return $activity;
+        }
+        $copyActivity = $this->getActivityService()->getActivity($activity['copyId']);
+        
+        return $this->getOriginActivity($copyActivity);
     }
 
     public function canRecord($liveId)

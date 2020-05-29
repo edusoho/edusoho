@@ -135,7 +135,7 @@ class HomeworkController extends BaseController
         }
 
         $homeworkActivity = $this->getHomeworkActivityService()->getByAnswerSceneId($answerRecord['answer_scene_id']);
-        $activity = $this->getActivityService()->getByMediaIdAndMediaType($homeworkActivity['id'], 'testpaper');
+        $activity = $this->getActivityService()->getByMediaIdAndMediaType($homeworkActivity['id'], 'homework');
 
         $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
         $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
@@ -243,5 +243,10 @@ class HomeworkController extends BaseController
     protected function getAnswerReportService()
     {
         return $this->createService('ItemBank:Answer:AnswerReportService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 }

@@ -41,7 +41,7 @@
                     <span class="color-success">{{ dict_text('passedStatus', answerReport.grade) }}</span>
                     {% endif %}
                   </div>
-                  <div class="color-gray item-bank-result__comment">{{ 'testpaper.result.comment'|trans }}：{{ answerReport.comment|default('-')|sub_text(59) }}</div>
+                  <div class="color-gray item-bank-result__comment">{{ 'testpaper.result.comment'|trans }}：{{ answerReport.comment|default('-') }}</div>
                 </div>
               </div>
             </div>

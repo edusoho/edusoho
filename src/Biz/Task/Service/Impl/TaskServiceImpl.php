@@ -562,6 +562,8 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResult = $this->getTaskResultService()->createTaskResult($taskResult);
 
         $this->dispatchEvent('course.task.start', new Event($taskResult));
+
+        return $taskResult;
     }
 
     public function doTask($taskId, $time = TaskService::LEARN_TIME_STEP)

@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "080b6be9efba3e723f4568635b32cef4",
+    "content-hash": "06a80836670cb12e9bdbfe8bd64c55c2",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -463,12 +463,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-item-bank.git",
-                "reference": "9dbe4f43460b8b0b87e8c240de66daa46b51310e"
+                "reference": "95be9827454d964b7d2866516166d57597464ac7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/9dbe4f43460b8b0b87e8c240de66daa46b51310e",
-                "reference": "9dbe4f43460b8b0b87e8c240de66daa46b51310e",
+                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/95be9827454d964b7d2866516166d57597464ac7",
+                "reference": "95be9827454d964b7d2866516166d57597464ac7",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -501,7 +501,7 @@
                 "MIT"
             ],
             "description": "item bank with biz-framework",
-            "time": "2020-05-14T10:50:26+00:00"
+            "time": "2020-05-28T10:14:25+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
@@ -8550,5 +8550,6 @@
         "php": ">=5.5.9",
         "ext-json": "*"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }
