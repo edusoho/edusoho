@@ -18,7 +18,6 @@ use Biz\Classroom\Service\LearningDataAnalysisService;
 use Biz\Content\Service\FileService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
-use Biz\Order\Service\OrderService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -31,6 +30,7 @@ use Biz\User\Service\UserFieldService;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Codeages\Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
