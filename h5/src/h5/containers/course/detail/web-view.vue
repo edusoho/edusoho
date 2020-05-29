@@ -7,7 +7,7 @@
     <div v-show="media === 'text'" ref="text" class="media-text" />
 
     <!-- 学习上报按钮 -->
-    <template>
+    <template v-if="joinStatus">
       <div
         v-if="isFinish"
         class="web-view--btn web-view--activebtn"
@@ -91,7 +91,9 @@ export default {
       setNavbarTitle: types.SET_NAVBAR_TITLE
     }),
     async initData() {
-      this.initReport();
+      if(this.joinStatus){
+        this.initReport();
+      }
       this.enableFinish = !!parseInt(this.details.enableFinish);
       const player = await Api.getMedia(this.getParams()).catch(err => {
         Toast(err.message);
@@ -177,7 +179,7 @@ export default {
         });
         player.on("pagechanged", e => {
           if (e.pageNum === e.total) {
-            if (this.finishCondition.type === "end") {
+            if (this.finishCondition && this.finishCondition.type === "end") {
               this.reprtData("finish");
             }
           }
