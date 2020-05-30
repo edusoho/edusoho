@@ -4,21 +4,21 @@ namespace Biz\File\Event;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\LiveReplayService;
 use Biz\File\Service\UploadFileService;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Biz\Course\Service\LiveReplayService;
+use Topxia\Service\Common\ServiceKernel;
 
 class UploadFileEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
-        return array(
-            'question.create' => array('onQuestionCreate', 2),
-            'question.update' => array('onQuestionUpdate', 2),
-            'question.delete' => array('onQuestionDelete', 2),
+        return [
+            'question.create' => ['onQuestionCreate', 2],
+            'question.update' => ['onQuestionUpdate', 2],
+            'question.delete' => ['onQuestionDelete', 2],
 
             'course.delete' => 'onCourseDelete',
 
@@ -37,10 +37,8 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
             'thread.delete' => 'onThreadDelete',
             'thread.post.delete' => 'onThreadPostDelete',
 
-            'delete.use.file' => 'onDeleteUseFiles',
-
             'live.activity.update' => 'onLiveActivityUpdate',
-        );
+        ];
     }
 
     public function onQuestionCreate(Event $event)
@@ -94,7 +92,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
 
     protected function deleteAttachment($targetType, $targetId)
     {
-        $conditions = array('targetId' => $targetId, 'type' => 'attachment');
+        $conditions = ['targetId' => $targetId, 'type' => 'attachment'];
         if (false === strpos($targetType, ',')) {
             $conditions['targetType'] = $targetType;
         } else {
@@ -168,7 +166,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
         $context = $event->getSubject();
         $lesson = $context['lesson'];
 
-        if (in_array($lesson['type'], array('video', 'audio', 'ppt', 'document', 'flash'))) {
+        if (in_array($lesson['type'], ['video', 'audio', 'ppt', 'document', 'flash'])) {
             $this->getUploadFileService()->waveUsedCount($lesson['mediaId'], 1);
         }
     }
@@ -224,7 +222,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
         }
 
         if ($file['targetId'] == $material['courseId']) {
-            $this->getUploadFileService()->update($material['fileId'], array('targetId' => 0));
+            $this->getUploadFileService()->update($material['fileId'], ['targetId' => 0]);
         }
     }
 
@@ -255,42 +253,6 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
                     $this->getUploadFileService()->waveUsedCount($fileId, -1);
                 }
             }
-        }
-    }
-
-    public function onDeleteUseFiles(Event $event)
-    {
-        $attachment = $event->getSubject();
-
-        if ('attachment' != $attachment['type'] || !in_array($attachment['targetType'], array('question.stem', 'question.analysis'))) {
-            return;
-        }
-
-        $question = $this->getQuestionService()->get($attachment['targetId']);
-
-        if ($question['copyId'] > 0) {
-            return;
-        }
-
-        $copyQuestions = $this->getQuestionService()->findQuestionsByCopyId($question['id']);
-
-        if (empty($copyQuestions)) {
-            return;
-        }
-
-        $conditions = array(
-            'type' => 'attachment',
-            'targetType' => $attachment['targetType'],
-            'targetIds' => ArrayToolkit::column($copyQuestions, 'id'),
-        );
-        $attachments = $this->getUploadFileService()->searchUseFiles($conditions, false);
-
-        if (empty($attachments)) {
-            return;
-        }
-
-        foreach ($attachments as $value) {
-            $this->getUploadFileService()->deleteUseFile($value['id']);
         }
     }
 
