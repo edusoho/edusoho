@@ -16,10 +16,10 @@ class UploadFileEventSubscriberTest extends BaseTestCase
 {
     public function testGetSubscribedEvents()
     {
-        $expected = array(
-            'question.create' => array('onQuestionCreate', 2),
-            'question.update' => array('onQuestionUpdate', 2),
-            'question.delete' => array('onQuestionDelete', 2),
+        $expected = [
+            'question.create' => ['onQuestionCreate', 2],
+            'question.update' => ['onQuestionUpdate', 2],
+            'question.delete' => ['onQuestionDelete', 2],
 
             'course.delete' => 'onCourseDelete',
 
@@ -38,10 +38,8 @@ class UploadFileEventSubscriberTest extends BaseTestCase
             'thread.delete' => 'onThreadDelete',
             'thread.post.delete' => 'onThreadPostDelete',
 
-            'delete.use.file' => 'onDeleteUseFiles',
-
             'live.activity.update' => 'onLiveActivityUpdate',
-        );
+        ];
 
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
         $result = $eventSubscriber::getSubscribedEvents();
@@ -52,28 +50,28 @@ class UploadFileEventSubscriberTest extends BaseTestCase
     public function testOnQuestionCreateNull()
     {
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
-        $event = new Event(array('id' => 1));
+        $event = new Event(['id' => 1]);
         $result = $eventSubscriber->onQuestionCreate($event);
         $this->assertNull($result);
 
-        $event->setArgument('argument', array());
+        $event->setArgument('argument', []);
         $result = $eventSubscriber->onQuestionCreate($event);
         $this->assertNull($result);
 
-        $argument = array(
-            'attachment' => array(
-                'stem' => array(
-                    'fileIds' => array(1),
+        $argument = [
+            'attachment' => [
+                'stem' => [
+                    'fileIds' => [1],
                     'targetType' => 'question',
                     'type' => 'course',
-                ),
-                'analysis' => array(
-                    'fileIds' => array(2),
+                ],
+                'analysis' => [
+                    'fileIds' => [2],
                     'targetType' => 'question',
                     'type' => 'question',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $event->setArgument('argument', $argument);
         $eventSubscriber->onQuestionCreate($event);
 
@@ -87,30 +85,30 @@ class UploadFileEventSubscriberTest extends BaseTestCase
     public function testOnQuestionUpdate()
     {
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
-        $event = new Event(array('id' => 1));
+        $event = new Event(['id' => 1]);
         $result = $eventSubscriber->onQuestionUpdate($event);
         $this->assertNull($result);
 
-        $event->setArgument('argument', array());
+        $event->setArgument('argument', []);
         $result = $eventSubscriber->onQuestionUpdate($event);
         $this->assertNull($result);
 
-        $argument = array(
-            'fields' => array(
-                'attachment' => array(
-                    'stem' => array(
-                        'fileIds' => array(1),
+        $argument = [
+            'fields' => [
+                'attachment' => [
+                    'stem' => [
+                        'fileIds' => [1],
                         'targetType' => 'question',
                         'type' => 'course',
-                    ),
-                    'analysis' => array(
-                        'fileIds' => array(2),
+                    ],
+                    'analysis' => [
+                        'fileIds' => [2],
                         'targetType' => 'question',
                         'type' => 'question',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
         $event->setArgument('argument', $argument);
         $eventSubscriber->onQuestionUpdate($event);
 
@@ -125,7 +123,7 @@ class UploadFileEventSubscriberTest extends BaseTestCase
     {
         $file1 = $this->createUsedFile(1, 'question_test', 1, 'course_test');
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
-        $event = new Event(array('id' => 1));
+        $event = new Event(['id' => 1]);
         $eventSubscriber->onQuestionDelete($event);
 
         $usedFile = $this->getFileUsedDao()->get($file1['id']);
@@ -140,7 +138,7 @@ class UploadFileEventSubscriberTest extends BaseTestCase
 
     public function testOnArticleDelete()
     {
-        $event = new Event(array('id' => 1));
+        $event = new Event(['id' => 1]);
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
 
         $file = $this->createUsedFile(2, 'article', 1, 'attachment');
@@ -152,7 +150,7 @@ class UploadFileEventSubscriberTest extends BaseTestCase
 
     public function testOnGroupThreadPostDelete()
     {
-        $event = new Event(array('id' => 1));
+        $event = new Event(['id' => 1]);
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
 
         $file = $this->createUsedFile(2, 'group.thread.post', 1, 'attachment');
@@ -164,7 +162,7 @@ class UploadFileEventSubscriberTest extends BaseTestCase
 
     public function testOnGroupThreadDelete()
     {
-        $event = new Event(array('id' => 1));
+        $event = new Event(['id' => 1]);
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
 
         $file = $this->createUsedFile(2, 'group.thread', 1, 'attachment');
@@ -176,7 +174,7 @@ class UploadFileEventSubscriberTest extends BaseTestCase
 
     public function testOnCourseThreadDelete()
     {
-        $event = new Event(array('id' => 1));
+        $event = new Event(['id' => 1]);
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
 
         $file = $this->createUsedFile(2, 'course.thread', 1, 'attachment');
@@ -188,7 +186,7 @@ class UploadFileEventSubscriberTest extends BaseTestCase
 
     public function testOnCourseThreadPostDelete()
     {
-        $event = new Event(array('id' => 1));
+        $event = new Event(['id' => 1]);
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
 
         $file = $this->createUsedFile(2, 'course.thread.post', 1, 'attachment');
@@ -200,10 +198,10 @@ class UploadFileEventSubscriberTest extends BaseTestCase
 
     public function testOnThreadDelete()
     {
-        $event = new Event(array(
+        $event = new Event([
             'targetType' => 'test',
             'id' => 1,
-        ));
+        ]);
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
 
         $file = $this->createUsedFile(2, 'test.thread', 1, 'attachment');
@@ -215,10 +213,10 @@ class UploadFileEventSubscriberTest extends BaseTestCase
 
     public function testOnThreadPostDelete()
     {
-        $event = new Event(array(
+        $event = new Event([
             'targetType' => 'test',
             'id' => 1,
-        ));
+        ]);
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
 
         $file = $this->createUsedFile(2, 'test.thread.post', 1, 'attachment');
@@ -231,12 +229,12 @@ class UploadFileEventSubscriberTest extends BaseTestCase
     public function testOnCourseLessonCreate()
     {
         $file = $this->createUploadFile(1);
-        $event = new Event(array(
-            'lesson' => array(
+        $event = new Event([
+            'lesson' => [
                 'mediaId' => $file['id'],
                 'type' => 'audio',
-            ),
-        ));
+            ],
+        ]);
 
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
         $eventSubscriber->onCourseLessonCreate($event);
@@ -249,9 +247,9 @@ class UploadFileEventSubscriberTest extends BaseTestCase
     public function testOnCourseLessonDelete()
     {
         $file = $this->createUploadFile(1);
-        $event = new Event(array(
+        $event = new Event([
             'mediaId' => $file['id'],
-        ));
+        ]);
 
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
         $eventSubscriber->onCourseLessonDelete($event);
@@ -264,9 +262,9 @@ class UploadFileEventSubscriberTest extends BaseTestCase
     public function testOnMaterialCreate()
     {
         $file = $this->createUploadFile(1);
-        $event = new Event(array(
+        $event = new Event([
             'fileId' => $file['id'],
-        ));
+        ]);
 
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
         $eventSubscriber->onMaterialCreate($event);
@@ -279,9 +277,9 @@ class UploadFileEventSubscriberTest extends BaseTestCase
 
     public function testOnMaterialDeleteWithFileNull()
     {
-        $event = new Event(array(
+        $event = new Event([
             'fileId' => 1,
-        ));
+        ]);
 
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
         $result = $eventSubscriber->onMaterialDelete($event);
@@ -290,27 +288,27 @@ class UploadFileEventSubscriberTest extends BaseTestCase
 
     public function testOnMaterialDeleteWithoutManageRole()
     {
-        $this->mockBiz('File:UploadFileService', array(
-            array(
+        $this->mockBiz('File:UploadFileService', [
+            [
                 'functionName' => 'canManageFile',
                 'returnValue' => false,
-                'withParams' => array(1),
-            ),
-            array(
+                'withParams' => [1],
+            ],
+            [
                 'functionName' => 'getFile',
-                'returnValue' => array('id' => 1),
-                'withParams' => array(1),
-            ),
-            array(
+                'returnValue' => ['id' => 1],
+                'withParams' => [1],
+            ],
+            [
                 'functionName' => 'waveUsedCount',
                 'returnValue' => true,
-                'withParams' => array(1, -1),
-            ),
-        ));
+                'withParams' => [1, -1],
+            ],
+        ]);
 
-        $event = new Event(array(
+        $event = new Event([
             'fileId' => 1,
-        ));
+        ]);
         $eventSubscriber = new UploadFileEventSubscriber($this->getServiceKernel()->getBiz());
         $result = $eventSubscriber->onMaterialDelete($event);
         $this->assertNull($result);
@@ -319,10 +317,10 @@ class UploadFileEventSubscriberTest extends BaseTestCase
     public function testOnMaterialDelete()
     {
         $file = $this->createUploadFile(1);
-        $event = new Event(array(
+        $event = new Event([
             'fileId' => $file['id'],
             'courseId' => $file['targetId'],
-        ));
+        ]);
 
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
         $eventSubscriber->onMaterialDelete($event);
@@ -336,12 +334,12 @@ class UploadFileEventSubscriberTest extends BaseTestCase
     public function testOnMaterialUpdateWithSourceMaterialLessonId()
     {
         $file = $this->createUploadFile(1);
-        $event = new Event(array(
+        $event = new Event([
             'lessonId' => 0,
             'fileId' => $file['id'],
-        ));
-        $event->setArgument('argument', array());
-        $event->setArgument('sourceMaterial', array('lessonId' => 1));
+        ]);
+        $event->setArgument('argument', []);
+        $event->setArgument('sourceMaterial', ['lessonId' => 1]);
 
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
         $eventSubscriber->onMaterialUpdate($event);
@@ -355,12 +353,12 @@ class UploadFileEventSubscriberTest extends BaseTestCase
     {
         $file1 = $this->createUploadFile(1);
         $file2 = $this->createUploadFile(2);
-        $event = new Event(array(
+        $event = new Event([
             'lessonId' => 1,
             'fileId' => $file1['id'],
-        ));
-        $event->setArgument('argument', array('fileId' => $file2['id']));
-        $event->setArgument('sourceMaterial', array('lessonId' => 0));
+        ]);
+        $event->setArgument('argument', ['fileId' => $file2['id']]);
+        $event->setArgument('sourceMaterial', ['lessonId' => 0]);
 
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
         $eventSubscriber->onMaterialUpdate($event);
@@ -377,12 +375,12 @@ class UploadFileEventSubscriberTest extends BaseTestCase
     public function testOnMaterialWithMaterialLessonId()
     {
         $file = $this->createUploadFile(1);
-        $event = new Event(array(
+        $event = new Event([
             'lessonId' => 1,
             'fileId' => $file['id'],
-        ));
-        $event->setArgument('argument', array('fileId' => $file['id']));
-        $event->setArgument('sourceMaterial', array('lessonId' => 0));
+        ]);
+        $event->setArgument('argument', ['fileId' => $file['id']]);
+        $event->setArgument('sourceMaterial', ['lessonId' => 0]);
 
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
         $eventSubscriber->onMaterialUpdate($event);
@@ -395,12 +393,12 @@ class UploadFileEventSubscriberTest extends BaseTestCase
     public function testOnOpenCourseLessonDelete()
     {
         $file = $this->createUploadFile(1);
-        $event = new Event(array(
-            'lesson' => array(
+        $event = new Event([
+            'lesson' => [
                 'mediaId' => $file['id'],
                 'type' => 'audio',
-            ),
-        ));
+            ],
+        ]);
 
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
         $eventSubscriber->onOpenCourseLessonDelete($event);
@@ -416,16 +414,16 @@ class UploadFileEventSubscriberTest extends BaseTestCase
         $file = $this->createUploadFile(1);
 
         $course = $this->getOpenCourseService()->createCourse(
-            array(
+            [
                 'title' => 'open course title',
                 'type' => 'open',
                 'about' => 'open course about',
                 'categoryId' => 0,
-            )
+            ]
         );
 
         $this->getOpenCourseService()->createLesson(
-            array(
+            [
                 'courseId' => $course['id'],
                 'title' => $course['title'].'课时1',
                 'type' => 'video',
@@ -433,13 +431,13 @@ class UploadFileEventSubscriberTest extends BaseTestCase
                 'mediaName' => '',
                 'mediaUri' => '',
                 'mediaSource' => 'self',
-            )
+            ]
         );
-        $this->getOpenCourseService()->updateCourse($course['id'], array('status' => 'published'));
+        $this->getOpenCourseService()->updateCourse($course['id'], ['status' => 'published']);
 
-        $event = new Event(array(
+        $event = new Event([
             'id' => $course['id'],
-        ));
+        ]);
 
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
         $eventSubscriber->onOpenCourseDelete($event);
@@ -450,163 +448,15 @@ class UploadFileEventSubscriberTest extends BaseTestCase
         $this->assertEquals(2, $result['usedCount']);
     }
 
-    public function testOnDeleteUseFilesWithWrongParams()
-    {
-        $event = new Event(array(
-            'type' => 'test.type',
-        ));
-        $eventSubscriber = new UploadFileEventSubscriber($this->biz);
-        $result = $eventSubscriber->onDeleteUseFiles($event);
-
-        $this->assertNull($result);
-
-        $event = new Event(
-            array(
-                'type' => 'attachment',
-                'targetType' => 'testTargetType',
-            )
-        );
-        $eventSubscriber = new UploadFileEventSubscriber($this->biz);
-        $result = $eventSubscriber->onDeleteUseFiles($event);
-
-        $this->assertNull($result);
-    }
-
-    public function testOnDeleteUseFilesWithQuestionCopyId()
-    {
-        $event = new Event(
-            array(
-                'type' => 'attachment',
-                'targetType' => 'question.stem',
-                'targetId' => 1,
-            )
-        );
-        $this->mockBiz('Question:QuestionService', array(
-            array(
-                'functionName' => 'get',
-                'returnValue' => array('copyId' => 1),
-                'withParams' => array(1),
-            ),
-        ));
-        $eventSubscriber = new UploadFileEventSubscriber($this->biz);
-        $result = $eventSubscriber->onDeleteUseFiles($event);
-
-        $this->assertNull($result);
-    }
-
-    public function testOnDeleteUseFilesWithQuestionsEmpty()
-    {
-        $event = new Event(
-            array(
-                'type' => 'attachment',
-                'targetType' => 'question.stem',
-                'targetId' => 1,
-            )
-        );
-        $this->mockBiz('Question:QuestionService', array(
-            array(
-                'functionName' => 'get',
-                'returnValue' => array(
-                    'copyId' => 0,
-                    'id' => 1,
-                ),
-                'withParams' => array(1),
-            ),
-            array(
-                'functionName' => 'findQuestionsByCopyId',
-                'returnValue' => array(),
-                'withParams' => array(1),
-            ),
-        ));
-        $eventSubscriber = new UploadFileEventSubscriber($this->biz);
-        $result = $eventSubscriber->onDeleteUseFiles($event);
-
-        $this->assertNull($result);
-    }
-
-    public function testOnDeleteUseFilesWithAttachmentsEmpty()
-    {
-        $event = new Event(
-            array(
-                'type' => 'attachment',
-                'targetType' => 'question.stem',
-                'targetId' => 1,
-            )
-        );
-        $this->mockBiz('Question:QuestionService', array(
-            array(
-                'functionName' => 'get',
-                'returnValue' => array(
-                    'copyId' => 0,
-                    'id' => 1,
-                ),
-                'withParams' => array(1),
-            ),
-            array(
-                'functionName' => 'findQuestionsByCopyId',
-                'returnValue' => array(
-                    array('id' => 1),
-                ),
-                'withParams' => array(1),
-            ),
-        ));
-        $eventSubscriber = new UploadFileEventSubscriber($this->biz);
-        $result = $eventSubscriber->onDeleteUseFiles($event);
-
-        $this->assertNull($result);
-    }
-
-    public function testOnDeleteUseFiles()
-    {
-        $question = array(
-            'id' => 1,
-            'type' => 'single_choice',
-            'parentId' => 0,
-            'stem' => '111',
-            'answer' => array(1),
-            'choices' => array(1, 2, 3, 4),
-            'target' => 'course-1',
-            'courseSetId' => 1,
-        );
-        $question = $this->getQuestionService()->create($question);
-        $copyQuestion = array(
-            'id' => 2,
-            'type' => 'single_choice',
-            'parentId' => 0,
-            'stem' => '111',
-            'answer' => array(1),
-            'choices' => array(1, 2, 3, 4),
-            'target' => 'course-1',
-            'courseSetId' => 1,
-            'copyId' => $question['id'],
-        );
-        $copyQuestion = $this->getQuestionService()->create($copyQuestion);
-
-        $file = $this->createUsedFile(1, 'question.stem', $copyQuestion['id'], 'attachment');
-        $event = new Event(
-            array(
-                'type' => 'attachment',
-                'targetType' => 'question.stem',
-                'targetId' => $question['id'],
-            )
-        );
-
-        $eventSubscriber = new UploadFileEventSubscriber($this->biz);
-        $eventSubscriber->onDeleteUseFiles($event);
-        $result = $this->getFileUsedDao()->get($file['id']);
-
-        $this->assertEmpty($result);
-    }
-
     public function testOnLiceActivityUpdate()
     {
         $file = $this->createUploadFile(1);
 
         $event = new Event();
-        $event->setArgument('fields', array(
+        $event->setArgument('fields', [
             'mediaId' => $file['id'],
             'replayStatus' => LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS,
-        ));
+        ]);
 
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
         $eventSubscriber->onLiveActivityUpdate($event);
@@ -626,7 +476,7 @@ class UploadFileEventSubscriberTest extends BaseTestCase
 
     private function createUploadFile($id)
     {
-        return $this->getUploadFileDao()->create(array(
+        return $this->getUploadFileDao()->create([
             'id' => $id,
             'globalId' => 0,
             'status' => 'ok',
@@ -650,19 +500,19 @@ class UploadFileEventSubscriberTest extends BaseTestCase
             'fileSize' => 12,
             'createdTime' => time(),
             'updatedTime' => time(),
-        ));
+        ]);
     }
 
     private function createUsedFile($fileId, $targetType, $targetId, $type)
     {
         return $this->getFileUsedDao()->create(
-            array(
+            [
                 'fileId' => $fileId,
                 'targetType' => $targetType,
                 'targetId' => $targetId,
                 'type' => $type,
                 'createdTime' => time(),
-            )
+            ]
         );
     }
 
