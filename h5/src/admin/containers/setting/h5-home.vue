@@ -352,10 +352,10 @@ export default {
         .then(res => {
           //默认排列方式
           Object.keys(res).forEach((element, index) => {
-            res[element] = this.formateAppDisplay(
-              res[element].type, //测试数据，上线删除
-              res[element]
-            );
+            // res[element] = this.formateAppDisplay(
+            //   res[element].type, //测试数据，上线删除
+            //   res[element]
+            // );
             res[element].oldIndex = index; //oldIndex用于组件的key,减少组件重新创建
           });
           this.moduleLength = Object.keys(res).length - 1;
@@ -371,13 +371,13 @@ export default {
         });
     },
     //处理班级课程排列（可删）
-    formateAppDisplay(type, item) {
-      if (
-        (type === "course_list" || type === "classroom_list") && this.portal === "h5") {
-          item.data.displayStyle = "row";
-      }
-      return item;
-    },
+    // formateAppDisplay(type, item) {
+    //   if (
+    //     (type === "course_list" || type === "classroom_list") && this.portal === "h5") {
+    //       item.data.displayStyle = "row";
+    //   }
+    //   return item;
+    // },
     reset() {
       parent.location.reload();
       // 删除草稿配置配置
