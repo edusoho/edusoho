@@ -7,18 +7,19 @@
   </div>
 
   <ul class="list-unstyled">
-    {% if testPaperResults %}
-      {% set testCount = 10 %}
-      {% for testPaperResult in testPaperResults %}
-        {% set testCount = loop.length %}
-        {% set task = tasks[testPaperResult.lessonId]|default(null) %}
+    {% if testpaperData.answerRecords %}
+      {% for answerRecord in testpaperData.answerRecords %}
+        {% set assessment = testpaperData.assessments[answerRecord.assessment_id]|default(null) %}
+        {% set activity = testpaperData.activities[testpaperData.testpeaperActivities[answerRecord['answer_scene_id']]['id']]|default(null) %}
+        {% set task = testpaperData.tasks[activity.id]|default(null) %}
+        {% set course = testpaperData.courses[task.courseId]|default(null) %}
         <li>
           <i class="es-icon es-icon-chevronright"></i>
-          <a target="_blank" href="{{ path('testpaper_result_show',{resultId:testPaperResult.id,action:'result'}) }}"
-            class="color-gray">{{ task.title|default(testPaperResult.paperName) }}</a>
+          <a target="_blank" href="{{ path('testpaper_result_show',{answerRecordId:answerRecord.id,action:'result'}) }}"
+            class="color-gray">{{ task.title|default(assessment.name) }}</a>
         </li>
       {% endfor %}
-      {% if testCount >= 10 %}
+      {% if testpaperData.pageCount >= 2 %}
         <li class="text-center">
           <a class="color-gray" href="{{ path('my_testpaper_list') }}" target="_blank">
             {{ 'site.default.more'|trans }}<i class="es-icon es-icon-angledoubleright"></i>
@@ -36,20 +37,20 @@
   </div>
 
   <ul class="list-unstyled">
-    {% if homeworkResults %}
-      {% set homeworkCount = 10 %}
-      {% for homeworkResult in homeworkResults %}
-        {% set homeworkCount = loop.length %}
-        {% set task = tasks[homeworkResult.lessonId] %}
-        {% set course = courses[homeworkResult.courseId] %}
+    {% if homeworkData.answerRecords %}
+      {% for answerRecord in homeworkData.answerRecords %}
+          {% set assessment = homeworkData.assessments[answerRecord.assessment_id]|default(null) %}
+          {% set activity = homeworkData.activities[homeworkData.homeworkActivities[answerRecord['answer_scene_id']]['id']]|default(null) %}
+          {% set task = homeworkData.tasks[activity.id]|default(null) %}
+          {% set course = homeworkData.courses[task.courseId]|default(null) %}
         <li>
           <i class="es-icon es-icon-chevronright"></i>
-          <a target="_blank" class="color-gray" href="{{ path('homework_result_show', {resultId:homeworkResult.id,action:'result'}) }}">
+          <a target="_blank" class="color-gray" href="{{ path('homework_result_show', {answerRecordId:answerRecord.id,action:'result'}) }}">
             {{ task.title|default('') }}
           </a>
         </li>
       {% endfor %}
-      {% if homeworkCount >= 10 %}
+      {% if homeworkData.pageCount >= 2 %}
         <li class="text-center">
           <a class="color-gray" href="{{ path('my_homework_list') }}" target="_blank">
             {{ 'site.default.more'|trans }}<i class="es-icon es-icon-angledoubleright"></i>
