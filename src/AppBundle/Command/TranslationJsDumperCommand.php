@@ -2,11 +2,11 @@
 
 namespace AppBundle\Command;
 
-use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Yaml\Yaml;
 
 class TranslationJsDumperCommand extends BaseCommand
 {
@@ -40,22 +40,22 @@ class TranslationJsDumperCommand extends BaseCommand
                 continue;
             }
             $template = $this->getContainer()->get('templating');
-            $content = $template->render('BazingaJsTranslationBundle::getTranslations.js.twig', array(
-                'translations' => array($locale => array(
+            $content = $template->render('BazingaJsTranslationBundle::getTranslations.js.twig', [
+                'translations' => [$locale => [
                     'js' => $translation,
-                )),
+                ]],
                 'include_config' => true,
                 'fallback' => $locale,
                 'defaultDomain' => 'js',
-            ));
+            ]);
 
             if (empty($code)) {
-                $filePaths = array('web/bundles/translations/');
+                $filePaths = ['web/static-dist/translations/'];
             } else {
-                $filePaths = array(
+                $filePaths = [
                     'plugins/'.ucfirst($code).'Plugin/Resources/public/js/controller/translations/',
                     'plugins/'.ucfirst($code).'Plugin/Resources/static-src/js/translations/',
-                );
+                ];
             }
             foreach ($filePaths as $filePath) {
                 $file = $filePath.$locale.'.js';
@@ -72,7 +72,7 @@ class TranslationJsDumperCommand extends BaseCommand
 
     private function getTranslations($code)
     {
-        $translations = array();
+        $translations = [];
         $rootDirectory = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
 
         $yaml = new Yaml();
@@ -94,7 +94,7 @@ class TranslationJsDumperCommand extends BaseCommand
             }
 
             if (!isset($translations[$locale])) {
-                $translations[$locale] = array();
+                $translations[$locale] = [];
             }
 
             $fileContent = $yaml->parse(file_get_contents($filename));
@@ -111,6 +111,6 @@ class TranslationJsDumperCommand extends BaseCommand
     {
         list($domain, $locale, $extension) = explode('.', basename($filename), 3);
 
-        return array($domain, $locale, $extension);
+        return [$domain, $locale, $extension];
     }
 }
