@@ -50,7 +50,7 @@ class TranslationJsDumperCommand extends BaseCommand
             ]);
 
             if (empty($code)) {
-                $filePaths = ['web/static-dist/translations/'];
+                $filePaths = ['web/translations/'];
             } else {
                 $filePaths = [
                     'plugins/'.ucfirst($code).'Plugin/Resources/public/js/controller/translations/',
