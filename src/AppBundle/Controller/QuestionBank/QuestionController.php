@@ -123,6 +123,7 @@ class QuestionController extends BaseController
         if (empty($item) || $item['bank_id'] != $questionBank['itemBankId']) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
+        $item = $this->wrapperItem($item);
 
         $goto = $request->query->get(
             'goto',
@@ -142,6 +143,19 @@ class QuestionController extends BaseController
             'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($item['bank_id']),
             'goto' => $goto,
         ]);
+    }
+
+    protected function wrapperItem($item)
+    {
+        foreach ($item['questions'] as &$question) {
+            if ('text' == $question['answer_mode']) {
+                foreach ($question['answer'] as $answer) {
+                    $question['stem'] = preg_replace('/\[\[\]\]/', '[['.$answer.']]', $question['stem'], 1);
+                }
+            }
+        }
+
+        return $item;
     }
 
     public function getQuestionsHtmlAction(Request $request, $id)
