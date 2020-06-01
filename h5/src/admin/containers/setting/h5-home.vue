@@ -379,6 +379,7 @@ export default {
       return item;
     },
     reset() {
+      parent.location.reload();
       // 删除草稿配置配置
       this.deleteDraft({
         portal: this.portal,

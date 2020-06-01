@@ -1,7 +1,7 @@
 module.exports = {
   devtest: {
     url: "http://devtest.edusoho.cn",
-    token: "hkqjuv9gy00gk8ksg440c440swsog84",
+    token: "9ty7o2tqozs4kw4c484k8o8g8oocgss",
   },
   try6: {
     url: "http://try6.edusoho.cn",
