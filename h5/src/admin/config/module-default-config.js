@@ -1,6 +1,5 @@
 const { protocol, pathname, host } = window.location;
 const baseUri = `${protocol}//${host}${pathname.split('/').slice(0, -1).join('/')}/`;
-// 模块初始化数据
 const MODULE_DEFAULT = {
   slideShow: {
     type: 'slide_show',
@@ -189,14 +188,9 @@ const MODULE_DEFAULT = {
       title: '',
       titleShow: 'show'
     }
-  },
-  search: {
-    type: 'search',
-    moduleType: '',
-    data: {}
   }
 };
-// 各端对应的组件
+
 const BASE_MODULE = [
   {
     name: '轮播图',
@@ -260,6 +254,7 @@ const APP_BASE_MODULE = [
   }
 ];
 
+<<<<<<< HEAD
 const H5_BASE_MODULE = [
   {
     name: '轮播图',
@@ -314,6 +309,8 @@ const H5_MARKETING_MODULE = [
 ];
 
 // 内容条件搜索关键字
+=======
+>>>>>>> master
 const VALUE_DEFAULT = {
   classroom_list: {
     key: 'title'
@@ -338,7 +335,6 @@ const VALUE_DEFAULT = {
   }
 };
 
-// 拖动可调整顺序文案
 const TYPE_TEXT_DEFAULT = {
   course_list: {
     text: '课程'
@@ -368,8 +364,6 @@ export {
   BASE_MODULE,
   MARKETING_MODULE,
   APP_BASE_MODULE,
-  H5_BASE_MODULE,
-  H5_MARKETING_MODULE,
   VALUE_DEFAULT,
   TYPE_TEXT_DEFAULT
 };

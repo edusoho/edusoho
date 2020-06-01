@@ -76,6 +76,9 @@ export default {
      *  @param {*} ContinuousReport //是否每间隔一分钟上报
      */
     reprtData(events = "doing",ContinuousReport=false,watchTime=null) {
+      if(this.reportData.courseId===null || this.reportData.taskId===null){
+        return;
+      }
       if (this.isFinish&&!ContinuousReport) {
         return;
       }

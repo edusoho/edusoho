@@ -5,11 +5,10 @@ module.exports = {
   },
   try6: {
     url: "http://try6.edusoho.cn",
-    token: "ec12qo57a6g44owso0skcs484cwc8k0",
+    token: "2ggsc28azq3ookoswkw8sg4ggosocw0",
   },
   gdy: {
-    url: "ttp://gdy.st.edusoho.cn",
-    token:"2wtxkor5huecgk4c00cs404w8o0osow"
+    url: "ttp://gdy.st.edusoho.cn"
   },
   iyamusic: {
     url: "https://www.iyamusic.com",
