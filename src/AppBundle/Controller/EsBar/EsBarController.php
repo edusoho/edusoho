@@ -181,6 +181,7 @@ class EsBarController extends BaseController
         $conditions = [
             'answer_scene_ids' => array_keys($testpeaperActivities),
             'user_id' => $user['id'],
+            'status' => $status,
         ];
 
         $paginator = new Paginator(
