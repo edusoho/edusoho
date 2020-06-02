@@ -10,7 +10,7 @@ class ProductDaoTest extends BaseTestCase
     public function testGetByTargetIdAndType()
     {
         $product1 = $this->createProduct();
-        $product2 = $this->createProduct('type2');
+        $product2 = $this->createProduct(['targetType' => 'type2']);
 
         $result = $this->getProductDao()->getByTargetIdAndType($product1['targetId'], $product1['targetType']);
         $this->assertArrayEquals($product1, $result);
@@ -19,22 +19,24 @@ class ProductDaoTest extends BaseTestCase
     public function testFindByIds()
     {
         $product1 = $this->createProduct();
-        $product2 = $this->createProduct('type2');
-        $product3 = $this->createProduct('type3');
+        $product2 = $this->createProduct(['targetType' => 'type2']);
+        $product3 = $this->createProduct(['targetType' => 'type3']);
 
         $result = $this->getProductDao()->findByIds([$product1['id'], $product2['id'], $product3['id'], 1001]);
 
         $this->assertArrayEquals([$product1, $product2, $product3], $result);
     }
 
-    protected function createProduct($targetType = 'testType', $targetId = 1, $title = 'testTitle', $owner = '')
+    protected function createProduct($product = [])
     {
-        $product = [
-            'targetType' => $targetType,
-            'targetId' => $targetId,
-            'title' => $title,
-            'owner' => empty($owner) ? (int) $this->getCurrentUser()->getId() : $owner,
+        $default = [
+            'targetType' => 'testType',
+            'targetId' => 1,
+            'title' => 'testTitle',
+            'owner' => (int) $this->getCurrentUser()->getId(),
         ];
+
+        $product = array_merge($default, $product);
 
         return $this->getProductDao()->create($product);
     }
