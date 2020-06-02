@@ -39,7 +39,7 @@ class ImUser extends AbstractResource
             }
         }
 
-        return $users;
+        return array_values($users);
     }
 
     /**
