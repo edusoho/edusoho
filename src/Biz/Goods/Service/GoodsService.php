@@ -13,4 +13,6 @@ interface GoodsService
     public function deleteGoods($id);
 
     public function searchGoods($conditions, $orderBys, $start, $limit, $columns = []);
+
+    public function findGoodSpecsByGoodsId($goodsId);
 }

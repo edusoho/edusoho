@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Goods\Dao\GoodsDao;
+use Biz\Goods\Dao\GoodsSpecsDao;
 use Biz\Goods\Service\GoodsService;
 
 class GoodsServiceImpl extends BaseService implements GoodsService
@@ -43,11 +44,24 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         return $this->getGoodsDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
+    public function findGoodSpecsByGoodsId($goodsId)
+    {
+        return $this->getGoodsSpecsDao()->findByGoodsId($goodsId);
+    }
+
     /**
      * @return GoodsDao
      */
     protected function getGoodsDao()
     {
         return $this->createDao('Goods:GoodsDao');
+    }
+
+    /**
+     * @return GoodsSpecsDao
+     */
+    protected function getGoodsSpecsDao()
+    {
+        return $this->createDao('Goods:GoodsSpecsDao');
     }
 }

@@ -5,6 +5,7 @@ namespace Tests\Unit\Goods\Service;
 use Biz\BaseTestCase;
 use Biz\Common\CommonException;
 use Biz\Goods\Dao\GoodsDao;
+use Biz\Goods\Dao\GoodsSpecsDao;
 use Biz\Goods\Service\GoodsService;
 
 class GoodsServiceTest extends BaseTestCase
@@ -140,6 +141,20 @@ class GoodsServiceTest extends BaseTestCase
         $this->assertArrayEquals($expected2, $result2);
     }
 
+    public function testFindGoodSpecsByGoodsId()
+    {
+        $goods = $this->createGoods();
+
+        $goodsSpecs1 = $this->createGoodsSpecs(['goodsId' => $goods['id']]);
+        $goodsSpecs2 = $this->createGoodsSpecs(['goodsId' => $goods['id'] + 1]);
+        $goodsSpecs3 = $this->createGoodsSpecs(['goodsId' => $goods['id'] + 1]);
+        $goodsSpecs4 = $this->createGoodsSpecs(['goodsId' => $goods['id']]);
+
+        $result = $this->getGoodsService()->findGoodSpecsByGoodsId($goods['id']);
+
+        $this->assertArrayEquals([$goodsSpecs1, $goodsSpecs4], $result);
+    }
+
     protected function createGoods($goods = [])
     {
         $default = [
@@ -151,6 +166,21 @@ class GoodsServiceTest extends BaseTestCase
         $goods = array_merge($default, $goods);
 
         return $this->getGoodsDao()->create($goods);
+    }
+
+    protected function createGoodsSpecs($goodsSpecs = [])
+    {
+        $default = [
+            'goodsId' => 1,
+            'title' => 'testTitle',
+            'images' => [],
+            'periodType' => 'test type',
+            'authority' => [],
+        ];
+
+        $goodsSpecs = array_merge($default, $goodsSpecs);
+
+        return $this->getGoodsSpecsDao()->create($goodsSpecs);
     }
 
     /**
@@ -167,5 +197,13 @@ class GoodsServiceTest extends BaseTestCase
     protected function getGoodsService()
     {
         return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return GoodsSpecsDao
+     */
+    protected function getGoodsSpecsDao()
+    {
+        return $this->createDao('Goods:GoodsSpecsDao');
     }
 }
