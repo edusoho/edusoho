@@ -119,7 +119,7 @@ class HomeworkResult extends AbstractResource
             throw HomeworkException::NOTFOUND_RESULT();
         }
 
-        $homework = $this->getAssessmentService()->showAssessment($homeworkId);
+        $homework = $this->getAssessmentService()->showAssessment($homeworkRecord['assessment_id']);
         if (empty($homework)) {
             throw HomeworkException::NOTFOUND_HOMEWORK();
         }
