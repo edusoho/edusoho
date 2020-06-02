@@ -85,9 +85,9 @@ class ProductServiceTest extends BaseTestCase
     public function testSearchProducts_withDifferentConditions()
     {
         $product1 = $this->createProduct();
-        $product2 = $this->createProduct('testType2');
-        $product3 = $this->createProduct('testType', 2);
-        $product4 = $this->createProduct('testType', 1, 'testTitle2');
+        $product2 = $this->createProduct(['targetType' => 'testType2']);
+        $product3 = $this->createProduct(['targetType' => 'testType', 'targetId' => 2]);
+        $product4 = $this->createProduct(['targetType' => 'testType', 'targetId' => 1, 'title' => 'testTitle2']);
 
         $conditions1 = ['titleLike' => 'test'];
 
@@ -109,9 +109,9 @@ class ProductServiceTest extends BaseTestCase
     public function testSearchProducts_withDifferentOrderBysAndLimits()
     {
         $product1 = $this->createProduct();
-        $product2 = $this->createProduct('testType2');
-        $product3 = $this->createProduct('testType', 2);
-        $product4 = $this->createProduct('testType', 1, 'testTitle2');
+        $product2 = $this->createProduct(['targetType' => 'testType2']);
+        $product3 = $this->createProduct(['targetType' => 'testType', 'targetId' => 2]);
+        $product4 = $this->createProduct(['targetType' => 'testType', 'targetId' => 1, 'title' => 'testTitle2']);
 
         $result1 = $this->getProductService()->searchProducts(['targetType' => 'testType'], ['id' => 'ASC'], 0, 10);
         $this->assertArrayEquals([$product1, $product3, $product4], $result1);
@@ -126,9 +126,9 @@ class ProductServiceTest extends BaseTestCase
     public function testSearchProducts_withDifferentColumns()
     {
         $product1 = $this->createProduct();
-        $product2 = $this->createProduct('testType2');
-        $product3 = $this->createProduct('testType', 2);
-        $product4 = $this->createProduct('testType', 1, 'testTitle2');
+        $product2 = $this->createProduct(['targetType' => 'testType2']);
+        $product3 = $this->createProduct(['targetType' => 'testType', 'targetId' => 2]);
+        $product4 = $this->createProduct(['targetType' => 'testType', 'targetId' => 1, 'title' => 'testTitle2']);
 
         $expected1 = [
             ['targetType' => $product1['targetType'], 'targetId' => $product1['targetId']],
@@ -152,7 +152,7 @@ class ProductServiceTest extends BaseTestCase
     public function testGetProductByTargetIdAndType()
     {
         $product1 = $this->createProduct();
-        $product2 = $this->createProduct('testType2');
+        $product2 = $this->createProduct(['targetType' => 'testType2']);
 
         $result = $this->getProductService()->getProductByTargetIdAndType($product1['targetId'], $product1['targetType']);
         $this->assertArrayEquals($product1, $result);
@@ -161,9 +161,9 @@ class ProductServiceTest extends BaseTestCase
     public function testFindProductsByIds()
     {
         $product1 = $this->createProduct();
-        $product2 = $this->createProduct('testType2');
-        $product3 = $this->createProduct('testType', 2);
-        $product4 = $this->createProduct('testType', 1, 'testTitle2');
+        $product2 = $this->createProduct(['targetType' => 'testType2']);
+        $product3 = $this->createProduct(['targetType' => 'testType', 'targetId' => 2]);
+        $product4 = $this->createProduct(['targetType' => 'testType', 'targetId' => 1, 'title' => 'testTitle2']);
 
         $result = $this->getProductService()->findProductsByIds([$product1['id'], $product2['id'], $product3['id']]);
 
@@ -177,14 +177,16 @@ class ProductServiceTest extends BaseTestCase
         );
     }
 
-    protected function createProduct($targetType = 'testType', $targetId = 1, $title = 'testTitle', $owner = '')
+    protected function createProduct($product = [])
     {
-        $product = [
-            'targetType' => $targetType,
-            'targetId' => $targetId,
-            'title' => $title,
-            'owner' => empty($owner) ? (int) $this->getCurrentUser()->getId() : $owner,
+        $default = [
+            'targetType' => 'testType',
+            'targetId' => 1,
+            'title' => 'testTitle',
+            'owner' => (int) $this->getCurrentUser()->getId(),
         ];
+
+        $product = array_merge($default, $product);
 
         return $this->getProductDao()->create($product);
     }
