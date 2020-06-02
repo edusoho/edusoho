@@ -19,6 +19,13 @@
 
 
 {% block body %}
+  <style>
+    html, body {
+      height: 100 %;
+      overflow: auto;
+      -webkit - overflow - scrolling: touch;
+    }  
+  </style>
   {% include 'answer-engine/common.html.twig' %}
   {% include 'attachment-upload/upload-data.html.twig' %}
   <input type="hidden" name="assessment" value='{{ assessment|json_encode }}'>
