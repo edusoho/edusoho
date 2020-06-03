@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class CategoryException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 21;
+    const EXCEPTION_MODULE = 21;
 
     const NOTFOUND_CATEGORY = 4042101;
 
@@ -24,7 +24,7 @@ class CategoryException extends AbstractException
 
     const NOTFOUND_PARENT_CATEGORY = 4042108;
 
-    public $messages = array(
+    public $messages = [
         4042101 => 'exception.category.not_found',
         4042102 => 'exception.category.not_found_group',
         5002103 => 'exception.category.empty_name',
@@ -33,5 +33,5 @@ class CategoryException extends AbstractException
         5002106 => 'exception.category.code_digit_invalid',
         5002107 => 'exception.category.code_unavailable',
         4042108 => 'exception.category.not_found_parent_category',
-    );
+    ];
 }

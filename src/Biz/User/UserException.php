@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class UserException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 01;
+    const EXCEPTION_MODULE = 01;
 
     const UN_LOGIN = 4040101;
 
@@ -96,7 +96,7 @@ class UserException extends AbstractException
 
     const WEIXIN_INVALID = 5000144;
 
-    public $messages = array(
+    public $messages = [
         4040101 => 'exception.user.unlogin',
         4030102 => 'exception.user.login_limit',
         4030103 => 'exception.user.register_error',
@@ -141,5 +141,5 @@ class UserException extends AbstractException
         4030142 => 'exception.user.lock_self_denied',
         5000143 => 'exception.user.datefield_invalid',
         5000144 => 'exception.user.weixin_invalid',
-    );
+    ];
 }

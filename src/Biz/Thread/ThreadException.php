@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class ThreadException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 05;
+    const EXCEPTION_MODULE = 05;
 
     const FORBIDDEN_TIME_LIMIT = 4030501;
 
@@ -32,7 +32,7 @@ class ThreadException extends AbstractException
 
     const ACCESS_DENIED = 4030512;
 
-    public $messages = array(
+    public $messages = [
         4030501 => 'exception.thread.frequent',
         4040502 => 'exception.thread.not_found',
         4040503 => 'exception.thread.not_found_post',
@@ -45,5 +45,5 @@ class ThreadException extends AbstractException
         5000510 => 'exception.thread.type_invalid',
         5000511 => 'exception.thread.not_found_member',
         4030512 => 'exception.thread.access_denied',
-    );
+    ];
 }
