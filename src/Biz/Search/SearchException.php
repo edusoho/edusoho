@@ -6,11 +6,11 @@ use AppBundle\Common\Exception\AbstractException;
 
 class SearchException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 47;
+    const EXCEPTION_MODULE = 47;
 
     const SEARCH_FAILED = 5004701;
 
-    public $messages = array(
+    public $messages = [
         5004701 => 'exception.search.failed',
-    );
+    ];
 }

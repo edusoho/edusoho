@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class TestpaperException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 22;
+    const EXCEPTION_MODULE = 22;
 
     const NOTFOUND_TESTPAPER = 4042201;
 
