@@ -4,24 +4,45 @@
   color: @h5-primary;
 }
 
+.h5-clearfix {
+  &:before,
+  &:after {
+    content: '';
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
 .h5-find-body {
   border-radius: 4px;
-  border: 1px solid #ddd;
   min-height: 480px;
   .setting-nav-tab {
     border: none;
-    margin-bottom: 30px;
+    // margin-bottom: 30px;
+    margin-bottom: 0px;
     padding: 0 20px;
     >li.active >a {
       color: @h5-primary;
       border: none;
-      border-bottom: 1px solid @h5-primary;
+      position: relative;
+      &::after{
+        content: "";
+        height: 3px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0px;
+        background: @h5-primary;
+        z-index: 99;
+      }
     }
     >li >a {
       color: #313131;
       border: none;
       margin-right: 0;
-      border-bottom: 1px solid #ddd;
+      border-bottom: 0px solid transparent;
     }
   }
   .h5-tab-content {
@@ -54,15 +75,31 @@
     }
     #find-page{
       .find-page__left{
-        text-align:center;
+        float:left;
+        position:relative;
+        width:375px;
+        margin-left:40px;
         &--img{
-            width:80%;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+            width:100%;
+        }
+        &--scroll{
+          position: absolute;
+          top: 102px;
+          bottom: 98px;
+          right: 23px;
+          left: 22px;
+          overflow: auto;
+          .scroll-img{
+            width:100%;
+          }
         }
       }
       .find-page__right{
-        margin-top:5%;
+        float: left;
+        margin-top: 5%;
+        margin-left: 60px;
+        margin-right: 20px;
+        width: calc(100% - 600px);
         &--text{
           font-size: 16px;
           line-height: 28px;
@@ -72,20 +109,49 @@
       }
     }
     #theme-page{
+      .theme-recomend{
+        right: -80px;
+        position: absolute;
+        top: -80px;
+        height: 80px;
+        width: 80px;
+        border: 80px solid;
+         border-color: transparent transparent rgba(252,155,44,1) ;
+        transform: rotate(45deg);
+        div{
+          width: 100px;
+          margin-top: 35px;
+          font-size: 26px;
+          color: #fff;
+          margin-left: -26px;
+          font-weight: bold;
+        }
+      }
+      .theme-bg{
+        position:relative;
+        background: #F5F5F5;
+        margin-right: 15px;
+        margin-left: 15px;
+        margin-bottom:30px;
+        padding: 5% 2%;
+      }
       .theme-left{
-        text-align:center;
       }
       .theme-right{
-        margin-top: 8%;
-        margin-left: -3%;
+        margin-top:2%;
+        padding-left:4%;
         &__title{
             margin-bottom:10px;
+            font-size:20px;
         }
         &__content{
           margin-left:14px;
+          font-size:16px;
         }
       }
-      
+      .theme-default-img{
+        width:100%
+      }
     }
     #site-page {
       .site-img-content {

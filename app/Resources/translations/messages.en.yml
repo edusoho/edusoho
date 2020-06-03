@@ -6533,7 +6533,9 @@ admin.invite_setting.mobile_for_receive: Phone number to receive reminders
 admin.invite_setting.sms_enable_hint: Please note that this feature will take effect when the cloud message is enabled, and the SMS notification will deduct the number of SMS messages of network school.
 admin.wap_setting: 'Mobile site'
 admin.wap_setting.find: 'Discovery page settings'
-admin.wap_setting.site: 'Site settings'
+admin.wap_setting.site: 'Mobile settings'
+admin.wap_setting.mini_school: 'Mobile'
+admin.wap_setting.theme: 'Decoration theme'
 admin.wap_setting.online: 'Function officially launched'
 admin.wap_setting.open: 'Go to the new micro-network school'
 admin.wap_setting.function: >

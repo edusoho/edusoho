@@ -7929,9 +7929,12 @@ admin.invite_setting.sms_enable_hint: 请注意，此功能在云短信开启时
 
 admin.wap_setting: 手机微网校
 admin.wap_setting.find: 发现页设置
-admin.wap_setting.site: 站点设置
+admin.wap_setting.mini_school: 微网校
+admin.wap_setting.theme: 装修主题
+admin.wap_setting.site: 微网校设置
 admin.wap_setting.online: 功能正式上线
 admin.wap_setting.open: 去开启新版微网校
+
 admin.wap_setting.function: >
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>自定义设置各模块</li>
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>边设置边预览，实时查看展示效果</li>
