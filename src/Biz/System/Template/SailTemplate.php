@@ -9,25 +9,6 @@ class SailTemplate extends Template
     public function getTemplate()
     {
         $host = $this->getHost();
-        $posters = $this->getBlockService()->getPosters();
-        $slides = [];
-        foreach ($posters as $poster) {
-            $slide = [
-                'title' => '',
-                'image' => [
-                    'id' => 0,
-                    'uri' => $poster['image'],
-                    'size' => '',
-                    'createdTime' => 0,
-                ],
-                'link' => [
-                    'type' => 'url',
-                    'target' => null,
-                    'url' => $poster['link']['url'],
-                ],
-            ];
-            $slides[] = $slide;
-        }
 
         $result = [
             'search-0' => [
@@ -37,7 +18,22 @@ class SailTemplate extends Template
             'slide-1' => [
                 'type' => 'slide_show',
                 'moduleType' => 'slide-1',
-                'data' => $slides,
+                'data' => [
+                    [
+                        'title' => '',
+                        'image' => [
+                            'id' => 0,
+                            'uri' => $host.'/static-dist/app/img/admin/h5/slide@2x.png',
+                            'size' => '',
+                            'createdTime' => 0,
+                        ],
+                        'link' => [
+                            'type' => 'url',
+                            'target' => null,
+                            'url' => '',
+                        ],
+                    ]
+                ],
                 'tips' => [
                     'banner中放限时免费、限时低价、限时活动的广告，强调突出限时活动，更容易吸引用户点击参与。',
                     'banner图设计时，重点突出能吸引用户点击的卖点。比如课程特色，价格等要素，能有效吸引客户点击。',
@@ -121,6 +117,9 @@ class SailTemplate extends Template
                     ],
                     'link' => [],
                 ],
+                'tips' => [
+                    '广告图中增加网校名称、logo、slogan等内容，可有效提升用户对平台信任度，更好促进课程试看和转化。'
+                ],
             ],
             'classroom_list-6' => [
                 'type' => 'classroom_list',
@@ -129,6 +128,7 @@ class SailTemplate extends Template
                     'title' => '专项技能班',
                     'sourceType' => 'condition',
                     'categoryId' => 0,
+                    'displayStyle' => 'distichous',
                     'sort' => 'recommendedSeq',
                     'lastDays' => 0,
                     'limit' => 4,
