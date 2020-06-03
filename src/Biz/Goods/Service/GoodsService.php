@@ -14,5 +14,19 @@ interface GoodsService
 
     public function searchGoods($conditions, $orderBys, $start, $limit, $columns = []);
 
-    public function findGoodSpecsByGoodsId($goodsId);
+    public function getGoodsByProductId($productId);
+
+    public function createGoodsSpecs($goodsSpecs);
+
+    public function getGoodsSpecs($id);
+
+    public function updateGoodsSpecs($id, $goodsSpecs);
+
+    public function deleteGoodsSpecs($id);
+
+    public function getGoodsSpecsByGoodsIdAndTargetId($goodsId, $targetId);
+
+    public function findGoodsSpecsByGoodsId($goodsId);
+
+    public function getGoodsSpecsByProductIdAndTargetId($productId, $targetId);
 }

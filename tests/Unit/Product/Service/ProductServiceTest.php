@@ -51,6 +51,9 @@ class ProductServiceTest extends BaseTestCase
         $result = $this->getProductService()->getProduct($expected['id']);
 
         $this->assertArrayEquals($expected, $result);
+
+        $result2 = $this->getProductService()->getProduct($expected['id'] + 100000);
+        $this->assertNull($result2);
     }
 
     public function testUpdateProduct()

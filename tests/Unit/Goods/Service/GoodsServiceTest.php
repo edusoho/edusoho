@@ -6,6 +6,7 @@ use Biz\BaseTestCase;
 use Biz\Common\CommonException;
 use Biz\Goods\Dao\GoodsDao;
 use Biz\Goods\Dao\GoodsSpecsDao;
+use Biz\Goods\GoodsException;
 use Biz\Goods\Service\GoodsService;
 
 class GoodsServiceTest extends BaseTestCase
@@ -44,6 +45,10 @@ class GoodsServiceTest extends BaseTestCase
         $result = $this->getGoodsService()->getGoods($expected['id']);
 
         $this->assertArrayEquals($expected, $result);
+
+        $result2 = $this->getGoodsService()->getGoods($expected['id'] + 10000);
+
+        $this->assertNull($result2);
     }
 
     public function testUpdateGoods()
@@ -141,6 +146,112 @@ class GoodsServiceTest extends BaseTestCase
         $this->assertArrayEquals($expected2, $result2);
     }
 
+    public function testGetGoodsByProductId()
+    {
+        $goods = $this->createGoods();
+        $goods2 = $this->createGoods(['productId' => $goods['productId'] + 1000]);
+
+        $result = $this->getGoodsService()->getGoodsByProductId($goods['productId']);
+
+        $this->assertArrayEquals($goods, $result);
+    }
+
+    public function testCreateGoodsSpecs_whenMissingGoodsId_thenThrowParamMissingException()
+    {
+        $this->expectException(CommonException::class);
+        $this->expectExceptionMessage('exception.common_parameter_missing');
+        $this->getGoodsService()->createGoodsSpecs(['targetId' => 1, 'title' => 'testTitle']);
+    }
+
+    public function testCreateGoodsSpecs_whenMissingTargetId_thenThrowParamMissingException()
+    {
+        $this->expectException(CommonException::class);
+        $this->expectExceptionMessage('exception.common_parameter_missing');
+        $this->getGoodsService()->createGoodsSpecs(['goodsId' => 1, 'title' => 'testTitle']);
+    }
+
+    public function testCreateGoodsSpecs_whenMissingTitle_thenThrowParamMissingException()
+    {
+        $this->expectException(CommonException::class);
+        $this->expectExceptionMessage('exception.common_parameter_missing');
+        $this->getGoodsService()->createGoodsSpecs(['goodsId' => 1, 'targetId' => 2]);
+    }
+
+    public function testCreateGoodsSpecs()
+    {
+        $result = $this->getGoodsService()->createGoodsSpecs(['goodsId' => 1, 'targetId' => 2, 'title' => 'test title']);
+
+        $this->assertEquals('1', $result['id']);
+        $this->assertEquals('1', $result['goodsId']);
+        $this->assertEquals('2', $result['targetId']);
+        $this->assertEquals('test title', $result['title']);
+        $this->assertEmpty($result['images']);
+        $this->assertEquals('0.00', $result['price']);
+    }
+
+    public function testGetGoodsSpecs()
+    {
+        $expected = $this->createGoodsSpecs();
+
+        $result = $this->getGoodsService()->getGoodsSpecs($expected['id']);
+
+        $this->assertArrayEquals($expected, $result);
+
+        $result2 = $this->getGoodsService()->getGoodsSpecs($expected['id'] + 10000);
+
+        $this->assertNull($result2);
+    }
+
+    public function testUpdateGoodsSpecs()
+    {
+        $goodsSpecs = $this->createGoodsSpecs();
+        $before = $this->getGoodsSpecsDao()->get($goodsSpecs['id']);
+
+        $fields = [
+            'goodsId' => $goodsSpecs['goodsId'] + 2,
+            'targetId' => $goodsSpecs['targetId'] + 4,
+            'title' => 'test update title',
+            'images' => ['testImg'],
+            'price' => '4.00',
+        ];
+
+        $this->getGoodsService()->updateGoodsSpecs($goodsSpecs['id'], $fields);
+
+        $after = $this->getGoodsSpecsDao()->get($goodsSpecs['id']);
+
+        $this->assertEquals($before['goodsId'], $after['goodsId']);
+        $this->assertEquals($before['targetId'], $after['targetId']);
+        $this->assertEquals($fields['title'], $after['title']);
+        $this->assertEquals($fields['images'], $after['images']);
+        $this->assertEquals($fields['price'], $after['price']);
+        $this->assertNotEquals($before['title'], $after['title']);
+        $this->assertNotEquals($before['images'], $after['images']);
+        $this->assertNotEquals($before['price'], $after['price']);
+    }
+
+    public function testDeleteGoodsSpecs()
+    {
+        $goodsSpecs = $this->createGoodsSpecs();
+        $before = $this->getGoodsSpecsDao()->get($goodsSpecs['id']);
+
+        $this->getGoodsService()->deleteGoodsSpecs($goodsSpecs['id']);
+
+        $after = $this->getGoodsSpecsDao()->get($goodsSpecs['id']);
+
+        $this->assertArrayEquals($goodsSpecs, $before);
+        $this->assertEmpty($after);
+    }
+
+    public function testGetGoodsSpecsByGoodsIdAndTargetId()
+    {
+        $goodsSpecs = $this->createGoodsSpecs();
+        $goodsSpecs2 = $this->createGoodsSpecs(['goodsId' => $goodsSpecs['goodsId'] + 1000]);
+
+        $result = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goodsSpecs['goodsId'], $goodsSpecs['targetId']);
+
+        $this->assertArrayEquals($goodsSpecs, $result);
+    }
+
     public function testFindGoodSpecsByGoodsId()
     {
         $goods = $this->createGoods();
@@ -150,9 +261,41 @@ class GoodsServiceTest extends BaseTestCase
         $goodsSpecs3 = $this->createGoodsSpecs(['goodsId' => $goods['id'] + 1]);
         $goodsSpecs4 = $this->createGoodsSpecs(['goodsId' => $goods['id']]);
 
-        $result = $this->getGoodsService()->findGoodSpecsByGoodsId($goods['id']);
+        $result = $this->getGoodsService()->findGoodsSpecsByGoodsId($goods['id']);
 
         $this->assertArrayEquals([$goodsSpecs1, $goodsSpecs4], $result);
+    }
+
+    public function testGetGoodsSpecsByProductIdAndTargetId_whenGoodsNotExist_thenThrowException()
+    {
+        $goods = $this->createGoods();
+
+        $this->expectException(GoodsException::class);
+        $this->expectExceptionMessage('exception.goods.not_found');
+
+        $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($goods['productId'] + 1000, 1);
+    }
+
+    public function testGetGoodsSpecsByProductIdAndTargetId()
+    {
+        $goods = $this->createGoods();
+        $goodsSpecs = $this->createGoodsSpecs([
+            'goodsId' => $goods['id'],
+            'targetId' => 1,
+            'title' => $goods['title'],
+        ]);
+
+        $goodsSpecs2 = $this->createGoodsSpecs([
+            'goodsId' => $goods['id'],
+            'targetId' => 2,
+            'title' => $goods['title'],
+        ]);
+
+        $result = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($goods['productId'], 1);
+        $this->assertArrayEquals($goodsSpecs, $result);
+
+        $resultNull = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($goods['productId'], 1000);
+        $this->assertNull($resultNull);
     }
 
     protected function createGoods($goods = [])
@@ -172,10 +315,10 @@ class GoodsServiceTest extends BaseTestCase
     {
         $default = [
             'goodsId' => 1,
+            'targetId' => 1,
             'title' => 'testTitle',
             'images' => [],
-            'periodType' => 'test type',
-            'authority' => [],
+            'price' => '1.00',
         ];
 
         $goodsSpecs = array_merge($default, $goodsSpecs);

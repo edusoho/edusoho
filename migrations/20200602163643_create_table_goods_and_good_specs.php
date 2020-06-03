@@ -22,11 +22,10 @@ class CreateTableGoodsAndGoodSpecs extends Migration
             CREATE TABLE `goods_specs` (
                `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                `goodsId` int(10) unsigned NOT NULL COMMENT '商品id',
+               `targetId` int(10) unsigned NOT NULL COMMENT '目标内容Id,如教学计划id',
                `title` varchar(1024) NOT NULL COMMENT '规格标题',
                `images` text DEFAULT NULL COMMENT '商品图片',
                `price` float NOT NULL DEFAULT 0.00 COMMENT '价格',
-               `periodType` varchar(1024) NOT NULL COMMENT '商品拥有类型',
-               `authority` text NOT NULL COMMENT '商品的具体权益',
                `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
                `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
                PRIMARY KEY (`id`)

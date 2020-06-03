@@ -25,4 +25,9 @@ class GoodsDaoImpl extends GeneralDaoImpl implements GoodsDao
             'orderbys' => ['id'],
         ];
     }
+
+    public function getByProductId($productId)
+    {
+        return $this->getByFields(['productId' => $productId]);
+    }
 }

@@ -15,21 +15,35 @@ class GoodsSpecsDaoImpl extends GeneralDaoImpl implements GoodsSpecsDao
             'timestamps' => ['createdTime', 'updatedTime'],
             'serializes' => [
                 'images' => 'json',
-                'authority' => 'json',
             ],
             'conditions' => [
                 'id = :id',
                 'goodsId = :goodsId',
                 'title = :title',
+                'targetId = :targetId',
                 'title LIKE :titleLike',
-                'periodType = :periodType',
             ],
             'orderbys' => ['id'],
         ];
     }
 
+    public function getByGoodsIdAndTargetId($goodsId, $targetId)
+    {
+        return $this->getByFields(['goodsId' => $goodsId, 'targetId' => $targetId]);
+    }
+
     public function findByGoodsId($goodsId)
     {
         return $this->findByFields(['goodsId' => $goodsId]);
+    }
+
+    public function deleteByGoodsIdAndTargetId($goodsId, $targetId)
+    {
+        return $this->db()->delete($this->table, ['goodsId' => $goodsId, 'targetId' => $targetId]);
+    }
+
+    public function deleteByGoodsId($goodsId)
+    {
+        return $this->db()->delete($this->table, ['goodsId' => $goodsId]);
     }
 }

@@ -8,5 +8,5 @@ class ProductException extends AbstractException
 {
     const EXCEPTION_MODULE = 71;
 
-    public $message = [];
+    public $messages = [];
 }
