@@ -31,7 +31,11 @@
           </div>
         </div>
          {% else %}
-          <iframe src="/h5/admin/index.html" frameborder="0" style="width: 100%;height: 700px;border: none;"></iframe>
+           {% if template %}
+             <iframe src="/h5/admin/index.html?template={{ template }}" frameborder="0" style="width: 100%;height: 700px;border: none;"></iframe>
+           {% else %}
+             <iframe src="/h5/admin/index.html" frameborder="0" style="width: 100%;height: 700px;border: none;"></iframe>
+           {% endif %}
         {% endif %}
       </div>
        {# 站点页设置 #}
@@ -63,7 +67,7 @@
                       <p>(3) 针对微网校设计，用户体验更佳。</p>
                     </div>
                   </div>
-                  <button type="submit" class="btn btn-h5-save js-site-save">立即应用</button>
+                  <button type="button" class="btn btn-h5-save js-site-save" data-version="2" data-template="default">立即应用</button>
                 </div>
               </div>
             </div>
@@ -88,7 +92,7 @@
                       <p>(3) 商品体验和购买过程中，在微网校中使用了PC端的交互，导致用户体验不佳。</p>
                     </div>
                   </div>
-                  <button type="submit" class="btn btn-h5-save js-site-save">立即应用</button>
+                  <button type="button" class="btn btn-h5-save js-site-save" data-version="1" data-template="jianmoOn">立即应用</button>
                 </div>
               </div>
             </div>
@@ -113,10 +117,12 @@
                         <p>(3) 商品体验和购买过程中，在微网校中使用了PC端的交互，导致用户体验不佳。</p>
                       </div>
                     </div>
-                    <button type="submit" class="btn btn-h5-save js-site-save">立即应用</button>
+                    <button type="button" class="btn btn-h5-save js-site-save" data-version="0" data-template="jianmoOff">立即应用</button>
                   </div>
               </div>
           </div>
+          <input type="hidden" name="template" value="{{ wapSetting.template }}">
+          <input type="hidden" name="version" value="{{ wapSetting.version }}">
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         </form>
       </div>

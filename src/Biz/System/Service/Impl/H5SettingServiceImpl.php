@@ -26,6 +26,14 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $this->filter($discoverySettings, $usage);
     }
 
+    public function getDiscoveryTemplate($template, $usage = 'show')
+    {
+        $class = $this->getTemplateFactory()->getTemplateClass($template);
+        $template = $class->getTemplate();
+
+        return $this->filter($template, $usage);
+    }
+
     public function filter($discoverySettings, $usage = 'show')
     {
         foreach ($discoverySettings as $key => &$discoverySetting) {
@@ -45,6 +53,11 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         $appDiscoverySetting = $this->getSettingService()->get('app_discovery', array());
 
         return empty($appDiscoverySetting['version']) ? 0 : (int) $appDiscoverySetting['version'];
+    }
+
+    public function searchFilter($discoverySetting, $usage = 'show')
+    {
+        return $discoverySetting;
     }
 
     public function courseListFilter($discoverySetting, $usage = 'show')
@@ -497,6 +510,11 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 ),
             ),
         ));
+    }
+
+    protected function getTemplateFactory()
+    {
+        return $this->biz['template_factory'];
     }
 
     protected function getCourseService()
