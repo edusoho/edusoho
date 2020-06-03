@@ -2,7 +2,6 @@
 
 namespace Biz\System\Template;
 
-use Biz\Content\Service\BlockService;
 use Codeages\Biz\Framework\Context\Biz;
 
 abstract class Template
