@@ -81,6 +81,7 @@ class SailTemplate extends Template
                     'sort' => '-studentNum',
                     'lastDays' => 0,
                     'limit' => 5,
+                    'displayStyle' => 'row',
                     'items' => [],
                 ],
                 'tips' => [
