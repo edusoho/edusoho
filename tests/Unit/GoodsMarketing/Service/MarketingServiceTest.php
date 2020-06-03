@@ -10,6 +10,10 @@ class MarketingServiceTest extends BaseTestCase
 {
     public function testGetMeans_whenCreated_thenGot()
     {
+        //不存在的means返回null
+        $got = $this->getMarketService()->getMeans(1000);
+        $this->assertNull($got);
+
         $means = $this->createMeans();
         $got = $this->getMarketService()->getMeans($means['id']);
         $this->assertEquals($means, $got);
@@ -30,7 +34,7 @@ class MarketingServiceTest extends BaseTestCase
         $this->getMarketService()->createMeans([]);
     }
 
-    public function testUpdateMeansWhenCreated_thenUpdated()
+    public function testUpdate()
     {
         $createdMeans = $this->createMeans($mockMeans = $this->mockMeans());
         $this->assertEquals($mockMeans['status'], $createdMeans['status']);
@@ -46,12 +50,24 @@ class MarketingServiceTest extends BaseTestCase
         $this->assertCount(2, $results);
     }
 
-    public function testSearchMeans_whenCreated_whenSearched()
+    public function testSearchMeans()
     {
+        //无数据情况下返回[]
+        $results = $this->getMarketService()->searchMeans(['fromMeansId' => 10], [], 0, 10);
+        $this->assertEquals([], $results);
+
         $this->createMeans($mockMeans = $this->mockMeans());
         $this->createMeans($mockMeans = $this->mockMeans(['fromMeansId' => 10]));
         $results = $this->getMarketService()->searchMeans(['fromMeansId' => 10], [], 0, 10);
         $this->assertCount(1, $results);
+    }
+
+    public function testDelete()
+    {
+        $created = $this->createMeans($mockMeans = $this->mockMeans());
+        $this->assertNotEmpty($created);
+        $this->getMarketService()->deleteMeans($created['id']);
+        $this->assertEmpty($this->getMarketService()->getMeans($created['id']));
     }
 
     protected function createMeans($means = [])
