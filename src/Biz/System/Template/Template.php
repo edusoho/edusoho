@@ -14,4 +14,11 @@ abstract class Template
     }
 
     abstract public function getTemplate();
+
+    protected function getHost()
+    {
+        $schema = (!empty($_SERVER['HTTPS']) && 'off' !== strtolower($_SERVER['HTTPS'])) ? 'https' : 'http';
+
+        return $schema.'://'.$_SERVER['HTTP_HOST'];
+    }
 }

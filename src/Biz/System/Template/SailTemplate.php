@@ -8,6 +8,7 @@ class SailTemplate extends Template
 {
     public function getTemplate()
     {
+        $host = $this->getHost();
         $posters = $this->getBlockService()->getPosters();
         $slides = [];
         foreach ($posters as $poster) {
@@ -51,22 +52,22 @@ class SailTemplate extends Template
                 'data' => [
                     [
                         'title' => '免费专区',
-                        'image' => ['url' => 'static-dist/app/img/admin/h5/free@2x.png', 'uri' => ''],
+                        'image' => ['url' => $host.'/static-dist/app/img/admin/h5/free@2x.png', 'uri' => ''],
                         'link' => ['target' => '', 'type' => '', 'url' => ''],
                     ],
                     [
                         'title' => '网校运营',
-                        'image' => ['url' => 'static-dist/app/img/admin/h5/operation@2x.png', 'uri' => ''],
+                        'image' => ['url' => $host.'/static-dist/app/img/admin/h5/operation@2x.png', 'uri' => ''],
                         'link' => ['target' => '', 'type' => '', 'url' => ''],
                     ],
                     [
                         'title' => '使用帮助',
-                        'image' => ['url' => 'static-dist/app/img/admin/h5/help@2x.png', 'uri' => ''],
+                        'image' => ['url' => $host.'/static-dist/app/img/admin/h5/help@2x.png', 'uri' => ''],
                         'link' => ['target' => '', 'type' => '', 'url' => ''],
                     ],
                     [
                         'title' => '名师专场',
-                        'image' => ['url' => 'static-dist/app/img/admin/h5/teacher@2x.png', 'uri' => ''],
+                        'image' => ['url' => $host.'/static-dist/app/img/admin/h5/teacher@2x.png', 'uri' => ''],
                         'link' => ['target' => '', 'type' => '', 'url' => ''],
                     ],
                 ],
@@ -104,6 +105,7 @@ class SailTemplate extends Template
                     'sort' => 'recommendedSeq',
                     'lastDays' => 0,
                     'limit' => 4,
+                    'displayStyle' => 'distichous',
                     'items' => [],
                 ],
                 'tips' => [
@@ -115,7 +117,7 @@ class SailTemplate extends Template
                 'moduleType' => 'poster-5',
                 'data' => [
                     'image' => [
-                        'url' => 'static-dist/app/img/admin/h5/poster@2x.png',
+                        'uri' => $host.'/static-dist/app/img/admin/h5/poster@2x.png',
                     ],
                     'link' => [],
                 ],
