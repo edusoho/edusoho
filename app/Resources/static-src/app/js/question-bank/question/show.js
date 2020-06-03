@@ -97,7 +97,8 @@ class QuestionsShow {
     let $target = $(event.currentTarget);
     let conditions = this.element.find('[data-role="search-conditions"]').serialize();
     let url = $target.data('url');
-    $target.attr('href', url + '?' + conditions);
+    let ids = this.selector.toJson();
+    $target.attr('href', url + '?' + conditions + '&ids=' + ids);
   }
 
   setCategory(event) {

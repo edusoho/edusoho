@@ -286,9 +286,14 @@ class QuestionController extends BaseController
         $fileName = $this->getExportFileName($id);
         $path = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory').DIRECTORY_SEPARATOR.$fileName;
 
+        $conditions = $request->query->all();
+        if (isset($conditions['ids']) && !empty($conditions['ids'])){
+            $conditions['ids'] = explode(',', $conditions['ids']);
+        }
+
         $result = $this->getItemService()->exportItems(
             $bank['itemBankId'],
-            $request->query->all(),
+            $conditions,
             $path,
             $this->get('kernel')->getContainer()->getParameter('kernel.root_dir').'/../web'
         );
