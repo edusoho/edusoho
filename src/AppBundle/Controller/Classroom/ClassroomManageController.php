@@ -489,7 +489,7 @@ class ClassroomManageController extends BaseController
 
         foreach ($classroomMembers as $classroomMember) {
             $member = '';
-            $member .= $users[$classroomMember['userId']]['nickname'].',';
+            $member .= $users[$classroomMember['userId']]['nickname']."\t".',';
             $member .= $users[$classroomMember['userId']]['email'].',';
             $member .= date('Y-n-d H:i:s', $classroomMember['createdTime']).',';
             $member .= $classroomMember['learningProgressPercent'].',';
