@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class QuestionException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 27;
+    const EXCEPTION_MODULE = 27;
 
     const NOTFOUND_QUESTION = 4042701;
 
@@ -14,9 +14,9 @@ class QuestionException extends AbstractException
 
     const UNEXPECTED_ANSWER = 5002703;
 
-    public $messages = array(
+    public $messages = [
         4042701 => 'exception.question.not_found',
         4032702 => 'exception.question.forbidden_preview_question',
         5002703 => 'exception.question.unexpected_answer',
-    );
+    ];
 }
