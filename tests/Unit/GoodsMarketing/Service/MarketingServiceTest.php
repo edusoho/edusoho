@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\GoodsMarketing\Service;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
 use Biz\Common\CommonException;
 use Biz\GoodsMarketing\Service\MarketingService;
@@ -44,10 +45,12 @@ class MarketingServiceTest extends BaseTestCase
 
     public function testFindValidMeansByTargetTypeAndTargetId()
     {
-        $this->createMeans($mockMeans = $this->mockMeans());
-        $this->createMeans($mockMeans = $this->mockMeans(['fromMeansId' => 10]));
-        $results = $this->getMarketService()->findValidMeansByTargetTypeAndTargetId('goods', 1);
+        $means1 = $this->createMeans($mockMeans = $this->mockMeans());
+        $means2 = $this->createMeans($mockMeans = $this->mockMeans(['fromMeansId' => 10]));
+        $results = ArrayToolkit::index($this->getMarketService()->findValidMeansByTargetTypeAndTargetId('goods', 1), 'id');
         $this->assertCount(2, $results);
+        $this->assertEquals([], array_diff([$means1['id'], $means2['id']], ArrayToolkit::column($results, 'id')));
+        $this->assertEquals($means1, $results[$means1['id']]);
     }
 
     public function testSearchMeans()
@@ -57,9 +60,10 @@ class MarketingServiceTest extends BaseTestCase
         $this->assertEquals([], $results);
 
         $this->createMeans($mockMeans = $this->mockMeans());
-        $this->createMeans($mockMeans = $this->mockMeans(['fromMeansId' => 10]));
+        $means1 = $this->createMeans($mockMeans = $this->mockMeans(['fromMeansId' => 10]));
         $results = $this->getMarketService()->searchMeans(['fromMeansId' => 10], [], 0, 10);
         $this->assertCount(1, $results);
+        $this->assertEquals($means1, reset($results));
     }
 
     public function testDelete()
