@@ -8,6 +8,7 @@ use AppBundle\Component\RateLimit\EmailRateLimiter;
 use Biz\Common\BizCaptcha;
 use Biz\Common\BizSms;
 use Biz\Course\Util\CourseRenderViewResolver;
+use Biz\System\Template\TemplateFactory;
 use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\NormalStrategy;
 use Biz\Task\Strategy\StrategyContext;
@@ -252,6 +253,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
             $role = $biz->service('Role:RoleService');
 
             return $role->getPermissionsYmlContent();
+        };
+
+        $biz['template_factory'] = function ($biz) {
+            return new TemplateFactory($biz);
         };
     }
 }

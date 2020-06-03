@@ -14,16 +14,18 @@ class SettingController extends BaseController
     //微网校
     public function wapSetAction(Request $request)
     {
-        $defaultWapSetting = array(
+        $defaultWapSetting = [
             'version' => 1,
-        );
+            'template' => 'jianmoOn',
+        ];
 
         if ($request->isMethod('POST')) {
             $wapSetting = $request->request->all();
-            $wapSetting = ArrayToolkit::parts($wapSetting, array(
-                'version',
-            ));
+            $wapSetting = ArrayToolkit::parts($wapSetting, [
+                'version', 'template',
+            ]);
 
+            $template = $wapSetting['template'];
             $wapSetting = array_merge($defaultWapSetting, $wapSetting);
             $this->getSettingService()->set('wap', $wapSetting);
             $result = CloudAPIFactory::create('leaf')->get('/me');
@@ -33,12 +35,13 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        $wapSetting = $this->setting('wap', array());
+        $wapSetting = $this->setting('wap', []);
         $wapSetting = array_merge($defaultWapSetting, $wapSetting);
 
-        return $this->render('admin-v2/operating/wap/set.html.twig', array(
+        return $this->render('admin-v2/operating/wap/set.html.twig', [
             'wapSetting' => $wapSetting,
-        ));
+            'template' => empty($template) ? '' : $template,
+        ]);
     }
 
     //小程序
