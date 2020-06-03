@@ -118,7 +118,6 @@ class CourseSetCoursesCopeTest extends BaseTestCase
         $task = $this->getTaskDao()->create(['courseId' => 1, 'fromCourseSetId' => $courseSetId, 'title' => '', 'type' => '', 'createdUserId' => '1', 'copyId' => 1]);
         $activity = $this->getActivity()->create(['fromCourseSetId' => $courseSetId, 'copyId' => 1, 'title' => '', 'mediaType' => '']);
         $courseChapter = $this->getCourseChapter()->create(['courseId' => 1, 'copyId' => 1, 'title' => '']);
-        $testpaper = $this->getTestpaper()->create(['copyId' => 1, 'courseSetId' => $courseSetId]);
         ReflectionUtils::invokeMethod($copy, 'resetCopyId', [$courseSetId]);
 
         $course = $this->getCourseDao()->get($course['id']);
@@ -127,8 +126,6 @@ class CourseSetCoursesCopeTest extends BaseTestCase
         $this->assertEquals(0, $task['copyId']);
         $activity = $this->getActivity()->get($activity['id']);
         $this->assertEquals(0, $activity['copyId']);
-        $testpaper = $this->getTestpaper()->get($testpaper['id']);
-        $this->assertEquals(0, $testpaper['copyId']);
         $courseChapter = $this->getCourseChapter()->get($courseChapter['id']);
         $this->assertEquals(0, $courseChapter['copyId']);
     }
@@ -136,11 +133,6 @@ class CourseSetCoursesCopeTest extends BaseTestCase
     protected function getQuestion()
     {
         return $this->biz->dao('Question:QuestionDao');
-    }
-
-    protected function getTestpaper()
-    {
-        return $this->biz->dao('Testpaper:TestpaperDao');
     }
 
     protected function getCourseDao()
