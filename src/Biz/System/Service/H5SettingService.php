@@ -6,9 +6,9 @@ interface H5SettingService
 {
     public function getDiscovery($portal, $mode = 'published', $usage = 'show');
 
-    public function getDiscoveryTemplate($template, $usage = 'show');
+    public function getDiscoveryTemplate($template, $portal, $usage = 'show');
 
-    public function filter($discoverySettings, $usage = 'show');
+    public function filter($discoverySettings, $portal, $usage = 'show');
 
     public function getCourseCondition($portal, $mode = 'published');
 

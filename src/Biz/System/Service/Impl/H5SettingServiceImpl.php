@@ -23,23 +23,23 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             $discoverySettings = $this->getDefaultDiscovery($portal);
         }
 
-        return $this->filter($discoverySettings, $usage);
+        return $this->filter($discoverySettings, $portal, $usage);
     }
 
-    public function getDiscoveryTemplate($template, $usage = 'show')
+    public function getDiscoveryTemplate($template, $portal, $usage = 'show')
     {
         $class = $this->getTemplateFactory()->getTemplateClass($template);
         $template = $class->getTemplate();
 
-        return $this->filter($template, $usage);
+        return $this->filter($template, $portal, $usage);
     }
 
-    public function filter($discoverySettings, $usage = 'show')
+    public function filter($discoverySettings, $portal, $usage = 'show')
     {
         foreach ($discoverySettings as $key => &$discoverySetting) {
             $method = $this->getMethod($discoverySetting['type']);
             $method .= 'Filter';
-            $discoverySetting = $this->$method($discoverySetting, $usage);
+            $discoverySetting = $this->$method($discoverySetting, $portal, $usage);
             if (false === $discoverySetting) {
                 unset($discoverySettings[$key]);
             }
@@ -55,12 +55,12 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return empty($appDiscoverySetting['version']) ? 0 : (int) $appDiscoverySetting['version'];
     }
 
-    public function searchFilter($discoverySetting, $usage = 'show')
+    public function searchFilter($discoverySetting, $portal, $usage = 'show')
     {
         return $discoverySetting;
     }
 
-    public function courseListFilter($discoverySetting, $usage = 'show')
+    public function courseListFilter($discoverySetting, $portal, $usage = 'show')
     {
         if ('condition' == $discoverySetting['data']['sourceType']) {
             $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
@@ -101,7 +101,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function openCourseListFilter($discoverySetting, $usage = 'show')
+    public function openCourseListFilter($discoverySetting, $portal, $usage = 'show')
     {
         if ('condition' == $discoverySetting['data']['sourceType']) {
             $conditions = array(
@@ -144,7 +144,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function classroomListFilter($discoverySetting, $usage = 'show')
+    public function classroomListFilter($discoverySetting, $portal, $usage = 'show')
     {
         if ('condition' == $discoverySetting['data']['sourceType']) {
             $conditions = array('status' => 'published', 'showable' => 1);
@@ -181,7 +181,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function slideShowFilter($discoverySetting, $usage = 'show')
+    public function slideShowFilter($discoverySetting, $portal, $usage = 'show')
     {
         foreach ($discoverySetting['data'] as &$slideShow) {
             if (!empty($slideShow['link'])) {
@@ -199,7 +199,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function graphicNavigationFilter($discoverySetting, $usage = 'show')
+    public function graphicNavigationFilter($discoverySetting, $portal, $usage = 'show')
     {
         $schema = (!empty($_SERVER['HTTPS']) && 'off' !== strtolower($_SERVER['HTTPS'])) ? 'https' : 'http';
 
@@ -208,7 +208,11 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 $navigation['image']['uri'] = !empty($navigation['image']['uri']) ? $navigation['image']['uri'] : $navigation['image']['url'];
             }
             if (!empty($navigation['link'])) {
-                $navigation['link']['url'] = $schema.'://'.$_SERVER['HTTP_HOST'].'/h5/index.html#/'.$navigation['link']['type'].'/explore/new';
+                if ('h5' == $portal) {
+                    $navigation['link']['url'] = $schema.'://'.$_SERVER['HTTP_HOST'].'/h5/index.html#/'.$navigation['link']['type'].'/explore';
+                } else {
+                    $navigation['link']['url'] = $schema.'://'.$_SERVER['HTTP_HOST'].'/h5/index.html#/'.$navigation['link']['type'].'/explore/new';
+                }
                 $navigation['link']['conditions'] = array('categoryId' => !empty($navigation['link']['categoryId']) ? $navigation['link']['categoryId'] : 0);
             }
         }
@@ -216,7 +220,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function posterFilter($discoverySetting, $usage = 'show')
+    public function posterFilter($discoverySetting, $portal, $usage = 'show')
     {
         if (!empty($discoverySetting['data']['link'])) {
             $link = $discoverySetting['data']['link'];
@@ -234,7 +238,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function grouponFilter($discoverySetting, $usage = 'show')
+    public function grouponFilter($discoverySetting, $portal, $usage = 'show')
     {
         $activity = $discoverySetting['data']['activity'];
         try {
@@ -250,7 +254,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function seckillFilter($discoverySetting, $usage = 'show')
+    public function seckillFilter($discoverySetting, $portal, $usage = 'show')
     {
         $activity = $discoverySetting['data']['activity'];
         try {
@@ -266,7 +270,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function cutFilter($discoverySetting, $usage = 'show')
+    public function cutFilter($discoverySetting, $portal, $usage = 'show')
     {
         $activity = $discoverySetting['data']['activity'];
         try {
@@ -282,7 +286,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function couponFilter($discoverySetting, $usage = 'show')
+    public function couponFilter($discoverySetting, $portal, $usage = 'show')
     {
         $batches = $discoverySetting['data']['items'];
         $batches = ArrayToolkit::index($batches, 'id');
@@ -328,7 +332,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function vipFilter($discoverySetting, $usage = 'show')
+    public function vipFilter($discoverySetting, $portal, $usage = 'show')
     {
         if ($this->isPluginInstalled('Vip')) {
             try {

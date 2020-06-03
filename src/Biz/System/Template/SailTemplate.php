@@ -4,7 +4,7 @@ namespace Biz\System\Template;
 
 use Biz\Content\Service\BlockService;
 
-class DefaultTemplate extends Template
+class SailTemplate extends Template
 {
     public function getTemplate()
     {

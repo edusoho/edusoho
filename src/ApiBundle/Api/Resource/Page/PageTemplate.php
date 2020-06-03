@@ -16,7 +16,11 @@ class PageTemplate extends AbstractResource
      */
     public function get(ApiRequest $request, $portal, $template)
     {
-        $template = $this->getH5SettingService()->getDiscoveryTemplate($template, 'setting');
+        if (!in_array($portal, array('h5', 'miniprogram', 'apps'))) {
+            throw PageException::ERROR_PORTAL();
+        }
+
+        $template = $this->getH5SettingService()->getDiscoveryTemplate($template, $portal, 'setting');
         foreach ($template as &$discoverySetting) {
             $discoverySetting = $this->handleSetting($discoverySetting);
         }

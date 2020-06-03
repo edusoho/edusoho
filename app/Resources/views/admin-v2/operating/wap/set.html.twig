@@ -19,11 +19,14 @@
       {# 发现页设置 #}
       <div class="tab-pane fade in active" id="find-page">
         {% if 2 != wapSetting.version %}
-        <div class="row">
-          <div class="col-md-4 find-page__left">
-              <img class="find-page__left--img" src="{{ asset('static-dist/app/img/admin/h5/new_default_all.jpg') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}" />
+        <div class="row h5-clearfix ">
+          <div class="find-page__left">
+                <img class="find-page__left--img" src="{{ asset('static-dist/app/img/admin/h5/iPhoneX.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}" />
+                <div class="find-page__left--scroll">
+                  <img class="scroll-img" src="{{ asset('static-dist/app/img/admin/h5/h5-all.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}" />
+                </div>
           </div>
-          <div class="col-md-7 find-page__right">
+          <div class=" find-page__right">
             <p class="find-page__right--text">
                 微网校是通过浏览器打开应用，无需下载。网校可以链接发给学员，或在推送的短信中加入链接，学员点击链接后，即可立即进入微网校内进行学习、购买课程、课程分享等。微网校比较适用于通过营销活动促进学员分享、拉新、促活等目的。
             </p>
@@ -52,44 +55,40 @@
       <div class="tab-pane fade" id="theme-page">
         <form class="form-horizontal" method="post" id="wap-setting-form" novalidate>
           <div class="row">
-            <div class="col-md-6 ">
-              <div class="row">
-                <div class="col-md-7   theme-left"> 
-                  <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/new_default_img.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}" />
+            <div class="col-md-6">
+              <div class="row theme-bg">
+                <div class="theme-recomend"><div>推荐</div></div>
+                <div class="col-md-5   theme-left"> 
+                  <img class="theme-default-img" src="{{ asset('static-dist/app/img/admin/h5/new_default_img.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}" />
                 </div>
-                <div class="col-md-5 theme-right">
-                  <div class="theme-right__title"><b>主题名称：</b>新版微网校</div>
+                <div class="col-md-7 theme-right">
+                  <div class="theme-right__title"><b>主题名称：</b>启航</div>
                   <div >
-                    <p class="mbm"><b>主题亮点：</b><p>
+                    <p class="mbm theme-right__title"><b>主题亮点：</b><p>
                     <div class="theme-right__content">
-                      <p>(1) 通过设计用户路径，推荐免费课程和低价课程，可达到促进用户快速试看和低客单价转化的目的。</p>
-                      <p>(2) 装修组件更齐全，例如搜索、图文导航、课程班级推荐等。</p>
-                      <p>(3) 针对微网校设计，用户体验更佳。</p>
+                      <p>1、促进新用户试学和低客单价课程转化</p>
+                      <p>2、装修组件更齐全。</p>
+                      <p>3、自定义灵活编辑。</p>
+                      <p>4、更适合移动端的用户体验。</p>
                     </div>
                   </div>
-                  <button type="button" class="btn btn-h5-save js-site-save" data-version="2" data-template="default">立即应用</button>
+                  <button type="button" class="btn btn-h5-save js-site-save" data-version="2" data-template="sail">立即应用</button>
                 </div>
               </div>
             </div>
             <div class="col-md-6 col-sm-10 col-xs-12">
-              <div class="row">
-                <div class="col-md-7  theme-left"> 
-                    <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/old_default_img@2x.png') }}" alt="{{ 'admin.wap_setting.old'|trans|raw }}"/>
+              <div class="row theme-bg">
+                <div class="col-md-5  theme-left"> 
+                    <img class="theme-default-img" src="{{ asset('static-dist/app/img/admin/h5/old_default_img.png') }}" alt="{{ 'admin.wap_setting.old'|trans|raw }}"/>
                 </div>
-                <div class="col-md-5  theme-right">
+                <div class="col-md-7  theme-right">
                   <div class="theme-right__title"><b>主题名称：</b>简墨</div>
                   <div >
-                    <p class="mbm"><b>主题亮点 ：</b><p>
+                    <p class="mbm theme-right__title"><b>主题亮点</b><p>
                     <div class="theme-right__content">
-                      <p>PC端使用主题装修后，微网校端可直接应用。</p>
-                    </div>
-                  </div>
-                  <div >
-                    <p class="mbm"><b>主题劣势：</b><p>
-                    <div class="theme-right__content">
-                      <p>(1) 不可对该主题进行二次装修编辑。</p>
-                      <p>(2) PC端主题自适应应用微网校时，会遇到适配问题，导致体验性能不佳。</p>
-                      <p>(3) 商品体验和购买过程中，在微网校中使用了PC端的交互，导致用户体验不佳。</p>
+                      <p>1、PC端适配为微网校。</p>
+                      <p>2、一键应用，省时省力。</p>
+                      <p>3、组件有限，不支持自定义编辑。</p>
                     </div>
                   </div>
                   <button type="button" class="btn btn-h5-save js-site-save" data-version="1" data-template="jianmoOn">立即应用</button>
@@ -97,24 +96,19 @@
               </div>
             </div>
             <div class="col-md-6">
-              <div class="row">
-                  <div class="col-md-7 theme-left"> 
-                      <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/old_default_img@2x.png') }}" alt="{{ 'admin.wap_setting.old'|trans|raw }}"/>
+              <div class="row theme-bg">
+                  <div class="col-md-5 theme-left"> 
+                      <img class="theme-default-img" src="{{ asset('static-dist/app/img/admin/h5/no_default_img.png') }}" alt="{{ 'admin.wap_setting.old'|trans|raw }}"/>
                   </div>
-                  <div class="col-md-5  theme-right">
+                  <div class="col-md-7  theme-right">
                     <div class="theme-right__title"><b>主题名称：</b>简墨</div>
                     <div >
-                      <p class="mbm"><b>主题亮点 ：</b><p>
+                      <p class="mbm theme-right__title"><b>主题亮点 ：</b><p>
                       <div class="theme-right__content">
-                        <p>PC端使用主题装修后，微网校端可直接应用。</p>
-                      </div>
-                    </div>
-                    <div >
-                      <p class="mbm"><b>主题劣势：</b><p>
-                      <div class="theme-right__content">
-                        <p>(1) 不可对该主题进行二次装修编辑。</p>
-                        <p>(2) PC端主题自适应应用微网校时，会遇到适配问题，导致体验性能不佳。</p>
-                        <p>(3) 商品体验和购买过程中，在微网校中使用了PC端的交互，导致用户体验不佳。</p>
+                        <p>1、PC端自适应为微网校。</p>
+                        <p>2、一键应用，省时省力。</p>
+                        <p>2、一键应用，省时省力。</p>
+                        <p>4、更适合PC端的用户体验。</p>
                       </div>
                     </div>
                     <button type="button" class="btn btn-h5-save js-site-save" data-version="0" data-template="jianmoOff">立即应用</button>
