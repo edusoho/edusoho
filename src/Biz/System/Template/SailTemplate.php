@@ -32,7 +32,7 @@ class SailTemplate extends Template
                             'target' => null,
                             'url' => '',
                         ],
-                    ]
+                    ],
                 ],
                 'tips' => [
                     'banner中放限时免费、限时低价、限时活动的广告，强调突出限时活动，更容易吸引用户点击参与。',
@@ -118,7 +118,7 @@ class SailTemplate extends Template
                     'link' => [],
                 ],
                 'tips' => [
-                    '广告图中增加网校名称、logo、slogan等内容，可有效提升用户对平台信任度，更好促进课程试看和转化。'
+                    '广告图中增加网校名称、logo、slogan等内容，可有效提升用户对平台信任度，更好促进课程试看和转化。',
                 ],
             ],
             'classroom_list-6' => [
