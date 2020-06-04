@@ -123,6 +123,7 @@
   }
 
   .e-course-list {
+    padding: 0 6px;
     &__header {
       padding: 10px 0px!important;
     }
@@ -134,17 +135,19 @@
     }
   }
 
-.e-course-list__body{
-  .e-column-class:nth-of-type(2n-1){
-    padding-left: 0px;
+
+
+  .e-course-list__body{
+    .e-column-class:nth-of-type(2n-1){
+      padding-left: 0px;
+    }
+    .e-row-class{
+      padding-left: 0px;
+    }
+    .e-openCourse-class:first-of-type{
+      padding-left: 0px;
+    }
   }
-  .e-row-class{
-    padding-left: 0px;
-  }
-  .e-openCourse-class:first-of-type{
-    padding-left: 0px;
-  }
-}
 
   .coupon-preview__container {
     padding-left: 0;
@@ -220,11 +223,8 @@
 
 .find-page__part {
   position: relative;
-  > .e-poster,.e-graphic-navigation {
+  .e-poster,.e-graphic-navigation {
     margin: 0 -10px ;
-  }
-  > .e-course-list{
-    padding: 0 6px;
   }
   &:nth-last-child(2) {
     .gray-border-bottom {
