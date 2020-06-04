@@ -1225,6 +1225,11 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType = 'plus')
     {
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        if ('forever' == $course['expiryMode']) {
+            return false;
+        }
         $members = $this->searchMembers(
             ['userIds' => $userIds, 'courseId' => $courseId],
             ['deadline' => 'ASC'],

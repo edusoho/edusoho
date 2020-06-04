@@ -33,24 +33,24 @@
         <label>{{'course.members_manage.official_student.add_expiry_day.update'|trans}}</label>
       </div>
       <div class="col-sm-2 control-label width-100">
-        <label><input type="radio" name="updateType" value="day" checked="checked"> {{'course.members_manage.official_student.add_expiry_day.update.days'|trans}}</label>
+        <label><input type="radio" name="updateType" value="day" checked="checked"{% if 'forever' == course.expiryMode %} disabled {% else %} checked="checked" {% endif %}> {{'course.members_manage.official_student.add_expiry_day.update.days'|trans}}</label>
       </div>
       <div class="col-sm-2 controls width-100 pl0">
-        <select class="form-control" name="waveType">
+        <select class="form-control" name="waveType" {% if 'forever' == course.expiryMode %} disabled {% endif %}>
           {{ select_options(dict('waveType'), app.request.query.get('waveType')) }}
         </select>
       </div>
       <div class="col-sm-5 controls expiry-date-change">
-        <input type="text" id="day" name="day" value="0" data-url="{{path('course_set_manage_course_students_deadline_batch_day_check', { courseSetId: course.courseSetId, courseId:course.id, ids:ids })}}" class="form-control width-input">
+        <input type="text" id="day" name="day" value="0" {% if 'forever' == course.expiryMode %} disabled {% endif %} data-url="{{path('course_set_manage_course_students_deadline_batch_day_check', { courseSetId: course.courseSetId, courseId:course.id, ids:ids })}}" class="form-control width-input">
       </div>
     </div>
 
     <div class="row form-group">
       <div class="col-sm-offset-2 col-sm-2 control-label width-100">
-        <label><input type="radio" name="updateType" value="date"> {{'course.members_manage.official_student.add_expiry_day.update.date'|trans}}</label>
+        <label><input type="radio" name="updateType" value="date" {% if 'forever' == course.expiryMode %} checked="checked" {% endif %}> {{'course.members_manage.official_student.add_expiry_day.update.date'|trans}}</label>
       </div>
       <div class="col-sm-7 controls pl0 pr0">
-        <input type="text" id="deadline" name="deadline" disabled data-url="{{path('course_set_manage_course_students_deadline_batch_deadline_check', { courseSetId: course.courseSetId, courseId:course.id, ids:ids })}}" class="form-control width-input">
+        <input type="text" id="deadline" name="deadline" {% if 'forever' != course.expiryMode %} disabled {% endif %} data-url="{{path('course_set_manage_course_students_deadline_batch_deadline_check', { courseSetId: course.courseSetId, courseId:course.id, ids:ids })}}" class="form-control width-input">
       </div>
     </div>
   {% else %}

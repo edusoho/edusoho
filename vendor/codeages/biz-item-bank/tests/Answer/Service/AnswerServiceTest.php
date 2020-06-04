@@ -208,6 +208,7 @@ class AnswerServiceTest extends IntegrationTestCase
                 'returnValue' => [
                     'id' => '1',
                     'need_score' => 1,
+                    'manual_marking' => 1,
                 ],
             ],
             [
@@ -224,6 +225,8 @@ class AnswerServiceTest extends IntegrationTestCase
                     'id' => '1',
                     'status' => AnswerService::ANSWER_RECORD_STATUS_DOING,
                     'assessment_id' => 1,
+                    'answer_scene_id' => 1,
+                    'user_id' => 1,
                 ],
             ],
             [
@@ -240,6 +243,7 @@ class AnswerServiceTest extends IntegrationTestCase
                 'functionName' => 'create',
                 'returnValue' => [
                     'id' => 1,
+                    'answer_scene_id' => 1,
                 ],
             ],
         ]);
@@ -350,6 +354,8 @@ class AnswerServiceTest extends IntegrationTestCase
                     'id' => '1',
                     'status' => AnswerService::ANSWER_RECORD_STATUS_REVIEWING,
                     'assessment_id' => 1,
+                    'answer_scene_id' => 1,
+                    'user_id' => 1,
                 ],
             ],
             [
@@ -359,6 +365,19 @@ class AnswerServiceTest extends IntegrationTestCase
                     'status' => AnswerService::ANSWER_RECORD_STATUS_FINISHED,
                 ],
             ],
+        ]);
+
+        $this->mockObjectIntoBiz('ItemBank:Assessment:AssessmentService', [
+            [
+                'functionName' => 'findAssessmentQuestions',
+                'returnValue' => [
+                    '1' => ['score' => 2],
+                    '2' => ['score' => 2],
+                    '3' => ['score' => 2],
+                    '4' => ['score' => 2],
+                    '5' => ['score' => 2],
+                ],
+            ]
         ]);
 
         $this->mockObjectIntoBiz('ItemBank:Answer:AnswerSceneService', [
@@ -399,7 +418,6 @@ class AnswerServiceTest extends IntegrationTestCase
                 'item_id' => 1,
                 'question_id' => 1,
                 'score' => 0,
-                'total_score' => 2,
                 'response' => ['A'],
                 'status' => 'no_answer',
             ],
@@ -412,7 +430,6 @@ class AnswerServiceTest extends IntegrationTestCase
                 'item_id' => 2,
                 'question_id' => 2,
                 'score' => 0,
-                'total_score' => 2,
                 'response' => ['A'],
                 'status' => 'reviewing',
             ],
@@ -425,7 +442,6 @@ class AnswerServiceTest extends IntegrationTestCase
                 'item_id' => 3,
                 'question_id' => 3,
                 'score' => 0,
-                'total_score' => 2,
                 'response' => ['A'],
                 'status' => 'reviewing',
             ],
@@ -438,7 +454,6 @@ class AnswerServiceTest extends IntegrationTestCase
                 'item_id' => 3,
                 'question_id' => 4,
                 'score' => 0,
-                'total_score' => 2,
                 'response' => [],
                 'status' => 'reviewing',
             ],
@@ -451,7 +466,6 @@ class AnswerServiceTest extends IntegrationTestCase
                 'item_id' => 3,
                 'question_id' => 5,
                 'score' => 0,
-                'total_score' => 2,
                 'response' => ['A'],
                 'status' => 'reviewing',
             ],
@@ -466,18 +480,18 @@ class AnswerServiceTest extends IntegrationTestCase
         $answerReport = $this->getAnswerService()->review($reviewReport);
 
         $aswerQuestionRerport = ArrayToolkit::index($this->getAnswerQuestionReportDao()->search(['ids' => [1, 2, 3, 4, 5]], [], 0, 5), 'id');
-        $this->assertEquals($aswerQuestionRerport['1']['status'], 'no_answer');
+        $this->assertEquals($aswerQuestionRerport['1']['status'], 'right');
         $this->assertEquals($aswerQuestionRerport['2']['status'], 'right');
         $this->assertEquals($aswerQuestionRerport['2']['score'], 2);
         $this->assertEquals($aswerQuestionRerport['3']['status'], 'wrong');
         $this->assertEquals($aswerQuestionRerport['4']['status'], 'no_answer');
         $this->assertEquals($aswerQuestionRerport['4']['score'], 0);
         $this->assertEquals($aswerQuestionRerport['5']['status'], 'part_right');
-        $this->assertEquals($answerReport['right_rate'], 20);
-        $this->assertEquals($answerReport['objective_score'], 1);
+        $this->assertEquals($answerReport['right_rate'], 40);
+        $this->assertEquals($answerReport['objective_score'], 3);
         $this->assertEquals($answerReport['subjective_score'], 2);
-        $this->assertEquals($answerReport['right_question_count'], 1);
-        $this->assertEquals($answerReport['score'], 3);
+        $this->assertEquals($answerReport['right_question_count'], 2);
+        $this->assertEquals($answerReport['score'], 5);
         $this->assertEquals($answerReport['grade'], 'excellent');
         $this->assertEquals($answerReport['comment'], '总体评语');
     }
@@ -491,6 +505,40 @@ class AnswerServiceTest extends IntegrationTestCase
                     'id' => '1',
                     'assessment_id' => 1,
                     'used_time' => 10,
+                ],
+            ],
+        ]);
+
+        $this->mockObjectIntoBiz('ItemBank:Answer:AnswerReportService', [
+            [
+                'functionName' => 'wrapperAnswerQuestionReports',
+                'returnValue' => [
+                    [
+                        'id' => 1,
+                        'identify' => '1_1',
+                        'answer_record_id' => 1,
+                        'assessment_id' => 1,
+                        'section_id' => 1,
+                        'item_id' => 1,
+                        'question_id' => 1,
+                        'score' => 1,
+                        'total_score' => 1,
+                        'response' => [],
+                        'status' => 'reviewing',
+                    ],
+                    [
+                        'id' => 2,
+                        'identify' => '1_1',
+                        'answer_record_id' => 1,
+                        'assessment_id' => 1,
+                        'section_id' => 1,
+                        'item_id' => 2,
+                        'question_id' => 2,
+                        'score' => 1,
+                        'total_score' => 1,
+                        'response' => [],
+                        'status' => 'reviewing',
+                    ],
                 ],
             ],
         ]);
