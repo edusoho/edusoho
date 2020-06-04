@@ -26,10 +26,10 @@ class OverviewStudentExporter extends Exporter
 
     public function getTitles()
     {
-        $titles = array(
+        $titles = [
             'task.learn_data_detail.nickname',
             'task.learn_data_detail.finished_rate',
-        );
+        ];
         $tasks = $this->getAllTaskByCourseId();
 
         $taskTitles = ArrayToolkit::column($tasks, 'title');
@@ -53,25 +53,25 @@ class OverviewStudentExporter extends Exporter
 
         list($users, $tasks, $taskResults) = $this->getReportService()->getStudentDetail($course['id'], $userIds, $taskCount);
 
-        $datas = array();
+        $datas = [];
 
-        $status = array(
+        $status = [
             'finish' => '已完成',
             'start' => '学习中',
-        );
+        ];
 
         foreach ($members as $member) {
-            $userTaskResults = !empty($taskResults[$member['userId']]) ? $taskResults[$member['userId']] : array();
+            $userTaskResults = !empty($taskResults[$member['userId']]) ? $taskResults[$member['userId']] : [];
 
             $user = $users[$member['userId']];
-            $data = array();
-            $data[] = $user['nickname'] . "\t";
+            $data = [];
+            $data[] = $user['nickname']."\t";
 
             $learnProccess = (empty($member['learnedCompulsoryTaskNum']) || empty($course['compulsoryTaskNum'])) ? 0 : (int) ($member['learnedCompulsoryTaskNum'] * 100 / $course['compulsoryTaskNum']);
             $data[] = $learnProccess > 100 ? '100%' : $learnProccess.'%';
 
             foreach ($tasks as $task) {
-                $taskResult = !empty($userTaskResults[$task['id']]) ? $userTaskResults[$task['id']] : array();
+                $taskResult = !empty($userTaskResults[$task['id']]) ? $userTaskResults[$task['id']] : [];
                 $data[] = empty($taskResult) ? '未开始' : $status[$taskResult['status']];
             }
 
@@ -84,12 +84,12 @@ class OverviewStudentExporter extends Exporter
     private function getAllTaskByCourseId()
     {
         return $this->getTaskService()->searchTasks(
-            array(
+            [
                 'courseId' => $this->parameter['courseId'],
                 'isOptional' => 0,
                 'status' => 'published',
-            ),
-            array('seq' => 'ASC'),
+            ],
+            ['seq' => 'ASC'],
             0,
             PHP_INT_MAX
         );
@@ -98,11 +98,11 @@ class OverviewStudentExporter extends Exporter
     private function countTasksByCourseId()
     {
         return $this->getTaskService()->countTasks(
-            array(
+            [
                 'courseId' => $this->parameter['courseId'],
                 'isOptional' => 0,
                 'status' => 'published',
-            )
+            ]
         );
     }
 
