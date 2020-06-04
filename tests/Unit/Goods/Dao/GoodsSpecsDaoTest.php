@@ -14,7 +14,7 @@ class GoodsSpecsDaoTest extends BaseTestCase
 
         $result = $this->getDao()->getByGoodsIdAndTargetId($goodsSpecs1['goodsId'], $goodsSpecs1['targetId']);
 
-        $this->assertArrayEquals($goodsSpecs1, $result);
+        $this->assertEquals($goodsSpecs1, $result);
     }
 
     public function testFindByGoodsId()
@@ -26,7 +26,7 @@ class GoodsSpecsDaoTest extends BaseTestCase
 
         $result = $this->getDao()->findByGoodsId(1);
 
-        $this->assertArrayEquals([$goodSpecs1, $goodSpecs3, $goodSpecs4], $result);
+        $this->assertEquals([$goodSpecs1, $goodSpecs3, $goodSpecs4], $result);
     }
 
     public function testDeleteByGoodsIdAndTargetId()
@@ -39,7 +39,7 @@ class GoodsSpecsDaoTest extends BaseTestCase
 
         $after = $this->getDao()->get($goodsSpecs['id']);
 
-        $this->assertArrayEquals($goodsSpecs, $before);
+        $this->assertEquals($goodsSpecs, $before);
         $this->assertNull($after);
     }
 

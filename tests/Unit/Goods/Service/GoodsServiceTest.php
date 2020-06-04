@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Goods\Service;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
 use Biz\Common\CommonException;
 use Biz\Goods\Dao\GoodsDao;
@@ -35,7 +36,7 @@ class GoodsServiceTest extends BaseTestCase
 
         $this->assertEquals(1, $result['productId']);
         $this->assertEquals('testTitle', $result['title']);
-        $this->assertArrayEquals(['testImages'], $result['images']);
+        $this->assertEquals(['testImages'], $result['images']);
     }
 
     public function testGetGoods()
@@ -44,7 +45,7 @@ class GoodsServiceTest extends BaseTestCase
 
         $result = $this->getGoodsService()->getGoods($expected['id']);
 
-        $this->assertArrayEquals($expected, $result);
+        $this->assertEquals($expected, $result);
 
         $result2 = $this->getGoodsService()->getGoods($expected['id'] + 10000);
 
@@ -64,7 +65,7 @@ class GoodsServiceTest extends BaseTestCase
         $result = $this->getGoodsService()->updateGoods($goods['id'], $fields);
         $this->assertEquals($goods['productId'], $result['productId']);
         $this->assertNotEquals($goods['title'], $result['title']);
-        $this->assertArrayEquals($fields['images'], $result['images']);
+        $this->assertEquals($fields['images'], $result['images']);
     }
 
     public function testDeleteGoods()
@@ -90,17 +91,17 @@ class GoodsServiceTest extends BaseTestCase
 
         $result1 = $this->getGoodsService()->searchGoods($conditions1, ['id' => 'ASC'], 0, 10);
 
-        $this->assertArrayEquals([$goods1, $goods2, $goods3, $goods4], $result1);
+        $this->assertEquals([$goods1, $goods2, $goods3, $goods4], $result1);
 
         $conditions2 = ['productId' => 2];
         $result2 = $this->getGoodsService()->searchGoods($conditions2, ['id' => 'ASC'], 0, 10);
 
-        $this->assertArrayEquals([$goods3, $goods4], $result2);
+        $this->assertEquals([$goods3, $goods4], $result2);
 
         $conditions3 = ['title' => 'testTitle2'];
         $result3 = $this->getGoodsService()->searchGoods($conditions3, ['id' => 'ASC'], 0, 10);
 
-        $this->assertArrayEquals([$goods2], $result3);
+        $this->assertEquals([$goods2], $result3);
     }
 
     public function testSearchGoods_withDifferentOrderBysAndLimits()
@@ -111,13 +112,13 @@ class GoodsServiceTest extends BaseTestCase
         $goods4 = $this->createGoods(['productId' => 2]);
 
         $result1 = $this->getGoodsService()->searchGoods(['title' => 'testTitle'], ['id' => 'ASC'], 0, 10);
-        $this->assertArrayEquals([$goods1, $goods3, $goods4], $result1);
+        $this->assertEquals([$goods1, $goods3, $goods4], $result1);
 
         $result2 = $this->getGoodsService()->searchGoods(['title' => 'testTitle'], ['id' => 'DESC'], 0, 10);
-        $this->assertArrayEquals([$goods4, $goods3, $goods1], $result2);
+        $this->assertEquals([$goods4, $goods3, $goods1], $result2);
 
         $result3 = $this->getGoodsService()->searchGoods(['title' => 'testTitle'], ['id' => 'ASC'], 0, 2);
-        $this->assertArrayEquals([$goods1, $goods3], $result3);
+        $this->assertEquals([$goods1, $goods3], $result3);
     }
 
     public function testSearchGoods_withDifferentColumns()
@@ -134,7 +135,7 @@ class GoodsServiceTest extends BaseTestCase
         ];
 
         $result1 = $this->getGoodsService()->searchGoods(['title' => 'testTitle'], ['id' => 'ASC'], 0, 10, ['productId', 'title']);
-        $this->assertArrayEquals($expected1, $result1);
+        $this->assertEquals($expected1, $result1);
 
         $expected2 = [
             ['title' => $goods1['title']],
@@ -143,7 +144,7 @@ class GoodsServiceTest extends BaseTestCase
         ];
 
         $result2 = $this->getGoodsService()->searchGoods(['title' => 'testTitle'], ['id' => 'ASC'], 0, 10, ['title']);
-        $this->assertArrayEquals($expected2, $result2);
+        $this->assertEquals($expected2, $result2);
     }
 
     public function testGetGoodsByProductId()
@@ -153,7 +154,7 @@ class GoodsServiceTest extends BaseTestCase
 
         $result = $this->getGoodsService()->getGoodsByProductId($goods['productId']);
 
-        $this->assertArrayEquals($goods, $result);
+        $this->assertEquals($goods, $result);
     }
 
     public function testCreateGoodsSpecs_whenMissingGoodsId_thenThrowParamMissingException()
@@ -195,7 +196,7 @@ class GoodsServiceTest extends BaseTestCase
 
         $result = $this->getGoodsService()->getGoodsSpecs($expected['id']);
 
-        $this->assertArrayEquals($expected, $result);
+        $this->assertEquals($expected, $result);
 
         $result2 = $this->getGoodsService()->getGoodsSpecs($expected['id'] + 10000);
 
@@ -238,7 +239,7 @@ class GoodsServiceTest extends BaseTestCase
 
         $after = $this->getGoodsSpecsDao()->get($goodsSpecs['id']);
 
-        $this->assertArrayEquals($goodsSpecs, $before);
+        $this->assertEquals($goodsSpecs, $before);
         $this->assertEmpty($after);
     }
 
@@ -249,7 +250,7 @@ class GoodsServiceTest extends BaseTestCase
 
         $result = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goodsSpecs['goodsId'], $goodsSpecs['targetId']);
 
-        $this->assertArrayEquals($goodsSpecs, $result);
+        $this->assertEquals($goodsSpecs, $result);
     }
 
     public function testFindGoodSpecsByGoodsId()
@@ -262,8 +263,16 @@ class GoodsServiceTest extends BaseTestCase
         $goodsSpecs4 = $this->createGoodsSpecs(['goodsId' => $goods['id']]);
 
         $result = $this->getGoodsService()->findGoodsSpecsByGoodsId($goods['id']);
+        $result = ArrayToolkit::index($result, 'id');
 
-        $this->assertArrayEquals([$goodsSpecs1, $goodsSpecs4], $result);
+        $expected = [
+            $goodsSpecs1['id'] => $goodsSpecs1,
+            $goodsSpecs4['id'] => $goodsSpecs4,
+        ];
+
+        $this->assertEquals(count($expected), count($result));
+        $this->assertEmpty(array_diff(array_keys($expected), array_keys($result)));
+        $this->assertEquals($goodsSpecs4, $result[$goodsSpecs4['id']]);
     }
 
     public function testGetGoodsSpecsByProductIdAndTargetId_whenGoodsNotExist_thenThrowException()
@@ -292,7 +301,7 @@ class GoodsServiceTest extends BaseTestCase
         ]);
 
         $result = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($goods['productId'], 1);
-        $this->assertArrayEquals($goodsSpecs, $result);
+        $this->assertEquals($goodsSpecs, $result);
 
         $resultNull = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($goods['productId'], 1000);
         $this->assertNull($resultNull);
