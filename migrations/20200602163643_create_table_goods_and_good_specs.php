@@ -25,7 +25,7 @@ class CreateTableGoodsAndGoodSpecs extends Migration
                `targetId` int(10) unsigned NOT NULL COMMENT '目标内容Id,如教学计划id',
                `title` varchar(1024) NOT NULL COMMENT '规格标题',
                `images` text DEFAULT NULL COMMENT '商品图片',
-               `price` float NOT NULL DEFAULT 0.00 COMMENT '价格',
+               `price` float(10,2) NOT NULL DEFAULT 0.00 COMMENT '价格',
                `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
                `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
                PRIMARY KEY (`id`)
