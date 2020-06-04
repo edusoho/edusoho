@@ -8,7 +8,7 @@ define(function(require, exports, module) {
     });
 
     $('.js-site-edit').click(function () {
-      window.location.href = location.href + '?mode=edit';
+      $('#find-page').html('<iframe src="/h5/admin/index.html" frameborder="0" style="width: 100%;height: 700px;border: none;"></iframe>');
     });
   };
 });

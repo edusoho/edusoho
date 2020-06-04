@@ -34,12 +34,8 @@
             </div>
           </div>
         {% else %}
-          {% if app.request.query.get('mode')|default('') == 'edit' %}
-            {% if template %}
-              <iframe src="/h5/admin/index.html?template={{ template }}" frameborder="0" style="width: 100%;height: 700px;border: none;"></iframe>
-            {% else %}
-              <iframe src="/h5/admin/index.html" frameborder="0" style="width: 100%;height: 700px;border: none;"></iframe>
-            {% endif %}
+          {% if template %}
+            <iframe src="/h5/admin/index.html?template={{ template }}" frameborder="0" style="width: 100%;height: 700px;border: none;"></iframe>
           {% else %}
             <div class="row h5-clearfix ">
               <div class="find-page__left">
