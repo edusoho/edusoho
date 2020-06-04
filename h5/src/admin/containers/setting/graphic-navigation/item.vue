@@ -175,7 +175,7 @@ export default {
     ]),
     getCurrentType() {
       this.groupList.length = 0;
-      if (this.item.link.type === 'vip') {
+      if (!this.item.link.type || this.item.link.type === 'vip') {
         return;
       }
       this.getCategoryType({

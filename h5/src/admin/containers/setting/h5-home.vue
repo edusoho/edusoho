@@ -44,7 +44,7 @@
           </el-menu>
         </div>
       </el-col>
-      <el-col :span="16">
+      <el-col :span="16" class="el-full">
         <div class="h5-home-center">
           <div
             class="setting-page setting-page-h5"
@@ -121,6 +121,7 @@ import {
   H5_BASE_MODULE
 } from "admin/config/module-default-config";
 import ModuleCounter from "admin/utils/module-counter";
+import getQueryVariable from "admin/utils/query-variable";
 import needUpgrade from "admin/utils/version-compare";
 import pathName2Portal from "admin/config/api-portal-config";
 import marketingMixins from "admin/mixins/marketing";
@@ -183,7 +184,7 @@ export default {
     //设置样式
     this.setStyle();
     // 请求发现页配置
-    this.load();
+    this.getFind();
     // 获得课程分类列表
     this.getCourseCategories();
     // 获得班级分类列表
@@ -200,8 +201,17 @@ export default {
       "getClassCategories",
       "deleteDraft",
       "saveDraft",
-      "getDraft"
+      "getDraft",
+      "getTemplate"
     ]),
+    getFind(){
+      const themeTemplate=getQueryVariable("template");
+      if(themeTemplate){
+        this.getTheme(themeTemplate)
+      }else{
+        this.load();
+      }
+    },
     setStyle(){
       //设置背景色
       const windowHeight = document.documentElement.clientHeight;
@@ -340,6 +350,18 @@ export default {
       //使用异步，保证组件添加完成再滑动到底部
       setTimeout(()=>{this.scrollBottom(),500})
     },
+    getTheme(themeTemplate){
+      this.getTemplate({
+        portal: this.portal,
+        template: themeTemplate,
+      })
+        .then(res => {
+          this.formateRes(res);
+        })
+        .catch(err => {
+          this.formateErr(err);
+        });
+    },
     load() {
       // 读取草稿配置
       const mode = this.$route.query.draft == 1 ? "draft" : "published";
@@ -350,34 +372,47 @@ export default {
         mode
       })
         .then(res => {
+          console.log(1)
           //默认排列方式
+          this.formateRes(res);
+        })
+        .catch(err => {
+         this.formateErr(err);
+        });
+    },
+    formateRes(res){
+      //默认排列方式
           Object.keys(res).forEach((element, index) => {
-            // res[element] = this.formateAppDisplay(
-            //   res[element].type, //测试数据，上线删除
-            //   res[element]
-            // );
+            res[element] = this.formateH5Display(
+              res[element].type, //兼容无displayStyle的老数据
+              res[element]
+            );
             res[element].oldIndex = index; //oldIndex用于组件的key,减少组件重新创建
           });
           this.moduleLength = Object.keys(res).length - 1;
           this.modules = Object.values(res);
           this.moduleCountInit();
-        })
-        .catch(err => {
-          this.moduleCountInit();
+    },
+    formateErr(err){
+      this.moduleCountInit();
           this.$message({
             message: err.message,
             type: "error"
-          });
-        });
+      });
     },
-    //处理班级课程排列（可删）
-    // formateAppDisplay(type, item) {
-    //   if (
-    //     (type === "course_list" || type === "classroom_list") && this.portal === "h5") {
-    //       item.data.displayStyle = "row";
-    //   }
-    //   return item;
-    // },
+    //处理班级课程排列
+    formateH5Display(type, item) {
+      if (
+        (type === "course_list" || type === "classroom_list")
+        && !item.data.displayStyle) {
+          if(this.portal === "app" ){
+              item.data.displayStyle = "distichous";
+          }else if(this.portal === "h5"){
+              item.data.displayStyle = "row";
+          }
+      }
+      return item;
+    },
     reset() {
       parent.location.reload();
       // 删除草稿配置配置

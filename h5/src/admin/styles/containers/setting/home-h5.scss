@@ -13,7 +13,7 @@
   padding-bottom: 60px;
 }
 .h5-home-center{
-  margin-left: 110px;
+  margin: 30px 416px 0 110px;
   text-align: center;
 }
 .h5-home-right{
@@ -27,6 +27,10 @@
 
 .el-menu{
     border: 0;
+}
+
+.el-full{
+  width: 100%;
 }
 
 .el-submenu .el-menu-item {
@@ -79,6 +83,7 @@
       bottom: 0px;
       padding-bottom: 60px;
       width: 416px;
+      border:none
     }
   }
 }
