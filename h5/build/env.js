@@ -5,10 +5,11 @@ module.exports = {
   },
   try6: {
     url: "http://try6.edusoho.cn",
-    token: "2ggsc28azq3ookoswkw8sg4ggosocw0",
+    token: "qa482o95rk04g8888w8oc88cgkcwsgk",
   },
   gdy: {
-    url: "ttp://gdy.st.edusoho.cn"
+    url: "http://gdy.st.edusoho.cn",
+    token: "bbdu8q9lw1wgck04804sowgoksc88g8",
   },
   iyamusic: {
     url: "https://www.iyamusic.com",
@@ -22,4 +23,4 @@ module.exports = {
   mock: {
     url: "https://www.easy-mock.com/mock/5b1742522de86c43cc2dc73a/edusoho",
   },
-}['devtest'];
+}['gdy'];

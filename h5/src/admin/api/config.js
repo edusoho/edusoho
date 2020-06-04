@@ -8,6 +8,11 @@ const config = [
     // 后台配置获取
     name: 'getDraft',
     url: '/pages/{portal}/settings/{type}'
+  },
+  {
+    // 后台配置获取
+    name: 'getTemplate',
+    url: '/pages/{portal}/template/{template}'
   }, {
     // 获取班级课程分类
     name: 'getCategoryType',
