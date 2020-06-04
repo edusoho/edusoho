@@ -133,13 +133,13 @@ class ProductServiceTest extends BaseTestCase
         $product4 = $this->createProduct('testType', 1, 'testTitle2');
 
         $result1 = $this->getProductService()->searchProducts(['targetType' => 'testType'], ['id' => 'ASC'], 0, 10);
-        $this->assertArrayEquals([$product1, $product3, $product4], $result1);
+        $this->assertEquals([$product1, $product3, $product4], $result1);
 
         $result2 = $this->getProductService()->searchProducts(['targetType' => 'testType'], ['id' => 'DESC'], 0, 10);
-        $this->assertArrayEquals([$product4, $product3, $product1], $result2);
+        $this->assertEquals([$product4, $product3, $product1], $result2);
 
         $result3 = $this->getProductService()->searchProducts(['targetType' => 'testType'], ['id' => 'ASC'], 0, 2);
-        $this->assertArrayEquals([$product1, $product3], $result3);
+        $this->assertEquals([$product1, $product3], $result3);
     }
 
     public function testSearchProducts_withDifferentColumns()
@@ -156,7 +156,7 @@ class ProductServiceTest extends BaseTestCase
         ];
 
         $result1 = $this->getProductService()->searchProducts(['targetType' => 'testType'], ['id' => 'ASC'], 0, 10, ['targetId', 'targetType']);
-        $this->assertArrayEquals($expected1, $result1);
+        $this->assertEquals($expected1, $result1);
 
         $expected2 = [
             ['targetType' => $product1['targetType'], 'title' => $product1['title']],
@@ -165,7 +165,7 @@ class ProductServiceTest extends BaseTestCase
         ];
 
         $result2 = $this->getProductService()->searchProducts(['targetType' => 'testType'], ['id' => 'ASC'], 0, 10, ['targetType', 'title']);
-        $this->assertArrayEquals($expected2, $result2);
+        $this->assertEquals($expected2, $result2);
     }
 
     public function testGetProductByTargetIdAndType()
