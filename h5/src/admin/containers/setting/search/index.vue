@@ -9,6 +9,7 @@
     </div>
 
     <div slot="setting">
+      <e-suggest v-if="moduleData.tips" :suggest="moduleData.tips" :key="moduleData.moduleType"></e-suggest>
         <header class="title">
         搜索设置
       </header>
@@ -22,10 +23,12 @@
 <script>
 import courseList from "&/components/e-course-list/e-course-list.vue";
 import moduleFrame from '../module-frame';
+import suggest from "&/components/e-suggest/e-suggest.vue"
 export default {
   name:"search",
   components: {
-    moduleFrame
+    moduleFrame,
+    'e-suggest':suggest
   },
   props: {
     active: {

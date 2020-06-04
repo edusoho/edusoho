@@ -106,6 +106,7 @@ export default {
     },
     onCancel() {
       this.isSearch=false;
+      this.$router.push({ path:'/'  })
     },
     initClassroomList() {
       this.classroom.isRequestCompile = false;

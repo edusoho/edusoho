@@ -12,6 +12,7 @@
     </div>
 
     <div slot="setting" class="carousel-allocate">
+      <e-suggest v-if="moduleData.tips" :suggest="moduleData.tips" :key="moduleData.moduleType"></e-suggest>
       <header class="title">
         轮播图设置
         <div v-if="pathName !== 'appSetting'" class="help-text" >建议图片尺寸为750x400px，支持 jpg/png/gif 格式，大小不超过2MB</div>
@@ -49,12 +50,14 @@ import { MODULE_DEFAULT } from 'admin/config/module-default-config'
 import item from './item'
 import moduleFrame from '../module-frame'
 import courseModal from '../course/modal/course-modal'
+import suggest from "&/components/e-suggest/e-suggest.vue"
 
 export default {
   components: {
     item,
     moduleFrame,
-    courseModal
+    courseModal,
+    'e-suggest':suggest
   },
   props: {
     active: {

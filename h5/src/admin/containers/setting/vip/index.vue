@@ -5,6 +5,7 @@
     </div>
 
     <div slot="setting">
+      <e-suggest v-if="moduleData.tips" :suggest="moduleData.tips" :key="moduleData.moduleType"></e-suggest>
       <header class="title">
         会员设置
         <div class="text-12 color-gray mts" v-if="portal === 'miniprogram'">
@@ -37,13 +38,14 @@ import settingCell from '../module-frame/setting-cell';
 import vipList from '&/components/e-vip-list/e-vip-list';
 import pathName2Portal from 'admin/config/api-portal-config';
 import { mapState } from 'vuex';
-
+import suggest from "&/components/e-suggest/e-suggest.vue"
 export default {
   name: 'vip',
   components: {
     moduleFrame,
     settingCell,
     vipList,
+    'e-suggest':suggest
   },
   data () {
     return {
