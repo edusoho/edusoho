@@ -13,7 +13,7 @@ class ProductDaoTest extends BaseTestCase
         $product2 = $this->createProduct(['targetType' => 'type2']);
 
         $result = $this->getProductDao()->getByTargetIdAndType($product1['targetId'], $product1['targetType']);
-        $this->assertArrayEquals($product1, $result);
+        $this->assertEquals($product1, $result);
     }
 
     public function testFindByIds()
@@ -24,7 +24,7 @@ class ProductDaoTest extends BaseTestCase
 
         $result = $this->getProductDao()->findByIds([$product1['id'], $product2['id'], $product3['id'], 1001]);
 
-        $this->assertArrayEquals([$product1, $product2, $product3], $result);
+        $this->assertEquals([$product1, $product2, $product3], $result);
     }
 
     protected function createProduct($product = [])
