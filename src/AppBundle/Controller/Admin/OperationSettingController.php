@@ -3,24 +3,24 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Coupon\Service\CouponBatchService;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\CloudPlatform\CloudAPIFactory;
 
 class OperationSettingController extends BaseController
 {
     public function wapSetAction(Request $request)
     {
-        $defaultWapSetting = array(
+        $defaultWapSetting = [
             'version' => 1,
             'template' => 'jianmoOn',
-        );
+        ];
 
         if ($request->isMethod('POST')) {
             $wapSetting = $request->request->all();
-            $wapSetting = ArrayToolkit::parts($wapSetting, array(
-                'version', 'template'
-            ));
+            $wapSetting = ArrayToolkit::parts($wapSetting, [
+                'version', 'template',
+            ]);
 
             $template = $wapSetting['template'];
             $wapSetting = array_merge($defaultWapSetting, $wapSetting);
@@ -32,24 +32,24 @@ class OperationSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        $wapSetting = $this->setting('wap', array());
+        $wapSetting = $this->setting('wap', []);
         $wapSetting = array_merge($defaultWapSetting, $wapSetting);
 
-        return $this->render('admin/wap/set.html.twig', array(
+        return $this->render('admin/wap/set.html.twig', [
             'wapSetting' => $wapSetting,
             'template' => empty($template) ? '' : $template,
-        ));
+        ]);
     }
 
     public function articleSetAction(Request $request)
     {
-        $articleSetting = $this->getSettingService()->get('article', array());
+        $articleSetting = $this->getSettingService()->get('article', []);
 
-        $default = array(
+        $default = [
             'name' => '资讯频道',
             'pageNums' => 20,
             'show_comment' => '1',
-        );
+        ];
 
         $articleSetting = array_merge($default, $articleSetting);
 
@@ -59,9 +59,9 @@ class OperationSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin/article/setting.html.twig', array(
+        return $this->render('admin/article/setting.html.twig', [
             'articleSetting' => $articleSetting,
-        ));
+        ]);
     }
 
     public function groupSetAction(Request $request)
@@ -73,13 +73,13 @@ class OperationSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin/group/set.html.twig', array(
-        ));
+        return $this->render('admin/group/set.html.twig', [
+        ]);
     }
 
     public function inviteSetAction(Request $request)
     {
-        $default = array(
+        $default = [
             'invite_code_setting' => 0,
             'promoted_user_enable' => 0,
             'promoted_user_batchId' => '',
@@ -89,23 +89,23 @@ class OperationSettingController extends BaseController
             'inviteInfomation_template' => '{{registerUrl}}',
             'remain_number' => '',
             'mobile' => '',
-        );
+        ];
 
         if ('POST' == $request->getMethod()) {
             $inviteSetting = $request->request->all();
             if (!empty($inviteSetting['promoted_user_batchId']) || !empty($inviteSetting['promoted_user_enable'])) {
                 $batch = $this->getCouponBatchService()->getBatch($inviteSetting['promoted_user_batchId']);
                 if ($batch['unreceivedNum'] <= 1) {
-                    return  $this->createJsonResponse(array('status' => false, 'message' => $this->trans('admin.setting.invite.chooser_coupon.unreceived_num')));
+                    return  $this->createJsonResponse(['status' => false, 'message' => $this->trans('admin.setting.invite.chooser_coupon.unreceived_num')]);
                 }
             }
             if (!empty($inviteSetting['promote_user_batchId']) || !empty($inviteSetting['promote_user_enable'])) {
                 $batch = $this->getCouponBatchService()->getBatch($inviteSetting['promote_user_batchId']);
                 if ($batch['unreceivedNum'] <= 1) {
-                    return  $this->createJsonResponse(array('status' => false, 'message' => $this->trans('admin.setting.invite.chooser_coupon.unreceived_num')));
+                    return  $this->createJsonResponse(['status' => false, 'message' => $this->trans('admin.setting.invite.chooser_coupon.unreceived_num')]);
                 }
             }
-            $inviteSetting = ArrayToolkit::parts($inviteSetting, array(
+            $inviteSetting = ArrayToolkit::parts($inviteSetting, [
                 'invite_code_setting',
                 'promoted_user_enable',
                 'promoted_user_batchId',
@@ -115,7 +115,7 @@ class OperationSettingController extends BaseController
                 'inviteInfomation_template',
                 'remain_number',
                 'mobile',
-            ));
+            ]);
 
             $inviteSetting = array_merge($default, $inviteSetting);
             $inviteSetting['promoted_sms_send'] = 1;
@@ -129,13 +129,13 @@ class OperationSettingController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $inviteSetting = $this->getSettingService()->get('invite', array());
+        $inviteSetting = $this->getSettingService()->get('invite', []);
         $inviteSetting = array_merge($default, $inviteSetting);
 
-        return $this->render('admin/invite/set.html.twig', array(
+        return $this->render('admin/invite/set.html.twig', [
             'inviteSetting' => $inviteSetting,
             'inviteInfomation_template' => $inviteSetting['inviteInfomation_template'],
-        ));
+        ]);
     }
 
     protected function updateInviteSmsSendSetting($inviteSetting)
