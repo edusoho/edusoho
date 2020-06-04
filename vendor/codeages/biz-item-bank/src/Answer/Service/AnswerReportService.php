@@ -19,4 +19,6 @@ interface AnswerReportService
     public function search($conditions, $orderBys, $start, $limit, $columns = array());
 
     public function count($conditions);
+
+    public function wrapperAnswerQuestionReports($answerRecordId, $answerQuestionReports);
 }

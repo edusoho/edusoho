@@ -50,21 +50,35 @@ class TestpaperInfo extends AbstractResource
         if (!method_exists($this, $method)) {
             throw CommonException::NOTFOUND_METHOD();
         }
-        $this->$method($user, $testpaper, $targetId, $results);
+        $this->$method($user, $targetId, $results);
 
         return $results;
     }
 
-    protected function handleTask($user, $testpaper, $taskId, &$results)
+    protected function handleTask($user, $taskId, &$results)
     {
         $task = $this->getTaskService()->tryTakeTask($taskId);
         if (empty($task)) {
             throw TaskException::NOTFOUND_TASK();
         }
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-        if ('testpaper' != $activity['mediaType'] || $activity['ext']['mediaId'] != $testpaper['id']) {
+        if ('testpaper' != $activity['mediaType']) {
             throw TestpaperException::NOT_TESTPAPER_TASK();
         }
+
+        $assessment = $this->getAssessmentService()->showAssessment($activity['ext']['mediaId']);
+        if (empty($assessment)) {
+            throw TestpaperException::NOTFOUND_TESTPAPER();
+        }
+
+        $testpaperWrapper = new TestpaperWrapper();
+        $testpaper = $testpaperWrapper->wrapTestpaper($assessment);
+        $items = ArrayToolkit::groupIndex($testpaperWrapper->wrapTestpaperItems($assessment), 'type', 'id');
+        $testpaper['metas']['question_type_seq'] = array_keys($items);
+        $results = [
+            'testpaper' => $testpaper,
+            'items' => $this->filterTestpaperItems($items),
+        ];
 
         $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         $testpaperRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $user['id']);

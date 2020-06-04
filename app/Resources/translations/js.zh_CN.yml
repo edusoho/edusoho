@@ -569,6 +569,7 @@ classroom.manage.expiry_mode_date_error_hint: 请输入截至日期
 classroom.manage.coin_price_hint: 相当于%coinPrice%%coinName%
 classroom.live_room.entry_error_hint: 进入直播教室错误，请联系管理员，<a href="javascript:document.location.reload()">重试</a>或<a href="javascript:window.close();">关闭</a>
 classroom.live_room.retry_or_close: <a href="javascript:document.location.reload()">重试</a>或<a href="javascript:window.close();">关闭</a>
+classroom.manage.admin_delete_course_set_hint: 同时删除此班级课程（不会影响源课程以及其他班级）
 
 thread.post.reply: 回复
 thread.post.reply_error_hint: 发表回复失败，请重试

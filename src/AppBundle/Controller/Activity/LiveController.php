@@ -161,17 +161,13 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         if ('live' !== $activity['mediaType']) {
             return $this->createJsonResponse(array('success' => true, 'status' => 'not_live'));
         }
-        $now = time();
-        if ($activity['startTime'] > $now) {
-            return $this->createJsonResponse(array('success' => true, 'status' => 'not_start'));
-        }
-
         if ($this->validTaskLearnStat($request, $activity['id'])) {
+           
             //当前业务逻辑：看过即视为完成
             $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
             $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
             if (empty($taskResult)) {
-                $this->getTaskService()->startTask($task['id']);
+                $taskResult = $this->getTaskService()->startTask($task['id']);
             }
             $eventName = $request->query->get('eventName');
             $data = $request->query->get('data');
@@ -188,7 +184,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             }
         }
 
-        $status = $activity['endTime'] < $now ? 'live_end' : 'on_live';
+        $status = $activity['endTime'] < time() ? 'live_end' : 'on_live';
 
         return $this->createJsonResponse(array('success' => true, 'status' => $status));
     }

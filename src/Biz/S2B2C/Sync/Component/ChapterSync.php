@@ -7,16 +7,16 @@ use Biz\Course\Dao\CourseChapterDao;
 
 class ChapterSync extends AbstractEntitySync
 {
-    protected function syncEntity($source, $config = array())
+    protected function syncEntity($source, $config = [])
     {
         $newCourseId = $config['newCourse']['id'];
         //查询出course下所有chapter，新增并保留新旧chapter id，用于填充newTask的categoryId
         $chapters = $source['chapterList'];
         if (empty($chapters)) {
-            return array();
+            return [];
         }
 
-        $chapterMap = array();
+        $chapterMap = [];
         foreach ($chapters as $chapter) {
             $newChapter = $this->filterFields($chapter);
             $newChapter['courseId'] = $newCourseId;
@@ -29,7 +29,7 @@ class ChapterSync extends AbstractEntitySync
         return $chapterMap;
     }
 
-    protected function updateEntityToLastedVersion($source, $config = array())
+    protected function updateEntityToLastedVersion($source, $config = [])
     {
         $newCourseId = $config['newCourse']['id'];
         $chapters = $source['chapterList'];
@@ -39,10 +39,10 @@ class ChapterSync extends AbstractEntitySync
                 $this->getChapterDao()->delete($existChapter['id']);
             }
 
-            return array();
+            return [];
         }
 
-        $chapterMap = array();
+        $chapterMap = [];
         foreach ($chapters as $chapter) {
             $newChapter = $this->filterFields($chapter);
             $newChapter['courseId'] = $newCourseId;
@@ -58,7 +58,7 @@ class ChapterSync extends AbstractEntitySync
 
         $needDeleteChapterSyncIds = array_values(array_diff(array_keys($existChapters), array_keys($chapterMap)));
         if (!empty($existChapters) && !empty($needDeleteChapterSyncIds)) {
-            $needDeleteChapters = $this->getChapterDao()->search(array('courseId' => $newCourseId, 'syncIds' => $needDeleteChapterSyncIds), array(), 0, PHP_INT_MAX);
+            $needDeleteChapters = $this->getChapterDao()->search(['courseId' => $newCourseId, 'syncIds' => $needDeleteChapterSyncIds], [], 0, PHP_INT_MAX);
             foreach ($needDeleteChapters as $needDeleteChapter) {
                 $this->getChapterDao()->delete($needDeleteChapter['id']);
             }
@@ -69,7 +69,7 @@ class ChapterSync extends AbstractEntitySync
 
     protected function getFields()
     {
-        return array(
+        return [
             'type',
             'number',
             'seq',
@@ -77,7 +77,7 @@ class ChapterSync extends AbstractEntitySync
             'status',
             'isOptional',
             'published_number',
-        );
+        ];
     }
 
     /**

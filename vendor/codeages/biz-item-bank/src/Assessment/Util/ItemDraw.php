@@ -74,7 +74,7 @@ class ItemDraw
             'bank_id' => $range['bank_id'],
         ];
 
-        if (!empty($range['category_ids'])) {
+        if (!empty($range['category_ids']) && !in_array('', $range['category_ids'])) {
             $conditions['category_ids'] = $range['category_ids'];
         }
 

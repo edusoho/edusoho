@@ -6,18 +6,18 @@ use Biz\Activity\Dao\VideoActivityDao;
 
 class Video extends Activity
 {
-    public function sync($activity, $config = array())
+    public function sync($activity, $config = [])
     {
         $newVideoFields = $this->getVideoActivityFields($activity, $config);
 
         return $this->getVideoActivityDao()->create($newVideoFields);
     }
 
-    public function updateToLastedVersion($activity, $config = array())
+    public function updateToLastedVersion($activity, $config = [])
     {
         $newVideoFields = $this->getVideoActivityFields($activity, $config);
 
-        $existVideo = $this->getVideoActivityDao()->search(array('syncId' => $newVideoFields['syncId']), array(), 0, PHP_INT_MAX);
+        $existVideo = $this->getVideoActivityDao()->search(['syncId' => $newVideoFields['syncId']], [], 0, PHP_INT_MAX);
         if (!empty($existVideo)) {
             unset($existVideo['createdUserId']);
 
@@ -32,14 +32,14 @@ class Video extends Activity
         $video = $activity[$activity['mediaType'].'Activity'];
         $newUploadFiles = $config['newUploadFiles'];
 
-        return array(
+        return [
             'syncId' => $video['id'],
             'mediaSource' => $video['mediaSource'],
             'mediaId' => empty($newUploadFiles[$video['mediaId']]) ? 0 : $newUploadFiles[$video['mediaId']]['id'],
             'mediaUri' => $video['mediaUri'],
             'finishType' => $video['finishType'],
             'finishDetail' => $video['finishDetail'],
-        );
+        ];
     }
 
     /**

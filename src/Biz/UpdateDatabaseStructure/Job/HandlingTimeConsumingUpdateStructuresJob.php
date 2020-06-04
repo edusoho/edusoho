@@ -21,6 +21,27 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
     protected function addTableIndex()
     {
         /*
+         *  Table  biz_answer_question_report
+         *  Index  identify
+         *  Column identify
+         */
+        $this->createIndex('biz_answer_question_report', 'identify', 'identify');
+
+        /*
+         *  Table  biz_assessment_section_item
+         *  Index  seq
+         *  Column seq
+         */
+        $this->createIndex('biz_assessment_section_item', 'seq', 'seq');
+
+        /*
+         *  Table  biz_answer_report
+         *  Index  answer_scene_id
+         *  Column answer_scene_id
+         */
+        $this->createIndex('biz_answer_report', 'answer_scene_id', 'answer_scene_id');
+
+        /*
          *  Table  biz_pay_trade
          *  Index  user_id
          *  Column user_id

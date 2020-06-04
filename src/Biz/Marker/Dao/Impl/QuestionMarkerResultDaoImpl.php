@@ -48,6 +48,19 @@ class QuestionMarkerResultDaoImpl extends GeneralDaoImpl implements QuestionMark
         return $this->findByFields(array('taskId' => $taskId, 'questionMarkerId' => $questionMarkerId));
     }
 
+    public function findByUserIdAndMarkerIds($userId, $markerIds)
+    {
+        if (empty($markerIds)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($markerIds) - 1).'?';
+
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND markerId IN ({$marks});";
+
+        return $this->db()->fetchAll($sql, array_merge(array($userId), $markerIds));
+    }
+
     public function declares()
     {
         return array(

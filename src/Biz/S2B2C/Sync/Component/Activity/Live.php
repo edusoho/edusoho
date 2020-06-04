@@ -6,14 +6,14 @@ use Biz\Activity\Service\LiveActivityService;
 
 class Live extends Activity
 {
-    public function sync($activity, $config = array())
+    public function sync($activity, $config = [])
     {
-        return array();
+        return [];
     }
 
-    public function updateToLastedVersion($activity, $config = array())
+    public function updateToLastedVersion($activity, $config = [])
     {
-        return array();
+        return [];
     }
 
     /**

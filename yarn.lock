@@ -3241,7 +3241,6 @@ es-abstract@^1.17.0, es-abstract@^1.17.0-next.1, es-abstract@^1.17.2, es-abstrac
 es-ckeditor@4.7.2-patch13:
   version "4.7.2-patch13"
   resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch13.tgz#a740df84a7d2e952f352fe727e1565409f1d0e1d"
-  integrity sha512-ZRwmo39MJujytpgs7giJYAhFFBkMzFhS/wdL8Yvu3GqQ6xjbhb1it45VR4q8UlGdOGFR6clzuNJ4mosxZZTbhQ==
 
 es-commit-msg-validator@1.0.2:
   version "1.0.2"
@@ -3297,7 +3296,6 @@ es-to-primitive@^1.2.1:
 es-webpack-engine@4.4.1:
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/es-webpack-engine/-/es-webpack-engine-4.4.1.tgz#cff4b2007f5524851b7dcf2cb35e2cf131a6bc88"
-  integrity sha512-gG4+dot1xNAJh2W+7pVwF8vtO7PSmYQHFW1o8SrzcIGmHAqB3rUTo4bFZ8PiqJZMFQlXFvgnMzoDqp0DSzi23Q==
   dependencies:
     "@babel/cli" "^7.0.0"
     "@babel/core" "^7.0.0"
@@ -5150,10 +5148,9 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/item-bank/-/item-bank-1.0.6.tgz#e7a8f68f54935ca7922f3d519c62f294cf8ff3ca"
-  integrity sha512-TpSZHSDE9u0Dl7bI1LD/IdW3KmR+IWpsKFlrjXWpWLqlhDGyCskxokuZBJDfnA+3/fUu5uWLYH4uAI9m2IpUEg==
+item-bank@1.0.10-0:
+  version "1.0.10-0"
+  resolved "https://registry.npm.taobao.org/item-bank/download/item-bank-1.0.10-0.tgz#564dfa17ab6d1d417ce2e8596eb630826388ba6e"
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"
@@ -8773,7 +8770,6 @@ uglify-js@^3.1.4:
 uglify-js@^3.6.0:
   version "3.9.2"
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.9.2.tgz#012b74fb6a2e440d9ba1f79110a479d3b1f2d48d"
-  integrity sha512-zGVwKslUAD/EeqOrD1nQaBmXIHl1Vw371we8cvS8I6mYK9rmgX5tv8AAeJdfsQ3Kk5mGax2SVV/AizxdNGhl7Q==
   dependencies:
     commander "~2.20.3"
 
@@ -8797,7 +8793,6 @@ uglifyjs-webpack-plugin@^1.3.0:
 uglifyjs-webpack-plugin@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/uglifyjs-webpack-plugin/-/uglifyjs-webpack-plugin-2.2.0.tgz#e75bc80e7f1937f725954c9b4c5a1e967ea9d0d7"
-  integrity sha512-mHSkufBmBuJ+KHQhv5H0MXijtsoA1lynJt1lXOaotja8/I0pR4L9oGaPIZw+bQBOFittXZg9OC1sXSGO9D9ZYg==
   dependencies:
     cacache "^12.0.2"
     find-cache-dir "^2.1.0"

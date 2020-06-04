@@ -41,9 +41,6 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
 
     /**
      * @param $params
-     *
-     * @return null
-     *              EduSoho 不存在更新B端URL
      */
     public function onMerchantDomainUrlChange($params)
     {

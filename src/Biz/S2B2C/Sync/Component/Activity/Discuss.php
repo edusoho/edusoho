@@ -4,13 +4,13 @@ namespace Biz\S2B2C\Sync\Component\Activity;
 
 class Discuss extends Activity
 {
-    public function sync($activity, $config = array())
+    public function sync($activity, $config = [])
     {
-        return array();
+        return [];
     }
 
-    public function updateToLastedVersion($activity, $config = array())
+    public function updateToLastedVersion($activity, $config = [])
     {
-        return array();
+        return [];
     }
 }
