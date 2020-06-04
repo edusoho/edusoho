@@ -2,7 +2,6 @@
 
 namespace Biz\Course\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Announcement\Service\AnnouncementService;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseChapterDao;
@@ -33,8 +32,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             $this->deleteCourseSetMaterial($courseSetId);
 
             $this->deleteCourseSetCourse($courseSetId);
-
-            $this->deleteTestpaper($courseSetId);
 
             $this->getCourseSetDao()->delete($courseSetId);
 
@@ -81,17 +78,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         foreach ($attachments as $attachment) {
             $this->getUploadFileService()->deleteUseFile($attachment['id']);
         }
-    }
-
-    protected function deleteTestpaper($courseSetId)
-    {
-        $testpapers = $this->getTestpaperService()->searchTestpapers(['courseSetId' => $courseSetId], [], 0, PHP_INT_MAX);
-        if (empty($testpapers)) {
-            return;
-        }
-
-        $testpaperIds = ArrayToolkit::column($testpapers, 'id');
-        $this->getTestpaperService()->deleteTestpapers($testpaperIds);
     }
 
     public function deleteCourse($courseId)

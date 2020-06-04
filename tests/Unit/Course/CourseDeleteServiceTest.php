@@ -68,19 +68,6 @@ class CourseDeleteServiceTest extends BaseTestCase
         $this->assertNull($result);
     }
 
-    public function testDeleteTestpaper()
-    {
-        $result = ReflectionUtils::invokeMethod($this->getCourseDeleteService(), 'deleteTestpaper', [1]);
-        $this->assertEmpty($result);
-
-        $result = $this->getTestpaperDao()->create(['name' => 'testpaper name', 'score' => '5.0', 'itemCount' => 1, 'courseSetId' => 1]);
-        $this->assertNotNull($result);
-
-        ReflectionUtils::invokeMethod($this->getCourseDeleteService(), 'deleteTestpaper', [1]);
-        $result = $this->getTestpaperDao()->get($result['id']);
-        $this->assertNull($result);
-    }
-
     public function testUpdateMobileSettingEmpty()
     {
         $result = ReflectionUtils::invokeMethod($this->getCourseDeleteService(), 'updateMobileSetting', [1]);
