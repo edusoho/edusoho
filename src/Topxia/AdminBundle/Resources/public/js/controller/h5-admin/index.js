@@ -6,6 +6,10 @@ define(function(require, exports, module) {
       $('[name="version"]').val($(this).data('version'));
       $('#wap-setting-form').submit();
     });
+
+    $('.js-site-edit').click(function () {
+      window.location.href = location.href + '?mode=edit';
+    });
   };
 });
 

@@ -10,7 +10,7 @@
 
   <div class="h5-find-body">
     <ul class="nav nav-tabs setting-nav-tab js-nav-tab">
-      <li class="active"><a href="#find-page" data-toggle="tab">{{'admin.wap_setting.mini_schoo'|trans}}</a></li>
+      <li class="active"><a href="#find-page" data-toggle="tab">{{'admin.wap_setting.mini_school'|trans}}</a></li>
       <li ><a href="#theme-page" data-toggle="tab">{{'admin.wap_setting.theme'|trans}}</a></li>
       <li ><a href="#site-page" data-toggle="tab">{{'admin.wap_setting.site'|trans}}</a></li>
     </ul>
@@ -19,45 +19,111 @@
       {# 发现页设置 #}
       <div class="tab-pane fade in active" id="find-page">
         {% if 2 != wapSetting.version %}
-          <div class="h5-text-content">
-            <div class="title">
-              <span class="h5-color-primary">{{ 'admin.wap_setting.find'|trans|raw }}</span><span class="text-gray-medium">{{ 'admin.wap_setting.online'|trans|raw }}</span>
+          <div class="row h5-clearfix ">
+            <div class="find-page__left">
+              <img class="find-page__left--img" src="{{ asset('static-dist/app/img/admin/h5/iPhoneX.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}" />
+              <div class="find-page__left--scroll">
+                <img class="scroll-img" src="{{ asset('static-dist/app/img/admin/h5/h5-all.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}" />
+              </div>
             </div>
-            <ul class="feature-info">{{ 'admin.wap_setting.function'|trans|raw }}</ul>
-            <a class="btn-h5-open js-site-set" href="#site-page" data-toggle="tab">{{ 'admin.wap_setting.open'|trans|raw }}</a>
+            <div class=" find-page__right">
+              <p class="find-page__right--text">
+                {{'admin.wap_setting.tip'|trans}}
+              </p>
+              <a class="btn-h5-open js-site-set" href="#theme-page" data-toggle="tab">{{ 'admin.wap_setting.open'|trans|raw }}</a>
+            </div>
           </div>
-          <img class="find-bg-plate" src="{{ asset('static-dist/app/img/admin/h5/find_plate@2x.png') }}" alt="">
         {% else %}
-          <iframe src="/h5/admin/index.html" frameborder="0" style="width: 100%;height: 700px;border: none;"></iframe>
+          {% if app.request.query.get('mode')|default('') == 'edit' %}
+            {% if template %}
+              <iframe src="/h5/admin/index.html?template={{ template }}" frameborder="0" style="width: 100%;height: 700px;border: none;"></iframe>
+            {% else %}
+              <iframe src="/h5/admin/index.html" frameborder="0" style="width: 100%;height: 700px;border: none;"></iframe>
+            {% endif %}
+          {% else %}
+            <div class="row h5-clearfix ">
+              <div class="find-page__left">
+                <img class="find-page__left--img" src="{{ asset('static-dist/app/img/admin/h5/iPhoneX.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}" />
+                <div class="find-page__left--scroll">
+                  <img class="scroll-img" src="{{ asset('static-dist/app/img/admin/h5/h5-all.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}" />
+                </div>
+              </div>
+              <div class=" find-page__right">
+                <p class="find-page__right--text">
+                  {{'admin.wap_setting.edit.tip'|trans}}
+                </p>
+                <a class="btn-h5-open js-site-edit" href="javascript:">{{ 'admin.wap_setting.edit'|trans|raw }}</a>
+              </div>
+            </div>
+          {% endif %}
         {% endif %}
+      </div>
+      {# 站点页设置 #}
+      <div class="tab-pane fade" id="site-page">
+        <div class="help-block-container">
+          {{'admin.wap_setting.open.tip'|trans|raw}}
+        </div>
       </div>
 
       {# 装修主题 #}
       <div class="tab-pane fade" id="theme-page">
-      </div>
-
-      {# 站点页设置 #}
-      <div class="tab-pane fade" id="site-page">
         <form class="form-horizontal" method="post" id="wap-setting-form" novalidate>
-          <div class="site-img-content clearfix">
-            <div class="clearfix site-module-container js-checked-radio">
-              <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/new_default_img@2x.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}">
-              {{radios('version', {'2':'admin.wap_setting.new'|trans},wapSetting.version)}}
+          <div class="row">
+            <div class="col-md-6">
+              <div class="row theme-bg">
+                <div class="theme-recomend"><div>{{ 'admin.wap_setting.subject_name.recommend'|trans }}</div></div>
+                <div class="col-md-5   theme-left">
+                  <img class="theme-default-img" src="{{ asset('static-dist/app/img/admin/h5/new_default_img.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}" />
+                </div>
+                <div class="col-md-7 theme-right">
+                  <div class="theme-right__title"><b>{{ 'admin.wap_setting.subject_name'|trans }}: </b>{{ 'admin.wap_setting.subject_name.template_name.sail'|trans }}</div>
+                  <div >
+                    <p class="mbm theme-right__title"><b>{{ 'admin.wap_setting.subject_name.template.feature'|trans }}:</b><p>
+                    <div class="theme-right__content">
+                      {{'admin.wap_setting.subject_name.template.sail.feature'|trans|raw}}
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-h5-save js-site-save" data-version="2" data-template="sail">{{'admin.wap_setting.subject_name.template.use'|trans}}</button>
+                </div>
+              </div>
             </div>
-            <div class="clearfix site-module-container js-checked-radio">
-              <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/old_default_img@2x.png') }}" alt="{{ 'admin.wap_setting.old'|trans|raw }}">
-              {{radios('version', {'1':'admin.wap_setting.old'|trans},wapSetting.version)}}
+            <div class="col-md-6 col-sm-10 col-xs-12">
+              <div class="row theme-bg">
+                <div class="col-md-5  theme-left">
+                  <img class="theme-default-img" src="{{ asset('static-dist/app/img/admin/h5/old_default_img.png') }}" alt="{{ 'admin.wap_setting.old'|trans|raw }}"/>
+                </div>
+                <div class="col-md-7  theme-right">
+                  <div class="theme-right__title"><b>{{ 'admin.wap_setting.subject_name'|trans }}: </b>{{ 'admin.wap_setting.subject_name.template_name.jane_mo'|trans }}</div>
+                  <div >
+                    <p class="mbm theme-right__title"><b>{{ 'admin.wap_setting.subject_name.template.feature'|trans }}:</b><p>
+                    <div class="theme-right__content">
+                      {{'admin.wap_setting.subject_name.template.jane_mo.feature'|trans|raw}}
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-h5-save js-site-save" data-version="1" data-template="jianmoOn">{{'admin.wap_setting.subject_name.template.use'|trans}}</button>
+                </div>
+              </div>
             </div>
-            <div class="clearfix site-module-container js-checked-radio">
-              <img class="site-default-img" src="{{ asset('static-dist/app/img/admin/h5/no_default_img@2x.png') }}" alt="{{ 'admin.wap_setting.off'|trans|raw }}">
-              {{radios('version', {'0':'admin.wap_setting.off'|trans},wapSetting.version)}}
+            <div class="col-md-6">
+              <div class="row theme-bg">
+                <div class="col-md-5 theme-left">
+                  <img class="theme-default-img" src="{{ asset('static-dist/app/img/admin/h5/no_default_img.png') }}" alt="{{ 'admin.wap_setting.old'|trans|raw }}"/>
+                </div>
+                <div class="col-md-7  theme-right">
+                  <div class="theme-right__title"><b>{{ 'admin.wap_setting.subject_name'|trans }}: </b>{{ 'admin.wap_setting.subject_name.template_name.jane_mo'|trans }}</div>
+                  <div >
+                    <p class="mbm theme-right__title"><b>{{ 'admin.wap_setting.subject_name.template.feature'|trans }}:</b><p>
+                    <div class="theme-right__content">
+                      {{'admin.wap_setting.subject_name.template.jane_mo_off.feature'|trans|raw}}
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-h5-save js-site-save" data-version="0" data-template="jianmoOff">{{'admin.wap_setting.subject_name.template.use'|trans}}</button>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="help-block-container">{{ 'admin.wap_setting.hint'|trans|raw }}</div>
-          <div class="text-center">
-            <button type="submit" class="btn btn-h5-save js-site-save">{{'form.btn.save'|trans}}</button>
-          </div>
-          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+            <input type="hidden" name="template" value="{{ wapSetting.template }}">
+            <input type="hidden" name="version" value="{{ wapSetting.version }}">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         </form>
       </div>
     </div>

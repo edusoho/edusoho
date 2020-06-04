@@ -13,14 +13,16 @@ class OperationSettingController extends BaseController
     {
         $defaultWapSetting = array(
             'version' => 1,
+            'template' => 'jianmoOn',
         );
 
         if ($request->isMethod('POST')) {
             $wapSetting = $request->request->all();
             $wapSetting = ArrayToolkit::parts($wapSetting, array(
-                'version',
+                'version', 'template'
             ));
 
+            $template = $wapSetting['template'];
             $wapSetting = array_merge($defaultWapSetting, $wapSetting);
             $this->getSettingService()->set('wap', $wapSetting);
             $result = CloudAPIFactory::create('leaf')->get('/me');
@@ -35,6 +37,7 @@ class OperationSettingController extends BaseController
 
         return $this->render('admin/wap/set.html.twig', array(
             'wapSetting' => $wapSetting,
+            'template' => empty($template) ? '' : $template,
         ));
     }
 
