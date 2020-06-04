@@ -10,6 +10,7 @@
       </activity>
     </div>
     <div slot="setting" class="groupon-allocate">
+      <e-suggest v-if="moduleData.tips" :suggest="moduleData.tips" :key="moduleData.moduleType"></e-suggest>
       <header class="title">{{ activityTitle }}
         <div class="text-12 color-gray mts" v-if="portal === 'miniprogram'">营销活动配置即将发布，敬请期待...</div>
       </header>
@@ -52,14 +53,15 @@ import moduleFrame from '../module-frame';
 import courseModal from '../course/modal/course-modal';
 import settingCell from '../module-frame/setting-cell';
 import pathName2Portal from 'admin/config/api-portal-config';
-
+import suggest from "&/components/e-suggest/e-suggest.vue"
 export default {
   name: 'marketing-groupon',
   components: {
     moduleFrame,
     courseModal,
     activity,
-    settingCell
+    settingCell,
+    'e-suggest':suggest
   },
   props: {
     active: {

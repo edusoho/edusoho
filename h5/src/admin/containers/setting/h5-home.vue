@@ -91,9 +91,9 @@
       <el-button
         class="setting-button-group__button text-14 btn-border-primary"
         size="mini"
-        @click="reset"
+        @click="quit"
         :disabled="isLoading"
-        >重 置</el-button
+        >取消装修</el-button
       >
       <el-button
         class="setting-button-group__button text-14 btn-border-primary"
@@ -108,9 +108,19 @@
         size="mini"
         @click="save('published')"
         :disabled="isLoading"
-        >发 布</el-button
+        >保存并发布</el-button
       >
     </div>
+    <el-dialog
+        title="提示"
+        :visible.sync="quitDialogVisible"
+        width="30%">
+        <div class="mtl">退出后编辑的内容不会保存，是否退出？</div>
+        <div slot="footer" >
+          <el-button @click="quitDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="reset">退出</el-button>
+        </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -159,7 +169,8 @@ export default {
       pathName: this.$route.name,
       couponSwitch: 0,
       moduleLength: 0,
-      menuStyle:{}//右侧菜单栏样式
+      menuStyle:{},//右侧菜单栏样式
+      quitDialogVisible:false
     };
   },
   computed: {
@@ -413,8 +424,11 @@ export default {
       }
       return item;
     },
+    quit(){
+      this.quitDialogVisible=true;
+    },
     reset() {
-      parent.location.reload();
+      this.quitDialogVisible=false;
       // 删除草稿配置配置
       this.deleteDraft({
         portal: this.portal,
@@ -422,15 +436,11 @@ export default {
         mode: "draft"
       })
         .then(res => {
-          this.$message({
-            message: "重置成功",
-            type: "success"
-          });
-          this.load();
+          parent.location.reload();
         })
         .catch(err => {
           this.$message({
-            message: err.message || "重置失败",
+            message: err.message || "取消失败",
             type: "error"
           });
         });

@@ -1,6 +1,16 @@
 .h5-home{
   padding-bottom: 60px;
   background: #F5F5F5;
+  .el-dialog {
+    &__header {
+      padding-bottom: 20px;
+    }
+    &__footer {
+      padding-top: 60px;
+      padding-bottom: 20px;
+      text-align: right;
+    }
+  }
 }
 .h5-home-left{
   position: fixed;
@@ -71,6 +81,7 @@
   background: #fff;
   margin: auto;
   text-align: left;
+ 
   .find-body{
     padding-bottom: 60px;
   }
@@ -83,7 +94,7 @@
       bottom: 0px;
       padding-bottom: 60px;
       width: 416px;
-      border:none
+      border:none;
     }
   }
 }

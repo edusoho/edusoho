@@ -27,7 +27,9 @@ import {
   Menu,
   Submenu,
   MenuItem,
-  MenuItemGroup
+  MenuItemGroup,
+  Carousel,
+  CarouselItem
 } from 'element-ui';
 
 import {
@@ -70,6 +72,9 @@ Vue.use(Menu);
 Vue.use(Submenu);
 Vue.use(MenuItem);
 Vue.use(MenuItemGroup);
+Vue.use(Carousel);
+Vue.use(CarouselItem);
+
 
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;

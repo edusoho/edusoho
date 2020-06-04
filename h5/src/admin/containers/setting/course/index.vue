@@ -10,6 +10,7 @@
         @fetchCourse="fetchCourse"/>
     </div>
     <div slot="setting">
+      <e-suggest v-if="moduleData.tips" :suggest="moduleData.tips" :key="moduleData.moduleType"></e-suggest>
       <header class="title">
         {{ typeLabel }}列表设置
         <div v-if="portal === 'miniprogram' && typeLabel === '班级'" class="text-12 color-gray mts">使用班级配置功能，小程序版本需要升级到1.3.1及以上</div>
@@ -89,7 +90,7 @@ import settingCell from '../module-frame/setting-cell'
 import { mapMutations, mapState, mapActions } from 'vuex'
 import treeDigger from 'admin/utils/tree-digger'
 import pathName2Portal from 'admin/config/api-portal-config'
-
+import suggest from "&/components/e-suggest/e-suggest.vue"
 const optionLabel = {
   'course_list': '课程',
   'classroom_list': '班级'
@@ -101,7 +102,8 @@ export default {
     draggable,
     courseModal,
     moduleFrame,
-    settingCell
+    settingCell,
+    'e-suggest':suggest
   },
   props: {
     active: {
