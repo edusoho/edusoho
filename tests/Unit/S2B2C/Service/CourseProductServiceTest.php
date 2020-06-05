@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\S2B2C\Service;
 
 use Biz\BaseTestCase;
@@ -38,7 +39,6 @@ class CourseProductServiceTest extends BaseTestCase
             'localResourceId' => $newCourseSet['id'],
         ]);
         $this->getCourseProductService()->syncCourses($newCourseSet, $product);
-
     }
 
     /**
@@ -64,6 +64,7 @@ class CourseProductServiceTest extends BaseTestCase
     {
         return $this->createService('S2B2C:ProductService');
     }
+
     /**
      * @return S2B2CFacadeService
      */
