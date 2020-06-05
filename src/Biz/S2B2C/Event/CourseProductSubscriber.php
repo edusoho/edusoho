@@ -15,6 +15,12 @@ use Codeages\PluginBundle\Event\EventSubscriber;
 use QiQiuYun\SDK\Service\S2B2CService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * Class CourseProductSubscriber
+ *
+ * @codeCoverageIgnore
+ * 需要通知远程的接口，忽略测试
+ */
 class CourseProductSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
