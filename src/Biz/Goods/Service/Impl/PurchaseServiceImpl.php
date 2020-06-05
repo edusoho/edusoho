@@ -9,6 +9,7 @@ class PurchaseServiceImpl extends BaseService
 {
     public function getVoucher($id)
     {
+        return $this->getPurchaseVoucherDao()->get($id);
     }
 
     public function createVoucher($voucher)
@@ -24,6 +25,14 @@ class PurchaseServiceImpl extends BaseService
     }
 
     public function countVouchers($conditions)
+    {
+    }
+
+    public function searchVouchers()
+    {
+    }
+
+    public function findVoucherByIds($ids)
     {
     }
 
