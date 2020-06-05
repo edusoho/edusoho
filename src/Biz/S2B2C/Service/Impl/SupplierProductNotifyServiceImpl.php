@@ -47,7 +47,7 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
             return ['status' => true];
         }
         $this->getLogger()->info('[refreshProductsStatus] 获取渠道商信息成功');
-        if ('cooperatio1n' != $merchant['coop_status']) {
+        if ('cooperation' != $merchant['coop_status']) {
             $this->getLogger()->info("[refreshProductsStatus] 渠道商合作状态为:{$merchant['coop_status']}，非'cooperation',将对所有S课程下架处理");
             $courseProducts = $this->getProductService()->findProductsBySupplierIdAndProductType($params['supplierId'], 'course');
             $courseSetProducts = $this->getProductService()->findProductsBySupplierIdAndProductType($params['supplierId'], 'course_set');
