@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\S2B2C\Service;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
 use Biz\S2B2C\Dao\SyncEventDao;
 use Biz\S2B2C\Service\SyncEventService;
@@ -27,17 +28,17 @@ class SyncEventServiceTest extends BaseTestCase
     public function testFindNotifyByCourseSetIds()
     {
         $this->mockBiz('S2B2C:S2B2CFacadeService', [
-            array(
+            [
                 'functionName' => 'getS2B2CConfig',
-                'returnValue' => array(
+                'returnValue' => [
                     'supplierId' => 1,
-                ),
-            ),
+                ],
+            ],
         ]);
         $this->mockBiz('Course:CourseService', [
             [
                 'functionName' => 'findCoursesByCourseSetIds',
-                'returnValue' => array(
+                'returnValue' => [
                     [
                         'id' => 1,
                         'courseSetId' => 1,
@@ -45,15 +46,15 @@ class SyncEventServiceTest extends BaseTestCase
                     [
                         'id' => 2,
                         'courseSetId' => 2,
-                    ]
-                ),
-            ]
+                    ],
+                ],
+            ],
         ]);
 
         $this->mockBiz('S2B2C:ProductService', [
             [
                 'functionName' => 'findProductsBySupplierIdAndProductTypeAndLocalResourceIds',
-                'returnValue' => array(
+                'returnValue' => [
                     [
                         'id' => 1,
                         'remoteResourceId' => 1,
@@ -64,20 +65,20 @@ class SyncEventServiceTest extends BaseTestCase
                         'remoteResourceId' => 2,
                         'localResourceId' => 2,
                     ],
-                ),
-            ]
+                ],
+            ],
         ]);
         $this->createSyncEvent(['productId' => 1]);
         $this->createSyncEvent(['productId' => 2]);
-        $results = $this->getSyncEventService()->findNotifyByCourseSetIds([1,2]);
-        var_dump($results);
-
+        $results = $this->getSyncEventService()->findNotifyByCourseSetIds([1, 2]);
+        $this->assertCount(2, $results);
+        $this->assertEquals([1, 2], ArrayToolkit::column($results, 'productId'));
     }
 
     protected function createSyncEvent($custom = [])
     {
         return $this->getSyncEventDao()->create(array_merge([
-            'event' =>'modifyPrice',
+            'event' => 'modifyPrice',
             'data' => ['new' => [
                 'suggestionPrice' => 10,
                 'cooperationPrice' => 19,
