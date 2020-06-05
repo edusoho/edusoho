@@ -49,7 +49,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            'DropUnusedTables',
+            'dropUnusedTables',
         );
 
         $funcNames = array();
@@ -85,7 +85,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    public function DropUnusedTables()
+    public function dropUnusedTables()
     {
         $this->getConnection()->exec("
             DROP TABLE IF EXISTS `course`;
