@@ -16,7 +16,7 @@ class CourseProductServiceTest extends BaseTestCase
         $fullSyncDataJsonFile = $this->getContainer()->getParameter('kernel.root_dir').'/../tests/Unit/S2B2C/Fixtures/full_sync_data.json';
         $supplierApi = \Mockery::mock($this->biz->offsetGet('supplier.platform_api'));
         $supplierApi->shouldReceive('getSupplierCourseSetProductDetail')->times(2)->andReturn(json_decode(file_get_contents($courseSetProductDetailJsonFile), true));
-        $supplierApi->shouldReceive('getSupplierProductSyncData')->times(1)->andReturn(json_decode(file_get_contents($fullSyncDataJsonFile), true));
+        $supplierApi->shouldReceive('getSupplierProductSyncData')->times(2)->andReturn(json_decode(file_get_contents($fullSyncDataJsonFile), true));
 
         $this->biz->offsetUnset('supplier.platform_api');
         $this->biz->offsetSet('supplier.platform_api', $supplierApi);
@@ -39,6 +39,7 @@ class CourseProductServiceTest extends BaseTestCase
             'localResourceId' => $newCourseSet['id'],
         ]);
         $this->getCourseProductService()->syncCourses($newCourseSet, $product);
+        $this->getCourseProductService()->updateCourseVersionData(1);
     }
 
     /**
