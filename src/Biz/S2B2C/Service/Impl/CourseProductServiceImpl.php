@@ -181,7 +181,9 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
     /**
      * @param $productType
      * @param $remoteResourceId
+     *
      * @return bool
+     *
      * @throws \Exception
      * @codeCoverageIgnore
      */
@@ -254,7 +256,9 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
     /**
      * @param $remoteResourceId
      * @param $priceFields
+     *
      * @return bool
+     *
      * @throws \Exception
      * @codeCoverageIgnore
      */

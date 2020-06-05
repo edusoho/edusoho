@@ -17,7 +17,7 @@ use QiQiuYun\SDK\Service\S2B2CService;
 
 /**
  * Class SupplierProductNotifyServiceImpl
- * @package Biz\S2B2C\Service\Impl
+ *
  * @codeCoverageIgnore
  */
 class SupplierProductNotifyServiceImpl extends BaseService implements SupplierProductNotifyService
