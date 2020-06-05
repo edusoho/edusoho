@@ -4,6 +4,7 @@ namespace Tests\Unit\S2B2C\Service;
 
 use Biz\BaseTestCase;
 use Biz\S2B2C\Service\SupplierNotifyService;
+use Biz\System\Service\SettingService;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Common\ServiceKernel;
@@ -15,15 +16,127 @@ class SupplierNotifyServiceTest extends BaseTestCase
         $this->assertNull($this->getSupplierNotifyService()->onSiteStatusChange([]));
     }
 
+    public function testOnCoopModeChange_whenMeError()
+    {
+        $this->createParameter();
+        $this->mockGetMe(['error' => 'Service Error']);
+        $result = $this->getSupplierNotifyService()->onCoopModeChange([]);
+        $this->assertEquals(['status' => false], $result);
+        $this->restoreParameters();
+    }
+
     public function testOnCoopModeChange()
     {
         $this->createParameter();
         $this->mockGetMe();
-        $this->getSupplierNotifyService()->onCoopModeChange([]);
+        $result = $this->getSupplierNotifyService()->onCoopModeChange([]);
+        $this->assertEquals(['success' => true], $result);
         $yaml = new Yaml();
         $targetPath = ServiceKernel::instance()->getParameter('kernel.root_dir').'/config/parameters.yml';
         $result = $yaml->parseFile($targetPath);
         $this->assertEquals('franchisee', $result['parameters']['school_mode']['business_mode']);
+        $this->restoreParameters();
+    }
+
+    public function testOnMerchantDomainUrlChange()
+    {
+        $result = $this->getSupplierNotifyService()->onMerchantDomainUrlChange([]);
+        $this->assertNull($result);
+    }
+
+    public function testOnSupplierDomainUrlChange()
+    {
+        $this->createParameter();
+        $result = $this->getSupplierNotifyService()->onSupplierDomainUrlChange(['domain_url' => 'new.edusoho.cn']);
+        $this->assertEquals(['success' => true], $result);
+        $yaml = new Yaml();
+        $targetPath = ServiceKernel::instance()->getParameter('kernel.root_dir').'/config/parameters.yml';
+        $result = $yaml->parseFile($targetPath);
+        $this->assertEquals('new.edusoho.cn', $result['parameters']['school_mode']['supplier']['domain']);
+        $this->restoreParameters();
+    }
+
+    public function testOnSupplierSiteLogoChange()
+    {
+        $this->getSettingService()->set('site', [
+            'logo' => 'test.com/testlogo.png',
+            'favicon' => 'test.com/testfavicon.png',
+        ]);
+        $result = $this->getSupplierNotifyService()->onSupplierSiteLogoChange([]);
+        $this->assertEquals(['success' => true], $result);
+        $setting = $this->getSettingService()->get('site');
+        $this->assertContains('test.com/testlogo.png?', $setting['logo']);
+        $this->assertContains('test.com/testfavicon.png?', $setting['favicon']);
+    }
+
+    public function testOnMerchantAuthNodeChange()
+    {
+        $this->createParameter();
+        $this->mockGetMe(['auth_node' => [
+            'logo' => 1,
+            'title' => 1,
+            'favicon' => 0,
+        ]]);
+
+        $this->mockBiz('System:SettingService', [
+            [
+                'functionName' => 'get',
+                'withParams' => ['s2b2c', []],
+                'returnValue' => ['auth_node' => [
+                    'logo' => 1,
+                    'title' => 1,
+                    'favicon' => 0,
+                ]],
+                'runTimes' => 2,
+            ],
+            [
+                'functionName' => 'set',
+                'withParams' => ['s2b2c', ['auth_node' => [
+                    'logo' => 1,
+                    'title' => 1,
+                    'favicon' => 0,
+                ]]],
+                'returnValue' => [
+                ],
+                'runTimes' => 1,
+            ],
+        ]);
+        $result = $this->getSupplierNotifyService()->onMerchantAuthNodeChange([]);
+        $this->assertEquals(['success' => true], $result);
+        $result = $this->getSettingService()->get('s2b2c', []);
+        $this->assertEquals(['auth_node' => [
+            'logo' => 1,
+            'title' => 1,
+            'favicon' => 0,
+        ]], $result);
+
+        $this->restoreParameters();
+    }
+
+    public function testOnResetMerchantBrand()
+    {
+        $this->createParameter();
+        $this->mockGetMe([
+            'site_title' => 'test',
+            'domain_url',
+        ]);
+        $this->mockBiz('System:SettingService', [
+            [
+                'functionName' => 'get',
+                'withParams' => ['site', []],
+                'returnValue' => [],
+                'runTimes' => 3,
+            ],
+            [
+                'functionName' => 'set',
+                'returnValue' => [
+                ],
+                'runTimes' => 3,
+            ],
+        ]);
+        $result = $this->getSupplierNotifyService()->onResetMerchantBrand([]);
+        $this->assertEquals(['success' => true], $result);
+
         $this->restoreParameters();
     }
 
@@ -67,7 +180,6 @@ class SupplierNotifyServiceTest extends BaseTestCase
         $bakPath = ServiceKernel::instance()->getParameter('kernel.root_dir').'/config/parameters.yml.bak';
         $fileSystem = new Filesystem();
         if ($fileSystem->exists($bakPath)) {
-            var_dump(123);
             $fileSystem->copy($bakPath, $targetPath, true);
             $fileSystem->remove($bakPath);
         }
@@ -105,5 +217,13 @@ class SupplierNotifyServiceTest extends BaseTestCase
     protected function getSupplierNotifyService()
     {
         return $this->createService('S2B2C:SupplierNotifyService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }
