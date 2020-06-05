@@ -2,7 +2,7 @@
 
 {% block title %}{{'course.plan_base_info'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set course_side_nav = 'info' %}
-{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/bootstrap-datetimepicker.js', 'libs/select2.js', 'libs/perfect-scrollbar.js', 'app/js/course-manage/info/index.js']) %}
+{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/bootstrap-datetimepicker.js', 'libs/select2.js', 'libs/perfect-scrollbar.js', 'libs/vue.js', 'app/js/course-manage/info/index.js']) %}
 
 {% block page_title %}{{ 'course.plan_base_info'|trans }}{% endblock %}
 {% block paddingClass %}course-manage-body course-manage-info js-course-manage-info{% endblock %}
@@ -21,10 +21,21 @@
       {% endif %}
 
       {# 计划基础信息 #}
-      {% if hasMulCourses %}
-        <div class="course-manage-subltitle cd-mb40">{{ 'course.base_info'|trans }}</div>
-        {% include 'course-manage/base-info/title.html.twig' %}
-      {% endif %}
+        <div id="app"
+             data-course="{{ course|default([])|json_encode }}"
+             data-course-set="{{ courseSet|default([])|json_encode }}"
+             data-has-mul-courses="{{ hasMulCourses }}"
+             data-lesson-watch-limit="{{ setting('magic.lesson_watch_limit') }}"
+             data-has-role-admin="{{ is_granted('ROLE_ADMIN') }}"
+             data-wechat-setting="{{ setting('wechat')|default([])|json_encode }}"
+             data-has-wechat-notification-manage-role="{{ has_permission('admin_operation_wechat_notification_manage') or has_permission('admin_v2_operation_wechat_notification_manage') }}"
+             data-wechat-manage-url="{{ setting('backstage.is_v2',0)  == 0 ? path('admin_wechat_notification_manage') : path('admin_v2_wechat_notification_manage') }}"
+             data-live-capacity-url="{{ path('course_set_live_capacity', {courseSetId: courseSet.id, courseId: course.id}) }}"
+             data-content-course-rule-url="{{ path('content_course_rule') }}"
+             data-free-tasks="{{ freeTasks|json_encode }}"
+             data-can-free-tasks="{{ canFreeTasks|json_encode }}"
+             data-task-name="{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}"
+        ></div>
       
       {# 营销设置 #}
       <div class="course-manage-subltitle cd-mb40">{{ 'course.marketing_setup'|trans }}</div>
@@ -33,10 +44,10 @@
       </div>
 
       {# 基础规则 #}
-      <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup.rules'|trans }}</div>
-      <div role="course-base-rule">
-        {% include 'course-manage/base-info/rule.html.twig' %}
-      </div>
+{#      <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup.rules'|trans }}</div>#}
+{#      <div role="course-base-rule">#}
+{#        {% include 'course-manage/base-info/rule.html.twig' %}#}
+{#      </div>#}
       
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-8">

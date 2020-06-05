@@ -8,11 +8,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
 
-class TranslationJsDumperCommand extends BaseCommand
+class TranslationMessagesJsDumperCommand extends BaseCommand
 {
     protected function configure()
     {
-        $this->setName('trans:dump-js')
+        $this->setName('trans:dump-js-messages')
             ->addOption(
                 'code',
                 null,
@@ -50,7 +50,7 @@ class TranslationJsDumperCommand extends BaseCommand
             ]);
 
             if (empty($code)) {
-                $filePaths = ['web/bundles/translations/'];
+                $filePaths = ['web/translations/messages/'];
             } else {
                 $filePaths = [
                     'plugins/'.ucfirst($code).'Plugin/Resources/public/js/controller/translations/',
@@ -81,7 +81,7 @@ class TranslationJsDumperCommand extends BaseCommand
 
         foreach ($files as $filename) {
             list($domain, $locale, $extension) = $this->getFileInfo($filename);
-            if (!in_array($domain, ['js', 'messages']) || 'yml' != $extension) {
+            if ('messages' != $domain || 'yml' != $extension) {
                 continue;
             }
 

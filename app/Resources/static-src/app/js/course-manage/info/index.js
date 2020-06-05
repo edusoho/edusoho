@@ -1,6 +1,34 @@
 import Intro from './intro';
 import Expiry from 'app/js/course-manage/expiry/expiry';
 import { initTags } from 'app/js/courseset-manage/base/tag';
+import ManageInfo from './src/manage-info';
+
+Vue.filter('trans', function (value, params) {
+  if (!value) return '';
+  console.log(value, params);
+  return Translator.trans(value, params);
+})
+
+new Vue({
+  el: '#app',
+  render: createElement => createElement(ManageInfo , {
+    props: {
+      course: $('#app').data('course'),
+      courseSet: $('#app').data('courseSet'),
+      lessonWatchLimit: $('#app').data('lessonWatchLimit'),
+      hasRoleAdmin: $('#app').data('hasRoleAdmin'),
+      wechatSetting: $('#app').data('wechatSetting'),
+      hasWechatNotificationManageRole: $('#app').data('hasWechatNotificationManageRole'),
+      hasMulCourses: $('#app').data('hasMulCourses'),
+      wechatManageUrl: $('#app').data('wechatManageUrl'),
+      liveCapacityUrl: $('#app').data('liveCapacityUrl'),
+      contentCourseRuleUrl: $('#app').data('contentCourseRuleUrl'),
+      canFreeTasks: $('#app').data('canFreeTasks'),
+      freeTasks: $('#app').data('freeTasks'),
+      taskName: $('#app').data('taskName'),
+    }
+  }),
+});
 
 class CourseInfo {
   constructor() {
