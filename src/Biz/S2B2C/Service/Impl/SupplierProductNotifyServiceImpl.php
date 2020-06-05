@@ -15,6 +15,11 @@ use Biz\S2B2C\Service\SupplierProductNotifyService;
 use Monolog\Logger;
 use QiQiuYun\SDK\Service\S2B2CService;
 
+/**
+ * Class SupplierProductNotifyServiceImpl
+ *
+ * @codeCoverageIgnore
+ */
 class SupplierProductNotifyServiceImpl extends BaseService implements SupplierProductNotifyService
 {
     public function setProductHasNewVersion($params)
