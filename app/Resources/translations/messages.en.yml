@@ -6537,7 +6537,7 @@ admin.wap_setting.site: 'Mobile settings'
 admin.wap_setting.mini_school: 'Mobile'
 admin.wap_setting.theme: 'Decoration theme'
 admin.wap_setting.online: 'Function officially launched'
-admin.wap_setting.open: 'Go to the new micro-network school'
+admin.wap_setting.open: 'Free to open the new micro-network school'
 admin.wap_setting.function: >
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>Customize each module</li>
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>Set a side preview to see the display in real time</li>

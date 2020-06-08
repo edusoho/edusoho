@@ -29,7 +29,6 @@ class OperationSettingController extends BaseController
             if (empty($result['error'])) {
                 $this->getSettingService()->set('meCount', $result);
             }
-            $this->setFlashMessage('success', 'site.save.success');
         }
 
         $wapSetting = $this->setting('wap', []);
