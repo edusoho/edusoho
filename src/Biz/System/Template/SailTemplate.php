@@ -136,6 +136,20 @@ class SailTemplate extends Template
                     'items' => [],
                 ],
             ],
+            'courseList-7' => [
+                'type' => 'course_list',
+                'moduleType' => 'courseList-7',
+                'data' => [
+                    'title' => '名师专栏',
+                    'sourceType' => 'condition',
+                    'categoryId' => 0,
+                    'sort' => '-studentNum',
+                    'lastDays' => 0,
+                    'limit' => 4,
+                    'displayStyle' => 'row',
+                    'items' => [],
+                ],
+            ],
         ]);
     }
 
