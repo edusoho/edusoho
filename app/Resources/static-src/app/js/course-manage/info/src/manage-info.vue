@@ -12,7 +12,18 @@
                    v-bind:can-free-tasks="canFreeTasks"
                    v-bind:free-tasks="freeTasks"
                    v-bind:task-name="taskName"
+                   v-bind:activity-metas="activityMetas"
+                   v-bind:course-remind-send-days="courseRemindSendDays"
+                   v-bind:upload-mode="uploadMode"
+                   v-bind:service-tags="serviceTags"
+                   v-bind:audio-service-status="audioServiceStatus"
+                   v-bind:video-convert-completion="videoConvertCompletion"
+                   v-bind:course-set-manage-files-url="courseSetManageFilesUrl"
         ></base-rule>
+        <market-setting v-bind:course="course"
+                        v-bind:course-product="courseProduct"
+                        v-bind:can-modify-course-price="canModifyCoursePrice"
+                        v-bind:notifies="notifies"></market-setting>
     </div>
 
 </template>
@@ -20,6 +31,7 @@
 <script>
     import baseInfo from './base-info';
     import baseRule from './base-rule';
+    import marketSetting from './marketing/market-setting'
 
     export default {
         name: "manage-info",
@@ -32,19 +44,32 @@
             hasWechatNotificationManageRole: false,
             hasMulCourses: false,
             wechatManageUrl: '',
-            liveCapacityUrl:'',
-            contentCourseRuleUrl:'',
+            liveCapacityUrl: '',
+            contentCourseRuleUrl: '',
             canFreeTasks: {},
             freeTasks: {},
             taskName: '',
+            activityMetas: {},
+            courseRemindSendDays: '',
+            uploadMode: '',
+            serviceTags: {},
+            audioServiceStatus: '',
+            videoConvertCompletion: '',
+            courseSetManageFilesUrl: '',
+            courseProduct: {},
+            notifies: {},
+            canModifyCoursePrice: true,
+
+
         },
         components: {
             baseInfo,
             baseRule,
+            marketSetting,
         },
         data() {
             return {
-                course: {},
+                course: this.course,
                 courseSet: {},
                 lessonWatchLimit: false,
                 hasRoleAdmin: false,
@@ -52,11 +77,22 @@
                 hasWechatNotificationManageRole: false,
                 hasMulCourses: false,
                 wechatManageUrl: '',
-                liveCapacityUrl:'',
-                contentCourseRuleUrl:'',
+                liveCapacityUrl: '',
+                contentCourseRuleUrl: '',
                 canFreeTasks: {},
                 freeTasks: {},
                 taskName: '',
+                activityMetas: {},
+                courseRemindSendDays: '',
+                uploadMode: '',
+                serviceTags: [],
+                audioServiceStatus: '',
+                videoConvertCompletion: '',
+                courseSetManageFilesUrl: '',
+                courseProduct: {},
+                notifies: {},
+                canModifyCoursePrice: true,
+
             }
         }
     }

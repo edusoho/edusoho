@@ -123,7 +123,7 @@
             <div class="col-sm-8">
                 <div v-if="wechatSetting.templates.courseRemind && wechatSetting.templates.courseRemind.status"
                      class="help-block course-mange-space">
-                    {{ '当前设置，%D% %H%会向所有在读学员发送学习提醒通知。' }}
+                    {{ 'course.setting.course_remind_tip'|trans({'D':courseRemindSendDays,'H':wechatSetting.templates.courseRemind.sendTime}) }}
                     <!--                    {{ 'course.setting.course_remind_tip'|trans({'%D%': days, '%H%': wechatSetting.templates.courseRemind.sendTime }) }}-->
                     <a v-if="hasWechatNotificationManageRole"
                        data-container="body" data-toggle="popover" data-trigger="hover" :href="wechatManageUrl"
@@ -150,6 +150,7 @@
             wechatSetting: {},
             hasWechatNotificationManageRole: false,
             wechatManageUrl: '',
+            courseRemindSendDays: '',
         },
         data() {
             let coursePublished = this.course.status ? this.course.status == 'published' : false;
@@ -165,6 +166,7 @@
                 wechatSetting: this.wechatSetting,
                 hasWechatNotificationManageRole: this.hasWechatNotificationManageRole ? this.hasWechatNotificationManageRole :false,
                 wechatManageUrl: '',
+                courseRemindSendDays: '',
                 expiryMode: {
                     'days': Translator.trans('course.teaching_plan.expiry_date.anywhere_mode'),
                     'date': Translator.trans('course.teaching_plan.expiry_date.date_mode'),
@@ -177,7 +179,7 @@
                 courseClosed: courseClosed,
                 coursePublished: coursePublished,
                 courseSetClosed: courseSetClosed,
-                courseSetPublished: courseSetPublished
+                courseSetPublished: courseSetPublished,
             }
         }
     }

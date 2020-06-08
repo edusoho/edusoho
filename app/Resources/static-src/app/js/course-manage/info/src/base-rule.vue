@@ -12,7 +12,7 @@
                 <div class="col-sm-8 cd-radio-group mb0">
                     <label class="cd-radio" :class="course.learnMode == value ? 'checked' : ''"
                            :disabled="course.status != 'draft' || course.platform !='self' ? true : false"
-                           v-for="(key, value) in learnMode">
+                           v-for="(key, value) in learnModeRadio">
                         <input type="radio"
                                name="learnMode"
                                :value="value"
@@ -30,7 +30,8 @@
                       v-bind:has-role-admin="hasRoleAdmin"
                       v-bind:has-wechat-notification-manage-role="hasWechatNotificationManageRole"
                       v-bind:wechat-setting="wechatSetting"
-                      v-bind:wechat-manage-url="wechatManageUrl">
+                      v-bind:wechat-manage-url="wechatManageUrl"
+                      v-bind:course-remind-send-days="courseRemindSendDays">
             </set-rule>
 
             <div class="form-group">
@@ -88,7 +89,9 @@
                                        :checked="freeTasks[task.id] != undefined ? true: false"
                                        :disabled="course.platform != 'self' ? true: false">
                                 <!--                                {% set meta = activity_meta(task.type) %}-->
-                                <i class="es-icon es-icon-video color-gray" data-toggle="tooltip" data-placement="top"
+                                <i class="color-gray"
+                                   :class="activityMetas[task.type].icon"
+                                   data-toggle="tooltip" data-placement="top"
                                    title=""
                                    data-container="body"
                                    :data-original-title="'course.marketing_setup.preview.set_task.task_name'|trans({'taskName':taskName})"></i>
@@ -98,13 +101,81 @@
                                 <span class="cd-tag cd-tag-orange pull-right price">{{ 'course.marketing_setup.preview.set_task.free'|trans }}</span>
                             </li>
                         </ul>
-
-
                     </div>
                 </div>
 
+                <div v-if="uploadMode != 'local'">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            {{ 'course.marketing_setup.preview.try_watch'|trans }}
+                            <a class="es-icon es-icon-help text-normal course-mangae-info__help" data-container="body"
+                               data-toggle="popover"
+                               data-trigger="hover"
+                               data-placement="top"
+                               :data-content="'course.marketing_setup.preview.try_watch_tips'|trans">
+                            </a>
+                        </label>
+                        <div class="col-sm-8">
+                            <select :disabled="course.platform != 'self'"
+                                    class="form-control course-mange-info__select mh5" id="tryLookLength"
+                                    v-model="course.tryLookLength"
+                                    name="tryLookLength">
+                                <option value="0">{{ 'course.marketing_setup.preview.not.support.try_watch'|trans }}
+                                </option>
+                                <option v-for="(i) in (1,2,3,4,5,6,7,8,9,10)" :value="i">
+                                    {{ i }}{{ 'course.marketing_setup.preview.minutes.try_watch'|trans }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
 
+            <div class="form-group js-services">
+                <label class="col-sm-2 control-label">
+                    {{ 'course.marketing_setup.services.provide_services'|trans }}
+                </label>
+                <div class="col-sm-8 form-control-static">
+                    <span v-for="(tag) in serviceTags"
+                          class="service-item js-service-item"
+                          :class="tag.active ? 'service-primary-item' : ''"
+                          data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
+                          :data-content="tag.summary|trans" :data-code="tag.code"
+                          @click="serviceItemClick"
+                    >{{ tag.fullName }}</span>
+                    <input type="hidden" name="services" id="course_services" :value="course.services|json_encode">
+                </div>
+            </div>
+
+            <div v-if="audioServiceStatus != 'needOpen' && course.type == 'normal'" class="form-group"
+                 id="audio-modal-id">
+                <label for="" class="col-sm-2 control-label">
+                    {{ 'course.info.video.convert.audio.enable'|trans }}
+                </label>
+                <div class="col-sm-8 cd-radio-group" :data-value="audioServiceStatus" id="course-audio-mode">
+                    <label class="cd-radio" :class="course.enableAudio == value ? 'checked' : ''"
+                           :disabled="course.platform =='supplier' ? true : false"
+                           v-for="(key, value) in audioServiceStatusRadio">
+                        <input type="radio"
+                               data-toggle="cd-radio" name="enableAudio"
+                               :value="value"
+                               v-model="course.learnMode"
+                               :disabled="course.platform =='supplier' ? true : false"/>
+                        {{ key }}
+                    </label>
+                    <div>
+                        <div class="course-mangae-info__tip">
+                            1.{{ 'course.enable.video.convert.audio.benefit'|trans }}
+                        </div>
+                        <div class="course-mangae-info__tip">
+                            2.{{ 'course.video.convert.audio.status'|trans }} ：{{ videoConvertCompletion }}
+                            <a class="ml5 link-primary" :href="courseSetManageFilesUrl" target="__blank">
+                                {{ 'course.video.convert.audio.detail'|trans }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -116,6 +187,12 @@
         name: "base-rule",
         components: {
             setRule,
+        },
+        filters: {
+            json_encode(value) {
+                if (!value) return '';
+                return JSON.stringify(value);
+            }
         },
         props: {
             course: {},
@@ -130,8 +207,34 @@
             canFreeTasks: {},
             freeTasks: {},
             taskName: '',
+            courseRemindSendDays: '',
+            uploadMode: '',
+            serviceTags: {},
+            activityMetas: {},
+            audioServiceStatus: '',
+            videoConvertCompletion: '',
+            courseSetManageFilesUrl: '',
         },
+        methods: {
+            serviceItemClick(event) {
+                let $item = $(event.currentTarget);
+                let $values = $('#course_services').val();
+                let values = this.course.services;
+                if (!$values) {
+                    values = [];
+                }
 
+                if ($item.hasClass('service-primary-item')) {
+                    $item.removeClass('service-primary-item');
+                    values.splice(values.indexOf($item.data('code')), 1);
+                } else {
+                    $item.addClass('service-primary-item');
+                    values.push($item.data('code'));
+                }
+
+                $('#course_services').val(JSON.stringify(values));
+            }
+        },
         data() {
             let freeTaskJsClass = this.canFreeTasks ? ' task-price-setting-group' : '';
             freeTaskJsClass += (this.course.platform == 'self' ? ' js-task-price-setting' : '');
@@ -148,12 +251,24 @@
                 contentCourseRuleUrl: '',
                 canFreeTasks: {},
                 freeTasks: {},
-                learnMode: {
+                courseRemindSendDays: '',
+                serviceTags: {},
+                learnModeRadio: {
                     freeMode: Translator.trans('course.plan_setup.mode.free'),
                     lockMode: Translator.trans('course.plan_setup.mode.locked'),
                 },
+
                 freeTaskJsClass: freeTaskJsClass,
-                taskName: ''
+                taskName: '',
+                activityMetas: {},
+                audioServiceStatus: '',
+                audioServiceStatusRadio: {
+                    1: Translator.trans('course.info.video.convert.audio.start'),
+                    0: Translator.trans('course.info.video.convert.audio.close')
+                },
+                videoConvertCompletion: '',
+                courseSetManageFilesUrl: '',
+
             };
         }
     }
