@@ -4,11 +4,11 @@ namespace AppBundle\Controller\Order;
 
 use AppBundle\Controller\BaseController;
 use Biz\Coupon\Service\CouponService;
+use Biz\Distributor\Util\DistributorCookieToolkit;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\Distributor\Util\DistributorCookieToolkit;
 
 class OrderController extends BaseController
 {
@@ -17,11 +17,11 @@ class OrderController extends BaseController
         $product = $this->getProduct($request->query->get('targetType'), $request->query->all());
 
         $product->setAvailableDeduct();
-        $product->setPickedDeduct(array());
+        $product->setPickedDeduct([]);
 
-        return $this->render('order/show/index.html.twig', array(
+        return $this->render('order/show/index.html.twig', [
             'product' => $product,
-        ));
+        ]);
     }
 
     public function createAction(Request $request)
@@ -32,14 +32,14 @@ class OrderController extends BaseController
         $this->addCreateDealers($request);
 
         $order = $this->getOrderFacadeService()->create($product);
-        $response = $this->redirectSafely($this->generateUrl('cashier_show', array(
+        $response = $this->redirectSafely($this->generateUrl('cashier_show', [
             'sn' => $order['sn'],
-        )));
+        ]));
 
         $resonse = DistributorCookieToolkit::clearCookieToken(
             $request,
             $response,
-            array('checkedType' => DistributorCookieToolkit::PRODUCT_ORDER)
+            ['checkedType' => DistributorCookieToolkit::PRODUCT_ORDER]
         );
 
         return $response;
@@ -57,11 +57,11 @@ class OrderController extends BaseController
         $deducts = $product->getDeducts();
 
         return $this->createJsonResponse(
-            array(
+            [
                 'price' => $product->getPayablePrice(),
                 'priceFormat' => $priceFormat,
                 'deducts' => $deducts,
-            )
+            ]
         );
     }
 
@@ -90,7 +90,7 @@ class OrderController extends BaseController
             $limiter = $this->getRateLimiter('coupon_check_limit', 60, 3600);
             $maxAllowance = $limiter->getAllow($user['id']);
             if (0 == $maxAllowance) {
-                $message = array('useable' => 'no', 'message' => '优惠码校验受限，请稍后尝试');
+                $message = ['useable' => 'no', 'message' => '优惠码校验受限，请稍后尝试'];
 
                 return $this->createJsonResponse($message);
             }
@@ -99,7 +99,7 @@ class OrderController extends BaseController
             $batch = $this->getCouponBatchService()->getBatch($coupon['batchId']);
             $limiter->check($user['id']);
             if (empty($batch['codeEnable'])) {
-                $message = array('useable' => 'no', 'message' => '该优惠券不存在');
+                $message = ['useable' => 'no', 'message' => '该优惠券不存在'];
 
                 return $this->createJsonResponse($message);
             }
@@ -141,7 +141,7 @@ class OrderController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(array_column($orderLogs, 'user_id'));
 
-        return $this->render('order/detail-modal.html.twig', array(
+        return $this->render('order/detail-modal.html.twig', [
             'order' => $order,
             'user' => $user,
             'orderLogs' => $orderLogs,
@@ -149,7 +149,7 @@ class OrderController extends BaseController
             'paymentTrade' => $paymentTrade,
             'orderDeducts' => $orderDeducts,
             'users' => $users,
-        ));
+        ]);
     }
 
     protected function getRateLimiter($id, $maxAllowance, $period)
@@ -198,7 +198,7 @@ class OrderController extends BaseController
 
     private function addCreateDealers(Request $request)
     {
-        $serviceNames = array('Distributor:DistributorProductDealerService');
+        $serviceNames = ['Distributor:DistributorProductDealerService'];
 
         foreach ($serviceNames as $serviceName) {
             $service = $this->createService($serviceName);
