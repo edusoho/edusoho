@@ -183,11 +183,13 @@ class MessageServiceImpl extends BaseService implements MessageService
 
     protected function addMessage($fromId, $toId, $content, $type, $createdTime)
     {
+        $content = $this->biz['html_helper']->purify($content);
+        $content = $this->getSensitiveService()->sensitiveCheck($content, '');
         $message = array(
             'fromId' => $fromId,
             'toId' => $toId,
             'type' => $type,
-            'content' => $this->biz['html_helper']->purify($content),
+            'content' => $content,
             'createdTime' => $createdTime,
         );
 
@@ -341,5 +343,10 @@ class MessageServiceImpl extends BaseService implements MessageService
     protected function getUserService()
     {
         return $this->biz->service('User:UserService');
+    }
+
+    protected function getSensitiveService()
+    {
+        return $this->createService('Sensitive:SensitiveService');
     }
 }
