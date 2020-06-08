@@ -85,8 +85,19 @@ class OrderController extends BaseController
             $id = $request->request->get('targetId');
             $type = $request->request->get('targetType');
             $price = $request->request->get('price');
+
+            $user = $this->getCurrentUser();
+            $limiter = $this->getRateLimiter('coupon_check_limit', 60, 3600);
+            $maxAllowance = $limiter->getAllow($user['id']);
+            if (0 == $maxAllowance) {
+                $message = array('useable' => 'no', 'message' => '优惠码校验受限，请稍后尝试');
+
+                return $this->createJsonResponse($message);
+            }
+
             $coupon = $this->getCouponService()->getCouponByCode($code);
             $batch = $this->getCouponBatchService()->getBatch($coupon['batchId']);
+            $limiter->check($user['id']);
             if (empty($batch['codeEnable'])) {
                 $message = array('useable' => 'no', 'message' => '该优惠券不存在');
 
@@ -139,6 +150,13 @@ class OrderController extends BaseController
             'orderDeducts' => $orderDeducts,
             'users' => $users,
         ));
+    }
+
+    protected function getRateLimiter($id, $maxAllowance, $period)
+    {
+        $factory = $this->getBiz()->offsetGet('ratelimiter.factory');
+
+        return $factory($id, $maxAllowance, $period);
     }
 
     /**
