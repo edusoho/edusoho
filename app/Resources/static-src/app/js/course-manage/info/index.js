@@ -3,8 +3,6 @@ import Expiry from 'app/js/course-manage/expiry/expiry';
 import {initTags} from 'app/js/courseset-manage/base/tag';
 import ManageInfo from './src/manage-info';
 
-console.log($('#app').data('course'));
-
 Vue.filter('trans', function (value, params) {
   if (!value) return '';
   return Translator.trans(value, params);
@@ -38,14 +36,9 @@ new Vue({
       courseProduct: $('#app').data('courseProduct'),
       notifies: $('#app').data('notifies'),
       canModifyCoursePrice: $('#app').data('canModifyCoursePrice'),
+      buyBeforeApproval: $('#app').data('buyBeforeApproval')
     },
   }),
-  beforeCreate() {
-    console.log('beforecreate' , $('#app').data('course'));
-  },
-  mounted() {
-    console.log('mounted');
-  }
 });
 
 class CourseInfo {
@@ -361,19 +354,19 @@ class CourseInfo {
     $element.rules('add', options);
   }
 
-  initenableBuyExpiry() {
-    let $enableBuyExpiryTime = $('[name="enableBuyExpiryTime"]:checked');
-    let $buyable = $('[name="buyable"]:checked');
-    let $buyExpiryTime = $('[name="buyExpiryTime"]');
-    if ($buyable.val() == 1 && $enableBuyExpiryTime.val() == 1) {
-      this.elementAddRules($buyExpiryTime, this.getBuyExpiryTimeRules());
-    } else {
-      this.elementRemoveRules($buyExpiryTime);
-      $enableBuyExpiryTime.closest('.form-group').removeClass('has-error');
-      $buyExpiryTime.removeClass('form-control-error');
-      $('.jq-validate-error').remove();
-    }
-  }
+  // initenableBuyExpiry() {
+  //   let $enableBuyExpiryTime = $('[name="enableBuyExpiryTime"]:checked');
+  //   let $buyable = $('[name="buyable"]:checked');
+  //   let $buyExpiryTime = $('[name="buyExpiryTime"]');
+  //   if ($buyable.val() == 1 && $enableBuyExpiryTime.val() == 1) {
+  //     this.elementAddRules($buyExpiryTime, this.getBuyExpiryTimeRules());
+  //   } else {
+  //     this.elementRemoveRules($buyExpiryTime);
+  //     $enableBuyExpiryTime.closest('.form-group').removeClass('has-error');
+  //     $buyExpiryTime.removeClass('form-control-error');
+  //     $('.jq-validate-error').remove();
+  //   }
+  // }
 
   getBuyExpiryTimeRules() {
     return {

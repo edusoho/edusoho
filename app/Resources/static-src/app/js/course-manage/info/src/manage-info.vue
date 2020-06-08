@@ -23,7 +23,9 @@
         <market-setting v-bind:course="course"
                         v-bind:course-product="courseProduct"
                         v-bind:can-modify-course-price="canModifyCoursePrice"
-                        v-bind:notifies="notifies"></market-setting>
+                        v-bind:notifies="notifies"
+                        v-bind:buy-before-approval="buyBeforeApproval"
+        ></market-setting>
     </div>
 
 </template>
@@ -59,7 +61,7 @@
             courseProduct: {},
             notifies: {},
             canModifyCoursePrice: true,
-
+            buyBeforeApproval: false
 
         },
         components: {
@@ -92,6 +94,7 @@
                 courseProduct: {},
                 notifies: {},
                 canModifyCoursePrice: true,
+                buyBeforeApproval: false
 
             }
         }

@@ -25,7 +25,6 @@
       {% else %}
         {% set courseRemindSendDays = '' %}
       {% endif %}
-      <div id="test1" data-course="{{ course|json_encode }}"></div>
       {# 计划基础信息 #}
         <div id="app"
              data-course="{{ course|json_encode }}"
@@ -50,7 +49,8 @@
              data-course-set-manage-files-url="{{ path('course_set_manage_files', { id: courseSet['id'] }) }}"
              data-course-product="{{ courseProduct|json_encode }}"
              data-notifies="{{ notifies|json_encode }}"
-             dara-can-modify-course-price="{{ s2b2c_has_behaviour_permission('canModifyCoursePrice') }}"
+             data-can-modify-course-price="{{ s2b2c_has_behaviour_permission('canModifyCoursePrice') }}"
+             data-buy-before-approval="{{ setting('magic.buy_before_approval') }}"
         ></div>
       
       {# 营销设置 #}

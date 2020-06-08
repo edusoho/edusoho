@@ -68,9 +68,6 @@
                 <div class="col-sm-8 cd-radio-group mb0">
                     <label class="cd-radio" v-for="(key, value) in buyableRadio"
                            :class="course.buyable == value  ? 'checked' : ''">
-                        v: {{value}}
-                        c: {{course.buyable}}
-                        if:{{course.buyable == value}}
                         <input type="radio"
                                data-toggle="cd-radio"
                                name="buyable"
@@ -81,21 +78,21 @@
                 </div>
             </div>
 
-            <div class="js-course-add-open-show" :class="course.buyable = 0 ? 'hidden' : ''">
+            <div class="js-course-add-open-show" :class="course.buyable == 0 ? 'hidden' : ''">
                 <div class="form-group">
                     <div class="col-sm-2 control-label">
-                        <label class="control-label-required">{{ 'course.marketing_setup.expiry_date'|trans
-                            }}</label>
+                        <label class="control-label-required">
+                            {{ 'course.marketing_setup.expiry_date'|trans }}
+                        </label>
                     </div>
                     <div class="col-sm-8 cd-radio-group course-mangae-info__group mb0">
                         <div class="col-sm-8 cd-radio-group mb0">
-                            <label class="cd-radio" :class="course.buyExpiryTime == value ? 'checked' : ''"
-                                   v-for="(key, value) in buyExpiryTimeRadio">
+                            <label class="cd-radio" :class="enableBuyExpiryTime == value ? 'checked' : ''"
+                                   v-for="(key, value) in buyExpiryTimeEnabledRadio">
                                 <input type="radio"
                                        name="enableBuyExpiryTime"
                                        :value="value"
-                                       :disabled="course.buyExpiryTime > 0 ? true : false"
-                                       v-model="course.buyExpiryTime"
+                                       v-model="enableBuyExpiryTime"
                                        data-toggle="cd-radio"/>
                                 {{ key }}
                             </label>
@@ -108,18 +105,26 @@
                                v-model="course.buyExpiryTime">
                     </div>
                 </div>
-                <!--                {% if setting('magic.buy_before_approval') %}-->
-                <!--                <div class="form-group">-->
-                <!--                    <label class="col-sm-2 control-label">-->
-                <!--                        {{ 'course.marketing_setup.approval'|trans }}-->
-                <!--                        <a class="es-icon es-icon-help text-normal course-mangae-info__help"-->
-                <!--                           data-container="body" data-toggle="popover" data-trigger="hover"-->
-                <!--                           data-placement="top" data-content="{{ 'course.marketing_setup.approval_tips'|trans }}"></a></label>-->
-                <!--                    <div class="col-sm-8 cd-radio-group">-->
-                <!--                        {{ cd_radios('approval', { '1': 'site.datagrid.radios.yes'|trans, '0': 'site.datagrid.radios.no'|trans }, course.approval|default(0)) }}-->
-                <!--                    </div>-->
-                <!--                </div>-->
-                <!--                {% endif %}-->
+                <div v-if="buyBeforeApproval" class="form-group">
+                    <label class="col-sm-2 control-label">
+                        {{ 'course.marketing_setup.approval'|trans }}
+                        <a class="es-icon es-icon-help text-normal course-mangae-info__help"
+                           data-container="body" data-toggle="popover" data-trigger="hover"
+                           data-placement="top"
+                           :data-content="'course.marketing_setup.approval_tips'|trans"></a></label>
+                    <div class="col-sm-8 cd-radio-group">
+                        <label class="cd-radio" :class="course.approval == value ? 'checked' : ''"
+                               v-for="(key, value) in approvalRadio">
+                            <input type="radio"
+                                   name="approval"
+                                   :value="value"
+                                   v-model="course.approval"
+                                   data-toggle="cd-radio"/>
+                            {{ key }}
+                        </label>
+
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -134,6 +139,18 @@
             courseProduct: {},
             notifies: {},
             canModifyCoursePrice: true,
+            buyBeforeApproval: false,
+        },
+        watch: {
+            enableBuyExpiryTime(newVal, oldVal) {
+                let $buyExpiryTime = $('#buyExpiryTime');
+
+                if (newVal == 0) {
+                    $buyExpiryTime.addClass('hidden');
+                } else {
+                    $buyExpiryTime.removeClass('hidden');
+                }
+            }
         },
         data() {
             return {
@@ -141,14 +158,21 @@
                 courseProduct: {},
                 notifies: {},
                 canModifyCoursePrice: true,
+                buyBeforeApproval: false,
+
                 buyableRadio: {
                     0: Translator.trans('course.marketing_setup.setup.can_not_join'),
                     1: Translator.trans('course.marketing_setup.setup.can_join'),
                 },
-                buyExpiryTimeRadio: {
+                buyExpiryTimeEnabledRadio: {
                     0: Translator.trans('course.marketing_setup.expiry_date.anytime'),
                     1: Translator.trans('course.marketing_setup.expiry_date.custom')
-                }
+                },
+                approvalRadio: {
+                    0: Translator.trans('site.datagrid.radios.no'),
+                    1: Translator.trans('site.datagrid.radios.yes'),
+                },
+                enableBuyExpiryTime: this.course.buyExpiryTime > 0 ? 1 : 0
             }
         }
     }
