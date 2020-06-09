@@ -33,16 +33,17 @@
 
     <el-dialog
       :visible.sync="chooseVisible"
+      :append-to-body="true"
       title="选择图片"
       width="60%">
-      <div class="choose-container">
+      <div class="setting-graphicNavigation-choose-container">
         <div class="choose-container-group"  v-for="(group, groupIndex) in imgChooseList" :key="groupIndex">
           <div class="choose-container-group-item" v-for="(item, index) in group" :key="index">
             <img :src="item" class="graphic-navigation-img" @click="setCurrentImg(item)">
           </div>
         </div>
       </div>
-      <span slot="footer" class="dialog-footer">
+      <div slot="footer" class="setting-graphicNavigation-dialog-footer">
         <el-button @click="chooseVisible = false">取 消</el-button>
         <el-upload
         :http-request="uploadImg"
@@ -54,15 +55,15 @@
       >
         <el-button type="primary">上传图片</el-button>
       </el-upload>
-      </span>
+      </div>
     </el-dialog>
-    
 
     <el-dialog
       :visible.sync="dialogVisible"
       title="提示:通过鼠标滚轮缩放图片"
-      width="80%">
-      <div class="cropper-container">
+      width="80%"
+      :append-to-body="true">
+      <div class="setting-graphicNavigation-cropper-container">
         <vueCropper
           v-show="option.img"
           ref="cropper"
