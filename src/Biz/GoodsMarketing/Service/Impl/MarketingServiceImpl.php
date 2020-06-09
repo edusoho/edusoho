@@ -62,6 +62,11 @@ class MarketingServiceImpl extends BaseService implements MarketingService
         return $this->getMarketingMeansDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
+    public function countMeans($conditions)
+    {
+        return $this->getMarketingMeansDao()->count($conditions);
+    }
+
     public function deleteMeans($id)
     {
         return $this->getMarketingMeansDao()->delete($id);

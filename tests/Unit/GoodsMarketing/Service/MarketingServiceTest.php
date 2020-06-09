@@ -66,6 +66,14 @@ class MarketingServiceTest extends BaseTestCase
         $this->assertEquals($means1, reset($results));
     }
 
+    public function testCountMeans()
+    {
+        $this->createMeans($mockMeans = $this->mockMeans());
+        $this->createMeans($mockMeans = $this->mockMeans(['fromMeansId' => 10]));
+        $count = $this->getMarketService()->countMeans(['fromMeansId' => 10]);
+        $this->assertEquals(1, $count);
+    }
+
     public function testDelete()
     {
         $created = $this->createMeans($mockMeans = $this->mockMeans());

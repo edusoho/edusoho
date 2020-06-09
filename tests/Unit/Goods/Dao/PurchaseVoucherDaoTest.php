@@ -30,6 +30,8 @@ class PurchaseVoucherDaoTest extends BaseDaoTestCase
 
     public function testFindByIds()
     {
+        $results = $this->getDao()->findByIds([]);
+        $this->assertEquals([], $results);
         $created1 = $this->mockDataObject();
         $created2 = $this->mockDataObject(['goodsId' => 2]);
 
