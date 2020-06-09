@@ -17,9 +17,9 @@ class TableAddGoodsPurchaseVoucher extends Migration
           `goodsId` int(11) unsigned NOT NULL,
           `orderId` int(11) unsigned NOT NULL DEFAULT '0',
           `userId` int(11) unsigned NOT NULL,
-          `effectiveType` varchar(64) NOT NULL DEFAULT '' COMMENT '生效类型',
-          `effectiveTime` int(11) unsigned NOT NULL COMMENT '生效时间',
-          `invalidTime` int(11) unsigned NOT NULL COMMENT '失效时间',
+          `effectiveType` varchar(64) NOT NULL COMMENT '生效类型',
+          `effectiveTime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '生效时间',
+          `invalidTime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '失效时间',
           `createdTime` int(11) unsigned NOT NULL DEFAULT '0',
           `updatedTime` int(11) unsigned NOT NULL DEFAULT '0',
           PRIMARY KEY (`id`)

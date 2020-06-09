@@ -10,4 +10,6 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 interface PurchaseVoucherDao extends AdvancedDaoInterface
 {
     public function getBySpecsId($specsId);
+
+    public function findByIds($ids);
 }

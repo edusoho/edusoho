@@ -16,6 +16,8 @@ class PurchaseVoucherDaoImpl extends AdvancedDaoImpl implements PurchaseVoucherD
                 'id= :id',
                 'goodsId = :goodsId',
                 'specsId = :specsId',
+                'userId = :userId',
+                'effectiveType = :effectiveType',
             ],
             'serializes' => [
             ],
@@ -34,5 +36,14 @@ class PurchaseVoucherDaoImpl extends AdvancedDaoImpl implements PurchaseVoucherD
     public function getBySpecsId($specsId)
     {
         return $this->getByFields(['specsId' => $specsId]);
+    }
+
+    public function findByIds($ids)
+    {
+        if (empty($ids)) {
+            return [];
+        }
+
+        return $this->findInField('id', $ids);
     }
 }

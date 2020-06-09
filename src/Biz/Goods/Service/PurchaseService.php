@@ -15,4 +15,6 @@ interface PurchaseService
     public function countVouchers($conditions);
 
     public function searchVouchers($conditions, $orderBys, $start, $limit, $columns = []);
+
+    public function findVouchersByIds($ids);
 }
