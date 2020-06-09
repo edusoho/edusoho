@@ -33,9 +33,10 @@ class PurchaseVoucherDaoTest extends BaseDaoTestCase
         $created1 = $this->mockDataObject();
         $created2 = $this->mockDataObject(['goodsId' => 2]);
 
-        $results = $this->getDao()->findByIds([$created1['id'], $created2['id']]);
+        $results = ArrayToolkit::index($this->getDao()->findByIds([$created1['id'], $created2['id']]), 'id');
         $this->assertCount(2, $results);
         $this->assertEquals(ArrayToolkit::column($results, 'id'), [$created1['id'], $created2['id']]);
+        $this->assertEquals($created2, $results[$created2['id']]);
     }
 
     /**
