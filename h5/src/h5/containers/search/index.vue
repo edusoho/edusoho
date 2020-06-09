@@ -31,6 +31,7 @@
         <emptyCourse
           v-if="isEmptyCourse && course.isRequestCompile"
           :has-button="false"
+           text="抱歉，没有找到相关内容"
           :type="'course_list'"
         />
       </van-tab>
@@ -49,6 +50,7 @@
           <emptyCourse
             v-if="isEmptyClassroom && classroom.isRequestCompile"
             :has-button="false"
+            text="抱歉，没有找到相关内容"
             :type="'classroom_list'"
           />
         </div>
