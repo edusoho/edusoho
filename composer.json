@@ -70,7 +70,11 @@
     "sensio/generator-bundle": "3.1.7",
     "symfony/phpunit-bridge": "4.4.4",
     "mockery/mockery": "0.9.11",
-    "friendsofphp/php-cs-fixer": "^2.16.3"
+    "friendsofphp/php-cs-fixer": "^2.16.3",
+    "codeception/codeception": "^4.1",
+    "codeception/module-db": "^1.0",
+    "codeception/module-rest": "^1.2",
+    "codeception/module-phpbrowser": "^1.0"
   },
   "scripts": {
     "post-install-cmd": [

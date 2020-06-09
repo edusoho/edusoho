@@ -22,6 +22,7 @@ class SyncEventDaoImpl extends AdvancedDaoImpl implements SyncEventDao
             ],
             'timestamps' => ['createdTime', 'updatedTime'],
             'conditions' => [
+                'id = :id',
                 'productId = :productId',
                 'productId IN (:productIds)',
                 'event = :event',

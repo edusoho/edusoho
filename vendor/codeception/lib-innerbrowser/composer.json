@@ -1,0 +1,41 @@
+{
+    "name":"codeception/lib-innerbrowser",
+    "description":"Parent library for all Codeception framework modules and PhpBrowser",
+    "keywords":["codeception"],
+    "homepage":"http://codeception.com/",
+    "type":"library",
+    "license":"MIT",
+    "authors":[
+        {
+            "name":"Michael Bodnarchuk",
+            "email":"davert@mail.ua",
+            "homepage":"http://codegyre.com"
+        },
+        {
+            "name":"Gintautas Miselis"
+        }
+    ],
+    "minimum-stability": "RC",
+
+    "require": {
+        "php": ">=5.6.0 <8.0",
+        "codeception/codeception": "*@dev",
+        "symfony/browser-kit": ">=2.7 <6.0",
+        "symfony/dom-crawler": ">=2.7 <6.0"
+    },
+    "require-dev": {
+        "codeception/util-universalframework": "dev-master"
+    },
+    "conflict": {
+        "codeception/codeception": "<4.0"
+    },
+    "autoload":{
+        "classmap": ["src/"]
+    },
+    "config": {
+        "classmap-authoritative": true
+    },
+    "scripts": {
+        "test": "codecept run --coverage-xml"
+    }
+}

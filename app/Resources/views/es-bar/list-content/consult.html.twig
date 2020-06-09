@@ -50,7 +50,7 @@
         <p class="mtm"><i class="es-icon es-icon-accesstime mrm"></i>{{'es_bar.consult.work_time'|trans({'%worktime%': consult.worktime}) }}</p>
       {% endif %}
       {% for phone in consultPhones %}
-        <p class="mtm"><i class="es-icon es-icon-phone mrm"></i>{{ phone.name }}:{{ phone.number }}</p>
+        <p class="mtm"><i class="es-icon es-icon-phone mrm"></i>{{ phone.name }}：{{ phone.number }}</p>
       {% endfor %}
       {% if consult.email is not empty %}
         <p class="mtm"><i class="es-icon es-icon-mail mrm"></i>{{'es_bar.consult.email'|trans}} <a class="link-dark" href="mailto:{{consult.email}}">{{consult.email}}</a></p>
