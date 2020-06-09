@@ -267,15 +267,18 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             'answer_record_id' => $answerRecord['id'],
         ];
         $questionReports = $this->getAnswerQuestionReportService()->search($conditions, [], 0, $this->getAnswerQuestionReportService()->count($conditions));
+        $assessmentQuestions = $this->getAssessmentService()->findAssessmentQuestions($answerRecord['assessment_id']);
         foreach ($questionReports as &$questionReport) {
             $questionReport['comment'] = empty($reviewQuestionReports[$questionReport['id']]['comment']) ? '' : $this->biz['item_bank_html_helper']->purify($reviewQuestionReports[$questionReport['id']]['comment']);
             list($score, $status) = $this->getQuestionReportScoreAndStatus(
                 $answerScene,
                 $questionReport,
-                empty($reviewQuestionReports[$questionReport['id']]) ? array() : $reviewQuestionReports[$questionReport['id']]
+                empty($reviewQuestionReports[$questionReport['id']]) ? array() : $reviewQuestionReports[$questionReport['id']],
+                empty($assessmentQuestions[$questionReport['question_id']]) ? array() : $assessmentQuestions[$questionReport['question_id']]
             );
             $questionReport['score'] = $score;
             $questionReport['status'] = $status;
+            $questionReport['total_score'] = empty($assessmentQuestions['score']) ? 0 : $assessmentQuestions['score'];
         }
 
         try {
@@ -319,9 +322,9 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return $answerReport;
     }
 
-    protected function getQuestionReportScoreAndStatus($answerScene, $questionReport, $reviewQuestionReport)
+    protected function getQuestionReportScoreAndStatus($answerScene, $questionReport, $reviewQuestionReport, $assessmentQuestion)
     {
-        if (empty($reviewQuestionReport)) {
+        if (empty($reviewQuestionReport) || empty($assessmentQuestion)) {
             return [0, AnswerQuestionReportService::STATUS_NOANSWER];
         }
         
@@ -336,8 +339,8 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         } elseif (0 == $reviewQuestionReport['score']) {
             $score = 0;
             $status = AnswerQuestionReportService::STATUS_WRONG;
-        } elseif ($reviewQuestionReport['score'] >= $questionReport['total_score']) {
-            $score = $questionReport['total_score'];
+        } elseif ($reviewQuestionReport['score'] >= $assessmentQuestion['score']) {
+            $score = $assessmentQuestion['score'];
             $status = AnswerQuestionReportService::STATUS_RIGHT;
         } else {
             $score = $reviewQuestionReport['score'];
@@ -508,6 +511,16 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
         if ($answerRecord['assessment_id'] != $assessmentResponse['assessment_id']) {
             throw $this->createInvalidArgumentException('assessment_id invalid.');
+        }
+
+        foreach ($assessmentResponse['section_responses'] as &$sectionResponse) {
+            foreach ($sectionResponse['item_responses'] as &$itemResponse) {
+                foreach ($itemResponse['question_responses'] as &$questionResponse) {
+                    foreach ($questionResponse['response'] as &$response) {
+                        $response = trim($response);
+                    }
+                }
+            }
         }
 
         return $assessmentResponse;

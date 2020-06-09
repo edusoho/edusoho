@@ -2,27 +2,27 @@
 
 namespace Tests\Unit\Component\Export\Invite;
 
-use Biz\BaseTestCase;
 use AppBundle\Component\Export\Course\StudentExporter;
+use Biz\BaseTestCase;
 
 class StudentExporterTest extends BaseTestCase
 {
-    public function testgetContent()
+    public function testgetCount()
     {
         self::$appKernel->getContainer()->set('biz', $this->getBiz());
-        $expoter = new StudentExporter(self::$appKernel->getContainer(), array(
+        $expoter = new StudentExporter(self::$appKernel->getContainer(), [
             'courseId' => 1,
             'courseSetId' => 2,
-        ));
+        ]);
 
         $this->mockBiz(
             'Course:MemberService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'countMembers',
                     'returnValue' => 100,
-                ),
-            )
+                ],
+            ]
         );
 
         $count = $expoter->getCount();
@@ -31,50 +31,50 @@ class StudentExporterTest extends BaseTestCase
 
     public function testBuildCondition()
     {
-        $expoter = new StudentExporter(self::$appKernel->getContainer(), array(
+        $expoter = new StudentExporter(self::$appKernel->getContainer(), [
             'courseId' => 1,
             'courseSetId' => 2,
-        ));
-        $conditions = $expoter->buildCondition(array('courseId' => 10));
+        ]);
+        $conditions = $expoter->buildCondition(['courseId' => 10]);
 
-        $this->assertArrayEquals(array(
+        $this->assertArrayEquals([
             'courseId' => 10,
             'role' => 'student',
-        ), $conditions);
+        ], $conditions);
     }
 
     public function testBuildParameter()
     {
-        $expoter = new StudentExporter(self::$appKernel->getContainer(), array(
+        $expoter = new StudentExporter(self::$appKernel->getContainer(), [
             'courseId' => 1,
             'courseSetId' => 2,
-        ));
-        $parameter = $expoter->buildParameter(array(
+        ]);
+        $parameter = $expoter->buildParameter([
             'courseId' => 1,
             'courseSetId' => 2,
             'start' => 20,
             'fileName' => '/course/student.csv',
             'asd' => '123',
-        ));
+        ]);
 
-        $this->assertArrayEquals(array(
+        $this->assertArrayEquals([
             'start' => 20,
             'fileName' => 'student.csv',
             'courseId' => 1,
             'courseSetId' => 2,
-        ), $parameter);
+        ], $parameter);
     }
 
     public function testGetTitles()
     {
         $this->mockUserField();
-        $this->mockUserField(array('field_title' => 'title2', 'field_enabled' => 1));
-        $expoter = new StudentExporter(self::$appKernel->getContainer(), array(
+        $this->mockUserField(['field_title' => 'title2', 'field_enabled' => 1]);
+        $expoter = new StudentExporter(self::$appKernel->getContainer(), [
             'courseId' => 1,
             'courseSetId' => 2,
-        ));
+        ]);
 
-        $title = array(
+        $title = [
             'user.fields.username_label',
             'user.fields.email_label',
             'task.learn_data_detail.createdTime',
@@ -89,77 +89,77 @@ class StudentExporterTest extends BaseTestCase
             'user.fields.title_label',
             'student.profile.weibo',
             'title2',
-        );
+        ];
 
         $this->assertArrayEquals($title, $expoter->getTitles());
     }
 
-    public function testGetCount()
+    public function testgetContent()
     {
         self::$appKernel->getContainer()->set('biz', $this->getBiz());
-        $this->mockUserField(array('field_title' => 'title', 'field_enabled' => 1));
-        $expoter = new StudentExporter(self::$appKernel->getContainer(), array(
+        $this->mockUserField(['field_title' => 'title', 'field_enabled' => 1]);
+        $expoter = new StudentExporter(self::$appKernel->getContainer(), [
             'courseId' => 1,
             'courseSetId' => 2,
-        ));
+        ]);
 
         $this->mockBiz(
             'Course:CourseService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getCourse',
-                    'returnValue' => array(
+                    'returnValue' => [
                         'compulsoryTaskNum' => 10,
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
 
         $this->mockBiz(
             'Course:MemberService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'searchMembers',
-                    'returnValue' => array(
-                        array(
+                    'returnValue' => [
+                        [
                             'userId' => 1,
                             'createdTime' => 1,
                             'learnedCompulsoryTaskNum' => 2,
-                        ),
-                        array(
+                        ],
+                        [
                             'userId' => 2,
                             'createdTime' => 33,
                             'learnedCompulsoryTaskNum' => 3,
-                        ),
-                    ),
-                ),
-            )
+                        ],
+                    ],
+                ],
+            ]
         );
 
         $this->mockBiz(
             'User:UserService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'findUsersByIds',
-                    'returnValue' => array(
-                        1 => array(
+                    'returnValue' => [
+                        1 => [
                             'id' => 1,
                             'nickname' => 'nickname',
                             'title' => 'title',
                             'email' => 'email',
-                        ),
-                        2 => array(
+                        ],
+                        2 => [
                             'id' => 2,
                             'nickname' => 'nickname2',
                             'title' => 'title2',
                             'email' => 'email2',
-                        ),
-                    ),
-                ),
-                array(
+                        ],
+                    ],
+                ],
+                [
                     'functionName' => 'findUserProfilesByIds',
-                    'returnValue' => array(
-                        1 => array(
+                    'returnValue' => [
+                        1 => [
                             'id' => 1,
                             'qq' => 'qq',
                             'weibo' => 'weibo',
@@ -170,8 +170,8 @@ class StudentExporterTest extends BaseTestCase
                             'gender' => 'female',
                             'truename' => 'truename',
                             'textField1' => '111',
-                        ),
-                        2 => array(
+                        ],
+                        2 => [
                             'id' => 2,
                             'qq' => 'qq2',
                             'gender' => 'male',
@@ -182,17 +182,17 @@ class StudentExporterTest extends BaseTestCase
                             'job' => 'job2',
                             'truename' => 'truename2',
                             'textField1' => '222',
-                        ),
-                    ),
-                ),
-            )
+                        ],
+                    ],
+                ],
+            ]
         );
 
         $result = $expoter->getContent(0, 20);
 
-        $this->assertArrayEquals(array(
-            array(
-                'nickname',
+        $this->assertArrayEquals([
+            [
+                'nickname'."\t",
                 'email',
                 '1970-1-01 08:00:01',
                 '20%',
@@ -206,9 +206,9 @@ class StudentExporterTest extends BaseTestCase
                 'title',
                 'weibo',
                 '111',
-            ),
-            array(
-                'nickname2',
+            ],
+            [
+                'nickname2'."\t",
                 'email2',
                 '1970-1-01 08:00:33',
                 '30%',
@@ -222,56 +222,56 @@ class StudentExporterTest extends BaseTestCase
                 'title2',
                 'weibo2',
                 '222',
-            ),
-        ), $result);
+            ],
+        ], $result);
     }
 
     public function testCanExport()
     {
         self::$appKernel->getContainer()->set('biz', $this->getBiz());
-        $expoter = new StudentExporter(self::$appKernel->getContainer(), array(
+        $expoter = new StudentExporter(self::$appKernel->getContainer(), [
             'courseId' => 1,
             'courseSetId' => 2,
-        ));
+        ]);
         $result = $expoter->canExport();
         $this->assertTrue($result);
 
         $biz = $this->getBiz();
         $user = $biz['user'];
-        $user->setPermissions(array());
+        $user->setPermissions([]);
         $result = $expoter->canExport();
         $this->assertNotTrue($result);
 
         $this->mockBiz(
             'Course:CourseService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'tryManageCourse',
                     'returnValue' => true,
-                ),
-            )
+                ],
+            ]
         );
 
         $this->mockBiz(
             'System:SettingService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'get',
                     'returnValue' => true,
-                ),
-            )
+                ],
+            ]
         );
         $result = $expoter->canExport();
         $this->assertNotTrue($result);
     }
 
-    protected function mockUserField($fields = array())
+    protected function mockUserField($fields = [])
     {
-        $this->getUserFieldService()->addUserField(array_merge(array(
+        $this->getUserFieldService()->addUserField(array_merge([
             'field_title' => 'title',
             'field_seq' => 1,
             'field_type' => 'text',
-        ), $fields
+        ], $fields
         ));
     }
 

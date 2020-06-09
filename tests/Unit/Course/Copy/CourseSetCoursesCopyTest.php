@@ -2,29 +2,29 @@
 
 namespace Tests\Unit\Course\Copy;
 
+use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
 use Biz\Course\Copy\CourseSetCoursesCopy;
-use AppBundle\Common\ReflectionUtils;
 
 class CourseSetCoursesCopeTest extends BaseTestCase
 {
     public function testDoCopy()
     {
-        $courseSet = $this->getCourseSetDao()->create(array('id' => 2, 'title' => ''));
-        $copy = new CourseSetCoursesCopy($this->biz, array(), false);
-        $course = $this->getCourseDao()->create(array('id' => 33, 'courseSetId' => 1, 'title' => '', 'type' => '', 'originPrice' => '1', 'status' => 'published'));
-        $course = $this->getCourseDao()->create(array('id' => 34, 'courseSetId' => 1, 'title' => '', 'type' => '', 'originPrice' => '1'));
-        $course2 = $this->getCourseDao()->create(array('id' => 35, 'courseSetId' => 1, 'title' => '', 'type' => '', 'originPrice' => '10', 'status' => 'published'));
-        $source = array(
+        $courseSet = $this->getCourseSetDao()->create(['id' => 2, 'title' => '']);
+        $copy = new CourseSetCoursesCopy($this->biz, [], false);
+        $course = $this->getCourseDao()->create(['id' => 33, 'courseSetId' => 1, 'title' => '', 'type' => '', 'originPrice' => '1', 'status' => 'published']);
+        $course = $this->getCourseDao()->create(['id' => 34, 'courseSetId' => 1, 'title' => '', 'type' => '', 'originPrice' => '1']);
+        $course2 = $this->getCourseDao()->create(['id' => 35, 'courseSetId' => 1, 'title' => '', 'type' => '', 'originPrice' => '10', 'status' => 'published']);
+        $source = [
             'id' => 1,
             'defaultCourseId' => $course2['id'],
-        );
-        $options = array(
-            'newCourseSet' => array(
+        ];
+        $options = [
+            'newCourseSet' => [
                 'id' => 2,
                 'title' => 2,
-            ),
-        );
+            ],
+        ];
 
         $copy->doCopy($source, $options);
         $courses = $this->getCourseDao()->findCoursesByCourseSetIdAndStatus(2, null);
@@ -39,16 +39,16 @@ class CourseSetCoursesCopeTest extends BaseTestCase
 
     public function testPreCopy()
     {
-        $copy = new CourseSetCoursesCopy($this->biz, array(), false);
-        $this->assertNull($copy->preCopy(array(), array()));
+        $copy = new CourseSetCoursesCopy($this->biz, [], false);
+        $this->assertNull($copy->preCopy([], []));
     }
 
     public function testGetFields()
     {
-        $copy = new CourseSetCoursesCopy($this->biz, array(), false);
+        $copy = new CourseSetCoursesCopy($this->biz, [], false);
         $result = ReflectionUtils::invokeMethod($copy, 'getFields');
 
-        $this->assertArrayEquals(array(
+        $this->assertArrayEquals([
             'title',
             'learnMode',
             'expiryMode',
@@ -106,21 +106,19 @@ class CourseSetCoursesCopeTest extends BaseTestCase
             'lessonNum',
             'publishLessonNum',
             'subtitle',
-        ), $result);
+        ], $result);
     }
 
     public function testResetCopyId()
     {
         $courseSetId = 2;
-        $copy = new CourseSetCoursesCopy($this->biz, array(), false);
+        $copy = new CourseSetCoursesCopy($this->biz, [], false);
 
-        $course = $this->getCourseDao()->create(array('courseSetId' => $courseSetId, 'parentId' => 1));
-        $task = $this->getTaskDao()->create(array('courseId' => 1, 'fromCourseSetId' => $courseSetId, 'title' => '', 'type' => '', 'createdUserId' => '1', 'copyId' => 1));
-        $activity = $this->getActivity()->create(array('fromCourseSetId' => $courseSetId, 'copyId' => 1, 'title' => '', 'mediaType' => ''));
-        $courseChapter = $this->getCourseChapter()->create(array('courseId' => 1, 'copyId' => 1, 'title' => ''));
-        $testpaper = $this->getTestpaper()->create(array('copyId' => 1, 'courseSetId' => $courseSetId));
-        $question = $this->getQuestion()->create(array('copyId' => 1, 'courseSetId' => $courseSetId));
-        ReflectionUtils::invokeMethod($copy, 'resetCopyId', array($courseSetId));
+        $course = $this->getCourseDao()->create(['courseSetId' => $courseSetId, 'parentId' => 1]);
+        $task = $this->getTaskDao()->create(['courseId' => 1, 'fromCourseSetId' => $courseSetId, 'title' => '', 'type' => '', 'createdUserId' => '1', 'copyId' => 1]);
+        $activity = $this->getActivity()->create(['fromCourseSetId' => $courseSetId, 'copyId' => 1, 'title' => '', 'mediaType' => '']);
+        $courseChapter = $this->getCourseChapter()->create(['courseId' => 1, 'copyId' => 1, 'title' => '']);
+        ReflectionUtils::invokeMethod($copy, 'resetCopyId', [$courseSetId]);
 
         $course = $this->getCourseDao()->get($course['id']);
         $this->assertEquals(0, $course['parentId']);
@@ -128,10 +126,6 @@ class CourseSetCoursesCopeTest extends BaseTestCase
         $this->assertEquals(0, $task['copyId']);
         $activity = $this->getActivity()->get($activity['id']);
         $this->assertEquals(0, $activity['copyId']);
-        $testpaper = $this->getTestpaper()->get($testpaper['id']);
-        $this->assertEquals(0, $testpaper['copyId']);
-        $question = $this->getQuestion()->get($question['id']);
-        $this->assertEquals(0, $question['copyId']);
         $courseChapter = $this->getCourseChapter()->get($courseChapter['id']);
         $this->assertEquals(0, $courseChapter['copyId']);
     }
@@ -139,11 +133,6 @@ class CourseSetCoursesCopeTest extends BaseTestCase
     protected function getQuestion()
     {
         return $this->biz->dao('Question:QuestionDao');
-    }
-
-    protected function getTestpaper()
-    {
-        return $this->biz->dao('Testpaper:TestpaperDao');
     }
 
     protected function getCourseDao()

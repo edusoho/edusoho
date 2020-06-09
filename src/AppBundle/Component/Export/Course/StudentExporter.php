@@ -14,7 +14,7 @@ class StudentExporter extends Exporter
             return true;
         }
 
-        $courseSetting = $this->getSettingService()->get('course', array());
+        $courseSetting = $this->getSettingService()->get('course', []);
         if (!empty($courseSetting['teacher_export_student'])) {
             $this->getCourseService()->tryManageCourse($this->parameter['courseId'], $this->parameter['courseSetId']);
 
@@ -32,8 +32,8 @@ class StudentExporter extends Exporter
     public function getTitles()
     {
         $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
-        $userFieldsTitle = empty($userFields) ? array() : ArrayToolkit::column($userFields, 'title');
-        $fields = array(
+        $userFieldsTitle = empty($userFields) ? [] : ArrayToolkit::column($userFields, 'title');
+        $fields = [
             'user.fields.username_label',
             'user.fields.email_label',
             'task.learn_data_detail.createdTime',
@@ -47,7 +47,7 @@ class StudentExporter extends Exporter
             'user.fields.career_label',
             'user.fields.title_label',
             'student.profile.weibo',
-        );
+        ];
 
         return array_merge($fields, $userFieldsTitle);
     }
@@ -56,15 +56,15 @@ class StudentExporter extends Exporter
     {
         $course = $this->getCourseService()->getCourse($this->parameter['courseId']);
         $translator = $this->container->get('translator');
-        $gender = array(
+        $gender = [
             'female' => $translator->trans('user.fields.gender.female'),
             'male' => $translator->trans('user.fields.gender.male'),
             'secret' => $translator->trans('user.fields.gender.secret'),
-        );
+        ];
 
         $courseMembers = $this->getCourseMemberService()->searchMembers(
             $this->conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $start,
             $limit
         );
@@ -82,14 +82,14 @@ class StudentExporter extends Exporter
         $fields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
         $fields = ArrayToolkit::column($fields, 'fieldName');
 
-        $datas = array();
+        $datas = [];
         foreach ($courseMembers as $courseMember) {
-            $member = array();
+            $member = [];
             $userId = $courseMember['userId'];
             $profile = $profiles[$userId];
             $user = $users[$userId];
 
-            $member[] = $user['nickname'];
+            $member[] = $user['nickname']."\t";
             $member[] = $user['email'];
             $member[] = date('Y-n-d H:i:s', $courseMember['createdTime']);
             $member[] = $courseMember['learningProgressPercent'].'%';
@@ -104,7 +104,7 @@ class StudentExporter extends Exporter
             $member[] = $profile['weibo'] ? $profile['weibo'] : '-';
 
             foreach ($fields as $value) {
-                $member[] = $profile[$value] ? str_replace(array(PHP_EOL, '"'), '', $profile[$value]) : '-';
+                $member[] = $profile[$value] ? str_replace([PHP_EOL, '"'], '', $profile[$value]) : '-';
             }
 
             $datas[] = $member;
@@ -124,10 +124,10 @@ class StudentExporter extends Exporter
 
     public function buildCondition($conditions)
     {
-        return array(
+        return [
             'courseId' => $conditions['courseId'],
             'role' => 'student',
-        );
+        ];
     }
 
     /**

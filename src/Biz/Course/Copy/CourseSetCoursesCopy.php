@@ -7,7 +7,6 @@ use Biz\AbstractCopy;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseSetService;
-use Biz\Question\Dao\QuestionDao;
 use Biz\Task\Dao\TaskDao;
 use Biz\Testpaper\Dao\TestpaperDao;
 
@@ -27,7 +26,7 @@ class CourseSetCoursesCopy extends AbstractCopy
         $courses = $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSet['id'], null);
 
         $defaultCourseId = 0;
-        $newCourses = array();
+        $newCourses = [];
 
         foreach ($courses as $originCourse) {
             $newCourse = $this->partsFields($originCourse);
@@ -51,7 +50,7 @@ class CourseSetCoursesCopy extends AbstractCopy
 
         // 原课程defaultCourse被删除时，复制后defaultCourseId为课程下第一个计划的ID
         $defaultCourseId = empty($defaultCourseId) ? $newCourses[0]['id'] : $defaultCourseId;
-        $this->getCourseSetDao()->update($newCourseSet['id'], array('defaultCourseId' => $defaultCourseId));
+        $this->getCourseSetDao()->update($newCourseSet['id'], ['defaultCourseId' => $defaultCourseId]);
 
         $this->getCourseSetService()->updateCourseSetMinAndMaxPublishedCoursePrice($newCourseSet['id']);
 
@@ -75,7 +74,6 @@ class CourseSetCoursesCopy extends AbstractCopy
         $connection->exec("UPDATE `course_task` SET copyId = 0 WHERE fromCourseSetId = {$newCourseSetId}");
         $connection->exec("UPDATE `activity` SET copyId = 0 where fromCourseSetId = {$newCourseSetId}");
         $connection->exec("UPDATE `testpaper_v8` SET copyId = 0 WHERE courseSetId = {$newCourseSetId}");
-        $connection->exec("UPDATE `question` SET copyId = 0 WHERE courseSetId = {$newCourseSetId}");
     }
 
     protected function doChildrenProcess($source, $options)
@@ -90,7 +88,7 @@ class CourseSetCoursesCopy extends AbstractCopy
 
     protected function getFields()
     {
-        return array(
+        return [
             'title',
             'learnMode',
             'expiryMode',
@@ -150,7 +148,7 @@ class CourseSetCoursesCopy extends AbstractCopy
             'lessonNum',
             'publishLessonNum',
             'subtitle',
-        );
+        ];
     }
 
     /**
@@ -175,14 +173,6 @@ class CourseSetCoursesCopy extends AbstractCopy
     protected function getTaskDao()
     {
         return $this->biz->dao('Task:TaskDao');
-    }
-
-    /**
-     * @return QuestionDao
-     */
-    protected function getQuestionDao()
-    {
-        return $this->biz->dao('Question:QuestionDao');
     }
 
     /**

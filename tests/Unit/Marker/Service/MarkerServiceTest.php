@@ -78,7 +78,6 @@ class MarkerServiceTest extends BaseTestCase
             'courseSetId' => 1,
         ];
 
-        $this->getQuestionService()->create($arguments);
         $this->getMarkerService()->addMarker(1, $fields);
         $this->getMarkerService()->addMarker(3, $fields);
         $markers = $this->getMarkerService()->getMarkersByIds([1, 2]);
@@ -94,18 +93,8 @@ class MarkerServiceTest extends BaseTestCase
             'second' => 30,
             'questionId' => 1,
         ];
-        $arguments = [
-            'type' => 'single_choice',
-            'parentId' => 0,
-            'stem' => '111',
-            'answer' => [1],
-            'choices' => [1, 2, 3, 4],
-            'target' => 'course-1',
-            'courseSetId' => 1,
-        ];
 
         $this->mockUploadFile(1);
-        $this->getQuestionService()->create($arguments);
         $this->getMarkerService()->addMarker(1, $fields);
         $this->mockUploadFile(2);
         $this->getMarkerService()->addMarker(2, $fields);
@@ -186,17 +175,7 @@ class MarkerServiceTest extends BaseTestCase
             'second' => 30,
             'questionId' => 1,
         ];
-        $arguments = [
-            'type' => 'single_choice',
-            'parentId' => 0,
-            'stem' => '111',
-            'answer' => [1],
-            'choices' => [1, 2, 3, 4],
-            'target' => 'course-1',
-            'courseSetId' => 1,
-        ];
 
-        $this->getQuestionService()->create($arguments);
         $this->getMarkerService()->addMarker(1, $fields);
 
         $this->getMarkerService()->updateMarker(1, []);
@@ -270,17 +249,7 @@ class MarkerServiceTest extends BaseTestCase
             'second' => 30,
             'questionId' => 1,
         ];
-        $arguments = [
-            'type' => 'single_choice',
-            'parentId' => 0,
-            'stem' => '111',
-            'answer' => [1],
-            'choices' => [1, 2, 3, 4],
-            'target' => 'course-1',
-            'courseSetId' => 1,
-        ];
 
-        $this->getQuestionService()->create($arguments);
         $marker = $this->getMarkerService()->addMarker(1, $fields);
 
         $this->mockBiz('Marker:QuestionMarkerService', [
@@ -483,11 +452,6 @@ class MarkerServiceTest extends BaseTestCase
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
-    }
-
-    protected function getQuestionService()
-    {
-        return $this->createService('Question:QuestionService');
     }
 
     protected function getCourseService()

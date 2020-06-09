@@ -32,6 +32,7 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
         if (isset($config['parameters']['school_mode']['business_mode'])) {
             $config['parameters']['school_mode']['business_mode'] = $new['coop_mode'];
             $content = $this->dumpParameters($config);
+            $this->backupParameters();
             $this->writeParameters($content);
         }
         $this->getLogger()->info("[onCoopModeChange] 更新渠道商#{$new['name']}合作模式#{$new['coop_mode']}成功");
@@ -89,7 +90,7 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
         $authNode = isset($me['auth_node']) ? $me['auth_node'] : [];
         $this->checkAuthNode($authNode);
 
-        $setting = $this->getSettingService()->get('s2b2c');
+        $setting = $this->getSettingService()->get('s2b2c', []);
         $setting['auth_node'] = [
             'logo' => $me['auth_node']['logo'],
             'title' => $me['auth_node']['title'],
@@ -155,7 +156,7 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
             'logo' => sprintf('%s/logo/%s_logo.png', $s2b2cConfig['supplierDomain'], $host),
         ];
 
-        $site = $this->getSettingService()->get('site');
+        $site = $this->getSettingService()->get('site', []);
         $site = array_merge($site, $logo);
         $this->getSettingService()->set('site', $site);
 
@@ -171,7 +172,7 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
         $favicon = [
             'favicon' => sprintf('%s/favicon/%s_favicon.ico', $s2b2cConfig['supplierDomain'], $host),
         ];
-        $site = $this->getSettingService()->get('site');
+        $site = $this->getSettingService()->get('site', []);
         $site = array_merge($site, $favicon);
         $this->getSettingService()->set('site', $site);
     }
@@ -184,7 +185,7 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
         }
 
         $site = array_merge(
-            $this->getSettingService()->get('site'),
+            $this->getSettingService()->get('site', []),
             ['name' => $merchant['site_title']]
         );
 

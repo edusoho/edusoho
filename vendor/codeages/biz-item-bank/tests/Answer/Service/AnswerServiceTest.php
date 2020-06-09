@@ -367,6 +367,19 @@ class AnswerServiceTest extends IntegrationTestCase
             ],
         ]);
 
+        $this->mockObjectIntoBiz('ItemBank:Assessment:AssessmentService', [
+            [
+                'functionName' => 'findAssessmentQuestions',
+                'returnValue' => [
+                    '1' => ['score' => 2],
+                    '2' => ['score' => 2],
+                    '3' => ['score' => 2],
+                    '4' => ['score' => 2],
+                    '5' => ['score' => 2],
+                ],
+            ]
+        ]);
+
         $this->mockObjectIntoBiz('ItemBank:Answer:AnswerSceneService', [
             [
                 'functionName' => 'get',
@@ -405,7 +418,6 @@ class AnswerServiceTest extends IntegrationTestCase
                 'item_id' => 1,
                 'question_id' => 1,
                 'score' => 0,
-                'total_score' => 2,
                 'response' => ['A'],
                 'status' => 'no_answer',
             ],
@@ -418,7 +430,6 @@ class AnswerServiceTest extends IntegrationTestCase
                 'item_id' => 2,
                 'question_id' => 2,
                 'score' => 0,
-                'total_score' => 2,
                 'response' => ['A'],
                 'status' => 'reviewing',
             ],
@@ -431,7 +442,6 @@ class AnswerServiceTest extends IntegrationTestCase
                 'item_id' => 3,
                 'question_id' => 3,
                 'score' => 0,
-                'total_score' => 2,
                 'response' => ['A'],
                 'status' => 'reviewing',
             ],
@@ -444,7 +454,6 @@ class AnswerServiceTest extends IntegrationTestCase
                 'item_id' => 3,
                 'question_id' => 4,
                 'score' => 0,
-                'total_score' => 2,
                 'response' => [],
                 'status' => 'reviewing',
             ],
@@ -457,7 +466,6 @@ class AnswerServiceTest extends IntegrationTestCase
                 'item_id' => 3,
                 'question_id' => 5,
                 'score' => 0,
-                'total_score' => 2,
                 'response' => ['A'],
                 'status' => 'reviewing',
             ],
