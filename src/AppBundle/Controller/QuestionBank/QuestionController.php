@@ -287,7 +287,7 @@ class QuestionController extends BaseController
         $path = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory').DIRECTORY_SEPARATOR.$fileName;
 
         $conditions = $request->query->all();
-        if (isset($conditions['ids']) && !empty($conditions['ids'])){
+        if (isset($conditions['ids']) && !empty($conditions['ids'])) {
             $conditions['ids'] = explode(',', $conditions['ids']);
         }
 

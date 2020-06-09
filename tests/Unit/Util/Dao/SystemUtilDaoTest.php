@@ -6,13 +6,6 @@ use Tests\Unit\Base\BaseDaoTestCase;
 
 class SystemUtilDaoTest extends BaseDaoTestCase
 {
-    public function testGetCourseIdsWhereCourseHasDeleted()
-    {
-        $result = $this->getSystemUtilDao()->getCourseIdsWhereCourseHasDeleted();
-
-        $this->assertEmpty($result);
-    }
-
     public function testDeclares()
     {
         $result = $this->getSystemUtilDao()->declares();
@@ -22,7 +15,7 @@ class SystemUtilDaoTest extends BaseDaoTestCase
 
     protected function getDefaultMockFields()
     {
-        return array();
+        return [];
     }
 
     protected function getSystemUtilDao()

@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class ParserException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 11;
+    const EXCEPTION_MODULE = 11;
 
     const PARSED_FAILED_LETV = 4041101;
 
@@ -18,11 +18,11 @@ class ParserException extends AbstractException
 
     const PARSER_NOT_SUPPORT = 5001101;
 
-    public $messages = array(
+    public $messages = [
         4041101 => 'exception.parsed.failed.letv',
         4041102 => 'exception.parsed.failed.netease',
         4041103 => 'exception.parsed.failed.qq',
         4041104 => 'exception.parsed.failed.youku',
         5001101 => 'exception.parser.not.support',
-    );
+    ];
 }

@@ -11,4 +11,3 @@ if (class_exists('PHPUnit_Runner_Filter_Factory') && !class_exists('PHPUnit\Runn
     class_alias('PHPUnit_Runner_Filter_Group_Exclude', 'PHPUnit\Runner\Filter\ExcludeGroupFilterIterator');
     class_alias('PHPUnit_Runner_Version', 'PHPUnit\Runner\Version');
 }
-
