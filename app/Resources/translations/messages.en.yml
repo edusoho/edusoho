@@ -6218,6 +6218,8 @@ admin.magic_setting.learn_time_sec_tip: second
 admin.magic_setting.watch_time_sec: watch time report cycle
 admin.magic_setting.watch_time_sec_tip: second
 admin.magic_setting.site_trace_enable: enable site trace
+admin.magic_setting.live_entry_time: Time to enter before live broadcast begins
+admin.magic_setting.live_entry_time_tip: second
 
 admin.magic_setting.one_for_open: '1 To enable'
 admin.magic_setting.one_for_close: '1 Is off'
@@ -7246,7 +7248,7 @@ activity.live.replay_guid: >
 
 activity.live.default_notice: >
   <p>The live broadcast starts at %startTimeFormat% and ends at %endTimeFormat%<p>
-  (You can enter the live broadcasting classroom within 120 minutes before it starts.)
+  (You can enter the live broadcasting classroom within %limitTimeFormat% hours before it starts.)
 
 
 #积分
