@@ -9,7 +9,7 @@ module.exports = {
   },
   gdy: {
     url: "http://gdy.st.edusoho.cn",
-    token: "bbdu8q9lw1wgck04804sowgoksc88g8",
+    token: "7j76hkzda6oscwws404scwss8ccogww",
   },
   iyamusic: {
     url: "https://www.iyamusic.com",
