@@ -160,6 +160,7 @@
                                data-toggle="cd-radio" name="enableAudio"
                                :value="value"
                                v-model="course.learnMode"
+                               @click="changeAudioMode"
                                :disabled="course.platform =='supplier' ? true : false"/>
                         {{ key }}
                     </label>
@@ -215,6 +216,7 @@
             videoConvertCompletion: '',
             courseSetManageFilesUrl: '',
         },
+        watch: {},
         methods: {
             serviceItemClick(event) {
                 let $item = $(event.currentTarget);
@@ -233,7 +235,15 @@
                 }
 
                 $('#course_services').val(JSON.stringify(values));
-            }
+            },
+            changeAudioMode(event) {
+                if ($('#course-audio-mode').data('value') == 'notAllowed') {
+                    let enableAudios = $("[name='enableAudio']");
+                    cd.message({type: 'info', message: Translator.trans('course.audio.enable.biz.user')});
+                    enableAudios[0].checked = true;
+                    enableAudios[1].checked = false;
+                }
+            },
         },
         data() {
             let freeTaskJsClass = this.canFreeTasks ? ' task-price-setting-group' : '';
@@ -270,6 +280,8 @@
                 courseSetManageFilesUrl: '',
 
             };
+        },
+        mounted() {
         }
     }
 </script>

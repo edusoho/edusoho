@@ -19,6 +19,7 @@
                    v-bind:audio-service-status="audioServiceStatus"
                    v-bind:video-convert-completion="videoConvertCompletion"
                    v-bind:course-set-manage-files-url="courseSetManageFilesUrl"
+                   v-bind:content-course-rule-url="contentCourseRuleUrl"
         ></base-rule>
         <market-setting v-bind:course="course"
                         v-bind:course-product="courseProduct"

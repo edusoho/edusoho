@@ -50,7 +50,7 @@ class CourseInfo {
     }
     this.initValidator();
     // this.checkBoxChange();
-    this.changeAudioMode();
+    // this.changeAudioMode();
     this.initDatetimepicker();
     this.setService();
     this.taskPriceSetting();
@@ -87,16 +87,16 @@ class CourseInfo {
     this.initDatePicker('#deadline');
   }
 
-  changeAudioMode() {
-    $('#audio-modal-id').on('change', 'input[name=\'enableAudio\']', function () {
-      let mode = $('#course-audio-mode').data('value');
-      if (mode == 'notAllowed') {
-        cd.message({type: 'info', message: Translator.trans('course.audio.enable.biz.user')});
-        $('[name=\'enableAudio\']')[1].checked = true;
-        $('[name=\'enableAudio\']')[0].checked = false;
-      }
-    });
-  }
+  // changeAudioMode() {
+  //   $('#audio-modal-id').on('change', 'input[name=\'enableAudio\']', function () {
+  //     let mode = $('#course-audio-mode').data('value');
+  //     if (mode == 'notAllowed') {
+  //       cd.message({type: 'info', message: Translator.trans('course.audio.enable.biz.user')});
+  //       $('[name=\'enableAudio\']')[1].checked = true;
+  //       $('[name=\'enableAudio\']')[0].checked = false;
+  //     }
+  //   });
+  // }
 
   initValidator() {
     let $form = $('#course-info-form');

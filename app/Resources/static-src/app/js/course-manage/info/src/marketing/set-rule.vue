@@ -27,7 +27,7 @@
                     type="hidden" name="expiryMode" v-model="course.expiryMode">
 
                 <div class="course-manage-expiry"
-                     :class="course.expiryMode in ['date', 'forever'] ? 'hidden' : ''"
+                     :class="{'hidden': course.expiryMode != 'days'}"
                      id="expiry-days">
                     <span class="caret"></span>
                     <label class="cd-radio" :class="course.deadlineType == value ? 'checked' : ''"
@@ -35,7 +35,7 @@
                            v-for="(key, value) in deadlineType">
                         <input type="radio"
                                name="deadlineType"
-                               :value="value"v-bind:course="course"
+                               :value="value" v-bind:course="course"
                                v-bind:courseSet="courseSet"
                                v-bind:lesson-watch-limit="lessonWatchLimit"
                                v-bind:has-role-admin="hasRoleAdmin"
@@ -49,8 +49,8 @@
                            v-model="course.deadlineType">
 
                     <div class="cd-mt16"
-                         :class="course.deadlineType != 'end_date'? 'hidden': ''">
-                        <input :disabled="course.platform == 'self' ? true : false"
+                         :class="{'hidden': course.deadlineType != 'end_date'}">
+                        <input :disabled="course.platform != 'self' ? true : false"
                                v-model="course.expiryEndDate"
                                autocomplete="off" class="form-control course-mangae-info__input js-expiry-input cd-mr8"
                                id="deadline"
@@ -59,7 +59,7 @@
                     </div>
 
                     <div class="cd-mt16"
-                         :class="course.deadlineType != 'days'? 'hidden' : ''"
+                         :class="{'hidden': course.deadlineType != 'days'}"
                          id="deadlineType-days">
                         <input
                             :disabled="(coursePublished && courseSetPublished) || course.platform != 'self' ? true : false"
@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="course-manage-expiry"
-                     :class="course.expiryMode in ['days', 'forever'] ? 'hidden' : ''"
+                     :class="{'hidden': course.expiryMode != 'date'}"
                      id="expiry-date">
                     <span class="caret"></span>
                     <div class="course-manage-expiry__circle">
@@ -94,7 +94,7 @@
                 </div>
 
                 <div class="course-mangae-info__tip js-expiry-tip"
-                     :class="course.expiryMode == 'forever' ? 'ml0' : ''">
+                     :class="{'ml0': course.expiryMode == 'forever'}">
                     {{ 'course.marketing_setup.rule.expiry_date.first_publish_tips'|trans }}
                 </div>
             </div>
@@ -123,7 +123,9 @@
             <div class="col-sm-8">
                 <div v-if="wechatSetting.templates.courseRemind && wechatSetting.templates.courseRemind.status"
                      class="help-block course-mange-space">
-                    {{ 'course.setting.course_remind_tip'|trans({'D':courseRemindSendDays,'H':wechatSetting.templates.courseRemind.sendTime}) }}
+                    {{
+                    'course.setting.course_remind_tip'|trans({'D':courseRemindSendDays,'H':wechatSetting.templates.courseRemind.sendTime})
+                    }}
                     <!--                    {{ 'course.setting.course_remind_tip'|trans({'%D%': days, '%H%': wechatSetting.templates.courseRemind.sendTime }) }}-->
                     <a v-if="hasWechatNotificationManageRole"
                        data-container="body" data-toggle="popover" data-trigger="hover" :href="wechatManageUrl"
@@ -164,7 +166,7 @@
                 lessonWatchLimit: this.lessonWatchLimit ? this.lessonWatchLimit : false,
                 hasRoleAdmin: this.hasRoleAdmin ? this.hasRoleAdmin : false,
                 wechatSetting: this.wechatSetting,
-                hasWechatNotificationManageRole: this.hasWechatNotificationManageRole ? this.hasWechatNotificationManageRole :false,
+                hasWechatNotificationManageRole: this.hasWechatNotificationManageRole ? this.hasWechatNotificationManageRole : false,
                 wechatManageUrl: '',
                 courseRemindSendDays: '',
                 expiryMode: {
