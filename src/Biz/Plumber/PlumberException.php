@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class PlumberException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 68;
+    const EXCEPTION_MODULE = 68;
 
     const NOT_FOUND_QUEUE = 5002501;
 

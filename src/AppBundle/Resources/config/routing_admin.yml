@@ -1029,11 +1029,6 @@ admin_optimize_backupdb:
     methods: [POST]
     permissions: [admin_optimize_settings]
 
-admin_optimize_remove_upload_files:
-    path:  /setting/optimize/remove-unusedfiles
-    defaults: { _controller: AppBundle:Admin/Optimize:removeUnusedFiles }
-    permissions: [admin_optimize_settings]
-
 admin_optimize_remove_show_progressbar:
     path:  /setting/optimize/show-progressbar
     defaults: { _controller: AppBundle:Admin/Optimize:showProgressbar }
@@ -2484,7 +2479,7 @@ admin_coupon_chooser_resource_list:
 admin_wechat_notification_setting_modal:
     path: /wechat/notification/setting_edit
     defaults: { _controller: AppBundle:Admin/WeChatNotification:settingModal }
-    
+
 admin_upgrade_v2_setting:
     path: /upgrade/v2_setting
     defaults: { _controller: AppBundle:Admin/Default:upgradeV2Setting }

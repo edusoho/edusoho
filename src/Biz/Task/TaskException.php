@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class TaskException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 12;
+    const EXCEPTION_MODULE = 12;
 
     const TASK_NUM_LIMIT = 4031201;
 
@@ -46,7 +46,7 @@ class TaskException extends AbstractException
 
     const LIVE_REPLAY_INVALID = 5001219;
 
-    public $messages = array(
+    public $messages = [
         4031201 => 'lesson_tasks_no_more_than_5',
         4041202 => 'exception.task.not_found',
         5001203 => 'exception.task.unpublished_task',
@@ -66,5 +66,5 @@ class TaskException extends AbstractException
         5001217 => 'exception.task.type_invalid',
         4041218 => 'exception.task.live_replay_not_found',
         5001219 => 'exception.task.live_replay_invalid',
-    );
+    ];
 }

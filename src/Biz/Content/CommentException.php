@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class CommentException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 37;
+    const EXCEPTION_MODULE = 37;
 
     const NOTFOUND_COMMENT = 4043701;
 
@@ -14,9 +14,9 @@ class CommentException extends AbstractException
 
     const OBJECTTYPE_INVALID = 5003703;
 
-    public $messages = array(
+    public $messages = [
         4043701 => 'exception.comment.not_found',
         4033702 => 'exception.comment.forbidden_delete',
         5003703 => 'exception.comment.objecttype_invalid',
-    );
+    ];
 }

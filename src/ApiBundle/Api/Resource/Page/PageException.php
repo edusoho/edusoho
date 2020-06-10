@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class PageException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 20;
+    const EXCEPTION_MODULE = 20;
 
     const ERROR_MODE = 5002001;
 
@@ -14,9 +14,9 @@ class PageException extends AbstractException
 
     const ERROR_PORTAL = 5002003;
 
-    public $messages = array(
+    public $messages = [
         5002001 => 'exception.page.error_mode',
         5002002 => 'exception.page.error_type',
         5002003 => 'exception.page.error_portal',
-    );
+    ];
 }
