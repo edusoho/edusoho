@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class BlockException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 39;
+    const EXCEPTION_MODULE = 39;
 
     const NOTFOUND_BLOCK = 4043901;
 
@@ -16,10 +16,10 @@ class BlockException extends AbstractException
 
     const EMPTY_CODES = 5003904;
 
-    public $messages = array(
+    public $messages = [
         4043901 => 'exception.block.not_found',
         4043902 => 'exception.block.not_found_template',
         5003903 => 'exception.block.empty_history',
         5003904 => 'exception.block.empty_codes',
-    );
+    ];
 }

@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class OpenCourseException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 40;
+    const EXCEPTION_MODULE = 40;
 
     const NOTFOUND_OPENCOURSE = 4044001;
 
@@ -30,7 +30,7 @@ class OpenCourseException extends AbstractException
 
     const CHECK_PASSWORD_REQUIRED = 5004011;
 
-    public $messages = array(
+    public $messages = [
         4044001 => 'exception.opencourse.not_found',
         4044002 => 'exception.opencourse.not_found_lesson',
         5004003 => 'exception.opencourse.lesson_type_invalid',
@@ -42,5 +42,5 @@ class OpenCourseException extends AbstractException
         5004009 => 'exception.opencourse.itemids_invalid',
         5004010 => 'exception.opencourse.is_not_member',
         5004011 => 'exception.opencourse.check_password_required',
-    );
+    ];
 }
