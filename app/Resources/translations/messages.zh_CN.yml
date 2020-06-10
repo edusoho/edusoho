@@ -10187,6 +10187,7 @@ exception.message.send_to_self: 不能给自己发消息
 exception.message.empty_message: 消息为空
 exception.message.not_found_conversation: 会话不存在
 exception.message.delete_denied: 您无权删除此私信
+exception.message.send_limit: 私信发送次数受限，请稍候重试
 exception.coupon.not_found: 优惠券不存在
 exception.coupon.status_invalid: 非法的优惠券状态
 exception.coupon.type_invalid: 非法的优惠券类型

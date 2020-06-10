@@ -8878,6 +8878,7 @@ exception.message.send_to_self: Can't send messages to yourself
 exception.message.empty_message: The message is empty
 exception.message.not_found_conversation: Session does not exist
 exception.message.delete_denied: You are not authorized to delete this private message
+exception.message.send_limit: The number of private messages is limited, please try again later
 exception.coupon.not_found: Coupon does not exist
 exception.coupon.status_invalid: Illegal coupon status
 exception.coupon.type_invalid: Illegal coupon type

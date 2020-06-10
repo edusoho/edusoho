@@ -111,6 +111,11 @@ class MessageController extends BaseController
         if ('POST' == $request->getMethod()) {
             $message = $request->request->get('message');
             $nickname = $message['receiver'];
+            $limiter = $this->getRateLimiter('message_limit', 60, 3600);
+            $maxAllowance = $limiter->getAllow($user['id']);
+            if (0 == $maxAllowance) {
+                $this->createNewException(MessageException::MESSAGE_SEND_LIMIT());
+            }
             $receiver = $this->getUserService()->getUserByNickname($nickname);
             if (empty($receiver)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
@@ -119,6 +124,7 @@ class MessageController extends BaseController
                 $this->createNewException(UserException::FORBIDDEN_SEND_MESSAGE());
             }
             $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
+            $limiter->check($user['id']);
 
             return $this->redirect($this->generateUrl('message'));
         }
@@ -134,6 +140,11 @@ class MessageController extends BaseController
         if ('POST' == $request->getMethod()) {
             $message = $request->request->get('message');
             $nickname = $message['receiver'];
+            $limiter = $this->getRateLimiter('message_limit', 60, 3600);
+            $maxAllowance = $limiter->getAllow($user['id']);
+            if (0 == $maxAllowance) {
+                $this->createNewException(MessageException::MESSAGE_SEND_LIMIT());
+            }
             $receiver = $this->getUserService()->getUnDstroyedUserByNickname($nickname);
             if (empty($receiver)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
@@ -142,6 +153,7 @@ class MessageController extends BaseController
                 $this->createNewException(UserException::FORBIDDEN_SEND_MESSAGE());
             }
             $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
+            $limiter->check($user['id']);
 
             return $this->redirect($this->generateUrl('message'));
         }
@@ -230,6 +242,13 @@ class MessageController extends BaseController
     protected function getWebExtension()
     {
         return $this->container->get('web.twig.extension');
+    }
+
+    protected function getRateLimiter($id, $maxAllowance, $period)
+    {
+        $factory = $this->getBiz()->offsetGet('ratelimiter.factory');
+
+        return $factory($id, $maxAllowance, $period);
     }
 
     /**
