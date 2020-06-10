@@ -15,9 +15,9 @@
     <div class="tab-content h5-tab-content">
 
       {# 发现页设置 #}
-      <div class="tab-pane fade in active" id="find-page">
+      <div class="tab-pane fade in active h5-mtl" id="find-page">
         {% if 2 != wapSetting.version %}
-          <div class="row h5-clearfix h5-mtl">
+          <div class="row h5-clearfix ">
             <div class="find-page__left">
               <img class="find-page__left--img" src="{{ asset('static-dist/app/img/admin/h5/iPhoneX.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}" />
               <div class="find-page__left--scroll">
@@ -54,14 +54,14 @@
         {% endif %}
       </div>
       {# 站点页设置 #}
-      <div class="tab-pane fade" id="site-page">
+      <div class="tab-pane fade " id="site-page">
         <div class="help-block-container">
           {{'admin.wap_setting.open.tip'|trans|raw}}
         </div>
       </div>
 
       {# 装修主题 #}
-      <div class="tab-pane fade" id="theme-page">
+      <div class="tab-pane fade h5-mtl" id="theme-page">
         <form class="form-horizontal" method="post" id="wap-setting-form" novalidate>
           <div class="row">
             <div class="col-md-6">
