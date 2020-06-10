@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class SettingException extends AbstractException
 {
-    const EXCEPTION_MODUAL = '08';
+    const EXCEPTION_MODULE = '08';
 
     const FORBIDDEN_MOBILE_REGISTER = 4030801;
 
@@ -36,7 +36,7 @@ class SettingException extends AbstractException
 
     const APP_CLIENT_CLOSED = 4030814;
 
-    public $messages = array(
+    public $messages = [
         4030801 => 'exception.setting.forbidden_mobile_register',
         4030802 => 'exception.sms.setting_enable',
         4030803 => 'exception.setting.forbidden_setting_nickname',
@@ -51,5 +51,5 @@ class SettingException extends AbstractException
         5000812 => 'exception.setting.ai_face_disable',
         4030813 => 'exception.setting.attachment.setting_enable',
         4030814 => 'exception.setting.app_client_closed',
-    );
+    ];
 }

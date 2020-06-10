@@ -15,7 +15,9 @@ use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MaterialService;
+use Biz\Course\Service\MemberService;
 use Biz\File\Service\UploadFileService;
+use Biz\System\Service\SettingService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Event\Event;
 
@@ -570,7 +572,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             return ['result' => false, 'message' => 'message_response.live_class_not_exist.message'];
         }
 
-        if ($activity['startTime'] - time() > self::LIVE_STARTTIME_DIFF_SECONDS) {
+        $setting = $this->getSettingService()->get('magic', ['live_entry_time' => self::LIVE_STARTTIME_DIFF_SECONDS]);
+        $setTime = $this->isTeacher($courseId) ? $setting['live_entry_time'] : self::LIVE_STARTTIME_DIFF_SECONDS;
+        if ($activity['startTime'] - time() > $setTime) {
             return ['result' => false, 'message' => 'message_response.live_not_start.message'];
         }
 
@@ -579,6 +583,16 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         return ['result' => true, 'message' => ''];
+    }
+
+    protected function isTeacher($courseId)
+    {
+        $user = $this->getCurrentUser();
+        if ($this->getMemberService()->isCourseTeacher($courseId, $user['id'])) {
+            return $user->isTeacher();
+        }
+
+        return false;
     }
 
     public function findFinishedLivesWithinTwoHours()
@@ -773,5 +787,21 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     protected function getExerciseActivityService()
     {
         return $this->createService('Activity:ExerciseActivityService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }

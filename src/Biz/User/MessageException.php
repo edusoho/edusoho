@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class MessageException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 44;
+    const EXCEPTION_MODULE = 44;
 
     const NOTFOUND_SENDER_OR_RECEIVER = 4044401;
 
@@ -26,6 +26,6 @@ class MessageException extends AbstractException
         5004403 => 'exception.message.empty_message',
         4044404 => 'exception.message.not_found_conversation',
         4034405 => 'exception.message.delete_denied',
-        5004406 => 'exception.message.send_limit',
+        5004406 => 'exception.message.send_limit'
     ];
 }

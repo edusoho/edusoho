@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class UserFieldException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 28;
+    const EXCEPTION_MODULE = 28;
 
     const NOTFOUND_USERFIELD = 4042801;
 
@@ -20,12 +20,12 @@ class UserFieldException extends AbstractException
 
     const DUPLICATE_TITLE = 5002806;
 
-    public $messages = array(
+    public $messages = [
         4042801 => 'exception.userfield.not_found',
         5002802 => 'exception.userfield.title_required',
         5002803 => 'exception.userfield.seq_required',
         5002804 => 'exception.userfield.seq_invalid',
         5002805 => 'exception.userfield.type_invalid',
         5002806 => 'exception.userfield.duplicate_title',
-    );
+    ];
 }

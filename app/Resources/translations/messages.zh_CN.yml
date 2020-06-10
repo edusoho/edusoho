@@ -7550,6 +7550,8 @@ admin.magic_setting.learn_time_sec_tip: 秒为单位
 admin.magic_setting.watch_time_sec: 视频观看时长上报周期
 admin.magic_setting.watch_time_sec_tip: 秒为单位
 admin.magic_setting.site_trace_enable: piwik跟踪的开关
+admin.magic_setting.live_entry_time: 直播开始前可进入时间
+admin.magic_setting.live_entry_time_tip: 秒为单位
 
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭
@@ -8560,7 +8562,7 @@ activity.live.replay_guid: >
 
 activity.live.default_notice: >
   <p>直播将于%startTimeFormat%开始，于%endTimeFormat%结束<p>
-  (直播开始前120分钟内可进入直播教室)
+  (直播开始前%limitTimeFormat%小时内可进入直播教室)
 
 #积分
 admin.reward_point: 积分
