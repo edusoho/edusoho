@@ -3808,7 +3808,7 @@ es-abstract@^1.17.0, es-abstract@^1.17.0-next.1, es-abstract@^1.17.2, es-abstrac
     string.prototype.trimleft "^2.1.1"
     string.prototype.trimright "^2.1.1"
 
-es-ckeditor@4.7.2-patch13:
+es-ckeditor@4.7.2-patch13, "es-ckeditor@git+https://github.com/cd-fez/es-ckeditor.git#master":
   version "4.7.2-patch13"
   resolved "https://registry.npm.taobao.org/es-ckeditor/download/es-ckeditor-4.7.2-patch13.tgz#a740df84a7d2e952f352fe727e1565409f1d0e1d"
   integrity sha1-p0DfhKfS6VLzUv5yfhVlQJ8dDh0=
@@ -6029,10 +6029,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@1.0.10-0:
-  version "1.0.10-0"
-  resolved "https://registry.npm.taobao.org/item-bank/download/item-bank-1.0.10-0.tgz#564dfa17ab6d1d417ce2e8596eb630826388ba6e"
-  integrity sha1-Vk36F6ttHUF84uhZbrYwgmOIum4=
+item-bank@1.0.11:
+  version "1.0.11"
+  resolved "https://registry.npm.taobao.org/item-bank/download/item-bank-1.0.11.tgz#8fca59f1b72ac644e159f450fb3a0a626072adb4"
+  integrity sha1-j8pZ8bcqxkThWfRQ+zoKYmByrbQ=
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"
