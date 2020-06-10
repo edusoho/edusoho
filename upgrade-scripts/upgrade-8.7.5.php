@@ -50,6 +50,11 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'dropUnusedTables',
+            'addGoodsTable',
+            'addGoodsSpecsTable',
+            'addProductTable',
+            'addMarketingMeansTable',
+            'addGoodsPurchaseTable',
         );
 
         $funcNames = array();
@@ -96,6 +101,111 @@ class EduSohoUpgrade extends AbstractUpdater
             DROP TABLE IF EXISTS `testpaper_item_result`;
         ");
         $this->logger('info', '删除7.0以来不需要的表');
+        return 1;
+    }
+
+    public function addGoodsTable()
+    {
+        if (!$this->isTableExist('goods')) {
+            $this->getConnection()->exec("
+            CREATE TABLE `goods` (
+               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+               `productId` int(10) unsigned NOT NULL COMMENT '产品id',
+               `title` varchar(1024) NOT NULL COMMENT '商品标题',
+               `images` text DEFAULT NULL COMMENT '商品图片',
+               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+               `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+               PRIMARY KEY (`id`)
+               ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品表';
+            ");
+        }
+
+        return 1;
+    }
+
+    public function addGoodsSpecsTable()
+    {
+        if (!$this->isTableExist('goods_specs')) {
+            $this->getConnection()->exec("
+            CREATE TABLE `goods_specs` (
+               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+               `goodsId` int(10) unsigned NOT NULL COMMENT '商品id',
+               `targetId` int(10) unsigned NOT NULL COMMENT '目标内容Id,如教学计划id',
+               `title` varchar(1024) NOT NULL COMMENT '规格标题',
+               `images` text DEFAULT NULL COMMENT '商品图片',
+               `price` float(10,2) NOT NULL DEFAULT 0.00 COMMENT '价格',
+               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+               `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+               PRIMARY KEY (`id`)
+               ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品规格表';
+            ");
+        }
+        return 1;
+    }
+
+    public function addProductTable()
+    {
+        if (!$this->isTableExist('product')) {
+            $this->getConnection()->exec("
+            CREATE TABLE `product` (
+               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+               `targetType` varchar (32) NOT NULL COMMENT '产品类型,course、classroom、lesson、open_course ...',
+               `targetId` int(10) unsigned NOT NULL COMMENT '对应产品资源id',
+               `title` varchar(1024) NOT NULL COMMENT '产品名称',
+               `owner` int(10) unsigned NOT NULL COMMENT '拥有者（创建者）',
+               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+               `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+               PRIMARY KEY (`id`),
+               KEY `targetType_targetId` (targetType, targetId)
+               ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品表';
+            ");
+        }
+
+        return 1;
+    }
+
+    public function addMarketingMeansTable()
+    {
+        if (!$this->isTableExist('marketing_means')) {
+            $this->getConnection()->exec("
+                CREATE TABLE `marketing_means` (
+                  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                  `type` varchar(64) NOT NULL DEFAULT '' COMMENT '营销手段：discount,vip,coupon',
+                  `fromMeansId` int(10) unsigned NOT NULL COMMENT '对应营销手段id（discountId, couponBatchId,vipLevelId）',
+                  `targetType` varchar(64) NOT NULL DEFAULT '' COMMENT '目标类型:整个商品、单个规格；goods,specs,category(商品分类)',
+                  `targetId` int(10) unsigned NOT NULL COMMENT '单个目标，如果批量选，则创建多条，0：表示某目标类型的所有，>0: 表示具体对应的目标类型',
+                  `status` tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT '1： 有效， 2：无效',
+                  `visibleOnGoodsPage` tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT '商品页可用,  0： 不可用 1 可用 （业务需求，字段暂时启用）',
+                  `createdTime` int(11) unsigned NOT NULL,
+                  `updatedTime` int(11) unsigned NOT NULL,
+                  PRIMARY KEY (`id`),
+                  KEY `targetType_targetId` (`targetType`,`targetId`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        return 1;
+    }
+
+    public function addGoodsPurchaseTable()
+    {
+        if (!$this->isTableExist('goods_purchase_voucher')) {
+            $this->getConnection()->exec("
+            CREATE TABLE `goods_purchase_voucher` (
+                  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                  `specsId` int(11) unsigned NOT NULL,
+                  `goodsId` int(11) unsigned NOT NULL,
+                  `orderId` int(11) unsigned NOT NULL DEFAULT '0',
+                  `userId` int(11) unsigned NOT NULL,
+                  `effectiveType` varchar(64) NOT NULL COMMENT '生效类型',
+                  `effectiveTime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '生效时间',
+                  `invalidTime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '失效时间',
+                  `createdTime` int(11) unsigned NOT NULL DEFAULT '0',
+                  `updatedTime` int(11) unsigned NOT NULL DEFAULT '0',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        }
         return 1;
     }
 
@@ -156,7 +266,7 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->createService('System:SettingService');
     }
