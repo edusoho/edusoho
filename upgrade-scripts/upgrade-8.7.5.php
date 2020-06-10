@@ -217,7 +217,10 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = 'SELECT course_task.id AS id,course_task.title AS title,course_task.categoryId AS chapterId FROM course_task LEFT JOIN course_chapter ON course_task.categoryId = course_chapter.id WHERE course_chapter.id IS NULL;';
         $shouldDelete = $this->getConnection()->fetchAll($sql, array());
         $this->logger('info', json_encode($shouldDelete));
-
+        
+        if (empty($shouldDelete)) {
+            return 1;
+        }
         $taskIds = ArrayToolkit::column($shouldDelete, 'id');
         $marks = str_repeat('?,', count($taskIds) - 1).'?';
         $sql = "DELETE from course_task where id in ({$marks});";
