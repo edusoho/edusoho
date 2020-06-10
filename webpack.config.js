@@ -70,6 +70,9 @@ module.exports = {
         '**/kityformula/libs/**',
       ]
     },
+    {
+      name: 'element-ui',
+    },
     // 纯拷贝item-bank/lib/itemBank.umd.min.js
     {
       name: 'item-bank/lib/itemBank.umd.min.js',
