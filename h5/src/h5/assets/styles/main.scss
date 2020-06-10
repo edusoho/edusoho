@@ -53,3 +53,15 @@
 
 // webview
 @import './containers/webview/index.scss';
+
+//隐藏滚动条
+html,body {
+  &::-webkit-scrollbar {
+    height: 0px;
+    width : 0px;
+    display: none;
+  }
+  scrollbar-width: none;
+  -ms-overflow-style:none;
+  overflow:-moz-scrollbars-none;
+}
