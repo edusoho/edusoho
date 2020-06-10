@@ -2,11 +2,13 @@ import Intro from './intro';
 import Expiry from 'app/js/course-manage/expiry/expiry';
 import {initTags} from 'app/js/courseset-manage/base/tag';
 import ManageInfo from './src/manage-info';
+import ElementUI from 'element-ui';
 
+Vue.use(ElementUI);
 Vue.filter('trans', function (value, params) {
   if (!value) return '';
   return Translator.trans(value, params);
-})
+});
 
 
 new Vue({

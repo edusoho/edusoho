@@ -34,7 +34,8 @@ module.exports = {
     'ltc-sdk-client': ['libs/ltc-sdk-client/index.js'],
     'ltc-sdk-server': ['libs/ltc-sdk-server/index.js'],
     'bootstrap-treeview': ['libs/bootstrap-treeview/index.js'],
-    'vue': ['vue']
+    'vue': ['vue'],
+    'element-ui': ['element-ui'],
   },
   noParseDeps: { // 不解析依赖，加快编译速度
     'jquery': 'jquery/dist/jquery.js',
@@ -58,7 +59,8 @@ module.exports = {
     'handlebars': 'handlebars/dist/handlebars.min.js',
     'moment': 'moment/moment.js',
     'fullcalendar': 'es-fullcalendar/dist/fullcalendar.js',
-    'codeages-design': 'codeages-design/dist/codeages-design.js'
+    'codeages-design': 'codeages-design/dist/codeages-design.js',
+    'element-ui': 'element-ui/dist/index.js',
   },
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {
