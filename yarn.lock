@@ -3238,9 +3238,9 @@ es-abstract@^1.17.0, es-abstract@^1.17.0-next.1, es-abstract@^1.17.2, es-abstrac
     string.prototype.trimleft "^2.1.1"
     string.prototype.trimright "^2.1.1"
 
-es-ckeditor@4.7.2-patch13, "es-ckeditor@git+https://github.com/shenchupeng/es-ckeditor.git#master":
+es-ckeditor@4.7.2-patch13, "es-ckeditor@git+https://github.com/cd-fez/es-ckeditor.git#master":
   version "4.7.2-patch13"
-  resolved "git+https://github.com/shenchupeng/es-ckeditor.git#98fff7a10450c6db70dcae08ea10b4d40fe91cba"
+  resolved "git+https://github.com/cd-fez/es-ckeditor.git#a069b024e79e085439a962d11eb8718f1e23e7e0"
 
 es-commit-msg-validator@1.0.2:
   version "1.0.2"
