@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\Filesystem\Filesystem;
+use AppBundle\Common\ArrayToolkit;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
@@ -55,6 +56,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'addProductTable',
             'addMarketingMeansTable',
             'addGoodsPurchaseTable',
+            'deleteTaskWithNullChapter',
+            'alterClassroomTeacherIds',
         );
 
         $funcNames = array();
@@ -206,6 +209,29 @@ class EduSohoUpgrade extends AbstractUpdater
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
+        return 1;
+    }
+
+    public function deleteTaskWithNullChapter()
+    {
+        $sql = 'SELECT course_task.id AS id,course_task.title AS title,course_task.categoryId AS chapterId FROM course_task LEFT JOIN course_chapter ON course_task.categoryId = course_chapter.id WHERE course_chapter.id IS NULL;';
+        $shouldDelete = $this->getConnection()->fetchAll($sql, array());
+        $this->logger('info', json_encode($shouldDelete));
+
+        $taskIds = ArrayToolkit::column($shouldDelete, 'id');
+        $marks = str_repeat('?,', count($taskIds) - 1).'?';
+        $sql = "DELETE from course_task where id in ({$marks});";
+        $this->getConnection()->executeUpdate($sql, $taskIds);
+
+        return 1;
+    }
+
+    public function alterClassroomTeacherIds()
+    {
+        if ($this->isFieldExist('classroom', 'teacherIds')) {
+            $this->getConnection()->exec("ALTER TABLE `classroom` modify COLUMN `teacherIds` varchar(1024) NOT NULL DEFAULT '' COMMENT '教师IDs';");
+        }
+
         return 1;
     }
 
