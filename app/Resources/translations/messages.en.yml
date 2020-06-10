@@ -9579,7 +9579,10 @@ admin_v2.course_manage.create_btn: Create Course
 admin_v2.course_manage.merchant_course: Purchase
 admin_v2.course_manage.has_version_change: Has Change
 
-exception.courseset.source_course_closed: Course closed,please contact the supplier.
+exception.courseset.source_course_closed: The supplier has removed the course. If you need to publish it, please contact the supplier!
+exception.courseset.source_course_not_found: Failed to obtain supplier course information, unable to post!
+exception.course.source_course_closed_join_denied: The supplier has removed the course and cannot join it for now!
+exception.course.source_course_closed: The supplier has closed the course and cannot publish it for now!
 
 admin_v2.plumber.status: Status
 admin_v2.plumber.start: start
