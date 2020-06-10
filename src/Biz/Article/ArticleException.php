@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class ArticleException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 02;
+    const EXCEPTION_MODULE = 02;
 
     const NOTFOUND = 4040201;
 
@@ -16,10 +16,10 @@ class ArticleException extends AbstractException
 
     const SOURCE_URL_INVALID = 5000204;
 
-    public $messages = array(
+    public $messages = [
         4040201 => 'exception.article.notfound',
         5000202 => 'exception.article.error_property',
         5000203 => 'exception.article.duplicate_like',
         5000204 => 'exception.article.error_source_url',
-    );
+    ];
 }

@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class MemberException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 19;
+    const EXCEPTION_MODULE = 19;
 
     const NOTFOUND_MEMBER = 4041901;
 
@@ -20,12 +20,12 @@ class MemberException extends AbstractException
 
     const NON_EXPIRED_MEMBER = 5001906;
 
-    public $messages = array(
+    public $messages = [
         4041901 => 'exception.course.member.not_found',
         4031902 => 'exception.course.member.not_member',
         4031903 => 'exception.course.member.duplicate_member',
         5001904 => 'exception.course.member.expired_member',
         5001905 => 'exception.course.member.not_student',
         5001906 => 'exception.course.member.non_expired',
-    );
+    ];
 }
