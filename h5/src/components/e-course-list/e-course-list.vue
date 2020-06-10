@@ -251,10 +251,18 @@ export default {
           }
         })
       } else {
-        this.$router.push({
-          name: this.typeList === 'course_list' ? 'more_course' : 'more_class'
-        })
+        this.jumpMore()
       }
+    },
+    jumpMore(){
+      let category={}
+      if(this.courseList.categoryIdArray){
+        category.categoryId=this.courseList.categoryIdArray[0]
+      }
+      this.$router.push({
+          name: this.typeList === 'course_list' ? 'more_course' : 'more_class',
+          query:{...category}
+      })
     },
     fetchCourse() {
       if (this.sourceType === 'custom') return
