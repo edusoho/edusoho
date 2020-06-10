@@ -55,8 +55,8 @@
           />
         </div>
       </van-tab>
-      <van-tab title=""> </van-tab>
-      <van-tab title=""> </van-tab>
+      <van-tab title="" disabled> </van-tab>
+      <van-tab title="" disabled> </van-tab>
     </van-tabs>
   </div>
 </template>
