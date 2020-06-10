@@ -2,7 +2,7 @@
   <div class="find-search">
     <form action="/">
       <van-search
-        v-model="selectedData.title"
+        v-model="selectedData.courseSetTitle"
         shape="round"
         show-action
         placeholder="搜索课程、班级"
@@ -74,7 +74,7 @@ export default {
     return {
       active: 0,
       selectedData: {
-        title: ""
+        courseSetTitle: ""
       },
       isSearch:false,
       classroomList: [],
