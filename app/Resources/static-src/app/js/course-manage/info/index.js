@@ -3,7 +3,6 @@
 // import {initTags} from 'app/js/courseset-manage/base/tag';
 import ManageInfo from './src/manage-info';
 import ElementUI from 'element-ui';
-import lang from 'element-ui/'
 
 Vue.use(ElementUI);
 Vue.filter('trans', function (value, params) {
