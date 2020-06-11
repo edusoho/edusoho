@@ -121,18 +121,33 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
         return ['status' => true];
     }
 
+    /**
+     * @param NotifyEvent $notifyEvent
+     * @return bool|mixed
+     */
     public function syncSupplierProductEvent($notifyEvent)
     {
         $this->getLogger()->info('[syncSupplierProductEvent] 同步supplier端信息', $notifyEvent->getData());
-        $handle = [
+        $handle = array(
             'modifyPrice' => 'modifyPriceEvent',
-        ];
+            'closeTask' => 'closeTaskEvent',
+        );
 
-        if (!array_key_exists($notifyEvent->getEvent(), $handle)) {
+        if (!array_key_exists($notifyEvent->getEvent(), $handle)){
             return false;
         }
 
-        return $this->{$handle[$notifyEvent->getEvent()]}($notifyEvent);
+        $result = $this->{$handle[$notifyEvent->getEvent()]}($notifyEvent);
+
+        if ($result) {
+            $this->getSyncEventDao()->create(array(
+                'productId' => $notifyEvent->getProductId(),
+                'event' => $notifyEvent->getEvent(),
+                'data' => $notifyEvent->getData()
+            ));
+        }
+
+        return $result;
     }
 
     /**
@@ -144,15 +159,17 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
     {
         $changeData = $notifyEvent->getData();
 
-        $this->getCourseProductService()->syncProductPrice($notifyEvent->getProductId(), ArrayToolkit::parts($changeData['new'], ['suggestionPrice', 'cooperationPrice']));
+        return $this->getCourseProductService()->syncProductPrice($notifyEvent->getProductId(), ArrayToolkit::parts($changeData['new'], ['suggestionPrice', 'cooperationPrice']));
+    }
 
-        $this->getSyncEventDao()->create([
-            'productId' => $notifyEvent->getProductId(),
-            'event' => $notifyEvent->getEvent(),
-            'data' => $notifyEvent->getData(),
-        ]);
-
-        return true;
+    /**
+     * @param \ApiBundle\Api\Resource\SyncProductNotify\NotifyEvent $notifyEvent
+     * @return boolean
+     * @throws
+     */
+    protected function closeTaskEvent($notifyEvent)
+    {
+        return $this->getCourseProductService()->closeTask($notifyEvent->getProductId(), ArrayToolkit::get($notifyEvent->getData(), 'taskId', 0));
     }
 
     /**

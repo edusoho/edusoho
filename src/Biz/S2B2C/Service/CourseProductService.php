@@ -8,6 +8,10 @@ interface CourseProductService
 
     public function syncCourseMain($courseId);
 
+    public function updateCourseVersionData($courseId);
+
+    public function updateProductVersionData($remoteProductId);
+
     public function setProductHasNewVersion($productType, $remoteResourceId);
 
     public function deleteProductsByCourseSet($courseSet);
@@ -19,4 +23,6 @@ interface CourseProductService
     public function checkCourseSetStatus($localCourseSetId);
 
     public function syncProductPrice($remoteResourceId, $priceFields);
+
+    public function closeTask($remoteResourceId, $lessonId);
 }
