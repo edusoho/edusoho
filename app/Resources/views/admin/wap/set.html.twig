@@ -6,7 +6,7 @@
 
 {% block main %}
 
-   <div class="h5-find-body">
+  <div class="h5-find-body">
     <ul class="nav nav-tabs setting-nav-tab js-nav-tab">
       <li class="active"><a href="#find-page" data-toggle="tab">{{'admin.wap_setting.mini_school'|trans}}</a></li>
       <li ><a href="#theme-page" data-toggle="tab">{{'admin.wap_setting.theme'|trans}}</a></li>
@@ -65,8 +65,8 @@
         <form class="form-horizontal" method="post" id="wap-setting-form" novalidate>
           <div class="row">
             <div class="col-md-6">
-              <div class="row theme-bg">
-                <div class="theme-recomend"><div>{{ 'admin.wap_setting.subject_name.recommend'|trans }}</div></div>
+              <div class="row theme-bg h5-mr5">
+                <div class="theme-recomend"><div><i class="es-icon es-icon-thumbup"></i>{{ 'admin.wap_setting.subject_name.recommend'|trans }}</div></div>
                 <div class="col-md-5   theme-left">
                   <img class="theme-default-img" src="{{ asset('static-dist/app/img/admin/h5/new_default_img.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}" />
                 </div>
@@ -83,7 +83,7 @@
               </div>
             </div>
             <div class="col-md-6 col-sm-10 col-xs-12">
-              <div class="row theme-bg h5-ml0">
+              <div class="row theme-bg h5-ml5">
                 <div class="col-md-5  theme-left">
                   <img class="theme-default-img" src="{{ asset('static-dist/app/img/admin/h5/old_default_img.png') }}" alt="{{ 'admin.wap_setting.old'|trans|raw }}"/>
                 </div>
@@ -100,7 +100,7 @@
               </div>
             </div>
             <div class="col-md-6">
-              <div class="row theme-bg">
+              <div class="row theme-bg h5-mr5">
                 <div class="col-md-5 theme-left">
                   <img class="theme-default-img" src="{{ asset('static-dist/app/img/admin/h5/no_default_img.png') }}" alt="{{ 'admin.wap_setting.old'|trans|raw }}"/>
                 </div>
