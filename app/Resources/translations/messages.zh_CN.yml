@@ -10976,7 +10976,7 @@ facein.capture_face.inspection_data.inspection_count: 疑似作弊人数
 facein.capture_face.inspection_result_modal.title: 监考抓拍
 exception.s2b2c_product.update_type_invalid: 设置的更新类型不合法
 exception.s2b2c_product.not_found: 不存在对应商品
-
+exception.s2b2c_product.remove_failed: 商品移除失败
 
 admin_v2.cloud_center.content_resource.product_update_setting: 更新设置
 admin_v2.cloud_center.content_resource.product_update_auto: 自动更新

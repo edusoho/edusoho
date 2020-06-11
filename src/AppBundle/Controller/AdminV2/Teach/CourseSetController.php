@@ -115,7 +115,7 @@ class CourseSetController extends BaseController
 
         $result = $this->getCourseProductService()->deleteProductsByCourseSet($courseSet);
 
-        if (!empty($result['error'])) {
+        if (!$result) {
             return $this->createJsonResponse(['code' => 2, 'message' => '采购关系移除失败']);
         }
 
@@ -133,6 +133,13 @@ class CourseSetController extends BaseController
         $this->getCourseSetService()->deleteCourseSet($id);
 
         return $this->createJsonResponse(['code' => 0, 'message' => '删除课程成功']);
+    }
+
+    public function removeAction(Request $request, $id)
+    {
+        return $this->forward('AppBundle:AdminV2\Teach\CourseSet:delete', [
+            'id' => $id,
+        ]);
     }
 
     //todo 和CourseController 有一样的
