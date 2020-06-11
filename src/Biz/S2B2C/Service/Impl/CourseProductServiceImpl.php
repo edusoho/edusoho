@@ -314,13 +314,14 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             $this->getProductService()->deleteProduct($courseSetProduct['id']);
             $this->getProductService()->deleteByIds(ArrayToolkit::column($courseProducts, 'id'));
             $result = $this->getS2B2CFacadeService()->getS2B2CService()->changePurchaseStatusToRemoved($courseSetProduct['remoteResourceId'], $productIds, 'course');
-            if (!isset($result['status']) || $result['status'] != 'success') {
+            if (!isset($result['status']) || 'success' != $result['status']) {
                 $this->createNewException(S2B2CProductException::REMOVE_PRODUCT_FAILED());
             }
 
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
+
             return false;
         }
 
