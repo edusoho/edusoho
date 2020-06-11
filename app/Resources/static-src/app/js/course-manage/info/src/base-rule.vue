@@ -4,11 +4,13 @@
         <div role="course-base-rule">
             <div class="form-group">
                 <label class="col-sm-2 control-label">{{ 'course.plan_setup.mode'|trans }}
-                    <a class="es-icon es-icon-help course-mangae-info__help text-normal" data-trigger="hover"
-                       data-toggle="popover"
-                       data-container="body" data-placement="top"
-                       :data-content="'course.plan_setup.mode.tips'|trans">
-                    </a></label>
+                    <el-popover
+                        placement="top"
+                        :content="'course.plan_setup.mode.tips'|trans"
+                        trigger="hover">
+                        <a class="es-icon es-icon-help course-mangae-info__help text-normal" slot="reference"></a>
+                    </el-popover>
+                </label>
                 <div class="col-sm-8 cd-radio-group mb0">
                     <label class="cd-radio" :class="course.learnMode == value ? 'checked' : ''"
                            :disabled="course.status != 'draft' || course.platform !='self' ? true : false"
@@ -51,10 +53,12 @@
                         <input type="radio" data-toggle="cd-radio" name="enableFinish" value="0"
                                :disabled="course.platform == 'supplier' ? true : false">
                         {{ 'course.plan_setup.finish_rule.depend_on_finish_condition'|trans({'taskName': taskName}) }}
-                        <a class="es-icon es-icon-help course-mangae-info__help" data-trigger="hover"
-                           data-toggle="popover"
-                           data-container="body" data-placement="top"
-                           :data-content="'course.plan_setup.finish_rule.depend_on_finish_condition_tips'|trans({'taskName': taskName})"></a>
+                        <el-popover
+                            placement="top"
+                            :content="'course.plan_setup.finish_rule.depend_on_finish_condition_tips'|trans({'taskName': taskName})"
+                            trigger="hover">
+                            <a class="es-icon es-icon-help course-mangae-info__help text-normal" slot="reference"></a>
+                        </el-popover>
                     </label>
                 </div>
             </div>
@@ -108,12 +112,13 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">
                             {{ 'course.marketing_setup.preview.try_watch'|trans }}
-                            <a class="es-icon es-icon-help text-normal course-mangae-info__help" data-container="body"
-                               data-toggle="popover"
-                               data-trigger="hover"
-                               data-placement="top"
-                               :data-content="'course.marketing_setup.preview.try_watch_tips'|trans">
-                            </a>
+                            <el-popover
+                                placement="top"
+                                :content="'course.marketing_setup.preview.try_watch_tips'|trans"
+                                trigger="hover">
+                                <a class="es-icon es-icon-help course-mangae-info__help text-normal"
+                                   slot="reference"></a>
+                            </el-popover>
                         </label>
                         <div class="col-sm-8">
                             <select :disabled="course.platform != 'self'"
@@ -136,13 +141,19 @@
                     {{ 'course.marketing_setup.services.provide_services'|trans }}
                 </label>
                 <div class="col-sm-8 form-control-static">
-                    <span v-for="(tag) in serviceTags"
-                          class="service-item js-service-item"
-                          :class="tag.active ? 'service-primary-item' : ''"
-                          data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
-                          :data-content="tag.summary|trans" :data-code="tag.code"
-                          @click="serviceItemClick"
-                    >{{ tag.fullName }}</span>
+                    <el-popover v-for="(tag, key) in serviceTags"
+                                placement="top"
+                                :key="key"
+                                :content="tag.summary|trans"
+                                trigger="hover">
+                        <span class="service-item js-service-item"
+                           slot="reference"
+                           :key="key"
+                           :class="tag.active ? 'service-primary-item' : ''"
+                           :data-code="tag.code"
+                           @click="serviceItemClick"
+                        >{{ tag.fullName }}</span>
+                    </el-popover>
                     <input type="hidden" name="services" id="course_services" :value="course.services|json_encode">
                 </div>
             </div>
@@ -220,18 +231,24 @@
         methods: {
             serviceItemClick(event) {
                 let $item = $(event.currentTarget);
+                console.log($item);
+                console.log($item.hasClass('service-primary-item'));
                 let $values = $('#course_services').val();
                 let values = this.course.services;
                 if (!$values) {
                     values = [];
                 }
 
+                let code = $item.data('code')
                 if ($item.hasClass('service-primary-item')) {
                     $item.removeClass('service-primary-item');
-                    values.splice(values.indexOf($item.data('code')), 1);
+                    values.splice(values.indexOf(code), 1);
                 } else {
                     $item.addClass('service-primary-item');
-                    values.push($item.data('code'));
+
+                    if (values.indexOf(code) < 0) {
+                        values.push(code);
+                    }
                 }
 
                 $('#course_services').val(JSON.stringify(values));
@@ -278,7 +295,6 @@
                 },
                 videoConvertCompletion: '',
                 courseSetManageFilesUrl: '',
-
             };
         },
         mounted() {

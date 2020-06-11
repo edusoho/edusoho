@@ -1,27 +1,22 @@
 <template>
     <div v-if="hasMulCourses">
-        <div class="course-manage-subltitle cd-mb40">{{ 'course.plan_setup.name'|trans }}</div>
-        <div class="form-group">
-            <div class="col-sm-2 control-label">
-                <label for="title" class="control-label-required">{{ 'course.plan_setup.placeholder'|trans }}</label>
-            </div>
-            <div class="col-sm-8">
-                <input v-if="course.title" class="form-control js-course-title" v-model="course.title" type="text" name="title" id="title" />
-                <input v-else class="form-control js-course-title" v-model="course.courseSetTitle" type="text" name="title" id="title" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-2 control-label">
-                <label>{{ 'course.plan_setup.subtitle'|trans }}</label>
-            </div>
-            <div class="col-sm-8">
-                <textarea v-model="course.subtitle" class="form-control js-course-subtitle" id="subtitle" name="subtitle"></textarea>
-            </div>
-        </div>
+        <div class="course-manage-subltitle cd-mb40">{{ 'course.base_info'|trans }}</div>
+        <el-form :model="baseInfoForm" :rules="formRule" ref="baseInfoForm" label-position="right">
+            <el-form-item :label="'course.plan_setup.name'|trans" prop="title">
+                <el-input v-model="baseInfoForm.title" auto-complete="off"
+                          :placeholder="'course.plan_setup.placeholder'|trans">
+                </el-input>
+            </el-form-item>
+            <el-form-item :label="'course.plan_setup.subtitle'|trans" prop="subtitle">
+                <el-input v-model="baseInfoForm.subtitle" type="textarea" rows="3"></el-input>
+            </el-form-item>
+        </el-form>
     </div>
 </template>
 
 <script>
+    import * as commonValidation from 'common/element-validation';
+
     export default {
         name: "base-info",
         props: {
@@ -32,11 +27,31 @@
             return {
                 course: {},
                 hasMulCourses: false,
+                baseInfoForm: {
+                    title: this.course.title ? this.course.title : this.course.courseSetTitle,
+                    subtitle: this.course.subtitle
+                },
+                formRule: {
+                    title: [
+                        {
+                            required: true,
+                            message: Translator.trans('validate.required.message', {'display': Translator.trans('course.plan_setup.name')}),
+                            trigger: 'blur'
+                        },
+                        {
+                            max: 10, message: Translator.trans('validate.max_length.message'),
+                        }
+                    ],
+                },
             };
+        },
+        mounted() {
         }
     }
 </script>
 
 <style scoped>
-
+    .el-form-item label {
+        width: 150px;
+    }
 </style>

@@ -3,12 +3,16 @@
         <div class="form-group mb0">
             <label class="col-sm-2 control-label">
                 {{ 'course.marketing_setup.rule.expiry_date'|trans }}
-                <a class="es-icon es-icon-help course-mangae-info__help text-normal" data-trigger="hover"
-                   data-toggle="popover"
-                   data-container="body" data-placement="top"
-                   data-content="TODO:Trans"
-                >
-                </a>
+                <el-popover
+                    placement="top"
+                    trigger="hover">
+                    <ul class='pl10 list-unstyled'>
+                        <li class='mb10'>{{ 'course.teaching_plan.expiry_date.anytime'|trans }}</li>
+                        <li class='mb10'>{{ 'course.teaching_plan.expiry_date.real_time'|trans }}</li>
+                        <li>{{ 'course.teaching_plan.expiry_date.overdue_tips'|trans }}</li>
+                    </ul>
+                    <a class="es-icon es-icon-help course-mangae-info__help text-normal" slot="reference"></a>
+                </el-popover>
             </label>
             <div class="col-sm-10 cd-radio-group mbm">
                 <label class="cd-radio" :class="course.expiryMode == value ? 'checked' : ''"
@@ -77,19 +81,29 @@
                     <span class="caret"></span>
                     <div class="course-manage-expiry__circle">
                         {{ 'course.plan_task.start_time'|trans }}
-                        <input
+                        <el-date-picker
+                            :style="'max-width: 150px;'"
                             :disabled="(coursePublished && courseSetPublished) || course.platform != 'self' ? true : false"
                             v-model="course.expiryStartDate"
-                            class="form-control cd-ml16 cd-mr32 course-mangae-info__input js-expiry-input"
-                            id="expiryStartDate"
-                            type="text" name="expiryStartDate">{{ 'course.plan_task.end_time'|trans }}
+                            name="expiryStartDate"
+                            :default-value="today"
+                            :picker-options="dateOptions"
+                            size="small"
+                            type="date">
+                        </el-date-picker>
+                        {{ 'course.plan_task.end_time'|trans }}
 
-                        <input
+                        <el-date-picker
+                            :style="'max-width: 150px;'"
                             :disabled="(coursePublished && courseSetPublished) || course.platform != 'self' ? true : false"
                             v-model="course.expiryEndDate"
-                            class="form-control cd-ml16 course-mangae-info__input js-expiry-input" type="text"
-                            id="expiryEndDate"
-                            name="expiryEndDate">
+                            name="expiryEndDate"
+                            :default-value="today"
+                            :picker-options="dateOptions"
+                            size="small"
+                            type="date">
+                        </el-date-picker>
+                        <div class="help-block"></div>
                     </div>
                 </div>
 
@@ -108,11 +122,12 @@
                 <input class="form-control course-mangae-info__input mrs" type="text" name="watchLimit"
                        v-model="course.watchLimit">
                 {{ 'course.marketing_setup.rule.watch_time_limit.watch_limit'|trans }}
-                <a class="es-icon es-icon-help text-normal course-mangae-info__help" data-container="body"
-                   data-toggle="popover"
-                   data-trigger="hover" data-placement="top"
-                   :data-content="'course.marketing_setup.rule.watch_time_limit.watch_limit_tips'|trans">
-                </a>
+                <el-popover
+                    placement="top"
+                    :content="'course.marketing_setup.rule.watch_time_limit.watch_limit_tips'|trans"
+                    trigger="hover">
+                    <a class="es-icon es-icon-help text-normal course-mangae-info__help" slot="reference"></a>
+                </el-popover>
             </div>
         </div>
 
@@ -126,15 +141,12 @@
                     {{
                     'course.setting.course_remind_tip'|trans({'D':courseRemindSendDays,'H':wechatSetting.templates.courseRemind.sendTime})
                     }}
-                    <!--                    {{ 'course.setting.course_remind_tip'|trans({'%D%': days, '%H%': wechatSetting.templates.courseRemind.sendTime }) }}-->
-                    <a v-if="hasWechatNotificationManageRole"
-                       data-container="body" data-toggle="popover" data-trigger="hover" :href="wechatManageUrl"
-                       target="_blank">{{ 'course.setting.course_remind_change'|trans }}</a>
+                    <a v-if="hasWechatNotificationManageRole" :href="wechatManageUrl" target="_blank">
+                        {{ 'course.setting.course_remind_change'|trans }}</a>
                 </div>
                 <div v-else class="help-block course-mange-space">{{ 'course.setting.course_remind_not_open'|trans }}
-                    <a v-if="hasWechatNotificationManageRole"
-                       data-container="body" data-toggle="popover" data-trigger="hover" v-bind:href="wechatManageUrl"
-                       target="_blank">{{ 'course.setting.course_remind_go_to_open'|trans }}</a>
+                    <a v-if="hasWechatNotificationManageRole" v-bind:href="wechatManageUrl" target="_blank">
+                        {{ 'course.setting.course_remind_go_to_open'|trans }}</a>
                 </div>
             </div>
         </div>
@@ -160,6 +172,9 @@
             let courseSetPublished = this.courseSet.status ? this.courseSet.status == 'published' : false;
             let courseSetClosed = this.courseSet.status ? this.courseSet.status == 'closed' : false;
 
+            this.course.expiryStartDate = this.course.expiryStartDate > 0 ? this.course.expiryStartDate * 1000 : null;
+            this.course.expiryEndDate = this.course.expiryEndDate > 0 ? this.course.expiryEndDate * 1000 : null;
+
             return {
                 course: this.course,
                 courseSet: this.courseSet,
@@ -182,8 +197,14 @@
                 coursePublished: coursePublished,
                 courseSetClosed: courseSetClosed,
                 courseSetPublished: courseSetPublished,
+                today: Date.now(),
+                dateOptions: {
+                    disabledDate(time) {
+                        return time.getTime() <= Date.now() - 24 * 60 * 60 * 1000;
+                    }
+                }
             }
-        }
+        },
     }
 </script>
 

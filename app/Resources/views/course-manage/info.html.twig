@@ -2,7 +2,7 @@
 
 {% block title %}{{'course.plan_base_info'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set course_side_nav = 'info' %}
-{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/bootstrap-datetimepicker.js', 'libs/select2.js', 'libs/perfect-scrollbar.js', 'libs/vue.js', 'app/js/course-manage/info/index.js']) %}
+{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/bootstrap-datetimepicker.js', 'libs/select2.js', 'libs/perfect-scrollbar.js', 'libs/vue.js', 'app/js/course-manage/info/index.js', 'libs/element-ui.js']) %}
 
 {% block page_title %}{{ 'course.plan_base_info'|trans }}{% endblock %}
 {% block paddingClass %}course-manage-body course-manage-info js-course-manage-info{% endblock %}
@@ -53,31 +53,24 @@
              data-buy-before-approval="{{ setting('magic.buy_before_approval') }}"
         ></div>
 
-      {# 营销设置 #}
-{#      <div class="course-manage-subltitle cd-mb40">{{ 'course.marketing_setup'|trans }}</div>#}
-{#      <div role="course-marketing-info">#}
-{#        {% include 'course-manage/base-info/marketing.html.twig' %}#}
+{#      <div class="form-group">#}
+{#        <div class="col-sm-offset-2 col-sm-8">#}
+{#          <button id="course-submit" type="button" class="cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>#}
+{#          <div id="test"></div>#}
+{#        </div>#}
 {#      </div>#}
 
-      <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-8">
-          <button id="course-submit" type="button" class="cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
-          <div id="test"></div>
-        </div>
-      </div>
-
-      {% if not hasMulCourses and courseSet.type == 'normal' %}
-        <div class="course-manage-intro js-plan-intro hidden">
-          <div class="course-manage-intro__outer js-plan-intro-btn">
-            <div class="course-manage-intro__inner"><i class="es-icon es-icon-zhinan"></i></div>
-          </div>
-          <div class="mtm course-manage-intro__tip">{{ 'course.base_plan_intro'|trans }}</div>
-        </div>
-      {% endif %}
-      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-    </form>
+{#      {% if not hasMulCourses and courseSet.type == 'normal' %}#}
+{#        <div class="course-manage-intro js-plan-intro hidden">#}
+{#          <div class="course-manage-intro__outer js-plan-intro-btn">#}
+{#            <div class="course-manage-intro__inner"><i class="es-icon es-icon-zhinan"></i></div>#}
+{#          </div>#}
+{#          <div class="mtm course-manage-intro__tip">{{ 'course.base_plan_intro'|trans }}</div>#}
+{#        </div>#}
+{#      {% endif %}#}
+{#      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">#}
+{#    </form>#}
   {% else %}
     <div class="cd-alert cd-alert-danger">{{ 'course.marketing_setup.no_permission_tips'|trans }}</div>
   {% endif %}
-  <link href="/static-dist/libs/element-ui/dist/index.css" rel="stylesheet">
 {% endblock %}

@@ -28,3 +28,8 @@
     </div>
   </div>
 {% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link href="/static-dist/libs/element-ui/dist/index.css" rel="stylesheet">
+{% endblock %}

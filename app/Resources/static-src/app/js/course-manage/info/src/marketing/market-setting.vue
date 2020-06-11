@@ -13,10 +13,14 @@
                             {{ courseProduct.cooperationPrice }}
                         </div>
                         <span class="ml5">{{ 'site.currency.CNY'|trans }}</span>
-                        <i v-if="notifies.modifyPrice"
-                           class="es-icon es-icon-tip admin-update__icon v2-color-warning color-danger"
-                           data-container="body" data-toggle="popover" data-trigger="hover"
-                           :data-content="('s2b2c.resource.sync.prev_price.notify'|trans) + (notifies.modifyPrice.data.old.cooperationPrice)"></i>
+                        <el-popover
+                            placement="top"
+                            :content="('s2b2c.resource.sync.prev_price.notify'|trans) + (notifies.modifyPrice.data.old.cooperationPrice)"
+                            trigger="hover">
+                            <i v-if="notifies.modifyPrice"
+                               class="es-icon es-icon-tip admin-update__icon v2-color-warning color-danger"
+                               slot="reference"></i>
+                        </el-popover>
                     </div>
                 </div>
                 <div class="form-group">
@@ -29,10 +33,14 @@
                             {{ courseProduct.suggestionPrice }}
                         </div>
                         <span class="ml5">{{ 'site.currency.CNY'|trans }}</span>
-                        <i v-if="notifies.modifyPrice"
-                           class="es-icon es-icon-tip admin-update__icon v2-color-warning color-danger"
-                           data-container="body" data-toggle="popover" data-trigger="hover"
-                           :data-content="('s2b2c.resource.sync.prev_price.notify'|trans) + (notifies.modifyPrice.data.old.suggestionPrice)"></i>
+                        <el-popover
+                            placement="top"
+                            :content="('s2b2c.resource.sync.prev_price.notify'|trans) + (notifies.modifyPrice.data.old.suggestionPrice)"
+                            trigger="hover">
+                            <i v-if="notifies.modifyPrice"
+                               class="es-icon es-icon-tip admin-update__icon v2-color-warning color-danger"
+                               slot="reference"></i>
+                        </el-popover>
                     </div>
                 </div>
             </div>
@@ -59,10 +67,12 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label mb5">
                     {{ 'course.marketing_setup.setup.can_join'|trans }}
-                    <a class="es-icon es-icon-help text-normal course-mangae-info__help" data-container="body"
-                       data-toggle="popover"
-                       data-trigger="hover" data-placement="top"
-                       :data-content="'course.marketing_setup.setup.can_join.tips'|trans"></a>
+                    <el-popover
+                        placement="top"
+                        :content="'course.marketing_setup.setup.can_join.tips'|trans"
+                        trigger="hover">
+                        <a class="es-icon es-icon-help text-normal course-mangae-info__help" slot="reference"></a>
+                    </el-popover>
                 </label>
 
                 <div class="col-sm-8 cd-radio-group mb0">
@@ -96,22 +106,29 @@
                                        data-toggle="cd-radio"/>
                                 {{ key }}
                             </label>
+                            <div class="form-inline" v-if="enableBuyExpiryTime" id="buyExpiryTime">
+                                <el-date-picker
+                                    v-model="course.buyExpiryTime"
+                                    name="buyExpiryTime"
+                                    :default-value="today"
+                                    :picker-options="dateOptions"
+                                    size="small"
+                                    type="date">
+                                </el-date-picker>
+                            </div>
                         </div>
-
-                        <input type="text"
-                               class="form-control course-mangae-info__input mlm"
-                               :class="course.buyExpiryTime == 0 ? 'hidden' : ''"
-                               id="buyExpiryTime" name="buyExpiryTime"
-                               v-model="course.buyExpiryTime">
                     </div>
                 </div>
                 <div v-if="buyBeforeApproval" class="form-group">
                     <label class="col-sm-2 control-label">
                         {{ 'course.marketing_setup.approval'|trans }}
-                        <a class="es-icon es-icon-help text-normal course-mangae-info__help"
-                           data-container="body" data-toggle="popover" data-trigger="hover"
-                           data-placement="top"
-                           :data-content="'course.marketing_setup.approval_tips'|trans"></a></label>
+                        <el-popover
+                            placement="top"
+                            :content="'course.marketing_setup.approval_tips'|trans"
+                            trigger="hover">
+                            <a class="es-icon es-icon-help text-normal course-mangae-info__help" slot="reference"></a>
+                        </el-popover>
+                    </label>
                     <div class="col-sm-8 cd-radio-group">
                         <label class="cd-radio" :class="course.approval == value ? 'checked' : ''"
                                v-for="(key, value) in approvalRadio">
@@ -153,6 +170,7 @@
             }
         },
         data() {
+            this.course.buyExpiryTime = this.course.buyExpiryTime > 0 ? this.course.buyExpiryTime * 1000 : null;
             return {
                 course: {},
                 courseProduct: {},
@@ -172,7 +190,13 @@
                     0: Translator.trans('site.datagrid.radios.no'),
                     1: Translator.trans('site.datagrid.radios.yes'),
                 },
-                enableBuyExpiryTime: this.course.buyExpiryTime > 0 ? 1 : 0
+                enableBuyExpiryTime: this.course.buyExpiryTime > 0 ? 1 : 0,
+                today: Date.now(),
+                dateOptions: {
+                    disabledDate(time) {
+                        return time.getTime() <= Date.now() - 24 * 60 * 60 * 1000;
+                    }
+                }
             }
         }
     }
