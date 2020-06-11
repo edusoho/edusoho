@@ -79,7 +79,7 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
     var url = CKEDITOR.getUrl('plugins/uploadpictures/html/index.html');
     var dialogHtml = `
         <div id="uploadpictures-body">
-            <iframe src=${url} scrolling="no" id="uploadContainer_${editor.name}" width="0" height="0" style="display:none;visibility:hidden">
+            <iframe id="uploadContainer_${editor.name}" src=${url} scrolling="no" width="0" height="0" style="display:none;visibility:hidden">
             </iframe>
         </div>
     `;
@@ -107,11 +107,14 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
             $('.' + editor.id + ' #uploadpictures-body').css({'vertical-align': 'top'});
             $("#uploadContainer_"+editor.name)[0].contentWindow.postMessage({eventName: 'dialogDefinition.Load'}, '*');
             function receiveMessage(event) {
-                var innerHtml = event.data;
+              var eventName = event.data.eventName;
+              if (eventName === 'ckeditor.post') {
+                var innerHtml = event.data.html;
                 $('.' + editor.id + ' #uploadpictures-body').append(innerHtml);
                 $("#uploadContainer_"+editor.name)[0].remove();
 
                 onLoadDialog();
+              }
             }
             window.addEventListener("message", receiveMessage, false);
 
