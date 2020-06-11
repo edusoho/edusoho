@@ -3808,10 +3808,14 @@ es-abstract@^1.17.0, es-abstract@^1.17.0-next.1, es-abstract@^1.17.2, es-abstrac
     string.prototype.trimleft "^2.1.1"
     string.prototype.trimright "^2.1.1"
 
-es-ckeditor@4.7.2-patch13, "es-ckeditor@git+https://github.com/cd-fez/es-ckeditor.git#master":
+es-ckeditor@4.7.2-patch13:
   version "4.7.2-patch13"
-  resolved "https://registry.npm.taobao.org/es-ckeditor/download/es-ckeditor-4.7.2-patch13.tgz#a740df84a7d2e952f352fe727e1565409f1d0e1d"
-  integrity sha1-p0DfhKfS6VLzUv5yfhVlQJ8dDh0=
+  resolved "git+https://github.com/shenchupeng/es-ckeditor.git#b8654141514356dd1864d01b2a618b3ec45290ac"
+
+es-ckeditor@4.7.2-patch14:
+  version "4.7.2-patch14"
+  resolved "https://registry.npm.taobao.org/es-ckeditor/download/es-ckeditor-4.7.2-patch14.tgz#9f9e62163a92c1a6dabb8c33da7f1b4702f11def"
+  integrity sha1-n55iFjqSwabau4wz2n8bRwLxHe8=
 
 es-commit-msg-validator@1.0.2:
   version "1.0.2"
