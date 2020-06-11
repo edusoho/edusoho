@@ -32,7 +32,7 @@
               {% if 2 == wapSetting.version %}
                 <a class="btn-h5-open js-site-edit" href="javascript:">{{ 'admin.wap_setting.edit'|trans|raw }}</a>
               {% else %}
-                <a class="btn-h5-open " href="{{ path('admin_v2_block', {category:'theme'}) }}">{{ 'admin.wap_setting.edit'|trans|raw }}</a>
+                <a class="btn-h5-open js-site-set" href="#theme-page" data-toggle="tab">{{ 'admin.wap_setting.edit'|trans|raw }}</a>
               {% endif %}
             </div>
           </div>
