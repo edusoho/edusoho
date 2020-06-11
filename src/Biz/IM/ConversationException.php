@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class ConversationException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 33;
+    const EXCEPTION_MODULE = 33;
 
     const NOTFOUND_CONVERSATION = 4043301;
 
@@ -28,7 +28,7 @@ class ConversationException extends AbstractException
 
     const CONVERSATION_IS_FULL = 5003310;
 
-    public $messages = array(
+    public $messages = [
         4043301 => 'exception.conversation.not_found',
         5003302 => 'exception.conversation.field_no_required',
         5003303 => 'exception.conversation.field_userid_required',
@@ -39,5 +39,5 @@ class ConversationException extends AbstractException
         5003308 => 'exception.conversation.join_conversation_failed',
         5003309 => 'exception.conversation.empty_members',
         5003310 => 'exception.conversation.is_full',
-    );
+    ];
 }
