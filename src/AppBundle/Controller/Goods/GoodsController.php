@@ -11,4 +11,14 @@ class GoodsController extends BaseController
     {
         return $this->render('goods/show.html.twig', []);
     }
+
+    public function mockData($id)
+    {
+        $mockData = [
+            1 => [
+            ],
+        ];
+
+        return $mockData[$id];
+    }
 }
