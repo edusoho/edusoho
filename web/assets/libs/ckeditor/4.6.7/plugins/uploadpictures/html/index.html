@@ -17,15 +17,6 @@
 </div>
 
 <script>
-  function receiveMessage(event) {
-    var eventName = event.data.eventName;
-    if (eventName === 'dialogDefinition.Load') {
-      var outerHtml = document.getElementsByTagName('div')[0].outerHTML;
-      window.parent.postMessage({eventName:'ckeditor.post', html:outerHtml }, '*');
-    }
-  }
-
-  window.addEventListener("message", receiveMessage, false);
   var outerHtml = document.getElementsByTagName('div')[0].outerHTML;
   window.parent.postMessage({eventName:'ckeditor.post', html:outerHtml }, '*');
 </script>
