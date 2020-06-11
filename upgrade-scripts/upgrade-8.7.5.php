@@ -58,6 +58,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'addGoodsPurchaseTable',
             'deleteTaskWithNullChapter',
             'alterClassroomTeacherIds',
+            'addTableIndexJob',
+            'createTableIndex',
         );
 
         $funcNames = array();
@@ -217,7 +219,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = 'SELECT course_task.id AS id,course_task.title AS title,course_task.categoryId AS chapterId FROM course_task LEFT JOIN course_chapter ON course_task.categoryId = course_chapter.id WHERE course_chapter.id IS NULL;';
         $shouldDelete = $this->getConnection()->fetchAll($sql, array());
         $this->logger('info', json_encode($shouldDelete));
-        
+
         if (empty($shouldDelete)) {
             return 1;
         }
@@ -233,6 +235,65 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         if ($this->isFieldExist('classroom', 'teacherIds')) {
             $this->getConnection()->exec("ALTER TABLE `classroom` modify COLUMN `teacherIds` varchar(1024) NOT NULL DEFAULT '' COMMENT '教师IDs';");
+        }
+
+        return 1;
+    }
+
+    public function addTableIndexJob()
+    {
+        if ($this->isJobExist('HandlingTimeConsumingUpdateStructuresJob')) {
+            return 1;
+        }
+
+        $currentTime = time();
+        $today = strtotime(date('Y-m-d', $currentTime) . '02:00:00');
+
+        if ($currentTime > $today) {
+            $time = strtotime(date('Y-m-d', strtotime('+1 day')) . '02:00:00');
+        }
+
+        $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
+              `name`,
+              `expression`,
+              `class`,
+              `args`,
+              `priority`,
+              `pre_fire_time`,
+              `next_fire_time`,
+              `misfire_threshold`,
+              `misfire_policy`,
+              `enabled`,
+              `creator_id`,
+              `updated_time`,
+              `created_time`
+        ) VALUES (
+              'HandlingTimeConsumingUpdateStructuresJob',
+              '',
+              'Biz\\\\UpdateDatabaseStructure\\\\\Job\\\\HandlingTimeConsumingUpdateStructuresJob',
+              '',
+              '200',
+              '0',
+              '{$time}',
+              '300',
+              'executing',
+              '1',
+              '0',
+              '{$currentTime}',
+              '{$currentTime}'
+        )");
+        $this->logger('info', 'INSERT增加索引的定时任务HandlingTimeConsumingUpdateStructuresJob');
+        return 1;
+    }
+
+    public function createTableIndex()
+    {
+        if (!$this->isIndexExist('reward_point_account_flow', 'userId')) {
+            $this->createIndex('reward_point_account_flow', 'userId', 'userId');
+        }
+
+        if (!$this->isIndexExist('member_operation_record', 'operateType_targetType_reasonType')) {
+            $this->createIndex('member_operation_record', 'operateType_targetType_reasonType', 'operate_type,target_type,reason_type');
         }
 
         return 1;
@@ -272,6 +333,13 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = "show index from `{$table}` where key_name='{$indexName}';";
         $result = $this->getConnection()->fetchAssoc($sql);
         return empty($result) ? false : true;
+    }
+
+    protected function createIndex($table, $index, $column)
+    {
+        if (!$this->isIndexExist($table, $column, $index)) {
+            $this->getConnection()->exec("ALTER TABLE {$table} ADD INDEX {$index} ({$column})");
+        }
     }
 
     protected function isJobExist($code)
