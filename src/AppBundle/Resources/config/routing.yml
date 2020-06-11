@@ -3407,7 +3407,7 @@ answer_engine_review:
     path: /answer_engine/review
     defaults: { _controller: AppBundle:AnswerEngine/AnswerEngine:reviewSave }
     methods: ['POST']
-    
+
 course_task_list_render:
     path: /course/{courseId}/task/list/render/{type}/{paged}
     defaults: { _controller: AppBundle:Course/Course:renderTaskList, paged:false }
@@ -3458,3 +3458,7 @@ facein_inspection_results:
 facein_inspection_results_detail:
     path:     /facein/{activityId}/inspection/{userId}/results
     defaults: { _controller: AppBundle:FaceInspection/InspectionResult:detail }
+
+goods_show:
+    path:     /goods/show/{id}
+    defaults: { _controller: AppBundle:Goods/Goods:show }
