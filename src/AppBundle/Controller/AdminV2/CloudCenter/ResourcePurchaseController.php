@@ -238,19 +238,6 @@ class ResourcePurchaseController extends BaseController
         );
     }
 
-    protected function getCourseByRemoteProductId($remoteProductId)
-    {
-        $config = $this->getS2B2CFacadeService()->getS2B2CConfig();
-        $product = $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteProductIdAndType($config['supplierId'], $remoteProductId, 'course');
-        if (empty($product)) {
-            return null;
-        }
-
-        $course = $this->getCourseService()->getCourse($product['localResourceId']);
-
-        return $course;
-    }
-
     protected function getProductController($type)
     {
         return $this->productController[$type];

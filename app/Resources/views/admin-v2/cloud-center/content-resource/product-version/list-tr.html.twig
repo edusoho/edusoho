@@ -36,11 +36,9 @@
             {% if productCourse != '' %}
               <a target="_blank" href="{{ path('course_set_manage_course_tasks', {courseSetId: productCourseSet.id, courseId: productCourse.id, hasNewVersion: 1}) }}">{{'merchant.content_resource.product_version.view_btn'|trans}}</a>
             {% endif %}
-          {% if productVersion.s2b2cDistributeId != null %}
-              <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_content_resource_update_product_version', {remoteProductId: productVersion.s2b2cDistributeId}) }}">{{ 'merchant.content_resource.product_version.update_btn'|trans  }}</a>
-          {% endif %}
-{#              <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_content_resource_update_product_version', {remoteProductId: productVersion.s2b2cDistributeId}) }}">{{ 'merchant.content_resource.product_version.update_btn'|trans }}</a>#}
-
+            {% if productVersion.s2b2cDistributeId != null %}
+                <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_content_resource_update_product_version', {remoteProductId: productVersion.s2b2cDistributeId}) }}">{{ 'merchant.content_resource.product_version.update_btn'|trans  }}</a>
+            {% endif %}
           {% endif %}
         </td>
       </tr>
@@ -53,53 +51,3 @@
 <div class="paginator">
 {#  {{ admin_macro.paginator(paginator) }}#}
 </div>
-
-{#{% for index,productVersion in productVersionList|default() %}#}
-{#  {% set product = products[productVersion.productId] %}#}
-{#  {% set course = courses[product.localResourceId]|default() %}#}
-{#  {% set courseSet = course.courseSet|default() %}#}
-{#  {% set courseSetProduct = courseSetProducts[courseSet.id] %}#}
-
-{#  {% if startDateTime > 0 and productVersion.updatedTime < startDateTime %}#}
-{#    {% set startDateShow = 0 %}#}
-{#  {% endif %}#}
-{#  {% if endDateTime > 0 and productVersion.updatedTime > endDateTime %}#}
-{#    {% set endDateShow = 0 %}#}
-{#  {% endif %}#}
-{#  {% set isShow = startDateShow|default(1) and endDateShow|default(1) and (product.localVersion < productVersion.productVersion) %}#}
-{#  {% if isShow and not hasData|default(0) %}#}
-{#    {% set hasData = 1 %}#}
-{#  {% endif %}#}
-
-{#  {% if courseSetProduct and isShow %}#}
-{#    <tr id="product-version-table" style="word-break: break-all;word-wrap: break-word;">#}
-{#      <td>#}
-{#        <img src="{{ filepath(course_set_cover(courseSet, 'small'), 'courseSet.png') }}" class="img-responsive" style="float: left;margin-right: 10px;width: 45%;">#}
-{#        <span title="《{{ courseSet.title }}》">{{ 'course'|trans }}《{{ courseSet.title|sub_text(25) }}》- {{ course.title }}</span>#}
-{#      </td>#}
-{#      <td>#}
-{#        <div class="middle-info pull-left short-long-text">#}
-{#          <div class="short-text text-muted">{{ productVersion.changeLog|plain_text(80) }} <span#}
-{#                    class="trigger">({{ 'admin.app_center.description_open'|trans }})</span></div>#}
-{#          <div class="long-text text-muted" style="color:black;">{{ productVersion.changeLog|raw }} <span class="trigger">({{ 'admin.app_center.description_close'|trans }})</span></div>#}
-{#        </div>#}
-{#      </td>#}
-{#      <td>{{ productVersion.updatedTime|date('Y-m-d') }}</td>#}
-{#      <td>#}
-{#        <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_content_resource_product_version_detail', {productId: product.id}) }}">{{ 'merchant.content_resource.product_version'|trans }}{{ productVersion.productVersion }}</a>#}
-{#      </td>#}
-{#      <td>#}
-{#        <a target="_blank" href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id, hasNewVersion: 1}) }}">{{'merchant.content_resource.product_version.view_btn'|trans}}</a>#}
-
-{#        {% if productVersion.status|default('') == 'published' %}#}
-{#          <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_content_resource_update_product_version', {productId: product.id}) }}">{{ 'merchant.content_resource.product_version.update_btn'|trans }}</a>#}
-{#        {% endif %}#}
-{#      </td>#}
-{#    </tr>#}
-{#  {% endif %}#}
-{#  {% if loop.last == index +1 and not hasData|default(0) %}#}
-{#    <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>#}
-{#  {% endif %}#}
-{#{% else %}#}
-{#  <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>#}
-{#{% endfor %}#}

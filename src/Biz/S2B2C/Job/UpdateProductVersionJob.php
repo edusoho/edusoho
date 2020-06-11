@@ -63,31 +63,6 @@ class UpdateProductVersionJob extends AbstractJob
     }
 
     /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->biz->service('Course:CourseService');
-    }
-
-    /**
-     * @return CourseDao
-     */
-    protected function getCourseDao()
-    {
-        return $this->biz->dao('Course:CourseDao');
-    }
-
-    /**
-     * @return CourseSetService
-     */
-    protected function getCourseSetService()
-    {
-        return $this->biz->service('Course:CourseSetService');
-    }
-
-
-    /**
      * @return S2B2CFacadeService
      */
     protected function getS2B2CFacadeService()

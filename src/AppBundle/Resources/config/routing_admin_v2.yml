@@ -2510,10 +2510,6 @@ admin_v2_content_resource_products_version:
     path:  /app/content_resource/products/version
     defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:productsVersion }
 
-admin_v2_content_resource_add_new_product:
-    path:  /app/content_resource/{remoteCourseSetId}/product/{remoteCourseId}/version
-    defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:addNewProduct }
-
 admin_v2_content_resource_product_version_detail:
   path:  /app/content_resource/product/{productId}/version_detail
   defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:productVersionDetail }

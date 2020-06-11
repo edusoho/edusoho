@@ -54,20 +54,14 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         $courseHasDefaultCourse = false;
         $supplierSetting = $this->getS2B2CFacadeService()->getS2B2CConfig();
         foreach ($courses as $course) {
-            $this->biz->offsetGet('s2b2c.merchant.logger')->info('$course11111' . json_encode($course));
-
             // 该计划没有分发，不同步
             if (!$course['s2b2cDistributeId']) {
                 continue;
             }
-            $this->biz->offsetGet('s2b2c.merchant.logger')->info('$course22222' . json_encode($course));
-
             //已存在不需要同步
             if (!empty($this->getS2B2CProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($supplierSetting['supplierId'], $course['id'], 'course'))) {
                 continue;
             }
-            $this->biz->offsetGet('s2b2c.merchant.logger')->info('$course123321123' . json_encode($course));
-
             $course['courseSetId'] = $localCourseSet['id'];
             $course['courseSetTitle'] = $localCourseSet['title'];
             $course['platform'] = 'supplier';
@@ -204,14 +198,14 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         $result = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->checkPurchaseProducts($purchaseProducts);
 
         if (empty($result['success']) || true != $result['success']) {
-            $this->getLogger()->error('[purchaseNewCourse:checkPurchaseProducts()] ', $result);
+            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[purchaseNewCourse:checkPurchaseProducts()] ', $result);
             return false;
         }
 
         $purchaseResult = $this->getS2B2CFacadeService()->getS2B2CService()->purchaseProducts($purchaseProducts, $purchaseRecord);
 
         if (empty($purchaseResult['status']) || $purchaseResult['status'] != 'success') {
-            $this->getLogger()->error('[purchaseNewCourse:purchaseProducts()] ', $result);
+            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[purchaseNewCourse:purchaseProducts()] ', $result);
             return false;
         }
 
@@ -223,7 +217,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         $course = $this->getCourseService()->getCourse($courseId);
         $product = $product = $this->getProductService()->getByTypeAndLocalResourceId('course', $course['id']);
         $courseSetProduct = $this->getProductService()->getByTypeAndLocalResourceId('course_set', $course['courseSetId']);
-        $this->getLogger()->info("开始尝试更新课程(#{$courseId})到最新版本");
+        $this->biz->offsetGet('s2b2c.merchant.logger')->info("开始尝试更新课程(#{$courseId})到最新版本");
         if (empty($course)) {
             $this->getLogger()->error('课程不存在，拒绝操作');
 
