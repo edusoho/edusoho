@@ -13,44 +13,29 @@
       <li ><a href="#site-page" data-toggle="tab">{{'admin.wap_setting.site'|trans}}</a></li>
     </ul>
     <div class="tab-content h5-tab-content">
-
       {# 发现页设置 #}
       <div class="tab-pane fade in active h5-mtl" id="find-page">
-        {% if 2 != wapSetting.version %}
+        {% if template and 2 == wapSetting.version %}
+          <iframe src="/h5/admin/index.html?template={{ template }}" frameborder="0" style="width: 100%;height: 700px;border: none;"></iframe>
+        {% else %}
           <div class="row h5-clearfix ">
             <div class="find-page__left">
               <img class="find-page__left--img" src="{{ asset('static-dist/app/img/admin/h5/iPhoneX.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}" />
               <div class="find-page__left--scroll">
-                <img class="scroll-img" src="{{ asset('static-dist/app/img/admin/h5/h5-all.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}" />
+                <iframe src="/h5/index.html#/" frameborder="0" style="width: 100%;height:100%;border: none;"></iframe>
               </div>
             </div>
             <div class=" find-page__right">
               <p class="find-page__right--text">
-                {{'admin.wap_setting.tip'|trans}}
+                {{'admin.wap_setting.edit.tip'|trans}}
               </p>
-              <a class="btn-h5-open js-site-set" href="#theme-page" data-toggle="tab">{{ 'admin.wap_setting.open'|trans|raw }}</a>
+              {% if 2 == wapSetting.version %}
+                <a class="btn-h5-open js-site-edit" href="javascript:">{{ 'admin.wap_setting.edit'|trans|raw }}</a>
+              {% else %}
+                <a class="btn-h5-open " href="{{ path('admin_v2_block', {category:'theme'}) }}">{{ 'admin.wap_setting.edit'|trans|raw }}</a>
+              {% endif %}
             </div>
           </div>
-        {% else %}
-          {% if template %}
-            <iframe src="/h5/admin/index.html?template={{ template }}" frameborder="0" style="width: 100%;height: 700px;border: none;"></iframe>
-          {% else %}
-            <div class="row h5-clearfix ">
-              <div class="find-page__left">
-                <img class="find-page__left--img" src="{{ asset('static-dist/app/img/admin/h5/iPhoneX.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}" />
-                <div class="find-page__left--scroll">
-                  <iframe src="/h5/index.html#/" frameborder="0" style="width: 100%;height:100%;border: none;"></iframe>
-                  {# <img class="scroll-img" src="{{ asset('static-dist/app/img/admin/h5/h5-all.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}" /> #}
-                </div>
-              </div>
-              <div class=" find-page__right">
-                <p class="find-page__right--text">
-                  {{'admin.wap_setting.edit.tip'|trans}}
-                </p>
-                <a class="btn-h5-open js-site-edit" href="javascript:">{{ 'admin.wap_setting.edit'|trans|raw }}</a>
-              </div>
-            </div>
-          {% endif %}
         {% endif %}
       </div>
       {# 站点页设置 #}
@@ -88,7 +73,7 @@
                   <img class="theme-default-img" src="{{ asset('static-dist/app/img/admin/h5/old_default_img.png') }}" alt="{{ 'admin.wap_setting.old'|trans|raw }}"/>
                 </div>
                 <div class="col-md-7  theme-right">
-                  <div class="theme-right__title">{{ 'admin.wap_setting.subject_name'|trans }}: {{ 'admin.wap_setting.subject_name.template_name.jane_mo'|trans }}</div>
+                  <div class="theme-right__title">{{ 'admin.wap_setting.subject_name'|trans }}: {{ currentTheme.name|default('') }}</div>
                   <div >
                     <p class="mbm theme-right__title">{{ 'admin.wap_setting.subject_name.template.feature'|trans }}:<p>
                     <div class="theme-right__content">
@@ -105,7 +90,7 @@
                   <img class="theme-default-img" src="{{ asset('static-dist/app/img/admin/h5/no_default_img.png') }}" alt="{{ 'admin.wap_setting.old'|trans|raw }}"/>
                 </div>
                 <div class="col-md-7  theme-right">
-                  <div class="theme-right__title">{{ 'admin.wap_setting.subject_name'|trans }}: {{ 'admin.wap_setting.subject_name.template_name.jane_mo'|trans }}</div>
+                  <div class="theme-right__title">{{ 'admin.wap_setting.subject_name'|trans }}: {{ currentTheme.name|default('') }}</div>
                   <div >
                     <p class="mbm theme-right__title">{{ 'admin.wap_setting.subject_name.template.feature'|trans }}:<p>
                     <div class="theme-right__content">
