@@ -477,6 +477,7 @@ export default {
                 message: "发布成功",
                 type: "success"
               });
+              parent.location.reload();
               return;
             }
             this.$store.commit(types.UPDATE_DRAFT, data);
