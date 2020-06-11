@@ -16,12 +16,12 @@
             <ul class="nav nav-tabs nav-tabs--course " role="tablist">
               <li role="presentation" id="summary" class="active">
                 <a href="javascript:0;">
-                  {{ '课程介绍'|trans }}
+                  {{ 'course.introduction.course_introduction'|trans }}
                 </a>
               </li>
               <li role="presentation" id="tasks" class="">
                 <a href="javascript:0;">
-                  {{ '目录'|trans }}
+                  {{ 'course.task_toolbar.tasks'|trans }}
                   {% if tab.number|default(false) %}
                     {% if course[tab.number]|default(0) %}
                       <small>({{ course[tab.number]|default(0) }})</small>
