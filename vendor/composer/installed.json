@@ -470,17 +470,17 @@
     },
     {
         "name": "codeages/biz-framework",
-        "version": "v0.9.35",
-        "version_normalized": "0.9.35.0",
+        "version": "v0.9.36",
+        "version_normalized": "0.9.36.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "829ebe2c66066d1c0aa385808688d38f3ff9859b"
+            "reference": "63a92464c90111be53b4cc4188eaaf4f5e4e6ecf"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/829ebe2c66066d1c0aa385808688d38f3ff9859b",
-            "reference": "829ebe2c66066d1c0aa385808688d38f3ff9859b",
+            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/63a92464c90111be53b4cc4188eaaf4f5e4e6ecf",
+            "reference": "63a92464c90111be53b4cc4188eaaf4f5e4e6ecf",
             "shasum": "",
             "mirrors": [
                 {
@@ -513,7 +513,7 @@
         "suggest": {
             "ramsey/uuid": "Dao UUID primary key feature need this package."
         },
-        "time": "2020-03-31T06:35:13+00:00",
+        "time": "2020-06-11T12:37:50+00:00",
         "bin": [
             "bin/biz"
         ],
