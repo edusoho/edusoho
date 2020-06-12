@@ -12,16 +12,16 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         '1d1b89d124cc9cb8219922c9d5569199' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest.php',
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
-        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
-        '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
+        '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
+        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '9c67151ae59aff4788964ce8eb2a0f43' => __DIR__ . '/..' . '/clue/stream-filter/src/functions_include.php',
         '8cff32064859f4559445b89279f3199c' => __DIR__ . '/..' . '/php-http/message/src/filters.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
-        'e40631d46120a9c38ea139981f8dab26' => __DIR__ . '/..' . '/ircmaxell/password-compat/lib/password.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        'e40631d46120a9c38ea139981f8dab26' => __DIR__ . '/..' . '/ircmaxell/password-compat/lib/password.php',
         'edc6464955a37aa4d5fbf39d40fb6ee7' => __DIR__ . '/..' . '/symfony/polyfill-php55/bootstrap.php',
         '3a6ac12a64116221776bf6b30b9b866b' => __DIR__ . '/..' . '/codeages/biz-framework/src/functions.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
@@ -127,6 +127,10 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
             'Monolog\\' => 8,
             'Money\\' => 6,
         ),
+        'J' => 
+        array (
+            'JsonSchema\\' => 11,
+        ),
         'I' => 
         array (
             'Incenteev\\ParameterHandler\\' => 27,
@@ -175,6 +179,9 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
             'Composer\\XdebugHandler\\' => 23,
             'Composer\\Semver\\' => 16,
             'Composer\\CaBundle\\' => 18,
+            'Codeception\\PHPUnit\\' => 20,
+            'Codeception\\Extension\\' => 22,
+            'Codeception\\' => 12,
             'Codeages\\Weblib\\' => 16,
             'Codeages\\RestApiClient\\Tests\\' => 29,
             'Codeages\\RestApiClient\\' => 23,
@@ -412,6 +419,10 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         array (
             0 => __DIR__ . '/..' . '/moneyphp/money/src',
         ),
+        'JsonSchema\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/justinrainbow/json-schema/src/JsonSchema',
+        ),
         'Incenteev\\ParameterHandler\\' => 
         array (
             0 => __DIR__ . '/..' . '/incenteev/composer-parameter-handler',
@@ -524,6 +535,19 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         'Composer\\CaBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/composer/ca-bundle/src',
+        ),
+        'Codeception\\PHPUnit\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeception/phpunit-wrapper/src',
+        ),
+        'Codeception\\Extension\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeception/codeception/ext',
+        ),
+        'Codeception\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeception/codeception/src/Codeception',
+            1 => __DIR__ . '/..' . '/codeception/stub/src',
         ),
         'Codeages\\Weblib\\' => 
         array (
@@ -661,6 +685,17 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
                 0 => __DIR__ . '/..' . '/ezyang/htmlpurifier/library',
             ),
         ),
+        'F' => 
+        array (
+            'Flow\\JSONPath\\Test' => 
+            array (
+                0 => __DIR__ . '/..' . '/flow/jsonpath/tests',
+            ),
+            'Flow\\JSONPath' => 
+            array (
+                0 => __DIR__ . '/..' . '/flow/jsonpath/src',
+            ),
+        ),
         'D' => 
         array (
             'Doctrine\\ORM\\' => 
@@ -684,6 +719,13 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
                 0 => __DIR__ . '/..' . '/doctrine/annotations/lib',
             ),
         ),
+        'B' => 
+        array (
+            'Behat\\Gherkin' => 
+            array (
+                0 => __DIR__ . '/..' . '/behat/gherkin/src',
+            ),
+        ),
         'A' => 
         array (
             'Assetic' => 
@@ -702,6 +744,25 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         'ArithmeticError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
         'AssertionError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
         'CallbackFilterIterator' => __DIR__ . '/..' . '/symfony/polyfill-php54/Resources/stubs/CallbackFilterIterator.php',
+        'Codeception\\Exception\\ExternalUrlException' => __DIR__ . '/..' . '/codeception/lib-innerbrowser/src/Codeception/Exception/ExternalUrlException.php',
+        'Codeception\\Lib\\Connector\\Guzzle' => __DIR__ . '/..' . '/codeception/module-phpbrowser/src/Codeception/Lib/Connector/Guzzle.php',
+        'Codeception\\Lib\\DbPopulator' => __DIR__ . '/..' . '/codeception/module-db/src/Codeception/Lib/DbPopulator.php',
+        'Codeception\\Lib\\Driver\\Db' => __DIR__ . '/..' . '/codeception/module-db/src/Codeception/Lib/Driver/Db.php',
+        'Codeception\\Lib\\Driver\\MySql' => __DIR__ . '/..' . '/codeception/module-db/src/Codeception/Lib/Driver/MySql.php',
+        'Codeception\\Lib\\Driver\\Oci' => __DIR__ . '/..' . '/codeception/module-db/src/Codeception/Lib/Driver/Oci.php',
+        'Codeception\\Lib\\Driver\\PostgreSql' => __DIR__ . '/..' . '/codeception/module-db/src/Codeception/Lib/Driver/PostgreSql.php',
+        'Codeception\\Lib\\Driver\\SqlSrv' => __DIR__ . '/..' . '/codeception/module-db/src/Codeception/Lib/Driver/SqlSrv.php',
+        'Codeception\\Lib\\Driver\\Sqlite' => __DIR__ . '/..' . '/codeception/module-db/src/Codeception/Lib/Driver/Sqlite.php',
+        'Codeception\\Lib\\Framework' => __DIR__ . '/..' . '/codeception/lib-innerbrowser/src/Codeception/Lib/Framework.php',
+        'Codeception\\Lib\\InnerBrowser' => __DIR__ . '/..' . '/codeception/lib-innerbrowser/src/Codeception/Lib/InnerBrowser.php',
+        'Codeception\\Lib\\Interfaces\\Db' => __DIR__ . '/..' . '/codeception/module-db/src/Codeception/Lib/Interfaces/Db.php',
+        'Codeception\\Module\\Db' => __DIR__ . '/..' . '/codeception/module-db/src/Codeception/Module/Db.php',
+        'Codeception\\Module\\PhpBrowser' => __DIR__ . '/..' . '/codeception/module-phpbrowser/src/Codeception/Module/PhpBrowser.php',
+        'Codeception\\Module\\REST' => __DIR__ . '/..' . '/codeception/module-rest/src/Codeception/Module/REST.php',
+        'Codeception\\Util\\HttpCode' => __DIR__ . '/..' . '/codeception/lib-innerbrowser/src/Codeception/Util/HttpCode.php',
+        'Codeception\\Util\\JsonArray' => __DIR__ . '/..' . '/codeception/module-rest/src/Codeception/Util/JsonArray.php',
+        'Codeception\\Util\\JsonType' => __DIR__ . '/..' . '/codeception/module-rest/src/Codeception/Util/JsonType.php',
+        'Codeception\\Util\\Shared\\Asserts' => __DIR__ . '/..' . '/codeception/lib-asserts/src/Codeception/Util/Shared/Asserts.php',
         'Collator' => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/Collator.php',
         'DivisionByZeroError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/DivisionByZeroError.php',
         'Docopt' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',

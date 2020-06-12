@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class AccountException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 57;
+    const EXCEPTION_MODULE = 57;
 
     const NOTFOUND_ACCOUNT = 4045701;
 
@@ -24,7 +24,7 @@ class AccountException extends AbstractException
 
     const ERROR_PAY_PASSWORD_FORMAT = 5005708;
 
-    public $messages = array(
+    public $messages = [
         4045701 => 'exception.reward_point.account.not_found',
         5005702 => 'exception.reward_point.account.already_open',
         5005703 => 'exception.reward_point.account.userid_invalid',
@@ -33,5 +33,5 @@ class AccountException extends AbstractException
         5005706 => 'exception.reward_point.account.pay_password_existed',
         5005707 => 'exception.reward_point.account.not_found_pay_password',
         5005708 => 'exception.reward_point.account.error_pay_password_format',
-    );
+    ];
 }

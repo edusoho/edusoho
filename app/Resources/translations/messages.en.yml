@@ -6218,6 +6218,8 @@ admin.magic_setting.learn_time_sec_tip: second
 admin.magic_setting.watch_time_sec: watch time report cycle
 admin.magic_setting.watch_time_sec_tip: second
 admin.magic_setting.site_trace_enable: enable site trace
+admin.magic_setting.live_entry_time: Time to enter before live broadcast begins
+admin.magic_setting.live_entry_time_tip: second
 
 admin.magic_setting.one_for_open: '1 To enable'
 admin.magic_setting.one_for_close: '1 Is off'
@@ -7246,7 +7248,7 @@ activity.live.replay_guid: >
 
 activity.live.default_notice: >
   <p>The live broadcast starts at %startTimeFormat% and ends at %endTimeFormat%<p>
-  (You can enter the live broadcasting classroom within 120 minutes before it starts.)
+  (You can enter the live broadcasting classroom within %limitTimeFormat% hours before it starts.)
 
 
 #积分
@@ -8876,6 +8878,7 @@ exception.message.send_to_self: Can't send messages to yourself
 exception.message.empty_message: The message is empty
 exception.message.not_found_conversation: Session does not exist
 exception.message.delete_denied: You are not authorized to delete this private message
+exception.message.send_limit: The number of private messages is limited, please try again later
 exception.coupon.not_found: Coupon does not exist
 exception.coupon.status_invalid: Illegal coupon status
 exception.coupon.type_invalid: Illegal coupon type
@@ -9655,3 +9658,5 @@ s2b2c.resource.has_new_notice_hint: 您采购的内容有更新
 s2b2c.resource.no_fee_notice_hint: 您与%supplierName%合作的采购账户余额还剩%balance%，请及时联系%supplierName%进行充值
 s2b2c.resource.sync.prev_price.notify: 上个版本价格为
 s2b2c.resource.sync.has_new.notify: 有价格更新
+
+exception.goods.not_found: Goods not found.

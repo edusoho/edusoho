@@ -20,19 +20,24 @@ class PlumberController extends BaseController
                 throw $this->createNewException(CommonException::ERROR_PARAMETER());
             }
 
-            $result = $this->getPlumberService()->$action();
-            $template = null;
+            $this->getPlumberService()->$action();
 
-            if ($result) {
-                list($status, $process) = $this->getPlumberService()->getPlumberStatus();
-                $template = $this->renderView('admin-v2/developer/plumber/info.html.twig', [
-                    'canOperate' => $this->getPlumberService()->canOperate(),
-                    'status' => $status,
-                    'process' => $process,
-                ]);
-            }
+            return $this->createJsonResponse(true);
+        }
 
-            return $this->createJsonResponse(['result' => $result, 'template' => $template]);
+        list($status, $process) = $this->getPlumberService()->getPlumberStatus();
+
+        $infoTemplate = null;
+        if (PlumberService::STATUS_EXECUTING == $status) {
+            $infoTemplate = $this->renderView('admin-v2/developer/plumber/info.html.twig', [
+                'canOperate' => $this->getPlumberService()->canOperate(),
+                'status' => $status,
+                'process' => $process,
+            ]);
+        }
+
+        if ($request->isXmlHttpRequest()) {
+            return $this->createJsonResponse($infoTemplate);
         }
 
         list($status, $process) = $this->getPlumberService()->getPlumberStatus();
@@ -44,7 +49,7 @@ class PlumberController extends BaseController
         ]);
     }
 
-    public function logsAction(Request $request)
+    public function queueAction(Request $request)
     {
         $conditions = [];
         $count = $this->getQueueService()->countQueues($conditions);

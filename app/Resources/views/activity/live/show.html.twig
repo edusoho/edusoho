@@ -4,6 +4,7 @@
 {% set startLeftSeconds = activity.startTime - activity.nowDate %}
 {% set replayGuid = activity.ext.liveProvider == 1 ? 'activity.live.replay_guid_1'|trans : 'activity.live.replay_guid'|trans %}
 {% set isFinished = is_live_finished(activity.id, 'course') %}
+{% set limitTime = is_teacher(activity.fromCourseId) ? setting('magic.live_entry_time', 7200) : 7200 %}
 
 {% block body %}
   <div class="iframe-parent-content ph20 pv20">
@@ -15,7 +16,11 @@
               <p class="title">
                   {{ 'homepage.live_course.start_time'|trans }}
               </p>
-              {{'activity.live.default_notice'|trans({'%startTimeFormat%': activity.startTimeFormat, '%endTimeFormat%': activity.endTimeFormat})|raw }}
+              {{'activity.live.default_notice'|trans({
+                '%startTimeFormat%': activity.startTimeFormat,
+                '%endTimeFormat%': activity.endTimeFormat,
+                '%limitTimeFormat%': limitTime/3600
+              })|raw }}
             </div>
             <div class='live-show-item'>
               <p class='title'>
@@ -28,7 +33,7 @@
               <p class='title'>{{ 'course.plan_task.activity_manage.live.info'|trans }}</p>
                 {{ summary|raw }}
             </div>
-              {% if startLeftSeconds < 7200 %}
+              {% if startLeftSeconds < limitTime %}
                 <div class='live-show-item'>
                   <a target="_blank" class='btn btn-primary js-start-live' data-finish="{{ path("task_live_trigger",{courseId: activity.fromCourseId, activityId: activity.id}) }}" href="{{ path('task_live_entry',{courseId:activity.fromCourseId, activityId:activity.id}) }}">
                       {{ 'homepage.live_course.join_btn'|trans }}

@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class ThreadException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 38;
+    const EXCEPTION_MODULE = 38;
 
     const NOTFOUND_THREAD = 4043801;
 
@@ -28,7 +28,7 @@ class ThreadException extends AbstractException
 
     const NOTFOUND_COLLECTION = 4043810;
 
-    public $messages = array(
+    public $messages = [
         4043801 => 'exception.group.thread.not_found',
         4033802 => 'exception.thread.frequent',
         5003803 => 'exception.group.thread.title_required',
@@ -39,5 +39,5 @@ class ThreadException extends AbstractException
         5003808 => 'exception.group.thread.collect_own_thread',
         5003809 => 'exception.group.thread.already_collect',
         4043810 => 'exception.group.thread.not_found_collection',
-    );
+    ];
 }
