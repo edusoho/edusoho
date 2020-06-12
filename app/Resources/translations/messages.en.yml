@@ -6555,29 +6555,27 @@ admin.wap_setting.edit.tip: On the left side is a preview of the home page of yo
 admin.wap_setting.edit: Edit Site
 admin.wap_setting.open.tip: >
   <h4 class="mbl">First time to start Micro-NetSchool, please modify the Wechat payment configuration.</h4>
-  <p>1、You need to change the configuration of WeChat for the first time, otherwise you will not be able to pay for lessons in WeChat.</p>
-  <p>2、Customers who switched from the old version of Microschool to the new version of Microschool will need to modify their WeChat configuration.</p>
+  <p>1、If you open the topic of wechat school - departure for the first time, you need to modify the wechat configuration, otherwise you will not be able to pay for the course in the wechat school.</p>
+  <p>2、For the first time, we need to modify the wechat configuration for the online school customers who switch to the topic of departure.</p>
   <a href="http://www.qiqiuyu.com/faq/793/detail" target="_blank">【View Tutorial】</a>
 admin.wap_setting.subject_name: Subject name
 admin.wap_setting.subject_name.recommend: recommend
 admin.wap_setting.subject_name.template_name.sail: Sailing
 admin.wap_setting.subject_name.template.feature: Theme features
 admin.wap_setting.subject_name.template.sail.feature: >
-  <p>1、Promote the transformation of new user test and low customer unit price courses.</p>
-  <p>2、More complete decoration components.</p>
-  <p>3、Customize flexible editing.</p>
-  <p>4、More suitable for mobile user experience.</p>
+  <p>1、The theme scheme has the characteristics of promoting the transformation of user test and low customer unit price courses.</p>
+  <p>2、Support custom homepage style of micro online school.</p>
+  <p>3、According to the operation objectives, the main courses on the homepage can be flexibly adjusted.</p>
 admin.wap_setting.subject_name.template.use: use
 admin.wap_setting.subject_name.template_name.jane_mo: Jane Mo
 admin.wap_setting.subject_name.template.jane_mo.feature: >
-  <p>1、The PC end adapts to the micro network school.</p>
-  <p>2、One click application saves time and effort.</p>
-  <p>3、Limited components, custom editing is not supported.</p>
+  <p>1、PC end network school decoration is applied to micro network school, one key application, time-saving and labor-saving.</p>
+  <p>2、It is not supported to customize the editing style of the home page in the school.</p>
+  <p>3、It is not supported to adjust the main courses on the home page in the micro network school.</p>
 admin.wap_setting.subject_name.template.jane_mo_off.feature: >
-  <p>1、The PC end adapts itself to the micro network school.</p>
-  <p>2、One click application saves time and effort.</p>
-  <p>2、Limited components, custom editing is not supported.</p>
-  <p>4、More suitable for PC end user experience.</p>
+  <p>1、PC end network school decoration is applied to micro network school, one key application, time-saving and labor-saving.</p>
+  <p>2、It is not supported to customize the editing style of the home page in the school.</p>
+  <p>3、It is not supported to adjust the main courses on the home page in the micro network school.</p>
 
 
 admin.payment_setting.open_help.tips: 'Tip: Please choose to open the payment method as required. If you do not open any payment, you will be unable to purchase online school products.'
