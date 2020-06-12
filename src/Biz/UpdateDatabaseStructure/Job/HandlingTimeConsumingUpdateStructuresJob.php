@@ -131,6 +131,13 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
          *  Column bankId, categoryId
          */
         $this->createIndex('question', 'bankId_categoryId', 'bankId, categoryId');
+
+        /*
+         *  Table  course_task_result
+         *  Index  courseId
+         *  Column courseId
+         */
+        $this->createIndex('course_task_result', 'courseId', 'courseId');
     }
 
     protected function changeTableFiledType()
