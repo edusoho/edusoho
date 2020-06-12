@@ -77,6 +77,51 @@
     // 猜你想学
     .info-right-learn {
       margin-top: 24px;
+      .learn-info-item {
+        margin-top: 24px;
+        .learn-img {
+          position: relative;
+          width: 46.721%;
+          padding-bottom: 26.229%;
+          img {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+          }
+        }
+        .learn-text {
+          width: 49.18%;
+          .learn-text__title {
+            margin: 4px 0;
+            font-size: 12px;
+            color: #333;
+            line-height: 16px;
+            display: -webkit-box;
+            overflow: hidden;
+            -webkit-box-orient: vertical;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 2;
+          }
+          .learn-text__price {
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 24px;
+            color: #FF5C3B;
+            &::before {
+              content: '¥';
+              font-size: 12px;
+            }
+          }
+        }
+      }
+      .learn-more {
+        margin-top: 24px;
+        text-align: center;
+        color: #46C37B;
+        line-height: 20px;
+      }
     }
   }
 }
