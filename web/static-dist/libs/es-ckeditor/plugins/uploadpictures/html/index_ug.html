@@ -1,3 +1,7 @@
+<head>
+  <title>شروع کریں</title>
+  <meta charset="UTF-8">
+</head>
 <div class="balloon-uploader ckeditor-balloon-uploader">
     <div class="balloon-uploader-body">
         <div class="balloon-nofile">شامل کریں فائل بٹن پر کلک کریں</div>
@@ -15,3 +19,8 @@
         <div class="start-upload-btn js-start-upload-btn">اپ لوڈ شروع کریں</div>
     </div>
 </div>
+
+<script>
+  var outerHtml = document.getElementsByTagName('div')[0].outerHTML;
+  window.parent.postMessage({eventName:'es-ckeditor.post', html:outerHtml }, '*');
+</script>
