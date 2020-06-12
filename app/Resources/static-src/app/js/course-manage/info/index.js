@@ -38,7 +38,10 @@ new Vue({
       courseProduct: $('#app').data('courseProduct'),
       notifies: $('#app').data('notifies'),
       canModifyCoursePrice: $('#app').data('canModifyCoursePrice'),
-      buyBeforeApproval: $('#app').data('buyBeforeApproval')
+      buyBeforeApproval: $('#app').data('buyBeforeApproval'),
+      canFreeActivityTypes: $('#app').data('canFreeActivityTypes'),
+      freeTaskChangelog: $('#app').data('freeTaskChangelog')
+
     },
   }),
 });

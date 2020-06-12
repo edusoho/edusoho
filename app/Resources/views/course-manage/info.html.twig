@@ -25,6 +25,18 @@
       {% else %}
         {% set courseRemindSendDays = '' %}
       {% endif %}
+
+      {% set can_free_activity_types = can_free_activity_types() %}
+
+      {% set freeTaskChangelog = '' %}
+      {% for key, changelog in courseProduct.changelog|default() %}
+        {% if changelog['freeTasks']|default() %}
+          {% if freeTaskChangelog %}{% set freeTaskChangelog = freeTaskChangelog ~ '<br>' %}{% endif %}
+          {% set freeTaskChangelog = freeTaskChangelog ~ 'merchant.content_resource.product_version'|trans ~ key ~ '-' ~ 's2b2c.course_product.free_tasks'|trans ~ ':<br>' %}
+          {% set freeTaskChangelog = freeTaskChangelog~ changelog['freeTasks'] %}
+        {% endif %}
+      {% endfor %}
+
       {# 计划基础信息 #}
         <div id="app"
              data-course="{{ course|json_encode }}"
@@ -51,6 +63,8 @@
              data-notifies="{{ notifies|json_encode }}"
              data-can-modify-course-price="{{ s2b2c_has_behaviour_permission('canModifyCoursePrice') }}"
              data-buy-before-approval="{{ setting('magic.buy_before_approval') }}"
+             data-can-free-activity-types="{{ can_free_activity_types|join('word.seperator'|trans) }}"
+             data-free-task-changelog="{{ freeTaskChangelog }}"
         ></div>
 
 {#      <div class="form-group">#}

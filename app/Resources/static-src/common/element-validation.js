@@ -1,11 +1,12 @@
-const validatePass = (rule, value, callback) => {
-  if (value !== 'afe') {
-    callback(new Error('fefaefaef范'));
-  } else {
+const trim = (rule, value, callback) => {
+  console.log(rule);
+  if (value.trim().length > 0) {
     callback();
+  } else {
+    callback(new Error(Translator.trans('validate.trim.message')));
   }
 };
 
 export {
-  validatePass
+  trim
 };

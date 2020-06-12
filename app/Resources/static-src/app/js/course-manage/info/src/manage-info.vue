@@ -23,6 +23,8 @@
                        v-bind:video-convert-completion="videoConvertCompletion"
                        v-bind:course-set-manage-files-url="courseSetManageFilesUrl"
                        v-bind:content-course-rule-url="contentCourseRuleUrl"
+                       v-bind:can-free-activity-types="canFreeActivityTypes"
+                       v-bind:free-task-changelog="freeTaskChangelog"
             ></base-rule>
             <market-setting v-bind:course="course"
                             v-bind:course-product="courseProduct"
@@ -87,7 +89,10 @@
             courseProduct: {},
             notifies: {},
             canModifyCoursePrice: true,
-            buyBeforeApproval: false
+            buyBeforeApproval: false,
+            canFreeActivityTypes: '',
+            freeTaskChangelog: ''
+
 
         },
         components: {
@@ -127,6 +132,8 @@
                 notifies: {},
                 canModifyCoursePrice: true,
                 buyBeforeApproval: false,
+                canFreeActivityTypes:'',
+                freeTaskChangelog: ''
             }
         }
     }

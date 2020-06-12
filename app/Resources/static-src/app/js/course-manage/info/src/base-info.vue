@@ -1,14 +1,18 @@
 <template>
     <div v-if="hasMulCourses">
         <div class="course-manage-subltitle cd-mb40">{{ 'course.base_info'|trans }}</div>
-        <el-form :model="baseInfoForm" :rules="formRule" ref="baseInfoForm" label-position="right">
+        <el-form :model="baseInfoForm" :rules="formRule" ref="baseInfoForm" label-position="right" label-width="150px">
             <el-form-item :label="'course.plan_setup.name'|trans" prop="title">
-                <el-input v-model="baseInfoForm.title" auto-complete="off"
-                          :placeholder="'course.plan_setup.placeholder'|trans">
-                </el-input>
+                <el-col span="18">
+                    <el-input v-model="baseInfoForm.title" auto-complete="off"
+                              :placeholder="'course.plan_setup.placeholder'|trans">
+                    </el-input>
+                </el-col>
             </el-form-item>
             <el-form-item :label="'course.plan_setup.subtitle'|trans" prop="subtitle">
-                <el-input v-model="baseInfoForm.subtitle" type="textarea" rows="3"></el-input>
+                <el-col span="18">
+                    <el-input v-model="baseInfoForm.subtitle" type="textarea" rows="3"></el-input>
+                </el-col>
             </el-form-item>
         </el-form>
     </div>
@@ -33,14 +37,11 @@
                 },
                 formRule: {
                     title: [
+                        {required: true, trigger: 'blur'},
                         {
-                            required: true,
-                            message: Translator.trans('validate.required.message', {'display': Translator.trans('course.plan_setup.name')}),
-                            trigger: 'blur'
+                            max: 10, trigger: 'blur',
                         },
-                        {
-                            max: 10, message: Translator.trans('validate.max_length.message'),
-                        }
+                        {validator: commonValidation.trim, trigger: 'blur'}
                     ],
                 },
             };
