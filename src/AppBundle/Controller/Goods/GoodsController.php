@@ -9,13 +9,14 @@ class GoodsController extends BaseController
 {
     public function showAction(Request $request, $id)
     {
-        return $this->render('goods/show.html.twig', $this->mockData($id));
+        return $this->render('goods/show.html.twig', array_merge($this->mockData($id), ['goods' => $this->mockData($id)]));
     }
 
     public function mockData($id)
     {
         $mockData = [
             1 => [
+                'dataDescription' => '富文本商品描述，有挂件，多计划，计划无优惠，永久有效，承诺服务',
                 'title' => '课程商品标题',
                 'subtitle' => '课程商品副标题',
                 'image' => 'http://try6.edusoho.cn/files/course/2020/04-14/18332003d725680219.jpeg',
@@ -37,12 +38,6 @@ class GoodsController extends BaseController
                         'subtitle' => '计划一规格副标题',
                         'price' => '100.00',
                         'expiryMode' => 'forever',
-                        'services' => [
-                            'homeworkReview',
-                            'testpaperReview',
-                            'teacherAnswer',
-                            'liveAnswer',
-                        ],
                     ],
                     2 => [
                         'title' => '计划二进阶学习',
@@ -50,9 +45,34 @@ class GoodsController extends BaseController
                         'price' => '150.00',
                         'expiryMode' => 'forever',
                         'services' => [
-                            'homeworkReview',
-                            'testpaperReview',
-                            'teacherAnswer',
+                            'homeworkReview' => [
+                                'code' => 'homeworkReview',
+                                'shortName' => 'site.services.homeworkReview.shortName',
+                                'fullName' => 'site.services.homeworkReview.fullName',
+                                'summary' => 'site.services.homeworkReview.summary',
+                                'active' => 0,
+                            ],
+                            'testpaperReview' => [
+                                'code' => 'testpaperReview',
+                                'shortName' => 'site.services.testpaperReview.shortName',
+                                'fullName' => 'site.services.testpaperReview.fullName',
+                                'summary' => 'site.services.testpaperReview.summary',
+                                'active' => 0,
+                            ],
+                            'teacherAnswer' => [
+                                'code' => 'teacherAnswer',
+                                'shortName' => 'site.services.teacherAnswer.shortName',
+                                'fullName' => 'site.services.teacherAnswer.fullName',
+                                'summary' => 'site.services.teacherAnswer.summary',
+                                'active' => 0,
+                            ],
+                            'liveAnswer' => [
+                                'code' => 'liveAnswer',
+                                'shortName' => 'site.services.liveAnswer.shortName',
+                                'fullName' => 'site.services.liveAnswer.fullName',
+                                'summary' => 'site.services.liveAnswer.summary',
+                                'active' => 0,
+                            ],
                         ],
                     ],
                 ],
@@ -75,10 +95,34 @@ class GoodsController extends BaseController
                         'price' => '1000.00',
                         'expiryMode' => 'forever',
                         'services' => [
-                            'homeworkReview',
-                            'testpaperReview',
-                            'teacherAnswer',
-                            'liveAnswer',
+                            'homeworkReview' => [
+                                'code' => 'homeworkReview',
+                                'shortName' => 'site.services.homeworkReview.shortName',
+                                'fullName' => 'site.services.homeworkReview.fullName',
+                                'summary' => 'site.services.homeworkReview.summary',
+                                'active' => 0,
+                            ],
+                            'testpaperReview' => [
+                                'code' => 'testpaperReview',
+                                'shortName' => 'site.services.testpaperReview.shortName',
+                                'fullName' => 'site.services.testpaperReview.fullName',
+                                'summary' => 'site.services.testpaperReview.summary',
+                                'active' => 0,
+                            ],
+                            'teacherAnswer' => [
+                                'code' => 'teacherAnswer',
+                                'shortName' => 'site.services.teacherAnswer.shortName',
+                                'fullName' => 'site.services.teacherAnswer.fullName',
+                                'summary' => 'site.services.teacherAnswer.summary',
+                                'active' => 0,
+                            ],
+                            'liveAnswer' => [
+                                'code' => 'liveAnswer',
+                                'shortName' => 'site.services.liveAnswer.shortName',
+                                'fullName' => 'site.services.liveAnswer.fullName',
+                                'summary' => 'site.services.liveAnswer.summary',
+                                'active' => 0,
+                            ],
                         ],
                     ],
                     2 => [
@@ -86,11 +130,6 @@ class GoodsController extends BaseController
                         'subtitle' => '计划二规格副标题',
                         'price' => '1500.00',
                         'expiryMode' => 'forever',
-                        'services' => [
-                            'homeworkReview',
-                            'testpaperReview',
-                            'teacherAnswer',
-                        ],
                     ],
                 ],
             ],
