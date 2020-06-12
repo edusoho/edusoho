@@ -1,3 +1,57 @@
 .product-info {
-  margin-top: 24px;
+  .product-info__left {
+    margin-top: 24px;
+    width: 74.49%;
+    background-color: #fff;
+    @media (max-width: 767px) {
+      width: 100%;
+    }
+  }
+  .product-info__right {
+    margin-top: 24px;
+    width: 23.47%;
+    @media (max-width: 767px) {
+      width: 100%;
+    }
+    .info-right-box {
+      padding: 8px 16px 16px;
+      .title {
+        font-size: 16px;
+        color: #333;
+        line-height: 24px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #ebebeb;
+      }
+    }
+    // 授课老师
+    .info-right-teacher {
+      background-color: #fff;
+      .teacher-info {
+        margin-top: 16px;
+        .teacher-info__img {
+          width: 64px;
+          height: 64px;
+          .border-radius(50%);
+        }
+        .teacher-info__introduce {
+          padding-top: 6px;
+          margin-left: 12px;
+          width: calc(100% - 76px);
+          .introduce__name {
+            color: #333;
+            line-height: 20px;
+          }
+          .introduce__text {
+            margin-top: 12px;
+            .text-overflow;
+            font-size: 12px;
+            color: #999;
+            line-height: 16px;
+          }
+        }
+      }
+    }
+    // 公众号
+    
+  }
 }
