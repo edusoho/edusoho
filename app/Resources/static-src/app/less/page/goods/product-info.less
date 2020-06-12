@@ -1,20 +1,22 @@
 .product-info {
+  margin-bottom: 24px;
   .product-info__left {
     margin-top: 24px;
     width: 74.49%;
     background-color: #fff;
-    @media (max-width: 767px) {
+    @media (max-width: 992px) {
       width: 100%;
     }
   }
   .product-info__right {
     margin-top: 24px;
     width: 23.47%;
-    @media (max-width: 767px) {
+    @media (max-width: 992px) {
       width: 100%;
     }
     .info-right-box {
       padding: 8px 16px 16px;
+      background-color: #fff;
       .title {
         font-size: 16px;
         color: #333;
@@ -25,7 +27,6 @@
     }
     // 授课老师
     .info-right-teacher {
-      background-color: #fff;
       .teacher-info {
         margin-top: 16px;
         .teacher-info__img {
@@ -52,6 +53,30 @@
       }
     }
     // 公众号
-    
+    .info-right-qr {
+      margin-top: 24px;
+      .qr-info {
+        margin-top: 16px;
+        text-align: center;
+        .qr-info__img {
+          width: 160px;
+          height: 160px;
+        }
+        .qr-info__introduce {
+          margin-top: 16px;
+          color: #666;
+          p {
+            line-height: 20px;
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+        }
+      }
+    }
+    // 猜你想学
+    .info-right-learn {
+      margin-top: 24px;
+    }
   }
 }
