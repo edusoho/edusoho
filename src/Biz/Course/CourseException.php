@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class CourseException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 16;
+    const EXCEPTION_MODULE = 16;
 
     const NOTFOUND_COURSE = 4041601;
 

@@ -1,0 +1,37 @@
+{
+    "name":"codeception/module-phpbrowser",
+    "description":"Codeception module for testing web application over HTTP",
+    "keywords":["codeception", "http", "functional-testing"],
+    "homepage":"http://codeception.com/",
+    "type":"library",
+    "license":"MIT",
+    "authors":[
+        {
+            "name":"Michael Bodnarchuk"
+        },
+        {
+            "name":"Gintautas Miselis"
+        }
+    ],
+    "minimum-stability": "RC",
+
+    "require": {
+        "php": ">=5.6.0 <8.0",
+        "guzzlehttp/guzzle": "^6.3.0",
+        "codeception/lib-innerbrowser": "^1.0",
+        "codeception/codeception": "4.0.x-dev | ^4.0"
+    },
+    "require-dev": {
+        "codeception/util-robohelpers": "dev-master",
+        "codeception/module-rest": "dev-master | ^1.0"
+    },
+    "suggest": {
+        "codeception/phpbuiltinserver": "Start and stop PHP built-in web server for your tests"
+    },
+    "autoload":{
+        "classmap": ["src/"]
+    },
+    "config": {
+        "classmap-authoritative": true
+    }
+}

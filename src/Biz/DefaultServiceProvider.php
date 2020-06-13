@@ -3,48 +3,45 @@
 namespace Biz;
 
 use AppBundle\Component\Notification\WeChatTemplateMessage\Client;
-use AppBundle\Component\RateLimit\SmsLoginRateLimiter;
 use AppBundle\Component\RateLimit\EmailRateLimiter;
+use AppBundle\Component\RateLimit\RegisterSmsRateLimiter;
+use AppBundle\Component\RateLimit\SmsLoginRateLimiter;
+use AppBundle\Component\RateLimit\SmsRateLimiter;
+use Biz\Announcement\Processor\AnnouncementProcessorFactory;
+use Biz\Article\Event\ArticleEventSubscriber;
+use Biz\Classroom\Event\ClassroomThreadEventProcessor;
 use Biz\Common\BizCaptcha;
+use Biz\Common\BizDragCaptcha;
 use Biz\Common\BizSms;
+use Biz\Common\HTMLHelper;
 use Biz\Course\Util\CourseRenderViewResolver;
-use Biz\System\Template\TemplateFactory;
+use Biz\Distributor\Service\Impl\SyncOrderServiceImpl;
+use Biz\Distributor\Service\Impl\SyncUserServiceImpl;
+use Biz\File\FireWall\FireWallFactory;
+use Biz\Importer\ClassroomMemberImporter;
+use Biz\Importer\CourseMemberImporter;
+use Biz\OpenCourse\Event\OpenCourseThreadEventProcessor;
+use Biz\Sms\SmsProcessor\LiveOpenLessonSmsProcessor;
 use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\NormalStrategy;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Testpaper\Builder\RandomTestpaperBuilder;
-use Gregwar\Captcha\CaptchaBuilder;
-use Pimple\Container;
-use Biz\Common\HTMLHelper;
-use Pimple\ServiceProviderInterface;
-use Biz\File\FireWall\FireWallFactory;
-use Biz\Importer\CourseMemberImporter;
-use Biz\Importer\ClassroomMemberImporter;
-use Biz\Testpaper\Builder\ExerciseBuilder;
-use Biz\Testpaper\Builder\HomeworkBuilder;
-use Biz\Testpaper\Builder\TestpaperBuilder;
-use Biz\Article\Event\ArticleEventSubscriber;
 use Biz\Testpaper\Pattern\QuestionTypePattern;
 use Biz\Thread\Firewall\ArticleThreadFirewall;
 use Biz\Thread\Firewall\ClassroomThreadFirewall;
 use Biz\Thread\Firewall\OpenCourseThreadFirewall;
-use Biz\Sms\SmsProcessor\LiveOpenLessonSmsProcessor;
-use Biz\Classroom\Event\ClassroomThreadEventProcessor;
-use Biz\OpenCourse\Event\OpenCourseThreadEventProcessor;
-use Biz\Announcement\Processor\AnnouncementProcessorFactory;
-use Biz\User\Register\RegisterFactory;
-use Biz\User\Register\Impl\EmailRegistDecoderImpl;
-use Biz\User\Register\Impl\MobileRegistDecoderImpl;
+use Biz\User\Register\Common\RegisterTypeToolkit;
 use Biz\User\Register\Impl\BinderRegistDecoderImpl;
 use Biz\User\Register\Impl\DistributorRegistDecoderImpl;
-use Biz\User\Register\Common\RegisterTypeToolkit;
-use Biz\Distributor\Service\Impl\SyncUserServiceImpl;
-use Biz\Distributor\Service\Impl\SyncOrderServiceImpl;
-use AppBundle\Component\RateLimit\RegisterSmsRateLimiter;
-use Biz\Common\BizDragCaptcha;
-use AppBundle\Component\RateLimit\SmsRateLimiter;
+use Biz\User\Register\Impl\EmailRegistDecoderImpl;
+use Biz\User\Register\Impl\MobileRegistDecoderImpl;
+use Biz\User\Register\RegisterFactory;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Queue\Driver\DatabaseQueue;
+use Gregwar\Captcha\CaptchaBuilder;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
+use Biz\System\Template\TemplateFactory;
 
 class DefaultServiceProvider implements ServiceProviderInterface
 {
@@ -54,24 +51,12 @@ class DefaultServiceProvider implements ServiceProviderInterface
             return new HTMLHelper($biz);
         };
 
-        $biz['testpaper_builder.testpaper'] = function ($biz) {
-            return new TestpaperBuilder($biz);
-        };
-
         $biz['testpaper_builder.random_testpaper'] = function ($biz) {
             return new RandomTestpaperBuilder($biz);
         };
 
         $biz['file_fire_wall_factory'] = function ($biz) {
             return new FireWallFactory($biz);
-        };
-
-        $biz['testpaper_builder.homework'] = function ($biz) {
-            return new HomeworkBuilder($biz);
-        };
-
-        $biz['testpaper_builder.exercise'] = function ($biz) {
-            return new ExerciseBuilder($biz);
         };
 
         $biz['announcement_processor'] = function ($biz) {
@@ -203,33 +188,33 @@ class DefaultServiceProvider implements ServiceProviderInterface
         };
 
         $biz['render_view_resolvers'] = function ($biz) {
-            return array(
+            return [
                 new CourseRenderViewResolver($biz),
-            );
+            ];
         };
 
-        $biz['template_extension.live'] = array(
+        $biz['template_extension.live'] = [
             'course/header/header-for-guest' => 'live-course/header/header-for-guest.html.twig',
-        );
+        ];
 
         $biz['educloud.live_client'] = function ($biz) {
             return new EdusohoLiveClient($biz);
         };
 
-        $biz['course.show_redirect'] = array(
+        $biz['course.show_redirect'] = [
             "\/(my\/)?course\/(\d)+/i",
             "\/course_set\/(\d)+\/manage\/(\S)+/i",
             "\/my\/teaching\/course_sets/",
-        );
+        ];
 
         $biz['wechat.template_message_client'] = function ($biz) {
             $setting = $biz->service('System:SettingService');
-            $loginBind = $setting->get('login_bind', array());
+            $loginBind = $setting->get('login_bind', []);
             if (!empty($loginBind['weixinmob_enabled'])) {
-                $client = new Client(array(
+                $client = new Client([
                     'key' => $loginBind['weixinmob_key'],
                     'secret' => $loginBind['weixinmob_secret'],
-                ));
+                ]);
                 $token = $client->getAccessToken();
                 if (!empty($token)) {
                     $client->setAccessToken($token['access_token']);

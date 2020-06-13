@@ -7550,6 +7550,8 @@ admin.magic_setting.learn_time_sec_tip: 秒为单位
 admin.magic_setting.watch_time_sec: 视频观看时长上报周期
 admin.magic_setting.watch_time_sec_tip: 秒为单位
 admin.magic_setting.site_trace_enable: piwik跟踪的开关
+admin.magic_setting.live_entry_time: 直播开始前可进入时间
+admin.magic_setting.live_entry_time_tip: 秒为单位
 
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭
@@ -8587,7 +8589,7 @@ activity.live.replay_guid: >
 
 activity.live.default_notice: >
   <p>直播将于%startTimeFormat%开始，于%endTimeFormat%结束<p>
-  (直播开始前120分钟内可进入直播教室)
+  (直播开始前%limitTimeFormat%小时内可进入直播教室)
 
 #积分
 admin.reward_point: 积分
@@ -10212,6 +10214,7 @@ exception.message.send_to_self: 不能给自己发消息
 exception.message.empty_message: 消息为空
 exception.message.not_found_conversation: 会话不存在
 exception.message.delete_denied: 您无权删除此私信
+exception.message.send_limit: 私信发送次数受限，请稍候重试
 exception.coupon.not_found: 优惠券不存在
 exception.coupon.status_invalid: 非法的优惠券状态
 exception.coupon.type_invalid: 非法的优惠券类型

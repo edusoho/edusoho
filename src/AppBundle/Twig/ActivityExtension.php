@@ -110,18 +110,7 @@ class ActivityExtension extends \Twig_Extension
         ];
 
         return json_encode([
-            'resource' => [
-                'jquery' => $cdn.'/static-dist/libs/jquery/dist/jquery.min.js',
-                'codeage-design.css' => $cdn.'/static-dist/libs/codeages-design/dist/codeages-design.css',
-                'codeage-design' => $cdn.'/static-dist/libs/codeages-design/dist/codeages-design.js',
-                'validate' => $cdn.'/static-dist/libs/jquery-validation/dist/jquery.validate.js',
-                'bootstrap.css' => $cdn.'/static-dist/libs/bootstrap/dist/css/bootstrap.css',
-                'bootstrap' => $cdn.'/static-dist/libs/bootstrap/dist/js/bootstrap.min.js',
-                'editor' => $cdn.'/static-dist/libs/es-ckeditor/ckeditor.js',
-                'scrollbar' => $cdn.'/static-dist/libs/perfect-scrollbar.js',
-                'es-ckeditor-highlight' => $cdn.'/static-dist/libs/es-ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js',
-                'es-ckeditor-highlight-zenburn.css' => $cdn.'/static-dist/libs/es-ckeditor/plugins/codesnippet/lib/highlight/styles/zenburn.css',
-            ],
+            'resource' => $this->findStaticResource(),
             'context' => $context,
             'editorConfig' => [
                 'filebrowserImageUploadUrl' => $this->generateUrl('editor_upload', ['token' => $this->getWebExtension()->makeUploadToken('course')]),
@@ -129,6 +118,36 @@ class ActivityExtension extends \Twig_Extension
                 'imageDownloadUrl' => $this->generateUrl('editor_download', ['token' => $this->getWebExtension()->makeUploadToken('course')]),
             ],
         ]);
+    }
+
+    protected function findStaticResource()
+    {
+        $cdnSetting = $this->getSettingService()->get('cdn');
+        $cdn = '';
+        if (!empty($cdnSetting) && !empty($cdnSetting['enabled'])) {
+            $cdn = empty($cdnSetting['defaultUrl']) ? '' : $cdnSetting['defaultUrl'];
+        }
+
+        $version = $this->container->getParameter('app_version');
+
+        $resources = [
+            'jquery' => $cdn.'/static-dist/libs/jquery/dist/jquery.min.js',
+            'codeage-design.css' => $cdn.'/static-dist/libs/codeages-design/dist/codeages-design.css',
+            'codeage-design' => $cdn.'/static-dist/libs/codeages-design/dist/codeages-design.js',
+            'validate' => $cdn.'/static-dist/libs/jquery-validation/dist/jquery.validate.js',
+            'bootstrap.css' => $cdn.'/static-dist/libs/bootstrap/dist/css/bootstrap.css',
+            'bootstrap' => $cdn.'/static-dist/libs/bootstrap/dist/js/bootstrap.min.js',
+            'editor' => $cdn.'/static-dist/libs/es-ckeditor/ckeditor.js',
+            'scrollbar' => $cdn.'/static-dist/libs/perfect-scrollbar.js',
+            'es-ckeditor-highlight' => $cdn.'/static-dist/libs/es-ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js',
+            'es-ckeditor-highlight-zenburn.css' => $cdn.'/static-dist/libs/es-ckeditor/plugins/codesnippet/lib/highlight/styles/zenburn.css',
+        ];
+
+        foreach ($resources as &$resource) {
+            $resource = $resource.'?v='.$version;
+        }
+
+        return $resources;
     }
 
     public function getActivityMeta($type = null)

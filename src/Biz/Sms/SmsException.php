@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class SmsException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 07;
+    const EXCEPTION_MODULE = 07;
 
     const FORBIDDEN_SMS_SETTING = 4030701;
 
@@ -24,7 +24,7 @@ class SmsException extends AbstractException
 
     const NEED_WAIT = 4030708;
 
-    public $messages = array(
+    public $messages = [
         4030701 => 'exception.sms.setting_enable',
         4030702 => 'exception.sms.code_invalid',
         5000703 => 'exception.sms.type_error',
@@ -33,5 +33,5 @@ class SmsException extends AbstractException
         5000706 => 'exception.sms.mobile_username_not_match',
         5000707 => 'exception.sms.error_mobile',
         4030708 => 'exception.sms.need_wait',
-    );
+    ];
 }
