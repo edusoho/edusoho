@@ -1497,3 +1497,6 @@ course_manage.positive_currency.message: 请输入大于0的有效价格，最�
 
 merchant.resource.product_version.update_success_hint: 更新成功
 merchant.resource.product_version.update_failed_hint: 更新失败
+
+validate.length_max.message: 最多只能输入 %length% 个字符
+course.manage.expiry_date.error_hint: 请输入时间范围

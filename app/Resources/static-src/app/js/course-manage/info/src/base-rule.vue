@@ -1,7 +1,9 @@
 <template>
     <div>
         <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup.rules'|trans }}</div>
-        <el-form ref="baseRuleForm" v-model="ruleForm" role="course-base-rule" label-position="right" label-width="150px">
+        <el-form ref="baseRuleForm" :model="baseRuleForm" :rules="formRule" role="course-base-rule"
+                 label-position="right"
+                 label-width="150px">
             <el-form-item prop="learnMode">
                 <label slot="label">{{ 'course.plan_setup.mode'|trans }}
                     <el-popover
@@ -13,11 +15,13 @@
                     </el-popover>
                 </label>
                 <el-col span="18">
-                    <el-radio v-model="ruleForm.learnMode"
+                    <el-radio v-model="baseRuleForm.learnMode"
                               v-for="(label, value) in learnModeRadio"
+                              ref="learnMode"
                               :key="value"
                               :label="value"
-                              :disabled="course.status != 'draft' || course.platform !='self'">{{ label }}
+                              :disabled="course.status != 'draft' || course.platform !='self'"
+                              class="cd-radio">{{ label }}
                     </el-radio>
                 </el-col>
             </el-form-item>
@@ -38,76 +42,75 @@
                 </label>
                 <el-col span="18">
                     <el-radio v-for="(label, value) in expiryMode"
-                              v-model="ruleForm.expiryMode"
+                              v-model="baseRuleForm.expiryMode"
                               :label="value"
                               :key="value"
-                              :disabled="coursePublished || courseClosed || course.platform !='self'">
+                              :disabled="coursePublished || courseClosed || course.platform !='self'"
+                              class="cd-radio">
                         {{label}}
                     </el-radio>
 
-                    <div class="course-manage-expiry" :class="{'hidden':ruleForm.expiryMode != 'days'}"
+                    <div class="course-manage-expiry" :class="{'hidden':baseRuleForm.expiryMode != 'days'}"
                          id="expiry-days">
                         <span class="caret"></span>
-                        <el-radio v-model="ruleForm.deadlineType"
+                        <el-radio v-model="baseRuleForm.deadlineType"
                                   v-for="(label, value) in deadlineTypeRadio"
                                   :disabled="coursePublished || courseClosed || course.platform !='self'"
+                                  class="cd-radio"
                                   :label="value"
                                   :key="value">
                             {{label}}
                         </el-radio>
 
-                        <div class="cd-mt16" :class="{'hidden': ruleForm.deadlineType != 'end_date'}">
-                            <el-date-picker
-                                v-model="ruleForm.deadline"
-                                type="date"
-                                size="small"
-                                :default-value="today"
-                                :picker-options="dateOptions"
-                                :disabled="course.platform != 'self'">
-                            </el-date-picker>
-                            <span class="mlm">{{ 'course.marketing_setup.rule.expiry_date_tips'|trans }}</span>
+                        <div class="cd-mt16"
+                             v-if="baseRuleForm.expiryMode == 'days' && baseRuleForm.deadlineType == 'end_date'">
+                            <el-form-item prop="deadline">
+                                <el-date-picker
+                                    v-model="baseRuleForm.deadline"
+                                    type="date"
+                                    size="small"
+                                    ref="deadline"
+                                    :default-value="today"
+                                    :picker-options="dateOptions"
+                                    :disabled="course.platform != 'self'">
+                                </el-date-picker>
+                                <span class="mlm">{{ 'course.marketing_setup.rule.expiry_date_tips'|trans }}</span>
+                            </el-form-item>
                         </div>
                         <div class="cd-mt16"
-                             :class="{'hidden' : ruleForm.deadlineType != 'days'}">
+                             v-if="baseRuleForm.expiryMode == 'days' && baseRuleForm.deadlineType == 'days'">
                             <el-col span="8">
-                                <el-input v-model="ruleForm.expiryDays"
-                                          :disabled="(coursePublished && courseSetPublished) || course.platform != 'self'">
-                                </el-input>
+                                <el-form-item prop="expiryDays">
+                                    <el-input ref="expiryDays" v-model="baseRuleForm.expiryDays"
+                                              :disabled="(coursePublished && courseSetPublished) || course.platform != 'self'">
+                                    </el-input>
+                                </el-form-item>
                             </el-col>
                             <span class="mlm">{{ 'course.marketing_setup.rule.expiry_date.publish_tips'|trans }}</span>
                         </div>
                     </div>
 
                     <div class="course-manage-expiry"
-                         :class="{'hidden': ruleForm.expiryMode != 'date'}">
+                         :class="{'hidden': baseRuleForm.expiryMode != 'date'}">
                         <span class="caret"></span>
-                        <div class="course-manage-expiry__circle">
-                            {{ 'course.plan_task.start_time'|trans }}
-                            <el-date-picker
-                                :style="'max-width: 150px;'"
-                                :disabled="(coursePublished && courseSetPublished) || course.platform != 'self' ? true : false"
-                                v-model="ruleForm.expiryStartDate"
-                                :default-value="today"
-                                :picker-options="dateOptions"
-                                size="small"
-                                type="date">
-                            </el-date-picker>
-                            {{ 'course.plan_task.end_time'|trans }}
-
-                            <el-date-picker
-                                :style="'max-width: 150px;'"
-                                :disabled="(coursePublished && courseSetPublished) || course.platform != 'self' ? true : false"
-                                v-model="ruleForm.expiryEndDate"
-                                :default-value="today"
-                                :picker-options="dateOptions"
-                                size="small"
-                                type="date">
-                            </el-date-picker>
-                            <div class="help-block"></div>
+                        <div class="course-manage-expiry__circle"
+                             v-if="baseRuleForm.expiryMode == 'date' && baseRuleForm.expiryMode == 'date'">
+                            <el-form-item prop="expiryDateRange">
+                                <el-date-picker
+                                    v-model="baseRuleForm.expiryDateRange"
+                                    :default-value="today"
+                                    :picker-options="dateOptions"
+                                    type="daterange"
+                                    range-separator="-"
+                                    ref="expiryDateRange"
+                                    :start-placeholder="'course.plan_task.start_time'|trans"
+                                    :end-placeholder="'course.plan_task.start_time'|trans">
+                                </el-date-picker>
+                            </el-form-item>
                         </div>
                     </div>
                     <div class="course-mangae-info__tip js-expiry-tip"
-                         :class="{'ml0': ruleForm.expiryMode == 'forever'}">
+                         :class="{'ml0': baseRuleForm.expiryMode == 'forever'}">
                         {{ 'course.marketing_setup.rule.expiry_date.first_publish_tips'|trans }}
                     </div>
                 </el-col>
@@ -115,10 +118,12 @@
 
             <el-form-item :label="'course.plan_setup.finish_rule'|trans({'taskName': taskName })">
                 <el-col span="18">
-                    <el-radio v-model="ruleForm.enableFinish" label="1" :disabled="course.platform == 'supplier'">
+                    <el-radio v-model="baseRuleForm.enableFinish" label="1" :disabled="course.platform == 'supplier'"
+                              class="cd-radio">
                         {{ 'course.plan_setup.finish_rule.nothing'|trans }}
                     </el-radio>
-                    <el-radio v-model="ruleForm.enableFinish" label="0" :disabled="course.platform == 'supplier'">
+                    <el-radio v-model="baseRuleForm.enableFinish" label="0" :disabled="course.platform == 'supplier'"
+                              class="cd-radio">
                         {{ 'course.plan_setup.finish_rule.depend_on_finish_condition'|trans({'taskName': taskName}) }}
                         <el-popover
                             placement="top"
@@ -133,7 +138,7 @@
             <el-form-item v-if="courseSet.type == 'live'"
                           :label="'course.plan_setup.member_numbers'|trans">
                 <el-col span="8">
-                    <el-input v-model="ruleForm.maxStudentNum"
+                    <el-input v-model="baseRuleForm.maxStudentNum"
                               :data-live-capacity-url="liveCapacityUrl"
                               data-explain="">
                     </el-input>
@@ -148,22 +153,26 @@
                     <el-col span="16">
                         <ul v-if="canFreeTasks.length" class="list-group mb0 pb0 js-task-price-setting-scroll"
                             :class="freeTaskJsClass">
-                            <li v-for="(task) in canFreeTasks"
-                                class="task-price-setting-group__item"
-                                :class="{'open': freeTasks[task.id] != undefined}">
-                                <input type="checkbox" class="mr10" name="freeTaskIds[]" :value="task.id"
-                                       :checked="freeTasks[task.id] != undefined"
-                                       :disabled="course.platform != 'self'">
-                                <el-tooltip effect="dark"
-                                            :content="'course.marketing_setup.preview.set_task.task_name'|trans({'name':activityMetas[task.type].name,'taskName':taskName})"
-                                            placement="top">
-                                    <i class="color-gray" :class="activityMetas[task.type].icon"></i>
-                                </el-tooltip>
-                                <span class="inline-block vertical-middle text-overflow title">
-                                    {{ taskName }} {{ task.number }}：{{ task.title }}
-                                </span>
-                                <span class="cd-tag cd-tag-orange pull-right price">{{ 'course.marketing_setup.preview.set_task.free'|trans }}</span>
-                            </li>
+                            <el-checkbox-group v-model="baseRuleForm.freeTaskIds">
+                                <li v-for="(task) in canFreeTasks"
+                                    class="task-price-setting-group__item"
+                                    :class="{'open': freeTasks[task.id] != undefined}">
+                                    <el-checkbox :label="task.id" :key="task.id"
+                                                 @change="freeTaskItemChange">
+                                        <div slot="default">
+                                            <el-tooltip effect="dark"
+                                                        :content="'course.marketing_setup.preview.set_task.task_name'|trans({'name':activityMetas[task.type].name,'taskName':taskName})"
+                                                        placement="top">
+                                                <i class="color-gray" :class="activityMetas[task.type].icon"></i>
+                                            </el-tooltip>
+                                            <span class="inline-block vertical-middle text-overflow title">
+                                                                                {{ taskName }} {{ task.number }}：{{ task.title }}
+                                                                            </span>
+                                            <span class="cd-tag cd-tag-orange pull-right price">{{ 'course.marketing_setup.preview.set_task.free'|trans }}</span>
+                                        </div>
+                                    </el-checkbox>
+                                </li>
+                            </el-checkbox-group>
                         </ul>
 
                         <div class="help-block course-mange-space" :class="{'mt0': !canFreeTasks.length}">
@@ -190,7 +199,7 @@
                                slot="reference"></a>
                         </el-popover>
                     </label>
-                    <el-select v-model="ruleForm.tryLookLength" :disabled="course.platform != 'self'">
+                    <el-select v-model="baseRuleForm.tryLookLength" :disabled="course.platform != 'self'">
                         <el-option
                             v-for="(label, value) in tryLookLengthOptions"
                             :key="value"
@@ -216,17 +225,18 @@
                               @click="serviceItemClick"
                         >{{ tag.fullName }}</span>
                     </el-popover>
-                    <el-input type="hidden" v-model="ruleForm.services"></el-input>
                 </el-col>
+                <el-input class="hidden" type="hidden" v-model="baseRuleForm.services"></el-input>
             </el-form-item>
 
             <el-form-item id="audio-modal-id"
                           :label="'course.info.video.convert.audio.enable'|trans"
-                          v-model="ruleForm.enableAudio"
+                          v-model="baseRuleForm.enableAudio"
                           v-if="audioServiceStatus != 'needOpen' && course.type == 'normal'">
                 <el-col span="16">
-                    <el-radio v-model="ruleForm.enableAudio"
+                    <el-radio v-model="baseRuleForm.enableAudio"
                               v-for="(label, value) in audioServiceStatusRadio"
+                              class="cd-radio"
                               :key="value"
                               :label="value"
                               @click="changeAudioMode"
@@ -248,6 +258,8 @@
 </template>
 
 <script>
+    import * as validation from 'common/element-validation';
+
     export default {
         name: "base-rule",
         components: {},
@@ -284,25 +296,34 @@
         methods: {
             serviceItemClick(event) {
                 let $item = $(event.currentTarget);
-                let $values = $('#course_services').val();
-                let values = this.course.services;
-                if (!$values) {
-                    values = [];
+                if (!this.course.services) {
+                    this.course.services = [];
                 }
 
                 let code = $item.data('code')
                 if ($item.hasClass('service-primary-item')) {
                     $item.removeClass('service-primary-item');
-                    values.splice(values.indexOf(code), 1);
+                    this.course.services.splice(this.course.services.indexOf(code), 1);
                 } else {
                     $item.addClass('service-primary-item');
 
-                    if (values.indexOf(code) < 0) {
-                        values.push(code);
+                    if (this.course.services.indexOf(code) < 0) {
+                        this.course.services.push(code);
                     }
                 }
+            },
+            freeTaskItemChange(value, event) {
+                let $currentCheckbox = $(event.currentTarget).parent().parent().parent('li');
 
-                $('#course_services').val(JSON.stringify(values));
+                if (value && !$currentCheckbox.hasClass('open')) {
+                    $currentCheckbox.addClass('open');
+                    console.log(value, $currentCheckbox.hasClass('open'));
+                }
+
+                if (!value && $currentCheckbox.hasClass('open')) {
+                    $currentCheckbox.removeClass('open');
+                    console.log(value, $currentCheckbox.hasClass('open'));
+                }
             },
             changeAudioMode(event) {
                 if ($('#course-audio-mode').data('value') == 'notAllowed') {
@@ -312,6 +333,24 @@
                     enableAudios[1].checked = false;
                 }
             },
+            validateForm() {
+                let result = false;
+                let invalids = {};
+                this.$refs.baseRuleForm.clearValidate();
+
+                this.$refs.baseRuleForm.validate((valid, invalidFields) => {
+                    if (valid) {
+                        result = true;
+                    } else {
+                        invalids = invalidFields;
+                    }
+                });
+
+                return {result: result, invalidFields: invalids};
+            },
+            getFormData() {
+                return this.baseRuleForm;
+            }
         },
         data() {
             let freeTaskJsClass = this.canFreeTasks ? ' task-price-setting-group' : '';
@@ -324,26 +363,19 @@
                 i++;
             }
 
-            let ruleForm = {
-                learnMode: this.course.learnMode,
-                enableFinish: this.course.enableFinish,
-                maxStudentNum: this.course.maxStudentNum,
-                tryLookLength: parseInt(this.course.tryLookLength),
-                services: JSON.stringify(this.course.services),
-                enableAudio: this.course.enableAudio,
-                expiryMode: this.course.expiryMode,
-                deadlineType: this.course.deadlineType ? this.course.deadlineType : 'days',
-                deadline: this.course.expiryEndDate > 0 ? this.course.expiryEndDate * 1000 : null,
-                expiryDays: this.course.expiryDays,
-                expiryStartDate: this.course.expiryStartDate > 0 ? this.course.expiryStartDate * 1000 : null,
-                expiryEndDate: this.course.expiryEndDate > 0 ? this.course.expiryEndDate * 1000 : null
-            };
-
             let coursePublished = this.course.status ? this.course.status == 'published' : false;
             let courseClosed = this.course.status ? this.course.status == 'closed' : false;
             let courseSetPublished = this.courseSet.status ? this.courseSet.status == 'published' : false;
             let courseSetClosed = this.courseSet.status ? this.courseSet.status == 'closed' : false;
 
+            let max_year = (rule, value, callback) => {
+                value < 7300 ? callback() : callback(new Error(Translator.trans('validate.max_year.message')));
+            }
+            this.course.expiryStartDate = this.course.expiryStartDate == 0 ? '' : this.course.expiryStartDate;
+            this.course.expiryEndDate = this.course.expiryEndDate == 0 ? '' : this.course.expiryEndDate
+            let expiryDateRange = (!this.course.expiryStartDate || !this.course.expiryEndDate) ? null : [
+                this.course.expiryStartDate, this.course.expiryEndDate
+            ]
 
             return {
                 course: {},
@@ -374,8 +406,53 @@
                 },
                 videoConvertCompletion: '',
                 courseSetManageFilesUrl: '',
-                ruleForm: ruleForm,
-                freeTaskIds: [],
+                baseRuleForm: {
+                    learnMode: this.course.learnMode,
+                    enableFinish: this.course.enableFinish,
+                    maxStudentNum: this.course.maxStudentNum,
+                    tryLookLength: parseInt(this.course.tryLookLength),
+                    services: JSON.stringify(this.course.services),
+                    enableAudio: this.course.enableAudio,
+                    expiryMode: this.course.expiryMode,
+                    deadlineType: this.course.deadlineType ? this.course.deadlineType : 'days',
+                    deadline: this.course.expiryEndDate > 0 ? this.course.expiryEndDate * 1000 : null,
+                    expiryDays: this.course.expiryDays > 0 ? this.course.expiryDays : null,
+                    expiryDateRange: expiryDateRange,
+                    freeTaskIds: Object.keys(this.freeTasks)
+                },
+                formRule: {
+                    deadline: [
+                        {
+                            required: true,
+                            message: Translator.trans('course.manage.deadline_end_date_error_hint'),
+                            trigger: 'blur'
+                        }
+                    ],
+                    expiryDateRange: [
+                        {
+                            required: true,
+                            message: Translator.trans('course.manage.expiry_date.error_hint'),
+                            trigger: 'blur'
+                        }
+                    ],
+                    expiryDays: [
+                        {
+                            required: true,
+                            message: Translator.trans('course.manage.expiry_days_error_hint'),
+                            trigger: 'blur'
+                        },
+                        {
+                            validator: validation.digits,
+                            message: Translator.trans('validate.positive_integer.message'),
+                            trigger: 'blur'
+                        },
+                        {
+                            validator: max_year,
+                            message: Translator.trans('course.manage.max_year_error_hint'),
+                            trigger: 'blur'
+                        }
+                    ]
+                },
                 canFreeActivityTypes: '',
                 freeTaskChangelog: '',
                 tryLookLengthOptions: tryLookLengthOptions,

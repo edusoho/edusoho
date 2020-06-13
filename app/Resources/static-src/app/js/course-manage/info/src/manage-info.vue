@@ -1,11 +1,13 @@
 <template>
 
-    <div>
-        <el-from :model="courseInfoForm" class="form-horizontal" role="form" id="course-info-form" ref="courseInfoFrom">
-            <base-info v-bind:course="course"
+    <div class="course-manage-info">
+        <el-form class="form-horizontal" role="form" id="course-info-form" :action="courseManageUrl" method="post">
+            <base-info ref="baseInfo"
+                       v-bind:course="course"
                        v-bind:has-mul-courses="hasMulCourses"
             ></base-info>
-            <base-rule v-bind:course="course"
+            <base-rule ref="baseRule"
+                       v-bind:course="course"
                        v-bind:courseSet="courseSet"
                        v-bind:lesson-watch-limit="lessonWatchLimit"
                        v-bind:has-role-admin="hasRoleAdmin"
@@ -26,34 +28,16 @@
                        v-bind:can-free-activity-types="canFreeActivityTypes"
                        v-bind:free-task-changelog="freeTaskChangelog"
             ></base-rule>
-            <market-setting v-bind:course="course"
+            <market-setting ref="marketing"
+                            v-bind:course="course"
                             v-bind:course-product="courseProduct"
                             v-bind:can-modify-course-price="canModifyCoursePrice"
                             v-bind:notifies="notifies"
                             v-bind:buy-before-approval="buyBeforeApproval"
             ></market-setting>
 
-            <el-button type="primary" @click="submitForm"></el-button>
-
-            <!--            <div class="form-group">-->
-            <!--                <div class="col-sm-offset-2 col-sm-8">-->
-            <!--                    <button id="course-submit" type="button" class="cd-btn cd-btn-primary"-->
-            <!--                            data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}-->
-            <!--                    </button>-->
-            <!--                    <div id="test"></div>-->
-            <!--                </div>-->
-            <!--            </div>-->
-
-            <!--            {% if not hasMulCourses and courseSet.type == 'normal' %}-->
-            <!--            <div class="course-manage-intro js-plan-intro hidden">-->
-            <!--                <div class="course-manage-intro__outer js-plan-intro-btn">-->
-            <!--                    <div class="course-manage-intro__inner"><i class="es-icon es-icon-zhinan"></i></div>-->
-            <!--                </div>-->
-            <!--                <div class="mtm course-manage-intro__tip">{{ 'course.base_plan_intro'|trans }}</div>-->
-            <!--            </div>-->
-            <!--            {% endif %}-->
-            <!--            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">-->
-        </el-from>
+            <button class="cd-btn cd-btn-primary" @click="submitForm">{{ 'form.btn.save'|trans }}</button>
+        </el-form>
     </div>
 
 </template>
@@ -66,8 +50,10 @@
     export default {
         name: "manage-info",
         props: {
+            courseManageUrl: '',
             course: {},
             courseSet: {},
+            isUnMultiCourseSet: false,
             lessonWatchLimit: false,
             hasRoleAdmin: false,
             wechatSetting: {},
@@ -92,8 +78,6 @@
             buyBeforeApproval: false,
             canFreeActivityTypes: '',
             freeTaskChangelog: ''
-
-
         },
         components: {
             baseInfo,
@@ -101,13 +85,50 @@
             marketSetting,
         },
         methods: {
+            validForm() {
+                let invalidField = '';
+                let valids = {
+                    baseInfo: this.$refs.baseInfo.validateForm(),
+                    baseRule: this.$refs.baseRule.validateForm(),
+                    marketing: this.$refs.marketing.validateForm()
+                };
+
+                for (let key in valids) {
+                    if (!valids[key].result) {
+                        for (let field in valids[key].invalidFields) {
+                            invalidField = field;
+                            this.$refs[key].$refs[invalidField].focus();
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            },
             submitForm() {
-                console.log($('#course-info-form'));
+                if (!this.validForm()) {
+                    return;
+                }
+
+                let formData = {'_csrf_token': $('meta[name=csrf-token]').attr('content')};
+                Object.assign(
+                    formData,
+                    this.$refs.baseInfo.getFormData(),
+                    this.$refs.baseRule.getFormData(),
+                    this.$refs.marketing.getFormData()
+                );
+
+                this.$axios.post(this.courseManageUrl, formData, {emulateJSON: true}).then((res) => {
+                    cd.message({type: 'success', message: Translator.trans('site.save_success_hint')});
+                    window.location.reload();
+
+                });
             }
 
         },
         data() {
             return {
+                courseManageUrl: '',
                 course: this.course,
                 courseSet: {},
                 lessonWatchLimit: false,
@@ -132,8 +153,9 @@
                 notifies: {},
                 canModifyCoursePrice: true,
                 buyBeforeApproval: false,
-                canFreeActivityTypes:'',
-                freeTaskChangelog: ''
+                canFreeActivityTypes: '',
+                freeTaskChangelog: '',
+                isUnMultiCourseSet: false,
             }
         }
     }

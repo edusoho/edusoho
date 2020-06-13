@@ -1,0 +1,49 @@
+.course-manage-info {
+  .cd-radio {
+    &.is-checked:before {
+      border-color: @brand-primary;
+      background: @brand-primary;
+    }
+
+    &.is-checked:after {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 6px;
+      height: 6px;
+      background: white;
+      border-radius: 50%;
+      display: inline-block;
+      animation-name: radio-dot;
+      animation-duration: .2s;
+    }
+  }
+
+  .el-radio__inner {
+    display: none !important;
+  }
+
+  .el-radio__label {
+    padding-left: unset !important;
+  }
+
+  .el-radio__input.is-checked + .el-radio__label {
+    color: unset;
+  }
+
+  .el-checkbox__input.is-checked + .el-checkbox__label {
+    color: unset;
+  }
+}
+
+.task-price-setting-group__item {
+  .el-checkbox {
+    width: 100%;
+  }
+
+  .el-checkbox__label {
+    width: 100%;
+    padding-right: 15px;
+  }
+}

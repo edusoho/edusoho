@@ -1,7 +1,9 @@
 <template>
     <div>
         <div class="course-manage-subltitle cd-mb40">{{ 'course.marketing_setup'|trans }}</div>
-        <el-form ref="marketSettingForm" v-model="marketingFrom" label-position="right" label-width="150px">
+        <el-form ref="marketSettingForm" :model="marketingForm"
+                 :rules="formRule" label-position="right"
+                 label-width="150px">
             <div v-if="course.platform == 'supplier'">
                 <el-form-item :label="'s2b2c.product.cooperation_price'|trans">
                     <el-col span="18">
@@ -38,9 +40,9 @@
                  :data-min-price="course.platform == 'self' ? 0 : 0.01">
             </div>
 
-            <el-form-item :label="'site.price'|trans">
+            <el-form-item :label="'site.price'|trans" prop="originPrice">
                 <el-col span="4">
-                    <el-input v-model="marketingForm.originPrice"
+                    <el-input v-model="marketingForm.originPrice" ref="originPrics"
                               :disabled="course.platform == 'supplier' && !canModifyCoursePrice"></el-input>
                 </el-col>
                 <el-col span="8" class="mlm">{{ 'site.currency.CNY'|trans }}</el-col>
@@ -62,26 +64,30 @@
                               v-model="marketingForm.buyable"
                               :key="value"
                               :value="value"
-                              :label="value">
+                              :label="value"
+                              class="cd-radio">
                         {{label}}
                     </el-radio>
                 </el-col>
             </el-form-item>
 
-            <el-form-item :label="'course.marketing_setup.expiry_date'|trans">
+            <el-form-item :label="'course.marketing_setup.expiry_date'|trans"
+                          :prop="marketingForm.enableBuyExpiryTime == 1 ? 'buyExpiryTime': 'enableBuyExpiryTime'">
                 <el-col span="8">
                     <el-radio v-for="(label, value) in buyExpiryTimeEnabledRadio"
                               v-model="marketingForm.enableBuyExpiryTime"
                               :key="value"
-                              :label="value">
+                              :label="value"
+                              class="cd-radio">
                         {{label}}
                     </el-radio>
                 </el-col>
-                <el-date-picker :class="{'hidden': marketingForm.enableBuyExpiryTime == 0}"
+                <el-date-picker v-if="marketingForm.enableBuyExpiryTime == 1"
                                 v-model="marketingForm.buyExpiryTime"
                                 :default-value="today"
                                 :picker-options="dateOptions"
                                 size="small"
+                                ref="buyExpiryTime"
                                 type="date">
                 </el-date-picker>
             </el-form-item>
@@ -100,7 +106,8 @@
                     <el-radio v-for="(label, value) in approvalRadio"
                               v-model="marketingForm.approval"
                               :key="value"
-                              :label="value">
+                              :label="value"
+                              class="cd-radio">
                         {{label}}
                     </el-radio>
                 </el-col>
@@ -111,6 +118,8 @@
 </template>
 
 <script>
+    import * as validation from 'common/element-validation';
+
     export default {
         name: "market-setting",
         props: {
@@ -121,15 +130,28 @@
             buyBeforeApproval: false,
         },
         watch: {},
+        methods: {
+            validateForm() {
+                let result = false;
+                let invalids = {};
+                this.$refs.marketSettingForm.clearValidate();
+
+                this.$refs.marketSettingForm.validate((valid, invalidFields) => {
+                    if (valid) {
+                        result = true;
+                    } else {
+                        invalids = invalidFields;
+                    }
+                });
+
+                return {result: result, invalidFields: invalids};
+            },
+            getFormData() {
+                return this.marketingForm;
+            }
+        },
         data() {
             this.course.buyExpiryTime = this.course.buyExpiryTime > 0 ? this.course.buyExpiryTime * 1000 : null;
-            let marketingForm = {
-                originPrice: this.course.originPrice,
-                buyable: this.course.buyable,
-                enableBuyExpiryTime: this.course.buyExpiryTime > 0 ? 1 : 0,
-                buyExpiryTime: this.course.buyExpiryTime > 0 ? this.course.buyExpiryTime * 1000 : null,
-                approval: this.course.approval
-            };
             return {
                 course: {},
                 courseProduct: {},
@@ -154,7 +176,33 @@
                         return time.getTime() <= Date.now() - 24 * 60 * 60 * 1000;
                     }
                 },
-                marketingForm: marketingForm,
+                marketingForm: {
+                    originPrice: this.course.originPrice,
+                    buyable: this.course.buyable,
+                    enableBuyExpiryTime: this.course.buyExpiryTime > 0 ? '1' : '0',
+                    buyExpiryTime: this.course.buyExpiryTime > 0 ? this.course.buyExpiryTime * 1000 : null,
+                    approval: this.course.approval
+                },
+                formRule: {
+                    originPrice: [
+                        {
+                            required: true,
+                            message: Translator.trans('validate.required.message', {'display': Translator.trans('site.price')}),
+                            trigger: 'blur'
+                        },
+                        {validator: validation.positive_price, trigger: 'blur'},
+                    ],
+                    enableBuyExpiryTime: [
+                        {required: true, trigger: 'blur'}
+                    ],
+                    buyExpiryTime: [
+                        {
+                            required: true,
+                            message: Translator.trans('course.manage.deadline_end_date_error_hint'),
+                            trigger: 'blur'
+                        }
+                    ]
+                }
             }
         }
     }

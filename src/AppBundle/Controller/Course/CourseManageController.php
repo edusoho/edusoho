@@ -492,7 +492,7 @@ class CourseManageController extends BaseController
         }
 
         if ($request->isMethod('POST')) {
-            $data = $request->request->all();
+            $data = json_decode($request->getContent(), true);
 
             $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
             if (in_array($courseSet['type'], ['live', 'reservation']) || !empty($courseSet['parentId'])) {
