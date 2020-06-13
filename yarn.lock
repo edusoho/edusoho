@@ -3810,8 +3810,12 @@ es-abstract@^1.17.0, es-abstract@^1.17.0-next.1, es-abstract@^1.17.2, es-abstrac
 
 es-ckeditor@4.7.2-patch13:
   version "4.7.2-patch13"
-  resolved "https://registry.npm.taobao.org/es-ckeditor/download/es-ckeditor-4.7.2-patch13.tgz#a740df84a7d2e952f352fe727e1565409f1d0e1d"
-  integrity sha1-p0DfhKfS6VLzUv5yfhVlQJ8dDh0=
+  resolved "git+https://github.com/shenchupeng/es-ckeditor.git#b8654141514356dd1864d01b2a618b3ec45290ac"
+
+es-ckeditor@4.7.2-patch14:
+  version "4.7.2-patch14"
+  resolved "https://registry.npm.taobao.org/es-ckeditor/download/es-ckeditor-4.7.2-patch14.tgz#9f9e62163a92c1a6dabb8c33da7f1b4702f11def"
+  integrity sha1-n55iFjqSwabau4wz2n8bRwLxHe8=
 
 es-commit-msg-validator@1.0.2:
   version "1.0.2"
@@ -6029,10 +6033,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@1.0.10-0:
-  version "1.0.10-0"
-  resolved "https://registry.npm.taobao.org/item-bank/download/item-bank-1.0.10-0.tgz#564dfa17ab6d1d417ce2e8596eb630826388ba6e"
-  integrity sha1-Vk36F6ttHUF84uhZbrYwgmOIum4=
+item-bank@1.0.11:
+  version "1.0.11"
+  resolved "https://registry.npm.taobao.org/item-bank/download/item-bank-1.0.11.tgz#8fca59f1b72ac644e159f450fb3a0a626072adb4"
+  integrity sha1-j8pZ8bcqxkThWfRQ+zoKYmByrbQ=
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"
