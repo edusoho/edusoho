@@ -29,7 +29,7 @@ new Vue({
     props: {
       course: $('#app').data('course'),
       courseSet: $('#app').data('courseSet'),
-      isUnMultiCourseSet: $('#app').date('isUnMultiCourseSet'),
+      isUnMultiCourseSet: $('#app').data('isUnMultiCourseSet'),
       lessonWatchLimit: $('#app').data('lessonWatchLimit'),
       hasRoleAdmin: $('#app').data('hasRoleAdmin'),
       wechatSetting: $('#app').data('wechatSetting'),
@@ -54,7 +54,9 @@ new Vue({
       buyBeforeApproval: $('#app').data('buyBeforeApproval'),
       canFreeActivityTypes: $('#app').data('canFreeActivityTypes'),
       freeTaskChangelog: $('#app').data('freeTaskChangelog'),
-      courseManageUrl: $('#app').data('courseManageUrl')
+      courseManageUrl: $('#app').data('courseManageUrl'),
+      tags: $('#app').data('tags'),
+      tagSearchUrl: $('#app').data('tagSearchUrl'),
     },
   }),
 });

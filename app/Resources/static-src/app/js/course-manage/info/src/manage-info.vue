@@ -1,43 +1,44 @@
 <template>
 
     <div class="course-manage-info">
-        <el-form class="form-horizontal" role="form" id="course-info-form" :action="courseManageUrl" method="post">
-            <base-info ref="baseInfo"
-                       v-bind:course="course"
-                       v-bind:has-mul-courses="hasMulCourses"
-            ></base-info>
-            <base-rule ref="baseRule"
-                       v-bind:course="course"
-                       v-bind:courseSet="courseSet"
-                       v-bind:lesson-watch-limit="lessonWatchLimit"
-                       v-bind:has-role-admin="hasRoleAdmin"
-                       v-bind:has-wechat-notification-manage-role="hasWechatNotificationManageRole"
-                       v-bind:wechat-setting="wechatSetting"
-                       v-bind:wechat-manage-url="wechatManageUrl"
-                       v-bind:can-free-tasks="canFreeTasks"
-                       v-bind:free-tasks="freeTasks"
-                       v-bind:task-name="taskName"
-                       v-bind:activity-metas="activityMetas"
-                       v-bind:course-remind-send-days="courseRemindSendDays"
-                       v-bind:upload-mode="uploadMode"
-                       v-bind:service-tags="serviceTags"
-                       v-bind:audio-service-status="audioServiceStatus"
-                       v-bind:video-convert-completion="videoConvertCompletion"
-                       v-bind:course-set-manage-files-url="courseSetManageFilesUrl"
-                       v-bind:content-course-rule-url="contentCourseRuleUrl"
-                       v-bind:can-free-activity-types="canFreeActivityTypes"
-                       v-bind:free-task-changelog="freeTaskChangelog"
-            ></base-rule>
-            <market-setting ref="marketing"
-                            v-bind:course="course"
-                            v-bind:course-product="courseProduct"
-                            v-bind:can-modify-course-price="canModifyCoursePrice"
-                            v-bind:notifies="notifies"
-                            v-bind:buy-before-approval="buyBeforeApproval"
-            ></market-setting>
+        <base-info ref="baseInfo"
+                   v-bind:course="course"
+                   v-bind:has-mul-courses="hasMulCourses"
+                   v-bind:is-un-multi-course-set="isUnMultiCourseSet"
+                   v-bind:tags="tags"
+                   v-bind:tag-search-url="tagSearchUrl"
+        ></base-info>
+        <base-rule ref="baseRule"
+                   v-bind:course="course"
+                   v-bind:courseSet="courseSet"
+                   v-bind:lesson-watch-limit="lessonWatchLimit"
+                   v-bind:has-role-admin="hasRoleAdmin"
+                   v-bind:has-wechat-notification-manage-role="hasWechatNotificationManageRole"
+                   v-bind:wechat-setting="wechatSetting"
+                   v-bind:wechat-manage-url="wechatManageUrl"
+                   v-bind:can-free-tasks="canFreeTasks"
+                   v-bind:free-tasks="freeTasks"
+                   v-bind:task-name="taskName"
+                   v-bind:activity-metas="activityMetas"
+                   v-bind:course-remind-send-days="courseRemindSendDays"
+                   v-bind:upload-mode="uploadMode"
+                   v-bind:service-tags="serviceTags"
+                   v-bind:audio-service-status="audioServiceStatus"
+                   v-bind:video-convert-completion="videoConvertCompletion"
+                   v-bind:course-set-manage-files-url="courseSetManageFilesUrl"
+                   v-bind:content-course-rule-url="contentCourseRuleUrl"
+                   v-bind:can-free-activity-types="canFreeActivityTypes"
+                   v-bind:free-task-changelog="freeTaskChangelog"
+        ></base-rule>
+        <market-setting ref="marketing"
+                        v-bind:course="course"
+                        v-bind:course-product="courseProduct"
+                        v-bind:can-modify-course-price="canModifyCoursePrice"
+                        v-bind:notifies="notifies"
+                        v-bind:buy-before-approval="buyBeforeApproval"
+        ></market-setting>
 
-            <button class="cd-btn cd-btn-primary" @click="submitForm">{{ 'form.btn.save'|trans }}</button>
-        </el-form>
+        <button class="cd-btn cd-btn-primary" @click="submitForm">{{ 'form.btn.save'|trans }}</button>
     </div>
 
 </template>
@@ -77,7 +78,9 @@
             canModifyCoursePrice: true,
             buyBeforeApproval: false,
             canFreeActivityTypes: '',
-            freeTaskChangelog: ''
+            freeTaskChangelog: '',
+            tags: '',
+            tagSearchUrl: ''
         },
         components: {
             baseInfo,
@@ -156,6 +159,8 @@
                 canFreeActivityTypes: '',
                 freeTaskChangelog: '',
                 isUnMultiCourseSet: false,
+                tags: '',
+                tagSearchUrl: ''
             }
         }
     }
