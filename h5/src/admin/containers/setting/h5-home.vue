@@ -477,7 +477,7 @@ export default {
                 message: "发布成功",
                 type: "success"
               });
-              parent.location.reload();
+              parent.location.href="/admin/v2/setting/wap";
               return;
             }
             this.$store.commit(types.UPDATE_DRAFT, data);
