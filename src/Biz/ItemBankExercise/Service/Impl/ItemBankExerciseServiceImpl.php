@@ -8,12 +8,12 @@ use Biz\ItemBankExercise\Service\ItemBankExerciseService;
 
 class ItemBankExerciseServiceImpl extends BaseService implements ItemBankExerciseService
 {
-    public function countCourses($conditions)
+    public function count($conditions)
     {
         return $this->getItemBankExerciseDao()->count($conditions);
     }
 
-    public function searchCourses($conditions, $orderBy, $start, $limit)
+    public function search($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareCourseConditions($conditions);
 

@@ -2,10 +2,11 @@
 
 namespace AppBundle\Controller\My;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\ItemBankExercise\Service\ItemBankExerciseService;
-use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ItemBankExerciseController extends BaseController
@@ -15,7 +16,7 @@ class ItemBankExerciseController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher()) {
-            return $this->createMessageResponse('error', '您不是教师，不能查看此页面! ');
+            return $this->createMessageResponse('error', 'my.teaching.view.forbidden');
         }
 
         $conditions = [
@@ -24,28 +25,27 @@ class ItemBankExerciseController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getItemBankExerciseService()->countCourses($conditions),
+            $this->getItemBankExerciseService()->count($conditions),
             10
         );
 
-        $itemCourses = $this->getItemBankExerciseService()->searchCourses(
+        $itemBankExercises = $this->getItemBankExerciseService()->search(
             $conditions,
             ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $itemCourses = array_map(
-            function ($set) {
-                $questionBankInfo = $this->getItemBankService()->getItemBank($set['questionBankId']);
-                $set['assessmentNum'] = $questionBankInfo['assessment_num'];
-                $set['itemNum'] = $questionBankInfo['item_num'];
-
-                return $set;
-            }, $itemCourses);
+        $questionBanks = ArrayToolkit::column($itemBankExercises, 'questionBankId');
+        $questionBanks = $this->getQuestionBankService()->findQuestionBanksByIds($questionBanks);
+        $questionBanks = ArrayToolkit::index($questionBanks, 'id');
+        foreach ($itemBankExercises as &$v) {
+            $v['assessmentNum'] = $questionBanks[$v['questionBankId']]['itemBank']['assessment_num'];
+            $v['itemNum'] = $questionBanks[$v['questionBankId']]['itemBank']['item_num'];
+        }
 
         return $this->render('my/teaching/item-bank-exercise.html.twig', [
-            'courses' => $itemCourses,
+            'itemBankExercises' => $itemBankExercises,
             'paginator' => $paginator,
             'filter' => $filter,
         ]);
@@ -60,10 +60,10 @@ class ItemBankExerciseController extends BaseController
     }
 
     /**
-     * @return ItemBankService
+     * @return QuestionBankService
      */
-    protected function getItemBankService()
+    protected function getQuestionBankService()
     {
-        return $this->createService('ItemBank:ItemBank:ItemBankService');
+        return $this->createService('QuestionBank:QuestionBankService');
     }
 }

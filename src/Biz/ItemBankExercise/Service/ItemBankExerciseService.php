@@ -4,7 +4,7 @@ namespace Biz\ItemBankExercise\Service;
 
 interface ItemBankExerciseService
 {
-    public function countCourses($conditions);
+    public function count($conditions);
 
-    public function searchCourses($conditions, $orderBy, $start, $limit);
+    public function search($conditions, $orderBy, $start, $limit);
 }

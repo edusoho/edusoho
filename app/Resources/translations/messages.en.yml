@@ -3363,6 +3363,7 @@ customer_service.mobile_group: 'Telephone customer service'
 customer_service.weixin-content: 'Wechat QR code'
 customer_service.time: 'Service time'
 customer_service.send_message: 'Click here to send me message'
+my.teaching.view.forbidden: 'You are not a teacher, can not view this page!'
 my.teaching.menu_heading: 'My teaching'
 my.teaching.course_set_menu: Courses
 my.teaching.live_schedule_menu: Teaching Schedules

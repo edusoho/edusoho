@@ -10,7 +10,7 @@
 {% block main %}
   {% include 'my/teaching/course-type-select.html.twig' %}
 
-  {% for course in courses %}
+  {% for item in itemBankExercises %}
     <div class="open-course-item">
       {% include 'my/teaching/item-bank-exercise-list.html.twig' %}
     </div>

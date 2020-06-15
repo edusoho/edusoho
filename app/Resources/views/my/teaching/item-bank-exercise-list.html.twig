@@ -5,13 +5,13 @@
 
 {% block coursesetImg %}
   <a href="#" target="_blank">
-    <img class="courseset-manage-header__img" src="{{ filepath(course.cover, 'course.png') }}" />
+    <img class="courseset-manage-header__img" src="{{ filepath(item.cover, 'course.png') }}" />
   </a>
 {% endblock %}
 
 {% block btn %}
   <a class="cd-btn cd-btn-ghost-primary cd-mr16" href="#" target="_blank">{{ 'item_bank_exercise.manage_btn'|trans }}</a>
-  {% if course.status != 'published' %}
+  {% if item.status != 'published' %}
     <a class="cd-btn cd-btn-ghost-default" href="#" target="_blank">{{ 'item_bank_exercise.preview.course'|trans }}</a>
   {% else %}
     <a class="cd-btn cd-btn-ghost-default" href="#" target="_blank">{{'my.learning.item_bank_exercise.watch'|trans}}</a>
@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block coursesetTitle %}
-  <a class="cd-link-major" href="#" target="_blank">{{ course.title }}</a>
+  <a class="cd-link-major" href="#" target="_blank">{{ item.title }}</a>
 {% endblock %}
 
 {% block liveTag %}

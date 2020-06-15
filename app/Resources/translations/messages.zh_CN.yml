@@ -4005,6 +4005,7 @@ customer_service.send_message: 点击这里给我发消息
 customer_service.customer_email: 反馈邮件
 
 # 我的教学
+my.teaching.view.forbidden: 您不是教师，不能查看此页面!
 my.teaching.menu_heading: 我的教学
 my.teaching.course_set_menu: 在教课程
 my.teaching.live_schedule_menu: 教学课表
