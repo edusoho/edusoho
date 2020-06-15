@@ -2,18 +2,9 @@
 
 namespace Biz\ItemBankExercise\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
-use Biz\Common\CommonException;
 use Biz\ItemBankExercise\Dao\ItemBankExerciseDao;
 use Biz\ItemBankExercise\Service\ItemBankExerciseService;
-use Biz\QuestionBank\Dao\QuestionBankDao;
-use Biz\QuestionBank\QuestionBankException;
-use Biz\QuestionBank\Service\CategoryService;
-use Biz\QuestionBank\Service\MemberService;
-use Biz\QuestionBank\Service\QuestionBankService;
-use Biz\Taxonomy\CategoryException;
-use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
 
 class ItemBankExerciseServiceImpl extends BaseService implements ItemBankExerciseService
 {

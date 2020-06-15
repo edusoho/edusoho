@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller\My;
 
+use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\ItemBankExercise\Service\ItemBankExerciseService;
 use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\Paginator;
 
 class ItemBankExerciseController extends BaseController
 {
@@ -19,7 +19,7 @@ class ItemBankExerciseController extends BaseController
         }
 
         $conditions = [
-            'teacherIds' => $user['id']
+            'teacherIds' => $user['id'],
         ];
 
         $paginator = new Paginator(
@@ -30,7 +30,7 @@ class ItemBankExerciseController extends BaseController
 
         $itemCourses = $this->getItemBankExerciseService()->searchCourses(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -40,15 +40,15 @@ class ItemBankExerciseController extends BaseController
                 $questionBankInfo = $this->getItemBankService()->getItemBank($set['questionBankId']);
                 $set['assessmentNum'] = $questionBankInfo['assessment_num'];
                 $set['itemNum'] = $questionBankInfo['item_num'];
-                return $set;
-            }
-            , $itemCourses);
 
-        return $this->render('my/teaching/item-bank-exercise.html.twig', array(
+                return $set;
+            }, $itemCourses);
+
+        return $this->render('my/teaching/item-bank-exercise.html.twig', [
             'courses' => $itemCourses,
             'paginator' => $paginator,
-            'filter' => $filter
-        ));
+            'filter' => $filter,
+        ]);
     }
 
     /**
