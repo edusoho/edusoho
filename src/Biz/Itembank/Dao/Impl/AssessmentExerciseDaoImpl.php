@@ -11,12 +11,12 @@ class AssessmentExerciseDaoImpl extends GeneralDaoImpl implements AssessmentExer
 
     public function declares()
     {
-        return array(
-            'timestamps' => array('createdTime', 'updatedTime'),
-            'orderbys' => array('createdTime'),
-            'conditions' => array(
+        return [
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'orderbys' => ['createdTime'],
+            'conditions' => [
                 'id = :id',
-            ),
-        );
+            ],
+        ];
     }
 }

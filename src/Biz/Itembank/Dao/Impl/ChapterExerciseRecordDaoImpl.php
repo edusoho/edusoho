@@ -11,12 +11,12 @@ class ChapterExerciseRecordDaoImpl extends GeneralDaoImpl implements ChapterExer
 
     public function declares()
     {
-        return array(
-            'timestamps' => array('createdTime', 'updatedTime'),
-            'orderbys' => array('createdTime'),
-            'conditions' => array(
+        return [
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'orderbys' => ['createdTime'],
+            'conditions' => [
                 'id = :id',
-            ),
-        );
+            ],
+        ];
     }
 }

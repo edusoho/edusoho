@@ -2,10 +2,8 @@
 
 namespace Biz\ItemBank\Service\Impl;
 
-use Biz\Common\CommonException;
-use Biz\ItemBank\Service\ExerciseRightRecordService;
 use Biz\BaseService;
-use AppBundle\Common\ArrayToolkit;
+use Biz\ItemBank\Service\ExerciseRightRecordService;
 
 class ExerciseRightRecordServiceImpl extends BaseService implements ExerciseRightRecordService
 {
