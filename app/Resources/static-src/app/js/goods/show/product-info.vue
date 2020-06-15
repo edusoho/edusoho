@@ -4,9 +4,9 @@
       <div v-if="isFixed" class="fixed">
         <div class="cd-container clearfix" >
           <ul class="info-left__nav pull-left">
-            <li :class="howActive == 1 ? 'active' : ''"><a href="#info-left-1">商品介绍</a></li>
-            <li :class="howActive == 2 ? 'active' : ''"><a href="#info-left-2">学习目录</a></li>
-            <li :class="howActive == 3 ? 'active' : ''"><a href="#info-left-3">学员评价</a></li>
+            <li :class="howActive == 1 ? 'active' : ''"><a href="javascript:;" @click="clickType(1)">商品介绍</a></li>
+            <li :class="howActive == 2 ? 'active' : ''"><a href="javascript:;" @click="clickType(2)">学习目录</a></li>
+            <li :class="howActive == 3 ? 'active' : ''"><a href="javascript:;" @click="clickType(3)">学员评价</a></li>
           </ul>
           <div class="buy__btn pull-right">
             <a href="javascript:;">立即购买</a>
@@ -14,75 +14,21 @@
         </div>
       </div>
       <ul class="info-left__nav" ref="infoLeftNav">
-        <li :class="howActive == 1 ? 'active' : ''"><a href="#info-left-1">商品介绍</a></li>
-        <li :class="howActive == 2 ? 'active' : ''"><a href="#info-left-2">学习目录</a></li>
-        <li :class="howActive == 3 ? 'active' : ''"><a href="#info-left-3">学员评价</a></li>
+        <li :class="howActive == 1 ? 'active' : ''"><a href="javascript:;" @click="clickType(1)">商品介绍</a></li>
+        <li :class="howActive == 2 ? 'active' : ''"><a href="javascript:;" @click="clickType(2)">学习目录</a></li>
+        <li :class="howActive == 3 ? 'active' : ''"><a href="javascript:;" @click="clickType(3)">学员评价</a></li>
       </ul>
       <div class="info-left__content">
-        <div v-if="isFixed" class="fixed-box"></div>
-        <h3 id="info-left-1" class="info-left__content__title">商品介绍</h3>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <h3 id="info-left-2" class="info-left__content__title">学习目录</h3>
-           <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-           <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <h3 id="info-left-3" class="info-left__content__title">学员评价</h3>
-           <p>text</p>
-        <p>text</p>
-        <p>text</p>
-           <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
-        <p>text</p>
+        <!-- <div v-if="isFixed" class="fixed-box"></div> -->
+        <div id="info-left-1" class="info-left__content-item">
+          <h3 class="info-left__content__title">商品介绍</h3>
+        </div>
+        <div id="info-left-2" class="info-left__content-item">
+          <h3  class="info-left__content__title">学习目录</h3>
+        </div>
+        <div id="info-left-3" class="info-left__content-item">
+          <h3  class="info-left__content__title">学员评价</h3>
+        </div>
       </div>
     </div>
     <div class="product-info__right pull-right">
@@ -103,8 +49,10 @@
   export default {
     data() {
       return {
-        isFixed: false,
-        howActive: 1
+        isFixed: false, // 是否吸顶
+        howActive: 1, // 当前active
+        flag: true,
+        timer: null, // 延时器对象
       }
     },
     components: {
@@ -116,8 +64,30 @@
       handleScroll() {
         let eleTop = this.$refs.infoLeftNav.offsetTop + this.$refs.infoLeftNav.offsetHeight;
         let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-        if ( eleTop <= scrollTop && !this.isFixed ) this.isFixed = true; 
+        if ( eleTop <= scrollTop && !this.isFixed ) this.isFixed = true;
         if ( eleTop > scrollTop && this.isFixed ) this.isFixed = false;
+        if (this.flag) this.calcScrollTop(scrollTop);
+      },
+      calcScrollTop(value) {
+        let eleArr = $('.info-left__content-item');
+        for (let i = eleArr.length - 1; i >= 0; i--) {
+          const elementTop = eleArr[i].offsetTop - 90;
+          if (value > elementTop) {
+            if (this.howActive != i + 1) this.howActive = i + 1;
+            return;
+          }
+        }
+      },
+      clickType(value) {
+        clearTimeout(this.timer);
+        this.timer = null
+        this.flag = false;
+        this.howActive = value;
+        let ele = '#info-left-' + value;
+        document.documentElement.scrollTop = $(ele).offset().top - 90;
+        this.timer = setTimeout(() => {
+         this.flag = true;
+        }, 500);
       }
     },
     mounted() {
