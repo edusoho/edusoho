@@ -127,7 +127,9 @@ export default {
         offset: this.classroom.offset,
         limit: this.classroom.limit
       };
-      const config = Object.assign({}, this.selectedData, setting);
+      const selectedData={title:this.selectedData.courseSetTitle}
+      const config = Object.assign({}, selectedData, setting);
+
       return Api.getClassList({
         params: config
       })
