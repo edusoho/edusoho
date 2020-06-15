@@ -436,7 +436,7 @@ export default {
         mode: "draft"
       })
         .then(res => {
-          parent.location.reload();
+          parent.location.href=parent.location.href;
         })
         .catch(err => {
           this.$message({
@@ -477,7 +477,7 @@ export default {
                 message: "发布成功",
                 type: "success"
               });
-              parent.location.href="/admin/v2/setting/wap";
+              parent.location.href=parent.location.href;
               return;
             }
             this.$store.commit(types.UPDATE_DRAFT, data);
