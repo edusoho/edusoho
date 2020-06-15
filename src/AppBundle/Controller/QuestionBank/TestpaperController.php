@@ -7,7 +7,6 @@ use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\QuestionBank\Service\QuestionBankService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
@@ -153,8 +152,8 @@ class TestpaperController extends BaseController
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
             $fields['itemBankId'] = $questionBank['itemBankId'];
-            
-            $assessment = $this->getBiz()["testpaper_builder.random_testpaper"]->build($fields);
+
+            $assessment = $this->getBiz()['testpaper_builder.random_testpaper']->build($fields);
 
             return $this->redirect(
                 $this->generateUrl(
@@ -528,7 +527,7 @@ class TestpaperController extends BaseController
         $data = $request->request->all();
         $data['itemBankId'] = $questionBank['itemBankId'];
 
-        $result = $result = $this->getBiz()["testpaper_builder.random_testpaper"]->canBuild($data);
+        $result = $result = $this->getBiz()['testpaper_builder.random_testpaper']->canBuild($data);
 
         return $this->createJsonResponse($result);
     }
