@@ -111,6 +111,7 @@ class PageSetting extends AbstractResource
         $discoverySettings = $this->getH5SettingService()->filter($discoverySettings, 'setting');
         foreach ($discoverySettings as &$discoverySetting) {
             $discoverySetting = $this->handleSetting($discoverySetting);
+            unset($discoverySetting['tips']);
         }
 
         return $discoverySettings;

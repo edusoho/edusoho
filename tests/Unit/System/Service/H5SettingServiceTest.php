@@ -8,9 +8,9 @@ class H5SettingServiceTest extends BaseTestCase
 {
     public function testGetDiscovery()
     {
-        $this->mockBiz('Content:BlockService', array(
-            array('functionName' => 'getPosters', 'returnValue' => array(0 => array('image' => '', 'link' => array('url' => '')))),
-        ));
+        $this->mockBiz('Content:BlockService', [
+            ['functionName' => 'getPosters', 'returnValue' => [0 => ['image' => '', 'link' => ['url' => '']]]],
+        ]);
         $discoverySettings = $this->getH5SettingService()->getDiscovery('h5');
         $this->assertEquals('slide_show', $discoverySettings['slide-1']['type']);
         $this->assertEquals('course_list', $discoverySettings['courseList-1']['type']);
@@ -20,14 +20,14 @@ class H5SettingServiceTest extends BaseTestCase
     {
         $discoverySettings = $this->createFilter();
 
-        $discoverySettings = $this->getH5SettingService()->filter($discoverySettings);
+        $discoverySettings = $this->getH5SettingService()->filter($discoverySettings, 'h5');
         $this->assertEquals('slide_show', $discoverySettings['slide-1']['type']);
     }
 
     public function testCourseListFilter()
     {
         $discoverySetting = $this->createTypeListByCondition('course_list');
-        $discoverySetting = $this->getH5SettingService()->courseListFilter($discoverySetting);
+        $discoverySetting = $this->getH5SettingService()->courseListFilter($discoverySetting, 'h5');
 
         $this->assertEquals('course_list', $discoverySetting['type']);
         $this->assertEquals('condition', $discoverySetting['data']['sourceType']);
@@ -35,7 +35,7 @@ class H5SettingServiceTest extends BaseTestCase
         $this->mockCourse();
 
         $discoverySetting = $this->createTypeListByCustom('course_list');
-        $discoverySetting = $this->getH5SettingService()->courseListFilter($discoverySetting);
+        $discoverySetting = $this->getH5SettingService()->courseListFilter($discoverySetting, 'h5');
         $this->assertEmpty($discoverySetting['data']['items']);
         $this->assertEquals('custom', $discoverySetting['data']['sourceType']);
     }
@@ -43,7 +43,7 @@ class H5SettingServiceTest extends BaseTestCase
     public function testClassroomListFilter()
     {
         $discoverySetting = $this->createTypeListByCondition('classroom_list');
-        $discoverySetting = $this->getH5SettingService()->classroomListFilter($discoverySetting);
+        $discoverySetting = $this->getH5SettingService()->classroomListFilter($discoverySetting, 'h5');
 
         $this->assertEquals('classroom_list', $discoverySetting['type']);
         $this->assertEquals('condition', $discoverySetting['data']['sourceType']);
@@ -51,7 +51,7 @@ class H5SettingServiceTest extends BaseTestCase
         $this->mockClassroom();
 
         $discoverySetting = $this->createTypeListByCustom('classroom_list');
-        $discoverySetting = $this->getH5SettingService()->classroomListFilter($discoverySetting);
+        $discoverySetting = $this->getH5SettingService()->classroomListFilter($discoverySetting, 'h5');
         $this->assertEmpty($discoverySetting['data']['items']);
         $this->assertEquals('custom', $discoverySetting['data']['sourceType']);
     }
@@ -60,7 +60,7 @@ class H5SettingServiceTest extends BaseTestCase
     {
         $discoverySetting = $this->createSlide();
 
-        $discoverySetting = $this->getH5SettingService()->slideShowFilter($discoverySetting);
+        $discoverySetting = $this->getH5SettingService()->slideShowFilter($discoverySetting, 'h5');
         $this->assertEquals('slide_show', $discoverySetting['type']);
         $this->assertNull($discoverySetting['data'][0]['link']['target']);
         $this->assertEmpty($discoverySetting['data'][0]['link']['url']);
@@ -70,7 +70,7 @@ class H5SettingServiceTest extends BaseTestCase
     {
         $discoverySetting = $this->createPoster();
 
-        $discoverySetting = $this->getH5SettingService()->posterFilter($discoverySetting);
+        $discoverySetting = $this->getH5SettingService()->posterFilter($discoverySetting, 'h5');
         $this->assertEquals('poster', $discoverySetting['type']);
         $this->assertNull($discoverySetting['data']['link']['target']);
         $this->assertEmpty($discoverySetting['data']['link']['url']);
@@ -79,42 +79,42 @@ class H5SettingServiceTest extends BaseTestCase
     public function testGrouponFilter()
     {
         $discoverySetting = $this->createEmptyActivity();
-        $discoverySetting = $this->getH5SettingService()->grouponFilter($discoverySetting);
+        $discoverySetting = $this->getH5SettingService()->grouponFilter($discoverySetting, 'h5');
         $this->assertFalse($discoverySetting);
 
         $discoverySetting = $this->createActivity();
-        $this->mockBiz('Marketing:MarketingPlatformService', array(
-            array('functionName' => 'getActivity', 'returnValue' => array('id' => 1)),
-        ));
-        $discoverySetting = $this->getH5SettingService()->grouponFilter($discoverySetting);
+        $this->mockBiz('Marketing:MarketingPlatformService', [
+            ['functionName' => 'getActivity', 'returnValue' => ['id' => 1]],
+        ]);
+        $discoverySetting = $this->getH5SettingService()->grouponFilter($discoverySetting, 'h5');
         $this->assertEquals(1, $discoverySetting['data']['activity']['id']);
     }
 
     public function testSeckillFilter()
     {
         $discoverySetting = $this->createEmptyActivity();
-        $discoverySetting = $this->getH5SettingService()->seckillFilter($discoverySetting);
+        $discoverySetting = $this->getH5SettingService()->seckillFilter($discoverySetting, 'h5');
         $this->assertFalse($discoverySetting);
 
         $discoverySetting = $this->createActivity();
-        $this->mockBiz('Marketing:MarketingPlatformService', array(
-            array('functionName' => 'getActivity', 'returnValue' => array('id' => 1)),
-        ));
-        $discoverySetting = $this->getH5SettingService()->seckillFilter($discoverySetting);
+        $this->mockBiz('Marketing:MarketingPlatformService', [
+            ['functionName' => 'getActivity', 'returnValue' => ['id' => 1]],
+        ]);
+        $discoverySetting = $this->getH5SettingService()->seckillFilter($discoverySetting, 'h5');
         $this->assertEquals(1, $discoverySetting['data']['activity']['id']);
     }
 
     public function testCutFilter()
     {
         $discoverySetting = $this->createEmptyActivity();
-        $discoverySetting = $this->getH5SettingService()->cutFilter($discoverySetting);
+        $discoverySetting = $this->getH5SettingService()->cutFilter($discoverySetting, 'h5');
         $this->assertFalse($discoverySetting);
 
         $discoverySetting = $this->createActivity();
-        $this->mockBiz('Marketing:MarketingPlatformService', array(
-            array('functionName' => 'getActivity', 'returnValue' => array('id' => 1)),
-        ));
-        $discoverySetting = $this->getH5SettingService()->cutFilter($discoverySetting);
+        $this->mockBiz('Marketing:MarketingPlatformService', [
+            ['functionName' => 'getActivity', 'returnValue' => ['id' => 1]],
+        ]);
+        $discoverySetting = $this->getH5SettingService()->cutFilter($discoverySetting, 'h5');
         $this->assertEquals(1, $discoverySetting['data']['activity']['id']);
     }
 
@@ -122,7 +122,7 @@ class H5SettingServiceTest extends BaseTestCase
     {
         $this->mockCouponService();
         $discoverySetting = $this->createCoupon();
-        $discoverySetting = $this->getH5SettingService()->couponFilter($discoverySetting);
+        $discoverySetting = $this->getH5SettingService()->couponFilter($discoverySetting, 'h5');
 
         $this->assertEquals(1, count($discoverySetting['data']['items']));
     }
@@ -132,7 +132,7 @@ class H5SettingServiceTest extends BaseTestCase
         $this->mockVipService();
 
         $discoverySetting = $this->createVip();
-        $discoverySetting = $this->getH5SettingService()->vipFilter($discoverySetting);
+        $discoverySetting = $this->getH5SettingService()->vipFilter($discoverySetting, 'h5');
 
         $this->assertEquals(1, $discoverySetting['data']['items'][0]['freeCourseNum']);
         $this->assertEquals(1, $discoverySetting['data']['items'][0]['freeClassroomNum']);
@@ -140,10 +140,10 @@ class H5SettingServiceTest extends BaseTestCase
 
     public function testGetCourseCondition()
     {
-        $this->mockBiz('Taxonomy:CategoryService', array(
-            array('functionName' => 'getGroupByCode', 'returnValue' => array('id' => 1)),
-            array('functionName' => 'findCategoriesByGroupIdAndParentId', 'returnValue' => array('id' => 1, 'code' => 'test')),
-        ));
+        $this->mockBiz('Taxonomy:CategoryService', [
+            ['functionName' => 'getGroupByCode', 'returnValue' => ['id' => 1]],
+            ['functionName' => 'findCategoriesByGroupIdAndParentId', 'returnValue' => ['id' => 1, 'code' => 'test']],
+        ]);
 
         $conditions = $this->getH5SettingService()->getCourseCondition('h5');
         $this->assertEquals('所有课程', $conditions['title']);
@@ -152,7 +152,7 @@ class H5SettingServiceTest extends BaseTestCase
     public function testGraphicNavigationFilter()
     {
         $setting = $this->createNavigation();
-        $result = $this->getH5SettingService()->graphicNavigationFilter($setting);
+        $result = $this->getH5SettingService()->graphicNavigationFilter($setting, 'app');
 
         $schema = (!empty($_SERVER['HTTPS']) && 'off' !== strtolower($_SERVER['HTTPS'])) ? 'https' : 'http';
 
@@ -165,145 +165,145 @@ class H5SettingServiceTest extends BaseTestCase
         $this->mockOpenCourse();
 
         $discoverySetting = $this->createTypeListByCondition('open_course_list');
-        $discoverySetting = $this->getH5SettingService()->openCourseListFilter($discoverySetting);
+        $discoverySetting = $this->getH5SettingService()->openCourseListFilter($discoverySetting, 'h5');
 
         $this->assertEquals('open_course_list', $discoverySetting['type']);
         $this->assertEquals('condition', $discoverySetting['data']['sourceType']);
         $this->assertCount(2, $discoverySetting['data']['items']);
 
         $discoverySetting = $this->createTypeListByCustom('course_list');
-        $discoverySetting = $this->getH5SettingService()->openCourseListFilter($discoverySetting);
+        $discoverySetting = $this->getH5SettingService()->openCourseListFilter($discoverySetting, 'h5');
         $this->assertEmpty($discoverySetting['data']['items']);
         $this->assertEquals('custom', $discoverySetting['data']['sourceType']);
     }
 
     protected function createFilter()
     {
-        return array(
-            'slide-1' => array(
+        return [
+            'slide-1' => [
                 'type' => 'slide_show',
                 'moduleType' => 'slide-1',
-                'data' => array(
-                    0 => array(
+                'data' => [
+                    0 => [
                         'title' => '',
-                        'image' => array(
+                        'image' => [
                             'id' => 0,
                             'uri' => '',
                             'size' => '',
                             'createdTime' => 0,
-                        ),
-                        'link' => array(
+                        ],
+                        'link' => [
                             'type' => 'url',
                             'target' => null,
                             'url' => '',
-                        ),
-                    ),
-                ),
-            ),
-        );
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 
     protected function createTypeListByCondition($type)
     {
-        return array(
+        return [
             'type' => $type,
-            'data' => array(
+            'data' => [
                 'sourceType' => 'condition',
                 'categoryId' => 0,
                 'sort' => '-studentNum',
                 'lastDays' => 0,
                 'limit' => 1,
-                'items' => array(),
-            ),
-        );
+                'items' => [],
+            ],
+        ];
     }
 
     protected function createTypeListByCustom($type)
     {
-        return array(
+        return [
             'type' => $type,
-            'data' => array(
+            'data' => [
                 'sourceType' => 'custom',
-                'items' => array(
-                    0 => array('id' => 1),
-                    1 => array('id' => 2),
-                    2 => array('id' => 3),
-                ),
-            ),
-        );
+                'items' => [
+                    0 => ['id' => 1],
+                    1 => ['id' => 2],
+                    2 => ['id' => 3],
+                ],
+            ],
+        ];
     }
 
     protected function createSlide()
     {
-        return array(
+        return [
             'type' => 'slide_show',
-            'data' => array(
-                0 => array(
-                    'link' => array(
+            'data' => [
+                0 => [
+                    'link' => [
                         'type' => '',
                         'target' => null,
                         'url' => '',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
     }
 
     protected function createPoster()
     {
-        return array(
+        return [
             'type' => 'poster',
-            'data' => array(
-                'link' => array(
+            'data' => [
+                'link' => [
                     'type' => '',
                     'target' => null,
                     'url' => '',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     protected function createEmptyActivity()
     {
-        return array(
-            'data' => array(
-                'activity' => array(),
-            ),
-        );
+        return [
+            'data' => [
+                'activity' => [],
+            ],
+        ];
     }
 
     protected function createActivity()
     {
-        return array(
-            'data' => array(
-                'activity' => array(
+        return [
+            'data' => [
+                'activity' => [
                     'id' => 0,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     protected function createCoupon()
     {
-        return array(
-            'data' => array(
+        return [
+            'data' => [
                 'sort' => 'desc',
-                'items' => array(
-                    0 => array('id' => 1, 'type' => 'discount', 'rate' => 9.00),
-                    1 => array('id' => 2, 'type' => 'discount', 'rate' => 9.00),
-                ),
-            ),
-        );
+                'items' => [
+                    0 => ['id' => 1, 'type' => 'discount', 'rate' => 9.00],
+                    1 => ['id' => 2, 'type' => 'discount', 'rate' => 9.00],
+                ],
+            ],
+        ];
     }
 
     protected function createVip()
     {
-        return array(
-            'data' => array(
+        return [
+            'data' => [
                 'sort' => 'desc',
-                'items' => array(),
-            ),
-        );
+                'items' => [],
+            ],
+        ];
     }
 
     protected function mockCourse()
@@ -319,18 +319,18 @@ class H5SettingServiceTest extends BaseTestCase
 
     protected function mockClassroom()
     {
-        $textClassroom = array(
+        $textClassroom = [
             'title' => 'test001',
-        );
+        ];
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
     }
 
     protected function createNewCourseSet()
     {
-        $courseSetFields = array(
+        $courseSetFields = [
             'title' => '新课程开始！',
             'type' => 'normal',
-        );
+        ];
         $courseSet = $this->getCourseSetService()->createCourseSet($courseSetFields);
 
         $this->assertNotEmpty($courseSet);
@@ -340,28 +340,28 @@ class H5SettingServiceTest extends BaseTestCase
 
     protected function defaultCourse($title, $courseSet, $isDefault = 1)
     {
-        return array(
+        return [
             'title' => $title,
             'courseSetId' => $courseSet['id'],
             'expiryMode' => 'forever',
             'learnMode' => 'freeMode',
             'isDefault' => $isDefault,
             'courseType' => $isDefault ? 'default' : 'normal',
-        );
+        ];
     }
 
     protected function createNewCourse($courseSetId)
     {
-        $courses = $this->getCourseService()->findCoursesByCourseSetIds(array($courseSetId));
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds([$courseSetId]);
 
         if (empty($courses)) {
-            $courseFields = array(
+            $courseFields = [
                 'title' => '第一个教学计划',
                 'courseSetId' => 1,
                 'learnMode' => 'lockMode',
                 'expiryDays' => 0,
                 'expiryMode' => 'forever',
-            );
+            ];
 
             $course = $this->getCourseService()->createCourse($courseFields);
         } else {
@@ -375,90 +375,90 @@ class H5SettingServiceTest extends BaseTestCase
 
     protected function mockCouponService()
     {
-        $this->mockBiz('CloudPlatform:AppService', array(
-            array('functionName' => 'getAppByCode', 'returnValue' => array('type' => 'plugin')),
-        ));
-        $this->mockBiz('Coupon:CouponBatchService', array(
-            array('functionName' => 'fillUserCurrentCouponByBatches', 'returnValue' => array(
-                1 => array('id' => 1, 'type' => 'discount', 'rate' => 9.00),
-                2 => array('id' => 2, 'type' => 'discount', 'rate' => 9.00),
-            )),
-            array('functionName' => 'findBatchsByIds', 'returnValue' => array(
-                1 => array('deadline' => time(), 'type' => 'discount', 'rate' => 9.00, 'money' => 0, 'usedNum' => 1, 'unreceivedNum' => 1, 'targetType' => 'vip', 'targetId' => 1),
-                2 => array('deadline' => time() - 100000, 'type' => 'discount', 'rate' => 9.00, 'money' => 0, 'usedNum' => 1, 'unreceivedNum' => 1, 'targetType' => 'vip', 'targetId' => 1),
-            )),
-        ));
-        $this->mockBiz('VipPlugin:Vip:LevelService', array(
-            array('functionName' => 'getLevel', 'returnValue' => array('id' => 1)),
-        ));
+        $this->mockBiz('CloudPlatform:AppService', [
+            ['functionName' => 'getAppByCode', 'returnValue' => ['type' => 'plugin']],
+        ]);
+        $this->mockBiz('Coupon:CouponBatchService', [
+            ['functionName' => 'fillUserCurrentCouponByBatches', 'returnValue' => [
+                1 => ['id' => 1, 'type' => 'discount', 'rate' => 9.00],
+                2 => ['id' => 2, 'type' => 'discount', 'rate' => 9.00],
+            ]],
+            ['functionName' => 'findBatchsByIds', 'returnValue' => [
+                1 => ['deadline' => time(), 'type' => 'discount', 'rate' => 9.00, 'money' => 0, 'usedNum' => 1, 'unreceivedNum' => 1, 'targetType' => 'vip', 'targetId' => 1],
+                2 => ['deadline' => time() - 100000, 'type' => 'discount', 'rate' => 9.00, 'money' => 0, 'usedNum' => 1, 'unreceivedNum' => 1, 'targetType' => 'vip', 'targetId' => 1],
+            ]],
+        ]);
+        $this->mockBiz('VipPlugin:Vip:LevelService', [
+            ['functionName' => 'getLevel', 'returnValue' => ['id' => 1]],
+        ]);
     }
 
     protected function mockVipService()
     {
-        $this->mockBiz('CloudPlatform:AppService', array(
-            array('functionName' => 'getAppByCode', 'returnValue' => array('type' => 'plugin')),
-        ));
-        $this->mockBiz('VipPlugin:Vip:LevelService', array(
-            array('functionName' => 'findEnabledLevels', 'returnValue' => array(0 => array('id' => 1))),
-            array('functionName' => 'getFreeCourseNumByLevelId', 'returnValue' => 1),
-            array('functionName' => 'getFreeClassroomNumByLevelId', 'returnValue' => 1),
-        ));
+        $this->mockBiz('CloudPlatform:AppService', [
+            ['functionName' => 'getAppByCode', 'returnValue' => ['type' => 'plugin']],
+        ]);
+        $this->mockBiz('VipPlugin:Vip:LevelService', [
+            ['functionName' => 'findEnabledLevels', 'returnValue' => [0 => ['id' => 1]]],
+            ['functionName' => 'getFreeCourseNumByLevelId', 'returnValue' => 1],
+            ['functionName' => 'getFreeClassroomNumByLevelId', 'returnValue' => 1],
+        ]);
     }
 
     protected function createNavigation()
     {
-        return array(
+        return [
             'type' => 'graphic_navigation',
             'moduleType' => 'navigation-1',
-            'data' => array(
-                array(
+            'data' => [
+                [
                     'title' => '公开课',
-                    'image' => array(
+                    'image' => [
                         'url' => '',
-                    ),
-                    'link' => array(
+                    ],
+                    'link' => [
                         'type' => 'openCourse',
                         'target' => '跳转公开课“全部”列表',
                         'url' => '',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
     }
 
     protected function mockOpenCourse()
     {
-        $this->mockBiz('OpenCourse:OpenCourseService', array(
-            array(
+        $this->mockBiz('OpenCourse:OpenCourseService', [
+            [
                 'functionName' => 'searchAndSortLiveCourses',
-                'returnValue' => array(
-                    array(
+                'returnValue' => [
+                    [
                         'id' => 3,
                         'title' => 'openCourse-3',
-                        'lesson' => array(
+                        'lesson' => [
                             'id' => 3,
                             'title' => 'openCourse-Lesson-3',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'id' => 2,
                         'title' => 'openCourse-2',
-                        'lesson' => array(
+                        'lesson' => [
                             'id' => 2,
                             'title' => 'openCourse-Lesson-2',
-                        ),
-                    ),
-                ),
-            ),
-            array(
+                        ],
+                    ],
+                ],
+            ],
+            [
                 'functionName' => 'getCourse',
-                'returnValue' => array(),
-            ),
-            array(
+                'returnValue' => [],
+            ],
+            [
                 'functionName' => 'getCourseLesson',
-                'returnValue' => array(),
-            ),
-        ));
+                'returnValue' => [],
+            ],
+        ]);
     }
 
     private function getH5SettingService()
