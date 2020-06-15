@@ -2,7 +2,7 @@
 
 namespace Biz\ItemBankExercise\Service;
 
-interface ItemBankExerciseService
+interface ExerciseService
 {
     public function count($conditions);
 

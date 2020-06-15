@@ -3,10 +3,10 @@
 namespace Biz\ItemBankExercise\Service\Impl;
 
 use Biz\BaseService;
-use Biz\ItemBankExercise\Dao\ItemBankExerciseDao;
-use Biz\ItemBankExercise\Service\ItemBankExerciseService;
+use Biz\ItemBankExercise\Dao\ExerciseDao;
+use Biz\ItemBankExercise\Service\ExerciseService;
 
-class ItemBankExerciseServiceImpl extends BaseService implements ItemBankExerciseService
+class ExerciseServiceImpl extends BaseService implements ExerciseService
 {
     public function count($conditions)
     {
@@ -34,10 +34,10 @@ class ItemBankExerciseServiceImpl extends BaseService implements ItemBankExercis
     }
 
     /**
-     * @return ItemBankExerciseDao
+     * @return ExerciseDao
      */
     protected function getItemBankExerciseDao()
     {
-        return $this->createDao('ItemBankExercise:ItemBankExerciseDao');
+        return $this->createDao('ItemBankExercise:ExerciseDao');
     }
 }

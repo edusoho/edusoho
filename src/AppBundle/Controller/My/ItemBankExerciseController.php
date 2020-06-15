@@ -5,7 +5,7 @@ namespace AppBundle\Controller\My;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
-use Biz\ItemBankExercise\Service\ItemBankExerciseService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -39,9 +39,9 @@ class ItemBankExerciseController extends BaseController
         $questionBanks = ArrayToolkit::column($itemBankExercises, 'questionBankId');
         $questionBanks = $this->getQuestionBankService()->findQuestionBanksByIds($questionBanks);
         $questionBanks = ArrayToolkit::index($questionBanks, 'id');
-        foreach ($itemBankExercises as &$v) {
-            $v['assessmentNum'] = $questionBanks[$v['questionBankId']]['itemBank']['assessment_num'];
-            $v['itemNum'] = $questionBanks[$v['questionBankId']]['itemBank']['item_num'];
+        foreach ($itemBankExercises as &$itemBankExercise) {
+            $itemBankExercise['assessmentNum'] = $questionBanks[$itemBankExercise['questionBankId']]['itemBank']['assessment_num'];
+            $itemBankExercise['itemNum'] = $questionBanks[$itemBankExercise['questionBankId']]['itemBank']['item_num'];
         }
 
         return $this->render('my/teaching/item-bank-exercise.html.twig', [
@@ -52,11 +52,11 @@ class ItemBankExerciseController extends BaseController
     }
 
     /**
-     * @return ItemBankExerciseService
+     * @return ExerciseService
      */
     protected function getItemBankExerciseService()
     {
-        return $this->getBiz()->service('ItemBankExercise:ItemBankExerciseService');
+        return $this->getBiz()->service('ItemBankExercise:ExerciseService');
     }
 
     /**

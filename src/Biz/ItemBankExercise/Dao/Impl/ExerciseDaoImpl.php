@@ -2,10 +2,10 @@
 
 namespace Biz\ItemBankExercise\Dao\Impl;
 
-use Biz\ItemBankExercise\Dao\ItemBankExerciseDao;
+use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class ItemBankExerciseDaoImpl extends AdvancedDaoImpl implements ItemBankExerciseDao
+class ExerciseDaoImpl extends AdvancedDaoImpl implements ExerciseDao
 {
     protected $table = 'item_bank_exercise';
 
