@@ -158,6 +158,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         }
 
         $course = $this->getCourseService()->getCourse($courseProduct['localResourceId']);
+
         return $this->updateCourseVersionData($course['id']);
     }
 
@@ -165,18 +166,19 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
     {
         $product = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getSupplierProductDetail($remoteProductId);
 
-        $settings = $this->getSettingService()->get('storage', array());
+        $settings = $this->getSettingService()->get('storage', []);
         $supplierSettings = $this->getS2B2CFacadeService()->getS2B2CConfig();
 
         if (empty($product)) {
-            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[purchaseNewCourse] 没有可采购的产品，productId' . $remoteProductId, $product);
+            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[purchaseNewCourse] 没有可采购的产品，productId'.$remoteProductId, $product);
+
             return false;
         }
 
         $purchaseProduct = $product['course'];
 
-        $purchaseProducts = array(
-            array(
+        $purchaseProducts = [
+            [
                 'product_id' => $purchaseProduct['id'],
                 'product_type' => 'course',
                 'access_key' => $settings['cloud_access_key'],
@@ -185,31 +187,33 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
                 'suggestion_price' => $purchaseProduct['suggestionPrice'],
                 's2b2cDistributeId' => $remoteProductId,
                 'selling_price' => $purchaseProduct['suggestionPrice'],
-            )
-        );
+            ],
+        ];
 
-        $purchaseRecord = array(
+        $purchaseRecord = [
             'parent_id' => $product['id'],
             'parent_title' => $product['title'],
             'type' => 'course',
-            'product_ids' => array($product['course']['id']),
-        );
+            'product_ids' => [$product['course']['id']],
+        ];
 
         $result = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->checkPurchaseProducts($purchaseProducts);
 
         if (empty($result['success']) || true != $result['success']) {
             $this->biz->offsetGet('s2b2c.merchant.logger')->error('[purchaseNewCourse:checkPurchaseProducts()] ', $result);
+
             return false;
         }
 
         $purchaseResult = $this->getS2B2CFacadeService()->getS2B2CService()->purchaseProducts($purchaseProducts, $purchaseRecord);
 
-        if (empty($purchaseResult['status']) || $purchaseResult['status'] != 'success') {
+        if (empty($purchaseResult['status']) || 'success' != $purchaseResult['status']) {
             $this->biz->offsetGet('s2b2c.merchant.logger')->error('[purchaseNewCourse:purchaseProducts()] ', $result);
+
             return false;
         }
 
-        return $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($supplierSettings['supplierId'],$product['id'], 'course_set');
+        return $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($supplierSettings['supplierId'], $product['id'], 'course_set');
     }
 
     public function updateCourseVersionData($courseId)
@@ -384,19 +388,21 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             }
             $lesson = $this->getCourseChapterDao()->getByCourseIdAndSyncId($product['localResourceId'], $lessonId);
 
-            if (empty($lesson) || $lesson['type'] != 'lesson') {
-                $this->getLogger()->error('不存在的课时 lessonSyncId:'.$lessonId.' lesson' . json_encode($lesson), $product);
+            if (empty($lesson) || 'lesson' != $lesson['type']) {
+                $this->getLogger()->error('不存在的课时 lessonSyncId:'.$lessonId.' lesson'.json_encode($lesson), $product);
+
                 return false;
             }
 
-            if ($lesson['status'] == 'unpublished') {
-                $this->getLogger()->error('课时已经下架，无需操作 lessonSyncId:' . $lessonId);
+            if ('unpublished' == $lesson['status']) {
+                $this->getLogger()->error('课时已经下架，无需操作 lessonSyncId:'.$lessonId);
+
                 return true;
             }
 
             $result = $this->getCourseLessonService()->unpublishLesson($lesson['courseId'], $lesson['id']);
 
-            $this->getLogger()->info('unPublishTask: '. json_encode($result));
+            $this->getLogger()->info('unPublishTask: '.json_encode($result));
             $this->commit();
 
             return true;
@@ -625,6 +631,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
     {
         return $this->createDao('S2B2C:CourseChapterDao');
     }
+
     /**
      * @return ProductService
      */

@@ -12,7 +12,6 @@ use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\CacheService;
 use Biz\System\Service\SettingService;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -123,19 +122,19 @@ class ResourcePurchaseController extends BaseController
 
         $merchant = $this->getS2B2CFacadeService()->getMe();
 
-        $productVersionList = $this->covertProductVersions($productVersionList,$courseSets, $courses, $products, $courseSetProducts, $conditions);
+        $productVersionList = $this->covertProductVersions($productVersionList, $courseSets, $courses, $products, $courseSetProducts, $conditions);
 
         return $this->render(
             'admin-v2/cloud-center/content-resource/product-version/list.html.twig',
             [
                 'request' => $request,
                 'productVersionList' => $productVersionList,
-                'merchant' => $merchant
+                'merchant' => $merchant,
             ]
         );
     }
 
-    protected function covertProductVersions($productVersionList,$courseSets , $courses, $products, $courseSetProducts, $conditions)
+    protected function covertProductVersions($productVersionList, $courseSets, $courses, $products, $courseSetProducts, $conditions)
     {
         $courses = ArrayToolkit::index($courses, 'id');
         $startDate = empty($conditions['startDateTime']) ? 0 : strtotime($conditions['startDateTime']);
@@ -146,7 +145,7 @@ class ResourcePurchaseController extends BaseController
 
         foreach ($productVersionList as $key => &$productVersion) {
             //时间筛选
-            if ( ($startDate > 0 && $productVersion['updatedTime'] < $startDate) || ($endDate > 0 && $productVersion['updatedTime'] > $endDate)) {
+            if (($startDate > 0 && $productVersion['updatedTime'] < $startDate) || ($endDate > 0 && $productVersion['updatedTime'] > $endDate)) {
                 unset($productVersionList[$key]);
                 continue;
             }
@@ -157,18 +156,18 @@ class ResourcePurchaseController extends BaseController
                 continue;
             }
 
-            if (empty($productVersion['s2b2cDistributeId']) ) {
+            if (empty($productVersion['s2b2cDistributeId'])) {
                 unset($productVersionList[$key]);
                 continue;
             }
 
-            $course =  isset($products[$remoteResourceId]['localResourceId']) ? $courses[$products[$remoteResourceId]['localResourceId']] : null;
+            $course = isset($products[$remoteResourceId]['localResourceId']) ? $courses[$products[$remoteResourceId]['localResourceId']] : null;
             $courseSet = $courseSets[$courseSetProducts[$productVersion['courseSetId']]['localResourceId']];
 
             $productVersion['course'] = $course;
-            $productVersion['localProductId'] = empty($course) ? 0:$products[$remoteResourceId]['id'];
-            $productVersion['courseSetTitle'] = empty( $course ) ? $courseSet['title'] : $course['courseSetTitle'];
-            $productVersion['title'] = empty($course ) ? $productVersion['title'] : $course['title'];
+            $productVersion['localProductId'] = empty($course) ? 0 : $products[$remoteResourceId]['id'];
+            $productVersion['courseSetTitle'] = empty($course) ? $courseSet['title'] : $course['courseSetTitle'];
+            $productVersion['title'] = empty($course) ? $productVersion['title'] : $course['title'];
         }
 
         return $productVersionList;
@@ -212,12 +211,13 @@ class ResourcePurchaseController extends BaseController
 
             return $this->createJsonResponse($result);
         }
+
         return $this->render(
             'admin-v2/cloud-center/content-resource/product-version/update-modal.html.twig',
             [
                 'path' => 'admin_v2_content_resource_update_product_version',
                 'request' => $request,
-                'remoteProductId' => $remoteProductId
+                'remoteProductId' => $remoteProductId,
             ]
         );
     }

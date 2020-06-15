@@ -3,15 +3,11 @@
 namespace Biz\S2B2C\Job;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\Course\Dao\CourseDao;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
 use Biz\S2B2C\Service\CourseProductService;
 use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\S2B2C\SupplierPlatformApi;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
-
 
 class UpdateProductVersionJob extends AbstractJob
 {
