@@ -20,14 +20,14 @@
       </ul>
       <div class="info-left__content">
         <!-- <div v-if="isFixed" class="fixed-box"></div> -->
-        <div id="info-left-1" class="info-left__content-item">
-          <h3 class="info-left__content__title">商品介绍</h3>
+        <div id="info-left-1" class="content-item js-content-item">
+          <h3 class="content-item__title">商品介绍</h3>
         </div>
-        <div id="info-left-2" class="info-left__content-item">
-          <h3  class="info-left__content__title">学习目录</h3>
+        <div id="info-left-2" class="content-item js-content-item">
+          <h3  class="content-item__title">学习目录</h3>
         </div>
-        <div id="info-left-3" class="info-left__content-item">
-          <h3  class="info-left__content__title">学员评价</h3>
+        <div id="info-left-3" class="content-item js-content-item">
+          <h3  class="content-item__title">学员评价</h3>
         </div>
       </div>
     </div>
@@ -69,9 +69,9 @@
         if (this.flag) this.calcScrollTop(scrollTop);
       },
       calcScrollTop(value) {
-        let eleArr = $('.info-left__content-item');
+        let eleArr = $('.js-content-item');
         for (let i = eleArr.length - 1; i >= 0; i--) {
-          const elementTop = eleArr[i].offsetTop - 90;
+          const elementTop = eleArr[i].offsetTop - 80;
           if (value > elementTop) {
             if (this.howActive != i + 1) this.howActive = i + 1;
             return;
@@ -84,7 +84,7 @@
         this.flag = false;
         this.howActive = value;
         let ele = '#info-left-' + value;
-        document.documentElement.scrollTop = $(ele).offset().top - 90;
+        document.documentElement.scrollTop = $(ele).offset().top - 80;
         this.timer = setTimeout(() => {
          this.flag = true;
         }, 500);
