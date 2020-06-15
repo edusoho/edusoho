@@ -153,8 +153,8 @@ class TestpaperController extends BaseController
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
             $fields['itemBankId'] = $questionBank['itemBankId'];
-
-            $assessment = $this->getTestpaperService()->buildTestpaper($fields, 'random_testpaper');
+            
+            $assessment = $this->getBiz()["testpaper_builder.random_testpaper"]->build($fields);
 
             return $this->redirect(
                 $this->generateUrl(
@@ -528,7 +528,7 @@ class TestpaperController extends BaseController
         $data = $request->request->all();
         $data['itemBankId'] = $questionBank['itemBankId'];
 
-        $result = $this->getTestpaperService()->canBuildTestpaper($type, $data);
+        $result = $result = $this->getBiz()["testpaper_builder.random_testpaper"]->canBuild($data);
 
         return $this->createJsonResponse($result);
     }
@@ -608,14 +608,6 @@ class TestpaperController extends BaseController
     protected function getAssessmentService()
     {
         return $this->createService('ItemBank:Assessment:AssessmentService');
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
     }
 
     /**
