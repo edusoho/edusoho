@@ -66,15 +66,21 @@
         let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
         if ( eleTop <= scrollTop && !this.isFixed ) this.isFixed = true;
         if ( eleTop > scrollTop && this.isFixed ) this.isFixed = false;
-        if (this.flag) this.calcScrollTop(scrollTop);
+        clearTimeout(this.timer);
+        this.timer = null
+        this.timer = setTimeout(() => {
+          this.calcScrollTop(scrollTop);
+        }, 200);
       },
       calcScrollTop(value) {
         let eleArr = $('.js-content-item');
         for (let i = eleArr.length - 1; i >= 0; i--) {
           const elementTop = eleArr[i].offsetTop - 80;
-          if (value > elementTop) {
+          if (value >= elementTop) {
             if (this.howActive != i + 1) this.howActive = i + 1;
             return;
+          } else {
+            this.howActive = 1;
           }
         }
       },
