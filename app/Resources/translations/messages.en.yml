@@ -1179,10 +1179,15 @@ course.status.finished: Finished
 course.status.published: Published
 course.filter.all_plan: All teaching plans
 course.student_member: Course students
+course.item_student_member: Item bank students
+course.assessment_number: Test paper number
+course.item_number: Question number
 course.student.cell: people
 course.plan.cell: pcs
 course.manage_btn: Course manage
+item_bank_exercise.manage_btn: Item bank exercise manage
 course.preview.course: Preview course
+item_bank_exercise.preview.course: Preview item bank exercise
 course.preview.plan: Preview Plan
 course.check.plan: View Plan
 course.share: Share
@@ -3358,6 +3363,7 @@ customer_service.mobile_group: 'Telephone customer service'
 customer_service.weixin-content: 'Wechat QR code'
 customer_service.time: 'Service time'
 customer_service.send_message: 'Click here to send me message'
+my.teaching.view.forbidden: 'You are not a teacher, can not view this page!'
 my.teaching.menu_heading: 'My teaching'
 my.teaching.course_set_menu: Courses
 my.teaching.live_schedule_menu: Teaching Schedules
@@ -3371,6 +3377,7 @@ my.teaching.question_bank_menu: 'Question Bank'
 my.teaching.testpaper_check_menu: 'Tests review'
 my.teaching.homework_check_menu: 'Assignments review'
 my.teaching.material_lib_menu: 'Library'
+my.teaching.item_bank_exercise.item: 'Item Bank Exercise'
 my.teaching.course_set.normal: 'Normal'
 my.teaching.course_set.live: 'Live'
 my.teaching.course_set.reservation: 'Reservation'
@@ -3742,6 +3749,7 @@ my.learning.course.learning_empty: 'No record'
 my.learning.course.lesson_num: 'Lesson %num%'
 my.learning.course.total_learn_time: 'Learned Duration In Total'
 my.learning.course.watch: View
+my.learning.item_bank_exercise.watch: View
 my.learning.course.click_loading_more: 'Click to load more'
 my.learning.course.loading: 'loading...'
 my.learning.live: 'My Live'

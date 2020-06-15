@@ -1340,10 +1340,15 @@ course.status.finished: 已完结
 course.status.published: 已发布
 course.filter.all_plan: 全部计划
 course.student_member: 课程学员
+course.item_student_member: 题库学员
+course.assessment_number: 试卷数量
+course.item_number: 题目数量
 course.student.cell: 人
 course.plan.cell: 个
 course.manage_btn: 管理课程
+item_bank_exercise.manage_btn: 管理题库练习
 course.preview.course: 预览课程
+item_bank_exercise.preview.course: 预览题库练习
 course.preview.plan: 预览计划
 course.check.plan: 查看计划
 course.share: 分享
@@ -4000,6 +4005,7 @@ customer_service.send_message: 点击这里给我发消息
 customer_service.customer_email: 反馈邮件
 
 # 我的教学
+my.teaching.view.forbidden: 您不是教师，不能查看此页面!
 my.teaching.menu_heading: 我的教学
 my.teaching.course_set_menu: 在教课程
 my.teaching.live_schedule_menu: 教学课表
@@ -4015,6 +4021,7 @@ my.teaching.testpaper_check_menu: 试卷批阅
 my.teaching.homework_check_menu: 作业批阅
 my.teaching.material_lib_menu: 教学资料库
 my.teaching.course_set.normal: 普通课程
+my.teaching.item_bank_exercise.item: 题库练习
 my.teaching.course_set.live: 直播课程
 my.teaching.course_set.reservation: 预约课程
 my.teaching.course_set.classroom: %classroom%课程
@@ -4474,6 +4481,7 @@ my.learning.course.learning_empty: 暂无学习中的课程
 my.learning.course.lesson_num: 第%num%课时
 my.learning.course.total_learn_time: 学习总时长
 my.learning.course.watch: 查看课程
+my.learning.item_bank_exercise.watch: 查看题库练习
 my.learning.course.click_loading_more: 点击加载更多
 my.learning.course.loading: 加载中...
 

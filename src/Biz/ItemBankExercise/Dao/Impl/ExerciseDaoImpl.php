@@ -14,8 +14,13 @@ class ExerciseDaoImpl extends GeneralDaoImpl implements ExerciseDao
         return [
             'timestamps' => ['createdTime', 'updatedTime'],
             'orderbys' => ['createdTime'],
+            'serializes' => [
+                'teacherIds' => 'delimiter',
+                'cover' => 'json',
+            ],
             'conditions' => [
                 'id = :id',
+                'questionBankId = :questionBankId',
             ],
         ];
     }
