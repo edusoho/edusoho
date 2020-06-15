@@ -568,7 +568,11 @@ my_teaching_course_sets:
 
 my_teaching_open_courses:
     path: /my/teaching/open/courses/{filter}
-    defaults: { _controller: AppBundle:My/OpenCourse:teaching, filter:'open'}
+    defaults: { _controller: AppBundle:My/OpenCourse:teaching, filter: 'open'}
+
+my_teaching_item_bank_exercise:
+  path: /my/teaching/item_bank_exercise/{filter}
+  defaults: { _controller: AppBundle:My/ItemBankExercise:teaching, filter: 'item' }
 
 my_teaching_threads:
     path: /my/teaching/threads/{type}

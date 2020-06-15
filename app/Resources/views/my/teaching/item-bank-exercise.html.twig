@@ -1,0 +1,32 @@
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+{% extends 'my/my-teaching.html.twig' %}
+
+{% block title %}{{'my.teaching.page_title'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-teaching-courses' %}
+
+{% set type = "question" %}
+
+{% block main %}
+  {% include 'my/teaching/course-type-select.html.twig' %}
+
+  {% for course in courses %}
+    <div class="open-course-item">
+      {% include 'my/teaching/item-bank-exercise-list.html.twig' %}
+    </div>
+  {% else %}
+    <div class="empty">
+      <a class="cd-link-primary" href="#" target="_blank">
+        {% if filter|default('normal') == 'live' %}
+          {{ 'my.teaching.course_set.live_empty_hint'|trans }}
+        {% else %}
+          {{ 'my.teaching.course_set.empty_hint'|trans }}
+        {% endif %}
+      </a>
+    </div>
+  {% endfor %}
+
+    <nav class="text-center">
+      {{ web_macro.paginator(paginator) }}
+    </nav>
+{% endblock %}
