@@ -120,6 +120,7 @@ admin_v2:
                                         admin_v2_course_set_remove:
                                             name: admin_v2.course.basic.basic_tab.remove_submit_btn
                                             class: remove-course
+                                            router_name: admin_v2_course_set_delete
                                             router_params:
                                                 id: (courseSet.id)
                                                 type: ''

@@ -135,13 +135,6 @@ class CourseSetController extends BaseController
         return $this->createJsonResponse(['code' => 0, 'message' => '删除课程成功']);
     }
 
-    public function removeAction(Request $request, $id)
-    {
-        return $this->forward('AppBundle:AdminV2\Teach\CourseSet:delete', [
-            'id' => $id,
-        ]);
-    }
-
     //todo 和CourseController 有一样的
     public function checkPasswordAction(Request $request)
     {
