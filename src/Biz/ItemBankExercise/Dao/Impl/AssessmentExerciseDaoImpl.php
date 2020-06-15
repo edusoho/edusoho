@@ -2,25 +2,20 @@
 
 namespace Biz\ItemBankExercise\Dao\Impl;
 
-use Biz\ItemBankExercise\Dao\ExerciseDao;
+use Biz\ItemBankExercise\Dao\AssessmentExerciseDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class ExerciseDaoImpl extends GeneralDaoImpl implements ExerciseDao
+class AssessmentExerciseDaoImpl extends GeneralDaoImpl implements AssessmentExerciseDao
 {
-    protected $table = 'item_bank_exercise';
+    protected $table = 'item_bank_assessment_exercise';
 
     public function declares()
     {
         return [
             'timestamps' => ['createdTime', 'updatedTime'],
             'orderbys' => ['createdTime'],
-            'serializes' => [
-                'teacherIds' => 'delimiter',
-                'cover' => 'json',
-            ],
             'conditions' => [
                 'id = :id',
-                'questionBankId = :questionBankId',
             ],
         ];
     }
