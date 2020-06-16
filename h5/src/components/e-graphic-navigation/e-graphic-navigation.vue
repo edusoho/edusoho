@@ -4,7 +4,8 @@
       <div 
       :class="['graphicNavigation__item']" 
       v-for="(item, index) in sliceList(graphicNavigation, count)"
-      :key="index">
+      :key="index"
+      @click="goNavigation(item.link)">
         <img v-if="!item.image.uri" class="graphicNavigation__img" :src="getDefaultImg(item.link.type)" />
         <img v-else class="graphicNavigation__img" :src="item.image.uri" />
         <span class="graphicNavigation__text">{{item.title}}</span>
@@ -20,6 +21,10 @@ export default {
     graphicNavigation:{
       type:Array,
       default:()=>[]
+    },
+    feedback:{
+      type:Boolean,
+      default:false
     }
   },
   data() {
@@ -52,6 +57,25 @@ export default {
     sliceList(data, count) {
       console.log(data);
       return data.slice(count * this.itemLength, (count + 1) * this.itemLength);
+    },
+    goNavigation(link){
+       if (!this.feedback) {
+        return;
+      }
+      if(link.type==="course"){
+        this.$router.push({
+          name: "more_course",
+          query: {...link.conditions}
+        });
+        return
+      }
+      if(link.type==="classroom"){
+        this.$router.push({
+          name: "more_class",
+          query: {...link.conditions}
+        });
+        return
+      }
     }
   }
 }

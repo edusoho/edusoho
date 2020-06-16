@@ -11,20 +11,18 @@
         :course-list="part.data"
         :feedback="feedback"
         :type-list="part.type"
-        class="gray-border-bottom"/>
+        :uiStyle="uiStyle"/>
         <e-openCourse-list
         v-if="['open_course_list'].includes(part.type)"
         :course-list="part.data"
         :feedback="feedback"
-        :type-list="part.type"
-        class="gray-border-bottom"/>
+        :type-list="part.type"/>
       <e-poster
         v-if="part.type == 'poster'"
         :class="imageMode[part.data.responsive]"
         :poster="part.data"
         :feedback="feedback"/>
       <e-graphic-navigation
-        class="gray-border-bottom"
         v-if="part.type == 'graphic_navigation'"
           :graphicNavigation="part.data"
       />
@@ -33,9 +31,8 @@
         :tag="part.data.tag"
         :type="part.type"
         :show-title="part.data.titleShow"
-        :activity="part.data.activity"
-        class="gray-border-bottom"/>
-      <div v-if="part.type == 'coupon'" class="coupon-preview__container gray-border-bottom">
+        :activity="part.data.activity"/>
+      <div v-if="part.type == 'coupon'" class="coupon-preview__container ">
         <e-coupon-list
           :coupons="part.data.items"
           :feedback="true"
@@ -46,8 +43,7 @@
         :items="part.data.items"
         :feedback="true"
         :sort="part.data.sort"
-        :show-title="part.data.titleShow"
-        class="gray-border-bottom"/>
+        :show-title="part.data.titleShow"/>
     </div>
     <!-- 垫底的 -->
     <div class="mt50"/>
@@ -96,7 +92,17 @@ export default {
   computed: {
     showTitle() {
       return this.from !== 'appSetting'
-    }
+    },
+    uiStyle:{
+     get() {
+        if (this.$route.name === 'miniprogramSetting'
+        || this.$route.query.from === 'miniprogramSetting') {
+          return 'old'
+        }else{
+          return "new"
+        }
+      },
+    },
   },
   created() {
     this.getDraft({

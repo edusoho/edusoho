@@ -309,6 +309,13 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "auth_social" */'@/containers/coupon/covert/index.vue')
   }, {
+    path: '/search',
+    name: 'search',
+    meta: {
+      title: '搜索'
+    },
+    component: () => import(/* webpackChunkName: "search" */'@/containers/search/index.vue')
+  }, {
     path: '/moneycard',
     name: 'study_card',
     meta: {

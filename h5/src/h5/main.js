@@ -40,7 +40,8 @@ import {
   Switch,
   Loading,
   PullRefresh,
-  Overlay
+  Overlay,
+  Search
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -64,6 +65,7 @@ Vue.component('van-radio-group', RadioGroup);
 Vue.component('van-panel', Panel);
 Vue.component('van-pull-refresh', PullRefresh);
 Vue.component('van-overlay', Overlay);
+Vue.component('van-search', Search);
 
 Vue.use(ActionSheet);
 Vue.use(filters);

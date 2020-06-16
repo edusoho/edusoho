@@ -33,16 +33,17 @@
 
     <el-dialog
       :visible.sync="chooseVisible"
+      :append-to-body="true"
       title="选择图片"
       width="60%">
-      <div class="choose-container">
+      <div class="setting-graphicNavigation-choose-container">
         <div class="choose-container-group"  v-for="(group, groupIndex) in imgChooseList" :key="groupIndex">
           <div class="choose-container-group-item" v-for="(item, index) in group" :key="index">
             <img :src="item" class="graphic-navigation-img" @click="setCurrentImg(item)">
           </div>
         </div>
       </div>
-      <span slot="footer" class="dialog-footer">
+      <div slot="footer" class="setting-graphicNavigation-dialog-footer">
         <el-button @click="chooseVisible = false">取 消</el-button>
         <el-upload
         :http-request="uploadImg"
@@ -53,19 +54,16 @@
         accept=".jpg,.jpeg,.png,.gif,.bmp,.JPG,.JPEG,.PBG,.GIF,.BMP"
       >
         <el-button type="primary">上传图片</el-button>
-        <!-- <img v-if="!item.image.url"  :src="getDefaultImg(item.link.type)" class="graphic-navigation-img">
-        <img v-else :src="item.image.url" class="graphic-navigation-img"> -->
-        <!-- <div  class="graphic-navigation-img-mask"></div> -->
       </el-upload>
-      </span>
+      </div>
     </el-dialog>
-    
 
     <el-dialog
       :visible.sync="dialogVisible"
       title="提示:通过鼠标滚轮缩放图片"
-      width="80%">
-      <div class="cropper-container">
+      width="80%"
+      :append-to-body="true">
+      <div class="setting-graphicNavigation-cropper-container">
         <vueCropper
           v-show="option.img"
           ref="cropper"
@@ -107,10 +105,17 @@ export default {
       chooseVisible: false,
       chooseType: '',
       imgChooseList: ICON_LIST,
-      typeBaseList: [{
+      appTypeBaseList: [{
         value: 'openCourse',
         label: '公开课分类'
       }, {
+        value: 'classroom',
+        label: '班级分类'
+      }, {
+        value: 'course',
+        label: '课程分类'
+      }],
+      h5TypeBaseList: [{
         value: 'classroom',
         label: '班级分类'
       }, {
@@ -150,12 +155,16 @@ export default {
             || !this.vipSettings.h5Enabled);
     },
     typeOptions() {
-      console.log('vipDisabled', this.vipDisabled);
-      const vipItem = !this.vipDisabled ? [{
-        value: 'vip',
-        label: '会员专区'
-      }] : []
-      return [ ...vipItem, ...this.typeBaseList ];
+      if(this.pathName==="h5Setting"){
+        return this.h5TypeBaseList;
+      }
+      if(this.pathName==="appSetting"){
+        const vipItem = !this.vipDisabled ? [{
+          value: 'vip',
+          label: '会员专区'
+        }] : []
+        return [ ...vipItem, ...this.appTypeBaseList ];
+      }
     },
   },
   created() {
@@ -167,7 +176,7 @@ export default {
     ]),
     getCurrentType() {
       this.groupList.length = 0;
-      if (this.item.link.type === 'vip') {
+      if (!this.item.link.type || this.item.link.type === 'vip') {
         return;
       }
       this.getCategoryType({

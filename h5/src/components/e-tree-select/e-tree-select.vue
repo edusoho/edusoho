@@ -7,6 +7,7 @@
         :class="{ active: selectedIndex === index && isActive }"
         class="e-tree-select__item"
         @click="toggle(item, index)"
+        :key="index"
       >{{ selectedText(item.data, index) }}</div>
     </div>
 

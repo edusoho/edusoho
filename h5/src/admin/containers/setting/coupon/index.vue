@@ -4,6 +4,7 @@
       <e-coupon :coupons="copyModuleData.data.items" :feedback="false" :show-title="radio"/>
     </div>
     <div slot="setting" class="coupon-allocate">
+      <e-suggest v-if="moduleData.tips" :suggest="moduleData.tips" :key="moduleData.moduleType"></e-suggest>
       <header class="title">
         优惠券设置（仅显示未过期的优惠券）
         <div v-if="portal === 'miniprogram'" class="text-12 color-gray mts">使用优惠券配置功能，小程序版本需要升级到1.3.2及以上</div>
@@ -47,6 +48,7 @@ import courseModal from '../course/modal/course-modal'
 import coupon from '&/components/e-coupon-list/e-coupon-list'
 import draggable from 'vuedraggable'
 import pathName2Portal from 'admin/config/api-portal-config'
+import suggest from "&/components/e-suggest/e-suggest.vue"
 
 export default {
   components: {
@@ -54,7 +56,8 @@ export default {
     courseModal,
     draggable,
     settingCell,
-    'e-coupon': coupon
+    'e-coupon': coupon,
+    'e-suggest':suggest
   },
   props: {
     active: {

@@ -1,7 +1,7 @@
 <template>
   <!-- 详见showMode注释 -->
   <div v-if="(showMode==='h5' && courseList.items.length) || showMode==='admin'" class="e-course-list">
-    <div v-if="pathName!=='appSetting'" class="e-course-list__header" >
+    <div v-if="uiStyle==='old'" class="e-course-list__header" >
       <div class="clearfix">
         <span class="e-course-list__list-title text-overflow">{{ courseList.title }}</span>
         <span class="e-course-list__more">
@@ -10,7 +10,7 @@
       </div>
     </div>
     <!-- 现在style中写样式，后续三端统一后再把上面那段div干掉，把style的样式写入到class中 -->
-    <div v-if="pathName==='appSetting'" class="e-course-list__header" style="padding:16px">
+    <div v-if="uiStyle!=='old'" class="e-course-list__header" style="padding:16px">
       <div class="clearfix">
         <span class="e-course-list__list-title text-overflow" style="font-size:16px">{{ courseList.title }}</span>
         <span class="e-course-list__more">
@@ -22,7 +22,7 @@
       <div class="e-course-list__body">
         <e-class
           v-for="item in courseList.items"
-          v-if="pathName!=='appSetting'"
+          v-if="uiStyle==='old'"
           :key="item.id"
           :course="item | courseListData(listObj)"
           :discountType="typeList === 'course_list' ? item.courseSet.discountType : ''"
@@ -37,9 +37,9 @@
         <!-- 一行一列  目前只正对app -->
         <e-row-class
           v-for="item in courseList.items"
-          v-if="pathName==='appSetting' && courseList.displayStyle==='row'"
+          v-if="uiStyle!=='old' && displayStyle==='row'"
           :key="item.id"
-          :course="item | courseListData(listObj,pathName)"
+          :course="item | courseListData(listObj,uiStyle,platform)"
           :discountType="typeList === 'course_list' ? item.courseSet.discountType : ''"
           :discount="typeList === 'course_list' ? item.courseSet.discount : ''"
           :course-type="typeList === 'course_list' ? item.courseSet.type : ''"
@@ -51,11 +51,11 @@
           :feedback="feedback"
         />
         <!-- 一行两列  目前只正对app -->
-        <div v-if="pathName==='appSetting' && courseList.displayStyle==='distichous'" class="clearfix">
+        <div v-if="uiStyle!=='old' && displayStyle==='distichous'" class="clearfix">
           <e-column-class
             v-for="item in courseList.items"
             :key="item.id"
-            :course="item | courseListData(listObj,pathName)"
+            :course="item | courseListData(listObj,uiStyle,platform)"
             :discountType="typeList === 'course_list' ? item.courseSet.discountType : ''"
             :discount="typeList === 'course_list' ? item.courseSet.discount : ''"
             :course-type="typeList === 'course_list' ? item.courseSet.type : ''"
@@ -129,6 +129,10 @@ export default {
     showMode: {// 展示模式  h5、admin 在admin模式下就算列表length为0，也要展示出列表标题。在h5模式下，length为0不展示任何列表标题
       type: String,
       default: 'h5'
+    },
+    uiStyle:{ //老样式和新样式
+      type: String,
+      default: 'old'
     }
   },
   data() {
@@ -171,12 +175,17 @@ export default {
     },
     pathName: {
       get() {
-        if (this.$route.name === 'appSetting' || this.$route.query.from === 'appSetting') {
-          return 'appSetting'
-        }
         return this.$route.name
       },
       set() {}
+    },
+    platform:{
+      get() {
+        if (this.$route.name === 'appSetting' || this.$route.query.from === 'appSetting') {
+          return 'app'
+        }
+        return 'h5'
+      }
     },
     listObj() {
       return {
@@ -186,6 +195,15 @@ export default {
           ? Number(this.courseSettings.show_student_num_enabled) : true,
         classRoomShowStudent: this.classroomSettings
           ? this.classroomSettings.show_student_num_enabled : true
+      }
+    },
+    displayStyle:{ //row 表示一行一列   distichout表示一行两列
+      get() {
+        if (this.courseList.displayStyle &&
+        this.courseList.displayStyle==='distichous') {
+          return 'distichous'
+        }
+        return 'row'
       }
     }
   },
@@ -233,10 +251,18 @@ export default {
           }
         })
       } else {
-        this.$router.push({
-          name: this.typeList === 'course_list' ? 'more_course' : 'more_class'
-        })
+        this.jumpMore()
       }
+    },
+    jumpMore(){
+      let category={}
+      if(this.courseList.categoryIdArray){
+        category.categoryId=this.courseList.categoryIdArray[0]
+      }
+      this.$router.push({
+          name: this.typeList === 'course_list' ? 'more_course' : 'more_class',
+          query:{...category}
+      })
     },
     fetchCourse() {
       if (this.sourceType === 'custom') return

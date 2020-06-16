@@ -4,13 +4,6 @@
 .preview-container {
   padding: 0 50px;
   box-sizing: border-box;
-  // .preview-title__app{
-  //   position: absolute;
-  //   top: 76px;
-  //   width: 100%;
-  //   text-align: center;
-  //   color: #fff;
-  // }
   .preview-title__app {
     position: absolute;
     top: 76px;
@@ -32,7 +25,7 @@
   }
   .preview-title__h5{
     position: absolute;
-    top: 102px;
+    top: 122px;
     width: 100%;
     text-align: center;
     color: #fff;
@@ -63,7 +56,7 @@
       }
       &-app{
         > img {
-          width: 438px;
+          width: 447px;
         }
       }
     }
@@ -130,6 +123,7 @@
   }
 
   .e-course-list {
+    padding: 0 6px;
     &__header {
       padding: 10px 0px!important;
     }
@@ -141,17 +135,19 @@
     }
   }
 
-.e-course-list__body{
-  .e-column-class:nth-of-type(2n-1){
-    padding-left: 0px;
+
+
+  .e-course-list__body{
+    .e-column-class:nth-of-type(2n-1){
+      padding-left: 0px;
+    }
+    .e-row-class{
+      padding-left: 0px;
+    }
+    .e-openCourse-class:first-of-type{
+      padding-left: 0px;
+    }
   }
-  .e-row-class{
-    padding-left: 0px;
-  }
-  .e-openCourse-class:first-of-type{
-    padding-left: 0px;
-  }
-}
 
   .coupon-preview__container {
     padding-left: 0;
@@ -227,8 +223,8 @@
 
 .find-page__part {
   position: relative;
-  > .e-swipe {
-    padding: 12px 16px 0;
+  .e-poster,.e-graphic-navigation {
+    margin: 0 -10px ;
   }
   &:nth-last-child(2) {
     .gray-border-bottom {
@@ -243,21 +239,22 @@
 
 .preview-iframe {
   position: absolute;
-  left: 25px;
-  top: 132px;
-  height: 483px;
-  width: 325px;
+  left: 30px;
+  top: 155px;
+  height: 570px;
+  width: 390px;
   overflow: auto;
   &__miniprogram{
     left: 25px;
     top: 89px;
     height: 573px;
+    width: 325px;
   }
   &__app{
     left: 31px;
     top: 116px;
-    height: 647px;
-    width: 377px;
+    height: 666px;
+    width: 390px;
   }
   .e-vip-list {
     padding-left: 0;
