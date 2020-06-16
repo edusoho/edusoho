@@ -2,36 +2,44 @@
 
 namespace Biz\System\Service\Impl;
 
-use Biz\BaseService;
-use Biz\System\Service\H5SettingService;
-use AppBundle\Common\TimeMachine;
-use Doctrine\Common\Inflector\Inflector;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\TimeMachine;
+use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\System\Service\H5SettingService;
+use Doctrine\Common\Inflector\Inflector;
 
 class H5SettingServiceImpl extends BaseService implements H5SettingService
 {
     public function getDiscovery($portal, $mode = 'published', $usage = 'show')
     {
-        $discoverySettings = $this->getSettingService()->get("{$portal}_{$mode}_discovery", array());
+        $discoverySettings = $this->getSettingService()->get("{$portal}_{$mode}_discovery", []);
         if (empty($discoverySettings)) {
-            $discoverySettings = $this->getSettingService()->get("{$portal}_published_discovery", array());
+            $discoverySettings = $this->getSettingService()->get("{$portal}_published_discovery", []);
         }
         //草稿和发布的设置都为空时获取第一版的默认设置
         if (empty($discoverySettings)) {
             $discoverySettings = $this->getDefaultDiscovery($portal);
         }
 
-        return $this->filter($discoverySettings, $usage);
+        return $this->filter($discoverySettings, $portal, $usage);
     }
 
-    public function filter($discoverySettings, $usage = 'show')
+    public function getDiscoveryTemplate($template, $portal, $usage = 'show')
+    {
+        $class = $this->getTemplateFactory()->getTemplateClass($template);
+        $template = $class->getTemplate();
+
+        return $this->filter($template, $portal, $usage);
+    }
+
+    public function filter($discoverySettings, $portal, $usage = 'show')
     {
         foreach ($discoverySettings as $key => &$discoverySetting) {
             $method = $this->getMethod($discoverySetting['type']);
             $method .= 'Filter';
-            $discoverySetting = $this->$method($discoverySetting, $usage);
+            $discoverySetting = $this->$method($discoverySetting, $portal, $usage);
             if (false === $discoverySetting) {
                 unset($discoverySettings[$key]);
             }
@@ -42,15 +50,20 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
 
     public function getAppDiscoveryVersion()
     {
-        $appDiscoverySetting = $this->getSettingService()->get('app_discovery', array());
+        $appDiscoverySetting = $this->getSettingService()->get('app_discovery', []);
 
         return empty($appDiscoverySetting['version']) ? 0 : (int) $appDiscoverySetting['version'];
     }
 
-    public function courseListFilter($discoverySetting, $usage = 'show')
+    public function searchFilter($discoverySetting, $portal, $usage = 'show')
+    {
+        return $discoverySetting;
+    }
+
+    public function courseListFilter($discoverySetting, $portal, $usage = 'show')
     {
         if ('condition' == $discoverySetting['data']['sourceType']) {
-            $conditions = array('parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => array('reservation'));
+            $conditions = ['parentId' => 0, 'status' => 'published', 'courseSetStatus' => 'published', 'excludeTypes' => ['reservation']];
             if (!empty($discoverySetting['data']['lastDays'])) {
                 $timeRange = TimeMachine::getTimeRangeByDays($discoverySetting['data']['lastDays']);
                 $conditions['outerStartTime'] = $timeRange['startTime'];
@@ -88,13 +101,13 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function openCourseListFilter($discoverySetting, $usage = 'show')
+    public function openCourseListFilter($discoverySetting, $portal, $usage = 'show')
     {
         if ('condition' == $discoverySetting['data']['sourceType']) {
-            $conditions = array(
+            $conditions = [
                 'categoryId' => isset($discoverySetting['data']['categoryId']) ? $discoverySetting['data']['categoryId'] : 0,
                 'limitDays' => isset($discoverySetting['data']['limitDays']) ? $discoverySetting['data']['limitDays'] : 0,
-            );
+            ];
 
             $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
             $discoverySetting['data']['items'] = $this->getOpenCourseService()->searchAndSortLiveCourses(
@@ -131,10 +144,10 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function classroomListFilter($discoverySetting, $usage = 'show')
+    public function classroomListFilter($discoverySetting, $portal, $usage = 'show')
     {
         if ('condition' == $discoverySetting['data']['sourceType']) {
-            $conditions = array('status' => 'published', 'showable' => 1);
+            $conditions = ['status' => 'published', 'showable' => 1];
             if (!empty($discoverySetting['data']['lastDays'])) {
                 $timeRange = TimeMachine::getTimeRangeByDays($discoverySetting['data']['lastDays']);
                 $conditions['outerStartTime'] = $timeRange['startTime'];
@@ -168,7 +181,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function slideShowFilter($discoverySetting, $usage = 'show')
+    public function slideShowFilter($discoverySetting, $portal, $usage = 'show')
     {
         foreach ($discoverySetting['data'] as &$slideShow) {
             if (!empty($slideShow['link'])) {
@@ -186,7 +199,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function graphicNavigationFilter($discoverySetting, $usage = 'show')
+    public function graphicNavigationFilter($discoverySetting, $portal, $usage = 'show')
     {
         $schema = (!empty($_SERVER['HTTPS']) && 'off' !== strtolower($_SERVER['HTTPS'])) ? 'https' : 'http';
 
@@ -195,15 +208,19 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
                 $navigation['image']['uri'] = !empty($navigation['image']['uri']) ? $navigation['image']['uri'] : $navigation['image']['url'];
             }
             if (!empty($navigation['link'])) {
-                $navigation['link']['url'] = $schema.'://'.$_SERVER['HTTP_HOST'].'/h5/index.html#/'.$navigation['link']['type'].'/explore/new';
-                $navigation['link']['conditions'] = array('categoryId' => !empty($navigation['link']['categoryId']) ? $navigation['link']['categoryId'] : 0);
+                if ('h5' == $portal) {
+                    $navigation['link']['url'] = $schema.'://'.$_SERVER['HTTP_HOST'].'/h5/index.html#/'.$navigation['link']['type'].'/explore';
+                } else {
+                    $navigation['link']['url'] = $schema.'://'.$_SERVER['HTTP_HOST'].'/h5/index.html#/'.$navigation['link']['type'].'/explore/new';
+                }
+                $navigation['link']['conditions'] = ['categoryId' => !empty($navigation['link']['categoryId']) ? $navigation['link']['categoryId'] : 0];
             }
         }
 
         return $discoverySetting;
     }
 
-    public function posterFilter($discoverySetting, $usage = 'show')
+    public function posterFilter($discoverySetting, $portal, $usage = 'show')
     {
         if (!empty($discoverySetting['data']['link'])) {
             $link = $discoverySetting['data']['link'];
@@ -221,7 +238,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function grouponFilter($discoverySetting, $usage = 'show')
+    public function grouponFilter($discoverySetting, $portal, $usage = 'show')
     {
         $activity = $discoverySetting['data']['activity'];
         try {
@@ -237,7 +254,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function seckillFilter($discoverySetting, $usage = 'show')
+    public function seckillFilter($discoverySetting, $portal, $usage = 'show')
     {
         $activity = $discoverySetting['data']['activity'];
         try {
@@ -253,7 +270,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function cutFilter($discoverySetting, $usage = 'show')
+    public function cutFilter($discoverySetting, $portal, $usage = 'show')
     {
         $activity = $discoverySetting['data']['activity'];
         try {
@@ -269,7 +286,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function couponFilter($discoverySetting, $usage = 'show')
+    public function couponFilter($discoverySetting, $portal, $usage = 'show')
     {
         $batches = $discoverySetting['data']['items'];
         $batches = ArrayToolkit::index($batches, 'id');
@@ -278,7 +295,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             $batches = $this->getCouponBatchService()->fillUserCurrentCouponByBatches($batches);
         }
 
-        $currentBatches = array();
+        $currentBatches = [];
         $currentBatches = $this->getCouponBatchService()->findBatchsByIds($batchIds);
         foreach ($batches as $key => &$batch) {
             if ('discount' == $batch['type']) {
@@ -315,7 +332,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
-    public function vipFilter($discoverySetting, $usage = 'show')
+    public function vipFilter($discoverySetting, $portal, $usage = 'show')
     {
         if ($this->isPluginInstalled('Vip')) {
             try {
@@ -361,49 +378,49 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     {
         $group = $this->getCategoryService()->getGroupByCode('course');
 
-        return array(
+        return [
             'title' => '所有课程',
-            array(
+            [
                 'type' => 'category',
                 'moduleType' => 'tree',
                 'text' => '分类',
                 'data' => $this->getCategoryService()->findCategoriesByGroupIdAndParentId($group['id'], 0),
-            ),
-            array(
+            ],
+            [
                 'type' => 'courseType',
                 'moduleType' => 'normal',
                 'text' => '课程类型',
-                'data' => array(
-                    array(
+                'data' => [
+                    [
                         'type' => 'normal',
                         'text' => '课程',
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'live',
                         'text' => '直播',
-                    ),
-                ),
-            ),
-            array(
+                    ],
+                ],
+            ],
+            [
                 'type' => 'sort',
                 'moduleType' => 'normal',
                 'text' => '课程类型',
-                'data' => array(
-                    array(
+                'data' => [
+                    [
                         'type' => 'recommendedSeq',
                         'text' => '推荐',
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => '-studentNum',
                         'text' => '热门',
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => '-createdTime',
                         'text' => '最新',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
     }
 
     protected function getSortByStr($sortStr)
@@ -411,7 +428,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         if ($sortStr) {
             $explodeSort = explode(',', $sortStr);
 
-            $sort = array();
+            $sort = [];
             foreach ($explodeSort as $part) {
                 $prefix = substr($part, 0, 1);
                 $field = str_replace('-', '', $part);
@@ -425,7 +442,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             return $sort;
         }
 
-        return array();
+        return [];
     }
 
     protected function isPluginInstalled($code)
@@ -437,66 +454,71 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
 
     public function getDefaultDiscovery($portal)
     {
-        $result = array();
+        $result = [];
 
-        if (in_array($portal, array('h5', 'apps'))) {
+        if (in_array($portal, ['h5', 'apps'])) {
             $posters = $this->getBlockService()->getPosters();
-            $slides = array();
+            $slides = [];
             foreach ($posters as $poster) {
-                $slide = array(
+                $slide = [
                     'title' => '',
-                    'image' => array(
+                    'image' => [
                         'id' => 0,
                         'uri' => $poster['image'],
                         'size' => '',
                         'createdTime' => 0,
-                    ),
-                    'link' => array(
+                    ],
+                    'link' => [
                         'type' => 'url',
                         'target' => null,
                         'url' => $poster['link']['url'],
-                    ),
-                );
+                    ],
+                ];
                 $slides[] = $slide;
             }
 
-            $result = array(
-                'slide-1' => array(
+            $result = [
+                'slide-1' => [
                     'type' => 'slide_show',
                     'moduleType' => 'slide-1',
                     'data' => $slides,
-                ),
-            );
+                ],
+            ];
         }
 
-        return array_merge($result, array(
-            'courseList-1' => array(
+        return array_merge($result, [
+            'courseList-1' => [
                 'type' => 'course_list',
                 'moduleType' => 'courseList-1',
-                'data' => array(
+                'data' => [
                     'title' => '热门课程',
                     'sourceType' => 'condition',
                     'categoryId' => 0,
                     'sort' => '-studentNum',
                     'lastDays' => 0,
                     'limit' => 4,
-                    'items' => array(),
-                ),
-            ),
-            'courseList-2' => array(
+                    'items' => [],
+                ],
+            ],
+            'courseList-2' => [
                 'type' => 'course_list',
                 'moduleType' => 'courseList-2',
-                'data' => array(
+                'data' => [
                     'title' => '推荐课程',
                     'sourceType' => 'condition',
                     'categoryId' => 0,
                     'sort' => 'recommendedSeq',
                     'lastDays' => 0,
                     'limit' => 4,
-                    'items' => array(),
-                ),
-            ),
-        ));
+                    'items' => [],
+                ],
+            ],
+        ]);
+    }
+
+    protected function getTemplateFactory()
+    {
+        return $this->biz['template_factory'];
     }
 
     protected function getCourseService()
