@@ -77,10 +77,10 @@ define(function (require, exports, module) {
     });
 
     $table.on('click', '.remove-course', function() {
-      let $this = $(this);
+      var $this = $(this);
       if (!confirm(Translator.trans('admin.course.remove_hint')))
         return;
-      let $tr = $this.parents('tr');
+      var $tr = $this.parents('tr');
       $.post($this.data('url'), function(data) {
         if (data.code > 0) {
           Notify.danger(data.message);

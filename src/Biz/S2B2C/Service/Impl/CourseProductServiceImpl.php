@@ -321,6 +321,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
+            $this->getLogger()->error(sprintf('[deleteProductsByCourseSetError] %s', $e->getMessage()));
 
             return false;
         }
