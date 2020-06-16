@@ -1,15 +1,25 @@
 <?php
 
-namespace AppBundle\Controller\Goods;
+namespace ApiBundle\Api\Resource\Good;
 
-use AppBundle\Controller\BaseController;
-use Symfony\Component\HttpFoundation\Request;
+use ApiBundle\Api\Annotation\ApiConf;
+use ApiBundle\Api\ApiRequest;
+use ApiBundle\Api\Resource\AbstractResource;
 
-class GoodsController extends BaseController
+/**
+ * Class Good Good并不合适,商品真实本体是Goods,单复数同形,类名为Good是为了满足接口的定义规范（带有s结尾的单词比较难处理）
+ */
+class Good extends AbstractResource
 {
-    public function showAction(Request $request, $id)
+    /**
+     * @param $id
+     *
+     * @return \string[][]
+     * @ApiConf(isRequiredAuth=false)
+     */
+    public function get(ApiRequest $request, $id)
     {
-        return $this->render('goods/show.html.twig', array_merge($this->mockData($id), ['goods' => $this->mockData($id)]));
+        return $this->mockData($id);
     }
 
     public function mockData($id)
