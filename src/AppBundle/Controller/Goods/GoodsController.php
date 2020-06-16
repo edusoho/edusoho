@@ -133,6 +133,9 @@ class GoodsController extends BaseController
                     ],
                 ],
             ],
+            3 => [
+                'dataDescription' => '富文本商品描述，有优惠，课程测试',
+            ],
         ];
 
         return empty($mockData[$id]) ? [] : $mockData[$id];

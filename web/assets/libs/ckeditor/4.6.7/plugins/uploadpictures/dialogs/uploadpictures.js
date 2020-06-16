@@ -2,6 +2,23 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
     
     var imageHtml = '', uploader;
 
+    var initEvent = function () {
+      function receiveMessage(event) {
+        var eventName = event.data.eventName;
+        if (eventName === 'ckeditor.post') {
+          var innerHtml = event.data.html;
+          $('.' + editor.id + ' #uploadpictures-body').append(innerHtml);
+          $("#uploadContainer_"+editor.name)[0].remove();
+
+          onLoadDialog();
+        }
+      }
+
+      window.addEventListener("message", receiveMessage, false);
+    };
+
+    initEvent();
+
     var onLoadDialog = function() {
 
         var uploadUrl = editor.config.filebrowserImageUploadUrl;
@@ -79,11 +96,10 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
     var url = CKEDITOR.getUrl('plugins/uploadpictures/html/index.html');
     var dialogHtml = `
         <div id="uploadpictures-body">
-            <iframe src=${url} scrolling="no" id="uploadContainer_${editor.name}" width="0" height="0" style="display:none;visibility:hidden">
+            <iframe id="uploadContainer_${editor.name}" src=${url} scrolling="no" width="0" height="0" style="display:none;visibility:hidden">
             </iframe>
         </div>
     `;
-
 
     var dialogDefinition = {
         title: '批量图片上传',
@@ -105,16 +121,6 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
         
         onLoad: function() {
             $('.' + editor.id + ' #uploadpictures-body').css({'vertical-align': 'top'});
-            $("#uploadContainer_"+editor.name)[0].contentWindow.postMessage({eventName: 'dialogDefinition.Load'}, '*');
-            function receiveMessage(event) {
-                var innerHtml = event.data;
-                $('.' + editor.id + ' #uploadpictures-body').append(innerHtml);
-                $("#uploadContainer_"+editor.name)[0].remove();
-
-                onLoadDialog();
-            }
-            window.addEventListener("message", receiveMessage, false);
-
         },
 
         onOk: function() {

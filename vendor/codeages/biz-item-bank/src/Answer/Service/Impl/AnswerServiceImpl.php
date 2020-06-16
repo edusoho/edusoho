@@ -329,7 +329,12 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
         
         if (0 == $answerScene['need_score']) {
-            return [0, AnswerQuestionReportService::STATUS_PART_RIGHT];
+            if (empty($reviewQuestionReport['status'])) {
+                $status = AnswerQuestionReportService::STATUS_RIGHT;
+            } else {
+                $status = $reviewQuestionReport['status'] == AnswerQuestionReportService::STATUS_WRONG ? AnswerQuestionReportService::STATUS_WRONG : AnswerQuestionReportService::STATUS_RIGHT;
+            }
+            return [0, $status];
         }
 
         $reviewQuestionReport['score'] = empty($reviewQuestionReport['score']) ? 0 : $reviewQuestionReport['score'];
