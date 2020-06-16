@@ -1,6 +1,6 @@
 <template>
   <div class="product-info clearfix">
-    <div class="product-info__left info-left pull-left">
+    <div class="product-info__left info-left pull-left" :class="{'all-width': !infoData.hasExtension}">
       <div v-if="isFixed" class="fixed">
         <div class="cd-container clearfix" >
           <ul class="info-left__nav pull-left">
@@ -31,18 +31,19 @@
         </div>
       </div>
     </div>
-    <div class="product-info__right pull-right">
+    <div v-if="infoData.hasExtension" class="product-info__right pull-right">
       <!-- 授课老师 -->
-      <info-right-teacher></info-right-teacher>
+      <info-right-teacher :teachers="componentsData.teachers"></info-right-teacher>
       <!-- 公众号 -->
-      <info-right-qr></info-right-qr>
+      <info-right-qr :mpQrCode="componentsData.mpQrCode"></info-right-qr>
       <!-- 猜你想学 -->
-      <info-right-learn></info-right-learn>
+      <info-right-learn :recommendGoods="componentsData.recommendGoods"></info-right-learn>
     </div>
   </div>
 </template>
 
 <script>
+  import axios from 'axios';
   import infoRightTeacher from './info-right-teacher';
   import infoRightQr from './info-right-qr';
   import infoRightLearn from './info-right-learn';
@@ -53,6 +54,15 @@
         howActive: 1, // 当前active
         flag: true,
         timer: null, // 延时器对象
+        componentsData: {}
+      }
+    },
+    props: {
+      infoData: {
+        type: Object,
+        default: function () {
+          return {}
+        }
       }
     },
     components: {
@@ -94,6 +104,25 @@
         this.timer = setTimeout(() => {
          this.flag = true;
         }, 500);
+      },
+      requestExtensions(extensions) {
+        axios.get('/api/goods/1/components', {
+          params: {
+            componentTypes: extensions
+          },
+          headers: {
+            'Accept': 'application/vnd.edusoho.v2+json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-Token': $('meta[name=csrf-token]').attr('content')
+          }
+        }).then(res => {
+          this.componentsData = res.data;
+        });
+      }
+    },
+    watch: {
+      infoData(newValue, oldValue) {
+        this.requestExtensions(newValue.extensions);
       }
     },
     mounted() {

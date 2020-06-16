@@ -1,7 +1,7 @@
 <template>
   <div class="product-detail clearfix">
     <div class="product-detail__left detail-left pull-left">
-      <img src="http://sce2a3b1c3d5nk-sb-qn.qiqiuyun.net/files/course/2020/03-19/102135fa5a9d376668.jpg?version=2" alt="">
+      <img :src="detailData.image" alt="">
       <ul class="detail-left__text clearfix">
         <li class="pull-left"><i class="es-icon es-icon-friends"></i>人加入学习</li>
         <li class="pull-right">
@@ -11,8 +11,8 @@
       </ul>
     </div>
     <div class="product-detail__right detail-right pull-right">
-      <p class="detail-right__title">这里是标题这里是标题这里是标题这里是标题这里这里是标题这里是标题这里是标题这里是标题这里这里是标题这里是标题这里是标题这里是标题这里这里是标题这里是标题这里是标题这里是标题这里</p>
-      <p class="detail-right__subtitle">这里是副标题这里是副标题这里是副标题这里是副标题这里是副标题这里副标题这里是副标题这里是副标题这里是副标题这里是副标题这里是副标题这里是副标题这里是副标题这里是副标题</p>
+      <p class="detail-right__title">{{ detailData.title }}</p>
+      <p class="detail-right__subtitle">{{ detailData.subtitle }}</p>
       <!-- 价格 -->
       <div class="detail-right__price">
         <!-- 优惠活动 -->
@@ -61,6 +61,14 @@
     data() {
       return {
         
+      }
+    },
+    props: {
+      detailData: {
+        type: Object,
+        default: function () {
+          return {}
+        }
       }
     },
     methods: {
