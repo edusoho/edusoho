@@ -14,10 +14,10 @@
   {#添加admin_v2#}
   {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or ('ROLE_TEACHER' in app.user.roles and setting('course.teacher_manage_marketing', 0) == 1) or has_permission('admin_course_content_manage') or has_permission('admin_v2_course_content_manage') %}
     {# 课程基础信息 #}
-{#    {% if is_un_multi_courseset(courseSet.id) %}#}
-{#      <div class="course-manage-subltitle cd-mb40">{{ 'course.base_info'|trans }}</div>#}
-      {#      {% include 'courseset-manage/base-info/info.html.twig' with {form: 'course-info-form', button:'course-submit'} %}#}
-{#    {% endif %}#}
+    {#    {% if is_un_multi_courseset(courseSet.id) %}#}
+    {#      <div class="course-manage-subltitle cd-mb40">{{ 'course.base_info'|trans }}</div>#}
+    {#      {% include 'courseset-manage/base-info/info.html.twig' with {form: 'course-info-form', button:'course-submit'} %}#}
+    {#    {% endif %}#}
     {% set wechatSetting = setting('wechat')|default([]) %}
     {% if wechatSetting.templates.courseRemind|default('') and  wechatSetting.templates.courseRemind.status|default(0) %}
       {% set courseRemindSendDays = get_days(wechatSetting.templates.courseRemind.sendDays) %}
@@ -66,9 +66,10 @@
          data-buy-before-approval="{{ setting('magic.buy_before_approval') }}"
          data-can-free-activity-types="{{ can_free_activity_types|join('word.seperator'|trans) }}"
          data-free-task-changelog="{{ freeTaskChangelog }}"
-         data-tags="{{ tags|json_encode }}"
-         data-tag-search-url="{{ path('tag_match') }}"
-
+         data-tags="{{ tags|json_encode }}" ,
+         data-image-save-url="{{ path('course_set_manage_cover_crop', {id: courseSet.id}) }}"
+         data-image-src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}"
+         data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
     ></div>
 
     {% if not hasMulCourses and courseSet.type == 'normal' %}

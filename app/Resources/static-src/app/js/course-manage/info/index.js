@@ -5,16 +5,19 @@ import ManageInfo from './src/manage-info';
 import ElementUI from 'element-ui';
 import Axios from 'axios';
 
+import qs from 'qs';
+
 const axios = Axios.create({
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
     'Accept': 'application/vnd.edusoho.v2+json',
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/x-www-form-urlencoded',
     'X-CSRF-Token': $('meta[name=csrf-token]').attr('content'),
   },
 });
 
 Vue.prototype.$axios = axios;
+Vue.prototype.$qs = qs;
 
 Vue.use(ElementUI);
 Vue.filter('trans', function (value, params) {
@@ -56,7 +59,8 @@ new Vue({
       freeTaskChangelog: $('#app').data('freeTaskChangelog'),
       courseManageUrl: $('#app').data('courseManageUrl'),
       tags: $('#app').data('tags'),
-      tagSearchUrl: $('#app').data('tagSearchUrl'),
+      imageSaveUrl: $('#app').data('imageSaveUrl'),
+      imageSrc: $('#app').data('imageSrc'),
     },
   }),
 });
@@ -79,23 +83,10 @@ class CourseInfo {
     };
   }
 
-//   saveForm() {
-//     $('#course-submit').on('click', (event) => {
-//       this.expiry.commonExpiryMode();
-//       const $summaryField = $('#courseset-summary-field');
-//       if ($summaryField.length) {
-//         $summaryField.val(this.editor.getData());
-//       }
-//       if (this.validator.form()) {
-//         $('#course-info-form').submit();
-//       }
-//     });
-//   }
 }
 
-//
 new CourseInfo();
-//
+
 setTimeout(function () {
   new Intro();
 }, 500);

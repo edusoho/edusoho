@@ -35,26 +35,24 @@
             </el-form-item>
             <el-form-item :label="'course.base.tag'|trans">
                 <el-col span="18">
-                    <el-select
-                        class="un-multi-course-set-tags"
-                        v-model="baseInfoForm.tags"
-                        multiple
-                        filterable
-                        remote
-                        reserve-keyword
-                        @focus="searchTags('')"
-                        :remote-method="searchTags"
-                        :loading="loading">
-                        <el-option
-                            v-for="tag in tags"
-                            :key="tag.id"
-                            :label="tag.name"
-                            :value="tag.name">
-                        </el-option>
-                    </el-select>
+                    <tags v-bind:tag-data="baseInfoForm.tags" v-on:update:tags="baseInfoForm.tags = $event"></tags>
                     <div class="help-block courseset-manage-body__tip">{{ 'course.base.tag_tips'|trans }}</div>
                 </el-col>
             </el-form-item>
+
+            <el-form-item :label="'course.base.category'|trans">
+                <el-col span="18">
+                    <category v-bind:category="baseInfoForm.categoryId"
+                              v-on:update:category="baseInfoForm.categoryId = $event"></category>
+                </el-col>
+            </el-form-item>
+
+            <el-form-item :label="'site.org'|trans" @click="aaaaaa">
+                <el-col span="18">
+                    <org v-bind:params="{}" v-bind:org-code="baseInfoForm.orgCode"></org>
+                </el-col>
+            </el-form-item>
+
             <el-form-item :label="'course.base.serialize_mode'|trans">
                 <el-radio v-model="baseInfoForm.serializeMode"
                           v-for="(label, value) in serializeModeRadio"
@@ -65,12 +63,30 @@
                 </el-radio>
             </el-form-item>
 
+            <el-form-item :label="'course.cover_image.content_title'|trans">
+                <el-col span="18">
+                    <div v-html="uploadImageTemplate"></div>
+                    <div class="help-block">{{ 'course.cover_image.upload_tips'|trans }}</div>
+                </el-col>
+            </el-form-item>
+
+            <el-form-item :label="'course.detail.summary'|trans">
+                <el-col span="18">
+                    <textarea name="summary" rows="10" data-form=" form" data-button="button"
+                              id="courseset-summary-field" class="form-control" :data-image-upload-url="imageUploadUrl"></textarea>
+                    <div class="help-block">{{ 'editor.iframe_tips'|trans }}</div>
+                </el-col>
+            </el-form-item>
         </el-form>
     </div>
 </template>
 
 <script>
     import * as validation from 'common/element-validation';
+    import tags from 'app/js/common/src/tags.vue';
+    import category from 'app/js/common/src/category.vue';
+    import org from 'app/js/common/src/org.vue';
+
 
     export default {
         name: "base-info",
@@ -79,19 +95,16 @@
             hasMulCourses: false,
             isUnMultiCourseSet: false,
             tags: '',
-            tagSearchUrl: ''
-
+            imageSaveUrl: '',
+            imageSrc: '',
+            imageUploadUrl: '',
+        },
+        components: {
+            tags,
+            category,
+            org
         },
         methods: {
-            searchTags(query) {
-                this.$axios.get(this.tagSearchUrl, {
-                    params: {q: query},
-                }).then((response) => {
-                    this.tags = response.data;
-                    console.log(response.data);
-                });
-
-            },
             validateForm() {
                 let result = false;
                 let invalids = {};
@@ -108,7 +121,24 @@
                 return {result: result, invalidFields: invalids};
             },
             getFormData() {
+                this.baseInfoForm.orgCode = $('.js-org-tree-select').children('option:selected').val();
+                console.log(this.baseInfoForm);
                 return this.baseInfoForm;
+            },
+            getUploadImageTemplate() {
+                let params = {
+                    saveUrl: this.imageSaveUrl,
+                    targetImg: 'course-cover',
+                    cropWidth: '480',
+                    cropHeight: '270',
+                    uploadToken: 'tmp',
+                    imageClass: 'course-manage-cover',
+                    imageText: Translator.trans('course.cover.change'),
+                    imageSrc: this.imageSrc,
+                };
+                this.$axios.get('/render/upload/image?' + this.$qs.stringify(params)).then((res) => {
+                    this.uploadImageTemplate = res.data;
+                });
             }
         },
         // mixins: [validation.trans],
@@ -116,22 +146,27 @@
         data() {
             let baseForm = {
                 title: this.course.title ? this.course.title : this.course.courseSetTitle,
-                subtitle: this.course.subtitle
+                subtitle: this.course.subtitle,
             };
 
             if (this.isUnMultiCourseSet) {
                 Object.assign(baseForm, {
                     tags: this.tags,
-                    serializeMode: this.course.serializeMode
+                    categoryId: this.course.categoryId,
+                    serializeMode: this.course.serializeMode,
+                    orgCode: this.course.orgCode,
+                    summary: this.course.summary
                 });
             }
+
+            this.getUploadImageTemplate();
 
             return {
                 course: {},
                 isUnMultiCourseSet: false,
                 hasMulCourses: false,
                 tags: '',
-                tagSearchUrl: '',
+                uploadImageTemplate: '',
                 baseInfoForm: baseForm,
                 formRule: {
                     title: [

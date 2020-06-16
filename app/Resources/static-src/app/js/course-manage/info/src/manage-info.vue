@@ -6,7 +6,9 @@
                    v-bind:has-mul-courses="hasMulCourses"
                    v-bind:is-un-multi-course-set="isUnMultiCourseSet"
                    v-bind:tags="tags"
-                   v-bind:tag-search-url="tagSearchUrl"
+                   v-bind:image-save-url="imageSaveUrl"
+                   v-bind:image-src="imageSrc"
+                   v-bind:image-upload-url="imageUploadUrl"
         ></base-info>
         <base-rule ref="baseRule"
                    v-bind:course="course"
@@ -80,7 +82,9 @@
             canFreeActivityTypes: '',
             freeTaskChangelog: '',
             tags: '',
-            tagSearchUrl: ''
+            imageSaveUrl: '',
+            imageSrc: '',
+            imageUploadUrl: '',
         },
         components: {
             baseInfo,
@@ -121,11 +125,11 @@
                     this.$refs.marketing.getFormData()
                 );
 
-                this.$axios.post(this.courseManageUrl, formData, {emulateJSON: true}).then((res) => {
-                    cd.message({type: 'success', message: Translator.trans('site.save_success_hint')});
-                    window.location.reload();
 
-                });
+                // this.$axios.post(this.courseManageUrl, this.$qs.stringify(formData), {emulateJSON: true}).then((res) => {
+                //     cd.message({type: 'success', message: Translator.trans('site.save_success_hint')});
+                //     window.location.reload();
+                // });
             }
 
         },
@@ -160,7 +164,9 @@
                 freeTaskChangelog: '',
                 isUnMultiCourseSet: false,
                 tags: '',
-                tagSearchUrl: ''
+                imageSaveUrl: '',
+                imageSrc: '',
+                imageUploadUrl: '',
             }
         }
     }
