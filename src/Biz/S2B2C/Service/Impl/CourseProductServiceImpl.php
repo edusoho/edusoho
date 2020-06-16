@@ -170,7 +170,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         $supplierSettings = $this->getS2B2CFacadeService()->getS2B2CConfig();
 
         if (empty($product)) {
-            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[purchaseNewCourse] 没有可采购的产品，productId'.$remoteProductId, $product);
+            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[purchaseNewCourse] 没有可采购的产品，productId:'.$remoteProductId);
 
             return false;
         }
