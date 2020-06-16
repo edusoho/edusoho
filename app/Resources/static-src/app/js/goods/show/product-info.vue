@@ -1,6 +1,6 @@
 <template>
   <div class="product-info clearfix">
-    <div class="product-info__left info-left pull-left" :class="{'all-width': !infoData.hasExtension}">
+    <div class="product-info__left info-left pull-left" :class="{'all-width': !hasExtension}">
       <div v-if="isFixed" class="fixed">
         <div class="cd-container clearfix" >
           <ul class="info-left__nav pull-left">
@@ -25,13 +25,13 @@
         </div>
         <div id="info-left-2" class="content-item js-content-item">
           <h3  class="content-item__title">学习目录</h3>
+          <div class="js-tasks-show" v-html="tasksList"></div>
         </div>
-        <div id="info-left-3" class="content-item js-content-item">
-          <h3  class="content-item__title">学员评价</h3>
-        </div>
+        <!-- 学员评价 -->
+        <info-left-reviews :reviews="componentsData.reviews"></info-left-reviews>
       </div>
     </div>
-    <div v-if="infoData.hasExtension" class="product-info__right pull-right">
+    <div v-if="hasExtension" class="product-info__right pull-right">
       <!-- 授课老师 -->
       <info-right-teacher :teachers="componentsData.teachers"></info-right-teacher>
       <!-- 公众号 -->
@@ -47,18 +47,21 @@
   import infoRightTeacher from './info-right-teacher';
   import infoRightQr from './info-right-qr';
   import infoRightLearn from './info-right-learn';
+  import infoLeftReviews from './info-left-reviews';
   export default {
     data() {
       return {
         isFixed: false, // 是否吸顶
         howActive: 1, // 当前active
         flag: true,
-        timer: null, // 延时器对象
-        componentsData: {}
+        timerClick: null, // 延时器对象
+        timerScroll: null,
+        componentsData: {},
+        tasksList: ''
       }
     },
     props: {
-      infoData: {
+      hasExtension: {
         type: Object,
         default: function () {
           return {}
@@ -68,7 +71,8 @@
     components: {
       infoRightTeacher,
       infoRightQr,
-      infoRightLearn
+      infoRightLearn,
+      infoLeftReviews
     },
     methods: {
       handleScroll() {
@@ -76,10 +80,10 @@
         let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
         if ( eleTop <= scrollTop && !this.isFixed ) this.isFixed = true;
         if ( eleTop > scrollTop && this.isFixed ) this.isFixed = false;
-        clearTimeout(this.timer);
-        this.timer = null
-        this.timer = setTimeout(() => {
-          this.calcScrollTop(scrollTop);
+        clearTimeout(this.timerScroll);
+        this.timerScroll = null;
+        this.timerScroll = setTimeout(() => {
+          if (this.flag) this.calcScrollTop(scrollTop);
         }, 200);
       },
       calcScrollTop(value) {
@@ -96,19 +100,19 @@
       },
       clickType(value) {
         clearTimeout(this.timer);
-        this.timer = null
+        this.timerClick = null
         this.flag = false;
         this.howActive = value;
         let ele = '#info-left-' + value;
         document.documentElement.scrollTop = $(ele).offset().top - 80;
-        this.timer = setTimeout(() => {
+        this.timerClick = setTimeout(() => {
          this.flag = true;
-        }, 500);
+        }, 300);
       },
-      requestExtensions(extensions) {
+      requestExtensions() {
         axios.get('/api/goods/1/components', {
           params: {
-            componentTypes: extensions
+            componentTypes: ['teachers', 'mpQrcode', 'recommendGoods', 'reviews']
           },
           headers: {
             'Accept': 'application/vnd.edusoho.v2+json',
@@ -118,12 +122,17 @@
         }).then(res => {
           this.componentsData = res.data;
         });
+      },
+      requestTasks() {
+        axios.get('/course/1/task/list/render/normal').then(res => {
+        //   console.log(res);
+          this.tasksList = res.data;
+        });
       }
     },
-    watch: {
-      infoData(newValue, oldValue) {
-        this.requestExtensions(newValue.extensions);
-      }
+    created() {
+      this.requestExtensions();
+      this.requestTasks();
     },
     mounted() {
       window.addEventListener("scroll", this.handleScroll);

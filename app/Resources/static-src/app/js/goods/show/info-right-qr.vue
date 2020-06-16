@@ -1,6 +1,6 @@
 <template>
   <div v-if="mpQrCode.length" class="info-right-qr info-right-box">
-    <div class="title">{{ mpQrCode.title }}</div>
+    <div class="title">公众号</div>
     <div class="qr-info">
       <img class="qr-info__img" :src="mpQrCode.imageUrl" alt="">
       <div class="qr-info__introduce">
