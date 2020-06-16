@@ -67,7 +67,7 @@ class TestpaperWrapper
                     'determine' => '0',
                     'fill' => '0',
                     'material' => '0',
-                ]
+                ],
             ],
         ];
         foreach ($assessment['sections'] as $section) {
