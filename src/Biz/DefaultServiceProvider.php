@@ -22,6 +22,7 @@ use Biz\Importer\ClassroomMemberImporter;
 use Biz\Importer\CourseMemberImporter;
 use Biz\OpenCourse\Event\OpenCourseThreadEventProcessor;
 use Biz\Sms\SmsProcessor\LiveOpenLessonSmsProcessor;
+use Biz\System\Template\TemplateFactory;
 use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\NormalStrategy;
 use Biz\Task\Strategy\StrategyContext;
@@ -237,6 +238,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
             $role = $biz->service('Role:RoleService');
 
             return $role->getPermissionsYmlContent();
+        };
+
+        $biz['template_factory'] = function ($biz) {
+            return new TemplateFactory($biz);
         };
     }
 }

@@ -28,25 +28,24 @@ class OverviewTestpaperTaskDetailExporter extends Exporter
 
     public function getTitles()
     {
-        return array(
+        return [
             'task.learn_data_detail.nickname',
             'task.learn_data_detail.createdTime',
             'course.task.finish_time',
             'task.learn_data_detail.testpaper_firstUsedTime',
             'task.learn_data_detail.testpaper_firstScore',
             'task.learn_data_detail.testpaper_maxScore',
-        );
+        ];
     }
 
     public function getContent($start, $limit)
     {
         $task = $this->getTaskService()->getTask($this->parameter['courseTaskId']);
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($activity['ext']['mediaId'], $activity['mediaType']);
 
         $taskResults = $this->getTaskResultService()->searchTaskResults(
             $this->conditions,
-            array('createdTime' => 'ASC'),
+            ['createdTime' => 'ASC'],
             $start,
             $limit
         );
@@ -55,12 +54,12 @@ class OverviewTestpaperTaskDetailExporter extends Exporter
         $users = $this->getUserService()->findUsersByIds($userIds);
         $testpaperResults = $this->getTestpaperResults($activity, $userIds);
 
-        $datas = array();
+        $datas = [];
 
         foreach ($taskResults as $taskResult) {
             $user = $users[$taskResult['userId']];
-            $testpaperResult = empty($testpaperResults[$taskResult['userId']]) ? array() : $testpaperResults[$taskResult['userId']];
-            $data = array();
+            $testpaperResult = empty($testpaperResults[$taskResult['userId']]) ? [] : $testpaperResults[$taskResult['userId']];
+            $data = [];
             $data[] = $user['nickname'];
             $data[] = empty($taskResult['createdTime']) ? '-' : date('Y-m-d H:i:s', $taskResult['createdTime']);
             $data[] = empty($taskResult['finishedTime']) ? '-' : date('Y-m-d H:i:s', $taskResult['finishedTime']);
@@ -133,7 +132,7 @@ class OverviewTestpaperTaskDetailExporter extends Exporter
 
     public function buildCondition($conditions)
     {
-        return ArrayToolkit::parts($conditions, array('courseTaskId'));
+        return ArrayToolkit::parts($conditions, ['courseTaskId']);
     }
 
     protected function getReportService()
@@ -176,11 +175,6 @@ class OverviewTestpaperTaskDetailExporter extends Exporter
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
-    }
-
-    protected function getTestpaperService()
-    {
-        return $this->getBiz()->service('Testpaper:TestpaperService');
     }
 
     /**
