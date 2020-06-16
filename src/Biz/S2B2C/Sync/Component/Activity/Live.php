@@ -2,25 +2,48 @@
 
 namespace Biz\S2B2C\Sync\Component\Activity;
 
-use Biz\Activity\Service\LiveActivityService;
+use Biz\Activity\Dao\LiveActivityDao;
 
 class Live extends Activity
 {
     public function sync($activity, $config = [])
     {
-        return [];
+        $newLiveFields = $this->getLiveActivityFields($activity);
+
+        return $this->getLiveActivityDao()->create($newLiveFields);
     }
 
     public function updateToLastedVersion($activity, $config = [])
     {
-        return [];
+        $newLiveFields = $this->getLiveActivityFields($activity);
+
+        $existLive = $this->getLiveActivityDao()->search(['syncId' => $newLiveFields['syncId']], [], 0, PHP_INT_MAX);
+        if (!empty($existLive)) {
+            return $this->getLiveActivityDao()->update($existLive[0]['id'], $newLiveFields);
+        }
+
+        return $this->getLiveActivityDao()->create($newLiveFields);
+    }
+
+    protected function getLiveActivityFields($activity)
+    {
+        $live = $activity[$activity['mediaType'].'Activity'];
+
+        return [
+            'syncId' => $live['id'],
+            'liveId' => $live['liveId'],
+            'progressStatus' => $live['progressStatus'],
+            'liveProvider' => $live['liveProvider'],
+            'roomType' => $live['roomType'],
+            'roomCreated' => $live['roomCreated'],
+        ];
     }
 
     /**
-     * @return LiveActivityService
+     * @return LiveActivityDao
      */
-    protected function getLiveActivityService()
+    protected function getLiveActivityDao()
     {
-        return $this->getBiz()->service('Activity:LiveActivityService');
+        return $this->getBiz()->dao('Activity:LiveActivityDao');
     }
 }

@@ -54,7 +54,7 @@
 		{% endif %}
 
 		{% if task.status == 'published' and task.isEnd  %}
-			{% if live_can_record(activity.ext.liveId) and activity.ext.replayStatus != 'videoGenerated' %}
+			{% if live_can_record(activity.ext.liveId, activity.syncId) and activity.ext.replayStatus != 'videoGenerated' %}
 				<a class="cd-link-assist cd-mr24 js-generate-replay"
 				{% if activity.ext.replayStatus == 'ungenerated' %}
 				title="{{'course.replay_manage.record'|trans}}"

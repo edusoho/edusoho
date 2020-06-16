@@ -4,12 +4,14 @@ namespace AppBundle\Controller;
 
 use Biz\Accessor\AccessorInterface;
 use Biz\Activity\Service\ActivityService;
-use Biz\Course\LiveReplayException;
-use Biz\Task\Service\TaskService;
-use Biz\Course\Service\CourseService;
+use Biz\Activity\Service\LiveActivityService;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\Course\LiveReplayException;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
+use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,7 +20,7 @@ class LiveroomController extends BaseController
     const LIVE_OPEN_COURSE_TYPE = 'open_course';
     const LIVE_COURSE_TYPE = 'course';
 
-    public function _entryAction(Request $request, $roomId, $params = array())
+    public function _entryAction(Request $request, $roomId, $params = [])
     {
         $user = $request->query->all();
         $user['device'] = $this->getDevice($request);
@@ -35,33 +37,38 @@ class LiveroomController extends BaseController
         $biz = $this->getBiz();
         $user['hostname'] = $biz['env']['base_url'];
 
-        if (in_array($user['role'], array('speaker', 'teacher'))) {
+        if (in_array($user['role'], ['speaker', 'teacher'])) {
             $schemeAndHost = $request->getSchemeAndHttpHost();
             $user['callbackUrl'] = $this->generateCallbackUrl($schemeAndHost, $params);
         }
 
-        $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$roomId}/tickets", $user);
+        $liveActivity = $this->getLiveActivityService()->search(['syncIdGT' => 0, 'liveId' => $roomId], [], 0, 1);
+        if (!empty($liveActivity)) {
+            $ticket = $this->getS2B2CFacadeService()->getS2B2CService()->getLiveEntryTicket($roomId, $user);
+        } else {
+            $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$roomId}/tickets", $user);
+        }
 
-        return $this->render('liveroom/entry.html.twig', array(
+        return $this->render('liveroom/entry.html.twig', [
             'roomId' => $roomId,
             'params' => $params,
             'ticket' => $ticket,
             'liveRole' => !empty($user['role']) ? $user['role'] : 'student',
-        ));
+        ]);
     }
 
     protected function generateCallbackUrl($host, $params)
     {
-        $callbackArgs = array(
-            'sources' => array('course', 'my', 'public'), //支持课程资料读取，公共资料读取，还有我的资料库读取
+        $callbackArgs = [
+            'sources' => ['course', 'my', 'public'], //支持课程资料读取，公共资料读取，还有我的资料库读取
             'userId' => $this->getCurrentUser()->getId(),
-        );
+        ];
 
         if (!empty($params['courseId'])) {
             $callbackArgs['courseId'] = $params['courseId'];
         }
 
-        $options = array();
+        $options = [];
         if (!empty($params['startTime']) && !empty($params['endTime'])) {
             //直播前后六小时有效
             $options['exp'] = $params['endTime'] + 60 * 60 * 6;
@@ -84,7 +91,7 @@ class LiveroomController extends BaseController
         }
 
         if ($this->canTakeReplay($targetType, $targetId, $lessonId, $replayId)) {
-            return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', array('globalId' => $replay['globalId']));
+            return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', ['globalId' => $replay['globalId']]);
         }
 
         $this->createNewException(LiveReplayException::NOTFOUND_LIVE_REPLAY());
@@ -93,7 +100,12 @@ class LiveroomController extends BaseController
     public function ticketAction(Request $request, $roomId)
     {
         $ticketNo = $request->query->get('ticket');
-        $ticket = CloudAPIFactory::create('leaf')->get("/liverooms/{$roomId}/tickets/{$ticketNo}");
+        $liveActivity = $this->getLiveActivityService()->search(['syncIdGT' => 0, 'liveId' => $roomId], [], 0, 1);
+        if (!empty($liveActivity)) {
+            $ticket = $this->getS2B2CServiceApi()->consumeLiveEntryTicket($roomId, $ticketNo);
+        } else {
+            $ticket = CloudAPIFactory::create('leaf')->get("/liverooms/{$roomId}/tickets/{$ticketNo}");
+        }
 
         return $this->createJsonResponse($ticket);
     }
@@ -180,5 +192,21 @@ class LiveroomController extends BaseController
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
+    }
+
+    /**
+     * @return LiveActivityService
+     */
+    protected function getLiveActivityService()
+    {
+        return $this->createService('Activity:LiveActivityService');
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->createService('S2B2C:S2B2CFacadeService');
     }
 }
