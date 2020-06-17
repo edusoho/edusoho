@@ -1,6 +1,7 @@
 <template>
     <div>
-        <el-form v-if="hasMulCourses" :model="baseInfoForm" :rules="formRule" ref="baseInfoForm" label-position="right"
+        <el-form v-if="hasMulCourses" :model="baseInfoForm" id="base-info-form" :rules="formRule" ref="baseInfoForm"
+                 label-position="right"
                  label-width="150px">
             <div class="course-manage-subltitle cd-mb40">{{ 'course.base_info'|trans }}</div>
             <el-form-item :label="'course.plan_setup.name'|trans" prop="title">
@@ -41,14 +42,14 @@
             </el-form-item>
 
             <el-form-item :label="'course.base.category'|trans">
-                <el-col span="18">
+                <el-col span="8">
                     <category v-bind:category="baseInfoForm.categoryId"
                               v-on:update:category="baseInfoForm.categoryId = $event"></category>
                 </el-col>
             </el-form-item>
 
             <el-form-item :label="'site.org'|trans" @click="aaaaaa">
-                <el-col span="18">
+                <el-col span="8">
                     <org v-bind:params="{}" v-bind:org-code="baseInfoForm.orgCode"></org>
                 </el-col>
             </el-form-item>
@@ -72,8 +73,10 @@
 
             <el-form-item :label="'course.detail.summary'|trans">
                 <el-col span="18">
-                    <textarea name="summary" rows="10" data-form=" form" data-button="button"
-                              id="courseset-summary-field" class="form-control" :data-image-upload-url="imageUploadUrl"></textarea>
+                    <textarea name="summary" rows="10" data-form="base-info-form"
+                              data-button="button"
+                              id="courseset-summary-field" class="form-control"
+                              :data-image-upload-url="imageUploadUrl">{{ baseInfoForm.summary }}</textarea>
                     <div class="help-block">{{ 'editor.iframe_tips'|trans }}</div>
                 </el-col>
             </el-form-item>
@@ -87,17 +90,30 @@
     import category from 'app/js/common/src/category.vue';
     import org from 'app/js/common/src/org.vue';
 
-
+    let summaryEditor = null;
     export default {
         name: "base-info",
         props: {
             course: {},
+            courseSet: {},
             hasMulCourses: false,
             isUnMultiCourseSet: false,
             tags: '',
             imageSaveUrl: '',
             imageSrc: '',
             imageUploadUrl: '',
+        },
+        watch: {
+            uploadImageTemplate(newVal, oldVal) {
+                this.$nextTick(() => {
+                    import('app/js/upload-image/index.js');
+
+                    summaryEditor = CKEDITOR.replace('courseset-summary-field', {
+                        toolbar: 'Simple',
+                        filebrowserImageUploadUrl: $('#courseset-summary-field').data('imageUploadUrl')
+                    });
+                });
+            },
         },
         components: {
             tags,
@@ -122,7 +138,8 @@
             },
             getFormData() {
                 this.baseInfoForm.orgCode = $('.js-org-tree-select').children('option:selected').val();
-                console.log(this.baseInfoForm);
+                this.baseInfoForm.summary = summaryEditor.getData();
+
                 return this.baseInfoForm;
             },
             getUploadImageTemplate() {
@@ -140,7 +157,8 @@
                     this.uploadImageTemplate = res.data;
                 });
             }
-        },
+        }
+        ,
         // mixins: [validation.trans],
         // refFormRule: formRule,
         data() {
@@ -155,7 +173,7 @@
                     categoryId: this.course.categoryId,
                     serializeMode: this.course.serializeMode,
                     orgCode: this.course.orgCode,
-                    summary: this.course.summary
+                    summary: this.courseSet.summary
                 });
             }
 
@@ -167,6 +185,7 @@
                 hasMulCourses: false,
                 tags: '',
                 uploadImageTemplate: '',
+                summaryTemplate: '',
                 baseInfoForm: baseForm,
                 formRule: {
                     title: [
@@ -197,7 +216,8 @@
                     finished: Translator.trans('course.base.serialize_mode.finished')
                 }
             };
-        },
+        }
+        ,
         mounted() {
             console.log();
         }

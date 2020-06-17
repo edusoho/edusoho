@@ -136,12 +136,10 @@
             </el-form-item>
 
             <el-form-item v-if="courseSet.type == 'live'"
-                          :label="'course.plan_setup.member_numbers'|trans">
+                          :label="'course.plan_setup.member_numbers'|trans"
+                          prop="maxStudentNum">
                 <el-col span="8">
-                    <el-input v-model="baseRuleForm.maxStudentNum"
-                              :data-live-capacity-url="liveCapacityUrl"
-                              data-explain="">
-                    </el-input>
+                    <el-input v-model="baseRuleForm.maxStudentNum" ref="maxStudentNum"></el-input>
                 </el-col>
                 <el-col span="6" class="mlm">
                     {{'site.data.people'|trans}}
@@ -377,6 +375,12 @@
                 this.course.expiryStartDate, this.course.expiryEndDate
             ]
 
+            let liveCapacity = 0;
+            this.$axios.get(this.liveCapacityUrl).then((response) => {
+                liveCapacity = response.data.capacity;
+            });
+
+            console.log(this.course.expiryEndDate)
             return {
                 course: {},
                 courseSet: {},
@@ -385,7 +389,6 @@
                 wechatSetting: {},
                 hasWechatNotificationManageRole: false,
                 wechatManageUrl: '',
-                liveCapacityUrl: '',
                 contentCourseRuleUrl: '',
                 canFreeTasks: {},
                 freeTasks: {},
@@ -395,7 +398,6 @@
                     freeMode: Translator.trans('course.plan_setup.mode.free'),
                     lockMode: Translator.trans('course.plan_setup.mode.locked'),
                 },
-
                 freeTaskJsClass: freeTaskJsClass,
                 taskName: '',
                 activityMetas: {},
@@ -415,7 +417,7 @@
                     enableAudio: this.course.enableAudio,
                     expiryMode: this.course.expiryMode,
                     deadlineType: this.course.deadlineType ? this.course.deadlineType : 'days',
-                    deadline: this.course.expiryEndDate > 0 ? this.course.expiryEndDate * 1000 : null,
+                    deadline: this.course.expiryEndDate,
                     expiryDays: this.course.expiryDays > 0 ? this.course.expiryDays : null,
                     expiryDateRange: expiryDateRange,
                     freeTaskIds: Object.keys(this.freeTasks)
@@ -450,6 +452,24 @@
                             validator: max_year,
                             message: Translator.trans('course.manage.max_year_error_hint'),
                             trigger: 'blur'
+                        }
+                    ],
+                    maxStudentNum: [
+                        {
+                            required: true,
+                            message: Translator.trans('course.manage.max_student_num_error_hint'),
+                            trigger: 'blur'
+                        },
+                        {
+                            validator: validation.digits,
+                            message: Translator.trans('validate.positive_integer.message'),
+                            trigger: 'blur'
+                        },
+                        {
+                            validator(rule, value, callback) {
+                                value <= liveCapacity ? callback() : callback(new Error(Translator.trans('course.manage.max_capacity_hint', {capacity: liveCapacity})));
+                            },
+                            trigger: 'blur',
                         }
                     ]
                 },

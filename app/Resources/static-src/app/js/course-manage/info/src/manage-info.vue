@@ -3,6 +3,7 @@
     <div class="course-manage-info">
         <base-info ref="baseInfo"
                    v-bind:course="course"
+                   v-bind:course-set="courseSet"
                    v-bind:has-mul-courses="hasMulCourses"
                    v-bind:is-un-multi-course-set="isUnMultiCourseSet"
                    v-bind:tags="tags"
@@ -31,6 +32,7 @@
                    v-bind:content-course-rule-url="contentCourseRuleUrl"
                    v-bind:can-free-activity-types="canFreeActivityTypes"
                    v-bind:free-task-changelog="freeTaskChangelog"
+                   v-bind:live-capacity-url="liveCapacityUrl"
         ></base-rule>
         <market-setting ref="marketing"
                         v-bind:course="course"
@@ -40,7 +42,11 @@
                         v-bind:buy-before-approval="buyBeforeApproval"
         ></market-setting>
 
-        <button class="cd-btn cd-btn-primary" @click="submitForm">{{ 'form.btn.save'|trans }}</button>
+        <el-row>
+            <el-col span="18" offset="6">
+                <button class="cd-btn cd-btn-primary" @click="submitForm">{{ 'form.btn.save'|trans }}</button>
+            </el-col>
+        </el-row>
     </div>
 
 </template>
@@ -125,11 +131,10 @@
                     this.$refs.marketing.getFormData()
                 );
 
-
-                // this.$axios.post(this.courseManageUrl, this.$qs.stringify(formData), {emulateJSON: true}).then((res) => {
-                //     cd.message({type: 'success', message: Translator.trans('site.save_success_hint')});
-                //     window.location.reload();
-                // });
+                this.$axios.post(this.courseManageUrl, this.$qs.stringify(formData), {emulateJSON: true}).then((res) => {
+                    cd.message({type: 'success', message: Translator.trans('site.save_success_hint')});
+                    window.location.reload();
+                });
             }
 
         },

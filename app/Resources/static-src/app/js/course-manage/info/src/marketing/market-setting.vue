@@ -86,34 +86,35 @@
                                 v-model="marketingForm.buyExpiryTime"
                                 :default-value="today"
                                 :picker-options="dateOptions"
+                                value-format="timestamp"
                                 size="small"
                                 ref="buyExpiryTime"
                                 type="date">
                 </el-date-picker>
             </el-form-item>
-<!--            实名认证有bug，暂不显示-->
-<!--            <el-form-item v-if="buyBeforeApproval">-->
-<!--                <label slot="label">-->
-<!--                    {{ 'course.marketing_setup.approval'|trans }}-->
-<!--                    <el-popover-->
-<!--                        placement="top"-->
-<!--                        :content="'course.marketing_setup.approval_tips'|trans"-->
-<!--                        trigger="hover">-->
-<!--                        <a class="es-icon es-icon-help text-normal course-mangae-info__help"-->
-<!--                           slot="reference"></a>-->
-<!--                    </el-popover>-->
-<!--                </label>-->
-<!--                <el-col span="18">-->
-<!--                    <el-radio v-for="(label, value) in approvalRadio"-->
-<!--                              v-model="marketingForm.approval"-->
-<!--                              :key="value"-->
-<!--                              :label="value"-->
-<!--                              class="cd-radio">-->
-<!--                        {{label}}-->
-<!--                    </el-radio>-->
-<!--                </el-col>-->
+            <!--            实名认证有bug，暂不显示-->
+            <!--            <el-form-item v-if="buyBeforeApproval">-->
+            <!--                <label slot="label">-->
+            <!--                    {{ 'course.marketing_setup.approval'|trans }}-->
+            <!--                    <el-popover-->
+            <!--                        placement="top"-->
+            <!--                        :content="'course.marketing_setup.approval_tips'|trans"-->
+            <!--                        trigger="hover">-->
+            <!--                        <a class="es-icon es-icon-help text-normal course-mangae-info__help"-->
+            <!--                           slot="reference"></a>-->
+            <!--                    </el-popover>-->
+            <!--                </label>-->
+            <!--                <el-col span="18">-->
+            <!--                    <el-radio v-for="(label, value) in approvalRadio"-->
+            <!--                              v-model="marketingForm.approval"-->
+            <!--                              :key="value"-->
+            <!--                              :label="value"-->
+            <!--                              class="cd-radio">-->
+            <!--                        {{label}}-->
+            <!--                    </el-radio>-->
+            <!--                </el-col>-->
 
-<!--            </el-form-item>-->
+            <!--            </el-form-item>-->
         </el-form>
     </div>
 </template>
@@ -148,6 +149,9 @@
                 return {result: result, invalidFields: invalids};
             },
             getFormData() {
+                if (this.marketingForm.buyExpiryTime.toString().length > 10) {
+                    this.marketingForm.buyExpiryTime /= 1000;
+                }
                 return this.marketingForm;
             }
         },

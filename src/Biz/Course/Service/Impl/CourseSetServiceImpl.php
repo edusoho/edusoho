@@ -1184,8 +1184,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if (isset($fields['tags'])) {
             if (empty($fields['tags'])) {
                 $fields['tags'] = [];
-            } elseif (!is_array($fields['tags'])) {
-                $tags = explode(',', $fields['tags']);
+            } else {
+                $tags = is_array($fields['tags']) ? $fields['tags'] : explode(',', $fields['tags']);
                 $tags = $this->getTagService()->findTagsByNames($tags);
                 $tagIds = ArrayToolkit::column($tags, 'id');
                 $fields['tags'] = $tagIds;

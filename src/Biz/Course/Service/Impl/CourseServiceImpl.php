@@ -797,7 +797,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (empty($course['expiryEndDate'])) {
                 $this->createNewException(CourseException::EXPIRYENDDATE_REQUIRED());
             }
-            $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime($course['expiryEndDate'].' 23:59:59');
+            $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime(date('Y-m-d 23:59:59', strtotime($course['expiryEndDate'])));
         } elseif ('date' === $course['expiryMode']) {
             $course['expiryDays'] = 0;
             if (isset($course['expiryStartDate'])) {
@@ -808,7 +808,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (empty($course['expiryEndDate'])) {
                 $this->createNewException(CourseException::EXPIRYENDDATE_REQUIRED());
             } else {
-                $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime($course['expiryEndDate'].' 23:59:59');
+                $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime(date('Y-m-d 23:59:59', strtotime($course['expiryEndDate'])));
             }
             if ($course['expiryEndDate'] <= $course['expiryStartDate']) {
                 $this->createNewException(CourseException::EXPIRY_DATE_SET_INVALID());

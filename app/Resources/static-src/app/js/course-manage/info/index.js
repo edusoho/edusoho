@@ -1,6 +1,4 @@
 import Intro from './intro';
-// import Expiry from 'app/js/course-manage/expiry/expiry';
-// import {initTags} from 'app/js/courseset-manage/base/tag';
 import ManageInfo from './src/manage-info';
 import ElementUI from 'element-ui';
 import Axios from 'axios';
@@ -61,6 +59,7 @@ new Vue({
       tags: $('#app').data('tags'),
       imageSaveUrl: $('#app').data('imageSaveUrl'),
       imageSrc: $('#app').data('imageSrc'),
+      imageUploadUrl: $('#app').data('imageUploadUrl'),
     },
   }),
 });

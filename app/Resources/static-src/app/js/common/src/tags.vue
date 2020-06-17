@@ -14,9 +14,9 @@
             :loading="loading">
             <el-option
                 v-for="tag in tags"
-                :key="tag.id"
+                :key="tag.name"
                 :label="tag.name"
-                :value="tag.id">
+                :value="tag.name">
             </el-option>
         </el-select>
     </div>
@@ -43,7 +43,6 @@
             }
         },
         data() {
-            console.log(this.tagData)
             return {
                 tagData: [],
                 tags: [],
