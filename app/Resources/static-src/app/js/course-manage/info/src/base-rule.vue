@@ -315,12 +315,10 @@
 
                 if (value && !$currentCheckbox.hasClass('open')) {
                     $currentCheckbox.addClass('open');
-                    console.log(value, $currentCheckbox.hasClass('open'));
                 }
 
                 if (!value && $currentCheckbox.hasClass('open')) {
                     $currentCheckbox.removeClass('open');
-                    console.log(value, $currentCheckbox.hasClass('open'));
                 }
             },
             changeAudioMode(event) {
@@ -380,7 +378,6 @@
                 liveCapacity = response.data.capacity;
             });
 
-            console.log(this.course.expiryEndDate)
             return {
                 course: {},
                 courseSet: {},

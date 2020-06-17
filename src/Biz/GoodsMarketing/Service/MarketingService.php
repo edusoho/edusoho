@@ -12,6 +12,8 @@ interface MarketingService
 
     public function deleteMeans($id);
 
+    public function countMeans($conditions);
+
     public function searchMeans($conditions, $orderBys, $start, $limit, $columns = []);
 
     public function findValidMeansByTargetTypeAndTargetId($targetType, $targetId);

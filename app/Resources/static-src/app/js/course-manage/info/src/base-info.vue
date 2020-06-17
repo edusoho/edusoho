@@ -164,7 +164,7 @@
         data() {
             let baseForm = {
                 title: this.course.title ? this.course.title : this.course.courseSetTitle,
-                subtitle: this.course.subtitle,
+                subtitle: this.course.subtitle ? this.course.subtitle : this.courseSet.subtitle,
             };
 
             if (this.isUnMultiCourseSet) {
@@ -219,7 +219,6 @@
         }
         ,
         mounted() {
-            console.log();
         }
     }
 </script>

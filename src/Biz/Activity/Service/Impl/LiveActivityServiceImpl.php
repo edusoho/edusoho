@@ -4,6 +4,7 @@ namespace Biz\Activity\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\ActivityException;
+use Biz\Activity\Dao\ActivityDao;
 use Biz\Activity\Dao\LiveActivityDao;
 use Biz\Activity\LiveActivityException;
 use Biz\Activity\Service\LiveActivityService;
@@ -16,7 +17,6 @@ use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Event\Event;
-use Biz\Activity\Dao\ActivityDao;
 
 class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 {
@@ -38,11 +38,11 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (empty($liveActivity)) {
             $this->createNewException(LiveActivityException::NOTFOUND_LIVE());
         }
-        $conditions = array(
+        $conditions = [
             'mediaId' => $liveActivity['id'],
             'mediaType' => 'live',
-        );
-        $activities = $this->getActivityDao()->search($conditions, array('endTime' => 'DESC'), 0, 1);
+        ];
+        $activities = $this->getActivityDao()->search($conditions, ['endTime' => 'DESC'], 0, 1);
         if (empty($activities)) {
             $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
@@ -69,10 +69,10 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             || $activity['startTime'] <= time()
         ) {
             //此时不创建直播教室
-            $live = array(
+            $live = [
                 'id' => 0,
                 'provider' => 0,
-            );
+            ];
         } else {
             $live = $this->createLiveroom($activity);
 
@@ -84,19 +84,19 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
                 $error = '帐号已过期' == $live['error'] ? '直播服务已过期' : $live['error'];
                 throw $this->createServiceException($error);
             }
-            $this->dispatchEvent('live.activity.create', new Event($live['id'], array('activity' => $activity)));
+            $this->dispatchEvent('live.activity.create', new Event($live['id'], ['activity' => $activity]));
         }
 
         if (!empty($activity['roomType']) && !$this->isRoomType($activity['roomType'])) {
             $this->createNewException(LiveActivityException::ROOMTYPE_INVALID());
         }
 
-        $liveActivity = array(
+        $liveActivity = [
             'liveId' => $live['id'],
             'liveProvider' => $live['provider'],
             'roomType' => empty($activity['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $activity['roomType'],
             'roomCreated' => $live['id'] > 0 ? 1 : 0,
-        );
+        ];
 
         return $this->getLiveActivityDao()->create($liveActivity);
     }
@@ -106,7 +106,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $preLiveActivity = $liveActivity = $this->getLiveActivityDao()->get($id);
 
         if (empty($liveActivity)) {
-            return array();
+            return [];
         }
         $fields = array_merge($activity, $fields);
         if (!$liveActivity['roomCreated']) {
@@ -121,11 +121,11 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             }
         } elseif ($fields['endTime'] > time()) {
             //直播还未结束的情况下才更新直播房间信息
-            $liveParams = array(
+            $liveParams = [
                 'liveId' => $liveActivity['liveId'],
                 'summary' => empty($fields['remark']) ? '' : $fields['remark'],
                 'title' => $fields['title'],
-            );
+            ];
             //直播开始后不更新开始时间和直播时长
             if ($fields['startTime'] > time()) {
                 $liveParams['startTime'] = $fields['startTime'];
@@ -138,7 +138,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
             $this->getEdusohoLiveClient()->updateLive($liveParams);
         }
-        $live = ArrayToolkit::parts($fields, array('replayStatus', 'fileId', 'roomType'));
+        $live = ArrayToolkit::parts($fields, ['replayStatus', 'fileId', 'roomType']);
 
         if (!empty($live['fileId'])) {
             $live['mediaId'] = $live['fileId'];
@@ -151,9 +151,9 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $liveActivity = $this->getLiveActivityDao()->update($id, $live);
         }
 
-        $this->dispatchEvent('live.activity.update', new Event($liveActivity, array('fields' => $live, 'liveId' => $liveActivity['liveId'], 'activity' => $activity)));
+        $this->dispatchEvent('live.activity.update', new Event($liveActivity, ['fields' => $live, 'liveId' => $liveActivity['liveId'], 'activity' => $activity]));
 
-        return array($liveActivity, $fields);
+        return [$liveActivity, $fields];
     }
 
     public function updateLiveStatus($id, $status)
@@ -163,12 +163,12 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             return;
         }
 
-        if (!in_array($status, array(EdusohoLiveClient::LIVE_STATUS_LIVING, EdusohoLiveClient::LIVE_STATUS_CLOSED, EdusohoLiveClient::LIVE_STATUS_PAUSE))) {
+        if (!in_array($status, [EdusohoLiveClient::LIVE_STATUS_LIVING, EdusohoLiveClient::LIVE_STATUS_CLOSED, EdusohoLiveClient::LIVE_STATUS_PAUSE])) {
             $this->createNewException(LiveActivityException::LIVE_STATUS_INVALID());
         }
 
-        $update = $this->getLiveActivityDao()->update($liveActivity['id'], array('progressStatus' => $status));
-        $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_status', "修改直播进行状态，由‘{$liveActivity['progressStatus']}’改为‘{$status}’", array('preLiveActivity' => $liveActivity, 'newLiveActivity' => $update));
+        $update = $this->getLiveActivityDao()->update($liveActivity['id'], ['progressStatus' => $status]);
+        $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_status', "修改直播进行状态，由‘{$liveActivity['progressStatus']}’改为‘{$status}’", ['preLiveActivity' => $liveActivity, 'newLiveActivity' => $update]);
 
         return $update;
     }
@@ -219,7 +219,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
     protected function isRoomType($liveRoomType)
     {
-        return in_array($liveRoomType, array(EdusohoLiveClient::LIVE_ROOM_LARGE, EdusohoLiveClient::LIVE_ROOM_SMALL));
+        return in_array($liveRoomType, [EdusohoLiveClient::LIVE_ROOM_LARGE, EdusohoLiveClient::LIVE_ROOM_SMALL]);
     }
 
     /**
@@ -284,8 +284,10 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $liveLogoUrl = $baseUrl.'/'.$liveLogo['live_logo'];
         }
 
-        $live = $this->getEdusohoLiveClient()->createLive(array(
-            'summary' => empty($activity['remark']) ? '' : $activity['remark'],
+        $remark = empty($activity['remark']) ? '' : strip_tags($activity['remark'], '<img>');
+        $remark = html_entity_decode($remark);
+        $live = $this->getEdusohoLiveClient()->createLive([
+            'summary' => $remark,
             'title' => $activity['title'],
             'speaker' => $speaker,
             'startTime' => $activity['startTime'].'',
@@ -294,7 +296,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'jumpUrl' => $baseUrl.'/live/jump?id='.$activity['fromCourseId'],
             'liveLogoUrl' => $liveLogoUrl,
             'roomType' => empty($activity['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $activity['roomType'],
-        ));
+        ]);
 
         return $live;
     }

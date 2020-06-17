@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller\AdminV2\Teach;
 
-use AppBundle\Common\ExportHelp;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\ExportHelp;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Activity\Service\ActivityService;
@@ -41,19 +41,19 @@ class CourseController extends BaseController
 
         return $this->render(
             'admin-v2/teach/course-set/course-list-data-modal.html.twig',
-            array(
+            [
                 'tasks' => $tasks,
                 'courseSet' => $courseSet,
                 'courses' => $courses,
                 'courseId' => $courseId,
-            )
+            ]
         );
     }
 
     public function prepareForExportTasksDatasAction(Request $request, $courseId)
     {
         if (empty($courseId)) {
-            return $this->createJsonResponse(array('error' => 'courseId can not be null'));
+            return $this->createJsonResponse(['error' => 'courseId can not be null']);
         }
 
         list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
@@ -76,11 +76,11 @@ class CourseController extends BaseController
         $method = ExportHelp::getNextMethod($start + $limit, $courseTasksCount);
 
         return $this->createJsonResponse(
-            array(
+            [
                 'method' => $method,
                 'fileName' => $fileName,
                 'start' => $start + $limit,
-            )
+            ]
         );
     }
 
@@ -89,7 +89,7 @@ class CourseController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
         if (empty($course)) {
-            return $this->createJsonResponse(array('error' => 'course can not be found'));
+            return $this->createJsonResponse(['error' => 'course can not be found']);
         }
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
@@ -107,10 +107,10 @@ class CourseController extends BaseController
             $password = $this->getPasswordEncoder()->encodePassword($password, $currentUser->salt);
 
             if ($password == $currentUser->password) {
-                $response = array('success' => true, 'message' => '密码正确');
+                $response = ['success' => true, 'message' => '密码正确'];
                 $request->getSession()->set('checkPassword', time() + 1800);
             } else {
-                $response = array('success' => false, 'message' => '密码错误');
+                $response = ['success' => false, 'message' => '密码错误'];
             }
 
             return $this->createJsonResponse($response);
@@ -125,7 +125,7 @@ class CourseController extends BaseController
             $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($conditions['keyword']);
             $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
             unset($conditions['keywordType'], $conditions['keyword']);
-            $conditions['courseSetIds'] = $conditions['courseSetIds'] ?: array(-1);
+            $conditions['courseSetIds'] = $conditions['courseSetIds'] ?: [-1];
         }
 
         $paginator = new Paginator(
@@ -135,7 +135,7 @@ class CourseController extends BaseController
         );
         $notes = $this->getNoteService()->searchNotes(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -144,14 +144,14 @@ class CourseController extends BaseController
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($notes, 'courseSetId'));
         $tasks = $this->getTaskService()->findTasksByIds(ArrayToolkit::column($notes, 'taskId'));
 
-        return $this->render('admin-v2/teach/course-note/index.html.twig', array(
+        return $this->render('admin-v2/teach/course-note/index.html.twig', [
             'notes' => $notes,
             'paginator' => $paginator,
             'users' => $users,
             'tasks' => ArrayToolkit::index($tasks, 'id'),
             'courses' => $courses,
             'courseSets' => $courseSets,
-        ));
+        ]);
     }
 
     public function deleteNoteAction(Request $request, $id)
@@ -163,7 +163,7 @@ class CourseController extends BaseController
 
     public function batchDeleteNoteAction(Request $request)
     {
-        $ids = $request->request->get('ids', array());
+        $ids = $request->request->get('ids', []);
         $this->getNoteService()->deleteNotes($ids);
 
         return $this->createJsonResponse(true);
@@ -181,7 +181,7 @@ class CourseController extends BaseController
     {
         $key = $request->query->get('key');
 
-        $conditions = array('title' => $key);
+        $conditions = ['title' => $key];
         $conditions['status'] = 'published';
         $conditions['type'] = 'normal';
         $conditions['parentId'] = 0;
@@ -201,22 +201,22 @@ class CourseController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
 
-        return $this->render($twigToRender, array(
+        return $this->render($twigToRender, [
             'key' => $key,
             'courses' => $courses,
             'users' => $users,
             'categories' => $categories,
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     protected function getExportTasksDatas($courseId, $start, $limit, $exportAllowCount)
     {
         $this->getCourseService()->tryManageCourse($courseId);
 
-        $conditions = array(
+        $conditions = [
             'courseId' => $courseId,
-        );
+        ];
         $courseTasksCount = $this->getTaskService()->countTasks($conditions);
 
         $courseTasksCount = ($courseTasksCount > $exportAllowCount) ? $exportAllowCount : $courseTasksCount;
@@ -225,7 +225,7 @@ class CourseController extends BaseController
 
         $originaTasks = $this->makeTasksDatasByCourseId($courseId, $start, $limit);
 
-        $exportTasks = array();
+        $exportTasks = [];
         foreach ($originaTasks as $task) {
             $exportTask = '';
 
@@ -261,12 +261,12 @@ class CourseController extends BaseController
             $exportTasks[] = $exportTask;
         }
 
-        return array($titles, $exportTasks, $courseTasksCount);
+        return [$titles, $exportTasks, $courseTasksCount];
     }
 
     protected function makeTasksDatasByCourseId($courseId, $start = 0, $limit = 1000)
     {
-        $tasks = $this->getTaskService()->searchTasks(array('courseId' => $courseId), array('id' => 'ASC'), $start, $limit);
+        $tasks = $this->getTaskService()->searchTasks(['courseId' => $courseId], ['id' => 'ASC'], $start, $limit);
         $activityIds = ArrayToolkit::column($tasks, 'activityId');
         $activities = $this->getActivityService()->findActivities($activityIds, true);
         $activities = ArrayToolkit::index($activities, 'id');
@@ -288,12 +288,12 @@ class CourseController extends BaseController
     {
         foreach ($tasks as $key => &$task) {
             $finishedNum = $this->getTaskResultService()->countTaskResults(
-                array('status' => 'finish', 'courseTaskId' => $task['id'])
+                ['status' => 'finish', 'courseTaskId' => $task['id']]
             );
-            $studentNum = $this->getTaskResultService()->countTaskResults(array('courseTaskId' => $task['id']));
+            $studentNum = $this->getTaskResultService()->countTaskResults(['courseTaskId' => $task['id']]);
             $learnedTime = $this->getTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($task['id']);
 
-            if (in_array($task['type'], array('video', 'audio'))) {
+            if (in_array($task['type'], ['video', 'audio'])) {
                 $task['length'] = (int) ($task['length'] / 60);
                 $watchTime = $this->getTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId($task['id']);
                 $task['watchTime'] = round($watchTime / 60);
@@ -301,9 +301,9 @@ class CourseController extends BaseController
 
             if ('testpaper' == $task['type'] && !empty($task['activity'])) {
                 $activity = $task['activity'];
-                $score = $this->getTestpaperService()->searchTestpapersScore(array('testId' => $activity['ext']['mediaId']));
+                $score = $this->getTestpaperService()->searchTestpapersScore(['testId' => $activity['ext']['mediaId']]);
                 $paperNum = $this->getTestpaperService()->searchTestpaperResultsCount(
-                    array('testId' => $activity['ext']['mediaId'])
+                    ['testId' => $activity['ext']['mediaId']]
                 );
 
                 $task['score'] = 0 == $paperNum ? 0 : intval($score / $paperNum);

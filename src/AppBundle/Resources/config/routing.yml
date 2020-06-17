@@ -3478,3 +3478,7 @@ render_org:
 upload_image:
     path: /render/upload/image
     defaults: { _controller: AppBundle:Vue/Common:uploadImage }
+
+goods_show:
+    path:     /goods/show/{id}
+    defaults: { _controller: AppBundle:Goods/Goods:show }

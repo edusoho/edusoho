@@ -4,14 +4,13 @@ namespace AppBundle\Controller\AdminV2\System;
 
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Util\FileUtil;
-use Biz\Util\Service\SystemUtilService;
 use Biz\Util\SystemUtil;
 
 class OptimizeController extends BaseController
 {
     public function indexAction()
     {
-        return $this->render('admin-v2/system/optimize.html.twig', array());
+        return $this->render('admin-v2/system/optimize.html.twig', []);
     }
 
     public function removeCacheAction()
@@ -46,29 +45,11 @@ class OptimizeController extends BaseController
         $db = SystemUtil::backupdb();
         $downloadFile = '/files/tmp/'.basename($db);
 
-        return $this->createJsonResponse(array('status' => 'ok', 'result' => $downloadFile));
-    }
-
-    public function removeUnusedFilesAction()
-    {
-        $result = $this->getSystemUtilService()->removeUnusedUploadFiles();
-        if ($result) {
-            return $this->createJsonResponse(array('success' => true, 'message' => '优化文件'));
-        } else {
-            return $this->createJsonResponse(array('success' => false, 'message' => '无可优化文件'));
-        }
+        return $this->createJsonResponse(['status' => 'ok', 'result' => $downloadFile]);
     }
 
     protected function isDisabledUpgrade()
     {
         return false;
-    }
-
-    /**
-     * @return SystemUtilService
-     */
-    protected function getSystemUtilService()
-    {
-        return $this->createService('Util:SystemUtilService');
     }
 }

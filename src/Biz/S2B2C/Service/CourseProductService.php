@@ -8,6 +8,8 @@ interface CourseProductService
 
     public function syncCourseMain($courseId);
 
+    public function updateCourseVersionData($courseId);
+
     public function setProductHasNewVersion($productType, $remoteResourceId);
 
     public function deleteProductsByCourseSet($courseSet);

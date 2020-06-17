@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Product\Service;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
 use Biz\Common\CommonException;
 use Biz\Product\Dao\ProductDao;
@@ -50,7 +51,10 @@ class ProductServiceTest extends BaseTestCase
 
         $result = $this->getProductService()->getProduct($expected['id']);
 
-        $this->assertArrayEquals($expected, $result);
+        $this->assertEquals($expected, $result);
+
+        $result2 = $this->getProductService()->getProduct($expected['id'] + 100000);
+        $this->assertNull($result2);
     }
 
     public function testUpdateProduct()
@@ -92,18 +96,33 @@ class ProductServiceTest extends BaseTestCase
         $conditions1 = ['titleLike' => 'test'];
 
         $result1 = $this->getProductService()->searchProducts($conditions1, ['id' => 'ASC'], 0, 10);
+        $result1 = ArrayToolkit::index($result1, 'id');
+        $expected1 = [$product1, $product2, $product3, $product4];
 
-        $this->assertArrayEquals([$product1, $product2, $product3, $product4], $result1);
+        $this->assertEquals(count($expected1), count($result1));
+        $this->assertEmpty(array_diff(ArrayToolkit::column($expected1, 'id'), ArrayToolkit::column($result1, 'id')));
+        $this->assertEquals($product1, $result1[$product1['id']]);
 
         $conditions2 = ['targetType' => 'testType'];
         $result2 = $this->getProductService()->searchProducts($conditions2, ['id' => 'ASC'], 0, 10);
+        $result2 = ArrayToolkit::index($result2, 'id');
 
-        $this->assertArrayEquals([$product1, $product3, $product4], $result2);
+        $expected2 = [$product1, $product3, $product4];
+
+        $this->assertEquals(count($expected2), count($result2));
+        $this->assertEmpty(array_diff(ArrayToolkit::column($expected2, 'id'), ArrayToolkit::column($result2, 'id')));
+        $this->assertEquals($product3, $result2[$product3['id']]);
 
         $conditions3 = ['targetType' => 'testType', 'title' => 'testTitle2'];
         $result3 = $this->getProductService()->searchProducts($conditions3, ['id' => 'ASC'], 0, 10);
 
-        $this->assertArrayEquals([$product4], $result3);
+        $result3 = ArrayToolkit::index($result3, 'id');
+
+        $expected3 = [$product4];
+
+        $this->assertEquals(count($expected3), count($result3));
+        $this->assertEmpty(array_diff(ArrayToolkit::column($expected3, 'id'), ArrayToolkit::column($result3, 'id')));
+        $this->assertEquals($product4, $result3[$product4['id']]);
     }
 
     public function testSearchProducts_withDifferentOrderBysAndLimits()
@@ -114,13 +133,13 @@ class ProductServiceTest extends BaseTestCase
         $product4 = $this->createProduct(['targetType' => 'testType', 'targetId' => 1, 'title' => 'testTitle2']);
 
         $result1 = $this->getProductService()->searchProducts(['targetType' => 'testType'], ['id' => 'ASC'], 0, 10);
-        $this->assertArrayEquals([$product1, $product3, $product4], $result1);
+        $this->assertEquals([$product1, $product3, $product4], $result1);
 
         $result2 = $this->getProductService()->searchProducts(['targetType' => 'testType'], ['id' => 'DESC'], 0, 10);
-        $this->assertArrayEquals([$product4, $product3, $product1], $result2);
+        $this->assertEquals([$product4, $product3, $product1], $result2);
 
         $result3 = $this->getProductService()->searchProducts(['targetType' => 'testType'], ['id' => 'ASC'], 0, 2);
-        $this->assertArrayEquals([$product1, $product3], $result3);
+        $this->assertEquals([$product1, $product3], $result3);
     }
 
     public function testSearchProducts_withDifferentColumns()
@@ -137,7 +156,7 @@ class ProductServiceTest extends BaseTestCase
         ];
 
         $result1 = $this->getProductService()->searchProducts(['targetType' => 'testType'], ['id' => 'ASC'], 0, 10, ['targetId', 'targetType']);
-        $this->assertArrayEquals($expected1, $result1);
+        $this->assertEquals($expected1, $result1);
 
         $expected2 = [
             ['targetType' => $product1['targetType'], 'title' => $product1['title']],
@@ -146,7 +165,7 @@ class ProductServiceTest extends BaseTestCase
         ];
 
         $result2 = $this->getProductService()->searchProducts(['targetType' => 'testType'], ['id' => 'ASC'], 0, 10, ['targetType', 'title']);
-        $this->assertArrayEquals($expected2, $result2);
+        $this->assertEquals($expected2, $result2);
     }
 
     public function testGetProductByTargetIdAndType()
@@ -155,7 +174,7 @@ class ProductServiceTest extends BaseTestCase
         $product2 = $this->createProduct(['targetType' => 'testType2']);
 
         $result = $this->getProductService()->getProductByTargetIdAndType($product1['targetId'], $product1['targetType']);
-        $this->assertArrayEquals($product1, $result);
+        $this->assertEquals($product1, $result);
     }
 
     public function testFindProductsByIds()
@@ -166,15 +185,15 @@ class ProductServiceTest extends BaseTestCase
         $product4 = $this->createProduct(['targetType' => 'testType', 'targetId' => 1, 'title' => 'testTitle2']);
 
         $result = $this->getProductService()->findProductsByIds([$product1['id'], $product2['id'], $product3['id']]);
+        $expected = [
+            $product1['id'] => $product1,
+            $product2['id'] => $product2,
+            $product3['id'] => $product3,
+        ];
 
-        $this->assertArrayEquals(
-            [
-                $product1['id'] => $product1,
-                $product2['id'] => $product2,
-                $product3['id'] => $product3,
-            ],
-            $result
-        );
+        $this->assertEquals(count($expected), count($result));
+        $this->assertEmpty(array_diff(array_keys($expected), array_keys($result)));
+        $this->assertEquals($product1, $result[$product1['id']]);
     }
 
     protected function createProduct($product = [])
