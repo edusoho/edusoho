@@ -28,7 +28,10 @@
           <div class="js-tasks-show" v-html="tasksList"></div>
         </div>
         <!-- 学员评价 -->
-        <info-left-reviews :reviews="componentsData.reviews"></info-left-reviews>
+        <div id="info-left-3" class="info-left-reviews content-item js-content-item">
+          <h3 class="content-item__title">学员评价</h3>
+          <info-left-reviews :reviews="componentsData.reviews"></info-left-reviews>
+        </div>
       </div>
     </div>
     <div v-if="hasExtension" class="product-info__right pull-right">
@@ -124,8 +127,14 @@
         });
       },
       requestTasks() {
-        axios.get('/course/1/task/list/render/normal').then(res => {
-        //   console.log(res);
+        axios.get('/course/1/task/list/render/normal', {
+          headers: {
+            'Accept': 'application/vnd.edusoho.v2+json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-Token': $('meta[name=csrf-token]').attr('content')
+          }
+        }).then(res => {
+        //   console.log(res.data);
           this.tasksList = res.data;
         });
       }
