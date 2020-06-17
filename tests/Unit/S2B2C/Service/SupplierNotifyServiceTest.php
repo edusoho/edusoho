@@ -62,11 +62,11 @@ class SupplierNotifyServiceTest extends BaseTestCase
             'logo' => 'test.com/testlogo.png',
             'favicon' => 'test.com/testfavicon.png',
         ]);
-        $result = $this->getSupplierNotifyService()->onSupplierSiteLogoChange([]);
+        $result = $this->getSupplierNotifyService()->onSupplierSiteLogoAndFaviconChange([]);
         $this->assertEquals(['success' => true], $result);
         $setting = $this->getSettingService()->get('site');
-        $this->assertContains('test.com/testlogo.png?', $setting['logo']);
-        $this->assertContains('test.com/testfavicon.png?', $setting['favicon']);
+        $this->assertContains('test.com/testlogo.png', $setting['logo']);
+        $this->assertContains('test.com/testfavicon.png', $setting['favicon']);
     }
 
     public function testOnMerchantAuthNodeChange()
