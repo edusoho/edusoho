@@ -16,11 +16,11 @@ class ImUser extends AbstractResource
     {
         $keyword = $request->query->get('keyword');
         if (empty($keyword)) {
-            return array();
+            return [];
         }
 
-        $mobileProfiles = $this->getUserService()->searchUserProfiles(array('mobile' => $keyword), array('id' => 'DESC'), 0, 5);
-        $qqProfiles = $this->getUserService()->searchUserProfiles(array('qq' => $keyword), array('id' => 'DESC'), 0, 5);
+        $mobileProfiles = $this->getUserService()->searchUserProfiles(['mobile' => $keyword], ['id' => 'DESC'], 0, 5);
+        $qqProfiles = $this->getUserService()->searchUserProfiles(['qq' => $keyword], ['id' => 'DESC'], 0, 5);
         $mobileAndQQUserIds = array_merge(
             ArrayToolkit::column($mobileProfiles, 'id'),
             ArrayToolkit::column($qqProfiles, 'id')
@@ -28,18 +28,18 @@ class ImUser extends AbstractResource
         $mobileAndQQUsers = $this->getUserService()->findUsersByIds($mobileAndQQUserIds);
 
         $nicknameUsers = ArrayToolkit::index(
-            $this->getUserService()->searchUsers(array('nickname' => $keyword), array('nickname' => 'ASC'), 0, 5),
+            $this->getUserService()->searchUsers(['nickname' => $keyword], ['nickname' => 'ASC'], 0, 5),
             'id'
         );
 
-        $users = ArrayToolkit::mergeArraysValue(array($mobileAndQQUsers, $nicknameUsers));
+        $users = ArrayToolkit::mergeArraysValue([$mobileAndQQUsers, $nicknameUsers]);
         foreach ($users as $key => $user) {
-            if ($user['destroyed'] == 1) {
+            if (1 == $user['destroyed']) {
                 unset($users[$key]);
             }
         }
 
-        return $users;
+        return array_values($users);
     }
 
     /**

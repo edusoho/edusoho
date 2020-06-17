@@ -6,11 +6,11 @@ use AppBundle\Common\Exception\AbstractException;
 
 class ReviewException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 43;
+    const EXCEPTION_MODULE = 43;
 
     const NOTFOUND_REVIEW = 4044301;
 
-    public $messages = array(
+    public $messages = [
         4044301 => 'exception.review.not_found',
-    );
+    ];
 }

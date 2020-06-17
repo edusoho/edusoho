@@ -6226,6 +6226,8 @@ admin.magic_setting.learn_time_sec_tip: second
 admin.magic_setting.watch_time_sec: watch time report cycle
 admin.magic_setting.watch_time_sec_tip: second
 admin.magic_setting.site_trace_enable: enable site trace
+admin.magic_setting.live_entry_time: Time to enter before live broadcast begins
+admin.magic_setting.live_entry_time_tip: second
 
 admin.magic_setting.one_for_open: '1 To enable'
 admin.magic_setting.one_for_close: '1 Is off'
@@ -6541,9 +6543,11 @@ admin.invite_setting.mobile_for_receive: Phone number to receive reminders
 admin.invite_setting.sms_enable_hint: Please note that this feature will take effect when the cloud message is enabled, and the SMS notification will deduct the number of SMS messages of network school.
 admin.wap_setting: 'Mobile site'
 admin.wap_setting.find: 'Discovery page settings'
-admin.wap_setting.site: 'Site settings'
+admin.wap_setting.site: 'Mobile settings'
+admin.wap_setting.mini_school: 'Mobile'
+admin.wap_setting.theme: 'Decoration theme'
 admin.wap_setting.online: 'Function officially launched'
-admin.wap_setting.open: 'Go to the new micro-network school'
+admin.wap_setting.open: 'Free to open the new micro-network school'
 admin.wap_setting.function: >
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>Customize each module</li>
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>Set a side preview to see the display in real time</li>
@@ -6556,7 +6560,33 @@ admin.wap_setting.version_select: 'version select'
 admin.wap_setting.new: New
 admin.wap_setting.old: Old
 admin.wap_setting.off: Off
-admin.wap_setting.hint: '<p class="help-block"> If turned on, mobile site will default displayed on mobile browser and wechat. </p><p class="help-block"> if turned off, site will displayed in a responsive way </p><p class="help-block">Notice: When you change the download link, you should save again.</p>'
+admin.wap_setting.tip: MicroSchool is an application that is opened through a browser and does not require a download. The link can be sent to students, or added to a push SMS, students can click on the link and immediately enter the micro-net school to study, purchase courses, course sharing, etc. The micro-net school is more suitable for the purpose of promoting student sharing, new promotion, and activation through marketing activities.
+admin.wap_setting.edit.tip: On the left side is a preview of the home page of your micro-net school, you can click "Edit Micro-net School" to enter the edit page. You can also select the appropriate theme application through the Theme Template. Build a personalized micro-net school home page through the free combination of components.
+admin.wap_setting.edit: Edit Site
+admin.wap_setting.open.tip: >
+  <h4 class="mbl">First time to start Micro-NetSchool, please modify the Wechat payment configuration.</h4>
+  <p>1、If you open the topic of wechat school - departure for the first time, you need to modify the wechat configuration, otherwise you will not be able to pay for the course in the wechat school.</p>
+  <p>2、For the first time, we need to modify the wechat configuration for the online school customers who switch to the topic of departure.</p>
+  <a href="http://www.qiqiuyu.com/faq/793/detail" target="_blank">【View Tutorial】</a>
+admin.wap_setting.subject_name: Subject name
+admin.wap_setting.subject_name.recommend: recommend
+admin.wap_setting.subject_name.template_name.sail: Sailing
+admin.wap_setting.subject_name.template.feature: Theme features
+admin.wap_setting.subject_name.template.sail.feature: >
+  <p>1、The theme scheme has the characteristics of promoting the transformation of user test and low customer unit price courses.</p>
+  <p>2、Support custom homepage style of micro online school.</p>
+  <p>3、According to the operation objectives, the main courses on the homepage can be flexibly adjusted.</p>
+admin.wap_setting.subject_name.template.use: use
+admin.wap_setting.subject_name.template_name.jane_mo: Jane Mo
+admin.wap_setting.subject_name.template.jane_mo.feature: >
+  <p>1、PC end network school decoration is applied to micro network school, one key application, time-saving and labor-saving.</p>
+  <p>2、It is not supported to customize the editing style of the home page in the school.</p>
+  <p>3、It is not supported to adjust the main courses on the home page in the micro network school.</p>
+admin.wap_setting.subject_name.template.jane_mo_off.feature: >
+  <p>1、PC end network school decoration is applied to micro network school, one key application, time-saving and labor-saving.</p>
+  <p>2、It is not supported to customize the editing style of the home page in the school.</p>
+  <p>3、It is not supported to adjust the main courses on the home page in the micro network school.</p>
+
 
 admin.payment_setting.open_help.tips: 'Tip: Please choose to open the payment method as required. If you do not open any payment, you will be unable to purchase online school products.'
 admin.payment_setting.close_help.tips: 'Tip: Closing the payment function will result in users of the school cannot be purchased.'
@@ -7254,7 +7284,7 @@ activity.live.replay_guid: >
 
 activity.live.default_notice: >
   <p>The live broadcast starts at %startTimeFormat% and ends at %endTimeFormat%<p>
-  (You can enter the live broadcasting classroom within 120 minutes before it starts.)
+  (You can enter the live broadcasting classroom within %limitTimeFormat% hours before it starts.)
 
 
 #积分
@@ -8884,6 +8914,7 @@ exception.message.send_to_self: Can't send messages to yourself
 exception.message.empty_message: The message is empty
 exception.message.not_found_conversation: Session does not exist
 exception.message.delete_denied: You are not authorized to delete this private message
+exception.message.send_limit: The number of private messages is limited, please try again later
 exception.coupon.not_found: Coupon does not exist
 exception.coupon.status_invalid: Illegal coupon status
 exception.coupon.type_invalid: Illegal coupon type
@@ -9663,3 +9694,5 @@ s2b2c.resource.has_new_notice_hint: 您采购的内容有更新
 s2b2c.resource.no_fee_notice_hint: 您与%supplierName%合作的采购账户余额还剩%balance%，请及时联系%supplierName%进行充值
 s2b2c.resource.sync.prev_price.notify: 上个版本价格为
 s2b2c.resource.sync.has_new.notify: 有价格更新
+
+exception.goods.not_found: Goods not found.

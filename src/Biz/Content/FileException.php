@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class FileException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 10;
+    const EXCEPTION_MODULE = 10;
 
     const FILE_NOT_FOUND = 4041001;
     const FILE_GROUP_INVALID = 4031002;
@@ -21,7 +21,7 @@ class FileException extends AbstractException
     const FILE_EMPTY_ERROR = 5001011;
     const FILE_AUTH_URL_INVALID = 5001012;
 
-    public $messages = array(
+    public $messages = [
         4041001 => 'exception.file.not_found',
         4031002 => 'exception.file.group_invalid',
         5001003 => 'exception.file.not_upload',
@@ -34,5 +34,5 @@ class FileException extends AbstractException
         5001010 => 'exception.file.size_limit',
         5001011 => 'exception.file.empty_error',
         5001012 => 'exception.file.auth_url_invalid',
-    );
+    ];
 }

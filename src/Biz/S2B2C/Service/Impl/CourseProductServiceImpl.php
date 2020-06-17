@@ -178,6 +178,15 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         return ['status' => true, 'error' => ''];
     }
 
+    /**
+     * @param $productType
+     * @param $remoteResourceId
+     *
+     * @return bool
+     *
+     * @throws \Exception
+     * @codeCoverageIgnore
+     */
     public function setProductHasNewVersion($productType, $remoteResourceId)
     {
         //获取更新的课程和计划
@@ -221,6 +230,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
     /**
      * @param $products
      * 下架对应商品
+     * @codeCoverageIgnore
      */
     public function closeProducts($products)
     {
@@ -243,6 +253,15 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         }
     }
 
+    /**
+     * @param $remoteResourceId
+     * @param $priceFields
+     *
+     * @return bool
+     *
+     * @throws \Exception
+     * @codeCoverageIgnore
+     */
     public function syncProductPrice($remoteResourceId, $priceFields)
     {
         $this->beginTransaction();
@@ -277,6 +296,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
      * @param $courseSet
      *
      * @return array|null[]|string[]
+     * @codeCoverageIgnore
      */
     public function deleteProductsByCourseSet($courseSet)
     {
@@ -342,6 +362,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
      *
      * @throws \Exception
      *                    检查计划是否有操作权限
+     * @codeCoverageIgnore
      */
     public function checkCourseStatus($localCourseId)
     {
@@ -362,6 +383,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
      *
      * @throws \Exception
      *                    检查课程是否有操作权限
+     * @codeCoverageIgnore
      */
     public function checkCourseSetStatus($localCourseSetId)
     {
@@ -377,6 +399,10 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         }
     }
 
+    /**
+     * @throws \Exception
+     * @codeCoverageIgnore
+     */
     protected function checkMerchantStatus()
     {
         $merchant = $this->getS2B2CFacadeService()->getMe();

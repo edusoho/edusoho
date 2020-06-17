@@ -121,7 +121,6 @@ class TestpaperController extends BaseActivityController implements ActivityActi
     public function learnDataDetailAction(Request $request, $task)
     {
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($activity['ext']['mediaId'], $activity['mediaType']);
 
         $conditions = [
             'courseTaskId' => $task['id'],

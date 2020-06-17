@@ -28,20 +28,20 @@ class OverviewNormalTaskDetailExporter extends Exporter
 
     public function getTitles()
     {
-        return array(
+        return [
             'task.learn_data_detail.nickname',
             'task.learn_data_detail.createdTime',
             'task.learn_data_detail.finishedTime',
             'task.learn_data_detail.learnTime',
             'task.learn_data_detail.video_and_audio_learnTime',
-        );
+        ];
     }
 
     public function getContent($start, $limit)
     {
         $taskResults = $this->getTaskResultService()->searchTaskResults(
             $this->conditions,
-            array('createdTime' => 'ASC'),
+            ['createdTime' => 'ASC'],
             $start,
             $limit
         );
@@ -49,13 +49,13 @@ class OverviewNormalTaskDetailExporter extends Exporter
         $userIds = ArrayToolkit::column($taskResults, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $datas = array();
+        $datas = [];
 
         foreach ($taskResults as $taskResult) {
             $user = $users[$taskResult['userId']];
 
-            $data = array();
-            $data[] = $user['nickname'];
+            $data = [];
+            $data[] = $user['nickname']."\t";
             $data[] = date('Y-m-d H:i:s', $taskResult['createdTime']);
             $data[] = empty($taskResult['finishedTime']) ? '-' : date('Y-m-d H:i:s', $taskResult['finishedTime']);
             $data[] = empty($taskResult['time']) ? '-' : round(($taskResult['time'] / 60), 1);
@@ -77,7 +77,7 @@ class OverviewNormalTaskDetailExporter extends Exporter
 
     public function buildCondition($conditions)
     {
-        return ArrayToolkit::parts($conditions, array('courseTaskId'));
+        return ArrayToolkit::parts($conditions, ['courseTaskId']);
     }
 
     protected function getReportService()

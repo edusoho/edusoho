@@ -4,7 +4,7 @@ namespace AppBundle\Common\Exception;
 
 class FileToolkitException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 62;
+    const EXCEPTION_MODULE = 62;
 
     const NOT_IMAGE = 5006201;
 
@@ -12,9 +12,9 @@ class FileToolkitException extends AbstractException
 
     const FILE_TYPE_ERROR = 5006203;
 
-    public $messages = array(
+    public $messages = [
         5006201 => 'exception.filetoolkit.not_image',
         5006202 => 'exception.filetoolkit.not_flash',
         5006203 => 'exception.filetoolkit.file_type_error',
-    );
+    ];
 }

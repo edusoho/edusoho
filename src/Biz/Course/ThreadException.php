@@ -6,7 +6,7 @@ use AppBundle\Common\Exception\AbstractException;
 
 class ThreadException extends AbstractException
 {
-    const EXCEPTION_MODUAL = 53;
+    const EXCEPTION_MODULE = 53;
 
     const NOTFOUND_THREAD = 4045301;
 
@@ -22,7 +22,7 @@ class ThreadException extends AbstractException
 
     const COURSEID_REQUIRED = 5005307;
 
-    public $messages = array(
+    public $messages = [
         4045301 => 'exception.course.thread.not_found',
         5005302 => 'exception.course.thread.not_in_course',
         4045303 => 'exception.course.thread.not_found_post',
@@ -30,5 +30,5 @@ class ThreadException extends AbstractException
         5005305 => 'exception.course.thread.title_required',
         5005306 => 'exception.course.thread.type_invalid',
         5005307 => 'exception.course.thread.courseid_required',
-    );
+    ];
 }

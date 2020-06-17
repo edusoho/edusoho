@@ -2,25 +2,24 @@
 
 namespace Biz\Course\Service\Impl;
 
+use Biz\Announcement\Service\AnnouncementService;
 use Biz\BaseService;
+use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseDao;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\Course\Dao\CourseNoteDao;
+use Biz\Course\Dao\CourseNoteLikeDao;
+use Biz\Course\Dao\CourseSetDao;
+use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\ReviewDao;
 use Biz\Course\Dao\ThreadDao;
-use Biz\Course\Dao\FavoriteDao;
-use Biz\Course\Dao\CourseSetDao;
-use Biz\Course\Dao\CourseNoteDao;
 use Biz\Course\Dao\ThreadPostDao;
-use Biz\Task\Service\TaskService;
-use AppBundle\Common\ArrayToolkit;
-use Biz\Course\Dao\CourseMemberDao;
-use Biz\User\Service\StatusService;
-use Biz\Course\Dao\CourseChapterDao;
-use Biz\Course\Dao\CourseNoteLikeDao;
-use Biz\System\Service\SettingService;
-use Biz\IM\Service\ConversationService;
 use Biz\Course\Service\CourseDeleteService;
+use Biz\IM\Service\ConversationService;
+use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Service\TestpaperService;
-use Biz\Announcement\Service\AnnouncementService;
+use Biz\User\Service\StatusService;
 
 class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 {
@@ -33,10 +32,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             $this->deleteCourseSetMaterial($courseSetId);
 
             $this->deleteCourseSetCourse($courseSetId);
-
-            $this->deleteTestpaper($courseSetId);
-
-            $this->deleteQuestion($courseSetId);
 
             $this->getCourseSetDao()->delete($courseSetId);
 
@@ -56,7 +51,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function deleteCourseSetCourse($courseSetId)
     {
-        $courses = $this->getCourseDao()->findByCourseSetIds(array($courseSetId));
+        $courses = $this->getCourseDao()->findByCourseSetIds([$courseSetId]);
         if (empty($courses)) {
             return;
         }
@@ -66,27 +61,13 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         }
     }
 
-    protected function deleteQuestion($courseSetId)
-    {
-        $questions = $this->getQuestionDao()->findQuestionsByCourseSetId($courseSetId);
-        if (empty($questions)) {
-            return;
-        }
-
-        $this->getQuestionDao()->deleteByCourseSetId($courseSetId);
-
-        foreach ($questions as $question) {
-            $this->deleteAttachment($question['id']);
-        }
-    }
-
     protected function deleteAttachment($targetId)
     {
-        $conditions = array(
+        $conditions = [
             'targetId' => $targetId,
-            'targetTypes' => array('question.stem', 'question.analysis'),
+            'targetTypes' => ['question.stem', 'question.analysis'],
             'type' => 'attachment',
-        );
+        ];
 
         $attachments = $this->getUploadFileService()->searchUseFiles($conditions);
 
@@ -97,17 +78,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         foreach ($attachments as $attachment) {
             $this->getUploadFileService()->deleteUseFile($attachment['id']);
         }
-    }
-
-    protected function deleteTestpaper($courseSetId)
-    {
-        $testpapers = $this->getTestpaperService()->searchTestpapers(array('courseSetId' => $courseSetId), array(), 0, PHP_INT_MAX);
-        if (empty($testpapers)) {
-            return;
-        }
-
-        $testpaperIds = ArrayToolkit::column($testpapers, 'id');
-        $this->getTestpaperService()->deleteTestpapers($testpaperIds);
     }
 
     public function deleteCourse($courseId)
@@ -155,7 +125,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function updateMobileSetting($courseId)
     {
-        $courseGrids = $this->getSettingService()->get('operation_course_grids', array());
+        $courseGrids = $this->getSettingService()->get('operation_course_grids', []);
         if (empty($courseGrids) || empty($courseGrids['courseIds'])) {
             return;
         }
@@ -165,14 +135,14 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             return;
         }
 
-        $operationMobile = $this->getSettingService()->get('operation_mobile', array());
-        $settingMobile = $this->getSettingService()->get('mobile', array());
+        $operationMobile = $this->getSettingService()->get('operation_mobile', []);
+        $settingMobile = $this->getSettingService()->get('mobile', []);
 
-        $courseIds = array_diff($courseIds, array($courseId));
+        $courseIds = array_diff($courseIds, [$courseId]);
 
         $mobile = array_merge($operationMobile, $settingMobile, $courseIds);
 
-        $this->getSettingService()->set('operation_course_grids', array('courseIds' => implode(',', $courseIds)));
+        $this->getSettingService()->set('operation_course_grids', ['courseIds' => implode(',', $courseIds)]);
         $this->getSettingService()->set('operation_mobile', $operationMobile);
         $this->getSettingService()->set('mobile', $mobile);
     }
@@ -229,7 +199,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function deleteCourseNote($courseId)
     {
-        $notes = $this->getNoteDao()->search(array('courseId' => $courseId), array(), 0, PHP_INT_MAX);
+        $notes = $this->getNoteDao()->search(['courseId' => $courseId], [], 0, PHP_INT_MAX);
         if (empty($notes)) {
             return;
         }
@@ -258,7 +228,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     public function deleteCourseAnnouncement($courseId)
     {
-        $announcements = $this->getAnnouncementService()->searchAnnouncements(array('targetType' => 'course', 'targetId' => $courseId), array(), 0, PHP_INT_MAX);
+        $announcements = $this->getAnnouncementService()->searchAnnouncements(['targetType' => 'course', 'targetId' => $courseId], [], 0, PHP_INT_MAX);
         if (empty($announcements)) {
             return;
         }

@@ -2,7 +2,9 @@
 
 namespace Tests\Unit\S2B2C\Service;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
+use Biz\Common\CommonException;
 use Biz\S2B2C\Service\ResourceSyncService;
 
 class ResourceSyncServiceTest extends BaseTestCase
@@ -20,6 +22,13 @@ class ResourceSyncServiceTest extends BaseTestCase
         $mockSync = $this->mockResourceSyncFields();
         $createdSync = $this->getResourceSyncService()->createSync($mockSync);
         $this->assertEquals($mockSync['supplierId'], $createdSync['supplierId']);
+    }
+
+    public function testCreateSync_whenParamsIncorrect_thenThrowException()
+    {
+        $this->expectException(CommonException::class);
+        $this->expectExceptionCode(5000305);
+        $this->getResourceSyncService()->createSync([]);
     }
 
     public function testSearchSync_whenCreatedAny_thenSearch()
@@ -43,6 +52,12 @@ class ResourceSyncServiceTest extends BaseTestCase
         $this->assertEquals($created, $got);
     }
 
+    public function testGetSyncBySupplierIdAndRemoteResourceIdAndResourceType_whenParamsEmpty_thenGotNull()
+    {
+        $got = $this->getResourceSyncService()->getSyncBySupplierIdAndRemoteResourceIdAndResourceType(1, '', '');
+        $this->assertNull($got);
+    }
+
     public function testFindSyncBySupplierIdAndRemoteResourceIdsAndResourceType_whenCreatedThree_thenFindOne()
     {
         $mockSync0 = $this->mockResourceSyncFields();
@@ -54,6 +69,32 @@ class ResourceSyncServiceTest extends BaseTestCase
         $results = $this->getResourceSyncService()->findSyncBySupplierIdAndRemoteResourceIdsAndResourceType(1, [100, 200], 'task');
         $this->assertCount(1, $results);
         $this->assertEquals($createdSync0, reset($results));
+    }
+
+    public function testBatchCreateSyncs()
+    {
+        $mockSync0 = $this->mockResourceSyncFields(['supplierId' => 2, 'localResourceId' => 3, 'remoteResourceId' => 100]);
+        $mockSync1 = $this->mockResourceSyncFields(['supplierId' => 2, 'localResourceId' => 2, 'remoteResourceId' => 300]);
+        $mockSync2 = $this->mockResourceSyncFields(['supplierId' => 2, 'localResourceId' => 1, 'remoteResourceId' => 100]);
+        $this->getResourceSyncService()->batchCreateSyncs([$mockSync0, $mockSync1, $mockSync2]);
+        $results = ArrayToolkit::index($this->getResourceSyncService()->searchSyncs(['supplierId' => 2], ['id' => 'desc'], 0, 10), 'id');
+        $this->assertCount(3, $results);
+        $this->assertEquals([], array_diff(ArrayToolkit::column($results, 'localResourceId'), [$mockSync0['localResourceId'], $mockSync1['localResourceId'], $mockSync2['localResourceId']]));
+    }
+
+    public function testBatchCreateSyncs_whenGiveEmptyArray_thenGotEmptyArray()
+    {
+        $results = $this->getResourceSyncService()->batchCreateSyncs([]);
+        $this->assertEquals([], $results);
+    }
+
+    public function testDeleteSync()
+    {
+        $created = $this->getResourceSyncService()->createSync($this->mockResourceSyncFields());
+        $this->assertNotEmpty($created);
+        $this->getResourceSyncService()->deleteSync($created['id']);
+        $got = $this->getResourceSyncService()->getSync($created['id']);
+        $this->assertNull($got);
     }
 
     protected function mockResourceSyncFields($customFields = [])
