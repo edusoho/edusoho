@@ -84,7 +84,7 @@ class LiveStatisticsServiceImpl extends BaseService implements LiveStatisticsSer
             throw $this->createService(CommonException::ERROR_PARAMETER());
         }
 
-        $liveActivity = $this->getLiveActivityService()->search(['syncIdGT' => 0, 'liveId' => $liveId], [], 0, 1);
+        $liveActivity = $this->getLiveActivityService()->getBySyncIdGTAndLiveId($liveId);
         if (self::STATISTICS_TYPE_CHECKIN == $type) {
             if (!empty($liveActivity)) {
                 $result = $this->getS2B2CFacadeService()->getS2B2CService()->getLiveRoomCheckinList($liveId);

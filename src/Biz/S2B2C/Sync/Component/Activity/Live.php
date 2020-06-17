@@ -17,7 +17,7 @@ class Live extends Activity
     {
         $newLiveFields = $this->getLiveActivityFields($activity);
 
-        $existLive = $this->getLiveActivityDao()->search(['syncId' => $newLiveFields['syncId']], [], 0, PHP_INT_MAX);
+        $existLive = $this->getLiveActivityDao()->getBySyncId($newLiveFields['syncId']);
         if (!empty($existLive)) {
             return $this->getLiveActivityDao()->update($existLive[0]['id'], $newLiveFields);
         }

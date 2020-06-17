@@ -42,4 +42,16 @@ class LiveActivityDaoImpl extends GeneralDaoImpl implements LiveActivityDao
     {
         return $this->getByFields(['liveId' => $liveId]);
     }
+
+    public function getBySyncIdGTAndLiveId($liveId)
+    {
+        $sql = "SELECT * FROM {$this->table()} WHERE syncId > 0 and liveId = ?";
+
+        return $this->db()->fetchAssoc($sql, [$liveId]);
+    }
+
+    public function getBySyncId($syncId)
+    {
+        return $this->getByFields(['syncId' => $syncId]);
+    }
 }

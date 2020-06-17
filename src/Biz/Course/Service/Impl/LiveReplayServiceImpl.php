@@ -118,7 +118,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
             $args['protocol'] = 'https';
         }
 
-        $liveActivity = $this->getLiveActivityService()->search(['syncIdGT' => 0, 'liveId' => $liveId], [], 0, 1);
+        $liveActivity = $this->getLiveActivityService()->getBySyncIdGTAndLiveId($liveId);
         if (!empty($liveActivity)) {
             return $this->getS2B2CFacadeService()->getS2B2CService()->entryLiveReplay($args);
         }
@@ -148,7 +148,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     public function generateReplay($liveId, $courseId, $lessonId, $liveProvider, $type)
     {
         try {
-            $liveActivity = $this->getLiveActivityService()->search(['syncIdGT' => 0, 'liveId' => $liveId], [], 0, 1);
+            $liveActivity = $this->getLiveActivityService()->getBySyncIdGTAndLiveId($liveId);
             if (!empty($liveActivity)) {
                 $replayList = $this->getS2B2CFacadeService()->getS2B2CService()->createLiveReplayList($liveId);
             } else {

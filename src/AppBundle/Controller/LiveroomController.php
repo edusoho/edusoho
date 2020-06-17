@@ -42,7 +42,7 @@ class LiveroomController extends BaseController
             $user['callbackUrl'] = $this->generateCallbackUrl($schemeAndHost, $params);
         }
 
-        $liveActivity = $this->getLiveActivityService()->search(['syncIdGT' => 0, 'liveId' => $roomId], [], 0, 1);
+        $liveActivity = $this->getLiveActivityService()->getBySyncIdGTAndLiveId($roomId);
         if (!empty($liveActivity)) {
             $ticket = $this->getS2B2CFacadeService()->getS2B2CService()->getLiveEntryTicket($roomId, $user);
         } else {
@@ -100,7 +100,7 @@ class LiveroomController extends BaseController
     public function ticketAction(Request $request, $roomId)
     {
         $ticketNo = $request->query->get('ticket');
-        $liveActivity = $this->getLiveActivityService()->search(['syncIdGT' => 0, 'liveId' => $roomId], [], 0, 1);
+        $liveActivity = $this->getLiveActivityService()->getBySyncIdGTAndLiveId($roomId);
         if (!empty($liveActivity)) {
             $ticket = $this->getS2B2CServiceApi()->consumeLiveEntryTicket($roomId, $ticketNo);
         } else {
