@@ -295,34 +295,38 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
     /**
      * @param $courseSet
      *
-     * @return array|null[]|string[]
+     * @return array|bool|null[]|string[]
      * @codeCoverageIgnore
      */
     public function deleteProductsByCourseSet($courseSet)
     {
         if ('supplier' != $courseSet['platform']) {
-            return ['error' => null];
+            return true;
         }
 
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+        try {
+            $this->beginTransaction();
+            $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+            $courseSetProduct = $this->getProductService()->getByTypeAndLocalResourceId('course_set', $courseSet['id']);
+            $courseProducts = $this->getProductService()->findProductsBySupplierIdAndProductTypeAndLocalResourceIds($courseSetProduct['supplierId'], 'course', ArrayToolkit::column($courses, 'id'));
+            $productIds = ArrayToolkit::column($courseProducts, 'remoteResourceId');
 
-        $courseSetProduct = $this->getProductService()->getByTypeAndLocalResourceId('course_set', $courseSet['id']);
+            $this->getProductService()->deleteProduct($courseSetProduct['id']);
+            $this->getProductService()->deleteByIds(ArrayToolkit::column($courseProducts, 'id'));
+            $result = $this->getS2B2CFacadeService()->getS2B2CService()->changePurchaseStatusToRemoved($courseSetProduct['remoteResourceId'], $productIds, 'course');
+            if (!isset($result['status']) || 'success' != $result['status']) {
+                $this->createNewException(S2B2CProductException::REMOVE_PRODUCT_FAILED());
+            }
 
-        $courseProducts = $this->getProductService()->findProductsBySupplierIdAndProductTypeAndLocalResourceIds($courseSetProduct['supplierId'], 'course', ArrayToolkit::column($courses, 'id'));
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            $this->getLogger()->error(sprintf('[deleteProductsByCourseSetError] %s', $e->getMessage()));
 
-        $productIds = ArrayToolkit::column($courseProducts, 'remoteResourceId');
-
-        $result = $this->getS2B2CFacadeService()->getS2B2CService()->changePurchaseStatusToRemoved($courseSetProduct['remoteResourceId'], $productIds, 'course');
-
-        $this->getProductService()->deleteProduct($courseSetProduct['id']);
-
-        if (empty($courseProducts)) {
-            return $result;
+            return false;
         }
 
-        $this->getProductService()->deleteByIds(ArrayToolkit::column($courseProducts, 'id'));
-
-        return $result;
+        return true;
     }
 
     protected function validateCourseData($course, $product)
