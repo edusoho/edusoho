@@ -495,3 +495,9 @@ adminCourseTypes:
 adminPlumberStatus:
     executing: Excuting
     stopped: Stopped
+
+s2b2cSettlementOrderStatus:
+    paid: To be paid
+    success: Paid
+    finished: Transaction complete
+    refunded: Refunded
