@@ -6,7 +6,7 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 
-class ItemBankExerciseModuleChapter extends AbstractResource
+class ItemBankExerciseModuleCategory extends AbstractResource
 {
     /**
      * @ApiConf(isRequiredAuth=false)

@@ -4,7 +4,7 @@ namespace ApiBundle\Api\Resource\ItemBankExercise;
 
 use ApiBundle\Api\Resource\Filter;
 
-class ItemBankExerciseModuleChapterFilter extends Filter
+class ItemBankExerciseModuleCategoryFilter extends Filter
 {
     protected $publicFields = [
         'id',
