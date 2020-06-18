@@ -13,10 +13,13 @@ class ItemBankExerciseModule extends AbstractResource
      */
     public function search(ApiRequest $request, $exerciseId)
     {
-        return $this->getExerciseModuleService()->findByExerciseId($exerciseId);
+        return $this->getItemBankExerciseModuleService()->findByExerciseId($exerciseId);
     }
 
-    protected function getExerciseModuleService()
+    /**
+     * @return \Biz\ItemBankExercise\Service\ExerciseModuleService
+     */
+    protected function getItemBankExerciseModuleService()
     {
         return $this->service('ItemBankExercise:ExerciseModuleService');
     }

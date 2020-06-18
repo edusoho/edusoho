@@ -20,6 +20,11 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->getItemBankExerciseDao()->search($conditions, $orderBy, $start, $limit);
     }
 
+    public function get($id)
+    {
+        return $this->getItemBankExerciseDao()->get($id);
+    }
+
     protected function _prepareCourseConditions($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
