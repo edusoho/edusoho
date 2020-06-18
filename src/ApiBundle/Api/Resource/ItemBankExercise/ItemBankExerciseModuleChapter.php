@@ -6,29 +6,21 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 
-class ItemBankExerciseChapterExercise extends AbstractResource
+class ItemBankExerciseModuleChapter extends AbstractResource
 {
     /**
      * @ApiConf(isRequiredAuth=false)
      */
-    public function get(ApiRequest $request, $exerciseId, $moduleId)
+    public function search(ApiRequest $request, $exerciseId, $moduleId)
     {
         $itemBankExercise = $this->getItemBankExerciseService()->get($exerciseId);
-        $module = $this->getItemBankExerciseModuleService()->get($moduleId);
-
-        if (empty($itemBankExercise) || empty($module)) {
-            return [
-                'module' => (object) [],
-                'categories' => [],
-            ];
+        if (empty($itemBankExercise)) {
+            return [];
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($itemBankExercise['questionBankId']);
 
-        return [
-            'module' => $module,
-            'categories' => $this->getItemCategoryService()->getItemCategoryTreeList($questionBank['itemBank']['id']),
-        ];
+        return $this->getItemCategoryService()->getItemCategoryTreeList($questionBank['itemBank']['id']);
     }
 
     /**
@@ -53,13 +45,5 @@ class ItemBankExerciseChapterExercise extends AbstractResource
     protected function getItemBankExerciseService()
     {
         return $this->service('ItemBankExercise:ExerciseService');
-    }
-
-    /**
-     * @return \Biz\ItemBankExercise\Service\ExerciseModuleService
-     */
-    protected function getItemBankExerciseModuleService()
-    {
-        return $this->service('ItemBankExercise:ExerciseModuleService');
     }
 }
