@@ -1,10 +1,10 @@
 <?php
 
-namespace ApiBundle\Api\Resource\ItemBank;
+namespace ApiBundle\Api\Resource\ItemBankExercise;
 
 use ApiBundle\Api\Resource\Filter;
 
-class ItemCategoryFilter extends Filter
+class ItemBankExerciseModuleChapterFilter extends Filter
 {
     protected $publicFields = [
         'id',
