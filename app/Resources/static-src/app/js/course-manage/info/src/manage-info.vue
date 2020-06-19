@@ -40,6 +40,9 @@
                         v-bind:can-modify-course-price="canModifyCoursePrice"
                         v-bind:notifies="notifies"
                         v-bind:buy-before-approval="buyBeforeApproval"
+                        v-bind:vip-installed="vipInstalled"
+                        v-bind:vip-enabled="vipEnabled"
+                        v-bind:vip-levels="vipLevels"
         ></market-setting>
 
         <el-row>
@@ -91,6 +94,9 @@
             imageSaveUrl: '',
             imageSrc: '',
             imageUploadUrl: '',
+            vipInstalled: false,
+            vipEnabled: false,
+            vipLevels: {},
         },
         components: {
             baseInfo,
@@ -172,6 +178,9 @@
                 imageSaveUrl: '',
                 imageSrc: '',
                 imageUploadUrl: '',
+                vipInstalled: false,
+                vipEnabled: false,
+                vipLevels: {},
             }
         }
     }

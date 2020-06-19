@@ -17,7 +17,7 @@
                 </el-col>
             </el-form-item>
         </el-form>
-        <el-form v-else-if="isUnMultiCourseSet" :model="baseInfoForm" :rules="formRule" ref="baseInfoForm"
+        <el-form v-if="isUnMultiCourseSet" :model="baseInfoForm" :rules="formRule" ref="baseInfoForm"
                  label-position="right"
                  label-width="150px">
             <div class="course-manage-subltitle cd-mb40">{{ 'course.base_info'|trans }}</div>
@@ -107,7 +107,6 @@
             uploadImageTemplate(newVal, oldVal) {
                 this.$nextTick(() => {
                     import('app/js/upload-image/index.js');
-
                     summaryEditor = CKEDITOR.replace('courseset-summary-field', {
                         toolbar: 'Simple',
                         filebrowserImageUploadUrl: $('#courseset-summary-field').data('imageUploadUrl')
@@ -137,8 +136,10 @@
                 return {result: result, invalidFields: invalids};
             },
             getFormData() {
-                this.baseInfoForm.orgCode = $('.js-org-tree-select').children('option:selected').val();
-                this.baseInfoForm.summary = summaryEditor.getData();
+                if (this.isUnMultiCourseSet) {
+                    this.baseInfoForm.orgCode = $('.js-org-tree-select').children('option:selected').val();
+                    this.baseInfoForm.summary = summaryEditor.getData();
+                }
 
                 return this.baseInfoForm;
             },
@@ -175,9 +176,10 @@
                     orgCode: this.course.orgCode,
                     summary: this.courseSet.summary
                 });
+
+                this.getUploadImageTemplate();
             }
 
-            this.getUploadImageTemplate();
 
             return {
                 course: {},

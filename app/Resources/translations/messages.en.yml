@@ -9688,3 +9688,6 @@ s2b2c.resource.sync.prev_price.notify: 上个版本价格为
 s2b2c.resource.sync.has_new.notify: 有价格更新
 
 exception.goods.not_found: Goods not found.
+
+
+vip.level.free_learning: Free for Vip
