@@ -12,7 +12,7 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
     public function declares()
     {
         return [
-            'orderbys' => ['createdTime'],
+            'orderbys' => ['createdTime', 'id'],
             'conditions' => [
                 'targetType = :targetType',
                 'targetId = :targetId',

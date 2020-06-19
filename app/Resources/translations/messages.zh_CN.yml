@@ -11023,3 +11023,4 @@ s2b2c.resource.sync.has_new.notify: 有价格更新
 
 
 exception.review.forbidden_create_review: 没有权限添加评价
+exception.review.rating_no_more_than_5: 评分不能超过5

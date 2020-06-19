@@ -45,13 +45,15 @@ class ReviewServiceImpl extends BaseService implements ReviewService
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
+        if ($review['rating'] > 5) {
+            $this->createNewException(ReviewException::RATING_LIMIT());
+        }
+
         $review = $this->tryCreateReview($review);
 
         $review = ArrayToolkit::parts($review, [
             'userId', 'targetType', 'targetId', 'content', 'rating', 'parentId',
         ]);
-
-        $review['userId'] = empty($review['userId']) ? $this->getCurrentUser()->getId() : $review['userId'];
 
         $review['content'] = $this->purifyHtml($review['content']);
         $review['content'] = $this->getSensitiveService()->sensitiveCheck($review['content'], 'review');

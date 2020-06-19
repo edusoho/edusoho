@@ -9690,3 +9690,4 @@ s2b2c.resource.sync.has_new.notify: 有价格更新
 exception.goods.not_found: Goods not found.
 
 exception.review.forbidden_create_review: Create review forbiddened.
+exception.review.rating_no_more_than_5: Rating no more than 5
