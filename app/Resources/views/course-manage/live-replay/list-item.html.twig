@@ -66,8 +66,10 @@
 				</a>
 			{% endif %}
 
-			<a class="cd-link-assist cd-mr16 item-actions__btn" href="#modal" title="{{'course.replay_manage.replay'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip" data-toggle="tooltip" title="{{'course.replay_manage.replay'|trans}}" data-container="body"></i></a>
-		{% endif %}
+      {% if activity.syncId == 0 %}
+        <a class="cd-link-assist cd-mr16 item-actions__btn" href="#modal" title="{{'course.replay_manage.replay'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip" data-toggle="tooltip" title="{{'course.replay_manage.replay'|trans}}" data-container="body"></i></a>
+      {% endif %}
+    {% endif %}
 
 	</div>
 </li>

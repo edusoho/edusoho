@@ -10935,6 +10935,8 @@ merchant.content_resource.product_version.update: 更新
 merchant.content_resource.product_version.update_btn: 更新
 merchant.content_resource.course_product_update: 课程更新
 merchant.content_resource.course_product_update_tips: 确定更新课程后，将会同步供应商提供的最新版本内容，确认更新？
+purchase.course.replay_manage.tips: >
+  提示：对于“未生成回放”的课时，可点击<i class="es-icon es-icon-videocam color-gray mh5"></i>来使用直播过程中的录制文件作为回放
 
 
 admin_v2.course_manage.create_btn: 创建课程

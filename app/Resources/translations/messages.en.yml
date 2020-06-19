@@ -9604,6 +9604,8 @@ merchant.content_resource.editing: Editing
 merchant.content_resource.choose: Choose
 merchant.content_resource.no_supplier: No Supplier!
 merchant.content_resource.supplier.no_cooperation_hint: 与供应商%supplierName%之间商品合作关系已经取消，供应商的商品不能购买加入，但不影响已购学员学习，如需恢复，请联系供应商！
+purchase.course.replay_manage.tips: >
+  Tip: for the lessons of ungenerated playback, you can click the button <i class="es-icon es-icon-videocam color-gray mh5"></i> to use the recorded video during the live stream
 
 
 admin_v2.course_manage.create_btn: Create Course
