@@ -39,7 +39,17 @@ class Review extends AbstractResource
 
     public function add(ApiRequest $request)
     {
-        return $this->getReviewService()->createReview($request->request->all());
+        return $this->dealReview($this->getReviewService()->createReview($request->request->all()));
+    }
+
+    protected function dealReview($review)
+    {
+        $review['user'] = $this->getUserService()->getUser($review['userId']);
+        $targetInfo = $this->getReviewTargetInfoByTargetTypeAndTargetIds($review['targetType'], [$review['targetId']]);
+
+        $review['targetName'] = empty($targetInfo['title']) ? null : $targetInfo['title'];
+
+        return $review;
     }
 
     protected function dealReviews($reviews)
