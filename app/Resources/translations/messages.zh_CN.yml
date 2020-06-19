@@ -11021,3 +11021,5 @@ s2b2c.resource.no_fee_notice_hint: 您与%supplierName%合作的采购账户余�
 s2b2c.resource.sync.prev_price.notify: 上个版本价格为
 s2b2c.resource.sync.has_new.notify: 有价格更新
 
+
+exception.review.forbidden_create_review: 没有权限添加评价
