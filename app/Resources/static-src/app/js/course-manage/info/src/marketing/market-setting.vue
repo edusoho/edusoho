@@ -115,6 +115,18 @@
             <!--                </el-col>-->
 
             <!--            </el-form-item>-->
+            <el-form-item v-if="vipInstalled && vipEnabled" :label="'vip.level.free_learning'|trans">
+                <el-select v-model="marketingForm.vipLevelId">
+                    <el-option value="0" :label="'site.default.none'|trans"></el-option>
+                    <el-option
+                        v-if="vipLevels"
+                        v-for="(label, level) in vipLevels"
+                        :key="level"
+                        :label="label"
+                        :value="level">
+                    </el-option>
+                </el-select>
+            </el-form-item>
         </el-form>
     </div>
 </template>
@@ -130,6 +142,9 @@
             notifies: {},
             canModifyCoursePrice: true,
             buyBeforeApproval: false,
+            vipInstalled: false,
+            vipEnabled: false,
+            vipLevels: {},
         },
         watch: {},
         methods: {
@@ -149,14 +164,24 @@
                 return {result: result, invalidFields: invalids};
             },
             getFormData() {
-                if (this.marketingForm.buyExpiryTime.toString().length > 10) {
-                    this.marketingForm.buyExpiryTime /= 1000;
-                }
                 return this.marketingForm;
             }
         },
         data() {
             this.course.buyExpiryTime = this.course.buyExpiryTime > 0 ? this.course.buyExpiryTime * 1000 : null;
+
+            let form = {
+                originPrice: this.course.originPrice,
+                buyable: this.course.buyable,
+                enableBuyExpiryTime: this.course.buyExpiryTime > 0 ? '1' : '0',
+                buyExpiryTime: this.course.buyExpiryTime,
+                approval: this.course.approval
+            };
+
+            if (this.vipInstalled && this.vipEnabled) {
+                Object.assign(form, {vipLevelId: this.course.vipLevelId})
+            }
+
             return {
                 course: {},
                 courseProduct: {},
@@ -181,13 +206,7 @@
                         return time.getTime() <= Date.now() - 24 * 60 * 60 * 1000;
                     }
                 },
-                marketingForm: {
-                    originPrice: this.course.originPrice,
-                    buyable: this.course.buyable,
-                    enableBuyExpiryTime: this.course.buyExpiryTime > 0 ? '1' : '0',
-                    buyExpiryTime: this.course.buyExpiryTime,
-                    approval: this.course.approval
-                },
+                marketingForm: form,
                 formRule: {
                     originPrice: [
                         {
@@ -207,7 +226,10 @@
                             trigger: 'blur'
                         }
                     ]
-                }
+                },
+                vipInstalled: false,
+                vipEnabled: false,
+                vipLevels: {}
             }
         }
     }

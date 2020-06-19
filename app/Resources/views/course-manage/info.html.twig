@@ -70,6 +70,9 @@
          data-image-save-url="{{ path('course_set_manage_cover_crop', {id: courseSet.id}) }}"
          data-image-src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}"
          data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
+         data-vip-installed="{{ vipInstalled }}"
+         data-vip-enabled="{{ setting('vip.enabled') }}"
+         data-vip-levels="{{ vipLevels|json_encode }}"
     ></div>
 
     {% if not hasMulCourses and courseSet.type == 'normal' %}

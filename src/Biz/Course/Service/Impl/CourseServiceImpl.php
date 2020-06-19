@@ -2658,7 +2658,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if (!empty($fields['buyExpiryTime'])) {
             if (is_numeric($fields['buyExpiryTime'])) {
-                $fields['buyExpiryTime'] = date('Y-m-d', $fields['buyExpiryTime']);
+                $fields['buyExpiryTime'] = date('Y-m-d', strlen($fields['buyExpiryTime']) > 10 ? $fields['buyExpiryTime'] / 1000 : $fields['buyExpiryTime']);
             }
 
             $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime'].' 23:59:59');

@@ -60,6 +60,9 @@ new Vue({
       imageSaveUrl: $('#app').data('imageSaveUrl'),
       imageSrc: $('#app').data('imageSrc'),
       imageUploadUrl: $('#app').data('imageUploadUrl'),
+      vipInstalled: $('#app').data('vipInstalled'),
+      vipEnabled: $('#app').data('vipEnabled'),
+      vipLevels: $('#app').data('vipLevels'),
     },
   }),
 });
