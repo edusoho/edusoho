@@ -8,6 +8,7 @@ use Codeages\Biz\ItemBank\ErrorCode;
 use Codeages\Biz\ItemBank\Item\Exception\ItemException;
 use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
+use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Dao\ItemDao;
 use Codeages\Biz\ItemBank\Item\Dao\QuestionDao;
 use Codeages\Biz\ItemBank\Item\Type\Item;
@@ -40,7 +41,11 @@ class ItemServiceImpl extends BaseService implements ItemService
 
             $this->createQuestions($item['id'], $questions);
 
-            $this->getItemBankService()->updateItemNum($item['bank_id'], 1);
+            $this->getItemBankService()->updateItemNumAndQuestionNum($item['bank_id'], 1, $item['question_num']);
+
+            if (!empty($item['category_id']) && 0 < $item['category_id']) {
+                $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id'], 1, $item['question_num']);
+            }
 
             $this->dispatch('item.create', $item, ['argument' => $arguments]);
 
@@ -116,7 +121,23 @@ class ItemServiceImpl extends BaseService implements ItemService
                 $this->updateAttachments($arguments['attachments'], $id, AttachmentService::ITEM_TYPE);
             }
 
+            $this->getItemBankService()->updateItemNumAndQuestionNum($item['bank_id'], 0, -$originItem['question_num'] + $item['question_num']);
+            
+            if ($originItem['category_id'] != $item['category_id']) {
+                if (0 < $originItem['category_id']) {
+                    $this->getItemCategoryService()->updateItemNumAndQuestionNum($originItem['category_id'], -1, -$originItem['question_num']);
+                }
+                if (0 < $item['category_id']) {
+                    $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id'], 1, $item['question_num']);
+                }
+            } else {
+                if (0 < $originItem['category_id']) {
+                    $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id'], 0, -$originItem['question_num'] + $item['question_num']);
+                }
+            }
+
             $this->dispatch('item.update', $item, ['argument' => $arguments]);
+
             $this->commit();
 
             return $item;
@@ -210,8 +231,15 @@ class ItemServiceImpl extends BaseService implements ItemService
 
             $result = $this->getItemDao()->delete($id);
             $this->getAttachmentService()->batchDeleteAttachment(['target_id' => $id, 'target_type' => 'item']);
+           
             $this->deleteQuestions(['item_id' => $id]);
-            $this->getItemBankService()->updateItemNum($item['bank_id'], -1);
+
+            $this->getItemBankService()->updateItemNumAndQuestionNum($item['bank_id'], -1, -$item['question_num']);
+            
+            if (0 < $item['category_id']) {
+                $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id'], -1, -$item['question_num']);
+            }
+
             $this->dispatch('item.delete', $item);
 
             $this->commit();
@@ -247,7 +275,21 @@ class ItemServiceImpl extends BaseService implements ItemService
             $updateFields[] = ['category_id' => $categoryId];
         }
 
-        return $this->getItemDao()->batchUpdate($ids, $updateFields, 'id');
+        try {
+            $this->beginTransaction();
+
+            $this->getItemDao()->batchUpdate($ids, $updateFields, 'id');
+
+            $item = $this->getItem($ids[0]);
+
+            $this->getItemCategoryService()->buildItemNumAndQuestionNumBybankId($item['bank_id']);
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
     }
 
     public function review($itemResponses)
@@ -434,6 +476,14 @@ class ItemServiceImpl extends BaseService implements ItemService
     protected function getItemBankService()
     {
         return $this->biz->service('ItemBank:ItemBank:ItemBankService');
+    }
+
+    /**
+     * @return ItemCategoryService
+     */
+    protected function getItemCategoryService()
+    {
+        return $this->biz->service('ItemBank:Item:ItemCategoryService');
     }
 
     /**

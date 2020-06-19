@@ -34,6 +34,7 @@ class AnswerSceneServiceTest extends IntegrationTestCase
             'need_score' => 1,
             'start_time' => time(),
             'manual_marking' => 1,
+            'doing_look_analysis' => 1,
             'pass_score' => 1.0,
         ];
 
@@ -45,6 +46,7 @@ class AnswerSceneServiceTest extends IntegrationTestCase
         $this->assertEquals($result['redo_interval'], $answerScene['redo_interval']);
         $this->assertEquals($result['need_score'], $answerScene['need_score']);
         $this->assertEquals($result['pass_score'], $answerScene['pass_score']);
+        $this->assertEquals($result['doing_look_analysis'], $answerScene['doing_look_analysis']);
     }
 
     /**
@@ -75,6 +77,7 @@ class AnswerSceneServiceTest extends IntegrationTestCase
             'need_score' => 1,
             'start_time' => time(),
             'manual_marking' => 1,
+            'doing_look_analysis' => 0,
             'pass_score' => 1.0,
         ];
 
@@ -86,6 +89,7 @@ class AnswerSceneServiceTest extends IntegrationTestCase
         $this->assertEquals($result['redo_interval'], $answerScene['redo_interval']);
         $this->assertEquals($result['need_score'], $answerScene['need_score']);
         $this->assertEquals($result['pass_score'], $answerScene['pass_score']);
+        $this->assertEquals($result['doing_look_analysis'], $answerScene['doing_look_analysis']);
     }
 
     /**

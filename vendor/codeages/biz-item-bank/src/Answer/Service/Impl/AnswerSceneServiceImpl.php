@@ -55,6 +55,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
             'need_score' => ['integer', ['in', [0, 1]]],
             'manual_marking' => ['integer', ['in', [0, 1]]],
             'start_time' => ['integer'],
+            'doing_look_analysis' => ['integer', ['in', [0, 1]]],
             'pass_score' => ['numeric', ['min', 0]],
             'enable_facein' => ['integer', ['in', [0, 1]]],
         ]);
@@ -255,13 +256,25 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
 
     protected function getQuestionReportsByAnswerRecordIds($answerRecordIds)
     {
-        return ArrayToolkit::group($this->getAnswerQuestionReportService()->search(
-            ['answer_record_ids' => $answerRecordIds],
-            [],
-            0,
-            $this->getAnswerQuestionReportService()->count(['answer_record_ids' => $answerRecordIds]),
-            ['status', 'response', 'question_id']
-        ), 'question_id');
+        $count = $this->getAnswerQuestionReportService()->count(['answer_record_ids' => $answerRecordIds]);
+        $limit = 10000;
+        $pageCount = ceil($count / $limit);
+        $questionReports = [];
+
+        if (0 < $pageCount) {
+            for ($i = 1; $i <= $pageCount; $i++) {
+                $searchQuestionReports = $this->getAnswerQuestionReportService()->search(
+                    ['answer_record_ids' => $answerRecordIds],
+                    [],
+                    ($i - 1) * $limit,
+                    $limit,
+                    ['status', 'response', 'question_id']
+                );
+                $questionReports = array_merge($questionReports, $searchQuestionReports);
+            }
+        }
+
+        return ArrayToolkit::group($questionReports, 'question_id');
     }
 
     protected function getAnswerRecordIdsByAnswerSceneId($answerSceneId)
