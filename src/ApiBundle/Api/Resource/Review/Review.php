@@ -5,21 +5,18 @@ namespace ApiBundle\Api\Resource\Review;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
+use Biz\Goods\Service\GoodsService;
 use Biz\Review\Service\ReviewService;
+use Biz\User\Service\UserService;
 
 class Review extends AbstractResource
 {
-    /**
-     * @param $id
-     *
-     * @return mixed
-     *
-     * @ApiConf(isRequiredAuth=false)
-     */
-    public function get(ApiRequest $request, $id)
-    {
-        return $this->getReviewService()->getReview($id);
-    }
+    protected $targetMap = [
+        'course' => 'searchCourseInfo',
+        'goods' => 'searchGoodsInfo',
+    ];
 
     /**
      * @return mixed
@@ -35,7 +32,9 @@ class Review extends AbstractResource
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
 
-        return $this->getReviewService()->searchReview($conditions, ['createdTime' => 'DESC'], $offset, $limit);
+        $reviews = $this->getReviewService()->searchReview($conditions, ['createdTime' => 'DESC'], $offset, $limit);
+
+        return $this->dealReviews($reviews);
     }
 
     public function add(ApiRequest $request)
@@ -43,11 +42,84 @@ class Review extends AbstractResource
         return $this->getReviewService()->createReview($request->request->all());
     }
 
+    protected function dealReviews($reviews)
+    {
+        $targetInfo = [];
+        $reviewGroupByType = ArrayToolkit::group($reviews, 'targetType');
+        foreach ($reviewGroupByType as $type => $groupedReviews) {
+            $targetIds = array_unique(ArrayToolkit::column($groupedReviews, 'targetId'));
+            $targetInfo[$type] = $this->getReviewTargetInfoByTargetTypeAndTargetIds($type, array_values($targetIds));
+        }
+
+        $userInfo = $this->getReviewUserInfoByUserIds(ArrayToolkit::column($reviews, 'userId'));
+
+        foreach ($reviews as &$review) {
+            $review['user'] = empty($userInfo[$review['userId']]) ? null : $userInfo[$review['userId']];
+            $review['targetName'] = empty($targetInfo[$review['targetType']][$review['targetId']]) ? '' : $targetInfo[$review['targetType']][$review['targetId']]['title'];
+        }
+
+        return $reviews;
+    }
+
+    protected function getReviewUserInfoByUserIds($userIds)
+    {
+        return $this->getUserService()->findUsersByIds($userIds);
+    }
+
+    protected function getReviewTargetInfoByTargetTypeAndTargetIds($targetType, $targetIds)
+    {
+        if (!in_array($targetType, array_keys($this->targetMap))) {
+            return null;
+        }
+
+        $function = $this->targetMap[$targetType];
+
+        return $this->$function($targetIds);
+    }
+
+    protected function searchGoodsInfo($ids)
+    {
+        $goods = $this->getGoodsService()->searchGoods(['ids' => $ids], [], 0, count($ids), ['id', 'title']);
+
+        return ArrayToolkit::index($goods, 'id');
+    }
+
+    protected function searchCourseInfo($ids)
+    {
+        $courses = $this->getCourseService()->searchCourses(['ids' => $ids], [], 0, count($ids), ['id', 'title']);
+
+        return ArrayToolkit::index($courses, 'id');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->service('User:UserService');
+    }
+
     /**
      * @return ReviewService
      */
     protected function getReviewService()
     {
-        return $this->getBiz()->service('Review:ReviewService');
+        return $this->service('Review:ReviewService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->service('Goods:GoodsService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->service('Course:CourseService');
     }
 }
