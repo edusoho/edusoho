@@ -338,7 +338,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         $reviewQuestionReport['score'] = empty($reviewQuestionReport['score']) ? 0 : $reviewQuestionReport['score'];
-        if (empty($questionReport['response'])) {
+        if (empty(array_filter($questionReport['response']))) {
             $score = 0;
             $status = AnswerQuestionReportService::STATUS_NOANSWER;
         } elseif (0 == $reviewQuestionReport['score']) {
@@ -473,6 +473,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             throw $e;
         }
 
+        $this->dispatch('answer.saved', $assessmentResponse);
         return $assessmentResponse;
     }
 

@@ -564,7 +564,7 @@ class AssessmentServiceTest extends IntegrationTestCase
                 'returnValue' => ['id' => 1],
             ],
             [
-                'functionName' => 'updateItemNum',
+                'functionName' => 'updateItemNumAndQuestionNum',
                 'returnValue' => 1,
             ],
             [

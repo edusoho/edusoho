@@ -375,3 +375,9 @@ services:
         arguments: ['@biz']
         tags:
              - { name: codeages_plugin.event.subscriber }
+
+    item_bank_chatper_exercise_event_subscriber:
+        class: Biz\ItemBankExercise\Event\ChapterExerciseEventSubscriber
+        arguments: ['@biz']
+        tags:
+             - { name: codeages_plugin.event.subscriber }

@@ -9,6 +9,11 @@ class ChapterExerciseRecordDaoImpl extends GeneralDaoImpl implements ChapterExer
 {
     protected $table = 'item_bank_chapter_exercise_record';
 
+    public function getByAnswerRecordId($answerRecordId)
+    {
+        return $this->getByFields(['answerRecordId' => $answerRecordId]);
+    }
+
     public function declares()
     {
         return [
