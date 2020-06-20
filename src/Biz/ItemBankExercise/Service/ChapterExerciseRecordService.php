@@ -11,4 +11,8 @@ interface ChapterExerciseRecordService
     public function update($id, $chapterExerciseRecord);
 
     public function getByAnswerRecordId($answerRecordId);
+
+    public function search($conditions, $sort, $start, $limit, $columns = []);
+
+    public function count($conditions);
 }

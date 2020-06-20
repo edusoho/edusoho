@@ -8,6 +8,16 @@ use Biz\ItemBankExercise\Service\ChapterExerciseRecordService;
 
 class ChapterExerciseRecordServiceImpl extends BaseService implements ChapterExerciseRecordService
 {
+    public function search($conditions, $sort, $start, $limit, $columns = [])
+    {
+        return $this->getItemBankChapterExerciseRecordDao()->search($conditions, $sort, $start, $limit, $columns);
+    }
+
+    public function count($conditions)
+    {
+        return $this->getItemBankChapterExerciseRecordDao()->search($conditions);
+    }
+
     public function create($chapterExerciseRecord)
     {
         $chapterExerciseRecord = ArrayToolkit::parts($chapterExerciseRecord, ['moduleId', 'exerciseId', 'questionBankId', 'itemCategoryId', 'userId', 'answerRecordId', 'questionNum']);
