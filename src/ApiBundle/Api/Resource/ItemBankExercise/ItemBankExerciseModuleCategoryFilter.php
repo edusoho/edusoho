@@ -3,6 +3,7 @@
 namespace ApiBundle\Api\Resource\ItemBankExercise;
 
 use ApiBundle\Api\Resource\Filter;
+use AppBundle\Common\ArrayToolkit;
 
 class ItemBankExerciseModuleCategoryFilter extends Filter
 {
@@ -13,13 +14,15 @@ class ItemBankExerciseModuleCategoryFilter extends Filter
         'weight',
         'bank_id',
         'parent_id',
-        'question_count',
-        'item_count',
+        'item_num',
+        'question_num',
+        'latestAnswerRecord',
     ];
 
     protected function publicFields(&$data)
     {
-        // todo 临时用
-        $data['question_count'] = $data['item_count'] = '0';
+        if (!empty($data['latestAnswerRecord'])) {
+            $data['latestAnswerRecord'] = ArrayToolkit::parts($data['latestAnswerRecord'], ['id', 'status', 'rightRate', 'questionNum', 'answerRecordId', 'doneQuestionNum']);
+        }
     }
 }
