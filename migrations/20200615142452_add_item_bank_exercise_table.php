@@ -51,7 +51,7 @@ class AddItemBankExerciseTable extends Migration
               `createdTime` int(11) unsigned NOT NULL DEFAULT '0',
               `updatedTime` int(11) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`),
-              KEY `exerciseId_userId` (`exerciseId`,`userId`)
+              KEY `moduleId_userId` (`moduleId`,`userId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题库章节练习记录';
             
             CREATE TABLE `item_bank_exercise` (
@@ -59,6 +59,8 @@ class AddItemBankExerciseTable extends Migration
               `seq` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '序号',
               `title` varchar(255) NOT NULL DEFAULT '' COMMENT '名称',
               `status` varchar(32) NOT NULL DEFAULT 'draft' COMMENT '状态  draft, published, closed',
+              `chapterEnable` tinyint(1) NOT NULL DEFAULT '0' COMMENT '章节练习是否开启',
+              `assessmentEnable` tinyint(1) NOT NULL DEFAULT '0' COMMENT '试卷练习是否开启',
               `questionBankId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '资源题库id',
               `categoryId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '题库分类id',
               `cover` varchar(1024) NOT NULL DEFAULT '' COMMENT '封面图',

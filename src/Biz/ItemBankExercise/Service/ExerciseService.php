@@ -9,4 +9,6 @@ interface ExerciseService
     public function search($conditions, $orderBy, $start, $limit);
 
     public function get($id);
+
+    public function canLearningExercise($exerciseId, $userId);
 }

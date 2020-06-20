@@ -17,7 +17,7 @@ class AnswerRecord extends AbstractResource
         }
 
         if (empty($answerRecord['answer_report_id'])) {
-            return (object) array();
+            return (object) [];
         }
 
         $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
@@ -31,8 +31,6 @@ class AnswerRecord extends AbstractResource
             'assessment' => $assessment,
             'answer_scene' => $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']),
         ];
-
-        return $this->getAnswerReportService()->get($id);
     }
 
     protected function getAnswerReportService()
