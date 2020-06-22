@@ -5,7 +5,7 @@ namespace AppBundle\Controller\ItemBankExercise;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
-use Biz\ItemBankExercise\ExerciseMemberException;
+use Biz\ItemBankExercise\ItemBankExerciseMemberException;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\User\Service\UserService;
@@ -114,7 +114,7 @@ class StudentManageController extends BaseController
         $member = $this->getExerciseMemberService()->getExerciseMember($exerciseId, $userId);
 
         if (empty($member)) {
-            $this->createNewException(ExerciseMemberException::NOTFOUND_MEMBER());
+            $this->createNewException(ItemBankExerciseMemberException::NOTFOUND_MEMBER());
         }
 
         if ($request->isMethod('POST')) {

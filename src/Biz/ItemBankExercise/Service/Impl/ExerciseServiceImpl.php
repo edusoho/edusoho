@@ -6,7 +6,7 @@ use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
-use Biz\ItemBankExercise\ExerciseException;
+use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
@@ -40,11 +40,11 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         $exercise = $this->getExerciseDao()->get($exerciseId);
 
         if (empty($exercise)) {
-            $this->createNewException(ExerciseException::NOTFOUND_EXERCISE());
+            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
         }
 
         if (!$this->hasCourseManagerRole($exerciseId)) {
-            $this->createNewException(ExerciseException::FORBIDDEN_MANAGE_EXERCISE());
+            $this->createNewException(ItemBankExerciseException::FORBIDDEN_MANAGE_EXERCISE());
         }
 
         return $exercise;

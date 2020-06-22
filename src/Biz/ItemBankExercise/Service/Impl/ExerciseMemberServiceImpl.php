@@ -6,8 +6,8 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
-use Biz\ItemBankExercise\ExerciseException;
-use Biz\ItemBankExercise\ExerciseMemberException;
+use Biz\ItemBankExercise\ItemBankExerciseException;
+use Biz\ItemBankExercise\ItemBankExerciseMemberException;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\ItemBankExercise\Service\MemberOperationRecordService;
@@ -49,11 +49,11 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         $exercise = $this->getExerciseService()->get($exerciseId);
 
         if (empty($exercise)) {
-            $this->createNewException(ExerciseException::NOTFOUND_EXERCISE);
+            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE);
         }
 
         if ($this->isExerciseMember($exercise['id'], $user['id'])) {
-            $this->createNewException(ExerciseMemberException::DUPLICATE_MEMBER());
+            $this->createNewException(ItemBankExerciseMemberException::DUPLICATE_MEMBER());
         }
 
         try {
@@ -120,11 +120,11 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         $exercise = $this->getExerciseService()->get($exerciseId);
 
         if (empty($exercise)) {
-            $this->createNewException(ExerciseException::NOTFOUND_EXERCISE());
+            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
         }
 
         if (!in_array($exercise['status'], ['published'])) {
-            $this->createNewException(ExerciseException::UNPUBLISHED_EXERCISE());
+            $this->createNewException(ItemBankExerciseException::UNPUBLISHED_EXERCISE());
         }
 
         $user = $this->getUserService()->getUser($userId);
@@ -139,7 +139,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             if ('teacher' == $member['role']) {
                 return $member;
             } else {
-                $this->createNewException(ExerciseMemberException::DUPLICATE_MEMBER());
+                $this->createNewException(ItemBankExerciseMemberException::DUPLICATE_MEMBER());
             }
         }
 
@@ -194,7 +194,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         $member = $this->getExerciseMember($exerciseId, $userId);
 
         if (empty($member)) {
-            $this->createNewException(ExerciseMemberException::NOTFOUND_MEMBER());
+            $this->createNewException(ItemBankExerciseMemberException::NOTFOUND_MEMBER());
         }
 
         $fields = ['remark' => empty($remark) ? '' : (string) $remark];
