@@ -724,6 +724,7 @@ import.user_import.download_example_btn: 点击下载示例说明文件
 import.user_import.download_example_tips: 支持从Excel文件导入
 import.user_import.price: 购买价格
 import.user_import.price_tips: 本课程的价格为
+import.exercise_user_import.price_tips: 本题库练习的价格为
 import.user_import.remark_btn: 备注
 import.user_import.remark_tips: 选填
 
@@ -1072,6 +1073,7 @@ course.members_manage.official_student.batch_upload_deadline: 批量修改有效
 course.members_manage.official_student.batch_remove: 批量移除
 course.members_manage.official_student.input_placeholder: 请输入用户名/邮箱/手机号
 course.members_manage.official_student.progress: 学习进度
+course.members_manage.official_student.stutatus: 学习状态
 course.members_manage.official_student.operation: 操作
 course.members_manage.official_student.detail: （查看详情）
 course.members_manage.official_student.show: 查看资料
@@ -1143,6 +1145,21 @@ course.members_manage.join_records: 加入记录
 course.members_manage.records.join_reason: 加入原因
 course.members_manage.records.join_reason_type: 加入类型
 course.members_manage.join_records.date: 加入日期
+
+item_bank_exercise.export.answer_num: 答题数
+item_bank_exercise.export.accuracy: 正确率
+item_bank_exercise.answer_number: 答题数：
+item_bank_exercise.accuracy: 正确率：
+item_bank_exercise.preview.course: 预览题库练习
+item_bank_exercise.chapter_practice: 章节练习
+item_bank_exercise.testpaper_practice: 试卷练习
+item_bank_exercise.manage_btn: 管理题库练习
+item_bank_exercise.members_manage.official_student.add.price_tips: 本题库练习的价格为
+item_bank_exercise.members_manage.official_student.add.failed_tips: 题库练习不能添加
+item_bank_exercise.members_manage.official_student.add.publish_tips: 请题库练习发布后再添加。
+item_bank_exercise.student_manage.can_not_add_teacher: 该用户是本题库练习的教师，不能添加
+item_bank_exercise.student_manage.student_exist: 该用户已是本题库练习的学员了
+item_bank_exercise.student_manage.student_not_exist: 该用户不存在
 
 course.testpaper_check: 试卷批阅
 course.testpaper_check.no_permission_tips: 当前用户不是本课程教师，没有批阅试卷的权限。
@@ -1346,9 +1363,7 @@ course.item_number: 题目数量
 course.student.cell: 人
 course.plan.cell: 个
 course.manage_btn: 管理课程
-item_bank_exercise.manage_btn: 管理题库练习
 course.preview.course: 预览课程
-item_bank_exercise.preview.course: 预览题库练习
 course.preview.plan: 预览计划
 course.check.plan: 查看计划
 course.share: 分享
@@ -10293,6 +10308,12 @@ exception.discovery_column.not_found: 发现栏目不存在
 exception.question_bank.forbidden_delete_category: 分类或子分类下有所属题库，无法删除
 exception.question_bank.not_found_bank: 题库不存在
 exception.question_bank.forbidden_access_bank: 没有访问该题库的权限
+
+exception.item_bank_exercise.exercise.not_found: 题库练习不存在
+exception.item_bank_exercise.exercise.forbidden_manage_exercise: 没有管理题库练习的权限
+exception.item_bank_exercise.member.duplicate_member: 用户已加入题库练习
+exception.item_bank_exercise.exercise.exercise_not_published: 题库练习未发布
+exception.item_bank_exercise.member.not_found: 题库练习中没有该成员
 
 exception.wechat.notify_setting_not_enabled: 微信通知未开启
 exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试

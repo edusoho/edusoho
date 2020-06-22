@@ -1,0 +1,8 @@
+<ul class="cd-tabs mbl">
+  <li {% if panelNav == 'manage' %}class="active" {% endif %}>
+    <a href="{{path('item_bank_exercise_manage_students', {exerciseId: exercise.id})}}">{{ 'course.members_manage.official_student'|trans }}</a>
+  </li>
+  <li {% if panelNav == 'join' %}class="active" {% endif %}>
+    <a href="{{path('item_bank_exercise_manage_student_records', {exerciseId: exercise.id, type: 'join'})}}">{{ 'course.members_manage.join_records'|trans }}</a>
+  </li>
+</ul>

@@ -108,6 +108,27 @@ class AddItemBankExerciseTable extends Migration
               KEY `userId` (`userId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题库练习成员';
             
+            CREATE TABLE `item_bank_exercise_member_operation_record` (
+              `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+              `title` varchar(1024) NOT NULL DEFAULT '' COMMENT '题库练习名称',
+              `memberId` int(10) unsigned NOT NULL COMMENT '成员ID',
+              `memberType` varchar(32) NOT NULL DEFAULT 'student' COMMENT '成员身份',
+              `exerciseId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题库练习ID',
+              `operateType` enum('join','exit') NOT NULL DEFAULT 'join' COMMENT '操作类型（join=加入, exit=退出）',
+              `operateTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '操作时间',
+              `operatorId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '操作用户ID',
+              `userId` int(11) NOT NULL DEFAULT '0' COMMENT '用户Id',
+              `orderId` int(11) NOT NULL DEFAULT '0' COMMENT '订单ID',
+              `refundId` int(11) NOT NULL DEFAULT '0' COMMENT '退款ID',
+              `reason` varchar(256) NOT NULL DEFAULT '' COMMENT '加入理由或退出理由',
+              `reasonType` varchar(255) NOT NULL DEFAULT '' COMMENT '用户退出或加入的类型',
+              `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`),
+              KEY `exerciseId` (`exerciseId`),
+              KEY `userId` (`userId`),
+              KEY `operateType` (`operateType`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            
             CREATE TABLE `item_bank_exercise_module` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `seq` int(11) unsigned NOT NULL DEFAULT '1' COMMENT '序号',
@@ -147,6 +168,7 @@ class AddItemBankExerciseTable extends Migration
             DROP TABLE IF EXISTS `item_bank_chapter_exercise_record`;
             DROP TABLE IF EXISTS `item_bank_exercise`;
             DROP TABLE IF EXISTS `item_bank_exercise_member`;
+            DROP TABLE IF EXISTS `item_bank_exercise_member_operation_record`;
             DROP TABLE IF EXISTS `item_bank_exercise_module`;
             DROP TABLE IF EXISTS `item_bank_exercise_right_record`;
         ');

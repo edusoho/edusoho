@@ -41,6 +41,7 @@ class Factory
             'bill-coin-flow' => 'AppBundle\Component\Export\Bill\CoinBillExporter',
             'user-learn-statistics' => 'AppBundle\Component\Export\UserLearnStatistics\UserLearnStatisticsExporter',
             'course-students' => 'AppBundle\Component\Export\Course\StudentExporter',
+            'item-bank-exercise-students' => 'AppBundle\Component\Export\ItemBankExercise\StudentExporter',
             'invoice-records' => 'InvoicePlugin\Component\Export\Invoice\InvoiceRecordsExporter',
             'course-live-statistics-list' => 'AppBundle\Component\Export\Course\CourseLiveStatisticsExporter',
             'course-live-statistics-checkin-list' => 'AppBundle\Component\Export\Course\LiveStatisticsCheckinListExporter',
