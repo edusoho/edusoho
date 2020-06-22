@@ -299,6 +299,7 @@ user.fields.idcard_back_title: 上传身份证反面照
 user.fields.mobile_label: 手机号码
 user.fields.mobile_label.bind: 已绑定
 user.fields.mobile_label.no_bind: 未绑定
+user.fields.mobile_label.apple_tip: 请前往APP端进行绑定
 user.fileds.realname: 真实姓名
 user.fileds.me: 我
 user.fields.following: 关注

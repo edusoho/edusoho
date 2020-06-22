@@ -260,6 +260,10 @@ class LoginBindController extends BaseController
             $this->createNewException(SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG());
         }
 
+        if ('apple' == $type) {
+            return $this->createAppleClient();
+        }
+
         if (empty($settings) || !isset($settings[$type.'_enabled']) || empty($settings[$type.'_key']) || empty($settings[$type.'_secret'])) {
             $this->createNewException(SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG());
         }
@@ -273,6 +277,19 @@ class LoginBindController extends BaseController
         $client = OAuthClientFactory::create($type, $config);
 
         return $client;
+    }
+
+    protected function createAppleClient()
+    {
+        $settings = $this->setting('login_bind');
+
+        if (empty($settings['enabled'])) {
+            throw SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG();
+        }
+
+        $config = $this->setting('apple_setting', []);
+
+        return OAuthClientFactory::create('apple', $config);
     }
 
     /**

@@ -37,6 +37,7 @@ abstract class AbstractOAuthClient
                 break;
             case 'weixinmob':
             case 'weixinweb':
+            case 'apple':
                 $token = array(
                     'openid' => $openid,
                     'access_token' => $accessToken,

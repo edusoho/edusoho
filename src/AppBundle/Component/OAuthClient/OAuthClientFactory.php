@@ -68,7 +68,7 @@ class OAuthClientFactory
                 'secret_setting_label' => 'App Secret',
                 'apply_url' => 'https://open.weixin.qq.com/cgi-bin/frame?t=home/web_tmpl&lang=zh_CN',
             ),
-            'weixinmob' => array(
+            'weixinmob' => [
                 'name' => '微信内分享登录接口',
                 'admin_name' => '微信内分享登录接口',
                 'class' => 'AppBundle\Component\OAuthClient\WeixinmobOAuthClient',
@@ -79,7 +79,18 @@ class OAuthClientFactory
                 'secret_setting_label' => 'App Secret',
                 'mp_secret_setting_label' => 'MP文件验证码',
                 'apply_url' => 'https://mp.weixin.qq.com/cgi-bin/readtemplate?t=register/step1_tmpl&lang=zh_CN',
-            ),
+            ],
+            'apple' => [
+                'name' => 'Apple登录',
+                'admin_name' => 'APPLE登录接口',
+                'class' => 'AppBundle\Component\OAuthClient\AppleOAuthClient',
+                'icon_class' => 'apple',
+                'icon_img' => '',
+                'large_icon_img' => 'assets/img/social/apple.png',
+                'key_setting_label' => '',
+                'secret_setting_label' => '',
+                'apply_url' => '',
+            ]
         );
 
         if (self::getServiceKernel()->hasParameter('oauth2_clients')) {

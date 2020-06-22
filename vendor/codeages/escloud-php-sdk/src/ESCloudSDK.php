@@ -149,6 +149,14 @@ class ESCloudSDK
     }
 
     /**
+     * @return \ESCloud\SDK\Service\MobileService
+     */
+    public function getMobileService()
+    {
+        return $this->getService('Mobile');
+    }
+
+    /**
      * 根据服务名获得服务实例
      *
      * @param string $name 服务名
