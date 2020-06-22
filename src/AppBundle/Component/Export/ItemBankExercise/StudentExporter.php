@@ -6,7 +6,6 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Export\Exporter;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
-use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
 
 class StudentExporter extends Exporter
@@ -19,6 +18,7 @@ class StudentExporter extends Exporter
         }
 
         $this->getExerciseService()->tryManageExercise($this->parameter['exerciseId']);
+
         return false;
     }
 
@@ -86,7 +86,7 @@ class StudentExporter extends Exporter
             $member[] = $user['email'];
             $member[] = date('Y-n-d H:i:s', $exerciseMember['createdTime']);
             $member[] = $exerciseMember['doneQuestionNum'];
-            $member[] = $exerciseMember['masteryRate'] . '%';
+            $member[] = $exerciseMember['masteryRate'].'%';
             $member[] = $profile['truename'] ? $profile['truename'] : '-';
             $member[] = $gender[$profile['gender']];
             $member[] = $profile['qq'] ? $profile['qq'] : '-';
