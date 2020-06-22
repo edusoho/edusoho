@@ -16,16 +16,8 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 {
     public function startAnswer($answerSceneId, $assessmentId, $userId)
     {
-        $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($answerSceneId, $userId);
-
-        if (empty($latestAnswerRecord)) {
-            if (!$this->getAnswerSceneService()->canStart($answerSceneId)) {
-                throw new AnswerSceneException('AnswerScene did not start.', ErrorCode::ANSWER_SCENE_NOTSTART);
-            }
-        } else {
-            if (!$this->getAnswerSceneService()->canRestart($answerSceneId, $userId)) {
-                throw new AnswerSceneException('AnswerScene did not restart.', ErrorCode::ANSWER_SCENE_CANNOT_RESTART);
-            }
+        if (!$this->getAnswerSceneService()->canStart($answerSceneId, $userId)) {
+            throw new AnswerSceneException('AnswerScene did not start.', ErrorCode::ANSWER_SCENE_NOTSTART);
         }
 
         $answerRecord = $this->getAnswerRecordService()->create([
