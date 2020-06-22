@@ -13,7 +13,7 @@ use ApiBundle\Api\Util\AssetHelper;
 
 class PageDiscoveryFilter extends Filter
 {
-    protected $publicFields = array('type', 'data', 'moduleType');
+    protected $publicFields = array('type', 'data', 'moduleType', 'tips');
 
     protected function publicFields(&$data)
     {
