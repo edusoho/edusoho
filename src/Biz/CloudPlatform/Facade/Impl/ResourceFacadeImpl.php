@@ -11,15 +11,16 @@ class ResourceFacadeImpl extends BaseFacade implements ResourceFacade
     {
         $context = [];
 
-        $context = $this->prepareVideoContext($context);
-        $playToken = $this->makePlayToken($file);
-        $context['token'] = $playToken;
+        $method = 'prepare'.ucfirst($file['type']).'Context';
+        $context = $this->$method($file, $context);
+        
+        $context['token'] = $this->makePlayToken($file);
         $context['resNo'] = $file['globalId'];
 
         return $context;
     }
 
-    protected function prepareVideoContext($context)
+    protected function prepareVideoContext($file, $context)
     {
         $storageSetting = $this->getSettingService()->get('storage');
         //是否开启加密增强
@@ -37,6 +38,11 @@ class ResourceFacadeImpl extends BaseFacade implements ResourceFacade
         //微网校用于是否支持 mobile 端判断
         $context['supportMobile'] = intval($this->getSettingService()->node('storage.support_mobile', 0));
 
+        return $context;
+    }
+
+    protected function preparePptContext($file, $context)
+    {
         return $context;
     }
 
