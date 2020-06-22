@@ -14,11 +14,27 @@
     "test:unit": "vue-cli-service test:unit",
     "lint": "eslint  --ext .js --ext .jsx --ext .vue src/",
     "lint:fix": "eslint  --fix  --ext .js --ext .jsx --ext .vue src/",
-    "style-lint": "stylelint **/*.scss",
-    "style-lint:fix": "stylelint **/*.scss --fix",
+    "style-lint": "stylelint  src/**/*.scss",
+    "style-lint:fix": "stylelint src/**/*.scss --fix",
     "format-code": "prettier-eslint --write \"src/**/*.js\" \"src/**/*.vue\""
   },
-  
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,vue}": [
+      "eslint  --fix --ext .js --ext .jsx --ext .vue",
+      "prettier --write",
+      "git add"
+    ],
+    "*.scss": [
+      "stylelint --syntax=scss --fix",
+      "prettier --write",
+      "git add"
+    ]
+  },
   "dependencies": {
     "@babel/core": "7.0.0",
     "@babel/plugin-proposal-optional-chaining": "^7.10.1",
