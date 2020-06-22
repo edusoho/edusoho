@@ -167,7 +167,7 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
             return $service;
         };
-    /*END*/
+        /*END*/
     }
 
     /**

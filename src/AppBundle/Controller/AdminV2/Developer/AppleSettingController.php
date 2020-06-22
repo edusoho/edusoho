@@ -19,9 +19,9 @@ class AppleSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/developer/apple/apple-setting.html.twig', array(
+        return $this->render('admin-v2/developer/apple/apple-setting.html.twig', [
             'setting' => $setting,
-        ));
+        ]);
     }
 
     /**

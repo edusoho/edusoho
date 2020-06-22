@@ -34,8 +34,8 @@ class OAuthClientFactory
 
     public static function clients()
     {
-        $clients = array(
-            'weibo' => array(
+        $clients = [
+            'weibo' => [
                 'name' => '微博帐号',
                 'admin_name' => '微博登录接口',
                 'class' => 'AppBundle\Component\OAuthClient\WeiboOAuthClient',
@@ -45,8 +45,8 @@ class OAuthClientFactory
                 'key_setting_label' => 'App Key',
                 'secret_setting_label' => 'App Secret',
                 'apply_url' => 'http://open.weibo.com/authentication/',
-            ),
-            'qq' => array(
+            ],
+            'qq' => [
                 'name' => 'QQ帐号',
                 'admin_name' => 'QQ登录接口',
                 'class' => 'AppBundle\Component\OAuthClient\QqOAuthClient',
@@ -56,8 +56,8 @@ class OAuthClientFactory
                 'key_setting_label' => 'App ID',
                 'secret_setting_label' => 'App Key',
                 'apply_url' => 'http://connect.qq.com/',
-            ),
-            'weixinweb' => array(
+            ],
+            'weixinweb' => [
                 'name' => '微信网页登录接口',
                 'admin_name' => '微信网页登录接口',
                 'class' => 'AppBundle\Component\OAuthClient\WeixinwebOAuthClient',
@@ -67,7 +67,7 @@ class OAuthClientFactory
                 'key_setting_label' => 'App ID',
                 'secret_setting_label' => 'App Secret',
                 'apply_url' => 'https://open.weixin.qq.com/cgi-bin/frame?t=home/web_tmpl&lang=zh_CN',
-            ),
+            ],
             'weixinmob' => [
                 'name' => '微信内分享登录接口',
                 'admin_name' => '微信内分享登录接口',
@@ -90,8 +90,8 @@ class OAuthClientFactory
                 'key_setting_label' => '',
                 'secret_setting_label' => '',
                 'apply_url' => '',
-            ]
-        );
+            ],
+        ];
 
         if (self::getServiceKernel()->hasParameter('oauth2_clients')) {
             $extras = self::getServiceKernel()->getParameter('oauth2_clients');

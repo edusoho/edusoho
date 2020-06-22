@@ -2,9 +2,8 @@
 
 namespace Tests\Unit\AppBundle\Component\OAuthClient;
 
-use Biz\BaseTestCase;
 use AppBundle\Component\OAuthClient\AppleAuthClient;
-use AppBundle\Common\ReflectionUtils;
+use Biz\BaseTestCase;
 
 class AppleAuthClientTest extends BaseTestCase
 {
@@ -24,7 +23,6 @@ Kq9UfMu+BC7kzCstyWzli+S2J1Rezezq7xMhAaBE2wRTUcg3mv6Wj07abaQ4V0M7
         $client = new AppleAuthClient($config);
 
 //        $result = $client->getAccessToken('ca97270a9af9846789035a1b548e028e7.0.mszt.V168sDykb6LMudCv3Od2tA', '');
-
     }
 
     public function testParseToken()

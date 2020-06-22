@@ -23,25 +23,25 @@ abstract class AbstractOAuthClient
     {
         switch ($type) {
             case 'weibo':
-                $token = array(
+                $token = [
                     'userId' => $openid,
                     'token' => $accessToken,
-                );
+                ];
                 break;
             case 'qq':
-                $token = array(
+                $token = [
                     'openid' => $openid,
                     'access_token' => $accessToken,
                     'key' => $appid,
-                );
+                ];
                 break;
             case 'weixinmob':
             case 'weixinweb':
             case 'apple':
-                $token = array(
+                $token = [
                     'openid' => $openid,
                     'access_token' => $accessToken,
-                );
+                ];
                 break;
             default:
                 throw new \InvalidArgumentException('Bad type');

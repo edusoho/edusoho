@@ -2,9 +2,7 @@
 
 namespace Biz\Oauth;
 
-use AppBundle\Common\Exception\UnexpectedValueException;
 use Codeages\Biz\Framework\Context\Biz;
-use Firebase\JWT\JWT;
 
 class AppleClient
 {
@@ -18,6 +16,4 @@ class AppleClient
 
         $this->config = $config;
     }
-
-
 }

@@ -14,7 +14,7 @@ class AppleAuthClient extends AbstractOAuthClient
 
     public function getAuthorizeUrl($callbackUrl)
     {
-        $params = array();
+        $params = [];
         $params['client_id'] = $this->config['clientId'];
         $params['redirect_uri'] = $callbackUrl;
         $params['response_type'] = 'code';
