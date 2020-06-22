@@ -188,11 +188,6 @@ class ActivitySync extends AbstractEntitySync
                 $newActivity['mediaId'] = $ext['id'];
             }
 
-            if ('live' == $newActivity['mediaType']) { // 教学计划复制
-                $newActivity['startTime'] = time();
-                $newActivity['endTime'] = $newActivity['startTime'] + $newActivity['length'] * 60;
-            }
-
             if (!empty($existActivities[$activity['id']])) {
                 $newActivity = $this->getActivityDao()->update($existActivities[$activity['id']]['id'], $newActivity);
             } else {
