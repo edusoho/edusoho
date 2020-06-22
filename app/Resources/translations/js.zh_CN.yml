@@ -559,6 +559,9 @@ course.question_marker.gap_filling: 填空
 course.question_marker.view_analysis: 查看解析
 course.question_marker.back_to_questions: 返回题目
 
+item_bank_exercise.student_create.price_min_error_hint: 采购的题库练习购买价格不能为0!
+item_bank_exercise.student_create.price_max_error_hint: 购买价格不能大于题库练习原价!
+
 classroom.manage.tag_required_hint: 请输入标签
 classroom.manage.delete_course_hint: 是否要从班级移除该课程？
 classroom.manage.delete_course_hint_title: 移除课程

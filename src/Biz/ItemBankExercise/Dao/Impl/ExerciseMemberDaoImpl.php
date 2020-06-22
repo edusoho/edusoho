@@ -9,6 +9,14 @@ class ExerciseMemberDaoImpl extends GeneralDaoImpl implements ExerciseMemberDao
 {
     protected $table = 'item_bank_exercise_member';
 
+    public function getByExerciseIdAndUserId($exerciseId, $userId)
+    {
+        return $this->getByFields(array(
+            'exerciseId' => $exerciseId,
+            'userId' => $userId,
+        ));
+    }
+
     public function declares()
     {
         return [
@@ -16,6 +24,9 @@ class ExerciseMemberDaoImpl extends GeneralDaoImpl implements ExerciseMemberDao
             'orderbys' => ['createdTime'],
             'conditions' => [
                 'id = :id',
+                'id NOT IN (:excludeIds)',
+                'userId = :userId',
+                'exerciseId = :exerciseId',
             ],
         ];
     }

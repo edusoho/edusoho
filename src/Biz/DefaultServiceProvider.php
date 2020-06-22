@@ -20,6 +20,7 @@ use Biz\Distributor\Service\Impl\SyncUserServiceImpl;
 use Biz\File\FireWall\FireWallFactory;
 use Biz\Importer\ClassroomMemberImporter;
 use Biz\Importer\CourseMemberImporter;
+use Biz\Importer\ItemBankExerciseMemberImporter;
 use Biz\OpenCourse\Event\OpenCourseThreadEventProcessor;
 use Biz\Sms\SmsProcessor\LiveOpenLessonSmsProcessor;
 use Biz\Task\Strategy\Impl\DefaultStrategy;
@@ -97,6 +98,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['thread_event_processor.article'] = function ($biz) {
             return new ArticleEventSubscriber($biz);
+        };
+
+        $biz['importer.exercise-member'] = function ($biz) {
+            return new ItemBankExerciseMemberImporter($biz);
         };
 
         $biz['importer.course-member'] = function ($biz) {

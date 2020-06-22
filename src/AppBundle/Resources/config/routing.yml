@@ -3462,3 +3462,28 @@ facein_inspection_results:
 facein_inspection_results_detail:
     path:     /facein/{activityId}/inspection/{userId}/results
     defaults: { _controller: AppBundle:FaceInspection/InspectionResult:detail }
+
+# item-bank-exercise
+item_bank_exercise_manage_students:
+  path: /item_bank_exercise/{exerciseId}/manage/students
+  defaults: {_controller: AppBundle:ItemBankExercise/StudentManage:students}
+
+item_bank_exercise_manage_students_add:
+  path: /item_bank_exercise/{exerciseId}/manage/students/add
+  defaults: {_controller: AppBundle:ItemBankExercise/StudentManage:createExerciseStudent}
+
+item_bank_exercise_course_students_check:
+  path: /item_bank_exercise/{exerciseId}/manage/students/check
+  defaults: {_controller: AppBundle:ItemBankExercise/StudentManage:checkStudent}
+
+item_bank_exercise_manage_student_records:
+  path: /item_bank_exercise/{exerciseId}/manage/students/{type}/records
+  defaults: {_controller: AppBundle:ItemBankExercise/StudentManage:studentRecords}
+
+item_bank_exercise_manage_students_show:
+  path:  /item_bank_exercise/{exerciseId}/manage/students/{userId}/show
+  defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:show }
+
+item_bank_exercise_manage_students_remark:
+  path:  /item_bank_exercise/{exerciseId}/manage/student/{userId}/remark
+  defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:remark }

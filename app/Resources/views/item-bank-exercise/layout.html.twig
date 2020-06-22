@@ -1,0 +1,26 @@
+{% extends 'item-bank-exercise/exercise-set/layout.html.twig' %}
+{% block title %}
+  {{ 'course.plan_task.manage'|trans }} - {{ parent() }}
+{% endblock %}
+
+{% set side_nav = 'default-course-info' %}
+
+{% block sidebar %}
+  {% include 'item-bank-exercise/exercise-set/sidebar.html.twig' with { code : course_side_nav } %}
+{% endblock %}
+
+{% block main %}
+  <div class="cd-main">
+    <div class="cd-main__heading {% block main_heading_class %}{% endblock %}">
+      {% block main_heading %}
+        <div class="cd-main__title">
+          {% block page_title %}{% endblock %}
+        </div>
+      {% endblock %}
+    </div>
+    <div class="cd-main__body">
+      {% block main_body %}
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}

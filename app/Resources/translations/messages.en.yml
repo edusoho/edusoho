@@ -629,6 +629,7 @@ import.user_import.download_example_btn: 'Click to download the sample file'
 import.user_import.download_example_tips: 'Support Excel file'
 import.user_import.price: Price
 import.user_import.price_tips: 'The price of the course is'
+import.exercise_user_import.price_tips: 'The price of the item bank exercise is'
 import.user_import.remark_btn: Note
 import.user_import.remark_tips: Optional
 question.no_answer: '. No answer'
@@ -950,6 +951,7 @@ course.members_manage.official_student.batch_upload_deadline: Batch modification
 course.members_manage.official_student.batch_remove: Batch remove
 course.members_manage.official_student.input_placeholder: 'Username/Email/Phone'
 course.members_manage.official_student.progress: 'Learn progress'
+course.members_manage.official_student.status: 'Learn status'
 course.members_manage.official_student.operation: Action
 course.members_manage.official_student.detail: (detail)
 course.members_manage.official_student.show: Info
@@ -1185,9 +1187,7 @@ course.item_number: Question number
 course.student.cell: people
 course.plan.cell: pcs
 course.manage_btn: Course manage
-item_bank_exercise.manage_btn: Item bank exercise manage
 course.preview.course: Preview course
-item_bank_exercise.preview.course: Preview item bank exercise
 course.preview.plan: Preview Plan
 course.check.plan: View Plan
 course.share: Share
@@ -1884,6 +1884,22 @@ course.live.replay_manage.lesson_add_content_title: 'Add playback video'
 course.live.replay_manage.lesson_add_btn: Add
 course.liveroom.content_title: 'Live'
 course.liveroom.open_liveroom_tips: 'Live entering, please wait ...'
+
+item_bank_exercise.export.answer_num: Answer number
+item_bank_exercise.export.accuracy: Accuracy
+item_bank_exercise.answer_number: Answer number：
+item_bank_exercise.accuracy: Accuracy：
+item_bank_exercise.manage_btn: Item bank exercise manage
+item_bank_exercise.chapter_practice: Chapter practice
+item_bank_exercise.testpaper_practice: Tests paper practice
+item_bank_exercise.preview.course: Preview item bank exercise
+item_bank_exercise.members_manage.official_student.add.price_tips: 'The price of this item bank exercise is'
+item_bank_exercise.members_manage.official_student.add.failed_tips: 'Fail to add'
+item_bank_exercise.members_manage.official_student.add.publish_tips: 'Please add after the item bank exerise is published'
+item_bank_exercise.student_manage.can_not_add_teacher: This user is the teacher of this item bank exercise and cannot be added
+item_bank_exercise.student_manage.student_exist: This user is already a student of this item bank exercise
+item_bank_exercise.student_manage.student_not_exist: The user does not exist
+
 activity.live.not_created_notice: Live classroom not yet created!
 activity.live.overlap_time_notice: There is already a live broadcast at the selected time. Please change your time.
 course.note.save_btn: Save
@@ -8987,6 +9003,12 @@ exception.question_bank.forbidden_access_bank: Forbidden access this bank
 exception.educloud.user_disabled_hint: The education cloud has been banned, and the payment system is automatically lifted. Tutorial <a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">See here</a>
 exception.coupon.target_type_error: The batch does not support viewing details
 exception.coupon.setting_close: Coupon global switch is closed
+
+exception.item_bank_exercise.exercise.not_found: Item bank exercise does not exist
+exception.item_bank_exercise.exercise.forbidden_manage_exercise: Forbidden manage this item bank exercise
+exception.item_bank_exercise.member.duplicate_member: User has joined this item bank exercise
+exception.item_bank_exercise.exercise.exercise_not_published: Item bank exercise is not published
+exception.item_bank_exercise.member.not_found: The item bank exercise doesn't have this student
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.
