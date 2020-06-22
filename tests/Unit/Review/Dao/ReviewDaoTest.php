@@ -7,14 +7,14 @@ use Biz\Review\Dao\ReviewDao;
 
 class ReviewDaoTest extends BaseTestCase
 {
-    public function testGetByUserIdAndTargetIdAndTargetType()
+    public function testGetByUserIdAndTargetTypeAndTargetId()
     {
         $expected = $this->createReview();
-        $resultNull = $this->getReviewDao()->getByUserIdAndTargetIdAndTargetType($expected['userId'] + 10000, $expected['targetType'], $expected['targetId']);
+        $resultNull = $this->getReviewDao()->getByUserIdAndTargetTypeAndTargetId($expected['userId'] + 10000, $expected['targetType'], $expected['targetId']);
 
         $this->assertNull($resultNull);
 
-        $result = $this->getReviewDao()->getByUserIdAndTargetIdAndTargetType($expected['userId'], $expected['targetType'], $expected['targetId']);
+        $result = $this->getReviewDao()->getByUserIdAndTargetTypeAndTargetId($expected['userId'], $expected['targetType'], $expected['targetId']);
         $this->assertEquals($expected, $result);
     }
 

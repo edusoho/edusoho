@@ -1,5 +1,6 @@
 import notify from 'common/notify';
 import ThreadShowWidget from 'app/js/thread/thread-show';
+
 let $form = $('#review-form');
 
 let validator = $form.validate({
@@ -36,18 +37,38 @@ if ($form.length > 0) {
     let self = $(this);
     if (validator.form()) {
       self.button('loading');
-      $.post($form.attr('action'), $form.serialize())
-        .success(() => {
+
+      $.ajax({
+        type: "POST",
+        beforeSend: function (request) {
+          request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
+          request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
+        },
+        url: '/api/review',
+        data: $form.serialize()
+          + '&targetType=' + $('.js-btn-save').data('targetType')
+          + '&targetId=' + $('.js-btn-save').data('targetId'),
+        success: function () {
           $form.find('.js-review-remind').fadeIn('fast', function () {
             window.location.reload();
           });
-        })
-        .error((response) => {
+        },
+        error: function () {
           self.button('reset');
-        });
+        }
+      });
+
+      // $.post('/api/review', $form.serialize())
+      //   .success(() => {
+      //     $form.find('.js-review-remind').fadeIn('fast', function () {
+      //       window.location.reload();
+      //     });
+      //   })
+      //   .error((response) => {
+      //     self.button('reset');
+      //   });
     }
   });
-
 
 
   $('.js-hide-review-form').on('click', function () {

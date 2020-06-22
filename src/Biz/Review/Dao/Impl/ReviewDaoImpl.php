@@ -12,6 +12,7 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
     public function declares()
     {
         return [
+            'serializes' => ['meta' => 'json'],
             'orderbys' => ['createdTime', 'id'],
             'conditions' => [
                 'targetType = :targetType',
@@ -25,7 +26,7 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
         ];
     }
 
-    public function getByUserIdAndTargetIdAndTargetType($userId, $targetType, $targetId)
+    public function getByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId)
     {
         return $this->getByFields(['userId' => $userId, 'targetType' => $targetType, 'targetId' => $targetId]);
     }

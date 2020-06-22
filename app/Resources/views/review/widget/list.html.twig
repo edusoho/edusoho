@@ -5,7 +5,7 @@
   <div class="clearfix">
      <button class="btn btn-primary btn-sm pull-right js-show-review-form" {% if not userReview or (hideRereview|default(false)) %}style="display:none;"{% endif %}>{{'course.reviews.review_again'|trans}}</button>
   </div>
-  {% include 'review/widget/review-form.html.twig' with {userReview:userReview,reviewSaveUrl:reviewSaveUrl|default(null)} %}
+  {% include 'review/widget/review-form.html.twig' with {userReview:userReview,targetType:targetType|default('course'), targetId:targetId|default()} %}
 {% endif %}
 
 {% set canAccess = canAccess|default(false) %}
@@ -21,7 +21,7 @@
       </div>
       <div class="media-body thread-post">
         <div class="title">{{ web_macro.user_link(user) }}
-          {% if review.meta %}<span>{{(courseMap[review.courseId].title|default('course.reviews.teaching_plan')|trans) ~ ' ' ~ ('course.reviews.teaching_plan_progress'|trans)}}:{{ review.meta.learnedNum }}/{{ review.meta.lessonNum}}</span>{% endif %}&nbsp;&nbsp;
+          {% if review.meta %}<span>{{(courseMap[review.targetId].title|default('course.reviews.teaching_plan')|trans) ~ ' ' ~ ('course.reviews.teaching_plan_progress'|trans)}}:{{ review.meta.learnedNum }}/{{ review.meta.lessonNum}}</span>{% endif %}&nbsp;&nbsp;
           {{ review.createdTime|date('Y-m-d') }}
         </div>
         <div class="score">
@@ -44,10 +44,8 @@
         </div>
 
         {% set goto = goto|default(path('homepage')) %}
-        {% if targetType|default('course') == 'classroom' %}
-          {% set postReplyUrl = path('classroom_review_post',{id:review.classroomId,reviewId:review.id}) %}
-        {% else %}
-          {% set postReplyUrl = path('course_review_post',{courseId:review.courseId,reviewId:review.id}) %}
+        {% if targetType|default('course') == 'course' %}
+          {% set postReplyUrl = path('course_review_post',{courseId:review.targetId,reviewId:review.id}) %}
         {% endif %}
 
         <div class="thread-subpost-container subcomments clearfix {% if posts is empty %}hide{% endif %}">

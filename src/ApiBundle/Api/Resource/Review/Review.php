@@ -42,6 +42,12 @@ class Review extends AbstractResource
         $review = $request->request->all();
         $review['userId'] = empty($review['userId']) ? $this->getCurrentUser()->getId() : $review['userId'];
 
+        $existed = $this->getReviewService()->getByUserIdAndTargetTypeAndTargetId($review['userId'], $request->request->get('targetType'), $request->request->get('targetId'));
+
+        if (!empty($existed['id'])) {
+            return $this->dealReview($this->getReviewService()->updateReview($existed['id'], $review));
+        }
+
         return $this->dealReview($this->getReviewService()->createReview($review));
     }
 

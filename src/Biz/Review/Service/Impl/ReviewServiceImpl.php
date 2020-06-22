@@ -61,9 +61,9 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         return $this->getReviewDao()->create($review);
     }
 
-    public function getByUserIdAndTargetIdAndTargetType($userId, $targetType, $targetId)
+    public function getByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId)
     {
-        return $this->getReviewDao()->getByUserIdAndTargetIdAndTargetType($userId, $targetType, $targetId);
+        return $this->getReviewDao()->getByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId);
     }
 
     public function updateReview($id, $review)

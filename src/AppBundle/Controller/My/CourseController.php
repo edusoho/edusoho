@@ -7,14 +7,14 @@ use AppBundle\Common\Paginator;
 use AppBundle\Controller\Course\CourseBaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
+use Biz\Course\Util\CourseTitleUtils;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Util\CourseTitleUtils;
 
 class CourseController extends CourseBaseController
 {
@@ -31,7 +31,7 @@ class CourseController extends CourseBaseController
     {
         $currentUser = $this->getUser();
 
-        $members = $this->getCourseMemberService()->searchMembers(array('userId' => $currentUser['id'], 'role' => 'student'), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+        $members = $this->getCourseMemberService()->searchMembers(['userId' => $currentUser['id'], 'role' => 'student'], ['createdTime' => 'desc'], 0, PHP_INT_MAX);
         $members = ArrayToolkit::index($members, 'courseId');
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
@@ -41,10 +41,10 @@ class CourseController extends CourseBaseController
 
         list($learnedCourseSetIds, $learningCourseSetIds) = $this->differentiateCourseSetIds($courses, $members);
 
-        $conditions = array(
-            'types' => array(CourseSetService::NORMAL_TYPE, CourseSetService::LIVE_TYPE),
+        $conditions = [
+            'types' => [CourseSetService::NORMAL_TYPE, CourseSetService::LIVE_TYPE],
             'ids' => $learningCourseSetIds,
-        );
+        ];
 
         $paginator = new Paginator(
             $request,
@@ -54,7 +54,7 @@ class CourseController extends CourseBaseController
 
         $courseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
-            array(),
+            [],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -69,20 +69,20 @@ class CourseController extends CourseBaseController
 
         return $this->render(
             'my/learning/course/learning.html.twig',
-            array(
+            [
                 'courses' => $courses,
                 'paginator' => $paginator,
                 'courseSets' => $courseSets,
                 'members' => $members,
                 'learningCourses' => $learningCourses,
-            )
+            ]
         );
     }
 
     public function learnedAction(Request $request)
     {
         $currentUser = $this->getUser();
-        $members = $this->getCourseMemberService()->searchMembers(array('userId' => $currentUser['id'], 'role' => 'student'), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+        $members = $this->getCourseMemberService()->searchMembers(['userId' => $currentUser['id'], 'role' => 'student'], ['createdTime' => 'desc'], 0, PHP_INT_MAX);
         $members = ArrayToolkit::index($members, 'courseId');
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
@@ -92,9 +92,9 @@ class CourseController extends CourseBaseController
 
         list($learnedCourseSetIds, $learningCourseSetIds) = $this->differentiateCourseSetIds($courses, $members);
 
-        $conditions = array(
+        $conditions = [
             'ids' => $learnedCourseSetIds,
-        );
+        ];
         $paginator = new Paginator(
             $request,
             $this->getCourseSetService()->countCourseSets($conditions),
@@ -103,7 +103,7 @@ class CourseController extends CourseBaseController
 
         $courseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
-            array(),
+            [],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -113,12 +113,12 @@ class CourseController extends CourseBaseController
 
         return $this->render(
             'my/learning/course/learned.html.twig',
-            array(
+            [
                 'courses' => $courses,
                 'courseSets' => $courseSets,
                 'paginator' => $paginator,
                 'members' => $members,
-            )
+            ]
         );
     }
 
@@ -132,7 +132,7 @@ class CourseController extends CourseBaseController
         if (empty($member['previewAs'])) {
             $learnProgress = $this->getLearningDataAnalysisService()->getUserLearningSchedule($course['id'], $member['userId']);
         } else {
-            $learnProgress = array(
+            $learnProgress = [
                 'taskCount' => 0,
                 'progress' => 0,
                 'taskResultCount' => 0,
@@ -140,7 +140,7 @@ class CourseController extends CourseBaseController
                 'taskPerDay' => 0,
                 'planStudyTaskCount' => 0,
                 'planProgressProgress' => 0,
-            );
+            ];
         }
 
         $isUserFavorite = false;
@@ -151,7 +151,7 @@ class CourseController extends CourseBaseController
 
         return $this->render(
             'course/header/header-for-member.html.twig',
-            array(
+            [
                 'courseSet' => $courseSet,
                 'courses' => $courses,
                 'course' => $course,
@@ -166,16 +166,21 @@ class CourseController extends CourseBaseController
                 'isUserFavorite' => $isUserFavorite,
                 'marketingPage' => 0,
                 'breadcrumbs' => $breadcrumbs,
-            )
+            ]
         );
     }
 
     public function showAction(Request $request, $id, $tab = 'tasks')
     {
         $course = $this->getCourseService()->getCourse($id);
+//      TODO: 班级课程评论迁移
+        if (0 == $course['parentId'] && 'reviews' == $tab) {
+            return $this->redirectToRoute('course_show', ['id' => $id, 'tab' => 'tasks']);
+        }
+
         $member = $this->getCourseMember($request, $course);
 
-        $classroom = array();
+        $classroom = [];
         if ($course['parentId'] > 0) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
         }
@@ -189,16 +194,16 @@ class CourseController extends CourseBaseController
             return $this->redirect(
                 $this->generateUrl(
                     'course_show',
-                    array(
+                    [
                         'id' => $id,
                         'tab' => $tab,
-                    )
+                    ]
                 )
             );
         }
 
         if ('date' == $course['expiryMode'] && $course['expiryStartDate'] >= time()) {
-            return $this->redirectToRoute('course_show', array('id' => $course['id']));
+            return $this->redirectToRoute('course_show', ['id' => $course['id']]);
         }
 
         $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
@@ -215,39 +220,39 @@ class CourseController extends CourseBaseController
 
         return $this->render(
             'course/course-show.html.twig',
-            array(
+            [
                 'tab' => $tab,
                 'tags' => $tags,
                 'member' => $member,
                 'isCourseTeacher' => 'teacher' == $member['role'],
                 'course' => $course,
                 'classroom' => $classroom,
-            )
+            ]
         );
     }
 
-    public function tasksAction($course, $member = array())
+    public function tasksAction($course, $member = [])
     {
         $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseId($course['id']);
 
         $offsetTaskId = !empty($toLearnTasks) ? $toLearnTasks[0]['id'] : 0;
 
-        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id'], array('limit' => 10000));
+        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id'], ['limit' => 10000]);
 
         return $this->render(
             'course/tabs/tasks.html.twig',
-            array(
+            [
                 'course' => $course,
                 'courseItems' => $courseItems,
                 'nextOffsetSeq' => $nextOffsetSeq,
                 'member' => $member,
                 'optionalTaskCount' => $this->getTaskService()->countTasks(
-                    array(
+                    [
                         'courseId' => $course['id'],
                         'status' => 'published',
                         'isOptional' => 1,
-                    )),
-            )
+                    ]),
+            ]
         );
     }
 
@@ -275,17 +280,17 @@ class CourseController extends CourseBaseController
             return;
         }
 
-        $info = array(
+        $info = [
             'levelId' => empty($classroomMember['levelId']) ? 0 : $classroomMember['levelId'],
             'deadline' => $classroomMember['deadline'],
-        );
+        ];
 
         $this->getMemberService()->createMemberByClassroomJoined($courseId, $user['id'], $classroom['id'], $info);
     }
 
     protected function sortCourseSets($courseSets, $members)
     {
-        $sort = array();
+        $sort = [];
         foreach ($members as $member) {
             if (empty($courseSets[$member['courseSetId']])) {
                 continue;
@@ -304,7 +309,7 @@ class CourseController extends CourseBaseController
     protected function calculateCourseSetprogress($courseSets, $courses)
     {
         if (empty($courseSets)) {
-            return array();
+            return [];
         }
 
         $user = $this->getCurrentUser();
@@ -324,7 +329,7 @@ class CourseController extends CourseBaseController
     protected function getClassrooms($courseSets)
     {
         if (empty($courseSets)) {
-            return array();
+            return [];
         }
 
         $courseSetIds = ArrayToolkit::column($courseSets, 'id');
@@ -341,10 +346,10 @@ class CourseController extends CourseBaseController
 
             $classroomCourse = $classroomCourses[$courseSet['id']];
             $classroom = $classrooms[$classroomCourse['classroomId']];
-            $courseSets[$courseSetId]['classroom'] = array(
+            $courseSets[$courseSetId]['classroom'] = [
                 'id' => $classroom['id'],
                 'title' => $classroom['title'],
-            );
+            ];
         }
 
         return $courseSets;
@@ -353,11 +358,11 @@ class CourseController extends CourseBaseController
     protected function differentiateCourseSetIds($groupCourses, $members)
     {
         if (empty($groupCourses)) {
-            return array(array(-1), array(-1));
+            return [[-1], [-1]];
         }
 
-        $learnedCourseSetIds = array(-1);
-        $learningCourseSetIds = array(-1);
+        $learnedCourseSetIds = [-1];
+        $learningCourseSetIds = [-1];
         foreach ($groupCourses as $courseSetId => $courses) {
             $isLearned = 1;
             array_map(function ($course) use ($members, &$isLearned) {
@@ -374,7 +379,7 @@ class CourseController extends CourseBaseController
             }
         }
 
-        return array($learnedCourseSetIds, $learningCourseSetIds);
+        return [$learnedCourseSetIds, $learningCourseSetIds];
     }
 
     /**

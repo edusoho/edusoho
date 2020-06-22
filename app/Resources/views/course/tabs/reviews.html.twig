@@ -5,4 +5,4 @@
 
 {{ render(controller('AppBundle:Course/Course:renderCourseChoice')) }}
 
-{% include 'review/widget/list.html.twig' %}
+{% include 'review/widget/list.html.twig' with {targetType: 'course', targetId:course.id} %}

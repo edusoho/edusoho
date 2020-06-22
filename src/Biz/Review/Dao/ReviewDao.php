@@ -6,5 +6,5 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface ReviewDao extends GeneralDaoInterface
 {
-    public function getByUserIdAndTargetIdAndTargetType($userId, $targetType, $targetId);
+    public function getByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId);
 }
