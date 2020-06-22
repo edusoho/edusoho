@@ -27,5 +27,6 @@ module.exports = {
   rules: {
     'no-var': 2,
     'prettier/prettier': 'error',
+    eqeqeq: 0,
   },
 };
