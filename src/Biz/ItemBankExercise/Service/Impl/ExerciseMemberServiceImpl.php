@@ -14,7 +14,6 @@ use Biz\ItemBankExercise\Service\MemberOperationRecordService;
 use Biz\Order\OrderException;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\System\Service\LogService;
-use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
@@ -27,7 +26,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         return $this->getExerciseMemberDao()->count($conditions);
     }
 
-    public function search($conditions, $orderBy, $start, $limit, $columns = array())
+    public function search($conditions, $orderBy, $start, $limit, $columns = [])
     {
         return $this->getExerciseMemberDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }

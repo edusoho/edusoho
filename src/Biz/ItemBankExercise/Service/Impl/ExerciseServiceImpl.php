@@ -9,7 +9,6 @@ use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\User\UserException;
-use Codeages\Biz\Framework\Event\Event;
 
 class ExerciseServiceImpl extends BaseService implements ExerciseService
 {
