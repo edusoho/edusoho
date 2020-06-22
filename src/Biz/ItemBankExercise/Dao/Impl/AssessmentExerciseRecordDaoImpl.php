@@ -9,13 +9,19 @@ class AssessmentExerciseRecordDaoImpl extends GeneralDaoImpl implements Assessme
 {
     protected $table = 'item_bank_assessment_exercise_record';
 
+    public function getByAnswerRecordId($answerRecordId)
+    {
+        return $this->getByFields(['answerRecordId' => $answerRecordId]);
+    }
+
     public function declares()
     {
         return [
             'timestamps' => ['createdTime', 'updatedTime'],
             'orderbys' => ['createdTime'],
             'conditions' => [
-                'id = :id',
+                'userId = :userId',
+                'moduleId = :moduleId',
             ],
         ];
     }

@@ -381,6 +381,12 @@ services:
         arguments: ['@biz']
         tags:
              - { name: codeages_plugin.event.subscriber }
+    
+    item_bank_assessment_exercise_event_subscriber:
+        class: Biz\ItemBankExercise\Event\AssessmentExerciseEventSubscriber
+        arguments: ['@biz']
+        tags:
+             - { name: codeages_plugin.event.subscriber }
 
     exercise_member_event_subscriber:
         class: Biz\ItemBankExercise\Event\ExerciseMemberEventSubscriber
