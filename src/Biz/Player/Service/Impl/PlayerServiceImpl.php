@@ -27,16 +27,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
                 return null;
         }
     }
-
-    public function agentInWhiteList($userAgent)
-    {
-        $whiteList = ['iPhone', 'iPad', 'Android', 'HTC'];
-
-        return ArrayToolkit::some($whiteList, function ($agent) use ($userAgent) {
-            return strpos($userAgent, $agent) > -1;
-        });
-    }
-
+    
     public function getVideoFilePlayer($file, $agentInWhiteList, $context, $ssl)
     {
         $storageSetting = $this->getSettingService()->get('storage');

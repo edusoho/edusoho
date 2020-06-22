@@ -16,11 +16,11 @@ class Show {
     this.courseId = container.data('courseId');
     this.lessonId = container.data('lessonId');
     this.timelimit = container.data('timelimit');
-
-    this.playerType = container.data('player');
+    this.token = container.data('token');
+    // this.playerType = container.data('player');
     this.fileType = container.data('fileType');
     this.fileLength = container.data('fileLength');
-    this.url = container.data('url');
+    // this.url = container.data('url');
     this.videoHeaderLength = container.data('videoHeaderLength');
     this.enablePlaybackRates = container.data('enablePlaybackRates');
     this.videoH5 = container.data('videoH5');
@@ -56,11 +56,11 @@ class Show {
   initView() {
     let html = '';
     if (this.fileType == 'video') {
-      if (this.playerType == 'local-video-player') {
-        html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
-      } else {
+      // if (this.playerType == 'local-video-player') {
+      //   html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
+      // } else {
         html += '<div id="lesson-player" style="width: 100%;height: 100%;"></div>';
-      }
+      // }
     } else if (this.fileType == 'audio') {
       html += '<div id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></audio>';
     }
@@ -71,9 +71,10 @@ class Show {
   initPlayer() {
     const customPos = parseInt(this.lastLearnTime) ? parseInt(this.lastLearnTime) : 0;
     return window.player = PlayerFactory.create(
-      this.playerType, {
+      'balloon-cloud-video-player', {
         element: '#lesson-player',
-        url: this.url,
+        resNo: this.fileGlobalId,
+        token: this.token,
         content: this.content,
         mediaType: this.fileType,
         fingerprint: this.fingerprint,
@@ -97,7 +98,7 @@ class Show {
           userId: this.userId,
           userName: this.userName
         },
-        resId: this.fileGlobalId,
+        
         videoHeaderLength: this.videoHeaderLength,
         textTrack: this.transToTextrack(this.subtitles),
         autoplay: this.autoplay,

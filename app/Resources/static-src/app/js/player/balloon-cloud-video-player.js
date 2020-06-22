@@ -22,6 +22,18 @@ class BalloonCloudVideoPlayer extends Emitter {
       });
     }
 
+    if (self.options.resNo) {
+      extConfig = Object.assign(extConfig, {
+        resNo: self.options.resNo
+      });
+    }
+
+    if (self.options.token) {
+      extConfig = Object.assign(extConfig, {
+        token: self.options.token
+      });
+    }
+
     if (self.options.watermark) {
       extConfig = Object.assign(extConfig, {
         watermark: {
@@ -102,8 +114,8 @@ class BalloonCloudVideoPlayer extends Emitter {
       strictMode: !self.options.strictMode,
       language: lang
     });
-
-    var player = new VideoPlayerSDK(extConfig);
+    console.log(extConfig);
+    var player = new QiQiuYun.Player(extConfig);
 
     player.on('ready', function(e) {
       self.emit('ready', e);
