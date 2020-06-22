@@ -235,3 +235,40 @@
     width: 100%;
   }
 }
+
+// 评价
+.reviews {
+  margin-top: 20px;
+  .reviews-item {
+    position: relative;
+    margin-top: 20px;
+    .reviews-item__img {
+      margin-right: 15px;
+      width: 40px;
+      height: 40px;
+      .border-radius(50%);
+    }
+    .reviews-item__text {
+      .reviews-text__nickname {
+        color: #919191;
+        a,
+        span {
+          margin-right: 5px;
+        }
+      }
+      .reviews-text__rating {
+        margin-top: 5px;
+      }
+      .reviews-text__content {
+        margin-top: 10px;
+        margin-bottom: 20px;
+      }
+      .reviews-text__reply {
+        position: absolute;
+        right: 10px;
+        bottom: 0;
+        color: #46C37B;
+      }
+    }
+  }
+}
