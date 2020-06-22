@@ -159,7 +159,6 @@ class CourseTaskMedia extends AbstractResource
         }
 
         $video = $config->prepareMediaUri($video);
-
         if ('self' != $video['mediaSource']) {
             return $video;
         }
@@ -172,38 +171,16 @@ class CourseTaskMedia extends AbstractResource
             throw PlayerException::NOT_SUPPORT_TYPE();
         }
 
-        $player = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
-
-        $agentInWhiteList = $this->getPlayerService()->agentInWhiteList($request->headers->get('user-agent'));
-
-        $isEncryptionPlus = false;
-        $context = [];
-        if ('video' == $file['type'] && 'cloud' == $file['storage']) {
-            $videoPlayer = $this->getPlayerService()->getVideoFilePlayer($file, $agentInWhiteList, [], $ssl);
-            $isEncryptionPlus = $videoPlayer['isEncryptionPlus'];
-            $context = $videoPlayer['context'];
-            if (!empty($videoPlayer['mp4Url'])) {
-                $mp4Url = $videoPlayer['mp4Url'];
-            }
-        }
+        $playerContext = $this->getBiz()['resource_facade']->getPlayerContext($file);
         $user = $this->getCurrentUser();
         $isCourseMember = $this->getCourseMemberService()->isCourseMember($course['id'], $user['id']);
         if (empty($task['isFree']) && !empty($course['tryLookable']) && !$isCourseMember) {
-            $context['watchTimeLimit'] = $course['tryLookLength'] * 60;
+            $watchTimeLimit = $course['tryLookLength'] * 60;
         }
-        $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($file, $context, $ssl);
-
-        $supportMobile = intval($this->getSettingService()->node('storage.support_mobile', 0));
 
         return [
-            'resId' => $file['globalId'],
-            'url' => isset($url) ? $url : null,
-            'player' => $player,
-            'videoHeaderLength' => isset($context['videoHeaderLength']) ? $context['videoHeaderLength'] : 0,
-            'timeLimit' => isset($context['watchTimeLimit']) ? $context['watchTimeLimit'] : 0,
-            'agentInWhiteList' => $agentInWhiteList,
-            'isEncryptionPlus' => $isEncryptionPlus,
-            'supportMobile' => $supportMobile,
+            'context' => $playerContext,
+            'timeLimit' => isset($watchTimeLimit) ? $watchTimeLimit : 0,
         ];
     }
 

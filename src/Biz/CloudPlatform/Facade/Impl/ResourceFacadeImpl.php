@@ -9,9 +9,22 @@ class ResourceFacadeImpl extends BaseFacade implements ResourceFacade
 {
     public function getPlayerContext($file, $userAgent = '')
     {
+        $context = [];
+
+        $context = $this->prepareVideoContext($context);
+        $playToken = $this->makePlayToken($file);
+        $context['token'] = $playToken;
+        $context['resNo'] = $file['globalId'];
+
+        return $context;
+    }
+
+    protected function prepareVideoContext($context)
+    {
         $storageSetting = $this->getSettingService()->get('storage');
         //是否开启加密增强
-        $isEncryptionPlus = isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['enable_hls_encryption_plus'];
+        $context['isEncryptionPlus'] = isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['enable_hls_encryption_plus'];
+        
         //是否加入片头信息
         $isShowVideoHeader = isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['video_header'];
         $videoHeaderLength = null;
@@ -19,16 +32,12 @@ class ResourceFacadeImpl extends BaseFacade implements ResourceFacade
             $videoHeaderFile = $this->getUploadFileService()->getFileByTargetType('headLeader');
             $videoHeaderLength = !empty($videoHeaderFile) && 'success' == $videoHeaderFile['convertStatus'] ? $videoHeaderFile['length'] : null;
         }
+        $context['videoHeaderLength'] = $videoHeaderLength;
 
-        $playToken = $this->makePlayToken($file);
+        //微网校用于是否支持 mobile 端判断
+        $context['supportMobile'] = intval($this->getSettingService()->node('storage.support_mobile', 0));
 
-        return [
-            'isEncryptionPlus' => $isEncryptionPlus,
-            'videoHeaderLength' => $videoHeaderLength,
-            'agentInWhiteList' => $this->agentInWhiteList($userAgent),
-            'token' => $playToken,
-            'resNo' => $file['globalId'],
-        ];
+        return $context;
     }
 
     public function makePlayToken($file, $lifetime = 600, $payload = [])

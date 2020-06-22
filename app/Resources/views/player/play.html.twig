@@ -22,11 +22,9 @@
           data-file-type="{{file.type}}"
           data-file-length="{{ file.length|default(0) }}"
           data-token="{{ context.token }}"
-          {# data-url="{{url}}" #}
           data-video-header-length="{{ context.videoHeaderLength|default(0) }}"
           data-video-h5="{{ setting('storage.video_h5_enable')|default(1) }}"
           data-enable-playback-rates="{{ setting('storage.enable_playback_rates')|default(false) }}"
-          {# data-player="{{player}}" #}
           data-agentInWhiteList="{{agentInWhiteList}}"
           data-strict="{{setting('storage.support_mobile', 0)}}"
           data-autoplay="{{ context.autoplay|default(setting('storage.video_auto_play', true)) }}"
@@ -55,7 +53,7 @@
           {% if context.subtitles is defined and context.hideSubtitle|default(0) == 0%}
             data-subtitles="{{ context.subtitles|json_encode }}"
           {% endif %}
-          data-remeber-last-pos="{{ remeberLastPos }}"
+          data-remember-last-pos="{{ rememberLastPos }}"
           data-timelimit="{{ context.watchTimeLimit|default('')}}"
           data-starttime="{{ context.starttime|default('')}}"
           data-lesson-id="{{ context.lessonId|default(0)}}"

@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PlayerController extends BaseController
 {
-    public function showAction(Request $request, $id, $isPart = false, $context = [], $remeberLastPos = true)
+    public function showAction(Request $request, $id, $isPart = false, $context = [], $rememberLastPos = true)
     {
         $file = $this->getUploadFileService()->getFullFile($id);
         if (empty($file)) {
@@ -35,12 +35,11 @@ class PlayerController extends BaseController
 
         $params = [
             'file' => $file,
-            // 'url' => isset($url) ? $url : null,
             'context' => $playerContext,
             'agentInWhiteList' => $playerContext['agentInWhiteList'],
             'isEncryptionPlus' => $playerContext['isEncryptionPlus'],
             'cloudSdk' => $file['type'],
-            'remeberLastPos' => $remeberLastPos,
+            'rememberLastPos' => $rememberLastPos,
         ];
 
         if ($isPart) {

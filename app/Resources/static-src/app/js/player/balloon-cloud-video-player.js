@@ -82,20 +82,19 @@ class BalloonCloudVideoPlayer extends Emitter {
       });
     }
 
-    if (self.options.statsInfo) {
-      var statsInfo = self.options.statsInfo;
+    if (self.options.user) {
+      var user = self.options.user;
       extConfig = Object.assign(extConfig, {
-        statsInfo: {
-          accesskey: statsInfo.accesskey,
-          globalId: statsInfo.globalId,
-          userId: statsInfo.userId,
-          userName: statsInfo.userName
+        user: {
+          accesskey: user.accesskey,
+          globalId: user.globalId,
+          id: user.id,
+          name: user.name
         }
       });
     }
 
-    const remeberLastPos = (self.options.customPos && self.options.remeberLastPos) ? true : false;
-
+    const rememberLastPos = (self.options.customPos && self.options.rememberLastPos) ? true : false;
 
     const lang = (document.documentElement.lang == 'zh_CN') ? 'zh-CN' : document.documentElement.lang;
     self.options.customPos = self.options.customPos.toString();
@@ -107,9 +106,9 @@ class BalloonCloudVideoPlayer extends Emitter {
       disableControlBar: self.options.disableControlBar,
       disableProgressBar: self.options.disableProgressBar,
       playlist: self.options.url,
-      remeberLastPos: remeberLastPos,
-      customPos: self.options.customPos,
-      videoHeaderLength: self.options.videoHeaderLength,
+      rememberLastPos: rememberLastPos,
+      initPos: self.options.customPos,
+      timelineOffset: self.options.videoHeaderLength,
       autoplay: self.options.autoplay,
       strictMode: !self.options.strictMode,
       language: lang
