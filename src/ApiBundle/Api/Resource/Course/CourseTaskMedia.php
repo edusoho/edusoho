@@ -298,13 +298,14 @@ class CourseTaskMedia extends AbstractResource
         $config = $this->getActivityService()->getActivityConfig('ppt');
 
         $ppt = $config->get($activity['mediaId']);
+        $file = $this->getUploadFileService()->getFullFile($ppt['mediaId']);
+        // list($result, $error) = $this->getPlayerService()->getPptFilePlayer($ppt, $ssl);
+        // if (!empty($error)) {
+        //     throw new BadRequestHttpException($error['message']);
+        // }
+        $playerContext = $this->getBiz()['resource_facade']->getPlayerContext($file);
 
-        list($result, $error) = $this->getPlayerService()->getPptFilePlayer($ppt, $ssl);
-        if (!empty($error)) {
-            throw new BadRequestHttpException($error['message']);
-        }
-
-        return $result;
+        return $playerContext;
     }
 
     protected function getLive($course, $task, $activity, $request, $ssl = false)
