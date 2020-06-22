@@ -18,13 +18,7 @@ class StudentExporter extends Exporter
             return true;
         }
 
-        $courseSetting = $this->getSettingService()->get('course', []);
-        if (!empty($courseSetting['teacher_export_student'])) {
-            $this->getExerciseService()->tryManageExercise($this->parameter['exerciseId']);
-
-            return true;
-        }
-
+        $this->getExerciseService()->tryManageExercise($this->parameter['exerciseId']);
         return false;
     }
 
@@ -151,13 +145,5 @@ class StudentExporter extends Exporter
     protected function getExerciseMemberService()
     {
         return $this->getBiz()->service('ItemBankExercise:ExerciseMemberService');
-    }
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->getBiz()->service('System:SettingService');
     }
 }
