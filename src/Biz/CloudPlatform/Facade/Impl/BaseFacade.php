@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\CloudPlatform\Facade\Impl;
 
 use Codeages\Biz\Framework\Context\Biz;

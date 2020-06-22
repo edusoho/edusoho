@@ -3,10 +3,10 @@
 namespace Biz;
 
 use AppBundle\System;
+use Biz\CloudPlatform\Facade\Impl\ResourceFacadeImpl;
 use Codeages\Biz\Framework\Context\Biz;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use Biz\CloudPlatform\Facade\Impl\ResourceFacadeImpl;
 
 class DefaultSdkProvider implements ServiceProviderInterface
 {
@@ -19,7 +19,6 @@ class DefaultSdkProvider implements ServiceProviderInterface
             if (!empty($sdk)) {
                 $service = $sdk->getDrpService();
             }
-
 
             return $service;
         };
@@ -170,7 +169,6 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
             return $service;
         };
-
 
         $this->registerFacade($biz);
     }

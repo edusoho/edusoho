@@ -30,7 +30,7 @@ class PlayerController extends BaseController
             $this->createNewException(PlayerException::NOT_SUPPORT_TYPE());
         }
 
-        // 获取播放必须的token和resNo，以及一些个性化播放器参数        
+        // 获取播放必须的token和resNo，以及一些个性化播放器参数
         $playerContext = $this->getBiz()['resource_facade']->getPlayerContext($file);
 
         $params = [

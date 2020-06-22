@@ -1,8 +1,9 @@
 <?php
+
 namespace Biz\CloudPlatform\Facade\Impl;
 
-use Biz\CloudPlatform\Facade\ResourceFacade;
 use AppBundle\Common\ArrayToolkit;
+use Biz\CloudPlatform\Facade\ResourceFacade;
 
 class ResourceFacadeImpl extends BaseFacade implements ResourceFacade
 {
@@ -30,7 +31,7 @@ class ResourceFacadeImpl extends BaseFacade implements ResourceFacade
         ];
     }
 
-    public function makePlayToken($file, $lifetime = 600, $payload = array())
+    public function makePlayToken($file, $lifetime = 600, $payload = [])
     {
         // if ('supplier' == $file['storage']) {
         //     return $this->getS2B2CFileSourceService()->player($file['globalId'], true);

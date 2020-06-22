@@ -2,7 +2,6 @@
 
 namespace Biz\Player\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\File\Service\FileImplementor;
 use Biz\File\Service\UploadFileService;
@@ -27,7 +26,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
                 return null;
         }
     }
-    
+
     public function getVideoFilePlayer($file, $agentInWhiteList, $context, $ssl)
     {
         $storageSetting = $this->getSettingService()->get('storage');
