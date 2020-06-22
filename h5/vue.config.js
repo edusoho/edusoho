@@ -95,14 +95,14 @@ module.exports = {
   chainWebpack: config => {
     if (process.env.NODE_ENV === "development") {
       // 设置eslint在dev模式下自动格式化代码
-      config.module
-        .rule("eslint")
-        .use("eslint-loader")
-        .loader("eslint-loader")
-        .tap(options => {
-          options.fix = true;
-          return options;
-        });
+      // config.module
+      //   .rule("eslint")
+      //   .use("eslint-loader")
+      //   .loader("eslint-loader")
+      //   .tap(options => {
+      //     options.fix = true;
+      //     return options;
+      //   });
     }
     config.performance.set("hints", false);
     config.plugins
