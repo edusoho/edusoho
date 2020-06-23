@@ -59,7 +59,7 @@ class AppleOAuthClient extends AbstractOAuthClient
     {
         $biz = ServiceKernel::instance()->getBiz();
 
-        return $biz['ESCloudSdk.mobile']->getAuthToken($code);
+        return $biz['ESCloudSdk.mobile']->getAppleToken($code);
     }
 
     protected function getTokenFromApple($code)

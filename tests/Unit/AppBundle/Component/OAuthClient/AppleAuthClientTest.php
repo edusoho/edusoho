@@ -2,31 +2,107 @@
 
 namespace Tests\Unit\AppBundle\Component\OAuthClient;
 
+use AppBundle\Common\ReflectionUtils;
 use AppBundle\Component\OAuthClient\AppleOAuthClient;
 use Biz\BaseTestCase;
 
 class AppleAuthClientTest extends BaseTestCase
 {
-    public function testGetAccessToken()
+    public function testGetAuthorizeUrl()
     {
         $config = [
-            'clientId' => 'com.edusoho.kuozhi',
-            'teamId' => 'ZKQ4HP5426',
-            'keyId' => '8568372JXY',
-            'secretKey' => '-----BEGIN PRIVATE KEY-----
-MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQg6JmVKrowJrSEAOde
-k7H0VYACLtPpr518n81qSv5KQ/2gCgYIKoZIzj0DAQehRANCAAQUxJrR1CjAcQKy
-Kq9UfMu+BC7kzCstyWzli+S2J1Rezezq7xMhAaBE2wRTUcg3mv6Wj07abaQ4V0M7
-/ZN7RsCI
------END PRIVATE KEY-----',
+            'clientId' => 'test',
+            'teamId' => 'AJSHDDSDSD',
+            'keyId' => '88727322JXY',
+            'secretKey' => 'secret',
         ];
         $client = new AppleOAuthClient($config);
-
-//        $result = $client->getAccessToken('ca97270a9af9846789035a1b548e028e7.0.mszt.V168sDykb6LMudCv3Od2tA', '');
+        $result = $client->getAuthorizeUrl('www.edusoho.cn');
+        $this->assertEquals(
+            'https://appleid.apple.com/auth/authorize?client_id=test&redirect_uri=www.edusoho.cn&response_type=code&scope=scope&state=es-state',
+            $result
+        );
     }
 
-    public function testParseToken()
+    public function testGetAccessToken()
     {
-        var_dump(json_decode(base64_decode('eyJpc3MiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIiwiYXVkIjoiY29tLmVkdXNvaG8ua3VvemhpIiwiZXhwIjoxNTkyNTMzODU3LCJpYXQiOjE1OTI1MzMyNTcsInN1YiI6IjAwMDI5My4wNWE0ZjIyYmRjNDg0OThiYTBhMzE4ZjMyOGFkOGMzZC4wMTU1IiwiY19oYXNoIjoiNEpEVXdRdWxtQVRXR29xZWY0Q2VPdyIsImVtYWlsIjoiZmllc3ZoN3J4eUBwcml2YXRlcmVsYXkuYXBwbGVpZC5jb20iLCJlbWFpbF92ZXJpZmllZCI6InRydWUiLCJpc19wcml2YXRlX2VtYWlsIjoidHJ1ZSIsImF1dGhfdGltZSI6MTU5MjUzMzI1Nywibm9uY2Vfc3VwcG9ydGVkIjp0cnVlfQ')));
+        $request = $this->mockBiz(
+            'request',
+            array(
+                array(
+                    'functionName' => 'postRequest',
+                    'returnValue' => json_encode(array(
+                        'access_token' => 'access_token',
+                        'token_type' => 'Bearer',
+                        'expires_in' => 3600,
+                        'refresh_token' => 'refresh_token',
+                        'id_token' => 'id_token'
+                    )),
+                    'times' => 1,
+                ),
+            )
+        );
+
+        $config = [
+            'clientId' => 'test',
+            'teamId' => 'AJSHDDSDSD',
+            'key' => '88727322JXY',
+            'secret' => '-----BEGIN EC PRIVATE KEY-----
+MHcCAQEEILogrrEub22bnn1Ztos8DvPBX4o77KZ0dasyHFctzPGSoAoGCCqGSM49
+AwEHoUQDQgAEnWWUGlN+fRXtDHstWCv1Y0p9tNrse3LX67+vbPiUe2voec9hLXMw
+t6i4YAveYBmNFft5YnyMnWztZzcxt878oA==
+-----END EC PRIVATE KEY-----',
+        ];
+        $client = new AppleOAuthClient($config);
+        ReflectionUtils::setProperty($client, 'request', $request);
+
+        $result = $client->getAccessToken('testCode', '');
+
+        $this->assertArrayEquals(
+            array(
+                'access_token' => 'access_token',
+                'token_type' => 'Bearer',
+                'expires_in' => 3600,
+                'refresh_token' => 'refresh_token',
+                'id_token' => 'id_token'
+            ),
+            $result
+        );
+    }
+
+    public function testGetUserInfo()
+    {
+        $request = $this->mockBiz(
+            'request',
+            array(
+                array(
+                    'functionName' => 'postRequest',
+                    'returnValue' => json_encode(array(
+                        'access_token' => 'access_token',
+                        'token_type' => 'Bearer',
+                        'expires_in' => 3600,
+                        'refresh_token' => 'refresh_token',
+                        'id_token' => 'test.'.base64_encode(json_encode(['sub' => 'openid'])).'.test',
+                    )),
+                    'times' => 1,
+                ),
+            )
+        );
+
+        $config = [
+            'clientId' => 'test',
+            'teamId' => 'AJSHDDSDSD',
+            'key' => '88727322JXY',
+            'secret' => '-----BEGIN EC PRIVATE KEY-----
+MHcCAQEEILogrrEub22bnn1Ztos8DvPBX4o77KZ0dasyHFctzPGSoAoGCCqGSM49
+AwEHoUQDQgAEnWWUGlN+fRXtDHstWCv1Y0p9tNrse3LX67+vbPiUe2voec9hLXMw
+t6i4YAveYBmNFft5YnyMnWztZzcxt878oA==
+-----END EC PRIVATE KEY-----',
+        ];
+        $client = new AppleOAuthClient($config);
+        ReflectionUtils::setProperty($client, 'request', $request);
+
+        $result = $client->getUserInfo(['access_token' => 'testCode', 'openid' => 'openid']);
+        $this->assertEquals($result['id'], 'openid');
     }
 }
