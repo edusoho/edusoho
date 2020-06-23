@@ -98,7 +98,7 @@ class AddItemBankExerciseTable extends Migration
               `doneQuestionNum` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '相对当前题库的已做问题总数',
               `doneAssessmentNum` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '相对当前题库的已做试卷总数',
               `masteryRate` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '相对当前题库的掌握度',
-              `role` enum('sutdent','teacher') NOT NULL DEFAULT 'sutdent' COMMENT '成员角色',
+              `role` enum('student','teacher') NOT NULL DEFAULT 'student' COMMENT '成员角色',
               `locked` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '学员是否锁定',
               `remark` varchar(255) NOT NULL COMMENT '备注',
               `createdTime` int(11) unsigned NOT NULL DEFAULT '0',
