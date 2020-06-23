@@ -1,5 +1,5 @@
 <template>
-  <div class="e-column-class pull-left">
+  <div class="e-column-class pull-left" @click="onClick">
     <div class="column-class-left">
       <img v-lazy="course.imgSrc.url" :class="course.imgSrc.className" >
       <div v-if="discountNum" class="column-class-left__discount">
