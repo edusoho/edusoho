@@ -5,6 +5,7 @@ namespace Biz\ItemBankExercise\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\ItemBankExerciseMemberException;
@@ -37,15 +38,13 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $this->getExerciseService()->tryManageExercise($exerciseId);
+        $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
 
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
             $this->createNewException(UserException::NOTFOUND_USER());
         }
-
-        $exercise = $this->getExerciseService()->get($exerciseId);
 
         if (empty($exercise)) {
             $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE);
@@ -142,7 +141,6 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             }
         }
 
-        //按照教学计划有效期模式计算学员有效期
         $deadline = 0;
         if ('days' == $exercise['expiryMode'] && $exercise['expiryDays'] > 0) {
             $endTime = strtotime(date('Y-m-d', time()).' 23:59:59'); //系统当前时间
@@ -163,6 +161,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
 
         $fields = [
             'exerciseId' => $exerciseId,
+            'questionBankId' => $exercise['questionBankId'],
             'userId' => $userId,
             'orderId' => empty($order) ? 0 : $order['id'],
             'deadline' => $deadline,
@@ -180,6 +179,23 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             ['userId' => $member['userId'], 'member' => $member]
         );
 
+        return $member;
+    }
+
+    public function addTeacher($exerciseId)
+    {
+        $exercise = $this->getExerciseDao()->get($exerciseId);
+        $userId = $this->getCurrentUser()->getId();
+        $teacher = [
+            'exerciseId' => $exerciseId,
+            'questionBankId' => $exercise['questionBankId'],
+            'userId' => $userId,
+            'role' => 'teacher',
+            'remark' => ''
+        ];
+        $member = $this->addMember($teacher);
+        $fields = ['teacherIds' => [$userId]];
+        $this->getExerciseDao()->update($exerciseId, $fields);
         return $member;
     }
 
@@ -311,6 +327,14 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
     protected function getExerciseMemberDao()
     {
         return $this->createDao('ItemBankExercise:ExerciseMemberDao');
+    }
+
+    /**
+     * @return ExerciseDao
+     */
+    protected function getExerciseDao()
+    {
+        return $this->createDao('ItemBankExercise:ExerciseDao');
     }
 
     /**

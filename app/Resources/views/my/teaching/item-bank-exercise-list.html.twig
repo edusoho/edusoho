@@ -1,11 +1,8 @@
 {% extends 'item-bank-exercise/header.html.twig' %}
 
-{% block js %}
-{% endblock %}
-
 {% block coursesetImg %}
   <a href="#" target="_blank">
-    <img class="courseset-manage-header__img" src="{{ filepath(item.cover, 'course.png') }}" />
+    <img class="courseset-manage-header__img" src="{{ filepath(course_set_cover(item, 'small'), 'course.png') }}" />
   </a>
 {% endblock %}
 

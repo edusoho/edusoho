@@ -14,6 +14,8 @@ interface ExerciseMemberService
 
     public function becomeStudent($exerciseId, $userId, $info = []);
 
+    public function addTeacher($exerciseId);
+
     public function getExerciseMember($exerciseId, $userId);
 
     public function remarkStudent($exerciseId, $userId, $remark);

@@ -17,6 +17,24 @@ class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleSer
         return $this->getItemBankExerciseModuleDao()->get($id);
     }
 
+    public function setDefaultAssessmentModule($exerciseId)
+    {
+        $this->getItemBankExerciseModuleDao()->create([
+            'exerciseId' => $exerciseId,
+            'title' => '模拟考试',
+            'type' => 'assessment'
+        ]);
+    }
+
+    public function setDefaultChapterModule($exerciseId)
+    {
+        $this->getItemBankExerciseModuleDao()->create([
+            'exerciseId' => $exerciseId,
+            'title' => '章节练习',
+            'type' => 'chapter'
+        ]);
+    }
+
     protected function getItemBankExerciseModuleDao()
     {
         return $this->createDao('ItemBankExercise:ExerciseModuleDao');

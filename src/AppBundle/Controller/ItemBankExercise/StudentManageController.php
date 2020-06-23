@@ -8,6 +8,7 @@ use AppBundle\Controller\BaseController;
 use Biz\ItemBankExercise\ItemBankExerciseMemberException;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,6 +48,7 @@ class StudentManageController extends BaseController
             'students' => $students,
             'followings' => $this->findCurrentUserFollowings(),
             'users' => $this->getUserService()->findUsersByIds(array_column($students, 'userId')),
+            'questionBank' => $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']),
             'paginator' => $paginator,
         ]);
     }
@@ -60,6 +62,7 @@ class StudentManageController extends BaseController
             [
                 'exercise' => $exercise,
                 'type' => $type,
+                'questionBank' => $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']),
             ]
         );
     }
@@ -139,23 +142,19 @@ class StudentManageController extends BaseController
         $keyword = $request->query->get('value');
         $user = $this->getUserService()->getUserByLoginField($keyword, true);
 
-        /**
-         * @var Translator
-         */
-        $translator = $this->get('translator');
         $response = true;
         if (!$user) {
-            $response = $translator->trans('item_bank_exercise.student_manage.student_not_exist');
+            $response = $this->trans('item_bank_exercise.student_manage.student_not_exist');
         } else {
             $isExerciseStudent = $this->getExerciseMemberService()->isExerciseMember($exerciseId, $user['id']);
 
             if ($isExerciseStudent) {
-                $response = $translator->trans('item_bank_exercise.student_manage.student_exist');
+                $response = $this->trans('item_bank_exercise.student_manage.student_exist');
             } else {
                 $isExerciseTeacher = $this->getExerciseService()->isExerciseTeacher($exerciseId, $user['id']);
 
                 if ($isExerciseTeacher) {
-                    $response = $translator->trans('item_bank_exercise.student_manage.can_not_add_teacher');
+                    $response = $this->trans('item_bank_exercise.student_manage.can_not_add_teacher');
                 }
             }
         }
@@ -197,5 +196,13 @@ class StudentManageController extends BaseController
     protected function getExerciseMemberService()
     {
         return $this->createService('ItemBankExercise:ExerciseMemberService');
+    }
+
+    /**
+     * @return QuestionBankService
+     */
+    protected function getQuestionBankService()
+    {
+        return $this->createService('QuestionBank:QuestionBankService');
     }
 }

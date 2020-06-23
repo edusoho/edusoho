@@ -32,10 +32,10 @@ class MemberOperationRecordServiceImpl extends BaseService implements MemberOper
 
     public function getJoinReasonByOrderId($orderId = 0)
     {
-        $reason = array(
+        $reason = [
             'reason' => 'site.join_by_free',
             'reasonType' => 'free_join',
-        );
+        ];
         if (empty($orderId)) {
             return $reason;
         }
@@ -43,13 +43,6 @@ class MemberOperationRecordServiceImpl extends BaseService implements MemberOper
         $order = $this->getOrderService()->getOrder($orderId);
         if (empty($order)) {
             return $reason;
-        }
-
-        if ('markting' === $order['source']) {
-            return array(
-                'reason' => 'site.join_by_markting',
-                'reasonType' => 'markting_join',
-            );
         }
 
         if ('outside' === $order['source']) {

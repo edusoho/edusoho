@@ -1146,6 +1146,10 @@ course.members_manage.records.join_reason: 加入原因
 course.members_manage.records.join_reason_type: 加入类型
 course.members_manage.join_records.date: 加入日期
 
+item_bank_exercise.practice_test: 模拟考试
+item_bank_exercise.save_cover: 保存图片
+item_bank_exercise.upload_cover: 题库练习图片上传
+item_bank_exercise.base.title: 题库练习名称
 item_bank_exercise.export.answer_num: 答题数
 item_bank_exercise.export.accuracy: 正确率
 item_bank_exercise.answer_number: 答题数：
@@ -1160,6 +1164,7 @@ item_bank_exercise.members_manage.official_student.add.publish_tips: 请题库�
 item_bank_exercise.student_manage.can_not_add_teacher: 该用户是本题库练习的教师，不能添加
 item_bank_exercise.student_manage.student_exist: 该用户已是本题库练习的学员了
 item_bank_exercise.student_manage.student_not_exist: 该用户不存在
+item_bank_exercise.exercise_create.forbidden: 您不是该题库管理者，不能查看此页面！
 
 course.testpaper_check: 试卷批阅
 course.testpaper_check.no_permission_tips: 当前用户不是本课程教师，没有批阅试卷的权限。
@@ -4378,6 +4383,7 @@ my.teaching.question_bank.instructions: 使用说明
 my.teaching.question_bank.list: 题库列表
 my.teaching.question_bank.name_tip: 最多输入30个字符
 my.teaching.question_bank.info: 题库信息
+my.teaching.question_bank.exercise_set: 题库练习设置
 my.teaching.question_bank.name_label: 题库名称
 my.teaching.question_bank.category_label: 题库分类
 my.teaching.question_bank.question_category.manage: 题目分类管理
@@ -4402,6 +4408,10 @@ my.teaching.question_bank.question.set_category: 设置分类
 my.teaching.question_bank.question.selected: 已选
 my.teaching.question_bank.question.set_score: 设置分值
 my.teaching.question_bank.question.add: 添加题目
+my.teaching.question_bank.start_now: 马上开启
+my.teaching.question_bank.is_open: 当前题库尚未启用题库练习，是否启用？
+my.teaching.question_bank.open_explain: 启用后，可使用当前题库向出版物开放翻译或试卷刷题功能。
+my.teaching.question_bank.open_ensure: 确认启用题库练习吗？
 
 my.learning.menu_heading: 我的学习
 my.learning.course_set_menu: 我的课程

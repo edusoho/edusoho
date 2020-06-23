@@ -4,6 +4,8 @@ namespace Biz\ItemBankExercise\Service;
 
 interface ExerciseService
 {
+    public function create($exercise);
+
     public function get($exerciseId);
 
     public function count($conditions);
@@ -21,4 +23,12 @@ interface ExerciseService
     public function hasCourseManagerRole($exerciseId);
 
     public function isExerciseTeacher($exerciseId, $userId);
+
+    public function changeExerciseCover($id, $coverArray);
+
+    public function updateCategoryByExerciseId($exerciseId, $categoryId);
+
+    public function updateBaseInfo($id, $fields);
+
+    public function getByQuestionBankId($questionBankId);
 }

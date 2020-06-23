@@ -2,16 +2,44 @@
 
 namespace Biz\ItemBankExercise\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\Content\Service\FileService;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
 use Biz\ItemBankExercise\ItemBankExerciseException;
+use Biz\ItemBankExercise\Service\ExerciseMemberService;
+use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\User\UserException;
+use Codeages\Biz\Framework\Event\Event;
 
 class ExerciseServiceImpl extends BaseService implements ExerciseService
 {
+    public function create($exercise)
+    {
+        if (!ArrayToolkit::requireds($exercise, ['questionBankId'])) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        try {
+            $this->beginTransaction();
+            $exercise = $this->getExerciseDao()->create($exercise);
+            if (!empty($exercise)){
+                $this->getExerciseMemberService()->addTeacher($exercise['id']);
+                $this->getExerciseModuleService()->setDefaultAssessmentModule($exercise['id']);
+                $this->getExerciseModuleService()->setDefaultChapterModule($exercise['id']);
+            }
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
+        return $exercise;
+    }
+
     public function get($exerciseId)
     {
         return $this->getExerciseDao()->get($exerciseId);
@@ -114,6 +142,48 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return !empty($member) && in_array($userId, $member['teacherIds']);
     }
 
+    public function changeExerciseCover($id, $coverArray)
+    {
+        if (empty($coverArray)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER());
+        }
+        $exercise = $this->tryManageExercise($id);
+        $covers = [];
+        foreach ($coverArray as $cover) {
+            $file = $this->getFileService()->getFile($cover['id']);
+            $covers[$cover['type']] = $file['uri'];
+        }
+
+        $exercise = $this->getExerciseDao()->update($exercise['id'], ['cover' => $covers]);
+
+        $this->dispatchEvent('exercise.update', new Event($exercise));
+
+        return $exercise;
+    }
+
+    public function updateCategoryByExerciseId($exerciseId, $categoryId)
+    {
+        $this->getExerciseDao()->updateCategoryByExerciseId($exerciseId, ['categoryId' => $categoryId]);
+    }
+
+    public function updateBaseInfo($id, $fields)
+    {
+        return $this->getExerciseDao()->update($id, $fields);
+    }
+
+    public function getByQuestionBankId($questionBankId)
+    {
+        return $this->getExerciseDao()->getByQuestionBankId($questionBankId);
+    }
+
+    /**
+     * @return FileService
+     */
+    protected function getFileService()
+    {
+        return $this->biz->service('Content:FileService');
+    }
+
     protected function hasAdminRole()
     {
         $user = $this->getCurrentUser();
@@ -154,5 +224,21 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     protected function getExerciseMemberDao()
     {
         return $this->createDao('ItemBankExercise:ExerciseMemberDao');
+    }
+
+    /**
+     * @return ExerciseMemberService
+     */
+    protected function getExerciseMemberService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseMemberService');
+    }
+
+    /**
+     * @return ExerciseModuleService
+     */
+    protected function getExerciseModuleService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseModuleService');
     }
 }

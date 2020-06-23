@@ -1,25 +1,26 @@
-{% extends 'item-bank-exercise/exercise-set/layout.html.twig' %}
-{% block title %}
-  {{ 'course.plan_task.manage'|trans }} - {{ parent() }}
-{% endblock %}
+{% extends 'v2/layout.html.twig' %}
 
-{% set side_nav = 'default-course-info' %}
-
-{% block sidebar %}
-  {% include 'item-bank-exercise/exercise-set/sidebar.html.twig' with { code : course_side_nav } %}
-{% endblock %}
-
-{% block main %}
-  <div class="cd-main">
-    <div class="cd-main__heading {% block main_heading_class %}{% endblock %}">
-      {% block main_heading %}
-        <div class="cd-main__title">
-          {% block page_title %}{% endblock %}
-        </div>
-      {% endblock %}
+{% set active_tab = 'exercise-set' %}
+{% block full_content %}
+  {% block top_content %}
+    <div class="{% block sectionClass %} courseset-header-section {% endblock %}">
+      <div class="container cd-container">
+        {% block breadcrumb %}
+        {% endblock %}
+        {% block courseset_header %}
+        {% endblock %}
+        {% block course_header %}
+        {% endblock %}
+      </div>
     </div>
-    <div class="cd-main__body">
-      {% block main_body %}
+  {% endblock %}
+  <div class="container cd-container">
+    <div class="cd-content courseset-manage-body {% block paddingClass %} courseset-manage-padding {% endblock %}">
+      {{ render(controller('AppBundle:My/User:avatarAlert')) }}
+      {% block sidebar %}
+      {% endblock %}
+
+      {% block main %}
       {% endblock %}
     </div>
   </div>
