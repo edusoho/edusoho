@@ -24,9 +24,9 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
-use Biz\Course\Service\ReviewService;
 use Biz\Exception\UnableJoinException;
 use Biz\File\UploadFileException;
+use Biz\Review\Service\ReviewService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
@@ -621,7 +621,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             } elseif ('questionNum' === $field) {
                 $updateFields['questionNum'] = $this->countThreadsByCourseIdAndType($id, 'question');
             } elseif ('ratingNum' === $field) {
-                $ratingFields = $this->getReviewService()->countRatingByCourseId($id);
+                $ratingFields = $this->getReviewService()->countRatingByTargetTypeAndTargetId('course', $id);
                 $updateFields = array_merge($updateFields, $ratingFields);
             } elseif ('noteNum' === $field) {
                 $updateFields['noteNum'] = $this->getNoteService()->countCourseNoteByCourseId($id);
@@ -2476,7 +2476,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     protected function getReviewService()
     {
-        return $this->createService('Course:ReviewService');
+        return $this->createService('Review:ReviewService');
     }
 
     /**

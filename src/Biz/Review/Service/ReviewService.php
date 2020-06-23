@@ -18,5 +18,7 @@ interface ReviewService
 
     public function searchReview($conditions, $orderBys, $start, $limit, $columns = []);
 
+    public function countRatingByTargetTypeAndTargetId($targetType, $targetId);
+
     public function getByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId);
 }

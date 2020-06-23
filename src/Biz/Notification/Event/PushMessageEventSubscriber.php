@@ -19,6 +19,7 @@ use Biz\Course\Service\Impl\ReviewServiceImpl;
 use Biz\Course\Util\CourseTitleUtils;
 use Biz\Group\Service\GroupService;
 use Biz\IM\Service\ConversationService;
+use Biz\Review\Service\ReviewService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Service\TestpaperService;
@@ -117,6 +118,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
             'invite.reward' => 'onInviteReward',
             'batch_notification.publish' => 'onBatchNotificationPublish',
+
+            'review.create' => 'onReviewCreate',
         ];
     }
 
@@ -1434,6 +1437,61 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             ];
             $this->createSearchJob('delete', $args);
         }
+    }
+
+    public function onReviewCreate(Event $event)
+    {
+        $review = $event->getSubject();
+
+        if ('course' != $review['targetType']) {
+            return;
+        }
+
+        if ($this->isIMEnabled()) {
+            if (empty($review['parentId'])) {
+                return;
+            }
+            $course = $this->getCourseService()->getCourse($review['targetId']);
+
+            if (empty($target)) {
+                return;
+            }
+            $parentReview = $this->getReviewService()->getReview($review['parentId']);
+
+            if (empty($parentReview)) {
+                return;
+            }
+
+            $from = [
+                'id' => $review['id'],
+                'type' => 'review',
+            ];
+
+            $to = [
+                'id' => $parentReview['userId'],
+                'type' => 'user',
+                'convNo' => $this->getConvNo(),
+            ];
+
+            $body = [
+                'type' => 'course.review_add',
+                'courseId' => $course['id'],
+                'reviewId' => $review['id'],
+                'parentReviewId' => $parentReview['id'],
+                'title' => "您在课程{$course['title']}的评价已被回复",
+                'message' => $this->plainText($review['content'], 50),
+            ];
+
+            $this->createPushJob($from, $to, $body);
+        }
+    }
+
+    /**
+     * @return ReviewService
+     */
+    protected function getReviewService()
+    {
+        return $this->createService('Review:ReviewService');
     }
 
     protected function convertCourse($course)

@@ -70,13 +70,6 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         return $this->getReviewDao()->getByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId);
     }
 
-    public function tryOperateReview($review)
-    {
-        if ($review['userId'] != $this->getCurrentUser()->getId() || !$this->getCurrentUser()->isAdmin()) {
-            $this->createNewException(ReviewException::FORBIDDEN_OPERATE_REVIEW());
-        }
-    }
-
     public function updateReview($id, $review)
     {
         $review = ArrayToolkit::parts($review, ['content', 'rating']);
@@ -102,7 +95,11 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
         $this->tryOperateReview($review);
 
-        return $this->getReviewDao()->delete($id);
+        $this->getReviewDao()->delete($id);
+
+        $this->dispatchEvent('review.delete', new Event($review));
+
+        return true;
     }
 
     public function countReview($conditions)
@@ -113,6 +110,29 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     public function searchReview($conditions, $orderBys, $start, $limit, $columns = [])
     {
         return $this->getReviewDao()->search($conditions, $orderBys, $start, $limit, $columns);
+    }
+
+    public function countRatingByTargetTypeAndTargetId($targetType, $targetId)
+    {
+        $conditions = [
+            'targetType' => $targetType,
+            'targetId' => $targetId,
+            'parentId' => 0,
+        ];
+        $ratingNum = $this->countReview($conditions);
+        $rating = $this->getReviewDao()->sumRatingByConditions($conditions);
+
+        return [
+            'ratingNum' => $ratingNum,
+            'rating' => $ratingNum ? $rating / $ratingNum : 0,
+        ];
+    }
+
+    protected function tryOperateReview($review)
+    {
+        if ($review['userId'] != $this->getCurrentUser()->getId() && !$this->getCurrentUser()->isAdmin()) {
+            $this->createNewException(ReviewException::FORBIDDEN_OPERATE_REVIEW());
+        }
     }
 
     protected function tryCreateGoodsReview($review)

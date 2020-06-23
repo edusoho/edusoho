@@ -2,6 +2,7 @@
 
 namespace Biz\Course\Event;
 
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\ReviewService;
 use Codeages\Biz\Framework\Event\Event;
@@ -12,20 +13,44 @@ class CourseSetStatisticsSubscriber extends EventSubscriber implements EventSubs
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'course.review.add' => 'onReviewNumberChange',
             'course.review.update' => 'onReviewNumberChange',
             'course.review.delete' => 'onReviewNumberChange',
-        );
+
+            'review.create' => 'onReviewChange',
+            'review.update' => 'onReviewChange',
+            'review.delete' => 'onReviewChange',
+        ];
     }
 
     public function onReviewNumberChange(Event $event)
     {
         $review = $event->getSubject();
 
-        $this->getCourseSetService()->updateCourseSetStatistics($review['courseSetId'], array(
+        $this->getCourseSetService()->updateCourseSetStatistics($review['courseSetId'], [
             'ratingNum',
-        ));
+        ]);
+    }
+
+    public function onReviewChange(Event $event)
+    {
+        $review = $event->getSubject();
+
+        if ('course' == $review['targetType']) {
+            $course = $this->getCourseService()->getCourse($review['targetId']);
+            $this->getCourseSetService()->updateCourseSetStatistics($course['courseSetId'], [
+                'courseRatingNum',
+            ]);
+        }
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     /**
