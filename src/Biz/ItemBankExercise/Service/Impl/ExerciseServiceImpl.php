@@ -2,6 +2,7 @@
 
 namespace Biz\ItemBankExercise\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
@@ -20,6 +21,13 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     public function count($conditions)
     {
         return $this->getExerciseDao()->count($conditions);
+    }
+
+    public function findByIds($ids)
+    {
+        $itemBankExercises = $this->getExerciseDao()->findByIds($ids);
+
+        return ArrayToolkit::index($itemBankExercises, 'id');
     }
 
     public function search($conditions, $orderBy, $start, $limit)

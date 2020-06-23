@@ -9,6 +9,11 @@ class ExerciseDaoImpl extends GeneralDaoImpl implements ExerciseDao
 {
     protected $table = 'item_bank_exercise';
 
+    public function findByIds($ids)
+    {
+        return $this->findInField('id', $ids);
+    }
+
     public function declares()
     {
         return [
