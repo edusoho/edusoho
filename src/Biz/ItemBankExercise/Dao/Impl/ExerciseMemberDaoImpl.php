@@ -27,6 +27,7 @@ class ExerciseMemberDaoImpl extends GeneralDaoImpl implements ExerciseMemberDao
                 'id NOT IN (:excludeIds)',
                 'userId = :userId',
                 'exerciseId = :exerciseId',
+                'role = :role',
             ],
         ];
     }

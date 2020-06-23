@@ -165,7 +165,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             'userId' => $userId,
             'orderId' => empty($order) ? 0 : $order['id'],
             'deadline' => $deadline,
-            'role' => 'sutdent',
+            'role' => 'student',
             'remark' => empty($info['remark']) ? '' : $info['remark'],
             'createdTime' => time(),
         ];
