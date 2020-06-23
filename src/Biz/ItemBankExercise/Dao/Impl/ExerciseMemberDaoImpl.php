@@ -11,10 +11,10 @@ class ExerciseMemberDaoImpl extends GeneralDaoImpl implements ExerciseMemberDao
 
     public function getByExerciseIdAndUserId($exerciseId, $userId)
     {
-        return $this->getByFields(array(
+        return $this->getByFields([
             'exerciseId' => $exerciseId,
             'userId' => $userId,
-        ));
+        ]);
     }
 
     public function declares()

@@ -191,11 +191,12 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             'questionBankId' => $exercise['questionBankId'],
             'userId' => $userId,
             'role' => 'teacher',
-            'remark' => ''
+            'remark' => '',
         ];
         $member = $this->addMember($teacher);
         $fields = ['teacherIds' => [$userId]];
         $this->getExerciseDao()->update($exerciseId, $fields);
+
         return $member;
     }
 
