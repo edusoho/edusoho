@@ -11,9 +11,9 @@ class BinderRegistDecoderImpl extends RegistDecoder
         $type = $registration['type'];
 
         $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
-        if (empty($thirdLoginInfo["{$type}_enabled"]) ||
+        if ((empty($thirdLoginInfo["{$type}_enabled"]) ||
                 empty($thirdLoginInfo["{$type}_key"]) ||
-                empty($thirdLoginInfo["{$type}_secret"])) {
+                empty($thirdLoginInfo["{$type}_secret"])) && 'apple' != $type) {
             throw SettingException::OAUTH_CLIENT_TYPE_INVALID();
         }
     }
