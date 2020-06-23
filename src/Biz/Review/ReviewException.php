@@ -10,10 +10,16 @@ class ReviewException extends AbstractException
 
     const FORBIDDEN_CREATE_REVIEW = 4037301;
 
+    const NOT_FOUND_REVIEW = 4047301;
+
     const RATING_LIMIT = 5007301;
+
+    const POST_LIMIT = 5007302;
 
     public $messages = [
         4037301 => 'exception.review.forbidden_create_review',
-        5007301 => 'exception.review.rating_no_more_than_5',
+        4047301 => 'exception.review.not_found_review',
+        5007301 => 'exception.review.rating_limit',
+        5007302 => 'exception.review.post_limit',
     ];
 }

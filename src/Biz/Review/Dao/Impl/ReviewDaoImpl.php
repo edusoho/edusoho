@@ -18,6 +18,7 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
                 'targetType = :targetType',
                 'targetId = :targetId',
                 'userId = :userId',
+                'parentId = :parentId',
             ],
             'timestamps' => [
                 'createdTime',

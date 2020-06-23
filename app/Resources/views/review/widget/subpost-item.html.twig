@@ -5,10 +5,8 @@
     {{ web_macro.user_avatar(author, 'user-avatar', 'avatar-sm', true) }}
   </div>
   <div class="media-body">
-    {% if targetType|default('course') == 'classroom' %}
-      {% set reviewDeleteUrl = path('classroom_review_delete',{reviewId:post.id}) %}
-    {% else %}
-      {% set reviewDeleteUrl = path('course_review_delete',{courseId:post.courseId,reviewId:post.id})%}
+    {% if targetType|default('course') == 'course' %}
+      {% set reviewDeleteUrl = path('course_review_delete',{courseId:post.targetId,reviewId:post.id})%}
     {% endif %}
 
     <div class="metas">
@@ -17,7 +15,7 @@
           <a href="javascript:;" class="dropdown-toggle color-gray" data-toggle="dropdown"><span class="glyphicon glyphicon-collapse-down"></span></a>
           <ul class="dropdown-menu">
             <li>
-              <a href="javascript:" class="js-post-delete" data-url="{{ reviewDeleteUrl }}" data-for="#post-{{ post.id }}">{{'course.reviews.delete_btn'|trans}}</a>
+              <a href="javascript:" class="js-post-delete" data-review-id="{{ post.id }}" data-url="{{ reviewDeleteUrl }}" data-for="#post-{{ post.id }}">{{'course.reviews.delete_btn'|trans}}</a>
             </li>
           </ul>
         </div>

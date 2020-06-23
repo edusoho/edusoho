@@ -15,6 +15,7 @@ use Biz\Review\Dao\ReviewDao;
 use Biz\Review\ReviewException;
 use Biz\Review\Service\ReviewService;
 use Biz\Sensitive\Service\SensitiveService;
+use Codeages\Biz\Framework\Event\Event;
 
 class ReviewServiceImpl extends BaseService implements ReviewService
 {
@@ -58,7 +59,10 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         $review['content'] = $this->purifyHtml($review['content']);
         $review['content'] = $this->getSensitiveService()->sensitiveCheck($review['content'], 'review');
 
-        return $this->getReviewDao()->create($review);
+        $review = $this->getReviewDao()->create($review);
+        $this->dispatchEvent('review.create', new Event($review));
+
+        return $review;
     }
 
     public function getByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId)
@@ -66,15 +70,38 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         return $this->getReviewDao()->getByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId);
     }
 
+    public function tryOperateReview($review)
+    {
+        if ($review['userId'] != $this->getCurrentUser()->getId() || !$this->getCurrentUser()->isAdmin()) {
+            $this->createNewException(ReviewException::FORBIDDEN_OPERATE_REVIEW());
+        }
+    }
+
     public function updateReview($id, $review)
     {
-        $review = ArrayToolkit::parts($review, ['content']);
+        $review = ArrayToolkit::parts($review, ['content', 'rating']);
 
-        return $this->getReviewDao()->update($id, $review);
+        $existed = $this->getReviewDao()->get($id);
+
+        $this->tryOperateReview($existed);
+
+        $review = $this->getReviewDao()->update($id, $review);
+
+        $this->dispatchEvent('review.update', new Event($review));
+
+        return $review;
     }
 
     public function deleteReview($id)
     {
+        $review = $this->getReviewDao()->get($id);
+
+        if (empty($review)) {
+            return true;
+        }
+
+        $this->tryOperateReview($review);
+
         return $this->getReviewDao()->delete($id);
     }
 

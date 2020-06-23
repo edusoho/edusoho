@@ -241,7 +241,7 @@ class ReviewServiceTest extends BaseTestCase
         $result = $this->getReviewService()->updateReview($review['id'], ['content' => 'test update', 'rating' => 5]);
 
         $this->assertNotEquals($before, $result);
-        $this->assertEquals($before['rating'], $result['rating']);
+        $this->assertNotEquals($before['rating'], $result['rating']);
         $this->assertEquals($review['content'], $before['content']);
         $this->assertEquals('test update', $result['content']);
     }

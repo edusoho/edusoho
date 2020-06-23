@@ -51,6 +51,11 @@ class Review extends AbstractResource
         return $this->dealReview($this->getReviewService()->createReview($review));
     }
 
+    public function remove(ApiRequest $request, $id)
+    {
+        return $this->getReviewService()->deleteReview($id);
+    }
+
     protected function dealReview($review)
     {
         $review['user'] = $this->getUserService()->getUser($review['userId']);
