@@ -8,6 +8,8 @@ interface ExerciseService
 
     public function count($conditions);
 
+    public function findByIds($ids);
+
     public function search($conditions, $orderBy, $start, $limit);
 
     public function canLearningExercise($exerciseId, $userId);
