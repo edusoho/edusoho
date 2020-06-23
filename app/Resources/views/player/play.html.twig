@@ -2,7 +2,7 @@
 <meta content="black" name="apple-mobile-web-app-status-bar-style" />
 <meta content="telephone=no" name="format-detection" />
 
-{% if is_mobile_client() and isEncryptionPlus %}
+{% if is_mobile_client() and context.isEncryptionPlus|default(false) %}
   <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'site.not_support_cloud_video'|trans({'%mobileUrl%':path('mobile')})|raw}}</div>
 {% else %}
   {% if file|default(null) %}
@@ -21,13 +21,13 @@
           data-file-id="{{file.id}}"
           data-file-type="{{file.type}}"
           data-file-length="{{ file.length|default(0) }}"
-          data-url="{{url}}"
+          data-token="{{ context.token }}"
           data-video-header-length="{{ context.videoHeaderLength|default(0) }}"
           data-video-h5="{{ setting('storage.video_h5_enable')|default(1) }}"
           data-enable-playback-rates="{{ setting('storage.enable_playback_rates')|default(false) }}"
-          data-player="{{player}}"
-          data-agentInWhiteList="{{agentInWhiteList}}"
+          data-agentInWhiteList="{{ context.agentInWhiteList|default('') }}"
           data-strict="{{setting('storage.support_mobile', 0)}}"
+          data-js-player="{{ context.jsPlayer|default('balloon-cloud-video-player') }}"
           data-autoplay="{{ context.autoplay|default(setting('storage.video_auto_play', true)) }}"
           {% if not file.convertParams.hasVideoWatermark|default(0) and setting('storage.video_watermark') >0 and setting('storage.video_watermark_image') %}
             data-watermark="{{ fileurl(setting('storage.video_watermark_image'), null) }}"
@@ -40,13 +40,13 @@
             data-fingerprint-src="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
             data-fingerprint-time="{{ setting('storage.video_fingerprint_time')|default(0.5) * 1000 }}"
           {% endif %}
-          {% if player == 'balloon-cloud-video-player' %}
+          {# {% if player == 'balloon-cloud-video-player' %} #}
             class="ballon-video-player"
-          {% elseif file.type == 'audio' %}
-            class="local-video-player local-audio-player"
-          {% else %}
-            class="local-video-player"
-          {% endif %}
+          {# {% elseif file.type == 'audio' %} #}
+            {# class="local-video-player local-audio-player" #}
+          {# {% else %} #}
+            {# class="local-video-player" #}
+          {# {% endif %} #}
           {% if context.hideQuestion|default(0) == 0 %}
             data-markerurl="{{ path('course_task_question_markers_show', {mediaId: file.id}) }}"
             data-finish-question-marker-url="{{ path('course_task_question_marker_finish') }}"
@@ -54,7 +54,7 @@
           {% if context.subtitles is defined and context.hideSubtitle|default(0) == 0%}
             data-subtitles="{{ context.subtitles|json_encode }}"
           {% endif %}
-          data-remeber-last-pos="{{ remeberLastPos }}"
+          data-remember-last-pos="{{ rememberLastPos }}"
           data-timelimit="{{ context.watchTimeLimit|default('')}}"
           data-starttime="{{ context.starttime|default('')}}"
           data-lesson-id="{{ context.lessonId|default(0)}}"

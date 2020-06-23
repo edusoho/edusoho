@@ -11,16 +11,16 @@ class Show {
     this.userId = container.data('userId');
     this.userName = container.data('userName');
     this.fileId = container.data('fileId');
+    //用于定位播放资源
     this.fileGlobalId = container.data('fileGlobalId');
-
     this.courseId = container.data('courseId');
     this.lessonId = container.data('lessonId');
     this.timelimit = container.data('timelimit');
-
-    this.playerType = container.data('player');
+    //用于鉴权
+    this.token = container.data('token');
     this.fileType = container.data('fileType');
     this.fileLength = container.data('fileLength');
-    this.url = container.data('url');
+    //字幕偏移时间信息
     this.videoHeaderLength = container.data('videoHeaderLength');
     this.enablePlaybackRates = container.data('enablePlaybackRates');
     this.videoH5 = container.data('videoH5');
@@ -29,7 +29,7 @@ class Show {
     this.fingerprint = container.data('fingerprint');
     this.fingerprintSrc = container.data('fingerprintSrc');
     this.fingerprintTime = container.data('fingerprintTime');
-    this.balloonVideoPlayer = container.data('balloonVideoPlayer');
+    this.jsPlayer = container.data('jsPlayer');
     this.markerUrl = container.data('markerurl');
     this.finishQuestionMarkerUrl = container.data('finishQuestionMarkerUrl');
     this.starttime = container.data('starttime');
@@ -40,7 +40,7 @@ class Show {
     this.disableResolutionSwitcher = container.data('disableResolutionSwitcher');
     this.subtitles = container.data('subtitles');
     this.autoplay = container.data('autoplay');
-    this.remeberLastPos = container.data('remeberLastPos');
+    this.rememberLastPos = container.data('rememberLastPos');
     let $iframe = $(window.parent.document.getElementById('task-content-iframe'));
     if ($iframe.length > 0 && parseInt($iframe.data('lastLearnTime')) != parseInt(DurationStorage.get(this.userId, this.fileId))) {
       DurationStorage.del(this.userId, this.fileId);
@@ -56,11 +56,7 @@ class Show {
   initView() {
     let html = '';
     if (this.fileType == 'video') {
-      if (this.playerType == 'local-video-player') {
-        html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
-      } else {
         html += '<div id="lesson-player" style="width: 100%;height: 100%;"></div>';
-      }
     } else if (this.fileType == 'audio') {
       html += '<div id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></audio>';
     }
@@ -71,9 +67,10 @@ class Show {
   initPlayer() {
     const customPos = parseInt(this.lastLearnTime) ? parseInt(this.lastLearnTime) : 0;
     return window.player = PlayerFactory.create(
-      this.playerType, {
+      this.jsPlayer, {
         element: '#lesson-player',
-        url: this.url,
+        resNo: this.fileGlobalId,
+        token: this.token,
         content: this.content,
         mediaType: this.fileType,
         fingerprint: this.fingerprint,
@@ -91,20 +88,21 @@ class Show {
           disablePlaybackButton: this.disablePlaybackButton,
           disableResolutionSwitcher: this.disableResolutionSwitcher
         },
-        statsInfo: {
+        //用户以及网校信息
+        user: {
           accesskey: this.accesskey,
           globalId: this.fileGlobalId,
-          userId: this.userId,
-          userName: this.userName
+          id: this.userId,
+          name: this.userName
         },
-        resId: this.fileGlobalId,
+        
         videoHeaderLength: this.videoHeaderLength,
         textTrack: this.transToTextrack(this.subtitles),
         autoplay: this.autoplay,
         customPos: customPos,
         mediaLength: this.fileLength,
         strictMode: this.strictMode,
-        remeberLastPos: this.remeberLastPos
+        rememberLastPos: this.rememberLastPos
       }
     );
   }

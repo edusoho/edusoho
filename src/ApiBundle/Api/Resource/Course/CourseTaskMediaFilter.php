@@ -38,8 +38,8 @@ class CourseTaskMediaFilter extends Filter
 
             case 'audio':
 
-                $data['media']['text'] = $this->convertAbsoluteUrl($data['media']['text']);
-                break;
+                // $data['media']['text'] = $this->convertAbsoluteUrl($data['media']['text']);
+                // break;
 
             case 'download':
 

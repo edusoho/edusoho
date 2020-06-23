@@ -6,8 +6,6 @@ interface PlayerService
 {
     public function getAudioAndVideoPlayerType($file);
 
-    public function agentInWhiteList($userAgent);
-
     public function getVideoFilePlayer($file, $agentInWhiteList, $context, $ssl);
 
     public function isHiddenVideoHeader($isHidden = false);

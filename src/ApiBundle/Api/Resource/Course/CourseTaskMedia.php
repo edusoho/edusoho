@@ -159,7 +159,6 @@ class CourseTaskMedia extends AbstractResource
         }
 
         $video = $config->prepareMediaUri($video);
-
         if ('self' != $video['mediaSource']) {
             return $video;
         }
@@ -171,10 +170,15 @@ class CourseTaskMedia extends AbstractResource
         if (!in_array($file['type'], ['audio', 'video'])) {
             throw PlayerException::NOT_SUPPORT_TYPE();
         }
+        
+        $version = $request->query->get('version', 'qiqiuyun');
+        if ($version == 'escloud') {
+            return $this->getVideoWithEsCloud($file, $course, $task);
+        }
 
         $player = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
 
-        $agentInWhiteList = $this->getPlayerService()->agentInWhiteList($request->headers->get('user-agent'));
+        $agentInWhiteList = $this->getBiz()['resource_facade']->agentInWhiteList($request->headers->get('user-agent'));
 
         $isEncryptionPlus = false;
         $context = [];
@@ -186,11 +190,7 @@ class CourseTaskMedia extends AbstractResource
                 $mp4Url = $videoPlayer['mp4Url'];
             }
         }
-        $user = $this->getCurrentUser();
-        $isCourseMember = $this->getCourseMemberService()->isCourseMember($course['id'], $user['id']);
-        if (empty($task['isFree']) && !empty($course['tryLookable']) && !$isCourseMember) {
-            $context['watchTimeLimit'] = $course['tryLookLength'] * 60;
-        }
+        
         $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($file, $context, $ssl);
 
         $supportMobile = intval($this->getSettingService()->node('storage.support_mobile', 0));
@@ -200,14 +200,33 @@ class CourseTaskMedia extends AbstractResource
             'url' => isset($url) ? $url : null,
             'player' => $player,
             'videoHeaderLength' => isset($context['videoHeaderLength']) ? $context['videoHeaderLength'] : 0,
-            'timeLimit' => isset($context['watchTimeLimit']) ? $context['watchTimeLimit'] : 0,
+            'timeLimit' => $this->getVideoFreeWatchTime($course, $task),
             'agentInWhiteList' => $agentInWhiteList,
             'isEncryptionPlus' => $isEncryptionPlus,
             'supportMobile' => $supportMobile,
         ];
     }
 
-    protected function getHomework($course, $task, $activity, $request, $ssl = fals)
+    protected function getVideoFreeWatchTime($course, $task)
+    {
+        $user = $this->getCurrentUser();
+        $isCourseMember = $this->getCourseMemberService()->isCourseMember($course['id'], $user['id']);
+        if (empty($task['isFree']) && !empty($course['tryLookable']) && !$isCourseMember) {
+            return $course['tryLookLength'] * 60;
+        }
+
+        return 0;
+    }
+
+    protected function getVideoWithEsCloud($file, $course, $task)
+    {
+        $playerContext = $this->getBiz()['resource_facade']->getPlayerContext($file);
+        $playerContext['timeLimit'] = $this->getVideoFreeWatchTime($course, $task);
+
+        return $playerContext;
+    }
+
+    protected function getHomework($course, $task, $activity, $request, $ssl = false)
     {
         $user = $this->getCurrentUser();
         $assessment = $this->getAssessmentService()->showAssessment($activity['ext']['assessmentId']);
@@ -286,9 +305,13 @@ class CourseTaskMedia extends AbstractResource
             throw PlayerException::NOT_SUPPORT_TYPE();
         }
 
+        if ($request->query->get('version', 'qiqiuyun') == 'escloud') {
+            return  $this->getBiz()['resource_facade']->getPlayerContext($file);
+        }
+       
         $player = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
 
-        $agentInWhiteList = $this->getPlayerService()->agentInWhiteList($request->headers->get('user-agent'));
+        $agentInWhiteList = $this->getBiz()['resource_facade']->agentInWhiteList($request->headers->get('user-agent'));
 
         $url = $this->getPlayUrl($file, [], $ssl);
 
@@ -321,6 +344,11 @@ class CourseTaskMedia extends AbstractResource
         $config = $this->getActivityService()->getActivityConfig('ppt');
 
         $ppt = $config->get($activity['mediaId']);
+        $file = $this->getUploadFileService()->getFullFile($ppt['mediaId']);
+        
+        if ($request->query->get('version', 'qiqiuyun') == 'escloud') {
+            return  $this->getBiz()['resource_facade']->getPlayerContext($file);
+        }
 
         list($result, $error) = $this->getPlayerService()->getPptFilePlayer($ppt, $ssl);
         if (!empty($error)) {
