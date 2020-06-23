@@ -7,19 +7,21 @@ use Biz\CloudPlatform\Facade\ResourceFacade;
 
 class ResourceFacadeImpl extends BaseFacade implements ResourceFacade
 {
-
     public function getPlayerContext($file, $userAgent = '')
     {
         $context = [];
 
-        $method = 'prepare'.ucfirst($file['type']).'Context';
         //是否开启加密增强
         $storageSetting = $this->getSettingService()->get('storage');
         $context['isEncryptionPlus'] = isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['enable_hls_encryption_plus'];
+
         $context['agentInWhiteList'] = $this->agentInWhiteList($userAgent);
-        
+
+        //对不同的资源类型，添加不同的配置参数
+        $method = 'prepare'.ucfirst($file['type']).'Context';
         $context = $this->$method($file, $context);
-        
+
+        //获取用于权限验证的token和资源编码
         $context['token'] = $this->makePlayToken($file);
         $context['resNo'] = $file['globalId'];
 
@@ -40,12 +42,12 @@ class ResourceFacadeImpl extends BaseFacade implements ResourceFacade
 
         //微网校用于是否支持 mobile 端判断
         $context['supportMobile'] = intval($this->getSettingService()->node('storage.support_mobile', 0));
-        if ($file['storage'] == 'cloud') {
+        if ('cloud' == $file['storage']) {
             $context['jsPlayer'] = 'balloon-cloud-video-player';
         } else {
             $context['jsPlayer'] = 'local-video-player';
         }
-        
+
         return $context;
     }
 

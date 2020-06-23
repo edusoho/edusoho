@@ -50,7 +50,7 @@ class Show {
     this.strictMode = container.data('strict');
 
     this.initView();
-    this.initEvent();``
+    this.initEvent();
   }
 
   initView() {
