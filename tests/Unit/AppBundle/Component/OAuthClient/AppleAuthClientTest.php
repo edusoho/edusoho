@@ -28,19 +28,19 @@ class AppleAuthClientTest extends BaseTestCase
     {
         $request = $this->mockBiz(
             'request',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'postRequest',
-                    'returnValue' => json_encode(array(
+                    'returnValue' => json_encode([
                         'access_token' => 'access_token',
                         'token_type' => 'Bearer',
                         'expires_in' => 3600,
                         'refresh_token' => 'refresh_token',
-                        'id_token' => 'id_token'
-                    )),
+                        'id_token' => 'id_token',
+                    ]),
                     'times' => 1,
-                ),
-            )
+                ],
+            ]
         );
 
         $config = [
@@ -59,13 +59,13 @@ t6i4YAveYBmNFft5YnyMnWztZzcxt878oA==
         $result = $client->getAccessToken('testCode', '');
 
         $this->assertArrayEquals(
-            array(
+            [
                 'access_token' => 'access_token',
                 'token_type' => 'Bearer',
                 'expires_in' => 3600,
                 'refresh_token' => 'refresh_token',
-                'id_token' => 'id_token'
-            ),
+                'id_token' => 'id_token',
+            ],
             $result
         );
     }
@@ -74,19 +74,19 @@ t6i4YAveYBmNFft5YnyMnWztZzcxt878oA==
     {
         $request = $this->mockBiz(
             'request',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'postRequest',
-                    'returnValue' => json_encode(array(
+                    'returnValue' => json_encode([
                         'access_token' => 'access_token',
                         'token_type' => 'Bearer',
                         'expires_in' => 3600,
                         'refresh_token' => 'refresh_token',
                         'id_token' => 'test.'.base64_encode(json_encode(['sub' => 'openid'])).'.test',
-                    )),
+                    ]),
                     'times' => 1,
-                ),
-            )
+                ],
+            ]
         );
 
         $config = [
