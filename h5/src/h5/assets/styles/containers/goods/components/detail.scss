@@ -55,3 +55,15 @@
     }
   }
 }
+// 名称价格
+.detail-info {
+  padding: vw(16);
+  .detail-info__title {
+    font-size: vw(16);
+    font-weight: 500;
+    color: #333;
+  }
+  .detail-info__price {
+    margin-top: vw(8);
+  }
+}

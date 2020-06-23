@@ -6,14 +6,18 @@
     </div>
     <!-- 优惠 -->
     <detail-discount />
+    <!-- 商品名称、价格 -->
+    <detail-info />
   </div>
 </template>
 
 <script>
 import DetailDiscount from './components/detail-discount';
+import DetailInfo from './components/detail-info';
 export default {
   components: {
-    DetailDiscount
+    DetailDiscount,
+    DetailInfo
   }
 }
 </script>
