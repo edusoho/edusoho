@@ -29,7 +29,7 @@ class Show {
     this.fingerprint = container.data('fingerprint');
     this.fingerprintSrc = container.data('fingerprintSrc');
     this.fingerprintTime = container.data('fingerprintTime');
-    this.balloonVideoPlayer = container.data('balloonVideoPlayer');
+    this.jsPlayer = container.data('jsPlayer');
     this.markerUrl = container.data('markerurl');
     this.finishQuestionMarkerUrl = container.data('finishQuestionMarkerUrl');
     this.starttime = container.data('starttime');
@@ -67,7 +67,7 @@ class Show {
   initPlayer() {
     const customPos = parseInt(this.lastLearnTime) ? parseInt(this.lastLearnTime) : 0;
     return window.player = PlayerFactory.create(
-      'balloon-cloud-video-player', {
+      this.jsPlayer, {
         element: '#lesson-player',
         resNo: this.fileGlobalId,
         token: this.token,

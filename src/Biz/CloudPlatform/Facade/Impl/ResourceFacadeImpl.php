@@ -7,11 +7,17 @@ use Biz\CloudPlatform\Facade\ResourceFacade;
 
 class ResourceFacadeImpl extends BaseFacade implements ResourceFacade
 {
+
     public function getPlayerContext($file, $userAgent = '')
     {
         $context = [];
 
         $method = 'prepare'.ucfirst($file['type']).'Context';
+        //是否开启加密增强
+        $storageSetting = $this->getSettingService()->get('storage');
+        $context['isEncryptionPlus'] = isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['enable_hls_encryption_plus'];
+        $context['agentInWhiteList'] = $this->agentInWhiteList($userAgent);
+        
         $context = $this->$method($file, $context);
         
         $context['token'] = $this->makePlayToken($file);
@@ -23,9 +29,6 @@ class ResourceFacadeImpl extends BaseFacade implements ResourceFacade
     protected function prepareVideoContext($file, $context)
     {
         $storageSetting = $this->getSettingService()->get('storage');
-        //是否开启加密增强
-        $context['isEncryptionPlus'] = isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['enable_hls_encryption_plus'];
-        
         //是否加入片头信息
         $isShowVideoHeader = isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['video_header'];
         $videoHeaderLength = null;
@@ -37,7 +40,12 @@ class ResourceFacadeImpl extends BaseFacade implements ResourceFacade
 
         //微网校用于是否支持 mobile 端判断
         $context['supportMobile'] = intval($this->getSettingService()->node('storage.support_mobile', 0));
-
+        if ($file['storage'] == 'cloud') {
+            $context['jsPlayer'] = 'balloon-cloud-video-player';
+        } else {
+            $context['jsPlayer'] = 'local-video-player';
+        }
+        
         return $context;
     }
 
@@ -46,11 +54,19 @@ class ResourceFacadeImpl extends BaseFacade implements ResourceFacade
         return $context;
     }
 
+    protected function prepareAudioContext($file, $context)
+    {
+        $context['jsPlayer'] = 'audio-player';
+
+        return $context;
+    }
+
     public function makePlayToken($file, $lifetime = 600, $payload = [])
     {
-        // if ('supplier' == $file['storage']) {
-        //     return $this->getS2B2CFileSourceService()->player($file['globalId'], true);
-        // }
+        // to do: S2B2C 也要更改相应的播放器
+        if ('supplier' == $file['storage']) {
+            return $this->getS2B2CFileSourceService()->player($file['globalId'], true);
+        }
 
         return $this->biz['ESCloudSdk.play']->makePlayToken($file['globalId'], $lifetime, $payload);
     }
@@ -71,12 +87,12 @@ class ResourceFacadeImpl extends BaseFacade implements ResourceFacade
         $paths = [
             'player' => 'js-sdk/sdk-v1.js',
             'newPlayer' => 'js-sdk/sdk-v2.js',
+            'audio' => 'js-sdk-v2/sdk-v1.js',
             'video' => 'js-sdk-v2/sdk-v1.js',
             'uploader' => 'js-sdk/uploader/sdk-2.1.0.js',
             'old_uploader' => 'js-sdk/uploader/sdk-v1.js',
             'old_document' => 'js-sdk/document-player/v7/viewer.html',
             'faq' => 'js-sdk/faq/sdk-v1.js',
-            'audio' => 'js-sdk/audio-player/sdk-v1.js',
         ];
 
         if (isset($paths[$type])) {

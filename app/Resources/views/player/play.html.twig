@@ -2,7 +2,7 @@
 <meta content="black" name="apple-mobile-web-app-status-bar-style" />
 <meta content="telephone=no" name="format-detection" />
 
-{% if is_mobile_client() and isEncryptionPlus %}
+{% if is_mobile_client() and context.isEncryptionPlus|default(false) %}
   <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'site.not_support_cloud_video'|trans({'%mobileUrl%':path('mobile')})|raw}}</div>
 {% else %}
   {% if file|default(null) %}
@@ -25,8 +25,9 @@
           data-video-header-length="{{ context.videoHeaderLength|default(0) }}"
           data-video-h5="{{ setting('storage.video_h5_enable')|default(1) }}"
           data-enable-playback-rates="{{ setting('storage.enable_playback_rates')|default(false) }}"
-          data-agentInWhiteList="{{agentInWhiteList}}"
+          data-agentInWhiteList="{{ context.agentInWhiteList|default('') }}"
           data-strict="{{setting('storage.support_mobile', 0)}}"
+          data-js-player="{{ context.jsPlayer|default('balloon-cloud-video-player') }}"
           data-autoplay="{{ context.autoplay|default(setting('storage.video_auto_play', true)) }}"
           {% if not file.convertParams.hasVideoWatermark|default(0) and setting('storage.video_watermark') >0 and setting('storage.video_watermark_image') %}
             data-watermark="{{ fileurl(setting('storage.video_watermark_image'), null) }}"

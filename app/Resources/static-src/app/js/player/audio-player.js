@@ -21,23 +21,35 @@ class AudioPlayer extends Emitter {
         playbackRates: ['0.8', '1.0', '1.25', '1.5', '2.0']
       });
     }
-
-    if (self.options.statsInfo) {
-      var statsInfo = self.options.statsInfo;
+    
+    if (self.options.resNo) {
       extConfig = Object.assign(extConfig, {
-        statsInfo: {
-          accesskey: statsInfo.accesskey,
-          globalId: statsInfo.globalId,
-          userId: statsInfo.userId,
-          userName: statsInfo.userName
+        resNo: self.options.resNo
+      });
+    }
+
+    if (self.options.token) {
+      extConfig = Object.assign(extConfig, {
+        token: self.options.token
+      });
+    }
+
+    if (self.options.user) {
+      var user = self.options.user;
+      extConfig = Object.assign(extConfig, {
+        user: {
+          accesskey: user.accesskey,
+          globalId: user.globalId,
+          id: user.id,
+          name: user.name
         }
       });
     }
     const lang = (document.documentElement.lang == 'zh_CN') ? 'zh-CN' : document.documentElement.lang;
-    const remeberLastPos = self.options.customPos < self.options.mediaLength;
+    const rememberLastPos = self.options.customPos < self.options.mediaLength;
 
     //范晓铖要改SDK，消除string和int的奇怪判断
-    if (remeberLastPos && self.options.customPos) {
+    if (rememberLastPos && self.options.customPos) {
       self.options.customPos = self.options.customPos.toString();
     } else if (!self.options.customPos) {
       self.options.customPos = 0;
@@ -50,13 +62,13 @@ class AudioPlayer extends Emitter {
       playlist: self.options.url,
       template: self.options.content,
       autoplay: true, //音频自动播放开启
-      customPos: self.options.customPos,
+      initPos: self.options.customPos,
       disableModeSelection: self.options.disableModeSelection,
-      remeberLastPos: remeberLastPos,
+      rememberLastPos: rememberLastPos,
       sequentialMode: true,
       language: lang
     });
-    var player = new AudioPlayerSDK(extConfig);
+    var player = new QiQiuYun.Player(extConfig);
 
     player.on('ready', function(e) {
       self.emit('ready', e);

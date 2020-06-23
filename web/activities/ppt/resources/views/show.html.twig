@@ -15,17 +15,21 @@
     </div>
   {% else %}
     <div class="iframe-parent-content iframe-parent-full" id="activity-ppt-content"
-         data-type="slide"
-         data-finish-type="{{ activity.ext.finishType }}"
-         data-finish-detail="{{ activity.ext.finishDetail }}"
-         data-res-no="{{ file.globalId }}"
-         data-token="{{ pptPlayer.result.token }}"
-         data-user-id="{{app.user.id|default(0)}}"
-         data-user-name="{{app.user.username|default('')}}"
-         data-image-info="{{ pptPlayer.result.images|json_encode() }}"
-         data-token-url="{{ path('activity_ppt_token', {mediaId: activity.mediaId}) }}"
-         {% if setting('magic.ppt_watermark') %}data-watermark-url="{{ path('cloud_ppt_watermark') }}"{% endif %}
-        {% if pptPlayer.result.animation is not defined %}data-img-type="onlyImg"{% endif %}>
+        data-type="slide"
+        data-finish-type="{{ activity.ext.finishType }}"
+        data-finish-detail="{{ activity.ext.finishDetail }}"
+        data-res-no="{{ file.globalId }}"
+        data-token="{{ pptPlayer.result.token }}"
+        data-user-id="{{app.user.id|default(0)}}"
+        data-user-name="{{app.user.username|default('')}}"
+        data-image-info="{{ pptPlayer.result.images|json_encode() }}"
+        data-token-url="{{ path('activity_ppt_token', {mediaId: activity.mediaId}) }}"
+        {% if setting('magic.ppt_watermark') %}
+          data-watermark-url="{{ path('cloud_ppt_watermark') }}"
+        {% endif %}
+        {% if pptPlayer.result.animation is not defined %}
+          data-img-type="onlyImg"
+        {% endif %}>
     </div>
     {% if pptPlayer.result.animation is defined %}
       <button class="cd-btn cd-btn-primary ppt-player-change-btn js-change-ppt-btn" type="button">{{ 'course.plan_task.activity_ppt_animation_btn'|trans }}</button>
