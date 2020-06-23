@@ -288,6 +288,8 @@ class LoginBindController extends BaseController
         }
 
         $config = $this->setting('apple_setting', []);
+        $config['key'] = empty($config['keyId']) ? '' : $config['keyId'];
+        $config['secret'] = empty($config['secretKey']) ? '' : $config['secretKey'];
 
         return OAuthClientFactory::create('apple', $config);
     }

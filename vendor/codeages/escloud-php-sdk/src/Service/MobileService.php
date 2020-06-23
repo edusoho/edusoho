@@ -6,7 +6,7 @@ use ESCloud\SDK\Exception\ResponseException;
 use ESCloud\SDK\Exception\SDKException;
 use ESCloud\SDK\HttpClient\ClientException;
 
-class InspectionService extends BaseService
+class MobileService extends BaseService
 {
     protected $host = 'mobile-service.qiqiuyun.net';
 

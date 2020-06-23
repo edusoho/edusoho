@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\AppBundle\Component\OAuthClient;
 
-use AppBundle\Component\OAuthClient\AppleAuthClient;
+use AppBundle\Component\OAuthClient\AppleOAuthClient;
 use Biz\BaseTestCase;
 
 class AppleAuthClientTest extends BaseTestCase
@@ -20,7 +20,7 @@ Kq9UfMu+BC7kzCstyWzli+S2J1Rezezq7xMhAaBE2wRTUcg3mv6Wj07abaQ4V0M7
 /ZN7RsCI
 -----END PRIVATE KEY-----',
         ];
-        $client = new AppleAuthClient($config);
+        $client = new AppleOAuthClient($config);
 
 //        $result = $client->getAccessToken('ca97270a9af9846789035a1b548e028e7.0.mszt.V168sDykb6LMudCv3Od2tA', '');
     }

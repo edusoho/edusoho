@@ -7,7 +7,7 @@ use Biz\System\Service\SettingService;
 use Firebase\JWT\JWT;
 use Topxia\Service\Common\ServiceKernel;
 
-class AppleAuthClient extends AbstractOAuthClient
+class AppleOAuthClient extends AbstractOAuthClient
 {
     const AUTHORIZE_URL = 'https://appleid.apple.com/auth/authorize?';
     const OAUTH_TOKEN_URL = 'https://appleid.apple.com/auth/token';
@@ -27,12 +27,11 @@ class AppleAuthClient extends AbstractOAuthClient
     public function getAccessToken($code, $callbackUrl)
     {
         if (empty($this->config['clientId'])) {
-            $data = $this->getTokenFromCloud($code);
+            $rawToken = $this->getTokenFromCloud($code);
         } else {
             $data = $this->getTokenFromApple($code);
+            $rawToken = json_decode($data, true);
         }
-
-        $rawToken = json_decode($data, true);
 
         $this->checkError($rawToken);
 
@@ -51,7 +50,7 @@ class AppleAuthClient extends AbstractOAuthClient
 
         return [
             'id' => $userId,
-            'nickname' => '',
+            'name' => '',
             'avatar' => '',
         ];
     }
@@ -60,7 +59,7 @@ class AppleAuthClient extends AbstractOAuthClient
     {
         $biz = ServiceKernel::instance()->getBiz();
 
-        return $biz['ESCloudSdk.mobile']->getAuthToken($code, ['grantType' => 'authorization_code']);
+        return $biz['ESCloudSdk.mobile']->getAuthToken($code);
     }
 
     protected function getTokenFromApple($code)
@@ -79,13 +78,13 @@ class AppleAuthClient extends AbstractOAuthClient
     {
         $claim = explode('.', $token)[1];
 
-        return json_decode(base64_decode($claim));
+        return json_decode(base64_decode($claim), true);
     }
 
     protected function getClientSecret()
     {
         $appleSetting = $this->getSettingService()->get('apple', []);
-        if (empty($appleSetting) || $appleSetting['expireTime'] > time()) {
+        if (!empty($appleSetting['clientSecret']) && $appleSetting['expireTime'] > time()) {
             return $appleSetting['clientSecret'];
         }
 
@@ -98,7 +97,7 @@ class AppleAuthClient extends AbstractOAuthClient
             'aud' => 'https://appleid.apple.com',
             'sub' => $this->config['clientId'],
         ];
-        $clientSecret = JWT::encode($claim, $this->config['secretKey'], 'ES256', $this->config['keyId']);
+        $clientSecret = JWT::encode($claim, $this->config['secret'], 'ES256', $this->config['key']);
         $this->getSettingService()->set('apple', ['clientSecret' => $clientSecret, 'expireTime' => $expireTime]);
 
         return $clientSecret;

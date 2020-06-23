@@ -13,9 +13,9 @@ class AppleSettingController extends BaseController
         $setting = $this->getSettingService()->get('apple_setting', []);
 
         if ('POST' == $request->getMethod()) {
-            $data = $request->request->all();
-            $this->getSettingService()->set('apple_setting', $data);
-            $this->getLogService()->info('system', 'update_settings', 'APPLE设置', $data);
+            $setting = $request->request->all();
+            $this->getSettingService()->set('apple_setting', $setting);
+            $this->getLogService()->info('system', 'update_settings', 'APPLE设置', $setting);
             $this->setFlashMessage('success', 'site.save.success');
         }
 

@@ -20,7 +20,11 @@
     {% if (settings[type ~ '_enabled']|default(false) and type != 'weixinmob') or type == 'apple' %}
       <div class="es-setting">
         <span class="setting-icon">
-          <i class="cd-icon cd-icon-{{ client.icon_class }}"></i>
+          {% if type == 'apple' %}
+            <i class="es-icon es-icon-{{ client.icon_class }}" style="color: black"></i>
+          {% else %}
+            <i class="cd-icon cd-icon-{{ client.icon_class }}"></i>
+          {% endif %}
         </span>
         <span class="setting-title">{% if type == 'weixinweb' %}{{ 'user.settings.oauth.weixin'|trans }}{% else %}{{ client.name }}{% endif %}</span>
         <span class="setting-action">
