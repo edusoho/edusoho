@@ -400,6 +400,14 @@ const routes = [
       hideTitle: true
     },
     component: () => import(/* webpackChunkName: "more" */'@/containers/webview/openCourse/more.vue')
+  }, {
+    path: '/goods/show',
+    name: 'good_show',
+    meta: {
+      title: '商品页',
+      hideTitle: true
+    },
+    component: () => import(/* webpackChunkName: "more" */'@/containers/goods/index.vue')
   }
 ];
 
