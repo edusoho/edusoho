@@ -404,8 +404,7 @@ const routes = [
     path: '/goods/show',
     name: 'good_show',
     meta: {
-      title: '商品页',
-      hideTitle: true
+      title: '商品页'
     },
     component: () => import(/* webpackChunkName: "more" */'@/containers/goods/index.vue')
   }

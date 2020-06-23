@@ -1,0 +1,57 @@
+// 限时优惠
+.detail-discount {
+  height: vw(46);
+  // 优惠价格
+  .detail-discount__left {
+    width: vw(240);
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255, 88, 115, 1) 0%, rgba(255, 127, 88, 1) 100%);
+    color: #fff;
+    text-align: center;
+    line-height: vw(46);
+    .text,
+    .price {
+      margin-right: vw(5);
+      font-size: vw(18);
+      font-weight: 500;
+    }
+    .original-price {
+      font-size: vw(14);
+    }
+  }
+  // 活动结束倒计时
+  .detail-discount__right {
+    width: vw(135);
+    height: 100%;
+    text-align: center;
+    background-color: #F5F5F5;
+    .text {
+      margin-top: vw(4);
+      font-size: vw(12);
+      line-height: vw(16);
+      color: #666;
+    }
+    .count-down {
+      height: vw(22);
+      color: #000;
+      .van-count-down {
+        font-size: vw(12);
+        line-height: vw(22);
+        .day {
+          margin-right: vw(5);
+          color: #FF5C3B;
+          font-size: vw(16);
+        }
+        .item {
+          display: inline-block;
+          width: vw(20);
+          height: vw(20);
+          margin-right: vw(5);
+          color: #fff;
+          background-color: #FF7262;
+          border-radius: vw(4);
+        }
+      }
+    }
+  }
+}

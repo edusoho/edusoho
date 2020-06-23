@@ -41,7 +41,8 @@ import {
   Loading,
   PullRefresh,
   Overlay,
-  Search
+  Search,
+  CountDown
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -66,6 +67,7 @@ Vue.component('van-panel', Panel);
 Vue.component('van-pull-refresh', PullRefresh);
 Vue.component('van-overlay', Overlay);
 Vue.component('van-search', Search);
+Vue.component('van-count-down', CountDown);
 
 Vue.use(ActionSheet);
 Vue.use(filters);
