@@ -70,7 +70,6 @@ class AudioPlayer extends Emitter {
       rememberLastPos: rememberLastPos,
       language: lang
     });
-    console.log(extConfig)
     var player = new QiQiuYun.Player(extConfig);
 
     player.on('ready', function(e) {

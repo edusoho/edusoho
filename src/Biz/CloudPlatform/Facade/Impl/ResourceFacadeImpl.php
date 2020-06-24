@@ -19,9 +19,7 @@ class ResourceFacadeImpl extends BaseFacade implements ResourceFacade
 
         //对不同的资源类型，添加不同的配置参数
         $method = 'prepare'.ucfirst($file['type']).'Context';
-        if (function_exists($method)) {
-            $context = $this->$method($file, $context);
-        }
+        $context = $this->$method($file, $context);
 
         //获取用于权限验证的token和资源编码
         $context['token'] = $this->makePlayToken($file);
@@ -65,6 +63,11 @@ class ResourceFacadeImpl extends BaseFacade implements ResourceFacade
     {
         $context['jsPlayer'] = 'audio-player';
 
+        return $context;
+    }
+
+    protected function prepareDocumentContext($file, $context)
+    {
         return $context;
     }
 
