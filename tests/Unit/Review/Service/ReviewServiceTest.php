@@ -10,6 +10,9 @@ use Biz\Goods\GoodsException;
 use Biz\Review\Dao\ReviewDao;
 use Biz\Review\ReviewException;
 use Biz\Review\Service\ReviewService;
+use Biz\Role\Util\PermissionBuilder;
+use Biz\User\CurrentUser;
+use Topxia\Service\Common\ServiceKernel;
 
 class ReviewServiceTest extends BaseTestCase
 {
@@ -193,7 +196,7 @@ class ReviewServiceTest extends BaseTestCase
     public function testCreateReview_whenRatingInvalid_thenThrowException()
     {
         $this->expectException(ReviewException::class);
-        $this->expectExceptionMessage('exception.review.rating_no_more_than_5');
+        $this->expectExceptionMessage('exception.review.rating_limit');
         $review = $this->mockDefaultReview();
         $review['rating'] = 100;
         $this->getReviewService()->createReview($review);
@@ -233,17 +236,41 @@ class ReviewServiceTest extends BaseTestCase
         $this->assertEquals($review, $result);
     }
 
+    public function testUpdateReview_whenNotAllowed_thenThrowException()
+    {
+        $this->expectException(ReviewException::class);
+        $this->expectExceptionMessage('exception.review.forbidden_operate_review');
+
+        $review = $this->createReview();
+
+        $this->setCurrentUser();
+
+        $this->getReviewService()->updateReview($review['id'], []);
+    }
+
     public function testUpdateReview()
     {
         $review = $this->createReview();
 
         $before = $this->getReviewService()->getReview($review['id']);
-        $result = $this->getReviewService()->updateReview($review['id'], ['content' => 'test update', 'rating' => 5]);
+        $result = $this->getReviewService()->updateReview($review['id'], ['content' => 'test update', 'rating' => $before['rating'] - 1]);
 
         $this->assertNotEquals($before, $result);
         $this->assertNotEquals($before['rating'], $result['rating']);
         $this->assertEquals($review['content'], $before['content']);
         $this->assertEquals('test update', $result['content']);
+    }
+
+    public function testDelete_whenNotAllowed_thenThrowException()
+    {
+        $this->expectException(ReviewException::class);
+        $this->expectExceptionMessage('exception.review.forbidden_operate_review');
+
+        $review = $this->createReview();
+
+        $this->setCurrentUser();
+
+        $this->getReviewService()->deleteReview($review['id']);
     }
 
     public function testDeleteReview()
@@ -369,6 +396,20 @@ class ReviewServiceTest extends BaseTestCase
         $this->assertEquals($expected2, $result2);
     }
 
+    public function testCountRatingByTargetTypeAndTargetId()
+    {
+        $review = $this->createReview();
+        $review2 = $this->createReview(['targetType' => $review['targetType'].'test']);
+        $review3 = $this->createReview(['rating' => 3]);
+
+        $result = $this->getReviewService()->countRatingByTargetTypeAndTargetId($review['targetType'], $review['targetId']);
+
+        $this->assertEquals([
+            'ratingNum' => 2,
+            'rating' => ($review['rating'] + $review3['rating']) / 2,
+        ], $result);
+    }
+
     protected function createReview($fields = [])
     {
         $review = $this->mockDefaultReview($fields);
@@ -381,11 +422,29 @@ class ReviewServiceTest extends BaseTestCase
         return array_merge([
             'userId' => $this->getCurrentUser()->getId(),
             'targetType' => 'goods',
-            'targetId' => 1,
-            'rating' => 5,
+            'targetId' => '1',
+            'rating' => '5',
             'content' => 'test content',
-            'parentId' => 0,
+            'parentId' => '0',
         ], $fields);
+    }
+
+    private function setCurrentUser($user = [])
+    {
+        $currentUser = new CurrentUser();
+
+        if (empty($user)) {
+            $user = [
+                'id' => 0,
+                'nickname' => '游客',
+                'currentIp' => '',
+                'roles' => [],
+            ];
+        }
+
+        $currentUser->fromArray($user);
+        $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
+        ServiceKernel::instance()->setCurrentUser($currentUser);
     }
 
     /**

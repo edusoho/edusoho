@@ -11023,6 +11023,7 @@ s2b2c.resource.sync.has_new.notify: 有价格更新
 
 
 exception.review.forbidden_create_review: 没有权限添加评价
+exception.review.forbidden_operate_review: 没有权限操作评价
 exception.review.rating_limit: 评分不能超过5
 exception.review.not_found_review: 评价不存在
 exception.review.post_limit: 回复数量已达5条上限，不能再回复

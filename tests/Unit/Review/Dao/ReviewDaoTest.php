@@ -18,6 +18,16 @@ class ReviewDaoTest extends BaseTestCase
         $this->assertEquals($expected, $result);
     }
 
+    public function testSumRatingByConditions()
+    {
+        $review1 = $this->createReview();
+        $review2 = $this->createReview(['rating' => 1, 'targetId' => $review1['targetId'] + 1000]);
+        $review3 = $this->createReview(['rating' => 3]);
+
+        $result = $this->getReviewDao()->sumRatingByConditions(['targetId' => $review1['targetId']]);
+        $this->assertEquals($review1['rating'] + $review3['rating'], $result);
+    }
+
     protected function createReview($fields = [])
     {
         $review = array_merge([
