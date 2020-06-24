@@ -84,3 +84,61 @@
     }
   }
 }
+// 教学计划
+.detail-plan {
+  margin-top: vw(8);
+  padding: vw(14) vw(16);
+  line-height: vw(20);
+  background-color: #fff;
+  .detail-plan__plan {
+    margin-bottom: vw(12);
+    &:last-child {
+      margin-bottom: 0;
+    }
+    .plan-left {
+      width: vw(72);
+      font-size: vw(12);
+      color: #999;
+    }
+    .plan-right {
+      position: relative;
+      width: vw(271);
+      font-size: vw(14);
+      color: #666;
+      .plan-icon {
+        font-size: vw(14);
+        position: absolute;
+        right: 0;
+        top: vw(1);
+      }
+      .plan-promise {
+        padding: vw(2) vw(4);
+        margin-right: vw(8);
+        font-size: vw(12);
+        background-color: #03C777;
+        color: #fff;
+        border-radius: vw(4);
+      }
+    }
+  }
+  // 学习计划弹出框
+  .detail-plan__popup {
+    padding: vw(16);
+    box-sizing: border-box;
+    border-radius: vw(12) vw(12) 0 0;
+    .plan-popup__title {
+      font-size: vw(14);
+      color: #333;
+      line-height: vw(20);
+      span {
+        position: relative;
+        top: vw(1);
+        display: inline-block;
+        width: vw(4);
+        height: vw(12);
+        background-color: #03C777;
+        border-radius: vw(2);
+      }
+    }
+  }
+}

@@ -1,11 +1,16 @@
 .goods {
   background-color: #F5F5F5;
-  .goods-detail__banner {
-    height: vw(210);
-    img {
-      width: 100%;
-      height: 100%;
+  .goods-detail {
+    .goods-detail__banner {
+      height: vw(210);
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
-
+  .goods-info {
+    margin-top: vw(8);
+    background-color: #fff;
+  }
 }
