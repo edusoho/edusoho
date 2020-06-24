@@ -306,7 +306,7 @@ class CourseTaskMedia extends AbstractResource
         }
 
         if ($request->query->get('version', 'qiqiuyun') == 'escloud') {
-            return  $this->getBiz()['resource_facade']->getPlayerContext($file);
+            return $this->getAudioWithEsCloud($file, $audio, $activity);
         }
        
         $player = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
@@ -324,6 +324,15 @@ class CourseTaskMedia extends AbstractResource
             'agentInWhiteList' => $agentInWhiteList,
             'isEncryptionPlus' => false,
         ];
+    }
+
+    protected function getAudioWithEsCloud($file, $audio, $activity)
+    {
+        $context = $this->getBiz()['resource_facade']->getPlayerContext($file);
+        $context['hasText'] = $audio['hasText'] ? true : false;
+        $context['text'] = $audio['hasText'] ? $activity['content'] : '';
+
+        return $context;
     }
 
     protected function getDoc($course, $task, $activity, $request, $ssl = false)

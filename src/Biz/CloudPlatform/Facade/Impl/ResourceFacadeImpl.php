@@ -25,6 +25,9 @@ class ResourceFacadeImpl extends BaseFacade implements ResourceFacade
         $context['token'] = $this->makePlayToken($file);
         $context['resNo'] = $file['globalId'];
 
+        //转码状态
+        $context['isFinishConvert'] = $file['storage'] != 'cloud' || !in_array($file['type'], ['ppt', 'document','video']) || $file['convertStatus'] == 'success';
+
         return $context;
     }
 
