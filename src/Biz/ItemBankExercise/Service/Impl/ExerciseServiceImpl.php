@@ -26,7 +26,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         try {
             $this->beginTransaction();
             $exercise = $this->getExerciseDao()->create($exercise);
-            if (!empty($exercise)){
+            if (!empty($exercise)) {
                 $this->getExerciseMemberService()->addTeacher($exercise['id']);
                 $this->getExerciseModuleService()->setDefaultAssessmentModule($exercise['id']);
                 $this->getExerciseModuleService()->setDefaultChapterModule($exercise['id']);
