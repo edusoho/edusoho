@@ -21,12 +21,13 @@ class ExerciseMemberDaoImpl extends GeneralDaoImpl implements ExerciseMemberDao
     {
         return [
             'timestamps' => ['createdTime', 'updatedTime'],
-            'orderbys' => ['createdTime'],
+            'orderbys' => ['createdTime', 'updatedTime'],
             'conditions' => [
                 'id = :id',
                 'id NOT IN (:excludeIds)',
                 'userId = :userId',
                 'exerciseId = :exerciseId',
+                'exerciseId IN (:exerciseIds)',
                 'role = :role',
             ],
         ];

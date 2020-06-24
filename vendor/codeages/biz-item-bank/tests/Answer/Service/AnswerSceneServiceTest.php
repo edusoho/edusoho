@@ -146,7 +146,7 @@ class AnswerSceneServiceTest extends IntegrationTestCase
         ];
         $answerScene = $this->getAnswerSceneDao()->create($answerScene);
 
-        $result = $this->getAnswerSceneService()->canStart(1);
+        $result = $this->getAnswerSceneService()->canStart(1, 1);
 
         $this->assertEquals($result, true);
     }
@@ -167,66 +167,19 @@ class AnswerSceneServiceTest extends IntegrationTestCase
         ];
         $answerScene = $this->getAnswerSceneDao()->create($answerScene);
 
-        $result = $this->getAnswerSceneService()->canStart(1);
+        $result = $this->getAnswerSceneService()->canStart(1, 1);
 
         $this->assertEquals($result, false);
     }
 
     public function testCanStart_whenIdMiss_thenReturnFalse()
     {
-        $result = $this->getAnswerSceneService()->canStart(1);
+        $result = $this->getAnswerSceneService()->canStart(1, 1);
 
         $this->assertEquals($result, false);
     }
 
-    public function testCanRestart()
-    {
-        $answerScene = [
-            'id' => 1,
-            'name' => '考试',
-            'limited_time' => 1,
-            'do_times' => 0,
-            'redo_interval' => 0,
-            'need_score' => 1,
-            'start_time' => 0,
-            'manual_marking' => 1,
-            'created_user_id' => 1,
-            'updated_user_id' => 1,
-        ];
-        $answerScene = $this->getAnswerSceneDao()->create($answerScene);
-
-        $answerRecord = $this->getAnswerRecordDao()->create([
-            'answer_scene_id' => 1,
-            'user_id' => 1,
-            'status' => 'finished',
-        ]);
-
-        $result = $this->getAnswerSceneService()->canRestart(1, 1);
-
-        $this->assertEquals($result, true);
-    }
-
-    public function testCanRestart_whenAnswerRecordEmpty_thenReturnFalse()
-    {
-        $answerScene = [
-            'id' => 1,
-            'name' => '考试',
-            'limited_time' => 1,
-            'do_times' => 0,
-            'redo_interval' => 0,
-            'need_score' => 1,
-            'start_time' => 0,
-            'manual_marking' => 1,
-            'created_user_id' => 1,
-            'updated_user_id' => 1,
-        ];
-
-        $result = $this->getAnswerSceneService()->canRestart(1, 1);
-
-        $this->assertEquals($result, false);
-    }
-
-    public function testCanRestart_whenDoTimesEQ1_thenReturnFalse()
+    public function testCanStart_whenDoTimesEQ1_thenReturnFalse()
     {
         $answerScene = [
             'id' => 1,
@@ -248,12 +201,12 @@ class AnswerSceneServiceTest extends IntegrationTestCase
             'status' => 'finished',
         ]);
 
-        $result = $this->getAnswerSceneService()->canRestart(1, 1);
+        $result = $this->getAnswerSceneService()->canStart(1, 1);
 
         $this->assertEquals($result, false);
     }
 
-    public function testCanRestart_whenRedoIntervaliInvalid_thenReturnFalse()
+    public function testCanStart_whenRedoIntervaliInvalid_thenReturnFalse()
     {
         $answerScene = [
             'id' => 1,
@@ -283,7 +236,7 @@ class AnswerSceneServiceTest extends IntegrationTestCase
             'review_time' => time(),
         ]);
 
-        $result = $this->getAnswerSceneService()->canRestart(1, 1);
+        $result = $this->getAnswerSceneService()->canStart(1, 1);
 
         $this->assertEquals($result, false);
     }

@@ -76,10 +76,9 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
         return $this->getAnswerSceneDao()->get($id) ?: [];
     }
 
-    public function canStart($id)
+    public function canStart($id, $userId)
     {
         $answerScene = $this->get($id);
-
         if (empty($answerScene)) {
             return false;
         }
@@ -88,35 +87,20 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
             return false;
         }
 
-        return true;
-    }
-
-    public function canRestart($id, $userId)
-    {
-        $answerScene = $this->get($id);
-
-        if (empty($answerScene)) {
-            return false;
-        }
-
         $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($id, $userId);
-        if (empty($latestAnswerRecord)) {
-            return false;
-        }
-
-        if (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
+        if ($latestAnswerRecord) {
             if (1 == $answerScene['do_times']) {
                 return false;
             }
 
-            if (0 == $answerScene['redo_interval']) {
-                return true;
-            } else {
+            if (0 < $answerScene['redo_interval']) {
                 $answerReport = $this->getAnswerReportService()->getSimple($latestAnswerRecord['answer_report_id']);
 
                 return $answerScene['redo_interval'] * 60 <= time() - $answerReport['review_time'];
             }
         }
+
+        return true;
     }
 
     public function getAnswerSceneReport($id)

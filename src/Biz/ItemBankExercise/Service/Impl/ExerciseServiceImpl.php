@@ -50,6 +50,13 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->getExerciseDao()->count($conditions);
     }
 
+    public function findByIds($ids)
+    {
+        $itemBankExercises = $this->getExerciseDao()->findByIds($ids);
+
+        return ArrayToolkit::index($itemBankExercises, 'id');
+    }
+
     public function search($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareCourseConditions($conditions);

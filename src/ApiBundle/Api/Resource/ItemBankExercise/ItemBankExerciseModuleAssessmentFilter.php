@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\ItemBankExercise;
 
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
 use ApiBundle\Api\Resource\Filter;
+use AppBundle\Common\ArrayToolkit;
 
 class ItemBankExerciseModuleAssessmentFilter extends Filter
 {
@@ -12,6 +13,7 @@ class ItemBankExerciseModuleAssessmentFilter extends Filter
         'exerciseId',
         'moduleId',
         'assessment',
+        'latestAnswerRecord',
     ];
 
     protected function publicFields(&$data)
@@ -19,5 +21,9 @@ class ItemBankExerciseModuleAssessmentFilter extends Filter
         $assessmentFilter = new AssessmentFilter();
         $assessmentFilter->setMode(Filter::SIMPLE_MODE);
         $assessmentFilter->filter($data['assessment']);
+
+        if (!empty($data['latestAnswerRecord'])) {
+            $data['latestAnswerRecord'] = ArrayToolkit::parts($data['latestAnswerRecord'], ['id', 'status', 'answerRecordId']);
+        }
     }
 }

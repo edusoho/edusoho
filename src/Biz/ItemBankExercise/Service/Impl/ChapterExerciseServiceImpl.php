@@ -30,7 +30,7 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
             $this->getItemBankChapterExerciseRecordService()->create([
                 'moduleId' => $moduleId,
                 'exerciseId' => $module['exerciseId'],
-                'questionBankId' => '', //todo
+                'questionBankId' => 0, //todo
                 'itemCategoryId' => $categroyId,
                 'userId' => $userId,
                 'answerRecordId' => $answerRecord['id'],

@@ -58,29 +58,6 @@ class AnswerServiceTest extends IntegrationTestCase
         $this->getAnswerService()->startAnswer(1, 1, 1);
     }
 
-    /**
-     * @expectedException \Codeages\Biz\ItemBank\Answer\Exception\AnswerSceneException
-     * @expectedExceptionCode 50095207
-     */
-    public function testStartAnswer_whenCanRestart_thenThrowException()
-    {
-        $this->mockObjectIntoBiz('ItemBank:Answer:AnswerRecordService', [
-            [
-                'functionName' => 'getLatestAnswerRecordByAnswerSceneIdAndUserId',
-                'returnValue' => ['id' => 1],
-            ],
-        ]);
-
-        $this->mockObjectIntoBiz('ItemBank:Answer:AnswerSceneService', [
-            [
-                'functionName' => 'canRestart',
-                'returnValue' => false,
-            ],
-        ]);
-
-        $this->getAnswerService()->startAnswer(1, 1, 1);
-    }
-
     public function testPauseAnswer()
     {
         $this->mockObjectIntoBiz('ItemBank:Answer:AnswerService', [
