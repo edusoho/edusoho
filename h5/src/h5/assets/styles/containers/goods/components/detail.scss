@@ -58,6 +58,7 @@
 // 名称价格
 .detail-info {
   padding: vw(16);
+  background-color: #fff;
   .detail-info__title {
     font-size: vw(16);
     font-weight: 500;
@@ -65,5 +66,21 @@
   }
   .detail-info__price {
     margin-top: vw(8);
+    font-size: vw(16);
+    color: #999;
+    .price {
+      margin: 0 vw(3) 0 vw(5);
+      font-size: vw(24);
+      font-weight: 600;
+      color: #FF5C3B;
+    }
+    .study-num {
+      position: relative;
+      top: vw(5);
+    }
+    .original-price {
+      margin-top: vw(4);
+      font-size: vw(12);
+    }
   }
 }
