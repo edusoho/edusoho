@@ -4134,6 +4134,7 @@ my.teaching.course_set.course_manage_btn: 计划管理
 my.teaching.course_set.file_manage_btn: 文件管理
 my.teaching.course_set.live_empty_hint: 你还没有在教的直播课程哦, 赶快去创建吧!
 my.teaching.course_set.empty_hint: 你还没有在教的课程哦, 赶快去创建吧!
+my.teaching.item_bank_exercise.empty_hint: 你还没有在教的题库练习哦, 赶快去创建吧!
 
 # 创建课程
 my.teaching.course_set.create_btn: 创建课程
@@ -10324,6 +10325,7 @@ exception.item_bank_exercise.exercise.forbidden_manage_exercise: 没有管理题
 exception.item_bank_exercise.member.duplicate_member: 用户已加入题库练习
 exception.item_bank_exercise.exercise.exercise_not_published: 题库练习未发布
 exception.item_bank_exercise.member.not_found: 题库练习中没有该成员
+exception.item_bank_exercise.module.exceeded_number: 最多只能添加5个试卷模块
 
 exception.wechat.notify_setting_not_enabled: 微信通知未开启
 exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试

@@ -8,8 +8,6 @@ interface ExerciseMemberService
 
     public function search($conditions, $orderBy, $start, $limit, $columns = array());
 
-    public function becomeStudentAndCreateOrder($userId, $courseId, $data);
-
     public function isExerciseMember($exerciseId, $userId);
 
     public function becomeStudent($exerciseId, $userId, $info = []);

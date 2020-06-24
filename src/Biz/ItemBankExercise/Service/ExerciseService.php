@@ -16,7 +16,7 @@ interface ExerciseService
 
     public function canLearningExercise($exerciseId, $userId);
 
-    public function tryManageExercise($exerciseId);
+    public function tryManageExercise($exerciseId, $teacher = 1);
 
     public function updateExerciseStatistics($id, $fields);
 
@@ -29,8 +29,6 @@ interface ExerciseService
     public function changeExerciseCover($id, $coverArray);
 
     public function updateCategoryByExerciseId($exerciseId, $categoryId);
-
-    public function updateBaseInfo($id, $fields);
 
     public function getByQuestionBankId($questionBankId);
 }

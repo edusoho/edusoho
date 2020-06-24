@@ -8,6 +8,7 @@ use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
+use Biz\ItemBankExercise\Dao\ExerciseModuleDao;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
@@ -28,8 +29,12 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             $exercise = $this->getExerciseDao()->create($exercise);
             if (!empty($exercise)) {
                 $this->getExerciseMemberService()->addTeacher($exercise['id']);
-                $this->getExerciseModuleService()->setDefaultAssessmentModule($exercise['id']);
-                $this->getExerciseModuleService()->setDefaultChapterModule($exercise['id']);
+                $this->getExerciseModuleService()->createAssessmentModule($exercise['id'], '模拟考试');
+                $this->getItemBankExerciseModuleDao()->create([
+                    'exerciseId' => $exercise['id'],
+                    'title' => '章节练习',
+                    'type' => 'chapter'
+                ]);
             }
             $this->commit();
         } catch (\Exception $e) {
@@ -64,7 +69,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->getExerciseDao()->search($conditions, $orderBy, $start, $limit);
     }
 
-    public function tryManageExercise($exerciseId = 0)
+    public function tryManageExercise($exerciseId = 0, $teacher = 1)
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
@@ -77,14 +82,14 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
         }
 
-        if (!$this->hasCourseManagerRole($exerciseId)) {
+        if (!$this->hasCourseManagerRole($exerciseId, $teacher)) {
             $this->createNewException(ItemBankExerciseException::FORBIDDEN_MANAGE_EXERCISE());
         }
 
         return $exercise;
     }
 
-    public function hasCourseManagerRole($exerciseId = 0)
+    public function hasCourseManagerRole($exerciseId = 0, $teacher = 1)
     {
         $user = $this->getCurrentUser();
         //未登录，无权限管理
@@ -103,7 +108,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             return false;
         }
 
-        if (in_array($user->getId(), $exercise['teacherIds'])) {
+        if ($teacher == 1 && in_array($user->getId(), $exercise['teacherIds'])) {
             return true;
         }
 
@@ -163,19 +168,12 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
         $exercise = $this->getExerciseDao()->update($exercise['id'], ['cover' => $covers]);
 
-        $this->dispatchEvent('exercise.update', new Event($exercise));
-
         return $exercise;
     }
 
     public function updateCategoryByExerciseId($exerciseId, $categoryId)
     {
         $this->getExerciseDao()->updateCategoryByExerciseId($exerciseId, ['categoryId' => $categoryId]);
-    }
-
-    public function updateBaseInfo($id, $fields)
-    {
-        return $this->getExerciseDao()->update($id, $fields);
     }
 
     public function getByQuestionBankId($questionBankId)
@@ -247,5 +245,13 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     protected function getExerciseModuleService()
     {
         return $this->createService('ItemBankExercise:ExerciseModuleService');
+    }
+
+    /**
+     * @return ExerciseModuleDao
+     */
+    protected function getItemBankExerciseModuleDao()
+    {
+        return $this->createDao('ItemBankExercise:ExerciseModuleDao');
     }
 }

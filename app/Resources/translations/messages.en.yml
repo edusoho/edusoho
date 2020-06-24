@@ -3473,6 +3473,7 @@ my.teaching.course_set.course_manage_btn: 'Programs'
 my.teaching.course_set.file_manage_btn: 'Files'
 my.teaching.course_set.live_empty_hint: 'No live courses in teaching, try to create one!'
 my.teaching.course_set.empty_hint: 'No courses in teaching, try to create one!'
+my.teaching.item_bank_exercise.empty_hint: 'No item bank exercise in teaching, try to create one!'
 my.teaching.course_set.create_btn: 'Add'
 my.teaching.course_set.select_type: 'Choose Type'
 my.teaching.course_set.select_type.course: 'Normal Course'
@@ -9019,6 +9020,7 @@ exception.item_bank_exercise.exercise.forbidden_manage_exercise: Forbidden manag
 exception.item_bank_exercise.member.duplicate_member: User has joined this item bank exercise
 exception.item_bank_exercise.exercise.exercise_not_published: Item bank exercise is not published
 exception.item_bank_exercise.member.not_found: The item bank exercise doesn't have this student
+exception.item_bank_exercise.module.exceeded_number: A maximum of 5 test paper modules can be added
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.

@@ -2,9 +2,7 @@
 
 namespace Biz\ItemBankExercise\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
-use Biz\Common\CommonException;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
 use Biz\ItemBankExercise\ItemBankExerciseException;
@@ -12,12 +10,10 @@ use Biz\ItemBankExercise\ItemBankExerciseMemberException;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\ItemBankExercise\Service\MemberOperationRecordService;
-use Biz\Order\OrderException;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\System\Service\LogService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserService;
-use Biz\User\UserException;
 use Codeages\Biz\Order\Service\OrderService;
 
 class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberService
@@ -32,52 +28,51 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         return $this->getExerciseMemberDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
-    public function becomeStudentAndCreateOrder($userId, $exerciseId, $data)
+    public function becomeStudent($exerciseId, $userId, $info = [])
     {
-        if (!ArrayToolkit::requireds($data, ['price', 'remark'])) {
-            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
-        }
-
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
 
-        $user = $this->getUserService()->getUser($userId);
-
-        if (empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+        if (!in_array($exercise['status'], ['published'])) {
+            $this->createNewException(ItemBankExerciseException::UNPUBLISHED_EXERCISE());
         }
 
-        if (empty($exercise)) {
-            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE);
-        }
-
-        if ($this->isExerciseMember($exercise['id'], $user['id'])) {
+        if ($this->isExerciseMember($exerciseId, $userId)) {
             $this->createNewException(ItemBankExerciseMemberException::DUPLICATE_MEMBER());
         }
 
-        try {
+        try{
             $this->beginTransaction();
-            if ($data['price'] > 0) {
-                $order = $this->createOrder($exercise['id'], $user['id'], $data);
-            } else {
-                $order = ['id' => 0];
-                $info = [
-                    'orderId' => $order['id'],
-                    'remark' => $data['remark'],
-                    'reason' => 'site.join_by_import',
-                    'reasonType' => 'import_join',
-                ];
-                $this->becomeStudent($exercise['id'], $user['id'], $info);
+            $deadline = 0;
+            if ('days' == $exercise['expiryMode'] && $exercise['expiryDays'] > 0) {
+                $endTime = strtotime(date('Y-m-d', time()).' 23:59:59'); //系统当前时间
+                $deadline = $exercise['expiryDays'] * 24 * 60 * 60 + $endTime;
+            } elseif ('date' == $exercise['expiryMode'] || 'end_date' == $exercise['expiryMode']) {
+                $deadline = $exercise['expiryEndDate'];
             }
 
-            $member = $this->getExerciseMember($exercise['id'], $user['id']);
+            $fields = [
+                'exerciseId' => $exerciseId,
+                'questionBankId' => $exercise['questionBankId'],
+                'userId' => $userId,
+                'deadline' => $deadline,
+                'role' => 'student',
+                'remark' => empty($info['remark']) ? '' : $info['remark'],
+                'createdTime' => time(),
+            ];
 
-            $currentUser = $this->getCurrentUser();
-            if (isset($data['isAdminAdded']) && 1 == $data['isAdminAdded']) {
+            $reason = [
+                'reason' => 'site.join_by_import',
+                'reasonType' => 'import_join',
+            ];
+            $member = $this->addMember($fields, $reason);
+
+            $user = $this->getUserService()->getUser($userId);
+            if (isset($info['isAdminAdded']) && 1 == $info['isAdminAdded']) {
                 $message = [
                     'exercise' => $exercise['id'],
                     'exerciseTitle' => $exercise['title'],
-                    'userId' => $currentUser['id'],
-                    'userName' => $currentUser['nickname'],
+                    'userId' => $user['id'],
+                    'userName' => $user['nickname'],
                     'type' => 'create',
                 ];
                 $this->getNotificationService()->notify($member['userId'], 'student-create', $message);
@@ -88,22 +83,27 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
                 'title' => $exercise['title'],
                 'userId' => $user['id'],
                 'nickname' => $user['nickname'],
-                'remark' => $data['remark'],
+                'remark' => $info['remark'],
             ];
-
             $this->getLogService()->info(
                 'course',
                 'add_student',
-                "《{$exercise['title']}》(#{$exercise['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}",
+                "《{$exercise['title']}》(#{$exercise['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$info['remark']}",
                 $infoData
             );
-            $this->commit();
 
-            return [$exercise, $member, $order];
-        } catch (\Exception $e) {
+            $this->dispatchEvent(
+                'exercise.join',
+                $exercise,
+                ['userId' => $member['userId'], 'member' => $member]
+            );
+            $this->commit();
+        }catch (\Exception $e){
             $this->rollback();
             throw $e;
         }
+
+        return $member;
     }
 
     public function isExerciseMember($exerciseId, $userId)
@@ -113,89 +113,27 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         return empty($member) ? false : true;
     }
 
-    public function becomeStudent($exerciseId, $userId, $info = [])
-    {
-        $exercise = $this->getExerciseService()->get($exerciseId);
-
-        if (empty($exercise)) {
-            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
-        }
-
-        if (!in_array($exercise['status'], ['published'])) {
-            $this->createNewException(ItemBankExerciseException::UNPUBLISHED_EXERCISE());
-        }
-
-        $user = $this->getUserService()->getUser($userId);
-
-        if (empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
-        }
-
-        $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
-
-        if ($member) {
-            if ('teacher' == $member['role']) {
-                return $member;
-            } else {
-                $this->createNewException(ItemBankExerciseMemberException::DUPLICATE_MEMBER());
-            }
-        }
-
-        $deadline = 0;
-        if ('days' == $exercise['expiryMode'] && $exercise['expiryDays'] > 0) {
-            $endTime = strtotime(date('Y-m-d', time()).' 23:59:59'); //系统当前时间
-            $deadline = $exercise['expiryDays'] * 24 * 60 * 60 + $endTime;
-        } elseif ('date' == $exercise['expiryMode'] || 'end_date' == $exercise['expiryMode']) {
-            $deadline = $exercise['expiryEndDate'];
-        }
-
-        if (!empty($info['orderId'])) {
-            $order = $this->getOrderService()->getOrder($info['orderId']);
-
-            if (empty($order)) {
-                $this->createNewException(OrderException::NOTFOUND_ORDER());
-            }
-        } else {
-            $order = null;
-        }
-
-        $fields = [
-            'exerciseId' => $exerciseId,
-            'questionBankId' => $exercise['questionBankId'],
-            'userId' => $userId,
-            'orderId' => empty($order) ? 0 : $order['id'],
-            'deadline' => $deadline,
-            'role' => 'student',
-            'remark' => empty($info['remark']) ? '' : $info['remark'],
-            'createdTime' => time(),
-        ];
-
-        $reason = $this->buildJoinReason($info, $order);
-        $member = $this->addMember($fields, $reason);
-
-        $this->dispatchEvent(
-            'exercise.join',
-            $exercise,
-            ['userId' => $member['userId'], 'member' => $member]
-        );
-
-        return $member;
-    }
-
     public function addTeacher($exerciseId)
     {
-        $exercise = $this->getExerciseDao()->get($exerciseId);
-        $userId = $this->getCurrentUser()->getId();
-        $teacher = [
-            'exerciseId' => $exerciseId,
-            'questionBankId' => $exercise['questionBankId'],
-            'userId' => $userId,
-            'role' => 'teacher',
-            'remark' => '',
-        ];
-        $member = $this->addMember($teacher);
-        $fields = ['teacherIds' => [$userId]];
-        $this->getExerciseDao()->update($exerciseId, $fields);
+        try{
+            $this->beginTransaction();
+            $exercise = $this->getExerciseService()->tryManageExercise($exerciseId,0);
+            $userId = $this->getCurrentUser()->getId();
+            $teacher = [
+                'exerciseId' => $exerciseId,
+                'questionBankId' => $exercise['questionBankId'],
+                'userId' => $userId,
+                'role' => 'teacher',
+                'remark' => '',
+            ];
+            $member = $this->addMember($teacher);
+            $fields = ['teacherIds' => [$userId]];
+            $this->getExerciseDao()->update($exerciseId, $fields);
+            $this->commit();
+        }catch (\Exception $e){
+            $this->rollback();
+            throw $e;
+        }
 
         return $member;
     }
@@ -255,17 +193,6 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         $record = $this->getMemberOperationRecordService()->create($record);
 
         return $record;
-    }
-
-    private function buildJoinReason($info, $order)
-    {
-        if (ArrayToolkit::requireds($info, ['reason', 'reasonType'])) {
-            return ArrayToolkit::parts($info, ['reason', 'reasonType']);
-        }
-
-        $orderId = empty($order) ? 0 : $order['id'];
-
-        return $this->getMemberOperationRecordService()->getJoinReasonByOrderId($orderId);
     }
 
     protected function createOrder($exerciseId, $userId, $data)
