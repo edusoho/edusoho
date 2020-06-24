@@ -32,7 +32,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
                 $this->getItemBankExerciseModuleDao()->create([
                     'exerciseId' => $exercise['id'],
                     'title' => '章节练习',
-                    'type' => 'chapter'
+                    'type' => 'chapter',
                 ]);
             }
             $this->commit();
@@ -107,7 +107,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             return false;
         }
 
-        if ($teacher == 1 && in_array($user->getId(), $exercise['teacherIds'])) {
+        if (1 == $teacher && in_array($user->getId(), $exercise['teacherIds'])) {
             return true;
         }
 

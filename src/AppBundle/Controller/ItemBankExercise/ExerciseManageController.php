@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AppBundle\Controller\ItemBankExercise;
-
 
 use AppBundle\Controller\BaseController;
 use Biz\ItemBankExercise\Service\ExerciseService;
