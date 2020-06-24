@@ -7,8 +7,11 @@
     <div v-show="media === 'text'" ref="text" class="media-text" />
 
     <!-- 学习上报按钮 -->
-    <template>
-      <div v-if="isFinish" class="web-view--btn web-view--activebtn">
+    <template v-if="joinStatus">
+      <div
+        v-if="isFinish"
+        class="web-view--btn web-view--activebtn"
+      >
         <i class="iconfont icon-markdone"></i>
         学过了
       </div>
@@ -80,7 +83,9 @@ export default {
       setNavbarTitle: types.SET_NAVBAR_TITLE
     }),
     async initData() {
-      this.initReport();
+      if(this.joinStatus){
+        this.initReport();
+      }
       this.enableFinish = !!parseInt(this.details.enableFinish);
       const player = await Api.getMedia(this.getParams()).catch(err => {
         Toast(err.message);
@@ -129,13 +134,17 @@ export default {
               taskId
             },
             params: {
-              preview: 1
+              preview: 1,
+              version:'escloud'
             }
           }
         : {
             query: {
               courseId,
               taskId
+            },
+            params: {
+              version:'escloud'
             }
           };
     },
@@ -151,7 +160,7 @@ export default {
 
         const player = new window.QiQiuYun.Player({
           id: "player", // 用于初始化的DOM节点id
-          resNo: media.resId, // 想要播放的资源编号
+          resNo: media.resNo, // 想要播放的资源编号
           token:media.token,
           source: {
             type: playerParams.mediaType,
@@ -162,7 +171,7 @@ export default {
         player.on("ready", () => {});
         player.on("pagechanged", e => {
           if (e.page === e.total) {
-            if (this.finishCondition.type === "end") {
+            if (this.finishCondition && this.finishCondition.type === "end") {
               this.reprtData("finish");
             }
           }

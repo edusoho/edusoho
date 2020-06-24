@@ -15,6 +15,7 @@ module.exports = {
 				"libraryName": "element-ui",
 				"styleLibraryName": "theme-chalk"
 			}
-		]
+    ],
+    ["@babel/plugin-proposal-optional-chaining"]
 	]
 };

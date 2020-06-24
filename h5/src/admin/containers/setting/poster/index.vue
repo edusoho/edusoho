@@ -8,6 +8,7 @@
     </div>
 
     <div slot="setting" class="poster-allocate">
+      <e-suggest v-if="moduleData.tips" :suggest="moduleData.tips" :key="moduleData.moduleType"></e-suggest>
       <header class="title">
         图片广告设置
         <div class="help-text">建议图片宽度为750px,支持jpg/png/gif格式，图片大小不超过2MB</div>
@@ -82,7 +83,7 @@ import moduleFrame from '../module-frame';
 import settingCell from '../module-frame/setting-cell';
 import courseModal from '../course/modal/course-modal';
 import poster from '&/components/e-poster/e-poster.vue';
-
+import suggest from "&/components/e-suggest/e-suggest.vue"
 
 export default {
   components: {
@@ -90,6 +91,7 @@ export default {
     settingCell,
     courseModal,
     poster,
+    'e-suggest':suggest
   },
   data() {
     return {

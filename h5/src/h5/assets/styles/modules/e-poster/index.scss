@@ -1,14 +1,6 @@
 .e-poster {
   text-align: center;
-  &.responsive {
-    .e-poster__img {
-      max-width: 100%;
-    }
-  }
-  &.size-fit {
-    text-align: center;
-    .e-poster__img {
-      width: 100%;
-    }
+  .e-poster__img {
+    max-width: 100%;
   }
 }

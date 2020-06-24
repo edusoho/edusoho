@@ -163,11 +163,11 @@ export default {
       taskId: state => state.taskId,
       details: state => state.details,
       joinStatus: state => state.joinStatus,
-      user: state => state.joinStatus.user,
+      user: state => state.joinStatus?.user || {},
       allTask: state => state.allTask
     }),
     showLearnBtn() {
-      return ["video", "audio"].includes(this.sourceType);
+      return  this.joinStatus && ["video", "audio"].includes(this.sourceType);
     }
   },
   watch: {
@@ -217,11 +217,13 @@ export default {
     initHead() {
       if (["video", "audio"].includes(this.sourceType)) {
         window.scrollTo(0, 0);
-        this.initReport();
+         if(this.joinStatus){
+          this.initReport();
+          this.clearComputeWatchTime();
+          this.lastWatchTime = 0;
+          this.nowWatchTime = 0;
+        }
         this.initData();
-        this.clearComputeWatchTime();
-        this.lastWatchTime = 0;
-        this.nowWatchTime = 0;
       }
     },
     initReport() {
@@ -262,13 +264,17 @@ export default {
               taskId: this.taskId
             },
             params: {
-              preview: 1
+              preview: 1,
+              version:"escloud"
             }
           }
         : {
             query: {
               courseId: this.selectedPlanId,
               taskId: this.taskId
+            },
+            params: {
+              version:"escloud"
             }
           };
     },
@@ -285,16 +291,11 @@ export default {
     getData() {
       Api.getMedia(this.getParams())
         .then(res => {
-          if (res.mediaType === "video" && !res.media.url) {
-            Toast("课程内容准备中，请稍候查看");
-            return;
+          if(res.mediaType === "audio"){
+            this.formateAudioData(res);
+          } else if(res.mediaType === "video"){
+            this.formateVedioData(res);
           }
-          this.isEncryptionPlus = res.media.isEncryptionPlus;
-          if (res.media.isEncryptionPlus) {
-            Toast("该浏览器不支持云视频播放，请下载App");
-            return;
-          }
-          this.formatePlayerData(res);
         })
         .catch(err => {
           const courseId = Number(this.details.id);
@@ -310,25 +311,54 @@ export default {
           Toast.fail(err.message);
         });
     },
-    formatePlayerData(player) {
-      const timelimit = player.media.timeLimit;
+    formateAudioData(player){
+      const media = player.downloadMedia;
+      //不支持浏览器判断
+      this.isEncryptionPlus = media.isEncryptionPlus;
+          if (media.isEncryptionPlus) {
+            Toast("该浏览器不支持云视频播放，请下载App");
+            return;
+      }
+      //音频文稿
+      this.textContent = media.text;
+      const options = {
+        id: "course-detail__head--video",
+       user: this.user,
+        resNo: media.resNo,
+        token: media.token,
+        disableDataUpload: true,
+        watermark: {
+          pos: "top.right",
+          width: 30,
+          height: 30
+        },
+      }
+      this.$store.commit("UPDATE_LOADING_STATUS", true);
+      this.initPlayer(options);
+    },
+    formateVedioData(player) {
       const media = player.media;
-      // 试看判断
+      const timelimit = media.timeLimit;
+      // 视频试看判断
       const canTryLookable =
         !this.joinStatus && Number(this.details.tryLookable);
+      //不支持浏览器判断
+      this.isEncryptionPlus = media.isEncryptionPlus;
+          if (media.isEncryptionPlus) {
+            Toast("该浏览器不支持云视频播放，请下载App");
+            return;
+      }
 
       const options = {
         id: "course-detail__head--video",
         user: this.user,
-        playlist: media.url,
         autoplay: true,
         disableFullscreen: this.sourceType === "audio",
-        isAudio: this.sourceType === "audio",
         strictMode: !media.supportMobile, // 视频是否加密 1表示普通  0表示加密
         pluck: {
           timelimit: timelimit
         },
-        resNo: media.resId,
+        resNo: media.resNo,
         disableDataUpload: true,
         watermark: {
           pos: "top.right",
@@ -341,8 +371,6 @@ export default {
       if (!canTryLookable) {
         delete options.pluck;
       }
-      this.textContent = player.media.text;
-
       this.$store.commit("UPDATE_LOADING_STATUS", true);
       this.initPlayer(options);
     },
@@ -363,9 +391,7 @@ export default {
               "当前内容不支持该手机浏览器观看，建议您使用Chrome、Safari浏览器观看。"
           }).then(() => {});
         });
-        player.on("ready", () => {
-
-        });
+        player.on("ready", () => {});
         player.on("playing", () => {
           this.isPlaying = true;
           this.computeWatchTime();
@@ -379,7 +405,7 @@ export default {
         });
         player.on("ended", () => {
           this.clearComputeWatchTime();
-          if (this.finishCondition.type === "end") {
+          if (this.finishCondition && this.finishCondition.type === "end") {
             this.reprtData("finish");
           }
         });

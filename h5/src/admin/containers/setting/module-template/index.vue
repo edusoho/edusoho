@@ -60,7 +60,7 @@
       @updateModule="updateHandler(module, index)"
     ></vip>
 
-  <!-- 仅app有的基础组件 -->
+  <!-- 仅app、h5有的基础组件 -->
   <!-- 图文导航 -->
      <graphic-navigation
       v-if="module.type === moduleDefault.graphicNavigation.type"
@@ -71,6 +71,16 @@
       @updateModule="updateHandler(module, index)"
     ></graphic-navigation>
 
+    <Search
+      v-if="module.type === moduleDefault.search.type"
+      :key="'search'+module.oldIndex"
+      :active="isActive"
+      :moduleData="module"
+      :incomplete="validateFuc"
+      @updateModule="updateHandler(module, index)"
+    ></Search>
+
+  <!-- 仅app有的基础组件 -->
   <!-- 公开课 -->
     <open-course
       v-if="module.type === moduleDefault.openCourseList.type"
@@ -107,6 +117,7 @@ import GraphicNavigation from "../graphic-navigation";
 import Poster from "../poster";
 import Coupon from "../coupon";
 import Vip from "../vip";
+import Search from "../search";
 import MarketingActivity from "../marketing-activity";
 import validate from "admin/utils/module-validator";
 import { MODULE_DEFAULT } from "admin/config/module-default-config";
@@ -120,7 +131,8 @@ export default {
     coupon: Coupon,
     vip: Vip,
     openCourse:OpenCourse,
-    graphicNavigation:GraphicNavigation
+    graphicNavigation:GraphicNavigation,
+    Search
   },
   props: {
     module: {

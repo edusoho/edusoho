@@ -15,9 +15,10 @@
 
     <el-dialog
       :visible.sync="dialogVisible"
+      :append-to-body="true"
       title="提示:通过鼠标滚轮缩放图片"
       width="80%">
-      <div class="cropper-container">
+      <div class="setting-carousel-cropper-container">
         <vueCropper
           v-show="option.img"
           ref="cropper"

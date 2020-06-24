@@ -7,6 +7,7 @@
     </div>
 
     <div slot="setting" class="carousel-allocate">
+      <e-suggest v-if="moduleData.tips" :suggest="moduleData.tips" :key="moduleData.moduleType"></e-suggest>
       <header class="title">
         图文导航设置
         <div  class="help-text" >建议图片尺寸为80x80px，支持 jpg/png/gif 格式，大小不超过2MB</div>
@@ -29,13 +30,14 @@ import { MODULE_DEFAULT } from 'admin/config/module-default-config'
 import item from './item'
 import moduleFrame from '../module-frame'
 import eGraphicNavigation from '&/components/e-graphic-navigation/e-graphic-navigation.vue'
-
+import suggest from "&/components/e-suggest/e-suggest.vue"
 
 export default {
   components: {
     item,
     moduleFrame,
-    'e-graphic-navigation':eGraphicNavigation
+    'e-graphic-navigation':eGraphicNavigation,
+    'e-suggest':suggest
   },
   props: {
     active: {

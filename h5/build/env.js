@@ -1,14 +1,15 @@
 module.exports = {
   devtest: {
     url: "http://devtest.edusoho.cn",
-    token: "in1vy3uwgxkwc8okocw08k8ckscw0so",
+    token: "9ty7o2tqozs4kw4c484k8o8g8oocgss",
   },
   try6: {
     url: "http://try6.edusoho.cn",
-    token: "2ggsc28azq3ookoswkw8sg4ggosocw0",
+    token: "qa482o95rk04g8888w8oc88cgkcwsgk",
   },
   gdy: {
-    url: "ttp://gdy.st.edusoho.cn"
+    url: "http://gdy.st.edusoho.cn",
+    token: "7j76hkzda6oscwws404scwss8ccogww",
   },
   iyamusic: {
     url: "https://www.iyamusic.com",
@@ -25,4 +26,4 @@ module.exports = {
   t5: {
     url: "http://www.t5.edusoho.cn",
   },
-}['t5'];
+}['gdy'];
