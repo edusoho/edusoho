@@ -105,13 +105,13 @@
       width: vw(271);
       font-size: vw(14);
       color: #666;
-      .plan-icon {
+      .plan-right__icon {
         font-size: vw(14);
         position: absolute;
         right: 0;
         top: vw(1);
       }
-      .plan-promise {
+      .plan-right__promise {
         padding: vw(2) vw(4);
         margin-right: vw(8);
         font-size: vw(12);
@@ -139,6 +139,63 @@
         background-color: #03C777;
         border-radius: vw(2);
       }
+    }
+    .plan-popup__type {
+      margin-top: vw(4);
+      .plan-popup__type__item {
+        display: inline-block;
+        padding: vw(4) vw(8);
+        margin: vw(12) vw(8) 0 0;
+        border: vw(1) solid rgba(225, 225, 225, 1);
+        font-size: vw(14);
+        color: #999;
+        border-radius: vw(4);
+        &.active {
+          border: vw(1) solid #03C777;
+          background: rgba(3, 199, 119, 0.1);
+        }
+      }
+    }
+    .plan-popup__other {
+      padding: vw(16);
+      margin-top: vw(16);
+      background-color: #F9F9F9;
+      border-radius: vw(4);
+      .popup-other {
+        margin-top: vw(16);
+        line-height: vw(20);
+        font-size: vw(14);
+        &:first-child {
+          margin-top: 0;
+        }
+        .popup-other__left {
+          width: vw(102);
+          color: #999;
+        }
+        .popup-other__right {
+          width: vw(209);
+          color: #666;
+          .popup-other__right__promise {
+            padding: vw(2) vw(4);
+            margin-right: vw(8);
+            font-size: vw(12);
+            background-color: #03C777;
+            color: #fff;
+            border-radius: vw(4);
+          }
+        }
+      }
+    }
+    .plan-popup__buy {
+      margin-top: vw(24);
+      height: vw(48);
+      border-radius: vw(24);
+      background: rgba(255, 118, 95, 1);
+      color: #fff;
+      text-align: center;
+      line-height: vw(48);
+      font-size: vw(16);
+      font-weight: 500;
     }
   }
 }
