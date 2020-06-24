@@ -67,17 +67,6 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $member = $this->addMember($fields, $reason);
 
             $user = $this->getUserService()->getUser($userId);
-            if (isset($info['isAdminAdded']) && 1 == $info['isAdminAdded']) {
-                $message = [
-                    'exercise' => $exercise['id'],
-                    'exerciseTitle' => $exercise['title'],
-                    'userId' => $user['id'],
-                    'userName' => $user['nickname'],
-                    'type' => 'create',
-                ];
-                $this->getNotificationService()->notify($member['userId'], 'student-create', $message);
-            }
-
             $infoData = [
                 'exercise' => $exercise['id'],
                 'title' => $exercise['title'],

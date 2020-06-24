@@ -3,7 +3,7 @@
     <label class="control-label-required" for="title">{{ 'item_bank_exercise.base.title'|trans }}</label>
   </div>
   <div class="col-md-8">
-    <input type="text" id="title" name="title" required="required" class="form-control js-courseset-title" value="{{ courseSet.title|default('') }}">
+    <input type="text" id="title" name="title" required="required" class="form-control js-courseset-title" value="{{ questionBank.name|default('') }}" disabled>
     <div class="help-block" style="display:none;"></div>
   </div>
 </div>
@@ -11,7 +11,7 @@
 <div class="form-group">
   <label class="col-md-2 control-label" for="categoryId">{{ 'course.base.category'|trans }}</label>
   <div class="col-md-8 controls">
-    <select style="width:150px;" class="form-control" name="categoryId" required="required" id="categoryId">
+    <select style="width:150px;" disabled class="form-control" name="categoryId" required="required" id="categoryId">
       <option value="">{{'admin.question_bank.manage.category'|trans}}</option>
       {% for tree in categoryTree %}
         <option value={{ tree.id }} {% if tree.id == questionBank.categoryId  %}selected{% endif%}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>
