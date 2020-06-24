@@ -61,13 +61,14 @@ class AudioPlayer extends Emitter {
       id: 'lesson-player',
       playlist: self.options.url,
       template: self.options.content,
+      sequentialMode: true,
       autoplay: true, //音频自动播放开启
       initPos: self.options.customPos,
       disableModeSelection: self.options.disableModeSelection,
       rememberLastPos: rememberLastPos,
-      sequentialMode: true,
       language: lang
     });
+    console.log(extConfig)
     var player = new QiQiuYun.Player(extConfig);
 
     player.on('ready', function(e) {
