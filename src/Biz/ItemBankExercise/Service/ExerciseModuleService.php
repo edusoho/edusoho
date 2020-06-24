@@ -8,7 +8,5 @@ interface ExerciseModuleService
 
     public function get($id);
 
-    public function setDefaultAssessmentModule($exerciseId);
-
-    public function setDefaultChapterModule($exerciseId);
+    public function createAssessmentModule($exerciseId, $name);
 }
