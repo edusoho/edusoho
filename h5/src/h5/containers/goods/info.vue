@@ -1,5 +1,79 @@
 <template>
   <div class="goods-info">
-    info
+    <ul id="goods-info__nav" class="goods-info__nav">
+      <li @click="onActive(0, 'introduction')"><a :class="active == 0 ? 'active' : ''" href="javascript:;">简介</a></li>
+      <li @click="onActive(1, 'teacher')"><a :class="active == 1 ? 'active' : ''" href="javascript:;">教师</a></li>
+      <li @click="onActive(2, 'catalog')"><a :class="active == 2 ? 'active' : ''" href="javascript:;">目录</a></li>
+      <li @click="onActive(3, 'evaluate')"><a :class="active == 3 ? 'active' : ''" href="javascript:;">评价</a></li>
+    </ul>
+    <!-- 简介 -->
+    <section class="js-scroll-top" id="introduction">
+
+    </section>
+    <!-- 教师 -->
+    <section class="js-scroll-top" id="teacher">
+
+    </section>
+    <!-- 目录 -->
+    <section class="js-scroll-top" id="catalog">
+
+    </section>
+    <!-- 评价 -->
+    <section class="js-scroll-top" id="evaluate">
+
+    </section>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      active: 0,
+      timer: null,
+      flag: true // 点击取消滚动监听
+    }
+  },
+  methods: {
+    onActive(value, eleId) {
+      clearTimeout(this.timer);
+      this.timer = null
+      this.flag = false;
+      this.active = value;
+      let eleTop = document.getElementById(eleId).offsetTop;
+      let navHeight =  document.getElementById('goods-info__nav').offsetHeight;
+      document.documentElement.scrollTop = eleTop - navHeight;
+      this.timer = setTimeout(() => {
+        this.flag = true;
+      }, 500);
+    },
+    handleScroll() {
+      if (!this.flag) return;
+      let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      clearTimeout(this.timer);
+      this.timer = null
+      this.timer = setTimeout(() => {
+        this.calcScrollTop(scrollTop);
+      }, 200);
+    },
+    calcScrollTop(value) {
+      let navHeight =  document.getElementById('goods-info__nav').offsetHeight;
+      let eleArr = document.querySelectorAll('.js-scroll-top');
+      for (let i = eleArr.length - 1; i >= 0; i--) {
+        if (value >= eleArr[i].offsetTop - navHeight) {
+          if (this.active != i) this.active = i;
+          return;
+        } else {
+          this.active = 0;
+        }
+      }
+    }
+  },
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll);
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.handleScroll);
+  }
+}
+</script>

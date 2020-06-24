@@ -38,9 +38,7 @@
           </div>
         </div>
       </div>
-      <div class="plan-popup__buy">
-        立即购买
-      </div>
+      <div class="plan-popup__buy">立即购买</div>
     </van-popup>
     <!-- 学习有效期 -->
     <div class="detail-plan__plan clearfix">

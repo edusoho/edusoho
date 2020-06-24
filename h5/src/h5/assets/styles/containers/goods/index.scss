@@ -12,5 +12,38 @@
   .goods-info {
     margin-top: vw(8);
     background-color: #fff;
+    .goods-info__nav {
+      display: flex;
+      position: sticky;
+      top: 0;
+      justify-content: space-around;
+      align-items: center;
+      height: vw(50);
+      border-bottom: vw(1) solid #e1e1e1;
+      background-color: #fff;
+      font-size: vw(14);
+      li > a {
+        position: relative;
+        color: #666;
+        transition: all 0.3s ease;
+        &.active {
+          font-size: vw(16);
+          color: #333;
+          font-weight: 500;
+          &::after {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            bottom: vw(-16);
+            left: 50%;
+            transform: translateX(-50%);
+            width: vw(16);
+            height: vw(3);
+            background-color: #03C777;
+            border-radius: vw(2);
+          }
+        }
+      }
+    }
   }
 }
