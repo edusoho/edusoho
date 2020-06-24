@@ -64,6 +64,7 @@
     "element-ui": "^2.4.6",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^11.3.0",
+    "eslint-config-prettier": "^6.11.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-import-resolver-webpack": "^0.8.3",
