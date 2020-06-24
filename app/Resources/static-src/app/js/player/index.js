@@ -138,11 +138,11 @@ class Show {
   }
 
   isCloudVideoPalyer() {
-    return 'balloon-cloud-video-player' == this.playerType;
+    return 'balloon-cloud-video-player' == this.jsPlayer;
   }
 
   isCloudAudioPlayer() {
-    return 'audio-player' == this.playerType;
+    return 'audio-player' == this.jsPlayer;
   }
 
   initEvent() {
@@ -160,6 +160,7 @@ class Show {
         }
         player.play();
       }
+      
       if (this.isCloudVideoPalyer()) {
         if (this.markerUrl) {
           $.getJSON(this.markerUrl, function(questions) {

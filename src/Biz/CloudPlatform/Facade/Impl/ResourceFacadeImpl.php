@@ -19,7 +19,9 @@ class ResourceFacadeImpl extends BaseFacade implements ResourceFacade
 
         //对不同的资源类型，添加不同的配置参数
         $method = 'prepare'.ucfirst($file['type']).'Context';
-        $context = $this->$method($file, $context);
+        if (function_exists($method)) {
+            $context = $this->$method($file, $context);
+        }
 
         //获取用于权限验证的token和资源编码
         $context['token'] = $this->makePlayToken($file);

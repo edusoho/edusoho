@@ -32,7 +32,9 @@ class PlayerController extends BaseController
 
         // 获取播放必须的token和resNo，以及一些个性化播放器参数
         $playerContext = $this->getBiz()['resource_facade']->getPlayerContext($file);
-        $playerContext = array_merge($playerContext, $context);
+        if (is_array($context)) {
+            $playerContext = array_merge($playerContext, $context);
+        }
 
         $params = [
             'file' => $file,

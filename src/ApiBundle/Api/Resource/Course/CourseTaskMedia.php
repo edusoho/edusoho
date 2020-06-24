@@ -340,6 +340,11 @@ class CourseTaskMedia extends AbstractResource
         $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
         $doc = $config->get($activity['mediaId']);
 
+        if ($request->query->get('version', 'qiqiuyun') == 'escloud') {
+            $file = $this->getUploadFileService()->getFullFile($doc['mediaId']);
+            return  $this->getBiz()['resource_facade']->getPlayerContext($file);
+        }
+
         list($result, $error) = $this->getPlayerService()->getDocFilePlayer($doc, $ssl);
         if (!empty($error)) {
             throw new BadRequestHttpException($error['message']);
