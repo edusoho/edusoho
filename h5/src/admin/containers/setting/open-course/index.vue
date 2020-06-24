@@ -9,6 +9,7 @@
         @fetchCourse="fetchCourse"/>
     </div>
     <div slot="setting">
+      <e-suggest v-if="moduleData.tips" :suggest="moduleData.tips"></e-suggest>
       <header class="title">
         公开课列表设置
         <div class="text-12 color-gray mts">注意：仅含直播公开课内容，不包含录播公开课</div>
@@ -81,6 +82,7 @@ import settingCell from '../module-frame/setting-cell'
 import { mapMutations, mapState, mapActions } from 'vuex'
 import treeDigger from 'admin/utils/tree-digger'
 import pathName2Portal from 'admin/config/api-portal-config'
+import suggest from "&/components/e-suggest/e-suggest.vue"
 
 const optionLabel = {
   'open_course_list': '课程',
@@ -92,7 +94,8 @@ export default {
     draggable,
     courseModal,
     moduleFrame,
-    settingCell
+    settingCell,
+    'e-suggest':suggest
   },
   props: {
     active: {

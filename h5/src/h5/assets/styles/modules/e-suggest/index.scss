@@ -1,0 +1,67 @@
+.setting-tip {
+  position: relative;
+  margin-bottom: 16px;
+  .el-carousel__item.is-animating {
+    -webkit-transition: -webkit-transform 0s ease-in-out;
+    transition: -webkit-transform 0s ease-in-out;
+    transition: transform 0s ease-in-out;
+    transition: transform 0s ease-in-out, -webkit-transform 0s ease-in-out;
+    transition: transform 0s ease-in-out,-webkit-transform 0s ease-in-out;
+  }
+  .tip__arrow {
+    border: none;
+    outline: 0;
+    padding: 0;
+    margin: 0;
+    height: 20px;
+    width: 20px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 50%;
+    background-color: rgba(31, 45, 61, 0.41);
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    z-index: 10;
+    transform: translateY(-50%);
+    text-align: center;
+    font-size: 12px;
+    .iconfont {
+      font-size: 12px;
+    }
+    .icon-arrow-left {
+      margin-right: 0;
+      margin-left: 2px;
+    }
+  }
+  .tip__left {
+    left: -10px;
+  }
+  .tip__right {
+    right: -10px;
+  }
+  .el-carousel__container {
+    min-height: 120px;
+    background: rgba(236, 246, 255, 1);
+    border-radius: 4px;
+    border: 1px solid rgba(49, 161, 255, 1);
+    height: auto;
+  }
+  .setting-tip__main {
+    padding: 8px 16px;
+  }
+  .setting-tip__title {
+    font-size: 14px;
+    font-weight: 500;
+    .icon-jianyi {
+      font-size: 22px;
+      color: rgba(49, 161, 255, 1);
+    }
+  }
+  .setting-tip__content {
+    margin-top: 4px;
+    color: #666666;
+    font-size: 14px;
+  }
+}

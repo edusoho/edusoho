@@ -5,38 +5,42 @@
       <!-- first-level -->
       <div class="e-menu__items level-one">
         <div
-          v-for="item in menuContent.data"
+          v-for="(item,levelOneIndex) in menuContent.data"
           :class="[item.id == queryData.categoryId ? 'selected' : '']"
           class="e-menu__item"
           @click="itemSelect(item, menuContent.type, 'levelOne')"
+          :key="'levelOne'+levelOneIndex"
         >{{ item.name }}</div>
       </div>
       <!-- second-level -->
       <div class="e-menu__items level-two">
         <div
-          v-for="item in secondLevel"
+          v-for="(item,levelTwoIndex) in secondLevel"
           :class="[item.id == queryData.categoryId ? 'selected' : '']"
           class="e-menu__item"
           @click="itemSelect(item, menuContent.type, 'levelTwo')"
+          :key="'levelTwo'+levelTwoIndex"
         >{{ item.text }}</div>
       </div>
       <!-- third-level -->
       <div class="e-menu__items level-three">
         <div
-          v-for="item in thirdLevel"
+          v-for="(item,levelThreeIndex) in thirdLevel"
           :class="[item.id == queryData.categoryId ? 'selected' : '']"
           class="e-menu__item"
           @click="itemSelect(item, menuContent.type, 'levelThree')"
+          :key="'levelThree'+levelThreeIndex"
         >{{ item.text }}</div>
       </div>
     </div>
     <!-- line -->
     <div v-if="menuContent.moduleType == 'normal'" class="e-menu__line">
       <div
-        v-for="item in menuContent.data"
+        v-for="(item,lineIndex) in menuContent.data"
         :class="judgeIsSelected(item, menuContent.type)"
         class="e-menu__item"
         @click="itemSelect(item, menuContent.type)"
+         :key="'line'+lineIndex"
       >{{ item.text }}</div>
     </div>
   </div>

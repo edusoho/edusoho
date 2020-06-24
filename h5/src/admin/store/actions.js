@@ -79,6 +79,14 @@ export const getDraft = ({ commit }, { portal, type, mode }) => Api.getDraft({
   }
 });
 
+// 获取后台配置（草稿／正式）
+export const getTemplate = ({ commit }, { portal, template }) => Api.getTemplate({
+  query: {
+    portal,
+    template
+  }
+});
+
 export const getCategoryType = ({ commit }, { type }) => {
   let current = type;
   if (type === 'openCourse') {

@@ -49,15 +49,19 @@ const getDisplayStyle = (data, listObj) => {
     }
   };
 };
-const getAppDisplayStyle = (data, listObj) => {
+const getNewDisplayStyle = (data, listObj, platform) => {
   const dataPrice = Number(data.price2.amount);
+  const primaryColor = {
+    app: '#20B573',
+    h5: '#408FFB'
+  };
   let price;
   if (dataPrice > 0 && data.price2.currency === 'coin') {
     price = `<span style="color: #ff5353">${data.price2.coinAmount} ${data.price2.coinName}</span>`;
   } else if (dataPrice > 0 && data.price2.currency === 'RMB') {
     price = `<span style="color: #ff5353">¥ ${data.price2.amount}</span>`;
   } else {
-    price = '<span style="color: #20B573">免费</span>';
+    price = `<span style="color:${primaryColor[platform]}">免费</span>`;
   }
 
   if (listObj.typeList === 'classroom_list') {
@@ -98,12 +102,12 @@ const getAppDisplayStyle = (data, listObj) => {
     }
   };
 };
-const courseListData = (data, listObj, setting = '') => {
-  // 当setting为appSetting: 1.后台admin为app设置。2.h5端被app的webview调用。  后续三端统一后可以去掉这个判断
+const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
+  // h5和app用了新版ui,小程序还是用旧版ui
   switch (listObj.type) {
     case 'price':
-      if (setting === 'appSetting') {
-        return getAppDisplayStyle(data, listObj);
+      if (uiStyle !== 'old') {
+        return getNewDisplayStyle(data, listObj, platform);
       }
       return getDisplayStyle(data, listObj);
 

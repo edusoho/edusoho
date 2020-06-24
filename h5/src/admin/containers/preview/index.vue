@@ -1,7 +1,7 @@
 <template>
   <div class="preview-container">
     <div class="image-container clearfix">
-      <div :class="{'phone-img-app': from === 'appSetting'}" class="phone-img">
+      <div :class="{'phone-img-app': from !== 'miniprogramSetting'}" class="phone-img">
         <img :src="bgImg">
         <div :class="getTitleClass()"><i class="iconfont icon-search"></i>{{ settings.name }}</div>
         <mobile-preview :class="getClass()" :feedback="false"/>
@@ -121,7 +121,7 @@ export default {
       } else if (this.from === 'appSetting') {
         return 'preview-iframe preview-iframe__app'
       } else {
-        return 'preview-iframe'
+        return 'preview-iframe '
       }
     },
     getTitleClass() {

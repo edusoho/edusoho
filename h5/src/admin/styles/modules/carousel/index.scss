@@ -104,10 +104,7 @@
     }
   }
 
-  .cropper-container {
-    margin-top: 50px;
-    height: 250px;
-  }
+
 
   .btn-add-item {
     height: 44px;
@@ -116,6 +113,10 @@
   }
 }
 
+.setting-carousel-cropper-container {
+  margin-top: 50px;
+  height: 250px;
+}
 // h5 轮播长度单位复写
 .e-swipe {
   img {

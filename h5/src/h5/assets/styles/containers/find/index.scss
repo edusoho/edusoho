@@ -1,6 +1,12 @@
 .find-page {
   padding-bottom: 50px;
 }
+@media only screen and (-webkit-device-pixel-ratio: 3) and (device-height: 812px) and (device-width: 375px){
+  .find-page {
+    padding-bottom: 84px;
+  }
+}
+
 
 .find-page__part:last-child {
   .gray-border-bottom {

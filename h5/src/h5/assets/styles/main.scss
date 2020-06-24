@@ -31,6 +31,7 @@
 @import './containers/study-card/index.scss';
 @import './containers/more/index.scss';
 @import './containers/live-timetable/index.scss';
+@import './containers/search/index.scss';
 
 
 // modules
@@ -41,12 +42,26 @@
 @import './modules/e-more-mask.scss';
 @import './modules/e-popup.scss';
 @import './modules/e-row-class/index.scss';
+@import './modules/e-column-class/index.scss';
 @import './modules/e-tree-selects/index.scss';
 @import './modules/e-empty/index.scss';
 @import './modules/e-navbar/index.scss';
 @import './modules/e-card/index.scss';
 @import './modules/e-back-top/index.scss';
 @import './modules/e-openCourse-class/e-openCourse-more.scss';
+@import './modules/e-graphic-navigation/index.scss';
 
 // webview
 @import './containers/webview/index.scss';
+
+//隐藏滚动条
+html,body {
+  &::-webkit-scrollbar {
+    height: 0px;
+    width : 0px;
+    display: none;
+  }
+  scrollbar-width: none;
+  -ms-overflow-style:none;
+  overflow:-moz-scrollbars-none;
+}
