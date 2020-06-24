@@ -3,8 +3,7 @@
 > 相关文档
 
 - [接口地址](http://kb.codeages.net/edusoho/api/api-h5.html)
-- [文档播放器地址](http://coding.codeages.net/qiqiuyun/api-doc/blob/master/v2/resource-play.md)
-- [视频播放器文档](/doc/player.md)
+- [播放器地址](http://docs.qiqiuyun.com/)
 - [需求文档](https://pro.modao.cc/app/43be7ceee9ba1239e1366453d273907de9ac2043#screen=sFAABE922B31526366021396)
 
 

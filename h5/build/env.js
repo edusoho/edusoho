@@ -23,4 +23,7 @@ module.exports = {
   mock: {
     url: "https://www.easy-mock.com/mock/5b1742522de86c43cc2dc73a/edusoho",
   },
+  t5: {
+    url: "http://www.t5.edusoho.cn",
+  },
 }['gdy'];
