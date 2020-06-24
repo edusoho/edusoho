@@ -60,8 +60,10 @@ class AudioPlayer extends Emitter {
     extConfig = Object.assign(extConfig, {
       id: 'lesson-player',
       playlist: self.options.url,
-      template: self.options.content,
-      sequentialMode: true,
+      audioDocMode: {
+        template: self.options.content,
+        sequentialMode: true,
+      },
       autoplay: true, //音频自动播放开启
       initPos: self.options.customPos,
       disableModeSelection: self.options.disableModeSelection,
