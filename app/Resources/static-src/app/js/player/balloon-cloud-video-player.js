@@ -15,13 +15,6 @@ class BalloonCloudVideoPlayer extends Emitter {
 
     let extConfig = {};
 
-    //字幕
-    if (self.options.textTrack.length) {
-      extConfig = Object.assign(extConfig, {
-        textTrack: self.options.textTrack
-      });
-    }
-
     if (self.options.resNo) {
       extConfig = Object.assign(extConfig, {
         resNo: self.options.resNo

@@ -31,7 +31,7 @@ class PlayerController extends BaseController
         }
 
         // 获取播放必须的token和resNo，以及一些个性化播放器参数
-        $playerContext = $this->getBiz()['resource_facade']->getPlayerContext($file);
+        $playerContext = $this->getResourceFacadeService()->getPlayerContext($file);
         if (is_array($context)) {
             $playerContext = array_merge($playerContext, $context);
         }
@@ -274,5 +274,10 @@ class PlayerController extends BaseController
     protected function getPlayerService()
     {
         return $this->getBiz()->service('Player:PlayerService');
+    }
+
+    protected function getResourceFacadeService()
+    {
+        return $this->getBiz()->service('CloudPlatform:ResourceFacadeService');
     }
 }

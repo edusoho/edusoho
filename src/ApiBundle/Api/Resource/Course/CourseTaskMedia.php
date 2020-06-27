@@ -178,7 +178,7 @@ class CourseTaskMedia extends AbstractResource
 
         $player = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
 
-        $agentInWhiteList = $this->getBiz()['resource_facade']->agentInWhiteList($request->headers->get('user-agent'));
+        $agentInWhiteList = $this->getResourceFacadeService()->agentInWhiteList($request->headers->get('user-agent'));
 
         $isEncryptionPlus = false;
         $context = [];
@@ -220,7 +220,7 @@ class CourseTaskMedia extends AbstractResource
 
     protected function getVideoWithEsCloud($file, $course, $task)
     {
-        $playerContext = $this->getBiz()['resource_facade']->getPlayerContext($file);
+        $playerContext = $this->getResourceFacadeService()->getPlayerContext($file);
         $playerContext['timeLimit'] = $this->getVideoFreeWatchTime($course, $task);
 
         return $playerContext;
@@ -311,7 +311,7 @@ class CourseTaskMedia extends AbstractResource
        
         $player = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
 
-        $agentInWhiteList = $this->getBiz()['resource_facade']->agentInWhiteList($request->headers->get('user-agent'));
+        $agentInWhiteList = $this->getResourceFacadeService()->agentInWhiteList($request->headers->get('user-agent'));
 
         $url = $this->getPlayUrl($file, [], $ssl);
 
@@ -328,7 +328,7 @@ class CourseTaskMedia extends AbstractResource
 
     protected function getAudioWithEsCloud($file, $audio, $activity)
     {
-        $context = $this->getBiz()['resource_facade']->getPlayerContext($file);
+        $context = $this->getResourceFacadeService()->getPlayerContext($file);
         $context['hasText'] = $audio['hasText'] ? true : false;
         $context['text'] = $audio['hasText'] ? $activity['content'] : '';
 
@@ -342,7 +342,7 @@ class CourseTaskMedia extends AbstractResource
 
         if ($request->query->get('version', 'qiqiuyun') == 'escloud') {
             $file = $this->getUploadFileService()->getFullFile($doc['mediaId']);
-            return  $this->getBiz()['resource_facade']->getPlayerContext($file);
+            return  $this->getResourceFacadeService()->getPlayerContext($file);
         }
 
         list($result, $error) = $this->getPlayerService()->getDocFilePlayer($doc, $ssl);
@@ -361,7 +361,7 @@ class CourseTaskMedia extends AbstractResource
         $file = $this->getUploadFileService()->getFullFile($ppt['mediaId']);
         
         if ($request->query->get('version', 'qiqiuyun') == 'escloud') {
-            return  $this->getBiz()['resource_facade']->getPlayerContext($file);
+            return  $this->getResourceFacadeService()->getPlayerContext($file);
         }
 
         list($result, $error) = $this->getPlayerService()->getPptFilePlayer($ppt, $ssl);
@@ -515,5 +515,10 @@ class CourseTaskMedia extends AbstractResource
     protected function getAnswerService()
     {
         return $this->service('ItemBank:Answer:AnswerService');
+    }
+
+    protected function getResourceFacadeService()
+    {
+        return $this->getBiz()->service('CloudPlatform:ResourceFacadeService');
     }
 }

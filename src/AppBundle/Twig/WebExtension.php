@@ -1864,7 +1864,7 @@ class WebExtension extends \Twig_Extension
 
     public function getCloudSdkUrl($type)
     {
-        return $this->biz['resource_facade']->getFrontPlaySDKPathByType($type);
+        return $this->getResourceFacadeService()->getFrontPlaySDKPathByType($type);
     }
 
     public function isWechatLoginBind()
@@ -2059,5 +2059,10 @@ class WebExtension extends \Twig_Extension
     protected function getAssessmentService()
     {
         return $this->createService('ItemBank:Assessment:AssessmentService');
+    }
+
+    protected function getResourceFacadeService()
+    {
+        return $this->createService('CloudPlatform:ResourceFacadeService');
     }
 }

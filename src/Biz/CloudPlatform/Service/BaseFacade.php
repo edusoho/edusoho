@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\CloudPlatform\Facade\Impl;
+namespace Biz\CloudPlatform\Service;
 
 use Codeages\Biz\Framework\Context\Biz;
 

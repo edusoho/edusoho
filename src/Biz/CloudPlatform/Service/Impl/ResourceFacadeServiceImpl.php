@@ -1,11 +1,12 @@
 <?php
 
-namespace Biz\CloudPlatform\Facade\Impl;
+namespace Biz\CloudPlatform\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\CloudPlatform\Facade\ResourceFacade;
+use Biz\CloudPlatform\Service\ResourceFacadeService;
+use Biz\CloudPlatform\Service\BaseFacade;
 
-class ResourceFacadeImpl extends BaseFacade implements ResourceFacade
+class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeService
 {
     public function getPlayerContext($file, $userAgent = '')
     {
@@ -33,16 +34,6 @@ class ResourceFacadeImpl extends BaseFacade implements ResourceFacade
 
     protected function prepareVideoContext($file, $context)
     {
-        $storageSetting = $this->getSettingService()->get('storage');
-        //是否加入片头信息
-        $isShowVideoHeader = isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['video_header'];
-        $videoHeaderLength = null;
-        if ($isShowVideoHeader) {
-            $videoHeaderFile = $this->getUploadFileService()->getFileByTargetType('headLeader');
-            $videoHeaderLength = !empty($videoHeaderFile) && 'success' == $videoHeaderFile['convertStatus'] ? $videoHeaderFile['length'] : null;
-        }
-        $context['videoHeaderLength'] = $videoHeaderLength;
-
         //微网校用于是否支持 mobile 端判断
         $context['supportMobile'] = intval($this->getSettingService()->node('storage.support_mobile', 0));
         if ('cloud' == $file['storage']) {
@@ -94,6 +85,7 @@ class ResourceFacadeImpl extends BaseFacade implements ResourceFacade
     {
         $cdnHost = $this->getSettingService()->node('developer.cloud_sdk_cdn') ?: 'service-cdn.qiqiuyun.net';
 
+        //to do：所有类型的sdkPath要合并成一个
         $paths = [
             'player' => 'js-sdk/sdk-v1.js',
             'newPlayer' => 'js-sdk/sdk-v2.js',

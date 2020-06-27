@@ -169,15 +169,6 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
             return $service;
         };
-
-        $this->registerFacade($biz);
-    }
-
-    protected function registerFacade($biz)
-    {
-        $biz['resource_facade'] = function ($biz) {
-            return new ResourceFacadeImpl($biz);
-        };
     }
 
     /**
