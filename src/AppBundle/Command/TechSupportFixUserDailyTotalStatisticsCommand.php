@@ -18,7 +18,7 @@ class TechSupportFixUserDailyTotalStatisticsCommand extends BaseCommand
          * ]
          */
         $this->setName('tech-support:fix-user-daily-total-statistics')
-            ->setDescription('处理用户每日学习记录的脏数据[脚本为8.7.10新增]：--real 真正覆盖')
+            ->setDescription('处理用户汇总学习记录的脏数据[脚本为8.7.10新增]：--real 真正覆盖')
             ->addArgument(
                 'dataJson',
                 InputArgument::REQUIRED,
