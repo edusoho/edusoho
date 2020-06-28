@@ -9,4 +9,8 @@ interface ExerciseQuestionRecordService
     public function batchCreate($questionRecords);
 
     public function batchUpdate($ids, $questionRecords);
+
+    public function deleteByQuestionIds(array $questionIds);
+
+    public function deleteByItemIds(array $itemIds);
 }

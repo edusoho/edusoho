@@ -14,12 +14,22 @@ class ExerciseQuestionRecordServiceImpl extends BaseService implements ExerciseQ
 
     public function batchCreate($questionRecords)
     {
-        $this->getItemBankExerciseQuestionRecordDao()->batchCreate($questionRecords);
+        return $this->getItemBankExerciseQuestionRecordDao()->batchCreate($questionRecords);
     }
 
     public function batchUpdate($ids, $questionRecords)
     {
-        $this->getItemBankExerciseQuestionRecordDao()->batchUpdate($ids, $questionRecords);
+        return $this->getItemBankExerciseQuestionRecordDao()->batchUpdate($ids, $questionRecords);
+    }
+
+    public function deleteByQuestionIds(array $questionIds)
+    {
+        return $this->getItemBankExerciseQuestionRecordDao()->batchDelete(['questionIds' => $questionIds]);
+    }
+
+    public function deleteByItemIds(array $itemIds)
+    {
+        return $this->getItemBankExerciseQuestionRecordDao()->batchDelete(['itemIds' => $itemIds]);
     }
 
     public function getItemBankExerciseQuestionRecordDao()

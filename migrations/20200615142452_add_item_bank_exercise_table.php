@@ -153,7 +153,8 @@ class AddItemBankExerciseTable extends Migration
               `createdTime` int(11) unsigned NOT NULL DEFAULT '0',
               `updatedTime` int(11) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`),
-              KEY `moduleId_userId` (`moduleId`,`userId`)
+              KEY `moduleId` (`moduleId`),
+              KEY `userId` (`userId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='已做题目表';
         ");
     }
