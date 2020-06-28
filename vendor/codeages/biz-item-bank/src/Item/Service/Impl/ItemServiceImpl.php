@@ -74,6 +74,9 @@ class ItemServiceImpl extends BaseService implements ItemService
                     $savedItems[] = array_merge($savedItems, $savedItem);
                 }
             }
+
+            $this->dispatch('item.import', $savedItems);
+
             $this->commit();
 
             return $savedItems;
@@ -81,8 +84,6 @@ class ItemServiceImpl extends BaseService implements ItemService
             $this->rollback();
             throw $e;
         }
-
-        $this->dispatch('item.import', $savedItems);
     }
 
     public function readWordFile($wordPath, $resourcePath = '')
@@ -105,7 +106,7 @@ class ItemServiceImpl extends BaseService implements ItemService
 
     public function updateItem($id, $item)
     {
-        $originItem = $this->getItem($id);
+        $originItem = $this->getItemWithQuestions($id);
         if (empty($originItem)) {
             throw new ItemException('Item not found', ErrorCode::ITEM_NOT_FOUND);
         }

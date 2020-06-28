@@ -3,6 +3,7 @@
 namespace Biz\ItemBankExercise\Event;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Crontab\SystemCrontabInitializer;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
@@ -17,7 +18,67 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
             'answer.submitted' => 'onAnswerSubmitted',
             'answer.saved' => 'onAnswerSaved',
             'answer.finished' => 'onAnswerFinished',
+            'item.create' => 'onItemCreate',
+            'item.update' => 'onItemUpdate',
+            'item.delete' => 'onItemDelete',
+            'item.import' => 'onItemImport',
+            'item.batchDelete' => 'onItemBatchDelete',
         ];
+    }
+
+    public function onItemCreate(Event $event)
+    {
+        $item = $event->getSubject();
+        if (!empty($item)) {
+            $this->createUpdateMemberMasteryRateJob($item['bank_id']);
+        }
+    }
+
+    public function onItemUpdate(Event $event)
+    {
+        $item = $event->getSubject();
+        $item = $this->getItemService()->getItemWithQuestions($item['id']);
+        $originItem = $event->getArgument('originItem');
+        if (!empty($item)) {
+            $originQuestionIds = ArrayToolkit::column($originItem['questions'], 'id');
+            $itemQuestionIds = ArrayToolkit::column($item['questions'], 'id');
+            $deleteQuestionIds = [];
+            foreach ($originQuestionIds as $originQuestionId) {
+                if (!in_array($originQuestionId, $itemQuestionIds)) {
+                    $deleteQuestionIds[] = $originQuestionId;
+                }
+            }
+            if ($deleteQuestionIds) {
+                $this->getItemBankExerciseQuestionRecordService()->deleteByQuestionIds($deleteQuestionIds);
+                $this->createUpdateMemberMasteryRateJob($item['bank_id']);
+            }
+        }
+    }
+
+    public function onItemDelete(Event $event)
+    {
+        $item = $event->getSubject();
+        if (!empty($item)) {
+            $this->getItemBankExerciseQuestionRecordService()->deleteByItemIds([$item['id']]);
+            $this->createUpdateMemberMasteryRateJob($item['bank_id']);
+        }
+    }
+
+    public function onItemImport(Event $event)
+    {
+        $items = $event->getSubject();
+        if (!empty($items)) {
+            $this->createUpdateMemberMasteryRateJob(current($items)['bank_id']);
+        }
+    }
+
+    public function onItemBatchDelete(Event $event)
+    {
+        $items = $event->getSubject();
+        if (!empty($items)) {
+            $this->getItemBankExerciseQuestionRecordService()->deleteByItemIds(ArrayToolkit::column($items, 'id'));
+            $this->createUpdateMemberMasteryRateJob(current($items)['bank_id']);
+        }
     }
 
     public function onAnswerSubmitted(Event $event)
@@ -66,6 +127,20 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
         }
 
         $this->finished($chapterExerciseRecord, $answerReport['id']);
+    }
+
+    protected function createUpdateMemberMasteryRateJob($itemBankId)
+    {
+        $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($itemBankId);
+
+        $this->getSchedulerService()->register([
+            'name' => 'UpdateItemBankMemberMasteryRateJob',
+            'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+            'expression' => intval(time()),
+            'misfire_policy' => 'executing',
+            'class' => 'Biz\ItemBankExercise\Job\UpdateMemberMasteryRateJob',
+            'args' => ['questionBankId' => $questionBank['id']],
+        ]);
     }
 
     protected function finished($chapterExerciseRecord, $answerReportId)
@@ -269,5 +344,21 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
     protected function getQuestionBankService()
     {
         return $this->getBiz()->service('QuestionBank:QuestionBankService');
+    }
+
+    /**
+     * @return \Codeages\Biz\Framework\Scheduler\Service\SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->getBiz()->service('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return \Codeages\Biz\ItemBank\Item\Service\ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->getBiz()->service('ItemBank:Item:ItemService');
     }
 }

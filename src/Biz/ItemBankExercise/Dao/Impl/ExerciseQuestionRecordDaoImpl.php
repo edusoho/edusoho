@@ -21,6 +21,8 @@ class ExerciseQuestionRecordDaoImpl extends AdvancedDaoImpl implements ExerciseQ
             'orderbys' => ['createdTime'],
             'conditions' => [
                 'itemBankId = :itemBankId',
+                'questionId IN (:questionIds)',
+                'itemId IN (:itemIds)',
             ],
         ];
     }

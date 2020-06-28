@@ -16,6 +16,11 @@ class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleSer
         return $this->getItemBankExerciseModuleDao()->findByExerciseId($exerciseId);
     }
 
+    public function findByExerciseIdAndType($exerciseId, $type)
+    {
+        return $this->getItemBankExerciseModuleDao()->findByExerciseIdAndType($exerciseId, $type);
+    }
+
     public function get($id)
     {
         return $this->getItemBankExerciseModuleDao()->get($id);
