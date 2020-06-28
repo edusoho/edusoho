@@ -20,7 +20,7 @@ use Codeages\Biz\ItemBank\Item\Type\ChoiceItem;
 
 class ItemServiceImpl extends BaseService implements ItemService
 {
-    public function createItem($item)
+    public function createItem($item, $isBatch = false)
     {
         if (empty($item['type'])) {
             throw new ItemException('Item without type', ErrorCode::ITEM_ARGUMENT_INVALID);
@@ -47,7 +47,9 @@ class ItemServiceImpl extends BaseService implements ItemService
                 $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id'], 1, $item['question_num']);
             }
 
-            $this->dispatch('item.create', $item, ['argument' => $arguments]);
+            if (!$isBatch) {
+                $this->dispatch('item.create', $item, ['argument' => $arguments]);
+            }
 
             $this->commit();
 
@@ -68,7 +70,7 @@ class ItemServiceImpl extends BaseService implements ItemService
             foreach ($groupItems as $group) {
                 foreach ($group as $item) {
                     $item['bank_id'] = $bankId;
-                    $savedItem = $this->createItem($item);
+                    $savedItem = $this->createItem($item, true);
                     $savedItems[] = array_merge($savedItems, $savedItem);
                 }
             }
@@ -79,6 +81,8 @@ class ItemServiceImpl extends BaseService implements ItemService
             $this->rollback();
             throw $e;
         }
+
+        $this->dispatch('item.import', $savedItems);
     }
 
     public function readWordFile($wordPath, $resourcePath = '')
@@ -136,7 +140,7 @@ class ItemServiceImpl extends BaseService implements ItemService
                 }
             }
 
-            $this->dispatch('item.update', $item, ['argument' => $arguments]);
+            $this->dispatch('item.update', $item, ['argument' => $arguments, 'originItem' => $originItem]);
 
             $this->commit();
 
@@ -220,7 +224,7 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $this->getItemDao()->findByCategoryIds($categoryIds);
     }
 
-    public function deleteItem($id)
+    public function deleteItem($id, $isBatch = false)
     {
         $item = $this->getItem($id);
         if (empty($item)) {
@@ -240,7 +244,9 @@ class ItemServiceImpl extends BaseService implements ItemService
                 $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id'], -1, -$item['question_num']);
             }
 
-            $this->dispatch('item.delete', $item);
+            if (!$isBatch) {
+                $this->dispatch('item.delete', $item);
+            }
 
             $this->commit();
 
@@ -257,9 +263,12 @@ class ItemServiceImpl extends BaseService implements ItemService
             return false;
         }
 
+        $deleteItems = $this->findItemsByIds($ids);
         foreach ($ids as $id) {
-            $this->deleteItem($id);
+            $this->deleteItem($id, true);
         }
+        
+        $this->dispatch('item.batchDelete', $deleteItems);
 
         return true;
     }
