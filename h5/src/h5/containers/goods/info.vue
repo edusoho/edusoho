@@ -32,7 +32,9 @@
       </info-learn>
     </section>
     <!-- 收藏/购买 -->
-    <info-buy></info-buy>
+    <info-buy />
+    <!-- 回到顶部 -->
+    <back-to-top v-show="backToTopShow" />
   </div>
 </template>
 
@@ -41,19 +43,22 @@ import InfoTeacher from './components/info-teacher';
 import InfoEvaluate from './components/info-evaluate';
 import InfoLearn from './components/info-learn';
 import InfoBuy from './components/info-buy';
+import BackToTop from './components/back-to-top';
 export default {
   data() {
     return {
       active: 0, // 判断nav当前active
       timer: null,
-      flag: true // 点击取消滚动监听
+      flag: true, // 点击取消滚动监听
+      backToTopShow: false // 是否显示回到顶部
     }
   },
   components: {
     InfoTeacher, // 教师风采
     InfoEvaluate, // 课程评价
     InfoLearn, // 猜你想学
-    InfoBuy // 购买按钮
+    InfoBuy, // 购买按钮
+    BackToTop
   },
   methods: {
     onActive(value, eleId) {
@@ -69,8 +74,10 @@ export default {
       }, 500);
     },
     handleScroll() {
-      if (!this.flag) return;
       let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop > 600 && !this.backToTopShow) this.backToTopShow = true;
+      if (scrollTop < 600 && this.backToTopShow) this.backToTopShow = false;
+      if (!this.flag) return;
       clearTimeout(this.timer);
       this.timer = null
       this.timer = setTimeout(() => {

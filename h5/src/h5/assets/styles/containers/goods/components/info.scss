@@ -176,6 +176,7 @@
   display: flex;
   width: 100%;
   height: vw(48);
+  z-index: 1888;
   .info-buy__collection {
     display: flex;
     flex-direction: column;
@@ -204,5 +205,27 @@
     color: #fff;
     font-size: vw(16);
     font-weight: 500;
+  }
+}
+
+// 回到顶部
+.back-to-top {
+  position: fixed;
+  right: vw(13);
+  bottom: vw(64);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: vw(40);
+  height: vw(40);
+  background-color: #fff;
+  box-shadow: 0 vw(2) vw(8) 0 rgba(0, 0, 0, 0.05);
+  border-radius: 50%;
+  z-index: 1999;
+  span,
+  i {
+    font-size: vw(10);
+    color: #03c777;
   }
 }
