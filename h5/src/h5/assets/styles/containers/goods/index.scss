@@ -10,6 +10,7 @@
     }
   }
   .goods-info {
+    padding-bottom: vw(48);
     margin-top: vw(8);
     background-color: #F5F5F5;
     .goods-info__nav {
@@ -22,7 +23,7 @@
       border-bottom: vw(1) solid #e1e1e1;
       background-color: #fff;
       font-size: vw(14);
-      z-index: 9999;
+      z-index: 999;
       li > a {
         position: relative;
         color: #666;

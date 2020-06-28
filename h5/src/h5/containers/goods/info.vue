@@ -31,6 +31,8 @@
         <span slot="title">猜你想学</span>
       </info-learn>
     </section>
+    <!-- 收藏/购买 -->
+    <info-buy></info-buy>
   </div>
 </template>
 
@@ -38,6 +40,7 @@
 import InfoTeacher from './components/info-teacher';
 import InfoEvaluate from './components/info-evaluate';
 import InfoLearn from './components/info-learn';
+import InfoBuy from './components/info-buy';
 export default {
   data() {
     return {
@@ -49,7 +52,8 @@ export default {
   components: {
     InfoTeacher, // 教师风采
     InfoEvaluate, // 课程评价
-    InfoLearn // 猜你想学
+    InfoLearn, // 猜你想学
+    InfoBuy // 购买按钮
   },
   methods: {
     onActive(value, eleId) {

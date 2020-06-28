@@ -168,3 +168,41 @@
     }
   }
 }
+
+// 收藏/购买
+.info-buy {
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  width: 100%;
+  height: vw(48);
+  .info-buy__collection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: vw(56);
+    background-color: #fff;
+    border-top: vw(1) solid #F5F5F5;
+    i {
+      font-size: vw(12);
+      color: #BEBEBE;
+    }
+    span {
+      font-size: vw(12);
+      color: #666;
+    }
+  }
+  .info-buy__btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: vw(319);
+    height: 100%;
+    background-color: #FF765F;
+    color: #fff;
+    font-size: vw(16);
+    font-weight: 500;
+  }
+}
