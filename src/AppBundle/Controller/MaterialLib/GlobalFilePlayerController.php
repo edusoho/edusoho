@@ -73,14 +73,11 @@ class GlobalFilePlayerController extends BaseController
 
     public function audioPlayer($file, Request $request)
     {
-        $ssl = $request->isSecure() ? true : false;
-        $result = $this->getMaterialLibService()->player($file['no'], $ssl);
+        $playerContext = $this->getResourceFacadeService()->getPlayerContext($file);
 
         return $this->render('material-lib/player/global-video-player.html.twig', array(
             'file' => $file,
-            'url' => $result['url'],
-            'player' => 'audio-player',
-            'agentInWhiteList' => $this->agentInWhiteList($request->headers->get('user-agent')),
+            'context' => $playerContext,
             'cloudSdk' => 'audio', //webExtension->getCloudSdkUrl
         ));
     }
@@ -297,5 +294,10 @@ class GlobalFilePlayerController extends BaseController
     protected function getMaterialLibService()
     {
         return $this->createService('MaterialLib:MaterialLibService');
+    }
+
+    protected function getResourceFacadeService()
+    {
+        return $this->getBiz()->service('CloudPlatform:ResourceFacadeService');
     }
 }
