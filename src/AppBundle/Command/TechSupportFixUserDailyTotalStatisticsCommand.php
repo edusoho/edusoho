@@ -13,7 +13,7 @@ class TechSupportFixUserDailyTotalStatisticsCommand extends BaseCommand
     {
         /*
          * [
-         *  {"userId":"1", "date":"2020-06-24", "learnedTime":"3600"},
+         *  {"userId":"1", "learnedTime":"3600"},
          *  ...
          * ]
          */
