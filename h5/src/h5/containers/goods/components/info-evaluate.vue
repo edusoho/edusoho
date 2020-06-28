@@ -9,7 +9,10 @@
           <span class="content-name__nickname pull-left">学生小王</span>
           <span class="content-name__time pull-right">2019/6/18 下午12:20</span>
         </div>
-        <div class="evaluate-content__plan">默认教学计划</div>
+        <div class="evaluate-content__plan">
+          默认教学计划
+          <van-rate class="plan-rate" readonly :value="3" gutter="2" />
+        </div>
         <div class="evaluate-content__text">正好需要呢啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊</div></div>
     </div>
   </div>

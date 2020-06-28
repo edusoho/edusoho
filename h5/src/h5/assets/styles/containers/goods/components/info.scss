@@ -73,6 +73,14 @@
         margin-top: vw(8);
         font-size: vw(12);
         color: #999;
+        line-height: vw(16);
+        .plan-rate {
+          position: relative;
+          top: vw(1);
+          i {
+            font-size: vw(12) !important;
+          }
+        }
       }
       .evaluate-content__text {
         margin-top: vw(8);
