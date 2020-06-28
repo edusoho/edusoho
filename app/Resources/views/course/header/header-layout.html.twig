@@ -61,14 +61,14 @@
           {% endblock %}
 
           <!--营销页显示-->
-          {% if marketingPage %}
-            <li class="js-unfavorite-btn" id="unfavorite-btn" data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}"
+          {% if marketingPage and course.parentId > 0 %}
+            <li class="js-unfavorite-btn" id="unfavorite-btn" data-target-type="course" data-target-id="{{ course.courseSetId }}"  data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}"
                 {% if not isUserFavorite %}style="display: none" {% endif %}>
               <a class="btn btn-default btn-xs" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.followed'|trans }}"
                 data-trigger="hover"> <i class="es-icon es-icon-bookmark color-primary"></i>
               </a>
             </li>
-            <li class="js-favorite-btn" id="favorite-btn" data-url="{{ path('course_set_favorite', {id: course.courseSetId }) }}"
+            <li class="js-favorite-btn" id="favorite-btn" data-target-type="course" data-target-id="{{ course.courseSetId }}"  data-url="{{ path('course_set_favorite', {id: course.courseSetId }) }}"
                 {% if isUserFavorite %}style="display: none"{% endif %}>
               <a class="btn btn-default btn-xs" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.follow'|trans }}"
                 data-trigger="hover"> <i class="es-icon es-icon-bookmarkoutline"></i>

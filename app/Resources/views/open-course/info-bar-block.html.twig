@@ -33,6 +33,8 @@
     <div class="operation-list  no-border">
       <div class="operation-img operation-collection {% if memberFavorite %}active{% endif %}">
         <a href="javascript:;" class="js-favorite-num"
+           data-target-type="openCourse"
+           data-target-id="{{ course.id }}"
            data-cancel-favorite-url="{{ path('open_course_unfavorite',{id:course.id}) }}"
            data-favorite-url="{{ path('open_course_favorite',{id:course.id}) }}"
            data-login-url="{{ path('login_ajax') }}"
