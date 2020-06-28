@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 class AssessmentFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'title', 'description', 'question_count', 'total_score',
+        'id', 'name', 'description', 'question_count', 'total_score',
     ];
 
     protected $publicFields = [

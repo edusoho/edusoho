@@ -23,6 +23,13 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         return $this->getExerciseMemberDao()->count($conditions);
     }
 
+    public function update($id, $member)
+    {
+        $member = ArrayToolkit::parts($member, ['doneQuestionNum', 'rightQuestionNum', 'masteryRate', 'completionRate']);
+
+        return $this->getExerciseMemberDao()->update($id, $member);
+    }
+
     public function search($conditions, $orderBy, $start, $limit, $columns = [])
     {
         return $this->getExerciseMemberDao()->search($conditions, $orderBy, $start, $limit, $columns);
@@ -40,7 +47,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $this->createNewException(ItemBankExerciseMemberException::DUPLICATE_MEMBER());
         }
 
-        try{
+        try {
             $this->beginTransaction();
             $deadline = 0;
             if ('days' == $exercise['expiryMode'] && $exercise['expiryDays'] > 0) {
@@ -87,7 +94,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
                 ['userId' => $member['userId'], 'member' => $member]
             );
             $this->commit();
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->rollback();
             throw $e;
         }
@@ -102,11 +109,16 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         return empty($member) ? false : true;
     }
 
+    public function getByEerciseIdAndUserId($exerciseId, $userId)
+    {
+        return $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
+    }
+
     public function addTeacher($exerciseId)
     {
-        try{
+        try {
             $this->beginTransaction();
-            $exercise = $this->getExerciseService()->tryManageExercise($exerciseId,0);
+            $exercise = $this->getExerciseService()->tryManageExercise($exerciseId, 0);
             $userId = $this->getCurrentUser()->getId();
             $teacher = [
                 'exerciseId' => $exerciseId,
@@ -119,7 +131,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $fields = ['teacherIds' => [$userId]];
             $this->getExerciseDao()->update($exerciseId, $fields);
             $this->commit();
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->rollback();
             throw $e;
         }

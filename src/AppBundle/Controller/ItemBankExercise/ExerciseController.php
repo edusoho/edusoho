@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AppBundle\Controller\ItemBankExercise;
-
 
 use AppBundle\Controller\BaseController;
 use Biz\ItemBankExercise\Service\ExerciseService;
@@ -22,9 +20,10 @@ class ExerciseController extends BaseController
             $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
         $exercise = $this->getExerciseService()->getByQuestionBankId($questionBank['id']);
-        if (!empty($exercise)){
-            return $this->redirect($this->generateUrl('item_bank_exercise_manage_base',['exerciseId' => $exercise['id']]));
+        if (!empty($exercise)) {
+            return $this->redirect($this->generateUrl('item_bank_exercise_manage_base', ['exerciseId' => $exercise['id']]));
         }
+
         return $this->render('question-bank/question/exercise-set.html.twig', [
             'questionBank' => $questionBank,
         ]);
@@ -41,7 +40,7 @@ class ExerciseController extends BaseController
         }
 
         if ($request->isMethod('POST')) {
-            $seq_exercise = $this->getExerciseService()->search([],['seq' => 'DESC'],0,1);
+            $seq_exercise = $this->getExerciseService()->search([], ['seq' => 'DESC'], 0, 1);
             $maxSeqExercise = empty($seq_exercise) ? [] : $seq_exercise[0];
             $seq = empty($maxSeqExercise) ? 1 : $maxSeqExercise['seq'] + 1;
             $data = [
@@ -52,7 +51,7 @@ class ExerciseController extends BaseController
             ];
             $exercise = $this->getExerciseService()->create($data);
 
-            return $this->redirect($this->generateUrl('item_bank_exercise_manage_base',['exerciseId' => $exercise['id']]));
+            return $this->redirect($this->generateUrl('item_bank_exercise_manage_base', ['exerciseId' => $exercise['id']]));
         }
 
         return $this->render(

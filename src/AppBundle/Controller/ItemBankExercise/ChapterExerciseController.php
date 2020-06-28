@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AppBundle\Controller\ItemBankExercise;
-
 
 use AppBundle\Controller\BaseController;
 use Biz\ItemBankExercise\Service\ExerciseService;
@@ -16,6 +14,7 @@ class ChapterExerciseController extends BaseController
     {
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
         $questionBank = $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']);
+
         return $this->getItemCategoryService()->getItemCategoryTreeList($questionBank['item']);
     }
 

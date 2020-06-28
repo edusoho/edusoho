@@ -6,7 +6,11 @@ interface ExerciseMemberService
 {
     public function count($conditions);
 
-    public function search($conditions, $orderBy, $start, $limit, $columns = array());
+    public function update($id, $member);
+
+    public function getByEerciseIdAndUserId($exerciseId, $userId);
+
+    public function search($conditions, $orderBy, $start, $limit, $columns = []);
 
     public function isExerciseMember($exerciseId, $userId);
 
