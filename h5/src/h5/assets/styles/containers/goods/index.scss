@@ -11,7 +11,7 @@
   }
   .goods-info {
     margin-top: vw(8);
-    background-color: #fff;
+    background-color: #F5F5F5;
     .goods-info__nav {
       display: flex;
       position: sticky;
@@ -44,6 +44,19 @@
           }
         }
       }
+    }
+    .goods-info__item {
+      margin-top: vw(8);
+      padding: vw(16);
+      background-color: #fff;
+      &:nth-of-type(1) {
+        margin-top: 0;
+      }
+    }
+    .goods-info__title {
+      font-size: vw(16);
+      font-weight: 500;
+      color: #333;
     }
   }
 }

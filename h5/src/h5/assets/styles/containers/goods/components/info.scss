@@ -1,0 +1,84 @@
+.info-teacher {
+  .info-teacher__item {
+    padding: vw(16) 0;
+    border-bottom: vw(1) solid #E1E1E1;
+    &:last-child {
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+    .teacher-img {
+      margin-right: vw(12);
+      width: vw(48);
+      height: vw(48);
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
+    }
+    .teacher-info {
+      margin-top: vw(4);
+      width: vw(283);
+      .teacher-info__name {
+        font-size: vw(14);
+        color: #333;
+      }
+      .teacher-info__describe {
+        margin-top: vw(4);
+        font-size: vw(12);
+        color: #999;
+      }
+    }
+  }
+}
+.info-introduction {
+  padding-top: vw(16);
+}
+.info-evaluate {
+  .info-evaluate__item {
+    padding-top: vw(16);
+    &:last-child {
+      .evaluate-content {
+        border-bottom: none !important;
+        padding-bottom: 0 !important;
+      }
+    }
+    .evaluate-img {
+      margin-right: vw(8);
+      width: vw(32);
+      height: vw(32);
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
+    }
+    .evaluate-content {
+      padding-bottom: vw(16);
+      width: vw(303);
+      border-bottom: vw(1) solid #e1e1e1;
+      .evaluate-content__name {
+        .content-name__nickname {
+          font-size: vw(14);
+          color: #666;
+        }
+        .content-name__time {
+          position: relative;
+          top: vw(2);
+          font-size: vw(12);
+          color: #999;
+        }
+      }
+      .evaluate-content__plan {
+        margin-top: vw(8);
+        font-size: vw(12);
+        color: #999;
+      }
+      .evaluate-content__text {
+        margin-top: vw(8);
+        font-size: vw(14);
+        color: #333;
+      }
+    }
+  }
+}

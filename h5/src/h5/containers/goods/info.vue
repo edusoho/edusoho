@@ -7,32 +7,41 @@
       <li @click="onActive(3, 'evaluate')"><a :class="active == 3 ? 'active' : ''" href="javascript:;">评价</a></li>
     </ul>
     <!-- 简介 -->
-    <section class="js-scroll-top" id="introduction">
-
+    <section class="js-scroll-top goods-info__item" id="introduction">
+      <div class="goods-info__title">课程简介</div>
+      <div class="info-introduction">简介内容</div>
     </section>
     <!-- 教师 -->
-    <section class="js-scroll-top" id="teacher">
-
+    <section class="js-scroll-top goods-info__item" id="teacher">
+      <div class="goods-info__title">教师风采</div>
+      <info-teacher />
     </section>
     <!-- 目录 -->
-    <section class="js-scroll-top" id="catalog">
-
+    <section class="js-scroll-top goods-info__item" id="catalog">
+      <div class="goods-info__title">课程目录</div>
     </section>
     <!-- 评价 -->
-    <section class="js-scroll-top" id="evaluate">
-
+    <section class="js-scroll-top goods-info__item" id="evaluate">
+      <div class="goods-info__title">课程评价</div>
+      <info-evaluate />
     </section>
   </div>
 </template>
 
 <script>
+import InfoTeacher from './components/info-teacher';
+import InfoEvaluate from './components/info-evaluate';
 export default {
   data() {
     return {
-      active: 0,
+      active: 0, // 判断nav当前active
       timer: null,
       flag: true // 点击取消滚动监听
     }
+  },
+  components: {
+    InfoTeacher,
+    InfoEvaluate
   },
   methods: {
     onActive(value, eleId) {
