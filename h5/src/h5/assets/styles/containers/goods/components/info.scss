@@ -229,3 +229,41 @@
     color: #03c777;
   }
 }
+
+// 班级详情
+.class-catalog {
+  .class-catalog__item {
+    margin-top: vw(24);
+    height: vw(72);
+    .item-img {
+      margin-right: vw(12);
+      width: vw(128);
+      height: vw(72);
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: vw(2);
+      }
+    }
+    .item-info {
+      padding-top: vw(4);
+      width: vw(203);
+      .item-info__title {
+        font-size: vw(14);
+        font-weight: 500;
+        color: #333;
+      }
+      .item-info__price {
+        margin-top: vw(4);
+        font-size: vw(14);
+        font-weight: 500;
+        color: #ff5c3b;
+      }
+      .item-info__plan {
+        margin-top: vw(4);
+        font-size: vw(12);
+        color: #999;
+      }
+    }
+  }
+} 

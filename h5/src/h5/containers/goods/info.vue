@@ -19,6 +19,9 @@
     <!-- 目录 -->
     <section class="js-scroll-top goods-info__item" id="catalog">
       <div class="goods-info__title">课程目录</div>
+      <!-- 班级详情 -->
+      <class-catalog />
+      <!-- 课程详情 -->
     </section>
     <!-- 评价 -->
     <section class="js-scroll-top goods-info__item" id="evaluate">
@@ -44,6 +47,7 @@ import InfoEvaluate from './components/info-evaluate';
 import InfoLearn from './components/info-learn';
 import InfoBuy from './components/info-buy';
 import BackToTop from './components/back-to-top';
+import ClassCatalog from './components/class-catalog';
 export default {
   data() {
     return {
@@ -58,7 +62,8 @@ export default {
     InfoEvaluate, // 课程评价
     InfoLearn, // 猜你想学
     InfoBuy, // 购买按钮
-    BackToTop
+    BackToTop, // 回到顶部
+    ClassCatalog // 班级详情目录
   },
   methods: {
     onActive(value, eleId) {
