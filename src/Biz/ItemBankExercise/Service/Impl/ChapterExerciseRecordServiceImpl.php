@@ -20,7 +20,7 @@ class ChapterExerciseRecordServiceImpl extends BaseService implements ChapterExe
 
     public function create($chapterExerciseRecord)
     {
-        $chapterExerciseRecord = ArrayToolkit::parts($chapterExerciseRecord, ['moduleId', 'exerciseId', 'questionBankId', 'itemCategoryId', 'userId', 'answerRecordId', 'questionNum']);
+        $chapterExerciseRecord = ArrayToolkit::parts($chapterExerciseRecord, ['moduleId', 'exerciseId', 'itemCategoryId', 'userId', 'answerRecordId', 'questionNum']);
 
         return $this->getItemBankChapterExerciseRecordDao()->create($chapterExerciseRecord);
     }

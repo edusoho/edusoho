@@ -26,6 +26,13 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         return $this->getExerciseMemberDao()->count($conditions);
     }
 
+    public function update($id, $member)
+    {
+        $member = ArrayToolkit::parts($member, ['doneQuestionNum', 'rightQuestionNum', 'masteryRate', 'completionRate']);
+
+        return $this->getExerciseMemberDao()->update($id, $member);
+    }
+
     public function search($conditions, $orderBy, $start, $limit, $columns = [])
     {
         return $this->getExerciseMemberDao()->search($conditions, $orderBy, $start, $limit, $columns);
@@ -112,6 +119,11 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
 
         return empty($member) ? false : true;
+    }
+
+    public function getByEerciseIdAndUserId($exerciseId, $userId)
+    {
+        return $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
     }
 
     public function becomeStudent($exerciseId, $userId, $info = [])
