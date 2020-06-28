@@ -192,7 +192,6 @@ class BalloonCloudVideoPlayer extends Emitter {
           questions: questions
         }
       };
-
       this.player.setExams(exam);
     }
 
