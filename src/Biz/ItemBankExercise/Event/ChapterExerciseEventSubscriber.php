@@ -103,8 +103,8 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
             if (AnswerQuestionReportService::STATUS_RIGHT == $questionRecord['status']) {
                 ++$rightQuestionNum;
             }
+            ++$doneQuestionNum;
         }
-        $doneQuestionNum = count($questionRecords);
         $masteryRate = 0 == $questinBank['itemBank']['question_num'] ? 0 : $rightQuestionNum / $questinBank['itemBank']['question_num'] * 100;
         $completionRate = 0 == $questinBank['itemBank']['question_num'] ? 0 : $doneQuestionNum / $questinBank['itemBank']['question_num'] * 100;
 
@@ -158,12 +158,14 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
         foreach ($answerReport['section_reports'] as $sectionReport) {
             foreach ($sectionReport['item_reports'] as $itemReport) {
                 foreach ($itemReport['question_reports'] as $questionReport) {
-                    $status = AnswerQuestionReportService::STATUS_RIGHT == $questionReport['status'] ? AnswerQuestionReportService::STATUS_RIGHT : AnswerQuestionReportService::STATUS_WRONG;
-                    $answerQuestionReports[] = [
-                        'itemId' => $itemReport['item_id'],
-                        'questionId' => $questionReport['question_id'],
-                        'status' => $status,
-                    ];
+                    if (array_filter($questionReport['response'])) {
+                        $status = AnswerQuestionReportService::STATUS_RIGHT == $questionReport['status'] ? AnswerQuestionReportService::STATUS_RIGHT : AnswerQuestionReportService::STATUS_WRONG;
+                        $answerQuestionReports[] = [
+                            'itemId' => $itemReport['item_id'],
+                            'questionId' => $questionReport['question_id'],
+                            'status' => $status,
+                        ];
+                    }
                 }
             }
         }

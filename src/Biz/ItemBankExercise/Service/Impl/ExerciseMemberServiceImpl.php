@@ -2,6 +2,7 @@
 
 namespace Biz\ItemBankExercise\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
