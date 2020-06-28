@@ -47,7 +47,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $this->createNewException(ItemBankExerciseMemberException::DUPLICATE_MEMBER());
         }
 
-        try{
+        try {
             $this->beginTransaction();
             $deadline = 0;
             if ('days' == $exercise['expiryMode'] && $exercise['expiryDays'] > 0) {
@@ -94,7 +94,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
                 ['userId' => $member['userId'], 'member' => $member]
             );
             $this->commit();
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->rollback();
             throw $e;
         }
@@ -113,12 +113,12 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
     {
         return $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
     }
-    
+
     public function addTeacher($exerciseId)
     {
-        try{
+        try {
             $this->beginTransaction();
-            $exercise = $this->getExerciseService()->tryManageExercise($exerciseId,0);
+            $exercise = $this->getExerciseService()->tryManageExercise($exerciseId, 0);
             $userId = $this->getCurrentUser()->getId();
             $teacher = [
                 'exerciseId' => $exerciseId,
@@ -131,7 +131,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $fields = ['teacherIds' => [$userId]];
             $this->getExerciseDao()->update($exerciseId, $fields);
             $this->commit();
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->rollback();
             throw $e;
         }
