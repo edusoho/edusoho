@@ -1,3 +1,4 @@
+// 教师风采
 .info-teacher {
   .info-teacher__item {
     padding: vw(16) 0;
@@ -31,9 +32,13 @@
     }
   }
 }
+
+// 课程简介
 .info-introduction {
   padding-top: vw(16);
 }
+
+// 课程评价
 .info-evaluate {
   .info-evaluate__item {
     padding-top: vw(16);
@@ -86,6 +91,79 @@
         margin-top: vw(8);
         font-size: vw(14);
         color: #333;
+      }
+    }
+  }
+}
+
+// 猜你想学
+.info-learn {
+  .info-learn__header {
+    line-height: vw(24);
+    .header-title {
+      font-size: vw(16);
+      font-weight: 500;
+      color: #333;
+    }
+    .header-more,
+    .header-more i {
+      font-size: vw(12);
+      color: #999;
+    }
+  }
+  .info-learn__body {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+    grid-gap: vw(16) 0;
+    margin-top: vw(16);
+    .body-item {
+      width: vw(163.5);
+      height: vw(160);
+      border-radius: vw(4);
+      box-shadow: 0 vw(2) vw(8) 0 rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      .body-item__img {
+        position: relative;
+        width: 100%;
+        height: vw(91.97);
+        img {
+          width: 100%;
+          height: 100%;
+        }
+        .learners-mask {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: vw(32);
+          background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+        }
+        .learners-number {
+          position: absolute;
+          right: vw(8);
+          bottom: vw(4);
+          color: #fff;
+          font-size: vw(12);
+          i {
+            margin-right: vw(2);
+            font-size: vw(12);
+          }
+        }
+      }
+      .body-item__content {
+        padding: vw(8);
+        .content-title {
+          font-size: vw(14);
+          color: #333;
+          line-height: vw(20);
+        }
+        .content-price {
+          margin-top: vw(16);
+          font-size: vw(12);
+          color: #FF5C3B;
+          line-height: vw(16);
+          font-weight: 500;
+        }
       }
     }
   }

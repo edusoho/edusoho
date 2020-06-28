@@ -25,12 +25,19 @@
       <div class="goods-info__title">课程评价</div>
       <info-evaluate />
     </section>
+    <!-- 猜你想学 -->
+    <section class="goods-info__item">
+      <info-learn>
+        <span slot="title">猜你想学</span>
+      </info-learn>
+    </section>
   </div>
 </template>
 
 <script>
 import InfoTeacher from './components/info-teacher';
 import InfoEvaluate from './components/info-evaluate';
+import InfoLearn from './components/info-learn';
 export default {
   data() {
     return {
@@ -40,8 +47,9 @@ export default {
     }
   },
   components: {
-    InfoTeacher,
-    InfoEvaluate
+    InfoTeacher, // 教师风采
+    InfoEvaluate, // 课程评价
+    InfoLearn // 猜你想学
   },
   methods: {
     onActive(value, eleId) {
