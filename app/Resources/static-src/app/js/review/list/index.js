@@ -151,7 +151,6 @@ if ($('.js-reviews').length > 0) {
     threadShowWidget.initSubpostForm($form);
 
     submitPostForm($form);
-
   });
 
   $('.js-reviews').on('click', '.js-delete-post', function (e) {
@@ -188,11 +187,12 @@ if ($('.js-reviews').length > 0) {
 }
 
 function submitPostForm($form) {
-  $('.js-btn-save-post').on('click', function () {
+  $('.js-btn-save-post').off('click').on('click', function (e) {
+    e.stopPropagation();
+
     if ($form.validate().form()) {
       let self = $(this);
       self.button('loading');
-
 
       $.ajax({
         type: "POST",

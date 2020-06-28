@@ -4,8 +4,8 @@ namespace Biz\Review\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
-use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Goods\GoodsException;
@@ -22,6 +22,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     protected $reviewMap = [
         'goods' => 'tryCreateGoodsReview',
         'course' => 'tryCreateCourseReview',
+        'classroom' => 'tryCreateClassroomReview',
     ];
 
     public function getReview($id)
@@ -156,15 +157,17 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
     protected function tryCreateCourseReview($review)
     {
-        $course = $this->getCourseService()->getCourse($review['targetId']);
-
-        if (empty($course)) {
-            $this->createNewException(CourseException::NOTFOUND_COURSE());
+        if (!$this->getCourseService()->canTakeCourse($review['targetId'])) {
+            $this->createNewException(ReviewException::FORBIDDEN_CREATE_REVIEW());
         }
 
-        $member = $this->getCourseMemberService()->getCourseMember($course['id'], $review['userId']);
+        return $review;
+    }
 
-        if (!$member) {
+//    TODO: 商品剥离暂时兼容班级
+    protected function tryCreateClassroomReview($review)
+    {
+        if (!$this->getClassroomService()->canTakeClassroom($review['targetId'])) {
             $this->createNewException(ReviewException::FORBIDDEN_CREATE_REVIEW());
         }
 
@@ -217,5 +220,13 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 }

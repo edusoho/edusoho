@@ -16,6 +16,9 @@
       {{ render(controller('ClassroomPlanBundle:ClassroomPlan:planNav',{classroomId:classroom.id, nav:nav})) }}
     {% endif %}
   {% if  classroom.showable or ( not classroom.showable and member) %}
+    {% if classroomSetting.show_review|default(1) != 0 %}
+      <li role="presentation" class="{% if nav == 'review' %}active{% endif %}"><a href="{{ path('classroom_reviews', {id:classroom.id}) }}">{{'classroom.reviews'|trans}} <small >({{classroom.ratingNum }})</small></a></li>
+    {% endif %}
     {% if classroomSetting.show_thread|default(1) != 0 %}
       <li role="presentation" class="{% if nav == 'thread' %}active{% endif %}"><a href="{{ path('classroom_threads', {classroomId:classroom.id}) }}">{{'thread'|trans}} <small >({{classroom.threadNum}})</small></a></li>
     {% endif %}
