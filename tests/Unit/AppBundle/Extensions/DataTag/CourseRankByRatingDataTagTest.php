@@ -27,9 +27,9 @@ class CourseRankByRatingDataTagTest extends BaseTestCase
 
     public function testGetData()
     {
-        $this->mockBiz('Course:ReviewService', array(
+        $this->mockBiz('Review:ReviewService', array(
             array(
-                'functionName' => 'countRatingByCourseId',
+                'functionName' => 'countRatingByTargetTypeAndTargetId',
                 'returnValue' => array('ratingNum' => 1, 'rating' => 3),
             ),
         ));
