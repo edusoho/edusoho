@@ -28,6 +28,20 @@ class ReviewDaoTest extends BaseTestCase
         $this->assertEquals($review1['rating'] + $review3['rating'], $result);
     }
 
+    public function testDeleteByParentId()
+    {
+        $review = $this->createReview();
+        $review1 = $this->createReview(['parentId' => $review['id']]);
+
+        $before = $this->getReviewDao()->get($review1['id']);
+
+        $this->getReviewDao()->deleteByParentId($review1['parentId']);
+
+        $after = $this->getReviewDao()->get($review1['id']);
+        $this->assertEquals($review1, $before);
+        $this->assertNull($after);
+    }
+
     protected function createReview($fields = [])
     {
         $review = array_merge([

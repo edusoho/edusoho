@@ -23,11 +23,11 @@ class ReviewController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getReviewService()->countReview($conditions),
+            $this->getReviewService()->countReviews($conditions),
             20
         );
 
-        $reviews = $this->getReviewService()->searchReview(
+        $reviews = $this->getReviewService()->searchReviews(
             $conditions,
             ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
@@ -73,11 +73,11 @@ class ReviewController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getReviewService()->countReview($conditions),
+            $this->getReviewService()->countReviews($conditions),
             20
         );
 
-        $reviews = $this->getReviewService()->searchReview(
+        $reviews = $this->getReviewService()->searchReviews(
             $conditions,
             ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),

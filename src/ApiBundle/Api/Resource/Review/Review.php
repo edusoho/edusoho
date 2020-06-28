@@ -32,7 +32,7 @@ class Review extends AbstractResource
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
 
-        $reviews = $this->getReviewService()->searchReview($conditions, ['createdTime' => 'DESC'], $offset, $limit);
+        $reviews = $this->getReviewService()->searchReviews($conditions, ['createdTime' => 'DESC'], $offset, $limit);
 
         return $this->dealReviews($reviews);
     }

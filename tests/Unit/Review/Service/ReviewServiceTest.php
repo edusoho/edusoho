@@ -5,7 +5,6 @@ namespace Tests\Unit\Review\Service;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
 use Biz\Common\CommonException;
-use Biz\Course\CourseException;
 use Biz\Goods\GoodsException;
 use Biz\Review\Dao\ReviewDao;
 use Biz\Review\ReviewException;
@@ -86,39 +85,15 @@ class ReviewServiceTest extends BaseTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testTryCreateCourseReview_whenCourseNotExist_thenThrowException()
-    {
-        $this->expectException(CourseException::class);
-        $this->expectExceptionMessage('exception.course.not_found');
-
-        $this->getReviewService()->tryCreateReview($this->mockDefaultReview(['targetType' => 'course']));
-    }
-
-    public function testTryCreateCourseReview_whenCourseParentIdInvalid_thenThrowException()
+    public function testTryCreateCourseReview_whenCannotTakeCourse_thenThrowException()
     {
         $this->expectException(ReviewException::class);
         $this->expectExceptionMessage('exception.review.forbidden_create_review');
 
         $mockedCourseService = $this->mockBiz('Course:CourseService', [
             [
-                'functionName' => 'getCourse',
-                'returnValue' => ['id' => 1, 'parentId' => 0],
-            ],
-        ]);
-
-        $this->getReviewService()->tryCreateReview($this->mockDefaultReview(['targetType' => 'course']));
-        $mockedCourseService->shouldHaveReceived('getCourse')->times(1);
-    }
-
-    public function testTryCreateCourseReview_whenNotCourseMember_thenThrowException()
-    {
-        $this->expectException(ReviewException::class);
-        $this->expectExceptionMessage('exception.review.forbidden_create_review');
-
-        $mockedCourseService = $this->mockBiz('Course:CourseService', [
-            [
-                'functionName' => 'getCourse',
-                'returnValue' => ['id' => 1, 'parentId' => 1],
+                'functionName' => 'canTakeCourse',
+                'returnValue' => false,
             ],
         ]);
 
@@ -130,19 +105,43 @@ class ReviewServiceTest extends BaseTestCase
     {
         $mockedCourseService = $this->mockBiz('Course:CourseService', [
             [
-                'functionName' => 'getCourse',
-                'returnValue' => ['id' => 1, 'parentId' => 1],
-            ],
-        ]);
-
-        $mockedMember = $this->mockBiz('Course:MemberService', [
-            [
-                'functionName' => 'getCourseMember',
-                'returnValue' => ['id' => 1],
+                'functionName' => 'canTakeCourse',
+                'returnValue' => true,
             ],
         ]);
 
         $expected = $this->mockDefaultReview(['targetType' => 'course']);
+        $result = $this->getReviewService()->tryCreateReview($expected);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testTryCreateClassroomReview_whenCannotTakeClassroom_thenThrowException()
+    {
+        $this->expectException(ReviewException::class);
+        $this->expectExceptionMessage('exception.review.forbidden_create_review');
+
+        $mockedCourseService = $this->mockBiz('Classroom:ClassroomService', [
+            [
+                'functionName' => 'canTakeClassroom',
+                'returnValue' => false,
+            ],
+        ]);
+
+        $this->getReviewService()->tryCreateReview($this->mockDefaultReview(['targetType' => 'classroom']));
+        $mockedCourseService->shouldHaveReceived('getCourse')->times(1);
+    }
+
+    public function testTryCreateClassroomReview()
+    {
+        $mockedCourseService = $this->mockBiz('Classroom:ClassroomService', [
+            [
+                'functionName' => 'canTakeClassroom',
+                'returnValue' => true,
+            ],
+        ]);
+
+        $expected = $this->mockDefaultReview(['targetType' => 'classroom']);
         $result = $this->getReviewService()->tryCreateReview($expected);
 
         $this->assertEquals($expected, $result);
@@ -294,16 +293,16 @@ class ReviewServiceTest extends BaseTestCase
         $review4 = $this->createReview(['targetId' => '4']);
         $review5 = $this->createReview(['targetType' => 'course']);
 
-        $count1 = $this->getReviewService()->countReview(['targetType' => 'course']);
+        $count1 = $this->getReviewService()->countReviews(['targetType' => 'course']);
         $this->assertEquals(2, $count1);
 
-        $count2 = $this->getReviewService()->countReview(['targetId' => 1]);
+        $count2 = $this->getReviewService()->countReviews(['targetId' => 1]);
         $this->assertEquals(4, $count2);
 
-        $count3 = $this->getReviewService()->countReview(['userId' => 23]);
+        $count3 = $this->getReviewService()->countReviews(['userId' => 23]);
         $this->assertEquals(1, $count3);
 
-        $count4 = $this->getReviewService()->countReview(['targetType' => 'goods', 'targetId' => 1]);
+        $count4 = $this->getReviewService()->countReviews(['targetType' => 'goods', 'targetId' => 1]);
         $this->assertEquals(2, $count4);
     }
 
@@ -315,23 +314,23 @@ class ReviewServiceTest extends BaseTestCase
         $review4 = $this->createReview(['targetId' => '4']);
         $review5 = $this->createReview(['targetType' => 'course']);
 
-        $result1 = $this->getReviewService()->searchReview(['userId' => 23], [], 0, 10);
+        $result1 = $this->getReviewService()->searchReviews(['userId' => 23], [], 0, 10);
         $this->assertEquals([$review2], $result1);
 
         $expected2 = ArrayToolkit::index([$review3, $review5], 'id');
-        $result2 = $this->getReviewService()->searchReview(['targetType' => 'course'], [], 0, 10);
+        $result2 = $this->getReviewService()->searchReviews(['targetType' => 'course'], [], 0, 10);
 
         $result2 = ArrayToolkit::index($result2, 'id');
         $this->assertEquals($expected2, $result2);
 
         $expected3 = ArrayToolkit::index([$review1, $review2, $review3, $review5], 'id');
-        $result3 = $this->getReviewService()->searchReview(['targetId' => 1], [], 0, 10);
+        $result3 = $this->getReviewService()->searchReviews(['targetId' => 1], [], 0, 10);
         $result3 = ArrayToolkit::index($result3, 'id');
 
         $this->assertEquals($expected3, $result3);
 
         $expected4 = ArrayToolkit::index([$review1, $review2], 'id');
-        $result4 = $this->getReviewService()->searchReview(['targetType' => 'goods', 'targetId' => 1], [], 0, 10);
+        $result4 = $this->getReviewService()->searchReviews(['targetType' => 'goods', 'targetId' => 1], [], 0, 10);
         $result4 = ArrayToolkit::index($result4, 'id');
 
         $this->assertEquals($expected4, $result4);
@@ -345,19 +344,19 @@ class ReviewServiceTest extends BaseTestCase
         $review4 = $this->createReview(['targetId' => '4']);
         $review5 = $this->createReview(['targetType' => 'course']);
 
-        $result1 = $this->getReviewService()->searchReview(['userId' => 23], ['id' => 'desc'], 0, 10);
+        $result1 = $this->getReviewService()->searchReviews(['userId' => 23], ['id' => 'desc'], 0, 10);
         $this->assertEquals([$review2], $result1);
 
-        $result2 = $this->getReviewService()->searchReview(['targetType' => 'course'], ['id' => 'desc'], 0, 10);
+        $result2 = $this->getReviewService()->searchReviews(['targetType' => 'course'], ['id' => 'desc'], 0, 10);
         $this->assertEquals([$review5, $review3], $result2);
 
-        $result3 = $this->getReviewService()->searchReview(['targetId' => 1], ['id' => 'desc'], 0, 10);
+        $result3 = $this->getReviewService()->searchReviews(['targetId' => 1], ['id' => 'desc'], 0, 10);
         $this->assertEquals([$review5, $review3, $review2, $review1], $result3);
 
-        $result4 = $this->getReviewService()->searchReview(['targetType' => 'goods', 'targetId' => 1], ['id' => 'desc'], 0, 10);
+        $result4 = $this->getReviewService()->searchReviews(['targetType' => 'goods', 'targetId' => 1], ['id' => 'desc'], 0, 10);
         $this->assertEquals([$review2, $review1], $result4);
 
-        $result4 = $this->getReviewService()->searchReview(['targetType' => 'goods', 'targetId' => 1], ['id' => 'desc'], 0, 1);
+        $result4 = $this->getReviewService()->searchReviews(['targetType' => 'goods', 'targetId' => 1], ['id' => 'desc'], 0, 1);
         $this->assertEquals([$review2], $result4);
     }
 
@@ -377,7 +376,7 @@ class ReviewServiceTest extends BaseTestCase
             ],
         ];
 
-        $result1 = $this->getReviewService()->searchReview(['userId' => 23], ['id' => 'desc'], 0, 10, ['targetType', 'targetId', 'userId']);
+        $result1 = $this->getReviewService()->searchReviews(['userId' => 23], ['id' => 'desc'], 0, 10, ['targetType', 'targetId', 'userId']);
         $this->assertEquals($expected1, $result1);
 
         $expected2 = [
@@ -392,7 +391,7 @@ class ReviewServiceTest extends BaseTestCase
                 'content' => $review3['content'],
             ],
         ];
-        $result2 = $this->getReviewService()->searchReview(['targetType' => 'course'], ['id' => 'desc'], 0, 10, ['targetType', 'targetId', 'content']);
+        $result2 = $this->getReviewService()->searchReviews(['targetType' => 'course'], ['id' => 'desc'], 0, 10, ['targetType', 'targetId', 'content']);
         $this->assertEquals($expected2, $result2);
     }
 
@@ -408,6 +407,43 @@ class ReviewServiceTest extends BaseTestCase
             'ratingNum' => 2,
             'rating' => ($review['rating'] + $review3['rating']) / 2,
         ], $result);
+    }
+
+    public function testDeleteReviewsByParentId()
+    {
+        $review = $this->createReview();
+        $review1 = $this->createReview(['parentId' => $review['id']]);
+        $review2 = $this->createReview(['parentId' => $review['id']]);
+        $review3 = $this->createReview(['parentId' => $review['id']]);
+        $review4 = $this->createReview(['parentId' => $review['id']]);
+
+        $before = $this->getReviewService()->getReview($review['id']);
+
+        $before1 = $this->getReviewService()->getReview($review1['id']);
+        $before2 = $this->getReviewService()->getReview($review2['id']);
+        $before3 = $this->getReviewService()->getReview($review3['id']);
+        $before4 = $this->getReviewService()->getReview($review4['id']);
+
+        $this->getReviewService()->deleteReviewsByParentId($review['id']);
+
+        $after = $this->getReviewService()->getReview($review['id']);
+
+        $after1 = $this->getReviewService()->getReview($review1['id']);
+        $after2 = $this->getReviewService()->getReview($review2['id']);
+        $after3 = $this->getReviewService()->getReview($review3['id']);
+        $after4 = $this->getReviewService()->getReview($review4['id']);
+
+        $this->assertEquals($review, $before);
+        $this->assertEquals($review1, $before1);
+        $this->assertEquals($review2, $before2);
+        $this->assertEquals($review3, $before3);
+        $this->assertEquals($review4, $before4);
+        $this->assertEquals($before, $after);
+
+        $this->assertNull($after1);
+        $this->assertNull($after2);
+        $this->assertNull($after3);
+        $this->assertNull($after4);
     }
 
     protected function createReview($fields = [])

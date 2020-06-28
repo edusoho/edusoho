@@ -103,12 +103,12 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         return true;
     }
 
-    public function countReview($conditions)
+    public function countReviews($conditions)
     {
         return $this->getReviewDao()->count($conditions);
     }
 
-    public function searchReview($conditions, $orderBys, $start, $limit, $columns = [])
+    public function searchReviews($conditions, $orderBys, $start, $limit, $columns = [])
     {
         return $this->getReviewDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
@@ -120,7 +120,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
             'targetId' => $targetId,
             'parentId' => 0,
         ];
-        $ratingNum = $this->countReview($conditions);
+        $ratingNum = $this->countReviews($conditions);
         $rating = $this->getReviewDao()->sumRatingByConditions($conditions);
 
         return [

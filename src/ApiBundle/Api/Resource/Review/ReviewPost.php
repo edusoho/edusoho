@@ -17,7 +17,7 @@ class ReviewPost extends AbstractResource
             throw ReviewException::NOT_FOUND_REVIEW();
         }
 
-        $postNum = $this->getReviewService()->countReview(['parentId' => $review['id']]);
+        $postNum = $this->getReviewService()->countReviews(['parentId' => $review['id']]);
 
         if ($postNum >= 5) {
             throw ReviewException::POST_LIMIT();

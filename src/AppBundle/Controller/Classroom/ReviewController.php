@@ -34,14 +34,14 @@ class ReviewController extends BaseController
             'parentId' => 0,
         ];
 
-        $reviewsNum = $this->getReviewService()->countReview($conditions);
+        $reviewsNum = $this->getReviewService()->countReviews($conditions);
         $paginator = new Paginator(
             $this->get('request'),
             $reviewsNum,
             20
         );
 
-        $reviews = $this->getReviewService()->searchReview(
+        $reviews = $this->getReviewService()->searchReviews(
             $conditions,
             ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
