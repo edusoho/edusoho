@@ -39,7 +39,14 @@ class Review extends AbstractResource
 
     public function add(ApiRequest $request)
     {
-        $review = $request->request->all();
+        $review = [
+            'targetType' => $request->request->get('targetType'),
+            'targetId' => $request->request->get('targetId'),
+            'userId' => $request->request->get('userId'),
+            'content' => $request->request->get('content'),
+            'rating' => $request->request->get('rating'),
+        ];
+
         $review['userId'] = empty($review['userId']) ? $this->getCurrentUser()->getId() : $review['userId'];
 
         $existed = $this->getReviewService()->getByUserIdAndTargetTypeAndTargetId($review['userId'], $request->request->get('targetType'), $request->request->get('targetId'));

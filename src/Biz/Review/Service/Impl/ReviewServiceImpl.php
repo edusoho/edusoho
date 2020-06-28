@@ -162,10 +162,6 @@ class ReviewServiceImpl extends BaseService implements ReviewService
             $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
-        if (!$course['parentId']) {
-            $this->createNewException(ReviewException::FORBIDDEN_CREATE_REVIEW());
-        }
-
         $member = $this->getCourseMemberService()->getCourseMember($course['id'], $review['userId']);
 
         if (!$member) {

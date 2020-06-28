@@ -65,10 +65,6 @@ class CourseController extends CourseBaseController
         if (empty($course)) {
             $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
-//      TODO: 班级课程评论迁移
-        if (0 == $course['parentId'] && 'reviews' == $tab) {
-            return $this->redirectToRoute('course_show', ['id' => $id, 'tab' => 'summary']);
-        }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         if (empty($courseSet)) {

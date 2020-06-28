@@ -173,10 +173,6 @@ class CourseController extends CourseBaseController
     public function showAction(Request $request, $id, $tab = 'tasks')
     {
         $course = $this->getCourseService()->getCourse($id);
-//      TODO: 班级课程评论迁移
-        if (0 == $course['parentId'] && 'reviews' == $tab) {
-            return $this->redirectToRoute('course_show', ['id' => $id, 'tab' => 'tasks']);
-        }
 
         $member = $this->getCourseMember($request, $course);
 

@@ -154,10 +154,10 @@ if ($('.js-reviews').length > 0) {
 
   });
 
-  $('.js-post-delete').on('click', function (e) {
-    e.stopPropagation();
+  $('.js-reviews').on('click', '.js-delete-post', function (e) {
     const $node = this.ele;
     const $btn = $(e.currentTarget);
+
     if (!confirm(Translator.trans('thread.post.delete_hint'))) {
       return;
     }

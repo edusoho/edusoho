@@ -5,7 +5,7 @@
   <div class="clearfix">
      <button class="btn btn-primary btn-sm pull-right js-show-review-form" {% if not userReview or (hideRereview|default(false)) %}style="display:none;"{% endif %}>{{'course.reviews.review_again'|trans}}</button>
   </div>
-  {% include 'review/widget/review-form.html.twig' with {userReview:userReview,targetType:targetType|default('course'), targetId:targetId|default()} %}
+  {% include 'review/widget/review-form.html.twig' with { userReview:userReview, targetType:targetType|default('course'), targetId:targetId|default() } %}
 {% endif %}
 
 {% set canAccess = canAccess|default(false) %}
@@ -57,7 +57,7 @@
           {% endif %}
 
           {% if app.user %}
-            <form method="post" action="{{ path('course_review_post',{courseId:review.targetId,reviewId:review.id}) }}" class="thread-subpost-form {% if posts %}hide{% endif %}">
+            <form method="post" class="thread-subpost-form {% if posts %}hide{% endif %}">
               <div class="form-group">
                 <div class="controls">
                   <textarea class="form-control" name="content" data-display="{{'course.reviews.content'|trans}}"></textarea>
