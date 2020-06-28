@@ -1,12 +1,48 @@
-{% extends 'v2/layout.html.twig' %}
+{% extends 'item-bank-exercise/layout.html.twig' %}
+{% block title %}
+  {{ 'course.plan_task.manage'|trans }} - {{ parent() }}
+{% endblock %}
 
-{% block full_content %}
-  <div class="container cd-container">
-    <div class="cd-content courseset-manage-body {% block paddingClass %} courseset-manage-padding {% endblock %}">
-      {% block sidebar %}
+{% set side_nav =  'my-question-bank' %}
+
+{% block top_content %}
+  <div class="my-header-section">
+    <div class="cd-container" >
+      {% include 'my/navbar.html.twig' %}
+    </div>
+  </div>
+  {% block courseset_header %}
+    <div class="cd-container" style="margin-top: 20px">
+      <div class="panel panel-default panel-col">
+        <div class="question-bank-heading">{{ questionBank.name }}</div>
+      </div>
+    </div>
+  {% endblock %}
+  {% block course_header %}
+    <div class="cd-container">
+      {% include 'question-bank/header-navbar.html.twig' %}
+    </div>
+  {% endblock %}
+{% endblock %}
+
+
+{% block paddingClass %}course-manage-body {% endblock %}
+
+{% block sidebar %}
+  {% include 'item-bank-exercise/exercise-set/sidebar.html.twig' with{ code : course_side_nav} %}
+{% endblock %}
+
+{% block main %}
+  <div class="cd-main">
+    <div class="cd-main__heading {% block main_heading_class %}{% endblock %}">
+      {% block main_heading %}
+        <div class="cd-main__title">
+          {% block page_title %}{% endblock %}
+        </div>
       {% endblock %}
-
-      {% block main %}
+    </div>
+    <div class="cd-main__body">
+      {% block main_body %}
       {% endblock %}
     </div>
   </div>

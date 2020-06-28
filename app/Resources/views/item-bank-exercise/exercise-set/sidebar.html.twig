@@ -1,14 +1,11 @@
 {% block side %}
-  <div class="cd-sidebar locked js-sidenav"">
+  <div class="cd-sidebar locked js-sidenav">
     <ul class="cd-sidebar__list">
       <div class="js-sidenav-course-menu">
         {# 章节练习 #}
         <li class="cd-sidebar__item {% if course_side_nav == 'chapter' %}active{% endif %}">
             <a href="#">
               {{ 'item_bank_exercise.chapter_practice'|trans }}
-              {% if hasLessonChanged|default(0) %}
-                <i class="es-icon es-icon-tip color-danger"></i>
-              {% endif %}
             </a>
         </li>
         {# 试卷练习 #}
@@ -23,11 +20,8 @@
         </li>
         {#基础设置#}
         <li class="cd-sidebar__item {% if course_side_nav == 'base' %}active{% endif %}">
-          <a href="">
+          <a href="{{ path('item_bank_exercise_manage_base', {exerciseId:exercise.id}) }}">
             {{ 'course.plan_base_info'|trans }}
-            {% if hasFreeTaskChanged|default(0) %}
-              <i class="es-icon es-icon-tip color-danger"></i>
-            {% endif %}
           </a>
         </li>
         {#营销设置#}
@@ -40,7 +34,7 @@
         {#学员管理#}
         <li class="cd-sidebar__item {% if course_side_nav == 'students' %}active{% endif %}">
           <a
-            href="">
+            href="{{ path('item_bank_exercise_manage_students', {exerciseId:exercise.id}) }}">
             {{ 'course.student_manage'|trans }}
           </a>
         </li>

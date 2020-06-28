@@ -1,0 +1,43 @@
+<div class="form-group">
+  <div class="col-md-2 control-label courseset-manage-body__lable">
+    <label class="control-label-required" for="title">{{ 'item_bank_exercise.base.title'|trans }}</label>
+  </div>
+  <div class="col-md-8">
+    <input type="text" id="title" name="title" required="required" class="form-control js-courseset-title" value="{{ questionBank.name|default('') }}" disabled>
+    <div class="help-block" style="display:none;"></div>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-2 control-label" for="categoryId">{{ 'course.base.category'|trans }}</label>
+  <div class="col-md-8 controls">
+    <select style="width:150px;" disabled class="form-control" name="categoryId" required="required" id="categoryId">
+      <option value="">{{'admin.question_bank.manage.category'|trans}}</option>
+      {% for tree in categoryTree %}
+        <option value={{ tree.id }} {% if tree.id == questionBank.categoryId  %}selected{% endif%}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>
+      {% endfor %}
+    </select>
+    <div class="help-block" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- 封面图片 -->
+<div class="form-group">
+  <label class="col-md-2 control-label" for="cover"><b>{{'course.cover_image.content_title'|trans}}</b></label>
+  <div class="col-md-8 controls">
+    {% include 'common/upload-image.html.twig' with {
+      saveUrl: path('item_bank_exercise_manage_cover_crop', {exerciseId: exercise.id}),
+      targetImg: 'course-cover',
+        cropWidth: '480',
+        cropHeight: '270',
+        uploadToken: 'tmp',
+        imageClass: 'course-manage-cover',
+        imageText: 'course.cover.change'|trans,
+        imageSrc: filepath(course_set_cover(exercise, 'large'), 'courseSet.png'),
+      } 
+    %}
+    <div class="courseset-manage-body__tip">
+      {{ 'course.cover_image.upload_tips'|trans|raw }}
+    </div>
+  </div>
+</div>

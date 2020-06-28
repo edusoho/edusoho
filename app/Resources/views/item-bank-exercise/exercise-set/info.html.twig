@@ -1,0 +1,24 @@
+{% extends 'item-bank-exercise/exercise-set/layout.html.twig' %}
+
+{% block title %}{{'course.plan_base_info'|trans}} - {{ exercise.title }} - {{ parent() }}{% endblock %}
+{% set course_side_nav = 'base' %}
+{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/bootstrap-datetimepicker.js', 'libs/select2.js', 'libs/perfect-scrollbar.js', 'app/js/course-manage/info/index.js']) %}
+
+{% block page_title %}{{ 'course.plan_base_info'|trans }}{% endblock %}
+
+{% block main_body %}
+    {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or ('ROLE_TEACHER' in app.user.roles) %}
+      <form class="form-horizontal" role="form" id="course-info-form" action="" method="post">
+        {% include 'item-bank-exercise/exercise-set/base-info/info.html.twig' with {form: 'course-info-form', button:'course-submit'} %}
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-8">
+            <button id="course-submit" type="button" class="cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
+            <div id="test"></div>
+          </div>
+        </div>
+      </form>
+    {% else %}
+      <div class="cd-alert cd-alert-danger">{{ 'course.marketing_setup.no_permission_tips'|trans }}</div>
+    {% endif %}
+{% endblock %}

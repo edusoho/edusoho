@@ -1,4 +1,4 @@
-{% extends 'item-bank-exercise/layout.html.twig' %}
+{% extends 'item-bank-exercise/exercise-set/layout.html.twig' %}
 
 {% block title %}{{'course.members_manage'|trans}} - {{ exercise.title }} - {{ parent() }}{% endblock %}
 {% do script(['app/js/course-manage/students/index.js']) %}
@@ -28,7 +28,6 @@
           <tr>
             <th><input type="checkbox"  autocomplete="off"  data-role="batch-select"></th>
             <th width="23%">{{'site.default.student'|trans}}</th>
-            <th width="18%">{{'course.members_manage.official_student.stutatus'|trans}}</th>
             <th width="17%">{{'join.time'|trans}}</th>
             <th width="17%">{{'course.expiry_date'|trans}}</th>
             <th width="25%">{{'course.members_manage.official_student.operation'|trans}}</th>

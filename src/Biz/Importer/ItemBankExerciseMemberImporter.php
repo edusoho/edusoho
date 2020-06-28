@@ -17,10 +17,10 @@ class ItemBankExerciseMemberImporter extends Importer
         $price = $request->request->get('price');
         $remark = $request->request->get('remark', '通过批量导入添加');
         $exercise = $this->getExerciseService()->get($exerciseId);
-        $orderData = array(
+        $orderData = [
             'amount' => $price,
             'remark' => $remark,
-        );
+        ];
 
         return $this->excelDataImporting($exercise, $importData, $orderData);
     }
@@ -46,18 +46,18 @@ class ItemBankExerciseMemberImporter extends Importer
             if ($isExerciseMember) {
                 ++$existsUserCount;
             } else {
-                $data = array(
+                $data = [
                     'price' => $orderData['amount'],
                     'remark' => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark'],
                     'source' => 'outside',
-                );
-                $this->getExerciseMemberService()->becomeStudentAndCreateOrder($user['id'], $exercise['id'], $data);
+                ];
+                $this->getExerciseMemberService()->becomeStudent($exercise['id'], $user['id'], $data);
 
                 ++$successCount;
             }
         }
 
-        return array('existsUserCount' => $existsUserCount, 'successCount' => $successCount);
+        return ['existsUserCount' => $existsUserCount, 'successCount' => $successCount];
     }
 
     public function getTemplate(Request $request)
@@ -67,10 +67,10 @@ class ItemBankExerciseMemberImporter extends Importer
 
         return $this->render(
             'item-bank-exercise/student-manage/import.html.twig',
-            array(
+            [
                 'exercise' => $course,
                 'importerType' => $this->type,
-            )
+            ]
         );
     }
 
