@@ -129,6 +129,11 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         ];
     }
 
+    public function deleteReviewsByParentId($parentId)
+    {
+        return $this->getReviewDao()->deleteByParentId($parentId);
+    }
+
     protected function tryOperateReview($review)
     {
         if ($review['userId'] != $this->getCurrentUser()->getId() && !$this->getCurrentUser()->isAdmin()) {

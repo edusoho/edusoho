@@ -43,4 +43,11 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
 
         return $builder->execute()->fetchColumn(0);
     }
+
+    public function deleteByParentId($parentId)
+    {
+        $sql = "DELETE FROM {$this->table()} WHERE parentId = ?";
+
+        return $this->db()->executeQuery($sql, [$parentId]);
+    }
 }

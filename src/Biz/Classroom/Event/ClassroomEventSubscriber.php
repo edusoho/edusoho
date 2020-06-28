@@ -25,6 +25,7 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
 
             'review.create' => 'onReviewChanged',
             'review.update' => 'onReviewChanged',
+            'review.delete' => 'onReviewChanged',
         ];
     }
 
