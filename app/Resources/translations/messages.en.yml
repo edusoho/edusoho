@@ -1885,6 +1885,10 @@ course.live.replay_manage.lesson_add_btn: Add
 course.liveroom.content_title: 'Live'
 course.liveroom.open_liveroom_tips: 'Live entering, please wait ...'
 
+item_bank_exercise.practice_test: Practice test
+item_bank_exercise.save_cover: Save cover
+item_bank_exercise.upload_cover: Upload item bank exercise cover
+item_bank_exercise.base.title: Item bank exercise title
 item_bank_exercise.export.answer_num: Answer number
 item_bank_exercise.export.accuracy: Accuracy
 item_bank_exercise.answer_number: Answer number：
@@ -1899,6 +1903,7 @@ item_bank_exercise.members_manage.official_student.add.publish_tips: 'Please add
 item_bank_exercise.student_manage.can_not_add_teacher: This user is the teacher of this item bank exercise and cannot be added
 item_bank_exercise.student_manage.student_exist: This user is already a student of this item bank exercise
 item_bank_exercise.student_manage.student_not_exist: The user does not exist
+item_bank_exercise.exercise_create.forbidden: You are not the question bank manager, can not view this page!
 
 activity.live.not_created_notice: Live classroom not yet created!
 activity.live.overlap_time_notice: There is already a live broadcast at the selected time. Please change your time.
@@ -3468,6 +3473,7 @@ my.teaching.course_set.course_manage_btn: 'Programs'
 my.teaching.course_set.file_manage_btn: 'Files'
 my.teaching.course_set.live_empty_hint: 'No live courses in teaching, try to create one!'
 my.teaching.course_set.empty_hint: 'No courses in teaching, try to create one!'
+my.teaching.item_bank_exercise.empty_hint: 'No item bank exercise in teaching, try to create one!'
 my.teaching.course_set.create_btn: 'Add'
 my.teaching.course_set.select_type: 'Choose Type'
 my.teaching.course_set.select_type.course: 'Normal Course'
@@ -3660,6 +3666,7 @@ my.teaching.question_bank.list: Question Bank List
 my.teaching.question_bank.instructions: Instructions
 my.teaching.question_bank.name_tip: Enter up to 30 characters
 my.teaching.question_bank.info: Bank Info
+my.teaching.question_bank.exercise_set: The setting of item bank exercise
 my.teaching.question_bank.name_label: Name
 my.teaching.question_bank.category_label: Category
 my.teaching.question_bank.question_category.manage: Question Category Manage
@@ -3684,6 +3691,10 @@ my.teaching.question_bank.question.set_category: Set Category
 my.teaching.question_bank.question.selected: selected Number
 my.teaching.question_bank.question.set_score: Set Score
 my.teaching.question_bank.question.add: Add title
+my.teaching.question_bank.start_now: Immediately open
+my.teaching.question_bank.is_open: The exercise in the current question bank has not been enabled. Do you want to enable it?
+my.teaching.question_bank.open_explain: After enabled, you can use the current question bank to open the translation or test paper to publications.
+my.teaching.question_bank.open_ensure: Are you sure to open the item bank exercise?
 
 my.learning.menu_heading: 'My Learning'
 my.learning.course_set_menu: 'Courses'
@@ -9009,6 +9020,7 @@ exception.item_bank_exercise.exercise.forbidden_manage_exercise: Forbidden manag
 exception.item_bank_exercise.member.duplicate_member: User has joined this item bank exercise
 exception.item_bank_exercise.exercise.exercise_not_published: Item bank exercise is not published
 exception.item_bank_exercise.member.not_found: The item bank exercise doesn't have this student
+exception.item_bank_exercise.module.exceeded_number: A maximum of 5 test paper modules can be added
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.

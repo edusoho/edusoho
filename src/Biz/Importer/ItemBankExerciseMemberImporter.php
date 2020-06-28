@@ -51,7 +51,7 @@ class ItemBankExerciseMemberImporter extends Importer
                     'remark' => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark'],
                     'source' => 'outside',
                 );
-                $this->getExerciseMemberService()->becomeStudentAndCreateOrder($user['id'], $exercise['id'], $data);
+                $this->getExerciseMemberService()->becomeStudent($exercise['id'], $user['id'], $data);
 
                 ++$successCount;
             }

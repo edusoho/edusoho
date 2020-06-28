@@ -13,10 +13,6 @@
       <span class="color-gray text-sm js-remark" title="{{ student.remark|trans }}">({{ student.remark|trans|plain_text(16) }})</span>
     {% endif %}
   </td>
-  <td style="vertical-align: middle;">
-    {{'item_bank_exercise.answer_number'|trans}}{{ student.doneQuestionNum|default(0) }}</br>
-    {{'item_bank_exercise.accuracy'|trans}}{{ student.masteryRate|default(0) }}%
-  </td>
   <td style="vertical-align: middle;">{{student.createdTime|date('Y-n-d H:i')}}</td>
   <td style="vertical-align: middle;">{% if student.deadline|default(0) %}{{student.deadline|date('Y-n-d H:i')}}{% else %}{{'course.expiry_date.forever_mode'|trans}}{% endif %}</td>
   <td style="vertical-align: middle;">

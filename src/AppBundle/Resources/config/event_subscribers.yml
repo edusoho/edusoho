@@ -395,3 +395,11 @@ services:
         tags:
               - { name: codeages_plugin.event.subscriber }
 
+    exercise_event_subscriber:
+      class: Biz\ItemBankExercise\Event\ExerciseEventSubscriber
+      arguments: ['@biz']
+      public: true
+      tags:
+        - { name: codeages_plugin.event.subscriber }
+
+

@@ -17,11 +17,7 @@
   {% else %}
     <div class="empty">
       <a class="cd-link-primary" href="#" target="_blank">
-        {% if filter|default('normal') == 'live' %}
-          {{ 'my.teaching.course_set.live_empty_hint'|trans }}
-        {% else %}
-          {{ 'my.teaching.course_set.empty_hint'|trans }}
-        {% endif %}
+          {{ 'my.teaching.item_bank_exercise.empty_hint'|trans }}
       </a>
     </div>
   {% endfor %}

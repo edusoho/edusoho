@@ -1,10 +1,7 @@
 {% import "macro.html.twig" as web_macro %}
-{% block js %}
-{% endblock %}
 
 <div class="courseset-manage-header cd-mb32 clearfix">
   {% block coursesetImg %}
-    <img class="courseset-manage-header__img" src="{{ filepath(item.cover, 'course.png') }}" />
   {% endblock %}
 
   {% if item.status =='closed' %}

@@ -23,50 +23,11 @@ class MemberOperationRecordServiceImpl extends BaseService implements MemberOper
 
     public function create($record)
     {
-        if (!ArrayToolkit::requireds($record, array('memberId', 'operateType'))) {
+        if (!ArrayToolkit::requireds($record, ['memberId', 'operateType'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         return $this->getMemberOperationRecordDao()->create($record);
-    }
-
-    public function getJoinReasonByOrderId($orderId = 0)
-    {
-        $reason = array(
-            'reason' => 'site.join_by_free',
-            'reasonType' => 'free_join',
-        );
-        if (empty($orderId)) {
-            return $reason;
-        }
-
-        $order = $this->getOrderService()->getOrder($orderId);
-        if (empty($order)) {
-            return $reason;
-        }
-
-        if ('markting' === $order['source']) {
-            return array(
-                'reason' => 'site.join_by_markting',
-                'reasonType' => 'markting_join',
-            );
-        }
-
-        if ('outside' === $order['source']) {
-            return array(
-                'reason' => 'site.join_by_import',
-                'reasonType' => 'import_join',
-            );
-        }
-
-        if ($order['pay_amount'] > 0) {
-            return array(
-                'reason' => 'site.join_by_purchase',
-                'reasonType' => 'buy_join',
-            );
-        }
-
-        return $reason;
     }
 
     /**
@@ -84,5 +45,4 @@ class MemberOperationRecordServiceImpl extends BaseService implements MemberOper
     {
         return $this->createService('Order:OrderService');
     }
-
 }
