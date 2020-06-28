@@ -42,7 +42,6 @@ class OverviewTestpaperTaskDetailExporter extends Exporter
     {
         $task = $this->getTaskService()->getTask($this->parameter['courseTaskId']);
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($activity['ext']['mediaId'], $activity['mediaType']);
 
         $taskResults = $this->getTaskResultService()->searchTaskResults(
             $this->conditions,
@@ -176,11 +175,6 @@ class OverviewTestpaperTaskDetailExporter extends Exporter
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
-    }
-
-    protected function getTestpaperService()
-    {
-        return $this->getBiz()->service('Testpaper:TestpaperService');
     }
 
     /**
