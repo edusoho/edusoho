@@ -22,7 +22,7 @@ class ReviewPostsDataTagTest extends BaseTestCase
             ['id' => 1],
             ['id' => 2],
         ];
-        $this->mockBiz('Classroom:ClassroomReviewService', [
+        $this->mockBiz('Review:ReviewService', [
             [
                 'functionName' => 'searchReviews',
                 'returnValue' => $reviews,
@@ -42,7 +42,7 @@ class ReviewPostsDataTagTest extends BaseTestCase
         ];
         $this->mockBiz('Review:ReviewService', [
             [
-                'functionName' => 'searchReview',
+                'functionName' => 'searchReviews',
                 'returnValue' => $reviews,
             ],
         ]);
