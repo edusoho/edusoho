@@ -22,6 +22,12 @@ export default {
     DetailDiscount,
     DetailInfo,
     DetailPlan
-  }
+  },
+  props: {
+    details: {
+      type: Object,
+      value: () => {}
+    }
+  },
 }
 </script>
