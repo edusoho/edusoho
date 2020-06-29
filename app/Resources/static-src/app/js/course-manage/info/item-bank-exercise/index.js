@@ -1,11 +1,10 @@
 import Intro from '../intro';
 import Expiry from 'app/js/course-manage/expiry/expiry';
 
-class CourseInfo {
+class ExerciseInfo {
   constructor() {
     this.initValidator();
     this.checkBoxChange();
-    this.changeAudioMode();
     this.initDatetimepicker();
     this.taskPriceSetting();
     this.setIntroPosition();
@@ -24,17 +23,6 @@ class CourseInfo {
     this.initDatePicker('#expiryStartDate');
     this.initDatePicker('#expiryEndDate');
     this.initDatePicker('#deadline');
-  }
-
-  changeAudioMode() {
-    $('#audio-modal-id').on('change', 'input[name=\'enableAudio\']', function(){
-      let mode = $('#course-audio-mode').data('value');
-      if (mode == 'notAllowed') {
-        cd.message({ type: 'info', message: Translator.trans('course.audio.enable.biz.user') });
-        $('[name=\'enableAudio\']')[1].checked = true;
-        $('[name=\'enableAudio\']')[0].checked = false;
-      }
-    });
   }
 
   initValidator() {
@@ -169,7 +157,7 @@ class CourseInfo {
   }
 }
 
-new CourseInfo();
+new ExerciseInfo();
 
 setTimeout(function() {
   new Intro();

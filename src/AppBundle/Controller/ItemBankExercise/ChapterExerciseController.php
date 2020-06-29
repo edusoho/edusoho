@@ -7,7 +7,6 @@ use AppBundle\Controller\BaseController;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
-use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ChapterExerciseController extends BaseController
@@ -19,13 +18,9 @@ class ChapterExerciseController extends BaseController
         $categoryTree = [];
         if ($exercise['chapterEnable']) {
             $categoryTree = $this->getItemCategoryService()->getItemCategoryTreeList($questionBank['itemBankId']);
-            $categoryIds = ArrayToolkit::column($categoryTree, 'id');
-            $itemsCount = $this->getItemService()->getItemCountGroupByCatgoryIds(['category_ids' => $categoryIds]);
             $categoryTree = ArrayToolkit::index($categoryTree, 'id');
-            $itemsCount = ArrayToolkit::index($itemsCount, 'categoryId');
             foreach ($categoryTree as &$tree) {
-                $tree['itemNum'] = isset($itemsCount[$tree['id']]) ? $itemsCount[$tree['id']]['itemNum'] : 0;
-                $tree['isShowNum'] = 0 == $tree['parent_id'] ? 1 : (0 == $categoryTree[$tree['parent_id']]['itemNum'] ? 0 : 1);
+                $tree['isShowNum'] = 0 == $tree['parent_id'] ? 1 : (0 == $categoryTree[$tree['parent_id']]['question_num'] ? 0 : 1);
             }
         }
 
@@ -67,13 +62,5 @@ class ChapterExerciseController extends BaseController
     protected function getItemCategoryService()
     {
         return $this->createService('ItemBank:Item:ItemCategoryService');
-    }
-
-    /**
-     * @return ItemService
-     */
-    protected function getItemService()
-    {
-        return $this->createService('ItemBank:Item:ItemService');
     }
 }
