@@ -81,6 +81,31 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
 
         $ratingFields = $this->getReviewService()->countRatingByTargetTypeAndTargetId($review['targetType'], $review['targetId']);
         $this->getClassroomService()->updateClassroom($review['targetId'], $ratingFields);
+
+        if ($review['parentId'] > 0) {
+            $classroom = $this->getClassroomService()->getClassroom($review['targetId']);
+
+            $review = $this->getReviewService()->getReview($review['id']);
+
+            if (empty($review['id'])) {
+                return;
+            }
+
+            $parentReview = $this->getReviewService()->getReview($review['parentId']);
+            if (!$parentReview) {
+                return;
+            }
+
+            $message = [
+                'title' => $classroom['title'],
+                'targetId' => $review['targetId'],
+                'targetType' => 'classroom',
+                'userId' => $review['userId'],
+            ];
+
+            $this->getNotifiactionService()->notify($parentReview['userId'], 'comment-post',
+                $message);
+        }
     }
 
     private function simplifyClassroom($classroom)
