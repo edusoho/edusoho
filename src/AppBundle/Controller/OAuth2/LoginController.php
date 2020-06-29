@@ -129,9 +129,8 @@ class LoginController extends LoginBindController
             $token = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + TimeMachine::ONE_MONTH);
         } else {
             $token = null;
+            $this->authenticateUser($user);
         }
-
-        $this->authenticateUser($user);
 
         $isNewAccount = $oauthUser->isNewAccount;
         if ($isNewAccount && !empty($oauthUser->avatar)) {
