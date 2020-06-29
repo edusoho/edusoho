@@ -9,7 +9,6 @@ class Permission
     /**
      * @param $exp
      * @param $token
-     *
      * @throws Exception
      */
     public static function check($exp, $token)
@@ -23,7 +22,7 @@ class Permission
             throw new Exception('有效期错误');
         }
 
-        if ($token != md5($key.$exp)) {
+        if ($token != md5($key . $exp)) {
             throw new Exception('无效token');
         }
     }

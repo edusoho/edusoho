@@ -16,7 +16,6 @@ class AppleSettingController extends BaseController
             $setting = $request->request->all();
             $this->getSettingService()->set('apple_setting', $setting);
             $this->getLogService()->info('system', 'update_settings', 'APPLE设置', $setting);
-            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin-v2/developer/apple/apple-setting.html.twig', [
