@@ -14,6 +14,13 @@ class AssessmentExerciseRecordDaoImpl extends GeneralDaoImpl implements Assessme
         return $this->getByFields(['answerRecordId' => $answerRecordId]);
     }
 
+    public function getLatestRecord($moduleId, $assessmentId, $userId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE moduleId = ? AND assessmentId = ? AND userId = ? ORDER BY id DESC;";
+
+        return $this->db()->fetchAssoc($sql, [$moduleId, $assessmentId, $userId]);
+    }
+
     public function declares()
     {
         return [

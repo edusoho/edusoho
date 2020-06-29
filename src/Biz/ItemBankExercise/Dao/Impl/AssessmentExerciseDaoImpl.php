@@ -17,6 +17,7 @@ class AssessmentExerciseDaoImpl extends GeneralDaoImpl implements AssessmentExer
             'conditions' => [
                 'exerciseId = :exerciseId',
                 'moduleId = :moduleId',
+                'assessmentId = :assessmentId',
             ],
         ];
     }

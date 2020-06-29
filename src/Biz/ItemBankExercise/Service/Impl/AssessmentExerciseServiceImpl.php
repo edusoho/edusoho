@@ -3,8 +3,11 @@
 namespace Biz\ItemBankExercise\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\AssessmentExerciseService;
+use Biz\ItemBankExercise\Service\ExerciseModuleService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 
 class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExerciseService
 {
@@ -20,17 +23,12 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
 
     public function startAnswer($moduleId, $assessmentId, $userId)
     {
-        $module = $this->getItemBankExerciseModuleService()->get($moduleId);
-        if (!$this->getItemBankExerciseService()->canLearningExercise($module['exerciseId'], $userId)) {
-            $this->createNewException(ItemBankExerciseException::FORBIDDEN_LEARN());
-        }
-
-        if (!$this->canStartAnswer($module, $assessmentId, $userId)) {
-            $this->createNewException(ItemBankExerciseException::CANNOT_START_CHAPTER_ANSWER());
-        }
+        $this->canStartAnswer($moduleId, $assessmentId, $userId);
 
         try {
             $this->beginTransaction();
+
+            $module = $this->getItemBankExerciseModuleService()->get($moduleId);
 
             $answerRecord = $this->getAnswerService()->startAnswer($module['answerSceneId'], $assessmentId, $userId);
 
@@ -51,14 +49,32 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
         return $answerRecord;
     }
 
-    //todo
-    protected function canStartAnswer($module, $assessmentId, $userId)
+    protected function canStartAnswer($moduleId, $assessmentId, $userId)
     {
-        //模块是否存在
-        //试卷练习是否开启
-        //试卷是否在应模块下
-        //是否已有正在进行中的答题记录
-        return true;
+        $module = $this->getItemBankExerciseModuleService()->get($moduleId);
+        if (empty($module) || ExerciseModuleService::TYPE_ASSESSMENT != $module['type']) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        if (!$this->getItemBankAssessmentExerciseDao()->count(['moduleId' => $moduleId, 'assessmentId' => $assessmentId])) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        if (!$this->getItemBankExerciseService()->canLearningExercise($module['exerciseId'], $userId)) {
+            $this->createNewException(ItemBankExerciseException::FORBIDDEN_LEARN());
+        }
+
+        $itemBankExercise = $this->getItemBankExerciseService()->get($module['exerciseId']);
+        if (0 == $itemBankExercise['assessmentEnable']) {
+            $this->createNewException(ItemBankExerciseException::ASSESSMENT_EXERCISE_CLOSED());
+        }
+
+        $latestRecord = $this->getItemBankAssessmentExerciseRecordService()->getLatestRecord($moduleId, $assessmentId, $userId);
+        if (!empty($latestRecord) && AnswerService::ANSWER_RECORD_STATUS_FINISHED != $latestRecord['status']) {
+            $this->createNewException(ItemBankExerciseException::ASSESSMENT_ANSWER_IS_DOING());
+        }
+
+        return false;
     }
 
     /**

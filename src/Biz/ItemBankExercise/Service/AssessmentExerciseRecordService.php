@@ -13,4 +13,6 @@ interface AssessmentExerciseRecordService
     public function count($conditions);
 
     public function getByAnswerRecordId($answerRecordId);
+
+    public function getLatestRecord($moduleId, $assessmentId, $userId);
 }
