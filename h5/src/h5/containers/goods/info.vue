@@ -25,6 +25,7 @@
       <!-- 班级详情 -->
       <class-catalog />
       <!-- 课程详情 -->
+      <afterjoin-directory />
     </section>
 
     <!-- 评价 -->
@@ -55,6 +56,7 @@ import InfoLearn from './components/info-learn';
 import InfoBuy from './components/info-buy';
 import BackToTop from './components/back-to-top';
 import ClassCatalog from './components/class-catalog';
+import AfterjoinDirectory from './components/afterjoin-directory';
 export default {
   data() {
     return {
@@ -82,7 +84,8 @@ export default {
     InfoLearn, // 猜你想学
     InfoBuy, // 购买按钮
     BackToTop, // 回到顶部
-    ClassCatalog // 班级详情目录
+    ClassCatalog, // 班级详情目录
+    AfterjoinDirectory
   },
   methods: {
     onActive(value, eleId) {

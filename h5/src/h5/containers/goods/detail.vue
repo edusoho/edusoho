@@ -2,7 +2,7 @@
   <div class="goods-detail">
     <!-- banner -->
     <div class="goods-detail__banner">
-      <img src="http://devtest.edusoho.cn/files/system/2019/08-07/1747506b1910625434.JPG">
+      <img :src="details.courseSet ? details.courseSet.cover.large : ''">
     </div>
     <!-- 优惠 -->
     <detail-discount />
@@ -26,7 +26,7 @@ export default {
   props: {
     details: {
       type: Object,
-      details: () => {}
+      default: () => {}
     }
   },
 }
