@@ -42,8 +42,10 @@ class AssessmentFilter extends Filter
                         !empty($point['checkbox']['text']) && $point['checkbox']['text'] = $this->convertAbsoluteUrl($point['checkbox']['text']);
                         !empty($point['radio']['text']) && $point['radio']['text'] = $this->convertAbsoluteUrl($point['radio']['text']);
                     }
-                    foreach ($question['answer'] as &$answer) {
-                        !empty($answer) && $answer = $this->convertAbsoluteUrl($answer);
+                    if (!empty($question['answer'])) {
+                        foreach ($question['answer'] as &$answer) {
+                            !empty($answer) && $answer = $this->convertAbsoluteUrl($answer);
+                        }
                     }
                 }
             }

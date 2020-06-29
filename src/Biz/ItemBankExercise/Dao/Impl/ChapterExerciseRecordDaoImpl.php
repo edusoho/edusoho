@@ -14,6 +14,13 @@ class ChapterExerciseRecordDaoImpl extends GeneralDaoImpl implements ChapterExer
         return $this->getByFields(['answerRecordId' => $answerRecordId]);
     }
 
+    public function getLatestRecord($moduleId, $itemCategoryId, $userId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE moduleId = ? AND itemCategoryId = ? AND userId = ? ORDER BY id DESC;";
+
+        return $this->db()->fetchAssoc($sql, [$moduleId, $itemCategoryId, $userId]);
+    }
+
     public function declares()
     {
         return [
