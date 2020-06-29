@@ -10,7 +10,7 @@
     <!-- 简介 -->
     <section class="js-scroll-top goods-info__item" id="introduction">
       <div class="goods-info__title">课程简介</div>
-      <div class="info-introduction">简介内容</div>
+      <div class="info-introduction" v-html="summary"></div>
     </section>
 
     <!-- 教师 -->
@@ -68,6 +68,12 @@ export default {
     details: {
       type: Object,
       default: () => {}
+    }
+  },
+  computed: {
+    summary() {
+      if (!this.details.summary) return '暂无简介~';
+      return this.details.summary || this.details.courseSet.summary;
     }
   },
   components: {

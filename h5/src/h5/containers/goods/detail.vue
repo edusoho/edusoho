@@ -26,7 +26,7 @@ export default {
   props: {
     details: {
       type: Object,
-      value: () => {}
+      details: () => {}
     }
   },
 }
