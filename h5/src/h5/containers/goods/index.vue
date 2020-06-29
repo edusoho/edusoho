@@ -36,7 +36,7 @@ export default {
         courseId: 567
       }).then(res => {
         // this.joinStatusChange(res.member)
-        console.log(this.details);
+        // console.log(this.details);
       })
     },
   },

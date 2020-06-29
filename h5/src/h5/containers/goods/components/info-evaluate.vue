@@ -1,6 +1,6 @@
 <template>
   <div class="info-evaluate">
-    <template v-if="reviews.length > 0">
+    <template v-if="reviews.length">
       <div class="info-evaluate__item clearfix" v-for="review in reviews" :key="review.id">
         <div class="pull-left evaluate-img">
           <img :src="review.user.avatar.small" alt="">
