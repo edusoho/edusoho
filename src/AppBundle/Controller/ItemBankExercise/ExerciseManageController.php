@@ -75,6 +75,7 @@ class ExerciseManageController extends BaseController
             $exercise['deadlineType'] = 'end_date';
             $exercise['expiryMode'] = 'days';
         }
+
         return $exercise;
     }
 

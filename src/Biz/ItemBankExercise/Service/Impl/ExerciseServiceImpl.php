@@ -193,6 +193,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         $fields = $this->validateExpiryMode($fields);
         $fields = $this->processFields($exercise, $fields);
         $exercise = $this->getExerciseDao()->update($id, $fields);
+
         return $exercise;
     }
 
