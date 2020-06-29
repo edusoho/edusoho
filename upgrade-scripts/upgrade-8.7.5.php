@@ -247,9 +247,9 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $currentTime = time();
-        $today = strtotime(date('Y-m-d', $currentTime) . '02:00:00');
+        $time = strtotime(date('Y-m-d', $currentTime) . '02:00:00');
 
-        if ($currentTime > $today) {
+        if ($currentTime > $time) {
             $time = strtotime(date('Y-m-d', strtotime('+1 day')) . '02:00:00');
         }
 
