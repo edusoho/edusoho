@@ -42,6 +42,11 @@ class ChapterExerciseRecordServiceImpl extends BaseService implements ChapterExe
         return $this->getItemBankChapterExerciseRecordDao()->update($id, $chapterExerciseRecord);
     }
 
+    public function getLatestRecord($moduleId, $itemCategoryId, $userId)
+    {
+        return $this->getItemBankChapterExerciseRecordDao()->getLatestRecord($moduleId, $itemCategoryId, $userId);
+    }
+
     protected function getItemBankChapterExerciseRecordDao()
     {
         return $this->createDao('ItemBankExercise:ChapterExerciseRecordDao');

@@ -10,7 +10,7 @@ class ItemBankExerciseException extends AbstractException
 
     const FORBIDDEN_LEARN = 4037301;
 
-    const CANNOT_START_CHAPTER_ANSWER = 4037302;
+    const CHAPTER_ANSWER_IS_DOING = 4037302;
 
     const NOTFOUND_EXERCISE = 4047303;
 
@@ -30,9 +30,15 @@ class ItemBankExerciseException extends AbstractException
 
     const EXPIRYMODE_INVALID = 5007311;
 
+    const CHAPTER_EXERCISE_CLOSED = 5007312;
+
+    const ASSESSMENT_EXERCISE_CLOSED = 5007313;
+
+    const ASSESSMENT_ANSWER_IS_DOING = 5007314;
+
     public $messages = [
         4037301 => 'exception.item_bank_exercise.forbidden_learn',
-        4037302 => 'exception.item_bank_exercise.cannot_start_chapter_answer',
+        4037302 => 'exception.item_bank_exercise.chapter_answer_is_doing',
         4047303 => 'exception.item_bank_exercise.exercise.not_found',
         4037304 => 'exception.item_bank_exercise.exercise.forbidden_manage_exercise',
         4037305 => 'exception.item_bank_exercise.exercise.exercise_not_published',
@@ -42,5 +48,8 @@ class ItemBankExerciseException extends AbstractException
         5007309 => 'exception.item_bank_exercise.expirystartdate_required',
         5007310 => 'exception.item_bank_exercise.expirydate_end_later_than_start',
         5007311 => 'exception.item_bank_exercise.expirymode_invalid',
+        5007312 => 'exception.item_bank_exercise.chapter_exercise_closed',
+        5007313 => 'exception.item_bank_exercise.chapter_exercise_closed',
+        5007314 => 'exception.item_bank_exercise.assessment_answer_is_doing',
     ];
 }

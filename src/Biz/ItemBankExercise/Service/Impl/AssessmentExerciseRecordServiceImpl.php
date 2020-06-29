@@ -37,6 +37,11 @@ class AssessmentExerciseRecordServiceImpl extends BaseService implements Assessm
         return $this->getItemBankAssessmentExerciseRecordDao()->getByAnswerRecordId($answerRecordId);
     }
 
+    public function getLatestRecord($moduleId, $assessmentId, $userId)
+    {
+        return $this->getItemBankAssessmentExerciseRecordDao()->getLatestRecord($moduleId, $assessmentId, $userId);
+    }
+
     protected function getItemBankAssessmentExerciseRecordDao()
     {
         return $this->createDao('ItemBankExercise:AssessmentExerciseRecordDao');

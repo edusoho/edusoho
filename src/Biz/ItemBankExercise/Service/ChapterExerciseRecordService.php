@@ -15,4 +15,6 @@ interface ChapterExerciseRecordService
     public function search($conditions, $sort, $start, $limit, $columns = []);
 
     public function count($conditions);
+
+    public function getLatestRecord($moduleId, $itemCategoryId, $userId);
 }

@@ -283,10 +283,9 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $user->hasPermission('admin_course_content_manage') || $user->hasPermission('admin_v2_course_content_manage');
     }
 
-    // todo
     public function canLearningExercise($exerciseId, $userId)
     {
-        return true;
+        return $this->getExerciseMemberService()->isExerciseMember($exerciseId, $userId);
     }
 
     protected function _prepareCourseConditions($conditions)
@@ -340,5 +339,13 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     protected function getItemBankExerciseModuleDao()
     {
         return $this->createDao('ItemBankExercise:ExerciseModuleDao');
+    }
+
+    /**
+     * @return \Biz\User\Service\UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 }

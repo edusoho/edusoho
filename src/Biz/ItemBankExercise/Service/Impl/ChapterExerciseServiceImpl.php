@@ -4,26 +4,24 @@ namespace Biz\ItemBankExercise\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\ChapterExerciseService;
+use Biz\ItemBankExercise\Service\ExerciseModuleService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 
 class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseService
 {
     public function startAnswer($moduleId, $categroyId, $userId)
     {
-        $module = $this->getItemBankExerciseModuleService()->get($moduleId);
-        if (!$this->getItemBankExerciseService()->canLearningExercise($module['exerciseId'], $userId)) {
-            $this->createNewException(ItemBankExerciseException::FORBIDDEN_LEARN());
-        }
-
-        if (!$this->canStartAnswer($moduleId, $categroyId, $userId)) {
-            $this->createNewException(ItemBankExerciseException::CANNOT_START_CHAPTER_ANSWER());
-        }
+        $this->canStartAnswer($moduleId, $categroyId, $userId);
 
         try {
             $this->beginTransaction();
 
             $assessment = $this->createAssessmentByCategroyId($categroyId);
+
+            $module = $this->getItemBankExerciseModuleService()->get($moduleId);
 
             $answerRecord = $this->getAnswerService()->startAnswer($module['answerSceneId'], $assessment['id'], $userId);
 
@@ -45,13 +43,38 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
         return $answerRecord;
     }
 
-    //todo
     protected function canStartAnswer($moduleId, $categroyId, $userId)
     {
-        // 模块是否关闭
-        // 分类下数量是否为0
-        // 模块跟题目分类是否对应
-        return true;
+        $module = $this->getItemBankExerciseModuleService()->get($moduleId);
+        if (empty($module) || ExerciseModuleService::TYPE_CHAPTER != $module['type']) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        if (!$this->getItemBankExerciseService()->canLearningExercise($module['exerciseId'], $userId)) {
+            $this->createNewException(ItemBankExerciseException::FORBIDDEN_LEARN());
+        }
+
+        $categroy = $this->getItemCategoryService()->getItemCategory($categroyId);
+        if (empty($categroy) || 0 == $categroy['question_num']) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        $itemBankExercise = $this->getItemBankExerciseService()->get($module['exerciseId']);
+        if (0 == $itemBankExercise['chapterEnable']) {
+            $this->createNewException(ItemBankExerciseException::CHAPTER_EXERCISE_CLOSED());
+        }
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($itemBankExercise['questionBankId']);
+        if ($questionBank['itemBank']['id'] != $categroy['bank_id']) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        $latestRecord = $this->getItemBankChapterExerciseRecordService()->getLatestRecord($moduleId, $categroyId, $userId);
+        if (!empty($latestRecord) && AnswerService::ANSWER_RECORD_STATUS_FINISHED != $latestRecord['status']) {
+            $this->createNewException(ItemBankExerciseException::CHAPTER_ANSWER_IS_DOING());
+        }
+
+        return false;
     }
 
     protected function createAssessmentByCategroyId($categroyId)
@@ -66,34 +89,20 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
                 $this->getItemService()->searchItems(['category_id' => $categroyId], [], 0, PHP_INT_MAX, ['id']),
                 'id'
             );
-            shuffle($itemIds);
-
             $items = $this->getItemService()->findItemsByIds($itemIds, true);
-            $sectionItems = [];
-            foreach ($items as $item) {
-                $sectionItem = [
-                    'id' => $item['id'],
-                    'questions' => [],
-                ];
-                foreach ($item['questions'] as $question) {
-                    $sectionItem['questions'][] = [
-                        'id' => $question['id'],
-                        'score' => 0,
-                    ];
-                }
-                $sectionItems[] = $sectionItem;
-            }
+            shuffle($items);
 
+            $sectionName = $this->getSectionName($categroyId);
             $assessment = [
                 'bank_id' => $categroy['bank_id'],
                 'name' => $itemBank['name'],
                 'displayable' => 0,
-                'description' => '章->节', //todo
+                'description' => $sectionName,
                 'sections' => [
                     [
-                        'name' => '',
-                        'description' => '章->节',
-                        'items' => $sectionItems,
+                        'name' => $sectionName,
+                        'description' => '',
+                        'items' => $items,
                     ],
                 ],
             ];
@@ -108,6 +117,24 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
         }
 
         return $assessment;
+    }
+
+    protected function getSectionName($categroyId)
+    {
+        $categories = [];
+
+        $loop = 1;
+        while ($loop <= 100) {
+            $categroy = $this->getItemCategoryService()->getItemCategory($categroyId);
+            if (empty($categroy)) {
+                break;
+            }
+            $categroyId = $categroy['parent_id'];
+            array_unshift($categories, $categroy);
+            ++$loop;
+        }
+
+        return implode(ArrayToolkit::column($categories, 'name'), '-');
     }
 
     /**
@@ -172,5 +199,13 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
     protected function getAnswerService()
     {
         return $this->createService('ItemBank:Answer:AnswerService');
+    }
+
+    /**
+     * @return \Biz\QuestionBank\Service\QuestionBankService
+     */
+    protected function getQuestionBankService()
+    {
+        return $this->createService('QuestionBank:QuestionBankService');
     }
 }

@@ -32,7 +32,10 @@ class AddItemBankExerciseTable extends Migration
               `status` enum('doing','paused','reviewing','finished') NOT NULL DEFAULT 'doing' COMMENT '答题状态',
               `createdTime` int(11) unsigned NOT NULL DEFAULT '0',
               `updatedTime` int(11) unsigned NOT NULL DEFAULT '0',
-              PRIMARY KEY (`id`)
+              PRIMARY KEY (`id`),
+              KEY `answerRecordId` (`answerRecordId`),
+              KEY `moduleId` (`moduleId`,`userId`),
+              KEY `userId` (`userId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='试卷练习记录表';
             
             CREATE TABLE `item_bank_chapter_exercise_record` (
@@ -50,7 +53,8 @@ class AddItemBankExerciseTable extends Migration
               `createdTime` int(11) unsigned NOT NULL DEFAULT '0',
               `updatedTime` int(11) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`),
-              KEY `moduleId_userId` (`moduleId`,`userId`),
+              KEY `moduleId` (`moduleId`,`userId`),
+              KEY `userId` (`userId`),
               KEY `answerRecordId` (`answerRecordId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题库章节练习记录';
             
