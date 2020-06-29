@@ -1885,6 +1885,10 @@ course.live.replay_manage.lesson_add_btn: Add
 course.liveroom.content_title: 'Live'
 course.liveroom.open_liveroom_tips: 'Live entering, please wait ...'
 
+item_bank_exercise.exercise.publish: Publish item bank exercise
+item_bank_exercise.chapter_exercise.list: Chapter directory
+item_bank_exercise.chapter_exercise.item_num: Number of node problems
+item_bank_exercise.chapter_exercise.open: Start the chapter exercise
 item_bank_exercise.practice_test: Practice test
 item_bank_exercise.save_cover: Save cover
 item_bank_exercise.upload_cover: Upload item bank exercise cover
@@ -1904,6 +1908,11 @@ item_bank_exercise.student_manage.can_not_add_teacher: This user is the teacher 
 item_bank_exercise.student_manage.student_exist: This user is already a student of this item bank exercise
 item_bank_exercise.student_manage.student_not_exist: The user does not exist
 item_bank_exercise.exercise_create.forbidden: You are not the question bank manager, can not view this page!
+item_bank_exercise.chapter_exercise.empty: 'It is empty, open the chapter exercise now'
+item_bank_exercise.chapter_exercise.info: Chapter exercises are based on the setting of "Item management by category".Provide students with a hierarchical list of brushing exercises
+item_bank_exercise.marketing_setup.no_permission_tips: 'Sorry, you can not edit base settings. Contact site administrator for help.'
+item_bank_exercise.marketing_setup.setup.can_join.tips: After it is closed, students cannot join by themselves. Teachers need to add students manually.
+item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: The change of validity period is only valid for new students after the change
 
 activity.live.not_created_notice: Live classroom not yet created!
 activity.live.overlap_time_notice: There is already a live broadcast at the selected time. Please change your time.
@@ -9021,6 +9030,12 @@ exception.item_bank_exercise.member.duplicate_member: User has joined this item 
 exception.item_bank_exercise.exercise.exercise_not_published: Item bank exercise is not published
 exception.item_bank_exercise.member.not_found: The item bank exercise doesn't have this student
 exception.item_bank_exercise.module.exceeded_number: A maximum of 5 test paper modules can be added
+exception.item_bank_exercise.expirydays_required: Valid days cannot be empty
+exception.item_bank_exercise.expirydays_invalid: Valid days is invalid
+exception.item_bank_exercise.expiryenddate_required: Validity period end date cannot be empty
+exception.item_bank_exercise.expirystartdate_required: Validity period start date cannot be empty
+exception.item_bank_exercise.expirydate_end_later_than_start: Validity period end date cannot be earlier than the start date
+exception.item_bank_exercise.expirymode_invalid: Validity type error
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.

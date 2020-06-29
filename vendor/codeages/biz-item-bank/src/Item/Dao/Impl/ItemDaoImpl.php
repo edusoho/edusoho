@@ -28,6 +28,15 @@ class ItemDaoImpl extends AdvancedDaoImpl implements ItemDao
         return $builder->execute()->fetchAll() ?: [];
     }
 
+    public function getItemCountGroupByCatgoryIds($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('count(id) as itemNum, category_id as categoryId')
+            ->addGroupBy('categoryId');
+
+        return $builder->execute()->fetchAll() ?: [];
+    }
+
     public function declares()
     {
         return [

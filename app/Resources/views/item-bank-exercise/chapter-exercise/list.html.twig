@@ -1,25 +1,23 @@
-{% extends 'course-manage/tasks/layout.html.twig' %}
-{% do script(['libs/jquery-sortable.js','app/js/course-manage/lesson-manage/default/index.js']) %}
-
-{% block page_title %}
-  {{ 'course.plan_task.content_title'|trans }}
-  {% if course.platform == 'supplier' %}
-    {% include 'lesson-manage/s2b2c-changelog.html.twig' %}
-  {% endif %}
-{% endblock %}
+{% extends 'item-bank-exercise/chapter-exercise/layout.html.twig' %}
+{% do script(['libs/jquery-sortable.js','app/js/course-manage/lesson-manage/item/index.js']) %}
+{% set course_side_nav = 'chapter' %}
 {% block main_body %}
-  {% include 'lesson-manage/header.html.twig' with {taskMode:'lesson'}  %}
-  <ul id="sortable-list" class="task-manage-list sortable-list" data-sort-url='{{ path("course_manage_items_sort",{courseId: course.id}) }}'>
-    {% for key, item in items %}
-      {% if item.type == 'lesson' %}
-        {% include 'lesson-manage/default/lesson.html.twig' with {course: course, lesson: item} %}
+  {% include 'item-bank-exercise/chapter-exercise/header.html.twig' with {taskMode:'lesson'}  %}
+  <div style="margin: 20px auto;display: {% if categoryTree %}block{% else %}none{% endif %}">
+    <span style="font-size: 18px;font-weight: bold;margin-left:20px">{{ 'item_bank_exercise.chapter_exercise.list'|trans }}</span>
+    <span style="font-size: 18px;font-weight: bold;float: right">{{ 'item_bank_exercise.chapter_exercise.item_num'|trans }}</span>
+  </div>
+  <ul id="sortable-list" class="task-manage-list sortable-list">
+    {% for key, item in categoryTree %}
+      {% if item.depth == 3 %}
+        {% include 'item-bank-exercise/chapter-exercise/lesson.html.twig' with {exercise: exercise, lesson: item} %}
       {% else %}
-        {% include 'lesson-manage/chapter/item.html.twig' with {chapter:item, course:course} %}
+        {% include 'item-bank-exercise/chapter-exercise/item.html.twig' with {chapter:item, exercise:exercise} %}
       {% endif %}
     {% endfor %}
   </ul>
-  <div class="empty task-empty js-task-empty {% if items %} hidden {% endif %}">
+  <div class="empty task-empty js-task-empty {% if categoryTree %} hidden {% endif %}">
     <i class="es-icon es-icon-book task-empty-icon"></i>
-    {{'course.plan_task.empty'|trans}}
+    {{'item_bank_exercise.chapter_exercise.empty'|trans}}
   </div>
 {% endblock %}

@@ -3,6 +3,7 @@
 namespace Biz\ItemBankExercise\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\TimeMachine;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
@@ -178,6 +179,92 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     public function getByQuestionBankId($questionBankId)
     {
         return $this->getExerciseDao()->getByQuestionBankId($questionBankId);
+    }
+
+    public function updateChapterEnable($exercised, $chapterEnable)
+    {
+        $this->getExerciseDao()->update($exercised, $chapterEnable);
+    }
+
+    public function updateBaseInfo($id, $fields)
+    {
+        $exercise = $this->tryManageExercise($id);
+
+        $fields = $this->validateExpiryMode($fields);
+        $fields = $this->processFields($exercise, $fields);
+        $exercise = $this->getExerciseDao()->update($id, $fields);
+        return $exercise;
+    }
+
+    protected function validateExpiryMode($exercise)
+    {
+        if (empty($exercise['expiryMode'])) {
+            return $exercise;
+        }
+        if ('days' === $exercise['expiryMode']) {
+            $exercise['expiryStartDate'] = 0;
+            $exercise['expiryEndDate'] = 0;
+
+            if (empty($exercise['expiryDays'])) {
+                $this->createNewException(ItemBankExerciseException::EXPIRYDAYS_REQUIRED());
+            }
+            if ($exercise['expiryDays'] > ExerciseService::MAX_EXPIRY_DAY) {
+                $this->createNewException(ItemBankExerciseException::EXPIRYDAYS_INVALID());
+            }
+        } elseif ('end_date' == $exercise['expiryMode']) {
+            $exercise['expiryStartDate'] = 0;
+            $exercise['expiryDays'] = 0;
+
+            if (empty($exercise['expiryEndDate'])) {
+                $this->createNewException(ItemBankExerciseException::EXPIRYENDDATE_REQUIRED());
+            }
+            $exercise['expiryEndDate'] = TimeMachine::isTimestamp($exercise['expiryEndDate']) ? $exercise['expiryEndDate'] : strtotime($exercise['expiryEndDate'].' 23:59:59');
+        } elseif ('date' === $exercise['expiryMode']) {
+            $exercise['expiryDays'] = 0;
+            if (isset($exercise['expiryStartDate'])) {
+                $exercise['expiryStartDate'] = TimeMachine::isTimestamp($exercise['expiryStartDate']) ? $exercise['expiryStartDate'] : strtotime($exercise['expiryStartDate']);
+            } else {
+                $this->createNewException(ItemBankExerciseException::EXPIRYSTARTDATE_REQUIRED());
+            }
+            if (empty($exercise['expiryEndDate'])) {
+                $this->createNewException(ItemBankExerciseException::EXPIRYENDDATE_REQUIRED());
+            } else {
+                $exercise['expiryEndDate'] = TimeMachine::isTimestamp($exercise['expiryEndDate']) ? $exercise['expiryEndDate'] : strtotime($exercise['expiryEndDate'].' 23:59:59');
+            }
+            if ($exercise['expiryEndDate'] <= $exercise['expiryStartDate']) {
+                $this->createNewException(ItemBankExerciseException::EXPIRY_DATE_SET_INVALID());
+            }
+        } elseif ('forever' == $exercise['expiryMode']) {
+            $exercise['expiryStartDate'] = 0;
+            $exercise['expiryEndDate'] = 0;
+            $exercise['expiryDays'] = 0;
+        } else {
+            $this->createNewException(ItemBankExerciseException::EXPIRYMODE_INVALID());
+        }
+
+        return $exercise;
+    }
+
+    private function processFields($exercise, $fields)
+    {
+        if (in_array($exercise['status'], ['published', 'closed'])) {
+            //发布或者关闭，不允许修改模式，但是允许修改时间
+            unset($fields['expiryMode']);
+            if ('published' == $exercise['status']) {
+                //发布后，不允许修改时间
+                unset($fields['expiryDays']);
+                unset($fields['expiryStartDate']);
+                unset($fields['expiryEndDate']);
+            }
+        }
+
+        if (empty($fields['price']) || $fields['price'] <= 0) {
+            $fields['isFree'] = 1;
+        } else {
+            $fields['isFree'] = 0;
+        }
+
+        return $fields;
     }
 
     /**

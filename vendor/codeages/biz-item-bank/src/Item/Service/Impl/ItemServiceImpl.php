@@ -215,6 +215,13 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $this->getItemDao()->getItemCountGroupByTypes($conditions);
     }
 
+    public function getItemCountGroupByCatgoryIds($conditions)
+    {
+        $conditions = $this->filterItemConditions($conditions);
+
+        return $this->getItemDao()->getItemCountGroupByCatgoryIds($conditions);
+    }
+
     public function findItemsByCategoryIds($categoryIds)
     {
         return $this->getItemDao()->findByCategoryIds($categoryIds);

@@ -26,6 +26,8 @@ interface ItemService
 
     public function getItemCountGroupByTypes($conditions);
 
+    public function getItemCountGroupByCatgoryIds($conditions);
+
     public function findItemsByCategoryIds($categoryIds);
 
     public function deleteItem($id);

@@ -1,0 +1,66 @@
+{% extends 'item-bank-exercise/exercise-set/layout.html.twig' %}
+
+{% block title %}{{'course.plan_base_info'|trans}} - {{ exercise.title }} - {{ parent() }}{% endblock %}
+{% set course_side_nav = 'business' %}
+{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/bootstrap-datetimepicker.js', 'libs/select2.js', 'libs/perfect-scrollbar.js', 'app/js/course-manage/info/item-bank-exercise/index.js']) %}
+
+{% block page_title %}{{ 'course.marketing_setup'|trans }}{% endblock %}
+
+{% block main_body %}
+  {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or ('ROLE_TEACHER' in app.user.roles) %}
+
+    <form class="form-horizontal" role="form" id="course-info-form" action="{{ path('item_bank_exercise_manage_marketing_info', {exerciseId:exercise.id}) }}" method="post">
+      {# 营销设置 #}
+      <div class="hidden" id="js-course-info"
+           data-hint-message="validate_old.positive_currency.message"
+           data-min-price="0">
+      </div>
+      <div class="form-group">
+        <div class="col-sm-2 control-label">
+          <label class="control-label-required" for="course_price">{{ 'site.price'|trans }}</label>
+        </div>
+        <div class="col-sm-8">
+          <input class="form-control course-mangae-info__input mrs" id="course_price" type="text" name="price"
+                 value="{{ exercise.price|default(0) }}" aria-required="true" aria-describedby="course_price-error"
+                 aria-invalid="true">
+          <span class="ml5">{{ 'site.currency.CNY'|trans }}</span>
+        </div>
+      </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label mb5">
+            {{ 'course.marketing_setup.setup.can_join'|trans }}
+            <a class="es-icon es-icon-help text-normal course-mangae-info__help" data-container="body" data-toggle="popover"
+               data-trigger="hover" data-placement="top"
+               data-content="{{ 'item_bank_exercise.marketing_setup.setup.can_join.tips'|trans }}"></a>
+          </label>
+          <div class="col-sm-8 cd-radio-group mb0">
+            {{ cd_radios('joinEnable', { '1': 'course.marketing_setup.setup.can_join'|trans, '0': 'course.marketing_setup.setup.can_not_join'|trans }, exercise.joinEnable|default(1)) }}
+          </div>
+        </div>
+        {{ slot('course.marketing.setting', {'course':exercise}) }}
+
+        {% include 'item-bank-exercise/exercise-set/base-info/set-rule.html.twig' %}
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label mb5">
+            {{ 'item_bank_exercise.exercise.publish'|trans }}
+          </label>
+          <div class="col-sm-8 cd-radio-group mb0">
+            {{ cd_radios('status', { 'published': 'form.btn.publish'|trans, 'closed': 'form.btn.close'|trans }, exercise.status|default('')) }}
+          </div>
+        </div>
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-8">
+          <button id="course-submit" type="button" class="cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
+          <div id="test"></div>
+        </div>
+      </div>
+    </form>
+
+  {% else %}
+    <div class="cd-alert cd-alert-danger">{{ 'item_bank_exercise.marketing_setup.no_permission_tips'|trans }}</div>
+  {% endif %}
+{% endblock %}

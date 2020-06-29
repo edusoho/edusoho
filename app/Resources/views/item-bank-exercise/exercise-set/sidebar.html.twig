@@ -4,7 +4,7 @@
       <div class="js-sidenav-course-menu">
         {# 章节练习 #}
         <li class="cd-sidebar__item {% if course_side_nav == 'chapter' %}active{% endif %}">
-            <a href="#">
+            <a href="{{ path('item_bank_exercise_manage_chapter_exercise_list', {exerciseId:exercise.id}) }}">
               {{ 'item_bank_exercise.chapter_practice'|trans }}
             </a>
         </li>
@@ -27,7 +27,7 @@
         {#营销设置#}
         <li class="cd-sidebar__item {% if course_side_nav == 'business' %}active{% endif %}">
             <a
-              href="#">
+              href="{{ path('item_bank_exercise_manage_marketing_info', {exerciseId:exercise.id}) }}">
               {{ 'course.marketing_setup'|trans }}
             </a>
         </li>

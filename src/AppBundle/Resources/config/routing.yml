@@ -3503,3 +3503,15 @@ item_bank_exercise_manage_base:
 item_bank_exercise_manage_cover_crop:
   path: /item_bank_exercise/{exerciseId}/manage/cover_crop
   defaults: {_controller: AppBundle:ItemBankExercise/ExerciseManage:coverCrop}
+
+item_bank_exercise_manage_chapter_exercise_list:
+  path: /item_bank_exercise/{exerciseId}/manage/chapter_exercise/list
+  defaults: {_controller: AppBundle:ItemBankExercise/ChapterExercise:list}
+
+item_bank_exercise_manage_chapter_exercise_open:
+  path: /item_bank_exercise/{exerciseId}/manage/chapter_exercise/open
+  defaults: {_controller: AppBundle:ItemBankExercise/ChapterExercise:open}
+
+item_bank_exercise_manage_marketing_info:
+  path: /item_bank_exercise/{exerciseId}/manage/marketing/info
+  defaults: {_controller: AppBundle:ItemBankExercise/ExerciseManage:info}
