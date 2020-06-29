@@ -49,4 +49,6 @@ interface ProductService
     public function generateVersionChangeLogs($nowVersion, $productVersions);
 
     public function deleteByIds($ids);
+
+    public function adoptProduct($s2b2cProductId);
 }

@@ -7,6 +7,7 @@ use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\S2B2C\Dao\ProductDao;
 use Biz\S2B2C\S2B2CProductException;
+use Biz\S2B2C\Service\CourseProductService;
 use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
@@ -314,6 +315,64 @@ class ProductServiceImpl extends BaseService implements ProductService
         return $this->getS2B2CProductDao()->deleteByIds($ids);
     }
 
+    /**
+     * @param $s2b2cProductId
+     * @return bool
+     * @throws \Exception
+     */
+    public function adoptProduct($s2b2cProductId)
+    {
+        $supplier = $this->getS2B2CFacadeService()->getS2B2CConfig();
+
+        $localProduct = $this->getProductBySupplierIdAndRemoteProductId($supplier['supplierId'], $s2b2cProductId);
+
+        if ($localProduct) {
+            throw new \Exception('重复了');
+        }
+
+        $result = $this->getS2B2CFacadeService()->getS2B2CService()->adoptDirtributeProduct($s2b2cProductId);
+
+        if (!empty($result['status']) && $result['status'] == 'success') {
+            $product = $result['data'];
+        }else{
+            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[adoptProduct] 采用课程失败，原因:' .json_encode($result));
+            throw new \Exception('采用课程失败');
+        }
+
+        $products = array_map(function ($detail) {
+            return [
+                'remoteProductDetailId' => $detail['id'],
+                'supplierId' => $detail['supplierId'],
+                'remoteProductId' => $detail['productId'],
+                'remoteResourceId' => $detail['targetId'],
+                'productType' => $this->getProductType($detail['targetType']),
+                'syncStatus' => 'waiting',
+            ];
+        }, $product['detail']);
+
+        $this->beginTransaction();
+        try{
+            $this->getS2B2CProductDao()->batchCreate($products);
+            //@todo 可以改成策略 根据商品类型进行同步，暂时只有course_set类型
+            $this->getCourseProductService()->syncCourses($product['id']);
+            $this->commit();
+        }catch (\Exception $exception) {
+            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[adoptProduct] 同步课程失败，原因:' .$exception->getMessage());
+            $this->rollback();
+            throw new \Exception('同步课程失败');
+        }
+        return true;
+    }
+
+    protected function getProductType($productType)
+    {
+        $type = [
+            'courseSet' => 'course_set',
+            'course' => 'course',
+        ];
+        return $type[$productType];
+    }
+
     protected function getAccessKey()
     {
         $settings = $this->getSettingService()->get('storage', []);
@@ -354,5 +413,13 @@ class ProductServiceImpl extends BaseService implements ProductService
     protected function getSchedulerService()
     {
         return $this->biz->service('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return CourseProductService
+     */
+    protected function getCourseProductService()
+    {
+        return $this->createService('S2B2C:CourseProductService');
     }
 }

@@ -8,6 +8,7 @@ use Biz\Common\CommonException;
 use Biz\Course\Service\CourseSetService;
 use Biz\S2B2C\Service\CourseProductService;
 use Biz\S2B2C\Service\ProductService;
+use QiQiuYun\SDK\Service\S2B2CService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,59 +16,9 @@ class CourseSetProductController extends ProductController
 {
     public function dealAction(Request $request, $product)
     {
-        $courseSetData = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getSupplierCourseSetProductDetail($product['id']);
-        if (!ArrayToolkit::requireds($courseSetData, ['title', 'type', 'id', 'defaultCourseId'])) {
-            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
-        }
-        if ('published' != $courseSetData['editStatus']) {
-            $this->createNewException('源平台课程正在编辑中，无法选择');
-        }
+        $result = $this->getS2B2CProductService()->adoptProduct($product['id']);
 
-        $merchant = $this->getS2B2CFacadeService()->getMe();
-        if (empty($merchant['coop_status']) || 'active' != $merchant['status'] || 'cooperation' != $merchant['coop_status']) {
-            $this->createNewException('用户状态非法，无法选择');
-        }
-
-        $visibleCourseTypes = $this->getCourseTypes();
-        $type = $courseSetData['type'];
-        if (empty($visibleCourseTypes[$type])) {
-            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
-        }
-
-        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
-        if (empty($s2b2cConfig['supplierId']) || empty($courseSetData['s2b2cDistributeId'])) {
-            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
-        }
-
-        /**
-         * 以前通过preparePurchaseData函数去实现，现在直接通过Product函数去实现
-         */
-        $localProduct = $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteProductId($s2b2cConfig['supplierId'], $courseSetData['s2b2cDistributeId']);
-        if ($localProduct) {
-            return $this->createJsonResponse(['status' => 'repeat']);
-        }
-
-        $prepareCourseSet = $this->prepareCourseSetData($courseSetData);
-        list($purchaseProducts, $purchaseRecord) = $this->preparePurchaseData($courseSetData);
-        $result = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->checkPurchaseProducts($purchaseProducts);
-        if (!empty($result['success']) && true == $result['success']) {
-            $result = $this->getS2B2CFacadeService()->getS2B2CService()->purchaseProducts($purchaseProducts, $purchaseRecord);
-            if (!empty($result['status']) && 'success' === $result['status']) {
-                $newCourseSet = $this->getCourseSetService()->addCourseSet($prepareCourseSet);
-                $product = $this->getS2B2CProductService()->createProduct([
-                    'supplierId' => $s2b2cConfig['supplierId'],
-                    'productType' => 'course_set',
-                    'remoteProductId' => $courseSetData['s2b2cDistributeId'],
-                    'remoteResourceId' => $courseSetData['id'],
-                    'localResourceId' => $newCourseSet['id'],
-                ]);
-                $this->getCourseProductService()->syncCourses($newCourseSet, $product);
-            }
-
-            return $this->createJsonResponse($result);
-        }
-
-        return $this->createJsonResponse(array_merge($result, ['status' => false]));
+        return $this->createJsonResponse($result);
     }
 
     /**
@@ -126,29 +77,30 @@ class CourseSetProductController extends ProductController
     {
         $pageSize = 16;
         $conditions = $request->query->all();
-        $conditions['offset'] = ($request->query->get('page', 1) - 1) * $pageSize;
-        $conditions['limit'] = $pageSize;
-        $conditions['sort'] = '-created_time,-id';
+        $offset = ($request->query->get('page', 1) - 1) * $pageSize;
 
-        list($courseSets, $total) = $this->getS2B2CProductService()->searchRemoteProducts($conditions);
-
+        $distributes = $this->getS2B2CFacadeService()->getS2B2CService()->searchDistribute($conditions, ['created_time' => 'desc'], $offset, $pageSize);
+        $products = ArrayToolkit::column($distributes['items'], 'product');
         $merchant = $this->getS2B2CFacadeService()->getMe();
 
-        $paginator = new Paginator($request, $total, $pageSize);
+        $paginator = new Paginator($request, $distributes['count'], $pageSize);
         $paginator->setBaseUrl($this->generateUrl('admin_v2_purchase_market_products_list', ['type' => 'courseSet']));
 
         $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
 
-        $remoteResourceIds = ArrayToolkit::column($courseSets, 'id');
+        $s2b2cProductIds = ArrayToolkit::column($products, 'id');
+        //$remoteResourceIds = ArrayToolkit::column($courseSets, 'id');
 
         if (!empty($s2b2cConfig['supplierId'])) {
-            $chosenProducts = $this->getS2B2CProductService()->findProductsBySupplierIdAndRemoteResourceTypeAndIds($s2b2cConfig['supplierId'], 'course_set', $remoteResourceIds);
-            $chosenProducts = ArrayToolkit::index($chosenProducts, 'remoteResourceId');
+            $chosenProducts = $this->getS2B2CProductService()->findProductsBySupplierIdAndRemoteResourceTypeAndIds($s2b2cConfig['supplierId'], 'course_set', $s2b2cProductIds);
+            //$chosenProducts = $this->getS2B2CProductService()->findProductsBySupplierIdAndRemoteResourceTypeAndIds($s2b2cConfig['supplierId'], 'course_set', $remoteResourceIds);
+            $chosenProducts = ArrayToolkit::index($chosenProducts, 'remoteProductId');
         }
 
         return $this->render(
             'admin-v2/cloud-center/content-resource/market/course-set/course-list.html.twig', [
-            'courseSets' => $courseSets,
+            'products' => $products,
+            //'courseSets' => $courseSets,
             'paginator' => $paginator,
             'merchant' => $merchant,
             'chosenCourses' => empty($chosenProducts) ? [] : $chosenProducts,
@@ -266,6 +218,7 @@ class CourseSetProductController extends ProductController
     {
         return $this->createService('S2B2C:ProductService');
     }
+
 
     /**
      * @return CourseProductService

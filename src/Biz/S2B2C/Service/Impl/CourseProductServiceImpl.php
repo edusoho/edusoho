@@ -13,6 +13,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LessonService;
 use Biz\S2B2C\Dao\CourseChapterDao;
+use Biz\S2B2C\Dao\ProductDao;
 use Biz\S2B2C\S2B2CProductException;
 use Biz\S2B2C\Service\CourseProductService;
 use Biz\S2B2C\Service\ProductService;
@@ -21,6 +22,7 @@ use Biz\System\Service\CacheService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Monolog\Logger;
+use mysql_xdevapi\Exception;
 
 /**
  * Class CourseProductServiceImpl
@@ -32,65 +34,111 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
     const SYNC_STATUS_ERROR = 'error';
 
     /**
-     * @param $localCourseSet
-     * @param $product
+     * @param $s2b2cProductId
+     * @return boolean
+     * @throws
      * 更新课程的计划列表
      */
-    public function syncCourses($localCourseSet, $product)
+    //public function syncCourses($localCourseSet, $product)
+    public function syncCourses($s2b2cProductId)
     {
-        // 获取供应商的原课程
-        $courseSet = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getSupplierCourseSetProductDetail($product['remoteResourceId']);
-        if (isset($courseSet['error'])) {
-            $this->getS2B2CLogger()->error("[syncCourses]getCoursesDetailFail: {$courseSet['error']}");
-
-            return;
-        }
         $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
-        if (empty($s2b2cConfig['supplierId']) || empty($courseSet['s2b2cDistributeId'])) {
+
+        if (empty($s2b2cConfig['supplierId'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $courses = $courseSet['courses'];
+        $waitSyncProducts = $this->getS2B2CProductDao()->findBySupplierIdAndRemoteProductId($s2b2cConfig['supplierId'], $s2b2cProductId);
+        //print_r($waitSyncProducts);exit;
+        if (empty($waitSyncProducts)) {
+            return true;
+        }
+
+//        // 获取供应商的原课程
+//        $courseSet = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getSupplierCourseSetProductDetail($product['remoteResourceId']);
+//        if (isset($courseSet['error'])) {
+//            $this->getS2B2CLogger()->error("[syncCourses]getCoursesDetailFail: {$courseSet['error']}");
+//            return false;
+//        }
+        $courseSets = array_filter($waitSyncProducts, function($product) {
+            return $product['productType'] == 'course_set';
+        });
+        $courseSetProduct = ArrayToolkit::get(array_values($courseSets), 0, []);
+
+        $content = $this->getDistributeContent($courseSetProduct['remoteProductDetailId']);
+        if (empty($content)) {
+            return false;
+        }
+        $newCourseSet = $this->getCourseSetService()->addCourseSet($this->prepareCourseSetData($content));
+        $this->getProductService()->updateProduct($courseSetProduct['id'], ['localResourceId' => $newCourseSet['id']]);
+
+        $courseProducts = array_filter($waitSyncProducts, function($product) {
+            return $product['productType'] == 'course';
+        });;
         $courseHasDefaultCourse = false;
-        $supplierSetting = $this->getS2B2CFacadeService()->getS2B2CConfig();
-        foreach ($courses as $course) {
-            // 该计划没有分发，不同步
-            if (!$course['s2b2cDistributeId']) {
-                continue;
-            }
-            //已存在不需要同步
-            if (!empty($this->getS2B2CProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($supplierSetting['supplierId'], $course['id'], 'course'))) {
-                continue;
-            }
-            $course['courseSetId'] = $localCourseSet['id'];
-            $course['courseSetTitle'] = $localCourseSet['title'];
+        foreach ($courseProducts as $product) {
+
+//            //已存在不需要同步
+//            if (!empty($this->getS2B2CProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($s2b2cConfig['supplierId'], $course['id'], 'course'))) {
+//                continue;
+//            }
+            $course = $this->getDistributeContent($product['remoteProductDetailId']);
+            $course['courseSetId'] = $newCourseSet['id'];
+            $course['courseSetTitle'] = $newCourseSet['title'];
             $course['platform'] = 'supplier';
             $localCourse = $this->getCourseService()->createCourse($course);
-            $product = $this->getProductService()->createProduct([
-                'supplierId' => $s2b2cConfig['supplierId'],
-                'productType' => 'course',
-                'remoteProductId' => $course['s2b2cDistributeId'],
-                'remoteResourceId' => $course['id'],
+
+            $this->getProductService()->updateProduct($product['id'], [
                 'localResourceId' => $localCourse['id'],
+                'localVersion' => $course['editVersion'],
                 'suggestionPrice' => $course['suggestionPrice'],
                 'cooperationPrice' => $course['cooperationPrice'],
-                'localVersion' => $course['editVersion'],
-            ]);
+                'remoteResourceId' => $course['id'],
+                'status' => self::SYNC_STATUS_FINISHED
+                ]);
 
-            $this->syncCourseMain($localCourse['id']);
+            $this->biz['s2b2c.course_product_sync']->sync($course, ['syncCourseId' => $localCourse['id']]);
 
-            if ($course['isDefault'] && $course['s2b2cDistributeId']) {
+            if ($course['isDefault']) {
                 // 如果供应商原课程中有默认计划，则直接同步
                 $courseHasDefaultCourse = true;
-                $this->getCourseSetService()->updateDefaultCourseId($localCourseSet['id'], $localCourse['id']);
+                $this->getCourseSetService()->updateDefaultCourseId($newCourseSet['id'], $localCourse['id']);
             }
         }
 
         // 如果供应商原课程中没有默认计划，则按默认规则生成
         if (!$courseHasDefaultCourse) {
-            $this->getCourseSetService()->updateCourseSetDefaultCourseId($localCourseSet['id']);
+            $this->getCourseSetService()->updateCourseSetDefaultCourseId($newCourseSet['id']);
         }
     }
+
+    protected function getDistributeContent($s2b2cProductDetailId)
+    {
+        $content = $this->getS2B2CFacadeService()->getS2B2CService()->getDistributeContent($s2b2cProductDetailId);
+        if (!empty($content['status']) && $content['status'] == 'success') {
+            return $content['data'];
+        }
+
+        return null;
+    }
+
+    protected function prepareCourseSetData($courseSetData)
+    {
+        return [
+            'syncStatus' => 'waiting',
+            'sourceCourseSetId' => $courseSetData['id'],
+            'title' => $courseSetData['title'],
+            'type' => $courseSetData['type'],
+            'sourceCourseId' => $courseSetData['defaultCourseId'],
+            'subtitle' => $courseSetData['subtitle'],
+            'summary' => $courseSetData['summary'],
+            'cover' => $courseSetData['cover'],
+            'maxCoursePrice' => $courseSetData['maxCoursePrice'],
+            'minCoursePrice' => $courseSetData['minCoursePrice'],
+            'platform' => 'supplier',
+        ];
+    }
+
 
     /**
      * @param $courseId
@@ -98,7 +146,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
      * @return bool
      *              更新单个课程计划下的所有资源
      */
-    public function syncCourseMain($courseId)
+    protected function syncCourseMain($courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
         $product = $product = $this->getProductService()->getByTypeAndLocalResourceId('course', $course['id']);
@@ -642,5 +690,13 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
     protected function getS2B2CProductService()
     {
         return $this->createService('S2B2C:ProductService');
+    }
+
+    /**
+     * @return ProductDao
+     */
+    protected function getS2B2CProductDao()
+    {
+        return $this->biz->dao('S2B2C:ProductDao');
     }
 }

@@ -11,14 +11,19 @@ class ProductController extends BaseController
 {
     public function pullSupplierProductAction(Request $request, $productType, $productId)
     {
-        $product = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getSupplierProductDetail($productId);
+//        $product = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getSupplierProductDetail($productId);
+        $result = $this->getS2B2CFacadeService()->getS2B2CService()->getDistributeProduct($productId);
 
-        return $this->forward($this->getForwardTarget($productType).':deal', ['product' => $product, 'request' => $request]);
+        if ($result['status'] && $result['status'] == 'success') {
+            $product = $result['data'];
+        }
+
+        return $this->forward($this->getForwardTarget($product['targetType']).':deal', ['product' => $product, 'request' => $request]);
     }
 
     private function getForwardTarget($productType)
     {
-        $controllers = ['course_set' => 'AppBundle:AdminV2/CloudCenter/S2B2C/CourseSetProduct'];
+        $controllers = ['courseSet' => 'AppBundle:AdminV2/CloudCenter/S2B2C/CourseSetProduct'];
 
         return $controllers[$productType];
     }

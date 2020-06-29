@@ -76,6 +76,11 @@ class ProductDaoImpl extends AdvancedDaoImpl implements ProductDao
         return $this->db()->fetchAll($sql, array_merge([$supplierId], array_values($remoteProductIds)));
     }
 
+    public function findBySupplierIdAndRemoteProductId($supplierId, $remoteProductId)
+    {
+        return $this->findByFields(['supplierId' => $supplierId, 'remoteProductId' => $remoteProductId]);
+    }
+
     public function findBySupplierIdAndRemoteResourceTypeAndIds($supplierId, $productType, $remoteResourceIds)
     {
         $marks = str_repeat('?,', count($remoteResourceIds) - 1).'?';

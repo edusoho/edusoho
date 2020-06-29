@@ -9,7 +9,7 @@ use QiQiuYun\SDK\HttpClient\ClientInterface;
 class S2B2CService extends BaseService
 {
     //@todo 此处测试站，后改为正式站
-    protected $defaultHost = 's2b2c-service.qiqiuyun.net';
+    protected $defaultHost = 's2b2c-service.local.cg-dev.cn';
 
     public function __construct(Auth $auth, array $options = array(), LoggerInterface $logger = null, ClientInterface $client = null)
     {
@@ -213,6 +213,44 @@ class S2B2CService extends BaseService
         $this->uri = $this->changeProductSellingPricePath;
 
         return $this->sendRequest('changeProductSellingPrice', $sendData, 'POST');
+    }
+
+    private $getProductUri = '/distribute/product';
+
+    public function getDistributeProduct($productId)
+    {
+        $this->uri = $this->getProductUri ."/{$productId}";
+
+        return $this->sendRequest('getDistributeProduct', array());
+    }
+
+    private $getDistributeContentUri = '/distribute/content';
+
+    public function getDistributeContent($productDetailId)
+    {
+        $this->uri = $this->getDistributeContentUri ."/{$productDetailId}";
+
+        return $this->sendRequest('getDistributeContent', array());
+    }
+
+    private $adoptDirtributeProductUri = '/distribute/product/{id}/adopt';
+
+    /**
+     * @return array ['status' => boolean,
+     * array data =>  [
+     *  array Product => [
+     *      targetId => int,
+     *      targetType => int
+     *      ...array detail => [array ProductDetail ... ]
+     *      ]
+     *  ]
+     * ]
+     */
+    public function adoptDirtributeProduct($productId)
+    {
+        $this->uri = str_replace('{id}', $productId, $this->adoptDirtributeProductUri);
+
+        return $this->sendRequest('adoptDirtributeProduct', array(), 'POST');
     }
 
     public function changePurchaseStatusToRemoved($parentId, $productIds, $productType)
