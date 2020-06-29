@@ -8,7 +8,7 @@ use ApiBundle\Api\Resource\ItemBankExercise\ItemBankExerciseFilter;
 class MeItemBankExerciseFilter extends Filter
 {
     protected $publicFields = [
-        'id', 'exerciseId', 'questionBankId', 'doneQuestionNum', 'doneAssessmentNum', 'questionNum', 'masteryRate', 'itemBankExercise',
+        'id', 'exerciseId', 'questionBankId', 'doneQuestionNum', 'rightQuestionNum', 'masteryRate', 'completionRate', 'itemBankExercise',
     ];
 
     protected function publicFields(&$data)

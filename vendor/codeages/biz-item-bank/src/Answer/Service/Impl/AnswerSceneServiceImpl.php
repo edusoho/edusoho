@@ -240,22 +240,23 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
 
     protected function getQuestionReportsByAnswerRecordIds($answerRecordIds)
     {
-        $count = $this->getAnswerQuestionReportService()->count(['answer_record_ids' => $answerRecordIds]);
-        $limit = 10000;
-        $pageCount = ceil($count / $limit);
+        $limit = 50000;
+        $currentPage = 1;
         $questionReports = [];
 
-        if (0 < $pageCount) {
-            for ($i = 1; $i <= $pageCount; $i++) {
-                $searchQuestionReports = $this->getAnswerQuestionReportService()->search(
-                    ['answer_record_ids' => $answerRecordIds],
-                    [],
-                    ($i - 1) * $limit,
-                    $limit,
-                    ['status', 'response', 'question_id']
-                );
-                $questionReports = array_merge($questionReports, $searchQuestionReports);
+        while (true) {
+            $searchQuestionReports = $this->getAnswerQuestionReportService()->search(
+                ['answer_record_ids' => $answerRecordIds],
+                [],
+                ($currentPage - 1) * $limit,
+                $limit,
+                ['status', 'response', 'question_id']
+            );
+            if (empty($searchQuestionReports) || $currentPage > 1000) {
+                break;
             }
+            $questionReports = array_merge($questionReports, $searchQuestionReports);
+            ++$currentPage;
         }
 
         return ArrayToolkit::group($questionReports, 'question_id');

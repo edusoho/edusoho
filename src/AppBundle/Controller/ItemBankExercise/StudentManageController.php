@@ -12,7 +12,6 @@ use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Translation\Translator;
 
 class StudentManageController extends BaseController
 {

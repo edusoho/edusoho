@@ -11,9 +11,9 @@ class ExerciseEventSubscriber extends EventSubscriber implements EventSubscriber
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'exercise.set' => 'onExerciseUpdate',
-        );
+        ];
     }
 
     public function onExerciseUpdate(Event $event)

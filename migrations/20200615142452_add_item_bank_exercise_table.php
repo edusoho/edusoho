@@ -39,7 +39,6 @@ class AddItemBankExerciseTable extends Migration
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `moduleId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '模块id',
               `exerciseId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '题库练习id',
-              `questionBankId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '资源题库id',
               `itemCategoryId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '题目分类id',
               `userId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
               `status` enum('doing','paused','reviewing','finished') NOT NULL DEFAULT 'doing' COMMENT '答题状态',
@@ -98,8 +97,9 @@ class AddItemBankExerciseTable extends Migration
               `orderId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '订单id',
               `deadline` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '学习最后期限',
               `doneQuestionNum` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '相对当前题库的已做问题总数',
-              `doneAssessmentNum` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '相对当前题库的已做试卷总数',
+              `rightQuestionNum` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '相对当前题库的做对问题总数',
               `masteryRate` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '相对当前题库的掌握度',
+              `completionRate` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '相对当前题库的完成率',
               `role` enum('student','teacher') NOT NULL DEFAULT 'student' COMMENT '成员角色',
               `locked` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '学员是否锁定',
               `remark` varchar(255) NOT NULL COMMENT '备注',
@@ -144,17 +144,20 @@ class AddItemBankExerciseTable extends Migration
               KEY `exerciseId` (`exerciseId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='练习模块表';
             
-            CREATE TABLE `item_bank_exercise_right_record` (
+            CREATE TABLE `item_bank_exercise_question_record` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `exerciseId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '题库练习id',
-              `questionBankId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '资源题库id',
+              `moduleId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '模块id',
               `itemId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '题目id',
               `questionId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '问题id',
               `userId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
+              `status` enum('right','wrong') NOT NULL DEFAULT 'wrong' COMMENT '状态',
               `createdTime` int(11) unsigned NOT NULL DEFAULT '0',
               `updatedTime` int(11) unsigned NOT NULL DEFAULT '0',
-              PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='已掌握题目表';
+              PRIMARY KEY (`id`),
+              KEY `moduleId` (`moduleId`),
+              KEY `userId` (`userId`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='已做题目表';
         ");
     }
 
@@ -172,7 +175,7 @@ class AddItemBankExerciseTable extends Migration
             DROP TABLE IF EXISTS `item_bank_exercise_member`;
             DROP TABLE IF EXISTS `item_bank_exercise_member_operation_record`;
             DROP TABLE IF EXISTS `item_bank_exercise_module`;
-            DROP TABLE IF EXISTS `item_bank_exercise_right_record`;
+            DROP TABLE IF EXISTS `item_bank_exercise_question_record`;
         ');
     }
 }

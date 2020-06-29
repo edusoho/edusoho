@@ -16,6 +16,11 @@ class ExerciseModuleDaoImpl extends GeneralDaoImpl implements ExerciseModuleDao
         return $this->db()->fetchAll($sql, [$exerciseId]);
     }
 
+    public function findByExerciseIdAndType($exerciseId, $type)
+    {
+        return $this->findByFields(['exerciseId' => $exerciseId, 'type' => $type]);
+    }
+
     public function declares()
     {
         return [
