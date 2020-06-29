@@ -20,6 +20,8 @@ interface ReviewService
 
     public function countRatingByTargetTypeAndTargetId($targetType, $targetId);
 
+    public function countRatingByTargetTypeAndTargetIds($targetType, $targetIds);
+
     public function getByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId);
 
     public function deleteReviewsByParentId($parentId);

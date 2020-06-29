@@ -13,7 +13,7 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
     {
         return [
             'serializes' => ['meta' => 'json'],
-            'orderbys' => ['createdTime', 'id'],
+            'orderbys' => ['createdTime', 'id', 'updatedTime'],
             'conditions' => [
                 'targetType = :targetType',
                 'targetId = :targetId',

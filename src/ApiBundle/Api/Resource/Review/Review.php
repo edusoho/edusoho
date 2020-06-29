@@ -25,14 +25,11 @@ class Review extends AbstractResource
      */
     public function search(ApiRequest $request)
     {
-        $conditions = [
-            'targetId' => $request->query->get('targetId'),
-            'targetType' => $request->query->get('targetType'),
-        ];
-
         list($offset, $limit) = $this->getOffsetAndLimit($request);
 
-        $reviews = $this->getReviewService()->searchReviews($conditions, ['createdTime' => 'DESC'], $offset, $limit);
+        $orderBys = empty($request->query->get('orderBys')) ? ['createdTime' => 'DESC'] : $request->query->get('orderBys');
+
+        $reviews = $this->getReviewService()->searchReviews($request->query->all(), $orderBys, $offset, $limit);
 
         return $this->dealReviews($reviews);
     }
@@ -52,10 +49,10 @@ class Review extends AbstractResource
         $existed = $this->getReviewService()->getByUserIdAndTargetTypeAndTargetId($review['userId'], $request->request->get('targetType'), $request->request->get('targetId'));
 
         if (!empty($existed['id'])) {
-            return $this->dealReview($this->getReviewService()->updateReview($existed['id'], $review));
+            return $this->getReviewService()->updateReview($existed['id'], $review);
         }
 
-        return $this->dealReview($this->getReviewService()->createReview($review));
+        return $this->getReviewService()->createReview($review);
     }
 
     public function remove(ApiRequest $request, $id)

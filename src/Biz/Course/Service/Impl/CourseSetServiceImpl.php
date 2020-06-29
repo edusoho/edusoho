@@ -630,8 +630,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                     ['courseSetId' => $id, 'source' => 'coursematerial']
                 );
             } elseif ('courseRatingNum' === $field) {
-                $course = $this->getCourseService()->getDefaultCourseByCourseSetId($id);
-                $ratingFields = $this->getReviewService()->countRatingByTargetTypeAndTargetId('course', $course['id']);
+                $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
+                $ratingFields = $this->getReviewService()->countRatingByTargetTypeAndTargetIds('course', array_values(array_column($courses, 'id')));
                 $updateFields = array_merge($updateFields, $ratingFields);
             }
         }

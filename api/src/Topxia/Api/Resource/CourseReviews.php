@@ -11,38 +11,41 @@ class CourseReviews extends BaseResource
     {
         $fields = $request->query->all();
 
-        $conditions = array(
-            'courseId' => $courseId
-        );
-        
+        $conditions = [
+            'courseId' => $courseId,
+        ];
+
         $total = $this->getCourseReviewService()->searchReviewsCount($conditions);
         $reviews = $this->getCourseReviewService()->searchReviews(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             isset($fields['start']) ? (int) $fields['start'] : 0,
             isset($fields['limit']) ? (int) $fields['limit'] : 20
         );
+
         return $this->wrap($this->multicallFilter('CourseReviews', $reviews), $total);
     }
 
     public function post(Application $app, Request $request, $courseId)
     {
-        $requiredFields = array('rating', 'content');
+        $requiredFields = ['rating', 'content'];
         $fields = $this->checkRequiredFields($requiredFields, $request->request->all());
 
-        $review = array(
+        $review = [
             'courseId' => $courseId,
             'userId' => !empty($fields['userId']) ? $fields['userId'] : $this->getCurrentUser()->id,
             'rating' => $fields['rating'],
             'content' => $fields['content'],
-        );
+        ];
         $review = $this->getCourseReviewService()->saveReview($review);
+
         return $this->filter($review);
     }
 
     public function filter($res)
     {
         $res['createdTime'] = date('c', $res['createdTime']);
+
         return $res;
     }
 

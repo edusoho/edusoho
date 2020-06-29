@@ -129,6 +129,22 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         ];
     }
 
+    public function countRatingByTargetTypeAndTargetIds($targetType, $targetIds)
+    {
+        $conditions = [
+            'targetType' => $targetType,
+            'targetIds' => $targetIds,
+            'parentId' => 0,
+        ];
+        $ratingNum = $this->countReviews($conditions);
+        $rating = $this->getReviewDao()->sumRatingByConditions($conditions);
+
+        return [
+            'ratingNum' => $ratingNum,
+            'rating' => $ratingNum ? $rating / $ratingNum : 0,
+        ];
+    }
+
     public function deleteReviewsByParentId($parentId)
     {
         return $this->getReviewDao()->deleteByParentId($parentId);
