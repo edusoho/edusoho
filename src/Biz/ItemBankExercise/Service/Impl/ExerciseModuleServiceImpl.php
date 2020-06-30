@@ -33,11 +33,15 @@ class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleSer
         if ($module_count > self::ASSESSMENT_MODULE_COUNT) {
             $this->createNewException(ItemBankExerciseException::ASSESSMENT_EXCEED());
         }
-        $this->getItemBankExerciseModuleDao()->create([
-            'exerciseId' => $exerciseId,
-            'title' => $name,
-            'type' => 'assessment',
-        ]);
+        return $this->getItemBankExerciseModuleDao()->create([
+                'exerciseId' => $exerciseId,
+                'title' => $name,
+                'type' => 'assessment',
+                ]);
+    }
+
+    public function updateAnswerSceneId($moduleId, $answerSceneId){
+        return $this->getItemBankExerciseModuleDao()->update($moduleId, ['answerSceneId'=>$answerSceneId]);
     }
 
     protected function getItemBankExerciseModuleDao()

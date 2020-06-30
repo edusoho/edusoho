@@ -18,10 +18,6 @@ class ChapterExerciseController extends BaseController
         $categoryTree = [];
         if ($exercise['chapterEnable']) {
             $categoryTree = $this->getItemCategoryService()->getItemCategoryTreeList($questionBank['itemBankId']);
-            $categoryTree = ArrayToolkit::index($categoryTree, 'id');
-            foreach ($categoryTree as &$tree) {
-                $tree['isShowNum'] = 0 == $tree['parent_id'] ? 1 : (0 == $categoryTree[$tree['parent_id']]['question_num'] ? 0 : 1);
-            }
         }
 
         return $this->render('item-bank-exercise/chapter-exercise/list.html.twig', [
@@ -34,7 +30,7 @@ class ChapterExerciseController extends BaseController
     public function openAction(Request $request, $exerciseId)
     {
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
-        $chapterEnable = 'on' == $request->get('chapterEnable') ? 1 : 0;
+        $chapterEnable = 'true' == $request->get('chapterEnable') ? 1 : 0;
         $this->getExerciseService()->updateChapterEnable($exercise['id'], ['chapterEnable' => $chapterEnable]);
 
         return $this->createJsonResponse(true);

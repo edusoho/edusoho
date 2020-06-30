@@ -21,4 +21,12 @@ interface ExerciseMemberService
     public function getExerciseMember($exerciseId, $userId);
 
     public function remarkStudent($exerciseId, $userId, $remark);
+
+    public function batchUpdateMemberDeadlinesByDay($exerciseId, $userIds, $day, $waveType = 'plus');
+
+    public function checkDayAndWaveTypeForUpdateDeadline($exerciseId, $userIds, $day, $waveType = 'plus');
+
+    public function batchUpdateMemberDeadlinesByDate($exerciseId, $userIds, $date);
+
+    public function checkDeadlineForUpdateDeadline($exerciseId, $userIds, $date);
 }

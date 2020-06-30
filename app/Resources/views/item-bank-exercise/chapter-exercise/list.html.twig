@@ -4,8 +4,8 @@
 {% block main_body %}
   {% include 'item-bank-exercise/chapter-exercise/header.html.twig' with {taskMode:'lesson'}  %}
   <div style="margin: 20px auto;display: {% if categoryTree %}block{% else %}none{% endif %}">
-    <span style="font-size: 18px;font-weight: bold;margin-left:20px">{{ 'item_bank_exercise.chapter_exercise.list'|trans }}</span>
-    <span style="font-size: 18px;font-weight: bold;float: right">{{ 'item_bank_exercise.chapter_exercise.item_num'|trans }}</span>
+    <span class="chapter-exercise-title" style="margin-left:27px">{{ 'item_bank_exercise.chapter_exercise.list'|trans }}</span>
+    <span class="chapter-exercise-title" style="float: right">{{ 'item_bank_exercise.chapter_exercise.item_num'|trans }}</span>
   </div>
   <ul id="sortable-list" class="task-manage-list sortable-list">
     {% for key, item in categoryTree %}

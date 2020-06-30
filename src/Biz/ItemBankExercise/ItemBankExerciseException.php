@@ -36,6 +36,8 @@ class ItemBankExerciseException extends AbstractException
 
     const ASSESSMENT_ANSWER_IS_DOING = 5007314;
 
+    const ASSESSMENT_EXCEED = 5007315;
+
     public $messages = [
         4037301 => 'exception.item_bank_exercise.forbidden_learn',
         4037302 => 'exception.item_bank_exercise.chapter_answer_is_doing',
@@ -51,5 +53,6 @@ class ItemBankExerciseException extends AbstractException
         5007312 => 'exception.item_bank_exercise.chapter_exercise_closed',
         5007313 => 'exception.item_bank_exercise.chapter_exercise_closed',
         5007314 => 'exception.item_bank_exercise.assessment_answer_is_doing',
+        5007315 => 'exception.item_bank_exercise.module.exceeded_number',
     ];
 }

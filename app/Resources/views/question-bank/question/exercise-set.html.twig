@@ -13,16 +13,16 @@
     {% include 'question-bank/header-navbar.html.twig' %}
     <div class="panel panel-default panel-col">
       {% block panel_body %}
-        <div class="panel-body question-list-container js-testpaper-container">
+        <div class="panel-body question-list-container js-testpaper-container exercise-set-open">
           <div class="mtl">
-            <table style="margin: 60px 25%">
+            <table style="margin: 120px 327px">
               <tr>
                 <td>
-                  <h3><b>{{ 'my.teaching.question_bank.is_open'|trans }}</b></h3>
-                  <p>{{ 'my.teaching.question_bank.open_explain'|trans }}</p>
+                  <p class="exercise-set-tip">{{ 'my.teaching.question_bank.is_open'|trans }}</p>
+                  <p class="exercise-set-info">{{ 'my.teaching.question_bank.open_explain'|trans }}</p>
                 </td>
-                <td style="text-align: right; padding-left: 35px">
-                  <a class="cd-btn cd-btn-primary" data-url="{{ path('item_bank_exercise_create', {id:questionBank.id}) }}" data-toggle="modal" data-target="#modal">
+                <td style="padding-left: 60px;">
+                  <a class="cd-btn cd-btn-primary" style="vertical-align: 13px" data-url="{{ path('item_bank_exercise_create', {id:questionBank.id}) }}" data-toggle="modal" data-target="#modal">
                     {{ 'my.teaching.question_bank.start_now'|trans }}
                   </a>
                 </td>

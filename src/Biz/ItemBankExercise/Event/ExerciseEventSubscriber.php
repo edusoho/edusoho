@@ -2,8 +2,10 @@
 
 namespace Biz\ItemBankExercise\Event;
 
+use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -12,19 +14,19 @@ class ExerciseEventSubscriber extends EventSubscriber implements EventSubscriber
     public static function getSubscribedEvents()
     {
         return [
-            'exercise.set' => 'onExerciseUpdate',
+            'exercise.update' => 'onExerciseUpdate',
         ];
     }
 
     public function onExerciseUpdate(Event $event)
     {
         $exercise = $event->getSubject();
-
-        if (!isset($courseSet['categoryId'])) {
+        $categoryId = $event->getArgument('categoryId');
+        if (!isset($categoryId)) {
             return;
         }
 
-        $this->getExerciseService()->updateCategoryByExerciseId($exercise['id'], $exercise['categoryId']);
+        $this->getExerciseService()->updateCategoryByExerciseId($exercise['id'], $categoryId);
     }
 
     /**
@@ -33,5 +35,13 @@ class ExerciseEventSubscriber extends EventSubscriber implements EventSubscriber
     protected function getExerciseService()
     {
         return $this->getBiz()->service('ItemBankExercise:ExerciseService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerSceneService');
     }
 }

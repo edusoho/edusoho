@@ -15,4 +15,6 @@ interface ExerciseModuleService
     public function get($id);
 
     public function createAssessmentModule($exerciseId, $name);
+
+    public function updateAnswerSceneId($moduleId, $answerSceneId);
 }

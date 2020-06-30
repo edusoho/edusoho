@@ -5,6 +5,7 @@ namespace Biz\QuestionBank\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Dao\QuestionBankDao;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\CategoryService;
@@ -122,6 +123,10 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
             if (!empty($fields['categoryId'])) {
                 $this->changeQuestionBankCategory($fields['categoryId'], $questionBank['categoryId']);
+                if ($fields['categoryId'] != $questionBank['categoryId']) {
+                    $exercise = $this->getItemBankExerciseService()->getByQuestionBankId($questionBank['id']);
+                    $this->dispatch('exercise.update', $exercise, ['categoryId' => $fields['categoryId']]);
+                }
             }
 
             $this->getMemberService()->resetBankMembers($newQuestionBank['id'], $members);
@@ -290,5 +295,13 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
     protected function getItemBankService()
     {
         return $this->createService('ItemBank:ItemBank:ItemBankService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getItemBankExerciseService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseService');
     }
 }
