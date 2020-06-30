@@ -284,8 +284,10 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $liveLogoUrl = $baseUrl.'/'.$liveLogo['live_logo'];
         }
 
+        $remark = empty($activity['remark']) ? '' : strip_tags($activity['remark'], '<img>');
+        $remark = html_entity_decode($remark);
         $live = $this->getEdusohoLiveClient()->createLive([
-            'summary' => empty($activity['remark']) ? '' : strip_tags($activity['remark'], '<img>'),
+            'summary' => $remark,
             'title' => $activity['title'],
             'speaker' => $speaker,
             'startTime' => $activity['startTime'].'',

@@ -572,8 +572,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             return ['result' => false, 'message' => 'message_response.live_class_not_exist.message'];
         }
 
-        $setting = $this->getSettingService()->get('magic', ['live_entry_time' => self::LIVE_STARTTIME_DIFF_SECONDS]);
-        $setTime = $this->isTeacher($courseId) ? $setting['live_entry_time'] : self::LIVE_STARTTIME_DIFF_SECONDS;
+        $setting = $this->getSettingService()->get('magic', []);
+        $setTime = empty($setting['live_entry_time']) ? self::LIVE_STARTTIME_DIFF_SECONDS : $setting['live_entry_time'];
+        $setTime = $this->isTeacher($courseId) ? $setTime : self::LIVE_STARTTIME_DIFF_SECONDS;
         if ($activity['startTime'] - time() > $setTime) {
             return ['result' => false, 'message' => 'message_response.live_not_start.message'];
         }

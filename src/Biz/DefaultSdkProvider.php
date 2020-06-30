@@ -3,6 +3,7 @@
 namespace Biz;
 
 use AppBundle\System;
+use Biz\CloudPlatform\Facade\Impl\ResourceFacadeImpl;
 use Codeages\Biz\Framework\Context\Biz;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -148,7 +149,7 @@ class DefaultSdkProvider implements ServiceProviderInterface
         /*S2B2C-CUSTOM*/
         $biz['qiQiuYunSdk.s2b2cService'] = function (Biz $biz) use ($that) {
             $service = null;
-//            $sdk = $that->generateSdk($biz, array('s2b2c' => array('host' => $host)), $biz->offsetGet('s2b2c.merchant.logger'));
+            // $sdk = $that->generateSdk($biz, array('s2b2c' => array('host' => $host)), $biz->offsetGet('s2b2c.merchant.logger'));
             $sdk = $that->generateSdk($biz, $this->getS2B2CConfig($biz), $biz['s2b2c.merchant.logger']);
 
             if (!empty($sdk)) {
@@ -157,7 +158,27 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
             return $service;
         };
+
+        $biz['ESCloudSdk.mobile'] = function ($biz) use ($that) {
+            $service = null;
+            $sdk = $that->generateEsCloudSdk($biz, []);
+            if (!empty($sdk)) {
+                $service = $sdk->getMobileService();
+            }
+
+            return $service;
+        };
         /*END*/
+
+        $biz['ESCloudSdk.play'] = function ($biz) use ($that) {
+            $service = null;
+            $sdk = $that->generateEsCloudSdk($biz, []);
+            if (!empty($sdk)) {
+                $service = $sdk->getPlayService();
+            }
+
+            return $service;
+        };
     }
 
     /**
@@ -178,6 +199,27 @@ class DefaultSdkProvider implements ServiceProviderInterface
         $sdk = null;
         if (!empty($storageSetting['cloud_access_key']) && !empty($storageSetting['cloud_secret_key'])) {
             $sdk = new \QiQiuYun\SDK\QiQiuYunSDK(
+                [
+                    'access_key' => $storageSetting['cloud_access_key'],
+                    'secret_key' => $storageSetting['cloud_secret_key'],
+                    'service' => $serviceConfig,
+                ],
+                $logger
+            );
+        }
+
+        return $sdk;
+    }
+
+    public function generateEsCloudSdk($biz, $serviceConfig, $logger = null)
+    {
+        $setting = $biz->service('System:SettingService');
+
+        $storageSetting = $setting->get('storage', []);
+
+        $sdk = null;
+        if (!empty($storageSetting['cloud_access_key']) && !empty($storageSetting['cloud_secret_key'])) {
+            $sdk = new \ESCloud\SDK\ESCloudSDK(
                 [
                     'access_key' => $storageSetting['cloud_access_key'],
                     'secret_key' => $storageSetting['cloud_secret_key'],

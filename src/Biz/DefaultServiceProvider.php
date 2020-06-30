@@ -41,6 +41,7 @@ use Codeages\Biz\Framework\Queue\Driver\DatabaseQueue;
 use Gregwar\Captcha\CaptchaBuilder;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Biz\System\Template\TemplateFactory;
 
 class DefaultServiceProvider implements ServiceProviderInterface
 {
@@ -237,6 +238,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
             $role = $biz->service('Role:RoleService');
 
             return $role->getPermissionsYmlContent();
+        };
+
+        $biz['template_factory'] = function ($biz) {
+            return new TemplateFactory($biz);
         };
     }
 }

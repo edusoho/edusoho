@@ -20,10 +20,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PlayerController extends BaseController
 {
-    public function showAction(Request $request, $id, $isPart = false, $context = [], $remeberLastPos = true)
+    public function showAction(Request $request, $id, $isPart = false, $context = [], $rememberLastPos = true)
     {
-        $ssl = $request->isSecure() ? true : false;
-
         $file = $this->getUploadFileService()->getFullFile($id);
         if (empty($file)) {
             $this->createNewException(UploadFileException::NOTFOUND_FILE());
@@ -32,36 +30,17 @@ class PlayerController extends BaseController
             $this->createNewException(PlayerException::NOT_SUPPORT_TYPE());
         }
 
-        $player = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
-
-        $agentInWhiteList = $this->getPlayerService()->agentInWhiteList($request->headers->get('user-agent'));
-
-        $isEncryptionPlus = false;
-
-        //音频无论是否开启教育云都会去使用cloudsdk
-        if ('audio' == $file['type']) {
-            $cloudSdk = 'audio'; //webExtension->getCloudSdkUrl
+        // 获取播放必须的token和resNo，以及一些个性化播放器参数
+        $playerContext = $this->getResourceFacadeService()->getPlayerContext($file);
+        if (is_array($context)) {
+            $playerContext = array_merge($playerContext, $context);
         }
-        if ('video' == $file['type'] && in_array($file['storage'], ['cloud', 'supplier'])) {
-            $cloudSdk = 'video'; //webExtension->getCloudSdkUrl
-            $videoPlayer = $this->getPlayerService()->getVideoFilePlayer($file, $agentInWhiteList, $context, $ssl);
-            $isEncryptionPlus = $videoPlayer['isEncryptionPlus'];
-            $context = $videoPlayer['context'];
-            if (!empty($videoPlayer['mp4Url'])) {
-                $mp4Url = $videoPlayer['mp4Url'];
-            }
-        }
-        $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($file, $context, $ssl);
 
         $params = [
             'file' => $file,
-            'url' => isset($url) ? $url : null,
-            'context' => $context,
-            'player' => $player,
-            'agentInWhiteList' => $agentInWhiteList,
-            'isEncryptionPlus' => $isEncryptionPlus,
-            'cloudSdk' => isset($cloudSdk) ? $cloudSdk : null,
-            'remeberLastPos' => $remeberLastPos,
+            'cloudSdk' => $file['type'],
+            'context' => $playerContext,
+            'rememberLastPos' => $rememberLastPos,
         ];
 
         if ($isPart) {
@@ -295,5 +274,10 @@ class PlayerController extends BaseController
     protected function getPlayerService()
     {
         return $this->getBiz()->service('Player:PlayerService');
+    }
+
+    protected function getResourceFacadeService()
+    {
+        return $this->getBiz()->service('CloudPlatform:ResourceFacadeService');
     }
 }

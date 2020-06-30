@@ -131,6 +131,27 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
          *  Column bankId, categoryId
          */
         $this->createIndex('question', 'bankId_categoryId', 'bankId, categoryId');
+
+        /*
+         *  Table  course_task_result
+         *  Index  courseId
+         *  Column courseId
+         */
+        $this->createIndex('course_task_result', 'courseId', 'courseId');
+
+        /*
+         *  Table  status
+         *  Index  userid_type_object
+         *  Column userId, type, objectType, objectId
+         */
+        $this->createIndex('status', 'userid_type_object', 'userId, type, objectType, objectId');
+
+        /*
+         *  Table  xapi_activity_watch_log
+         *  Index  is_push
+         *  Column is_push
+         */
+        $this->createIndex('xapi_activity_watch_log', 'is_push', 'is_push');
     }
 
     protected function changeTableFiledType()

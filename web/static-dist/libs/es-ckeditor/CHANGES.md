@@ -1,3 +1,8 @@
+# es-ckeditor 4.7.2-patch14 (2020-06-11)
+
+* 解决图片上传跨域问题
+* 适配item-bank中调用 es-ckeditor 图片上传
+
 # es-ckeditor 4.7.2-patch13 (2020-05-12)
 
 * 解决公式编辑器跨域问题
