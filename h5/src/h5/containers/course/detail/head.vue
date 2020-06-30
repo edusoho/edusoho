@@ -330,6 +330,7 @@ export default {
         user: this.user,
         resNo: media.resNo,
         token: media.token,
+        autoplay: true,
         disableDataUpload: true,
         watermark: {
           pos: 'top.right',

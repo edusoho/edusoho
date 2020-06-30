@@ -4744,9 +4744,9 @@ eslint-config-airbnb-base@^11.3.0:
   dependencies:
     eslint-restricted-globals "^0.1.1"
 
-eslint-config-prettier@^6.0.0:
+eslint-config-prettier@^6.0.0, eslint-config-prettier@^6.11.0:
   version "6.11.0"
-  resolved "https://registry.npm.taobao.org/eslint-config-prettier/download/eslint-config-prettier-6.11.0.tgz#f6d2238c1290d01c859a8b5c1f7d352a0b0da8b1"
+  resolved "https://registry.npm.taobao.org/eslint-config-prettier/download/eslint-config-prettier-6.11.0.tgz?cache=0&sync_timestamp=1587497107068&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Feslint-config-prettier%2Fdownload%2Feslint-config-prettier-6.11.0.tgz#f6d2238c1290d01c859a8b5c1f7d352a0b0da8b1"
   integrity sha1-9tIjjBKQ0ByFmotcH301KgsNqLE=
   dependencies:
     get-stdin "^6.0.0"
