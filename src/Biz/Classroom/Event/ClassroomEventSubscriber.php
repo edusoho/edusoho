@@ -3,7 +3,6 @@
 namespace Biz\Classroom\Event;
 
 use AppBundle\Common\StringToolkit;
-use Biz\Classroom\Service\ClassroomReviewService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Review\Service\ReviewService;
 use Biz\Taxonomy\TagOwnerManager;
@@ -21,7 +20,6 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
             'classroom.course.create' => 'onClassroomCourseChange',
             'classroom.course.delete' => 'onClassroomCourseChange',
             'classroom.course.update' => 'onClassroomCourseChange',
-            'classReview.add' => 'onReviewCreate',
 
             'review.create' => 'onReviewChanged',
             'review.update' => 'onReviewChanged',
@@ -48,29 +46,6 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
         $this->getClassroomService()->updateClassroomTeachers($classroomId);
     }
 
-    public function onReviewCreate(Event $event)
-    {
-        $review = $event->getSubject();
-
-        if ($review['parentId'] > 0) {
-            $classroom = $this->getClassroomService()->getClassroom($review['classroomId']);
-
-            $parentReview = $this->getClassroomReviewService()->getReview($review['parentId']);
-            if (!$parentReview) {
-                return false;
-            }
-
-            $message = [
-                'title' => $classroom['title'],
-                'targetId' => $review['classroomId'],
-                'targetType' => 'classroom',
-                'userId' => $review['userId'],
-            ];
-            $this->getNotifiactionService()->notify($parentReview['userId'], 'comment-post',
-                $message);
-        }
-    }
-
     public function onReviewChanged(Event $event)
     {
         $review = $event->getSubject();
@@ -82,30 +57,32 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
         $ratingFields = $this->getReviewService()->countRatingByTargetTypeAndTargetId($review['targetType'], $review['targetId']);
         $this->getClassroomService()->updateClassroom($review['targetId'], $ratingFields);
 
-        if ($review['parentId'] > 0) {
-            $classroom = $this->getClassroomService()->getClassroom($review['targetId']);
-
-            $review = $this->getReviewService()->getReview($review['id']);
-
-            if (empty($review['id'])) {
-                return;
-            }
-
-            $parentReview = $this->getReviewService()->getReview($review['parentId']);
-            if (!$parentReview) {
-                return;
-            }
-
-            $message = [
-                'title' => $classroom['title'],
-                'targetId' => $review['targetId'],
-                'targetType' => 'classroom',
-                'userId' => $review['userId'],
-            ];
-
-            $this->getNotifiactionService()->notify($parentReview['userId'], 'comment-post',
-                $message);
+        if (0 == $review['parentId']) {
+            return;
         }
+
+        $classroom = $this->getClassroomService()->getClassroom($review['targetId']);
+
+        $review = $this->getReviewService()->getReview($review['id']);
+
+        if (empty($review['id']) || $review['createdTime'] != $review['updatedTime']) {
+            return;
+        }
+
+        $parentReview = $this->getReviewService()->getReview($review['parentId']);
+        if (!$parentReview) {
+            return;
+        }
+
+        $message = [
+            'title' => $classroom['title'],
+            'targetId' => $review['targetId'],
+            'targetType' => 'classroom',
+            'userId' => $review['userId'],
+        ];
+
+        $this->getNotifiactionService()->notify($parentReview['userId'], 'comment-post',
+            $message);
     }
 
     private function simplifyClassroom($classroom)
@@ -133,14 +110,6 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     private function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
-    }
-
-    /**
-     * @return ClassroomReviewService
-     */
-    private function getClassroomReviewService()
-    {
-        return $this->getBiz()->service('Classroom:ClassroomReviewService');
     }
 
     /**

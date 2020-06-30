@@ -120,7 +120,9 @@ class ReviewController extends BaseController
 
         if (!empty($conditions['courseTitle']) && 'course' == $conditions['targetType']) {
             $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($conditions['courseTitle']);
-            $conditions['targetIds'] = ArrayToolkit::column($courseSets, 'id');
+            $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
+
+            $conditions['targetIds'] = ArrayToolkit::column($courses, 'id');
             unset($conditions['courseTitle']);
             $conditions['targetIds'] = $conditions['targetIds'] ?: [-1];
         }

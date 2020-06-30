@@ -74,7 +74,6 @@ class ReviewController extends BaseController
             'reviewsNum' => $reviewsNum,
             'reviews' => $reviews,
             'userReview' => $review,
-            'reviewSaveUrl' => $this->generateUrl('classroom_review_create', ['id' => $id]),
             'users' => $reviewUsers,
             'member' => $member,
             'layout' => $layout,

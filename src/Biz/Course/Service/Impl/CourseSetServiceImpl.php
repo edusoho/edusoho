@@ -19,7 +19,6 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
-use Biz\Course\Service\ReviewService as CourseReviewService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Review\Service\ReviewService;
 use Biz\System\Service\LogService;
@@ -618,7 +617,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $updateFields = [];
         foreach ($fields as $field) {
             if ('ratingNum' === $field) {
-                $ratingFields = $this->getCourseReviewService()->countRatingByCourseSetId($id);
+                $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
+                $ratingFields = $this->getReviewService()->countRatingByTargetTypeAndTargetIds('course', array_values(array_column($courses, 'id')));
                 $updateFields = array_merge($updateFields, $ratingFields);
             } elseif ('noteNum' === $field) {
                 $noteNum = $this->getNoteService()->countCourseNoteByCourseSetId($id);
@@ -629,10 +629,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 $updateFields['materialNum'] = $this->getCourseMaterialService()->countMaterials(
                     ['courseSetId' => $id, 'source' => 'coursematerial']
                 );
-            } elseif ('courseRatingNum' === $field) {
-                $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
-                $ratingFields = $this->getReviewService()->countRatingByTargetTypeAndTargetIds('course', array_values(array_column($courses, 'id')));
-                $updateFields = array_merge($updateFields, $ratingFields);
             }
         }
 
@@ -1074,14 +1070,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getTagService()
     {
         return $this->biz->service('Taxonomy:TagService');
-    }
-
-    /**
-     * @return CourseReviewService
-     */
-    protected function getCourseReviewService()
-    {
-        return $this->biz->service('Course:ReviewService');
     }
 
     /**

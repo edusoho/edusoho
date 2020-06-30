@@ -5,10 +5,6 @@
     {{ web_macro.user_avatar(author, 'user-avatar', 'avatar-sm', true) }}
   </div>
   <div class="media-body">
-    {% if targetType|default('course') == 'course' %}
-      {% set reviewDeleteUrl = path('course_review_delete',{courseId:post.targetId,reviewId:post.id})%}
-    {% endif %}
-
     <div class="metas">
       {% if canAccess|default(false) %}
         <div class="thread-post-manage-dropdown dropdown pull-right">

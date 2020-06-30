@@ -23,6 +23,7 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
                 'userId IN (:userIds)',
                 'content LIKE :content',
                 'rating = :rating',
+                'targetType IN (:targetTypes)',
             ],
             'timestamps' => [
                 'createdTime',

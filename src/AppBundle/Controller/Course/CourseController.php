@@ -352,7 +352,7 @@ class CourseController extends CourseBaseController
 
         $conditions = [
             'parentId' => 0,
-            'targetId' => $course['id'],
+            'targetId' => empty($selectedCourseId) ? $course['id'] : $selectedCourseId,
             'targetType' => 'course',
         ];
 
