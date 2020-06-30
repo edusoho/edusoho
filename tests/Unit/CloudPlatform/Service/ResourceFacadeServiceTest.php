@@ -77,6 +77,6 @@ class ResourceFacadeServiceTest extends BaseTestCase
 
     protected function getResourceFacadeService()
     {
-        return $this->createService('CloudPlatform:ResourceFacadeService');   
+        return $this->createService('CloudPlatform:ResourceFacadeService');
     }
 }
