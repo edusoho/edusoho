@@ -55,15 +55,15 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             'limited_time' => 0,
             'do_times' => 0,
             'redo_interval' => 0,
-            'need_score' => $module['type'] == 'assessment' ? 1 : 0,
+            'need_score' => 'assessment' == $module['type'] ? 1 : 0,
             'enable_facein' => 0,
             'pass_score' => 0,
             'manual_marking' => 1,
             'start_time' => 0,
-            'doing_look_analysis' => $module['type'] == 'assessment' ? 0 : 1,
+            'doing_look_analysis' => 'assessment' == $module['type'] ? 0 : 1,
         ];
         $scene = $this->getAnswerSceneService()->create($fileds);
-        $this->getExerciseModuleService()->updateAnswerSceneId($module['id'],$scene['id']);
+        $this->getExerciseModuleService()->updateAnswerSceneId($module['id'], $scene['id']);
     }
 
     public function get($exerciseId)

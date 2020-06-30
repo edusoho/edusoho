@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\ItemBankExercise;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\QuestionBankService;

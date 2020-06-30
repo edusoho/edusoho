@@ -2,7 +2,6 @@
 
 namespace Biz\ItemBankExercise\Event;
 
-use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;

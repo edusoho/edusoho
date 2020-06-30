@@ -201,7 +201,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
     public function batchUpdateMemberDeadlinesByDate($exerciseId, $userIds, $date)
     {
         $this->getExerciseService()->tryManageExercise($exerciseId);
-        $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date . ' 23:59:59');
+        $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date.' 23:59:59');
         if ($this->checkDeadlineForUpdateDeadline($exerciseId, $userIds, $date)) {
             foreach ($userIds as $userId) {
                 $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
