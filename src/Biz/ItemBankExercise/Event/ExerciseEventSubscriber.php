@@ -13,19 +13,22 @@ class ExerciseEventSubscriber extends EventSubscriber implements EventSubscriber
     public static function getSubscribedEvents()
     {
         return [
-            'exercise.update' => 'onExerciseUpdate',
+            'questionBank.update' => 'onQuestionBankUpdate',
         ];
     }
 
-    public function onExerciseUpdate(Event $event)
+    public function onQuestionBankUpdate(Event $event)
     {
-        $exercise = $event->getSubject();
-        $categoryId = $event->getArgument('categoryId');
-        if (!isset($categoryId)) {
-            return;
-        }
+        $questionBank = $event->getSubject();
+        $exercise = $this->getExerciseService()->getByQuestionBankId($questionBank['id']);
 
-        $this->getExerciseService()->updateCategoryByExerciseId($exercise['id'], $categoryId);
+        $this->getExerciseService()->update(
+            $exercise['id'],
+            [
+                'categoryId' => $questionBank['categoryId'],
+                'title' => $questionBank['name']
+            ]
+        );
     }
 
     /**
@@ -34,13 +37,5 @@ class ExerciseEventSubscriber extends EventSubscriber implements EventSubscriber
     protected function getExerciseService()
     {
         return $this->getBiz()->service('ItemBankExercise:ExerciseService');
-    }
-
-    /**
-     * @return AnswerSceneService
-     */
-    protected function getAnswerSceneService()
-    {
-        return $this->getBiz()->service('ItemBank:Answer:AnswerSceneService');
     }
 }

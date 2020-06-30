@@ -6,6 +6,8 @@ interface ExerciseService
 {
     const MAX_EXPIRY_DAY = 7300;
 
+    public function update($id, $fields);
+
     public function create($exercise);
 
     public function get($exerciseId);
@@ -29,8 +31,6 @@ interface ExerciseService
     public function isExerciseTeacher($exerciseId, $userId);
 
     public function changeExerciseCover($id, $coverArray);
-
-    public function updateCategoryByExerciseId($exerciseId, $categoryId);
 
     public function getByQuestionBankId($questionBankId);
 

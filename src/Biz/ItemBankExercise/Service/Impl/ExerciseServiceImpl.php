@@ -19,6 +19,11 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 
 class ExerciseServiceImpl extends BaseService implements ExerciseService
 {
+    public function update($id, $fields)
+    {
+        return $this->getExerciseDao()->update($id, $fields);
+    }
+
     public function create($exercise)
     {
         if (!ArrayToolkit::requireds($exercise, ['questionBankId'])) {
@@ -27,18 +32,12 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
         try {
             $this->beginTransaction();
+
             $exercise = $this->getExerciseDao()->create($exercise);
-            if (!empty($exercise)) {
-                $this->getExerciseMemberService()->addTeacher($exercise['id']);
-                $chapterModule = $this->getItemBankExerciseModuleDao()->create([
-                                    'exerciseId' => $exercise['id'],
-                                    'title' => '章节练习',
-                                    'type' => 'chapter',
-                                    ]);
-                $assessmentModule = $this->getExerciseModuleService()->createAssessmentModule($exercise['id'], '模拟考试');
-                $this->createAnswerScene($chapterModule);
-                $this->createAnswerScene($assessmentModule);
-            }
+            $this->getExerciseMemberService()->addTeacher($exercise['id']);
+            $this->createChapterModule($exercise);
+            $this->getExerciseModuleService()->createAssessmentModule($exercise['id'], '模拟考试');
+
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
@@ -48,22 +47,28 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $exercise;
     }
 
-    protected function createAnswerScene($module)
+    protected function createChapterModule($exercise)
     {
-        $fileds = [
-            'name' => $module['title'],
-            'limited_time' => 0,
-            'do_times' => 0,
-            'redo_interval' => 0,
-            'need_score' => 'assessment' == $module['type'] ? 1 : 0,
-            'enable_facein' => 0,
-            'pass_score' => 0,
-            'manual_marking' => 1,
-            'start_time' => 0,
-            'doing_look_analysis' => 'assessment' == $module['type'] ? 0 : 1,
-        ];
-        $scene = $this->getAnswerSceneService()->create($fileds);
-        $this->getExerciseModuleService()->updateAnswerSceneId($module['id'], $scene['id']);
+        $scene = $this->getAnswerSceneService()->create(
+            [
+                'name' => '章节练习',
+                'limited_time' => 0,
+                'do_times' => 0,
+                'redo_interval' => 0,
+                'need_score' => 0,
+                'enable_facein' => 0,
+                'pass_score' => 0,
+                'manual_marking' => 1,
+                'start_time' => 0,
+                'doing_look_analysis' => 1,
+            ]
+        );
+        $this->getItemBankExerciseModuleDao()->create([
+            'exerciseId' => $exercise['id'],
+            'title' => '章节练习',
+            'type' => 'chapter',
+            'answerSceneId' => $scene['id'],
+        ]);
     }
 
     public function get($exerciseId)
@@ -190,11 +195,6 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         $exercise = $this->getExerciseDao()->update($exercise['id'], ['cover' => $covers]);
 
         return $exercise;
-    }
-
-    public function updateCategoryByExerciseId($exerciseId, $categoryId)
-    {
-        $this->getExerciseDao()->updateCategoryByExerciseId($exerciseId, ['categoryId' => $categoryId]);
     }
 
     public function getByQuestionBankId($questionBankId)

@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 
 class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleService
 {
@@ -43,12 +44,42 @@ class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleSer
         if ($module_count > self::ASSESSMENT_MODULE_COUNT) {
             $this->createNewException(ItemBankExerciseException::ASSESSMENT_EXCEED());
         }
+        try {
+            $this->beginTransaction();
 
-        return $this->getItemBankExerciseModuleDao()->create([
+            $scene = $this->createAssessmentScene($name);
+            $module =  $this->getItemBankExerciseModuleDao()->create([
                 'exerciseId' => $exerciseId,
                 'title' => $name,
                 'type' => 'assessment',
-                ]);
+                'answerSceneId' => $scene['id'],
+            ]);
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
+        return $module;
+    }
+
+    protected function createAssessmentScene($name)
+    {
+        return $this->getAnswerSceneService()->create(
+            [
+                'name' => $name,
+                'limited_time' => 0,
+                'do_times' => 0,
+                'redo_interval' => 0,
+                'need_score' => 1,
+                'enable_facein' => 0,
+                'pass_score' => 0,
+                'manual_marking' => 1,
+                'start_time' => 0,
+                'doing_look_analysis' => 0,
+            ]
+        );
     }
 
     public function updateAnswerSceneId($moduleId, $answerSceneId)
@@ -67,5 +98,13 @@ class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleSer
     protected function getItemBankExerciseService()
     {
         return $this->createService('ItemBankExercise:ExerciseService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerSceneService');
     }
 }

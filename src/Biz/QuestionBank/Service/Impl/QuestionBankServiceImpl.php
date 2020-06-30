@@ -123,10 +123,6 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
             if (!empty($fields['categoryId'])) {
                 $this->changeQuestionBankCategory($fields['categoryId'], $questionBank['categoryId']);
-                if ($fields['categoryId'] != $questionBank['categoryId']) {
-                    $exercise = $this->getItemBankExerciseService()->getByQuestionBankId($questionBank['id']);
-                    $this->dispatch('exercise.update', $exercise, ['categoryId' => $fields['categoryId']]);
-                }
             }
 
             $this->getMemberService()->resetBankMembers($newQuestionBank['id'], $members);
@@ -151,6 +147,7 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
         $questionBank = $this->getQuestionBankDao()->update($id, $fields);
         $this->getItemBankService()->updateItemBank($questionBank['itemBankId'], ['name' => $questionBank['name']]);
+        $this->dispatch('questionBank.update', $questionBank);
 
         return $this->wrapQuestionBank($questionBank);
     }
@@ -295,13 +292,5 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
     protected function getItemBankService()
     {
         return $this->createService('ItemBank:ItemBank:ItemBankService');
-    }
-
-    /**
-     * @return ExerciseService
-     */
-    protected function getItemBankExerciseService()
-    {
-        return $this->createService('ItemBankExercise:ExerciseService');
     }
 }
