@@ -483,6 +483,7 @@ admin_v2.course.basic.basic_tab.close_btn: Close
 admin_v2.course.basic.basic_tab.publish_submit_btn: Publish
 admin_v2.course.basic.basic_tab.clone_btn: Clone
 admin_v2.course.basic.basic_tab.delete_submit_btn: Delete
+admin_v2.course.basic.basic_tab.s2b2c_submit_btn: Remove
 
 # 教学模块-课程管理-班级管理
 admin_v2.course.classroom_menu: Classes
@@ -908,6 +909,10 @@ admin_v2.developer.crontab: Crontab Manage
 admin_v2.developer.plumber_manage_menu: Plumber
 admin_v2.developer.plumber_manage: Manage
 admin_v2.developer.plumber_queue: Queue
+
+# Apple设置管理（隐藏路由）
+admin_v2.system.apple_manage_menu: Apple
+admin_v2.system.apple_setting: Apple
 
 # IAP
 admin_v2.developer.mobile_iap_product_menu: iOS Purchase Setting

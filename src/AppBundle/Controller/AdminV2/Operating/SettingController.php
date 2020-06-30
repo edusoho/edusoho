@@ -40,7 +40,7 @@ class SettingController extends BaseController
         return $this->render('admin-v2/operating/wap/set.html.twig', [
             'wapSetting' => $wapSetting,
             'template' => empty($template) ? '' : $template,
-            'currentTheme' => $this->get('web.twig.extension')->getSetting('theme')
+            'currentTheme' => $this->get('web.twig.extension')->getSetting('theme'),
         ]);
     }
 

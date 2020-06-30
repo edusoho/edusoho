@@ -48,12 +48,10 @@
           {{ '合作面额'|trans }}:
         </label>
         <span class="cooperation-price" style="color: #dc2d2d">
-          {% set maxCoopAmountAfterDeduct = courseSet.maxCooperationPrice|default(0) * merchant.coop_level_deduct|default(100) / 100 %}
-          {% set minCoopAmountAfterDeduct = courseSet.minCooperationPrice|default(0) * merchant.coop_level_deduct|default(100) / 100 %}
           {% if courseSet.maxCooperationPrice == courseSet.minCooperationPrice %}
-            ￥{{ maxCoopAmountAfterDeduct | number_format(2) }}
+            ￥{{ courseSet.maxCooperationPrice|default(0) | number_format(2) }}
           {% else %}
-            ￥{{ minCoopAmountAfterDeduct | number_format(2) }} - ￥{{ maxCoopAmountAfterDeduct | number_format(2) }}
+            ￥{{ courseSet.minCooperationPrice | number_format(2) }} - ￥{{ courseSet.maxCooperationPrice|default(0) | number_format(2) }}
           {% endif %}
         </span>
 
