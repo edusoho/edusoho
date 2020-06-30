@@ -586,16 +586,16 @@
         },
         {
             "name": "codeages/escloud-php-sdk",
-            "version": "v1.1.3",
+            "version": "v1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/escloud-php-sdk.git",
-                "reference": "3086c6f82106d808ffca8fbea26dbbc8938ac976"
+                "reference": "cc3a2014dba462e9ce1ae5067f97dcef2ae311bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/escloud-php-sdk/zipball/3086c6f82106d808ffca8fbea26dbbc8938ac976",
-                "reference": "3086c6f82106d808ffca8fbea26dbbc8938ac976",
+                "url": "https://api.github.com/repos/codeages/escloud-php-sdk/zipball/cc3a2014dba462e9ce1ae5067f97dcef2ae311bf",
+                "reference": "cc3a2014dba462e9ce1ae5067f97dcef2ae311bf",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -634,7 +634,7 @@
                 }
             ],
             "description": "ESCloud PHP SDK",
-            "time": "2020-03-09T14:15:29+00:00"
+            "time": "2020-06-28T11:56:57+00:00"
         },
         {
             "name": "codeages/exam-parser",
@@ -6905,12 +6905,6 @@
                 "functional testing",
                 "unit testing"
             ],
-            "funding": [
-                {
-                    "url": "https://opencollective.com/codeception",
-                    "type": "open_collective"
-                }
-            ],
             "time": "2020-05-24T13:58:47+00:00"
         },
         {
@@ -7544,12 +7538,6 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "funding": [
-                {
-                    "url": "https://github.com/keradus",
-                    "type": "github"
-                }
-            ],
             "time": "2020-04-15T18:51:10+00:00"
         },
         {
@@ -9203,6 +9191,5 @@
         "php": ">=5.5.9",
         "ext-json": "*"
     },
-    "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "platform-dev": []
 }

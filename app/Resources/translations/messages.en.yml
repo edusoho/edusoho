@@ -231,6 +231,7 @@ user.fields.idcard_back_title: Upload Id card back
 user.fields.mobile_label: 'Phone'
 user.fields.mobile_label.bind: Binded
 user.fields.mobile_label.no_bind: 'Not bind'
+user.fields.mobile_label.apple_tip: Please go to the APP for binding
 user.fileds.realname: Name
 user.fileds.me: Me
 user.fields.following: Following

@@ -919,6 +919,10 @@ admin_v2.developer.plumber_manage_menu: Plumber管理
 admin_v2.developer.plumber_manage: Plumber管理
 admin_v2.developer.plumber_queue: 队列信息
 
+# Apple设置管理（隐藏路由）
+admin_v2.system.apple_manage_menu: Apple设置管理
+admin_v2.system.apple_setting: Apple设置管理
+
 # IAP
 admin_v2.developer.mobile_iap_product_menu: iOS内购商品设置
 admin_v2.developer.mobile_iap_product.basic_tab: iOS内购商品设置iOS Purchase Setting
