@@ -312,7 +312,7 @@ export default {
         });
     },
     formateAudioData(player) {
-      const media = player.downloadMedia;
+      const media = player.media;
       if (!media.isFinishConvert) {
         Toast('课程内容准备中，请稍候查看');
         return;
