@@ -27,7 +27,7 @@ class MeFavoriteCourseSet extends AbstractResource
             $limit
         );
         $total = $this->getFavoriteService()->countFavorites($conditions);
-        $courseSets = $this->getCourseSetService()->findCourseSetsByIds(array_column($favorites, 'courseSetId'));
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds(array_column($favorites, 'targetId'));
 
         return $this->makePagingObject(array_values($courseSets), $total, $offset, $limit);
     }
@@ -41,13 +41,13 @@ class MeFavoriteCourseSet extends AbstractResource
 
     public function add(ApiRequest $request)
     {
-        $success = $this->getFavoriteService()->createFavorite([
+        $result = $this->getFavoriteService()->createFavorite([
             'targetType' => 'course',
             'targetId' => $request->request->get('courseSetId'),
             'userId' => $this->getCurrentUser()->getId(),
         ]);
 
-        return array('success' => $success);
+        return array('success' => !empty($result));
     }
 
     public function remove(ApiRequest $request, $courseSetId)
