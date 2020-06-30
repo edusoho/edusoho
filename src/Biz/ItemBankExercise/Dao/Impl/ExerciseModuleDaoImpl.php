@@ -26,7 +26,10 @@ class ExerciseModuleDaoImpl extends GeneralDaoImpl implements ExerciseModuleDao
         return [
             'timestamps' => ['createdTime', 'updatedTime'],
             'orderbys' => ['createdTime', 'seq'],
-            'conditions' => [],
+            'conditions' => [
+                'type IN (:types)',
+                'exerciseId = :exerciseId',
+            ],
         ];
     }
 }
