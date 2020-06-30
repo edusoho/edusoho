@@ -157,6 +157,16 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
             return $service;
         };
+
+        $biz['ESCloudSdk.mobile'] = function ($biz) use ($that) {
+            $service = null;
+            $sdk = $that->generateEsCloudSdk($biz, []);
+            if (!empty($sdk)) {
+                $service = $sdk->getMobileService();
+            }
+
+            return $service;
+        };
         /*END*/
     }
 
@@ -178,6 +188,27 @@ class DefaultSdkProvider implements ServiceProviderInterface
         $sdk = null;
         if (!empty($storageSetting['cloud_access_key']) && !empty($storageSetting['cloud_secret_key'])) {
             $sdk = new \QiQiuYun\SDK\QiQiuYunSDK(
+                [
+                    'access_key' => $storageSetting['cloud_access_key'],
+                    'secret_key' => $storageSetting['cloud_secret_key'],
+                    'service' => $serviceConfig,
+                ],
+                $logger
+            );
+        }
+
+        return $sdk;
+    }
+
+    public function generateEsCloudSdk($biz, $serviceConfig, $logger = null)
+    {
+        $setting = $biz->service('System:SettingService');
+
+        $storageSetting = $setting->get('storage', []);
+
+        $sdk = null;
+        if (!empty($storageSetting['cloud_access_key']) && !empty($storageSetting['cloud_secret_key'])) {
+            $sdk = new \ESCloud\SDK\ESCloudSDK(
                 [
                     'access_key' => $storageSetting['cloud_access_key'],
                     'secret_key' => $storageSetting['cloud_secret_key'],
