@@ -3,8 +3,8 @@
 namespace Biz\CloudPlatform\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\CloudPlatform\Service\ResourceFacadeService;
 use Biz\CloudPlatform\Service\BaseFacade;
+use Biz\CloudPlatform\Service\ResourceFacadeService;
 
 class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeService
 {
@@ -27,7 +27,7 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         $context['resNo'] = $file['globalId'];
 
         //转码状态
-        $context['isFinishConvert'] = $file['storage'] != 'cloud' || !in_array($file['type'], ['ppt', 'document','video']) || $file['convertStatus'] == 'success';
+        $context['isFinishConvert'] = 'cloud' != $file['storage'] || !in_array($file['type'], ['ppt', 'document', 'video']) || 'success' == $file['convertStatus'];
 
         return $context;
     }
