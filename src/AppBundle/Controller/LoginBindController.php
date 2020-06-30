@@ -3,17 +3,17 @@
 namespace AppBundle\Controller;
 
 use ApiBundle\Api\Resource\Setting\Setting;
+use AppBundle\Common\SimpleValidator;
+use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use AppBundle\Controller\OAuth2\OAuthUser;
 use Biz\Sensitive\Service\SensitiveService;
 use Biz\System\SettingException;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
-use AppBundle\Common\SimpleValidator;
 use Biz\User\TokenException;
 use Biz\WeChat\Service\WeChatService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class LoginBindController extends BaseController
@@ -31,18 +31,18 @@ class LoginBindController extends BaseController
         }
         $client = $this->createOAuthClient($type);
 
-        $token = $this->getTokenService()->makeToken('login.bind', array(
-            'data' => array(
+        $token = $this->getTokenService()->makeToken('login.bind', [
+            'data' => [
                 'type' => $type,
                 'sessionId' => $request->getSession()->getId(),
-            ),
+            ],
             'times' => $this->isAndroidAndWechat($request) ? 0 : 1,
             'duration' => 3600,
-        ));
-        $params = array(
+        ]);
+        $params = [
             'type' => $type,
             'token' => $token['token'],
-        );
+        ];
 
         if ($request->query->get('os')) {
             $params['os'] = $request->query->get('os');
@@ -69,7 +69,7 @@ class LoginBindController extends BaseController
 
     protected function getBlacklist()
     {
-        return array('/partner/logout');
+        return ['/partner/logout'];
     }
 
     public function callbackAction(Request $request, $type)
@@ -78,10 +78,10 @@ class LoginBindController extends BaseController
         $token = $request->query->get('token', '');
         $os = $request->query->get('os', '');
         $this->validateToken($request, $type);
-        $callbackParams = array(
+        $callbackParams = [
             'type' => $type,
             'token' => $token,
-        );
+        ];
 
         if ($os) {
             $callbackParams['os'] = $os;
@@ -114,11 +114,11 @@ class LoginBindController extends BaseController
             }
 
             if ($this->getAuthService()->hasPartnerAuth()) {
-                return $this->redirect($this->generateUrl('partner_login', array('goto' => $this->getTargetPath($request))));
+                return $this->redirect($this->generateUrl('partner_login', ['goto' => $this->getTargetPath($request)]));
             } else {
                 $currentUser = $this->getCurrentUser();
                 if (!$currentUser['passwordInit']) {
-                    $params = array('goto' => $this->getTargetPath($request));
+                    $params = ['goto' => $this->getTargetPath($request)];
                     $url = $this->generateUrl('password_init');
                     $goto = $url.'?'.http_build_query($params);
                 } else {
@@ -180,10 +180,10 @@ class LoginBindController extends BaseController
 
     protected function generateUser($type, $token, $oauthUser, $setData)
     {
-        $registration = array();
+        $registration = [];
         $randString = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $oauthUser['name'] = preg_replace('/[^\x{4e00}-\x{9fa5}a-zA-z0-9_.]+/u', '', $oauthUser['name']);
-        $oauthUser['name'] = str_replace(array('-'), array('_'), $oauthUser['name']);
+        $oauthUser['name'] = str_replace(['-'], ['_'], $oauthUser['name']);
 
         if (!SimpleValidator::nickname($oauthUser['name'])) {
             $oauthUser['name'] = '';
@@ -210,7 +210,7 @@ class LoginBindController extends BaseController
             $registration['email'] = $setData['email'];
             $registration['emailOrMobile'] = $setData['email'];
         } else {
-            $nicknames = array();
+            $nicknames = [];
             $nicknames[] = isset($setData['nickname']) ? $setData['nickname'] : $oauthUser['name'];
             $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8').substr($randString, 0, 3);
             $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8').substr($randString, 3, 3);
@@ -224,7 +224,7 @@ class LoginBindController extends BaseController
             }
 
             if (empty($registration['nickname'])) {
-                return array();
+                return [];
             }
 
             $registration['email'] = 'u_'.substr($randString, 0, 12).'@edusoho.net';
@@ -260,6 +260,10 @@ class LoginBindController extends BaseController
             $this->createNewException(SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG());
         }
 
+        if ('apple' == $type) {
+            return $this->createAppleClient();
+        }
+
         if (empty($settings) || !isset($settings[$type.'_enabled']) || empty($settings[$type.'_key']) || empty($settings[$type.'_secret'])) {
             $this->createNewException(SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG());
         }
@@ -268,11 +272,26 @@ class LoginBindController extends BaseController
             $this->createNewException(SettingException::FORBIDDEN_THIRD_PARTY_AUTH());
         }
 
-        $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
+        $config = ['key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']];
 
         $client = OAuthClientFactory::create($type, $config);
 
         return $client;
+    }
+
+    protected function createAppleClient()
+    {
+        $settings = $this->setting('login_bind');
+
+        if (empty($settings['enabled'])) {
+            throw SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG();
+        }
+
+        $config = $this->setting('apple_setting', []);
+        $config['key'] = empty($config['keyId']) ? '' : $config['keyId'];
+        $config['secret'] = empty($config['secretKey']) ? '' : $config['secretKey'];
+
+        return OAuthClientFactory::create('apple', $config);
     }
 
     /**

@@ -158,6 +158,16 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
             return $service;
         };
+
+        $biz['ESCloudSdk.mobile'] = function ($biz) use ($that) {
+            $service = null;
+            $sdk = $that->generateEsCloudSdk($biz, []);
+            if (!empty($sdk)) {
+                $service = $sdk->getMobileService();
+            }
+
+            return $service;
+        };
         /*END*/
 
         $biz['ESCloudSdk.play'] = function ($biz) use ($that) {
