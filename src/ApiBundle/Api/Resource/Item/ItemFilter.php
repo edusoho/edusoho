@@ -14,6 +14,7 @@ class ItemFilter extends Filter
         'category_id',
         'difficulty',
         'question_num',
+        'analysis',
         'questions',
     ];
 

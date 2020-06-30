@@ -15,6 +15,7 @@ class QuestionFilter extends Filter
         'answer_mode',
         'response_points',
         'answer',
+        'analysis',
     ];
 
     protected function publicFields(&$question)
