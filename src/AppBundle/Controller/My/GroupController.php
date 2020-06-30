@@ -31,7 +31,7 @@ class GroupController extends BaseController
 
         $collectSearchConditions = [
             'userId' => $user['id'],
-            'targetType' => 'thread'
+            'targetType' => 'thread',
         ];
         $collectThreadsIds = $this->getFavoriteService()->searchFavorites(
             $collectSearchConditions,

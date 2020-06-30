@@ -3,7 +3,6 @@
 namespace Biz\Course\Service;
 
 use Biz\System\Annotation\Log;
-use Biz\User\UserException;
 
 interface CourseSetService
 {

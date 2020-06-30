@@ -193,7 +193,7 @@ interface OpenCourseService
 
     public function findOpenLiveCourse($conditions, $userId);
 
-    public function countLiveCourses($conditions = array());
+    public function countLiveCourses($conditions = []);
 
-    public function searchAndSortLiveCourses($conditions = array(), $start, $limit);
+    public function searchAndSortLiveCourses($conditions = [], $start, $limit);
 }

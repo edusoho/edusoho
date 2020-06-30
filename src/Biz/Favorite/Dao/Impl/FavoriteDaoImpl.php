@@ -30,9 +30,9 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
         $sql .= ' JOIN  '.CourseSetDao::TABLE_NAME.' AS c ON f.userId = ?';
         $sql .= "AND f.targetId = c.id AND c.parentId = 0 AND f.targetType = 'course'";
         $sql .= ' ORDER BY createdTime DESC';
-        $sql = $this->sql($sql, array(), $start, $limit);
+        $sql = $this->sql($sql, [], $start, $limit);
 
-        return $this->db()->fetchAll($sql, array($userId));
+        return $this->db()->fetchAll($sql, [$userId]);
     }
 
     /*
@@ -44,9 +44,9 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
         $sql .= ' JOIN  '.CourseSetDao::TABLE_NAME.' AS c ON f.userId = ? AND c.type = ?';
         $sql .= "AND f.targetId = c.id AND c.parentId = 0 AND f.targetType = 'course')";
         $sql .= ' ORDER BY createdTime DESC';
-        $sql = $this->sql($sql, array(), $start, $limit);
+        $sql = $this->sql($sql, [], $start, $limit);
 
-        return $this->db()->fetchAll($sql, array($userId, $courseType));
+        return $this->db()->fetchAll($sql, [$userId, $courseType]);
     }
 
     /*
@@ -58,9 +58,8 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
         $sql .= ' JOIN  '.CourseSetDao::TABLE_NAME.' AS c ON f.userId = ? AND c.type = ?';
         $sql .= "AND f.targetId = c.id AND c.parentId = 0 AND f.targetType = 'course')";
 
-        return $this->db()->fetchColumn($sql, array($userId, $courseType));
+        return $this->db()->fetchColumn($sql, [$userId, $courseType]);
     }
-
 
     public function declares()
     {
