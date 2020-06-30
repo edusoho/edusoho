@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Favorite\Service\FavoriteService;
 use Biz\User\CurrentUser;
 use AppBundle\Common\Paginator;
 use Biz\User\UserException;
@@ -236,14 +237,22 @@ class UserController extends BaseController
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
         $user = array_merge($user, $userProfile);
 
+        $conditions = [
+            'userId' => $user['id'],
+            'targetTypes' => ['course', 'openCourse'],
+        ];
+
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseSetService()->countUserFavorites($user['id']),
+            $this->getFavoriteService()->countFavorites($conditions),
             20
         );
 
-        $favorites = $this->getCourseSetService()->searchUserFavorites(
-            $user['id'], $paginator->getOffsetCount(), $paginator->getPerPageCount()
+        $favorites = $this->getFavoriteService()->searchFavorites(
+            $conditions,
+            ['createdTime' => 'DESC'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
         );
 
         return $this->render('user/courses_favorited.html.twig', array(
@@ -803,5 +812,13 @@ class UserController extends BaseController
     protected function getCourseSetService()
     {
         return $this->getBiz()->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return FavoriteService
+     */
+    protected function getFavoriteService()
+    {
+        return $this->getBiz()->service('Favorite:FavoriteService');
     }
 }

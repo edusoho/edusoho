@@ -3,6 +3,7 @@
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
 use AppBundle\Common\Exception\AbstractException;
+use Biz\Favorite\Service\FavoriteService;
 use Biz\Util\EdusohoLiveClient;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Response;
@@ -849,7 +850,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $course = $this->getCourseService()->getCourse($courseId);
 
-        $this->getCourseSetService()->favorite($course['courseSetId']);
+        $this->getFavoriteService()->createFavorite(['targetType' => 'course', 'targetId' => $course['courseSetId'], 'userId' => $user['id']]);
 
         return true;
     }
@@ -879,12 +880,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $course = $this->getCourseService()->getCourse($courseId);
 
-        if (!$this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId'])) {
+        if (!$this->getFavoriteService()->isUserFavorite($user['id'], 'course', $course['courseSetId'])) {
             return $this->createErrorResponse('runtime_error', '您尚未收藏课程，不能取消收藏！');
         }
 
         try {
-            $this->controller->getCourseSetService()->unfavorite($course['courseSetId']);
+            $this->getFavoriteService()->deleteUserFavorite($user['id'], 'course', $course['courseSetId']);
         } catch (AbstractException $e) {
             return $this->createErrorResponse('runtime_error', $e->getMessage());
         }
@@ -1030,7 +1031,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         $this->updateMemberLastViewTime($member);
-        $userFavorited = $user->isLogin() ? $this->controller->getCourseService()->getFavoritedCourseByUserIdAndCourseSetId($user['id'], $course['courseSetId']) : false;
+        $userFavorited = $user->isLogin() ? $this->getFavoriteService()->getUserFavorite($user['id'], 'course', $course['courseSetId']) : false;
         $vipLevels = array();
 
         if ($this->controller->isinstalledPlugin('Vip') && $this->controller->setting('vip.enabled')) {
@@ -1760,5 +1761,13 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     private function getVipService()
     {
         return $this->controller->getService('VipPlugin:Vip:VipService');
+    }
+
+    /**
+     * @return FavoriteService
+     */
+    public function getFavoriteService()
+    {
+        return $this->controller->getService('Favorite:FavoriteService');
     }
 }

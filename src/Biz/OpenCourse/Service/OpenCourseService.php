@@ -53,10 +53,6 @@ interface OpenCourseService
 
     public function waveCourse($id, $field, $diff);
 
-    public function favoriteCourse($courseId);
-
-    public function unFavoriteCourse($courseId);
-
     /**
      * @param $courseId
      * @param $data
@@ -65,8 +61,6 @@ interface OpenCourseService
      * @Log(module="open_course",action="update_picture",funcName="getCourse",param="courseId")
      */
     public function changeCoursePicture($courseId, $data);
-
-    public function getFavoriteByUserIdAndCourseId($userId, $courseId, $type);
 
     /**
      * @param $id

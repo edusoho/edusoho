@@ -30,49 +30,6 @@ class ThreadServiceTest extends BaseTestCase
         ), $result);
     }
 
-    public function testUnThreadCollect()
-    {
-        $testThread = array(
-            'id' => 41,
-            'title' => 'test',
-            'content' => 'xxx',
-            'groupId' => 1,
-            'userId' => 1,
-        );
-
-        $thread = $this->getThreadService()->addThread($testThread);
-        $this->getThreadCollectDao()->create(array('userId' => 1, 'threadId' => $testThread['id']));
-        $this->getThreadService()->unThreadCollect(1, $testThread['id']);
-        $result = $this->getThreadCollectDao()->search(array(), array(), 0, 2);
-
-        $this->assertTrue(empty($result));
-    }
-
-    /**
-     * @expectedException \Biz\Group\ThreadException
-     */
-    public function testUnThreadCollectError2()
-    {
-        $testThread = array(
-            'id' => 41,
-            'title' => 'test',
-            'content' => 'xxx',
-            'groupId' => 1,
-            'userId' => 1,
-        );
-
-        $thread = $this->getThreadService()->addThread($testThread);
-        $this->getThreadService()->unThreadCollect(1, $testThread['id']);
-    }
-
-    /**
-     * @expectedException \Biz\Group\ThreadException
-     */
-    public function testUnThreadCollectError1()
-    {
-        $this->getThreadService()->unThreadCollect(1, 1);
-    }
-
     public function testAddPostAttach()
     {
         $file = $this->getFileDao()->create(array('uri' => 'test', 'mime' => 'test', 'userId' => 1));
@@ -189,75 +146,6 @@ class ThreadServiceTest extends BaseTestCase
         $result = ReflectionUtils::invokeMethod($this->getThreadService(), 'filterSort', array('test'));
     }
 
-    public function testThreadCollect()
-    {
-        $testThread = array(
-            'id' => 41,
-            'title' => 'test',
-            'content' => 'xxx',
-            'groupId' => 1,
-            'userId' => 1,
-        );
-
-        $thread = $this->getThreadService()->addThread($testThread);
-        $result = $this->getThreadService()->threadCollect(2, $thread['id']);
-
-        $this->assertTrue(!empty($result));
-    }
-
-    /**
-     * @expectedException \Biz\Group\ThreadException
-     */
-    public function testThreadCollectError3()
-    {
-        $post = $this->getThreadCollectDao()->create(array('threadId' => 41, 'userId' => 2));
-        $testThread = array(
-            'id' => 41,
-            'title' => 'test',
-            'content' => 'xxx',
-            'groupId' => 1,
-            'userId' => 1,
-        );
-
-        $thread = $this->getThreadService()->addThread($testThread);
-        $result = $this->getThreadService()->threadCollect(2, $thread['id']);
-    }
-
-    /**
-     * @expectedException \Biz\Group\ThreadException
-     */
-    public function testThreadCollectError2()
-    {
-        $result = $this->getThreadService()->threadCollect(1, 4);
-    }
-
-    /**
-     * @expectedException \Biz\Group\ThreadException
-     */
-    public function testThreadCollectError1()
-    {
-        $testThread = array(
-            'id' => 41,
-            'title' => 'test',
-            'content' => 'xxx',
-            'groupId' => 1,
-            'userId' => 1,
-        );
-
-        $thread = $this->getThreadService()->addThread($testThread);
-        $result = $this->getThreadService()->threadCollect(1, 41);
-    }
-
-    public function testIsCollected()
-    {
-        $post = $this->getThreadCollectDao()->create(array('threadId' => 41, 'userId' => 1));
-        $result = $this->getThreadService()->isCollected(1, 41);
-        $this->assertTrue($result);
-
-        $result = $this->getThreadService()->isCollected(2, 41);
-        $this->assertNotTrue($result);
-    }
-
     public function testCountPostsThreadIds()
     {
         $this->getThreadPostDao()->create(array('threadId' => 41, 'userId' => 1, 'content' => 1));
@@ -272,31 +160,6 @@ class ThreadServiceTest extends BaseTestCase
         $this->getThreadPostDao()->create(array('threadId' => 4, 'userId' => 1, 'content' => 12));
         $result = $this->getThreadService()->countPostsThreadIds(array());
         $this->assertEquals(2, $result);
-    }
-
-    public function testCountThreadCollects()
-    {
-        $thread = $this->getThreadCollectDao()->create(array('threadId' => 41, 'userId' => 1));
-        $thread1 = $this->getThreadCollectDao()->create(array('threadId' => 4, 'userId' => 1));
-        $result = $this->getThreadService()->countThreadCollects(array());
-        $this->assertEquals(2, $result);
-
-        $result = $this->getThreadService()->countThreadCollects(array('threadId' => 4));
-        $this->assertEquals(1, $result);
-    }
-
-    public function testSearchThreadCollects()
-    {
-        $thread = $this->getThreadCollectDao()->create(array('threadId' => 41, 'userId' => 1));
-        $thread1 = $this->getThreadCollectDao()->create(array('threadId' => 4, 'userId' => 1));
-        $result = $this->getThreadService()->searchThreadCollects(array(), array(), 0, 1);
-
-        $this->assertEquals(1, count($result));
-        $result = $this->getThreadService()->searchThreadCollects(array(), array(), 0, 2);
-        $this->assertEquals(2, count($result));
-
-        $result = $this->getThreadService()->searchThreadCollects(array('threadId' => 4), array(), 0, 2);
-        $this->assertEquals(1, count($result));
     }
 
     public function testCountThreads()
@@ -805,11 +668,6 @@ class ThreadServiceTest extends BaseTestCase
         $user['password'] = 'user1123';
 
         return $this->getUserService()->register($user);
-    }
-
-    protected function getThreadCollectDao()
-    {
-        return $this->createDao('Group:ThreadCollectDao');
     }
 
     protected function getThreadGoodsDao()

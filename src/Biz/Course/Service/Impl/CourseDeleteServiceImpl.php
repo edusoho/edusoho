@@ -10,11 +10,11 @@ use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\CourseNoteDao;
 use Biz\Course\Dao\CourseNoteLikeDao;
 use Biz\Course\Dao\CourseSetDao;
-use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\ReviewDao;
 use Biz\Course\Dao\ThreadDao;
 use Biz\Course\Dao\ThreadPostDao;
 use Biz\Course\Service\CourseDeleteService;
+use Biz\Favorite\Dao\FavoriteDao;
 use Biz\IM\Service\ConversationService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
@@ -223,7 +223,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function deleteCourseFavorite($courseId)
     {
-        $this->getFavoriteDao()->deleteByCourseId($courseId);
+        $this->getFavoriteDao()->deleteByTargetTypeAndsTargetId('course', $courseId);
     }
 
     public function deleteCourseAnnouncement($courseId)
@@ -370,7 +370,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getFavoriteDao()
     {
-        return $this->createDao('Course:FavoriteDao');
+        return $this->createDao('Favorite:FavoriteDao');
     }
 
     /**

@@ -1108,7 +1108,7 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindUserFavoritedCourseCountNotInClassroom()
     {
-        $this->mockBiz('Course:FavoriteDao', array(
+        $this->mockBiz('Favorite:FavoriteDao', array(
             array('functionName' => 'findCourseFavoritesNotInClassroomByUserId', 'returnValue' => array(array())),
         ));
 
@@ -1117,8 +1117,8 @@ class CourseServiceTest extends BaseTestCase
 
         $defaultCourse = $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
         $this->getCourseService()->publishCourse($defaultCourse['id']);
-        $this->mockBiz('Course:FavoriteDao', array(
-            array('functionName' => 'findCourseFavoritesNotInClassroomByUserId', 'returnValue' => array(array('courseId' => 1))),
+        $this->mockBiz('Favorite:FavoriteDao', array(
+            array('functionName' => 'findCourseFavoritesNotInClassroomByUserId', 'returnValue' => array(array('targetId' => 1))),
         ));
 
         $count = $this->getCourseService()->findUserFavoritedCourseCountNotInClassroom(1);
@@ -1127,7 +1127,7 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindUserFavoritedCoursesNotInClassroom()
     {
-        $this->mockBiz('Course:FavoriteDao', array(
+        $this->mockBiz('Favorite:FavoriteDao', array(
             array('functionName' => 'findCourseFavoritesNotInClassroomByUserId', 'returnValue' => array(array('courseId' => 1))),
         ));
         $this->mockBiz('Course:CourseDao', array(
@@ -1140,7 +1140,7 @@ class CourseServiceTest extends BaseTestCase
     public function testFindUserFavoriteCoursesNotInClassroomWithCourseType()
     {
         $this->createDefaultCourse('第二个教学计划', array('id' => 1), 0);
-        $this->mockBiz('Course:FavoriteDao', array(
+        $this->mockBiz('Favorite:FavoriteDao', array(
             array('functionName' => 'findUserFavoriteCoursesNotInClassroomWithCourseType', 'returnValue' => array(array('id' => 1))),
         ));
         $result = $this->getCourseService()->findUserFavoriteCoursesNotInClassroomWithCourseType(1, 'live', 0, 5);
@@ -1149,7 +1149,7 @@ class CourseServiceTest extends BaseTestCase
 
     public function testCountUserFavoriteCourseNotInClassroomWithCourseType()
     {
-        $this->mockBiz('Course:FavoriteDao', array(
+        $this->mockBiz('Favorite:FavoriteDao', array(
             array('functionName' => 'countUserFavoriteCoursesNotInClassroomWithCourseType', 'returnValue' => 1),
         ));
 
@@ -1550,16 +1550,6 @@ class CourseServiceTest extends BaseTestCase
 
         $count = $this->getCourseService()->countCoursesByCourseSetId(1);
         $this->assertEquals(1, $count);
-    }
-
-    public function testGetFavoritedCourseByUserIdAndCourseSetId()
-    {
-        $this->mockBiz('Course:FavoriteDao', array(
-            array('functionName' => 'getByUserIdAndCourseSetId', 'returnValue' => array('courseId' => 1)),
-        ));
-
-        $result = $this->getCourseService()->getFavoritedCourseByUserIdAndCourseSetId(1, 1);
-        $this->assertEquals(1, $result['courseId']);
     }
 
     public function testCalculateLearnProgressByUserIdAndCourseIds()

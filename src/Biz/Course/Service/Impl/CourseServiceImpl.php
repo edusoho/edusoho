@@ -15,7 +15,6 @@ use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\CourseSetDao;
-use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\ThreadDao;
 use Biz\Course\MemberException;
 use Biz\Course\Service\CourseDeleteService;
@@ -26,6 +25,7 @@ use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
 use Biz\Exception\UnableJoinException;
+use Biz\Favorite\Dao\FavoriteDao;
 use Biz\File\UploadFileException;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
@@ -1917,7 +1917,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findUserFavoritedCourseCountNotInClassroom($userId)
     {
         $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesNotInClassroomByUserId($userId, 0, PHP_INT_MAX);
-        $courseIds = ArrayToolkit::column($courseFavorites, 'courseId');
+        $courseIds = ArrayToolkit::column($courseFavorites, 'targetId');
         $conditions = ['courseIds' => $courseIds, 'excludeTypes' => ['reservation']];
 
         if (0 == count($courseIds)) {
@@ -1933,17 +1933,19 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findUserFavoritedCoursesNotInClassroom($userId, $start, $limit)
     {
         $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit);
-        $favoriteCourses = $this->getCourseDao()->search(
+        if (empty($courseFavorites)) {
+            return [];
+        }
+
+        return $this->getCourseDao()->search(
             [
-                'ids' => ArrayToolkit::column($courseFavorites, 'courseId'),
+                'ids' => ArrayToolkit::column($courseFavorites, 'targetId'),
                 'excludeTypes' => ['reservation'],
             ],
             [],
             0,
             PHP_INT_MAX
         );
-
-        return $favoriteCourses;
     }
 
     /*
@@ -1958,9 +1960,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $limit
         );
 
-        $courses = $this->findCoursesByIds(ArrayToolkit::column($coursesIds, 'id'));
-
-        return $courses;
+        return $this->findCoursesByIds(ArrayToolkit::column($coursesIds, 'id'));
     }
 
     /*
@@ -2037,11 +2037,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function countCoursesGroupByCourseSetIds($courseSetIds)
     {
         return $this->getCourseDao()->countGroupByCourseSetIds($courseSetIds);
-    }
-
-    public function getFavoritedCourseByUserIdAndCourseSetId($userId, $courseSetId)
-    {
-        return $this->getFavoriteDao()->getByUserIdAndCourseSetId($userId, $courseSetId);
     }
 
     public function appendReservationConditions($conditions)
@@ -2428,7 +2423,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     protected function getFavoriteDao()
     {
-        return $this->createDao('Course:FavoriteDao');
+        return $this->createDao('Favorite:FavoriteDao');
     }
 
     /**

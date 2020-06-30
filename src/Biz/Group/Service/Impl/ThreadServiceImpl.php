@@ -4,11 +4,10 @@ namespace Biz\Group\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\Content\Service\FileService;
 use Biz\Thread\Dao\ThreadDao;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Group\Dao\ThreadCollectDao;
 use Biz\Group\Service\ThreadService;
-use Codeages\Biz\Framework\Event\Event;
 use Biz\Group\ThreadException;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
@@ -30,16 +29,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadDao()->count($conditions);
     }
 
-    public function searchThreadCollects($conditions, $orderBy, $start, $limit)
-    {
-        return $this->getThreadCollectDao()->search($conditions, $orderBy, $start, $limit);
-    }
-
-    public function countThreadCollects($conditions)
-    {
-        return $this->getThreadCollectDao()->count($conditions);
-    }
-
     public function searchPostsThreadIds($conditions, $orderBy, $start, $limit)
     {
         return $this->getThreadPostDao()->searchPostsThreadIds($conditions, $orderBy, $start, $limit);
@@ -50,17 +39,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadPostDao()->countPostsThreadIds($conditions);
     }
 
-    public function isCollected($userId, $threadId)
-    {
-        $thread = $this->getThreadCollectDao()->getByUserIdAndThreadId($userId, $threadId);
-
-        if (empty($thread)) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
     public function getThreadsByIds($ids)
     {
         $threads = $this->getThreadDao()->findByIds($ids);
@@ -68,51 +46,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return ArrayToolkit::index($threads, 'id');
     }
 
-    public function threadCollect($userId, $threadId)
-    {
-        $thread = $this->getThread($threadId);
-        if (empty($thread)) {
-            $this->createNewException(ThreadException::NOTFOUND_THREAD());
-        }
-
-        if ($userId == $thread['userId']) {
-            $this->createNewException(ThreadException::COLLECT_OWN_THREAD());
-        }
-
-        $collectThread = $this->getThreadCollectDao()->getByUserIdAndThreadId($userId, $threadId);
-
-        if (!empty($collectThread)) {
-            $this->createNewException(ThreadException::DUPLICATE_COLLECT());
-        }
-
-        $this->dispatchEvent('group.thread.collect', new Event($thread));
-
-        return $this->getThreadCollectDao()->create(array(
-            'userId' => $userId,
-            'threadId' => $threadId,
-        ));
-    }
-
     public function searchGoods($conditions, $orderBy, $start, $limit)
     {
         return $this->getThreadGoodsDao()->search($conditions, $orderBy, $start, $limit);
-    }
-
-    public function unThreadCollect($userId, $threadId)
-    {
-        $thread = $this->getThread($threadId);
-
-        if (empty($thread)) {
-            $this->createNewException(ThreadException::NOTFOUND_THREAD());
-        }
-
-        $collectThread = $this->getThreadCollectDao()->getByUserIdAndThreadId($userId, $threadId);
-
-        if (empty($collectThread)) {
-            $this->createNewException(ThreadException::NOTFOUND_COLLECTION());
-        }
-
-        return $this->getThreadCollectDao()->deleteByUserIdAndThreadId($userId, $threadId);
     }
 
     public function getTradeByUserIdAndGoodsId($userId, $goodsId)
@@ -545,14 +481,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     protected function getThreadDao()
     {
         return $this->createDao('Group:ThreadDao');
-    }
-
-    /**
-     * @return ThreadCollectDao
-     */
-    protected function getThreadCollectDao()
-    {
-        return $this->createDao('Group:ThreadCollectDao');
     }
 
     protected function getThreadPostDao()

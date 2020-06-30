@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Common\Exception\FileToolkitException;
 use Biz\Content\FileException;
 use Biz\Content\Service\FileService;
+use Biz\Favorite\Service\FavoriteService;
 use Biz\File\Service\UploadFileService;
 use Biz\Group\Service\GroupService;
 use Biz\Group\Service\ThreadService;
@@ -151,56 +152,6 @@ class GroupThreadController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function collectAction(Request $request, $threadId)
-    {
-        $user = $this->getCurrentUser();
-
-        if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '消息提示', '您尚未登录，不能收藏话题！');
-        }
-
-        $threadMain = $this->getThreadService()->getThread($threadId);
-
-        $this->getThreadService()->threadCollect($user['id'], $threadId);
-
-        $message = array(
-            'id' => $threadMain['groupId'],
-            'threadId' => $threadMain['id'],
-            'title' => $threadMain['title'],
-            'userId' => $user['id'],
-            'userName' => $user['nickname'],
-            'type' => 'collect',
-        );
-        $this->getNotifiactionService()->notify($threadMain['userId'], 'group-thread', $message);
-
-        return $this->createJsonResponse(true);
-    }
-
-    public function uncollectAction(Request $request, $threadId)
-    {
-        $user = $this->getCurrentUser();
-
-        if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '消息提示', '您尚未登录，不能收藏话题！');
-        }
-
-        $threadMain = $this->getThreadService()->getThread($threadId);
-
-        $this->getThreadService()->unThreadCollect($user['id'], $threadId);
-
-        $message = array(
-            'id' => $threadMain['groupId'],
-            'threadId' => $threadMain['id'],
-            'title' => $threadMain['title'],
-            'userId' => $user['id'],
-            'userName' => $user['nickname'],
-            'type' => 'uncollect',
-        );
-        $this->getNotifiactionService()->notify($threadMain['userId'], 'group-thread', $message);
-
-        return $this->createJsonResponse(true);
-    }
-
     public function groupThreadIndexAction(Request $request, $id, $threadId)
     {
         $group = $this->getGroupService()->getGroup($id);
@@ -222,7 +173,7 @@ class GroupThreadController extends BaseController
         }
 
         if ($threadMain['status'] != 'close') {
-            $isCollected = $this->getThreadService()->isCollected($this->getCurrentUser()->id, $threadMain['id']);
+            $isCollected = $this->getFavoriteService()->isUserFavorite($this->getCurrentUser()->id,'thread', $threadMain['id']);
         } else {
             $isCollected = false;
         }
@@ -882,5 +833,13 @@ class GroupThreadController extends BaseController
     protected function getGroupService()
     {
         return $this->getBiz()->service('Group:GroupService');
+    }
+
+    /**
+     * @return FavoriteService
+     */
+    protected function getFavoriteService()
+    {
+        return $this->createService('Favorite:FavoriteService');
     }
 }

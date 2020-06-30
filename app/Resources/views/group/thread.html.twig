@@ -35,8 +35,8 @@
         </div>
         <div class="pull-right mrm" id="thread-list">
           {% if threadMain.userId != user.id %}
-            <a href="javascript:;" class="uncollect-btn link-dark" data-target-type="thread" data-target-id="{{ threadMain.id }}" data-url="{{ path('group_thread_uncollect', {threadId:threadMain.id}) }}" {% if isCollected == false %} style="display:none;"{% endif %}><i class="es-icon es-icon-favorite mrs"></i> {{'group.thread.favorited_btn'|trans}}</a>
-            <a href="javascript:;" class="collect-btn link-dark" data-target-type="thread" data-target-id="{{ threadMain.id }}" data-url="{{ path('group_thread_collect', {threadId:threadMain.id}) }}" {% if isCollected == true %} style="display:none;"{% endif %}><i class="es-icon es-icon-favoriteoutline mrs"></i>{{'group.thread.favorite_btn'|trans}}</a>
+            <a href="javascript:;" class="uncollect-btn link-dark" data-target-type="thread" data-target-id="{{ threadMain.id }}" {% if isCollected == false %} style="display:none;"{% endif %}><i class="es-icon es-icon-favorite mrs"></i> {{'group.thread.favorited_btn'|trans}}</a>
+            <a href="javascript:;" class="collect-btn link-dark" data-target-type="thread" data-target-id="{{ threadMain.id }}" {% if isCollected == true %} style="display:none;"{% endif %}><i class="es-icon es-icon-favoriteoutline mrs"></i>{{'group.thread.favorite_btn'|trans}}</a>
           {% endif %}
         </div>
         {{'group.thread.created_time'|trans({'%createdTime%':threadMain.createdTime|smart_time})}}

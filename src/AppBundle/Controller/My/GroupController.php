@@ -6,6 +6,9 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Favorite\Service\FavoriteService;
+use Biz\Group\Service\GroupService;
+use Biz\Group\Service\ThreadService;
+use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 
 class GroupController extends BaseController
@@ -26,16 +29,23 @@ class GroupController extends BaseController
         $threadsCount = $this->getThreadService()->countThreads(['userId' => $user['id']]);
         $groupsAsOwnThreads = $this->getGroupService()->getGroupsByIds($groupIds);
 
-        $userIds = ArrayToolkit::column($ownThreads, 'lastPostMemberId');
-        $lastPostMembers = $this->getUserService()->findUsersByIds($userIds);
-        $collectThreadsIds = $this->getThreadService()->searchThreadCollects(['userId' => $user['id']], ['id' => 'DESC'], 0, 10);
+        $collectSearchConditions = [
+            'userId' => $user['id'],
+            'targetType' => 'thread'
+        ];
+        $collectThreadsIds = $this->getFavoriteService()->searchFavorites(
+            $collectSearchConditions,
+            ['id' => 'DESC'],
+            0,
+            10
+        );
         $collectThreads = [];
 
         foreach ($collectThreadsIds as $collectThreadsId) {
-            $collectThreads[] = $this->getThreadService()->getThread($collectThreadsId['threadId']);
+            $collectThreads[] = $this->getThreadService()->getThread($collectThreadsId['targetId']);
         }
 
-        $collectCount = $this->getThreadService()->countThreadCollects(['userId' => $user['id']]);
+        $collectCount = $this->getFavoriteService()->countFavorites(['userId' => $user['id'], 'targetType' => 'thread']);
 
         $groupIdsAsCollectThreads = ArrayToolkit::column($collectThreads, 'groupId');
         $groupsAsCollectThreads = $this->getGroupService()->getGroupsByIds($groupIdsAsCollectThreads);

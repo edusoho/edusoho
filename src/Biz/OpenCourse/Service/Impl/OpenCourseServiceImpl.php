@@ -4,14 +4,12 @@ namespace Biz\OpenCourse\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Common\CommonException;
-use Biz\Course\Dao\FavoriteDao;
 use AppBundle\Common\ArrayToolkit;
 use Biz\File\UploadFileException;
 use Biz\OpenCourse\OpenCourseException;
 use Biz\System\Service\LogService;
 use Biz\OpenCourse\Dao\OpenCourseDao;
 use Biz\User\UserException;
-use Codeages\Biz\Framework\Event\Event;
 use Biz\OpenCourse\Dao\OpenCourseLessonDao;
 use Biz\OpenCourse\Dao\OpenCourseMemberDao;
 use Biz\OpenCourse\Service\OpenCourseService;
@@ -362,86 +360,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $this->dispatchEvent('open.course.picture.update', array('argument' => $data, 'course' => $update_picture));
 
         return $update_picture;
-    }
-
-    public function favoriteCourse($courseId)
-    {
-        $user = $this->getCurrentUser();
-
-        if (empty($user['id'])) {
-            $this->createNewException(UserException::UN_LOGIN());
-        }
-
-        $course = $this->getCourse($courseId);
-
-        if (empty($course)) {
-            $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
-        }
-
-        if ('published' != $course['status']) {
-            $this->createNewException(OpenCourseException::FAVOR_UNPUBLISHED());
-        }
-
-        $favorite = $this->getFavoriteDao()->getByUserIdAndCourseId($user['id'], $course['id'], 'openCourse');
-
-        if ($favorite) {
-            $this->createNewException(OpenCourseException::DUPLICATE_FAVOR());
-        }
-
-        //添加动态
-        $this->dispatchEvent(
-            'open.course.favorite',
-            new Event($course)
-        );
-
-        $this->getFavoriteDao()->create(array(
-            'courseId' => $course['id'],
-            'userId' => $user['id'],
-            'createdTime' => time(),
-            'type' => 'openCourse',
-        ));
-
-        $courseFavoriteNum = $this->getFavoriteDao()->count(array(
-            'courseId' => $courseId,
-            'type' => 'openCourse',
-        ));
-
-        return $courseFavoriteNum;
-    }
-
-    public function unFavoriteCourse($courseId)
-    {
-        $user = $this->getCurrentUser();
-
-        if (empty($user['id'])) {
-            $this->createNewException(UserException::UN_LOGIN());
-        }
-
-        $course = $this->getCourse($courseId);
-
-        if (empty($course)) {
-            $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
-        }
-
-        $favorite = $this->getFavoriteDao()->getByUserIdAndCourseId($user['id'], $course['id'], 'openCourse');
-
-        if (empty($favorite)) {
-            $this->createNewException(OpenCourseException::CANCEL_UN_FAVOR());
-        }
-
-        $this->getFavoriteDao()->delete($favorite['id']);
-
-        $courseFavoriteNum = $this->getFavoriteDao()->count(array(
-            'courseId' => $courseId,
-            'type' => 'openCourse',
-        ));
-
-        return $courseFavoriteNum;
-    }
-
-    public function getFavoriteByUserIdAndCourseId($userId, $courseId, $type)
-    {
-        return $this->getFavoriteDao()->getByUserIdAndCourseId($userId, $courseId, $type);
     }
 
     public function getLessonItems($courseId)
@@ -1316,14 +1234,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     protected function getOpenCourseMemberDao()
     {
         return $this->createDao('OpenCourse:OpenCourseMemberDao');
-    }
-
-    /**
-     * @return FavoriteDao
-     */
-    protected function getFavoriteDao()
-    {
-        return $this->createDao('Course:FavoriteDao');
     }
 
     /**
