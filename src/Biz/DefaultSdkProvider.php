@@ -3,7 +3,6 @@
 namespace Biz;
 
 use AppBundle\System;
-use Biz\CloudPlatform\Facade\Impl\ResourceFacadeImpl;
 use Codeages\Biz\Framework\Context\Biz;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;

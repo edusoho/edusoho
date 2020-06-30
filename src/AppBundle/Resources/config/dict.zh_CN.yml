@@ -513,3 +513,9 @@ adminCourseTypes:
 adminPlumberStatus:
     executing: 正在运行中
     stopped: 已停止
+
+s2b2cSettlementOrderStatus:
+  paid: 待支付
+  success: 已支付
+  finished: 交易完成
+  refunded: 已退款

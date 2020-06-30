@@ -22,6 +22,7 @@ use Biz\Importer\ClassroomMemberImporter;
 use Biz\Importer\CourseMemberImporter;
 use Biz\OpenCourse\Event\OpenCourseThreadEventProcessor;
 use Biz\Sms\SmsProcessor\LiveOpenLessonSmsProcessor;
+use Biz\System\Template\TemplateFactory;
 use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\NormalStrategy;
 use Biz\Task\Strategy\StrategyContext;
@@ -41,7 +42,6 @@ use Codeages\Biz\Framework\Queue\Driver\DatabaseQueue;
 use Gregwar\Captcha\CaptchaBuilder;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use Biz\System\Template\TemplateFactory;
 
 class DefaultServiceProvider implements ServiceProviderInterface
 {
