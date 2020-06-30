@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Util\CourseTitleUtils;
+use Biz\Review\Service\ReviewService;
 use Biz\Role\Util\PermissionBuilder;
 use Biz\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -216,6 +217,7 @@ class MobileBaseController extends BaseController
                 unset($review['userId']);
 
                 $review['createdTime'] = date('c', $review['createdTime']);
+                $review['updatedTime'] = date('c', $review['updatedTime']);
 
                 return $review;
             },
@@ -678,6 +680,9 @@ class MobileBaseController extends BaseController
         return $this->createService('Course:MemberService');
     }
 
+    /**
+     * @return ReviewService
+     */
     public function getReviewService()
     {
         return $this->createService('Review:ReviewService');

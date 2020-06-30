@@ -42,6 +42,20 @@ class ReviewDaoTest extends BaseTestCase
         $this->assertNull($after);
     }
 
+    public function testDeleteByTargetTypeAndTargetId()
+    {
+        $review = $this->createReview();
+        $review1 = $this->createReview(['targetId' => 1000]);
+
+        $before = $this->getReviewDao()->get($review1['id']);
+
+        $this->getReviewDao()->deleteByTargetTypeAndTargetId($review1['targetType'], $review1['targetId']);
+
+        $after = $this->getReviewDao()->get($review1['id']);
+        $this->assertEquals($review1, $before);
+        $this->assertNull($after);
+    }
+
     protected function createReview($fields = [])
     {
         $review = array_merge([

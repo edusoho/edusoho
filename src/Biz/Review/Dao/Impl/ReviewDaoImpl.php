@@ -13,7 +13,7 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
     {
         return [
             'serializes' => ['meta' => 'json'],
-            'orderbys' => ['createdTime', 'id', 'updatedTime'],
+            'orderbys' => ['createdTime', 'id', 'updatedTime', 'rating'],
             'conditions' => [
                 'targetType = :targetType',
                 'targetId = :targetId',
@@ -50,5 +50,12 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
         $sql = "DELETE FROM {$this->table()} WHERE parentId = ?";
 
         return $this->db()->executeQuery($sql, [$parentId]);
+    }
+
+    public function deleteByTargetTypeAndTargetId($targetType, $targetId)
+    {
+        $sql = "DELETE FROM {$this->table()} WHERE targetType = ? AND targetId = ?";
+
+        return $this->db()->executeQuery($sql, [$targetType, $targetId]);
     }
 }

@@ -11,4 +11,6 @@ interface ReviewDao extends GeneralDaoInterface
     public function sumRatingByConditions($conditions);
 
     public function deleteByParentId($parentId);
+
+    public function deleteByTargetTypeAndTargetId($targetType, $targetId);
 }
