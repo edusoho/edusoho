@@ -48,7 +48,7 @@ class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleSer
             $this->beginTransaction();
 
             $scene = $this->createAssessmentScene($name);
-            $module =  $this->getItemBankExerciseModuleDao()->create([
+            $module = $this->getItemBankExerciseModuleDao()->create([
                 'exerciseId' => $exerciseId,
                 'title' => $name,
                 'type' => 'assessment',

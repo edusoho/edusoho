@@ -4,7 +4,6 @@ namespace Biz\ItemBankExercise\Event;
 
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -26,7 +25,7 @@ class ExerciseEventSubscriber extends EventSubscriber implements EventSubscriber
             $exercise['id'],
             [
                 'categoryId' => $questionBank['categoryId'],
-                'title' => $questionBank['name']
+                'title' => $questionBank['name'],
             ]
         );
     }

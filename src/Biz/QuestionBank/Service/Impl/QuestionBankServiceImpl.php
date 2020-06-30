@@ -5,7 +5,6 @@ namespace Biz\QuestionBank\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
-use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Dao\QuestionBankDao;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\CategoryService;
