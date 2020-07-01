@@ -6,7 +6,7 @@ interface FavoriteService
 {
     public function getUserFavorite($userId, $targetType, $targetId);
 
-    public function createFavorite($favorite);
+    public function createFavorite(array $favorite);
 
     public function deleteUserFavorite($userId, $targetType, $targetId);
 

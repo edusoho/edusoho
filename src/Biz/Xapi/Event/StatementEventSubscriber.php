@@ -4,6 +4,7 @@ namespace Biz\Xapi\Event;
 
 use AppBundle\Common\MathToolkit;
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseService;
 use Biz\OrderFacade\Product\ClassroomProduct;
 use Biz\OrderFacade\Product\CourseProduct;
 use Biz\User\CurrentUser;
@@ -30,7 +31,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'course.task.finish' => 'onCourseTaskFinish',
             'course.note.create' => 'onCourseNoteCreate',
             'course.thread.create' => 'onCourseThreadCreate',
-            'courseSet.favorite' => 'onCourseSetFavorite',
+            'favorite' => 'onCourseSetFavorite',
             'course.review.add' => 'onCourseReviewAdd',
         ];
     }
@@ -137,7 +138,14 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     public function onCourseSetFavorite(Event $event)
     {
         $favorite = $event->getSubject();
-        $course = $event->getArgument('course');
+        if ('course' != $favorite['targetType']) {
+            return;
+        }
+
+        $course = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($favorite['targetId']);
+        if (empty($course)) {
+            return;
+        }
 
         $this->createStatement($favorite['userId'], XAPIVerbs::BOOKMARKED, $course['id'], 'course', [
         ]);
@@ -222,8 +230,16 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     /**
      * @return ActivityService
      */
-    public function getActivityService()
+    protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->getBiz()->service('Course:CourseService');
     }
 }

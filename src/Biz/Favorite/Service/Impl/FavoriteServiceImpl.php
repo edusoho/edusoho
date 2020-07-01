@@ -16,7 +16,7 @@ class FavoriteServiceImpl extends BaseService implements FavoriteService
         return $this->getFavoriteDao()->getByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId);
     }
 
-    public function createFavorite($favorite)
+    public function createFavorite(array $favorite)
     {
         if (!ArrayToolkit::requireds($favorite, ['targetType', 'targetId'], true)) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
@@ -32,9 +32,10 @@ class FavoriteServiceImpl extends BaseService implements FavoriteService
             return $this->getUserFavorite($favorite['userId'], $favorite['targetType'], $favorite['targetId']);
         }
 
-        $favorite = ArrayToolkit::parts($favorite, ['userId', 'targetType', 'targetId']);
+        $favorite = $this->getFavoriteDao()->create(ArrayToolkit::parts($favorite, ['userId', 'targetType', 'targetId']));
+        $this->dispatch('favorite', $favorite);
 
-        return $this->getFavoriteDao()->create($favorite);
+        return $favorite;
     }
 
     public function deleteUserFavorite($userId, $targetType, $targetId)

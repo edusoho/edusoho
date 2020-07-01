@@ -217,53 +217,6 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertArraySternEquals($expected, $courseSetsB);
     }
 
-    public function testFavorite()
-    {
-        $courseSet = $this->createAndPublishCourseSet('测试课程', 'normal');
-
-        $result = $this->getCourseSetService()->favorite($courseSet['id']);
-
-        $this->assertTrue($result);
-
-        $result = $this->getCourseSetService()->favorite(2);
-        $this->assertFalse($result);
-    }
-
-    public function testUnfavorite()
-    {
-        $courseSet = $this->createAndPublishCourseSet('测试课程', 'normal');
-        $this->getCourseSetService()->favorite($courseSet['id']);
-
-        $result = $this->getCourseSetService()->unfavorite(3);
-        $this->assertFalse($result);
-
-        $result = $this->getCourseSetService()->unfavorite(1);
-        $this->assertTrue($result);
-
-        $result = $this->getCourseSetService()->favorite(1);
-        $this->assertTrue($result);
-
-        $result = $this->getCourseSetService()->unfavorite(1);
-        $this->assertTrue($result);
-    }
-
-    public function testIsUserFavorite()
-    {
-        $courseSet = $this->createAndPublishCourseSet('课程', 'normal');
-        $this->getCourseSetService()->favorite($courseSet['id']);
-        $result = $this->getCourseSetService()->favorite($courseSet['id']);
-        $this->assertTrue($result);
-    }
-
-    /**
-     * @expectedException \Biz\Course\CourseSetException
-     * @expectedExceptionMessage exception.courseset.not_found
-     */
-    public function testIsUserFavoriteException()
-    {
-        $this->getCourseSetService()->isUserFavorite(1, 1);
-    }
-
     public function testHasCourseSetManageRoleUnLogin()
     {
         $this->createAndPublishCourseSet('课程1', 'normal');
@@ -748,39 +701,6 @@ class CourseSetServiceTest extends BaseTestCase
 
         $result = $this->getCourseSetService()->getCourseSet($courseSet['id']);
         $this->assertEquals('closed', $result['status']);
-    }
-
-    public function testCountUserFavorites()
-    {
-        $courseSet = $this->createAndPublishCourseSet('测试课程', 'normal');
-        $this->getCourseSetService()->favorite($courseSet['id']);
-
-        $user = $this->getCurrentUser();
-        $count = $this->getCourseSetService()->countUserFavorites($user['id']);
-
-        $this->assertEquals(1, $count);
-    }
-
-    public function testSearchUserFavorites()
-    {
-        $courseSet = $this->createAndPublishCourseSet('测试课程', 'normal');
-        $this->getCourseSetService()->favorite($courseSet['id']);
-
-        $user = $this->getCurrentUser();
-        $result = $this->getCourseSetService()->searchUserFavorites($user['id'], 0, 10);
-
-        $this->assertEquals($user['id'], $result[0]['userId']);
-    }
-
-    public function testSearchFavorites()
-    {
-        $courseSet = $this->createAndPublishCourseSet('测试课程', 'normal');
-        $this->getCourseSetService()->favorite($courseSet['id']);
-
-        $user = $this->getCurrentUser();
-        $result = $this->getCourseSetService()->searchFavorites(['userId' => $user['id']], ['createdTime' => 'DESC'], 0, 10);
-
-        $this->assertEquals($user['id'], $result[0]['userId']);
     }
 
     public function testFindCourseSetIncomesByCourseSetIds()
