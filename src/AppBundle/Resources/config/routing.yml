@@ -2249,19 +2249,6 @@ course_set_manage_close:
   path: /course_set/{id}/manage/close
   defaults: {_controller: AppBundle:Course/CourseSetManage:close}
 
-course_review_create:
-   path:  /course/{id}/review/create
-   defaults: { _controller: AppBundle:Course/Review:create }
-   methods: [POST]
-
-course_review_post:
-  path:  /course/{courseId}/review/{reviewId}/post
-  defaults: { _controller: AppBundle:Course/Review:post }
-
-course_review_delete:
-  path:  /course/{courseId}/review/{reviewId}/delete
-  defaults: { _controller: AppBundle:Course/Review:delete }
-
 course_material_download:
     path:  /course/{courseId}/material/{materialId}/download
     defaults: { _controller: AppBundle:Course/Material:download }
@@ -2682,18 +2669,6 @@ classroom_reviews:
     path:  /classroom/{id}/review
     defaults: { _controller: AppBundle:Classroom/Review:list }
     h5: true
-
-classroom_review_create:
-    path:  /classroom/{id}/review/create
-    defaults: { _controller: AppBundle:Classroom/Review:create }
-
-classroom_review_post:
-    path:  /classroom/{id}/review/{reviewId}/post
-    defaults: { _controller: AppBundle:Classroom/Review:post }
-
-classroom_review_delete:
-    path:  /classroom/review/{reviewId}/delete
-    defaults: { _controller: AppBundle:Classroom/Review:delete }
 
 classroom_introductions:
     path:  /classroom/{id}/introduction

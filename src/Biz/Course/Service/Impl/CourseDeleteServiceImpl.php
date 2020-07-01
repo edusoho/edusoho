@@ -2,6 +2,7 @@
 
 namespace Biz\Course\Service\Impl;
 
+use Biz\Activity\Service\ActivityService;
 use Biz\Announcement\Service\AnnouncementService;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseChapterDao;
@@ -10,15 +11,15 @@ use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\CourseNoteDao;
 use Biz\Course\Dao\CourseNoteLikeDao;
 use Biz\Course\Dao\CourseSetDao;
-use Biz\Course\Dao\ReviewDao;
 use Biz\Course\Dao\ThreadDao;
 use Biz\Course\Dao\ThreadPostDao;
 use Biz\Course\Service\CourseDeleteService;
 use Biz\Favorite\Dao\FavoriteDao;
 use Biz\IM\Service\ConversationService;
+use Biz\Review\Dao\ReviewDao;
+use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\StatusService;
 
 class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
@@ -218,7 +219,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function deleteCourseReview($courseId)
     {
-        $this->getReviewDao()->deleteByCourseId($courseId);
+        $this->getReviewDao()->deleteByTargetTypeAndTargetId('course', $courseId);
     }
 
     protected function deleteCourseFavorite($courseId)
@@ -357,7 +358,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getReviewDao()
     {
-        return $this->createDao('Course:ReviewDao');
+        return $this->createDao('Review:ReviewDao');
     }
 
     protected function getCourseJobDao()

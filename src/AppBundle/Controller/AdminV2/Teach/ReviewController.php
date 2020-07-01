@@ -2,14 +2,13 @@
 
 namespace AppBundle\Controller\AdminV2\Teach;
 
-use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
-use Biz\Classroom\Service\ClassroomReviewService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\ReviewService;
+use Biz\Review\Service\ReviewService;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,49 +17,39 @@ class ReviewController extends BaseController
     //课程评价
     public function courseReviewListAction(Request $request)
     {
-        $conditions = $request->query->all();
+        $conditions = array_merge(['targetType' => 'course'], $request->query->all());
 
-        if (empty($conditions['rating'])) {
-            unset($conditions['rating']);
-        }
-
-        if (!empty($conditions['courseTitle'])) {
-            $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($conditions['courseTitle']);
-            $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
-            unset($conditions['courseTitle']);
-            $conditions['courseSetIds'] = $conditions['courseSetIds'] ?: array(-1);
-        }
-        $conditions['parentId'] = 0;
+        $conditions = $this->prepareConditions($conditions);
 
         $paginator = new Paginator(
             $request,
-            $this->getCourseReviewService()->searchReviewsCount($conditions),
+            $this->getReviewService()->countReviews($conditions),
             20
         );
 
-        $reviews = $this->getCourseReviewService()->searchReviews(
+        $reviews = $this->getReviewService()->searchReviews(
             $conditions,
-            'latest',
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
-        $courseSets = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($reviews, 'courseSetId'));
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($reviews, 'courseId'));
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($reviews, 'targetId'));
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($courses, 'courseSetId'));
 
-        return $this->render('admin-v2/teach/review/course-review.html.twig', array(
+        return $this->render('admin-v2/teach/review/course-review.html.twig', [
             'reviews' => $reviews,
             'users' => $users,
             'courses' => $courses,
             'courseSets' => $courseSets,
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     public function deleteCourseReviewAction(Request $request, $id)
     {
-        $this->getCourseReviewService()->deleteReview($id);
+        $this->getReviewService()->deleteReview($id);
 
         return $this->createJsonResponse(true);
     }
@@ -69,7 +58,7 @@ class ReviewController extends BaseController
     {
         $ids = $request->request->get('ids');
         foreach ($ids as $id) {
-            $this->getCourseReviewService()->deleteReview($id);
+            $this->getReviewService()->deleteReview($id);
         }
 
         return $this->createJsonResponse(true);
@@ -78,52 +67,37 @@ class ReviewController extends BaseController
     //班级评价
     public function classroomReviewListAction(Request $request)
     {
-        $conditions = $request->query->all();
+        $conditions = array_merge(['targetType' => 'classroom'], $request->query->all());
 
-        if (empty($conditions['rating'])) {
-            unset($conditions['rating']);
-        }
+        $conditions = $this->prepareConditions($conditions);
 
-        if (!empty($conditions['classroomTitle'])) {
-            $classrooms = $this->getClassroomService()->findClassroomsByLikeTitle(trim($conditions['classroomTitle']));
-            $conditions['classroomIds'] = ArrayToolkit::column($classrooms, 'id');
-            if (0 == count($conditions['classroomIds'])) {
-                return $this->render('admin-v2/teach/review/classroom-review.html.twig', array(
-                    'reviews' => array(),
-                    'users' => array(),
-                    'classrooms' => array(),
-                    'paginator' => new Paginator($request, 0, 20),
-                ));
-            }
-        }
-
-        $conditions['parentId'] = 0;
         $paginator = new Paginator(
             $request,
-            $this->getClassroomReviewService()->searchReviewCount($conditions),
+            $this->getReviewService()->countReviews($conditions),
             20
         );
 
-        $reviews = $this->getClassroomReviewService()->searchReviews(
+        $reviews = $this->getReviewService()->searchReviews(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
-        $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($reviews, 'classroomId'));
 
-        return $this->render('admin-v2/teach/review/classroom-review.html.twig', array(
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
+        $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($reviews, 'targetId'));
+
+        return $this->render('admin-v2/teach/review/classroom-review.html.twig', [
             'reviews' => $reviews,
             'users' => $users,
             'classrooms' => $classrooms,
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     public function deleteClassroomReviewAction(Request $request, $id)
     {
-        $this->getClassroomReviewService()->deleteReview($id);
+        $this->getReviewService()->deleteReview($id);
 
         return $this->createJsonResponse(true);
     }
@@ -132,10 +106,43 @@ class ReviewController extends BaseController
     {
         $ids = $request->request->get('ids');
         foreach ($ids as $id) {
-            $this->getClassroomReviewService()->deleteReview($id);
+            $this->getReviewService()->deleteReview($id);
         }
 
         return $this->createJsonResponse(true);
+    }
+
+    protected function prepareConditions($conditions)
+    {
+        if (empty($conditions['rating'])) {
+            unset($conditions['rating']);
+        }
+
+        if (!empty($conditions['courseTitle']) && 'course' == $conditions['targetType']) {
+            $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($conditions['courseTitle']);
+            $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
+
+            $conditions['targetIds'] = ArrayToolkit::column($courses, 'id');
+            unset($conditions['courseTitle']);
+            $conditions['targetIds'] = $conditions['targetIds'] ?: [-1];
+        }
+
+        if (!empty($conditions['classroomTitle']) && 'classroom' == $conditions['targetType']) {
+            $classrooms = $this->getClassroomService()->findClassroomsByLikeTitle(trim($conditions['classroomTitle']));
+            $conditions['targetIds'] = ArrayToolkit::column($classrooms, 'id');
+            unset($conditions['classroomTitle']);
+            $conditions['targetIds'] = $conditions['targetIds'] ?: [-1];
+        }
+
+        if (!empty($conditions['author'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['author']);
+            unset($conditions['author']);
+            $conditions['userId'] = $user['id'] ? $user['id'] : -1;
+        }
+
+        $conditions['parentId'] = 0;
+
+        return $conditions;
     }
 
     /**
@@ -152,14 +159,6 @@ class ReviewController extends BaseController
     protected function getUserService()
     {
         return $this->createService('User:UserService');
-    }
-
-    /**
-     * @return ClassroomReviewService
-     */
-    protected function getClassroomReviewService()
-    {
-        return $this->createService('Classroom:ClassroomReviewService');
     }
 
     /**
@@ -181,8 +180,8 @@ class ReviewController extends BaseController
     /**
      * @return ReviewService
      */
-    protected function getCourseReviewService()
+    protected function getReviewService()
     {
-        return $this->createService('Course:ReviewService');
+        return $this->createService('Review:ReviewService');
     }
 }

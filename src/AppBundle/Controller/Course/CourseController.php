@@ -11,11 +11,10 @@ use Biz\Course\CourseSetException;
 use Biz\Course\MemberException;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\MaterialService;
-use Biz\Course\Service\ReviewService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\File\Service\UploadFileService;
 use Biz\Order\OrderException;
-use Biz\Order\Service\OrderService;
+use Biz\Review\Service\ReviewService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
@@ -354,13 +353,13 @@ class CourseController extends CourseBaseController
 
         $conditions = [
             'parentId' => 0,
-            'courseSetId' => $courseSet['id'],
-            'courseId' => $selectedCourseId ? $selectedCourseId : '',
+            'targetId' => empty($selectedCourseId) ? $course['id'] : $selectedCourseId,
+            'targetType' => 'course',
         ];
 
         $paginator = new Paginator(
             $request,
-            $this->getReviewService()->searchReviewsCount($conditions),
+            $this->getReviewService()->countReviews($conditions),
             20
         );
 
@@ -378,9 +377,9 @@ class CourseController extends CourseBaseController
         }
         if (!empty($member)) {
             if ($selectedCourseId > 0) {
-                $userReview = $this->getReviewService()->getUserCourseReview($member['userId'], $selectedCourseId);
+                $userReview = $this->getReviewService()->getByUserIdAndTargetTypeAndTargetId($member['userId'], 'course', $selectedCourseId);
             } else {
-                $userReview = $this->getReviewService()->getUserCourseReview($member['userId'], $course['id']);
+                $userReview = $this->getReviewService()->getByUserIdAndTargetTypeAndTargetId($member['userId'], 'course', $course['id']);
             }
         }
 
@@ -835,7 +834,7 @@ class CourseController extends CourseBaseController
      */
     protected function getReviewService()
     {
-        return $this->createService('Course:ReviewService');
+        return $this->createService('Review:ReviewService');
     }
 
     /**

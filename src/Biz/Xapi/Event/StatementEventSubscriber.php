@@ -33,6 +33,8 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'course.thread.create' => 'onCourseThreadCreate',
             'favorite' => 'onCourseSetFavorite',
             'course.review.add' => 'onCourseReviewAdd',
+
+            'review.create' => 'onReviewCreate',
         ];
     }
 
@@ -156,6 +158,24 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         $review = $event->getSubject();
 
         $this->createStatement($review['userId'], XAPIVerbs::RATED, $review['courseId'], 'course', [
+            'score' => [
+                'raw' => $review['rating'],
+                'max' => 5,
+                'min' => 1,
+            ],
+            'response' => $review['content'],
+        ]);
+    }
+
+    public function onReviewCreate(Event $event)
+    {
+        $review = $event->getSubject();
+
+        if (!in_array($review['targetType'], ['course', 'classroom'])) {
+            return;
+        }
+
+        $this->createStatement($review['userId'], XAPIVerbs::RATED, $review['targetId'], $review['targetType'], [
             'score' => [
                 'raw' => $review['rating'],
                 'max' => 5,

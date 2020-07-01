@@ -174,6 +174,7 @@ class CourseController extends CourseBaseController
     public function showAction(Request $request, $id, $tab = 'tasks')
     {
         $course = $this->getCourseService()->getCourse($id);
+
         $member = $this->getCourseMember($request, $course);
 
         $classroom = [];
