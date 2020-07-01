@@ -9,6 +9,7 @@
 import Detail from './detail';
 import Info from './info';
 import Api from '@/api';
+import { Toast } from 'vant'
 export default {
   data() {
     return {
@@ -27,6 +28,8 @@ export default {
         }
       }).then(res => {
         this.details = res;
+      }).catch(err => {
+        Toast.fail(err.message);
       });
     }
   },

@@ -407,6 +407,13 @@ const routes = [
       title: '商品页'
     },
     component: () => import(/* webpackChunkName: "more" */'@/containers/goods/course.vue')
+  }, {
+    path: '/goods/:id/classroom',
+    name: 'goods_classroom',
+    meta: {
+      title: '商品页'
+    },
+    component: () => import(/* webpackChunkName: "more" */'@/containers/goods/classroom.vue')
   }
 ];
 

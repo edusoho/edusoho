@@ -9,7 +9,7 @@
     <!-- 商品名称、价格 -->
     <detail-info :details="details" :currentPlan="currentPlan" />
     <!-- 教学计划、有效期、服务 -->
-    <detail-plan :details="details" :currentPlan="currentPlan" :plans="plans" />
+    <detail-plan :details="details" :currentPlan="currentPlan" :plans="plans" @changePlan="changePlan" />
   </div>
 </template>
 
@@ -51,6 +51,15 @@ export default {
         }
         this.plans = temp;
       }
+    }
+  },
+  methods: {
+    changePlan(id) {
+      this.plans.map((item) => {
+        if (item.active) item.active = false;
+        if (item.id == id) item.active = true;
+        return item;
+      });
     }
   }
 }

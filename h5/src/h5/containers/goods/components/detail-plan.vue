@@ -92,6 +92,7 @@ export default {
     },
     handleClick(plan) {
       if (plan.id ==  this.$route.params.id) return;
+      this.$emit('changePlan', plan.id);
       this.$router.push({ path: `/goods/${plan.id}/course`});
     }
   },
