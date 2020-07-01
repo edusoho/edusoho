@@ -76,11 +76,6 @@ class ActivitySync extends AbstractEntitySync
                 $newActivity['mediaId'] = $ext['id'];
             }
 
-            if ('live' == $newActivity['mediaType']) { // 教学计划复制
-                $newActivity['startTime'] = time();
-                $newActivity['endTime'] = $newActivity['startTime'] + $newActivity['length'] * 60;
-            }
-
             $newActivity = $this->getActivityDao()->create($newActivity);
             if ('download' == $newActivity['mediaType']) {
                 $this->syncDownloadMaterials($newActivity);
@@ -191,11 +186,6 @@ class ActivitySync extends AbstractEntitySync
             //对于testpaper，mediaId指向testpaper_activity.id
             if (!empty($ext)) {
                 $newActivity['mediaId'] = $ext['id'];
-            }
-
-            if ('live' == $newActivity['mediaType']) { // 教学计划复制
-                $newActivity['startTime'] = time();
-                $newActivity['endTime'] = $newActivity['startTime'] + $newActivity['length'] * 60;
             }
 
             if (!empty($existActivities[$activity['id']])) {
