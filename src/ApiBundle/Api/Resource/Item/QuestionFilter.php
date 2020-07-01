@@ -16,6 +16,7 @@ class QuestionFilter extends Filter
         'response_points',
         'answer',
         'analysis',
+        'isDelete',
     ];
 
     protected function publicFields(&$question)

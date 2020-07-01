@@ -11,10 +11,14 @@ class ItemFilter extends Filter
         'bank_id',
         'type',
         'material',
+        'analysis',
         'category_id',
         'difficulty',
         'question_num',
-        'analysis',
+        'isDelete',
+        'seq',
+        'score',
+        'section_id',
         'questions',
     ];
 
