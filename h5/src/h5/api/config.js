@@ -11,8 +11,11 @@ import marketing from './marketing/index';
 import studyCard from './study-card/index';
 import distribution from './distribution/index';
 import liveTimetable from './liveTimetable/index';
+import goods from './goods/index';
+
 
 const config = [...openCourse, ...classroom, ...course, ...lesson, ...me, ...order,
-  ...setting, ...coupon, ...vip, ...marketing, ...distribution, ...studyCard, ...liveTimetable];
+  ...setting, ...coupon, ...vip, ...marketing, ...distribution, ...studyCard,
+  ...liveTimetable, ...goods];
 
 export default config;

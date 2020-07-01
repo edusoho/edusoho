@@ -401,12 +401,12 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "more" */'@/containers/webview/openCourse/more.vue')
   }, {
-    path: '/goods/show',
-    name: 'good_show',
+    path: '/goods/:id/course',
+    name: 'goods_course',
     meta: {
       title: '商品页'
     },
-    component: () => import(/* webpackChunkName: "more" */'@/containers/goods/index.vue')
+    component: () => import(/* webpackChunkName: "more" */'@/containers/goods/course.vue')
   }
 ];
 

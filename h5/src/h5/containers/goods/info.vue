@@ -22,8 +22,6 @@
     <!-- 目录 -->
     <section class="js-scroll-top goods-info__item" id="catalog">
       <div class="goods-info__title">课程目录</div>
-      <!-- 班级详情 -->
-      <class-catalog />
       <!-- 课程详情 -->
       <afterjoin-directory />
     </section>
@@ -55,7 +53,6 @@ import InfoEvaluate from './components/info-evaluate';
 import InfoLearn from './components/info-learn';
 import InfoBuy from './components/info-buy';
 import BackToTop from './components/back-to-top';
-import ClassCatalog from './components/class-catalog';
 import AfterjoinDirectory from './components/afterjoin-directory';
 export default {
   data() {
@@ -74,8 +71,8 @@ export default {
   },
   computed: {
     summary() {
-      if (!this.details.summary) return '暂无简介~';
-      return this.details.summary || this.details.courseSet.summary;
+      if (!this.details.description) return '暂无简介~';
+      return this.details.description;
     }
   },
   components: {
@@ -84,7 +81,6 @@ export default {
     InfoLearn, // 猜你想学
     InfoBuy, // 购买按钮
     BackToTop, // 回到顶部
-    ClassCatalog, // 班级详情目录
     AfterjoinDirectory
   },
   methods: {
