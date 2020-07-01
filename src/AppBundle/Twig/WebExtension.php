@@ -1864,28 +1864,7 @@ class WebExtension extends \Twig_Extension
 
     public function getCloudSdkUrl($type)
     {
-        $cdnHost = $this->getSetting('developer.cloud_sdk_cdn') ?: 'service-cdn.qiqiuyun.net';
-
-        $paths = [
-            'player' => 'js-sdk/sdk-v1.js',
-            'newPlayer' => 'js-sdk/sdk-v2.js',
-            'video' => 'js-sdk/video-player/sdk-v1.js',
-            'uploader' => 'js-sdk/uploader/sdk-2.1.0.js',
-            'old_uploader' => 'js-sdk/uploader/sdk-v1.js',
-            'old_document' => 'js-sdk/document-player/v7/viewer.html',
-            'faq' => 'js-sdk/faq/sdk-v1.js',
-            'audio' => 'js-sdk/audio-player/sdk-v1.js',
-        ];
-
-        if (isset($paths[$type])) {
-            $path = $paths[$type];
-        } else {
-            $path = $type;
-        }
-
-        $timestamp = round(time() / 100);
-
-        return '//'.trim($cdnHost, "\/").'/'.$path.'?'.$timestamp;
+        return $this->getResourceFacadeService()->getFrontPlaySDKPathByType($type);
     }
 
     public function isWechatLoginBind()
@@ -2080,5 +2059,10 @@ class WebExtension extends \Twig_Extension
     protected function getAssessmentService()
     {
         return $this->createService('ItemBank:Assessment:AssessmentService');
+    }
+
+    protected function getResourceFacadeService()
+    {
+        return $this->createService('CloudPlatform:ResourceFacadeService');
     }
 }

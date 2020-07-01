@@ -288,9 +288,9 @@ class ProductServiceImpl extends BaseService implements ProductService
             $this->createNewException(S2B2CProductException::INVALID_S2B2C_PRODUCT_TYPE());
         }
 
-        if ($type == self::UPDATE_TYPE_AUTO) {
+        if (self::UPDATE_TYPE_AUTO == $type) {
             $this->addUpdateProductJob();
-        }else{
+        } else {
             $this->removeUpdateProductJob();
         }
 
@@ -305,14 +305,14 @@ class ProductServiceImpl extends BaseService implements ProductService
             return true;
         }
 
-        $job = array(
+        $job = [
             'name' => 'productUpdateVersion',
             'class' => 'Biz\S2B2C\Job\UpdateProductVersionJob',
-            'expression' => time(),//'0 2 * * *',
+            'expression' => '0 2 * * *',
             'args' => '',
             'misfire_threshold' => 300,
             'misfire_policy' => 'executing',
-        );
+        ];
 
         $this->getSchedulerService()->register($job);
 

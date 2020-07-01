@@ -1475,6 +1475,12 @@ admin_v2:
                                     name: admin_v2.developer.plumber_manage
                                 admin_v2_plumber_queue:
                                     name: admin_v2.developer.plumber_queue
+                        admin_v2_apple_manage:
+                            name: admin_v2.system.apple_manage_menu
+                            disable: true
+                            children:
+                                admin_v2_setting_apple:
+                                    name: admin_v2.system.apple_setting
                         admin_v2_setting_mobile_iap_product:
                             name: admin_v2.developer.mobile_iap_product_menu
                             disable: true

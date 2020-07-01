@@ -59,7 +59,7 @@ class TestpaperWrapper
                     'fill' => '0',
                     'material' => '0',
                 ],
-                'scores' => [
+                'totalScores' => [
                     'single_choice' => '0',
                     'choice' => '0',
                     'essay' => '0',
@@ -68,14 +68,13 @@ class TestpaperWrapper
                     'fill' => '0',
                     'material' => '0',
                 ],
-                'totalScore' => $assessment['total_score'],
             ],
         ];
         foreach ($assessment['sections'] as $section) {
             foreach ($section['items'] as $item) {
                 if (1 != $item['isDelete']) {
                     ++$testpaper['metas']['counts'][$item['type']];
-                    $testpaper['metas']['scores'][$item['type']] += $item['score'];
+                    $testpaper['metas']['totalScores'][$item['type']] += $item['score'];
                 }
             }
         }
@@ -169,7 +168,7 @@ class TestpaperWrapper
             'metas' => $this->convertMetas($itemQuestion),
             'difficulty' => $item['difficulty'],
             'subCount' => '0',
-            'missScore' => empty($itemQuestion['miss_score']) ? '0' : $itemQuestion['miss_score'],
+            'missScore' => empty($itemQuestion['miss_score']) ? '0' : (string) $itemQuestion['miss_score'],
             'seq' => empty($itemQuestion['seq']) ? '0' : strval($itemQuestion['seq']),
             'categoryId' => $item['category_id'],
             'analysis' => $itemQuestion['analysis'],
