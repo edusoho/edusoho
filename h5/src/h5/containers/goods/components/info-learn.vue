@@ -5,17 +5,31 @@
       <span class="header-more pull-right">更多<i class="iconfont icon-About"></i></span>
     </div>
     <div class="info-learn__body">
-      <div class="body-item" v-for="count in 10" :key="count">
-        <div class="body-item__img">
-          <img src="http://devtest.edusoho.cn/files/system/2019/08-07/1747506b1910625434.JPG" alt="">
-          <div class="learners-mask"></div>
-          <span class="learners-number"><i class="iconfont icon-renqi"></i>8888</span>
+      <template v-if="recommendGoods.length">
+        <div class="body-item" v-for="item in recommendGoods" :key="item.id">
+          <div class="body-item__img">
+            <img :src="item.image" alt="">
+            <div class="learners-mask"></div>
+            <span class="learners-number"><i class="iconfont icon-renqi"></i>8888</span>
+          </div>
+          <div class="body-item__content">
+            <p class="content-title text-overflow">{{ item.title }}</p>
+            <p class="content-price text-overflow">12000.0 Edusoho学习币…</p>
+          </div>
         </div>
-        <div class="body-item__content">
-          <p class="content-title text-overflow">Edusoho经典案例案…Edusoho经典案例案…</p>
-          <p class="content-price text-overflow">12000.0 Edusoho学习币…</p>
-        </div>
-      </div>
+      </template>
+      <div v-else>暂时还没有推荐课程哦...</div>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    recommendGoods: {
+      type: Array,
+      default: () => []
+    }
+  }
+}
+</script>

@@ -6,7 +6,7 @@
           <img :src="teacher.avatar.small" alt="">
         </div>
         <div class="pull-left teacher-info">
-          <p class="teacher-info__name">{{ teacher.nickname }}</p>
+          <p class="teacher-info__name">{{ teacher.name }}</p>
           <p class="teacher-info__describe text-overflow">{{ teacher.title }}</p>
         </div>
       </div>

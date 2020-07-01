@@ -16,7 +16,7 @@
     <!-- 教师 -->
     <section class="js-scroll-top goods-info__item" id="teacher">
       <div class="goods-info__title">教师风采</div>
-      <info-teacher :teachers="details.teachers" />
+      <info-teacher :teachers="componentsInfo.teachers" />
     </section>
 
     <!-- 目录 -->
@@ -29,12 +29,12 @@
     <!-- 评价 -->
     <section class="js-scroll-top goods-info__item" id="evaluate">
       <div class="goods-info__title">课程评价</div>
-      <info-evaluate :reviews="details.reviews" />
+      <info-evaluate :reviews="componentsInfo.reviews" />
     </section>
 
     <!-- 猜你想学 -->
     <section class="goods-info__item">
-      <info-learn>
+      <info-learn :recommendGoods="componentsInfo.recommendGoods">
         <span slot="title">猜你想学</span>
       </info-learn>
     </section>
@@ -54,13 +54,15 @@ import InfoLearn from './components/info-learn';
 import InfoBuy from './components/info-buy';
 import BackToTop from './components/back-to-top';
 import AfterjoinDirectory from './components/afterjoin-directory';
+import Api from '@/api';
 export default {
   data() {
     return {
       active: 0, // 判断nav当前active
       timer: null,
       flag: true, // 点击取消滚动监听
-      backToTopShow: false // 是否显示回到顶部
+      backToTopShow: false, // 是否显示回到顶部
+      componentsInfo: {} // 组件数据
     }
   },
   props: {
@@ -118,7 +120,32 @@ export default {
           this.active = 0;
         }
       }
+    },
+    getGoodsCourseComponents() {
+      Api.getGoodsCourseComponents({
+        query: {
+          id: this.$route.params.id
+        },
+        params: {
+          componentTypes: ['teachers', 'reviews', 'recommendGoods']
+        },
+        headers: {
+          // 'Accept': 'application/vnd.edusoho.v2+json',
+          // 'X-Requested-With': 'XMLHttpRequest',
+          // 'X-CSRF-Token': this.$store.state.count
+        }
+      }).then(res => {
+        this.componentsInfo = res;
+      });
+
     }
+  },
+  watch: {
+    // 如果路由发生变化，再次执行该方法
+    "$route": "getGoodsCourseComponents"
+  },
+  created() {
+    this.getGoodsCourseComponents();
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll);

@@ -3,7 +3,7 @@
     <template v-if="reviews.length">
       <div class="info-evaluate__item clearfix" v-for="review in reviews" :key="review.id">
         <div class="pull-left evaluate-img">
-          <img :src="review.user.avatar.small" alt="">
+          <img src="http://try6.edusoho.cn/files/user/2020/06-15/1741586dd258161303.jpg" alt="">
         </div>
         <div class="pull-left evaluate-content">
           <div class="evaluate-content__name content-name clearfix">
@@ -11,7 +11,7 @@
             <span class="content-name__time pull-right">{{ review.createdTime | createdTime }}</span>
           </div>
           <div class="evaluate-content__plan">
-            {{ review.course.title }}
+            {{ review.targetName }}
             <van-rate class="plan-rate" readonly :value="review.rating * 1" gutter="2" />
           </div>
           <div class="evaluate-content__text">{{ review.content }}</div></div>
