@@ -4,6 +4,10 @@ namespace Biz\ItemBankExercise\Service;
 
 interface ExerciseService
 {
+    const MAX_EXPIRY_DAY = 7300;
+
+    public function update($id, $fields);
+
     public function create($exercise);
 
     public function get($exerciseId);
@@ -28,7 +32,9 @@ interface ExerciseService
 
     public function changeExerciseCover($id, $coverArray);
 
-    public function updateCategoryByExerciseId($exerciseId, $categoryId);
-
     public function getByQuestionBankId($questionBankId);
+
+    public function updateChapterEnable($exercised, $chapterEnable);
+
+    public function updateBaseInfo($exerciseId, $data);
 }

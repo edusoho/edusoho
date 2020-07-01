@@ -35,7 +35,7 @@
         </li>
         {% if (app.user.isAdmin() or  app.user.isTeacher()) %}
           <li>
-            <a class="" href="" data-toggle="modal" data-target="#modal" data-url="">{{'course.members_manage.official_student.update_expiry_day_btn'|trans}}</a>
+            <a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('item_bank_exercise_manage_students_deadline_batch', {exerciseId: exercise.id, ids: student.userId})}}">{{'course.members_manage.official_student.update_expiry_day_btn'|trans}}</a>
           </li>
         {% endif %}
 

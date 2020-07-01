@@ -146,6 +146,7 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
         $questionBank = $this->getQuestionBankDao()->update($id, $fields);
         $this->getItemBankService()->updateItemBank($questionBank['itemBankId'], ['name' => $questionBank['name']]);
+        $this->dispatch('questionBank.update', $questionBank);
 
         return $this->wrapQuestionBank($questionBank);
     }

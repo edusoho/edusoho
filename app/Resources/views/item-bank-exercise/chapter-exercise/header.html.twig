@@ -1,0 +1,11 @@
+{% do script(['app/js/item-bank-exercise/chapter/index.js']) %}
+{% set chapterEnable = 0 %}
+<div class="task-list-header clearfix">
+  <span class="switch-title">{{ 'item_bank_exercise.chapter_exercise.open'|trans }}</span>
+  <label class="cd-switch {% if exercise.chapterEnable %}checked{% endif %}" style="vertical-align: -4px;">
+    <input id="switch" type="radio" value="{{ exercise.chapterEnable }}" checked />
+  </label>
+  <span class="switch-title-info">{{ 'item_bank_exercise.chapter_exercise.info'|trans }}</span>
+  <input type="hidden" value="{{ path('item_bank_exercise_manage_chapter_exercise_open',{exerciseId:exercise.id}) }}" id="openUrl">
+  <input type="hidden" value="{{ exercise.id }}" id="exerciseId">
+</div>

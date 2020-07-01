@@ -12,19 +12,22 @@ class ExerciseEventSubscriber extends EventSubscriber implements EventSubscriber
     public static function getSubscribedEvents()
     {
         return [
-            'exercise.set' => 'onExerciseUpdate',
+            'questionBank.update' => 'onQuestionBankUpdate',
         ];
     }
 
-    public function onExerciseUpdate(Event $event)
+    public function onQuestionBankUpdate(Event $event)
     {
-        $exercise = $event->getSubject();
+        $questionBank = $event->getSubject();
+        $exercise = $this->getExerciseService()->getByQuestionBankId($questionBank['id']);
 
-        if (!isset($courseSet['categoryId'])) {
-            return;
-        }
-
-        $this->getExerciseService()->updateCategoryByExerciseId($exercise['id'], $exercise['categoryId']);
+        $this->getExerciseService()->update(
+            $exercise['id'],
+            [
+                'categoryId' => $questionBank['categoryId'],
+                'title' => $questionBank['name'],
+            ]
+        );
     }
 
     /**
