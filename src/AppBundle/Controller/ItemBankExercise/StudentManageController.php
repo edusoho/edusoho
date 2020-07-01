@@ -4,6 +4,7 @@ namespace AppBundle\Controller\ItemBankExercise;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use AppBundle\Common\TimeMachine;
 use AppBundle\Controller\BaseController;
 use Biz\ItemBankExercise\ItemBankExerciseMemberException;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
@@ -171,6 +172,60 @@ class StudentManageController extends BaseController
             'request' => $request,
             'userId' => $userId,
         ]);
+    }
+
+    public function batchUpdateMemberDeadlinesAction(Request $request, $exerciseId)
+    {
+        $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
+        $ids = $request->query->get('ids');
+        $ids = is_array($ids) ? $ids : explode(',', $ids);
+        if ('POST' === $request->getMethod()) {
+            $fields = $request->request->all();
+            if ('day' == $fields['updateType']) {
+                $this->getExerciseMemberService()->batchUpdateMemberDeadlinesByDay($exerciseId, $ids, $fields['day'], $fields['waveType']);
+
+                return $this->createJsonResponse(true);
+            }
+            $this->getExerciseMemberService()->batchUpdateMemberDeadlinesByDate($exerciseId, $ids, $fields['deadline']);
+
+            return $this->createJsonResponse(true);
+        }
+        $users = $this->getUserService()->findUsersByIds($ids);
+
+        return $this->render(
+            'item-bank-exercise/student-manage/set-deadline-modal.html.twig',
+            [
+                'exercise' => $exercise,
+                'users' => $users,
+                'ids' => implode(',', ArrayToolkit::column($users, 'id')),
+            ]
+        );
+    }
+
+    public function checkDayAction(Request $request, $exerciseId)
+    {
+        $waveType = $request->query->get('waveType');
+        $day = $request->query->get('day');
+        $ids = $request->query->get('ids');
+        $ids = is_array($ids) ? $ids : explode(',', $ids);
+        if ($this->getExerciseMemberService()->checkDayAndWaveTypeForUpdateDeadline($exerciseId, $ids, $day, $waveType)) {
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->createJsonResponse(false);
+    }
+
+    public function checkDeadlineAction(Request $request, $exerciseId)
+    {
+        $deadline = $request->query->get('deadline');
+        $deadline = TimeMachine::isTimestamp($deadline) ? $deadline : strtotime($deadline.' 23:59:59');
+        $ids = $request->query->get('ids');
+        $ids = is_array($ids) ? $ids : explode(',', $ids);
+        if ($this->getExerciseMemberService()->checkDeadlineForUpdateDeadline($exerciseId, $ids, $deadline)) {
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->createJsonResponse(false);
     }
 
     /**

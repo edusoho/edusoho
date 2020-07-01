@@ -3,6 +3,7 @@
 namespace Biz\ItemBankExercise\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\TimeMachine;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
@@ -14,9 +15,15 @@ use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 
 class ExerciseServiceImpl extends BaseService implements ExerciseService
 {
+    public function update($id, $fields)
+    {
+        return $this->getExerciseDao()->update($id, $fields);
+    }
+
     public function create($exercise)
     {
         if (!ArrayToolkit::requireds($exercise, ['questionBankId'])) {
@@ -25,16 +32,12 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
         try {
             $this->beginTransaction();
+
             $exercise = $this->getExerciseDao()->create($exercise);
-            if (!empty($exercise)) {
-                $this->getExerciseMemberService()->addTeacher($exercise['id']);
-                $this->getExerciseModuleService()->createAssessmentModule($exercise['id'], '模拟考试');
-                $this->getItemBankExerciseModuleDao()->create([
-                    'exerciseId' => $exercise['id'],
-                    'title' => '章节练习',
-                    'type' => 'chapter',
-                ]);
-            }
+            $this->getExerciseMemberService()->addTeacher($exercise['id']);
+            $this->createChapterModule($exercise);
+            $this->getExerciseModuleService()->createAssessmentModule($exercise['id'], '模拟考试');
+
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
@@ -42,6 +45,30 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         }
 
         return $exercise;
+    }
+
+    protected function createChapterModule($exercise)
+    {
+        $scene = $this->getAnswerSceneService()->create(
+            [
+                'name' => '章节练习',
+                'limited_time' => 0,
+                'do_times' => 0,
+                'redo_interval' => 0,
+                'need_score' => 0,
+                'enable_facein' => 0,
+                'pass_score' => 0,
+                'manual_marking' => 1,
+                'start_time' => 0,
+                'doing_look_analysis' => 1,
+            ]
+        );
+        $this->getItemBankExerciseModuleDao()->create([
+            'exerciseId' => $exercise['id'],
+            'title' => '章节练习',
+            'type' => 'chapter',
+            'answerSceneId' => $scene['id'],
+        ]);
     }
 
     public function get($exerciseId)
@@ -170,14 +197,96 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $exercise;
     }
 
-    public function updateCategoryByExerciseId($exerciseId, $categoryId)
-    {
-        $this->getExerciseDao()->updateCategoryByExerciseId($exerciseId, ['categoryId' => $categoryId]);
-    }
-
     public function getByQuestionBankId($questionBankId)
     {
         return $this->getExerciseDao()->getByQuestionBankId($questionBankId);
+    }
+
+    public function updateChapterEnable($exercised, $chapterEnable)
+    {
+        $this->getExerciseDao()->update($exercised, $chapterEnable);
+    }
+
+    public function updateBaseInfo($id, $fields)
+    {
+        $exercise = $this->tryManageExercise($id);
+
+        $fields = $this->validateExpiryMode($fields);
+        $fields = $this->processFields($exercise, $fields);
+        $exercise = $this->getExerciseDao()->update($id, $fields);
+
+        return $exercise;
+    }
+
+    protected function validateExpiryMode($exercise)
+    {
+        if (empty($exercise['expiryMode'])) {
+            return $exercise;
+        }
+        if ('days' === $exercise['expiryMode']) {
+            $exercise['expiryStartDate'] = 0;
+            $exercise['expiryEndDate'] = 0;
+
+            if (empty($exercise['expiryDays'])) {
+                $this->createNewException(ItemBankExerciseException::EXPIRYDAYS_REQUIRED());
+            }
+            if ($exercise['expiryDays'] > ExerciseService::MAX_EXPIRY_DAY) {
+                $this->createNewException(ItemBankExerciseException::EXPIRYDAYS_INVALID());
+            }
+        } elseif ('end_date' == $exercise['expiryMode']) {
+            $exercise['expiryStartDate'] = 0;
+            $exercise['expiryDays'] = 0;
+
+            if (empty($exercise['expiryEndDate'])) {
+                $this->createNewException(ItemBankExerciseException::EXPIRYENDDATE_REQUIRED());
+            }
+            $exercise['expiryEndDate'] = TimeMachine::isTimestamp($exercise['expiryEndDate']) ? $exercise['expiryEndDate'] : strtotime($exercise['expiryEndDate'].' 23:59:59');
+        } elseif ('date' === $exercise['expiryMode']) {
+            $exercise['expiryDays'] = 0;
+            if (isset($exercise['expiryStartDate'])) {
+                $exercise['expiryStartDate'] = TimeMachine::isTimestamp($exercise['expiryStartDate']) ? $exercise['expiryStartDate'] : strtotime($exercise['expiryStartDate']);
+            } else {
+                $this->createNewException(ItemBankExerciseException::EXPIRYSTARTDATE_REQUIRED());
+            }
+            if (empty($exercise['expiryEndDate'])) {
+                $this->createNewException(ItemBankExerciseException::EXPIRYENDDATE_REQUIRED());
+            } else {
+                $exercise['expiryEndDate'] = TimeMachine::isTimestamp($exercise['expiryEndDate']) ? $exercise['expiryEndDate'] : strtotime($exercise['expiryEndDate'].' 23:59:59');
+            }
+            if ($exercise['expiryEndDate'] <= $exercise['expiryStartDate']) {
+                $this->createNewException(ItemBankExerciseException::EXPIRY_DATE_SET_INVALID());
+            }
+        } elseif ('forever' == $exercise['expiryMode']) {
+            $exercise['expiryStartDate'] = 0;
+            $exercise['expiryEndDate'] = 0;
+            $exercise['expiryDays'] = 0;
+        } else {
+            $this->createNewException(ItemBankExerciseException::EXPIRYMODE_INVALID());
+        }
+
+        return $exercise;
+    }
+
+    private function processFields($exercise, $fields)
+    {
+        if (in_array($exercise['status'], ['published', 'closed'])) {
+            //发布或者关闭，不允许修改模式，但是允许修改时间
+            unset($fields['expiryMode']);
+            if ('published' == $exercise['status']) {
+                //发布后，不允许修改时间
+                unset($fields['expiryDays']);
+                unset($fields['expiryStartDate']);
+                unset($fields['expiryEndDate']);
+            }
+        }
+
+        if (empty($fields['price']) || $fields['price'] <= 0) {
+            $fields['isFree'] = 1;
+        } else {
+            $fields['isFree'] = 0;
+        }
+
+        return $fields;
     }
 
     /**
@@ -259,5 +368,13 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerSceneService');
     }
 }

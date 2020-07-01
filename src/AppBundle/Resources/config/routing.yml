@@ -3511,3 +3511,27 @@ item_bank_exercise_manage_assessment:
 item_bank_exercise_manage_assessment_module_edit:
     path: /item_bank_exercise/{exerciseId}/assessment/module/{moduleId}/edit
     defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:editModule}
+
+item_bank_exercise_manage_chapter_exercise_list:
+  path: /item_bank_exercise/{exerciseId}/manage/chapter_exercise/list
+  defaults: {_controller: AppBundle:ItemBankExercise/ChapterExercise:list}
+
+item_bank_exercise_manage_chapter_exercise_open:
+  path: /item_bank_exercise/{exerciseId}/manage/chapter_exercise/open
+  defaults: {_controller: AppBundle:ItemBankExercise/ChapterExercise:open}
+
+item_bank_exercise_manage_marketing_info:
+  path: /item_bank_exercise/{exerciseId}/manage/marketing/info
+  defaults: {_controller: AppBundle:ItemBankExercise/ExerciseManage:info}
+
+item_bank_exercise_manage_students_deadline_batch:
+  path:  /item_bank_exercise/{exerciseId}/manage/student/deadline
+  defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:batchUpdateMemberDeadlines }
+
+item_bank_exercise_manage_students_deadline_batch_day_check:
+  path:  /item_bank_exercise/{exerciseId}/manage/student/day/check
+  defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:checkDay }
+
+item_bank_exercise_manage_students_deadline_batch_deadline_check:
+  path:  /item_bank_exercise/{exerciseId}/manage/student/deadline/check
+  defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:checkDeadline }

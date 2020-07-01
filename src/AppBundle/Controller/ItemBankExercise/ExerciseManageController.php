@@ -39,6 +39,67 @@ class ExerciseManageController extends BaseController
         return $this->render('item-bank-exercise/exercise-set/cover-crop-modal.html.twig');
     }
 
+    public function infoAction(Request $request, $exerciseId)
+    {
+        $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
+
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+            $data = $this->prepareExpiryMode($data);
+
+            $this->getExerciseService()->updateBaseInfo($exerciseId, $data);
+
+            return $this->createJsonResponse(true);
+        }
+
+        $exercise = $this->formatExerciseDate($exercise);
+
+        return $this->render(
+            'item-bank-exercise/exercise-set/base-info/marketing.html.twig',
+            [
+                'exercise' => $exercise,
+                'questionBank' => $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']),
+            ]
+        );
+    }
+
+    protected function formatExerciseDate($exercise)
+    {
+        if (!empty($exercise['expiryStartDate'])) {
+            $exercise['expiryStartDate'] = date('Y-m-d', $exercise['expiryStartDate']);
+        }
+        if (!empty($exercise['expiryEndDate'])) {
+            $exercise['expiryEndDate'] = date('Y-m-d', $exercise['expiryEndDate']);
+        }
+        if ('end_date' == $exercise['expiryMode']) {
+            $exercise['deadlineType'] = 'end_date';
+            $exercise['expiryMode'] = 'days';
+        }
+
+        return $exercise;
+    }
+
+    public function prepareExpiryMode($data)
+    {
+        if (empty($data['expiryMode']) || 'days' != $data['expiryMode']) {
+            unset($data['deadlineType']);
+        }
+        if (!empty($data['deadlineType'])) {
+            if ('end_date' == $data['deadlineType']) {
+                $data['expiryMode'] = 'end_date';
+                if (isset($data['deadline'])) {
+                    $data['expiryEndDate'] = $data['deadline'];
+                }
+            } else {
+                $data['expiryMode'] = 'days';
+            }
+            unset($data['deadlineType']);
+        }
+        unset($data['deadline']);
+
+        return $data;
+    }
+
     /**
      * @return ExerciseService
      */

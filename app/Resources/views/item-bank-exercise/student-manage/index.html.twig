@@ -21,7 +21,7 @@
         <div class="clearfix"></div>
       </form>
       {% if students|length > 0 %}
-          <button id="batch-update-expiry-day" type="button" class="cd-btn cd-btn-primary cd-mb16" data-url="#">{{'course.members_manage.official_student.batch_upload_deadline'|trans}}</button>
+          <button id="batch-update-expiry-day" type="button" class="cd-btn cd-btn-primary cd-mb16" data-url="{{ path('item_bank_exercise_manage_students_deadline_batch', {exerciseId: exercise.id}) }}">{{'course.members_manage.official_student.batch_upload_deadline'|trans}}</button>
       {% endif %}
       <table class="table table-striped" id="course-student-list">
         <thead>

@@ -62,7 +62,7 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        if (!$this->getItemBankAssessmentExerciseDao()->count(['moduleId' => $moduleId, 'assessmentId' => $assessmentId])) {
+        if (!$this->count(['moduleId' => $moduleId, 'assessmentId' => $assessmentId])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 

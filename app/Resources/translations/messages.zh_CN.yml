@@ -1146,6 +1146,10 @@ course.members_manage.records.join_reason: 加入原因
 course.members_manage.records.join_reason_type: 加入类型
 course.members_manage.join_records.date: 加入日期
 
+item_bank_exercise.exercise.publish: 题库练习发布
+item_bank_exercise.chapter_exercise.list: 章节目录
+item_bank_exercise.chapter_exercise.item_num: 节点题目数
+item_bank_exercise.chapter_exercise.open: 启动章节练习
 item_bank_exercise.practice_test: 模拟考试
 item_bank_exercise.save_cover: 保存图片
 item_bank_exercise.upload_cover: 题库练习图片上传
@@ -1171,6 +1175,11 @@ item_bank_exercise.assessment.total_score: 总分
 item_bank_exercise.assessment_exercise.module_add: 添加新模块
 item_bank_exercise.assessment_exercise.add_assessment: 添加试卷
 item_bank_exercise.assessment_exercise.remove_assessment: 移除试卷
+item_bank_exercise.chapter_exercise.empty: 什么都没有，快去启章节练习吧
+item_bank_exercise.chapter_exercise.info: 章节练习依据“题目分类管理”的设置。按层级目录向学员提供刷题练习
+item_bank_exercise.marketing_setup.no_permission_tips: 抱歉，您无权管理题库练习基础设置，如有需要请联系网站管理员！
+item_bank_exercise.marketing_setup.setup.can_join.tips: 关闭后，学员自己无法加入，需要由老师手动添加学员。
+item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: 变更学习有效期，仅对修改后新增的学员有效
 
 course.testpaper_check: 试卷批阅
 course.testpaper_check.no_permission_tips: 当前用户不是本课程教师，没有批阅试卷的权限。
@@ -10333,6 +10342,12 @@ exception.item_bank_exercise.exercise.exercise_not_published: 题库练习未发
 exception.item_bank_exercise.member.not_found: 题库练习中没有该成员
 exception.item_bank_exercise.module.exceeded_number: 最多只能添加5个试卷模块
 exception.item_bank_exercise.exercise.module_not_found: 题库练习模块不存在
+exception.item_bank_exercise.expirydays_required: 有效天数不能为空
+exception.item_bank_exercise.expirydays_invalid: 有效天数不合法
+exception.item_bank_exercise.expiryenddate_required: 有效期结束日期不能为空
+exception.item_bank_exercise.expirystartdate_required: 有效期开始日期不能为空
+exception.item_bank_exercise.expirydate_end_later_than_start: 有效期结束日期不能早于开始日期
+exception.item_bank_exercise.expirymode_invalid: 有效期类型错误
 
 exception.wechat.notify_setting_not_enabled: 微信通知未开启
 exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试
