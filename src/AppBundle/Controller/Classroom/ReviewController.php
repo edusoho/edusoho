@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller\Classroom;
 
-use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Review\Service\ReviewService;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\Classroom\Service\ClassroomReviewService;
 
 class ReviewController extends BaseController
 {
@@ -19,7 +19,7 @@ class ReviewController extends BaseController
 
         $user = $this->getCurrentUser();
 
-        $classroomSetting = $this->setting('classroom', array());
+        $classroomSetting = $this->setting('classroom', []);
         $classroomName = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
 
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
@@ -28,21 +28,22 @@ class ReviewController extends BaseController
             return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomName}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
 
-        $conditions = array(
-            'classroomId' => $id,
+        $conditions = [
+            'targetType' => 'classroom',
+            'targetId' => $id,
             'parentId' => 0,
-        );
+        ];
 
-        $reviewsNum = $this->getClassroomReviewService()->searchReviewCount($conditions);
+        $reviewsNum = $this->getReviewService()->countReviews($conditions);
         $paginator = new Paginator(
             $this->get('request'),
             $reviewsNum,
             20
         );
 
-        $reviews = $this->getClassroomReviewService()->searchReviews(
+        $reviews = $this->getReviewService()->searchReviews(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -51,7 +52,7 @@ class ReviewController extends BaseController
         $reviewUsers = $this->getUserService()->findUsersByIds($reviewUserIds);
 
         $classroom = $this->getClassroomService()->getClassroom($id);
-        $review = $this->getClassroomReviewService()->getUserClassroomReview($user['id'], $classroom['id']);
+        $review = $this->getReviewService()->getByUserIdAndTargetTypeAndTargetId($user['id'], 'classroom', $classroom['id']);
         $layout = 'classroom/layout.html.twig';
 
         if ($member && !$member['locked']) {
@@ -59,28 +60,27 @@ class ReviewController extends BaseController
         }
 
         if (!$classroom) {
-            $classroomDescription = array();
+            $classroomDescription = [];
         } else {
             $classroomDescription = $classroom['about'];
             $classroomDescription = strip_tags($classroomDescription, '');
             $classroomDescription = preg_replace('/ /', '', $classroomDescription);
         }
 
-        return $this->render('classroom/review/list.html.twig', array(
+        return $this->render('classroom/review/list.html.twig', [
             'classroom' => $classroom,
             'courses' => $courses,
             'paginator' => $paginator,
             'reviewsNum' => $reviewsNum,
             'reviews' => $reviews,
             'userReview' => $review,
-            'reviewSaveUrl' => $this->generateUrl('classroom_review_create', array('id' => $id)),
             'users' => $reviewUsers,
             'member' => $member,
             'layout' => $layout,
             'classroomDescription' => $classroomDescription,
             'canReview' => $this->isClassroomMember($classroom, $user['id']),
             'targetType' => 'classroom',
-        ));
+        ]);
     }
 
     public function createAction(Request $request, $id)
@@ -91,8 +91,8 @@ class ReviewController extends BaseController
         $fields['userId'] = $user['id'];
         $fields['classroomId'] = $id;
 
-        $this->getClassroomReviewService()->saveReview($fields);
-        $response = array('code' => 'success', 'message' => '');
+        $this->getReviewService()->saveReview($fields);
+        $response = ['code' => 'success', 'message' => ''];
 
         return $this->createJsonResponse($response);
     }
@@ -102,10 +102,10 @@ class ReviewController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $postNum = $this->getClassroomReviewService()->searchReviewCount(array('parentId' => $reviewId));
+        $postNum = $this->getReviewService()->searchReviewCount(['parentId' => $reviewId]);
 
         if ($postNum >= 5) {
-            return $this->createJsonResponse(array('error' => '回复数量已达5条上限，不能再回复'));
+            return $this->createJsonResponse(['error' => '回复数量已达5条上限，不能再回复']);
         }
 
         $user = $this->getCurrentUser();
@@ -116,19 +116,19 @@ class ReviewController extends BaseController
         $fields['rating'] = 1;
         $fields['parentId'] = $reviewId;
 
-        $post = $this->getClassroomReviewService()->saveReview($fields);
+        $post = $this->getReviewService()->saveReview($fields);
 
-        return $this->render('review/widget/subpost-item.html.twig', array(
+        return $this->render('review/widget/subpost-item.html.twig', [
             'post' => $post,
             'author' => $this->getCurrentUser(),
             'canAccess' => true,
             'targetType' => 'classroom',
-        ));
+        ]);
     }
 
     public function deleteAction($reviewId)
     {
-        $this->getClassroomReviewService()->deleteReview($reviewId);
+        $this->getReviewService()->deleteReview($reviewId);
 
         return $this->createJsonResponse(true);
     }
@@ -137,7 +137,7 @@ class ReviewController extends BaseController
     {
         if ($classroom['id']) {
             $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $userId);
-            if (!empty($member) && array_intersect(array('student', 'teacher', 'headTeacher', 'assistant'), $member['role'])) {
+            if (!empty($member) && array_intersect(['student', 'teacher', 'headTeacher', 'assistant'], $member['role'])) {
                 return 1;
             }
         }
@@ -154,10 +154,10 @@ class ReviewController extends BaseController
     }
 
     /**
-     * @return ClassroomReviewService
+     * @return ReviewService
      */
-    private function getClassroomReviewService()
+    private function getReviewService()
     {
-        return $this->createService('Classroom:ClassroomReviewService');
+        return $this->createService('Review:ReviewService');
     }
 }
