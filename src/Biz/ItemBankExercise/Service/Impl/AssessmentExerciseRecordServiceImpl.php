@@ -15,7 +15,7 @@ class AssessmentExerciseRecordServiceImpl extends BaseService implements Assessm
 
     public function count($conditions)
     {
-        return $this->getItemBankAssessmentExerciseRecordDao()->search($conditions);
+        return $this->getItemBankAssessmentExerciseRecordDao()->count($conditions);
     }
 
     public function create($assessmentExerciseRecord)

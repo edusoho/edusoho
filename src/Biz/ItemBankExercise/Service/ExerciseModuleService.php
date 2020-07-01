@@ -16,8 +16,6 @@ interface ExerciseModuleService
 
     public function createAssessmentModule($exerciseId, $name);
 
-    public function updateAnswerSceneId($moduleId, $answerSceneId);
-
     public function search($conditions, $sort, $start, $limit, $columns = []);
 
     public function count($conditions);

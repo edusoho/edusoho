@@ -32,7 +32,7 @@ class ExerciseQuestionRecordServiceImpl extends BaseService implements ExerciseQ
         return $this->getItemBankExerciseQuestionRecordDao()->batchDelete(['itemIds' => $itemIds]);
     }
 
-    public function getItemBankExerciseQuestionRecordDao()
+    protected function getItemBankExerciseQuestionRecordDao()
     {
         return $this->createDao('ItemBankExercise:ExerciseQuestionRecordDao');
     }
