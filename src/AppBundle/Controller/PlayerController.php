@@ -60,7 +60,7 @@ class PlayerController extends BaseController
         return $this->generateUrl($result['route'], $result['params'], $result['referenceType']);
     }
 
-    public function localMediaAction(Request $request, $id, $token)
+    public function localMediaAction(Request $request, $id, $token, $ext)
     {
         $file = $this->getUploadFileService()->getFile($id);
 
@@ -73,7 +73,7 @@ class PlayerController extends BaseController
         }
 
         $token = $this->getTokenService()->verifyToken('local.media', $token);
-        if (!$token || $token['userId'] != $this->getCurrentUser()->getId()) {
+        if (!$token) {
             $this->createNewException(TokenException::TOKEN_INVALID());
         }
 

@@ -113,6 +113,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
             $params = [
                 'id' => $file['id'],
                 'token' => $token['token'],
+                'ext' => $file['ext'],
             ];
 
             return [
