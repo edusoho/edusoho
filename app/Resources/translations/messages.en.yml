@@ -1896,6 +1896,8 @@ item_bank_exercise.accuracy: Accuracy：
 item_bank_exercise.manage_btn: Item bank exercise manage
 item_bank_exercise.chapter_practice: Chapter practice
 item_bank_exercise.testpaper_practice: Tests paper practice
+item_bank_exercise.testpaper_practice.tip: The practice papers support both brush mode and assessment mode. In Brush mode, you will get immediate feedback while answering the questions; in Assessment mode, you will get feedback after answering the questions.
+item_bank_exercise.testpaper_practice.open: Open tests paper practice
 item_bank_exercise.preview.course: Preview item bank exercise
 item_bank_exercise.members_manage.official_student.add.price_tips: 'The price of this item bank exercise is'
 item_bank_exercise.members_manage.official_student.add.failed_tips: 'Fail to add'
@@ -1904,6 +1906,10 @@ item_bank_exercise.student_manage.can_not_add_teacher: This user is the teacher 
 item_bank_exercise.student_manage.student_exist: This user is already a student of this item bank exercise
 item_bank_exercise.student_manage.student_not_exist: The user does not exist
 item_bank_exercise.exercise_create.forbidden: You are not the question bank manager, can not view this page!
+item_bank_exercise.assessment.total_score: Total Score
+item_bank_exercise.assessment_exercise.module_add: Create
+item_bank_exercise.assessment_exercise.add_assessment: Add Assessment
+item_bank_exercise.assessment_exercise.remove_assessment: Remove Assessment
 
 activity.live.not_created_notice: Live classroom not yet created!
 activity.live.overlap_time_notice: There is already a live broadcast at the selected time. Please change your time.
@@ -9021,6 +9027,7 @@ exception.item_bank_exercise.member.duplicate_member: User has joined this item 
 exception.item_bank_exercise.exercise.exercise_not_published: Item bank exercise is not published
 exception.item_bank_exercise.member.not_found: The item bank exercise doesn't have this student
 exception.item_bank_exercise.module.exceeded_number: A maximum of 5 test paper modules can be added
+exception.item_bank_exercise.exercise.module_not_found: Item bank exercis module does not exist
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.

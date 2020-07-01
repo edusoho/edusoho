@@ -8,6 +8,8 @@ interface ExerciseModuleService
 
     const TYPE_ASSESSMENT = 'assessment';
 
+    const ASSESSMENT_MODULE_COUNT = 5;
+
     public function findByExerciseId($exerciseId);
 
     public function findByExerciseIdAndType($exerciseId, $type);

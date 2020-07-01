@@ -9,9 +9,9 @@
             </a>
         </li>
         {# 试卷练习 #}
-          <li class="cd-sidebar__item {% if course_side_nav == 'testpaper' %}active{% endif %}">
+          <li class="cd-sidebar__item {% if course_side_nav == 'assessment' %}active{% endif %}">
               <a
-                href="">
+                href="{{ path('item_bank_exercise_manage_assessment', {exerciseId:exercise.id}) }}">
                 {{ 'item_bank_exercise.testpaper_practice'|trans }}
               </a>
           </li>

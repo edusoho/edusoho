@@ -3,14 +3,13 @@
 namespace Biz\ItemBankExercise\Service\Impl;
 
 use Biz\BaseService;
+use Biz\ItemBankExercise\Dao\ExerciseModuleDao;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 
 class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleService
 {
-    const ASSESSMENT_MODULE_COUNT = 5;
-
     public function findByExerciseId($exerciseId)
     {
         return $this->getItemBankExerciseModuleDao()->findByExerciseId($exerciseId);
@@ -50,6 +49,9 @@ class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleSer
         ]);
     }
 
+    /**
+     * @return ExerciseModuleDao
+     */
     protected function getItemBankExerciseModuleDao()
     {
         return $this->createDao('ItemBankExercise:ExerciseModuleDao');

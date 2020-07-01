@@ -4,6 +4,7 @@ namespace Biz\ItemBankExercise\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\ItemBankExercise\Dao\AssessmentExerciseDao;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\AssessmentExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
@@ -11,6 +12,11 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 
 class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExerciseService
 {
+    public function findByModuleId($moduleId)
+    {
+        return $this->getItemBankAssessmentExerciseDao()->findByModuleId($moduleId);
+    }
+
     public function search($conditions, $sort, $start, $limit, $columns = [])
     {
         return $this->getItemBankAssessmentExerciseDao()->search($conditions, $sort, $start, $limit, $columns);
@@ -109,6 +115,9 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
         return $this->createService('ItemBankExercise:AssessmentExerciseRecordService');
     }
 
+    /**
+     * @return AssessmentExerciseDao
+     */
     protected function getItemBankAssessmentExerciseDao()
     {
         return $this->createDao('ItemBankExercise:AssessmentExerciseDao');

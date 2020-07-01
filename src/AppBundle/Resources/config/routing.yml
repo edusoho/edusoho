@@ -3465,41 +3465,49 @@ facein_inspection_results_detail:
 
 # item-bank-exercise
 item_bank_exercise_manage_students:
-  path: /item_bank_exercise/{exerciseId}/manage/students
-  defaults: {_controller: AppBundle:ItemBankExercise/StudentManage:students}
+    path: /item_bank_exercise/{exerciseId}/manage/students
+    defaults: {_controller: AppBundle:ItemBankExercise/StudentManage:students}
 
 item_bank_exercise_manage_students_add:
-  path: /item_bank_exercise/{exerciseId}/manage/students/add
-  defaults: {_controller: AppBundle:ItemBankExercise/StudentManage:createExerciseStudent}
+    path: /item_bank_exercise/{exerciseId}/manage/students/add
+    defaults: {_controller: AppBundle:ItemBankExercise/StudentManage:createExerciseStudent}
 
 item_bank_exercise_course_students_check:
-  path: /item_bank_exercise/{exerciseId}/manage/students/check
-  defaults: {_controller: AppBundle:ItemBankExercise/StudentManage:checkStudent}
+    path: /item_bank_exercise/{exerciseId}/manage/students/check
+    defaults: {_controller: AppBundle:ItemBankExercise/StudentManage:checkStudent}
 
 item_bank_exercise_manage_student_records:
-  path: /item_bank_exercise/{exerciseId}/manage/students/{type}/records
-  defaults: {_controller: AppBundle:ItemBankExercise/StudentManage:studentRecords}
+    path: /item_bank_exercise/{exerciseId}/manage/students/{type}/records
+    defaults: {_controller: AppBundle:ItemBankExercise/StudentManage:studentRecords}
 
 item_bank_exercise_manage_students_show:
-  path:  /item_bank_exercise/{exerciseId}/manage/students/{userId}/show
-  defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:show }
+    path:  /item_bank_exercise/{exerciseId}/manage/students/{userId}/show
+    defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:show }
 
 item_bank_exercise_manage_students_remark:
-  path:  /item_bank_exercise/{exerciseId}/manage/student/{userId}/remark
-  defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:remark }
+    path:  /item_bank_exercise/{exerciseId}/manage/student/{userId}/remark
+    defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:remark }
 
 item_bank_exercise_open:
-  path: question_bank/{id}/item_bank_exercise/open
-  defaults: {_controller: AppBundle:ItemBankExercise/Exercise:open}
+    path: /question_bank/{id}/item_bank_exercise/open
+    defaults: {_controller: AppBundle:ItemBankExercise/Exercise:open}
 
 item_bank_exercise_create:
-  path: question_bank/{id}/item_bank_exercise/create
-  defaults: {_controller: AppBundle:ItemBankExercise/Exercise:create}
+    path: /question_bank/{id}/item_bank_exercise/create
+    defaults: {_controller: AppBundle:ItemBankExercise/Exercise:create}
 
 item_bank_exercise_manage_base:
-  path: /item_bank_exercise/{exerciseId}/manage/base
-  defaults: {_controller: AppBundle:ItemBankExercise/ExerciseManage:base}
+    path: /item_bank_exercise/{exerciseId}/manage/base
+    defaults: {_controller: AppBundle:ItemBankExercise/ExerciseManage:base}
 
 item_bank_exercise_manage_cover_crop:
-  path: /item_bank_exercise/{exerciseId}/manage/cover_crop
-  defaults: {_controller: AppBundle:ItemBankExercise/ExerciseManage:coverCrop}
+    path: /item_bank_exercise/{exerciseId}/manage/cover_crop
+    defaults: {_controller: AppBundle:ItemBankExercise/ExerciseManage:coverCrop}
+
+item_bank_exercise_manage_assessment:
+    path: /item_bank_exercise/{exerciseId}/assessment/{moduleId}
+    defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:index, moduleId: 0}
+
+item_bank_exercise_manage_assessment_module_edit:
+    path: /item_bank_exercise/{exerciseId}/assessment/module/{moduleId}/edit
+    defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:editModule}

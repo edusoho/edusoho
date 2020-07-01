@@ -9,6 +9,11 @@ class AssessmentExerciseDaoImpl extends GeneralDaoImpl implements AssessmentExer
 {
     protected $table = 'item_bank_assessment_exercise';
 
+    public function findByModuleId($moduleId)
+    {
+        return $this->findByFields(['moduleId' => $moduleId]);
+    }
+
     public function declares()
     {
         return [

@@ -1,0 +1,69 @@
+{% extends 'item-bank-exercise/exercise-set/layout.html.twig' %}
+
+{% block title %}{{'item_bank_exercise.testpaper_practice'|trans}} - {{ exercise.title }} - {{ parent() }}{% endblock %}
+{#{% do script(['app/js/course-manage/students/index.js']) %}#}
+{% set course_side_nav = 'assessment' %}
+{% block main_heading_class %}course-main-header{% endblock %}
+{% block main_heading %}
+  <div class="cd-main__title">
+    <label class="">{{ 'item_bank_exercise.testpaper_practice.open'|trans }}</label>
+    <label class="cd-switch ml20 {% if exercise.assessmentEnable == 1 %}checked{% endif %}">
+      <input id="switch" type="radio" data-toggle="cd-switch" value="1" data-url="">
+    </label>
+    <span class="text-14 ml20" style="color: #adadad; line-height: 1;">
+      {{ 'item_bank_exercise.testpaper_practice.tip'|trans }}
+    </span>
+  </div>
+{% endblock %}
+
+{% block main_body %}
+  <div class="exercise-container">
+    <ul class="nav nav-tabs mb0 col-sm-9">
+      {% for module in modules %}
+        <li class="text-center {% if moduleId == module.id %}active{% endif %}">
+          {{ module.title }}
+          {% if moduleId == module.id %}
+            <a href="#modal" data-toggle="modal" class="js-edit-module cd-link-minor" data-url="{{ path('item_bank_exercise_manage_assessment_module_edit', {moduleId: module.id}) }}"><i class="cd-icon cd-icon-edit edit-icon"></i></a>
+          {% endif %}
+        </li>
+      {% endfor %}
+      <li class="text-center">
+        <a href="javascript:"><i class="cd-icon cd-icon-add"></i>{{ 'item_bank_exercise.assessment_exercise.module_add'|trans }}</a>
+      </li>
+    </ul>
+    <div class="col-sm-3 pull-right">
+      <button class="cd-btn cd-btn-ghost-primary">{{ 'item_bank_exercise.assessment_exercise.add_assessment'|trans }}</button>
+      <button class="cd-btn cd-btn-ghost-primary mlm">{{ 'item_bank_exercise.assessment_exercise.remove_assessment'|trans }}</button>
+    </div>
+  </div>
+  <div>
+    <table class="table cd-table">
+      <thead>
+        <tr>
+          <th><input type="checkbox" autocomplete="off" class="js-select-all"></th>
+          <th width="40%">{{ 'course.testpaper_manage.create.name'|trans }}</th>
+          <th width="20%">{{ 'question.nums'|trans }}/{{ 'item_bank_exercise.assessment.total_score'|trans }}</th>
+          <th width="20%">{{ 'operation'|trans }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for assessment in assessments if assessments %}
+          <tr>
+            <td><input class="js-checkbox" value="{{ assessment.id }}" data-id="{{ assessment.id }}" type="checkbox" autocomplete="off"></td>
+            <td>{{ assessment.name }}</td>
+            <td>{{ assessmeng.item_count }}/{{ assessment.total_score }}</td>
+            <td>
+
+            </td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="20">
+              <div class="cd-empty">{{ 'my.teaching.question_bank.testpaper.empty'|trans }}</div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
