@@ -19,6 +19,8 @@ class ItemFilter extends Filter
         'seq',
         'score',
         'section_id',
+        'includeImg',
+        'attachments',
         'questions',
     ];
 
