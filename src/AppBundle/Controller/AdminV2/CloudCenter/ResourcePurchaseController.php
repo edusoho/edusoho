@@ -73,7 +73,7 @@ class ResourcePurchaseController extends BaseController
         ]);
     }
 
-    public function productDetailAction(Request $request, $productType, $remoteResourceId)
+    public function productDetailAction(Request $request, $productType, $s2b2cProductId, $courseId)
     {
         $controller = $this->getProductController($productType);
         if (empty($controller)) {
@@ -82,7 +82,8 @@ class ResourcePurchaseController extends BaseController
 
         return $this->forward("{$controller}:productDetail", [
             'request' => $request,
-            'remoteResourceId' => $remoteResourceId,
+            's2b2cProductId' => $s2b2cProductId,
+            'courseId' => $courseId,
         ]);
     }
 

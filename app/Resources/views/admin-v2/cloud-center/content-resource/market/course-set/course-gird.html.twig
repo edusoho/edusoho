@@ -6,7 +6,7 @@
 {#      {% set course = data('PublishedCourseByCourseSet',{ courseSetId: courseSet.id } ) %}#}
 {#    {% endif %}#}
 
-    <a href="{{ path('admin_v2_content_resource_product_detail', {productType: 'courseSet',remoteResourceId: product.id}) }}" target="_blank">
+    <a href="{{ path('admin_v2_content_resource_product_detail', {productType: 'courseSet',s2b2cProductId: product.id}) }}" target="_blank">
       {% if product.serializeMode == 'serialized' %}
         <span class="tags"><span class="tag-serialing"></span></span>
       {% elseif product.serializeMode == 'finished' %}
@@ -28,7 +28,7 @@
   </div>
   <div class="course-info">
     <div class="title">
-      <a class="link-dark" href="{{ path('admin_v2_content_resource_product_detail', {productType: 'courseSet',remoteResourceId: product.id}) }}" target="_blank">
+      <a class="link-dark" href="{{ path('admin_v2_content_resource_product_detail', {productType: 'courseSet',s2b2cProductId: product.id}) }}" target="_blank">
         {{ product.name }}
       </a>
     </div>

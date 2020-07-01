@@ -10,10 +10,6 @@ interface SupplierProductNotifyService
 
     public function refreshProductsStatus($params);
 
-    public function supplierCourseClosed($params);
-
-    public function supplierCourseSetClosed($params);
-
     /**
      * @param NotifyEvent $notifyEvent
      * @return mixed

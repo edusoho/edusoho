@@ -49,40 +49,28 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         }
 
         $waitSyncProducts = $this->getS2B2CProductDao()->findBySupplierIdAndRemoteProductId($s2b2cConfig['supplierId'], $s2b2cProductId);
-        //print_r($waitSyncProducts);exit;
         if (empty($waitSyncProducts)) {
             return true;
         }
 
-//        // 获取供应商的原课程
-//        $courseSet = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getSupplierCourseSetProductDetail($product['remoteResourceId']);
-//        if (isset($courseSet['error'])) {
-//            $this->getS2B2CLogger()->error("[syncCourses]getCoursesDetailFail: {$courseSet['error']}");
-//            return false;
-//        }
         $courseSets = array_filter($waitSyncProducts, function($product) {
             return $product['productType'] == 'course_set';
         });
         $courseSetProduct = ArrayToolkit::get(array_values($courseSets), 0, []);
 
-        $content = $this->getDistributeContent($courseSetProduct['remoteProductDetailId']);
+        $content = $this->getDistributeContent($courseSetProduct['s2b2cProductDetailId']);
         if (empty($content)) {
             return false;
         }
         $newCourseSet = $this->getCourseSetService()->addCourseSet($this->prepareCourseSetData($content));
-        $this->getProductService()->updateProduct($courseSetProduct['id'], ['localResourceId' => $newCourseSet['id']]);
+        $this->getProductService()->updateProduct($courseSetProduct['id'], ['localResourceId' => $newCourseSet['id'],'syncStatus' => self::SYNC_STATUS_FINISHED]);
 
         $courseProducts = array_filter($waitSyncProducts, function($product) {
             return $product['productType'] == 'course';
         });;
         $courseHasDefaultCourse = false;
         foreach ($courseProducts as $product) {
-
-//            //已存在不需要同步
-//            if (!empty($this->getS2B2CProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($s2b2cConfig['supplierId'], $course['id'], 'course'))) {
-//                continue;
-//            }
-            $course = $this->getDistributeContent($product['remoteProductDetailId']);
+            $course = $this->getDistributeContent($product['s2b2cProductDetailId']);
             $course['courseSetId'] = $newCourseSet['id'];
             $course['courseSetTitle'] = $newCourseSet['title'];
             $course['platform'] = 'supplier';
@@ -94,7 +82,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
                 'suggestionPrice' => $course['suggestionPrice'],
                 'cooperationPrice' => $course['cooperationPrice'],
                 'remoteResourceId' => $course['id'],
-                'status' => self::SYNC_STATUS_FINISHED
+                'syncStatus' => self::SYNC_STATUS_FINISHED
                 ]);
 
             $this->biz['s2b2c.course_product_sync']->sync($course, ['syncCourseId' => $localCourse['id']]);
@@ -137,53 +125,6 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             'minCoursePrice' => $courseSetData['minCoursePrice'],
             'platform' => 'supplier',
         ];
-    }
-
-
-    /**
-     * @param $courseId
-     *
-     * @return bool
-     *              更新单个课程计划下的所有资源
-     */
-    protected function syncCourseMain($courseId)
-    {
-        $course = $this->getCourseService()->getCourse($courseId);
-        $product = $product = $this->getProductService()->getByTypeAndLocalResourceId('course', $course['id']);
-        $courseSetProduct = $this->getProductService()->getByTypeAndLocalResourceId('course_set', $course['courseSetId']);
-        $this->getLogger()->info("开始尝试同步课程(#{$courseId})");
-        if (!$this->validateCourseData($course, $product)) {
-            return false;
-        }
-
-        try {
-            $this->beginTransaction();
-            $sourceCourse = $this->tryGetSupplierProductSyncData($product['remoteProductId']);
-
-            $this->biz['s2b2c.course_product_sync']->sync($sourceCourse, ['syncCourseId' => $courseId]);
-            $syncCourse = $this->getProductService()->updateProduct($product['id'], ['localVersion' => $sourceCourse['editVersion'], 'syncStatus' => self::SYNC_STATUS_FINISHED]);
-            $this->getProductService()->updateProduct($courseSetProduct['id'], ['syncStatus' => self::SYNC_STATUS_FINISHED]);
-            $this->getLogService()->info('course', 'create', "内容市场选择商品(#{$courseId})《{$course['courseSetTitle']}》同步数据成功", ['userId' => $this->getCurrentUser()->getId()]);
-            $this->commit();
-            $this->getLogger()->info("[syncCourseProduct] 同步课程 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 成功", ['courseId' => $course['id']]);
-        } catch (\Exception $e) {
-            $this->rollback();
-            $this->getLogger()->error("[syncCourseProduct] 同步课程 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 失败", ['message' => $e->getMessage(), 'errorFile' => $e->getFile().$e->getLine(), 'error' => $e->getTraceAsString()]);
-            $courseCounts = $this->getProductService()->countProducts(['remoteResourceId' => $course['courseSetId']]);
-            //删除CourseSet存在一定风险，如果第一个计划就报错，会造成数据丢失
-            if (1 == $courseCounts) {
-                $this->getCourseSetService()->deleteCourseSet($course['courseSetId']);
-                $this->getProductService()->deleteProduct($courseSetProduct['id']);
-            }
-//            $this->getCourseService()->deleteCourse($courseId);
-            $this->getProductService()->deleteProduct($product['id']);
-            $this->getProductService()->deleteProduct($courseSetProduct['id']);
-            $this->getLogService()->error('course', 'create', "内容市场选择商品(#{$courseId})《{$course['courseSetTitle']}》同步数据失败", ['userId' => $this->getCurrentUser()->getId()]);
-
-            throw $e;
-        }
-
-        return true;
     }
 
     public function updateProductVersionData($remoteProductId)
@@ -387,7 +328,8 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
     }
 
     /**
-     * @param $remoteResourceId
+     * @param $s2b2cProductId
+     * @param $remoteCourseId
      * @param $priceFields
      *
      * @return bool
@@ -395,12 +337,14 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
      * @throws \Exception
      * @codeCoverageIgnore
      */
-    public function syncProductPrice($remoteResourceId, $priceFields)
+    public function syncProductPrice($s2b2cProductId, $remoteCourseId, $priceFields)
     {
         $this->beginTransaction();
         try {
             $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
-            $product = $this->getProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($s2b2cConfig['supplierId'], $remoteResourceId, 'course');
+
+            $product = $this->getProductService()->getByProductIdAndRemoteResourceIdAndType($s2b2cProductId, $remoteCourseId, 'course');
+
             if (empty($product)) {
                 $this->createNewException(CourseSetException::SOURCE_COURSE_NOTFOUND());
             }
@@ -408,9 +352,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             $product = $this->getProductService()->updateProduct($product['id'], ArrayToolkit::parts($priceFields, ['suggestionPrice', 'cooperationPrice']));
             $course = $this->getCourseService()->getCourse($product['localResourceId']);
 
-            $merchantSetting = $this->getSettingService()->get('merchant_setting');
-
-            $this->getLogger()->info('[syncProductPrice] $merchantSetting', $merchantSetting);
+            $this->biz->offsetGet('s2b2c.merchant.logger')->info('[syncProductPrice] $merchantSetting', $s2b2cConfig);
 
             if (isset($s2b2cConfig['businessMode']) && S2B2CFacadeService::FRANCHISEE_MODE == $s2b2cConfig['businessMode']) {
                 $this->getCourseService()->updateCourseMarketing($course['id'], array_merge($course, ['originPrice' => $priceFields['suggestionPrice']]));
@@ -425,12 +367,51 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         }
     }
 
-    public function closeTask($remoteResourceId, $lessonId)
+    public function closeCourse($s2b2cProductId, $remoteCourseId)
     {
         $this->beginTransaction();
         try {
-            $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
-            $product = $this->getProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($s2b2cConfig['supplierId'], $remoteResourceId, 'course');
+            $product = $this->getProductService()->getByProductIdAndRemoteResourceIdAndType($s2b2cProductId, $remoteCourseId, 'course');
+
+            if (empty($product)) {
+                $this->createNewException(CourseSetException::SOURCE_COURSE_NOTFOUND());
+            }
+
+            $this->getCourseService()->closeCourse($product['localResourceId']);
+            $this->commit();
+            return true;
+        } catch (\Exception $e) {
+            $this->rollback();
+            $this->getLogger()->error('[syncCloseCourse]'.$e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function closeCourseSet($s2b2cProductId, $remoteCourseSetId)
+    {
+        $this->beginTransaction();
+        try {
+            $product = $this->getProductService()->getByProductIdAndRemoteResourceIdAndType($s2b2cProductId, $remoteCourseSetId, 'course_set');
+
+            if (empty($product)) {
+                $this->createNewException(CourseSetException::SOURCE_COURSE_NOTFOUND());
+            }
+
+            $this->getCourseSetService()->closeCourseSet($product['localResourceId']);
+            $this->commit();
+            return true;
+        } catch (\Exception $e) {
+            $this->rollback();
+            $this->getLogger()->error('[synccloseCourseSet]'.$e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function closeTask($s2b2cProductId, $remoteResourceId, $lessonId)
+    {
+        $this->beginTransaction();
+        try {
+            $product = $this->getProductService()->getByProductIdAndRemoteResourceIdAndType($s2b2cProductId, $remoteResourceId, 'course');
             if (empty($product)) {
                 $this->createNewException(CourseSetException::SOURCE_COURSE_NOTFOUND());
             }
@@ -542,11 +523,14 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         $this->checkMerchantStatus();
         $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
         $courseProduct = $this->getProductService()->getProductBySupplierIdAndLocalResourceIdAndType($s2b2cConfig['supplierId'], $localCourseId, 'course');
-        $sourceCourseSet = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getSupplierProductDetail($courseProduct['remoteProductId']);
-        if (empty($sourceCourseSet['id']) || isset($sourceCourseSet['error'])) {
+
+        $sourceCourse = $this->getS2B2CFacadeService()->getS2B2CService()->getDistributeContent($courseProduct['s2b2cProductDetailId']);
+
+        if (empty($sourceCourse['status'])) {
             $this->createNewException(CourseSetException::SOURCE_COURSE_NOTFOUND());
         }
-        if ('published' != $sourceCourseSet['course']['status']) {
+        $sourceCourse = $sourceCourse['data'];
+        if ('published' != $sourceCourse['status']) {
             $this->createNewException(CourseException::SOURCE_COURSE_CLOSED());
         }
     }
@@ -563,10 +547,13 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         $this->checkMerchantStatus();
         $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
         $courseSetProduct = $this->getProductService()->getProductBySupplierIdAndLocalResourceIdAndType($s2b2cConfig['supplierId'], $localCourseSetId, 'course_set');
-        $sourceCourseSet = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getSupplierCourseSetProductDetail($courseSetProduct['remoteResourceId']);
-        if (!empty($sourceCourseSet['error']) || empty($sourceCourseSet['id'])) {
+        $sourceCourseSet = $this->getS2B2CFacadeService()->getS2B2CService()->getDistributeContent($courseSetProduct['s2b2cProductDetailId']);
+
+        if (empty($sourceCourseSet['status'])) {
             $this->createNewException(CourseSetException::SOURCE_COURSE_NOTFOUND());
         }
+
+        $sourceCourseSet = $sourceCourseSet['data'];
         if ('published' != $sourceCourseSet['status']) {
             $this->createNewException(CourseSetException::SOURCE_COURSE_CLOSED());
         }

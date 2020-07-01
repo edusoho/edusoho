@@ -2514,8 +2514,8 @@ admin_v2_content_resource_update_product_version:
   defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:updateProductToLatestVersion }
 
 admin_v2_content_resource_product_detail:
-  path:  /app/resourses/type/{productType}/remote_resource/{remoteResourceId}
-  defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:productDetail }
+  path:  /app/resourses/type/{productType}/remote_resource/{s2b2cProductId}/course/{courseId}
+  defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:productDetail, courseId: 0 }
 
 admin_v2_content_resource_choose_product:
   path:  /app/content_resource/type/{productType}/product_id/{productId}

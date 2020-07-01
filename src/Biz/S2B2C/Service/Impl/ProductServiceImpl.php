@@ -62,6 +62,19 @@ class ProductServiceImpl extends BaseService implements ProductService
     }
 
     /**
+     * @param $s2b2cProductId
+     * @param $remoteResourceId
+     * @param $type
+     *
+     * @return mixed
+     *               通过$s2b2cProductId 和 remoteResourceId（第三方具体资源ID）和 类型 唯一确定一个商品
+     */
+    public function getByProductIdAndRemoteResourceIdAndType($s2b2cProductId, $remoteResourceId, $type)
+    {
+        return $this->getS2B2CProductDao()->getByRemoteProductIdRemoteResourceIdAndType($s2b2cProductId, $remoteResourceId, $type);
+    }
+
+    /**
      * @param $supplierId
      * @param $localResourceId
      * @param $type
@@ -117,6 +130,15 @@ class ProductServiceImpl extends BaseService implements ProductService
         }
 
         return $this->getS2B2CProductDao()->findBySupplierIdAndRemoteResourceTypeAndIds($supplierId, $productType, $remoteResourceIds);
+    }
+
+    public function findProductsBySupplierIdAndRemoteResourceTypeAndProductIds($supplierId, $productType, $remoteProductIds)
+    {
+        if (empty($remoteProductIds)) {
+            return [];
+        }
+
+        return $this->getS2B2CProductDao()->findBySupplierIdAndRemoteResourceTypeAndProductIds($supplierId, $productType, $remoteProductIds);
     }
 
     /**
@@ -341,7 +363,7 @@ class ProductServiceImpl extends BaseService implements ProductService
 
         $products = array_map(function ($detail) {
             return [
-                'remoteProductDetailId' => $detail['id'],
+                's2b2cProductDetailId' => $detail['id'],
                 'supplierId' => $detail['supplierId'],
                 'remoteProductId' => $detail['productId'],
                 'remoteResourceId' => $detail['targetId'],

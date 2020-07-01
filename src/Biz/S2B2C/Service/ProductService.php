@@ -26,6 +26,8 @@ interface ProductService
 
     public function getProductBySupplierIdAndRemoteResourceIdAndType($supplierId, $remoteResourceId, $type);
 
+    public function getByProductIdAndRemoteResourceIdAndType($productId, $remoteResourceId, $type);
+
     public function getProductBySupplierIdAndLocalResourceIdAndType($supplierId, $localResourceId, $type);
 
     public function searchProducts($conditions, $orderBys, $start, $limit, $columns = []);
@@ -34,7 +36,9 @@ interface ProductService
 
     public function findProductsBySupplierIdAndRemoteProductIds($supplierId, $remoteProductIds);
 
-    public function findProductsBySupplierIdAndRemoteResourceTypeAndIds($supplierId, $productType, $remoteProductIds);
+    public function findProductsBySupplierIdAndRemoteResourceTypeAndIds($supplierId, $productType, $remoteResourceIds);
+
+    public function findProductsBySupplierIdAndRemoteResourceTypeAndProductIds($supplierId, $productType, $remoteProductIds);
 
     public function findProductsBySupplierIdAndProductTypeAndLocalResourceIds($supplierId, $productType, $localResourceIds);
 

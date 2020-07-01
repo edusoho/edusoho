@@ -2,6 +2,7 @@
 
 namespace QiQiuYun\SDK\Service;
 
+use App\Biz\Service\ProductService;
 use Psr\Log\LoggerInterface;
 use QiQiuYun\SDK\Auth;
 use QiQiuYun\SDK\HttpClient\ClientInterface;
@@ -135,17 +136,18 @@ class S2B2CService extends BaseService
      *
      * @return array array('items' => array(), 'count' => 0)
      */
-    public function searchDistribute($conditions, $sorts, $start, $limit)
-    {
-        $params = array(
-            'conditions' => $conditions,
-            'sorts' => $sorts,
-            'start' => (int) $start,
-            'limit' => (int) $limit,
-        );
+     public function searchDistribute($conditions, $sorts, $start, $limit)
+     {
+         $params = array(
+             'conditions' => $conditions,
+             'sorts' => $sorts,
+             'start' => (int) $start,
+             'limit' => (int) $limit,
+         );
+         $this->uri = '/contents/search_distribute';
 
-        return $this->request('GET', '/contents/search_distribute', $params);
-    }
+         return $this->sendRequest('searchDistribute', $params);
+     }
 
     // 获取余额明细详情接口路径
     private $flowDetailPath = '/merchants/flow_detail';
@@ -201,16 +203,14 @@ class S2B2CService extends BaseService
     }
 
     // 修改采购课程价格的接口路径
-    private $changeProductSellingPricePath = '/merchants/change/product/selling_price';
+    private $changeProductSellingPricePath = '/distribute/product_detail/{productDetailId}/selling_price/change';
 
-    public function changeProductSellingPrice($productId, $productType, $sellingPrice)
+    public function changeProductSellingPrice($productDetailId, $sellingPrice)
     {
         $sendData = array(
-            'productId' => $productId,
-            'productType' => $productType,
             'sellingPrice' => $sellingPrice,
         );
-        $this->uri = $this->changeProductSellingPricePath;
+        $this->uri = str_replace('{productDetailId}', $productDetailId, $this->changeProductSellingPricePath);
 
         return $this->sendRequest('changeProductSellingPrice', $sendData, 'POST');
     }
@@ -476,7 +476,7 @@ class S2B2CService extends BaseService
     {
         try {
             $this->logger->info('try '.$methodName.': ', array('DATA' => $data));
-            $result = $this->request($requestMethod, $this->uri, $data);
+            $result = $this->request($requestMethod, $this->uri, $data, $this->getDefaultHeaders());
             $this->logger->info($methodName.' SUCCEED', array($result));
         } catch (\Exception $e) {
             $this->logger->error($methodName.' error: '.$e->getMessage(), array('DATA' => $data));
@@ -490,5 +490,37 @@ class S2B2CService extends BaseService
     protected function createErrorResult($message = 'unexpected error')
     {
         return array('error' => $message);
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->biz->service('ProductService');
+    }
+
+    private function getDefaultHeaders()
+    {
+        $isCTProject = class_exists('\CorporateTrainingBundle\System');
+        if ($isCTProject) {
+            return array(
+                'BSystem' => 'ct',
+                'BSystemVersion' => \CorporateTrainingBundle\System::CT_VERSION
+            );
+        }
+
+        $isESProject = class_exists('\AppBundle\System');
+        if ($isESProject) {
+            return array(
+                'BSystem' => 'es',
+                'BSystemVersion' => \AppBundle\System::VERSION
+            );
+        }
+
+        return array(
+            'BSystem' => 'un',
+            'BSystemVersion' => 0
+        );
     }
 }

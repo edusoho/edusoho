@@ -93,22 +93,6 @@ class SupplierPlatformApi extends AbstractPlatformApi
         return $this->sendRequest('getSupplierProductDetail', $data, $options);
     }
 
-    public function getSupplierCourseSetProductDetail($courseSetId)
-    {
-        if (!$this->apiValid) {
-            return $this->createErrorResult();
-        }
-
-        $data = [];
-        $this->uri = "{$this->courseSetProductPath}/{$courseSetId}";
-        $options = [
-            'connectTimeout' => 300,
-            'timeout' => 300,
-        ];
-
-        return $this->sendRequest('getSupplierCourseSetProductDetail', $data, $options);
-    }
-
     /**
      * 获取供应商产品同步的内容数据
      *

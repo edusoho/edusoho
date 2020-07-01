@@ -84,48 +84,6 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
         return ['status' => true];
     }
 
-    public function supplierCourseClosed($params)
-    {
-        $courseProduct = $this->getProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($params['supplier_id'], $params['course_id'], 'course');
-        if (empty($courseProduct)) {
-            $this->getLogger()->info('[supplierCloseCourse] course not found in Merchant', $params);
-
-            return ['status' => false];
-        }
-
-        try {
-            $this->getCourseService()->closeCourse($courseProduct['localResourceId']);
-            $this->getLogger()->info('[supplierCloseCourse] success');
-        } catch (\Exception $e) {
-            $this->getLogger()->err('[supplierCloseCourse] failed'.$e->getMessage().$e->getTraceAsString(), $params);
-
-            return ['status' => false];
-        }
-
-        return ['status' => true];
-    }
-
-    public function supplierCourseSetClosed($params)
-    {
-        $courseSetProduct = $this->getProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($params['supplier_id'], $params['course_set_id'], 'course_set');
-        if (empty($courseSetProduct)) {
-            $this->getLogger()->info('[supplierCourseSetClosed] course_set not found in Merchant', $params);
-
-            return ['status' => false];
-        }
-
-        try {
-            $this->getCourseSetService()->closeCourseSet($courseSetProduct['localResourceId']);
-            $this->getLogger()->info('[supplierCourseSetClosed] success');
-        } catch (\Exception $e) {
-            $this->getLogger()->err('[supplierCourseSetClosed] failed'.$e->getMessage().$e->getTraceAsString(), $params);
-
-            return ['status' => false];
-        }
-
-        return ['status' => true];
-    }
-
     /**
      * @param NotifyEvent $notifyEvent
      * @return bool|mixed
@@ -136,6 +94,8 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
         $handle = array(
             'modifyPrice' => 'modifyPriceEvent',
             'closeTask' => 'closeTaskEvent',
+            'closePlan' => 'closePlanEvent',
+            'closeCourse' => 'closeCourseEvent',
         );
 
         if (!array_key_exists($notifyEvent->getEvent(), $handle)){
@@ -164,7 +124,11 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
     {
         $changeData = $notifyEvent->getData();
 
-        return $this->getCourseProductService()->syncProductPrice($notifyEvent->getProductId(), ArrayToolkit::parts($changeData['new'], ['suggestionPrice', 'cooperationPrice']));
+        return $this->getCourseProductService()->syncProductPrice(
+            $notifyEvent->getProductId(),
+            $changeData['courseId'],
+            ArrayToolkit::parts($changeData['new'], ['suggestionPrice', 'cooperationPrice'])
+        );
     }
 
     /**
@@ -174,7 +138,31 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
      */
     protected function closeTaskEvent($notifyEvent)
     {
-        return $this->getCourseProductService()->closeTask($notifyEvent->getProductId(), ArrayToolkit::get($notifyEvent->getData(), 'taskId', 0));
+        return $this->getCourseProductService()->closeTask(
+            $notifyEvent->getProductId(),
+            $notifyEvent->getData('courseId'),
+            $notifyEvent->getData('lessonId')
+        );
+    }
+
+    /**
+     * @param \ApiBundle\Api\Resource\SyncProductNotify\NotifyEvent $notifyEvent
+     * @return boolean
+     * @throws
+     */
+    protected function closePlanEvent($notifyEvent)
+    {
+        return $this->getCourseProductService()->closeCourse($notifyEvent->getProductId(), $notifyEvent->getData('courseId'));
+    }
+
+    /**
+     * @param \ApiBundle\Api\Resource\SyncProductNotify\NotifyEvent $notifyEvent
+     * @return boolean
+     * @throws
+     */
+    protected function closeCourseEvent($notifyEvent)
+    {
+        return $this->getCourseProductService()->closeCourseSet($notifyEvent->getProductId(), $notifyEvent->getData('courseSetId'));
     }
 
     /**
