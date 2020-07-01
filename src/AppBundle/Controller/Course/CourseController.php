@@ -11,9 +11,9 @@ use Biz\Course\CourseSetException;
 use Biz\Course\MemberException;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\MaterialService;
+use Biz\Favorite\Service\FavoriteService;
 use Biz\File\Service\UploadFileService;
 use Biz\Order\OrderException;
-use Biz\Order\Service\OrderService;
 use Biz\Review\Service\ReviewService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -222,8 +222,9 @@ class CourseController extends CourseBaseController
             $user['id']
         ) : [];
 
-        $isUserFavorite = $user->isLogin() ? $this->getCourseSetService()->isUserFavorite(
+        $isUserFavorite = $user->isLogin() ? $this->getFavoriteService()->isUserFavorite(
             $user['id'],
+            'course',
             $course['courseSetId']
         ) : false;
 
@@ -922,5 +923,13 @@ class CourseController extends CourseBaseController
         }
 
         return 1;
+    }
+
+    /**
+     * @return FavoriteService
+     */
+    protected function getFavoriteService()
+    {
+        return $this->createService('Favorite:FavoriteService');
     }
 }

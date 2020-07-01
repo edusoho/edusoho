@@ -11,6 +11,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Util\CourseTitleUtils;
+use Biz\Favorite\Service\FavoriteService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
@@ -146,7 +147,7 @@ class CourseController extends CourseBaseController
         $isUserFavorite = false;
         $user = $this->getUser();
         if ($user->isLogin()) {
-            $isUserFavorite = $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']);
+            $isUserFavorite = $this->getFavoriteService()->isUserFavorite($user['id'], 'course', $course['courseSetId']);
         }
 
         return $this->render(
@@ -432,5 +433,13 @@ class CourseController extends CourseBaseController
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return FavoriteService
+     */
+    protected function getFavoriteService()
+    {
+        return $this->createService('Favorite:FavoriteService');
     }
 }

@@ -986,14 +986,6 @@ group_thread_check_user:
 group_thread_show:
     path:  /group/{id}/thread/{threadId}
     defaults: { _controller: AppBundle:GroupThread:groupThreadIndex }
-group_thread_collect:
-    path:  /group/thread/{threadId}/collect
-    defaults: { _controller: AppBundle:GroupThread:collect }
-    methods: [POST]
-group_thread_uncollect:
-    path:  /group/thread/{threadId}/uncollect
-    defaults: { _controller: AppBundle:GroupThread:uncollect }
-    methods: [POST]
 group_thread_setElite:
     path:  /group/thread/{threadId}/setElite
     defaults: { _controller: AppBundle:GroupThread:setElite }
@@ -1515,16 +1507,6 @@ open_course_lesson_learn:
 open_course_lesson_show:
     path:  /open/course/{courseId}/lesson/{lessonId}/show
     defaults: { _controller: AppBundle:OpenCourse:lessonShow }
-
-open_course_favorite:
-    path: /open/course/{id}/favorite
-    defaults: { _controller: AppBundle:OpenCourse:favorite }
-    methods: [POST]
-
-open_course_unfavorite:
-    path: /open/course/{id}/unfavorite
-    defaults: { _controller: AppBundle:OpenCourse:unfavorite }
-    methods: [POST]
 
 open_course_like:
     path: /open/course/{id}/like
@@ -2142,16 +2124,6 @@ course_set_show:
 course_qrcode:
   path: /course/{id}/qrcode
   defaults: { _controller: AppBundle:Course/Course:qrcode }
-  methods: [POST]
-
-course_set_favorite:
-  path: /course_set/{id}/favorite
-  defaults: { _controller: AppBundle:Course/CourseSet:favorite }
-  methods: [POST]
-
-course_set_unfavorite:
-  path: /course_set/{id}/unfavorite
-  defaults: { _controller: AppBundle:Course/CourseSet:unfavorite }
   methods: [POST]
 
 course_exit:
