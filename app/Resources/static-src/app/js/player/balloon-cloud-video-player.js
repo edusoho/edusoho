@@ -6,6 +6,7 @@ class BalloonCloudVideoPlayer extends Emitter {
     this.options = options;
     this.player = {};
     this.setup();
+    console.log(123);
   }
 
   setup() {
@@ -106,7 +107,6 @@ class BalloonCloudVideoPlayer extends Emitter {
       strictMode: !self.options.strictMode,
       language: lang
     });
-    console.log(extConfig);
     var player = new QiQiuYun.Player(extConfig);
 
     player.on('ready', function(e) {

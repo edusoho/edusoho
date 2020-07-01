@@ -25,6 +25,7 @@ use Biz\S2B2C\Service\FileSourceService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
 use Biz\Testpaper\Service\TestpaperService;
+use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
@@ -195,7 +196,15 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_question_lack', [$this, 'isQuestionLack']),
             new \Twig_SimpleFunction('is_s2b2c_enabled', [$this, 'isS2B2CEnabled']),
             new \Twig_SimpleFunction('s2b2c_has_behaviour_permission', [$this, 's2b2cHasBehaviourPermission']),
+            new \Twig_SimpleFunction('make_local_media_file_token', [$this, 'makeLocalMediaFileToken']),
         ];
+    }
+
+    public function makeLocalMediaFileToken($file)
+    {
+        $token = $this->makeToken('local.media', $file['id']);
+
+        return $token['token'];
     }
 
     /**
@@ -2011,6 +2020,36 @@ class WebExtension extends \Twig_Extension
         }
 
         return in_array($merchantSetting['coop_mode'], $this->allowedCoopMode) || !empty($merchantSetting['auth_node']['favicon']);
+    }
+
+    protected function makeToken($type, $fileId, $context = [])
+    {
+        $fields = [
+            'data' => [
+                'id' => $fileId,
+            ],
+            'times' => 10,
+            'duration' => 3600,
+            'userId' => $this->biz['user']['id'],
+        ];
+
+        if (isset($context['watchTimeLimit'])) {
+            $fields['data']['watchTimeLimit'] = $context['watchTimeLimit'];
+        }
+
+        if (isset($context['hideBeginning'])) {
+            $fields['data']['hideBeginning'] = $context['hideBeginning'];
+        }
+
+        return $this->getTokenService()->makeToken($type, $fields);
+    }
+
+    /**
+     * @return TokenService
+     */
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
     }
 
     /**
