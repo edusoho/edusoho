@@ -124,7 +124,7 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
         $categories = [];
 
         $loop = 1;
-        while ($loop <= 100) {
+        while ($loop <= 3) {
             $categroy = $this->getItemCategoryService()->getItemCategory($categroyId);
             if (empty($categroy)) {
                 break;
