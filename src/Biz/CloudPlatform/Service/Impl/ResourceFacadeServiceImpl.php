@@ -50,14 +50,6 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         $storageSetting = $this->getSettingService()->get('storage');
         $context['isEncryptionPlus'] = isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['enable_hls_encryption_plus'];
 
-        if (!$this->isHiddenVideoHeader()) {
-            // 加入片头信息
-            $videoHeaderFile = $this->getUploadFileService()->getFileByTargetType('headLeader');
-            if (!empty($videoHeaderFile) && 'success' == $videoHeaderFile['convertStatus']) {
-                $context['']
-            }
-        }
-
         return $context;
     }
 
