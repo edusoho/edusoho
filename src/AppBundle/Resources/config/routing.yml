@@ -3512,6 +3512,10 @@ item_bank_exercise_manage_assessment_module_edit:
     path: /item_bank_exercise/{exerciseId}/assessment/module/{moduleId}/edit
     defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:editModule}
 
+item_bank_exercise_manage_assessment_module_create:
+    path: /item_bank_exercise/{exerciseId}/assessment/module/create
+    defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:createModule}
+
 item_bank_exercise_manage_chapter_exercise_list:
   path: /item_bank_exercise/{exerciseId}/manage/chapter_exercise/list
   defaults: {_controller: AppBundle:ItemBankExercise/ChapterExercise:list}

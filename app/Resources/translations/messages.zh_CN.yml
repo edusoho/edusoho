@@ -1172,7 +1172,7 @@ item_bank_exercise.student_manage.student_exist: 该用户已是本题库练习�
 item_bank_exercise.student_manage.student_not_exist: 该用户不存在
 item_bank_exercise.exercise_create.forbidden: 您不是该题库管理者，不能查看此页面！
 item_bank_exercise.assessment.total_score: 总分
-item_bank_exercise.assessment_exercise.module_add: 添加新模块
+item_bank_exercise.assessment_exercise.add_new_module: 添加新模块
 item_bank_exercise.assessment_exercise.add_assessment: 添加试卷
 item_bank_exercise.assessment_exercise.remove_assessment: 移除试卷
 item_bank_exercise.chapter_exercise.empty: 什么都没有，快去启章节练习吧
@@ -1180,6 +1180,9 @@ item_bank_exercise.chapter_exercise.info: 章节练习依据“题目分类管�
 item_bank_exercise.marketing_setup.no_permission_tips: 抱歉，您无权管理题库练习基础设置，如有需要请联系网站管理员！
 item_bank_exercise.marketing_setup.setup.can_join.tips: 关闭后，学员自己无法加入，需要由老师手动添加学员。
 item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: 变更学习有效期，仅对修改后新增的学员有效
+item_bank_exercise.assessment_exercise.add_module: 添加模块
+item_bank_exercise.assessment_exercise.edit_module: 修改模块
+item_bank_exercise.assessment_exercise.module.name: 模块名称
 
 course.testpaper_check: 试卷批阅
 course.testpaper_check.no_permission_tips: 当前用户不是本课程教师，没有批阅试卷的权限。

@@ -81,6 +81,11 @@ class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleSer
         );
     }
 
+    public function updateAssessmentModule($moduleId, $fields)
+    {
+        return $this->getItemBankExerciseModuleDao()->update($moduleId, $fields);
+    }
+
     /**
      * @return ExerciseModuleDao
      */

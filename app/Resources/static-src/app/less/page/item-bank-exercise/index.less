@@ -1,6 +1,7 @@
 .exercise-container {
-  .nav.nav-tabs {
+  .exercise-nav.exercise-nav-tabs {
     li {
+      float: left;
       font-size:14px;
       font-weight:400;
       color:rgba(51,51,51,1);
@@ -9,6 +10,7 @@
       width:120px;
       height:40px;
       padding-top: 10px;
+      list-style-type: none;
       a {
         display: contents;
         font-size:14px;
@@ -19,9 +21,6 @@
       &.active {
         background:rgba(67,188,96,1);
         color:rgba(255,255,255,1);
-      }
-      &:hover {
-        color: @brand-primary;
       }
       .edit-icon {
         background-color: white;

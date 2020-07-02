@@ -39,8 +39,9 @@ class AssessmentExerciseController extends BaseController
         ]);
     }
 
-    public function editModuleAction(Request $request, $moduleId)
+    public function editModuleAction(Request $request, $exerciseId, $moduleId)
     {
+        $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
         $module = $this->getExerciseModuleService()->get($moduleId);
         if (empty($module)) {
             $this->createNewException(ItemBankExerciseException::NOTFOUND_MODULE());
@@ -49,11 +50,22 @@ class AssessmentExerciseController extends BaseController
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
 
-            $module = $this->getExerciseModuleService();
+            $module = $this->getExerciseModuleService()->updateAssessmentModule($moduleId, $data);
+
+            return $this->createJsonResponse($module);
         }
 
-        return $this->render('item-bank-exercise/assessment-exercise/index.html.twig', [
+        return $this->render('item-bank-exercise/assessment-exercise/module-modal.html.twig', [
             'module' => $module,
+            'exercise' => $exercise,
+        ]);
+    }
+
+    public function createModuleAction(Request $request)
+    {
+        return $this->render('item-bank-exercise/assessment-exercise/module-modal.html.twig', [
+            'module' => $module,
+            'exercise' => $exercise,
         ]);
     }
 

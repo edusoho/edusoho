@@ -1,7 +1,7 @@
 {% extends 'item-bank-exercise/exercise-set/layout.html.twig' %}
 
 {% block title %}{{'item_bank_exercise.testpaper_practice'|trans}} - {{ exercise.title }} - {{ parent() }}{% endblock %}
-{#{% do script(['app/js/course-manage/students/index.js']) %}#}
+{% do script(['app/js/item-bank-exercise/assessment/index.js']) %}
 {% set course_side_nav = 'assessment' %}
 {% block main_heading_class %}course-main-header{% endblock %}
 {% block main_heading %}
@@ -18,17 +18,17 @@
 
 {% block main_body %}
   <div class="exercise-container">
-    <ul class="nav nav-tabs mb0 col-sm-9">
+    <ul class="exercise-nav exercise-nav-tabs mb0 col-sm-9">
       {% for module in modules %}
         <li class="text-center {% if moduleId == module.id %}active{% endif %}">
           {{ module.title }}
           {% if moduleId == module.id %}
-            <a href="#modal" data-toggle="modal" class="js-edit-module cd-link-minor" data-url="{{ path('item_bank_exercise_manage_assessment_module_edit', {moduleId: module.id}) }}"><i class="cd-icon cd-icon-edit edit-icon"></i></a>
+            <a href="#modal" data-toggle="modal" class="js-edit-module cd-link-minor" data-url="{{ path('item_bank_exercise_manage_assessment_module_edit', {exerciseId: exercise.id, moduleId: module.id}) }}"><i class="cd-icon cd-icon-edit edit-icon"></i></a>
           {% endif %}
         </li>
       {% endfor %}
       <li class="text-center">
-        <a href="javascript:"><i class="cd-icon cd-icon-add"></i>{{ 'item_bank_exercise.assessment_exercise.module_add'|trans }}</a>
+        <a href="javascript:"><i class="cd-icon cd-icon-add"></i>{{ 'item_bank_exercise.assessment_exercise.add_new_module'|trans }}</a>
       </li>
     </ul>
     <div class="col-sm-3 pull-right">
