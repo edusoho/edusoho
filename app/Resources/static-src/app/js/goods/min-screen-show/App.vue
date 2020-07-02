@@ -1,18 +1,23 @@
 <template>
-  <div class="min-screen-show">
-    min-screen-show
+  <div class="goods">
+    <detail :details="details" />
+    <course-info :details="details" />
   </div>
 </template>
 
 <script>
+  import Detail from './detail';
+  import CourseInfo from './course-info';
   import axios from 'axios';
   export default {
     data() {
       return {
-        componentsData: {}
+        details: {}
       }
     },
     components: {
+      Detail,
+      CourseInfo
     },
     methods: {
       
@@ -21,7 +26,7 @@
       axios.get('/api/goods/1', {
         headers: { 'Accept': 'application/vnd.edusoho.v2+json'}
       }).then((res) => {
-        this.componentsData = res.data;
+        this.details = res.data;
       });
     }
   }

@@ -1,0 +1,201 @@
+// 限时优惠
+.detail-discount {
+  .height(46);
+  // 优惠价格
+  .detail-discount__left {
+    .width(240);
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255, 88, 115, 1) 0%, rgba(255, 127, 88, 1) 100%);
+    color: #fff;
+    text-align: center;
+    .line-height(46);
+    .text,
+    .price {
+      .margin-right(5);
+      .font-size(18);
+      font-weight: 500;
+    }
+    .original-price {
+      .font-size(14);
+    }
+  }
+  // 活动结束倒计时
+  .detail-discount__right {
+    .width(135);
+    height: 100%;
+    text-align: center;
+    background-color: #F5F5F5;
+    .text {
+      .margin-top(4);
+      .font-size(12);
+      .line-height(16);
+      color: #666;
+    }
+    .count-down {
+      .height(22);
+      color: #000;
+      .van-count-down {
+        .font-size(12);
+        .line-height(22);
+        .day {
+          .margin-right(5);
+          color: #FF5C3B;
+          .font-size(16);
+        }
+        .item {
+          display: inline-block;
+          .width(20);
+          .height(20);
+          .margin-right(5);
+          color: #fff;
+          background-color: #FF7262;
+          border-radius: 4px;
+        }
+      }
+    }
+  }
+}
+// 名称价格
+.detail-info {
+  .padding(16);
+  background-color: #fff;
+  .detail-info__title {
+    .font-size(16);
+    font-weight: 500;
+    color: #333;
+  }
+  .detail-info__price {
+    .margin-top(8);
+    .font-size(16);
+    color: #999;
+    .price {
+      .margin(0, 3, 0, 5);
+      .font-size(24);
+      font-weight: 600;
+      color: #FF5C3B;
+    }
+    .study-num {
+      position: relative;
+      .top(5);
+    }
+    .original-price {
+      .margin-top(4);
+      .font-size(12);
+    }
+  }
+}
+// 教学计划
+.detail-plan {
+  .margin-top(8);
+  .padding(14, 16);
+  .line-height(20);
+  background-color: #fff;
+  .detail-plan__plan {
+    .margin-bottom(12);
+    &:last-child {
+      margin-bottom: 0;
+    }
+    .plan-left {
+      .width(72);
+      .font-size(12);
+      color: #999;
+    }
+    .plan-right {
+      position: relative;
+      .width(271);
+      .font-size(14);
+      color: #666;
+      .plan-right__icon {
+        .font-size(14);
+        position: absolute;
+        right: 0;
+        .top(1);
+      }
+      .plan-right__promise {
+        .padding(2, 4);
+        .margin-right(8);
+        .font-size(12);
+        background-color: #03C777;
+        color: #fff;
+        border-radius: 4px;
+      }
+    }
+  }
+  // 学习计划弹出框
+  .detail-plan__popup {
+    .padding(16);
+    box-sizing: border-box;
+    border-radius: 12px 12px 0 0;
+    .plan-popup__title {
+      .font-size(14);
+      color: #333;
+      .line-height(20);
+      span {
+        position: relative;
+        .top(1);
+        display: inline-block;
+        .width(4);
+        .height(12);
+        background-color: #03C777;
+        border-radius: 2px;
+      }
+    }
+    .plan-popup__type {
+      .margin-top(4);
+      .plan-popup__type__item {
+        display: inline-block;
+        .padding(4, 8);
+        .margin(12, 8, 0 ,0);
+        .border(1, rgba(225, 225, 225, 1));
+        .font-size(14);
+        color: #999;
+        border-radius: 4px;
+        &.active {
+          .border(1, #03C777);
+          background: rgba(3, 199, 119, 0.1);
+        }
+      }
+    }
+    .plan-popup__other {
+      .padding(16);
+      .margin-top(16);
+      background-color: #F9F9F9;
+      border-radius: 4px;
+      .popup-other {
+        .margin-top(16);
+        .line-height(20);
+        .font-size(14);
+        &:first-child {
+          margin-top: 0;
+        }
+        .popup-other__left {
+          .width(102);
+          color: #999;
+        }
+        .popup-other__right {
+          .width(209);
+          color: #666;
+          .popup-other__right__promise {
+            .padding(2, 4);
+            .margin-right(8);
+            .font-size(12);
+            background-color: #03C777;
+            color: #fff;
+            border-radius: 4px;
+          }
+        }
+      }
+    }
+    .plan-popup__buy {
+      .margin-top(24);
+      .height(48);
+      border-radius: 24px;
+      background: rgba(255, 118, 95, 1);
+      color: #fff;
+      text-align: center;
+      .line-height(48);
+      .font-size(16);
+      font-weight: 500;
+    }
+  }
+}
