@@ -18,6 +18,7 @@ class GoodsDaoImpl extends GeneralDaoImpl implements GoodsDao
             ],
             'conditions' => [
                 'id = :id',
+                'id IN (:ids)',
                 'productId = :productId',
                 'title = :title',
                 'title LIKE :titleLike',

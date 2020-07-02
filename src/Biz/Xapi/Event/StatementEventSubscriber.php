@@ -4,6 +4,7 @@ namespace Biz\Xapi\Event;
 
 use AppBundle\Common\MathToolkit;
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseService;
 use Biz\OrderFacade\Product\ClassroomProduct;
 use Biz\OrderFacade\Product\CourseProduct;
 use Biz\User\CurrentUser;
@@ -30,8 +31,10 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'course.task.finish' => 'onCourseTaskFinish',
             'course.note.create' => 'onCourseNoteCreate',
             'course.thread.create' => 'onCourseThreadCreate',
-            'courseSet.favorite' => 'onCourseSetFavorite',
+            'favorite' => 'onCourseSetFavorite',
             'course.review.add' => 'onCourseReviewAdd',
+
+            'review.create' => 'onReviewCreate',
         ];
     }
 
@@ -137,7 +140,14 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     public function onCourseSetFavorite(Event $event)
     {
         $favorite = $event->getSubject();
-        $course = $event->getArgument('course');
+        if ('course' != $favorite['targetType']) {
+            return;
+        }
+
+        $course = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($favorite['targetId']);
+        if (empty($course)) {
+            return;
+        }
 
         $this->createStatement($favorite['userId'], XAPIVerbs::BOOKMARKED, $course['id'], 'course', [
         ]);
@@ -148,6 +158,24 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         $review = $event->getSubject();
 
         $this->createStatement($review['userId'], XAPIVerbs::RATED, $review['courseId'], 'course', [
+            'score' => [
+                'raw' => $review['rating'],
+                'max' => 5,
+                'min' => 1,
+            ],
+            'response' => $review['content'],
+        ]);
+    }
+
+    public function onReviewCreate(Event $event)
+    {
+        $review = $event->getSubject();
+
+        if (!in_array($review['targetType'], ['course', 'classroom'])) {
+            return;
+        }
+
+        $this->createStatement($review['userId'], XAPIVerbs::RATED, $review['targetId'], $review['targetType'], [
             'score' => [
                 'raw' => $review['rating'],
                 'max' => 5,
@@ -222,8 +250,16 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     /**
      * @return ActivityService
      */
-    public function getActivityService()
+    protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->getBiz()->service('Course:CourseService');
     }
 }

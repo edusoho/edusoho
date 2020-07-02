@@ -8,13 +8,13 @@
   <div class="course-list course-list-new">
     <div class="row">
       {% for courseFavorite in courseFavorites if courseFavorite %}
-        {% if courseFavorite.type == 'course' %}
-          {% set courseSet = data('CourseSet',{ id: courseFavorite.courseSetId} ) %}
+        {% if courseFavorite.targetType == 'course' %}
+          {% set courseSet = data('CourseSet',{ id: courseFavorite.targetId} ) %}
           <div class="col-lg-3 col-md-4 col-xs-6 course-item-wrap">
             {% include 'course/widgets/course-grid-new.html.twig' with { courseSet: courseSet } %}
           </div>
-        {% elseif courseFavorite.type == 'openCourse' %}
-          {% set course = data('OpenCourse',{courseId:courseFavorite.courseId})|default(null) %}
+        {% elseif courseFavorite.targetType == 'openCourse' %}
+          {% set course = data('OpenCourse',{courseId:courseFavorite.targetId})|default(null) %}
           {% if course %}
             <div class="col-lg-3 col-md-4 col-xs-6 course-item-wrap">
               {% include 'open-course/widget/open-course-grid.html.twig' %}
