@@ -20,6 +20,7 @@ class ExerciseEventSubscriberTest extends BaseTestCase
                 'name' => 'questionBank'
             ]
         );
+
         $result = $subscriber->onQuestionBankUpdate($event);
         $this->assertNull($result);
     }
