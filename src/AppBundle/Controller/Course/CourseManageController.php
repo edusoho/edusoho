@@ -239,12 +239,16 @@ class CourseManageController extends BaseController
         }
 
         $task['isEnd'] = intval(time() - $task['endTime']) > 0;
-        $task['canRecord'] = $this->get('web.twig.live_extension')->canRecord($liveId);
-
-        $client = new EdusohoLiveClient();
+        $task['canRecord'] = $this->get('web.twig.live_extension')->canRecord($liveId, $activity['syncId']);
 
         if ('live' == $task['type']) {
-            $result = $client->getMaxOnline($liveId);
+            if ($activity['syncId'] > 0) {
+                $result = $this->getS2B2CFacadeService()->getS2B2CService()->getLiveRoomMaxOnline($liveId);
+            } else {
+                $client = new EdusohoLiveClient();
+                $result = $client->getMaxOnline($liveId);
+            }
+
             $this->getTaskService()->setTaskMaxOnlineNum($task['id'], $result['onLineNum']);
         }
 

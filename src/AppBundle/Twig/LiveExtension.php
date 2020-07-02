@@ -5,6 +5,7 @@ namespace AppBundle\Twig;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\Course\Service\LiveReplayService;
 use Biz\File\Service\UploadFileService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -122,11 +123,14 @@ class LiveExtension extends \Twig_Extension
         return $this->getOriginActivity($copyActivity);
     }
 
-    public function canRecord($liveId)
+    public function canRecord($liveId, $syncId = 0)
     {
-        $client = new EdusohoLiveClient();
-
         try {
+            if ($syncId > 0) {
+                return (bool) $this->getS2B2CFacadeService()->getS2B2CService()->isLiveAvailableRecord($liveId);
+            }
+            $client = new EdusohoLiveClient();
+
             return (bool) $client->isAvailableRecord($liveId);
         } catch (CloudAPIIOException $cloudAPIIOException) {
             return false;
@@ -223,5 +227,13 @@ class LiveExtension extends \Twig_Extension
     protected function getUploadFileService()
     {
         return $this->biz->service('File:UploadFileService');
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->biz->service('S2B2C:S2B2CFacadeService');
     }
 }

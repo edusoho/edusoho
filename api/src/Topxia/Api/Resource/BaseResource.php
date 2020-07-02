@@ -361,4 +361,12 @@ abstract class BaseResource
     {
         return $this->createService('System:SettingService');
     }
+
+    /**
+     * @return \Biz\S2B2C\Service\S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->createService('S2B2C:S2B2CFacadeService');
+    }
 }
