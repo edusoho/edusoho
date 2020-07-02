@@ -1,13 +1,13 @@
 <template>
   <div class="goods">
     <detail :details="details" />
-    <info :details="details" />
+    <course-info :details="details" />
   </div>
 </template>
 
 <script>
 import Detail from './detail';
-import Info from './info';
+import CourseInfo from './course-info';
 import Api from '@/api';
 import { Toast } from 'vant'
 export default {
@@ -18,7 +18,7 @@ export default {
   },
   components: {
     Detail,
-    Info
+    CourseInfo
   },
   methods: {
     getGoodsCourse() {
