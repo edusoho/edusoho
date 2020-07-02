@@ -2,9 +2,9 @@
 
 namespace Biz\ItemBankExercise\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface ExerciseDao extends GeneralDaoInterface
+interface ExerciseDao extends AdvancedDaoInterface
 {
     public function getByQuestionBankId($questionBankId);
 
