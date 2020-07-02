@@ -28,7 +28,7 @@
         </li>
       {% endfor %}
       <li class="text-center">
-        <a href="javascript:"><i class="cd-icon cd-icon-add"></i>{{ 'item_bank_exercise.assessment_exercise.add_new_module'|trans }}</a>
+        <a href="#modal" data-toggle="modal" data-url="{{ path('item_bank_exercise_manage_assessment_module_create', {exerciseId: exercise.id}) }}"><i class="cd-icon cd-icon-add"></i>{{ 'item_bank_exercise.assessment_exercise.add_new_module'|trans }}</a>
       </li>
     </ul>
     <div class="col-sm-3 pull-right">

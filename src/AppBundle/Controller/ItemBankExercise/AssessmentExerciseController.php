@@ -60,11 +60,21 @@ class AssessmentExerciseController extends BaseController
         ]);
     }
 
-    public function createModuleAction(Request $request)
+    public function createModuleAction(Request $request, $exerciseId)
     {
+        $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
+
+        if ($request->isMethod('POST')) {
+            $name = $request->request->get('title');
+
+            $module = $this->getExerciseModuleService()->createAssessmentModule($exerciseId, $name);
+
+            return $this->createJsonResponse($module);
+        }
+
         return $this->render('item-bank-exercise/assessment-exercise/module-modal.html.twig', [
-            'module' => $module,
             'exercise' => $exercise,
+            'module' => [],
         ]);
     }
 
