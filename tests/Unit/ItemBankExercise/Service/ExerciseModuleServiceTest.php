@@ -63,7 +63,7 @@ class ExerciseModuleServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Biz\ItemBankExercise\ItemBankExerciseException
-     * @expectedExceptionCode 5007315
+     * @expectedExceptionCode 5007515
      */
     public function testCreateAssessmentModule_whenModuleCountGt5_thenThrowItemBankExerciseException()
     {
