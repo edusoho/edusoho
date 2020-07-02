@@ -12,6 +12,11 @@ class GoodsController extends BaseController
         return $this->render('goods/show.html.twig', array_merge($this->mockData($id), ['goods' => $this->mockData($id)]));
     }
 
+    public function minScreenShowAction(Request $request, $id)
+    {
+        return $this->render('goods/min-screen-show.html.twig', []);
+    }
+
     public function mockData($id)
     {
         $mockData = [
