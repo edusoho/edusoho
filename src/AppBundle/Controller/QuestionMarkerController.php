@@ -30,6 +30,14 @@ class QuestionMarkerController extends BaseController
         $baseUrl = $request->getSchemeAndHttpHost();
         $results = [];
 
+        $headerLength = 0;
+        if (!$this->getWebExtension()->isHiddenVideoHeader()) {
+            $videoHeaderFile = $this->getUploadFileService()->getFileByTargetType('headLeader');
+            if (!empty($videoHeaderFile) && 'success' == $videoHeaderFile['convertStatus']) {
+                $headerLength = $videoHeaderFile['length'];
+            }
+        }
+        
         foreach ($questionMakers as $index => $questionMaker) {
             if (empty($items[$questionMaker['questionId']]) || empty($items[$questionMaker['questionId']]['questions'])) {
                 continue;
@@ -43,7 +51,7 @@ class QuestionMarkerController extends BaseController
             $result['id'] = $questionMaker['id'];
             $result['questionMarkerId'] = $questionMaker['id'];
             $result['markerId'] = $questionMaker['markerId'];
-            $result['time'] = $questionMaker['second'];
+            $result['time'] = $questionMaker['second'] + $headerLength;
             $result['type'] = $item['type'];
             $result['question'] = self::convertAbsoluteUrl($baseUrl, $question['stem']);
             if ($isChoice) {
