@@ -32,7 +32,7 @@
       </li>
     </ul>
     <div class="col-sm-3 pull-right">
-      <button class="cd-btn cd-btn-ghost-primary">{{ 'item_bank_exercise.assessment_exercise.add_assessment'|trans }}</button>
+      <a href="#modal" data-toggle="modal" id="add-testpaper" data-url="{{ path('item_bank_exercise_manage_assessment_add_list', {exerciseId: exercise.id, moduleId: moduleId}) }}" class="cd-btn cd-btn-ghost-primary">{{ 'item_bank_exercise.assessment_exercise.add_assessment'|trans }}</a>
       <button class="cd-btn cd-btn-ghost-primary mlm">{{ 'item_bank_exercise.assessment_exercise.remove_assessment'|trans }}</button>
     </div>
   </div>
@@ -51,7 +51,7 @@
           <tr>
             <td><input class="js-checkbox" value="{{ assessment.id }}" data-id="{{ assessment.id }}" type="checkbox" autocomplete="off"></td>
             <td>{{ assessment.name }}</td>
-            <td>{{ assessmeng.item_count }}/{{ assessment.total_score }}</td>
+            <td>{{ assessment.item_count }}/{{ assessment.total_score }}</td>
             <td>
 
             </td>

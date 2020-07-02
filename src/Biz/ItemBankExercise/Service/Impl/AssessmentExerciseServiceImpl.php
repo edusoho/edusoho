@@ -55,6 +55,38 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
         return $answerRecord;
     }
 
+    public function addAssessments($exerciseId, $moduleId, $assessments)
+    {
+        try {
+            $this->beginTransaction();
+
+            foreach ($assessments as $assessment) {
+                if ($this->getItemBankAssessmentExerciseDao()->isAssessmentExercise($moduleId, $assessment['id'], $exerciseId)){
+                    $this->createNewException(ItemBankExerciseException::ASSESSMENT_EXERCISE_EXIST());
+                }
+
+                $this->getItemBankAssessmentExerciseDao()->create(
+                    [
+                        'exerciseId' => $exerciseId,
+                        'moduleId' => $moduleId,
+                        'assessmentId' => $assessment['id'],
+                    ]
+                );
+            }
+
+            $this->commit();
+        }catch (\Exception $e){
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    public function isAssessmentExercise($moduleId, $assessmentId, $exerciseId)
+    {
+        $assessmentExercise = $this->getItemBankAssessmentExerciseDao()->isAssessmentExercise($moduleId, $assessmentId, $exerciseId);
+        return empty($assessmentExercise) ? false : true;
+    }
+
     protected function canStartAnswer($moduleId, $assessmentId, $userId)
     {
         $module = $this->getItemBankExerciseModuleService()->get($moduleId);

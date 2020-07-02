@@ -3,12 +3,14 @@
 namespace AppBundle\Controller\ItemBankExercise;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\AssessmentExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\QuestionBankService;
+use Biz\Testpaper\TestpaperException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Symfony\Component\HttpFoundation\Request;
@@ -76,6 +78,69 @@ class AssessmentExerciseController extends BaseController
             'exercise' => $exercise,
             'module' => [],
         ]);
+    }
+
+    public function assessmentAddListAction(Request $request, $exerciseId, $moduleId)
+    {
+        $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
+
+        if (!$this->getQuestionBankService()->canManageBank($exercise['questionBankId'])) {
+            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
+        }
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']);
+
+        $conditions = [
+            'bank_id' => $questionBank['itemBankId'],
+            'displayable' => 1,
+        ];
+
+        $paginator = new Paginator(
+            $request,
+            $this->getAssessmentService()->countAssessments($conditions),
+            10
+        );
+
+        $assessments = $this->getAssessmentService()->searchAssessments(
+            $conditions,
+            ['created_time' => 'DESC'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render('item-bank-exercise/assessment-exercise/assessment-modal.html.twig', [
+            'exercise' => $exercise,
+            'questionBank' => $questionBank,
+            'testpapers' => $assessments,
+            'users' => $this->getUserService()->findUsersByIds(array_column($assessments, 'updated_user_id')),
+            'paginator' => $paginator,
+            'moduleId' => $moduleId,
+        ]);
+    }
+
+    public function addAssessmentAction(Request $request, $exerciseId, $moduleId)
+    {
+        $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
+
+        if (!$this->getQuestionBankService()->canManageBank($exercise['questionBankId'])) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $ids = $request->request->get('ids');
+
+        $assessments = $this->getAssessmentService()->findAssessmentsByIds($ids);
+        if (empty($assessments)) {
+            $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
+        }
+
+        $status = ArrayToolkit::column($assessments, 'status');
+        if (in_array('open', $status)) {
+            $this->createNewException(TestpaperException::OPEN_TESTPAPER_FORBIDDEN_DELETE());
+        }
+
+        $this->getAssessmentExerciseService()->addAssessments($exerciseId, $moduleId, $assessments);
+
+        return $this->createJsonResponse(true);
     }
 
     /**

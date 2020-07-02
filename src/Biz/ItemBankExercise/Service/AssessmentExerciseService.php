@@ -11,4 +11,8 @@ interface AssessmentExerciseService
     public function count($conditions);
 
     public function startAnswer($moduleId, $assessmentId, $userId);
+
+    public function addAssessments($exerciseId, $moduleId, $assessments);
+
+    public function isAssessmentExercise($moduleId, $assessmentId, $exerciseId);
 }

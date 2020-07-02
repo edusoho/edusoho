@@ -14,6 +14,17 @@ class AssessmentExerciseDaoImpl extends GeneralDaoImpl implements AssessmentExer
         return $this->findByFields(['moduleId' => $moduleId]);
     }
 
+    public function isAssessmentExercise($moduleId, $assessmentId, $exerciseId)
+    {
+        return $this->getByFields(
+            [
+                'exerciseId' => $exerciseId,
+                'moduleId' => $moduleId,
+                'assessmentId' => $assessmentId,
+            ]
+        );
+    }
+
     public function declares()
     {
         return [

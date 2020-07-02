@@ -18,7 +18,9 @@ site.data.not_found: Not found ...
 site.data.delete_name_hint: Really want to delete the% name%?
 site.data.uncheck_name_hint: No %name% selected
 site.data.delete_check_name_hint: Are you sure to delete the selected bar %name%?
+site.data.add_check_name_hint: Are you sure to add the selected bar %name%?
 site.data.delete_title_hint: Delete %name%
+site.data.add_title_hint: Add %name%
 site.data.delete_submiting_hint: Deleting ...
 site.date.year: Years
 site.date.month: Month
@@ -230,7 +232,9 @@ Site.date_format_his: 'Hours %hour% Minutes% minutes% Seconds %seconds%'
 Site.date_format_is: 'Minutes %minutes% seconds %seconds%'
 Site.date_format_s: Seconds %seconds%
 Site.delete_success_hint: Deleted successfully
+Site.add_success_hint: Add successfully
 Site.delete_fail_hint: Delete failed
+Site.add_fail_hint: Add failed
 Site.upload_success_hint: Uploaded successfully
 Site.upload_fail_retry_hint: Upload failed, please try again
 Site.save_success_hint: Saved successfully

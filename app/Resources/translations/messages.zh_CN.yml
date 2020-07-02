@@ -10351,6 +10351,7 @@ exception.item_bank_exercise.expiryenddate_required: 有效期结束日期不能
 exception.item_bank_exercise.expirystartdate_required: 有效期开始日期不能为空
 exception.item_bank_exercise.expirydate_end_later_than_start: 有效期结束日期不能早于开始日期
 exception.item_bank_exercise.expirymode_invalid: 有效期类型错误
+exception.item_bank_exercise.assessment_exercise_exist: 试卷已存在该模块内，请勿重复添加
 
 exception.wechat.notify_setting_not_enabled: 微信通知未开启
 exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试
