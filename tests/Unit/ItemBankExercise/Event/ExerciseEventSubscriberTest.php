@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\ItemBankExercise\Event;
-
 
 use Biz\BaseTestCase;
 use Biz\ItemBankExercise\Event\ExerciseEventSubscriber;
@@ -17,7 +15,7 @@ class ExerciseEventSubscriberTest extends BaseTestCase
             [
                 'id' => 1,
                 'categoryId' => 1,
-                'name' => 'questionBank'
+                'name' => 'questionBank',
             ]
         );
 
