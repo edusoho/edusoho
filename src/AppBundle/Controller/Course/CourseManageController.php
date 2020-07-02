@@ -265,6 +265,12 @@ class CourseManageController extends BaseController
             );
         }
 
+        if ('supplier' == $courseSet['platform']) {
+            $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+            $product = $this->getS2B2CProductService()->getProductBySupplierIdAndLocalResourceIdAndType($s2b2cConfig['supplierId'], $courseSet['id'], 'course_set');
+            $this->getSyncEventService()->confirmByEvents($product['remoteProductId'], [SyncEventService::EVENT_CLOSE_PLAN]);
+        }
+
         $conditions = [
             'courseSetId' => $courseSet['id'],
         ];
@@ -430,6 +436,12 @@ class CourseManageController extends BaseController
             );
         }
 
+        if ('supplier' == $course['platform']) {
+            $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+            $product = $this->getS2B2CProductService()->getProductBySupplierIdAndLocalResourceIdAndType($s2b2cConfig['supplierId'], $course['id'], 'course');
+            $this->getSyncEventService()->confirmByEvents($product['remoteProductId'], [SyncEventService::EVENT_CLOSE_TASK]);
+        }
+
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
         $tasksListJsonData = $this->createCourseStrategy($course)->getTasksListJsonData($courseId);
 
@@ -488,7 +500,7 @@ class CourseManageController extends BaseController
         if ('supplier' == $course['platform']) {
             $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
             $product = $this->getS2B2CProductService()->getProductBySupplierIdAndLocalResourceIdAndType($s2b2cConfig['supplierId'], $course['id'], 'course');
-            $notifies = $this->getSyncEventService()->confirmByEvents($product['remoteResourceId'], [SyncEventService::EVENT_MODIFY_PRICE]);
+            $notifies = $this->getSyncEventService()->confirmByEvents($product['remoteProductId'], [SyncEventService::EVENT_MODIFY_PRICE]);
         }
 
         if ($request->isMethod('POST')) {

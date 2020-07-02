@@ -419,8 +419,8 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
 
             if (empty($lesson) || 'lesson' != $lesson['type']) {
                 $this->getLogger()->error('不存在的课时 lessonSyncId:'.$lessonId.' lesson'.json_encode($lesson), $product);
-
-                return false;
+                //todo 目前无法通过版本判断合适加入的task 暂时返回true
+                return true;
             }
 
             if ('unpublished' == $lesson['status']) {

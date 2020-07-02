@@ -67,7 +67,7 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
                 if (!empty($product['remoteResourceId'])) {
                     $productIds[] = $product['remoteResourceId'];
                 }
-                $item['origin_product_id'] = $product['remoteResourceId'];
+                $item['origin_product_id'] = $product['s2b2cProductDetailId'];
             }
 
             if (!empty($productIds)) {

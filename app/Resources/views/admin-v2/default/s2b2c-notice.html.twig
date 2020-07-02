@@ -31,8 +31,8 @@
       {% set notifies = data('S2B2CProductUpdateNotify', {}) %}
       {% for notify in notifies %}
         <div class="alert alert-warning clearfix" role="alert">
-          <span>您采购的 《{{  notify.course.courseSetTitle|default('') }}》 {{ notify.eventName }}</span>
-          <a class="alert-link" href="{{ path('course_set_manage_course_info', {courseSetId: notify.course.courseSetId, courseId: notify.course.id}) }}" target="_blank">{{ 'course.testpaper_manage.transfer_btn'|trans }}</a>
+          <span>您采购的 《{{  notify.title |default('') }}》 {{ notify.eventName }}</span>
+          <a class="alert-link" href="{{ path(notify.path, notify.pathParams) }}" target="_blank">{{ 'course.testpaper_manage.transfer_btn'|trans }}</a>
         </div>
       {% endfor %}
     </div>

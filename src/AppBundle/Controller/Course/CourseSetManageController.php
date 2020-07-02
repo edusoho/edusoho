@@ -11,7 +11,9 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Biz\S2B2C\Service\CourseProductService;
+use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
+use Biz\S2B2C\Service\SyncEventService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
@@ -163,6 +165,12 @@ class CourseSetManageController extends BaseController
             $this->getCourseSetService()->updateCourseSet($id, $data);
 
             return $this->createJsonResponse(true);
+        }
+
+        if ('supplier' == $courseSet['platform']) {
+            $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+            $product = $this->getS2B2CProductService()->getProductBySupplierIdAndLocalResourceIdAndType($s2b2cConfig['supplierId'], $courseSet['id'], 'course_set');
+            $this->getSyncEventService()->confirmByEvents($product['remoteProductId'], [SyncEventService::EVENT_CLOSE_COURSE]);
         }
 
         if ($courseSet['locked']) {
@@ -491,5 +499,29 @@ class CourseSetManageController extends BaseController
     protected function getCourseProductService()
     {
         return $this->createService('S2B2C:CourseProductService');
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->createService('S2B2C:S2B2CFacadeService');
+    }
+
+    /**
+     * @return SyncEventService
+     */
+    protected function getSyncEventService()
+    {
+        return $this->createService('S2B2C:SyncEventService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getS2B2CProductService()
+    {
+        return $this->createService('S2B2C:ProductService');
     }
 }

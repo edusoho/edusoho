@@ -11,7 +11,6 @@ class ProductController extends BaseController
 {
     public function pullSupplierProductAction(Request $request, $productType, $productId)
     {
-//        $product = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getSupplierProductDetail($productId);
         $result = $this->getS2B2CFacadeService()->getS2B2CService()->getDistributeProduct($productId);
 
         if ($result['status'] && $result['status'] == 'success') {
