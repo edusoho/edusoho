@@ -2534,3 +2534,7 @@ admin_v2_plumber:
 admin_v2_plumber_queue:
   path: /plumber/queue
   defaults: { _controller: AppBundle:AdminV2/Developer/Plumber:queue }
+
+admin_v2_goods_setting:
+  path: /goods/setting
+  defaults: { _controller: AppBundle:AdminV2/Operating/GoodsSetting:index }

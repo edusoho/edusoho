@@ -1,0 +1,151 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% do script(['libs/jquery-validation.js','app/js/admin-v2/operating/goods-setting/index.js']) %}
+
+{% set menu = 'admin_v2_goods_setting' %}
+
+{% block main %}
+  <form class="form-horizontal">
+    <fieldset>
+      <legend>{{ 'admin_v2.operating.goods_recommend_setting'|trans }}</legend>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label>{{ 'admin_v2.operating.goods_recommend_rule'|trans }}</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          {{ radios('recommendRule', {
+            'hot':'admin_v2.operating.goods_recommend.hot'|trans,
+            'latest':'admin_v2.operating.goods_recommend.latest'|trans,
+            'label':'admin_v2.operating.goods_recommend.label'|trans
+          }, setting.recommendRule|default('hot')) }}
+          <div class="help-block">
+            <span class="">{{ 'admin_v2.operating.goods_recommend.hot_tips'|trans }}</span>
+            <br>
+            <span class="">{{ 'admin_v2.operating.goods_recommend.latest_tips'|trans }}</span>
+            <br>
+            <span class="">{{ 'admin_v2.operating.goods_recommend.label_tips'|trans }}</span>
+            <br>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>{{ 'admin_v2.operating.goods_show_setting'|trans }}</legend>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label>{{ 'admin_v2.operating.goods_show_sales'|trans }}</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          <label>
+            <input type="checkbox" name="showCourseSales" value="1">
+            {{ 'admin_v2.operating.goods_show_sales.course'|trans }}
+          </label>
+
+          <label>
+            <input type="checkbox" name="showClassroomSales" value="1">
+            {{ 'admin_v2.operating.goods_show_sales.classroom'|trans }}
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label>{{ 'admin_v2.operating.goods_show_data'|trans }}</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          {{ radios('showData', {
+            'joinNumber':'admin_v2.operating.goods_show.join_number'|trans,
+            'visitorNumber':'admin_v2.operating.goods_show.visitor_number'|trans,
+          }, setting.showData|default('joinNumber')) }}
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>{{ 'admin_v2.operating.goods_leading_setting'|trans }}</legend>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label>{{ 'admin_v2.operating.goods_leading.join_group'|trans }}</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          {{ radios('joinGroup', {
+            '1':'form.radio_btn.open'|trans,
+            '0':'form.radio_btn.close'|trans,
+          }, setting.joinGroup|default('0')) }}
+          <div class="help-block">
+            {{ 'admin_v2.operating.goods_leading.join_group.tips'|trans }}
+            {#            <a href="#">{{ 'admin_v2.operating.goods_leading.join_group.btn'|trans }}</a>#}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label>{{ 'admin_v2.operating.goods_leading.join_group_label'|trans }}</label>
+        </div>
+        <div class="controls col-md-3">
+          <input class="form-control" type="text" name="leadingLabel" value="{{ setting.leadingLabel|default('') }}">
+          <div class="help-block">
+            {#            <a href="#">{{ 'admin_v2.operating.goods_leading.join_group_label.example_btn'|trans }}</a>#}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label>{{ 'admin_v2.operating.goods_leading.label_content'|trans }}</label>
+        </div>
+        <div class="controls col-md-8">
+          <div class="form-group">
+            <div class="col-md-2 text-left control-label">
+              <label>{{ 'admin_v2.operating.goods_leading.label_content.description'|trans }}</label>
+            </div>
+            <div class="controls col-md-8">
+              <input class="form-control" type="text" name="leadingLabel"
+                     value="{{ setting.leadingLabel|default('') }}">
+              <div class="help-block">
+                {{ 'admin_v2.operating.goods_leading.label_content.description_tips'|trans }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-2 text-left control-label">
+              <label>{{ 'admin_v2.operating.goods_leading.label_content.qrcode'|trans }}</label>
+            </div>
+            <div class="controls col-md-8">
+              <div id="leading-qrcode-container">
+                {% if setting.leadingQrcode|default() %}<img src="{{ asset(setting.leadingQrcode) }}">{% endif %}
+              </div>
+              <a class="btn btn-default btn-sm btn-primary"
+                 id="leading-qrcode-upload"
+                 data-upload-token="{{ upload_token('system', 'image') }}"
+                 data-goto-url="{{ path('admin_v2_setting_logo_upload') }}">
+                {{ 'form.btn.upload'|trans }}</a>
+              <input type="hidden" id="leading-qrcode" name="leadingQrcode"
+                     value="{{ setting.leadingQrcode|default() }}"
+                     class="form-control">
+
+
+              <div class="help-block">
+                {{ 'admin_v2.operating.goods_leading.label_content.qrcode_tips'|trans }}
+              </div>
+            </div>
+          </div>
+
+          <div>{{ 'admin_v2.operating.goods_leading_setting.tips'|trans }}</div>
+        </div>
+      </div>
+
+    </fieldset>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label"></div>
+      <div class="controls col-md-8">
+        <button type="submit" class="btn btn-primary">提交</button>
+      </div>
+    </div>
+  </form>
+
+{% endblock %}
