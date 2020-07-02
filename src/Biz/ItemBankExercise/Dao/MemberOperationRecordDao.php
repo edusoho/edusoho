@@ -2,8 +2,8 @@
 
 namespace Biz\ItemBankExercise\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface MemberOperationRecordDao extends GeneralDaoInterface
+interface MemberOperationRecordDao extends AdvancedDaoInterface
 {
 }

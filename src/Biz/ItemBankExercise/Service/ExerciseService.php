@@ -26,7 +26,7 @@ interface ExerciseService
 
     public function countStudentsByExerciseId($exerciseId);
 
-    public function hasCourseManagerRole($exerciseId);
+    public function hasExerciseManagerRole($exerciseId);
 
     public function isExerciseTeacher($exerciseId, $userId);
 

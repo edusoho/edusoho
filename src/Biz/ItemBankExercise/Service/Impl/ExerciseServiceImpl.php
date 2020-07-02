@@ -108,14 +108,14 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
         }
 
-        if (!$this->hasCourseManagerRole($exerciseId, $teacher)) {
+        if (!$this->hasExerciseManagerRole($exerciseId, $teacher)) {
             $this->createNewException(ItemBankExerciseException::FORBIDDEN_MANAGE_EXERCISE());
         }
 
         return $exercise;
     }
 
-    public function hasCourseManagerRole($exerciseId = 0, $teacher = 1)
+    public function hasExerciseManagerRole($exerciseId = 0, $teacher = 1)
     {
         $user = $this->getCurrentUser();
         //未登录，无权限管理
@@ -204,7 +204,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function updateChapterEnable($exercised, $chapterEnable)
     {
-        $this->getExerciseDao()->update($exercised, $chapterEnable);
+        return $this->getExerciseDao()->update($exercised, $chapterEnable);
     }
 
     public function updateBaseInfo($id, $fields)
