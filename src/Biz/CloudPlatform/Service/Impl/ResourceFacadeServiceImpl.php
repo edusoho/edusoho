@@ -12,10 +12,6 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
     {
         $context = [];
 
-        //是否开启加密增强
-        $storageSetting = $this->getSettingService()->get('storage');
-        $context['isEncryptionPlus'] = isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['enable_hls_encryption_plus'];
-
         $context['agentInWhiteList'] = $this->agentInWhiteList($userAgent);
 
         //对不同的资源类型，添加不同的配置参数
@@ -41,6 +37,10 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         } else {
             $context['jsPlayer'] = 'local-video-player';
         }
+
+        //是否开启加密增强
+        $storageSetting = $this->getSettingService()->get('storage');
+        $context['isEncryptionPlus'] = isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['enable_hls_encryption_plus'];
 
         return $context;
     }
