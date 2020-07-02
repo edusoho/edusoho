@@ -353,9 +353,14 @@ class CourseController extends CourseBaseController
 
         $conditions = [
             'parentId' => 0,
-            'targetId' => empty($selectedCourseId) ? $course['id'] : $selectedCourseId,
             'targetType' => 'course',
         ];
+
+        if (!empty($selectedCourseId)) {
+            $conditions['targetId'] = $selectedCourseId;
+        } else {
+            $conditions['targetIds'] = array_values(array_column($this->getCourseService()->findCoursesByCourseSetId($courseSet['id']), 'id'));
+        }
 
         $paginator = new Paginator(
             $request,
