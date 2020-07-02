@@ -222,11 +222,11 @@ class CourseController extends CourseBaseController
             $user['id']
         ) : [];
 
-        $isUserFavorite = $user->isLogin() ? $this->getFavoriteService()->isUserFavorite(
+        $isUserFavorite = $user->isLogin() ? !empty($this->getFavoriteService()->getUserFavorite(
             $user['id'],
             'course',
             $course['courseSetId']
-        ) : false;
+        )) : false;
 
         $previewAs = $request->query->get('previewAs', null);
         $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);

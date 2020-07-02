@@ -9694,3 +9694,5 @@ exception.review.forbidden_operate_review: Operate review forbiddened.
 exception.review.rating_limit: Rating no more than 5
 exception.review.not_found_review: Review not found
 exception.review.post_limit: Post no more than 5
+
+exception.favorite.forbidden_operate_favorite: Forbidden
