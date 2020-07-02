@@ -1,0 +1,132 @@
+@vw_base: 375px;
+
+.vw(@px) {
+  @vw: (@px / @vw_base) * 100vw;
+};
+
+.height(@px) {
+  .vw(@px);
+  height: @vw;
+}
+
+.width(@px) {
+  .vw(@px);
+  width: @vw;
+}
+
+.font-size(@px) {
+  .vw(@px);
+  font-size: @vw;
+}
+
+.line-height(@px) {
+  .vw(@px);
+  line-height: @vw;
+}
+
+// top、bottom、left、right
+.top(@px) {
+  .vw(@px);
+  top: @vw;
+}
+
+.bottom(@px) {
+  .vw(@px);
+  bottom: @vw;
+}
+
+.left(@px) {
+  .vw(@px);
+  left: @vw;
+}
+
+.right(@px) {
+  .vw(@px);
+  right: @vw;
+}
+
+// border
+.border(@px:1, @color) {
+  .vw(@px);
+  border: @vw solid @color;
+}
+
+.border-top(@px:1, @color) {
+  .vw(@px);
+  border-top: @vw solid @color;
+}
+
+.border-bottom(@px:1, @color) {
+  .vw(@px);
+  border-bottom: @vw solid @color;
+}
+
+.border-left(@px:1, @color) {
+  .vw(@px);
+  border-left: @vw solid @color;
+}
+
+.border-right(@px:1, @color) {
+  .vw(@px);
+  border-right: @vw solid @color;
+}
+
+// padding
+.padding(@px) {
+  .vw(@px);
+  padding: @vw;
+}
+
+.padding(@y, @x) {
+  padding: (@y / @vw_base) * 100vw (@x / @vw_base) * 100vw;
+}
+
+.padding-top(@px) {
+  .vw(@px);
+  padding-top: @vw;
+}
+
+.padding-bottom(@px) {
+  .vw(@px);
+  padding-bottom: @vw;
+}
+
+.padding-left(@px) {
+  .vw(@px);
+  padding-left: @vw;
+}
+
+.padding-right(@px) {
+  .vw(@px);
+  padding-right: @vw;
+}
+
+// margin
+.margin(@px) {
+  .vw(@px);
+  margin: @vw;
+}
+
+.margin(@y, @x) {
+  margin: (@y / @vw_base) * 100vw (@x / @vw_base) * 100vw;
+}
+
+.margin-top(@px) {
+  .vw(@px);
+  margin-top: @vw;
+}
+
+.margin-bottom(@px) {
+  .vw(@px);
+  margin-bottom: @vw;
+}
+
+.margin-left(@px) {
+  .vw(@px);
+  margin-left: @vw;
+}
+
+.margin-right(@px) {
+  .vw(@px);
+  margin-right: @vw;
+}
