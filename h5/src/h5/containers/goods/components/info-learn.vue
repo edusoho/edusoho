@@ -6,7 +6,7 @@
     </div>
     <div class="info-learn__body">
       <template v-if="recommendGoods.length">
-        <div class="body-item" v-for="item in recommendGoods" :key="item.id">
+        <div class="body-item" v-for="item in recommendGoods" :key="item.id" @click="onJump(item.id)">
           <div class="body-item__img">
             <img :src="item.image" alt="">
             <div class="learners-mask"></div>
@@ -29,6 +29,12 @@ export default {
     recommendGoods: {
       type: Array,
       default: () => []
+    }
+  },
+  methods: {
+    onJump(id) {
+      if (id ==  this.$route.params.id) return;
+      this.$router.push({ path: `/goods/${id}/course`});
     }
   }
 }

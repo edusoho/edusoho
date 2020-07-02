@@ -128,11 +128,6 @@ export default {
         },
         params: {
           componentTypes: ['teachers', 'reviews', 'recommendGoods']
-        },
-        headers: {
-          // 'Accept': 'application/vnd.edusoho.v2+json',
-          // 'X-Requested-With': 'XMLHttpRequest',
-          // 'X-CSRF-Token': this.$store.state.count
         }
       }).then(res => {
         this.componentsInfo = res;

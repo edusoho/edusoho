@@ -8,7 +8,7 @@
           <span class="price">{{ currentPlan.price }}</span>
           元
         </div>
-        <div class="pull-right study-num">100人在学</div>
+        <div class="pull-right study-num">{{ currentPlan.joinedNum }}人在学</div>
       </div>
       <p class="original-price"><s>价格&nbsp;<span>399.00</span>元</s></p>
     </div>

@@ -3,7 +3,7 @@
     <template v-if="reviews.length">
       <div class="info-evaluate__item clearfix" v-for="review in reviews" :key="review.id">
         <div class="pull-left evaluate-img">
-          <img src="http://try6.edusoho.cn/files/user/2020/06-15/1741586dd258161303.jpg" alt="">
+          <img :src="review.user.smallAvatar" alt="">
         </div>
         <div class="pull-left evaluate-content">
           <div class="evaluate-content__name content-name clearfix">
@@ -33,7 +33,6 @@ export default {
   },
   filters: {
     createdTime(date) {
-      // const date = '2020-03-11T18:11:16+08:00';
       const reg = new RegExp('-', 'g');
       let time = date.replace(reg, '/'); // 2020/03/11T18:11:16+08:00
       time = time.slice(0, -9) // 2020/03/11T18:11
