@@ -3462,3 +3462,7 @@ facein_inspection_results_detail:
 goods_show:
     path:     /goods/show/{id}
     defaults: { _controller: AppBundle:Goods/Goods:show }
+
+goods_min_screen_show:
+    path:     /goods/min_screen_show/{id}
+    defaults: { _controller: AppBundle:Goods/Goods:minScreenShow }
