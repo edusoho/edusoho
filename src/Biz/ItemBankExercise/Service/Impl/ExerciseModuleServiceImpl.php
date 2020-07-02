@@ -40,8 +40,8 @@ class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleSer
     public function createAssessmentModule($exerciseId, $name)
     {
         $this->getItemBankExerciseService()->tryManageExercise($exerciseId);
-        $module_count = $this->getItemBankExerciseModuleDao()->count(['exerciseId' => $exerciseId, 'type' => 'assessment']);
-        if ($module_count > self::ASSESSMENT_MODULE_COUNT) {
+        $moduleCount = $this->getItemBankExerciseModuleDao()->count(['exerciseId' => $exerciseId, 'type' => 'assessment']);
+        if ($moduleCount >= self::ASSESSMENT_MODULE_COUNT) {
             $this->createNewException(ItemBankExerciseException::ASSESSMENT_EXCEED());
         }
         try {
@@ -80,11 +80,6 @@ class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleSer
                 'doing_look_analysis' => 0,
             ]
         );
-    }
-
-    public function updateAnswerSceneId($moduleId, $answerSceneId)
-    {
-        return $this->getItemBankExerciseModuleDao()->update($moduleId, ['answerSceneId' => $answerSceneId]);
     }
 
     protected function getItemBankExerciseModuleDao()

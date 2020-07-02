@@ -10,7 +10,7 @@ class ItemBankExerciseException extends AbstractException
 
     const FORBIDDEN_LEARN = 4037301;
 
-    const CHAPTER_ANSWER_IS_DOING = 4037302;
+    const CHAPTER_ANSWER_IS_DOING = 5007302;
 
     const NOTFOUND_EXERCISE = 4047303;
 
@@ -40,7 +40,7 @@ class ItemBankExerciseException extends AbstractException
 
     public $messages = [
         4037301 => 'exception.item_bank_exercise.forbidden_learn',
-        4037302 => 'exception.item_bank_exercise.chapter_answer_is_doing',
+        5007302 => 'exception.item_bank_exercise.chapter_answer_is_doing',
         4047303 => 'exception.item_bank_exercise.exercise.not_found',
         4037304 => 'exception.item_bank_exercise.exercise.forbidden_manage_exercise',
         4037305 => 'exception.item_bank_exercise.exercise.exercise_not_published',

@@ -15,7 +15,7 @@ class ChapterExerciseRecordServiceImpl extends BaseService implements ChapterExe
 
     public function count($conditions)
     {
-        return $this->getItemBankChapterExerciseRecordDao()->search($conditions);
+        return $this->getItemBankChapterExerciseRecordDao()->count($conditions);
     }
 
     public function create($chapterExerciseRecord)
