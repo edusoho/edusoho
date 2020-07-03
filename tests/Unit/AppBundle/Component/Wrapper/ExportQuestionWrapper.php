@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\AppBundle\Component\Wrapper;
 
-use Biz\BaseTestCase;
 use AppBundle\Component\Wrapper\ExportQuestionWrapper;
+use Biz\BaseTestCase;
 
 class ExportQuestionWrapperTest extends BaseTestCase
 {
@@ -11,9 +11,9 @@ class ExportQuestionWrapperTest extends BaseTestCase
     {
         $wrapper = $this->getExportQuestionWrapper();
         $question = [
-            'seq' => 1
+            'seq' => 1,
         ];
-        
+
         $result = $wrapper->seq($question);
 
         $this->assertEquals('1、', $result['seq']);
@@ -22,12 +22,12 @@ class ExportQuestionWrapperTest extends BaseTestCase
     public function testNum()
     {
         $wrapper = $this->getExportQuestionWrapper();
-        
+
         $question = [
-            'seq' => 1
+            'seq' => 1,
         ];
         $result = $wrapper->num($question);
-        
+
         $this->assertArrayEquals($result, $question);
 
         $question = [
@@ -42,14 +42,14 @@ class ExportQuestionWrapperTest extends BaseTestCase
     {
         $wrapper = $this->getExportQuestionWrapper();
         $question = [
-            'stem' => '<p>你好</p><a>世界</a>'
+            'stem' => '<p>你好</p><a>世界</a>',
         ];
         $result = $wrapper->stem($question);
 
         $this->assertEquals('你好<a>世界</a>', $result['stem'][0]['content']);
 
         $question = [
-            'stem' => '<p>你好</p><img src="test.png">世界'
+            'stem' => '<p>你好</p><img src="test.png">世界',
         ];
         $result = $wrapper->stem($question);
 
@@ -61,7 +61,7 @@ class ExportQuestionWrapperTest extends BaseTestCase
     {
         $wrapper = $this->getExportQuestionWrapper();
         $question = [
-            'stem' => '<p>你好</p><a>世界</a>'
+            'stem' => '<p>你好</p><a>世界</a>',
         ];
         $result = $wrapper->options($question);
 
@@ -71,12 +71,12 @@ class ExportQuestionWrapperTest extends BaseTestCase
             'metas' => [
                 'choices' => [
                     'A' => '<p>你好</p><a>世界</a>',
-                    'B' => '<p>你好</p><img src="test.png">世界'
-                ]
-            ]
+                    'B' => '<p>你好</p><img src="test.png">世界',
+                ],
+            ],
         ];
         $result = $wrapper->options($question);
-        
+
         $this->assertEquals('A.你好<a>世界</a>', $result['options']['A'][0]['content']);
     }
 
