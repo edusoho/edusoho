@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\ItemBankExercise\Service;
-
 
 use Biz\BaseTestCase;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
@@ -114,14 +112,14 @@ class ExerciseMemberServiceTest extends BaseTestCase
         $res = $this->getExerciseService()->isExerciseTeacher($exercise['id'], 2);
         $this->assertEquals(false, $res);
         $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
+        $currentUser->fromArray([
             'id' => 2,
             'nickname' => 'admin3',
             'email' => 'admin3@admin.com',
             'password' => 'admin',
             'currentIp' => '127.0.0.1',
-            'roles' => array('ROLE_USER', 'ROLE_SUPER_ADMIN'),
-        ));
+            'roles' => ['ROLE_USER', 'ROLE_SUPER_ADMIN'],
+        ]);
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getExerciseMemberService()->addTeacher($exercise['id']);
@@ -161,7 +159,7 @@ class ExerciseMemberServiceTest extends BaseTestCase
 
         $this->getExerciseMemberService()->batchUpdateMemberDeadlinesByDay($exercise['id'], [0 => $user['id']], 1, 'minus');
         $result = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
-        $this->assertEquals($member['deadline'], (int)$result['deadline']);
+        $this->assertEquals($member['deadline'], (int) $result['deadline']);
 
         $this->getExerciseMemberService()->batchUpdateMemberDeadlinesByDay($exercise['id'], [0 => $user['id']], 1);
         $result = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
@@ -185,7 +183,7 @@ class ExerciseMemberServiceTest extends BaseTestCase
 
         $this->getExerciseMemberService()->batchUpdateMemberDeadlinesByDate($exercise['id'], [0 => $user['id']], time() - 86400);
         $result = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
-        $this->assertEquals($member['deadline'], (int)$result['deadline']);
+        $this->assertEquals($member['deadline'], (int) $result['deadline']);
 
         $this->getExerciseMemberService()->batchUpdateMemberDeadlinesByDate($exercise['id'], [0 => $user['id']], time() + 86400);
         $result = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
@@ -254,7 +252,7 @@ class ExerciseMemberServiceTest extends BaseTestCase
                     'userId' => 3,
                     'role' => 'student',
                     'remark' => 'ccc',
-                ]
+                ],
             ]
         );
     }

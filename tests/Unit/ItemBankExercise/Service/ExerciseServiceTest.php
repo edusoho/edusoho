@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\ItemBankExercise\Service;
-
 
 use Biz\BaseTestCase;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
@@ -53,7 +51,7 @@ class ExerciseServiceTest extends BaseTestCase
         $this->batchCreateExercise();
 
         $res = $this->getExerciseService()->count([
-            'questionBankId' => 1
+            'questionBankId' => 1,
         ]);
 
         $this->assertEquals('1', count($res));
@@ -176,7 +174,7 @@ class ExerciseServiceTest extends BaseTestCase
                 'questionBankId' => 1,
                 'categoryId' => 1,
                 'seq' => 1,
-                'teacherIds' => [1]
+                'teacherIds' => [1],
             ]
         );
         $res = $this->getExerciseService()->isExerciseTeacher($exercise['id'], 1);
@@ -260,7 +258,7 @@ class ExerciseServiceTest extends BaseTestCase
                     'questionBankId' => 3,
                     'categoryId' => 2,
                     'seq' => 3,
-                ]
+                ],
             ]
         );
     }

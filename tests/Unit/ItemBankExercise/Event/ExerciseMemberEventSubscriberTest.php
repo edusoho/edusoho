@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\ItemBankExercise\Event;
-
 
 use Biz\BaseTestCase;
 use Biz\ItemBankExercise\Event\ExerciseMemberEventSubscriber;

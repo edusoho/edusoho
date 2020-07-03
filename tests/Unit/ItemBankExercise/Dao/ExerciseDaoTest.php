@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\ItemBankExercise\Dao;
-
 
 use AppBundle\Common\ArrayToolkit;
 use Tests\Unit\Base\BaseDaoTestCase;
@@ -24,7 +22,7 @@ class ExerciseDaoTest extends BaseDaoTestCase
         $res = $this->getDao()->findByIds([1, 2]);
 
         $this->assertEquals('2', count($res));
-        $this->assertEquals([1,2],ArrayToolkit::column($res,'id'));
+        $this->assertEquals([1, 2], ArrayToolkit::column($res, 'id'));
     }
 
     protected function getDefaultMockFields()

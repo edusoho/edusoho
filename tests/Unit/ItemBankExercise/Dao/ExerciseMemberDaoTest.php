@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\ItemBankExercise\Dao;
-
 
 use Tests\Unit\Base\BaseDaoTestCase;
 
@@ -10,10 +8,10 @@ class ExerciseMemberDaoTest extends BaseDaoTestCase
 {
     public function testGetByExerciseIdAndUserId()
     {
-       $this->createMember();
-       $res = $this->getDao()->getByExerciseIdAndUserId(1,1);
-       $this->assertEquals(1, $res['exerciseId']);
-       $this->assertEquals(1, $res['userId']);
+        $this->createMember();
+        $res = $this->getDao()->getByExerciseIdAndUserId(1, 1);
+        $this->assertEquals(1, $res['exerciseId']);
+        $this->assertEquals(1, $res['userId']);
     }
 
     protected function getDefaultMockFields()

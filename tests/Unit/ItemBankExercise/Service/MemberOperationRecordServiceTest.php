@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\ItemBankExercise\Service;
-
 
 use Biz\BaseTestCase;
 use Biz\ItemBankExercise\Dao\MemberOperationRecordDao;
@@ -19,7 +17,7 @@ class MemberOperationRecordServiceTest extends BaseTestCase
                 'exerciseId' => 1,
                 'userId' => 1,
                 'operatorId' => 2,
-                'operateType' => 'join'
+                'operateType' => 'join',
             ]
         );
 
@@ -38,7 +36,7 @@ class MemberOperationRecordServiceTest extends BaseTestCase
             [
                 'exerciseId' => 1,
                 'memberType' => 'student',
-                'operateType' => 'join'
+                'operateType' => 'join',
             ]
         );
 
@@ -91,7 +89,7 @@ class MemberOperationRecordServiceTest extends BaseTestCase
                     'exerciseId' => 2,
                     'userId' => 3,
                     'operatorId' => 2,
-                ]
+                ],
             ]
         );
     }
