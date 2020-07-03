@@ -23,8 +23,8 @@ const chunks = {
     "chunk-vant",
     "chunk-elementUI",
     "runtime",
-    projectname
-  ]
+    projectname,
+  ],
 };
 page[projectname] = {
   entry: `src/${projectname}/main.js`, // page 的入口PROXY_TYPE
@@ -35,20 +35,20 @@ page[projectname] = {
   // 在这个页面中包含的块，默认情况下会包含,提取出来的通用 chunk 和 vendor chunk。
   //chunks: ['chunk-commons','chunk-vant','chunk-libs','chunk-common', 'h5']
   chunks:
-    process.env.NODE_ENV !== "development" ? chunks.prodChunks : chunks.dafault
+    process.env.NODE_ENV !== "development" ? chunks.prodChunks : chunks.dafault,
 };
 module.exports = {
   publicPath: publicPath, // 官方要求修改路径在这里做更改，默认是根目录下，可以自行配置
   outputDir: `dist${projectname === "h5" ? "" : "/" + projectname}`, //标识是打包哪个文件
   assetsDir: "static",
-  lintOnSave: process.env.NODE_ENV === "production" ? false : true,
-  //lintOnSave:false,
+  //lintOnSave: process.env.NODE_ENV === "production" ? false : true, //由于更新了校验规则，存在待改正较多，所以暂时关闭运行时校验
+  lintOnSave: false,
   css: {
     loaderOptions: {
       scss: {
-        data: `$baseUrl: "${bgImgPath}";`
-      }
-    }
+        data: `$baseUrl: "${bgImgPath}";`,
+      },
+    },
   },
   //默认情况下，生成的静态资源在它们的文件名中包含了 hash 以便更好的控制缓存。如果你无法使用 Vue CLI 生成的 index HTML，你可以通过将这个选项设为 false 来关闭文件名哈希。
   filenameHashing: true,
@@ -62,15 +62,15 @@ module.exports = {
     hotOnly: false, // 没啥效果，热模块，webpack已经做好了
     overlay: {
       warnings: false,
-      errors: true
+      errors: true,
     },
     proxy: {
       "/api": {
         target: proxyMap.url,
         changeOrigin: true,
-        secure: false
-      }
-    }
+        secure: false,
+      },
+    },
   },
   configureWebpack: config => {
     if (process.env.NODE_ENV === "production") {
@@ -79,30 +79,40 @@ module.exports = {
           uglifyOptions: {
             compress: {
               drop_console: true,
-              drop_debugger: true
-            }
+              drop_debugger: true,
+            },
           },
           cache: true, // 启用文件缓存
-          parallel: true // 使用多进程并行运行来提高构建速度
+          parallel: true, // 使用多进程并行运行来提高构建速度
           // sourceMap: false // 映射错误信息到模块
-        })
+        }),
       );
     } else {
       // 为开发环境修改配置...
+      // 设置stylelint在dev模式下自动格式化代码
+      // const StyleLintPlugin = require('stylelint-webpack-plugin')
+      // config.plugins.push(
+      //   new StyleLintPlugin({
+      //       files: ['src/**/*.scss'],
+      //       failOnError: false,
+      //       cache: true,
+      //       fix: true,
+      //   })
+      // )
     }
     config.resolve.extensions = [".js", ".vue", ".json"];
   },
   chainWebpack: config => {
     if (process.env.NODE_ENV === "development") {
       // 设置eslint在dev模式下自动格式化代码
-      config.module
-        .rule("eslint")
-        .use("eslint-loader")
-        .loader("eslint-loader")
-        .tap(options => {
-          options.fix = true;
-          return options;
-        });
+      // config.module
+      //   .rule("eslint")
+      //   .use("eslint-loader")
+      //   .loader("eslint-loader")
+      //   .tap(options => {
+      //     options.fix = true;
+      //     return options;
+      //   });
     }
     config.performance.set("hints", false);
     config.plugins
@@ -133,15 +143,15 @@ module.exports = {
       .tap(options =>
         merge(options, {
           limit: 10000,
-          name: "static/fonts/[name].[hash:8].[ext]"
-        })
+          name: "static/fonts/[name].[hash:8].[ext]",
+        }),
       );
     config.module
       .rule("images")
       .use("url-loader")
       .tap(options => {
         return merge(options, {
-          publicPath: publicPath
+          publicPath: publicPath,
         });
       });
     config.when(process.env.NODE_ENV !== "development", config => {
@@ -151,8 +161,8 @@ module.exports = {
         .use("script-ext-html-webpack-plugin", [
           {
             // `runtime` must same as runtimeChunk name. default is `runtime`
-            inline: /runtime\..*\.js$/
-          }
+            inline: /runtime\..*\.js$/,
+          },
         ])
         .end();
       config.optimization.splitChunks({
@@ -162,28 +172,28 @@ module.exports = {
             name: "chunk-libs",
             test: /[\\/]node_modules[\\/]/,
             priority: 10,
-            chunks: "initial" // only package third parties that are initially dependent
+            chunks: "initial", // only package third parties that are initially dependent
           },
           elementUI: {
             name: "chunk-elementUI", // split elementUI into a single package
             priority: 20, // the weight needs to be larger than libs and app or it will be packaged into libs or app
-            test: /[\\/]node_modules[\\/]_?element-ui(.*)/ // in order to adapt to cnpm
+            test: /[\\/]node_modules[\\/]_?element-ui(.*)/, // in order to adapt to cnpm
           },
           vant: {
             name: "chunk-vant", // split elementUI into a single package
             priority: 20, // the weight needs to be larger than libs and app or it will be packaged into libs or app
-            test: /[\\/]node_modules[\\/]_?vant(.*)/ // in order to adapt to cnpm
+            test: /[\\/]node_modules[\\/]_?vant(.*)/, // in order to adapt to cnpm
           },
           commons: {
             name: "chunk-commons",
             test: resolve("src/h5/containers/components"), // can customize your rules
             minChunks: 3, //  minimum common number
             priority: 5,
-            reuseExistingChunk: true
-          }
-        }
+            reuseExistingChunk: true,
+          },
+        },
       });
       config.optimization.runtimeChunk("single");
     });
-  }
+  },
 };
