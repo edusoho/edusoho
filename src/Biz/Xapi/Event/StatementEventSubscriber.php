@@ -31,7 +31,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'course.task.finish' => 'onCourseTaskFinish',
             'course.note.create' => 'onCourseNoteCreate',
             'course.thread.create' => 'onCourseThreadCreate',
-            'favorite' => 'onCourseSetFavorite',
+            'favorite.create' => 'onCourseSetFavorite',
             'course.review.add' => 'onCourseReviewAdd',
 
             'review.create' => 'onReviewCreate',

@@ -34,9 +34,9 @@ class MeFavoriteCourseSet extends AbstractResource
 
     public function get(ApiRequest $request, $courseSetId)
     {
-        $isFavorite = $this->getFavoriteService()->isUserFavorite($this->getCurrentUser()->getId(), 'course', $courseSetId);
-
-        return array('isFavorite' => $isFavorite);
+        return [
+            'isFavorite' => !empty($this->getFavoriteService()->getUserFavorite($this->getCurrentUser()->getId(), 'course', $courseSetId)),
+        ];
     }
 
     public function add(ApiRequest $request)
@@ -47,14 +47,14 @@ class MeFavoriteCourseSet extends AbstractResource
             'userId' => $this->getCurrentUser()->getId(),
         ]);
 
-        return array('success' => !empty($result));
+        return ['success' => !empty($result)];
     }
 
     public function remove(ApiRequest $request, $courseSetId)
     {
         $success = $this->getFavoriteService()->deleteUserFavorite($this->getCurrentUser()->getId(), 'course', $courseSetId);
 
-        return array('success' => $success);
+        return ['success' => $success];
     }
 
     /**

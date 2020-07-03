@@ -893,7 +893,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $course = $this->getCourseService()->getCourse($courseId);
 
-        if (!$this->getFavoriteService()->isUserFavorite($user['id'], 'course', $course['courseSetId'])) {
+        if (empty($this->getFavoriteService()->getUserFavorite($user['id'], 'course', $course['courseSetId']))) {
             return $this->createErrorResponse('runtime_error', '您尚未收藏课程，不能取消收藏！');
         }
 
@@ -1044,7 +1044,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         $this->updateMemberLastViewTime($member);
-        $userFavorited = $user->isLogin() ? $this->getFavoriteService()->getUserFavorite($user['id'], 'course', $course['courseSetId']) : false;
+        $userFavorited = $user->isLogin() ? !empty($this->getFavoriteService()->getUserFavorite($user['id'], 'course', $course['courseSetId'])) : false;
         $vipLevels = [];
 
         if ($this->controller->isinstalledPlugin('Vip') && $this->controller->setting('vip.enabled')) {

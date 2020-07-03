@@ -173,7 +173,7 @@ class GroupThreadController extends BaseController
         }
 
         if ('close' != $threadMain['status']) {
-            $isCollected = $this->getFavoriteService()->isUserFavorite($this->getCurrentUser()->id, 'thread', $threadMain['id']);
+            $isCollected = !empty($this->getFavoriteService()->getUserFavorite($this->getCurrentUser()->id, 'thread', $threadMain['id']));
         } else {
             $isCollected = false;
         }
