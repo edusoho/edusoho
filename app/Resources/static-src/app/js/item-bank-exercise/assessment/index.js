@@ -10,6 +10,7 @@ class AssessmentModule {
   init() {
     this.element.on('click', 'js-batch-delete', event => this.batchDelete(event));
     this.element.on('click', 'js-delete-single', event => this.deleteSingle(event));
+    this.initChange();
   }
 
   batchDelete(event) {
@@ -61,6 +62,17 @@ class AssessmentModule {
         }
       }).error(function (error) {
         cd.message({type: 'danger', message: Translator.trans('site.delete_fail_hint')});
+      });
+    });
+  }
+
+  initChange() {
+    cd.onoff({
+      el: '#switch'
+    }).on('change', (value) => {
+      console.log(value);
+      $.post($('#switch').data('url'), {assessmentEnable: value}, function () {
+        location.reload();
       });
     });
   }

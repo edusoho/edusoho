@@ -30,7 +30,7 @@ class ChapterExerciseController extends BaseController
     {
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
         $chapterEnable = 'true' == $request->get('chapterEnable') ? 1 : 0;
-        $this->getExerciseService()->updateChapterEnable($exercise['id'], ['chapterEnable' => $chapterEnable]);
+        $this->getExerciseService()->updateModuleEnable($exercise['id'], ['chapterEnable' => $chapterEnable]);
 
         return $this->createJsonResponse(true);
     }

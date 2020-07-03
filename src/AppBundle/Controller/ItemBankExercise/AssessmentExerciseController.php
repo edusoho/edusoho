@@ -194,6 +194,15 @@ class AssessmentExerciseController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function openAction(Request $request, $exerciseId)
+    {
+        $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
+        $assessmentEnable = 'true' == $request->get('assessmentEnable') ? 1 : 0;
+        $this->getExerciseService()->updateModuleEnable($exercise['id'], ['assessmentEnable' => $assessmentEnable]);
+
+        return $this->createJsonResponse(true);
+    }
+
     /**
      * @return ExerciseService
      */
