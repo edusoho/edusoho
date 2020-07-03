@@ -12,10 +12,6 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
     {
         $context = [];
 
-        //是否开启加密增强
-        $storageSetting = $this->getSettingService()->get('storage');
-        $context['isEncryptionPlus'] = isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['enable_hls_encryption_plus'];
-
         $context['agentInWhiteList'] = $this->agentInWhiteList($userAgent);
 
         //对不同的资源类型，添加不同的配置参数
@@ -23,7 +19,15 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         $context = $this->$method($file, $context);
 
         //获取用于权限验证的token和资源编码
-        $context['token'] = $this->makePlayToken($file);
+        $payload = [];
+        if (!$this->isHiddenVideoHeader()) {
+            // 加入片头信息
+            $videoHeaderFile = $this->getUploadFileService()->getFileByTargetType('headLeader');
+            if (!empty($videoHeaderFile) && 'success' == $videoHeaderFile['convertStatus']) {
+                $payload['head'] = $videoHeaderFile['globalId'];
+            }
+        }
+        $context['token'] = $this->makePlayToken($file, 600, $payload);
         $context['resNo'] = $file['globalId'];
 
         //转码状态
@@ -41,6 +45,10 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         } else {
             $context['jsPlayer'] = 'local-video-player';
         }
+
+        //是否开启加密增强
+        $storageSetting = $this->getSettingService()->get('storage');
+        $context['isEncryptionPlus'] = isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['enable_hls_encryption_plus'];
 
         return $context;
     }
@@ -106,6 +114,16 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         $timestamp = round(time() / 100);
 
         return '//'.trim($cdnHost, "\/").'/'.$path.'?'.$timestamp;
+    }
+
+    protected function isHiddenVideoHeader($isHidden = false)
+    {
+        $storage = $this->getSettingService()->get('storage');
+        if (!empty($storage) && array_key_exists('video_header', $storage) && $storage['video_header'] && !$isHidden) {
+            return false;
+        }
+
+        return true;
     }
 
     protected function getSettingService()

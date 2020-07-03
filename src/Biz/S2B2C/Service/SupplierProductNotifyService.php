@@ -12,6 +12,7 @@ interface SupplierProductNotifyService
 
     /**
      * @param NotifyEvent $notifyEvent
+     *
      * @return mixed
      */
     public function syncSupplierProductEvent($notifyEvent);

@@ -72,7 +72,7 @@ class ResourceFacadeServiceTest extends BaseTestCase
             'convertStatus' => 'success',
         ];
         $playContext = $this->getResourceFacadeService()->getPlayerContext($file);
-        $this->assertFalse($playContext['isEncryptionPlus']);
+        $this->assertEquals('test token', $playContext['token']);
     }
 
     protected function getResourceFacadeService()
