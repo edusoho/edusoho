@@ -37,7 +37,11 @@ class LessonLiveTickets extends BaseResource
         }
 
         try {
-            $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$activity['ext']['liveId']}/tickets", $params);
+            if (!empty($activity['syncId'])) {
+                $ticket = $this->getS2B2CFacadeService()->getS2B2CService()->getLiveEntryTicket($activity['ext']['liveId'], $params);
+            } else {
+                $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$activity['ext']['liveId']}/tickets", $params);
+            }
         } catch (\Exception $e) {
             return $this->error('5003', '进入直播教室失败！');
         }

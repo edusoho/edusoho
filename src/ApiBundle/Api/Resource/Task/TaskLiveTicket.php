@@ -33,7 +33,11 @@ class TaskLiveTicket extends AbstractResource
         // android, iphone, mobile
         $params['device'] = $request->request->get('device', DeviceToolkit::isMobileClient() ? 'mobile' : 'desktop');
 
-        $liveTicket = CloudAPIFactory::create('leaf')->post("/liverooms/{$activity['ext']['liveId']}/tickets", $params);
+        if (!empty($activity['syncId'])) {
+            $liveTicket = $this->getS2B2CFacadeService()->getS2B2CService()->getLiveEntryTicket($activity['ext']['liveId'], $params);
+        } else {
+            $liveTicket = CloudAPIFactory::create('leaf')->post("/liverooms/{$activity['ext']['liveId']}/tickets", $params);
+        }
 
         return $liveTicket;
     }
@@ -43,7 +47,13 @@ class TaskLiveTicket extends AbstractResource
      */
     public function get(ApiRequest $request, $taskId, $liveTicket)
     {
-        $liveTicket = CloudAPIFactory::create('leaf')->get("/liverooms/{$taskId}/tickets/{$liveTicket}");
+        $task = $this->getTaskService()->getTask($taskId);
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        if (!empty($activity['syncId'])) {
+            $liveTicket = $this->getS2B2CFacadeService()->getS2B2CService()->consumeLiveEntryTicket($activity['ext']['liveId'], $liveTicket);
+        } else {
+            $liveTicket = CloudAPIFactory::create('leaf')->get("/liverooms/{$activity['ext']['liveId']}/tickets/{$liveTicket}");
+        }
 
         return $liveTicket;
     }

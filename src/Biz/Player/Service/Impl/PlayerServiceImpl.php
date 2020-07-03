@@ -2,7 +2,6 @@
 
 namespace Biz\Player\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\File\Service\FileImplementor;
 use Biz\File\Service\UploadFileService;
@@ -26,15 +25,6 @@ class PlayerServiceImpl extends BaseService implements PlayerService
             default:
                 return null;
         }
-    }
-
-    public function agentInWhiteList($userAgent)
-    {
-        $whiteList = ['iPhone', 'iPad', 'Android', 'HTC'];
-
-        return ArrayToolkit::some($whiteList, function ($agent) use ($userAgent) {
-            return strpos($userAgent, $agent) > -1;
-        });
     }
 
     public function getVideoFilePlayer($file, $agentInWhiteList, $context, $ssl)
@@ -123,6 +113,7 @@ class PlayerServiceImpl extends BaseService implements PlayerService
             $params = [
                 'id' => $file['id'],
                 'token' => $token['token'],
+                'ext' => $file['ext'],
             ];
 
             return [

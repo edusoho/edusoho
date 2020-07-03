@@ -148,7 +148,7 @@ class DefaultSdkProvider implements ServiceProviderInterface
         /*S2B2C-CUSTOM*/
         $biz['qiQiuYunSdk.s2b2cService'] = function (Biz $biz) use ($that) {
             $service = null;
-//            $sdk = $that->generateSdk($biz, array('s2b2c' => array('host' => $host)), $biz->offsetGet('s2b2c.merchant.logger'));
+            // $sdk = $that->generateSdk($biz, array('s2b2c' => array('host' => $host)), $biz->offsetGet('s2b2c.merchant.logger'));
             $sdk = $that->generateSdk($biz, $this->getS2B2CConfig($biz), $biz['s2b2c.merchant.logger']);
 
             if (!empty($sdk)) {
@@ -168,6 +168,16 @@ class DefaultSdkProvider implements ServiceProviderInterface
             return $service;
         };
         /*END*/
+
+        $biz['ESCloudSdk.play'] = function ($biz) use ($that) {
+            $service = null;
+            $sdk = $that->generateEsCloudSdk($biz, []);
+            if (!empty($sdk)) {
+                $service = $sdk->getPlayService();
+            }
+
+            return $service;
+        };
     }
 
     /**

@@ -28,6 +28,8 @@ class QuestionMarkerController extends BaseController
         $questionMakers = $this->getQuestionMarkerService()->findQuestionMarkersMetaByMediaId($mediaId);
         $items = $this->getItemService()->findItemsByIds(ArrayToolkit::column($questionMakers, 'questionId'), true);
         $baseUrl = $request->getSchemeAndHttpHost();
+        $results = [];
+
         $headerLength = 0;
         if (!$this->getWebExtension()->isHiddenVideoHeader()) {
             $videoHeaderFile = $this->getUploadFileService()->getFileByTargetType('headLeader');
@@ -35,7 +37,6 @@ class QuestionMarkerController extends BaseController
                 $headerLength = $videoHeaderFile['length'];
             }
         }
-        $results = [];
 
         foreach ($questionMakers as $index => $questionMaker) {
             if (empty($items[$questionMaker['questionId']]) || empty($items[$questionMaker['questionId']]['questions'])) {

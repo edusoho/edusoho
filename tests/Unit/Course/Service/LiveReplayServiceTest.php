@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Course\Service;
 
+use Biz\BaseTestCase;
 use Biz\Util\EdusohoLiveClient;
 use Mockery;
-use Biz\BaseTestCase;
 
 class LiveReplayServiceTest extends BaseTestCase
 {
@@ -33,14 +33,14 @@ class LiveReplayServiceTest extends BaseTestCase
 
     public function testAddReplay()
     {
-        $fields = array(
+        $fields = [
             'courseId' => 1,
             'lessonId' => 1,
             'title' => 'live replay',
             'replayId' => 1,
             'globalId' => '5aac664d11ca403a853749sssss12345',
             'type' => 'liveOpen',
-        );
+        ];
 
         $replay = $this->getLiveReplayService()->addReplay($fields);
 
@@ -89,10 +89,10 @@ class LiveReplayServiceTest extends BaseTestCase
     {
         $replay = $this->createLiveReplay();
 
-        $fields = array(
+        $fields = [
             'title' => 'live replay update',
             'hidden' => 1,
-        );
+        ];
         $result = $this->getLiveReplayService()->updateReplay($replay['id'], $fields);
 
         $this->assertEquals($fields['title'], $result['title']);
@@ -105,10 +105,10 @@ class LiveReplayServiceTest extends BaseTestCase
      */
     public function testUpdateEmptyReplay()
     {
-        $fields = array(
+        $fields = [
             'title' => 'live replay update',
             'hidden' => 1,
-        );
+        ];
 
         $this->getLiveReplayService()->updateReplay(1, $fields);
     }
@@ -119,9 +119,9 @@ class LiveReplayServiceTest extends BaseTestCase
         $replay2 = $this->createLiveReplay1();
         $replay3 = $this->createLiveReplay2();
 
-        $fields = array(
+        $fields = [
             'hidden' => 1,
-        );
+        ];
 
         $this->getLiveReplayService()->updateReplayByLessonId(1, $fields, 'live');
 
@@ -140,9 +140,9 @@ class LiveReplayServiceTest extends BaseTestCase
         $replay2 = $this->createLiveReplay1();
         $replay3 = $this->createLiveReplay2();
 
-        $conditions = array(
+        $conditions = [
             'type' => 'live',
-        );
+        ];
         $count = $this->getLiveReplayService()->searchCount($conditions);
 
         $this->assertEquals(2, $count);
@@ -154,11 +154,11 @@ class LiveReplayServiceTest extends BaseTestCase
         $replay2 = $this->createLiveReplay1();
         $replay3 = $this->createLiveReplay2();
 
-        $conditions = array(
+        $conditions = [
             'type' => 'live',
-        );
+        ];
 
-        $results = $this->getLiveReplayService()->searchReplays($conditions, array('replayId' => 'ASC'), 0, 10);
+        $results = $this->getLiveReplayService()->searchReplays($conditions, ['replayId' => 'ASC'], 0, 10);
 
         $this->assertEquals(2, count($results));
     }
@@ -180,24 +180,71 @@ class LiveReplayServiceTest extends BaseTestCase
         $liveClient = new EdusohoLiveClient();
         $mockLiveClient = Mockery::mock($liveClient);
 
-        $mockLiveClient->shouldReceive('entryReplay')->times(1)->andReturn(array('success' => 'ok'));
+        $mockLiveClient->shouldReceive('entryReplay')->times(1)->andReturn(['success' => 'ok']);
         $this->getLiveReplayService()->setLiveClient($mockLiveClient);
 
         $result = $this->getLiveReplayService()->entryReplay(1, 1, 'ESLive');
 
-        $this->assertEquals(array('success' => 'ok'), $result);
+        $this->assertEquals(['success' => 'ok'], $result);
+    }
+
+    public function testEntryReplayWithRemoteLive()
+    {
+        $this->biz['qiQiuYunSdk.s2b2cService'] = $this->mockBiz(
+            'qiQiuYunSdk.s2b2cService',
+            [
+                [
+                    'functionName' => 'entryLiveReplay',
+                    'returnValue' => ['success' => 'ok'],
+                    'withParams' => [[
+                        'liveId' => 1,
+                        'replayId' => null,
+                        'provider' => 'ESLive',
+                        'user' => 'admin@admin.com',
+                        'nickname' => 'admin',
+                        'userId' => '1',
+                    ]],
+                ],
+            ]
+        );
+        $this->mockBiz(
+            'Activity:ActivityService',
+            [
+                [
+                    'functionName' => 'getActivity',
+                    'returnValue' => ['id' => 1],
+                ],
+                [
+                    'functionName' => 'updateActivity',
+                    'returnValue' => [],
+                ],
+            ]
+        );
+        $this->mockBiz(
+            'Activity:LiveActivityService',
+            [
+                [
+                    'functionName' => 'getBySyncIdGTAndLiveId',
+                    'returnValue' => ['id' => 1],
+                ],
+            ]
+        );
+
+        $result = $this->getLiveReplayService()->entryReplay(1, 1, 'ESLive');
+
+        $this->assertEquals(['success' => 'ok'], $result);
     }
 
     public function testUpdateReplayShow()
     {
-        $result = $this->getLiveReplayService()->updateReplayShow(array(), 1);
+        $result = $this->getLiveReplayService()->updateReplayShow([], 1);
         $this->assertFalse($result);
 
         $replay1 = $this->createLiveReplay1();
         $replay2 = $this->createLiveReplay2();
 
-        $result1 = $this->getLiveReplayService()->updateReplayShow(array(), 1);
-        $result2 = $this->getLiveReplayService()->updateReplayShow(array(), 2);
+        $result1 = $this->getLiveReplayService()->updateReplayShow([], 1);
+        $result2 = $this->getLiveReplayService()->updateReplayShow([], 2);
         $updateReplay1 = $this->getLiveReplayService()->getReplay($replay1['id']);
         $updateReplay2 = $this->getLiveReplayService()->getReplay($replay2['id']);
 
@@ -206,8 +253,8 @@ class LiveReplayServiceTest extends BaseTestCase
         $this->assertEquals(1, $updateReplay1['hidden']);
         $this->assertEquals(1, $updateReplay2['hidden']);
 
-        $result1 = $this->getLiveReplayService()->updateReplayShow(array(1), 1);
-        $result2 = $this->getLiveReplayService()->updateReplayShow(array(2), 2);
+        $result1 = $this->getLiveReplayService()->updateReplayShow([1], 1);
+        $result2 = $this->getLiveReplayService()->updateReplayShow([2], 2);
         $updateReplay1 = $this->getLiveReplayService()->getReplay($replay1['id']);
         $updateReplay2 = $this->getLiveReplayService()->getReplay($replay2['id']);
 
@@ -222,32 +269,78 @@ class LiveReplayServiceTest extends BaseTestCase
         $liveClient = new EdusohoLiveClient();
         $mockLiveClient = Mockery::mock($liveClient);
 
-        $replay = array(
+        $replay = [
             'id' => 1,
             'subject' => 'live replay',
             'resourceNo' => '5aac664d11ca403a853749sssss12345',
-        );
+        ];
 
-        $replayList['data'] = json_encode(array($replay));
+        $replayList['data'] = json_encode([$replay]);
         $mockLiveClient->shouldReceive('createReplayList')->times(1)->andReturn($replayList);
         $this->getLiveReplayService()->setLiveClient($mockLiveClient);
 
         $this->mockBiz(
             'Activity:ActivityService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getActivity',
-                    'returnValue' => array('id' => 1),
-                ),
-                array(
+                    'returnValue' => ['id' => 1],
+                ],
+                [
                     'functionName' => 'updateActivity',
-                    'returnValue' => array(),
-                ),
-            )
+                    'returnValue' => [],
+                ],
+            ]
         );
 
         $result = $this->getLiveReplayService()->generateReplay(1, 1, 1, 'ESLive', 'live');
-        $this->assertEquals($result, array($replay));
+        $this->assertEquals($result, [$replay]);
+    }
+
+    public function testGenerateReplayWithRemoteLive()
+    {
+        $replay = [
+            'id' => 1,
+            'subject' => 'live replay',
+            'resourceNo' => '5aac664d11ca403a853749sssss12345',
+        ];
+        $replayList['data'] = json_encode([$replay]);
+
+        $this->biz['qiQiuYunSdk.s2b2cService'] = $this->mockBiz(
+            'qiQiuYunSdk.s2b2cService',
+            [
+                [
+                    'functionName' => 'createLiveReplayList',
+                    'returnValue' => $replayList,
+                    'withParams' => [1],
+                ],
+            ]
+        );
+        $this->mockBiz(
+            'Activity:ActivityService',
+            [
+                [
+                    'functionName' => 'getActivity',
+                    'returnValue' => ['id' => 1],
+                ],
+                [
+                    'functionName' => 'updateActivity',
+                    'returnValue' => [],
+                ],
+            ]
+        );
+        $this->mockBiz(
+            'Activity:LiveActivityService',
+            [
+                [
+                    'functionName' => 'getBySyncIdGTAndLiveId',
+                    'returnValue' => ['id' => 1],
+                ],
+            ]
+        );
+
+        $result = $this->getLiveReplayService()->generateReplay(1, 1, 1, 'ESLive', 'live');
+        $this->assertEquals($result, [$replay]);
     }
 
     public function testGenerateReplayWithException()
@@ -270,7 +363,7 @@ class LiveReplayServiceTest extends BaseTestCase
         $liveClient = new EdusohoLiveClient();
         $mockLiveClient = Mockery::mock($liveClient);
 
-        $mockLiveClient->shouldReceive('createReplayList')->times(1)->andReturn(array('error' => 'error'));
+        $mockLiveClient->shouldReceive('createReplayList')->times(1)->andReturn(['error' => 'error']);
         $this->getLiveReplayService()->setLiveClient($mockLiveClient);
 
         $this->getLiveReplayService()->generateReplay(1, 1, 1, 'ESLive', 'live');
@@ -278,42 +371,42 @@ class LiveReplayServiceTest extends BaseTestCase
 
     protected function createLiveReplay()
     {
-        $fields = array(
+        $fields = [
             'courseId' => 1,
             'lessonId' => 1,
             'title' => 'live replay',
             'replayId' => 1,
             'globalId' => '5aac664d11ca403a853749sssss12345',
             'type' => 'liveOpen',
-        );
+        ];
 
         return $this->getLiveReplayService()->addReplay($fields);
     }
 
     protected function createLiveReplay1()
     {
-        $fields = array(
+        $fields = [
             'courseId' => 1,
             'lessonId' => 1,
             'title' => 'live replay2',
             'replayId' => 4,
             'globalId' => 0,
             'type' => 'live',
-        );
+        ];
 
         return $this->getLiveReplayService()->addReplay($fields);
     }
 
     protected function createLiveReplay2()
     {
-        $fields = array(
+        $fields = [
             'courseId' => 1,
             'lessonId' => 2,
             'title' => 'live replay3',
             'replayId' => 5,
             'globalId' => 0,
             'type' => 'live',
-        );
+        ];
 
         return $this->getLiveReplayService()->addReplay($fields);
     }
@@ -322,7 +415,7 @@ class LiveReplayServiceTest extends BaseTestCase
     {
         $api = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($api);
-        $mockObject->shouldReceive('post')->times(1)->andReturn(array('no' => $no));
+        $mockObject->shouldReceive('post')->times(1)->andReturn(['no' => $no]);
         $this->getLiveReplayService()->createLiveClient($mockObject);
     }
 
