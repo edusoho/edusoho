@@ -80,6 +80,19 @@ class ExportQuestionWrapperTest extends BaseTestCase
         $this->assertEquals('A.你好<a>世界</a>', $result['options']['A'][0]['content']);
     }
 
+    public function testDifficulty()
+    {
+        $wrapper = $this->getExportQuestionWrapper();
+        $question = [
+            'stem' => '<p>你好</p><a>世界</a>',
+            'difficulty' => 'normal',
+        ];
+
+        $result = $wrapper->difficulty($question);
+
+        $this->assertEquals('一般', $result['difficulty']);
+    }
+
     private function getExportQuestionWrapper()
     {
         return new ExportQuestionWrapper(self::getContainer());
