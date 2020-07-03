@@ -40,7 +40,7 @@ class AssessmentExerciseController extends BaseController
 
         $assessmentExercises = $this->getAssessmentExerciseService()->search(
             ['moduleId' => $moduleId],
-            array('createdTime' => 'desc'),
+            ['createdTime' => 'desc'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

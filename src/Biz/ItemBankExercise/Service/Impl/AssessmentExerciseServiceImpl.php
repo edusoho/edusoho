@@ -61,7 +61,7 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
             $this->beginTransaction();
 
             foreach ($assessments as $assessment) {
-                if ($this->getItemBankAssessmentExerciseDao()->isAssessmentExercise($moduleId, $assessment['id'], $exerciseId)){
+                if ($this->getItemBankAssessmentExerciseDao()->isAssessmentExercise($moduleId, $assessment['id'], $exerciseId)) {
                     $this->createNewException(ItemBankExerciseException::ASSESSMENT_EXERCISE_EXIST());
                 }
 
@@ -75,7 +75,7 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
             }
 
             $this->commit();
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->rollback();
             throw $e;
         }
@@ -84,6 +84,7 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
     public function isAssessmentExercise($moduleId, $assessmentId, $exerciseId)
     {
         $assessmentExercise = $this->getItemBankAssessmentExerciseDao()->isAssessmentExercise($moduleId, $assessmentId, $exerciseId);
+
         return empty($assessmentExercise) ? false : true;
     }
 

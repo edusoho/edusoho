@@ -85,11 +85,11 @@ class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleSer
 
     public function updateAssessmentModule($moduleId, $fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('title'))) {
+        if (!ArrayToolkit::requireds($fields, ['title'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $fields = ArrayToolkit::parts($fields, array('title'));
+        $fields = ArrayToolkit::parts($fields, ['title']);
 
         return $this->getItemBankExerciseModuleDao()->update($moduleId, $fields);
     }
