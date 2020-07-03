@@ -67,13 +67,12 @@
 
           </div>
 
-          <div data-label="价格" style="margin-top: 40px; font-size:13px">
+          <div data-label="{{ 'price'|trans }}" style="margin-top: 40px; font-size:13px">
             <div class="form-group">
               <label> {{ 's2b2c.product.cooperation_price'|trans }} </label>
               {% set courseSet = courseSet|wrap('courseSet.price') %}
               <span style="margin-left:20px; font-size: 80%; color: #999;">
-                {% set amountAfterDeduct = course.cooperationPrice * merchant.coop_level_deduct|default(100) / 100 %}
-                {{ amountAfterDeduct|number_format(2) }}
+                {{ course.cooperationPrice|number_format(2) }}
               </span>
             </div>
 

@@ -1077,6 +1077,7 @@ admin.course.publish_hint: 您确认要发布此课程吗？
 admin.course.publish_success_hint: 课程发布成功！
 admin.course.unknow_error_hint: 未知错误
 admin.course.delete_hint: 删除课程，将删除课程的章节、课时、学员等信息。真的要删除该课程吗？
+admin.course.remove_hint: 移除课程将删除所有的学员信息以及学员数据，移除后无法恢复！ 确定移除该课程吗？
 admin.course.remind_teacher_success_hint: 提醒教师的通知，发送成功！
 admin.course.cancel_recommend_hint: 真的要取消该课程推荐吗？
 admin.course.recommend_success_hint: 设置推荐课程操作成功!

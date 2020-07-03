@@ -16,6 +16,18 @@ class H5SettingServiceTest extends BaseTestCase
         $this->assertEquals('course_list', $discoverySettings['courseList-1']['type']);
     }
 
+    public function testGetDiscoveryTemplate()
+    {
+        $this->mockBiz('Content:BlockService', [
+            ['functionName' => 'getPosters', 'returnValue' => [0 => ['image' => '', 'link' => ['url' => '']]]],
+        ]);
+
+        $template = $this->getH5SettingService()->getDiscoveryTemplate('sail', 'h5');
+        $this->assertEquals('slide_show', $template['slide-1']['type']);
+        $this->assertEquals('graphic_navigation', $template['graphic_navigation-2']['type']);
+        $this->assertEquals('本周最受欢迎TOP5', $template['courseList-3']['data']['title']);
+    }
+
     public function testFilter()
     {
         $discoverySettings = $this->createFilter();

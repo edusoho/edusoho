@@ -14,9 +14,12 @@ class S2B2CProductException extends AbstractException
 
     const NOT_FOUND_PRODUCT = 4047003;
 
+    const REMOVE_PRODUCT_FAILED = 5007004;
+
     public $message = [
         5007001 => 'exception.s2b2c_product.type_invalid',
         5007002 => 'exception.s2b2c_product.update_type_invalid',
         4047003 => 'exception.s2b2c_product.not_found',
+        5007004 => 'exception.s2b2c_product.remove_failed',
     ];
 }

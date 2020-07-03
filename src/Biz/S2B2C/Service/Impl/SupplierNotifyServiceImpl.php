@@ -63,19 +63,18 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
         return ['success' => true];
     }
 
-    public function onSupplierSiteLogoChange($params)
+    public function onSupplierSiteLogoAndFaviconChange($params)
     {
         $this->getLogger()->info('[onSupplierSiteLogoChange]通知参数', $params);
         $site = $this->getSettingService()->get('site');
+        $permissions = $this->getS2B2CFacadeService()->getBehaviourPermissions();
 
-        if (!empty($site['logo'])) {
-            $logoData = explode('?', $site['logo']);
-            $site['logo'] = $logoData[0].'?'.time();
+        if (!$permissions['canModifySiteLogo']) {
+            $site['logo'] = $params['logo'];
         }
 
-        if (!empty($site['favicon'])) {
-            $faviconData = explode('?', $site['favicon']);
-            $site['favicon'] = $faviconData[0].'?'.time();
+        if (!$permissions['canModifySiteFavicon']) {
+            $site['favicon'] = $params['favicon'];
         }
 
         $this->getSettingService()->set('site', $site);

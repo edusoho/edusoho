@@ -299,6 +299,7 @@ user.fields.idcard_back_title: 上传身份证反面照
 user.fields.mobile_label: 手机号码
 user.fields.mobile_label.bind: 已绑定
 user.fields.mobile_label.no_bind: 未绑定
+user.fields.mobile_label.apple_tip: 请前往APP端进行绑定
 user.fileds.realname: 真实姓名
 user.fileds.me: 我
 user.fields.following: 关注
@@ -10868,6 +10869,7 @@ admin_v2.app_center.resource_settlement.balance.detail.success: 成功
 admin_v2.app_center.resource_settlement.balance.detail.default_operator: 系统
 
 admin_v2.app_center.resource_settlement.balance.order.detail: 采购单信息
+admin_v2.app_center.resource_settlement.balance.order.debt: 采购单欠款
 admin_v2.app_center.resource_settlement.balance.order: 采购单
 admin_v2.app_center.resource_settlement.balance.order.sn: 采购单号码
 
@@ -10886,6 +10888,7 @@ admin_v2.app_center.resource_settlement.order.title: 采购单名称
 admin_v2.app_center.resource_settlement.order.sn: 采购单号
 admin_v2.app_center.resource_settlement.order.coop_price: 合作面额
 admin_v2.app_center.resource_settlement.order.price_amount: 实际支付价
+admin_v2.app_center.resource_settlement.order.pay_amount: 应付金额
 admin_v2.app_center.resource_settlement.order.debt_amount: 欠款金额
 admin_v2.app_center.resource_settlement.order.status: 采购单状态
 
@@ -10903,8 +10906,12 @@ admin_v2.app_center.resource_settlement.order.detail.order_information: 订单�
 admin_v2.app_center.resource_settlement.order.detail.order_title: 订单名称
 admin_v2.app_center.resource_settlement.order.detail.order_sn: 订单号
 admin_v2.app_center.resource_settlement.order.detail.order_user: 订单用户
+admin_v2.app_center.resource_settlement.order.detail.price_settlement: 采购单费用结算
+admin_v2.app_center.resource_settlement.order.detail.deduct: 采购单优惠
+admin_v2.app_center.resource_settlement.order.detail.paid_amount: 支付金额
 
 admin_v2.app_center.resource_settlement.product.id: 编号
+admin_v2.app_center.resource_settlement.product.information: 商品信息
 admin_v2.app_center.resource_settlement.product.time: 选择时间
 admin_v2.app_center.resource_settlement.product.order_count: 订单数
 admin_v2.app_center.resource_settlement.product.max_course_price: 实际售价
@@ -10923,6 +10930,18 @@ admin_v2.app_center.resource_settlement.empty: 暂无数据
 
 
 merchant.content_resource.product_title: 商品名称
+merchant.content_resource.product_title_simple: 商品名
+merchant.content_resource.product_no: 商品编码
+merchant.content_resource.product_count: 商品数量
+merchant.content_resource.product_specifications: 商品规格
+merchant.content_resource.product_sales_unit: 计价单位
+merchant.content_resource.product_price: 商品价格
+merchant.content_resource.product_sum: 商品合计
+merchant.content_resource.product_buyer_information: 买家信息
+merchant.content_resource.product_customer_name: 客户名
+merchant.content_resource.product_customer_id: 客户ID
+merchant.content_resource.product_payer: 支付者
+merchant.content_resource.product_order_title: 订单名
 merchant.content_resource.product_change_publish_time: 发布时间
 merchant.content_resource.product_change_log_publish: 发布日志
 merchant.content_resource.product_change_log: 更新日志
@@ -10935,12 +10954,17 @@ merchant.content_resource.product_version.update: 更新
 merchant.content_resource.product_version.update_btn: 更新
 merchant.content_resource.course_product_update: 课程更新
 merchant.content_resource.course_product_update_tips: 确定更新课程后，将会同步供应商提供的最新版本内容，确认更新？
-
+purchase.course.replay_manage.tips: >
+  提示：对于“未生成回放”的课时，可点击<i class="es-icon es-icon-videocam color-gray mh5"></i>来使用直播过程中的录制文件作为回放
+merchant.content_resource.system: 系统
 
 admin_v2.course_manage.create_btn: 创建课程
 admin_v2.course_manage.merchant_course: 采购
 admin_v2.course_manage.has_version_change: 有变更
 exception.courseset.source_course_closed: 供应商已下架课程，如需发布，请联系商家！
+exception.courseset.source_course_not_found: 获取供应商课程信息失败，无法发布！
+exception.course.source_course_closed_join_denied: 供应商已经下架商品，暂不可以加入
+exception.course.source_course_closed: 供应商已经关闭该计划，暂不可以发布
 
 merchant.content_resource.has_chosen: 已选择
 merchant.content_resource.editing: 编辑中
@@ -11006,7 +11030,7 @@ facein.capture_face.inspection_data.inspection_count: 疑似作弊人数
 facein.capture_face.inspection_result_modal.title: 监考抓拍
 exception.s2b2c_product.update_type_invalid: 设置的更新类型不合法
 exception.s2b2c_product.not_found: 不存在对应商品
-
+exception.s2b2c_product.remove_failed: 商品移除失败
 
 admin_v2.cloud_center.content_resource.product_update_setting: 更新设置
 admin_v2.cloud_center.content_resource.product_update_auto: 自动更新
