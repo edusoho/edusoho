@@ -15,4 +15,8 @@ interface AssessmentExerciseService
     public function addAssessments($exerciseId, $moduleId, $assessments);
 
     public function isAssessmentExercise($moduleId, $assessmentId, $exerciseId);
+
+    public function deleteAssessmentExercise($id);
+
+    public function batchDeleteAssessmentExercise($ids);
 }

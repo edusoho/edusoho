@@ -565,6 +565,8 @@ course.question_marker.back_to_questions: 返回题目
 
 item_bank_exercise.student_create.price_min_error_hint: 采购的题库练习购买价格不能为0!
 item_bank_exercise.student_create.price_max_error_hint: 购买价格不能大于题库练习原价!
+item_bank_exercise.assessment_module.assessment_delete: 确定要移除当前试卷?
+item_bank_exercise.assessment_module.assessment_delete.title: 移除试卷
 
 classroom.manage.tag_required_hint: 请输入标签
 classroom.manage.delete_course_hint: 是否要从班级移除该课程？

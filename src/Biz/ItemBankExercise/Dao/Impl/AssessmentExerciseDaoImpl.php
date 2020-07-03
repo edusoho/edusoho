@@ -3,9 +3,9 @@
 namespace Biz\ItemBankExercise\Dao\Impl;
 
 use Biz\ItemBankExercise\Dao\AssessmentExerciseDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class AssessmentExerciseDaoImpl extends GeneralDaoImpl implements AssessmentExerciseDao
+class AssessmentExerciseDaoImpl extends AdvancedDaoImpl implements AssessmentExerciseDao
 {
     protected $table = 'item_bank_assessment_exercise';
 
@@ -31,6 +31,7 @@ class AssessmentExerciseDaoImpl extends GeneralDaoImpl implements AssessmentExer
             'timestamps' => ['createdTime', 'updatedTime'],
             'orderbys' => ['createdTime'],
             'conditions' => [
+                'id in (:ids)',
                 'exerciseId = :exerciseId',
                 'moduleId = :moduleId',
                 'assessmentId = :assessmentId',

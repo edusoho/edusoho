@@ -115,6 +115,25 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
         return false;
     }
 
+    public function deleteAssessmentExercise($id)
+    {
+        $assessmentExercise = $this->getItemBankAssessmentExerciseDao()->get($id);
+        if (empty($assessmentExercise)) {
+            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
+        }
+
+        return $this->getItemBankAssessmentExerciseDao()->delete($id);
+    }
+
+    public function batchDeleteAssessmentExercise($ids)
+    {
+        if (empty($ids)) {
+            return;
+        }
+
+        $this->getItemBankAssessmentExerciseDao()->batchDelete(['ids' => $ids]);
+    }
+
     /**
      * @return \Codeages\Biz\ItemBank\Answer\Service\AnswerService
      */

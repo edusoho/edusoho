@@ -1,5 +1,5 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
-{% do script(['libs/jquery-validation.js', 'app/js/course-chapter-manage/index.js']) %}
+{% do script(['libs/jquery-validation.js', 'app/js/item-bank-exercise/module/index.js']) %}
 {% block title %}
   {% if module %}
     {{ 'item_bank_exercise.assessment_exercise.edit_module'|trans }}
@@ -32,10 +32,10 @@
 
 {% block footer %}
   {% if module %}
-    <button type="button" class="btn btn-link js-delete-module">{{'form.btn.delete'|trans}}</button>
+    <button type="button" class="btn btn-link js-delete-module" data-url="{{ path('item_bank_exercise_manage_assessment_module_delete', {exerciseId: exercise.id, moduleId: module.id}) }}">{{'form.btn.delete'|trans}}</button>
   {% endif %}
   <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
-  <button id="module-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" class="btn btn-primary" data-toggle="form-submit" data-target="#module-form">
+  <button id="module-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" class="btn btn-primary js-submit-btn">
     {% if module %}
       {{'form.btn.save'|trans}}
     {% else %}

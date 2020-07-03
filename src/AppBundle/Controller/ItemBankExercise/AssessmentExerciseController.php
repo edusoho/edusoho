@@ -22,13 +22,29 @@ class AssessmentExerciseController extends BaseController
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
         $modules = $this->getExerciseModuleService()->findByExerciseIdAndType($exercise['id'], ExerciseModuleService::TYPE_ASSESSMENT);
         $moduleIds = ArrayToolkit::column($modules, 'id');
-        if (empty($modules) || (!empty($moduleId) && !in_array($moduleId, $moduleIds))) {
+        if (empty($modules)) {
             $this->createNewException(ItemBankExerciseException::NOTFOUND_MODULE());
+        }
+
+        if (!empty($moduleId) && !in_array($moduleId, $moduleIds)) {
+            $moduleId = $modules[0]['id'];
         }
 
         $moduleId = empty($moduleId) ? $modules[0]['id'] : $moduleId;
 
-        $assessmentExercises = $this->getAssessmentExerciseService()->findByModuleId($moduleId);
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getAssessmentExerciseService()->count(['moduleId' => $moduleId]),
+            20
+        );
+
+        $assessmentExercises = $this->getAssessmentExerciseService()->search(
+            ['moduleId' => $moduleId],
+            array('createdTime' => 'desc'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
         $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($assessmentExercises, 'assessmentId'));
 
         return $this->render('item-bank-exercise/assessment-exercise/index.html.twig', [
@@ -37,6 +53,8 @@ class AssessmentExerciseController extends BaseController
             'modules' => $modules,
             'moduleId' => $moduleId,
             'assessments' => $assessments,
+            'paginator' => $paginator,
+            'assessmentExercises' => ArrayToolkit::index($assessmentExercises, 'assessmentId'),
         ]);
     }
 
@@ -118,6 +136,15 @@ class AssessmentExerciseController extends BaseController
         ]);
     }
 
+    public function deleteModuleAction(Request $request, $exerciseId, $moduleId)
+    {
+        $this->getExerciseService()->tryManageExercise($exerciseId);
+
+        $this->getExerciseModuleService()->deleteAssessmentModule($moduleId);
+
+        return $this->createJsonResponse(true);
+    }
+
     public function addAssessmentAction(Request $request, $exerciseId, $moduleId)
     {
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
@@ -139,6 +166,25 @@ class AssessmentExerciseController extends BaseController
         }
 
         $this->getAssessmentExerciseService()->addAssessments($exerciseId, $moduleId, $assessments);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function batchDeleteAssessmentAction(Request $request, $exerciseId)
+    {
+        $this->getExerciseService()->tryManageExercise($exerciseId);
+
+        $ids = $request->request->get('ids');
+        $this->getAssessmentExerciseService()->batchDeleteAssessmentExercise($ids);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function deleteAssessmentAction(Request $request, $exerciseId, $id)
+    {
+        $this->getExerciseService()->tryManageExercise($exerciseId);
+
+        $this->getAssessmentExerciseService()->deleteAssessmentExercise($id);
 
         return $this->createJsonResponse(true);
     }

@@ -2,7 +2,9 @@
 
 namespace Biz\ItemBankExercise\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\ItemBankExercise\Dao\ExerciseModuleDao;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
@@ -83,7 +85,18 @@ class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleSer
 
     public function updateAssessmentModule($moduleId, $fields)
     {
+        if (!ArrayToolkit::requireds($fields, array('title'))) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        $fields = ArrayToolkit::parts($fields, array('title'));
+
         return $this->getItemBankExerciseModuleDao()->update($moduleId, $fields);
+    }
+
+    public function deleteAssessmentModule($moduleId)
+    {
+        return $this->getItemBankExerciseModuleDao()->delete($moduleId);
     }
 
     /**
