@@ -202,9 +202,9 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->getExerciseDao()->getByQuestionBankId($questionBankId);
     }
 
-    public function updateChapterEnable($exercised, $chapterEnable)
+    public function updateModuleEnable($exercised, $enable)
     {
-        return $this->getExerciseDao()->update($exercised, $chapterEnable);
+        return $this->getExerciseDao()->update($exercised, $enable);
     }
 
     public function updateBaseInfo($id, $fields)

@@ -199,10 +199,10 @@ class ExerciseServiceTest extends BaseTestCase
         $this->assertEquals($excepted['questionBankId'], $res['questionBankId']);
     }
 
-    public function testUpdateChapterEnable()
+    public function testupdateModuleEnable()
     {
         $excepted = $this->createExercise();
-        $res = $this->getExerciseService()->updateChapterEnable($excepted['id'], ['chapterEnable' => 1]);
+        $res = $this->getExerciseService()->updateModuleEnable($excepted['id'], ['chapterEnable' => 1]);
         $this->assertEquals(1, $res['chapterEnable']);
     }
 

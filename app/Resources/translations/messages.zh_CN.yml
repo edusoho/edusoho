@@ -1175,7 +1175,8 @@ item_bank_exercise.assessment.total_score: 总分
 item_bank_exercise.assessment_exercise.add_new_module: 添加新模块
 item_bank_exercise.assessment_exercise.add_assessment: 添加试卷
 item_bank_exercise.assessment_exercise.remove_assessment: 移除试卷
-item_bank_exercise.chapter_exercise.empty: 什么都没有，快去启章节练习吧
+item_bank_exercise.chapter_exercise.empty: 什么都没有，快去开启章节练习吧
+item_bank_exercise.assessment_exercise.empty: 什么都没有，快去开启试卷练习吧
 item_bank_exercise.chapter_exercise.info: 章节练习依据“题目分类管理”的设置。按层级目录向学员提供刷题练习
 item_bank_exercise.marketing_setup.no_permission_tips: 抱歉，您无权管理题库练习基础设置，如有需要请联系网站管理员！
 item_bank_exercise.marketing_setup.setup.can_join.tips: 关闭后，学员自己无法加入，需要由老师手动添加学员。
