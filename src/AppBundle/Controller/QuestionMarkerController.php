@@ -37,7 +37,7 @@ class QuestionMarkerController extends BaseController
                 $headerLength = $videoHeaderFile['length'];
             }
         }
-        
+
         foreach ($questionMakers as $index => $questionMaker) {
             if (empty($items[$questionMaker['questionId']]) || empty($items[$questionMaker['questionId']]['questions'])) {
                 continue;

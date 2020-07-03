@@ -147,5 +147,3 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         return $this->biz->service('S2B2C:FileSourceService');
     }
 }
-
-
