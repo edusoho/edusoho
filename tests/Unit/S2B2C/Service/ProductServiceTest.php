@@ -74,6 +74,13 @@ class ProductServiceTest extends BaseTestCase
         $this->assertEquals(1, $result);
     }
 
+    public function testGetProductBySupplierIdAndRemoteProductIdAndType()
+    {
+        $newProduct = $this->getS2B2CProductService()->createProduct($this->mockProductFields());
+        $product = $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteProductIdAndType($newProduct['supplierId'], $newProduct['remoteProductId'], 'course');
+        $this->assertEquals($product['id'], $newProduct['id']);
+    }
+
     protected function mockProductFields($customFields = [])
     {
         return array_merge([

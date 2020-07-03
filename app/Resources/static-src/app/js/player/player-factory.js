@@ -7,7 +7,7 @@ class PlayerFactory {
   static create(type, options) {
     switch (type) {
     case 'local-video-player':
-      return new LocalVideoPlayer(options);
+      return new BalloonVideoPlayer(options);
     case 'audio-player':
       return new AudioPlayer(options);
     case 'balloon-cloud-video-player':

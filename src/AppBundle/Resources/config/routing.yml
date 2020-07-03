@@ -284,8 +284,8 @@ hls_audio_playlist:
     defaults: { _controller: AppBundle:HLSAudio:playlist}
 
 player_local_media:
-    path: /player/{id}/file/{token}
-    defaults: { _controller: AppBundle:Player:localMedia}
+    path: /player/{id}/file/{token}.{ext}
+    defaults: { _controller: AppBundle:Player:localMedia }
 
 course_thread_player_show:
     path: /course/thread/file/{id}/player/show

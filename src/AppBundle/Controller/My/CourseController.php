@@ -147,7 +147,7 @@ class CourseController extends CourseBaseController
         $isUserFavorite = false;
         $user = $this->getUser();
         if ($user->isLogin()) {
-            $isUserFavorite = $this->getFavoriteService()->isUserFavorite($user['id'], 'course', $course['courseSetId']);
+            $isUserFavorite = !empty($this->getFavoriteService()->getUserFavorite($user['id'], 'course', $course['courseSetId']));
         }
 
         return $this->render(

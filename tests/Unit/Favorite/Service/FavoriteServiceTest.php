@@ -5,6 +5,7 @@ namespace Tests\Unit\Favorite\Service;
 use Biz\BaseTestCase;
 use Biz\Common\CommonException;
 use Biz\Favorite\Dao\FavoriteDao;
+use Biz\Favorite\FavoriteException;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\Role\Util\PermissionBuilder;
 use Biz\User\CurrentUser;
@@ -51,11 +52,17 @@ class FavoriteServiceTest extends BaseTestCase
         $this->assertEquals('testType', $favoriteWithCurrentUser['targetType']);
         $this->assertEquals('1', $favoriteWithCurrentUser['targetId']);
         $this->assertEquals($this->getCurrentUser()->getId(), $favoriteWithCurrentUser['userId']);
+    }
 
-        $favoriteWithUserId = $this->getFavoriteService()->createFavorite(['targetType' => 'testType', 'targetId' => 1, 'userId' => 111]);
-        $this->assertEquals('testType', $favoriteWithUserId['targetType']);
-        $this->assertEquals('1', $favoriteWithUserId['targetId']);
-        $this->assertEquals(111, $favoriteWithUserId['userId']);
+    public function testDeleteUserFavorite_whenForbidden_thenThrowException()
+    {
+        $favorite = $this->createFavorite();
+
+        $this->expectException(FavoriteException::class);
+        $this->expectExceptionMessage('exception.favorite.forbidden_operate_favorite');
+
+        $this->mockCurrentUser();
+        $this->getFavoriteService()->deleteUserFavorite($favorite['id'], $favorite['targetType'], $favorite['targetId']);
     }
 
     public function testDeleteUserFavorite()
@@ -72,15 +79,6 @@ class FavoriteServiceTest extends BaseTestCase
         $this->assertEquals($before, $favorite);
         $this->assertTrue($result);
         $this->assertNull($after);
-    }
-
-    public function testIsUserFavorite()
-    {
-        $favorite = $this->createFavorite();
-        $resultTrue = $this->getFavoriteService()->isUserFavorite($favorite['userId'], $favorite['targetType'], $favorite['targetId']);
-        $this->assertTrue($resultTrue);
-        $resultFalse = $this->getFavoriteService()->isUserFavorite($favorite['userId'] + 100, $favorite['targetType'], $favorite['targetId']);
-        $this->assertFalse($resultFalse);
     }
 
     protected function mockCurrentUser($user = [])
