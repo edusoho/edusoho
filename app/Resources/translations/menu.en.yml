@@ -483,6 +483,7 @@ admin_v2.course.basic.basic_tab.close_btn: Close
 admin_v2.course.basic.basic_tab.publish_submit_btn: Publish
 admin_v2.course.basic.basic_tab.clone_btn: Clone
 admin_v2.course.basic.basic_tab.delete_submit_btn: Delete
+admin_v2.course.basic.basic_tab.s2b2c_submit_btn: Remove
 
 # 教学模块-课程管理-班级管理
 admin_v2.course.classroom_menu: Classes

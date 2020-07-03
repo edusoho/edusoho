@@ -11,16 +11,21 @@ class LiveActivityDaoImpl extends GeneralDaoImpl implements LiveActivityDao
 
     public function declares()
     {
-        return array(
-            'conditions' => array(
+        return [
+            'conditions' => [
                 'id IN (:ids)',
                 'liveId = :liveId',
                 'liveProvider = :liveProvider',
                 'replayStatus = :replayStatus',
                 'progressStatus != :progressStatusNotEqual',
                 'progressStatus = :progressStatus',
-            ),
-        );
+                /*S2B2C 增加syncId*/
+                'syncId = :syncId',
+                'syncId in (:syncIds)',
+                'syncId > :syncIdGT',
+                /*END*/
+            ],
+        ];
     }
 
     public function findByIds($Ids)
@@ -30,11 +35,23 @@ class LiveActivityDaoImpl extends GeneralDaoImpl implements LiveActivityDao
 
     public function findByLiveIdAndReplayStatus($liveId)
     {
-        return $this->findByFields(array('liveId' => $liveId, 'replayStatus' => 'ungenerated'));
+        return $this->findByFields(['liveId' => $liveId, 'replayStatus' => 'ungenerated']);
     }
 
     public function getByLiveId($liveId)
     {
-        return $this->getByFields(array('liveId' => $liveId));
+        return $this->getByFields(['liveId' => $liveId]);
+    }
+
+    public function getBySyncIdGTAndLiveId($liveId)
+    {
+        $sql = "SELECT * FROM {$this->table()} WHERE syncId > 0 and liveId = ?";
+
+        return $this->db()->fetchAssoc($sql, [$liveId]);
+    }
+
+    public function getBySyncId($syncId)
+    {
+        return $this->getByFields(['syncId' => $syncId]);
     }
 }

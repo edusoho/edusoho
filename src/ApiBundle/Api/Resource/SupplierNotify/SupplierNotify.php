@@ -16,7 +16,7 @@ class SupplierNotify extends AbstractResource
         'coop_mode_change' => 'onCoopModeChange',
         'merchant_domain_url_change' => 'onMerchantDomainUrlChange',
         'supplier_domain_url_change' => 'onSupplierDomainUrlChange',
-        'site_logo_change' => 'onSupplierSiteLogoChange',
+        'site_logo_and_favicon_change' => 'onSupplierSiteLogoAndFaviconChange',
         'auth_node_change' => 'onMerchantAuthNodeChange', // setting => s2b2c => auth_node (array)
         'reset_brand' => 'onResetMerchantBrand',
     ];
