@@ -22,7 +22,6 @@ use Biz\System\Service\CacheService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Monolog\Logger;
-use mysql_xdevapi\Exception;
 
 /**
  * Class CourseProductServiceImpl
@@ -35,11 +34,12 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
 
     /**
      * @param $s2b2cProductId
-     * @return boolean
+     *
+     * @return bool
+     *
      * @throws
      * 更新课程的计划列表
      */
-    //public function syncCourses($localCourseSet, $product)
     public function syncCourses($s2b2cProductId)
     {
         $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
@@ -53,8 +53,8 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             return true;
         }
 
-        $courseSets = array_filter($waitSyncProducts, function($product) {
-            return $product['productType'] == 'course_set';
+        $courseSets = array_filter($waitSyncProducts, function ($product) {
+            return 'course_set' == $product['productType'];
         });
         $courseSetProduct = ArrayToolkit::get(array_values($courseSets), 0, []);
 
@@ -63,11 +63,11 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             return false;
         }
         $newCourseSet = $this->getCourseSetService()->addCourseSet($this->prepareCourseSetData($content));
-        $this->getProductService()->updateProduct($courseSetProduct['id'], ['localResourceId' => $newCourseSet['id'],'syncStatus' => self::SYNC_STATUS_FINISHED]);
+        $this->getProductService()->updateProduct($courseSetProduct['id'], ['localResourceId' => $newCourseSet['id'], 'syncStatus' => self::SYNC_STATUS_FINISHED]);
 
-        $courseProducts = array_filter($waitSyncProducts, function($product) {
-            return $product['productType'] == 'course';
-        });;
+        $courseProducts = array_filter($waitSyncProducts, function ($product) {
+            return 'course' == $product['productType'];
+        });
         $courseHasDefaultCourse = false;
         foreach ($courseProducts as $product) {
             $course = $this->getDistributeContent($product['s2b2cProductDetailId']);
@@ -82,7 +82,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
                 'suggestionPrice' => $course['suggestionPrice'],
                 'cooperationPrice' => $course['cooperationPrice'],
                 'remoteResourceId' => $course['id'],
-                'syncStatus' => self::SYNC_STATUS_FINISHED
+                'syncStatus' => self::SYNC_STATUS_FINISHED,
                 ]);
 
             $this->biz['s2b2c.course_product_sync']->sync($course, ['syncCourseId' => $localCourse['id']]);
@@ -103,7 +103,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
     protected function getDistributeContent($s2b2cProductDetailId)
     {
         $content = $this->getS2B2CFacadeService()->getS2B2CService()->getDistributeContent($s2b2cProductDetailId);
-        if (!empty($content['status']) && $content['status'] == 'success') {
+        if (!empty($content['status']) && 'success' == $content['status']) {
             return $content['data'];
         }
 
@@ -379,6 +379,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
 
             $this->getCourseService()->closeCourse($product['localResourceId']);
             $this->commit();
+
             return true;
         } catch (\Exception $e) {
             $this->rollback();
@@ -399,6 +400,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
 
             $this->getCourseSetService()->closeCourseSet($product['localResourceId']);
             $this->commit();
+
             return true;
         } catch (\Exception $e) {
             $this->rollback();

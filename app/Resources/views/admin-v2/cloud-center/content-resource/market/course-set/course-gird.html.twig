@@ -1,11 +1,5 @@
 <div class="course-item">
   <div class="course-img">
-{#    {% if courseSet.course is defined %}#}
-{#      {% set course = courseSet.course %}#}
-{#    {% else %}#}
-{#      {% set course = data('PublishedCourseByCourseSet',{ courseSetId: courseSet.id } ) %}#}
-{#    {% endif %}#}
-
     <a href="{{ path('admin_v2_content_resource_product_detail', {productType: 'courseSet',s2b2cProductId: product.id}) }}" target="_blank">
       {% if product.serializeMode == 'serialized' %}
         <span class="tags"><span class="tag-serialing"></span></span>
@@ -33,16 +27,6 @@
       </a>
     </div>
     <div class="metas clearfix">
-{#      {% if setting('course.show_student_num_enabled', '1') == 1 %}#}
-{#        <span class="num">#}
-{#          {% if setting('course.show_cover_num_mode') == 'studentNum' %}#}
-{#            <i class="es-icon es-icon-people"></i>{{ courseSet.studentNum }}#}
-{#          {% elseif setting('course.show_cover_num_mode') == 'hitNum' %}#}
-{#            <i class="es-icon es-icon-view"></i>{{ course.hitNum }}#}
-{#          {% endif %}#}
-{#        </span>#}
-{#      {% endif %}#}
-
       <div class="form-group row">
         <label class="coopertion control-label" style="width: auto">
           {{ '合作面额'|trans }}:
