@@ -53,9 +53,22 @@ class TaskLiveReplay extends AbstractResource
 
         $protocol = $this->container->get('request')->getScheme();
         $replays = array();
+        $sendParams = array(
+            'userId' => $user['id'],
+            'nickname' => $user['nickname'],
+            'device' => $device,
+            'protocol' => $protocol
+        );
 
         foreach ($visibleReplays as $index => $visibleReplay) {
-            $replays[] = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", array('replayId' => $visibleReplays[$index]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device, 'protocol' => $protocol));
+            $sendParams['replayId'] = $visibleReplays[$index]['replayId'];
+            if (!empty($activity['syncId'])) {
+                $replays[] = $this->getS2B2CFacadeService()->getS2B2CService()->createAppLiveReplayList($activity['ext']['liveId'], $sendParams);
+            } else {
+                $replays[] = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", $sendParams);
+            }
+
+            $replays[] = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", $sendParams);
             $replays[$index]['title'] = $visibleReplay['title'];
         }
 

@@ -39,6 +39,9 @@ class ResourceSyncDaoImpl extends AdvancedDaoImpl implements ResourceSyncDao
 
     public function findBySupplierIdAndRemoteResourceIdsAndResourceType($supplierId, $remoteResourceIds, $resourceType)
     {
+        if (empty($remoteResourceIds)) {
+            return [];
+        }
         $marks = str_repeat('?,', count($remoteResourceIds) - 1).'?';
         $sql = "SELECT * FROM {$this->table} WHERE supplierId= ? AND remoteResourceId IN ({$marks}) AND resourceType = ?;";
 

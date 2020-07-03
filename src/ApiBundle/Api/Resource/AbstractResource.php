@@ -187,4 +187,12 @@ abstract class AbstractResource
 
         return $biz['user'];
     }
+
+    /**
+     * @return \Biz\S2B2C\Service\S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->getBiz()->service('S2B2C:S2B2CFacadeService');
+    }
 }

@@ -8,9 +8,6 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
-use Biz\Goods\GoodsException;
-use Biz\Goods\Service\GoodsService;
-use Biz\Goods\Service\PurchaseService;
 use Biz\Review\Dao\ReviewDao;
 use Biz\Review\ReviewException;
 use Biz\Review\Service\ReviewService;
@@ -19,8 +16,10 @@ use Codeages\Biz\Framework\Event\Event;
 
 class ReviewServiceImpl extends BaseService implements ReviewService
 {
+    const RATING_LIMIT = 5;
+
+//    TODO: 剥离完课程与班级数据后删除
     protected $reviewMap = [
-        'goods' => 'tryCreateGoodsReview',
         'course' => 'tryCreateCourseReview',
         'classroom' => 'tryCreateClassroomReview',
     ];
@@ -30,10 +29,11 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         return $this->getReviewDao()->get($id);
     }
 
+    //    TODO: 暂时兼容课程、班级,权限判断修改
     public function tryCreateReview($review)
     {
         if (!in_array($review['targetType'], array_keys($this->reviewMap))) {
-            $this->createNewException(CommonException::ERROR_PARAMETER());
+            return $review;
         }
 
         $function = $this->reviewMap[$review['targetType']];
@@ -47,7 +47,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        if ($review['rating'] > 5) {
+        if ($review['rating'] > self::RATING_LIMIT) {
             $this->createNewException(ReviewException::RATING_LIMIT());
         }
 
@@ -73,11 +73,12 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
     public function updateReview($id, $review)
     {
+        $existed = $this->getReviewDao()->get($id);
+        $this->tryOperateReview($existed);
         $review = ArrayToolkit::parts($review, ['content', 'rating']);
 
-        $existed = $this->getReviewDao()->get($id);
-
-        $this->tryOperateReview($existed);
+        $review['content'] = $this->purifyHtml($review['content']);
+        $review['content'] = $this->getSensitiveService()->sensitiveCheck($review['content'], 'review');
 
         $review = $this->getReviewDao()->update($id, $review);
 
@@ -95,8 +96,9 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         }
 
         $this->tryOperateReview($review);
-
         $this->getReviewDao()->delete($id);
+
+        $this->getReviewDao()->deleteByParentId($review['id']);
 
         $this->dispatchEvent('review.delete', new Event($review));
 
@@ -145,11 +147,6 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         ];
     }
 
-    public function deleteReviewsByParentId($parentId)
-    {
-        return $this->getReviewDao()->deleteByParentId($parentId);
-    }
-
     protected function tryOperateReview($review)
     {
         if ($review['userId'] != $this->getCurrentUser()->getId() && !$this->getCurrentUser()->isAdmin()) {
@@ -157,25 +154,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         }
     }
 
-    protected function tryCreateGoodsReview($review)
-    {
-        $goods = $this->getGoodsService()->getGoods($review['targetId']);
-        if (empty($goods)) {
-            $this->createNewException(GoodsException::GOODS_NOT_FOUND());
-        }
-
-        $purchaseCount = $this->getGoodsPurchaseService()->countVouchers([
-            'userId' => $review['userId'],
-            'goodsId' => $goods['id'],
-        ]);
-
-        if (!$purchaseCount) {
-            $this->createNewException(ReviewException::FORBIDDEN_CREATE_REVIEW());
-        }
-
-        return $review;
-    }
-
+    //    TODO: 商品剥离暂时兼容课程
     protected function tryCreateCourseReview($review)
     {
         if (!$this->getCourseService()->canTakeCourse($review['targetId'])) {
@@ -209,22 +188,6 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     protected function getSensitiveService()
     {
         return $this->createService('Sensitive:SensitiveService');
-    }
-
-    /**
-     * @return GoodsService
-     */
-    protected function getGoodsService()
-    {
-        return $this->createService('Goods:GoodsService');
-    }
-
-    /**
-     * @return PurchaseService
-     */
-    protected function getGoodsPurchaseService()
-    {
-        return $this->createService('Goods:PurchaseService');
     }
 
     /**

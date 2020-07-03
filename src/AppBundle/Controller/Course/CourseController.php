@@ -222,11 +222,11 @@ class CourseController extends CourseBaseController
             $user['id']
         ) : [];
 
-        $isUserFavorite = $user->isLogin() ? $this->getFavoriteService()->isUserFavorite(
+        $isUserFavorite = $user->isLogin() ? !empty($this->getFavoriteService()->getUserFavorite(
             $user['id'],
             'course',
             $course['courseSetId']
-        ) : false;
+        )) : false;
 
         $previewAs = $request->query->get('previewAs', null);
         $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
@@ -353,9 +353,14 @@ class CourseController extends CourseBaseController
 
         $conditions = [
             'parentId' => 0,
-            'targetId' => empty($selectedCourseId) ? $course['id'] : $selectedCourseId,
             'targetType' => 'course',
         ];
+
+        if (!empty($selectedCourseId)) {
+            $conditions['targetId'] = $selectedCourseId;
+        } else {
+            $conditions['targetIds'] = array_values(array_column($this->getCourseService()->findCoursesByCourseSetId($courseSet['id']), 'id'));
+        }
 
         $paginator = new Paginator(
             $request,

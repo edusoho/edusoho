@@ -12,7 +12,7 @@ interface SupplierNotifyService
 
     public function onSupplierDomainUrlChange($params);
 
-    public function onSupplierSiteLogoChange($params);
+    public function onSupplierSiteLogoAndFaviconChange($params);
 
     public function onMerchantAuthNodeChange($params);
 

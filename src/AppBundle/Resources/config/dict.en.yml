@@ -258,6 +258,7 @@ userType:
     renren: Renren connected
     qq: QQ connected
     weixin: Wechat connected
+    apple: Apple connected
     marketing: 微营销
     distributor: 分销
 
@@ -495,3 +496,9 @@ adminCourseTypes:
 adminPlumberStatus:
     executing: Excuting
     stopped: Stopped
+
+s2b2cSettlementOrderStatus:
+    paid: To be paid
+    success: Paid
+    finished: Transaction complete
+    refunded: Refunded

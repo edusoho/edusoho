@@ -400,6 +400,96 @@ class S2B2CService extends BaseService
         return $this->sendRequest('purchaseProducts', $body, 'POST');
     }
 
+    /*以下是live相关*/
+    private $merchantLivePrefix = '/merchant_live';
+
+    public function isLiveAvailableRecord($liveId)
+    {
+        $this->uri = $this->merchantLivePrefix.'/check_record_available';
+        $body = array(
+            'liveId' => $liveId,
+        );
+
+        return $this->sendRequest('isAvailableRecord', $body, 'GET');
+    }
+
+    public function getLiveRoomMaxOnline($liveId)
+    {
+        $this->uri = $this->merchantLivePrefix.'/get_max_online';
+        $body = array(
+            'liveId' => $liveId,
+        );
+
+        return $this->sendRequest('getMaxOnline', $body, 'GET');
+    }
+
+    public function getLiveEntryTicket($liveId, $entryUser = array())
+    {
+        $this->uri = $this->merchantLivePrefix.'/create_entry_ticket';
+        $body = array(
+            'liveId' => $liveId,
+            'entryUser' => $entryUser
+        );
+
+        return $this->sendRequest('getLiveEntryTicket', $body, 'POST');
+    }
+
+    public function consumeLiveEntryTicket($liveId, $ticketNo)
+    {
+        $this->uri = $this->merchantLivePrefix.'/consume_entry_ticket';
+        $body = array(
+            'liveId' => $liveId,
+            'ticketNo' => $ticketNo
+        );
+
+        return $this->sendRequest('consumeLiveEntryTicket', $body, 'POST');
+    }
+
+    public function entryLiveReplay($roomParams)
+    {
+        $this->uri = $this->merchantLivePrefix.'/entry_live_replay';
+
+        return $this->sendRequest('entryLiveReplay', $roomParams, 'POST');
+    }
+
+    public function createLiveReplayList($liveId)
+    {
+        $this->uri = $this->merchantLivePrefix.'/create_live_replays';
+        $body = array(
+            'liveId' => $liveId,
+        );
+
+        return $this->sendRequest('createLiveReplayList', $body, 'POST');
+    }
+
+    public function createAppLiveReplayList($liveId, $roomParams)
+    {
+        $this->uri = $this->merchantLivePrefix.'/create_app_live_replays';
+        $roomParams['liveId'] = $liveId;
+
+        return $this->sendRequest('createAppLiveReplayList', $roomParams, 'POST');
+    }
+
+    public function getLiveRoomCheckinList($liveId)
+    {
+        $this->uri = $this->merchantLivePrefix.'/get_room_checkin_list';
+        $body = array(
+            'liveId' => $liveId,
+        );
+
+        return $this->sendRequest('getLiveRoomCheckinList', $body, 'POST');
+    }
+
+    public function getLiveRoomHistory($liveId)
+    {
+        $this->uri = $this->merchantLivePrefix.'/get_room_history';
+        $body = array(
+            'liveId' => $liveId,
+        );
+
+        return $this->sendRequest('getLiveRoomHistory', $body, 'POST');
+    }
+
     /**
      * 生成调用商品资源类接口的基础参数
      *

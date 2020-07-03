@@ -6,6 +6,7 @@ use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
 use Biz\Live\Dao\LiveStatisticsDao;
 use Biz\Live\LiveStatisticsProcessor\LiveStatisticsProcessorFactory;
+use Biz\Live\Service\Impl\LiveStatisticsServiceImpl;
 use Biz\Live\Service\LiveStatisticsService;
 use Biz\Util\EdusohoLiveClient;
 
@@ -25,10 +26,10 @@ class LiveStatisticsServiceTest extends BaseTestCase
 
         $this->assertEquals($liveId, $result['liveId']);
         $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_CHECKIN, $result['type']);
-        $this->assertEquals(array('data' => array(
+        $this->assertEquals(['data' => [
             'success' => 1,
             'detail' => 'test detail',
-        )), $result['data']);
+        ]], $result['data']);
     }
 
     public function testCreateLiveVisitorStatistics()
@@ -45,8 +46,8 @@ class LiveStatisticsServiceTest extends BaseTestCase
 
         $this->assertEquals($liveId, $result['liveId']);
         $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_VISITOR, $result['type']);
-        $this->assertEquals(array('data' => array('success' => 1,
-            'detail' => 'test detail', )), $result['data']);
+        $this->assertEquals(['data' => ['success' => 1,
+            'detail' => 'test detail', ]], $result['data']);
     }
 
     public function testGetCheckinStatisticsByLiveId()
@@ -91,8 +92,8 @@ class LiveStatisticsServiceTest extends BaseTestCase
 
         $this->assertEquals($liveId, $result['liveId']);
         $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_CHECKIN, $result['type']);
-        $this->assertEquals(array('data' => array('success' => 1,
-            'detail' => 'test detail', )), $result['data']);
+        $this->assertEquals(['data' => ['success' => 1,
+            'detail' => 'test detail', ]], $result['data']);
     }
 
     public function testUpdateCheckinStatistics_WithExistedStatistics()
@@ -132,8 +133,8 @@ class LiveStatisticsServiceTest extends BaseTestCase
 
         $this->assertEquals($liveId, $result['liveId']);
         $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_VISITOR, $result['type']);
-        $this->assertEquals(array('data' => array('success' => 1,
-            'detail' => 'test detail', )), $result['data']);
+        $this->assertEquals(['data' => ['success' => 1,
+            'detail' => 'test detail', ]], $result['data']);
     }
 
     public function testUpdateVisitorStatistics_WithExistedStatistics()
@@ -161,12 +162,12 @@ class LiveStatisticsServiceTest extends BaseTestCase
 
     public function testFindCheckinStatisticsByLiveIds()
     {
-        $liveIds = array(1, 2, 4);
+        $liveIds = [1, 2, 4];
         $result = $this->getLiveStatisticsService()->findCheckinStatisticsByLiveIds($liveIds);
 
         $this->assertEmpty($result);
 
-        $expected = array();
+        $expected = [];
         $expected[1] = $this->createCheckinStatistics(1);
         $expected[2] = $this->createCheckinStatistics(2);
         $this->createCheckinStatistics(3);
@@ -179,12 +180,12 @@ class LiveStatisticsServiceTest extends BaseTestCase
 
     public function testFindVisitorStatisticsByLiveIds()
     {
-        $liveIds = array(1, 2, 4);
+        $liveIds = [1, 2, 4];
         $result = $this->getLiveStatisticsService()->findVisitorStatisticsByLiveIds($liveIds);
 
         $this->assertEmpty($result);
 
-        $expected = array();
+        $expected = [];
         $expected[1] = $this->createVisitorStatistics(1);
         $expected[2] = $this->createVisitorStatistics(2);
         $this->createVisitorStatistics(3);
@@ -195,31 +196,105 @@ class LiveStatisticsServiceTest extends BaseTestCase
         $this->assertEquals($expected, $result);
     }
 
+    public function testGenerateStatisticsByLiveIdAndTypeWithCheckIn()
+    {
+        $mockedProcessor = $this->mockProcessor();
+        ReflectionUtils::setStaticProperty(new LiveStatisticsProcessorFactory(), 'mockedProcessor', $mockedProcessor);
+
+        $this->biz['qiQiuYunSdk.s2b2cService'] = $this->mockBiz(
+            'qiQiuYunSdk.s2b2cService',
+            [
+                [
+                    'functionName' => 'getLiveRoomCheckinList',
+                    'returnValue' => [['code' => 200, 'data' => [
+                        ['time' => 1592394136, 'liveId' => 1, 'users' => [
+                            ['nickName' => 'admin_1'],
+                        ]],
+                    ]]],
+                    'withParams' => [1],
+                ],
+            ]
+        );
+
+        $this->mockBiz(
+            'Activity:LiveActivityService',
+            [
+                [
+                    'functionName' => 'getBySyncIdGTAndLiveId',
+                    'returnValue' => ['id' => 1],
+                ],
+            ]
+        );
+
+        $liveId = 1;
+        $result = ReflectionUtils::invokeMethod(new LiveStatisticsServiceImpl($this->biz), 'generateStatisticsByLiveIdAndType', [$liveId, LiveStatisticsService::STATISTICS_TYPE_CHECKIN]);
+
+        $this->assertEquals($liveId, $result['liveId']);
+        $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_CHECKIN, $result['type']);
+    }
+
+    public function testGenerateStatisticsByLiveIdAndTypeWithVisitor()
+    {
+        $mockedProcessor = $this->mockProcessor();
+        ReflectionUtils::setStaticProperty(new LiveStatisticsProcessorFactory(), 'mockedProcessor', $mockedProcessor);
+
+        $this->biz['qiQiuYunSdk.s2b2cService'] = $this->mockBiz(
+            'qiQiuYunSdk.s2b2cService',
+            [
+                [
+                    'functionName' => 'getLiveRoomHistory',
+                    'returnValue' => [['code' => 200, 'data' => [
+                        ['time' => 1592394136, 'liveId' => 1, 'users' => [
+                            ['nickName' => 'admin_1', 'joinTime' => 1592394136, 'leaveTime' => 1592494136],
+                        ]],
+                    ]]],
+                    'withParams' => [1],
+                ],
+            ]
+        );
+
+        $this->mockBiz(
+            'Activity:LiveActivityService',
+            [
+                [
+                    'functionName' => 'getBySyncIdGTAndLiveId',
+                    'returnValue' => ['id' => 1],
+                ],
+            ]
+        );
+
+        $liveId = 1;
+        $result = ReflectionUtils::invokeMethod(new LiveStatisticsServiceImpl($this->biz), 'generateStatisticsByLiveIdAndType', [$liveId, LiveStatisticsService::STATISTICS_TYPE_VISITOR]);
+
+        $this->assertEquals($liveId, $result['liveId']);
+        $this->assertEquals(LiveStatisticsService::STATISTICS_TYPE_VISITOR, $result['type']);
+    }
+
     protected function createCheckinStatistics($liveId)
     {
-        return $this->getLiveStatisticsDao()->create(array('liveId' => $liveId, 'type' => LiveStatisticsService::STATISTICS_TYPE_CHECKIN, 'data' => array()));
+        return $this->getLiveStatisticsDao()->create(['liveId' => $liveId, 'type' => LiveStatisticsService::STATISTICS_TYPE_CHECKIN, 'data' => []]);
     }
 
     protected function createVisitorStatistics($liveId)
     {
-        return $this->getLiveStatisticsDao()->create(array('liveId' => $liveId, 'type' => LiveStatisticsService::STATISTICS_TYPE_VISITOR, 'data' => array()));
+        return $this->getLiveStatisticsDao()->create(['liveId' => $liveId, 'type' => LiveStatisticsService::STATISTICS_TYPE_VISITOR, 'data' => []]);
     }
 
     protected function mockProcessor()
     {
         return $this->mockBiz(
             'Mocked:MockedProcessor',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'handlerResult',
-                    'returnValue' => array(
-                        'data' => array(
+                    'returnValue' => [
+                        'data' => [
                             'success' => 1,
                             'detail' => 'test detail',
-                        ),
-                    ),
-                ),
-            )
+                        ],
+                    ],
+                ],
+            ]
         );
     }
 
@@ -229,17 +304,17 @@ class LiveStatisticsServiceTest extends BaseTestCase
         $mockObject = \Mockery::mock($liveClient);
 
         if (LiveStatisticsService::STATISTICS_TYPE_CHECKIN == $type) {
-            $mockObject->shouldReceive('getLiveRoomCheckinList')->times(1)->andReturn(array(
+            $mockObject->shouldReceive('getLiveRoomCheckinList')->times(1)->andReturn([
                 'code' => 0,
-                'data' => array(),
-            ));
+                'data' => [],
+            ]);
         }
 
         if (LiveStatisticsService::STATISTICS_TYPE_VISITOR == $type) {
-            $mockObject->shouldReceive('getLiveRoomHistory')->times(1)->andReturn(array(
+            $mockObject->shouldReceive('getLiveRoomHistory')->times(1)->andReturn([
                 'code' => 0,
-                'data' => array(),
-            ));
+                'data' => [],
+            ]);
         }
 
         $biz = $this->getBiz();
