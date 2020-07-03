@@ -35,8 +35,6 @@ class StudentExporter extends Exporter
             'user.fields.username_label',
             'user.fields.email_label',
             'task.learn_data_detail.createdTime',
-            'item_bank_exercise.export.answer_num',
-            'item_bank_exercise.export.accuracy',
             'user.fields.truename_label',
             'user.fields.gender_label',
             'user.fileds.qq',
@@ -85,8 +83,6 @@ class StudentExporter extends Exporter
             $member[] = $user['nickname']."\t";
             $member[] = $user['email'];
             $member[] = date('Y-n-d H:i:s', $exerciseMember['createdTime']);
-            $member[] = $exerciseMember['doneQuestionNum'];
-            $member[] = $exerciseMember['masteryRate'].'%';
             $member[] = $profile['truename'] ? $profile['truename'] : '-';
             $member[] = $gender[$profile['gender']];
             $member[] = $profile['qq'] ? $profile['qq'] : '-';
