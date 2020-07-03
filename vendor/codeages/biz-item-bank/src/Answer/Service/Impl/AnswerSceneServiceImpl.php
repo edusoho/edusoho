@@ -105,6 +105,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
 
     public function getAnswerSceneReport($id)
     {
+        $this->buildAnswerSceneReport($id);
         $answerReports = $this->getAnswerReportService()->findByAnswerSceneId($id);
         $answerRecords = $this->getAnswerRecordService()->findByAnswerSceneId($id);
         $answerSceneRerport = [
@@ -240,26 +241,13 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
 
     protected function getQuestionReportsByAnswerRecordIds($answerRecordIds)
     {
-        $limit = 50000;
-        $currentPage = 1;
-        $questionReports = [];
-
-        while (true) {
-            $searchQuestionReports = $this->getAnswerQuestionReportService()->search(
-                ['answer_record_ids' => $answerRecordIds],
-                [],
-                ($currentPage - 1) * $limit,
-                $limit,
-                ['status', 'response', 'question_id']
-            );
-            if (empty($searchQuestionReports) || $currentPage > 1000) {
-                break;
-            }
-            $questionReports = array_merge($questionReports, $searchQuestionReports);
-            ++$currentPage;
-        }
-
-        return ArrayToolkit::group($questionReports, 'question_id');
+        return ArrayToolkit::group($this->getAnswerQuestionReportService()->search(
+            ['answer_record_ids' => $answerRecordIds],
+            [],
+            0,
+            PHP_INT_MAX,
+            ['status', 'response', 'question_id']
+        ), 'question_id');
     }
 
     protected function getAnswerRecordIdsByAnswerSceneId($answerSceneId)

@@ -290,6 +290,14 @@ class AnswerSceneServiceTest extends IntegrationTestCase
                     ['user_id' => 2, 'status' => 'finished'],
                 ],
             ],
+            [
+                'functionName' => 'count',
+                'returnValue' => 100
+            ],
+            [
+                'functionName' => 'search',
+                'returnValue' => ['id' => 1]
+            ],
         ]);
 
         $answerSceneReport = $this->getAnswerSceneService()->getAnswerSceneReport(1);
