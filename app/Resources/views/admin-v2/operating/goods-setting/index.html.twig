@@ -5,7 +5,9 @@
 {% set menu = 'admin_v2_goods_setting' %}
 
 {% block main %}
-  <form class="form-horizontal">
+  {{ web_macro.flash_messages() }}
+
+  <form class="form-horizontal" id="goods-setting-form">
     <fieldset>
       <legend>{{ 'admin_v2.operating.goods_recommend_setting'|trans }}</legend>
       <div class="form-group">
@@ -13,11 +15,11 @@
           <label>{{ 'admin_v2.operating.goods_recommend_rule'|trans }}</label>
         </div>
         <div class="controls col-md-8 radios">
-          {{ radios('recommendRule', {
+          {{ radios('recommend_rule', {
             'hot':'admin_v2.operating.goods_recommend.hot'|trans,
             'latest':'admin_v2.operating.goods_recommend.latest'|trans,
             'label':'admin_v2.operating.goods_recommend.label'|trans
-          }, setting.recommendRule|default('hot')) }}
+          }, setting.recommend_rule|default('hot')) }}
           <div class="help-block">
             <span class="">{{ 'admin_v2.operating.goods_recommend.hot_tips'|trans }}</span>
             <br>
@@ -38,12 +40,14 @@
         </div>
         <div class="controls col-md-8 radios">
           <label>
-            <input type="checkbox" name="showCourseSales" value="1">
+            <input type="checkbox" name="show_course_sales" value="1"
+                   {% if setting.show_course_sales|default(0) == 1 %}checked{% endif %}>
             {{ 'admin_v2.operating.goods_show_sales.course'|trans }}
           </label>
 
           <label>
-            <input type="checkbox" name="showClassroomSales" value="1">
+            <input type="checkbox" name="show_classroom_sales" value="1"
+                   {% if setting.show_classroom_sales|default(0) == 1 %}checked{% endif %}>
             {{ 'admin_v2.operating.goods_show_sales.classroom'|trans }}
           </label>
         </div>
@@ -54,10 +58,10 @@
           <label>{{ 'admin_v2.operating.goods_show_data'|trans }}</label>
         </div>
         <div class="controls col-md-8 radios">
-          {{ radios('showData', {
-            'joinNumber':'admin_v2.operating.goods_show.join_number'|trans,
-            'visitorNumber':'admin_v2.operating.goods_show.visitor_number'|trans,
-          }, setting.showData|default('joinNumber')) }}
+          {{ radios('show_number_data', {
+            'join':'admin_v2.operating.goods_show.join_number'|trans,
+            'visitor':'admin_v2.operating.goods_show.visitor_number'|trans,
+          }, setting.show_number_data|default('join')) }}
         </div>
       </div>
     </fieldset>
@@ -69,10 +73,10 @@
           <label>{{ 'admin_v2.operating.goods_leading.join_group'|trans }}</label>
         </div>
         <div class="controls col-md-8 radios">
-          {{ radios('joinGroup', {
+          {{ radios('leading_join_enabled', {
             '1':'form.radio_btn.open'|trans,
             '0':'form.radio_btn.close'|trans,
-          }, setting.joinGroup|default('0')) }}
+          }, setting.leading_join_enabled|default('0')) }}
           <div class="help-block">
             {{ 'admin_v2.operating.goods_leading.join_group.tips'|trans }}
             {#            <a href="#">{{ 'admin_v2.operating.goods_leading.join_group.btn'|trans }}</a>#}
@@ -82,10 +86,11 @@
 
       <div class="form-group">
         <div class="col-md-3 control-label">
-          <label>{{ 'admin_v2.operating.goods_leading.join_group_label'|trans }}</label>
+          <label for="leading-label">{{ 'admin_v2.operating.goods_leading.join_group_label'|trans }}</label>
         </div>
         <div class="controls col-md-3">
-          <input class="form-control" type="text" name="leadingLabel" value="{{ setting.leadingLabel|default('') }}">
+          <input class="form-control" id="leading-label" type="text" name="leading[label]"
+                 value="{{ setting.leading.label|default('') }}">
           <div class="help-block">
             {#            <a href="#">{{ 'admin_v2.operating.goods_leading.join_group_label.example_btn'|trans }}</a>#}
           </div>
@@ -94,47 +99,51 @@
 
       <div class="form-group">
         <div class="col-md-3 control-label">
-          <label>{{ 'admin_v2.operating.goods_leading.label_content'|trans }}</label>
+          <label
+            for="leading-description">{{ 'admin_v2.operating.goods_leading.label_content.description'|trans }}</label>
         </div>
         <div class="controls col-md-8">
-          <div class="form-group">
-            <div class="col-md-2 text-left control-label">
-              <label>{{ 'admin_v2.operating.goods_leading.label_content.description'|trans }}</label>
-            </div>
-            <div class="controls col-md-8">
-              <input class="form-control" type="text" name="leadingLabel"
-                     value="{{ setting.leadingLabel|default('') }}">
-              <div class="help-block">
-                {{ 'admin_v2.operating.goods_leading.label_content.description_tips'|trans }}
-              </div>
-            </div>
+          <input class="form-control" type="text" name="leading[description]" id="leading-description"
+                 value="{{ setting.leading.description|default('') }}">
+          <div class="help-block">
+            {{ 'admin_v2.operating.goods_leading.label_content.description_tips'|trans }}
           </div>
+        </div>
+      </div>
 
-          <div class="form-group">
-            <div class="col-md-2 text-left control-label">
-              <label>{{ 'admin_v2.operating.goods_leading.label_content.qrcode'|trans }}</label>
-            </div>
-            <div class="controls col-md-8">
-              <div id="leading-qrcode-container">
-                {% if setting.leadingQrcode|default() %}<img src="{{ asset(setting.leadingQrcode) }}">{% endif %}
-              </div>
-              <a class="btn btn-default btn-sm btn-primary"
-                 id="leading-qrcode-upload"
-                 data-upload-token="{{ upload_token('system', 'image') }}"
-                 data-goto-url="{{ path('admin_v2_setting_logo_upload') }}">
-                {{ 'form.btn.upload'|trans }}</a>
-              <input type="hidden" id="leading-qrcode" name="leadingQrcode"
-                     value="{{ setting.leadingQrcode|default() }}"
-                     class="form-control">
-
-
-              <div class="help-block">
-                {{ 'admin_v2.operating.goods_leading.label_content.qrcode_tips'|trans }}
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="leading-qrcode">{{ 'admin_v2.operating.goods_leading.label_content.qrcode'|trans }}</label>
+        </div>
+        <div class="controls col-md-8">
+          <div class="cd-image-upload">
+            <img src="{% if setting.leading.qrcode|default() %}{{ filepath(setting.leading.qrcode) }}{% endif %}"
+                 alt=""
+                 class="cd-avatar cd-avatar-square cd-avatar-lg" id="leading-qrcode"/>
+            <div class="image-upload-mask">
+              <div class="image-upload-content">
+                <i
+                  class="cd-icon cd-icon-camera"></i>{{ 'admin_v2.operating.goods_leading.label_content.qecode_upload'|trans }}
               </div>
             </div>
+            <label class="image-upload-label">
+              <input id="cd-upload" type="file" name="file" class="cd-hide" data-target="#leading-qrcode"
+                     accept="{% if app.request.headers.get('User-Agent') matches '/MicroMessenger/' %}image/*{% else %}image/bmp,image/jpeg,image/png,image/jpg{% endif %}"
+                     data-token="{{ upload_token('default', 'image') }}"/>
+            </label>
           </div>
+          <input id="leading-qrcode" type="hidden" name="leading[qrcode]"
+                 value="{{ setting.leading.qrcode|default() }}"
+                 class="form-control">
+          <div class="help-block">
+            {{ 'admin_v2.operating.goods_leading.label_content.qrcode_tips'|trans }}
+          </div>
+        </div>
+      </div>
 
-          <div>{{ 'admin_v2.operating.goods_leading_setting.tips'|trans }}</div>
+      <div class="form-group">
+        <div class="col-md-offset-3 plm">
+          {{ 'admin_v2.operating.goods_leading_setting.tips'|trans }}
         </div>
       </div>
 
@@ -143,7 +152,10 @@
     <div class="form-group">
       <div class="col-md-3 control-label"></div>
       <div class="controls col-md-8">
-        <button type="submit" class="btn btn-primary">提交</button>
+        <a class="btn btn-primary js-setting-save-btn"
+           data-loading-text="{{ 'form.btn.save.submiting'|trans }}">
+          {{ 'form.btn.save'|trans }}
+        </a>
       </div>
     </div>
   </form>

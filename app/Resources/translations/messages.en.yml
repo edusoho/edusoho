@@ -9724,6 +9724,7 @@ admin_v2.operating.goods_leading.label_content: Boot label pop-up content settin
 admin_v2.operating.goods_leading.label_content.description: Boot description
 admin_v2.operating.goods_leading.label_content.description_tips: 'You can enter the relevant copy to guide the user, such as: free access to teaching materials into the group, free learning courses, etc.'
 admin_v2.operating.goods_leading.label_content.qrcode: QR code upload
+admin_v2.operating.goods_leading.label_content.qecode_upload: Upload QR code
 admin_v2.operating.goods_leading.label_content.qrcode_tips: 'Please upload pictures in jpg, gif, png format, the picture size is 1:1. It is recommended that the image size should not exceed 2MB.'
 admin_v2.operating.goods_leading_setting.tips: 'Note: After the number of WeChat groups exceeds 100, users will not be able to scan the code to enter the group and the WeChat group QR code is valid for 7 days. Please update the group QR code in time.'
 
