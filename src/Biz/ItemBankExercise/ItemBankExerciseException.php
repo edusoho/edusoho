@@ -6,37 +6,37 @@ use AppBundle\Common\Exception\AbstractException;
 
 class ItemBankExerciseException extends AbstractException
 {
-    const EXCEPTION_MODULE = 73;
+    const EXCEPTION_MODULE = 75;
 
-    const FORBIDDEN_LEARN = 4037301;
+    const FORBIDDEN_LEARN = 4037501;
 
-    const CHAPTER_ANSWER_IS_DOING = 5007302;
+    const CHAPTER_ANSWER_IS_DOING = 5007502;
 
-    const NOTFOUND_EXERCISE = 4047303;
+    const NOTFOUND_EXERCISE = 4047503;
 
-    const FORBIDDEN_MANAGE_EXERCISE = 4037304;
+    const FORBIDDEN_MANAGE_EXERCISE = 4037504;
 
-    const UNPUBLISHED_EXERCISE = 4037305;
+    const UNPUBLISHED_EXERCISE = 4037505;
 
-    const EXPIRYDAYS_REQUIRED = 5007306;
+    const EXPIRYDAYS_REQUIRED = 5007506;
 
-    const EXPIRYDAYS_INVALID = 5007307;
+    const EXPIRYDAYS_INVALID = 5007507;
 
-    const EXPIRYENDDATE_REQUIRED = 5007308;
+    const EXPIRYENDDATE_REQUIRED = 5007508;
 
-    const EXPIRYSTARTDATE_REQUIRED = 5007309;
+    const EXPIRYSTARTDATE_REQUIRED = 5007509;
 
-    const EXPIRY_DATE_SET_INVALID = 5007310;
+    const EXPIRY_DATE_SET_INVALID = 5007510;
 
-    const EXPIRYMODE_INVALID = 5007311;
+    const EXPIRYMODE_INVALID = 5007511;
 
-    const CHAPTER_EXERCISE_CLOSED = 5007312;
+    const CHAPTER_EXERCISE_CLOSED = 5007512;
 
-    const ASSESSMENT_EXERCISE_CLOSED = 5007313;
+    const ASSESSMENT_EXERCISE_CLOSED = 5007513;
 
-    const ASSESSMENT_ANSWER_IS_DOING = 5007314;
+    const ASSESSMENT_ANSWER_IS_DOING = 5007514;
 
-    const ASSESSMENT_EXCEED = 5007315;
+    const ASSESSMENT_EXCEED = 5007515;
 
     const NOTFOUND_MODULE = 4047316;
 
@@ -55,10 +55,9 @@ class ItemBankExerciseException extends AbstractException
         5007310 => 'exception.item_bank_exercise.expirydate_end_later_than_start',
         5007311 => 'exception.item_bank_exercise.expirymode_invalid',
         5007312 => 'exception.item_bank_exercise.chapter_exercise_closed',
-        5007313 => 'exception.item_bank_exercise.chapter_exercise_closed',
-        5007314 => 'exception.item_bank_exercise.assessment_answer_is_doing',
-        5007315 => 'exception.item_bank_exercise.module.exceeded_number',
-        4047316 => 'exception.item_bank_exercise.exercise.module_not_found',
-        5007317 => 'exception.item_bank_exercise.assessment_exercise_exist',
+        5007313 => 'exception.item_bank_exercise.assessment_answer_is_doing',
+        5007314 => 'exception.item_bank_exercise.module.exceeded_number',
+        4047315 => 'exception.item_bank_exercise.exercise.module_not_found',
+        5007316 => 'exception.item_bank_exercise.assessment_exercise_exist',
     ];
 }

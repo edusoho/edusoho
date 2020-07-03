@@ -63,7 +63,7 @@ class AssessmentExerciseServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Biz\ItemBankExercise\ItemBankExerciseException
-     * @expectedExceptionCode 4037301
+     * @expectedExceptionCode 4037501
      */
     public function testStartAnswer_whenCannotLearningExercise_thenThrowItemBankExerciseException()
     {
@@ -75,7 +75,7 @@ class AssessmentExerciseServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Biz\ItemBankExercise\ItemBankExerciseException
-     * @expectedExceptionCode 5007313
+     * @expectedExceptionCode 5007513
      */
     public function testStartAnswer_whenAssessmentEnableFalse_thenThrowItemBankExerciseException()
     {
@@ -101,7 +101,7 @@ class AssessmentExerciseServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Biz\ItemBankExercise\ItemBankExerciseException
-     * @expectedExceptionCode 5007314
+     * @expectedExceptionCode 5007514
      */
     public function testStartAnswer_whenLatestRecordIsDoing_thenThrowItemBankExerciseException()
     {

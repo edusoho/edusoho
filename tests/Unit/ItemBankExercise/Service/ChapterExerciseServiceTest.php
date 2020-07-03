@@ -32,7 +32,7 @@ class ChapterExerciseServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Biz\ItemBankExercise\ItemBankExerciseException
-     * @expectedExceptionCode 4037301
+     * @expectedExceptionCode 4037501
      */
     public function testStartAnswer_whenCannotLearningExercise_thenThrowItemBankExerciseException()
     {
@@ -54,7 +54,7 @@ class ChapterExerciseServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Biz\ItemBankExercise\ItemBankExerciseException
-     * @expectedExceptionCode 5007312
+     * @expectedExceptionCode 5007512
      */
     public function testStartAnswer_whenChapterEnableFalse_thenThrowItemBankExerciseException()
     {
@@ -91,7 +91,7 @@ class ChapterExerciseServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Biz\ItemBankExercise\ItemBankExerciseException
-     * @expectedExceptionCode 5007302
+     * @expectedExceptionCode 5007502
      */
     public function testStartAnswer_whenLatestRecordIsDoing_thenThrowItemBankExerciseException()
     {
