@@ -17,6 +17,11 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
         return $this->getItemBankAssessmentExerciseDao()->findByModuleId($moduleId);
     }
 
+    public function findByExerciseIdAndModuleId($exerciseId, $moduleId)
+    {
+        return $this->getItemBankAssessmentExerciseDao()->findByExerciseIdAndModuleId($exerciseId, $moduleId);
+    }
+
     public function search($conditions, $sort, $start, $limit, $columns = [])
     {
         return $this->getItemBankAssessmentExerciseDao()->search($conditions, $sort, $start, $limit, $columns);

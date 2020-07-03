@@ -98,7 +98,7 @@ class AssessmentExerciseController extends BaseController
         ]);
     }
 
-    public function assessmentAddListAction(Request $request, $exerciseId, $moduleId)
+    public function assessmentAddListAction(Request $request, $exerciseId, $moduleId, $isPage)
     {
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
 
@@ -113,6 +113,10 @@ class AssessmentExerciseController extends BaseController
             'displayable' => 1,
         ];
 
+        $assessmentExercises = $this->getAssessmentExerciseService()->findByExerciseIdAndModuleId($exerciseId, $moduleId);
+        $assessmentIds = ArrayToolkit::column($assessmentExercises,'assessmentId');
+        $conditions['ids'] = !empty($assessmentIds) ?  $assessmentIds : [];
+
         $paginator = new Paginator(
             $request,
             $this->getAssessmentService()->countAssessments($conditions),
@@ -126,7 +130,8 @@ class AssessmentExerciseController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('item-bank-exercise/assessment-exercise/assessment-modal.html.twig', [
+        $route = $isPage ? 'item-bank-exercise/assessment-exercise/assessment-list-tr.html.twig' : 'item-bank-exercise/assessment-exercise/assessment-modal.html.twig';
+        return $this->render($route, [
             'exercise' => $exercise,
             'questionBank' => $questionBank,
             'testpapers' => $assessments,

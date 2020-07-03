@@ -3,8 +3,8 @@ import Selector from "../../../question-bank/common/selector";
 class BatchAddAssessmentExercise {
   constructor() {
     this.table = $('.js-testpaper-html');
-    this.element = $('#batch-add');
     this.selector = new Selector(this.table);
+    this.renderUrl = $('#renderUrl').data('url');
     this.init();
   }
 
@@ -13,8 +13,12 @@ class BatchAddAssessmentExercise {
   }
 
   initEvent() {
-    this.element.on('click', (event) => {
+    this.table.on('click', '#batch-add', (event) => {
       this.onBatchAdd(event);
+    });
+
+    this.table.on('click', '.pagination li', (event) => {
+      this.onClickPagination(event);
     });
   }
 
@@ -44,6 +48,44 @@ class BatchAddAssessmentExercise {
         cd.message({type: 'danger', message: Translator.trans('site.add_fail_hint')});
       });
     });
+  }
+
+  onClickPagination(event) {
+    let $target = $(event.currentTarget);
+    this.table.find('.js-page').val($target.data('page'));
+    this.renderTable(true);
+    event.preventDefault();
+  }
+
+  renderTable(isPaginator) {
+    isPaginator || this._resetPage();
+    let self = this;
+    let conditions = this.table.find('[data-role="search-conditions"]').serialize() + '&page=' + this.table.find('.js-page').val();
+    this._loading();
+    $.ajax({
+      type: 'GET',
+      url: this.renderUrl,
+      data: conditions
+    }).done(function(resp){
+      self.table.html(resp);
+      self.table.updateTable();
+    }).fail(function(){
+      self._loaded_error();
+    });
+  }
+
+  _resetPage() {
+    this.table.find('.js-page').val(1);
+  }
+
+  _loading() {
+    let loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">' + Translator.trans('site.loading') + '</div>';
+    this.table.html(loading);
+  }
+
+  _loaded_error() {
+    let loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">' + Translator.trans('site.loading_error') + '</div>';
+    this.table.html(loading);
   }
 }
 

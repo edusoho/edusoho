@@ -6,6 +6,8 @@ interface AssessmentExerciseService
 {
     public function findByModuleId($moduleId);
 
+    public function findByExerciseIdAndModuleId($exerciseId, $moduleId);
+
     public function search($conditions, $sort, $start, $limit, $columns = []);
 
     public function count($conditions);

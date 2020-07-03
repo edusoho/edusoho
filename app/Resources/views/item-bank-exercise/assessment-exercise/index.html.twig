@@ -34,10 +34,9 @@
           <a href="#modal" data-toggle="modal" data-url="{{ path('item_bank_exercise_manage_assessment_module_create', {exerciseId: exercise.id}) }}"><i class="cd-icon cd-icon-add"></i>{{ 'item_bank_exercise.assessment_exercise.add_new_module'|trans }}</a>
         </li>
       </ul>
-      <div class="col-sm-3 pull-right">
-        <a href="#modal" data-toggle="modal" id="add-testpaper" data-url="{{ path('item_bank_exercise_manage_assessment_add_list', {exerciseId: exercise.id, moduleId: moduleId}) }}" class="cd-btn cd-btn-ghost-primary">{{ 'item_bank_exercise.assessment_exercise.add_assessment'|trans }}</a>
-        <button class="cd-btn cd-btn-ghost-primary mlm js-batch-delete" data-url="{{ path('item_bank_exercise_manage_batch_delete_assessment', {exerciseId: exercise.id}) }}">{{ 'item_bank_exercise.assessment_exercise.remove_assessment'|trans }}</button>
-      </div>
+    <div class="col-sm-3 pull-right">
+      <a href="#modal" data-toggle="modal" id="add-testpaper" data-url="{{ path('item_bank_exercise_manage_assessment_add_list', {exerciseId: exercise.id, moduleId: moduleId, isPage: 0}) }}" class="cd-btn cd-btn-ghost-primary">{{ 'item_bank_exercise.assessment_exercise.add_assessment'|trans }}</a>
+      <button class="cd-btn cd-btn-ghost-primary mlm">{{ 'item_bank_exercise.assessment_exercise.remove_assessment'|trans }}</button>
     </div>
     <div class="js-assessment-container">
       <table class="table cd-table">

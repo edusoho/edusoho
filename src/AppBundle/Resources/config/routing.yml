@@ -3517,7 +3517,7 @@ item_bank_exercise_manage_assessment_module_create:
     defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:createModule}
 
 item_bank_exercise_manage_assessment_add_list:
-    path: /item_bank_exercise/{exerciseId}/assessment/{moduleId}/add/list
+    path: /item_bank_exercise/{exerciseId}/assessment/{moduleId}/add/list/{isPage}
     defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:assessmentAddList}
 
 item_bank_exercise_manage_add_assessment:
