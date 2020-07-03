@@ -17,35 +17,7 @@
       @close="onClose"
       class="detail-plan__popup plan-popup"
     >
-      <div class="plan-popup__title">
-        <span></span>
-        选择教学计划
-      </div>
-      <div class="plan-popup__type">
-        <span
-          class="plan-popup__type__item"
-          v-for="plan in plans"
-          :key="plan.id"
-          :class="{ active: plan.active }"
-          @click="handleClick(plan)"
-        >{{ plan.title }}</span>
-      </div>
-
-      <div class="plan-popup__other">
-        <!-- 学习有效期 -->
-        <div class="popup-other clearfix">
-          <div class="pull-left popup-other__left">学习有效期</div>
-          <div class="pull-left popup-other__right" v-html="currentPlan.expiryMode"></div>
-        </div>
-        <!-- 承诺服务 -->
-        <div class="popup-other clearfix" v-if="currentPlan.services">
-          <div class="pull-left popup-other__left">承诺服务</div>
-          <div class="pull-left popup-other__right">
-            <span class="popup-other__right__promise" v-for="(item, index) in currentPlan.services" :key="index">练</span>
-          </div>
-        </div>
-      </div>
-      <div class="plan-popup__buy">立即购买</div>
+      
     </van-popup>
 
     <!-- 学习有效期 -->

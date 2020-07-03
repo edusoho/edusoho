@@ -140,16 +140,245 @@
 }
 
 .goods {
+  p {
+    margin: 0;
+  }
   background-color: #F5F5F5;
-  .goods-detail {
-    .goods-detail__banner {
-      .height(210);
-      img {
-        width: 100%;
-        height: 100%;
+  .goods-banner {
+    .height(210);
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+// 优惠活动
+.goods-discount {
+  .height(46);
+  // 优惠价格
+  .goods-discount__left {
+    .width(240);
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255, 88, 115, 1) 0%, rgba(255, 127, 88, 1) 100%);
+    color: #fff;
+    text-align: center;
+    .line-height(46);
+    .text,
+    .price {
+      .margin-right(5);
+      .font-size(18);
+      font-weight: 500;
+    }
+    .original-price {
+      .font-size(14);
+    }
+  }
+  // 倒计时
+  .goods-discount__right {
+    .width(135);
+    height: 100%;
+    text-align: center;
+    background-color: #F5F5F5;
+    .text {
+      .margin-top(4);
+      .font-size(12);
+      .line-height(16);
+      color: #666;
+    }
+    .count-down {
+      .height(22);
+      color: #000;
+      .font-size(12);
+      .line-height(22);
+      .day {
+        .margin-right(5);
+        color: #FF5C3B;
+        .font-size(16);
+      }
+      .item {
+        display: inline-block;
+        .width(20);
+        .height(20);
+        .margin-right(5);
+        color: #fff;
+        background-color: #FF7262;
+        border-radius: 4px;
       }
     }
   }
+}
+
+// 名称、价格、在学人数
+.goods-information {
+  .padding(16);
+  background-color: #fff;
+  .goods-information__title {
+    .font-size(16);
+    font-weight: 500;
+    color: #333;
+  }
+  .goods-information__price {
+    .margin-top(8);
+    .font-size(16);
+    color: #999;
+    .price {
+      .margin(0, 3, 0, 5);
+      .font-size(24);
+      font-weight: 600;
+      color: #FF5C3B;
+    }
+    .study-num {
+      position: relative;
+      .top(5);
+    }
+    .original-price {
+      .margin-top(4);
+      .font-size(12);
+    }
+  }
+}
+
+// 教学计划、有效期、承诺服务
+.goods-specs {
+  .margin-top(8);
+  .padding(14, 16);
+  .line-height(20);
+  background-color: #fff;
+  .goods-plan__plan {
+    .margin-bottom(12);
+    &:last-child {
+      margin-bottom: 0;
+    }
+    .plan-left {
+      .width(72);
+      .font-size(12);
+      color: #999;
+    }
+    .plan-right {
+      position: relative;
+      .width(271);
+      .font-size(14);
+      color: #666;
+      .plan-right__icon {
+        .font-size(14);
+        position: absolute;
+        right: 0;
+        .top(3);
+      }
+      .plan-right__promise {
+        .padding(2, 4);
+        .margin-right(8);
+        .font-size(12);
+        background-color: #03C777;
+        color: #fff;
+        border-radius: 4px;
+      }
+    }
+  }
+  // 切换教学计划
+  .popup-mask {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    background: rgba(0, 0, 0, .4)
+  }
+  .specs-popup {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    .padding(16);
+    width: 100%;
+    max-height: 100%;
+    z-index: 2000;
+    background-color: #fff;
+    border-radius: 12px 12px 0 0;
+    transform: translateY(100%);
+    transition: all 0.3s ease;
+    &.active {
+      transform: translateY(0);
+    }
+    .specs-popup__title {
+      .font-size(14);
+      color: #333;
+      .line-height(20);
+      span {
+        position: relative;
+        .top(1);
+        display: inline-block;
+        .width(4);
+        .height(12);
+        background-color: #03C777;
+        border-radius: 2px;
+      }
+    }
+    .specs-popup__type {
+      .margin-top(4);
+      .specs-popup__type__item {
+        display: inline-block;
+        .padding(4, 8);
+        .margin(12, 8, 0 ,0);
+        .border(1, rgba(225, 225, 225, 1));
+        .font-size(14);
+        color: #999;
+        border-radius: 4px;
+        &.active {
+          .border(1, #03C777);
+          background: rgba(3, 199, 119, 0.1);
+        }
+      }
+    }
+    .specs-popup__other {
+      .padding(16);
+      .margin-top(16);
+      background-color: #F9F9F9;
+      border-radius: 4px;
+      .popup-other {
+        .margin-top(16);
+        .line-height(20);
+        .font-size(14);
+        &:first-child {
+          margin-top: 0;
+        }
+        .popup-other__left {
+          .width(102);
+          color: #999;
+        }
+        .popup-other__right {
+          .width(209);
+          color: #666;
+          .popup-other__right__promise {
+            .padding(2, 4);
+            .margin-right(8);
+            .font-size(12);
+            background-color: #03C777;
+            color: #fff;
+            border-radius: 4px;
+          }
+        }
+      }
+    }
+    .specs-popup__buy {
+      .margin-top(24);
+      .height(48);
+      border-radius: 24px;
+      background: rgba(255, 118, 95, 1);
+      color: #fff;
+      text-align: center;
+      .line-height(48);
+      .font-size(16);
+      font-weight: 500;
+    }
+  }
+}
+
+
+
+.goods {
+ 
   .goods-info {
     .padding-bottom(48);
     .margin-top(8);
@@ -206,5 +435,5 @@
   }
 }
 
-@import './detail.less';
-@import './info.less';
+// @import './goods.less';
+// @import './info.less';
