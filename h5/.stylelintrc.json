@@ -1,0 +1,16 @@
+{
+  "extends": ["stylelint-config-standard", "stylelint-config-rational-order"],
+  "plugins": ["stylelint-scss", "stylelint-order"],
+  "rules": {
+    "at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": ["extend", "ignores","include","mixin","function","return"]
+      }
+    ],
+    "indentation": "tab",
+    "number-leading-zero": null,
+    "font-family-no-missing-generic-family-keyword": null,
+    "no-descending-specificity": null
+  }
+}

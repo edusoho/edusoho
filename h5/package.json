@@ -11,11 +11,32 @@
     "build": "vue-cli-service build --mode prod h5 && vue-cli-service build --mode prod admin",
     "analyze:h5": "vue-cli-service build --mode prod h5 --report",
     "analyze:admin": "vue-cli-service build --mode prod admin --report",
-    "lint": "vue-cli-service lint --mode  h5",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "lint": "eslint  --ext .js --ext .jsx --ext .vue src/",
+    "lint:fix": "eslint  --fix  --ext .js --ext .jsx --ext .vue src/",
+    "style-lint": "stylelint  src/**/*.scss",
+    "style-lint:fix": "stylelint src/**/*.scss --fix",
+    "format-code": "prettier-eslint --write \"src/**/*.js\" \"src/**/*.vue\""
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.scss": [
+      "stylelint --syntax=scss --fix"
+    ],
+    "*.{js,vue}": [
+      "eslint  --fix --ext .js --ext .jsx --ext .vue",
+      "prettier --write",
+      "git add"
+    ]
   },
   "dependencies": {
     "@babel/core": "7.0.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.10.1",
+    "@babel/plugin-transform-arrow-functions": "^7.7.4",
     "@babel/preset-env": "^7.6.3",
     "@vue/cli-plugin-babel": "^3.12.0",
     "@vue/cli-plugin-eslint": "^3.12.0",
@@ -41,16 +62,23 @@
     "element-ui": "^2.4.6",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^11.3.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-standard": "^14.1.1",
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-import-resolver-webpack": "^0.8.3",
     "eslint-loader": "^1.7.1",
-    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-import": "^2.21.2",
     "eslint-plugin-jsfix": "^1.0.3",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.1.0",
-    "eslint-plugin-vue": "^5.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-vue": "^5.2.3",
     "eslint-plugin-vuefix": "^0.2.0",
     "file-loader": "^1.1.4",
     "html-webpack-plugin": "3.2.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
     "load-script": "^1.0.0",
     "node-sass": "^4.12.0",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
@@ -77,14 +105,23 @@
     "vue-template-compiler": "^2.6.11",
     "vuedraggable": "^2.16.0",
     "vuex": "^3.0.1",
-    "webpack": "^4.42.1",
-    "@babel/plugin-proposal-optional-chaining": "^7.10.1",
-    "@babel/plugin-transform-arrow-functions": "^7.7.4"
+    "webpack": "^4.42.1"
   },
   "devDependencies": {
     "@vue/eslint-config-prettier": "^5.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-jest": "^23.6.0",
-    "chromedriver": "^2.27.2"
+    "chromedriver": "^2.27.2",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-vue": "^5.2.3",
+    "stylelint": "^13.6.1",
+    "stylelint-config-rational-order": "^0.1.2",
+    "stylelint-config-standard": "^20.0.0",
+    "stylelint-order": "^4.1.0",
+    "stylelint-scss": "^3.18.0"
   }
 }

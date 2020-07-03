@@ -51,7 +51,11 @@
     </div>
     <!-- 由于在安卓端弹出层会被视频遮挡，因此在弹出层显示时，隐藏视频，显示课程封面图，判断字段 finishDialog-->
     <div
-      v-show="['video', 'audio'].includes(sourceType) && !isEncryptionPlus && !finishDialog"
+      v-show="
+        ['video', 'audio'].includes(sourceType) &&
+          !isEncryptionPlus &&
+          !finishDialog
+      "
       id="course-detail__head--video"
       ref="video"
     />
@@ -94,21 +98,21 @@
   </div>
 </template>
 <script>
-import loadScript from "load-script";
-import { mapState } from "vuex";
-import Api from "@/api";
-import { Toast, Dialog } from "vant";
-import countDown from "&/components/e-marketing/e-count-down/index";
-import tagLink from "&/components/e-tag-link/e-tag-link";
-import finishDialog from "../components/finish-dialog";
-import qs from "qs";
-import report from "@/mixins/course/report";
+import loadScript from 'load-script';
+import { mapState } from 'vuex';
+import Api from '@/api';
+import { Toast, Dialog } from 'vant';
+import countDown from '&/components/e-marketing/e-count-down/index';
+import tagLink from '&/components/e-tag-link/e-tag-link';
+import finishDialog from '../components/finish-dialog';
+import qs from 'qs';
+import report from '@/mixins/course/report';
 
 export default {
   components: {
     countDown,
     tagLink,
-    finishDialog
+    finishDialog,
   },
   mixins: [report],
   props: {
@@ -116,12 +120,12 @@ export default {
       type: Object,
       default: () => {
         return {};
-      }
+      },
     },
     seckillActivities: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
   data() {
     return {
@@ -129,72 +133,69 @@ export default {
       learnMode: false,
       enableFinish: false,
       isEncryptionPlus: false,
-      mediaOpts: {},
       isCoverOpen: false,
       isPlaying: false,
       player: null,
       counting: true,
       isEmpty: false,
+      textContent: null,
       tagData: {
         // 分销标签信息
         earnings: 0,
         isShow: false,
-        link: "",
-        className: "course-tag",
-        minDirectRewardRatio: 0
+        link: '',
+        className: 'course-tag',
+        minDirectRewardRatio: 0,
       },
       timeChangingList: [],
       bindAgencyRelation: {}, // 分销代理商绑定信息
       finishResult: null,
-      finishDialog: false, //下一课时弹出模态框
-      lastWatchTime: 0, //上一次暂停上报的视频时间
-      nowWatchTime: 0 //当前刚看时间计时
+      finishDialog: false, // 下一课时弹出模态框
+      lastWatchTime: 0, // 上一次暂停上报的视频时间
+      nowWatchTime: 0, // 当前刚看时间计时
     };
   },
   computed: {
-    ...mapState(["DrpSwitch"]),
-    ...mapState("course", {
+    ...mapState(['DrpSwitch']),
+    ...mapState('course', {
       sourceType: state => state.sourceType,
       selectedPlanId: state => state.selectedPlanId,
       taskId: state => state.taskId,
       details: state => state.details,
       joinStatus: state => state.joinStatus,
-      user: state => state.user,
-      allTask: state => state.allTask
+      user: state => state.joinStatus?.user || {},
+      allTask: state => state.allTask,
     }),
-    textContent() {
-      return this.mediaOpts.text;
-    },
     showLearnBtn() {
-      return  this.joinStatus && ["video", "audio"].includes(this.sourceType);
-    }
+      return this.joinStatus && ['video', 'audio'].includes(this.sourceType);
+    },
   },
   watch: {
     taskId(value, oldValue) {
       // 未登录情况下，详情页面不需要初始化播放器
-      if (this.$route.name === "course" && !this.joinStatus) return;
+      if (this.$route.name === 'course' && !this.joinStatus) return;
       if (value > 0) {
         this.initHead();
       }
     },
-    selectedPlanId() {
+    selectedPlanId(value) {
       // 未登录情况下，详情页面不需要初始化播放器
-      if (this.$route.name === "course" && !this.joinStatus) return;
+      if (this.$route.name === 'course' && !this.joinStatus) return;
       if (value > 0) {
         this.initHead();
       }
-    }
+    },
   },
   created() {
     this.initHead();
     this.showTagLink();
   },
   beforeDestroy() {
-    //销毁播放器
-    if (this.player) {
-      this.player.eventManager = {};
+    // 销毁播放器
+    if (this.player && this.player.destory) {
+      this.player.destory();
     }
-    //清除计时器
+    // 清除计时器
     this.clearComputeWatchTime();
   },
   /*
@@ -206,23 +207,23 @@ export default {
       if (this.finishCondition) {
         this.$toast({
           message: this.finishCondition.text,
-          position: "bottom"
+          position: 'bottom',
         });
       }
     },
     isAndroid() {
-      return !!navigator.userAgent.match(new RegExp("android", "i"));
+      return !!navigator.userAgent.match(new RegExp('android', 'i'));
     },
     initHead() {
-      if (["video", "audio"].includes(this.sourceType)) {
+      if (['video', 'audio'].includes(this.sourceType)) {
         window.scrollTo(0, 0);
-         if(this.joinStatus){
+        if (this.joinStatus) {
           this.initReport();
           this.clearComputeWatchTime();
           this.lastWatchTime = 0;
           this.nowWatchTime = 0;
         }
-        this.initPlayer();
+        this.initData();
       }
     },
     initReport() {
@@ -236,10 +237,10 @@ export default {
         this.finishCondition = res.activity && res.activity.finishCondition;
       });
     },
-    //直播视频回放刚进入课程就算学习完成
-    IsLivePlayback(){
-      if(this.allTask[this.taskId].type==="live"){
-         this.reprtData("finish");
+    // 直播视频回放刚进入课程就算学习完成
+    IsLivePlayback() {
+      if (this.allTask[this.taskId].type === 'live') {
+        this.reprtData('finish');
       }
     },
     viewAudioDoc() {
@@ -260,166 +261,171 @@ export default {
         ? {
             query: {
               courseId: this.selectedPlanId,
-              taskId: this.taskId
+              taskId: this.taskId,
             },
             params: {
-              preview: 1
-            }
+              preview: 1,
+              version: 'escloud',
+            },
           }
         : {
             query: {
               courseId: this.selectedPlanId,
-              taskId: this.taskId
-            }
+              taskId: this.taskId,
+            },
+            params: {
+              version: 'escloud',
+            },
           };
     },
-    async initPlayer() {
-      this.$refs.video && (this.$refs.video.innerHTML = "");
+    initData() {
+      this.$refs.video && (this.$refs.video.innerHTML = '');
+      // 是否为无限制任务
       this.enableFinish = !!parseInt(this.details.enableFinish);
-      const player = await Api.getMedia(this.getParams()).catch(err => {
-        const courseId = Number(this.details.id);
-        // 后台课程设置里设置了不允许未登录用户观看免费试看的视频
-        if (err.code == 4040101) {
-          this.$router.push({
-            name: "login",
-            query: {
-              redirect: `/course/${courseId}`
-            }
-          });
-        }
-        Toast.fail(err.message);
-      });
-      if (!player) return; // 如果没有初始化成功
-
-      if (player.mediaType === "video" && !player.media.url) {
-        Toast("课程内容准备中，请稍候查看");
-        return;
+      // 销毁播放器
+      if (this.player && this.player.destory) {
+        this.player.destory();
       }
-
-      const timelimit = player.media.timeLimit;
-
-      this.isEncryptionPlus = player.media.isEncryptionPlus;
-      if (player.media.isEncryptionPlus) {
-        Toast("该浏览器不支持云视频播放，请下载App");
-        return;
-      }
+      this.getData();
+    },
+    getData() {
+      Api.getMedia(this.getParams())
+        .then(res => {
+          if (res.mediaType === 'audio') {
+            this.formateAudioData(res);
+          } else if (res.mediaType === 'video') {
+            this.formateVedioData(res);
+          }
+        })
+        .catch(err => {
+          const courseId = Number(this.details.id);
+          // 后台课程设置里设置了不允许未登录用户观看免费试看的视频
+          if (err.code == 4040101) {
+            this.$router.push({
+              name: 'login',
+              query: {
+                redirect: `/course/${courseId}`,
+              },
+            });
+          }
+          Toast.fail(err.message);
+        });
+    },
+    formateAudioData(player) {
       const media = player.media;
+      if (!media.isFinishConvert) {
+        Toast('课程内容准备中，请稍候查看');
+        return;
+      }
+      // 不支持浏览器判断
+      this.isEncryptionPlus = media.isEncryptionPlus;
+      if (media.isEncryptionPlus) {
+        Toast('该浏览器不支持云视频播放，请下载App');
+        return;
+      }
+      // 音频文稿
+      this.textContent = media.text;
       const options = {
-        id: "course-detail__head--video",
+        id: 'course-detail__head--video',
         user: this.user,
-        playlist: media.url,
+        resNo: media.resNo,
+        token: media.token,
         autoplay: true,
-        disableFullscreen: this.sourceType === "audio",
-        isAudio: this.sourceType === "audio",
-        strictMode: !media.supportMobile, // 视频是否加密 1表示普通  0表示加密
-        pluck: {
-          timelimit: timelimit
+        disableDataUpload: true,
+        watermark: {
+          pos: 'top.right',
+          width: 30,
+          height: 30,
         },
-        resId: media.resId,
-        disableDataUpload: true
-        // poster: "https://img4.mukewang.com/szimg/5b0b60480001b95e06000338.jpg"
       };
-      // 试看判断
+      this.$store.commit('UPDATE_LOADING_STATUS', true);
+      this.initPlayer(options);
+    },
+    formateVedioData(player) {
+      const media = player.media;
+      const timelimit = media.timeLimit;
+      // 视频试看判断
       const canTryLookable =
         !this.joinStatus && Number(this.details.tryLookable);
+      // 不支持浏览器判断
+      if (!media.isFinishConvert) {
+        Toast('课程内容准备中，请稍候查看');
+        return;
+      }
+      this.isEncryptionPlus = media.isEncryptionPlus;
+      if (media.isEncryptionPlus) {
+        Toast('该浏览器不支持云视频播放，请下载App');
+        return;
+      }
+
+      const options = {
+        id: 'course-detail__head--video',
+        user: this.user,
+        autoplay: true,
+        disableFullscreen: this.sourceType === 'audio',
+        strictMode: !media.supportMobile, // 视频是否加密 1表示普通  0表示加密
+        pluck: {
+          timelimit: timelimit,
+        },
+        resNo: media.resNo,
+        disableDataUpload: true,
+        watermark: {
+          pos: 'top.right',
+          width: 30,
+          height: 30,
+        },
+        token: media.token,
+      };
+
       if (!canTryLookable) {
         delete options.pluck;
       }
-
-      this.mediaOpts = Object.assign(
-        {
-          text: player.media.text
-        },
-        options
-      );
-
-      this.$store.commit("UPDATE_LOADING_STATUS", true);
-      this.loadPlayerSDK().then(SDK => {
-        this.$store.commit("UPDATE_LOADING_STATUS", false);
-        if (this.player) {
-          this.player.taskId = -1;
-        }
-        if (this.player && this.player.eventManager) {
-          this.player.eventManager = {};
-        }
-        const player = new SDK(options);
-        player.taskId = this.taskId;
+      this.$store.commit('UPDATE_LOADING_STATUS', true);
+      this.initPlayer(options);
+    },
+    initPlayer(options) {
+      const playerSDKUri =
+        '//service-cdn.qiqiuyun.net/js-sdk-v2/sdk-v1.js?' +
+        ~~(Date.now() / 1000 / 60);
+      loadScript(playerSDKUri, err => {
+        this.$store.commit('UPDATE_LOADING_STATUS', false);
+        if (err) throw err;
+        const player = new window.QiQiuYun.Player(options);
         this.player = player;
-        player.on("ready", () => {
-          if (player.taskId !== this.taskId) {
-            return;
-          }
-        });
-        player.on("unablePlay", () => {
+        player.on('unablePlay', () => {
           // 加密模式下在不支持的浏览器下提示
-          this.$refs.video.innerHTML = "";
+          this.$refs.video.innerHTML = '';
           Dialog.alert({
             message:
-              "当前内容不支持该手机浏览器观看，建议您使用Chrome、Safari浏览器观看。"
+              '当前内容不支持该手机浏览器观看，建议您使用Chrome、Safari浏览器观看。',
           }).then(() => {});
         });
-        player.on("playing", () => {
+        player.on('ready', () => {});
+        player.on('playing', () => {
           this.isPlaying = true;
-          if (player.taskId !== this.taskId) {
-            return;
-          }
           this.computeWatchTime();
         });
-        player.on("paused", e => {
+        player.on('paused', e => {
           this.isPlaying = false;
-          if (player.taskId !== this.taskId) {
-            return;
-          }
           this.clearComputeWatchTime();
           const watchTime = parseInt(this.nowWatchTime - this.lastWatchTime);
           this.lastWatchTime = this.nowWatchTime;
-          this.reprtData("doing", true, watchTime);
+          this.reprtData('doing', true, watchTime);
         });
-        player.on("datapicker.start", e => {
-          if (player.taskId !== this.taskId) {
-            return;
-          }
-        });
-        player.on("ended", () => {
-          if (player.taskId !== this.taskId) {
-            return;
-          }
+        player.on('ended', () => {
           this.clearComputeWatchTime();
-          if (this.finishCondition && this.finishCondition.type === "end") {
-            this.reprtData("finish");
-          }
-        });
-        player.on("timeupdate", e => {
-          if (player.taskId !== this.taskId) {
-            return;
+          if (this.finishCondition && this.finishCondition.type === 'end') {
+            this.reprtData('finish');
           }
         });
       });
-    },
-    loadPlayerSDK() {
-      if (!window.VideoPlayerSDK) {
-        const VEDIOURL =
-          "//service-cdn.qiqiuyun.net/js-sdk/video-player/sdk-v1.js?v=";
-        const scrptSrc = VEDIOURL + Date.now() / 1000 / 60;
-        // Cache SDK for 1 min.
-
-        return new Promise((resolve, reject) => {
-          loadScript(scrptSrc, err => {
-            if (err) {
-              reject(err);
-            }
-            resolve(window.VideoPlayerSDK);
-          });
-        });
-      }
-      return Promise.resolve(window.VideoPlayerSDK);
     },
     expire() {
       this.counting = false;
     },
     sellOut() {
       this.isEmpty = true;
-      this.$emit("goodsEmpty");
+      this.$emit('goodsEmpty');
     },
     showTagLink() {
       if (!this.DrpSwitch) {
@@ -445,37 +451,37 @@ export default {
         this.tagData.minDirectRewardRatio = data.minDirectRewardRatio;
 
         const params = {
-          type: "course",
+          type: 'course',
           id: this.details.id,
-          merchant_id: this.drpSetting.merchantId
+          merchant_id: this.drpSetting.merchantId,
         };
 
         this.tagData.link =
-          this.drpSetting.distributor_template_url + "?" + qs.stringify(params);
+          this.drpSetting.distributor_template_url + '?' + qs.stringify(params);
         const earnings =
           (this.drpSetting.minDirectRewardRatio / 100) * this.details.price;
         this.tagData.earnings = (Math.floor(earnings * 100) / 100).toFixed(2);
       });
     },
     toLearned() {
-      this.reprtData("finish").then(res => {
+      this.reprtData('finish').then(res => {
         this.finishResult = res;
         this.finishDialog = true;
       });
     },
-    //计算观看时长计时器，一直累加 nowWatchTime
+    // 计算观看时长计时器，一直累加 nowWatchTime
     computeWatchTime() {
       this.intervalWatchTime = setInterval(() => {
         this.nowWatchTime++;
       }, 1000);
     },
-    //清除计时器
+    // 清除计时器
     clearComputeWatchTime() {
       clearInterval(this.intervalWatchTime);
     },
-    closeFinishDialog(){
-      this.finishDialog=false;
-    }
-  }
+    closeFinishDialog() {
+      this.finishDialog = false;
+    },
+  },
 };
 </script>
