@@ -104,11 +104,11 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
 
             if (!empty($productIds) && max($productIds) > 0) {
                 $this->setUserInfo($context);
-                $this->getLogger()->info('[onOrderRefunded] order report succeed', array(
+                $this->getLogger()->info('[onOrderRefunded] order report succeed', [
                     'merchantOrder' => $context,
                     'merchantOrderRefund' => $orderRefund,
                     'merchantOrderRefundItems' => $orderItemRefunds,
-                ));
+                ]);
                 $this->getS2B2CService()->reportRefundOrder($context, $orderRefund, $orderItemRefunds);
             }
 
