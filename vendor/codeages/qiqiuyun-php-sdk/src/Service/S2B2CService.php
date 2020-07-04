@@ -102,8 +102,9 @@ class S2B2CService extends BaseService
             'start' => (int) $start,
             'limit' => (int) $limit,
         );
+        $this->uri = '/merchants/flows';
 
-        return $this->request('GET', '/merchants/flows', $params);
+        return $this->sendRequest('searchMerchantFlow', $params);
     }
 
     /**
@@ -124,8 +125,8 @@ class S2B2CService extends BaseService
             'start' => (int) $start,
             'limit' => (int) $limit,
         );
-
-        return $this->request('GET', '/merchants/orders', $params);
+        $this->uri = '/merchants/orders';
+        return $this->sendRequest('searchMerchantOrder', $params);
     }
 
     /**
