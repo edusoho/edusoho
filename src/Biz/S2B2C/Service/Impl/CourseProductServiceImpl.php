@@ -367,6 +367,13 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         }
     }
 
+    /**
+     * @param $s2b2cProductId
+     * @param $remoteCourseId
+     * @return bool|mixed
+     * @throws \Exception
+     * @codeCoverageIgnore
+     */
     public function closeCourse($s2b2cProductId, $remoteCourseId)
     {
         $this->beginTransaction();
@@ -388,6 +395,13 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         }
     }
 
+    /**
+     * @param $s2b2cProductId
+     * @param $remoteCourseSetId
+     * @return bool|mixed
+     * @throws \Exception
+     * @codeCoverageIgnore
+     */
     public function closeCourseSet($s2b2cProductId, $remoteCourseSetId)
     {
         $this->beginTransaction();
