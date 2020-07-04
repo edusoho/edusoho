@@ -369,6 +369,7 @@ class ProductServiceImpl extends BaseService implements ProductService
                 'remoteResourceId' => $detail['targetId'],
                 'productType' => $this->getProductType($detail['targetType']),
                 'syncStatus' => 'waiting',
+                'localResourceId' => 0,
             ];
         }, $product['detail']);
 
