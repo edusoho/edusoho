@@ -34,8 +34,9 @@ class S2B2CService extends BaseService
             'merchantOrder' => $order,
             'merchantOrderItems' => $orderItems,
         );
+        $this->uri = '/distribute/order/settlement/report';
 
-        return $this->request('POST', '/order/report', $params);
+        return $this->sendRequest('reportSuccessOrder', $params, 'POST');
     }
 
     /**
@@ -54,8 +55,9 @@ class S2B2CService extends BaseService
             'merchantOrderRefund' => $orderRefund,
             'merchantOrderRefundItems' => $orderRefundItems,
         );
+        $this->uri = '/order/report/refund';
 
-        return $this->request('POST', '/order/report', $params);
+        return $this->sendRequest('reportRefundOrder', $params, 'POST');
     }
 
     /**
@@ -100,8 +102,9 @@ class S2B2CService extends BaseService
             'start' => (int) $start,
             'limit' => (int) $limit,
         );
+        $this->uri = '/merchants/flows';
 
-        return $this->request('GET', '/merchants/flows', $params);
+        return $this->sendRequest('searchMerchantFlow', $params);
     }
 
     /**
@@ -122,8 +125,8 @@ class S2B2CService extends BaseService
             'start' => (int) $start,
             'limit' => (int) $limit,
         );
-
-        return $this->request('GET', '/merchants/orders', $params);
+        $this->uri = '/merchants/orders';
+        return $this->sendRequest('searchMerchantOrder', $params);
     }
 
     /**
