@@ -370,7 +370,9 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
     /**
      * @param $s2b2cProductId
      * @param $remoteCourseId
+     *
      * @return bool|mixed
+     *
      * @throws \Exception
      * @codeCoverageIgnore
      */
@@ -398,7 +400,9 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
     /**
      * @param $s2b2cProductId
      * @param $remoteCourseSetId
+     *
      * @return bool|mixed
+     *
      * @throws \Exception
      * @codeCoverageIgnore
      */
@@ -423,6 +427,16 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         }
     }
 
+    /**
+     * @param $s2b2cProductId
+     * @param $remoteResourceId
+     * @param $lessonId
+     *
+     * @return bool|mixed
+     *
+     * @throws \Exception
+     * @codeCoverageIgnore
+     */
     public function closeTask($s2b2cProductId, $remoteResourceId, $lessonId)
     {
         $this->beginTransaction();

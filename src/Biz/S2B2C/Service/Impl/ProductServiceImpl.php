@@ -216,6 +216,13 @@ class ProductServiceImpl extends BaseService implements ProductService
         return $this->getS2B2CProductDao()->delete($id);
     }
 
+    /**
+     * @param $nowVersion
+     * @param $productVersions
+     *
+     * @return array
+     * @codeCoverageIgnore
+     */
     public function generateVersionChangeLogs($nowVersion, $productVersions)
     {
         if (empty($productVersions)) {
@@ -277,6 +284,10 @@ class ProductServiceImpl extends BaseService implements ProductService
         return $this->getS2B2CProductDao()->getByTypeAndLocalResourceId($type, $localResourceId);
     }
 
+    /**
+     * @return mixed
+     * @codeCoverageIgnore
+     */
     public function getProductUpdateType()
     {
         return $this->getSettingService()->get('productUpdateType');
@@ -339,7 +350,9 @@ class ProductServiceImpl extends BaseService implements ProductService
 
     /**
      * @param $s2b2cProductId
+     *
      * @return bool
+     *
      * @throws \Exception
      */
     public function adoptProduct($s2b2cProductId)
@@ -354,10 +367,10 @@ class ProductServiceImpl extends BaseService implements ProductService
 
         $result = $this->getS2B2CFacadeService()->getS2B2CService()->adoptDirtributeProduct($s2b2cProductId);
 
-        if (!empty($result['status']) && $result['status'] == 'success') {
+        if (!empty($result['status']) && 'success' == $result['status']) {
             $product = $result['data'];
-        }else{
-            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[adoptProduct] 采用课程失败，原因:' .json_encode($result));
+        } else {
+            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[adoptProduct] 采用课程失败，原因:'.json_encode($result));
             throw new \Exception('采用课程失败');
         }
 
@@ -373,16 +386,17 @@ class ProductServiceImpl extends BaseService implements ProductService
         }, $product['detail']);
 
         $this->beginTransaction();
-        try{
+        try {
             $this->getS2B2CProductDao()->batchCreate($products);
             //@todo 可以改成策略 根据商品类型进行同步，暂时只有course_set类型
             $this->getCourseProductService()->syncCourses($product['id']);
             $this->commit();
-        }catch (\Exception $exception) {
-            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[adoptProduct] 同步课程失败，原因:' .$exception->getMessage());
+        } catch (\Exception $exception) {
+            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[adoptProduct] 同步课程失败，原因:'.$exception->getMessage());
             $this->rollback();
             throw new \Exception('同步课程失败');
         }
+
         return true;
     }
 
@@ -392,6 +406,7 @@ class ProductServiceImpl extends BaseService implements ProductService
             'courseSet' => 'course_set',
             'course' => 'course',
         ];
+
         return $type[$productType];
     }
 
