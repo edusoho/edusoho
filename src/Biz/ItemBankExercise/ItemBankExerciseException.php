@@ -38,6 +38,10 @@ class ItemBankExerciseException extends AbstractException
 
     const ASSESSMENT_EXCEED = 5007515;
 
+    const NOTFOUND_MODULE = 4047516;
+
+    const ASSESSMENT_EXERCISE_EXIST = 5007517;
+
     public $messages = [
         4037501 => 'exception.item_bank_exercise.forbidden_learn',
         5007502 => 'exception.item_bank_exercise.chapter_answer_is_doing',
@@ -51,8 +55,10 @@ class ItemBankExerciseException extends AbstractException
         5007510 => 'exception.item_bank_exercise.expirydate_end_later_than_start',
         5007511 => 'exception.item_bank_exercise.expirymode_invalid',
         5007512 => 'exception.item_bank_exercise.chapter_exercise_closed',
-        5007513 => 'exception.item_bank_exercise.chapter_exercise_closed',
+        5007513 => 'exception.item_bank_exercise.assessment_exercise_closed',
         5007514 => 'exception.item_bank_exercise.assessment_answer_is_doing',
         5007515 => 'exception.item_bank_exercise.module.exceeded_number',
+        4047516 => 'exception.item_bank_exercise.exercise.module_not_found',
+        5007517 => 'exception.item_bank_exercise.assessment_exercise_exist',
     ];
 }

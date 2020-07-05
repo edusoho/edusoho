@@ -1900,6 +1900,8 @@ item_bank_exercise.accuracy: Accuracy：
 item_bank_exercise.manage_btn: Item bank exercise manage
 item_bank_exercise.chapter_practice: Chapter practice
 item_bank_exercise.testpaper_practice: Tests paper practice
+item_bank_exercise.testpaper_practice.tip: The practice papers support both brush mode and assessment mode. In Brush mode, you will get immediate feedback while answering the questions; in Assessment mode, you will get feedback after answering the questions.
+item_bank_exercise.testpaper_practice.open: Open tests paper practice
 item_bank_exercise.preview.course: Preview item bank exercise
 item_bank_exercise.members_manage.official_student.add.price_tips: 'The price of this item bank exercise is'
 item_bank_exercise.members_manage.official_student.add.failed_tips: 'Fail to add'
@@ -1908,11 +1910,20 @@ item_bank_exercise.student_manage.can_not_add_teacher: This user is the teacher 
 item_bank_exercise.student_manage.student_exist: This user is already a student of this item bank exercise
 item_bank_exercise.student_manage.student_not_exist: The user does not exist
 item_bank_exercise.exercise_create.forbidden: You are not the question bank manager, can not view this page!
+item_bank_exercise.assessment.total_score: Total Score
+item_bank_exercise.assessment_exercise.add_new_module: Create
+item_bank_exercise.assessment_exercise.add_assessment: Add Assessment
+item_bank_exercise.assessment_exercise.remove_assessment: Remove Assessment
+item_bank_exercise.chapter_exercise.category_empty: No chapters have been added to the current item bank exercise
 item_bank_exercise.chapter_exercise.empty: 'It is empty, open the chapter exercise now'
+item_bank_exercise.assessment_exercise.empty: 'It is empty, open the assessment exercise now'
 item_bank_exercise.chapter_exercise.info: Chapter exercises are based on the setting of "Item management by category".Provide students with a hierarchical list of brushing exercises
 item_bank_exercise.marketing_setup.no_permission_tips: 'Sorry, you can not edit base settings. Contact site administrator for help.'
 item_bank_exercise.marketing_setup.setup.can_join.tips: After it is closed, students cannot join by themselves. Teachers need to add students manually.
 item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: The change of validity period is only valid for new students after the change
+item_bank_exercise.assessment_exercise.add_module: Create
+item_bank_exercise.assessment_exercise.edit_module: Edit
+item_bank_exercise.assessment_exercise.module.name: Module Name
 
 activity.live.not_created_notice: Live classroom not yet created!
 activity.live.overlap_time_notice: There is already a live broadcast at the selected time. Please change your time.
@@ -9030,12 +9041,14 @@ exception.item_bank_exercise.member.duplicate_member: User has joined this item 
 exception.item_bank_exercise.exercise.exercise_not_published: Item bank exercise is not published
 exception.item_bank_exercise.member.not_found: The item bank exercise doesn't have this student
 exception.item_bank_exercise.module.exceeded_number: A maximum of 5 test paper modules can be added
+exception.item_bank_exercise.exercise.module_not_found: Item bank exercis module does not exist
 exception.item_bank_exercise.expirydays_required: Valid days cannot be empty
 exception.item_bank_exercise.expirydays_invalid: Valid days is invalid
 exception.item_bank_exercise.expiryenddate_required: Validity period end date cannot be empty
 exception.item_bank_exercise.expirystartdate_required: Validity period start date cannot be empty
 exception.item_bank_exercise.expirydate_end_later_than_start: Validity period end date cannot be earlier than the start date
 exception.item_bank_exercise.expirymode_invalid: Validity type error
+exception.item_bank_exercise.assessment_exercise_exist: The test paper has been saved in this module, please do not add it repeatedly
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.

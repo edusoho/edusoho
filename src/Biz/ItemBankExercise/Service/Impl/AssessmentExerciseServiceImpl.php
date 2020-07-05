@@ -4,6 +4,7 @@ namespace Biz\ItemBankExercise\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\ItemBankExercise\Dao\AssessmentExerciseDao;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\AssessmentExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
@@ -11,6 +12,16 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 
 class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExerciseService
 {
+    public function findByModuleId($moduleId)
+    {
+        return $this->getItemBankAssessmentExerciseDao()->findByModuleId($moduleId);
+    }
+
+    public function findByExerciseIdAndModuleId($exerciseId, $moduleId)
+    {
+        return $this->getItemBankAssessmentExerciseDao()->findByExerciseIdAndModuleId($exerciseId, $moduleId);
+    }
+
     public function search($conditions, $sort, $start, $limit, $columns = [])
     {
         return $this->getItemBankAssessmentExerciseDao()->search($conditions, $sort, $start, $limit, $columns);
@@ -49,6 +60,39 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
         return $answerRecord;
     }
 
+    public function addAssessments($exerciseId, $moduleId, $assessments)
+    {
+        try {
+            $this->beginTransaction();
+
+            foreach ($assessments as $assessment) {
+                if ($this->getItemBankAssessmentExerciseDao()->isAssessmentExercise($moduleId, $assessment['id'], $exerciseId)) {
+                    $this->createNewException(ItemBankExerciseException::ASSESSMENT_EXERCISE_EXIST());
+                }
+
+                $this->getItemBankAssessmentExerciseDao()->create(
+                    [
+                        'exerciseId' => $exerciseId,
+                        'moduleId' => $moduleId,
+                        'assessmentId' => $assessment['id'],
+                    ]
+                );
+            }
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    public function isAssessmentExercise($moduleId, $assessmentId, $exerciseId)
+    {
+        $assessmentExercise = $this->getItemBankAssessmentExerciseDao()->isAssessmentExercise($moduleId, $assessmentId, $exerciseId);
+
+        return empty($assessmentExercise) ? false : true;
+    }
+
     protected function canStartAnswer($moduleId, $assessmentId, $userId)
     {
         $module = $this->getItemBankExerciseModuleService()->get($moduleId);
@@ -75,6 +119,25 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
         }
 
         return false;
+    }
+
+    public function deleteAssessmentExercise($id)
+    {
+        $assessmentExercise = $this->getItemBankAssessmentExerciseDao()->get($id);
+        if (empty($assessmentExercise)) {
+            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
+        }
+
+        return $this->getItemBankAssessmentExerciseDao()->delete($id);
+    }
+
+    public function batchDeleteAssessmentExercise($ids)
+    {
+        if (empty($ids)) {
+            return;
+        }
+
+        $this->getItemBankAssessmentExerciseDao()->batchDelete(['ids' => $ids]);
     }
 
     /**
@@ -109,6 +172,9 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
         return $this->createService('ItemBankExercise:AssessmentExerciseRecordService');
     }
 
+    /**
+     * @return AssessmentExerciseDao
+     */
     protected function getItemBankAssessmentExerciseDao()
     {
         return $this->createDao('ItemBankExercise:AssessmentExerciseDao');

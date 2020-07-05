@@ -1161,6 +1161,8 @@ item_bank_exercise.accuracy: 正确率：
 item_bank_exercise.preview.course: 预览题库练习
 item_bank_exercise.chapter_practice: 章节练习
 item_bank_exercise.testpaper_practice: 试卷练习
+item_bank_exercise.testpaper_practice.tip: 试卷练习支持刷题模式和评测模式。刷题模式在答题时即时得到反馈；评测模式在答题结束后统一反馈。
+item_bank_exercise.testpaper_practice.open: 启用试卷练习
 item_bank_exercise.manage_btn: 管理题库练习
 item_bank_exercise.members_manage.official_student.add.price_tips: 本题库练习的价格为
 item_bank_exercise.members_manage.official_student.add.failed_tips: 题库练习不能添加
@@ -1169,11 +1171,20 @@ item_bank_exercise.student_manage.can_not_add_teacher: 该用户是本题库练�
 item_bank_exercise.student_manage.student_exist: 该用户已是本题库练习的学员了
 item_bank_exercise.student_manage.student_not_exist: 该用户不存在
 item_bank_exercise.exercise_create.forbidden: 您不是该题库管理者，不能查看此页面！
-item_bank_exercise.chapter_exercise.empty: 什么都没有，快去启章节练习吧
+item_bank_exercise.assessment.total_score: 总分
+item_bank_exercise.assessment_exercise.add_new_module: 添加新模块
+item_bank_exercise.assessment_exercise.add_assessment: 添加试卷
+item_bank_exercise.assessment_exercise.remove_assessment: 移除试卷
+item_bank_exercise.chapter_exercise.category_empty: 当前题库练习还未添加章节
+item_bank_exercise.chapter_exercise.empty: 什么都没有，快去开启章节练习吧
+item_bank_exercise.assessment_exercise.empty: 什么都没有，快去开启试卷练习吧
 item_bank_exercise.chapter_exercise.info: 章节练习依据“题目分类管理”的设置。按层级目录向学员提供刷题练习
 item_bank_exercise.marketing_setup.no_permission_tips: 抱歉，您无权管理题库练习基础设置，如有需要请联系网站管理员！
 item_bank_exercise.marketing_setup.setup.can_join.tips: 关闭后，学员自己无法加入，需要由老师手动添加学员。
 item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: 变更学习有效期，仅对修改后新增的学员有效
+item_bank_exercise.assessment_exercise.add_module: 添加模块
+item_bank_exercise.assessment_exercise.edit_module: 修改模块
+item_bank_exercise.assessment_exercise.module.name: 模块名称
 
 course.testpaper_check: 试卷批阅
 course.testpaper_check.no_permission_tips: 当前用户不是本课程教师，没有批阅试卷的权限。
@@ -10335,12 +10346,14 @@ exception.item_bank_exercise.member.duplicate_member: 用户已加入题库练�
 exception.item_bank_exercise.exercise.exercise_not_published: 题库练习未发布
 exception.item_bank_exercise.member.not_found: 题库练习中没有该成员
 exception.item_bank_exercise.module.exceeded_number: 最多只能添加5个试卷模块
+exception.item_bank_exercise.exercise.module_not_found: 题库练习模块不存在
 exception.item_bank_exercise.expirydays_required: 有效天数不能为空
 exception.item_bank_exercise.expirydays_invalid: 有效天数不合法
 exception.item_bank_exercise.expiryenddate_required: 有效期结束日期不能为空
 exception.item_bank_exercise.expirystartdate_required: 有效期开始日期不能为空
 exception.item_bank_exercise.expirydate_end_later_than_start: 有效期结束日期不能早于开始日期
 exception.item_bank_exercise.expirymode_invalid: 有效期类型错误
+exception.item_bank_exercise.assessment_exercise_exist: 试卷已存在该模块内，请勿重复添加
 
 exception.wechat.notify_setting_not_enabled: 微信通知未开启
 exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试

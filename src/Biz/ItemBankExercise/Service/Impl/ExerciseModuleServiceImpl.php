@@ -2,7 +2,10 @@
 
 namespace Biz\ItemBankExercise\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Common\CommonException;
+use Biz\ItemBankExercise\Dao\ExerciseModuleDao;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
@@ -10,8 +13,6 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 
 class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleService
 {
-    const ASSESSMENT_MODULE_COUNT = 5;
-
     public function findByExerciseId($exerciseId)
     {
         return $this->getItemBankExerciseModuleDao()->findByExerciseId($exerciseId);
@@ -82,6 +83,25 @@ class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleSer
         );
     }
 
+    public function updateAssessmentModule($moduleId, $fields)
+    {
+        if (!ArrayToolkit::requireds($fields, ['title'])) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        $fields = ArrayToolkit::parts($fields, ['title']);
+
+        return $this->getItemBankExerciseModuleDao()->update($moduleId, $fields);
+    }
+
+    public function deleteAssessmentModule($moduleId)
+    {
+        return $this->getItemBankExerciseModuleDao()->delete($moduleId);
+    }
+
+    /**
+     * @return ExerciseModuleDao
+     */
     protected function getItemBankExerciseModuleDao()
     {
         return $this->createDao('ItemBankExercise:ExerciseModuleDao');
