@@ -2,8 +2,6 @@ import 'app/common/widget/qrcode';
 
 let $unfavorite = $('.js-unfavorite-btn');
 let $favorite = $('.js-favorite-btn');
-bindOperation($unfavorite, $favorite);
-bindOperation($favorite, $unfavorite);
 discountCountdown();
 ancelRefund();
 
@@ -15,22 +13,6 @@ function ancelRefund() {
     $.post($(this).data('url'), function (data) {
       window.location.reload();
     });
-  });
-}
-
-function bindOperation($needHideBtn, $needShowBtn) {
-  $needHideBtn.click(() => {
-    const url = $needHideBtn.data('url');
-    console.log(url);
-    if (!url) {
-      return;
-    }
-    $.post(url)
-      .done((success) => {
-        if (!success) return;
-        $needShowBtn.removeClass('hidden');
-        $needHideBtn.addClass('hidden');
-      });
   });
 }
 
@@ -51,11 +33,49 @@ function discountCountdown() {
   }
 }
 
+if ($favorite.length) {
+  $favorite.on('click', function () {
+    $.ajax({
+      type: "POST",
+      data: {
+        'targetType': $(this).data('targetType'),
+        'targetId': $(this).data('targetId'),
+      },
+      beforeSend: function (request) {
+        request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
+        request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
+      },
+      url: '/api/favorite',
+      success: function (resp) {
+        $unfavorite.removeClass('hidden');
+        $favorite.addClass('hidden');
+      }
+    });
+  });
+}
+
+if ($unfavorite.length) {
+  $unfavorite.on('click', function () {
+    $.ajax({
+      type: "DELETE",
+      beforeSend: function (request) {
+        request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
+        request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
+      },
+      url: '/api/favorite?' + 'targetType=' + $(this).data('targetType') + '&targetId=' + $(this).data('targetId'),
+      success: function (resp) {
+        $favorite.removeClass('hidden');
+        $unfavorite.addClass('hidden');
+      }
+    });
+  });
+}
+
 const fixButtonPosition = () => {
   const $target = $('.js-course-detail-info');
   const height = $target.height();
   const $btn = $('.js-course-header-operation');
-  if (height >  240) {
+  if (height > 240) {
     $btn.removeClass('course-detail-info__btn');
   }
 };

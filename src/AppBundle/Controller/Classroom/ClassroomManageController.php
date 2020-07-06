@@ -12,12 +12,12 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Classroom\ClassroomException;
-use Biz\Classroom\Service\ClassroomReviewService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Classroom\Service\LearningDataAnalysisService;
 use Biz\Content\Service\FileService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Review\Service\ReviewService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -132,15 +132,16 @@ class ClassroomManageController extends BaseController
 
         $yestodayAllCount = $yestodayStudentCount + $yestodayAuditorCount;
 
-        $reviewsNum = $this->getClassroomReviewService()->searchReviewCount(['classroomId' => $id]);
+        $reviewConditions = ['targetType' => 'classroom', 'targetId' => $id, 'parentId' => 0];
+        $reviewsNum = $this->getReviewService()->countReviews($reviewConditions);
         $paginator = new Paginator(
             $this->get('request'),
             $reviewsNum,
             20
         );
 
-        $reviews = $this->getClassroomReviewService()->searchReviews(
-            ['classroomId' => $id, 'parentId' => 0],
+        $reviews = $this->getReviewService()->searchReviews(
+            $reviewConditions,
             ['createdTime' => 'desc'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -1277,11 +1278,11 @@ class ClassroomManageController extends BaseController
     }
 
     /**
-     * @return ClassroomReviewService
+     * @return ReviewService
      */
-    protected function getClassroomReviewService()
+    protected function getReviewService()
     {
-        return $this->createService('Classroom:ClassroomReviewService');
+        return $this->createService('Review:ReviewService');
     }
 
     /**

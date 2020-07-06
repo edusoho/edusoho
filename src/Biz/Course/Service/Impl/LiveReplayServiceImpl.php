@@ -3,10 +3,12 @@
 namespace Biz\Course\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Service\LiveActivityService;
 use Biz\BaseService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\Course\LiveReplayException;
 use Biz\Course\Service\LiveReplayService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\LogService;
 use Biz\Util\EdusohoLiveClient;
 
@@ -34,7 +36,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
 
         $replay = $this->getLessonReplayDao()->create($replay);
 
-        $this->dispatchEvent('live.replay.create', array('replay' => $replay));
+        $this->dispatchEvent('live.replay.create', ['replay' => $replay]);
 
         return $replay;
     }
@@ -42,7 +44,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     public function deleteReplayByLessonId($lessonId, $lessonType = 'live')
     {
         $result = $this->getLessonReplayDao()->deleteByLessonId($lessonId, $lessonType);
-        $this->dispatchEvent('live.replay.delete', array('lessonId' => $lessonId));
+        $this->dispatchEvent('live.replay.delete', ['lessonId' => $lessonId]);
 
         return $result;
     }
@@ -50,7 +52,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     public function deleteReplaysByCourseId($courseId, $lessonType = 'live')
     {
         $result = $this->getLessonReplayDao()->deleteByCourseId($courseId, $lessonType);
-        $this->dispatchEvent('live.replay.delete', array('courseId' => $courseId));
+        $this->dispatchEvent('live.replay.delete', ['courseId' => $courseId]);
 
         return $result;
     }
@@ -63,18 +65,18 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
             $this->createNewException(LiveReplayException::NOTFOUND_LIVE_REPLAY());
         }
 
-        $fields = ArrayToolkit::parts($fields, array('hidden', 'title'));
+        $fields = ArrayToolkit::parts($fields, ['hidden', 'title']);
 
         $replay = $this->getLessonReplayDao()->update($id, $fields);
 
-        $this->dispatchEvent('live.replay.update', array('replay' => $replay));
+        $this->dispatchEvent('live.replay.update', ['replay' => $replay]);
 
         return $replay;
     }
 
     public function updateReplayByLessonId($lessonId, $fields, $lessonType = 'live')
     {
-        $fields = ArrayToolkit::parts($fields, array('hidden'));
+        $fields = ArrayToolkit::parts($fields, ['hidden']);
 
         return $this->getLessonReplayDao()->updateByLessonId($lessonId, $lessonType, $fields);
     }
@@ -99,13 +101,13 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         $replay = $this->getReplay($replayId);
         $user = $this->getCurrentUser();
 
-        $args = array(
+        $args = [
             'liveId' => $liveId,
             'replayId' => $replay['replayId'],
             'provider' => $liveProvider,
             'user' => $user->isLogin() ? $user['email'] : '',
             'nickname' => $user->isLogin() ? $user['nickname'] : 'guest',
-        );
+        ];
 
         //用来计算当前直播用户数量
         if ($user->isLogin()) {
@@ -114,6 +116,11 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
 
         if ($ssl) {
             $args['protocol'] = 'https';
+        }
+
+        $liveActivity = $this->getLiveActivityService()->getBySyncIdGTAndLiveId($liveId);
+        if (!empty($liveActivity)) {
+            return $this->getS2B2CFacadeService()->getS2B2CService()->entryLiveReplay($args);
         }
 
         return $this->createLiveClient()->entryReplay($args);
@@ -129,9 +136,9 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
 
         foreach ($replayLessons as $replay) {
             if (empty($showReplayIds) || (!$replay['hidden'] && !in_array($replay['id'], $showReplayIds))) {
-                $this->updateReplay($replay['id'], array('hidden' => 1));
+                $this->updateReplay($replay['id'], ['hidden' => 1]);
             } elseif ($replay['hidden'] && in_array($replay['id'], $showReplayIds)) {
-                $this->updateReplay($replay['id'], array('hidden' => 0));
+                $this->updateReplay($replay['id'], ['hidden' => 0]);
             }
         }
 
@@ -141,9 +148,14 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     public function generateReplay($liveId, $courseId, $lessonId, $liveProvider, $type)
     {
         try {
-            $replayList = $this->createLiveClient()->createReplayList($liveId, '录播回放', $liveProvider);
+            $liveActivity = $this->getLiveActivityService()->getBySyncIdGTAndLiveId($liveId);
+            if (!empty($liveActivity)) {
+                $replayList = $this->getS2B2CFacadeService()->getS2B2CService()->createLiveReplayList($liveId);
+            } else {
+                $replayList = $this->createLiveClient()->createReplayList($liveId, '录播回放', $liveProvider);
+            }
         } catch (CloudAPIIOException $cloudAPIIOException) {
-            return array();
+            return [];
         }
 
         if (isset($replayList['error']) && !empty($replayList['error'])) {
@@ -156,16 +168,16 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
             $replayList = json_decode($replayList['data'], true);
         }
 
-        $replays = array();
+        $replays = [];
         foreach ($replayList as $replay) {
-            $fields = array(
+            $fields = [
                 'courseId' => $courseId,
                 'lessonId' => $lessonId,
                 'title' => $replay['subject'],
                 'replayId' => $replay['id'],
                 'globalId' => empty($replay['resourceNo']) ? '' : $replay['resourceNo'],
                 'type' => $type,
-            );
+            ];
 
             $replays[] = $this->addReplay($fields);
         }
@@ -205,5 +217,21 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    /**
+     * @return LiveActivityService
+     */
+    protected function getLiveActivityService()
+    {
+        return $this->createService('Activity:LiveActivityService');
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->createService('S2B2C:S2B2CFacadeService');
     }
 }

@@ -30,30 +30,49 @@ const main = {
       var self = $(this);
 
       var isFavorited = self.parent().hasClass('active');
-      var url, action, text;
+      var text;
+
       if (isFavorited) {
-        text = Translator.trans('open_course.collect');
-        url = self.data('cancelFavoriteUrl');
-        action = 'removeClass';
+        $.ajax({
+          type: "DELETE",
+          beforeSend: function (request) {
+            request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
+            request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
+          },
+          url: '/api/favorite?' + 'targetType=' + $(this).data('targetType') + '&targetId=' + $(this).data('targetId'),
+          success: function (resp) {
+            self.parent().next().html(Translator.trans('open_course.collect'));
+            self.parent().removeClass('active');
+          },
+          error: function () {
+            $('#modal').html();
+            $('#modal').load(self.data('loginUrl'));
+            $('#modal').modal('show');
+          }
+        });
       } else {
-        url = self.data('favoriteUrl');
-        action = 'addClass';
-        text = Translator.trans('open_course.collected');
+        $.ajax({
+          type: "POST",
+          data: {
+            'targetType': $(this).data('targetType'),
+            'targetId': $(this).data('targetId'),
+          },
+          beforeSend: function (request) {
+            request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
+            request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
+          },
+          url: '/api/favorite',
+          success: function (resp) {
+            self.parent().next().html(Translator.trans('open_course.collected'));
+            self.parent().addClass('active');
+          },
+          error: function () {
+            $('#modal').html();
+            $('#modal').load(self.data('loginUrl'));
+            $('#modal').modal('show');
+          }
+        });
       }
-
-      $.post(url, function (data) {
-        if (data['result']) {
-          self.parent().next().html(text);
-          self.parent()[action]('active');
-        } else if (!data['result'] && data['message'] == 'Access Denied') {
-          $('#modal').html();
-          $('#modal').load(self.data('loginUrl'));
-          $('#modal').modal('show');
-        } else {
-          notify('danger',data['message']);
-        }
-
-      });
     });
   },
   //点击ES直播公开课回放

@@ -477,6 +477,7 @@ admin_v2.course.basic.basic_tab.close_btn: 关闭课程
 admin_v2.course.basic.basic_tab.publish_submit_btn: 发布课程
 admin_v2.course.basic.basic_tab.clone_btn: 复制课程
 admin_v2.course.basic.basic_tab.delete_submit_btn: 删除课程
+admin_v2.course.basic.basic_tab.remove_submit_btn: 移除课程
 
 # 教学-课程管理-班级管理
 admin_v2.course.classroom_menu: 班级管理
@@ -918,6 +919,10 @@ admin_v2.developer.crontab: crontab管理
 admin_v2.developer.plumber_manage_menu: Plumber管理
 admin_v2.developer.plumber_manage: Plumber管理
 admin_v2.developer.plumber_queue: 队列信息
+
+# Apple设置管理（隐藏路由）
+admin_v2.system.apple_manage_menu: Apple设置管理
+admin_v2.system.apple_setting: Apple设置管理
 
 # IAP
 admin_v2.developer.mobile_iap_product_menu: iOS内购商品设置

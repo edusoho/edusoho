@@ -12,15 +12,14 @@ use Biz\Course\CourseException;
 use Biz\Course\CourseSetException;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
-use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Service\CourseDeleteService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
-use Biz\Course\Service\ReviewService;
 use Biz\QuestionBank\Service\QuestionBankService;
+use Biz\Review\Service\ReviewService;
 use Biz\System\Service\LogService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\User\Service\UserService;
@@ -97,82 +96,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $offset = rand(0, $max);
 
         return $this->searchCourseSets($conditions, 'latest', $offset, $num);
-    }
-
-    public function favorite($id)
-    {
-        $courseSet = $this->getCourseSet($id);
-        $user = $this->getCurrentUser();
-
-        if (empty($courseSet)) {
-            return false;
-        }
-
-        if (!$user->isLogin()) {
-            $this->createNewException(UserException::UN_LOGIN());
-        }
-
-        $isFavorite = $this->isUserFavorite($user['id'], $courseSet['id']);
-
-        if ($isFavorite) {
-            return true;
-        }
-
-        $course = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($courseSet['id']);
-
-        if (empty($course)) {
-            return false;
-        }
-
-        $favorite = [
-            'courseSetId' => $courseSet['id'],
-            'type' => 'course',
-            'userId' => $user['id'],
-            'courseId' => $course['id'],
-        ];
-
-        $favorite = $this->getFavoriteDao()->create($favorite);
-
-        $this->dispatch('courseSet.favorite', $favorite, ['courseSet' => $courseSet, 'course' => $course]);
-
-        return !empty($favorite);
-    }
-
-    public function unfavorite($id)
-    {
-        $courseSet = $this->getCourseSet($id);
-        $user = $this->getCurrentUser();
-
-        if (empty($courseSet)) {
-            return false;
-        }
-
-        if (!$user->isLogin()) {
-            $this->createNewException(UserException::UN_LOGIN());
-        }
-
-        $favorite = $this->getFavoriteDao()->getByUserIdAndCourseSetId($user['id'], $courseSet['id'], 'course');
-
-        if (empty($favorite)) {
-            return true;
-        }
-
-        $this->getFavoriteDao()->delete($favorite['id']);
-        $this->getLogService()->info('course', 'delete_favorite', "删除收藏(#{$id})", $favorite);
-
-        return true;
-    }
-
-    public function isUserFavorite($userId, $courseSetId)
-    {
-        $courseSet = $this->getCourseSet($courseSetId);
-
-        if (empty($courseSet)) {
-            throw $this->createNewException(CourseSetException::NOTFOUND_COURSESET());
-        }
-        $favorite = $this->getFavoriteDao()->getByUserIdAndCourseSetId($userId, $courseSet['id'], 'course');
-
-        return !empty($favorite);
     }
 
     public function tryManageCourseSet($id)
@@ -617,7 +540,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $updateFields = [];
         foreach ($fields as $field) {
             if ('ratingNum' === $field) {
-                $ratingFields = $this->getReviewService()->countRatingByCourseSetId($id);
+                $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
+                $ratingFields = $this->getReviewService()->countRatingByTargetTypeAndTargetIds('course', array_values(array_column($courses, 'id')));
                 $updateFields = array_merge($updateFields, $ratingFields);
             } elseif ('noteNum' === $field) {
                 $noteNum = $this->getNoteService()->countCourseNoteByCourseSetId($id);
@@ -710,21 +634,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         $this->dispatchEvent('course-set.closed', new Event($courseSet));
-    }
-
-    public function countUserFavorites($userId)
-    {
-        return $this->getFavoriteDao()->countByUserId($userId);
-    }
-
-    public function searchUserFavorites($userId, $start, $limit)
-    {
-        return $this->getFavoriteDao()->searchByUserId($userId, $start, $limit);
-    }
-
-    public function searchFavorites(array $conditions, array $orderBys, $start, $limit)
-    {
-        return $this->getFavoriteDao()->search($conditions, $orderBys, $start, $limit);
     }
 
     /**
@@ -1076,7 +985,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
      */
     protected function getReviewService()
     {
-        return $this->biz->service('Course:ReviewService');
+        return $this->createService('Review:ReviewService');
     }
 
     /**
@@ -1085,14 +994,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getFileService()
     {
         return $this->biz->service('Content:FileService');
-    }
-
-    /**
-     * @return FavoriteDao
-     */
-    protected function getFavoriteDao()
-    {
-        return $this->biz->dao('Course:FavoriteDao');
     }
 
     /**

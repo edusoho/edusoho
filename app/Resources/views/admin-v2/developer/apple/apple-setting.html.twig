@@ -1,0 +1,50 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_setting_apple' %}
+
+{% do script(['app/js/admin-v2/developer/apple-setting/index.js']) %}
+
+{% block main %}
+
+  <form class="form-horizontal" id="apple-form" method="post" data-url="{{ path('admin_v2_setting_apple') }}">
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">ClientId</label>
+      <div class="col-md-8 controls">
+        <input type="text" name="clientId" class="form-control" value="{{ setting.clientId|default('') }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">TeamId</label>
+      <div class="col-md-8 controls">
+        <input type="text" name="teamId" class="form-control" value="{{ setting.teamId|default('') }}">
+
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">KeyId</label>
+      <div class="col-md-8 controls">
+        <input type="text" name="keyId" class="form-control" value="{{ setting.keyId|default('') }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">SecretKey</label>
+      <div class="col-md-8 controls">
+        <textarea type="text" name="secretKey" class="form-control" rows="5">{{ setting.secretKey|default('') }}</textarea>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="controls col-md-offset-2 col-md-8">
+        <button type="button" class="btn btn-primary js-setting-submit">{{'form.btn.submit'|trans}}</button>
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  </form>
+
+{% endblock %}

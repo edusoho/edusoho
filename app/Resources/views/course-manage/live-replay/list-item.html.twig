@@ -54,7 +54,7 @@
 		{% endif %}
 
 		{% if task.status == 'published' and task.isEnd  %}
-			{% if live_can_record(activity.ext.liveId) and activity.ext.replayStatus != 'videoGenerated' %}
+			{% if live_can_record(activity.ext.liveId, activity.syncId) and activity.ext.replayStatus != 'videoGenerated' %}
 				<a class="cd-link-assist cd-mr24 js-generate-replay"
 				{% if activity.ext.replayStatus == 'ungenerated' %}
 				title="{{'course.replay_manage.record'|trans}}"
@@ -66,8 +66,10 @@
 				</a>
 			{% endif %}
 
-			<a class="cd-link-assist cd-mr16 item-actions__btn" href="#modal" title="{{'course.replay_manage.replay'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip" data-toggle="tooltip" title="{{'course.replay_manage.replay'|trans}}" data-container="body"></i></a>
-		{% endif %}
+      {% if activity.syncId == 0 %}
+        <a class="cd-link-assist cd-mr16 item-actions__btn" href="#modal" title="{{'course.replay_manage.replay'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip" data-toggle="tooltip" title="{{'course.replay_manage.replay'|trans}}" data-container="body"></i></a>
+      {% endif %}
+    {% endif %}
 
 	</div>
 </li>
