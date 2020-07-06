@@ -20,7 +20,7 @@ class CreateTableReview extends Migration
                 `parentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '回复id',
                 `meta` text COMMENT '评论元信息',
                 `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评价创建时间',
-                `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评价更新时间',
+                `updatedTime` int(10) unsigned DEFAULT '0' COMMENT '评价更新时间',
                 PRIMARY KEY (`id`),
                 KEY `targetType_targetId` (targetType, targetId)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='评价表';
