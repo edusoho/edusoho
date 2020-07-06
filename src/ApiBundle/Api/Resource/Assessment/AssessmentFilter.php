@@ -6,7 +6,7 @@ use ApiBundle\Api\Resource\Filter;
 
 class AssessmentFilter extends Filter
 {
-    protected $publicFields = array(
+    protected $publicFields = [
         'id',
         'bank_id',
         'displayable',
@@ -21,7 +21,7 @@ class AssessmentFilter extends Filter
         'created_time',
         'updated_time',
         'sections',
-    );
+    ];
 
     protected function publicFields(&$assessment)
     {
@@ -33,7 +33,7 @@ class AssessmentFilter extends Filter
                 foreach ($item['questions'] as &$question) {
                     !empty($question['stem']) && $question['stem'] = $this->convertAbsoluteUrl($question['stem']);
                     !empty($question['analysis']) && $question['analysis'] = $this->convertAbsoluteUrl($question['analysis']);
-                    empty($question['response_points']) && $question['response_points'] = array();
+                    empty($question['response_points']) && $question['response_points'] = [];
                     foreach ($question['response_points'] as &$point) {
                         !empty($point['checkbox']['text']) && $point['checkbox']['text'] = $this->convertAbsoluteUrl($point['checkbox']['text']);
                         !empty($point['radio']['text']) && $point['radio']['text'] = $this->convertAbsoluteUrl($point['radio']['text']);

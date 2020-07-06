@@ -267,6 +267,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($fields['enableBuyExpiryTime'])) {
             $fields['buyExpiryTime'] = 0;
         }
+
+        if (!empty($fields['expiryDateRange'])) {
+            $fields['expiryStartDate'] = $fields['expiryDateRange'][0];
+            $fields['expiryEndDate'] = $fields['expiryDateRange'][1];
+        }
+
         $fields = ArrayToolkit::parts(
             $fields,
             [
@@ -791,7 +797,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (empty($course['expiryEndDate'])) {
                 $this->createNewException(CourseException::EXPIRYENDDATE_REQUIRED());
             }
-            $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime($course['expiryEndDate'].' 23:59:59');
+            $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime(date('Y-m-d 23:59:59', strtotime($course['expiryEndDate'])));
         } elseif ('date' === $course['expiryMode']) {
             $course['expiryDays'] = 0;
             if (isset($course['expiryStartDate'])) {
@@ -802,7 +808,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (empty($course['expiryEndDate'])) {
                 $this->createNewException(CourseException::EXPIRYENDDATE_REQUIRED());
             } else {
-                $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime($course['expiryEndDate'].' 23:59:59');
+                $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime(date('Y-m-d 23:59:59', strtotime($course['expiryEndDate'])));
             }
             if ($course['expiryEndDate'] <= $course['expiryStartDate']) {
                 $this->createNewException(CourseException::EXPIRY_DATE_SET_INVALID());
@@ -2647,7 +2653,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if (!empty($fields['buyExpiryTime'])) {
             if (is_numeric($fields['buyExpiryTime'])) {
-                $fields['buyExpiryTime'] = date('Y-m-d', $fields['buyExpiryTime']);
+                $fields['buyExpiryTime'] = date('Y-m-d', strlen($fields['buyExpiryTime']) > 10 ? $fields['buyExpiryTime'] / 1000 : $fields['buyExpiryTime']);
             }
 
             $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime'].' 23:59:59');

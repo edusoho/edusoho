@@ -7218,7 +7218,7 @@ admin.user_auth.privacy_policy_settings.closed: 关闭
 admin.user_auth.privacy_policy_settings.Enable.help_block: 开启后用户注册时必须同意隐私政策才能注册。
 admin.user_auth.privacy_policy_settings.details: 隐私政策内容
 admin.user_auth.privacy_policy_settings.tooltip: >
-  <h5>隐私政策配置仅对有独立APP的网校生效，使用阔知学堂APP的网校的隐私政策需阔知统一配置。</h5> 
+  <h5>隐私政策配置仅对有独立APP的网校生效，使用阔知学堂APP的网校的隐私政策需阔知统一配置。</h5>
 admin.user_auth.Name_setting: 名称设置
 admin.user_auth.Name_setting.user_name: 用户名称
 admin.user_auth.Name_setting.help_block: 注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
@@ -11045,6 +11045,7 @@ s2b2c.resource.no_fee_notice_hint: 您与%supplierName%合作的采购账户余�
 s2b2c.resource.sync.prev_price.notify: 上个版本价格为
 s2b2c.resource.sync.has_new.notify: 有价格更新
 
+vip.level.free_learning: 会员免费学
 
 exception.review.forbidden_create_review: 没有权限添加评价
 exception.review.forbidden_operate_review: 没有权限操作评价
@@ -11086,4 +11087,3 @@ admin_v2.operating.goods_leading.label_content.qrcode_tips: 请上传jpg, gif, p
 admin_v2.operating.goods_leading_setting.tips: 注意：微信群人数超过100人后，用户将无法扫码进群且微信群二维码有效期为7天，请及时更新群二维码。
 
 exception.favorite.forbidden_operate_favorite: 没有权限
-
