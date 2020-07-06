@@ -22,6 +22,7 @@
         <!-- <div v-if="isFixed" class="fixed-box"></div> -->
         <div id="info-left-1" class="content-item js-content-item">
           <h3 class="content-item__title">商品介绍</h3>
+          <div v-html="description"></div>
         </div>
         <div id="info-left-2" class="content-item js-content-item">
           <h3  class="content-item__title">学习目录</h3>
@@ -69,6 +70,9 @@
         default: function () {
           return {}
         }
+      },
+      description: {
+        type: String
       }
     },
     components: {

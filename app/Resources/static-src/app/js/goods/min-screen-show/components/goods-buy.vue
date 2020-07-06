@@ -29,14 +29,16 @@ export default {
         url: "/api/favorite",
         method: "POST",
         data: {
+          'targetType': 'goods',
           'targetId': id
         },
         headers: {
           'Accept': 'application/vnd.edusoho.v2+json',
-          'X-CSRF-Token': $('meta[name=csrf-token]').attr('content')
+          'X-CSRF-Token': $('meta[name=csrf-token]').attr('content'),
+          'X-Requested-With': 'XMLHttpRequest'
         }
       }).then(res => {
-        console.log(res);
+        this.isFavorite = true;
       });
     },
     // 移除收藏
@@ -45,27 +47,25 @@ export default {
         url: "/api/favorite",
         method: "DELETE",
         params: {
+          'targetType': 'goods',
           'targetId': id
         },
         headers: {
           'Accept': 'application/vnd.edusoho.v2+json',
-          'X-CSRF-Token': $('meta[name=csrf-token]').attr('content')
+          'X-CSRF-Token': $('meta[name=csrf-token]').attr('content'),
+          'X-Requested-With': 'XMLHttpRequest'
         }
       }).then(res => {
-        console.log(res);
+        this.isFavorite = false;
       });
     },
     // 收藏/移除收藏
     onFavorite() {
       let goodsId = window.location.pathname.replace(/[^0-9]/ig, ""); // goods id
       if (this.isFavorite) {
-        // 移除收藏
-        this.isFavorite = false;
-        this.addFavorite(goodsId);
-      } else {
-        // 收藏
-        this.isFavorite = true;
         this.removeFavorite(goodsId);
+      } else {
+        this.addFavorite(goodsId);
       }
     }
   }

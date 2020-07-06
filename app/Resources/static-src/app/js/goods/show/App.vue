@@ -2,7 +2,7 @@
   <div class="cd-container">
     <div class="product-breadcrumb">首页 / 艺术学概论</div>
     <product-detail :detailData="componentsData"></product-detail>
-    <product-info :hasExtension="componentsData.hasExtension"></product-info>
+    <product-info :hasExtension="componentsData.hasExtension" :description="componentsData.description"></product-info>
   </div>
 </template>
 
