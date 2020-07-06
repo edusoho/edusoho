@@ -147,9 +147,25 @@ class AssessmentExerciseController extends BaseController
     {
         $this->getExerciseService()->tryManageExercise($exerciseId);
 
+        $count = $this->getExerciseModuleService()->count(['exerciseId' => $exerciseId, 'type' => ExerciseModuleService::TYPE_ASSESSMENT]);
+        if ($count == ExerciseModuleService::ASSESSMENT_MODULE_LEAST_COUNT) {
+            $this->createNewException(ItemBankExerciseException::ASSESSMENT_MODULE_NOT_EMPTY());
+        }
+
         $this->getExerciseModuleService()->deleteAssessmentModule($moduleId);
 
         return $this->createJsonResponse(true);
+    }
+
+    public function deleteCheckAction(Request $request, $exerciseId, $moduleId)
+    {
+        $this->getExerciseService()->tryManageExercise($exerciseId);
+
+        $assessments = $this->getAssessmentExerciseService()->findByModuleId($moduleId);
+
+        $moduleCount = $this->getExerciseModuleService()->count(['exerciseId' => $exerciseId, 'type' => ExerciseModuleService::TYPE_ASSESSMENT]);
+
+        return $this->createJsonResponse(['assessmentCount' => count($assessments), 'moduleCount' => $moduleCount]);
     }
 
     public function addAssessmentAction(Request $request, $exerciseId, $moduleId)

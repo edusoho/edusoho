@@ -32,7 +32,12 @@
 
 {% block footer %}
   {% if module %}
-    <button type="button" class="btn btn-link js-delete-module" data-url="{{ path('item_bank_exercise_manage_assessment_module_delete', {exerciseId: exercise.id, moduleId: module.id}) }}">{{'form.btn.delete'|trans}}</button>
+    <button type="button" class="btn btn-link js-delete-module"
+            data-url="{{ path('item_bank_exercise_manage_assessment_module_delete', {exerciseId: exercise.id, moduleId: module.id}) }}"
+            data-check-url="{{ path('item_bank_exercise_manage_assessment_module_delete_check', {exerciseId: exercise.id, moduleId: module.id}) }}"
+    >
+      {{'form.btn.delete'|trans}}
+    </button>
   {% endif %}
   <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
   <button id="module-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" class="btn btn-primary js-submit-btn">

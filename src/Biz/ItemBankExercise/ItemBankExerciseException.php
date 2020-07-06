@@ -42,6 +42,8 @@ class ItemBankExerciseException extends AbstractException
 
     const ASSESSMENT_EXERCISE_EXIST = 5007517;
 
+    const ASSESSMENT_MODULE_NOT_EMPTY = 5007518;
+
     public $messages = [
         4037501 => 'exception.item_bank_exercise.forbidden_learn',
         5007502 => 'exception.item_bank_exercise.chapter_answer_is_doing',
@@ -60,5 +62,6 @@ class ItemBankExerciseException extends AbstractException
         5007515 => 'exception.item_bank_exercise.module.exceeded_number',
         4047516 => 'exception.item_bank_exercise.exercise.module_not_found',
         5007517 => 'exception.item_bank_exercise.assessment_exercise_exist',
+        5007518 => 'exception.item_bank_exercise.module.not_empty_number',
     ];
 }
