@@ -80,12 +80,12 @@ class CourseSetProductController extends ProductController
         $conditions = $request->query->all();
         $offset = ($request->query->get('page', 1) - 1) * $pageSize;
 
-        $distributes = $this->getS2B2CFacadeService()->getS2B2CService()->searchDistribute($conditions, ['created_time' => 'desc'], $offset, $pageSize);
+        $result = $this->getS2B2CFacadeService()->getS2B2CService()->searchDistribute($conditions, ['createdTime' => 'desc'], $offset, $pageSize);
 
-        $products = ArrayToolkit::column($distributes['items'], 'product');
+        $products = $result['items'];
         $merchant = $this->getS2B2CFacadeService()->getMe();
 
-        $paginator = new Paginator($request, $distributes['count'], $pageSize);
+        $paginator = new Paginator($request, $result['count'], $pageSize);
         $paginator->setBaseUrl($this->generateUrl('admin_v2_purchase_market_products_list', ['type' => 'courseSet']));
 
         $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();

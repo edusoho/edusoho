@@ -147,7 +147,7 @@ class S2B2CService extends BaseService
              'start' => (int) $start,
              'limit' => (int) $limit,
          );
-         $this->uri = '/contents/search_distribute';
+         $this->uri = '/distribute/products';
 
          return $this->sendRequest('searchDistribute', $params);
      }
@@ -553,7 +553,7 @@ class S2B2CService extends BaseService
                 'resourceNo' => $file['globalId'],
                 'uri' => $uri,
                 'productType' => 'course',
-                'distributeId' => $file['sourceTargetId'],
+                'productId' => $file['sourceTargetId'],
                 'params' => empty($params) ? array() : $params,
             );
         } catch (\Exception $e) {
