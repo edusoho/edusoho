@@ -57,7 +57,7 @@
                 <td class="text-center">{{ assessment.name }}</td>
                 <td class="text-center">{{'course.testpaper_manage.count'|trans({'%itemCount%': assessment.item_count})}}/{{'course.testpaper_manage.score'|trans({'%score%': assessment.total_score})}}</td>
                 <td class="text-center">
-                  <button class="cd-btn cd-btn-link-primary">{{ 'course.btn.preview'|trans }}</button>
+                  <a href="{{ path('question_bank_manage_testpaper_preview', {id: questionBank.id, assessmentId: assessment.id}) }}" class="cd-btn cd-btn-link-primary" target="_blank">{{ 'course.btn.preview'|trans }}</a>
                   <button class="cd-btn cd-btn-link-primary js-delete-single" data-url="{{ path('item_bank_exercise_manage_delete_assessment', {exerciseId: exercise.id, id: assessmentExercises[assessment.id].id }) }}">{{ 'form.btn.remove'|trans }}</button>
                 </td>
               </tr>
