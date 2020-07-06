@@ -424,6 +424,27 @@ class S2B2CService extends BaseService
         return $this->sendRequest('getProductResDownload', $sendData);
     }
 
+    /**
+     * 获取商品资源的播放JWT加密token
+     *
+     * @return string token
+     */
+    public function getProductResourceJWTPlayToken($no, $lifetime = 600, $payload = array())
+    {
+        if (empty($no)) {
+            return '';
+        }
+
+        $sendData = array(
+            'resourceNo' => $no,
+            'lifetime' => $lifetime,
+            'payload' => $payload,
+        );
+        $this->uri = '/merchant_resource/make_jwt_play_token';
+
+        return $this->sendRequest('getProductResourceJWTPlayToken', $sendData);
+    }
+
     public function purchaseProducts($purchaseProducts, $purchaseRecord)
     {
         $this->uri = $this->purchaseProductPath;
