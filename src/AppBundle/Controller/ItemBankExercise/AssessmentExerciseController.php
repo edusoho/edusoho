@@ -165,11 +165,6 @@ class AssessmentExerciseController extends BaseController
             $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
         }
 
-        $status = ArrayToolkit::column($assessments, 'status');
-        if (in_array('open', $status)) {
-            $this->createNewException(TestpaperException::OPEN_TESTPAPER_FORBIDDEN_DELETE());
-        }
-
         $this->getAssessmentExerciseService()->addAssessments($exerciseId, $moduleId, $assessments);
 
         return $this->createJsonResponse(true);
