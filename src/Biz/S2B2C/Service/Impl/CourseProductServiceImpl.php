@@ -489,11 +489,10 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
             $courseSetProduct = $this->getProductService()->getByTypeAndLocalResourceId('course_set', $courseSet['id']);
             $courseProducts = $this->getProductService()->findProductsBySupplierIdAndProductTypeAndLocalResourceIds($courseSetProduct['supplierId'], 'course', ArrayToolkit::column($courses, 'id'));
-            $productIds = ArrayToolkit::column($courseProducts, 'remoteResourceId');
 
             $this->getProductService()->deleteProduct($courseSetProduct['id']);
             $this->getProductService()->deleteByIds(ArrayToolkit::column($courseProducts, 'id'));
-            $result = $this->getS2B2CFacadeService()->getS2B2CService()->changePurchaseStatusToRemoved($courseSetProduct['remoteResourceId'], $productIds, 'course');
+            $result = $this->getS2B2CFacadeService()->getS2B2CService()->changePurchaseStatusToRemoved($courseSetProduct['remoteProductId']);
             if (!isset($result['status']) || 'success' != $result['status']) {
                 $this->createNewException(S2B2CProductException::REMOVE_PRODUCT_FAILED());
             }
@@ -602,6 +601,11 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         if ('cooperation' != $merchant['coop_status']) {
             $this->createNewException(CourseSetException::SOURCE_COURSE_CLOSED());
         }
+    }
+
+    protected function getLogger()
+    {
+        return $this->biz->offsetGet('s2b2c.merchant.logger');
     }
 
     /**

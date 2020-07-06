@@ -26,15 +26,17 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
     public static function getSubscribedEvents()
     {
         return [
-            'course.update' => 'onCourseUpdate',
             'order.success' => 'onOrderSuccess',
             'order.refunded' => 'onOrderRefunded',
+            'course.marketing.update' => 'onCourseMarketingUpdate',
         ];
     }
 
-    public function onCourseUpdate(Event $event)
+
+    public function onCourseMarketingUpdate(Event $event)
     {
-        $course = $event->getSubject();
+        $courses = $event->getSubject();
+        $course = $courses['newCourse'];
         if ($this->isSupplierCourse($course)) {
             $courseProduct = $this->getS2b2cProductService()->getByTypeAndLocalResourceId('course', $course['id']);
             $this->getS2B2CService()->changeProductSellingPrice($courseProduct['s2b2cProductDetailId'], $course['price']);

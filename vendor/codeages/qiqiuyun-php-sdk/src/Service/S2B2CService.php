@@ -256,17 +256,11 @@ class S2B2CService extends BaseService
         return $this->sendRequest('adoptDirtributeProduct', array(), 'POST');
     }
 
-    public function changePurchaseStatusToRemoved($parentId, $productIds, $productType)
+    public function changePurchaseStatusToRemoved($productId)
     {
-        $this->uri = '/purchase/removed';
+        $this->uri = str_replace('{productId}', $productId, '/purchase/{productId}/removed');
 
-        $sendData = array(
-            'parent_id' => $parentId,
-            'product_ids' => $productIds,
-            'product_type' => $productType,
-        );
-
-        return $this->sendRequest('changePurchaseStatusToRemoved', $sendData, 'POST');
+        return $this->sendRequest('changePurchaseStatusToRemoved', array(), 'POST');
     }
 
     public function upgrade($params)
