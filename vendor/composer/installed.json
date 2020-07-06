@@ -540,12 +540,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/biz-item-bank.git",
-            "reference": "5d283af34d23afbd93ab011fa7d7bc9031ea7f51"
+            "reference": "5d78d1d5c28c47dbecad495e90eb1121d8302adb"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/5d283af34d23afbd93ab011fa7d7bc9031ea7f51",
-            "reference": "5d283af34d23afbd93ab011fa7d7bc9031ea7f51",
+            "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/5d78d1d5c28c47dbecad495e90eb1121d8302adb",
+            "reference": "5d78d1d5c28c47dbecad495e90eb1121d8302adb",
             "shasum": "",
             "mirrors": [
                 {
@@ -567,7 +567,7 @@
             "mockery/mockery": "^0.9.9",
             "phpunit/phpunit": "^5|^6"
         },
-        "time": "2020-06-09T03:22:22+00:00",
+        "time": "2020-07-04T02:04:38+00:00",
         "type": "library",
         "installation-source": "source",
         "autoload": {
