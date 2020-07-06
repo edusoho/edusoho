@@ -4,9 +4,11 @@ namespace Biz\ItemBankExercise\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\TimeMachine;
+use AppBundle\Extension\NewcomerExtension;
 use Biz\BaseService;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
+use Biz\ItemBankExercise\ExpiryMode\ExerciseExpiryMode;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\ItemBankExerciseMemberException;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
@@ -51,48 +53,26 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
 
         try {
             $this->beginTransaction();
-            $deadline = 0;
-            if ('days' == $exercise['expiryMode'] && $exercise['expiryDays'] > 0) {
-                $endTime = strtotime(date('Y-m-d', time()).' 23:59:59'); //系统当前时间
-                $deadline = $exercise['expiryDays'] * 24 * 60 * 60 + $endTime;
-            } elseif ('date' == $exercise['expiryMode'] || 'end_date' == $exercise['expiryMode']) {
-                $deadline = $exercise['expiryEndDate'];
-            }
 
-            $fields = [
-                'exerciseId' => $exerciseId,
-                'questionBankId' => $exercise['questionBankId'],
-                'userId' => $userId,
-                'deadline' => $deadline,
-                'role' => 'student',
-                'remark' => empty($info['remark']) ? '' : $info['remark'],
-                'createdTime' => time(),
-            ];
-
-            $reason = [
-                'reason' => 'site.join_by_import',
-                'reasonType' => 'import_join',
-            ];
-            $member = $this->addMember($fields, $reason);
-
-            $user = $this->getUserService()->getUser($userId);
-            $infoData = [
-                'exercise' => $exercise['id'],
-                'title' => $exercise['title'],
-                'userId' => $user['id'],
-                'nickname' => $user['nickname'],
-                'remark' => $info['remark'],
-            ];
-            $this->getLogService()->info(
-                'course',
-                'add_student',
-                "《{$exercise['title']}》(#{$exercise['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$info['remark']}",
-                $infoData
+            $member = $this->addMember(
+                [
+                    'exerciseId' => $exerciseId,
+                    'questionBankId' => $exercise['questionBankId'],
+                    'userId' => $userId,
+                    'deadline' => ExerciseExpiryMode::getDeadline($exercise),
+                    'role' => 'student',
+                    'remark' => empty($info['remark']) ? '' : $info['remark'],
+                    'createdTime' => time(),
+                ],
+                [
+                    'reason' => 'site.join_by_import',
+                    'reasonType' => 'import_join',
+                ]
             );
 
-            if ('student' == $member['role']){
-                $this->getExerciseService()->updateExerciseStatistics($exercise['id'], ['studentNum']);
-            }
+            $this->recordLog($exercise, $userId, $info);
+            $this->dispatchEvent('exercise.join', $exercise, ['member' => $member]);
+
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
@@ -176,9 +156,8 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
     {
         $exercise = $this->getExerciseService()->get($exerciseId);
 
-        if ('forever' == $exercise['expiryMode']) {
-            return false;
-        }
+        ExerciseExpiryMode::canUpdateDeadline($exercise['expiryMode']);
+
         $members = $this->search(
             ['userIds' => $userIds, 'exerciseId' => $exerciseId],
             ['deadline' => 'ASC'],
@@ -275,6 +254,23 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         ];
 
         return $this->getOrderFacadeService()->createSpecialOrder($courseProduct, $userId, $params);
+    }
+
+    protected function recordLog($exercise, $userId, $info)
+    {
+        $user = $this->getUserService()->getUser($userId);
+        $this->getLogService()->info(
+            'course',
+            'add_student',
+            "《{$exercise['title']}》(#{$exercise['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$info['remark']}",
+            [
+                'exercise' => $exercise['id'],
+                'title' => $exercise['title'],
+                'userId' => $user['id'],
+                'nickname' => $user['nickname'],
+                'remark' => $info['remark'],
+            ]
+        );
     }
 
     /**
