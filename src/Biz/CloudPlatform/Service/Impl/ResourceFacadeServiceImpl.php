@@ -30,6 +30,9 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
             }
         }
         $context['token'] = $this->makePlayToken($file, 600, $payload);
+        if ('supplier' == $file['storage']) {
+            $file = $this->getS2B2CFileSourceService()->getFullFileInfo($file);
+        }
         $context['resNo'] = $file['globalId'];
 
         //转码状态
@@ -74,7 +77,6 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
 
     public function makePlayToken($file, $lifetime = 600, $payload = [])
     {
-        // to do: S2B2C 也要更改相应的播放器
         if ('supplier' == $file['storage']) {
             $fileInfo = $this->getS2B2CFileSourceService()->getFullFileInfo($file);
             return $this->getS2B2CFacadeService()->getS2B2CService()->getProductResourceJWTPlayToken($fileInfo['globalId'], $lifetime, $payload);
