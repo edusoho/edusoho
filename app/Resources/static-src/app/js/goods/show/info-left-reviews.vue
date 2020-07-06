@@ -1,5 +1,6 @@
 <template>
   <div class="reviews">
+    <create-review />
     <div class="reviews-item clearfix" v-for="item in reviews" :key="item.id">
       <img class="reviews-item__img pull-left" src="http://qa.edusoho.cn/files/default/2020/06-09/1643462753a8389520.jpg" alt="">
       <div class="reviews-item__text reviews-text pull-left">
@@ -19,6 +20,7 @@
 
 <script>
   import BackToTop from './back-to-top'; // 回到顶部
+  import CreateReview from './create-review'; // 创建评价
   export default {
     props: {
       reviews: {
@@ -29,7 +31,8 @@
       }
     },
     components: {
-      BackToTop
+      BackToTop,
+      CreateReview
     },
     filters: {
       createdTime(date) {
