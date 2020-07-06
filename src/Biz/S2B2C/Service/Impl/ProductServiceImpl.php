@@ -5,6 +5,7 @@ namespace Biz\S2B2C\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\Course\Service\CourseSetService;
 use Biz\S2B2C\Dao\ProductDao;
 use Biz\S2B2C\S2B2CProductException;
 use Biz\S2B2C\Service\CourseProductService;
@@ -365,6 +366,24 @@ class ProductServiceImpl extends BaseService implements ProductService
             throw new \Exception('重复了');
         }
 
+        $this->adoptS2B2CProduct($s2b2cProductId);
+
+        $this->beginTransaction();
+        try {
+            //@todo 可以改成策略 根据商品类型进行同步，暂时只有course_set类型
+            $this->getCourseProductService()->syncCourses($s2b2cProductId);
+            $this->commit();
+        } catch (\Exception $exception) {
+            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[adoptProduct] 同步课程失败，原因:'.$exception->getMessage());
+            $this->rollback();
+            throw new \Exception('同步课程失败');
+        }
+
+        return true;
+    }
+
+    protected function adoptS2B2CProduct($s2b2cProductId)
+    {
         $result = $this->getS2B2CFacadeService()->getS2B2CService()->adoptDirtributeProduct($s2b2cProductId);
 
         if (!empty($result['status']) && 'success' == $result['status']) {
@@ -374,28 +393,73 @@ class ProductServiceImpl extends BaseService implements ProductService
             throw new \Exception('采用课程失败');
         }
 
-        $products = array_map(function ($detail) {
-            return [
-                's2b2cProductDetailId' => $detail['id'],
-                'supplierId' => $detail['supplierId'],
-                'remoteProductId' => $detail['productId'],
-                'remoteResourceId' => $detail['targetId'],
-                'productType' => $this->getProductType($detail['targetType']),
-                'syncStatus' => 'waiting',
-                'localResourceId' => 0,
-            ];
-        }, $product['detail']);
+        //过滤已有的product
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+        $localProducts = $this->getS2B2CProductDao()->findBySupplierIdAndRemoteProductId($s2b2cConfig['supplierId'], $s2b2cProductId);
+        $s2b2cProductDetailIds = array_column($localProducts, 's2b2cProductDetailId');
+        $remoteProductDetails = array_filter($product['detail'], function ($detail) use ($s2b2cProductDetailIds) {
+            return !in_array($detail['id'], $s2b2cProductDetailIds);
+        });
+
+        if (!empty($remoteProductDetails)) {
+            $products = array_map(function ($detail) {
+                return [
+                    's2b2cProductDetailId' => $detail['id'],
+                    'supplierId' => $detail['supplierId'],
+                    'remoteProductId' => $detail['productId'],
+                    'remoteResourceId' => $detail['targetId'],
+                    'productType' => $this->getProductType($detail['targetType']),
+                    'syncStatus' => 'waiting',
+                    'localResourceId' => 0,
+                ];
+            }, $product['detail']);
+
+            $this->getS2B2CProductDao()->batchCreate($products);
+        }
+
+        return true;
+    }
+
+    public function notifyNewVersionProduct($s2b2cProductId, $resourceCourseId, $version)
+    {
+        $product = $this->getByProductIdAndRemoteResourceIdAndType($s2b2cProductId, $resourceCourseId, 'course');
+
+        if (!empty($product)) {
+            $this->getS2B2CProductDao()->update($product['id'], ['remoteVersion' => $version]);
+        }
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+
+        $courseSetProduct = $this->getProductBySupplierIdAndRemoteProductIdAndType($s2b2cConfig['supplierId'], $s2b2cProductId, 'course_set');
+
+        $this->getS2B2CProductDao()->wave([$courseSetProduct['id']], ['remoteVersion' => 1]);
+
+        return true;
+    }
+
+    public function findUpdateVersionProductList()
+    {
+        return $this->getS2B2CProductDao()->findRemoteVersionGTLocalVersion();
+    }
+
+    public function updateProductVersion($id)
+    {
+        $product = $this->getProduct($id);
+
+        if (empty($product)) {
+            throw $this->createNotFoundException('product not found');
+        }
+
+        $this->adoptS2B2CProduct($product['remoteProductId']);
 
         $this->beginTransaction();
-        try {
-            $this->getS2B2CProductDao()->batchCreate($products);
-            //@todo 可以改成策略 根据商品类型进行同步，暂时只有course_set类型
-            $this->getCourseProductService()->syncCourses($product['id']);
+
+        try{
+            $this->getCourseProductService()->updateProductVersionData($product['remoteProductId']);
             $this->commit();
-        } catch (\Exception $exception) {
-            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[adoptProduct] 同步课程失败，原因:'.$exception->getMessage());
+        }catch (\Exception $exception) {
+            $this->getLogger()->error('[updateProductVersion] 更新失败 ' . $exception->getMessage());
             $this->rollback();
-            throw new \Exception('同步课程失败');
+            throw $this->createServiceException('更新失败');
         }
 
         return true;
@@ -459,5 +523,13 @@ class ProductServiceImpl extends BaseService implements ProductService
     protected function getCourseProductService()
     {
         return $this->createService('S2B2C:CourseProductService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 }

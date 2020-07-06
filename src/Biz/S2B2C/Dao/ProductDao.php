@@ -31,4 +31,6 @@ interface ProductDao extends AdvancedDaoInterface
     public function getByRemoteProductIdRemoteResourceIdAndType($supplierId, $localResourceId, $type);
 
     public function deleteByIds($ids);
+
+    public function findRemoteVersionGTLocalVersion();
 }

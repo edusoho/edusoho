@@ -89,48 +89,24 @@ class ResourcePurchaseController extends BaseController
 
     public function productsVersionAction(Request $request)
     {
-        $necessaryConditions = [
-            'platform' => 'supplier',
-        ];
-        $conditions = $request->query->all();
-        $courseSets = $this->getCourseSetService()->searchCourseSets(array_merge($conditions, $necessaryConditions), [], 0, PHP_INT_MAX);
+        $products = $this->getS2B2CProductService()->findUpdateVersionProductList();
 
-        $courses = [];
-        foreach ($courseSets as $courseSet) {
-            $coursesInCourseSet = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
-            foreach ($coursesInCourseSet as &$course) {
-                $course['courseSet'] = $courseSet;
+        if (!empty($products)) {
+            $courseSetIds = array_column($products, 'localResourceId');
+
+            $courseSets = ArrayToolkit::index($this->getCourseSetService()->findCourseSetsByIds($courseSetIds), 'id');
+
+            foreach ($products as &$product) {
+                $product['courseSet'] = $courseSets[$product['localResourceId']] ?? null;
             }
-            $courses = array_merge($courses, $coursesInCourseSet);
+
         }
-
-        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
-
-        $products = $this->getS2B2CProductService()->findProductsBySupplierIdAndProductTypeAndLocalResourceIds($s2b2cConfig['supplierId'], 'course', ArrayToolkit::column($courses, 'id'));
-
-        $courseSetProducts = $this->getS2B2CProductService()->findProductsBySupplierIdAndProductTypeAndLocalResourceIds($s2b2cConfig['supplierId'], 'course_set', ArrayToolkit::column($courseSets, 'id'));
-
-        $productVersionList = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getProductVersionList(ArrayToolkit::column($products, 'remoteResourceId'));
-        if (!empty($productVersionList['error'])) {
-            throw $this->createNotFoundException();
-        }
-
-        $hasNewVersion = $this->getCacheService()->get('s2b2c.hasNewVersion') ?: [];
-        if (!empty($hasNewVersion['courseSet'])) {
-            $hasNewVersion['courseSet'] = 0;
-            $this->getCacheService()->set('s2b2c.hasNewVersion', $hasNewVersion);
-        }
-
-        $merchant = $this->getS2B2CFacadeService()->getMe();
-
-        $productVersionList = $this->covertProductVersions($productVersionList, $courseSets, $courses, $products, $courseSetProducts, $conditions);
 
         return $this->render(
             'admin-v2/cloud-center/content-resource/product-version/list.html.twig',
             [
                 'request' => $request,
-                'productVersionList' => $productVersionList,
-                'merchant' => $merchant,
+                'productVersionList' => $products,
             ]
         );
     }
@@ -197,7 +173,7 @@ class ResourcePurchaseController extends BaseController
         );
     }
 
-    public function updateProductToLatestVersionAction(Request $request, $remoteProductId)
+    public function updateProductToLatestVersionAction(Request $request, $productId)
     {
         if ($request->isMethod('POST')) {
             /**
@@ -208,9 +184,9 @@ class ResourcePurchaseController extends BaseController
                 return $this->createJsonResponse(['status' => false, 'error' => '更新失败']);
             }
 
-            $result = $this->getS2B2CCourseProductService()->updateProductVersionData($remoteProductId);
+            $result = $this->getS2B2CProductService()->updateProductVersion($productId);
 
-            return $this->createJsonResponse($result);
+            return $this->createJsonResponse(['status' => true]);
         }
 
         return $this->render(
@@ -218,7 +194,7 @@ class ResourcePurchaseController extends BaseController
             [
                 'path' => 'admin_v2_content_resource_update_product_version',
                 'request' => $request,
-                'remoteProductId' => $remoteProductId,
+                'productId' => $productId,
             ]
         );
     }

@@ -55,4 +55,10 @@ interface ProductService
     public function deleteByIds($ids);
 
     public function adoptProduct($s2b2cProductId);
+
+    public function notifyNewVersionProduct($s2b2cProductId, $resourceCourseId, $version);
+
+    public function findUpdateVersionProductList();
+
+    public function updateProductVersion($id);
 }

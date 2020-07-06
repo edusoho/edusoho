@@ -21,6 +21,7 @@ use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\CacheService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Monolog\Logger;
 
 /**
@@ -127,129 +128,93 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         ];
     }
 
-    public function updateProductVersionData($remoteProductId)
+    public function updateProductVersionData($s2b2cProductId)
     {
-        $config = $this->getS2B2CFacadeService()->getS2B2CConfig();
-        $courseProduct = $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteProductIdAndType($config['supplierId'], $remoteProductId, 'course');
-        if (empty($courseProduct)) {
-            //需要采购
-            $courseSetProduct = $this->purchaseNewCourse($remoteProductId);
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
 
-            if (!$courseSetProduct) {
-                return ['status' => false, 'error' => '更新失败'];
+        if (empty($s2b2cConfig['supplierId'])) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        $waitSyncProducts = $this->getS2B2CProductDao()->findBySupplierIdAndRemoteProductId($s2b2cConfig['supplierId'], $s2b2cProductId);
+        if (empty($waitSyncProducts)) {
+            return true;
+        }
+
+        $courseSets = array_filter($waitSyncProducts, function ($product) {
+            return 'course_set' == $product['productType'];
+        });
+        $courseSetProduct = ArrayToolkit::get(array_values($courseSets), 0, []);
+
+        $newCourseSet = $this->getCourseSetService()->getCourseSet($courseSetProduct['localResourceId']);
+
+        $this->getProductService()->updateProduct($courseSetProduct['id'], ['localResourceId' => $newCourseSet['id'], 'syncStatus' => self::SYNC_STATUS_FINISHED]);
+
+        $courseProducts = array_filter($waitSyncProducts, function ($product) {
+            return 'course' == $product['productType'];
+        });
+        foreach ($courseProducts as $courseProduct) {
+            if ($courseProduct['localResourceId'] == 0 ){
+                //新计划进行同步
+                $this->syncNewCourse($courseProduct, $newCourseSet);
+                continue;
             }
-
-            $courseSet = $this->getCourseSetService()->getCourseSet($courseSetProduct['localResourceId']);
-
-            $this->syncCourses($courseSet, $courseSetProduct);
-
-            return ['status' => true, 'error' => ''];
+            if (!$this->updateCourseVersionData($courseProduct)) {
+                throw new ServiceException('更新失败，productId#' . $courseProduct['id']);
+            }
         }
 
-        $course = $this->getCourseService()->getCourse($courseProduct['localResourceId']);
+        $this->getProductService()->updateProduct($courseSetProduct['id'], ['localVersion' => $courseSetProduct['remoteVersion']]);
 
-        return $this->updateCourseVersionData($course['id']);
+        return true;
     }
 
-    protected function purchaseNewCourse($remoteProductId)
+    protected function syncNewCourse($product, $courseSet)
     {
-        $product = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getSupplierProductDetail($remoteProductId);
+        $course = $this->getDistributeContent($product['s2b2cProductDetailId']);
+        $course['courseSetId'] = $courseSet['id'];
+        $course['courseSetTitle'] = $courseSet['title'];
+        $course['platform'] = 'supplier';
+        $localCourse = $this->getCourseService()->createCourse($course);
 
-        $settings = $this->getSettingService()->get('storage', []);
-        $supplierSettings = $this->getS2B2CFacadeService()->getS2B2CConfig();
+        $this->getProductService()->updateProduct($product['id'], [
+            'localResourceId' => $localCourse['id'],
+            'localVersion' => $course['editVersion'],
+            'suggestionPrice' => $course['suggestionPrice'],
+            'cooperationPrice' => $course['cooperationPrice'],
+            'remoteResourceId' => $course['id'],
+            'syncStatus' => self::SYNC_STATUS_FINISHED,
+        ]);
 
-        if (empty($product)) {
-            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[purchaseNewCourse] 没有可采购的产品，productId:'.$remoteProductId);
-
-            return false;
-        }
-
-        $purchaseProduct = $product['course'];
-
-        $purchaseProducts = [
-            [
-                'product_id' => $purchaseProduct['id'],
-                'product_type' => 'course',
-                'access_key' => $settings['cloud_access_key'],
-                'supplier_id' => $supplierSettings['supplierId'],
-                'cooperation_price' => $purchaseProduct['cooperationPrice'],
-                'suggestion_price' => $purchaseProduct['suggestionPrice'],
-                's2b2cDistributeId' => $remoteProductId,
-                'selling_price' => $purchaseProduct['suggestionPrice'],
-            ],
-        ];
-
-        $purchaseRecord = [
-            'parent_id' => $product['id'],
-            'parent_title' => $product['title'],
-            'type' => 'course',
-            'product_ids' => [$product['course']['id']],
-        ];
-
-        $result = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->checkPurchaseProducts($purchaseProducts);
-
-        if (empty($result['success']) || true != $result['success']) {
-            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[purchaseNewCourse:checkPurchaseProducts()] ', $result);
-
-            return false;
-        }
-
-        $purchaseResult = $this->getS2B2CFacadeService()->getS2B2CService()->purchaseProducts($purchaseProducts, $purchaseRecord);
-
-        if (empty($purchaseResult['status']) || 'success' != $purchaseResult['status']) {
-            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[purchaseNewCourse:purchaseProducts()] ', $result);
-
-            return false;
-        }
-
-        return $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($supplierSettings['supplierId'], $product['id'], 'course_set');
+        $this->biz['s2b2c.course_product_sync']->sync($course, ['syncCourseId' => $localCourse['id']]);
     }
 
-    public function updateCourseVersionData($courseId)
+    protected function updateCourseVersionData($product)
     {
-        $course = $this->getCourseService()->getCourse($courseId);
-        $product = $product = $this->getProductService()->getByTypeAndLocalResourceId('course', $course['id']);
-        $courseSetProduct = $this->getProductService()->getByTypeAndLocalResourceId('course_set', $course['courseSetId']);
-        $this->biz->offsetGet('s2b2c.merchant.logger')->info("开始尝试更新课程(#{$courseId})到最新版本");
+        $course = $this->getCourseService()->getCourse($product['localResourceId']);
         if (empty($course)) {
-            $this->getLogger()->error('课程不存在，拒绝操作');
-
-            return ['status' => false, 'error' => '更新失败'];
+            return false;
         }
-        if (self::SYNC_STATUS_FINISHED !== $product['syncStatus']) {
-            $this->getLogger()->error("课程 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 状态异常，无法处理", ['syncStatus' => $product['syncStatus']]);
-
-            return ['status' => false, 'error' => '更新失败'];
-        }
-
         try {
             $this->beginTransaction();
-            $sourceCourse = $this->tryGetSupplierProductSyncData($product['remoteProductId']);
+            $sourceCourse = $this->getDistributeContent($product['s2b2cProductDetailId']);
             if ($product['localVersion'] >= $sourceCourse['editVersion']) {
-                $this->getLogger()->info("课程 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 版本已经是最新，无需处理", ['nowVersion' => $product['localVersion'], 'sourceVersion' => $sourceCourse['editVersion']]);
-
+                $this->getLogger()->info("课程 - {$sourceCourse['courseSetTitle']}(courseSetId#{$sourceCourse['courseSetId']}) 版本已经是最新，无需处理", ['nowVersion' => $product['localVersion'], 'sourceVersion' => $sourceCourse['editVersion']]);
                 $this->commit();
-
-                return ['status' => false, 'error' => '版本已经是最新，无需处理'];
+                return true;
             }
-            $this->biz['s2b2c.course_product_sync']->updateToLastedVersion($sourceCourse, ['syncCourseId' => $courseId]);
-
-            $syncCourse = $this->getProductService()->updateProduct($product['id'], ['localVersion' => $sourceCourse['editVersion'], 'changelog' => []]);
-            //课程没有版本号，只有计划有，所以升级后版本号归1默认值
-            $this->getProductService()->updateProduct($courseSetProduct['id'], ['localVersion' => 1, 'remoteVersion' => 1]);
-            $this->getLogger()->info("[syncCourseProduct] 更新课程到最新 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 成功", ['courseId' => $course['id']]);
-            $this->getLogService()->info('course', 'update', "(#{$courseId})《{$course['courseSetTitle']}》更新版本到最新成功,版本变动：V{$product['localVersion']}->V{$sourceCourse['editVersion']}", ['userId' => $this->getCurrentUser()->getId()]);
+            $this->biz['s2b2c.course_product_sync']->updateToLastedVersion($sourceCourse, ['syncCourseId' => $product['localResourceId']]);
+            $this->getProductService()->updateProduct($product['id'], ['localVersion' => $sourceCourse['editVersion'], 'changelog' => []]);
+            $this->getLogService()->info('course', 'update', "(#{$course['id']})《{$sourceCourse['courseSetTitle']}》更新版本到最新成功,版本变动：V{$product['localVersion']}->V{$sourceCourse['editVersion']}", ['userId' => $this->getCurrentUser()->getId()]);
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
             $this->getLogger()->error("[syncCourseProduct] 更新课程到最新 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 失败", ['message' => $e->getMessage(), 'errorFile' => $e->getFile().$e->getLine(), 'error' => $e->getTraceAsString()]);
-            $this->getLogService()->error('course', 'update', "(#{$courseId})《{$course['courseSetTitle']}》更新版本到最新失败，版本无变化：V{$product['localVersion']}", ['userId' => $this->getCurrentUser()->getId()]);
-            $errorMsg = in_array($e->getCode(), [5001730, 5001731]) ? $e->getMessage() : '更新失败';
-
-            return ['status' => false, 'error' => $errorMsg];
+            $this->getLogService()->error('course', 'update', "(#{$course['id']})《{$course['courseSetTitle']}》更新版本到最新失败，版本无变化：V{$product['localVersion']}", ['userId' => $this->getCurrentUser()->getId()]);
+            return false;
         }
 
-        return ['status' => true, 'error' => ''];
+       return true;
     }
 
     /**

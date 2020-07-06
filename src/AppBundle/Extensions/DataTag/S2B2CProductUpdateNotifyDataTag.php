@@ -12,7 +12,9 @@ class S2B2CProductUpdateNotifyDataTag extends BaseDataTag implements DataTag
 {
     public function getData(array $arguments)
     {
-        $notify = $this->getSyncEventService()->searchSyncEvent(['isConfirm' => 0], ['createdTime' => 'desc'], 0, 5);
+        $notify = $this->getSyncEventService()->searchSyncEvent(
+            ['isConfirm' => 0, 'events' => ['modifyPrice', 'closeTask', 'closePlan', 'closeCourse']],
+            ['createdTime' => 'desc'], 0, 5);
 
         return $this->covertProducts($notify);
     }
