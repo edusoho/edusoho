@@ -8,8 +8,8 @@ class AssessmentModule {
   }
 
   init() {
-    this.element.on('click', 'js-batch-delete', event => this.batchDelete(event));
-    this.element.on('click', 'js-delete-single', event => this.deleteSingle(event));
+    this.element.on('click', '.js-batch-delete', event => this.batchDelete(event));
+    this.element.on('click', '.js-delete-single', event => this.deleteSingle(event));
     this.initChange();
   }
 
@@ -30,9 +30,7 @@ class AssessmentModule {
         $.post($target.data('url'), {ids: ids}, function (response) {
           if (response) {
             cd.message({type: 'success', message: Translator.trans('site.delete_success_hint')});
-            self._resetPage();
-            self.selector.resetItems();
-            self.renderTable();
+            location.reload();
           } else {
             cd.message({type: 'danger', message: Translator.trans('site.delete_fail_hint')});
           }
@@ -54,9 +52,7 @@ class AssessmentModule {
       $.post($target.data('url'), function (response) {
         if (response) {
           cd.message({type: 'success', message: Translator.trans('site.delete_success_hint')});
-          self._resetPage();
-          self.selector.resetItems();
-          self.renderTable();
+          location.reload();
         } else {
           cd.message({type: 'danger', message: Translator.trans('site.delete_fail_hint')});
         }
