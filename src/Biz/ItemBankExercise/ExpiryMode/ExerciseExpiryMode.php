@@ -106,4 +106,21 @@ class ExerciseExpiryMode extends ExpiryMode
         $deadline = 'plus' == $waveType ? $originDeadline + $day * 24 * 60 * 60 : $originDeadline - $day * 24 * 60 * 60;
         return $deadline;
     }
+
+    public static function isExpired($exercise)
+    {
+        $expiryMode = $exercise['expiryMode'];
+        $now = strtotime();
+        if (self::EXPIRY_MODE_DAYS == $expiryMode){
+            $isExpired = true;
+        }elseif (self::EXPIRY_MODE_DATE == $expiryMode){
+            $isExpired = $exercise['expiryStartDate'] <= $now && $exercise['expiryEndDate'] > $now;
+        }elseif (self::EXPIRY_MODE_END_DATE == $expiryMode){
+            $isExpired = $exercise['expiryEndDate'] > $now;
+        }else{
+            $isExpired = true;
+        }
+
+        return $isExpired;
+    }
 }

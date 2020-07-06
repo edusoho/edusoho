@@ -50,6 +50,10 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $this->createNewException(ItemBankExerciseMemberException::DUPLICATE_MEMBER());
         }
 
+        if(ExerciseExpiryMode::isExpired($exercise)){
+            $this->createNewException(ItemBankExerciseMemberException::CAN_NOT_BECOME_MEMBER);
+        }
+
         try {
             $this->beginTransaction();
 
