@@ -11,16 +11,16 @@ class Show {
     this.userId = container.data('userId');
     this.userName = container.data('userName');
     this.fileId = container.data('fileId');
+    //用于定位播放资源
     this.fileGlobalId = container.data('fileGlobalId');
-
     this.courseId = container.data('courseId');
     this.lessonId = container.data('lessonId');
     this.timelimit = container.data('timelimit');
-
-    this.playerType = container.data('player');
+    //用于鉴权
+    this.token = container.data('token');
     this.fileType = container.data('fileType');
     this.fileLength = container.data('fileLength');
-    this.url = container.data('url');
+    //字幕偏移时间信息
     this.videoHeaderLength = container.data('videoHeaderLength');
     this.enablePlaybackRates = container.data('enablePlaybackRates');
     this.videoH5 = container.data('videoH5');
@@ -29,7 +29,7 @@ class Show {
     this.fingerprint = container.data('fingerprint');
     this.fingerprintSrc = container.data('fingerprintSrc');
     this.fingerprintTime = container.data('fingerprintTime');
-    this.balloonVideoPlayer = container.data('balloonVideoPlayer');
+    this.jsPlayer = container.data('jsPlayer');
     this.markerUrl = container.data('markerurl');
     this.finishQuestionMarkerUrl = container.data('finishQuestionMarkerUrl');
     this.starttime = container.data('starttime');
@@ -40,7 +40,7 @@ class Show {
     this.disableResolutionSwitcher = container.data('disableResolutionSwitcher');
     this.subtitles = container.data('subtitles');
     this.autoplay = container.data('autoplay');
-    this.remeberLastPos = container.data('remeberLastPos');
+    this.rememberLastPos = container.data('rememberLastPos');
     let $iframe = $(window.parent.document.getElementById('task-content-iframe'));
     if ($iframe.length > 0 && parseInt($iframe.data('lastLearnTime')) != parseInt(DurationStorage.get(this.userId, this.fileId))) {
       DurationStorage.del(this.userId, this.fileId);
@@ -48,7 +48,8 @@ class Show {
     }
     this.lastLearnTime = DurationStorage.get(this.userId, this.fileId);
     this.strictMode = container.data('strict');
-
+    this.url = container.data('url');
+    this.fileStorage = container.data('fileStorage');
     this.initView();
     this.initEvent();
   }
@@ -56,11 +57,7 @@ class Show {
   initView() {
     let html = '';
     if (this.fileType == 'video') {
-      if (this.playerType == 'local-video-player') {
-        html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
-      } else {
-        html += '<div id="lesson-player" style="width: 100%;height: 100%;"></div>';
-      }
+      html += '<div id="lesson-player" style="width: 100%;height: 100%;"></div>';
     } else if (this.fileType == 'audio') {
       html += '<div id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></audio>';
     }
@@ -70,42 +67,55 @@ class Show {
 
   initPlayer() {
     const customPos = parseInt(this.lastLearnTime) ? parseInt(this.lastLearnTime) : 0;
-    return window.player = PlayerFactory.create(
-      this.playerType, {
-        element: '#lesson-player',
+    let options = {
+      element: '#lesson-player',
+      content: this.content,
+      mediaType: this.fileType,
+      fingerprint: this.fingerprint,
+      fingerprintSrc: this.fingerprintSrc,
+      fingerprintTime: this.fingerprintTime,
+      watermark: this.watermark,
+      starttime: this.starttime,
+      agentInWhiteList: this.agentInWhiteList,
+      timelimit: this.timelimit,
+      enablePlaybackRates: this.enablePlaybackRates,
+      disableModeSelection: this.disableModeSelection,
+      videoH5: this.videoH5,
+      controlBar: {
+        disableVolumeButton: this.disableVolumeButton,
+        disablePlaybackButton: this.disablePlaybackButton,
+        disableResolutionSwitcher: this.disableResolutionSwitcher
+      },
+      //用户以及网校信息
+      user: {
+        accesskey: this.accesskey,
+        globalId: this.fileGlobalId,
+        id: this.userId,
+        name: this.userName
+      },
+
+      videoHeaderLength: this.videoHeaderLength,
+      textTrack: this.transToTextrack(this.subtitles),
+      autoplay: this.autoplay,
+      customPos: customPos,
+      mediaLength: this.fileLength,
+      strictMode: this.strictMode,
+      rememberLastPos: this.rememberLastPos
+    };
+    if (this.fileStorage === 'local') {
+      options = Object.assign(options, {
         url: this.url,
-        content: this.content,
-        mediaType: this.fileType,
-        fingerprint: this.fingerprint,
-        fingerprintSrc: this.fingerprintSrc,
-        fingerprintTime: this.fingerprintTime,
-        watermark: this.watermark,
-        starttime: this.starttime,
-        agentInWhiteList: this.agentInWhiteList,
-        timelimit: this.timelimit,
-        enablePlaybackRates: this.enablePlaybackRates,
-        disableModeSelection: this.disableModeSelection,
-        videoH5: this.videoH5,
-        controlBar: {
-          disableVolumeButton: this.disableVolumeButton,
-          disablePlaybackButton: this.disablePlaybackButton,
-          disableResolutionSwitcher: this.disableResolutionSwitcher
-        },
-        statsInfo: {
-          accesskey: this.accesskey,
-          globalId: this.fileGlobalId,
-          userId: this.userId,
-          userName: this.userName
-        },
-        resId: this.fileGlobalId,
-        videoHeaderLength: this.videoHeaderLength,
-        textTrack: this.transToTextrack(this.subtitles),
-        autoplay: this.autoplay,
-        customPos: customPos,
-        mediaLength: this.fileLength,
-        strictMode: this.strictMode,
-        remeberLastPos: this.remeberLastPos
-      }
+      });
+    } else {
+      //文件存储类型：cloud、supplier供应商
+      options = Object.assign(options, {
+        resNo: this.fileGlobalId,
+        token: this.token,
+      });
+    }
+    console.log(this.jsPlayer);
+    return window.player = PlayerFactory.create(
+      this.jsPlayer, options
     );
   }
   transToTextrack(subtitles) {
@@ -140,11 +150,11 @@ class Show {
   }
 
   isCloudVideoPalyer() {
-    return 'balloon-cloud-video-player' == this.playerType;
+    return 'balloon-cloud-video-player' == this.jsPlayer;
   }
 
   isCloudAudioPlayer() {
-    return 'audio-player' == this.playerType;
+    return 'audio-player' == this.jsPlayer;
   }
 
   initEvent() {
@@ -162,6 +172,7 @@ class Show {
         }
         player.play();
       }
+
       if (this.isCloudVideoPalyer()) {
         if (this.markerUrl) {
           $.getJSON(this.markerUrl, function(questions) {

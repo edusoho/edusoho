@@ -2,19 +2,18 @@
 
 namespace AppBundle\Controller\Classroom;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ClassroomToolkit;
 use AppBundle\Common\Paginator;
-use AppBundle\Common\ArrayToolkit;
+use AppBundle\Controller\BaseController;
 use Biz\Classroom\ClassroomException;
-use Biz\Taxonomy\Service\TagService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
-use AppBundle\Controller\BaseController;
-use Biz\Course\Service\CourseSetService;
-use Biz\Classroom\Service\ClassroomService;
+use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\Classroom\Service\ClassroomReviewService;
 
 class CourseController extends BaseController
 {
@@ -22,11 +21,11 @@ class CourseController extends BaseController
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
 
-        $conditions = array(
+        $conditions = [
             'status' => 'published',
             'parentId' => 0,
-            'types' => array(CourseSetService::NORMAL_TYPE, CourseSetService::LIVE_TYPE),
-        );
+            'types' => [CourseSetService::NORMAL_TYPE, CourseSetService::LIVE_TYPE],
+        ];
 
         $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
         if (!empty($activeCourses)) {
@@ -45,7 +44,7 @@ class CourseController extends BaseController
 
         $courseSets = $this->searchCourseSetWithCourses(
             $conditions,
-            array('updatedTime' => 'DESC'),
+            ['updatedTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -60,13 +59,13 @@ class CourseController extends BaseController
 
         return $this->render(
             $template,
-            array(
+            [
                 'users' => $users,
                 'courseSets' => $courseSets,
                 'classroomId' => $classroomId,
                 'paginator' => $paginator,
                 'type' => 'ajax_pagination',
-            )
+            ]
         );
     }
 
@@ -82,8 +81,8 @@ class CourseController extends BaseController
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
 
         $currentUser = $this->getCurrentUser();
-        $courseMembers = array();
-        $teachers = array();
+        $courseMembers = [];
+        $teachers = [];
 
         foreach ($courses as &$course) {
             $courseMembers[$course['id']] = $this->getCourseMemberService()->getCourseMember(
@@ -91,7 +90,7 @@ class CourseController extends BaseController
                 $currentUser['id']
             );
 
-            $course['teachers'] = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds(
+            $course['teachers'] = empty($course['teacherIds']) ? [] : $this->getUserService()->findUsersByIds(
                 $course['teacherIds']
             );
             $teachers[$course['id']] = $course['teachers'];
@@ -129,7 +128,7 @@ class CourseController extends BaseController
             $layout = 'classroom/join-layout.html.twig';
         }
         if (!$classroom) {
-            $classroomDescription = array();
+            $classroomDescription = [];
         } else {
             $classroomDescription = $classroom['about'];
             $classroomDescription = strip_tags($classroomDescription, '');
@@ -138,7 +137,7 @@ class CourseController extends BaseController
 
         return $this->render(
             'classroom/course/list.html.twig',
-            array(
+            [
                 'classroom' => $classroom,
                 'member' => $member,
                 'teachers' => $teachers,
@@ -147,7 +146,7 @@ class CourseController extends BaseController
                 'layout' => $layout,
                 'classroomDescription' => $classroomDescription,
                 'isCourseMember' => $isCourseMember,
-            )
+            ]
         );
     }
 
@@ -159,13 +158,13 @@ class CourseController extends BaseController
         $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
         $excludeIds = ArrayToolkit::column($activeCourses, 'parentCourseSetId');
 
-        $conditions = array(
+        $conditions = [
             'title' => "%{$key}%",
             'status' => 'published',
             'parentId' => 0,
             'excludeIds' => $excludeIds,
-            'excludeTypes' => array('reservation'),
-        );
+            'excludeTypes' => ['reservation'],
+        ];
 
         $user = $this->getCurrentUser();
         if (!$user->isAdmin() && !$user->isSuperAdmin()) {
@@ -180,7 +179,7 @@ class CourseController extends BaseController
 
         $courseSets = $this->searchCourseSetWithCourses(
             $conditions,
-            array('updatedTime' => 'DESC'),
+            ['updatedTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -189,19 +188,19 @@ class CourseController extends BaseController
 
         return $this->render(
             'course/course-select-list.html.twig',
-            array(
+            [
                 'users' => $users,
                 'courseSets' => $courseSets,
                 'paginator' => $paginator,
                 'classroomId' => $classroomId,
                 'type' => 'ajax_pagination',
-            )
+            ]
         );
     }
 
     protected function getUsers($courseSets)
     {
-        $userIds = array();
+        $userIds = [];
         foreach ($courseSets as &$courseSet) {
             // $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));
             if (!empty($courseSet['tags'])) {
@@ -209,7 +208,7 @@ class CourseController extends BaseController
 
                 $courseSet['tags'] = ArrayToolkit::column($tags, 'id');
             }
-            $userIds = array_merge($userIds, array($courseSet['creator']));
+            $userIds = array_merge($userIds, [$courseSet['creator']]);
         }
 
         $users = $this->getUserService()->findUsersByIds($userIds);
@@ -231,17 +230,17 @@ class CourseController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        if (in_array($previewAs, array('guest', 'auditor', 'member'), true)) {
+        if (in_array($previewAs, ['guest', 'auditor', 'member'], true)) {
             if ('guest' === $previewAs) {
-                return array();
+                return [];
             }
 
-            $deadline = ClassroomToolkit::buildMemberDeadline(array(
+            $deadline = ClassroomToolkit::buildMemberDeadline([
                 'expiryMode' => $classroom['expiryMode'],
                 'expiryValue' => $classroom['expiryValue'],
-            ));
+            ]);
 
-            $member = array(
+            $member = [
                 'id' => 0,
                 'classroomId' => $classroom['id'],
                 'userId' => $user['id'],
@@ -250,14 +249,14 @@ class CourseController extends BaseController
                 'noteNum' => 0,
                 'threadNum' => 0,
                 'remark' => '',
-                'role' => array('auditor'),
+                'role' => ['auditor'],
                 'locked' => 0,
                 'createdTime' => 0,
                 'deadline' => $deadline,
-            );
+            ];
 
             if ('member' === $previewAs) {
-                $member['role'] = array('member');
+                $member['role'] = ['member'];
             }
         }
 
@@ -269,7 +268,7 @@ class CourseController extends BaseController
         $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, $orderbys, $start, $limit);
 
         if (empty($courseSets)) {
-            return array();
+            return [];
         }
 
         $courseSets = ArrayToolkit::index($courseSets, 'id');
@@ -281,7 +280,7 @@ class CourseController extends BaseController
                 }
 
                 if (empty($courseSets[$course['courseSetId']]['courses'])) {
-                    $courseSets[$course['courseSetId']]['courses'] = array($course);
+                    $courseSets[$course['courseSetId']]['courses'] = [$course];
                 } else {
                     $courseSets[$course['courseSetId']]['courses'][] = $course;
                 }
@@ -313,14 +312,6 @@ class CourseController extends BaseController
     private function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
-    }
-
-    /**
-     * @return ClassroomReviewService
-     */
-    protected function getClassroomReviewService()
-    {
-        return $this->createService('Classroom:ClassroomReviewService');
     }
 
     /**

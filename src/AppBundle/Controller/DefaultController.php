@@ -3,19 +3,20 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\Task\Service\TaskService;
-use Biz\Theme\Service\ThemeService;
-use Biz\Content\Service\BlockService;
-use Biz\Course\Service\CourseService;
-use Biz\CloudPlatform\CloudAPIFactory;
-use Biz\System\Service\SettingService;
-use Biz\Course\Service\CourseSetService;
-use Biz\CloudPlatform\Service\AppService;
-use Biz\Taxonomy\Service\CategoryService;
-use Biz\Content\Service\NavigationService;
 use Biz\Classroom\Service\ClassroomService;
-use Symfony\Component\HttpFoundation\Request;
+use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\Service\AppService;
+use Biz\Content\Service\BlockService;
+use Biz\Content\Service\NavigationService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Review\Service\ReviewService;
+use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskService;
+use Biz\Taxonomy\Service\CategoryService;
+use Biz\Theme\Service\ThemeService;
 use Biz\User\Service\BatchNotificationService;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -32,7 +33,7 @@ class DefaultController extends BaseController
         $custom = $this->isCustom();
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
 
-        return $this->render('default/index.html.twig', array('friendlyLinks' => $friendlyLinks, 'custom' => $custom));
+        return $this->render('default/index.html.twig', ['friendlyLinks' => $friendlyLinks, 'custom' => $custom]);
     }
 
     public function appDownloadAction()
@@ -43,12 +44,12 @@ class DefaultController extends BaseController
         if ($this->getWebExtension()->isMicroMessenger() && 'edusohov3' == $mobileCode) {
             $url = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.kuozhi';
         } else {
-            $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $mobileCode), UrlGeneratorInterface::ABSOLUTE_URL);
+            $url = $this->generateUrl('mobile_download', ['from' => 'qrcode', 'code' => $mobileCode], UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
-        return $this->render('mobile/app-download.html.twig', array(
+        return $this->render('mobile/app-download.html.twig', [
             'url' => $url,
-        ));
+        ]);
     }
 
     public function promotedTeacherBlockAction()
@@ -67,64 +68,64 @@ class DefaultController extends BaseController
             $teacher = null;
         }
 
-        return $this->render('default/promoted-teacher-block.html.twig', array(
+        return $this->render('default/promoted-teacher-block.html.twig', [
             'teacher' => $teacher,
-        ));
+        ]);
     }
 
     public function latestReviewsBlockAction($number)
     {
-        $reviews = $this->getReviewService()->searchReviews(array('private' => 0), 'latest', 0, $number);
+        $reviews = $this->getReviewService()->searchReviews(['targetType' => 'course', 'parentId' => 0], ['createdTime' => 'DESC'], 0, $number);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($reviews, 'courseId'));
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($reviews, 'targetId'));
 
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($courses, 'courseSetId'));
         $courseSets = ArrayToolkit::index($courseSets, 'id');
 
-        return $this->render('default/latest-reviews-block.html.twig', array(
+        return $this->render('default/latest-reviews-block.html.twig', [
             'reviews' => $reviews,
             'users' => $users,
             'courses' => $courses,
             'courseSets' => $courseSets,
-        ));
+        ]);
     }
 
     public function topNavigationAction($siteNav = null, $isMobile = false)
     {
         $navigations = $this->getNavigationService()->getOpenedNavigationsTreeByType('top');
 
-        return $this->render('default/top-navigation.html.twig', array(
+        return $this->render('default/top-navigation.html.twig', [
             'navigations' => $navigations,
             'siteNav' => $siteNav,
             'isMobile' => $isMobile,
-        ));
+        ]);
     }
 
     public function footNavigationAction()
     {
         $navigations = $this->getNavigationService()->findNavigationsByType('foot', 0, 100);
 
-        return $this->render('default/foot-navigation.html.twig', array(
+        return $this->render('default/foot-navigation.html.twig', [
             'navigations' => $navigations,
-        ));
+        ]);
     }
 
     public function friendlyLinkAction()
     {
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
 
-        return $this->render('default/friend-link.html.twig', array(
+        return $this->render('default/friend-link.html.twig', [
             'friendlyLinks' => $friendlyLinks,
-        ));
+        ]);
     }
 
     public function customerServiceAction()
     {
-        $customerServiceSetting = $this->getSettingService()->get('customerService', array());
+        $customerServiceSetting = $this->getSettingService()->get('customerService', []);
 
-        return $this->render('default/customer-service-online.html.twig', array(
+        return $this->render('default/customer-service-online.html.twig', [
             'customerServiceSetting' => $customerServiceSetting,
-        ));
+        ]);
     }
 
     public function jumpAction(Request $request)
@@ -132,9 +133,9 @@ class DefaultController extends BaseController
         $courseId = (int) ($request->query->get('id'));
 
         if ($this->getCourseMemberService()->isCourseTeacher($courseId, $this->getCurrentUser()->id)) {
-            $url = $this->generateUrl('live_course_manage_replay', array('id' => $courseId));
+            $url = $this->generateUrl('live_course_manage_replay', ['id' => $courseId]);
         } else {
-            $url = $this->generateUrl('course_show', array('id' => $courseId));
+            $url = $this->generateUrl('course_show', ['id' => $courseId]);
         }
 
         $jumpScript = "<script type=\"text/javascript\"> if (top.location !== self.location) {top.location = \"{$url}\";}</script>";
@@ -166,14 +167,14 @@ class DefaultController extends BaseController
             $config['orderBy'] = $orderBy;
             $config['categoryId'] = $categoryId;
 
-            return $this->render('default/'.$config['code'].'.html.twig', array(
+            return $this->render('default/'.$config['code'].'.html.twig', [
                 'config' => $config,
-            ));
+            ]);
         } else {
-            return $this->render('default/course-grid-with-condition-index.html.twig', array(
+            return $this->render('default/course-grid-with-condition-index.html.twig', [
                 'categoryId' => $categoryId,
                 'orderBy' => $orderBy,
-            ));
+            ]);
         }
     }
 
@@ -257,9 +258,12 @@ class DefaultController extends BaseController
         return $this->getBiz()->service('Course:CourseService');
     }
 
+    /**
+     * @return ReviewService
+     */
     protected function getReviewService()
     {
-        return $this->getBiz()->service('Course:ReviewService');
+        return $this->getBiz()->service('Review:ReviewService');
     }
 
     /**

@@ -15,7 +15,6 @@ use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\CourseSetDao;
-use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\ThreadDao;
 use Biz\Course\MemberException;
 use Biz\Course\Service\CourseDeleteService;
@@ -24,9 +23,10 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
-use Biz\Course\Service\ReviewService;
 use Biz\Exception\UnableJoinException;
+use Biz\Favorite\Dao\FavoriteDao;
 use Biz\File\UploadFileException;
+use Biz\Review\Service\ReviewService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
@@ -267,6 +267,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($fields['enableBuyExpiryTime'])) {
             $fields['buyExpiryTime'] = 0;
         }
+
+        if (!empty($fields['expiryDateRange'])) {
+            $fields['expiryStartDate'] = $fields['expiryDateRange'][0];
+            $fields['expiryEndDate'] = $fields['expiryDateRange'][1];
+        }
+
         $fields = ArrayToolkit::parts(
             $fields,
             [
@@ -621,7 +627,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             } elseif ('questionNum' === $field) {
                 $updateFields['questionNum'] = $this->countThreadsByCourseIdAndType($id, 'question');
             } elseif ('ratingNum' === $field) {
-                $ratingFields = $this->getReviewService()->countRatingByCourseId($id);
+                $ratingFields = $this->getReviewService()->countRatingByTargetTypeAndTargetId('course', $id);
                 $updateFields = array_merge($updateFields, $ratingFields);
             } elseif ('noteNum' === $field) {
                 $updateFields['noteNum'] = $this->getNoteService()->countCourseNoteByCourseId($id);
@@ -791,7 +797,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (empty($course['expiryEndDate'])) {
                 $this->createNewException(CourseException::EXPIRYENDDATE_REQUIRED());
             }
-            $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime($course['expiryEndDate'].' 23:59:59');
+            $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime(date('Y-m-d 23:59:59', strtotime($course['expiryEndDate'])));
         } elseif ('date' === $course['expiryMode']) {
             $course['expiryDays'] = 0;
             if (isset($course['expiryStartDate'])) {
@@ -802,7 +808,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (empty($course['expiryEndDate'])) {
                 $this->createNewException(CourseException::EXPIRYENDDATE_REQUIRED());
             } else {
-                $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime($course['expiryEndDate'].' 23:59:59');
+                $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime(date('Y-m-d 23:59:59', strtotime($course['expiryEndDate'])));
             }
             if ($course['expiryEndDate'] <= $course['expiryStartDate']) {
                 $this->createNewException(CourseException::EXPIRY_DATE_SET_INVALID());
@@ -1917,7 +1923,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findUserFavoritedCourseCountNotInClassroom($userId)
     {
         $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesNotInClassroomByUserId($userId, 0, PHP_INT_MAX);
-        $courseIds = ArrayToolkit::column($courseFavorites, 'courseId');
+        $courseIds = ArrayToolkit::column($courseFavorites, 'targetId');
         $conditions = ['courseIds' => $courseIds, 'excludeTypes' => ['reservation']];
 
         if (0 == count($courseIds)) {
@@ -1933,17 +1939,19 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findUserFavoritedCoursesNotInClassroom($userId, $start, $limit)
     {
         $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit);
-        $favoriteCourses = $this->getCourseDao()->search(
+        if (empty($courseFavorites)) {
+            return [];
+        }
+
+        return $this->getCourseDao()->search(
             [
-                'ids' => ArrayToolkit::column($courseFavorites, 'courseId'),
+                'ids' => ArrayToolkit::column($courseFavorites, 'targetId'),
                 'excludeTypes' => ['reservation'],
             ],
             [],
             0,
             PHP_INT_MAX
         );
-
-        return $favoriteCourses;
     }
 
     /*
@@ -1958,9 +1966,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $limit
         );
 
-        $courses = $this->findCoursesByIds(ArrayToolkit::column($coursesIds, 'id'));
-
-        return $courses;
+        return $this->findCoursesByIds(ArrayToolkit::column($coursesIds, 'id'));
     }
 
     /*
@@ -2037,11 +2043,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function countCoursesGroupByCourseSetIds($courseSetIds)
     {
         return $this->getCourseDao()->countGroupByCourseSetIds($courseSetIds);
-    }
-
-    public function getFavoritedCourseByUserIdAndCourseSetId($userId, $courseSetId)
-    {
-        return $this->getFavoriteDao()->getByUserIdAndCourseSetId($userId, $courseSetId);
     }
 
     public function appendReservationConditions($conditions)
@@ -2428,7 +2429,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     protected function getFavoriteDao()
     {
-        return $this->createDao('Course:FavoriteDao');
+        return $this->createDao('Favorite:FavoriteDao');
     }
 
     /**
@@ -2476,7 +2477,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     protected function getReviewService()
     {
-        return $this->createService('Course:ReviewService');
+        return $this->createService('Review:ReviewService');
     }
 
     /**
@@ -2652,7 +2653,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if (!empty($fields['buyExpiryTime'])) {
             if (is_numeric($fields['buyExpiryTime'])) {
-                $fields['buyExpiryTime'] = date('Y-m-d', $fields['buyExpiryTime']);
+                $fields['buyExpiryTime'] = date('Y-m-d', strlen($fields['buyExpiryTime']) > 10 ? $fields['buyExpiryTime'] / 1000 : $fields['buyExpiryTime']);
             }
 
             $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime'].' 23:59:59');

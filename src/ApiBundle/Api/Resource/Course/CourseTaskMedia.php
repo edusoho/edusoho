@@ -159,7 +159,6 @@ class CourseTaskMedia extends AbstractResource
         }
 
         $video = $config->prepareMediaUri($video);
-
         if ('self' != $video['mediaSource']) {
             return $video;
         }
@@ -172,9 +171,14 @@ class CourseTaskMedia extends AbstractResource
             throw PlayerException::NOT_SUPPORT_TYPE();
         }
 
+        $version = $request->query->get('version', 'qiqiuyun');
+        if ('escloud' == $version) {
+            return $this->getVideoWithEsCloud($file, $course, $task);
+        }
+
         $player = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
 
-        $agentInWhiteList = $this->getPlayerService()->agentInWhiteList($request->headers->get('user-agent'));
+        $agentInWhiteList = $this->getResourceFacadeService()->agentInWhiteList($request->headers->get('user-agent'));
 
         $isEncryptionPlus = false;
         $context = [];
@@ -186,11 +190,7 @@ class CourseTaskMedia extends AbstractResource
                 $mp4Url = $videoPlayer['mp4Url'];
             }
         }
-        $user = $this->getCurrentUser();
-        $isCourseMember = $this->getCourseMemberService()->isCourseMember($course['id'], $user['id']);
-        if (empty($task['isFree']) && !empty($course['tryLookable']) && !$isCourseMember) {
-            $context['watchTimeLimit'] = $course['tryLookLength'] * 60;
-        }
+
         $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($file, $context, $ssl);
 
         $supportMobile = intval($this->getSettingService()->node('storage.support_mobile', 0));
@@ -200,14 +200,33 @@ class CourseTaskMedia extends AbstractResource
             'url' => isset($url) ? $url : null,
             'player' => $player,
             'videoHeaderLength' => isset($context['videoHeaderLength']) ? $context['videoHeaderLength'] : 0,
-            'timeLimit' => isset($context['watchTimeLimit']) ? $context['watchTimeLimit'] : 0,
+            'timeLimit' => $this->getVideoFreeWatchTime($course, $task),
             'agentInWhiteList' => $agentInWhiteList,
             'isEncryptionPlus' => $isEncryptionPlus,
             'supportMobile' => $supportMobile,
         ];
     }
 
-    protected function getHomework($course, $task, $activity, $request, $ssl = fals)
+    protected function getVideoFreeWatchTime($course, $task)
+    {
+        $user = $this->getCurrentUser();
+        $isCourseMember = $this->getCourseMemberService()->isCourseMember($course['id'], $user['id']);
+        if (empty($task['isFree']) && !empty($course['tryLookable']) && !$isCourseMember) {
+            return $course['tryLookLength'] * 60;
+        }
+
+        return 0;
+    }
+
+    protected function getVideoWithEsCloud($file, $course, $task)
+    {
+        $playerContext = $this->getResourceFacadeService()->getPlayerContext($file);
+        $playerContext['timeLimit'] = $this->getVideoFreeWatchTime($course, $task);
+
+        return $playerContext;
+    }
+
+    protected function getHomework($course, $task, $activity, $request, $ssl = false)
     {
         $user = $this->getCurrentUser();
         $assessment = $this->getAssessmentService()->showAssessment($activity['ext']['assessmentId']);
@@ -286,9 +305,13 @@ class CourseTaskMedia extends AbstractResource
             throw PlayerException::NOT_SUPPORT_TYPE();
         }
 
+        if ('escloud' == $request->query->get('version', 'qiqiuyun')) {
+            return $this->getAudioWithEsCloud($file, $audio, $activity);
+        }
+
         $player = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
 
-        $agentInWhiteList = $this->getPlayerService()->agentInWhiteList($request->headers->get('user-agent'));
+        $agentInWhiteList = $this->getResourceFacadeService()->agentInWhiteList($request->headers->get('user-agent'));
 
         $url = $this->getPlayUrl($file, [], $ssl);
 
@@ -303,10 +326,25 @@ class CourseTaskMedia extends AbstractResource
         ];
     }
 
+    protected function getAudioWithEsCloud($file, $audio, $activity)
+    {
+        $context = $this->getResourceFacadeService()->getPlayerContext($file);
+        $context['hasText'] = $audio['hasText'] ? true : false;
+        $context['text'] = $audio['hasText'] ? $activity['content'] : '';
+
+        return $context;
+    }
+
     protected function getDoc($course, $task, $activity, $request, $ssl = false)
     {
         $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
         $doc = $config->get($activity['mediaId']);
+
+        if ('escloud' == $request->query->get('version', 'qiqiuyun')) {
+            $file = $this->getUploadFileService()->getFullFile($doc['mediaId']);
+
+            return  $this->getResourceFacadeService()->getPlayerContext($file);
+        }
 
         list($result, $error) = $this->getPlayerService()->getDocFilePlayer($doc, $ssl);
         if (!empty($error)) {
@@ -321,6 +359,11 @@ class CourseTaskMedia extends AbstractResource
         $config = $this->getActivityService()->getActivityConfig('ppt');
 
         $ppt = $config->get($activity['mediaId']);
+        $file = $this->getUploadFileService()->getFullFile($ppt['mediaId']);
+
+        if ('escloud' == $request->query->get('version', 'qiqiuyun')) {
+            return  $this->getResourceFacadeService()->getPlayerContext($file);
+        }
 
         list($result, $error) = $this->getPlayerService()->getPptFilePlayer($ppt, $ssl);
         if (!empty($error)) {
@@ -473,5 +516,10 @@ class CourseTaskMedia extends AbstractResource
     protected function getAnswerService()
     {
         return $this->service('ItemBank:Answer:AnswerService');
+    }
+
+    protected function getResourceFacadeService()
+    {
+        return $this->getBiz()->service('CloudPlatform:ResourceFacadeService');
     }
 }

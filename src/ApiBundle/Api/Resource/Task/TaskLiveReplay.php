@@ -4,10 +4,10 @@ namespace ApiBundle\Api\Resource\Task;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\SettingToolkit;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\MemberException;
 use Biz\Task\TaskException;
-use Biz\CloudPlatform\CloudAPIFactory;
-use AppBundle\Common\SettingToolkit;
 
 class TaskLiveReplay extends AbstractResource
 {
@@ -42,20 +42,33 @@ class TaskLiveReplay extends AbstractResource
         $visibleReplays = array_values($visibleReplays);
 
         $user = $this->getCurrentUser();
-        $response = array(
+        $response = [
             'url' => '',
-            'extra' => array(
+            'extra' => [
                 'provider' => '',
                 'lessonId' => $activity['id'],
-            ),
+            ],
             'device' => $device,
-        );
+        ];
 
         $protocol = $this->container->get('request')->getScheme();
-        $replays = array();
+        $replays = [];
+        $sendParams = [
+            'userId' => $user['id'],
+            'nickname' => $user['nickname'],
+            'device' => $device,
+            'protocol' => $protocol,
+        ];
 
         foreach ($visibleReplays as $index => $visibleReplay) {
-            $replays[] = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", array('replayId' => $visibleReplays[$index]['replayId'], 'userId' => $user['id'], 'nickname' => $user['nickname'], 'device' => $device, 'protocol' => $protocol));
+            $sendParams['replayId'] = $visibleReplays[$index]['replayId'];
+            if (!empty($activity['syncId'])) {
+                $replays[] = $this->getS2B2CFacadeService()->getS2B2CService()->createAppLiveReplayList($activity['ext']['liveId'], $sendParams);
+            } else {
+                $replays[] = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", $sendParams);
+            }
+
+            $replays[] = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", $sendParams);
             $replays[$index]['title'] = $visibleReplay['title'];
         }
 
@@ -85,16 +98,16 @@ class TaskLiveReplay extends AbstractResource
 
         if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
             if (isset($file['convertParams']['convertor']) && ('HLSEncryptedVideo' == $file['convertParams']['convertor'])) {
-                $tokenFields = array(
-                    'data' => array(
+                $tokenFields = [
+                    'data' => [
                         'id' => $file['id'],
                         'fromApi' => $options['fromApi'],
                         'type' => $options['type'],
                         'replayId' => $options['replayId'],
-                    ),
+                    ],
                     'times' => $options['times'],
                     'duration' => $options['duration'],
-                );
+                ];
 
                 $token = $this->getTokenService()->makeToken('hls.playlist', $tokenFields);
 

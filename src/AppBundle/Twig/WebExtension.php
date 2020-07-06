@@ -25,6 +25,7 @@ use Biz\S2B2C\Service\FileSourceService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
 use Biz\Testpaper\Service\TestpaperService;
+use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
@@ -195,7 +196,15 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_question_lack', [$this, 'isQuestionLack']),
             new \Twig_SimpleFunction('is_s2b2c_enabled', [$this, 'isS2B2CEnabled']),
             new \Twig_SimpleFunction('s2b2c_has_behaviour_permission', [$this, 's2b2cHasBehaviourPermission']),
+            new \Twig_SimpleFunction('make_local_media_file_token', [$this, 'makeLocalMediaFileToken']),
         ];
+    }
+
+    public function makeLocalMediaFileToken($file)
+    {
+        $token = $this->makeToken('local.media', $file['id']);
+
+        return $token['token'];
     }
 
     /**
@@ -1864,28 +1873,7 @@ class WebExtension extends \Twig_Extension
 
     public function getCloudSdkUrl($type)
     {
-        $cdnHost = $this->getSetting('developer.cloud_sdk_cdn') ?: 'service-cdn.qiqiuyun.net';
-
-        $paths = [
-            'player' => 'js-sdk/sdk-v1.js',
-            'newPlayer' => 'js-sdk/sdk-v2.js',
-            'video' => 'js-sdk/video-player/sdk-v1.js',
-            'uploader' => 'js-sdk/uploader/sdk-2.1.0.js',
-            'old_uploader' => 'js-sdk/uploader/sdk-v1.js',
-            'old_document' => 'js-sdk/document-player/v7/viewer.html',
-            'faq' => 'js-sdk/faq/sdk-v1.js',
-            'audio' => 'js-sdk/audio-player/sdk-v1.js',
-        ];
-
-        if (isset($paths[$type])) {
-            $path = $paths[$type];
-        } else {
-            $path = $type;
-        }
-
-        $timestamp = round(time() / 100);
-
-        return '//'.trim($cdnHost, "\/").'/'.$path.'?'.$timestamp;
+        return $this->getResourceFacadeService()->getFrontPlaySDKPathByType($type);
     }
 
     public function isWechatLoginBind()
@@ -2034,6 +2022,36 @@ class WebExtension extends \Twig_Extension
         return in_array($merchantSetting['coop_mode'], $this->allowedCoopMode) || !empty($merchantSetting['auth_node']['favicon']);
     }
 
+    protected function makeToken($type, $fileId, $context = [])
+    {
+        $fields = [
+            'data' => [
+                'id' => $fileId,
+            ],
+            'times' => 10,
+            'duration' => 3600,
+            'userId' => $this->biz['user']['id'],
+        ];
+
+        if (isset($context['watchTimeLimit'])) {
+            $fields['data']['watchTimeLimit'] = $context['watchTimeLimit'];
+        }
+
+        if (isset($context['hideBeginning'])) {
+            $fields['data']['hideBeginning'] = $context['hideBeginning'];
+        }
+
+        return $this->getTokenService()->makeToken($type, $fields);
+    }
+
+    /**
+     * @return TokenService
+     */
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
+    }
+
     /**
      * @return PlayerService
      */
@@ -2080,5 +2098,10 @@ class WebExtension extends \Twig_Extension
     protected function getAssessmentService()
     {
         return $this->createService('ItemBank:Assessment:AssessmentService');
+    }
+
+    protected function getResourceFacadeService()
+    {
+        return $this->createService('CloudPlatform:ResourceFacadeService');
     }
 }

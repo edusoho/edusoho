@@ -43,7 +43,7 @@
       <tbody>
         {% for review in reviews %}
           {% set author = users[review.userId]|default(null) %}
-          {% set classroom = classrooms[review.classroomId]|default(null) %}
+          {% set classroom = classrooms[review.targetId]|default(null) %}
           <tr id="review-table-tr-{{review.id}}" data-role="item">
             <td><input type="checkbox" value="{{review.id}}" data-role="batch-item"></td>
             <td>
@@ -55,7 +55,7 @@
               </div>
               <div class="mts">
                 {% if classroom %}
-                  <a class="color-success text-sm" href="{{ path('classroom_show', {id:review.classroomId}) }}" target="_blank">{{ classrooms[review.classroomId].title }}</a>
+                  <a class="color-success text-sm" href="{{ path('classroom_show', {id:review.targetId}) }}" target="_blank">{{ classrooms[review.targetId].title }}</a>
                 {% else %}
                   <span class="color-gray text-sm">{{'admin.course_review.classroom_deleted'|trans({'%classroomName%':setting('classroom.name')|default('admin.classroom_default_name'|trans)})}}</span>
                 {% endif %}

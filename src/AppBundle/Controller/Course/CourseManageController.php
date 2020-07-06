@@ -239,12 +239,16 @@ class CourseManageController extends BaseController
         }
 
         $task['isEnd'] = intval(time() - $task['endTime']) > 0;
-        $task['canRecord'] = $this->get('web.twig.live_extension')->canRecord($liveId);
-
-        $client = new EdusohoLiveClient();
+        $task['canRecord'] = $this->get('web.twig.live_extension')->canRecord($liveId, $activity['syncId']);
 
         if ('live' == $task['type']) {
-            $result = $client->getMaxOnline($liveId);
+            if ($activity['syncId'] > 0) {
+                $result = $this->getS2B2CFacadeService()->getS2B2CService()->getLiveRoomMaxOnline($liveId);
+            } else {
+                $client = new EdusohoLiveClient();
+                $result = $client->getMaxOnline($liveId);
+            }
+
             $this->getTaskService()->setTaskMaxOnlineNum($task['id'], $result['onLineNum']);
         }
 
@@ -548,6 +552,10 @@ class CourseManageController extends BaseController
             'ownerId' => $course['courseSetId'],
         ]);
 
+        if ($this->isPluginInstalled('Vip')) {
+            $vipLevels = $this->createService('VipPlugin:Vip:LevelService')->findEnabledLevels();
+        }
+
         return $this->render(
             'course-manage/info.html.twig',
             [
@@ -558,6 +566,8 @@ class CourseManageController extends BaseController
                 'canFreeTasks' => $this->findCanFreeTasks($course),
                 'freeTasks' => $freeTasks,
                 'notifies' => empty($notifies) ? [] : $notifies,
+                'vipInstalled' => $this->isPluginInstalled('Vip'),
+                'vipLevels' => empty($vipLevels) ? [] : array_column($vipLevels, 'name', 'id'),
             ]
         );
     }

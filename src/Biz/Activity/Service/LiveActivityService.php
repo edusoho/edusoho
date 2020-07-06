@@ -39,4 +39,6 @@ interface LiveActivityService
     public function canUpdateRoomType($liveStartTime);
 
     public function getByLiveId($liveId);
+
+    public function getBySyncIdGTAndLiveId($liveId);
 }

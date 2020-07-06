@@ -9,9 +9,9 @@ use ApiBundle\Api\Resource\AbstractResource;
 class GoodComponent extends AbstractResource
 {
     /**
-     * @param ApiRequest $request
      * @param $id
      * @param $component
+     *
      * @return object
      * @ApiConf(isRequiredAuth=false)
      */
@@ -21,8 +21,8 @@ class GoodComponent extends AbstractResource
     }
 
     /**
-     * @param ApiRequest $request
      * @param $id
+     *
      * @return array
      * @ApiConf(isRequiredAuth=false)
      */
