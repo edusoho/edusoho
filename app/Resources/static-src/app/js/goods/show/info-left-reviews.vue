@@ -6,7 +6,7 @@
         <div class="reviews-text__nickname">
           <a class="link-dark" href="javascript:;" target="_blank">{{ item.user.nickname }}</a>
           <span>{{ item.targetName }}</span>
-          {{ item.createdTime }}
+          {{ item.createdTime | createdTime }}
         </div>
         <div class="reviews-text__rating" v-html="$options.filters.rating(item.rating)"></div>
         <div class="reviews-text__content">{{ item.content }}</div>
@@ -27,6 +27,9 @@
       }
     },
     filters: {
+      createdTime(date) {
+        return date.slice(0, 10);;
+      },
       rating(score) {
         let floorScore = Math.floor(score);
         let emptyNum = 5 - floorScore;
