@@ -116,6 +116,7 @@ class AssessmentExerciseController extends BaseController
         $assessmentExercises = $this->getAssessmentExerciseService()->findByExerciseIdAndModuleId($exerciseId, $moduleId);
         $assessmentIds = ArrayToolkit::column($assessmentExercises,'assessmentId');
         $conditions['ids'] = !empty($assessmentIds) ?  $assessmentIds : [];
+        $conditions['status'] = 'open';
 
         $paginator = new Paginator(
             $request,
