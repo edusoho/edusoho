@@ -12,7 +12,7 @@
           </div>
           <div class="evaluate-content__plan">
             {{ review.targetName }}
-            <van-rate class="plan-rate" readonly :value="review.rating * 1" gutter="2" />
+            <span class="plan-rate" v-html="$options.filters.rating(review.rating)"></span>
           </div>
           <div class="evaluate-content__text">{{ review.content }}</div></div>
       </div>
@@ -50,6 +50,25 @@ export default {
       const reg2 = new RegExp('T', 'g');
       time = time.replace(reg2, ' ' + str);
       return time;
+    },
+    rating(score) {
+      let floorScore = Math.floor(score);
+      let emptyNum = 5 - floorScore;
+      let ele = '';
+      if (floorScore > 0) {
+        for (let i = 0; i < floorScore; i++) {
+          ele += `<i class="es-icon es-icon-star color-warning"></i>`;
+        }
+        }
+      if ((score - floorScore) >= 0.5) {
+        ele += `<i class="es-icon es-icon-starhalf color-warning"></i>`;
+      }
+      if (emptyNum > 0) {
+        for (let i = 0; i < emptyNum; i++) {
+          ele += `<i class="es-icon es-icon-staroutline"></i>`;
+        }
+      }
+      return ele;
     }
   }
 }
