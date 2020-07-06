@@ -114,8 +114,9 @@ class AssessmentExerciseController extends BaseController
         ];
 
         $assessmentExercises = $this->getAssessmentExerciseService()->findByExerciseIdAndModuleId($exerciseId, $moduleId);
-        $assessmentIds = ArrayToolkit::column($assessmentExercises,'assessmentId');
-        $conditions['ids'] = !empty($assessmentIds) ?  $assessmentIds : [];
+        $assessmentIds = ArrayToolkit::column($assessmentExercises, 'assessmentId');
+        $conditions['ids'] = !empty($assessmentIds) ? $assessmentIds : [];
+        $conditions['status'] = 'open';
 
         $paginator = new Paginator(
             $request,
@@ -131,6 +132,7 @@ class AssessmentExerciseController extends BaseController
         );
 
         $route = $isPage ? 'item-bank-exercise/assessment-exercise/assessment-list-tr.html.twig' : 'item-bank-exercise/assessment-exercise/assessment-modal.html.twig';
+
         return $this->render($route, [
             'exercise' => $exercise,
             'questionBank' => $questionBank,
@@ -163,11 +165,6 @@ class AssessmentExerciseController extends BaseController
         $assessments = $this->getAssessmentService()->findAssessmentsByIds($ids);
         if (empty($assessments)) {
             $this->createNewException(TestpaperException::NOTFOUND_TESTPAPER());
-        }
-
-        $status = ArrayToolkit::column($assessments, 'status');
-        if (in_array('open', $status)) {
-            $this->createNewException(TestpaperException::OPEN_TESTPAPER_FORBIDDEN_DELETE());
         }
 
         $this->getAssessmentExerciseService()->addAssessments($exerciseId, $moduleId, $assessments);
