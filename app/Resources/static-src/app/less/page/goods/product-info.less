@@ -238,6 +238,7 @@
 
 // 评价
 .reviews {
+  position: relative;
   margin-top: 20px;
   .reviews-item {
     position: relative;
@@ -334,5 +335,29 @@
         }
       }
     }
+  }
+}
+
+.back-to-top-pc {
+  position: absolute;
+  bottom: 10px;
+  right: -62px;
+  width: 36px;
+  height: 30px;
+  background-color: #fff;
+  text-align: center;
+  i {
+    font-size: 30px !important;
+    color: #46C37B;
+  }
+  &::before {
+    position: absolute;
+    top: -18px;
+    left: 0;
+    display: inline-block;
+    content: '';
+    border-bottom: 18px solid #fff;
+    border-left: 18px solid transparent;
+    border-right: 18px solid transparent;
   }
 }

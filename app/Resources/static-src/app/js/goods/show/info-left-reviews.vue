@@ -13,10 +13,12 @@
         <div class="reviews-text__reply"><a href="javascript:;">回复</a></div>
       </div>
     </div>
+    <back-to-top></back-to-top>
   </div>
 </template>
 
 <script>
+  import BackToTop from './back-to-top'; // 回到顶部
   export default {
     props: {
       reviews: {
@@ -25,6 +27,9 @@
           return []
         }
       }
+    },
+    components: {
+      BackToTop
     },
     filters: {
       createdTime(date) {
