@@ -90,11 +90,9 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
                 $infoData
             );
 
-            $this->dispatchEvent(
-                'exercise.join',
-                $exercise,
-                ['userId' => $member['userId'], 'member' => $member]
-            );
+            if ('student' == $member['role']){
+                $this->getExerciseService()->updateExerciseStatistics($exercise['id'], ['studentNum']);
+            }
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
