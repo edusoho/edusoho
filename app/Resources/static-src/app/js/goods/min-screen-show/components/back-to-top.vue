@@ -1,6 +1,6 @@
 <template>
   <div class="back-to-top" @click="backToTop">
-    <i class="iconfont icon-top"></i>
+    <i class="es-icon es-icon-sticky"></i>
     <span>顶部</span>
   </div>
 </template>
@@ -9,7 +9,6 @@
 export default {
   methods: {
     backToTop() {
-      console.log(1);
       document.documentElement.scrollTop = 0;
     }
   }
