@@ -10,6 +10,8 @@ abstract class ExpiryMode
 
     abstract static function getDeadline($exercise);
 
+    abstract static function getDeadlineByWaveType($originDeadline, $waveType, $day);
+
     abstract static function canUpdateDeadline($expiryMode);
 
     abstract static function filterUpdateExpiryInfo($exercise, $fields);

@@ -99,4 +99,11 @@ class ExerciseExpiryMode extends ExpiryMode
         }
         return $fields;
     }
+
+    public static function getDeadlineByWaveType($originDeadline, $waveType, $day)
+    {
+        $originDeadline = $originDeadline > 0 ? $originDeadline : time();
+        $deadline = 'plus' == $waveType ? $originDeadline + $day * 24 * 60 * 60 : $originDeadline - $day * 24 * 60 * 60;
+        return $deadline;
+    }
 }

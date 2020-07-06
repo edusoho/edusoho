@@ -4,7 +4,6 @@ namespace Biz\ItemBankExercise\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\TimeMachine;
-use AppBundle\Extension\NewcomerExtension;
 use Biz\BaseService;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
@@ -143,9 +142,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         if ($this->checkDayAndWaveTypeForUpdateDeadline($exerciseId, $userIds, $day, $waveType)) {
             foreach ($userIds as $userId) {
                 $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
-
-                $member['deadline'] = $member['deadline'] > 0 ? $member['deadline'] : time();
-                $deadline = 'plus' == $waveType ? $member['deadline'] + $day * 24 * 60 * 60 : $member['deadline'] - $day * 24 * 60 * 60;
+                $deadline = ExerciseExpiryMode::getDeadlineByWaveType($member['deadline'], $day, $waveType);
 
                 $this->getExerciseMemberDao()->update($member['id'], ['deadline' => $deadline]);
             }
@@ -156,7 +153,9 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
     {
         $exercise = $this->getExerciseService()->get($exerciseId);
 
-        ExerciseExpiryMode::canUpdateDeadline($exercise['expiryMode']);
+        if (!ExerciseExpiryMode::canUpdateDeadline($exercise['expiryMode'])) {
+            return false;
+        }
 
         $members = $this->search(
             ['userIds' => $userIds, 'exerciseId' => $exerciseId],
