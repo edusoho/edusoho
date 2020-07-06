@@ -141,15 +141,15 @@ export default {
     },
     // 获取商品数据
     getGoodsDetails() {
-      let routerNum = 2; // goods id
-      axios.get('/api/goods/1', {
+      let goodId = window.location.pathname.replace(/[^0-9]/ig, ""); // goods id
+      axios.get('/api/goods/' + goodId, {
         headers: { 'Accept': 'application/vnd.edusoho.v2+json'}
       }).then((res) => {
         let data = res.data;
         for (const key in data.specs) {
           this.$set(data.specs[key], 'active', false);
           this.$set(data.specs[key], 'id', key);
-          if (key == routerNum) {
+          if (key == goodId) {
             this.$set(data.specs[key], 'active', true);
             this.currentPlan = data.specs[key];
           }
@@ -159,7 +159,8 @@ export default {
     },
     // 获取组件数据
     getComponentsInfo() {
-      axios.get('/api/goods/1/components', {
+      let goodId = window.location.pathname.replace(/[^0-9]/ig, ""); // goods id
+      axios.get('/api/goods/' + goodId + '/components', {
         params: {
           componentTypes: ['teachers', 'recommendGoods', 'reviews']
         },

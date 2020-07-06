@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   data() {
     return {
@@ -22,12 +23,49 @@ export default {
     }
   },
   methods: {
+    // 添加收藏
+    addFavorite(id) {
+      axios({
+        url: "/api/favorite",
+        method: "POST",
+        data: {
+          'targetId': id
+        },
+        headers: {
+          'Accept': 'application/vnd.edusoho.v2+json',
+          'X-CSRF-Token': $('meta[name=csrf-token]').attr('content')
+        }
+      }).then(res => {
+        console.log(res);
+      });
+    },
+    // 移除收藏
+    removeFavorite(id) {
+      axios({
+        url: "/api/favorite",
+        method: "DELETE",
+        params: {
+          'targetId': id
+        },
+        headers: {
+          'Accept': 'application/vnd.edusoho.v2+json',
+          'X-CSRF-Token': $('meta[name=csrf-token]').attr('content')
+        }
+      }).then(res => {
+        console.log(res);
+      });
+    },
     // 收藏/移除收藏
     onFavorite() {
+      let goodsId = window.location.pathname.replace(/[^0-9]/ig, ""); // goods id
       if (this.isFavorite) {
         // 移除收藏
+        this.isFavorite = false;
+        this.addFavorite(goodsId);
       } else {
         // 收藏
+        this.isFavorite = true;
+        this.removeFavorite(goodsId);
       }
     }
   }
