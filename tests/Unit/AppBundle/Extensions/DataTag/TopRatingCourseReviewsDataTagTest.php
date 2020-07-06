@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\AppBundle\Extensions\DataTag;
 
-use Biz\BaseTestCase;
 use AppBundle\Extensions\DataTag\TopRatingCourseReviewsDataTag;
+use Biz\BaseTestCase;
 
 class TopRatingCourseReviewsDataTagTest extends BaseTestCase
 {
@@ -13,7 +13,7 @@ class TopRatingCourseReviewsDataTagTest extends BaseTestCase
     public function testEmptyCount()
     {
         $dataTag = new TopRatingCourseReviewsDataTag();
-        $dataTag->getData(array());
+        $dataTag->getData([]);
     }
 
     /**
@@ -22,21 +22,21 @@ class TopRatingCourseReviewsDataTagTest extends BaseTestCase
     public function testMaxCount()
     {
         $dataTag = new TopRatingCourseReviewsDataTag();
-        $dataTag->getData(array('count' => 101));
+        $dataTag->getData(['count' => 101]);
     }
 
     public function testGetData()
     {
         $dataTag = new TopRatingCourseReviewsDataTag();
 
-        $this->mockBiz('Course:ReviewService', array(
-            array(
+        $this->mockBiz('Review:ReviewService', [
+            [
                 'functionName' => 'searchReviews',
-                'returnValue' => array(),
-            ),
-        ));
+                'returnValue' => [],
+            ],
+        ]);
 
-        $course = $dataTag->getData(array('categoryId' => 1, 'count' => 10));
+        $course = $dataTag->getData(['categoryId' => 1, 'count' => 10]);
         $this->assertEmpty($course);
     }
 }

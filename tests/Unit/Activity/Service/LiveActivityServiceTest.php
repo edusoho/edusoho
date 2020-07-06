@@ -2,15 +2,15 @@
 
 namespace Tests\Unit\Activity\Service;
 
-use Biz\BaseTestCase;
-use Biz\Activity\Service\LiveActivityService;
 use AppBundle\Common\ReflectionUtils;
+use Biz\Activity\Service\LiveActivityService;
+use Biz\BaseTestCase;
 
 class LiveActivityServiceTest extends BaseTestCase
 {
     public function testCreate()
     {
-        $live = array(
+        $live = [
             'title' => 'test live activity',
             'remark' => 'remark ...',
             'mediaType' => 'live',
@@ -22,7 +22,7 @@ class LiveActivityServiceTest extends BaseTestCase
             'length' => 2000,
             '_base_url' => 'url...',
             'roomType' => 'small',
-        );
+        ];
         $savedActivity = $this->getLiveActivityService()->createLiveActivity($live);
         $this->assertNotNull($savedActivity['id']);
         $this->assertNotNull($savedActivity['liveId']);
@@ -32,7 +32,7 @@ class LiveActivityServiceTest extends BaseTestCase
 
     public function testUpdate()
     {
-        $live = array(
+        $live = [
             'title' => 'test live activity 2',
             'remark' => 'remark ...',
             'mediaType' => 'live',
@@ -43,12 +43,12 @@ class LiveActivityServiceTest extends BaseTestCase
             'endTime' => time() + 4000,
             'length' => 3,
             'roomType' => 'small',
-        );
+        ];
         $savedActivity = $this->getLiveActivityService()->createLiveActivity($live);
         $savedActivity = array_merge($savedActivity, $live);
         $savedActivity['startTime'] = time() + 2000;
         $savedActivity['endTime'] = time() + 5000;
-        $updatedData = array('length' => 100, 'endTime' => time() + 100000);
+        $updatedData = ['length' => 100, 'endTime' => time() + 100000];
         list($updatedActivity, $updatedData) = $this->getLiveActivityService()->updateLiveActivity($savedActivity['id'], $updatedData, $savedActivity);
         $this->assertEquals($savedActivity['liveId'], $updatedActivity['liveId']);
         $this->assertEquals(array_merge($savedActivity, $updatedData), $updatedData);
@@ -56,7 +56,7 @@ class LiveActivityServiceTest extends BaseTestCase
 
     public function testDelete()
     {
-        $live = array(
+        $live = [
             'title' => 'test live activity 2',
             'remark' => 'remark ...',
             'mediaType' => 'live',
@@ -68,7 +68,7 @@ class LiveActivityServiceTest extends BaseTestCase
             'length' => 3000,
             '_base_url' => 'url...',
             'roomType' => 'large',
-        );
+        ];
         $savedActivity = $this->getLiveActivityService()->createLiveActivity($live);
         $this->getLiveActivityService()->deleteLiveActivity($savedActivity['id']);
         $result = $this->getLiveActivityService()->getLiveActivity($savedActivity['id']);
@@ -79,50 +79,50 @@ class LiveActivityServiceTest extends BaseTestCase
     {
         $this->mockBiz(
             'Activity:LiveActivityDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'get',
-                    'returnValue' => array('id' => 111, 'liveId' => 111),
-                    'withParams' => array(1),
-                ),
-            )
+                    'returnValue' => ['id' => 111, 'liveId' => 111],
+                    'withParams' => [1],
+                ],
+            ]
         );
         $result = $this->getLiveActivityService()->getLiveActivity(1);
 
-        $this->assertEquals(array('id' => 111, 'liveId' => 111), $result);
+        $this->assertEquals(['id' => 111, 'liveId' => 111], $result);
     }
 
     public function testFindLiveActivitiesByIds()
     {
         $this->mockBiz(
             'Activity:LiveActivityDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'findByIds',
-                    'returnValue' => array(array('id' => 111, 'liveId' => 111)),
-                    'withParams' => array(array(1, 2)),
-                ),
-            )
+                    'returnValue' => [['id' => 111, 'liveId' => 111]],
+                    'withParams' => [[1, 2]],
+                ],
+            ]
         );
 
-        $results = $this->getLiveActivityService()->findLiveActivitiesByIds(array(1, 2));
+        $results = $this->getLiveActivityService()->findLiveActivitiesByIds([1, 2]);
 
-        $this->assertEquals(array(array('id' => 111, 'liveId' => 111)), $results);
+        $this->assertEquals([['id' => 111, 'liveId' => 111]], $results);
     }
 
     public function testCreateLiveroom()
     {
         $this->mockBiz(
             'User:UserService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getUser',
-                    'returnValue' => array('id' => 111, 'nickname' => 'test'),
-                    'withParams' => array(111),
-                ),
-            )
+                    'returnValue' => ['id' => 111, 'nickname' => 'test'],
+                    'withParams' => [111],
+                ],
+            ]
         );
-        $liveRoom = $this->getLiveActivityService()->createLiveroom(array(
+        $liveRoom = $this->getLiveActivityService()->createLiveroom([
             'fromUserId' => 111,
             'remark' => 'test',
             'startTime' => 4541222,
@@ -130,7 +130,7 @@ class LiveActivityServiceTest extends BaseTestCase
             'title' => 'test',
             'fromCourseId' => 12,
             'roomType' => 'large',
-        ));
+        ]);
     }
 
     public function testCanUpdateRoomType()
@@ -150,13 +150,13 @@ class LiveActivityServiceTest extends BaseTestCase
 
     public function testIsRoomType()
     {
-        $result = ReflectionUtils::invokeMethod($this->getLiveActivityService(), 'isRoomType', array('small'));
+        $result = ReflectionUtils::invokeMethod($this->getLiveActivityService(), 'isRoomType', ['small']);
         $this->assertTrue($result);
 
-        $result = ReflectionUtils::invokeMethod($this->getLiveActivityService(), 'isRoomType', array('large'));
+        $result = ReflectionUtils::invokeMethod($this->getLiveActivityService(), 'isRoomType', ['large']);
         $this->assertTrue($result);
 
-        $result = ReflectionUtils::invokeMethod($this->getLiveActivityService(), 'isRoomType', array('middle'));
+        $result = ReflectionUtils::invokeMethod($this->getLiveActivityService(), 'isRoomType', ['middle']);
         $this->assertFalse($result);
     }
 
@@ -169,27 +169,27 @@ class LiveActivityServiceTest extends BaseTestCase
         $result = $this->getLiveActivityService()->updateLiveStatus(1, 'closed');
         $this->assertNull($result);
 
-        $this->mockBiz('Activity:LiveActivityDao', array(
-            array(
+        $this->mockBiz('Activity:LiveActivityDao', [
+            [
                 'functionName' => 'get',
-                'returnValue' => array('id' => 1),
-            ),
-        ));
+                'returnValue' => ['id' => 1],
+            ],
+        ]);
         $result = $this->getLiveActivityService()->updateLiveStatus(1, 'created');
     }
 
     public function testUpdateLiveStatus()
     {
-        $this->mockBiz('Activity:LiveActivityDao', array(
-            array(
+        $this->mockBiz('Activity:LiveActivityDao', [
+            [
                 'functionName' => 'get',
-                'returnValue' => array('id' => 1, 'progressStatus' => 'created'),
-            ),
-            array(
+                'returnValue' => ['id' => 1, 'progressStatus' => 'created'],
+            ],
+            [
                 'functionName' => 'update',
-                'returnValue' => array('id' => 1, 'progressStatus' => 'closed'),
-            ),
-        ));
+                'returnValue' => ['id' => 1, 'progressStatus' => 'closed'],
+            ],
+        ]);
         $result = $this->getLiveActivityService()->updateLiveStatus(1, 'closed');
 
         $this->assertEquals('closed', $result['progressStatus']);
@@ -197,16 +197,29 @@ class LiveActivityServiceTest extends BaseTestCase
 
     public function testSearch()
     {
-        $this->mockBiz('Activity:LiveActivityDao', array(
-            array(
+        $this->mockBiz('Activity:LiveActivityDao', [
+            [
                 'functionName' => 'search',
-                'returnValue' => array(array('id' => 1), array('id' => 2)),
-            ),
-        ));
+                'returnValue' => [['id' => 1], ['id' => 2]],
+            ],
+        ]);
 
-        $results = $this->getLiveActivityService()->search(array('ids' => array(1, 2, 3)), null, 0, 5);
+        $results = $this->getLiveActivityService()->search(['ids' => [1, 2, 3]], null, 0, 5);
 
         $this->assertEquals(2, count($results));
+    }
+
+    public function testGetBySyncIdGTAndLiveId()
+    {
+        $this->mockBiz('Activity:LiveActivityDao', [
+            [
+                'functionName' => 'getBySyncIdGTAndLiveId',
+                'returnValue' => ['id' => 1, 'syncId' => 2],
+            ],
+        ]);
+        $result = $this->getLiveActivityService()->getBySyncIdGTAndLiveId(1);
+
+        $this->assertEquals(2, $result['syncId']);
     }
 
     /**
@@ -233,10 +246,10 @@ class MockEdusohoLiveClient
 
     public function createLive($live)
     {
-        return array(
+        return [
             'id' => rand(1, 1000),
             'provider' => rand(1, 10),
-        );
+        ];
     }
 
     public function updateLive($live)
@@ -246,8 +259,8 @@ class MockEdusohoLiveClient
 
     public function deleteLive($id)
     {
-        return array(
+        return [
             'id' => $id,
-        );
+        ];
     }
 }

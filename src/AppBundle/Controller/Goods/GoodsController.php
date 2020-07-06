@@ -12,6 +12,11 @@ class GoodsController extends BaseController
         return $this->render('goods/show.html.twig', array_merge($this->mockData($id), ['goods' => $this->mockData($id)]));
     }
 
+    public function minScreenShowAction(Request $request, $id)
+    {
+        return $this->render('goods/min-screen-show.html.twig', []);
+    }
+
     public function mockData($id)
     {
         $mockData = [
@@ -38,12 +43,14 @@ class GoodsController extends BaseController
                         'subtitle' => '计划一规格副标题',
                         'price' => '100.00',
                         'expiryMode' => 'forever',
+                        'joinedNum' => '58',
                     ],
                     2 => [
                         'title' => '计划二进阶学习',
                         'subtitle' => '计划二规格副标题',
                         'price' => '150.00',
                         'expiryMode' => 'forever',
+                        'joinedNum' => '18',
                         'services' => [
                             'homeworkReview' => [
                                 'code' => 'homeworkReview',
@@ -94,6 +101,7 @@ class GoodsController extends BaseController
                         'subtitle' => '计划一规格副标题',
                         'price' => '1000.00',
                         'expiryMode' => 'forever',
+                        'joinedNum' => '49',
                         'services' => [
                             'homeworkReview' => [
                                 'code' => 'homeworkReview',
@@ -130,6 +138,7 @@ class GoodsController extends BaseController
                         'subtitle' => '计划二规格副标题',
                         'price' => '1500.00',
                         'expiryMode' => 'forever',
+                        'joinedNum' => '35',
                     ],
                 ],
             ],

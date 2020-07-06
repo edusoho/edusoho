@@ -217,6 +217,11 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return 1;
     }
 
+    public function getBySyncIdGTAndLiveId($liveId)
+    {
+        return $this->getLiveActivityDao()->getBySyncIdGTAndLiveId($liveId);
+    }
+
     protected function isRoomType($liveRoomType)
     {
         return in_array($liveRoomType, [EdusohoLiveClient::LIVE_ROOM_LARGE, EdusohoLiveClient::LIVE_ROOM_SMALL]);

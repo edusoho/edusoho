@@ -5,7 +5,6 @@ namespace Biz\Notification\Event;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\StringToolkit;
 use Biz\Activity\Service\ActivityService;
-use Biz\Classroom\Service\ClassroomReviewService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudData\Service\CloudDataService;
 use Biz\CloudPlatform\IMAPIFactory;
@@ -15,10 +14,10 @@ use Biz\CloudPlatform\Service\PushService;
 use Biz\CloudPlatform\Service\SearchService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\Impl\ReviewServiceImpl;
 use Biz\Course\Util\CourseTitleUtils;
 use Biz\Group\Service\GroupService;
 use Biz\IM\Service\ConversationService;
+use Biz\Review\Service\ReviewService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Service\TestpaperService;
@@ -112,11 +111,10 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             'answer.submitted' => 'onAnswerSubmitted',
             'answer.finished' => 'onAnswerFinished',
 
-            'course.review.add' => 'onCourseReviewAdd',
-            'classReview.add' => 'onClassroomReviewAdd',
-
             'invite.reward' => 'onInviteReward',
             'batch_notification.publish' => 'onBatchNotificationPublish',
+
+            'review.create' => 'onReviewCreate',
         ];
     }
 
@@ -610,92 +608,6 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'userId' => $inviteCoupon['userId'],
                 'title' => "{$message['title']}",
                 'message' => "{$message['content']}",
-            ];
-
-            $this->createPushJob($from, $to, $body);
-        }
-    }
-
-    public function onCourseReviewAdd(Event $event)
-    {
-        $review = $event->getSubject();
-
-        if ($this->isIMEnabled()) {
-            if (empty($review['parentId'])) {
-                return;
-            }
-            $course = $this->getCourseService()->getCourse($review['courseId']);
-
-            if (empty($course)) {
-                return;
-            }
-            $parentReview = $this->getCourseReviewService()->getReview($review['parentId']);
-
-            if (empty($parentReview)) {
-                return;
-            }
-
-            $from = [
-                'id' => $review['id'],
-                'type' => 'review',
-            ];
-
-            $to = [
-                'id' => $parentReview['userId'],
-                'type' => 'user',
-                'convNo' => $this->getConvNo(),
-            ];
-
-            $body = [
-                'type' => 'course.review_add',
-                'courseId' => $course['id'],
-                'reviewId' => $review['id'],
-                'parentReviewId' => $parentReview['id'],
-                'title' => "您在课程{$course['title']}的评价已被回复",
-                'message' => $this->plainText($review['content'], 50),
-            ];
-
-            $this->createPushJob($from, $to, $body);
-        }
-    }
-
-    public function onClassroomReviewAdd(Event $event)
-    {
-        $review = $event->getSubject();
-
-        if ($this->isIMEnabled()) {
-            if (empty($review['parentId'])) {
-                return;
-            }
-            $classroom = $this->getClassroomService()->getClassroom($review['classroomId']);
-
-            if (empty($classroom)) {
-                return;
-            }
-            $parentReview = $this->getCourseReviewService()->getReview($review['parentId']);
-
-            if (empty($parentReview)) {
-                return;
-            }
-
-            $from = [
-                'id' => $review['id'],
-                'type' => 'review',
-            ];
-
-            $to = [
-                'id' => $parentReview['userId'],
-                'type' => 'user',
-                'convNo' => $this->getConvNo(),
-            ];
-
-            $body = [
-                'type' => 'classroom.review_add',
-                'classroomId' => $classroom['id'],
-                'reviewId' => $review['id'],
-                'parentReviewId' => $parentReview['id'],
-                'title' => "您在班级{$classroom['title']}的评价已被回复",
-                'message' => $this->plainText($review['content'], 50),
             ];
 
             $this->createPushJob($from, $to, $body);
@@ -1434,6 +1346,80 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             ];
             $this->createSearchJob('delete', $args);
         }
+    }
+
+    public function onReviewCreate(Event $event)
+    {
+        $review = $event->getSubject();
+
+        if ($this->isIMEnabled()) {
+            if (empty($review['parentId'])) {
+                return;
+            }
+
+            $parentReview = $this->getReviewService()->getReview($review['parentId']);
+
+            if (empty($parentReview)) {
+                return;
+            }
+
+            $from = [
+                'id' => $review['id'],
+                'type' => 'review',
+            ];
+
+            $to = [
+                'id' => $parentReview['userId'],
+                'type' => 'user',
+                'convNo' => $this->getConvNo(),
+            ];
+
+            if ('course' == $review['targetType']) {
+                $course = $this->getCourseService()->getCourse($review['targetId']);
+
+                if (empty($course)) {
+                    return;
+                }
+
+                $body = [
+                    'type' => 'course.review_add',
+                    'courseId' => $course['id'],
+                    'reviewId' => $review['id'],
+                    'parentReviewId' => $parentReview['id'],
+                    'title' => "您在课程{$course['title']}的评价已被回复",
+                    'message' => $this->plainText($review['content'], 50),
+                ];
+            } elseif ('classroom' == $review['targetType']) {
+                $classroom = $this->getClassroomService()->getClassroom($review['targetId']);
+
+                if (empty($classroom)) {
+                    return;
+                }
+
+                $body = [
+                    'type' => 'classroom.review_add',
+                    'classroomId' => $classroom['id'],
+                    'reviewId' => $review['id'],
+                    'parentReviewId' => $parentReview['id'],
+                    'title' => "您在班级{$classroom['title']}的评价已被回复",
+                    'message' => $this->plainText($review['content'], 50),
+                ];
+            }
+
+            if (empty($body)) {
+                return;
+            }
+
+            $this->createPushJob($from, $to, $body);
+        }
+    }
+
+    /**
+     * @return ReviewService
+     */
+    protected function getReviewService()
+    {
+        return $this->createService('Review:ReviewService');
     }
 
     protected function convertCourse($course)
@@ -2288,22 +2274,6 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
     protected function getSearchService()
     {
         return $this->createService('CloudPlatform:SearchService');
-    }
-
-    /**
-     * @return ReviewServiceImpl
-     */
-    protected function getCourseReviewService()
-    {
-        return $this->createService('Course:ReviewService');
-    }
-
-    /**
-     * @return ClassroomReviewService
-     */
-    protected function getClassroomReviewService()
-    {
-        return $this->createService('Classroom:ClassroomReviewService');
     }
 
     /**

@@ -226,8 +226,8 @@ class CourseSetManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($id);
 
-        if (!empty($courseSet['sourceCourseSetId'])) {
-            $this->getCourseProductService()->checkSourceCourseSetStatus($courseSet['sourceCourseSetId']);
+        if ('supplier' == $courseSet['platform']) {
+            $this->getCourseProductService()->checkCourseSetStatus($id);
         }
 
         if ('live' == $courseSet['type']) {

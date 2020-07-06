@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\AppBundle\Extensions\DataTag;
 
-use Biz\BaseTestCase;
 use AppBundle\Extensions\DataTag\CourseReviewDataTag;
+use Biz\BaseTestCase;
 
 class CourseReviewDataTagTest extends BaseTestCase
 {
@@ -13,38 +13,38 @@ class CourseReviewDataTagTest extends BaseTestCase
     public function testArgumentError()
     {
         $datatag = new CourseReviewDataTag();
-        $datatag->getData(array());
+        $datatag->getData([]);
     }
 
     public function testGetData()
     {
         $datatag = new CourseReviewDataTag();
 
-        $data = $datatag->getData(array('reviewId' => 1));
+        $data = $datatag->getData(['reviewId' => 1]);
         $this->assertNull($data);
 
-        $this->mockBiz('Course:ReviewService', array(
-            array(
+        $this->mockBiz('Review:ReviewService', [
+            [
                 'functionName' => 'getReview',
-                'returnValue' => array('id' => 1, 'userId' => 2, 'courseId' => 3),
-            ),
-        ));
+                'returnValue' => ['id' => 1, 'userId' => 2, 'targetId' => 3],
+            ],
+        ]);
 
-        $this->mockBiz('User:UserService', array(
-            array(
+        $this->mockBiz('User:UserService', [
+            [
                 'functionName' => 'getUser',
-                'returnValue' => array('id' => 2, 'nickname' => 'user name', 'password' => '123456', 'salt' => 'abcd'),
-            ),
-        ));
+                'returnValue' => ['id' => 2, 'nickname' => 'user name', 'password' => '123456', 'salt' => 'abcd'],
+            ],
+        ]);
 
-        $this->mockBiz('Course:CourseService', array(
-            array(
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'getCourse',
-                'returnValue' => array('id' => 3, 'title' => 'course title'),
-            ),
-        ));
+                'returnValue' => ['id' => 3, 'title' => 'course title'],
+            ],
+        ]);
 
-        $data = $datatag->getData(array('reviewId' => 1));
+        $data = $datatag->getData(['reviewId' => 1]);
 
         $this->assertEquals(1, $data['id']);
         $this->assertArrayHasKey('reviewer', $data);

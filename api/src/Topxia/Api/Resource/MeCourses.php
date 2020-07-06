@@ -2,40 +2,36 @@
 
 namespace Topxia\Api\Resource;
 
-use Silex\Application;
 use AppBundle\Common\ArrayToolkit;
-use Symfony\Component\HttpFoundation\Request;
 use Biz\Course\Service\Impl\CourseServiceImpl;
 use Biz\Course\Service\Impl\CourseSetServiceImpl;
+use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
 
 class MeCourses extends BaseResource
 {
     public function get(Application $app, Request $request)
     {
-        $conditions = $request->query->all();
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 10);
         $type = $request->query->get('type', '');
         $relation = $request->query->get('relation', '');
         $user = getCurrentUser();
         if ('learning' == $relation) {
-            $total = $this->getCourseService()->findUserLearningCourseCountNotInClassroom($user['id'], $conditions);
             $courses = $this->getCourseService()->findUserLearningCoursesNotInClassroom(
                 $user['id'],
                 $start,
                 $limit,
-                empty($type) ? array() : array('type' => $type)
+                empty($type) ? [] : ['type' => $type]
             );
         } elseif ('learned' == $relation) {
-            $total = $this->getCourseService()->findUserLeanedCourseCount($user['id'], $conditions);
             $courses = $this->getCourseService()->findUserLearnedCoursesNotInClassroom(
                 $user['id'],
                 $start,
                 $limit,
-                empty($type) ? array() : array('type' => $type)
+                empty($type) ? [] : ['type' => $type]
             );
         } elseif ('learn' == $relation) {
-            $total = $this->getCourseService()->findUserLearnCourseCountNotInClassroom($user['id'], true, true);
             if (empty($type)) {
                 $coursesAfterColumn = $this->getCourseService()->findUserLearnCoursesNotInClassroom(
                     $user['id'],
@@ -54,18 +50,16 @@ class MeCourses extends BaseResource
             }
             $courses = array_values($coursesAfterColumn);
         } elseif ('teaching' == $relation) {
-            $total = $this->getCourseService()->findUserTeachCourseCountNotInClassroom(array('userId' => $user['id']), false);
             $courses = $this->getCourseService()->findUserTeachCoursesNotInClassroom(
-                array(
+                [
                     'userId' => $user['id'],
-                    'excludeTypes' => array('reservation'),
-                ),
+                    'excludeTypes' => ['reservation'],
+                ],
                 $start,
                 $limit,
                 false
             );
         } elseif ('favorited' == $relation) {
-            $total = $this->getCourseService()->findUserFavoritedCourseCountNotInClassroom($user['id']);
             $courses = $this->getCourseService()->findUserFavoritedCoursesNotInClassroom(
                 $user['id'],
                 $start,
@@ -87,7 +81,7 @@ class MeCourses extends BaseResource
 
     protected function multicallFilter($name, $res)
     {
-        $courses = array();
+        $courses = [];
         $courseIds = ArrayToolkit::column($res, 'id');
 
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);

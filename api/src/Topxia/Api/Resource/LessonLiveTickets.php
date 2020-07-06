@@ -2,8 +2,8 @@
 
 namespace Topxia\Api\Resource;
 
-use Silex\Application;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
 class LessonLiveTickets extends BaseResource
@@ -12,7 +12,7 @@ class LessonLiveTickets extends BaseResource
     {
         $task = $this->getTaskService()->getTask($id);
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-        if ($task['type'] != 'live') {
+        if ('live' != $task['type']) {
             return $this->error('5001', '非直播课程');
         }
 
@@ -24,7 +24,7 @@ class LessonLiveTickets extends BaseResource
 
         $user = $this->getCurrentUser();
 
-        $params = array();
+        $params = [];
         $params['id'] = $user['id'];
         $params['nickname'] = $user['nickname'].'_'.$user['id'];
         $params['role'] = 'student';
@@ -37,7 +37,11 @@ class LessonLiveTickets extends BaseResource
         }
 
         try {
-            $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$activity['ext']['liveId']}/tickets", $params);
+            if (!empty($activity['syncId'])) {
+                $ticket = $this->getS2B2CFacadeService()->getS2B2CService()->getLiveEntryTicket($activity['ext']['liveId'], $params);
+            } else {
+                $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$activity['ext']['liveId']}/tickets", $params);
+            }
         } catch (\Exception $e) {
             return $this->error('5003', '进入直播教室失败！');
         }

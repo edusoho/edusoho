@@ -38,7 +38,7 @@ abstract class AbstractResource
         $this->biz = $biz;
     }
 
-    public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    public function generateUrl($route, $parameters = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
@@ -48,7 +48,7 @@ abstract class AbstractResource
         return $this->container->get('web.twig.extension');
     }
 
-    public function renderView($view, array $parameters = array())
+    public function renderView($view, array $parameters = [])
     {
         //不推荐在API中使用renderView，不要继续使用
         @trigger_error("renderView in Api is not recommended, dont't use in the future，will removed soon", E_USER_DEPRECATED);
@@ -97,7 +97,7 @@ abstract class AbstractResource
             $limit = static::DEFAULT_PAGING_LIMIT;
         }
 
-        return array($offset, $limit > self::MAX_PAGING_LIMIT ? self::MAX_PAGING_LIMIT : $limit);
+        return [$offset, $limit > self::MAX_PAGING_LIMIT ? self::MAX_PAGING_LIMIT : $limit];
     }
 
     protected function getSort(ApiRequest $request)
@@ -110,7 +110,7 @@ abstract class AbstractResource
         if ($sortStr) {
             $explodeSort = explode(',', $sortStr);
 
-            $sort = array();
+            $sort = [];
             foreach ($explodeSort as $part) {
                 $prefix = substr($part, 0, 1);
                 $field = str_replace(self::PREFIX_SORT_DESC, '', $part);
@@ -124,7 +124,7 @@ abstract class AbstractResource
             return $sort;
         }
 
-        return array();
+        return [];
     }
 
     protected function dispatchEvent($eventName, Event $event)
@@ -134,13 +134,13 @@ abstract class AbstractResource
 
     public function supportMethods()
     {
-        return array(
+        return [
             static::METHOD_ADD,
             static::METHOD_GET,
             static::METHOD_SEARCH,
             static::METHOD_UPDATE,
             static::METHOD_REMOVE,
-        );
+        ];
     }
 
     /**
@@ -168,14 +168,14 @@ abstract class AbstractResource
 
     protected function makePagingObject($objects, $total, $offset, $limit)
     {
-        return array(
+        return [
             'data' => $objects,
-            'paging' => array(
+            'paging' => [
                 'total' => $total,
                 'offset' => $offset,
                 'limit' => $limit,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -186,5 +186,13 @@ abstract class AbstractResource
         $biz = $this->getBiz();
 
         return $biz['user'];
+    }
+
+    /**
+     * @return \Biz\S2B2C\Service\S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->getBiz()->service('S2B2C:S2B2CFacadeService');
     }
 }

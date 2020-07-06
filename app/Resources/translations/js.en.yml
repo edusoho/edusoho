@@ -1137,6 +1137,7 @@ admin.course.publish_hint: Are you sure you want to publish this course?
 admin.course.publish_success_hint: The course was published successfully!
 admin.course.unknow_error_hint: unknown mistake
 admin.course.delete_hint: Delete a course will delete the chapters, class hours, students, etc. of the course. Really want to delete the course?
+admin.course.remove_hint: Removal of the course will delete all student information and student data, and cannot be restored after removal! Are you sure you want to remove this course?
 admin.course.remind_teacher_success_hint: Remind the teacher's notice and send it successfully!
 admin.course.cancel_recommend_hint: Really you want to cancel the course recommend?
 admin.course.recommend_success_hint: Setting the recommended course operation successfully!

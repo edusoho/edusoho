@@ -4259,6 +4259,7 @@ t.add("admin.course.publish_hint", "Are you sure you want to publish this course
 t.add("admin.course.publish_success_hint", "The course was published successfully!", "js", "en");
 t.add("admin.course.unknow_error_hint", "unknown mistake", "js", "en");
 t.add("admin.course.delete_hint", "Delete a course will delete the chapters, class hours, students, etc. of the course. Really want to delete the course?", "js", "en");
+t.add("admin.course.remove_hint", "Removal of the course will delete all student information and student data, and cannot be restored after removal! Are you sure you want to remove this course?", "js", "en");
 t.add("admin.course.remind_teacher_success_hint", "Remind the teacher's notice and send it successfully!", "js", "en");
 t.add("admin.course.cancel_recommend_hint", "Really you want to cancel the course recommend?", "js", "en");
 t.add("admin.course.recommend_success_hint", "Setting the recommended course operation successfully!", "js", "en");

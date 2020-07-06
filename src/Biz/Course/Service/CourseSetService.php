@@ -3,7 +3,6 @@
 namespace Biz\Course\Service;
 
 use Biz\System\Annotation\Log;
-use Biz\User\UserException;
 
 interface CourseSetService
 {
@@ -17,36 +16,6 @@ interface CourseSetService
 
     const NORMAL_TYPE = 'normal';
     const LIVE_TYPE = 'live';
-
-    /**
-     * collect course set.
-     *
-     * @param  $id
-     *
-     * @throws UserException
-     *
-     * @return bool
-     */
-    public function favorite($id);
-
-    /**
-     * cancel collected course set.
-     *
-     * @param  $id
-     *
-     * @throws UserException
-     *
-     * @return bool
-     */
-    public function unfavorite($id);
-
-    /**
-     * @param int $userId
-     * @param int $courseSetId
-     *
-     * @return bool
-     */
-    public function isUserFavorite($userId, $courseSetId);
 
     public function tryManageCourseSet($id);
 
@@ -197,30 +166,6 @@ interface CourseSetService
      * @return array[]
      */
     public function findPublicCourseSetsByIds(array $ids);
-
-    /**
-     * @param int $userId
-     *
-     * @return int
-     */
-    public function countUserFavorites($userId);
-
-    /**
-     * @param int $userId
-     * @param int $start
-     * @param int $limit
-     *
-     * @return array[]
-     */
-    public function searchUserFavorites($userId, $start, $limit);
-
-    /**
-     * @param int $start
-     * @param int $limit
-     *
-     * @return array[]
-     */
-    public function searchFavorites(array $conditions, array $orderBys, $start, $limit);
 
     /**
      * 更新课程统计属性.

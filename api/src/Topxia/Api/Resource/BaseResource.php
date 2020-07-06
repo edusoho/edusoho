@@ -3,9 +3,9 @@
 namespace Topxia\Api\Resource;
 
 use AppBundle\Util\CdnUrl;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
 use Codeages\Biz\Framework\Context\Biz;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Topxia\Service\Common\ServiceKernel;
 
 abstract class BaseResource
@@ -93,7 +93,7 @@ abstract class BaseResource
     {
         $userAgent = strtolower($userAgent);
 
-        $ios = array('iphone', 'ipad', 'ipod');
+        $ios = ['iphone', 'ipad', 'ipod'];
         foreach ($ios as $keyword) {
             if (strpos($userAgent, $keyword) > -1) {
                 return 'ios';
@@ -109,24 +109,24 @@ abstract class BaseResource
 
     protected function error($code, $message)
     {
-        return array('error' => array(
+        return ['error' => [
             'code' => $code,
             'message' => $message,
-        ));
+        ]];
     }
 
     protected function wrap($resources, $total)
     {
         if (is_array($total)) {
-            return array('resources' => $resources, 'next' => $total);
+            return ['resources' => $resources, 'next' => $total];
         } else {
-            return array('resources' => $resources, 'total' => $total ?: 0);
+            return ['resources' => $resources, 'total' => $total ?: 0];
         }
     }
 
     protected function simpleUsers($users)
     {
-        $newArray = array();
+        $newArray = [];
         foreach ($users as $key => $user) {
             $newArray[$key] = $this->simpleUser($user);
         }
@@ -136,7 +136,7 @@ abstract class BaseResource
 
     protected function simpleUser($user)
     {
-        $simple = array();
+        $simple = [];
         $user = $this->destroyedNicknameFilter($user);
 
         $simple['id'] = $user['id'];
@@ -151,7 +151,7 @@ abstract class BaseResource
 
     protected function destroyedNicknameFilter($user)
     {
-        $user['nickname'] = ($user['destroyed'] == 1) ? '帐号已注销' : $user['nickname'];
+        $user['nickname'] = (1 == $user['destroyed']) ? '帐号已注销' : $user['nickname'];
 
         return $user;
     }
@@ -160,37 +160,37 @@ abstract class BaseResource
     {
         $end = end($currentRows);
         if (empty($end)) {
-            return array(
+            return [
                 'cursor' => $currentCursor + 1,
                 'start' => 0,
                 'limit' => $currentLimit,
                 'eof' => true,
-            );
+            ];
         }
 
         if (count($currentRows) < $currentLimit) {
-            return array(
+            return [
                 'cursor' => $end['updatedTime'] + 1,
                 'start' => 0,
                 'limit' => $currentLimit,
                 'eof' => true,
-            );
+            ];
         }
 
         if ($end['updatedTime'] != $currentCursor) {
-            $next = array(
+            $next = [
                 'cursor' => $end['updatedTime'],
                 'start' => 0,
                 'limit' => $currentLimit,
                 'eof' => false,
-            );
+            ];
         } else {
-            $next = array(
+            $next = [
                 'cursor' => $currentCursor,
                 'start' => $currentStart + $currentLimit,
                 'limit' => $currentLimit,
                 'eof' => false,
-            );
+            ];
         }
 
         return $next;
@@ -225,7 +225,7 @@ abstract class BaseResource
                 return '';
             }
 
-            $defaultSetting = $this->getSettingService()->get('default', array());
+            $defaultSetting = $this->getSettingService()->get('default', []);
             if (('course.png' == $defaultKey && !empty($defaultSetting['defaultCoursePicture'])) || 'avatar.png' == $defaultKey && !empty($defaultSetting['defaultAvatar']) && empty($defaultSetting[$defaultKey])) {
                 $path = $defaultSetting[$defaultKey];
             } else {
@@ -295,7 +295,7 @@ abstract class BaseResource
         return $this->getHttpHost();
     }
 
-    protected function generateUrl($route, $parameters = array())
+    protected function generateUrl($route, $parameters = [])
     {
         global $app;
 
@@ -360,5 +360,13 @@ abstract class BaseResource
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return \Biz\S2B2C\Service\S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->createService('S2B2C:S2B2CFacadeService');
     }
 }
