@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\ItemBankExercise\ExpiryMode;
-
 
 use AppBundle\Common\TimeMachine;
 use Biz\ItemBankExercise\ItemBankExerciseException;
@@ -20,11 +18,12 @@ class ExerciseExpiryMode extends ExpiryMode
     {
         $deadline = 0;
         if (self::EXPIRY_MODE_DAYS == $exercise['expiryMode'] && $exercise['expiryDays'] > 0) {
-            $endTime = strtotime(date('Y-m-d', time()) . ' 23:59:59'); //系统当前时间
+            $endTime = strtotime(date('Y-m-d', time()).' 23:59:59'); //系统当前时间
             $deadline = $exercise['expiryDays'] * 24 * 60 * 60 + $endTime;
         } elseif (self::EXPIRY_MODE_DATE == $exercise['expiryMode'] || 'end_date' == $exercise['expiryMode']) {
             $deadline = $exercise['expiryEndDate'];
         }
+
         return $deadline;
     }
 
@@ -50,7 +49,7 @@ class ExerciseExpiryMode extends ExpiryMode
             if (empty($exercise['expiryEndDate'])) {
                 return ItemBankExerciseException::EXPIRYENDDATE_REQUIRED();
             }
-            $exercise['expiryEndDate'] = TimeMachine::isTimestamp($exercise['expiryEndDate']) ? $exercise['expiryEndDate'] : strtotime($exercise['expiryEndDate'] . ' 23:59:59');
+            $exercise['expiryEndDate'] = TimeMachine::isTimestamp($exercise['expiryEndDate']) ? $exercise['expiryEndDate'] : strtotime($exercise['expiryEndDate'].' 23:59:59');
         } elseif (self::EXPIRY_MODE_DATE === $exercise['expiryMode']) {
             $exercise['expiryDays'] = 0;
             if (isset($exercise['expiryStartDate'])) {
@@ -61,7 +60,7 @@ class ExerciseExpiryMode extends ExpiryMode
             if (empty($exercise['expiryEndDate'])) {
                 return ItemBankExerciseException::EXPIRYENDDATE_REQUIRED();
             } else {
-                $exercise['expiryEndDate'] = TimeMachine::isTimestamp($exercise['expiryEndDate']) ? $exercise['expiryEndDate'] : strtotime($exercise['expiryEndDate'] . ' 23:59:59');
+                $exercise['expiryEndDate'] = TimeMachine::isTimestamp($exercise['expiryEndDate']) ? $exercise['expiryEndDate'] : strtotime($exercise['expiryEndDate'].' 23:59:59');
             }
             if ($exercise['expiryEndDate'] <= $exercise['expiryStartDate']) {
                 return ItemBankExerciseException::EXPIRY_DATE_SET_INVALID();
@@ -82,6 +81,7 @@ class ExerciseExpiryMode extends ExpiryMode
         if (self::EXPIRY_MODE_FOREVER == $expiryMode) {
             return false;
         }
+
         return true;
     }
 
@@ -97,6 +97,7 @@ class ExerciseExpiryMode extends ExpiryMode
                 unset($fields['expiryEndDate']);
             }
         }
+
         return $fields;
     }
 
@@ -104,6 +105,7 @@ class ExerciseExpiryMode extends ExpiryMode
     {
         $originDeadline = $originDeadline > 0 ? $originDeadline : time();
         $deadline = 'plus' == $waveType ? $originDeadline + $day * 24 * 60 * 60 : $originDeadline - $day * 24 * 60 * 60;
+
         return $deadline;
     }
 
