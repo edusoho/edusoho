@@ -128,28 +128,29 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
 
     /**
      * @param NotifyEvent $notifyEvent
+     *
      * @return bool|mixed
      */
     public function syncSupplierProductEvent($notifyEvent)
     {
         $this->getLogger()->info('[syncSupplierProductEvent] 同步supplier端信息', $notifyEvent->getData());
-        $handle = array(
+        $handle = [
             'modifyPrice' => 'modifyPriceEvent',
             'closeTask' => 'closeTaskEvent',
-        );
+        ];
 
-        if (!array_key_exists($notifyEvent->getEvent(), $handle)){
+        if (!array_key_exists($notifyEvent->getEvent(), $handle)) {
             return false;
         }
 
         $result = $this->{$handle[$notifyEvent->getEvent()]}($notifyEvent);
 
         if ($result) {
-            $this->getSyncEventDao()->create(array(
+            $this->getSyncEventDao()->create([
                 'productId' => $notifyEvent->getProductId(),
                 'event' => $notifyEvent->getEvent(),
-                'data' => $notifyEvent->getData()
-            ));
+                'data' => $notifyEvent->getData(),
+            ]);
         }
 
         return $result;
@@ -169,7 +170,9 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
 
     /**
      * @param \ApiBundle\Api\Resource\SyncProductNotify\NotifyEvent $notifyEvent
-     * @return boolean
+     *
+     * @return bool
+     *
      * @throws
      */
     protected function closeTaskEvent($notifyEvent)
