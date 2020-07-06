@@ -2,8 +2,8 @@
   <div class="info-buy">
     <div class="info-buy__collection" @click="onFavorite">
       <template v-if="isFavorite">
-        <i class="es-icon es-icon-favorite"></i>
-        <span>已收藏</span>
+        <i class="es-icon es-icon-favorite" style="color: #FF7E56;"></i>
+        <span style="color: #FF7E56;">已收藏</span>
       </template>
       <template v-else>
         <i class="es-icon es-icon-favoriteoutline"></i>

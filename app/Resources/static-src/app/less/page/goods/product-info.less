@@ -272,3 +272,67 @@
     }
   }
 }
+
+// 学习课程列表
+.classroom-task {
+  .classroom-task__item {
+    position: relative;
+    margin-top: 16px;
+    padding: 16px;
+    height: 122px;
+    box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.05);
+    .border-radius(4px);
+    .task-banner {
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      width: 160px;
+      height: 90px;
+      @media (max-width: 750px) {
+        width: 50px;
+      }
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .task-content {
+      margin-left: 176px;
+      @media (max-width: 750px) {
+        margin-left: 60px;
+      }
+      .task-content__title {
+        font-size: 16px;
+        font-weight: 500;
+        color: #333;
+      }
+      .task-content__plan {
+        font-size: 14px;
+        color: #999;
+      }
+      .task-content__teacher {
+        .teacher-info {
+          img {
+            width: 24px;
+            height: 24px;
+            .border-radius(50%);
+          }
+          span {
+            font-size: 14px;
+            color: #999;
+            vertical-align: middle;
+          }
+        }
+        .price-info {
+          font-size: 18px;
+          color: #FF5C3B;
+          &::before {
+            content: '￥';
+            font-size: 14px;
+
+          }
+        }
+      }
+    }
+  }
+}

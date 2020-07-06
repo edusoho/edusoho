@@ -141,15 +141,15 @@ export default {
     },
     // 获取商品数据
     getGoodsDetails() {
-      let goodId = window.location.pathname.replace(/[^0-9]/ig, ""); // goods id
-      axios.get('/api/goods/' + goodId, {
+      let goodsId = window.location.pathname.replace(/[^0-9]/ig, ""); // goods id
+      axios.get('/api/goods/' + goodsId, {
         headers: { 'Accept': 'application/vnd.edusoho.v2+json'}
       }).then((res) => {
         let data = res.data;
         for (const key in data.specs) {
           this.$set(data.specs[key], 'active', false);
           this.$set(data.specs[key], 'id', key);
-          if (key == goodId) {
+          if (key == goodsId) {
             this.$set(data.specs[key], 'active', true);
             this.currentPlan = data.specs[key];
           }

@@ -22,7 +22,7 @@
         <!-- <div v-if="isFixed" class="fixed-box"></div> -->
         <div id="info-left-1" class="content-item js-content-item">
           <h3 class="content-item__title">商品介绍</h3>
-          <div v-html="description"></div>
+          <div v-html="descriptionHtml" style="padding-left: 14px; padding-top: 4px;"></div>
         </div>
         <div id="info-left-2" class="content-item js-content-item">
           <h3  class="content-item__title">学习目录</h3>
@@ -73,6 +73,12 @@
       },
       description: {
         type: String
+      }
+    },
+    computed: {
+      descriptionHtml() {
+        if (!this.description) return '暂无简介哦～';
+        return this.description;
       }
     },
     components: {

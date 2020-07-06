@@ -1,7 +1,7 @@
-import App from './App';
+import Classroom from './Classroom';
 
 Vue.config.productionTip = false;
 
 new Vue({
-  render: createElement => createElement(App)
+  render: createElement => createElement(Classroom)
 }).$mount('#show-product-page');
