@@ -1555,3 +1555,5 @@ course_manage.positive_currency.message: Please enter a valid price greater than
 
 merchant.resource.product_version.update_success_hint: Update Success
 merchant.resource.product_version.update_failed_hint: Update Failed
+
+validate.length_max.message: Please enter no more than %length% characters.

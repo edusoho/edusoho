@@ -170,9 +170,9 @@ class CourseTaskMedia extends AbstractResource
         if (!in_array($file['type'], ['audio', 'video'])) {
             throw PlayerException::NOT_SUPPORT_TYPE();
         }
-        
+
         $version = $request->query->get('version', 'qiqiuyun');
-        if ($version == 'escloud') {
+        if ('escloud' == $version) {
             return $this->getVideoWithEsCloud($file, $course, $task);
         }
 
@@ -190,7 +190,7 @@ class CourseTaskMedia extends AbstractResource
                 $mp4Url = $videoPlayer['mp4Url'];
             }
         }
-        
+
         $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($file, $context, $ssl);
 
         $supportMobile = intval($this->getSettingService()->node('storage.support_mobile', 0));
@@ -305,10 +305,10 @@ class CourseTaskMedia extends AbstractResource
             throw PlayerException::NOT_SUPPORT_TYPE();
         }
 
-        if ($request->query->get('version', 'qiqiuyun') == 'escloud') {
+        if ('escloud' == $request->query->get('version', 'qiqiuyun')) {
             return $this->getAudioWithEsCloud($file, $audio, $activity);
         }
-       
+
         $player = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
 
         $agentInWhiteList = $this->getResourceFacadeService()->agentInWhiteList($request->headers->get('user-agent'));
@@ -340,8 +340,9 @@ class CourseTaskMedia extends AbstractResource
         $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
         $doc = $config->get($activity['mediaId']);
 
-        if ($request->query->get('version', 'qiqiuyun') == 'escloud') {
+        if ('escloud' == $request->query->get('version', 'qiqiuyun')) {
             $file = $this->getUploadFileService()->getFullFile($doc['mediaId']);
+
             return  $this->getResourceFacadeService()->getPlayerContext($file);
         }
 
@@ -359,8 +360,8 @@ class CourseTaskMedia extends AbstractResource
 
         $ppt = $config->get($activity['mediaId']);
         $file = $this->getUploadFileService()->getFullFile($ppt['mediaId']);
-        
-        if ($request->query->get('version', 'qiqiuyun') == 'escloud') {
+
+        if ('escloud' == $request->query->get('version', 'qiqiuyun')) {
             return  $this->getResourceFacadeService()->getPlayerContext($file);
         }
 
