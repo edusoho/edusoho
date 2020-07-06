@@ -441,8 +441,9 @@ class S2B2CService extends BaseService
             'payload' => $payload,
         );
         $this->uri = '/merchant_resource/make_jwt_play_token';
-
-        return $this->sendRequest('getProductResourceJWTPlayToken', $sendData);
+        $tokenData = $this->sendRequest('getProductResourceJWTPlayToken', $sendData, 'POST');
+        
+        return $tokenData['JWTPlayToken'];
     }
 
     public function purchaseProducts($purchaseProducts, $purchaseRecord)
