@@ -148,7 +148,7 @@ class AssessmentExerciseController extends BaseController
         $this->getExerciseService()->tryManageExercise($exerciseId);
 
         $count = $this->getExerciseModuleService()->count(['exerciseId' => $exerciseId, 'type' => ExerciseModuleService::TYPE_ASSESSMENT]);
-        if ($count == ExerciseModuleService::ASSESSMENT_MODULE_LEAST_COUNT) {
+        if (ExerciseModuleService::ASSESSMENT_MODULE_LEAST_COUNT == $count) {
             $this->createNewException(ItemBankExerciseException::ASSESSMENT_MODULE_NOT_EMPTY());
         }
 
