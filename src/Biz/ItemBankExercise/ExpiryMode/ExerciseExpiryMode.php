@@ -111,14 +111,16 @@ class ExerciseExpiryMode extends ExpiryMode
     {
         $expiryMode = $exercise['expiryMode'];
         $now = strtotime();
-        if (self::EXPIRY_MODE_DAYS == $expiryMode){
+        if (self::EXPIRY_MODE_DAYS == $expiryMode) {
             $isExpired = true;
-        }elseif (self::EXPIRY_MODE_DATE == $expiryMode){
+        } elseif (self::EXPIRY_MODE_DATE == $expiryMode) {
             $isExpired = $exercise['expiryStartDate'] <= $now && $exercise['expiryEndDate'] > $now;
-        }elseif (self::EXPIRY_MODE_END_DATE == $expiryMode){
+        } elseif (self::EXPIRY_MODE_END_DATE == $expiryMode) {
             $isExpired = $exercise['expiryEndDate'] > $now;
-        }else{
+        } elseif (self::EXPIRY_MODE_FOREVER == $expiryMode) {
             $isExpired = true;
+        } else {
+            $isExpired = false;
         }
 
         return $isExpired;
