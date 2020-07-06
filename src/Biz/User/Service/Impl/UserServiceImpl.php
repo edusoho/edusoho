@@ -579,14 +579,14 @@ class UserServiceImpl extends BaseService implements UserService
             $options['group'] = 'default';
         }
 
-        $record = $this->getFileService()->uploadFile($groupCode, $file);
+        $record = $this->getFileService()->addFile($groupCode, $file);
         $parsed = $this->getFileService()->parseFileUri($record['uri']);
         $filePaths = FileToolkit::cropImages($parsed['fullpath'], $options);
 
         $fields = [];
 
         foreach ($filePaths as $key => $value) {
-            $file = $this->getFileService()->uploadFile($options['group'], new File($value));
+            $file = $this->getFileService()->addFile($options['group'], new File($value));
             $fields[] = [
                 'type' => $key,
                 'id' => $file['id'],
