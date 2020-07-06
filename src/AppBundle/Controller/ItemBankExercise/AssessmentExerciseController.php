@@ -114,8 +114,8 @@ class AssessmentExerciseController extends BaseController
         ];
 
         $assessmentExercises = $this->getAssessmentExerciseService()->findByExerciseIdAndModuleId($exerciseId, $moduleId);
-        $assessmentIds = ArrayToolkit::column($assessmentExercises,'assessmentId');
-        $conditions['ids'] = !empty($assessmentIds) ?  $assessmentIds : [];
+        $assessmentIds = ArrayToolkit::column($assessmentExercises, 'assessmentId');
+        $conditions['ids'] = !empty($assessmentIds) ? $assessmentIds : [];
         $conditions['status'] = 'open';
 
         $paginator = new Paginator(
@@ -132,6 +132,7 @@ class AssessmentExerciseController extends BaseController
         );
 
         $route = $isPage ? 'item-bank-exercise/assessment-exercise/assessment-list-tr.html.twig' : 'item-bank-exercise/assessment-exercise/assessment-modal.html.twig';
+
         return $this->render($route, [
             'exercise' => $exercise,
             'questionBank' => $questionBank,
