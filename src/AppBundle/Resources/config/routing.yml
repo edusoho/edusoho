@@ -3521,7 +3521,7 @@ item_bank_exercise_manage_assessment_add_list:
     defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:assessmentAddList}
 
 item_bank_exercise_manage_add_assessment:
-    path: /item_bank_exercise/{exerciseId}/add/assessment{moduleId}
+    path: /item_bank_exercise/{exerciseId}/add/assessment/{moduleId}
     defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:addAssessment}
 
 item_bank_exercise_manage_batch_delete_assessment:
