@@ -30,9 +30,6 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
             }
         }
         $context['token'] = $this->makePlayToken($file, 600, $payload);
-        if ('supplier' == $file['storage']) {
-            $file = $this->getS2B2CFileSourceService()->getFullFileInfo($file);
-        }
         $context['resNo'] = $file['globalId'];
 
         //转码状态
