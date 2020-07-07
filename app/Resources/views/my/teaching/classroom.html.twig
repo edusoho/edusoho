@@ -1,56 +1,80 @@
 {% extends 'my/my-teaching.html.twig' %}
 
-{% block title %}{{'my.teaching.classroom'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)})}} - {{ parent() }}{% endblock %}
+{% block title %}{{ 'my.teaching.classroom'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)}) }} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-teaching-classroom' %}
 
 {% block main %}
-  <div class="panel panel-default panel-col lesson-manage-panel">
-    <div class="panel-heading">
-      {{'my.teaching.classroom'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)})}}
-    </div>
+  <div>
 
-    <div class="panel-body">
-      <ul class="good-wide-list">
-        {% if classrooms %}
-          {% for classroom in classrooms %}
-            <li class="good-item cd-mb24 clearfix">
-              <a class="good-item__img" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
-                <img src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
-                {% if classroom.status == "draft" %}
-                  <span class="cd-tag cd-tag-orange good-item__tag">{{'classroom.status.unpublish'|trans}}</span>
-                {% elseif classroom.status == "closed" %}
-                  <span class="cd-tag cd-tag-red good-item__tag">{{'classroom.status.closed'|trans}}</span>
-                {% endif %}
-              </a>
-              <div class="good-body clearfix">
-                {% if members[classroom.id].role == "headTeacher"  or is_granted('ROLE_ADMIN') %}
-                  <div class="good-item__manage">
-                    <i class="es-icon es-icon-setting"></i>
-                    <a class="link-primary" target="_blank" href="{{path('classroom_manage',{id:classroom.id})}}">{{'my.teaching.classroom.manage_btn'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)})}}</a>
-                  </div>
-                {% endif %}
-                <div class="good-item__title text-overflow">
-                  <a class="link-primary" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">{{classroom.title}}</a>
-                </div>
+    {% for classroom in classrooms %}
+      <div class="cd-mb32">
+        <div class="courseset-manage-header clearfix">
+          <div class="clearfix">
+            <img class="courseset-manage-header__img" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}"/>
 
-                <div class="good-item__data cd-mt8">
-                  {{'my.learning.classroom.total_course_count'|trans({'%Count%':classroom.coursesCount})}}
-                  <i class="es-icon es-icon-groupadd cd-ml16"></i>
-                  <span class="numbers">{{classroom.studentNum + classroom.auditorNum}}</span>
-                </div>
-                <div class="good-item__footer">
-                  <strong class="gray-darker cd-mr24">{{'my.teaching.classroom.today_data_title'|trans}}</strong>
-                  {{ 'my.teaching.classroom.today_data'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%allCount%':classroom.allCount, '%threadCount%':classroom.threadCount, '%todayFinishedTaskNum%':classroom.todayFinishedTaskNum})|raw }}
-                </div>
+            {% if classroom.status=='closed' %}
+              <span
+                class="course-publish-status course-publish-status--closed">{{ 'classroom.status.closed'|trans }}</span>
+            {% elseif classroom.status=='draft' %}
+              <span
+                class="course-publish-status course-publish-status--unpublished">{{ 'classroom.status.unpublish'|trans }}</span>
+            {% elseif classroom.status=='published' %}
+              <span
+                class="course-publish-status course-publish-status--published">{{ 'classroom.status.published'|trans }}</span>
+            {% endif %}
+
+            <div class="courseset-manage-header-info">
+              <div class="courseset-manage-header-info__title text-overflow"
+                   {% if classroom.title|length > 21 %}data-toggle="tooltip" title="{{ classroom.title }}"
+                   data-container="body" {% endif %}>
+                <span class="cd-dark-major">{{ classroom.title }}</span>
               </div>
-            </li>
-          {% endfor %}
-        {% else %}
-          <div class="empty">{{'site.datagrid.empty'|trans}}</div>
-        {% endif %}
-      </ul>
-    </div>
-    <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
+
+              <div class="courseset-manage-header-info__price color-danger">
+                {% include 'common/price.html.twig' with {'productPrice': classroom.price} %}
+              </div>
+            </div>
+
+            <div class="courseset-manage-header-btn">
+              {% if members[classroom.id].role == "headTeacher"  or is_granted('ROLE_ADMIN') and classroom.id == 1 %}}
+                <a class="cd-btn cd-btn-primary" target="_blank"
+                   href="{{ path('classroom_manage',{id:classroom.id}) }}">{{ 'my.teaching.classroom.manage_btn'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)}) }}</a>
+              {% else %}
+                <a class="cd-btn" href="javascript:;">&#12288&#12288&#12288&#12288</a>
+              {% endif %}
+
+              <a class="cd-btn cd-btn-default cd-ml16"
+                 href="{{ path('classroom_courses',{classroomId:classroom.id,previewAs:'guest'}) }}"
+                 target="_blank">{{ 'my.teaching.classroom.preview'|trans }}</a>
+            </div>
+
+            <div class="courseset-manage-header-data hidden-xs">
+              <span class="cd-text-medium">{{ 'my.teaching.classroom.studen_count'|trans }}</span>
+              <div class="cd-mt16 cd-dark-major">
+                <span class="courseset-manage-header-data__num">{{ classroom.studentNum + classroom.auditorNum }}</span>
+              </div>
+            </div>
+
+            <div class="courseset-manage-header-data hidden-xs">
+              <span class="cd-text-medium">{{ 'my.teaching.classroom.course_count'|trans }}</span>
+              <div class="cd-mt16 cd-dark-major">
+                <span class="courseset-manage-header-data__num">{{ classroom.coursesCount|default(0) }}</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="empty">
+        {{ 'site.datagrid.empty'|trans }}
+      </div>
+    {% endfor %}
+  </div>
+
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav>
   </div>
 {% endblock %}

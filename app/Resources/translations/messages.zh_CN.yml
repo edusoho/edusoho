@@ -423,7 +423,13 @@ form.change_mobile: 修改手机号码
 form.input_mobile: 输入手机号码
 form.btn.yes: 是
 form.btn.no: 否
-
+form.btn.not_delete: 不删除
+form.btn.import: 导入
+form.btn.login.submiting: 正在登录...
+form.btn.reply_publish.submiting: 正在发表回复...
+form.placeholder.search_keyword: 请输入搜索关键词...
+form.checkbox.batch_select: 全选
+form.btn.continue: 完成并继续
 
 #财务通用
 finance.income: 收入
@@ -487,7 +493,6 @@ order.charge: 收费
 order.name: 订单名称
 order.product_name: 商品名称
 order.product_price: 商品价格
-order.price_amount: 订单价格
 order.paid_amount: 实付价格
 order.paid_coin_amount: 实付虚拟币
 order.paid_cash_amount: 实付现金
@@ -749,7 +754,6 @@ question.type.determine: 判断题
 question.type.essay: 问答题
 question.type.material: 材料题
 question.nums: 题数
-question.score: 分数
 question.choice.content_title: 选择选题
 question.no_analysis: 无解析
 question.view_analysis_btn: 查看解析
@@ -880,8 +884,6 @@ material_lib.btn.convert_again: 重新转码
 material_lib.btn.upload_files: 上传资料
 material_lib.btn.batch_manage: 批量管理
 material_lib.btn.add_tag: 添加标签
-material_lib.btn.share: 共享
-material_lib.btn.delete: 删除
 material_lib.btn.back: 返回列表
 
 # 课程
@@ -1190,7 +1192,6 @@ course.homework_check.review.common_comments: >
   <option value="3">你真棒！我为你骄傲！</option>
   <option value="4">有点松懈了吧？继续加油吧！</option>
   <option value="5">用心、专注、坚持，你能做的更好的！</option>
-course.homework_check.review.score: 试卷得分
 
 course.homework_check.teacher_say.default: 常用评语
 course.homework_check.teacher_say.option_one: 继续努力，继续进步！
@@ -1668,7 +1669,6 @@ course.testpaper_manage.testpaper_quoted_close_tips: 该试卷已被%taskName%�
 course.testpaper_manage.edit_btn: 编辑试卷信息
 course.testpaper_manage.manage_btn: 管理题目
 course.testpaper_manage.repead_btn: 重新生成题目
-course.testpaper_manage.delete_btn: 删除试卷
 course.testpaper_manage.export: 导出试卷
 course.testpaper_manage.import: 导入试卷
 course.testpaper_manage.import.re_edit.title: 导入编辑
@@ -1897,7 +1897,6 @@ course.plan_task.activity_manage.create: 添加%taskName%
 course.plan_task.activity_manage.modify: 编辑%taskName%
 course.plan_task.activity_manage.preview: 预览%taskName%
 
-course.lesson: 课时
 course.manage.create_lesson: 添加课时
 course.manage.edit_lesson: 编辑课时
 course.manage.preview_lesson: 预览课时
@@ -1949,7 +1948,6 @@ course.plan_task.activity_manage.download.input_placeholder: 填写资料简介�
 course.plan_task.activity_manage.download.add_btn: 添加资料
 course.plan_task.activity_manage.download.finished_condition_tips: >
   <p class="gray-darker mbs">满足以下条件:</p>下载过资料。
-course.plan_task.activity_manage.download.delete_btn: 删除
 course.plan_task.activity_manage.exercise.finished_condition_tips: >
   <p class="gray-darker mbs">满足以下条件:</p>提交练习
 course.plan_task.activity_manage.exercise.question_numbers: 题目个数
@@ -2025,9 +2023,7 @@ course.plan_task.activity_manage.testpaper.mode.require_credit: 限制学分
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 参加此次考试所需的学分，０分则不限制。
 course.plan_task.activity_manage.testpaper.pass: 分数达标
 course.plan_task.activity_manage.testpaper.score_pass: 考试合格
-course.plan_task.activity_manage.testpaper.submit: 提交答卷
 course.plan_task.activity_manage.testpaper.finish_tip: 提示：若任务完成条件选择了“考试合格”，则学员的考试分数必须达到上一步中设置的“合格分数”，才能完成此任务。
-course.plan_task.activity_manage.testpaper.empty_tips: 试卷已被删除
 course.plan_task.activity_manage.testpaper.will_begin_tips: 考试未开始，请在%startTime%之后再来
 course.plan_task.activity_manage.testpaper.total_question: >
   本次考试共<span class="color-primary">%itemCount%题</span>，总分<span class="color-primary">%score%分</span>
@@ -2297,6 +2293,7 @@ classroom.cancle_refund_btn: 取消退款，继续学习！
 classroom.courses_count: 共%courseNum%课
 classroom.continue_learning_btn: 继续学习
 classroom.join_btn: 立即加入
+classroom.status.published: 已发布
 classroom.status.unpublish: 未发布
 classroom.status.closed: 已关闭
 classroom.course.base: 课程基本信息
@@ -2493,7 +2490,6 @@ classroom.not_online_buy_tips: >
 classroom.not_buy: 无法购买
 classroom.alerday_buy_course_tips: 您之前已购买了本%name%的所有收费课程，可免费学习！
 classroom.free_join: 免费加入
-classroom.reviews: 评价
 classroom.collapse: 收起
 classroom.again_reviews: 重新评价
 classroom.please_score: 请打分
@@ -2505,7 +2501,6 @@ classroom.name: 班级名称
 classroom.manage: 管理
 classroom.about: 简介
 classroom.small_picture: 图片
-classroom.price: 价格
 classroom.course: 课程
 classroom.tash_num: %taskName%数
 classroom.student: 学员
@@ -2641,7 +2636,6 @@ classroom.answer_questions_tips: 对于提问做到有问必答，帮您扫清�
 classroom.testpaper_review: 24小时阅卷点评
 classroom.testpaper_review_tips: 24小时内批阅您提交的试卷，给予有针对性的点评
 classroom.homework_review: 24小时作业批阅
-classroom.testpaper_review_tips: 24小时内完成作业批阅，即时反馈并巩固您的学习效果
 classroom.set_head_teacher_tips: 班主任负责管理整个%name%，班主任只有一位，并且必须要由老师来担任。
 classroom.set_teacher: 设置教师
 classroom.set_teacher_tips: >
@@ -2654,7 +2648,6 @@ classroom.select_course: 选择课程
 classroom.select_course_tips: >
   加入%name%的课程为选中的原课程复制生成，并与原课程同步更新（可能会延后几分钟生效）。如需解除同步，请对该课程进行编辑。
 classroom.course_name_placeholder: 课程名称
-classroom.all_courses: 全部课程
 classroom.add_course_btn: 添加
 classroom.add_course_tips: 班级数据处理中，请耐心等待。
 classroom.delete_btn: 删除
@@ -2666,7 +2659,6 @@ classroom.task_num: >
   第%number%%taskName%
 classroom.total_task_count: >
   %taskNum%个%taskName%
-classroom.expiry_mode: 有效期
 classroom.forever: 永久
 classroom.end_date: 截止日期
 classroom.course_tips: >
@@ -2730,95 +2722,6 @@ classroom.remove: 移除
 classroom.create.congratulation_message: 恭喜！创建班级成功！
 classroom.create.title_not_unique: 班级名称已被使用，创建班级失败
 classroom.set_assistant_tip: 仅能添加本班级学员
-
-# 表单通用
-form.field.filter: 筛选
-form.radio_btn.true: 是
-form.radio_btn.false: 否
-form.radio_btn.open: 开启
-form.radio_btn.close: 关闭
-form.radio_btn.show: 显示
-form.radio_btn.hidden: 不显示
-form.radio_btn.one_day: 天
-form.radio_btn.one_week: 周
-form.radio_btn.two_week: 两周
-form.radio_btn.one_month: 月
-form.field.optional: 选填
-form.field.privacy_public: 公开
-form.field.create: 添加
-form.field.amount: 数量
-form.field.cut: 扣除
-form.btn.create: 创建
-form.btn.select: 选择
-form.btn.modify: 修改
-form.btn.finish: 完成
-form.btn.set: 设置
-form.btn.publish: 发布
-form.btn.cancel_publish: 取消发布
-form.btn.save_and_publish: 直接发布
-form.btn.save_and_continue_add: 保存并继续添加
-form.btn.reset: 重置
-form.btn.view: 查看
-form.btn.bind: 绑定
-form.btn.search: 搜索
-form.btn.reply: 发表
-form.btn.bind_cancel: 取消绑定
-form.btn.submit: 提交
-form.btn.login: 登录
-form.btn.save: 保存
-form.btn.detail: 详情
-form.btn.close: 关闭
-form.btn.return: 返回
-form.btn.cancel: 取消
-form.btn.confirm: 确定
-form.btn.insert: 插入
-form.btn.not_delete: 不删除
-form.btn.import: 导入
-form.btn.submit_disabled: 已提交
-form.btn.reset_password: 重设密码
-form.btn.send: 发送
-form.btn.upload: 上传
-form.btn.picture_crop: 选择要上传的图片
-form.btn.remove: 移除
-form.btn.comment: 发表评论
-form.btn.approve: 去认证
-form.btn.unlock: 解除同步
-form.btn.next: 下一步
-form.btn.back: 上一步
-form.btn.add: 添加
-form.btn.export: 导出
-form.btn.login.submiting: 正在登录...
-form.btn.reply_publish.submiting: 正在发表回复...
-form.btn.create.submiting: 正在创建...
-form.btn.import.submiting: 正在导入，请稍等
-form.btn.search.submiting: 正在加载，请稍等
-form.btn.pay.submiting: 正在创建订单...
-form.btn.comment.submiting: 正在评论...
-form.btn.upload.submiting: 正在上传...
-form.btn.delete.submiting: 正在删除...
-form.btn.reply.submiting: 正在发表...
-form.btn.save.submiting: 正在保存...
-form.btn.publish.submiting: 正在发布...
-form.btn.submit.submiting: 正在提交...
-form.btn.send.submiting: 正在发送...
-form.btn.modify.submiting: 正在修改...
-form.btn.export.submiting: 正在导出...
-form.btn.export_result: 导出结果
-form.btn.hand_in.submiting: 正在交卷, 请稍等
-form.checkbox.public: 公开
-form.placeholder.max_int: 最大值为9位整数
-form.placeholer.two_decimal_places: 保留到2位小数
-form.placeholder.start_date: 起始时间
-form.placeholder.end_date: 结束时间
-form.placeholder.nickname: 用户名
-form.placeholder.keyword: 关键词
-form.radio_btn.pass: 同意
-form.radio_btn.unpass: 不同意
-form.btn.restore: 还原
-form.btn.back_to_list: 返回列表
-form.placeholder.search_keyword: 请输入搜索关键词...
-form.checkbox.batch_select: 全选
-form.btn.continue: 完成并继续
 
 # 用户登录
 user.login.account_type_label: 邮箱/手机/用户名
@@ -2917,11 +2820,11 @@ user.register.read_detail: 请详细阅读
 user.register.read_agree: 我已阅读并同意
 user.register.user_service_protocol: 用户服务协议
 user.register.reset_email: 重置邮箱
-user.register.reset_email.origin_email: 原邮箱地址:
+user.register.reset_email.origin_email: '原邮箱地址:'
 user.register.reset_email.school_login_password: 网校密码：
 user.register.reset_email.input_placeholder: 请输入网校密码
 user.register.reset_email.display: 网校密码
-user.register.reset_email.new_email: 新邮箱地址:
+user.register.reset_email.new_email: '新邮箱地址:'
 user.register.reset_email.new_email_tips: 请输入新的邮箱地址
 user.register.login_account: 登录帐号
 user.register.register_account: 注册帐号
@@ -2930,7 +2833,6 @@ user.register.register_through_inviter: >
   您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。
 user.register.input_sms_code_tips: 请输入验证码
 user.register.page_title: 注册帐号
-user.register.register_account: 注册帐号
 user.register.account_with_email_label: 邮箱
 user.register.account_with_sms_code_label: 验证码
 user.register.account_with_email_placeholder: 填写你常用的邮箱作为登录帐号
@@ -3192,7 +3094,6 @@ user.settings.verification.notice: 认证须知
 user.settings.verification.notice_content: "<p>1、请确保身份证照片清晰可认，严禁PS，否则将由您本人承担相应的法律后果。<br> 2、实名认证成功后，将无法修改和删除实名信息，请谨慎填写。<br> 3、我们将尽快审核您提交的信息，处理完成后您将会收到系统通知。</p>"
 
 # 个人设置模块-头像设置
-user.settings.avatar: 头像设置
 user.settings.avatar.page_title: 头像设置
 user.settings.avatar.crop: 头像图片
 user.settings.avatar.reselect: 重新选择图片
@@ -3434,8 +3335,8 @@ homepage.header.switch_mobile: 切换触屏版
 homepage.friend-link.content_title: 友情链接：
 homepage.live_course.living: 正在直播
 homepage.live_course.expect: 敬请期待
-homepage.live_course.teacher: 授课老师:
-homepage.live_course.start_time: 直播时间:
+homepage.live_course.teacher: '授课老师:'
+homepage.live_course.start_time: '直播时间:'
 homepage.live_course.time_before_start: >
   距离直播还有<span>%minutes%</span>分钟
 homepage.live_course.join_btn: 进入直播教室
@@ -3772,8 +3673,6 @@ group.detail.hot_group_empty: 暂无小组信息！
 
 group.add.content_title: 创建小组
 
-group.search.content_title: %title%小组
-group.search: 话题搜索
 group.search.keyword.input_placeholder: 组内搜索
 
 group.member_center.content_title: 我的小组
@@ -3995,10 +3894,8 @@ customer_service.qq_customer_service: QQ客服
 customer_service.qq_group: QQ群
 customer_service.mobile_group: 电话客服
 customer_service.weixin-content: 微信二维码
-customer_service.email: 电子邮箱
 customer_service.time: 服务时间：
 customer_service.send_message: 点击这里给我发消息
-customer_service.customer_email: 反馈邮件
 
 # 我的教学
 my.teaching.menu_heading: 我的教学
@@ -4018,7 +3915,6 @@ my.teaching.material_lib_menu: 教学资料库
 my.teaching.course_set.normal: 普通课程
 my.teaching.course_set.live: 直播课程
 my.teaching.course_set.reservation: 预约课程
-my.teaching.course_set.classroom: %classroom%课程
 my.teaching.open_course.normal: 录播公开课
 my.teaching.open_course.live: 直播公开课
 my.teaching.open_course.live_remind: 直播提醒
@@ -4029,18 +3925,13 @@ my.teaching.classroom.threads_discussion.nickname: 话题作者
 my.teaching.classroom.threads_event.nickname: 活动发起人
 my.teaching.classroom.threads_question: %classroom%学员问答
 my.teaching.classroom.threads_question.nickname: 话题作者
-my.teaching.classroom: 所教%classroom%
+my.teaching.classroom: 在教%classroom%
+my.teaching.classroom.preview: 预览班级
+my.teaching.classroom.studen_count: 班级学员
+my.teaching.classroom.course_count: 班级课程
 my.teaching.classroom.manage_btn: 管理%classroom%
 my.teaching.classroom.today_data_title: 今日新增
-my.teaching.classroom.today_data: >
-  <span class="cd-mr16 gray-dark">学员%allCount%</span>
-  <span class="cd-mr16 gray-dark">话题%threadCount%</span>
-  <span class="gray-dark">%taskName%完成学习%todayFinishedTaskNum%</span>
-my.teaching.page_title: 在教课程
-my.teaching.course_set.create: 创建课程
-my.teaching.course_set.content_title: 在教课程
 my.teaching.course_set.title: 名称
-my.teaching.course_set.classroom: 所属%classroom%
 my.teaching.course_set.student_count: 学员数
 my.teaching.course_set.price: 价格(元)
 my.teaching.course_set.status: 状态
@@ -4259,7 +4150,6 @@ my.teaching.open_course.files.cloud_file: 云文件
 my.teaching.open_course.files.dev_mode_btn: 重新转换(调试模式)
 my.teaching.open_course.files.media_subtitle_btn: 字幕管理
 my.teaching.open_course.recommend_setting.title: 推荐设置
-my.teaching.open_course.recommend_setting.add_course_btn: 添加课程
 my.teaching.open_course.recommend_setting.add_course_btn: 添加课程
 my.teaching.open_course.recommend_setting.serializeMode.live: 更新中
 my.teaching.open_course.recommend_setting.serializeMode.finished: 已完结
@@ -4491,7 +4381,6 @@ my.learning.group.homepage: 小组主页
 my.learning.group.join: 加入的小组
 my.learning.group.post_thread: 发起的话题
 my.learning.group.joined: 我加入的小组
-my.learning.group.post_thread: 我发起的话题
 my.learning.gruop.answer_thread: 回复的话题
 my.learning.group.favorit_thread: 收藏的话题
 my.learning.group.manage_group: 我管理的小组
@@ -4998,7 +4887,6 @@ admin.course_manage.file.data_name: 文件
 admin.course_manage.file.delete_btn: 删除
 admin.course_manage.file.local_storage: 本地存储
 admin.course_manage.file.cloud_storage: 云视频
-admin.course_manage.file.create_time: 创建时间
 admin.course_manage.file.remove: 文件移除
 admin.course_manage.file.remove_course_contact: 文件将从该课程中移除关联
 admin.course_manage.file.remove_material_lib: 同时在我的教学资料中删除相关文件
@@ -5368,7 +5256,6 @@ admin.classroom_manage.chooser.num: 编号
 admin.classroom_manage.chooser.name: 名称
 admin.classroom_manage.chooser.student_num: 学员数
 admin.classroom_manage.chooser.price: 价格
-admin.classroom_manage.chooser.status: 状态
 admin.classroom_manage.chooser.operation: 操作
 admin.classroom_manage.chooser.recommend: 荐
 admin.classroom_manage.chooser.free: 免费
@@ -5666,7 +5553,6 @@ admin.setting.theme.manage.modal.setting_ustom_background_color: 背景颜色设
 admin.setting.theme.manage.modal.color_gray: 灰色
 admin.setting.theme.manage.modal.color_wihte: 白色
 admin.setting.theme.manage.modal.color_default: 默认
-admin.setting.theme.manage.modal.setting_custom_category_count: 是否启用模块
 admin.setting.theme.manage.modal.hot_group: 热门小组
 admin.setting.theme.manage.modal.latest_article: 最新%article_name%
 admin.setting.theme.manage.modal.default_article: 资讯
@@ -5825,7 +5711,6 @@ admin.block_manage.edit_content: 编辑内容
 admin.block_manage.set_up: 设置
 admin.block_manage.delete: 删除
 admin.block_manage.create: 新增
-admin.block_manage.set_up: 设置
 admin.block_manage.edit_block: 编辑区
 admin.block_manage.code_label: 编号
 admin.block_manage.title_label: 标题
@@ -6415,8 +6300,8 @@ admin.user.teacher.basic_tab.fields.recent_login_label: 最近登录
 admin.user.teacher.basic_tab.fields.recommend_teacher_label: 推荐教师
 admin.user.teacher.basic_tab.teacher_empty_hint: 暂无教师记录
 admin.user.teacher.basic_tab.fields.forbid_label: 禁
-admin.user.teacher.basic_tab.fields.recommend_label: 荐:
-admin.user.teacher.basic_tab.fields.serial_num_label: 序号:
+admin.user.teacher.basic_tab.fields.recommend_label: '荐:'
+admin.user.teacher.basic_tab.fields.serial_num_label: '序号:'
 admin.user.teacher.basic_tab.fields.deny_label: 否
 
 ###教师管理设置推荐教师模块
@@ -6505,7 +6390,6 @@ admin.edu_cloud.side_bar.setup: 设置
 # 账户
 admin.edu_cloud.account.content_title: 账户余额
 admin.edu_cloud.account.recharge_btn: 去充值
-admin.edu_cloud.account.recharge_btn: 充值
 admin.edu_cloud.account.coupon_balance: 代金券余额：
 admin.edu_cloud.account.active_ben: 激活代金券
 admin.edu_cloud.account.cloud_wiil_stop_tips: 您已欠费，教育云将于%arrearageDays% 天后暂停，请尽快充值，以免影响正常使用
@@ -6553,9 +6437,9 @@ admin.edu_cloud.overview.further_understand_cloud_search: 进一步了解 云搜
 
 # 云视频
 admin.edu_cloud.edu_video.package.content_title: 云视频包状态
-admin.edu_cloud.edu_video.package.storage: 存储空间:
-admin.edu_cloud.edu_video.package.storage.free_transfer: 流量:
-admin.edu_cloud.edu_video.package.storage.service_deadline: 服务期限:
+admin.edu_cloud.edu_video.package.storage: '存储空间:'
+admin.edu_cloud.edu_video.package.storage.free_transfer: '流量:'
+admin.edu_cloud.edu_video.package.storage.service_deadline: '服务期限:'
 admin.edu_cloud.edu_video.package.storage.upgrade_btn: 升级
 admin.edu_cloud.edu_video.package.storage.renew_btn: 续费
 admin.edu_cloud.edu_video.package.storage.will_overdue_tips: 您的云视频包将于%remaining%天后到期，请尽快续费
@@ -6730,7 +6614,6 @@ admin.edu_cloud.edu_live.status: 云直播状态
 admin.edu_cloud.edu_live.buy_btn: >
   <a class="mhm" href="%live%" target="_blank">购买</a>云直播服务，轻松创建直播课堂
 admin.edu_cloud.edu_live.renew_btn: 续费
-admin.edu_cloud.edu_live.classroom_capacity: 教室容量：%capacity%人/月
 admin.edu_cloud.edu_live.expiry_date: 有效期至：
 admin.edu_cloud.edu_live.overdue_tips: 您的云直播服务已到期，请尽快续费，以免影响正常使用
 admin.edu_cloud.edu_live.renew_tips: 您的云直播服务将于%remaining%天后到期，请尽快续费
@@ -6812,8 +6695,6 @@ admin.edu_cloud.edu_sms.type_id: 类型编号
 admin.edu_cloud.edu_sms.application_scenarios: 短信应用场景
 admin.edu_cloud.edu_sms.sms_type_num: 类型编号
 admin.edu_cloud.edu_sms.sms_open_status: 启用状态
-admin.edu_cloud.edu_sms.sms_school_notify: 网校通知
-admin.edu_cloud.edu_sms.application_scenarios: 应用场景
 admin.edu_cloud.edu_sms.content: 内容示例
 admin.edu_cloud.edu_sms.send_object: 发送对象
 admin.edu_cloud.edu_sms.send_way: 发送方式
@@ -6885,9 +6766,7 @@ admin.edu_cloud.edu_sms.educational_notice: 教务通知
 admin.edu_cloud.edu_sms.new_classroom_publish: 新%classroomName%发布
 admin.edu_cloud.edu_sms.classroom_sms_send_hint: 进入后台班级列表页中的［操作］列中进行手动发送。
 admin.edu_cloud.edu_sms.sms_school_notify_tips: 课程：《课程名》－课时：《课时名》将在［开播时间］开播！%smsSchoolName%链接地址
-admin.edu_cloud.edu_sms.homework_checked_tips: 您的课程：《课程名》-作业：《课时名》的作业已被老师批阅，快来看看吧！%smsScoolName%
 admin.edu_cloud.edu_sms.first_install_homework_plugin: 请先安装作业插件！
-admin.edu_cloud.edu_sms.testpaper_checked_tips: 您的课程：《课程名》-试卷：《课时名》的试卷已被老师批阅，快来看看吧！%smsSchoolName%
 admin.edu_cloud.edu_sms.pay_course_order_tips: 你已成功购买课程《课程名称》，支付［订单金额］。%smsSchoolName%
 admin.edu_cloud.edu_sms.pay_classroom_order_tips: 你已成功购买班级《班级名称》，支付［订单金额］。%smsSchoolName%
 admin.edu_cloud.edu_sms.pay_vip_order_tips: 你已成功购买《会员名称》，支付［订单金额］。%smsSchoolName%
@@ -7063,7 +6942,6 @@ admin.edu_cloud.edu_search.more_btn: 更多
 admin.edu_cloud.edu_search.search_service_provider: >
   云搜索托管服务由EduSoho教育云提供 <a href="%url%" target="_blank">了解详情</a>
 admin.edu_cloud.edu_search.no_enabled_search: 尚未启用云搜索
-admin.edu_cloud.edu_search.search_tips: 云搜索提供强大的全文搜索引擎，帮助学员轻松、精确的搜索课程、老师、小组话题、资讯。
 admin.edu_cloud.edu_search.unbinded_url_tips: >
   未绑定授权域名不能开通云搜索！<a href="%setUrl%">立即设置</a>
 admin.edu_cloud.edu_search.start_enabled_btn: 立即启用
@@ -7760,10 +7638,10 @@ admin.cdn.input_placeholder: 不填将默认是URL
 
 # 订单模块
 admin.order.paid_time_range.input_placeholder: 付款时间段
-admin.order.keyword: 关键词:
+admin.order.keyword: '关键词:'
 admin.order.buyer: 购买者
 admin.order.title: 订单名称
-admin.order.screen_condition: 筛选条件:
+admin.order.screen_condition: '筛选条件:'
 admin.order.target_name: 名
 admin.order.buyer_mobile: 购买者绑定手机号
 admin.order.buyer_email: 购买者邮箱
@@ -8385,7 +8263,6 @@ admin.xapi.id: 推送id
 admin.xapi.status: 推送状态
 admin.xapi.version: xAPI版本
 admin.xapi.body: 推送主体
-admin.xapi.status: 推送状态
 admin.xapi.verb: 推送行为
 admin.xapi.target_type: 推送类型
 admin.xapi.time: 推送时间
@@ -9017,7 +8894,6 @@ log.action.tagGroup.delete: 删除
 log.action.coin.update_settings: 设置
 log.action.coin.add_coin: 增加
 log.action.coin.deduct_coin: 扣除
-log.action.announcement.delete: 删除公告
 log.action.open_course.create_course: 创建公开课
 log.action.open_course.update_course: 更新公开课
 log.action.open_course.delete_course: 删除课程

@@ -445,7 +445,6 @@ order.status.cancel: Closed
 order.status.refunding: Refund
 order.status.refunded: 'Refund succeed'
 order.due_pay: duePay(CNY)
-order.price_amount: PriceAmount
 order.discount_amount: DiscountAmount
 order.real_pay: Paid
 order.buyers: Consumer
@@ -831,7 +830,6 @@ course.students_count: '<span class="mhs">%studentsNum%</span> students enrolled
 course.course_member_count: '%studentsNum% students'
 course.activity: %taskName%
 course.plan: Course plan
-course.activity: Activity
 course.teaching_plan.access_denied_hint: 'No permission'
 course.teaching_plan: 'Program'
 course.teaching_plan.free: 'Free'
@@ -1270,10 +1268,8 @@ course.thread.question_type.image: image
 course.thread.question_type.audio: audio
 course.thread.question_type.content: content
 course.thread.question.title: This is a %questionType% question
-course.task.preview.free_learn_tips: 'Join for free'
 course.task.classroom_sync_job_executing_tips: 'Classroom synchronization, please publish later'
 course.task.learning.remaining.watch_time: 'remaining watch length'
-course.thread: Forum
 course.thread.empty: "There is no %thread%, please add one!\n"
 course.thread.hit_times: '%hitNum% hits'
 course.thread.mission_number: %taskName%%number%
@@ -1306,8 +1302,6 @@ course.material.empty: 'No files for the course'
 course.btn.learn: Learn
 course.btn.join: Enroll
 course.btn.free_join: 'Enroll Free'
-course.btn.join: Join
-course.btn.free_join: 'Join Free'
 course.btn.pay_tips: 'creating the order'
 course.export: export course data
 course.btn.pay: Pay
@@ -1701,7 +1695,6 @@ course.plan_task.activity_manage.create: 'Add%taskName%'
 course.plan_task.activity_manage.modify: 'Edit%taskName%'
 course.plan_task.activity_manage.preview: 'Preview%taskName%'
 
-course.lesson: Lesson
 course.manage.create_lesson: Add Lesson
 course.manage.edit_lesson: Edit the lesson
 course.manage.preview_lesson: Preview
@@ -2021,6 +2014,7 @@ classroom.cancle_refund_btn: 'Cancel the refund and resume course.'
 classroom.courses_count: '%courseNum% courses in total'
 classroom.continue_learning_btn: Continue
 classroom.join_btn: 'Join Now'
+classroom.status.published: Publish
 classroom.status.unpublish: Unpublished
 classroom.status.closed: Closed
 classroom.course.base: 'Basic info'
@@ -2684,7 +2678,6 @@ user.settings.verification.approved_title_tips: 'Certified by real name'
 user.settings.verification.approved_content_tips: 'The real name information cannot be modified after the certification is passed.'
 
 user.settings.verification.unapprove_tips: 'To protect your account and get better service, please complete your real-name certification as soon as possible.'
-user.settings.verification.unapprove_tips: Real-name certification can boost your personal information and the security level of virtual property, but also better able to experience various services
 user.settings.verification.approve_failed_tips: Audit failed, please upload id photos again and make sure the picture is clear
 user.settings.verification.approve_failed_reason_tips: 'The review failed, due to: %reason%. Please check.'
 
@@ -2763,8 +2756,6 @@ user.account.other_invite_code.reward_tips: 'Input the invitation code, the invi
 user.account.my_invite_code.no_reward_tips: 'Send invitation code to your friends'
 user.account.my_invite_code.reward_after_consume_tips: 'Send invitation code to your friends，The invited user will get a coupon worthing %promoted_user_value% CNY  after registeration。'
 user.account.my_invite_code.reward_after_register_tips: 'Send invitation code to your friends，The invited user will get a coupon worthing %promoted_user_value% CNY  after he or she  make a payment.'
-user.account.my_invite_code.reward_after_consume_tips: 'Send invitation code to your friends，The invited user will get a coupon worthing %promoted_user_value% RMB  after registeration。'
-user.account.my_invite_code.reward_after_register_tips: 'Send invitation code to your friends，The invited user will get a coupon worthing %promoted_user_value% RMB  after he or she  make a payment.'
 user.account.my_invite_code.reward_after_register_reward_tips: 'At the same time you will receive a %promote_user_value% CNY coupon.'
 user.account.my_invite_code.invitees: Invited
 user.account.my_invite_code.invite_time: 'Invited date'
@@ -3365,6 +3356,8 @@ my.teaching.live_schedule_menu: Teaching Schedules
 my.teaching.hints_block: Only live courses are shown currently
 my.teaching.today_courses: 'Number of courses today'
 my.teaching.classroom_menu: Class
+my.teaching.classroom.studen_count: Students
+my.teaching.classroom.course_count: Courses
 my.teaching.question_menu: 'Q&A'
 my.teaching.discussion_menu: Discussions
 my.teaching.online_review_menu: 'Online review'
@@ -3375,12 +3368,12 @@ my.teaching.material_lib_menu: 'Library'
 my.teaching.course_set.normal: 'Normal'
 my.teaching.course_set.live: 'Live'
 my.teaching.course_set.reservation: 'Reservation'
-my.teaching.course_set.classroom: '%classroom% courses'
 my.teaching.open_course.normal: 'Recorded Open Course'
 my.teaching.open_course.live: 'Live Open Courses'
 my.teaching.open_course.live_remind: 'Live remind'
 my.teaching.threads_discussion: 'Student discussion'
 my.teaching.threads_question: 'Student question'
+my.teaching.classroom.preview: 'Preview Classroom'
 my.teaching.classroom.threads_discussion: '%classroom% discussion'
 my.teaching.classroom.threads_discussion.nickname: 'Discussion owner'
 my.teaching.classroom.threads_event.nickname: 'Activity owner'
@@ -3389,7 +3382,6 @@ my.teaching.classroom.threads_question.nickname: 'Discussion owner'
 my.teaching.classroom: 'Teaching %classroom%'
 my.teaching.classroom.manage_btn: 'Edit %classroom%'
 my.teaching.classroom.today_data_title: 'What''s is new today'
-my.teaching.classroom.today_data: "student %allCount% &nbsp;&nbsp; discussion %threadCount% &nbsp;&nbsp; assignments %todayFinishedTaskNum% \n"
 my.teaching.page_title: 'Course list'
 my.teaching.course_set.create: 'Add'
 my.teaching.course_set.content_title: 'Courses'
@@ -6911,7 +6903,6 @@ admin.wechat_app.easy_promotion_introduction_title: Ultralight promotion
 admin.wechat_app.easy_promotion_introduction_content: Streamlined experience, lowering user thresholds, and facilitating users to quickly spread on WeChat, promoting low-cost and high-transformation
 admin.xapi.title: Push details
 admin.xapi.id: Push id
-admin.xapi.status: Push status
 admin.xapi.version: xAPI version
 admin.xapi.body: Push body
 admin.xapi.status: Push status
@@ -7203,7 +7194,7 @@ notification.group-thread.uncollect: %who%  cancel to collect your discussion %t
 notification.group-thread.reply: %who% replied to you in discussion %thread%
 notification.group-thread.delete-post: Your reply to discussion %thread% was deleted.
 notification.group-thread.type-modify: You are edited by %who% on discussion %thread%.
-notification.global: System notification:
+notification.global: 'System notification:'
 notification.vip-deadline: The VIP you bought will expire at %deadline%.
 notification.thread: %who% posted %thread% in %where%.
 notification.live-course: 【Live】 You are learning %course% will be broadcast at %noticeDay%%minStartTime%, please arrange time to participate on time.
@@ -7460,7 +7451,6 @@ join.time: 'Join Time'
 register.userinfo_fill_tips: Mobile not matching SMS code, please resubmit.
 
 
-cashier.order.status.changed_tips: The order status has been changed, please reorder.
 cashflow.title: Name
 cashflow.sn: sn
 cashflow.order_sn: order sn
@@ -7766,7 +7756,6 @@ log.action.tagGroup.delete: 'Delete'
 log.action.coin.update_settings: 'Settings'
 log.action.coin.add_coin: 'Add'
 log.action.coin.deduct_coin: 'deduction'
-log.action.announcement.delete: 'Delete announcement'
 log.action.open_course.create_course: 'Create open course'
 log.action.open_course.update_course: 'Update open course'
 log.action.open_course.delete_course: 'Delete course'
@@ -7833,8 +7822,6 @@ log.action.template.course.update_task: Updated the task《%title%》
 log.action.template.course.update_draft: Updated the draft《%title%》
 log.action.template.course.recommend: Recommended<strong class="color-success"> course </strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.cancel_recommend: Recommended<strong class="color-success"> course </strong> 《<a href="%url%" target="_blank">%title%</a>》 canceled.
-log.action.template.course.create_lesson: Created a new course lesson《<a href="%url%" target="_blank">%title%</a>》
-log.action.template.course.add_task: Created a new course task《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.join_course: Joined the teaching plan《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.join_classroom: Joined the classroom《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.create: Created a new<strong class="color-success"> classroom </strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -8392,7 +8379,6 @@ log.attr.system.update_settings.storage.video_quality: Video transcode quality
 log.attr.system.update_settings.storage.video_quality.low: Smooth
 log.attr.system.update_settings.storage.video_quality.normal: Standard
 log.attr.system.update_settings.storage.video_quality.high: High
-log.attr.system.update_settings.storage.video_quality.high: Super
 log.attr.system.update_settings.storage.video_audio_quality: Video transcoding sound quality
 log.attr.system.update_settings.storage.video_audio_quality.low: Smooth
 log.attr.system.update_settings.storage.video_audio_quality.normal: Standard

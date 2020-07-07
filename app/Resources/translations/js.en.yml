@@ -100,7 +100,6 @@ user.settings.unbind_success: unbind successfully
 user.settings.unbind_title: unbind
 user.settings.unbind_content: Are you determined to unbind?
 
-material.share.teacher_nickname_label: teacher nickname
 material.cancel_share.tips: Already cancel share
 
 uploader.title: Upload
@@ -254,7 +253,6 @@ User.unfollow_success_hint: Unfollow succeed
 
 User.card_load_hint: User card loading
 
-user.settings.security.security_questions.type_duplicate_hint: Problem type can not be repeated
 user.settings.security.questions.set.incorrect_password: Incorrect password, you are unable to add security question
 user.settings.security.questions.set.not_modify_aligin_hint: You have set up a security question, do not change again
 user.settings.security.questions.set.success: Security question set successfully
@@ -281,7 +279,6 @@ Activity.audio_manage.length_unsigned_integer_error_hint: The duration must be g
 Activity.audio_manage.second_range_error_hint: Seconds between 0-59
 Activity.audio_manage.media_error_hint: Please upload or select an audio file
 
-Activity.audio_manage.media_error_hint: Please upload or select the document
 Activity.audio_manage.finish_detail_required_error_hint: Please enter the completion condition
 Activity.audio_manage.finish_detail_digits_error_hint: The completion condition must be a number
 
@@ -519,10 +516,6 @@ course.manage.expiry_start_date_error_hint: Please enter the start date
 course.manage.expiry_days_error_hint: Please enter the number of valid days
 course.manage.deadline_end_date_error_hint: Please enter the due date
 course.manage.max_student_num_error_hint: Please enter the number of courses
-course.manage.deadline_end_date_error_hint: Please enter a study validity period
-course.manage.expiry_days_error_hint: The start date should be before the end date
-course.manage.expiry_start_date_error_hint: End date should be later than start date
-course.manage.expiry_end_date_error_hint: The start date should be earlier than the end date
 course.manage.max_year_error_hint: Please enter a value less than 7300 (20 years)
 course.manage.max_capacity_hint: The site can support up to %capacity% people to participate in the live at the same time, you can set a larger value, but then may lead to students can not enter the live.
 course.manage.publish_hint: Are you sure you want to publish the program?
@@ -799,7 +792,6 @@ validate.password_check.message: Wrong password
 validate.sms_code_input.message: Please enter the verification code
 validate.sms_code.message: Verification code error
 validate.es_remote.message: Validation error
-validate.reg_invite_code.message: Must be a 5-digit alphabet
 validate.byte_minlength.message: Character length must be greater than or equal to %min%, a Chinese word count 2 characters
 validate.byte_maxlength.message: The character length must be less than or equal to %max%, and a Chinese word is 2 characters
 
@@ -909,7 +901,6 @@ validate_old.visible_character.message: %display% Enter the visibility character
 validate_old.chinese_limit.message: %display% must be less than or equal to% max% and 2 characters in Chinese
 validate_old.chinese.message: %display% must be Chinese
 validate_old.phone.message: Please enter a valid %display% (only mainland China phone number).
-validate_old.mobile.message: Please enter a valid %display% (only mainland China phone number).
 validate_old.chinese_alphanumeric.message: %display% supports Chinese characters, letters, numbers and _ . ·
 validate_old.reg_invite_code.message: %display% must be a 5-digit alphabet
 validate_old.alphanumeric.message: %display% must be alphabetical, numeric, and underlined
@@ -1072,7 +1063,6 @@ admin.block.edit_success_hint: Update the block template successfully!
 admin.block.upload_failed_hint: Upload the picture failed, please try again!
 admin.block.upload_success_hint: Upload the picture successfully!
 admin.block.delete_picture_success_hint: Delete the picture successfully!
-admin.block.edit_success_hint: Updated successfully!
 admin.block.submit_success_hint: Submitted successfully!
 admin.block.select_picture_hint: Please select the image to upload first
 admin.block.upload_picture_success_hint: Upload the picture successfully!
@@ -1081,8 +1071,6 @@ admin.block.add_max_num_hint: Can only add up to %panelGroup%!
 admin.block.delete_tip: Are you sure you want to delete?
 admin.block.delete_min_num_hint: There must be one!
 admin.block.uploading_hint: Uploading, please wait!
-admin.block.upload_success_hint: Uploaded successfully!
-admin.block.upload_failed_hint: Upload failed, please try again!
 admin.block.poster: poster (%index%)
 admin.category.icon_delete_hint: Are you sure you want to delete the icon?
 admin.category.icon_delete_success_hint: Delete the category icon successfully!
