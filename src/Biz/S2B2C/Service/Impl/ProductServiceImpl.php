@@ -420,6 +420,9 @@ class ProductServiceImpl extends BaseService implements ProductService
         return true;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function notifyNewVersionProduct($s2b2cProductId, $resourceCourseId, $version)
     {
         $product = $this->getByProductIdAndRemoteResourceIdAndType($s2b2cProductId, $resourceCourseId, 'course');
@@ -453,11 +456,11 @@ class ProductServiceImpl extends BaseService implements ProductService
 
         $this->beginTransaction();
 
-        try{
+        try {
             $this->getCourseProductService()->updateProductVersionData($product['remoteProductId']);
             $this->commit();
-        }catch (\Exception $exception) {
-            $this->getLogger()->error('[updateProductVersion] 更新失败 ' . $exception->getMessage());
+        } catch (\Exception $exception) {
+            $this->getLogger()->error('[updateProductVersion] 更新失败 '.$exception->getMessage());
             $this->rollback();
             throw $this->createServiceException('更新失败');
         }
