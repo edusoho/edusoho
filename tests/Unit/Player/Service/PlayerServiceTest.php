@@ -8,39 +8,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PlayerServiceTest extends BaseTestCase
 {
-    public function testGetAudioAndVideoPlayerType()
-    {
-        $file = ['type' => 'audio', 'storage' => 'local'];
-        $result = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
-        $this->assertEquals('audio-player', $result);
-
-        $file = ['type' => 'video', 'storage' => 'local'];
-        $result = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
-        $this->assertEquals('local-video-player', $result);
-
-        $file = ['type' => 'video', 'storage' => 'cloud'];
-        $result = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
-        $this->assertEquals('balloon-cloud-video-player', $result);
-
-        $file = ['type' => 'ppt', 'storage' => 'cloud'];
-        $result = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
-        $this->assertEquals(null, $result);
-    }
-
-    public function testAgentInWhiteList()
-    {
-        $result = $this->getPlayerService()->agentInWhiteList('iPhone');
-        $this->assertTrue($result);
-        $result = $this->getPlayerService()->agentInWhiteList('iPad');
-        $this->assertTrue($result);
-        $result = $this->getPlayerService()->agentInWhiteList('Android');
-        $this->assertTrue($result);
-        $result = $this->getPlayerService()->agentInWhiteList('HTC');
-        $this->assertTrue($result);
-        $result = $this->getPlayerService()->agentInWhiteList('HuaWei');
-        $this->assertFalse($result);
-    }
-
     public function testGetVideoFilePlayer()
     {
         $this->mockBiz('System:SettingService', [
@@ -80,7 +47,7 @@ class PlayerServiceTest extends BaseTestCase
         $this->assertEquals('www.baidu.com', $result['url']);
 
         $result = $this->getPlayerService()->getVideoPlayUrl(
-            ['id' => 1, 'storage' => 'es'], [], true
+            ['id' => 1, 'storage' => 'es', 'ext' => '.mp4'], [], true
         );
         $this->assertEquals('player_local_media', $result['route']);
         $this->assertEquals(UrlGeneratorInterface::ABSOLUTE_URL, $result['referenceType']);

@@ -12,7 +12,7 @@
   </div>
 
   <div class="text-center cd-mb32">
-    <img class="third-party-avatar" src="{{ asset(oauthUser.avatar) }}">
+    <img class="third-party-avatar" src="{% if oauthUser.avatar %}{{ asset(oauthUser.avatar) }}{% else %}{{ filepath('', 'avatar.png') }}{% endif %}">
   </div>
 
   <form class="third-party-form" id="third-party-login-form" method="post" action="{{ path('oauth2_login_bind_account') }}">

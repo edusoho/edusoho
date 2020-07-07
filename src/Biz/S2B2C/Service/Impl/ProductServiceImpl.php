@@ -10,6 +10,7 @@ use Biz\S2B2C\S2B2CProductException;
 use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 
 /**
  * Class ProductServiceImpl
@@ -31,6 +32,19 @@ class ProductServiceImpl extends BaseService implements ProductService
     public function getProductBySupplierIdAndRemoteProductId($supplierId, $remoteProductId)
     {
         return $this->getS2B2CProductDao()->getBySupplierIdAndRemoteProductId($supplierId, $remoteProductId);
+    }
+
+    /**
+     * @param $supplierId
+     * @param $remoteProductId
+     * @param $type
+     *
+     * @return mixed
+     *               通过supplierId 和 remoteProductId（第三方商品ID）和 type 唯一确定一个商品
+     */
+    public function getProductBySupplierIdAndRemoteProductIdAndType($supplierId, $remoteProductId, $type)
+    {
+        return $this->getS2B2CProductDao()->getBySupplierIdAndRemoteProductIdAndType($supplierId, $remoteProductId, $type);
     }
 
     /**
@@ -251,7 +265,48 @@ class ProductServiceImpl extends BaseService implements ProductService
             $this->createNewException(S2B2CProductException::INVALID_S2B2C_PRODUCT_TYPE());
         }
 
+        if (self::UPDATE_TYPE_AUTO == $type) {
+            $this->addUpdateProductJob();
+        } else {
+            $this->removeUpdateProductJob();
+        }
+
         return $this->getSettingService()->set('productUpdateType', $type);
+    }
+
+    protected function addUpdateProductJob()
+    {
+        $job = $this->getSchedulerService()->getJobByName('productUpdateVersion');
+
+        if (!empty($job)) {
+            return true;
+        }
+
+        $job = [
+            'name' => 'productUpdateVersion',
+            'class' => 'Biz\S2B2C\Job\UpdateProductVersionJob',
+            'expression' => '0 2 * * *',
+            'args' => '',
+            'misfire_threshold' => 300,
+            'misfire_policy' => 'executing',
+        ];
+
+        $this->getSchedulerService()->register($job);
+
+        return true;
+    }
+
+    protected function removeUpdateProductJob()
+    {
+        $job = $this->getSchedulerService()->getJobByName('productUpdateVersion');
+
+        if (empty($job)) {
+            return true;
+        }
+
+        $this->getSchedulerService()->deleteJob($job['id']);
+
+        return true;
     }
 
     public function deleteByIds($ids)
@@ -291,5 +346,13 @@ class ProductServiceImpl extends BaseService implements ProductService
     protected function getS2B2CProductDao()
     {
         return $this->biz->dao('S2B2C:ProductDao');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->biz->service('Scheduler:SchedulerService');
     }
 }

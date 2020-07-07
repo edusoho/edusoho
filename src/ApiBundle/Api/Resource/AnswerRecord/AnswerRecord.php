@@ -21,6 +21,9 @@ class AnswerRecord extends AbstractResource
         }
 
         $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+        $answerReportFilter = new AnswerReportFilter();
+        $answerReportFilter->filter($answerReport);
+
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
         $assessmentFilter = new AssessmentFilter();
         $assessmentFilter->filter($assessment);

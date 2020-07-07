@@ -31,6 +31,7 @@ class ExerciseModuleDaoImpl extends GeneralDaoImpl implements ExerciseModuleDao
             'conditions' => [
                 'type IN (:types)',
                 'exerciseId = :exerciseId',
+                'type = :type',
             ],
         ];
     }

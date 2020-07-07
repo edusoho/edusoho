@@ -100,7 +100,7 @@
       </div>
     </fieldset>
     <fieldset id="third_login" {% if loginConnect.enabled|default(null) == 0 %} style="display:none"{% endif %}>
-      {% for type, client in clients if type not in ['weixinmob', 'weixinweb']%}
+      {% for type, client in clients if type not in ['weixinmob', 'weixinweb', 'apple']%}
         <fieldset data-role="oauth2-setting" data-type="{{ type }}">
           <legend>{{ client.admin_name }}</legend>
           <div class="form-group">

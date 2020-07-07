@@ -15,7 +15,6 @@ class Auth
 
     /**
      * Auth constructor.
-     *
      * @param $accessKey
      * @param $secretKey
      * @param bool $useJwt 新的服务将启用 JWT 作为鉴权的 Token
@@ -49,10 +48,10 @@ class Auth
     /**
      * 制作API请求的授权信息
      *
-     * @param string $uri      HTTP 请求的 URI
-     * @param string $body     HTTP 请求的 BODY
-     * @param int    $lifetime 授权生命周期
-     * @param bool   $useNonce 授权随机值避免重放攻击
+     * @param string $uri HTTP 请求的 URI
+     * @param string $body HTTP 请求的 BODY
+     * @param int $lifetime 授权生命周期
+     * @param bool $useNonce 授权随机值避免重放攻击
      *
      * @return string 授权信息
      */
@@ -64,7 +63,7 @@ class Auth
                 'exp' => time() + $lifetime,
             );
 
-            $token = JWT::encode($payload, $this->secretKey, 'HS256', $this->accessKey);
+            $token =  JWT::encode($payload, $this->secretKey, 'HS256', $this->accessKey);
 
             return "Bearer {$token}";
         } else {
@@ -82,8 +81,8 @@ class Auth
     public function makeXAPIRequestAuthorization()
     {
         $deadline = strtotime(date('Y-m-d H:0:0', strtotime('+2 hours')));
-        $signingText = $this->getAccessKey()."\n".$deadline;
-        $signature = $this->getAccessKey().':'.$deadline.':'.$this->makeSignature($signingText);
+        $signingText = $this->getAccessKey() . "\n" . $deadline;
+        $signature = $this->getAccessKey() . ':' . $deadline . ':' . $this->makeSignature($signingText);
 
         return "Signature $signature";
     }

@@ -122,21 +122,55 @@ class ResourcePurchaseController extends BaseController
 
         $merchant = $this->getS2B2CFacadeService()->getMe();
 
+        $productVersionList = $this->covertProductVersions($productVersionList, $courseSets, $courses, $products, $courseSetProducts, $conditions);
+
         return $this->render(
             'admin-v2/cloud-center/content-resource/product-version/list.html.twig',
             [
                 'request' => $request,
                 'productVersionList' => $productVersionList,
-                'courses' => ArrayToolkit::index($courses, 'id'),
-                'courseSets' => $courseSets,
-                'startDateTime' => empty($conditions['startDateTime']) ? 0 : strtotime($conditions['startDateTime']),
-                'endDateTime' => empty($conditions['endDateTime']) ? 0 : strtotime($conditions['endDateTime']),
                 'merchant' => $merchant,
-                'supplier' => [],
-                'products' => ArrayToolkit::index($products, 'remoteResourceId'), //remoteResourceId == remoteResourceId.productId
-                'courseSetProducts' => ArrayToolkit::index($courseSetProducts, 'localResourceId'),
             ]
         );
+    }
+
+    protected function covertProductVersions($productVersionList, $courseSets, $courses, $products, $courseSetProducts, $conditions)
+    {
+        $courses = ArrayToolkit::index($courses, 'id');
+        $startDate = empty($conditions['startDateTime']) ? 0 : strtotime($conditions['startDateTime']);
+        $endDate = empty($conditions['endDateTime']) ? 0 : strtotime($conditions['endDateTime']);
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+        $products = ArrayToolkit::index($products, 'remoteResourceId');
+        $courseSetProducts = ArrayToolkit::index($courseSetProducts, 'remoteResourceId');
+
+        foreach ($productVersionList as $key => &$productVersion) {
+            //时间筛选
+            if (($startDate > 0 && $productVersion['updatedTime'] < $startDate) || ($endDate > 0 && $productVersion['updatedTime'] > $endDate)) {
+                unset($productVersionList[$key]);
+                continue;
+            }
+
+            $remoteResourceId = $productVersion['productId'];
+            if (isset($products[$remoteResourceId]) && $products[$remoteResourceId]['localVersion'] >= $productVersion['productVersion']) {
+                unset($productVersionList[$key]);
+                continue;
+            }
+
+            if (empty($productVersion['s2b2cDistributeId'])) {
+                unset($productVersionList[$key]);
+                continue;
+            }
+
+            $course = isset($products[$remoteResourceId]['localResourceId']) ? $courses[$products[$remoteResourceId]['localResourceId']] : null;
+            $courseSet = $courseSets[$courseSetProducts[$productVersion['courseSetId']]['localResourceId']];
+
+            $productVersion['course'] = $course;
+            $productVersion['localProductId'] = empty($course) ? 0 : $products[$remoteResourceId]['id'];
+            $productVersion['courseSetTitle'] = empty($course) ? $courseSet['title'] : $course['courseSetTitle'];
+            $productVersion['title'] = empty($course) ? $productVersion['title'] : $course['title'];
+        }
+
+        return $productVersionList;
     }
 
     public function productVersionDetailAction(Request $request, $productId)
@@ -162,10 +196,8 @@ class ResourcePurchaseController extends BaseController
         );
     }
 
-    public function updateProductToLatestVersionAction(Request $request, $productId)
+    public function updateProductToLatestVersionAction(Request $request, $remoteProductId)
     {
-        $course = $this->getCourseByProductId($productId);
-
         if ($request->isMethod('POST')) {
             /**
              * mock
@@ -175,7 +207,7 @@ class ResourcePurchaseController extends BaseController
                 return $this->createJsonResponse(['status' => false, 'error' => '更新失败']);
             }
 
-            $result = $this->getS2B2CCourseProductService()->updateCourseVersionData($course['id']);
+            $result = $this->getS2B2CCourseProductService()->updateProductVersionData($remoteProductId);
 
             return $this->createJsonResponse($result);
         }
@@ -183,8 +215,9 @@ class ResourcePurchaseController extends BaseController
         return $this->render(
             'admin-v2/cloud-center/content-resource/product-version/update-modal.html.twig',
             [
+                'path' => 'admin_v2_content_resource_update_product_version',
                 'request' => $request,
-                'productId' => $productId,
+                'remoteProductId' => $remoteProductId,
             ]
         );
     }
@@ -203,17 +236,6 @@ class ResourcePurchaseController extends BaseController
                 'type' => !empty($type) ? $type : $this->getSettingService()->get('productUpdateType', ProductService::UPDATE_TYPE_MANUAL),
             ]
         );
-    }
-
-    protected function getCourseByProductId($productId)
-    {
-        $product = $this->getS2B2CProductService()->getProduct($productId);
-        $course = $this->getCourseService()->getCourse($product['localResourceId']);
-        if (empty($course)) {
-            throw $this->createNotFoundException();
-        }
-
-        return $course;
     }
 
     protected function getProductController($type)
@@ -273,6 +295,14 @@ class ResourcePurchaseController extends BaseController
      * @return CourseProductService
      */
     protected function getS2B2CCourseProductService()
+    {
+        return $this->createService('S2B2C:CourseProductService');
+    }
+
+    /**
+     * @return CourseProductService
+     */
+    protected function getCourseProductService()
     {
         return $this->createService('S2B2C:CourseProductService');
     }

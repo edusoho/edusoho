@@ -298,8 +298,6 @@ interface CourseService
 
     public function unlockCourse($courseId);
 
-    public function getFavoritedCourseByUserIdAndCourseSetId($userId, $courseSetId);
-
     public function buildCourseExpiryDataFromClassroom($expiryMode, $expiryValue);
 
     public function hitCourse($courseId);

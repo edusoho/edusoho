@@ -567,6 +567,10 @@ item_bank_exercise.student_create.price_min_error_hint: 采购的题库练习购
 item_bank_exercise.student_create.price_max_error_hint: 购买价格不能大于题库练习原价!
 item_bank_exercise.assessment_module.assessment_delete: 确定要移除当前试卷?
 item_bank_exercise.assessment_module.assessment_delete.title: 移除试卷
+item_bank_exercise.assessment_module.module_delete.title: 移除模块
+item_bank_exercise.assessment_module.module_delete: 确定要移除当前模块？
+item_bank_exercise.assessment_module.module_delete.has_assessment_hint: 当前模块下有试卷存在，是否继续移除？
+item_bank_exercise.assessment_module.module_delete.least_module_count_hint: 请至少保留一个试卷模块
 
 classroom.manage.tag_required_hint: 请输入标签
 classroom.manage.delete_course_hint: 是否要从班级移除该课程？
@@ -1086,6 +1090,7 @@ admin.course.publish_hint: 您确认要发布此课程吗？
 admin.course.publish_success_hint: 课程发布成功！
 admin.course.unknow_error_hint: 未知错误
 admin.course.delete_hint: 删除课程，将删除课程的章节、课时、学员等信息。真的要删除该课程吗？
+admin.course.remove_hint: 移除课程将删除所有的学员信息以及学员数据，移除后无法恢复！ 确定移除该课程吗？
 admin.course.remind_teacher_success_hint: 提醒教师的通知，发送成功！
 admin.course.cancel_recommend_hint: 真的要取消该课程推荐吗？
 admin.course.recommend_success_hint: 设置推荐课程操作成功!

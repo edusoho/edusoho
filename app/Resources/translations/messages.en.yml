@@ -231,6 +231,7 @@ user.fields.idcard_back_title: Upload Id card back
 user.fields.mobile_label: 'Phone'
 user.fields.mobile_label.bind: Binded
 user.fields.mobile_label.no_bind: 'Not bind'
+user.fields.mobile_label.apple_tip: Please go to the APP for binding
 user.fileds.realname: Name
 user.fileds.me: Me
 user.fields.following: Following
@@ -9050,6 +9051,7 @@ exception.item_bank_exercise.expirydate_end_later_than_start: Validity period en
 exception.item_bank_exercise.expirymode_invalid: Validity type error
 exception.item_bank_exercise.assessment_exercise_exist: The test paper has been saved in this module, please do not add it repeatedly
 exception.item_bank_exercise.member.can_not_become_member: The exercise has expired and students cannot join
+exception.item_bank_exercise.module.not_empty_number: Please keep at least one module
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.
@@ -9622,10 +9624,12 @@ admin_v2.app_center.resource_settlement.order.title: Title
 admin_v2.app_center.resource_settlement.order.sn: Sn
 admin_v2.app_center.resource_settlement.order.coop_price: Cooperation Denomination
 admin_v2.app_center.resource_settlement.order.price_amount: Actual Paid
+admin_v2.app_center.resource_settlement.order.pay_amount: Amounts payable
 admin_v2.app_center.resource_settlement.order.debt_amount: Amount owed
 admin_v2.app_center.resource_settlement.order.status: Status
 
 admin_v2.app_center.resource_settlement.order.detail: Order Detail
+admin_v2.app_center.resource_settlement.balance.order.debt: Order Debt
 admin_v2.app_center.resource_settlement.order.detail.information: Order Information
 admin_v2.app_center.resource_settlement.order.detail.price_amount: Cooperation Denomination
 admin_v2.app_center.resource_settlement.order.detail.discount: Discount
@@ -9639,8 +9643,13 @@ admin_v2.app_center.resource_settlement.order.detail.order_information: Order In
 admin_v2.app_center.resource_settlement.order.detail.order_title: Title
 admin_v2.app_center.resource_settlement.order.detail.order_sn: Sn
 admin_v2.app_center.resource_settlement.order.detail.order_user: User
+admin_v2.app_center.resource_settlement.order.detail.price_settlement: Purchase order expense settlement
+admin_v2.app_center.resource_settlement.order.detail.deduct: Purchase deduct
+admin_v2.app_center.resource_settlement.order.detail.paid_amount: Purchase amount
+
 
 admin_v2.app_center.resource_settlement.product.id: Id
+admin_v2.app_center.resource_settlement.product.information: Product Infomation
 admin_v2.app_center.resource_settlement.product.time: Choose Time
 admin_v2.app_center.resource_settlement.product.order_count: Order Count
 admin_v2.app_center.resource_settlement.product.max_course_price: Actual Price
@@ -9658,6 +9667,18 @@ admin_v2.app_center.resource_settlement.empty: Empty
 
 
 merchant.content_resource.product_title: Product name
+merchant.content_resource.product_title_simple: Product name
+merchant.content_resource.product_no: Product Number
+merchant.content_resource.product_count: Product Count
+merchant.content_resource.product_specifications: Product specifications
+merchant.content_resource.product_sales_unit: Product Sales Unit
+merchant.content_resource.product_price: Product Price
+merchant.content_resource.product_sum: Product Sum
+merchant.content_resource.product_buyer_information: Buyer information
+merchant.content_resource.product_customer_name: Customer Name
+merchant.content_resource.product_customer_id: Customer ID
+merchant.content_resource.product_payer: Payer
+merchant.content_resource.product_order_title: Order Title
 merchant.content_resource.product_change_publish_time: Publish time
 merchant.content_resource.product_change_log_publish: Publish changelog
 merchant.content_resource.product_change_log: update changelog
@@ -9675,13 +9696,18 @@ merchant.content_resource.editing: Editing
 merchant.content_resource.choose: Choose
 merchant.content_resource.no_supplier: No Supplier!
 merchant.content_resource.supplier.no_cooperation_hint: 与供应商%supplierName%之间商品合作关系已经取消，供应商的商品不能购买加入，但不影响已购学员学习，如需恢复，请联系供应商！
-
+purchase.course.replay_manage.tips: >
+  Tip: for the lessons of ungenerated playback, you can click the button <i class="es-icon es-icon-videocam color-gray mh5"></i> to use the recorded video during the live stream
+merchant.content_resource.system: System
 
 admin_v2.course_manage.create_btn: Create Course
 admin_v2.course_manage.merchant_course: Purchase
 admin_v2.course_manage.has_version_change: Has Change
 
-exception.courseset.source_course_closed: Course closed,please contact the supplier.
+exception.courseset.source_course_closed: The supplier has removed the course. If you need to publish it, please contact the supplier!
+exception.courseset.source_course_not_found: Failed to obtain supplier course information, unable to post!
+exception.course.source_course_closed_join_denied: The supplier has removed the course and cannot join it for now!
+exception.course.source_course_closed: The supplier has closed the course and cannot publish it for now!
 
 admin_v2.plumber.status: Status
 admin_v2.plumber.start: start
@@ -9742,6 +9768,7 @@ facein.capture_face.inspection_result_modal.title: 监考抓拍
 
 exception.s2b2c_product.update_type_invalid: Update type invalid
 exception.s2b2c_product.not_found: Product not found
+exception.s2b2c_product.remove_failed: Product remove failed
 
 admin_v2.cloud_center.content_resource.product_update_setting: Update Setting
 admin_v2.cloud_center.content_resource.product_update_auto: Auto
@@ -9759,3 +9786,11 @@ s2b2c.resource.sync.prev_price.notify: 上个版本价格为
 s2b2c.resource.sync.has_new.notify: 有价格更新
 
 exception.goods.not_found: Goods not found.
+
+exception.review.forbidden_create_review: Create review forbiddened.
+exception.review.forbidden_operate_review: Operate review forbiddened.
+exception.review.rating_limit: Rating no more than 5
+exception.review.not_found_review: Review not found
+exception.review.post_limit: Post no more than 5
+
+exception.favorite.forbidden_operate_favorite: Forbidden

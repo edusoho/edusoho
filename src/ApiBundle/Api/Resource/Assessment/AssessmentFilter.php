@@ -3,6 +3,7 @@
 namespace ApiBundle\Api\Resource\Assessment;
 
 use ApiBundle\Api\Resource\Filter;
+use ApiBundle\Api\Resource\Item\ItemFilter;
 
 class AssessmentFilter extends Filter
 {
@@ -29,26 +30,10 @@ class AssessmentFilter extends Filter
 
     protected function publicFields(&$assessment)
     {
+        $itemFilter = new ItemFilter();
         $assessment['description'] = $this->convertAbsoluteUrl($assessment['description']);
         foreach ($assessment['sections'] as &$section) {
-            foreach ($section['items'] as &$item) {
-                !empty($item['material']) && $item['material'] = $this->convertAbsoluteUrl($item['material']);
-                !empty($item['analysis']) && $item['analysis'] = $this->convertAbsoluteUrl($item['analysis']);
-                foreach ($item['questions'] as &$question) {
-                    !empty($question['stem']) && $question['stem'] = $this->convertAbsoluteUrl($question['stem']);
-                    !empty($question['analysis']) && $question['analysis'] = $this->convertAbsoluteUrl($question['analysis']);
-                    empty($question['response_points']) && $question['response_points'] = [];
-                    foreach ($question['response_points'] as &$point) {
-                        !empty($point['checkbox']['text']) && $point['checkbox']['text'] = $this->convertAbsoluteUrl($point['checkbox']['text']);
-                        !empty($point['radio']['text']) && $point['radio']['text'] = $this->convertAbsoluteUrl($point['radio']['text']);
-                    }
-                    if (!empty($question['answer'])) {
-                        foreach ($question['answer'] as &$answer) {
-                            !empty($answer) && $answer = $this->convertAbsoluteUrl($answer);
-                        }
-                    }
-                }
-            }
+            $itemFilter->filters($section['items']);
         }
     }
 

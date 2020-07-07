@@ -31,6 +31,11 @@ class ProductDaoImpl extends AdvancedDaoImpl implements ProductDao
         return $this->getByFields(['supplierId' => $supplierId, 'remoteProductId' => $remoteProductId]);
     }
 
+    public function getBySupplierIdAndRemoteProductIdAndType($supplierId, $remoteProductId, $type)
+    {
+        return $this->getByFields(['supplierId' => $supplierId, 'remoteProductId' => $remoteProductId, 'productType' => $type]);
+    }
+
     public function getBySupplierIdAndRemoteResourceIdAndType($supplierId, $remoteResourceId, $type)
     {
         return $this->getByFields(['supplierId' => $supplierId, 'remoteResourceId' => $remoteResourceId, 'productType' => $type]);

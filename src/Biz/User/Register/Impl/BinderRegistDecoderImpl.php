@@ -10,10 +10,10 @@ class BinderRegistDecoderImpl extends RegistDecoder
     {
         $type = $registration['type'];
 
-        $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
-        if (empty($thirdLoginInfo["{$type}_enabled"]) ||
+        $thirdLoginInfo = $this->getSettingService()->get('login_bind', []);
+        if ((empty($thirdLoginInfo["{$type}_enabled"]) ||
                 empty($thirdLoginInfo["{$type}_key"]) ||
-                empty($thirdLoginInfo["{$type}_secret"])) {
+                empty($thirdLoginInfo["{$type}_secret"])) && 'apple' != $type) {
             throw SettingException::OAUTH_CLIENT_TYPE_INVALID();
         }
     }
@@ -28,7 +28,7 @@ class BinderRegistDecoderImpl extends RegistDecoder
             $user['password'] = '';
         }
 
-        if (in_array($registration['type'], array('weixinmob', 'weixinweb'))) {
+        if (in_array($registration['type'], ['weixinmob', 'weixinweb'])) {
             $user['type'] = 'weixin';
         }
 
@@ -41,7 +41,7 @@ class BinderRegistDecoderImpl extends RegistDecoder
             $registration['type'],
             $registration['authid'],
             $user['id'],
-            array()
+            []
         );
     }
 
