@@ -2567,19 +2567,15 @@ classroom.name_label: 名称
 classroom.about_tips: 为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
 classroom.tag_label: 标签
 classroom.tag_tips: 用于按标签检索班级等，由网校管理员后台统一管理
-classroom.show_label: >
-  %name%展示
 classroom.open_radio: 开启
 classroom.close_radio: 关闭
 classroom.show_tips: >
   关闭后，%name%将彻底隐藏，无法在前台查看到。
-classroom.buy_label: 购买
 classroom.buy_tips: >
   关闭后%name%将无法在线购买加入。
 classroom.expiry_mode: 有效期
 classroom.set_expiry_mode_tips: >
   设置该值后，学员只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。
-classroom.expiry_mode_label: 班级有效期
 classroom.expiry_mode_rule: 班级有效期规则
 classroom.expiry_mode_rule_tips: >
   ● 班级有效期设置
@@ -2606,21 +2602,11 @@ classroom.expiry_mode_rule_tips: >
   3. 进入班级课程，提示和班级一致<br>
   4. 班级到期前10天会进行系统通知，提示班级已到期，班级内课程也会发送相应通知<br>
   5. 班级过期后，除评价以外，所有项只允许查看，不允许操作，操作都会提示：当前班级已过有效期<br>
-classroom.expiry_mode_end_date: 截止日期
-classroom.expiry_mode_days: 有效期天数
-classroom.expiry_mode_forever: 长期有效
 classroom.edit_expiry_mode: 修改学员有效期
-classroom.expiry_mode.first_publish_tips: 班级首次发布后，有效期类型不能再更改，只允许修改有效日期。
 classroom.not_edit: 班级不能修改
 classroom.publish_tips: 有效期，请班级发布后再增加。
 classroom.title_label: 班级标题
-classroom.expiry_mode_end_date_tips: >
-  设置该值后，学员只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。
-classroom.expiry_mode_days_tips: >
-  设置该值后，学员只能在有效天数内进行课程的学习，系统默认会在有效期前10天提醒学员。
-classroom.watch_expiry_mode_rile: 查看有效期规则
 classroom.category: 分类
-classroom.price_label: 价格(元)
 classroom.price_tips: >
   当前共有 %courseNum% 个课程，原价共计 %price% 元。
 classroom.amount: >
@@ -11054,3 +11040,11 @@ exception.review.not_found_review: 评价不存在
 exception.review.post_limit: 回复数量已达5条上限，不能再回复
 
 exception.favorite.forbidden_operate_favorite: 没有权限
+
+classroom.courses: 班级课程
+classroom.member_number: 班级学员
+classroom.preview_btn: 预览班级
+classroom.publish_btn: 发布班级
+classroom.basic_setting: 基础设置
+classroom.cover_crop.title: 班级封面上传
+

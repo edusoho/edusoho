@@ -2261,30 +2261,19 @@ classroom.name_label: Name
 classroom.about_tips: 'To use IFrame，please go to 【Admin Console】-【System】-【Site Settings】-【Security】-【IFrame white list】and set the value'
 classroom.tag_label: Tag
 classroom.tag_tips: 'Used to query classes by label, and managed by administrator'
-classroom.show_label: "Show %name%\n"
 classroom.open_radio: Open
 classroom.close_radio: Close
 classroom.show_tips: "If close，%name% will be hidden\n"
-classroom.buy_label: Buy
 classroom.buy_tips: "If close, %name% will not be able to enroll\n"
 classroom.expiry_mode: 'Expiry date'
 classroom.set_expiry_mode_tips: "If set，student can only study before the deadline. The system will remind students by 10 days before the deadline\n"
-classroom.expiry_mode_label: 'Expired on'
 classroom.expiry_mode_rule: Rule
 classroom.expiry_mode_rule_tips: "● Class expiry setting  <br> 1. The setting item is in【Class basic info】<br> 2. There are 3 choises【effective days】【Expired on】【None】<br> <br> ● The rule of expiry <br> 1. Effective days: From the beginning of the course to the end of the effective days, such as: The effective number of days is 10 days, students  enroll the class, in 2017.3.8 <br> 15:00 , then it expired on : 2017.3.18 15:00<br> 2. Expired on: Whenever you enroll class, if the set effective date is: 2017.3.8 All students are valid for: 2017.3.8 24:00<br> <br> ● To change the rule <br> 1. Unpublished status: All settings will be valid after saving.<br> 2. Published status: Can only update the value of the 'effective days' or the 'Expired on', and it will only affect the students who enrolled after the update.<br> 3. Closed：Cannot update<br> 4. In the student management, you can update the expiry for single student<br>\n<br> ● Handle expiry <br> 1. Effective days: If the class has expired, then send notice to students: The current class has expired, please re-enroll<br> 2. Expired on: If the class has expired, then send notice to students: The current class has expired, and cannot learn  any more.<br> 3. Enter into class course, the notice is the same with that in class.<br> 4. A Notice will be made 10 days before the class expires. Both class and class courses will send notification.<br> 5. After the class expires, every items, except review, is only allowed to view, but not allowed to do any other operations. If any operation happens, it will prompte: The current class has expired. \n"
-classroom.expiry_mode_end_date: 'Expired on'
-classroom.expiry_mode_days: 'Effective days'
-classroom.expiry_mode_forever: Forever
 classroom.edit_expiry_mode: 'Update student expiry'
-classroom.expiry_mode.first_publish_tips: 'Expiry mode can not be edited since the classroom was published'
 classroom.not_edit: 'Cannot update class'
 classroom.publish_tips: 'Expiry, please extends it after publish'
 classroom.title_label: 'Class name'
-classroom.expiry_mode_end_date_tips: "If set，student can only study before the deadline. The system will remind students by 10 days before the deadline.\n"
-classroom.expiry_mode_days_tips: "If set，student can only study before the deadline. The system will remind students by 10 days before the deadline.\n"
-classroom.watch_expiry_mode_rile: 'View the rule'
 classroom.category: Category
-classroom.price_label: Price(CNY)
 classroom.price_tips: "Total %courseNum% courses, original %price% CNY.\n"
 classroom.amount: "Equals to%price%\n"
 classroom.picture_tips: "File format could be jpg/gif/png. Suggested size is 540×304px. <br> The file limits to <strong>2MB</strong>.\n"
@@ -9723,3 +9712,14 @@ exception.review.not_found_review: Review not found
 exception.review.post_limit: Post no more than 5
 
 exception.favorite.forbidden_operate_favorite: Forbidden
+
+classroom.courses: Classroom course number
+classroom.member_number: Classroom member number
+classroom.preview_btn: Preview Classroom
+classroom.publish_btn: Publish Classroom
+classroom.subtitle_label: Subtitle
+classroom.basic_setting: Basic Setting
+classroom.cover_crop.title: Classroom Cover
+
+
+

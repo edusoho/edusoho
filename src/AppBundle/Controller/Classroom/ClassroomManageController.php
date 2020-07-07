@@ -150,6 +150,10 @@ class ClassroomManageController extends BaseController
         $userIds = ArrayToolkit::column($reviews, 'userId');
         $reviewUsers = $this->getUserService()->findUsersByIds($userIds);
 
+        if ($this->isPluginInstalled('Vip')) {
+            $vipLevels = $this->createService('VipPlugin:Vip:LevelService')->findEnabledLevels();
+        }
+
         return $this->render(
             'classroom-manage/index.html.twig',
             [
@@ -164,6 +168,12 @@ class ClassroomManageController extends BaseController
                 'yesterdayFinishedTaskNum' => $yesterdayFinishedTaskNum,
                 'todayThreadCount' => $todayThreadCount,
                 'yesterdayThreadCount' => $yesterdayThreadCount,
+                'tags' => $this->getTagService()->findTagsByOwner([
+                    'ownerType' => 'classroom',
+                    'ownerId' => $id,
+                ]),
+                'vipInstalled' => $this->isPluginInstalled('Vip'),
+                'vipLevels' => empty($vipLevels) ? [] : array_column($vipLevels, 'name', 'id'),
             ]
         );
     }
@@ -849,23 +859,14 @@ class ClassroomManageController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $options = $request->request->all();
-            $this->getClassroomService()->changePicture($classroom['id'], $options['images']);
+            $classroom = $this->getClassroomService()->changePicture($classroom['id'], $options['images']);
 
-            return $this->redirect($this->generateUrl('classroom_manage_set_picture', ['id' => $classroom['id']]));
+            $cover = $this->getWebExtension()->getFpath($classroom['largePicture']);
+
+            return $this->createJsonResponse(['image' => $cover]);
         }
 
-        $fileId = $request->getSession()->get('fileId');
-        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 540, 304);
-
-        return $this->render(
-            'classroom-manage/picture-crop.html.twig',
-            [
-                'classroom' => $classroom,
-                'pictureUrl' => $pictureUrl,
-                'naturalSize' => $naturalSize,
-                'scaledSize' => $scaledSize,
-            ]
-        );
+        return $this->render('classroom-manage/picture-crop.html.twig');
     }
 
     public function removeCourseAction($id, $courseId)

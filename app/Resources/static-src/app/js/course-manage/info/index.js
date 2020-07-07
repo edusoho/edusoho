@@ -63,6 +63,7 @@ new Vue({
       vipInstalled: $('#app').data('vipInstalled'),
       vipEnabled: $('#app').data('vipEnabled'),
       vipLevels: $('#app').data('vipLevels'),
+      enableOrg: $('#app').data('enableOrg'),
     },
   }),
 });
