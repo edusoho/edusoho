@@ -97,7 +97,7 @@ class ResourcePurchaseController extends BaseController
             $courseSets = ArrayToolkit::index($this->getCourseSetService()->findCourseSetsByIds($courseSetIds), 'id');
 
             foreach ($products as &$product) {
-                $product['courseSet'] = $courseSets[$product['localResourceId']] ?? null;
+                $product['courseSet'] = empty($courseSets[$product['localResourceId']]) ? null : $courseSets[$product['localResourceId']];
             }
         }
 
