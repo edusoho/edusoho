@@ -95,6 +95,7 @@ class ExerciseMemberServiceTest extends BaseTestCase
                 'categoryId' => 1,
                 'seq' => 1,
                 'status' => 'published',
+                'expiryMode' => 'forever'
             ]
         );
 
@@ -153,7 +154,6 @@ class ExerciseMemberServiceTest extends BaseTestCase
                 'userId' => $user['id'],
                 'role' => 'student',
                 'remark' => 'aaa',
-                'deadline' => time(),
             ]
         );
 
@@ -163,7 +163,7 @@ class ExerciseMemberServiceTest extends BaseTestCase
 
         $this->getExerciseMemberService()->batchUpdateMemberDeadlinesByDay($exercise['id'], [0 => $user['id']], 1);
         $result = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
-        $this->assertEquals($member['deadline'] + 1 * 24 * 60 * 60, $result['deadline']);
+        $this->assertEquals($member['deadline'], $result['deadline']);
     }
 
     public function testBatchUpdateMemberDeadlinesByDate()
@@ -199,6 +199,7 @@ class ExerciseMemberServiceTest extends BaseTestCase
                 'questionBankId' => 1,
                 'categoryId' => 1,
                 'seq' => 1,
+                'expiryMode' => 'forever',
             ]
         );
     }

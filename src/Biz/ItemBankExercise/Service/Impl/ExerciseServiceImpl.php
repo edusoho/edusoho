@@ -3,14 +3,13 @@
 namespace Biz\ItemBankExercise\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\TimeMachine;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
 use Biz\ItemBankExercise\Dao\ExerciseModuleDao;
-use Biz\ItemBankExercise\ExpiryMode\ExerciseExpiryMode;
+use Biz\ItemBankExercise\ExpiryMode\ExpiryModeFactory;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
@@ -221,7 +220,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     protected function validateExpiryMode($exercise)
     {
-        $expiryMode = new ExerciseExpiryMode();
+        $expiryMode = ExpiryModeFactory::create($exercise['expiryMode']);
         $exercise = $expiryMode->validateExpiryMode($exercise);
         if (!is_array($exercise)) {
             $this->createNewException($exercise);
@@ -231,7 +230,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     private function processFields($exercise, $fields)
     {
-        $fields = ExerciseExpiryMode::filterUpdateExpiryInfo($exercise, $fields);
+        $fields = ExpiryModeFactory::create($exercise['expiryMode'])->filterUpdateExpiryInfo($exercise, $fields);
 
         if (empty($fields['price']) || $fields['price'] <= 0) {
             $fields['isFree'] = 1;

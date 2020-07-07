@@ -7,7 +7,7 @@ use AppBundle\Common\TimeMachine;
 use Biz\BaseService;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
-use Biz\ItemBankExercise\ExpiryMode\ExerciseExpiryMode;
+use Biz\ItemBankExercise\ExpiryMode\ExpiryModeFactory;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\ItemBankExerciseMemberException;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
@@ -50,7 +50,8 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $this->createNewException(ItemBankExerciseMemberException::DUPLICATE_MEMBER());
         }
 
-        if(ExerciseExpiryMode::isExpired($exercise)){
+        $expiryMode = ExpiryModeFactory::create($exercise['expiryMode']);
+        if ($expiryMode->isExpired($exercise)) {
             $this->createNewException(ItemBankExerciseMemberException::CAN_NOT_BECOME_MEMBER);
         }
 
@@ -62,7 +63,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
                     'exerciseId' => $exerciseId,
                     'questionBankId' => $exercise['questionBankId'],
                     'userId' => $userId,
-                    'deadline' => ExerciseExpiryMode::getDeadline($exercise),
+                    'deadline' => ExpiryModeFactory::create($exercise['expiryMode'])->getDeadline($exercise),
                     'role' => 'student',
                     'remark' => empty($info['remark']) ? '' : $info['remark'],
                     'createdTime' => time(),
@@ -142,11 +143,11 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
 
     public function batchUpdateMemberDeadlinesByDay($exerciseId, $userIds, $day, $waveType = 'plus')
     {
-        $this->getExerciseService()->tryManageExercise($exerciseId);
+        $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
         if ($this->checkDayAndWaveTypeForUpdateDeadline($exerciseId, $userIds, $day, $waveType)) {
             foreach ($userIds as $userId) {
                 $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
-                $deadline = ExerciseExpiryMode::getDeadlineByWaveType($member['deadline'], $day, $waveType);
+                $deadline = ExpiryModeFactory::create($exercise['expiryMode'])->getDeadlineByWaveType($member['deadline'], $day, $waveType);
 
                 $this->getExerciseMemberDao()->update($member['id'], ['deadline' => $deadline]);
             }
@@ -157,7 +158,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
     {
         $exercise = $this->getExerciseService()->get($exerciseId);
 
-        if (!ExerciseExpiryMode::canUpdateDeadline($exercise['expiryMode'])) {
+        if (!ExpiryModeFactory::create($exercise['expiryMode'])->canUpdateDeadline($exercise['expiryMode'])) {
             return false;
         }
 
