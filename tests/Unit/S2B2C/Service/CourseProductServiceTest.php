@@ -56,12 +56,68 @@ class CourseProductServiceTest extends BaseTestCase
             'remoteResourceId' => 84,
             'localResourceId' => 0,
         ]);
-        $this->getCourseProductService()->syncCourses(1);
-        $this->getCourseProductService()->updateCourseVersionData(1);
+        $result = $this->getCourseProductService()->syncCourses(1);
+
+        $this->assertEmpty($result);
     }
 
-    /*public function testUpdateProductVersionData_withPurchaseNewCourse()
+    public function testUpdateProductVersionData_withPurchaseNewCourse()
     {
+        $this->mockUpdateProductVersionData('new');
+        $this->getCourseProductService()->updateProductVersionData(76);
+
+        $product = $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteProductIdAndType(1, 76, 'course');
+        $this->assertNotEmpty($product);
+    }
+
+    public function testUpdateProductVersionData_withExistCourse()
+    {
+        $this->mockUpdateProductVersionData('exist');
+        $this->getCourseProductService()->updateProductVersionData(76);
+
+        $product = $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteProductIdAndType(1, 76, 'course');
+        $this->assertNotEmpty($product);
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testUpdateProductVersionData_withExistCourseError()
+    {
+        $this->mockUpdateProductVersionData('exist');
+        $this->biz['s2b2c.course_product_sync'] = $this->mockBiz(
+            's2b2c.course_product_sync',
+            [
+                [
+                    'functionName' => 'updateToLastedVersion',
+                    'returnValue' => [],
+                    'withParams' => [45],
+                ],
+            ]
+        );
+        $this->getCourseProductService()->updateProductVersionData(76);
+    }
+
+    protected function mockUpdateProductVersionData($type)
+    {
+        $courseSetProductDetailJsonFile = $this->getContainer()->getParameter('kernel.root_dir').'/../tests/Unit/S2B2C/Fixtures/course_set_detail.json';
+        $courseProductDetailJsonFile = $this->getContainer()->getParameter('kernel.root_dir').'/../tests/Unit/S2B2C/Fixtures/full_sync_data.json';
+        $this->biz['qiQiuYunSdk.s2b2cService'] = $this->mockBiz(
+            'qiQiuYunSdk.s2b2cService',
+            [
+                [
+                    'functionName' => 'getDistributeContent',
+                    'returnValue' => json_decode(file_get_contents($courseSetProductDetailJsonFile), true),
+                    'withParams' => [73],
+                ],
+                [
+                    'functionName' => 'getDistributeContent',
+                    'returnValue' => json_decode(file_get_contents($courseProductDetailJsonFile), true),
+                    'withParams' => [81],
+                ],
+            ]
+        );
+
         $this->biz->offsetUnset('s2b2c.config');
         $this->biz->offsetSet('s2b2c.config', [
             'enabled' => true,
@@ -70,79 +126,43 @@ class CourseProductServiceTest extends BaseTestCase
             'businessMode' => 'dealer',
         ]);
 
-        $courseSetProductDetailJsonFile = $this->getContainer()->getParameter('kernel.root_dir').'/../tests/Unit/S2B2C/Fixtures/course_set_detail.json';
-        $fullSyncDataJsonFile = $this->getContainer()->getParameter('kernel.root_dir').'/../tests/Unit/S2B2C/Fixtures/full_sync_data.json';
-        $courseSetData = json_decode(file_get_contents($courseSetProductDetailJsonFile), true);
-        $courseSetData['course'] = $courseSetData['courses'][0];
-        $supplierApi = \Mockery::mock($this->biz->offsetGet('supplier.platform_api'));
-        $supplierApi->shouldReceive('getSupplierProductDetail')->times(2)->andReturn($courseSetData);
-        $supplierApi->shouldReceive('getSupplierCourseSetProductDetail')->times(2)->andReturn($courseSetData);
-        $supplierApi->shouldReceive('getSupplierProductSyncData')->times(2)->andReturn(json_decode(file_get_contents($fullSyncDataJsonFile), true));
-        $supplierApi->shouldReceive('checkPurchaseProducts')->times(1)->andReturn(['success' => true]);
-        $this->biz->offsetUnset('supplier.platform_api');
-        $this->biz->offsetSet('supplier.platform_api', $supplierApi);
+        $prepareCourseSet = [
+            'syncStatus' => 'waiting',
+            'sourceCourseSetId' => 77,
+            'title' => '测试课程',
+            'type' => 'normal',
+            'sourceCourseId' => 77,
+            'subtitle' => 'testSubtitle',
+            'summary' => 'testSummary',
+            'cover' => '',
+            'maxCoursePrice' => '10',
+            'minCoursePrice' => '10',
+            'platform' => 'supplier',
+        ];
+        if ('new' === $type) {
+            $newCourseSet = $this->getCourseSetService()->addCourseSet($prepareCourseSet);
+        }
+        if ('exist' === $type) {
+            $newCourseSet = $this->getCourseSetService()->createCourseSet($prepareCourseSet);
+        }
 
-        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
-        $prepareCourseSet = $this->prepareCourseSetData($courseSetData);
-        $newCourseSet = $this->getCourseSetService()->addCourseSet($prepareCourseSet);
-
-        $this->mockBiz('System:SettingService', [
-            [
-                'functionName' => 'get',
-                'withParams' => ['storage', []],
-                'returnValue' => [
-                    'cloud_access_key' => 'testkey',
-                    'cloud_secret_key' => 'testsecret',
-                ],
-                'runTimes' => 1,
-            ],
-            [
-                'functionName' => 'get',
-                'withParams' => ['developer', []],
-                'returnValue' => [
-                ],
-                'runTimes' => 1,
-            ],
-            [
-                'functionName' => 'get',
-                'withParams' => ['security'],
-                'returnValue' => [
-                ],
-                'runTimes' => 1,
-            ],
-            [
-                'functionName' => 'get',
-                'withParams' => ['site', []],
-                'returnValue' => [
-                ],
-                'runTimes' => 1,
-            ],
-            [
-                'functionName' => 'get',
-                'withParams' => ['cloud_search', []],
-                'returnValue' => [
-                ],
-                'runTimes' => 1,
-            ],
-        ]);
-
-        $mockedS2B2CService = \Mockery::mock($this->biz['qiQiuYunSdk.s2b2cService']);
-        $mockedS2B2CService->shouldReceive('purchaseProducts')->times(1)->andReturn(['status' => 'success']);
-        $this->biz->offsetUnset('qiQiuYunSdk.s2b2cService');
-        $this->biz->offsetSet('qiQiuYunSdk.s2b2cService', $mockedS2B2CService);
-
-        $product = $this->getS2B2CProductService()->createProduct([
-            'supplierId' => $s2b2cConfig['supplierId'],
+        $courseSetData = $this->getS2B2CProductDao()->create([
+            's2b2cProductDetailId' => 73,
+            'supplierId' => 1,
             'productType' => 'course_set',
-            'remoteProductId' => $courseSetData['s2b2cDistributeId'],
-            'remoteResourceId' => $courseSetData['id'],
+            'remoteProductId' => 76,
+            'remoteResourceId' => 77,
             'localResourceId' => $newCourseSet['id'],
         ]);
-        $this->getCourseProductService()->updateProductVersionData($product['remoteProductId']);
-
-        $product = $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteProductIdAndType($s2b2cConfig['supplierId'], $courseSetData['s2b2cDistributeId'], 'course');
-        $this->assertNotEmpty($product);
-    }*/
+        $courseData = $this->getS2B2CProductDao()->create([
+            's2b2cProductDetailId' => 81,
+            'supplierId' => 1,
+            'productType' => 'course',
+            'remoteProductId' => 76,
+            'remoteResourceId' => 77,
+            'localResourceId' => $newCourseSet['defaultCourseId'],
+        ]);
+    }
 
     /**
      * @return CourseProductService
@@ -174,23 +194,6 @@ class CourseProductServiceTest extends BaseTestCase
     protected function getS2B2CFacadeService()
     {
         return $this->createService('S2B2C:S2B2CFacadeService');
-    }
-
-    protected function prepareCourseSetData($courseSetData)
-    {
-        return [
-            'syncStatus' => 'waiting',
-            'sourceCourseSetId' => $courseSetData['id'],
-            'title' => $courseSetData['title'],
-            'type' => $courseSetData['type'],
-            'sourceCourseId' => $courseSetData['defaultCourseId'],
-            'subtitle' => $courseSetData['subtitle'],
-            'summary' => $courseSetData['summary'],
-            'cover' => $courseSetData['cover'],
-            'maxCoursePrice' => $courseSetData['maxCoursePrice'],
-            'minCoursePrice' => $courseSetData['minCoursePrice'],
-            'platform' => 'supplier',
-        ];
     }
 
     protected function getS2B2CProductDao()
