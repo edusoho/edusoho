@@ -13,12 +13,12 @@ class ExpiryModeFactory
 
     private function expiryModeMap($name)
     {
-        $map = array(
+        $map = [
             'days' => 'Biz\ItemBankExercise\ExpiryMode\DaysExpiryMode',
             'date' => 'Biz\ItemBankExercise\ExpiryMode\DateExpiryMode',
             'end_date' => 'Biz\ItemBankExercise\ExpiryMode\EndDateExpiryMode',
             'forever' => 'Biz\ItemBankExercise\ExpiryMode\ForeverExpiryMode',
-        );
+        ];
 
         if (empty($map[$name])) {
             $map[$name] = 'Biz\ItemBankExercise\ExpiryMode\ForeverExpiryMode';

@@ -4,13 +4,13 @@ namespace Biz\ItemBankExercise\ExpiryMode;
 
 abstract class ExpiryMode
 {
-    abstract function validateExpiryMode($exercise);
+    abstract public function validateExpiryMode($exercise);
 
-    abstract function getDeadline($exercise);
+    abstract public function getDeadline($exercise);
 
-    abstract function canUpdateDeadline($expiryMode);
+    abstract public function canUpdateDeadline($expiryMode);
 
-    abstract static function isExpired($exercise);
+    abstract public static function isExpired($exercise);
 
     public static function filterUpdateExpiryInfo($exercise, $fields)
     {

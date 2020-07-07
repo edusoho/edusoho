@@ -2,9 +2,7 @@
 
 namespace Biz\ItemBankExercise\ExpiryMode;
 
-use AppBundle\Common\TimeMachine;
 use Biz\ItemBankExercise\ItemBankExerciseException;
-use Biz\ItemBankExercise\Service\ExerciseService;
 
 class ForeverExpiryMode extends ExpiryMode
 {

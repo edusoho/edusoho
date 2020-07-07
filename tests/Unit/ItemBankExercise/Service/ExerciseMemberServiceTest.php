@@ -95,7 +95,7 @@ class ExerciseMemberServiceTest extends BaseTestCase
                 'categoryId' => 1,
                 'seq' => 1,
                 'status' => 'published',
-                'expiryMode' => 'forever'
+                'expiryMode' => 'forever',
             ]
         );
 

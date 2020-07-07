@@ -225,6 +225,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         if (!is_array($exercise)) {
             $this->createNewException($exercise);
         }
+
         return $exercise;
     }
 
