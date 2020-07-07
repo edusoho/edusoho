@@ -202,6 +202,20 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->getExerciseDao()->getByQuestionBankId($questionBankId);
     }
 
+    public function searchOrderByStudentNumAndLastDays($conditions, $lastDays, $start, $limit)
+    {
+        $conditions = $this->_prepareCourseConditions($conditions);
+
+        return $this->getExerciseDao()->searchOrderByStudentNumAndLastDays($conditions, $lastDays, $start, $limit);
+    }
+
+    public function searchOrderByRatingAndLastDays($conditions, $lastDays, $start, $limit)
+    {
+        $conditions = $this->_prepareCourseConditions($conditions);
+
+        return $this->getExerciseDao()->searchOrderByRatingAndLastDays($conditions, $lastDays, $start, $limit);
+    }
+
     public function updateModuleEnable($exercised, $enable)
     {
         return $this->getExerciseDao()->update($exercised, $enable);
