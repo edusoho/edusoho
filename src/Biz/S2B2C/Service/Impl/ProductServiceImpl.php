@@ -426,6 +426,7 @@ class ProductServiceImpl extends BaseService implements ProductService
      * @param array $versionData ['title', 'version', 'courseId', 'versionChangeLog']
      *
      * @codeCoverageIgnore
+     *
      * @return bool
      */
     public function notifyNewVersionProduct($s2b2cProductId, $resourceCourseId, $versionData)

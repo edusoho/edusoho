@@ -99,7 +99,6 @@ class ResourcePurchaseController extends BaseController
             foreach ($products as &$product) {
                 $product['courseSet'] = $courseSets[$product['localResourceId']] ?? null;
             }
-
         }
 
         return $this->render(
