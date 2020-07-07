@@ -243,6 +243,61 @@ admin_v2:
                                     router_params:
                                         status: end
                                     disable: true
+                        # 题库练习管理
+                        admin_v2_item_bank_exercise_manage:
+                            quick_entrance_icon: 'course'
+                            name: admin_v2.course.item_bank_exercise
+                            router_name: admin_v2_item_bank_exercise
+                            children:
+                                admin_v2_item_bank_exercise:
+                                    name: admin_v2.course.item_bank_exercise.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_item_bank_exercise
+                                    children:
+                                        admin_v2_item_bank_exercise_content_manage:
+                                            name: admin_v2.course.basic.basic_tab.manage_btn
+                                        admin_v2_item_bank_exercise_recommend:
+                                            name: admin_v2.course.basic.basic_tab.recommend_btn
+                                            router_params:
+                                                id: (exercise.id)
+                                            group: groupButton
+                                            visible: ( not exercise.recommended )
+                                            icon: 'glyphicon glyphicon-hand-up'
+                                            mode: modal
+                                        admin_v2_item_bank_exercise_cancel_recommend:
+                                            name: admin_v2.btn.recommend_cancel_btn
+                                            router_params:
+                                                id: (exercise.id)
+                                            group: groupButton
+                                            class: cancel-recommend-course
+                                            visible: ( exercise.recommended )
+                                            icon: 'glyphicon glyphicon-hand-right'
+                                            mode: none
+#                                        admin_v2_item_bank_exercise_preview:
+#                                            name: admin_v2.course.basic.basic_tab.preview_btn
+#                                            router_params:
+#                                                id: (exercise.id)
+#                                            group: groupButton
+#                                            icon: 'glyphicon glyphicon-eye-open'
+#                                            blank: 1
+                                        admin_v2_item_bank_exercise_publish:
+                                            name: admin_v2.course.basic.basic_tab.publish_submit_btn
+                                            router_params:
+                                                id: (exercise.id)
+                                            group: groupButton
+                                            class: publish-course
+                                            icon: 'glyphicon glyphicon-ok-circle'
+                                            mode: none
+                                            visible: (exercise.status != 'published')
+#                                            admin_v2_item_bank_exercise_delete:
+#                                                name: admin_v2.course.basic.basic_tab.delete_submit_btn
+#                                                class: delete-course
+#                                                router_params:
+#                                                    id: (exercise.id)
+#                                                group: groupButton
+#                                                icon: 'glyphicon glyphicon-trash'
+#                                                mode: none
+#                                                visible: ( exercise.status in ['closed', 'draft', 'published'])
                         # 公开课管理模块
                         admin_v2_open_course_manage:
                             name: admin_v2.course.open_course_menu

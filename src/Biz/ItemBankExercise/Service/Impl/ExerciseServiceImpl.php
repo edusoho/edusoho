@@ -33,6 +33,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         try {
             $this->beginTransaction();
 
+            $exercise['creator'] = $this->getCurrentUser()->getId();
             $exercise = $this->getExerciseDao()->create($exercise);
             $this->getExerciseMemberService()->addTeacher($exercise['id']);
             $this->createChapterModule($exercise);
@@ -200,6 +201,20 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     public function getByQuestionBankId($questionBankId)
     {
         return $this->getExerciseDao()->getByQuestionBankId($questionBankId);
+    }
+
+    public function searchOrderByStudentNumAndLastDays($conditions, $lastDays, $start, $limit)
+    {
+        $conditions = $this->_prepareCourseConditions($conditions);
+
+        return $this->getExerciseDao()->searchOrderByStudentNumAndLastDays($conditions, $lastDays, $start, $limit);
+    }
+
+    public function searchOrderByRatingAndLastDays($conditions, $lastDays, $start, $limit)
+    {
+        $conditions = $this->_prepareCourseConditions($conditions);
+
+        return $this->getExerciseDao()->searchOrderByRatingAndLastDays($conditions, $lastDays, $start, $limit);
     }
 
     public function updateModuleEnable($exercised, $enable)

@@ -37,4 +37,8 @@ interface ExerciseService
     public function updateModuleEnable($exercised, $enable);
 
     public function updateBaseInfo($exerciseId, $data);
+
+    public function searchOrderByStudentNumAndLastDays($conditions, $lastDays, $start, $limit);
+
+    public function searchOrderByRatingAndLastDays($conditions, $lastDays, $start, $limit);
 }
