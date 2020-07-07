@@ -37,11 +37,6 @@ class EndDateExpiryMode extends ExpiryMode
         return $exercise;
     }
 
-    public function canUpdateDeadline($expiryMode)
-    {
-        return true;
-    }
-
     public function isExpired($exercise)
     {
         $expiryMode = $exercise['expiryMode'];
@@ -52,5 +47,17 @@ class EndDateExpiryMode extends ExpiryMode
         }
 
         return $isExpired;
+    }
+
+    public function getUpdateDeadline($exercise, $member, $setting)
+    {
+        if ($setting['updateType'] == 'day') {
+            $originDeadline = $member['deadline'] > 0 ? $member['deadline'] : time();
+            $deadline = 'plus' == $setting['waveType'] ? $originDeadline + $setting['day'] * 24 * 60 * 60 : $originDeadline - $setting['day'] * 24 * 60 * 60;
+        } else {
+            $deadline = TimeMachine::isTimestamp($setting['deadline']) ? $setting['deadline'] : strtotime($setting['deadline'] . ' 23:59:59');
+        }
+
+        return $deadline;
     }
 }

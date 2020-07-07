@@ -19,12 +19,16 @@ class ForeverExpiryModeTest extends BaseTestCase
         $this->assertEquals($exercise['expiryEndDate'], $res['expiryEndDate']);
     }
 
-    public function testCanUpdateDeadline()
+    public function testGetUpdateDeadline()
     {
         $exercise = $this->createExercise();
-        $res = ExpiryModeFactory::create($exercise['expiryMode'])->canUpdateDeadline($exercise['expiryMode']);
+        $res = ExpiryModeFactory::create($exercise['expiryMode'])->getUpdateDeadline(
+            $exercise,
+            ['deadline' => 0],
+            ['deadline' => time()]
+        );
 
-        $this->assertFalse($res);
+        $this->assertEquals(time(), $res);
     }
 
     private function createExercise()

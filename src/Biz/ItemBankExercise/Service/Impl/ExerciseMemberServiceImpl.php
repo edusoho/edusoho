@@ -136,62 +136,23 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $this->createNewException(ItemBankExerciseMemberException::NOTFOUND_MEMBER());
         }
 
-        $fields = ['remark' => empty($remark) ? '' : (string) $remark];
+        $fields = ['remark' => empty($remark) ? '' : (string)$remark];
 
         return $this->getExerciseMemberDao()->update($member['id'], $fields);
     }
 
-    public function batchUpdateMemberDeadlinesByDay($exerciseId, $userIds, $day, $waveType = 'plus')
+    public function batchUpdateMemberDeadlines($exerciseId, $userIds, $setting)
     {
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
-        if ($this->checkDayAndWaveTypeForUpdateDeadline($exerciseId, $userIds, $day, $waveType)) {
-            foreach ($userIds as $userId) {
-                $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
-                $deadline = ExpiryModeFactory::create($exercise['expiryMode'])->getDeadlineByWaveType($member['deadline'], $day, $waveType);
-
-                $this->getExerciseMemberDao()->update($member['id'], ['deadline' => $deadline]);
-            }
+        $expiryMode = ExpiryModeFactory::create($exercise['expiryMode']);
+        foreach ($userIds as $userId) {
+            $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
+            $deadline = $expiryMode->getUpdateDeadline($exercise, $member, $setting);
+            $this->getExerciseMemberDao()->update($member['id'], ['deadline' => $deadline]);
         }
     }
 
-    public function checkDayAndWaveTypeForUpdateDeadline($exerciseId, $userIds, $day, $waveType = 'plus')
-    {
-        $exercise = $this->getExerciseService()->get($exerciseId);
-
-        if (!ExpiryModeFactory::create($exercise['expiryMode'])->canUpdateDeadline($exercise['expiryMode'])) {
-            return false;
-        }
-
-        $members = $this->search(
-            ['userIds' => $userIds, 'exerciseId' => $exerciseId],
-            ['deadline' => 'ASC'],
-            0,
-            PHP_INT_MAX
-        );
-        if ('minus' == $waveType) {
-            $member = array_shift($members);
-            $maxAllowMinusDay = intval(($member['deadline'] - time()) / (24 * 3600));
-            if ($day > $maxAllowMinusDay) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public function batchUpdateMemberDeadlinesByDate($exerciseId, $userIds, $date)
-    {
-        $this->getExerciseService()->tryManageExercise($exerciseId);
-        $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date.' 23:59:59');
-        if ($this->checkDeadlineForUpdateDeadline($exerciseId, $userIds, $date)) {
-            foreach ($userIds as $userId) {
-                $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
-                $this->getExerciseMemberDao()->update($member['id'], ['deadline' => $date]);
-            }
-        }
-    }
-
-    public function checkDeadlineForUpdateDeadline($exerciseId, $userIds, $date)
+    public function checkUpdateDeadline($exerciseId, $userIds, $setting)
     {
         $members = $this->search(
             ['userIds' => $userIds, 'exerciseId' => $exerciseId],
@@ -200,8 +161,19 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             PHP_INT_MAX
         );
         $member = array_shift($members);
-        if ($date < $member['deadline'] || time() > $date) {
-            return false;
+
+        if (isset($setting['day'])) {
+            if ('minus' == $setting['waveType']) {
+                $maxAllowMinusDay = intval(($member['deadline'] - time()) / (24 * 3600));
+                if ($setting['day'] > $maxAllowMinusDay) {
+                    return false;
+                }
+            }
+        } else {
+            $deadline = TimeMachine::isTimestamp($setting['deadline']) ? $setting['deadline'] : strtotime($setting['deadline'] . ' 23:59:59');
+            if ($deadline < $member['deadline'] || time() > $deadline) {
+                return false;
+            }
         }
 
         return true;

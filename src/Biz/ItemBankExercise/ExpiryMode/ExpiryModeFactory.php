@@ -20,10 +20,6 @@ class ExpiryModeFactory
             'forever' => 'Biz\ItemBankExercise\ExpiryMode\ForeverExpiryMode',
         ];
 
-        if (empty($map[$name])) {
-            $map[$name] = 'Biz\ItemBankExercise\ExpiryMode\ForeverExpiryMode';
-        }
-
         return $map[$name];
     }
 }

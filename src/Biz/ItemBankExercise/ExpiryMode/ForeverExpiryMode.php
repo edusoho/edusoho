@@ -2,6 +2,7 @@
 
 namespace Biz\ItemBankExercise\ExpiryMode;
 
+use AppBundle\Common\TimeMachine;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 
 class ForeverExpiryMode extends ExpiryMode
@@ -26,17 +27,13 @@ class ForeverExpiryMode extends ExpiryMode
         return $exercise;
     }
 
-    public function canUpdateDeadline($expiryMode)
-    {
-        if (self::EXPIRY_MODE_FOREVER == $expiryMode) {
-            return false;
-        }
-
-        return true;
-    }
-
     public function isExpired($exercise)
     {
         return false;
+    }
+
+    public function getUpdateDeadline($exercise, $member, $setting)
+    {
+        return TimeMachine::isTimestamp($setting['deadline']) ? $setting['deadline'] : strtotime($setting['deadline'] . ' 23:59:59');
     }
 }

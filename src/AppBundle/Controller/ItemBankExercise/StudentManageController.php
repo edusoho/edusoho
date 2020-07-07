@@ -181,12 +181,8 @@ class StudentManageController extends BaseController
         $ids = is_array($ids) ? $ids : explode(',', $ids);
         if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
-            if ('day' == $fields['updateType']) {
-                $this->getExerciseMemberService()->batchUpdateMemberDeadlinesByDay($exerciseId, $ids, $fields['day'], $fields['waveType']);
 
-                return $this->createJsonResponse(true);
-            }
-            $this->getExerciseMemberService()->batchUpdateMemberDeadlinesByDate($exerciseId, $ids, $fields['deadline']);
+            $this->getExerciseMemberService()->batchUpdateMemberDeadlines($exerciseId, $ids, $fields);
 
             return $this->createJsonResponse(true);
         }
@@ -202,26 +198,12 @@ class StudentManageController extends BaseController
         );
     }
 
-    public function checkDayAction(Request $request, $exerciseId)
+    public function checkUpdateDeadlineAction(Request $request, $exerciseId)
     {
-        $waveType = $request->query->get('waveType');
-        $day = $request->query->get('day');
+        $fields = $request->query->all();
         $ids = $request->query->get('ids');
         $ids = is_array($ids) ? $ids : explode(',', $ids);
-        if ($this->getExerciseMemberService()->checkDayAndWaveTypeForUpdateDeadline($exerciseId, $ids, $day, $waveType)) {
-            return $this->createJsonResponse(true);
-        }
-
-        return $this->createJsonResponse(false);
-    }
-
-    public function checkDeadlineAction(Request $request, $exerciseId)
-    {
-        $deadline = $request->query->get('deadline');
-        $deadline = TimeMachine::isTimestamp($deadline) ? $deadline : strtotime($deadline.' 23:59:59');
-        $ids = $request->query->get('ids');
-        $ids = is_array($ids) ? $ids : explode(',', $ids);
-        if ($this->getExerciseMemberService()->checkDeadlineForUpdateDeadline($exerciseId, $ids, $deadline)) {
+        if ($this->getExerciseMemberService()->checkUpdateDeadline($exerciseId, $ids, $fields)){
             return $this->createJsonResponse(true);
         }
 

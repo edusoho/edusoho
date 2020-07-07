@@ -8,9 +8,9 @@ abstract class ExpiryMode
 
     abstract public function getDeadline($exercise);
 
-    abstract public function canUpdateDeadline($expiryMode);
-
     abstract public function isExpired($exercise);
+
+    abstract public function getUpdateDeadline($exercise, $member, $setting);
 
     public static function filterUpdateExpiryInfo($exercise, $fields)
     {
@@ -26,13 +26,5 @@ abstract class ExpiryMode
         }
 
         return $fields;
-    }
-
-    public static function getDeadlineByWaveType($originDeadline, $waveType, $day)
-    {
-        $originDeadline = $originDeadline > 0 ? $originDeadline : time();
-        $deadline = 'plus' == $waveType ? $originDeadline + $day * 24 * 60 * 60 : $originDeadline - $day * 24 * 60 * 60;
-
-        return $deadline;
     }
 }

@@ -28,6 +28,18 @@ class DaysExpiryModeTest extends BaseTestCase
         $this->assertEquals($exercise['expiryEndDate'], $res['expiryEndDate']);
     }
 
+    public function testGetUpdateDeadline()
+    {
+        $exercise = $this->createExercise();
+        $res = ExpiryModeFactory::create($exercise['expiryMode'])->getUpdateDeadline(
+            $exercise,
+            ['deadline' => 0],
+            ['deadline' => time(), 'updateType' => 'deadline']
+        );
+
+        $this->assertEquals(time(), $res);
+    }
+
     private function createExercise()
     {
         return $this->getExerciseService()->create(
