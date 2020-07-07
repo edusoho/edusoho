@@ -194,6 +194,23 @@ admin_v2_live_course:
     defaults: { _controller: AppBundle:AdminV2/Teach/LiveCourse:index, status:'coming'}
     permissions: [admin_v2_live_course]
 
+# 教学-课程管理-直播管理
+admin_v2_item_bank_exercise:
+    path: /item_bank_exercise/index
+    defaults: { _controller: AppBundle:AdminV2/Teach/ItemBankExercise:index}
+
+admin_v2_item_bank_exercise_recommend:
+    path: /item_bank_exercise/{id}/recommend
+    defaults: { _controller: AppBundle:AdminV2/Teach/ItemBankExercise:recommend}
+
+admin_v2_item_bank_exercise_cancel_recommend:
+    path: /item_bank_exercise/{id}/recommend_cancel
+    defaults: { _controller: AppBundle:AdminV2/Teach/ItemBankExercise:cacelRecommend}
+
+admin_v2_item_bank_exercise_publish:
+    path: /item_bank_exercise/{id}/publish
+    defaults: { _controller: AppBundle:AdminV2/Teach/ItemBankExercise:publish}
+
 # 教学-课程管理-公开课管理
 admin_v2_open_course:
     path: /open_course/{filter}

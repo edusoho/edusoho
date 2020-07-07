@@ -85,6 +85,7 @@ class AddItemBankExerciseTable extends Migration
               `recommended` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否推荐',
               `recommendedSeq` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '推荐序号',
               `recommendedTime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',
+              `creator` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建者',
               `createdTime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
               `updatedTime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '最后修改时间',
               PRIMARY KEY (`id`),
