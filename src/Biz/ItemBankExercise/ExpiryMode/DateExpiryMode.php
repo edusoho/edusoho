@@ -49,7 +49,7 @@ class DateExpiryMode extends ExpiryMode
         return true;
     }
 
-    public static function isExpired($exercise)
+    public function isExpired($exercise)
     {
         $expiryMode = $exercise['expiryMode'];
         if (self::EXPIRY_MODE_DATE == $expiryMode) {

@@ -10,7 +10,7 @@ abstract class ExpiryMode
 
     abstract public function canUpdateDeadline($expiryMode);
 
-    abstract public static function isExpired($exercise);
+    abstract public function isExpired($exercise);
 
     public static function filterUpdateExpiryInfo($exercise, $fields)
     {

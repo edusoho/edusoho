@@ -35,7 +35,7 @@ class ForeverExpiryMode extends ExpiryMode
         return true;
     }
 
-    public static function isExpired($exercise)
+    public function isExpired($exercise)
     {
         return false;
     }
