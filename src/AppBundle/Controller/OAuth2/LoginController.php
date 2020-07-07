@@ -127,6 +127,9 @@ class LoginController extends LoginBindController
         if ($oauthUser->isApp()) {
             $request->getSession()->set(OAuthUser::SESSION_SKIP_KEY, true);
             $token = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + TimeMachine::ONE_MONTH);
+            if ('h5' == $oauthUser->os) {
+                $this->authenticateUser($user);
+            }
         } else {
             $token = null;
             $this->authenticateUser($user);

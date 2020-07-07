@@ -13,14 +13,14 @@
 
       {% for courseFavorite in courseFavorites if courseFavorite %}
 
-        {% if courseFavorite.type == 'course' %}
-          {% set course = data('Course',{courseId:courseFavorite.courseId}) %}
-          {% set courseSet =  data('CourseSet',{id:courseFavorite.courseSetId}) %}
+        {% if courseFavorite.targetType == 'course' %}
+          {% set course = data('Course',{courseId:courseFavorite.targetId}) %}
+          {% set courseSet =  data('CourseSet',{id:course.courseSetId}) %}
           {% set coursePath = path('course_show', {id: courseSet.defaultCourseId}) %}
           {% include 'my/learning/my-course-set-grid.html.twig' %}
 
-        {% elseif courseFavorite.type == 'openCourse' %}
-          {% set course = data('OpenCourse',{courseId:courseFavorite.courseId})|default(null) %}
+        {% elseif courseFavorite.targetType == 'openCourse' %}
+          {% set course = data('OpenCourse',{courseId:courseFavorite.targetId})|default(null) %}
           {% if course %}
             {% include 'open-course/widget/my-open-course-grid.html.twig' %}
           {% endif %}

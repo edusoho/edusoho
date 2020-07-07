@@ -7,8 +7,8 @@
 	<ul class="media-list latest-review-list">
 		{% for review in reviews %}
 		  {% set author = users[review.userId]|default(null) %}
-		  {% set course = courses[review.courseId]|default(null) %}
-      {% set courseSet = courseSets[review.courseSetId]|default(null) %}
+		  {% set course = courses[review.targetId]|default(null) %}
+      {% set courseSet = courseSets[course.courseSetId]|default(null) %}
 		  {% if author and course %}
 			  <li class="media">
 
