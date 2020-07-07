@@ -134,7 +134,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             return false;
         }
 
-        if (1 == $teacher && in_array($user->getId(), $exercise['teacherIds'])) {
+        if (0 == $teacher || in_array($user->getId(), $exercise['teacherIds'])) {
             return true;
         }
 
