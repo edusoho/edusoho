@@ -154,13 +154,13 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             return 'course' == $product['productType'];
         });
         foreach ($courseProducts as $courseProduct) {
-            if ($courseProduct['localResourceId'] == 0 ){
+            if (0 == $courseProduct['localResourceId']) {
                 //新计划进行同步
                 $this->syncNewCourse($courseProduct, $newCourseSet);
                 continue;
             }
             if (!$this->updateCourseVersionData($courseProduct)) {
-                throw new ServiceException('更新失败，productId#' . $courseProduct['id']);
+                throw new ServiceException('更新失败，productId#'.$courseProduct['id']);
             }
         }
 
@@ -201,6 +201,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             if ($product['localVersion'] >= $sourceCourse['editVersion']) {
                 $this->getLogger()->info("课程 - {$sourceCourse['courseSetTitle']}(courseSetId#{$sourceCourse['courseSetId']}) 版本已经是最新，无需处理", ['nowVersion' => $product['localVersion'], 'sourceVersion' => $sourceCourse['editVersion']]);
                 $this->commit();
+
                 return true;
             }
             $this->biz['s2b2c.course_product_sync']->updateToLastedVersion($sourceCourse, ['syncCourseId' => $product['localResourceId']]);
@@ -211,10 +212,11 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             $this->rollback();
             $this->getLogger()->error("[syncCourseProduct] 更新课程到最新 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 失败", ['message' => $e->getMessage(), 'errorFile' => $e->getFile().$e->getLine(), 'error' => $e->getTraceAsString()]);
             $this->getLogService()->error('course', 'update', "(#{$course['id']})《{$course['courseSetTitle']}》更新版本到最新失败，版本无变化：V{$product['localVersion']}", ['userId' => $this->getCurrentUser()->getId()]);
+
             return false;
         }
 
-       return true;
+        return true;
     }
 
     /**
@@ -471,38 +473,6 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         }
 
         return true;
-    }
-
-    protected function validateCourseData($course, $product)
-    {
-        if (empty($course)) {
-            $this->getLogger()->error('课程不存在，拒绝操作');
-
-            return false;
-        }
-        if ('waiting' !== $product['syncStatus']) {
-            $this->getLogger()->info("课程 - {$course['courseSetTitle']}(courseSetId#{$course['courseSetId']}) 无需处理", ['syncStatus' => $product['syncStatus']]);
-
-            return false;
-        }
-
-        return true;
-    }
-
-    protected function tryGetSupplierProductSyncData($distributeId)
-    {
-        $sourceCourse = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getSupplierProductSyncData($distributeId);
-
-        if (empty($sourceCourse['id'])) {
-            $this->getLogger()->info('[syncCourseProduct] 获取源平台课程数据失败', ['DATA' => $sourceCourse]);
-            throw $this->createServiceException('获取新版本课程数据失败，请稍后重试', 5001730);
-        }
-        if ('published' != $sourceCourse['editStatus']) {
-            $this->getLogger()->info('[syncCourseProduct] 源平台课程正在编辑中，无法处理', ['DATA' => $sourceCourse]);
-            throw $this->createServiceException('源平台课程正在编辑中，无法更新，请稍后再试', 5001731);
-        }
-
-        return $sourceCourse;
     }
 
     /**
