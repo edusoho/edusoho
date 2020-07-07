@@ -4,7 +4,6 @@ namespace AppBundle\Controller\ItemBankExercise;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
-use AppBundle\Common\TimeMachine;
 use AppBundle\Controller\BaseController;
 use Biz\ItemBankExercise\ItemBankExerciseMemberException;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
@@ -203,7 +202,7 @@ class StudentManageController extends BaseController
         $fields = $request->query->all();
         $ids = $request->query->get('ids');
         $ids = is_array($ids) ? $ids : explode(',', $ids);
-        if ($this->getExerciseMemberService()->checkUpdateDeadline($exerciseId, $ids, $fields)){
+        if ($this->getExerciseMemberService()->checkUpdateDeadline($exerciseId, $ids, $fields)) {
             return $this->createJsonResponse(true);
         }
 

@@ -32,7 +32,7 @@ class DateExpiryMode extends ExpiryMode
             if (empty($exercise['expiryEndDate'])) {
                 return ItemBankExerciseException::EXPIRYENDDATE_REQUIRED();
             } else {
-                $exercise['expiryEndDate'] = TimeMachine::isTimestamp($exercise['expiryEndDate']) ? $exercise['expiryEndDate'] : strtotime($exercise['expiryEndDate'] . ' 23:59:59');
+                $exercise['expiryEndDate'] = TimeMachine::isTimestamp($exercise['expiryEndDate']) ? $exercise['expiryEndDate'] : strtotime($exercise['expiryEndDate'].' 23:59:59');
             }
             if ($exercise['expiryEndDate'] <= $exercise['expiryStartDate']) {
                 return ItemBankExerciseException::EXPIRY_DATE_SET_INVALID();
@@ -58,11 +58,11 @@ class DateExpiryMode extends ExpiryMode
 
     public function getUpdateDeadline($exercise, $member, $setting)
     {
-        if ($setting['updateType'] == 'day') {
+        if ('day' == $setting['updateType']) {
             $originDeadline = $member['deadline'] > 0 ? $member['deadline'] : time();
             $deadline = 'plus' == $setting['waveType'] ? $originDeadline + $setting['day'] * 24 * 60 * 60 : $originDeadline - $setting['day'] * 24 * 60 * 60;
         } else {
-            $deadline = TimeMachine::isTimestamp($setting['deadline']) ? $setting['deadline'] : strtotime($setting['deadline'] . ' 23:59:59');
+            $deadline = TimeMachine::isTimestamp($setting['deadline']) ? $setting['deadline'] : strtotime($setting['deadline'].' 23:59:59');
         }
 
         return $deadline;

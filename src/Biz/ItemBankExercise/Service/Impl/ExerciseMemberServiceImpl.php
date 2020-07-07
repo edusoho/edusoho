@@ -136,7 +136,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $this->createNewException(ItemBankExerciseMemberException::NOTFOUND_MEMBER());
         }
 
-        $fields = ['remark' => empty($remark) ? '' : (string)$remark];
+        $fields = ['remark' => empty($remark) ? '' : (string) $remark];
 
         return $this->getExerciseMemberDao()->update($member['id'], $fields);
     }
@@ -170,7 +170,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
                 }
             }
         } else {
-            $deadline = TimeMachine::isTimestamp($setting['deadline']) ? $setting['deadline'] : strtotime($setting['deadline'] . ' 23:59:59');
+            $deadline = TimeMachine::isTimestamp($setting['deadline']) ? $setting['deadline'] : strtotime($setting['deadline'].' 23:59:59');
             if ($deadline < $member['deadline'] || time() > $deadline) {
                 return false;
             }

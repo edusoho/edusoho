@@ -236,6 +236,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     protected function validateExpiryMode($exercise)
     {
         $expiryMode = ExpiryModeFactory::create($exercise['expiryMode']);
+
         return $expiryMode->validateExpiryMode($exercise);
     }
 

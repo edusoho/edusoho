@@ -48,11 +48,11 @@ class DaysExpiryMode extends ExpiryMode
 
     public function getUpdateDeadline($exercise, $member, $setting)
     {
-        if ($setting['updateType'] == 'day') {
+        if ('day' == $setting['updateType']) {
             $originDeadline = $member['deadline'] > 0 ? $member['deadline'] : time();
             $deadline = 'plus' == $setting['waveType'] ? $originDeadline + $setting['day'] * 24 * 60 * 60 : $originDeadline - $setting['day'] * 24 * 60 * 60;
         } else {
-            $deadline = TimeMachine::isTimestamp($setting['deadline']) ? $setting['deadline'] : strtotime($setting['deadline'] . ' 23:59:59');
+            $deadline = TimeMachine::isTimestamp($setting['deadline']) ? $setting['deadline'] : strtotime($setting['deadline'].' 23:59:59');
         }
 
         return $deadline;
