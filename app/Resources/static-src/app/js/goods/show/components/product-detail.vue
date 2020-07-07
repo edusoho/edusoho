@@ -114,11 +114,10 @@
       },
       // 收藏/移除收藏
       onFavorite() {
-        let goodsId = window.location.pathname.replace(/[^0-9]/ig, ""); // goods id
         if (this.isFavorite) {
-          this.removeFavorite(goodsId);
+          this.removeFavorite(this.currentPlan.id);
         } else {
-          this.addFavorite(goodsId);
+          this.addFavorite(this.currentPlan.id);
         }
       },
       handleClick(plan) {
