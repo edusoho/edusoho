@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use Biz\Review\Service\ReviewService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 
@@ -61,9 +62,12 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         return $this->getServiceKernel()->getBiz()->service('Course:ThreadService');
     }
 
+    /**
+     * @return ReviewService
+     */
     protected function getReviewService()
     {
-        return $this->getServiceKernel()->getBiz()->service('Course:ReviewService');
+        return $this->getServiceKernel()->getBiz()->service('Review:ReviewService');
     }
 
     protected function getActivityService()
@@ -106,9 +110,9 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
     protected function checkCourseArguments(array $arguments)
     {
         if (empty($arguments['courseId'])) {
-            $conditions = array();
+            $conditions = [];
         } else {
-            $conditions = array('courseId' => $arguments['courseId']);
+            $conditions = ['courseId' => $arguments['courseId']];
         }
 
         return $conditions;
@@ -144,8 +148,8 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 
     protected function fillCourseSetTeachersAndCategoriesAttribute(array $courseSets)
     {
-        $userIds = array();
-        $categoryIds = array();
+        $userIds = [];
+        $categoryIds = [];
 
         foreach ($courseSets as &$set) {
             if (!empty($set['teacherIds'])) {
@@ -171,7 +175,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
                 $set['category'] = $categories[$categoryId];
             }
 
-            $teachers = array();
+            $teachers = [];
 
             if (empty($set['teacherIds'])) {
                 continue;
@@ -198,8 +202,8 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 
     protected function getCourseTeachersAndCategories($courses)
     {
-        $userIds = array();
-        $categoryIds = array();
+        $userIds = [];
+        $categoryIds = [];
 
         foreach ($courses as $course) {
             $userIds = array_merge($userIds, $course['teacherIds']);
@@ -218,7 +222,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
         foreach ($courses as &$course) {
-            $teachers = array();
+            $teachers = [];
 
             foreach ($course['teacherIds'] as $teacherId) {
                 if (!$teacherId) {
@@ -245,12 +249,12 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 
     protected function getCoursesAndUsers($courseRelations)
     {
-        $userIds = array();
-        $courseIds = array();
+        $userIds = [];
+        $courseIds = [];
 
         foreach ($courseRelations as &$courseRelation) {
             $userIds[] = $courseRelation['userId'];
-            $courseIds[] = $courseRelation['courseId'];
+            $courseIds[] = isset($courseRelation['courseId']) ? $courseRelation['courseId'] : $courseRelation['targetId'];
         }
 
         $users = $this->getUserService()->findUsersByIds($userIds);
@@ -263,7 +267,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
             unset($user['salt']);
             $courseRelation['User'] = $user;
 
-            $courseId = $courseRelation['courseId'];
+            $courseId = isset($courseRelation['courseId']) ? $courseRelation['courseId'] : $courseRelation['targetId'];
             $course = $courses[$courseId];
             $courseRelation['course'] = $course;
         }
@@ -295,7 +299,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
             $tasks = ArrayToolkit::index($tasks, 'activityId');
 
             $activities = array_filter($activities, function ($activity) use ($tasks) {
-                return $tasks[$activity['id']]['status'] === 'published';
+                return 'published' === $tasks[$activity['id']]['status'];
             });
 
             //返回有云视频任务的课程

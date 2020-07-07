@@ -2,10 +2,10 @@
 
 namespace AppBundle\Controller\MaterialLib;
 
+use AppBundle\Controller\BaseController;
 use Biz\CloudFile\CloudFileException;
 use Biz\CloudFile\Service\CloudFileService;
 use Biz\CloudPlatform\CloudAPIFactory;
-use AppBundle\Controller\BaseController;
 use Biz\MaterialLib\Service\MaterialLibService;
 use Biz\Player\PlayerException;
 use Biz\User\TokenException;
@@ -22,11 +22,11 @@ class GlobalFilePlayerController extends BaseController
         if (empty($file)) {
             $this->createNewException(CloudFileException::NOTFOUND_CLOUD_FILE());
         }
-        if (in_array($file['type'], array('video', 'ppt', 'document'))) {
+        if (in_array($file['type'], ['video', 'ppt', 'document'])) {
             return $this->globalPlayer($file, $request);
         } elseif ('audio' == $file['type']) {
             return $this->audioPlayer($file, $request);
-        } elseif (in_array($file['type'], array('image', 'flash'))) {
+        } elseif (in_array($file['type'], ['image', 'flash'])) {
             return $this->commonPlayer($file, $request);
         }
 
@@ -39,10 +39,10 @@ class GlobalFilePlayerController extends BaseController
 
         return $this->render(
             'material-lib/player/global-document-player.html.twig',
-            array(
+            [
                 'globalId' => $globalId,
                 'token' => $token,
-            )
+            ]
         );
     }
 
@@ -51,10 +51,10 @@ class GlobalFilePlayerController extends BaseController
         $ssl = $request->isSecure() ? true : false;
         $player = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
-        return $this->render('material-lib/player/global-player.html.twig', array(
+        return $this->render('material-lib/player/global-player.html.twig', [
             'file' => $file,
             'player' => $player,
-        ));
+        ]);
     }
 
     public function commonPlayer($file, $request)
@@ -66,37 +66,34 @@ class GlobalFilePlayerController extends BaseController
             $this->createNewException(CloudFileException::NOTFOUND_PLAYER());
         }
 
-        return $this->render("material-lib/player/{$file['type']}-player.html.twig", array(
+        return $this->render("material-lib/player/{$file['type']}-player.html.twig", [
             'player' => $player,
-        ));
+        ]);
     }
 
     public function audioPlayer($file, Request $request)
     {
-        $ssl = $request->isSecure() ? true : false;
-        $result = $this->getMaterialLibService()->player($file['no'], $ssl);
+        $playerContext = $this->getResourceFacadeService()->getPlayerContext($file);
 
-        return $this->render('material-lib/player/global-video-player.html.twig', array(
+        return $this->render('material-lib/player/global-video-player.html.twig', [
             'file' => $file,
-            'url' => $result['url'],
-            'player' => 'audio-player',
-            'agentInWhiteList' => $this->agentInWhiteList($request->headers->get('user-agent')),
+            'context' => $playerContext,
             'cloudSdk' => 'audio', //webExtension->getCloudSdkUrl
-        ));
+        ]);
     }
 
     protected function getPlayUrl($file)
     {
-        if (!in_array($file['type'], array('audio', 'video'))) {
+        if (!in_array($file['type'], ['audio', 'video'])) {
             $this->createNewException(PlayerException::NOT_SUPPORT_TYPE());
         }
 
         $token = $this->makeToken('hls.playlist', $file['no']);
 
-        $params = array(
+        $params = [
             'globalId' => $file['no'],
             'token' => $token['token'],
-        );
+        ];
 
         return $this->generateUrl('global_file_hls_playlist', $params, UrlGeneratorInterface::ABSOLUTE_URL);
     }
@@ -121,20 +118,20 @@ class GlobalFilePlayerController extends BaseController
             $this->createNewException(CloudFileException::NOTFOUND_CLOUD_FILE());
         }
 
-        $streams = array();
+        $streams = [];
 
-        foreach (array('sd', 'hd', 'shd') as $level) {
+        foreach (['sd', 'hd', 'shd'] as $level) {
             if (empty($file['metas']['levels'][$level])) {
                 continue;
             }
 
-            $tokenFields = array(
-                'data' => array(
+            $tokenFields = [
+                'data' => [
                     'globalId' => $file['no'].$level,
-                ),
+                ],
                 'times' => $this->agentInWhiteList($request->headers->get('user-agent')) ? 0 : 1,
                 'duration' => 3600,
-            );
+            ];
 
             if (!empty($token['userId'])) {
                 $tokenFields['userId'] = $token['userId'];
@@ -142,35 +139,35 @@ class GlobalFilePlayerController extends BaseController
 
             $token = $this->getTokenService()->makeToken('hls.stream', $tokenFields);
 
-            $params = array(
+            $params = [
                 'globalId' => $file['no'],
                 'level' => $level,
                 'token' => $token['token'],
-            );
+            ];
 
             $streams[$level] = $this->generateUrl('global_file_hls_stream', $params, UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         $api = CloudAPIFactory::create('leaf');
 
-        $qualities = array(
+        $qualities = [
             'video' => $file['directives']['videoQuality'],
             'audio' => $file['directives']['audioQuality'],
-        );
+        ];
 
-        $playlist = $api->get('/hls/playlist', array(
+        $playlist = $api->get('/hls/playlist', [
             'streams' => $streams,
             'qualities' => $qualities,
-        ));
+        ]);
 
         if (empty($playlist['playlist'])) {
             return $this->createMessageResponse('error', '生成视频播放列表失败！');
         }
 
-        return new Response($playlist['playlist'], 200, array(
+        return new Response($playlist['playlist'], 200, [
             'Content-Type' => 'application/vnd.apple.mpegurl',
             'Content-Disposition' => 'inline; filename="playlist.m3u8"',
-        ));
+        ]);
     }
 
     public function streamAction(Request $request, $globalId, $level, $token)
@@ -197,15 +194,15 @@ class GlobalFilePlayerController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $tokenFields = array(
-            'data' => array(
+        $tokenFields = [
+            'data' => [
                 'globalId' => $file['no'],
                 'level' => $level,
                 'keyencryption' => 0,
-            ),
+            ],
             'times' => 1,
             'duration' => 3600,
-        );
+        ];
 
         if (!empty($token['userId'])) {
             $tokenFields['userId'] = $token['userId'];
@@ -213,11 +210,11 @@ class GlobalFilePlayerController extends BaseController
 
         $token = $this->getTokenService()->makeToken('hls.clef', $tokenFields);
 
-        $params = array();
-        $params['keyUrl'] = $this->generateUrl('global_file_hls_clef', array(
+        $params = [];
+        $params['keyUrl'] = $this->generateUrl('global_file_hls_clef', [
             'globalId' => $file['no'],
             'token' => $token['token'],
-        ), UrlGeneratorInterface::ABSOLUTE_URL);
+        ], UrlGeneratorInterface::ABSOLUTE_URL);
         $params['key'] = $file['metas']['levels'][$level]['key'];
         $params['fileId'] = $file['extno'];
 
@@ -229,10 +226,10 @@ class GlobalFilePlayerController extends BaseController
             return $this->createMessageResponse('error', $this->getServiceKernel()->trans('生成视频播放地址失败！'));
         }
 
-        return new Response($stream['stream'], 200, array(
+        return new Response($stream['stream'], 200, [
             'Content-Type' => 'application/vnd.apple.mpegurl',
             'Content-Disposition' => 'inline; filename="stream.m3u8"',
-        ));
+        ]);
     }
 
     public function clefAction(Request $request, $globalId, $token)
@@ -264,14 +261,14 @@ class GlobalFilePlayerController extends BaseController
 
     protected function makeToken($type, $globalId)
     {
-        $fileds = array(
-            'data' => array(
+        $fileds = [
+            'data' => [
                 'globalId' => $globalId,
-            ),
+            ],
             'times' => 3,
             'duration' => 3600,
             'userId' => $this->getCurrentUser()->getId(),
-        );
+        ];
 
         $token = $this->getTokenService()->makeToken($type, $fileds);
 
@@ -297,5 +294,10 @@ class GlobalFilePlayerController extends BaseController
     protected function getMaterialLibService()
     {
         return $this->createService('MaterialLib:MaterialLibService');
+    }
+
+    protected function getResourceFacadeService()
+    {
+        return $this->getBiz()->service('CloudPlatform:ResourceFacadeService');
     }
 }

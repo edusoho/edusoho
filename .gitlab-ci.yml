@@ -93,7 +93,6 @@ check env:
   only:
     refs:
       - merge_requests
-      - project/b2c
     variables:
       - $REPOSITORY == "main"
 
@@ -176,7 +175,8 @@ check env:
   only:
     refs:
       - develop
-      - project/b2c
+      - project/spbl
+      - project/spbl-publish
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"

@@ -2,10 +2,10 @@
 
 namespace ApiBundle\Api\Resource\Classroom;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Classroom\Service\ClassroomService;
-use ApiBundle\Api\Annotation\ApiConf;
+use Biz\Review\Service\ReviewService;
 
 class ClassroomReview extends AbstractResource
 {
@@ -14,34 +14,50 @@ class ClassroomReview extends AbstractResource
      */
     public function search(ApiRequest $request, $classroomId)
     {
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
+
         $conditions = $request->query->all();
         $conditions['classroomId'] = $classroomId;
         $conditions['parentId'] = 0;
-        $total = $this->getClassroomReviewService()->searchReviewCount($conditions);
-        list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $reviews = $this->getClassroomReviewService()->searchReviews(
-            $conditions,
-            array('createdTime' => 'DESC'),
-            $offset,
-            $limit
-        );
-        $this->getOCUtil()->multiple($reviews, array('userId'));
+        $conditions['targetId'] = $classroomId;
+        $conditions['targetType'] = 'classroom';
+        $conditions['offset'] = $offset;
+        $conditions['limit'] = $limit;
+
+        $total = $this->getReviewService()->countReviews($conditions);
+
+        $reviews = $this->invokeResource(new ApiRequest(
+            '/api/review',
+            'GET',
+            $conditions
+        ));
+
+        $this->getOCUtil()->multiple($reviews, ['userId']);
+
         foreach ($reviews as &$review) {
-            $reviewPosts = $this->getClassroomReviewService()->searchReviews(array('parentId' => $review['id']), array('createdTime' => 'ASC'), 0, 5);
-            $this->getOCUtil()->multiple($reviewPosts, array('userId'));
+            $reviewPosts = $this->invokeResource(new ApiRequest(
+                '/api/review',
+                'GET',
+                [
+                    'parentId' => $review['id'],
+                    'orderBys' => ['createdTime' => 'ASC'],
+                    'offset' => 0,
+                    'limit' => 5,
+                ]
+            ));
+
+            $this->getOCUtil()->multiple($reviewPosts, ['userId']);
             $review['posts'] = $reviewPosts;
         }
 
         return $this->makePagingObject($reviews, $total, $offset, $limit);
     }
 
-    private function getClassroomService()
+    /**
+     * @return ReviewService
+     */
+    private function getReviewService()
     {
-        return $this->service('Classroom:ClassroomService');
-    }
-
-    private function getClassroomReviewService()
-    {
-        return $this->service('Classroom:ClassroomReviewService');
+        return $this->service('Review:ReviewService');
     }
 }

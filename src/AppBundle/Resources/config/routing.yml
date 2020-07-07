@@ -284,8 +284,8 @@ hls_audio_playlist:
     defaults: { _controller: AppBundle:HLSAudio:playlist}
 
 player_local_media:
-    path: /player/{id}/file/{token}
-    defaults: { _controller: AppBundle:Player:localMedia}
+    path: /player/{id}/file/{token}.{ext}
+    defaults: { _controller: AppBundle:Player:localMedia }
 
 course_thread_player_show:
     path: /course/thread/file/{id}/player/show
@@ -990,14 +990,6 @@ group_thread_check_user:
 group_thread_show:
     path:  /group/{id}/thread/{threadId}
     defaults: { _controller: AppBundle:GroupThread:groupThreadIndex }
-group_thread_collect:
-    path:  /group/thread/{threadId}/collect
-    defaults: { _controller: AppBundle:GroupThread:collect }
-    methods: [POST]
-group_thread_uncollect:
-    path:  /group/thread/{threadId}/uncollect
-    defaults: { _controller: AppBundle:GroupThread:uncollect }
-    methods: [POST]
 group_thread_setElite:
     path:  /group/thread/{threadId}/setElite
     defaults: { _controller: AppBundle:GroupThread:setElite }
@@ -1519,16 +1511,6 @@ open_course_lesson_learn:
 open_course_lesson_show:
     path:  /open/course/{courseId}/lesson/{lessonId}/show
     defaults: { _controller: AppBundle:OpenCourse:lessonShow }
-
-open_course_favorite:
-    path: /open/course/{id}/favorite
-    defaults: { _controller: AppBundle:OpenCourse:favorite }
-    methods: [POST]
-
-open_course_unfavorite:
-    path: /open/course/{id}/unfavorite
-    defaults: { _controller: AppBundle:OpenCourse:unfavorite }
-    methods: [POST]
 
 open_course_like:
     path: /open/course/{id}/like
@@ -2148,16 +2130,6 @@ course_qrcode:
   defaults: { _controller: AppBundle:Course/Course:qrcode }
   methods: [POST]
 
-course_set_favorite:
-  path: /course_set/{id}/favorite
-  defaults: { _controller: AppBundle:Course/CourseSet:favorite }
-  methods: [POST]
-
-course_set_unfavorite:
-  path: /course_set/{id}/unfavorite
-  defaults: { _controller: AppBundle:Course/CourseSet:unfavorite }
-  methods: [POST]
-
 course_exit:
   path: /course/{id}/exit
   defaults: {_controller: AppBundle:Course/Course:exit}
@@ -2280,19 +2252,6 @@ course_set_manage_publish:
 course_set_manage_close:
   path: /course_set/{id}/manage/close
   defaults: {_controller: AppBundle:Course/CourseSetManage:close}
-
-course_review_create:
-   path:  /course/{id}/review/create
-   defaults: { _controller: AppBundle:Course/Review:create }
-   methods: [POST]
-
-course_review_post:
-  path:  /course/{courseId}/review/{reviewId}/post
-  defaults: { _controller: AppBundle:Course/Review:post }
-
-course_review_delete:
-  path:  /course/{courseId}/review/{reviewId}/delete
-  defaults: { _controller: AppBundle:Course/Review:delete }
 
 course_material_download:
     path:  /course/{courseId}/material/{materialId}/download
@@ -2714,18 +2673,6 @@ classroom_reviews:
     path:  /classroom/{id}/review
     defaults: { _controller: AppBundle:Classroom/Review:list }
     h5: true
-
-classroom_review_create:
-    path:  /classroom/{id}/review/create
-    defaults: { _controller: AppBundle:Classroom/Review:create }
-
-classroom_review_post:
-    path:  /classroom/{id}/review/{reviewId}/post
-    defaults: { _controller: AppBundle:Classroom/Review:post }
-
-classroom_review_delete:
-    path:  /classroom/review/{reviewId}/delete
-    defaults: { _controller: AppBundle:Classroom/Review:delete }
 
 classroom_introductions:
     path:  /classroom/{id}/introduction
@@ -3411,7 +3358,7 @@ answer_engine_review:
     path: /answer_engine/review
     defaults: { _controller: AppBundle:AnswerEngine/AnswerEngine:reviewSave }
     methods: ['POST']
-    
+
 course_task_list_render:
     path: /course/{courseId}/task/list/render/{type}/{paged}
     defaults: { _controller: AppBundle:Course/Course:renderTaskList, paged:false }
@@ -3567,3 +3514,7 @@ item_bank_exercise_manage_students_deadline_batch_day_check:
 item_bank_exercise_manage_students_deadline_batch_deadline_check:
   path:  /item_bank_exercise/{exerciseId}/manage/student/deadline/check
   defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:checkDeadline }
+  
+goods_show:
+    path:     /goods/show/{id}
+    defaults: { _controller: AppBundle:Goods/Goods:show }
