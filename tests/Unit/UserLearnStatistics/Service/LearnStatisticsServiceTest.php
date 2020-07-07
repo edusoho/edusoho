@@ -9,12 +9,12 @@ class LearnStatisticsServiceTest extends BaseTestCase
 {
     public function testBatchDeletePastDailyStatistics()
     {
-        $this->createDao('UserLearnStatistics:DailyStatisticsDao')->create(array('userId' => 1));
-        $this->createDao('UserLearnStatistics:DailyStatisticsDao')->create(array('userId' => 12, 'isStorage' => 1));
-        $this->getLearnStatisticsService()->batchDeletePastDailyStatistics(array(
+        $this->createDao('UserLearnStatistics:DailyStatisticsDao')->create(['userId' => 1]);
+        $this->createDao('UserLearnStatistics:DailyStatisticsDao')->create(['userId' => 12, 'isStorage' => 1]);
+        $this->getLearnStatisticsService()->batchDeletePastDailyStatistics([
             'isStorage' => '1',
-        ));
-        $result = $this->getLearnStatisticsService()->searchDailyStatistics(array(), array(), 0, \PHP_INT_MAX);
+        ]);
+        $result = $this->getLearnStatisticsService()->searchDailyStatistics([], [], 0, \PHP_INT_MAX);
 
         $this->assertEquals(1, $result[0]['id']);
     }
@@ -22,8 +22,8 @@ class LearnStatisticsServiceTest extends BaseTestCase
     public function testSearchLearnData()
     {
         $this->mockData();
-        $result = $this->getLearnStatisticsService()->searchLearnData(array('createdTime_GE' => 1, 'createdTime_LT' => 10), array());
-        $this->assertArrayEquals(array(
+        $result = $this->getLearnStatisticsService()->searchLearnData(['createdTime_GE' => 1, 'createdTime_LT' => 10], []);
+        $this->assertArrayEquals([
             'learnedSeconds' => 3,
             'paidAmount' => 4,
             'refundAmount' => 4,
@@ -35,67 +35,67 @@ class LearnStatisticsServiceTest extends BaseTestCase
             'joinedCourseNum' => 122,
             'exitCourseNum' => 122,
             'userId' => 2,
-        ), $result[0]);
+        ], $result[0]);
     }
 
     private function mockData()
     {
-        $this->mockBiz('Activity:ActivityLearnLogService', array(
-            array(
+        $this->mockBiz('Activity:ActivityLearnLogService', [
+            [
                 'functionName' => 'sumLearnTimeGroupByUserId',
-                'returnValue' => array(
-                    2 => array(
+                'returnValue' => [
+                    2 => [
                         'userId' => 2,
                         'learnedTime' => 3,
-                    ),
-                ),
-            ),
-        ));
+                    ],
+                ],
+            ],
+        ]);
 
-        $this->mockBiz('Pay:AccountService', array(
-            array(
+        $this->mockBiz('Pay:AccountService', [
+            [
                 'functionName' => 'sumAmountGroupByUserId',
-                'returnValue' => array(
-                    2 => array(
+                'returnValue' => [
+                    2 => [
                         'userId' => 2,
                         'amount' => 4,
-                    ),
-                ),
-            ),
-        ));
+                    ],
+                ],
+            ],
+        ]);
 
-        $this->mockBiz('Task:TaskResultService', array(
-            array(
+        $this->mockBiz('Task:TaskResultService', [
+            [
                 'functionName' => 'countTaskNumGroupByUserId',
-                'returnValue' => array(
-                    2 => array(
+                'returnValue' => [
+                    2 => [
                         'userId' => 2,
                         'count' => 5,
-                    ),
-                ),
-            ),
-        ));
+                    ],
+                ],
+            ],
+        ]);
 
-        $this->mockBiz('MemberOperation:MemberOperationService', array(
-            array(
+        $this->mockBiz('MemberOperation:MemberOperationService', [
+            [
                 'functionName' => 'countGroupByUserId',
-                'returnValue' => array(
-                    2 => array(
+                'returnValue' => [
+                    2 => [
                         'userId' => 2,
                         'count' => 122,
-                    ),
-                ),
-            ),
-        ));
+                    ],
+                ],
+            ],
+        ]);
     }
 
     public function testUpdateStorageByIds()
     {
         $result = $this->createDao('UserLearnStatistics:DailyStatisticsDao')->create(
-           array('userId' => 1)
+           ['userId' => 1]
         );
         $this->assertEquals(0, $result['isStorage']);
-        $this->getLearnStatisticsService()->updateStorageByIds(array(1));
+        $this->getLearnStatisticsService()->updateStorageByIds([1]);
         $result = $this->createDao('UserLearnStatistics:DailyStatisticsDao')->get($result['id']);
         $this->assertEquals(1, $result['isStorage']);
     }
@@ -112,15 +112,15 @@ class LearnStatisticsServiceTest extends BaseTestCase
      */
     public function testSearchLearnDataError()
     {
-        $this->getLearnStatisticsService()->searchLearnData(array(), array());
+        $this->getLearnStatisticsService()->searchLearnData([], []);
     }
 
     public function testBatchCreateTotalStatistics()
     {
         $this->mockData();
-        $result = $this->getLearnStatisticsService()->batchCreateTotalStatistics(array('createdTime_GE' => 1, 'createdTime_LT' => 10));
-        $result = $this->getLearnStatisticsService()->searchTotalStatistics(array(), array(), 0, \PHP_INT_MAX);
-        $this->assertArrayEquals(array(
+        $result = $this->getLearnStatisticsService()->batchCreateTotalStatistics(['createdTime_GE' => 1, 'createdTime_LT' => 10]);
+        $result = $this->getLearnStatisticsService()->searchTotalStatistics([], [], 0, \PHP_INT_MAX);
+        $this->assertArrayEquals([
             'learnedSeconds' => 3,
             'paidAmount' => 4,
             'refundAmount' => 4,
@@ -132,15 +132,15 @@ class LearnStatisticsServiceTest extends BaseTestCase
             'joinedCourseNum' => 122,
             'exitCourseNum' => 122,
             'userId' => 2,
-        ), $result[0]);
+        ], $result[0]);
     }
 
     public function testBatchCreatePastDailyStatistics()
     {
         $this->mockData();
-        $result = $this->getLearnStatisticsService()->batchCreatePastDailyStatistics(array('createdTime_GE' => 1, 'createdTime_LT' => 10));
-        $result = $this->getLearnStatisticsService()->searchDailyStatistics(array(), array(), 0, \PHP_INT_MAX);
-        $this->assertArrayEquals(array(
+        $result = $this->getLearnStatisticsService()->batchCreatePastDailyStatistics(['createdTime_GE' => 1, 'createdTime_LT' => 10]);
+        $result = $this->getLearnStatisticsService()->searchDailyStatistics([], [], 0, \PHP_INT_MAX);
+        $this->assertArrayEquals([
             'learnedSeconds' => 3,
             'paidAmount' => 4,
             'refundAmount' => 4,
@@ -152,15 +152,15 @@ class LearnStatisticsServiceTest extends BaseTestCase
             'joinedCourseNum' => 122,
             'exitCourseNum' => 122,
             'userId' => 2,
-        ), $result[0]);
+        ], $result[0]);
     }
 
     public function testBatchCreateDailyStatistics()
     {
         $this->mockData();
-        $result = $this->getLearnStatisticsService()->batchCreateDailyStatistics(array('createdTime_GE' => 1, 'createdTime_LT' => 10));
-        $result = $this->getLearnStatisticsService()->searchDailyStatistics(array(), array(), 0, \PHP_INT_MAX);
-        $this->assertArrayEquals(array(
+        $result = $this->getLearnStatisticsService()->batchCreateDailyStatistics(['createdTime_GE' => 1, 'createdTime_LT' => 10]);
+        $result = $this->getLearnStatisticsService()->searchDailyStatistics([], [], 0, \PHP_INT_MAX);
+        $this->assertArrayEquals([
             'learnedSeconds' => 3,
             'paidAmount' => 4,
             'refundAmount' => 4,
@@ -172,26 +172,26 @@ class LearnStatisticsServiceTest extends BaseTestCase
             'joinedCourseNum' => 122,
             'exitCourseNum' => 122,
             'userId' => 2,
-        ), $result[0]);
+        ], $result[0]);
     }
 
     public function testStorageDailyStatistics()
     {
-        $this->mockBiz('System:SettingService', array(
-            array('functionName' => 'get', 'returnValue' => array(
+        $this->mockBiz('System:SettingService', [
+            ['functionName' => 'get', 'returnValue' => [
                 'syncTotalDataStatus' => true,
-            )),
-        ));
+            ]],
+        ]);
         $daiyl = $this->createDao('UserLearnStatistics:DailyStatisticsDao')->create(
-           array(
+           [
                'userId' => 1,
                'joinedCourseNum' => 3,
                'exitCourseNum' => 45,
-            )
+            ]
         );
 
         $total = $this->createDao('UserLearnStatistics:TotalStatisticsDao')->create(
-           array('userId' => 1, 'joinedCourseNum' => 3)
+           ['userId' => 1, 'joinedCourseNum' => 3]
         );
         $this->getLearnStatisticsService()->storageDailyStatistics();
 
@@ -213,12 +213,12 @@ class LearnStatisticsServiceTest extends BaseTestCase
         $this->assertEquals(strtotime(date('Y-m-d')), $result['currentTime']);
         $this->assertEquals(24 * 60 * 60 * 365, $result['timespan']);
 
-        $this->mockBiz('System:SettingService', array(
-            array('functionName' => 'get', 'returnValue' => array(
+        $this->mockBiz('System:SettingService', [
+            ['functionName' => 'get', 'returnValue' => [
                 'currentTime' => 123,
                 'timespan' => 312,
-            )),
-        ));
+            ]],
+        ]);
 
         $result = $this->getLearnStatisticsService()->getStatisticsSetting();
         $this->assertEquals(123, $result['currentTime']);
@@ -227,23 +227,23 @@ class LearnStatisticsServiceTest extends BaseTestCase
 
     public function testStatisticsDataSearch()
     {
-        $conditions = array(
+        $conditions = [
             'startDate' => '2017-11-08',
             'endDate' => '',
             'nickname' => '',
             'isDefault' => 'false',
-            'userIds' => array(3),
-        );
-        $order = array(
+            'userIds' => [3],
+        ];
+        $order = [
             'id' => 'DESC',
-        );
-        $preResult = array(
-            array(
+        ];
+        $preResult = [
+            [
                 'userId' => 3,
                 'joinedClassroomNum' => 2,
                 'joinedCourseSetNum' => 2,
-            ),
-        );
+            ],
+        ];
 
         $this->mockBiz('UserLearnStatistics:DailyStatisticsDao');
         $this->getDailyStatisticsDao()->shouldReceive('statisticSearch')->andReturn($preResult);
@@ -255,13 +255,13 @@ class LearnStatisticsServiceTest extends BaseTestCase
 
     public function testStatisticsDataCount()
     {
-        $conditions = array(
+        $conditions = [
             'startDate' => '',
             'endDate' => '',
             'nickname' => '',
             'isDefault' => 'false',
-            'userIds' => array(3),
-        );
+            'userIds' => [3],
+        ];
 
         $this->mockBiz('UserLearnStatistics:TotalStatisticsDao');
         $this->getTotalStatisticsDao()->shouldReceive('statisticCount')->andReturn(1);
@@ -274,38 +274,34 @@ class LearnStatisticsServiceTest extends BaseTestCase
     {
         $user = $this->getCurrentUser();
 
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'findUserLearnCourseIds', 'returnValue' => array(1, 2)),
-            array('functionName' => 'countUserLearnCourses', 'returnValue' => 10),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'findUserLearnCourseIds', 'returnValue' => [1, 2]],
+            ['functionName' => 'countUserLearnCourses', 'returnValue' => 10],
+        ]);
 
-        $this->mockBiz('Course:CourseSetService', array(
-            array('functionName' => 'countUserLearnCourseSets', 'returnValue' => 5),
-        ));
+        $this->mockBiz('Course:CourseSetService', [
+            ['functionName' => 'countUserLearnCourseSets', 'returnValue' => 5],
+        ]);
 
-        $this->mockBiz('Course:LearningDataAnalysisService', array(
-            array('functionName' => 'getUserLearningProgressByCourseIds', 'returnValue' => array('percent' => 90)),
-        ));
+        $this->mockBiz('Course:LearningDataAnalysisService', [
+            ['functionName' => 'getUserLearningProgressByCourseIds', 'returnValue' => ['percent' => 90]],
+        ]);
 
-        $this->mockBiz('Course:CourseNoteService', array(
-            array('functionName' => 'countCourseNotes', 'returnValue' => 6),
-        ));
+        $this->mockBiz('Course:CourseNoteService', [
+            ['functionName' => 'countCourseNotes', 'returnValue' => 6],
+        ]);
 
-        $this->mockBiz('Course:ThreadService', array(
-            array('functionName' => 'countPartakeThreadsByUserId', 'returnValue' => 2),
-        ));
+        $this->mockBiz('Course:ThreadService', [
+            ['functionName' => 'countPartakeThreadsByUserId', 'returnValue' => 2],
+        ]);
 
-        $this->mockBiz('Thread:ThreadService', array(
-            array('functionName' => 'countPartakeThreadsByUserIdAndTargetType', 'returnValue' => 2),
-        ));
+        $this->mockBiz('Thread:ThreadService', [
+            ['functionName' => 'countPartakeThreadsByUserIdAndTargetType', 'returnValue' => 2],
+        ]);
 
-        $this->mockBiz('Course:ReviewService', array(
-            array('functionName' => 'searchReviewsCount', 'returnValue' => 7),
-        ));
-
-        $this->mockBiz('Classroom:ClassroomReviewService', array(
-            array('functionName' => 'searchReviewCount', 'returnValue' => 3),
-        ));
+        $this->mockBiz('Review:ReviewService', [
+            ['functionName' => 'countReviews', 'returnValue' => 10],
+        ]);
 
         $result = $this->getLearnStatisticsService()->getUserOverview($user->getId());
         $this->assertEquals('10', $result['learningCoursesCount']);
@@ -330,10 +326,10 @@ class LearnStatisticsServiceTest extends BaseTestCase
     {
         $user = $this->getCurrentUser();
 
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'findUserLearnCourseIds', 'returnValue' => array()),
-            array('functionName' => 'countUserLearnCourses', 'returnValue' => 10),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'findUserLearnCourseIds', 'returnValue' => []],
+            ['functionName' => 'countUserLearnCourses', 'returnValue' => 10],
+        ]);
 
         $result = $this->getLearnStatisticsService()->getUserOverview($user->getId());
         $this->assertEmpty($result);
@@ -350,37 +346,37 @@ class LearnStatisticsServiceTest extends BaseTestCase
     {
         $user = $this->getCurrentUser();
 
-        $this->mockBiz('Course:MemberService', array(
-            array('functionName' => 'searchMembers', 'returnValue' => array(
-                1 => array('courseId' => 2, 'orderId' => 2, 'classroomId' => 1),
-            )),
-        ));
+        $this->mockBiz('Course:MemberService', [
+            ['functionName' => 'searchMembers', 'returnValue' => [
+                1 => ['courseId' => 2, 'orderId' => 2, 'classroomId' => 1],
+            ]],
+        ]);
 
-        $this->mockBiz('Order:OrderService', array(
-            array('functionName' => 'findOrdersByIds', 'returnValue' => array()),
-        ));
+        $this->mockBiz('Order:OrderService', [
+            ['functionName' => 'findOrdersByIds', 'returnValue' => []],
+        ]);
 
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'searchCourses', 'returnValue' => array(
-                1 => array('id' => 1, 'courseSetId' => 1),
-            )),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'searchCourses', 'returnValue' => [
+                1 => ['id' => 1, 'courseSetId' => 1],
+            ]],
+        ]);
 
-        $this->mockBiz('Classroom:ClassroomService', array(
-            array('functionName' => 'findClassroomsByIds', 'returnValue' => array(
-                1 => array('id' => 1),
-            )),
-        ));
+        $this->mockBiz('Classroom:ClassroomService', [
+            ['functionName' => 'findClassroomsByIds', 'returnValue' => [
+                1 => ['id' => 1],
+            ]],
+        ]);
 
-        $this->mockBiz('Course:CourseSetService', array(
-            array('functionName' => 'findCourseSetsByIds', 'returnValue' => array(
-                1 => array('id' => 1),
-            )),
-        ));
+        $this->mockBiz('Course:CourseSetService', [
+            ['functionName' => 'findCourseSetsByIds', 'returnValue' => [
+                1 => ['id' => 1],
+            ]],
+        ]);
 
-        $this->mockBiz('Course:LearningDataAnalysisService', array(
-            array('functionName' => 'getUserLearningProgress', 'returnValue' => array('percent' => 90)),
-        ));
+        $this->mockBiz('Course:LearningDataAnalysisService', [
+            ['functionName' => 'getUserLearningProgress', 'returnValue' => ['percent' => 90]],
+        ]);
 
         list($learnCourses, $courseSets, $members) = $this->getLearnStatisticsService()->findLearningCourseDetails($user->getId(), 1, 10);
         $this->assertEquals(1, count($learnCourses));
@@ -390,65 +386,65 @@ class LearnStatisticsServiceTest extends BaseTestCase
 
     public function testSearchTotalStatistics()
     {
-        $this->getTotalStatisticsDao()->create(array('userId' => 1));
-        $this->getTotalStatisticsDao()->create(array('userId' => 2));
+        $this->getTotalStatisticsDao()->create(['userId' => 1]);
+        $this->getTotalStatisticsDao()->create(['userId' => 2]);
 
-        $result = $this->getLearnStatisticsService()->searchTotalStatistics(array(), array(), 0, 2);
+        $result = $this->getLearnStatisticsService()->searchTotalStatistics([], [], 0, 2);
         $this->assertEquals(2, count($result));
 
-        $result = $this->getLearnStatisticsService()->searchTotalStatistics(array('userId' => 1), array(), 0, 2);
+        $result = $this->getLearnStatisticsService()->searchTotalStatistics(['userId' => 1], [], 0, 2);
         $this->assertEquals(1, count($result));
 
-        $result = $this->getLearnStatisticsService()->searchTotalStatistics(array(), array(), 0, 1);
+        $result = $this->getLearnStatisticsService()->searchTotalStatistics([], [], 0, 1);
         $this->assertEquals(1, count($result));
     }
 
     public function testCountTotalStatistics()
     {
-        $this->getTotalStatisticsDao()->create(array('userId' => 1));
-        $this->getTotalStatisticsDao()->create(array('userId' => 2));
+        $this->getTotalStatisticsDao()->create(['userId' => 1]);
+        $this->getTotalStatisticsDao()->create(['userId' => 2]);
 
-        $count = $this->getLearnStatisticsService()->countTotalStatistics(array());
+        $count = $this->getLearnStatisticsService()->countTotalStatistics([]);
         $this->assertEquals(2, $count);
 
-        $count = $this->getLearnStatisticsService()->countTotalStatistics(array('userId' => 1));
+        $count = $this->getLearnStatisticsService()->countTotalStatistics(['userId' => 1]);
         $this->assertEquals(1, $count);
     }
 
     public function testSearchDailyStatistics()
     {
-        $this->getDailyStatisticsDao()->create(array('userId' => 1));
-        $this->getDailyStatisticsDao()->create(array('userId' => 2));
-        $result = $this->getLearnStatisticsService()->searchDailyStatistics(array(), array(), 0, 2);
+        $this->getDailyStatisticsDao()->create(['userId' => 1]);
+        $this->getDailyStatisticsDao()->create(['userId' => 2]);
+        $result = $this->getLearnStatisticsService()->searchDailyStatistics([], [], 0, 2);
         $this->assertEquals(2, count($result));
 
-        $result = $this->getLearnStatisticsService()->searchDailyStatistics(array('userId' => 1), array(), 0, 2);
+        $result = $this->getLearnStatisticsService()->searchDailyStatistics(['userId' => 1], [], 0, 2);
         $this->assertEquals(1, count($result));
 
-        $result = $this->getLearnStatisticsService()->searchDailyStatistics(array(), array(), 0, 1);
+        $result = $this->getLearnStatisticsService()->searchDailyStatistics([], [], 0, 1);
         $this->assertEquals(1, count($result));
     }
 
     public function testCountDailyStatistics()
     {
-        $this->getDailyStatisticsDao()->create(array('userId' => 1));
-        $this->getDailyStatisticsDao()->create(array('userId' => 2));
-        $count = $this->getLearnStatisticsService()->countDailyStatistics(array());
+        $this->getDailyStatisticsDao()->create(['userId' => 1]);
+        $this->getDailyStatisticsDao()->create(['userId' => 2]);
+        $count = $this->getLearnStatisticsService()->countDailyStatistics([]);
 
         $this->assertEquals(2, $count);
     }
 
     public function batchDeletePastDailyStatistics()
     {
-        $this->getDailyStatisticsDao()->create(array('userId' => 1, 'recordTime' => 2));
-        $this->getDailyStatisticsDao()->create(array('userId' => 1, 'recordTime' => 3));
-        $this->getDailyStatisticsDao()->create(array('userId' => 1, 'recordTime' => 10));
-        $this->getDailyStatisticsDao()->create(array('userId' => 2, 'recordTime' => 3));
+        $this->getDailyStatisticsDao()->create(['userId' => 1, 'recordTime' => 2]);
+        $this->getDailyStatisticsDao()->create(['userId' => 1, 'recordTime' => 3]);
+        $this->getDailyStatisticsDao()->create(['userId' => 1, 'recordTime' => 10]);
+        $this->getDailyStatisticsDao()->create(['userId' => 2, 'recordTime' => 3]);
 
-        $this->getLearnStatisticsService()->batchDeletePastDailyStatistics(array('recordTime_GE' => 10));
-        $this->assertEquals(3, $this->getDailyStatisticsDao()->count(array()));
-        $this->getLearnStatisticsService()->batchDeletePastDailyStatistics(array('userIds' => array('1')));
-        $this->assertEquals(1, $this->getDailyStatisticsDao()->count(array()));
+        $this->getLearnStatisticsService()->batchDeletePastDailyStatistics(['recordTime_GE' => 10]);
+        $this->assertEquals(3, $this->getDailyStatisticsDao()->count([]));
+        $this->getLearnStatisticsService()->batchDeletePastDailyStatistics(['userIds' => ['1']]);
+        $this->assertEquals(1, $this->getDailyStatisticsDao()->count([]));
     }
 
     public function getStatisticsSetting()

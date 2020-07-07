@@ -2,20 +2,18 @@
 
 namespace Biz\OpenCourse\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
+use Biz\AppLoggerConstant;
 use Biz\BaseService;
 use Biz\Common\CommonException;
-use Biz\Course\Dao\FavoriteDao;
-use AppBundle\Common\ArrayToolkit;
 use Biz\File\UploadFileException;
-use Biz\OpenCourse\OpenCourseException;
-use Biz\System\Service\LogService;
 use Biz\OpenCourse\Dao\OpenCourseDao;
-use Biz\User\UserException;
-use Codeages\Biz\Framework\Event\Event;
 use Biz\OpenCourse\Dao\OpenCourseLessonDao;
 use Biz\OpenCourse\Dao\OpenCourseMemberDao;
+use Biz\OpenCourse\OpenCourseException;
 use Biz\OpenCourse\Service\OpenCourseService;
-use Biz\AppLoggerConstant;
+use Biz\System\Service\LogService;
+use Biz\User\UserException;
 use Biz\Util\EdusohoLiveClient;
 
 class OpenCourseServiceImpl extends BaseService implements OpenCourseService
@@ -51,24 +49,24 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     {
         $this->tryCreateCourse();
 
-        if (!ArrayToolkit::requireds($course, array('title'))) {
+        if (!ArrayToolkit::requireds($course, ['title'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $course = ArrayToolkit::parts($course, array('title', 'type', 'about', 'categoryId', 'orgCode'));
+        $course = ArrayToolkit::parts($course, ['title', 'type', 'about', 'categoryId', 'orgCode']);
         $course['status'] = 'draft';
         $course['about'] = !empty($course['about']) ? $this->purifyHtml($course['about']) : '';
         $course['userId'] = $this->getCurrentUser()->id;
-        $course['teacherIds'] = array($course['userId']);
+        $course['teacherIds'] = [$course['userId']];
         $course = $this->fillOrgId($course);
 
         $course = $this->getOpenCourseDao()->create($course);
 
-        $member = array(
+        $member = [
             'courseId' => $course['id'],
             'userId' => $course['userId'],
             'role' => 'teacher',
-        );
+        ];
 
         $this->getOpenCourseMemberDao()->create($member);
 
@@ -85,7 +83,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     protected function filterOpenCourseFields($fields)
     {
-        $fields = ArrayToolkit::parts($fields, array(
+        $fields = ArrayToolkit::parts($fields, [
             'title',
             'subtitle',
             'status',
@@ -115,7 +113,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'length',
             'authUrl',
             'jumpUrl',
-        ));
+        ]);
 
         return $fields;
     }
@@ -124,7 +122,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     {
         $user = $this->getCurrentUser();
 
-        $courseFields = ArrayToolkit::parts($fields, array(
+        $courseFields = ArrayToolkit::parts($fields, [
             'title',
             'subtitle',
             'status',
@@ -150,7 +148,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'updateTime',
             'orgId',
             'orgCode',
-        ));
+        ]);
 
         $courseFields = $this->_filterCourseFields($courseFields);
 
@@ -158,7 +156,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $updatedCourse = $this->getOpenCourseDao()->update($course['id'], $courseFields);
 
-        $this->dispatchEvent('open.course.update', array('argument' => $fields, 'course' => $updatedCourse, 'tagIds' => $tagIds, 'userId' => $user['id']));
+        $this->dispatchEvent('open.course.update', ['argument' => $fields, 'course' => $updatedCourse, 'tagIds' => $tagIds, 'userId' => $user['id']]);
 
         return $updatedCourse;
     }
@@ -171,19 +169,19 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     protected function updateLiveLesson($course, $fields)
     {
         $openLiveLesson = $this->searchLessons(
-            array('courseId' => $course['id']),
-            array('startTime' => 'DESC'),
+            ['courseId' => $course['id']],
+            ['startTime' => 'DESC'],
             0,
             1
         );
-        $liveLesson = $openLiveLesson ? $openLiveLesson[0] : array();
+        $liveLesson = $openLiveLesson ? $openLiveLesson[0] : [];
 
-        $liveLessonFields = ArrayToolkit::parts($fields, array(
+        $liveLessonFields = ArrayToolkit::parts($fields, [
             'startTime',
             'length',
             'authUrl',
             'jumpUrl',
-        ));
+        ]);
 
         $liveLessonFields = array_merge($liveLesson, $liveLessonFields);
 
@@ -191,10 +189,10 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $liveLessonFields['courseId'] = $course['id'];
         $liveLessonFields['title'] = $course['title'];
 
-        $routes = array(
+        $routes = [
             'authUrl' => $fields['authUrl'],
             'jumpUrl' => $fields['jumpUrl'],
-        );
+        ];
         if ($openLiveLesson) {
             $this->getLiveCourseService()->editLiveRoom($course, $liveLessonFields, $routes);
             $this->updateLesson(
@@ -250,7 +248,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function waveCourse($id, $field, $diff)
     {
-        $this->getOpenCourseDao()->wave(array($id), array($field => $diff));
+        $this->getOpenCourseDao()->wave([$id], [$field => $diff]);
 
         return $this->getCourse($id);
     }
@@ -259,16 +257,16 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     {
         $course = $this->tryManageOpenCourse($id);
 
-        $lessonCount = $this->countLessons(array('courseId' => $id, 'status' => 'published'));
+        $lessonCount = $this->countLessons(['courseId' => $id, 'status' => 'published']);
 
         if ($lessonCount < 1) {
-            return array('result' => false, 'message' => '请先添加课时并发布！');
+            return ['result' => false, 'message' => '请先添加课时并发布！'];
         }
 
-        $course = $this->updateCourse($id, array('status' => 'published'));
+        $course = $this->updateCourse($id, ['status' => 'published']);
         $this->dispatchEvent('open.course.publish', $course);
 
-        return array('result' => true, 'course' => $course);
+        return ['result' => true, 'course' => $course];
     }
 
     public function closeCourse($id)
@@ -277,16 +275,16 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $this->dispatchEvent('open.course.close', $course);
 
-        return $this->getOpenCourseDao()->update($id, array('status' => 'closed'));
+        return $this->getOpenCourseDao()->update($id, ['status' => 'closed']);
     }
 
     public function batchUpdateOrg($openCourseIds, $orgCode)
     {
         if (!is_array($openCourseIds)) {
-            $openCourseIds = array($openCourseIds);
+            $openCourseIds = [$openCourseIds];
         }
 
-        $fields = $this->fillOrgId(array('orgCode' => $orgCode));
+        $fields = $this->fillOrgId(['orgCode' => $orgCode]);
 
         foreach ($openCourseIds as $openCourseId) {
             $this->getOpenCourseDao()->update($openCourseId, $fields);
@@ -328,7 +326,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->createNewException(UserException::UN_LOGIN());
         }
 
-        if (0 == count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')))) {
+        if (0 == count(array_intersect($user['roles'], ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN']))) {
             $this->createNewException(UserException::PERMISSION_DENIED());
         }
 
@@ -349,106 +347,26 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $files = ArrayToolkit::index($files, 'id');
         $fileIds = ArrayToolkit::index($data, 'type');
 
-        $fields = array(
+        $fields = [
             'smallPicture' => $files[$fileIds['small']['id']]['uri'],
             'middlePicture' => $files[$fileIds['middle']['id']]['uri'],
             'largePicture' => $files[$fileIds['large']['id']]['uri'],
-        );
+        ];
 
         $this->_deleteNotUsedPictures($course);
 
         $update_picture = $this->getOpenCourseDao()->update($courseId, $fields);
 
-        $this->dispatchEvent('open.course.picture.update', array('argument' => $data, 'course' => $update_picture));
+        $this->dispatchEvent('open.course.picture.update', ['argument' => $data, 'course' => $update_picture]);
 
         return $update_picture;
     }
 
-    public function favoriteCourse($courseId)
-    {
-        $user = $this->getCurrentUser();
-
-        if (empty($user['id'])) {
-            $this->createNewException(UserException::UN_LOGIN());
-        }
-
-        $course = $this->getCourse($courseId);
-
-        if (empty($course)) {
-            $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
-        }
-
-        if ('published' != $course['status']) {
-            $this->createNewException(OpenCourseException::FAVOR_UNPUBLISHED());
-        }
-
-        $favorite = $this->getFavoriteDao()->getByUserIdAndCourseId($user['id'], $course['id'], 'openCourse');
-
-        if ($favorite) {
-            $this->createNewException(OpenCourseException::DUPLICATE_FAVOR());
-        }
-
-        //添加动态
-        $this->dispatchEvent(
-            'open.course.favorite',
-            new Event($course)
-        );
-
-        $this->getFavoriteDao()->create(array(
-            'courseId' => $course['id'],
-            'userId' => $user['id'],
-            'createdTime' => time(),
-            'type' => 'openCourse',
-        ));
-
-        $courseFavoriteNum = $this->getFavoriteDao()->count(array(
-            'courseId' => $courseId,
-            'type' => 'openCourse',
-        ));
-
-        return $courseFavoriteNum;
-    }
-
-    public function unFavoriteCourse($courseId)
-    {
-        $user = $this->getCurrentUser();
-
-        if (empty($user['id'])) {
-            $this->createNewException(UserException::UN_LOGIN());
-        }
-
-        $course = $this->getCourse($courseId);
-
-        if (empty($course)) {
-            $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
-        }
-
-        $favorite = $this->getFavoriteDao()->getByUserIdAndCourseId($user['id'], $course['id'], 'openCourse');
-
-        if (empty($favorite)) {
-            $this->createNewException(OpenCourseException::CANCEL_UN_FAVOR());
-        }
-
-        $this->getFavoriteDao()->delete($favorite['id']);
-
-        $courseFavoriteNum = $this->getFavoriteDao()->count(array(
-            'courseId' => $courseId,
-            'type' => 'openCourse',
-        ));
-
-        return $courseFavoriteNum;
-    }
-
-    public function getFavoriteByUserIdAndCourseId($userId, $courseId, $type)
-    {
-        return $this->getFavoriteDao()->getByUserIdAndCourseId($userId, $courseId, $type);
-    }
-
     public function getLessonItems($courseId)
     {
-        $lessons = $this->searchLessons(array('courseId' => $courseId), array('seq' => 'ASC'), 0, 1);
+        $lessons = $this->searchLessons(['courseId' => $courseId], ['seq' => 'ASC'], 0, 1);
 
-        $items = array();
+        $items = [];
 
         foreach ($lessons as $lesson) {
             $lesson['itemType'] = 'lesson';
@@ -492,7 +410,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function createLesson($lesson)
     {
-        $lesson = ArrayToolkit::filter($lesson, array(
+        $lesson = ArrayToolkit::filter($lesson, [
             'courseId' => 0,
             'chapterId' => 0,
             'seq' => 0,
@@ -500,7 +418,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'title' => '',
             'summary' => '',
             'type' => 'text',
-            'media' => array(),
+            'media' => [],
             'content' => '',
             'mediaId' => 0,
             'mediaName' => '',
@@ -515,10 +433,10 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'testStartTime' => 0,
             'status' => 'unpublished',
             'mediaSource' => '',
-        ));
+        ]);
         $lesson['replayStatus'] = 'ungenerated';
 
-        if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
+        if (!ArrayToolkit::requireds($lesson, ['courseId', 'title', 'type'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
@@ -532,7 +450,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
         }
 
-        if (!in_array($lesson['type'], array('video', 'liveOpen', 'open'))) {
+        if (!in_array($lesson['type'], ['video', 'liveOpen', 'open'])) {
             $this->createNewException(OpenCourseException::LESSON_TYPE_INVALID());
         }
 
@@ -554,7 +472,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', 1);
         }
 
-        $this->dispatchEvent('open.course.lesson.create', array('lesson' => $lesson));
+        $this->dispatchEvent('open.course.lesson.create', ['lesson' => $lesson]);
 
         return $lesson;
     }
@@ -573,11 +491,11 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->createNewException(OpenCourseException::NOTFOUND_LESSON());
         }
 
-        $fields = ArrayToolkit::filter($fields, array(
+        $fields = ArrayToolkit::filter($fields, [
             'title' => '',
             'summary' => '',
             'content' => '',
-            'media' => array(),
+            'media' => [],
             'mediaId' => 0,
             'mediaSource' => '',
             'mediaName' => '',
@@ -597,7 +515,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'replayStatus' => 'ungenerated',
             'status' => 'unpublished',
             'materialNum' => 0,
-        ));
+        ]);
 
         if (isset($fields['title'])) {
             $fields['title'] = $this->purifyHtml($fields['title']);
@@ -616,14 +534,14 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $updatedLesson = $this->getOpenCourseLessonDao()->update($lessonId, $fields);
 
         $updatedLesson['fields'] = $lesson;
-        $this->dispatchEvent('open.course.lesson.update', array('lesson' => $updatedLesson, 'sourceLesson' => $lesson));
+        $this->dispatchEvent('open.course.lesson.update', ['lesson' => $updatedLesson, 'sourceLesson' => $lesson]);
 
         return $updatedLesson;
     }
 
     public function waveCourseLesson($id, $field, $diff)
     {
-        return $this->getOpenCourseLessonDao()->wave(array($id), array($field => $diff));
+        return $this->getOpenCourseLessonDao()->wave([$id], [$field => $diff]);
     }
 
     public function deleteLesson($id)
@@ -632,7 +550,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $result = $this->getOpenCourseLessonDao()->delete($id);
 
-        $this->dispatchEvent('open.course.lesson.delete', array('lesson' => $lesson));
+        $this->dispatchEvent('open.course.lesson.delete', ['lesson' => $lesson]);
 
         return $result;
     }
@@ -650,16 +568,16 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
 
-        $lessonFields = array(
+        $lessonFields = [
             'mediaId' => $file['id'],
             'mediaName' => $file['filename'],
             'mediaSource' => 'self',
             'replayStatus' => 'videoGenerated',
-        );
+        ];
 
         $updatedLesson = $this->getOpenCourseLessonDao()->update($lessonId, $lessonFields);
 
-        $this->dispatchEvent('open.course.lesson.generate.video.replay', array('lesson' => $updatedLesson));
+        $this->dispatchEvent('open.course.lesson.generate.video.replay', ['lesson' => $updatedLesson]);
 
         return $lesson;
     }
@@ -683,11 +601,11 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->createNewException(OpenCourseException::NOTFOUND_LESSON());
         }
 
-        $conditions = array(
+        $conditions = [
             'number' => $lesson['number'] + 1,
             'courseId' => $courseId,
-        );
-        $orderBy = array('seq' => 'ASC');
+        ];
+        $orderBy = ['seq' => 'ASC'];
         $nextLessons = $this->searchLessons($conditions, $orderBy, 0, 1);
 
         return array_shift($nextLessons);
@@ -703,7 +621,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->createNewException(OpenCourseException::NOTFOUND_LESSON());
         }
 
-        $publishedLesson = $this->getOpenCourseLessonDao()->update($lesson['id'], array('status' => 'published'));
+        $publishedLesson = $this->getOpenCourseLessonDao()->update($lesson['id'], ['status' => 'published']);
 
         $this->dispatchEvent('open.course.lesson.publish', $publishedLesson);
 
@@ -720,9 +638,9 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->createNewException(OpenCourseException::NOTFOUND_LESSON());
         }
 
-        $lesson = $this->getOpenCourseLessonDao()->update($lesson['id'], array('status' => 'unpublished'));
+        $lesson = $this->getOpenCourseLessonDao()->update($lesson['id'], ['status' => 'unpublished']);
 
-        $this->dispatchEvent('open.course.lesson.unpublish', array('lesson' => $lesson));
+        $this->dispatchEvent('open.course.lesson.unpublish', ['lesson' => $lesson]);
 
         return $lesson;
     }
@@ -731,7 +649,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     {
         $lesson = $this->getLesson($lessonId);
         if ($lesson) {
-            $this->getOpenCourseLessonDao()->update($lesson['id'], array('mediaId' => 0));
+            $this->getOpenCourseLessonDao()->update($lesson['id'], ['mediaId' => 0]);
 
             return true;
         }
@@ -762,7 +680,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             ++$lessonNum;
 
             $item = $items[$itemId];
-            $fields = array('number' => $lessonNum, 'seq' => $seq);
+            $fields = ['number' => $lessonNum, 'seq' => $seq];
 
             if ($fields['number'] != $item['number'] || $fields['seq'] != $item['seq']) {
                 $this->updateLesson($courseId, $item['id'], $fields);
@@ -780,11 +698,11 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $thisStartTime = $thisEndTime = 0;
 
-        $conditions = array();
+        $conditions = [];
 
         if ($lessonId) {
             $liveLesson = $this->getCourseLesson($course['id'], $lessonId);
-            $conditions['lessonIdNotIn'] = array($lessonId);
+            $conditions['lessonIdNotIn'] = [$lessonId];
         } else {
             $lessonId = '';
         }
@@ -799,14 +717,14 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $thisLessons = $this->getOpenCourseLessonDao()->findTimeSlotOccupiedLessonsByCourseId($courseId, $startTime, $endTime, $lessonId);
 
         if (($length / 60) > 8) {
-            return array('error_timeout', '时长不能超过8小时！');
+            return ['error_timeout', '时长不能超过8小时！'];
         }
 
         if ($thisLessons) {
-            return array('error_occupied', '该时段内已有直播课时存在，请调整直播开始时间');
+            return ['error_occupied', '该时段内已有直播课时存在，请调整直播开始时间'];
         }
 
-        return array('success', '');
+        return ['success', ''];
     }
 
     public function findFinishedLivesWithinTwoHours()
@@ -821,12 +739,12 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             return;
         }
 
-        if (!in_array($status, array(EdusohoLiveClient::LIVE_STATUS_LIVING, EdusohoLiveClient::LIVE_STATUS_CLOSED, EdusohoLiveClient::LIVE_STATUS_PAUSE))) {
+        if (!in_array($status, [EdusohoLiveClient::LIVE_STATUS_LIVING, EdusohoLiveClient::LIVE_STATUS_CLOSED, EdusohoLiveClient::LIVE_STATUS_PAUSE])) {
             $this->createNewException(OpenCourseException::STATUS_INVALID());
         }
 
-        $updateLesson = $this->getOpenCourseLessonDao()->update($lesson['id'], array('progressStatus' => $status));
-        $this->getLogService()->info(AppLoggerConstant::OPEN_COURSE, 'update_live_status', "公开课修改直播进行状态，由‘{$lesson['progressStatus']}’改为‘{$status}’", array('preLesson' => $lesson, 'newLesson' => $updateLesson));
+        $updateLesson = $this->getOpenCourseLessonDao()->update($lesson['id'], ['progressStatus' => $status]);
+        $this->getLogService()->info(AppLoggerConstant::OPEN_COURSE, 'update_live_status', "公开课修改直播进行状态，由‘{$lesson['progressStatus']}’改为‘{$status}’", ['preLesson' => $lesson, 'newLesson' => $updateLesson]);
 
         return $updateLesson;
     }
@@ -871,7 +789,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function setCourseTeachers($courseId, $teachers)
     {
-        $teacherMembers = array();
+        $teacherMembers = [];
 
         foreach (array_values($teachers) as $index => $teacher) {
             if (empty($teacher['id'])) {
@@ -884,14 +802,14 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
 
-            $teacherMembers[] = array(
+            $teacherMembers[] = [
                 'courseId' => $courseId,
                 'userId' => $user['id'],
                 'role' => 'teacher',
                 'seq' => $index,
                 'isVisible' => empty($teacher['isVisible']) ? 0 : 1,
                 'createdTime' => time(),
-            );
+            ];
         }
 
         $existTeacherMembers = $this->findCourseTeachers($courseId);
@@ -900,7 +818,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->getOpenCourseMemberDao()->delete($member['id']);
         }
 
-        $visibleTeacherIds = array();
+        $visibleTeacherIds = [];
 
         foreach ($teacherMembers as $member) {
             $existMember = $this->getCourseMember($courseId, $member['userId']);
@@ -916,7 +834,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             }
         }
 
-        $fields = array('teacherIds' => $visibleTeacherIds);
+        $fields = ['teacherIds' => $visibleTeacherIds];
         $course = $this->updateCourse($courseId, $fields);
     }
 
@@ -935,14 +853,14 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $newMember = $this->getOpenCourseMemberDao()->create($member);
 
-        $this->dispatchEvent('open.course.member.create', array('argument' => $member, 'newMember' => $newMember));
+        $this->dispatchEvent('open.course.member.create', ['argument' => $member, 'newMember' => $newMember]);
 
         return $newMember;
     }
 
     public function updateMember($id, $member)
     {
-        $member = ArrayToolkit::filter($member, array(
+        $member = ArrayToolkit::filter($member, [
             'userId' => 0,
             'learnedNum' => '',
             'learnTime' => '',
@@ -953,7 +871,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'seq' => 0,
             'isVisible' => 1,
             'isNotified' => 0,
-        ));
+        ]);
 
         return $this->getOpenCourseMemberDao()->update($id, $member);
     }
@@ -970,13 +888,13 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $beginToday = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
         $endToday = mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')) - 1;
         $openLessons = $this->searchLessons(
-            array('type' => 'liveOpen', 'startTimeGreaterThan' => $beginToday, 'endTimeLessThan' => $endToday, 'status' => 'published'),
-            array(),
+            ['type' => 'liveOpen', 'startTimeGreaterThan' => $beginToday, 'endTimeLessThan' => $endToday, 'status' => 'published'],
+            [],
             0,
             PHP_INT_MAX
         );
         foreach ($openLessons as $openLesson) {
-            $members = $this->searchMembers(array('courseId' => $openLesson['courseId'], 'role' => 'teacher'), array(), 0, PHP_INT_MAX);
+            $members = $this->searchMembers(['courseId' => $openLesson['courseId'], 'role' => 'teacher'], [], 0, PHP_INT_MAX);
             $userIds = ArrayToolkit::column($members, 'userId');
             if (empty($userIds) || !in_array($user['id'], $userIds)) {
                 continue;
@@ -992,29 +910,29 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function findOpenLiveCourse($conditions, $userId)
     {
-        $openLiveCourses = array();
+        $openLiveCourses = [];
         $openLessons = $this->searchLessons(
-            array('type' => 'liveOpen', 'startTimeGreaterThan' => $conditions['startTime_GE'], 'endTimeLessThan' => $conditions['endTime_LT'], 'status' => 'published'),
-            array(),
+            ['type' => 'liveOpen', 'startTimeGreaterThan' => $conditions['startTime_GE'], 'endTimeLessThan' => $conditions['endTime_LT'], 'status' => 'published'],
+            [],
             0,
             PHP_INT_MAX
         );
         foreach ($openLessons as $openLesson) {
-            $members = $this->searchMembers(array('courseId' => $openLesson['courseId'], 'role' => 'teacher'), array(), 0, PHP_INT_MAX);
+            $members = $this->searchMembers(['courseId' => $openLesson['courseId'], 'role' => 'teacher'], [], 0, PHP_INT_MAX);
             $userIds = ArrayToolkit::column($members, 'userId');
             if (empty($userIds) || !in_array($userId, $userIds)) {
                 continue;
             }
             $openCourse = $this->getCourse($openLesson['courseId']);
             if (!empty($openCourse) && 'published' == $openCourse['status']) {
-                $openLiveCourse = array(
+                $openLiveCourse = [
                     'title' => $openCourse['title'],
                     'event' => $openCourse['title'],
                     'id' => $openCourse['id'],
                     'startTime' => date('Y-m-d H:i:s', $openLesson['startTime']),
                     'endTime' => date('Y-m-d H:i:s', $openLesson['endTime']),
                     'date' => date('w', $openLesson['startTime']),
-                );
+                ];
                 array_push($openLiveCourses, $openLiveCourse);
             }
         }
@@ -1022,7 +940,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $openLiveCourses;
     }
 
-    public function countLiveCourses($conditions = array())
+    public function countLiveCourses($conditions = [])
     {
         $lessonConditions = $this->_prepareLiveCourseLessonConditions($conditions);
 
@@ -1034,36 +952,36 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $lessons = $this->getOpenCourseLessonDao()->searchLessonsWithOrderBy($lessonConditions, 0, $total);
 
-        $courseConditions = array(
+        $courseConditions = [
             'type' => 'liveOpen',
             'status' => 'published',
             'parentId' => 0,
             'ids' => ArrayToolkit::column($lessons, 'courseId'),
             'categoryId' => empty($conditions['categoryId']) ? '' : $conditions['categoryId'],
             'titleLike' => empty($conditions['title']) ? '' : $conditions['title'],
-        );
+        ];
 
         return $this->countCourses($courseConditions);
     }
 
-    public function searchAndSortLiveCourses($conditions = array(), $start, $limit)
+    public function searchAndSortLiveCourses($conditions = [], $start, $limit)
     {
         if (empty($conditions)) {
-            return array();
+            return [];
         }
 
         if (!empty($conditions['title']) || !empty($conditions['categoryId'])) {
-            $courseConditions = array(
+            $courseConditions = [
                 'type' => 'liveOpen',
                 'status' => 'published',
                 'parentId' => 0,
                 'categoryId' => empty($conditions['categoryId']) ? '' : $conditions['categoryId'],
                 'titleLike' => empty($conditions['title']) ? '' : $conditions['title'],
-            );
+            ];
 
             $total = $this->countCourses($courseConditions);
 
-            $courses = $this->searchCourses($courseConditions, array(), 0, $total);
+            $courses = $this->searchCourses($courseConditions, [], 0, $total);
 
             $courses = ArrayToolkit::index($courses, 'id');
 
@@ -1072,7 +990,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $lessons = $this->getOpenCourseLessonDao()->searchLessonsWithOrderBy($this->_prepareLiveCourseLessonConditions($conditions), $start, $limit);
 
-        $results = array();
+        $results = [];
         foreach ($lessons as $lesson) {
             if (isset($conditions['courseIds']) && empty($courses[$lesson['courseId']])) {
                 continue;
@@ -1080,7 +998,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
             $course = !empty($courses[$lesson['courseId']]) ? $courses[$lesson['courseId']] : $this->getCourse($lesson['courseId']);
 
-            if ($course['status'] != 'published') {
+            if ('published' != $course['status']) {
                 continue;
             }
 
@@ -1093,9 +1011,9 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     protected function _prepareLiveCourseLessonConditions($conditions)
     {
-        $defaultConditions = array('categoryId' => '', 'isReplay' => 0, 'limitDays' => 0, 'courseIds' => array());
+        $defaultConditions = ['categoryId' => '', 'isReplay' => 0, 'limitDays' => 0, 'courseIds' => []];
         $conditions = ArrayToolkit::filter($conditions, $defaultConditions);
-        $conditions = array_merge(array('type' => 'liveOpen', 'status' => 'published', 'parentId' => 0), $conditions);
+        $conditions = array_merge(['type' => 'liveOpen', 'status' => 'published', 'parentId' => 0], $conditions);
 
         if (!empty($conditions['isReplay'])) {
             $conditions['endTimeLessThan'] = time();
@@ -1121,7 +1039,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         if ($lessons) {
             foreach ($lessons as $key => $lesson) {
-                $this->dispatchEvent('open.course.lesson.delete', array('lesson' => $lesson));
+                $this->dispatchEvent('open.course.lesson.delete', ['lesson' => $lesson]);
             }
         }
     }
@@ -1145,7 +1063,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     protected function _filterCourseFields($fields)
     {
-        $fields = ArrayToolkit::filter($fields, array(
+        $fields = ArrayToolkit::filter($fields, [
             'title' => '',
             'subtitle' => '',
             'about' => '',
@@ -1164,7 +1082,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'smallPicture' => '',
             'middlePicture' => '',
             'largePicture' => '',
-            'teacherIds' => array(),
+            'teacherIds' => [],
             'recommended' => 0,
             'recommendedSeq' => 0,
             'recommendedTime' => 0,
@@ -1172,7 +1090,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'updateTime' => time(),
             'orgCode' => '1.',
             'orgId' => '1',
-        ));
+        ]);
 
         if (isset($fields['tags'])) {
             if (!empty($fields['tags'])) {
@@ -1182,7 +1100,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
                     $item = (int) $item['id'];
                 });
             } else {
-                $fields['tags'] = array();
+                $fields['tags'] = [];
             }
         }
 
@@ -1226,7 +1144,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         if (isset($conditions['categoryId']) && !empty($conditions['categoryId'])) {
             $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
-            $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+            $conditions['categoryIds'] = array_merge([$conditions['categoryId']], $childrenIds);
             unset($conditions['categoryId']);
         }
 
@@ -1241,7 +1159,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     private function _getNextLessonNumber($courseId)
     {
-        $lessonCount = $this->countLessons(array('courseId' => $courseId));
+        $lessonCount = $this->countLessons(['courseId' => $courseId]);
 
         return $lessonCount + 1;
     }
@@ -1255,13 +1173,13 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     private function _deleteNotUsedPictures($course)
     {
-        $oldPictures = array(
+        $oldPictures = [
             'smallPicture' => $course['smallPicture'] ? $course['smallPicture'] : null,
             'middlePicture' => $course['middlePicture'] ? $course['middlePicture'] : null,
             'largePicture' => $course['largePicture'] ? $course['largePicture'] : null,
-        );
+        ];
 
-        $courseCount = $this->countCourses(array('smallPicture' => $course['smallPicture']));
+        $courseCount = $this->countCourses(['smallPicture' => $course['smallPicture']]);
 
         if ($courseCount <= 1) {
             $fileService = $this->getFileService();
@@ -1275,11 +1193,11 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function findCourseTeachers($courseId)
     {
-        $conditions = array(
+        $conditions = [
             'courseId' => $courseId,
             'role' => 'teacher',
-        );
-        $orders = array('seq' => 'DESC', 'createdTime' => 'DESC');
+        ];
+        $orders = ['seq' => 'DESC', 'createdTime' => 'DESC'];
 
         return $this->getOpenCourseMemberDao()->search($conditions, $orders, 0, 100);
     }
@@ -1316,14 +1234,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     protected function getOpenCourseMemberDao()
     {
         return $this->createDao('OpenCourse:OpenCourseMemberDao');
-    }
-
-    /**
-     * @return FavoriteDao
-     */
-    protected function getFavoriteDao()
-    {
-        return $this->createDao('Course:FavoriteDao');
     }
 
     /**

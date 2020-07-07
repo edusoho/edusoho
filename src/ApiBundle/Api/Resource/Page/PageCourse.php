@@ -2,10 +2,10 @@
 
 namespace ApiBundle\Api\Resource\Page;
 
-use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Annotation\ApiConf;
-use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ResponseFilter;
+use ApiBundle\Api\ApiRequest;
+use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 
 class PageCourse extends AbstractResource
@@ -23,14 +23,14 @@ class PageCourse extends AbstractResource
         $user = $this->getCurrentUser();
         $member = null;
         if (!empty($user['id'])) {
-            $apiRequest = new ApiRequest('/api/me/course_members/'.$courseId, 'GET', array());
+            $apiRequest = new ApiRequest('/api/me/course_members/'.$courseId, 'GET', []);
             $member = $this->invokeResource($apiRequest);
         }
         $course['member'] = $member;
         $course['learnedCompulsoryTaskNum'] = empty($member) ? 0 : $member['learnedCompulsoryTaskNum'];
 
-        $this->getOCUtil()->single($course, array('creator', 'teacherIds'));
-        $this->getOCUtil()->single($course, array('courseSetId'), 'courseSet');
+        $this->getOCUtil()->single($course, ['creator', 'teacherIds']);
+        $this->getOCUtil()->single($course, ['courseSetId'], 'courseSet');
         $course['access'] = $this->getCourseService()->canJoinCourse($courseId);
 
         $course['courseItems'] = $this->container->get('api.util.item_helper')->convertToLeadingItemsV2(
@@ -45,27 +45,58 @@ class PageCourse extends AbstractResource
         $course['courses'] = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSet']['id']);
         $course['courses'] = ArrayToolkit::sortPerArrayValue($course['courses'], 'seq');
         $course['progress'] = $this->getLearningDataAnalysisService()->makeProgress($course['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
+        $course['reviews'] = $this->searchCourseReviews($course['id']);
 
-        $reviews = $this->getCourseReviewService()->searchReviews(
-            array('courseSetId' => $course['courseSet']['id'], 'private' => 0, 'parentId' => 0),
-            array('updatedTime' => 'DESC'),
-            0, self::DEFAULT_DISPLAY_COUNT
-        );
-
-        $this->getOCUtil()->multiple($reviews, array('userId'));
-        $this->getOCUtil()->multiple($reviews, array('courseId'), 'course');
-        foreach ($reviews as &$review) {
-            $review['posts'] = $this->getCourseReviewService()->searchReviews(array('parentId' => $review['id']), array('updatedTime' => 'DESC'), 0, self::DEFAULT_DISPLAY_COUNT);
-            $this->getOCUtil()->multiple($review['posts'], array('userId'));
-            $this->getOCUtil()->multiple($review['posts'], array('courseId'), 'course');
-        }
-        $course['reviews'] = $reviews;
         if ($this->isPluginInstalled('vip') && $course['vipLevelId'] > 0) {
-            $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$course['vipLevelId'], 'GET', array());
+            $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$course['vipLevelId'], 'GET', []);
             $course['vipLevel'] = $this->invokeResource($apiRequest);
         }
 
         return $course;
+    }
+
+    protected function searchCourseReviews($courseId)
+    {
+        $reviews = $this->invokeResource(new ApiRequest(
+            '/api/reviews',
+            'GET',
+            [
+                'targetType' => 'course',
+                'targetId' => $courseId,
+                'parentId' => 0,
+                'offset' => 0,
+                'limit' => self::DEFAULT_DISPLAY_COUNT,
+                'orderBys' => ['updatedTime' => 'DESC'],
+            ]
+        ));
+
+        $this->getOCUtil()->multiple($reviews, ['userId']);
+        $this->getOCUtil()->multiple($reviews, ['targetId'], 'course');
+
+        foreach ($reviews as &$review) {
+            $review['posts'] = $this->invokeResource(new ApiRequest(
+                '/api/reviews',
+                'GET',
+                [
+                    'parentId' => $review['id'],
+                    'offset' => 0,
+                    'limit' => self::DEFAULT_DISPLAY_COUNT,
+                    'orderBys' => ['updatedTime' => 'DESC'],
+                ]
+            ));
+            $this->getOCUtil()->multiple($review['posts'], ['userId']);
+            $this->getOCUtil()->multiple($review['posts'], ['targetId'], 'course');
+
+            array_filter($review['posts'], function (&$post) {
+                $post['course'] = $post['target'];
+                unset($post['target']);
+            });
+
+            $review['course'] = $review['target'];
+            unset($review['target']);
+        }
+
+        return $reviews;
     }
 
     private function getCourseService()
@@ -91,10 +122,5 @@ class PageCourse extends AbstractResource
     private function getLearningDataAnalysisService()
     {
         return $this->service('Course:LearningDataAnalysisService');
-    }
-
-    private function getCourseReviewService()
-    {
-        return $this->service('Course:ReviewService');
     }
 }

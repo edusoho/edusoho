@@ -169,7 +169,7 @@
           <ul class="clearfix">
             <!--营销页显示-->
             {% if marketingPage %}
-              <li class="js-unfavorite-btn {% if not isUserFavorite %}hidden{% endif %}" id="unfavorite-btn" data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}">
+              <li class="js-unfavorite-btn {% if not isUserFavorite %}hidden{% endif %}" id="unfavorite-btn" data-target-type="course" data-target-id="{{ course.courseSetId }}">
                 <a class="color-primary" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.followed'|trans }}"
                   data-trigger="hover">
                   <i class="es-icon es-icon-favorite color-primary"></i>
@@ -177,7 +177,7 @@
                   {{ 'course.status.followed'|trans }}
                 </a>
               </li>
-              <li class="js-favorite-btn {% if isUserFavorite %}hidden{% endif %}" id="favorite-btn" data-url="{{ path('course_set_favorite', {id: course.courseSetId }) }}">
+              <li class="js-favorite-btn {% if isUserFavorite %}hidden{% endif %}" id="favorite-btn" data-target-type="course" data-target-id="{{ course.courseSetId }}">
                 <a class="" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.follow'|trans }}"
                   data-trigger="hover">
                   <i class="es-icon es-icon-favoriteoutline"></i>
@@ -221,11 +221,11 @@
           <!--营销页显示-->
           {# 收藏图标设置 #}
           {% if marketingPage %}
-            <li class="js-unfavorite-btn mrl {% if not isUserFavorite %}hidden {% endif %}" id="unfavorite-btn" data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}">
+            <li class="js-unfavorite-btn mrl {% if not isUserFavorite %}hidden {% endif %}" id="unfavorite-btn" data-target-type="course" data-target-id="{{ course.courseSetId }}">
               <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-favorite color-danger course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'course.status.followed'|trans }}</span>
               </a>
             </li>
-            <li class="js-favorite-btn mrl {% if isUserFavorite %}hidden{% endif %}" id="favorite-btn" data-url="{{ path('course_set_favorite', {id: course.courseSetId }) }}">
+            <li class="js-favorite-btn mrl {% if isUserFavorite %}hidden{% endif %}" id="favorite-btn" data-target-type="course" data-target-id="{{ course.courseSetId }}">
               <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-favoriteoutline course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'course.status.follow'|trans }}</span>
               </a>
             </li>

@@ -4,7 +4,6 @@ namespace Biz\Group\Service;
 
 use Biz\System\Annotation\Log;
 
-// TODO refactor. use Thread.
 interface ThreadService
 {
     public function getThread($id);
@@ -13,19 +12,9 @@ interface ThreadService
 
     public function countThreads($conditions);
 
-    public function searchThreadCollects($conditions, $orderBy, $start, $limit);
-
-    public function countThreadCollects($conditions);
-
     public function searchPostsThreadIds($conditions, $orderBy, $start, $limit);
 
     public function countPostsThreadIds($conditions);
-
-    public function isCollected($userId, $threadId);
-
-    public function threadCollect($userId, $threadId);
-
-    public function unThreadCollect($userId, $threadId);
 
     public function getThreadsByIds($ids);
 
