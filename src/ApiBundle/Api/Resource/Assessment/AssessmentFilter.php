@@ -3,10 +3,15 @@
 namespace ApiBundle\Api\Resource\Assessment;
 
 use ApiBundle\Api\Resource\Filter;
+use ApiBundle\Api\Resource\Item\ItemFilter;
 
 class AssessmentFilter extends Filter
 {
-    protected $publicFields = array(
+    protected $simpleFields = [
+        'id', 'name', 'description', 'question_count', 'total_score',
+    ];
+
+    protected $publicFields = [
         'id',
         'bank_id',
         'displayable',
@@ -21,28 +26,19 @@ class AssessmentFilter extends Filter
         'created_time',
         'updated_time',
         'sections',
-    );
+    ];
 
     protected function publicFields(&$assessment)
     {
+        $itemFilter = new ItemFilter();
         $assessment['description'] = $this->convertAbsoluteUrl($assessment['description']);
         foreach ($assessment['sections'] as &$section) {
-            foreach ($section['items'] as &$item) {
-                !empty($item['material']) && $item['material'] = $this->convertAbsoluteUrl($item['material']);
-                !empty($item['analysis']) && $item['analysis'] = $this->convertAbsoluteUrl($item['analysis']);
-                foreach ($item['questions'] as &$question) {
-                    !empty($question['stem']) && $question['stem'] = $this->convertAbsoluteUrl($question['stem']);
-                    !empty($question['analysis']) && $question['analysis'] = $this->convertAbsoluteUrl($question['analysis']);
-                    empty($question['response_points']) && $question['response_points'] = array();
-                    foreach ($question['response_points'] as &$point) {
-                        !empty($point['checkbox']['text']) && $point['checkbox']['text'] = $this->convertAbsoluteUrl($point['checkbox']['text']);
-                        !empty($point['radio']['text']) && $point['radio']['text'] = $this->convertAbsoluteUrl($point['radio']['text']);
-                    }
-                    foreach ($question['answer'] as &$answer) {
-                        !empty($answer) && $answer = $this->convertAbsoluteUrl($answer);
-                    }
-                }
-            }
+            $itemFilter->filters($section['items']);
         }
+    }
+
+    protected function simpleFields(&$assessment)
+    {
+        $assessment['description'] = $this->convertAbsoluteUrl($assessment['description']);
     }
 }

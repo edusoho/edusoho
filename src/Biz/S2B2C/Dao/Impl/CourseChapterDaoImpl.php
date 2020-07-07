@@ -9,9 +9,9 @@ class CourseChapterDaoImpl extends BaseCourseChapterDaoImpl implements CourseCha
 {
     public function getByCourseIdAndSyncId($courseId, $syncId)
     {
-        return $this->getByFields(array(
+        return $this->getByFields([
             'courseId' => $courseId,
             'syncId' => $syncId,
-        ));
+        ]);
     }
 }

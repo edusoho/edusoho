@@ -81,7 +81,7 @@ class TranslationJsDumperCommand extends BaseCommand
 
         foreach ($files as $filename) {
             list($domain, $locale, $extension) = $this->getFileInfo($filename);
-            if ('js' != $domain || 'yml' != $extension) {
+            if (!in_array($domain, ['js', 'messages']) || 'yml' != $extension) {
                 continue;
             }
 

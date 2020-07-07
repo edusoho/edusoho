@@ -5,10 +5,10 @@ namespace ApiBundle\Api\Resource\Task;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\DeviceToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\MemberException;
 use Biz\Task\TaskException;
-use AppBundle\Common\DeviceToolkit;
 
 class TaskLiveTicket extends AbstractResource
 {
@@ -26,7 +26,7 @@ class TaskLiveTicket extends AbstractResource
         }
 
         $user = $this->getCurrentUser();
-        $params = array();
+        $params = [];
         $params['id'] = $user['id'];
         $params['nickname'] = $user['nickname'].'_'.$user['id'];
         $params['role'] = 'student';

@@ -1,8 +1,8 @@
 {% extends 'course-manage/layout.html.twig' %}
 
-{% block title %}{{'course.plan_base_info'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
+{% block title %}{{ 'course.plan_base_info'|trans }} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set course_side_nav = 'info' %}
-{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/bootstrap-datetimepicker.js', 'libs/select2.js', 'libs/perfect-scrollbar.js', 'app/js/course-manage/info/index.js']) %}
+{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/select2.js', 'libs/perfect-scrollbar.js', 'libs/vue.js', 'app/js/course-manage/info/index.js', 'libs/element-ui.js']) %}
 
 {% block page_title %}{{ 'course.plan_base_info'|trans }}{% endblock %}
 {% block paddingClass %}course-manage-body course-manage-info js-course-manage-info{% endblock %}
@@ -12,49 +12,77 @@
   {% set hasMulCourses = has_mul_courses(courseSet.id) %}
   <input type="hidden" id="s2b2c_enabled" value="{{ is_s2b2c_enabled() }}">
   {#添加admin_v2#}
-  {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or ('ROLE_TEACHER' in app.user.roles and setting('course.teacher_manage_marketing', 0) == 1) or has_permission('admin_course_content_manage') or has_permission('admin_v2_course_content_manage')%}
-    <form class="form-horizontal" role="form" id="course-info-form" action="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
-      {# 课程基础信息 #}
-      {% if is_un_multi_courseset(courseSet.id) %}
-        <div class="course-manage-subltitle cd-mb40">{{ 'course.base_info'|trans }}</div>
-        {% include 'courseset-manage/base-info/info.html.twig' with {form: 'course-info-form', button:'course-submit'} %}
-      {% endif %}
+  {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or ('ROLE_TEACHER' in app.user.roles and setting('course.teacher_manage_marketing', 0) == 1) or has_permission('admin_course_content_manage') or has_permission('admin_v2_course_content_manage') %}
+    {# 课程基础信息 #}
+    {#    {% if is_un_multi_courseset(courseSet.id) %}#}
+    {#      <div class="course-manage-subltitle cd-mb40">{{ 'course.base_info'|trans }}</div>#}
+    {#      {% include 'courseset-manage/base-info/info.html.twig' with {form: 'course-info-form', button:'course-submit'} %}#}
+    {#    {% endif %}#}
+    {% set wechatSetting = setting('wechat')|default([]) %}
+    {% if wechatSetting.templates.courseRemind|default('') and  wechatSetting.templates.courseRemind.status|default(0) %}
+      {% set courseRemindSendDays = get_days(wechatSetting.templates.courseRemind.sendDays) %}
+    {% else %}
+      {% set courseRemindSendDays = '' %}
+    {% endif %}
 
-      {# 计划基础信息 #}
-      {% if hasMulCourses %}
-        <div class="course-manage-subltitle cd-mb40">{{ 'course.base_info'|trans }}</div>
-        {% include 'course-manage/base-info/title.html.twig' %}
-      {% endif %}
-      
-      {# 营销设置 #}
-      <div class="course-manage-subltitle cd-mb40">{{ 'course.marketing_setup'|trans }}</div>
-      <div role="course-marketing-info">
-        {% include 'course-manage/base-info/marketing.html.twig' %}
-      </div>
+    {% set can_free_activity_types = can_free_activity_types() %}
 
-      {# 基础规则 #}
-      <div class="course-manage-subltitle cd-mb40">{{ 'course.base_setup.rules'|trans }}</div>
-      <div role="course-base-rule">
-        {% include 'course-manage/base-info/rule.html.twig' %}
-      </div>
-      
-      <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-8">
-          <button id="course-submit" type="button" class="cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
-          <div id="test"></div>
+    {% set freeTaskChangelog = '' %}
+    {% for key, changelog in courseProduct.changelog|default() %}
+      {% if changelog['freeTasks']|default() %}
+        {% if freeTaskChangelog %}{% set freeTaskChangelog = freeTaskChangelog ~ '<br>' %}{% endif %}
+        {% set freeTaskChangelog = freeTaskChangelog ~ 'merchant.content_resource.product_version'|trans ~ key ~ '-' ~ 's2b2c.course_product.free_tasks'|trans ~ ':<br>' %}
+        {% set freeTaskChangelog = freeTaskChangelog~ changelog['freeTasks'] %}
+      {% endif %}
+    {% endfor %}
+
+    {# 计划基础信息 #}
+    <div id="app"
+         data-course-manage-url="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id}) }}"
+         data-is-un-multi-course-set="{{ is_un_multi_courseset(courseSet.id) }}"
+         data-course="{{ course|json_encode }}"
+         data-course-set="{{ courseSet|default([])|json_encode }}"
+         data-has-mul-courses="{{ hasMulCourses }}"
+         data-lesson-watch-limit="{{ setting('magic.lesson_watch_limit') }}"
+         data-has-role-admin="{{ is_granted('ROLE_ADMIN') }}"
+         data-wechat-setting="{{ wechatSetting|json_encode }}"
+         data-has-wechat-notification-manage-role="{{ has_permission('admin_operation_wechat_notification_manage') or has_permission('admin_v2_operation_wechat_notification_manage') }}"
+         data-wechat-manage-url="{{ setting('backstage.is_v2',0)  == 0 ? path('admin_wechat_notification_manage') : path('admin_v2_wechat_notification_manage') }}"
+         data-live-capacity-url="{{ path('course_set_live_capacity', {courseSetId: courseSet.id, courseId: course.id}) }}"
+         data-content-course-rule-url="{{ path('content_course_rule') }}"
+         data-free-tasks="{{ freeTasks|json_encode }}"
+         data-can-free-tasks="{{ canFreeTasks|json_encode }}"
+         data-task-name="{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}"
+         data-activity-metas="{{ activity_metas()|json_encode }}"
+         data-course-remind-send-days="{{ courseRemindSendDays }}"
+         data-upload-mode="{{ setting('storage.upload_mode', 'local') }}"
+         data-service-tags="{{ services(course.services|default([]))|json_encode }}"
+         data-audio-service-status="{{ audioServiceStatus }}"
+         data-video-convert-completion="{{ video_convert_completion(course.id) }}"
+         data-course-set-manage-files-url="{{ path('course_set_manage_files', { id: courseSet['id'] }) }}"
+         data-course-product="{{ courseProduct|json_encode }}"
+         data-notifies="{{ notifies|json_encode }}"
+         data-can-modify-course-price="{{ s2b2c_has_behaviour_permission('canModifyCoursePrice') }}"
+         data-buy-before-approval="{{ setting('magic.buy_before_approval') }}"
+         data-can-free-activity-types="{{ can_free_activity_types|join('word.seperator'|trans) }}"
+         data-free-task-changelog="{{ freeTaskChangelog }}"
+         data-tags="{{ tags|json_encode }}" ,
+         data-image-save-url="{{ path('course_set_manage_cover_crop', {id: courseSet.id}) }}"
+         data-image-src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}"
+         data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
+         data-vip-installed="{{ vipInstalled }}"
+         data-vip-enabled="{{ setting('vip.enabled') }}"
+         data-vip-levels="{{ vipLevels|json_encode }}"
+    ></div>
+
+    {% if not hasMulCourses and courseSet.type == 'normal' %}
+      <div class="course-manage-intro js-plan-intro hidden">
+        <div class="course-manage-intro__outer js-plan-intro-btn">
+          <div class="course-manage-intro__inner"><i class="es-icon es-icon-zhinan"></i></div>
         </div>
+        <div class="mtm course-manage-intro__tip">{{ 'course.base_plan_intro'|trans }}</div>
       </div>
-
-      {% if not hasMulCourses and courseSet.type == 'normal' %}
-        <div class="course-manage-intro js-plan-intro hidden">
-          <div class="course-manage-intro__outer js-plan-intro-btn">
-            <div class="course-manage-intro__inner"><i class="es-icon es-icon-zhinan"></i></div>
-          </div>
-          <div class="mtm course-manage-intro__tip">{{ 'course.base_plan_intro'|trans }}</div>
-        </div>
-      {% endif %}
-      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-    </form>
+    {% endif %}
   {% else %}
     <div class="cd-alert cd-alert-danger">{{ 'course.marketing_setup.no_permission_tips'|trans }}</div>
   {% endif %}

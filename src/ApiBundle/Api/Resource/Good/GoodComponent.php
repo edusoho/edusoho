@@ -2,16 +2,30 @@
 
 namespace ApiBundle\Api\Resource\Good;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 
 class GoodComponent extends AbstractResource
 {
+    /**
+     * @param $id
+     * @param $component
+     *
+     * @return object
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function get(ApiRequest $request, $id, $component)
     {
         return (object) ['teachers' => $this->getMockedComponents($component)];
     }
 
+    /**
+     * @param $id
+     *
+     * @return array
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function search(ApiRequest $request, $id)
     {
         $componentTypes = $request->query->get('componentTypes', []);
@@ -61,6 +75,12 @@ class GoodComponent extends AbstractResource
                     'user' => [
                         'id' => 10,
                         'nickname' => '小兵张嘎',
+                        'title' => '',
+                        'smallAvatar' => 'http://try6.edusoho.cn/files/user/2020/06-15/1741586de969821923.jpg',
+                        'mediumAvatar' => 'http://try6.edusoho.cn/files/user/2020/06-15/1741586ddefc650434.jpg',
+                        'largeAvatar' => 'http://try6.edusoho.cn/files/user/2020/06-15/1741586dd258161303.jpg',
+                        'uuid' => '3dfd51f26077d3c1e6b3b40286b6a968d65ad502',
+                        'destroyed' => '0',
                     ],
                     'content' => '不错的课程',
                     'rating' => '4',
@@ -74,6 +94,12 @@ class GoodComponent extends AbstractResource
                     'user' => [
                         'id' => 11,
                         'nickname' => '小兵张嘎',
+                        'title' => '',
+                        'smallAvatar' => 'http://try6.edusoho.cn/files/user/2020/06-15/1741586de969821923.jpg',
+                        'mediumAvatar' => 'http://try6.edusoho.cn/files/user/2020/06-15/1741586ddefc650434.jpg',
+                        'largeAvatar' => 'http://try6.edusoho.cn/files/user/2020/06-15/1741586dd258161303.jpg',
+                        'uuid' => '3dfd51f26077d3c1e6b3b40286b6a968d65ad502',
+                        'destroyed' => '0',
                     ],
                     'content' => '很棒的课程',
                     'rating' => '5',

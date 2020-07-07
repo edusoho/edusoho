@@ -2,15 +2,15 @@
 
 namespace ApiBundle\Api\Resource\Course;
 
+use ApiBundle\Api\Resource\Exercise\ExerciseFilter;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\Homework\HomeworkFilter;
-use ApiBundle\Api\Resource\Exercise\ExerciseFilter;
 
 class CourseTaskMediaFilter extends Filter
 {
-    protected $publicFields = array(
+    protected $publicFields = [
         'mediaType', 'media', 'format',
-    );
+    ];
 
     protected function publicFields(&$data)
     {

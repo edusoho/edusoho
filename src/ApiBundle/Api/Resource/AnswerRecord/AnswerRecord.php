@@ -17,10 +17,13 @@ class AnswerRecord extends AbstractResource
         }
 
         if (empty($answerRecord['answer_report_id'])) {
-            return (object) array();
+            return (object) [];
         }
 
         $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+        $answerReportFilter = new AnswerReportFilter();
+        $answerReportFilter->filter($answerReport);
+
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
         $assessmentFilter = new AssessmentFilter();
         $assessmentFilter->filter($assessment);

@@ -1,4 +1,5 @@
 {% extends 'v2/layout.html.twig' %}
+{% set needJsMessages = 1 %}
 
 {% block full_content %}
   {% block top_content %}
@@ -26,4 +27,9 @@
       {% endblock %}
     </div>
   </div>
+{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link href="/static-dist/libs/element-ui/dist/index.css" rel="stylesheet">
 {% endblock %}
