@@ -21,6 +21,12 @@ export default {
       content: "" // 评价内容
     }
   },
+  props: {
+    currentPlan: {
+      type: Object,
+      default: () => {}
+    }
+  },
   computed: {
     rating() {
       let floorScore = Math.floor(this.num);
@@ -66,7 +72,7 @@ export default {
         method: "POST",
         data: {
           'targetType': 'goods',
-          'targetId': 1,
+          'targetId': this.currentPlan.id,
           'content': content,
           'rating': this.num
         },

@@ -31,7 +31,7 @@
         <!-- 学员评价 -->
         <div id="info-left-3" class="info-left-reviews content-item js-content-item">
           <h3 class="content-item__title">学员评价</h3>
-          <info-left-reviews :reviews="componentsData.reviews"></info-left-reviews>
+          <info-left-reviews :reviews="componentsData.reviews" :currentPlan="currentPlan"></info-left-reviews>
         </div>
       </div>
     </div>
@@ -48,10 +48,10 @@
 
 <script>
   import axios from 'axios';
-  import infoRightTeacher from './info-right-teacher'; // 授课老师
-  import infoRightQr from './info-right-qr'; // 二维码
-  import infoRightLearn from './info-right-learn';  // 猜你想学
-  import infoLeftReviews from './info-left-reviews'; // 评价
+  import infoRightTeacher from './components/info-right-teacher'; // 授课老师
+  import infoRightQr from './components/info-right-qr'; // 二维码
+  import infoRightLearn from './components/info-right-learn';  // 猜你想学
+  import infoLeftReviews from './components/info-left-reviews'; // 评价
   import ClassroomTask from './classroom-task'; // 学习课程
   export default {
     data() {
@@ -74,6 +74,10 @@
       },
       description: {
         type: String
+      },
+      currentPlan: {
+        type: Object,
+        default: () => {}
       }
     },
     computed: {

@@ -2,13 +2,13 @@
   <div class="cd-container">
     <div class="product-breadcrumb">首页 / 艺术学概论</div>
     <product-detail :detailData="componentsData" :currentPlan="currentPlan" @changePlan="changePlan"></product-detail>
-    <course-info :hasExtension="componentsData.hasExtension" :description="componentsData.description"></course-info>
+    <course-info :hasExtension="componentsData.hasExtension" :currentPlan="currentPlan" :description="componentsData.description"></course-info>
   </div>
 </template>
 
 <script>
   import axios from 'axios';
-  import ProductDetail from './product-detail';
+  import ProductDetail from './components/product-detail';
   import CourseInfo from './course-info';
   export default {
     data() {
