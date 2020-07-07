@@ -6,8 +6,6 @@ use ApiBundle\Api\Resource\SyncProductNotify\NotifyEvent;
 
 interface SupplierProductNotifyService
 {
-    public function setProductHasNewVersion($params);
-
     public function refreshProductsStatus($params);
 
     /**

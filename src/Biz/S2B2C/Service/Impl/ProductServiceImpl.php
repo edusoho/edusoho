@@ -320,7 +320,7 @@ class ProductServiceImpl extends BaseService implements ProductService
         $job = [
             'name' => 'productUpdateVersion',
             'class' => 'Biz\S2B2C\Job\UpdateProductVersionJob',
-            'expression' => '0 2 * * *',
+            'expression' => time(), //'0 2 * * *',
             'args' => '',
             'misfire_threshold' => 300,
             'misfire_policy' => 'executing',
@@ -424,6 +424,7 @@ class ProductServiceImpl extends BaseService implements ProductService
      * @param $s2b2cProductId
      * @param $resourceCourseId
      * @param array $versionData ['title', 'version', 'courseId', 'versionChangeLog']
+     *
      * @return bool
      */
     public function notifyNewVersionProduct($s2b2cProductId, $resourceCourseId, $versionData)
@@ -463,11 +464,11 @@ class ProductServiceImpl extends BaseService implements ProductService
 
         $this->beginTransaction();
 
-        try{
+        try {
             $this->getCourseProductService()->updateProductVersionData($product['remoteProductId']);
             $this->commit();
-        }catch (\Exception $exception) {
-            $this->getLogger()->error('[updateProductVersion] 更新失败 ' . $exception->getMessage());
+        } catch (\Exception $exception) {
+            $this->getLogger()->error('[updateProductVersion] 更新失败 '.$exception->getMessage());
             $this->rollback();
             throw $this->createServiceException('更新失败');
         }
