@@ -3536,6 +3536,10 @@ item_bank_exercise_manage_assessment_module_delete:
     path: /item_bank_exercise/{exerciseId}/assessment/module/{moduleId}/delete
     defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:deleteModule}
 
+item_bank_exercise_manage_assessment_module_delete_check:
+    path: /item_bank_exercise/{exerciseId}/assessment/module/{moduleId}/delete_check
+    defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:deleteCheck}
+
 item_bank_exercise_manage_assessment_exercise_open:
     path: /item_bank_exercise/{exerciseId}/manage/assessment_exercise/open
     defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:open}

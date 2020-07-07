@@ -9049,6 +9049,7 @@ exception.item_bank_exercise.expirystartdate_required: Validity period start dat
 exception.item_bank_exercise.expirydate_end_later_than_start: Validity period end date cannot be earlier than the start date
 exception.item_bank_exercise.expirymode_invalid: Validity type error
 exception.item_bank_exercise.assessment_exercise_exist: The test paper has been saved in this module, please do not add it repeatedly
+exception.item_bank_exercise.module.not_empty_number: Please keep at least one module
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.
