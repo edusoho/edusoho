@@ -76,6 +76,7 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
     {
         if ('supplier' == $file['storage']) {
             $fileInfo = $this->getS2B2CFileSourceService()->getFullFileInfo($file);
+
             return $this->getS2B2CFacadeService()->getS2B2CService()->getProductResourceJWTPlayToken($fileInfo['globalId'], $lifetime, $payload);
         }
 
