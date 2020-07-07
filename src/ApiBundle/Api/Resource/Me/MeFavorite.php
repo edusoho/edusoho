@@ -9,11 +9,9 @@ use Biz\Favorite\Service\FavoriteService;
 
 class MeFavorite extends AbstractResource
 {
-    public function search(ApiRequest $request)
+    public function get(ApiRequest $request, $targetId)
     {
         $targetType = $request->query->get('targetType');
-        $targetId = $request->query->get('targetId');
-
         if (empty($targetType) || empty($targetId)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
