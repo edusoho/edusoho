@@ -5,14 +5,14 @@
       <ul class="detail-left__text clearfix">
         <li class="pull-left"><i class="es-icon es-icon-friends"></i>{{ currentPlan.joinedNum }}人加入学习</li>
         <li class="pull-right">
-          <span class="detail-left__text-share"><i class="es-icon es-icon-share"></i>分享</span>
+          <span class="detail-left__text-share" style="cursor: pointer;"><i class="es-icon es-icon-share"></i>分享</span>
           <template v-if="isFavorite">
-            <span @click="onFavorite" style="color: #FF7E56;">
+            <span @click="onFavorite" style="color: #FF7E56;" class="detail-hover-span">
               <i class="es-icon es-icon-favorite" style="color: #FF7E56;"></i>已收藏
             </span>
           </template>
           <template v-else>
-            <span @click="onFavorite">
+            <span @click="onFavorite" class="detail-hover-span">
               <i class="es-icon es-icon-favoriteoutline"></i>收藏
             </span>
           </template>

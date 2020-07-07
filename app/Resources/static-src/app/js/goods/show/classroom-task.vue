@@ -19,5 +19,6 @@
         </div>
       </div>
     </div>
+    <div class="learn-more"><a href="javascript:;">查看更多<i class="es-icon es-icon-chevronright"></i></a></div>
   </div>
 </template>

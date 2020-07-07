@@ -282,6 +282,7 @@
     padding: 16px;
     height: 122px;
     box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
     .border-radius(4px);
     .task-banner {
       position: absolute;
@@ -336,6 +337,10 @@
       }
     }
   }
+  .learn-more {
+    margin-top: 24px;
+    text-align: center;
+  }
 }
 
 .back-to-top-pc {
@@ -365,7 +370,7 @@
 // 创建评价
 .create-review {
   .create-review__grade {
-
+    margin-bottom: 12px;
   }
   .create-review__content {
     width: 100%;
@@ -373,5 +378,32 @@
     border: 1px solid rgba(225, 225, 225, 1);
     outline: none;
     .border-radius(4px);
+  }
+  .create-review__btn {
+    text-align: right;
+    span {
+      display: inline-block;
+      width: 60px;
+      height: 32px;
+      .border-radius(4px);
+      text-align: center;
+      line-height: 32px;
+      cursor: pointer;
+      .es-transition;
+    }
+    .btn-cancel {
+      background-color: #ebebeb;
+      color: #999;
+      &:hover {
+        background: rgba(206, 209, 207, 0.7);
+      }
+    }
+    .btn-confirm {
+      background: rgba(70, 195, 123, 1);
+      color: #fff;
+      &:hover {
+        background: rgba(70, 195, 123, .7);
+      }
+    }
   }
 }
