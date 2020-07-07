@@ -420,17 +420,27 @@ class ProductServiceImpl extends BaseService implements ProductService
         return true;
     }
 
-    public function notifyNewVersionProduct($s2b2cProductId, $resourceCourseId, $version)
+    /**
+     * @param $s2b2cProductId
+     * @param $resourceCourseId
+     * @param array $versionData ['title', 'version', 'courseId', 'versionChangeLog']
+     * @return bool
+     */
+    public function notifyNewVersionProduct($s2b2cProductId, $resourceCourseId, $versionData)
     {
         $product = $this->getByProductIdAndRemoteResourceIdAndType($s2b2cProductId, $resourceCourseId, 'course');
 
         if (!empty($product)) {
-            $this->getS2B2CProductDao()->update($product['id'], ['remoteVersion' => $version]);
+            $this->getS2B2CProductDao()->update($product['id'], ['remoteVersion' => $versionData['version']]);
         }
         $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
 
         $courseSetProduct = $this->getProductBySupplierIdAndRemoteProductIdAndType($s2b2cConfig['supplierId'], $s2b2cProductId, 'course_set');
 
+        $localChangeLogs = $courseSetProduct['changelog'] ?: [];
+        $localChangeLogs[$versionData['courseId']] = $versionData;
+
+        $this->getS2B2CProductDao()->update($courseSetProduct['id'], ['changelog' => $localChangeLogs]);
         $this->getS2B2CProductDao()->wave([$courseSetProduct['id']], ['remoteVersion' => 1]);
 
         return true;

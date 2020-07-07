@@ -227,6 +227,15 @@ class S2B2CService extends BaseService
         return $this->sendRequest('getDistributeProduct', array());
     }
 
+    private $getProducVersionstUri = '/distribute/product/{productDetailId}/versions';
+
+    public function getDistributeProductVersions($productDetailId)
+    {
+        $this->uri = str_replace('{productDetailId}', $productDetailId, $this->getProducVersionstUri);
+
+        return $this->sendRequest('getDistributeProductVersions', array());
+    }
+
     private $getDistributeContentUri = '/distribute/content';
 
     public function getDistributeContent($productDetailId)

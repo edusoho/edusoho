@@ -182,7 +182,7 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
      */
     protected function newVersionEvent($notifyEvent)
     {
-        return $this->getProductService()->notifyNewVersionProduct($notifyEvent->getProductId(), $notifyEvent->getData('courseId'), $notifyEvent->getData('version'));
+        return $this->getProductService()->notifyNewVersionProduct($notifyEvent->getProductId(), $notifyEvent->getData('courseId'), $notifyEvent->getData());
     }
 
     /**

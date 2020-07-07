@@ -56,7 +56,7 @@ interface ProductService
 
     public function adoptProduct($s2b2cProductId);
 
-    public function notifyNewVersionProduct($s2b2cProductId, $resourceCourseId, $version);
+    public function notifyNewVersionProduct($s2b2cProductId, $resourceCourseId, $versionData);
 
     public function findUpdateVersionProductList();
 

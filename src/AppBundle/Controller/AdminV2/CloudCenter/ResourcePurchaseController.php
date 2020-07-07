@@ -150,25 +150,25 @@ class ResourcePurchaseController extends BaseController
         return $productVersionList;
     }
 
-    public function productVersionDetailAction(Request $request, $productId)
+    public function productVersionDetailAction(Request $request, $remoteSourceId)
     {
-        $product = $this->getS2B2CProductService()->getProduct($productId);
-        $course = $this->getCourseService()->getCourse($product['localResourceId']);
-        if (empty($course)) {
-            throw $this->createNotFoundException();
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+        $product = $this->getS2B2CProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($s2b2cConfig['supplierId'], $remoteSourceId, 'course');
+
+        if (empty($product)) {
+            throw $this->createNotFoundException('需先更新至本地');
         }
 
-        $productVersions = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getProductVersions($product['remoteResourceId']);
-        if (!empty($productVersions['error']) || (!empty($productVersions) && $product['remoteResourceId'] != $productVersions[0]['productId'])) {
-            throw $this->createNotFoundException();
+        $productVersions = $this->getS2B2CFacadeService()->getS2B2CService()->getDistributeProductVersions($product['s2b2cProductDetailId']);
+
+        if (empty($productVersions['status'])) {
+            throw $this->createNotFoundException('未找到版本信息');
         }
-//        $versionChangeLogs = $this->getProductService()->generateVersionChangeLogs($course['sourceVersion'], $productVersions);
-//        $this->getProductService()->setCourseNewVersionChangeLogs($course['id'], $versionChangeLogs);
 
         return $this->render(
             'admin-v2/cloud-center/content-resource/product-version/detail.html.twig',
             [
-                'productVersions' => $productVersions,
+                'productVersions' => $productVersions['data'],
             ]
         );
     }

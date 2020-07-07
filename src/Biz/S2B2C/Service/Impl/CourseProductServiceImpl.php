@@ -164,7 +164,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             }
         }
 
-        $this->getProductService()->updateProduct($courseSetProduct['id'], ['localVersion' => $courseSetProduct['remoteVersion']]);
+        $this->getProductService()->updateProduct($courseSetProduct['id'], ['localVersion' => $courseSetProduct['remoteVersion'], 'changelog' => []]);
 
         return true;
     }
