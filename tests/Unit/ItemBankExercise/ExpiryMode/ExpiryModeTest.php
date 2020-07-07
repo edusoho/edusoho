@@ -1,38 +1,75 @@
 <?php
 
-namespace Biz\ItemBankExercise\ExpiryMode;
+namespace Tests\Unit\ItemBankExercise\ExpiryMode;
 
-abstract class ExpiryMode
+use Biz\BaseTestCase;
+use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
+use Biz\ItemBankExercise\ExpiryMode\ExpiryModeFactory;
+use Biz\ItemBankExercise\Service\ExerciseService;
+
+class ExpiryModeTest extends BaseTestCase
 {
-    abstract public function validateExpiryMode($exercise);
-
-    abstract public function getDeadline($exercise);
-
-    abstract public function canUpdateDeadline($expiryMode);
-
-    abstract public static function isExpired($exercise);
-
-    public static function filterUpdateExpiryInfo($exercise, $fields)
+    public function testFilterUpdateExpiryInfo()
     {
-        if (in_array($exercise['status'], ['published', 'closed'])) {
-            //发布或者关闭，不允许修改模式，但是允许修改时间
-            unset($fields['expiryMode']);
-            if ('published' == $exercise['status']) {
-                //发布后，不允许修改时间
-                unset($fields['expiryDays']);
-                unset($fields['expiryStartDate']);
-                unset($fields['expiryEndDate']);
-            }
-        }
+        $exercise = $this->createExercise();
+        $fields = [
+            'expiryDays' => 0,
+            'expiryStartDate' => 0,
+            'expiryEndDate' => 0,
+        ];
+        $res = ExpiryModeFactory::create($exercise['expiryMode'])->filterUpdateExpiryInfo($exercise, $fields);
 
-        return $fields;
+        $this->assertEquals($fields['expiryDays'], $res['expiryDays']);
+        $this->assertEquals($fields['expiryStartDate'], $res['expiryStartDate']);
+        $this->assertEquals($fields['expiryEndDate'], $res['expiryEndDate']);
     }
 
-    public static function getDeadlineByWaveType($originDeadline, $waveType, $day)
+    public function testGetDeadlineByWaveType()
     {
-        $originDeadline = $originDeadline > 0 ? $originDeadline : time();
-        $deadline = 'plus' == $waveType ? $originDeadline + $day * 24 * 60 * 60 : $originDeadline - $day * 24 * 60 * 60;
+        $exercise = $this->createExercise();
+        $member = $this->getExerciseMemberDao()->create(
+            [
+                'exerciseId' => $exercise['id'],
+                'questionBankId' => 1,
+                'userId' => 1,
+                'role' => 'student',
+                'remark' => 'aaa',
+                'deadline' => 0,
+            ]
+        );
+        $except = time() + 1 * 24 * 60 * 60;
+        $res = ExpiryModeFactory::create($exercise['expiryMode'])->getDeadlineByWaveType($member['deadline'], 'plus', 1);
 
-        return $deadline;
+        $this->assertEquals($except, $res);
+    }
+
+    private function createExercise()
+    {
+        return $this->getExerciseService()->create(
+            [
+                'id' => 1,
+                'title' => 'test',
+                'questionBankId' => 1,
+                'categoryId' => 1,
+                'seq' => 1,
+                'expiryMode' => 'forever',
+            ]
+        );
+    }
+
+    /**
+     * @return ExerciseMemberDao
+     */
+    protected function getExerciseMemberDao()
+    {
+        return $this->createDao('ItemBankExercise:ExerciseMemberDao');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getExerciseService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseService');
     }
 }
