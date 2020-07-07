@@ -26,4 +26,7 @@ module.exports = {
   host: {
     url: "http://es-dev.com"
   },
+  t5: {
+    url: "http://www.t5.edusoho.cn",
+  }
 }['host'];

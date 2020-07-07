@@ -17,18 +17,10 @@
       </div>
 
       <div v-if="!isFinish">
-        <div
-          class="web-view--btn"
-          v-if="enableFinish"
-          @click="toLearned"
-        >
+        <div class="web-view--btn" v-if="enableFinish" @click="toLearned">
           学过了
         </div>
-        <div
-          class="web-view--btn"
-          v-if="!enableFinish"
-          @click="toToast"
-        >
+        <div class="web-view--btn" v-if="!enableFinish" @click="toToast">
           完成条件
         </div>
       </div>
@@ -61,7 +53,7 @@ export default {
       enableFinish: false,
       media: "",
       isPreview: this.$route.query.preview,
-      finishResult:null,
+      finishResult: null,
       finishDialog: false, //下一课时弹出模态框
       courseId: null,
       taskId: null,
@@ -142,43 +134,43 @@ export default {
               taskId
             },
             params: {
-              preview: 1
+              preview: 1,
+              version:'escloud'
             }
           }
         : {
             query: {
               courseId,
               taskId
+            },
+            params: {
+              version:'escloud'
             }
           };
     },
     initPlayer(playerParams) {
       const media = playerParams.media;
+      // const playerSDKUri ="//service-cdn.qiqiuyun.net/js-sdk/sdk-v1.js?v="
+      // + parseInt(Date.now() / 1000 / 60);
       const playerSDKUri =
-        "//service-cdn.qiqiuyun.net/js-sdk/sdk-v1.js?v=" +
-        // const playerSDKUri = '//oilgb9e2p.qnssl.com/js-sdk/sdk-v1.js?v=' // 测试 sdk
-        parseInt(Date.now() / 1000 / 60);
-
+        "//service-cdn.qiqiuyun.net/js-sdk-v2/sdk-v1.js?" +
+        ~~(Date.now() / 1000 / 60);
       loadScript(playerSDKUri, err => {
         if (err) throw err;
 
         const player = new window.QiQiuYun.Player({
           id: "player", // 用于初始化的DOM节点id
-          // playServer: 'play.test.qiqiuyun.cn', // 测试 playServer
-          resNo: media.resId, // 想要播放的资源编号
-          token: media.token, // 请求播放的认证token
+          resNo: media.resNo, // 想要播放的资源编号
+          token:media.token,
           source: {
             type: playerParams.mediaType,
             args: media
           }
         });
         this.player = player;
-        player.on("ready", () => {
-          // this.intervalReportData();
-          // this.intervalReportLearnTime();
-        });
+        player.on("ready", () => {});
         player.on("pagechanged", e => {
-          if (e.pageNum === e.total) {
+          if (e.page === e.total) {
             if (this.finishCondition && this.finishCondition.type === "end") {
               this.reprtData("finish");
             }
@@ -188,7 +180,7 @@ export default {
     },
     toLearned() {
       this.reprtData("finish").then(res => {
-        this.finishResult=res;
+        this.finishResult = res;
         this.finishDialog = true;
       });
     },
