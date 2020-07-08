@@ -5,8 +5,6 @@ namespace AppBundle\Controller\AdminV2\Teach;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
-use Biz\ItemBankExercise\Service\AssessmentExerciseService;
-use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\QuestionBankService;

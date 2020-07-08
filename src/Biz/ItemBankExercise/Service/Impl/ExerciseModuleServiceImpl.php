@@ -97,7 +97,7 @@ class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleSer
 
     public function deleteAssessmentModule($moduleId)
     {
-        try{
+        try {
             $this->beginTransaction();
 
             $this->getItemBankExerciseModuleDao()->delete($moduleId);
