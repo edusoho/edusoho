@@ -4237,6 +4237,7 @@ admin.course_manage.recommend.name: 'Course Name'
 admin.course_manage.recommend.creator: Creator
 admin.course_manage.recommend.time: 'Recommended At'
 admin.course_manage.recommend.empty: 'No record'
+admin.course_manage.item_bank_exercise.recommend.empty: 'No record'
 admin.course_manage.recommend.category: Category
 admin.course_manage.recommend.set_seq_btn: 'SN Setting'
 admin.course_manage.recommend.cancel_seq_btn: 'Cancel Recomment'

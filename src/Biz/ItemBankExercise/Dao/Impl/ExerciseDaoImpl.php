@@ -109,6 +109,7 @@ class ExerciseDaoImpl extends AdvancedDaoImpl implements ExerciseDao
                 'status = :status',
                 'studentNum = :studentNum',
                 'categoryId = :categoryId',
+                'recommended = :recommended',
             ],
         ];
     }
