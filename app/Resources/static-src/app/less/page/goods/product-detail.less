@@ -1,0 +1,181 @@
+.product-detail {
+  padding: 32px 32px 16px 32px;
+  margin-top: 16px;
+  background-color: #fff;
+  .product-detail__left {
+    width: 43.165%;
+    @media (max-width: 767px) {
+      width: 100%;
+    }
+    img {
+      width: 100%;
+    }
+    .detail-left__text {
+      padding: 0;
+      margin-top: 16px;
+      margin-bottom: 0;
+      list-style: none;
+      color: #999;
+      .detail-left__text-share {
+        margin-right: 12px;
+      }
+      i {
+        margin-right: 4px;
+      }
+    }
+  }
+  .product-detail__right {
+    position: relative;
+    width: 53.957%;
+    @media (max-width: 767px) {
+      margin-top: 24px;
+      width: 100%;
+    }
+    p {
+      margin: 0;
+    }
+    .detail-right__title {
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 28px;
+      color: #333;
+    }
+    .detail-right__subtitle {
+      line-height: 20px;
+      color: #999;
+    }
+    // 价格
+    .detail-right__price {
+      margin-top: 12px;
+      margin-bottom: 12px;
+      .detail-right__price__activities {
+        padding: 6px 16px;
+        line-height: 20px;
+        color: #fff;
+        font-weight: 500;
+        background: -moz-linear-gradient(270deg, rgba(255, 166, 119, 1) 0%, rgba(255, 92, 59, 1) 100%);
+        background: -ms-linear-gradient(270deg, rgba(255, 166, 119, 1) 0%, rgba(255, 92, 59, 1) 100%);
+        background: -webkit-linear-gradient(270deg, rgba(255, 166, 119, 1) 0%, rgba(255, 92, 59, 1) 100%);
+        background: linear-gradient(270deg, rgba(255, 166, 119, 1) 0%, rgba(255, 92, 59, 1) 100%);
+        filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr="#FFA677", endColorstr="#FF5C3B", gradientType="1");
+        .border-radius(4px 4px 0px 0px);
+      }
+      .detail-right__price__num {
+        padding-left: 30px;
+        height: 68px;
+        background-color: #f9f9f9;
+        color: #666;
+        line-height: 68px;
+        span {
+          margin-left: 24px;
+          font-size: 28px;
+          color: #FF5C3B;
+          font-weight: 600;
+          &:after {
+            content: '元';
+            color: #666;
+            font-size: 14px;
+            font-weight: normal;
+          }
+        }
+        s {
+          margin-left: 9px;
+        }
+        @media (max-width: 767px) {
+          padding-left: 16px;
+          span {
+            margin-left: 10px;
+            font-size: 24px;
+          }
+        }
+      }
+    }
+    // 教学计划
+    .detail-right__plan {
+      margin-top: 24px;
+      .plan-title {
+        position: relative;
+        top: 4px;
+        margin-right: 24px;
+        width: 70px;
+        text-align: right;
+        color: #666;
+      }
+      .plan-btns {
+        width: calc(100% - 94px);
+        .plan-btns__item {
+          display: inline-block;
+          padding: 4px 8px;
+          margin-right: 14px;
+          margin-bottom: 12px;
+          border: 1px solid #bebebe;
+          line-height: 20px;
+          color: #999;
+          .border-radius(4px);
+          cursor: pointer;
+          &:hover,
+          &.active {
+            background: rgba(70, 195, 123, 0.1);
+            border: 1px solid rgba(70, 195, 123, 1);
+            color: #46C37B;
+          }
+        }
+      }
+    }
+    // 学习有效期
+    .detail-right__validity {
+      .validity-title {
+        position: relative;
+        top: 2px;
+        margin-right: 24px;
+        width: 70px;
+        text-align: right;
+        color: #666;
+      }
+      .validity-content {
+        color: #333;
+      }
+    }
+    // 承诺服务
+    .detail-right__promise {
+      margin-top: 12px;
+      margin-bottom: 16px;
+      .promise-title {
+        margin-right: 24px;
+        width: 70px;
+        text-align: right;
+        color: #666;
+      }
+      .promise-content {
+        width: calc(100% - 94px);
+        .promise-content__item {
+          display: inline-block;
+          margin-right: 8px;
+          padding: 2px 5px;
+          background-color: #46C37B;
+          .border-radius(2px);
+          color: #fff;
+        }
+      }
+    }
+    // 立即购买
+    .product-detail__btn {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      padding: 6px 24px;
+      width: 104px;
+      height: 32px;
+      font-weight: 500;
+      color: #fff;
+      background-color: #FF7E56;
+      line-height: 20px;
+      cursor: pointer;
+      .border-radius(4px);
+      @media (max-width: 767px) {
+        position: static;
+        margin: 0 auto;
+      }
+    }
+  }
+}
