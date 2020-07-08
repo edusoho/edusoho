@@ -13,11 +13,8 @@ use Biz\ItemBankExercise\ItemBankExerciseMemberException;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\ItemBankExercise\Service\MemberOperationRecordService;
-use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\System\Service\LogService;
-use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserService;
-use Codeages\Biz\Order\Service\OrderService;
 
 class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberService
 {
@@ -147,7 +144,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         $expiryMode = ExpiryModeFactory::create($exercise['expiryMode']);
         foreach ($userIds as $userId) {
             $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
-            $deadline = $expiryMode->getUpdateDeadline($exercise, $member, $setting);
+            $deadline = $expiryMode->getUpdateDeadline($member, $setting);
             $this->getExerciseMemberDao()->update($member['id'], ['deadline' => $deadline]);
         }
     }
@@ -218,25 +215,11 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         return $record;
     }
 
-    protected function createOrder($exerciseId, $userId, $data)
-    {
-        $courseProduct = $this->getOrderFacadeService()->getOrderProduct('exercise', ['targetId' => $exerciseId]);
-
-        $params = [
-            'created_reason' => $data['remark'],
-            'source' => $data['source'],
-            'create_extra' => $data,
-            'deducts' => empty($data['deducts']) ? [] : $data['deducts'],
-        ];
-
-        return $this->getOrderFacadeService()->createSpecialOrder($courseProduct, $userId, $params);
-    }
-
     protected function recordLog($exercise, $userId, $info)
     {
         $user = $this->getUserService()->getUser($userId);
         $this->getLogService()->info(
-            'course',
+            'question_bank',
             'add_student',
             "《{$exercise['title']}》(#{$exercise['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$info['remark']}",
             [
@@ -258,35 +241,11 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
     }
 
     /**
-     * @return NotificationService
-     */
-    private function getNotificationService()
-    {
-        return $this->createService('User:NotificationService');
-    }
-
-    /**
      * @return MemberOperationRecordService
      */
     protected function getMemberOperationRecordService()
     {
         return $this->biz->service('ItemBankExercise:MemberOperationRecordService');
-    }
-
-    /**
-     * @return OrderService
-     */
-    protected function getOrderService()
-    {
-        return $this->createService('Order:OrderService');
-    }
-
-    /**
-     * @return OrderFacadeService
-     */
-    protected function getOrderFacadeService()
-    {
-        return $this->createService('OrderFacade:OrderFacadeService');
     }
 
     /**

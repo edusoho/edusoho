@@ -242,7 +242,16 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     private function processFields($exercise, $fields)
     {
-        $fields = ExpiryModeFactory::create($exercise['expiryMode'])->filterUpdateExpiryInfo($exercise, $fields);
+        if (in_array($exercise['status'], ['published', 'closed'])) {
+            //发布或者关闭，不允许修改模式，但是允许修改时间
+            unset($fields['expiryMode']);
+            if ('published' == $exercise['status']) {
+                //发布后，不允许修改时间
+                unset($fields['expiryDays']);
+                unset($fields['expiryStartDate']);
+                unset($fields['expiryEndDate']);
+            }
+        }
 
         if (empty($fields['price']) || $fields['price'] <= 0) {
             $fields['isFree'] = 1;

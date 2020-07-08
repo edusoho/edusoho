@@ -2,6 +2,8 @@
 
 namespace Biz\ItemBankExercise\ExpiryMode;
 
+use AppBundle\Common\TimeMachine;
+
 abstract class ExpiryMode
 {
     abstract public function validateExpiryMode($exercise);
@@ -10,21 +12,15 @@ abstract class ExpiryMode
 
     abstract public function isExpired($exercise);
 
-    abstract public function getUpdateDeadline($exercise, $member, $setting);
-
-    public static function filterUpdateExpiryInfo($exercise, $fields)
+    public function getUpdateDeadline($member, $setting)
     {
-        if (in_array($exercise['status'], ['published', 'closed'])) {
-            //发布或者关闭，不允许修改模式，但是允许修改时间
-            unset($fields['expiryMode']);
-            if ('published' == $exercise['status']) {
-                //发布后，不允许修改时间
-                unset($fields['expiryDays']);
-                unset($fields['expiryStartDate']);
-                unset($fields['expiryEndDate']);
-            }
+        if ('day' == $setting['updateType']) {
+            $originDeadline = $member['deadline'] > 0 ? $member['deadline'] : time();
+            $deadline = 'plus' == $setting['waveType'] ? $originDeadline + $setting['day'] * 24 * 60 * 60 : $originDeadline - $setting['day'] * 24 * 60 * 60;
+        } else {
+            $deadline = TimeMachine::isTimestamp($setting['deadline']) ? $setting['deadline'] : strtotime($setting['deadline'].' 23:59:59');
         }
 
-        return $fields;
+        return $deadline;
     }
 }

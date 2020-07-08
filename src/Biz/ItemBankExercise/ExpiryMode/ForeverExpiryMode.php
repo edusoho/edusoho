@@ -32,7 +32,7 @@ class ForeverExpiryMode extends ExpiryMode
         return false;
     }
 
-    public function getUpdateDeadline($exercise, $member, $setting)
+    public function getUpdateDeadline($member, $setting)
     {
         return TimeMachine::isTimestamp($setting['deadline']) ? $setting['deadline'] : strtotime($setting['deadline'].' 23:59:59');
     }

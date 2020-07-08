@@ -500,6 +500,7 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'create_category',
                 'delete_category',
                 'update_category',
+                'add_student',
             ),
             self::DESTROY_ACCOUNT_RECORD => array(
                 'create',

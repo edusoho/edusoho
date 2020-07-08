@@ -9,19 +9,16 @@ use Biz\ItemBankExercise\Service\ExerciseService;
 
 class ExpiryModeTest extends BaseTestCase
 {
-    public function testFilterUpdateExpiryInfo()
+    public function testGetUpdateDeadline()
     {
         $exercise = $this->createExercise();
-        $fields = [
-            'expiryDays' => 0,
-            'expiryStartDate' => 0,
-            'expiryEndDate' => 0,
-        ];
-        $res = ExpiryModeFactory::create($exercise['expiryMode'])->filterUpdateExpiryInfo($exercise, $fields);
+        $res = ExpiryModeFactory::create($exercise['expiryMode'])->getUpdateDeadline(
+            $exercise,
+            ['deadline' => 0],
+            ['deadline' => time(), 'updateType' => 'deadline']
+        );
 
-        $this->assertEquals($fields['expiryDays'], $res['expiryDays']);
-        $this->assertEquals($fields['expiryStartDate'], $res['expiryStartDate']);
-        $this->assertEquals($fields['expiryEndDate'], $res['expiryEndDate']);
+        $this->assertEquals(time(), $res);
     }
 
     private function createExercise()
@@ -33,7 +30,9 @@ class ExpiryModeTest extends BaseTestCase
                 'questionBankId' => 1,
                 'categoryId' => 1,
                 'seq' => 1,
-                'expiryMode' => 'forever',
+                'expiryMode' => 'date',
+                'expiryStartDate' => strtotime('-1day'),
+                'expiryEndDate' => strtotime('+1day'),
             ]
         );
     }
