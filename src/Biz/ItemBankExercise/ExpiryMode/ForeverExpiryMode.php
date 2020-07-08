@@ -16,13 +16,9 @@ class ForeverExpiryMode extends ExpiryMode
 
     public function validateExpiryMode($exercise)
     {
-        if (self::EXPIRY_MODE_FOREVER == $exercise['expiryMode']) {
-            $exercise['expiryStartDate'] = 0;
-            $exercise['expiryEndDate'] = 0;
-            $exercise['expiryDays'] = 0;
-        } else {
-            return ItemBankExerciseException::EXPIRYMODE_INVALID();
-        }
+        $exercise['expiryStartDate'] = 0;
+        $exercise['expiryEndDate'] = 0;
+        $exercise['expiryDays'] = 0;
 
         return $exercise;
     }

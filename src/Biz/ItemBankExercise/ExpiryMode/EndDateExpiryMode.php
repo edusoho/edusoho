@@ -21,17 +21,13 @@ class EndDateExpiryMode extends ExpiryMode
 
     public function validateExpiryMode($exercise)
     {
-        if (self::EXPIRY_MODE_END_DATE == $exercise['expiryMode']) {
-            $exercise['expiryStartDate'] = 0;
-            $exercise['expiryDays'] = 0;
+        $exercise['expiryStartDate'] = 0;
+        $exercise['expiryDays'] = 0;
 
-            if (empty($exercise['expiryEndDate'])) {
-                return ItemBankExerciseException::EXPIRYENDDATE_REQUIRED();
-            }
-            $exercise['expiryEndDate'] = TimeMachine::isTimestamp($exercise['expiryEndDate']) ? $exercise['expiryEndDate'] : strtotime($exercise['expiryEndDate'].' 23:59:59');
-        } else {
-            return ItemBankExerciseException::EXPIRYMODE_INVALID();
+        if (empty($exercise['expiryEndDate'])) {
+            return ItemBankExerciseException::EXPIRYENDDATE_REQUIRED();
         }
+        $exercise['expiryEndDate'] = TimeMachine::isTimestamp($exercise['expiryEndDate']) ? $exercise['expiryEndDate'] : strtotime($exercise['expiryEndDate'].' 23:59:59');
 
         return $exercise;
     }

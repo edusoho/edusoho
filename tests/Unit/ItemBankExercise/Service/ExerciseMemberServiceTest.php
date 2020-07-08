@@ -143,7 +143,7 @@ class ExerciseMemberServiceTest extends BaseTestCase
         $this->assertEquals('remark', $res['remark']);
     }
 
-    public function testBatchUpdateMemberDeadlinesByDay()
+    public function testBatchUpdateMemberDeadlines()
     {
         $user = $this->createNormalUser();
         $exercise = $this->createExercise();
@@ -157,37 +157,9 @@ class ExerciseMemberServiceTest extends BaseTestCase
             ]
         );
 
-        $this->getExerciseMemberService()->batchUpdateMemberDeadlinesByDay($exercise['id'], [0 => $user['id']], 1, 'minus');
+        $this->getExerciseMemberService()->batchUpdateMemberDeadlines($exercise['id'], [0 => $user['id']],['updateType'=>'deadline','deadline'=>time()]);
         $result = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
-        $this->assertEquals($member['deadline'], (int) $result['deadline']);
-
-        $this->getExerciseMemberService()->batchUpdateMemberDeadlinesByDay($exercise['id'], [0 => $user['id']], 1);
-        $result = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
-        $this->assertEquals($member['deadline'], $result['deadline']);
-    }
-
-    public function testBatchUpdateMemberDeadlinesByDate()
-    {
-        $user = $this->createNormalUser();
-        $exercise = $this->createExercise();
-        $member = $this->getExerciseMemberDao()->create(
-            [
-                'exerciseId' => $exercise['id'],
-                'questionBankId' => 1,
-                'userId' => $user['id'],
-                'role' => 'student',
-                'remark' => 'aaa',
-                'deadline' => time(),
-            ]
-        );
-
-        $this->getExerciseMemberService()->batchUpdateMemberDeadlinesByDate($exercise['id'], [0 => $user['id']], time() - 86400);
-        $result = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
-        $this->assertEquals($member['deadline'], (int) $result['deadline']);
-
-        $this->getExerciseMemberService()->batchUpdateMemberDeadlinesByDate($exercise['id'], [0 => $user['id']], time() + 86400);
-        $result = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
-        $this->assertEquals($member['deadline'] + 24 * 60 * 60, $result['deadline']);
+        $this->assertEquals(time(), (int) $result['deadline']);
     }
 
     private function createExercise()

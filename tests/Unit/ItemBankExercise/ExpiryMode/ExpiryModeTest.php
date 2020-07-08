@@ -13,7 +13,6 @@ class ExpiryModeTest extends BaseTestCase
     {
         $exercise = $this->createExercise();
         $res = ExpiryModeFactory::create($exercise['expiryMode'])->getUpdateDeadline(
-            $exercise,
             ['deadline' => 0],
             ['deadline' => time(), 'updateType' => 'deadline']
         );

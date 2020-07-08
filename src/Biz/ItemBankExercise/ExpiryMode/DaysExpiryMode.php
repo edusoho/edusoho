@@ -22,18 +22,14 @@ class DaysExpiryMode extends ExpiryMode
 
     public function validateExpiryMode($exercise)
     {
-        if (self::EXPIRY_MODE_DAYS === $exercise['expiryMode']) {
-            $exercise['expiryStartDate'] = 0;
-            $exercise['expiryEndDate'] = 0;
+        $exercise['expiryStartDate'] = 0;
+        $exercise['expiryEndDate'] = 0;
 
-            if (empty($exercise['expiryDays'])) {
-                return ItemBankExerciseException::EXPIRYDAYS_REQUIRED();
-            }
-            if ($exercise['expiryDays'] > ExerciseService::MAX_EXPIRY_DAY) {
-                return ItemBankExerciseException::EXPIRYDAYS_INVALID();
-            }
-        } else {
-            return ItemBankExerciseException::EXPIRYMODE_INVALID();
+        if (empty($exercise['expiryDays'])) {
+            return ItemBankExerciseException::EXPIRYDAYS_REQUIRED();
+        }
+        if ($exercise['expiryDays'] > ExerciseService::MAX_EXPIRY_DAY) {
+            return ItemBankExerciseException::EXPIRYDAYS_INVALID();
         }
 
         return $exercise;

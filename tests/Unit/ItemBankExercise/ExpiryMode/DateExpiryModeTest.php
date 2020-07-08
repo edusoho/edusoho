@@ -11,7 +11,7 @@ class DateExpiryModeTest extends BaseTestCase
     public function testGetDeadline()
     {
         $exercise = $this->createExercise();
-        $except = strtotime('+1day');
+        $except = strtotime(date('Y-m-d').' 23:59:59');
         $res = ExpiryModeFactory::create($exercise['expiryMode'])->getDeadline($exercise);
 
         $this->assertEquals($except, $res);
@@ -46,8 +46,8 @@ class DateExpiryModeTest extends BaseTestCase
                 'categoryId' => 1,
                 'seq' => 1,
                 'expiryMode' => 'date',
-                'expiryStartDate' => strtotime('-1day'),
-                'expiryEndDate' => strtotime('+1day'),
+                'expiryStartDate' => strtotime(date('Y-m-d').' 00:00:00'),
+                'expiryEndDate' => strtotime(date('Y-m-d').' 23:59:59'),
             ]
         );
     }
