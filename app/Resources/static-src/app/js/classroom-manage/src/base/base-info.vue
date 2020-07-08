@@ -152,7 +152,7 @@
                 formRule: {
                     title: {
                         required: true,
-                        message: Translator.trans('validate.required.message', {'display': Translator.trans('classroom.name_label')}),
+                        message: Translator.trans('validate.required.message', {'display': Translator.trans('classroom.title_label')}),
                         trigger: 'blur'
                     }
                 },
