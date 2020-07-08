@@ -1,7 +1,7 @@
 <div class="course-detail-section-responsive visible-xs visible-sm clearfix">
   <ul class="clearfix">
     <!--营销页显示-->
-    {% if marketingPage and course.parentId > 0 %}
+    {% if marketingPage %}
     <li class="js-unfavorite-btn" id="unfavorite-btn" data-target-type="course" data-target-id="{{ course.courseSetId }}"
       {% if not isUserFavorite %}style="display: none" {% endif %}>
       <a class="color-primary" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.followed'|trans }}"

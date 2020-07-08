@@ -168,7 +168,7 @@
         <div class="course-detail-section-responsive visible-xs visible-sm clearfix">
           <ul class="clearfix">
             <!--营销页显示-->
-            {% if marketingPage and course.parentId > 0 %}
+            {% if marketingPage %}
               <li class="js-unfavorite-btn {% if not isUserFavorite %}hidden{% endif %}" id="unfavorite-btn" data-target-type="course" data-target-id="{{ course.courseSetId }}">
                 <a class="color-primary" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.followed'|trans }}"
                   data-trigger="hover">
@@ -220,7 +220,7 @@
           </li>
           <!--营销页显示-->
           {# 收藏图标设置 #}
-          {% if marketingPage and course.parentId > 0 %}
+          {% if marketingPage %}
             <li class="js-unfavorite-btn mrl {% if not isUserFavorite %}hidden {% endif %}" id="unfavorite-btn" data-target-type="course" data-target-id="{{ course.courseSetId }}">
               <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-favorite color-danger course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'course.status.followed'|trans }}</span>
               </a>

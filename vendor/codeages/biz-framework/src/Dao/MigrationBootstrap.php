@@ -40,7 +40,9 @@ class MigrationBootstrap
         $container['phpmig.migrations'] = $migrations;
 
         if (count($this->directories) > 0) {
-            $container['phpmig.migrations_path'] = reset($this->directories);
+            $i = $this->directories->getIterator();
+            $i->rewind();
+            $container['phpmig.migrations_path'] = $i->current();
         }
 
         return $container;
