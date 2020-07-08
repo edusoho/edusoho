@@ -30,6 +30,7 @@ class ExerciseMemberDaoImpl extends AdvancedDaoImpl implements ExerciseMemberDao
                 'exerciseId = :exerciseId',
                 'exerciseId IN (:exerciseIds)',
                 'role = :role',
+                'locked = :locked',
             ],
         ];
     }
