@@ -103,6 +103,10 @@ class ExerciseDaoImpl extends AdvancedDaoImpl implements ExerciseDao
             'conditions' => [
                 'id = :id',
                 'questionBankId = :questionBankId',
+                'categoryId in (:categoryIds)',
+                'creator = :creator',
+                'title like :title',
+                'status = :status',
                 'studentNum = :studentNum',
                 'categoryId = :categoryId',
             ],

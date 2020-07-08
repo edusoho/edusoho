@@ -15,6 +15,7 @@ class ItemBankExerciseController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
+        $conditions = $this->filterConditions($conditions);
         $paginator = new Paginator(
             $this->get('request'),
             $this->getExerciseService()->count($conditions),
@@ -44,6 +45,64 @@ class ItemBankExerciseController extends BaseController
                 'questionBanks' => $questionBanks,
             ]
         );
+    }
+
+    public function publishAction(Request $request, $id)
+    {
+        $exercise = $this->getExerciseService()->publishExercise($id);
+
+        return $this->createJsonResponse($exercise);
+    }
+
+    public function deleteAction(Request $request, $id)
+    {
+        $this->getExerciseService()->deleteExercise($id);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function recommendAction(Request $request, $id)
+    {
+        $exercise = $this->getExerciseService()->get($id);
+
+        if ('POST' == $request->getMethod()) {
+            $number = $request->request->get('number');
+
+            $exercise = $this->getExerciseService()->recommendExercise($id, $number);
+
+            return $this->createJsonResponse($exercise);
+        }
+
+        return $this->render(
+            'admin-v2/teach/item-bank-exercise/recommend-modal.html.twig',
+            [
+                'exercise' => $exercise,
+            ]
+        );
+    }
+
+    public function cancelRecommendAction(Request $request, $id)
+    {
+        $exercise = $this->getExerciseService()->cancelRecommendExercise($id);
+
+        return $this->createJsonResponse($exercise);
+    }
+
+    protected function filterConditions($conditions)
+    {
+        if (!empty($conditions['creatorName'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['creatorName']);
+            $conditions['creator'] = $user ? $user['id'] : -1;
+        }
+
+        if (!empty($conditions['categoryId'])) {
+            $categoryIds = $this->getCategoryService()->findAllChildrenIdsByParentId($conditions['categoryId']);
+            $categoryIds[] = $conditions['categoryId'];
+            $conditions['categoryIds'] = $categoryIds;
+            unset($conditions['categoryId']);
+        }
+
+        return $conditions;
     }
 
     protected function getDifferentStatusExercisesNum($conditions)

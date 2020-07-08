@@ -269,7 +269,7 @@ admin_v2:
                                             router_params:
                                                 id: (exercise.id)
                                             group: groupButton
-                                            class: cancel-recommend-course
+                                            class: cancel-recommend-exercise
                                             visible: ( exercise.recommended )
                                             icon: 'glyphicon glyphicon-hand-right'
                                             mode: none
@@ -285,19 +285,19 @@ admin_v2:
                                             router_params:
                                                 id: (exercise.id)
                                             group: groupButton
-                                            class: publish-course
+                                            class: publish-exercise
                                             icon: 'glyphicon glyphicon-ok-circle'
                                             mode: none
                                             visible: (exercise.status != 'published')
-#                                            admin_v2_item_bank_exercise_delete:
-#                                                name: admin_v2.course.basic.basic_tab.delete_submit_btn
-#                                                class: delete-course
-#                                                router_params:
-#                                                    id: (exercise.id)
-#                                                group: groupButton
-#                                                icon: 'glyphicon glyphicon-trash'
-#                                                mode: none
-#                                                visible: ( exercise.status in ['closed', 'draft', 'published'])
+                                        admin_v2_item_bank_exercise_delete:
+                                            name: admin_v2.course.basic.basic_tab.delete_submit_btn
+                                            class: delete-exercise
+                                            router_params:
+                                                id: (exercise.id)
+                                            group: groupButton
+                                            icon: 'glyphicon glyphicon-trash'
+                                            mode: none
+                                            visible: ( exercise.status in ['closed', 'draft', 'published'])
                         # 公开课管理模块
                         admin_v2_open_course_manage:
                             name: admin_v2.course.open_course_menu

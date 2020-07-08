@@ -38,6 +38,14 @@ interface ExerciseService
 
     public function updateBaseInfo($exerciseId, $data);
 
+    public function deleteExercise($exerciseId);
+
+    public function recommendExercise($exerciseId, $number);
+
+    public function cancelRecommendExercise($exerciseId);
+
+    public function publishExercise($exerciseId);
+
     public function searchOrderByStudentNumAndLastDays($conditions, $lastDays, $start, $limit);
 
     public function searchOrderByRatingAndLastDays($conditions, $lastDays, $start, $limit);
