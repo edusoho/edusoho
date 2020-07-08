@@ -8,6 +8,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Goods\Service\GoodsService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\Review\Service\ReviewService;
 use Biz\User\Service\UserService;
 
@@ -16,6 +17,7 @@ class Review extends AbstractResource
     protected $targetMap = [
         'course' => 'searchCourseInfo',
         'goods' => 'searchGoodsInfo',
+        'item_bank_exercise' => 'searchItemBankExericseInfo',
     ];
 
     /**
@@ -119,6 +121,13 @@ class Review extends AbstractResource
         return ArrayToolkit::index($courses, 'id');
     }
 
+    protected function searchItemBankExericseInfo($ids)
+    {
+        $itemBankExercises = $this->getItemBankExerciseService()->search(['ids' => $ids], [], 0, count($ids), ['id', 'title']);
+
+        return ArrayToolkit::index($itemBankExercises, 'id');
+    }
+
     /**
      * @return UserService
      */
@@ -149,5 +158,13 @@ class Review extends AbstractResource
     protected function getCourseService()
     {
         return $this->service('Course:CourseService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getItemBankExerciseService()
+    {
+        return $this->service('ItemBankExercise:ExerciseService');
     }
 }

@@ -41,7 +41,7 @@
         </select>
       </div>
       <div class="col-sm-5 controls expiry-date-change">
-        <input type="text" id="day" name="day" value="0" {% if 'forever' == exercise.expiryMode %} disabled {% endif %} data-url="{{path('item_bank_exercise_manage_students_deadline_batch_day_check', { exerciseId:exercise.id, ids:ids })}}" class="form-control width-input">
+        <input type="text" id="day" name="day" value="0" {% if 'forever' == exercise.expiryMode %} disabled {% endif %} data-url="{{path('item_bank_exercise_manage_students_deadline_batch_deadline_check', { exerciseId:exercise.id, ids:ids })}}" class="form-control width-input">
       </div>
     </div>
 

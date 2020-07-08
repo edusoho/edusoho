@@ -102,6 +102,7 @@ class ExerciseDaoImpl extends AdvancedDaoImpl implements ExerciseDao
             ],
             'conditions' => [
                 'id = :id',
+                'id IN (:ids)',
                 'questionBankId = :questionBankId',
                 'categoryId in (:categoryIds)',
                 'creator = :creator',
@@ -109,6 +110,7 @@ class ExerciseDaoImpl extends AdvancedDaoImpl implements ExerciseDao
                 'status = :status',
                 'studentNum = :studentNum',
                 'categoryId = :categoryId',
+                'recommended = :recommended',
             ],
         ];
     }

@@ -4237,6 +4237,7 @@ admin.course_manage.recommend.name: 'Course Name'
 admin.course_manage.recommend.creator: Creator
 admin.course_manage.recommend.time: 'Recommended At'
 admin.course_manage.recommend.empty: 'No record'
+admin.course_manage.item_bank_exercise.recommend.empty: 'No record'
 admin.course_manage.recommend.category: Category
 admin.course_manage.recommend.set_seq_btn: 'SN Setting'
 admin.course_manage.recommend.cancel_seq_btn: 'Cancel Recomment'
@@ -7598,6 +7599,7 @@ log.module.mobile: 'Mobile'
 log.module.wap: 'Wap'
 log.module.push: 'Push'
 log.module.question_bank: 'Question Bank'
+log.module.item_bank_exercise: 'Item Bank Exercise'
 
 log.action.course.create: 'Create course'
 log.action.course.update: 'Update course'
@@ -7851,6 +7853,7 @@ log.action.question_bank.update_teacher: Update Manager
 log.action.question_bank.create_category: Create Bank Category
 log.action.question_bank.delete_category: Delete Bank Category
 log.action.question_bank.update_category: Update Bank Category
+log.action.item_bank_exercise.add_student: 'Add student'
 
 log.action.template.course.create: Created a new<strong class="color-success"> course </strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: Updated the<strong class="color-success"> course </strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -9050,6 +9053,7 @@ exception.item_bank_exercise.expirystartdate_required: Validity period start dat
 exception.item_bank_exercise.expirydate_end_later_than_start: Validity period end date cannot be earlier than the start date
 exception.item_bank_exercise.expirymode_invalid: Validity type error
 exception.item_bank_exercise.assessment_exercise_exist: The test paper has been saved in this module, please do not add it repeatedly
+exception.item_bank_exercise.member.can_not_become_member: The exercise has expired and students cannot join
 exception.item_bank_exercise.module.not_empty_number: Please keep at least one module
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On

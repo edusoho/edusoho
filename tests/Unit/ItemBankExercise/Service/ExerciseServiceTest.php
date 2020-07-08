@@ -5,6 +5,7 @@ namespace Tests\Unit\ItemBankExercise\Service;
 use Biz\BaseTestCase;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Biz\ItemBankExercise\Service\ExerciseService;
+use Biz\Role\Util\PermissionBuilder;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
 
@@ -249,10 +250,42 @@ class ExerciseServiceTest extends BaseTestCase
         $this->assertEquals(1, $exercises[2]['id']);
     }
 
+    public function testCanTakeItemBankExercise()
+    {
+        $this->createExercise();
+        $this->mockExerciseMembers();
+        $this->mockUser();
+
+        $result = $this->getExerciseService()->canTakeItemBankExercise(1);
+        $this->assertEquals(true, $result);
+    }
+
+    public function testCanTakeItemBankExercise_whenExerciseNotFound_thenReturnFalse()
+    {
+        $result = $this->getExerciseService()->canTakeItemBankExercise(1);
+        $this->assertEquals(false, $result);
+    }
+
+    protected function mockUser()
+    {
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray([
+            'id' => 2,
+            'nickname' => 'admin3',
+            'email' => 'admin3@admin.com',
+            'password' => 'admin',
+            'currentIp' => '127.0.0.1',
+            'roles' => ['ROLE_USER', 'ROLE_SUPER_ADMIN'],
+        ]);
+        $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+    }
+
     protected function createExercise()
     {
         return $this->getExerciseService()->create(
             [
+                'id' => 1,
                 'title' => 'test',
                 'questionBankId' => 1,
                 'categoryId' => 1,
