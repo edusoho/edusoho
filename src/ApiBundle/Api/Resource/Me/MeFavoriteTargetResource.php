@@ -7,11 +7,10 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
 use Biz\Favorite\Service\FavoriteService;
 
-class MeFavorite extends AbstractResource
+class MeFavoriteTargetResource extends AbstractResource
 {
-    public function get(ApiRequest $request, $targetId)
+    public function get(ApiRequest $request, $targetType, $targetId)
     {
-        $targetType = $request->query->get('targetType');
         if (empty($targetType) || empty($targetId)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
