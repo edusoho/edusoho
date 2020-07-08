@@ -38,7 +38,6 @@
             {{ cd_radios('joinEnable', { '1': 'course.marketing_setup.setup.can_join'|trans, '0': 'course.marketing_setup.setup.can_not_join'|trans }, exercise.joinEnable|default(1)) }}
           </div>
         </div>
-        {{ slot('course.marketing.setting', {'course':exercise}) }}
 
         {% include 'item-bank-exercise/exercise-set/base-info/set-rule.html.twig' %}
 

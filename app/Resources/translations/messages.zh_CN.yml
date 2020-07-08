@@ -8848,6 +8848,7 @@ log.module.wap: 微网校
 log.module.push: 推送
 log.module.question_bank: 题库
 log.module.destroy_account_record: 帐号注销
+log.module.item_bank_exercise: 题库练习
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -9104,6 +9105,7 @@ log.action.question_bank.update_category: 更新题库分类
 log.action.destroy_account_record.create: 申请注销帐号
 log.action.destroy_account_record.pass: 通过注销帐号申请
 log.action.destroy_account_record.reject: 拒绝注销帐号申请
+log.action.item_bank_exercise.add_student: 添加学员
 
 log.action.template.course.create: 新建了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: 修改了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -10355,6 +10357,7 @@ exception.item_bank_exercise.expirystartdate_required: 有效期开始日期不�
 exception.item_bank_exercise.expirydate_end_later_than_start: 有效期结束日期不能早于开始日期
 exception.item_bank_exercise.expirymode_invalid: 有效期类型错误
 exception.item_bank_exercise.assessment_exercise_exist: 试卷已存在该模块内，请勿重复添加
+exception.item_bank_exercise.member.can_not_become_member: 题库练习已过期，学员不能加入
 exception.item_bank_exercise.module.not_empty_number: 请至少保留一个试卷模块
 
 exception.wechat.notify_setting_not_enabled: 微信通知未开启

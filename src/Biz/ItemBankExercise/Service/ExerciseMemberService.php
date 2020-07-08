@@ -22,11 +22,7 @@ interface ExerciseMemberService
 
     public function remarkStudent($exerciseId, $userId, $remark);
 
-    public function batchUpdateMemberDeadlinesByDay($exerciseId, $userIds, $day, $waveType = 'plus');
+    public function batchUpdateMemberDeadlines($exerciseId, $userIds, $setting);
 
-    public function checkDayAndWaveTypeForUpdateDeadline($exerciseId, $userIds, $day, $waveType = 'plus');
-
-    public function batchUpdateMemberDeadlinesByDate($exerciseId, $userIds, $date);
-
-    public function checkDeadlineForUpdateDeadline($exerciseId, $userIds, $date);
+    public function checkUpdateDeadline($exerciseId, $userIds, $setting);
 }

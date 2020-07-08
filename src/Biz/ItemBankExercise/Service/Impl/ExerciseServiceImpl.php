@@ -3,13 +3,13 @@
 namespace Biz\ItemBankExercise\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\TimeMachine;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
 use Biz\ItemBankExercise\Dao\ExerciseModuleDao;
+use Biz\ItemBankExercise\ExpiryMode\ExpiryModeFactory;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
@@ -282,51 +282,9 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     protected function validateExpiryMode($exercise)
     {
-        if (empty($exercise['expiryMode'])) {
-            return $exercise;
-        }
-        if ('days' === $exercise['expiryMode']) {
-            $exercise['expiryStartDate'] = 0;
-            $exercise['expiryEndDate'] = 0;
+        $expiryMode = ExpiryModeFactory::create($exercise['expiryMode']);
 
-            if (empty($exercise['expiryDays'])) {
-                $this->createNewException(ItemBankExerciseException::EXPIRYDAYS_REQUIRED());
-            }
-            if ($exercise['expiryDays'] > ExerciseService::MAX_EXPIRY_DAY) {
-                $this->createNewException(ItemBankExerciseException::EXPIRYDAYS_INVALID());
-            }
-        } elseif ('end_date' == $exercise['expiryMode']) {
-            $exercise['expiryStartDate'] = 0;
-            $exercise['expiryDays'] = 0;
-
-            if (empty($exercise['expiryEndDate'])) {
-                $this->createNewException(ItemBankExerciseException::EXPIRYENDDATE_REQUIRED());
-            }
-            $exercise['expiryEndDate'] = TimeMachine::isTimestamp($exercise['expiryEndDate']) ? $exercise['expiryEndDate'] : strtotime($exercise['expiryEndDate'].' 23:59:59');
-        } elseif ('date' === $exercise['expiryMode']) {
-            $exercise['expiryDays'] = 0;
-            if (isset($exercise['expiryStartDate'])) {
-                $exercise['expiryStartDate'] = TimeMachine::isTimestamp($exercise['expiryStartDate']) ? $exercise['expiryStartDate'] : strtotime($exercise['expiryStartDate']);
-            } else {
-                $this->createNewException(ItemBankExerciseException::EXPIRYSTARTDATE_REQUIRED());
-            }
-            if (empty($exercise['expiryEndDate'])) {
-                $this->createNewException(ItemBankExerciseException::EXPIRYENDDATE_REQUIRED());
-            } else {
-                $exercise['expiryEndDate'] = TimeMachine::isTimestamp($exercise['expiryEndDate']) ? $exercise['expiryEndDate'] : strtotime($exercise['expiryEndDate'].' 23:59:59');
-            }
-            if ($exercise['expiryEndDate'] <= $exercise['expiryStartDate']) {
-                $this->createNewException(ItemBankExerciseException::EXPIRY_DATE_SET_INVALID());
-            }
-        } elseif ('forever' == $exercise['expiryMode']) {
-            $exercise['expiryStartDate'] = 0;
-            $exercise['expiryEndDate'] = 0;
-            $exercise['expiryDays'] = 0;
-        } else {
-            $this->createNewException(ItemBankExerciseException::EXPIRYMODE_INVALID());
-        }
-
-        return $exercise;
+        return $expiryMode->validateExpiryMode($exercise);
     }
 
     private function processFields($exercise, $fields)

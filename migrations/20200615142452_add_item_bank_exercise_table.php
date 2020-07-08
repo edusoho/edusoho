@@ -72,7 +72,7 @@ class AddItemBankExerciseTable extends Migration
               `teacherIds` varchar(1024) NOT NULL DEFAULT '' COMMENT '教师ID列表',
               `joinEnable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否允许加入',
               `vipLevelId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '支持的vip等级',
-              `expiryMode` varchar(32) NOT NULL DEFAULT '' COMMENT '过期方式 days, date',
+              `expiryMode` varchar(32) NOT NULL DEFAULT 'forever' COMMENT '过期方式 days,date,end_date,forever',
               `expiryDays` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '过期天数',
               `expiryStartDate` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '有效期开始时间',
               `expiryEndDate` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '有效期结束时间',

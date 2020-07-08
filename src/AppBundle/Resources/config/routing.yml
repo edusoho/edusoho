@@ -3507,13 +3507,9 @@ item_bank_exercise_manage_students_deadline_batch:
   path:  /item_bank_exercise/{exerciseId}/manage/student/deadline
   defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:batchUpdateMemberDeadlines }
 
-item_bank_exercise_manage_students_deadline_batch_day_check:
-  path:  /item_bank_exercise/{exerciseId}/manage/student/day/check
-  defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:checkDay }
-
 item_bank_exercise_manage_students_deadline_batch_deadline_check:
   path:  /item_bank_exercise/{exerciseId}/manage/student/deadline/check
-  defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:checkDeadline }
+  defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:checkUpdateDeadline }
   
 goods_show:
     path:     /goods/show/{id}
