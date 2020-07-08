@@ -442,6 +442,10 @@ admin_v2:
                                     name: admin_v2.course.review.classroom_review_tab
                                     router_name: admin_v2_classroom_review
                                     disable: true
+                                admin_v2_item_bank_exercise_review_tab:
+                                    name: admin_v2.course.review.exercise_review_tab
+                                    router_name: admin_v2_item_bank_exercise_review
+                                    disable: true
                 # 资源管理
                 admin_v2_cloud_resource_group:
                     name: admin_v2.cloud_resource.basic_group

@@ -13,4 +13,6 @@ interface ExerciseDao extends AdvancedDaoInterface
     public function searchOrderByStudentNumAndLastDays($conditions, $lastDays, $start, $limit);
 
     public function searchOrderByRatingAndLastDays($conditions, $lastDays, $start, $limit);
+
+    public function findByLikeTitle($title);
 }

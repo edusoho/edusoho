@@ -369,6 +369,11 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $conditions;
     }
 
+    public function findExercisesByLikeTitle($title)
+    {
+        return $this->getExerciseDao()->findByLikeTitle($title);
+    }
+
     /**
      * @return ExerciseDao
      */
