@@ -11,6 +11,22 @@ class ItemBankExercise extends AbstractResource
     /**
      * @ApiConf(isRequiredAuth=false)
      */
+    public function get(ApiRequest $request, $id)
+    {
+        $user = $this->getCurrentUser();
+
+        if ($user->isLogin()) {
+            $member = $this->getItemBankExerciseMemberService()->getExerciseMember($id, $user['id']);
+        }
+
+        $itemBankExercise = $this->getItemBankExerciseService()->get($id);
+
+        return $itemBankExercise;
+    }
+
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function search(ApiRequest $request)
     {
         list($offset, $limit) = $this->getOffsetAndLimit($request);
@@ -37,5 +53,13 @@ class ItemBankExercise extends AbstractResource
     protected function getItemBankExerciseService()
     {
         return $this->service('ItemBankExercise:ExerciseService');
+    }
+
+    /**
+     * @return \Biz\ItemBankExercise\Service\ExerciseMemberService
+     */
+    protected function getItemBankExerciseMemberService()
+    {
+        return $this->service('ItemBankExercise:ExerciseMemberService');
     }
 }
