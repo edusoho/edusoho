@@ -245,6 +245,15 @@ class S2B2CService extends BaseService
         return $this->sendRequest('getDistributeContent', array());
     }
 
+    private $getDistributeOldContentUri = '/distribute/old/content';
+
+    public function getDistributeOldContent($distributeId)
+    {
+        $this->uri = $this->getDistributeOldContentUri ."/{$distributeId}";
+
+        return $this->sendRequest('getDistributeOldContent', array());
+    }
+
     private $adoptDirtributeProductUri = '/distribute/product/{id}/adopt';
 
     /**
@@ -315,8 +324,6 @@ class S2B2CService extends BaseService
 
     // 资源信息的播放
     private $resourcePlayerPath = '/merchant_resource/player';
-
-    private $purchaseProductPath = '/contents/purchase_product';
 
     /**
      * 获取商品资源播放列表m3u8
@@ -454,18 +461,7 @@ class S2B2CService extends BaseService
         
         return $tokenData['JWTPlayToken'];
     }
-
-    public function purchaseProducts($purchaseProducts, $purchaseRecord)
-    {
-        $this->uri = $this->purchaseProductPath;
-        $body = array(
-            'products' => $purchaseProducts,
-            'record' => $purchaseRecord,
-        );
-
-        return $this->sendRequest('purchaseProducts', $body, 'POST');
-    }
-
+    
     /*以下是live相关*/
     private $merchantLivePrefix = '/merchant_live';
 
