@@ -16,7 +16,6 @@ use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\System\Service\LogService;
 use Biz\User\UserException;
-use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 
 class ExerciseServiceImpl extends BaseService implements ExerciseService
