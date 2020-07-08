@@ -5097,6 +5097,7 @@ admin.course_manage.recommend.name: 课程名称
 admin.course_manage.recommend.creator: 创建者
 admin.course_manage.recommend.time: 推荐时间
 admin.course_manage.recommend.empty: 暂无推荐课程
+admin.course_manage.item_bank_exercise.recommend.empty: 暂无推荐题库练习
 admin.course_manage.recommend.category: 分类
 admin.course_manage.recommend.set_seq_btn: 设置序号
 admin.course_manage.recommend.cancel_seq_btn: 取消推荐

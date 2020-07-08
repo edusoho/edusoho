@@ -120,6 +120,39 @@ class ItemBankExerciseController extends BaseController
         ];
     }
 
+    public function recommendListAction(Request $request)
+    {
+        $conditions = $request->query->all();
+        $conditions = $this->filterConditions($conditions);
+        $conditions['recommended'] = 1;
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getExerciseService()->count($conditions),
+            20
+        );
+
+        $exercises = $this->getExerciseService()->search(
+            $conditions,
+            ['recommendedSeq' => 'ASC'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($exercises, 'creator'));
+
+        return $this->render(
+            'admin-v2/teach/item-bank-exercise/exercise-recommend-list.html.twig',
+            [
+                'exercises' => $exercises,
+                'users' => $users,
+                'paginator' => $paginator,
+                'categoryTree' => $this->getCategoryService()->getCategoryTree(),
+                'categories' => $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($exercises, 'categoryId')),
+            ]
+        );
+    }
+
     /**
      * @return ExerciseService
      */

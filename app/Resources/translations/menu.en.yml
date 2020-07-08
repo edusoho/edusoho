@@ -506,6 +506,7 @@ admin_v2.course.live.basic_tab.create_btn: Create
 ##题库管理模块
 admin_v2.course.item_bank_exercise: Item Bank Exercise
 admin_v2.course.item_bank_exercise.basic_tab: Item Bank Exercise
+admin_v2.course.item_bank_exercise.recommend_list_tab: Recommended
 
 #公开课模块
 admin_v2.course.open_course_menu:  Public Courses

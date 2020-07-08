@@ -501,6 +501,7 @@ admin_v2.course.live.basic_tab.create_btn: 创建直播
 ##题库管理模块
 admin_v2.course.item_bank_exercise: 题库练习管理
 admin_v2.course.item_bank_exercise.basic_tab: 题库练习管理
+admin_v2.course.item_bank_exercise.recommend_list_tab: 题库练习推荐
 
 # 教学-课程管理-公开课模块
 admin_v2.course.open_course_menu: 公开课管理
