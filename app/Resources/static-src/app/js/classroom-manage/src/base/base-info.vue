@@ -33,7 +33,6 @@
 
             <el-form-item v-if="enableOrg" :label="'site.org'|trans">
                 <el-col span="8">
-                    {{ form.orgCode }}
                     <org v-bind:params="{}" v-bind:org-code="form.orgCode"></org>
                 </el-col>
             </el-form-item>
@@ -66,6 +65,7 @@
     import category from 'app/js/common/src/category.vue';
     import org from 'app/js/common/src/org.vue';
 
+    let aboutEditor = null;
     export default {
         name: "base-info",
         components: {
@@ -84,7 +84,7 @@
             uploadImageTemplate(newVal, oldVal) {
                 this.$nextTick(() => {
                     import('app/js/upload-image/index.js');
-                    CKEDITOR.replace('about', {
+                    aboutEditor = CKEDITOR.replace('about', {
                         allowedContent: true,
                         toolbar: 'Detail',
                         fileSingleSizeLimit: app.fileSingleSizeLimit,
@@ -100,7 +100,7 @@
                     saveUrl: this.coverCropUrl,
                     targetImg: 'classroom-cover',
                     cropWidth: '540',
-                    cropHeight: '340',
+                    cropHeight: '304',
                     uploadToken: 'tmp',
                     imageClass: 'classroom-manage-cover',
                     imageText: Translator.trans('classroom.upload_picture_btn'),
@@ -109,7 +109,32 @@
                 this.$axios.get('/render/upload/image?' + this.$qs.stringify(params)).then((res) => {
                     this.uploadImageTemplate = res.data;
                 });
-            }
+            },
+            validateForm() {
+                if (!this.$refs.baseInfoForm) {
+                    return {result: true, invalidFields: {}};
+                }
+
+                let result = false;
+                let invalids = {};
+                this.$refs.baseInfoForm.clearValidate();
+
+                this.$refs.baseInfoForm.validate((valid, invalidFields) => {
+                    if (valid) {
+                        result = true;
+                    } else {
+                        invalids = invalidFields;
+                    }
+                });
+
+                return {result: result, invalidFields: invalids};
+            },
+            getFormData() {
+                this.form.orgCode = $('.js-org-tree-select').children('option:selected').val();
+                this.form.about = aboutEditor.getData();
+
+                return this.form;
+            },
         },
         data() {
             this.initUploaderAndEditor();
@@ -119,10 +144,10 @@
                 form: {
                     title: this.classroom.title,
                     subtitle: this.classroom.subtitle ? this.classroom.subtitle : null,
+                    about: this.classroom.about,
                     tags: this.tags,
                     categoryId: this.classroom.categoryId,
                     orgCode: this.classroom.orgCode,
-                    about: this.classroom.about,
                 },
                 formRule: {
                     title: {

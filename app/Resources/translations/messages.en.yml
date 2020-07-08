@@ -2274,8 +2274,6 @@ classroom.not_edit: 'Cannot update class'
 classroom.publish_tips: 'Expiry, please extends it after publish'
 classroom.title_label: 'Class name'
 classroom.category: Category
-classroom.price_tips: "Total %courseNum% courses, original %price% CNY.\n"
-classroom.amount: "Equals to%price%\n"
 classroom.picture_tips: "File format could be jpg/gif/png. Suggested size is 540×304px. <br> The file limits to <strong>2MB</strong>.\n"
 classroom.commitment_service_label: Commitment
 classroom.activiy: Activity

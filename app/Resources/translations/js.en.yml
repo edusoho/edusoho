@@ -1585,11 +1585,15 @@ classroom.expiry_mode_days_tips: "If set，student can only study before the dea
 classroom.expiry_mode_end_date: 'Expired on'
 classroom.expiry_mode_days: 'Effective days'
 classroom.expiry_mode_forever: Forever
+classroom.price_tips: "Total %courseNum% courses, original %price% CNY.\n"
+classroom.amount: "Equals to "
+
 
 site.open: Open
 site.date.day: Day
 course.marketing_setup.services.provide_services: Services
 vip.level.free_learning: Free for Vip
 site.default.none: None
+form.btn.save: Save
 
 

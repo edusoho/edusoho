@@ -42,6 +42,11 @@ new Vue({
       vipInstalled: $app.data('vipInstalled'),
       vipEnabled: $app.data('vipEnabled'),
       vipLevels: $app.data('vipLevels'),
+      courseNum: $app.data('courseNum'),
+      coinSetting: $app.data('coinSetting'),
+      coinPrice: $app.data('coinPrice'),
+      coursePrice: $app.data('coursePrice'),
+      infoSaveUrl: $app.data('infoSaveUrl'),
     }
   })
 });

@@ -505,9 +505,6 @@ class CourseManageController extends BaseController
                 unset($data['subtitle']);
             }
             $data = $this->prepareExpiryMode($data);
-            if (!empty($data['services'])) {
-                $data['services'] = json_decode($data['services'], true);
-            }
 
             if (!empty($data['freeTaskIds']) || !empty($freeTasks)) {
                 $freeTaskIds = ArrayToolkit::column($freeTasks, 'id');

@@ -1,7 +1,7 @@
 {% extends 'classroom-manage/layout.html.twig' %}
 
 {% block title %}{{ setting('classroom.name')|default("site.default.classroom"|trans) }}{{ 'classroom.manage'|trans }} - {{ parent() }}{% endblock %}
-{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/vue.js', 'app/js/classroom-manage/index.js', 'libs/element-ui.js']) %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/select2.js', 'libs/vue.js', 'app/js/classroom-manage/index.js', 'libs/element-ui.js']) %}
 
 {% set side_nav = 'main' %}
 
@@ -23,6 +23,11 @@
        data-vip-installed="{{ vipInstalled|default(false) }}"
        data-vip-enabled="{{ setting('vip.enabled', '0') }}"
        data-vip-levels="{{ vipLevels|default([])|json_encode }}"
+       data-course-num="{{ courseNum|default(0) }}"
+       data-coin-setting="{{ setting('coin',[])|json_encode }}"
+       data-course-price="{{ coursePrice|default(0) }}"
+       data-info-save-url="{{ path('classroom_manage_set_info', {'id': classroom.id}) }}"
+       data-enable-org="{{ setting('magic.enable_org', 0) }}"
   >
   </div>
 {% endblock %}

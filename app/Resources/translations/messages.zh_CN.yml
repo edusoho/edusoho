@@ -2607,10 +2607,6 @@ classroom.not_edit: 班级不能修改
 classroom.publish_tips: 有效期，请班级发布后再增加。
 classroom.title_label: 班级标题
 classroom.category: 分类
-classroom.price_tips: >
-  当前共有 %courseNum% 个课程，原价共计 %price% 元。
-classroom.amount: >
-  相当于%price%
 classroom.picture_tips: >
   请上传jpg, gif, png格式的图片, 建议图片尺寸为 540×304px。<br>建议图片大小不超过<strong>2MB</strong>。
 classroom.upload_picture_btn: 上传新图片

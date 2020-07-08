@@ -6,8 +6,20 @@
                  label-width="150px">
             <div class="course-manage-subltitle cd-mb40 ml0">{{ 'classroom.marketing_setting'|trans }}</div>
             <el-form-item :label="'classroom.price_label'|trans" prop="price">
-                <el-col span="18">
+                <el-col span="8">
                     <el-input ref="price" v-model="form.price" auto-complete="off"></el-input>
+                    <div class="help-block">
+                        {{'classroom.price_tips'|trans({'courseNum':courseNum,'price':coursePrice})}}
+                    </div>
+                    <div class="help-block" id="coinPrice"
+                         v-if="coinSetting.coin_enabled && coinSetting.price_type == 'Coin'"
+                         :data-rate="coinSetting.cash_rate"
+                         :data-name="coinSetting.coin_name">
+                        {{ 'classroom.amount'|trans }}
+                        {{ form.price * coinSetting.cash_rate }}
+                        {{coinSetting.coin_name}}
+                    </div>
+
                 </el-col>
             </el-form-item>
 
@@ -45,7 +57,7 @@
                     v-if="form.expiryMode == 'date'"
                     v-model="form.expiryValue"
                     type="date"
-                    ref="deadline"
+                    value-format="timestamp"
                     :default-value="today"
                     :picker-options="dateOptions">
                 </el-date-picker>
@@ -86,7 +98,7 @@
                         <span class="service-item js-service-item"
                               slot="reference"
                               :key="key"
-                              :class="tag.active ? 'service-primary-item' : ''"
+                              :class="tag.active || form.service.indexOf(tag.code) >= 0 ? 'service-primary-item' : ''"
                               :data-code="tag.code"
                               @click="serviceItemClick"
                         >{{ tag.fullName }}</span>
@@ -113,6 +125,9 @@
             vipInstalled: false,
             vipEnabled: false,
             vipLevels: [],
+            courseNum: 0,
+            coursePrice: 0,
+            coinSetting: {}
         },
         methods: {
             serviceItemClick(event) {
@@ -132,6 +147,24 @@
                         this.form.service.push(code);
                     }
                 }
+            },
+            validateForm() {
+                let result = false;
+                let invalids = {};
+                this.$refs.marketingForm.clearValidate();
+
+                this.$refs.marketingForm.validate((valid, invalidFields) => {
+                    if (valid) {
+                        result = true;
+                    } else {
+                        invalids = invalidFields;
+                    }
+                });
+
+                return {result: result, invalidFields: invalids};
+            },
+            getFormData() {
+                return this.form;
             },
         },
         computed: {
@@ -169,8 +202,6 @@
             }
         },
         data() {
-            console.log(this.vipLevels)
-            console.log(this.vipLevels.length)
             return {
                 statusRadios: {
                     '0': Translator.trans('site.close'),
@@ -186,7 +217,7 @@
                     showable: this.classroom.showable,
                     buyable: this.classroom.buyable,
                     expiryMode: this.classroom.expiryMode,
-                    expiryValue: this.classroom.expiryValue,
+                    expiryValue: this.classroom.expiryMode == 'date' ? this.classroom.expiryValue * 1000 : this.classroom.expiryValue,
                     service: this.classroom.service,
                     vipLevelId: (this.vipInstalled && this.vipEnabled) ? this.classroom.vipLevelId : null
                 },

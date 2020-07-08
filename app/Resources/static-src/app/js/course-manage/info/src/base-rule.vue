@@ -218,7 +218,7 @@
                         <span class="service-item js-service-item"
                               slot="reference"
                               :key="key"
-                              :class="tag.active ? 'service-primary-item' : ''"
+                              :class="tag.active || baseRuleForm.services.indexOf(tag.code) >= 0 ? 'service-primary-item' : ''"
                               :data-code="tag.code"
                               @click="serviceItemClick"
                         >{{ tag.fullName }}</span>
@@ -410,7 +410,7 @@
                     enableFinish: this.course.enableFinish,
                     maxStudentNum: this.course.maxStudentNum,
                     tryLookLength: parseInt(this.course.tryLookLength),
-                    services: JSON.stringify(this.course.services),
+                    services: this.course.services,
                     enableAudio: this.course.enableAudio,
                     expiryMode: this.course.expiryMode,
                     deadlineType: this.course.deadlineType ? this.course.deadlineType : 'days',

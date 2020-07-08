@@ -1529,11 +1529,17 @@ classroom.expiry_mode_end_date: 截止日期
 classroom.expiry_mode_days: 有效期天数
 classroom.expiry_mode_forever: 长期有效
 
+classroom.price_tips: 当前共有 %courseNum% 个课程，原价共计 %price% 元。
+classroom.amount: 相当于
+
+
 site.open: 开启
 site.date.day: 天
 course.marketing_setup.services.provide_services: 承诺提供服务
 vip.level.free_learning: 会员免费学
 site.default.none: 无
+form.btn.save: 保存
+
 
 
 
