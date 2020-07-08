@@ -157,7 +157,7 @@ class ExerciseMemberServiceTest extends BaseTestCase
             ]
         );
 
-        $this->getExerciseMemberService()->batchUpdateMemberDeadlines($exercise['id'], [0 => $user['id']],['updateType'=>'deadline','deadline'=>time()]);
+        $this->getExerciseMemberService()->batchUpdateMemberDeadlines($exercise['id'], [0 => $user['id']], ['updateType' => 'deadline', 'deadline' => time()]);
         $result = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
         $this->assertEquals(time(), (int) $result['deadline']);
     }
