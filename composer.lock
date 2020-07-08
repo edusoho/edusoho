@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "141fe07b2e512cdf603cfe2c19a21fec",
+    "content-hash": "c79a076cc123406f37ecb67de5d9a0ed",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -396,16 +396,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.9.35",
+            "version": "v0.9.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "829ebe2c66066d1c0aa385808688d38f3ff9859b"
+                "reference": "63a92464c90111be53b4cc4188eaaf4f5e4e6ecf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/829ebe2c66066d1c0aa385808688d38f3ff9859b",
-                "reference": "829ebe2c66066d1c0aa385808688d38f3ff9859b",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/63a92464c90111be53b4cc4188eaaf4f5e4e6ecf",
+                "reference": "63a92464c90111be53b4cc4188eaaf4f5e4e6ecf",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -455,7 +455,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2020-03-31T06:35:13+00:00"
+            "time": "2020-06-11T12:37:50+00:00"
         },
         {
             "name": "codeages/biz-item-bank",
@@ -463,12 +463,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-item-bank.git",
-                "reference": "5d283af34d23afbd93ab011fa7d7bc9031ea7f51"
+                "reference": "5d78d1d5c28c47dbecad495e90eb1121d8302adb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/5d283af34d23afbd93ab011fa7d7bc9031ea7f51",
-                "reference": "5d283af34d23afbd93ab011fa7d7bc9031ea7f51",
+                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/5d78d1d5c28c47dbecad495e90eb1121d8302adb",
+                "reference": "5d78d1d5c28c47dbecad495e90eb1121d8302adb",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -501,7 +501,7 @@
                 "MIT"
             ],
             "description": "item bank with biz-framework",
-            "time": "2020-06-09T03:22:22+00:00"
+            "time": "2020-07-04T02:04:38+00:00"
         },
         {
             "name": "codeages/biz-order-pay",

@@ -120,6 +120,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
 
     public function getAnswerSceneReport($id)
     {
+        $this->buildAnswerSceneReport($id);
         $answerReports = $this->getAnswerReportService()->findByAnswerSceneId($id);
         $answerRecords = $this->getAnswerRecordService()->findByAnswerSceneId($id);
         $answerSceneRerport = [

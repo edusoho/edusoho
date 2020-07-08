@@ -13,7 +13,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
-use Biz\Testpaper\Service\TestpaperService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
@@ -299,14 +299,11 @@ class CourseController extends BaseController
                 $task['watchTime'] = round($watchTime / 60);
             }
 
-            if ('testpaper' == $task['type'] && !empty($task['activity'])) {
+            if ('testpaper' === $task['type'] && !empty($task['activity'])) {
                 $activity = $task['activity'];
-                $score = $this->getTestpaperService()->searchTestpapersScore(['testId' => $activity['ext']['mediaId']]);
-                $paperNum = $this->getTestpaperService()->searchTestpaperResultsCount(
-                    ['testId' => $activity['ext']['mediaId']]
-                );
+                $score = $this->getAnswerSceneService()->getAnswerSceneReport($activity['ext']['answerSceneId']);
 
-                $task['score'] = 0 == $paperNum ? 0 : intval($score / $paperNum);
+                $task['score'] = $score['avg_score'];
             }
 
             $task['finishedNum'] = $finishedNum;
@@ -383,11 +380,11 @@ class CourseController extends BaseController
     }
 
     /**
-     * @return TestpaperService
+     * @return AnswerSceneService
      */
-    protected function getTestpaperService()
+    protected function getAnswerSceneService()
     {
-        return $this->createService('Testpaper:TestpaperService');
+        return $this->createService('ItemBank:Answer:AnswerSceneService');
     }
 
     /**

@@ -15,7 +15,7 @@ class CreateTableFavorite extends Migration
                 `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '收藏人',
                 `targetType` varchar(64) NOT NULL COMMENT '收藏的对象类型',
                 `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '收藏对象id',
-                `createdTime` int(10) unsigned NOT NULL COMMENT '收藏时间',
+                `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '收藏时间',
                 PRIMARY KEY (`id`),
                 KEY `targetType_targetId` (targetType, targetId),
                 KEY `userId` (userId)
