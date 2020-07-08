@@ -138,11 +138,11 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function coursePlatformConvert()
     {
         $this->getConnection()->exec("
-            UPDATE `course_v8` SET platform = 'supplier' WHERE originPlatform = 'supplier';
+            UPDATE `course_v8` SET platform = originPlatform WHERE platform <> originPlatform;
         ");
 
         $this->getConnection()->exec("
-            UPDATE `course_set_v8` SET platform = 'supplier' WHERE originPlatform = 'supplier';
+            UPDATE `course_set_v8` SET platform = originPlatform WHERE platform <> originPlatform;
         ");
 
         return 1;
