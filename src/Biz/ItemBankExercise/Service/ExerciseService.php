@@ -37,4 +37,12 @@ interface ExerciseService
     public function updateModuleEnable($exercised, $enable);
 
     public function updateBaseInfo($exerciseId, $data);
+
+    public function deleteExercise($exerciseId);
+
+    public function recommendExercise($exerciseId, $number);
+
+    public function cancelRecommendExercise($exerciseId);
+
+    public function publishExercise($exerciseId);
 }

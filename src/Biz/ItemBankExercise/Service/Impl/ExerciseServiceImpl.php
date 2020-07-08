@@ -14,7 +14,9 @@ use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
+use Biz\System\Service\LogService;
 use Biz\User\UserException;
+use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 
 class ExerciseServiceImpl extends BaseService implements ExerciseService
@@ -323,6 +325,52 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $conditions;
     }
 
+    public function deleteExercise($exerciseId)
+    {
+        $this->tryManageExercise($exerciseId);
+
+        $this->getExerciseDao()->delete($exerciseId);
+
+        $user = $this->getCurrentUser();
+
+        $this->getLogService()->info('item_bank_exercise', 'deleteExercise', "删除练习{$user['nickname']}(#{$user['id']})");
+    }
+
+    public function recommendExercise($exerciseId, $number)
+    {
+        $this->tryManageExercise($exerciseId);
+        if (!is_numeric($number)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER());
+        }
+
+        $fields = [
+            'recommended' => 1,
+            'recommendedSeq' => (int) $number,
+            'recommendedTime' => time(),
+        ];
+
+        return $this->getExerciseDao()->update($exerciseId, $fields);
+    }
+
+    public function cancelRecommendExercise($exerciseId)
+    {
+        $this->tryManageExercise($exerciseId);
+        $fields = [
+            'recommended' => 0,
+            'recommendedTime' => 0,
+            'recommendedSeq' => 0,
+        ];
+
+        return $this->getExerciseDao()->update($exerciseId, $fields);
+    }
+
+    public function publishExercise($exerciseId)
+    {
+        $this->tryManageExercise($exerciseId);
+
+        return $this->getExerciseDao()->update($exerciseId, ['status' => 'published']);
+    }
+
     /**
      * @return ExerciseDao
      */
@@ -377,5 +425,13 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     protected function getAnswerSceneService()
     {
         return $this->createService('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 }
