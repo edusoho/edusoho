@@ -52,6 +52,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = array(
             'productConvert',
             'uploadFileConvert',
+            'coursePlatformConvert',
         );
 
         $funcNames = array();
@@ -129,6 +130,19 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $this->getConnection()->exec("
             UPDATE `upload_files` SET storage='supplier' WHERE originPlatform='supplier';
+        ");
+
+        return 1;
+    }
+
+    protected function coursePlatformConvert()
+    {
+        $this->getConnection()->exec("
+            UPDATE `course_v8` SET platform = 'supplier' WHERE originPlatform = 'supplier';
+        ");
+
+        $this->getConnection()->exec("
+            UPDATE `course_set_v8` SET platform = 'supplier' WHERE originPlatform = 'supplier';
         ");
 
         return 1;
