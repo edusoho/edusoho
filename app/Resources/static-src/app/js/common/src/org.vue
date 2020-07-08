@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-html="OrgTreeTemplate"></div>
+        <div v-if="OrgTreeTemplate" v-html="OrgTreeTemplate"></div>
     </div>
 </template>
 
@@ -16,13 +16,6 @@
                 if (newVal && !$('.js-org-tree-select').length) {
                     this.$nextTick(() => {
                         import('app/js/org/org-tree-select/index.js');
-                        // $('.js-org-tree-select').select2({
-                        //     treeview: true,
-                        //     dropdownAutoWidth: true,
-                        //     treeviewInitState: 'collapsed',
-                        //     placeholderOption: 'first'
-                        //     // treeviewInitState: 'expanded'
-                        // });
                     });
                 }
             }
@@ -40,6 +33,7 @@
             },
         },
         data() {
+
             return {
                 OrgTreeTemplate: this.renderOrgTree(),
                 orgCode: ''

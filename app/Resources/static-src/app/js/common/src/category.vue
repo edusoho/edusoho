@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-select v-model="category" v-on:change="updateCategory">
-            <el-option value="0" :label="'course.base.category'|trans"></el-option>
+            <el-option value="0" :label="'category'|trans"></el-option>
             <el-option
                 v-for="(label,value) in categoryChoices"
                 :key="value"

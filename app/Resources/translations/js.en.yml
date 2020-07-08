@@ -1557,3 +1557,43 @@ merchant.resource.product_version.update_success_hint: Update Success
 merchant.resource.product_version.update_failed_hint: Update Failed
 
 validate.length_max.message: Please enter no more than %length% characters.
+
+classroom.title_label: Title
+classroom.subtitle_label: Subtitle
+classroom.basic_info: Base Info
+classroom.tag_label: Tag
+classroom.category_label: Category
+classroom.manage.set_info.tags.help_block: 'Used to query classes by label, and managed by administrator'
+category: Category
+site.org: Org
+classroom.about: about
+classroom.cover_image: Cover
+classroom.cover_image.upload_tips: Please upload images in jpg, gif, png format. The recommended image size is 540×304px. It is recommended that the image size should not exceed 2MB.
+editor.iframe_tips: To use IFrame normally, please set it in [Admin] - [System] -[Security] -[White List Domain]
+classroom.upload_picture_btn: 'Upload an image'
+
+
+classroom.marketing_setting: Marketing Setting
+classroom.price_label: Price(CNY)
+classroom.show_label: "Show %name%\n"
+classroom.buy_label: Buy %name%
+classroom.expiry_mode_label: 'Expired on'
+classroom.watch_expiry_mode_rule: 'View the rule'
+classroom.expiry_mode.first_publish_tips: 'Expiry mode can not be edited since the classroom was published'
+classroom.expiry_mode_end_date_tips: "If set，student can only study before the deadline. The system will remind students by 10 days before the deadline.\n"
+classroom.expiry_mode_days_tips: "If set，student can only study before the deadline. The system will remind students by 10 days before the deadline.\n"
+classroom.expiry_mode_end_date: 'Expired on'
+classroom.expiry_mode_days: 'Effective days'
+classroom.expiry_mode_forever: Forever
+classroom.price_tips: "Total %courseNum% courses, original %price% CNY.\n"
+classroom.amount: "Equals to "
+
+
+site.open: Open
+site.date.day: Day
+course.marketing_setup.services.provide_services: Services
+vip.level.free_learning: Free for Vip
+site.default.none: None
+form.btn.save: Save
+
+

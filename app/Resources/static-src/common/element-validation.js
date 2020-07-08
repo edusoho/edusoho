@@ -18,38 +18,9 @@ const max_year = (rule, value, callback) => {
   value < 100000 ? callback() : callback(new Error(Translator.trans('validate.max_year.message')));
 }
 
-const trans = {
-  created: function () {
-    let refFormRule = this.$options.refFormRule;
-
-    let map = this.transMap();
-
-    let keys = Object.keys(map);
-
-    for (let field in refFormRule) {
-      keys.map((value) => {
-        refFormRule[field].map((rule) => {
-          if (Object.keys(rule).indexOf(value)) {
-            // console.log(rule[value]);
-            // console.log(value);
-          }
-          console.log(rule);
-        });
-      });
-    }
-    console.log(refFormRule);
-  },
-  methods: {
-    transMap: function (key, params) {
-      let map = {
-        required: Translator.trans('validate.required.message', params)
-      };
-
-      return map[key] ? map[key] : null;
-    }
-  }
+const currency = (rule, value, callback) => {
+  /^[0-9]{0,8}(\.\d{0,2})?$/.test(value) ? callback() : callback(new Error(Translator.trans('validate.currency.message')));
 }
-
 
 export {
   trim,
@@ -57,5 +28,5 @@ export {
   positive_price,
   max_year,
   digits,
-  trans
+  currency,
 };

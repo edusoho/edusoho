@@ -1273,24 +1273,6 @@ web:
                                 side_nav: base
                             router_params:
                                 id: (classroom.id)
-                        classroom_manage_set_price:
-                            name: web.classroom.setting.price_side_nav
-                            data:
-                                side_nav: price
-                            router_params:
-                                id: (classroom.id)
-                        classroom_manage_set_picture:
-                            name: web.classroom.setting.picture_side_nav
-                            data:
-                                side_nav: picture
-                            router_params:
-                                id: (classroom.id)
-                        classroom_manage_service:
-                            name: web.classroom.setting.service_side_nav
-                            data:
-                                side_nav: service
-                            router_params:
-                                id: (classroom.id)
                         classroom_manage_headteacher:
                             name: web.classroom.setting.headteacher_side_nav
                             data:

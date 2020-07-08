@@ -1501,3 +1501,46 @@ merchant.resource.product_version.update_failed_hint: 更新失败
 
 validate.length_max.message: 最多只能输入 %length% 个字符
 course.manage.expiry_date.error_hint: 请输入时间范围
+
+classroom.title_label: 班级标题
+classroom.subtitle_label: 班级副标题
+classroom.basic_info: 基础信息
+classroom.tag_label: 标签
+classroom.category_label: 分类
+classroom.manage.set_info.tags.help_block: 用于按标签检索班级等，由网校管理员后台统一管理
+category: 分类
+site.org: 组织机构
+classroom.about: 简介
+classroom.cover_image: 封面图片
+classroom.cover_image.upload_tips: 请上传jpg, gif, png格式的图片, 建议图片尺寸为 540×304px。建议图片大小不超过2MB。
+editor.iframe_tips: 为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
+classroom.upload_picture_btn: 上传新图片
+
+classroom.marketing_setting: 营销设置
+classroom.price_label: 价格(元)
+classroom.show_label: %name%展示
+classroom.buy_label: %name%购买
+classroom.expiry_mode_label: 班级有效期
+classroom.watch_expiry_mode_rule: 查看有效期规则
+classroom.expiry_mode.first_publish_tips: 班级首次发布后，有效期类型不能再更改，只允许修改有效日期。
+classroom.expiry_mode_end_date_tips: 设置该值后，学员只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。
+classroom.expiry_mode_days_tips: 设置该值后，学员只能在有效天数内进行课程的学习，系统默认会在有效期前10天提醒学员。
+classroom.expiry_mode_end_date: 截止日期
+classroom.expiry_mode_days: 有效期天数
+classroom.expiry_mode_forever: 长期有效
+
+classroom.price_tips: 当前共有 %courseNum% 个课程，原价共计 %price% 元。
+classroom.amount: 相当于
+
+
+site.open: 开启
+site.date.day: 天
+course.marketing_setup.services.provide_services: 承诺提供服务
+vip.level.free_learning: 会员免费学
+site.default.none: 无
+form.btn.save: 保存
+
+
+
+
+
