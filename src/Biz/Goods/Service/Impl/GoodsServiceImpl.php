@@ -23,9 +23,25 @@ class GoodsServiceImpl extends BaseService implements GoodsService
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $goods = ArrayToolkit::parts($goods, ['productId', 'title', 'images']);
+        $goods = ArrayToolkit::parts($goods, [
+            'productId',
+            'title',
+            'subtitle',
+            'summary',
+            'orgId',
+            'orgCode',
+            'images',
+            'creator',
+            'minPrice',
+            'maxPrice',
+        ]);
 
         return $this->getGoodsDao()->create($goods);
+    }
+
+    public function publishGoods($id)
+    {
+        return $this->getGoodsDao()->create();
     }
 
     public function updateGoods($id, $goods)
@@ -96,6 +112,30 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         }
 
         return $this->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $targetId);
+    }
+
+    /**
+     * @param $goods
+     *
+     * @return bool
+     *              大于管理员的权限，教师权限且是当前商品的创建者
+     *
+     * @todo 按照当前逻辑课程后面设定的教师也应该有管理权限，从商品上，只有创建者有管理权限，后续作额外调整
+     */
+    public function canManageGoods($goods)
+    {
+        return $this->getCurrentUser()->isAdmin() || ($this->getCurrentUser()->isTeacher() && $this->isGoodsCreator($goods));
+    }
+
+    /**
+     * @param $goods
+     *
+     * @return bool
+     *              创建者Id不为空，且创建者Id等于当前用户Id
+     */
+    protected function isGoodsCreator($goods)
+    {
+        return $goods['creator'] && (int) $goods['creator'] === (int) $this->getCurrentUser()->getId();
     }
 
     /**
