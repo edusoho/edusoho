@@ -5,9 +5,9 @@ namespace Tests\Unit\ItemBankExercise\Service;
 use Biz\BaseTestCase;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Biz\ItemBankExercise\Service\ExerciseService;
+use Biz\Role\Util\PermissionBuilder;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
-use Biz\Role\Util\PermissionBuilder;
 
 class ExerciseServiceTest extends BaseTestCase
 {
@@ -265,7 +265,7 @@ class ExerciseServiceTest extends BaseTestCase
         $result = $this->getExerciseService()->canTakeItemBankExercise(1);
         $this->assertEquals(false, $result);
     }
-    
+
     protected function mockUser()
     {
         $currentUser = new CurrentUser();

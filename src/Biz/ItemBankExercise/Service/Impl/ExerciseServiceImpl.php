@@ -295,7 +295,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         }
 
         $member = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
-        
+
         if ($member && in_array($member['role'], ['teacher', 'student'])) {
             return true;
         }
