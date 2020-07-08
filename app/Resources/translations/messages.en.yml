@@ -7598,6 +7598,7 @@ log.module.mobile: 'Mobile'
 log.module.wap: 'Wap'
 log.module.push: 'Push'
 log.module.question_bank: 'Question Bank'
+log.module.item_bank_exercise: 'Item Bank Exercise'
 
 log.action.course.create: 'Create course'
 log.action.course.update: 'Update course'
@@ -7851,7 +7852,7 @@ log.action.question_bank.update_teacher: Update Manager
 log.action.question_bank.create_category: Create Bank Category
 log.action.question_bank.delete_category: Delete Bank Category
 log.action.question_bank.update_category: Update Bank Category
-log.action.question_bank.add_student: 'Add student'
+log.action.item_bank_exercise.add_student: 'Add student'
 
 log.action.template.course.create: Created a new<strong class="color-success"> course </strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: Updated the<strong class="color-success"> course </strong> 《<a href="%url%" target="_blank">%title%</a>》

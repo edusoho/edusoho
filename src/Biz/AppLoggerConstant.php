@@ -201,6 +201,13 @@ class AppLoggerConstant implements LoggerConstantInterface
      */
     const DESTROY_ACCOUNT_RECORD = 'destroy_account_record';
 
+    /**
+     *  [$question_bank 题库练习]
+     *
+     * $var string
+     */
+    const ITEM_BANK_EXERCISE = 'item_bank_exercise';
+
     public function getActions()
     {
         return [
@@ -500,12 +507,14 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'create_category',
                 'delete_category',
                 'update_category',
-                'add_student',
             ],
             self::DESTROY_ACCOUNT_RECORD => [
                 'create',
                 'pass',
                 'reject',
+            ],
+            self::ITEM_BANK_EXERCISE => [
+                'add_student',
             ],
         ];
     }
@@ -537,6 +546,7 @@ class AppLoggerConstant implements LoggerConstantInterface
             self::PUSH,
             self::QUESTION_BANK,
             self::DESTROY_ACCOUNT_RECORD,
+            self::ITEM_BANK_EXERCISE,
 //            self::COIN,
 //            self::COUPON,
 //            self::DISCOUNT,

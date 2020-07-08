@@ -219,7 +219,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
     {
         $user = $this->getUserService()->getUser($userId);
         $this->getLogService()->info(
-            'question_bank',
+            'item_bank_exercise',
             'add_student',
             "《{$exercise['title']}》(#{$exercise['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$info['remark']}",
             [
