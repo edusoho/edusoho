@@ -17,6 +17,8 @@ class MemberOperationRecordDaoImpl extends AdvancedDaoImpl implements MemberOper
             'conditions' => [
                 'id = :id',
                 'userId IN (:userIds)',
+                'exerciseId = :exerciseId',
+                'operateType = :operateType',
             ],
         ];
     }

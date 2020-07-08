@@ -136,7 +136,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             return false;
         }
 
-        if (1 == $teacher && in_array($user->getId(), $exercise['teacherIds'])) {
+        if (0 == $teacher || in_array($user->getId(), $exercise['teacherIds'])) {
             return true;
         }
 
@@ -204,6 +204,20 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->getExerciseDao()->getByQuestionBankId($questionBankId);
     }
 
+    public function searchOrderByStudentNumAndLastDays($conditions, $lastDays, $start, $limit)
+    {
+        $conditions = $this->_prepareCourseConditions($conditions);
+
+        return $this->getExerciseDao()->searchOrderByStudentNumAndLastDays($conditions, $lastDays, $start, $limit);
+    }
+
+    public function searchOrderByRatingAndLastDays($conditions, $lastDays, $start, $limit)
+    {
+        $conditions = $this->_prepareCourseConditions($conditions);
+
+        return $this->getExerciseDao()->searchOrderByRatingAndLastDays($conditions, $lastDays, $start, $limit);
+    }
+
     public function updateModuleEnable($exercised, $enable)
     {
         return $this->getExerciseDao()->update($exercised, $enable);
@@ -218,6 +232,52 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         $exercise = $this->getExerciseDao()->update($id, $fields);
 
         return $exercise;
+    }
+
+    public function deleteExercise($exerciseId)
+    {
+        $this->tryManageExercise($exerciseId);
+
+        $this->getExerciseDao()->delete($exerciseId);
+
+        $user = $this->getCurrentUser();
+
+        $this->getLogService()->info('item_bank_exercise', 'deleteExercise', "删除练习{$user['nickname']}(#{$user['id']})");
+    }
+
+    public function recommendExercise($exerciseId, $number)
+    {
+        $this->tryManageExercise($exerciseId);
+        if (!is_numeric($number)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER());
+        }
+
+        $fields = [
+            'recommended' => 1,
+            'recommendedSeq' => (int) $number,
+            'recommendedTime' => time(),
+        ];
+
+        return $this->getExerciseDao()->update($exerciseId, $fields);
+    }
+
+    public function cancelRecommendExercise($exerciseId)
+    {
+        $this->tryManageExercise($exerciseId);
+        $fields = [
+            'recommended' => 0,
+            'recommendedTime' => 0,
+            'recommendedSeq' => 0,
+        ];
+
+        return $this->getExerciseDao()->update($exerciseId, $fields);
+    }
+
+    public function publishExercise($exerciseId)
+    {
+        $this->tryManageExercise($exerciseId);
+
+        return $this->getExerciseDao()->update($exerciseId, ['status' => 'published']);
     }
 
     protected function validateExpiryMode($exercise)
@@ -322,52 +382,6 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         });
 
         return $conditions;
-    }
-
-    public function deleteExercise($exerciseId)
-    {
-        $this->tryManageExercise($exerciseId);
-
-        $this->getExerciseDao()->delete($exerciseId);
-
-        $user = $this->getCurrentUser();
-
-        $this->getLogService()->info('item_bank_exercise', 'deleteExercise', "删除练习{$user['nickname']}(#{$user['id']})");
-    }
-
-    public function recommendExercise($exerciseId, $number)
-    {
-        $this->tryManageExercise($exerciseId);
-        if (!is_numeric($number)) {
-            $this->createNewException(CommonException::ERROR_PARAMETER());
-        }
-
-        $fields = [
-            'recommended' => 1,
-            'recommendedSeq' => (int) $number,
-            'recommendedTime' => time(),
-        ];
-
-        return $this->getExerciseDao()->update($exerciseId, $fields);
-    }
-
-    public function cancelRecommendExercise($exerciseId)
-    {
-        $this->tryManageExercise($exerciseId);
-        $fields = [
-            'recommended' => 0,
-            'recommendedTime' => 0,
-            'recommendedSeq' => 0,
-        ];
-
-        return $this->getExerciseDao()->update($exerciseId, $fields);
-    }
-
-    public function publishExercise($exerciseId)
-    {
-        $this->tryManageExercise($exerciseId);
-
-        return $this->getExerciseDao()->update($exerciseId, ['status' => 'published']);
     }
 
     /**

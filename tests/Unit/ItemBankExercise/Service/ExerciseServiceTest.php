@@ -61,9 +61,9 @@ class ExerciseServiceTest extends BaseTestCase
     {
         $excepted = $this->batchCreateExercise();
         $res = $this->getExerciseService()->findByIds([1, 2, 3]);
-        foreach ($res as $key => $value) {
-            $this->assertEquals($excepted[$key - 1]['id'], $key);
-        }
+        $this->assertEquals(1, $res[1]['id']);
+        $this->assertEquals(2, $res[2]['id']);
+        $this->assertEquals(3, $res[3]['id']);
     }
 
     public function testSearch()
@@ -225,6 +225,30 @@ class ExerciseServiceTest extends BaseTestCase
         $this->assertEquals('days', $res['expiryMode']);
     }
 
+    public function testSearchOrderByStudentNumAndLastDays()
+    {
+        $this->batchCreateExercise();
+        $this->mockExerciseMembers();
+
+        $exercises = $this->getExerciseService()->searchOrderByStudentNumAndLastDays([], 1, 0, 3);
+
+        $this->assertEquals(3, $exercises[0]['id']);
+        $this->assertEquals(2, $exercises[1]['id']);
+        $this->assertEquals(1, $exercises[2]['id']);
+    }
+
+    public function testSearchOrderByRatingAndLastDays()
+    {
+        $this->batchCreateExercise();
+        $this->mockReviews();
+
+        $exercises = $this->getExerciseService()->searchOrderByRatingAndLastDays([], 1, 0, 3);
+
+        $this->assertEquals(3, $exercises[0]['id']);
+        $this->assertEquals(2, $exercises[1]['id']);
+        $this->assertEquals(1, $exercises[2]['id']);
+    }
+
     protected function createExercise()
     {
         return $this->getExerciseService()->create(
@@ -242,18 +266,21 @@ class ExerciseServiceTest extends BaseTestCase
         return $this->getExerciseDao()->batchCreate(
             [
                 [
+                    'id' => 1,
                     'title' => 'test1',
                     'questionBankId' => 1,
                     'categoryId' => 1,
                     'seq' => 1,
                 ],
                 [
+                    'id' => 2,
                     'title' => 'test2',
                     'questionBankId' => 2,
                     'categoryId' => 1,
                     'seq' => 2,
                 ],
                 [
+                    'id' => 3,
                     'title' => 'test3',
                     'questionBankId' => 3,
                     'categoryId' => 2,
@@ -261,6 +288,39 @@ class ExerciseServiceTest extends BaseTestCase
                 ],
             ]
         );
+    }
+
+    protected function mockExerciseMembers()
+    {
+        $this->getExerciseMemberDao()->batchCreate([
+            ['exerciseId' => 3, 'userId' => 1, 'role' => 'student'],
+            ['exerciseId' => 3, 'userId' => 2, 'role' => 'student'],
+            ['exerciseId' => 2, 'userId' => 2, 'role' => 'student'],
+        ]);
+    }
+
+    protected function mockReviews()
+    {
+        $this->getReviewDao()->create([
+            'userId' => 1,
+            'targetType' => 'item_bank_exercise',
+            'targetId' => 3,
+            'rating' => 3,
+        ]);
+
+        $this->getReviewDao()->create([
+            'userId' => 1,
+            'targetType' => 'item_bank_exercise',
+            'targetId' => 3,
+            'rating' => 4,
+        ]);
+
+        $this->getReviewDao()->create([
+            'userId' => 1,
+            'targetType' => 'item_bank_exercise',
+            'targetId' => 2,
+            'rating' => 3,
+        ]);
     }
 
     /**
@@ -285,5 +345,15 @@ class ExerciseServiceTest extends BaseTestCase
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    protected function getExerciseMemberDao()
+    {
+        return $this->createDao('ItemBankExercise:ExerciseMemberDao');
+    }
+
+    protected function getReviewDao()
+    {
+        return $this->createDao('Review:ReviewDao');
     }
 }

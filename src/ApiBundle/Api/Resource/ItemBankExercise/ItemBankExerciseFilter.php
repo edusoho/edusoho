@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\ItemBankExercise;
 
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Util\AssetHelper;
+use ApiBundle\Api\Util\Money;
 
 class ItemBankExerciseFilter extends Filter
 {
@@ -11,7 +12,19 @@ class ItemBankExerciseFilter extends Filter
         'id', 'title', 'cover',
     ];
 
-    protected $publicFields = [];
+    protected $publicFields = [
+        'id', 'seq', 'title', 'status', 'chapterEnable', 'assessmentEnable', 'questionBankId',
+        'categoryId', 'cover', 'studentNum', 'joinEnable', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate',
+        'isFree', 'price', 'originPrice', 'ratingNum', 'rating',
+        'recommended', 'recommendedSeq', 'recommendedTime', 'createdTime', 'updatedTime', 'access',
+    ];
+
+    protected function publicFields(&$data)
+    {
+        $this->transformCover($data['cover']);
+        $data['price2'] = Money::convert($data['price']);
+        $data['originPrice2'] = Money::convert($data['originPrice']);
+    }
 
     protected function simpleFields(&$data)
     {
