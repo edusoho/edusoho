@@ -49,4 +49,6 @@ interface ExerciseService
     public function searchOrderByStudentNumAndLastDays($conditions, $lastDays, $start, $limit);
 
     public function searchOrderByRatingAndLastDays($conditions, $lastDays, $start, $limit);
+
+    public function canTakeItemBankExercise($exerciseId);
 }

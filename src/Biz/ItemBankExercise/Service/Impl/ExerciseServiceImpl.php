@@ -280,6 +280,33 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->getExerciseDao()->update($exerciseId, ['status' => 'published']);
     }
 
+    public function canTakeItemBankExercise($exerciseId)
+    {
+        $exercise = $this->get($exerciseId);
+
+        if (empty($exercise)) {
+            return false;
+        }
+
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return false;
+        }
+
+        $member = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
+        
+        if ($member && in_array($member['role'], ['teacher', 'student'])) {
+            return true;
+        }
+
+        if ($user->hasPermission('admin_course_manage') || $user->hasPermission('admin_v2_course_manage')) {
+            return true;
+        }
+
+        return false;
+    }
+
     protected function validateExpiryMode($exercise)
     {
         $expiryMode = ExpiryModeFactory::create($exercise['expiryMode']);
