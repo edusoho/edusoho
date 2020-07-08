@@ -11053,4 +11053,37 @@ exception.review.rating_limit: 评分不能超过5
 exception.review.not_found_review: 评价不存在
 exception.review.post_limit: 回复数量已达5条上限，不能再回复
 
+admin_v2.operating.goods_recommend_setting: 商品推荐设置
+admin_v2.operating.goods_recommend_rule: 猜你想学推荐规则
+
+admin_v2.operating.goods_recommend.hot: 按热度推荐
+admin_v2.operating.goods_recommend.hot_tips: 根据最近30天购买人数最多的商品进行推荐，课程商品优先推荐课程，班级商品优先推荐班级。
+admin_v2.operating.goods_recommend.latest: 按最新推荐
+admin_v2.operating.goods_recommend.latest_tips: 根据商品发布时间展示最近发布的商品，课程商品优先推荐课程，班级商品优先推荐班级。
+admin_v2.operating.goods_recommend.label: 按标签推荐
+admin_v2.operating.goods_recommend.label_tips: 根据商品的分类标签，显示相关的商品。课程商品优先推荐课程，班级商品优先推荐班级。
+
+
+admin_v2.operating.goods_show_setting: 销售情况显示设置
+admin_v2.operating.goods_show_sales: 商品页显示销售情况
+admin_v2.operating.goods_show_sales.course: 课程商品页显示销售情况
+admin_v2.operating.goods_show_sales.classroom: 班级商品页显示销售情况
+admin_v2.operating.goods_show_data: 商品页显示数据
+admin_v2.operating.goods_show.join_number: 显示加入人数
+admin_v2.operating.goods_show.visitor_number: 显示浏览人数
+
+admin_v2.operating.goods_leading_setting: 商品页引导
+admin_v2.operating.goods_leading.join_group: 商品页引导加群
+admin_v2.operating.goods_leading.join_group.tips: 引导访问商品页的用户可以加微信群、微信个人号或公众号，通过社群和公众号承接商品页可能流失的流量进行转化。该功能会在所有终端、网校所有的商品页面都显示同一个引导文案和二维码，建议提供网校的公众号和做流量运营转化的微信群。
+admin_v2.operating.goods_leading.join_group.btn: 查看教程
+admin_v2.operating.goods_leading.join_group_label: 引导标签设置
+admin_v2.operating.goods_leading.join_group_label.example_btn: 查看示例
+admin_v2.operating.goods_leading.label_content: 引导标签弹出内容设置
+admin_v2.operating.goods_leading.label_content.description: 引导描述
+admin_v2.operating.goods_leading.label_content.description_tips: 可输入相关引导用户的文案，如：进群免费获取教材，免费学习课程等。
+admin_v2.operating.goods_leading.label_content.qrcode: 二维码上传
+admin_v2.operating.goods_leading.label_content.qecode_upload: 上传二维码
+admin_v2.operating.goods_leading.label_content.qrcode_tips: 请上传jpg, gif, png格式的图片, 图片尺寸为 1:1。建议图片大小不超过2MB。
+admin_v2.operating.goods_leading_setting.tips: 注意：微信群人数超过100人后，用户将无法扫码进群且微信群二维码有效期为7天，请及时更新群二维码。
+
 exception.favorite.forbidden_operate_favorite: 没有权限

@@ -9722,4 +9722,37 @@ exception.review.rating_limit: Rating no more than 5
 exception.review.not_found_review: Review not found
 exception.review.post_limit: Post no more than 5
 
+admin_v2.operating.goods_recommend_setting: Product recommendation settings
+admin_v2.operating.goods_recommend_rule: Recommended rules
+
+admin_v2.operating.goods_recommend.hot: Recommended by heat
+admin_v2.operating.goods_recommend.hot_tips: Recommendations are made based on the products with the largest number of purchases in the last 30 days. Course products are recommended for courses first, and class products are recommended for classes first.
+admin_v2.operating.goods_recommend.latest: According to the latest recommendation
+admin_v2.operating.goods_recommend.latest_tips: According to the product release time, the most recently released products are displayed. Course products are recommended for courses first, and class products are recommended for classes first.
+admin_v2.operating.goods_recommend.label: Recommended by label
+admin_v2.operating.goods_recommend.label_tips: According to the classification label of the goods, the related goods are displayed. Course goods give priority to courses, and class goods give priority to classes.
+
+
+admin_v2.operating.goods_show_setting: Sales display settings
+admin_v2.operating.goods_show_sales: Product page shows sales
+admin_v2.operating.goods_show_sales.course: Course merchandise page shows sales
+admin_v2.operating.goods_show_sales.classroom: Class product page shows sales
+admin_v2.operating.goods_show_data: Product page display data
+admin_v2.operating.goods_show.join_number: Show joins
+admin_v2.operating.goods_show.visitor_number: Show visitors
+
+admin_v2.operating.goods_leading_setting: Product page guide
+admin_v2.operating.goods_leading.join_group: Product page guide join group
+admin_v2.operating.goods_leading.join_group.tips: Users who guide access to the product page can add a WeChat group, WeChat personal number or public number, and use the community and public number to undertake the possible loss of the product page for conversion. This function will display the same guide copy and QR code on all the product pages of all terminals and online schools. It is recommended to provide the public number of the online school and the WeChat group that converts traffic operations.
+admin_v2.operating.goods_leading.join_group.btn: View tutorial
+admin_v2.operating.goods_leading.join_group_label: Boot label settings
+admin_v2.operating.goods_leading.join_group_label.example_btn: View example
+admin_v2.operating.goods_leading.label_content: Boot label pop-up content settings
+admin_v2.operating.goods_leading.label_content.description: Boot description
+admin_v2.operating.goods_leading.label_content.description_tips: 'You can enter the relevant copy to guide the user, such as: free access to teaching materials into the group, free learning courses, etc.'
+admin_v2.operating.goods_leading.label_content.qrcode: QR code upload
+admin_v2.operating.goods_leading.label_content.qecode_upload: Upload QR code
+admin_v2.operating.goods_leading.label_content.qrcode_tips: 'Please upload pictures in jpg, gif, png format, the picture size is 1:1. It is recommended that the image size should not exceed 2MB.'
+admin_v2.operating.goods_leading_setting.tips: 'Note: After the number of WeChat groups exceeds 100, users will not be able to scan the code to enter the group and the WeChat group QR code is valid for 7 days. Please update the group QR code in time.'
+
 exception.favorite.forbidden_operate_favorite: Forbidden
