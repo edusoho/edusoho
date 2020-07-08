@@ -7,6 +7,7 @@ use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\ItemBankExercise\Dao\ExerciseModuleDao;
 use Biz\ItemBankExercise\ItemBankExerciseException;
+use Biz\ItemBankExercise\Service\AssessmentExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
@@ -96,7 +97,18 @@ class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleSer
 
     public function deleteAssessmentModule($moduleId)
     {
-        return $this->getItemBankExerciseModuleDao()->delete($moduleId);
+        try{
+            $this->beginTransaction();
+
+            $this->getItemBankExerciseModuleDao()->delete($moduleId);
+
+            $assessmentExercises = $this->getAssessmentExerciseService()->findByModuleId($moduleId);
+            $this->getAssessmentExerciseService()->batchDeleteAssessmentExercise(ArrayToolkit::column($assessmentExercises, 'id'));
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+        }
     }
 
     /**
@@ -121,5 +133,13 @@ class ExerciseModuleServiceImpl extends BaseService implements ExerciseModuleSer
     protected function getAnswerSceneService()
     {
         return $this->createService('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return AssessmentExerciseService
+     */
+    protected function getAssessmentExerciseService()
+    {
+        return $this->createService('ItemBankExercise:AssessmentExerciseService');
     }
 }

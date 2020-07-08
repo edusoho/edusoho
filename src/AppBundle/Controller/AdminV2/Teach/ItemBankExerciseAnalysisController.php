@@ -6,13 +6,12 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\ItemBankExercise\Service\AssessmentExerciseService;
-use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Symfony\Component\HttpFoundation\Request;
 
-class ItemBankExerciseController extends BaseController
+class ItemBankExerciseAnalysisController extends BaseController
 {
     public function indexAction(Request $request)
     {
@@ -30,64 +29,22 @@ class ItemBankExerciseController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($exercises, 'creator'));
-        $exercisesStatusNum = $this->getDifferentStatusExercisesNum($conditions);
         $questionBanks = $this->getQuestionBankService()->findQuestionBanksByIds(ArrayToolkit::column($exercises, 'questionBankId'));
         $questionBanks = ArrayToolkit::index($questionBanks, 'id');
+        foreach ($exercises as &$exercise) {
+            $exercise['assessment_num'] = $this->getAssessmentExerciseService()->count(['exerciseId' => $exercise['id']]);
+        }
 
         return $this->render(
-            'admin-v2/teach/item-bank-exercise/index.html.twig',
+            'admin-v2/teach/item-bank-exercise/analysis.html.twig',
             [
                 'exercises' => $exercises,
                 'paginator' => $paginator,
-                'exercisesStatusNum' => $exercisesStatusNum,
-                'users' => $users,
                 'categoryTree' => $this->getCategoryService()->getCategoryTree(),
                 'categories' => $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($exercises, 'categoryId')),
                 'questionBanks' => $questionBanks,
             ]
         );
-    }
-
-    public function publishAction(Request $request, $id)
-    {
-        $exercise = $this->getExerciseService()->publishExercise($id);
-
-        return $this->createJsonResponse($exercise);
-    }
-
-    public function deleteAction(Request $request, $id)
-    {
-        $this->getExerciseService()->deleteExercise($id);
-
-        return $this->createJsonResponse(true);
-    }
-
-    public function recommendAction(Request $request, $id)
-    {
-        $exercise = $this->getExerciseService()->get($id);
-
-        if ('POST' == $request->getMethod()) {
-            $number = $request->request->get('number');
-
-            $exercise = $this->getExerciseService()->recommendExercise($id, $number);
-
-            return $this->createJsonResponse($exercise);
-        }
-
-        return $this->render(
-            'admin-v2/teach/item-bank-exercise/recommend-modal.html.twig',
-            [
-                'exercise' => $exercise,
-            ]
-        );
-    }
-
-    public function cancelRecommendAction(Request $request, $id)
-    {
-        $exercise = $this->getExerciseService()->cancelRecommendExercise($id);
-
-        return $this->createJsonResponse($exercise);
     }
 
     protected function filterConditions($conditions)
@@ -105,21 +62,6 @@ class ItemBankExerciseController extends BaseController
         }
 
         return $conditions;
-    }
-
-    protected function getDifferentStatusExercisesNum($conditions)
-    {
-        $total = $this->getExerciseService()->count($conditions);
-        $published = $this->getExerciseService()->count(array_merge($conditions, ['status' => 'published']));
-        $closed = $this->getExerciseService()->count(array_merge($conditions, ['status' => 'closed']));
-        $draft = $this->getExerciseService()->count(array_merge($conditions, ['status' => 'draft']));
-
-        return [
-            'total' => empty($total) ? 0 : $total,
-            'published' => empty($published) ? 0 : $published,
-            'closed' => empty($closed) ? 0 : $closed,
-            'draft' => empty($draft) ? 0 : $draft,
-        ];
     }
 
     /**
@@ -144,5 +86,13 @@ class ItemBankExerciseController extends BaseController
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
+    }
+
+    /**
+     * @return AssessmentExerciseService
+     */
+    protected function getAssessmentExerciseService()
+    {
+        return $this->createService('ItemBankExercise:AssessmentExerciseService');
     }
 }
