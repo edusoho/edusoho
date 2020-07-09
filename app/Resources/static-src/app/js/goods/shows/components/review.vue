@@ -1,6 +1,6 @@
 <template>
   <div class="reviews-item">
-    <img class="reviews-item__img" :src="review.user.largeAvatar" alt="">
+    <img class="reviews-item__img" src="http://qa.edusoho.cn/files/default/2020/06-09/1643462753a8389520.jpg" alt="">
     <div class="reviews-item__text reviews-text">
       <div class="reviews-text__nickname">
         <a class="link-dark" href="javascript:;" target="_blank">{{ review.user.nickname }}</a>
