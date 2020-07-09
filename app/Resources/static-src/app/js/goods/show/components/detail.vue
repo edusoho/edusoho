@@ -2,7 +2,9 @@
   <div class="product-detail clearfix">
       
     <div class="product-detail__left detail-left pull-left">
-      <img :src="detailData.image" alt="">
+      <div class="detail-left__img">
+        <img :src="detailData.image" alt="">
+      </div>
       <ul class="detail-left__text clearfix">
         <li class="pull-left"><i class="es-icon es-icon-friends"></i>{{ currentPlan.joinedNum }}人加入学习</li>
         <li class="pull-right">
