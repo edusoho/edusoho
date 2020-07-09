@@ -266,6 +266,14 @@ class ExerciseServiceTest extends BaseTestCase
         $this->assertEquals(false, $result);
     }
 
+    public function getFindExercisesByLikeTitle()
+    {
+        $this->batchCreateExercise();
+        $res = $this->getExerciseService()->findExercisesByLikeTitle('test');
+
+        $this->assertEquals(3, count($res));
+    }
+
     protected function mockUser()
     {
         $currentUser = new CurrentUser();
@@ -326,9 +334,9 @@ class ExerciseServiceTest extends BaseTestCase
     protected function mockExerciseMembers()
     {
         $this->getExerciseMemberDao()->batchCreate([
-            ['exerciseId' => 3, 'userId' => 1, 'role' => 'student'],
-            ['exerciseId' => 3, 'userId' => 2, 'role' => 'student'],
-            ['exerciseId' => 2, 'userId' => 2, 'role' => 'student'],
+            ['exerciseId' => 3, 'userId' => 1, 'role' => 'student', 'remark' => 'aaa'],
+            ['exerciseId' => 3, 'userId' => 2, 'role' => 'student', 'remark' => 'bbb'],
+            ['exerciseId' => 2, 'userId' => 2, 'role' => 'student', 'remark' => 'ccc'],
         ]);
     }
 
@@ -339,6 +347,7 @@ class ExerciseServiceTest extends BaseTestCase
             'targetType' => 'item_bank_exercise',
             'targetId' => 3,
             'rating' => 3,
+            'content' => 'a',
         ]);
 
         $this->getReviewDao()->create([
@@ -346,6 +355,7 @@ class ExerciseServiceTest extends BaseTestCase
             'targetType' => 'item_bank_exercise',
             'targetId' => 3,
             'rating' => 4,
+            'content' => 'b',
         ]);
 
         $this->getReviewDao()->create([
@@ -353,6 +363,7 @@ class ExerciseServiceTest extends BaseTestCase
             'targetType' => 'item_bank_exercise',
             'targetId' => 2,
             'rating' => 3,
+            'content' => 'c',
         ]);
     }
 

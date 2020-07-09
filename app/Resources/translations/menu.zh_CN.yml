@@ -537,6 +537,7 @@ admin_v2.course.review_menu: 反馈管理
 
 admin_v2.course.review.course_review_tab: 课程评价
 admin_v2.course.review.classroom_review_tab: 班级评价
+admin_v2.course.review.exercise_review_tab: 题库练习评价
 
 # 教学模块-资源管理
 admin_v2.cloud_resource.basic_group: 资源管理

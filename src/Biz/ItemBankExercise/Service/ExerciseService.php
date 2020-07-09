@@ -51,4 +51,6 @@ interface ExerciseService
     public function searchOrderByRatingAndLastDays($conditions, $lastDays, $start, $limit);
 
     public function canTakeItemBankExercise($exerciseId);
+
+    public function findExercisesByLikeTitle($title);
 }

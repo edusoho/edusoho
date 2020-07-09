@@ -81,6 +81,17 @@ class ExerciseDaoImpl extends AdvancedDaoImpl implements ExerciseDao
         return $itemBankExercises;
     }
 
+    public function findByLikeTitle($title)
+    {
+        if (empty($title)) {
+            return array();
+        }
+
+        $sql = "SELECT * FROM {$this->table} WHERE `title` LIKE ?; ";
+
+        return $this->db()->fetchAll($sql, array('%'.$title.'%'));
+    }
+
     protected function getExerciseMemberDao()
     {
         return $this->biz->dao('ItemBankExercise:ExerciseMemberDao');
