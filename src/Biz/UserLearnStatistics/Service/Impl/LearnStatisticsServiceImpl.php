@@ -2,8 +2,8 @@
 
 namespace Biz\UserLearnStatistics\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
-use Biz\Classroom\Service\ClassroomReviewService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseNoteService;
@@ -11,14 +11,13 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
-use Biz\Course\Service\ReviewService;
 use Biz\Course\Service\ThreadService;
+use Biz\Review\Service\ReviewService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Biz\UserLearnStatistics\Dao\DailyStatisticsDao;
 use Biz\UserLearnStatistics\Service\LearnStatisticsService;
-use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Order\Service\OrderService;
 
 class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsService
@@ -75,10 +74,10 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     {
         try {
             $this->beginTransaction();
-            $fields = array(
+            $fields = [
                 'isStorage' => 1,
                 'recordTime' => $conditions['createdTime_GE'],
-            );
+            ];
             $statistics = $this->searchLearnData($conditions, $fields);
             $this->getDailyStatisticsDao()->batchCreate($statistics);
             $this->commit();
@@ -93,9 +92,9 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     {
         try {
             $this->beginTransaction();
-            $fields = array(
+            $fields = [
                 'recordTime' => $conditions['createdTime_GE'],
-            );
+            ];
             $statistics = $this->searchLearnData($conditions, $fields);
             $this->getDailyStatisticsDao()->batchCreate($statistics);
             $this->commit();
@@ -119,9 +118,9 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         }
     }
 
-    public function searchLearnData($conditions, $fields = array())
+    public function searchLearnData($conditions, $fields = [])
     {
-        if (!ArrayToolkit::requireds($conditions, array('createdTime_GE', 'createdTime_LT'))) {
+        if (!ArrayToolkit::requireds($conditions, ['createdTime_GE', 'createdTime_LT'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
@@ -129,23 +128,23 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         $payAmount = $this->findUserPaidAmount($conditions);
         $refundAmount = $this->findUserRefundAmount($conditions);
 
-        $statistics = array();
+        $statistics = [];
         if (!empty($conditions['userIds'])) {
             $userIds = array_unique($conditions['userIds']);
         }
 
-        $statisticMap = array(
-            'finishedTaskNum' => $this->getTaskResultService()->countTaskNumGroupByUserId(array_merge(array('status' => 'finish'), $conditions)),
+        $statisticMap = [
+            'finishedTaskNum' => $this->getTaskResultService()->countTaskNumGroupByUserId(array_merge(['status' => 'finish'], $conditions)),
             'joinedClassroomNum' => $this->findUserOperateClassroomNum('join', $conditions),
             'exitClassroomNum' => $this->findUserOperateClassroomNum('exit', $conditions),
             'joinedCourseSetNum' => $this->findUserOperateCourseSetNum('join', $conditions),
             'exitCourseSetNum' => $this->findUserOperateCourseSetNum('exit', $conditions),
             'joinedCourseNum' => $this->findUserOperateCourseNum('join', $conditions),
             'exitCourseNum' => $this->findUserOperateCourseNum('exit', $conditions),
-        );
+        ];
 
         if (!isset($userIds)) {
-            $userIds = array();
+            $userIds = [];
             foreach ($statisticMap as $key => $data) {
                 $userIds = array_merge($userIds, array_keys($data));
             }
@@ -160,7 +159,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             if (0 == $userId) {
                 continue;
             }
-            $statistic = array();
+            $statistic = [];
             $statistic['learnedSeconds'] = empty($learnedSeconds[$userId]) ? 0 : $learnedSeconds[$userId]['learnedTime'];
             $statistic['paidAmount'] = empty($payAmount[$userId]) ? 0 : $payAmount[$userId]['amount'];
             $statistic['refundAmount'] = empty($refundAmount[$userId]) ? 0 : $refundAmount[$userId]['amount'];
@@ -179,12 +178,12 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     private function analysisCondition($conditions)
     {
         if (!empty($conditions['isDefault']) && 'true' == $conditions['isDefault']) {
-            $orderBy = array('userId' => 'DESC', 'joinedCourseNum' => 'DESC', 'actualAmount' => 'DESC');
+            $orderBy = ['userId' => 'DESC', 'joinedCourseNum' => 'DESC', 'actualAmount' => 'DESC'];
         } else {
-            $orderBy = array('id' => 'DESC');
+            $orderBy = ['id' => 'DESC'];
         }
 
-        $conditions = ArrayToolkit::parts($conditions, array('startDate', 'endDate', 'userIds'));
+        $conditions = ArrayToolkit::parts($conditions, ['startDate', 'endDate', 'userIds']);
         if (!empty($conditions['startDate']) || !empty($conditions['endDate'])) {
             $daoType = 'Daily';
             $conditions['recordTime_GE'] = !empty($conditions['startDate']) ? strtotime($conditions['startDate']) : strtotime($this->getRecordEndTime());
@@ -195,7 +194,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $daoType = 'Total';
         }
 
-        return array($conditions, $orderBy, $daoType);
+        return [$conditions, $orderBy, $daoType];
     }
 
     public function getRecordEndTime()
@@ -210,8 +209,8 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         try {
             $this->beginTransaction();
             $dailyData = $this->searchDailyStatistics(
-                array('isStorage' => 0),
-                array('id' => 'asc'),
+                ['isStorage' => 0],
+                ['id' => 'asc'],
                 0,
                 $limit
             );
@@ -224,12 +223,12 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
 
             $dailyUserIds = ArrayToolkit::column($dailyData, 'userId');
 
-            $totalData = $this->searchTotalStatistics(array('userIds' => $dailyUserIds), array(), 0, PHP_INT_MAX);
+            $totalData = $this->searchTotalStatistics(['userIds' => $dailyUserIds], [], 0, PHP_INT_MAX);
             $totalData = ArrayToolkit::index($totalData, 'userId');
             $totalUserIds = array_keys($totalData);
 
-            $addTotalData = $updateTotalData = array();
-            $updateColumn = array(
+            $addTotalData = $updateTotalData = [];
+            $updateColumn = [
                 'joinedClassroomNum',
                 'joinedCourseSetNum',
                 'joinedCourseNum',
@@ -241,7 +240,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
                 'paidAmount',
                 'refundAmount',
                 'actualAmount',
-            );
+            ];
             foreach ($dailyData as $key => $data) {
                 unset($data['recordTime']);
                 unset($data['isStorage']);
@@ -292,52 +291,51 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         $learnCourseIds = $this->getCourseService()->findUserLearnCourseIds($userId);
 
         if (empty($learnCourseIds)) {
-            return array();
+            return [];
         }
 
         $learningCourseSetCount = $this->getCourseSetService()->countUserLearnCourseSets($userId);
         $learningCoursesCount = $this->getCourseService()->countUserLearnCourses($userId);
         $learningProcess = $this->getLearningDataAnalysisService()->getUserLearningProgressByCourseIds($learnCourseIds, $userId);
-        $learningCourseNotesCount = $this->getCourseNoteService()->countCourseNotes(array('courseIds' => $learnCourseIds, 'userId' => $userId));
+        $learningCourseNotesCount = $this->getCourseNoteService()->countCourseNotes(['courseIds' => $learnCourseIds, 'userId' => $userId]);
         $learningCourseThreadsCount = $this->getCourseThreadService()->countPartakeThreadsByUserId($userId);
         $learningClassroomThreadCount = $this->getThreadService()->countPartakeThreadsByUserIdAndTargetType($userId, 'classroom');
-        $learningCourseReviewCount = $this->getCourseReviewService()->searchReviewsCount(array('userId' => $userId));
-        $learningClassroomReviewCount = $this->getClassroomReviewService()->searchReviewCount(array('userId' => $userId));
+        $learningReviewCount = $this->getReviewService()->countReviews(['userId' => $userId, 'parentId' => 0, 'targetTypes' => ['course', 'classroom']]);
 
-        return array(
+        return [
             'learningCourseSetCount' => $learningCourseSetCount,
             'learningCoursesCount' => $learningCoursesCount,
             'learningProcess' => $learningProcess,
             'learningCourseNotesCount' => $learningCourseNotesCount,
             'learningCourseThreadsCount' => $learningCourseThreadsCount + $learningClassroomThreadCount,
-            'learningReviewCount' => $learningCourseReviewCount + $learningClassroomReviewCount,
-        );
+            'learningReviewCount' => $learningReviewCount,
+        ];
     }
 
     public function findLearningCourseDetails($userId, $start, $limit)
     {
-        $members = $this->getCourseMemberService()->searchMembers(array('userId' => $userId, 'role' => 'student'), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+        $members = $this->getCourseMemberService()->searchMembers(['userId' => $userId, 'role' => 'student'], ['createdTime' => 'desc'], 0, PHP_INT_MAX);
         if (empty($members)) {
-            return array(array(), array(), array());
+            return [[], [], []];
         }
         $members = ArrayToolkit::index($members, 'courseId');
 
         $orderIds = ArrayToolkit::column($members, 'orderId');
 
         $orders = $this->getOrderService()->findOrdersByIds($orderIds);
-        $orders = empty($orders) ? array() : ArrayToolkit::index($orders, 'id');
+        $orders = empty($orders) ? [] : ArrayToolkit::index($orders, 'id');
 
         $classroomIds = ArrayToolkit::column($members, 'classroomId');
 
         $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
-        $classrooms = empty($classrooms) ? array() : ArrayToolkit::index($classrooms, 'id');
+        $classrooms = empty($classrooms) ? [] : ArrayToolkit::index($classrooms, 'id');
 
         foreach ($members as &$member) {
-            $member['order'] = empty($orders[$member['orderId']]) ? array() : $orders[$member['orderId']];
-            $member['classroom'] = empty($classrooms[$member['classroomId']]) ? array() : $classrooms[$member['classroomId']];
+            $member['order'] = empty($orders[$member['orderId']]) ? [] : $orders[$member['orderId']];
+            $member['classroom'] = empty($classrooms[$member['classroomId']]) ? [] : $classrooms[$member['classroomId']];
         }
         $learnCourseIds = ArrayToolkit::column($members, 'courseId');
-        $learnCourses = $this->getCourseService()->searchCourses(array('courseIds' => $learnCourseIds), array('createdTime' => 'desc'), $start, $limit);
+        $learnCourses = $this->getCourseService()->searchCourses(['courseIds' => $learnCourseIds], ['createdTime' => 'desc'], $start, $limit);
         $courseSetIds = array_filter(ArrayToolkit::column($learnCourses, 'courseSetId'));
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
 
@@ -345,12 +343,12 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $course['process'] = $this->getLearningDataAnalysisService()->getUserLearningProgress($course['id'], $userId);
         }
 
-        return array($learnCourses, $courseSets, $members);
+        return [$learnCourses, $courseSets, $members];
     }
 
     public function getDailyLearnData($userId, $startTime, $endTime)
     {
-        return $this->getDailyStatisticsDao()->findUserDailyLearnTimeByDate(array('userId' => $userId, 'recordTime_GE' => $startTime, 'recordTime_LT' => $endTime));
+        return $this->getDailyStatisticsDao()->findUserDailyLearnTimeByDate(['userId' => $userId, 'recordTime_GE' => $startTime, 'recordTime_LT' => $endTime]);
     }
 
     private function findUserOperateClassroomNum($operation, $conditions)
@@ -358,10 +356,10 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         $conditions = $this->buildMemberOperationConditions($conditions);
         $conditions = array_merge(
             $conditions,
-            array(
+            [
                 'target_type' => 'classroom',
                 'operate_type' => $operation,
-            )
+            ]
         );
 
         return $this->getMemberOperationService()->countGroupByUserId('target_id', $conditions);
@@ -370,17 +368,17 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     private function findUserOperateCourseSetNum($operation, $conditions)
     {
         if (empty($conditions['skipSyncCourseSetNum'])) {
-            return array();
+            return [];
         }
 
         $conditions = $this->buildMemberOperationConditions($conditions);
         $conditions = array_merge(
             $conditions,
-            array(
+            [
                 'target_type' => 'course',
                 'operate_type' => $operation,
                 'parent_id' => 0,
-            )
+            ]
         );
         'join' == $operation ? $conditions['join_course_set'] = 1 : $conditions['exit_course_set'] = 1;
 
@@ -392,11 +390,11 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         $conditions = $this->buildMemberOperationConditions($conditions);
         $conditions = array_merge(
             $conditions,
-            array(
+            [
                 'target_type' => 'course',
                 'operate_type' => $operation,
                 'parent_id' => 0,
-            )
+            ]
         );
 
         return $this->getMemberOperationService()->countGroupByUserId('target_id', $conditions);
@@ -405,11 +403,11 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     private function findUserPaidAmount($conditions)
     {
         $cashflowConditions = $this->buildCashflowConditions($conditions);
-        $cashflowConditions = array_merge($cashflowConditions, array(
+        $cashflowConditions = array_merge($cashflowConditions, [
             'type' => 'outflow',
             'amount_type' => 'money',
             'except_user_id' => 0,
-        ));
+        ]);
 
         return $this->getAccountService()->sumAmountGroupByUserId($cashflowConditions);
     }
@@ -417,12 +415,12 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     private function findUserRefundAmount($conditions)
     {
         $cashflowConditions = $this->buildCashflowConditions($conditions);
-        $cashflowConditions = array_merge($cashflowConditions, array(
+        $cashflowConditions = array_merge($cashflowConditions, [
             'type' => 'inflow',
             'amount_type' => 'money',
             'except_user_id' => 0,
             'action' => 'refund',
-        ));
+        ]);
 
         return $this->getAccountService()->sumAmountGroupByUserId($cashflowConditions);
     }
@@ -468,10 +466,10 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     public function setStatisticsSetting()
     {
         //currentTime 当天升级的那天的0点0分
-        $syncStatisticsSetting = array(
+        $syncStatisticsSetting = [
             'currentTime' => strtotime(date('Y-m-d')),
             'timespan' => 24 * 60 * 60 * 365,
-        );
+        ];
         $this->getSettingService()->set('learn_statistics', $syncStatisticsSetting);
 
         return $syncStatisticsSetting;
@@ -606,17 +604,9 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     /**
      * @return ReviewService
      */
-    protected function getCourseReviewService()
+    protected function getReviewService()
     {
-        return $this->createService('Course:ReviewService');
-    }
-
-    /**
-     * @return ClassroomReviewService
-     */
-    protected function getClassroomReviewService()
-    {
-        return $this->createService('Classroom:ClassroomReviewService');
+        return $this->createService('Review:ReviewService');
     }
 
     /**

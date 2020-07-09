@@ -2,30 +2,29 @@
 
 namespace AppBundle\Controller\Classroom;
 
-use AppBundle\Common\ClassroomToolkit;
-use AppBundle\Common\Paginator;
-use Biz\Classroom\ClassroomException;
-use Biz\Order\OrderException;
-use Biz\Sign\Service\SignService;
-use Biz\User\Service\AuthService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\User\Service\TokenService;
-use Biz\Order\Service\OrderService;
-use Biz\User\Service\StatusService;
-use Biz\Taxonomy\Service\TagService;
+use AppBundle\Common\ClassroomToolkit;
+use AppBundle\Common\ExtensionManager;
+use AppBundle\Common\Paginator;
+use AppBundle\Controller\BaseController;
+use Biz\Classroom\ClassroomException;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
-use AppBundle\Common\ExtensionManager;
+use Biz\Order\OrderException;
+use Biz\Order\Service\OrderService;
+use Biz\Sign\Service\SignService;
 use Biz\System\Service\SettingService;
-use Biz\User\Service\UserFieldService;
-use AppBundle\Controller\BaseController;
 use Biz\Taxonomy\Service\CategoryService;
-use Biz\Classroom\Service\ClassroomService;
+use Biz\Taxonomy\Service\TagService;
+use Biz\User\Service\AuthService;
+use Biz\User\Service\StatusService;
+use Biz\User\Service\TokenService;
+use Biz\User\Service\UserFieldService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Biz\Classroom\Service\ClassroomReviewService;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ClassroomController extends BaseController
@@ -34,28 +33,28 @@ class ClassroomController extends BaseController
     {
         $canManageClassroom = $this->getClassroomService()->canManageClassroom($classroom['id']);
 
-        return $this->render('classroom/dashboard-nav.html.twig', array(
+        return $this->render('classroom/dashboard-nav.html.twig', [
             'canManageClassroom' => $canManageClassroom,
             'classroom' => $classroom,
             'nav' => $nav,
             'member' => $member,
-        ));
+        ]);
     }
 
     public function keywordsAction($classroom)
     {
         $category = $this->getCategoryService()->getCategory($classroom['categoryId']);
-        $parentCategory = array();
+        $parentCategory = [];
 
         if (!empty($category) && 0 != $category['parentId']) {
             $parentCategory = $this->getCategoryService()->getCategory($category['parentId']);
         }
 
-        return $this->render('classroom/keywords.html.twig', array(
+        return $this->render('classroom/keywords.html.twig', [
             'category' => $category,
             'parentCategory' => $parentCategory,
             'classroom' => $classroom,
-        ));
+        ]);
     }
 
     public function headerAction($previewAs, $classroomId)
@@ -111,7 +110,7 @@ class ClassroomController extends BaseController
             $isclassroomteacher = in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']) ? true : false;
             $vipChecked = $this->isPluginInstalled('Vip') && $this->setting('vip.enabled') && $member['levelId'] > 0 ? $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) : 'ok';
 
-            return $this->render('classroom/classroom-join-header.html.twig', array(
+            return $this->render('classroom/classroom-join-header.html.twig', [
                 'classroom' => $classroom,
                 'courses' => $courses,
                 'lessonNum' => $lessonNum,
@@ -125,10 +124,10 @@ class ClassroomController extends BaseController
                 'breadcrumbs' => $breadcrumbs,
                 'isclassroomteacher' => $isclassroomteacher,
                 'vipChecked' => $vipChecked,
-            ));
+            ]);
         }
 
-        return $this->render('classroom/classroom-header.html.twig', array(
+        return $this->render('classroom/classroom-header.html.twig', [
             'classroom' => $classroom,
             'courses' => $courses,
             'checkMemberLevelResult' => $checkMemberLevelResult,
@@ -137,7 +136,7 @@ class ClassroomController extends BaseController
             'member' => $member,
             'canFreeJoin' => $canFreeJoin,
             'breadcrumbs' => $breadcrumbs,
-        ));
+        ]);
     }
 
     /*
@@ -167,36 +166,36 @@ class ClassroomController extends BaseController
 
         if ($member && '0' == $member['locked']) {
             if (in_array('student', $member['role'])) {
-                return $this->redirect($this->generateUrl('classroom_courses', array(
+                return $this->redirect($this->generateUrl('classroom_courses', [
                     'classroomId' => $id,
-                )));
+                ]));
             } else {
-                return $this->redirect($this->generateUrl('classroom_threads', array(
+                return $this->redirect($this->generateUrl('classroom_threads', [
                     'classroomId' => $id,
-                )));
+                ]));
             }
         }
 
-        return $this->redirect($this->generateUrl('classroom_introductions', array(
+        return $this->redirect($this->generateUrl('classroom_introductions', [
             'id' => $id,
-        )));
+        ]));
     }
 
     private function previewAsMember($previewAs, $member, $classroom)
     {
         $user = $this->getCurrentUser();
 
-        if (in_array($previewAs, array('guest', 'auditor', 'member'))) {
+        if (in_array($previewAs, ['guest', 'auditor', 'member'])) {
             if ('guest' == $previewAs) {
                 return;
             }
 
-            $deadline = ClassroomToolkit::buildMemberDeadline(array(
+            $deadline = ClassroomToolkit::buildMemberDeadline([
                 'expiryMode' => $classroom['expiryMode'],
                 'expiryValue' => $classroom['expiryValue'],
-            ));
+            ]);
 
-            $member = array(
+            $member = [
                 'id' => 0,
                 'classroomId' => $classroom['id'],
                 'userId' => $user['id'],
@@ -205,14 +204,14 @@ class ClassroomController extends BaseController
                 'noteNum' => 0,
                 'threadNum' => 0,
                 'remark' => '',
-                'role' => array('auditor'),
+                'role' => ['auditor'],
                 'locked' => 0,
                 'createdTime' => 0,
                 'deadline' => $deadline,
-            );
+            ];
 
             if ('member' == $previewAs) {
-                $member['role'] = array('member');
+                $member['role'] = ['member'];
             }
         }
 
@@ -231,7 +230,7 @@ class ClassroomController extends BaseController
         }
 
         if (!$classroom) {
-            $classroomDescription = array();
+            $classroomDescription = [];
         } else {
             $classroomDescription = $classroom['about'];
             $classroomDescription = strip_tags($classroomDescription, '');
@@ -244,13 +243,13 @@ class ClassroomController extends BaseController
             $layout = 'classroom/join-layout.html.twig';
         }
 
-        return $this->render('classroom/introduction.html.twig', array(
+        return $this->render('classroom/introduction.html.twig', [
             'introduction' => $introduction,
             'layout' => $layout,
             'classroom' => $classroom,
             'member' => $member,
             'classroomDescription' => $classroomDescription,
-        ));
+        ]);
     }
 
     public function teachersBlockAction($classroom)
@@ -274,7 +273,7 @@ class ClassroomController extends BaseController
             $teachersCount = count($users);
         }
 
-        return $this->render('classroom/teachers-block.html.twig', array(
+        return $this->render('classroom/teachers-block.html.twig', [
             'classroom' => $classroom,
             'users' => $users,
             'profiles' => $profiles,
@@ -282,7 +281,7 @@ class ClassroomController extends BaseController
             'headTeacherprofiles' => $headTeacherprofiles,
             'teachersCount' => $teachersCount,
             'isFollowed' => $isFollowed,
-        ));
+        ]);
     }
 
     public function roleAction($previewAs, $classroomId)
@@ -324,7 +323,7 @@ class ClassroomController extends BaseController
         }
 
         if ($member && '0' == $member['locked']) {
-            return $this->render('classroom/role.html.twig', array(
+            return $this->render('classroom/role.html.twig', [
                 'classroom' => $classroom,
                 'courses' => $courses,
                 'coinPrice' => $coinPrice,
@@ -332,7 +331,7 @@ class ClassroomController extends BaseController
                 'member' => $member,
                 'checkMemberLevelResult' => $checkMemberLevelResult,
                 'classroomMemberLevel' => $classroomMemberLevel,
-            ));
+            ]);
         }
 
         return new Response();
@@ -348,7 +347,7 @@ class ClassroomController extends BaseController
 
         $this->getClassroomService()->removeStudent($classroomId, $user['id']);
 
-        return $this->redirect($this->generateUrl('classroom_introductions', array('id' => $classroomId)));
+        return $this->redirect($this->generateUrl('classroom_introductions', ['id' => $classroomId]));
     }
 
     public function latestMembersBlockAction($classroom, $count = 20)
@@ -356,10 +355,10 @@ class ClassroomController extends BaseController
         $students = $this->getClassroomService()->findClassroomStudents($classroom['id'], 0, $count);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($students, 'userId'));
 
-        return $this->render('classroom/latest-members-block.html.twig', array(
+        return $this->render('classroom/latest-members-block.html.twig', [
             'students' => $students,
             'users' => $users,
-        ));
+        ]);
     }
 
     public function classroomStatusBlockAction($classroom, $count = 10)
@@ -367,7 +366,7 @@ class ClassroomController extends BaseController
         $conditions['onlyClassroomId'] = $classroom['id'];
         $learns = $this->getStatusService()->searchStatuses(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             0,
             $count
         );
@@ -385,9 +384,9 @@ class ClassroomController extends BaseController
             }
         }
 
-        return $this->render('status/status-block.html.twig', array(
+        return $this->render('status/status-block.html.twig', [
             'learns' => $learns,
-        ));
+        ]);
     }
 
     public function signPageAction($classroomId)
@@ -398,7 +397,7 @@ class ClassroomController extends BaseController
 
         $isSignedToday = $this->getSignService()->isSignedToday($user['id'], 'classroom_sign', $classroom['id']);
 
-        $week = array('日', '一', '二', '三', '四', '五', '六');
+        $week = ['日', '一', '二', '三', '四', '五', '六'];
 
         $userSignStatistics = $this->getSignService()->getSignUserStatistics($user['id'], 'classroom_sign', $classroom['id']);
 
@@ -407,24 +406,24 @@ class ClassroomController extends BaseController
         $signDay = $this->getSignService()->findSignRecordsByPeriod($user['id'], 'classroom_sign', $classroom['id'], date('Y-m', time()), date('Y-m-d', time() + 3600));
         $notSign = $day - count($signDay);
 
-        return $this->render('classroom/sign.html.twig', array(
+        return $this->render('classroom/sign.html.twig', [
             'classroom' => $classroom,
             'isSignedToday' => $isSignedToday,
             'userSignStatistics' => $userSignStatistics,
             'notSign' => $notSign,
-            'week' => $week[date('w', time())], ));
+            'week' => $week[date('w', time())], ]);
     }
 
     public function signAction($classroomId)
     {
         $user = $this->getCurrentUser();
-        $userSignStatistics = array();
+        $userSignStatistics = [];
 
         $this->checkClassroomStatus($classroomId);
 
         $member = $this->getClassroomService()->getClassroomMember($classroomId, $user['id']);
 
-        if ($this->getClassroomService()->canTakeClassroom($classroomId) || (isset($member) && array_intersect(array('auditor'), $member['role']))) {
+        if ($this->getClassroomService()->canTakeClassroom($classroomId) || (isset($member) && array_intersect(['auditor'], $member['role']))) {
             $this->getSignService()->userSign($user['id'], 'classroom_sign', $classroomId);
 
             $userSignStatistics = $this->getSignService()->getSignUserStatistics($user['id'], 'classroom_sign', $classroomId);
@@ -442,15 +441,15 @@ class ClassroomController extends BaseController
         $endDay = $request->query->get('endDay');
 
         $userSigns = $this->getSignService()->findSignRecordsByPeriod($userId, 'classroom_sign', $classroomId, $startDay, $endDay);
-        $result = array();
-        $result['records'] = array();
+        $result = [];
+        $result['records'] = [];
 
         if ($userSigns) {
             foreach ($userSigns as $userSign) {
-                $result['records'][] = array(
+                $result['records'][] = [
                     'day' => date('d', $userSign['createdTime']),
                     'time' => date('H-i', $userSign['createdTime']),
-                    'rank' => $userSign['_rank'], );
+                    'rank' => $userSign['_rank'], ];
             }
         }
 
@@ -480,9 +479,9 @@ class ClassroomController extends BaseController
             $this->createNewException(ClassroomException::EXPIRED_CLASSROOM());
         }
 
-        $this->getClassroomService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));
+        $this->getClassroomService()->becomeStudent($id, $user['id'], ['becomeUseMember' => true]);
 
-        return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));
+        return $this->redirect($this->generateUrl('classroom_show', ['id' => $id]));
     }
 
     public function exitAction(request $request, $id)
@@ -503,10 +502,10 @@ class ClassroomController extends BaseController
         $this->getClassroomService()->removeStudent(
             $id,
             $user['id'],
-            array('reason' => $reason['note'], 'reason_type' => 'exit')
+            ['reason' => $reason['note'], 'reason_type' => 'exit']
         );
 
-        return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));
+        return $this->redirect($this->generateUrl('classroom_show', ['id' => $id]));
     }
 
     public function becomeAuditorAction($id)
@@ -542,7 +541,7 @@ class ClassroomController extends BaseController
         $this->getClassroomService()->becomeAuditor($id, $user['id']);
 
         response:
-        return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));
+        return $this->redirect($this->generateUrl('classroom_show', ['id' => $id]));
     }
 
     public function canviewAction($classroomId)
@@ -564,28 +563,28 @@ class ClassroomController extends BaseController
 
         $classroom = empty($classroomIds) || 0 == count($classroomIds) ? null : $this->getClassroomService()->getClassroom($classroomIds[0]);
 
-        return $this->render('classroom/classroom-block.html.twig', array(
+        return $this->render('classroom/classroom-block.html.twig', [
             'classroom' => $classroom,
-        ));
+        ]);
     }
 
     public function qrcodeAction(Request $request, $id)
     {
         $user = $this->getCurrentUser();
 
-        $token = $this->getTokenService()->makeToken('qrcode', array(
+        $token = $this->getTokenService()->makeToken('qrcode', [
             'userId' => $user['id'],
-            'data' => array(
-                'url' => $this->generateUrl('classroom_show', array('id' => $id), UrlGeneratorInterface::ABSOLUTE_URL),
-            ),
+            'data' => [
+                'url' => $this->generateUrl('classroom_show', ['id' => $id], UrlGeneratorInterface::ABSOLUTE_URL),
+            ],
             'times' => 1,
             'duration' => 3600,
-        ));
-        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), UrlGeneratorInterface::ABSOLUTE_URL);
+        ]);
+        $url = $this->generateUrl('common_parse_qrcode', ['token' => $token['token']], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        $response = array(
-            'img' => $this->generateUrl('common_qrcode', array('text' => $url), UrlGeneratorInterface::ABSOLUTE_URL),
-        );
+        $response = [
+            'img' => $this->generateUrl('common_qrcode', ['text' => $url], UrlGeneratorInterface::ABSOLUTE_URL),
+        ];
 
         return $this->createJsonResponse($response);
     }
@@ -666,8 +665,8 @@ class ClassroomController extends BaseController
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
-        $teacherClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user['id']), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
-        $headTeacherClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'headTeacher', 'userId' => $user['id']), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+        $teacherClassrooms = $this->getClassroomService()->searchMembers(['role' => 'teacher', 'userId' => $user['id']], ['createdTime' => 'desc'], 0, PHP_INT_MAX);
+        $headTeacherClassrooms = $this->getClassroomService()->searchMembers(['role' => 'headTeacher', 'userId' => $user['id']], ['createdTime' => 'desc'], 0, PHP_INT_MAX);
 
         $classrooms = array_merge($teacherClassrooms, $headTeacherClassrooms);
 
@@ -676,18 +675,18 @@ class ClassroomController extends BaseController
         $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
 
         if (empty($classrooms)) {
-            return $this->render('classroom/my-teaching-threads.html.twig', array(
+            return $this->render('classroom/my-teaching-threads.html.twig', [
                 'type' => $type,
                 'threadType' => 'classroom',
-                'threads' => array(),
-            ));
+                'threads' => [],
+            ]);
         }
 
-        $conditions = array(
+        $conditions = [
             'targetIds' => $classroomIds,
             'targetType' => 'classroom',
             'type' => $type,
-        );
+        ];
 
         $paginator = new Paginator(
             $request,
@@ -703,14 +702,14 @@ class ClassroomController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'lastPostUserId'));
 
-        return $this->render('classroom/my-teaching-threads.html.twig', array(
+        return $this->render('classroom/my-teaching-threads.html.twig', [
             'paginator' => $paginator,
             'threads' => $threads,
             'users' => $users,
             'classrooms' => $classrooms,
             'type' => $type,
             'threadType' => 'classroom',
-        ));
+        ]);
     }
 
     protected function getCashRate()
@@ -736,7 +735,7 @@ class ClassroomController extends BaseController
             $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
         }
 
-        return $this->render('classroom/classroom-order.html.twig', array('order' => $order, 'classroom' => $classroom));
+        return $this->render('classroom/classroom-order.html.twig', ['order' => $order, 'classroom' => $classroom]);
     }
 
     /**
@@ -793,14 +792,6 @@ class ClassroomController extends BaseController
     protected function getVipService()
     {
         return $this->createService('VipPlugin:Vip:VipService');
-    }
-
-    /**
-     * @return ClassroomReviewService
-     */
-    protected function getClassroomReviewService()
-    {
-        return $this->createService('Classroom:ClassroomReviewService');
     }
 
     /**

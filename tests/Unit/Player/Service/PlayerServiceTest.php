@@ -47,7 +47,7 @@ class PlayerServiceTest extends BaseTestCase
         $this->assertEquals('www.baidu.com', $result['url']);
 
         $result = $this->getPlayerService()->getVideoPlayUrl(
-            ['id' => 1, 'storage' => 'es', 'ext' => []], [], true
+            ['id' => 1, 'storage' => 'es', 'ext' => '.mp4'], [], true
         );
         $this->assertEquals('player_local_media', $result['route']);
         $this->assertEquals(UrlGeneratorInterface::ABSOLUTE_URL, $result['referenceType']);
