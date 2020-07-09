@@ -242,7 +242,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
         $user = $this->getCurrentUser();
 
-        $this->getLogService()->info('item_bank_exercise', 'deleteExercise', "删除练习{$user['nickname']}(#{$user['id']})");
+        $this->getLogService()->info('item_bank_exercise', 'delete_exercise', "删除练习{$user['nickname']}(#{$user['id']})");
     }
 
     public function recommendExercise($exerciseId, $number)
@@ -258,7 +258,12 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             'recommendedTime' => time(),
         ];
 
-        return $this->getExerciseDao()->update($exerciseId, $fields);
+        $exercise = $this->getExerciseDao()->update($exerciseId, $fields);
+
+        $user = $this->getCurrentUser();
+        $this->getLogService()->info('item_bank_exercise', 'recommend_exercise', "推荐练习{$user['nickname']}(#{$user['id']})");
+
+        return $exercise;
     }
 
     public function cancelRecommendExercise($exerciseId)
@@ -270,21 +275,36 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             'recommendedSeq' => 0,
         ];
 
-        return $this->getExerciseDao()->update($exerciseId, $fields);
+        $exercise = $this->getExerciseDao()->update($exerciseId, $fields);
+
+        $user = $this->getCurrentUser();
+        $this->getLogService()->info('item_bank_exercise', 'cancel_recommend_exercise', "取消推荐练习{$user['nickname']}(#{$user['id']})");
+
+        return $exercise;
     }
 
     public function publishExercise($exerciseId)
     {
         $this->tryManageExercise($exerciseId);
 
-        return $this->getExerciseDao()->update($exerciseId, ['status' => 'published']);
+        $exercise = $this->getExerciseDao()->update($exerciseId, ['status' => 'published']);
+
+        $user = $this->getCurrentUser();
+        $this->getLogService()->info('item_bank_exercise', 'publish_exercise', "发布练习{$user['nickname']}(#{$user['id']})");
+
+        return $exercise;
     }
 
     public function closeExercise($exerciseId)
     {
         $this->tryManageExercise($exerciseId);
 
-        return $this->getExerciseDao()->update($exerciseId, ['status' => 'closed']);
+        $exercise = $this->getExerciseDao()->update($exerciseId, ['status' => 'closed']);
+
+        $user = $this->getCurrentUser();
+        $this->getLogService()->info('item_bank_exercise', 'close_exercise', "关闭练习{$user['nickname']}(#{$user['id']})");
+
+        return $exercise;
     }
 
     public function canTakeItemBankExercise($exerciseId)

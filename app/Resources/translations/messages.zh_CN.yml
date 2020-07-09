@@ -9112,6 +9112,11 @@ log.action.destroy_account_record.create: 申请注销帐号
 log.action.destroy_account_record.pass: 通过注销帐号申请
 log.action.destroy_account_record.reject: 拒绝注销帐号申请
 log.action.item_bank_exercise.add_student: 添加学员
+log.action.item_bank_exercise.delete_exercise: 删除题库练习
+log.action.item_bank_exercise.recommend_exercise: 推荐题库练习
+log.action.item_bank_exercise.cancel_recommend_exercise: 取消推荐题库练习
+log.action.item_bank_exercise.publish_exercise: 发布题库练习
+log.action.item_bank_exercise.close_exercise: 关闭题库练习
 
 log.action.template.course.create: 新建了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: 修改了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
