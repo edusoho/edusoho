@@ -215,10 +215,13 @@ admin_v2_item_bank_exercise_delete:
     path: /item_bank_exercise/{id}/delete
     defaults: { _controller: AppBundle:AdminV2/Teach/ItemBankExercise:delete}
 
+admin_v2_item_bank_exercise_analysis:
+    path: /item_bank_exercise/analysis
+    defaults: { _controller: AppBundle:AdminV2/Teach/ItemBankExerciseAnalysis:index}
+
 admin_v2_item_bank_exercise_recommend_list:
   path: /item_bank_exercise/recommend/list
   defaults: { _controller: AppBundle:AdminV2/Teach/ItemBankExercise:recommendList}
-
 
 # 教学-课程管理-公开课管理
 admin_v2_open_course:
