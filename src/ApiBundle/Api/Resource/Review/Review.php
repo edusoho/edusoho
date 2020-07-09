@@ -52,10 +52,15 @@ class Review extends AbstractResource
         $existed = $this->getReviewService()->getByUserIdAndTargetTypeAndTargetId($review['userId'], $request->request->get('targetType'), $request->request->get('targetId'));
 
         if (!empty($existed['id'])) {
-            return $this->getReviewService()->updateReview($existed['id'], $review);
+            $review = $this->getReviewService()->updateReview($existed['id'], $review);
+        } else {
+            $review = $this->getReviewService()->createReview($review);
         }
 
-        return $this->getReviewService()->createReview($review);
+        $this->getOCUtil()->single($review, ['userId'], 'user');
+        $this->getOCUtil()->single($review, ['targetId'], $review['targetType']);
+
+        return $review;
     }
 
     public function remove(ApiRequest $request, $id)
@@ -89,36 +94,6 @@ class Review extends AbstractResource
         }
 
         return $makeUpReviews;
-    }
-
-    protected function getReviewUserInfoByUserIds($userIds)
-    {
-        return $this->getUserService()->findUsersByIds($userIds);
-    }
-
-    protected function getReviewTargetInfoByTargetTypeAndTargetIds($targetType, $targetIds)
-    {
-        if (!in_array($targetType, array_keys($this->targetMap))) {
-            return null;
-        }
-
-        $function = $this->targetMap[$targetType];
-
-        return $this->$function($targetIds);
-    }
-
-    protected function searchGoodsInfo($ids)
-    {
-        $goods = $this->getGoodsService()->searchGoods(['ids' => $ids], [], 0, count($ids), ['id', 'title']);
-
-        return ArrayToolkit::index($goods, 'id');
-    }
-
-    protected function searchCourseInfo($ids)
-    {
-        $courses = $this->getCourseService()->searchCourses(['ids' => $ids], [], 0, count($ids), ['id', 'title']);
-
-        return ArrayToolkit::index($courses, 'id');
     }
 
     /**
