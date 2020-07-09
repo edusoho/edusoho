@@ -10,7 +10,7 @@ class QuickEntranceServiceTest extends BaseTestCase
 {
     public function testFindEntrancesByUserIdEmptyWithDbDataEmpty()
     {
-        $this->getQuickEntranceService()->createUserEntrance($this->getCurrentUser()->getId(), array());
+        $this->getQuickEntranceService()->createUserEntrance($this->getCurrentUser()->getId(), []);
 
         $result = $this->getQuickEntranceService()->findEntrancesByUserId($this->getCurrentUser()->getId());
 
@@ -19,7 +19,7 @@ class QuickEntranceServiceTest extends BaseTestCase
 
     public function testFindEntrancesByUserIdEmptyWithoutMenuConfig()
     {
-        $this->getQuickEntranceService()->createUserEntrance($this->getCurrentUser()->getId(), array('test_admin_without_menu_config'));
+        $this->getQuickEntranceService()->createUserEntrance($this->getCurrentUser()->getId(), ['test_admin_without_menu_config']);
 
         $result = $this->getQuickEntranceService()->findEntrancesByUserId($this->getCurrentUser()->getId());
 
@@ -55,18 +55,18 @@ class QuickEntranceServiceTest extends BaseTestCase
     {
         $result = $this->getQuickEntranceService()->findAvailableEntrances();
 
-        $expected = array(
+        $expected = [
             'admin_v2_teach',
             'admin_v2_marketing',
             'admin_v2_operating',
             'admin_v2_user',
             'admin_v2_trade',
             'admin_v2_system',
-        );
+        ];
 
         $this->assertCount(6, $result);
         $this->assertEquals($expected, array_keys($result));
-        $this->assertCount(9, $result['admin_v2_teach']['data']);
+        $this->assertCount(10, $result['admin_v2_teach']['data']);
         $this->assertCount(4, $result['admin_v2_marketing']['data']);
         $this->assertCount(8, $result['admin_v2_operating']['data']);
         $this->assertCount(3, $result['admin_v2_user']['data']);
@@ -79,18 +79,18 @@ class QuickEntranceServiceTest extends BaseTestCase
         $this->createCurrentUserInviteManageQuickEntrance();
         $result = $this->getQuickEntranceService()->findAvailableEntrances();
 
-        $expected = array(
+        $expected = [
             'admin_v2_teach',
             'admin_v2_marketing',
             'admin_v2_operating',
             'admin_v2_user',
             'admin_v2_trade',
             'admin_v2_system',
-        );
+        ];
 
         $this->assertCount(6, $result);
         $this->assertEquals($expected, array_keys($result));
-        $this->assertCount(9, $result['admin_v2_teach']['data']);
+        $this->assertCount(10, $result['admin_v2_teach']['data']);
         $this->assertCount(4, $result['admin_v2_marketing']['data']);
         $this->assertCount(8, $result['admin_v2_operating']['data']);
         $this->assertCount(3, $result['admin_v2_user']['data']);
@@ -117,7 +117,7 @@ class QuickEntranceServiceTest extends BaseTestCase
      */
     public function testCreateUserEntrancesInvalidArgumentException()
     {
-        $entrances = array(
+        $entrances = [
             'test_data_1',
             'test_data_2',
             'test_data_3',
@@ -126,28 +126,28 @@ class QuickEntranceServiceTest extends BaseTestCase
             'test_data_6',
             'test_data_7',
             'test_data_8',
-        );
+        ];
 
         $this->getQuickEntranceService()->createUserEntrance($this->getCurrentUser()->getId(), $entrances);
     }
 
     public function testCreateUserEntranceWithEmpty()
     {
-        $result = $this->getQuickEntranceService()->createUserEntrance($this->getCurrentUser()->getId(), array());
+        $result = $this->getQuickEntranceService()->createUserEntrance($this->getCurrentUser()->getId(), []);
         $this->assertEmpty($result);
     }
 
     public function testCreateUserEntrance()
     {
-        $expected = array(
-            array(
+        $expected = [
+            [
                 'code' => 'admin_v2_operation_invite',
                 'text' => '邀请管理',
                 'icon' => 'invite',
                 'class' => 'icon-color-yellow',
                 'target' => '',
-            ),
-        );
+            ],
+        ];
         $result = $this->createCurrentUserInviteManageQuickEntrance();
         $this->assertCount(1, $result);
         $this->assertEquals($expected, $result);
@@ -160,7 +160,7 @@ class QuickEntranceServiceTest extends BaseTestCase
     public function testUpdateUserEntrancesWithInvalidArgumentException()
     {
         $this->createCurrentUserInviteManageQuickEntrance();
-        $entrances = array(
+        $entrances = [
                 'test_data_1',
                 'test_data_2',
                 'test_data_3',
@@ -169,7 +169,7 @@ class QuickEntranceServiceTest extends BaseTestCase
                 'test_data_6',
                 'test_data_7',
                 'test_data_8',
-        );
+        ];
 
         $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $entrances);
     }
@@ -179,7 +179,7 @@ class QuickEntranceServiceTest extends BaseTestCase
         $this->createCurrentUserInviteManageQuickEntrance();
         $before = $this->getQuickEntranceService()->findEntrancesByUserId($this->getCurrentUser()->getId());
 
-        $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), array());
+        $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), []);
 
         $after = $this->getQuickEntranceService()->findEntrancesByUserId($this->getCurrentUser()->getId());
 
@@ -193,7 +193,7 @@ class QuickEntranceServiceTest extends BaseTestCase
         $this->createCurrentUserInviteManageQuickEntrance();
         $before = $this->getQuickEntranceService()->findEntrancesByUserId($this->getCurrentUser()->getId());
 
-        $entrances = array('admin_v2_marketing_coupon', 'admin_v2_operation_invite');
+        $entrances = ['admin_v2_marketing_coupon', 'admin_v2_operation_invite'];
         $this->getQuickEntranceService()->updateUserEntrances($this->getCurrentUser()->getId(), $entrances);
 
         $after = $this->getQuickEntranceService()->findEntrancesByUserId($this->getCurrentUser()->getId());
@@ -205,7 +205,7 @@ class QuickEntranceServiceTest extends BaseTestCase
 
     private function createCurrentUserInviteManageQuickEntrance()
     {
-        return $this->getQuickEntranceService()->createUserEntrance($this->getCurrentUser()->getId(), array('admin_v2_operation_invite'));
+        return $this->getQuickEntranceService()->createUserEntrance($this->getCurrentUser()->getId(), ['admin_v2_operation_invite']);
     }
 
     /**

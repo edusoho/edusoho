@@ -55,4 +55,6 @@ interface ExerciseService
     public function canJoinExercise($exerciseId);
 
     public function freeJoinExercise($exerciseId);
+    
+    public function findExercisesByLikeTitle($title);
 }

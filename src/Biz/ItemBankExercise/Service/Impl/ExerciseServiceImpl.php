@@ -350,7 +350,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     {
         $user = $this->getCurrentUser();
 
-        return $user->hasPermission('admin_course_content_manage') || $user->hasPermission('admin_v2_course_content_manage');
+        return $user->hasPermission('admin_v2_item_bank_exercise_content_manage');
     }
 
     public function canLearnExercise($exerciseId)
@@ -388,6 +388,11 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         });
 
         return $conditions;
+    }
+
+    public function findExercisesByLikeTitle($title)
+    {
+        return $this->getExerciseDao()->findByLikeTitle($title);
     }
 
     /**

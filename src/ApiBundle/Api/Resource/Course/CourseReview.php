@@ -7,7 +7,6 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
-use Biz\Review\Service\ReviewService;
 
 class CourseReview extends AbstractResource
 {
@@ -22,19 +21,17 @@ class CourseReview extends AbstractResource
             throw CourseException::NOTFOUND_COURSE();
         }
 
-        $conditions = [
-            'targetType' => 'course',
-            'targetId' => $courseId,
-        ];
-
-        $offset = $request->query->get('offset', static::DEFAULT_PAGING_OFFSET);
-        $limit = $request->query->get('limit', static::DEFAULT_PAGING_LIMIT);
-
-        $total = $this->getReviewService()->countReviews($conditions);
-
-        $reviews = $this->searchReviews($conditions, $offset, $limit);
-
-        return $this->makePagingObject($reviews, $total, $offset, $limit);
+        return $this->invokeResource(new ApiRequest(
+            '/api/review',
+            'GET',
+            [
+                'targetType' => 'course',
+                'targetId' => $courseId,
+                'offset' => $request->query->get('offset', static::DEFAULT_PAGING_OFFSET),
+                'limit' => $request->query->get('limit', static::DEFAULT_PAGING_LIMIT),
+                'orderBys' => ['updatedTime' => 'DESC'],
+            ]
+        ));
     }
 
     public function add(ApiRequest $request, $courseId)
@@ -58,36 +55,5 @@ class CourseReview extends AbstractResource
                 'content' => $request->request->get('content'),
             ]
         ));
-    }
-
-    protected function searchReviews($conditions, $offset, $limit)
-    {
-        $reviews = $this->invokeResource(new ApiRequest(
-            '/api/reviews',
-            'GET',
-            array_merge($conditions, [
-                'offset' => $offset,
-                'limit' => $limit,
-                'orderBys' => ['updatedTime' => 'DESC'],
-            ])
-        ));
-
-        $this->getOCUtil()->multiple($reviews, ['userId']);
-        $this->getOCUtil()->multiple($reviews, ['targetId'], 'course');
-
-        array_filter($reviews, function (&$review) {
-            $review['course'] = $review['target'];
-            unset($review['target']);
-        });
-
-        return $reviews;
-    }
-
-    /**
-     * @return ReviewService
-     */
-    private function getReviewService()
-    {
-        return $this->service('Review:ReviewService');
     }
 }

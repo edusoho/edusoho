@@ -506,6 +506,7 @@ admin_v2.course.live.basic_tab.create_btn: Create
 ##题库管理模块
 admin_v2.course.item_bank_exercise: Item Bank Exercise
 admin_v2.course.item_bank_exercise.basic_tab: Item Bank Exercise
+admin_v2.course.item_bank_exercise.analysis_tab: Item Bank Exercise Analysis
 admin_v2.course.item_bank_exercise.recommend_list_tab: Recommended
 
 #公开课模块
@@ -540,6 +541,7 @@ admin_v2.course.review_menu: Reviews
 
 admin_v2.course.review.course_review_tab: Reviews
 admin_v2.course.review.classroom_review_tab: Rate
+admin_v2.course.review.exercise_review_tab: Item Bank Exercise
 
 # 教学模块-资源管理
 admin_v2.cloud_resource.basic_group: Resources

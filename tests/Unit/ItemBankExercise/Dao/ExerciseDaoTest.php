@@ -49,6 +49,14 @@ class ExerciseDaoTest extends BaseDaoTestCase
         $this->assertEquals(1, $exercises[2]['id']);
     }
 
+    public function testFindByLikeTitle()
+    {
+        $this->batchCreateExercise();
+        $res = $this->getDao()->findByLikeTitle('test');
+
+        $this->assertEquals(3, count($res));
+    }
+
     protected function batchCreateExercise()
     {
         return $this->getDao()->batchCreate(
@@ -81,9 +89,9 @@ class ExerciseDaoTest extends BaseDaoTestCase
     protected function mockExerciseMembers()
     {
         $this->getExerciseMemberDao()->batchCreate([
-            ['exerciseId' => 3, 'userId' => 1, 'role' => 'student'],
-            ['exerciseId' => 3, 'userId' => 2, 'role' => 'student'],
-            ['exerciseId' => 2, 'userId' => 2, 'role' => 'student'],
+            ['exerciseId' => 3, 'userId' => 1, 'role' => 'student', 'remark' => 'aaa'],
+            ['exerciseId' => 3, 'userId' => 2, 'role' => 'student', 'remark' => 'bbb'],
+            ['exerciseId' => 2, 'userId' => 2, 'role' => 'student', 'remark' => 'ccc'],
         ]);
     }
 
@@ -94,6 +102,7 @@ class ExerciseDaoTest extends BaseDaoTestCase
             'targetType' => 'item_bank_exercise',
             'targetId' => 3,
             'rating' => 3,
+            'content' => 'a',
         ]);
 
         $this->getReviewDao()->create([
@@ -101,6 +110,7 @@ class ExerciseDaoTest extends BaseDaoTestCase
             'targetType' => 'item_bank_exercise',
             'targetId' => 3,
             'rating' => 4,
+            'content' => 'b',
         ]);
 
         $this->getReviewDao()->create([
@@ -108,6 +118,7 @@ class ExerciseDaoTest extends BaseDaoTestCase
             'targetType' => 'item_bank_exercise',
             'targetId' => 2,
             'rating' => 3,
+            'content' => 'c',
         ]);
     }
 

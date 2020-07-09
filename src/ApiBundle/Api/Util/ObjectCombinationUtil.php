@@ -8,19 +8,21 @@ class ObjectCombinationUtil
 {
     private $biz;
 
-    private $serviceMap = array(
+    private $serviceMap = [
         'user' => 'User:UserService',
         'course' => 'Course:CourseService',
         'courseSet' => 'Course:CourseSetService',
         'classroom' => 'Classroom:ClassroomService',
-    );
+        'goods' => 'Goods:GoodsService',
+    ];
 
-    private $methodMap = array(
+    private $methodMap = [
         'user' => 'findUsersByIds',
         'course' => 'findCoursesByIds',
         'courseSet' => 'findCourseSetsByIds',
         'classroom' => 'findClassroomsByIds',
-    );
+        'goods' => 'findGoodsByIds',
+    ];
 
     public function __construct($biz)
     {
@@ -30,7 +32,6 @@ class ObjectCombinationUtil
     /**
      * @param $targetObjectType
      * @param $sourceObj
-     * @param array $targetIdFields
      */
     public function single(&$sourceObj, array $targetIdFields, $targetObjectType = 'user')
     {
@@ -56,7 +57,7 @@ class ObjectCombinationUtil
             return;
         }
 
-        $targetIds = array();
+        $targetIds = [];
         foreach ($sourceObjects as $sourceObject) {
             $tempTargetIds = $this->findTargetIds($sourceObject, $targetIdFields);
             $this->pushIdToArray($targetIds, $tempTargetIds);
@@ -121,7 +122,7 @@ class ObjectCombinationUtil
 
     private function findTargetIds($sourceObj, $targetIdFields)
     {
-        $targetIds = array();
+        $targetIds = [];
         foreach ($targetIdFields as $targetIdField) {
             $targetIdValue = $sourceObj[$targetIdField];
             $this->pushIdToArray($targetIds, $targetIdValue);
@@ -149,7 +150,7 @@ class ObjectCombinationUtil
         foreach ($targetIdFields as $targetIdField) {
             $newField = str_replace('Id', '', $targetIdField);
             $targetIdValue = $sourceObj[$targetIdField];
-            $sourceObj[$newField] = array();
+            $sourceObj[$newField] = [];
 
             if (is_array($targetIdValue)) {
                 foreach ($targetIdValue as $targetId) {
