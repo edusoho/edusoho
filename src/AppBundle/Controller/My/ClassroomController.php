@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller\My;
 
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Classroom\Service\LearningDataAnalysisService;
@@ -11,8 +13,6 @@ use Biz\Task\Service\TaskService;
 use Biz\Thread\Service\ThreadService;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\Paginator;
 
 class ClassroomController extends BaseController
 {
@@ -21,13 +21,13 @@ class ClassroomController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher()) {
-            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+            return   $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
-        $orderBy = array('createdTime' => 'desc');
+        $orderBy = ['createdTime' => 'desc'];
 
         $classroomMembers = $this->getClassroomService()->searchMembers(
-            array('role' => 'teacher', 'userId' => $user->getId()),
+            ['role' => 'teacher', 'userId' => $user->getId()],
             $orderBy,
             0,
             PHP_INT_MAX
@@ -35,7 +35,7 @@ class ClassroomController extends BaseController
         $classroomMembers = array_merge(
             $classroomMembers,
             $this->getClassroomService()->searchMembers(
-                array('role' => 'assistant', 'userId' => $user->getId()),
+                ['role' => 'assistant', 'userId' => $user->getId()],
                 $orderBy,
                 0,
                 PHP_INT_MAX
@@ -44,14 +44,14 @@ class ClassroomController extends BaseController
         $classroomIds = ArrayToolkit::column($classroomMembers, 'classroomId');
 
         if (empty($classroomIds)) {
-            return $this->render('my/teaching/classroom.html.twig', array(
-                'classrooms' => array(),
-                'members' => array(),
-                'paginator' => array(),
-            ));
+            return $this->render('my/teaching/classroom.html.twig', [
+                'classrooms' => [],
+                'members' => [],
+                'paginator' => [],
+            ]);
         }
 
-        $conditions = array('classroomIds' => $classroomIds);
+        $conditions = ['classroomIds' => $classroomIds];
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -74,26 +74,26 @@ class ClassroomController extends BaseController
             $classrooms[$key]['coursesCount'] = $coursesCount;
         }
 
-        return $this->render('my/teaching/classroom.html.twig', array(
+        return $this->render('my/teaching/classroom.html.twig', [
             'classrooms' => $classrooms,
             'members' => $members,
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     public function classroomAction()
     {
         $user = $this->getUser();
 
-        $members = $this->getClassroomService()->searchMembers(array(
-            'roles' => array('student', 'auditor'),
+        $members = $this->getClassroomService()->searchMembers([
+            'roles' => ['student', 'auditor'],
             'userId' => $user->id,
-        ), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+        ], ['createdTime' => 'desc'], 0, PHP_INT_MAX);
 
-        $assistants = $this->getClassroomService()->searchMembers(array(
+        $assistants = $this->getClassroomService()->searchMembers([
             'role' => 'assistant',
             'userId' => $user->id,
-        ), null, 0, PHP_INT_MAX);
+        ], null, 0, PHP_INT_MAX);
 
         $members = array_merge($members, $assistants);
         $members = ArrayToolkit::index($members, 'classroomId');
@@ -117,21 +117,21 @@ class ClassroomController extends BaseController
             $classrooms[$key]['learningProgressPercent'] = $progress['percent'];
         }
 
-        return $this->render('my/learning/classroom/classroom.html.twig', array(
+        return $this->render('my/learning/classroom/classroom.html.twig', [
             'classrooms' => $classrooms,
             'members' => $members,
-        ));
+        ]);
     }
 
     public function classroomDiscussionsAction(Request $request)
     {
         $user = $this->getUser();
 
-        $conditions = array(
+        $conditions = [
             'userId' => $user['id'],
             'type' => 'discussion',
             'targetType' => 'classroom',
-        );
+        ];
 
         $paginator = new Paginator(
             $request,
@@ -148,24 +148,24 @@ class ClassroomController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'lastPostUserId'));
         $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($threads, 'targetId'));
 
-        return $this->render('my/learning/classroom/discussions.html.twig', array(
+        return $this->render('my/learning/classroom/discussions.html.twig', [
             'threadType' => 'classroom',
             'paginator' => $paginator,
             'threads' => $threads,
             'users' => $users,
             'classrooms' => $classrooms,
-        ));
+        ]);
     }
 
     public function classroomQuestionsAction(Request $request)
     {
         $user = $this->getUser();
 
-        $conditions = array(
+        $conditions = [
             'userId' => $user['id'],
             'type' => 'question',
             'targetType' => 'classroom',
-        );
+        ];
 
         $paginator = new Paginator(
             $request,
@@ -182,13 +182,13 @@ class ClassroomController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'lastPostUserId'));
         $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($threads, 'targetId'));
 
-        return $this->render('my/learning/classroom/questions.html.twig', array(
+        return $this->render('my/learning/classroom/questions.html.twig', [
             'threadType' => 'classroom',
             'paginator' => $paginator,
             'threads' => $threads,
             'users' => $users,
             'classrooms' => $classrooms,
-        ));
+        ]);
     }
 
     /**
