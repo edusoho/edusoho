@@ -32,6 +32,7 @@ class CourseGoodsDecouplingTableChange extends Migration
         $biz['db']->exec("ALTER TABLE `goods_specs` ADD COLUMN `maxJoinNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最大购买加入人数' AFTER `price`;");
         $biz['db']->exec("ALTER TABLE `goods_specs` ADD COLUMN `seq` int(10) NOT NULL DEFAULT '0' COMMENT '规格排序序号' AFTER `images`;");
         $biz['db']->exec("ALTER TABLE `goods_specs` ADD COLUMN `coinPrice` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '虚拟币价格' AFTER `price`;");
+        $biz['db']->exec("ALTER TABLE `goods_specs` ADD COLUMN `buyableMode` varchar(32) DEFAULT NULL COMMENT 'days, date' AFTER `coinPrice`;");
         $biz['db']->exec("ALTER TABLE `goods_specs` ADD COLUMN `buyableStartTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '可购买起始时间，默认为0不限制' AFTER `coinPrice`;");
         $biz['db']->exec("ALTER TABLE `goods_specs` ADD COLUMN `buyableEndTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '可购买结束时间，默认为0不限制' AFTER `buyableStartTime`;");
     }
@@ -65,6 +66,7 @@ class CourseGoodsDecouplingTableChange extends Migration
         $biz['db']->exec('ALTER TABLE `goods_specs` DROP COLUMN `maxJoinNum`;');
         $biz['db']->exec('ALTER TABLE `goods_specs` DROP COLUMN `seq`;');
         $biz['db']->exec('ALTER TABLE `goods_specs` DROP COLUMN `coinPrice`;');
+        $biz['db']->exec('ALTER TABLE `goods_specs` DROP COLUMN `buyableMode`;');
         $biz['db']->exec('ALTER TABLE `goods_specs` DROP COLUMN `buyableStartTime`;');
         $biz['db']->exec('ALTER TABLE `goods_specs` DROP COLUMN `buyableEndTime`;');
     }

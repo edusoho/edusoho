@@ -41,12 +41,27 @@ class GoodsServiceImpl extends BaseService implements GoodsService
 
     public function publishGoods($id)
     {
-        return $this->getGoodsDao()->create();
+        return $this->getGoodsDao()->update($id, ['status' => 'published']);
     }
 
     public function updateGoods($id, $goods)
     {
-        $goods = ArrayToolkit::parts($goods, ['title', 'images']);
+        $goods = ArrayToolkit::parts($goods, [
+            'title',
+            'images',
+            'subtitle',
+            'summary',
+            'orgId',
+            'orgCode',
+            'minPrice',
+            'maxPrice',
+            'ratingNum',
+            'rating',
+            'hitNum',
+            'hotSeq',
+            'recommendWeight',
+            'recommendedTime',
+        ]);
 
         return $this->getGoodsDao()->update($id, $goods);
     }
@@ -68,11 +83,24 @@ class GoodsServiceImpl extends BaseService implements GoodsService
 
     public function createGoodsSpecs($goodsSpecs)
     {
-        if (!ArrayToolkit::requireds($goodsSpecs, ['goodsId', 'targetId', 'title'])) {
+        if (!ArrayToolkit::requireds($goodsSpecs, [
+            'goodsId',
+            'targetId',
+            'title',
+        ])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $goodsSpecs = ArrayToolkit::parts($goodsSpecs, ['goodsId', 'targetId', 'title', 'images', 'price']);
+        $goodsSpecs = ArrayToolkit::parts($goodsSpecs, [
+            'goodsId',
+            'targetId',
+            'title',
+            'images',
+            'seq',
+            'buyableMode',
+            'buyableStartTime',
+            'buyableEndTime',
+        ]);
 
         return $this->getGoodsSpecsDao()->create($goodsSpecs);
     }
@@ -84,7 +112,20 @@ class GoodsServiceImpl extends BaseService implements GoodsService
 
     public function updateGoodsSpecs($id, $goodsSpecs)
     {
-        $goodsSpecs = ArrayToolkit::parts($goodsSpecs, ['title', 'images', 'price']);
+        $goodsSpecs = ArrayToolkit::parts($goodsSpecs, [
+            'title',
+            'images',
+            'price',
+            'title',
+            'images',
+            'price',
+            'seq',
+            'coinPrice',
+            'buyableMode',
+            'buyableStartTime',
+            'buyableEndTime',
+            'maxJoinNum',
+        ]);
 
         return $this->getGoodsSpecsDao()->update($id, $goodsSpecs);
     }
