@@ -10946,6 +10946,8 @@ admin_v2.operating.goods_leading_setting.tips: 注意：微信群人数超过100
 
 exception.favorite.forbidden_operate_favorite: 没有权限
 
+exception.product.not_exist: 商品不存在
+
 classroom.courses: 班级课程
 classroom.member_number: 班级学员
 classroom.preview_btn: 预览班级
