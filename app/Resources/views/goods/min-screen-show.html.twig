@@ -1,7 +1,27 @@
-{% extends 'v2/layout.html.twig' %}
+{# {% extends 'v2/layout.html.twig' %} #}
 
-{% do script(['libs/vue.js', 'app/js/goods/min-screen-show/index.js']) %}
+{# {% do script(['libs/vue.js', 'app/js/goods/min-screen-show/index.js']) %} #}
 
-{% block full_content %}
-  <div id="min-screen-show"></div>
-{% endblock %}
+{# {% block full_content %} #}
+  {# <div id="min-screen-show"></div> #}
+{# {% endblock %} #}
+
+
+<!DOCTYPE html>
+<html style="height: 100%;">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+  <meta name="renderer" content="webkit">
+  <meta name="viewport"
+    content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <title>
+    {%- block title -%}
+      {{ setting('site.name', 'EduSoho') }}{% if setting('site.slogan') %} - {{ setting('site.slogan') }}{% endif %}{% if  setting('copyright.owned','0') != '1' or setting('copyright.thirdCopyright')|default(0) == 2 %} - Powered By EduSoho{% endif %}
+    {%- endblock -%}
+  </title>
+</head>
+<body style="margin: 0; height: 100%; overflow: hidden">
+  <iframe src="http://localhost:8081/#/goods/1/course" frameborder="0" width="100%" height="100%"></iframe>
+</body>
+</html>
