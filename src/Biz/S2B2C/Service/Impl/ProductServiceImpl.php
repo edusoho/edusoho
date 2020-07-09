@@ -196,6 +196,7 @@ class ProductServiceImpl extends BaseService implements ProductService
                 'supplierId',
                 'productType',
                 'remoteProductId',
+                's2b2cProductDetailId',
                 'remoteResourceId',
                 'localResourceId',
                 'cooperationPrice',
