@@ -268,6 +268,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'buyableStartTime' => $course['expiryStartDate'],
             'buyableEndTime' => $course['expiryEndDate'],
             'maxJoinNum' => $course['maxStudentNum'],
+            'services' => $course['services'],
         ]);
 
         return $goodsSpecs;

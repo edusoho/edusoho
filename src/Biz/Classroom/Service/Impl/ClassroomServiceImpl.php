@@ -215,6 +215,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom['expiryValue'] = 0;
 
         $classroom = $this->getClassroomDao()->create($classroom);
+        $this->addProductAndGoodsAndSpecs($classroom);
 
         $this->dispatchEvent('classroom.create', $classroom);
 
@@ -286,6 +287,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'showable' => $classroom['showable'],
             'buyableMode' => $classroom['expiryMode'],
             'buyableEndTime' => $classroom['expiryValue'],
+            'services' => $classroom['service'],
         ]);
 
         return [$product, $goods, $goodsSpecs];
@@ -389,6 +391,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $fields = $this->fillOrgId($fields);
 
         $classroom = $this->getClassroomDao()->update($id, $fields);
+        $this->syncProductAndGoodsAndSpecs($classroom);
 
         $arguments = $fields;
 

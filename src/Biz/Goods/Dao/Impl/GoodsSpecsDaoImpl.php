@@ -15,6 +15,7 @@ class GoodsSpecsDaoImpl extends GeneralDaoImpl implements GoodsSpecsDao
             'timestamps' => ['createdTime', 'updatedTime'],
             'serializes' => [
                 'images' => 'json',
+                'services' => 'json',
             ],
             'conditions' => [
                 'id = :id',

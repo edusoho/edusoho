@@ -125,6 +125,7 @@ class GoodsServiceImpl extends BaseService implements GoodsService
             'buyableStartTime',
             'buyableEndTime',
             'maxJoinNum',
+            'services',
         ]);
 
         return $this->getGoodsSpecsDao()->update($id, $goodsSpecs);
