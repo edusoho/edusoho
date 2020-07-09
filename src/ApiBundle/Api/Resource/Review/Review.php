@@ -29,9 +29,12 @@ class Review extends AbstractResource
 
         $orderBys = empty($request->query->get('orderBys')) ? ['createdTime' => 'DESC'] : $request->query->get('orderBys');
 
-        $reviews = $this->getReviewService()->searchReviews($request->query->all(), $orderBys, $offset, $limit);
+        $conditions = array_merge(['parentId' => 0], $request->query->all());
+        $reviews = $this->getReviewService()->searchReviews($conditions, $orderBys, $offset, $limit);
 
-        return $this->dealReviews($reviews);
+        $reviews = $this->makeUpReviews($reviews, $request->query->get('needPosts'));
+
+        return $this->makePagingObject($reviews, $this->getReviewService()->countReviews($conditions), $offset, $limit);
     }
 
     public function add(ApiRequest $request)
@@ -49,10 +52,15 @@ class Review extends AbstractResource
         $existed = $this->getReviewService()->getByUserIdAndTargetTypeAndTargetId($review['userId'], $request->request->get('targetType'), $request->request->get('targetId'));
 
         if (!empty($existed['id'])) {
-            return $this->getReviewService()->updateReview($existed['id'], $review);
+            $review = $this->getReviewService()->updateReview($existed['id'], $review);
+        } else {
+            $review = $this->getReviewService()->createReview($review);
         }
 
-        return $this->getReviewService()->createReview($review);
+        $this->getOCUtil()->single($review, ['userId'], 'user');
+        $this->getOCUtil()->single($review, ['targetId'], $review['targetType']);
+
+        return $review;
     }
 
     public function remove(ApiRequest $request, $id)
@@ -60,63 +68,32 @@ class Review extends AbstractResource
         return $this->getReviewService()->deleteReview($id);
     }
 
-    protected function dealReview($review)
+    protected function makeUpReviews($reviews, $needPosts = false)
     {
-        $review['user'] = $this->getUserService()->getUser($review['userId']);
-        $targetInfo = $this->getReviewTargetInfoByTargetTypeAndTargetIds($review['targetType'], [$review['targetId']]);
-
-        $review['targetName'] = empty($targetInfo['title']) ? null : $targetInfo['title'];
-
-        return $review;
-    }
-
-    protected function dealReviews($reviews)
-    {
-        $targetInfo = [];
+        $makeUpReviews = [];
         $reviewGroupByType = ArrayToolkit::group($reviews, 'targetType');
         foreach ($reviewGroupByType as $type => $groupedReviews) {
-            $targetIds = array_unique(ArrayToolkit::column($groupedReviews, 'targetId'));
-            $targetInfo[$type] = $this->getReviewTargetInfoByTargetTypeAndTargetIds($type, array_values($targetIds));
+            $this->getOCUtil()->multiple($groupedReviews, ['targetId'], $type);
+            $this->getOCUtil()->multiple($groupedReviews, ['userId'], 'user');
+
+            $makeUpReviews = array_merge($makeUpReviews, $groupedReviews);
         }
 
-        $userInfo = $this->getReviewUserInfoByUserIds(ArrayToolkit::column($reviews, 'userId'));
-
-        foreach ($reviews as &$review) {
-            $review['user'] = empty($userInfo[$review['userId']]) ? null : $userInfo[$review['userId']];
-            $review['targetName'] = empty($targetInfo[$review['targetType']][$review['targetId']]) ? '' : $targetInfo[$review['targetType']][$review['targetId']]['title'];
+        if (!$needPosts) {
+            return $makeUpReviews;
         }
 
-        return $reviews;
-    }
-
-    protected function getReviewUserInfoByUserIds($userIds)
-    {
-        return $this->getUserService()->findUsersByIds($userIds);
-    }
-
-    protected function getReviewTargetInfoByTargetTypeAndTargetIds($targetType, $targetIds)
-    {
-        if (!in_array($targetType, array_keys($this->targetMap))) {
-            return null;
+        foreach ($makeUpReviews as &$review) {
+            $review['posts'] = $this->getReviewService()->searchReviews(
+                ['parentId' => $review['id']],
+                ['createdTime' => 'ASC'],
+                0,
+                5
+            );
+            $this->getOCUtil()->multiple($review['posts'], ['userId'], 'user');
         }
 
-        $function = $this->targetMap[$targetType];
-
-        return $this->$function($targetIds);
-    }
-
-    protected function searchGoodsInfo($ids)
-    {
-        $goods = $this->getGoodsService()->searchGoods(['ids' => $ids], [], 0, count($ids), ['id', 'title']);
-
-        return ArrayToolkit::index($goods, 'id');
-    }
-
-    protected function searchCourseInfo($ids)
-    {
-        $courses = $this->getCourseService()->searchCourses(['ids' => $ids], [], 0, count($ids), ['id', 'title']);
-
-        return ArrayToolkit::index($courses, 'id');
+        return $makeUpReviews;
     }
 
     /**

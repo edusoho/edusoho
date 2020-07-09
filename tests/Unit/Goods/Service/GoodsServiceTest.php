@@ -356,6 +356,20 @@ class GoodsServiceTest extends BaseTestCase
         $this->assertFalse(ReflectionUtils::invokeMethod($this->getGoodsService(), 'canManageGoods', [$goods]));
     }
 
+    public function testFindGoodsByIds()
+    {
+        $goods1 = $this->createGoods();
+        $goods2 = $this->createGoods(['title' => 'testTitle2']);
+        $goods3 = $this->createGoods(['productId' => 2]);
+        $goods4 = $this->createGoods(['productId' => 2]);
+
+        $result = $this->getGoodsService()->findGoodsByIds([$goods1['id'], $goods2['id']]);
+        $this->assertEquals([
+            $goods1['id'] => $goods1,
+            $goods2['id'] => $goods2,
+        ], $result);
+    }
+
     protected function createGoods($goods = [])
     {
         $default = [

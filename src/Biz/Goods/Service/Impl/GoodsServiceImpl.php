@@ -156,6 +156,11 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         return $this->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $targetId);
     }
 
+    public function findGoodsByIds($ids)
+    {
+        return  ArrayToolkit::index($this->getGoodsDao()->findByIds($ids), 'id');
+    }
+
     /**
      * @param $goods
      *
