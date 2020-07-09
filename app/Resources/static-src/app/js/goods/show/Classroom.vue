@@ -35,7 +35,8 @@
 
           <!-- 学习目录 -->
           <div id="info-left-2" class="content-item js-content-item">
-            <h3  class="content-item__title">学习目录</h3>
+            <h3 class="content-item__title">学习目录</h3>
+            <classroom-task />
           </div>
 
           <!-- 学员评价 -->
@@ -75,6 +76,7 @@
   import Qr from './components/qr';
   import Recommend from './components/recommend';
   import BackToTop from './components/back-to-top';
+  import ClassroomTask from './components/classroom-task'; // 班级课程列表
 
   export default {
     data() {
@@ -96,7 +98,8 @@
       Teacher,
       Qr,
       Recommend,
-      BackToTop
+      BackToTop,
+      ClassroomTask
     },
     computed: {
       descriptionHtml() {
