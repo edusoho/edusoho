@@ -48,9 +48,14 @@
           </div>
         </div>
       </div>
+
       <div v-if="details.hasExtension" class="product-info__right pull-right">
         <!-- 授课老师 -->
-
+        <teacher :teachers="componentsData.teachers" />
+        <!-- 公众号 -->
+        <qr :mpQrcode="componentsData.mpQrcode" />
+        <!-- 猜你想学 -->
+        <recommend :recommendGoods="componentsData.recommendGoods" />
       </div>
     </div>
   </div>
@@ -61,6 +66,9 @@
   import Detail from './components/detail';
   import CreateReview from './components/create-review';
   import Review from './components/review';
+  import Teacher from './components/teacher';
+  import Qr from './components/qr';
+  import Recommend from './components/recommend';
 
 //   import infoRightTeacher from './components/info-right-teacher';
 //   import infoRightQr from './components/info-right-qr';
@@ -82,10 +90,9 @@
       Detail,
       CreateReview,
       Review,
-    //   infoRightTeacher,
-    //   infoRightQr,
-    //   infoRightLearn,
-    //   infoLeftReviews
+      Teacher,
+      Qr,
+      Recommend
     },
     computed: {
       descriptionHtml() {
