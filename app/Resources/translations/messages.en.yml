@@ -7858,6 +7858,11 @@ log.action.question_bank.create_category: Create Bank Category
 log.action.question_bank.delete_category: Delete Bank Category
 log.action.question_bank.update_category: Update Bank Category
 log.action.item_bank_exercise.add_student: 'Add student'
+log.action.item_bank_exercise.delete_exercise: Delete Item Exercise
+log.action.item_bank_exercise.recommend_exercise: Recommend Item Exercise
+log.action.item_bank_exercise.cancel_recommend_exercise: Cancel Recommend Item Exercise
+log.action.item_bank_exercise.publish_exercise: Publish Item Exercise
+log.action.item_bank_exercise.close_exercise: Close Item Exercise
 
 log.action.template.course.create: Created a new<strong class="color-success"> course </strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: Updated the<strong class="color-success"> course </strong> 《<a href="%url%" target="_blank">%title%</a>》
