@@ -4,12 +4,9 @@ namespace AppBundle\Controller\AdminV2\CloudCenter\S2B2C;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
-use Biz\Common\CommonException;
 use Biz\Course\Service\CourseSetService;
 use Biz\S2B2C\Service\CourseProductService;
 use Biz\S2B2C\Service\ProductService;
-use function Clue\StreamFilter\fun;
-use QiQiuYun\SDK\Service\S2B2CService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -109,10 +106,10 @@ class CourseSetProductController extends ProductController
     public function productDetailAction(Request $request, $s2b2cProductId, $courseId)
     {
         $result = $this->getS2B2CFacadeService()->getS2B2CService()->getDistributeProduct($s2b2cProductId);
-        if (!empty($result['status']) && $result['status'] == 'success') {
+        if (!empty($result['status']) && 'success' == $result['status']) {
             $product = $result['data'];
             $courseSet = $product['content'];
-        }else{
+        } else {
             throw $this->createNotFoundException('商品未找到或出错了');
         }
 
@@ -184,7 +181,6 @@ class CourseSetProductController extends ProductController
     {
         return $this->createService('S2B2C:ProductService');
     }
-
 
     /**
      * @return CourseProductService

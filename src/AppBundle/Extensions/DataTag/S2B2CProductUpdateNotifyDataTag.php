@@ -30,9 +30,9 @@ class S2B2CProductUpdateNotifyDataTag extends BaseDataTag implements DataTag
 
         foreach ($notifies as &$notify) {
             $product = $this->getProduct($notify);
-            $localResource = $this->getLocalCResource($product);
+            $localResource = $this->getLocalResource($product);
             $notify['eventName'] = $eventName[$notify['event']];
-            $notify['title'] = $product['productType'] == 'course_set' ? $localResource['title'] : $localResource['courseSetTitle'];
+            $notify['title'] = 'course_set' == $product['productType'] ? $localResource['title'] : $localResource['courseSetTitle'];
             $notify = array_merge($notify, $this->getPath($notify, $localResource));
         }
 
@@ -41,24 +41,24 @@ class S2B2CProductUpdateNotifyDataTag extends BaseDataTag implements DataTag
 
     protected function getProduct($notify)
     {
-        if ($notify['event'] == 'closeCourse') {
+        if ('closeCourse' == $notify['event']) {
             $product = $this->getProductService()->getByProductIdAndRemoteResourceIdAndType($notify['productId'], $notify['data']['courseSetId'], 'course_set');
-        }else{
+        } else {
             $product = $this->getProductService()->getByProductIdAndRemoteResourceIdAndType($notify['productId'], $notify['data']['courseId'], 'course');
         }
 
         return $product;
     }
 
-    protected function getLocalCResource($product)
+    protected function getLocalResource($product)
     {
-        if ($product['productType'] == 'course_set') {
+        if ('course_set' == $product['productType']) {
             return $this->getCourseSetService()->getCourseSet($product['localResourceId']);
-        }else{
+        } else {
             return $this->getCourseService()->getCourse($product['localResourceId']);
         }
-
     }
+
     protected function getPath($notify, $localResource)
     {
         $path = [
@@ -67,12 +67,13 @@ class S2B2CProductUpdateNotifyDataTag extends BaseDataTag implements DataTag
             'closePlan' => 'course_set_manage_courses',
             'closeCourse' => 'course_set_manage_base',
         ];
-        if ($notify['event'] == 'closeCourse') {
+        if ('closeCourse' == $notify['event']) {
             $pathParams = ['id' => $localResource['id']];
-        }else{
+        } else {
             $pathParams = ['courseId' => $localResource['id'], 'courseSetId' => $localResource['courseSetId']];
         }
-        return ['path' => $path[$notify['event']], 'pathParams' =>$pathParams];
+
+        return ['path' => $path[$notify['event']], 'pathParams' => $pathParams];
     }
 
     /**

@@ -320,7 +320,7 @@ class ProductServiceImpl extends BaseService implements ProductService
         $job = [
             'name' => 'productUpdateVersion',
             'class' => 'Biz\S2B2C\Job\UpdateProductVersionJob',
-            'expression' => time(), //'0 2 * * *',
+            'expression' => '0 2 * * *',
             'args' => '',
             'misfire_threshold' => 300,
             'misfire_policy' => 'executing',

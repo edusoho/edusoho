@@ -32,7 +32,6 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
         ];
     }
 
-
     public function onCourseMarketingUpdate(Event $event)
     {
         $courses = $event->getSubject();
@@ -112,6 +111,7 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
                     'merchantOrderRefundItems' => $orderItemRefunds,
                 ]);
                 $this->getS2B2CService()->reportRefundOrder($context, $orderRefund, $orderItemRefunds);
+                $this->getLogger()->info('[onOrderRefunded] order report succeed');
             }
 
             return true;
