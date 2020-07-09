@@ -179,7 +179,6 @@
             }
           }
           this.details = data;
-          console.log(this.details);
         });
       }
     },
