@@ -5,10 +5,10 @@
     <detail :detailData="details" :currentPlan="currentPlan" @changePlan="changePlan"></detail>
 
     <!--商品介绍、目录、评价、老师、二维码、猜你想学 -->
-    <div class="product-info clearfix">
+    <div class="product-info clearfix" v-show="Object.keys(details).length != 0">
       <div class="product-info__left info-left pull-left" :class="{'all-width': !details.hasExtension}">
         <div v-if="isFixed" class="fixed">
-          <div class="cd-container clearfix" >
+          <div class="cd-container clearfix">
             <ul class="info-left__nav pull-left">
               <li :class="howActive == 1 ? 'active' : ''"><a href="javascript:;" @click="clickType(1)">商品介绍</a></li>
               <li :class="howActive == 2 ? 'active' : ''"><a href="javascript:;" @click="clickType(2)">学习目录</a></li>
@@ -179,6 +179,7 @@
             }
           }
           this.details = data;
+          console.log(this.details);
         });
       }
     },
