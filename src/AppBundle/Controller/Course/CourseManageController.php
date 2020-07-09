@@ -505,9 +505,6 @@ class CourseManageController extends BaseController
                 unset($data['subtitle']);
             }
             $data = $this->prepareExpiryMode($data);
-            if (!empty($data['services'])) {
-                $data['services'] = json_decode($data['services'], true);
-            }
 
             if (!empty($data['freeTaskIds']) || !empty($freeTasks)) {
                 $freeTaskIds = ArrayToolkit::column($freeTasks, 'id');
@@ -552,6 +549,10 @@ class CourseManageController extends BaseController
             'ownerId' => $course['courseSetId'],
         ]);
 
+        if ($this->isPluginInstalled('Vip')) {
+            $vipLevels = $this->createService('VipPlugin:Vip:LevelService')->findEnabledLevels();
+        }
+
         return $this->render(
             'course-manage/info.html.twig',
             [
@@ -562,6 +563,8 @@ class CourseManageController extends BaseController
                 'canFreeTasks' => $this->findCanFreeTasks($course),
                 'freeTasks' => $freeTasks,
                 'notifies' => empty($notifies) ? [] : $notifies,
+                'vipInstalled' => $this->isPluginInstalled('Vip'),
+                'vipLevels' => empty($vipLevels) ? [] : array_column($vipLevels, 'name', 'id'),
             ]
         );
     }

@@ -26,8 +26,21 @@ class ClassroomController extends BaseController
 
         $orderBy = array('createdTime' => 'desc');
 
-        $classroomMembers = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user->getId()), $orderBy, 0, PHP_INT_MAX);
-        $classroomMembers = array_merge($classroomMembers, $this->getClassroomService()->searchMembers(array('role' => 'assistant', 'userId' => $user->getId()), $orderBy, 0, PHP_INT_MAX));
+        $classroomMembers = $this->getClassroomService()->searchMembers(
+            array('role' => 'teacher', 'userId' => $user->getId()),
+            $orderBy,
+            0,
+            PHP_INT_MAX
+        );
+        $classroomMembers = array_merge(
+            $classroomMembers,
+            $this->getClassroomService()->searchMembers(
+                array('role' => 'assistant', 'userId' => $user->getId()),
+                $orderBy,
+                0,
+                PHP_INT_MAX
+            )
+        );
         $classroomIds = ArrayToolkit::column($classroomMembers, 'classroomId');
 
         if (empty($classroomIds)) {
@@ -57,26 +70,8 @@ class ClassroomController extends BaseController
 
         foreach ($classrooms as $key => $classroom) {
             $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-            $courseIds = ArrayToolkit::column($courses, 'id');
             $coursesCount = count($courses);
-
             $classrooms[$key]['coursesCount'] = $coursesCount;
-
-            $studentCount = $this->getClassroomService()->searchMemberCount(array('role' => 'student', 'classroomId' => $classroom['id'], 'startTimeGreaterThan' => strtotime(date('Y-m-d'))));
-            $auditorCount = $this->getClassroomService()->searchMemberCount(array('role' => 'auditor', 'classroomId' => $classroom['id'], 'startTimeGreaterThan' => strtotime(date('Y-m-d'))));
-
-            $allCount = $studentCount + $auditorCount;
-
-            $classrooms[$key]['allCount'] = $allCount;
-
-            $todayTimeStart = strtotime(date('Y-m-d', time()));
-            $todayTimeEnd = strtotime(date('Y-m-d', time() + 24 * 3600));
-
-            $todayFinishedTaskNum = $this->getTaskResultService()->countTaskResults(array('courseIds' => (!empty($courseIds)) ? $courseIds : array(-1), 'createdTime_GE' => $todayTimeStart, 'status' => 'finish'));
-            $threadCount = $this->getThreadService()->searchThreadCount(array('targetType' => 'classroom', 'targetId' => $classroom['id'], 'type' => 'discussion', 'startTime' => $todayTimeStart, 'endTime' => $todayTimeEnd, 'status' => 'open'));
-            $classrooms[$key]['threadCount'] = $threadCount;
-
-            $classrooms[$key]['todayFinishedTaskNum'] = $todayFinishedTaskNum;
         }
 
         return $this->render('my/teaching/classroom.html.twig', array(

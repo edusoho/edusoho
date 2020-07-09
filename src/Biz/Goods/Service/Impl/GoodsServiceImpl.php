@@ -23,14 +23,45 @@ class GoodsServiceImpl extends BaseService implements GoodsService
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $goods = ArrayToolkit::parts($goods, ['productId', 'title', 'images']);
+        $goods = ArrayToolkit::parts($goods, [
+            'productId',
+            'title',
+            'subtitle',
+            'summary',
+            'orgId',
+            'orgCode',
+            'images',
+            'creator',
+            'minPrice',
+            'maxPrice',
+        ]);
 
         return $this->getGoodsDao()->create($goods);
     }
 
+    public function publishGoods($id)
+    {
+        return $this->getGoodsDao()->update($id, ['status' => 'published']);
+    }
+
     public function updateGoods($id, $goods)
     {
-        $goods = ArrayToolkit::parts($goods, ['title', 'images']);
+        $goods = ArrayToolkit::parts($goods, [
+            'title',
+            'images',
+            'subtitle',
+            'summary',
+            'orgId',
+            'orgCode',
+            'minPrice',
+            'maxPrice',
+            'ratingNum',
+            'rating',
+            'hitNum',
+            'hotSeq',
+            'recommendWeight',
+            'recommendedTime',
+        ]);
 
         return $this->getGoodsDao()->update($id, $goods);
     }
@@ -52,11 +83,24 @@ class GoodsServiceImpl extends BaseService implements GoodsService
 
     public function createGoodsSpecs($goodsSpecs)
     {
-        if (!ArrayToolkit::requireds($goodsSpecs, ['goodsId', 'targetId', 'title'])) {
+        if (!ArrayToolkit::requireds($goodsSpecs, [
+            'goodsId',
+            'targetId',
+            'title',
+        ])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $goodsSpecs = ArrayToolkit::parts($goodsSpecs, ['goodsId', 'targetId', 'title', 'images', 'price']);
+        $goodsSpecs = ArrayToolkit::parts($goodsSpecs, [
+            'goodsId',
+            'targetId',
+            'title',
+            'images',
+            'seq',
+            'buyableMode',
+            'buyableStartTime',
+            'buyableEndTime',
+        ]);
 
         return $this->getGoodsSpecsDao()->create($goodsSpecs);
     }
@@ -68,7 +112,21 @@ class GoodsServiceImpl extends BaseService implements GoodsService
 
     public function updateGoodsSpecs($id, $goodsSpecs)
     {
-        $goodsSpecs = ArrayToolkit::parts($goodsSpecs, ['title', 'images', 'price']);
+        $goodsSpecs = ArrayToolkit::parts($goodsSpecs, [
+            'title',
+            'images',
+            'price',
+            'title',
+            'images',
+            'price',
+            'seq',
+            'coinPrice',
+            'buyableMode',
+            'buyableStartTime',
+            'buyableEndTime',
+            'maxJoinNum',
+            'services',
+        ]);
 
         return $this->getGoodsSpecsDao()->update($id, $goodsSpecs);
     }
@@ -101,6 +159,30 @@ class GoodsServiceImpl extends BaseService implements GoodsService
     public function findGoodsByIds($ids)
     {
         return  ArrayToolkit::index($this->getGoodsDao()->findByIds($ids), 'id');
+    }
+
+    /**
+     * @param $goods
+     *
+     * @return bool
+     *              大于管理员的权限，教师权限且是当前商品的创建者
+     *
+     * @todo 按照当前逻辑课程后面设定的教师也应该有管理权限，从商品上，只有创建者有管理权限，后续作额外调整
+     */
+    public function canManageGoods($goods)
+    {
+        return $this->getCurrentUser()->isAdmin() || ($this->getCurrentUser()->isTeacher() && $this->isGoodsCreator($goods));
+    }
+
+    /**
+     * @param $goods
+     *
+     * @return bool
+     *              创建者Id不为空，且创建者Id等于当前用户Id
+     */
+    protected function isGoodsCreator($goods)
+    {
+        return $goods['creator'] && (int) $goods['creator'] === (int) $this->getCurrentUser()->getId();
     }
 
     /**

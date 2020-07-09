@@ -3,6 +3,7 @@
 namespace Tests\Unit\Goods\Service;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
 use Biz\Common\CommonException;
 use Biz\Goods\Dao\GoodsDao;
@@ -305,6 +306,54 @@ class GoodsServiceTest extends BaseTestCase
 
         $resultNull = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($goods['productId'], 1000);
         $this->assertNull($resultNull);
+    }
+
+    /**
+     * 权限判断：教师身份并且是当前商品的Creator返回True
+     */
+    public function testCanManageGoods_whenTeacherRoleAndEqualCreator_thenTrue()
+    {
+        $this->loadCurrentUserWithTeacher(['id' => 5]);
+        $goods = [
+            'creator' => 5,
+        ];
+        $this->assertTrue(ReflectionUtils::invokeMethod($this->getGoodsService(), 'canManageGoods', [$goods]));
+    }
+
+    /**
+     * 权限判断： 教师身份，不过不是当前商品Creator返回False
+     */
+    public function testCanManageGoods_whenTeacherRoleAndNotEqualCreator_thenFalse()
+    {
+        $this->loadCurrentUserWithTeacher(['id' => 5]);
+        $goods = [
+            'creator' => 10,
+        ];
+        $this->assertFalse(ReflectionUtils::invokeMethod($this->getGoodsService(), 'canManageGoods', [$goods]));
+    }
+
+    /**
+     * 权限判断： 管理员身份，可以有权限管理
+     */
+    public function testCanManageGoods_whenAdminRole_thenTrue()
+    {
+        $this->loadCurrentUserWithAdmin();
+        $goods = [
+            'creator' => 10,
+        ];
+        $this->assertTrue(ReflectionUtils::invokeMethod($this->getGoodsService(), 'canManageGoods', [$goods]));
+    }
+
+    /**
+     * 权限判断： 普通用户权限，没有管理权限
+     */
+    public function testCanManageGoods_whenNormalUserRole_thenFalse()
+    {
+        $this->loadCurrentUserWithNormalUser();
+        $goods = [
+            'creator' => 10,
+        ];
+        $this->assertFalse(ReflectionUtils::invokeMethod($this->getGoodsService(), 'canManageGoods', [$goods]));
     }
 
     public function testFindGoodsByIds()

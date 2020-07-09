@@ -19,8 +19,12 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Exception\UnableJoinException;
+use Biz\Goods\GoodsException;
+use Biz\Goods\Service\GoodsService;
 use Biz\Order\OrderException;
 use Biz\OrderFacade\Service\OrderFacadeService;
+use Biz\Product\ProductException;
+use Biz\Product\Service\ProductService;
 use Biz\System\Service\LogService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Taxonomy\Service\CategoryService;
@@ -211,10 +215,82 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom['expiryValue'] = 0;
 
         $classroom = $this->getClassroomDao()->create($classroom);
+        $this->addProductAndGoodsAndSpecs($classroom);
 
         $this->dispatchEvent('classroom.create', $classroom);
 
         return $classroom;
+    }
+
+    protected function addProductAndGoodsAndSpecs($classroom)
+    {
+        $product = $this->getProductService()->createProduct([
+            'targetType' => 'classroom',
+            'targetId' => $classroom['id'],
+            'title' => $classroom['title'],
+            'owner' => $classroom['creator'],
+        ]);
+
+        $goods = $this->getGoodsService()->createGoods([
+            'productId' => $product['id'],
+            'title' => $classroom['title'],
+            'subtitle' => '',
+            'creator' => $classroom['creator'],
+        ]);
+
+        $goodsSpecs = $this->getGoodsService()->createGoodsSpecs([
+            'goodsId' => $goods['id'],
+            'targetId' => $classroom['id'],
+            'title' => $classroom['title'],
+        ]);
+
+        return [$product, $goods, $goodsSpecs];
+    }
+
+    protected function syncProductAndGoodsAndSpecs($classroom)
+    {
+        $existProduct = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
+        if (empty($existProduct)) {
+            $this->createNewException(ProductException::NOTFOUND_PRODUCT());
+        }
+
+        $product = $this->getProductService()->updateProduct($existProduct['id'], [
+            'title' => $classroom['title'],
+        ]);
+
+        $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
+
+        if (empty($existGoods)) {
+            $this->createNewException(GoodsException::GOODS_NOT_FOUND());
+        }
+
+        $goods = $this->getGoodsService()->updateGoods($existGoods['id'], [
+            'title' => $classroom['title'],
+            'subtitle' => '',
+            'summary' => $classroom['about'],
+            'images' => [
+                'large' => $classroom['largePicture'],
+                'middle' => $classroom['largePicture'],
+                'small' => $classroom['smallPicture'],
+            ],
+            'orgId' => $classroom['orgId'],
+            'orgCode' => $classroom['orgCode'],
+        ]);
+
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $classroom['id']);
+
+        $goodsSpecs = $this->getGoodsService()->updateGoodsSpecs($goodsSpecs['id'], [
+            'title' => $classroom['title'],
+            'images' => $goods['images'],
+            'price' => $classroom['price'],
+            'buyable' => $classroom['buyable'],
+            'showable' => $classroom['showable'],
+            'buyableMode' => $classroom['expiryMode'],
+            'buyableEndTime' => $classroom['expiryValue'],
+            'services' => $classroom['service'],
+        ]);
+
+        return [$product, $goods, $goodsSpecs];
     }
 
     public function addCoursesToClassroom($classroomId, $courseIds)
@@ -315,6 +391,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $fields = $this->fillOrgId($fields);
 
         $classroom = $this->getClassroomDao()->update($id, $fields);
+        $this->syncProductAndGoodsAndSpecs($classroom);
 
         $arguments = $fields;
 
@@ -2389,5 +2466,21 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getSettingService()
     {
         return $this->biz->service('System:SettingService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
     }
 }

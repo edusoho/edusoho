@@ -1,0 +1,705 @@
+@vw_base: 375px;
+
+.vw(@px) {
+  @vw: (@px / @vw_base) * 100vw;
+};
+
+.height(@px) {
+  .vw(@px);
+  height: @vw;
+}
+
+.width(@px) {
+  .vw(@px);
+  width: @vw;
+}
+
+.font-size(@px) {
+  .vw(@px);
+  font-size: @vw;
+}
+
+.line-height(@px) {
+  .vw(@px);
+  line-height: @vw;
+}
+
+// top、bottom、left、right
+.top(@px) {
+  .vw(@px);
+  top: @vw;
+}
+
+.bottom(@px) {
+  .vw(@px);
+  bottom: @vw;
+}
+
+.left(@px) {
+  .vw(@px);
+  left: @vw;
+}
+
+.right(@px) {
+  .vw(@px);
+  right: @vw;
+}
+
+// border
+.border(@px:1, @color) {
+  .vw(@px);
+  border: @vw solid @color;
+}
+
+.border-top(@px:1, @color) {
+  .vw(@px);
+  border-top: @vw solid @color;
+}
+
+.border-bottom(@px:1, @color) {
+  .vw(@px);
+  border-bottom: @vw solid @color;
+}
+
+.border-left(@px:1, @color) {
+  .vw(@px);
+  border-left: @vw solid @color;
+}
+
+.border-right(@px:1, @color) {
+  .vw(@px);
+  border-right: @vw solid @color;
+}
+
+// padding
+.padding(@px) {
+  .vw(@px);
+  padding: @vw;
+}
+
+.padding(@y, @x) {
+  padding: (@y / @vw_base) * 100vw (@x / @vw_base) * 100vw;
+}
+
+.padding(@t, @r, @b, @l) {
+  padding: (@t / @vw_base) * 100vw (@r / @vw_base) * 100vw  (@b / @vw_base) * 100vw (@l / @vw_base) * 100vw;
+}
+
+.padding-top(@px) {
+  .vw(@px);
+  padding-top: @vw;
+}
+
+.padding-bottom(@px) {
+  .vw(@px);
+  padding-bottom: @vw;
+}
+
+.padding-left(@px) {
+  .vw(@px);
+  padding-left: @vw;
+}
+
+.padding-right(@px) {
+  .vw(@px);
+  padding-right: @vw;
+}
+
+// margin
+.margin(@px) {
+  .vw(@px);
+  margin: @vw;
+}
+
+.margin(@y, @x) {
+  margin: (@y / @vw_base) * 100vw (@x / @vw_base) * 100vw;
+}
+
+.margin(@t, @r, @b, @l) {
+  margin: (@t / @vw_base) * 100vw (@r / @vw_base) * 100vw  (@b / @vw_base) * 100vw (@l / @vw_base) * 100vw;
+}
+
+.margin-top(@px) {
+  .vw(@px);
+  margin-top: @vw;
+}
+
+.margin-bottom(@px) {
+  .vw(@px);
+  margin-bottom: @vw;
+}
+
+.margin-left(@px) {
+  .vw(@px);
+  margin-left: @vw;
+}
+
+.margin-right(@px) {
+  .vw(@px);
+  margin-right: @vw;
+}
+
+.goods {
+  p {
+    margin: 0;
+  }
+  background-color: #F5F5F5;
+  .goods-banner {
+    .height(210);
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+// 优惠活动
+.goods-discount {
+  .height(46);
+  // 优惠价格
+  .goods-discount__left {
+    .width(240);
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255, 88, 115, 1) 0%, rgba(255, 127, 88, 1) 100%);
+    color: #fff;
+    text-align: center;
+    .line-height(46);
+    .text,
+    .price {
+      .margin-right(5);
+      .font-size(18);
+      font-weight: 500;
+    }
+    .original-price {
+      .font-size(14);
+    }
+  }
+  // 倒计时
+  .goods-discount__right {
+    .width(135);
+    height: 100%;
+    text-align: center;
+    background-color: #F5F5F5;
+    .text {
+      .margin-top(4);
+      .font-size(12);
+      .line-height(16);
+      color: #666;
+    }
+    .count-down {
+      .height(22);
+      color: #000;
+      .font-size(12);
+      .line-height(22);
+      .day {
+        .margin-right(5);
+        color: #FF5C3B;
+        .font-size(16);
+      }
+      .item {
+        display: inline-block;
+        .width(20);
+        .height(20);
+        .margin-right(5);
+        color: #fff;
+        background-color: #FF7262;
+        border-radius: 4px;
+      }
+    }
+  }
+}
+
+// 名称、价格、在学人数
+.goods-information {
+  .padding(16);
+  background-color: #fff;
+  .goods-information__title {
+    .font-size(16);
+    font-weight: 500;
+    color: #333;
+  }
+  .goods-information__price {
+    .margin-top(8);
+    .font-size(16);
+    color: #999;
+    .price {
+      .margin(0, 3, 0, 5);
+      .font-size(24);
+      font-weight: 600;
+      color: #FF5C3B;
+    }
+    .study-num {
+      position: relative;
+      .top(5);
+    }
+    .original-price {
+      .margin-top(4);
+      .font-size(12);
+    }
+  }
+}
+
+// 教学计划、有效期、承诺服务
+.goods-specs {
+  .margin-top(8);
+  .padding(14, 16);
+  .line-height(20);
+  background-color: #fff;
+  .goods-plan__plan {
+    .margin-bottom(12);
+    &:last-child {
+      margin-bottom: 0;
+    }
+    .plan-left {
+      .width(72);
+      .font-size(12);
+      color: #999;
+    }
+    .plan-right {
+      position: relative;
+      .width(271);
+      .font-size(14);
+      color: #666;
+      .plan-right__icon {
+        .font-size(14);
+        position: absolute;
+        right: 0;
+        .top(3);
+      }
+      .plan-right__promise {
+        .padding(2, 4);
+        .margin-right(8);
+        .font-size(12);
+        background-color: #03C777;
+        color: #fff;
+        border-radius: 4px;
+      }
+    }
+  }
+  // 切换教学计划
+  .popup-mask {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    background: rgba(0, 0, 0, .4)
+  }
+  .specs-popup {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    .padding(16);
+    width: 100%;
+    max-height: 100%;
+    z-index: 2000;
+    background-color: #fff;
+    border-radius: 12px 12px 0 0;
+    transform: translateY(100%);
+    transition: all 0.3s ease;
+    &.active {
+      transform: translateY(0);
+    }
+    .specs-popup__title {
+      .font-size(14);
+      color: #333;
+      .line-height(20);
+      span {
+        position: relative;
+        .top(1);
+        display: inline-block;
+        .width(4);
+        .height(12);
+        background-color: #03C777;
+        border-radius: 2px;
+      }
+    }
+    .specs-popup__type {
+      .margin-top(4);
+      .specs-popup__type__item {
+        display: inline-block;
+        .padding(4, 8);
+        .margin(12, 8, 0 ,0);
+        .border(1, rgba(225, 225, 225, 1));
+        .font-size(14);
+        color: #999;
+        border-radius: 4px;
+        &.active {
+          .border(1, #03C777);
+          background: rgba(3, 199, 119, 0.1);
+        }
+      }
+    }
+    .specs-popup__other {
+      .padding(16);
+      .margin-top(16);
+      background-color: #F9F9F9;
+      border-radius: 4px;
+      .popup-other {
+        .margin-top(16);
+        .line-height(20);
+        .font-size(14);
+        &:first-child {
+          margin-top: 0;
+        }
+        .popup-other__left {
+          .width(102);
+          color: #999;
+        }
+        .popup-other__right {
+          .width(209);
+          color: #666;
+          .popup-other__right__promise {
+            .padding(2, 4);
+            .margin-right(8);
+            .font-size(12);
+            background-color: #03C777;
+            color: #fff;
+            border-radius: 4px;
+          }
+        }
+      }
+    }
+    .specs-popup__buy {
+      .margin-top(24);
+      .height(48);
+      border-radius: 24px;
+      background: rgba(255, 118, 95, 1);
+      color: #fff;
+      text-align: center;
+      .line-height(48);
+      .font-size(16);
+      font-weight: 500;
+    }
+  }
+}
+
+.goods-info {
+  .padding-bottom(48);
+  .margin-top(8);
+  background-color: #F5F5F5;
+  .goods-info__nav {
+    display: flex;
+    position: sticky;
+    top: 0;
+    justify-content: space-around;
+    align-items: center;
+    .height(50);
+    .border-bottom(1, #e1e1e1);
+    .padding(0);
+    background-color: #fff;
+    .font-size(14);
+    z-index: 999;
+    list-style: none;
+    li > a {
+      position: relative;
+      color: #666;
+      transition: all 0.3s ease;
+      &.active {
+        .font-size(16);
+        color: #333;
+        font-weight: 500;
+        &::after {
+          content: '';
+          display: inline-block;
+          position: absolute;
+          .bottom(-16);
+          left: 50%;
+          transform: translateX(-50%);
+          .width(16);
+          .height(3);
+          background-color: #03C777;
+          border-radius: 2px;
+        }
+      }
+    }
+  }
+  .goods-info__item {
+    .margin-top(8);
+    .padding(16);
+    background-color: #fff;
+    &:nth-of-type(1) {
+      margin-top: 0;
+    }
+  }
+  .goods-info__title {
+    .font-size(16);
+    font-weight: 500;
+    color: #333;
+  }
+}
+
+// 教师风采
+.info-teacher {
+  .info-teacher__item {
+    .padding(16, 0);
+    .border-bottom(1, #e1e1e1);
+    &:last-child {
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+    .teacher-img {
+      .margin-right(12);
+      .width(48);
+      .height(48);
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
+    }
+    .teacher-info {
+      .margin-top(4);
+      .width(283);
+      .teacher-info__name {
+        .font-size(14);
+        color: #333;
+      }
+      .teacher-info__describe {
+        .margin-top(4);
+        .font-size(12);
+        color: #999;
+      }
+    }
+  }
+}
+
+// 课程简介
+.info-introduction {
+  .padding-top(16);
+}
+
+// 课程评价
+.info-evaluate {
+  .info-evaluate__item {
+    .padding-top(16);
+    &:last-child {
+      .evaluate-content {
+        border-bottom: none !important;
+        padding-bottom: 0 !important;
+      }
+    }
+    .evaluate-img {
+      .margin-right(8);
+      .width(32);
+      .height(32);
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
+    }
+    .evaluate-content {
+      .padding-bottom(16);
+      .width(303);
+      .border-bottom(1, #e1e1e1);
+      .evaluate-content__name {
+        .content-name__nickname {
+          .font-size(14);
+          color: #666;
+        }
+        .content-name__time {
+          position: relative;
+          .top(2);
+          .font-size(12);
+          color: #999;
+        }
+      }
+      .evaluate-content__plan {
+        .margin-top(8);
+        .font-size(12);
+        color: #999;
+        .line-height(16);
+        .plan-rate {
+          position: relative;
+          .top(-1);
+          i {
+            .font-size(12);
+          }
+        }
+      }
+      .evaluate-content__text {
+        .margin-top(8);
+        .font-size(14);
+        color: #333;
+      }
+    }
+  }
+}
+
+// 猜你想学
+.info-learn {
+  .info-learn__header {
+    .line-height(24);
+    .header-title {
+      .font-size(16);
+      font-weight: 500;
+      color: #333;
+    }
+    .header-more,
+    .header-more i {
+      .font-size(14);
+      color: #999;
+    }
+  }
+  .info-learn__body {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+    grid-gap: 16px 0;
+    .margin-top(16);
+    .body-item {
+      .width(163.5);
+      .height(160);
+      border-radius: 4px;
+      box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      .body-item__img {
+        position: relative;
+        width: 100%;
+        .height(91.97);
+        img {
+          width: 100%;
+          height: 100%;
+        }
+        .learners-mask {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          .height(32);
+          background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+        }
+        .learners-number {
+          position: absolute;
+          .right(8);
+          .bottom(4);
+          color: #fff;
+          .font-size(12);
+          i {
+            .margin-right(2);
+            .font-size(14);
+          }
+        }
+      }
+      .body-item__content {
+        .padding(8);
+        .content-title {
+          .font-size(14);
+          color: #333;
+          .line-height(20);
+        }
+        .content-price {
+          .margin-top(16);
+          .font-size(12);
+          color: #FF5C3B;
+          .line-height(16);
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}
+
+// 收藏/购买
+.info-buy {
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  width: 100%;
+  .height(48);
+  z-index: 1888;
+  .info-buy__collection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    .width(56);
+    background-color: #fff;
+    .border-top(1, #f5f5f5);
+    i {
+      .font-size(14);
+      color: #BEBEBE;
+    }
+    span {
+      .font-size(12);
+      color: #666;
+    }
+  }
+  .info-buy__btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .width(319);
+    height: 100%;
+    background-color: #FF765F;
+    color: #fff;
+    .font-size(16);
+    font-weight: 500;
+  }
+}
+
+// 回到顶部
+.back-to-top {
+  position: fixed;
+  .right(13);
+  .bottom(64);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .width(40);
+  .height(40);
+  background-color: #fff;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.05);
+  border-radius: 50%;
+  z-index: 1999;
+  span,
+  i {
+    .font-size(1);
+    color: #03c777;
+  }
+}
+
+// 班级详情
+.class-catalog {
+  .class-catalog__item {
+    .margin-top(24);
+    .height(72);
+    .item-img {
+      .margin-right(12);
+      .width(128);
+      .height(72);
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 2px;
+      }
+    }
+    .item-info {
+      .padding-top(4);
+      .width(203);
+      .item-info__title {
+        .font-size(14);
+        font-weight: 500;
+        color: #333;
+      }
+      .item-info__price {
+        .margin-top(4);
+        .font-size(14);
+        font-weight: 500;
+        color: #ff5c3b;
+      }
+      .item-info__plan {
+        .margin-top(4);
+        .font-size(12);
+        color: #999;
+      }
+    }
+  }
+} 
+
+.goods-swiper-directory {
+  .margin-top(16);
+}

@@ -2499,18 +2499,11 @@ classroom_manage_items_sort:
 classroom_manage_set_info:
     path: /classroom/{id}/manage/set_info
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:setInfo }
-
-classroom_manage_set_picture:
-    path: /classroom/{id}/manage/set_picture
-    defaults: { _controller: AppBundle:Classroom/ClassroomManage:setPicture }
+    methods: ['POST']
 
 classroom_manage_picture_crop:
     path: /classroom/{id}/manage/picture_crop
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:pictureCrop }
-
-classroom_manage_set_price:
-    path: /classroom/{id}/manage/price/set
-    defaults: { _controller: AppBundle:Classroom/ClassroomManage:setPrice }
 
 classroom_manage_students:
     path: /classroom/{id}/manage/students
@@ -2523,10 +2516,6 @@ classroom_manage_aduitor:
 classroom_manage_record:
     path: /classroom/{id}/manage/record/{type}
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:record }
-
-classroom_manage_service:
-    path: /classroom/{id}/manage/service
-    defaults: { _controller: AppBundle:Classroom/ClassroomManage:service}
 
 classroom_manage_teachers:
     path: /classroom/{id}/manage/teachers
@@ -3406,6 +3395,30 @@ facein_inspection_results_detail:
     path:     /facein/{activityId}/inspection/{userId}/results
     defaults: { _controller: AppBundle:FaceInspection/InspectionResult:detail }
 
+category_choices:
+    path:     /category/choices/{type}
+    defaults: { _controller: AppBundle:Vue/Common:getCategoryChoices, type:'course' }
+
+get_current_user:
+    path:     /current/user
+    defaults: { _controller: AppBundle:Vue/Common:currentUser }
+
+get_data_tag:
+    path:     /data/tag/{name}
+    defaults: { _controller: AppBundle:Vue/Common:getDataTag }
+
+render_org:
+    path: /render/org
+    defaults: { _controller: AppBundle:Vue/Common:renderOrg }
+
+upload_image:
+    path: /render/upload/image
+    defaults: { _controller: AppBundle:Vue/Common:uploadImage }
+
 goods_show:
     path:     /goods/show/{id}
     defaults: { _controller: AppBundle:Goods/Goods:show }
+
+goods_min_screen_show:
+    path:     /goods/min_screen_show/{id}
+    defaults: { _controller: AppBundle:Goods/Goods:minScreenShow }

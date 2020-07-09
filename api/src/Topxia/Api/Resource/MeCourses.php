@@ -2,11 +2,11 @@
 
 namespace Topxia\Api\Resource;
 
-use Silex\Application;
 use AppBundle\Common\ArrayToolkit;
-use Symfony\Component\HttpFoundation\Request;
 use Biz\Course\Service\Impl\CourseServiceImpl;
 use Biz\Course\Service\Impl\CourseSetServiceImpl;
+use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
 
 class MeCourses extends BaseResource
 {
@@ -22,14 +22,14 @@ class MeCourses extends BaseResource
                 $user['id'],
                 $start,
                 $limit,
-                empty($type) ? array() : array('type' => $type)
+                empty($type) ? [] : ['type' => $type]
             );
         } elseif ('learned' == $relation) {
             $courses = $this->getCourseService()->findUserLearnedCoursesNotInClassroom(
                 $user['id'],
                 $start,
                 $limit,
-                empty($type) ? array() : array('type' => $type)
+                empty($type) ? [] : ['type' => $type]
             );
         } elseif ('learn' == $relation) {
             if (empty($type)) {
@@ -51,10 +51,10 @@ class MeCourses extends BaseResource
             $courses = array_values($coursesAfterColumn);
         } elseif ('teaching' == $relation) {
             $courses = $this->getCourseService()->findUserTeachCoursesNotInClassroom(
-                array(
+                [
                     'userId' => $user['id'],
-                    'excludeTypes' => array('reservation'),
-                ),
+                    'excludeTypes' => ['reservation'],
+                ],
                 $start,
                 $limit,
                 false
@@ -81,7 +81,7 @@ class MeCourses extends BaseResource
 
     protected function multicallFilter($name, $res)
     {
-        $courses = array();
+        $courses = [];
         $courseIds = ArrayToolkit::column($res, 'id');
 
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);

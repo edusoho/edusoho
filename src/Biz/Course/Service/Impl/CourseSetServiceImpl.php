@@ -18,6 +18,10 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
+use Biz\Goods\GoodsException;
+use Biz\Goods\Service\GoodsService;
+use Biz\Product\ProductException;
+use Biz\Product\Service\ProductService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Review\Service\ReviewService;
 use Biz\System\Service\LogService;
@@ -317,7 +321,28 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         //update courseSet defaultId
         $created = $this->getCourseSetDao()->update($created['id'], ['defaultCourseId' => $defaultCourse['id']]);
 
+        $this->addProductAndGoods($created);
+
         return $created;
+    }
+
+    protected function addProductAndGoods($courseSet)
+    {
+        $product = $this->getProductService()->createProduct([
+            'targetType' => 'course',
+            'targetId' => $courseSet['id'],
+            'title' => $courseSet['title'],
+            'owner' => $courseSet['creator'],
+        ]);
+
+        $goods = $this->getGoodsService()->createGoods([
+            'productId' => $product['id'],
+            'title' => $courseSet['title'],
+            'subtitle' => $courseSet['subtitle'],
+            'creator' => $courseSet['creator'],
+        ]);
+
+        return [$product, $goods];
     }
 
     public function copyCourseSet($classroomId, $courseSetId, $courseId)
@@ -400,7 +425,38 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $this->dispatchEvent('course-set.update', new Event($courseSet));
 
+        $this->syncProductsAndGoods($courseSet);
+
         return $courseSet;
+    }
+
+    protected function syncProductsAndGoods($courseSet)
+    {
+        $existProduct = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
+        if (empty($existProduct)) {
+            $this->createNewException(ProductException::NOTFOUND_PRODUCT());
+        }
+
+        $product = $this->getProductService()->updateProduct($existProduct['id'], [
+            'title' => $courseSet['title'],
+        ]);
+
+        $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
+
+        if (empty($existGoods)) {
+            $this->createNewException(GoodsException::GOODS_NOT_FOUND());
+        }
+
+        $goods = $this->getGoodsService()->updateGoods($existGoods['id'], [
+            'title' => $courseSet['title'],
+            'subtitle' => $courseSet['subtitle'],
+            'summary' => $courseSet['summary'],
+            'images' => $courseSet['cover'],
+            'orgId' => $courseSet['orgId'],
+            'orgCode' => $courseSet['orgCode'],
+        ]);
+
+        return [$product, $goods];
     }
 
     protected function updateCourseSerializeMode($courseSet, $fields)
@@ -1086,7 +1142,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             if (empty($fields['tags'])) {
                 $fields['tags'] = [];
             } else {
-                $tags = explode(',', $fields['tags']);
+                $tags = is_array($fields['tags']) ? $fields['tags'] : explode(',', $fields['tags']);
                 $tags = $this->getTagService()->findTagsByNames($tags);
                 $tagIds = ArrayToolkit::column($tags, 'id');
                 $fields['tags'] = $tagIds;
@@ -1192,5 +1248,21 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $defaultCourse = $this->generateDefaultCourse($created);
 
         return $this->getCourseService()->createCourse($defaultCourse);
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 }

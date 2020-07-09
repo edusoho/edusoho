@@ -26,6 +26,8 @@ use Biz\Course\Service\MemberService;
 use Biz\Exception\UnableJoinException;
 use Biz\Favorite\Dao\FavoriteDao;
 use Biz\File\UploadFileException;
+use Biz\Goods\Service\GoodsService;
+use Biz\Product\Service\ProductService;
 use Biz\Review\Service\ReviewService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
@@ -223,6 +225,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->beginTransaction();
 
             $created = $this->getCourseDao()->create($course);
+            $this->addGoodsSpecs($created);
             $currentUser = $this->getCurrentUser();
             //set default teacher
             $this->getMemberService()->setDefaultTeacher($created['id']);
@@ -234,6 +237,41 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->rollback();
             throw $e;
         }
+    }
+
+    public function addGoodsSpecs($course)
+    {
+        $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
+        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+        $goodsSpecs = $this->getGoodsService()->createGoodsSpecs([
+            'goodsId' => $goods['id'],
+            'targetId' => $course['id'],
+            'title' => $course['title'],
+            'seq' => $course['seq'],
+        ]);
+
+        return $goodsSpecs;
+    }
+
+    public function syncGoodsSpecs($course)
+    {
+        $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
+        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
+        $goodsSpecs = $this->getGoodsService()->updateGoodsSpecs($goodsSpecs['id'], [
+            'title' => $course['title'],
+            'images' => $goods['images'],
+            'seq' => $course['seq'],
+            'price' => $course['price'],
+            'coinPrice' => $course['coinPrice'],
+            'buyableMode' => $course['expiryMode'],
+            'buyableStartTime' => $course['expiryStartDate'],
+            'buyableEndTime' => $course['expiryEndDate'],
+            'maxJoinNum' => $course['maxStudentNum'],
+            'services' => $course['services'],
+        ]);
+
+        return $goodsSpecs;
     }
 
     public function copyCourse($newCourse)
@@ -267,6 +305,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($fields['enableBuyExpiryTime'])) {
             $fields['buyExpiryTime'] = 0;
         }
+
+        if (!empty($fields['expiryDateRange'])) {
+            $fields['expiryStartDate'] = $fields['expiryDateRange'][0];
+            $fields['expiryEndDate'] = $fields['expiryDateRange'][1];
+        }
+
         $fields = ArrayToolkit::parts(
             $fields,
             [
@@ -308,6 +352,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields = $this->validateExpiryMode($fields);
         $fields = $this->processFields($oldCourse, $fields, $courseSet);
         $course = $this->getCourseDao()->update($id, $fields);
+        $this->syncGoodsSpecs($course);
 
         $this->dispatchEvent('course.update', new Event($course));
         $this->dispatchEvent('course.marketing.update', ['oldCourse' => $oldCourse, 'newCourse' => $course]);
@@ -347,6 +392,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $course = $this->getCourseDao()->update($id, $fields);
+        $this->syncGoodsSpecs($course);
 
         $this->dispatchEvent('course.update', new Event($course));
 
@@ -791,7 +837,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (empty($course['expiryEndDate'])) {
                 $this->createNewException(CourseException::EXPIRYENDDATE_REQUIRED());
             }
-            $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime($course['expiryEndDate'].' 23:59:59');
+            $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime(date('Y-m-d 23:59:59', strtotime($course['expiryEndDate'])));
         } elseif ('date' === $course['expiryMode']) {
             $course['expiryDays'] = 0;
             if (isset($course['expiryStartDate'])) {
@@ -802,7 +848,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (empty($course['expiryEndDate'])) {
                 $this->createNewException(CourseException::EXPIRYENDDATE_REQUIRED());
             } else {
-                $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime($course['expiryEndDate'].' 23:59:59');
+                $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime(date('Y-m-d 23:59:59', strtotime($course['expiryEndDate'])));
             }
             if ($course['expiryEndDate'] <= $course['expiryStartDate']) {
                 $this->createNewException(CourseException::EXPIRY_DATE_SET_INVALID());
@@ -2549,6 +2595,22 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
+
+    /**
      * 当默认值未设置时，合并默认值
      *
      * @param  $course
@@ -2647,7 +2709,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if (!empty($fields['buyExpiryTime'])) {
             if (is_numeric($fields['buyExpiryTime'])) {
-                $fields['buyExpiryTime'] = date('Y-m-d', $fields['buyExpiryTime']);
+                $fields['buyExpiryTime'] = date('Y-m-d', strlen($fields['buyExpiryTime']) > 10 ? $fields['buyExpiryTime'] / 1000 : $fields['buyExpiryTime']);
             }
 
             $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime'].' 23:59:59');
