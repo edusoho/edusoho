@@ -120,7 +120,6 @@ user.settings.unbind_success: 取消绑定成功
 user.settings.unbind_title: 取消绑定
 user.settings.unbind_content: 确定要取消绑定吗？
 
-material.share.teacher_nickname_label: 老师的名称
 material.cancel_share.tips: 已取消分享
 
 uploader.title: 上传
@@ -462,10 +461,6 @@ course.manage.expiry_start_date_error_hint: 请输入开始日期
 course.manage.expiry_days_error_hint: 请输入有效期天数
 course.manage.deadline_end_date_error_hint: 请输入截至日期
 course.manage.max_student_num_error_hint: 请输入课程人数
-course.manage.deadline_end_date_error_hint: 请输入学习有效期
-course.manage.expiry_days_error_hint: 开始日期应早于结束日期
-course.manage.expiry_start_date_error_hint: 结束日期应晚于开始日期
-course.manage.expiry_end_date_error_hint: 开始日期应早于结束日期
 course.manage.max_year_error_hint: 请输入不大于 7300（20年）的数值
 course.manage.max_capacity_hint: 网校可支持最多%capacity%人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。
 course.manage.publish_hint: 是否确定发布该教学计划？
@@ -740,7 +735,6 @@ validate.password_check.message: 密码错误
 validate.sms_code_input.message: 请输入短信验证码
 validate.sms_code.message: 验证码错误
 validate.es_remote.message: 验证错误
-validate.reg_invite_code.message: 必须是5位数字、英文字母组成
 validate.byte_minlength.message: 字符长度必须大于等于%min%，一个中文字算2个字符
 validate.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
 validate.character_maxlength: 字数不能超过%max%字！
@@ -851,7 +845,6 @@ validate_old.visible_character.message: %display%请输入可见性字符
 validate_old.chinese_limit.message: %display%的长度必须小于等于%max%字符,一个中文为2个字符
 validate_old.chinese.message: %display%必须是中文字
 validate_old.phone.message: 请输入有效的%display%（仅支持中国大陆手机号）。
-validate_old.mobile.message: 请输入有效的%display%（仅支持中国大陆手机号）。
 validate_old.chinese_alphanumeric.message: %display%支持中文字、英文字母、数字及_ . ·
 validate_old.reg_invite_code.message: %display%必须是5位数字、英文字母组成
 validate_old.alphanumeric.message: %display%必须是英文字母、数字及下划线组成
@@ -1010,7 +1003,6 @@ admin.block.edit_success_hint: 更新编辑区模板成功!
 admin.block.upload_failed_hint: 上传图片失败，请重试！
 admin.block.upload_success_hint: 上传图片成功！
 admin.block.delete_picture_success_hint: 删除图片成功！
-admin.block.edit_success_hint: 更新成功！
 admin.block.submit_success_hint: 提交成功!
 admin.block.select_picture_hint: 请先选择要上传的图片
 admin.block.upload_picture_success_hint: 插入图片成功！
@@ -1019,8 +1011,6 @@ admin.block.add_max_num_hint: 最多只能添加%panelGroup%个!
 admin.block.delete_tip: 你确定要删除吗?
 admin.block.delete_min_num_hint: 必须要有一个!
 admin.block.uploading_hint: 正在上传，请稍等！
-admin.block.upload_success_hint: 上传成功！
-admin.block.upload_failed_hint: 上传失败，请重试！
 admin.block.poster: 海报(%index%)
 admin.category.icon_delete_hint: 确认要删除图标吗？
 admin.category.icon_delete_success_hint: 删除分类图标成功！
@@ -1501,3 +1491,46 @@ merchant.resource.product_version.update_failed_hint: 更新失败
 
 validate.length_max.message: 最多只能输入 %length% 个字符
 course.manage.expiry_date.error_hint: 请输入时间范围
+
+classroom.title_label: 班级标题
+classroom.subtitle_label: 班级副标题
+classroom.basic_info: 基础信息
+classroom.tag_label: 标签
+classroom.category_label: 分类
+classroom.manage.set_info.tags.help_block: 用于按标签检索班级等，由网校管理员后台统一管理
+category: 分类
+site.org: 组织机构
+classroom.about: 简介
+classroom.cover_image: 封面图片
+classroom.cover_image.upload_tips: 请上传jpg, gif, png格式的图片, 建议图片尺寸为 540×304px。建议图片大小不超过2MB。
+editor.iframe_tips: 为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
+classroom.upload_picture_btn: 上传新图片
+
+classroom.marketing_setting: 营销设置
+classroom.price_label: 价格(元)
+classroom.show_label: %name%展示
+classroom.buy_label: %name%购买
+classroom.expiry_mode_label: 班级有效期
+classroom.watch_expiry_mode_rule: 查看有效期规则
+classroom.expiry_mode.first_publish_tips: 班级首次发布后，有效期类型不能再更改，只允许修改有效日期。
+classroom.expiry_mode_end_date_tips: 设置该值后，学员只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。
+classroom.expiry_mode_days_tips: 设置该值后，学员只能在有效天数内进行课程的学习，系统默认会在有效期前10天提醒学员。
+classroom.expiry_mode_end_date: 截止日期
+classroom.expiry_mode_days: 有效期天数
+classroom.expiry_mode_forever: 长期有效
+
+classroom.price_tips: 当前共有 %courseNum% 个课程，原价共计 %price% 元。
+classroom.amount: 相当于
+
+
+site.open: 开启
+site.date.day: 天
+course.marketing_setup.services.provide_services: 承诺提供服务
+vip.level.free_learning: 会员免费学
+site.default.none: 无
+form.btn.save: 保存
+
+
+
+
+

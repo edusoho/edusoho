@@ -48,7 +48,7 @@
                 </el-col>
             </el-form-item>
 
-            <el-form-item :label="'site.org'|trans" @click="aaaaaa">
+            <el-form-item v-if="enableOrg" :label="'site.org'|trans">
                 <el-col span="8">
                     <org v-bind:params="{}" v-bind:org-code="baseInfoForm.orgCode"></org>
                 </el-col>
@@ -102,6 +102,7 @@
             imageSaveUrl: '',
             imageSrc: '',
             imageUploadUrl: '',
+            enableOrg: 0
         },
         watch: {
             uploadImageTemplate(newVal, oldVal) {
@@ -121,6 +122,10 @@
         },
         methods: {
             validateForm() {
+                if (!this.$refs.baseInfoForm) {
+                    return {result: true, invalidFields: {}};
+                }
+
                 let result = false;
                 let invalids = {};
                 this.$refs.baseInfoForm.clearValidate();
@@ -158,10 +163,7 @@
                     this.uploadImageTemplate = res.data;
                 });
             }
-        }
-        ,
-        // mixins: [validation.trans],
-        // refFormRule: formRule,
+        },
         data() {
             let baseForm = {
                 title: this.course.title ? this.course.title : this.course.courseSetTitle,
@@ -216,7 +218,8 @@
                     none: Translator.trans('course.base.serialize_mode.none'),
                     serialized: Translator.trans('course.base.serialize_mode.serialized'),
                     finished: Translator.trans('course.base.serialize_mode.finished')
-                }
+                },
+                enableOrg: 0
             };
         }
         ,

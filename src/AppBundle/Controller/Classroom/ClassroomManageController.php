@@ -43,127 +43,31 @@ class ClassroomManageController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($id);
         $classroom['lessonNum'] = $this->getClassroomService()->countCourseTasksByClassroomId($id);
 
-        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-        $courseIds = ArrayToolkit::column($courses, 'id');
-
-        $currentTime = time();
-        $todayTimeStart = strtotime(date('Y-m-d', $currentTime));
-        $todayTimeEnd = strtotime(date('Y-m-d', $currentTime + 24 * 3600));
-
-        $yesterdayTimeStart = strtotime(date('Y-m-d', $currentTime - 24 * 3600));
-        $yesterdayTimeEnd = strtotime(date('Y-m-d', $currentTime));
-
-        $todayFinishedTaskNum = 0;
-        $yesterdayFinishedTaskNum = 0;
-
-        if (!empty($courseIds)) {
-            $todayFinishedTaskNum = $this->getTaskResultService()->countTaskResults(
-                [
-                    'courseIds' => $courseIds,
-                    'finishedTime_GE' => $todayTimeStart,
-                    'finishedTime_LE' => $todayTimeEnd,
-                    'status' => 'finish',
-                ]
-            );
-            $yesterdayFinishedTaskNum = $this->getTaskResultService()->countTaskResults(
-                [
-                    'courseIds' => $courseIds,
-                    'finishedTime_GE' => $yesterdayTimeStart,
-                    'finishedTime_LE' => $yesterdayTimeEnd,
-                    'status' => 'finish',
-                ]
-            );
+        if ($this->isPluginInstalled('Vip')) {
+            $vipLevels = $this->createService('VipPlugin:Vip:LevelService')->findEnabledLevels();
         }
 
-        $todayThreadCount = $this->getThreadService()->searchThreadCount(
-            [
-                'targetType' => 'classroom',
-                'targetId' => $id,
-                'type' => 'discussion',
-                'startTime' => $todayTimeStart,
-                'endTime' => $todayTimeEnd,
-                'status' => 'open',
-            ]
-        );
-        $yesterdayThreadCount = $this->getThreadService()->searchThreadCount(
-            [
-                'targetType' => 'classroom',
-                'targetId' => $id,
-                'type' => 'discussion',
-                'startTime' => $yesterdayTimeStart,
-                'endTime' => $yesterdayTimeEnd,
-                'status' => 'open',
-            ]
-        );
+        $coursePrice = 0;
+        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
 
-        $studentCount = $this->getClassroomService()->searchMemberCount(
-            [
-                'role' => 'student',
-                'classroomId' => $id,
-                'startTimeGreaterThan' => $todayTimeStart,
-            ]
-        );
-        $auditorCount = $this->getClassroomService()->searchMemberCount(
-            [
-                'role' => 'auditor',
-                'classroomId' => $id,
-                'startTimeGreaterThan' => $todayTimeStart,
-            ]
-        );
+        foreach ($courses as $course) {
+            $coursePrice += $course['originPrice'];
+        }
 
-        $allCount = $studentCount + $auditorCount;
-
-        $yestodayStudentCount = $this->getClassroomService()->searchMemberCount(
-            [
-                'role' => 'student',
-                'classroomId' => $id,
-                'startTimeLessThan' => $yesterdayTimeEnd,
-                'startTimeGreaterThan' => $yesterdayTimeStart,
-            ]
-        );
-        $yestodayAuditorCount = $this->getClassroomService()->searchMemberCount(
-            [
-                'role' => 'auditor',
-                'classroomId' => $id,
-                'startTimeLessThan' => $yesterdayTimeEnd,
-                'startTimeGreaterThan' => $yesterdayTimeStart,
-            ]
-        );
-
-        $yestodayAllCount = $yestodayStudentCount + $yestodayAuditorCount;
-
-        $reviewConditions = ['targetType' => 'classroom', 'targetId' => $id, 'parentId' => 0];
-        $reviewsNum = $this->getReviewService()->countReviews($reviewConditions);
-        $paginator = new Paginator(
-            $this->get('request'),
-            $reviewsNum,
-            20
-        );
-
-        $reviews = $this->getReviewService()->searchReviews(
-            $reviewConditions,
-            ['createdTime' => 'desc'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $userIds = ArrayToolkit::column($reviews, 'userId');
-        $reviewUsers = $this->getUserService()->findUsersByIds($userIds);
+        $courseNum = count($courses);
 
         return $this->render(
             'classroom-manage/index.html.twig',
             [
                 'classroom' => $classroom,
-                'studentCount' => $studentCount,
-                'yestodayStudentCount' => $yestodayStudentCount,
-                'allCount' => $allCount,
-                'yestodayAllCount' => $yestodayAllCount,
-                'reviews' => $reviews,
-                'reviewUsers' => $reviewUsers,
-                'todayFinishedTaskNum' => $todayFinishedTaskNum,
-                'yesterdayFinishedTaskNum' => $yesterdayFinishedTaskNum,
-                'todayThreadCount' => $todayThreadCount,
-                'yesterdayThreadCount' => $yesterdayThreadCount,
+                'tags' => ArrayToolkit::column($this->getTagService()->findTagsByOwner([
+                    'ownerType' => 'classroom',
+                    'ownerId' => $id,
+                ]), 'name'),
+                'vipInstalled' => $this->isPluginInstalled('Vip'),
+                'vipLevels' => empty($vipLevels) ? [] : array_column($vipLevels, 'name', 'id'),
+                'coursePrice' => $coursePrice,
+                'courseNum' => $courseNum,
             ]
         );
     }
@@ -513,37 +417,6 @@ class ClassroomManageController extends BaseController
         return [$str, $students, $classroomMemberCount];
     }
 
-    public function serviceAction(Request $request, $id)
-    {
-        $this->getClassroomService()->tryManageClassroom($id);
-
-        $classroom = $this->getClassroomService()->getClassroom($id);
-
-        if (!$this->isPluginInstalled('ClassroomPlan') && $classroom['service'] && in_array(
-                'studyPlan',
-                $classroom['service']
-            )
-        ) {
-            unset($classroom['service']['studyPlan']);
-        }
-
-        if ('POST' == $request->getMethod()) {
-            $data = $request->request->all();
-
-            $data['service'] = empty($data['service']) ? null : $data['service'];
-
-            $classroom = $this->getClassroomService()->updateClassroom($id, $data);
-            $this->setFlashMessage('success', 'site.save.success');
-        }
-
-        return $this->render(
-            'classroom-manage/services.html.twig',
-            [
-                'classroom' => $classroom,
-            ]
-        );
-    }
-
     public function studentShowAction(Request $request, $classroomId, $userId)
     {
         if (!$this->getCurrentUser()->isAdmin()) {
@@ -755,90 +628,24 @@ class ClassroomManageController extends BaseController
     {
         $this->getClassroomService()->tryManageClassroom($id);
 
-        $classroom = $this->getClassroomService()->getClassroom($id);
+        $class = $request->request->all();
 
-        if ($request->isMethod('POST')) {
-            $class = $request->request->all();
+        $class['tagIds'] = $this->getTagIdsFromRequest($request);
 
-            $class['tagIds'] = $this->getTagIdsFromRequest($request);
-
-            if ('date' === $class['expiryMode']) {
-                $class['expiryValue'] = strtotime($class['expiryValue'].' 23:59:59');
-            } elseif ('forever' === $class['expiryMode']) {
-                $class['expiryValue'] = 0;
-            }
-
-            $classroom = $this->getClassroomService()->updateClassroomInfo($id, $class);
-
-            $this->setFlashMessage('success', 'site.save.success');
+        if ('date' === $class['expiryMode']) {
+            $class['expiryValue'] = strtotime(date('Y-m-d 23:59:59', $class['expiryValue'] / 1000));
+        } elseif ('forever' === $class['expiryMode']) {
+            $class['expiryValue'] = 0;
         }
 
-        $tags = $this->getTagService()->findTagsByOwner([
-            'ownerType' => 'classroom',
-            'ownerId' => $id,
-        ]);
+        $this->getClassroomService()->updateClassroomInfo($id, $class);
 
-        return $this->render('classroom-manage/set-info.html.twig', [
-            'classroom' => $classroom,
-            'tags' => ArrayToolkit::column($tags, 'name'),
-        ]);
-    }
-
-    public function setPriceAction(Request $request, $id)
-    {
-        $this->getClassroomService()->tryManageClassroom($id);
-
-        $classroom = $this->getClassroomService()->getClassroom($id);
-
-        if ('POST' == $request->getMethod()) {
-            $class = $request->request->all();
-
-            $this->setFlashMessage('success', 'site.save.success');
-
-            $classroom = $this->getClassroomService()->updateClassroom($id, $class);
-        }
-
-        $coinPrice = 0;
-        $price = 0;
-        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
-
-        $cashRate = $this->getCashRate();
-
-        foreach ($courses as $course) {
-            $coinPrice += $course['originPrice'] * $cashRate;
-            $price += $course['originPrice'];
-        }
-
-        $courseNum = count($courses);
-
-        return $this->render(
-            'classroom-manage/set-price.html.twig',
-            [
-                'price' => $price,
-                'coinPrice' => $coinPrice,
-                'courseNum' => $courseNum,
-                'classroom' => $classroom,
-            ]
-        );
+        return $this->createJsonResponse(true);
     }
 
     public function expiryDateRuleAction()
     {
         return $this->render('classroom-manage/rule.html.twig');
-    }
-
-    public function setPictureAction($id)
-    {
-        $this->getClassroomService()->tryManageClassroom($id);
-
-        $classroom = $this->getClassroomService()->getClassroom($id);
-
-        return $this->render(
-            'classroom-manage/set-picture.html.twig',
-            [
-                'classroom' => $classroom,
-            ]
-        );
     }
 
     public function pictureCropAction(Request $request, $id)
@@ -849,23 +656,14 @@ class ClassroomManageController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $options = $request->request->all();
-            $this->getClassroomService()->changePicture($classroom['id'], $options['images']);
+            $classroom = $this->getClassroomService()->changePicture($classroom['id'], $options['images']);
 
-            return $this->redirect($this->generateUrl('classroom_manage_set_picture', ['id' => $classroom['id']]));
+            $cover = $this->getWebExtension()->getFpath($classroom['largePicture']);
+
+            return $this->createJsonResponse(['image' => $cover]);
         }
 
-        $fileId = $request->getSession()->get('fileId');
-        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 540, 304);
-
-        return $this->render(
-            'classroom-manage/picture-crop.html.twig',
-            [
-                'classroom' => $classroom,
-                'pictureUrl' => $pictureUrl,
-                'naturalSize' => $naturalSize,
-                'scaledSize' => $scaledSize,
-            ]
-        );
+        return $this->render('classroom-manage/picture-crop.html.twig');
     }
 
     public function removeCourseAction($id, $courseId)
@@ -1238,7 +1036,6 @@ class ClassroomManageController extends BaseController
     private function getTagIdsFromRequest($request)
     {
         $tags = $request->request->get('tags');
-        $tags = explode(',', $tags);
         $tags = $this->getTagService()->findTagsByNames($tags);
 
         return ArrayToolkit::column($tags, 'id');

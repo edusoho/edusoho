@@ -2,85 +2,96 @@
 
 {% set unsetted = "" %}
 {% if not classroom.about %}
-{% set unsetted = unsetted ~ ',' ~ 'classroom.about'|trans %}
+  {% set unsetted = unsetted ~ ',' ~ 'classroom.about'|trans %}
 {% endif %}
 {% if not classroom.smallPicture %}
-{% set unsetted = unsetted ~ ',' ~ 'classroom.small_picture'|trans %}
+  {% set unsetted = unsetted ~ ',' ~ 'classroom.small_picture'|trans %}
 {% endif %}
 {% if classroom.price == 0 %}
   {% set unsetted = unsetted ~ ',' ~ 'classroom.price'|trans %}
 {% endif %}
 {% if classroom.courseNum == 0 %}
-{% set unsetted = unsetted ~ ',' ~ 'classroom.course'|trans %}
+  {% set unsetted = unsetted ~ ',' ~ 'classroom.course'|trans %}
 {% endif %}
 
 
 <div class="es-section classroom-manage-header clearfix">
-  <img class="picture" src="{{ filepath(classroom.smallPicture, 'classroom.png') }}">
-  <h1 class="title"><a href="{{path('classroom_show',{id:classroom.id})}}">{{classroom.title}}</a>
+  <div class="col-md-6 pl0">
+    <img class="picture" src="{{ filepath(classroom.smallPicture, 'classroom.png') }}">
     {% if classroom.status == "draft" %}
-    <span class="label label-warning ">{{'classroom.unpublish'|trans}}</span>
+      <span class="classroom-publish-status label-warning ">{{ 'classroom.unpublish'|trans }}</span>
     {% elseif classroom.status == "closed" %}
-    <span class="label label-danger ">{{'classroom.closed'|trans}}</span>
+      <span class="classroom-publish-status label-danger">{{ 'classroom.closed'|trans }}</span>
     {% endif %}
     {% if classroom.status == "published" %}
-    <span class="label label-success"> {{'classroom.published'|trans}}</span>
+      <span class="classroom-publish-status label-success"> {{ 'classroom.published'|trans }}</span>
     {% endif %}
-  </h1>
 
-  <div class="toolbar hidden-xs">
-    {% if classroom.status == 'published' %}
-      <div class="btn-group">
-        <a class="btn btn-default dropdown-toggle btn-sm" href="{{ path('classroom_show', {id:classroom.id}) }}">{{'classroom.go_back_classroom_homepage'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</a>
-      </div>
-    {% endif %}
-    <div class="btn-group">
-      <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-expanded="false">
-        {{'classroom.preview'|trans}} <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" role="menu">
-        <li><a href="{{path('classroom_courses',{classroomId:classroom.id,previewAs:'guest'})}}" target="_blank">{{'classroom.as_guest'|trans}}</a></li>
-        {% if  classroom.showable %}
-          <li><a href="{{path('classroom_courses',{classroomId:classroom.id,previewAs:'auditor'})}}" target="_blank">{{'classroom.as_auditor'|trans}}</a></li>
-        {% endif %}
-        <li><a href="{{path('classroom_courses',{classroomId:classroom.id,previewAs:'member'})}}" target="_blank">{{'classroom.as_member'|trans}}</a></li>
-      </ul>
+    <h1 class="title text-overflow mr0">
+      <a href="{{ path('classroom_show',{id:classroom.id}) }}">
+        {{ classroom.title }}
+      </a>
+
+    </h1>
+    <div class="color-danger">
+      {% include 'common/price.html.twig' with {'productPrice': classroom.price} %}
     </div>
+  </div>
 
+  <div class="pull-right ptl mtm">
+    {% if classroom.status == 'published' %}
+      <a class="cd-btn cd-btn-primary" href="{{ path('classroom_show', {id:classroom.id}) }}">
+        {{ 'explore.view_classroom_btn'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}
+      </a>
+    {% else %}
+      <a class="cd-btn cd-btn-default"
+         href="{{ path('classroom_courses',{classroomId:classroom.id,previewAs:'guest'}) }}">
+        {{ 'classroom.preview_btn'|trans }}
+      </a>
 
-    {% if classroom.status != 'published' %}
-      <div class="btn-group">
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
-          {{'classroom.publish'|trans}}
-        </button>
-      </div>
-
-      <div id="myModal" class="modal fade">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#classroomConfirm">
+        {{ 'classroom.publish_btn'|trans }}
+      </button>
+      <div id="classroomConfirm" class="modal fade">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title">{{'classroom.publish_name'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                  aria-hidden="true">&times;</span>
+              </button>
+              <h4
+                class="modal-title">{{ 'classroom.publish_name'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}</h4>
             </div>
             <div class="modal-body">
               <p>
                 {% if unsetted|length > 0 %}
-                {% set unsetted = sub_str(unsetted, 1, unsetted|length - 1 )|split(',')  %}
-                <span class="color-danger">
-                    {{'classroom.unsetted'|trans({'%unsetted%':unsetted|join("，")})}}
-                </span>
+                  {% set unsetted = sub_str(unsetted, 1, unsetted|length - 1 )|split(',') %}
+                  <span class="color-danger">
+                          {{ 'classroom.unsetted'|trans({'%unsetted%':unsetted|join("，")}) }}
+                      </span>
                 {% endif %}
-                &nbsp;{{'classroom.whether_confirm_publish'|trans}}
+                &nbsp;{{ 'classroom.whether_confirm_publish'|trans }}
               </p>
             </div>
             <div class="modal-footer">
-              <a data-dismiss="modal" href="">{{'form.btn.cancel'|trans}}</a>&nbsp;
-              <button type="button" class="btn btn-success" id="publishSure" data-url="{{path('classroom_manage_publish',{id:classroom.id})}}">{{'form.btn.confirm'|trans}}</button>
+              <a data-dismiss="modal" href="">{{ 'form.btn.cancel'|trans }}</a>&nbsp;
+              <button type="button" class="btn btn-success" id="publishSure"
+                      data-url="{{ path('classroom_manage_publish',{id:classroom.id}) }}">{{ 'form.btn.confirm'|trans }}</button>
             </div>
           </div>
         </div>
       </div>
     {% endif %}
+  </div>
 
+  <div class="pull-right prl mrl mtl">
+    <div class="pull-right pll prl">
+      <span class="cd-text-medium">{{ 'classroom.member_number'|trans }}</span>
+      <div class="mtm cd-dark-major text-center"><span class="">{{ studentCount|default() }} </span></div>
+    </div>
+    <div class="pull-right pll prl">
+      <span class="cd-text-medium ">{{ 'classroom.courses'|trans }}</span>
+      <div class="mtm cd-dark-major text-center"><span class="">{{ classroom.courseNum|default() }} </span></div>
+    </div>
   </div>
 </div>

@@ -10,6 +10,7 @@
                    v-bind:image-save-url="imageSaveUrl"
                    v-bind:image-src="imageSrc"
                    v-bind:image-upload-url="imageUploadUrl"
+                   v-bind:enable-org="enableOrg"
         ></base-info>
         <base-rule ref="baseRule"
                    v-bind:course="course"
@@ -97,6 +98,7 @@
             vipInstalled: false,
             vipEnabled: false,
             vipLevels: {},
+            enableOrg: 0
         },
         components: {
             baseInfo,
@@ -181,6 +183,7 @@
                 vipInstalled: false,
                 vipEnabled: false,
                 vipLevels: {},
+                enableOrg: 0
             }
         }
     }

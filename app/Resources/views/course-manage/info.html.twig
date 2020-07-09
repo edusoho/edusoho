@@ -73,6 +73,7 @@
          data-vip-installed="{{ vipInstalled }}"
          data-vip-enabled="{{ setting('vip.enabled') }}"
          data-vip-levels="{{ vipLevels|json_encode }}"
+         data-enable-org="{{ setting('magic.enable_org','0') }}"
     ></div>
 
     {% if not hasMulCourses and courseSet.type == 'normal' %}

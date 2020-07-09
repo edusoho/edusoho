@@ -26,6 +26,8 @@ use Biz\Course\Service\MemberService;
 use Biz\Exception\UnableJoinException;
 use Biz\Favorite\Dao\FavoriteDao;
 use Biz\File\UploadFileException;
+use Biz\Goods\Service\GoodsService;
+use Biz\Product\Service\ProductService;
 use Biz\Review\Service\ReviewService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
@@ -223,6 +225,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->beginTransaction();
 
             $created = $this->getCourseDao()->create($course);
+            $this->addGoodsSpecs($created);
             $currentUser = $this->getCurrentUser();
             //set default teacher
             $this->getMemberService()->setDefaultTeacher($created['id']);
@@ -234,6 +237,41 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->rollback();
             throw $e;
         }
+    }
+
+    public function addGoodsSpecs($course)
+    {
+        $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
+        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+        $goodsSpecs = $this->getGoodsService()->createGoodsSpecs([
+            'goodsId' => $goods['id'],
+            'targetId' => $course['id'],
+            'title' => $course['title'],
+            'seq' => $course['seq'],
+        ]);
+
+        return $goodsSpecs;
+    }
+
+    public function syncGoodsSpecs($course)
+    {
+        $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
+        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
+        $goodsSpecs = $this->getGoodsService()->updateGoodsSpecs($goodsSpecs['id'], [
+            'title' => $course['title'],
+            'images' => $goods['images'],
+            'seq' => $course['seq'],
+            'price' => $course['price'],
+            'coinPrice' => $course['coinPrice'],
+            'buyableMode' => $course['expiryMode'],
+            'buyableStartTime' => $course['expiryStartDate'],
+            'buyableEndTime' => $course['expiryEndDate'],
+            'maxJoinNum' => $course['maxStudentNum'],
+            'services' => $course['services'],
+        ]);
+
+        return $goodsSpecs;
     }
 
     public function copyCourse($newCourse)
@@ -314,6 +352,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields = $this->validateExpiryMode($fields);
         $fields = $this->processFields($oldCourse, $fields, $courseSet);
         $course = $this->getCourseDao()->update($id, $fields);
+        $this->syncGoodsSpecs($course);
 
         $this->dispatchEvent('course.update', new Event($course));
         $this->dispatchEvent('course.marketing.update', ['oldCourse' => $oldCourse, 'newCourse' => $course]);
@@ -353,6 +392,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $course = $this->getCourseDao()->update($id, $fields);
+        $this->syncGoodsSpecs($course);
 
         $this->dispatchEvent('course.update', new Event($course));
 
@@ -2552,6 +2592,22 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getCourseThreadService()
     {
         return $this->createService('Course:ThreadService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
     }
 
     /**
