@@ -282,6 +282,13 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->getExerciseDao()->update($exerciseId, ['status' => 'published']);
     }
 
+    public function closeExercise($exerciseId)
+    {
+        $this->tryManageExercise($exerciseId);
+
+        return $this->getExerciseDao()->update($exerciseId, ['status' => 'closed']);
+    }
+
     public function canTakeItemBankExercise($exerciseId)
     {
         $exercise = $this->get($exerciseId);

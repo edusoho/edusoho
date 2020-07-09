@@ -8716,6 +8716,11 @@ admin.reward_point_account.log_deduction: 账户扣减%amount%%name%
 admin.reward_point_account.note_empty: 无
 admin.reward_point_account.log_deduction_by: 从
 
+admin.item_bank_exercise.exercise.manage.status_placeholder: 题库练习状态
+admin.item_bank_exercise.exercise.manage.number: 编号
+admin.item_bank_exercise.exercise.manage.status: 题库练习状态
+admin.item_bank_exercise.exercise.manage.income: 题库练习收入
+
 reward_point_account.note: 备注
 reward_point_product.pending: 待处理
 reward_point_product.delivered: 已发货

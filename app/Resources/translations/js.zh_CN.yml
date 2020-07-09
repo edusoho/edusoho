@@ -1360,6 +1360,13 @@ admin.util.item_delete.delete_success_hint: 删除%name%成功
 admin.shortcut_add_success_hint: 已添加当前页面为常用链接！
 admin.shortcut_delete_success_hint: 删除常用链接成功！
 
+admin.item_bank_exercise.exercise.close_hint: 确定要关闭当前题库练习吗？
+admin.item_bank_exercise.exercise.close_success_hint: 题库练习关闭成功!
+admin.item_bank_exercise.exercise.cancel_recommend_success_hint: 题库练习推荐已取消!
+admin.item_bank_exercise.exercise.publish_hint: 确定要发布当前题库练习吗？
+admin.item_bank_exercise.exercise.publish_success_hint: 题库练习发布成功!
+admin.item_bank_exercise.exercise.delete_hint: 确定要删除当前题库练习吗？
+
 task_show.user_login_protect_tip: 该账号未登录或已被踢
 
 admin.course_manage.manage.tags_select.placeholder: 输入标签名称关键字

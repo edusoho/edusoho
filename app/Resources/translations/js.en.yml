@@ -1418,6 +1418,13 @@ admin.util.item_delete.delete_success_hint: Delete %name% successfully
 admin.shortcut_add_success_hint: The current page has been added as a popular link!
 admin.shortcut_delete_success_hint: Delete frequently used links successfully!
 
+admin.item_bank_exercise.exercise.close_hint: Are you sure you want to close the current exercise?
+admin.item_bank_exercise.exercise.close_success_hint: Close successfully
+admin.item_bank_exercise.exercise.cancel_recommend_success_hint: The item bank exercise recommendation has been cancelled!
+admin.item_bank_exercise.exercise.publish_hint: Are you sure you want to publish the current exercise?
+admin.item_bank_exercise.exercise.publish_success_hint: The item bank exercise recommendation has been published!
+admin.item_bank_exercise.exercise.delete_hint: Are you sure you want to delete the current exercise?
+
 task_show.user_login_protect_tip: User unLogin
 admin.course_manage.manage.tags_select.placeholder: Enter the keyword of the tag
 

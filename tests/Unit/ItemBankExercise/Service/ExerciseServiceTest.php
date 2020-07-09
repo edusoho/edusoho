@@ -226,6 +226,55 @@ class ExerciseServiceTest extends BaseTestCase
         $this->assertEquals('forever', $res['expiryMode']);
     }
 
+    public function testDeleteExercise()
+    {
+        $excepted = $this->createExercise();
+        $this->getExerciseService()->deleteExercise($excepted['id']);
+
+        $result = $this->getExerciseService()->get($excepted['id']);
+
+        $this->assertEmpty($result);
+    }
+
+    public function testRecommendExercise()
+    {
+        $excepted = $this->createExercise();
+        $result = $this->getExerciseService()->recommendExercise($excepted['id'], 1);
+
+        $this->assertEquals(1, $result['recommended']);
+        $this->assertEquals(1, $result['recommendedSeq']);
+    }
+
+    public function testCancelRecommendExercise()
+    {
+        $excepted = $this->createExercise();
+        $excepted = $this->getExerciseService()->recommendExercise($excepted['id'], 1);
+
+        $this->assertEquals(1, $excepted['recommendedSeq']);
+
+        $result = $this->getExerciseService()->cancelRecommendExercise($excepted['id']);
+
+        $this->assertEquals(0, $result['recommended']);
+    }
+
+    public function testPublishExercise()
+    {
+        $excepted = $this->createExercise();
+
+        $result = $this->getExerciseService()->publishExercise($excepted['id']);
+
+        $this->assertEquals('published', $result['status']);
+    }
+
+    public function testCloseExercise()
+    {
+        $excepted = $this->createExercise();
+        $excepted = $this->getExerciseService()->publishExercise($excepted['id']);
+        $result = $this->getExerciseService()->closeExercise($excepted['id']);
+
+        $this->assertEquals('closed', $result['status']);
+    }
+
     public function testSearchOrderByStudentNumAndLastDays()
     {
         $this->batchCreateExercise();
