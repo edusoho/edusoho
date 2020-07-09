@@ -31,11 +31,32 @@ class ItemBankExerciseMember extends AbstractResource
         return $this->makePagingObject($members, $total, $offset, $limit);
     }
 
+    public function add(ApiRequest $request, $exerciseId)
+    {
+        $member = $this->getItemBankExerciseMemberService()->getExerciseMember($exerciseId, $this->getCurrentUser()->getId());
+
+        if (!$member) {
+            $member = $this->getItemBankExerciseService()->freeJoinExercise($exerciseId);
+        }
+
+        $this->getOCUtil()->single($member, ['userId']);
+
+        return $member;
+    }
+
     /**
      * @return \Biz\ItemBankExercise\Service\ExerciseMemberService
      */
     protected function getItemBankExerciseMemberService()
     {
         return $this->service('ItemBankExercise:ExerciseMemberService');
+    }
+
+    /**
+     * @return \Biz\ItemBankExercise\Service\ExerciseService
+     */
+    protected function getItemBankExerciseService()
+    {
+        return $this->service('ItemBankExercise:ExerciseService');
     }
 }

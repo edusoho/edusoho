@@ -3,6 +3,7 @@
 namespace Biz\ItemBankExercise\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Accessor\AccessorInterface;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\ItemBankExercise\ItemBankExerciseException;
@@ -50,7 +51,8 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        if (!$this->getItemBankExerciseService()->canLearningExercise($module['exerciseId'], $userId)) {
+        $access = $this->getItemBankExerciseService()->canLearnExercise($module['exerciseId']);
+        if (AccessorInterface::SUCCESS != $access['code']) {
             $this->createNewException(ItemBankExerciseException::FORBIDDEN_LEARN());
         }
 

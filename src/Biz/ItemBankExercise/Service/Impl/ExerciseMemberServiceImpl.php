@@ -39,6 +39,10 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
     {
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
 
+        if (empty($exercise)) {
+            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
+        }
+
         if (!in_array($exercise['status'], ['published'])) {
             $this->createNewException(ItemBankExerciseException::UNPUBLISHED_EXERCISE());
         }
@@ -55,6 +59,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         try {
             $this->beginTransaction();
 
+            $info['remark'] = empty($info['remark']) ? '' : $info['remark'];
             $member = $this->addMember(
                 [
                     'exerciseId' => $exerciseId,
@@ -62,7 +67,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
                     'userId' => $userId,
                     'deadline' => ExpiryModeFactory::create($exercise['expiryMode'])->getDeadline($exercise),
                     'role' => 'student',
-                    'remark' => empty($info['remark']) ? '' : $info['remark'],
+                    'remark' => $info['remark'],
                     'createdTime' => time(),
                 ],
                 [

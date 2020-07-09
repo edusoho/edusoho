@@ -3,9 +3,11 @@
 namespace Biz\ItemBankExercise\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Accessor\AccessorInterface;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
+use Biz\Exception\UnableJoinException;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
 use Biz\ItemBankExercise\Dao\ExerciseModuleDao;
@@ -351,9 +353,28 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $user->hasPermission('admin_course_content_manage') || $user->hasPermission('admin_v2_course_content_manage');
     }
 
-    public function canLearningExercise($exerciseId, $userId)
+    public function canLearnExercise($exerciseId)
     {
-        return $this->getExerciseMemberService()->isExerciseMember($exerciseId, $userId);
+        return $this->biz['item_bank_exercise.learn_chain']->process($this->get($exerciseId));
+    }
+
+    public function canJoinExercise($exerciseId)
+    {
+        return $this->biz['item_bank_exercise.join_chain']->process($this->get($exerciseId));
+    }
+
+    public function freeJoinExercise($exerciseId)
+    {
+        $access = $this->canJoinExercise($exerciseId);
+        if (AccessorInterface::SUCCESS != $access['code']) {
+            throw new UnableJoinException($access['msg'], $access['code']);
+        }
+
+        $exercise = $this->get($exerciseId);
+
+        if ((1 == $exercise['isFree'] || 0 == $exercise['originPrice']) && $exercise['joinEnable']) {
+            return $this->getExerciseMemberService()->becomeStudent($exercise['id'], $this->getCurrentUser()->getId());
+        }
     }
 
     protected function _prepareCourseConditions($conditions)

@@ -13,13 +13,18 @@ class ItemBankExercise extends AbstractResource
      */
     public function get(ApiRequest $request, $id)
     {
-        $user = $this->getCurrentUser();
+        $itemBankExercise = $this->getItemBankExerciseService()->get($id);
 
+        $user = $this->getCurrentUser();
         if ($user->isLogin()) {
             $member = $this->getItemBankExerciseMemberService()->getExerciseMember($id, $user['id']);
         }
 
-        $itemBankExercise = $this->getItemBankExerciseService()->get($id);
+        if (!empty($member)) {
+            $itemBankExercise['access'] = $this->getItemBankExerciseService()->canLearnExercise($id);
+        } else {
+            $itemBankExercise['access'] = $this->getItemBankExerciseService()->canJoinExercise($id);
+        }
 
         return $itemBankExercise;
     }

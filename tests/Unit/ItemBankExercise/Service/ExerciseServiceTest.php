@@ -222,8 +222,8 @@ class ExerciseServiceTest extends BaseTestCase
 
         $this->assertEquals(10.1, $res['price']);
         $this->assertEquals(0, $res['isFree']);
-        $this->assertEquals(10, $res['expiryDays']);
-        $this->assertEquals('days', $res['expiryMode']);
+        $this->assertEquals(0, $res['expiryDays']);
+        $this->assertEquals('forever', $res['expiryMode']);
     }
 
     public function testSearchOrderByStudentNumAndLastDays()
@@ -266,6 +266,25 @@ class ExerciseServiceTest extends BaseTestCase
         $this->assertEquals(false, $result);
     }
 
+    public function testFreeJoinExercise()
+    {
+        $this->createExercise();
+        $this->mockBiz(
+            'ItemBankExercise:ExerciseMemberService',
+            [
+                [
+                    'functionName' => 'becomeStudent',
+                    'returnValue' => [],
+                ],
+                [
+                    'functionName' => 'isExerciseMember',
+                    'returnValue' => false,
+                ],
+            ]
+        );
+        $member = $this->getExerciseService()->freeJoinExercise(1);
+    }
+
     protected function mockUser()
     {
         $currentUser = new CurrentUser();
@@ -289,6 +308,8 @@ class ExerciseServiceTest extends BaseTestCase
                 'title' => 'test',
                 'questionBankId' => 1,
                 'categoryId' => 1,
+                'status' => 'published',
+                'expiryMode' => 'forever',
                 'seq' => 1,
             ]
         );

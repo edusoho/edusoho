@@ -2,6 +2,7 @@
 
 namespace Biz\ItemBankExercise\Service\Impl;
 
+use Biz\Accessor\AccessorInterface;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\ItemBankExercise\Dao\AssessmentExerciseDao;
@@ -104,7 +105,8 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        if (!$this->getItemBankExerciseService()->canLearningExercise($module['exerciseId'], $userId)) {
+        $access = $this->getItemBankExerciseService()->canLearnExercise($module['exerciseId']);
+        if (AccessorInterface::SUCCESS != $access['code']) {
             $this->createNewException(ItemBankExerciseException::FORBIDDEN_LEARN());
         }
 
