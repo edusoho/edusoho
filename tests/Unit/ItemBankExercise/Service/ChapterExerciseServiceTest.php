@@ -64,8 +64,8 @@ class ChapterExerciseServiceTest extends BaseTestCase
             'ItemBankExercise:ExerciseService',
             [
                 [
-                    'functionName' => 'canLearningExercise',
-                    'returnValue' => true,
+                    'functionName' => 'canLearnExercise',
+                    'returnValue' => ['code' => 'success'],
                 ],
                 [
                     'functionName' => 'get',
@@ -120,8 +120,8 @@ class ChapterExerciseServiceTest extends BaseTestCase
             'ItemBankExercise:ExerciseService',
             [
                 [
-                    'functionName' => 'canLearningExercise',
-                    'returnValue' => true,
+                    'functionName' => 'canLearnExercise',
+                    'returnValue' => ['code' => 'success'],
                 ],
                 [
                     'functionName' => 'get',

@@ -18,7 +18,7 @@ interface ExerciseService
 
     public function search($conditions, $orderBy, $start, $limit);
 
-    public function canLearningExercise($exerciseId, $userId);
+    public function canLearnExercise($exerciseId);
 
     public function tryManageExercise($exerciseId, $teacher = 1);
 
@@ -52,5 +52,9 @@ interface ExerciseService
 
     public function canTakeItemBankExercise($exerciseId);
 
+    public function canJoinExercise($exerciseId);
+
+    public function freeJoinExercise($exerciseId);
+    
     public function findExercisesByLikeTitle($title);
 }
