@@ -98,7 +98,7 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
                 'bank_id' => $categroy['bank_id'],
                 'name' => $itemBank['name'],
                 'displayable' => 0,
-                'description' => $module['title'].'-'.$categroy['name'],
+                'description' => $this->getAssessmentDescription($categroyId, $module),
                 'sections' => [
                     [
                         'name' => '题目列表',
@@ -118,6 +118,24 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
         }
 
         return $assessment;
+    }
+
+    protected function getAssessmentDescription($categroyId, $module)
+    {
+        $categories = [];
+
+        $loop = 1;
+        while ($loop <= 3) {
+            $categroy = $this->getItemCategoryService()->getItemCategory($categroyId);
+            if (empty($categroy)) {
+                break;
+            }
+            $categroyId = $categroy['parent_id'];
+            array_unshift($categories, $categroy);
+            ++$loop;
+        }
+
+        return $module['title'].' > '.implode(ArrayToolkit::column($categories, 'name'), ' > ');
     }
 
     /**

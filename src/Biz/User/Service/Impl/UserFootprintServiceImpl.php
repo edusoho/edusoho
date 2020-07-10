@@ -119,6 +119,7 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
                 0,
                 PHP_INT_MAX
             ), 'id');
+            $itemCategories = $this->getItemCategoryService()->findItemCategoriesByIds(ArrayToolkit::column($chapterExerciseRecords, 'itemCategoryId'));
             $exercises = $this->getItemBankExerciseService()->findByIds(ArrayToolkit::column($chapterExerciseRecords, 'exerciseId'));
             $answerRecrods = ArrayToolkit::index($this->getAnswerRecordService()->search(['ids' => ArrayToolkit::column($chapterExerciseRecords, 'answerRecordId')], [], 0, PHP_INT_MAX), 'id');
             $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($answerRecrods, 'assessment_id'));
@@ -131,6 +132,7 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
                 'module' => empty($modules[$chapterExerciseRecord['moduleId']]) ? (object) [] : $modules[$chapterExerciseRecord['moduleId']],
                 'answerRecord' => $chapterExerciseRecord,
                 'exercise' => empty($exercises[$chapterExerciseRecord['exerciseId']]) ? (object) [] : $exercises[$chapterExerciseRecord['exerciseId']],
+                'itemCategory' => empty($itemCategories[$chapterExerciseRecord['itemCategoryId']]) ? (object) [] : $itemCategories[$chapterExerciseRecord['itemCategoryId']],
             ];
         }
 
@@ -290,6 +292,14 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
     protected function getAnswerRecordService()
     {
         return $this->createService('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return \Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
+     */
+    protected function getItemCategoryService()
+    {
+        return $this->createService('ItemBank:Item:ItemCategoryService');
     }
 
     /**
