@@ -19,10 +19,17 @@ class ExerciseMemberEventSubscriber extends EventSubscriber implements EventSubs
     {
         return array(
             'exercise.join' => 'onExerciseJoin',
+            'exercise.quit' => 'onExerciseQuit',
         );
     }
 
     public function onExerciseJoin(Event $event)
+    {
+        $this->countStudentMember($event);
+        $this->countIncome($event);
+    }
+
+    public function onExerciseQuit(Event $event)
     {
         $this->countStudentMember($event);
         $this->countIncome($event);

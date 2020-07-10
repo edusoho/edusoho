@@ -7775,6 +7775,7 @@ log.action.order.refund_cancel: 'Cancel refund'
 log.action.order.unbind-back: 'Unbind bank'
 log.action.order.course_callback: 'Course callback'
 log.action.order.classroom_callback: 'Classroom callback'
+log.action.order.item_bank_exercise_callback: 'Item Bank Exercise Callback'
 log.action.order.adjust_price: 'Adjust price'
 log.action.category.create: 'Create'
 log.action.category.update: 'Update'
@@ -7844,6 +7845,7 @@ log.action.open_course.update_teacher: 'Update open course teacher'
 log.action.open_course.delete_recommend_course: 'Delete recommended course'
 order.course_callback.fail: 'Order is successful, but the user failed to join the course.'
 order.classroom_callback.fail: 'Order is successful, but the user failed to join the class.'
+order.item_bank_exercise_callback.fail: 'Order is successful, but the user failed to join the exercise.'
 crontab.register_crontab_job.fail: 'The scheduled task registration failed. Please refer to http://developer.edusoho.com/biz-framework/scheduler.html'
 cashier.order.status.changed_tips: 'The order has changed, Please order again.'
 log.message.order_adjust_price.success: 'The order (#%title%) price is adjusted from %oldPrice% to %newPrice%.'
@@ -7858,6 +7860,7 @@ log.action.question_bank.create_category: Create Bank Category
 log.action.question_bank.delete_category: Delete Bank Category
 log.action.question_bank.update_category: Update Bank Category
 log.action.item_bank_exercise.add_student: 'Add student'
+log.action.item_bank_exercise.remove_student: Remove Student
 log.action.item_bank_exercise.delete_exercise: Delete Item Exercise
 log.action.item_bank_exercise.recommend_exercise: Recommend Item Exercise
 log.action.item_bank_exercise.cancel_recommend_exercise: Cancel Recommend Item Exercise
@@ -9064,6 +9067,7 @@ exception.item_bank_exercise.expirymode_invalid: Validity type error
 exception.item_bank_exercise.assessment_exercise_exist: The test paper has been saved in this module, please do not add it repeatedly
 exception.item_bank_exercise.member.can_not_become_member: The exercise has expired and students cannot join
 exception.item_bank_exercise.module.not_empty_number: Please keep at least one module
+exception.item_bank_exercise.member.member_not_student: Member is not student
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.
