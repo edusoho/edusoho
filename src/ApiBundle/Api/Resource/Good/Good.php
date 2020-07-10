@@ -5,6 +5,10 @@ namespace ApiBundle\Api\Resource\Good;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Util\AssetHelper;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Goods\Service\GoodsService;
+use Biz\Product\Service\ProductService;
 
 /**
  * Class Good Good并不合适,商品真实本体是Goods,单复数同形,类名为Good是为了满足接口的定义规范（带有s结尾的单词比较难处理）
@@ -19,139 +23,102 @@ class Good extends AbstractResource
      */
     public function get(ApiRequest $request, $id)
     {
-        return $this->mockData($id);
+        return $this->buildGoodsData($id);
     }
 
-    public function mockData($id)
+    protected function buildGoodsData($goodsId)
     {
-        $mockData = [
-            1 => [
-                'dataDescription' => '富文本商品描述，有挂件，多计划，计划无优惠，永久有效，承诺服务',
-                'title' => '课程商品标题',
-                'subtitle' => '课程商品副标题',
-                'image' => 'http://try6.edusoho.cn/files/course/2020/04-14/18332003d725680219.jpeg',
-                'description' => '<p>EduSoho可以添加本地视频，也可以导入优酷、土豆、网易公开课的视频。</p>
-                <p>本地视频支持MP4格式，如果开通<span style="font-size:16px;"><em><u><a href="http://open.edusoho.com/show/cloud/video"><span style="color:#33cc99;"><strong>EduSoho教育云视频</strong></span></a></u></em></span>，可以上传MP4、AVI、FLV、WMA、MOV视频，省空间省流量且四重加密技术保护视频安全：</p>
-                <p>第一重加密：观看身份验证，谁买谁观看，防盗播；</p>              
-                <p>第二重加密：视频水印、隐形视频指纹，一秒识别翻录者；</p>                
-                <p>第三重加密：先进的播放地址加密，100%无法被常用工具下载；</p>                
-                <p>第四重加密：源文件级别加密，视频即使被非法下载也无法播放。</p>',
-                'hasExtension' => true,
-                'extensions' => [
-                    'mpQrCode',
-                    'teachers',
-                    'recommendGoods',
+        $goods = $this->getGoodsService()->getGoods($goodsId);
+        $product = $this->getProductService()->getProduct($goods['productId']);
+        if ('classroom' == $product['targetType']) {
+            $description = $this->getClassroomService()->getClassroom($product['targetId']);
+        }
+
+        return [
+            'title' => $goods['title'],
+            'subTitle' => $goods['subtitle'],
+            'description' => empty($description) ? '' : $description,
+            'image' => AssetHelper::getFurl(empty($goods['images']['middle']) ? '' : $goods['images']['middle'], 'course.png'),
+            'hasExtension' => true,
+            'product' => [
+                'targetType' => $product['targetType'],
+                'targetId' => $product['targetId'],
+            ],
+            'extensions' => [
+                'mpQrCode' => '',
+                'teachers' => [],
+                'recommendGoods' => [],
+            ],
+            'specs' => [
+                1 => [
+                    'title' => '计划一',
+                    'subtitle' => '计划一规格副标题',
+                    'price' => '100.00',
+                    'expiryMode' => 'forever',
+                    'joinedNum' => '58',
                 ],
-                'specs' => [
-                    1 => [
-                        'title' => '计划一',
-                        'subtitle' => '计划一规格副标题',
-                        'price' => '100.00',
-                        'expiryMode' => 'forever',
-                        'joinedNum' => '58',
-                    ],
-                    2 => [
-                        'title' => '计划二进阶学习',
-                        'subtitle' => '计划二规格副标题',
-                        'price' => '150.00',
-                        'expiryMode' => 'forever',
-                        'joinedNum' => '18',
-                        'services' => [
-                            'homeworkReview' => [
-                                'code' => 'homeworkReview',
-                                'shortName' => 'site.services.homeworkReview.shortName',
-                                'fullName' => 'site.services.homeworkReview.fullName',
-                                'summary' => 'site.services.homeworkReview.summary',
-                                'active' => 0,
-                            ],
-                            'testpaperReview' => [
-                                'code' => 'testpaperReview',
-                                'shortName' => 'site.services.testpaperReview.shortName',
-                                'fullName' => 'site.services.testpaperReview.fullName',
-                                'summary' => 'site.services.testpaperReview.summary',
-                                'active' => 0,
-                            ],
-                            'teacherAnswer' => [
-                                'code' => 'teacherAnswer',
-                                'shortName' => 'site.services.teacherAnswer.shortName',
-                                'fullName' => 'site.services.teacherAnswer.fullName',
-                                'summary' => 'site.services.teacherAnswer.summary',
-                                'active' => 0,
-                            ],
-                            'liveAnswer' => [
-                                'code' => 'liveAnswer',
-                                'shortName' => 'site.services.liveAnswer.shortName',
-                                'fullName' => 'site.services.liveAnswer.fullName',
-                                'summary' => 'site.services.liveAnswer.summary',
-                                'active' => 0,
-                            ],
+                2 => [
+                    'title' => '计划二进阶学习',
+                    'subtitle' => '计划二规格副标题',
+                    'price' => '150.00',
+                    'expiryMode' => 'forever',
+                    'joinedNum' => '18',
+                    'services' => [
+                        'homeworkReview' => [
+                            'code' => 'homeworkReview',
+                            'shortName' => 'site.services.homeworkReview.shortName',
+                            'fullName' => 'site.services.homeworkReview.fullName',
+                            'summary' => 'site.services.homeworkReview.summary',
+                            'active' => 0,
+                        ],
+                        'testpaperReview' => [
+                            'code' => 'testpaperReview',
+                            'shortName' => 'site.services.testpaperReview.shortName',
+                            'fullName' => 'site.services.testpaperReview.fullName',
+                            'summary' => 'site.services.testpaperReview.summary',
+                            'active' => 0,
+                        ],
+                        'teacherAnswer' => [
+                            'code' => 'teacherAnswer',
+                            'shortName' => 'site.services.teacherAnswer.shortName',
+                            'fullName' => 'site.services.teacherAnswer.fullName',
+                            'summary' => 'site.services.teacherAnswer.summary',
+                            'active' => 0,
+                        ],
+                        'liveAnswer' => [
+                            'code' => 'liveAnswer',
+                            'shortName' => 'site.services.liveAnswer.shortName',
+                            'fullName' => 'site.services.liveAnswer.fullName',
+                            'summary' => 'site.services.liveAnswer.summary',
+                            'active' => 0,
                         ],
                     ],
                 ],
-            ],
-            2 => [
-                'title' => '课程商品标题',
-                'subtitle' => '课程商品副标题',
-                'image' => 'http://try6.edusoho.cn/files/course/2020/04-14/18332003d725680219.jpeg',
-                'description' => '<p>EduSoho可以添加本地视频，也可以导入优酷、土豆、网易公开课的视频。</p>
-                <p>本地视频支持MP4格式，如果开通<span style="font-size:16px;"><em><u><a href="http://open.edusoho.com/show/cloud/video"><span style="color:#33cc99;"><strong>EduSoho教育云视频</strong></span></a></u></em></span>，可以上传MP4、AVI、FLV、WMA、MOV视频，省空间省流量且四重加密技术保护视频安全：</p>
-                <p>第一重加密：观看身份验证，谁买谁观看，防盗播；</p>              
-                <p>第二重加密：视频水印、隐形视频指纹，一秒识别翻录者；</p>                
-                <p>第三重加密：先进的播放地址加密，100%无法被常用工具下载；</p>                
-                <p>第四重加密：源文件级别加密，视频即使被非法下载也无法播放。</p>',
-                'hasExtension' => false,
-                'specs' => [
-                    1 => [
-                        'title' => '计划一',
-                        'subtitle' => '计划一规格副标题',
-                        'price' => '1000.00',
-                        'expiryMode' => 'forever',
-                        'joinedNum' => '49',
-                        'services' => [
-                            'homeworkReview' => [
-                                'code' => 'homeworkReview',
-                                'shortName' => 'site.services.homeworkReview.shortName',
-                                'fullName' => 'site.services.homeworkReview.fullName',
-                                'summary' => 'site.services.homeworkReview.summary',
-                                'active' => 0,
-                            ],
-                            'testpaperReview' => [
-                                'code' => 'testpaperReview',
-                                'shortName' => 'site.services.testpaperReview.shortName',
-                                'fullName' => 'site.services.testpaperReview.fullName',
-                                'summary' => 'site.services.testpaperReview.summary',
-                                'active' => 0,
-                            ],
-                            'teacherAnswer' => [
-                                'code' => 'teacherAnswer',
-                                'shortName' => 'site.services.teacherAnswer.shortName',
-                                'fullName' => 'site.services.teacherAnswer.fullName',
-                                'summary' => 'site.services.teacherAnswer.summary',
-                                'active' => 0,
-                            ],
-                            'liveAnswer' => [
-                                'code' => 'liveAnswer',
-                                'shortName' => 'site.services.liveAnswer.shortName',
-                                'fullName' => 'site.services.liveAnswer.fullName',
-                                'summary' => 'site.services.liveAnswer.summary',
-                                'active' => 0,
-                            ],
-                        ],
-                    ],
-                    2 => [
-                        'title' => '计划二进阶学习',
-                        'subtitle' => '计划二规格副标题',
-                        'price' => '1500.00',
-                        'expiryMode' => 'forever',
-                        'joinedNum' => '68',
-                    ],
-                ],
-            ],
-            3 => [
-                'dataDescription' => '富文本商品描述，有优惠，课程测试',
             ],
         ];
+    }
 
-        return empty($mockData[$id]) ? [] : $mockData[$id];
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->service('Goods:GoodsService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->service('Product:ProductService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->service('Classroom:ClassroomService');
     }
 }
