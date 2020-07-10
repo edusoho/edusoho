@@ -148,7 +148,9 @@ class ExerciseServiceTest extends BaseTestCase
         $user['org'] = ['id' => 1];
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
-        $this->grantPermissionToUser($currentUser);
+        $permissions = new \ArrayObject();
+        $permissions['admin_v2_item_bank_exercise_content_manage'] = true;
+        $currentUser->setPermissions($permissions);
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $this->assertTrue($this->getExerciseService()->hasExerciseManagerRole(3231));

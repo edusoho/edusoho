@@ -329,7 +329,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             return true;
         }
 
-        if ($user->hasPermission('admin_course_manage') || $user->hasPermission('admin_v2_course_manage')) {
+        if ($user->hasPermission('admin_v2_item_bank_exercise')) {
             return true;
         }
 
