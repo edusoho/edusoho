@@ -141,6 +141,7 @@ class ChapterExerciseServiceTest extends BaseTestCase
                     'returnValue' => [
                         'id' => 1,
                         'exerciseId' => 1,
+                        'title' => '章节练习',
                         'type' => 'chapter',
                         'answerSceneId' => 1,
                     ],
