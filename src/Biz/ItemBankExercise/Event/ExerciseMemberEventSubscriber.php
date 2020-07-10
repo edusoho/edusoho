@@ -17,10 +17,10 @@ class ExerciseMemberEventSubscriber extends EventSubscriber implements EventSubs
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'exercise.join' => 'onExerciseJoin',
             'exercise.quit' => 'onExerciseQuit',
-        );
+        ];
     }
 
     public function onExerciseJoin(Event $event)
@@ -49,10 +49,10 @@ class ExerciseMemberEventSubscriber extends EventSubscriber implements EventSubs
     {
         $exercise = $event->getSubject();
 
-        $conditions = array(
+        $conditions = [
             'exerciseId' => $exercise['id'],
-            'statuses' => array('paid', 'success', 'finished'),
-        );
+            'statuses' => ['paid', 'success', 'finished'],
+        ];
 
         $income = $this->getOrderFacadeService()->sumOrderItemPayAmount($conditions);
         $income = MathToolkit::simple($income, 0.01);

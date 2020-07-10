@@ -18,17 +18,17 @@ class ItemBankExerciseProduct extends Product implements OrderStatusCallback
     {
         $exercise = $this->getExerciseService()->get($params['targetId']);
         $this->targetId = $params['targetId'];
-        $this->backUrl = array('routing' => '', 'params' => array('id' => $exercise['id']));
-        $this->successUrl = array('', array('id' => $this->targetId));
+        $this->backUrl = ['routing' => '', 'params' => ['id' => $exercise['id']]];
+        $this->successUrl = ['', ['id' => $this->targetId]];
         $this->title = $exercise['title'];
         $this->originPrice = $exercise['price'];
         $this->maxRate = 100;
         $this->productEnable = 'published' === $exercise['status'] ? true : false;
-        $this->cover = array(
+        $this->cover = [
             'small' => '',
             'middle' => '',
             'large' => '',
-        );
+        ];
     }
 
     public function validate()
@@ -46,10 +46,10 @@ class ItemBankExerciseProduct extends Product implements OrderStatusCallback
 //        $this->smsCallback($orderItem, $targetName);
 
         $order = $this->getOrderService()->getOrder($orderItem['order_id']);
-        $info = array(
+        $info = [
             'orderId' => $order['id'],
             'remark' => $order['created_reason'],
-        );
+        ];
 
         try {
             if (!$this->getExerciseMemberService()->isExerciseMember($orderItem['target_id'], $orderItem['user_id'])) {
@@ -59,7 +59,7 @@ class ItemBankExerciseProduct extends Product implements OrderStatusCallback
             return OrderStatusCallback::SUCCESS;
         } catch (\Exception $e) {
             $this->getLogService()->error('order', 'item_bank_exercise_callback', 'order.item_bank_exercise_callback.fail',
-                array('error' => $e->getMessage(), 'context' => $orderItem));
+                ['error' => $e->getMessage(), 'context' => $orderItem]);
 
             return false;
         }
