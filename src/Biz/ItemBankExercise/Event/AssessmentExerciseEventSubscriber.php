@@ -12,26 +12,9 @@ class AssessmentExerciseEventSubscriber extends EventSubscriber implements Event
     public static function getSubscribedEvents()
     {
         return [
-            'answer.started' => 'onAnswerStarted',
             'answer.submitted' => 'onAnswerSubmitted',
             'answer.finished' => 'onAnswerFinished',
         ];
-    }
-
-    public function onAnswerStarted(Event $event)
-    {
-        $answerRecord = $event->getSubject();
-        $assessmentExerciseRecord = $this->getItemBankAssessmentExerciseRecordService()->getByAnswerRecordId($answerRecord['id']);
-        if (empty($assessmentExerciseRecord)) {
-            return;
-        }
-
-        return $this->getUserFootprintService()->createUserFootprint([
-            'targetType' => 'item_bank_assessment_exercise',
-            'targetId' => $assessmentExerciseRecord['id'],
-            'event' => 'answer.started',
-            'userId' => $assessmentExerciseRecord['userId'],
-        ]);
     }
 
     public function onAnswerSubmitted(Event $event)
@@ -72,13 +55,5 @@ class AssessmentExerciseEventSubscriber extends EventSubscriber implements Event
     protected function getItemBankAssessmentExerciseRecordService()
     {
         return $this->getBiz()->service('ItemBankExercise:AssessmentExerciseRecordService');
-    }
-
-    /**
-     * @return \Biz\User\UserFootprintService
-     */
-    protected function getUserFootprintService()
-    {
-        return $this->getBiz()->service('User:UserFootprintService');
     }
 }

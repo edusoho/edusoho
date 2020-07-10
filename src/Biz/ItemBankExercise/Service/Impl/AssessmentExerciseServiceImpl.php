@@ -44,12 +44,19 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
 
             $answerRecord = $this->getAnswerService()->startAnswer($module['answerSceneId'], $assessmentId, $userId);
 
-            $this->getItemBankAssessmentExerciseRecordService()->create([
+            $assessmentExerciseRecord = $this->getItemBankAssessmentExerciseRecordService()->create([
                 'moduleId' => $moduleId,
                 'exerciseId' => $module['exerciseId'],
                 'assessmentId' => $assessmentId,
                 'userId' => $userId,
                 'answerRecordId' => $answerRecord['id'],
+            ]);
+
+            $this->getUserFootprintService()->createUserFootprint([
+                'targetType' => 'item_bank_assessment_exercise',
+                'targetId' => $assessmentExerciseRecord['id'],
+                'event' => 'answer.started',
+                'userId' => $assessmentExerciseRecord['userId'],
             ]);
 
             $this->commit();
@@ -180,5 +187,13 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
     protected function getItemBankAssessmentExerciseDao()
     {
         return $this->createDao('ItemBankExercise:AssessmentExerciseDao');
+    }
+
+    /**
+     * @return \Biz\User\UserFootprintService
+     */
+    protected function getUserFootprintService()
+    {
+        return $this->createService('User:UserFootprintService');
     }
 }

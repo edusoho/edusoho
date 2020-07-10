@@ -26,13 +26,20 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
 
             $answerRecord = $this->getAnswerService()->startAnswer($module['answerSceneId'], $assessment['id'], $userId);
 
-            $this->getItemBankChapterExerciseRecordService()->create([
+            $chapterExerciseRecord = $this->getItemBankChapterExerciseRecordService()->create([
                 'moduleId' => $moduleId,
                 'exerciseId' => $module['exerciseId'],
                 'itemCategoryId' => $categroyId,
                 'userId' => $userId,
                 'answerRecordId' => $answerRecord['id'],
                 'questionNum' => $assessment['question_count'],
+            ]);
+
+            $this->getUserFootprintService()->createUserFootprint([
+                'targetType' => 'item_bank_chapter_exercise',
+                'targetId' => $chapterExerciseRecord['id'],
+                'event' => 'answer.started',
+                'userId' => $chapterExerciseRecord['userId'],
             ]);
 
             $this->commit();
@@ -208,5 +215,13 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
+    }
+
+    /**
+     * @return \Biz\User\UserFootprintService
+     */
+    protected function getUserFootprintService()
+    {
+        return $this->createService('User:UserFootprintService');
     }
 }

@@ -84,12 +84,12 @@ class ExerciseDaoImpl extends AdvancedDaoImpl implements ExerciseDao
     public function findByLikeTitle($title)
     {
         if (empty($title)) {
-            return array();
+            return [];
         }
 
         $sql = "SELECT * FROM {$this->table} WHERE `title` LIKE ?; ";
 
-        return $this->db()->fetchAll($sql, array('%'.$title.'%'));
+        return $this->db()->fetchAll($sql, ['%'.$title.'%']);
     }
 
     protected function getExerciseMemberDao()
@@ -119,6 +119,7 @@ class ExerciseDaoImpl extends AdvancedDaoImpl implements ExerciseDao
                 'creator = :creator',
                 'title like :title',
                 'status = :status',
+                'price = :price',
                 'studentNum = :studentNum',
                 'categoryId = :categoryId',
                 'recommended = :recommended',

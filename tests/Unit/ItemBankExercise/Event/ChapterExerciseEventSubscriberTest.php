@@ -8,25 +8,6 @@ use Codeages\Biz\Framework\Event\Event;
 
 class ChapterExerciseEventSubscriberTest extends BaseTestCase
 {
-    public function testOnAnswerStarted()
-    {
-        $this->mockChapterExerciseRecord();
-
-        $subscriber = new ChapterExerciseEventSubscriber($this->biz);
-        $event = new Event(
-            [
-                'id' => 1,
-                'status' => 'doing',
-                'answer_report_id' => 1,
-            ]
-        );
-
-        $userFootprint = $subscriber->onAnswerStarted($event);
-        $this->assertEquals($userFootprint['targetType'], 'item_bank_chapter_exercise');
-        $this->assertEquals($userFootprint['targetId'], 1);
-        $this->assertEquals($userFootprint['event'], 'answer.started');
-    }
-
     public function testOnAnswerSubmitted()
     {
         $this->mockChapterExerciseRecord();

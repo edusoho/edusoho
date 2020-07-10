@@ -15,7 +15,6 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
     public static function getSubscribedEvents()
     {
         return [
-            'answer.started' => 'onAnswerStarted',
             'answer.submitted' => 'onAnswerSubmitted',
             'answer.saved' => 'onAnswerSaved',
             'answer.finished' => 'onAnswerFinished',
@@ -25,22 +24,6 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
             'item.import' => 'onItemImport',
             'item.batchDelete' => 'onItemBatchDelete',
         ];
-    }
-
-    public function onAnswerStarted(Event $event)
-    {
-        $answerRecord = $event->getSubject();
-        $chapterExerciseRecord = $this->getItemBankChapterExerciseRecordService()->getByAnswerRecordId($answerRecord['id']);
-        if (empty($chapterExerciseRecord)) {
-            return;
-        }
-
-        return $this->getUserFootprintService()->createUserFootprint([
-            'targetType' => 'item_bank_chapter_exercise',
-            'targetId' => $chapterExerciseRecord['id'],
-            'event' => 'answer.started',
-            'userId' => $chapterExerciseRecord['userId'],
-        ]);
     }
 
     public function onItemCreate(Event $event)
@@ -377,13 +360,5 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
     protected function getItemService()
     {
         return $this->getBiz()->service('ItemBank:Item:ItemService');
-    }
-
-    /**
-     * @return \Biz\User\UserFootprintService
-     */
-    protected function getUserFootprintService()
-    {
-        return $this->getBiz()->service('User:UserFootprintService');
     }
 }
