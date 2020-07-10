@@ -22,7 +22,7 @@ const getTitleHtml = (hasSubTitle, target) => {
 
 const getItemBankHtml = data => {
   if (data.targetType === 'item_bank_chapter_exercise') {
-    return `${data.target.assessment.description}`;
+    return `${data.target.module.title}-${data.target.itemCategory.name}`;
   }
   return `${data.target.module.title}-${data.target.assessment.name}`;
 };
