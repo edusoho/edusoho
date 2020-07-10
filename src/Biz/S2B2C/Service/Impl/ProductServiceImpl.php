@@ -364,7 +364,7 @@ class ProductServiceImpl extends BaseService implements ProductService
         $localProduct = $this->getProductBySupplierIdAndRemoteProductId($supplier['supplierId'], $s2b2cProductId);
 
         if ($localProduct) {
-            throw new \Exception('重复了');
+            throw $this->createNewException(S2B2CProductException::ADOPT_PRODUCT_REPEAT());
         }
 
         $this->adoptS2B2CProduct($s2b2cProductId);
@@ -375,9 +375,9 @@ class ProductServiceImpl extends BaseService implements ProductService
             $this->getCourseProductService()->syncCourses($s2b2cProductId);
             $this->commit();
         } catch (\Exception $exception) {
-            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[adoptProduct] 同步课程失败，原因:'.$exception->getMessage());
             $this->rollback();
-            throw new \Exception('同步课程失败');
+            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[adoptProduct] 同步课程失败，原因:'.$exception->getMessage());
+            throw $this->createNewException(S2B2CProductException::SYNC_PRODUCT_CONTENT_FAIL());
         }
 
         return true;
@@ -391,7 +391,7 @@ class ProductServiceImpl extends BaseService implements ProductService
             $product = $result['data'];
         } else {
             $this->biz->offsetGet('s2b2c.merchant.logger')->error('[adoptProduct] 采用课程失败，原因:'.json_encode($result));
-            throw new \Exception('采用课程失败');
+            throw $this->createNewException(S2B2CProductException::ADOPT_PRODUCT_FAILED());
         }
 
         //过滤已有的product
@@ -450,7 +450,7 @@ class ProductServiceImpl extends BaseService implements ProductService
         return true;
     }
 
-    public function findUpdateVersionProductList()
+    public function findUpdatedVersionProductList()
     {
         return $this->getS2B2CProductDao()->findRemoteVersionGTLocalVersion();
     }
@@ -460,7 +460,7 @@ class ProductServiceImpl extends BaseService implements ProductService
         $product = $this->getProduct($id);
 
         if (empty($product)) {
-            throw $this->createNotFoundException('product not found');
+            throw $this->createNewException(S2B2CProductException::PRODUCT_NOT_FOUNT());
         }
 
         $this->adoptS2B2CProduct($product['remoteProductId']);
@@ -471,14 +471,21 @@ class ProductServiceImpl extends BaseService implements ProductService
             $this->getCourseProductService()->updateProductVersionData($product['remoteProductId']);
             $this->commit();
         } catch (\Exception $exception) {
-            $this->getLogger()->error('[updateProductVersion] 更新失败 '.$exception->getMessage());
             $this->rollback();
-            throw $this->createServiceException('更新失败');
+            $this->getLogger()->error('[updateProductVersion] 更新失败 '.$exception->getMessage());
+            throw $this->createNewException(S2B2CProductException::ADOPT_PRODUCT_FAILED());
         }
 
         return true;
     }
 
+    /**
+     * 获取远程productType 和 本地productType的映射关系
+     *
+     * @param $productType
+     *
+     * @return mixed
+     */
     protected function getProductType($productType)
     {
         $type = [

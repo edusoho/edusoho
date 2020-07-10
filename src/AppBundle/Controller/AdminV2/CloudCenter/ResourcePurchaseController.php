@@ -89,7 +89,7 @@ class ResourcePurchaseController extends BaseController
 
     public function productsVersionAction(Request $request)
     {
-        $products = $this->getS2B2CProductService()->findUpdateVersionProductList();
+        $products = $this->getS2B2CProductService()->findUpdatedVersionProductList();
 
         if (!empty($products)) {
             $courseSetIds = array_column($products, 'localResourceId');
