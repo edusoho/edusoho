@@ -118,7 +118,6 @@ export default {
           id: this.$route.params.id
         }
       }).then(res => {
-        console.log(res);
         let data = res;
         for (const key in data.specs) {
           this.$set(data.specs[key], 'active', false);
@@ -159,7 +158,6 @@ export default {
         if (key == id) {
           this.$set(data.specs[key], 'active', true);
           this.currentPlan = data.specs[key];
-          // console.log(this.currentPlan);
         }
       }
     },
