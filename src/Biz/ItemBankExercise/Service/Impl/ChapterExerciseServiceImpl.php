@@ -20,9 +20,9 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
         try {
             $this->beginTransaction();
 
-            $assessment = $this->createAssessmentByCategroyId($categroyId);
-
             $module = $this->getItemBankExerciseModuleService()->get($moduleId);
+
+            $assessment = $this->createAssessmentByCategroyId($categroyId, $module);
 
             $answerRecord = $this->getAnswerService()->startAnswer($module['answerSceneId'], $assessment['id'], $userId);
 
@@ -79,7 +79,7 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
         return false;
     }
 
-    protected function createAssessmentByCategroyId($categroyId)
+    protected function createAssessmentByCategroyId($categroyId, $module)
     {
         try {
             $this->beginTransaction();
@@ -94,15 +94,14 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
             $items = $this->getItemService()->findItemsByIds($itemIds, true);
             shuffle($items);
 
-            $sectionName = $this->getSectionName($categroyId);
             $assessment = [
                 'bank_id' => $categroy['bank_id'],
                 'name' => $itemBank['name'],
                 'displayable' => 0,
-                'description' => $sectionName,
+                'description' => $module['title'].'-'.$categroy['name'],
                 'sections' => [
                     [
-                        'name' => $sectionName,
+                        'name' => '题目列表',
                         'description' => '',
                         'items' => $items,
                     ],
@@ -119,24 +118,6 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
         }
 
         return $assessment;
-    }
-
-    protected function getSectionName($categroyId)
-    {
-        $categories = [];
-
-        $loop = 1;
-        while ($loop <= 3) {
-            $categroy = $this->getItemCategoryService()->getItemCategory($categroyId);
-            if (empty($categroy)) {
-                break;
-            }
-            $categroyId = $categroy['parent_id'];
-            array_unshift($categories, $categroy);
-            ++$loop;
-        }
-
-        return implode(ArrayToolkit::column($categories, 'name'), '-');
     }
 
     /**

@@ -20,7 +20,7 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
         $footprint = $this->checkAndFilterFootprint($footprint);
 
         $conditions = $footprint;
-        $existedFootprint = $this->searchUserFootprints($conditions, array(), 0, 1);
+        $existedFootprint = $this->searchUserFootprints($conditions, [], 0, 1);
 
         if (empty($existedFootprint)) {
             return $this->getUserFootprintDao()->create($footprint);
@@ -36,7 +36,7 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
         return $this->getUserFootprintDao()->update($id, $footprint);
     }
 
-    public function searchUserFootprints(array $conditions, array $order, $start, $limit, $columns = array())
+    public function searchUserFootprints(array $conditions, array $order, $start, $limit, $columns = [])
     {
         return $this->getUserFootprintDao()->search($conditions, $order, $start, $limit, $columns);
     }
@@ -49,12 +49,12 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
     public function prepareUserFootprintsByType($footprints, $type)
     {
         if (empty($footprints)) {
-            return array();
+            return [];
         }
 
-        $method = 'prepare'.ucfirst($type).'Footprints';
+        if (isset(UserFootprintService::PREPARE_METHODS[$type])) {
+            $method = UserFootprintService::PREPARE_METHODS[$type];
 
-        if (method_exists($this, $method)) {
             return $this->$method($footprints);
         }
 
@@ -64,6 +64,77 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
     public function deleteUserFootprintsBeforeDate($date)
     {
         return $this->getUserFootprintDao()->deleteBeforeDate($date);
+    }
+
+    protected function prepareItemBankAssessmentExerciseFootprints($footprints)
+    {
+        $assessmentExerciseRecords = $modules = $assessments = $exercises = [];
+
+        $assessmentExerciseRecords = ArrayToolkit::index($this->getItemBankAssessmentExerciseRecordService()->search(
+            ['ids' => ArrayToolkit::column($footprints, 'targetId')],
+            [],
+            0,
+            PHP_INT_MAX
+        ), 'id');
+
+        if ($assessmentExerciseRecords) {
+            $modules = ArrayToolkit::index($this->getItemBankExerciseModuleService()->search(
+                ['ids' => ArrayToolkit::column($assessmentExerciseRecords, 'moduleId')],
+                [],
+                0,
+                PHP_INT_MAX
+            ), 'id');
+            $exercises = $this->getItemBankExerciseService()->findByIds(ArrayToolkit::column($assessmentExerciseRecords, 'exerciseId'));
+            $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($assessmentExerciseRecords, 'assessmentId'));
+        }
+
+        foreach ($footprints as &$footprint) {
+            $assessmentExerciseRecord = empty($assessmentExerciseRecords[$footprint['targetId']]) ? (object) [] : $assessmentExerciseRecords[$footprint['targetId']];
+            $footprint['target'] = [
+                'assessment' => empty($assessments[$assessmentExerciseRecord['assessmentId']]) ? (object) [] : $assessments[$assessmentExerciseRecord['assessmentId']],
+                'module' => empty($modules[$assessmentExerciseRecord['moduleId']]) ? (object) [] : $modules[$assessmentExerciseRecord['moduleId']],
+                'answerRecord' => $assessmentExerciseRecord,
+                'exercise' => empty($exercises[$assessmentExerciseRecord['exerciseId']]) ? (object) [] : $exercises[$assessmentExerciseRecord['exerciseId']],
+            ];
+        }
+
+        return $footprints;
+    }
+
+    protected function prepareItemBankChapterExerciseFootprints($footprints)
+    {
+        $chapterExerciseRecords = $modules = $assessments = $exercises = [];
+
+        $chapterExerciseRecords = ArrayToolkit::index($this->getItemBankChapterExerciseRecordService()->search(
+            ['ids' => ArrayToolkit::column($footprints, 'targetId')],
+            [],
+            0,
+            PHP_INT_MAX
+        ), 'id');
+
+        if ($chapterExerciseRecords) {
+            $modules = ArrayToolkit::index($this->getItemBankExerciseModuleService()->search(
+                ['ids' => ArrayToolkit::column($chapterExerciseRecords, 'moduleId')],
+                [],
+                0,
+                PHP_INT_MAX
+            ), 'id');
+            $exercises = $this->getItemBankExerciseService()->findByIds(ArrayToolkit::column($chapterExerciseRecords, 'exerciseId'));
+            $answerRecrods = ArrayToolkit::index($this->getAnswerRecordService()->search(['ids' => ArrayToolkit::column($chapterExerciseRecords, 'answerRecordId')], [], 0, PHP_INT_MAX), 'id');
+            $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($answerRecrods, 'assessment_id'));
+        }
+
+        foreach ($footprints as &$footprint) {
+            $chapterExerciseRecord = empty($chapterExerciseRecords[$footprint['targetId']]) ? (object) [] : $chapterExerciseRecords[$footprint['targetId']];
+            $footprint['target'] = [
+                'assessment' => empty($assessments[$answerRecrods[$chapterExerciseRecord['answerRecordId']]['assessment_id']]) ? (object) [] : $assessments[$answerRecrods[$chapterExerciseRecord['answerRecordId']]['assessment_id']],
+                'module' => empty($modules[$chapterExerciseRecord['moduleId']]) ? (object) [] : $modules[$chapterExerciseRecord['moduleId']],
+                'answerRecord' => $chapterExerciseRecord,
+                'exercise' => empty($exercises[$chapterExerciseRecord['exerciseId']]) ? (object) [] : $exercises[$chapterExerciseRecord['exerciseId']],
+            ];
+        }
+
+        return $footprints;
     }
 
     protected function prepareTaskFootprints($footprints)
@@ -78,7 +149,7 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
         $tasks = ArrayToolkit::index($tasks, 'id');
         $courseIds = ArrayToolkit::column($tasks, 'courseId');
 
-        $courses = $this->getCourseService()->searchCourses(array('ids' => $courseIds), array(), 0, count($courseIds), array('id', 'title', 'courseSetTitle'));
+        $courses = $this->getCourseService()->searchCourses(['ids' => $courseIds], [], 0, count($courseIds), ['id', 'title', 'courseSetTitle']);
         $courses = ArrayToolkit::index($courses, 'id');
 
         $classroomCourses = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses, 'id'));
@@ -88,7 +159,7 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
         $activities = $this->getActivityService()->findActivities(ArrayToolkit::column($tasks, 'activityId'), true);
         $activities = ArrayToolkit::index($activities, 'id');
 
-        $classrooms = $this->getClassroomService()->searchClassrooms(array('classroomIds' => $classroomIds), array(), 0, count($classroomIds), array('id', 'title'));
+        $classrooms = $this->getClassroomService()->searchClassrooms(['classroomIds' => $classroomIds], [], 0, count($classroomIds), ['id', 'title']);
         $classrooms = ArrayToolkit::index($classrooms, 'id');
 
         foreach ($footprints as &$footprint) {
@@ -108,7 +179,7 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
                 $task['classroom'] = $classroom;
                 $footprint['target'] = $task;
             } else {
-                $lesson = $this->getTaskService()->searchTasks(array('categoryId' => $task['categoryId'], 'isLesson' => 1), array(), 0, 1);
+                $lesson = $this->getTaskService()->searchTasks(['categoryId' => $task['categoryId'], 'isLesson' => 1], [], 0, 1);
                 $lesson = array_pop($lesson);
                 $lesson['task'] = $task;
                 $lesson['course'] = $course;
@@ -124,7 +195,7 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
 
     protected function checkAndFilterFootprint($footprint)
     {
-        if (!ArrayToolkit::requireds($footprint, array('userId', 'targetType', 'targetId', 'event'))) {
+        if (!ArrayToolkit::requireds($footprint, ['userId', 'targetType', 'targetId', 'event'])) {
             throw $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
@@ -132,13 +203,13 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
             throw $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        return array(
+        return [
             'userId' => $footprint['userId'],
             'targetType' => $footprint['targetType'],
             'targetId' => $footprint['targetId'],
             'event' => $footprint['event'],
             'date' => empty($footprint['date']) ? date('Y-m-d', time()) : $footprint['date'],
-        );
+        ];
     }
 
     /**
@@ -179,5 +250,53 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
+    }
+
+    /**
+     * @return \Biz\ItemBankExercise\Service\ChapterExerciseRecordService
+     */
+    protected function getItemBankChapterExerciseRecordService()
+    {
+        return $this->createService('ItemBankExercise:ChapterExerciseRecordService');
+    }
+
+    /**
+     * @return \Biz\ItemBankExercise\Service\AssessmentExerciseRecordService
+     */
+    protected function getItemBankAssessmentExerciseRecordService()
+    {
+        return $this->createService('ItemBankExercise:AssessmentExerciseRecordService');
+    }
+
+    /**
+     * @return \Biz\ItemBankExercise\Service\ExerciseService
+     */
+    protected function getItemBankExerciseService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseService');
+    }
+
+    /**
+     * @return \Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+     */
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return \Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return \Biz\ItemBankExercise\Service\ExerciseModuleService
+     */
+    protected function getItemBankExerciseModuleService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseModuleService');
     }
 }

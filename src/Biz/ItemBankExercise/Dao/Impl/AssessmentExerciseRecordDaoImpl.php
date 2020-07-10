@@ -27,6 +27,7 @@ class AssessmentExerciseRecordDaoImpl extends GeneralDaoImpl implements Assessme
             'timestamps' => ['createdTime', 'updatedTime'],
             'orderbys' => ['createdTime'],
             'conditions' => [
+                'id IN (:ids)',
                 'userId = :userId',
                 'moduleId = :moduleId',
             ],
