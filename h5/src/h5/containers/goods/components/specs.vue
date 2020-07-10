@@ -24,7 +24,7 @@
       <div class="plan-popup__type">
         <span
           class="plan-popup__type__item"
-          v-for="plan in plans"
+          v-for="plan in details.specs"
           :key="plan.id"
           :class="{ active: plan.active }"
           @click="handleClick(plan)"
@@ -72,8 +72,8 @@ export default {
     };
   },
   props: {
-    plans: {
-      type: Array,
+    details: {
+      type: Object,
       default: () => {}
     },
     currentPlan: {

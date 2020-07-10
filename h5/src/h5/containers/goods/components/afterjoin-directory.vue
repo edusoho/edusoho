@@ -179,9 +179,9 @@ export default {
         if (scrolltop < document.documentElement.clientWidth) {
           return;
         }
-        window.scrollTo({
-          top: scrolltop
-        });
+        // window.scrollTo({
+        //   top: scrolltop
+        // });
       });
     },
     formatChapter(chapter, list, index) {
