@@ -34,7 +34,7 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
 
     public function getByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId)
     {
-        return $this->getByFields(['userId' => $userId, 'targetType' => $targetType, 'targetId' => $targetId]);
+        return $this->getByFields(['userId' => $userId, 'targetType' => $targetType, 'targetId' => $targetId, 'parentId' => 0]);
     }
 
     public function sumRatingByConditions($conditions)

@@ -1584,4 +1584,13 @@ vip.level.free_learning: Free for Vip
 site.default.none: None
 form.btn.save: Save
 
+site.twig.extension.smarttime.future: Feature
+site.twig.extension.smarttime.hardly: A moment ago
+site.twig.extension.smarttime.previous_second: %diff% second ago
+site.twig.extension.smarttime.previous_minute: %diff% minute ago
+site.twig.extension.smarttime.previous_hour: %diff% hour ago
+site.twig.extension.smarttime.previous_day: %diff% day ago
+
+reviews.review_again: Review Again
+
 

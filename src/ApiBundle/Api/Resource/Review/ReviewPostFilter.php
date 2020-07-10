@@ -12,7 +12,7 @@ class ReviewPostFilter extends Filter
     ];
 
     protected $publicFields = [
-        'id', 'userId', 'user', 'targetId', 'targetType', 'content', 'rating', 'parentId', 'createdTime', 'updatedTime', 'template',
+        'id', 'userId', 'user', 'targetId', 'targetType', 'content', 'rating', 'parentId', 'createdTime', 'updatedTime',
     ];
 
     protected function simpleFields(&$data)

@@ -66,7 +66,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         return $review;
     }
 
-    public function getByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId)
+    public function getReviewByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId)
     {
         return $this->getReviewDao()->getByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId);
     }

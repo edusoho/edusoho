@@ -154,10 +154,10 @@ class ReviewServiceTest extends BaseTestCase
     public function testGetByUserIdAndTargetTypeAndTargetId()
     {
         $review = $this->createReview();
-        $resultNull = $this->getReviewService()->getByUserIdAndTargetTypeAndTargetId($review['userId'] + 10000, $review['targetType'], $review['targetId']);
+        $resultNull = $this->getReviewService()->getReviewByUserIdAndTargetTypeAndTargetId($review['userId'] + 10000, $review['targetType'], $review['targetId']);
         $this->assertNull($resultNull);
 
-        $result = $this->getReviewService()->getByUserIdAndTargetTypeAndTargetId($review['userId'], $review['targetType'], $review['targetId']);
+        $result = $this->getReviewService()->getReviewByUserIdAndTargetTypeAndTargetId($review['userId'], $review['targetType'], $review['targetId']);
         $this->assertEquals($review, $result);
     }
 

@@ -42,7 +42,7 @@
 
             <el-form-item :label="'site.price'|trans" prop="originPrice">
                 <el-col span="4">
-                    <el-input v-model="marketingForm.originPrice" ref="originPrics"
+                    <el-input v-model="marketingForm.originPrice" ref="originPrice"
                               :disabled="course.platform == 'supplier' && !canModifyCoursePrice"></el-input>
                 </el-col>
                 <el-col span="8" class="mlm">{{ 'site.currency.CNY'|trans }}</el-col>
