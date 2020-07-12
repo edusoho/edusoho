@@ -1,30 +1,26 @@
 {
-  "_from": "codeages-design@0.1.12",
-  "_id": "codeages-design@0.1.12",
-  "_inBundle": false,
-  "_integrity": "sha1-VtMtizTxBh7zRGBhQ1M0AEmXOYE=",
-  "_location": "/codeages-design",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "version",
-    "registry": true,
-    "raw": "codeages-design@0.1.12",
-    "name": "codeages-design",
-    "escapedName": "codeages-design",
-    "rawSpec": "0.1.12",
-    "saveSpec": null,
-    "fetchSpec": "0.1.12"
+  "name": "codeages-design",
+  "version": "0.1.12",
+  "description": "a Web Design Language",
+  "main": "src/codeages-design.js",
+  "scripts": {
+    "dev": "webpack --watch",
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "_requiredBy": [
-    "/"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codeages-design/codeages-design.git"
+  },
+  "keywords": [
+    "component"
   ],
-  "_resolved": "https://registry.npm.taobao.org/codeages-design/download/codeages-design-0.1.12.tgz",
-  "_shasum": "56d32d8b34f1061ef34460614353340049973981",
-  "_spec": "codeages-design@0.1.12",
-  "_where": "/private/var/www/edusoho",
-  "author": {
-    "name": "Joe Zhong, Benz Lee"
+  "author": "Joe Zhong, Benz Lee",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/codeages-design/codeages-design/issues"
   },
+  "homepage": "https://github.com/codeages-design/codeages-design#readme",
   "babel": {
     "presets": [
       [
@@ -38,15 +34,9 @@
     "plugins": [],
     "compact": false
   },
-  "bugs": {
-    "url": "https://github.com/codeages-design/codeages-design/issues"
-  },
-  "bundleDependencies": false,
   "dependencies": {
     "jquery": "^3.2.1"
   },
-  "deprecated": false,
-  "description": "a Web Design Language",
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
@@ -64,22 +54,5 @@
     "style-loader": "^0.19.0",
     "url-loader": "^0.6.2",
     "webpack": "^3.8.1"
-  },
-  "homepage": "https://github.com/codeages-design/codeages-design#readme",
-  "keywords": [
-    "component"
-  ],
-  "license": "MIT",
-  "main": "src/codeages-design.js",
-  "name": "codeages-design",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/codeages-design/codeages-design.git"
-  },
-  "scripts": {
-    "build": "webpack",
-    "dev": "webpack --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "version": "0.1.12"
+  }
 }

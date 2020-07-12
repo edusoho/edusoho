@@ -1,36 +1,34 @@
 {
-  "_from": "bootstrap@3.3.7",
-  "_id": "bootstrap@3.3.7",
-  "_inBundle": false,
-  "_integrity": "sha1-WjiTlFSfIzMIdaOxUGVldPip63E=",
-  "_location": "/bootstrap",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "version",
-    "registry": true,
-    "raw": "bootstrap@3.3.7",
-    "name": "bootstrap",
-    "escapedName": "bootstrap",
-    "rawSpec": "3.3.7",
-    "saveSpec": null,
-    "fetchSpec": "3.3.7"
-  },
-  "_requiredBy": [
-    "/"
+  "name": "bootstrap",
+  "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+  "version": "3.3.7",
+  "keywords": [
+    "css",
+    "less",
+    "mobile-first",
+    "responsive",
+    "front-end",
+    "framework",
+    "web"
   ],
-  "_resolved": "https://registry.npm.taobao.org/bootstrap/download/bootstrap-3.3.7.tgz",
-  "_shasum": "5a389394549f23330875a3b150656574f8a9eb71",
-  "_spec": "bootstrap@3.3.7",
-  "_where": "/private/var/www/edusoho",
-  "author": {
-    "name": "Twitter, Inc."
+  "homepage": "http://getbootstrap.com",
+  "author": "Twitter, Inc.",
+  "scripts": {
+    "change-version": "node grunt/change-version.js",
+    "update-shrinkwrap": "npm shrinkwrap --dev && shx mv ./npm-shrinkwrap.json ./grunt/npm-shrinkwrap.json",
+    "test": "grunt test"
+  },
+  "style": "dist/css/bootstrap.css",
+  "less": "less/bootstrap.less",
+  "main": "./dist/js/npm",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/twbs/bootstrap.git"
   },
   "bugs": {
     "url": "https://github.com/twbs/bootstrap/issues"
   },
-  "bundleDependencies": false,
-  "deprecated": false,
-  "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+  "license": "MIT",
   "devDependencies": {
     "btoa": "~1.1.2",
     "glob": "~7.0.3",
@@ -74,7 +72,6 @@
     "Gruntfile.js",
     "LICENSE"
   ],
-  "homepage": "http://getbootstrap.com",
   "jspm": {
     "main": "js/bootstrap",
     "shim": {
@@ -88,29 +85,5 @@
       "fonts",
       "js"
     ]
-  },
-  "keywords": [
-    "css",
-    "less",
-    "mobile-first",
-    "responsive",
-    "front-end",
-    "framework",
-    "web"
-  ],
-  "less": "less/bootstrap.less",
-  "license": "MIT",
-  "main": "./dist/js/npm",
-  "name": "bootstrap",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/twbs/bootstrap.git"
-  },
-  "scripts": {
-    "change-version": "node grunt/change-version.js",
-    "test": "grunt test",
-    "update-shrinkwrap": "npm shrinkwrap --dev && shx mv ./npm-shrinkwrap.json ./grunt/npm-shrinkwrap.json"
-  },
-  "style": "dist/css/bootstrap.css",
-  "version": "3.3.7"
+  }
 }
