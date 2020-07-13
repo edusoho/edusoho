@@ -20,6 +20,7 @@ use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Review\Service\ReviewService;
+use Biz\S2B2C\Service\CourseProductService;
 use Biz\System\Service\LogService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\User\Service\UserService;
@@ -491,6 +492,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if (!empty($subCourseSets)) {
             $this->createNewException(CourseSetException::SUB_COURSESET_EXIST());
         }
+
+        $this->getCourseProductService()->deleteProductsByCourseSet($courseSet);
+
         $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
 
         $this->dispatchEvent('course-set.delete', new Event($courseSet));
@@ -1192,5 +1196,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $defaultCourse = $this->generateDefaultCourse($created);
 
         return $this->getCourseService()->createCourse($defaultCourse);
+    }
+
+    /**
+     * @return CourseProductService
+     */
+    protected function getCourseProductService()
+    {
+        return $this->createService('S2B2C:CourseProductService');
     }
 }
