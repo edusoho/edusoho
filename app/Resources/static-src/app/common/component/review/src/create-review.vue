@@ -10,7 +10,7 @@
                 <p></p>
             </div>
             <div class="review-form-content">
-                <textarea class="form-control" v-model="form.content"></textarea>
+                <textarea class="form-control" rows="5" v-model="form.content"></textarea>
                 <p></p>
             </div>
             <div class="create-review__btn">
@@ -29,6 +29,33 @@
     let starOnImg = '/assets/img/raty/star-on.png';
     let starOffImg = '/assets/img/raty/star-off.png';
     import axios from 'axios';
+
+    axios.interceptors.request.use((config) => {
+        config.headers = {
+            'Accept': 'application/vnd.edusoho.v2+json',
+            'X-CSRF-Token': $('meta[name=csrf-token]').attr('content'),
+            'X-Requested-With': 'XMLHttpRequest'
+        };
+
+        return config;
+    });
+
+    axios.interceptors.response.use((response) => {
+        return response;
+    }, (error) => {
+        if (error.response.data.error.message) {
+            cd.message({
+                'type': 'danger',
+                'message': error.response.data.error.message
+            });
+        } else {
+            cd.message({
+                'type': 'danger',
+                'message': Translator.trans('site.service_error_hint')
+            });
+        }
+        return error;
+    });
 
     export default {
         created() {
@@ -62,8 +89,14 @@
                 },
                 starHover: 0,
                 content: "",
-                showForm: false
+                showForm: true
             }
+        },
+        filters: {
+            trans(value, params) {
+                if (!value) return '';
+                return Translator.trans(value, params);
+            },
         },
         props: {
             targetType: {
@@ -209,11 +242,15 @@
                         'rating': this.form.rating
                     }
                 }).then(res => {
+                    if (!res.data.error) {
+                        return;
+                    }
+
                     cd.message({
                         'type': 'success',
                         'message': Translator.trans('site.save_success_hint')
                     });
-                    window.location.reload();
+                    // window.location.reload();
                 });
             }
         }

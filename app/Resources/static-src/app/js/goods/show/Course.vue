@@ -41,12 +41,13 @@
           <!-- 学员评价 -->
           <div id="info-left-3" class="info-left-reviews content-item js-content-item reviews">
             <h3 class="content-item__title">学员评价</h3>
+              <reviews :can-create="true" :can-operate="true" :target-type="'course'" can-creates :target-id="100"></reviews>
             <!-- 创建评价 -->
-            <create-review />
-            <!-- 评价回复 -->
-            <review v-for="review in componentsData.reviews" :key="review.id" :review="review" />
+<!--            <create-review />-->
+<!--            &lt;!&ndash; 评价回复 &ndash;&gt;-->
+<!--            <review v-for="review in componentsData.reviews" :key="review.id" :review="review" />-->
             <!-- 查看更多 -->
-            <div class="learn-more"><a href="javascript:;">查看更多<i class="es-icon es-icon-chevronright"></i></a></div>
+<!--            <div class="learn-more"><a href="javascript:;">查看更多<i class="es-icon es-icon-chevronright"></i></a></div>-->
           </div>
         </div>
       </div>
@@ -75,6 +76,7 @@
   import Qr from './components/qr';
   import Recommend from './components/recommend';
   import BackToTop from './components/back-to-top';
+  import Reviews from 'app/common/component/review/index';
 
   export default {
     data() {
@@ -96,7 +98,7 @@
       Teacher,
       Qr,
       Recommend,
-      BackToTop
+      BackToTop, Reviews
     },
     computed: {
       descriptionHtml() {

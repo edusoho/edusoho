@@ -39,7 +39,7 @@
                             </div>
                             <div class="media-body">
                                 <div class="metas">
-                                    <div v-if="canAccess" class="thread-post-manage-dropdown dropdown pull-right">
+                                    <div v-if="canOperate" class="thread-post-manage-dropdown dropdown pull-right">
                                         <a href="javascript:;" class="dropdown-toggle color-gray"
                                            data-toggle="dropdown">
                                             <span class="glyphicon glyphicon-collapse-down"></span>
@@ -49,7 +49,7 @@
                                                 <a href="javascript:"
                                                    class="js-delete-post"
                                                    :data-target="'thread-subpost-'+post.id"
-                                                   @click="onDelete($event, post.id)">{{'site.delete'|trans}}</a>
+                                                   :data-target-id="post.id">{{'site.delete'|trans}}</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -77,7 +77,11 @@
                 </div>
             </div>
         </div>
-        <div class="learn-more"><a href="javascript:;">查看更多<i class="es-icon es-icon-chevronright"></i></a>
+        <div class="learn-more"><a href="javascript:;"
+                                   v-if="(parseInt(paging.offset) + 1) * paging.limit < paging.total"
+                                   @click="searchReviews(parseInt(paging.offset) + 1, paging.limit)"
+                                   :data-page="multiOffset" :data-limit="paging.limit" :data.total="paging.total">查看更多<i
+            class="es-icon es-icon-chevronright"></i></a>
         </div>
     </div>
 </template>
@@ -119,23 +123,20 @@
             createReview
         },
         data() {
-            if (this.targetType && this.targetId) {
-                axios.get('/api/reviews', {
-                    params: {
-                        targetType: this.targetType,
-                        targetId: this.targetId,
-                        offset: this.offset,
-                        limit: this.limit,
-                        needPosts: this.needPosts,
-                    },
-                }).then(response => {
-                    this.reviews = response.data.data;
-                });
-            }
-
+            this.searchReviews();
             return {
                 postContent: '',
                 reviews: [],
+                paging: {
+                    limit: 5,
+                    offset: 0,
+                    total: 0
+                },
+            }
+        },
+        computed: {
+            multiOffset() {
+                return this.paging.offset;
             }
         },
         props: {
@@ -159,11 +160,11 @@
                 type: Number,
                 default: 5
             },
-            canAccess: {
+            canCreate: {
                 type: Boolean,
                 default: false,
             },
-            canCreate: {
+            canOperate: {
                 type: Boolean,
                 default: false,
             },
@@ -173,6 +174,25 @@
             }
         },
         methods: {
+            searchReviews(offset = 0, limit = 5) {
+                if (!this.targetType || !this.targetId) {
+                    return;
+                }
+
+                let reviews = this.reviews ? this.reviews : [];
+                axios.get('/api/reviews', {
+                    params: {
+                        targetType: this.targetType,
+                        targetId: this.targetId,
+                        offset: parseInt(offset),
+                        limit: parseInt(limit),
+                        needPosts: this.needPosts,
+                    },
+                }).then(response => {
+                    this.reviews = this.reviews.concat(response.data.data);
+                    this.paging = response.data.paging;
+                });
+            },
             switchDisplay(event) {
                 let $target = $('.' + $(event.currentTarget).data('toggle'));
 
@@ -217,13 +237,13 @@
                     '  </div>\n' +
                     '  <div class="media-body">\n' +
                     '    <div class="metas">\n';
-                if (this.canAccess) {
+                if (this.canOperate) {
                     html = html + ' <div class="thread-post-manage-dropdown dropdown pull-right">\n' +
                         '             <a href="javascript:;" class="dropdown-toggle color-gray" data-toggle="dropdown">\n' +
                         '               <span class="glyphicon glyphicon-collapse-down"></span></a>\n' +
                         '             <ul class="dropdown-menu">\n' +
                         '               <li>\n' +
-                        '                 <a href="javascript:" class="js-delete-post" data-target="thread-subpost-' + post.id + '" @click="onDelete">' +
+                        '                 <a href="javascript:" class="js-delete-post" data-target="thread-subpost-' + post.id + '" data-target-id="' + post.id + '">' +
                         Translator.trans('site.delete') + '</a></li></ul></div>';
                 }
 
@@ -271,35 +291,37 @@
                     }
 
                     $targetForm.find('.post-content').val('');
-
                     cd.message({
                         type: 'success',
                         message: Translator.trans('site.save_success_hint')
                     });
                 });
             },
-            onDelete(event, reviewId) {
-                let $target = $('.' + $(event.currentTarget).data('target'));
+            onDelete() {
+                $('.reviews').on('click', '.js-delete-post', function (event) {
+                    event.stopPropagation();
+                    let $target = $('.' + $(event.currentTarget).data('target'));
 
-                cd.confirm({
-                    title: '',
-                    content: Translator.trans('thread.post.delete_hint'),
-                    okText: Translator.trans('site.confirm'),
-                    cancelText: Translator.trans('site.cancel'),
-                    className: '',
-                }).on('ok', () => {
-                    axios({
-                        url: "/api/review/" + reviewId,
-                        method: 'DELETE',
-                    }).then(res => {
-                        $target.remove();
-                        cd.message({
-                            type: 'success',
-                            message: Translator.trans('site.delete_success_hint')
+                    cd.confirm({
+                        title: '',
+                        content: Translator.trans('thread.post.delete_hint'),
+                        okText: Translator.trans('site.confirm'),
+                        cancelText: Translator.trans('site.cancel'),
+                        className: '',
+                    }).on('ok', () => {
+                        axios({
+                            url: "/api/review/" + $(event.currentTarget).data('targetId'),
+                            method: 'DELETE',
+                        }).then(res => {
+                            $target.remove();
+                            cd.message({
+                                type: 'success',
+                                message: Translator.trans('site.delete_success_hint')
+                            });
                         });
+                    }).on('cancel', () => {
                     });
-                }).on('cancel', () => {
-                })
+                });
             },
         },
         filters: {
@@ -366,6 +388,7 @@
             }
         },
         mounted() {
+            this.onDelete();
         }
     }
 </script>
