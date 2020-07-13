@@ -10,7 +10,7 @@ use Codeages\Biz\Order\Status\OrderStatusCallback;
 
 class ItemBankExerciseProduct extends Product implements OrderStatusCallback
 {
-    const TYPE = 'itemBankExercise';
+    const TYPE = 'item_bank_exercise';
 
     public $targetType = self::TYPE;
 
@@ -43,7 +43,6 @@ class ItemBankExerciseProduct extends Product implements OrderStatusCallback
     public function onPaid($orderItem)
     {
         $targetName = '题库练习';
-//        $this->smsCallback($orderItem, $targetName);
 
         $order = $this->getOrderService()->getOrder($orderItem['order_id']);
         $info = [
