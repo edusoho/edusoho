@@ -2,7 +2,7 @@
   <div class="cd-container">
     <div class="product-breadcrumb">首页 / 艺术学概论</div>
     <!-- 信息 -->
-    <detail :detailData="details" :currentPlan="currentPlan" @changePlan="changePlan"></detail>
+    <detail :detailData="details" :currentPlan="currentPlan" :product="details.product" :is-favorite="componentsData.isFavorite" @changePlan="changePlan"></detail>
 
     <!--商品介绍、目录、评价、老师、二维码、猜你想学 -->
     <div class="product-info clearfix" v-show="Object.keys(details).length != 0">

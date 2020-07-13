@@ -5,6 +5,9 @@ namespace ApiBundle\Api\Resource\Good;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Favorite\Service\FavoriteService;
+use Biz\Goods\Service\GoodsService;
+use Biz\Product\Service\ProductService;
 
 class GoodComponent extends AbstractResource
 {
@@ -12,12 +15,17 @@ class GoodComponent extends AbstractResource
      * @param $id
      * @param $component
      *
-     * @return object
      * @ApiConf(isRequiredAuth=false)
      */
     public function get(ApiRequest $request, $id, $component)
     {
-        return (object) ['teachers' => $this->getMockedComponents($component)];
+        $goods = $this->getGoodsService()->getGoods($id);
+        $product = $this->getGoodsService()->getGoodsByProductId($goods['productId']);
+
+        return [
+            'teachers' => [],
+            'isFavorite' => !empty($this->getFavoriteService()->getUserFavorite($this->getCurrentUser()->getId(), $product['targetType'], $product['targetId'])),
+        ];
     }
 
     /**
@@ -28,13 +36,37 @@ class GoodComponent extends AbstractResource
      */
     public function search(ApiRequest $request, $id)
     {
-        $componentTypes = $request->query->get('componentTypes', []);
-        $components = [];
-        foreach ($componentTypes as $componentType) {
-            $components[$componentType] = $this->getMockedComponents($componentType);
-        }
+        $goods = $this->getGoodsService()->getGoods($id);
+        $product = $this->getProductService()->getProduct($goods['productId']);
 
-        return $components;
+        return [
+            'teachers' => [],
+            'isFavorite' => !empty($this->getFavoriteService()->getUserFavorite($this->getCurrentUser()->getId(), $product['targetType'], $product['targetId'])),
+        ];
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->service('Goods:GoodsService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->service('Product:ProductService');
+    }
+
+    /**
+     * @return FavoriteService
+     */
+    protected function getFavoriteService()
+    {
+        return $this->service('Favorite:FavoriteService');
     }
 
     protected function getMockedComponents($component)
