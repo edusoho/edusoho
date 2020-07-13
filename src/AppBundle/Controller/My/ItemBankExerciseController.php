@@ -5,6 +5,9 @@ namespace AppBundle\Controller\My;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
+use Biz\ItemBankExercise\ItemBankExerciseException;
+use Biz\ItemBankExercise\Service\ExerciseMemberService;
+use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,12 +54,61 @@ class ItemBankExerciseController extends BaseController
         ]);
     }
 
+    public function showAction(Request $request, $id, $tab = 'reviews')
+    {
+        $user = $this->getCurrentUser();
+        $exercise = $this->getItemBankExerciseService()->get($id);
+        if (empty($exercise)) {
+            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
+        }
+
+        $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : null;
+
+        if (empty($member) || ('date' == $exercise['expiryMode'] && $exercise['expiryStartDate'] >= time())) {
+            return $this->redirectToRoute('course_show', ['id' => $id]);
+        }
+
+        return $this->render(
+            'item-bank-exercise/exercise-show.html.twig',
+            [
+                'tab' => $tab,
+                'tabs' => $this->getExerciseModuleService()->findByExerciseId($id),
+                'member' => $member,
+                'isExerciseTeacher' => 'teacher' == $member['role'],
+                'exercise' => $exercise,
+            ]
+        );
+    }
+
+    public function headerAction(Request $request, $exercise)
+    {
+        $user = $this->getCurrentUser();
+
+        $member = $user->isLogin() ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : [];
+
+        return $this->render(
+            'item-bank-exercise/header/header-for-member.html.twig',
+            [
+                'member' => $member,
+                'exercise' => $exercise,
+            ]
+        );
+    }
+
+    /**
+     * @return ExerciseMemberService
+     */
+    protected function getExerciseMemberService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseMemberService');
+    }
+
     /**
      * @return ExerciseService
      */
     protected function getItemBankExerciseService()
     {
-        return $this->getBiz()->service('ItemBankExercise:ExerciseService');
+        return $this->createService('ItemBankExercise:ExerciseService');
     }
 
     /**
@@ -65,5 +117,13 @@ class ItemBankExerciseController extends BaseController
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
+    }
+
+    /**
+     * @return ExerciseModuleService
+     */
+    protected function getExerciseModuleService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseModuleService');
     }
 }

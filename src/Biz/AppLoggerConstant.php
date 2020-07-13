@@ -515,6 +515,7 @@ class AppLoggerConstant implements LoggerConstantInterface
             ],
             self::ITEM_BANK_EXERCISE => [
                 'add_student',
+                'remove_student',
             ],
         ];
     }

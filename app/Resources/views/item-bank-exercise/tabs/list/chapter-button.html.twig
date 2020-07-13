@@ -1,0 +1,32 @@
+{% if member|default(null) %}
+  <div style="display: inline-block;float:right;padding-top: 14px;">
+    <div style="display: inline-block;margin-right:80px;vertical-align:-3px;width:180px">
+      {% if record %}
+          <span style="margin-right: 25px">{{ record.doneQuestionNum }}/{{ 'course.testpaper_manage.count'|trans({'%itemCount%': record.questionNum}) }}</span>
+          <span>{{ 'item_bank_exercise.accuracy'|trans }}{{ record.rightRate }}%</span>
+        </div>
+        <div style="display: inline-block;">
+          {% if record.status == 'doing' or record.status == 'paused' %}
+            <span style="vertical-align:-3px;margin-right:27px;font-weight:400;color:rgba(153,153,153,1);">{{ 'item_bank_exercise.exercise.wait_tip'|trans }}</span>
+            <a class="cd-btn cd-btn-primary" href="javasrcipt:;" style="border-bottom-left-radius: 18px;border-top-right-radius: 18px;">{{ 'item_bank_exercise.chapter.exercise.continue_btn'|trans }}</a>
+          {% elseif record.status == 'reviewing' %}
+            <a class="cd-btn cd-btn-ghost-primary" href="javasrcipt:;" style="border-bottom-left-radius: 18px;border-top-right-radius: 18px;color:rgba(255,155,86,1);border-color:rgba(255,155,86,1); ">{{ 'item_bank_exercise.chapter.exercise.view_btn'|trans }}</a>
+            <a class="cd-btn cd-btn-ghost-primary" href="javasrcipt:;" style="border-bottom-left-radius: 18px;border-top-right-radius: 18px;">{{ 'item_bank_exercise.chapter.exercise.again_btn'|trans }}</a>
+          {% else %}
+            <a class="cd-btn cd-btn-ghost-primary" href="javasrcipt:;" style="border-bottom-left-radius: 18px;border-top-right-radius: 18px;">{{ 'item_bank_exercise.chapter.exercise.start_btn'|trans }}</a>
+          {% endif %}
+        </div>
+      {% else %}
+          <span style="margin-right: 25px">0/{{ 'course.testpaper_manage.count'|trans({'%itemCount%': question_num}) }}</span>
+          <span>{{ 'item_bank_exercise.accuracy'|trans }}0%</span>
+        </div>
+        <div style="display: inline-block;margin-left: 86px">
+          <a class="cd-btn cd-btn-ghost-primary" href="javasrcipt:;" style="border-bottom-left-radius: 18px;border-top-right-radius: 18px;">{{ 'item_bank_exercise.chapter.exercise.start_btn'|trans }}</a>
+        </div>
+      {% endif %}
+  </div>
+{% else %}
+  <div style="display: inline-block;float:right;padding: 18px;">
+    {% if question_num %}{{'course.testpaper_manage.count'|trans({'%itemCount%': question_num})}}{% endif %}
+  </div>
+{% endif %}

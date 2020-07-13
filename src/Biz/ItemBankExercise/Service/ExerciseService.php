@@ -53,4 +53,6 @@ interface ExerciseService
     public function canTakeItemBankExercise($exerciseId);
 
     public function findExercisesByLikeTitle($title);
+
+    public function tryTakeExercise($exerciseId);
 }

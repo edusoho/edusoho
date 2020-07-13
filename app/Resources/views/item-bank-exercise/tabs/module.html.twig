@@ -1,0 +1,9 @@
+<div class="js-tasks-list">
+  <div class="js-tasks-show">
+       {% if moduleType == 'chapter' %}
+          {{ render(controller('AppBundle:ItemBankExercise/Exercise:renderChapterList', {exerciseId:exerciseId, moduleId:moduleId})) }}
+        {% else %}
+          {{ render(controller('AppBundle:ItemBankExercise/Exercise:renderAssessmentList', {exerciseId:exerciseId, moduleId:moduleId})) }}
+        {% endif %}
+  </div>
+</div>

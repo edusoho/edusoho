@@ -29,6 +29,8 @@ class ChapterExerciseRecordDaoImpl extends GeneralDaoImpl implements ChapterExer
             'conditions' => [
                 'userId = :userId',
                 'moduleId = :moduleId',
+                'exerciseId = :exerciseId',
+                'userId = :userId',
             ],
         ];
     }

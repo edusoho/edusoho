@@ -1,0 +1,26 @@
+{% extends 'item-bank-exercise/header/header-layout.html.twig' %}
+
+{% set page_type = 'member' %}
+
+{% block course_heard_content %}
+    <div class="clearfix js-origin-header-content">
+      {# 课程封面 #}
+      {% block coursesetImg %}
+        <img class="courseset-manage-header__img" src="{{ filepath(exercise.cover.large|default(null), 'courseSet.png') }}" /> <!-- courseSet.largePicture -->
+      {% endblock %}
+      <div class="courseset-manage-header-info">
+        <div style="margin-top: 21px;" class="courseset-manage-header-info__title text-overflow" {% if exercise.title|length > 21 %}data-toggle="tooltip" title="{{ exercise.title }}" data-container="body" {% endif %}>
+          {% block coursesetTitle %}
+            <span class="cd-dark-major">{{ exercise.title }}</span>
+          {% endblock %}
+        </div>
+      </div>
+      <div style="width: 200px;float: right;height: 90px;">
+        <div style="width:98px;font-size:14px;font-weight:400;color:rgba(51,51,51,1);float: left;margin-top: 21px;">
+          {{ 'site.tips.exercise_qrcode_tips'|trans }}
+        </div>
+        <img style="width:82px;height:82px;float: right;padding-top: 5px" src="{{ path('item_bank_exercise_qrcode', { id: exercise.id }) }}" alt="">
+      </div>
+    </div>
+{% endblock %}
+

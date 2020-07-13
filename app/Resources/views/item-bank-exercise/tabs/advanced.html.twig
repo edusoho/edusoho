@@ -1,0 +1,50 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{ 'course.advanced.content_title'|trans }}</h3>
+  </div>
+  <div class="panel-body">
+    {% set num = 0 %}
+    {% for member in members if members %}
+      {% set num = num + 1 %}
+      {% set user = users[member.userId] %}
+      <div class="media media-default">
+        <div style="display: inline-block;width: 174px">
+          {% if num == 1 %}
+            <img style="width:22px;height:30px;" src="{{ asset('static-dist/app/img/medal_gold@2x.png') }}">
+          {% elseif num == 2%}
+            <img style="width:22px;height:30px;" src="{{ asset('static-dist/app/img/medal_silver@2x.png') }}">
+          {% elseif num == 3%}
+            <img style="width:22px;height:30px;" src="{{ asset('static-dist/app/img/medal_copper@2x.png') }}">
+          {% else%}
+            <div class="label-default" style="background-color:#D8D8D8;width:22px;height:24px;color: #FFFFFF;text-align: center;display: inline-block">{{ num }}</div>
+          {% endif %}
+          <div style="margin-left: 12px;display: inline-block">
+            <a class="{% if not user.destroyed|default(0) %}js-user-card{% endif %}" href="{{ path('user_show', {'id': user.id}) }}"
+               data-card-url="{{ path('user_card_show', {'userId': user.id}) }}"
+               data-user-id="{{ user.id }}"
+               data-original-title="" title="">
+              <img class="avatar-sm" src="{{ filepath(user.mediumAvatar, 'avatar.png') }}"></a>
+          </div>
+          <div style="display: inline-block;margin-left: 9px">
+            <div class="title" style="display: inline-block">
+              {% if not user.destroyed|default(0) %}
+                <a class="link-dark link-dark" href="{{ path('user_show', {'id': user.id}) }}">{{ user.nickname }}</a>
+              {% else %}
+                <a class="link-dark link-dark">{{ 'user.user_had_destroyed'|trans }}</a>
+              {% endif %}
+            </div>
+            <div class="content">{{ user.title }}</div>
+          </div>
+        </div>
+        <div style="float: right;display: inline-block;width: 70px;margin-top: 7px;font-size: 12px;">
+          {{ 'course.testpaper_manage.total_count'|trans }}<span style="font-size: 16px;{% if num < 4 %}color:#03C777;{% endif %}">{{ member.doneQuestionNum }}</span>
+        </div>
+      </div>
+    {% else %}
+      <div class="empty task-empty js-task-empty">
+        {{'user.account.empty'|trans}}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+

@@ -19,6 +19,7 @@ class ExerciseMemberEventSubscriber extends EventSubscriber implements EventSubs
     {
         return array(
             'exercise.join' => 'onExerciseJoin',
+            'exercise.quit' => 'onExerciseJoin',
         );
     }
 

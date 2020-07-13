@@ -1,0 +1,9 @@
+{% set showPrice = exercise.price %}
+<span class="course-detail__label vertical-sub">{{'course.price'|trans}}</span>
+<span class="course-detail-price-money vertical-sub mrm">
+  {% if exercise.price == 0 and exercise.isFree == 1 %}
+    <b class="pirce-num color-success">{{'course.price.free'|trans}}</b>
+  {% else %}
+      <b class="pirce-num"><span class="cd-text-lg">¥&nbsp;</span>{{ showPrice }}</b>
+  {% endif %}
+</span>

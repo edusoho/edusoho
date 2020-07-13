@@ -14,9 +14,12 @@ class ItemBankExerciseMemberException extends AbstractException
 
     const CAN_NOT_BECOME_MEMBER = 4037603;
 
+    const NON_EXPIRED_MEMBER = 5007604;
+
     public $messages = [
         4037601 => 'exception.item_bank_exercise.member.duplicate_member',
         4047602 => 'exception.item_bank_exercise.member.not_found',
         4037603 => 'exception.item_bank_exercise.member.can_not_become_member',
+        5007604 => 'exception.item_bank_exercise.member.non_expired',
     ];
 }

@@ -1,0 +1,53 @@
+{% extends 'layout.html.twig' %}
+{% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','libs/excanvas-compiled.js','libs/jquery-countdown.js',
+'app/js/courseset/show/index.js']) %}
+
+{% set bodyClass = 'course-dashboard-page' %}
+
+{% block title %}{{ exercise.title }} - {{ parent() }}{% endblock %}
+
+{% block format_detection %}{{ 'telephone=no' }}{% endblock %}
+{% block full_content %}
+
+  {% set route_params = app.request.attributes.get('_route_params') %}
+
+  {% if member|default(null) %}
+    {{ render(controller('AppBundle:My/ItemBankExercise:header',{exercise: exercise} )) }}
+  {% else %}
+    {{ render(controller('AppBundle:ItemBankExercise/Exercise:header',{exercise: exercise} )) }}
+  {% endif %}
+
+  <div class="container cd-container">
+    <div class="row cd-row">
+      <div class="col-lg-9 col-md-8 course-detail-content">
+
+        <section class="es-section">
+          <div class="nav-btn-tab">
+            {% include 'item-bank-exercise/header/nav-tab.html.twig' %}
+          </div>
+          {% block detail_content %}
+            {% if tab == 'reviews' %}
+              {{ render(controller('AppBundle:ItemBankExercise/Exercise:reviews', {request: app.request, id: exercise.id, member: member|default(null)})) }}
+            {% else %}
+              {{ render(controller('AppBundle:ItemBankExercise/Exercise:module', {request: app.request, exerciseId: exercise.id, tab: tab})) }}
+            {% endif %}
+          {% endblock %}
+        </section>
+
+      </div>
+
+      <div class="col-lg-3 col-md-4 course-sidebar">
+        {{ render(controller('AppBundle:ItemBankExercise/Exercise:advancedUsers', {request: app.request, exerciseId: exercise.id})) }}
+      </div>
+
+    </div>
+  </div>
+
+  {% block member_expired %}
+    {% if is_exercise_member_expired(exercise|default(null), member|default(null)) %}
+      <div class="member-expire">
+        <a href="#modal" data-toggle="modal" data-url="{{ path('item_bank_exercise_member_expired', {id:exercise.id}) }}"></a>
+      </div>
+    {% endif %}
+  {% endblock %}
+{% endblock %}
