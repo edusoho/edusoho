@@ -244,8 +244,8 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
                 ];
             }
 
+            $this->getLock()->get("receive_coupon_{$batch['id']}", 10);
             $couponsId = ArrayToolkit::column($coupons, 'id');
-            $this->getLock()->get("receive_coupon_{$couponsId[0]}", 10);
             $coupon = $this->getCouponService()->getCoupon($couponsId[0]);
 
             if (!empty($userId) && !empty($coupon)) {
@@ -275,7 +275,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
 
                 if (empty($coupon)) {
                     $this->getCouponBatchDao()->db()->commit();
-
+                    $this->getLock()->release("receive_coupon_{$batch['id']}");
                     return [
                         'code' => 'failed',
                         'message' => '优惠码领取失败',
@@ -305,7 +305,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
 
             $this->updateUnreceivedNumByBatchId($batch['id']);
             $this->getCouponBatchDao()->db()->commit();
-            $this->getLock()->release("receive_coupon_{$couponsId[0]}");
+            $this->getLock()->release("receive_coupon_{$batch['id']}");
 
             return [
                 'id' => $coupon['id'],
@@ -314,9 +314,8 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             ];
         } catch (\Exception $e) {
             $this->getCouponBatchDao()->db()->rollback();
-            if ($couponsId[0]) {
-                $this->getLock()->release("receive_coupon_{$couponsId[0]}");
-            }
+            $this->getLock()->release("receive_coupon_{$batch['id']}");
+
             throw $e;
         }
     }
