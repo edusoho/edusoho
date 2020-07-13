@@ -276,6 +276,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
                 if (empty($coupon)) {
                     $this->getCouponBatchDao()->db()->commit();
                     $this->getLock()->release("receive_coupon_{$batch['id']}");
+
                     return [
                         'code' => 'failed',
                         'message' => '优惠码领取失败',
