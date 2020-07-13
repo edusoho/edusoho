@@ -23,6 +23,11 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
         return $this->getItemBankAssessmentExerciseDao()->findByExerciseIdAndModuleId($exerciseId, $moduleId);
     }
 
+    public function getByModuleIdAndAssessmentId($moduleId, $assessmentId)
+    {
+        return $this->getItemBankAssessmentExerciseDao()->getByModuleIdAndAssessmentId($moduleId, $assessmentId);
+    }
+
     public function search($conditions, $sort, $start, $limit, $columns = [])
     {
         return $this->getItemBankAssessmentExerciseDao()->search($conditions, $sort, $start, $limit, $columns);
@@ -40,21 +45,22 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
         try {
             $this->beginTransaction();
 
+            $assessmentExercise = $this->getByModuleIdAndAssessmentId($moduleId, $assessmentId);
             $module = $this->getItemBankExerciseModuleService()->get($moduleId);
-
             $answerRecord = $this->getAnswerService()->startAnswer($module['answerSceneId'], $assessmentId, $userId);
 
             $assessmentExerciseRecord = $this->getItemBankAssessmentExerciseRecordService()->create([
                 'moduleId' => $moduleId,
                 'exerciseId' => $module['exerciseId'],
                 'assessmentId' => $assessmentId,
+                'assessmentExerciseId' => $assessmentExercise['id'],
                 'userId' => $userId,
                 'answerRecordId' => $answerRecord['id'],
             ]);
 
             $this->getUserFootprintService()->createUserFootprint([
                 'targetType' => 'item_bank_assessment_exercise',
-                'targetId' => $assessmentExerciseRecord['id'],
+                'targetId' => $assessmentExercise['id'],
                 'event' => 'answer.started',
                 'userId' => $assessmentExerciseRecord['userId'],
             ]);

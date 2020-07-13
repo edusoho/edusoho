@@ -37,7 +37,7 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
 
             $this->getUserFootprintService()->createUserFootprint([
                 'targetType' => 'item_bank_chapter_exercise',
-                'targetId' => $chapterExerciseRecord['id'],
+                'targetId' => $categroyId,
                 'event' => 'answer.started',
                 'userId' => $chapterExerciseRecord['userId'],
             ]);

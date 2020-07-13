@@ -71,11 +71,11 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
         $assessmentExerciseRecords = $modules = $assessments = $exercises = [];
 
         $assessmentExerciseRecords = ArrayToolkit::index($this->getItemBankAssessmentExerciseRecordService()->search(
-            ['ids' => ArrayToolkit::column($footprints, 'targetId')],
+            ['assessmentExerciseIds' => ArrayToolkit::column($footprints, 'targetId')],
             [],
             0,
             PHP_INT_MAX
-        ), 'id');
+        ), 'assessmentExerciseId');
 
         if ($assessmentExerciseRecords) {
             $modules = ArrayToolkit::index($this->getItemBankExerciseModuleService()->search(
@@ -86,16 +86,16 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
             ), 'id');
             $exercises = $this->getItemBankExerciseService()->findByIds(ArrayToolkit::column($assessmentExerciseRecords, 'exerciseId'));
             $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($assessmentExerciseRecords, 'assessmentId'));
-        }
 
-        foreach ($footprints as &$footprint) {
-            $assessmentExerciseRecord = empty($assessmentExerciseRecords[$footprint['targetId']]) ? (object) [] : $assessmentExerciseRecords[$footprint['targetId']];
-            $footprint['target'] = [
-                'assessment' => empty($assessments[$assessmentExerciseRecord['assessmentId']]) ? (object) [] : $assessments[$assessmentExerciseRecord['assessmentId']],
-                'module' => empty($modules[$assessmentExerciseRecord['moduleId']]) ? (object) [] : $modules[$assessmentExerciseRecord['moduleId']],
-                'answerRecord' => $assessmentExerciseRecord,
-                'exercise' => empty($exercises[$assessmentExerciseRecord['exerciseId']]) ? (object) [] : $exercises[$assessmentExerciseRecord['exerciseId']],
-            ];
+            foreach ($footprints as &$footprint) {
+                $assessmentExerciseRecord = empty($assessmentExerciseRecords[$footprint['targetId']]) ? (object) [] : $assessmentExerciseRecords[$footprint['targetId']];
+                $footprint['target'] = [
+                    'assessment' => empty($assessments[$assessmentExerciseRecord['assessmentId']]) ? (object) [] : $assessments[$assessmentExerciseRecord['assessmentId']],
+                    'module' => empty($modules[$assessmentExerciseRecord['moduleId']]) ? (object) [] : $modules[$assessmentExerciseRecord['moduleId']],
+                    'answerRecord' => $assessmentExerciseRecord,
+                    'exercise' => empty($exercises[$assessmentExerciseRecord['exerciseId']]) ? (object) [] : $exercises[$assessmentExerciseRecord['exerciseId']],
+                ];
+            }
         }
 
         return $footprints;
@@ -106,11 +106,11 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
         $chapterExerciseRecords = $modules = $assessments = $exercises = [];
 
         $chapterExerciseRecords = ArrayToolkit::index($this->getItemBankChapterExerciseRecordService()->search(
-            ['ids' => ArrayToolkit::column($footprints, 'targetId')],
-            [],
+            ['itemCategoryIds' => ArrayToolkit::column($footprints, 'targetId')],
+            ['createdTime' => 'DESC'],
             0,
             PHP_INT_MAX
-        ), 'id');
+        ), 'itemCategoryId');
 
         if ($chapterExerciseRecords) {
             $modules = ArrayToolkit::index($this->getItemBankExerciseModuleService()->search(
@@ -123,17 +123,17 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
             $exercises = $this->getItemBankExerciseService()->findByIds(ArrayToolkit::column($chapterExerciseRecords, 'exerciseId'));
             $answerRecrods = ArrayToolkit::index($this->getAnswerRecordService()->search(['ids' => ArrayToolkit::column($chapterExerciseRecords, 'answerRecordId')], [], 0, PHP_INT_MAX), 'id');
             $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($answerRecrods, 'assessment_id'));
-        }
 
-        foreach ($footprints as &$footprint) {
-            $chapterExerciseRecord = empty($chapterExerciseRecords[$footprint['targetId']]) ? (object) [] : $chapterExerciseRecords[$footprint['targetId']];
-            $footprint['target'] = [
-                'assessment' => empty($assessments[$answerRecrods[$chapterExerciseRecord['answerRecordId']]['assessment_id']]) ? (object) [] : $assessments[$answerRecrods[$chapterExerciseRecord['answerRecordId']]['assessment_id']],
-                'module' => empty($modules[$chapterExerciseRecord['moduleId']]) ? (object) [] : $modules[$chapterExerciseRecord['moduleId']],
-                'answerRecord' => $chapterExerciseRecord,
-                'exercise' => empty($exercises[$chapterExerciseRecord['exerciseId']]) ? (object) [] : $exercises[$chapterExerciseRecord['exerciseId']],
-                'itemCategory' => empty($itemCategories[$chapterExerciseRecord['itemCategoryId']]) ? (object) [] : $itemCategories[$chapterExerciseRecord['itemCategoryId']],
-            ];
+            foreach ($footprints as &$footprint) {
+                $chapterExerciseRecord = empty($chapterExerciseRecords[$footprint['targetId']]) ? (object) [] : $chapterExerciseRecords[$footprint['targetId']];
+                $footprint['target'] = [
+                    'assessment' => empty($assessments[$answerRecrods[$chapterExerciseRecord['answerRecordId']]['assessment_id']]) ? (object) [] : $assessments[$answerRecrods[$chapterExerciseRecord['answerRecordId']]['assessment_id']],
+                    'module' => empty($modules[$chapterExerciseRecord['moduleId']]) ? (object) [] : $modules[$chapterExerciseRecord['moduleId']],
+                    'answerRecord' => $chapterExerciseRecord,
+                    'exercise' => empty($exercises[$chapterExerciseRecord['exerciseId']]) ? (object) [] : $exercises[$chapterExerciseRecord['exerciseId']],
+                    'itemCategory' => empty($itemCategories[$chapterExerciseRecord['itemCategoryId']]) ? (object) [] : $itemCategories[$chapterExerciseRecord['itemCategoryId']],
+                ];
+            }
         }
 
         return $footprints;

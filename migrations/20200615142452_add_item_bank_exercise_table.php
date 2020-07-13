@@ -25,6 +25,7 @@ class AddItemBankExerciseTable extends Migration
             CREATE TABLE `item_bank_assessment_exercise_record` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `exerciseId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '题库练习id',
+              `assessmentExerciseId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '试卷练习任务id',
               `moduleId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '模块id',
               `assessmentId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '试卷id',
               `userId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
@@ -34,7 +35,7 @@ class AddItemBankExerciseTable extends Migration
               `updatedTime` int(11) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`),
               KEY `answerRecordId` (`answerRecordId`),
-              KEY `moduleId` (`moduleId`,`userId`),
+              KEY `moduleId` (`moduleId`),
               KEY `userId` (`userId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='试卷练习记录表';
             

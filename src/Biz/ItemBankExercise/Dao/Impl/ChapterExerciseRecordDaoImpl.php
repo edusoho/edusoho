@@ -28,6 +28,7 @@ class ChapterExerciseRecordDaoImpl extends GeneralDaoImpl implements ChapterExer
             'orderbys' => ['createdTime'],
             'conditions' => [
                 'id IN (:ids)',
+                'itemCategoryId IN (:itemCategoryIds)',
                 'userId = :userId',
                 'moduleId = :moduleId',
             ],
