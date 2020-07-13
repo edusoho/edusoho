@@ -46,23 +46,23 @@
         props: {
             title: {
                 type: String,
-                default: 'title',
+                default: '',
             },
             summary: {
                 type: String,
-                default: 'summary',
+                default: '',
             },
             message: {
                 type: String,
-                default: 'message',
+                default: '',
             },
             url: {
                 type: String,
-                default: 'http://t5.edusoho.cn',
+                default: '',
             },
             picture: {
                 type: String,
-                default: 'http://sce2a3b1c3d5nk-sb-qn.qiqiuyun.net/files/default/2019/08-09/18334266a615121661.jpg',
+                default: '',
             },
             customizedClass: {
                 type: Object,
@@ -78,11 +78,9 @@
         },
         methods: {
             onWeChatShare() {
-                console.log('weixin');
                 $('.weixin-share-modal').modal('show');
             },
             onWeiboShare() {
-                console.log('weibo');
                 let query = {
                     url: this.url,
                     title: this.message,
@@ -99,7 +97,6 @@
                 window.open('http://service.weibo.com/share/share.php?' + qs.stringify(query));
             },
             onQQShare() {
-                console.log('qq');
                 let query = {
                     url: this.url,
                     title: this.title,
@@ -113,7 +110,6 @@
                 window.open('http://connect.qq.com/widget/shareqq/index.html?' + qs.stringify(query));
             },
             onQzoneShare() {
-                console.log('qzone');
                 let query = {
                     url: this.url,
                     title: this.title,
