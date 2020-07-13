@@ -119,6 +119,7 @@
       handleScroll() {
         let eleTop = this.$refs.infoLeftNav.offsetTop + this.$refs.infoLeftNav.offsetHeight;
         let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        if (!eleTop) return;
         if ( eleTop <= scrollTop && !this.isFixed ) this.isFixed = true;
         if ( eleTop > scrollTop && this.isFixed ) this.isFixed = false;
         clearTimeout(this.timerScroll);
