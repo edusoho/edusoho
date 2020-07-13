@@ -1,22 +1,15 @@
 <template>
   <div class="product-detail clearfix">
-      
+
     <div class="product-detail__left detail-left pull-left">
-      <img :src="detailData.image" alt="">
+      <div class="detail-left__img">
+        <img :src="detailData.image" alt="">
+      </div>
       <ul class="detail-left__text clearfix">
         <li class="pull-left"><i class="es-icon es-icon-friends"></i>{{ currentPlan.joinedNum }}人加入学习</li>
         <li class="pull-right">
           <span class="detail-left__text-share" style="cursor: pointer;"><i class="es-icon es-icon-share"></i>分享</span>
-          <template v-if="isFavorite">
-            <span @click="onFavorite" style="color: #FF7E56;" class="detail-hover-span">
-              <i class="es-icon es-icon-favorite" style="color: #FF7E56;"></i>已收藏
-            </span>
-          </template>
-          <template v-else>
-            <span @click="onFavorite" class="detail-hover-span">
-              <i class="es-icon es-icon-favoriteoutline"></i>收藏
-            </span>
-          </template>
+          <favorite :is-favorite="isFavorite" :target-type="product.targetType" :target-id="product.targetId"></favorite>
         </li>
       </ul>
     </div>
@@ -35,7 +28,7 @@
           <s>价格: 2000元</s>
         </div>
       </div>
-      
+
       <!-- 教学计划 -->
       <div class="detail-right__plan plan clearfix" v-if="detailData.specs">
         <div class="plan-title pull-left">教学计划</div>
@@ -65,12 +58,11 @@
 </template>
 
 <script>
-  import axios from 'axios';
+  import Favorite from "./favorite";
+
   export default {
-    data() {
-      return {
-        isFavorite: false
-      }
+    components: {
+        Favorite
     },
     props: {
       detailData: {
@@ -80,53 +72,20 @@
       currentPlan: {
         type: Object,
         default: () => {}
+      },
+      product: {
+          type: Object,
+          default: {
+              targetType: '',
+              targetId: ''
+          }
+      },
+      isFavorite: {
+          type: Boolean,
+          default: null
       }
     },
     methods: {
-      // 添加收藏
-      addFavorite(id) {
-        axios({
-          url: "/api/favorite",
-          method: "POST",
-          data: {
-            'targetType': 'goods',
-            'targetId': id
-          },
-          headers: {
-            'Accept': 'application/vnd.edusoho.v2+json',
-            'X-CSRF-Token': $('meta[name=csrf-token]').attr('content'),
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then(res => {
-          this.isFavorite = true;
-        });
-      },
-      // 移除收藏
-      removeFavorite(id) {
-        axios({
-          url: "/api/favorite",
-          method: "DELETE",
-          params: {
-            'targetType': 'goods',
-            'targetId': id
-          },
-          headers: {
-            'Accept': 'application/vnd.edusoho.v2+json',
-            'X-CSRF-Token': $('meta[name=csrf-token]').attr('content'),
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then(res => {
-          this.isFavorite = false;
-        });
-      },
-      // 收藏/移除收藏
-      onFavorite() {
-        if (this.isFavorite) {
-          this.removeFavorite(this.currentPlan.id);
-        } else {
-          this.addFavorite(this.currentPlan.id);
-        }
-      },
       handleClick(plan) {
         this.$emit('changePlan', plan.id);
       }
