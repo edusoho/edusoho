@@ -179,7 +179,6 @@
                     return;
                 }
 
-                let reviews = this.reviews ? this.reviews : [];
                 axios.get('/api/reviews', {
                     params: {
                         targetType: this.targetType,

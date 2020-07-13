@@ -89,7 +89,7 @@
                 },
                 starHover: 0,
                 content: "",
-                showForm: true
+                showForm: false
             }
         },
         filters: {
@@ -242,7 +242,7 @@
                         'rating': this.form.rating
                     }
                 }).then(res => {
-                    if (!res.data.error) {
+                    if (res.data.error) {
                         return;
                     }
 
@@ -250,7 +250,7 @@
                         'type': 'success',
                         'message': Translator.trans('site.save_success_hint')
                     });
-                    // window.location.reload();
+                    window.location.reload();
                 });
             }
         }
