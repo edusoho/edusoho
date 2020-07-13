@@ -125,6 +125,91 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         return $member;
     }
 
+    public function lockStudent($exerciseId, $userId)
+    {
+        $exercise = $this->getExerciseService()->get($exerciseId);
+
+        if (empty($exercise)) {
+            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
+        }
+
+        $member = $this->getExerciseMember($exerciseId, $userId);
+        if (empty($member)) {
+            return;
+        }
+
+        if ('student' != $member['role']) {
+            $this->createNewException(ItemBankExerciseMemberException::MEMBER_NOT_STUDENT());
+        }
+
+        if ($member['locked']) {
+            return;
+        }
+
+        $this->getExerciseMemberDao()->update($member['id'], ['locked' => 1]);
+    }
+
+    public function unlockStudent($exerciseId, $userId)
+    {
+        $exercise = $this->getExerciseService()->get($exerciseId);
+
+        if (empty($exercise)) {
+            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
+        }
+
+        $member = $this->getExerciseMember($exerciseId, $userId);
+        if (empty($member)) {
+            return;
+        }
+
+        if ('student' != $member['role']) {
+            $this->createNewException(ItemBankExerciseMemberException::MEMBER_NOT_STUDENT());
+        }
+
+        if (empty($member['locked'])) {
+            return;
+        }
+
+        $this->getExerciseMemberDao()->update($member['id'], ['locked' => 0]);
+    }
+
+    public function removeStudent($exerciseId, $userId, $reason = [])
+    {
+        $exercise = $this->getExerciseService()->get($exerciseId);
+
+        if (empty($exercise)) {
+            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
+        }
+
+        $member = $this->getByEerciseIdAndUserId($exerciseId, $userId);
+
+        if (empty($member) || ('student' != $member['role'])) {
+            $this->createNewException(ItemBankExerciseException::NOTFOUND_MEMBER());
+        }
+
+        try {
+            $this->beginTransaction();
+
+            $reason = ArrayToolkit::parts($reason, ['reason', 'reason_type']);
+
+            $this->removeMember($member, $reason);
+
+            $this->dispatchEvent('exercise.quit', $exercise, ['member' => $member]);
+
+            $user = $this->getUserService()->getUser($userId);
+            $this->getLogService()->info(
+                'item_bank_exercise',
+                'remove_student',
+                "《{$exercise['title']}》(#{$exercise['id']})，移除学员{$user['nickname']}(#{$user['id']})}"
+            );
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
     public function getExerciseMember($exerciseId, $userId)
     {
         return $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
@@ -196,6 +281,23 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         }
 
         return $member;
+    }
+
+    private function removeMember($member, $reason = [])
+    {
+        try {
+            $this->beginTransaction();
+            $result = $this->getExerciseMemberDao()->delete($member['id']);
+            if (!empty($reason)) {
+                $this->createOperateRecord($member, 'exit', $reason);
+            }
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
+        return $result;
     }
 
     protected function createOperateRecord($member, $operateType, $reason)

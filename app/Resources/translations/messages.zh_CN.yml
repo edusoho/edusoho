@@ -9026,6 +9026,7 @@ log.action.order.refund_cancel: 取消退款
 log.action.order.unbind-back: 解绑银行卡
 log.action.order.course_callback: 课程回调
 log.action.order.classroom_callback: 班级回调
+log.action.order.item_bank_exercise_callback: 题库练习回调
 log.action.order.adjust_price: 价格调整
 log.action.category.create: 新增
 log.action.category.update: 修改
@@ -9095,6 +9096,7 @@ log.action.open_course.update_teacher: 更新公开课教师
 log.action.open_course.delete_recommend_course: 删除推荐课程
 order.course_callback.fail: 订单处理成功，但是用户加入课程失败
 order.classroom_callback.fail: 订单处理成功，但是用户加入班级失败
+order.item_bank_exercise_callback.fail: 订单处理成功，但是用户加入题库练习失败
 crontab.register_crontab_job.fail: 定时任务注册失败，请参考官网文档重新手动注册:http://developer.edusoho.com/biz-framework/scheduler.html
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
 log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%元 调整到 %newPrice%元.
@@ -9112,6 +9114,7 @@ log.action.destroy_account_record.create: 申请注销帐号
 log.action.destroy_account_record.pass: 通过注销帐号申请
 log.action.destroy_account_record.reject: 拒绝注销帐号申请
 log.action.item_bank_exercise.add_student: 添加学员
+log.action.item_bank_exercise.remove_student: 移除学员
 log.action.item_bank_exercise.delete_exercise: 删除题库练习
 log.action.item_bank_exercise.recommend_exercise: 推荐题库练习
 log.action.item_bank_exercise.cancel_recommend_exercise: 取消推荐题库练习
@@ -10370,6 +10373,7 @@ exception.item_bank_exercise.expirymode_invalid: 有效期类型错误
 exception.item_bank_exercise.assessment_exercise_exist: 试卷已存在该模块内，请勿重复添加
 exception.item_bank_exercise.member.can_not_become_member: 题库练习已过期，学员不能加入
 exception.item_bank_exercise.module.not_empty_number: 请至少保留一个试卷模块
+exception.item_bank_exercise.member.member_not_student: 成员不是学生
 
 exception.wechat.notify_setting_not_enabled: 微信通知未开启
 exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试
