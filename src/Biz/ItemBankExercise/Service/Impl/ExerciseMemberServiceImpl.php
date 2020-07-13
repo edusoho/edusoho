@@ -11,8 +11,6 @@ use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
 use Biz\ItemBankExercise\ExpiryMode\ExpiryModeFactory;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\ItemBankExerciseMemberException;
-use Biz\ItemBankExercise\Service\AssessmentExerciseRecordService;
-use Biz\ItemBankExercise\Service\ChapterExerciseRecordService;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\ItemBankExercise\Service\MemberOperationRecordService;
@@ -285,22 +283,6 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
                 'remark' => $info['type'] == 'add' ? $info['remark'] : '',
             ]
         );
-    }
-
-    /**
-     * @return ChapterExerciseRecordService
-     */
-    protected function getChapterExerciseRecordService()
-    {
-        return $this->createService('ItemBankExercise:ChapterExerciseRecordService');
-    }
-
-    /**
-     * @return AssessmentExerciseRecordService
-     */
-    protected function getAssessmentExerciseRecordService()
-    {
-        return $this->createService('ItemBankExercise:AssessmentExerciseRecordService');
     }
 
     /**
