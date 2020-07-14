@@ -16,7 +16,7 @@ class ItemBankExerciseFilter extends Filter
         'id', 'seq', 'title', 'status', 'chapterEnable', 'assessmentEnable', 'questionBankId',
         'categoryId', 'cover', 'studentNum', 'joinEnable', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate',
         'isFree', 'price', 'originPrice', 'ratingNum', 'rating',
-        'recommended', 'recommendedSeq', 'recommendedTime', 'createdTime', 'updatedTime', 'access', 'isMmeber',
+        'recommended', 'recommendedSeq', 'recommendedTime', 'createdTime', 'updatedTime', 'access', 'isMember',
     ];
 
     protected function publicFields(&$data)
