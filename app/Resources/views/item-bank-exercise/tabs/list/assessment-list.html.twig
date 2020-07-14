@@ -10,7 +10,7 @@
             {{ 'course.testpaper_manage.count'|trans({'%itemCount%': assessment.item_count}) }}/{{ 'course.testpaper_manage.score'|trans({'%score%':assessment.total_score}) }}
           </div>
         </div>
-        {% if member|default(null) %}
+        {% if member|default(null) and previewAs|default(null) %}
           <div style="display: inline-block;float:right;padding-top: 13px;">
             {% if record|default(null) %}
               {% if record.status == 'doing' or record.status == 'paused' %}

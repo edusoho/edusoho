@@ -3,7 +3,7 @@
       <li role="presentation" id="{{ tab.type }}_{{ tab.id }}"
           class="{% if route_params.tab|default('') == tab.type ~ '_' ~ tab.id  or nav|default('') == tab.type ~ '_' ~ tab.id %}active{% endif %}">
         <a
-          {% if member|default(false) %}
+          {% if member|default(false) and previewAs|default(null) %}
             href="{{ path('my_item_bank_exercise_show', {'id': exercise.id, 'tab': tab.type ~ '_' ~ tab.id}) }}"
           {% else %}
             href="{{ path('item_bank_exercise_show', {'id': exercise.id, 'tab': tab.type ~ '_' ~ tab.id}) }}"
@@ -16,7 +16,7 @@
   <li role="presentation" id="reviews"
       class="{% if route_params.tab|default('') == 'reviews'  or nav|default('') == 'reviews' %}active{% endif %}">
     <a
-      {% if member|default(false) %}
+      {% if member|default(false) and previewAs|default(null) %}
         href="{{ path('my_item_bank_exercise_show', {'id': exercise.id, 'tab': 'reviews'}) }}"
       {% else %}
         href="{{ path('item_bank_exercise_show', {'id': exercise.id, 'tab': 'reviews'}) }}"

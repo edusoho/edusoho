@@ -1,7 +1,7 @@
 <li id="chapter-{{ lesson.id }}" class="task-manage-item task-manage-lesson js-task-manage-item" style="box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.05)">
   <div class="item-content title gray-dark">
     <div style="display:inline-block;margin-left: 16px;rgba(102,102,102,1);padding: 18px;">{{ lesson.name }}</div>
-    {% include 'item-bank-exercise/tabs/list/chapter-button.html.twig' with {'question_num': lesson.question_num, 'member':member|default(null), record: record} %}
+    {% include 'item-bank-exercise/tabs/list/chapter-button.html.twig' with {previewAs:previewAs,'question_num': lesson.question_num, 'member':member|default(null), record: record} %}
   </div>
 </li>
 

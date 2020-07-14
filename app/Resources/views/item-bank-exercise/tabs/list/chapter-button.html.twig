@@ -1,4 +1,4 @@
-{% if member|default(null) %}
+{% if member|default(null) and previewAs|default(null) %}
   <div style="display: inline-block;float:right;padding-top: 14px;">
     <div style="display: inline-block;margin-right:80px;vertical-align:-3px;width:180px">
       {% if record %}

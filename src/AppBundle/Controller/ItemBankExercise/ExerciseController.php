@@ -88,8 +88,8 @@ class ExerciseController extends BaseController
         }
 
         $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : null;
-
-        if (!empty($member) && $user->isLogin() && $this->canExerciseShowRedirect($request)) {
+        $previewAs = $request->query->get('previewAs', '');
+        if (!empty($previewAs) && $user->isLogin() && $this->canExerciseShowRedirect($request)) {
             $exerciseMember = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
             if (!empty($exerciseMember)) {
                 if ('date' != $exercise['expiryMode'] || $exercise['expiryStartDate'] < time()) {
@@ -108,6 +108,7 @@ class ExerciseController extends BaseController
                 'exercise' => $exercise,
                 'isExerciseTeacher' => $isExerciseTeacher,
                 'member' => $member,
+                'previewAs' => $previewAs,
             ]
         );
     }
@@ -219,7 +220,7 @@ class ExerciseController extends BaseController
         );
     }
 
-    public function moduleAction(Request $request, $exerciseId, $tab)
+    public function moduleAction(Request $request, $previewAs, $exerciseId, $tab)
     {
         list($type, $moduleId) = explode('_', $tab);
         return $this->render(
@@ -229,11 +230,12 @@ class ExerciseController extends BaseController
                 'moduleType' => $type,
                 'moduleId' => $moduleId,
                 'exerciseId' => $exerciseId,
+                'previewAs' => $previewAs,
             ]
         );
     }
 
-    public function renderChapterListAction(Request $request, $exerciseId, $moduleId)
+    public function renderChapterListAction(Request $request, $previewAs, $exerciseId, $moduleId)
     {
         $exercise = $this->getExerciseService()->get($exerciseId);
         $user = $this->getCurrentUser();
@@ -259,10 +261,11 @@ class ExerciseController extends BaseController
             'member' => $member,
             'records' => $records,
             'categoryTree' => $categoryTree,
+            'previewAs' => $previewAs,
         ]);
     }
 
-    public function renderAssessmentListAction(Request $request, $exerciseId, $moduleId)
+    public function renderAssessmentListAction(Request $request, $previewAs, $exerciseId, $moduleId)
     {
         $exercise = $this->getExerciseService()->get($exerciseId);
         $user = $this->getCurrentUser();
@@ -305,6 +308,7 @@ class ExerciseController extends BaseController
             'assessments' => $assessments,
             'paginator' => $paginator,
             'assessmentExercises' => ArrayToolkit::index($assessmentExercises, 'assessmentId'),
+            'previewAs' => $previewAs,
         ]);
     }
 

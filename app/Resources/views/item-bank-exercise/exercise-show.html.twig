@@ -11,10 +11,10 @@
 
   {% set route_params = app.request.attributes.get('_route_params') %}
 
-  {% if member|default(null) %}
-    {{ render(controller('AppBundle:My/ItemBankExercise:header',{exercise: exercise} )) }}
+  {% if member|default(null) and previewAs|default(null) %}
+    {{ render(controller('AppBundle:My/ItemBankExercise:header',{previewAs:previewAs,exercise: exercise} )) }}
   {% else %}
-    {{ render(controller('AppBundle:ItemBankExercise/Exercise:header',{exercise: exercise} )) }}
+    {{ render(controller('AppBundle:ItemBankExercise/Exercise:header',{previewAs:previewAs,exercise: exercise} )) }}
   {% endif %}
 
   <div class="container cd-container">
@@ -27,9 +27,9 @@
           </div>
           {% block detail_content %}
             {% if tab == 'reviews' %}
-              {{ render(controller('AppBundle:ItemBankExercise/Exercise:reviews', {request: app.request, id: exercise.id, member: member|default(null)})) }}
+              {{ render(controller('AppBundle:ItemBankExercise/Exercise:reviews', {previewAs:previewAs, id: exercise.id, member: member|default(null)})) }}
             {% else %}
-              {{ render(controller('AppBundle:ItemBankExercise/Exercise:module', {request: app.request, exerciseId: exercise.id, tab: tab})) }}
+              {{ render(controller('AppBundle:ItemBankExercise/Exercise:module', {previewAs:previewAs, exerciseId: exercise.id, tab: tab})) }}
             {% endif %}
           {% endblock %}
         </section>
@@ -37,7 +37,7 @@
       </div>
 
       <div class="col-lg-3 col-md-4 course-sidebar">
-        {{ render(controller('AppBundle:ItemBankExercise/Exercise:advancedUsers', {request: app.request, exerciseId: exercise.id})) }}
+        {{ render(controller('AppBundle:ItemBankExercise/Exercise:advancedUsers', {previewAs:previewAs, exerciseId: exercise.id})) }}
       </div>
 
     </div>

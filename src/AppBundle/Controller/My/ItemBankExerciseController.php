@@ -23,7 +23,7 @@ class ItemBankExerciseController extends BaseController
         }
 
         $conditions = [
-            'teacherIds' => $user['id'],
+            'creator' => $user['id'],
         ];
 
         $paginator = new Paginator(
@@ -76,6 +76,7 @@ class ItemBankExerciseController extends BaseController
                 'member' => $member,
                 'isExerciseTeacher' => 'teacher' == $member['role'],
                 'exercise' => $exercise,
+                'previewAs' => 'member',
             ]
         );
     }
@@ -91,6 +92,7 @@ class ItemBankExerciseController extends BaseController
             [
                 'member' => $member,
                 'exercise' => $exercise,
+                'previewAs' => $request->query->get('previewAs', 'member')
             ]
         );
     }
