@@ -1,5 +1,6 @@
 <?php
 
+use Biz\S2B2C\Service\ProductService;
 use Symfony\Component\Filesystem\Filesystem;
 use AppBundle\Common\ArrayToolkit;
 
@@ -51,6 +52,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'productConvert',
+            'productCourseSetConvert',
             'uploadFileConvert',
             'coursePlatformConvert',
         );
@@ -124,6 +126,33 @@ class EduSohoUpgrade extends AbstractUpdater
         ");
 
         return 1;
+    }
+
+    protected function productCourseSetConvert()
+    {
+        $products = $this->getProductService()->searchProducts(['productType' => 'course_set'], [], 0, PHP_INT_MAX);
+
+        foreach ($products as $product) {
+            $course = $this->getCourseService()->getFirstCourseByCourseSetId($product['localResourceId']);
+
+            $courseProduct = $this->getProductService()->getProductBySupplierIdAndLocalResourceIdAndType($product['supplierId'], $course['id'], 'course');
+
+            if (empty($courseProduct)) {
+                echo '修改courseSetProduct-remoteProductId失败 id#' . $product['id'] . "\n";
+            }
+
+            $this->getProductService()->updateProduct($product['id'], ['remoteProductId' => $courseProduct['remoteProductId']]);
+        }
+
+        return 1;
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('S2B2C:ProductService');
     }
 
     protected function uploadFileConvert()
