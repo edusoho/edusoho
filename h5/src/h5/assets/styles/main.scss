@@ -35,7 +35,7 @@
 @import './containers/goods/index.scss';
 @import './containers/goods/components/detail.scss';
 @import './containers/goods/components/info.scss';
-
+@import './containers/review/index.scss';
 
 // modules
 @import './modules/e-drag.scss';
@@ -58,13 +58,15 @@
 @import './containers/webview/index.scss';
 
 //隐藏滚动条
-html,body {
-  &::-webkit-scrollbar {
-    height: 0px;
-    width : 0px;
-    display: none;
-  }
-  scrollbar-width: none;
-  -ms-overflow-style:none;
-  overflow:-moz-scrollbars-none;
+html,
+body {
+	&::-webkit-scrollbar {
+		display: none;
+		width: 0;
+		height: 0;
+	}
+
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+	overflow: -moz-scrollbars-none;
 }

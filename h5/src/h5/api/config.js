@@ -12,10 +12,24 @@ import studyCard from './study-card/index';
 import distribution from './distribution/index';
 import liveTimetable from './liveTimetable/index';
 import goods from './goods/index';
+import reviews from './reviews/index';
 
-
-const config = [...openCourse, ...classroom, ...course, ...lesson, ...me, ...order,
-  ...setting, ...coupon, ...vip, ...marketing, ...distribution, ...studyCard,
-  ...liveTimetable, ...goods];
+const config = [
+  ...openCourse,
+  ...classroom,
+  ...course,
+  ...lesson,
+  ...me,
+  ...order,
+  ...setting,
+  ...coupon,
+  ...vip,
+  ...marketing,
+  ...distribution,
+  ...studyCard,
+  ...liveTimetable,
+  ...goods,
+  ...reviews,
+];
 
 export default config;

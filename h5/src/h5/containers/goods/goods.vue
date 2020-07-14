@@ -69,7 +69,13 @@
       <!-- 评价 -->
       <section class="js-scroll-top goods-info__item" id="evaluate">
         <div class="goods-info__title">课程评价</div>
-        <reviews :reviews="componentsInfo.reviews" />
+        <reviews
+          :can-create="true"
+          :can-operate="true"
+          :target-type="'goods'"
+          :user-review="null"
+          :target-id="parseInt($route.params.id)"
+        ></reviews>
       </section>
 
       <!-- 猜你想学 -->
@@ -94,7 +100,7 @@ import Detail from './components/detail';
 import Specs from './components/specs';
 
 import Teacher from './components/teacher';
-import Reviews from './components/reviews';
+import Reviews from '@/containers/review';
 import Recommend from './components/recommend';
 import Buy from './components/buy';
 import BackToTop from './components/back-to-top';
