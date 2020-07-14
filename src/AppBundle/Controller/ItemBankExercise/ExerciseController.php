@@ -89,12 +89,10 @@ class ExerciseController extends BaseController
 
         $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : null;
         $previewAs = $request->query->get('previewAs', '');
-        if (!empty($previewAs) && $user->isLogin() && $this->canExerciseShowRedirect($request)) {
-            $exerciseMember = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
-            if (!empty($exerciseMember)) {
-                if ('date' != $exercise['expiryMode'] || $exercise['expiryStartDate'] < time()) {
-                    return $this->redirect(($this->generateUrl('my_item_bank_exercise_show', ['id' => $id])));
-                }
+        if (!empty($member) && empty($previewAs) && $member['role'] == 'student') $previewAs = 'member';
+        if (!empty($member) && !empty($previewAs) && $user->isLogin() && $this->canExerciseShowRedirect($request)) {
+            if ('date' != $exercise['expiryMode'] || $exercise['expiryStartDate'] < time()) {
+                return $this->redirect(($this->generateUrl('my_item_bank_exercise_show', ['id' => $id])));
             }
         }
 
