@@ -13,9 +13,9 @@ class ItemBankExerciseProductTest extends BaseTestCase
         $product = new ItemBankExerciseProduct();
         $product->setBiz($this->getBiz());
 
-        $this->mockBiz('ItemBankExercise:ExerciseService', array(
-            array('functionName' => 'canJoinExercise', 'returnValue' => array('code' => AccessorInterface::SUCCESS)),
-        ));
+        $this->mockBiz('ItemBankExercise:ExerciseService', [
+            ['functionName' => 'canJoinExercise', 'returnValue' => ['code' => AccessorInterface::SUCCESS]],
+        ]);
         $this->assertEquals(null, $product->validate());
     }
 
@@ -27,9 +27,9 @@ class ItemBankExerciseProductTest extends BaseTestCase
         $product = new ItemBankExerciseProduct();
         $product->setBiz($this->getBiz());
 
-        $this->mockBiz('ItemBankExercise:ExerciseService', array(
-            array('functionName' => 'canJoinExercise', 'returnValue' => array('code' => 'error', 'msg' => 'wrong')),
-        ));
+        $this->mockBiz('ItemBankExercise:ExerciseService', [
+            ['functionName' => 'canJoinExercise', 'returnValue' => ['code' => 'error', 'msg' => 'wrong']],
+        ]);
         $product->validate();
     }
 }
