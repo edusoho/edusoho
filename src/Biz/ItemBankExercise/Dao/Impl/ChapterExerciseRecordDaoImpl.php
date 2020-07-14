@@ -31,6 +31,8 @@ class ChapterExerciseRecordDaoImpl extends GeneralDaoImpl implements ChapterExer
                 'itemCategoryId IN (:itemCategoryIds)',
                 'userId = :userId',
                 'moduleId = :moduleId',
+                'exerciseId = :exerciseId',
+                'userId = :userId',
             ],
         ];
     }

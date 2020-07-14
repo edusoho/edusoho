@@ -4,12 +4,9 @@ namespace Biz\ItemBankExercise\Event;
 
 use AppBundle\Common\MathToolkit;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
-use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\Biz\Order\Service\OrderService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -61,14 +58,6 @@ class ExerciseMemberEventSubscriber extends EventSubscriber implements EventSubs
     }
 
     /**
-     * @return OrderService
-     */
-    protected function getOrderService()
-    {
-        return $this->getBiz()->service('Order:OrderService');
-    }
-
-    /**
      * @return OrderFacadeService
      */
     protected function getOrderFacadeService()
@@ -77,27 +66,11 @@ class ExerciseMemberEventSubscriber extends EventSubscriber implements EventSubs
     }
 
     /**
-     * @return UserService
-     */
-    protected function getUserService()
-    {
-        return $this->getBiz()->service('User:UserService');
-    }
-
-    /**
      * @return ExerciseService
      */
     protected function getExerciseService()
     {
         return $this->getBiz()->service('ItemBankExercise:ExerciseService');
-    }
-
-    /**
-     * @return ExerciseMemberService
-     */
-    protected function getExerciseMemberService()
-    {
-        return $this->getBiz()->service('ItemBankExercise:ExerciseMemberService');
     }
 
     /**

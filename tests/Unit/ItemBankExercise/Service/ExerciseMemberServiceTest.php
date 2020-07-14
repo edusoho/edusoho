@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\ItemBankExercise\Service;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
@@ -159,7 +160,46 @@ class ExerciseMemberServiceTest extends BaseTestCase
 
         $this->getExerciseMemberService()->batchUpdateMemberDeadlines($exercise['id'], [0 => $user['id']], ['updateType' => 'deadline', 'deadline' => time()]);
         $result = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
-        $this->assertEquals(time(), (int) $result['deadline']);
+        $this->assertEquals(time(), (int)$result['deadline']);
+    }
+
+    public function testCheckUpdateDeadline()
+    {
+        $exercise = $this->createExercise();
+        $this->batchCreateExerciseMembers();
+        $res = $this->getExerciseMemberService()->checkUpdateDeadline($exercise['id'], [1, 2], ['deadline' => strtotime(date("Y-m-d"))]);
+        $this->assertFalse($res);
+    }
+
+    public function testIsMemberNonExpired()
+    {
+        $exercise = $this->createExercise();
+        $member = $this->createExerciseMember();
+        $res = $this->getExerciseMemberService()->isMemberNonExpired($exercise, $member);
+        $this->assertTrue($res);
+    }
+
+    public function testQuitExerciseByDeadlineReach()
+    {
+        $exercise = $this->createExercise();
+        $member = $this->getExerciseMemberDao()->create(
+            [
+                'exerciseId' => 1,
+                'questionBankId' => 1,
+                'userId' => 2,
+                'role' => 'student',
+                'remark' => 'aaa',
+                'deadline' => strtotime('-1day'),
+            ]
+        );
+        $this->getExerciseService()->updateExerciseStatistics($exercise['id'], ['studentNum']);
+
+        $this->getExerciseMemberService()->quitExerciseByDeadlineReach(2, $exercise['id']);
+        $res = $this->getExerciseService()->get($exercise['id']);
+        $result = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $member['userId']);
+
+        $this->assertEquals(0, $res['studentNum']);
+        $this->assertEmpty($result);
     }
 
     private function createExercise()
@@ -205,27 +245,9 @@ class ExerciseMemberServiceTest extends BaseTestCase
     {
         return $this->getExerciseMemberDao()->batchCreate(
             [
-                [
-                    'exerciseId' => 1,
-                    'questionBankId' => 1,
-                    'userId' => 1,
-                    'role' => 'teacher',
-                    'remark' => 'aaa',
-                ],
-                [
-                    'exerciseId' => 1,
-                    'questionBankId' => 1,
-                    'userId' => 2,
-                    'role' => 'student',
-                    'remark' => 'bbb',
-                ],
-                [
-                    'exerciseId' => 2,
-                    'questionBankId' => 2,
-                    'userId' => 3,
-                    'role' => 'student',
-                    'remark' => 'ccc',
-                ],
+                ['exerciseId' => 1, 'questionBankId' => 1, 'userId' => 1, 'role' => 'teacher', 'remark' => 'aaa',],
+                ['exerciseId' => 1, 'questionBankId' => 1, 'userId' => 2, 'role' => 'student', 'remark' => 'bbb',],
+                ['exerciseId' => 2, 'questionBankId' => 2, 'userId' => 3, 'role' => 'student', 'remark' => 'ccc',],
             ]
         );
     }

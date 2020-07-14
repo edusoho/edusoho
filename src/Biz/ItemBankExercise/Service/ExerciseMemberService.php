@@ -31,4 +31,8 @@ interface ExerciseMemberService
     public function batchUpdateMemberDeadlines($exerciseId, $userIds, $setting);
 
     public function checkUpdateDeadline($exerciseId, $userIds, $setting);
+
+    public function isMemberNonExpired($exercise, $member);
+
+    public function quitExerciseByDeadlineReach($userId, $exerciseId);
 }

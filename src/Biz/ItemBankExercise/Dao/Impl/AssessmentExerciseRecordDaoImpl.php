@@ -31,6 +31,8 @@ class AssessmentExerciseRecordDaoImpl extends GeneralDaoImpl implements Assessme
                 'assessmentExerciseId IN (:assessmentExerciseIds)',
                 'userId = :userId',
                 'moduleId = :moduleId',
+                'exerciseId = :exerciseId',
+                'userId = :userId',
             ],
         ];
     }

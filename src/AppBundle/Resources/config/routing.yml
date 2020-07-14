@@ -3415,6 +3415,32 @@ facein_inspection_results_detail:
     defaults: { _controller: AppBundle:FaceInspection/InspectionResult:detail }
 
 # item-bank-exercise
+item_bank_exercise_show:
+  path: /item_bank_exercise/show/{id}/{tab}
+  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:show, tab: 'reviews' }
+  h5: true
+
+my_item_bank_exercise_show:
+  path:  /my/item_bank_exercise/show/{id}/{tab}
+  defaults: { _controller: AppBundle:My/ItemBankExercise:show, tab: 'reviews' }
+  h5: true
+
+item_bank_exercise_qrcode:
+  path: /item_bank_exercise/{id}/qrcode
+  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:qrcodeDownload }
+
+item_bank_exercise_qrcode_scan:
+  path: /item_bank_exercise/{id}/qrcode/scan
+  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:qrcode }
+
+item_bank_exercise_member_expired:
+  path:  /item_bank_exercise/{id}/member/expired
+  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:memberExpired }
+
+item_bank_exercise_member_deadline_reach:
+  path:  /item_bank_exercise/{id}/member/deadline/reach
+  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:deadlineReach }
+
 item_bank_exercise_manage_students:
     path: /item_bank_exercise/{exerciseId}/manage/students
     defaults: {_controller: AppBundle:ItemBankExercise/StudentManage:students}
