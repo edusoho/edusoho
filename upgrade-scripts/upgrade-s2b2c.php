@@ -94,12 +94,13 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $this->getConnection()->exec("
             INSERT INTO `s2b2c_product` 
-            (`supplierId`, `productType`, `remoteProductId`, `remoteResourceId`, `localResourceId`, `cooperationPrice`, `suggestionPrice`, `localVersion`, `changelog`, `createdTime`, `updatedTime`)
+            (`supplierId`, `productType`, `remoteProductId`, `remoteResourceId`, `s2b2cProductDetailId`, `localResourceId`, `cooperationPrice`, `suggestionPrice`, `localVersion`, `changelog`, `createdTime`, `updatedTime`)
             SELECT 
             originPlatformId, 
             'course', 
             s2b2cDistributeId, 
-            sourceCourseId, 
+            sourceCourseId,
+            '0' 
             id, 
             cooperationPrice, 
             suggestionPrice, 
@@ -111,11 +112,12 @@ class EduSohoUpgrade extends AbstractUpdater
         ");
 
         $this->getConnection()->exec("
-            INSERT INTO `s2b2c_product` (`supplierId`, `productType`, `remoteProductId`, `remoteResourceId`, `localResourceId`, `localVersion`, `changelog`, `createdTime`, `updatedTime`)
+            INSERT INTO `s2b2c_product` (`supplierId`, `productType`, `remoteProductId`, `s2b2cProductDetailId`, `remoteResourceId`, `localResourceId`, `localVersion`, `changelog`, `createdTime`, `updatedTime`)
             SELECT 
             originPlatformId, 
             'course_set', 
             '0', 
+            '0',
             sourceCourseSetId, 
             id, 
             sourceVersion, 
