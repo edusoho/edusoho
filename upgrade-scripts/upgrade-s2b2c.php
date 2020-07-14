@@ -100,7 +100,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'course', 
             s2b2cDistributeId, 
             sourceCourseId,
-            '0' 
+            '0',
             id, 
             cooperationPrice, 
             suggestionPrice, 
