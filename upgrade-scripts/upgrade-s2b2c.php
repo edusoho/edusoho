@@ -99,8 +99,8 @@ class EduSohoUpgrade extends AbstractUpdater
             originPlatformId, 
             'course', 
             s2b2cDistributeId, 
-            '0'
-            sourceCourseId, 
+            sourceCourseId,
+            '0' 
             id, 
             cooperationPrice, 
             suggestionPrice, 
