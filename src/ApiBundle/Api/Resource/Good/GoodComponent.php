@@ -8,6 +8,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
 use ApiBundle\Api\Util\AssetHelper;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\Goods\Service\GoodsService;
@@ -50,24 +51,28 @@ class GoodComponent extends AbstractResource
 
         $components = [];
         foreach ($types as $type) {
-            if ('isFavorite' == $type) {
+            if ('isFavorite' === $type) {
                 $components['isFavorite'] = $this->getIsFavoriteComponent($product['targetType'], $product['targetId']);
                 continue;
             }
 
-            if ('mpQrCode' == $type) {
+            if ('mpQrCode' === $type) {
                 $components['mpQrCode'] = $this->getMpQrCodeComponent();
                 continue;
             }
 
-            if ('teachers' == $type) {
+            if ('teachers' === $type) {
                 $components['teachers'] = $this->getTeacherComponent($product['targetType'], $product['targetId']);
             }
 
-            if ('reviews' == $type) {
+            if ('reviews' === $type) {
             }
 
-            if ('recommendGoods' == $type) {
+            if ('recommendGoods' === $type) {
+            }
+
+            if ('classroomCourses' === $type) {
+                $components['classroomCourses'] = $this->getClassroomCourses($product);
             }
         }
 
@@ -92,13 +97,13 @@ class GoodComponent extends AbstractResource
         return [
             'title' => $goodsSetting['leading']['label'],
             'content' => $goodsSetting['leading']['description'],
-            'imageUrl' => AssetHelper::getFurl($goodsSetting['leading']['qrcode'] , 'default'),
+            'imageUrl' => AssetHelper::getFurl($goodsSetting['leading']['qrcode'], 'default'),
         ];
     }
 
     private function getTeacherComponent($productType, $productId)
     {
-        if ('course' ==  $productType) {
+        if ('course' === $productType) {
             $courseSet = $this->getCourseSetService()->getCourseSet($productId);
             if (empty($courseSet['teacherIds'])) {
                 return [];
@@ -112,6 +117,17 @@ class GoodComponent extends AbstractResource
 
             return  $teachers['teachers'];
         }
+    }
+
+    public function getClassroomCourses($product)
+    {
+        if ('classroom' !== $product['targetType']) {
+            return [];
+        }
+
+        $apiRequest = new ApiRequest("/api/classrooms/{$product['targetId']}/courses", 'GET');
+
+        return $this->invokeResource($apiRequest);
     }
 
     /**
@@ -152,6 +168,14 @@ class GoodComponent extends AbstractResource
     protected function getCourseSetService()
     {
         return $this->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->service('Classroom:ClassroomService');
     }
 
     protected function getMockedComponents($component)
