@@ -5,9 +5,14 @@ namespace ApiBundle\Api\Resource\Good;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Resource\Filter;
+use ApiBundle\Api\Resource\User\UserFilter;
+use ApiBundle\Api\Util\AssetHelper;
+use Biz\Course\Service\CourseSetService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
+use Biz\System\Service\SettingService;
 
 class GoodComponent extends AbstractResource
 {
@@ -19,13 +24,7 @@ class GoodComponent extends AbstractResource
      */
     public function get(ApiRequest $request, $id, $component)
     {
-        $goods = $this->getGoodsService()->getGoods($id);
-        $product = $this->getGoodsService()->getGoodsByProductId($goods['productId']);
-
-        return [
-            'teachers' => [],
-            'isFavorite' => !empty($this->getFavoriteService()->getUserFavorite($this->getCurrentUser()->getId(), $product['targetType'], $product['targetId'])),
-        ];
+        return $this->getComponentsByTypes($id, [$component]);
     }
 
     /**
@@ -36,13 +35,83 @@ class GoodComponent extends AbstractResource
      */
     public function search(ApiRequest $request, $id)
     {
-        $goods = $this->getGoodsService()->getGoods($id);
+        $componentTypes = $request->query->get('componentTypes');
+        if (empty($componentTypes)) {
+            return [];
+        }
+
+        return $this->getComponentsByTypes($id, $componentTypes);
+    }
+
+    private function getComponentsByTypes($goodsId, array $types)
+    {
+        $goods = $this->getGoodsService()->getGoods($goodsId);
         $product = $this->getProductService()->getProduct($goods['productId']);
 
+        $components = [];
+        foreach ($types as $type) {
+            if ('isFavorite' == $type) {
+                $components['isFavorite'] = $this->getIsFavoriteComponent($product['targetType'], $product['targetId']);
+                continue;
+            }
+
+            if ('mpQrCode' == $type) {
+                $components['mpQrCode'] = $this->getMpQrCodeComponent();
+                continue;
+            }
+
+            if ('teachers' == $type) {
+                $components['teachers'] = $this->getTeacherComponent($product['targetType'], $product['targetId']);
+            }
+
+            if ('reviews' == $type) {
+            }
+
+            if ('recommendGoods' == $type) {
+            }
+        }
+
+        return $components;
+    }
+
+    private function getIsFavoriteComponent($productType, $productId)
+    {
+        $favorite = $this->getFavoriteService()->getUserFavorite(
+            $this->getCurrentUser()->getId(),
+            $productType,
+            $productId
+        );
+
+        return !empty($favorite);
+    }
+
+    private function getMpQrCodeComponent()
+    {
+        $goodsSetting = $this->getSettingService()->get('goods_setting', []);
+
         return [
-            'teachers' => [],
-            'isFavorite' => !empty($this->getFavoriteService()->getUserFavorite($this->getCurrentUser()->getId(), $product['targetType'], $product['targetId'])),
+            'title' => $goodsSetting['leading']['label'],
+            'content' => $goodsSetting['leading']['description'],
+            'imageUrl' => AssetHelper::getFurl($goodsSetting['leading']['qrcode'] , 'default'),
         ];
+    }
+
+    private function getTeacherComponent($productType, $productId)
+    {
+        if ('course' ==  $productType) {
+            $courseSet = $this->getCourseSetService()->getCourseSet($productId);
+            if (empty($courseSet['teacherIds'])) {
+                return [];
+            }
+
+            $teachers['teacherIds'] = array_unique(array_merge($courseSet['teacherIds'], [$courseSet['creator']]));
+            $this->getOCUtil()->single($teachers, ['teacherIds']);
+            $userFilter = new UserFilter();
+            $userFilter->setMode(Filter::SIMPLE_MODE);
+            $userFilter->filters($teachers['teachers']);
+
+            return  $teachers['teachers'];
+        }
     }
 
     /**
@@ -67,6 +136,22 @@ class GoodComponent extends AbstractResource
     protected function getFavoriteService()
     {
         return $this->service('Favorite:FavoriteService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->service('System:SettingService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->service('Course:CourseSetService');
     }
 
     protected function getMockedComponents($component)
