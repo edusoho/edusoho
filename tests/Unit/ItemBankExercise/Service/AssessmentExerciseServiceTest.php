@@ -30,6 +30,16 @@ class AssessmentExerciseServiceTest extends BaseTestCase
         $this->assertEquals($count, 1);
     }
 
+    public function testGetByModuleIdAndAssessmentId()
+    {
+        $this->mockAssessmentExercise();
+
+        $assessmentExercise = $this->getItemBankAssessmentExerciseService()->getByModuleIdAndAssessmentId(1, 1);
+
+        $this->assertEquals($assessmentExercise['moduleId'], 1);
+        $this->assertEquals($assessmentExercise['assessmentId'], 1);
+    }
+
     public function testStartAnswer()
     {
         $this->mockAssessmentExercise();
@@ -86,8 +96,8 @@ class AssessmentExerciseServiceTest extends BaseTestCase
             'ItemBankExercise:ExerciseService',
             [
                 [
-                    'functionName' => 'canLearningExercise',
-                    'returnValue' => true,
+                    'functionName' => 'canLearnExercise',
+                    'returnValue' => ['code' => 'success'],
                 ],
                 [
                     'functionName' => 'get',
@@ -200,8 +210,8 @@ class AssessmentExerciseServiceTest extends BaseTestCase
             'ItemBankExercise:ExerciseService',
             [
                 [
-                    'functionName' => 'canLearningExercise',
-                    'returnValue' => true,
+                    'functionName' => 'canLearnExercise',
+                    'returnValue' => ['code' => 'success'],
                 ],
                 [
                     'functionName' => 'get',

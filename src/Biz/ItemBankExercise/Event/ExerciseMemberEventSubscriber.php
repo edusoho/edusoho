@@ -4,12 +4,9 @@ namespace Biz\ItemBankExercise\Event;
 
 use AppBundle\Common\MathToolkit;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
-use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\Biz\Order\Service\OrderService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -17,13 +14,19 @@ class ExerciseMemberEventSubscriber extends EventSubscriber implements EventSubs
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'exercise.join' => 'onExerciseJoin',
-            'exercise.quit' => 'onExerciseJoin',
-        );
+            'exercise.quit' => 'onExerciseQuit',
+        ];
     }
 
     public function onExerciseJoin(Event $event)
+    {
+        $this->countStudentMember($event);
+        $this->countIncome($event);
+    }
+
+    public function onExerciseQuit(Event $event)
     {
         $this->countStudentMember($event);
         $this->countIncome($event);
@@ -43,23 +46,15 @@ class ExerciseMemberEventSubscriber extends EventSubscriber implements EventSubs
     {
         $exercise = $event->getSubject();
 
-        $conditions = array(
+        $conditions = [
             'exerciseId' => $exercise['id'],
-            'statuses' => array('paid', 'success', 'finished'),
-        );
+            'statuses' => ['paid', 'success', 'finished'],
+        ];
 
         $income = $this->getOrderFacadeService()->sumOrderItemPayAmount($conditions);
         $income = MathToolkit::simple($income, 0.01);
 
         $this->getExerciseDao()->update($exercise['id'], ['income' => $income]);
-    }
-
-    /**
-     * @return OrderService
-     */
-    protected function getOrderService()
-    {
-        return $this->getBiz()->service('Order:OrderService');
     }
 
     /**
@@ -71,27 +66,11 @@ class ExerciseMemberEventSubscriber extends EventSubscriber implements EventSubs
     }
 
     /**
-     * @return UserService
-     */
-    protected function getUserService()
-    {
-        return $this->getBiz()->service('User:UserService');
-    }
-
-    /**
      * @return ExerciseService
      */
     protected function getExerciseService()
     {
         return $this->getBiz()->service('ItemBankExercise:ExerciseService');
-    }
-
-    /**
-     * @return ExerciseMemberService
-     */
-    protected function getExerciseMemberService()
-    {
-        return $this->getBiz()->service('ItemBankExercise:ExerciseMemberService');
     }
 
     /**

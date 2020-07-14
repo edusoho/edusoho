@@ -2,6 +2,7 @@
 
 namespace Biz\ItemBankExercise\Service\Impl;
 
+use Biz\Accessor\AccessorInterface;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\ItemBankExercise\Dao\AssessmentExerciseDao;
@@ -22,6 +23,11 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
         return $this->getItemBankAssessmentExerciseDao()->findByExerciseIdAndModuleId($exerciseId, $moduleId);
     }
 
+    public function getByModuleIdAndAssessmentId($moduleId, $assessmentId)
+    {
+        return $this->getItemBankAssessmentExerciseDao()->getByModuleIdAndAssessmentId($moduleId, $assessmentId);
+    }
+
     public function search($conditions, $sort, $start, $limit, $columns = [])
     {
         return $this->getItemBankAssessmentExerciseDao()->search($conditions, $sort, $start, $limit, $columns);
@@ -39,16 +45,24 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
         try {
             $this->beginTransaction();
 
+            $assessmentExercise = $this->getByModuleIdAndAssessmentId($moduleId, $assessmentId);
             $module = $this->getItemBankExerciseModuleService()->get($moduleId);
-
             $answerRecord = $this->getAnswerService()->startAnswer($module['answerSceneId'], $assessmentId, $userId);
 
-            $this->getItemBankAssessmentExerciseRecordService()->create([
+            $assessmentExerciseRecord = $this->getItemBankAssessmentExerciseRecordService()->create([
                 'moduleId' => $moduleId,
                 'exerciseId' => $module['exerciseId'],
                 'assessmentId' => $assessmentId,
+                'assessmentExerciseId' => $assessmentExercise['id'],
                 'userId' => $userId,
                 'answerRecordId' => $answerRecord['id'],
+            ]);
+
+            $this->getUserFootprintService()->createUserFootprint([
+                'targetType' => 'item_bank_assessment_exercise',
+                'targetId' => $assessmentExercise['id'],
+                'event' => 'answer.started',
+                'userId' => $assessmentExerciseRecord['userId'],
             ]);
 
             $this->commit();
@@ -104,7 +118,8 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        if (!$this->getItemBankExerciseService()->canLearningExercise($module['exerciseId'], $userId)) {
+        $access = $this->getItemBankExerciseService()->canLearnExercise($module['exerciseId']);
+        if (AccessorInterface::SUCCESS != $access['code']) {
             $this->createNewException(ItemBankExerciseException::FORBIDDEN_LEARN());
         }
 
@@ -178,5 +193,13 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
     protected function getItemBankAssessmentExerciseDao()
     {
         return $this->createDao('ItemBankExercise:AssessmentExerciseDao');
+    }
+
+    /**
+     * @return \Biz\User\UserFootprintService
+     */
+    protected function getUserFootprintService()
+    {
+        return $this->createService('User:UserFootprintService');
     }
 }

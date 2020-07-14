@@ -289,6 +289,15 @@ admin_v2:
                                             icon: 'glyphicon glyphicon-ok-circle'
                                             mode: none
                                             visible: (exercise.status != 'published')
+                                        admin_v2_item_bank_exercise_close:
+                                          name: admin_v2.course.basic.basic_tab.close_btn
+                                          router_params:
+                                            id: (exercise.id)
+                                          group: groupButton
+                                          class: close-exercise
+                                          icon: 'glyphicon glyphicon-ok-circle'
+                                          mode: none
+                                          visible: (exercise.status == 'published')
                                         admin_v2_item_bank_exercise_delete:
                                             name: admin_v2.course.basic.basic_tab.delete_submit_btn
                                             class: delete-exercise
@@ -299,9 +308,13 @@ admin_v2:
                                             mode: none
                                             visible: ( exercise.status in ['closed', 'draft', 'published'])
                                 admin_v2_item_bank_exercise_recommend_list:
-                                    name: admin_v2.course.item_bank_exercise.recommend_list_tab
+                                  name: admin_v2.course.item_bank_exercise.recommend_list_tab
+                                  disable: true
+                                  router_name: admin_v2_item_bank_exercise_recommend_list
+                                admin_v2_item_bank_exercise_analysis:
+                                    name: admin_v2.course.item_bank_exercise.analysis_tab
                                     disable: true
-                                    router_name: admin_v2_item_bank_exercise_recommend_list
+                                    router_name: admin_v2_item_bank_exercise_analysis
                         # 公开课管理模块
                         admin_v2_open_course_manage:
                             name: admin_v2.course.open_course_menu

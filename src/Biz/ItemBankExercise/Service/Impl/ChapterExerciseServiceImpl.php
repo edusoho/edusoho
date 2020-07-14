@@ -3,6 +3,7 @@
 namespace Biz\ItemBankExercise\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Accessor\AccessorInterface;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\ItemBankExercise\ItemBankExerciseException;
@@ -19,19 +20,26 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
         try {
             $this->beginTransaction();
 
-            $assessment = $this->createAssessmentByCategroyId($categroyId);
-
             $module = $this->getItemBankExerciseModuleService()->get($moduleId);
+
+            $assessment = $this->createAssessmentByCategroyId($categroyId, $module);
 
             $answerRecord = $this->getAnswerService()->startAnswer($module['answerSceneId'], $assessment['id'], $userId);
 
-            $this->getItemBankChapterExerciseRecordService()->create([
+            $chapterExerciseRecord = $this->getItemBankChapterExerciseRecordService()->create([
                 'moduleId' => $moduleId,
                 'exerciseId' => $module['exerciseId'],
                 'itemCategoryId' => $categroyId,
                 'userId' => $userId,
                 'answerRecordId' => $answerRecord['id'],
                 'questionNum' => $assessment['question_count'],
+            ]);
+
+            $this->getUserFootprintService()->createUserFootprint([
+                'targetType' => 'item_bank_chapter_exercise',
+                'targetId' => $categroyId,
+                'event' => 'answer.started',
+                'userId' => $chapterExerciseRecord['userId'],
             ]);
 
             $this->commit();
@@ -50,7 +58,8 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        if (!$this->getItemBankExerciseService()->canLearningExercise($module['exerciseId'], $userId)) {
+        $access = $this->getItemBankExerciseService()->canLearnExercise($module['exerciseId']);
+        if (AccessorInterface::SUCCESS != $access['code']) {
             $this->createNewException(ItemBankExerciseException::FORBIDDEN_LEARN());
         }
 
@@ -77,7 +86,7 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
         return false;
     }
 
-    protected function createAssessmentByCategroyId($categroyId)
+    protected function createAssessmentByCategroyId($categroyId, $module)
     {
         try {
             $this->beginTransaction();
@@ -92,15 +101,14 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
             $items = $this->getItemService()->findItemsByIds($itemIds, true);
             shuffle($items);
 
-            $sectionName = $this->getSectionName($categroyId);
             $assessment = [
                 'bank_id' => $categroy['bank_id'],
                 'name' => $itemBank['name'],
                 'displayable' => 0,
-                'description' => $sectionName,
+                'description' => $this->getAssessmentDescription($categroyId, $module),
                 'sections' => [
                     [
-                        'name' => $sectionName,
+                        'name' => '题目列表',
                         'description' => '',
                         'items' => $items,
                     ],
@@ -119,7 +127,7 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
         return $assessment;
     }
 
-    protected function getSectionName($categroyId)
+    protected function getAssessmentDescription($categroyId, $module)
     {
         $categories = [];
 
@@ -134,7 +142,7 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
             ++$loop;
         }
 
-        return implode(ArrayToolkit::column($categories, 'name'), '-');
+        return $module['title'].' > '.implode(ArrayToolkit::column($categories, 'name'), ' > ');
     }
 
     /**
@@ -207,5 +215,13 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
+    }
+
+    /**
+     * @return \Biz\User\UserFootprintService
+     */
+    protected function getUserFootprintService()
+    {
+        return $this->createService('User:UserFootprintService');
     }
 }

@@ -148,7 +148,9 @@ class ExerciseServiceTest extends BaseTestCase
         $user['org'] = ['id' => 1];
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
-        $this->grantPermissionToUser($currentUser);
+        $permissions = new \ArrayObject();
+        $permissions['admin_v2_item_bank_exercise_content_manage'] = true;
+        $currentUser->setPermissions($permissions);
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $this->assertTrue($this->getExerciseService()->hasExerciseManagerRole(3231));
@@ -222,8 +224,57 @@ class ExerciseServiceTest extends BaseTestCase
 
         $this->assertEquals(10.1, $res['price']);
         $this->assertEquals(0, $res['isFree']);
-        $this->assertEquals(10, $res['expiryDays']);
-        $this->assertEquals('days', $res['expiryMode']);
+        $this->assertEquals(0, $res['expiryDays']);
+        $this->assertEquals('forever', $res['expiryMode']);
+    }
+
+    public function testDeleteExercise()
+    {
+        $excepted = $this->createExercise();
+        $this->getExerciseService()->deleteExercise($excepted['id']);
+
+        $result = $this->getExerciseService()->get($excepted['id']);
+
+        $this->assertEmpty($result);
+    }
+
+    public function testRecommendExercise()
+    {
+        $excepted = $this->createExercise();
+        $result = $this->getExerciseService()->recommendExercise($excepted['id'], 1);
+
+        $this->assertEquals(1, $result['recommended']);
+        $this->assertEquals(1, $result['recommendedSeq']);
+    }
+
+    public function testCancelRecommendExercise()
+    {
+        $excepted = $this->createExercise();
+        $excepted = $this->getExerciseService()->recommendExercise($excepted['id'], 1);
+
+        $this->assertEquals(1, $excepted['recommendedSeq']);
+
+        $result = $this->getExerciseService()->cancelRecommendExercise($excepted['id']);
+
+        $this->assertEquals(0, $result['recommended']);
+    }
+
+    public function testPublishExercise()
+    {
+        $excepted = $this->createExercise();
+
+        $result = $this->getExerciseService()->publishExercise($excepted['id']);
+
+        $this->assertEquals('published', $result['status']);
+    }
+
+    public function testCloseExercise()
+    {
+        $excepted = $this->createExercise();
+        $excepted = $this->getExerciseService()->publishExercise($excepted['id']);
+        $result = $this->getExerciseService()->closeExercise($excepted['id']);
+
+        $this->assertEquals('closed', $result['status']);
     }
 
     public function testSearchOrderByStudentNumAndLastDays()
@@ -264,6 +315,25 @@ class ExerciseServiceTest extends BaseTestCase
     {
         $result = $this->getExerciseService()->canTakeItemBankExercise(1);
         $this->assertEquals(false, $result);
+    }
+
+    public function testFreeJoinExercise()
+    {
+        $this->createExercise();
+        $this->mockBiz(
+            'ItemBankExercise:ExerciseMemberService',
+            [
+                [
+                    'functionName' => 'becomeStudent',
+                    'returnValue' => [],
+                ],
+                [
+                    'functionName' => 'isExerciseMember',
+                    'returnValue' => false,
+                ],
+            ]
+        );
+        $member = $this->getExerciseService()->freeJoinExercise(1);
     }
 
     public function getFindExercisesByLikeTitle()
@@ -313,6 +383,8 @@ class ExerciseServiceTest extends BaseTestCase
                 'title' => 'test',
                 'questionBankId' => 1,
                 'categoryId' => 1,
+                'status' => 'published',
+                'expiryMode' => 'forever',
                 'seq' => 1,
             ]
         );

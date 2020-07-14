@@ -8,6 +8,8 @@ interface AssessmentExerciseService
 
     public function findByExerciseIdAndModuleId($exerciseId, $moduleId);
 
+    public function getByModuleIdAndAssessmentId($moduleId, $assessmentId);
+
     public function search($conditions, $sort, $start, $limit, $columns = []);
 
     public function count($conditions);

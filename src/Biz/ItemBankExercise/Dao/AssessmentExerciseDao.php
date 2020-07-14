@@ -11,4 +11,6 @@ interface AssessmentExerciseDao extends AdvancedDaoInterface
     public function findByExerciseIdAndModuleId($exerciseId, $moduleId);
 
     public function isAssessmentExercise($moduleId, $assessmentId, $exerciseId);
+
+    public function getByModuleIdAndAssessmentId($moduleId, $assessmentId);
 }

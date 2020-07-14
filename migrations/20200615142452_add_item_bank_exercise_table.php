@@ -25,6 +25,7 @@ class AddItemBankExerciseTable extends Migration
             CREATE TABLE `item_bank_assessment_exercise_record` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `exerciseId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '题库练习id',
+              `assessmentExerciseId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '试卷练习任务id',
               `moduleId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '模块id',
               `assessmentId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '试卷id',
               `userId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
@@ -34,7 +35,7 @@ class AddItemBankExerciseTable extends Migration
               `updatedTime` int(11) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`),
               KEY `answerRecordId` (`answerRecordId`),
-              KEY `moduleId` (`moduleId`,`userId`),
+              KEY `moduleId` (`moduleId`),
               KEY `userId` (`userId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='试卷练习记录表';
             
@@ -71,7 +72,6 @@ class AddItemBankExerciseTable extends Migration
               `studentNum` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '学员总数',
               `teacherIds` varchar(1024) NOT NULL DEFAULT '' COMMENT '教师ID列表',
               `joinEnable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否允许加入',
-              `vipLevelId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '支持的vip等级',
               `expiryMode` varchar(32) NOT NULL DEFAULT 'forever' COMMENT '过期方式 days,date,end_date,forever',
               `expiryDays` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '过期天数',
               `expiryStartDate` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '有效期开始时间',
@@ -97,7 +97,6 @@ class AddItemBankExerciseTable extends Migration
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `exerciseId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '题库练习id',
               `questionBankId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '资源题库id',
-              `joinedType` enum('buy','admin') NOT NULL DEFAULT 'buy' COMMENT '加入方式 buy=购买 admin=后台添加',
               `userId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '用户Id',
               `orderId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '订单id',
               `deadline` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '学习最后期限',

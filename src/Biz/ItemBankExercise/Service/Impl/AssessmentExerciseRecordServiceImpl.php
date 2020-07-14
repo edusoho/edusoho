@@ -20,7 +20,7 @@ class AssessmentExerciseRecordServiceImpl extends BaseService implements Assessm
 
     public function create($assessmentExerciseRecord)
     {
-        $assessmentExerciseRecord = ArrayToolkit::parts($assessmentExerciseRecord, ['exerciseId', 'moduleId', 'assessmentId', 'userId', 'answerRecordId']);
+        $assessmentExerciseRecord = ArrayToolkit::parts($assessmentExerciseRecord, ['exerciseId', 'assessmentExerciseId', 'moduleId', 'assessmentId', 'userId', 'answerRecordId']);
 
         return $this->getItemBankassessmentExerciseRecordDao()->create($assessmentExerciseRecord);
     }

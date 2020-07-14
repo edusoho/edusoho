@@ -18,6 +18,12 @@ interface ExerciseMemberService
 
     public function addTeacher($exerciseId);
 
+    public function lockStudent($exerciseId, $userId);
+
+    public function unlockStudent($exerciseId, $userId);
+
+    public function removeStudent($exerciseId, $userId, $reason = []);
+
     public function getExerciseMember($exerciseId, $userId);
 
     public function remarkStudent($exerciseId, $userId, $remark);

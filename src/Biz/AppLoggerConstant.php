@@ -400,6 +400,7 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'course_callback',
                 'classroom_callback',
                 'adjust_price',
+                'item_bank_exercise_callback',
             ],
             self::CATEGORY => [
                 'create',
@@ -516,6 +517,11 @@ class AppLoggerConstant implements LoggerConstantInterface
             self::ITEM_BANK_EXERCISE => [
                 'add_student',
                 'remove_student',
+                'delete_exercise',
+                'recommend_exercise',
+                'cancel_recommend_exercise',
+                'publish_exercise',
+                'close_exercise',
             ],
         ];
     }

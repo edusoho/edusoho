@@ -3,9 +3,11 @@
 namespace Biz\ItemBankExercise\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Accessor\AccessorInterface;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
+use Biz\Exception\UnableJoinException;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
 use Biz\ItemBankExercise\Dao\ExerciseModuleDao;
@@ -242,7 +244,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
         $user = $this->getCurrentUser();
 
-        $this->getLogService()->info('item_bank_exercise', 'deleteExercise', "删除练习{$user['nickname']}(#{$user['id']})");
+        $this->getLogService()->info('item_bank_exercise', 'delete_exercise', "删除练习{$user['nickname']}(#{$user['id']})");
     }
 
     public function recommendExercise($exerciseId, $number)
@@ -258,7 +260,12 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             'recommendedTime' => time(),
         ];
 
-        return $this->getExerciseDao()->update($exerciseId, $fields);
+        $exercise = $this->getExerciseDao()->update($exerciseId, $fields);
+
+        $user = $this->getCurrentUser();
+        $this->getLogService()->info('item_bank_exercise', 'recommend_exercise', "推荐练习{$user['nickname']}(#{$user['id']})");
+
+        return $exercise;
     }
 
     public function cancelRecommendExercise($exerciseId)
@@ -270,14 +277,36 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             'recommendedSeq' => 0,
         ];
 
-        return $this->getExerciseDao()->update($exerciseId, $fields);
+        $exercise = $this->getExerciseDao()->update($exerciseId, $fields);
+
+        $user = $this->getCurrentUser();
+        $this->getLogService()->info('item_bank_exercise', 'cancel_recommend_exercise', "取消推荐练习{$user['nickname']}(#{$user['id']})");
+
+        return $exercise;
     }
 
     public function publishExercise($exerciseId)
     {
         $this->tryManageExercise($exerciseId);
 
-        return $this->getExerciseDao()->update($exerciseId, ['status' => 'published']);
+        $exercise = $this->getExerciseDao()->update($exerciseId, ['status' => 'published']);
+
+        $user = $this->getCurrentUser();
+        $this->getLogService()->info('item_bank_exercise', 'publish_exercise', "发布练习{$user['nickname']}(#{$user['id']})");
+
+        return $exercise;
+    }
+
+    public function closeExercise($exerciseId)
+    {
+        $this->tryManageExercise($exerciseId);
+
+        $exercise = $this->getExerciseDao()->update($exerciseId, ['status' => 'closed']);
+
+        $user = $this->getCurrentUser();
+        $this->getLogService()->info('item_bank_exercise', 'close_exercise', "关闭练习{$user['nickname']}(#{$user['id']})");
+
+        return $exercise;
     }
 
     public function canTakeItemBankExercise($exerciseId)
@@ -300,7 +329,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             return true;
         }
 
-        if ($user->hasPermission('admin_course_manage') || $user->hasPermission('admin_v2_course_manage')) {
+        if ($user->hasPermission('admin_v2_item_bank_exercise')) {
             return true;
         }
 
@@ -348,12 +377,31 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     {
         $user = $this->getCurrentUser();
 
-        return $user->hasPermission('admin_course_content_manage') || $user->hasPermission('admin_v2_course_content_manage');
+        return $user->hasPermission('admin_v2_item_bank_exercise_content_manage');
     }
 
-    public function canLearningExercise($exerciseId, $userId)
+    public function canLearnExercise($exerciseId)
     {
-        return $this->getExerciseMemberService()->isExerciseMember($exerciseId, $userId);
+        return $this->biz['item_bank_exercise.learn_chain']->process($this->get($exerciseId));
+    }
+
+    public function canJoinExercise($exerciseId)
+    {
+        return $this->biz['item_bank_exercise.join_chain']->process($this->get($exerciseId));
+    }
+
+    public function freeJoinExercise($exerciseId)
+    {
+        $access = $this->canJoinExercise($exerciseId);
+        if (AccessorInterface::SUCCESS != $access['code']) {
+            throw new UnableJoinException($access['msg'], $access['code']);
+        }
+
+        $exercise = $this->get($exerciseId);
+
+        if ((1 == $exercise['isFree'] || 0 == $exercise['originPrice']) && $exercise['joinEnable']) {
+            return $this->getExerciseMemberService()->becomeStudent($exercise['id'], $this->getCurrentUser()->getId());
+        }
     }
 
     protected function _prepareCourseConditions($conditions)
