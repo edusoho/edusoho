@@ -7,6 +7,8 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Util\AssetHelper;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
 use Biz\System\Service\SettingService;
@@ -33,6 +35,7 @@ class Good extends AbstractResource
         $product = $this->getProductService()->getProduct($goods['productId']);
 
         return [
+            'id' => $goods['id'],
             'title' => $goods['title'],
             'subTitle' => $goods['subtitle'],
             'description' => $goods['summary'],
@@ -51,7 +54,6 @@ class Good extends AbstractResource
     private function collectGoodsExtensions()
     {
         $defaultExtensions = [
-            'reviews',
             'teachers',
             'recommendGoods',
             'isFavorite',
@@ -65,59 +67,81 @@ class Good extends AbstractResource
         return array_merge($defaultExtensions, ['mpQrCode']);
     }
 
+
     private function getGoodsSpecs($targetType, $targetId)
     {
         if ('course' != $targetType) {
             return [];
         }
 
-        return [
-            1 => [
-                'title' => '计划一',
-                'subtitle' => '计划一规格副标题',
-                'price' => '100.00',
-                'expiryMode' => 'forever',
-                'joinedNum' => '58',
+        $courses = $this->getCourseService()->searchCourses(
+            [
+                'courseSetId' => $targetId,
+                'status' => 'published',
             ],
-            2 => [
-                'title' => '计划二进阶学习',
-                'subtitle' => '计划二规格副标题',
-                'price' => '150.00',
-                'expiryMode' => 'forever',
-                'joinedNum' => '18',
-                'services' => [
-                    'homeworkReview' => [
-                        'code' => 'homeworkReview',
-                        'shortName' => 'site.services.homeworkReview.shortName',
-                        'fullName' => 'site.services.homeworkReview.fullName',
-                        'summary' => 'site.services.homeworkReview.summary',
-                        'active' => 0,
-                    ],
-                    'testpaperReview' => [
-                        'code' => 'testpaperReview',
-                        'shortName' => 'site.services.testpaperReview.shortName',
-                        'fullName' => 'site.services.testpaperReview.fullName',
-                        'summary' => 'site.services.testpaperReview.summary',
-                        'active' => 0,
-                    ],
-                    'teacherAnswer' => [
-                        'code' => 'teacherAnswer',
-                        'shortName' => 'site.services.teacherAnswer.shortName',
-                        'fullName' => 'site.services.teacherAnswer.fullName',
-                        'summary' => 'site.services.teacherAnswer.summary',
-                        'active' => 0,
-                    ],
-                    'liveAnswer' => [
-                        'code' => 'liveAnswer',
-                        'shortName' => 'site.services.liveAnswer.shortName',
-                        'fullName' => 'site.services.liveAnswer.fullName',
-                        'summary' => 'site.services.liveAnswer.summary',
-                        'active' => 0,
-                    ],
-                ],
+            ['seq' => 'ASC', 'createdTime' => 'ASC'],
+            0,
+            PHP_INT_MAX
+        );
+
+        $specs = [];
+        foreach ($courses as $course) {
+            $specs[] = [
+                'id' => $course['id'],
+                'title' => $course['title'],
+                'subTitle' => $course['subtitle'],
+                'expiryMode' => $course['expiryMode'],
+                'joinedNum' => $course['studentNum'],
+                'price' => $course['price'],
+                'isDefault' => $course['isDefault'],
+                'services' => $this->buildGoodsServices($course['services']),
+            ];
+        }
+
+        return $specs;
+    }
+
+    private function buildGoodsServices(array $serviceNames)
+    {
+        $allServices = [
+            'homeworkReview' => [
+                'code' => 'homeworkReview',
+                'shortName' => 'site.services.homeworkReview.shortName',
+                'fullName' => 'site.services.homeworkReview.fullName',
+                'summary' => 'site.services.homeworkReview.summary',
+                'active' => 0,
+            ],
+            'testpaperReview' => [
+                'code' => 'testpaperReview',
+                'shortName' => 'site.services.testpaperReview.shortName',
+                'fullName' => 'site.services.testpaperReview.fullName',
+                'summary' => 'site.services.testpaperReview.summary',
+                'active' => 0,
+            ],
+            'teacherAnswer' => [
+                'code' => 'teacherAnswer',
+                'shortName' => 'site.services.teacherAnswer.shortName',
+                'fullName' => 'site.services.teacherAnswer.fullName',
+                'summary' => 'site.services.teacherAnswer.summary',
+                'active' => 0,
+            ],
+            'liveAnswer' => [
+                'code' => 'liveAnswer',
+                'shortName' => 'site.services.liveAnswer.shortName',
+                'fullName' => 'site.services.liveAnswer.fullName',
+                'summary' => 'site.services.liveAnswer.summary',
+                'active' => 0,
             ],
         ];
 
+        $specifyServices = [];
+        foreach ($serviceNames as $serviceName) {
+            if (!empty($allServices[$serviceName])) {
+                $specifyServices = array_merge($specifyServices, $allServices[$serviceName]);
+            }
+        }
+
+        return $specifyServices;
     }
 
 
@@ -143,6 +167,22 @@ class Good extends AbstractResource
     protected function getClassroomService()
     {
         return $this->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->service('Course:CourseService');
     }
 
     /**

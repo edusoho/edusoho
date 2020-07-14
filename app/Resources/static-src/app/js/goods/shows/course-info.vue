@@ -148,7 +148,6 @@
             'X-CSRF-Token': $('meta[name=csrf-token]').attr('content')
           }
         }).then(res => {
-        //   console.log(res.data);
           this.tasksList = res.data;
         });
       }
