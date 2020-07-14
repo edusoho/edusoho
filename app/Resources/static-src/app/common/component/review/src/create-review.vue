@@ -1,6 +1,7 @@
 <template>
     <div class="create-review" v-if="canCreate">
-        <form v-show="!userReview.id || (userReview.id && showForm)">
+        {{userReview}}
+        <form v-show="!userReview || (userReview && showForm)">
             <div class="review-form-rating create-review__grade">
                 {{ 'validate.raty_star.message'|trans }}：
                 <span @mouseleave="leaveRating">
@@ -19,7 +20,7 @@
             </div>
         </form>
 
-        <div v-show="userReview.id && !showForm" class="create-review__btn" @click="onCancle(true)"><span
+        <div v-show="userReview && !showForm" class="create-review__btn" @click="onCancle(true)"><span
             class="btn-confirm">{{ 'reviews.review_again'|trans }}</span>
         </div>
     </div>

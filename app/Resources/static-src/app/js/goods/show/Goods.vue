@@ -45,7 +45,7 @@
                     <div id="info-left-3" class="info-left-reviews content-item js-content-item reviews">
                         <h3 class="content-item__title">学员评价</h3>
                         <reviews :can-create="true" :can-operate="true" :target-type="'goods'" :current-user-id="currentUserId"
-                                 :target-id="1">
+                                 :target-id="this.getGoodsId()">
                         </reviews>
                     </div>
                 </div>
