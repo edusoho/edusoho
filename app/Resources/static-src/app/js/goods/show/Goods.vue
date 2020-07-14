@@ -1,10 +1,10 @@
 <template>
     <div class="cd-container">
         <div class="product-breadcrumb">首页 / 艺术学概论</div>
-        <!-- 信息 -->
         <detail :detailData="details" :currentPlan="currentPlan" :product="details.product"
-                :is-favorite="componentsData.isFavorite" @changePlan="changePlan"></detail>
-        <!--商品介绍、目录、评价、老师、二维码、猜你想学 -->
+                :is-favorite="componentsData.isFavorite" @changePlan="changePlan">
+        </detail>
+
         <div class="product-info clearfix" v-show="Object.keys(details).length != 0">
             <div class="product-info__left info-left pull-left" :class="{'all-width': !details.hasExtension}">
                 <div v-if="isFixed" class="fixed">
@@ -22,6 +22,7 @@
                         </div>
                     </div>
                 </div>
+
                 <ul class="info-left__nav" ref="infoLeftNav">
                     <li :class="howActive == 1 ? 'active' : ''"><a href="javascript:;" @click="clickType(1)">商品介绍</a>
                     </li>
@@ -30,41 +31,32 @@
                     <li :class="howActive == 3 ? 'active' : ''"><a href="javascript:;" @click="clickType(3)">学员评价</a>
                     </li>
                 </ul>
-                <div class="info-left__content">
-                    <!-- <div v-if="isFixed" class="fixed-box"></div> -->
 
-                    <!-- 商品介绍 -->
+                <div class="info-left__content">
                     <div id="info-left-1" class="content-item js-content-item">
                         <h3 class="content-item__title">商品介绍</h3>
-                        <div v-html="descriptionHtml" style="padding-left: 14px; padding-top: 10px;"></div>
+                        <div v-html="descriptionHtml" class="description-content" style="padding-left: 14px; padding-top: 10px;"></div>
                     </div>
 
-                    <!-- 学习目录 -->
                     <div id="info-left-2" class="content-item js-content-item">
                         <h3  class="content-item__title">学习目录</h3>
                     </div>
 
-                    <!-- 学员评价 -->
                     <div id="info-left-3" class="info-left-reviews content-item js-content-item reviews">
                         <h3 class="content-item__title">学员评价</h3>
-
                         <reviews :can-create="true" :can-operate="true" :target-type="'goods'" :user-review="userReview"
-                                 :target-id="1"></reviews>
+                                 :target-id="1">
+                        </reviews>
                     </div>
                 </div>
             </div>
 
             <div class="product-info__right pull-right">
-                <!-- 授课老师 -->
                 <teacher :teachers="componentsData.teachers" />
-
                 <qr :mpQrcode="componentsData.mpQrCode" />
-                <!-- 猜你想学 -->
                 <recommend :recommendGoods="componentsData.recommendGoods" />
             </div>
         </div>
-
-        <!-- 回到顶部 -->
         <back-to-top v-show="isFixed" />
     </div>
 </template>
@@ -113,10 +105,11 @@
         },
         methods: {
             changePlan(id) {
+                console.log(id)
                 let data = this.details;
                 for (const key in data.specs) {
                     this.$set(data.specs[key], 'active', false);
-                    if (key == id) {
+                    if (data.specs[key]['id'] == id) {
                         this.$set(data.specs[key], 'active', true);
                         this.currentPlan = data.specs[key];
                     }
@@ -166,8 +159,7 @@
                     let data = res.data;
                     for (const key in data.specs) {
                         this.$set(data.specs[key], 'active', false);
-                        this.$set(data.specs[key], 'id', key);
-                        if (key == goodsId) {
+                        if (1 == data.specs[key]['isDefault']) {
                             this.$set(data.specs[key], 'active', true);
                             this.currentPlan = data.specs[key];
                         }
