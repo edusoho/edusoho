@@ -157,6 +157,7 @@
       .promise-content {
         width: calc(100% - 94px);
         .promise-content__item {
+          position: relative;
           display: inline-block;
           margin-right: 8px;
           padding: 2px 5px;
@@ -164,6 +165,40 @@
           background-color: #46C37B;
           .border-radius(2px);
           color: #fff;
+          cursor: pointer;
+          &:hover .promise-content__item-hover {
+            display: block !important;
+          }
+          .promise-content__item-hover {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            display: none;
+            padding: 6px 10px;
+            margin-bottom: 10px;
+            min-width: 100px;
+            background-color: #404040;
+            transform: translateX(-50%);
+            text-align: center;
+            .border-radius(2px);
+            -webkit-transition: all 0.3s ease;
+            -moz-transition: all 0.3s ease;
+            -o-transition: all 0.3s ease;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            &::after {
+              content: "";
+              position: absolute;
+              top: 100%;
+              left: 50%;
+              transform: translateX(-50%);
+              display: inline-block;
+              width: 0;
+              height: 0;
+              border: 8px solid transparent;
+              border-top-color: #404040;
+            }
+          }
         }
       }
     }
