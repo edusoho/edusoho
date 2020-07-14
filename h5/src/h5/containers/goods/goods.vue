@@ -63,7 +63,9 @@
       >
         <div class="goods-info__title">学习课程</div>
         <!-- 学习课程目录 -->
-        <afterjoin-directory />
+        <classroom-courses
+          :classroomCourses="componentsInfo.classroomCourses"
+        />
       </section>
 
       <!-- 评价 -->
@@ -105,6 +107,7 @@ import Recommend from './components/recommend';
 import Buy from './components/buy';
 import BackToTop from './components/back-to-top';
 import AfterjoinDirectory from './components/afterjoin-directory';
+import ClassroomCourses from './components/classroom-courses';
 
 import Api from '@/api';
 import { Toast } from 'vant';
@@ -133,6 +136,7 @@ export default {
     Buy, // 购买按钮
     BackToTop, // 回到顶部
     AfterjoinDirectory,
+    ClassroomCourses,
   },
   computed: {
     summary() {
@@ -176,7 +180,12 @@ export default {
           id: this.$route.params.id,
         },
         params: {
-          componentTypes: ['teachers', 'reviews', 'recommendGoods'],
+          componentTypes: [
+            'teachers',
+            'reviews',
+            'recommendGoods',
+            'classroomCourses',
+          ],
         },
       }).then(res => {
         this.componentsInfo = res;

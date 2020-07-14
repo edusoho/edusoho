@@ -49,7 +49,7 @@
       <section class="js-scroll-top goods-info__item" id="catalog">
         <div class="goods-info__title">课程目录</div>
         <!-- 课程详情 -->
-        <classroom-task />
+        <classroom-courses />
       </section>
 
       <!-- 评价 -->
@@ -82,7 +82,7 @@ import Teacher from './components/teacher';
 import Recommend from './components/recommend';
 import Buy from './components/buy';
 import BackToTop from './components/back-to-top';
-import ClassroomTask from './components/classroom-task';
+import ClassroomCourses from './components/classroom-courses';
 
 import Api from '@/api';
 import { Toast } from 'vant';
@@ -108,7 +108,7 @@ export default {
     Recommend, // 猜你想学
     Buy, // 购买按钮
     BackToTop, // 回到顶部
-    ClassroomTask,
+    ClassroomCourses,
   },
   computed: {
     summary() {
