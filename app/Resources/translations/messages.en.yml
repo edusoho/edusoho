@@ -1910,12 +1910,8 @@ item_bank_exercise.save_cover: Save cover
 item_bank_exercise.upload_cover: Upload item bank exercise cover
 item_bank_exercise.base.title: Item bank exercise title
 item_bank_exercise.export.answer_num: Answer number
-<<<<<<< HEAD
-item_bank_exercise.export.accuracy: Accuracy
 item_bank_exercise.export.completion_rate: Answer Rate
-=======
 item_bank_exercise.export.accuracy: Master rate
->>>>>>> f5f28a0f1c16567dbc5fe44f596d21a91d6462c4
 item_bank_exercise.answer_number: Answer number：
 item_bank_exercise.accuracy: Master rate：
 item_bank_exercise.manage_btn: Item bank exercise manage
