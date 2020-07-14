@@ -66,6 +66,14 @@ class GoodComponent extends AbstractResource
             }
 
             if ('recommendGoods' === $type) {
+                $components['teachers'] = $this->getTeacherComponent($product);
+            }
+
+            if ('recommendGoods' === $type) {
+            }
+
+            if ('classroomCourses' === $type) {
+                $components['classroomCourses'] = $this->getClassroomCourses($product);
             }
         }
 
@@ -90,13 +98,13 @@ class GoodComponent extends AbstractResource
         return [
             'title' => $goodsSetting['leading']['label'],
             'content' => $goodsSetting['leading']['description'],
-            'imageUrl' => AssetHelper::getFurl($goodsSetting['leading']['qrcode'] , 'default'),
+            'imageUrl' => AssetHelper::getFurl($goodsSetting['leading']['qrcode'], 'default'),
         ];
     }
 
     private function getTeacherComponent($product)
     {
-        if ('course' ==  $product['targetType']) {
+        if ('course' === $product['targetType']) {
             $courseSet = $this->getCourseSetService()->getCourseSet($product['targetId']);
             if (empty($courseSet['teacherIds'])) {
                 return [];
@@ -108,11 +116,11 @@ class GoodComponent extends AbstractResource
             $userFilter->setMode(Filter::SIMPLE_MODE);
             $userFilter->filters($teachers['teachers']);
 
-            return  $teachers['teachers'];
+            return $teachers['teachers'];
         }
 
-        if ('classroom' === $product['targetType'] ) {
-            $classroom = $this->getClassroomService()->getClassroom($product['targetIda']);
+        if ('classroom' === $product['targetType']) {
+            $classroom = $this->getClassroomService()->getClassroom($product['targetId']);
             if (empty($classroom['headTeacherId'])) {
                 return [];
             }
@@ -123,8 +131,19 @@ class GoodComponent extends AbstractResource
             $userFilter->setMode(Filter::SIMPLE_MODE);
             $userFilter->filters($teachers['teachers']);
 
-            return  $teachers['teachers'];
+            return $teachers['teachers'];
         }
+    }
+
+    public function getClassroomCourses($product)
+    {
+        if ('classroom' !== $product['targetType']) {
+            return [];
+        }
+
+        $apiRequest = new ApiRequest("/api/classrooms/{$product['targetId']}/courses", 'GET');
+
+        return $this->invokeResource($apiRequest);
     }
 
     /**
