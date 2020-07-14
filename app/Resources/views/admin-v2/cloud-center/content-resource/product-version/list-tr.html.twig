@@ -13,33 +13,44 @@
   <tbody class="js-table-container">
   {% if productVersionList|default() != '' %}
     {% for index,productVersion in productVersionList|default() %}
-      {% set productCourse = productVersion.course | default() %}
-      {% set productCourseSet = productCourse.courseSet|default() %}
+
+      {% set productCourseSet = productVersion.courseSet|default() %}
       <tr id="product-version-table" style="word-break: break-all;word-wrap: break-word;">
         <td>
           <img src="{{ filepath(course_set_cover(productCourseSet, 'small'), 'courseSet.png') }}" class="img-responsive" style="float: left;margin-right: 10px;width: 45%;">
-          <span title="《{{ productVersion.courseSetTitle }}》">{{ 'course'|trans }}《{{ productVersion.courseSetTitle|sub_text(25) }}》- {{ productVersion.title }}</span>
+          <span title="《{{ productCourseSet.title }}》">{{ 'course'|trans }}《{{ productCourseSet.title|sub_text(25) }}》</span>
         </td>
         <td>
-          <div class="middle-info pull-left short-long-text">
-            <div class="short-text text-muted">{{ productVersion.changeLog|plain_text(80) }} <span
-                      class="trigger">({{ 'admin.app_center.description_open'|trans }})</span></div>
-            <div class="long-text text-muted" style="color:black;">{{ productVersion.changeLog|raw }} <span class="trigger">({{ 'admin.app_center.description_close'|trans }})</span></div>
+          {% for changeLog in productVersion.changelog %}
+          <div class="middle-info pull-left short-long-text width-full">
+            <div class="short-text text-muted">
+              《{{ changeLog.title | default('') }}》: {{ changeLog.versionChangeLog | default('') |plain_text(80) }}
+              <span class="trigger">({{ 'admin.app_center.description_open'|trans }})</span>
+            </div>
+            <div class="long-text text-muted" style="color:black;">
+              《{{ changeLog.title | default('') }}》: {{ changeLog.versionChangeLog | default('') |raw }}
+              <span class="trigger">({{ 'admin.app_center.description_close'|trans }})</span>
+            </div>
           </div>
+          {% endfor %}
         </td>
         <td>{{ productVersion.updatedTime|date('Y-m-d') }}</td>
         <td>
-          <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_content_resource_product_version_detail', {productId: productVersion.localProductId}) }}">{{ 'merchant.content_resource.product_version'|trans }}{{ productVersion.productVersion }}</a>
+          {% for changeLog in productVersion.changelog %}
+
+            <a href="javascript:" class="width-full"  {% if changeLog.version |default(0) > 1 %} data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_content_resource_product_version_detail', {remoteSourceId: changeLog.courseId | default(0)}) }}" {% endif %}>
+              《{{ changeLog.title | default('') }}》:
+              {{ 'merchant.content_resource.product_version'|trans }}
+              {{ changeLog.version | default('') }}
+              <br />
+            </a>
+          {% endfor %}
         </td>
         <td>
-          {% if productVersion.status|default('') == 'published' %}
-            {% if productCourse != '' %}
-              <a target="_blank" href="{{ path('course_set_manage_course_tasks', {courseSetId: productCourseSet.id, courseId: productCourse.id, hasNewVersion: 1}) }}">{{'merchant.content_resource.product_version.view_btn'|trans}}</a>
+            {% if productCourseSet != '' %}
+              <a target="_blank" href="{{ path('course_set_manage_base', {id: productCourseSet.id}) }}">{{'merchant.content_resource.product_version.view_btn'|trans}}</a>
             {% endif %}
-            {% if productVersion.s2b2cDistributeId != null %}
-                <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_content_resource_update_product_version', {remoteProductId: productVersion.s2b2cDistributeId}) }}">{{ 'merchant.content_resource.product_version.update_btn'|trans  }}</a>
-            {% endif %}
-          {% endif %}
+              <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_content_resource_update_product_version', {productId: productVersion.id|default(0)}) }}">{{ 'merchant.content_resource.product_version.update_btn'|trans  }}</a>
         </td>
       </tr>
     {% endfor %}

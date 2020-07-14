@@ -17,7 +17,7 @@ $('#js-course-select-btn').on('click', function (e) {
   $.post($(this).data('chooseUrl'), {courseSetData: $(this).data('courseSet')}, function (response) {
     if (response.status === 'repeat') {
       notify('danger', Translator.trans('已选择过该课程'));
-    } else if (response.status === 'success') {
+    } else if (response.status === true) {
       notify('success', '已选择，请到“课程管理”查看并进行营销配置');
     } else {
       notify('danger', Translator.trans('意外错误，操作失败，请联系管理员处理！'));

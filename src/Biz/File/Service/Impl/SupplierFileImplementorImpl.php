@@ -30,12 +30,12 @@ class SupplierFileImplementorImpl extends BaseService implements FileImplementor
     {
         $fileInfo = $this->getS2B2CFileSourceService()->getFullFileInfo($file);
         $resourceFile = $this->getS2B2CFacedService()->getS2B2CService()->getProductResource(
-            "/resources/{$file['globalId']}",
+            "/resources/{$fileInfo['globalId']}",
             $fileInfo,
             ['canNoSdInMetas' => 1]
         );
 
-        return $this->mergeResourceFile($file, $resourceFile);
+        return $this->mergeResourceFile($fileInfo, $resourceFile);
     }
 
     public function getFileByGlobalId($globalId)

@@ -2,7 +2,6 @@
 
 namespace Biz\S2B2C\Job;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\S2B2C\Service\CourseProductService;
 use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
@@ -14,24 +13,15 @@ class UpdateProductVersionJob extends AbstractJob
     public function execute()
     {
         $products = $this->getProducts();
-        $this->biz->offsetGet('s2b2c.merchant.logger')->info('[UpdateProductJob] courses', $products);
+        $this->biz->offsetGet('s2b2c.merchant.logger')->info('[UpdateProductJob] product', $products);
         foreach ($products as $product) {
-            $this->getS2B2CCourseProductService()->updateProductVersionData($product['s2b2cDistributeId']);
+            $this->getS2B2CCourseProductService()->updateProductVersionData($product['remoteProductId']);
         }
     }
 
     protected function getProducts()
     {
-        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
-        $products = $this->getProductService()->findProductsBySupplierIdAndProductType($s2b2cConfig['supplierId'], 'course');
-
-        $productVersionList = $this->getS2B2CFacadeService()->getSupplierPlatformApi()->getProductVersionList(ArrayToolkit::column($products, 'remoteResourceId'));
-
-        $productVersionList = ArrayToolkit::index($productVersionList, 'productId');
-
-        $this->biz->offsetGet('s2b2c.merchant.logger')->info('[UpdateProductJob] productVersionListIndex', $productVersionList);
-
-        return $productVersionList;
+        return $this->getProductService()->findUpdateVersionProductList();
     }
 
     /**

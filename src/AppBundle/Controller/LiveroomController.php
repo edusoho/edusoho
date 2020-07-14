@@ -102,7 +102,7 @@ class LiveroomController extends BaseController
         $ticketNo = $request->query->get('ticket');
         $liveActivity = $this->getLiveActivityService()->getBySyncIdGTAndLiveId($roomId);
         if (!empty($liveActivity)) {
-            $ticket = $this->getS2B2CServiceApi()->consumeLiveEntryTicket($roomId, $ticketNo);
+            $ticket = $this->getS2B2CFacadeService()->getS2B2CService()->consumeLiveEntryTicket($roomId, $ticketNo);
         } else {
             $ticket = CloudAPIFactory::create('leaf')->get("/liverooms/{$roomId}/tickets/{$ticketNo}");
         }

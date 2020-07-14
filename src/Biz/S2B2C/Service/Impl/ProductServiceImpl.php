@@ -5,8 +5,10 @@ namespace Biz\S2B2C\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\Course\Service\CourseSetService;
 use Biz\S2B2C\Dao\ProductDao;
 use Biz\S2B2C\S2B2CProductException;
+use Biz\S2B2C\Service\CourseProductService;
 use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
@@ -58,6 +60,19 @@ class ProductServiceImpl extends BaseService implements ProductService
     public function getProductBySupplierIdAndRemoteResourceIdAndType($supplierId, $remoteResourceId, $type)
     {
         return $this->getS2B2CProductDao()->getBySupplierIdAndRemoteResourceIdAndType($supplierId, $remoteResourceId, $type);
+    }
+
+    /**
+     * @param $s2b2cProductId
+     * @param $remoteResourceId
+     * @param $type
+     *
+     * @return mixed
+     *               通过$s2b2cProductId 和 remoteResourceId（第三方具体资源ID）和 类型 唯一确定一个商品
+     */
+    public function getByProductIdAndRemoteResourceIdAndType($s2b2cProductId, $remoteResourceId, $type)
+    {
+        return $this->getS2B2CProductDao()->getByRemoteProductIdRemoteResourceIdAndType($s2b2cProductId, $remoteResourceId, $type);
     }
 
     /**
@@ -118,6 +133,15 @@ class ProductServiceImpl extends BaseService implements ProductService
         return $this->getS2B2CProductDao()->findBySupplierIdAndRemoteResourceTypeAndIds($supplierId, $productType, $remoteResourceIds);
     }
 
+    public function findProductsBySupplierIdAndRemoteResourceTypeAndProductIds($supplierId, $productType, $remoteProductIds)
+    {
+        if (empty($remoteProductIds)) {
+            return [];
+        }
+
+        return $this->getS2B2CProductDao()->findBySupplierIdAndRemoteResourceTypeAndProductIds($supplierId, $productType, $remoteProductIds);
+    }
+
     /**
      * @param $supplierId
      * @param $productType
@@ -172,6 +196,7 @@ class ProductServiceImpl extends BaseService implements ProductService
                 'supplierId',
                 'productType',
                 'remoteProductId',
+                's2b2cProductDetailId',
                 'remoteResourceId',
                 'localResourceId',
                 'cooperationPrice',
@@ -193,6 +218,13 @@ class ProductServiceImpl extends BaseService implements ProductService
         return $this->getS2B2CProductDao()->delete($id);
     }
 
+    /**
+     * @param $nowVersion
+     * @param $productVersions
+     *
+     * @return array
+     * @codeCoverageIgnore
+     */
     public function generateVersionChangeLogs($nowVersion, $productVersions)
     {
         if (empty($productVersions)) {
@@ -254,6 +286,10 @@ class ProductServiceImpl extends BaseService implements ProductService
         return $this->getS2B2CProductDao()->getByTypeAndLocalResourceId($type, $localResourceId);
     }
 
+    /**
+     * @return mixed
+     * @codeCoverageIgnore
+     */
     public function getProductUpdateType()
     {
         return $this->getSettingService()->get('productUpdateType');
@@ -314,6 +350,152 @@ class ProductServiceImpl extends BaseService implements ProductService
         return $this->getS2B2CProductDao()->deleteByIds($ids);
     }
 
+    /**
+     * @param $s2b2cProductId
+     *
+     * @return bool
+     *
+     * @throws \Exception
+     */
+    public function adoptProduct($s2b2cProductId)
+    {
+        $supplier = $this->getS2B2CFacadeService()->getS2B2CConfig();
+
+        $localProduct = $this->getProductBySupplierIdAndRemoteProductId($supplier['supplierId'], $s2b2cProductId);
+
+        if (!empty($localProduct)) {
+            $this->createNewException(S2B2CProductException::ADOPT_PRODUCT_REPEAT());
+        }
+
+        $this->adoptS2B2CProduct($s2b2cProductId);
+
+        $this->beginTransaction();
+        try {
+            //@todo 可以改成策略 根据商品类型进行同步，暂时只有course_set类型
+            $this->getCourseProductService()->syncCourses($s2b2cProductId);
+            $this->commit();
+        } catch (\Exception $exception) {
+            $this->rollback();
+            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[adoptProduct] 同步课程失败，原因:'.$exception->getMessage());
+            $this->createNewException(S2B2CProductException::SYNC_PRODUCT_CONTENT_FAIL());
+        }
+
+        return true;
+    }
+
+    protected function adoptS2B2CProduct($s2b2cProductId)
+    {
+        $result = $this->getS2B2CFacadeService()->getS2B2CService()->adoptDirtributeProduct($s2b2cProductId);
+
+        if (!empty($result['status']) && 'success' == $result['status']) {
+            $product = $result['data'];
+        } else {
+            $this->biz->offsetGet('s2b2c.merchant.logger')->error('[adoptProduct] 采用课程失败，原因:'.json_encode($result));
+            $this->createNewException(S2B2CProductException::ADOPT_PRODUCT_FAILED());
+        }
+
+        //过滤已有的product
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+        $localProducts = $this->getS2B2CProductDao()->findBySupplierIdAndRemoteProductId($s2b2cConfig['supplierId'], $s2b2cProductId);
+        $s2b2cProductDetailIds = array_column($localProducts, 's2b2cProductDetailId');
+        $remoteProductDetails = array_filter($product['detail'], function ($detail) use ($s2b2cProductDetailIds) {
+            return !in_array($detail['id'], $s2b2cProductDetailIds);
+        });
+
+        if (!empty($remoteProductDetails)) {
+            $products = array_map(function ($detail) {
+                return [
+                    's2b2cProductDetailId' => $detail['id'],
+                    'supplierId' => $detail['supplierId'],
+                    'remoteProductId' => $detail['productId'],
+                    'remoteResourceId' => $detail['targetId'],
+                    'productType' => $this->getProductType($detail['targetType']),
+                    'syncStatus' => 'waiting',
+                    'localResourceId' => 0,
+                ];
+            }, $product['detail']);
+
+            $this->getS2B2CProductDao()->batchCreate($products);
+        }
+
+        return true;
+    }
+
+    /**
+     * @param $s2b2cProductId
+     * @param $resourceCourseId
+     * @param array $versionData ['title', 'version', 'courseId', 'versionChangeLog']
+     *
+     * @codeCoverageIgnore
+     *
+     * @return bool
+     */
+    public function notifyNewVersionProduct($s2b2cProductId, $resourceCourseId, $versionData)
+    {
+        $product = $this->getByProductIdAndRemoteResourceIdAndType($s2b2cProductId, $resourceCourseId, 'course');
+
+        if (!empty($product)) {
+            $this->getS2B2CProductDao()->update($product['id'], ['remoteVersion' => $versionData['version']]);
+        }
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+
+        $courseSetProduct = $this->getProductBySupplierIdAndRemoteProductIdAndType($s2b2cConfig['supplierId'], $s2b2cProductId, 'course_set');
+
+        $localChangeLogs = $courseSetProduct['changelog'] ?: [];
+        $localChangeLogs[$versionData['courseId']] = $versionData;
+
+        $this->getS2B2CProductDao()->update($courseSetProduct['id'], ['changelog' => $localChangeLogs]);
+        $this->getS2B2CProductDao()->wave([$courseSetProduct['id']], ['remoteVersion' => 1]);
+
+        return true;
+    }
+
+    public function findUpdatedVersionProductList()
+    {
+        return $this->getS2B2CProductDao()->findRemoteVersionGTLocalVersion();
+    }
+
+    public function updateProductVersion($id)
+    {
+        $product = $this->getProduct($id);
+
+        if (empty($product)) {
+            $this->createNewException(S2B2CProductException::PRODUCT_NOT_FOUNT());
+        }
+
+        $this->adoptS2B2CProduct($product['remoteProductId']);
+
+        $this->beginTransaction();
+
+        try {
+            $this->getCourseProductService()->updateProductVersionData($product['remoteProductId']);
+            $this->commit();
+        } catch (\Exception $exception) {
+            $this->rollback();
+            $this->getLogger()->error('[updateProductVersion] 更新失败 '.$exception->getMessage());
+            $this->createNewException(S2B2CProductException::ADOPT_PRODUCT_FAILED());
+        }
+
+        return true;
+    }
+
+    /**
+     * 获取远程productType 和 本地productType的映射关系
+     *
+     * @param $productType
+     *
+     * @return mixed
+     */
+    protected function getProductType($productType)
+    {
+        $type = [
+            'courseSet' => 'course_set',
+            'course' => 'course',
+        ];
+
+        return $type[$productType];
+    }
+
     protected function getAccessKey()
     {
         $settings = $this->getSettingService()->get('storage', []);
@@ -354,5 +536,21 @@ class ProductServiceImpl extends BaseService implements ProductService
     protected function getSchedulerService()
     {
         return $this->biz->service('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return CourseProductService
+     */
+    protected function getCourseProductService()
+    {
+        return $this->createService('S2B2C:CourseProductService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 }
