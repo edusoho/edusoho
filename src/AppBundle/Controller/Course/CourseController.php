@@ -382,9 +382,9 @@ class CourseController extends CourseBaseController
         }
         if (!empty($member)) {
             if ($selectedCourseId > 0) {
-                $userReview = $this->getReviewService()->getByUserIdAndTargetTypeAndTargetId($member['userId'], 'course', $selectedCourseId);
+                $userReview = $this->getReviewService()->getReviewByUserIdAndTargetTypeAndTargetId($member['userId'], 'course', $selectedCourseId);
             } else {
-                $userReview = $this->getReviewService()->getByUserIdAndTargetTypeAndTargetId($member['userId'], 'course', $course['id']);
+                $userReview = $this->getReviewService()->getReviewByUserIdAndTargetTypeAndTargetId($member['userId'], 'course', $course['id']);
             }
         }
 

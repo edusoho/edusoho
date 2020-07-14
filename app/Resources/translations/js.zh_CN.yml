@@ -1531,6 +1531,15 @@ site.default.none: 无
 form.btn.save: 保存
 
 
+site.twig.extension.smarttime.future: 未来
+site.twig.extension.smarttime.hardly: 刚刚
+site.twig.extension.smarttime.previous_second: %diff%秒前
+site.twig.extension.smarttime.previous_minute: %diff%分钟前
+site.twig.extension.smarttime.previous_hour: %diff%小时前
+site.twig.extension.smarttime.previous_day: %diff%天前
+
+reviews.review_again: 重新评价
+
 
 
 
