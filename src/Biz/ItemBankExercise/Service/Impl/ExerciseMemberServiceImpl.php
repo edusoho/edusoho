@@ -306,7 +306,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         try {
             $this->beginTransaction();
 
-            $this->getExerciseMemberDao()->delete($member['id']);
+            $this->removeMember($member, []);
             $this->recordLog($exercise, $userId, ['type' => 'remove', 'memberId' => $member['id'], 'remark' => '']);
             $this->dispatchEvent('exercise.quit', $exercise, ['member' => $member]);
 
