@@ -72,11 +72,9 @@
       <section class="js-scroll-top goods-info__item" id="evaluate">
         <div class="goods-info__title">课程评价</div>
         <reviews
-          :can-create="true"
-          :can-operate="true"
           :target-type="'goods'"
-          :user-review="null"
           :target-id="parseInt($route.params.id)"
+          :limit="1"
         ></reviews>
       </section>
 

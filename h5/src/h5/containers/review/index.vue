@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="reviews" v-if="reviews">
+    <div class="reviews" v-if="reviews.length">
       <div
         class="review-item clearfix"
         v-for="review in reviews"
@@ -39,10 +39,9 @@
               </div>
               <div class="review-post-content pull-left">
                 <div class="review-content__header clearfix">
-                  <span class="review-content__header__nickname pull-left"
-                    >{{ post.user.nickname }} 回复
-                    {{ review.user.nickname }} ：</span
-                  >
+                  <span class="review-content__header__nickname pull-left">
+                    {{ post.user.nickname }} 回复{{ review.user.nickname }} ：
+                  </span>
                 </div>
                 <div class="review-content_text">{{ post.content }}</div>
               </div>
@@ -54,7 +53,18 @@
     <div v-else class="info-evaluate__item">
       暂无评价~
     </div>
-    <div class="text-center">点击查看更多</div>
+    <div v-if="reviews.length">
+      <div
+        v-if="(parseInt(paging.offset) + 1) * paging.limit < paging.total"
+        class="load-more__footer"
+        @click="searchReviews(parseInt(paging.offset) + 1, paging.limit)"
+      >
+        点击查看更多
+      </div>
+      <div v-else class="load-more__footer">
+        没有更多了
+      </div>
+    </div>
   </div>
 </template>
 
@@ -93,13 +103,9 @@ export default {
       type: Boolean,
       default: true,
     },
-    offset: {
-      type: Number,
-      default: 0,
-    },
     limit: {
       type: Number,
-      default: 5,
+      default: null,
     },
   },
   methods: {
@@ -114,7 +120,7 @@ export default {
           targetId: this.targetId,
           parentId: 0,
           offset: parseInt(offset),
-          limit: parseInt(limit),
+          limit: this.limit == null ? parseInt(limit) : this.limit,
           needPosts: this.needPosts,
         },
       }).then(res => {
