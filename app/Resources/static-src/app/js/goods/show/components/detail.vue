@@ -33,8 +33,7 @@
       <div class="detail-right__plan plan clearfix" v-if="detailData.specs">
         <div class="plan-title pull-left">教学计划</div>
         <div class="plan-btns pull-right">
-          <span class="plan-btns__item" v-for="plan in detailData.specs" :key="plan.id" :class="{ active: plan.active }" @click="handleClick(plan)">        {{plan}}
-{{ plan.title }}</span>
+          <span class="plan-btns__item" v-for="plan in detailData.specs" :key="plan.id" :class="{ active: plan.active }" @click="handleClick(plan)">{{ plan.title }}</span>
         </div>
       </div>
 
