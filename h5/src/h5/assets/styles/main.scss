@@ -36,13 +36,13 @@
 @import './containers/goods/components/detail.scss';
 @import './containers/goods/components/info.scss';
 
-
 // modules
 @import './modules/e-drag.scss';
 @import './modules/e-panel.scss';
 @import './modules/e-footer.scss';
 @import './modules/e-loading.scss';
 @import './modules/e-more-mask.scss';
+@import './modules/e-load-more.scss';
 @import './modules/e-popup.scss';
 @import './modules/e-row-class/index.scss';
 @import './modules/e-column-class/index.scss';
@@ -58,13 +58,15 @@
 @import './containers/webview/index.scss';
 
 //隐藏滚动条
-html,body {
-  &::-webkit-scrollbar {
-    height: 0px;
-    width : 0px;
-    display: none;
-  }
-  scrollbar-width: none;
-  -ms-overflow-style:none;
-  overflow:-moz-scrollbars-none;
+html,
+body {
+	&::-webkit-scrollbar {
+		display: none;
+		width: 0;
+		height: 0;
+	}
+
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+	overflow: -moz-scrollbars-none;
 }
