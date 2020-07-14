@@ -733,6 +733,14 @@ user_learning_classrooms:
     path:  /user/{id}/learning/classrooms
     defaults: { _controller: AppBundle:User:learning }
 
+user_question_bank_learn:
+    path:  /user/{id}/question_bank/learn
+    defaults: { _controller: AppBundle:User:itemBankLearn }
+
+user_question_bank_teach:
+  path:  /user/{id}/question_bank/teach
+  defaults: { _controller: AppBundle:User:itemBankTeach }
+
 user_card_show:
     path:  /user/{userId}/card/show
     defaults: { _controller: AppBundle:User:cardShow }

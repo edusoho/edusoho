@@ -3432,8 +3432,10 @@ message.btn.send: 写私信
 user.homepage: %nickname%的个人主页
 user.homepage.introductions: 个人介绍
 user.homepage.teaching_courses: 在教课程
+user.homepage.teaching_question_bank: 在教题库
 user.homepage.teaching_classrooms: 在教%classroomName%
 user.homepage.learning_courses: 在学课程
+user.homepage.learning_question_bank: 在学题库
 user.homepage.learning_classrooms: 在学%classroomName%
 user.homepage.favorite_courses: 收藏课程
 user.homepage.joined_group: 加入小组
@@ -3447,6 +3449,11 @@ user.homepage.teaching_courses.empty: 无在教的课程
 
 #个人主页模块-在学课程
 user.homepage.learning_courses.empty: 无在学的课程
+
+#个人主页模块-在学题库
+user.homepage.learning_question_bank.empty: 无在学的题库
+
+user.homepage.teaching_question_bank.empty: 无在教的题库
 
 #个人主页模块-收藏课程
 user.homepage.favorite_courses.empty: 无收藏的课程

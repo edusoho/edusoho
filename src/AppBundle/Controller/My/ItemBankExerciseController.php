@@ -70,16 +70,19 @@ class ItemBankExerciseController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getItemBankExerciseService()->count($conditions),
+            !empty($members) ? $this->getItemBankExerciseService()->count($conditions) : 0,
             12
         );
 
-        $exercises = $this->getItemBankExerciseService()->search(
-            $conditions,
-            [],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        $exercises = [];
+        if (!empty($exerciseIds)) {
+            $exercises = $this->getItemBankExerciseService()->search(
+                $conditions,
+                [],
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        }
 
         return $this->render(
             'my/learning/question-bank/list.html.twig',
