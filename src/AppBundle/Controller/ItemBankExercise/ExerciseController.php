@@ -89,7 +89,9 @@ class ExerciseController extends BaseController
 
         $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : null;
         $previewAs = $request->query->get('previewAs', '');
-        if (!empty($member) && empty($previewAs) && $member['role'] == 'student') $previewAs = 'member';
+        if (!empty($member) && empty($previewAs) && 'student' == $member['role']) {
+            $previewAs = 'member';
+        }
         if (!empty($member) && !empty($previewAs) && $user->isLogin() && $this->canExerciseShowRedirect($request)) {
             if ('date' != $exercise['expiryMode'] || $exercise['expiryStartDate'] < time()) {
                 return $this->redirect(($this->generateUrl('my_item_bank_exercise_show', ['id' => $id])));
@@ -165,8 +167,8 @@ class ExerciseController extends BaseController
         $qrCode->setPadding(10);
         $img = $qrCode->get('png');
 
-        $headers = array('Content-Type' => 'image/png',
-            'Content-Disposition' => 'inline; filename="image.png"',);
+        $headers = ['Content-Type' => 'image/png',
+            'Content-Disposition' => 'inline; filename="image.png"', ];
 
         return new Response($img, 200, $headers);
     }
@@ -221,6 +223,7 @@ class ExerciseController extends BaseController
     public function moduleAction(Request $request, $previewAs, $exerciseId, $tab)
     {
         list($type, $moduleId) = explode('_', $tab);
+
         return $this->render(
             'item-bank-exercise/tabs/module.html.twig',
             [
@@ -254,7 +257,7 @@ class ExerciseController extends BaseController
             $records = ArrayToolkit::index($records, 'itemCategoryId');
         }
 
-        return $this->render("item-bank-exercise/tabs/list/chapter-list.html.twig", [
+        return $this->render('item-bank-exercise/tabs/list/chapter-list.html.twig', [
             'exercise' => $exercise,
             'member' => $member,
             'records' => $records,
@@ -392,7 +395,7 @@ class ExerciseController extends BaseController
         $matchExpreList = $biz['item_bank_exercise.show_redirect'];
 
         foreach ($matchExpreList as $matchExpre) {
-            $matchExpre = "/{$host}" . $matchExpre;
+            $matchExpre = "/{$host}".$matchExpre;
             if (preg_match($matchExpre, $referer)) {
                 return false;
             }
