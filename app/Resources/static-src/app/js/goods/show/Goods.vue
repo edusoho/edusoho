@@ -44,7 +44,8 @@
 
                     <div id="info-left-3" class="info-left-reviews content-item js-content-item reviews">
                         <h3 class="content-item__title">学员评价</h3>
-                        <reviews :can-create="true" :can-operate="true" :target-type="'goods'" :user-review="userReview"
+                        <reviews :can-create="true" :can-operate="true" :target-type="'goods'" :current-user-id="currentUserId"
+                                 :limit="1"
                                  :target-id="1">
                         </reviews>
                     </div>
@@ -84,8 +85,8 @@
             }
         },
         props: {
-            userReview: {
-                type: Object,
+            currentUserId: {
+                type: Number,
                 default: null
             }
         },
@@ -105,7 +106,6 @@
         },
         methods: {
             changePlan(id) {
-                console.log(id)
                 let data = this.details;
                 for (const key in data.specs) {
                     this.$set(data.specs[key], 'active', false);

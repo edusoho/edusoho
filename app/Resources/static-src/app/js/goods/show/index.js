@@ -1,7 +1,11 @@
-import Course from './Goods';
+import Goods from './Goods';
 
 Vue.config.productionTip = false;
 
 new Vue({
-  render: createElement => createElement(Course)
+  render: createElement => createElement(Goods,{
+    props: {
+      currentUserId: $('#show-product-page').data('currentUserId')
+    },
+  })
 }).$mount('#show-product-page');
