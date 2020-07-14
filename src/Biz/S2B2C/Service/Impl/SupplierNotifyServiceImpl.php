@@ -36,6 +36,7 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
             $this->writeParameters($content);
         }
         $this->getLogger()->info("[onCoopModeChange] 更新渠道商#{$new['name']}合作模式#{$new['coop_mode']}成功");
+        $this->getS2B2CFacadeService()->updateMerchantDisabledPermissions();
 
         return ['success' => true];
     }
