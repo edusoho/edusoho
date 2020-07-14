@@ -1,5 +1,6 @@
 <?php
 
+use Biz\S2B2C\Service\ProductService;
 use Symfony\Component\Filesystem\Filesystem;
 use AppBundle\Common\ArrayToolkit;
 
@@ -88,16 +89,23 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function upgradeS2b2cProduct()
     {
-        $products = $this->getProductService()->searchProducts(array(), array(), 0, 1);
+        $sql = 'SELECT * FROM `s2b2c_product` WHERE s2b2cProductDetailId = ? ORDER BY id ASC';
+
+        $products = $this->getConnection()->fetchAll($sql, [0]) ?? [];
 
         foreach ($products as $product) {
             try{
                 $result = $this->getS2B2CFacadeService()->getS2B2CService()->getDistributeOldContent($product['remoteProductId']);
 
                 if (empty($result['status'])) {
+                    echo "更新product执行失败 调用接口失败 id#{$product['id']}";
                     continue;
                 }
                 $distribute = $result['data'];
+                if (empty($distribute)) {
+                    echo "更新product执行失败 不存在的分发记录 id#{$product['id']}";
+                    continue;
+                }
 
                 $this->getProductService()->updateProduct($product['id'], [
                     'remoteProductId' => $distribute["product_id_v2"],
@@ -108,14 +116,12 @@ class EduSohoUpgrade extends AbstractUpdater
             }catch (\Throwable $exception) {
                 echo '更新product执行失败 ' . $exception->getMessage() . "id#{$product['id']}";
             }
-
         }
-
         return 1;
     }
 
     /**
-     * @return \Biz\S2B2C\Service\ProductService
+     * @return ProductService
      */
     protected function getProductService()
     {
