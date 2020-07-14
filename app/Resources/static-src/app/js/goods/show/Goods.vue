@@ -36,7 +36,7 @@
                     <!-- 商品介绍 -->
                     <div id="info-left-1" class="content-item js-content-item">
                         <h3 class="content-item__title">商品介绍</h3>
-                        <div v-html="descriptionHtml" style="padding-left: 14px; padding-top: 10px;"></div>
+                        <div v-html="descriptionHtml" class="description-content" style="padding-left: 14px; padding-top: 10px;"></div>
                     </div>
 
                     <!-- 学习目录 -->
