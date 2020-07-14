@@ -1157,6 +1157,7 @@ item_bank_exercise.upload_cover: 题库练习图片上传
 item_bank_exercise.base.title: 题库练习名称
 item_bank_exercise.export.answer_num: 答题数
 item_bank_exercise.export.accuracy: 正确率
+item_bank_exercise.export.completion_rate: 答题率
 item_bank_exercise.answer_number: 答题数：
 item_bank_exercise.accuracy: 正确率：
 item_bank_exercise.preview.course: 预览题库练习
@@ -4437,6 +4438,7 @@ my.teaching.question_bank.open_ensure: 确认启用题库练习吗？
 
 my.learning.menu_heading: 我的学习
 my.learning.course_set_menu: 我的课程
+my.learning.question_bank_menu: 我的题库
 my.learning.live_schedule_menu: 直播课表
 my.learning.classroom_menu: 我的%classroom%
 my.learning.live_menu: 我的直播
@@ -4525,6 +4527,7 @@ my.learning.course.learned_empty: 暂无已学完的课程
 my.learning.course.finish_task: 完成%taskName%
 my.learning.course.contiune_study: 继续学习
 my.learning.course.learning_empty: 暂无学习中的课程
+my.learning.question_bank.learning_empty: 暂无学习中的题库
 my.learning.course.lesson_num: 第%num%课时
 my.learning.course.total_learn_time: 学习总时长
 my.learning.course.watch: 查看课程

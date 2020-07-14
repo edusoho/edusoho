@@ -1896,6 +1896,7 @@ item_bank_exercise.upload_cover: Upload item bank exercise cover
 item_bank_exercise.base.title: Item bank exercise title
 item_bank_exercise.export.answer_num: Answer number
 item_bank_exercise.export.accuracy: Accuracy
+item_bank_exercise.export.completion_rate: Answer Rate
 item_bank_exercise.answer_number: Answer number：
 item_bank_exercise.accuracy: Accuracy：
 item_bank_exercise.manage_btn: Item bank exercise manage
@@ -3719,6 +3720,7 @@ my.teaching.question_bank.open_ensure: Are you sure to open the item bank exerci
 
 my.learning.menu_heading: 'My Learning'
 my.learning.course_set_menu: 'Courses'
+my.learning.question_bank_menu: 'Question bank'
 my.learning.live_schedule_menu: Live Schedule
 my.learning.classroom_menu: '%classroom%'
 my.learning.live_menu: 'Lives'
@@ -3794,6 +3796,7 @@ my.learning.course.learned_empty: 'No record'
 my.learning.course.finish_task: 'Finish %taskName%'
 my.learning.course.contiune_study: Continue
 my.learning.course.learning_empty: 'No record'
+my.learning.question_bank.learning_empty: 'No record'
 my.learning.course.lesson_num: 'Lesson %num%'
 my.learning.course.total_learn_time: 'Learned Duration In Total'
 my.learning.course.watch: View

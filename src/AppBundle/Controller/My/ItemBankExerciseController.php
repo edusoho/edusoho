@@ -5,6 +5,7 @@ namespace AppBundle\Controller\My;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
+use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,6 +50,50 @@ class ItemBankExerciseController extends BaseController
             'paginator' => $paginator,
             'filter' => $filter,
         ]);
+    }
+
+    public function itemBankAction(Request $request)
+    {
+        $currentUser = $this->getUser();
+        $members = $this->getItemBankExerciseMemberService()->search(
+            ['userId' => $currentUser['id'], 'role' => 'student'],
+            ['createdTime' => 'desc'],
+            0,
+            PHP_INT_MAX
+        );
+
+        $exerciseIds = ArrayToolkit::column($members, 'exerciseId');
+        $conditions = ['ids' => $exerciseIds];
+
+        $paginator = new Paginator(
+            $request,
+            $this->getItemBankExerciseService()->count($conditions),
+            12
+        );
+
+        $exercises = $this->getItemBankExerciseService()->search(
+            $conditions,
+            [],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render(
+            'my/learning/question-bank/list.html.twig',
+            [
+                'exercises' => ArrayToolkit::index($exercises, 'id'),
+                'paginator' => $paginator,
+                'members' => ArrayToolkit::index($members, 'exerciseId'),
+            ]
+        );
+    }
+
+    /**
+     * @return ExerciseMemberService
+     */
+    protected function getItemBankExerciseMemberService()
+    {
+        return $this->getBiz()->service('ItemBankExercise:ExerciseMemberService');
     }
 
     /**

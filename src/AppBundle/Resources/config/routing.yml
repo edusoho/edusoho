@@ -2077,6 +2077,10 @@ my_classroom_questions:
     path: /my/classroom/questions
     defaults: { _controller: AppBundle:My/Classroom:classroomQuestions }
 
+my_question_bank:
+  path: /my/question_bank
+  defaults: { _controller: AppBundle:My/ItemBankExercise:itemBank }
+
 my_questions:
     path: /my/questions
     defaults: { _controller: AppBundle:My/Thread:questions }
