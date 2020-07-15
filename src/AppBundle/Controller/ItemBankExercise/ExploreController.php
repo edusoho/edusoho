@@ -42,7 +42,7 @@ class ExploreController extends BaseController
 
     protected function getFilter($conditions)
     {
-        $default = array('price' => 'all');
+        $default = ['price' => 'all'];
 
         $filter = !isset($conditions['filter']) ? $default : $conditions['filter'];
 
@@ -52,7 +52,7 @@ class ExploreController extends BaseController
 
         unset($conditions['filter']);
 
-        return array($conditions, $filter);
+        return [$conditions, $filter];
     }
 
     /**

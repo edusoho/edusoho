@@ -8,17 +8,17 @@ class ItemBankExerciseWrapper extends Wrapper
 {
     public function price($exercise)
     {
-        $coinSetting = $this->getSettingService()->get('coin', array(
+        $coinSetting = $this->getSettingService()->get('coin', [
             'coin_enabled' => 0,
             'cash_model' => 'none',
             'cash_rate' => 1,
-        ));
+        ]);
 
-        $priceWrapper = array(
+        $priceWrapper = [
             'priceText' => $exercise['price'],
             'currencyType' => 'RMB',
             'currency' => $this->container->get('translator')->trans('admin.account_center.RMB'),
-        );
+        ];
 
         if (0 == $exercise['price']) {
             $priceWrapper['priceText'] = $this->container->get('translator')->trans('course.block_grid.price_free');
@@ -50,6 +50,6 @@ class ItemBankExerciseWrapper extends Wrapper
 
     protected function getWrapList()
     {
-        return array('price');
+        return ['price'];
     }
 }
