@@ -248,6 +248,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'targetId' => $course['id'],
             'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['title'],
             'seq' => $course['seq'],
+            'buyableMode' => $course['expiryMode'],
         ]);
 
         return $goodsSpecs;
@@ -265,8 +266,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'price' => $course['price'],
             'coinPrice' => $course['coinPrice'],
             'buyableMode' => $course['expiryMode'],
-            'buyableStartTime' => $course['expiryStartDate'],
-            'buyableEndTime' => $course['expiryEndDate'],
+            'buyableStartTime' => $course['expiryStartDate'] ? $course['expiryStartDate'] : 0,
+            'buyableEndTime' => $course['expiryEndDate'] ? $course['expiryEndDate'] : 0,
             'maxJoinNum' => $course['maxStudentNum'],
             'services' => $course['services'],
         ]);

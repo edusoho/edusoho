@@ -34,7 +34,7 @@
                     url: "/api/favorite",
                     method: "POST",
                     data: {
-                        'targetType': "course",
+                        'targetType': targetType,
                         'targetId': targetId
                     },
                     headers: {
