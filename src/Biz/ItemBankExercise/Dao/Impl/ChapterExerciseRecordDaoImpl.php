@@ -25,7 +25,7 @@ class ChapterExerciseRecordDaoImpl extends GeneralDaoImpl implements ChapterExer
     {
         return [
             'timestamps' => ['createdTime', 'updatedTime'],
-            'orderbys' => ['createdTime'],
+            'orderbys' => ['createdTime', 'doneQuestionNum'],
             'conditions' => [
                 'id IN (:ids)',
                 'itemCategoryId IN (:itemCategoryIds)',
@@ -33,6 +33,9 @@ class ChapterExerciseRecordDaoImpl extends GeneralDaoImpl implements ChapterExer
                 'moduleId = :moduleId',
                 'exerciseId = :exerciseId',
                 'userId = :userId',
+                'doneQuestionNum > :doneQuestionNum',
+                'createdTime >= :startTimeGreaterThan',
+                'createdTime < :startTimeLessThan',
             ],
         ];
     }

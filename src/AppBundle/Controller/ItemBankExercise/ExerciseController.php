@@ -16,6 +16,7 @@ use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Review\Service\ReviewService;
+use Biz\System\Service\CacheService;
 use Biz\User\Service\TokenService;
 use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
@@ -315,24 +316,31 @@ class ExerciseController extends BaseController
 
     public function advancedUsersAction(Request $request, $exerciseId)
     {
-        $members = $this->getExerciseMemberService()->search(
-            [
-                'exerciseId' => $exerciseId,
-                'doneQuestionNum' => 0,
-                'startTimeGreaterThan' => strtotime('Monday last week'),
-                'startTimeLessThan' => strtotime('Monday this week'),
-            ],
-            ['doneQuestionNum' => 'DESC'],
-            0,
-            10
-        );
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
+        $records = $this->getCacheService()->get("item_bank_exercise({$exerciseId})");
+        $records = json_decode($records, true);
+        if (empty($records)){
+            $records = $this->getChapterExerciseRecordService()->search(
+                [
+                    'exerciseId' => $exerciseId,
+                    'doneQuestionNum' => 0,
+                    'startTimeGreaterThan' => strtotime('Monday last week'),
+                    'startTimeLessThan' => strtotime('Monday this week'),
+                ],
+                ['doneQuestionNum' => 'DESC'],
+                0,
+                10
+            );
+            $expiryTime = mktime(23,59,59,date('m'),date('d')-date('w')+7,date('Y'));
+            $this->getCacheService()->set("item_bank_exercise({$exerciseId})", json_encode($records), $expiryTime);
+        }
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($records, 'userId'));
 
         return $this->render(
             'item-bank-exercise/tabs/advanced.html.twig',
             [
                 'users' => $users,
-                'members' => ArrayToolkit::index($members, 'userId'),
+                'members' => ArrayToolkit::index($records, 'userId'),
             ]
         );
     }
@@ -402,6 +410,14 @@ class ExerciseController extends BaseController
         }
 
         return true;
+    }
+
+    /**
+     * @return CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 
     /**

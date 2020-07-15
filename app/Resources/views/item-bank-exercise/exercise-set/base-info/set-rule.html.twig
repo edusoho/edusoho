@@ -17,7 +17,7 @@
       { 'days': 'course.teaching_plan.expiry_date.anywhere_mode'|trans, 'date': 'course.teaching_plan.expiry_date.date_mode'|trans,'forever':'course.teaching_plan.expiry_date.forever_mode'|trans },
       exercise.expiryMode|default('forever'), exercisePublished or exerciseClosed ? 'disabled' : '') }}
 
-    {% if exerciseClosed or (exercise.expiryMode|default('forever') == 'days') and exercise.status|default('draft') != 'draft' %}
+    {% if exercise.status|default('draft') != 'draft' %}
       <input type="hidden" name="expiryMode" value="{{ exercise.expiryMode|default('forever') }}">
     {% endif %}
     {#随到随学#}
@@ -38,6 +38,9 @@
           autocomplete="off" class="form-control course-mangae-info__input js-expiry-input cd-mr8" id="deadline"
           name="deadline"
           value="{% if exercise.expiryEndDate|default(0) %}{{ exercise.expiryEndDate|default(0) }}{% endif %}" {% if exercisePublished %} disabled {% endif %}>{{ 'course.marketing_setup.rule.expiry_date_tips'|trans }}
+        {% if exercise.deadlineType|default('days') == 'end_date' and (exercisePublished or exerciseClosed) %}
+          <input type="hidden" name="deadline" value="{{ exercise.expiryEndDate|default(0) }}">
+        {% endif %}
       </div>
       <div class="cd-mt16 {% if exercise.deadlineType|default('days') != 'days' %}hidden{% endif %}"
            id="deadlineType-days">
@@ -46,6 +49,9 @@
           name="expiryDays"
           value="{% if exercise.expiryDays|default(1) %}{{ exercise.expiryDays|default(1) }}{% endif %}" {% if exercisePublished%}disabled {% endif %}>
         {{ 'course.marketing_setup.rule.expiry_date.publish_tips'|trans }}
+        {% if exercise.deadlineType|default('days') == 'days' and (exercisePublished or exerciseClosed) %}
+          <input type="hidden" name="expiryDays" value="{{ exercise.expiryDays|default(1) }}">
+        {% endif %}
       </div>
     </div>
     {#固定周期#}
@@ -63,6 +69,10 @@
           name="expiryEndDate"
           value="{% if exercise.expiryEndDate|default(0) != 0 %}{{ exercise.expiryEndDate|default(0) }}{% endif %}"
           {% if exercisePublished %}disabled {% endif %} >
+        {% if exercise.expiryMode|default('days') == 'date' and (exercisePublished or exerciseClosed) %}
+          <input type="hidden" name="expiryStartDate" value="{{ exercise.expiryStartDate|default('now'|date('Y-m-d')) }}">
+          <input type="hidden" name="expiryEndDate" value="{{ exercise.expiryEndDate|default(0) }}">
+        {% endif %}
       </div>
     </div>
     <div
