@@ -70,7 +70,7 @@ class ExploreController extends BaseController
             $conditions['recommended'] = 0;
             $exercisesTemp = $this->getExerciseService()->search(
                 $conditions,
-                array('createdTime' => 'DESC'),
+                ['createdTime' => 'DESC'],
                 0,
                 20 - $recommendLeft
             );
@@ -79,7 +79,7 @@ class ExploreController extends BaseController
             $conditions['recommended'] = 0;
             $exercises = $this->getExerciseService()->search(
                 $conditions,
-                array('createdTime' => 'DESC'),
+                ['createdTime' => 'DESC'],
                 (20 - $recommendLeft) + ($currentPage - $recommendPage - 2) * 20,
                 20
             );
