@@ -5804,6 +5804,7 @@ admin.setting.navigation.tips: >
   <p>课程列表页：域名/course/explore</p>
   <p>班级列表页：域名/classroom/explore</p>
   <p>公开课列表页：域名/open/course/explore</p>
+  <p>题库练习列表页：域名/exercise/explore</p>
   <p>课程分类：域名/course/explore/分类编码</p>
   <p>资讯栏目：域名/article/栏目编码</p>
 admin.setting.navigation.top.add: 新增顶部导航
