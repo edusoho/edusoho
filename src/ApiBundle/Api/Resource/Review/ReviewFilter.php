@@ -14,6 +14,7 @@ class ReviewFilter extends Filter
     protected $targetFilters = [
         'course' => 'ApiBundle\Api\Resource\Course\CourseFilter',
         'classroom' => 'ApiBundle\Api\Resource\Classroom\ClassroomFilter',
+        'item_bank_exercise' => 'ApiBundle\Api\Resource\ItemBankExercise\ItemBankExerciseFilter',
     ];
 
     protected function publicFields(&$data)

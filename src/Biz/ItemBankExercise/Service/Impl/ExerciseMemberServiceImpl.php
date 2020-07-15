@@ -37,7 +37,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
 
     public function becomeStudent($exerciseId, $userId, $info = [])
     {
-        $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
+        $exercise = $this->getExerciseService()->get($exerciseId);
 
         if (empty($exercise)) {
             $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
