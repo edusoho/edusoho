@@ -1,8 +1,8 @@
 <template>
     <div class="cd-container">
         <div class="product-breadcrumb">首页 / 艺术学概论</div>
-        <detail :detailData="details" :currentPlan="currentPlan" :product="details.product"
-                :is-favorite="componentsData.isFavorite" @changePlan="changePlan">
+        <detail :detailData="details" :currentSku="currentSku" :product="details.product"
+                :is-favorite="componentsData.isFavorite" @changeSku="changeSku">
         </detail>
 
         <div class="product-info clearfix" v-show="Object.keys(details).length != 0">
@@ -45,7 +45,7 @@
                     <div id="info-left-3" class="info-left-reviews content-item js-content-item reviews">
                         <h3 class="content-item__title">学员评价</h3>
                         <reviews :can-create="true" :can-operate="true" :target-type="'goods'" :current-user-id="currentUserId"
-                                 :target-id="this.getGoodsId()">
+                                 :target-id="this.currentGoodsId">
                         </reviews>
                     </div>
                 </div>
@@ -73,13 +73,14 @@
     export default {
         data() {
             return {
-                details: {},
-                currentPlan: {}, // 当前specs
-                isFixed: false, // 是否吸顶
-                howActive: 1, // 当前active
+                howActive: 1,
                 flag: true,
-                timerClick: null, // 延时器对象
+                isFixed: false,
+                timerClick: null,
                 timerScroll: null,
+                currentGoodsId: '',
+                details: {},
+                currentSku: {},
                 componentsData: {}
             }
         },
@@ -104,13 +105,50 @@
             }
         },
         methods: {
-            changePlan(id) {
+            initCurrentGoodsId(){
+                this.currentGoodsId = window.location.pathname.replace(/[^0-9]/ig, "");
+            },
+            initGoodsDetail() {
+                axios.get(`/api/goods/${this.currentGoodsId}`, {
+                    headers: { 'Accept': 'application/vnd.edusoho.v2+json'}
+                }).then((res) => {
+                    let data = res.data;
+                    for (const key in data.specs) {
+                        this.$set(data.specs[key], 'active', false);
+                        if (1 == data.specs[key]['isDefault']) {
+                            this.$set(data.specs[key], 'active', true);
+                            this.currentSku = data.specs[key];
+                        }
+                    }
+                    this.details = data;
+                    this.initGoodsComponents();
+                });
+            },
+            initGoodsComponents() {
+                if (!this.details.hasExtension) {
+                    return;
+                }
+
+                axios.get(`/api/goods/${this.currentGoodsId}/components`, {
+                    params: {
+                        componentTypes: this.details.extensions
+                    },
+                    headers: {
+                        'Accept': 'application/vnd.edusoho.v2+json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-Token': $('meta[name=csrf-token]').attr('content')
+                    }
+                }).then(res => {
+                    this.componentsData = res.data;
+                });
+            },
+            changeSku(id) {
                 let data = this.details;
                 for (const key in data.specs) {
                     this.$set(data.specs[key], 'active', false);
                     if (data.specs[key]['id'] == id) {
                         this.$set(data.specs[key], 'active', true);
-                        this.currentPlan = data.specs[key];
+                        this.currentSku = data.specs[key];
                     }
                 }
                 this.details = data;
@@ -149,48 +187,11 @@
                     this.flag = true;
                 }, 300);
             },
-            requestDetails() {
-                let goodsId = this.getGoodsId()
 
-                axios.get('/api/goods/' +　goodsId, {
-                    headers: { 'Accept': 'application/vnd.edusoho.v2+json'}
-                }).then((res) => {
-                    let data = res.data;
-                    for (const key in data.specs) {
-                        this.$set(data.specs[key], 'active', false);
-                        if (1 == data.specs[key]['isDefault']) {
-                            this.$set(data.specs[key], 'active', true);
-                            this.currentPlan = data.specs[key];
-                        }
-                    }
-                    this.details = data;
-                    this.requestExtensions();
-                });
-            },
-            requestExtensions() {
-                if (!this.details.hasExtension) {
-                    return;
-                }
-
-                 axios.get('/api/goods/' + this.getGoodsId() + '/components', {
-                    params: {
-                        componentTypes: this.details.extensions
-                    },
-                    headers: {
-                        'Accept': 'application/vnd.edusoho.v2+json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-Token': $('meta[name=csrf-token]').attr('content')
-                    }
-                }).then(res => {
-                    this.componentsData = res.data;
-                });
-            },
-            getGoodsId() {
-                return window.location.pathname.replace(/[^0-9]/ig, "");
-            }
         },
         created() {
-            this.requestDetails();
+            this.initCurrentGoodsId();
+            this.initGoodsDetail();
         },
         mounted() {
             window.addEventListener("scroll", this.handleScroll);

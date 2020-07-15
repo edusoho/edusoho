@@ -66,10 +66,6 @@ class GoodComponent extends AbstractResource
             }
 
             if ('recommendGoods' === $type) {
-                $components['teachers'] = $this->getTeacherComponent($product);
-            }
-
-            if ('recommendGoods' === $type) {
             }
 
             if ('classroomCourses' === $type) {
