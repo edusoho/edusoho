@@ -5,7 +5,6 @@ namespace ApiBundle\Api\Resource\Good;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
 use ApiBundle\Api\Util\AssetHelper;
-use AppBundle\Common\ServiceToolkit;
 
 class GoodFilter extends Filter
 {
@@ -22,11 +21,9 @@ class GoodFilter extends Filter
 
     protected function publicFields(&$data)
     {
-        if (!empty($data['specs'])) {
-            foreach ($data['specs'] as &$spec) {
-                $spec['services'] = AssetHelper::callAppExtensionMethod('transServiceTags', [ServiceToolkit::getServicesByCodes($spec['services'])]);
-            }
-        }
+        $goodSpecsFilter = new GoodSpecsFilter();
+        $goodSpecsFilter->setMode(Filter::SIMPLE_MODE);
+        $goodSpecsFilter->filters($data['specs']);
 
         if (!empty($data['product']) && !empty($data['product']['target']) && in_array($data['product']['targetType'], array_keys($this->filterMap))) {
             $class = $this->filterMap[$data['product']['targetType']];
