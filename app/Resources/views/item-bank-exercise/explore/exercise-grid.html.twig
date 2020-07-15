@@ -1,0 +1,33 @@
+<div class="course-item">
+  <div class="course-img">
+    <a href="{{ path('item_bank_exercise_show', {id: exercise.id}) }}" target="_blank">
+      {{ lazy_img(filepath(exercise.cover.large|default(null), 'courseSet.png'), 'img-responsive', exercise.title) }}
+    </a>
+  </div>
+  <div class="course-info">
+    <div class="title">
+      <a class="link-darker" href="{{ path('item_bank_exercise_show', {id: exercise.id}) }}" target="_blank">
+        {{ exercise.title }}
+      </a>
+    </div>
+    <div class="metas clearfix">
+      <span class="num">
+        <i class="es-icon es-icon-people"></i>{{ exercise.studentNum }}
+      </span>
+
+      {% set exercise = exercise|wrap('itemBankExercise.price') %}
+
+      <span class="course-price-widget">
+          <span class="
+            {% if exercise.price == 0 %}
+                  free
+            {% else %}
+                  price
+            {% endif %}">
+            {{ exercise.priceWrapper.priceText }}
+          </span>
+      </span>
+
+    </div>
+  </div>
+</div>

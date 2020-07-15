@@ -1,0 +1,102 @@
+{% extends 'layout.html.twig' %}
+
+{% set mobile = is_show_mobile_page() %}
+{% set bodyClass = 'course-list-page ' %}
+{% set siteNav = 'course/explore' %}
+
+{% do script(['app/js/course/explore/index.js']) %}
+
+{% block top_content %}
+  <div class="es-banner">
+    <div class="container">
+      <div class="title">
+        <i class="es-icon es-icon-viewcomfy"></i>
+        {{ 'explore.item_bank_exercise.list'|trans }}
+      </div>
+
+      {% set classrooms = data('Classrooms',{count:1}) %}
+      <div class="more">
+        <a class="btn btn-primary btn-lg" href="{{ path('course_set_explore') }}">
+          {{ 'explore.view_course_btn'|trans }}
+        </a>
+        {% if classrooms|default(null) %}
+          <a class="btn btn-primary btn-lg" href="{{ path('classroom_explore') }}">
+            {{ 'explore.course.view_name_btn'|trans({'%name%': setting('classroom.name')|default('classroom'|trans)}) }}
+          </a>
+        {% endif %}
+        <a class="btn btn-primary btn-lg" href="{{ path('open_course_explore') }}">
+          {{ 'explore.view_open_course_btn'|trans }}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  {% if mobile %}
+    {% include 'course-set/search-mobile.html.twig' %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% set type = filter.type|default('all') %}
+  {% set price = filter.price|default('all') %}
+  {% set orderBy = app.request.query.get('orderBy')|default('latest')%}
+  {% set path = app.request.get('_route') %}
+
+  <div class="es-filter">
+    <ul class="nav nav-sort clearfix">
+      <li>
+        <a
+          href="{{ path('item_bank_exercise_explore', {filter: {price: price},orderBy: 'latest'}) }}"
+          class="{% if (orderBy == 'latest') %}active{% endif %}">
+          {{ 'site.datagrid.filter.latest'|trans }}
+        </a>
+      </li>
+      <li>
+        <a
+          href="{{ path('item_bank_exercise_explore', {filter: {price: price},orderBy: 'hotSeq'}) }}"
+          class="{% if (orderBy == 'hotSeq') %}active{% endif %}">
+          {{ 'site.datagrid.filter.hotest'|trans }}
+        </a>
+      </li>
+      <li>
+        <a
+          href="{{ path('item_bank_exercise_explore', {filter: {price: price},orderBy: 'recommendedSeq'}) }}"
+          class="{% if (orderBy == 'recommendedSeq') %}active{% endif %}">
+          {{ 'site.datagrid.filter.recommended'|trans }}
+        </a>
+      </li>
+    </ul>
+    <div class="filter hidden-xs">
+      <label class="checkbox-inline">
+        <input type="checkbox" class="js-search-type" {% if price == 'free' %}checked="checked" {% endif %} id="free" value="
+        {% if price == 'all' %}
+          {{ path('item_bank_exercise_explore', {filter: {price: 'free'},orderBy: orderBy}) }}
+        {% else %}
+          {{ path('item_bank_exercise_explore', {filter: {price: 'all'},orderBy: orderBy}) }}
+        {% endif %}
+        "> {{ 'search.free_item_bank'|trans }}
+      </label>
+    </div>
+  </div>
+
+  <div class="course-list course-list-new">
+    <div class="row">
+      {% if exercises %}
+        {% for exercise in exercises %}
+          <div class="col-lg-3 col-md-4 col-xs-6 course-item-wrap">
+            {% include 'item-bank-exercise/explore/exercise-grid.html.twig' with {exercise: exercise} %}
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="empty">{{ 'explore.item_bank_exercise.empty'|trans }}</div>
+      {% endif %}
+    </div>
+  </div>
+  {% if not mobile %}
+    <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
+  {% endif %}
+{% endblock %}
+
+{% block bottom %}
+  {% include 'mobile/footer-tool-bar.html.twig' with { mobile_tool_bar: 'course' } %}
+{% endblock %}

@@ -2975,6 +2975,7 @@ search.live_courses: 'Live courses'
 search.reservation_courses: Reservation courses
 search.all_classrooms: 'All %classroom%'
 search.free_classrooms: 'Free %classroom%'
+search.free_item_bank: Free Item Bank
 cloud_file.preview: 'preview'
 cloud_file.re_transcoding_btn: Re-transcoding
 cloud_file.re_transcoding.submiting: Submiting...
@@ -3867,6 +3868,8 @@ explore.open_course.title: 'Open Course'
 explore.open_course.list: 'Open Course List'
 explore.open_course.live: Live
 explore.open_course.empty: 'No record'
+explore.item_bank_exercise.list: Exercise List
+explore.item_bank_exercise.empty: No Exercise
 archive.course.title: 'Course Archive'
 archive.course.tags: Tags
 archive.course.empty: 'No record'
