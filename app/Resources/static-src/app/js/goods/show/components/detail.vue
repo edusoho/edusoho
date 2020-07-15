@@ -57,9 +57,10 @@
               </span>
             </div>
           </div>
-            <!-- 立即购买 -->
-            <div class="product-detail__btn">立即购买</div>
         </div>
+
+        <!-- 立即购买 -->
+        <div class="product-detail__btn">立即购买</div>
     </div>
 </template>
 

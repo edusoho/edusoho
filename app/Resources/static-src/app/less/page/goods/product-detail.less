@@ -1,4 +1,5 @@
 .product-detail {
+  position: relative;
   padding: 32px 32px 16px 32px;
   margin-top: 16px;
   background-color: #fff;
@@ -199,24 +200,20 @@
         }
       }
     }
-    // 立即购买
-    .product-detail__btn {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      padding: 6px 24px;
-      width: 104px;
-      height: 32px;
-      font-weight: 500;
-      color: #fff;
-      background-color: #FF7E56;
-      line-height: 20px;
-      cursor: pointer;
-      .border-radius(4px);
-      @media (max-width: 767px) {
-        position: static;
-        margin: 0 auto;
-      }
-    }
+  }
+  // 立即购买
+  .product-detail__btn {
+    position: absolute;
+    right: 32px;
+    bottom: 16px;
+    padding: 6px 24px;
+    width: 104px;
+    height: 32px;
+    font-weight: 500;
+    color: #fff;
+    background-color: #FF7E56;
+    line-height: 20px;
+    cursor: pointer;
+    .border-radius(4px);
   }
 }
