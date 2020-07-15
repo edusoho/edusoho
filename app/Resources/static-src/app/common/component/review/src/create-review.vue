@@ -1,5 +1,6 @@
 <template>
     <div class="create-review" v-if="canCreate">
+        {{userReview}}
         <form v-show="!userReview || (userReview && showForm)">
             <div class="review-form-rating create-review__grade">
                 {{ 'validate.raty_star.message'|trans }}：
@@ -59,6 +60,8 @@
 
     export default {
         created() {
+            this.getUserReview();
+
             if (this.form.rating) {
                 this.rating(this.form.rating - 1);
             }
@@ -81,11 +84,12 @@
                     src: starOffImg,
                     active: false
                 }],
+                userReview: null,
                 form: {
-                    targetType: this.userReview ? this.userReview.targetType : this.targetType,
-                    targetId: this.userReview ? this.userReview.targetId : this.targetId,
-                    rating: this.userReview ? this.userReview.rating : 0,
-                    content: this.userReview ? this.userReview.content : null,
+                    targetType: this.targetType,
+                    targetId: this.targetId,
+                    rating: 0,
+                    content: null,
                 },
                 starHover: 0,
                 content: "",
@@ -111,12 +115,40 @@
                 type: Boolean,
                 default: false,
             },
-            userReview: {
-                type: Object,
+            currentUserId: {
+                type: Number,
                 default: null
             }
         },
         methods: {
+            getUserReview() {
+                if (!this.currentUserId) {
+                    return null;
+                }
+
+                axios.get('/api/reviews', {
+                    params: {
+                        targetType: this.targetType,
+                        targetId: this.targetId,
+                        userId: this.currentUserId,
+                    },
+                }).then(response => {
+                    if (!response.data.paging.total) {
+                        return;
+                    }
+
+                    this.userReview = response.data.data.shift();
+
+                    this.form = {
+                        targetType: this.userReview.targetType,
+                        targetId: this.userReview.targetId,
+                        rating: parseInt(this.userReview.rating),
+                        content: this.userReview.content,
+                    };
+
+                    this.rating(this.form.rating - 1);
+                });
+            },
             enterRating(index) {
                 let total = this.stars.length;
                 let idx = index + 1;

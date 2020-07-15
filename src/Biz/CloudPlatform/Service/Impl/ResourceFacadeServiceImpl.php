@@ -5,6 +5,8 @@ namespace Biz\CloudPlatform\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\CloudPlatform\Service\BaseFacade;
 use Biz\CloudPlatform\Service\ResourceFacadeService;
+use Biz\S2B2C\Service\FileSourceService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
 
 class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeService
 {
@@ -72,9 +74,10 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
 
     public function makePlayToken($file, $lifetime = 600, $payload = [])
     {
-        // to do: S2B2C 也要更改相应的播放器
         if ('supplier' == $file['storage']) {
-            return $this->getS2B2CFileSourceService()->player($file['globalId'], true);
+            $fileInfo = $this->getS2B2CFileSourceService()->getFullFileInfo($file);
+
+            return $this->getS2B2CFacadeService()->getS2B2CService()->getProductResourceJWTPlayToken($fileInfo['globalId'], $lifetime, $payload);
         }
 
         return $this->biz['ESCloudSdk.play']->makePlayToken($file['globalId'], $lifetime, $payload);
@@ -145,5 +148,13 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
     protected function getS2B2CFileSourceService()
     {
         return $this->biz->service('S2B2C:FileSourceService');
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->biz->service('S2B2C:S2B2CFacadeService');
     }
 }

@@ -23,7 +23,7 @@ class SyncProductNotify extends AbstractResource
                 return ['status' => true];
             }
         } catch (\Exception $e) {
-            $this->getBiz()->offsetGet('s2b2c.merchant.logger')->error('接口错误'.$e->getMessage());
+            $this->getBiz()->offsetGet('s2b2c.merchant.logger')->error('[SyncProductNotify]接口错误 '.$e->getMessage());
         }
 
         return ['status' => false];

@@ -68,7 +68,6 @@ class TaskLiveReplay extends AbstractResource
                 $replays[] = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", $sendParams);
             }
 
-            $replays[] = CloudAPIFactory::create('root')->get("/lives/{$activity['ext']['liveId']}/replay", $sendParams);
             $replays[$index]['title'] = $visibleReplay['title'];
         }
 

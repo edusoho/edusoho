@@ -47,15 +47,16 @@
                 <span class="validity-content pull-left">{{ currentPlan.expiryMode }}</span>
             </div>
 
-            <!-- 承诺服务 -->
-            <div class="detail-right__promise promise clearfix" v-if="currentPlan.services">
-                <div class="promise-title pull-left">承诺服务</div>
-                <div class="promise-content pull-left">
-                    <span class="promise-content__item" v-for="(item, index) in currentPlan.services"
-                          :key="index">疑</span>
-                </div>
+          <!-- 承诺服务 -->
+          <div class="detail-right__promise promise clearfix" v-if="currentPlan.services">
+            <div class="promise-title pull-left">承诺服务</div>
+            <div class="promise-content pull-left">
+              <span class="promise-content__item" v-for="(item, index) in currentPlan.services" :key="index">
+                疑
+                <span class="promise-content__item-hover">一对一答疑</span>
+              </span>
             </div>
-
+          </div>
             <!-- 立即购买 -->
             <div class="product-detail__btn">立即购买</div>
         </div>
