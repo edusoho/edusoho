@@ -571,7 +571,7 @@ class UserController extends BaseController
 
     protected function getExercises($user, $type)
     {
-        $role = $type == 'learn' ? 'student' : 'teacher';
+        $role = 'learn' == $type ? 'student' : 'teacher';
         $members = $this->getExerciseMemberService()->search(
             ['userId' => $user['id'], 'role' => $role],
             ['createdTime' => 'desc'],
@@ -589,7 +589,7 @@ class UserController extends BaseController
         );
 
         $exercises = [];
-        if (!empty($exerciseIds)){
+        if (!empty($exerciseIds)) {
             $exercises = $this->getItemBankExerciseService()->search(
                 $conditions,
                 [],
@@ -602,7 +602,7 @@ class UserController extends BaseController
             'user' => $user,
             'exercises' => $exercises,
             'paginator' => $paginator,
-            'type' => $type == 'learn' ? 'question_bank_learning' : 'question_bank_teaching',
+            'type' => 'learn' == $type ? 'question_bank_learning' : 'question_bank_teaching',
         ]);
     }
 

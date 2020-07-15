@@ -5,9 +5,8 @@ namespace AppBundle\Controller\My;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
-
-use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\ItemBankExerciseException;
+use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\QuestionBankService;
@@ -132,7 +131,7 @@ class ItemBankExerciseController extends BaseController
             [
                 'member' => $member,
                 'exercise' => $exercise,
-                'previewAs' => $request->query->get('previewAs', 'member')
+                'previewAs' => $request->query->get('previewAs', 'member'),
             ]
         );
     }
@@ -143,7 +142,6 @@ class ItemBankExerciseController extends BaseController
     protected function getExerciseMemberService()
     {
         return $this->createService('ItemBankExercise:ExerciseMemberService');
-
     }
 
     /**
