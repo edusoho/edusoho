@@ -13,7 +13,7 @@ class ProductController extends BaseController
     {
         $result = $this->getS2B2CFacadeService()->getS2B2CService()->getDistributeProduct($productId);
 
-        if ($result['status'] && $result['status'] == 'success') {
+        if ($result['status'] && 'success' == $result['status']) {
             $product = $result['data'];
         }
 
