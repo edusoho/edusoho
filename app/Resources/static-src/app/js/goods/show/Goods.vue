@@ -38,8 +38,12 @@
                         <div v-html="descriptionHtml" class="description-content" style="padding-left: 14px; padding-top: 10px;"></div>
                     </div>
 
-                    <div id="info-left-2" class="content-item js-content-item">
+                    <div v-if="product.targetType === 'course'" id="info-left-2" class="content-item js-content-item">
                         <h3  class="content-item__title">学习目录</h3>
+                    </div>
+                    <div v-if="product.targetType === 'classroom'" id="info-left-2" class="content-item js-content-item">
+                        <h3  class="content-item__title">学习目录</h3>
+                        <classroom-courses :classroomCourses="componentsData.classroomCourses"></classroom-courses>
                     </div>
 
                     <div id="info-left-3" class="info-left-reviews content-item js-content-item reviews">
@@ -69,6 +73,7 @@
     import Recommend from './components/recommend';
     import BackToTop from './components/back-to-top';
     import Reviews from 'app/common/component/review/index';
+    import ClassroomCourses from './components/classroom-courses';
 
     export default {
         data() {
@@ -81,7 +86,8 @@
                 currentGoodsId: '',
                 details: {},
                 currentSku: {},
-                componentsData: {}
+                componentsData: {},
+                product: {},
             }
         },
         props: {
@@ -96,7 +102,8 @@
             Qr,
             Recommend,
             BackToTop,
-            Reviews
+            Reviews,
+            ClassroomCourses,
         },
         computed: {
             descriptionHtml() {
@@ -121,6 +128,7 @@
                         }
                     }
                     this.details = data;
+                    this.product = data.product;
                     this.initGoodsComponents();
                 });
             },
