@@ -47,7 +47,7 @@ class Good extends AbstractResource
 
             'hasExtension' => true,
             'extensions' => $this->collectGoodsExtensions(),
-            'specs' => $this->getGoodsSpecs($product['targetType'], $product['targetId'])
+            'specs' => $this->getGoodsSpecs($product['targetType'], $product['targetId']),
         ];
     }
 
@@ -66,7 +66,6 @@ class Good extends AbstractResource
 
         return array_merge($defaultExtensions, ['mpQrCode']);
     }
-
 
     private function getGoodsSpecs($targetType, $targetId)
     {
@@ -143,7 +142,6 @@ class Good extends AbstractResource
 
         return $specifyServices;
     }
-
 
     /**
      * @return GoodsService
