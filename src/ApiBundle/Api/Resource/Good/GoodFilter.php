@@ -9,7 +9,7 @@ use ApiBundle\Api\Util\AssetHelper;
 class GoodFilter extends Filter
 {
     protected $publicFields = [
-        'id', 'title', 'subtitle', 'description', 'product', 'extensions', 'specs', 'creator', 'status',
+        'id', 'title', 'subtitle', 'product', 'extensions', 'specs', 'creator', 'status',
         'showable', 'buyable', 'summary', 'minPrice', 'maxPrice', 'images', 'orgId', 'orgCode', 'ratingNum', 'rating',
         'hitNum', 'hotSeq', 'recommendWeight', 'recommendedTime', 'createdTime', 'updatedTime', 'isFavorite',
     ];
@@ -21,6 +21,7 @@ class GoodFilter extends Filter
 
     protected function publicFields(&$data)
     {
+        $data['summary'] = $this->convertAbsoluteUrl($data['summary']);
         $goodSpecsFilter = new GoodSpecsFilter();
         $goodSpecsFilter->setMode(Filter::SIMPLE_MODE);
         $goodSpecsFilter->filters($data['specs']);

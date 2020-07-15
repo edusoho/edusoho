@@ -40,10 +40,10 @@
                         <div v-html="summaryHtml" class="description-content" style="padding-left: 14px; padding-top: 10px;"></div>
                     </div>
 
-                    <div v-if="product.targetType === 'course'" id="info-left-2" class="content-item js-content-item">
+                    <div v-if="goods.product.targetType === 'course'" id="info-left-2" class="content-item js-content-item">
                         <h3  class="content-item__title">学习目录</h3>
                     </div>
-                    <div v-if="product.targetType === 'classroom'" id="info-left-2" class="content-item js-content-item">
+                    <div v-if="goods.product.targetType === 'classroom'" id="info-left-2" class="content-item js-content-item">
                         <h3  class="content-item__title">学习目录</h3>
                         <classroom-courses :classroomCourses="componentsData.classroomCourses"></classroom-courses>
                     </div>
@@ -89,7 +89,6 @@
                 goods: {},
                 currentSku: {},
                 componentsData: {},
-                product: {},
             }
         },
         props: {

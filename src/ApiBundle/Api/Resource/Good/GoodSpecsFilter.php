@@ -18,14 +18,21 @@ class GoodSpecsFilter extends Filter
 
     protected function simpleFields(&$data)
     {
+        $this->transTime($data);
         $this->transServices($data['services']);
     }
 
     protected function publicFields(&$data)
     {
+        $this->transTime($data);
         $this->transServices($data['services']);
-
         $this->transformImages($data['images']);
+    }
+
+    private function transTime(&$specs)
+    {
+        $specs['buyableStartTime'] = date('c', $specs['buyableStartTime']);
+        $specs['buyableEndTime'] = date('c', $specs['buyableEndTime']);
     }
 
     private function transServices(&$services)
