@@ -274,6 +274,26 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $goodsSpecs;
     }
 
+    public function publishGoodsSpecs($course)
+    {
+        $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
+        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
+        $goodsSpecs = $this->getGoodsService()->publishGoodsSpecs($goodsSpecs['id']);
+
+        return $goodsSpecs;
+    }
+
+    public function unpublishGoodsSpecs($course)
+    {
+        $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
+        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
+        $goodsSpecs = $this->getGoodsService()->unpublishGoodsSpecs($goodsSpecs['id']);
+
+        return $goodsSpecs;
+    }
+
     public function copyCourse($newCourse)
     {
         $sourceCourse = $this->tryManageCourse($newCourse['copyCourseId']);
@@ -755,6 +775,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             }
             $this->commit();
             $this->dispatchEvent('course.close', new Event($course));
+            $this->unpublishGoodsSpecs($course);
         } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;
@@ -773,6 +794,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatchEvent('course.publish', $course);
 
         $this->getCourseLessonService()->publishLessonByCourseId($course['id']);
+        $this->publishGoodsSpecs($course);
     }
 
     public function hasNoTitleForDefaultPlanInMulPlansCourse($id)

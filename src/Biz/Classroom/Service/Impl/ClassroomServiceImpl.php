@@ -293,6 +293,41 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return [$product, $goods, $goodsSpecs];
     }
 
+    protected function publishGoodsAndSpecs($classroom)
+    {
+        $existProduct = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
+        if (empty($existProduct)) {
+            $this->createNewException(ProductException::NOTFOUND_PRODUCT());
+        }
+        $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
+        $goods = $this->getGoodsService()->publishGoods($existGoods['id']);
+        if (empty($existGoods)) {
+            $this->createNewException(GoodsException::GOODS_NOT_FOUND());
+        }
+
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $classroom['id']);
+
+        $this->getGoodsService()->publishGoodsSpecs($goodsSpecs['id']);
+    }
+
+    protected function unpublishGoodsAndSpecs($classroom)
+    {
+        $existProduct = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
+        if (empty($existProduct)) {
+            $this->createNewException(ProductException::NOTFOUND_PRODUCT());
+        }
+        $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
+        $goods = $this->getGoodsService()->unpublishGoods($existGoods['id']);
+
+        if (empty($existGoods)) {
+            $this->createNewException(GoodsException::GOODS_NOT_FOUND());
+        }
+
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $classroom['id']);
+
+        $this->getGoodsService()->unpublishGoodsSpecs($goodsSpecs['id']);
+    }
+
     public function addCoursesToClassroom($classroomId, $courseIds)
     {
         $this->tryManageClassroom($classroomId);
@@ -775,14 +810,16 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $this->tryManageClassroom($id, 'admin_classroom_open');
 
-        $this->updateClassroom($id, ['status' => 'published']);
+        $classroom = $this->updateClassroom($id, ['status' => 'published']);
+        $this->publishGoodsAndSpecs($classroom);
     }
 
     public function closeClassroom($id)
     {
         $this->tryManageClassroom($id, 'admin_classroom_close');
 
-        $this->updateClassroom($id, ['status' => 'closed']);
+        $classroom = $this->updateClassroom($id, ['status' => 'closed']);
+        $this->unpublishGoodsAndSpecs($classroom);
     }
 
     public function changePicture($id, $data)

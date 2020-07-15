@@ -46,18 +46,22 @@ class Good extends AbstractResource
             ],
 
             'hasExtension' => true,
-            'extensions' => $this->collectGoodsExtensions(),
+            'extensions' => $this->collectGoodsExtensions($product),
             'specs' => $this->getGoodsSpecs($product['targetType'], $product['targetId']),
         ];
     }
 
-    private function collectGoodsExtensions()
+    private function collectGoodsExtensions($product)
     {
         $defaultExtensions = [
             'teachers',
             'recommendGoods',
             'isFavorite',
         ];
+
+        if ('classroom' === $product['targetType']) {
+            $defaultExtensions = array_merge($defaultExtensions, ['classroomCourses']);
+        }
 
         $goodsSetting = $this->getSettingService()->get('goods_setting', []);
         if (empty($goodsSetting['leading_join_enabled'])) {

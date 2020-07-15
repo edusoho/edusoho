@@ -41,7 +41,12 @@ class GoodsServiceImpl extends BaseService implements GoodsService
 
     public function publishGoods($id)
     {
-        return $this->getGoodsDao()->update($id, ['status' => 'published']);
+        return $this->getGoodsDao()->update($id, ['status' => 'published', 'publishedTime' => time()]);
+    }
+
+    public function unpublishGoods($id)
+    {
+        return $this->getGoodsDao()->update($id, ['status' => 'unpublished', 'publishedTime' => time()]);
     }
 
     public function updateGoods($id, $goods)
@@ -129,6 +134,16 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         ]);
 
         return $this->getGoodsSpecsDao()->update($id, $goodsSpecs);
+    }
+
+    public function publishGoodsSpecs($id)
+    {
+        return $this->getGoodsSpecsDao()->update($id, ['status' => 'published']);
+    }
+
+    public function unpublishGoodsSpecs($id)
+    {
+        return $this->getGoodsSpecsDao()->update($id, ['status' => 'unpublished']);
     }
 
     public function deleteGoodsSpecs($id)

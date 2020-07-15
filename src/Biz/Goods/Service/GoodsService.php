@@ -14,6 +14,8 @@ interface GoodsService
 
     public function publishGoods($id);
 
+    public function unpublishGoods($id);
+
     public function searchGoods($conditions, $orderBys, $start, $limit, $columns = []);
 
     public function getGoodsByProductId($productId);
@@ -23,6 +25,10 @@ interface GoodsService
     public function getGoodsSpecs($id);
 
     public function updateGoodsSpecs($id, $goodsSpecs);
+
+    public function publishGoodsSpecs($id);
+
+    public function unpublishGoodsSpecs($id);
 
     public function deleteGoodsSpecs($id);
 
