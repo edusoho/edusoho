@@ -9,10 +9,16 @@
     <div class="pull-left detail-discount__right">
       <p class="text">距离结束还剩</p>
       <div class="count-down">
-        <van-count-down use-slot :time="time" @finish="onFinish" @change="onChange">
-          <span class="day">{{ timeData.days }}</span>天
-          <span class="item">{{ timeData.hours | checkTime }}</span>:
-          <span class="item">{{ timeData.minutes | checkTime }}</span>:
+        <van-count-down
+          use-slot
+          :time="time"
+          @finish="onFinish"
+          @change="onChange"
+        >
+          <span class="day">{{ timeData.days }}</span
+          >天 <span class="item">{{ timeData.hours | checkTime }}</span
+          >: <span class="item">{{ timeData.minutes | checkTime }}</span
+          >:
           <span class="item">{{ timeData.seconds | checkTime }}</span>
         </van-count-down>
       </div>
@@ -25,8 +31,8 @@ export default {
   data() {
     return {
       time: 1432111,
-      timeData: {days: 0, hours: 0, minutes: 0, seconds: 0}
-    }
+      timeData: { days: 0, hours: 0, minutes: 0, seconds: 0 },
+    };
   },
   methods: {
     onChange(e) {
@@ -35,7 +41,7 @@ export default {
     // 倒计时结束
     onFinish() {
       console.log('倒计时结束了');
-    }
+    },
   },
   filters: {
     checkTime(i) {
@@ -43,7 +49,7 @@ export default {
         i = `0${i}`;
       }
       return i;
-    }
-  }
-}
+    },
+  },
+};
 </script>

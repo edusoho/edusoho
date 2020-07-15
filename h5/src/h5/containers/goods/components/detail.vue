@@ -1,16 +1,24 @@
 <template>
-  <div class="detail-info">
-    <p class="detail-info__title text-overflow">{{ details.title }}</p>
+  <div class="detail-info" v-if="goods.id">
+    <p class="detail-info__title text-overflow">{{ goods.title }}</p>
+
     <div class="detail-info__price">
       <div class="clearfix">
         <div class="pull-left">
           优惠价
-          <span class="price">{{ currentPlan.price }}</span>
+          <span class="price">{{ currentSku.price }}</span>
           元
         </div>
-        <div class="pull-right study-num">{{ currentPlan.joinedNum }}人在学</div>
+        <div class="pull-right study-num">
+          {{ currentSku.maxJoinNum }}人在学
+        </div>
       </div>
-      <p class="original-price"><s>价格&nbsp;<span>399.00</span>元</s></p>
+      <p class="original-price">
+        <s
+          >价格&nbsp;<span>{{ currentSku.price }}</span
+          >元</s
+        >
+      </p>
     </div>
   </div>
 </template>
@@ -18,14 +26,14 @@
 <script>
 export default {
   props: {
-    details: {
+    goods: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
-    currentPlan: {
+    currentSku: {
       type: Object,
-      default: () => {}
-    }
-  }
-}
+      default: () => {},
+    },
+  },
+};
 </script>

@@ -1,20 +1,12 @@
 <template>
-  <div class="goods">
+  <div class="goods" v-if="goods.id">
     <div class="goods-detail">
-      <!-- banner -->
       <div class="goods-detail__banner">
-        <img :src="details.image" />
+        <img :src="goods.images.large" />
       </div>
-      <!-- 优惠 -->
-      <discount :details="details" />
-      <!-- 商品名称、价格 -->
-      <detail :details="details" :currentPlan="currentPlan" />
-      <!-- 教学计划、有效期、服务 -->
-      <specs
-        :details="details"
-        :currentPlan="currentPlan"
-        @changePlan="changePlan"
-      />
+      <discount :goods="goods" />
+      <detail :goods="goods" :currentSku="currentSku" />
+      <specs :goods="goods" :currentSku="currentSku" @changeSku="changeSku" />
     </div>
 
     <div class="goods-info">
@@ -114,9 +106,9 @@ import { mapActions } from 'vuex';
 export default {
   data() {
     return {
-      details: {},
+      goods: {},
       product: {},
-      currentPlan: {}, // 当前学习计划
+      currentSku: {}, // 当前学习计划
       active: 0, // 判断nav当前active
       timer: null,
       flag: true, // 点击取消滚动监听
@@ -138,8 +130,8 @@ export default {
   },
   computed: {
     summary() {
-      if (!this.details.description) return '暂无简介~';
-      return this.details.description;
+      if (!this.goods.summary) return '暂无简介~';
+      return this.goods.summary;
     },
   },
   methods: {
@@ -151,17 +143,12 @@ export default {
         },
       })
         .then(res => {
-          const data = res;
-          for (const key in data.specs) {
-            this.$set(data.specs[key], 'active', false);
-            this.$set(data.specs[key], 'id', key);
-            if (key == this.$route.params.id) {
-              this.$set(data.specs[key], 'active', true);
-              this.currentPlan = data.specs[key];
-            }
+          this.goods = res;
+          if (this.goods.product.target.defaultCourseId) {
+            this.changeSku(this.goods.product.target.defaultCourseId);
+          } else {
+            this.changeSku(this.goods.product.target.id);
           }
-          this.details = data;
-          this.product = data.product;
         })
         .catch(err => {
           Toast.fail(err.message);
@@ -189,15 +176,16 @@ export default {
         this.componentsInfo = res;
       });
     },
-    changePlan(id) {
-      const data = this.details;
-      for (const key in data.specs) {
-        this.$set(data.specs[key], 'active', false);
-        if (key == id) {
-          this.$set(data.specs[key], 'active', true);
-          this.currentPlan = data.specs[key];
+    changeSku(targetId) {
+      for (const key in this.goods.specs) {
+        this.$set(this.goods.specs[key], 'active', false);
+        if (targetId == this.goods.specs[key].targetId) {
+          this.$set(this.goods.specs[key], 'active', true);
+          this.currentSku = this.goods.specs[key];
         }
       }
+
+      this.goods.hasExtension = true;
     },
     onActive(value, eleId) {
       clearTimeout(this.timer);

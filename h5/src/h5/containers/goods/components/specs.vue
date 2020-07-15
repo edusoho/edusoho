@@ -1,15 +1,13 @@
 <template>
-  <div class="detail-plan">
-    <!-- 学习计划 -->
+  <div class="detail-plan" v-if="goods.id">
     <div class="detail-plan__plan clearfix" @click="showPopup">
       <div class="pull-left plan-left">教学计划</div>
       <div class="pull-left plan-right">
-        {{ currentPlan.title }}
+        {{ currentSku.title }}
         <i class="iconfont icon-arrow-right plan-right__icon"></i>
       </div>
     </div>
 
-    <!-- 学习计划弹出框 -->
     <van-popup
       v-model="show"
       round
@@ -24,41 +22,56 @@
       <div class="plan-popup__type">
         <span
           class="plan-popup__type__item"
-          v-for="plan in details.specs"
-          :key="plan.id"
-          :class="{ active: plan.active }"
-          @click="handleClick(plan)"
-        >{{ plan.title }}</span>
+          v-for="specs in goods.specs"
+          :key="specs.id"
+          :class="{ active: specs.active }"
+          @click="handleClick(specs)"
+          >{{ specs.title }}</span
+        >
       </div>
 
       <div class="plan-popup__other">
         <!-- 学习有效期 -->
         <div class="popup-other clearfix">
           <div class="pull-left popup-other__left">学习有效期</div>
-          <div class="pull-left popup-other__right" v-html="currentPlan.expiryMode"></div>
+          <div
+            class="pull-left popup-other__right"
+            v-html="currentSku.expiryMode"
+          ></div>
         </div>
         <!-- 承诺服务 -->
-        <div class="popup-other clearfix" v-if="currentPlan.services">
+        <div class="popup-other clearfix" v-if="currentSku.services">
           <div class="pull-left popup-other__left">承诺服务</div>
           <div class="pull-left popup-other__right">
-            <span class="popup-other__right__promise" v-for="(item, index) in currentPlan.services" :key="index">练</span>
+            <span
+              class="popup-other__right__promise"
+              v-for="(item, index) in currentSku.services"
+              :key="index"
+              >练</span
+            >
           </div>
         </div>
       </div>
       <div class="plan-popup__buy">立即购买</div>
     </van-popup>
 
-    <!-- 学习有效期 -->
     <div class="detail-plan__plan clearfix">
       <div class="pull-left plan-left">学习有效期</div>
-      <div class="pull-left plan-right" v-html="currentPlan.expiryMode"></div>
+      <div class="pull-left plan-right" v-html="buyableModeHtml"></div>
     </div>
 
-    <!-- 承诺服务 -->
-    <div class="detail-plan__plan clearfix" v-if="currentPlan.services">
+    <div
+      class="detail-plan__plan clearfix"
+      v-if="currentSku.services.length > 0"
+    >
       <div class="pull-left plan-left">承诺服务</div>
       <div class="pull-left plan-right">
-        <span class="plan-right__promise" v-for="(item, index) in currentPlan.services" :key="index">{{ item.shortName }}</span>
+        <span
+          class="plan-right__promise"
+          v-for="(item, index) in currentSku.services"
+          :key="index"
+          >{{ item.shortName }}</span
+        >
       </div>
     </div>
   </div>
@@ -68,18 +81,18 @@
 export default {
   data() {
     return {
-      show: false // 是否显示弹出层
+      show: false, // 是否显示弹出层
     };
   },
   props: {
-    details: {
+    goods: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
-    currentPlan: {
+    currentSku: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   methods: {
     // 点击显示弹窗
@@ -90,54 +103,44 @@ export default {
     onClose() {
       this.show = false;
     },
-    handleClick(plan) {
-      if (plan.id ==  this.$route.params.id) return;
-      this.$emit('changePlan', plan.id);
-      this.$router.push({ path: `/goods/${plan.id}/course`});
-    }
+    handleClick(specs) {
+      this.$emit('changeSku', specs.targetId);
+      this.show = false;
+    },
   },
   computed: {
-    // learnExpiryHtml() {
-    //   if (!this.details.learningExpiryDate) return;
-    //   console.log(this.details);
-    //   const memberInfo = this.details.member;
-    //   const learnExpiryData = this.details.learningExpiryDate;
-    //   const expiryMode = learnExpiryData.expiryMode;
-
-    //   if (!memberInfo) {
-    //     switch (expiryMode) {
-    //       case "forever":
-    //         return "永久有效";
-    //         break;
-    //       case "end_date":
-    //         return learnExpiryData.expiryEndDate.slice(0, 10) + "之前可学习";
-    //         break;
-    //       case "days":
-    //         return learnExpiryData.expiryDays + "天内可学习";
-    //         break;
-    //       case "date":
-    //         const startDateStr = learnExpiryData.expiryStartDate.slice(0, 10);
-    //         const endDateStr = learnExpiryData.expiryEndDate.slice(0, 10);
-    //         return (
-    //           '<div class = "mt5">' +
-    //           "开课日期：" +
-    //           startDateStr +
-    //           "&nbsp;&nbsp;&nbsp;" +
-    //           "截止日期：" +
-    //           endDateStr +
-    //           "</div>"
-    //         );
-    //         break;
-    //     }
-    //   } else {
-    //     if (expiryMode == "forever") {
-    //       return "永久有效";
-    //     }
-    //     return memberInfo.deadline != 0
-    //       ? memberInfo.deadline.slice(0, 10) + "之前可学习"
-    //       : "永久有效";
-    //   }
-    // }
-  }
+    buyableModeHtml() {
+      const memberInfo = this.goods.member;
+      if (!memberInfo) {
+        switch (this.currentSku.buyableMode) {
+          case 'forever':
+            return '永久有效';
+          case 'end_date':
+            return this.currentSku.buyableEndTime.slice(0, 10) + '之前可学习';
+          case 'days':
+            return 'x天内可学习';
+          case 'date':
+            return (
+              '<div class = "mt5">' +
+              '开课日期：' +
+              this.currentSku.buyableStartTime.slice(0, 10) +
+              '&nbsp;&nbsp;&nbsp;' +
+              '截止日期：' +
+              this.currentSku.buyableEndTime.slice(0, 10) +
+              '</div>'
+            );
+          default:
+            return '';
+        }
+      } else {
+        if (this.currentSku.buyableMode == 'forever') {
+          return '永久有效';
+        }
+        return memberInfo.deadline != 0
+          ? memberInfo.deadline.slice(0, 10) + '之前可学习'
+          : '永久有效';
+      }
+    },
+  },
 };
 </script>
