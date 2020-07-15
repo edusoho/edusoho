@@ -55,7 +55,6 @@
       <!-- 评价 -->
       <section class="js-scroll-top goods-info__item" id="evaluate">
         <div class="goods-info__title">课程评价</div>
-        <reviews :reviews="componentsInfo.reviews" />
       </section>
 
       <!-- 猜你想学 -->
@@ -80,7 +79,6 @@ import Detail from './components/detail';
 import Specs from './components/specs';
 
 import Teacher from './components/teacher';
-import Reviews from './components/reviews';
 import Recommend from './components/recommend';
 import Buy from './components/buy';
 import BackToTop from './components/back-to-top';
@@ -107,7 +105,6 @@ export default {
     Specs,
     Detail,
     Teacher, // 教师风采
-    Reviews, // 课程评价
     Recommend, // 猜你想学
     Buy, // 购买按钮
     BackToTop, // 回到顶部

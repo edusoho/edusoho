@@ -22,3 +22,4 @@ composer.lock
 *.njsproj
 *.sln
 deploy.yml
+package-lock.json
