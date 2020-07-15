@@ -52,7 +52,7 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
             return [];
         }
 
-        if (isset(UserFootprintService::PREPARE_METHODS[$type])) {
+        if (!empty(UserFootprintService::PREPARE_METHODS[$type])) {
             $method = UserFootprintService::PREPARE_METHODS[$type];
 
             return $this->$method($footprints);
