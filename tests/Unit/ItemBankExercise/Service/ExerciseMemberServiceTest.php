@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\ItemBankExercise\Service;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
@@ -160,14 +159,14 @@ class ExerciseMemberServiceTest extends BaseTestCase
 
         $this->getExerciseMemberService()->batchUpdateMemberDeadlines($exercise['id'], [0 => $user['id']], ['updateType' => 'deadline', 'deadline' => time()]);
         $result = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
-        $this->assertEquals(time(), (int)$result['deadline']);
+        $this->assertEquals(time(), (int) $result['deadline']);
     }
 
     public function testCheckUpdateDeadline()
     {
         $exercise = $this->createExercise();
         $this->batchCreateExerciseMembers();
-        $res = $this->getExerciseMemberService()->checkUpdateDeadline($exercise['id'], [1, 2], ['deadline' => strtotime(date("Y-m-d"))]);
+        $res = $this->getExerciseMemberService()->checkUpdateDeadline($exercise['id'], [1, 2], ['deadline' => strtotime(date('Y-m-d'))]);
         $this->assertFalse($res);
     }
 
@@ -253,9 +252,9 @@ class ExerciseMemberServiceTest extends BaseTestCase
     {
         return $this->getExerciseMemberDao()->batchCreate(
             [
-                ['exerciseId' => 1, 'questionBankId' => 1, 'userId' => 1, 'role' => 'teacher', 'remark' => 'aaa',],
-                ['exerciseId' => 1, 'questionBankId' => 1, 'userId' => 2, 'role' => 'student', 'remark' => 'bbb',],
-                ['exerciseId' => 2, 'questionBankId' => 2, 'userId' => 3, 'role' => 'student', 'remark' => 'ccc',],
+                ['exerciseId' => 1, 'questionBankId' => 1, 'userId' => 1, 'role' => 'teacher', 'remark' => 'aaa'],
+                ['exerciseId' => 1, 'questionBankId' => 1, 'userId' => 2, 'role' => 'student', 'remark' => 'bbb'],
+                ['exerciseId' => 2, 'questionBankId' => 2, 'userId' => 3, 'role' => 'student', 'remark' => 'ccc'],
             ]
         );
     }

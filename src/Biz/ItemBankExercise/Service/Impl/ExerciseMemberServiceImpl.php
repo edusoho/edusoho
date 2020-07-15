@@ -385,14 +385,14 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         $removeMessage = "《{$exercise['title']}》(#{$exercise['id']})，学员({$user['nickname']})因达到有效期退出教学计划(#{$info['memberId']})";
         $this->getLogService()->info(
             'item_bank_exercise',
-            $info['type'] == 'add' ? 'add_student' : 'remove_student',
-            $info['type'] == 'add' ? $addMessage : $removeMessage,
+            'add' == $info['type'] ? 'add_student' : 'remove_student',
+            'add' == $info['type'] ? $addMessage : $removeMessage,
             [
                 'exerciseId' => $exercise['id'],
                 'title' => $exercise['title'],
                 'userId' => $user['id'],
                 'nickname' => $user['nickname'],
-                'remark' => $info['type'] == 'add' ? $info['remark'] : '',
+                'remark' => 'add' == $info['type'] ? $info['remark'] : '',
             ]
         );
     }

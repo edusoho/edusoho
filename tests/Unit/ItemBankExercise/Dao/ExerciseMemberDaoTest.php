@@ -68,7 +68,7 @@ class ExerciseMemberDaoTest extends BaseDaoTestCase
                     'userId' => 1,
                     'role' => 'teacher',
                     'remark' => 'adg',
-                ]
+                ],
             ]
         );
     }

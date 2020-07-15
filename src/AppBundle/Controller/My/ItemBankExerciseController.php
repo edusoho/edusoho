@@ -34,7 +34,7 @@ class ItemBankExerciseController extends BaseController
         );
 
         $itemBankExercises = [];
-        if (!empty($members)){
+        if (!empty($members)) {
             $itemBankExercises = $this->getItemBankExerciseService()->search(
                 $conditions,
                 ['createdTime' => 'DESC'],
