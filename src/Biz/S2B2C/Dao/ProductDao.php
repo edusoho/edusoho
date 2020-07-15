@@ -12,7 +12,11 @@ interface ProductDao extends AdvancedDaoInterface
 
     public function findBySupplierIdAndRemoteProductIds($supplierId, $remoteProductIds);
 
+    public function findBySupplierIdAndRemoteProductId($supplierId, $remoteProductId);
+
     public function findBySupplierIdAndRemoteResourceTypeAndIds($supplierId, $productType, $remoteResourceIds);
+
+    public function findBySupplierIdAndRemoteResourceTypeAndProductIds($supplierId, $productType, $remoteProductIds);
 
     public function getByTypeAndLocalResourceId($type, $localResourceId);
 
@@ -24,5 +28,9 @@ interface ProductDao extends AdvancedDaoInterface
 
     public function getBySupplierIdAndLocalResourceIdAndType($supplierId, $localResourceId, $type);
 
+    public function getByRemoteProductIdRemoteResourceIdAndType($supplierId, $localResourceId, $type);
+
     public function deleteByIds($ids);
+
+    public function findRemoteVersionGTLocalVersion();
 }

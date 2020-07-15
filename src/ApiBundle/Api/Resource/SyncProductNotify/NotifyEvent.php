@@ -39,9 +39,12 @@ class NotifyEvent
         return $this->productId;
     }
 
-    public function getData()
+    public function getData($dataIndex = null)
     {
-        return $this->eventData;
+        if (is_null($dataIndex)) {
+            return $this->eventData;
+        }
+        return $this->eventData[$dataIndex];
     }
 
     public function getEvent()

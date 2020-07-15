@@ -29,22 +29,23 @@
     </thead>
     <tbody>
     {% for item in items %}
+      {% set product = item.product %}
       <tr>
         <td>{{ item.id }}</td>
         <td>{{ item.created_time|date('Y-m-d H:i:s') }}</td>
-        <td>{{ item.parent_title|default('') }}</td>
+        <td>{{ product.name|default('') }}</td>
         <td>{{ item.order_count|default(0) }}</td>
         <td>
           {{ item.min_selling_price|default(0) == item.max_selling_price|default(0) ? '￥' ~ item.min_selling_price|currency : '￥' ~ item.min_selling_price|currency ~ '~ ￥' ~ item.max_selling_price|currency }}
         </td>
         <td>
-          {{ item.min_suggest_price|default(0) == item.max_suggest_price|default(0) ? '￥' ~ item.min_suggest_price|currency : '￥' ~ item.min_suggest_price|currency ~ '~ ￥' ~ item.max_suggest_price|currency }}
+          {{ product.minSuggestionPrice|default(0) == product.maxSuggestionPrice|default(0) ? '￥' ~ product.minSuggestionPrice|currency : '￥' ~ product.minSuggestionPrice|currency ~ '~ ￥' ~ product.maxSuggestionPrice|currency }}
         </td>
         <td>
-          {{ item.min_cooperate_price|default(0) == item.max_cooperate_price|default(0) ? '￥' ~ item.min_cooperate_price|currency : '￥' ~ item.min_cooperate_price|currency ~ '~ ￥' ~ item.max_cooperate_price|currency }}
+          {{ product.minCooperationPrice|default(0) == product.maxCooperationPrice|default(0) ? '￥' ~ product.minCooperationPrice|currency : '￥' ~ product.minCooperationPrice|currency ~ '~ ￥' ~ product.maxCooperationPrice|currency }}
         </td>
         <td>
-          {% if item.course_set_status == 'published' %}
+          {% if product.status == 'published' %}
             {{ 'admin_v2.app_center.resource_settlement.product.item_status.published'|trans }}
           {% elseif item.course_set_status =='closed' %}
             {{ 'admin_v2.app_center.resource_settlement.product.item_status.closed'|trans }}
