@@ -22,29 +22,33 @@ class ItemBankExerciseController extends BaseController
             return $this->createMessageResponse('error', 'my.teaching.view.forbidden');
         }
 
+        $members = $this->getExerciseMemberService()->search(['userId' => $user['id'], 'role' => 'teacher'],[], 0, PHP_INT_MAX);
         $conditions = [
-            'creator' => $user['id'],
+            'ids' => ArrayToolkit::column($members, 'exerciseId'),
         ];
 
         $paginator = new Paginator(
             $request,
-            $this->getItemBankExerciseService()->count($conditions),
+            !empty($members) ? $this->getItemBankExerciseService()->count($conditions) : 0,
             10
         );
 
-        $itemBankExercises = $this->getItemBankExerciseService()->search(
-            $conditions,
-            ['createdTime' => 'DESC'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        $itemBankExercises = [];
+        if (!empty($members)){
+            $itemBankExercises = $this->getItemBankExerciseService()->search(
+                $conditions,
+                ['createdTime' => 'DESC'],
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
 
-        $questionBanks = ArrayToolkit::column($itemBankExercises, 'questionBankId');
-        $questionBanks = $this->getQuestionBankService()->findQuestionBanksByIds($questionBanks);
-        $questionBanks = ArrayToolkit::index($questionBanks, 'id');
-        foreach ($itemBankExercises as &$itemBankExercise) {
-            $itemBankExercise['assessmentNum'] = $questionBanks[$itemBankExercise['questionBankId']]['itemBank']['assessment_num'];
-            $itemBankExercise['itemNum'] = $questionBanks[$itemBankExercise['questionBankId']]['itemBank']['item_num'];
+            $questionBanks = ArrayToolkit::column($itemBankExercises, 'questionBankId');
+            $questionBanks = $this->getQuestionBankService()->findQuestionBanksByIds($questionBanks);
+            $questionBanks = ArrayToolkit::index($questionBanks, 'id');
+            foreach ($itemBankExercises as &$itemBankExercise) {
+                $itemBankExercise['assessmentNum'] = $questionBanks[$itemBankExercise['questionBankId']]['itemBank']['assessment_num'];
+                $itemBankExercise['itemNum'] = $questionBanks[$itemBankExercise['questionBankId']]['itemBank']['item_num'];
+            }
         }
 
         return $this->render('my/teaching/item-bank-exercise.html.twig', [
