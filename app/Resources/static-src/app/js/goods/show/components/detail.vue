@@ -6,7 +6,7 @@
                 <img :src="detailData.image" alt="">
             </div>
             <ul class="detail-left__text clearfix">
-                <li class="pull-left"><i class="es-icon es-icon-friends mrs"></i>{{ currentPlan.joinedNum }}人加入学习</li>
+                <li class="pull-left"><i class="es-icon es-icon-friends mrs"></i>{{ currentSku.joinedNum }}人加入学习</li>
                 <li class="pull-right">
                     <share :customized-class="'detail-left__text-share'" :type="'courseSet'">分享
                     </share>
@@ -27,7 +27,7 @@
                 <div class="detail-right__price__activities">该商品享受“某某某某某某某某某某某某”打折促销活动，24：00：00后结束，请尽快购买！</div>
                 <div class="detail-right__price__num">
                     优惠价
-                    <span>{{ currentPlan.price }}</span>
+                    <span>{{ currentSku.price }}</span>
                     <s>价格: 2000元</s>
                 </div>
             </div>
@@ -44,14 +44,14 @@
             <!-- 学习有效期 -->
             <div class="detail-right__validity validity clearfix">
                 <span class="validity-title pull-left">学习有效期</span>
-                <span class="validity-content pull-left">{{ currentPlan.expiryMode }}</span>
+                <span class="validity-content pull-left">{{ currentSku.expiryMode }}</span>
             </div>
 
           <!-- 承诺服务 -->
-          <div class="detail-right__promise promise clearfix" v-if="currentPlan.services">
+          <div class="detail-right__promise promise clearfix" v-if="currentSku.services">
             <div class="promise-title pull-left">承诺服务</div>
             <div class="promise-content pull-left">
-              <span class="promise-content__item" v-for="(item, index) in currentPlan.services" :key="index">
+              <span class="promise-content__item" v-for="(item, index) in currentSku.services" :key="index">
                 疑
                 <span class="promise-content__item-hover">一对一答疑</span>
               </span>
@@ -78,7 +78,7 @@
                 default: () => {
                 }
             },
-            currentPlan: {
+            currentSku: {
                 type: Object,
                 default: () => {
                 }
@@ -96,8 +96,8 @@
             }
         },
         methods: {
-            handleClick(plan) {
-                this.$emit('changePlan', plan.id);
+            handleClick(sku) {
+                this.$emit('changeSku', sku.id);
             }
         }
     }
