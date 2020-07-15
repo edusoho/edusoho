@@ -1539,6 +1539,9 @@ site.twig.extension.smarttime.previous_hour: %diff%小时前
 site.twig.extension.smarttime.previous_day: %diff%天前
 
 reviews.review_again: 重新评价
+classroom.courses.lesson_num: 共%num%课时
+classroom.courses.plan: 教学计划
+site.local_more: 加载更多
 
 
 
