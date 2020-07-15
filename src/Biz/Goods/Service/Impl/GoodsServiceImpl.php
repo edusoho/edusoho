@@ -19,11 +19,12 @@ class GoodsServiceImpl extends BaseService implements GoodsService
 
     public function createGoods($goods)
     {
-        if (!ArrayToolkit::requireds($goods, ['productId', 'title'])) {
+        if (!ArrayToolkit::requireds($goods, ['productId', 'title', 'type'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $goods = ArrayToolkit::parts($goods, [
+            'type',
             'productId',
             'title',
             'subtitle',

@@ -335,6 +335,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         ]);
 
         $goods = $this->getGoodsService()->createGoods([
+            'type' => 'course',
             'productId' => $product['id'],
             'title' => $courseSet['title'],
             'subtitle' => $courseSet['subtitle'],

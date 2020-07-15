@@ -232,6 +232,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         ]);
 
         $goods = $this->getGoodsService()->createGoods([
+            'type' => 'classroom',
             'productId' => $product['id'],
             'title' => $classroom['title'],
             'subtitle' => '',
