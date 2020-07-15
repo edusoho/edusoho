@@ -37,10 +37,8 @@
 {% endblock %}
 
 {% block content %}
-  {% set type = filter.type|default('all') %}
   {% set price = filter.price|default('all') %}
   {% set orderBy = app.request.query.get('orderBy')|default('latest')%}
-  {% set path = app.request.get('_route') %}
 
   <div class="es-filter">
     <ul class="nav nav-sort clearfix">
