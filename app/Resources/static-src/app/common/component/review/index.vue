@@ -199,7 +199,7 @@
                 }
             },
             onFormDisplay(event) {
-                if ($(event.currentTarget).siblings('ul').find('.thread-post').length >= 5) {
+                if ($('.' + $(event.currentTarget).data('toggle')).hasClass('hidden') && $(event.currentTarget).siblings('ul').find('.thread-post').length >= 5) {
                     cd.message({
                         type: 'danger',
                         message: Translator.trans('course.manage.post_limit_hint')

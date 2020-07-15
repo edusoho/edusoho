@@ -167,7 +167,7 @@
         data() {
             let baseForm = {
                 title: this.course.title ? this.course.title : this.course.courseSetTitle,
-                subtitle: this.course.subtitle ? this.course.subtitle : this.courseSet.subtitle,
+                subtitle: this.course.subtitle ? this.course.subtitle : null,
             };
 
             if (this.isUnMultiCourseSet) {
