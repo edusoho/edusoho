@@ -1,6 +1,5 @@
 <template>
     <div class="create-review" v-if="canCreate">
-        {{userReview}}
         <form v-show="!userReview || (userReview && showForm)">
             <div class="review-form-rating create-review__grade">
                 {{ 'validate.raty_star.message'|trans }}：
@@ -199,7 +198,6 @@
                 this.starHover = 0;
             },
             rating(index) {
-                console.log(index);
                 let total = this.stars.length;
                 let idx = index + 1;
                 if (this.form.rating == 0) {
