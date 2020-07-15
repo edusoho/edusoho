@@ -1,6 +1,5 @@
 <template>
     <div class="create-review" v-if="canCreate">
-        {{userReview}}
         <form v-show="!userReview || (userReview && showForm)">
             <div class="review-form-rating create-review__grade">
                 {{ 'validate.raty_star.message'|trans }}：
