@@ -334,6 +334,23 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'watchLimit',
             ]
         );
+
+        if ('supplier' == $oldCourse['platform']) {
+            $fields = array_merge($fields,
+                ArrayToolkit::parts($oldCourse, [
+                    'expiryEndDate',
+                    'learnMode',
+                    'expiryMode',
+                    'expiryDays',
+                    'expiryEndDate',
+                    'expiryStartDate',
+                    'enableFinish',
+                    'tryLookLength',
+                    'enableAudio',
+                ])
+            );
+        }
+
         if (!empty($fields['services'])) {
             $fields['showServices'] = 1;
         } else {

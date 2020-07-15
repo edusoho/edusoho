@@ -31,15 +31,14 @@
               <span class="course-detail-title vertical-middle">{{ 'course.teaching_plan'|trans }}</span>
               <ul class="nav nav-pills nav-pills-sm nav-pills-transparent course-detail-nav">
                 {% for c in courses if c.status == 'published' %}
-                  <li class="mb5 mrs {% if c.s2b2cDistributeId == course.s2b2cDistributeId %}active{% endif %}">
-                    <a href="{{ path('admin_v2_content_resource_product_detail', {productType: 'courseSet', remoteResourceId: courseSet.id, remoteCourseResourceId: c.s2b2cDistributeId}) }}"
+                  <li class="mb5 mrs {{ c.id ==  course.id ? 'active': ''}}">
+                    <a href="{{ path('admin_v2_content_resource_product_detail', {productType: 'courseSet', s2b2cProductId: product.id, courseId:c.id}) }}"
                        data-toggle="tooltip"
                        data-placement="top"
                        data-container="body"
                        title="{{ c.subtitle }}"
                        data-trigger="hover"
                        title="{{ c.title }}">{{ c.title|sub_text(10)|default('course.unname_title'|trans) }}
-
                     </a>
                     <i class="es-icon es-icon-done done-icon"></i>
                   </li>
@@ -91,7 +90,7 @@
                       data-id="{{ courseSet.id }}"
                       class="btn btn-fat btn-primary course-v2-btn{% if canChoose %} disabled {% endif %}"
                       data-course-set="{{ courseSet|json_encode() }}"
-                      data-choose-url="{{ path('admin_v2_content_resource_choose_product', {productType: 'course_set', productId: courseSet.s2b2cDistributeId}) }}"
+                      data-choose-url="{{ path('admin_v2_content_resource_choose_product', {productType: 'course_set', productId: product.id}) }}"
                       style="{% if canChoose %} background-color: #ccc; border-color: #ccc;{% else %} border-color: #409eff; background-color: #409eff; {% endif %}">
                 {% if hasChosen %}
                   {{ 'merchant.content_resource.has_chosen'|trans }}

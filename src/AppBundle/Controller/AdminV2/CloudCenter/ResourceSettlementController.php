@@ -88,20 +88,23 @@ class ResourceSettlementController extends BaseController
     public function productAction(Request $request)
     {
         $conditions = $this->prepareConditionsByType($request->query->all(), self::TYPE_PRODUCT);
+        $pageSize = 20;
+        $offset = ($request->query->get('page', 1) - 1) * $pageSize;
 
-        $conditions['offset'] = $request->query->get('page', 0);
+        $purchaseProducts = $this->getS2B2CFacadeService()->getS2B2CService()->searchPurchaseProduct($conditions, ['created_time' => 'desc'], $offset, $pageSize);
+        if (isset($result['error'])) {
+            throw $this->createNotFoundException('PurchaseProduct not found');
+        }
 
-        $products = $this->getProductService()->searchSelectedProducts($conditions);
-
-        $paginator = new Paginator($request, $products['count'], $this->pageSize);
+        $paginator = new Paginator($request, $purchaseProducts['count'], $this->pageSize);
 
         return $this->render(
             'admin-v2/resource-settlement/product.html.twig',
             [
                 'paginator' => $paginator,
-                'items' => $products['items'],
+                'items' => $purchaseProducts['items'],
                 'merchant' => $this->getS2B2CFacadeService()->getMe(),
-                'total' => $products['count'],
+                'total' => $purchaseProducts['count'],
             ]);
     }
 

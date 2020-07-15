@@ -37,12 +37,12 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             throw $this->createServiceException('优惠券批次不存在');
         }
 
-        $unreceivedNum = $this->getCouponService()->searchCouponsCount(array(
+        $unreceivedNum = $this->getCouponService()->searchCouponsCount([
             'userId' => 0,
             'batchId' => $batch['id'],
-        ));
+        ]);
 
-        $this->getCouponBatchDao()->update($batchId, array('unreceivedNum' => $unreceivedNum));
+        $this->getCouponBatchDao()->update($batchId, ['unreceivedNum' => $unreceivedNum]);
         $this->dispatchEvent('coupon.receive', $batch);
     }
 
@@ -55,7 +55,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         $couponData['deadline'] = isset($couponData['deadline']) ? strtotime($couponData['deadline']) : 0;
         $couponData['fixedDay'] = isset($couponData['fixedDay']) ? $couponData['fixedDay'] : 0;
 
-        $batchArray = array(
+        $batchArray = [
             'name',
             'prefix',
             'type',
@@ -68,7 +68,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             'targetType',
             'h5MpsEnable',
             'linkEnable',
-            'codeEnable', );
+            'codeEnable', ];
         if (!ArrayToolkit::requireds($couponData, $batchArray)) {
             throw $this->createServiceException('缺少必要参数，生成优惠码失败');
         }
@@ -106,9 +106,9 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         }
 
         $duration = ('time' == $batch['deadlineMode']) ? $batch['deadline'] + 86400 - time() : 3600;
-        $token = $this->getTokenService()->makeToken('coupon', array(
+        $token = $this->getTokenService()->makeToken('coupon', [
             'duration' => $duration,
-        ));
+        ]);
 
         $batch['token'] = $token['token'];
 
@@ -148,7 +148,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             $card = $this->getCardService()->getCardByCardIdAndCardType($coupon['id'], 'coupon');
 
             if (!empty($card)) {
-                $this->getCardService()->updateCardByCardIdAndCardType($coupon['id'], 'coupon', array('status' => 'deleted'));
+                $this->getCardService()->updateCardByCardIdAndCardType($coupon['id'], 'coupon', ['status' => 'deleted']);
 
                 if ('minus' == $coupon['type']) {
                     $message = '您的一张价值为￥'.$coupon['rate'].'的优惠券已经被管理员删除，详情请联系管理员。';
@@ -178,127 +178,121 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         $token = $this->getTokenService()->verifyToken('coupon', $token);
 
         if (!$token && ('time' == $batch['deadlineMode'])) {
-            return array(
+            return [
                 'code' => 'failed',
                 'message' => '无效的链接',
-                'exception' => array(
+                'exception' => [
                     'class' => 'Biz\Coupon\CouponException',
                     'method' => 'INVALID',
-                ),
-            );
+                ],
+            ];
         }
         $user = $this->getUserService()->getUser($userId);
         if (!$user) {
-            return array(
+            return [
                 'code' => 'failed',
                 'message' => '请登录网校账号后再领取',
-                'exception' => array(
+                'exception' => [
                     'class' => 'Biz\User\UserException',
                     'method' => 'UN_LOGIN',
-                ),
-            );
+                ],
+            ];
         }
         try {
-            $this->getCouponBatchDao()->db()->beginTransaction();
-
             if (empty($batch)) {
-                $this->getCouponBatchDao()->db()->commit();
-
-                return array(
+                return [
                     'code' => 'failed',
                     'message' => '链接不存在或已被删除',
-                    'exception' => array(
+                    'exception' => [
                         'class' => 'Biz\Coupon\CouponException',
                         'method' => 'INVALID',
-                    ),
-                );
+                    ],
+                ];
             }
 
-            $conditions = array(
+            $conditions = [
                 'userId' => $userId,
                 'batchId' => $batch['id'],
-            );
-            $coupon = $this->getCouponService()->searchCoupons($conditions, array('id' => 'DESC'), 0, 1);
+            ];
+            $coupon = $this->getCouponService()->searchCoupons($conditions, ['id' => 'DESC'], 0, 1);
 
             if (!empty($coupon) && !$canRepeat) {
-                $this->getCouponBatchDao()->db()->commit();
-
-                return array(
+                return [
                     'code' => 'failed',
                     'message' => '您已经领取该批优惠码',
-                    'exception' => array(
+                    'exception' => [
                         'class' => 'Biz\Coupon\CouponException',
                         'method' => 'RECEIVED',
-                    ),
-                );
+                    ],
+                ];
             }
 
-            $conditions = array(
+            $conditions = [
                 'userId' => 0,
                 'batchId' => $batch['id'],
-            );
-            $coupons = $this->getCouponService()->searchCoupons($conditions, array('id' => 'ASC'), 0, 1);
+            ];
+            $coupons = $this->getCouponService()->searchCoupons($conditions, ['id' => 'ASC'], 0, 1);
 
             if (empty($coupons)) {
-                $this->getCouponBatchDao()->db()->commit();
-
-                return array(
+                return [
                     'code' => 'failed',
                     'message' => '该批优惠码已经被领完',
-                    'exception' => array(
+                    'exception' => [
                         'class' => 'Biz\Coupon\CouponException',
                         'method' => 'FINISHED',
-                    ),
-                );
+                    ],
+                ];
             }
 
+            $this->getLock()->get("receive_coupon_{$batch['id']}", 10);
             $couponsId = ArrayToolkit::column($coupons, 'id');
             $coupon = $this->getCouponService()->getCoupon($couponsId[0]);
 
             if (!empty($userId) && !empty($coupon)) {
-                $fields = array(
+                $fields = [
                     'userId' => $userId,
                     'status' => 'receive',
                     'receiveTime' => time(),
-                );
+                ];
 
                 if ('day' == $batch['deadlineMode']) {
                     if (0 == $batch['fixedDay']) {
-                        return array(
+                        return [
                             'code' => 'failed',
                             'message' => '优惠码领取后过期日期为0',
-                            'exception' => array(
+                            'exception' => [
                                 'class' => 'Biz\Coupon\CouponException',
                                 'method' => 'INVALID',
-                            ),
-                        );
+                            ],
+                        ];
                     }
 
                     //ES优惠券领取时，对于优惠券过期时间会加86400秒，所以计算deadline时对于固定天数模式应与设置有效期模式一致，都为当天凌晨00:00:00
                     $fields['deadline'] = strtotime(date('Y-m-d')) + 24 * 60 * 60 * $batch['fixedDay'];
                 }
-
+                $this->getCouponBatchDao()->db()->beginTransaction();
                 $coupon = $this->getCouponService()->updateCoupon($coupon['id'], $fields);
 
                 if (empty($coupon)) {
                     $this->getCouponBatchDao()->db()->commit();
+                    $this->getLock()->release("receive_coupon_{$batch['id']}");
 
-                    return array(
+                    return [
                         'code' => 'failed',
                         'message' => '优惠码领取失败',
-                        'exception' => array(
+                        'exception' => [
                             'class' => 'Biz\Coupon\CouponException',
                             'method' => 'RECEIVE_FAILED',
-                        ),
-                    );
+                        ],
+                    ];
                 }
 
-                $this->getCardService()->addCard(array(
+                $this->getCardService()->addCard([
                     'cardType' => 'coupon',
                     'cardId' => $coupon['id'],
                     'deadline' => $coupon['deadline'],
                     'userId' => $userId,
-                ));
+                ]);
 
                 if ('minus' == $coupon['type']) {
                     $message = '您有一张价值'.$coupon['rate'].'元的优惠券领取成功';
@@ -312,14 +306,17 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
 
             $this->updateUnreceivedNumByBatchId($batch['id']);
             $this->getCouponBatchDao()->db()->commit();
+            $this->getLock()->release("receive_coupon_{$batch['id']}");
 
-            return array(
+            return [
                 'id' => $coupon['id'],
                 'code' => 'success',
                 'message' => '领取成功，请在卡包中查看',
-            );
+            ];
         } catch (\Exception $e) {
             $this->getCouponBatchDao()->db()->rollback();
+            $this->getLock()->release("receive_coupon_{$batch['id']}");
+
             throw $e;
         }
     }
@@ -341,7 +338,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             return null;
         }
 
-        $generated = $this->getCouponService()->searchCouponsCount(array('batchId' => $batch['id']));
+        $generated = $this->getCouponService()->searchCouponsCount(['batchId' => $batch['id']]);
         $remain = intval($batch['generatedNum'] - $generated);
         if ($remain < $generatedNum) {
             $generatedNum = $remain;
@@ -354,7 +351,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             for ($i = 0; $i < $generatedNum; ++$i) {
                 $couponCode = $this->generateRandomCode($batch['digits'], $batch['prefix']);
 
-                $coupon = array(
+                $coupon = [
                     'code' => $couponCode,
                     'type' => $batch['type'],
                     'status' => 'unused',
@@ -366,7 +363,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
                     'targetIds' => $batch['targetIds'],
                     'fullDiscountPrice' => $batch['fullDiscountPrice'],
                     'createdTime' => $time,
-                );
+                ];
                 $batchCreateHelper->add($coupon);
             }
             $batchCreateHelper->flush();
@@ -391,14 +388,14 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         $batches = ArrayToolkit::index($batches, 'id');
         $user = $this->getCurrentUser();
         if (!empty($user['id']) && !empty($batches)) {
-            $conditions = array(
+            $conditions = [
                 'batchIds' => array_keys($batches),
                 'userId' => $user['id'],
-            );
+            ];
 
             $receivedCoupons = $this->getCouponService()->searchCoupons(
                 $conditions,
-                array(),
+                [],
                 0,
                 $this->getCouponService()->searchCouponsCount($conditions)
             );
@@ -482,11 +479,11 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
     {
         $user = $this->getCurrentUser();
 
-        if (!ArrayToolkit::requireds($conditions, array('targetType', 'targetId'))) {
+        if (!ArrayToolkit::requireds($conditions, ['targetType', 'targetId'])) {
             throw $this->createInvalidArgumentException('Lack of required fields.');
         }
 
-        $conditions = ArrayToolkit::parts($conditions, array('targetType', 'targetId'));
+        $conditions = ArrayToolkit::parts($conditions, ['targetType', 'targetId']);
 
         $conditions['likeTargetIds'] = "%|{$conditions['targetId']}|%";
         $conditions['deadlineGt'] = time() - 86400;

@@ -67,3 +67,4 @@ yarn-error.log
 /reports_tmp
 /edusoho-h5
 /app/config/plumber.php
+.package-lock.json

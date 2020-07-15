@@ -18,6 +18,7 @@ class ProductDaoTest extends BaseDaoTestCase
         return array_merge([
             'supplierId' => 1,
             'productType' => 'course',
+            's2b2cProductDetailId' => 0,
             'remoteProductId' => 1,
             'remoteResourceId' => 1,
             'localResourceId' => 1,

@@ -26,18 +26,19 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
     public static function getSubscribedEvents()
     {
         return [
-            'course.update' => 'onCourseUpdate',
             'order.success' => 'onOrderSuccess',
             'order.refunded' => 'onOrderRefunded',
+            'course.marketing.update' => 'onCourseMarketingUpdate',
         ];
     }
 
-    public function onCourseUpdate(Event $event)
+    public function onCourseMarketingUpdate(Event $event)
     {
-        $course = $event->getSubject();
+        $courses = $event->getSubject();
+        $course = $courses['newCourse'];
         if ($this->isSupplierCourse($course)) {
             $courseProduct = $this->getS2b2cProductService()->getByTypeAndLocalResourceId('course', $course['id']);
-            $this->getS2B2CService()->changeProductSellingPrice($courseProduct['remoteResourceId'], 'course', $course['price']);
+            $this->getS2B2CService()->changeProductSellingPrice($courseProduct['s2b2cProductDetailId'], $course['price']);
         }
     }
 
@@ -67,7 +68,7 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
                 if (!empty($product['remoteResourceId'])) {
                     $productIds[] = $product['remoteResourceId'];
                 }
-                $item['origin_product_id'] = $product['remoteResourceId'];
+                $item['origin_product_id'] = $product['s2b2cProductDetailId'];
             }
 
             if (!empty($productIds)) {
@@ -104,6 +105,11 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
 
             if (!empty($productIds) && max($productIds) > 0) {
                 $this->setUserInfo($context);
+                $this->getLogger()->info('[onOrderRefunded] order report succeed', [
+                    'merchantOrder' => $context,
+                    'merchantOrderRefund' => $orderRefund,
+                    'merchantOrderRefundItems' => $orderItemRefunds,
+                ]);
                 $this->getS2B2CService()->reportRefundOrder($context, $orderRefund, $orderItemRefunds);
                 $this->getLogger()->info('[onOrderRefunded] order report succeed');
             }

@@ -31,6 +31,7 @@ class SupplierProductNotifyServiceTest extends BaseTestCase
             'productId' => $savedProduct['remoteResourceId'],
             'event' => 'modifyPrice',
             'data' => [
+                'courseId' => $course['id'],
                 'new' => [
                 'suggestionPrice' => '20.00',
                 'cooperationPrice' => '30.00',
@@ -61,6 +62,8 @@ class SupplierProductNotifyServiceTest extends BaseTestCase
             'event' => 'closeTask',
             'data' => [
                 'taskId' => $lesson['syncId'],
+                'courseId' => $course['id'],
+                'lessonId' => $lesson['id'],
             ],
         ]);
         $result = $this->getSupplierNotifyService()->syncSupplierProductEvent($modifyPriceEvent);
