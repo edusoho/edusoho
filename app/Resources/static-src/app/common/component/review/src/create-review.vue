@@ -121,7 +121,6 @@
         },
         methods: {
             getUserReview() {
-                console.log(this.targetId);
                 if (!this.currentUserId) {
                     return null;
                 }
