@@ -42,8 +42,6 @@ class ItemBankExerciseProduct extends Product implements OrderStatusCallback
 
     public function onPaid($orderItem)
     {
-        $targetName = '题库练习';
-
         $order = $this->getOrderService()->getOrder($orderItem['order_id']);
         $info = [
             'orderId' => $order['id'],
