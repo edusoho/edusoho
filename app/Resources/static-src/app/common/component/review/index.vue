@@ -1,7 +1,7 @@
 <template>
     <div class="reviews">
         <create-review :target-id="targetId" :target-type="targetType" :can-create="canCreate"
-                       :user-review="userReview"></create-review>
+                       :current-user-id="currentUserId"></create-review>
         <div class="reviews-item" v-for="review in reviews" :key="review.id" :class="'reviews-item-'+ review.id">
             <img class="reviews-item__img" :src="review.user.avatar.large" alt="">
             <div class="reviews-item__text reviews-text">
@@ -152,13 +152,9 @@
                 type: Boolean,
                 default: true
             },
-            offset: {
-                type: Number,
-                default: 0
-            },
             limit: {
                 type: Number,
-                default: 5
+                default: null
             },
             canCreate: {
                 type: Boolean,
@@ -168,8 +164,8 @@
                 type: Boolean,
                 default: false,
             },
-            userReview: {
-                type: Object,
+            currentUserId: {
+                type: Number,
                 default: null
             }
         },
@@ -184,7 +180,7 @@
                         targetType: this.targetType,
                         targetId: this.targetId,
                         offset: parseInt(offset),
-                        limit: parseInt(limit),
+                        limit: this.limit == null ? parseInt(limit) : this.limit,
                         needPosts: this.needPosts,
                     },
                 }).then(response => {
