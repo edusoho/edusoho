@@ -91,7 +91,7 @@ class Good extends AbstractResource
         foreach ($courses as $course) {
             $specs[] = [
                 'id' => $course['id'],
-                'title' => $course['title'],
+                'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['title'],
                 'subTitle' => $course['subtitle'],
                 'expiryMode' => $course['expiryMode'],
                 'joinedNum' => $course['studentNum'],

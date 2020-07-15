@@ -259,7 +259,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
         $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
         $goodsSpecs = $this->getGoodsService()->updateGoodsSpecs($goodsSpecs['id'], [
-            'title' => $course['title'],
+            'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['title'],
             'images' => $goods['images'],
             'seq' => $course['seq'],
             'price' => $course['price'],

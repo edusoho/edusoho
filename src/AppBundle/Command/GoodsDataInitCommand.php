@@ -158,7 +158,7 @@ class GoodsDataInitCommand extends BaseCommand
     {
         $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
         $goodsSpecs = $this->getGoodsService()->updateGoodsSpecs($goodsSpecs['id'], [
-            'title' => $course['title'],
+            'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['title'],
             'images' => $goods['images'],
             'status' => 'published' === $course['status'] ? 'published' : 'unpublished',
             'seq' => $course['seq'],
