@@ -28,6 +28,7 @@ class GoodsServiceImpl extends BaseService implements GoodsService
             'productId',
             'title',
             'subtitle',
+            'status',
             'summary',
             'orgId',
             'orgCode',
@@ -53,9 +54,11 @@ class GoodsServiceImpl extends BaseService implements GoodsService
     public function updateGoods($id, $goods)
     {
         $goods = ArrayToolkit::parts($goods, [
+            'type', //type不应该被更新，后面去掉
             'title',
             'images',
             'subtitle',
+            'status',
             'summary',
             'orgId',
             'orgCode',
@@ -100,6 +103,7 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         $goodsSpecs = ArrayToolkit::parts($goodsSpecs, [
             'goodsId',
             'targetId',
+            'status',
             'title',
             'images',
             'seq',
@@ -123,6 +127,7 @@ class GoodsServiceImpl extends BaseService implements GoodsService
             'images',
             'price',
             'title',
+            'status',
             'images',
             'price',
             'seq',
