@@ -317,6 +317,11 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         }
     }
 
+    public function findByUserIdAndRole($userId, $role)
+    {
+        return $this->getExerciseMemberDao()->findByUserIdAndRole($userId, $role);
+    }
+
     private function addMember($member, $reason = [])
     {
         try {

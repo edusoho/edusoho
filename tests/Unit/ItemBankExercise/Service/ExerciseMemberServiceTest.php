@@ -202,6 +202,14 @@ class ExerciseMemberServiceTest extends BaseTestCase
         $this->assertEmpty($result);
     }
 
+    public function testFindByUserIdAndRole()
+    {
+        $this->batchCreateExerciseMembers();
+        $res = $this->getExerciseMemberService()->findByUserIdAndRole(2, 'student');
+        $this->assertEquals(1, count($res));
+        $this->assertEquals('student', $res[0]['role']);
+    }
+
     private function createExercise()
     {
         return $this->getExerciseService()->create(

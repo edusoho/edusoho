@@ -22,7 +22,7 @@ class ItemBankExerciseController extends BaseController
             return $this->createMessageResponse('error', 'my.teaching.view.forbidden');
         }
 
-        $members = $this->getExerciseMemberService()->search(['userId' => $user['id'], 'role' => 'teacher'],[], 0, PHP_INT_MAX);
+        $members = $this->getExerciseMemberService()->findByUserIdAndRole($user['id'], 'teacher');
         $conditions = [
             'ids' => ArrayToolkit::column($members, 'exerciseId'),
         ];
@@ -61,13 +61,7 @@ class ItemBankExerciseController extends BaseController
     public function itemBankAction(Request $request)
     {
         $currentUser = $this->getUser();
-        $members = $this->getExerciseMemberService()->search(
-            ['userId' => $currentUser['id'], 'role' => 'student'],
-            ['createdTime' => 'desc'],
-            0,
-            PHP_INT_MAX
-        );
-
+        $members = $this->getExerciseMemberService()->findByUserIdAndRole($currentUser['id'], 'student');
         $exerciseIds = ArrayToolkit::column($members, 'exerciseId');
         $conditions = ['ids' => $exerciseIds];
 

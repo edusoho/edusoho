@@ -35,4 +35,6 @@ interface ExerciseMemberService
     public function isMemberNonExpired($exercise, $member);
 
     public function quitExerciseByDeadlineReach($userId, $exerciseId);
+
+    public function findByUserIdAndRole($userId, $role);
 }

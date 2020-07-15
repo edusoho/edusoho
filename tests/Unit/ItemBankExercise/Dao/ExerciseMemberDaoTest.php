@@ -14,6 +14,14 @@ class ExerciseMemberDaoTest extends BaseDaoTestCase
         $this->assertEquals(1, $res['userId']);
     }
 
+    public function testFindByUserIdAndRole()
+    {
+        $this->batchCreateMembers();
+        $res = $this->getDao()->findByUserIdAndRole(1, 'teacher');
+        $this->assertEquals(1, count($res));
+        $this->assertEquals('teacher', $res[0]['role']);
+    }
+
     protected function getDefaultMockFields()
     {
         return [
@@ -32,6 +40,35 @@ class ExerciseMemberDaoTest extends BaseDaoTestCase
                 'questionBankId' => 1,
                 'userId' => 1,
                 'remark' => 'adg',
+            ]
+        );
+    }
+
+    private function batchCreateMembers()
+    {
+        return $this->getDao()->batchCreate(
+            [
+                [
+                    'exerciseId' => 1,
+                    'questionBankId' => 1,
+                    'userId' => 1,
+                    'role' => 'student',
+                    'remark' => 'adg',
+                ],
+                [
+                    'exerciseId' => 1,
+                    'questionBankId' => 1,
+                    'userId' => 2,
+                    'role' => 'teacher',
+                    'remark' => 'adg',
+                ],
+                [
+                    'exerciseId' => 2,
+                    'questionBankId' => 2,
+                    'userId' => 1,
+                    'role' => 'teacher',
+                    'remark' => 'adg',
+                ]
             ]
         );
     }

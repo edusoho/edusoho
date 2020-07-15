@@ -17,6 +17,11 @@ class ExerciseMemberDaoImpl extends AdvancedDaoImpl implements ExerciseMemberDao
         ]);
     }
 
+    public function findByUserIdAndRole($userId, $role)
+    {
+        return $this->findByFields(['userId' => $userId, 'role' => $role]);
+    }
+
     public function declares()
     {
         return [
