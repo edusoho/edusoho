@@ -27,13 +27,27 @@
 		border-radius: vw(14);
 	}
 
+	.van-tabs__wrap {
+		overflow: visible;
+	}
+
+	.van-tabs__line {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		z-index: 1;
+		width: 0 !important;
+		height: 0;
+		background: transparent;
+		border-color: transparent transparent #fff;
+		border-style: solid;
+		border-width: 0 8px 8px;
+		box-shadow: 0 0;
+	}
+
 	.van-tab--active {
 		color: #fff;
 		background: $primary-color;
 		border-radius: vw(14);
-	}
-
-	.van-tabs__line {
-		display: none;
 	}
 }

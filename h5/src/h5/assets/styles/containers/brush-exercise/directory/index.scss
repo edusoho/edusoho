@@ -1,2 +1,28 @@
-@import './components/swiper-tab.scss';
-@import './components/exam.scss';
+.brush-exercise-directory {
+	$report-btn: #ff954d;
+
+	@import './components/swiper-tab.scss';
+	@import './components/exam.scss';
+	@import './components/exercise.scss';
+
+	.learn-btn {
+		width: vw(72);
+		height: vw(28);
+		padding: 0 vw(0);
+		color: $primary-color;
+		line-height: vw(28);
+		text-align: center;
+		border: vw(1) solid $primary-color;
+		border-radius: vw(0) vw(14) vw(0) vw(14);
+	}
+
+	.learn-btn-doing {
+		color: #fff;
+		background: $primary-color;
+	}
+
+	.learn-btn-report {
+		color: $report-btn;
+		border: vw(1) solid $report-btn;
+	}
+}
