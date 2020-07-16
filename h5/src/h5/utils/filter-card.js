@@ -76,6 +76,9 @@ const getItemBank = data => {
       moduleId: data.target.module?.id,
       answerRecordId: data.target.answerRecord?.id,
       exerciseId: data.target.exercise?.id,
+      targetId: data.targetId,
+      status: data.target.answerRecord?.status,
+      itemCategoryId: data.target.itemCategory?.id,
     },
     type: data.targetType,
     top: {

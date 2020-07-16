@@ -23,7 +23,7 @@
     />
     <empty
       v-if="isEmptyCourse && isRequestCompile"
-      text="暂无课程"
+      text="暂无题库"
       class="empty__couse"
     />
     <back-top icon="icon-top" color="#20B573" />
@@ -82,7 +82,7 @@ export default {
     setTitle() {
       window.postNativeMessage({
         action: 'kuozhi_native_header',
-        data: { title: '所有课程' },
+        data: { title: '所有题库' },
       });
     },
     setQuery(value) {
