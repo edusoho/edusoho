@@ -1,5 +1,24 @@
 initUploadImg();
-initForm();
+
+let validator = $('#goods-setting-form').validate({
+  rules: {},
+  ajax: true,
+  submitSuccess(data) {
+    cd.message({type: 'success', message: Translator.trans('site.save_success_hint')});
+    $('.js-setting-save-btn').button('reset');
+  }
+});
+
+initLabelValidator();
+
+$('.js-setting-save-btn').on('click', (event) => {
+  const $this = $(event.currentTarget);
+
+  if (validator.form()) {
+    $this.button('loading');
+    $('#goods-setting-form').submit();
+  }
+});
 
 function initUploadImg() {
   cd.upload({
@@ -48,34 +67,30 @@ function uploadImage(formData) {
   });
 };
 
-function initForm() {
-  let validator = $('#goods-setting-form').validate({
-    rules: {
-      'leading[label]': {
-        required: true,
-        maxlength: 20,
-      },
-      'leading[description]': {
-        required: true,
-        maxlength: 40,
-      },
-      'leading[qrcode]': 'required',
-    },
-    ajax: true,
-    submitSuccess(data) {
-      cd.message({type: 'success', message: Translator.trans('site.save_success_hint')});
-      $('.js-setting-save-btn').button('reset');
-    }
-  });
+function initLabelValidator() {
+  validator.resetForm();
 
-  $('.js-setting-save-btn').on('click', (event) => {
-    const $this = $(event.currentTarget);
-
-    if (validator.form()) {
-      $this.button('loading');
-      $('#goods-setting-form').submit();
-    }
-  });
+  if ($('input[name="leading_join_enabled"]:checked').val() == 1) {
+    $('#leading-label').rules('add', {
+      required: true,
+      maxlength: 20,
+    });
+    $('#leading-description').rules('add', {
+      required: true,
+      maxlength: 40,
+    });
+    $('input[name="leading[qrcode]"]').rules('add', {
+      required: true
+    });
+  } else {
+    $('#leading-label').rules('remove');
+    $('#leading-description').rules('remove');
+    $('input[name="leading[qrcode]"]').rules('remove');
+  }
 }
+
+$('input[name="leading_join_enabled"]').on('change', (event) => {
+  initLabelValidator();
+});
 
 

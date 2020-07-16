@@ -99,7 +99,7 @@ class GoodComponent extends AbstractResource
         return [
             'title' => $goodsSetting['leading']['label'],
             'content' => $goodsSetting['leading']['description'],
-            'imageUrl' => AssetHelper::getFurl($goodsSetting['leading']['qrcode'], 'default'),
+            'imageUrl' => AssetHelper::getFurl($goodsSetting['leading']['qrcode']),
         ];
     }
 
@@ -113,6 +113,7 @@ class GoodComponent extends AbstractResource
 
             $teachers['teacherIds'] = $courseSet['teacherIds'];
             $this->getOCUtil()->single($teachers, ['teacherIds']);
+
             $userFilter = new UserFilter();
             $userFilter->setMode(Filter::SIMPLE_MODE);
             $userFilter->filters($teachers['teachers']);
@@ -128,6 +129,7 @@ class GoodComponent extends AbstractResource
 
             $teachers['teacherIds'] = [$classroom['headTeacherId']];
             $this->getOCUtil()->single($teachers, ['teacherIds']);
+
             $userFilter = new UserFilter();
             $userFilter->setMode(Filter::SIMPLE_MODE);
             $userFilter->filters($teachers['teachers']);
@@ -139,9 +141,10 @@ class GoodComponent extends AbstractResource
     protected function getRecommendGoodsComponent($goods)
     {
         $recommendGoods = $this->getRecommendGoodsService()->findRecommendedGoodsByGoods($goods);
-        foreach ($recommendGoods as &$recommendGood) {
-            $recommendGood['image'] = AssetHelper::getFurl(empty($recommendGood['images']['middle']) ? '' : $recommendGood['images']['middle'], 'course.png');
-        }
+
+        $goodsFilter = new GoodFilter();
+        $goodsFilter->setMode(Filter::SIMPLE_MODE);
+        $goodsFilter->filters($recommendGoods);
 
         return $recommendGoods;
     }

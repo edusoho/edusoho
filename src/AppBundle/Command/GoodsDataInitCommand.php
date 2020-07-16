@@ -96,6 +96,7 @@ class GoodsDataInitCommand extends BaseCommand
         }
 
         $goods = $this->getGoodsService()->updateGoods($existGoods['id'], [
+            'type' => 'classroom',
             'title' => $classroom['title'],
             'subtitle' => '',
             'summary' => $classroom['about'],
@@ -236,6 +237,7 @@ class GoodsDataInitCommand extends BaseCommand
         }
 
         $goods = $this->getGoodsService()->updateGoods($existGoods['id'], [
+            'type' => 'course',
             'title' => $courseSet['title'],
             'status' => 'published' === $courseSet['status'] ? 'published' : 'unpublished',
             'subtitle' => $courseSet['subtitle'],
