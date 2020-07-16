@@ -1,12 +1,11 @@
 <template>
     <div class="cd-container">
-        <div class="product-breadcrumb">首页 / {{details.title}}</div>
-        <detail :detailData="details" :currentSku="currentSku" :product="details.product"
-                :is-favorite="componentsData.isFavorite" @changeSku="changeSku">
+        <div class="product-breadcrumb">首页 / {{goods.title}}</div>
+        <detail :goods="goods" :currentSku="currentSku" @changeSku="changeSku">
         </detail>
 
-        <div class="product-info clearfix" v-show="Object.keys(details).length != 0">
-            <div class="product-info__left info-left pull-left" :class="{'all-width': !details.hasExtension}">
+        <div class="product-info clearfix" v-if="goods.id">
+            <div class="product-info__left info-left pull-left" :class="{'all-width': !goods.hasExtension}">
                 <div v-if="isFixed" class="fixed">
                     <div class="cd-container clearfix">
                         <ul class="info-left__nav pull-left">
@@ -24,24 +23,27 @@
                 </div>
 
                 <ul class="info-left__nav" ref="infoLeftNav">
-                    <li :class="howActive == 1 ? 'active' : ''"><a href="javascript:;" @click="clickType(1)">商品介绍</a>
+                    <li :class="howActive == 1 ? 'active' : ''">
+                        <a href="javascript:;" @click="clickType(1)">商品介绍</a>
                     </li>
-                    <li :class="howActive == 2 ? 'active' : ''"><a href="javascript:;" @click="clickType(2)">学习目录</a>
+                    <li :class="howActive == 2 ? 'active' : ''">
+                        <a href="javascript:;" @click="clickType(2)">学习目录</a>
                     </li>
-                    <li :class="howActive == 3 ? 'active' : ''"><a href="javascript:;" @click="clickType(3)">学员评价</a>
+                    <li :class="howActive == 3 ? 'active' : ''">
+                        <a href="javascript:;" @click="clickType(3)">学员评价</a>
                     </li>
                 </ul>
 
                 <div class="info-left__content">
                     <div id="info-left-1" class="content-item js-content-item">
                         <h3 class="content-item__title">商品介绍</h3>
-                        <div v-html="descriptionHtml" class="description-content" style="padding-left: 14px; padding-top: 10px;"></div>
+                        <div v-html="summaryHtml" class="description-content" style="padding-left: 14px; padding-top: 10px;"></div>
                     </div>
 
-                    <div v-if="product.targetType === 'course'" id="info-left-2" class="content-item js-content-item">
+                    <div v-if="goods.product.targetType === 'course'" id="info-left-2" class="content-item js-content-item">
                         <h3  class="content-item__title">学习目录</h3>
                     </div>
-                    <div v-if="product.targetType === 'classroom'" id="info-left-2" class="content-item js-content-item">
+                    <div v-if="goods.product.targetType === 'classroom'" id="info-left-2" class="content-item js-content-item">
                         <h3  class="content-item__title">学习目录</h3>
                         <classroom-courses :classroomCourses="componentsData.classroomCourses"></classroom-courses>
                     </div>
@@ -49,7 +51,7 @@
                     <div id="info-left-3" class="info-left-reviews content-item js-content-item reviews">
                         <h3 class="content-item__title">学员评价</h3>
                         <reviews :can-create="true" :can-operate="true" :target-type="'goods'" :current-user-id="currentUserId"
-                                 :target-id="this.currentGoodsId">
+                                 :target-id="goods.id">
                         </reviews>
                     </div>
                 </div>
@@ -83,11 +85,10 @@
                 isFixed: false,
                 timerClick: null,
                 timerScroll: null,
-                currentGoodsId: '',
-                details: {},
+                goodsId: window.location.pathname.replace(/[^0-9]/ig, ""),
+                goods: {},
                 currentSku: {},
                 componentsData: {},
-                product: {},
             }
         },
         props: {
@@ -106,40 +107,35 @@
             ClassroomCourses,
         },
         computed: {
-            descriptionHtml() {
-                if (!this.details.description) return '暂无简介哦～';
-                return this.details.description;
+            summaryHtml() {
+                if (!this.goods.summary) return '暂无简介哦～';
+                return this.goods.summary;
             }
         },
         methods: {
-            initCurrentGoodsId(){
-                this.currentGoodsId = window.location.pathname.replace(/[^0-9]/ig, "");
-            },
-            initGoodsDetail() {
-                axios.get(`/api/goods/${this.currentGoodsId}`, {
+            getGoodsInfo() {
+                axios.get(`/api/good/${this.goodsId}`, {
                     headers: { 'Accept': 'application/vnd.edusoho.v2+json'}
                 }).then((res) => {
-                    let data = res.data;
-                    for (const key in data.specs) {
-                        this.$set(data.specs[key], 'active', false);
-                        if (1 == data.specs[key]['isDefault']) {
-                            this.$set(data.specs[key], 'active', true);
-                            this.currentSku = data.specs[key];
-                        }
+                    this.goods = res.data;
+
+                    if (this.goods.product.target.defaultCourseId) {
+                        this.changeSku(this.goods.product.target.defaultCourseId);
+                    } else {
+                        this.changeSku(this.goods.product.target.id);
                     }
-                    this.details = data;
-                    this.product = data.product;
+
                     this.initGoodsComponents();
                 });
             },
             initGoodsComponents() {
-                if (!this.details.hasExtension) {
+                if (!this.goods.hasExtension) {
                     return;
                 }
 
-                axios.get(`/api/goods/${this.currentGoodsId}/components`, {
+                axios.get(`/api/goods/${this.goodsId}/components`, {
                     params: {
-                        componentTypes: this.details.extensions
+                        componentTypes: this.goods.extensions
                     },
                     headers: {
                         'Accept': 'application/vnd.edusoho.v2+json',
@@ -150,19 +146,20 @@
                     this.componentsData = res.data;
                 });
             },
-            changeSku(id) {
-                let data = this.details;
-                for (const key in data.specs) {
-                    this.$set(data.specs[key], 'active', false);
-                    if (data.specs[key]['id'] == id) {
-                        this.$set(data.specs[key], 'active', true);
-                        this.currentSku = data.specs[key];
+            changeSku(targetId) {
+                for (const key in this.goods.specs) {
+                    this.$set(this.goods.specs[key], 'active', false);
+                    if (targetId == this.goods.specs[key]['targetId']) {
+                        this.$set(this.goods.specs[key], 'active', true);
+                        this.currentSku = this.goods.specs[key];
                     }
                 }
-                this.details = data;
+
+                this.goods.hasExtension = true;
             },
             handleScroll() {
                 let eleTop = this.$refs.infoLeftNav.offsetTop + this.$refs.infoLeftNav.offsetHeight;
+                if (!eleTop) return;
                 let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
                 if ( eleTop <= scrollTop && !this.isFixed ) this.isFixed = true;
                 if ( eleTop > scrollTop && this.isFixed ) this.isFixed = false;
@@ -198,11 +195,14 @@
 
         },
         created() {
-            this.initCurrentGoodsId();
-            this.initGoodsDetail();
+            this.getGoodsInfo();
         },
-        mounted() {
-            window.addEventListener("scroll", this.handleScroll);
+        watch: {
+            goods(newVal, oldVal) {
+                if (!oldVal.id && newVal.id) {
+                    window.addEventListener("scroll", this.handleScroll);
+                }
+            }
         },
         destroyed() {
             window.removeEventListener('scroll', this.handleScroll);

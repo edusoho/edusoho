@@ -248,6 +248,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'targetId' => $course['id'],
             'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['title'],
             'seq' => $course['seq'],
+            'buyableMode' => $course['expiryMode'],
         ]);
 
         return $goodsSpecs;
@@ -259,14 +260,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
         $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
         $goodsSpecs = $this->getGoodsService()->updateGoodsSpecs($goodsSpecs['id'], [
-            'title' => $course['title'],
+            'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['title'],
             'images' => $goods['images'],
             'seq' => $course['seq'],
             'price' => $course['price'],
             'coinPrice' => $course['coinPrice'],
             'buyableMode' => $course['expiryMode'],
-            'buyableStartTime' => $course['expiryStartDate'],
-            'buyableEndTime' => $course['expiryEndDate'],
+            'buyableStartTime' => $course['expiryStartDate'] ? $course['expiryStartDate'] : 0,
+            'buyableEndTime' => $course['expiryEndDate'] ? $course['expiryEndDate'] : 0,
             'maxJoinNum' => $course['maxStudentNum'],
             'services' => $course['services'],
         ]);

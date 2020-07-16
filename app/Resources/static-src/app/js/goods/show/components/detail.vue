@@ -1,25 +1,24 @@
 <template>
-    <div class="product-detail clearfix">
-
+    <div class="product-detail clearfix" v-if="goods.id">
         <div class="product-detail__left detail-left pull-left">
             <div class="detail-left__img">
-                <img :src="detailData.image" alt="">
+                <img :src="goods.images ? goods.images.large : null" alt="">
             </div>
             <ul class="detail-left__text clearfix">
-                <li class="pull-left"><i class="es-icon es-icon-friends mrs"></i>{{ currentSku.joinedNum }}人加入学习</li>
+                <li class="pull-left"><i class="es-icon es-icon-friends mrs"></i>{{ currentSku.maxJoinNum }}人加入学习
+                </li>
                 <li class="pull-right">
                     <share :customized-class="'detail-left__text-share'" :type="'courseSet'">分享
                     </share>
-                    <!--          <span class="detail-left__text-share" style="cursor: pointer;"><i class="es-icon es-icon-share mrs"></i>分享</span>-->
-                    <favorite :is-favorite="isFavorite" :target-type="product.targetType"
-                              :target-id="product.targetId"></favorite>
+                    <favorite :is-favorite="goods.isFavorite" :target-type="'goods'"
+                              :target-id="goods.id"></favorite>
                 </li>
             </ul>
         </div>
 
         <div class="product-detail__right detail-right pull-right">
-            <p class="detail-right__title">{{ detailData.title }}</p>
-            <p class="detail-right__subtitle">{{ detailData.subtitle }}</p>
+            <p class="detail-right__title">{{ goods.title }}</p>
+            <p class="detail-right__subtitle">{{ goods.subtitle }}</p>
 
             <!-- 价格 -->
             <div class="detail-right__price">
@@ -28,15 +27,15 @@
                 <div class="detail-right__price__num">
                     优惠价
                     <span>{{ currentSku.price }}</span>
-                    <s>价格: 2000元</s>
+                    <s>价格: {{ currentSku.price }}元</s>
                 </div>
             </div>
 
             <!-- 教学计划 -->
-            <div class="detail-right__plan plan clearfix" v-if="detailData.specs">
+            <div class="detail-right__plan plan clearfix" v-if="goods.specs.length > 1">
                 <div class="plan-title pull-left">教学计划</div>
                 <div class="plan-btns pull-right">
-                    <span class="plan-btns__item" v-for="plan in detailData.specs" :key="plan.id"
+                    <span class="plan-btns__item" v-for="plan in goods.specs" :key="plan.id"
                           :class="{ active: plan.active }" @click="handleClick(plan)">{{ plan.title }}</span>
                 </div>
             </div>
@@ -44,22 +43,23 @@
             <!-- 学习有效期 -->
             <div class="detail-right__validity validity clearfix">
                 <span class="validity-title pull-left">学习有效期</span>
-                <span class="validity-content pull-left">{{ currentSku.expiryMode }}</span>
+                <span class="validity-content pull-left">{{ buyableModes[currentSku.buyableMode] }}</span>
             </div>
 
-          <!-- 承诺服务 -->
-          <div class="detail-right__promise promise clearfix" v-if="currentSku.services">
-            <div class="promise-title pull-left">承诺服务</div>
-            <div class="promise-content pull-left">
+            <!-- 承诺服务 -->
+            <div class="detail-right__promise promise clearfix" v-if="currentSku.services.length > 0">
+                <div class="promise-title pull-left">承诺服务</div>
+                <div class="promise-content pull-left">
               <span class="promise-content__item" v-for="(item, index) in currentSku.services" :key="index">
-                疑
-                <span class="promise-content__item-hover">一对一答疑</span>
+                {{ item.shortName }}
+                <span class="promise-content__item-hover">{{ item.fullName }}</span>
               </span>
+                </div>
             </div>
-          </div>
-            <!-- 立即购买 -->
-            <div class="product-detail__btn">立即购买</div>
         </div>
+
+        <!-- 立即购买 -->
+        <div class="product-detail__btn">立即购买</div>
     </div>
 </template>
 
@@ -73,31 +73,29 @@
             Share
         },
         props: {
-            detailData: {
+            goods: {
                 type: Object,
-                default: () => {
-                }
+                default: null
             },
             currentSku: {
                 type: Object,
                 default: () => {
                 }
             },
-            product: {
-                type: Object,
-                default: {
-                    targetType: '',
-                    targetId: ''
-                }
-            },
-            isFavorite: {
-                type: Boolean,
-                default: null
-            }
         },
         methods: {
             handleClick(sku) {
-                this.$emit('changeSku', sku.id);
+                this.$emit('changeSku', sku.targetId);
+            }
+        },
+        data() {
+            return {
+                product: this.goods ? this.goods.product : null,
+                buyableModes: {
+                    'date': Translator.trans('classroom.expiry_mode_end_date'),
+                    'days': Translator.trans('classroom.expiry_mode_days'),
+                    'forever': Translator.trans('classroom.expiry_mode_forever'),
+                }
             }
         }
     }

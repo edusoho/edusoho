@@ -9,6 +9,7 @@ use ApiBundle\Api\Util\AssetHelper;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Favorite\Service\FavoriteService;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
 use Biz\System\Service\SettingService;
@@ -26,13 +27,34 @@ class Good extends AbstractResource
      */
     public function get(ApiRequest $request, $id)
     {
-        return $this->buildGoodsData($id);
+        $goods = $this->getGoodsService()->getGoods($id);
+
+        $this->getOCUtil()->single($goods, ['creator']);
+        $product = $this->getProductService()->getProduct($goods['productId']);
+        $this->getOCUtil()->single($product, ['targetId'], 'course' == $product['targetType'] ? 'courseSet' : $product['targetType']);
+        $goods['product'] = $product;
+
+        $goods['specs'] = $this->getGoodsService()->findGoodsSpecsByGoodsId($goods['id']);
+        $goods['extensions'] = $this->collectGoodsExtensions($goods['product']);
+
+        if ($this->getCurrentUser()->isLogin()) {
+            $goods['isFavorite'] = !empty($this->getFavoriteService()->getUserFavorite($this->getCurrentUser()->getId(), 'goods', $goods['id']));
+        }
+
+        return $goods;
+    }
+
+    /**
+     * @return FavoriteService
+     */
+    protected function getFavoriteService()
+    {
+        return $this->service('Favorite:FavoriteService');
     }
 
     protected function buildGoodsData($goodsId)
     {
         $goods = $this->getGoodsService()->getGoods($goodsId);
-        $product = $this->getProductService()->getProduct($goods['productId']);
 
         return [
             'id' => $goods['id'],
@@ -40,11 +62,7 @@ class Good extends AbstractResource
             'subTitle' => $goods['subtitle'],
             'description' => $goods['summary'],
             'image' => AssetHelper::getFurl(empty($goods['images']['middle']) ? '' : $goods['images']['middle'], 'course.png'),
-            'product' => [
-                'targetType' => $product['targetType'],
-                'targetId' => $product['targetId'],
-            ],
-
+            'product' => $this->getProductService()->getProduct($goods['productId']),
             'hasExtension' => true,
             'extensions' => $this->collectGoodsExtensions($product),
             'specs' => $this->getGoodsSpecs($product['targetType'], $product['targetId']),
@@ -91,7 +109,7 @@ class Good extends AbstractResource
         foreach ($courses as $course) {
             $specs[] = [
                 'id' => $course['id'],
-                'title' => $course['title'],
+                'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['title'],
                 'subTitle' => $course['subtitle'],
                 'expiryMode' => $course['expiryMode'],
                 'joinedNum' => $course['studentNum'],
