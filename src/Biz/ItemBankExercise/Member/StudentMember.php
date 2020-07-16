@@ -11,7 +11,6 @@ use Biz\ItemBankExercise\Service\MemberOperationRecordService;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
-use Codeages\Biz\Framework\Context\Biz;
 
 class StudentMember extends Member
 {
@@ -66,7 +65,7 @@ class StudentMember extends Member
             'orderId' => $member['orderId'],
             'title' => $exercise['title'],
             'reason' => empty($info['reason']) ? '' : $info['reason'],
-            'reasonType' => empty($info['reason_type']) ? '': $info['reason_type'],
+            'reasonType' => empty($info['reason_type']) ? '' : $info['reason_type'],
         ];
 
         return $this->getMemberOperationRecordService()->create($record);

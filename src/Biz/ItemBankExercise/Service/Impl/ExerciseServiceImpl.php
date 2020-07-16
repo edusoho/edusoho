@@ -407,7 +407,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
                 [
                     'remark' => OperateReason::JOIN_BY_FREE,
                     'reason' => OperateReason::JOIN_BY_FREE,
-                    'reasonType' => OperateReason::JOIN_BY_FREE_TYPE
+                    'reasonType' => OperateReason::JOIN_BY_FREE_TYPE,
                 ]
             );
         }

@@ -3,7 +3,6 @@
 namespace Biz\ItemBankExercise\Member;
 
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
-use Biz\ItemBankExercise\ExpiryMode\ExpiryModeFactory;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Codeages\Biz\Framework\Context\Biz;
