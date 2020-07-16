@@ -3344,16 +3344,6 @@ question_bank_manage_question_picked:
     path: /question_bank/{id}/question/picked
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:pickedQuestion }
 
-answer_engine_submit:
-    path: /answer_engine/submit
-    defaults: { _controller: AppBundle:AnswerEngine/AnswerEngine:submitAnswer }
-    methods: ['POST']
-
-answer_engine_save:
-    path: /answer_engine/save
-    defaults: { _controller: AppBundle:AnswerEngine/AnswerEngine:saveAnswer }
-    methods: ['POST']
-
 answer_engine_review:
     path: /answer_engine/review
     defaults: { _controller: AppBundle:AnswerEngine/AnswerEngine:reviewSave }
