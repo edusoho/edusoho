@@ -31,6 +31,7 @@ class Good extends AbstractResource
 
         $this->getOCUtil()->single($goods, ['creator']);
         $product = $this->getProductService()->getProduct($goods['productId']);
+        //获取状态中的组件
         $this->getOCUtil()->single($product, ['targetId'], 'course' == $product['targetType'] ? 'courseSet' : $product['targetType']);
         $goods['product'] = $product;
 

@@ -686,30 +686,6 @@ class ClassroomServiceTest extends BaseTestCase
     public function testChangePicture()
     {
         $this->mockBiz(
-            'Classroom:ClassroomDao',
-            [
-                [
-                    'functionName' => 'get',
-                    'returnValue' => [
-                        'id' => 1,
-                        'title' => 'title',
-                        'smallPicture' => 'smallPicture',
-                        'middlePicture' => 'middlePicture',
-                        'largePicture' => 'largePicture',
-                    ],
-                    'withParams' => [1],
-                ],
-                [
-                    'functionName' => 'update',
-                    'returnValue' => ['id' => 1, 'title' => 'title'],
-                    'withParams' => [
-                        1,
-                        ['smallPicture' => 'uri1?version=2', 'middlePicture' => 'uri2?version=2', 'largePicture' => 'uri3?version=2'],
-                    ],
-                ],
-            ]
-        );
-        $this->mockBiz(
             'Content:FileService',
             [
                 [
@@ -741,45 +717,9 @@ class ClassroomServiceTest extends BaseTestCase
                 ],
             ]
         );
-        $this->mockBiz(
-            'System:LogService',
-            [
-                [
-                    'functionName' => 'info',
-                    'returnValue' => [],
-                    'withParams' => [
-                        'classroom',
-                        'update_picture',
-                        '更新课程《title》(#1)图片',
-                        [
-                            'smallPicture' => 'uri1',
-                            'middlePicture' => 'uri2',
-                            'largePicture' => 'uri3',
-                        ],
-                    ],
-                    'runTimes' => 1,
-                ],
-                [
-                    'functionName' => 'info',
-                    'returnValue' => [],
-                    'withParams' => [
-                        'classroom',
-                        'update',
-                        '更新班级《title》(#1)',
-                        [
-                            'smallPicture' => ['old' => 'smallPicture', 'new' => 'uri1'],
-                            'middlePicture' => ['old' => 'middlePicture', 'new' => 'uri2'],
-                            'largePicture' => ['old' => 'largePicture', 'new' => 'uri3'],
-                            'id' => 1,
-                            'showTitle' => 'title',
-                        ],
-                    ],
-                    'runTimes' => 1,
-                ],
-            ]
-        );
+        $classroom = $this->getClassroomService()->addClassroom(['title' => 'createdClassroom Title']);
         $result = $this->getClassroomService()->changePicture(
-            1,
+            $classroom['id'],
             [
                 ['id' => 1, 'type' => 'small'],
                 ['id' => 2, 'type' => 'middle'],
@@ -787,7 +727,9 @@ class ClassroomServiceTest extends BaseTestCase
             ]
         );
 
-        $this->assertEquals(['id' => 1, 'title' => 'title'], $result);
+        self::assertEquals('uri1?version=2', $result['smallPicture']);
+        self::assertEquals('uri2?version=2', $result['middlePicture']);
+        self::assertEquals('uri3?version=2', $result['largePicture']);
     }
 
     public function testIsCourseInClassroom()
