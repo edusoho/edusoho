@@ -1,5 +1,6 @@
 <template>
   <div class="goods" v-if="goods.id">
+    <e-loading v-if="isLoading" />
     <div class="goods-detail">
       <div class="goods-detail__banner">
         <img :src="goods.images.large" />
@@ -114,6 +115,7 @@ export default {
       flag: true, // 点击取消滚动监听
       backToTopShow: false, // 是否显示回到顶部
       componentsInfo: {}, // 组件数据
+      isLoading: true,
     };
   },
   components: {
@@ -149,6 +151,9 @@ export default {
           } else {
             this.changeSku(this.goods.product.target.id);
           }
+
+          this.isLoading = false;
+          document.documentElement.scrollTop = 0;
         })
         .catch(err => {
           Toast.fail(err.message);
@@ -229,7 +234,10 @@ export default {
   },
   watch: {
     // 如果路由发生变化，再次执行该方法
-    $route: 'getGoodsCourse',
+    $route() {
+      this.isLoading = true;
+      this.getGoodsCourse();
+    },
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
