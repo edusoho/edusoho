@@ -1,17 +1,17 @@
-{% extends 'item-bank-exercise/exercise-set/layout.html.twig' %}
+{% extends 'item-bank-exercise-manage/exercise-set/layout.html.twig' %}
 
 {% block title %}{{'course.members_manage'|trans}} - {{ exercise.title }} - {{ parent() }}{% endblock %}
 {% do script(['app/js/course-manage/students/index.js']) %}
 {% set course_side_nav = 'students' %}
 {% block main_heading_class %}course-main-header{% endblock %}
 {% block main_heading %}
-  {% include 'item-bank-exercise/panel-header/exercise-publish-header.html.twig' with {code: course_side_nav, btnGroup:1} %}
+  {% include 'item-bank-exercise-manage/panel-header/exercise-publish-header.html.twig' with {code: course_side_nav, btnGroup:1} %}
 {% endblock %}
 
 {% block main_body %}
     <div id="student-table-container" role="course-manage-student-index">
       {{ web_macro.flash_messages() }}
-      {% include 'item-bank-exercise/student-manage/panel-nav.html.twig' with {'panelNav': 'manage'} %}
+      {% include 'item-bank-exercise-manage/student-manage/panel-nav.html.twig' with {'panelNav': 'manage'} %}
 
       <form class="form-inline well well-sm" action="#" method="get" novalidate>
         <div class="form-group col-md-7">
@@ -36,7 +36,7 @@
         <tbody>
           {% for student in students if student %}
             {% set user = users[student.userId]|default(null) %}
-            {% include 'item-bank-exercise/student-manage/tr-v2.html.twig' %}
+            {% include 'item-bank-exercise-manage/student-manage/tr-v2.html.twig' %}
           {% else %}
             <tr class="empty"><td colspan="20">{{'course.members_manage.official_student.empty'|trans}}</td></tr>
           {% endfor %}

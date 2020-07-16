@@ -1,8 +1,8 @@
-{% extends 'item-bank-exercise/chapter-exercise/layout.html.twig' %}
+{% extends 'item-bank-exercise-manage/chapter-exercise/layout.html.twig' %}
 {% do script(['libs/jquery-sortable.js','app/js/course-manage/lesson-manage/item/index.js']) %}
 {% set course_side_nav = 'chapter' %}
 {% block main_body %}
-  {% include 'item-bank-exercise/chapter-exercise/header.html.twig' with {taskMode:'lesson'}  %}
+  {% include 'item-bank-exercise-manage/chapter-exercise/header.html.twig' with {taskMode:'lesson'}  %}
   <div style="margin: 20px auto;display: {% if categoryTree %}block{% else %}none{% endif %}">
     <span class="chapter-exercise-title" style="margin-left:27px">{{ 'item_bank_exercise.chapter_exercise.list'|trans }}</span>
     <span class="chapter-exercise-title" style="float: right">{{ 'item_bank_exercise.chapter_exercise.item_num'|trans }}</span>
@@ -10,9 +10,9 @@
   <ul id="sortable-list" class="task-manage-list sortable-list">
     {% for key, item in categoryTree %}
       {% if item.depth == 3 %}
-        {% include 'item-bank-exercise/chapter-exercise/lesson.html.twig' with {exercise: exercise, lesson: item} %}
+        {% include 'item-bank-exercise-manage/chapter-exercise/lesson.html.twig' with {exercise: exercise, lesson: item} %}
       {% else %}
-        {% include 'item-bank-exercise/chapter-exercise/item.html.twig' with {chapter:item, exercise:exercise} %}
+        {% include 'item-bank-exercise-manage/chapter-exercise/item.html.twig' with {chapter:item, exercise:exercise} %}
       {% endif %}
     {% endfor %}
   </ul>

@@ -40,7 +40,14 @@
         {% endif %}
 
         <div class="cd-mb16">
-          {% include 'item-bank-exercise/header/header-for-price.html.twig' %}
+          <span class="course-detail__label vertical-sub">{{'course.price'|trans}}</span>
+          <span class="course-detail-price-money vertical-sub mrm">
+            {% if exercise.price == 0 and exercise.isFree == 1 %}
+              <b class="pirce-num color-success">{{'course.price.free'|trans}}</b>
+            {% else %}
+              <b class="pirce-num"><span class="cd-text-lg">¥&nbsp;</span>{{ exercise.price }}</b>
+            {% endif %}
+          </span>
         </div>
 
         <div class="course-detail-gray course-detail-gray--market not-activity">
@@ -136,7 +143,24 @@
               </a>
             {% endif %}
           {% else %}
-              {% include 'item-bank-exercise/header/header-for-guest-buy-btn.html.twig' %}
+            {% if exercise.joinEnable|default(true) == false %}
+              {{ 'item_bank_exercise.course_limited_tips'|trans }}
+            {% elseif exercise.status != 'published' %}
+              {{ 'item_bank_exercise.unbuyable.unpublished_tips'|trans }}
+            {% elseif (exercise.expiryMode in ['end_date', 'date'] and exercise.expiryEndDate < 'now'|date('U')) %}
+              {{ 'course.unbuyable.over_expiry_end_date_tips'|trans }}
+            {% else %}
+              {% if exercise.originPrice == 0 or exercise.isFree %}
+                {% set btnText = 'course.btn.join' %}
+                {% set toUrl = '' %}
+              {% else  %}
+                {% set btnText = 'course.btn.buy' %}
+                {% set toUrl = '' %}
+              {% endif %}
+              <a class="cd-btn cd-btn-primary" href="javascript:" data-url="{{ toUrl }}">
+                {{ btnText|trans }}
+              </a>
+            {% endif %}
           {% endif %}
         </div>
       </div>

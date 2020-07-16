@@ -42,7 +42,7 @@ class StudentManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('item-bank-exercise/student-manage/index.html.twig', [
+        return $this->render('item-bank-exercise-manage/student-manage/index.html.twig', [
             'exercise' => $exercise,
             'students' => $students,
             'followings' => $this->findCurrentUserFollowings(),
@@ -57,7 +57,7 @@ class StudentManageController extends BaseController
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
 
         return $this->render(
-            'item-bank-exercise/student-manage/records.html.twig',
+            'item-bank-exercise-manage/student-manage/records.html.twig',
             [
                 'exercise' => $exercise,
                 'type' => $type,
@@ -91,7 +91,7 @@ class StudentManageController extends BaseController
         }
 
         return $this->render(
-            'item-bank-exercise/student-manage/add-modal.html.twig',
+            'item-bank-exercise-manage/student-manage/add-modal.html.twig',
             [
                 'exercise' => $exercise,
             ]
@@ -127,7 +127,7 @@ class StudentManageController extends BaseController
         }
 
         return $this->render(
-            'item-bank-exercise/student-manage/remark-modal.html.twig',
+            'item-bank-exercise-manage/student-manage/remark-modal.html.twig',
             [
                 'member' => $member,
                 'user' => $user,
@@ -188,7 +188,7 @@ class StudentManageController extends BaseController
         $users = $this->getUserService()->findUsersByIds($ids);
 
         return $this->render(
-            'item-bank-exercise/student-manage/set-deadline-modal.html.twig',
+            'item-bank-exercise-manage/student-manage/set-deadline-modal.html.twig',
             [
                 'exercise' => $exercise,
                 'users' => $users,

@@ -429,31 +429,12 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         if (empty($exercise)) {
             $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
         }
-        if (!$this->canTakeExercise($exercise, $user)) {
+        if (!$this->canTakeItemBankExercise($exercise)) {
             $this->createNewException(ItemBankExerciseException::FORBIDDEN_TAKE_EXERCISE());
         }
         $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exercise['id'], $user['id']);
 
         return [$exercise, $member];
-    }
-
-    protected function canTakeExercise($exercise, $user)
-    {
-        if (!$user->isLogin()) {
-            return false;
-        }
-
-        $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exercise['id'], $user['id']);
-
-        if ($member && in_array($member['role'], ['teacher', 'student'])) {
-            return true;
-        }
-
-        if ($this->hasAdminRole()) {
-            return true;
-        }
-
-        return false;
     }
 
     /**

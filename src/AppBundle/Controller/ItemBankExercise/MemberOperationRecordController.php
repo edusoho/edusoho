@@ -53,7 +53,7 @@ class MemberOperationRecordController extends BaseController
         $condition = $request->query->all();
 
         return $this->render(
-            "item-bank-exercise/member-record/{$operatType}.html.twig",
+            "item-bank-exercise-manage/member-record/{$operatType}.html.twig",
             array(
                 'paginator' => $paginator,
                 'records' => $records,
