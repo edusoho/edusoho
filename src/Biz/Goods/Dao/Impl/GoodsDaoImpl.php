@@ -22,8 +22,11 @@ class GoodsDaoImpl extends GeneralDaoImpl implements GoodsDao
                 'productId = :productId',
                 'title = :title',
                 'title LIKE :titleLike',
+                'status = :status',
+                'type = :type',
+                'id <> :excludeId',
             ],
-            'orderbys' => ['id'],
+            'orderbys' => ['id', 'hotSeq', 'publishedTime'],
         ];
     }
 
@@ -35,5 +38,10 @@ class GoodsDaoImpl extends GeneralDaoImpl implements GoodsDao
     public function findByIds($ids)
     {
         return $this->findInField('id', $ids);
+    }
+
+    public function findByProductIds(array $productIds)
+    {
+        return $this->findInField('productId', $productIds);
     }
 }

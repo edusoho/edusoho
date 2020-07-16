@@ -69,7 +69,6 @@ interface TagService
 
     /**
      * @param $id
-     * @param array $fields
      *
      * @return mixed
      * @Log(module="tag",action="update",param="id")
@@ -106,4 +105,6 @@ interface TagService
     public function findOwnerIdsByTagIdsAndOwnerType($tagIds, $ownerType);
 
     public function findGroupTagIdsByOwnerTypeAndOwnerIds($ownerType, array $ids);
+
+    public function findDistinctOwnerIdByOwnerTypeAndTagIdsAndExcludeOwnerId($ownerType, array $tagIds, $excludeOwnerId, $count);
 }

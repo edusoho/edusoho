@@ -55,6 +55,11 @@ class ProductServiceImpl extends BaseService implements ProductService
         return ArrayToolkit::index($this->getProductDao()->findByIds($ids), 'id');
     }
 
+    public function findProductsByTargetTypeAndTargetIds($targetType, array $targetIds)
+    {
+        return $this->getProductDao()->findByTargetTypeAndTargetIds($targetType, $targetIds);
+    }
+
     /**
      * @return ProductDao
      */

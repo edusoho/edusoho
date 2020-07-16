@@ -12,6 +12,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\Goods\Service\GoodsService;
+use Biz\Goods\Service\RecommendGoodsService;
 use Biz\Product\Service\ProductService;
 use Biz\System\Service\SettingService;
 
@@ -63,13 +64,17 @@ class GoodComponent extends AbstractResource
 
             if ('teachers' === $type) {
                 $components['teachers'] = $this->getTeacherComponent($product);
+                continue;
             }
 
             if ('recommendGoods' === $type) {
+                $components['recommendGoods'] = $this->getRecommendGoodsComponent($goods);
+                continue;
             }
 
             if ('classroomCourses' === $type) {
                 $components['classroomCourses'] = $this->getClassroomCourses($product);
+                continue;
             }
         }
 
@@ -131,7 +136,17 @@ class GoodComponent extends AbstractResource
         }
     }
 
-    public function getClassroomCourses($product)
+    protected function getRecommendGoodsComponent($goods)
+    {
+        $recommendGoods = $this->getRecommendGoodsService()->findRecommendedGoodsByGoods($goods);
+        foreach ($recommendGoods as &$recommendGood) {
+            $recommendGood['image'] = AssetHelper::getFurl(empty($recommendGood['images']['middle']) ? '' : $recommendGood['images']['middle'], 'course.png');
+        }
+
+        return $recommendGoods;
+    }
+
+    protected function getClassroomCourses($product)
     {
         if ('classroom' !== $product['targetType']) {
             return [];
@@ -148,6 +163,14 @@ class GoodComponent extends AbstractResource
     protected function getGoodsService()
     {
         return $this->service('Goods:GoodsService');
+    }
+
+    /**
+     * @return RecommendGoodsService
+     */
+    protected function getRecommendGoodsService()
+    {
+        return $this->service('Goods:RecommendGoodsService');
     }
 
     /**
