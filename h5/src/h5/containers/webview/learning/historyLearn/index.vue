@@ -164,10 +164,10 @@ export default {
         data: { taskId: task.id, taskType: task.type, courseId: task.courseId },
       });
     },
-    toItemBankTask(task) {
+    toItemBankTask(task, type) {
       window.postNativeMessage({
         action: 'kuozhi_itembank_task',
-        data: { task },
+        data: { task, type },
       });
     },
     toCourse(id) {
