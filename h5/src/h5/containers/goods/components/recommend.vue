@@ -16,10 +16,6 @@
         >
           <div class="body-item__img">
             <img :src="goods.images.large" alt="" />
-            <div class="learners-mask"></div>
-            <span class="learners-number"
-              ><i class="iconfont icon-renqi"></i>8888</span
-            >
           </div>
           <div class="body-item__content">
             <p class="content-title text-overflow">{{ goods.title }}</p>
