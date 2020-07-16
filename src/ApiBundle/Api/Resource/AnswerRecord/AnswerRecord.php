@@ -30,10 +30,18 @@ class AnswerRecord extends AbstractResource
 
         return [
             'answer_report' => $answerReport,
-            'answer_record' => $answerRecord,
+            'answer_record' => $this->wrapperAnswerRecord($answerRecord),
             'assessment' => $assessment,
             'answer_scene' => $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']),
         ];
+    }
+
+    protected function wrapperAnswerRecord($answerRecord)
+    {
+        $user = $this->getUserService()->getUser($answerRecord['user_id']);
+        $answerRecord['username'] = $user['nickname'];
+
+        return $answerRecord;
     }
 
     protected function getAnswerReportService()
@@ -59,5 +67,10 @@ class AnswerRecord extends AbstractResource
     protected function getAssessmentService()
     {
         return $this->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->service('User:UserService');
     }
 }

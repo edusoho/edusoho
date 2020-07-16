@@ -35,14 +35,27 @@
       };
     },
     created() {
-        this.answerRecord = JSON.parse($('[name=answer_record]').val());
-        if ('finished' == this.answerRecord.status) {
-          location.href = $('[name=success_goto_url]').val();
-          return;
-        }
-        this.assessment = JSON.parse($('[name=assessment]').val());
-        this.answerReport = JSON.parse($('[name=answer_report]').val());
-        this.answerScene = JSON.parse($('[name=answer_scene]').val());
+        const that = this;
+        $.ajax({
+          url: '/api/answer_record/'+$("[name='answer_record_id']").val(),
+          type: 'GET',
+          async:false,
+          headers:{
+            'Accept':'application/vnd.edusoho.v2+json'
+          },
+          beforeSend(request) {
+            request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+          }
+        }).done(function (res) {
+          that.answerRecord = res.answer_record;
+          if ('finished' == that.answerRecord.status) {
+            location.href = $('[name=success_goto_url]').val();
+            return;
+          }
+          that.assessment = res.assessment;
+          that.answerReport = res.answer_report;
+          that.answerScene = res.answer_scene;
+        })
     },
     methods: {
       getReviewData(reviewReport) {
