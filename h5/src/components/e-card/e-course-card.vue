@@ -98,15 +98,15 @@ export default {
       this.$emit('toClassroom', this.course.link.classroomId);
     },
     toTask() {
-      let task = {
+      if (itemBank.includes(this.course.type)) {
+        this.$emit('toItemBankTask', this.course.link.answerRecord);
+        return;
+      }
+      const task = {
         id: this.course.link.taskId,
         type: this.course.type,
         courseId: this.course.link.courseId,
       };
-      if (itemBank.includes(this.course.type)) {
-        task = this.course.link;
-      }
-
       this.$emit('toTask', task);
     },
     toCourse() {
@@ -117,7 +117,7 @@ export default {
       this.$emit('toCourse', this.course.link.courseId);
     },
     toItemBank() {
-      this.$emit('toItemBank', this.course.link.answerRecord);
+      this.$emit('toItemBank', this.course.link.exerciseId);
     },
   },
 };

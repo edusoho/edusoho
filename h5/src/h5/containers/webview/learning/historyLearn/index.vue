@@ -16,6 +16,7 @@
                 @toTask="toTask"
                 @toCourse="toCourse"
                 @toItemBank="toItemBank"
+                @toItemBankTask="toItemBankTask"
               />
             </template>
           </div>
@@ -163,16 +164,22 @@ export default {
         data: { taskId: task.id, taskType: task.type, courseId: task.courseId },
       });
     },
+    toItemBankTask(task) {
+      window.postNativeMessage({
+        action: 'kuozhi_itembank_task',
+        data: { task },
+      });
+    },
     toCourse(id) {
       window.postNativeMessage({
         action: 'kuozhi_course',
         data: { courseId: id },
       });
     },
-    toItemBank(itemBank) {
+    toItemBank(id) {
       window.postNativeMessage({
         action: 'kuozhi_itembank',
-        data: itemBank,
+        data: { exerciseId: id },
       });
     },
     sendError(error) {

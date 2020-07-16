@@ -136,7 +136,7 @@ export default {
           break;
         case 'item_bank_exercise':
           action = 'kuozhi_itembank';
-          data = { itembankId: id };
+          data = { exerciseId: id };
           break;
         case 'classroom_list':
           action = 'kuozhi_classroom';
