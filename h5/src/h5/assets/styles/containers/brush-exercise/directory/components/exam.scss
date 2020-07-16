@@ -1,0 +1,32 @@
+.brush-exercise-directory-exam {
+	margin-top: vw(-1);
+	padding: 0 vw(16);
+	background: #fff;
+
+	.directory-exam-warp {
+		display: flex;
+		padding: vw(16) 0;
+		font-size: vw(14);
+		border-bottom: 1px solid #f5f5f5;
+	}
+
+	.exam-left {
+		display: flex;
+		flex-direction: column;
+
+		.exam-title {
+			@include text-overflow-multi(1);
+		}
+
+		.exam-score {
+			color: #999;
+		}
+	}
+
+	.exam-right {
+		display: flex;
+		flex: 0 0 30%;
+		align-items: center;
+		justify-content: flex-end;
+	}
+}
