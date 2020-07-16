@@ -182,6 +182,7 @@ class GoodsDataInitCommand extends BaseCommand
             'targetId' => $course['id'],
             'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['title'],
             'seq' => $course['seq'],
+            'buyableMode' => $course['expiryMode'],
         ]);
 
         return $goodsSpecs;
