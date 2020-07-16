@@ -15,6 +15,7 @@
                 @toClassroom="toClassroom"
                 @toTask="toTask"
                 @toCourse="toCourse"
+                @toItemBank="toItemBank"
               />
             </template>
           </div>
@@ -166,6 +167,12 @@ export default {
       window.postNativeMessage({
         action: 'kuozhi_course',
         data: { courseId: id },
+      });
+    },
+    toItemBank(itemBank) {
+      window.postNativeMessage({
+        action: 'kuozhi_itembank',
+        data: itemBank,
       });
     },
     sendError(error) {

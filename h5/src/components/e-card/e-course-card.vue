@@ -106,16 +106,18 @@ export default {
       if (itemBank.includes(this.course.type)) {
         task = this.course.link;
       }
+
       this.$emit('toTask', task);
     },
     toCourse() {
-      let id = '';
       if (itemBank.includes(this.course.type)) {
-        id = this.course.link.targetId;
-      } else {
-        id = this.course.link.courseId;
+        this.toItemBank();
+        return;
       }
-      this.$emit('toCourse', id);
+      this.$emit('toCourse', this.course.link.courseId);
+    },
+    toItemBank() {
+      this.$emit('toItemBank', this.course.link.answerRecord);
     },
   },
 };

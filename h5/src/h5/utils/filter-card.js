@@ -68,7 +68,6 @@ const getTask = data => {
     },
   };
 };
-
 const getItemBank = data => {
   return {
     link: {
@@ -79,6 +78,7 @@ const getItemBank = data => {
       targetId: data.targetId,
       status: data.target.answerRecord?.status,
       itemCategoryId: data.target.itemCategory?.id,
+      answerRecord: data.target.answerRecord,
     },
     type: data.targetType,
     top: {
