@@ -316,7 +316,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function createCourseSet($courseSet)
     {
         $created = $this->addCourseSet($courseSet);
-        $this->addProductAndGoods($created);
         $defaultCourse = $this->addDefaultCourse($courseSet, $created);
 
         //update courseSet defaultId
@@ -1270,6 +1269,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courseSet['creator'] = $this->getCurrentUser()->getId();
 
         $created = $this->getCourseSetDao()->create($courseSet);
+        $this->addProductAndGoods($created);
 
         return $created;
     }

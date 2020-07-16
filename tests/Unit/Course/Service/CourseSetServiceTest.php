@@ -775,14 +775,15 @@ class CourseSetServiceTest extends BaseTestCase
      */
     public function testResetParentIdByCourseIdWithCourseSetNotFoundException()
     {
-        $course = $this->mockNewCourseAndPublished();
-        $this->getCourseSetService()->resetParentIdByCourseId($course['id']);
+        $courseSet = $this->getCourseSetService()->createCourseSet(['title' => '测试课程', 'type' => 'normal']);
+        $this->getCourseSetDao()->delete($courseSet['id']);
+        $this->getCourseSetService()->resetParentIdByCourseId($courseSet['defaultCourseId']);
     }
 
     public function testResetParentIdByCourseId()
     {
         $courseSet = $this->createAndPublishCourseSet('测试课程', 'normal');
-        $course = $this->mockNewCourseAndPublished();
+        $course = $this->mockNewCourseAndPublished(['courseSetId' => $courseSet['id']]);
 
         $courseSet['parentId'] = 123;
         $course['parentId'] = 12;

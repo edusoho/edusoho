@@ -32,6 +32,7 @@ class GoodsServiceTest extends BaseTestCase
         $result = $this->getGoodsService()->createGoods([
             'productId' => 1,
             'title' => 'testTitle',
+            'type' => 'course',
             'images' => ['testImages'],
         ]);
 
@@ -60,6 +61,7 @@ class GoodsServiceTest extends BaseTestCase
         $fields = [
             'productId' => 2,
             'title' => 'test update title',
+            'type' => 'course',
             'images' => ['test update images'],
         ];
 
@@ -374,6 +376,7 @@ class GoodsServiceTest extends BaseTestCase
     {
         $default = [
             'productId' => 1,
+            'type' => 'course',
             'title' => 'testTitle',
             'images' => [],
         ];

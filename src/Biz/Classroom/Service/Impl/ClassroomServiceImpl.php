@@ -271,7 +271,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'summary' => $classroom['about'],
             'images' => [
                 'large' => $classroom['largePicture'],
-                'middle' => $classroom['largePicture'],
+                'middle' => $classroom['middlePicture'],
                 'small' => $classroom['smallPicture'],
             ],
             'orgId' => $classroom['orgId'],
@@ -427,7 +427,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $fields = $this->fillOrgId($fields);
 
         $classroom = $this->getClassroomDao()->update($id, $fields);
-        $this->syncProductAndGoodsAndSpecs($classroom);
+
+        if (array_intersect(
+            array_keys($fields),
+            ['title', 'about', 'orgId', 'orgCode', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'buyable', 'showable', 'expiryMode', 'expiryValue', 'service']
+        )) {
+            $this->syncProductAndGoodsAndSpecs($classroom);
+        }
 
         $arguments = $fields;
 
