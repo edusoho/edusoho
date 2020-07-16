@@ -3,9 +3,9 @@
 namespace Biz\Goods\Dao\Impl;
 
 use Biz\Goods\Dao\GoodsDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class GoodsDaoImpl extends GeneralDaoImpl implements GoodsDao
+class GoodsDaoImpl extends AdvancedDaoImpl implements GoodsDao
 {
     protected $table = 'goods';
 
@@ -43,5 +43,12 @@ class GoodsDaoImpl extends GeneralDaoImpl implements GoodsDao
     public function findByProductIds(array $productIds)
     {
         return $this->findInField('productId', $productIds);
+    }
+
+    public function refreshHotSeq()
+    {
+        $sql = "UPDATE {$this->table} set hotSeq = 0;";
+
+        return $this->db()->exec($sql);
     }
 }

@@ -200,6 +200,11 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         return $this->getCurrentUser()->isAdmin() || ($this->getCurrentUser()->isTeacher() && $this->isGoodsCreator($goods));
     }
 
+    public function refreshGoodsHotSeq()
+    {
+        return $this->getGoodsDao()->refreshHotSeq();
+    }
+
     /**
      * @param $goods
      *

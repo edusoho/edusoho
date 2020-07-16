@@ -38,6 +38,10 @@ class ProductDaoImpl extends GeneralDaoImpl implements ProductDao
 
     public function findByTargetTypeAndTargetIds($targetType, array $targetIds)
     {
+        if (empty($targetIds)) {
+            return [];
+        }
+
         $marks = str_repeat('?,', count($targetIds) - 1).'?';
         $sql = "SELECT * FROM {$this->table} WHERE targetType = ? AND targetId IN ({$marks});";
 

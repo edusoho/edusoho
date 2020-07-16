@@ -4,11 +4,13 @@ namespace Biz\Goods\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Goods\Dao\GoodsDao;
 use Biz\Goods\Service\GoodsService;
 use Biz\Goods\Service\RecommendGoodsService;
 use Biz\Product\Service\ProductService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\TagService;
+use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 class RecommendGoodsServiceImpl extends BaseService implements RecommendGoodsService
 {
@@ -34,6 +36,23 @@ class RecommendGoodsServiceImpl extends BaseService implements RecommendGoodsSer
         }
 
         return [];
+    }
+
+    public function refreshGoodsHotSeqByProductTypeAndProductMemberCount($productType, $productMemberCount)
+    {
+        $columnName = 'course' === $productType ? 'courseSetId' : 'classroomId';
+        $products = $this->getProductService()->findProductsByTargetTypeAndTargetIds(
+            $productType,
+            ArrayToolkit::column($productMemberCount, $columnName)
+        );
+
+        $productsHotSeq = $this->appendProductsHotSeq($products, $productMemberCount);
+
+        $batchHelper = new BatchUpdateHelper($this->getGoodsDao());
+        foreach ($productsHotSeq as $product) {
+            $batchHelper->add('productId', $product['productId'], ['hotSeq' => $product['hotSeq']]);
+        }
+        $batchHelper->flush();
     }
 
     protected function findRecommendedGoodsByHotSeq($goods)
@@ -68,7 +87,7 @@ class RecommendGoodsServiceImpl extends BaseService implements RecommendGoodsSer
     {
         $product = $this->getProductService()->getProduct($goods['productId']);
         if (empty($product)) {
-            return[];
+            return [];
         }
 
         $tagOwnerType = $this->getTagOwnerTypeByProductType($product['targetType']);
@@ -127,6 +146,27 @@ class RecommendGoodsServiceImpl extends BaseService implements RecommendGoodsSer
         return empty($map[$productType]) ? '' : $map[$productType];
     }
 
+    private function appendProductsHotSeq(array $products, array $productStudentsCount)
+    {
+        if (empty($products) || empty($productStudentsCount)) {
+            return [];
+        }
+
+        $buildProducts = [];
+        foreach ($products as $product) {
+            $currentProductTargetId = $product['targetId'];
+
+            if (!empty($courseStudentsCount[$currentProductTargetId])) {
+                $buildProducts[] = [
+                    'productId' => $product['id'],
+                    'hotSeq' => $productStudentsCount[$currentProductTargetId]['count'],
+                ];
+            }
+        }
+
+        return $buildProducts;
+    }
+
     /**
      * @return SettingService
      */
@@ -157,5 +197,13 @@ class RecommendGoodsServiceImpl extends BaseService implements RecommendGoodsSer
     protected function getTagService()
     {
         return $this->createService('Taxonomy:TagService');
+    }
+
+    /**
+     * @return GoodsDao
+     */
+    protected function getGoodsDao()
+    {
+        return $this->createDao('Goods:GoodsDao');
     }
 }
