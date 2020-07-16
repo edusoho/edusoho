@@ -319,17 +319,7 @@ class ExerciseController extends BaseController
         $records = $this->getCacheService()->get("item_bank_exercise({$exerciseId})");
         $records = json_decode($records, true);
         if (empty($records)){
-            $records = $this->getChapterExerciseRecordService()->search(
-                [
-                    'exerciseId' => $exerciseId,
-                    'doneQuestionNum' => 0,
-                    'startTimeGreaterThan' => strtotime('Monday last week'),
-                    'startTimeLessThan' => strtotime('Monday this week'),
-                ],
-                ['doneQuestionNum' => 'DESC'],
-                0,
-                10
-            );
+            $records = $this->getChapterExerciseRecordService()->findWeekRankRecords($exerciseId);
             $expiryTime = mktime(23,59,59,date('m'),date('d')-date('w')+7,date('Y'));
             $this->getCacheService()->set("item_bank_exercise({$exerciseId})", json_encode($records), $expiryTime);
         }

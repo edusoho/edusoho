@@ -21,6 +21,24 @@ class ChapterExerciseRecordDaoImpl extends GeneralDaoImpl implements ChapterExer
         return $this->db()->fetchAssoc($sql, [$moduleId, $itemCategoryId, $userId]);
     }
 
+    public function findWeekRankRecords($exerciseId)
+    {
+        $conditions = [
+            'exerciseId' => $exerciseId,
+            'doneQuestionNum' => 0,
+            'startTimeGreaterThan' => strtotime('Monday last week'),
+            'startTimeLessThan' => strtotime('Monday this week'),
+        ];
+        $builder = $this->createQueryBuilder($conditions)
+            ->setFirstResult(0)
+            ->setMaxResults(10)
+            ->select("userId, exerciseId, sum(doneQuestionNum)doneQuestionNum")
+            ->groupBy('userId')
+            ->orderBy('doneQuestionNum', 'DESC');
+
+        return $builder->execute()->fetchAll();
+    }
+
     public function declares()
     {
         return [

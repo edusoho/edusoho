@@ -17,4 +17,6 @@ interface ChapterExerciseRecordService
     public function count($conditions);
 
     public function getLatestRecord($moduleId, $itemCategoryId, $userId);
+
+    public function findWeekRankRecords($exerciseId);
 }
