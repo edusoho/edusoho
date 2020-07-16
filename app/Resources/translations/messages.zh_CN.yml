@@ -10915,11 +10915,11 @@ admin_v2.operating.goods_recommend_setting: 商品推荐设置
 admin_v2.operating.goods_recommend_rule: 猜你想学推荐规则
 
 admin_v2.operating.goods_recommend.hot: 按热度推荐
-admin_v2.operating.goods_recommend.hot_tips: 根据最近30天购买人数最多的商品进行推荐，课程商品优先推荐课程，班级商品优先推荐班级。
+admin_v2.operating.goods_recommend.hot_tips: 根据最近30天购买人数最多的商品进行推荐
 admin_v2.operating.goods_recommend.latest: 按最新推荐
-admin_v2.operating.goods_recommend.latest_tips: 根据商品发布时间展示最近发布的商品，课程商品优先推荐课程，班级商品优先推荐班级。
+admin_v2.operating.goods_recommend.latest_tips: 根据商品发布时间展示最近发布的商品
 admin_v2.operating.goods_recommend.label: 按标签推荐
-admin_v2.operating.goods_recommend.label_tips: 根据商品的分类标签，显示相关的商品。课程商品优先推荐课程，班级商品优先推荐班级。
+admin_v2.operating.goods_recommend.label_tips: 根据商品的标签，显示相关的商品
 
 
 admin_v2.operating.goods_show_setting: 销售情况显示设置

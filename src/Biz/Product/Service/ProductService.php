@@ -17,4 +17,6 @@ interface ProductService
     public function getProductByTargetIdAndType($targetId, $targetType);
 
     public function findProductsByIds($ids);
+
+    public function findProductsByTargetTypeAndTargetIds($targetType, array $targetIds);
 }

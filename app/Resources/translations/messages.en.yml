@@ -9699,11 +9699,11 @@ admin_v2.operating.goods_recommend_setting: Product recommendation settings
 admin_v2.operating.goods_recommend_rule: Recommended rules
 
 admin_v2.operating.goods_recommend.hot: Recommended by heat
-admin_v2.operating.goods_recommend.hot_tips: Recommendations are made based on the products with the largest number of purchases in the last 30 days. Course products are recommended for courses first, and class products are recommended for classes first.
+admin_v2.operating.goods_recommend.hot_tips: Recommendations are made based on the products with the largest number of purchases in the last 30 days.
 admin_v2.operating.goods_recommend.latest: According to the latest recommendation
-admin_v2.operating.goods_recommend.latest_tips: According to the product release time, the most recently released products are displayed. Course products are recommended for courses first, and class products are recommended for classes first.
-admin_v2.operating.goods_recommend.label: Recommended by label
-admin_v2.operating.goods_recommend.label_tips: According to the classification label of the goods, the related goods are displayed. Course goods give priority to courses, and class goods give priority to classes.
+admin_v2.operating.goods_recommend.latest_tips: According to the product release time, the most recently released products are displayed.
+admin_v2.operating.goods_recommend.label: Recommended by tag
+admin_v2.operating.goods_recommend.label_tips: According to the classification tag of the goods, the related goods are displayed.
 
 
 admin_v2.operating.goods_show_setting: Sales display settings

@@ -17,4 +17,6 @@ interface TagOwnerDao extends GeneralDaoInterface
     public function deleteByOwnerTypeAndOwnerId($ownerType, $ownerId);
 
     public function getTagOwnerRelationByTagIdAndOwnerTypeAndOwnerId($tagId, $ownerType, $ownerId);
+
+    public function findDistinctOwnerIdByOwnerTypeAndTagIdsAndExcludeOwnerId($ownerType, array $tagIds, $excludeId, $count);
 }

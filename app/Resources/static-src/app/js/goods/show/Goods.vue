@@ -1,6 +1,6 @@
 <template>
     <div class="cd-container">
-        <div class="product-breadcrumb">首页 / 艺术学概论</div>
+        <div class="product-breadcrumb">首页 / {{goods.title}}</div>
         <detail :goods="goods" :currentSku="currentSku" @changeSku="changeSku">
         </detail>
 
