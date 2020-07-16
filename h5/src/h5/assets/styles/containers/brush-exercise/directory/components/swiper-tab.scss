@@ -1,0 +1,39 @@
+.brush-exercise-directory-swipertab {
+	padding: vw(16) 0;
+	background: #f5f5f5;
+
+	.van-tabs__nav {
+		background: #f5f5f5;
+	}
+
+	.van-tabs--line .van-tabs__wrap {
+		height: vw(28);
+	}
+
+	.van-tab:nth-of-type(1) {
+		margin-left: vw(16);
+	}
+
+	.van-tab:nth-last-of-type(1) {
+		margin-right: vw(16);
+	}
+
+	.van-tab {
+		height: vw(28);
+		margin-right: vw(32);
+		padding: 0 vw(16);
+		color: #666;
+		background: #e2e2e2;
+		border-radius: vw(14);
+	}
+
+	.van-tab--active {
+		color: #fff;
+		background: $primary-color;
+		border-radius: vw(14);
+	}
+
+	.van-tabs__line {
+		display: none;
+	}
+}

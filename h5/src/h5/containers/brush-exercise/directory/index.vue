@@ -1,10 +1,18 @@
 <template>
-  <div class=""></div>
+  <div class="">
+    <swiperTab />
+    <exam />
+  </div>
 </template>
 
 <script>
+import swiperTab from './components/swiper-tab.vue';
+import exam from './components/exam.vue';
 export default {
-  components: {},
+  components: {
+    swiperTab,
+    exam,
+  },
   data() {
     return {};
   },
