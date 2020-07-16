@@ -3,6 +3,8 @@
 namespace Tests\Unit\RefererLog\Service;
 
 use Biz\BaseTestCase;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\RefererLog\Service\RefererLogService;
 
 class RefererLogServiceTest extends BaseTestCase
@@ -62,7 +64,7 @@ class RefererLogServiceTest extends BaseTestCase
         $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
 
         $timeRange = $this->getTimeRange();
-        $conditions = array_merge($timeRange, array('targetType' => 'course'));
+        $conditions = array_merge($timeRange, ['targetType' => 'course']);
 
         $summary = $this->getRefererLogService()->analysisSummary($conditions);
 
@@ -80,7 +82,7 @@ class RefererLogServiceTest extends BaseTestCase
         $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
 
         $timeRange = $this->getTimeRange();
-        $conditions = array_merge($timeRange, array('targetType' => 'course'));
+        $conditions = array_merge($timeRange, ['targetType' => 'course']);
 
         $refererlist = $this->getRefererLogService()->searchAnalysisSummaryList($conditions, 'targetId', 0, 2);
 
@@ -97,7 +99,7 @@ class RefererLogServiceTest extends BaseTestCase
         $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
 
         $timeRange = $this->getTimeRange();
-        $conditions = array_merge($timeRange, array('targetType' => 'course'));
+        $conditions = array_merge($timeRange, ['targetType' => 'course']);
 
         $refererCount = $this->getRefererLogService()->countDistinctLogsByField($conditions, $field = 'targetId');
         $this->assertEquals(3, $refererCount);
@@ -113,7 +115,7 @@ class RefererLogServiceTest extends BaseTestCase
         $refererlog2 = $this->moocReferelog($course, $_SERVER['HTTP_HOST']);
         $createRefererLog2 = $this->getRefererLogService()->addRefererLog($refererlog2);
 
-        $refererLogs = $this->getRefererLogService()->searchRefererLogs(array(), array('createdTime' => 'DESC'), 0, 2);
+        $refererLogs = $this->getRefererLogService()->searchRefererLogs([], ['createdTime' => 'DESC'], 0, 2);
 
         $this->assertArrayEquals($createRefererLog1, $refererLogs[0]);
         $this->assertArrayEquals($createRefererLog2, $refererLogs[1]);
@@ -127,9 +129,9 @@ class RefererLogServiceTest extends BaseTestCase
         $refererlog2 = $this->moocReferelog($course, $_SERVER['HTTP_HOST']);
         $createRefererLog2 = $this->getRefererLogService()->addRefererLog($refererlog2);
 
-        $count = $this->getRefererLogService()->countRefererLogs(array());
+        $count = $this->getRefererLogService()->countRefererLogs([]);
 
-        $this->assertEquals(count(array($createRefererLog1, $createRefererLog2)), $count);
+        $this->assertEquals(count([$createRefererLog1, $createRefererLog2]), $count);
     }
 
     public function testFindRefererLogsGroupByDate()
@@ -143,7 +145,7 @@ class RefererLogServiceTest extends BaseTestCase
         $refererlog2 = $this->moocReferelog($course, $_SERVER['HTTP_HOST']);
         $this->getRefererLogService()->addRefererLog($refererlog2);
 
-        $groupedLogs = $this->getRefererLogService()->findRefererLogsGroupByDate(array());
+        $groupedLogs = $this->getRefererLogService()->findRefererLogsGroupByDate([]);
 
         $this->assertEquals(2, count($groupedLogs[$date]));
     }
@@ -161,33 +163,33 @@ class RefererLogServiceTest extends BaseTestCase
 
     public function testFindRefererLogsGroupByTargetId()
     {
-        $refererlog1 = array(
+        $refererlog1 = [
             'targetId' => 1,
             'targetType' => 'course',
             'refererUrl' => 'http://demo.edusoho.com/course/explore',
             'userAgent' => 'iOS10',
-        );
+        ];
         $createRefererLog1 = $this->getRefererLogService()->addRefererLog($refererlog1);
 
-        $refererlog2 = array(
+        $refererlog2 = [
             'targetId' => 1,
             'targetType' => 'openCourse',
             'refererUrl' => 'http://demo.edusoho.com/open/course/explore',
             'userAgent' => 'iOS10',
-        );
+        ];
         $createRefererLog2 = $this->getRefererLogService()->addRefererLog($refererlog2);
 
-        $refererlog3 = array(
+        $refererlog3 = [
             'targetId' => 1,
             'targetType' => 'openCourse',
             'refererUrl' => 'http://demo.edusoho.com',
             'userAgent' => 'iOS10',
-        );
+        ];
         $createRefererLog3 = $this->getRefererLogService()->addRefererLog($refererlog3);
 
         $startTime = strtotime(date('Y-m-d', strtotime('-1 day', time())));
         $endTime = strtotime(date('Y-m-d', time()).' 23:59:59');
-        $refererLogs = $this->getRefererLogService()->findRefererLogsGroupByTargetId('openCourse', array('hitNum', 'DESC'), $startTime, $endTime, 0, 10);
+        $refererLogs = $this->getRefererLogService()->findRefererLogsGroupByTargetId('openCourse', ['hitNum', 'DESC'], $startTime, $endTime, 0, 10);
 
         $this->assertEquals(1, count($refererLogs));
         $this->assertEquals(2, $refererLogs[0]['hitNum']);
@@ -195,14 +197,15 @@ class RefererLogServiceTest extends BaseTestCase
 
     private function createCourse()
     {
-        $course = array(
+        $courseSet = $this->getCourseSetService()->createCourseSet(['title' => 'courseSetTitle', 'type' => 'normal']);
+        $course = [
             'title' => 'online test course 1',
             'type' => 'normal',
-            'courseSetId' => '1',
+            'courseSetId' => $courseSet['id'],
             'expiryMode' => 'forever',
             'learnMode' => 'freeMode',
             'courseType' => 'normal',
-        );
+        ];
 
         return $this->getCourseService()->createCourse($course);
     }
@@ -211,19 +214,19 @@ class RefererLogServiceTest extends BaseTestCase
     {
         $course = empty($course) ? $this->createCourse() : $course;
 
-        $refererlog = array(
+        $refererlog = [
             'targetId' => $course['id'],
             'targetType' => 'course',
             'refererUrl' => empty($refererUrl) ? 'https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=2&tn=baiduhome_pg&wd=symfony3&rsv_spt=1&oq=sdfsadfsdfsd&rsv_pq=81bbcee100030f47&rsv_t=5b30KXbnTOC01lM%2B7P8apVzBOGbh%2B8ETweQAF1q%2BaFspbHSjNifvQ2ZAdINVnNjpbfcM&rqlang=cn&rsv_enter=1&rsv_sug3=7&rsv_sug1=7&rsv_sug7=100&bs=sdfsadfsdfsd' : $refererUrl,
             'userAgent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36',
-        );
+        ];
 
         return $refererlog;
     }
 
     private function getTimeRange()
     {
-        return array('startTime' => strtotime(date('Y-m-d', time())), 'endTime' => strtotime(date('Y-m-d', time() + 24 * 3600)));
+        return ['startTime' => strtotime(date('Y-m-d', time())), 'endTime' => strtotime(date('Y-m-d', time() + 24 * 3600))];
     }
 
     /**
@@ -234,8 +237,19 @@ class RefererLogServiceTest extends BaseTestCase
         return $this->createService('RefererLog:RefererLogService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 }
