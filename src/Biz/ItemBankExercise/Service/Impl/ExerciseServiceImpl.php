@@ -94,9 +94,30 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function search($conditions, $orderBy, $start, $limit)
     {
+        $orderBy = $this->getOrderBys($orderBy);
         $conditions = $this->_prepareCourseConditions($conditions);
 
         return $this->getExerciseDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    protected function getOrderBys($order)
+    {
+        if (is_array($order)) {
+            return $order;
+        }
+
+        $typeOrderByMap = [
+            'rating' => ['rating' => 'DESC'],
+            'recommended' => ['recommendedTime' => 'DESC'],
+            'studentNum' => ['studentNum' => 'DESC'],
+            'recommendedSeq' => ['recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC'],
+            'hotSeq' => ['studentNum' => 'DESC', 'id' => 'DESC'],
+        ];
+        if (isset($typeOrderByMap[$order])) {
+            return $typeOrderByMap[$order];
+        } else {
+            return ['createdTime' => 'DESC'];
+        }
     }
 
     public function tryManageExercise($exerciseId = 0, $teacher = 1)

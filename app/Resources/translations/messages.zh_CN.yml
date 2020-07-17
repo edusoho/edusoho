@@ -3536,6 +3536,7 @@ search.live_courses: 直播课程
 search.reservation_courses: 一对一约课
 search.all_classrooms: 全部%classroom%
 search.free_classrooms: 免费%classroom%
+search.free_item_bank: 免费题库
 
 
 #云资源
@@ -4615,6 +4616,8 @@ explore.open_course.title: 公开课
 explore.open_course.list: 公开课列表
 explore.open_course.live: 直播
 explore.open_course.empty: 暂无公开课
+explore.item_bank_exercise.list: 题库练习列表
+explore.item_bank_exercise.empty: 暂无题库练习
 
 #课程存档
 archive.course.title: 课程存档
@@ -5801,6 +5804,7 @@ admin.setting.navigation.tips: >
   <p>课程列表页：域名/course/explore</p>
   <p>班级列表页：域名/classroom/explore</p>
   <p>公开课列表页：域名/open/course/explore</p>
+  <p>题库练习列表页：域名/exercise/explore</p>
   <p>课程分类：域名/course/explore/分类编码</p>
   <p>资讯栏目：域名/article/栏目编码</p>
 admin.setting.navigation.top.add: 新增顶部导航

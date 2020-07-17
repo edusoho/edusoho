@@ -2975,6 +2975,7 @@ search.live_courses: 'Live courses'
 search.reservation_courses: Reservation courses
 search.all_classrooms: 'All %classroom%'
 search.free_classrooms: 'Free %classroom%'
+search.free_item_bank: Free Item Bank
 cloud_file.preview: 'preview'
 cloud_file.re_transcoding_btn: Re-transcoding
 cloud_file.re_transcoding.submiting: Submiting...
@@ -3867,6 +3868,8 @@ explore.open_course.title: 'Open Course'
 explore.open_course.list: 'Open Course List'
 explore.open_course.live: Live
 explore.open_course.empty: 'No record'
+explore.item_bank_exercise.list: Exercise List
+explore.item_bank_exercise.empty: No Exercise
 archive.course.title: 'Course Archive'
 archive.course.tags: Tags
 archive.course.empty: 'No record'
@@ -4793,7 +4796,7 @@ admin.setting.navigation.name: Name
 admin.setting.navigation.new_windows: 'New Window'
 admin.setting.navigation.status: Status
 admin.setting.navigation.operation: Action
-admin.setting.navigation.tips: "<p>Vip Zone：domain/vip</p> <p>Live Page：domain/live</p> <p>Group Page：domain/group</p> <p>Article Page：domain/article</p> <p>Teachers Page：domain/teacher</p> <p>Mobile Page：domain/mobile</p> <p>Personal Page：domain/my/page/show</p> <p>Course List Page：domain/course/explore</p> <p>Class List Page：domain/classroom/explore</p> <p>Open Course List Page：domain/open/course/explore</p> <p>Course Category：domain/course/explore/categoryCode</p> <p>Article Category：domain/article/categoryCode</p>\n"
+\admin.setting.navigation.tips: "<p>Vip Zone：domain/vip</p> <p>Live Page：domain/live</p> <p>Group Page：domain/group</p> <p>Article Page：domain/article</p> <p>Teachers Page：domain/teacher</p> <p>Mobile Page：domain/mobile</p> <p>Personal Page：domain/my/page/show</p> <p>Course List Page：domain/course/explore</p> <p>Class List Page：domain/classroom/explore</p> <p>Open Course List Page：domain/open/course/explore</p> <p>Exercise List Page：domain/exercise/explore</p> <p>Course Category：domain/course/explore/categoryCode</p> <p>Article Category：domain/article/categoryCode</p>\n"
 admin.setting.navigation.top.add: 'Add Top Navigation Menu Item'
 admin.setting.navigation.top.edit: 'Edit Top Navigation Menu Item'
 admin.setting.navigation.foot.add: 'Add Bottom Navigation Menu Item'
