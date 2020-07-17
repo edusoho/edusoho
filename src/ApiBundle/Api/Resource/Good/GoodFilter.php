@@ -10,12 +10,12 @@ use ApiBundle\Api\Util\Money;
 class GoodFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'title', 'subtitle', 'summary', 'minPrice', 'maxPrice', 'images', 'ratingNum', 'rating', 'hitNum',
+        'id', 'title', 'subtitle', 'type', 'summary', 'minPrice', 'maxPrice', 'images', 'ratingNum', 'rating', 'hitNum',
         'hotSeq', 'showable', 'buyable', 'creator',
     ];
 
     protected $publicFields = [
-        'id', 'title', 'subtitle', 'product', 'extensions', 'specs', 'creator', 'status',
+        'id', 'title', 'subtitle', 'type',  'product', 'extensions', 'specs', 'creator', 'status',
         'showable', 'buyable', 'summary', 'minPrice', 'maxPrice', 'images', 'orgId', 'orgCode', 'ratingNum', 'rating',
         'hitNum', 'hotSeq', 'recommendWeight', 'recommendedTime', 'createdTime', 'updatedTime', 'isFavorite',
     ];
