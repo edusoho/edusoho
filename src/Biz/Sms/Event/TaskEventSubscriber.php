@@ -22,7 +22,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'course.task.unpublish' => 'onTaskUnpublish',
             'course.task.publish' => 'onTaskPublish',
             'course.task.update' => 'onTaskUpdate',
@@ -30,7 +30,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
             'course.task.create.sync' => 'onTaskCreateSync',
             'course.task.update.sync' => 'onTaskUpdateSync',
             'course.task.publish.sync' => 'onTaskPublishSync',
-        );
+        ];
     }
 
     public function onTaskUnpublish(Event $event)
@@ -61,7 +61,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         $task = $event->getSubject();
 
-        $this->sendTasksPublishSms(array($task));
+        $this->sendTasksPublishSms([$task]);
     }
 
     public function onTaskPublishSync(Event $event)
@@ -116,9 +116,12 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
                 $return = $processor->getUrls($task['id'], $smsType);
                 $callbackUrls = $return['urls'];
                 $count = ceil($return['count'] / 1000);
+                if ($count = 0) {
+                    $return;
+                }
                 try {
                     $api = CloudAPIFactory::create('root');
-                    $result = $api->post('/sms/sendBatch', array('total' => $count, 'callbackUrls' => $callbackUrls));
+                    $result = $api->post('/sms/sendBatch', ['total' => $count, 'callbackUrls' => $callbackUrls]);
                 } catch (\Exception $e) {
                     throw SmsException::FAILED_SEND();
                 }
@@ -133,31 +136,31 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
         if ($dayIsOpen && $task['startTime'] >= (time() + 24 * 60 * 60)) {
             //24小时期限，在预定时间前1小时内有效
-            $startJob = array(
+            $startJob = [
                 'name' => 'SmsSendOneDayJob_task_'.$task['id'],
                 'expression' => intval($task['startTime'] - 24 * 60 * 60),
                 'class' => 'Biz\Sms\Job\SmsSendOneDayJob',
                 'misfire_threshold' => 60 * 60,
-                'args' => array(
+                'args' => [
                     'targetType' => 'task',
                     'targetId' => $task['id'],
-                ),
-            );
+                ],
+            ];
             $this->createJob($startJob);
         }
 
         if ($hourIsOpen && $task['startTime'] >= (time() + 60 * 60)) {
             //1小时期限，在预定时间前10分钟内有效
-            $startJob = array(
+            $startJob = [
                 'name' => 'SmsSendOneHourJob_task_'.$task['id'],
                 'expression' => intval($task['startTime'] - 60 * 60),
                 'class' => 'Biz\Sms\Job\SmsSendOneHourJob',
                 'misfire_threshold' => 60 * 10,
-                'args' => array(
+                'args' => [
                     'targetType' => 'task',
                     'targetId' => $task['id'],
-                ),
-            );
+                ],
+            ];
             $this->createJob($startJob);
         }
     }
@@ -165,7 +168,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
     private function getCopiedTasks($task)
     {
         if (empty($task)) {
-            return array();
+            return [];
         }
 
         $courses = $this->getCourseService()->findCoursesByParentIdAndLocked($task['courseId'], 1);
@@ -208,7 +211,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
     private function deleteByJobName($jobName)
     {
-        $jobs = $this->getSchedulerService()->searchJobs(array('name' => $jobName), array(), 0, PHP_INT_MAX);
+        $jobs = $this->getSchedulerService()->searchJobs(['name' => $jobName], [], 0, PHP_INT_MAX);
 
         foreach ($jobs as $job) {
             $this->getSchedulerService()->deleteJob($job['id']);
