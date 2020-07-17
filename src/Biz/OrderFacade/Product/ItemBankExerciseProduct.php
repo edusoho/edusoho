@@ -18,16 +18,16 @@ class ItemBankExerciseProduct extends Product implements OrderStatusCallback
     {
         $exercise = $this->getExerciseService()->get($params['targetId']);
         $this->targetId = $params['targetId'];
-        $this->backUrl = ['routing' => '', 'params' => ['id' => $exercise['id']]];
-        $this->successUrl = ['', ['id' => $this->targetId]];
+        $this->backUrl = ['routing' => 'item_bank_exercise_show', 'params' => ['id' => $exercise['id']]];
+        $this->successUrl = ['item_bank_exercise_show', ['id' => $this->targetId]];
         $this->title = $exercise['title'];
         $this->originPrice = $exercise['price'];
         $this->maxRate = 100;
         $this->productEnable = 'published' === $exercise['status'] ? true : false;
         $this->cover = [
-            'small' => '',
-            'middle' => '',
-            'large' => '',
+            'small' => empty($exercise['cover']['small']) ? '' : $exercise['cover']['small'],
+            'middle' => empty($exercise['cover']['middle']) ? '' : $exercise['cover']['middle'],
+            'large' => empty($exercise['cover']['large']) ? '' : $exercise['cover']['large'],
         ];
     }
 

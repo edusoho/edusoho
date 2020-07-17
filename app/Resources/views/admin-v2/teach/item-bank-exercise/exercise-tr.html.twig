@@ -4,7 +4,7 @@
 <tr id="course-tr-{{ exercise.id }}">
   <td>{{ exercise.id }}</td>
   <td>
-    <strong>{{ exercise.title }}</strong>
+    <a href="{{ path('item_bank_exercise_show', {id: exercise.id}) }}" target="_blank"><strong>{{ exercise.title }}</strong></a>
     <br>
     <span class="text-muted text-sm">{{ 'admin.course_manage.manage.category'|trans }}：{{ category.name|default('--') }}</span>
     {% if exercise.recommended %}
