@@ -51,7 +51,10 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'addBizItemCategoryColumn',
+            'updateBizItemCategory',
             'addBizItemBankColumn',
+            'updateBizItemBankColumn',
+            'addBizAnswerSceneColumn',
             'createItemBankAssessmentExerciseTable',
             'createItemBankAssessmentExerciseRecordTable',
             'createItemBankChapterExerciseRecordTable',
@@ -108,10 +111,33 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
+    public function updateBizItemCategory()
+    {
+        $this->getConnection()->exec("UPDATE `biz_item_category` cate join `biz_item_bank` bank on cate.bank_id = bank.id SET cate.item_num = bank.item_num, cate.question_num = bank.question_num;");
+
+        return 1;
+    }
+
     public function addBizItemBankColumn()
     {
         if (!$this->isFieldExist('biz_item_bank', 'question_num')) {
             $this->getConnection()->exec("ALTER TABLE `biz_item_bank` ADD `question_num` INT(11) NOT NULL DEFAULT '0' COMMENT '问题总数' AFTER `item_num`;");
+        }
+
+        return 1;
+    }
+
+    public function updateBizItemBankColumn()
+    {
+        $this->getConnection()->exec("UPDATE `biz_item_bank` bank join (select bank_id,sum(question_num) question_num from `biz_item` item group by item.bank_id) item on bank.id = item.bank_id SET bank.question_num = item.question_num;");
+
+        return 1;
+    }
+
+    public function addBizAnswerSceneColumn()
+    {
+        if (!$this->isFieldExist('biz_answer_scene', 'doing_look_analysis')) {
+            $this->getConnection()->exec("ALTER TABLE `biz_answer_scene` ADD `doing_look_analysis` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '支持做题中查看解析' AFTER `start_time`;");
         }
 
         return 1;
