@@ -15,7 +15,7 @@ class ExerciseManageController extends BaseController
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
 
         return $this->render(
-            'item-bank-exercise/exercise-set/info.html.twig',
+            'item-bank-exercise-manage/exercise-set/info.html.twig',
             [
                 'exercise' => $exercise,
                 'questionBank' => $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']),
@@ -36,7 +36,7 @@ class ExerciseManageController extends BaseController
             return $this->createJsonResponse(['image' => $cover]);
         }
 
-        return $this->render('item-bank-exercise/exercise-set/cover-crop-modal.html.twig');
+        return $this->render('item-bank-exercise-manage/exercise-set/cover-crop-modal.html.twig');
     }
 
     public function infoAction(Request $request, $exerciseId)
@@ -55,7 +55,7 @@ class ExerciseManageController extends BaseController
         $exercise = $this->formatExerciseDate($exercise);
 
         return $this->render(
-            'item-bank-exercise/exercise-set/base-info/marketing.html.twig',
+            'item-bank-exercise-manage/exercise-set/base-info/marketing.html.twig',
             [
                 'exercise' => $exercise,
                 'questionBank' => $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']),

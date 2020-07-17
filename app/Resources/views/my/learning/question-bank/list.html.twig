@@ -1,0 +1,23 @@
+{% extends 'my/layout.html.twig' %}
+
+{% set bodyClass = 'my-course cd-design' %}
+{% set side_nav = 'my-question-bank' %}
+
+{% block title %}{{'my.learning.question_bank_menu'|trans}} - {{ parent() }}{% endblock %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">
+      {{ 'my.learning.question_bank_menu'|trans }}
+    </div>
+    <div class="panel-body">
+      {% for exercise in exercises if exercises %}
+        {% set member = members[exercise.id]|default(null) %}
+          {% include 'my/learning/question-bank/list-li.html.twig' %}
+      {% else %}
+        <div class="cd-empty">{{ 'my.learning.question_bank.learning_empty'|trans }}</div>
+      {% endfor %}
+      {{ web_macro.paginator(paginator) }}
+    </div>
+  </div>
+{% endblock %}

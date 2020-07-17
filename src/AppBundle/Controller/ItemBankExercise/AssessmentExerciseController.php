@@ -47,7 +47,7 @@ class AssessmentExerciseController extends BaseController
 
         $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($assessmentExercises, 'assessmentId'));
 
-        return $this->render('item-bank-exercise/assessment-exercise/index.html.twig', [
+        return $this->render('item-bank-exercise-manage/assessment-exercise/index.html.twig', [
             'exercise' => $exercise,
             'questionBank' => $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']),
             'modules' => $modules,
@@ -74,7 +74,7 @@ class AssessmentExerciseController extends BaseController
             return $this->createJsonResponse($module);
         }
 
-        return $this->render('item-bank-exercise/assessment-exercise/module-modal.html.twig', [
+        return $this->render('item-bank-exercise-manage/assessment-exercise/module-modal.html.twig', [
             'module' => $module,
             'exercise' => $exercise,
         ]);
@@ -92,7 +92,7 @@ class AssessmentExerciseController extends BaseController
             return $this->createJsonResponse($module);
         }
 
-        return $this->render('item-bank-exercise/assessment-exercise/module-modal.html.twig', [
+        return $this->render('item-bank-exercise-manage/assessment-exercise/module-modal.html.twig', [
             'exercise' => $exercise,
             'module' => [],
         ]);
@@ -131,7 +131,7 @@ class AssessmentExerciseController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $route = $isPage ? 'item-bank-exercise/assessment-exercise/assessment-list-tr.html.twig' : 'item-bank-exercise/assessment-exercise/assessment-modal.html.twig';
+        $route = $isPage ? 'item-bank-exercise-manage/assessment-exercise/assessment-list-tr.html.twig' : 'item-bank-exercise-manage/assessment-exercise/assessment-modal.html.twig';
 
         return $this->render($route, [
             'exercise' => $exercise,

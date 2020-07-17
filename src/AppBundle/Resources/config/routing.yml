@@ -733,6 +733,14 @@ user_learning_classrooms:
     path:  /user/{id}/learning/classrooms
     defaults: { _controller: AppBundle:User:learning }
 
+user_question_bank_learn:
+    path:  /user/{id}/question_bank/learn
+    defaults: { _controller: AppBundle:User:itemBankLearn }
+
+user_question_bank_teach:
+  path:  /user/{id}/question_bank/teach
+  defaults: { _controller: AppBundle:User:itemBankTeach }
+
 user_card_show:
     path:  /user/{userId}/card/show
     defaults: { _controller: AppBundle:User:cardShow }
@@ -2077,6 +2085,10 @@ my_classroom_questions:
     path: /my/classroom/questions
     defaults: { _controller: AppBundle:My/Classroom:classroomQuestions }
 
+my_question_bank:
+  path: /my/question_bank
+  defaults: { _controller: AppBundle:My/ItemBankExercise:itemBank }
+
 my_questions:
     path: /my/questions
     defaults: { _controller: AppBundle:My/Thread:questions }
@@ -3344,16 +3356,6 @@ question_bank_manage_question_picked:
     path: /question_bank/{id}/question/picked
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:pickedQuestion }
 
-answer_engine_submit:
-    path: /answer_engine/submit
-    defaults: { _controller: AppBundle:AnswerEngine/AnswerEngine:submitAnswer }
-    methods: ['POST']
-
-answer_engine_save:
-    path: /answer_engine/save
-    defaults: { _controller: AppBundle:AnswerEngine/AnswerEngine:saveAnswer }
-    methods: ['POST']
-
 answer_engine_review:
     path: /answer_engine/review
     defaults: { _controller: AppBundle:AnswerEngine/AnswerEngine:reviewSave }
@@ -3411,6 +3413,32 @@ facein_inspection_results_detail:
     defaults: { _controller: AppBundle:FaceInspection/InspectionResult:detail }
 
 # item-bank-exercise
+item_bank_exercise_show:
+  path: /item_bank_exercise/show/{id}/{tab}
+  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:show, tab: 'reviews' }
+  h5: true
+
+my_item_bank_exercise_show:
+  path:  /my/item_bank_exercise/show/{id}/{tab}
+  defaults: { _controller: AppBundle:My/ItemBankExercise:show, tab: 'reviews' }
+  h5: true
+
+item_bank_exercise_qrcode:
+  path: /item_bank_exercise/{id}/qrcode
+  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:qrcodeDownload }
+
+item_bank_exercise_qrcode_scan:
+  path: /item_bank_exercise/{id}/qrcode/scan
+  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:qrcode }
+
+item_bank_exercise_member_expired:
+  path:  /item_bank_exercise/{id}/member/expired
+  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:memberExpired }
+
+item_bank_exercise_member_deadline_reach:
+  path:  /item_bank_exercise/{id}/member/deadline/reach
+  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:deadlineReach }
+
 item_bank_exercise_manage_students:
     path: /item_bank_exercise/{exerciseId}/manage/students
     defaults: {_controller: AppBundle:ItemBankExercise/StudentManage:students}
@@ -3510,6 +3538,10 @@ item_bank_exercise_manage_students_deadline_batch:
 item_bank_exercise_manage_students_deadline_batch_deadline_check:
   path:  /item_bank_exercise/{exerciseId}/manage/student/deadline/check
   defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:checkUpdateDeadline }
+
+item_bank_exercise_explore:
+    path: /exercise/explore
+    defaults: { _controller: AppBundle:ItemBankExercise/Explore:index }
   
 goods_show:
     path:     /goods/show/{id}

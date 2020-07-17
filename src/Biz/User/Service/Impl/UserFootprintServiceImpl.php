@@ -72,7 +72,7 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
 
         $assessmentExerciseRecords = ArrayToolkit::index($this->getItemBankAssessmentExerciseRecordService()->search(
             ['assessmentExerciseIds' => ArrayToolkit::column($footprints, 'targetId')],
-            [],
+            ['createdTime' => 'ASC'],
             0,
             PHP_INT_MAX
         ), 'assessmentExerciseId');
@@ -107,7 +107,7 @@ class UserFootprintServiceImpl extends BaseService implements UserFootprintServi
 
         $chapterExerciseRecords = ArrayToolkit::index($this->getItemBankChapterExerciseRecordService()->search(
             ['itemCategoryIds' => ArrayToolkit::column($footprints, 'targetId')],
-            ['createdTime' => 'DESC'],
+            ['createdTime' => 'ASC'],
             0,
             PHP_INT_MAX
         ), 'itemCategoryId');

@@ -1,0 +1,19 @@
+{% import "macro.html.twig" as web_macro %}
+{% do script('app/js/course/header-top/index.js') %}
+
+<!-- 3、加入后：任务式学习 -->
+<div class="container cd-container">
+  <ol class="breadcrumb breadcrumb-o">
+    <li><a href="{{ path('homepage') }}">{{'homepage'|trans}}</a></li>
+    {% if page_type|default('guest') == 'member' %}
+      <li><a href="{{ path('item_bank_exercise_show', {id: exercise.id}) }}">{{ exercise.title }} </a></li>
+    {% else %}
+      <li class="active">{{ exercise.title }} </li>
+    {% endif %}
+  </ol>
+
+  {% block course_header_info %}{% endblock %}
+  <div class="es-section course-detail-section course-detail-section--normal clearfix">
+    {% block course_heard_content %}{% endblock %}
+  </div>
+</div>

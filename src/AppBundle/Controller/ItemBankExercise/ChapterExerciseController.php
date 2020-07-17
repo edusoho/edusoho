@@ -19,7 +19,7 @@ class ChapterExerciseController extends BaseController
             $categoryTree = $this->getItemCategoryService()->getItemCategoryTreeList($questionBank['itemBankId']);
         }
 
-        return $this->render('item-bank-exercise/chapter-exercise/list.html.twig', [
+        return $this->render('item-bank-exercise-manage/chapter-exercise/list.html.twig', [
             'exercise' => $exercise,
             'categoryTree' => $categoryTree,
             'questionBank' => $questionBank,

@@ -212,6 +212,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
             "\/my\/teaching\/course_sets/",
         ];
 
+        $biz['item_bank_exercise.show_redirect'] = [
+            "\/(my\/)?item_bank_exercise\/show\/(\d)+/i",
+        ];
+
         $biz['wechat.template_message_client'] = function ($biz) {
             $setting = $biz->service('System:SettingService');
             $loginBind = $setting->get('login_bind', []);

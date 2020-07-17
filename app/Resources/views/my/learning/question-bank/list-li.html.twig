@@ -1,0 +1,21 @@
+<div class="my-course-item cd-mb16 clearfix">
+
+  <a class="my-course-item__link" href="{{ path('item_bank_exercise_show', {id:exercise.id}) }}">
+    {{ lazy_img(filepath(exercise.cover.large|default(null), 'courseSet.png'), 'my-course-item__picture', exercise.title) }}
+  </a>
+  <div class="my-course-item__info">
+    <div class="my-course-item__title text-overflow">
+      <a class="cd-link-major" href="{{ path('item_bank_exercise_show', {id:exercise.id}) }}">{{ exercise.title }}</a>
+    </div>
+
+    <div class="my-course-item__progress cd-mt32 cd-clearfix">
+      <span class="my-course-item__progress__text" style="width: 14%">{{ 'item_bank_exercise.export.completion_rate'|trans }}</span>
+      <span class="my-course-item__progress__text">{{ member.completionRate }}%</span>
+      <span class="my-course-item__progress__text" style="width: 14%">{{ 'item_bank_exercise.export.accuracy'|trans }}</span>
+      <span class="my-course-item__progress__text">{{ member.masteryRate }}%</span>
+    </div>
+  </div>
+  <div class="my-course-item__btn">
+    <a class="btn cd-btn cd-btn-primary" href="{{ path('my_item_bank_exercise_show', {id:exercise.id}) }}">{{ 'course.block_grid.countinue_learn_btn'|trans }}</a>
+  </div>
+</div>

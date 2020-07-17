@@ -1,0 +1,29 @@
+<ul class="nav nav-tabs nav-tabs--course" role="tablist">
+  {% for tab in tabs %}
+      <li role="presentation" id="{{ tab.type }}_{{ tab.id }}"
+          class="{% if route_params.tab|default('') == tab.type ~ '_' ~ tab.id  or nav|default('') == tab.type ~ '_' ~ tab.id %}active{% endif %}">
+        <a
+          {% if member|default(false) and previewAs|default(null) %}
+            href="{{ path('my_item_bank_exercise_show', {'id': exercise.id, 'tab': tab.type ~ '_' ~ tab.id}) }}"
+          {% else %}
+            href="{{ path('item_bank_exercise_show', {'id': exercise.id, 'tab': tab.type ~ '_' ~ tab.id}) }}"
+          {% endif %}
+        >
+          {{ tab.title }}
+        </a>
+      </li>
+  {% endfor %}
+  <li role="presentation" id="reviews"
+      class="{% if route_params.tab|default('') == 'reviews'  or nav|default('') == 'reviews' %}active{% endif %}">
+    <a
+      {% if member|default(false) and previewAs|default(null) %}
+        href="{{ path('my_item_bank_exercise_show', {'id': exercise.id, 'tab': 'reviews'}) }}"
+      {% else %}
+        href="{{ path('item_bank_exercise_show', {'id': exercise.id, 'tab': 'reviews'}) }}"
+      {% endif %}
+    >
+      {{ 'course.tab.reviews'|trans }}
+      <small>({{ exercise.ratingNum|default(0) }})</small>
+    </a>
+  </li>
+</ul>

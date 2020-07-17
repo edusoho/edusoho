@@ -95,9 +95,30 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function search($conditions, $orderBy, $start, $limit)
     {
+        $orderBy = $this->getOrderBys($orderBy);
         $conditions = $this->_prepareCourseConditions($conditions);
 
         return $this->getExerciseDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    protected function getOrderBys($order)
+    {
+        if (is_array($order)) {
+            return $order;
+        }
+
+        $typeOrderByMap = [
+            'rating' => ['rating' => 'DESC'],
+            'recommended' => ['recommendedTime' => 'DESC'],
+            'studentNum' => ['studentNum' => 'DESC'],
+            'recommendedSeq' => ['recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC'],
+            'hotSeq' => ['studentNum' => 'DESC', 'id' => 'DESC'],
+        ];
+        if (isset($typeOrderByMap[$order])) {
+            return $typeOrderByMap[$order];
+        } else {
+            return ['createdTime' => 'DESC'];
+        }
     }
 
     public function tryManageExercise($exerciseId = 0, $teacher = 1)
@@ -429,6 +450,21 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     public function findExercisesByLikeTitle($title)
     {
         return $this->getExerciseDao()->findByLikeTitle($title);
+    }
+
+    public function tryTakeExercise($exerciseId)
+    {
+        $exercise = $this->get($exerciseId);
+        $user = $this->getCurrentUser();
+        if (empty($exercise)) {
+            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
+        }
+        if (!$this->canTakeItemBankExercise($exercise)) {
+            $this->createNewException(ItemBankExerciseException::FORBIDDEN_TAKE_EXERCISE());
+        }
+        $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exercise['id'], $user['id']);
+
+        return [$exercise, $member];
     }
 
     /**

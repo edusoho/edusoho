@@ -134,6 +134,34 @@ class AssessmentExerciseServiceTest extends BaseTestCase
         $answerRecord = $this->getItemBankAssessmentExerciseService()->startAnswer(1, 1, 1);
     }
 
+    public function testFindByExerciseIdAndModuleId()
+    {
+        $this->mockAssessmentExercise();
+        $res = $this->getItemBankAssessmentExerciseDao()->findByExerciseIdAndModuleId(1, 1);
+
+        $this->assertEquals(1, $res[0]['exerciseId']);
+        $this->assertEquals(1, $res[0]['moduleId']);
+        $this->assertEquals(1, $res[0]['assessmentId']);
+    }
+
+    public function testIsAssessmentExercise()
+    {
+        $this->mockAssessmentExercise();
+        $res = $this->getItemBankAssessmentExerciseDao()->isAssessmentExercise(1, 1, 1);
+
+        $this->assertEquals(1, $res['exerciseId']);
+        $this->assertEquals(1, $res['moduleId']);
+        $this->assertEquals(1, $res['assessmentId']);
+    }
+
+    public function testAddAssessments()
+    {
+        $this->getItemBankAssessmentExerciseService()->addAssessments(1, 1, [['id' => 1], ['id' => 2]]);
+        $res = $this->getItemBankAssessmentExerciseService()->findByExerciseIdAndModuleId(1, 1);
+
+        $this->assertEquals(2, count($res));
+    }
+
     protected function mockAssessmentExercise()
     {
         $this->getItemBankAssessmentExerciseDao()->create([

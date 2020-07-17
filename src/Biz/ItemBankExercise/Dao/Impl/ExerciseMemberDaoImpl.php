@@ -17,11 +17,16 @@ class ExerciseMemberDaoImpl extends AdvancedDaoImpl implements ExerciseMemberDao
         ]);
     }
 
+    public function findByUserIdAndRole($userId, $role)
+    {
+        return $this->findByFields(['userId' => $userId, 'role' => $role]);
+    }
+
     public function declares()
     {
         return [
             'timestamps' => ['createdTime', 'updatedTime'],
-            'orderbys' => ['createdTime', 'updatedTime', 'deadline'],
+            'orderbys' => ['createdTime', 'updatedTime', 'deadline', 'doneQuestionNum'],
             'conditions' => [
                 'id = :id',
                 'id NOT IN (:excludeIds)',
@@ -31,6 +36,9 @@ class ExerciseMemberDaoImpl extends AdvancedDaoImpl implements ExerciseMemberDao
                 'exerciseId IN (:exerciseIds)',
                 'role = :role',
                 'locked = :locked',
+                'doneQuestionNum > :doneQuestionNum',
+                'updatedTime >= :startTimeGreaterThan',
+                'updatedTime < :startTimeLessThan',
             ],
         ];
     }

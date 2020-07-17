@@ -5,6 +5,7 @@ namespace Biz\ItemBankExercise\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\TimeMachine;
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
 use Biz\ItemBankExercise\ExpiryMode\ExpiryModeFactory;
@@ -64,8 +65,8 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
 
             $userId = $this->getCurrentUser()->getId();
             $manage = new MemberManage($this->biz);
-            $studentMember = $manage->getMemberClass('teacher');
-            $member = $studentMember->join($exerciseId, $userId, ['remark' => '']);
+            $teacherMember = $manage->getMemberClass('teacher');
+            $member = $teacherMember->join($exerciseId, $userId, ['remark' => '']);
 
             $this->commit();
         } catch (\Exception $e) {
@@ -229,21 +230,63 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         return true;
     }
 
-    private function addMember($member, $reason = [])
+    public function isMemberNonExpired($exercise, $member)
     {
+        if (empty($exercise) || empty($member)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        if (0 == $member['deadline']) {
+            return true;
+        }
+
+        if ($member['deadline'] > time()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function quitExerciseByDeadlineReach($userId, $exerciseId)
+    {
+        $exercise = $this->getExerciseService()->get($exerciseId);
+        if (empty($exercise)) {
+            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
+        }
+
+        $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
+        if (empty($member) || ('student' != $member['role'])) {
+            $this->createNewException(ItemBankExerciseMemberException::NOTFOUND_MEMBER());
+        }
+
+        $isNonExpired = $this->isMemberNonExpired($exercise, $member);
+        if ($isNonExpired) {
+            $this->createNewException(ItemBankExerciseMemberException::NON_EXPIRED_MEMBER());
+        }
+
         try {
             $this->beginTransaction();
-            $member = $this->getExerciseMemberDao()->create($member);
-            if (!empty($reason)) {
-                $this->createOperateRecord($member, 'join', $reason);
-            }
+
+            $this->removeMember($member, []);
+
+            $user = $this->getUserService()->getUser($userId);
+            $this->getLogService()->info(
+                'item_bank_exercise',
+                'remove_student',
+                "《{$exercise['title']}》(#{$exercise['id']})，学员({$user['nickname']})因达到有效期退出教学计划(#{$member['id']})"
+            );
+            $this->dispatchEvent('exercise.quit', $exercise, ['member' => $member]);
+
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
             throw $e;
         }
+    }
 
-        return $member;
+    public function findByUserIdAndRole($userId, $role)
+    {
+        return $this->getExerciseMemberDao()->findByUserIdAndRole($userId, $role);
     }
 
     private function removeMember($member, $reason = [])
@@ -283,23 +326,6 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         $record = $this->getMemberOperationRecordService()->create($record);
 
         return $record;
-    }
-
-    protected function recordLog($exercise, $userId, $info)
-    {
-        $user = $this->getUserService()->getUser($userId);
-        $this->getLogService()->info(
-            'item_bank_exercise',
-            'add_student',
-            "《{$exercise['title']}》(#{$exercise['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$info['remark']}",
-            [
-                'exercise' => $exercise['id'],
-                'title' => $exercise['title'],
-                'userId' => $user['id'],
-                'nickname' => $user['nickname'],
-                'remark' => $info['remark'],
-            ]
-        );
     }
 
     /**

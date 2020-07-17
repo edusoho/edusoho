@@ -9,4 +9,6 @@ interface ChapterExerciseRecordDao extends GeneralDaoInterface
     public function getByAnswerRecordId($answerRecordId);
 
     public function getLatestRecord($moduleId, $itemCategoryId, $userId);
+
+    public function findWeekRankRecords($exerciseId);
 }

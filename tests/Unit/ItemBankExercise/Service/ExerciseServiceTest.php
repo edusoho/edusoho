@@ -344,6 +344,22 @@ class ExerciseServiceTest extends BaseTestCase
         $this->assertEquals(3, count($res));
     }
 
+    public function testTryTakeExercise()
+    {
+        $exercise = $this->createExercise();
+        $member = $this->getExerciseMemberDao()->create([
+            'exerciseId' => $exercise['id'],
+            'userId' => 1,
+            'role' => 'student',
+            'remark' => 'aaa',
+        ]);
+
+        list($exerciseRes, $memberRes) = $this->getExerciseService()->tryTakeExercise($exercise['id']);
+
+        $this->assertArrayEquals($exercise, $exerciseRes);
+        $this->assertArrayEquals($memberRes, $memberRes);
+    }
+
     protected function mockUser()
     {
         $currentUser = new CurrentUser();
