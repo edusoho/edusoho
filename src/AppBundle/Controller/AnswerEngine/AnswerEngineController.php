@@ -3,15 +3,11 @@
 namespace AppBundle\Controller\AnswerEngine;
 
 use AppBundle\Controller\BaseController;
-use Biz\User\Service\UserService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
-use Codeages\Biz\ItemBank\Item\Service\QuestionFavoriteService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class AnswerEngineController extends BaseController
 {
@@ -89,14 +85,6 @@ class AnswerEngineController extends BaseController
     }
 
     /**
-     * @return AnswerReportService
-     */
-    protected function getAnswerReportService()
-    {
-        return $this->createService('ItemBank:Answer:AnswerReportService');
-    }
-
-    /**
      * @return AssessmentService
      */
     protected function getAssessmentService()
@@ -110,29 +98,5 @@ class AnswerEngineController extends BaseController
     protected function getAnswerSceneService()
     {
         return $this->createService('ItemBank:Answer:AnswerSceneService');
-    }
-
-    /**
-     * @return ServiceKernel
-     */
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
-    }
-
-    /**
-     * @return UserService
-     */
-    protected function getUserService()
-    {
-        return $this->createService('User:UserService');
-    }
-
-    /**
-     * @return QuestionFavoriteService
-     */
-    protected function getQuestionFavoriteService()
-    {
-        return $this->createService('ItemBank:Item:QuestionFavoriteService');
     }
 }

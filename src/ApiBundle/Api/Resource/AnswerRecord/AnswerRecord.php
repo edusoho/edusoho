@@ -5,17 +5,12 @@ namespace ApiBundle\Api\Resource\AnswerRecord;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
-use Biz\Common\CommonException;
 
 class AnswerRecord extends AbstractResource
 {
     public function get(ApiRequest $request, $id)
     {
         $answerRecord = $this->getAnswerRecordService()->get($id);
-        if (empty($answerRecord) || $this->getCurrentUser()['id'] != $answerRecord['user_id']) {
-            throw CommonException::ERROR_PARAMETER();
-        }
-
         if (empty($answerRecord['answer_report_id'])) {
             return (object) [];
         }
