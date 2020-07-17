@@ -80,7 +80,7 @@ class ExerciseController extends BaseController
         );
     }
 
-    public function showAction(Request $request, $id, $tab = 'reviews')
+    public function showAction(Request $request, $id, $tab = 'reviews', $moduleId = 0)
     {
         $user = $this->getCurrentUser();
         $exercise = $this->getExerciseService()->get($id);
@@ -221,15 +221,14 @@ class ExerciseController extends BaseController
         );
     }
 
-    public function moduleAction(Request $request, $previewAs, $exerciseId, $tab)
+    public function moduleAction(Request $request, $previewAs, $exerciseId, $moduleId)
     {
-        list($type, $moduleId) = explode('_', $tab);
+        $module = $this->getExerciseModuleService()->get($moduleId);
 
         return $this->render(
             'item-bank-exercise/tabs/module.html.twig',
             [
-                'tab' => $tab,
-                'moduleType' => $type,
+                'moduleType' => $module['type'],
                 'moduleId' => $moduleId,
                 'exerciseId' => $exerciseId,
                 'previewAs' => $previewAs,

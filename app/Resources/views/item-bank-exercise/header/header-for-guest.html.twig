@@ -109,7 +109,7 @@
           <li class="es-qrcode top hidden-xs mrl" data-url="{{ path('item_bank_exercise_qrcode_scan', { id: exercise.id }) }}">
             <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-saoyisao course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'site.qrcode_tips'|trans }}</span></a>
             <span class="qrcode-popover">
-              <img class="mb0" src="" alt="">{{ 'site.tips.scan_qrcode_tips'|trans }}
+              <img class="mb0" src="{{ path('item_bank_exercise_qrcode_scan',{'id':exercise.id}) }}" alt="">{{ 'site.tips.scan_qrcode_tips'|trans }}
             </span>
           </li>
 

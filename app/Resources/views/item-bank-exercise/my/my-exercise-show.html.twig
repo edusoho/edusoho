@@ -11,7 +11,7 @@
 
   {% set route_params = app.request.attributes.get('_route_params') %}
 
-  {{ render(controller('AppBundle:ItemBankExercise/Exercise:header',{previewAs:previewAs,exercise: exercise} )) }}
+  {{ render(controller('AppBundle:My/ItemBankExercise:header',{previewAs:previewAs,exercise: exercise} )) }}
 
   <div class="container cd-container">
     <div class="row cd-row">

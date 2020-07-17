@@ -3424,13 +3424,13 @@ facein_inspection_results_detail:
 
 # item-bank-exercise
 item_bank_exercise_show:
-  path: /item_bank_exercise/show/{id}/{tab}
-  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:show, tab: 'reviews' }
+  path: /item_bank_exercise/{id}/{tab}/{moduleId}
+  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:show, tab: 'reviews',moduleId: '' }
   h5: true
 
 my_item_bank_exercise_show:
-  path:  /my/item_bank_exercise/show/{id}/{tab}
-  defaults: { _controller: AppBundle:My/ItemBankExercise:show, tab: 'reviews' }
+  path:  /my/item_bank_exercise/{id}/{tab}/{moduleId}
+  defaults: { _controller: AppBundle:My/ItemBankExercise:show, tab: 'reviews',moduleId: '' }
   h5: true
 
 item_bank_exercise_qrcode:

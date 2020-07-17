@@ -91,7 +91,7 @@ class ItemBankExerciseController extends BaseController
         );
     }
 
-    public function showAction(Request $request, $id, $tab = 'reviews')
+    public function showAction(Request $request, $id, $tab = 'reviews', $moduleId = 0)
     {
         $user = $this->getCurrentUser();
         $exercise = $this->getItemBankExerciseService()->get($id);
@@ -106,7 +106,7 @@ class ItemBankExerciseController extends BaseController
         }
 
         return $this->render(
-            'item-bank-exercise/exercise-show.html.twig',
+            'item-bank-exercise/my/my-exercise-show.html.twig',
             [
                 'tab' => $tab,
                 'tabs' => $this->getExerciseModuleService()->findByExerciseId($id),
