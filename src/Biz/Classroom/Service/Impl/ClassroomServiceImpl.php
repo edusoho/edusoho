@@ -235,7 +235,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'type' => 'classroom',
             'productId' => $product['id'],
             'title' => $classroom['title'],
-            'subtitle' => '',
+            'subtitle' => $classroom['subtitle'],
             'creator' => $classroom['creator'],
         ]);
 
@@ -267,7 +267,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $goods = $this->getGoodsService()->updateGoods($existGoods['id'], [
             'title' => $classroom['title'],
-            'subtitle' => '',
+            'subtitle' => $classroom['subtitle'],
             'summary' => $classroom['about'],
             'images' => [
                 'large' => $classroom['largePicture'],
@@ -430,7 +430,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         if (array_intersect(
             array_keys($fields),
-            ['title', 'about', 'orgId', 'orgCode', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'buyable', 'showable', 'expiryMode', 'expiryValue', 'service']
+            ['title', 'subtitle', 'about', 'orgId', 'orgCode', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'buyable', 'showable', 'expiryMode', 'expiryValue', 'service']
         )) {
             $this->syncProductAndGoodsAndSpecs($classroom);
         }
@@ -507,6 +507,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'ratingNum',
             'categoryId',
             'title',
+            'subtitle',
             'status',
             'about',
             'description',
