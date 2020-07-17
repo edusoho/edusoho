@@ -21,7 +21,7 @@ class UpdateProductVersionJob extends AbstractJob
 
     protected function getProducts()
     {
-        return $this->getProductService()->findUpdateVersionProductList();
+        return $this->getProductService()->findUpdatedVersionProductList();
     }
 
     /**
