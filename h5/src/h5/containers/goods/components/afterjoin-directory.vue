@@ -47,22 +47,22 @@
   </div>
 </template>
 <script>
-import swiperDirectory from "./swiper-directory.vue";
-import utilDirectory from "./util-directory.vue";
-import lessonDirectory from "./lesson-directory.vue";
-import Api from "@/api";
-import { mapState, mapMutations } from "vuex";
-import * as types from '@/store/mutation-types'
+import swiperDirectory from './swiper-directory.vue';
+import utilDirectory from './util-directory.vue';
+import lessonDirectory from './lesson-directory.vue';
+// import Api from "@/api";
+import { mapState, mapActions } from 'vuex';
+import * as types from '@/store/mutation-types';
 export default {
-  name: "AfterjoinDirectory",
+  name: 'AfterjoinDirectory',
   components: {
     swiperDirectory,
     utilDirectory,
-    lessonDirectory
+    lessonDirectory,
   },
   data() {
     return {
-      scroll: "",
+      scroll: '',
       item: [],
       level: 3, // 目录层数
       chapterNum: 0, // 章节数
@@ -75,38 +75,46 @@ export default {
       taskId: null,
       nodata: false,
       allTask: {},
-      allTaskId: [] //所有task的id
+      allTaskId: [], // 所有task的id
     };
   },
+  created() {
+    this.getCourseLessons({
+      courseId: this.selectedPlanId,
+    }).then(res => {
+      console.log(res);
+    });
+  },
   computed: {
-    ...mapState("course", {
+    ...mapState('course', {
       nextStudy: state => state.nextStudy,
       selectedPlanId: state => state.selectedPlanId,
       OptimizationCourseLessons: state => state.OptimizationCourseLessons,
       details: state => state.details,
       // allTask: state => state.allTask,
-      taskStatus: state => state.taskStatus
+      taskStatus: state => state.taskStatus,
     }),
     hasChapter: function() {
       return this.chapterNum > 0;
-    }
+    },
   },
   watch: {
     nextStudy: {
-      handler: "getNextStudy",
-      immediate: true
+      handler: 'getNextStudy',
+      immediate: true,
     },
     selectedPlanId: {
-      handler: "processItem",
+      handler: 'processItem',
       immediate: true,
-      deep: true
+      deep: true,
     },
     taskStatus: {
-      handler: "changeTaskStatus",
-      immediate: false
-    }
+      handler: 'changeTaskStatus',
+      immediate: false,
+    },
   },
   methods: {
+    ...mapActions('course', ['getCourseLessons']),
     getNextStudy() {
       if (this.nextStudy.nextTask) {
         this.taskId = Number(this.nextStudy.nextTask.id);
@@ -133,7 +141,7 @@ export default {
       this.setItems(res);
       this.mapChild(this.item);
       this.startScroll();
-      this.$store.commit(`course/${types.SET_ALL_TASK}`,this.allTask)
+      this.$store.commit(`course/${types.SET_ALL_TASK}`, this.allTask);
     },
     resetData() {
       this.chapterNum = 0; // 章节数
@@ -152,11 +160,11 @@ export default {
     // 递归遍历目录
     mapChild(list) {
       list.map((item, index) => {
-        if (item.type === "chapter") {
+        if (item.type === 'chapter') {
           this.formatChapter(item, list, index);
-        } else if (item.type === "unit") {
+        } else if (item.type === 'unit') {
           this.formatUnit(item, list, index);
-        } else if (item.type === "lesson") {
+        } else if (item.type === 'lesson') {
           this.formatLesson(item, list, index);
         } else {
           this.formatTask(item, list, index);
@@ -169,15 +177,14 @@ export default {
           return;
         }
         const NARTAB = 44;
-        const PROCESSBAR = document.getElementById("progress-bar");
-        const SWIPER = document.getElementById("swiper-directory");
+        const PROCESSBAR = document.getElementById('progress-bar');
+        const SWIPER = document.getElementById('swiper-directory');
         const TASK = document.getElementById(this.taskId);
         const PROCESSHEIGHT = !PROCESSBAR ? 0 : PROCESSBAR.offsetHeight;
         const SWIPERHEIGHT = !SWIPER ? 0 : SWIPER.offsetHeight;
         const TASKTOP = !TASK ? 0 : TASK.offsetTop;
         const scrolltop = TASKTOP - PROCESSHEIGHT - NARTAB - SWIPERHEIGHT;
         if (scrolltop < document.documentElement.clientWidth) {
-          return;
         }
         // window.scrollTo({
         //   top: scrolltop
@@ -194,8 +201,8 @@ export default {
       // 实际章数
       if (chapter.isExist) {
         this.chapterNum += 1;
-        //当前章节下统计章数量
-        this.computedNum(1, "chapterNum");
+        // 当前章节下统计章数量
+        this.computedNum(1, 'chapterNum');
       }
       if (Array.isArray(chapter.children) && chapter.children.length > 0) {
         this.mapChild(chapter.children);
@@ -209,12 +216,12 @@ export default {
       // 实际节数
       if (unit.isExist) {
         this.unitNum += 1;
-        //当前章节下统计节数量
-        this.computedNum(1, "unitNum");
+        // 当前章节下统计节数量
+        this.computedNum(1, 'unitNum');
       }
       if (Array.isArray(unit.children) && unit.children.length > 0) {
-        //当前章节下统计课时数量
-        this.computedNum(unit.children.length, "lessonNum");
+        // 当前章节下统计课时数量
+        this.computedNum(unit.children.length, 'lessonNum');
         this.mapChild(unit.children);
       }
     },
@@ -225,8 +232,8 @@ export default {
         this.lessonNum += 1;
       }
       if (lesson.tasks) {
-        //当前章节下统计任务数量
-        this.computedNum(lesson.tasks.length - 1, "tasksNum");
+        // 当前章节下统计任务数量
+        this.computedNum(lesson.tasks.length - 1, 'tasksNum');
         this.mapChild(lesson.tasks);
       }
     },
@@ -250,7 +257,7 @@ export default {
       // 非默认教学计划 是0  默认计划是lesson的index
       if (!task.mode) {
         this.getMainTask(task, 0);
-      } else if (task.mode === "lesson") {
+      } else if (task.mode === 'lesson') {
         this.getMainTask(task, index);
       }
     },
@@ -261,14 +268,14 @@ export default {
           this.item[this.currentChapter].children[this.currentUnit].children[
             this.currentLesson
           ],
-          "index",
-          index
+          'index',
+          index,
         );
       } else {
         this.$set(
           this.item[this.currentUnit].children[this.currentLesson],
-          "index",
-          index
+          'index',
+          index,
         );
       }
     },
@@ -283,16 +290,16 @@ export default {
     changeChapter(slideIndex) {
       this.slideIndex = slideIndex;
     },
-    //更改当前课时学识进度状态
+    // 更改当前课时学识进度状态
     changeTaskStatus(val) {
       if (!val) {
         return;
       }
-      if (val === "finish") {
+      if (val === 'finish') {
         this.changeLockStatus();
       }
       const task = this.allTask[this.taskId];
-      let result = {};
+      const result = {};
       if (task.level === 2) {
         const nowTask = this.item[task.unitIndex].children[task.LessonIndex]
           .tasks[task.taskIndex];
@@ -314,7 +321,7 @@ export default {
       }
     },
     changeLockStatus() {
-      if (this.details.learnMode !== "lockMode") {
+      if (this.details.learnMode !== 'lockMode') {
         return;
       }
       const taskIndex = this.allTaskId.indexOf(this.taskId.toString());
@@ -333,7 +340,7 @@ export default {
           nowTask.lock = false;
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
