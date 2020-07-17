@@ -106,6 +106,7 @@ class ExerciseController extends BaseController
             [
                 'tab' => $tab,
                 'tabs' => $this->getExerciseModuleService()->findByExerciseId($id),
+                'moduleId' => $moduleId,
                 'exercise' => $exercise,
                 'isExerciseTeacher' => $isExerciseTeacher,
                 'member' => $member,

@@ -111,6 +111,7 @@ class ItemBankExerciseController extends BaseController
                 'tab' => $tab,
                 'tabs' => $this->getExerciseModuleService()->findByExerciseId($id),
                 'member' => $member,
+                'moduleId' => $moduleId,
                 'isExerciseTeacher' => 'teacher' == $member['role'],
                 'exercise' => $exercise,
                 'previewAs' => 'member',

@@ -4,9 +4,9 @@
           class="{% if route_params.moduleId|default('') == tab.id%}active{% endif %}">
         <a
           {% if member|default(false) and previewAs|default(null) %}
-            href="{{ path('my_item_bank_exercise_show', {'id': exercise.id, 'tab': 'module', 'moduleId': tab.id}) }}"
+            href="{{ path('my_item_bank_exercise_show', {'id': exercise.id, 'tab': tab.type, 'moduleId': tab.id}) }}"
           {% else %}
-            href="{{ path('item_bank_exercise_show', {'id': exercise.id, 'tab': 'module', 'moduleId':tab.id}) }}"
+            href="{{ path('item_bank_exercise_show', {'id': exercise.id, 'tab': tab.type, 'moduleId':tab.id}) }}"
           {% endif %}
         >
           {{ tab.title }}
