@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AppBundle\Controller\ItemBankExercise;
-
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
@@ -18,11 +16,11 @@ class MemberOperationRecordController extends BaseController
     {
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
 
-        $condition = array(
+        $condition = [
             'exerciseId' => $exercise['id'],
             'status' => 'success',
             'operateType' => $operatType,
-        );
+        ];
 
         $fields = $request->query->all();
         if (isset($fields['keyword']) && !empty($fields['keyword'])) {
@@ -37,7 +35,7 @@ class MemberOperationRecordController extends BaseController
 
         $records = $this->getMemberOperationService()->search(
             $condition,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -54,13 +52,13 @@ class MemberOperationRecordController extends BaseController
 
         return $this->render(
             "item-bank-exercise-manage/member-record/{$operatType}.html.twig",
-            array(
+            [
                 'paginator' => $paginator,
                 'records' => $records,
                 'users' => $users,
                 'orders' => $orders,
                 'conditions' => $condition,
-            )
+            ]
         );
     }
 

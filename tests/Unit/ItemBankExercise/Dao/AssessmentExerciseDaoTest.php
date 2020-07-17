@@ -3,7 +3,6 @@
 namespace Tests\Unit\ItemBankExercise\Dao;
 
 use Biz\BaseTestCase;
-
 use Biz\ItemBankExercise\Dao\AssessmentExerciseDao;
 
 class AssessmentExerciseDaoTest extends BaseTestCase

@@ -26,14 +26,14 @@ class ItemBankExerciseExtension extends \Twig_Extension
 
     public function getFilters()
     {
-        return array();
+        return [];
     }
 
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('is_exercise_member_expired', array($this, 'isMemberExpired')),
-        );
+        return [
+            new \Twig_SimpleFunction('is_exercise_member_expired', [$this, 'isMemberExpired']),
+        ];
     }
 
     public function isMemberExpired($exercise, $member)

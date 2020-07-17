@@ -318,9 +318,9 @@ class ExerciseController extends BaseController
     {
         $records = $this->getCacheService()->get("item_bank_exercise({$exerciseId})");
         $records = json_decode($records, true);
-        if (empty($records)){
+        if (empty($records)) {
             $records = $this->getChapterExerciseRecordService()->findWeekRankRecords($exerciseId);
-            $expiryTime = mktime(23,59,59,date('m'),date('d')-date('w')+7,date('Y'));
+            $expiryTime = mktime(23, 59, 59, date('m'), date('d') - date('w') + 7, date('Y'));
             $this->getCacheService()->set("item_bank_exercise({$exerciseId})", json_encode($records), $expiryTime);
         }
 
