@@ -39,7 +39,7 @@
           {% set questionBank = questionBanks[exercise.questionBankId]|default(null) %}
           <tr>
             <td>
-              {{exercise.title}}
+              <a href="{{ path('item_bank_exercise_show', {id: exercise.id}) }}" target="_blank"><strong>{{ exercise.title }}</strong></a>
             </td>
             <td>{{ questionBank.itemBank.item_num|default('0') }}</td>
             <td>{{ exercise.assessment_num|default('0') }}</td>

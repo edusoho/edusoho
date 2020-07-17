@@ -450,7 +450,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         if (empty($exercise)) {
             $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
         }
-        if (!$this->canTakeItemBankExercise($exercise)) {
+        if (!$this->canTakeItemBankExercise($exercise['id'])) {
             $this->createNewException(ItemBankExerciseException::FORBIDDEN_TAKE_EXERCISE());
         }
         $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exercise['id'], $user['id']);
