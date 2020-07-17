@@ -1,0 +1,55 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{ 'course.advanced.content_title'|trans }}</h3>
+  </div>
+  <div class="panel-body">
+    {% for member in members if members %}
+      {% set user = users[member.userId] %}
+      <div class="media media-default">
+        <div class="clearfix" style="position: relative;width:100%;height:56px;background:rgba(245,245,245,1);border-radius:4px;">
+          <div style="width:22px;height:30px;margin: 13px 228px 13px 10px;position: absolute;display: inline-block">
+            {% if loop.index == 1 %}
+              <img style="width:22px;height:30px;" src="{{ asset('assets/img/item-bank-exercise/medal_gold@2x.png') }}">
+            {% elseif loop.index == 2%}
+              <img style="width:22px;height:30px;" src="{{ asset('assets/img/item-bank-exercise/medal_silver@2x.png') }}">
+            {% elseif loop.index == 3%}
+              <img style="width:22px;height:30px;" src="{{ asset('assets/img/item-bank-exercise/medal_copper@2x.png') }}">
+            {% else%}
+              <div class="label-default" style="background-color:#D8D8D8;width:22px;height:24px;color: #FFFFFF;text-align: center;display: inline-block">{{ loop.index }}</div>
+            {% endif %}
+          </div>
+          <div style="width: 40px;height: 40px;margin: 8px 176px 8px 44px;position: absolute;display: inline-block">
+            <a class="{% if not user.destroyed|default(0) %}js-user-card{% endif %}" href="{{ path('user_show', {'id': user.id}) }}"
+               data-card-url="{{ path('user_card_show', {'userId': user.id}) }}"
+               data-user-id="{{ user.id }}"
+               data-original-title="" title="">
+              <img class="avatar-sm" src="{{ filepath(user.mediumAvatar, 'avatar.png') }}"></a>
+          </div>
+          <div style="display: inline-block;top:50%;transform: translateY(-50%);left:93px;position: absolute;width: 75px">
+            {% if not user.destroyed|default(0) %}
+              <a class="link-dark link-dark" style="vertical-align: super;" href="{{ path('user_show', {'id': user.id}) }}">{% if user.nickname|length > 5 %}{{ user.nickname|slice(0,4) ~ '...' }}{% else %}{{ user.nickname }}{% endif %}</a>
+            {% else %}
+              <a class="link-dark link-dark" style="vertical-align: super;">{{ 'user.user_had_destroyed'|trans }}</a>
+            {% endif %}
+          </div>
+          {% if member.doneQuestionNum >= 10000 %}
+            {% set question_num = member.doneQuestionNum/10000 ~ 'w' %}
+          {% elseif member.doneQuestionNum < 10000 and member.doneQuestionNum >= 1000 %}
+            {% set question_num = member.doneQuestionNum/1000 ~ 'k' %}
+          {% else %}
+            {% set question_num = member.doneQuestionNum %}
+          {% endif %}
+          <div class="pull-right" style="height: 56px;line-height: 56px;margin-right: 10px">
+            <span style="color: #999999;font-size: 12px">{{ 'course.testpaper_manage.total_count'|trans }}</span>
+            <span style="font-size: 16px;{% if loop.index < 4 %}color:#03C777;{% endif %}">{{ question_num }}</span>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="empty task-empty js-task-empty">
+        {{'user.account.empty'|trans}}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+

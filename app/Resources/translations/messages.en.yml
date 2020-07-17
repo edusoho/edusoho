@@ -76,6 +76,7 @@ site.org.code: Code
 site.tips: Tips
 site.qrcode_tips: Scan
 site.tips.scan_qrcode_tips: 'Scan the QR code to continue, the code will be expired in half an hour'
+site.tips.exercise_qrcode_tips: 'Scan the QR code on the right and go to the mobile terminal to learn'
 site.validate_rules.max_int: 'Maximum 9 digits integer'
 site.validate_rules.two_decimal_places: 'Keep the second decimal'
 site.btn.expand: Expand
@@ -1163,6 +1164,7 @@ course.expiry_date.end_date_mode: "End Date：%expiryEndDate%\n"
 course.expiry_date.date_mode: "Start Date：%expiryStartDate% &nbsp; End Date：%expiryEndDate%\n"
 course.expiry_date.forever_mode: Permanent
 course.expiry_date.expiryStartDate: "The course will start at %expiryStartDate%, Please be patient.\n"
+item_bank_exercise.expiry_date.expiryStartDate: "The item bank exercise will start at %expiryStartDate%, Please be patient.\n"
 course.expiry_date.overdue: '（Be expired）'
 course.expiry_date.today_will_overdue: '(Expired today)'
 course.expiry_date.tomorrow_will_overdue: '(Expired tommorrow)'
@@ -1194,9 +1196,11 @@ course.check.plan: View Plan
 course.share: Share
 course.belong_to_classroom_tips: 'The course is belong to<a href="%classroomUrl%">%classroomTitle%</a>please enroll to learn'
 course.course_limited_tips: 'Limited access, please contact the customer service.'
+item_bank_exercise.course_limited_tips: 'Limited access, please contact the customer service.'
 course.course_closed_tips: 'Sorry, this course %title% has been closed.'
 course.courseSet_closed_tips: 'Sorry, this courseSet %title% has been closed.'
 course.unbuyable.unpublished_tips: 'You are not allowed to enroll before the course published.'
+item_bank_exercise.unbuyable.unpublished_tips: 'You are not allowed to enroll before the item bank exercise published.'
 course.unbuyable.over_buy_expiry_time_tips: 'You are not allowded to enroll, since it‘s expired.'
 course.unbuyable.over_expiry_end_date_tips: 'You are not allowded to enroll, since it''s expired.'
 course.introduction: Intro
@@ -1236,6 +1240,7 @@ course.teacher: Tearcher：
 course.reward_point.award: Reward Point Award
 course.reward_point.course_award: Course Award
 course.teacher.content_title: Teacher
+course.advanced.content_title: Students with excellent grades last week
 course.characteristic.content_title: 'Course features'
 course.newest_students.content_title: 'New students'
 course.students_dynamic.content_title: 'Latest updates'
@@ -1487,6 +1492,7 @@ course.testpaper_manage.passed_condition: 'Passing score is %passedCondition% po
 course.testpaper_manage.limited_time: '%limitedTime% minutes'
 course.testpaper_manage.unlimited: 'No limits'
 course.testpaper_manage.count: '%itemCount% questions'
+course.testpaper_manage.total_count: 'questions'
 course.testpaper_manage.testpaper_status.draft: Draft
 course.testpaper_manage.testpaper_status.open: Published
 course.testpaper_manage.testpaper_status.closed: Closed
@@ -1886,6 +1892,15 @@ course.live.replay_manage.lesson_add_btn: Add
 course.liveroom.content_title: 'Live'
 course.liveroom.open_liveroom_tips: 'Live entering, please wait ...'
 
+item_bank_exercise.assessment.exercise.start_btn: Start
+item_bank_exercise.assessment.exercise.continue_btn: Continue
+item_bank_exercise.assessment.exercise.view_btn: View
+item_bank_exercise.assessment.exercise.again_btn: Again
+item_bank_exercise.exercise.wait_tip: Wait to commit
+item_bank_exercise.chapter.exercise.start_btn: Start
+item_bank_exercise.chapter.exercise.continue_btn: Continue
+item_bank_exercise.chapter.exercise.view_btn: View
+item_bank_exercise.chapter.exercise.again_btn: Again
 item_bank_exercise.exercise.publish: Publish item bank exercise
 item_bank_exercise.chapter_exercise.list: Chapter directory
 item_bank_exercise.chapter_exercise.item_num: Number of node problems
@@ -1895,9 +1910,10 @@ item_bank_exercise.save_cover: Save cover
 item_bank_exercise.upload_cover: Upload item bank exercise cover
 item_bank_exercise.base.title: Item bank exercise title
 item_bank_exercise.export.answer_num: Answer number
-item_bank_exercise.export.accuracy: Accuracy
+item_bank_exercise.export.completion_rate: Answer Rate
+item_bank_exercise.export.accuracy: Master rate
 item_bank_exercise.answer_number: Answer number：
-item_bank_exercise.accuracy: Accuracy：
+item_bank_exercise.accuracy: Master rate：
 item_bank_exercise.manage_btn: Item bank exercise manage
 item_bank_exercise.chapter_practice: Chapter practice
 item_bank_exercise.testpaper_practice: Tests paper practice
@@ -2886,8 +2902,10 @@ message.btn.send: 'Write a message'
 user.homepage: '%nickname%''s home'
 user.homepage.introductions: About
 user.homepage.teaching_courses: 'Teaching Courses'
+user.homepage.teaching_question_bank: 'Teaching question bank'
 user.homepage.teaching_classrooms: 'Teaching %classroomName%'
 user.homepage.learning_courses: 'Learning Courses'
+user.homepage.learning_question_bank: 'Learning Question bank'
 user.homepage.learning_classrooms: 'Learning in %classroomName%'
 user.homepage.favorite_courses: Favorites
 user.homepage.joined_group: 'Enrolled Groups'
@@ -2895,6 +2913,8 @@ user.homepage.following_fan: Following/Fans
 user.homepage.introductions.empty: 'No introduction'
 user.homepage.teaching_courses.empty: 'No teaching course.'
 user.homepage.learning_courses.empty: 'No learning course.'
+user.homepage.learning_question_bank.empty: 'No learning question bank.'
+user.homepage.teaching_question_bank.empty: 'No teaching question bank.'
 user.homepage.favorite_courses.empty: 'No bookmarked course.'
 user.homepage.teaching_classrooms.empty: 'No teaching %classroomName%'
 user.homepage.learning_classrooms.empty: 'No learning %classroomName%'
@@ -3720,6 +3740,7 @@ my.teaching.question_bank.open_ensure: Are you sure to open the item bank exerci
 
 my.learning.menu_heading: 'My Learning'
 my.learning.course_set_menu: 'Courses'
+my.learning.question_bank_menu: 'Question bank'
 my.learning.live_schedule_menu: Live Schedule
 my.learning.classroom_menu: '%classroom%'
 my.learning.live_menu: 'Lives'
@@ -3795,6 +3816,7 @@ my.learning.course.learned_empty: 'No record'
 my.learning.course.finish_task: 'Finish %taskName%'
 my.learning.course.contiune_study: Continue
 my.learning.course.learning_empty: 'No record'
+my.learning.question_bank.learning_empty: 'No record'
 my.learning.course.lesson_num: 'Lesson %num%'
 my.learning.course.total_learn_time: 'Learned Duration In Total'
 my.learning.course.watch: View
@@ -4013,7 +4035,9 @@ course.header.become_a_VIP: '<a href="%href%" target="_blank">Purchase VIP</a>'
 course.member.tips.title: Tips
 course.member.classroom.tips: 'Your purchased class was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help.'
 course.member.course.tips: 'Your purchased course was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help.'
+item_bank_exercise.member.expiry_tips: 'Your purchased course was expired. You cannot proceed with the chapter, test paper, etc.If you have any questions, please contact the teacher.'
 course.member.course.allow_buy.tips: 'Your purchased course was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help or click Rejoin.'
+item_bank_exercise.member.allow_buy.tips: 'Your purchased item bank exercise was expired and you cannot proceed with the chapter, test paper, etc. and ask questions now. Please contact your teacher for help or click Rejoin.'
 course.member.course.join_btn: 'Exit and re-Enroll'
 course.member.operation.quit_deadline_reach: 'The user will quit until the deadline'
 course.member.operation.admin_remove_course_student: 'The admin removes it manually'
@@ -9070,6 +9094,8 @@ exception.item_bank_exercise.expirymode_invalid: Validity type error
 exception.item_bank_exercise.assessment_exercise_exist: The test paper has been saved in this module, please do not add it repeatedly
 exception.item_bank_exercise.member.can_not_become_member: The exercise has expired and students cannot join
 exception.item_bank_exercise.module.not_empty_number: Please keep at least one module
+exception.item_bank_exercise.forbidden_take_exercise: Can't access the item bank exercise
+exception.item_bank_exercise.member.non_expired: The student has not expired
 exception.item_bank_exercise.member.member_not_student: Member is not student
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On

@@ -13,6 +13,8 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\Group\Service\GroupService;
+use Biz\ItemBankExercise\Service\ExerciseMemberService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\System\Service\SettingService;
 use Biz\User\CurrentUser;
 use Biz\User\Service\AuthService;
@@ -545,6 +547,65 @@ class UserController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function itemBankLearnAction(Request $request, $id)
+    {
+        $user = $this->tryGetUser($id);
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
+        $userProfile['about'] = strip_tags($userProfile['about'], '');
+        $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
+        $user = array_merge($user, $userProfile);
+
+        return $this->getExercises($user, 'learn');
+    }
+
+    public function itemBankTeachAction(Request $request, $id)
+    {
+        $user = $this->tryGetUser($id);
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
+        $userProfile['about'] = strip_tags($userProfile['about'], '');
+        $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
+        $user = array_merge($user, $userProfile);
+
+        return $this->getExercises($user, 'teach');
+    }
+
+    protected function getExercises($user, $type)
+    {
+        $role = 'learn' == $type ? 'student' : 'teacher';
+        $members = $this->getExerciseMemberService()->search(
+            ['userId' => $user['id'], 'role' => $role],
+            ['createdTime' => 'desc'],
+            0,
+            PHP_INT_MAX
+        );
+
+        $exerciseIds = ArrayToolkit::column($members, 'exerciseId');
+        $conditions = ['ids' => $exerciseIds];
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            !empty($members) ? $this->getItemBankExerciseService()->count($conditions) : 0,
+            20
+        );
+
+        $exercises = [];
+        if (!empty($exerciseIds)) {
+            $exercises = $this->getItemBankExerciseService()->search(
+                $conditions,
+                [],
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        }
+
+        return $this->render('user/question-bank.html.twig', [
+            'user' => $user,
+            'exercises' => $exercises,
+            'paginator' => $paginator,
+            'type' => 'learn' == $type ? 'question_bank_learning' : 'question_bank_teaching',
+        ]);
+    }
+
     protected function saveUserInfo($request, $user)
     {
         $formData = $request->request->all();
@@ -700,6 +761,22 @@ class UserController extends BaseController
         $myfollowings = $this->getUserService()->filterFollowingIds($user['id'], $followingIds);
 
         return $myfollowings;
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getItemBankExerciseService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseService');
+    }
+
+    /**
+     * @return ExerciseMemberService
+     */
+    protected function getExerciseMemberService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseMemberService');
     }
 
     /**

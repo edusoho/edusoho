@@ -1,0 +1,172 @@
+{% extends 'item-bank-exercise/header/header-layout.html.twig' %}
+
+{% set page_type = 'guest' %}
+
+{% block course_header_subtitle %}{% endblock %}
+
+{% block course_header_people_num %}{% endblock %}
+
+{% block course_member_count %}
+  {{ 'course.course_member_count'|trans({'%studentsNum%':exercise.studentNum}) }}
+{% endblock %}
+
+{% block course_heard_content %}
+  <div class="course-detail-bottom">
+    <div class="course-detail-img">
+      <img class="img-responsive" src="{{ filepath(exercise.cover.large|default(null), 'courseSet.png') }}" alt="{{ exercise.title }} ">
+      <div class="image-overlay"></div>
+
+      <div class="course-detail-remask">
+        <i class="es-icon es-icon-people"></i>{{ 'course.students_count'|trans({'%studentsNum%':exercise.studentNum|default(0)})|raw }}
+        <div class="score pull-right mb0">
+          {{ web_macro.star(exercise.rating|default(0)) }}
+          <span class="vertical-middle">{{'course.mask.rating_num'|trans({'%ratingNum%':exercise.ratingNum|default(0)})}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="course-detail-info">
+      <div class="course-detail-info__text js-course-detail-info">
+        <div class="course-detail-info__title">
+            {{ exercise.title }}
+        </div>
+
+        {#添加admin_v2#}
+        {% set canManage =  member.role|default('') == 'teacher' or has_permission('admin_course_content_manage') or has_permission('admin_v2_course_content_manage') %}
+        {% if canManage %}
+          <a class="btn btn-default btn-xs course-detail-info__manage" href="{{ path('item_bank_exercise_manage_base', {exerciseId: exercise.id}) }}">
+            <i class="es-icon es-icon-setting"></i>&nbsp;{{ 'site.default.manage'|trans }}
+          </a>
+        {% endif %}
+
+        <div class="cd-mb16">
+          <span class="course-detail__label vertical-sub">{{'course.price'|trans}}</span>
+          <span class="course-detail-price-money vertical-sub mrm">
+            {% if exercise.price == 0 and exercise.isFree == 1 %}
+              <b class="pirce-num color-success">{{'course.price.free'|trans}}</b>
+            {% else %}
+              <b class="pirce-num"><span class="cd-text-lg">¥&nbsp;</span>{{ exercise.price }}</b>
+            {% endif %}
+          </span>
+        </div>
+
+        <div class="course-detail-gray course-detail-gray--market not-activity">
+          <div class="hidden-xs common-line-height">
+            <span class="course-detail-title">{{ 'course.expiry_date'|trans }}</span>
+            {% if exercise.expiryMode == 'days'  %}
+              <span class="gray-dark course-detail-expiry">
+                {{ 'course.expiry_date.days_mode'|trans({'%expiryDays%':exercise.expiryDays})|raw }}
+              </span>
+            {% elseif exercise.expiryMode == 'end_date' %}
+              <span class="gray-dark course-detail-expiry">
+                {{ 'course.expiry_date.end_date_mode'|trans({'%expiryEndDate%':exercise.expiryEndDate|date('Y-m-d ')})|raw }}
+              </span>
+            {% elseif exercise.expiryMode == 'date' %}
+              <span class="gray-dark course-detail-expiry">
+                {{ 'course.expiry_date.date_mode'|trans({'%expiryStartDate%':exercise.expiryStartDate|date('Y-m-d '), '%expiryEndDate%':course.expiryEndDate|date('Y-m-d ')})|raw }}
+              </span>
+            {% elseif exercise.expiryMode == 'forever' %}
+              <span class="gray-dark course-detail-expiry mrl">{{ 'course.expiry_date.forever_mode'|trans }}</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="course-detail-section-responsive visible-xs visible-sm clearfix">
+          <ul class="clearfix">
+            <!--营销页显示-->
+              <li class="js-unfavorite-btn {% if not isUserFavorite %}hidden{% endif %}" id="unfavorite-btn" data-target-type="course" data-target-id="{{ exercise.id }}">
+                <a class="color-primary" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.followed'|trans }}"
+                   data-trigger="hover">
+                  <i class="es-icon es-icon-favorite color-primary"></i>
+                  <br/>
+                  {{ 'course.status.followed'|trans }}
+                </a>
+              </li>
+              <li class="js-favorite-btn {% if isUserFavorite %}hidden{% endif %}" id="favorite-btn" data-target-type="course" data-target-id="{{ exercise.id }}">
+                <a class="" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.follow'|trans }}"
+                   data-trigger="hover">
+                  <i class="es-icon es-icon-favoriteoutline"></i>
+                  <br/>
+                  {{ 'course.status.follow'|trans }}
+                </a>
+              </li>
+
+            <li class="es-share top js-es-share">
+              <a class=" dropdown-toggle" href="" data-toggle="dropdown" title="{{ 'course.share'|trans }}">
+                <i class="es-icon es-icon-share"></i>
+                <br/>
+                {{ 'course.share'|trans }}
+              </a>
+              {% include 'common/share-dropdown.html.twig' with {type:'item_bank_exercise'} %}
+            </li>
+
+          </ul>
+        </div>
+      </div>
+
+      <div class="course-detail-info__btn js-course-header-operation">
+        <ul class="course-operation course-operation--market hidden-xs hidden-sm clearfix mb0">
+          <li class="es-qrcode top hidden-xs mrl" data-url="{{ path('item_bank_exercise_qrcode_scan', { id: exercise.id }) }}">
+            <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-saoyisao course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'site.qrcode_tips'|trans }}</span></a>
+            <span class="qrcode-popover">
+              <img class="mb0" src="" alt="">{{ 'site.tips.scan_qrcode_tips'|trans }}
+            </span>
+          </li>
+
+          {# 分享图标功能设置 #}
+          <li class="es-share es-share-item top mrl js-es-share">
+            <a class="dropdown-toggle cd-link-assist" href="javascript:;" data-toggle="dropdown">
+              <i class="es-icon es-icon-share course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'course.share'|trans }}</span>
+            </a>
+            {% include 'common/share-dropdown.html.twig' with {type:'item_bank_exercise'} %}
+          </li>
+          <!--营销页显示-->
+          {# 收藏图标设置 #}
+            <li class="js-unfavorite-btn mrl {% if not isUserFavorite %}hidden {% endif %}" id="unfavorite-btn" data-target-type="course" data-target-id="{{ exercise.id }}">
+              <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-favorite color-danger course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'course.status.followed'|trans }}</span>
+              </a>
+            </li>
+            <li class="js-favorite-btn mrl {% if isUserFavorite %}hidden{% endif %}" id="favorite-btn" data-target-type="course" data-target-id="{{ exercise.id }}">
+              <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-favoriteoutline course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'course.status.follow'|trans }}</span>
+              </a>
+            </li>
+
+          {% block course_member_exit %}{% endblock %}
+        </ul>
+        <div class="text-right buy-btn-group course-operation-btn course-classroom-tip">
+          {% if member | default(false) %}
+            {% if exercise.expiryMode == 'date' and exercise.expiryStartDate >= timestamp() %}
+              {{ 'item_bank_exercise.expiry_date.expiryStartDate'|trans({'%expiryStartDate%':exercise.expiryStartDate|date('date.format'|trans)})|raw }}
+            {% else %}
+              <a class="cd-btn cd-btn-primary" href="{{ path('my_item_bank_exercise_show', {id: exercise.id}) }}">
+                {{ 'course.btn.learn'|trans }}
+              </a>
+            {% endif %}
+          {% else %}
+            {% if exercise.joinEnable|default(true) == false %}
+              {{ 'item_bank_exercise.course_limited_tips'|trans }}
+            {% elseif exercise.status != 'published' %}
+              {{ 'item_bank_exercise.unbuyable.unpublished_tips'|trans }}
+            {% elseif (exercise.expiryMode in ['end_date', 'date'] and exercise.expiryEndDate < 'now'|date('U')) %}
+              {{ 'course.unbuyable.over_expiry_end_date_tips'|trans }}
+            {% else %}
+              {% if exercise.originPrice == 0 or exercise.isFree %}
+                {% set btnText = 'course.btn.join' %}
+                {% set toUrl = '' %}
+              {% else  %}
+                {% set btnText = 'course.btn.buy' %}
+                {% set toUrl = '' %}
+              {% endif %}
+              <a class="cd-btn cd-btn-primary" href="javascript:" data-url="{{ toUrl }}">
+                {{ btnText|trans }}
+              </a>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block course_header_top %}
+{% endblock %}

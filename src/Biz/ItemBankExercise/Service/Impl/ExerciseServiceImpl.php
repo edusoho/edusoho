@@ -443,6 +443,21 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->getExerciseDao()->findByLikeTitle($title);
     }
 
+    public function tryTakeExercise($exerciseId)
+    {
+        $exercise = $this->get($exerciseId);
+        $user = $this->getCurrentUser();
+        if (empty($exercise)) {
+            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
+        }
+        if (!$this->canTakeItemBankExercise($exercise)) {
+            $this->createNewException(ItemBankExerciseException::FORBIDDEN_TAKE_EXERCISE());
+        }
+        $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exercise['id'], $user['id']);
+
+        return [$exercise, $member];
+    }
+
     /**
      * @return ExerciseDao
      */

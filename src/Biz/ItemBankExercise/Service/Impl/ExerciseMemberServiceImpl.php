@@ -5,6 +5,7 @@ namespace Biz\ItemBankExercise\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\TimeMachine;
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
 use Biz\ItemBankExercise\ExpiryMode\ExpiryModeFactory;
@@ -76,6 +77,8 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
                 ]
             );
 
+            $info['type'] = 'add';
+            $info['memberId'] = $member['id'];
             $this->recordLog($exercise, $userId, $info);
             $this->dispatchEvent('exercise.join', $exercise, ['member' => $member]);
 
@@ -266,6 +269,59 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         return true;
     }
 
+    public function isMemberNonExpired($exercise, $member)
+    {
+        if (empty($exercise) || empty($member)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        if (0 == $member['deadline']) {
+            return true;
+        }
+
+        if ($member['deadline'] > time()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function quitExerciseByDeadlineReach($userId, $exerciseId)
+    {
+        $exercise = $this->getExerciseService()->get($exerciseId);
+        if (empty($exercise)) {
+            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
+        }
+
+        $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
+        if (empty($member) || ('student' != $member['role'])) {
+            $this->createNewException(ItemBankExerciseMemberException::NOTFOUND_MEMBER());
+        }
+
+        $isNonExpired = $this->isMemberNonExpired($exercise, $member);
+        if ($isNonExpired) {
+            $this->createNewException(ItemBankExerciseMemberException::NON_EXPIRED_MEMBER());
+        }
+
+        try {
+            $this->beginTransaction();
+
+            $this->removeMember($member, []);
+            $this->recordLog($exercise, $userId, ['type' => 'remove', 'memberId' => $member['id'], 'remark' => '']);
+            $this->dispatchEvent('exercise.quit', $exercise, ['member' => $member]);
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    public function findByUserIdAndRole($userId, $role)
+    {
+        return $this->getExerciseMemberDao()->findByUserIdAndRole($userId, $role);
+    }
+
     private function addMember($member, $reason = [])
     {
         try {
@@ -325,16 +381,18 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
     protected function recordLog($exercise, $userId, $info)
     {
         $user = $this->getUserService()->getUser($userId);
+        $addMessage = "《{$exercise['title']}》(#{$exercise['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$info['remark']}";
+        $removeMessage = "《{$exercise['title']}》(#{$exercise['id']})，学员({$user['nickname']})因达到有效期退出教学计划(#{$info['memberId']})";
         $this->getLogService()->info(
             'item_bank_exercise',
-            'add_student',
-            "《{$exercise['title']}》(#{$exercise['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$info['remark']}",
+            'add' == $info['type'] ? 'add_student' : 'remove_student',
+            'add' == $info['type'] ? $addMessage : $removeMessage,
             [
-                'exercise' => $exercise['id'],
+                'exerciseId' => $exercise['id'],
                 'title' => $exercise['title'],
                 'userId' => $user['id'],
                 'nickname' => $user['nickname'],
-                'remark' => $info['remark'],
+                'remark' => 'add' == $info['type'] ? $info['remark'] : '',
             ]
         );
     }

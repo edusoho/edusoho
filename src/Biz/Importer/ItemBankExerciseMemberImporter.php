@@ -66,7 +66,7 @@ class ItemBankExerciseMemberImporter extends Importer
         $course = $this->getExerciseService()->get($exerciseId);
 
         return $this->render(
-            'item-bank-exercise/student-manage/import.html.twig',
+            'item-bank-exercise-manage/student-manage/import.html.twig',
             [
                 'exercise' => $course,
                 'importerType' => $this->type,
