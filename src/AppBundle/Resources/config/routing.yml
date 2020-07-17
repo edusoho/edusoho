@@ -3539,6 +3539,10 @@ item_bank_exercise_manage_students_deadline_batch_deadline_check:
   path:  /item_bank_exercise/{exerciseId}/manage/student/deadline/check
   defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:checkUpdateDeadline }
 
+item_bank_exercise_buy:
+    path: /item_bank_exercise/{id}/buy
+    defaults: { _controller: AppBundle:ItemBankExercise/ExerciseBuy:buy }
+
 item_bank_exercise_explore:
     path: /exercise/explore
     defaults: { _controller: AppBundle:ItemBankExercise/Explore:index }

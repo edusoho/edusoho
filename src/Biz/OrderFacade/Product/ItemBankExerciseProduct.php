@@ -14,6 +14,8 @@ class ItemBankExerciseProduct extends Product implements OrderStatusCallback
 
     public $targetType = self::TYPE;
 
+    public $showTemplate = 'order/show/exercise-item.html.twig';
+
     public function init(array $params)
     {
         $exercise = $this->getExerciseService()->get($params['targetId']);

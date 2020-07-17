@@ -155,9 +155,9 @@
                 {% set toUrl = '' %}
               {% else  %}
                 {% set btnText = 'course.btn.buy' %}
-                {% set toUrl = '' %}
+                {% set toUrl = path('item_bank_exercise_buy', {id: exercise.id}) %}
               {% endif %}
-              <a class="cd-btn cd-btn-primary" href="javascript:" data-url="{{ toUrl }}">
+              <a class="cd-btn cd-btn-primary js-buy-btn" href="javascript:" data-url="{{ toUrl }}">
                 {{ btnText|trans }}
               </a>
             {% endif %}
