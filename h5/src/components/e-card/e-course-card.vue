@@ -99,11 +99,7 @@ export default {
     },
     toTask() {
       if (itemBank.includes(this.course.type)) {
-        this.$emit(
-          'toItemBankTask',
-          this.course.link.answerRecord,
-          this.course.type,
-        );
+        this.$emit('toItemBankTask', this.course.link.target, this.course.type);
         return;
       }
       const task = {

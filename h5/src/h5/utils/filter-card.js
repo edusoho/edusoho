@@ -78,7 +78,7 @@ const getItemBank = data => {
       targetId: data.targetId,
       status: data.target.answerRecord?.status,
       itemCategoryId: data.target.itemCategory?.id,
-      answerRecord: data.target.answerRecord,
+      target: data.target,
     },
     type: data.targetType,
     top: {
