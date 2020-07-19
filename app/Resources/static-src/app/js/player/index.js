@@ -20,8 +20,6 @@ class Show {
     this.token = container.data('token');
     this.fileType = container.data('fileType');
     this.fileLength = container.data('fileLength');
-    //字幕偏移时间信息
-    this.videoHeaderLength = container.data('videoHeaderLength');
     this.enablePlaybackRates = container.data('enablePlaybackRates');
     this.videoH5 = container.data('videoH5');
     this.watermark = container.data('watermark');
@@ -93,8 +91,6 @@ class Show {
         id: this.userId,
         name: this.userName
       },
-
-      videoHeaderLength: this.videoHeaderLength,
       textTrack: this.transToTextrack(this.subtitles),
       autoplay: this.autoplay,
       customPos: customPos,
@@ -113,7 +109,6 @@ class Show {
         token: this.token,
       });
     }
-    console.log(this.jsPlayer);
     return window.player = PlayerFactory.create(
       this.jsPlayer, options
     );
