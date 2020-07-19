@@ -36,7 +36,7 @@ class TestpaperSubscriber extends EventSubscriber implements EventSubscriberInte
         }
 
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
-        if ('score' == $activity['finishType'] && $answerReport['total_score'] >= $testpaperActivity['finishCondition']['finishScore']) {
+        if ('score' == $activity['finishType'] && $answerReport['score'] >= $testpaperActivity['finishCondition']['finishScore']) {
             $answerRecord = $this->getAnswerRecordService()->get($answerReport['answer_record_id']);
             $this->finishTaskResult($task['id'], $answerRecord['user_id']);
         }
