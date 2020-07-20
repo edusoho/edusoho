@@ -9697,6 +9697,7 @@ facein.capture_face.inspection_result_modal.title: 监考抓拍
 exception.s2b2c_product.update_type_invalid: Update type invalid
 exception.s2b2c_product.not_found: Product not found
 exception.s2b2c_product.remove_failed: Product remove failed
+exception.s2b2c.hidden_permission_invalid: S2b2c hide permission invalid
 
 admin_v2.cloud_center.content_resource.product_update_setting: Update Setting
 admin_v2.cloud_center.content_resource.product_update_auto: Auto
