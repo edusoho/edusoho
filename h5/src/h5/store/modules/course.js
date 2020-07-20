@@ -15,8 +15,8 @@ const state = {
   searchCourseList: {
     selectedData: {},
     courseList: [],
-    paging: {}
-  }
+    paging: {},
+  },
 };
 
 const hasJoinedCourse = course => course.member;
@@ -52,7 +52,7 @@ const mutations = {
   },
   [types.SET_COURSELIST](currentState, data) {
     currentState.searchCourseList = data || {};
-  }
+  },
 };
 
 const actions = {
@@ -72,7 +72,7 @@ const actions = {
     return Promise.all([
       Api.getCourseLessons({ query }),
       Api.getOptimizationCourseLessons({ query }),
-      Api.getCourseDetail({ query })
+      Api.getCourseDetail({ query }),
     ]).then(([coursePlan, OptimizationCoursePlan, courseDetail]) => {
       commit(types.GET_COURSE_LESSONS, coursePlan);
       commit(types.GET_OPTIMIZATION_COURSE_LESSONS, OptimizationCoursePlan);
@@ -83,37 +83,35 @@ const actions = {
   },
   getBeforeCourse({ commit }, { courseId }) {
     const query = { courseId };
-    return Promise.all([
-      Api.getCourseLessons({ query })
-    ]).then(([coursePlan]) => {
-      commit(types.GET_COURSE_LESSONS, coursePlan);
-      return [coursePlan];
-    });
+    return Promise.all([Api.getCourseLessons({ query })]).then(
+      ([coursePlan]) => {
+        commit(types.GET_COURSE_LESSONS, coursePlan);
+        return [coursePlan];
+      },
+    );
   },
   getAfterCourse({ commit }, { courseId }) {
     const query = { courseId };
-    return Promise.all([
-      Api.getOptimizationCourseLessons({ query })
-    ]).then(([OptimizationCoursePlan]) => {
-      commit(types.GET_OPTIMIZATION_COURSE_LESSONS, OptimizationCoursePlan);
-      // dispatch('getNextStudy', { courseId });
-      return [OptimizationCoursePlan];
-    });
+    return Promise.all([Api.getOptimizationCourseLessons({ query })]).then(
+      ([OptimizationCoursePlan]) => {
+        commit(types.GET_OPTIMIZATION_COURSE_LESSONS, OptimizationCoursePlan);
+        // dispatch('getNextStudy', { courseId });
+        return [OptimizationCoursePlan];
+      },
+    );
   },
   getCourseDetail({ commit }, { courseId }) {
     const query = { courseId };
-    return Promise.all([
-      Api.getCourseDetail({ query })
-    ]).then(([courseDetail]) => {
-      commit(types.GET_COURSE_DETAIL, courseDetail);
-      return courseDetail;
-    });
+    return Promise.all([Api.getCourseDetail({ query })]).then(
+      ([courseDetail]) => {
+        commit(types.GET_COURSE_DETAIL, courseDetail);
+        return courseDetail;
+      },
+    );
   },
   getNextStudy({ commit }, { courseId }) {
     const query = { courseId };
-    return Promise.all([
-      Api.getNextStudy({ query })
-    ]).then(([nextStudy]) => {
+    return Promise.all([Api.getNextStudy({ query })]).then(([nextStudy]) => {
       commit(types.GET_NEXT_STUDY, nextStudy);
       return [nextStudy];
     });
@@ -121,8 +119,8 @@ const actions = {
   joinCourse({ commit }, { id }) {
     return Api.joinCourse({
       query: {
-        id
-      }
+        id,
+      },
     }).then(res => {
       // 返回空对象，表示加入失败，需要去创建订单购买
       if (!(Object.keys(res).length === 0)) {
@@ -149,8 +147,8 @@ const actions = {
         data: {
           data: answer,
           resultId,
-          usedTime
-        }
+          usedTime,
+        },
       })
         .then(res => {
           localStorage.removeItem(`${userId}-${resultId}`);
@@ -175,12 +173,12 @@ const actions = {
       Api.handHomework({
         query: {
           homeworkId,
-          homeworkResultId
+          homeworkResultId,
         },
         data: {
           data: answer,
-          usedTime
-        }
+          usedTime,
+        },
       })
         .then(res => {
           localStorage.removeItem(`homework-${userId}-${homeworkResultId}`);
@@ -205,12 +203,12 @@ const actions = {
       Api.handExercise({
         query: {
           exerciseId,
-          exerciseResultId
+          exerciseResultId,
         },
         data: {
           data: answer,
-          usedTime
-        }
+          usedTime,
+        },
       })
         .then(res => {
           localStorage.removeItem(`exercise-${userId}-${exerciseResultId}`);
@@ -224,12 +222,12 @@ const actions = {
   },
   setCourseList({ commit }, data) {
     commit(types.SET_COURSELIST, data);
-  }
+  },
 };
 
 export default {
   namespaced: true,
   state,
   actions,
-  mutations
+  mutations,
 };

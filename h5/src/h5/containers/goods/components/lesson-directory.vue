@@ -1,42 +1,93 @@
 <template>
-
-  <div >
-    <div v-for="(lessonItem,lessonIndex) in lesson" v-if="hasLesson" :key="lessonIndex" class="lesson-directory" style="margin-left: 0; width: 100%; box-sizing: border-box;">
+  <div>
+    <div
+      v-for="(lessonItem, lessonIndex) in lesson"
+      :key="lessonIndex"
+      class="lesson-directory"
+      style="margin-left: 0; width: 100%; box-sizing: border-box;"
+    >
       <div
         :id="lessonItem.tasks[lessonItem.index].id"
-        :class="{'zb-ks' : doubleLine(lessonItem.tasks[lessonItem.index])}"
+        :class="{ 'zb-ks': doubleLine(lessonItem.tasks[lessonItem.index]) }"
         class="lesson-title"
-        @click="lessonCellClick(lessonItem.tasks[lessonItem.index],lessonIndex,lessonItem.index)"
+        @click="
+          lessonCellClick(
+            lessonItem.tasks[lessonItem.index],
+            lessonIndex,
+            lessonItem.index,
+          )
+        "
       >
         <div class="lesson-title-r">
           <div class="lesson-title-des">
             <!-- 非直播考试-->
-            <div v-if="!doubleLine(lessonItem.tasks[lessonItem.index])" class="bl l22">
+            <div
+              v-if="!doubleLine(lessonItem.tasks[lessonItem.index])"
+              class="bl l22"
+            >
               <!-- <span class="tryLes">试听</span> -->
               <span
-                :class="{ 'lessonactive': (currentTask==lessonItem.tasks[lessonItem.index].id) }"
+                :class="{
+                  lessonactive:
+                    currentTask == lessonItem.tasks[lessonItem.index].id,
+                }"
                 class="text-overflow ks"
               >
-                <i :class="iconfont(lessonItem.tasks[lessonItem.index])" class="iconfont"/>
-                {{ Number(lessonItem.tasks[lessonItem.index].isOptional) ? '选修 ' : '课时' }}{{ Number(lessonItem.tasks[lessonItem.index].isOptional) ? ' ' : `${lessonItem.tasks[lessonItem.index].number}:${lessonItem.title}` }}
+                <i
+                  :class="iconfont(lessonItem.tasks[lessonItem.index])"
+                  class="iconfont"
+                />
+                {{
+                  Number(lessonItem.tasks[lessonItem.index].isOptional)
+                    ? '选修 '
+                    : '课时'
+                }}{{
+                  Number(lessonItem.tasks[lessonItem.index].isOptional)
+                    ? ' '
+                    : `${lessonItem.tasks[lessonItem.index].number}:${
+                        lessonItem.title
+                      }`
+                }}
               </span>
             </div>
 
             <!-- 直播或者考试-->
-            <div v-if="doubleLine(lessonItem.tasks[lessonItem.index])" class="bl">
+            <div
+              v-if="doubleLine(lessonItem.tasks[lessonItem.index])"
+              class="bl"
+            >
               <!-- <span class="tryLes">试听</span> -->
               <div class="block-inline">
                 <span
-                  :class="{ 'lessonactive': (currentTask==lessonItem.tasks[lessonItem.index].id) }"
+                  :class="{
+                    lessonactive:
+                      currentTask == lessonItem.tasks[lessonItem.index].id,
+                  }"
                   class="bl text-overflow ks"
                 >
-                  <i :class="iconfont(lessonItem.tasks[lessonItem.index])" class="iconfont"/>
-                  {{ Number(lessonItem.tasks[lessonItem.index].isOptional) ? '选修 ' : '课时' }}{{ Number(lessonItem.tasks[lessonItem.index].isOptional) ? ' ' : `${lessonItem.tasks[lessonItem.index].number}:${lessonItem.title}` }}
+                  <i
+                    :class="iconfont(lessonItem.tasks[lessonItem.index])"
+                    class="iconfont"
+                  />
+                  {{
+                    Number(lessonItem.tasks[lessonItem.index].isOptional)
+                      ? '选修 '
+                      : '课时'
+                  }}{{
+                    Number(lessonItem.tasks[lessonItem.index].isOptional)
+                      ? ' '
+                      : `${lessonItem.tasks[lessonItem.index].number}:${
+                          lessonItem.title
+                        }`
+                  }}
                 </span>
                 <span class="bl zbtime">
                   <span
                     :class="[liveClass(lessonItem.tasks[lessonItem.index])]"
-                  >{{ lessonItem.tasks[lessonItem.index]| filterTaskTime }}</span>
+                    >{{
+                      lessonItem.tasks[lessonItem.index] | filterTaskTime
+                    }}</span
+                  >
                 </span>
               </div>
             </div>
@@ -45,198 +96,232 @@
 
         <!-- 时长 -->
         <div class="lesson-title-l">
-          <span
-            v-if="lessonItem.tasks[lessonItem.index].type!='live'"
-          >{{ lessonItem.tasks[lessonItem.index] | filterTaskTime }}</span>
-          <i :class="studyStatus(lessonItem.tasks[lessonItem.index])" class="iconfont"/>
+          <span v-if="lessonItem.tasks[lessonItem.index].type != 'live'">{{
+            lessonItem.tasks[lessonItem.index] | filterTaskTime
+          }}</span>
+          <i
+            :class="studyStatus(lessonItem.tasks[lessonItem.index])"
+            class="iconfont"
+          />
         </div>
       </div>
 
       <!-- task任务 -->
-      <div v-if="lessonItem.tasks.length>1" class="lesson-items">
+      <div v-if="lessonItem.tasks.length > 1" class="lesson-items">
         <div
-          v-for="(taskItem,taskIndex) in lessonItem.tasks"
-          v-if="showTask(taskItem,taskIndex)"
+          v-for="(taskItem, taskIndex) in lessonItem.tasks"
           :id="taskItem.id"
           :key="taskIndex"
           class="litem"
-          @click="lessonCellClick(taskItem,lessonIndex,taskIndex)"
+          @click="lessonCellClick(taskItem, lessonIndex, taskIndex)"
         >
-          <div
-            :class="{ 'lessonactive': (currentTask==Number(taskItem.id)) }"
-            class="litem-r text-overflow"
-          >
-            <!-- <span class="tryLes">试听</span> -->
-            <i :class="iconfont(taskItem)" class="iconfont"/>
-            {{ Number(taskItem.isOptional) ? '选修 ' : '课时' }}{{ Number(taskItem.isOptional) ? ' ' : `${taskItem.number}:${taskItem.title}` }}
-          </div>
-          <div class="litem-l clearfix">
-            <span :class="[liveClass(taskItem),'text-overflow']">{{ taskItem | filterTaskTime }}</span>
-            <i :class="studyStatus(taskItem)" class="iconfont"/>
+          <div v-if="showTask(taskItem, taskIndex)">
+            <div
+              :class="{ lessonactive: currentTask == Number(taskItem.id) }"
+              class="litem-r text-overflow"
+            >
+              <!-- <span class="tryLes">试听</span> -->
+              <i :class="iconfont(taskItem)" class="iconfont" />
+              {{ Number(taskItem.isOptional) ? '选修 ' : '课时'
+              }}{{
+                Number(taskItem.isOptional)
+                  ? ' '
+                  : `${taskItem.number}:${taskItem.title}`
+              }}
+            </div>
+            <div class="litem-l clearfix">
+              <span :class="[liveClass(taskItem), 'text-overflow']">{{
+                taskItem | filterTaskTime
+              }}</span>
+              <i :class="studyStatus(taskItem)" class="iconfont" />
+            </div>
           </div>
         </div>
       </div>
     </div>
     <div v-if="isNoData" class="noneItem">
-      <img src="static/images/none.png" class="notask" >
+      <img src="static/images/none.png" class="notask" />
       <p>暂时还没有课时哦...</p>
     </div>
   </div>
-
 </template>
 <script>
-import redirectMixin from '@/mixins/saveRedirect'
-import copyUrl from '@/mixins/copyUrl'
-import { mapState, mapMutations } from 'vuex'
-import * as types from '@/store/mutation-types'
-import { Dialog, Toast } from 'vant'
+import redirectMixin from '@/mixins/saveRedirect';
+import copyUrl from '@/mixins/copyUrl';
+import { mapState, mapMutations } from 'vuex';
+import * as types from '@/store/mutation-types';
+import { Toast } from 'vant';
 export default {
   name: 'LessonDirectory',
-  mixins: [redirectMixin,copyUrl],
+  mixins: [redirectMixin, copyUrl],
   props: {
     lesson: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     errorMsg: {
       type: String,
-      default: ''
+      default: '',
     },
     taskId: {
       type: Number,
-      default: -1
+      default: -1,
     },
     taskNumber: {
       type: Number,
-      default: -1
+      default: -1,
     },
     unitNum: {
       type: Number,
-      default: -1
-    }
+      default: -1,
+    },
   },
   data() {
     return {
-      currentTask: ''
-    }
+      currentTask: '',
+    };
   },
   watch: {
     taskId: {
       handler: 'getTaskId',
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   computed: {
     ...mapState('course', {
       details: state => state.details,
       joinStatus: state => state.joinStatus,
-      selectedPlanId: state => state.selectedPlanId
+      selectedPlanId: state => state.selectedPlanId,
     }),
     hasLesson() {
-      return this.lesson.length > 0
+      return this.lesson.length > 0;
     },
-    isNoData(){
-      //在当前章下无节且无课时才显示
-      return this.taskNumber===0 && this.unitNum===0
-    }
+    isNoData() {
+      // 在当前章下无节且无课时才显示
+      return this.taskNumber === 0 && this.unitNum === 0;
+    },
   },
-  mounted(){
-    if(Object.keys(this.$route.query).length){
-      const { sourceType,taskId }=this.$route.query;
+  mounted() {
+    if (Object.keys(this.$route.query).length) {
+      const { sourceType, taskId } = this.$route.query;
       this.setSourceType({
-          sourceType: sourceType,
-          taskId: taskId
-        });
+        sourceType: sourceType,
+        taskId: taskId,
+      });
     }
   },
   methods: {
     ...mapMutations('course', {
-      setSourceType: types.SET_SOURCETYPE
+      setSourceType: types.SET_SOURCETYPE,
     }),
+    getCurrentStatus(task) {
+      if (Number(task.isFree)) {
+        return 'is-free';
+      }
+      if (
+        Number(this.details.tryLookable) &&
+        task.type === 'video' &&
+        task.activity.mediaStorage
+      ) {
+        return 'is-tryLook';
+      }
+      return '';
+    },
+    filterTaskStatus(task) {
+      if (!this.details.member && task.tagStatus === 'is-free') {
+        return '免费';
+      }
+      if (!this.details.member && task.tagStatus === 'is-tryLook') {
+        return '试看';
+      }
+      return '';
+    },
     // 获取lesson位置
     getTaskId() {
-      this.currentTask = this.taskId
+      this.currentTask = this.taskId;
     },
     // 直播双行显示判断
     doubleLine(task) {
       if (!task.type) {
-        return
+        return;
       }
-      const type = task.type
-      let isDouble = false
+      const type = task.type;
+      let isDouble = false;
       if (type === 'live') {
-        isDouble = true
+        isDouble = true;
       } else {
-        isDouble = false
+        isDouble = false;
       }
-      return isDouble
+      return isDouble;
     },
     showTask(taskItem, taskIndex) {
-      let result = true
+      let result = true;
       if (taskItem.mode == null) {
         if (taskIndex == 0) {
-          result = false
+          result = false;
         }
       }
       if (taskItem.mode == 'lesson') {
-        result = false
+        result = false;
       }
-      return result
+      return result;
     },
-    lessonCellClick(task,lessonIndex,taskIndex) {
+    lessonCellClick(task, lessonIndex, taskIndex) {
       this.$store.commit(types.SET_TASK_SATUS, '');
       // 课程错误和未发布状态，不允许学习任务
       if (this.errorMsg) {
-        this.$emit("showDialog");
+        this.$emit('showDialog');
         return;
       }
       if (task.lock) {
-        Toast("需要解锁上一个任务");
+        Toast('需要解锁上一个任务');
         return;
       }
-      //课程再创建阶段或者和未发布状态
-      if (task.status === "create" || task.status !== "published") {
-        Toast("敬请期待");
+      // 课程再创建阶段或者和未发布状态
+      if (task.status === 'create' || task.status !== 'published') {
+        Toast('敬请期待');
         return;
       }
       const nextTask = {
-        id: task.id
-      }
+        id: task.id,
+      };
       // 更改store中的当前学习
-      this.$store.commit(`course/${types.GET_NEXT_STUDY}`, { nextTask })
+      this.$store.commit(`course/${types.GET_NEXT_STUDY}`, { nextTask });
 
-      const details = this.details
+      const details = this.details;
       !details.allowAnonymousPreview &&
         this.$router.push({
           name: 'login',
           query: {
-            redirect: this.redirect
-          }
-        })
-      this.joinStatus ? this.showTypeDetail(task) : ''
+            redirect: this.redirect,
+          },
+        });
+      if (this.joinStatus) {
+        this.showTypeDetail(task);
+      }
     },
     showTypeDetail(task) {
       if (task.status !== 'published') {
-        Toast('敬请期待')
-        return
+        Toast('敬请期待');
+        return;
       }
       switch (task.type) {
         case 'video':
           if (task.mediaSource === 'self') {
             this.setSourceType({
               sourceType: 'video',
-              taskId: task.id
-            })
+              taskId: task.id,
+            });
           } else {
-            Toast('暂不支持此类型')
+            Toast('暂不支持此类型');
           }
-          break
+          break;
         case 'audio':
           this.setSourceType({
             sourceType: 'audio',
-            taskId: task.id
-          })
-          break
+            taskId: task.id,
+          });
+          break;
         case 'text':
         case 'ppt':
         case 'doc':
@@ -245,32 +330,29 @@ export default {
             query: {
               courseId: this.selectedPlanId,
               taskId: task.id,
-              type: task.type
-            }
-          })
-          break
-        case 'live':
-          const nowDate = new Date()
-          const endDate = new Date(task.endTime * 1000)
-          const startDate = new Date(task.startTime * 1000)
-          let replay = false
-          if (nowDate > endDate) {
-            if (task.activity.replayStatus == 'videoGenerated') {
+              type: task.type,
+            },
+          });
+          break;
+        case 'live': {
+          let replay = false;
+          if (new Date() > new Date(task.endTime * 1000)) {
+            if (task.activity.replayStatus === 'videoGenerated') {
               // 本站文件
               if (task.mediaSource === 'self') {
                 this.setSourceType({
                   sourceType: 'video',
-                  taskId: task.id
-                })
+                  taskId: task.id,
+                });
               } else {
-                Toast('暂不支持此类型')
+                Toast('暂不支持此类型');
               }
-              return
-            } else if (task.activity.replayStatus == 'ungenerated') {
-              Toast('暂无回放')
-              return
+              break;
+            } else if (task.activity.replayStatus === 'ungenerated') {
+              Toast('暂无回放');
+              return;
             } else {
-              replay = true
+              replay = true;
             }
           }
           this.$router.push({
@@ -280,127 +362,116 @@ export default {
               taskId: task.id,
               type: task.type,
               title: task.title,
-              replay
-            }
-          })
-          break
-        case 'testpaper':
+              replay,
+            },
+          });
+          break;
+        }
+        case 'testpaper': {
           const testId = task.activity.testpaperInfo.testpaperId;
           this.$router.push({
             name: 'testpaperIntro',
             query: {
               testId: testId,
-              targetId: task.id
-            }
-          })
-          break
-        case 'homework':
+              targetId: task.id,
+            },
+          });
+          break;
+        }
+        case 'homework': {
           this.$router.push({
             name: 'homeworkIntro',
             query: {
               courseId: this.$route.params.id,
-              taskId: task.id
-            }
-          })
-          break
-        case 'exercise':
+              taskId: task.id,
+            },
+          });
+          break;
+        }
+        case 'exercise': {
           this.$router.push({
             name: 'exerciseIntro',
             query: {
               courseId: this.$route.params.id,
-              taskId: task.id
-            }
-          })
-          break
+              taskId: task.id,
+            },
+          });
+          break;
+        }
         default:
-          //防止视频遮挡了弹出框
+          // 防止视频遮挡了弹出框
           this.setSourceType({
             sourceType: 'img',
-            taskId: task.id
-          })
+            taskId: task.id,
+          });
           this.copyPcUrl(task.courseUrl);
       }
     },
     // 任务图标(缺少下载)
     iconfont(task) {
-      const type = task.type
+      const type = task.type;
       switch (type) {
         case 'audio':
-          return 'icon-yinpin'
-          break
+          return 'icon-yinpin';
         case 'doc':
-          return 'icon-wendang'
-          break
+          return 'icon-wendang';
         case 'exercise':
-          return 'icon-lianxi'
-          break
+          return 'icon-lianxi';
         case 'flash':
-          return 'icon-flash'
-          break
+          return 'icon-flash';
         case 'homework':
-          return 'icon-zuoye'
-          break
+          return 'icon-zuoye';
         case 'live':
-          return 'icon-zhibo'
-          break
+          return 'icon-zhibo';
         case 'ppt':
-          return 'icon-ppt'
-          break
+          return 'icon-ppt';
         case 'discuss':
-          return 'icon-taolun'
-          break
+          return 'icon-taolun';
         case 'testpaper':
-          return 'icon-kaoshi'
-          break
+          return 'icon-kaoshi';
         case 'text':
-          return 'icon-tuwen'
-          break
+          return 'icon-tuwen';
         case 'video':
-          return 'icon-shipin'
-          break
+          return 'icon-shipin';
         case 'download':
-          return 'icon-xiazai'
-          break
+          return 'icon-xiazai';
         default:
-          return ''
+          return '';
       }
     },
     // 学习状态
     studyStatus(task) {
       if (task.lock) {
-        return 'icon-suo'
+        return 'icon-suo';
       }
       if (task.result != null) {
         switch (task.result.status) {
           case 'finish':
-            return 'icon-yiwanchengliang'
-            break
+            return 'icon-yiwanchengliang';
           case 'start':
-            return 'icon-weiwancheng'
-            break
+            return 'icon-weiwancheng';
           default:
-            return ''
+            return '';
         }
       } else {
-        return 'icon-weixuexi'
+        return 'icon-weixuexi';
       }
     },
     // 直播状态样式
     liveClass(lesson) {
-      if (lesson.status != 'published' || lesson.type != 'live') {
-        return 'nopublished'
+      if (lesson.status !== 'published' || lesson.type !== 'live') {
+        return 'nopublished';
       }
-      const now = new Date().getTime()
-      const startTimeStamp = new Date(lesson.startTime * 1000)
-      const endTimeStamp = new Date(lesson.endTime * 1000)
+      const now = new Date().getTime();
+      const endTimeStamp = new Date(lesson.endTime * 1000);
       if (now > endTimeStamp) {
         if (lesson.activity.replayStatus === 'ungenerated') {
-          return 'end'
+          return 'end';
         }
-        return 'back'
+        return 'back';
       }
-      return 'play'
-    }
-  }
-}
+      return 'play';
+    },
+  },
+};
 </script>

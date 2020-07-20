@@ -41,7 +41,7 @@
 
         <!-- 目录： 课程和班级在这里的表现不一致，需要通过product.targetType来做变化，其他应该以数据为准 -->
         <section
-          v-if="product.targetType === 'course'"
+          v-if="goods.product.targetType === 'course'"
           class="js-scroll-top goods-info__item"
           id="catalog"
         >
@@ -51,7 +51,7 @@
         </section>
 
         <section
-          v-if="product.targetType === 'classroom'"
+          v-if="goods.product.targetType === 'classroom'"
           class="js-scroll-top goods-info__item"
           id="catalog"
         >
@@ -160,10 +160,6 @@ export default {
         .catch(err => {
           Toast.fail(err.message);
         });
-
-      this.getCourseLessons({
-        courseId: this.$route.params.id,
-      }).then(res => {});
       this.getGoodsCourseComponents();
     },
     getGoodsCourseComponents() {
@@ -191,7 +187,11 @@ export default {
           this.currentSku = this.goods.specs[key];
         }
       }
-
+      if (this.goods.product.targetType === 'course') {
+        this.getCourseLessons({
+          courseId: targetId,
+        }).then(res => {});
+      }
       this.goods.hasExtension = true;
     },
     onActive(value, eleId) {
