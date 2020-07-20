@@ -78,13 +78,13 @@ export default {
       allTaskId: [], // 所有task的id
     };
   },
-  created() {
-    this.getCourseLessons({
-      courseId: this.selectedPlanId,
-    }).then(res => {
-      console.log(res);
-    });
-  },
+  // created() {
+  //   this.getCourseLessons({
+  //     courseId: this.selectedPlanId,
+  //   }).then(res => {
+  //     console.log(res);
+  //   });
+  // },
   computed: {
     ...mapState('course', {
       nextStudy: state => state.nextStudy,
@@ -141,6 +141,14 @@ export default {
       this.setItems(res);
       this.mapChild(this.item);
       this.startScroll();
+      // this.allTask.each(item => {
+      //   if (item.type == 'lesson') {
+      //   item.tasks.forEach(task => {
+      //     task['tagStatus'] = this.getCurrentStatus(task)
+      //   })
+      // }
+      // })
+      console.log(this.allTask);
       this.$store.commit(`course/${types.SET_ALL_TASK}`, this.allTask);
     },
     resetData() {

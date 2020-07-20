@@ -180,7 +180,11 @@ export default {
           this.currentSku = this.goods.specs[key];
         }
       }
-
+      if (this.goods.product.targetType === 'course') {
+        this.getCourseLessons({
+          courseId: targetId,
+        }).then(res => {});
+      }
       this.goods.hasExtension = true;
     },
     onActive(value, eleId) {
