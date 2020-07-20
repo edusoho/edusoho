@@ -9,6 +9,10 @@
 {% block format_detection %}{{ 'telephone=no' }}{% endblock %}
 {% block full_content %}
 
+  {% if previewAs|default('') %}
+    {% set previewAs = '' %}
+  {% endif %}
+
   {% set route_params = app.request.attributes.get('_route_params') %}
 
   {{ render(controller('AppBundle:ItemBankExercise/Exercise:header',{previewAs:previewAs,exercise: exercise, tab:tab, moduleId:moduleId} )) }}
