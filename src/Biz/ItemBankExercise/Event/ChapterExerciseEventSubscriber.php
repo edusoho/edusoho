@@ -166,7 +166,7 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
     {
         $itemBankExercise = $this->getItemBankExerciseService()->get($chapterExerciseRecord['exerciseId']);
         $questinBank = $this->getQuestionBankService()->getQuestionBank($itemBankExercise['questionBankId']);
-        $member = $this->getItemBankExerciseMemberService()->getByEerciseIdAndUserId($chapterExerciseRecord['exerciseId'], $chapterExerciseRecord['userId']);
+        $member = $this->getItemBankExerciseMemberService()->getByExerciseIdAndUserId($chapterExerciseRecord['exerciseId'], $chapterExerciseRecord['userId']);
 
         $doneQuestionNum = $rightQuestionNum = $completionRate = $masteryRate = 0;
         $questionRecords = $this->getItemBankExerciseQuestionRecordService()->findByUserIdAndModuleId(

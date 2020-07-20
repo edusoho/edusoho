@@ -8,7 +8,7 @@ interface ExerciseMemberService
 
     public function update($id, $member);
 
-    public function getByEerciseIdAndUserId($exerciseId, $userId);
+    public function getByExerciseIdAndUserId($exerciseId, $userId);
 
     public function search($conditions, $orderBy, $start, $limit, $columns = []);
 

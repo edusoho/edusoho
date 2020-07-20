@@ -16,7 +16,7 @@ class ItemBankExerciseFilter extends Filter
         'id', 'seq', 'title', 'status', 'chapterEnable', 'assessmentEnable', 'questionBankId',
         'categoryId', 'cover', 'studentNum', 'joinEnable', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate',
         'isFree', 'price', 'originPrice', 'ratingNum', 'rating',
-        'recommended', 'recommendedSeq', 'recommendedTime', 'createdTime', 'updatedTime', 'access',
+        'recommended', 'recommendedSeq', 'recommendedTime', 'createdTime', 'updatedTime', 'access', 'isMember',
     ];
 
     protected function publicFields(&$data)
@@ -33,8 +33,8 @@ class ItemBankExerciseFilter extends Filter
 
     private function transformCover(&$cover)
     {
-        $cover['small'] = AssetHelper::getFurl(empty($cover['small']) ? '' : $cover['small'], 'item-bank-exercise.png');
-        $cover['middle'] = AssetHelper::getFurl(empty($cover['middle']) ? '' : $cover['middle'], 'item-bank-exercise.png');
-        $cover['large'] = AssetHelper::getFurl(empty($cover['large']) ? '' : $cover['large'], 'item-bank-exercise.png');
+        $cover['small'] = AssetHelper::getFurl(empty($cover['small']) ? '' : $cover['small'], 'item_bank_exercise.png');
+        $cover['middle'] = AssetHelper::getFurl(empty($cover['middle']) ? '' : $cover['middle'], 'item_bank_exercise.png');
+        $cover['large'] = AssetHelper::getFurl(empty($cover['large']) ? '' : $cover['large'], 'item_bank_exercise.png');
     }
 }

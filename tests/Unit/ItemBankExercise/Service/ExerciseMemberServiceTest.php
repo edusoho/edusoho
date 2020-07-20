@@ -45,7 +45,7 @@ class ExerciseMemberServiceTest extends BaseTestCase
     public function testGetByExerciseIdAndUserId()
     {
         $member = $this->createExerciseMember();
-        $res = $this->getExerciseMemberService()->getByEerciseIdAndUserId(1, 1);
+        $res = $this->getExerciseMemberService()->getByExerciseIdAndUserId(1, 1);
         $this->assertEquals($member['exerciseId'], $res['exerciseId']);
         $this->assertEquals($member['userId'], $res['userId']);
     }
@@ -126,6 +126,43 @@ class ExerciseMemberServiceTest extends BaseTestCase
         $this->getExerciseMemberService()->addTeacher($exercise['id']);
         $res = $this->getExerciseService()->isExerciseTeacher($exercise['id'], 2);
         $this->assertEquals(true, $res);
+    }
+
+    public function testLockStudent()
+    {
+        $exercise = $this->createExercise();
+        $result = $this->getExerciseMemberService()->lockStudent($exercise['id'], 100);
+        $this->assertNull($result);
+
+        $member = $this->createExerciseMember(['exerciseId' => $exercise['id'], 'userId' => 10]);
+        $result = $this->getExerciseMemberService()->lockStudent($member['exerciseId'], $member['userId']);
+
+        $this->assertEquals(1, $result['locked']);
+    }
+
+    public function testUnlockStudent()
+    {
+        $exercise = $this->createExercise();
+        $result = $this->getExerciseMemberService()->unlockStudent($exercise['id'], 100);
+        $this->assertNull($result);
+
+        $member = $this->createExerciseMember(['exerciseId' => $exercise['id'], 'userId' => 10]);
+        $result = $this->getExerciseMemberService()->lockStudent($member['exerciseId'], $member['userId']);
+
+        $this->assertEquals(1, $result['locked']);
+
+        $result = $this->getExerciseMemberService()->unlockStudent($member['exerciseId'], $member['userId']);
+        $this->assertEquals(0, $result['locked']);
+    }
+
+    public function testRemoveStudent()
+    {
+        $exercise = $this->createExercise();
+        $member = $this->createExerciseMember(['exerciseId' => $exercise['id'], 'userId' => 10]);
+        $this->getExerciseMemberService()->removeStudent($member['exerciseId'], $member['userId']);
+        $result = $this->getExerciseMemberService()->getByExerciseIdAndUserId($member['exerciseId'], $member['userId']);
+
+        $this->assertEmpty($result);
     }
 
     public function testGetExerciseMember()
@@ -235,17 +272,18 @@ class ExerciseMemberServiceTest extends BaseTestCase
         ]);
     }
 
-    protected function createExerciseMember()
+    protected function createExerciseMember($member = [])
     {
-        return $this->getExerciseMemberDao()->create(
-            [
-                'exerciseId' => 1,
-                'questionBankId' => 1,
-                'userId' => 1,
-                'role' => 'student',
-                'remark' => 'aaa',
-            ]
-        );
+        $default = [
+            'exerciseId' => 1,
+            'questionBankId' => 1,
+            'userId' => 1,
+            'role' => 'student',
+            'remark' => 'aaa',
+        ];
+        $member = array_merge($default, $member);
+
+        return $this->getExerciseMemberDao()->create($member);
     }
 
     protected function batchCreateExerciseMembers()

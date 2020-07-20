@@ -31,7 +31,7 @@
         <td>{{ 'course.item_number'|trans }}</td>
         <td>{{ 'course.assessment_number'|trans }}</td>
         <td>{{ 'admin.course_manage.statistics.student_number'|trans }}</td>
-        <td>{{ 'admin.item_bank_exercise.exercise.manage.income'|trans }}</td>
+        <td>{{ 'admin.item_bank_exercise.exercise.manage.income'|trans }}({{ 'site.currency.CNY'|trans }})</td>
       </tr>
 
       {% if exercises %}
@@ -39,7 +39,7 @@
           {% set questionBank = questionBanks[exercise.questionBankId]|default(null) %}
           <tr>
             <td>
-              {{exercise.title}}
+              <a href="{{ path('item_bank_exercise_show', {id: exercise.id}) }}" target="_blank"><strong>{{ exercise.title }}</strong></a>
             </td>
             <td>{{ questionBank.itemBank.item_num|default('0') }}</td>
             <td>{{ exercise.assessment_num|default('0') }}</td>

@@ -3356,16 +3356,6 @@ question_bank_manage_question_picked:
     path: /question_bank/{id}/question/picked
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:pickedQuestion }
 
-answer_engine_submit:
-    path: /answer_engine/submit
-    defaults: { _controller: AppBundle:AnswerEngine/AnswerEngine:submitAnswer }
-    methods: ['POST']
-
-answer_engine_save:
-    path: /answer_engine/save
-    defaults: { _controller: AppBundle:AnswerEngine/AnswerEngine:saveAnswer }
-    methods: ['POST']
-
 answer_engine_review:
     path: /answer_engine/review
     defaults: { _controller: AppBundle:AnswerEngine/AnswerEngine:reviewSave }
@@ -3548,6 +3538,10 @@ item_bank_exercise_manage_students_deadline_batch:
 item_bank_exercise_manage_students_deadline_batch_deadline_check:
   path:  /item_bank_exercise/{exerciseId}/manage/student/deadline/check
   defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:checkUpdateDeadline }
+
+item_bank_exercise_explore:
+    path: /exercise/explore
+    defaults: { _controller: AppBundle:ItemBankExercise/Explore:index }
   
 goods_show:
     path:     /goods/show/{id}

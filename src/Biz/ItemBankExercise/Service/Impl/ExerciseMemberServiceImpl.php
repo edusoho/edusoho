@@ -38,7 +38,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
 
     public function becomeStudent($exerciseId, $userId, $info = [])
     {
-        $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
+        $exercise = $this->getExerciseService()->get($exerciseId);
 
         if (empty($exercise)) {
             $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
@@ -98,7 +98,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         return empty($member) ? false : true;
     }
 
-    public function getByEerciseIdAndUserId($exerciseId, $userId)
+    public function getByExerciseIdAndUserId($exerciseId, $userId)
     {
         return $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
     }
@@ -149,7 +149,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             return;
         }
 
-        $this->getExerciseMemberDao()->update($member['id'], ['locked' => 1]);
+        return $this->getExerciseMemberDao()->update($member['id'], ['locked' => 1]);
     }
 
     public function unlockStudent($exerciseId, $userId)
@@ -173,7 +173,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             return;
         }
 
-        $this->getExerciseMemberDao()->update($member['id'], ['locked' => 0]);
+        return $this->getExerciseMemberDao()->update($member['id'], ['locked' => 0]);
     }
 
     public function removeStudent($exerciseId, $userId, $reason = [])
@@ -184,7 +184,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
         }
 
-        $member = $this->getByEerciseIdAndUserId($exerciseId, $userId);
+        $member = $this->getByExerciseIdAndUserId($exerciseId, $userId);
 
         if (empty($member) || ('student' != $member['role'])) {
             $this->createNewException(ItemBankExerciseException::NOTFOUND_MEMBER());
