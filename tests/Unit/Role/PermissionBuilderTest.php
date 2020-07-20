@@ -5,6 +5,7 @@ namespace Tests\Unit\Tests;
 use Biz\BaseTestCase;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Role\Util\PermissionBuilder;
+use Biz\S2B2C\SupplierPlatformApi;
 use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -13,10 +14,10 @@ class PermissionBuilderTest extends BaseTestCase
     public function testGetPermissionConfig()
     {
         $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
-        $expected = array(
+        $expected = [
             $rootDir.'/../src/AppBundle/Resources/config/menus_admin.yml',
             $rootDir.'/../src/AppBundle/Resources/config/menus_admin_v2.yml',
-        );
+        ];
 
         $this->assertEquals($expected, PermissionBuilder::instance()->getPermissionConfig());
     }
@@ -39,7 +40,7 @@ class PermissionBuilderTest extends BaseTestCase
 
     public function testGetPermissionsByRolesEmpty()
     {
-        $this->assertEmpty(PermissionBuilder::instance()->getPermissionsByRoles(array()));
+        $this->assertEmpty(PermissionBuilder::instance()->getPermissionsByRoles([]));
     }
 
     public function testGetPermissionsByRolesWithRoleSuperAdmin()
@@ -47,17 +48,17 @@ class PermissionBuilderTest extends BaseTestCase
         $builder = PermissionBuilder::instance();
         $expected = $builder->getOriginPermissions();
 
-        $result = $builder->getPermissionsByRoles(array('ROLE_SUPER_ADMIN'));
+        $result = $builder->getPermissionsByRoles(['ROLE_SUPER_ADMIN']);
         $this->assertEquals($expected, $result);
     }
 
     public function testGetPermissionsByRolesWithRoleAdmin()
     {
-        $result = PermissionBuilder::instance()->getPermissionsByRoles(array('ROLE_ADMIN'));
+        $result = PermissionBuilder::instance()->getPermissionsByRoles(['ROLE_ADMIN']);
         $this->assertArrayHasKey('admin', $result);
         $this->assertArrayNotHasKey('admin_system', $result);
 
-        $result = PermissionBuilder::instance()->getPermissionsByRoles(array('ROLE_USER'));
+        $result = PermissionBuilder::instance()->getPermissionsByRoles(['ROLE_USER']);
         $this->assertEmpty($result);
     }
 
@@ -71,6 +72,10 @@ class PermissionBuilderTest extends BaseTestCase
 
     public function testGetOriginSubPermissions()
     {
+        $disabledPermissions = ['course_set_manage_create'];
+        $mockeryPlatformApi = \Mockery::mock(new SupplierPlatformApi($this->biz));
+        $mockeryPlatformApi->shouldReceive('getMerchantDisabledPermissions')->times(1)->andReturn($disabledPermissions);
+        $this->biz['supplier.platform_api'] = $mockeryPlatformApi;
         $result = PermissionBuilder::instance()->getOriginSubPermissions('admin');
         $this->assertCount(9, $result);
     }
@@ -138,7 +143,7 @@ class PermissionBuilderTest extends BaseTestCase
         $permissionBuilder = PermissionBuilder::instance();
         $configs = $permissionBuilder->getPermissionConfig();
 
-        $res = array();
+        $res = [];
         foreach ($configs as $key => $config) {
             if (!file_exists($config)) {
                 continue;
@@ -156,18 +161,18 @@ class PermissionBuilderTest extends BaseTestCase
             return $res;
         }
 
-        $permissionCode = array();
+        $permissionCode = [];
         foreach ($user['roles'] as $code) {
             $role = $this->getRoleService()->getRoleByCode($code);
 
             if (empty($role['data'])) {
-                $role['data'] = array();
+                $role['data'] = [];
             }
 
             $permissionCode = array_merge($permissionCode, $role['data']);
         }
 
-        $permissions = array();
+        $permissions = [];
         foreach ($res as $key => $value) {
             if (in_array($key, $permissionCode)) {
                 $permissions[$key] = $res[$key];
@@ -179,7 +184,7 @@ class PermissionBuilderTest extends BaseTestCase
 
     protected function getMenusFromConfig($parents)
     {
-        $menus = array();
+        $menus = [];
 
         foreach ($parents as $key => $value) {
             if (isset($parents[$key]['children'])) {
@@ -188,7 +193,7 @@ class PermissionBuilderTest extends BaseTestCase
 
                 foreach ($childrenMenu as $childKey => $childValue) {
                     $childValue['parent'] = $key;
-                    $menus = array_merge($menus, $this->getMenusFromConfig(array($childKey => $childValue)));
+                    $menus = array_merge($menus, $this->getMenusFromConfig([$childKey => $childValue]));
                 }
             }
 
