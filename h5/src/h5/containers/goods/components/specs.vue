@@ -116,18 +116,16 @@ export default {
           case 'forever':
             return '永久有效';
           case 'end_date':
-            return this.currentSku.buyableEndTime.slice(0, 10) + '之前可学习';
+            return (
+              this.currentSku.buyableEndTime.slice(0, 10) + '&nbsp;之前可学习'
+            );
           case 'days':
             return 'x天内可学习';
           case 'date':
             return (
-              '<div class = "mt5">' +
-              '开课日期：' +
               this.currentSku.buyableStartTime.slice(0, 10) +
-              '&nbsp;&nbsp;&nbsp;' +
-              '截止日期：' +
-              this.currentSku.buyableEndTime.slice(0, 10) +
-              '</div>'
+              '&nbsp;~&nbsp;' +
+              this.currentSku.buyableEndTime.slice(0, 10)
             );
           default:
             return '';

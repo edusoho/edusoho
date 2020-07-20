@@ -1,87 +1,90 @@
 <template>
-  <div class="goods" v-if="goods.id">
-    <div class="goods-detail">
-      <div class="goods-detail__banner">
-        <img :src="goods.images.large" />
+  <div>
+    <e-loading v-if="isLoading" />
+    <div class="goods" v-if="goods.id">
+      <div class="goods-detail">
+        <div class="goods-detail__banner">
+          <img :src="goods.images.large" />
+        </div>
+        <discount :goods="goods" />
+        <detail :goods="goods" :currentSku="currentSku" />
+        <specs :goods="goods" :currentSku="currentSku" @changeSku="changeSku" />
       </div>
-      <discount :goods="goods" />
-      <detail :goods="goods" :currentSku="currentSku" />
-      <specs :goods="goods" :currentSku="currentSku" @changeSku="changeSku" />
-    </div>
 
-    <div class="goods-info">
-      <ul id="goods-info__nav" class="goods-info__nav">
-        <li @click="onActive(0, 'introduction')">
-          <a :class="active == 0 ? 'active' : ''" href="javascript:;">简介</a>
-        </li>
-        <li @click="onActive(1, 'teacher')">
-          <a :class="active == 1 ? 'active' : ''" href="javascript:;">教师</a>
-        </li>
-        <li @click="onActive(2, 'catalog')">
-          <a :class="active == 2 ? 'active' : ''" href="javascript:;">目录</a>
-        </li>
-        <li @click="onActive(3, 'evaluate')">
-          <a :class="active == 3 ? 'active' : ''" href="javascript:;">评价</a>
-        </li>
-      </ul>
+      <div class="goods-info">
+        <ul id="goods-info__nav" class="goods-info__nav">
+          <li @click="onActive(0, 'introduction')">
+            <a :class="active == 0 ? 'active' : ''" href="javascript:;">简介</a>
+          </li>
+          <li @click="onActive(1, 'teacher')">
+            <a :class="active == 1 ? 'active' : ''" href="javascript:;">教师</a>
+          </li>
+          <li @click="onActive(2, 'catalog')">
+            <a :class="active == 2 ? 'active' : ''" href="javascript:;">目录</a>
+          </li>
+          <li @click="onActive(3, 'evaluate')">
+            <a :class="active == 3 ? 'active' : ''" href="javascript:;">评价</a>
+          </li>
+        </ul>
 
-      <!-- 简介 -->
-      <section class="js-scroll-top goods-info__item" id="introduction">
-        <div class="goods-info__title">课程简介</div>
-        <div class="info-introduction" v-html="summary"></div>
-      </section>
+        <!-- 简介 -->
+        <section class="js-scroll-top goods-info__item" id="introduction">
+          <div class="goods-info__title">课程简介</div>
+          <div class="info-introduction" v-html="summary"></div>
+        </section>
 
-      <!-- 教师 -->
-      <section class="js-scroll-top goods-info__item" id="teacher">
-        <div class="goods-info__title">教师风采</div>
-        <teacher :teachers="componentsInfo.teachers" />
-      </section>
+        <!-- 教师 -->
+        <section class="js-scroll-top goods-info__item" id="teacher">
+          <div class="goods-info__title">教师风采</div>
+          <teacher :teachers="componentsInfo.teachers" />
+        </section>
 
-      <!-- 目录： 课程和班级在这里的表现不一致，需要通过product.targetType来做变化，其他应该以数据为准 -->
-      <section
-        v-if="goods.product.targetType === 'course'"
-        class="js-scroll-top goods-info__item"
-        id="catalog"
-      >
-        <div class="goods-info__title">课程目录</div>
-        <!-- 课程详情 -->
-        <afterjoin-directory />
-      </section>
+        <!-- 目录： 课程和班级在这里的表现不一致，需要通过product.targetType来做变化，其他应该以数据为准 -->
+        <section
+          v-if="goods.product.targetType === 'course'"
+          class="js-scroll-top goods-info__item"
+          id="catalog"
+        >
+          <div class="goods-info__title">课程目录</div>
+          <!-- 课程详情 -->
+          <afterjoin-directory />
+        </section>
 
-      <section
-        v-if="goods.product.targetType === 'classroom'"
-        class="js-scroll-top goods-info__item"
-        id="catalog"
-      >
-        <div class="goods-info__title">学习课程</div>
-        <!-- 学习课程目录 -->
-        <classroom-courses
-          :classroomCourses="componentsInfo.classroomCourses"
-        />
-      </section>
+        <section
+          v-if="goods.product.targetType === 'classroom'"
+          class="js-scroll-top goods-info__item"
+          id="catalog"
+        >
+          <div class="goods-info__title">学习课程</div>
+          <!-- 学习课程目录 -->
+          <classroom-courses
+            :classroomCourses="componentsInfo.classroomCourses"
+          />
+        </section>
 
-      <!-- 评价 -->
-      <section class="js-scroll-top goods-info__item" id="evaluate">
-        <div class="goods-info__title">课程评价</div>
-        <reviews
-          :target-type="'goods'"
-          :target-id="parseInt($route.params.id)"
-          :limit="1"
-        ></reviews>
-      </section>
+        <!-- 评价 -->
+        <section class="js-scroll-top goods-info__item" id="evaluate">
+          <div class="goods-info__title">课程评价</div>
+          <reviews
+            :target-type="'goods'"
+            :target-id="parseInt($route.params.id)"
+            :limit="1"
+          ></reviews>
+        </section>
 
-      <!-- 猜你想学 -->
-      <section class="goods-info__item">
-        <Recommend :recommendGoods="componentsInfo.recommendGoods">
-          <span slot="title">猜你想学</span>
-        </Recommend>
-      </section>
+        <!-- 猜你想学 -->
+        <section class="goods-info__item">
+          <Recommend :recommendGoods="componentsInfo.recommendGoods">
+            <span slot="title">猜你想学</span>
+          </Recommend>
+        </section>
 
-      <!-- 收藏/购买 -->
-      <buy />
+        <!-- 收藏/购买 -->
+        <buy />
 
-      <!-- 回到顶部 -->
-      <back-to-top v-show="backToTopShow" />
+        <!-- 回到顶部 -->
+        <back-to-top v-show="backToTopShow" />
+      </div>
     </div>
   </div>
 </template>
@@ -114,6 +117,7 @@ export default {
       flag: true, // 点击取消滚动监听
       backToTopShow: false, // 是否显示回到顶部
       componentsInfo: {}, // 组件数据
+      isLoading: true,
     };
   },
   components: {
@@ -149,6 +153,9 @@ export default {
           } else {
             this.changeSku(this.goods.product.target.id);
           }
+
+          this.isLoading = false;
+          document.documentElement.scrollTop = 0;
         })
         .catch(err => {
           Toast.fail(err.message);
@@ -229,7 +236,10 @@ export default {
   },
   watch: {
     // 如果路由发生变化，再次执行该方法
-    $route: 'getGoodsCourse',
+    $route() {
+      this.isLoading = true;
+      this.getGoodsCourse();
+    },
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
