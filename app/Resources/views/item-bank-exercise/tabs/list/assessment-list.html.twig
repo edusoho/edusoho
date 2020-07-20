@@ -14,13 +14,9 @@
           <div id="assessment-btn" class="col-md-3 pull-right">
             {% if record|default(null) %}
               {% if record.status == 'doing' or record.status == 'paused' %}
-                <span id="assessment-btn-tip">{{ 'item_bank_exercise.exercise.wait_tip'|trans }}</span>
                 <a id="btn-default" class="cd-btn cd-btn-primary" href="javasrcipt:;">{{ 'item_bank_exercise.assessment.exercise.continue_btn'|trans }}</a>
-              {% elseif record.status == 'reviewing' %}
+              {% elseif record.status == 'reviewing' or record.status == 'finished' %}
                 <a id="btn-view" class="cd-btn cd-btn-ghost-primary" href="javasrcipt:;">{{ 'item_bank_exercise.assessment.exercise.view_btn'|trans }}</a>
-                <a id="btn-default" class="cd-btn cd-btn-ghost-primary" href="javasrcipt:;">{{ 'item_bank_exercise.assessment.exercise.again_btn'|trans }}</a>
-              {% else %}
-                <a id="btn-default" class="cd-btn cd-btn-ghost-primary" href="javasrcipt:;">{{ 'item_bank_exercise.assessment.exercise.start_btn'|trans }}</a>
               {% endif %}
             {% else %}
               <a id="btn-default" class="cd-btn cd-btn-ghost-primary" href="javasrcipt:;">{{ 'item_bank_exercise.assessment.exercise.start_btn'|trans }}</a>

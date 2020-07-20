@@ -115,7 +115,7 @@ class ExerciseController extends BaseController
         );
     }
 
-    public function headerAction(Request $request, $exercise)
+    public function headerAction(Request $request, $exercise, $tab, $moduleId)
     {
         $user = $this->getCurrentUser();
 
@@ -133,6 +133,8 @@ class ExerciseController extends BaseController
                 'isUserFavorite' => $isUserFavorite,
                 'member' => $member,
                 'exercise' => $exercise,
+                'tab' => $tab,
+                'moduleId' => $moduleId,
             ]
         );
     }
@@ -251,7 +253,7 @@ class ExerciseController extends BaseController
         if ($member) {
             $records = $this->getChapterExerciseRecordService()->search(
                 ['moduleId' => $moduleId, 'exerciseId' => $exerciseId, 'userId' => $user['id']],
-                ['createdTime' => 'DESC'],
+                ['createdTime' => 'ASC'],
                 0,
                 PHP_INT_MAX
             );
@@ -284,7 +286,7 @@ class ExerciseController extends BaseController
         if ($exercise['assessmentEnable']) {
             $assessmentExercises = $this->getAssessmentExerciseService()->search(
                 ['moduleId' => $moduleId],
-                ['createdTime' => 'desc'],
+                ['createdTime' => 'DESC'],
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
@@ -295,7 +297,7 @@ class ExerciseController extends BaseController
         if ($member) {
             $records = $this->getAssessmentExerciseRecordService()->search(
                 ['moduleId' => $moduleId, 'exerciseId' => $exerciseId, 'userId' => $user['id']],
-                ['createdTime' => 'DESC'],
+                ['createdTime' => 'ASC'],
                 0,
                 PHP_INT_MAX
             );

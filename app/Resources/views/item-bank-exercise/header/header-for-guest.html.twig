@@ -138,7 +138,7 @@
             {% if exercise.expiryMode == 'date' and exercise.expiryStartDate >= timestamp() %}
               {{ 'item_bank_exercise.expiry_date.expiryStartDate'|trans({'%expiryStartDate%':exercise.expiryStartDate|date('date.format'|trans)})|raw }}
             {% else %}
-              <a class="cd-btn cd-btn-primary" href="{{ path('my_item_bank_exercise_show', {id: exercise.id}) }}">
+              <a class="cd-btn cd-btn-primary" href="{{ path('my_item_bank_exercise_show', {id: exercise.id, tab: tab|default('reviews'), moduleId:moduleId|default(0)}) }}">
                 {{ 'course.btn.learn'|trans }}
               </a>
             {% endif %}
