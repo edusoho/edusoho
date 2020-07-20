@@ -14,6 +14,8 @@ class ItemBankExerciseProduct extends Product implements OrderStatusCallback
 
     public $targetType = self::TYPE;
 
+    public $showTemplate = 'order/show/exercise-item.html.twig';
+
     public function init(array $params)
     {
         $exercise = $this->getExerciseService()->get($params['targetId']);
@@ -21,7 +23,7 @@ class ItemBankExerciseProduct extends Product implements OrderStatusCallback
         $this->backUrl = ['routing' => 'item_bank_exercise_show', 'params' => ['id' => $exercise['id']]];
         $this->successUrl = ['item_bank_exercise_show', ['id' => $this->targetId]];
         $this->title = $exercise['title'];
-        $this->originPrice = $exercise['price'];
+        $this->originPrice = $exercise['originPrice'];
         $this->maxRate = 100;
         $this->productEnable = 'published' === $exercise['status'] ? true : false;
         $this->cover = [

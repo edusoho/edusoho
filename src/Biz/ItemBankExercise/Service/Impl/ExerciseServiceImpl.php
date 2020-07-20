@@ -381,6 +381,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             $fields['isFree'] = 1;
         } else {
             $fields['isFree'] = 0;
+            $fields['originPrice'] = $fields['price'];
         }
 
         return $fields;
