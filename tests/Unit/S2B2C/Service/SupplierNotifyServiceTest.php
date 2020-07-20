@@ -4,6 +4,7 @@ namespace Tests\Unit\S2B2C\Service;
 
 use Biz\BaseTestCase;
 use Biz\S2B2C\Service\SupplierNotifyService;
+use Biz\S2B2C\SupplierPlatformApi;
 use Biz\System\Service\SettingService;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
@@ -29,6 +30,10 @@ class SupplierNotifyServiceTest extends BaseTestCase
     {
         $this->createParameter();
         $this->mockGetMe();
+        $disabledPermissions = ['course_set_manage_create'];
+        $mockeryPlatformApi = \Mockery::mock(new SupplierPlatformApi($this->biz));
+        $mockeryPlatformApi->shouldReceive('getMerchantDisabledPermissions')->times(1)->andReturn($disabledPermissions);
+        $this->biz['supplier.platform_api'] = $mockeryPlatformApi;
         $result = $this->getSupplierNotifyService()->onCoopModeChange([]);
         $this->assertEquals(['success' => true], $result);
         $yaml = new Yaml();
