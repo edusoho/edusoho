@@ -55,7 +55,7 @@
             </div>
             <div class="mts">
               {% if exercise %}
-                <a class="color-success text-sm" href="#" target="_blank">{{ exercises[review.targetId].title }}</a>
+                <a class="color-success text-sm" href="{{ path('item_bank_exercise_show', {id:exercises[review.targetId].id}) }}" target="_blank">{{ exercises[review.targetId].title }}</a>
               {% else %}
                 <span class="color-gray text-sm">{{'admin.course_review.classroom_deleted'|trans({'%classroomName%':setting('item_bank_exercise.base.title')|default('my.teaching.item_bank_exercise.item'|trans)})}}</span>
               {% endif %}
