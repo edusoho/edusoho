@@ -15,7 +15,7 @@ class UpdateProductVersionJob extends AbstractJob
         $products = $this->getProducts();
         $this->biz->offsetGet('s2b2c.merchant.logger')->info('[UpdateProductJob] product', $products);
         foreach ($products as $product) {
-            $this->getS2B2CCourseProductService()->updateProductVersionData($product['remoteProductId']);
+            $this->getProductService()->updateProductVersion($product['id']);
         }
     }
 
