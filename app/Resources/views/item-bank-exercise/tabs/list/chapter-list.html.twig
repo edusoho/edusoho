@@ -1,7 +1,6 @@
 {% do script(['libs/jquery-sortable.js','app/js/item-bank-exercise/exercise/show/index.js']) %}
 {% set record = [] %}
 <div class="course-detail-content js-course-detail-content">
-{#  {% set previewAs = app.request.query.get('previewAs') %}#}
   <ul id="sortable-list" class="task-list">
     {% for key, item in categoryTree %}
       {% if records|default(null) %}{% set record = records[item.id]|default(null)  %}{% endif %}

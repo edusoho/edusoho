@@ -1,12 +1,12 @@
 <ul class="nav nav-tabs nav-tabs--course" role="tablist">
   {% for tab in tabs %}
-      <li role="presentation" id="{{ tab.type }}_{{ tab.id }}"
-          class="{% if route_params.tab|default('') == tab.type ~ '_' ~ tab.id  or nav|default('') == tab.type ~ '_' ~ tab.id %}active{% endif %}">
+      <li role="presentation" id="{{ tab.id }}"
+          class="{% if route_params.moduleId|default('') == tab.id%}active{% endif %}">
         <a
           {% if member|default(false) and previewAs|default(null) %}
-            href="{{ path('my_item_bank_exercise_show', {'id': exercise.id, 'tab': tab.type ~ '_' ~ tab.id}) }}"
+            href="{{ path('my_item_bank_exercise_show', {'id': exercise.id, 'tab': tab.type, 'moduleId': tab.id}) }}"
           {% else %}
-            href="{{ path('item_bank_exercise_show', {'id': exercise.id, 'tab': tab.type ~ '_' ~ tab.id}) }}"
+            href="{{ path('item_bank_exercise_show', {'id': exercise.id, 'tab': tab.type, 'moduleId':tab.id}) }}"
           {% endif %}
         >
           {{ tab.title }}

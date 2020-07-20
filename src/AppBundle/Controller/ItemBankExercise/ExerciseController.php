@@ -80,7 +80,7 @@ class ExerciseController extends BaseController
         );
     }
 
-    public function showAction(Request $request, $id, $tab = 'reviews')
+    public function showAction(Request $request, $id, $tab = 'reviews', $moduleId = 0)
     {
         $user = $this->getCurrentUser();
         $exercise = $this->getExerciseService()->get($id);
@@ -106,6 +106,7 @@ class ExerciseController extends BaseController
             [
                 'tab' => $tab,
                 'tabs' => $this->getExerciseModuleService()->findByExerciseId($id),
+                'moduleId' => $moduleId,
                 'exercise' => $exercise,
                 'isExerciseTeacher' => $isExerciseTeacher,
                 'member' => $member,
@@ -114,7 +115,7 @@ class ExerciseController extends BaseController
         );
     }
 
-    public function headerAction(Request $request, $exercise)
+    public function headerAction(Request $request, $exercise, $tab, $moduleId)
     {
         $user = $this->getCurrentUser();
 
@@ -132,6 +133,8 @@ class ExerciseController extends BaseController
                 'isUserFavorite' => $isUserFavorite,
                 'member' => $member,
                 'exercise' => $exercise,
+                'tab' => $tab,
+                'moduleId' => $moduleId,
             ]
         );
     }
@@ -221,15 +224,14 @@ class ExerciseController extends BaseController
         );
     }
 
-    public function moduleAction(Request $request, $previewAs, $exerciseId, $tab)
+    public function moduleAction(Request $request, $previewAs, $exerciseId, $moduleId)
     {
-        list($type, $moduleId) = explode('_', $tab);
+        $module = $this->getExerciseModuleService()->get($moduleId);
 
         return $this->render(
             'item-bank-exercise/tabs/module.html.twig',
             [
-                'tab' => $tab,
-                'moduleType' => $type,
+                'moduleType' => $module['type'],
                 'moduleId' => $moduleId,
                 'exerciseId' => $exerciseId,
                 'previewAs' => $previewAs,
@@ -251,7 +253,7 @@ class ExerciseController extends BaseController
         if ($member) {
             $records = $this->getChapterExerciseRecordService()->search(
                 ['moduleId' => $moduleId, 'exerciseId' => $exerciseId, 'userId' => $user['id']],
-                ['createdTime' => 'DESC'],
+                ['createdTime' => 'ASC'],
                 0,
                 PHP_INT_MAX
             );
@@ -284,7 +286,7 @@ class ExerciseController extends BaseController
         if ($exercise['assessmentEnable']) {
             $assessmentExercises = $this->getAssessmentExerciseService()->search(
                 ['moduleId' => $moduleId],
-                ['createdTime' => 'desc'],
+                ['createdTime' => 'DESC'],
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
@@ -295,7 +297,7 @@ class ExerciseController extends BaseController
         if ($member) {
             $records = $this->getAssessmentExerciseRecordService()->search(
                 ['moduleId' => $moduleId, 'exerciseId' => $exerciseId, 'userId' => $user['id']],
-                ['createdTime' => 'DESC'],
+                ['createdTime' => 'ASC'],
                 0,
                 PHP_INT_MAX
             );
@@ -318,9 +320,9 @@ class ExerciseController extends BaseController
     {
         $records = $this->getCacheService()->get("item_bank_exercise({$exerciseId})");
         $records = json_decode($records, true);
-        if (empty($records)){
+        if (empty($records)) {
             $records = $this->getChapterExerciseRecordService()->findWeekRankRecords($exerciseId);
-            $expiryTime = mktime(23,59,59,date('m'),date('d')-date('w')+7,date('Y'));
+            $expiryTime = mktime(23, 59, 59, date('m'), date('d') - date('w') + 7, date('Y'));
             $this->getCacheService()->set("item_bank_exercise({$exerciseId})", json_encode($records), $expiryTime);
         }
 
