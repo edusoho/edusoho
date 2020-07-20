@@ -121,6 +121,7 @@ class ProductDaoImpl extends AdvancedDaoImpl implements ProductDao
     public function findRemoteVersionGTLocalVersion()
     {
         $sql = "SELECT * FROM {$this->table} WHERE remoteVersion > localVersion AND productType = ? ORDER BY ? ?;";
-        return $this->db()->fetchAll($sql, array('course_set', 'createdTime', 'desc'));
+
+        return $this->db()->fetchAll($sql, ['course_set', 'createdTime', 'desc']);
     }
 }
