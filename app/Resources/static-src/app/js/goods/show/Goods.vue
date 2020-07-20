@@ -17,7 +17,7 @@
                             </li>
                         </ul>
                         <div class="buy__btn pull-right">
-                            <a href="javascript:;">立即购买</a>
+                            <buy-sku :sku="currentSku"></buy-sku>
                         </div>
                     </div>
                 </div>
@@ -76,6 +76,7 @@
     import BackToTop from './components/back-to-top';
     import Reviews from 'app/common/component/review/index';
     import ClassroomCourses from './components/classroom-courses';
+    import BuySku from './components/buy-sku';
 
     export default {
         data() {
@@ -105,6 +106,7 @@
             BackToTop,
             Reviews,
             ClassroomCourses,
+            BuySku,
         },
         computed: {
             summaryHtml() {
@@ -192,7 +194,6 @@
                     this.flag = true;
                 }, 300);
             },
-
         },
         created() {
             this.getGoodsInfo();

@@ -7,6 +7,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Util\CourseTitleUtils;
+use Biz\Goods\Service\GoodsService;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Codeages\Biz\Order\Status\OrderStatusCallback;
 
@@ -20,6 +21,8 @@ class CourseProduct extends Product implements OrderStatusCallback
 
     public $courseSet;
 
+    public $courseId;
+
     /**
      * 课程展示价格
      *
@@ -30,10 +33,14 @@ class CourseProduct extends Product implements OrderStatusCallback
     public function init(array $params)
     {
         $this->targetId = $params['targetId'];
-        $course = $this->getCourseService()->getCourse($this->targetId);
-        $this->backUrl = array('routing' => 'course_show', 'params' => array('id' => $this->targetId));
-        $this->successUrl = array('my_course_show', array('id' => $this->targetId));
+
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecs($params['targetId']);
+        $course = $this->getCourseService()->getCourse($goodsSpecs['targetId']);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
+        $this->courseId = $course['id'];
+        $this->backUrl = ['routing' => 'course_show', 'params' => ['id' => $this->courseId]];
+        $this->successUrl = ['my_course_show', ['id' => $this->courseId]];
         $this->courseSet = $courseSet;
         $this->productEnable = ('published' === $course['status'] && 'published' === $courseSet['status']) ? true : false;
         $this->title = CourseTitleUtils::getDisplayedTitle($course);
@@ -49,9 +56,9 @@ class CourseProduct extends Product implements OrderStatusCallback
 
     public function validate()
     {
-        $access = $this->getCourseService()->canJoinCourse($this->targetId);
+        $access = $this->getCourseService()->canJoinCourse($this->courseId);
 
-        $course = $this->getCourseService()->getCourse($this->targetId);
+        $course = $this->getCourseService()->getCourse($this->courseId);
 
         if (!$course['buyable']) {
             throw OrderPayCheckException::UNPURCHASABLE_PRODUCT();
@@ -68,25 +75,26 @@ class CourseProduct extends Product implements OrderStatusCallback
         $this->smsCallback($orderItem, $targetName);
 
         $order = $this->getOrderService()->getOrder($orderItem['order_id']);
-        $info = array(
+        $info = [
             'orderId' => $order['id'],
             'remark' => $order['created_reason'],
-        );
+        ];
+
+        $course = $this->getCourseByGoodsSpecsId($orderItem['target_id']);
 
         try {
-            if (!$this->getCourseMemberService()->isCourseStudent($orderItem['target_id'], $orderItem['user_id'])) {
-                $member = $this->getCourseMemberService()->becomeStudent($orderItem['target_id'], $orderItem['user_id'], $info);
+            if (!$this->getCourseMemberService()->isCourseStudent($course['id'], $orderItem['user_id'])) {
+                $member = $this->getCourseMemberService()->becomeStudent($course['id'], $orderItem['user_id'], $info);
             }
 
             if (isset($member)) {
-                $course = $this->getCourseService()->getCourse($orderItem['target_id']);
-                $this->getLogService()->info('course', 'join_course', "加入教学计划《{$course['title']}》", array('userId' => $orderItem['user_id'], 'courseId' => $course['id'], 'title' => ($course['title']) ? $course['title'] : $course['courseSetTitle']));
+                $this->getLogService()->info('course', 'join_course', "加入教学计划《{$course['title']}》", ['userId' => $orderItem['user_id'], 'courseId' => $course['id'], 'title' => ($course['title']) ? $course['title'] : $course['courseSetTitle']]);
             }
 
             return OrderStatusCallback::SUCCESS;
         } catch (\Exception $e) {
             $this->getLogService()->error('order', 'course_callback', 'order.course_callback.fail',
-                array('error' => $e->getMessage(), 'context' => $orderItem));
+                ['error' => $e->getMessage(), 'context' => $orderItem]);
 
             return false;
         }
@@ -95,22 +103,27 @@ class CourseProduct extends Product implements OrderStatusCallback
     public function onOrderRefundAuditing($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
-        $this->getCourseMemberService()->lockStudent($orderItem['target_id'], $orderItem['user_id']);
+        $course = $this->getCourseByGoodsSpecsId($orderItem['target_id']);
+
+        $this->getCourseMemberService()->lockStudent($course['id'], $orderItem['user_id']);
     }
 
     public function onOrderRefundCancel($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
-        $this->getCourseMemberService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
+        $course = $this->getCourseByGoodsSpecsId($orderItem['target_id']);
+
+        $this->getCourseMemberService()->unlockStudent($course['id'], $orderItem['user_id']);
     }
 
     public function onOrderRefundRefunded($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
+        $course = $this->getCourseByGoodsSpecsId($orderItem['target_id']);
 
-        $member = $this->getCourseMemberService()->getCourseMember($orderItem['target_id'], $orderItem['user_id']);
+        $member = $this->getCourseMemberService()->getCourseMember($course['id'], $orderItem['user_id']);
         if (!empty($member)) {
-            $this->getCourseMemberService()->removeStudent($orderItem['target_id'], $orderItem['user_id']);
+            $this->getCourseMemberService()->removeStudent($course['id'], $orderItem['user_id']);
         }
 
         $this->updateMemberRecordByRefundItem($orderItem);
@@ -119,10 +132,18 @@ class CourseProduct extends Product implements OrderStatusCallback
     public function onOrderRefundRefused($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
-        $course = $this->getCourseService()->getCourse($orderItem['target_id']);
+        $course = $this->getCourseByGoodsSpecsId($orderItem['target_id']);
+
         if (!empty($course)) {
-            $this->getCourseMemberService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
+            $this->getCourseMemberService()->unlockStudent($course['id'], $orderItem['user_id']);
         }
+    }
+
+    protected function getCourseByGoodsSpecsId($id)
+    {
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecs($id);
+
+        return $this->getCourseService()->getCourse($goodsSpecs['targetId']);
     }
 
     /**
@@ -147,5 +168,13 @@ class CourseProduct extends Product implements OrderStatusCallback
     protected function getCourseSetService()
     {
         return $this->biz->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->biz->service('Goods:GoodsService');
     }
 }

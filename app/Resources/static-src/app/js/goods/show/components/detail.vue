@@ -59,18 +59,20 @@
         </div>
 
         <!-- 立即购买 -->
-        <div class="product-detail__btn">立即购买</div>
+        <buy-sku :sku="currentSku" :btn-class="'product-detail__btn'"></buy-sku>
     </div>
 </template>
 
 <script>
     import Favorite from "./favorite";
     import Share from 'app/js/share/src/share.vue';
+    import BuySku from './buy-sku';
 
     export default {
         components: {
             Favorite,
-            Share
+            Share,
+            BuySku,
         },
         props: {
             goods: {

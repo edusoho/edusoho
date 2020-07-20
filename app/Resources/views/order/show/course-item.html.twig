@@ -4,7 +4,7 @@
 {% else %}
   <div class="order-center-card clearfix">
     <div class="order-center-card__img">
-      <a href="{{ path('course_show', {id: product.targetId}) }}">
+      <a href="{{ path('course_show', {id: product.courseId}) }}">
         <img src="{{ filepath(course_set_cover(product.courseSet, 'middle'), 'courseSet.png') }}" alt="{{ product.title }}">
       </a>
     </div>
