@@ -1,7 +1,7 @@
 {% import "admin-v2/macro.html.twig" as admin_macro %}
 {% set target = 'recommend_list' %}
 
-{% set showUrl = '' %}
+{% set showUrl = path('item_bank_exercise_show', {id:exercise.id}) %}
 {% set cancelUrl = path('admin_v2_item_bank_exercise_cancel_recommend', {id:exercise.id}) %}
 {% set recommendUrl = path('admin_v2_item_bank_exercise_recommend', {id:exercise.id}) %}
 
@@ -12,7 +12,6 @@
     <br>
     <span class="text-muted text-sm">{{'admin.course_manage.recommend.category'|trans}}：{{ category.name|default('--') }}</span>
   </td>
-{#  {% include 'org/parts/table-body-td.html.twig' with {orgCode: courseSet.orgCode}%}#}
   <td>
     {{ admin_macro.user_link(user) }}
     <br>
