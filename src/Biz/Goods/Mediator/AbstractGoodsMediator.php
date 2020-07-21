@@ -5,30 +5,31 @@ namespace Biz\Goods\Mediator;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
 use Codeages\Biz\Framework\Context\Biz;
+use Pimple\Container;
 
-class AbstractGoodsMediator
+abstract class AbstractGoodsMediator
 {
     /**
      * @var Biz
      */
     protected $biz;
 
-    public function __construct(Biz $biz)
+    public function __construct(Container $biz)
     {
         $this->biz = $biz;
     }
 
-    abstract public function onCreate();
+    abstract public function onCreate($target);
 
-    abstract public function onUpdateNormalData();
+    abstract public function onUpdateNormalData($target);
 
-    abstract public function onPriceUpdate();
+    abstract public function onPriceUpdate($target);
 
-    abstract public function onClose();
+    abstract public function onClose($target);
 
-    abstract public function onPublish();
+    abstract public function onPublish($target);
 
-    abstract public function onDelete();
+    abstract public function onDelete($target);
 
     /**
      * @return GoodsService
