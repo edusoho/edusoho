@@ -9,6 +9,7 @@
 {% block format_detection %}{{ 'telephone=no' }}{% endblock %}
 {% block full_content %}
 
+  {% set previewAs = 'member' %}
   {% set route_params = app.request.attributes.get('_route_params') %}
 
   {{ render(controller('AppBundle:My/ItemBankExercise:header',{previewAs:previewAs,exercise: exercise} )) }}

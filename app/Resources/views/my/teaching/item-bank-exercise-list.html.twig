@@ -9,9 +9,9 @@
 {% block btn %}
   <a class="cd-btn cd-btn-ghost-primary cd-mr16" href="{{ path('item_bank_exercise_open', {id: item.questionBankId }) }}" target="_blank">{{ 'item_bank_exercise.manage_btn'|trans }}</a>
   {% if item.status != 'published' %}
-    <a class="cd-btn cd-btn-ghost-default" href="{{ path('item_bank_exercise_show', {id: item.id}) }}" target="_blank">{{ 'item_bank_exercise.preview.course'|trans }}</a>
+    <a class="cd-btn cd-btn-ghost-default" href="{{ path('item_bank_exercise_show', {id: item.id, previewAs:'guest'}) }}" target="_blank">{{ 'item_bank_exercise.preview.course'|trans }}</a>
   {% else %}
-    <a class="cd-btn cd-btn-ghost-default" href="{{ path('item_bank_exercise_show', {id: item.id}) }}" target="_blank">{{'my.learning.item_bank_exercise.watch'|trans}}</a>
+    <a class="cd-btn cd-btn-ghost-default" href="{{ path('item_bank_exercise_show', {id: item.id, previewAs:'guest'}) }}" target="_blank">{{'my.learning.item_bank_exercise.watch'|trans}}</a>
   {% endif %}
 {% endblock %}
 

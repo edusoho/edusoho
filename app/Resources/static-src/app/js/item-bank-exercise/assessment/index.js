@@ -66,9 +66,17 @@ class AssessmentModule {
     cd.onoff({
       el: '#switch'
     }).on('change', (value) => {
-      console.log(value);
-      $.post($('#switch').data('url'), {assessmentEnable: value}, function () {
-        location.reload();
+      $.get($('#canOpen').val(), function (data) {
+        if (data){
+          $.post($('#switch').data('url'), {assessmentEnable: value}, function () {
+            location.reload();
+          });
+        }else {
+          cd.message({ type: 'danger', message: Translator.trans('item_bank_exercise.module.switch.danger') });
+          setTimeout(function () {
+            window.location.reload();
+          }, 1000);
+        }
       });
     });
   }

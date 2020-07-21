@@ -7,5 +7,6 @@
   </label>
   <span class="switch-title-info">{{ 'item_bank_exercise.chapter_exercise.info'|trans }}</span>
   <input type="hidden" value="{{ path('item_bank_exercise_manage_chapter_exercise_open',{exerciseId:exercise.id}) }}" id="openUrl">
+  <input type="hidden" value="{{ path('item_bank_exercise_manage_can_module_open',{exerciseId:exercise.id, type:'chapter'}) }}" id="canOpen">
   <input type="hidden" value="{{ exercise.id }}" id="exerciseId">
 </div>

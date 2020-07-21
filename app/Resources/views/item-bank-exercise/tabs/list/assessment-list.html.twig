@@ -3,27 +3,29 @@
   <ul class="task-list infinite-container">
     {% for assessment in assessments if assessments %}
       {% if records|default(null) %}{% set record = records[assessment.id]|default(null)  %}{% endif %}
-      <li class="assessment-list-li">
-        <div class="col-md-2">
-          <div style="font-weight:400;color:#333333;">{{ assessment.name }}</div>
-          <div id="assessment-info">
-            {{ 'course.testpaper_manage.count'|trans({'%itemCount%': assessment.item_count}) }}/{{ 'course.testpaper_manage.score'|trans({'%score%':assessment.total_score}) }}
+      <div class="row">
+        <li class="assessment-list-li">
+          <div class="col-xs-7">
+            <div style="font-weight:400;color:#333333;">{{ assessment.name }}</div>
+            <div id="assessment-info">
+              {{ 'course.testpaper_manage.count'|trans({'%itemCount%': assessment.item_count}) }}/{{ 'course.testpaper_manage.score'|trans({'%score%':assessment.total_score}) }}
+            </div>
           </div>
-        </div>
-        {% if member|default(null) and previewAs|default(null) %}
-          <div id="assessment-btn" class="col-md-3 pull-right">
-            {% if record|default(null) %}
-              {% if record.status == 'doing' or record.status == 'paused' %}
-                <a id="btn-default" class="cd-btn cd-btn-primary" href="{{ path('item_bank_exercise_assessment_answer', {exerciseId:exercise.id, moduleId:moduleId, assessmentId:assessment.id}) }}">{{ 'item_bank_exercise.assessment.exercise.continue_btn'|trans }}</a>
-              {% elseif record.status == 'reviewing' or record.status == 'finished' %}
-                <a id="btn-view" class="cd-btn cd-btn-ghost-primary" href="{{ path('item_bank_exercise_assessment_answer', {exerciseId:exercise.id, moduleId:moduleId, assessmentId:assessment.id}) }}">{{ 'item_bank_exercise.assessment.exercise.view_btn'|trans }}</a>
+          {% if member|default(null) and previewAs|default(null) == 'member' %}
+            <div id="assessment-btn" class="col-xs-5">
+              {% if record|default(null) %}
+                {% if record.status == 'doing' or record.status == 'paused' %}
+                  <a id="btn-default" class="cd-btn cd-btn-primary" href="{{ path('item_bank_exercise_assessment_answer', {exerciseId:exercise.id, moduleId:moduleId, assessmentId:assessment.id}) }}">{{ 'item_bank_exercise.assessment.exercise.continue_btn'|trans }}</a>
+                {% elseif record.status == 'reviewing' or record.status == 'finished' %}
+                  <a id="btn-view" class="cd-btn cd-btn-ghost-primary" href="{{ path('item_bank_exercise_assessment_answer', {exerciseId:exercise.id, moduleId:moduleId, assessmentId:assessment.id}) }}">{{ 'item_bank_exercise.assessment.exercise.view_btn'|trans }}</a>
+                {% endif %}
+              {% else %}
+                <a id="btn-default" class="cd-btn cd-btn-ghost-primary" href="{{ path('item_bank_exercise_assessment_answer', {exerciseId:exercise.id, moduleId:moduleId, assessmentId:assessment.id}) }}">{{ 'item_bank_exercise.assessment.exercise.start_btn'|trans }}</a>
               {% endif %}
-            {% else %}
-              <a id="btn-default" class="cd-btn cd-btn-ghost-primary" href="{{ path('item_bank_exercise_assessment_answer', {exerciseId:exercise.id, moduleId:moduleId, assessmentId:assessment.id}) }}">{{ 'item_bank_exercise.assessment.exercise.start_btn'|trans }}</a>
-            {% endif %}
-          </div>
-        {% endif %}
-      </li>
+            </div>
+          {% endif %}
+        </li>
+      </div>
     {% else %}
       <div class="empty js-task-empty">
         {{'my.teaching.question_bank.testpaper.empty'|trans}}

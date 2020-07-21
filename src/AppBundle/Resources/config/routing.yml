@@ -3465,6 +3465,10 @@ item_bank_exercise_manage_cover_crop:
     path: /item_bank_exercise/{exerciseId}/manage/cover_crop
     defaults: {_controller: AppBundle:ItemBankExercise/ExerciseManage:coverCrop}
 
+item_bank_exercise_manage_can_module_open:
+  path: /item_bank_exercise/{exerciseId}/manage/can/{type}/open
+  defaults: {_controller: AppBundle:ItemBankExercise/ExerciseManage:canOpen}
+
 item_bank_exercise_manage_assessment:
     path: /item_bank_exercise/{exerciseId}/manage/assessment/{moduleId}
     defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:index, moduleId: 0}
@@ -3535,12 +3539,12 @@ item_bank_exercise_explore:
 
 item_bank_exercise_show:
   path: /item_bank_exercise/{id}/{tab}/{moduleId}
-  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:show, tab: 'reviews',moduleId: 0 }
+  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:show, tab: '',moduleId: 0 }
   h5: true
 
 my_item_bank_exercise_show:
   path:  /my/item_bank_exercise/{id}/{tab}/{moduleId}
-  defaults: { _controller: AppBundle:My/ItemBankExercise:show, tab: 'reviews',moduleId: 0 }
+  defaults: { _controller: AppBundle:My/ItemBankExercise:show, tab: '',moduleId: 0 }
   h5: true
 
 item_bank_exercise_assessment_answer:

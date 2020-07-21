@@ -13,6 +13,7 @@
         <label class="cd-switch {% if exercise.assessmentEnable == 1 %}checked{% endif %}" style="vertical-align: -4px;">
           <input id="switch" type="radio" value="{{ exercise.assessmentEnable }}" data-url="{{ path('item_bank_exercise_manage_assessment_exercise_open', {exerciseId: exercise.id}) }}" checked>
         </label>
+        <input type="hidden" value="{{ path('item_bank_exercise_manage_can_module_open',{exerciseId:exercise.id, type:'assessment'}) }}" id="canOpen">
         <span class="text-14 ml20" style="color: #adadad; line-height: 1;">
           {{ 'item_bank_exercise.testpaper_practice.tip'|trans }}
         </span>

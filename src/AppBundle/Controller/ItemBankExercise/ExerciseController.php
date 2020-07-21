@@ -80,7 +80,7 @@ class ExerciseController extends BaseController
         );
     }
 
-    public function showAction(Request $request, $id, $tab = 'reviews', $moduleId = 0)
+    public function showAction(Request $request, $id, $tab, $moduleId)
     {
         $user = $this->getCurrentUser();
         $exercise = $this->getExerciseService()->get($id);
@@ -90,25 +90,49 @@ class ExerciseController extends BaseController
 
         $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : null;
         $previewAs = $request->query->get('previewAs', '');
-        if (!empty($previewAs) && $user->isLogin() && $this->canExerciseShowRedirect($request)) {
-            if ('date' != $exercise['expiryMode'] || $exercise['expiryStartDate'] < time()) {
-                return $this->redirect(($this->generateUrl('my_item_bank_exercise_show', ['id' => $id])));
+        if (empty($previewAs) && $user->isLogin() && $this->canExerciseShowRedirect($request)) {
+            if (!empty($member)){
+                if ('date' != $exercise['expiryMode'] || $exercise['expiryStartDate'] < time()) {
+                    return $this->redirect(($this->generateUrl('my_item_bank_exercise_show', ['id' => $id])));
+                }
             }
         }
 
         $isExerciseTeacher = $this->getExerciseService()->isExerciseTeacher($id, $user['id']);
+        $tabs = $this->getTabs($exercise);
+        if (!empty($tabs) && $tab == ''){
+            $tab = $tabs[0]['type'];
+            $moduleId = $tabs[0]['id'];
+        }
 
         return $this->render(
             'item-bank-exercise/exercise-show.html.twig',
             [
-                'tab' => $tab,
-                'tabs' => $this->getExerciseModuleService()->findByExerciseId($id),
+                'tab' => $tab == '' ? 'reviews' : $tab,
+                'tabs' => $tabs,
                 'moduleId' => $moduleId,
                 'exercise' => $exercise,
                 'isExerciseTeacher' => $isExerciseTeacher,
                 'member' => $member,
                 'previewAs' => $previewAs,
             ]
+        );
+    }
+
+    protected function getTabs($exercise)
+    {
+        $condition['exerciseId'] = $exercise['id'];
+        if ($exercise['chapterEnable']) {
+            $condition['types'][] = 'chapter';
+        }
+        if ($exercise['assessmentEnable']) {
+            $condition['types'][] = 'assessment';
+        }
+        return $this->getExerciseModuleService()->search(
+            $condition,
+            [],
+            0,
+            6
         );
     }
 
