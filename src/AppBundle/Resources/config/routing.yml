@@ -3546,7 +3546,15 @@ my_item_bank_exercise_show:
   path:  /my/item_bank_exercise/{id}/{tab}/{moduleId}
   defaults: { _controller: AppBundle:My/ItemBankExercise:show, tab: 'reviews',moduleId: 0 }
   h5: true
-  
+
+item_bank_exercise_assessment_answer:
+  path: /item_bank_exercise/{exerciseId}/module/{moduleId}/assessment/{assessmentId}/answer
+  defaults: { _controller: AppBundle:ItemBankExercise/Answer:assessmentAnswer }
+
+item_bank_exercise_category_answer:
+  path: /item_bank_exercise/{exerciseId}/module/{moduleId}/category/{categoryId}/answer
+  defaults: { _controller: AppBundle:ItemBankExercise/Answer:categoryAnswer }
+
 goods_show:
     path:     /goods/show/{id}
     defaults: { _controller: AppBundle:Goods/Goods:show }

@@ -11,12 +11,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AnswerEngineController extends BaseController
 {
-    public function doAction(Request $request, $answerRecordId, $submitGotoUrl, $saveGotoUrl)
+    public function doAction(Request $request, $answerRecordId, $submitGotoUrl, $saveGotoUrl, $showHeader = 0)
     {
         return $this->render('answer-engine/answer.html.twig', [
             'answerRecord' => $this->getAnswerRecordService()->get($answerRecordId),
             'submitGotoUrl' => $submitGotoUrl,
             'saveGotoUrl' => $saveGotoUrl,
+            'showHeader' => $showHeader,
         ]);
     }
 
@@ -44,7 +45,7 @@ class AnswerEngineController extends BaseController
         return $this->createJsonResponse($reviewReport);
     }
 
-    public function reviewAnswerAction(Request $request, $answerRecordId, $successGotoUrl, $successContinueGotoUrl)
+    public function reviewAnswerAction(Request $request, $answerRecordId, $successGotoUrl, $successContinueGotoUrl = '')
     {
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
 

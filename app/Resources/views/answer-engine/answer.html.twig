@@ -19,6 +19,9 @@
 
 
 {% block body %}
+  {% block header %}
+      {% if showHeader|default(0) %}{{ parent() }}{% endif %}
+  {% endblock %}
   <style>
     html, body {
       height: 100%;
@@ -32,4 +35,7 @@
   <input type="hidden" name="submit_goto_url" value='{{ submitGotoUrl }}'>
   <input type="hidden" name="save_goto_url" value='{{ saveGotoUrl }}'>
   {{ render(controller('AppBundle:FaceInspection/Capture:inspection', {request:app.request, answerSceneId: answerRecord.answer_scene_id, answerRecordId: answerRecord.id})) }}
+  {% block footer %}
+      {% if showHeader|default(0) %}{{ parent() }}{% endif %}
+  {% endblock %}
 {% endblock %}

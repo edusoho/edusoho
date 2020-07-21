@@ -259,6 +259,7 @@ class ExerciseController extends BaseController
 
         return $this->render('item-bank-exercise/tabs/list/chapter-list.html.twig', [
             'exercise' => $exercise,
+            'moduleId' => $moduleId,
             'member' => $member,
             'records' => $records,
             'categoryTree' => $categoryTree,
@@ -303,6 +304,7 @@ class ExerciseController extends BaseController
 
         return $this->render('item-bank-exercise/tabs/list/assessment-list.html.twig', [
             'exercise' => $exercise,
+            'moduleId' => $moduleId,
             'member' => $member,
             'records' => $records,
             'questionBank' => $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']),

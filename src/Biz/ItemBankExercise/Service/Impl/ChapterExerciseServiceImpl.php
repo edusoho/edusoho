@@ -48,7 +48,7 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
             throw $e;
         }
 
-        return $answerRecord;
+        return $chapterExerciseRecord;
     }
 
     protected function canStartAnswer($moduleId, $categroyId, $userId)

@@ -8,9 +8,9 @@
       </div>
       <div class="col-md-3 content-right">
         {% if record.status == 'doing' or record.status == 'paused' %}
-          <a id="btn-default" class="cd-btn cd-btn-primary content-right" href="javasrcipt:;">{{ 'item_bank_exercise.chapter.exercise.continue_btn'|trans }}</a>
+          <a id="btn-default" class="cd-btn cd-btn-primary content-right" href="{{ path('item_bank_exercise_category_answer', {exerciseId:exercise.id, moduleId:moduleId, categoryId:item.id}) }}">{{ 'item_bank_exercise.chapter.exercise.continue_btn'|trans }}</a>
         {% elseif record.status == 'reviewing' or record.status == 'finished' %}
-          <a id="btn-view" class="cd-btn cd-btn-ghost-primary" href="javasrcipt:;">{{ 'item_bank_exercise.chapter.exercise.view_btn'|trans }}</a>
+          <a id="btn-view" class="cd-btn cd-btn-ghost-primary" href="{{ path('item_bank_exercise_category_answer', {exerciseId:exercise.id, moduleId:moduleId, categoryId:item.id}) }}">{{ 'item_bank_exercise.chapter.exercise.view_btn'|trans }}</a>
         {% endif %}
       </div>
     {% else %}
@@ -21,7 +21,7 @@
         <span>{{ 'item_bank_exercise.accuracy'|trans }}0%</span>
       </div>
       <div class="col-md-3 content-right">
-        <a id="btn-default" class="cd-btn cd-btn-ghost-primary" href="javasrcipt:;">{{ 'item_bank_exercise.chapter.exercise.start_btn'|trans }}</a>
+        <a id="btn-default" class="cd-btn cd-btn-ghost-primary" href="{{ path('item_bank_exercise_category_answer', {exerciseId:exercise.id, moduleId:moduleId, categoryId:item.id}) }}">{{ 'item_bank_exercise.chapter.exercise.start_btn'|trans }}</a>
       </div>
     {% endif %}
 {% else %}
