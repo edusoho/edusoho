@@ -110,45 +110,6 @@ class ResourcePurchaseController extends BaseController
         );
     }
 
-    protected function covertProductVersions($productVersionList, $courseSets, $courses, $products, $courseSetProducts, $conditions)
-    {
-        $courses = ArrayToolkit::index($courses, 'id');
-        $startDate = empty($conditions['startDateTime']) ? 0 : strtotime($conditions['startDateTime']);
-        $endDate = empty($conditions['endDateTime']) ? 0 : strtotime($conditions['endDateTime']);
-        $courseSets = ArrayToolkit::index($courseSets, 'id');
-        $products = ArrayToolkit::index($products, 'remoteResourceId');
-        $courseSetProducts = ArrayToolkit::index($courseSetProducts, 'remoteResourceId');
-
-        foreach ($productVersionList as $key => &$productVersion) {
-            //时间筛选
-            if (($startDate > 0 && $productVersion['updatedTime'] < $startDate) || ($endDate > 0 && $productVersion['updatedTime'] > $endDate)) {
-                unset($productVersionList[$key]);
-                continue;
-            }
-
-            $remoteResourceId = $productVersion['productId'];
-            if (isset($products[$remoteResourceId]) && $products[$remoteResourceId]['localVersion'] >= $productVersion['productVersion']) {
-                unset($productVersionList[$key]);
-                continue;
-            }
-
-            if (empty($productVersion['s2b2cDistributeId'])) {
-                unset($productVersionList[$key]);
-                continue;
-            }
-
-            $course = isset($products[$remoteResourceId]['localResourceId']) ? $courses[$products[$remoteResourceId]['localResourceId']] : null;
-            $courseSet = $courseSets[$courseSetProducts[$productVersion['courseSetId']]['localResourceId']];
-
-            $productVersion['course'] = $course;
-            $productVersion['localProductId'] = empty($course) ? 0 : $products[$remoteResourceId]['id'];
-            $productVersion['courseSetTitle'] = empty($course) ? $courseSet['title'] : $course['courseSetTitle'];
-            $productVersion['title'] = empty($course) ? $productVersion['title'] : $course['title'];
-        }
-
-        return $productVersionList;
-    }
-
     public function productVersionDetailAction(Request $request, $remoteSourceId)
     {
         $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
@@ -182,9 +143,11 @@ class ResourcePurchaseController extends BaseController
             if (empty($merchant['status']) || 'active' != $merchant['status'] || 'cooperation' != $merchant['coop_status']) {
                 return $this->createJsonResponse(['status' => false, 'error' => '更新失败']);
             }
-
-            $result = $this->getS2B2CProductService()->updateProductVersion($productId);
-
+            try{
+                $this->getS2B2CProductService()->updateProductVersion($productId);
+            }catch (\Exception $exception) {
+                return $this->createJsonResponse(['status' => false, 'error' => $exception->getMessage()]);
+            }
             return $this->createJsonResponse(['status' => true]);
         }
 

@@ -477,7 +477,7 @@ class ProductServiceImpl extends BaseService implements ProductService
         } catch (\Exception $exception) {
             $this->rollback();
             $this->getLogger()->error('[updateProductVersion] 更新失败 '.$exception->getMessage());
-            $this->createNewException(S2B2CProductException::ADOPT_PRODUCT_FAILED());
+            $this->createNewException(S2B2CProductException::UPDATE_PRODUCT_VERSION_FAIL());
         }
 
         return true;
