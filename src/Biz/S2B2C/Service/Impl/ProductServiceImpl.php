@@ -483,6 +483,11 @@ class ProductServiceImpl extends BaseService implements ProductService
         return true;
     }
 
+    protected function getLogger()
+    {
+        return $this->biz->offsetGet('s2b2c.merchant.logger');
+    }
+
     /**
      * 获取远程productType 和 本地productType的映射关系
      *
